@@ -2,338 +2,152 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Windows;
 using System.Windows.Input;
-using MahApps.Metro.Controls.Dialogs;
-using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Commands;
+using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Model;
-using Sdl.Community.SdlTmAnonymizer.Ui;
-using Sdl.LanguagePlatform.TranslationMemory;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
-	public class PreviewWindowViewModel:ViewModelBase
+	public class PreviewWindowViewModel : ViewModelBase, IDisposable
 	{
-		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
-		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
-		private readonly ObservableCollection<TmFile> _tmsCollection;
+		private ObservableCollection<ContentSearchResult> _sourceSearchResults;
+		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTms;
 		private bool _selectAllResults;
-		private readonly TranslationMemoryViewModel _tmViewModel;
+		private readonly TranslationMemoryViewModel _model;
 		private ICommand _selectAllResultsCommand;
 		private ICommand _applyCommand;
-		private readonly BackgroundWorker _backgroundWorker;
-		private ScheduledServerTranslationMemoryExport _tmExporter;
-		private readonly List<ServerTmBackUp> _backupTms;
-		private string _filePath;
-		//private readonly IDialogCoordinator _dialogCoordinator;
-		private WaitWindow _waitWindow;
-		private SourceSearchResult _selectedItem;
+		private ContentSearchResult _selectedItem;
 		private string _textBoxColor;
+		private readonly Window _window;
 
-		public PreviewWindowViewModel(ObservableCollection<SourceSearchResult> searchResults,
-			ObservableCollection<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
-			TranslationMemoryViewModel tmViewModel)
+		public PreviewWindowViewModel(Window window, List<ContentSearchResult> searchResults,
+			ObservableCollection<AnonymizeTranslationMemory> anonymizeTms, TranslationMemoryViewModel model)
 		{
+			_window = window;
 			_textBoxColor = "White";
-			
-			_backupTms = new List<ServerTmBackUp>();
-			_backgroundWorker = new BackgroundWorker();
-			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
-			_sourceSearchResults = searchResults;
-			_tmViewModel = tmViewModel;
-			_anonymizeTranslationMemories = anonymizeTranslationMemories;
-			_tmsCollection = tmsCollection;
-		}
-
-		private async void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
-		{
-			await Task.WhenAll(Task.Run(() => Parallel.ForEach(_backupTms, tm =>
-			{
-				using (Stream outputStream = new FileStream(tm.FilePath, FileMode.Create))
-				{
-					 tm.ScheduledExport.DownloadExport(outputStream);
-				}
-			})));
-		}
-
-		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ??
-		                                           (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
-		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
-		public IDialogCoordinator Window { get; set; }
 	
-		public async void ApplyChanges()
+			SourceSearchResults = new ObservableCollection<ContentSearchResult>(searchResults);
+
+			_model = model;
+			_anonymizeTms = anonymizeTms;
+		}
+
+		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ?? (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
+
+		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
+
+		public void ApplyChanges()
 		{
 			if (SourceSearchResults.Any(s => s.TuSelected))
 			{
-				System.Windows.Application.Current.Dispatcher.Invoke(delegate
-				{
-					_waitWindow = new WaitWindow();
-					_waitWindow.Show();
-				});
-				var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
-				List<AnonymizeTranslationMemory> tusToAnonymize;
-				//file base tms
-				var fileBasedSearchResult = selectedSearchResult.Where(t => !t.IsServer).ToList();
-				if (fileBasedSearchResult.Count > 0)
-				{
-					BackupFileBasedTm();
-					tusToAnonymize = GetTranslationUnitsToAnonymize(fileBasedSearchResult);
-					Tm.AnonymizeFileBasedTu(tusToAnonymize);
-				}
-				//server based tms
-				var serverBasedSearchResult = selectedSearchResult.Where(t => t.IsServer).ToList();
-				if (serverBasedSearchResult.Count > 0)
-				{
-					tusToAnonymize = GetTranslationUnitsToAnonymize(serverBasedSearchResult);
-					var uri = new Uri(_tmViewModel.Credentials.Url);
-					var translationProvider = new TranslationProviderServer(uri, false, _tmViewModel.Credentials.UserName,
-						_tmViewModel.Credentials.Password);
+				var progressDialogSettings = new ProgressDialogSettings(_window, true, true, false);
 
-					BackupServerBasedTm(translationProvider, tusToAnonymize);
-					Tm.AnonymizeServerBasedTu(translationProvider, tusToAnonymize);
+				var result = ProgressDialog.Execute(StringResources.Applying_changes, () =>
+				{
+					var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
+					List<AnonymizeTranslationMemory> anonymizeTranslationMemories;
+
+					//file base tms
+					var fileBasedSearchResult = selectedSearchResult.Where(t => !t.IsServer).ToList();
+					if (fileBasedSearchResult.Count > 0)
+					{
+						anonymizeTranslationMemories = GetTranslationUnitsToAnonymize(ProgressDialog.Current, fileBasedSearchResult);
+
+						if (ProgressDialog.Current != null && ProgressDialog.Current.CheckCancellationPending())
+						{
+							ProgressDialog.Current.ThrowIfCancellationPending();
+						}
+						
+						_model.TmService.AnonymizeFileBasedTm(ProgressDialog.Current, anonymizeTranslationMemories);
+					}
+
+					//server based tms
+					var serverBasedSearchResult = selectedSearchResult.Where(t => t.IsServer).ToList();
+					if (serverBasedSearchResult.Count > 0)
+					{
+						anonymizeTranslationMemories = GetTranslationUnitsToAnonymize(ProgressDialog.Current, serverBasedSearchResult);
+
+						if (ProgressDialog.Current != null && ProgressDialog.Current.CheckCancellationPending())
+						{
+							ProgressDialog.Current.ThrowIfCancellationPending();
+						}
+						
+						_model.TmService.AnonymizeServerBasedTm(ProgressDialog.Current, anonymizeTranslationMemories);
+					}
+				}, progressDialogSettings);
+
+				if (result.Cancelled)
+				{
+					System.Windows.Forms.MessageBox.Show(StringResources.Process_cancelled_by_user, System.Windows.Forms.Application.ProductName);
+					_window.Close();
 				}
+
+				if (result.OperationFailed)
+				{
+					System.Windows.Forms.MessageBox.Show(StringResources.Process_failed + "\r\n\r\n" + result.Error.Message, System.Windows.Forms.Application.ProductName);
+				}
+
 				RemoveSelectedTusToAnonymize();
-				_waitWindow?.Close();
+
+				_model.Refresh();
 			}
 			else
 			{
-				await Window.ShowMessageAsync(this, "", "Please select at least one translation unit to apply the changes");
-			}
-			
-		}
-
-		private void BackupServerBasedTm(TranslationProviderServer translationProvider,
-			List<AnonymizeTranslationMemory> tusToAnonymize)
-		{
-			_backupTms.Clear();
-			if (!Directory.Exists(Constants.ServerTmBackupPath))
-			{
-				Directory.CreateDirectory(Constants.ServerTmBackupPath);
-			}
-			try
-			{
-				foreach (var tuToAonymize in tusToAnonymize)
-				{
-					var translationMemory =
-						translationProvider.GetTranslationMemory(tuToAonymize.TmPath, TranslationMemoryProperties.All);
-					var languageDirections = translationMemory.LanguageDirections;
-					foreach (var languageDirection in languageDirections)
-					{
-						var folderPath = Path.Combine(Constants.ServerTmBackupPath, translationMemory.Name,
-							languageDirection.TargetLanguageCode);
-						if (!Directory.Exists(folderPath))
-						{
-							Directory.CreateDirectory(folderPath);
-						}
-						var fileName = translationMemory.Name + languageDirection.TargetLanguageCode + ".tmx.gz";
-						_filePath = Path.Combine(folderPath, fileName);
-
-						//if tm does not exist download it
-						if (!File.Exists(_filePath))
-						{
-							_tmExporter = new ScheduledServerTranslationMemoryExport(languageDirection)
-							{
-								ContinueOnError = true
-							};
-							_tmExporter.Queue();
-							_tmExporter.Refresh();
-
-							var continueWaiting = true;
-							while (continueWaiting)
-							{
-								switch (_tmExporter.Status)
-								{
-									case ScheduledOperationStatus.Abort:
-									case ScheduledOperationStatus.Aborted:
-									case ScheduledOperationStatus.Cancel:
-									case ScheduledOperationStatus.Cancelled:
-									case ScheduledOperationStatus.Completed:
-									case ScheduledOperationStatus.Error:
-										continueWaiting = false;
-										break;
-									case ScheduledOperationStatus.Aborting:
-									case ScheduledOperationStatus.Allocated:
-									case ScheduledOperationStatus.Cancelling:
-									case ScheduledOperationStatus.NotSet:
-									case ScheduledOperationStatus.Queued:
-									case ScheduledOperationStatus.Recovered:
-									case ScheduledOperationStatus.Recovering:
-									case ScheduledOperationStatus.Recovery:
-										_tmExporter.Refresh();
-										break;
-									default:
-										continueWaiting = false;
-										break;
-								}
-							}
-							if (_tmExporter.Status == ScheduledOperationStatus.Completed)
-							{
-								var backup = new ServerTmBackUp
-								{
-									ScheduledExport = _tmExporter,
-									FilePath = _filePath
-								};
-								_backupTms.Add(backup);
-							}
-							else if (_tmExporter.Status == ScheduledOperationStatus.Error)
-							{
-								MessageBox.Show(_tmExporter.ErrorMessage,
-									"", MessageBoxButtons.OK, MessageBoxIcon.Error);
-							}
-						}
-					}
-					if (!_backgroundWorker.IsBusy)
-					{
-						_backgroundWorker.RunWorkerAsync();
-					}
-
-				}
-			}
-			catch (Exception exception)
-			{
-				if (exception.Message.Equals("One or more errors occurred."))
-				{
-					if (exception.InnerException != null)
-					{
-						MessageBox.Show(exception.InnerException.Message,
-							"", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
-				}
-				else
-				{
-					MessageBox.Show(exception.Message,
-						"", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				}
+				System.Windows.Forms.MessageBox.Show(StringResources.ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes, System.Windows.Forms.Application.ProductName);
 			}
 		}
 
-		/// <summary>
-		/// Gets corresponding tus from TMs
-		/// </summary>
-		/// <param name="selectedSearchResult"></param>
-		/// <returns></returns>
-		private List<AnonymizeTranslationMemory> GetTranslationUnitsToAnonymize(List<SourceSearchResult> selectedSearchResult)
-		{
-			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
-			foreach (var selectedResult in selectedSearchResult)
-			{
-				foreach (var anonymizeUnits in _anonymizeTranslationMemories)
-					{
-						var sourceTranslationUnit =
-							anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.SourceSegment.ToPlain().Equals(selectedResult.SourceText.TrimEnd()));
-						var targetTranslationUnit =
-							anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.TargetSegment.ToPlain().Equals(selectedResult.TargetText.TrimEnd()));
-					//TranslationUnit tuToAnonymize;
-
-					if (sourceTranslationUnit != null|| targetTranslationUnit!=null)
-					{
-						// if there is an tm with the same path add translation units to that tm
-						var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmPath.Equals(anonymizeUnits.TmPath));
-						TranslationUnit tuToAnonymize = new TranslationUnit();
-
-						if (sourceTranslationUnit != null)
-						{
-							tuToAnonymize = sourceTranslationUnit;
-						}
-						if (targetTranslationUnit != null)
-						{
-							tuToAnonymize = targetTranslationUnit;
-						}
-						//added for select custom words functionality
-						var tranlationUnitDetails = new TranslationUnitDetails
-						{
-							TranslationUnit = tuToAnonymize,
-							SelectedWordsDetails = selectedResult.SelectedWordsDetails,
-							RemovedWordsFromMatches = selectedResult.DeSelectedWordsDetails,
-							IsSourceMatch = selectedResult.IsSourceMatch,
-							IsTargetMatch = selectedResult.IsTargetMatch,
-							TargetSelectedWordsDetails =  selectedResult.TargetSelectedWordsDetails,
-							TargetRemovedWordsFromMatches = selectedResult.TargetDeSelectedWordsDetails
-						};
-						
-						if (anonymizeTu != null)
-						{
-							anonymizeTu.TranslationUnitDetails.Add(tranlationUnitDetails);
-							anonymizeTu.TranslationUnits.Add(tuToAnonymize);
-						}
-						else
-						{
-							var anonymizeTm = new AnonymizeTranslationMemory
-							{
-								TranslationUnits = new List<TranslationUnit>(),
-								TmPath = anonymizeUnits.TmPath,
-								TranslationUnitDetails = new List<TranslationUnitDetails>(),
-								
-							};
-							anonymizeTm.TranslationUnitDetails.Add(tranlationUnitDetails);
-
-							anonymizeTm.TranslationUnits.Add(tuToAnonymize);
-							tusToAnonymize.Add(anonymizeTm);
-						}
-					}
-
-				}
-			}
-			return tusToAnonymize;
-		}
-		private void RemoveSelectedTusToAnonymize()
-		{
-			foreach (var searchResult in SourceSearchResults.Where(s => s.TuSelected).ToList())
-			{
-				SourceSearchResults.Remove(searchResult);
-			}
-
-		}
-		private void BackupFileBasedTm()
-		{
-			var backupFolderPath = Constants.TmBackupPath;
-			if (!Directory.Exists(backupFolderPath))
-			{
-				Directory.CreateDirectory(backupFolderPath);
-			}
-			foreach (var tm in _tmsCollection.Where(t => t.IsSelected))
-			{
-				var tmInfo = new FileInfo(tm.Path);
-				var backupFilePath = Path.Combine(backupFolderPath, tm.Name);
-				if (!File.Exists(backupFilePath))
-				{
-					tmInfo.CopyTo(backupFilePath, false);
-				}
-			}
-		}
 		public bool SelectAllResults
 		{
 			get => _selectAllResults;
-
 			set
 			{
 				if (Equals(value, _selectAllResults))
 				{
 					return;
 				}
+
 				_selectAllResults = value;
 				OnPropertyChanged(nameof(SelectAllResults));
 			}
 		}
-		public ObservableCollection<SourceSearchResult> SourceSearchResults
+
+		public ObservableCollection<ContentSearchResult> SourceSearchResults
 		{
 			get => _sourceSearchResults;
-
 			set
 			{
 				if (Equals(value, _sourceSearchResults))
 				{
 					return;
 				}
+
+				if (_sourceSearchResults != null)
+				{
+					foreach (var result in _sourceSearchResults)
+					{
+						result.PropertyChanged -= Result_PropertyChanged;
+					}
+				}
+
 				_sourceSearchResults = value;
+
+				if (_sourceSearchResults != null)
+				{
+					foreach (var result in _sourceSearchResults)
+					{
+						result.PropertyChanged += Result_PropertyChanged;
+					}
+				}
+
 				OnPropertyChanged(nameof(SourceSearchResults));
 			}
 		}
-		public SourceSearchResult SelectedItem
+
+		public ContentSearchResult SelectedItem
 		{
 			get => _selectedItem;
 
@@ -343,15 +157,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					return;
 				}
+
 				_selectedItem = value;
+
 				TextBoxColor = "#f4fef4";
 				OnPropertyChanged(nameof(SelectedItem));
 			}
 		}
+
 		public string TextBoxColor
 		{
 			get => _textBoxColor;
-
 			set
 			{
 				if (Equals(value, _textBoxColor))
@@ -363,12 +179,144 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
+		public int SelectedCount
+		{
+			get { return SourceSearchResults?.Count(a => a.TuSelected) ?? 0; }
+		}
+
+		private List<AnonymizeTranslationMemory> GetTranslationUnitsToAnonymize(ProgressDialogContext context, IReadOnlyCollection<ContentSearchResult> selectedSearchResults)
+		{
+			if (selectedSearchResults == null)
+			{
+				return null;
+			}
+
+			decimal iCurrent = 0;
+			decimal iTotalUnits = selectedSearchResults.Count;
+
+			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
+			foreach (var selectedResult in selectedSearchResults)
+			{
+				iCurrent++;
+				if (iCurrent % 1000 == 0)
+				{
+					if (context != null && context.CheckCancellationPending())
+					{
+						break;
+					}
+
+					var progress = iCurrent / iTotalUnits * 100;
+					context?.Report(Convert.ToInt32(progress), "Analyzing: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+				}
+
+				var anonymizeTranslationMemory = _anonymizeTms.FirstOrDefault(a => a.TmFile.Path == selectedResult.TmFilePath);
+
+				if (anonymizeTranslationMemory != null && selectedResult.TranslationUnit != null)
+				{
+					// if there is an tm with the same path add translation units to that tm
+					var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmFile.Path.Equals(anonymizeTranslationMemory.TmFile.Path));
+
+					//added for select custom words functionality
+					var tranlationUnitDetails = new TranslationUnitDetails
+					{
+						TranslationUnit = selectedResult.TranslationUnit,
+						SelectedWordsDetails = selectedResult.SelectedWordsDetails,
+						RemovedWordsFromMatches = selectedResult.DeSelectedWordsDetails,
+						IsSourceMatch = selectedResult.IsSourceMatch,
+						IsTargetMatch = selectedResult.IsTargetMatch,
+						TargetSelectedWordsDetails = selectedResult.TargetSelectedWordsDetails,
+						TargetRemovedWordsFromMatches = selectedResult.TargetDeSelectedWordsDetails
+					};
+
+					if (anonymizeTu != null)
+					{
+						anonymizeTu.TranslationUnitDetails.Add(tranlationUnitDetails);
+						anonymizeTu.TranslationUnits.Add(selectedResult.TranslationUnit);
+					}
+					else
+					{
+						var anonymizeTm = new AnonymizeTranslationMemory
+						{
+							TranslationUnits = new List<TmTranslationUnit>(),
+							TmFile = anonymizeTranslationMemory.TmFile,
+							TranslationUnitDetails = new List<TranslationUnitDetails>()
+						};
+
+						anonymizeTm.TranslationUnitDetails.Add(tranlationUnitDetails);
+						anonymizeTm.TranslationUnits.Add(selectedResult.TranslationUnit);
+						tusToAnonymize.Add(anonymizeTm);
+					}
+				}
+			}
+
+			return tusToAnonymize;
+		}
+
+		private void RemoveSelectedTusToAnonymize()
+		{
+			foreach (var searchResult in SourceSearchResults.Where(s => s.TuSelected).ToList())
+			{
+				SourceSearchResults.Remove(searchResult);
+			}
+
+			OnPropertyChanged(nameof(SelectedCount));
+		}
+
+		private bool SelectingAllAction { get; set; }
 
 		private void SelectResults()
 		{
-			foreach (var result in _sourceSearchResults)
+			var value = SelectAllResults;
+
+			try
 			{
-				result.TuSelected = SelectAllResults;
+				SelectingAllAction = true;
+				foreach (var result in _sourceSearchResults)
+				{
+					result.TuSelected = value;
+				}
+			}
+			finally
+			{
+				SelectingAllAction = false;
+
+				UpdateCheckedAllState();
+				OnPropertyChanged(nameof(SelectedCount));
+			}
+		}
+
+		private void UpdateCheckedAllState()
+		{
+			if (SourceSearchResults.Count > 0)
+			{
+				SelectAllResults = SourceSearchResults.Count(a => !a.TuSelected) <= 0;
+			}
+			else
+			{
+				SelectAllResults = false;
+			}
+		}
+
+		private void Result_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (!SelectingAllAction)
+			{
+				if (e.PropertyName == nameof(ContentSearchResult.TuSelected))
+				{
+					UpdateCheckedAllState();
+
+					OnPropertyChanged(nameof(SelectedCount));
+				}
+			}
+		}
+
+		public void Dispose()
+		{
+			_model?.Dispose();
+
+			foreach (var result in SourceSearchResults)
+			{
+				result.PropertyChanged -= Result_PropertyChanged;
 			}
 		}
 	}

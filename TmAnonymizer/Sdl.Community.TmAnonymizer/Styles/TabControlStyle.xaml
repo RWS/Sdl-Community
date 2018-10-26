@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<Style x:Key="TabItemStyle" TargetType="TabItem">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="TabItem">
+					<Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="2,0">
+						<ContentPresenter x:Name="ContentSite"
+						                  VerticalAlignment="Center"
+						                  HorizontalAlignment="Center"
+						                  ContentSource="Header"
+						                  Margin="10,6"/>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsSelected" Value="True">
+							<Setter TargetName="Border" Property="Background" Value="Transparent" />
+						</Trigger>
+						<Trigger Property="IsSelected" Value="False">
+							<Setter TargetName="Border" Property="Background" Value="GhostWhite" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>

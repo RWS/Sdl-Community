@@ -1,12 +1,17 @@
-﻿namespace Sdl.Community.SdlTmAnonymizer.Model
+﻿using System.IO;
+
+namespace Sdl.Community.SdlTmAnonymizer.Model
 {
-    public class User:ModelBase
-    {
+	public class User : ModelBase
+	{
 		private bool _isSelected;
 		private string _name;
 		private string _alias;
 
-	    public string TmFilePath { get; set; }
+		public string TmFilePath { get; set; }
+
+		public string TmName => TmFilePath != null ? Path.GetFileName(TmFilePath) : string.Empty;
+
 		public bool IsSelected
 		{
 

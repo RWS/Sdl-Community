@@ -1,0 +1,36 @@
+﻿<Window x:Class="Sdl.Community.SdlTmAnonymizer.View.WaitWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      mc:Ignorable="d" 					  
+                      WindowStartupLocation="CenterScreen"                     
+                      FontFamily="Segoe UI"
+                      Width="279"
+                      Height="75"
+                      WindowStyle="None">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\Styles\ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="..\Styles\TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="..\Styles\TextBoxStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid Margin="5,0,5,0">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<TextBlock x:Name="TextLabel"  Grid.Row="0" Text="Please wait..." FontFamily="Segoe UI" TextTrimming="CharacterEllipsis" Margin="10" FontSize="20" Foreground="#3EA691"/>
+		<ProgressBar Grid.Row="1" Width="Auto" IsIndeterminate="True" Height="5"/>
+	</Grid>
+
+
+</Window>
+
