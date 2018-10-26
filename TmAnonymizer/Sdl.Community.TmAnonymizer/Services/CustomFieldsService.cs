@@ -98,6 +98,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				report.Actions.AddRange(change.Value);
 			}
 
+			UpdateCustomFieldPickLists(context, customFields, tm);
+
 			var settings = _settingsService.GetSettings();
 			if (settings.UseSqliteApiForFileBasedTm)
 			{
@@ -107,8 +109,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				UpdateCustomFields(context, tm, units);
 			}
-
-			UpdateCustomFieldPickLists(context, customFields, tm);
 
 			ClearPreviousCustomFieldValues(translationUnits);
 
@@ -154,10 +154,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				report.Actions.AddRange(change.Value);
 			}
 
+			UpdateCustomFieldPickLists(context, customFields, serverBasedTm);
 
 			UpdateCustomFields(context, tmFile, translationUnits, units, serverBasedTm);
-
-			UpdateCustomFieldPickLists(context, customFields, serverBasedTm);
 
 			ClearPreviousCustomFieldValues(translationUnits);
 
