@@ -383,14 +383,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				SourceSearchResults.Clear();
 				MessageBox.Show(StringResources.Process_cancelled_by_user, Application.ProductName);
 			}
-
-			if (result.OperationFailed)
+			else if (result.OperationFailed)
 			{
 				SourceSearchResults.Clear();
 				MessageBox.Show(StringResources.Process_failed + "\r\n\r\n" + result.Error.Message, Application.ProductName);
 			}
-
-			LoadPreviewWindow();
+			else
+			{
+				LoadPreviewWindow();
+			}
 		}
 
 		private void ProcessData(ProgressDialogContext context)

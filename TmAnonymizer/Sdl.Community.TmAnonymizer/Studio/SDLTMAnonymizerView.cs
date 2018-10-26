@@ -32,9 +32,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 
 			_model = new MainViewModel(_settingsService, this);
 
-			_control = new TmAnonymizerViewControl(_model);
 			_explorerControl = new TmAnonymizerExplorerControl(_model);
-			_logViewController = new SDLTMAnonymizerLogViewPart(_model);
+
+			if (_settingsService.GetSettings().Accepted)
+			{
+				_control = new TmAnonymizerViewControl(_model);
+				_logViewController = new SDLTMAnonymizerLogViewPart(_model);				
+			}
 		}
 
 		public UserControl ContentControl => _control;
@@ -53,7 +57,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		[RibbonGroup("TmAnonymizerSettingsRibbonGroup", "  Settings  ")]
 		[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 		public class TmAnonymizerSettingsRibbonGroup : AbstractRibbonGroup
-		{
+		{			
 		}
 
 		[Action("TmAnonymizerTmRibbonGroupSettingsAction", typeof(SDLTMAnonymizerView), Name = " Settings ", Icon = "Settings", Description = "Settings ")]
@@ -67,6 +71,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 				settingsWindow.DataContext = settingsViewModel;
 
 				settingsWindow.ShowDialog();				
+			}
+
+			public override void Initialize()
+			{
+				Enabled = _settingsService.GetSettings().Accepted;
 			}
 		}
 
@@ -85,6 +94,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			{
 				_model?.TranslationMemoryViewModel.AddFileBasedTm();
 			}
+
+			public override void Initialize()
+			{
+				Enabled = _settingsService.GetSettings().Accepted;
+			}
 		}
 
 		[Action("TmAnonymizerTmRibbonGroupAddServerTmAction", typeof(SDLTMAnonymizerView), Name = "Add server TM", Icon = "ServerBasedTranslationMemory", Description = "Add server TM")]
@@ -94,6 +108,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			protected override void Execute()
 			{
 				_model?.TranslationMemoryViewModel.AddServerTm();
+			}
+
+			public override void Initialize()
+			{
+				Enabled = _settingsService.GetSettings().Accepted;
 			}
 		}
 
@@ -105,6 +124,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			{
 				_model?.TranslationMemoryViewModel.SelectFolder();
 			}
+
+			public override void Initialize()
+			{
+				Enabled = _settingsService.GetSettings().Accepted;
+			}
 		}
 
 		[Action("TmAnonymizerTmRibbonGroupRemoveTmAction", typeof(SDLTMAnonymizerView), Name = "Remove TM", Icon = "Remove", Description = "Remove TM")]
@@ -115,6 +139,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			{
 				_model?.TranslationMemoryViewModel.RemoveTm();
 			}
+
+			public override void Initialize()
+			{
+				Enabled = _settingsService.GetSettings().Accepted;
+			}
 		}
 
 		[Action("TmAnonymizerTmRibbonGroupRemoveTmCacheAction", typeof(SDLTMAnonymizerView), Name = "Clear TM Cache", Icon = "RemoveCache", Description = "Clear TM Cache")]
@@ -124,6 +153,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			protected override void Execute()
 			{
 				_model?.TranslationMemoryViewModel.ClearCache();
+			}
+
+			public override void Initialize()
+			{
+				Enabled = _settingsService.GetSettings().Accepted;
 			}
 		}
 

@@ -32,7 +32,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 				_acceptWindow.InitializeComponent();
 				_acceptWindow.Closing += AcceptWindow_Closing;
 				_acceptWindow.Topmost = true;
-				_acceptWindow.Show();				
+				_acceptWindow.ShowDialog();
 			}
 			else
 			{
