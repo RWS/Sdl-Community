@@ -32,7 +32,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 							{
 								if (string.IsNullOrEmpty(tag.TextEquivalent) && includeTags)
 								{
-									builder.Append("<" + tag.TagID + "/>");
+									builder.Append("<" + tag.TagID + " text-equiv=\"\" />");
 								}
 								else
 								{
