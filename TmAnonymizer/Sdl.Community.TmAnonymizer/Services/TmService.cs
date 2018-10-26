@@ -292,11 +292,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var memory in anonymizeTranslationMemories)
 			{
-				var report = new Model.Log.Report(memory.TmFile)
+				var report = new Report(memory.TmFile)
 				{
 					ReportFullPath = _settingsService.GetLogReportFullPath(memory.TmFile.Name, Report.ReportScope.Content),
 					UpdatedCount = memory.TranslationUnits.Count,
-					Scope = Model.Log.Report.ReportScope.Content
+					Scope = Report.ReportScope.Content
 				};
 
 				var actions = new List<Model.Log.Action>();
@@ -358,7 +358,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				stopWatch.Stop();
 				report.ElapsedSeconds = stopWatch.Elapsed.TotalSeconds;
 
-				_serializerService.Save<Model.Log.Report>(report, report.ReportFullPath);
+				_serializerService.Save<Report>(report, report.ReportFullPath);
 			}
 
 			return updatedCount;
@@ -388,7 +388,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var memory in anonymizeTranslationMemories)
 			{
-				var report = new Model.Log.Report(memory.TmFile)
+				var report = new Report(memory.TmFile)
 				{
 					ReportFullPath = _settingsService.GetLogReportFullPath(memory.TmFile.Name, Report.ReportScope.Content),
 					UpdatedCount = memory.TranslationUnits.Count,
@@ -467,7 +467,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				stopWatch.Stop();
 				report.ElapsedSeconds = stopWatch.Elapsed.TotalSeconds;
 
-				_serializerService.Save<Model.Log.Report>(report, report.ReportFullPath);
+				_serializerService.Save<Report>(report, report.ReportFullPath);
 			}
 
 			return updatedCount;
@@ -598,6 +598,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			try
 			{
+				context.ProgressBarIsIndeterminate = true;
+
 				foreach (var tm in tmsCollection)
 				{
 					if (tm == null)
@@ -606,7 +608,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					}
 
 					var uri = new Uri(tm.Credentials.Url);
-					var translationProvider = new TranslationProviderServer(uri, false, tm.Credentials.UserName, tm.Credentials.Password);
+					var translationProvider =
+						new TranslationProviderServer(uri, false, tm.Credentials.UserName, tm.Credentials.Password);
 
 					context.Report(0, "Backup " + tm.Path);
 
@@ -615,14 +618,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 					foreach (var languageDirection in languageDirections)
 					{
-						var folderPath = Path.Combine(settings.BackupFullPath, translationMemory.Name, languageDirection.TargetLanguageCode);
+						var folderPath = Path.Combine(settings.BackupFullPath, translationMemory.Name,
+							languageDirection.TargetLanguageCode);
 
 						if (!Directory.Exists(folderPath))
 						{
 							Directory.CreateDirectory(folderPath);
 						}
 
-						var fileName = translationMemory.Name + languageDirection.TargetLanguageCode + "." + _settingsService.GetDateTimeToString() + ".tmx.gz";
+						var fileName = translationMemory.Name + languageDirection.TargetLanguageCode + "." +
+									   _settingsService.GetDateTimeToString() + ".tmx.gz";
 						var filePath = Path.Combine(folderPath, fileName);
 
 						//if tm does not exist download it
@@ -677,8 +682,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							}
 							else if (tmExporter.Status == ScheduledOperationStatus.Error)
 							{
-								MessageBox.Show(tmExporter.ErrorMessage, Application.ProductName,
-									MessageBoxButtons.OK, MessageBoxIcon.Error);
+								MessageBox.Show(tmExporter.ErrorMessage, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 							}
 						}
 					}
@@ -691,36 +695,34 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						}
 					})));
 				}
-
-
 			}
 			catch (Exception exception)
 			{
-				if (exception.Message.Equals("One or more errors occurred."))
+				if (exception.Message.Equals("One or more errors occurred.") && exception.InnerException != null)
 				{
-					if (exception.InnerException != null)
-					{
-						System.Windows.Forms.MessageBox.Show(exception.InnerException.Message, System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
+					MessageBox.Show(exception.InnerException.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 				else
 				{
-					System.Windows.Forms.MessageBox.Show(exception.Message, System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(exception.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
+			}
+			finally
+			{
+				context.ProgressBarIsIndeterminate = false;
 			}
 		}
 
 		public void BackupFileBasedTms(ProgressDialogContext context, IEnumerable<TmFile> tmsCollection)
 		{
-			context.ProgressBarIsIndeterminate = true;
-
+			var settings = _settingsService.GetSettings();
+			if (!settings.Backup)
+			{
+				return;
+			}
 			try
 			{
-				var settings = _settingsService.GetSettings();
-				if (!settings.Backup)
-				{
-					return;
-				}
+				context.ProgressBarIsIndeterminate = true;
 
 				foreach (var tm in tmsCollection)
 				{
@@ -749,13 +751,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 			catch (Exception ex)
 			{
-				throw ex;
+				MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			finally
 			{
 				context.ProgressBarIsIndeterminate = false;
 			}
-		
+
 		}
 
 		private static List<TmTranslationUnit> GetTranslationUnitsFromLocalTm(ProgressDialogContext context, TmFile tmFile)
@@ -1097,7 +1099,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			localLanguageDirection.TranslationUnitsCount = tus.Count;
 		}
 
-		private static IEnumerable<TmTranslationUnit> AddTranslationUnits(IEnumerable<Sdl.LanguagePlatform.TranslationMemory.TranslationUnit> units)
+		private static IEnumerable<TmTranslationUnit> AddTranslationUnits(IEnumerable<LanguagePlatform.TranslationMemory.TranslationUnit> units)
 		{
 			var tus = new List<TmTranslationUnit>();
 			tus.AddRange(units.Select(unit => new TmTranslationUnit
