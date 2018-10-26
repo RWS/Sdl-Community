@@ -93,7 +93,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog
 				{
 					try
 					{
-						Current = new ProgressDialogContext(s as BackgroundWorker, e as DoWorkEventArgs);
+						Current = new ProgressDialogContext(ProgressBar, s as BackgroundWorker, e as DoWorkEventArgs);
 
 						if (operation is Action action)
 						{

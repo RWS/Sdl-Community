@@ -1,15 +1,31 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog
 {
 	public class ProgressDialogContext
 	{
+		private bool _showProgressBarIndeterminate;
+		private readonly ProgressBar _progressBar;
+
 		public BackgroundWorker Worker { get; }
 		public DoWorkEventArgs Arguments { get; }
-
-		public ProgressDialogContext(BackgroundWorker worker, DoWorkEventArgs arguments)
+		public bool ProgressBarIsIndeterminate
 		{
+			get { return _showProgressBarIndeterminate; }
+			set
+			{
+				_showProgressBarIndeterminate = value;
+
+				_progressBar.Dispatcher.Invoke(delegate { _progressBar.IsIndeterminate = _showProgressBarIndeterminate; });
+			}
+		}
+		
+		public ProgressDialogContext(ProgressBar progressBar, BackgroundWorker worker, DoWorkEventArgs arguments)
+		{
+			_progressBar = progressBar;
 			Worker = worker ?? throw new ArgumentNullException("worker");
 			Arguments = arguments ?? throw new ArgumentNullException("arguments");
 		}
@@ -35,7 +51,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog
 		public void Report(string message)
 		{
 			if (Worker.WorkerReportsProgress)
-			{
+			{				
 				Worker.ReportProgress(0, message);
 			}
 		}
