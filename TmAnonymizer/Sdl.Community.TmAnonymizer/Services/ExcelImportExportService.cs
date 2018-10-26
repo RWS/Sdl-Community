@@ -15,7 +15,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 	public class ExcelImportExportService
 	{
 		public ExcelPackage GetExcelPackage(string filePath)
-		{
+		{			
 			var fileInfo = new FileInfo(filePath);
 			var excelPackage = new ExcelPackage(fileInfo);
 			return excelPackage;
@@ -28,9 +28,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				var package = GetExcelPackage(file);
 				var workSheet = package.Workbook.Worksheets[1];
-				for (var i = workSheet.Dimension.Start.Row;
-					i <= workSheet.Dimension.End.Row;
-					i++)
+				for (var i = workSheet.Dimension.Start.Row + 1; i <= workSheet.Dimension.End.Row; i++)
 				{
 					var customFieldName = workSheet.Cells[i, 1].Value.ToString();
 					var existingField = customFields.FirstOrDefault(c => c.Name.Equals(customFieldName));
@@ -47,9 +45,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						};
 						customFields.Add(field);
 					}
-					for (var j = workSheet.Dimension.Start.Column + 2;
-						j <= workSheet.Dimension.End.Column;
-						j++)
+					for (var j = workSheet.Dimension.Start.Column + 2; j <= workSheet.Dimension.End.Column; j++)
 					{
 						var address = workSheet.Cells[i, j].Address;
 						// get the filed with the same name
@@ -86,23 +82,46 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void ExportCustomFields(string filePath, List<CustomField> customFields)
 		{
+			if (File.Exists(filePath))
+			{
+				File.Delete(filePath);
+			}
+
 			var package = GetExcelPackage(filePath);
 			var worksheet = package.Workbook.Worksheets.Add("Exported custom fields");
 			var lineNumber = 1;
+
+			worksheet.Cells["A" + lineNumber].Value = "Name";
+			worksheet.Cells["B" + lineNumber].Value = "Type";
+			worksheet.Cells["C" + lineNumber].Value = "Value";
+			worksheet.Cells["D" + lineNumber].Value = "New Value";
+
+			worksheet.Column(1).Width = 20;
+			worksheet.Column(2).Width = 25;
+			worksheet.Column(3).Width = 25;
+			worksheet.Column(4).Width = 25;
+
+			var startData = lineNumber;
+
 			foreach (var field in customFields)
 			{
 				if (field != null)
 				{
 					foreach (var detail in field.FieldValues)
 					{
+						lineNumber++;
 						worksheet.Cells["A" + lineNumber].Value = field.Name;
 						worksheet.Cells["B" + lineNumber].Value = field.ValueType;
 						worksheet.Cells["C" + lineNumber].Value = detail.Value;
 						worksheet.Cells["D" + lineNumber].Value = detail.NewValue;
-						lineNumber++;
+						
 					}
 				}
 			}
+
+			var range = worksheet.Cells[startData, 1, lineNumber, 4];
+			var table = worksheet.Tables.Add(range, "tableData");
+
 			package.Save();
 		}
 
@@ -113,9 +132,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				var package = GetExcelPackage(file);
 				var workSheet = package.Workbook.Worksheets[1];
-				for (var i = workSheet.Dimension.Start.Row;
-					i <= workSheet.Dimension.End.Row;
-					i++)
+				for (var i = workSheet.Dimension.Start.Row + 1; i <= workSheet.Dimension.End.Row; i++)
 				{
 					var pattern = new Rule()
 					{
@@ -125,9 +142,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						Name = string.Empty
 					};
 
-					for (var j = workSheet.Dimension.Start.Column;
-						j <= workSheet.Dimension.End.Column;
-						j++)
+					for (var j = workSheet.Dimension.Start.Column; j <= workSheet.Dimension.End.Column; j++)
 					{
 						var address = workSheet.Cells[i, j].Address;
 
@@ -138,7 +153,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						}
 						else
 						{
-							pattern.Description = cellValue.ToString();
+							pattern.Description = cellValue?.ToString();
 						}
 					}
 					patterns.Add(pattern);
@@ -149,19 +164,36 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void ExportRules(string filePath, List<Rule> patterns)
 		{
+			if (File.Exists(filePath))
+			{
+				File.Delete(filePath);
+			}
+
 			using (var package = GetExcelPackage(filePath))
 			{
 				var worksheet = package.Workbook.Worksheets.Add("Exported expressions");
 				var lineNumber = 1;
+
+				worksheet.Cells["A" + lineNumber].Value = "Rule";
+				worksheet.Cells["B" + lineNumber].Value = "Description";
+
+				worksheet.Column(1).Width = 40;
+				worksheet.Column(2).Width = 30;
+
+				var startData = lineNumber;
+
 				foreach (var pattern in patterns)
 				{
 					if (pattern != null)
 					{
+						lineNumber++;
 						worksheet.Cells["A" + lineNumber].Value = pattern.Name;
 						worksheet.Cells["B" + lineNumber].Value = pattern.Description;
-						lineNumber++;
 					}
 				}
+
+				var range = worksheet.Cells[startData, 1, lineNumber, 2];
+				var table = worksheet.Tables.Add(range, "tableData");
 
 				package.Save();
 			}
@@ -174,9 +206,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				var package = GetExcelPackage(file);
 				var workSheet = package.Workbook.Worksheets[1];
-				for (var i = workSheet.Dimension.Start.Row;
-					i <= workSheet.Dimension.End.Row;
-					i++)
+				for (var i = workSheet.Dimension.Start.Row + 1; i <= workSheet.Dimension.End.Row; i++)
 				{
 					var user = new User
 					{
@@ -185,9 +215,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						Alias = string.Empty
 					};
 
-					for (var j = workSheet.Dimension.Start.Column;
-						j <= workSheet.Dimension.End.Column;
-						j++)
+					for (var j = workSheet.Dimension.Start.Column; j <= workSheet.Dimension.End.Column; j++)
 					{
 						var address = workSheet.Cells[i, j].Address;
 
@@ -209,19 +237,36 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void ExportUsers(string filePath, List<User> users)
 		{
+			if (File.Exists(filePath))
+			{
+				File.Delete(filePath);
+			}
+
 			using (var package = GetExcelPackage(filePath))
 			{
 				var worksheet = package.Workbook.Worksheets.Add("Exported system fields");
 				var lineNumber = 1;
+
+				worksheet.Cells["A" + lineNumber].Value = "User Name";
+				worksheet.Cells["B" + lineNumber].Value = "New User Name";
+
+				worksheet.Column(1).Width = 30;
+				worksheet.Column(2).Width = 30;
+
+				var startData = lineNumber;
 				foreach (var user in users)
 				{
 					if (user != null)
 					{
+						lineNumber++;
+
 						worksheet.Cells["A" + lineNumber].Value = user.UserName;
 						worksheet.Cells["B" + lineNumber].Value = user.Alias;
-						lineNumber++;
 					}
 				}
+
+				var range = worksheet.Cells[startData, 1, lineNumber, 2];
+				var table = worksheet.Tables.Add(range, "tableData");
 
 				package.Save();
 			}
@@ -239,15 +284,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var worksheet = package.Workbook.Worksheets.Add("Log Report");
 				worksheet.View.ShowGridLines = false;
 				var lineNumber = 1;
-				
-				AddLogReportHeaderItem(worksheet, "Report Path:", report.ReportFullPath, ref lineNumber);				
-				AddLogReportHeaderItem(worksheet, "Report Type:", report.Type, ref lineNumber);				
-				AddLogReportHeaderItem(worksheet, "Process Scope:", report.Scope, ref lineNumber);				
-				AddLogReportHeaderItem(worksheet, "TM Path:", report.TmFile.Path, ref lineNumber);				
-				AddLogReportHeaderItem(worksheet, "Server TM:", report.TmFile.IsServerTm, ref lineNumber);				
-				AddLogReportHeaderItem(worksheet, "Created:", report.Created.ToString(CultureInfo.InvariantCulture), ref lineNumber);				
-				AddLogReportHeaderItem(worksheet, "Updated Units:", report.UpdatedCount, ref lineNumber);			
-												
+
+				AddLogReportHeaderItem(worksheet, "Report Path:", report.ReportFullPath, ref lineNumber);
+				AddLogReportHeaderItem(worksheet, "Report Type:", report.Type, ref lineNumber);
+				AddLogReportHeaderItem(worksheet, "Process Scope:", report.Scope, ref lineNumber);
+				AddLogReportHeaderItem(worksheet, "TM Path:", report.TmFile.Path, ref lineNumber);
+				AddLogReportHeaderItem(worksheet, "Server TM:", report.TmFile.IsServerTm, ref lineNumber);
+				AddLogReportHeaderItem(worksheet, "Created:", report.Created.ToString(CultureInfo.InvariantCulture), ref lineNumber);
+				AddLogReportHeaderItem(worksheet, "Updated Units:", report.UpdatedCount, ref lineNumber);
+
 				var table = AddLogReportDataTable(report, worksheet, ref lineNumber);
 
 				package.Save();
@@ -256,7 +301,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		private static ExcelTable AddLogReportDataTable(Report report, ExcelWorksheet worksheet, ref int lineNumber)
 		{
-			lineNumber++;			
+			lineNumber++;
 
 			var startData = lineNumber;
 
@@ -290,11 +335,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					worksheet.Cells["E" + lineNumber].Style.WrapText = true;
 				}
 			}
-		
+
 			var range = worksheet.Cells[startData, 1, lineNumber, 6];
+			var table = worksheet.Tables.Add(range, "tableData");
 
 			lineNumber++;
-			var table = worksheet.Tables.Add(range, "tableData");
 			return table;
 		}
 

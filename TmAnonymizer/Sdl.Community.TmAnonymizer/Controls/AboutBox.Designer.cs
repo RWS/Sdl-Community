@@ -112,6 +112,7 @@
 			// 
 			// textBoxDescription
 			// 
+			this.textBoxDescription.BackColor = System.Drawing.SystemColors.Window;
 			this.textBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.textBoxDescription.Location = new System.Drawing.Point(6, 79);
 			this.textBoxDescription.Margin = new System.Windows.Forms.Padding(6, 3, 3, 3);
@@ -127,18 +128,26 @@
 			// okButton
 			// 
 			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.okButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(157)))), ((int)(((byte)(170)))));
+			this.okButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.okButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(157)))), ((int)(((byte)(170)))));
+			this.okButton.FlatAppearance.BorderSize = 0;
+			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.okButton.ForeColor = System.Drawing.Color.White;
 			this.okButton.Location = new System.Drawing.Point(257, 155);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(75, 24);
 			this.okButton.TabIndex = 24;
 			this.okButton.Text = "&OK";
+			this.okButton.UseVisualStyleBackColor = false;
 			// 
 			// AboutBox
 			// 
 			this.AcceptButton = this.okButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(353, 200);
 			this.Controls.Add(this.tableLayoutPanel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -147,6 +156,7 @@
 			this.MinimizeBox = false;
 			this.Name = "AboutBox";
 			this.Padding = new System.Windows.Forms.Padding(9);
+			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "AboutBox";

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -186,13 +187,25 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var result = fileDialog.ShowDialog();
 				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
 				{
+
 					foreach (var rule in SelectedItems.OfType<Rule>())
 					{
 						selectedRules.Add(rule);
 					}
 
+					if (!fileDialog.FileName.ToLower().EndsWith(".xlsx"))
+					{
+						fileDialog.FileName += ".xlsx";
+					}
+
 					_excelImportExportService.ExportRules(fileDialog.FileName, selectedRules);
+
 					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+					if (SelectedItem != null && File.Exists(fileDialog.FileName))
+					{
+						System.Diagnostics.Process.Start("\"" + fileDialog.FileName + "\"");
+					}
 				}
 			}
 			else
@@ -224,6 +237,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					if (ruleExist == null)
 					{
 						Rules.Add(expression);
+					}
+					else
+					{
+						ruleExist.Name = expression.Name;
+						ruleExist.Description = expression.Description;
 					}
 				}
 

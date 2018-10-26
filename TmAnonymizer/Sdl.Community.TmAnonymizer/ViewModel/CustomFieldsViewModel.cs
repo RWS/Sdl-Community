@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -331,6 +332,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				};
 				var result = fileDialog.ShowDialog();
 				var valuesToBeAnonymized = new List<CustomField>();
+
 				foreach (var item in SelectedItems)
 				{
 					valuesToBeAnonymized.Add(item as CustomField);
@@ -338,9 +340,18 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
 				{
+					if (!fileDialog.FileName.ToLower().EndsWith(".xlsx"))
+					{
+						fileDialog.FileName += ".xlsx";
+					}
+
 					_excelImportExportService.ExportCustomFields(fileDialog.FileName, valuesToBeAnonymized);
-					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK,
-						MessageBoxIcon.Information);
+					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK,MessageBoxIcon.Information);
+
+					if (SelectedItem != null && File.Exists(fileDialog.FileName))
+					{
+						System.Diagnostics.Process.Start("\"" + fileDialog.FileName + "\"");
+					}
 				}
 			}
 			else

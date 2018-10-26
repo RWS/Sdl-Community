@@ -8,7 +8,7 @@
 		WindowStartupLocation="CenterScreen"
         FontFamily="Segoe UI"
         Title="Preview changes"
-        mc:Ignorable="d"
+        mc:Ignorable="d"		
 		xmlns:controls="clr-namespace:Sdl.Community.SdlTmAnonymizer.Controls"
         xmlns:model="clr-namespace:Sdl.Community.SdlTmAnonymizer.Model"
         d:DesignHeight="300" d:DesignWidth="600"
@@ -58,7 +58,7 @@
 					<DataGridTemplateColumn  Header="ID"  MinWidth="50"  Width="Auto" SortMemberPath="TranslationUnit.ResourceId.Id" >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate DataType="model:ContentSearchResult">
-								<TextBlock Text="{Binding TranslationUnit.ResourceId.Id}" VerticalAlignment="Center" />
+								<TextBlock Text="{Binding TranslationUnit.ResourceId.Id}" VerticalAlignment="Center" HorizontalAlignment="Right" />
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>

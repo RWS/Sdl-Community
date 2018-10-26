@@ -22,6 +22,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ICommand _openFolderContaining;
 		private ICommand _exportToExcel;
 		private ReportFile _selectedItem;
+		private bool _isEnabled;
 
 		public LogViewModel(TranslationMemoryViewModel model, SerializerService serializerService, ExcelImportExportService excelImportExportService)
 		{
@@ -32,6 +33,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_model = model;
 			_model.PropertyChanged += Model_PropertyChanged;
 			_model.TmsCollection.CollectionChanged += TmsCollection_CollectionChanged;
+
+			IsEnabled = _settingsService.GetSettings().Accepted;
 		}
 
 		private void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -98,6 +101,16 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			if (ReportFiles?.Count > 0)
 			{
 				SelectedItem = ReportFiles.FirstOrDefault(a => a.FullPath == selectedFullPath) ?? ReportFiles[0];
+			}
+		}
+
+		public bool IsEnabled
+		{
+			get { return _isEnabled; }
+			set
+			{
+				_isEnabled = value;
+				OnPropertyChanged(nameof(IsEnabled));
 			}
 		}
 

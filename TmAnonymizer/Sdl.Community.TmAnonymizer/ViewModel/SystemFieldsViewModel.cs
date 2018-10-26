@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -342,7 +343,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						var index = UniqueUserNames.IndexOf(existingUser);
 						if (index != -1)
 						{
-							UniqueUserNames[index] = user;
+							UniqueUserNames[index].Alias = user.Alias;
 						}
 					}
 				}
@@ -368,8 +369,18 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						selectedUsers.Add(user);
 					}
 
+					if (!fileDialog.FileName.ToLower().EndsWith(".xlsx"))
+					{
+						fileDialog.FileName += ".xlsx";
+					}
+
 					_excelImportExportService.ExportUsers(fileDialog.FileName, selectedUsers);
 					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+					if (SelectedItem != null && File.Exists(fileDialog.FileName))
+					{
+						System.Diagnostics.Process.Start("\"" + fileDialog.FileName + "\"");
+					}
 				}
 			}
 			else
