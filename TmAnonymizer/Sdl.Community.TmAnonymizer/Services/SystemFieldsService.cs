@@ -81,20 +81,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			});
 
 			var report = new Report(tmFile)
-			{				
+			{
 				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportScope.SystemFields),
 				UpdatedCount = translationUnits.Count,
 				Scope = Report.ReportScope.SystemFields,
 			};
 
 			var stopWatch = new Stopwatch();
-			stopWatch.Start();			
-			
+			stopWatch.Start();
+
 			report.Actions.AddRange(GetSystemFieldChangesReport(uniqueUsers));
-		
+
 			var settings = _settingsService.GetSettings();
-			report.UpdatedCount = settings.UseSqliteApiForFileBasedTm 
-				? UpdateSystemFieldsSqlite(context, tmFile, translationUnits, uniqueUsers) 
+			report.UpdatedCount = settings.UseSqliteApiForFileBasedTm
+				? UpdateSystemFieldsSqlite(context, tmFile, translationUnits, uniqueUsers)
 				: UpdateSystemFields(context, translationUnits, tm, uniqueUsers);
 
 			stopWatch.Stop();
@@ -102,7 +102,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			return report;
 		}
-	
+
 		public Report AnonymizeServerBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, TranslationProviderServer translationProvideServer)
 		{
 			_tmService.BackupServerBasedTms(context, new List<TmFile> { tmFile });
@@ -118,17 +118,17 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					Target = languageDirection.TargetLanguage
 				});
 			}
-			
+
 			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
 
 			var report = new Report(tmFile)
-			{				
+			{
 				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportScope.SystemFields),
 				UpdatedCount = translationUnits.Count,
 				Scope = Report.ReportScope.SystemFields,
 			};
 
-			
+
 			report.Actions.AddRange(GetSystemFieldChangesReport(uniqueUsers));
 
 			var stopWatch = new Stopwatch();
@@ -142,7 +142,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return report;
 		}
 
-		private int UpdateSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, 
+		private int UpdateSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers,
 			List<TmTranslationUnit> translationUnits, ServerBasedTranslationMemory serverBasedTm)
 		{
 			var updatedCount = 0;
@@ -150,7 +150,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			decimal iTotalUnits = translationUnits.Count;
 			var groupsOf = 100;
 
-			var tusGroups = new List<List<TmTranslationUnit>> {new List<TmTranslationUnit>(translationUnits)};
+			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(translationUnits) };
 			if (translationUnits.Count > groupsOf)
 			{
 				tusGroups = translationUnits.ChunkBy(groupsOf);
@@ -167,58 +167,24 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var progress = iCurrent / iTotalUnits * 100;
 				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
 
-				var updateSystemFields = false;
-
+				var filteredTusToUpdate = new List<TmTranslationUnit>();
 				foreach (var tu in tus)
 				{
-					foreach (var userName in uniqueUsers)
+					if (UpdateSystemFields(uniqueUsers, tu))
 					{
-						var updateCreationUser = false;
-						var updateUseUser = false;
-
-						if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
-						{
-							var systemFields = tu.SystemFields;
-
-							if (!string.IsNullOrEmpty(systemFields.CreationUser) &&
-							    userName.UserName == systemFields.CreationUser)
-							{
-								updateCreationUser = true;
-							}
-
-							if (!string.IsNullOrEmpty(systemFields.UseUser) &&
-							    userName.UserName == systemFields.UseUser)
-							{
-								updateUseUser = true;
-							}
-
-							if (updateCreationUser || updateUseUser)
-							{
-								updateSystemFields = true;
-
-								if (updateCreationUser)
-								{
-									systemFields.CreationUser = userName.Alias;
-								}
-
-								if (updateUseUser)
-								{
-									systemFields.UseUser = userName.Alias;
-								}
-							}
-						}
-					}
+						filteredTusToUpdate.Add(tu);
+					}					
 				}
 
-				if (updateSystemFields)
+				if (filteredTusToUpdate.Count > 0)
 				{
 					foreach (var languageDirection in serverBasedTm.LanguageDirections)
 					{
 						var tusToUpdate = new List<TranslationUnit>();
-						foreach (var tu in tus)
+						foreach (var tu in filteredTusToUpdate)
 						{
 							if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
-							    languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
+								languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
 							{
 								var unit = _tmService.CreateTranslationUnit(tu, languageDirection);
 								tusToUpdate.Add(unit);
@@ -299,17 +265,19 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var progress = iCurrent / iTotalUnits * 100;
 				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
 
-				var updateSystemFields = false;
-
+				var filteredTusToUpdate = new List<TmTranslationUnit>();
 				foreach (var tu in tus)
 				{
-					updateSystemFields = UpdateSystemFields(uniqueUsers, tu);
+					if (UpdateSystemFields(uniqueUsers, tu))
+					{
+						filteredTusToUpdate.Add(tu);
+					}
 				}
 
-				if (updateSystemFields)
+				if (filteredTusToUpdate.Count > 0)
 				{
 					var tusToUpdate = new List<TranslationUnit>();
-					foreach (var tu in tus)
+					foreach (var tu in filteredTusToUpdate)
 					{
 						if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
 							tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
@@ -395,7 +363,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			var details = new List<Model.Log.Action>();
 
 			foreach (var userName in uniqueUsers)
-			{				
+			{
 				if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
 				{
 					var detailCreationUser = details.FirstOrDefault(a => a.Value == userName.Alias && a.Previous == userName.UserName);
