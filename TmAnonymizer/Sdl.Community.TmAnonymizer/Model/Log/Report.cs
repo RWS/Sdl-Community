@@ -24,7 +24,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.Log
 			Actions = new List<Model.Log.Action>();
 			ElapsedSeconds = 0;
 			Created = DateTime.Now;
-			Type = "Update";
+			Type = "Update TM";
 		}
 
 		public string ReportFullPath { get; set; }

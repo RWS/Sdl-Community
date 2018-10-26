@@ -5,6 +5,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Input;
+using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Model.Log;
 using Sdl.Community.SdlTmAnonymizer.Services;
 
@@ -15,13 +17,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private readonly TranslationMemoryViewModel _model;
 		private readonly SettingsService _settingsService;
 		private readonly SerializerService _serializerService;
+		private readonly ExcelImportExportService _excelImportExportService;
 		private ObservableCollection<ReportFile> _reportFiles;
+		private ICommand _openFolderContaining;
+		private ICommand _exportToExcel;
 		private ReportFile _selectedItem;
 
-		public LogViewModel(TranslationMemoryViewModel model, SerializerService serializerService)
+		public LogViewModel(TranslationMemoryViewModel model, SerializerService serializerService, ExcelImportExportService excelImportExportService)
 		{
 			_settingsService = model.SettingsService;
 			_serializerService = serializerService;
+			_excelImportExportService = excelImportExportService;
 
 			_model = model;
 			_model.PropertyChanged += Model_PropertyChanged;
@@ -107,6 +113,32 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			return name;
 		}
 
+		public ICommand OpenFolderContainingCommand => _openFolderContaining ?? (_openFolderContaining = new RelayCommand(OpenFolderContaining));
+
+		public ICommand ExportToExcelCommand => _exportToExcel ?? (_exportToExcel = new RelayCommand(ExportToExcel));
+
+		private void OpenFolderContaining(object parameter)
+		{
+			if (SelectedItem != null && Directory.Exists(Path.GetDirectoryName(SelectedItem.FullPath)))
+			{
+				System.Diagnostics.Process.Start("explorer.exe", "\"" + Path.GetDirectoryName(SelectedItem.FullPath) + "\"");
+			}
+		}
+
+		private void ExportToExcel(object parameter)
+		{
+			if (SelectedItem != null && Directory.Exists(Path.GetDirectoryName(SelectedItem.FullPath)))
+			{
+				_excelImportExportService.ExportLogReportToExcel(SelectedItem.FullPath + ".xlsx", Report);
+
+				if (File.Exists(SelectedItem.FullPath + ".xlsx"))
+				{
+					System.Diagnostics.Process.Start("\"" + SelectedItem.FullPath + ".xlsx" + "\"");
+				}
+			}
+		}
+
+
 		public string SelectedReportHtml
 		{
 			get { return SelectedItem != null ? SelectedItem.FullPath : string.Empty; }
@@ -134,14 +166,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (SelectedItem != null && File.Exists(SelectedItem.FullPath))
 				{
 					report = _serializerService.Read<Report>(SelectedItem.FullPath);
-					ReportCreated = report.Created.ToString(CultureInfo.InvariantCulture);									
+					ReportCreated = report.Created.ToString(CultureInfo.InvariantCulture);
 				}
 				else
 				{
 					report = new Report();
 					ReportCreated = string.Empty;
 				}
-				
+
 				OnPropertyChanged(nameof(ReportCreated));
 
 				return report;

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using OfficeOpenXml.Table;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Model.Log;
 using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.SdlTmAnonymizer.Services
@@ -33,7 +37,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					if (existingField == null)
 					{
 						var fieldType = workSheet.Cells[i, 2].Value.ToString();
-						var studioCustomFieldType = (FieldValueType) Enum.Parse(typeof(FieldValueType), fieldType);
+						var studioCustomFieldType = (FieldValueType)Enum.Parse(typeof(FieldValueType), fieldType);
 						var field = new CustomField
 						{
 							IsSelected = true,
@@ -43,7 +47,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						};
 						customFields.Add(field);
 					}
-					for (var j = workSheet.Dimension.Start.Column+2;
+					for (var j = workSheet.Dimension.Start.Column + 2;
 						j <= workSheet.Dimension.End.Column;
 						j++)
 					{
@@ -101,7 +105,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 			package.Save();
 		}
-		
+
 		public List<Rule> ImportedRules(List<string> files)
 		{
 			var patterns = new List<Rule>();
@@ -142,22 +146,25 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 			return patterns;
 		}
-		
+
 		public void ExportRules(string filePath, List<Rule> patterns)
 		{
-			var package = GetExcelPackage(filePath);
-			var worksheet = package.Workbook.Worksheets.Add("Exported expressions");
-			var lineNumber = 1;
-			foreach (var pattern in patterns)
+			using (var package = GetExcelPackage(filePath))
 			{
-				if (pattern != null)
+				var worksheet = package.Workbook.Worksheets.Add("Exported expressions");
+				var lineNumber = 1;
+				foreach (var pattern in patterns)
 				{
-					worksheet.Cells["A" + lineNumber].Value = pattern.Name;
-					worksheet.Cells["B" + lineNumber].Value = pattern.Description;
-					lineNumber++;
+					if (pattern != null)
+					{
+						worksheet.Cells["A" + lineNumber].Value = pattern.Name;
+						worksheet.Cells["B" + lineNumber].Value = pattern.Description;
+						lineNumber++;
+					}
 				}
+
+				package.Save();
 			}
-			package.Save();
 		}
 
 		public List<User> ImportUsers(List<string> files)
@@ -202,19 +209,104 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void ExportUsers(string filePath, List<User> users)
 		{
-			var package = GetExcelPackage(filePath);
-			var worksheet = package.Workbook.Worksheets.Add("Exported system fields");
-			var lineNumber = 1;
-			foreach (var user in users)
+			using (var package = GetExcelPackage(filePath))
 			{
-				if (user != null)
+				var worksheet = package.Workbook.Worksheets.Add("Exported system fields");
+				var lineNumber = 1;
+				foreach (var user in users)
 				{
-					worksheet.Cells["A" + lineNumber].Value = user.UserName;
-					worksheet.Cells["B" + lineNumber].Value = user.Alias;
-					lineNumber++;
+					if (user != null)
+					{
+						worksheet.Cells["A" + lineNumber].Value = user.UserName;
+						worksheet.Cells["B" + lineNumber].Value = user.Alias;
+						lineNumber++;
+					}
+				}
+
+				package.Save();
+			}
+		}
+
+		public void ExportLogReportToExcel(string filePath, Model.Log.Report report)
+		{
+			if (File.Exists(filePath))
+			{
+				File.Delete(filePath);
+			}
+
+			using (var package = GetExcelPackage(filePath))
+			{
+				var worksheet = package.Workbook.Worksheets.Add("Log Report");
+				worksheet.View.ShowGridLines = false;
+				var lineNumber = 1;
+				
+				AddLogReportHeaderItem(worksheet, "Report Path:", report.ReportFullPath, ref lineNumber);				
+				AddLogReportHeaderItem(worksheet, "Report Type:", report.Type, ref lineNumber);				
+				AddLogReportHeaderItem(worksheet, "Process Scope:", report.Scope, ref lineNumber);				
+				AddLogReportHeaderItem(worksheet, "TM Path:", report.TmFile.Path, ref lineNumber);				
+				AddLogReportHeaderItem(worksheet, "Server TM:", report.TmFile.IsServerTm, ref lineNumber);				
+				AddLogReportHeaderItem(worksheet, "Created:", report.Created.ToString(CultureInfo.InvariantCulture), ref lineNumber);				
+				AddLogReportHeaderItem(worksheet, "Updated Units:", report.UpdatedCount, ref lineNumber);			
+												
+				var table = AddLogReportDataTable(report, worksheet, ref lineNumber);
+
+				package.Save();
+			}
+		}
+
+		private static ExcelTable AddLogReportDataTable(Report report, ExcelWorksheet worksheet, ref int lineNumber)
+		{
+			lineNumber++;			
+
+			var startData = lineNumber;
+
+			worksheet.Cells["A" + lineNumber].Value = "ID";
+			worksheet.Cells["B" + lineNumber].Value = "Name";
+			worksheet.Cells["C" + lineNumber].Value = "Type";
+			worksheet.Cells["D" + lineNumber].Value = "Value";
+			worksheet.Cells["E" + lineNumber].Value = "Previous";
+			worksheet.Cells["F" + lineNumber].Value = "Result";
+
+			worksheet.Column(1).Width = 10;
+			worksheet.Column(2).Width = 12;
+			worksheet.Column(3).Width = 12;
+			worksheet.Column(4).Width = 70;
+			worksheet.Column(5).Width = 70;
+			worksheet.Column(6).Width = 10;
+
+			foreach (var action in report.Actions)
+			{
+				lineNumber++;
+				if (action != null)
+				{
+					worksheet.Cells["A" + lineNumber].Value = action.TmId?.Id.ToString();
+					worksheet.Cells["B" + lineNumber].Value = action.Name;
+					worksheet.Cells["C" + lineNumber].Value = action.Type;
+					worksheet.Cells["D" + lineNumber].Value = action.Value;
+					worksheet.Cells["E" + lineNumber].Value = action.Previous;
+					worksheet.Cells["F" + lineNumber].Value = string.IsNullOrEmpty(action.Result) ? "OK" : action.Result;
+
+					worksheet.Cells["D" + lineNumber].Style.WrapText = true;
+					worksheet.Cells["E" + lineNumber].Style.WrapText = true;
 				}
 			}
-			package.Save();
+		
+			var range = worksheet.Cells[startData, 1, lineNumber, 6];
+
+			lineNumber++;
+			var table = worksheet.Tables.Add(range, "tableData");
+			return table;
+		}
+
+		private static void AddLogReportHeaderItem(ExcelWorksheet worksheet, string labelText, object value, ref int lineNumber)
+		{
+			worksheet.Cells["A" + lineNumber].Value = labelText;
+			worksheet.Cells["A" + lineNumber].Style.Font.Bold = true;
+			worksheet.Cells["C" + lineNumber].Value = value;
+			worksheet.Cells["C" + lineNumber].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+			worksheet.Cells["A" + lineNumber + ":" + "B" + lineNumber].Merge = true;
+
+			lineNumber++;
 		}
 	}
 }
