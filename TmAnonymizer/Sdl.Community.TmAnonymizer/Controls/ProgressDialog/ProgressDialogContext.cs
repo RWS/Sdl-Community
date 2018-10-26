@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Controls;
-using System.Windows.Threading;
 
 namespace Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog
 {
