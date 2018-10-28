@@ -5,6 +5,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 {
     public class ContentSearchResult : ModelBase
 	{
+
+		public ContentSearchResult()
+		{
+			SelectedWordsDetails = new List<WordDetails>();
+			DeSelectedWordsDetails = new List<WordDetails>();
+			TargetDeSelectedWordsDetails = new List<WordDetails>();
+			TargetSelectedWordsDetails = new List<WordDetails>();
+		}
+
 		private bool _tuSelected;		
 		public TmTranslationUnit TranslationUnit { get; set; }		
 		public string SourceText { get; set; }

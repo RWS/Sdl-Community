@@ -236,11 +236,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						TargetText = tu.TargetSegment.ToPlain(),
 						TmFilePath = tmFile.Path,
 						IsServer = tmFile.IsServerTm,
-						IconFilePath = "../Resources/ServerBasedTranslationMemory.ico",
-						SelectedWordsDetails = new List<WordDetails>(),
-						DeSelectedWordsDetails = new List<WordDetails>(),
-						TargetDeSelectedWordsDetails = new List<WordDetails>(),
-						TargetSelectedWordsDetails = new List<WordDetails>()
+						IconFilePath = tmFile.IsServerTm
+							? "../Resources/ServerBasedTranslationMemory.ico"
+							: "../Resources/TranslationMemory.ico"
 					};
 
 					if (sourcePositions?.Count > 0)

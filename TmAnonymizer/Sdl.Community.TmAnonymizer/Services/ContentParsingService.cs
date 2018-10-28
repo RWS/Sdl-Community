@@ -8,7 +8,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 	public class ContentParsingService
 	{
 		/// <summary>
-		/// Gets a list with the positions and lenghts of PI in text 
+		/// Gets a list with the positions and lengths of PI in text 
 		/// </summary>
 		/// <param name="text">Segment plain text</param>
 		/// <param name="patterns"></param>
