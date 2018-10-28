@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Sdl.Community.SdlTmAnonymizer.View.MainExplorerControl"
+﻿<UserControl x:Class="Sdl.Community.SdlTmAnonymizer.View.MainExplorerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,7 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="600" d:DataContext="{d:DesignData MainViewModel}">
 	<UserControl.Resources>
 		<DataTemplate DataType="{x:Type viewModels:TranslationMemoryViewModel}">
-			<view:TranslationMemory/>
+			<view:TranslationMemoryView/>
 		</DataTemplate>
 	</UserControl.Resources>
 

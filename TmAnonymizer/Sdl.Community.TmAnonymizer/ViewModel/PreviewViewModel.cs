@@ -11,7 +11,7 @@ using Sdl.Community.SdlTmAnonymizer.Model;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
-	public class PreviewWindowViewModel : ViewModelBase, IDisposable
+	public class PreviewViewModel : ViewModelBase, IDisposable
 	{
 		private ObservableCollection<ContentSearchResult> _sourceSearchResults;
 		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTms;
@@ -23,7 +23,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private string _textBoxColor;
 		private readonly Window _window;
 
-		public PreviewWindowViewModel(Window window, List<ContentSearchResult> searchResults,
+		public PreviewViewModel(Window window, List<ContentSearchResult> searchResults,
 			ObservableCollection<AnonymizeTranslationMemory> anonymizeTms, TranslationMemoryViewModel model)
 		{
 			_window = window;

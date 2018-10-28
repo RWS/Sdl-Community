@@ -5,14 +5,14 @@ using Sdl.Community.SdlTmAnonymizer.View;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
-	public class AcceptWindowViewModel : ViewModelBase
+	public class AcceptViewModel : ViewModelBase
 	{
 		private string _description;
 		private bool _accepted;
 		private ICommand _okCommand;
 		private readonly SettingsService _settingsService;
 
-		public AcceptWindowViewModel(SettingsService settingsService)
+		public AcceptViewModel(SettingsService settingsService)
 		{
 			_settingsService = settingsService;
 			Description = StringResources.AcceptsNoLiability_Description_Line01 +
@@ -28,7 +28,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			_settingsService.SaveSettings(settings);
 
-			var accept = (AcceptWindow)window;
+			var accept = (AcceptView)window;
 			accept.Close();
 		}
 

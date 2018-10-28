@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Sdl.Community.SdlTmAnonymizer.View.MainViewControl"
+﻿<UserControl x:Class="Sdl.Community.SdlTmAnonymizer.View.MainView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -15,7 +15,7 @@
 			</ResourceDictionary.MergedDictionaries>
 
 			<DataTemplate DataType="{x:Type viewModels:TranslationMemoryViewModel}">
-				<view:TranslationMemory/>
+				<view:TranslationMemoryView/>
 			</DataTemplate>
 		</ResourceDictionary>
 
@@ -26,13 +26,13 @@
 		<TabControl Margin="5" BorderBrush="Gainsboro" ItemContainerStyle="{StaticResource TabItemStyle}" >
 
 			<TabItem Header="Content Filtering Rules">
-				<view:ContentFilteringRules DataContext="{Binding ContentFilteringRulesViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
+				<view:ContentFilteringRulesView DataContext="{Binding ContentFilteringRulesViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 			</TabItem>
 			<TabItem  Header ="System Fields">
-				<view:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
+				<view:SystemFieldsView DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 			</TabItem>
 			<TabItem Header="Custom Fields">
-				<view:CustomFields DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
+				<view:CustomFieldsView DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 			</TabItem>
 
 		</TabControl>

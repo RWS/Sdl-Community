@@ -3,9 +3,9 @@
 	/// <summary>
 	/// Interaction logic for LoginWindow.xaml
 	/// </summary>
-	public partial class LoginWindow
+	public partial class LoginView
 	{
-		public LoginWindow()
+		public LoginView()
 		{
 			InitializeComponent();
 		}	

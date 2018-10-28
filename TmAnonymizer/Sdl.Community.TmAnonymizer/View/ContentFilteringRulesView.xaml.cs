@@ -5,9 +5,9 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 	/// <summary>
 	/// Interaction logic for Translations.xaml
 	/// </summary>
-	public partial class ContentFilteringRules : UserControl
+	public partial class ContentFilteringRulesView : UserControl
 	{
-		public ContentFilteringRules()
+		public ContentFilteringRulesView()
 		{
 			InitializeComponent();
 		}	

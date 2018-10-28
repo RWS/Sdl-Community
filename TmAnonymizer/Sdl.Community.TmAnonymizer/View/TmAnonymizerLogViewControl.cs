@@ -9,7 +9,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 		{
 			InitializeComponent();
 
-			var window = new LogViewControl(model);
+			var window = new LogView(model);
 
 			window.InitializeComponent();
 			elementHost.Child = window;

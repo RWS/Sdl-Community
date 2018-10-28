@@ -9,7 +9,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 	/// <summary>
 	/// Interaction logic for AcceptWindow.xaml
 	/// </summary>
-	public partial class SelectServersWindow
+	public partial class SelectServersView
 	{
 		[DllImport("user32.dll")]
 		private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
@@ -21,7 +21,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 		private const int WS_MAXIMIZEBOX = 0x10000; //maximize button
 		private const int WS_MINIMIZEBOX = 0x20000; //minimize button
 
-		public SelectServersWindow()
+		public SelectServersView()
 		{
 			InitializeComponent();
 			Visibility = Visibility.Visible;

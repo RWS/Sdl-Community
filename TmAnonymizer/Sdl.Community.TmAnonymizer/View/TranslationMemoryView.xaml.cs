@@ -3,9 +3,9 @@
 	/// <summary>
 	/// Interaction logic for TranslationMemory.xaml
 	/// </summary>
-	public partial class TranslationMemory
+	public partial class TranslationMemoryView
 	{
-		public TranslationMemory()
+		public TranslationMemoryView()
 		{
 			InitializeComponent();
 		}

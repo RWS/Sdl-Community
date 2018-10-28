@@ -13,7 +13,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 	/// <summary>
 	/// Interaction logic for PreviewWindow.xaml
 	/// </summary>
-	public partial class PreviewWindow
+	public partial class PreviewView
 	{
 		[DllImport("user32.dll")]
 		private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
@@ -27,7 +27,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 
 		private RichTextBox _textBox;		
 
-		public PreviewWindow()
+		public PreviewView()
 		{
 			InitializeComponent();
 			SourceInitialized += MainWindow_SourceInitialized;
@@ -174,7 +174,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 
 		private void AnonymizeAction(object sender, RoutedEventArgs e)
 		{
-			((PreviewWindowViewModel)DataContext).ApplyChanges();
+			((PreviewViewModel)DataContext).ApplyChanges();
 		}
 	}
 }
