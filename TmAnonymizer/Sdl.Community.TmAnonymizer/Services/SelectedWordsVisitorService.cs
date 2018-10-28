@@ -45,7 +45,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			var wordsIndexes = new List<int>();
 			var positionOfSelectedText = new List<int>();
 
-			//for each selected word add start index, the lenght and the position of next word
+			//for each selected word add start index, the length and the position of next word
 			foreach (var selectedWord in _selectedWordsDetails)
 			{
 				wordsIndexes.Add(selectedWord.Position);
@@ -57,9 +57,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 			var segmentTextTrimed = segmentText.TrimStart();
 
-			var indexesBiggerThanTextLenght = wordsIndexes.Count(i => i > segmentTextTrimed.Length);
+			var biggerThanTextLength = wordsIndexes.Count(i => i > segmentTextTrimed.Length);
 			//that means selected text is the last word
-			if (indexesBiggerThanTextLenght.Equals(wordsIndexes.Count))
+			if (biggerThanTextLength.Equals(wordsIndexes.Count))
 			{
 				var startIndex = segmentText.IndexOf(segmentTextTrimed, StringComparison.Ordinal);
 				positionOfSelectedText.Add(startIndex);
