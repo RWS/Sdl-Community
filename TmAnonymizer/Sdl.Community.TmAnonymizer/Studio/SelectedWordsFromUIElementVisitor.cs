@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Extensions;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Tokenization;
 
-namespace Sdl.Community.SdlTmAnonymizer.Studio
+namespace Sdl.Community.SdlTmAnonymizer.Services
 {
-	public class SelectedWordsFromUiElementVisitor : ISegmentElementVisitor
+	public class SelectedWordsVisitorService : ISegmentElementVisitor
 	{
 		private readonly List<WordDetails> _selectedWordsDetails;
+		private readonly List<int> _anchorIds;
 		/// <summary>
 		/// All subsegments in current translation unit
 		/// </summary>
 		public List<object> SegmentColection { get; set; }
-		public SelectedWordsFromUiElementVisitor(List<WordDetails>selectedWordsDetails)
+		public SelectedWordsVisitorService(List<WordDetails> selectedWordsDetails, List<int> anchorIds)
 		{
 			_selectedWordsDetails = selectedWordsDetails;
+			_anchorIds = anchorIds;
 		}
-		
+
 		public void VisitText(Text text)
 		{
 			var segmentCollection = new List<object>();
@@ -38,11 +40,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		/// </summary>
 		/// <param name="segmentText"></param>
 		/// <param name="segmentCollection"></param>
-		private void SubsegmentSelectedData(string segmentText, List<object> segmentCollection)
+		private void SubsegmentSelectedData(string segmentText, ICollection<object> segmentCollection)
 		{
 			var wordsIndexes = new List<int>();
 			var positionOfSelectedText = new List<int>();
-			//for each selected word add start index, the lenght and the position of next word
+
+			//for each selected word add start index, the length and the position of next word
 			foreach (var selectedWord in _selectedWordsDetails)
 			{
 				wordsIndexes.Add(selectedWord.Position);
@@ -54,9 +57,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			}
 			var segmentTextTrimed = segmentText.TrimStart();
 
-			var indexesBiggerThanTextLenght = wordsIndexes.Count(i => i > segmentTextTrimed.Length);
+			var biggerThanTextLength = wordsIndexes.Count(i => i > segmentTextTrimed.Length);
 			//that means selected text is the last word
-			if (indexesBiggerThanTextLenght.Equals(wordsIndexes.Count))
+			if (biggerThanTextLength.Equals(wordsIndexes.Count))
 			{
 				var startIndex = segmentText.IndexOf(segmentTextTrimed, StringComparison.Ordinal);
 				positionOfSelectedText.Add(startIndex);
@@ -102,8 +105,22 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 				}
 				CreateSegmentCollection(elementsCollection, positionOfSelectedText, segmentCollection);
 			}
-		
+
 			_selectedWordsDetails.Clear();
+		}
+
+		private int GetUniqueAnchorId()
+		{
+			for (var i = 1; i < 1000; i++)
+			{
+				if (!_anchorIds.Contains(i))
+				{
+					_anchorIds.Add(i);
+					return i;
+				}
+			}
+
+			return 0;
 		}
 
 		/// <summary>
@@ -112,9 +129,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		/// <param name="elementsCollection">List of words</param>
 		/// <param name="positionOfSelectedText">List with the positions of selected words in Preview Window</param>
 		/// <param name="segmentCollection">List with Text and Tags</param>
-		private void CreateSegmentCollection(List<string>elementsCollection,List<int> positionOfSelectedText, List<object> segmentCollection)
+		private void CreateSegmentCollection(IReadOnlyList<string> elementsCollection, ICollection<int> positionOfSelectedText, ICollection<object> segmentCollection)
 		{
-			for (int i = 0; i < elementsCollection.Count; i++)
+			for (var i = 0; i < elementsCollection.Count; i++)
 			{
 				var isTagAtPosition = positionOfSelectedText.Contains(i);
 				if (!isTagAtPosition)
@@ -124,41 +141,41 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 				}
 				else
 				{
-					var tag = new Tag(TagType.TextPlaceholder, string.Empty, 1);
+					var anchorId = GetUniqueAnchorId();
+					var tag = new Tag(TagType.TextPlaceholder, string.Empty, anchorId );					
 					segmentCollection.Add(tag);
 				}
-
 			}
 		}
 
 		public void VisitTag(Tag tag)
 		{
-			
+			// not required with this implementation
 		}
 
 		public void VisitDateTimeToken(DateTimeToken token)
 		{
-			
+			// not required with this implementation
 		}
 
 		public void VisitNumberToken(NumberToken token)
 		{
-			
+			// not required with this implementation
 		}
 
 		public void VisitMeasureToken(MeasureToken token)
 		{
-			
+			// not required with this implementation
 		}
 
 		public void VisitSimpleToken(SimpleToken token)
 		{
-			
+			// not required with this implementation
 		}
 
 		public void VisitTagToken(TagToken token)
 		{
-			
+			// not required with this implementation
 		}
 	}
 }
