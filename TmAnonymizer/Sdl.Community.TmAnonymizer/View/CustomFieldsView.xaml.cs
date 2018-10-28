@@ -3,11 +3,11 @@
 namespace Sdl.Community.SdlTmAnonymizer.View
 {
 	/// <summary>
-	/// Interaction logic for SystemFields.xaml
+	/// Interaction logic for CustomFields.xaml
 	/// </summary>
-	public partial class SystemFields : UserControl
+	public partial class CustomFieldsView : UserControl
 	{
-		public SystemFields()
+		public CustomFieldsView()
 		{
 			InitializeComponent();
 		}

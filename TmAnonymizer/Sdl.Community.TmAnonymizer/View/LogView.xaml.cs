@@ -6,9 +6,9 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 	/// <summary>
 	/// Interaction logic for MainViewControl.xaml
 	/// </summary>
-	public partial class LogViewControl : UserControl
+	public partial class LogView : UserControl
 	{
-		public LogViewControl(MainViewModel model)
+		public LogView(MainViewModel model)
 		{			
 			InitializeComponent();
 

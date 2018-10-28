@@ -11,7 +11,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
-	public class SelectServersWindowViewModel : ViewModelBase, IDisposable
+	public class SelectServersViewModel : ViewModelBase, IDisposable
 	{
 		private List<TmFile> _translationMemories;
 		private readonly SettingsService _settingsService;
@@ -19,7 +19,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private readonly BackgroundWorker _backgroundWorker;
 		private readonly Window _controlWindow;
 
-		public SelectServersWindowViewModel(Window controlWindow, SettingsService settingsService, TranslationProviderServer translationProviderServer)
+		public SelectServersViewModel(Window controlWindow, SettingsService settingsService, TranslationProviderServer translationProviderServer)
 		{
 			_controlWindow = controlWindow;
 
@@ -124,7 +124,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private void RefreshView()
 		{
 			OnPropertyChanged(nameof(TranslationMemories));
-			((SelectServersWindow)_controlWindow).Refresh();
+			((SelectServersView)_controlWindow).Refresh();
 		}
 
 		public void Dispose()

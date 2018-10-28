@@ -9,7 +9,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
-	public class LoginWindowViewModel : ViewModelBase, IDataErrorInfo, IDisposable
+	public class LoginViewModel : ViewModelBase, IDataErrorInfo, IDisposable
 	{
 		private string _url;
 		private string _userName;
@@ -23,7 +23,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private bool _hasText;
 		private string _visibility;
 
-		public LoginWindowViewModel(Window window, Credentials credentials)
+		public LoginViewModel(Window window, Credentials credentials)
 		{
 			_window = window;
 			

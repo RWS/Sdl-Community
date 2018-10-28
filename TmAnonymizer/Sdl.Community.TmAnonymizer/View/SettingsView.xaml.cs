@@ -1,13 +1,13 @@
 ﻿namespace Sdl.Community.SdlTmAnonymizer.View
 {
 	/// <summary>
-	/// Interaction logic for WaitWindow.xaml
+	/// Interaction logic for LoginWindow.xaml
 	/// </summary>
-	public partial class WaitWindow 
+	public partial class SettingsView
 	{
-		public WaitWindow()
+		public SettingsView()
 		{
 			InitializeComponent();
-		}
+		}	
 	}
 }

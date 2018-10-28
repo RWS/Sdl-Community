@@ -6,13 +6,13 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 	/// <summary>
 	/// Interaction logic for AcceptWindow.xaml
 	/// </summary>
-	public partial class AcceptWindow 
+	public partial class AcceptView 
 	{
-		public AcceptWindow(SettingsService settingsService)
+		public AcceptView(SettingsService settingsService)
 		{
 			InitializeComponent();
 
-			DataContext = new AcceptWindowViewModel(settingsService);
+			DataContext = new AcceptViewModel(settingsService);
 		}
 	}
 }

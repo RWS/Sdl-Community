@@ -5,9 +5,9 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 	/// <summary>
 	/// Interaction logic for MainExplorerControl.xaml
 	/// </summary>
-	public partial class MainExplorerControl
+	public partial class MainExplorerView
 	{
-		public MainExplorerControl(MainViewModel model)
+		public MainExplorerView(MainViewModel model)
 		{
 			InitializeComponent();
 			DataContext = model;

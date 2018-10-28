@@ -233,37 +233,37 @@
     <Compile Include="Model\TM\TranslationUnit.cs" />
     <Compile Include="Model\TM\TranslationUnitContext.cs" />
     <Compile Include="ViewModel\LogViewModel.cs" />
-    <Compile Include="ViewModel\SelectServersWindowViewModel.cs" />
+    <Compile Include="ViewModel\SelectServersViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Compile Include="View\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    <Compile Include="View\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\LogViewControl.xaml.cs">
-      <DependentUpon>LogViewControl.xaml</DependentUpon>
+    <Compile Include="View\LogView.xaml.cs">
+      <DependentUpon>LogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SelectServersWindow.xaml.cs">
-      <DependentUpon>SelectServersWindow.xaml</DependentUpon>
+    <Compile Include="View\SelectServersView.xaml.cs">
+      <DependentUpon>SelectServersView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\AcceptWindow.xaml.cs">
-      <DependentUpon>AcceptWindow.xaml</DependentUpon>
+    <Compile Include="View\AcceptView.xaml.cs">
+      <DependentUpon>AcceptView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\CustomFields.xaml.cs">
-      <DependentUpon>CustomFields.xaml</DependentUpon>
+    <Compile Include="View\CustomFieldsView.xaml.cs">
+      <DependentUpon>CustomFieldsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\LoginWindow.xaml.cs">
-      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    <Compile Include="View\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainExplorerControl.xaml.cs">
-      <DependentUpon>MainExplorerControl.xaml</DependentUpon>
+    <Compile Include="View\MainExplorerView.xaml.cs">
+      <DependentUpon>MainExplorerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainViewControl.xaml.cs">
-      <DependentUpon>MainViewControl.xaml</DependentUpon>
+    <Compile Include="View\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\PreviewWindow.xaml.cs">
-      <DependentUpon>PreviewWindow.xaml</DependentUpon>
+    <Compile Include="View\PreviewView.xaml.cs">
+      <DependentUpon>PreviewView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SystemFields.xaml.cs">
-      <DependentUpon>SystemFields.xaml</DependentUpon>
+    <Compile Include="View\SystemFieldsView.xaml.cs">
+      <DependentUpon>SystemFieldsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TmAnonymizerExplorerControl.cs">
       <SubType>UserControl</SubType>
@@ -283,20 +283,17 @@
     <Compile Include="View\TmAnonymizerViewControl.Designer.cs">
       <DependentUpon>TmAnonymizerViewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\TranslationMemory.xaml.cs">
-      <DependentUpon>TranslationMemory.xaml</DependentUpon>
+    <Compile Include="View\TranslationMemoryView.xaml.cs">
+      <DependentUpon>TranslationMemoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ContentFilteringRules.xaml.cs">
-      <DependentUpon>ContentFilteringRules.xaml</DependentUpon>
+    <Compile Include="View\ContentFilteringRulesView.xaml.cs">
+      <DependentUpon>ContentFilteringRulesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\WaitWindow.xaml.cs">
-      <DependentUpon>WaitWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModel\AcceptWindowViewModel.cs" />
+    <Compile Include="ViewModel\AcceptViewModel.cs" />
     <Compile Include="ViewModel\CustomFieldsViewModel.cs" />
-    <Compile Include="ViewModel\LoginWindowViewModel.cs" />
+    <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\PreviewWindowViewModel.cs" />
+    <Compile Include="ViewModel\PreviewViewModel.cs" />
     <Compile Include="ViewModel\SystemFieldsViewModel.cs" />
     <Compile Include="ViewModel\TranslationMemoryViewModel.cs" />
     <Compile Include="ViewModel\ContentFilteringRulesViewModel.cs" />
@@ -384,55 +381,51 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\SettingsWindow.xaml">
+    <Page Include="View\SettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\LogViewControl.xaml">
+    <Page Include="View\LogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\SelectServersWindow.xaml">
+    <Page Include="View\SelectServersView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\AcceptWindow.xaml">
+    <Page Include="View\AcceptView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\CustomFields.xaml">
+    <Page Include="View\CustomFieldsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\LoginWindow.xaml">
+    <Page Include="View\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainExplorerControl.xaml">
+    <Page Include="View\MainExplorerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\MainViewControl.xaml">
+    <Page Include="View\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\PreviewWindow.xaml">
+    <Page Include="View\PreviewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SystemFields.xaml">
+    <Page Include="View\SystemFieldsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\TranslationMemory.xaml">
+    <Page Include="View\TranslationMemoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ContentFilteringRules.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\WaitWindow.xaml">
+    <Page Include="View\ContentFilteringRulesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

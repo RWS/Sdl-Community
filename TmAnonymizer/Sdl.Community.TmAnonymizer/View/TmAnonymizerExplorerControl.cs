@@ -7,7 +7,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 {
 	public partial class TmAnonymizerExplorerControl : UserControl
 	{
-		private readonly AcceptWindow _acceptWindow;
+		private readonly AcceptView _acceptView;
 		private readonly MainViewModel _model;
 
 		public TmAnonymizerExplorerControl(MainViewModel model)
@@ -28,11 +28,11 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 
 			if (!model.TranslationMemoryViewModel.SettingsService.UserAgreed())
 			{				
-				_acceptWindow = new AcceptWindow(model.TranslationMemoryViewModel.SettingsService);
-				_acceptWindow.InitializeComponent();
-				_acceptWindow.Closing += AcceptWindow_Closing;
-				_acceptWindow.Topmost = true;
-				_acceptWindow.ShowDialog();
+				_acceptView = new AcceptView(model.TranslationMemoryViewModel.SettingsService);
+				_acceptView.InitializeComponent();
+				_acceptView.Closing += AcceptViewClosing;
+				_acceptView.Topmost = true;
+				_acceptView.ShowDialog();
 			}
 			else
 			{
@@ -40,9 +40,9 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 			}
 		}		
 
-		private void AcceptWindow_Closing(object sender, CancelEventArgs e)
+		private void AcceptViewClosing(object sender, CancelEventArgs e)
 		{
-			_acceptWindow.Closing -= AcceptWindow_Closing;
+			_acceptView.Closing -= AcceptViewClosing;
 
 			if (_model.TranslationMemoryViewModel.SettingsService.UserAgreed())
 			{
@@ -52,7 +52,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 
 		private void LoadView()
 		{
-			var mainWindow = new MainExplorerControl(_model);
+			var mainWindow = new MainExplorerView(_model);
 
 			mainWindow.InitializeComponent();
 			elementHost.Child = mainWindow;

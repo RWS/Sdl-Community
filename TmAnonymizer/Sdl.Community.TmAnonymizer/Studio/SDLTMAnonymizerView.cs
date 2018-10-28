@@ -71,7 +71,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		{
 			protected override void Execute()
 			{			
-				var settingsWindow = new SettingsWindow();
+				var settingsWindow = new SettingsView();
 				var settingsViewModel = new SettingsViewModel(settingsWindow, _settingsService);
 				settingsWindow.DataContext = settingsViewModel;
 

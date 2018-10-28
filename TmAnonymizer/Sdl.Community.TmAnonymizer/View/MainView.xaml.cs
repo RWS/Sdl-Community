@@ -6,9 +6,9 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 	/// <summary>
 	/// Interaction logic for MainViewControl.xaml
 	/// </summary>
-	public partial class MainViewControl: UserControl
+	public partial class MainView: UserControl
 	{
-		public MainViewControl(MainViewModel model)
+		public MainView(MainViewModel model)
 		{			
 			InitializeComponent();
 			DataContext = model;

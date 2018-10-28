@@ -18,7 +18,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 
 		private void LoadView()
 		{
-			var mainWindow = new MainViewControl(_model);
+			var mainWindow = new MainView(_model);
 
 			mainWindow.InitializeComponent();
 			elementHost.Child = mainWindow;

@@ -24,7 +24,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private IList _selectedItems;
 		private ObservableCollection<TmFile> _tmsCollection;
 		private bool _isEnabled;
-		private LoginWindowViewModel _loginWindowViewModel;
+		private LoginViewModel _loginWindowViewModel;
 		private readonly SDLTMAnonymizerView _controller;
 		private readonly ContentParsingService _contentParsingService;
 		private readonly SerializerService _serializerService;
@@ -148,7 +148,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public void AddServerTm()
 		{
 			var settings = SettingsService.GetSettings();
-			var loginWindow = new LoginWindow();
+			var loginWindow = new LoginView();
 
 			var credentials = new Credentials
 			{
@@ -156,7 +156,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				UserName = settings.LastUsedServerUserName
 			};
 
-			_loginWindowViewModel = new LoginWindowViewModel(loginWindow, credentials);
+			_loginWindowViewModel = new LoginViewModel(loginWindow, credentials);
 
 			loginWindow.DataContext = _loginWindowViewModel;
 			loginWindow.ShowDialog();
@@ -170,8 +170,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			if (_loginWindowViewModel.TranslationProviderServer != null)
 			{
-				var selectServers = new SelectServersWindow();
-				var model = new SelectServersWindowViewModel(selectServers, SettingsService, _loginWindowViewModel.TranslationProviderServer);
+				var selectServers = new SelectServersView();
+				var model = new SelectServersViewModel(selectServers, SettingsService, _loginWindowViewModel.TranslationProviderServer);
 
 				selectServers.DataContext = model;
 				selectServers.ShowDialog();
@@ -376,8 +376,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							};
 						}
 
-						var loginWindow = new LoginWindow();
-						_loginWindowViewModel = new LoginWindowViewModel(loginWindow, tmFile.Credentials);
+						var loginWindow = new LoginView();
+						_loginWindowViewModel = new LoginViewModel(loginWindow, tmFile.Credentials);
 
 						loginWindow.DataContext = _loginWindowViewModel;
 						loginWindow.ShowDialog();
