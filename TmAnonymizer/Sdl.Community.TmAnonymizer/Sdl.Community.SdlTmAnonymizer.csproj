@@ -2,6 +2,7 @@
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SSDTUnitTestPath Condition="'$(SSDTUnitTestPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB</SSDTUnitTestPath>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
     <SSDTPath Condition="'$(SSDTPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\130</SSDTPath>
@@ -19,7 +20,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.SdlTmAnonymizer</RootNamespace>
     <AssemblyName>Sdl.Community.SdlTmAnonymizer</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -42,20 +43,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+    <Reference Include="EPPlus">
       <HintPath>..\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
-    </Reference>
-    <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
-      <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="presentationframework.aero2" />
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
@@ -64,163 +60,258 @@
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <Private>True</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <Private>True</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>True</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
       <Private>True</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.Core, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.TranslationMemory, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.MultiTerm.Client.Api, Version=14.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.MultiTerm.Client.Api.dll</HintPath>
+    <Reference Include="Sdl.MultiTerm.Client.Api">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.MultiTerm.Client.Api.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <Private>True</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <Private>True</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <Private>True</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Settings.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <Private>True</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
       <Private>True</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.109.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.109.2\lib\net46\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="Xceed.Wpf.Toolkit, Version=3.6.17613.9190, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xceed.Wpf.Toolkit.3.6.17613.09190\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.7.18313.20590, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.Toolkit.3.7.18313.20590\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\CustomDataGrid.cs" />
-    <Compile Include="Helpers\CustomFieldsHandler.cs" />
-    <Compile Include="Helpers\CustomTextBox.cs" />
-    <Compile Include="Helpers\ExcelFile.cs" />
-    <Compile Include="Helpers\Expressions.cs" />
-    <Compile Include="Helpers\SettingsMethods.cs" />
-    <Compile Include="Helpers\CommandHandler.cs" />
-    <Compile Include="Helpers\Constants.cs" />
-    <Compile Include="Helpers\DropBehavior.cs" />
-    <Compile Include="Helpers\FolderSelectDialog.cs" />
-    <Compile Include="Helpers\PersonalInformation.cs" />
-    <Compile Include="Helpers\Reflector.cs" />
-    <Compile Include="Helpers\RelayCommand.cs" />
-    <Compile Include="Helpers\RichTextBoxFormatter.cs" />
-    <Compile Include="Helpers\StringExtensions.cs" />
-    <Compile Include="Helpers\SystemFields.cs" />
-    <Compile Include="Helpers\Tm.cs" />
-    <Compile Include="Helpers\Users.cs" />
+    <Compile Include="Behaviours\DragDropBehaviour.cs" />
+    <Compile Include="Behaviours\EventBehaviourFactory.cs" />
+    <Compile Include="Controls\AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BindingDataProxy.cs" />
+    <Compile Include="Controls\BindingWebBrowserSource.cs" />
+    <Compile Include="Controls\LabelledTextBox.xaml.cs">
+      <DependentUpon>LabelledTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProgressDialog\ProgressDialog.xaml.cs">
+      <DependentUpon>ProgressDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProgressDialog\ProgressDialogCancellationExcpetion.cs" />
+    <Compile Include="Controls\ProgressDialog\ProgressDialogContext.cs" />
+    <Compile Include="Controls\ProgressDialog\ProgressDialogResult.cs" />
+    <Compile Include="Controls\ProgressDialog\ProgressDialogSettings.cs" />
+    <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Model\FieldDefinitions\DateTimeFieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\FieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\IntFieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\MultiplePicklistFieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\MultipleStringFieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\PicklistItem.cs" />
+    <Compile Include="Model\FieldDefinitions\SinglePicklistFieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\SingleStringFieldValue.cs" />
+    <Compile Include="Model\LanguageDirection.cs" />
+    <Compile Include="Model\Log\Action.cs" />
+    <Compile Include="Model\Log\Report.cs" />
+    <Compile Include="Model\Log\ReportFile.cs" />
+    <Compile Include="Model\TmTranslationUnit.cs" />
+    <Compile Include="Model\TmSegment.cs" />
+    <Compile Include="Model\TmLanguageDirection.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Converters\FieldValueTypeConverter.cs" />
+    <Compile Include="Services\Converters\SegmentElementTypeConverter.cs" />
+    <Compile Include="Services\ExcelImportExportService.cs" />
+    <Compile Include="Controls\RichTextBoxFormatter.cs" />
+    <Compile Include="Services\CustomFieldsService.cs" />
+    <Compile Include="Controls\CustomTextBox.cs" />
+    <Compile Include="Services\SegmentService.cs" />
+    <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Model\PathInfo.cs" />
+    <Compile Include="Controls\FolderSelectDialog.cs" />
+    <Compile Include="Services\ContentParsingService.cs" />
+    <Compile Include="Services\ReflectorService.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Services\SystemFieldsService.cs" />
+    <Compile Include="Services\TmService.cs" />
     <Compile Include="Model\AnonymizeTranslationMemory.cs" />
     <Compile Include="Model\CustomField.cs" />
-    <Compile Include="Model\Details.cs" />
-    <Compile Include="Model\Login.cs" />
+    <Compile Include="Model\CustomFieldValue.cs" />
+    <Compile Include="Model\Credentials.cs" />
     <Compile Include="Model\MatchResult.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Position.cs" />
     <Compile Include="Model\Rule.cs" />
     <Compile Include="Model\ServerTmBackUp.cs" />
     <Compile Include="Model\Settings.cs" />
-    <Compile Include="Model\SourceSearchResult.cs" />
+    <Compile Include="Model\ContentSearchResult.cs" />
     <Compile Include="Model\TmFile.cs" />
     <Compile Include="Model\TranslationUnitDetails.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\WordDetails.cs" />
-    <Compile Include="Studio\SegmentElementVisitor.cs" />
-    <Compile Include="Studio\SelectedWordsFromUiElementVisitor.cs" />
-    <Compile Include="Studio\TmAnonymizerViewController.cs" />
+    <Compile Include="Services\SerializerService.cs" />
+    <Compile Include="StringResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StringResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\SegmentElementVisitorService.cs" />
+    <Compile Include="Services\SelectedWordsVisitorService.cs" />
+    <Compile Include="Studio\SDLTMAnonymizerLogViewPart.cs" />
+    <Compile Include="Studio\SDLTMAnonymizerView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Ui\AcceptWindow.xaml.cs">
-      <DependentUpon>AcceptWindow.xaml</DependentUpon>
+    <Compile Include="Services\SqliteTMService.cs" />
+    <Compile Include="Model\TM\TmAttribute.cs" />
+    <Compile Include="Model\TM\DateAttribute.cs" />
+    <Compile Include="Model\TM\NumericAttribute.cs" />
+    <Compile Include="Model\TM\PickListAttribute.cs" />
+    <Compile Include="Model\TM\PickListValue.cs" />
+    <Compile Include="Model\TM\StringAttribute.cs" />
+    <Compile Include="Model\TM\TranslationMemory.cs" />
+    <Compile Include="Model\TM\TranslationUnit.cs" />
+    <Compile Include="Model\TM\TranslationUnitContext.cs" />
+    <Compile Include="ViewModel\LogViewModel.cs" />
+    <Compile Include="ViewModel\SelectServersViewModel.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="View\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\CustomFields.xaml.cs">
-      <DependentUpon>CustomFields.xaml</DependentUpon>
+    <Compile Include="View\LogView.xaml.cs">
+      <DependentUpon>LogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\LoginWindow.xaml.cs">
-      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    <Compile Include="View\SelectServersView.xaml.cs">
+      <DependentUpon>SelectServersView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\MainViewControl.xaml.cs">
-      <DependentUpon>MainViewControl.xaml</DependentUpon>
+    <Compile Include="View\AcceptView.xaml.cs">
+      <DependentUpon>AcceptView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\PreviewWindow.xaml.cs">
-      <DependentUpon>PreviewWindow.xaml</DependentUpon>
+    <Compile Include="View\CustomFieldsView.xaml.cs">
+      <DependentUpon>CustomFieldsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\SystemFields.xaml.cs">
-      <DependentUpon>SystemFields.xaml</DependentUpon>
+    <Compile Include="View\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\TmAnonymizerUserControl.cs">
+    <Compile Include="View\MainExplorerView.xaml.cs">
+      <DependentUpon>MainExplorerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PreviewView.xaml.cs">
+      <DependentUpon>PreviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SystemFieldsView.xaml.cs">
+      <DependentUpon>SystemFieldsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TmAnonymizerExplorerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Ui\TmAnonymizerUserControl.Designer.cs">
-      <DependentUpon>TmAnonymizerUserControl.cs</DependentUpon>
+    <Compile Include="View\TmAnonymizerExplorerControl.Designer.cs">
+      <DependentUpon>TmAnonymizerExplorerControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ui\TranslationMemory.xaml.cs">
-      <DependentUpon>TranslationMemory.xaml</DependentUpon>
+    <Compile Include="View\TmAnonymizerLogViewControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Ui\Translations.xaml.cs">
-      <DependentUpon>Translations.xaml</DependentUpon>
+    <Compile Include="View\TmAnonymizerLogViewControl.Designer.cs">
+      <DependentUpon>TmAnonymizerLogViewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ui\WaitWindow.xaml.cs">
-      <DependentUpon>WaitWindow.xaml</DependentUpon>
+    <Compile Include="View\TmAnonymizerViewControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ViewModel\AcceptWindowViewModel.cs" />
+    <Compile Include="View\TmAnonymizerViewControl.Designer.cs">
+      <DependentUpon>TmAnonymizerViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\TranslationMemoryView.xaml.cs">
+      <DependentUpon>TranslationMemoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentFilteringRulesView.xaml.cs">
+      <DependentUpon>ContentFilteringRulesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\AcceptViewModel.cs" />
     <Compile Include="ViewModel\CustomFieldsViewModel.cs" />
-    <Compile Include="ViewModel\LoginWindowViewModel.cs" />
+    <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\PreviewWindowViewModel.cs" />
+    <Compile Include="ViewModel\PreviewViewModel.cs" />
     <Compile Include="ViewModel\SystemFieldsViewModel.cs" />
     <Compile Include="ViewModel\TranslationMemoryViewModel.cs" />
-    <Compile Include="ViewModel\TranslationViewModel.cs" />
+    <Compile Include="ViewModel\ContentFilteringRulesViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Excel.ico" />
+    <Resource Include="Resources\Folder.ico" />
+    <Content Include="Resources\ReportsView.ico" />
+    <Resource Include="Resources\Report.ico" />
+    <Resource Include="Resources\information.ico" />
+    <Resource Include="Resources\Settings.ico" />
+    <Resource Include="Resources\RemoveCache.ico" />
+    <Resource Include="Resources\ServerBasedTranslationMemoryCache.ico" />
+    <Resource Include="Resources\TranslationMemoryCache.ico" />
+    <Resource Include="Resources\Check.ico" />
+    <Resource Include="Resources\CheckedCircle.png" />
     <None Include="Resources\icon.ico" />
     <None Include="Resources\wiki.ico" />
     <None Include="Resources\help.ico" />
@@ -228,74 +319,119 @@
     <Resource Include="Resources\Remove.ico" />
     <Resource Include="Resources\TranslationMemoriesFolder_Open.ico" />
     <Resource Include="Resources\TranslationMemory.ico" />
-    <EmbeddedResource Include="PluginResources.resx" />
+    <EmbeddedResource Include="Controls\AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
-    <EmbeddedResource Include="Ui\TmAnonymizerUserControl.resx">
-      <DependentUpon>TmAnonymizerUserControl.cs</DependentUpon>
+    <EmbeddedResource Include="StringResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\TmAnonymizerExplorerControl.resx">
+      <DependentUpon>TmAnonymizerExplorerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\TmAnonymizerLogViewControl.resx">
+      <DependentUpon>TmAnonymizerLogViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\TmAnonymizerViewControl.resx">
+      <DependentUpon>TmAnonymizerViewControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UiHelpers\ButtonsStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UiHelpers\DataGridStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UiHelpers\TextBlockStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UiHelpers\TextBoxStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Ui\AcceptWindow.xaml">
+    <Page Include="Controls\LabelledTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\CustomFields.xaml">
+    <Page Include="Controls\ProgressDialog\ProgressDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ButtonsStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\DataGridStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\TabControlStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\TextBlockStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ToolTipStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\TextBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\LogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SelectServersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\AcceptView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\LoginWindow.xaml">
+    <Page Include="View\CustomFieldsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\MainViewControl.xaml">
+    <Page Include="View\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\PreviewWindow.xaml">
+    <Page Include="View\MainExplorerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\SystemFields.xaml">
+    <Page Include="View\PreviewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\TranslationMemory.xaml">
+    <Page Include="View\SystemFieldsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\Translations.xaml">
+    <Page Include="View\TranslationMemoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\WaitWindow.xaml">
+    <Page Include="View\ContentFilteringRulesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="3rd party\" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
@@ -308,18 +444,21 @@
     <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.14.0.0\Build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.14.0.0\Build\net45\Sdl.Core.PluginFramework.Build.targets')" />
+  <PropertyGroup>
+    <SsdtUnitTestVersion>3.1</SsdtUnitTestVersion>
+    <PluginDeploymentPath>$(AppData)\SDL\SDL Trados Studio\15\Plugins</PluginDeploymentPath>
+  </PropertyGroup>
+  <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' == ''" />
+  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.14.0.0\Build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.14.0.0\Build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets'))" />
   </Target>
-  <PropertyGroup>
-    <SsdtUnitTestVersion>3.1</SsdtUnitTestVersion>
-  </PropertyGroup>
-  <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' != ''" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' == ''" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

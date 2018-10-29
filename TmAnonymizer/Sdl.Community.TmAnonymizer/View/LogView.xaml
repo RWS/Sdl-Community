@@ -1,0 +1,148 @@
+﻿<UserControl x:Class="Sdl.Community.SdlTmAnonymizer.View.LogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:Sdl.Community.SdlTmAnonymizer.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="900" d:DataContext="{d:DesignData MainViewModel}">
+	<UserControl.Resources>
+
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\Styles\DataGridStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+
+
+	</UserControl.Resources>
+
+	<Grid IsEnabled="{Binding LogViewModel.IsEnabled}">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="430"/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Grid Grid.Column="0" Margin="0,0,3,0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="26"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+
+			<Border Grid.Row="0" >
+				<StackPanel Orientation="Horizontal" Margin="2" Background="Transparent" >
+					<Button Margin="5,0,5,0" ToolTip="Export selected report to excel" Command="{Binding LogViewModel.ExportToExcelCommand}" Background="Transparent" BorderThickness="0">
+						<Image Source="../Resources/Excel.ico" Height="20"/>
+					</Button>
+					<Button ToolTip="Open folder containing..." Command="{Binding LogViewModel.OpenFolderContainingCommand}" Background="Transparent" BorderThickness="0">
+						<Image Source="../Resources/Folder.ico" Height="20"/>
+					</Button>
+				</StackPanel>
+			</Border>
+
+			<controls:SortAwareDataGrid Grid.Row="1"
+						DefaultColumnName="Name"
+						DefaultSortDirection="Ascending"
+						Style="{StaticResource FilesGridStyle}" 							
+						FontFamily="Segoe UI"								
+						BorderBrush="LightGray"
+						SelectionMode="Single"
+						SelectionUnit="FullRow"
+						HeadersVisibility="Column"
+						VerticalScrollBarVisibility="Auto"	
+						HorizontalScrollBarVisibility="Auto"
+						GridLinesVisibility="None" 
+						Background="White"		
+						SelectedItem="{Binding LogViewModel.SelectedItem, Mode=TwoWay}"
+						ItemsSource="{Binding LogViewModel.ReportFiles, Mode=TwoWay}" 						                            											                       
+						MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" MinWidth="150" Width="2*" />
+					<DataGridTextColumn Header="Scope" Binding="{Binding Scope}" IsReadOnly="True" Width="80"  />
+					<DataGridTextColumn Header="Date" Binding="{Binding Created}" IsReadOnly="True" MinWidth="125" Width="1*" />
+				</DataGrid.Columns>
+				<DataGrid.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="Export selected report to excel" Command="{Binding LogViewModel.ExportToExcelCommand}">
+							<MenuItem.Icon>
+								<Image Source="../Resources/Excel.ico" Height="20"/>
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Open folder containing..." Command="{Binding LogViewModel.OpenFolderContainingCommand}">
+							<MenuItem.Icon>
+								<Image Source="../Resources/Folder.ico" Height="20"/>
+							</MenuItem.Icon>
+						</MenuItem>
+					</ContextMenu>
+				</DataGrid.ContextMenu>
+			</controls:SortAwareDataGrid>
+		</Grid>
+
+		<GridSplitter Grid.Column="0" Width="3" Margin="0"/>
+		<Grid Grid.Column="1" Margin="3,0,0,0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="120"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+
+			<GroupBox Grid.Row="0" Margin="2,4,2,4" Padding="2,4,2,2" Header="Report Details" Background="White" >
+				<Grid Margin="1">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<TextBlock Text="Path: " Margin="4,1,2,1" TextWrapping="WrapWithOverflow" Grid.Column="0" Grid.Row="0" />
+					<TextBlock Text="{Binding Path=LogViewModel.Report.ReportFullPath}" Grid.Column="1" Grid.Row="0" Margin="2"/>
+
+					<TextBlock Text="Type: " Margin="4,1,2,1" TextWrapping="WrapWithOverflow" Grid.Column="0" Grid.Row="1" />
+					<TextBlock Text="{Binding Path=LogViewModel.Report.Type}" Grid.Column="1" Grid.Row="1" Margin="2"/>
+
+					<TextBlock Text="Created: " Margin="4,1,2,1" Grid.Column="0" Grid.Row="2" />
+					<TextBlock Text="{Binding Path=LogViewModel.ReportCreated}" Grid.Column="1" Grid.Row="2" Margin="2"/>
+
+					<TextBlock Text="Updated Units: " Margin="4,1,2,1" Grid.Column="0" Grid.Row="3" />
+					<TextBlock Text="{Binding Path=LogViewModel.Report.UpdatedCount}" Grid.Column="1" Grid.Row="3" Margin="2"/>
+
+					<TextBlock Text="Time-elapsed: " Margin="4,1,2,1" Grid.Column="0" Grid.Row="4" />
+					<TextBlock Text="{Binding Path=LogViewModel.Report.ElapsedSeconds}" Grid.Column="1" Grid.Row="4" Margin="2"/>
+				</Grid>
+			</GroupBox>
+
+
+			<Grid Grid.Row="1" Margin="2">
+				<controls:SortAwareDataGrid 
+					DefaultColumnName="Name"
+					DefaultSortDirection="Ascending"
+					Style="{StaticResource FilesGridStyle}" 							
+					FontFamily="Segoe UI"								
+					BorderBrush="LightGray"
+					SelectionMode="Single"
+					SelectionUnit="FullRow"
+					HeadersVisibility="Column"
+					VerticalScrollBarVisibility="Auto"	
+					HorizontalScrollBarVisibility="Auto"
+					GridLinesVisibility="None" 
+					Background="White"	
+					ItemsSource="{Binding LogViewModel.Report.Actions, Mode=TwoWay}" 						                            											                       
+					MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="ID" Binding="{Binding TmId.Id}" IsReadOnly="True" MinWidth="30" Width="30" />
+						<DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" MinWidth="80" Width="110" ElementStyle="{StaticResource WrapText}" />
+						<DataGridTextColumn Header="Type" Binding="{Binding Type}" IsReadOnly="True" MinWidth="80" Width="100"  />
+						<DataGridTextColumn Header="Value" Binding="{Binding Value}" IsReadOnly="True" MinWidth="150" Width="2*" ElementStyle="{StaticResource WrapText}"/>
+						<DataGridTextColumn Header="Previous" Binding="{Binding Previous}" IsReadOnly="True" MinWidth="150" Width="2*" ElementStyle="{StaticResource WrapText}" />
+					</DataGrid.Columns>
+				</controls:SortAwareDataGrid>
+			</Grid>
+		</Grid>
+	</Grid>
+
+</UserControl>
+
