@@ -31,15 +31,16 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private string _undoLabelVisibility = Constants.Hidden;
 		private string _undoDictVisibility = Constants.Hidden;
 		private string _resultMessage;
+		private bool _isRestoreEnabled = true;
+		private static string _hunspellDictionariesFolderPath;
+		private static string _backupFolderPath;
+		private static string _undoDictFolderPath = Path.Combine(Constants.BackupFolderPath, Constants.Restore2019HunspellDicFolderPath);
 		private ICommand _createHunspellDictionaryCommand;
 		private ICommand _closeCommand;
 		private ICommand _deleteCommand;
 		private ICommand _refreshCommand;
 		private ICommand _helpCommand;
 		private ICommand _undoCommand;
-		private static string _hunspellDictionariesFolderPath;
-		private static string _backupFolderPath;
-		private static string _undoDictFolderPath = Path.Combine(Path.GetTempPath(), Constants.UndoHunspellDictionaries);
 		#endregion
 
 		#region Constructors
@@ -101,6 +102,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			set
 			{
 				_selectedUndoDictionary = value;
+				IsRestoreEnabled = true;
 				OnPropertyChanged();
 			}
 		}
@@ -174,6 +176,16 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				OnPropertyChanged();
 			}
 		}
+
+		public bool IsRestoreEnabled
+		{
+			get => _isRestoreEnabled;
+			set
+			{
+				_isRestoreEnabled = value;
+				OnPropertyChanged();
+			}
+		}
 		#endregion
 
 		#region Commands
@@ -189,7 +201,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private void CreateHunspellDictionaryAction()
 		{
 			LabelVisibility = Constants.Hidden;
-			if (NewDictionaryLanguage != null)
+			if (NewDictionaryLanguage != null && !string.IsNullOrEmpty(NewDictionaryLanguage.IsoCode))
 			{
 				CopyFiles();
 			}
@@ -206,7 +218,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private void DeleteAction()
 		{
 			LabelVisibility = Constants.Hidden;
-			if (DeletedDictionaryLanguage != null)
+			if (DeletedDictionaryLanguage != null && !string.IsNullOrEmpty(DeletedDictionaryLanguage.DictionaryFile))
 			{
 				// add dictionaries which are deleted in a temp folder (used for Undo action)
 				AddUndoDictionaries();
@@ -243,24 +255,31 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void UndoAction()
 		{
-			// Selected dictionary and .aff files for Undo action
-			var dictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, Path.GetFileName(SelectedUndoDictionary.DictionaryFile));
-			var affFilePath = Path.Combine(_hunspellDictionariesFolderPath, Path.GetFileName(SelectedUndoDictionary.AffFile));
-
-			var undoHunspellDictionaryModel = new HunspellLangDictionaryModel
+			if (SelectedUndoDictionary != null)
 			{
-				DictionaryFile = SelectedUndoDictionary.DictionaryFile,
-				AffFile = SelectedUndoDictionary.AffFile
-			};
+				// Selected dictionary and .aff files for Undo action
+				var dictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, Path.GetFileName(SelectedUndoDictionary.DictionaryFile));
+				var affFilePath = Path.Combine(_hunspellDictionariesFolderPath, Path.GetFileName(SelectedUndoDictionary.AffFile));
 
-			// Copy files in the original Studio HunspellDictionaries folder
-			var isoCode = Path.GetFileNameWithoutExtension(SelectedUndoDictionary.AffFile);
-			CopyLanguageDictionary(undoHunspellDictionaryModel, dictionaryFilePath, affFilePath, isoCode);
+				var undoHunspellDictionaryModel = new HunspellLangDictionaryModel
+				{
+					DictionaryFile = SelectedUndoDictionary.DictionaryFile,
+					AffFile = SelectedUndoDictionary.AffFile
+				};
 
-			RemoveDictFromDeleteFolder();
-			RefreshAction();
-			ResultMessage = Constants.UndoSuccessMessage;
-			LabelVisibility = Constants.Visible;
+				// Copy files in the original Studio HunspellDictionaries folder
+				var isoCode = Path.GetFileNameWithoutExtension(SelectedUndoDictionary.AffFile);
+				CopyLanguageDictionary(undoHunspellDictionaryModel, dictionaryFilePath, affFilePath, isoCode);
+
+				RemoveDictFromDeleteFolder();
+				RefreshAction();
+				ResultMessage = Constants.UndoSuccessMessage;
+				LabelVisibility = Constants.Visible;
+			}
+			else
+			{
+				IsRestoreEnabled = false;
+			}
 		}
 
 		private void HelpAction()
@@ -279,7 +298,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		{
 			if (!string.IsNullOrEmpty(_hunspellDictionariesFolderPath))
 			{
-				FormatDictionaryFiles(_hunspellDictionariesFolderPath, DictionaryLanguages);
+				DictionaryLanguages = FormatDictionaryFiles(_hunspellDictionariesFolderPath, DictionaryLanguages);
 			}
 			else
 			{
@@ -443,7 +462,11 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private void BackupHunspellDictionaries()
 		{
 			var studioPath = Utils.GetInstalledStudioPath();
-			_backupFolderPath = Path.Combine(Path.GetTempPath(), Constants.HunspellDictionaries);
+			if (!Directory.Exists(Constants.BackupFolderPath))
+			{
+				Directory.CreateDirectory(Constants.BackupFolderPath);
+			}
+			_backupFolderPath = Path.Combine(Constants.BackupFolderPath, Constants.Backup2019HunspellDicFolderPath);
 
 			var task = System.Threading.Tasks.Task.Factory.StartNew(() =>
 			{
@@ -454,11 +477,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			});
 			task.Wait();
 
-			var createFolder = System.Threading.Tasks.Task.Factory.StartNew(() =>
-			{
-				Directory.CreateDirectory(_backupFolderPath);
-			});
-			createFolder.Wait();
+			Directory.CreateDirectory(_backupFolderPath);
 			if (!string.IsNullOrEmpty(studioPath))
 			{
 				_hunspellDictionariesFolderPath = Path.Combine(Path.GetDirectoryName(studioPath), Constants.HunspellDictionaries);
@@ -566,7 +585,8 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 					dicFile.AffFile = affFile;
 				}
 			}
-			return new ObservableCollection<HunspellLangDictionaryModel>(dictionaries.OrderBy(d => d.DisplayLanguageName));
+			var sortedDictionaries = dictionaries.OrderBy(d => d.DisplayLanguageName).ToList();
+			return new ObservableCollection<HunspellLangDictionaryModel>(sortedDictionaries);
 		}
 
 		#endregion

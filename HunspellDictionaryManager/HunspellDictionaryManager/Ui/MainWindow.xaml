@@ -98,10 +98,10 @@
 			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding DeletedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
 
-		<Label Name="undoDictionaryLbl" Grid.Row="6"  Grid.Column="0" Content="Select dictionary to undo" Visibility="{Binding UndoLabelVisibility}" Margin="3 0 0 0" />
+		<Label Name="undoDictionaryLbl" Grid.Row="6"  Grid.Column="0" Content="Restore deleted dictionary" Visibility="{Binding UndoLabelVisibility}" Margin="3 0 0 0" />
 		<ComboBox Grid.Row="6" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
-			controls:TextBoxHelper.Watermark="Choose dictionary language to undo" Visibility="{Binding UndoDictVisibility}"
+            controls:TextBoxHelper.Watermark="Choose dictionary language to restore" Visibility="{Binding UndoDictVisibility}"
 			ItemsSource="{Binding UndoDictionaries, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding SelectedUndoDictionary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
 
@@ -113,7 +113,8 @@
                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5" />
 		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="7" Grid.Column="0" Width="85" Height="25"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding UndoCommand}" Content="Undo" Grid.Row="7" Grid.Column="0" Width="85" Height="25"
-				   HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="100,0,0,5" ToolTip="Undo the dictionary deletion"/>
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding UndoCommand}" Content="Restore" Grid.Row="7" Grid.Column="0" Width="85" Height="25"
+                   HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="100,0,0,5" ToolTip="Undo the dictionary deletion"
+				   IsEnabled="{Binding IsRestoreEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 	</Grid>
 </controls:MetroWindow>
