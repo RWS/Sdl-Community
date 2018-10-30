@@ -4,9 +4,9 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 {
 	public static class Constants
 	{
-		public static string BackupFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community", Environment.UserName);
-		public static string Backup2017HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2017\HunspellDictionaries";
-		public static string Backup2019HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2019\HunspellDictionaries";
+		public static readonly string BackupFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community", Environment.UserName);
+		public static readonly string Backup2017HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2017\HunspellDictionaries";
+		public static readonly string Backup2019HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2019\HunspellDictionaries";
 		public static readonly string Restore2017HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2017\RestoreHunspellDictionaries";
 		public static readonly string Restore2019HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2019\RestoreHunspellDictionaries";
 		

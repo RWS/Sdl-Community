@@ -218,7 +218,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private void DeleteAction()
 		{
 			LabelVisibility = Constants.Hidden;
-			if (DeletedDictionaryLanguage != null)
+			if (DeletedDictionaryLanguage != null && !string.IsNullOrEmpty(DeletedDictionaryLanguage.DictionaryFile))
 			{
 				// add dictionaries which are deleted in a temp folder (used for Undo action)
 				AddUndoDictionaries();
