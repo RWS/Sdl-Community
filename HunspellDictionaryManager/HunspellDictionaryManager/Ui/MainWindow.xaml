@@ -106,9 +106,11 @@
 			SelectedItem="{Binding SelectedUndoDictionary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
 
 		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="7" Grid.Column="1" Width="85" Height="25"
-                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" ToolTip="Create new Hunspell dictionary"/>
+                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" ToolTip="Create new Hunspell dictionary"
+                    IsEnabled="{Binding IsCreateEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="7" Grid.Column="1" Width="85" Height="25"
-                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="92,0,90,5" ToolTip="Delete selected Hunspell dictionary"/>
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="92,0,90,5" ToolTip="Delete selected Hunspell dictionary"
+                    IsEnabled="{Binding IsDeleteEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CloseCommand}" Content="Close" Grid.Row="7" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5" />
 		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="7" Grid.Column="0" Width="85" Height="25"
