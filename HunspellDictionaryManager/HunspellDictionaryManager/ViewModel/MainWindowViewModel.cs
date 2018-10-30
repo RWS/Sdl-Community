@@ -330,6 +330,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		{
 			if (!string.IsNullOrEmpty(_hunspellDictionariesFolderPath))
 			{
+				DictionaryLanguages = new ObservableCollection<HunspellLangDictionaryModel>();
 				DictionaryLanguages = FormatDictionaryFiles(_hunspellDictionariesFolderPath, DictionaryLanguages);
 			}
 			else
@@ -617,8 +618,8 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 					dicFile.AffFile = affFile;
 				}
 			}
-			var sortedDictionaries = dictionaries.OrderBy(d => d.DisplayLanguageName).ToList();
-			return new ObservableCollection<HunspellLangDictionaryModel>(sortedDictionaries);
+			
+			return new ObservableCollection<HunspellLangDictionaryModel>(dictionaries.OrderBy(d => d.DisplayLanguageName).ToList());
 		}
 
 		#endregion
