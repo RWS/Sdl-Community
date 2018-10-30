@@ -32,6 +32,8 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private string _undoDictVisibility = Constants.Hidden;
 		private string _resultMessage;
 		private bool _isRestoreEnabled = true;
+		private bool _isCreateEnabled = true;
+		private bool _isDeleteEnabled = true;
 		private static string _hunspellDictionariesFolderPath;
 		private static string _backupFolderPath;
 		private static string _undoDictFolderPath = Path.Combine(Constants.BackupFolderPath, Constants.Restore2017HunspellDicFolderPath);
@@ -62,6 +64,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			set
 			{
 				_selectedDictionaryLanguage = value;
+				IsCreateEnabled = true;
 				OnPropertyChanged();
 			}
 		}
@@ -72,6 +75,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			set
 			{
 				_deletedDictionaryLanguage = value;
+				IsDeleteEnabled = true;
 				OnPropertyChanged();
 			}
 		}
@@ -186,6 +190,26 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				OnPropertyChanged();
 			}
 		}
+
+		public bool IsCreateEnabled
+		{
+			get => _isCreateEnabled;
+			set
+			{
+				_isCreateEnabled = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool IsDeleteEnabled
+		{
+			get => _isDeleteEnabled;
+			set
+			{
+				_isDeleteEnabled = value;
+				OnPropertyChanged();
+			}
+		}
 		#endregion
 
 		#region Commands
@@ -204,6 +228,10 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			if (NewDictionaryLanguage != null && !string.IsNullOrEmpty(NewDictionaryLanguage.IsoCode))
 			{
 				CopyFiles();
+			}
+			else
+			{
+				IsCreateEnabled = false;
 			}
 		}
 
@@ -227,6 +255,10 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 				UndoLabelVisibility = Constants.Visible;
 				UndoDictVisibility = Constants.Visible;
+			}
+			else
+			{
+				IsDeleteEnabled = false;
 			}
 		}
 
@@ -255,7 +287,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void UndoAction()
 		{
-			if (SelectedUndoDictionary != null)
+			if (SelectedUndoDictionary != null && !string.IsNullOrEmpty(SelectedUndoDictionary.DictionaryFile))
 			{
 				// Selected dictionary and .aff files for Undo action
 				var dictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, Path.GetFileName(SelectedUndoDictionary.DictionaryFile));
