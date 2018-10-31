@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="Hunspell Dictionary Manager 2017" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="3e35f8d6-cb98-4410-a336-aaa76ffee6d9">
+  <Product Id="*" Name="Hunspell Dictionary Manager 2017" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="dc84d498-6dc3-49d8-89aa-1f07ab9760bc">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
@@ -27,7 +27,7 @@
 	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
   <Fragment>
     <DirectoryRef Id="DesktopFolder">
-      <Component Id="ApplicationShortcutDesktop" Guid="efeb0124-7cd7-4261-a060-8a471932f793">
+      <Component Id="ApplicationShortcutDesktop" Guid="5e05d6fc-8b1e-483c-a9d9-2ec07a47ac92">
         <Shortcut Id="ApplicationDesktopShortcut" Name="Hunspell Dictionary Manager 2017" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2017" Target="[Studio5]Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio5" />
         <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
         <RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManager" Name="installed" Type="integer" Value="1" KeyPath="yes" />
@@ -39,7 +39,7 @@
 	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
 	<Fragment>
 		<DirectoryRef Id="SDLTradosStudio2017Apps">
-			<Component Id="ApplicationProgramDataShortcut" Guid="b993a102-f7c3-4e21-8dbf-90396113c099">
+			<Component Id="ApplicationProgramDataShortcut" Guid="caa3e42f-01cb-4a47-a428-44af599ad837">
 				<Shortcut Id="ApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2017" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2017" Target="[Studio5]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio5" />
 				<RemoveFolder Id="RemoveSDLTradosStudio2017Apps" Directory="SDLTradosStudio2017Apps" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
@@ -76,7 +76,7 @@
         <File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetPath)" KeyPath="yes" />
       </Component>
 
-      <Component Id="Sdl.Community.HunspellDictionaryManager.exe.config" Guid="334d68e8-dc7a-43b3-b722-7e4fffafcc8d">
+      <Component Id="Sdl.Community.HunspellDictionaryManager.exe.config" Guid="1c64bb25-5937-42f3-bb3a-51b84dcb9102">
         <File Id="Sdl.Community.HunspellDictionaryManager.exe.config" Name="Sdl.Community.HunspellDictionaryManager.exe.config" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\Sdl.Community.HunspellDictionaryManager.exe.config" />
       </Component>
 
