@@ -1,5 +1,6 @@
-﻿using System.Windows.Forms;
-using Sdl.Community.SdlTmAnonymizer.Controls;
+﻿using System;
+using System.Windows.Forms;
+using Sdl.Community.SdlTmAnonymizer.EventArgs;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.View;
@@ -19,34 +20,37 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		AllowViewParts = true)]
 	public class SDLTMAnonymizerView : AbstractViewController
 	{
-		private static TmAnonymizerViewControl _control;
-		private static TmAnonymizerExplorerControl _explorerControl;
-		private static SDLTMAnonymizerLogViewPart _logViewController;
+		private TmAnonymizerViewControl _control;
+		private TmAnonymizerExplorerControl _explorerControl;
+		private SDLTMAnonymizerLogViewPart _logViewController;
 
-		private static MainViewModel _model;
-		private static SettingsService _settingsService;
+		internal MainViewModel Model;
+		internal SettingsService SettingsService;
+		internal event EventHandler<SelectedTabIndexArgs> SelectedTabIndexArgs;
+				
+		public UserControl ContentControl => _control;
 
 		protected override void Initialize(IViewContext context)
 		{
-			_settingsService = new SettingsService(new PathInfo());
+			SettingsService = new SettingsService(new PathInfo());
 
-			_model = new MainViewModel(_settingsService, this);
+			Model = new MainViewModel(SettingsService, this);
+			Model.PropertyChanged += Model_PropertyChanged;
+			Model.SelectedTabIndex = 0;
 
-			_explorerControl = new TmAnonymizerExplorerControl(_model);
-			_logViewController = new SDLTMAnonymizerLogViewPart(_model);
+			_explorerControl = new TmAnonymizerExplorerControl(Model);
+			_logViewController = new SDLTMAnonymizerLogViewPart(Model);
 
-			if (_settingsService.GetSettings().Accepted)
+			if (SettingsService.GetSettings().Accepted)
 			{
-				_model.LogViewModel.IsEnabled = true;
-				_control = new TmAnonymizerViewControl(_model);
+				Model.LogViewModel.IsEnabled = true;
+				_control = new TmAnonymizerViewControl(Model);
 			}
 			else
 			{
-				_model.LogViewModel.IsEnabled = false;
+				Model.LogViewModel.IsEnabled = false;
 			}
 		}
-
-		public UserControl ContentControl => _control;
 
 		protected override Control GetContentControl()
 		{
@@ -58,140 +62,22 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			return _explorerControl;
 		}
 
-
-		[RibbonGroup("TmAnonymizerSettingsRibbonGroup", "  Settings  ")]
-		[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-		public class TmAnonymizerSettingsRibbonGroup : AbstractRibbonGroup
-		{			
-		}
-
-		[Action("TmAnonymizerTmRibbonGroupSettingsAction", typeof(SDLTMAnonymizerView), Name = " Settings ", Icon = "Settings", Description = "Settings ")]
-		[ActionLayout(typeof(TmAnonymizerSettingsRibbonGroup), 7, DisplayType.Large)]
-		public class TmAnonymizerTmRibbonGroupSettingsAction : AbstractAction
+		public override void Dispose()
 		{
-			protected override void Execute()
-			{			
-				var settingsWindow = new SettingsView();
-				var settingsViewModel = new SettingsViewModel(settingsWindow, _settingsService);
-				settingsWindow.DataContext = settingsViewModel;
-
-				settingsWindow.ShowDialog();				
-			}
-
-			public override void Initialize()
-			{
-				Enabled = _settingsService.GetSettings().Accepted;
-			}
+			Model.PropertyChanged -= Model_PropertyChanged;
+			base.Dispose();
 		}
 
-
-		[RibbonGroup("TmAnonymizerTMRibbonGroup", "Translation Memories")]
-		[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-		public class TmAnonymizerTmRibbonGroup : AbstractRibbonGroup
+		private void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-		}
-
-		[Action("TmAnonymizerTmRibbonGroupAddFileBasedTmAction", typeof(SDLTMAnonymizerView), Name = "Add file-based TM", Icon = "TranslationMemory", Description = "Add file-based TM")]
-		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 6, DisplayType.Large)]
-		public class TmAnonymizerTmRibbonGroupAddFileBasedTmAction : AbstractAction
-		{
-			protected override void Execute()
+			if (e.PropertyName.EndsWith(nameof(MainViewModel.SelectedTabIndex)))
 			{
-				_model?.TranslationMemoryViewModel.AddFileBasedTm();
-			}
-
-			public override void Initialize()
-			{
-				Enabled = _settingsService.GetSettings().Accepted;
-			}
-		}
-
-		[Action("TmAnonymizerTmRibbonGroupAddServerTmAction", typeof(SDLTMAnonymizerView), Name = "Add server TM", Icon = "ServerBasedTranslationMemory", Description = "Add server TM")]
-		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 5, DisplayType.Large)]
-		public class TmAnonymizerTmRibbonGroupAddServerTmAction : AbstractAction
-		{
-			protected override void Execute()
-			{
-				_model?.TranslationMemoryViewModel.AddServerTm();
-			}
-
-			public override void Initialize()
-			{
-				Enabled = _settingsService.GetSettings().Accepted;
-			}
-		}
-
-		[Action("TmAnonymizerTMRibbonGroupOpenFolderAction", typeof(SDLTMAnonymizerView), Name = "Select Folder", Icon = "TranslationMemoriesFolder_Open", Description = "Add all file-based TMs in the selected folder")]
-		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 4, DisplayType.Normal)]
-		public class TmAnonymizerTmRibbonGroupOpenFolderAction : AbstractAction
-		{
-			protected override void Execute()
-			{
-				_model?.TranslationMemoryViewModel.SelectFolder();
-			}
-
-			public override void Initialize()
-			{
-				Enabled = _settingsService.GetSettings().Accepted;
-			}
-		}
-
-		[Action("TmAnonymizerTmRibbonGroupRemoveTmAction", typeof(SDLTMAnonymizerView), Name = "Remove TM", Icon = "Remove", Description = "Remove TM")]
-		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 3, DisplayType.Normal)]
-		public class TmAnonymizerTmRibbonGroupRemoveTmAction : AbstractAction
-		{
-			protected override void Execute()
-			{
-				_model?.TranslationMemoryViewModel.RemoveTm();
-			}
-
-			public override void Initialize()
-			{
-				Enabled = _settingsService.GetSettings().Accepted;
-			}
-		}
-
-		[Action("TmAnonymizerTmRibbonGroupRemoveTmCacheAction", typeof(SDLTMAnonymizerView), Name = "Clear TM Cache", Icon = "RemoveCache", Description = "Clear TM Cache")]
-		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 2, DisplayType.Normal)]
-		public class TmAnonymizerTmRibbonGroupRemoveTmCacheAction : AbstractAction
-		{
-			protected override void Execute()
-			{
-				_model?.TranslationMemoryViewModel.ClearCache();
-			}
-
-			public override void Initialize()
-			{
-				Enabled = _settingsService.GetSettings().Accepted;
+				SelectedTabIndexArgs?.Invoke(this, new SelectedTabIndexArgs { SelectedIndex = Model.SelectedTabIndex });
 			}
 		}
 
 
-		[RibbonGroup("TmAnonymizerHelpRibbonGroup", "    Help    ")]
-		[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-		public class TmAnonymizerHelpRibbonGroup : AbstractRibbonGroup
-		{
-		}
 
-		[Action("TmAnonymizerHelpRibbonGroupHelpAction", typeof(SDLTMAnonymizerView), Name = "Online Help", Icon = "wiki", Description = "An wiki page will be opened in browser with user documentation")]
-		[ActionLayout(typeof(TmAnonymizerHelpRibbonGroup), 1, DisplayType.Large)]
-		public class TmAnonymizerHelpRibbonGroupHelpAction : AbstractAction
-		{
-			protected override void Execute()
-			{
-				System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3272.sdltmanonymizer");
-			}
-		}
-
-		[Action("TmAnonymizerHelpRibbonGroupAboutAction", typeof(SDLTMAnonymizerView), Name = "About", Icon = "information", Description = "About")]
-		[ActionLayout(typeof(TmAnonymizerHelpRibbonGroup), 0, DisplayType.Large)]
-		public class TmAnonymizerHelpRibbonGroupAboutAction : AbstractAction
-		{
-			protected override void Execute()
-			{
-				var about = new AboutBox();
-				about.ShowDialog();
-			}
-		}
+	
 	}
 }

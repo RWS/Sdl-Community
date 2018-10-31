@@ -34,7 +34,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 		}
 
 		private IntPtr _windowHandle;
-		private void MainWindow_SourceInitialized(object sender, EventArgs e)
+		private void MainWindow_SourceInitialized(object sender, System.EventArgs e)
 		{
 			_windowHandle = new WindowInteropHelper(this).Handle;
 

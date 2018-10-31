@@ -54,7 +54,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectFields, true));
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(Import, true));
-		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
+		public ICommand ApplyChangesCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
 		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export, true));
 
 		public bool SelectAll

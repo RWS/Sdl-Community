@@ -23,9 +23,9 @@
 	</UserControl.Resources>
 
 	<Grid Name="ParentGrid">
-		<TabControl Margin="5" BorderBrush="Gainsboro" ItemContainerStyle="{StaticResource TabItemStyle}" >
+		<TabControl Margin="5" SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  BorderBrush="Gainsboro" ItemContainerStyle="{StaticResource TabItemStyle}" >
 
-			<TabItem Header="Content Filtering Rules">
+			<TabItem  Header="Content Filtering Rules">
 				<view:ContentFilteringRulesView DataContext="{Binding ContentFilteringRulesViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 			</TabItem>
 			<TabItem  Header ="System Fields">

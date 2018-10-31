@@ -36,6 +36,9 @@
 					<Button ToolTip="Open folder containing..." Command="{Binding LogViewModel.OpenFolderContainingCommand}" Background="Transparent" BorderThickness="0">
 						<Image Source="../Resources/Folder.ico" Height="20"/>
 					</Button>
+					<!--<Button ToolTip="Remove the selected log reports" Command="{Binding LogViewModel.RemoveSelectedLogReportsCommand}" Background="Transparent" BorderThickness="0">
+						<Image Source="../Resources/Delete.ico" Height="20"/>
+					</Button>-->
 				</StackPanel>
 			</Border>
 

@@ -31,7 +31,7 @@
 		</Grid.ColumnDefinitions>
 		<TextBlock Name="Description" FontFamily="Segoe UI" Grid.Row="0" Grid.ColumnSpan="2" Margin="10,10" Text="{Binding Description}" TextWrapping="WrapWithOverflow"/>
 		<CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding Accepted}" Margin="10,0,0,0" FontFamily="Segoe UI" Height="15" VerticalAlignment="Bottom">I agree</CheckBox>
-		<Button  Grid.Row="2" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" Margin="102,0,10,10" Content="Ok" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=Accept}" Width="Auto" VerticalAlignment="Bottom"></Button>
+		<Button  Grid.Row="2" Grid.Column="1" Style="{DynamicResource LightGreenButtonsStyle }" Margin="0,0,10,10" Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=Accept}" Width="85" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
 	</Grid>
 </Window>
 

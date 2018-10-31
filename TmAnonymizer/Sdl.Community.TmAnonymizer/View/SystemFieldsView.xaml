@@ -21,13 +21,7 @@
 
 
 	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition />
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
-		<controls:SortAwareDataGrid Grid.Row="1" 
+		<controls:SortAwareDataGrid  
 		        DefaultColumnName="UserName"
 		        DefaultSortDirection="Ascending"
 				Style="{StaticResource FilesGridStyle}" 
@@ -66,7 +60,7 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				
+
 				<DataGridTextColumn Width="2*" Header="User Name" IsReadOnly="True" Binding="{Binding UserName}" />
 				<DataGridTemplateColumn Header="New Value" Width="3*" IsReadOnly="False" SortMemberPath="Alias" >
 					<DataGridTemplateColumn.CellTemplate>
@@ -79,25 +73,6 @@
 				</DataGridTemplateColumn>
 			</DataGrid.Columns>
 		</controls:SortAwareDataGrid>
-		<StackPanel Grid.Column="0" Grid.Row="2"  Orientation="Vertical"  Margin="5,10,10,10">
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ImportCommand}">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>Import users</TextBlock>
-					</StackPanel>
-				</Button>
-				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ExportCommand}">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>Export users</TextBlock>
-					</StackPanel>
-				</Button>
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Command="{Binding ApplyChangesCommand}">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>Apply changes</TextBlock>
-					</StackPanel>
-				</Button>
-			</StackPanel>
-		</StackPanel>
 	</Grid>
 
 </UserControl>
