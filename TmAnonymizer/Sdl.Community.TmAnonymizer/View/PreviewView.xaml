@@ -55,7 +55,7 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTemplateColumn  Header="ID"  MinWidth="50"  Width="Auto" SortMemberPath="TranslationUnit.ResourceId.Id" >
+					<DataGridTemplateColumn Header="ID"  MinWidth="50"  Width="Auto" SortMemberPath="TranslationUnit.ResourceId.Id" >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate DataType="model:ContentSearchResult">
 								<TextBlock Text="{Binding TranslationUnit.ResourceId.Id}" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="0,0,6,0"/>
@@ -77,9 +77,8 @@
 									</xctk:RichTextBox.TextFormatter>
 									<xctk:RichTextBox.ContextMenu>
 										<ContextMenu >
-											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"></MenuItem>
-											<MenuItem Header="Deselect word" Click="UnselectWord"></MenuItem>
-											<MenuItem Header="Apply selected changes" Click="AnonymizeAction"></MenuItem>
+											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"/>
+											<MenuItem Header="Deselect word" Click="UnselectWord"/>
 										</ContextMenu>
 									</xctk:RichTextBox.ContextMenu>
 								</xctk:RichTextBox>
@@ -103,8 +102,7 @@
 									<xctk:RichTextBox.ContextMenu>
 										<ContextMenu>
 											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"/>
-											<MenuItem Header="Deselect word" Click="UnselectWord"></MenuItem>
-											<MenuItem Header="Anonymize selected translation units" Click="AnonymizeAction"></MenuItem>
+											<MenuItem Header="Deselect word" Click="UnselectWord"/>
 										</ContextMenu>
 									</xctk:RichTextBox.ContextMenu>
 								</xctk:RichTextBox>

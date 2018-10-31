@@ -90,7 +90,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 	{
 		protected override void Execute()
 		{
-			Controller.Model?.TranslationMemoryViewModel.RemoveTm();
+			Controller.Model?.TranslationMemoryViewModel.RemoveTmCommand.Execute(null);
 		}
 
 		public override void Initialize()
@@ -105,7 +105,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 	{
 		protected override void Execute()
 		{
-			Controller.Model?.TranslationMemoryViewModel.ClearCache();
+			Controller.Model?.TranslationMemoryViewModel.ClearTmCacheCommand.Execute(null);
 		}
 
 		public override void Initialize()
@@ -129,20 +129,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			switch (Controller.Model.SelectedTabIndex)
 			{
 				case 1:
-				{
-					Controller.Model.SystemFieldsViewModel.ApplyChangesCommand.Execute(null);
-					break;
-				}
+					{
+						Controller.Model.SystemFieldsViewModel.ApplyChangesCommand.Execute(null);
+						break;
+					}
 				case 2:
-				{
-					Controller.Model.CustomFieldsViewModel.ApplyChangesCommand.Execute(null);
-					break;
-				}
+					{
+						Controller.Model.CustomFieldsViewModel.ApplyChangesCommand.Execute(null);
+						break;
+					}
 				default:
-				{
-					Controller.Model.ContentFilteringRulesViewModel.PreviewCommand.Execute(null);
-					break;
-				}
+					{
+						Controller.Model.ContentFilteringRulesViewModel.PreviewCommand.Execute(null);
+						break;
+					}
 			}
 		}
 
@@ -159,7 +159,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 				case 1:
 					{
 						Text = "Apply Changes";
-						ToolTipText = "Apply Changes (System-Fields)";						
+						ToolTipText = "Apply Changes (System-Fields)";
 						Icon = PluginResources.ApplyChanges;
 						break;
 					}
@@ -190,20 +190,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			switch (Controller.Model.SelectedTabIndex)
 			{
 				case 1:
-				{
-					Controller.Model.SystemFieldsViewModel.ExportCommand.Execute(null);
-					break;
-				}
+					{
+						Controller.Model.SystemFieldsViewModel.ExportCommand.Execute(null);
+						break;
+					}
 				case 2:
-				{
-					Controller.Model.CustomFieldsViewModel.ExportCommand.Execute(null);
-					break;
-				}
+					{
+						Controller.Model.CustomFieldsViewModel.ExportCommand.Execute(null);
+						break;
+					}
 				default:
-				{
-					Controller.Model.ContentFilteringRulesViewModel.ExportCommand.Execute(null);
-					break;
-				}
+					{
+						Controller.Model.ContentFilteringRulesViewModel.ExportCommand.Execute(null);
+						break;
+					}
 			}
 		}
 
@@ -250,20 +250,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			switch (Controller.Model.SelectedTabIndex)
 			{
 				case 1:
-				{
-					Controller.Model.SystemFieldsViewModel.ImportCommand.Execute(null);
-					break;
-				}
+					{
+						Controller.Model.SystemFieldsViewModel.ImportCommand.Execute(null);
+						break;
+					}
 				case 2:
-				{
-					Controller.Model.CustomFieldsViewModel.ImportCommand.Execute(null);
-					break;
-				}
+					{
+						Controller.Model.CustomFieldsViewModel.ImportCommand.Execute(null);
+						break;
+					}
 				default:
-				{
-					Controller.Model.ContentFilteringRulesViewModel.ImportCommand.Execute(null);
-					break;
-				}
+					{
+						Controller.Model.ContentFilteringRulesViewModel.ImportCommand.Execute(null);
+						break;
+					}
 			}
 		}
 
