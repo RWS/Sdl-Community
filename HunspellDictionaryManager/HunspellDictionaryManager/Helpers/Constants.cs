@@ -1,9 +1,16 @@
-﻿namespace Sdl.Community.HunspellDictionaryManager.Helpers
+﻿using System;
+
+namespace Sdl.Community.HunspellDictionaryManager.Helpers
 {
 	public static class Constants
 	{
+		public static readonly string BackupFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community", Environment.UserName);
+		public static readonly string Backup2017HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2017\HunspellDictionaries";
+		public static readonly string Backup2019HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2019\HunspellDictionaries";
+		public static readonly string Restore2017HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2017\RestoreHunspellDictionaries";
+		public static readonly string Restore2019HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2019\RestoreHunspellDictionaries";
 		public static readonly string HunspellDictionaries = "HunspellDictionaries";
-		public static readonly string UndoHunspellDictionaries = "UndoHunspellDictionaries";
+
 		public static readonly string Visible = "Visible";
 		public static readonly string Hidden = "Hidden";
 		public static readonly string RedColor = "Red";
@@ -17,7 +24,7 @@
 		public static readonly string SuccessfullCreateMessage = "Dictionary language was successfully created!";
 		public static readonly string SuccessfullDeleteMessage = "Dictionary language was successfully deleted!";
 		public static readonly string DictionaryAlreadyExists = "Dictionary already exists! Are you sure you want to override?";
-		public static readonly string UndoSuccessMessage = "Hunspell dictionary was successfully undone!";
+		public static readonly string RestoreSuccessMessage = "Hunspell dictionary was successfully restored!";
 
 		public static readonly string LanguageAlreadyExists = "Hunspell language dictionary already exists with specified configuration!";
 		public static readonly string NoLanguageDictionaryFound = "Please select a language dictionary for deletion!";
