@@ -8,7 +8,7 @@
         mc:Ignorable="d"
 		GlowBrush="#008C95"
         WindowTitleBrush="#008C95"
-        Title="Hunspell Dictionary Manager" Height="260" Width="650"
+        Title="Hunspell Dictionary Manager Studio 2019" Height="260" Width="650"
 		ResizeMode="NoResize"
 		WindowStartupLocation="CenterScreen">
 	<Window.Resources>
