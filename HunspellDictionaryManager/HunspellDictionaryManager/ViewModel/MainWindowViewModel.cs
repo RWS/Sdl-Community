@@ -300,12 +300,12 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				};
 
 				// Copy files in the original Studio HunspellDictionaries folder
-				var isoCode = Path.GetFileNameWithoutExtension(SelectedUndoDictionary.AffFile);
+				var isoCode = Path.GetFileNameWithoutExtension(SelectedUndoDictionary.AffFile).Replace('_', '-');
 				CopyLanguageDictionary(undoHunspellDictionaryModel, dictionaryFilePath, affFilePath, isoCode);
 
 				RemoveDictFromDeleteFolder();
 				RefreshAction();
-				ResultMessage = Constants.UndoSuccessMessage;
+				ResultMessage = Constants.RestoreSuccessMessage;
 				LabelVisibility = Constants.Visible;
 			}
 			else
