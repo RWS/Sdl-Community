@@ -20,15 +20,8 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-
 	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition/>
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
-
-		<controls:SortAwareDataGrid Grid.Row="1"
+		<controls:SortAwareDataGrid 
 		                DefaultColumnName="Name"
 		                DefaultSortDirection="Ascending"
 						Style="{StaticResource FilesGridStyle}"
@@ -75,27 +68,21 @@
 				</DataGridTemplateColumn>
 				<DataGridTextColumn Width="3*" MinWidth="200" Header="Description" Binding="{Binding Description}" IsReadOnly="False" ElementStyle="{StaticResource WrapText}"/>
 			</DataGrid.Columns>
+			<DataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="Export selected rules to excel" Command="{Binding ExportCommand}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/Excel.ico" Height="20"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Remove the selected rules" Command="{Binding RemoveRuleCommand}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/Delete.ico" Height="20"/>
+						</MenuItem.Icon>
+					</MenuItem>
+				</ContextMenu>
+			</DataGrid.ContextMenu>
 		</controls:SortAwareDataGrid>
-
-		<StackPanel Grid.Column="0" Grid.Row="2"  Orientation="Vertical"  Margin="5,10,10,10">
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ImportCommand}">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>Import rules</TextBlock>
-					</StackPanel>
-				</Button>
-				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ExportCommand}">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>Export rules</TextBlock>
-					</StackPanel>
-				</Button>
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125"  Command="{Binding PreviewCommand}">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>Preview</TextBlock>
-					</StackPanel>
-				</Button>
-			</StackPanel>
-		</StackPanel>
 	</Grid>
 
 </UserControl>

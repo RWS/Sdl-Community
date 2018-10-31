@@ -158,6 +158,7 @@
     <Compile Include="Controls\ProgressDialog\ProgressDialogResult.cs" />
     <Compile Include="Controls\ProgressDialog\ProgressDialogSettings.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="EventArgs\SelectedTabIndexArgs.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Model\FieldDefinitions\DateTimeFieldValue.cs" />
     <Compile Include="Model\FieldDefinitions\FieldValue.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="Model\TM\TranslationMemory.cs" />
     <Compile Include="Model\TM\TranslationUnit.cs" />
     <Compile Include="Model\TM\TranslationUnitContext.cs" />
+    <Compile Include="Studio\SDLTMAnonymizierViewRibbon.cs" />
     <Compile Include="ViewModel\LogViewModel.cs" />
     <Compile Include="ViewModel\SelectServersViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
@@ -303,6 +305,12 @@
   <ItemGroup>
     <Resource Include="Resources\Excel.ico" />
     <Resource Include="Resources\Folder.ico" />
+    <Resource Include="Resources\ApplyChanges.ico" />
+    <Resource Include="Resources\ExportTo.ico" />
+    <Resource Include="Resources\ImportFrom.ico" />
+    <Resource Include="Resources\Preview.ico" />
+    <Resource Include="Resources\PreviewChanges.ico" />
+    <Resource Include="Resources\Delete.ico" />
     <Content Include="Resources\ReportsView.ico" />
     <Resource Include="Resources\Report.ico" />
     <Resource Include="Resources\information.ico" />
@@ -310,7 +318,6 @@
     <Resource Include="Resources\RemoveCache.ico" />
     <Resource Include="Resources\ServerBasedTranslationMemoryCache.ico" />
     <Resource Include="Resources\TranslationMemoryCache.ico" />
-    <Resource Include="Resources\Check.ico" />
     <Resource Include="Resources\CheckedCircle.png" />
     <None Include="Resources\icon.ico" />
     <None Include="Resources\wiki.ico" />

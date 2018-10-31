@@ -31,12 +31,7 @@
 
 		<Border Grid.Column="0" BorderBrush="{StaticResource OutterBorderColor}" BorderThickness="0" MinWidth="200" Margin="0,0,2,0">
 			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition />
-					<RowDefinition Height="Auto"  />
-				</Grid.RowDefinitions>
-
-				<controls:SortAwareDataGrid Grid.Row="0" Margin="5,10"
+				<controls:SortAwareDataGrid Margin="5,10"
 					            DefaultColumnName="Name"
 					            DefaultSortDirection="Ascending"
 					            Style="{StaticResource FilesGridStyle}" 							
@@ -72,26 +67,6 @@
 						<DataGridTextColumn Width="1*" Header="Type" MinWidth="100" Binding="{Binding ValueType}" IsReadOnly="True" ElementStyle="{StaticResource WrapText}" />
 					</DataGrid.Columns>
 				</controls:SortAwareDataGrid>
-
-				<StackPanel Grid.Row="1"  Orientation="Vertical"  Margin="5,10,10,10">
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-						<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Command="{Binding ImportCommand}">
-							<StackPanel Orientation="Horizontal">
-								<TextBlock>Import fields</TextBlock>
-							</StackPanel>
-						</Button>
-						<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Command="{Binding ExportCommand}">
-							<StackPanel Orientation="Horizontal">
-								<TextBlock>Export fields</TextBlock>
-							</StackPanel>
-						</Button>
-						<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Command="{Binding ApplyCommand}">
-							<StackPanel Orientation="Horizontal">
-								<TextBlock>Apply changes</TextBlock>
-							</StackPanel>
-						</Button>
-					</StackPanel>
-				</StackPanel>
 			</Grid>
 		</Border>
 
