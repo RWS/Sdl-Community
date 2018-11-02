@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using Sdl.Community.StarTransit.Shared.Models;
@@ -37,13 +39,14 @@ namespace Sdl.Community.StarTransit
 			var pathToTempFolder = CreateTempPackageFolder();
 			try
 			{
-				OpenFileDialog fileDialog = new OpenFileDialog();
-				fileDialog.Filter = @"Transit Project Package Files (*.ppf)|*.ppf";
+				var fileDialog = new OpenFileDialog
+				{
+					Filter = @"Transit Project Package Files (*.ppf)|*.ppf"
+				};
 				var dialogResult = fileDialog.ShowDialog();
 				if (dialogResult == DialogResult.OK)
 				{
-					var path = fileDialog.FileName;
-
+					var path = fileDialog.FileName;	
 					var packageService = new PackageService();
 					var package = await packageService.OpenPackage(path, pathToTempFolder);
 
@@ -67,11 +70,11 @@ namespace Sdl.Community.StarTransit
 			{
 				System.Windows.Forms.MessageBox.Show(ptle.Message);
 			}
-		}
-
+		}  
+		
 		private string CreateTempPackageFolder()
 		{
-			var tempFolder = string.Format(@"C:\Users\{0}\StarTransit", Environment.UserName);
+			var tempFolder = $@"C:\Users\{Environment.UserName}\StarTransit";
 			var pathToTempFolder = Path.Combine(tempFolder, Guid.NewGuid().ToString());
 			
 			if (Directory.Exists(pathToTempFolder))
