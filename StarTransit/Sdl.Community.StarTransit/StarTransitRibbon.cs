@@ -37,8 +37,10 @@ namespace Sdl.Community.StarTransit
 			var pathToTempFolder = CreateTempPackageFolder();
 			try
 			{
-				OpenFileDialog fileDialog = new OpenFileDialog();
-				fileDialog.Filter = @"Transit Project Package Files (*.ppf)|*.ppf";
+				var fileDialog = new OpenFileDialog
+				{
+					Filter = @"Transit Project Package Files (*.ppf)|*.ppf"
+				};
 				var dialogResult = fileDialog.ShowDialog();
 				if (dialogResult == DialogResult.OK)
 				{
@@ -71,7 +73,7 @@ namespace Sdl.Community.StarTransit
 
 		private string CreateTempPackageFolder()
 		{
-			var tempFolder = string.Format(@"C:\Users\{0}\StarTransit", Environment.UserName);
+			var tempFolder = $@"C:\Users\{Environment.UserName}\StarTransit";
 			var pathToTempFolder = Path.Combine(tempFolder, Guid.NewGuid().ToString());
 			
 			if (Directory.Exists(pathToTempFolder))
