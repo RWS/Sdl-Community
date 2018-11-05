@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
@@ -11,7 +9,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 	{
 		private readonly string _xliffPath;
 		private readonly List<string> _segmentIds;
-		private XmlDocument _xmlDoc;
+		private readonly XmlDocument _xmlDoc;
 
 		public XliffParser(string xliffPath, List<string> segmentIds)
 		{
@@ -71,16 +69,28 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				foreach (var segDef in segDefList.OfType<XmlElement>().ToList())
 				{
 					var segs = segDef.GetElementsByTagName("sdl:seg");
-					var removedSegments = new List<XmlNode>();	
-					foreach (XmlNode seg in segs)
+					var removedSegments = new List<XmlNode>();
+
+					//the id of the segment is in mrk elements
+					if (segs.Count > 1)
+					{	
+						RemoveSegmentFromSourceOrTarget( transUnit,  "source");
+						RemoveSegmentFromSourceOrTarget( transUnit,  "target");
+						RemoveSegmentFromSourceOrTarget( transUnit,  "seg-source");
+						RemoveSegmentFromSourceOrTarget( transUnit,  "target-source");
+					}
+					else
 					{
-						var id = seg.Attributes?["id"]?.Value;
-						if (!string.IsNullOrEmpty(id))
+						foreach (XmlNode seg in segs)
 						{
-							var idExists = _segmentIds.Any(s => s.Equals(id));
-							if (!idExists)
+							var id = seg.Attributes?["id"]?.Value;
+							if (!string.IsNullOrEmpty(id))
 							{
-								removedSegments.Add(seg);
+								var idExists = _segmentIds.Any(s => s.Equals(id));
+								if (!idExists)
+								{
+									removedSegments.Add(seg);
+								}
 							}
 						}
 					}
@@ -92,25 +102,63 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 						removedSegDefs.Add(segDef);
 					}
 					foreach (var rSegDef in removedSegDefs.OfType<XmlElement>())
-					{   //remove from translation unit -> seg-defs
+					{
+						//remove from translation unit -> seg-defs
 						if (rSegDef.ParentNode != null)
 						{
 							transUnit.RemoveChild(rSegDef);
 							removedTransUnits.Add(transUnit);
 						}
-						
+
 					}
 					removedSegDefs.Clear();
 					removedSegments.Clear();
 				}
 
 				foreach (var rTransaltionUnit in removedTransUnits.OfType<XmlElement>())
-				{	//remove from group -> translation unit
+				{
+					//remove from group -> translation unit
 					groupElement.RemoveChild(rTransaltionUnit);
 					removedGroups?.Add(groupElement);
 				}
 			}
-			removedTransUnits.Clear(); 
+			removedTransUnits.Clear();
+		}
+
+		private void RemoveSegmentFromSourceOrTarget(XmlElement transUnit, string tagName)
+		{
+			var segments = transUnit.GetElementsByTagName(tagName);
+			if (segments.Count > 0)
+			{
+				var firstSeg = (XmlElement)segments[0];
+				var mrks = firstSeg.GetElementsByTagName("mrk");
+				var removedMrks = new List<XmlNode>();
+				foreach (var mrk in mrks.OfType<XmlElement>())
+				{  
+					if (!mrk.HasAttribute("mtype") || mrk.Attributes["mtype"].Value != "seg")
+						continue;
+
+					string mrkId;
+					if (mrk.HasAttribute("mid"))
+					{
+						mrkId = mrk.Attributes["mid"].Value;
+						if (!string.IsNullOrEmpty(mrkId))
+						{
+							var idExists = _segmentIds.Any(s => s.Equals(mrkId));
+							if (!idExists)
+							{
+								removedMrks.Add(mrk);
+							}
+						}
+					}
+				}
+				//remove mrk element from translation unit
+				foreach (var xmlNode in removedMrks.OfType<XmlElement>())
+				{
+					xmlNode.ParentNode?.RemoveChild(xmlNode);
+				}
+				removedMrks.Clear();
+			}
 		}
 	}
 }
