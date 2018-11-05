@@ -1792,18 +1792,23 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private void helpButton_Click(object sender, EventArgs e)
 		{
 			var segments = ActiveDocument?.FilteredSegmentPairs?.ToList();
-			var segmentsIds = new List<string>();
 			//list with ids of segments from filter result 
-			foreach (var segment in segments)
+			if (segments == null) return;
+			var segmentsIds = segments.Select(segment => segment.Properties.Id.Id).ToList();
+
+			var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+			var activeFilePath = ActiveDocument?.ActiveFile?.LocalFilePath;
+			var fileName = Path.GetFileName(activeFilePath);
+
+			if (fileName != null)
 			{
-				segmentsIds.Add(segment.Properties.Id.Id);
+				var fileCopyPath = Path.Combine(desktop, fileName);
+				File.Copy(activeFilePath,fileCopyPath);		   
+
+				var xliffParser = new XliffParser(fileCopyPath, segmentsIds);
+				xliffParser.GenerateXliff();
 			}
-			var filePath = ActiveDocument?.ActiveFile.LocalFilePath;
 
-			var fileCopy = @"C:\Users\aghisa\Desktop\SamplePhotoPrinter.doc.sdlxliff";
-
-			var xliffParser = new XliffParser(fileCopy,segmentsIds);
-			xliffParser.GenerateXliff();
 			//System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3130.community-advanced-display-filter");
 		}
 
