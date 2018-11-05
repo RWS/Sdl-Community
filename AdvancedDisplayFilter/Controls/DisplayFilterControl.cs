@@ -1818,19 +1818,22 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			//list with ids of segments from filter result 
 			if (segments == null) return;
 			var segmentsIds = segments.Select(segment => segment.Properties.Id.Id).ToList();
-
-			var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-			var activeFilePath = ActiveDocument?.ActiveFile?.LocalFilePath;
-			var fileName = Path.GetFileName(activeFilePath);
-
-			if (fileName != null)
+			var saveFileDialog = new SaveFileDialog
 			{
-				var fileCopyPath = Path.Combine(desktop, fileName);
-				File.Copy(activeFilePath, fileCopyPath);
+				Filter = @"sdlxliff files (*.sdlxliff)|*.sdlxliff|All files (*.*)|*."
+			};
+			if (saveFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				var selectedFilePath = saveFileDialog.FileName;
+				var activeFilePath = ActiveDocument?.ActiveFile?.LocalFilePath;
 
-				var xliffParser = new XliffParser(fileCopyPath, segmentsIds);
-				xliffParser.GenerateXliff();
-			}
+				if (activeFilePath != null)
+				{
+					File.Copy(activeFilePath, selectedFilePath);  
+					var xliffParser = new XliffParser(selectedFilePath, segmentsIds);
+					xliffParser.GenerateXliff();
+				}
+			}  
 		}
 	}
 }
