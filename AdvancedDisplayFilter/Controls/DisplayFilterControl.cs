@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Community.Plugins.AdvancedDisplayFilter;
@@ -1790,7 +1791,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void helpButton_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3130.community-advanced-display-filter");
+			var segments = ActiveDocument?.FilteredSegmentPairs?.ToList();
+			var segmentsIds = new List<string>();
+			//list with ids of segments from filter result 
+			foreach (var segment in segments)
+			{
+				segmentsIds.Add(segment.Properties.Id.Id);
+			}
+			var filePath = ActiveDocument?.ActiveFile.LocalFilePath;
+
+			var fileCopy = @"C:\Users\aghisa\Desktop\SamplePhotoPrinter.doc.sdlxliff";
+
+			var xliffParser = new XliffParser(fileCopy,segmentsIds);
+			xliffParser.GenerateXliff();
+			//System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3130.community-advanced-display-filter");
 		}
 
 		private void listView_available_MouseDoubleClick(object sender, MouseEventArgs e)

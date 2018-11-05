@@ -142,6 +142,7 @@
     <Compile Include="Helpers\SegmentNumbersHelper.cs" />
     <Compile Include="Helpers\TagVisitor.cs" />
     <Compile Include="Helpers\UserVisitor.cs" />
+    <Compile Include="Helpers\XliffParser.cs" />
     <Compile Include="Models\DisplayFilterSerializer.cs" />
     <Compile Include="Controls\Helper.cs" />
     <Compile Include="Models\SavedSettings.cs" />
