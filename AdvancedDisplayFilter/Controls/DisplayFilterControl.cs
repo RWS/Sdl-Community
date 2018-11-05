@@ -1790,26 +1790,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		}
 
 		private void helpButton_Click(object sender, EventArgs e)
-		{
-			var segments = ActiveDocument?.FilteredSegmentPairs?.ToList();
-			//list with ids of segments from filter result 
-			if (segments == null) return;
-			var segmentsIds = segments.Select(segment => segment.Properties.Id.Id).ToList();
-
-			var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-			var activeFilePath = ActiveDocument?.ActiveFile?.LocalFilePath;
-			var fileName = Path.GetFileName(activeFilePath);
-
-			if (fileName != null)
-			{
-				var fileCopyPath = Path.Combine(desktop, fileName);
-				File.Copy(activeFilePath,fileCopyPath);		   
-
-				var xliffParser = new XliffParser(fileCopyPath, segmentsIds);
-				xliffParser.GenerateXliff();
-			}
-
-			//System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3130.community-advanced-display-filter");
+		{ 
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3130.community-advanced-display-filter");
 		}
 
 		private void listView_available_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -1828,6 +1810,27 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				}
 			MoveSelectedListViewItem(listView_available, listView_selected);
 			InvalidateIconsFilterEdited(tabPage_filters);
+		}
+
+		private void generateXliff_Click(object sender, EventArgs e)
+		{
+			var segments = ActiveDocument?.FilteredSegmentPairs?.ToList();
+			//list with ids of segments from filter result 
+			if (segments == null) return;
+			var segmentsIds = segments.Select(segment => segment.Properties.Id.Id).ToList();
+
+			var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+			var activeFilePath = ActiveDocument?.ActiveFile?.LocalFilePath;
+			var fileName = Path.GetFileName(activeFilePath);
+
+			if (fileName != null)
+			{
+				var fileCopyPath = Path.Combine(desktop, fileName);
+				File.Copy(activeFilePath, fileCopyPath);
+
+				var xliffParser = new XliffParser(fileCopyPath, segmentsIds);
+				xliffParser.GenerateXliff();
+			}
 		}
 	}
 }
