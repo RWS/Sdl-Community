@@ -9,13 +9,14 @@ using OfficeOpenXml.Table;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Model.Log;
 using Sdl.LanguagePlatform.TranslationMemory;
+using SegmentComparer.Structure;
 
 namespace Sdl.Community.SdlTmAnonymizer.Services
 {
 	public class ExcelImportExportService
 	{
 		public ExcelPackage GetExcelPackage(string filePath)
-		{			
+		{
 			var fileInfo = new FileInfo(filePath);
 			var excelPackage = new ExcelPackage(fileInfo);
 			return excelPackage;
@@ -114,7 +115,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						worksheet.Cells["B" + lineNumber].Value = field.ValueType;
 						worksheet.Cells["C" + lineNumber].Value = detail.Value;
 						worksheet.Cells["D" + lineNumber].Value = detail.NewValue;
-						
+
 					}
 				}
 			}
@@ -308,8 +309,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			worksheet.Cells["A" + lineNumber].Value = "ID";
 			worksheet.Cells["B" + lineNumber].Value = "Name";
 			worksheet.Cells["C" + lineNumber].Value = "Type";
-			worksheet.Cells["D" + lineNumber].Value = "Value";
-			worksheet.Cells["E" + lineNumber].Value = "Previous";
+			worksheet.Cells["D" + lineNumber].Value = "Original Value";
+			worksheet.Cells["E" + lineNumber].Value = "New Value";
 			worksheet.Cells["F" + lineNumber].Value = "Result";
 
 			worksheet.Column(1).Width = 10;
@@ -319,16 +320,66 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			worksheet.Column(5).Width = 70;
 			worksheet.Column(6).Width = 10;
 
+			var comparer = new SegmentComparer.Comparer();
 			foreach (var action in report.Actions)
 			{
 				lineNumber++;
 				if (action != null)
-				{
+				{					
 					worksheet.Cells["A" + lineNumber].Value = action.TmId?.Id.ToString();
 					worksheet.Cells["B" + lineNumber].Value = action.Name;
 					worksheet.Cells["C" + lineNumber].Value = action.Type;
-					worksheet.Cells["D" + lineNumber].Value = action.Value;
-					worksheet.Cells["E" + lineNumber].Value = action.Previous;
+
+					var comparison = comparer.CompareSegment(action.TmId?.Id.ToString(), action.Previous, action.Value, true, 1);
+
+					var previousValue = worksheet.Cells["D" + lineNumber];
+					previousValue.IsRichText = true;
+
+					var currentValue = worksheet.Cells["E" + lineNumber];
+					currentValue.IsRichText = true;					
+
+					foreach (var unit in comparison.ComparisonUnits)
+					{
+						switch (unit.Type)
+						{
+							case ComparisonUnit.ComparisonType.New:
+								{
+									if (unit.TextType != ComparisonUnit.ContentType.Tag)
+									{
+										var valueNormalText = currentValue.RichText.Add(unit.Text);
+										valueNormalText.Color = System.Drawing.Color.Black;
+										valueNormalText.Bold = false;
+									}
+									else
+									{
+										var valueNewText = currentValue.RichText.Add(unit.Text);
+										valueNewText.Color = System.Drawing.Color.Red;
+										valueNewText.Bold = true;
+									}
+									break;
+								}
+							case ComparisonUnit.ComparisonType.Removed:
+								{
+									var previousRemovedText = previousValue.RichText.Add(unit.Text);
+									previousRemovedText.Color = System.Drawing.Color.Red;
+									previousRemovedText.Bold = true;
+									break;
+								}
+							case ComparisonUnit.ComparisonType.Identical:
+							case ComparisonUnit.ComparisonType.None:
+								{
+									var valueNormalText = currentValue.RichText.Add(unit.Text);
+									valueNormalText.Color = System.Drawing.Color.Black;
+									valueNormalText.Bold = false;
+
+									var previousNormalText = previousValue.RichText.Add(unit.Text);
+									previousNormalText.Color = System.Drawing.Color.Black;
+									previousNormalText.Bold = false;
+									break;
+								}
+						}
+					}
+
 					worksheet.Cells["F" + lineNumber].Value = string.IsNullOrEmpty(action.Result) ? "OK" : action.Result;
 
 					worksheet.Cells["D" + lineNumber].Style.WrapText = true;

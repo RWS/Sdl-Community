@@ -7,7 +7,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.SdlTmAnonymizer.Studio
 {
-	[RibbonGroup("TmAnonymizerSettingsRibbonGroup", "  Settings  ")]
+	[RibbonGroup("TmAnonymizerSettingsRibbonGroup", "Configuration")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	public class TmAnonymizerSettingsRibbonGroup : AbstractRibbonGroup
 	{
@@ -114,7 +114,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[RibbonGroup("TmAnonymizerProcessRibbonGroup", "  Process Actions ")]
+	[RibbonGroup("TmAnonymizerProcessRibbonGroup", "  Actions ")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	public class TmAnonymizerProcessRibbonGroup : AbstractRibbonGroup
 	{
@@ -149,6 +149,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		public override void Initialize()
 		{
 			Controller.SelectedTabIndexArgs += Controller_selectedTabIndexArgs;
+			Enabled = Controller.SettingsService.GetSettings().Accepted;
 			base.Initialize();
 		}
 
@@ -211,6 +212,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		public override void Initialize()
 		{
 			Controller.SelectedTabIndexArgs += Controller_selectedTabIndexArgs;
+			Enabled = Controller.SettingsService.GetSettings().Accepted;
 			base.Initialize();
 		}
 
@@ -270,6 +272,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		public override void Initialize()
 		{
 			Controller.SelectedTabIndexArgs += Controller_selectedTabIndexArgs;
+			Enabled = Controller.SettingsService.GetSettings().Accepted;
 			base.Initialize();
 		}
 
@@ -299,7 +302,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[Action("TmAnonymizerProcessRibbonGroupRemoveAction", typeof(SDLTMAnonymizerView), Name = "Remove ", Icon = "Delete", Description = "Remove the slected items")]
+	[Action("TmAnonymizerProcessRibbonGroupRemoveAction", typeof(SDLTMAnonymizerView), Name = "Remove ", Icon = "Delete", Description = "Remove the slected Rules")]
 	[ActionLayout(typeof(TmAnonymizerProcessRibbonGroup), 1, DisplayType.Normal)]
 	public class TmAnonymizerProcessRibbonGroupRemoveAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
@@ -314,17 +317,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		public override void Initialize()
 		{
 			Controller.SelectedTabIndexArgs += Controller_selectedTabIndexArgs;
+			Enabled = Controller.SettingsService.GetSettings().Accepted;
 			base.Initialize();
 		}
-
+		
 		private void Controller_selectedTabIndexArgs(object sender, EventArgs.SelectedTabIndexArgs e)
 		{
 			if (e.SelectedIndex == 0)
 			{
+				ToolTipText = "Remove the slected Rules";
 				Enabled = true;
 			}
 			else
 			{
+				ToolTipText = string.Empty;
 				Enabled = false;
 			}
 		}
