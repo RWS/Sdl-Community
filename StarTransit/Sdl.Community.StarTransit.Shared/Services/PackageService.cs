@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Sdl.Community.StarTransit.Shared.Import;
@@ -22,18 +23,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
         private static PackageModel _package = new PackageModel();
         private const char LanguageTargetSeparator = ' ';
 
-        /// <summary>
-        /// Opens a ppf package and saves to files to temp folder
-        /// </summary>
-        /// <param name="packagePath"></param>
-        /// <param name="pathToTempFolder"></param>
-        /// <returns>Task<PackageModel></returns>
-        public async Task<PackageModel> OpenPackage(string packagePath, string pathToTempFolder)
-        {
-
-            var entryName = string.Empty;
-
-
+		/// <summary>
+		/// Opens a ppf package and saves to files to temp folder
+		/// </summary>
+		/// <param name="packagePath"></param>
+		/// <param name="pathToTempFolder"></param>
+		public async Task<PackageModel> OpenPackage(string packagePath, string pathToTempFolder)
+        {	
+            var entryName = string.Empty;  
             using (var archive = ZipFile.OpenRead(packagePath))
             {
                 foreach (ZipArchiveEntry entry in archive.Entries)
@@ -47,34 +44,29 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
                     if (entry.FullName.EndsWith(".PRJ", StringComparison.OrdinalIgnoreCase))
                     {
-                        entryName = entry.FullName;
-                    }
-
+	                    entryName = entry.FullName;
+                    }  
                 }
-            }
-
+            } 
             return await ReadProjectMetadata(pathToTempFolder, entryName);
-        }
+        } 
 
-        /// <summary>
-        /// Reads the metadata from .PRJ file
-        /// </summary>
-        /// <param name="pathToTempFolder"></param>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        private async Task<PackageModel> ReadProjectMetadata(string pathToTempFolder, string fileName)
+		/// <summary>
+		/// Reads the metadata from .PRJ file
+		/// </summary>
+		/// <param name="pathToTempFolder"></param>
+		/// <param name="fileName"></param>
+		/// <returns></returns>
+		private async Task<PackageModel> ReadProjectMetadata(string pathToTempFolder, string fileName)
         {
             var filePath = Path.Combine(pathToTempFolder, fileName);
-            var keyProperty = string.Empty;
+            var keyProperty = string.Empty;	 
 
-
-            using (var reader = new StreamReader(filePath))
+            using (var reader = new StreamReader(filePath,Encoding.Default))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
-                {
-
-
+                { 
                     if (line.StartsWith("[") && line.EndsWith("]"))
                     {
                         var valuesDictionaries = new List<KeyValuePair<string, string>>();
@@ -96,18 +88,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
                         var firstPosition = line.IndexOf("[", StringComparison.Ordinal) + 1;
                         var lastPosition = line.IndexOf("]", StringComparison.Ordinal) - 1;
-                        keyProperty = line.Substring(firstPosition, lastPosition);
-
+                        keyProperty = line.Substring(firstPosition, lastPosition);	
                     }
                     else
                     {
                         var properties = line.Split('=');
                         _dictionaryPropetries.Add(new KeyValuePair<string, string>(properties[0], properties[1]));
-
-
-                    }
-
-
+                    }	
                 }
             }
 
@@ -121,20 +108,19 @@ namespace Sdl.Community.StarTransit.Shared.Services
         public  PackageModel GetPackageModel()
         {
             return _package;
-        }
+        }	 
 
-        /// <summary>
-        /// Creates a package model
-        /// </summary>
-        /// <param name="pathToTempFolder"></param>
-        /// <returns></returns>
-        private async Task<PackageModel> CreateModel(string pathToTempFolder)
+		/// <summary>
+		/// Creates a package model
+		/// </summary>
+		/// <param name="pathToTempFolder"></param>
+		/// <returns></returns>
+		private async Task<PackageModel> CreateModel(string pathToTempFolder)
         {
-            var model = new PackageModel();
-            
-            CultureInfo sourceLanguage = null;
-
+            var model = new PackageModel();	   
+            CultureInfo sourceLanguage = null;	 
             var languagePairList = new List<LanguagePair>();
+
             if (_pluginDictionary.ContainsKey("Admin"))
             {
                 var propertiesDictionary = _pluginDictionary["Admin"];
@@ -191,9 +177,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     AddFilesAndTmsToModel(languagePair, filesAndMetadata, targetFilesAndTmsPath);
                 }
             }
-
-            return model;
-
+            return model; 
         }
 
         private void AddFilesAndTmsToModel(LanguagePair languagePair,
