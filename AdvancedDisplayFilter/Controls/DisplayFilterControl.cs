@@ -1815,6 +1815,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private void generateXliff_Click(object sender, EventArgs e)
 		{
 			var segments = ActiveDocument?.FilteredSegmentPairs?.ToList();
+
 			//list with ids of segments from filter result 
 			if (segments == null) return;
 			var segmentsIds = segments.Select(segment => segment.Properties.Id.Id).ToList();
@@ -1833,7 +1834,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					var xliffParser = new XliffParser(selectedFilePath, segmentsIds);
 					xliffParser.GenerateXliff();
 				}
-			}  
+
+				MessageBox.Show(@"File was generated at the following location: "+selectedFilePath,string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
 		}
 	}
 }
