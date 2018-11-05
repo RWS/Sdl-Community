@@ -334,7 +334,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
 						{
 							var unit = CreateTranslationUnit(tu, tm.LanguageDirection);
-
 							tusToUpdate.Add(unit);
 						}
 					}
@@ -342,9 +341,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					if (tusToUpdate.Count > 0)
 					{
 						var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
-
 						actions.AddRange(GetResultActions(results, unitsClone, tus));
-
 						updatedCount += results.Count(a => a.ErrorCode == ErrorCode.OK);
 					}
 				}
@@ -356,7 +353,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				stopWatch.Stop();
 				report.ElapsedSeconds = stopWatch.Elapsed.TotalSeconds;
 
-				_serializerService.Save<Report>(report, report.ReportFullPath);
+				_serializerService.Save(report, report.ReportFullPath);
 			}
 
 			return updatedCount;
@@ -437,7 +434,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
 							{
 								var unit = CreateTranslationUnit(tu, languageDirection);
-
 								tusToUpdate.Add(unit);
 							}
 						}
@@ -445,9 +441,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						if (tusToUpdate.Count > 0)
 						{
 							var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
-
 							actions.AddRange(GetResultActions(results, unitsClone, tus));
-
 							updatedCount += results.Count(a => a.ErrorCode == ErrorCode.OK);
 						}
 					}
@@ -465,7 +459,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				stopWatch.Stop();
 				report.ElapsedSeconds = stopWatch.Elapsed.TotalSeconds;
 
-				_serializerService.Save<Report>(report, report.ReportFullPath);
+				_serializerService.Save(report, report.ReportFullPath);
 			}
 
 			return updatedCount;

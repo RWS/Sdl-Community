@@ -110,6 +110,9 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="SegmentComparer, Version=1.0.2.0, Culture=neutral, PublicKeyToken=89aa17d6612aafb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\SegmentComparer.1.0.2\lib\net472\SegmentComparer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -145,8 +148,10 @@
     <Compile Include="Controls\AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\BindableParagraphBlock.cs" />
     <Compile Include="Controls\BindingDataProxy.cs" />
     <Compile Include="Controls\BindingWebBrowserSource.cs" />
+    <Compile Include="Controls\EnabledImage.cs" />
     <Compile Include="Controls\LabelledTextBox.xaml.cs">
       <DependentUpon>LabelledTextBox.xaml</DependentUpon>
     </Compile>
@@ -158,6 +163,7 @@
     <Compile Include="Controls\ProgressDialog\ProgressDialogResult.cs" />
     <Compile Include="Controls\ProgressDialog\ProgressDialogSettings.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="Converters\GrayScaleConverter.cs" />
     <Compile Include="EventArgs\SelectedTabIndexArgs.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Model\FieldDefinitions\DateTimeFieldValue.cs" />
@@ -440,7 +446,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
