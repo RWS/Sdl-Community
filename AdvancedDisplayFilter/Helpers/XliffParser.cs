@@ -64,16 +64,19 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		{
 			try
 			{
-				var headerElement = (XmlElement) fileElement.GetElementsByTagName("header")[0];
-				var referenceElement = headerElement.GetElementsByTagName("reference")[0];
-				var internalFile = referenceElement.ChildNodes.OfType<XmlElement>().Where(node => node.Name == "internal-file")
-					.ToList()[0];
-				internalFile.InnerText = string.Empty;
+				var headerElement = (XmlElement)fileElement.GetElementsByTagName("header")[0];
+				var referenceElement = headerElement.GetElementsByTagName("reference");
+				foreach (var reference in referenceElement.OfType<XmlElement>())
+				{
+					var internalFile = reference.ChildNodes.OfType<XmlElement>().Where(node => node.Name == "internal-file")
+						.ToList()[0];
+					internalFile.InnerText = string.Empty;
+				}
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine(e);
-			} 
+			}
 		}
 
 		private void SliceInBody(XmlElement groupElement, List<XmlNode> removedGroups)
