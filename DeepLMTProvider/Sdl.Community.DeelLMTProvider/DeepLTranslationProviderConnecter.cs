@@ -71,6 +71,8 @@ namespace Sdl.Community.DeepLMTProvider
 				{
 					sourcetext = ReplaceCharacters(sourcetext, words);
 				}
+				//sourcetext = HttpUtility.HtmlEncode(sourcetext);
+				sourcetext = Uri.EscapeDataString(sourcetext);
 
 				request.AddParameter("text", sourcetext);
 				request.AddParameter("source_lang", sourceLanguage);
@@ -88,7 +90,7 @@ namespace Sdl.Community.DeepLMTProvider
 				if (translatedObject != null)
 				{
 					translatedText = translatedObject.Translations[0].Text;
-					translatedText = HttpUtility.HtmlDecode(translatedText);
+					translatedText = HttpUtility.UrlDecode(translatedText);
 				}
 			}
 			catch (WebException e)
