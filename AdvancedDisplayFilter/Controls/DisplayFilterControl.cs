@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Xml;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Community.Plugins.AdvancedDisplayFilter;
@@ -717,9 +716,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 ActiveDocument.DocumentFilterChanged += ActiveDocument_DocumentFilterChanged;
 
                 SetContextInfoList();
-                PopulateContextInfoList();
+                PopulateContextInfoList();	 
 
-                if (ActiveDocument.DisplayFilter != null &&
+	            if (ActiveDocument.DisplayFilter != null &&
                     ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
                 {
                     //invalidate UI with display settings recovered from the active document
