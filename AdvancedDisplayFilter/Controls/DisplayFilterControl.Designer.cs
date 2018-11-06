@@ -118,6 +118,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.toolStripButton_saveFilter = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_loadFilter = new System.Windows.Forms.ToolStripButton();
 			this.reverseBtn = new System.Windows.Forms.ToolStripButton();
+			this.generateXliff = new System.Windows.Forms.ToolStripButton();
 			this.helpButton = new System.Windows.Forms.ToolStripButton();
 			this.panel_filterExpression = new System.Windows.Forms.Panel();
 			this.filterExpressionControl = new Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression();
@@ -749,6 +750,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             this.toolStripButton_saveFilter,
             this.toolStripButton_loadFilter,
             this.reverseBtn,
+            this.generateXliff,
             this.helpButton});
 			resources.ApplyResources(this.toolStrip_filter, "toolStrip_filter");
 			this.toolStrip_filter.Name = "toolStrip_filter";
@@ -787,6 +789,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.reverseBtn, "reverseBtn");
 			this.reverseBtn.Name = "reverseBtn";
 			this.reverseBtn.Click += new System.EventHandler(this.reverseBtn_Click);
+			// 
+			// generateXliff
+			// 
+			resources.ApplyResources(this.generateXliff, "generateXliff");
+			this.generateXliff.Name = "generateXliff";
+			this.generateXliff.Click += new System.EventHandler(this.generateXliff_Click);
 			// 
 			// helpButton
 			// 
@@ -1014,5 +1022,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private TextBox createdByBox;
 		private CheckBox createdByCheck;
 		private ToolStripButton helpButton;
+		private ToolStripButton generateXliff;
 	}
 }

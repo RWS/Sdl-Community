@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.Toolkit.FileType;
 using Sdl.Community.Toolkit.Integration;
@@ -15,9 +12,9 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 {
 	public static class CustomFilterHelper
 	{
-		public static bool Filter(CustomFilterSettings customSettings, DisplayFilterRowInfo rowInfo,bool success,Document  activeDocument)
+		public static bool Filter(CustomFilterSettings customSettings, DisplayFilterRowInfo rowInfo, bool success, Document activeDocument)
 		{
-			
+
 			var rowId = rowInfo.SegmentPair.Properties.Id.Id;
 			if (success && customSettings.EvenNo)
 			{
@@ -92,9 +89,9 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					return true;
 				}
 
-				var isRepeted = rowInfo.SegmentPair.Properties.TranslationOrigin.IsRepeated;
+				var isRepeted = rowInfo.SegmentPair?.Properties?.TranslationOrigin?.IsRepeated;
 
-				if (!isRepeted)
+				if (!isRepeted != null)
 				{
 					return true;
 				}
@@ -119,12 +116,12 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			}
 			if (success && customSettings.UnEditedFuzzy)
 			{
-				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target)&& !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) && !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
 			}
 			return success;
 		}
 
-		public static  bool Reverse(DisplayFilterSettings settings,bool success, DisplayFilterRowInfo rowInfo, CustomFilterSettings customSettings, Document activeDocument)
+		public static bool Reverse(DisplayFilterSettings settings, bool success, DisplayFilterRowInfo rowInfo, CustomFilterSettings customSettings, Document activeDocument)
 		{
 			success = false;
 			if (!success && settings.SegmentReviewTypes != null && settings.SegmentReviewTypes.Any())

@@ -141,6 +141,7 @@
     <Compile Include="Helpers\SegmentNumbersHelper.cs" />
     <Compile Include="Helpers\TagVisitor.cs" />
     <Compile Include="Helpers\UserVisitor.cs" />
+    <Compile Include="Helpers\XliffParser.cs" />
     <Compile Include="Models\DisplayFilterSerializer.cs" />
     <Compile Include="Controls\Helper.cs" />
     <Compile Include="Models\SavedSettings.cs" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <Content Include="3rd party\Cyotek.Windows.Forms.ColorPicker.dll" />
     <Content Include="Images\filter.ico" />
+    <EmbeddedResource Include="Resources\File.ico" />
     <EmbeddedResource Include="Resources\eyedropper.png" />
     <None Include="..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
