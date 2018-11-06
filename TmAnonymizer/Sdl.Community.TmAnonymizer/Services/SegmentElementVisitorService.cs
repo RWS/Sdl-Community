@@ -13,12 +13,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 	{
 		private readonly List<WordDetails> _deSelectedWordsDetails;
 		private readonly List<Rule> _rules;
-		private readonly List<int> _anchorIds;
+		private readonly List<int> _anchors;
 
-		public SegmentElementVisitorService(List<WordDetails> deSelectedWords, List<int> anchorIds, List<Rule> rules)
+		public SegmentElementVisitorService(List<WordDetails> deSelectedWords, IEnumerable<int> anchors, List<Rule> rules)
 		{
 			_deSelectedWordsDetails = deSelectedWords;
-			_anchorIds = anchorIds;
+			_anchors = new List<int>(anchors);
 			_rules = rules;
 			SegmentColection = new List<object>();
 		}
@@ -29,7 +29,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		public List<object> SegmentColection { get; set; }
 
 		public void VisitText(Text text)
-		{			
+		{
 			var personalData = GetPersonalData(text.Value);
 			if (personalData.Count > 0)
 			{
@@ -37,18 +37,17 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		private int GetUniqueAnchorId()
+		private int GetNextAnchor()
 		{
-			for (var i = 1; i < 1000; i++)
+			var i = 0;
+			while (_anchors.Contains(i))
 			{
-				if (!_anchorIds.Contains(i))
-				{
-					_anchorIds.Add(i);
-					return i;
-				}
+				i++;
 			}
 
-			return 0;
+			_anchors.Add(i);
+
+			return i;			
 		}
 
 		private IEnumerable<object> GetSubsegmentPi(string segmentText, List<int> personalData)
@@ -68,8 +67,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					if (shouldAnonymize)
 					{
 						//create new tag
-						var anchorId = GetUniqueAnchorId();
-						var tag = new Tag(TagType.TextPlaceholder, string.Empty, anchorId);
+						var anchor = GetNextAnchor();
+						var tag = new Tag(TagType.TextPlaceholder, anchor.ToString(), anchor);
 
 						segmentCollection.Add(tag);
 					}
