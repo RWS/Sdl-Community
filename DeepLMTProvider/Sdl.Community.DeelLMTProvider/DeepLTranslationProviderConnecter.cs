@@ -13,7 +13,8 @@ using System.Xml;
 
 namespace Sdl.Community.DeepLMTProvider
 {
-	public class DeepLTranslationProviderConnecter{
+	public class DeepLTranslationProviderConnecter
+	{
 
 		public string ApiKey { get; set; }
 		private readonly string _pluginVersion = "";
@@ -27,11 +28,10 @@ namespace Sdl.Community.DeepLMTProvider
 			try
 			{
 				// fetch the version of the plugin from the manifest deployed
-				var executingAssemblyPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-				if (executingAssemblyPath == null) return;
-				executingAssemblyPath = Path.Combine(executingAssemblyPath, "pluginpackage.manifest.xml");
+				var pexecutingAsseblyPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+				pexecutingAsseblyPath = Path.Combine(pexecutingAsseblyPath, "pluginpackage.manifest.xml");
 				var doc = new XmlDocument();
-				doc.Load(executingAssemblyPath);
+				doc.Load(pexecutingAsseblyPath);
 
 				if (doc.DocumentElement == null) return;
 				foreach (XmlNode n in doc.DocumentElement.ChildNodes)
@@ -54,7 +54,7 @@ namespace Sdl.Community.DeepLMTProvider
 			var targetLanguage = languageDirection.TargetCulture.TwoLetterISOLanguageName;
 			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
 			var translatedText = string.Empty;
-			
+
 			try
 			{
 				var client = new RestClient(@"https://api.deepl.com/v1")
@@ -62,15 +62,17 @@ namespace Sdl.Community.DeepLMTProvider
 					UserAgent = "SDL Trados 2017 (v" + _pluginVersion + ",id" + _identifier + ")"
 				};
 				var request = new RestRequest("translate", Method.POST);
-				
+
 				//search for words like this <word> 
 				var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
 				var words = rgx.Matches(sourcetext);
 
-				if (words.Count>0)
+				if (words.Count > 0)
 				{
-					sourcetext =ReplaceCharacters(sourcetext,words);
+					sourcetext = ReplaceCharacters(sourcetext, words);
 				}
+				//sourcetext = HttpUtility.HtmlEncode(sourcetext);
+				sourcetext = Uri.EscapeDataString(sourcetext);
 
 				request.AddParameter("text", sourcetext);
 				request.AddParameter("source_lang", sourceLanguage);
@@ -88,10 +90,10 @@ namespace Sdl.Community.DeepLMTProvider
 				if (translatedObject != null)
 				{
 					translatedText = translatedObject.Translations[0].Text;
-					translatedText = HttpUtility.HtmlDecode(translatedText);
+					translatedText = HttpUtility.UrlDecode(translatedText);
 				}
 			}
-			catch (WebException e) 
+			catch (WebException e)
 			{
 				var eReason = Helpers.ProcessWebException(e);
 				throw new Exception(eReason);
@@ -100,7 +102,7 @@ namespace Sdl.Community.DeepLMTProvider
 			return translatedText;
 		}
 
-		private string ReplaceCharacters(string sourcetext,MatchCollection matches)
+		private string ReplaceCharacters(string sourcetext, MatchCollection matches)
 		{
 			var indexes = new List<int>();
 			foreach (Match match in matches)
@@ -128,7 +130,7 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 			var splitedText = sourcetext.SplitAt(indexes.ToArray()).ToList();
 			var positions = new List<int>();
-			for (var i=0;i<splitedText.Count;i++)
+			for (var i = 0; i < splitedText.Count; i++)
 			{
 				if (!splitedText[i].Contains("tg"))
 				{
