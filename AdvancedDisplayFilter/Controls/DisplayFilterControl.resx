@@ -2222,7 +2222,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAARQBBQEUAQUBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAARwBBQEcAQUBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ
@@ -2474,16 +2474,16 @@
   <data name="reverseBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI1SURBVEhLvZTPa9NgGMdfRXCgbqAwGAiy/8A/QdimiHpx
-        Bw0mXRNDsW542mwbyjIItCvMFU1WpfU0WlArXRBRPOhxVgtVRlU8uIMM0YPrYey4zn63J5J2b2d/bH7g
-        C837PN/PSwMt+18c0HX9zO3xccPv9+dUdaQgS9KS7B0peTyeT7xghh3sooMuHHBtKwkMhOHhn8FgsJDJ
-        ZJ4Ui0VzfW3NqFQqejPBLjrowgEXnKRnbGhwYEORxe+lUinOE7QSOOCCk/SMnR0a3Lh08cImIly98nts
-        bPSzPjm5GJ+ZeZVMJhfS6fTjXO5p2rbteQSfcYYZdrCLDrqOB07SM+YVxS/OYK8CJ+kZMwyjXxCEFd5i
-        O4ELTtJvo2lanyRd+8YrtBI44CJtLZFI5EQnrwtdOEjHJxaLHVMU5QNPsFvQQZc0u1P9sXSp6vVFnogX
-        7KJD9eaoFg75fL7XPKE72MEu1VqjWjw4evPGM54YwQw7tF7DUUsMd1vSUpelnKKjxqiq9129HGc03kG3
-        Jeo9c55N5IglLdNxYwITE+H6C3BG4xrc8uYvCASCkGpa6H0+n597mErZxtSUn8Z/4cmbekW4IGGaz/Fn
-        Nl2wHxV/Ld8pl8unabxF23IQjUZVyMUX5huUe1Pyqvnx5TkadyYH2Wz2/NsfX+NuSe8DeQWSjuWg/hs4
-        OTwrrbqf25KDcCgk3k8kFqqX3BrI6vNuacdyHnvyWv6Fc8m+yB167nkvH7+rnqTHBjD2B6Dopd7hsvr/
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI1SURBVEhLvZTPa9NgGMdfRXCgbqAwEAbif+CfIHYiol7c
+        QcOSromhWDc8bbYNZRkEWgvbiiar0noaLaiVLogoHvQ4q4Uqoyoe3EGG6MH1MDyuW7/uyUi7t7M/ph/4
+        QvM+z/fz0kDL/hf7dF0/fWt83AgEAnlVHSnKkrQk+0bKXq/3Iy+YYQe76KALB1xbSgIDYWjoRygUKmaz
+        2celUsn8vbZmVKtVvZVgFx104YALTtIzNug5s67I4rdyuZzgCdoJHHDBSXrGzg561i9dvLCBCFev/Bob
+        G/2kT04uJqanX6ZSqYVMJvMon3+SsW17HsFnnGGGHeyig67jgZP0jPlE8bMz2KvASXrGDMM4KQjCCm+x
+        k8AFJ+m30DTtuCQNf+UV2gkccJG2nmg0eqyb14UuHKTjE4/HjyiK8p4n2C3ooEua3an9WHpU9doiT8QL
+        dtGhemvUCgf8fv8rntAd7GCXau1RK+4fvXH9KU+MYIYdWq/jsCVGei1pqcdSTtBRc1TV97ZRjjMa76DX
+        EvW+Oe8GcsiSlum4OcGJiUjjBTijcR1ueesXBIMhSDUt/K5QKMw9SKdtY2oqQONtePKWXhEuSJrmM/yZ
+        3S7aD0s/l2cqlcopGv+hYzmIxWIq5OJz8zXK/Wl51fzw4hyNu5ODXC53/s33Lwm3pP++vAJJ13LQ+A2c
+        HJyVVt3PHclBJBwW7yWTC7VLbnpy+rxb2rWcx568lr/hXPJP5A59d32Xj95RB+ixCYxtAkXCpdKSSp8A
         AAAAAElFTkSuQmCC
 </value>
   </data>
@@ -2495,6 +2495,25 @@
   </data>
   <data name="reverseBtn.Text" xml:space="preserve">
     <value>Reverse Filter</value>
+  </data>
+  <data name="generateXliff.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADmSURBVEhL3ZXBCcJAEEXTgR2I3QjuxLUCvagdKB5zSwV2
+        4D148ygWYAupwAaUsPJhVoI7JruLyOKHRwiZ+T+zA0n2U+WkTAhE6p7T5EREQ7boFprWq2VdluW5j912
+        c30FKVVrPR6xzWehGM3GmKKPpmkK+0IzPX14hYQEAFt/rKqDDek8rpgAe6S44h47YTtXMQHvYPFs5woF
+        IQFtsBO7eLZz1Q4Y7OdG4nZZiKAHvekExJDWBJI5kMxBcEAMaU0gmQPJHAQHxJDWBJI5kMxBcEAMXgG+
+        fzQJ+8lmO1d4+A3Y7i+UZU9BrttOhRW4VgAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="generateXliff.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="generateXliff.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 24</value>
+  </data>
+  <data name="generateXliff.Text" xml:space="preserve">
+    <value>Generate xliff</value>
   </data>
   <data name="helpButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -2965,6 +2984,12 @@
   </data>
   <data name="&gt;&gt;backgroundWorker1.Type" xml:space="preserve">
     <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;generateXliff.Name" xml:space="preserve">
+    <value>generateXliff</value>
+  </data>
+  <data name="&gt;&gt;generateXliff.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>DisplayFilterControl</value>

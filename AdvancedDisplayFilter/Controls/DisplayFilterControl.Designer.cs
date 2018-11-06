@@ -131,6 +131,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.generateXliff = new System.Windows.Forms.ToolStripButton();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -749,6 +750,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             this.toolStripButton_saveFilter,
             this.toolStripButton_loadFilter,
             this.reverseBtn,
+            this.generateXliff,
             this.helpButton});
 			resources.ApplyResources(this.toolStrip_filter, "toolStrip_filter");
 			this.toolStrip_filter.Name = "toolStrip_filter";
@@ -859,6 +861,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
+			// 
+			// generateXliff
+			// 
+			resources.ApplyResources(this.generateXliff, "generateXliff");
+			this.generateXliff.Name = "generateXliff";
+			this.generateXliff.Click += new System.EventHandler(this.generateXliff_Click);
 			// 
 			// DisplayFilterControl
 			// 
@@ -1014,5 +1022,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private TextBox createdByBox;
 		private CheckBox createdByCheck;
 		private ToolStripButton helpButton;
+		private ToolStripButton generateXliff;
 	}
 }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Community.Plugins.AdvancedDisplayFilter;
@@ -1789,7 +1790,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		}
 
 		private void helpButton_Click(object sender, EventArgs e)
-		{
+		{ 
 			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3130.community-advanced-display-filter");
 		}
 
@@ -1809,6 +1810,33 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				}
 			MoveSelectedListViewItem(listView_available, listView_selected);
 			InvalidateIconsFilterEdited(tabPage_filters);
+		}
+
+		private void generateXliff_Click(object sender, EventArgs e)
+		{
+			var segments = ActiveDocument?.FilteredSegmentPairs?.ToList();
+
+			//list with ids of segments from filter result 
+			if (segments == null) return;
+			var segmentsIds = segments.Select(segment => segment.Properties.Id.Id).ToList();
+			var saveFileDialog = new SaveFileDialog
+			{
+				Filter = @"sdlxliff files (*.sdlxliff)|*.sdlxliff|All files (*.*)|*."
+			};
+			if (saveFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				var selectedFilePath = saveFileDialog.FileName;
+				var activeFilePath = ActiveDocument?.ActiveFile?.LocalFilePath;
+
+				if (activeFilePath != null)
+				{
+					File.Copy(activeFilePath, selectedFilePath);  
+					var xliffParser = new XliffParser(selectedFilePath, segmentsIds);
+					xliffParser.GenerateXliff();
+				}
+
+				MessageBox.Show(@"File was generated at the following location: "+selectedFilePath,string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
 		}
 	}
 }
