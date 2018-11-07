@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.Toolkit.FileType;
 using Sdl.Community.Toolkit.Integration;
@@ -92,9 +89,9 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					return true;
 				}
 
-				var isRepeted = rowInfo.SegmentPair.Properties.TranslationOrigin.IsRepeated;
+				var isRepeted = rowInfo.SegmentPair?.Properties?.TranslationOrigin?.IsRepeated;
 
-				if (!isRepeted)
+				if (!isRepeted != null)
 				{
 					return true;
 				}

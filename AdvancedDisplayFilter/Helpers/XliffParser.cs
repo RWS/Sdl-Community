@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -24,29 +25,57 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		public void GenerateXliff()
 		{
-			var fileElements = _xmlDoc.DocumentElement?.GetElementsByTagName("file");
-			if (fileElements != null)
+			try
 			{
-				foreach (XmlElement fileElement in fileElements)
+				var fileElements = _xmlDoc.DocumentElement?.GetElementsByTagName("file");
+				if (fileElements != null)
 				{
-					var bodyElement = (XmlElement)fileElement.GetElementsByTagName("body")[0];
-					var groupElements = bodyElement.GetElementsByTagName("group");
-					var removedGroups = new List<XmlNode>();
-
-					foreach (var groupElement in groupElements.OfType<XmlElement>().ToList())
-					{  
-						SliceInBody( groupElement, removedGroups);
-					}
-
-					foreach (var group in removedGroups.OfType<XmlElement>())
+					foreach (XmlElement fileElement in fileElements)
 					{
-						bodyElement.RemoveChild(group);
+						RemoveInternalFileInfo(fileElement);
+
+						var bodyElement = (XmlElement) fileElement.GetElementsByTagName("body")[0];
+						var groupElements = bodyElement.GetElementsByTagName("group");
+						var removedGroups = new List<XmlNode>();
+
+						foreach (var groupElement in groupElements.OfType<XmlElement>().ToList())
+						{
+							SliceInBody(groupElement, removedGroups);
+						}
+
+						foreach (var group in removedGroups.OfType<XmlElement>())
+						{
+							bodyElement.RemoveChild(group);
+						}
+					}
+					using (var writer = new XmlTextWriter(_xliffPath, Encoding.UTF8))
+					{
+						_xmlDoc.Save(writer);
 					}
 				}
-				using (var writer = new XmlTextWriter(_xliffPath, Encoding.UTF8))
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+			}
+		}
+
+		private void RemoveInternalFileInfo(XmlElement fileElement)
+		{
+			try
+			{
+				var headerElement = (XmlElement)fileElement.GetElementsByTagName("header")[0];
+				var referenceElement = headerElement.GetElementsByTagName("reference");
+				foreach (var reference in referenceElement.OfType<XmlElement>())
 				{
-					_xmlDoc.Save(writer);
+					var internalFile = reference.ChildNodes.OfType<XmlElement>().Where(node => node.Name == "internal-file")
+						.ToList()[0];
+					internalFile.InnerText = string.Empty;
 				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
 			}
 		}
 

@@ -5,6 +5,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.IO;
+using System.Text;
 using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.DeelLMTProvider.Model;
@@ -59,7 +60,7 @@ namespace Sdl.Community.DeepLMTProvider
 			{
 				var client = new RestClient(@"https://api.deepl.com/v1")
 				{
-					UserAgent = "SDL Trados 2017 (v" + _pluginVersion + ",id" + _identifier + ")"
+					UserAgent = "SDL Trados 2019 (v" + _pluginVersion + ",id" + _identifier + ")"
 				};
 				var request = new RestRequest("translate", Method.POST);
 
@@ -69,8 +70,21 @@ namespace Sdl.Community.DeepLMTProvider
 
 				if (words.Count > 0)
 				{
-					sourcetext = ReplaceCharacters(sourcetext, words);
+					var matchesIndexes = GetMatchesIndexes(sourcetext, words);
+					sourcetext = ReplaceCharacters(matchesIndexes,sourcetext);
 				}
+
+				//search for spaces
+				var spaceRgx = new Regex("[\\s]+");
+				var spaces = spaceRgx.Matches(sourcetext);
+
+				if (spaces.Count > 0)
+				{
+					var matchesIndexes = GetMatchesIndexes(sourcetext, spaces);
+					sourcetext = EncodeSpaces(matchesIndexes, sourcetext);
+				}
+				//sourcetext = HttpUtility.HtmlEncode(sourcetext);
+				//sourcetext = Uri.EscapeDataString(sourcetext);
 
 				request.AddParameter("text", sourcetext);
 				request.AddParameter("source_lang", sourceLanguage);
@@ -88,7 +102,12 @@ namespace Sdl.Community.DeepLMTProvider
 				if (translatedObject != null)
 				{
 					translatedText = translatedObject.Translations[0].Text;
-					translatedText = HttpUtility.HtmlDecode(translatedText);
+					translatedText = HttpUtility.UrlDecode(translatedText);
+					if (words.Count > 0)
+					{
+						// used to decode < > characters
+						translatedText = HttpUtility.HtmlDecode(translatedText);
+					}
 				}
 			}
 			catch (WebException e)
@@ -100,7 +119,31 @@ namespace Sdl.Community.DeepLMTProvider
 			return translatedText;
 		}
 
-		private string ReplaceCharacters(string sourcetext, MatchCollection matches)
+		private string EncodeSpaces(int[] matchesIndexes, string sourceText)
+		{
+			var spaceRgx = new Regex("([\\s]+){2}");
+			var finalText = new StringBuilder();
+			var splitedText = sourceText.SplitAt(matchesIndexes).ToList();
+
+			foreach (var text in splitedText)
+			{
+				var hasMultipleSpace = spaceRgx.IsMatch(text);
+				var containsTab = text.Contains('\t');
+				if (hasMultipleSpace || containsTab)
+				{ 
+					var encodedSpace = Uri.EscapeDataString(text);
+					finalText.Append(encodedSpace);	 
+				}
+				else
+				{
+					finalText.Append(text);
+				}
+
+			}
+			return finalText.ToString();
+		}
+
+		private int[] GetMatchesIndexes(string sourcetext, MatchCollection matches)
 		{
 			var indexes = new List<int>();
 			foreach (Match match in matches)
@@ -111,13 +154,10 @@ namespace Sdl.Community.DeepLMTProvider
 				}
 				else
 				{
-					//check if there is any text after PI
 					var remainingText = sourcetext.Substring(match.Index + match.Length);
 					if (!string.IsNullOrEmpty(remainingText))
 					{
-						//get the position where PI starts to split before
 						indexes.Add(match.Index);
-						//split after PI
 						indexes.Add(match.Index + match.Length);
 					}
 					else
@@ -126,7 +166,12 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 				}
 			}
-			var splitedText = sourcetext.SplitAt(indexes.ToArray()).ToList();
+			return indexes.ToArray();
+		}
+
+		private string ReplaceCharacters(int[]indexes,string sourceText)
+		{  
+			var splitedText = sourceText.SplitAt(indexes).ToList();
 			var positions = new List<int>();
 			for (var i = 0; i < splitedText.Count; i++)
 			{
