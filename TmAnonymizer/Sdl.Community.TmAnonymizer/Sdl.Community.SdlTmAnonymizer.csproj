@@ -109,8 +109,8 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="SegmentComparer, Version=1.0.2.0, Culture=neutral, PublicKeyToken=89aa17d6612aafb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\SegmentComparer.1.0.2\lib\net472\SegmentComparer.dll</HintPath>
+    <Reference Include="SegmentComparer, Version=1.0.3.0, Culture=neutral, PublicKeyToken=89aa17d6612aafb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\SegmentComparer.1.0.3\lib\net452\SegmentComparer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
