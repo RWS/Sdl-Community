@@ -205,7 +205,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			decimal iCurrent = 0;
 
 			var results = new List<ContentSearchResult>();
-			var rules = _settingsService.GetRules();
+			var rules = _settingsService.GetRules().OrderBy(a => a.Order).ToList();
+
 			foreach (var tu in tus)
 			{
 				iCurrent++;
@@ -1137,7 +1138,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return tus;
 		}
 
-		private static void AnonymizeSegment(TranslationUnitDetails tuDetails, IReadOnlyCollection<SegmentElement> elements, List<Rule> rules, bool isSource, List<int> anchors)
+		private static void AnonymizeSegment(TranslationUnitDetails tuDetails, IEnumerable<SegmentElement> elements, List<Rule> rules, bool isSource, IReadOnlyList<int> anchors)
 		{
 			var elementsContainsTag = elements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
 
@@ -1168,7 +1169,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		private static void AnonymizeSelectedWordsFromPreview(TmSegment segment, IEnumerable<SegmentElement> translationElements, List<WordDetails> selectedWords, IReadOnlyList<int> anchors)
 		{
 			segment.Elements.Clear();
-			
+
 			foreach (var element in translationElements.ToList())
 			{
 				var visitor = new SelectedWordsVisitorService(selectedWords, anchors);
@@ -1248,7 +1249,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		}
 
 		private static void AnonymizeSegmentsWithTags(TmSegment segment, List<Rule> rules, List<WordDetails> removeWords, IReadOnlyList<int> anchors)
-		{			
+		{
 			for (var i = 0; i < segment.Elements.Count; i++)
 			{
 				if (!segment.Elements[i].GetType().UnderlyingSystemType.Name.Equals("Text"))
@@ -1313,7 +1314,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					}
 
 					try
-					{						
+					{
 						if (int.TryParse(tag.TagID, out var tagId) && !anchors.Contains(tagId))
 						{
 							anchors.Add(tagId);

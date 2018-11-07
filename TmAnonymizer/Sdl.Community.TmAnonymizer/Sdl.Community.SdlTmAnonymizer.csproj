@@ -162,8 +162,10 @@
     <Compile Include="Controls\ProgressDialog\ProgressDialogContext.cs" />
     <Compile Include="Controls\ProgressDialog\ProgressDialogResult.cs" />
     <Compile Include="Controls\ProgressDialog\ProgressDialogSettings.cs" />
+    <Compile Include="Controls\SelectAwareDataGrid.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Converters\GrayScaleConverter.cs" />
+    <Compile Include="Converters\VisibilityToBooleanConverter.cs" />
     <Compile Include="EventArgs\SelectedTabIndexArgs.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Model\FieldDefinitions\DateTimeFieldValue.cs" />
@@ -309,6 +311,7 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Up.ico" />
     <Resource Include="Resources\Excel.ico" />
     <Resource Include="Resources\Folder.ico" />
     <Resource Include="Resources\ApplyChanges.ico" />
@@ -317,6 +320,7 @@
     <Resource Include="Resources\Preview.ico" />
     <Resource Include="Resources\PreviewChanges.ico" />
     <Resource Include="Resources\Delete.ico" />
+    <Resource Include="Resources\Down.ico" />
     <Content Include="Resources\ReportsView.ico" />
     <Resource Include="Resources\Report.ico" />
     <Resource Include="Resources\information.ico" />

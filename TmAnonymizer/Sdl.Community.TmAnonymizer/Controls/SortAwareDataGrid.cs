@@ -14,7 +14,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 	{
 		public SortAwareDataGrid()
 		{
-			SelectionChanged += CustomDataGrid_SelectionChanged;
+			SelectionChanged += SortAwareDataGrid_SelectionChanged;
 			Loaded += SortAwareDataGrid_Loaded;
 		}
 
@@ -42,6 +42,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 
 		private void SortAwareDataGrid_Loaded(object sender, RoutedEventArgs e)
 		{
+			Loaded -= SortAwareDataGrid_Loaded;
 			SelectedItem = Items.Count > 0 ? Items[0] : null;
 		}
 
@@ -119,15 +120,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 			}
 		}
 
-
-		private void CustomDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void SortAwareDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			SelectedItemsList = SelectedItems;
 		}
 
 		public void Dispose()
 		{
-			SelectionChanged -= CustomDataGrid_SelectionChanged;
+			SelectionChanged -= SortAwareDataGrid_SelectionChanged;
 			Loaded -= SortAwareDataGrid_Loaded;
 		}
 	}
