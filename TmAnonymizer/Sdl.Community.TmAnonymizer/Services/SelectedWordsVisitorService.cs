@@ -11,15 +11,17 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 	public class SelectedWordsVisitorService : ISegmentElementVisitor
 	{
 		private readonly List<WordDetails> _selectedWordsDetails;
-		private readonly List<int> _anchorIds;
+		private readonly List<int> _anchors;
+
 		/// <summary>
 		/// All subsegments in current translation unit
 		/// </summary>
 		public List<object> SegmentColection { get; set; }
-		public SelectedWordsVisitorService(List<WordDetails> selectedWordsDetails, List<int> anchorIds)
+
+		public SelectedWordsVisitorService(List<WordDetails> selectedWordsDetails, IEnumerable<int> anchors)
 		{
 			_selectedWordsDetails = selectedWordsDetails;
-			_anchorIds = anchorIds;
+			_anchors = new List<int>(anchors);
 		}
 
 		public void VisitText(Text text)
@@ -32,6 +34,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					SubsegmentSelectedData(text.Value, segmentCollection);
 				}
 			}
+
 			SegmentColection = segmentCollection;
 		}
 
@@ -109,18 +112,17 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			_selectedWordsDetails.Clear();
 		}
 
-		private int GetUniqueAnchorId()
+		private int GetNextAnchor()
 		{
-			for (var i = 1; i < 1000; i++)
+			var i = 0;
+			while (_anchors.Contains(i))
 			{
-				if (!_anchorIds.Contains(i))
-				{
-					_anchorIds.Add(i);
-					return i;
-				}
+				i++;
 			}
 
-			return 0;
+			_anchors.Add(i);
+
+			return i;
 		}
 
 		/// <summary>
@@ -141,8 +143,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 				else
 				{
-					var anchorId = GetUniqueAnchorId();
-					var tag = new Tag(TagType.TextPlaceholder, string.Empty, anchorId );					
+					var anchor = GetNextAnchor();
+					var tag = new Tag(TagType.TextPlaceholder, anchor.ToString(), anchor);					
 					segmentCollection.Add(tag);
 				}
 			}

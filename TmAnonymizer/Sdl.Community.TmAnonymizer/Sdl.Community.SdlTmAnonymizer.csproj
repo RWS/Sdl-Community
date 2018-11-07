@@ -109,6 +109,9 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="SegmentComparer, Version=1.0.3.0, Culture=neutral, PublicKeyToken=89aa17d6612aafb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\SegmentComparer.1.0.3\lib\net452\SegmentComparer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -144,8 +147,10 @@
     <Compile Include="Controls\AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\BindableParagraphBlock.cs" />
     <Compile Include="Controls\BindingDataProxy.cs" />
     <Compile Include="Controls\BindingWebBrowserSource.cs" />
+    <Compile Include="Controls\EnabledImage.cs" />
     <Compile Include="Controls\LabelledTextBox.xaml.cs">
       <DependentUpon>LabelledTextBox.xaml</DependentUpon>
     </Compile>
@@ -156,7 +161,11 @@
     <Compile Include="Controls\ProgressDialog\ProgressDialogContext.cs" />
     <Compile Include="Controls\ProgressDialog\ProgressDialogResult.cs" />
     <Compile Include="Controls\ProgressDialog\ProgressDialogSettings.cs" />
+    <Compile Include="Controls\SelectAwareDataGrid.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="Converters\GrayScaleConverter.cs" />
+    <Compile Include="Converters\VisibilityToBooleanConverter.cs" />
+    <Compile Include="EventArgs\SelectedTabIndexArgs.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Model\FieldDefinitions\DateTimeFieldValue.cs" />
     <Compile Include="Model\FieldDefinitions\FieldValue.cs" />
@@ -232,6 +241,7 @@
     <Compile Include="Model\TM\TranslationMemory.cs" />
     <Compile Include="Model\TM\TranslationUnit.cs" />
     <Compile Include="Model\TM\TranslationUnitContext.cs" />
+    <Compile Include="Studio\SDLTMAnonymizierViewRibbon.cs" />
     <Compile Include="ViewModel\LogViewModel.cs" />
     <Compile Include="ViewModel\SelectServersViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
@@ -300,8 +310,16 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Up.ico" />
     <Resource Include="Resources\Excel.ico" />
     <Resource Include="Resources\Folder.ico" />
+    <Resource Include="Resources\ApplyChanges.ico" />
+    <Resource Include="Resources\ExportTo.ico" />
+    <Resource Include="Resources\ImportFrom.ico" />
+    <Resource Include="Resources\Preview.ico" />
+    <Resource Include="Resources\PreviewChanges.ico" />
+    <Resource Include="Resources\Delete.ico" />
+    <Resource Include="Resources\Down.ico" />
     <Content Include="Resources\ReportsView.ico" />
     <Resource Include="Resources\Report.ico" />
     <Resource Include="Resources\information.ico" />
@@ -309,7 +327,6 @@
     <Resource Include="Resources\RemoveCache.ico" />
     <Resource Include="Resources\ServerBasedTranslationMemoryCache.ico" />
     <Resource Include="Resources\TranslationMemoryCache.ico" />
-    <Resource Include="Resources\Check.ico" />
     <Resource Include="Resources\CheckedCircle.png" />
     <None Include="Resources\icon.ico" />
     <None Include="Resources\wiki.ico" />
@@ -430,7 +447,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

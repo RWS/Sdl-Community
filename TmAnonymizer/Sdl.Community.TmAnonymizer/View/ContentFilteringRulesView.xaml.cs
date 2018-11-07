@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using Sdl.Community.SdlTmAnonymizer.ViewModel;
 
 namespace Sdl.Community.SdlTmAnonymizer.View
 {
@@ -10,6 +12,22 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 		public ContentFilteringRulesView()
 		{
 			InitializeComponent();
-		}	
+		}
+
+		private void UIElement_OnLostFocus(object sender, RoutedEventArgs e)
+		{
+			if (!(sender is DataGridRow row))
+			{
+				return;
+			}
+
+			if (!row.IsNewItem)
+			{
+				if ((DataContext is ContentFilteringRulesViewModel dataContext))
+				{
+					dataContext.CancelRuleCommand.Execute(null);
+				}				
+			}
+		}
 	}
 }

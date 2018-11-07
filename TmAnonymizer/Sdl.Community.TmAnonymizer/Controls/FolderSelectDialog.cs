@@ -83,12 +83,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 			}
 
 			return flag;
-		}
-
-		public void Dispose()
-		{
-
-		}
+		}		
 	}
 }
 

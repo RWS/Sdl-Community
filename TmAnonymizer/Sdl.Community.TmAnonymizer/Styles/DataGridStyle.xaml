@@ -14,6 +14,23 @@
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
 	</Style>
 
+	<Style x:Key="DefaultRowStyle" TargetType="{x:Type DataGridRow}">
+		<Setter Property="MaxHeight" Value="150" />
+		<Style.Triggers>
+			<Trigger Property="IsEditing" Value="true">
+				<Setter Property="BorderBrush" Value="Red"/>
+				<Setter Property="BorderThickness" Value="2"/>
+			</Trigger>
+			<!--<Trigger Property="Validation.HasError" Value="true">
+				<Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+			</Trigger>-->
+		</Style.Triggers>
+	</Style>
+
+	<!--<Style x:Key="CustomRowStyle" TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource DefaultRowStyle}">
+		<EventSetter Event="MouseLeftButtonDown" Handler="Row_MouseLeftButtonDown" />
+	</Style>-->
+
 	<Style x:Key="DataGridContentCellCentering" TargetType="{x:Type DataGridCell}">
 		<Setter Property="Template">
 			<Setter.Value>
@@ -187,8 +204,8 @@
 						<Border x:Uid="InnerBorder" Name="InnerBorder" CornerRadius="1" BorderThickness="1">
 							<Grid Background="{TemplateBinding Background}">
 								<GridViewRowPresenter 
-                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"   
-                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"   
+                                         SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 							</Grid>
 						</Border>
 					</Border>

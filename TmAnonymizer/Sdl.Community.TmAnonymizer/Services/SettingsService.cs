@@ -20,7 +20,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		public string GetLogReportPath()
 		{
 			var settings = GetSettings();
-			if (String.IsNullOrEmpty(settings.LogsFullPath) || !Directory.Exists(settings.LogsFullPath))
+			if (string.IsNullOrEmpty(settings.LogsFullPath) || !Directory.Exists(settings.LogsFullPath))
 			{
 				settings.LogsFullPath = PathInfo.LogsFullPath;
 				SaveSettings(settings);
@@ -58,38 +58,32 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return new List<Rule>
 			{
 				new Rule
-				{
-					Id = Guid.NewGuid().ToString(),
+				{					
 					Description = "Email addresses",
 					Name = @"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"
 				},
 				new Rule
-				{
-					Id = Guid.NewGuid().ToString(),
+				{				
 					Description = "PCI (Payment Card Industry)",
 					Name = @"\b(?:\d[ -]*?){13,16}\b"
 				},
 				new Rule
-				{
-					Id = Guid.NewGuid().ToString(),
+				{					
 					Description = "IP4 Address",
 					Name = @"\b(?<![:.\w])(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}(?![:.\w])\b"
 				},
 				new Rule
-				{
-					Id = Guid.NewGuid().ToString(),
+				{					
 					Description = "MAC Address",
 					Name = @"\b[0-9A-F]{2}([-:]?)(?:[0-9A-F]{2}\1){4}[0-9A-F]{2}\b"
 				},
 				new Rule
-				{
-					Id = Guid.NewGuid().ToString(),
+				{					
 					Description = "UK National Insurance Number",
 					Name = @"\b[A-Z]{2}\s\d{2}\s\d{2}\s\d{2}\s[A-Z]\b"
 				},
 				new Rule
-				{
-					Id = Guid.NewGuid().ToString(),
+				{					
 					Description = "Social Security Numbers",
 					Name = @"\b(?!000)(?!666)[0-8][0-9]{2}[- ](?!00)[0-9]{2}[- ](?!0000)[0-9]{4}\b"
 				}
@@ -112,12 +106,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 				AddDefaultRules(settings);
 
-				if (String.IsNullOrEmpty(settings.BackupFullPath) || !Directory.Exists(settings.BackupFullPath))
+				if (string.IsNullOrEmpty(settings.BackupFullPath) || !Directory.Exists(settings.BackupFullPath))
 				{
 					settings.BackupFullPath = PathInfo.BackupFullPath;
 				}
 
-				if (String.IsNullOrEmpty(settings.LogsFullPath) || !Directory.Exists(settings.LogsFullPath))
+				if (string.IsNullOrEmpty(settings.LogsFullPath) || !Directory.Exists(settings.LogsFullPath))
 				{
 					settings.LogsFullPath = PathInfo.LogsFullPath;
 				}
@@ -191,9 +185,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				tmFile.IsSelected = false;
 
-				if (!String.IsNullOrEmpty(tmFile.CachePath) && !File.Exists(tmFile.CachePath))
+				if (!string.IsNullOrEmpty(tmFile.CachePath) && !File.Exists(tmFile.CachePath))
 				{
-					tmFile.CachePath = String.Empty;
+					tmFile.CachePath = string.Empty;
 				}
 			}
 

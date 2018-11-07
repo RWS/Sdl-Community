@@ -5,10 +5,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Model.Log;
 using Sdl.Community.SdlTmAnonymizer.Services;
+using SegmentComparer.Structure;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
@@ -106,7 +109,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public bool IsEnabled
 		{
-			get { return _isEnabled; }
+			get => _isEnabled;
 			set
 			{
 				_isEnabled = value;
@@ -151,15 +154,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-
-		public string SelectedReportHtml
-		{
-			get { return SelectedItem != null ? SelectedItem.FullPath : string.Empty; }
-		}
+		public string SelectedReportHtml => SelectedItem != null ? SelectedItem.FullPath : string.Empty;
 
 		public ReportFile SelectedItem
 		{
-			get { return _selectedItem; }
+			get => _selectedItem;
 			set
 			{
 				_selectedItem = value;
@@ -180,6 +179,76 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					report = _serializerService.Read<Report>(SelectedItem.FullPath);
 					ReportCreated = report.Created.ToString(CultureInfo.InvariantCulture);
+
+					var comparer = new SegmentComparer.Comparer();
+
+					if (report.Scope == Report.ReportScope.Content)
+					{
+						foreach (var action in report.Actions)
+						{
+							var comparison = comparer.CompareSegment(action.TmId.Id.ToString(), action.Previous, action.Value, true, 1);
+
+							var previousSpan = new Span();
+							var valueSpan = new Span();
+
+							var toolTip = string.Empty;
+							foreach (var unit in comparison.ComparisonUnits)
+							{
+								switch (unit.Type)
+								{
+									case ComparisonUnit.ComparisonType.New:
+
+										if (unit.TextType != ComparisonUnit.ContentType.Tag)
+										{
+											valueSpan.Inlines.Add(new Run(unit.Text));
+										}
+										else
+										{
+											var valueNewText = new Run(unit.Text)
+											{
+												Background = new SolidColorBrush(Colors.Yellow),
+												ToolTip = toolTip
+											};
+
+											valueSpan.Inlines.Add(valueNewText);
+										}
+
+										break;
+									case ComparisonUnit.ComparisonType.Removed:
+										var previousRemovedText = new Run(unit.Text)
+										{
+											Background = new SolidColorBrush(Colors.Pink),
+										};
+
+										toolTip = unit.Text;
+										previousSpan.Inlines.Add(previousRemovedText);
+										break;
+									case ComparisonUnit.ComparisonType.Identical:
+									case ComparisonUnit.ComparisonType.None:
+										previousSpan.Inlines.Add(new Run(unit.Text));
+										valueSpan.Inlines.Add(new Run(unit.Text));
+										break;
+								}
+							}
+
+							action.PreviousSpan = previousSpan;
+							action.ValueSpan = valueSpan;
+						}
+					}
+					else
+					{
+						foreach (var action in report.Actions)
+						{
+							var previousSpan = new Span();
+							var valueSpan = new Span();
+
+							previousSpan.Inlines.Add(new Run(action.Previous));
+							valueSpan.Inlines.Add(new Run(action.Value));
+
+							action.PreviousSpan = previousSpan;
+							action.ValueSpan = valueSpan;
+						}
+					}
 				}
 				else
 				{
@@ -195,11 +264,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public ObservableCollection<ReportFile> ReportFiles
 		{
-			get
-			{
-				return _reportFiles;
-
-			}
+			get => _reportFiles;
 			set
 			{
 				_reportFiles = value;

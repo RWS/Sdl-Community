@@ -31,10 +31,10 @@
 			<Border Grid.Row="0" >
 				<StackPanel Orientation="Horizontal" Margin="2" Background="Transparent" >
 					<Button Margin="5,0,5,0" ToolTip="Export selected report to excel" Command="{Binding LogViewModel.ExportToExcelCommand}" Background="Transparent" BorderThickness="0">
-						<Image Source="../Resources/Excel.ico" Height="20"/>
+						<controls:EnabledImage Source="../Resources/Excel.ico" Height="20" />
 					</Button>
 					<Button ToolTip="Open folder containing..." Command="{Binding LogViewModel.OpenFolderContainingCommand}" Background="Transparent" BorderThickness="0">
-						<Image Source="../Resources/Folder.ico" Height="20"/>
+						<controls:EnabledImage Source="../Resources/Folder.ico" Height="20"/>
 					</Button>
 				</StackPanel>
 			</Border>
@@ -64,12 +64,12 @@
 					<ContextMenu>
 						<MenuItem Header="Export selected report to excel" Command="{Binding LogViewModel.ExportToExcelCommand}">
 							<MenuItem.Icon>
-								<Image Source="../Resources/Excel.ico" Height="20"/>
+								<controls:EnabledImage Source="../Resources/Excel.ico" Height="20"/>
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="Open folder containing..." Command="{Binding LogViewModel.OpenFolderContainingCommand}">
 							<MenuItem.Icon>
-								<Image Source="../Resources/Folder.ico" Height="20"/>
+								<controls:EnabledImage Source="../Resources/Folder.ico" Height="20"/>
 							</MenuItem.Icon>
 						</MenuItem>
 					</ContextMenu>
@@ -118,6 +118,7 @@
 
 			<Grid Grid.Row="1" Margin="2">
 				<controls:SortAwareDataGrid 
+					x:Name="SortAwareDataGrid"
 					DefaultColumnName="Name"
 					DefaultSortDirection="Ascending"
 					Style="{StaticResource FilesGridStyle}" 							
@@ -129,15 +130,41 @@
 					VerticalScrollBarVisibility="Auto"	
 					HorizontalScrollBarVisibility="Auto"
 					GridLinesVisibility="None" 
-					Background="White"	
+					Background="White"
 					ItemsSource="{Binding LogViewModel.Report.Actions, Mode=TwoWay}" 						                            											                       
 					MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="ID" Binding="{Binding TmId.Id}" IsReadOnly="True" MinWidth="30" Width="30" />
 						<DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" MinWidth="80" Width="110" ElementStyle="{StaticResource WrapText}" />
 						<DataGridTextColumn Header="Type" Binding="{Binding Type}" IsReadOnly="True" MinWidth="80" Width="100"  />
-						<DataGridTextColumn Header="Value" Binding="{Binding Value}" IsReadOnly="True" MinWidth="150" Width="2*" ElementStyle="{StaticResource WrapText}"/>
-						<DataGridTextColumn Header="Previous" Binding="{Binding Previous}" IsReadOnly="True" MinWidth="150" Width="2*" ElementStyle="{StaticResource WrapText}" />
+						
+						<DataGridTemplateColumn Header="Original Value" IsReadOnly="True" MinWidth="150" Width="2*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<FlowDocumentScrollViewer HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
+									                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" 
+									                          Width="Auto" BorderThickness="0" Margin="-12" Padding="0" AllowDrop="False" Background="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top">
+										<FlowDocument FontSize="12" FontFamily="Segoe UI" TextAlignment="Left">
+											<controls:BindableParagraphBlock BoundInline="{Binding PreviousSpan, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+										</FlowDocument>
+									</FlowDocumentScrollViewer>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+
+						<DataGridTemplateColumn Header="New Value" IsReadOnly="True" MinWidth="150" Width="2*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<FlowDocumentScrollViewer HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
+									                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" 
+									                          Width="Auto"  BorderThickness="0" Margin="-12" Padding="0" AllowDrop="False" Background="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top">
+										<FlowDocument FontSize="12" FontFamily="Segoe UI" TextAlignment="Left">
+											<controls:BindableParagraphBlock BoundInline="{Binding ValueSpan, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+										</FlowDocument>
+									</FlowDocumentScrollViewer>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
 					</DataGrid.Columns>
 				</controls:SortAwareDataGrid>
 			</Grid>

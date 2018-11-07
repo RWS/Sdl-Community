@@ -99,8 +99,21 @@
 					</DataGridTemplateColumn.CellTemplate>
 
 				</DataGridTemplateColumn>
-
 			</DataGrid.Columns>
+			<DataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="Remove Translation Memory" Command="{Binding RemoveTmCommand}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/Remove.ico" Height="20"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Clear Translation Memory Cache" Command="{Binding ClearTmCacheCommand}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/RemoveCache.ico" Height="20"/>
+						</MenuItem.Icon>
+					</MenuItem>
+				</ContextMenu>
+			</DataGrid.ContextMenu>
 		</controls:SortAwareDataGrid>
 	</Border>
 

@@ -55,7 +55,7 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTemplateColumn  Header="ID"  MinWidth="50"  Width="Auto" SortMemberPath="TranslationUnit.ResourceId.Id" >
+					<DataGridTemplateColumn Header="ID"  MinWidth="50"  Width="Auto" SortMemberPath="TranslationUnit.ResourceId.Id" >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate DataType="model:ContentSearchResult">
 								<TextBlock Text="{Binding TranslationUnit.ResourceId.Id}" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="0,0,6,0"/>
@@ -77,9 +77,8 @@
 									</xctk:RichTextBox.TextFormatter>
 									<xctk:RichTextBox.ContextMenu>
 										<ContextMenu >
-											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"></MenuItem>
-											<MenuItem Header="Deselect word" Click="UnselectWord"></MenuItem>
-											<MenuItem Header="Apply selected changes" Click="AnonymizeAction"></MenuItem>
+											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"/>
+											<MenuItem Header="Deselect word" Click="UnselectWord"/>
 										</ContextMenu>
 									</xctk:RichTextBox.ContextMenu>
 								</xctk:RichTextBox>
@@ -103,8 +102,7 @@
 									<xctk:RichTextBox.ContextMenu>
 										<ContextMenu>
 											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"/>
-											<MenuItem Header="Deselect word" Click="UnselectWord"></MenuItem>
-											<MenuItem Header="Anonymize selected translation units" Click="AnonymizeAction"></MenuItem>
+											<MenuItem Header="Deselect word" Click="UnselectWord"/>
 										</ContextMenu>
 									</xctk:RichTextBox.ContextMenu>
 								</xctk:RichTextBox>
@@ -129,16 +127,17 @@
 					<Label Content="Filtered:" Padding="2,0,2,0"/>
 					<Label Content="{Binding ElementName=SortAwareDataGrid, Path=Items.Count}" Padding="2,0,2,0"/>
 					<Label Content=", " Padding="0"/>
-					<Label Content="Selected:" Padding="2,0,2,0"/>
+					<Label Content="Selected:" Padding="2,0,2,0" Height="33" VerticalAlignment="Top"/>
 					<Label Content="{Binding Path=SelectedCount, FallbackValue=0}" Padding="2,0,2,0"/>
 				</StackPanel>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-					<Button  Width="180" Style="{DynamicResource LightGreenButtonsStyle }" Command="{Binding ApplyCommand}">
+					<Button  Width="127" Style="{DynamicResource LightGreenButtonsStyle }" Command="{Binding ApplyCommand}" Height="Auto" Margin="0,0,10,5">
 						<StackPanel Orientation="Horizontal">
-							<TextBlock>Apply selected changes</TextBlock>
+							<Image Source="../Resources/ApplyChanges.ico" Margin="0,0,5,0"/>
+							<TextBlock>Apply changes</TextBlock>
 						</StackPanel>
 					</Button>
-					<Button Margin="0" Style="{DynamicResource LightGreenButtonsStyle }" Width="90" IsCancel="True">
+					<Button Margin="0,0,0,5" Style="{DynamicResource LightGreenButtonsStyle }" Width="90" IsCancel="True" Height="Auto">
 						<StackPanel Orientation="Horizontal">
 							<TextBlock>Cancel</TextBlock>
 						</StackPanel>

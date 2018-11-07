@@ -20,18 +20,89 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-
 	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition/>
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
+		<Grid.Resources>
+			<Style TargetType="{x:Type DataGridRow}">
+				<EventSetter Event="Selected" Handler="UIElement_OnLostFocus"/>
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}">
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="DataGridRow">
+									<Border x:Name="border" BorderThickness="0" Margin="5" HorizontalAlignment="Stretch"  BorderBrush="Black">
+										<Grid>
+											<Button x:Name="TextBlockAddItem" Content="Click here to add a new rule" Background="Transparent" Command="{Binding DataContext.CreateRuleCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"/>
+											<GroupBox x:Name="GroupBoxNewItem" Header="New Rule" Margin="5">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="Auto"/>
+														<ColumnDefinition Width="*"/>
+													</Grid.ColumnDefinitions>
+													<Grid.RowDefinitions>
+														<RowDefinition Height="Auto"/>
+														<RowDefinition Height="Auto"/>
+														<RowDefinition Height="Auto"/>
+													</Grid.RowDefinitions>
 
-		<controls:SortAwareDataGrid Grid.Row="1"
-		                DefaultColumnName="Name"
-		                DefaultSortDirection="Ascending"
-						Style="{StaticResource FilesGridStyle}"
+													<TextBlock Text="Rule: " Grid.Column="0" Grid.Row="0" Margin="8,2,2,2"/>
+													<TextBox x:Name="RuleText" Text="{Binding Path=DataContext.NewRule.Name, Mode=TwoWay, 
+														NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+													         Focusable="True" ForceCursor="True" Grid.Column="1" Grid.Row="0" Margin="2"/>
+
+													<TextBlock Text="Description: " TextWrapping="WrapWithOverflow" Grid.Column="0" Grid.Row="1" Margin="8,2,2,2"/>
+													<TextBox Text="{Binding Path=DataContext.NewRule.Description, Mode=TwoWay,
+														NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+													         Grid.Column="1" Grid.Row="1" Margin="2" />
+
+													<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Margin="8,7,5,5">
+														<Button Content="Save" Width="70" Height="25" Command="{Binding Path=DataContext.AddRuleCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="0,0,5,0" />
+														<Button Content="Cancel"  Width="70" Height="25" Command="{Binding Path=DataContext.CancelRuleCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+													</StackPanel>
+
+													<Grid.Style>
+														<Style TargetType="Grid">
+															<Style.Triggers>
+																<DataTrigger Binding="{Binding Path=DataContext.NewRuleIsVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="true">
+																	<Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=RuleText}"/>
+																</DataTrigger>
+															</Style.Triggers>
+														</Style>
+													</Grid.Style>
+												</Grid>
+											</GroupBox>
+
+											<Grid.InputBindings>
+												<KeyBinding Key="Escape" Command="{Binding Path=DataContext.CancelRuleCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"/>
+											</Grid.InputBindings>
+
+										</Grid>
+									</Border>
+
+									<ControlTemplate.Triggers>
+										<DataTrigger Binding="{Binding Path=DataContext.NewRuleIsVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="false">
+											<Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
+											<Setter Property="Visibility" TargetName="TextBlockAddItem" Value="Visible"/>
+											<Setter Property="Visibility" TargetName="GroupBoxNewItem" Value="Hidden"/>
+											<Setter Property="Height" TargetName="GroupBoxNewItem" Value="16"/>
+										</DataTrigger>
+										<DataTrigger Binding="{Binding Path=DataContext.NewRuleIsVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="true">
+											<Setter Property="Background" TargetName="border" Value="Transparent" />
+											<Setter Property="BorderBrush" TargetName="border" Value="Gray"/>
+											<Setter Property="Visibility" TargetName="TextBlockAddItem" Value="Hidden"/>
+											<Setter Property="Visibility" TargetName="GroupBoxNewItem" Value="Visible"/>
+											<Setter Property="Height" TargetName="GroupBoxNewItem" Value="100"/>
+										</DataTrigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+		</Grid.Resources>
+		<controls:SelectAwareDataGrid						
+						Style="{StaticResource FilesGridStyle}"						
+						CanUserSortColumns="False"
 						FontFamily="Segoe UI"
 						BorderBrush="LightGray"
 						VerticalScrollBarVisibility="Auto"
@@ -41,16 +112,17 @@
 						GridLinesVisibility="None" 
 						CanUserAddRows="True"
 		                SelectionMode="Extended"
-		                SelectionUnit="FullRow"
+		                SelectionUnit="FullRow"							
 						SelectedItem="{Binding SelectedItem}"
 						SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 						MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-						Margin="5,10" >
+						Margin="5,10">
 			<DataGrid.InputBindings>
 				<KeyBinding Key="Delete" Command="{Binding RemoveRuleCommand}"/>
+				<KeyBinding Modifiers="Control" Key="N" Command="{Binding CreateRuleCommand}"/>
 			</DataGrid.InputBindings>
 			<DataGrid.Columns>
-				<DataGridTemplateColumn  Width="Auto" IsReadOnly="True" MinWidth="85" SortMemberPath="IsSelected">
+				<DataGridTemplateColumn  Width="Auto" IsReadOnly="True" MinWidth="85" CanUserSort="False">
 					<DataGridTemplateColumn.Header>
 						<CheckBox Content="Preview" FontFamily="Segoe UI" Margin="0" IsChecked="{Binding Path=Data.SelectAll, Source={StaticResource DataProxy}}" Command="{Binding Path=Data.SelectAllCommand, Source={StaticResource DataProxy}}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
 					</DataGridTemplateColumn.Header>
@@ -61,8 +133,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-
-				<DataGridTemplateColumn Width="2*" MinWidth="200" Header="Rule"  IsReadOnly="False" SortMemberPath="Name" >
+				<DataGridTemplateColumn Width="2*" MinWidth="200" Header="Rule"  IsReadOnly="False"  CanUserSort="False">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:Rule">
 							<TextBox TextWrapping="Wrap" HorizontalContentAlignment="Stretch" 
@@ -73,29 +144,52 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTextColumn Width="3*" MinWidth="200" Header="Description" Binding="{Binding Description}" IsReadOnly="False" ElementStyle="{StaticResource WrapText}"/>
-			</DataGrid.Columns>
-		</controls:SortAwareDataGrid>
 
-		<StackPanel Grid.Column="0" Grid.Row="2"  Orientation="Vertical"  Margin="5,10,10,10">
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ImportCommand}">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>Import rules</TextBlock>
-					</StackPanel>
-				</Button>
-				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ExportCommand}">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>Export rules</TextBlock>
-					</StackPanel>
-				</Button>
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125"  Command="{Binding PreviewCommand}">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>Preview</TextBlock>
-					</StackPanel>
-				</Button>
-			</StackPanel>
-		</StackPanel>
+				<DataGridTextColumn Width="3*" MinWidth="200" Header="Description" Binding="{Binding Description}" IsReadOnly="False" ElementStyle="{StaticResource WrapText}" CanUserSort="False"/>
+
+				<DataGridTemplateColumn Header="" Width="18" IsReadOnly="True" CanUserSort="False" >
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Button Background="Transparent" BorderThickness="0" Command="{Binding Path=DataContext.MoveRuleUpCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+								<Image Source="../Resources/Up.ico" Width="16" Height="16"/>
+							</Button>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="" Width="18" IsReadOnly="True" MinWidth="18" CanUserSort="False">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Button Background="Transparent" BorderThickness="0" Command="{Binding Path=DataContext.MoveRuleDownCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+								<Image Source="../Resources/Down.ico" Width="16" Height="16"/>
+							</Button>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="" Width="18" IsReadOnly="True" MinWidth="18" CanUserSort="False">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Button Background="Transparent" BorderThickness="0" Command="{Binding Path=DataContext.RemoveRuleCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+								<Image Opacity=".8" Source="../Resources/Delete.ico" Width="16" Height="16"/>
+							</Button>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+			<DataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="Export selected rules to excel" Command="{Binding ExportCommand}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/Excel.ico" Height="20"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Remove the selected rules" Command="{Binding RemoveRuleCommand}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/Delete.ico" Height="20"/>
+						</MenuItem.Icon>
+					</MenuItem>
+				</ContextMenu>
+			</DataGrid.ContextMenu>
+		</controls:SelectAwareDataGrid>
 	</Grid>
 
 </UserControl>
