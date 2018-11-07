@@ -83,6 +83,16 @@ namespace Sdl.Community.SdlTmAnonymizer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon Down {
+            get {
+                object obj = ResourceManager.GetObject("Down", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon ExportTo {
             get {
                 object obj = ResourceManager.GetObject("ExportTo", resourceCulture);
@@ -225,6 +235,16 @@ namespace Sdl.Community.SdlTmAnonymizer {
         internal static System.Drawing.Icon TranslationMemory {
             get {
                 object obj = ResourceManager.GetObject("TranslationMemory", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Up {
+            get {
+                object obj = ResourceManager.GetObject("Up", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

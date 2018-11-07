@@ -24,18 +24,25 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private readonly TranslationMemoryViewModel _model;
 		private readonly Settings _settings;
 		private readonly SettingsService _settingsService;
+		private readonly ExcelImportExportService _excelImportExportService;
 		private TmFile _selectedTm;
+		private Rule _newRule;
 		private ObservableCollection<Rule> _rules;
 		private Rule _selectedItem;
 		private bool _selectAll;
-		private ICommand _selectAllCommand;
-		private ICommand _previewCommand;
-		private ICommand _removeRuleCommand;
-		private ICommand _importCommand;
-		private ICommand _exportCommand;
 		private List<ContentSearchResult> _sourceSearchResults;
 		private IList _selectedItems;
-		private readonly ExcelImportExportService _excelImportExportService;
+		private bool _newRuleIsVisible;
+		private ICommand _selectAllCommand;
+		private ICommand _previewCommand;
+		private ICommand _importCommand;
+		private ICommand _exportCommand;
+		private ICommand _removeRuleCommand;
+		private ICommand _createRuleCommand;
+		private ICommand _cancelRuleCommand;
+		private ICommand _addRuleCommand;
+		private ICommand _moveRuleUpCommand;
+		private ICommand _moveRuleDownCommand;
 
 		public ContentFilteringRulesViewModel(TranslationMemoryViewModel model, ExcelImportExportService excelImportExportService)
 		{
@@ -52,8 +59,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			_model.PropertyChanged += ModelPropertyChanged;
 
-			Rules.CollectionChanged += RulesCollection_CollectionChanged;
-
+			NewRuleIsVisible = false;
 			UpdateCheckedAllState();
 		}
 
@@ -61,11 +67,41 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public ICommand PreviewCommand => _previewCommand ?? (_previewCommand = new CommandHandler(PreviewChanges, true));
 
-		public ICommand RemoveRuleCommand => _removeRuleCommand ?? (_removeRuleCommand = new CommandHandler(RemoveRule, true));
-
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(Import, true));
 
 		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export, true));
+
+		public ICommand CreateRuleCommand => _createRuleCommand ?? (_createRuleCommand = new CommandHandler(CreateRule, true));
+
+		public ICommand AddRuleCommand => _addRuleCommand ?? (_addRuleCommand = new CommandHandler(AddRule, true));
+
+		public ICommand RemoveRuleCommand => _removeRuleCommand ?? (_removeRuleCommand = new CommandHandler(RemoveRule, true));
+
+		public ICommand CancelRuleCommand => _cancelRuleCommand ?? (_cancelRuleCommand = new CommandHandler(CancelRule, true));
+
+		public ICommand MoveRuleUpCommand => _moveRuleUpCommand ?? (_moveRuleUpCommand = new CommandHandler(MoveRuleUp, true));
+
+		public ICommand MoveRuleDownCommand => _moveRuleDownCommand ?? (_moveRuleDownCommand = new CommandHandler(MoveRuleDown, true));
+
+		public bool NewRuleIsVisible
+		{
+			get => _newRuleIsVisible;
+			set
+			{
+				_newRuleIsVisible = value;
+				OnPropertyChanged(nameof(NewRuleIsVisible));
+			}
+		}
+
+		public Rule NewRule
+		{
+			get => _newRule ?? (_newRule = new Rule());
+			set
+			{
+				_newRule = value;
+				OnPropertyChanged(nameof(NewRule));
+			}
+		}
 
 		public IList SelectedItems
 		{
@@ -97,11 +133,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				if (_rules == null)
 				{
-					_rules = new ObservableCollection<Rule>(_settingsService.GetRules());
-					foreach (var rule in _rules)
-					{
-						rule.PropertyChanged += Rule_PropertyChanged;
-					}
+					InitializeRules();
 				}
 
 				return _rules;
@@ -142,10 +174,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				_selectedItem = value;
 				OnPropertyChanged(nameof(SelectedItem));
-				if (Rules.Any(r => r.Id == null))
-				{
-					SetIdForNewRules();
-				}
 			}
 		}
 
@@ -170,6 +198,58 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 				_selectAll = value;
 				OnPropertyChanged(nameof(SelectAll));
+			}
+		}
+
+		private void InitializeRules()
+		{
+			var rules = _settingsService.GetRules();
+
+			UpdateRuleOrder(rules);
+
+			if (_rules != null)
+			{
+				foreach (var rule in _rules)
+				{
+					rule.PropertyChanged -= Rule_PropertyChanged;
+				}
+			}
+
+			_rules = new ObservableCollection<Rule>(rules.OrderBy(a => a.Order));
+
+			foreach (var rule in _rules)
+			{
+				rule.PropertyChanged += Rule_PropertyChanged;
+			}
+		}
+
+		private static void UpdateRuleOrder(IReadOnlyCollection<Rule> rules)
+		{
+			var orders = new List<int>();
+			foreach (var rule in rules.OrderBy(a => a.Order))
+			{
+				if (!orders.Contains(rule.Order))
+				{
+					orders.Add(rule.Order);
+				}
+				else
+				{
+					var i = 0;
+					while (orders.Contains(i))
+					{
+						i++;
+					}
+
+					rule.Order = i;
+					orders.Add(i);
+				}
+			}
+
+			var orderIndex = 0;
+			foreach (var rule in rules.OrderBy(a => a.Order))
+			{
+				rule.Order = orderIndex;
+				orderIndex++;
 			}
 		}
 
@@ -229,21 +309,40 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var result = fileDialog.ShowDialog();
 			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
 			{
-				var importedExpressions = _excelImportExportService.ImportedRules(fileDialog.FileNames.ToList());
+				var importedRules = _excelImportExportService.ImportedRules(fileDialog.FileNames.ToList());
 
-				foreach (var expression in importedExpressions)
+				if (importedRules == null)
 				{
-					var ruleExist = Rules.FirstOrDefault(s => s.Name.Equals(expression.Name));
-					if (ruleExist == null)
+					return;
+				}
+
+				var rules = new List<Rule>();
+				foreach (var rule in Rules)
+				{
+					rules.Add(rule.Clone() as Rule);
+				}
+
+				foreach (var rule in importedRules)
+				{
+					var existingRule = rules.FirstOrDefault(s => s.Id.Equals(rule.Id, StringComparison.InvariantCultureIgnoreCase) || s.Name.Equals(rule.Name, StringComparison.InvariantCultureIgnoreCase));
+					if (existingRule == null)
 					{
-						Rules.Add(expression);
+						rules.Add(new Rule
+						{
+							Name = rule.Name,
+							Description = rule.Description,
+							Order = rules.Count
+						});
 					}
 					else
-					{
-						ruleExist.Name = expression.Name;
-						ruleExist.Description = expression.Description;
+					{						
+						existingRule.Name = rule.Name;
+						existingRule.Description = rule.Description;
 					}
 				}
+				UpdateRuleOrder(rules);
+
+				Rules = new ObservableCollection<Rule>(rules.OrderBy(a => a.Order));
 
 				_settings.Rules = Rules.ToList();
 				_settingsService.SaveSettings(_settings);
@@ -259,31 +358,119 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				if (SelectedItems != null)
 				{
-					var selectedRules = new List<Rule>();
-
-					foreach (var selectedItem in SelectedItems)
+					var selectedRuleIds = (from object selectedItem in SelectedItems select ((Rule)selectedItem).Id).ToList();
+					var rules = new List<Rule>();
+					foreach (var rule in Rules)
 					{
-						if (!selectedItem.GetType().Name.Equals("NamedObject"))
-						{
-							var item = (Rule)selectedItem;
-							var rule = new Rule
-							{
-								Id = item.Id
-							};
-							selectedRules.Add(rule);
-						}
-
+						rules.Add(rule.Clone() as Rule);
 					}
+
 					SelectedItems.Clear();
-					foreach (var rule in selectedRules)
+
+					foreach (var id in selectedRuleIds)
 					{
-						var ruleRoRemove = Rules.FirstOrDefault(r => r.Id.Equals(rule.Id));
+						var ruleRoRemove = rules.FirstOrDefault(r => r.Id.Equals(id));
 						if (ruleRoRemove != null)
 						{
-							Rules.Remove(ruleRoRemove);
+							rules.Remove(ruleRoRemove);
 						}
 					}
+
+					UpdateRuleOrder(rules);
+
+					Rules = new ObservableCollection<Rule>(rules.OrderBy(a => a.Order));
+
+					_settings.Rules = Rules.ToList();
+					_settingsService.SaveSettings(_settings);
 				}
+			}
+		}
+
+		private void CancelRule()
+		{
+			NewRuleIsVisible = false;
+			NewRule = new Rule();
+		}
+
+		private void AddRule()
+		{
+			if (string.IsNullOrEmpty(NewRule.Name))
+			{
+				return;
+			}
+			var rules = new List<Rule>();
+			foreach (var rule in Rules)
+			{
+				rules.Add(rule.Clone() as Rule);
+			}
+
+			var existingRule = rules.FirstOrDefault(s => s.Name.Equals(NewRule.Name, StringComparison.InvariantCultureIgnoreCase));
+			if (existingRule == null)
+			{
+				var newRule = new Rule
+				{
+					Name = NewRule.Name,
+					Description = NewRule.Description,
+					IsSelected = true,
+					Order = Rules.Count
+				};
+
+				rules.Add(newRule);
+
+				UpdateRuleOrder(rules);
+
+				Rules = new ObservableCollection<Rule>(rules.OrderBy(a => a.Order));
+			}
+
+			NewRuleIsVisible = false;
+			NewRule = new Rule();
+
+			_settings.Rules = Rules.ToList();
+			_settingsService.SaveSettings(_settings);
+		}
+
+		private void CreateRule()
+		{
+			NewRule = new Rule();
+			NewRuleIsVisible = true;
+		}
+
+		private void MoveRuleUp()
+		{
+			var selectedRule = SelectedItem;
+			var selectedIndex = Rules.IndexOf(SelectedItem);
+
+			if (selectedIndex > 0)
+			{
+				var previousRule = Rules[selectedIndex - 1];
+				previousRule.Order = selectedIndex;
+
+				selectedRule.Order = selectedIndex - 1;
+
+				Rules.Move(selectedIndex, selectedIndex - 1);
+
+				OnPropertyChanged(nameof(Rules));
+
+				_settings.Rules = Rules.ToList();
+				_settingsService.SaveSettings(_settings);
+			}
+		}
+
+		private void MoveRuleDown()
+		{
+			var selectedRule = SelectedItem;
+			var selectedIndex = Rules.IndexOf(SelectedItem);
+
+			if (selectedIndex < Rules.Count - 1)
+			{
+				var nextRule = Rules[selectedIndex + 1];
+				nextRule.Order = selectedIndex;
+
+				selectedRule.Order = selectedIndex + 1;
+
+				Rules.Move(selectedIndex, selectedIndex + 1);
+
+				OnPropertyChanged(nameof(Rules));
 
 				_settings.Rules = Rules.ToList();
 				_settingsService.SaveSettings(_settings);
@@ -295,18 +482,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			if (e.PropertyName.Equals(nameof(TranslationMemoryViewModel.TmsCollection)))
 			{
 				RefreshPreviewWindow();
-			}
-		}
-
-		private void RulesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-		{
-			if (e.Action == NotifyCollectionChangedAction.Add)
-			{
-				foreach (var item in e.NewItems)
-				{
-					var rule = (Rule)item;
-					rule.PropertyChanged += Rule_PropertyChanged;
-				}
 			}
 		}
 
@@ -513,7 +688,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private void PreviewWindow_Closing(object sender, CancelEventArgs e)
 		{
 			SourceSearchResults.Clear();
-		}		
+		}
 
 		private void SelectAllRules()
 		{
@@ -521,15 +696,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			foreach (var rule in Rules)
 			{
 				rule.IsSelected = value;
-			}
-		}
-
-		private void SetIdForNewRules()
-		{
-			var newRules = Rules.Where(r => r.Id == null).ToList();
-			foreach (var rule in newRules)
-			{
-				rule.Id = Guid.NewGuid().ToString();
 			}
 		}
 
@@ -542,8 +708,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				rule.PropertyChanged -= Rule_PropertyChanged;
 			}
-
-			Rules.CollectionChanged -= RulesCollection_CollectionChanged;
 		}
 	}
 }

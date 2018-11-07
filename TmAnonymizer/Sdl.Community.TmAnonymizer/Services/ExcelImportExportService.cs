@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
@@ -29,6 +30,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				var package = GetExcelPackage(file);
 				var workSheet = package.Workbook.Worksheets[1];
+
+				var colmun01 = workSheet.Cells[1, 1].Value;
+				var column02 = workSheet.Cells[1, 2].Value;
+				var column03 = workSheet.Cells[1, 3].Value;
+				var column04 = workSheet.Cells[1, 4].Value;
+
+				if (!IsValidColumnHeader(colmun01?.ToString(), "Name") |
+					!IsValidColumnHeader(column02?.ToString(), "Type") |
+					!IsValidColumnHeader(column03?.ToString(), "Value") |
+					!IsValidColumnHeader(column04?.ToString(), "New Value"))
+				{
+					return null;
+				}
+
 				for (var i = workSheet.Dimension.Start.Row + 1; i <= workSheet.Dimension.End.Row; i++)
 				{
 					var customFieldName = workSheet.Cells[i, 1].Value.ToString();
@@ -128,19 +143,30 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public List<Rule> ImportedRules(List<string> files)
 		{
-			var patterns = new List<Rule>();
+			var rules = new List<Rule>();
 			foreach (var file in files)
 			{
 				var package = GetExcelPackage(file);
 				var workSheet = package.Workbook.Worksheets[1];
+
+				var colmun01 = workSheet.Cells[1, 1].Value;
+				var column02 = workSheet.Cells[1, 2].Value;
+				var column03 = workSheet.Cells[1, 3].Value;
+				var column04 = workSheet.Cells[1, 4].Value;
+
+				if (!IsValidColumnHeader(colmun01?.ToString(), "ID") |
+					!IsValidColumnHeader(column02?.ToString(), "Order") |
+					!IsValidColumnHeader(column03?.ToString(), "Rule") |
+					!IsValidColumnHeader(column04?.ToString(), "Description"))
+				{
+					return null;
+				}
+
 				for (var i = workSheet.Dimension.Start.Row + 1; i <= workSheet.Dimension.End.Row; i++)
 				{
-					var pattern = new Rule()
+					var rule = new Rule
 					{
-						Id = Guid.NewGuid().ToString(),
-						IsSelected = true,
-						Description = string.Empty,
-						Name = string.Empty
+						IsSelected = true
 					};
 
 					for (var j = workSheet.Dimension.Start.Column; j <= workSheet.Dimension.End.Column; j++)
@@ -150,20 +176,28 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						var cellValue = workSheet.Cells[i, j].Value;
 						if (address.Contains("A"))
 						{
-							pattern.Name = cellValue.ToString();
+							rule.Id = cellValue?.ToString() ?? string.Empty;
 						}
-						else
+						else if (address.Contains("B"))
 						{
-							pattern.Description = cellValue?.ToString();
+							rule.Order = cellValue != null && int.TryParse(cellValue.ToString(), out var value) ? value : 0;
+						}
+						else if (address.Contains("C"))
+						{
+							rule.Name = cellValue?.ToString() ?? string.Empty;
+						}
+						else if (address.Contains("D"))
+						{
+							rule.Description = cellValue?.ToString() ?? string.Empty;
 						}
 					}
-					patterns.Add(pattern);
+					rules.Add(rule);
 				}
 			}
-			return patterns;
+			return rules;
 		}
 
-		public void ExportRules(string filePath, List<Rule> patterns)
+		public void ExportRules(string filePath, List<Rule> rules)
 		{
 			if (File.Exists(filePath))
 			{
@@ -175,25 +209,28 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var worksheet = package.Workbook.Worksheets.Add("Exported expressions");
 				var lineNumber = 1;
 
-				worksheet.Cells["A" + lineNumber].Value = "Rule";
-				worksheet.Cells["B" + lineNumber].Value = "Description";
+				worksheet.Cells["A" + lineNumber].Value = "ID";
+				worksheet.Cells["B" + lineNumber].Value = "Order";
+				worksheet.Cells["C" + lineNumber].Value = "Rule";
+				worksheet.Cells["D" + lineNumber].Value = "Description";
 
-				worksheet.Column(1).Width = 40;
-				worksheet.Column(2).Width = 30;
+				worksheet.Column(1).Width = 10;
+				worksheet.Column(2).Width = 10;
+				worksheet.Column(3).Width = 50;
+				worksheet.Column(4).Width = 35;
 
 				var startData = lineNumber;
 
-				foreach (var pattern in patterns)
+				foreach (var rule in rules.OrderBy(a => a.Order))
 				{
-					if (pattern != null)
-					{
-						lineNumber++;
-						worksheet.Cells["A" + lineNumber].Value = pattern.Name;
-						worksheet.Cells["B" + lineNumber].Value = pattern.Description;
-					}
+					lineNumber++;
+					worksheet.Cells["A" + lineNumber].Value = rule.Id;
+					worksheet.Cells["B" + lineNumber].Value = rule.Order;
+					worksheet.Cells["C" + lineNumber].Value = rule.Name;
+					worksheet.Cells["D" + lineNumber].Value = rule.Description;
 				}
 
-				var range = worksheet.Cells[startData, 1, lineNumber, 2];
+				var range = worksheet.Cells[startData, 1, lineNumber, 4];
 				var table = worksheet.Tables.Add(range, "tableData");
 
 				package.Save();
@@ -207,6 +244,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				var package = GetExcelPackage(file);
 				var workSheet = package.Workbook.Worksheets[1];
+
+				var colmun01 = workSheet.Cells[1, 1].Value;
+				var column02 = workSheet.Cells[1, 2].Value;
+
+				if (!IsValidColumnHeader(colmun01?.ToString(), "User Name") |
+					!IsValidColumnHeader(column02?.ToString(), "New User Name"))
+				{
+					return null;
+				}
+
 				for (var i = workSheet.Dimension.Start.Row + 1; i <= workSheet.Dimension.End.Row; i++)
 				{
 					var user = new User
@@ -325,7 +372,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				lineNumber++;
 				if (action != null)
-				{					
+				{
 					worksheet.Cells["A" + lineNumber].Value = action.TmId?.Id.ToString();
 					worksheet.Cells["B" + lineNumber].Value = action.Name;
 					worksheet.Cells["C" + lineNumber].Value = action.Type;
@@ -336,7 +383,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					previousValue.IsRichText = true;
 
 					var currentValue = worksheet.Cells["E" + lineNumber];
-					currentValue.IsRichText = true;					
+					currentValue.IsRichText = true;
 
 					foreach (var unit in comparison.ComparisonUnits)
 					{
@@ -403,6 +450,18 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			worksheet.Cells["A" + lineNumber + ":" + "B" + lineNumber].Merge = true;
 
 			lineNumber++;
+		}
+
+		private static bool IsValidColumnHeader(string colmun, string expected)
+		{
+			if (string.Compare(colmun, expected, StringComparison.InvariantCultureIgnoreCase) != 0)
+			{
+				MessageBox.Show("Invalid import format, found '" + colmun + "', expected column header name '" + expected + "'", "SDLTM Anonymizer");
+
+				return false;
+			}
+
+			return true;
 		}
 	}
 }
