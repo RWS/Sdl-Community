@@ -150,7 +150,7 @@
 				<DataGridTemplateColumn Header="" Width="18" IsReadOnly="True" CanUserSort="False" >
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<Button Background="Transparent" BorderThickness="0" Command="{Binding Path=DataContext.MoveRuleUpCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+							<Button Background="Transparent" BorderThickness="0" ToolTip="Move Up" Command="{Binding Path=DataContext.MoveRuleUpCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
 								<Image Source="../Resources/Up.ico" Width="16" Height="16"/>
 							</Button>
 						</DataTemplate>
@@ -159,7 +159,7 @@
 				<DataGridTemplateColumn Header="" Width="18" IsReadOnly="True" MinWidth="18" CanUserSort="False">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<Button Background="Transparent" BorderThickness="0" Command="{Binding Path=DataContext.MoveRuleDownCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+							<Button Background="Transparent" BorderThickness="0" ToolTip="Move Down" Command="{Binding Path=DataContext.MoveRuleDownCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
 								<Image Source="../Resources/Down.ico" Width="16" Height="16"/>
 							</Button>
 						</DataTemplate>
@@ -168,7 +168,7 @@
 				<DataGridTemplateColumn Header="" Width="18" IsReadOnly="True" MinWidth="18" CanUserSort="False">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<Button Background="Transparent" BorderThickness="0" Command="{Binding Path=DataContext.RemoveRuleCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+							<Button Background="Transparent" BorderThickness="0" ToolTip="Delete" Command="{Binding Path=DataContext.RemoveRuleCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
 								<Image Opacity=".8" Source="../Resources/Delete.ico" Width="16" Height="16"/>
 							</Button>
 						</DataTemplate>
@@ -182,7 +182,7 @@
 							<Image Source="../Resources/Excel.ico" Height="20"/>
 						</MenuItem.Icon>
 					</MenuItem>
-					<MenuItem Header="Remove the selected rules" Command="{Binding RemoveRuleCommand}">
+					<MenuItem Header="Delete the selected rules" Command="{Binding RemoveRuleCommand}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/Delete.ico" Height="20"/>
 						</MenuItem.Icon>

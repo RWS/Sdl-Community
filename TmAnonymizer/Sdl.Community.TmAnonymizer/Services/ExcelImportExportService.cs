@@ -249,7 +249,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var column02 = workSheet.Cells[1, 2].Value;
 
 				if (!IsValidColumnHeader(colmun01?.ToString(), "User Name") |
-					!IsValidColumnHeader(column02?.ToString(), "New User Name"))
+					!IsValidColumnHeader(column02?.ToString(), "New Value"))
 				{
 					return null;
 				}
@@ -296,7 +296,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var lineNumber = 1;
 
 				worksheet.Cells["A" + lineNumber].Value = "User Name";
-				worksheet.Cells["B" + lineNumber].Value = "New User Name";
+				worksheet.Cells["B" + lineNumber].Value = "New Value";
 
 				worksheet.Column(1).Width = 30;
 				worksheet.Column(2).Width = 30;
