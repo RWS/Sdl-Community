@@ -216,6 +216,16 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					// if there is an tm with the same path add translation units to that tm
 					var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmFile.Path.Equals(anonymizeTranslationMemory.TmFile.Path));
 
+					if (selectedResult.SelectedWordsDetails.Count > 0)
+					{
+						selectedResult.IsSourceMatch = true;
+					}
+
+					if (selectedResult.TargetSelectedWordsDetails.Count > 0)
+					{
+						selectedResult.IsTargetMatch = true;
+					}
+
 					//added for select custom words functionality
 					var tranlationUnitDetails = new TranslationUnitDetails
 					{

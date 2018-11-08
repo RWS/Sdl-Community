@@ -63,8 +63,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 				SetDefaultSortDescriptions();
 			}
 
-			foreach (var sortDescription in _sortDescriptions)
+			if (_sortDescriptions == null)
 			{
+				return;
+			}
+
+			foreach (var sortDescription in _sortDescriptions)
+			{				
 				view.SortDescriptions.Add(sortDescription);
 
 				var column = Columns.FirstOrDefault(c => c.SortMemberPath == sortDescription.PropertyName);
@@ -98,7 +103,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 		
 		private void SetDefaultSortDescriptions()
 		{
-			if (string.IsNullOrEmpty(DefaultColumnName))
+			if (string.IsNullOrEmpty(DefaultColumnName) || DefaultColumnName == "[none]")
 			{
 				return;
 			}

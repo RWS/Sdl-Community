@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -33,12 +34,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_serializerService = serializerService;
 			_excelImportExportService = excelImportExportService;
 
+			// the amount of actions that are visble in the log report
+			VisibleActionsLimit = 100;
+
 			_model = model;
 			_model.PropertyChanged += Model_PropertyChanged;
 			_model.TmsCollection.CollectionChanged += TmsCollection_CollectionChanged;
 
 			IsEnabled = _settingsService.GetSettings().Accepted;
 		}
+
+		public int VisibleActionsLimit { get; set; }
 
 		private void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
@@ -170,95 +176,121 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public string ReportCreated { get; set; }
 
+		private Report _report;
 		public Report Report
 		{
 			get
 			{
-				Report report;
 				if (SelectedItem != null && File.Exists(SelectedItem.FullPath))
 				{
-					report = _serializerService.Read<Report>(SelectedItem.FullPath);
-					ReportCreated = report.Created.ToString(CultureInfo.InvariantCulture);
-
-					var comparer = new SegmentComparer.Comparer();
-
-					if (report.Scope == Report.ReportScope.Content)
+					if (_report == null || _report.ReportFullPath != SelectedItem.FullPath)
 					{
-						foreach (var action in report.Actions)
+						
+						_report = _serializerService.Read<Report>(SelectedItem.FullPath);
+						ReportCreated = _report.Created.ToString(CultureInfo.InvariantCulture);
+
+						if (_report.Actions.Count > VisibleActionsLimit)
 						{
-							var comparison = comparer.CompareSegment(action.TmId.Id.ToString(), action.Previous, action.Value, true, 1);
+							MessageBox.Show("Only the first " + VisibleActionsLimit + " comparison differences are identified in view", "SDLTM Anonymizer");
+						}
 
-							var previousSpan = new Span();
-							var valueSpan = new Span();
+						var comparer = new SegmentComparer.Comparer();
 
-							var toolTip = string.Empty;
-							foreach (var unit in comparison.ComparisonUnits)
-							{
-								switch (unit.Type)
+						if (_report.Scope == Report.ReportScope.Content)
+						{
+							var i = 0;
+							foreach (var action in _report.Actions)
+							{								
+								if (i++ < VisibleActionsLimit)
 								{
-									case ComparisonUnit.ComparisonType.New:
+									var comparison = comparer.CompareSegment(action.TmId.Id.ToString(), action.Previous, action.Value, true, 1);
 
-										if (unit.TextType != ComparisonUnit.ContentType.Tag)
+									var previousSpan = new Span();
+									var valueSpan = new Span();
+
+									var toolTip = string.Empty;
+									foreach (var unit in comparison.ComparisonUnits)
+									{
+										switch (unit.Type)
 										{
-											valueSpan.Inlines.Add(new Run(unit.Text));
+											case ComparisonUnit.ComparisonType.New:
+
+												if (unit.TextType != ComparisonUnit.ContentType.Tag)
+												{
+													valueSpan.Inlines.Add(new Run(unit.Text));
+												}
+												else
+												{
+													var valueNewText = new Run(unit.Text)
+													{
+														Background = new SolidColorBrush(Colors.Yellow),
+														ToolTip = toolTip
+													};
+
+													valueSpan.Inlines.Add(valueNewText);
+												}
+
+												break;
+											case ComparisonUnit.ComparisonType.Removed:
+												var previousRemovedText = new Run(unit.Text)
+												{
+													Background = new SolidColorBrush(Colors.Pink),
+												};
+
+												toolTip = unit.Text;
+												previousSpan.Inlines.Add(previousRemovedText);
+												break;
+											case ComparisonUnit.ComparisonType.Identical:
+											case ComparisonUnit.ComparisonType.None:
+												previousSpan.Inlines.Add(new Run(unit.Text));
+												valueSpan.Inlines.Add(new Run(unit.Text));
+												break;
 										}
-										else
-										{
-											var valueNewText = new Run(unit.Text)
-											{
-												Background = new SolidColorBrush(Colors.Yellow),
-												ToolTip = toolTip
-											};
+									}
 
-											valueSpan.Inlines.Add(valueNewText);
-										}
+									action.PreviousSpan = previousSpan;
+									action.ValueSpan = valueSpan;
+								}
+								else
+								{
+									var previousSpan = new Span();
+									var valueSpan = new Span();
 
-										break;
-									case ComparisonUnit.ComparisonType.Removed:
-										var previousRemovedText = new Run(unit.Text)
-										{
-											Background = new SolidColorBrush(Colors.Pink),
-										};
+									previousSpan.Inlines.Add(new Run(action.Previous));
+									valueSpan.Inlines.Add(new Run(action.Value));
 
-										toolTip = unit.Text;
-										previousSpan.Inlines.Add(previousRemovedText);
-										break;
-									case ComparisonUnit.ComparisonType.Identical:
-									case ComparisonUnit.ComparisonType.None:
-										previousSpan.Inlines.Add(new Run(unit.Text));
-										valueSpan.Inlines.Add(new Run(unit.Text));
-										break;
+									action.PreviousSpan = previousSpan;
+									action.ValueSpan = valueSpan;
 								}
 							}
 
-							action.PreviousSpan = previousSpan;
-							action.ValueSpan = valueSpan;
+							_report.Actions.RemoveAll(a => a.PreviousSpan == null);
 						}
-					}
-					else
-					{
-						foreach (var action in report.Actions)
+						else
 						{
-							var previousSpan = new Span();
-							var valueSpan = new Span();
+							foreach (var action in _report.Actions)
+							{
+								var previousSpan = new Span();
+								var valueSpan = new Span();
 
-							previousSpan.Inlines.Add(new Run(action.Previous));
-							valueSpan.Inlines.Add(new Run(action.Value));
+								previousSpan.Inlines.Add(new Run(action.Previous));
+								valueSpan.Inlines.Add(new Run(action.Value));
 
-							action.PreviousSpan = previousSpan;
-							action.ValueSpan = valueSpan;
+								action.PreviousSpan = previousSpan;
+								action.ValueSpan = valueSpan;
+							}
 						}
 					}
 				}
 				else
 				{
-					report = new Report();
+					_report = new Report();
 					ReportCreated = string.Empty;
 				}
 
 				OnPropertyChanged(nameof(ReportCreated));
 
-				return report;
+				return _report;
 			}
 		}
 

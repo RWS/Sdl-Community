@@ -342,8 +342,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					if (tusToUpdate.Count > 0)
 					{
 						var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
-						actions.AddRange(GetResultActions(results, unitsClone, tus));
-						updatedCount += results.Count(a => a.ErrorCode == ErrorCode.OK);
+						if (results != null)
+						{
+							actions.AddRange(GetResultActions(results, unitsClone, tusToUpdate, tus));
+							updatedCount += results.Count(a => a.ErrorCode == ErrorCode.OK);
+						}
 					}
 				}
 
@@ -442,8 +445,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						if (tusToUpdate.Count > 0)
 						{
 							var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
-							actions.AddRange(GetResultActions(results, unitsClone, tus));
-							updatedCount += results.Count(a => a.ErrorCode == ErrorCode.OK);
+							if (results != null)
+							{
+								actions.AddRange(GetResultActions(results, unitsClone, tusToUpdate, tus));
+								updatedCount += results.Count(a => a.ErrorCode == ErrorCode.OK);
+							}
 						}
 					}
 				}
@@ -466,44 +472,49 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return updatedCount;
 		}
 
-		private static IEnumerable<Model.Log.Action> GetResultActions(IEnumerable<ImportResult> results, IReadOnlyCollection<TranslationUnitDetails> unitsClone, IReadOnlyCollection<TmTranslationUnit> units)
+		private static IEnumerable<Model.Log.Action> GetResultActions(IReadOnlyList<ImportResult> results, IReadOnlyList<TranslationUnitDetails> unitsClone, 
+			IReadOnlyList<LanguagePlatform.TranslationMemory.TranslationUnit> unitsUpdated, IReadOnlyCollection<TmTranslationUnit> unitsReference)
 		{
 			var details = new List<Model.Log.Action>();
-			foreach (var result in results)
-			{
-				if (result.TuId != null)
-				{
-					var previousTu = unitsClone.FirstOrDefault(a => a.TranslationUnit.ResourceId.Id == result.TuId.Id);
-					var updateTu = units.FirstOrDefault(a => a.ResourceId.Id == result.TuId.Id);
-					if (updateTu != null && previousTu != null)
-					{
-						if (previousTu.IsSourceMatch)
-						{
-							var detail = new Model.Log.Action
-							{
-								TmId = updateTu.ResourceId,
-								Name = "Source",
-								Result = result.ErrorCode.ToString(),
-								Previous = previousTu.TranslationUnit.SourceSegment.ToPlain(true),
-								Value = updateTu.SourceSegment.ToPlain(true),
-								Type = "Segment"
-							};
-							details.Add(detail);
-						}
 
-						if (previousTu.IsTargetMatch)
+			for (var i = 0; i < results.Count; i++)
+			{
+				// The ResourceIds don't match from the TU used to update the TM against the results received from a Server-based TM.
+				// for this reason, we are using a simple index to align the result generation
+				// var previousTu = unitsUpdated.FirstOrDefault(a => a.TranslationUnit.ResourceId.Id == result.TuId.Id);
+
+				var updateTu = unitsUpdated[i]; // we need this value to recover the correct resource ID, because of issue mentioned above.
+				var previousTu = unitsClone.FirstOrDefault(a => a.TranslationUnit.ResourceId.Id == updateTu.ResourceId.Id);	
+				var tuReference = unitsReference.FirstOrDefault(a => a.ResourceId.Id == updateTu.ResourceId.Id);
+
+				if (tuReference != null && previousTu != null)
+				{
+					if (previousTu.IsSourceMatch)
+					{
+						var detail = new Model.Log.Action
 						{
-							var detail = new Model.Log.Action
-							{
-								TmId = updateTu.ResourceId,
-								Name = "Target",
-								Result = result.ErrorCode.ToString(),
-								Previous = previousTu.TranslationUnit.TargetSegment.ToPlain(true),
-								Value = updateTu.TargetSegment.ToPlain(true),
-								Type = "Segment"
-							};
-							details.Add(detail);
-						}
+							TmId = updateTu.ResourceId,
+							Name = "Source",
+							Result = results[i].ErrorCode.ToString(),
+							Previous = previousTu.TranslationUnit.SourceSegment.ToPlain(true),
+							Value = tuReference.SourceSegment.ToPlain(true),
+							Type = "Segment"
+						};
+						details.Add(detail);
+					}
+
+					if (previousTu.IsTargetMatch)
+					{
+						var detail = new Model.Log.Action
+						{
+							TmId = updateTu.ResourceId,
+							Name = "Target",
+							Result = results[i].ErrorCode.ToString(),
+							Previous = previousTu.TranslationUnit.TargetSegment.ToPlain(true),
+							Value = tuReference.TargetSegment.ToPlain(true),
+							Type = "Segment"
+						};
+						details.Add(detail);
 					}
 				}
 			}

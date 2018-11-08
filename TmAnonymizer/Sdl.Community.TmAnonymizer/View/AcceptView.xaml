@@ -5,7 +5,7 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             mc:Ignorable="d" 
 			Name="Accept"
-			Title="Sdl TM Anonymizer"
+			Title="SDLTM Anonymizer"
             FontFamily="Segoe UI"
 			Width="400"
 			Height="300"
