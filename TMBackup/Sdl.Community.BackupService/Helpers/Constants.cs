@@ -35,6 +35,6 @@ namespace Sdl.Community.BackupService.Helpers
 
 		public static readonly string RegistryParam = " / WindowsInitialize";
 
-		public static readonly string TimeFormat = "HH:mm:ss tt";
+		public static readonly string TimeFormat = "HH:mm:ss";
 	}
 }
