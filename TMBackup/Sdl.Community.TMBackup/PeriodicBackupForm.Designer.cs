@@ -108,12 +108,12 @@
             // 
             this.timePicker_At.Location = new System.Drawing.Point(350, 86);
             this.timePicker_At.Name = "timePicker_At";
-            this.timePicker_At.Size = new System.Drawing.Size(103, 20);
+            this.timePicker_At.Size = new System.Drawing.Size(80, 20);
             this.timePicker_At.TabIndex = 8;
             // 
             // btn_Now
             // 
-            this.btn_Now.Location = new System.Drawing.Point(474, 85);
+            this.btn_Now.Location = new System.Drawing.Point(475, 84);
             this.btn_Now.Name = "btn_Now";
             this.btn_Now.Size = new System.Drawing.Size(75, 23);
             this.btn_Now.TabIndex = 9;
