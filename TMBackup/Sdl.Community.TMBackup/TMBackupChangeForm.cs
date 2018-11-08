@@ -59,6 +59,24 @@ namespace Sdl.Community.TMBackup
 			GetBackupTimeInfo();
 			Close();
 		}
+
+		// Disable "Edit details" button when user selects "When manually started" option
+		private void radioBtn_Manually_CheckedChanged(object sender, EventArgs e)
+		{
+			if (radioBtn_Manually.Checked.Equals(true))
+			{
+				btn_TimeDetails.Enabled = false;
+			}
+		}
+
+		// Enable "Edit details" button when user selects "Every" option
+		private void radioBtn_TimeChange_CheckedChanged(object sender, EventArgs e)
+		{
+			if (radioBtn_TimeChange.Checked.Equals(true))
+			{
+				btn_TimeDetails.Enabled = true;
+			}
+		}
 		#endregion
 
 		#region Methods
