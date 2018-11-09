@@ -194,9 +194,9 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			}
 			else
 			{
-				for (int i = index; i < RegexPatterns.Count; i++)
+				for (int i = index; i < RegexPatterns.Count - 1; i++)
 				{
-					RegexPatterns[i - 1] = RegexPatterns[i];
+					RegexPatterns[i] = RegexPatterns[i+1];
 				}
 
 				RegexPatterns.RemoveAt(RegexPatterns.Count - 1);
