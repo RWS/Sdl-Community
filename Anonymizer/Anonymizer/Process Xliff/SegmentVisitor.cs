@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 using Sdl.Community.projectAnonymizer.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -15,6 +16,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 		private readonly bool _arePatternsEcrypted;
 		private IDocumentItemFactory _factory;
 		private IPropertiesFactory _propertiesFactory;
+		private string _id = null;
 
 		public SegmentVisitor(List<RegexPattern> patterns, string encryptionKey, bool arePatternsEcnrypted)
 		{
@@ -42,6 +44,10 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
+			//if (!string.IsNullOrEmpty(_id))
+			//{
+			//	if (_id == tag.TagProperties.ta)
+			//}
 		}
 
 		public void VisitText(IText text)
@@ -78,6 +84,9 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 							{
 								//in the case we have only PI in the segment
 								//remove the text -> add the anonymized data in the same position
+								
+								//Patrick says I have to look here for the bug, it could be that we are inserting a tag without realizing it... 
+								//We must check <<AllSubItems>> for tags
 								if (elementContainer.AllSubItems.ToList().Count.Equals(1))
 								{
 									if (elementContainer.AllSubItems.ToList().ElementAtOrDefault(count) == null)
