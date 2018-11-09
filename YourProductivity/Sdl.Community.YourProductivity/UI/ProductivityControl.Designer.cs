@@ -44,7 +44,6 @@
             this.pbInfo1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tblScore = new System.Windows.Forms.TableLayoutPanel();
-            this.pbTweetAccountImage = new System.Windows.Forms.PictureBox();
             this.lblScore = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -56,7 +55,6 @@
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbInfo1)).BeginInit();
             this.tblScore.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbTweetAccountImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -229,7 +227,6 @@
             this.tblScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tblScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tblScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tblScore.Controls.Add(this.pbTweetAccountImage, 0, 0);
             this.tblScore.Controls.Add(this.lblScore, 1, 0);
             this.tblScore.Controls.Add(this.pictureBox1, 2, 0);
             this.tblScore.Dock = System.Windows.Forms.DockStyle.Left;
@@ -247,7 +244,7 @@
             this.lblScore.Cursor = System.Windows.Forms.Cursors.Default;
             this.lblScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblScore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(139)))), ((int)(((byte)(141)))));
-            this.lblScore.Location = new System.Drawing.Point(57, 19);
+            this.lblScore.Location = new System.Drawing.Point(3, 19);
             this.lblScore.Name = "lblScore";
             this.lblScore.Size = new System.Drawing.Size(350, 52);
             this.lblScore.TabIndex = 1;
@@ -258,10 +255,10 @@
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Image = global::Sdl.Community.YourProductivity.PluginResources.info;
-            this.pictureBox1.Location = new System.Drawing.Point(413, 32);
+            this.pictureBox1.Location = new System.Drawing.Point(359, 32);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 5);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(126, 24);
+            this.pictureBox1.Size = new System.Drawing.Size(180, 24);
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
             this.toolTip2.SetToolTip(this.pictureBox1, "Leaderboard score:\r\nCompete against translators from around the world for prizes " +
@@ -303,7 +300,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbInfo1)).EndInit();
             this.tblScore.ResumeLayout(false);
             this.tblScore.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbTweetAccountImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
@@ -326,7 +322,6 @@
         private System.Windows.Forms.PictureBox pbInfo1;
         private System.Windows.Forms.Panel pnlbottom;
         private System.Windows.Forms.TableLayoutPanel tblScore;
-        private System.Windows.Forms.PictureBox pbTweetAccountImage;
         private System.Windows.Forms.Label lblScore;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
