@@ -9,14 +9,14 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.YourProductivity.UI
 {
-	[RibbonGroup("Sdl.Community.Productivity", Name = "#YourProductivity", ContextByType = typeof(EditorController))]
+	[RibbonGroup("Sdl.Community.Productivity", Name = "YourProductivity", ContextByType = typeof(EditorController))]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
     public class ProductivityRibbon : AbstractRibbonGroup
     {
     }
 
-    [Action("Sdl.Community.Productivity", Icon = "score", Name = "Productivity score", Description = "#YourProductivityy")]
-    [ActionLayout(typeof(ProductivityRibbon), 20, DisplayType.Normal)]
+    [Action("Sdl.Community.Productivity", Icon = "score", Name = "Productivity score", Description = "#YourProductivity")]
+    [ActionLayout(typeof(ProductivityRibbon), 10, DisplayType.Large)]
     class ProductivityViewPartAction : AbstractAction
     {
         protected override void Execute()
