@@ -4,5 +4,11 @@
   <Version>1.0</Version>
   <Description>Plugin description</Description>
   <Author>Sdl Community</Author>
+  <Include>
+		<File>Newtonsoft.Json.dll</File>
+		<File>RestSharp.dll</File>
+		<File>MahApps.Metro.dll</File>
+		<File>System.Windows.Interactivity.dll</File>
+  </Include>
   <RequiredProduct name="SDLTradosStudio" minversion="14.0" maxversion="15.0" />
 </PluginPackage>
