@@ -318,6 +318,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\SDLTMAnoymizer.Add.FileBasedTM.gif" />
+    <Content Include="Resources\SDLTMAnoymizer.Anonymize.Data.gif" />
     <EmbeddedResource Include="UsefulTips\TipsImport.xml" />
     <Resource Include="Resources\Up.ico" />
     <Resource Include="Resources\Excel.ico" />
