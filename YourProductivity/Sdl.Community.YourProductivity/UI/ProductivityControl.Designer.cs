@@ -40,26 +40,21 @@
             this.pnlbottom = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnScore = new Sdl.Community.YourProductivity.UI.RoundedButton();
             this.pbInfo1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tblScore = new System.Windows.Forms.TableLayoutPanel();
-            this.pbTweetAccountImage = new System.Windows.Forms.PictureBox();
             this.lblScore = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnTweet = new RoundedButton();
-            this.btnLeaderboard = new RoundedButton();
-            this.btnScore = new RoundedButton();
             ((System.ComponentModel.ISupportInitialize)(this.listView)).BeginInit();
             this.pnlMain.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.pnlbottom.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbInfo1)).BeginInit();
             this.tblScore.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbTweetAccountImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,6 +65,7 @@
             this.listView.AllColumns.Add(this.efficiencyColumn);
             this.listView.AllColumns.Add(this.keyStrokesSavedColumn);
             this.listView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listView.CellEditUseWholeCell = false;
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.segmentTextColumn,
             this.insertedCharactersColumn,
@@ -152,12 +148,10 @@
             // 
             // pnlbottom
             // 
-            this.pnlbottom.Controls.Add(this.btnTweet);
-            this.pnlbottom.Controls.Add(this.btnLeaderboard);
             this.pnlbottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlbottom.Location = new System.Drawing.Point(0, 296);
+            this.pnlbottom.Location = new System.Drawing.Point(0, 321);
             this.pnlbottom.Name = "pnlbottom";
-            this.pnlbottom.Size = new System.Drawing.Size(992, 62);
+            this.pnlbottom.Size = new System.Drawing.Size(992, 37);
             this.pnlbottom.TabIndex = 2;
             // 
             // panel1
@@ -186,6 +180,21 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(373, 90);
             this.tableLayoutPanel1.TabIndex = 11;
+            // 
+            // btnScore
+            // 
+            this.btnScore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnScore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(121)))), ((int)(((byte)(197)))));
+            this.btnScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnScore.ForeColor = System.Drawing.Color.White;
+            this.btnScore.Location = new System.Drawing.Point(270, 10);
+            this.btnScore.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.btnScore.Name = "btnScore";
+            this.btnScore.Radius = 70;
+            this.btnScore.Size = new System.Drawing.Size(72, 70);
+            this.btnScore.TabIndex = 7;
+            this.btnScore.Text = "100%";
+            this.btnScore.UseVisualStyleBackColor = false;
             // 
             // pbInfo1
             // 
@@ -218,7 +227,6 @@
             this.tblScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tblScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tblScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tblScore.Controls.Add(this.pbTweetAccountImage, 0, 0);
             this.tblScore.Controls.Add(this.lblScore, 1, 0);
             this.tblScore.Controls.Add(this.pictureBox1, 2, 0);
             this.tblScore.Dock = System.Windows.Forms.DockStyle.Left;
@@ -229,17 +237,6 @@
             this.tblScore.Size = new System.Drawing.Size(542, 90);
             this.tblScore.TabIndex = 10;
             // 
-            // pbTweetAccountImage
-            // 
-            this.pbTweetAccountImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbTweetAccountImage.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pbTweetAccountImage.Image = global::Sdl.Community.YourProductivity.PluginResources.cup_48;
-            this.pbTweetAccountImage.Location = new System.Drawing.Point(3, 21);
-            this.pbTweetAccountImage.Name = "pbTweetAccountImage";
-            this.pbTweetAccountImage.Size = new System.Drawing.Size(48, 48);
-            this.pbTweetAccountImage.TabIndex = 2;
-            this.pbTweetAccountImage.TabStop = false;
-            // 
             // lblScore
             // 
             this.lblScore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -247,7 +244,7 @@
             this.lblScore.Cursor = System.Windows.Forms.Cursors.Default;
             this.lblScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblScore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(139)))), ((int)(((byte)(141)))));
-            this.lblScore.Location = new System.Drawing.Point(57, 19);
+            this.lblScore.Location = new System.Drawing.Point(3, 19);
             this.lblScore.Name = "lblScore";
             this.lblScore.Size = new System.Drawing.Size(350, 52);
             this.lblScore.TabIndex = 1;
@@ -258,10 +255,10 @@
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Image = global::Sdl.Community.YourProductivity.PluginResources.info;
-            this.pictureBox1.Location = new System.Drawing.Point(413, 32);
+            this.pictureBox1.Location = new System.Drawing.Point(359, 32);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 5);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(126, 24);
+            this.pictureBox1.Size = new System.Drawing.Size(180, 24);
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
             this.toolTip2.SetToolTip(this.pictureBox1, "Leaderboard score:\r\nCompete against translators from around the world for prizes " +
@@ -288,53 +285,6 @@
             this.toolTip2.ReshowDelay = 100;
             this.toolTip2.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             // 
-            // btnTweet
-            // 
-            this.btnTweet.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnTweet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(121)))), ((int)(((byte)(197)))));
-            this.btnTweet.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnTweet.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTweet.ForeColor = System.Drawing.Color.White;
-            this.btnTweet.Location = new System.Drawing.Point(661, 14);
-            this.btnTweet.Name = "btnTweet";
-            this.btnTweet.Radius = 1;
-            this.btnTweet.Size = new System.Drawing.Size(157, 36);
-            this.btnTweet.TabIndex = 4;
-            this.btnTweet.Text = "Share score";
-            this.btnTweet.UseVisualStyleBackColor = false;
-            this.btnTweet.Click += new System.EventHandler(this.btnTweet_Click);
-            // 
-            // btnLeaderboard
-            // 
-            this.btnLeaderboard.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnLeaderboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(121)))), ((int)(((byte)(197)))));
-            this.btnLeaderboard.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLeaderboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLeaderboard.ForeColor = System.Drawing.Color.White;
-            this.btnLeaderboard.Location = new System.Drawing.Point(827, 14);
-            this.btnLeaderboard.Name = "btnLeaderboard";
-            this.btnLeaderboard.Radius = 1;
-            this.btnLeaderboard.Size = new System.Drawing.Size(157, 36);
-            this.btnLeaderboard.TabIndex = 5;
-            this.btnLeaderboard.Text = "Leaderboard";
-            this.btnLeaderboard.UseVisualStyleBackColor = false;
-            this.btnLeaderboard.Click += new System.EventHandler(this.btnLeaderboard_Click);
-            // 
-            // btnScore
-            // 
-            this.btnScore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnScore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(121)))), ((int)(((byte)(197)))));
-            this.btnScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnScore.ForeColor = System.Drawing.Color.White;
-            this.btnScore.Location = new System.Drawing.Point(270, 10);
-            this.btnScore.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
-            this.btnScore.Name = "btnScore";
-            this.btnScore.Radius = 70;
-            this.btnScore.Size = new System.Drawing.Size(72, 70);
-            this.btnScore.TabIndex = 7;
-            this.btnScore.Text = "100%";
-            this.btnScore.UseVisualStyleBackColor = false;
-            // 
             // ProductivityControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -345,13 +295,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.listView)).EndInit();
             this.pnlMain.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            this.pnlbottom.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbInfo1)).EndInit();
             this.tblScore.ResumeLayout(false);
             this.tblScore.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbTweetAccountImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
@@ -366,8 +314,6 @@
         private System.Windows.Forms.Panel pnlMain;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel1;
-        private RoundedButton btnTweet;
-        private RoundedButton btnLeaderboard;
         private System.Windows.Forms.Label label1;
         private RoundedButton btnScore;
         private BrightIdeasSoftware.OLVColumn keyStrokesSavedColumn;
@@ -376,7 +322,6 @@
         private System.Windows.Forms.PictureBox pbInfo1;
         private System.Windows.Forms.Panel pnlbottom;
         private System.Windows.Forms.TableLayoutPanel tblScore;
-        private System.Windows.Forms.PictureBox pbTweetAccountImage;
         private System.Windows.Forms.Label lblScore;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;

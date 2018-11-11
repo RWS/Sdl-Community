@@ -13,7 +13,6 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		public DecryptSettingsControl()
 		{
 			InitializeComponent();
-			//encryptionBox.LostFocus += EncryptionBox_LostFocus;
 			Timer.Tick += EncryptionBox_UserStoppedTyping;
 			decryptionBox.TextChanged += (t, e) => StartSearchTimer();
 		}

@@ -168,7 +168,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Down.ico" />
+    <Resource Include="Resources\Delete.ico" />
     <Content Include="Resources\icon.ico" />
+    <None Include="Resources\Up.ico" />
     <None Include="Resources\lock.png" />
     <EmbeddedResource Include="Ui\AcceptWindow.resx">
       <DependentUpon>AcceptWindow.cs</DependentUpon>

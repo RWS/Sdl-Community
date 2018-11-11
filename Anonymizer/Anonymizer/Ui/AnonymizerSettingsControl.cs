@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.projectAnonymizer.Batch_Task;
@@ -92,12 +93,14 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			var shouldEncryptColumn = new DataGridViewCheckBoxColumn
 			{
 				HeaderText = @"Encrypt?",
-				Width = 110,
+				Width = 105,
 				DataPropertyName = "ShouldEncrypt",
 				HeaderCell = encryptHeaderCell,
 				Name = "Encrypt"
 			};
 			expressionsGrid.Columns.Add(exportColumn);
+
+			
 			var pattern = new DataGridViewTextBoxColumn
 			{
 				HeaderText = @"Regex Pattern",
@@ -113,6 +116,42 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			};
 			expressionsGrid.Columns.Add(description);
 			expressionsGrid.Columns.Add(shouldEncryptColumn);
+			
+			var moveUpButtonColumn = new DataGridViewImageColumn()
+			{
+				Width = 20,
+				Icon = new Icon(PluginResources.Up, 16, 16),
+				ValuesAreIcons = true,
+				DisplayIndex = 4,
+			};
+
+			expressionsGrid.Columns.Add(moveUpButtonColumn);
+			expressionsGrid.CellClick += UpDownDeleteButtonClick;
+
+			var moveDownButtonColumn = new DataGridViewImageColumn()
+			{
+				Width = 20,
+				Icon = new Icon(PluginResources.Down, 16, 16),
+				ValuesAreIcons = true,
+				DisplayIndex = 5,
+			};
+
+			expressionsGrid.Columns.Add(moveDownButtonColumn);
+
+			var deleteButtonColumn = new DataGridViewImageColumn()
+			{
+				Width = 20,
+				Icon = new Icon(PluginResources.Delete, 16, 16),
+				ValuesAreIcons = true,
+				DisplayIndex = 6,
+			};
+
+			expressionsGrid.Columns.Add(deleteButtonColumn);
+
+			var defaultRow = expressionsGrid.RowTemplate;
+			defaultRow.DefaultCellStyle = null;
+
+			expressionsGrid.AllowUserToAddRows = false;
 
 			ReadExistingExpressions();
 			SetSettings(Settings);
@@ -124,12 +163,63 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 			if ((Settings.EncryptionState & State.DataEncrypted) != 0)
 			{
-				//if (Settings.IsOldVersion ?? false)
-				//{
-				//	encryptedMessage.Text = "Old version of Anonymizer was used on this project. Unprotect Data before proceeding.";
-				//}
 				mainPanel.Visible = false;
 				encryptedPanel.Visible = true;
+			}
+		}
+
+		private void UpDownDeleteButtonClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.ColumnIndex == 4)
+			{
+				MovePatternUp(e.RowIndex);
+			}
+
+			if (e.ColumnIndex == 5)
+			{
+				MovePatternDown(e.RowIndex);
+			}
+
+			if (e.ColumnIndex == 6)
+			{
+				DeletePattern(e.RowIndex);
+			}
+		}
+
+		private void DeletePattern(int index)
+		{
+			if (index == RegexPatterns.Count - 1)
+			{
+				RegexPatterns.RemoveAt(index);
+			}
+			else
+			{
+				for (int i = index; i < RegexPatterns.Count - 1; i++)
+				{
+					RegexPatterns[i] = RegexPatterns[i+1];
+				}
+
+				RegexPatterns.RemoveAt(RegexPatterns.Count - 1);
+			}
+		}
+
+		private void MovePatternUp(int index)
+		{
+			if (index > 0)
+			{
+				var previousPattern = RegexPatterns[index - 1];
+				RegexPatterns[index - 1] = RegexPatterns[index];
+				RegexPatterns[index] = previousPattern;
+			}
+		}
+
+		private void MovePatternDown(int index)
+		{
+			if (index < RegexPatterns.Count - 1)
+			{
+				var previousPattern = RegexPatterns[index + 1];
+				RegexPatterns[index + 1] = RegexPatterns[index];
+				RegexPatterns[index] = previousPattern;
 			}
 		}
 
@@ -284,6 +374,11 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		private bool IsProjectAnonymized()
 		{
 			return Settings.EncryptionKey != "<dummy-encryption-key>";
+		}
+
+		private void addNewPatternButton_Click(object sender, EventArgs e)
+		{
+			RegexPatterns.AddNew();
 		}
 	}
 }
