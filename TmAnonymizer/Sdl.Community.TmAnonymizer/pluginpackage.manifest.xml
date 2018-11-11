@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.SDLTmAnonymizer</PlugInName>
-  <Version>1.9.7</Version>
+  <Version>1.9.9</Version>
   <Description></Description>
   <Author></Author>
 	<Include>
@@ -10,6 +10,8 @@
 		<File>Newtonsoft.Json.dll</File>
 		<File>System.Data.SQLite.dll</File>
 		<File>SegmentComparer.dll</File>
+		<File>Sdl.Community.UsefulTipsService.dll</File>
+		<File>Sdl.Community.UsefulTipsService.Update.exe</File>
 	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>

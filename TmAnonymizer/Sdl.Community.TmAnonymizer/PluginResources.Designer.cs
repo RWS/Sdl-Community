@@ -103,6 +103,16 @@ namespace Sdl.Community.SdlTmAnonymizer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon help {
+            get {
+                object obj = ResourceManager.GetObject("help", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon icon {
             get {
                 object obj = ResourceManager.GetObject("icon", resourceCulture);
@@ -131,7 +141,7 @@ namespace Sdl.Community.SdlTmAnonymizer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sdl.Community.SDLTmAnonymizer.
+        ///   Looks up a localized string similar to Sdl.Community.SDLTMAnonymizer.
         /// </summary>
         internal static string Plugin_Name {
             get {

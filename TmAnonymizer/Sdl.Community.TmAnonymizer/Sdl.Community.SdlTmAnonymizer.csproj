@@ -52,6 +52,12 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="presentationframework.aero2" />
+    <Reference Include="Sdl.Community.UsefulTipsService, Version=1.0.9.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.0.9\lib\net472\Sdl.Community.UsefulTipsService.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Community.UsefulTipsService.Update, Version=1.0.9.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.0.9\lib\net472\Sdl.Community.UsefulTipsService.Update.exe</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
@@ -110,8 +116,8 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="SegmentComparer, Version=1.0.2.0, Culture=neutral, PublicKeyToken=89aa17d6612aafb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\SegmentComparer.1.0.2\lib\net472\SegmentComparer.dll</HintPath>
+    <Reference Include="SegmentComparer, Version=1.0.3.0, Culture=neutral, PublicKeyToken=89aa17d6612aafb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\SegmentComparer.1.0.3\lib\net452\SegmentComparer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -311,6 +317,7 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="UsefulTips\TipsImport.xml" />
     <Resource Include="Resources\Up.ico" />
     <Resource Include="Resources\Excel.ico" />
     <Resource Include="Resources\Folder.ico" />
@@ -331,7 +338,7 @@
     <Resource Include="Resources\CheckedCircle.png" />
     <None Include="Resources\icon.ico" />
     <None Include="Resources\wiki.ico" />
-    <None Include="Resources\help.ico" />
+    <Resource Include="Resources\help.ico" />
     <Resource Include="Resources\ServerBasedTranslationMemory.ico" />
     <Resource Include="Resources\Remove.ico" />
     <Resource Include="Resources\TranslationMemoriesFolder_Open.ico" />
@@ -344,7 +351,9 @@
       <SubType>Designer</SubType>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="pluginpackage.manifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <EmbeddedResource Include="StringResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
@@ -449,6 +458,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

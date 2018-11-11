@@ -6,17 +6,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 	public class PathInfo
 	{
 		private const string SdlCommunityPathName = "SDL Community";
-		private const string ApplicationPathName = "TmAnonymizer";
+		private const string ApplicationPathName = "SDLTMAnonymizer";
 		private const string BackupPathName = "Backup";
 		private const string LogsPathName = "Logs";
+		private const string TipsPathName = "Tips";
 		private const string TemporaryStoragePathName = "TemporaryStorage";
 		private const string SettingsPathName = "Settings";
 		private const string SettingsFileName = "settings.json";
+		
 
 		private string _sdlCommunityFullPath;
 		private string _applicationFullPath;
 		private string _backupFullPath;
 		private string _logsFullPath;
+		private string _tipsFullPath;
 		private string _temporaryStorageFullPath;
 		private string _settingsFullPath;
 
@@ -95,6 +98,25 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 				}
 
 				return _logsFullPath;
+			}
+		}
+
+		public string TipsFullPath
+		{
+			get
+			{
+				if (!string.IsNullOrEmpty(_tipsFullPath))
+				{
+					return _tipsFullPath;
+				}
+
+				_tipsFullPath = Path.Combine(ApplicationFullPath, TipsPathName);
+				if (!Directory.Exists(_tipsFullPath))
+				{
+					Directory.CreateDirectory(_tipsFullPath);
+				}
+
+				return _tipsFullPath;
 			}
 		}
 

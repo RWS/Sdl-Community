@@ -213,4 +213,7 @@
 	<data name="Cant_compare_different_field_types" xml:space="preserve">
     <value>Can't compare different field types</value>
   </data>
+	<data name="Application_Name" xml:space="preserve">
+    <value>SDLTM Anonymizer</value>
+  </data>
 </root>

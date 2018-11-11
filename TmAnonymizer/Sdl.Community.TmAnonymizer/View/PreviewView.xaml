@@ -77,8 +77,8 @@
 									</xctk:RichTextBox.TextFormatter>
 									<xctk:RichTextBox.ContextMenu>
 										<ContextMenu >
-											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"/>
-											<MenuItem Header="Deselect word" Click="UnselectWord"/>
+											<MenuItem Header="Select content for anonymization" Click="MenuItem_OnClick"/>
+											<MenuItem Header="Deselect content" Click="UnselectWord"/>
 										</ContextMenu>
 									</xctk:RichTextBox.ContextMenu>
 								</xctk:RichTextBox>
@@ -101,8 +101,8 @@
 									</xctk:RichTextBox.TextFormatter>
 									<xctk:RichTextBox.ContextMenu>
 										<ContextMenu>
-											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"/>
-											<MenuItem Header="Deselect word" Click="UnselectWord"/>
+											<MenuItem Header="Select content for anonymization" Click="MenuItem_OnClick"/>
+											<MenuItem Header="Deselect content" Click="UnselectWord"/>
 										</ContextMenu>
 									</xctk:RichTextBox.ContextMenu>
 								</xctk:RichTextBox>

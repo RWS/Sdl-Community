@@ -79,6 +79,15 @@ namespace Sdl.Community.SdlTmAnonymizer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SDLTM Anonymizer.
+        /// </summary>
+        internal static string Application_Name {
+            get {
+                return ResourceManager.GetString("Application_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select at least one translation unit to apply the changes..
         /// </summary>
         internal static string ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes {

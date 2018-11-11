@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 using Sdl.Community.SdlTmAnonymizer.EventArgs;
 using Sdl.Community.SdlTmAnonymizer.Model;
-using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.View;
 using Sdl.Community.SdlTmAnonymizer.ViewModel;
+using Sdl.Community.UsefulTipsService;
+using Sdl.Community.UsefulTipsService.Services;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using SettingsService = Sdl.Community.SdlTmAnonymizer.Services.SettingsService;
 
 namespace Sdl.Community.SdlTmAnonymizer.Studio
 {
@@ -27,7 +33,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		internal MainViewModel Model;
 		internal SettingsService SettingsService;
 		internal event EventHandler<SelectedTabIndexArgs> SelectedTabIndexArgs;
-				
+
 		public UserControl ContentControl => _control;
 
 		protected override void Initialize(IViewContext context)
@@ -45,10 +51,51 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			{
 				Model.LogViewModel.IsEnabled = true;
 				_control = new TmAnonymizerViewControl(Model);
+
+				AddUsefulTips();
 			}
 			else
 			{
 				Model.LogViewModel.IsEnabled = false;
+			}
+		}
+
+		private void AddUsefulTips()
+		{
+			try
+			{				
+				var pathService = new PathService("en");				
+				var tipsService = new TipsProvider(pathService);
+
+				var tipsImportFile = Path.Combine(SettingsService.PathInfo.TipsFullPath, "TipsImport.xml");
+				CreateTipsImportFile(tipsImportFile);
+
+				var tips = tipsService.ReadTipsImportFile(tipsImportFile);
+
+				tipsService.AddTips(tips, StringResources.Application_Name);			
+			}
+			catch (Exception ex)
+			{
+				Trace.WriteLine(ex.Message);
+			}
+		}
+
+		private static void CreateTipsImportFile(string fileName)
+		{
+			var tipsImportFile = "Sdl.Community.SdlTmAnonymizer.UsefulTips.TipsImport.xml";
+			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(tipsImportFile))
+			{
+				if (stream != null)
+				{					
+					using (var reader = new StreamReader(stream))
+					{
+						using (var writer = new StreamWriter(fileName, false, Encoding.UTF8))
+						{
+							writer.Write(reader.ReadToEnd());
+							writer.Flush();
+						}
+					}
+				}
 			}
 		}
 
@@ -75,9 +122,5 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 				SelectedTabIndexArgs?.Invoke(this, new SelectedTabIndexArgs { SelectedIndex = Model.SelectedTabIndex });
 			}
 		}
-
-
-
-	
 	}
 }

@@ -114,15 +114,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[RibbonGroup("TmAnonymizerProcessRibbonGroup", "  Actions ")]
+	[RibbonGroup("TmAnonymizerTasksRibbonGroup", "  Tasks ")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-	public class TmAnonymizerProcessRibbonGroup : AbstractRibbonGroup
+	public class TmAnonymizerTasksRibbonGroup : AbstractRibbonGroup
 	{
 	}
 
-	[Action("TmAnonymizerProcessRibbonGroupProcessAction", typeof(SDLTMAnonymizerView), Name = "Preview Changes", Icon = "PreviewChanges", Description = "Preview Changes (Content Filtering Rules)")]
-	[ActionLayout(typeof(TmAnonymizerProcessRibbonGroup), 4, DisplayType.Large)]
-	public class TmAnonymizerProcessRibbonGroupProcessAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("TmAnonymizerTasksRibbonGrouppProcessAction", typeof(SDLTMAnonymizerView), Name = "Preview Changes", Icon = "PreviewChanges", Description = "Preview Changes (Content Filtering Rules)")]
+	[ActionLayout(typeof(TmAnonymizerTasksRibbonGroup), 4, DisplayType.Large)]
+	public class TmAnonymizerTasksRibbonGroupProcessAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -182,9 +182,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[Action("TmAnonymizerProcessRibbonGroupExportAction", typeof(SDLTMAnonymizerView), Name = "Export", Icon = "ExportTo", Description = "Export the selected Rules")]
-	[ActionLayout(typeof(TmAnonymizerProcessRibbonGroup), 3, DisplayType.Normal)]
-	public class TmAnonymizerProcessRibbonGroupExportAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("TmAnonymizerTasksRibbonGroupExportAction", typeof(SDLTMAnonymizerView), Name = "Export", Icon = "ExportTo", Description = "Export the selected Rules")]
+	[ActionLayout(typeof(TmAnonymizerTasksRibbonGroup), 3, DisplayType.Normal)]
+	public class TmAnonymizerTasksRibbonGroupExportAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -243,9 +243,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 	}
 
 
-	[Action("TmAnonymizerProcessRibbonGroupImportAction", typeof(SDLTMAnonymizerView), Name = "Import", Icon = "ImportFrom", Description = "Import Rules")]
-	[ActionLayout(typeof(TmAnonymizerProcessRibbonGroup), 2, DisplayType.Normal)]
-	public class TmAnonymizerProcessRibbonGroupImportAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("TmAnonymizerTasksRibbonGroupImportAction", typeof(SDLTMAnonymizerView), Name = "Import", Icon = "ImportFrom", Description = "Import Rules")]
+	[ActionLayout(typeof(TmAnonymizerTasksRibbonGroup), 2, DisplayType.Normal)]
+	public class TmAnonymizerTasksRibbonGroupImportAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -302,9 +302,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[Action("TmAnonymizerProcessRibbonGroupRemoveAction", typeof(SDLTMAnonymizerView), Name = "Remove ", Icon = "Delete", Description = "Remove the slected Rules")]
-	[ActionLayout(typeof(TmAnonymizerProcessRibbonGroup), 1, DisplayType.Normal)]
-	public class TmAnonymizerProcessRibbonGroupRemoveAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("TmAnonymizerTasksRibbonGroupRemoveAction", typeof(SDLTMAnonymizerView), Name = "Remove ", Icon = "Delete", Description = "Remove the slected Rules")]
+	[ActionLayout(typeof(TmAnonymizerTasksRibbonGroup), 1, DisplayType.Normal)]
+	public class TmAnonymizerTasksRibbonGroupRemoveAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -343,7 +343,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 	{
 	}
 
-	[Action("TmAnonymizerHelpRibbonGroupHelpAction", typeof(SDLTMAnonymizerView), Name = "Online Help", Icon = "wiki", Description = "An wiki page will be opened in browser with user documentation")]
+	[Action("TmAnonymizerHelpRibbonGroupHelpAction", typeof(SDLTMAnonymizerView), Name = "Online Help", Icon = "help", Description = "An wiki page will be opened in browser with user documentation")]
 	[ActionLayout(typeof(TmAnonymizerHelpRibbonGroup), 1, DisplayType.Large)]
 	public class TmAnonymizerHelpRibbonGroupHelpAction : AbstractAction
 	{
