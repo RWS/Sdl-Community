@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
@@ -9,6 +11,7 @@ using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.View;
 using Sdl.Community.SdlTmAnonymizer.ViewModel;
 using Sdl.Community.UsefulTipsService;
+using Sdl.Community.UsefulTipsService.Model;
 using Sdl.Community.UsefulTipsService.Services;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -63,16 +66,19 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		private void AddUsefulTips()
 		{
 			try
-			{				
-				var pathService = new PathService("en");				
+			{
+				var languageId = "en";
+				var pathService = new PathService(languageId);
 				var tipsService = new TipsProvider(pathService);
 
-				var tipsImportFile = Path.Combine(SettingsService.PathInfo.TipsFullPath, "TipsImport.xml");
-				CreateTipsImportFile(tipsImportFile);
+				var tipsLanguageFullPath = GetTipsLanguagePath(languageId);
+				
+				CreateTipsImportContent(tipsLanguageFullPath, languageId);
 
-				var tips = tipsService.ReadTipsImportFile(tipsImportFile);
+				var tipsImportFile = Path.Combine(tipsLanguageFullPath, "TipsImport.xml");
+				var tips = GetTips(tipsService, tipsImportFile, tipsLanguageFullPath);
 
-				tipsService.AddTips(tips, StringResources.Application_Name);			
+				tipsService.AddTips(tips, StringResources.Application_Name);
 			}
 			catch (Exception ex)
 			{
@@ -80,22 +86,93 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			}
 		}
 
-		private static void CreateTipsImportFile(string fileName)
+		private static List<Tip> GetTips(TipsProvider tipsService, string tipsImportFile, string tipsLanguageFullPath)
 		{
-			var tipsImportFile = "Sdl.Community.SdlTmAnonymizer.UsefulTips.TipsImport.xml";
-			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(tipsImportFile))
+			var tips = tipsService.ReadTipsImportFile(tipsImportFile);
+
+			// update the relative path infor for each of the Tips
+			foreach (var tip in tips)
+			{
+				tip.Icon = GetFullPath(tip.Icon, tipsLanguageFullPath);
+				tip.Content = GetFullPath(tip.Content, tipsLanguageFullPath);
+				tip.DescriptionImage = GetFullPath(tip.DescriptionImage, tipsLanguageFullPath);
+			}
+
+			// save the updated tips with the relative path info
+			tipsService.CreateTipsImportFile(tipsImportFile, tips);
+
+			return tips;
+		}
+
+		private string GetTipsLanguagePath(string languageId)
+		{
+			var tipsLanguageFullPath = Path.Combine(SettingsService.PathInfo.TipsFullPath, languageId);
+			if (!Directory.Exists(tipsLanguageFullPath))
+			{
+				Directory.CreateDirectory(tipsLanguageFullPath);
+			}
+
+			return tipsLanguageFullPath;
+		}
+
+		private static string GetFullPath(string fileName, string tipsLanguageFullPath)
+		{
+			if (!string.IsNullOrEmpty(fileName))
+			{
+				var name = Path.GetFileName(fileName);
+				return Path.Combine(tipsLanguageFullPath, name);
+			}
+
+			return fileName;
+		}
+
+		private static void CreateTipsImportContent(string tipsLanguageFullPath, string languageId)
+		{
+			RemoveAllFiles(tipsLanguageFullPath);
+
+			var tipsContentFileInput = "Sdl.Community.SdlTmAnonymizer.UsefulTips." + languageId + "." + languageId + ".zip";
+			var tipsContentFileOutput = Path.Combine(tipsLanguageFullPath, languageId + ".zip");			
+
+			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(tipsContentFileInput))
 			{
 				if (stream != null)
-				{					
-					using (var reader = new StreamReader(stream))
+				{
+					using (var reader = new BinaryReader(stream))
 					{
-						using (var writer = new StreamWriter(fileName, false, Encoding.UTF8))
+						using (Stream writer = File.Create(tipsContentFileOutput))
 						{
-							writer.Write(reader.ReadToEnd());
-							writer.Flush();
+							var buffer = new byte[2048];
+							while (true)
+							{								
+								var current = reader.Read(buffer, 0, buffer.Length);
+								if (current == 0)
+								{
+									break;
+								}
+
+								writer.Write(buffer, 0, current);
+							}
 						}
 					}
 				}
+			}
+
+			ZipFile.ExtractToDirectory(tipsContentFileOutput, tipsLanguageFullPath);
+		}
+
+		private static void RemoveAllFiles(string tipsLanguageFullPath)
+		{
+			try
+			{
+				var files = Directory.GetFiles(tipsLanguageFullPath, "*.*");
+				foreach (var file in files)
+				{
+					File.Delete(file);
+				}
+			}
+			catch
+			{
+				//ignore
 			}
 		}
 
