@@ -37,13 +37,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					CreateTipsImportContent(tipsLanguageFullPath, language);
 
 					var tipsImportFile = Path.Combine(tipsLanguageFullPath, "TipsImport.xml");
-					var tips = GetTips(tipsService, tipsImportFile, tipsLanguageFullPath);
+					var tips = GetTipsForImport(tipsService, tipsImportFile, tipsLanguageFullPath);
 
-					tipContexts.Add(new TipContext
+					if (tips?.Count > 0)
 					{
-						LanguageId = language,
-						Tips = tips
-					});
+						tipContexts.Add(new TipContext
+						{
+							LanguageId = language,
+							Tips = tips
+						});
+					}
 				}
 
 				tipsService.AddTips(tipContexts, StringResources.Application_Name);
@@ -54,12 +57,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		private static List<Tip> GetTips(TipsProvider tipsService, string tipsImportFile, string tipsLanguageFullPath)
+		private static List<Tip> GetTipsForImport(TipsProvider tipsService, string tipsImportFile, string tipsLanguageFullPath)
 		{
 			var tips = tipsService.ReadTipsImportFile(tipsImportFile);
 
 			// update the relative path info for each of the Tips
-
 			foreach (var tip in tips)
 			{
 				tip.Icon = GetFullPath(tip.Icon, tipsLanguageFullPath);
@@ -97,7 +99,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		private static void CreateTipsImportContent(string tipsLanguageFullPath, string languageId)
 		{
-			RemoveAllFiles(tipsLanguageFullPath);
+			RemoveAllFilesInPath(tipsLanguageFullPath);
 
 			var tipsContentFileInput = "Sdl.Community.SdlTmAnonymizer.UsefulTips." + languageId + "." + languageId + ".zip";
 			var tipsContentFileOutput = Path.Combine(tipsLanguageFullPath, languageId + ".zip");
@@ -129,7 +131,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			ZipFile.ExtractToDirectory(tipsContentFileOutput, tipsLanguageFullPath);
 		}
 
-		private static void RemoveAllFiles(string tipsLanguageFullPath)
+		private static void RemoveAllFilesInPath(string tipsLanguageFullPath)
 		{
 			try
 			{

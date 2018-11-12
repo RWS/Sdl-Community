@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfTip xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Tip Context="SDLTMAnonymizerView" Category="Plugins" Icon="SdlTmAnonymizer.ico" DescriptionImage="SdlTmAnonymizer.png" Content="Welcome.md" IsNew="true" ShowOnWelcomeWizard="false">
+		<Title>Welcome to the SDLTM Anonymizer view</Title>
+		<Description>The SDLTM Anonymizer view is where you anonymize data in the both server and file-based Translation Memories. Includes features to anonymize content within Segments, System Fields and Custom Fields.</Description>
+		<LinkText>Learn more</LinkText>
+	</Tip>
+    <Tip Context="SDLTMAnonymizerView" Category="Plugins" Icon="SdlTmAnonymizer.ico" DescriptionImage="" Content="RulesTab.md" IsNew="true" ShowOnWelcomeWizard="false">
+      <Title>Working with Content Filtering Rules</Title>
+      <Description>Select, edit, delete or add new rules to match personal data in the Translation Unit segments to be anonymized.</Description>
+      <LinkText>Learn more</LinkText>
+    </Tip>	
+    <Tip Context="SDLTMAnonymizerView" Category="Plugins" Icon="SdlTmAnonymizer.ico" DescriptionImage="" Content="SystemFieldsTab.md" IsNew="true" ShowOnWelcomeWizard="false">
+      <Title>Working with System Fields</Title>
+      <Description>Substitute the Users Name values that are recovered from the System Fields in the Translation Memory with new values.</Description>
+      <LinkText>Learn more</LinkText>
+    </Tip>	
+    <Tip Context="SDLTMAnonymizerView" Category="Plugins" Icon="SdlTmAnonymizer.ico" DescriptionImage="" Content="CustomFieldsTab.md" IsNew="true" ShowOnWelcomeWizard="false">
+      <Title>Working with Custom Fields</Title>
+      <Description>Substitute the values that are recovered for each of the Custom Field types in the Translation Memory with new values.</Description>
+      <LinkText>Learn more</LinkText>
+    </Tip>	
+</ArrayOfTip>
