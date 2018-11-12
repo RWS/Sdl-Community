@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
+using Sdl.Community.BeGlobalV4.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -24,11 +25,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var options = new BeGlobalTranslationOptions();
 			var credentials = GetCredentials(credentialStore, "beglobaltranslationprovider:///");
-			var beGlobalVm = new BeGlobalWindowViewModel(options, credentials);
-			var beGlobalWindow = new BeGlobalWindow
-			{
-				DataContext = beGlobalVm
-			};
+			
+			var beGlobalWindow = new BeGlobalWindow();
+			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow,options, credentials);
+			beGlobalWindow.DataContext = beGlobalVm;
 
 			beGlobalWindow.ShowDialog();
 			if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
@@ -60,11 +60,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				editProvider.Options.ApiKey = savedCredentials.Credential;
 			}
-			var beGlobalVm = new BeGlobalWindowViewModel(editProvider.Options,savedCredentials);
-			var beGlobalWindow = new BeGlobalWindow
-			{
-				DataContext = beGlobalVm
-			};
+			var beGlobalWindow = new BeGlobalWindow();
+			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow,editProvider.Options,savedCredentials);
+			beGlobalWindow.DataContext = beGlobalVm;
+			
 			beGlobalWindow.ShowDialog();
 			if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 			{
