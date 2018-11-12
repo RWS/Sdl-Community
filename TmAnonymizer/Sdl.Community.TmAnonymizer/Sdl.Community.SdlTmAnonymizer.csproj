@@ -229,6 +229,7 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\WordDetails.cs" />
     <Compile Include="Services\SerializerService.cs" />
+    <Compile Include="Services\UsefulTipsService.cs" />
     <Compile Include="StringResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
