@@ -20,22 +20,12 @@ namespace Sdl.Community.YourProductivity
         private EditorController _editorController;
         private LoggingConfiguration _loggingConfiguration;
         private Logger _logger;
-        private EmailService _emailService;
         KeyboardTrackingService _service;
 
         public void Execute()
         {
             _logger = LogManager.GetLogger("log");
-            #if DEBUG
-            {
-                _emailService = new EmailService(true);
-            }
-            #else
-            {
-                _emailService = new EmailService(false);
-            }
-            #endif
-
+          
             try
             {
                 RavenContext.Current.Initialize();
@@ -44,25 +34,17 @@ namespace Sdl.Community.YourProductivity
                 Application.AddMessageFilter(KeyboardTracking.Instance);
                 SdlTradosStudio.Application.Closing += Application_Closing;
 
-                _service = new KeyboardTrackingService(_logger,
-                    _emailService);
+                _service = new KeyboardTrackingService(_logger);
                 _editorController = SdlTradosStudio.Application.GetController<EditorController>();
                 _editorController.Opened += _editorController_Opened;
                 _editorController.ActiveDocumentChanged += _editorController_ActiveDocumentChanged;
                 _editorController.Closing += _editorController_Closing;
-
-                var twitterPersistenceService = new TwitterPersistenceService(_logger);
-                if (twitterPersistenceService.HasAccountConfigured) return;
-                using (var tForm = new TwitterAccountSetup(twitterPersistenceService))
-                {
-                    tForm.ShowDialog();
-                }
+				                           
                 _logger.Info(string.Format("Started productivity plugin version {0}",VersioningService.GetPluginVersion()));
             }
             catch (Exception ex)
             {
                 _logger.Debug(ex,"Unexpected exception when intializing the app");
-                _emailService.SendLogFile();
             }
         }
         
@@ -105,9 +87,7 @@ namespace Sdl.Community.YourProductivity
             catch (Exception ex)
             {
                 _logger.Debug(ex, "Unexpected exception when closing the editor");
-                _emailService.SendLogFile();
             }
-
         }
 
         void _editorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
@@ -126,12 +106,7 @@ namespace Sdl.Community.YourProductivity
             catch (Exception ex)
             {
                 _logger.Debug(ex, "Unexpected exception when changing the active document");
-                _emailService.SendLogFile();
             }
-
-        }
-
-       
-
+        }     
     }
 }
