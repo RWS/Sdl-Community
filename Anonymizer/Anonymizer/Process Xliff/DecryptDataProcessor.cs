@@ -15,6 +15,9 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
+			if (!(_decryptSettings.HasBeenCheckedByControl ?? false))
+				return;
+
 			base.ProcessParagraphUnit(paragraphUnit);
 			if (paragraphUnit.IsStructure) { return; }
 
