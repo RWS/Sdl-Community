@@ -5,8 +5,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
              mc:Ignorable="d" 
+             FontFamily="Segoe UI"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            		 <TextBlock>Login view</TextBlock>
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"></ResourceDictionary>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+
+		</Grid.RowDefinitions>
+		<TextBlock Margin="10,20,10,15" Width="550" Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">The Be Global is a paid machine translation service. 
+			Please purchase a Be Global Subscription in order to get an Client Id and use this service.<LineBreak/>
+			Please enter your Client Id below:</TextBlock>
+		
     </Grid>
 </UserControl>
