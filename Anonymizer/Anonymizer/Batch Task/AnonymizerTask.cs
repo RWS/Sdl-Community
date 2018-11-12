@@ -113,6 +113,12 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings)));
 		}
+
+		public override void TaskComplete()
+		{
+			base.TaskComplete();
+			_settings.HasBeenCheckedByControl = false;
+		}
 	}
 
 	[Action("Help Anonymizer Action",
