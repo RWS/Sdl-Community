@@ -23,18 +23,30 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		{
 			try
 			{
-				var languageId = "en";
-				var pathService = new PathService(languageId);
+				var defaultLanguage = "en";
+				var pathService = new PathService(defaultLanguage);
 				var tipsService = new TipsProvider(pathService);
 
-				var tipsLanguageFullPath = GetTipsLanguagePath(languageId);
+				var tipContexts = new List<TipContext>();
+				foreach (var language in tipsService.SupportedLanguages)
+				{
+					pathService.LanguageId = language;
 
-				CreateTipsImportContent(tipsLanguageFullPath, languageId);
+					var tipsLanguageFullPath = GetTipsLanguagePath(language);
 
-				var tipsImportFile = Path.Combine(tipsLanguageFullPath, "TipsImport.xml");
-				var tips = GetTips(tipsService, tipsImportFile, tipsLanguageFullPath);
+					CreateTipsImportContent(tipsLanguageFullPath, language);
 
-				tipsService.AddTips(tips, StringResources.Application_Name);
+					var tipsImportFile = Path.Combine(tipsLanguageFullPath, "TipsImport.xml");
+					var tips = GetTips(tipsService, tipsImportFile, tipsLanguageFullPath);
+
+					tipContexts.Add(new TipContext
+					{
+						LanguageId = language,
+						Tips = tips
+					});
+				}
+
+				tipsService.AddTips(tipContexts, StringResources.Application_Name);
 			}
 			catch (Exception ex)
 			{
@@ -47,6 +59,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			var tips = tipsService.ReadTipsImportFile(tipsImportFile);
 
 			// update the relative path info for each of the Tips
+
 			foreach (var tip in tips)
 			{
 				tip.Icon = GetFullPath(tip.Icon, tipsLanguageFullPath);

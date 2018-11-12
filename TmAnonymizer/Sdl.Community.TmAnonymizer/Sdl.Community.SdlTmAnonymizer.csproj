@@ -52,11 +52,11 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="presentationframework.aero2" />
-    <Reference Include="Sdl.Community.UsefulTipsService, Version=1.1.1.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.1\lib\net472\Sdl.Community.UsefulTipsService.dll</HintPath>
+    <Reference Include="Sdl.Community.UsefulTipsService, Version=1.1.2.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.2\lib\net472\Sdl.Community.UsefulTipsService.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Community.UsefulTipsService.Update, Version=1.1.1.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.1\lib\net472\Sdl.Community.UsefulTipsService.Update.exe</HintPath>
+    <Reference Include="Sdl.Community.UsefulTipsService.Update, Version=1.1.2.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.2\lib\net472\Sdl.Community.UsefulTipsService.Update.exe</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
@@ -107,6 +107,9 @@
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <Private>True</Private>
@@ -212,6 +215,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Services\SystemFieldsService.cs" />
+    <Compile Include="Services\TellMeService.cs" />
     <Compile Include="Services\TmService.cs" />
     <Compile Include="Model\AnonymizeTranslationMemory.cs" />
     <Compile Include="Model\CustomField.cs" />
@@ -323,6 +327,14 @@
     <Content Include="Resources\SDLTMAnoymizer.Add.FileBasedTM.gif" />
     <Content Include="Resources\SDLTMAnoymizer.Anonymize.Data.gif" />
     <EmbeddedResource Include="UsefulTips\en\en.zip" />
+    <EmbeddedResource Include="UsefulTips\de\de.zip" />
+    <EmbeddedResource Include="UsefulTips\es\es.zip" />
+    <EmbeddedResource Include="UsefulTips\fr\fr.zip" />
+    <EmbeddedResource Include="UsefulTips\it\it.zip" />
+    <EmbeddedResource Include="UsefulTips\ja\ja.zip" />
+    <EmbeddedResource Include="UsefulTips\ko\ko.zip" />
+    <EmbeddedResource Include="UsefulTips\ru\ru.zip" />
+    <EmbeddedResource Include="UsefulTips\zh\zh.zip" />
     <Resource Include="Resources\Up.ico" />
     <Resource Include="Resources\Excel.ico" />
     <Resource Include="Resources\Folder.ico" />
