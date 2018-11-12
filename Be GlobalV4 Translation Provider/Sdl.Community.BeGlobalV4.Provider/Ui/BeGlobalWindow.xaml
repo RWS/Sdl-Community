@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:views ="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
              xmlns:local="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
 	         ResizeMode="NoResize"
@@ -19,14 +20,61 @@
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />   
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
-	<Grid>
-            
-    </Grid>
+	
+	<Grid Height="auto">
+		<Grid.Resources>
+			<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+		</Grid.Resources>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+		</Grid.ColumnDefinitions>
+
+		<StackPanel Grid.Row="0" Orientation="Horizontal">
+			<Label Margin="0,15,20,0" HorizontalAlignment="Center" HorizontalContentAlignment="Center">Welcome to the Be Global Translation Provider. Please add your account and provider settings.</Label>
+			<Image Source="../Resources/sdl.png" Width="70" Height="50" HorizontalAlignment="Center"  Margin="0,0,0,0"></Image>
+		</StackPanel>
+
+		<TabControl Grid.Column="0" Grid.Row="1" 
+		            Margin="0,0,0,15"
+		            controls:TabControlHelper.Underlined="SelectedTabItem"
+		            controls:TabControlHelper.UnderlineMouseOverBrush="#00CED1" Foreground="#00CED1"
+		             >
+			<controls:MetroTabItem Header="Login">
+				<views:Login DataContext="{Binding LoginViewModel}"></views:Login>
+			</controls:MetroTabItem>
+			<controls:MetroTabItem Header="Provider settings">
+				<views:Settings DataContext="{Binding SettingsViewModel}"></views:Settings>
+			</controls:MetroTabItem>
+		</TabControl>
+
+		<StackPanel Grid.Row="2"  Orientation="Vertical"  Margin="10,20,10,10" VerticalAlignment="Bottom">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Width="125" >
+					<StackPanel Orientation="Horizontal">
+						<TextBlock>OK</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" IsCancel="True" >
+					<StackPanel Orientation="Horizontal">
+						<TextBlock>Cancel</TextBlock>
+					</StackPanel>
+				</Button>
+			</StackPanel>
+		</StackPanel>
+	</Grid>
 </controls:MetroWindow>
 
