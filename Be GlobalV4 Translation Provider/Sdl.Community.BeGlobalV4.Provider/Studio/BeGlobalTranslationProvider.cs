@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -41,7 +37,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			throw new NotImplementedException();
+			// here we need to get the language directions from Be Global
+			return true;
 		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
@@ -51,17 +48,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public void RefreshStatusInfo()
 		{
-			throw new NotImplementedException();
 		}
 
 		public string SerializeState()
 		{
-			throw new NotImplementedException();
+			return null;
 		}
 
 		public void LoadState(string translationProviderState)
 		{
-			throw new NotImplementedException();
 		}
 
 

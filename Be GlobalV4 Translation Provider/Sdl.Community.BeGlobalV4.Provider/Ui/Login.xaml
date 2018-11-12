@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              FontFamily="Segoe UI"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -21,11 +22,29 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 
 		</Grid.RowDefinitions>
-		<TextBlock Margin="10,20,10,15" Width="550" Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">The Be Global is a paid machine translation service. 
+		<TextBlock Margin="0,20,10,15" Width="550" Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">The Be Global is a paid machine translation service. 
 			Please purchase a Be Global Subscription in order to get an Client Id and use this service.<LineBreak/>
-			Please enter your Client Id below:</TextBlock>
-		
-    </Grid>
+			</TextBlock>
+		<TextBlock Grid.Row="1" Style="{DynamicResource TextBlockColor}" Margin="15,0,10,15">
+			Please enter your Client Id below:
+		</TextBlock>
+		<PasswordBox  
+			HorizontalAlignment="Left"
+			Name="ClientKeyBox"
+			controls:TextBoxHelper.UseFloatingWatermark="True"  
+			controls:TextBoxHelper.Watermark="Client Id"
+			controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+			controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+			Width="300"
+			Margin="15,0,0,0"	  
+			Grid.Row="2" IsEnabled="True">
+		</PasswordBox>
+		<TextBlock Name="ValidationBlock" Grid.Row="3" Grid.Column="0" Foreground="DarkRed" Margin="10,0,0,0" Visibility="Collapsed"> Client Id is required</TextBlock>
+		<TextBlock Grid.Row="4" Grid.Column="0"  Style="{DynamicResource TextBlockColor}" Margin="10,20,0,10" > This Client Id will then be used in all projects where you will be using the Be GlobalTranslation plug-in.</TextBlock>
+	</Grid>
 </UserControl>

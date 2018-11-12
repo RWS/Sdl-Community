@@ -70,6 +70,15 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Be Global MT Provider.
+        /// </summary>
+        public static string Plugin_NiceName {
+            get {
+                return ResourceManager.GetString("Plugin_NiceName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap sdl {

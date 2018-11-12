@@ -98,6 +98,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -110,7 +111,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
+    <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Model\BeGlobalTag.cs" />
     <Compile Include="Model\TagInfo.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -126,6 +129,7 @@
     <Compile Include="Studio\BeGlobalTagPlacer.cs" />
     <Compile Include="Studio\BeGlobalTranslationOptions.cs" />
     <Compile Include="Studio\BeGlobalTranslationProvider.cs" />
+    <Compile Include="Studio\BeGlobalTranslationProviderFactory.cs" />
     <Compile Include="Ui\BeGlobalWindow.xaml.cs">
       <DependentUpon>BeGlobalWindow.xaml</DependentUpon>
     </Compile>

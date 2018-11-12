@@ -6,6 +6,8 @@
 			 xmlns:views ="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
              xmlns:local="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
+             helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 	         ResizeMode="NoResize"
              WindowStartupLocation="CenterScreen"
              WindowTitleBrush="#00CED1"
@@ -29,7 +31,7 @@
 		</ResourceDictionary>
 	</Window.Resources>
 	
-	<Grid Height="auto">
+	<Grid>
 		<Grid.Resources>
 			<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
 		</Grid.Resources>
@@ -44,17 +46,18 @@
 		</Grid.ColumnDefinitions>
 
 		<StackPanel Grid.Row="0" Orientation="Horizontal">
-			<Label Margin="0,15,20,0" HorizontalAlignment="Center" HorizontalContentAlignment="Center">Welcome to the Be Global Translation Provider. Please add your account and provider settings.</Label>
+			<TextBlock Margin="15,15,20,0" HorizontalAlignment="Center" Style="{DynamicResource TextBlockColor}">Welcome to the Be Global Translation Provider. Please add your account and provider settings.</TextBlock>
 			<Image Source="../Resources/sdl.png" Width="70" Height="50" HorizontalAlignment="Center"  Margin="0,0,0,0"></Image>
 		</StackPanel>
 
 		<TabControl Grid.Column="0" Grid.Row="1" 
 		            Margin="0,0,0,15"
+					Height="300"
 		            controls:TabControlHelper.Underlined="SelectedTabItem"
 		            controls:TabControlHelper.UnderlineMouseOverBrush="#00CED1" Foreground="#00CED1"
 		             >
 			<controls:MetroTabItem Header="Login">
-				<views:Login DataContext="{Binding LoginViewModel}"></views:Login>
+				<views:Login x:Name="LoginTab" DataContext="{Binding LoginViewModel}"></views:Login>
 			</controls:MetroTabItem>
 			<controls:MetroTabItem Header="Provider settings">
 				<views:Settings DataContext="{Binding SettingsViewModel}"></views:Settings>
@@ -62,17 +65,9 @@
 		</TabControl>
 
 		<StackPanel Grid.Row="2"  Orientation="Vertical"  VerticalAlignment="Bottom">
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Width="125" >
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>OK</TextBlock>
-					</StackPanel>
-				</Button>
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" IsCancel="True" >
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>Cancel</TextBlock>
-					</StackPanel>
-				</Button>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Width="125" Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=LoginTab}"/> 
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="0,0,30,0" />
 			</StackPanel>
 		</StackPanel>
 	</Grid>

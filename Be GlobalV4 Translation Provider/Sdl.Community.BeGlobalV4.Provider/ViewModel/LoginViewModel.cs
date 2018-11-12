@@ -1,14 +1,17 @@
-﻿using Sdl.Community.BeGlobalV4.Provider.Ui;
+﻿using System.Windows.Input;
+using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Ui;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
 	public class LoginViewModel : BaseViewModel
 	{
-		private BeGlobalWindow mainWindow;
+		private readonly BeGlobalWindow _mainWindow;
+
 
 		public LoginViewModel(BeGlobalWindow mainWindow)
 		{
-			this.mainWindow = mainWindow;
-		}
+			_mainWindow = mainWindow;
+		}  
 	}
 }

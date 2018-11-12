@@ -127,4 +127,7 @@
   <data name="TranslationLookupDraftNotResentMessage" xml:space="preserve">
     <value>[segment already translated...source not re-sent]</value>
   </data>
+  <data name="Plugin_NiceName" xml:space="preserve">
+    <value>Be Global MT Provider</value>
+  </data>
 </root>
