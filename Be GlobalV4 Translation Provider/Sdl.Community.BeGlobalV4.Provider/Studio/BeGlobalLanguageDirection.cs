@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -11,6 +13,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private readonly BeGlobalTranslationProvider _beGlobalTranslationProvider;
 		private readonly BeGlobalTranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
+		private BeGlobalConnecter _beGlobalConnect;
+		private TranslationUnit _inputTu;
 
 		public ITranslationProvider TranslationProvider => _beGlobalTranslationProvider;
 		public CultureInfo SourceLanguage { get; }
@@ -23,9 +27,82 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			_languageDirection = languageDirection;
 			_options = beGlobalTranslationProvider.Options;
 		}
+
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
-			throw new NotImplementedException();
+			var translation = new Segment(_languageDirection.TargetCulture);
+			var results = new SearchResults
+			{
+				SourceSegment = segment.Duplicate()
+			};
+			if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
+			{
+				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
+				//later get these strings from resource file
+				results.Add(CreateSearchResult(segment, translation));
+				return results;
+			}
+			var newseg = segment.Duplicate();
+			if (newseg.HasTags)
+			{
+				var tagPlacer = new BeGlobalTagPlacer(newseg);
+				var translatedText = LookupBeGlobal(tagPlacer.PreparedSourceText);
+				translation = tagPlacer.GetTaggedSegment(translatedText);
+
+				results.Add(CreateSearchResult(newseg, translation));
+				return results;
+			}
+			else
+			{
+
+				var sourcetext = newseg.ToPlain();
+
+				var translatedText = LookupBeGlobal(sourcetext);
+				translation.Add(translatedText);
+
+				results.Add(CreateSearchResult(newseg, translation));
+				return results;
+			}
+		}
+
+		private SearchResult CreateSearchResult(Segment segment, Segment translation)
+		{ 
+			var tu = new TranslationUnit
+			{
+				SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
+				TargetSegment = translation
+			};
+			   
+			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
+
+			const int score = 0; //score to 0...change if needed to support scoring
+			tu.Origin = TranslationUnitOrigin.MachineTranslation;
+			var searchResult = new SearchResult(tu)
+			{
+				ScoringResult = new ScoringResult
+				{
+					BaseScore = score
+				}
+			};
+			tu.ConfirmationLevel = ConfirmationLevel.Draft;
+
+			return searchResult;
+		}
+	
+
+		private string LookupBeGlobal(string sourcetext)
+		{
+			if (_beGlobalConnect == null)
+			{
+				_beGlobalConnect = new BeGlobalConnecter(_options.ApiKey, _options.Identifier);
+			}
+			else
+			{
+				_beGlobalConnect.ApiKey = _options.ApiKey;
+			}
+
+			var translatedText = _beGlobalConnect.Translate(_languageDirection, sourcetext);
+			return translatedText;
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
@@ -43,26 +120,39 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			throw new NotImplementedException();
 		}
 
-		public SearchResults SearchTranslationUnit(SearchSettings settings,
-			TranslationUnit translationUnit)
+		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
+		{
+			_inputTu = translationUnit;
+			return SearchSegment(settings, translationUnit.SourceSegment);
+		}
+
+		public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
 		{
 			throw new NotImplementedException();
 		}
 
-		public SearchResults[] SearchTranslationUnits(SearchSettings settings,
-			TranslationUnit[] translationUnits)
+		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
 		{
-			throw new NotImplementedException();
+			// bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
+			var results = new List<SearchResults>();
+			var i = 0;
+			foreach (var tu in translationUnits)
+			{
+				if (mask == null || mask[i])
+				{
+					var result = SearchTranslationUnit(settings, tu);
+					results.Add(result);
+				}
+				else
+				{
+					results.Add(null);
+				}
+				i++;
+			}
+			return results.ToArray();
 		}
 
-		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings,
-			TranslationUnit[] translationUnits, bool[] mask)
-		{
-			throw new NotImplementedException();
-		}
-
-		public ImportResult AddTranslationUnit(TranslationUnit translationUnit,
-			ImportSettings settings)
+		public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
 		{
 			throw new NotImplementedException();
 		}

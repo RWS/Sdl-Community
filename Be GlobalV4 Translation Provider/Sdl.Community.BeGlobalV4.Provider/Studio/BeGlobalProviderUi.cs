@@ -24,16 +24,64 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var options = new BeGlobalTranslationOptions();
 			var credentials = GetCredentials(credentialStore, "beglobaltranslationprovider:///");
-			var beGlobalVm = new BeGlobalWindowViewModel();
+			var beGlobalVm = new BeGlobalWindowViewModel(options, credentials);
 			var beGlobalWindow = new BeGlobalWindow
 			{
 				DataContext = beGlobalVm
 			};
 
 			beGlobalWindow.ShowDialog();
-
-			//we need to add more code here
+			if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+			{
+				var provider = new BeGlobalTranslationProvider(options)
+				{
+					Options = beGlobalVm.Options
+				};
+				var apiKey = beGlobalVm.Options.ApiKey;
+				SetBeGlobalCredentials(credentialStore, apiKey, true);
+				return new ITranslationProvider[] { provider };
+			}
 			return null;
+		}
+
+		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs,
+			ITranslationProviderCredentialStore credentialStore)
+		{
+			var editProvider = translationProvider as BeGlobalTranslationProvider;
+
+			if (editProvider == null)
+			{
+				return false;
+			}
+
+			//get saved key if there is one and put it into options
+			var savedCredentials = GetCredentials(credentialStore, "beglobaltranslationprovider:///");
+			if (savedCredentials != null)
+			{
+				editProvider.Options.ApiKey = savedCredentials.Credential;
+			}
+			var beGlobalVm = new BeGlobalWindowViewModel(editProvider.Options,savedCredentials);
+			var beGlobalWindow = new BeGlobalWindow
+			{
+				DataContext = beGlobalVm
+			};
+			beGlobalWindow.ShowDialog();
+			if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+			{
+				editProvider.Options = beGlobalVm.Options;
+				var apiKey = editProvider.Options.ApiKey;
+				SetBeGlobalCredentials(credentialStore, apiKey, true);
+				return true;
+			}
+			return false;
+		}
+
+		private void SetBeGlobalCredentials(ITranslationProviderCredentialStore credentialStore, string apiKey, bool persistKey)
+		{
+			var uri = new Uri("beglobaltranslationprovider:///");
+			var credentials = new TranslationProviderCredential(apiKey, persistKey);
+			credentialStore.RemoveCredential(uri);
+			credentialStore.AddCredential(uri, credentials);
 		}
 
 		private TranslationProviderCredential GetCredentials(ITranslationProviderCredentialStore credentialStore, string uri)
@@ -52,12 +100,24 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
-			throw new NotImplementedException();
+			if (translationProviderUri == null)
+			{
+				throw new ArgumentNullException(nameof(translationProviderUri));
+			}
+
+			var supportsProvider = string.Equals(translationProviderUri.Scheme, BeGlobalTranslationProvider.ListTranslationProviderScheme,
+				StringComparison.OrdinalIgnoreCase);
+			return supportsProvider;
 		}
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			throw new NotImplementedException();
+			var info = new TranslationProviderDisplayInfo
+			{
+				Name = "BeGlobal Translation provider",
+				TooltipText = "BeGlobal Translation provider"
+			};
+			return info;
 		}
 
 		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState,
@@ -66,10 +126,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			throw new NotImplementedException();
 		}  
 
-		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
-		{
-			throw new NotImplementedException();
-		}
+		
 
 		
 	}

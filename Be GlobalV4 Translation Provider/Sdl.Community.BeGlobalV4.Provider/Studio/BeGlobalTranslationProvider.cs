@@ -46,7 +46,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			throw new NotImplementedException();
+			return  new BeGlobalLanguageDirection(this,languageDirection);
 		}
 
 		public void RefreshStatusInfo()
