@@ -29,8 +29,6 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 		protected override void OnLoad(EventArgs e)
 		{
-			SetSettings(Settings);
-
 			if (Settings.EncryptionState == State.DefaultState)
 			{
 				Settings.EncryptionState = IsProjectAnonymized() ? State.DataEncrypted : State.Decrypted;
@@ -41,6 +39,8 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				encryptedMessage.Text = "Click finish to untag the text";
 				decryptionBox.Enabled = false;
 			}
+
+			SetSettings(Settings);
 		}
 
 		private void StartSearchTimer()

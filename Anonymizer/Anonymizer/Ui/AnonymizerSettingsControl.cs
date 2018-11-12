@@ -99,7 +99,6 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				Name = "Encrypt"
 			};
 			expressionsGrid.Columns.Add(exportColumn);
-
 			
 			var pattern = new DataGridViewTextBoxColumn
 			{
@@ -153,9 +152,6 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 			expressionsGrid.AllowUserToAddRows = false;
 
-			ReadExistingExpressions();
-			SetSettings(Settings);
-
 			if (Settings.EncryptionState == State.DefaultState)
 			{
 				Settings.EncryptionState = IsProjectAnonymized() ? State.DataEncrypted : State.Decrypted;
@@ -166,6 +162,9 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				mainPanel.Visible = false;
 				encryptedPanel.Visible = true;
 			}
+
+			ReadExistingExpressions();
+			SetSettings(Settings);
 		}
 
 		private void UpDownDeleteButtonClick(object sender, DataGridViewCellEventArgs e)
@@ -231,6 +230,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			}
 			Settings.EncryptAll = e.IsChecked;
 			Settings.RegexPatterns = RegexPatterns;
+			expressionsGrid.Refresh();
 		}
 
 		private void ExportHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
@@ -241,6 +241,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			}
 			Settings.EnableAll = e.IsChecked;
 			Settings.RegexPatterns = RegexPatterns;
+			expressionsGrid.Refresh();
 		}
 
 		private void ReadExistingExpressions()
@@ -282,6 +283,9 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			Settings.RegexPatterns = RegexPatterns;
 			Settings.EnableAll = shouldSelect;
 			Settings.EncryptAll = shouldSelect;
+			((CustomColumnHeader) expressionsGrid.Columns[0].HeaderCell).IsChecked = shouldSelect;
+			((CustomColumnHeader)expressionsGrid.Columns[3].HeaderCell).IsChecked = shouldSelect;
+			expressionsGrid.Refresh();
 		}
 
 		private void exportBtn_Click(object sender, EventArgs e)
