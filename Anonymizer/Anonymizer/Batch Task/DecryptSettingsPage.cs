@@ -28,6 +28,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 
 		public override void Save()
 		{
+			base.Save();
 			if (_settings.EncryptionKey != AnonymizeData.EncryptData(_control.EncryptionKey, Constants.Key) && !_settings.EncryptionState.HasFlag(State.Decrypted))
 			{
 				_settings.ShouldDeanonymize = false;
@@ -39,6 +40,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			_settings.ShouldDeanonymize = _settings.EncryptionState.HasFlag(State.DataEncrypted & State.Decrypted);
 			_settings.EncryptionState = State.Decrypted;
 			_settings.EncryptionKey = _control.EncryptionKey;
+			_settings.HasBeenCheckedByControl = true;
 		}
 
 		public void DecryptPatterns()

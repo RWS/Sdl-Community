@@ -105,5 +105,12 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			}
 			return base.GetDefaultValue(settingId);
 		}
+
+		public bool? HasBeenCheckedByControl
+		{
+			get => GetSetting<bool?>(nameof(HasBeenCheckedByControl));
+			set => GetSetting<bool?>(nameof(HasBeenCheckedByControl)).Value = value;
+		}
+		
 	}
 }

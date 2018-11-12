@@ -48,6 +48,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 
 			_settings.RegexPatterns = _control.RegexPatterns;
 			_settings.SelectAll = _control.SelectAll;
+			_settings.HasBeenCheckedByControl = false;
 		}
 
 		public override bool ValidateInput()
