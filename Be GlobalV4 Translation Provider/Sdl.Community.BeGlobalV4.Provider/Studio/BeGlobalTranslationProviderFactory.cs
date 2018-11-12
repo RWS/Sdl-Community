@@ -21,7 +21,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (credentialStore.GetCredential(originalUri) != null)
 			{
 				var credentials = credentialStore.GetCredential(originalUri);
-				options.ApiKey = credentials.Credential;
+				var splitedCredentials = credentials.Credential.Split('#');
+				options.ClientId = splitedCredentials[0];
+				options.ClientSecret = splitedCredentials[1];
 			}
 			else
 			{

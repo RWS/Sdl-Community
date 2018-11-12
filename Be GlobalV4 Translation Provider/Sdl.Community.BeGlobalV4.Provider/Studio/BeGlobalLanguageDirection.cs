@@ -94,11 +94,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			if (_beGlobalConnect == null)
 			{
-				_beGlobalConnect = new BeGlobalConnecter(_options.ApiKey, _options.Identifier);
+				_beGlobalConnect = new BeGlobalConnecter(_options.ClientId, _options.ClientSecret);
 			}
 			else
 			{
-				_beGlobalConnect.ApiKey = _options.ApiKey;
+				_beGlobalConnect.ClientId = _options.ClientId;
+				_beGlobalConnect.ClientSecret = _options.ClientSecret;
+
 			}
 
 			var translatedText = _beGlobalConnect.Translate(_languageDirection, sourcetext);

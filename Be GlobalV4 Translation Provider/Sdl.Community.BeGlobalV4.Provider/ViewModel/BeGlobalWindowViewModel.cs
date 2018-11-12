@@ -23,6 +23,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			SettingsViewModel = new SettingsViewModel(mainWindow);
 			Options = options;
 			_mainWindow = mainWindow;
+			if (credentialStore != null)
+			{
+				_mainWindow.LoginTab.ClientKeyBox.Password = options.ClientId;
+				_mainWindow.LoginTab.ClientSecretBox.Password = options.ClientSecret;
+			}
 		}	
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
@@ -34,13 +39,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			if (loginTab != null)
 			{
 				var clientId = loginTab.ClientKeyBox.Password;
-				if (!string.IsNullOrEmpty(clientId))
+				var clientSecret = loginTab.ClientSecretBox.Password;
+				if (!string.IsNullOrEmpty(clientId.TrimEnd()) && !string.IsNullOrEmpty(clientSecret.TrimEnd()))
 				{
-					Options.ApiKey = clientId;
+					Options.ClientId = clientId;
+					Options.ClientSecret = clientSecret;
 					loginTab.ValidationBlock.Visibility = Visibility.Collapsed;	  
 					WindowCloser.SetDialogResult(_mainWindow,true);	
 					_mainWindow.Close(); 
-
 				}
 				else
 				{

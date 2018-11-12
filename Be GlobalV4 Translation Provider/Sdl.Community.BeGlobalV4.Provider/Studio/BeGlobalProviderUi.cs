@@ -37,8 +37,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				{
 					Options = beGlobalVm.Options
 				};
-				var apiKey = beGlobalVm.Options.ApiKey;
-				SetBeGlobalCredentials(credentialStore, apiKey, true);
+				var clientId = beGlobalVm.Options.ClientId;
+				var clientSecret = beGlobalVm.Options.ClientSecret;
+				SetBeGlobalCredentials(credentialStore, clientId,clientSecret, true);
 				return new ITranslationProvider[] { provider };
 			}
 			return null;
@@ -58,7 +59,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var savedCredentials = GetCredentials(credentialStore, "beglobaltranslationprovider:///");
 			if (savedCredentials != null)
 			{
-				editProvider.Options.ApiKey = savedCredentials.Credential;
+				var splitedCredentials = savedCredentials.Credential.Split('#');
+				var clientId = splitedCredentials[0];
+				var clientSecret = splitedCredentials[1];
+
+				editProvider.Options.ClientId = clientId;
+				editProvider.Options.ClientSecret = clientSecret;
 			}
 			var beGlobalWindow = new BeGlobalWindow();
 			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow,editProvider.Options,savedCredentials);
@@ -68,17 +74,20 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 			{
 				editProvider.Options = beGlobalVm.Options;
-				var apiKey = editProvider.Options.ApiKey;
-				SetBeGlobalCredentials(credentialStore, apiKey, true);
+				var clientId = editProvider.Options.ClientId;
+				var clientSecret = beGlobalVm.Options.ClientSecret;	  
+				SetBeGlobalCredentials(credentialStore, clientId, clientSecret, true);
 				return true;
 			}
 			return false;
 		}
 
-		private void SetBeGlobalCredentials(ITranslationProviderCredentialStore credentialStore, string apiKey, bool persistKey)
+		private void SetBeGlobalCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret,bool persistKey)
 		{
 			var uri = new Uri("beglobaltranslationprovider:///");
-			var credentials = new TranslationProviderCredential(apiKey, persistKey);
+
+			var credential = $"{clientId}#{clientSecret}";
+			var credentials = new TranslationProviderCredential(credential, persistKey);
 			credentialStore.RemoveCredential(uri);
 			credentialStore.AddCredential(uri, credentials);
 		}

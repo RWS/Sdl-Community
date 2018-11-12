@@ -16,16 +16,14 @@ using Sdl.LanguagePlatform.Core;
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
 	public class BeGlobalConnecter
-	{
+	{  
+		public string ClientId { get; set; }
+		public string ClientSecret { get; set; }
 
-		public string ApiKey { get; set; }
-		private readonly string _pluginVersion = "";
-		private readonly string _identifier;
-
-		public BeGlobalConnecter(string key, string identifier)
+		public BeGlobalConnecter(string clientId,string clientSecret)
 		{
-			ApiKey = key;
-			_identifier = identifier;	  
+			ClientId = clientId;
+			ClientSecret = clientSecret;
 		}
 
 		public string Translate(LanguagePair languageDirection, string sourcetext)
