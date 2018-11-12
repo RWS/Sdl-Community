@@ -11,6 +11,7 @@ using System.Xml;
 using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
@@ -29,10 +30,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public string Translate(LanguagePair languageDirection, string sourcetext)
 		{
 			const string tagOption = @"xml";
-			var targetLanguage = languageDirection.TargetCulture.TwoLetterISOLanguageName;
-			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
+			var targetLanguage = languageDirection.TargetCulture.ThreeLetterISOLanguageName;
+			var sourceLanguage = languageDirection.SourceCulture.ThreeLetterISOLanguageName;
 			var translatedText = string.Empty;
 
+			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com",ClientId,ClientSecret,sourceLanguage,targetLanguage, "genericnmt", false);
+			translatedText = beGlobalTranslator.TranslateText(sourcetext);
 			//try
 			//{
 			//	var client = new RestClient(@"https://api.deepl.com/v1")
