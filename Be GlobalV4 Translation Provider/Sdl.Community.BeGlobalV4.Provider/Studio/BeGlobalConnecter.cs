@@ -20,11 +20,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 	{  
 		public string ClientId { get; set; }
 		public string ClientSecret { get; set; }
+		public bool UseClientAuthentication { get; set; }
 
-		public BeGlobalConnecter(string clientId,string clientSecret)
+		public BeGlobalConnecter(string clientId,string clientSecret, bool useClientAuthentication)
 		{
 			ClientId = clientId;
 			ClientSecret = clientSecret;
+			UseClientAuthentication = useClientAuthentication;
 		}
 
 		public string Translate(LanguagePair languageDirection, string sourcetext)
@@ -34,7 +36,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var sourceLanguage = languageDirection.SourceCulture.ThreeLetterISOLanguageName;
 			var translatedText = string.Empty;
 
-			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com",ClientId,ClientSecret,sourceLanguage,targetLanguage, "genericnmt", false);
+			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com",ClientId,ClientSecret,sourceLanguage,targetLanguage, "genericnmt", UseClientAuthentication);
 			translatedText = beGlobalTranslator.TranslateText(sourcetext);
 			//try
 			//{

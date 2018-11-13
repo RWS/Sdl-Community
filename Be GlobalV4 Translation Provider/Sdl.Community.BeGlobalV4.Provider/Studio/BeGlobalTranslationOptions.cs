@@ -15,7 +15,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		}
 
 		public string ClientId { get; set; }
-		public string ClientSecret { get; set; }						
+		public string ClientSecret { get; set; }
+		
 		public Uri Uri => _uriBuilder.Uri;		 
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 
@@ -29,8 +30,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			get => ResendDraftsParameter != null && Convert.ToBoolean(ResendDraftsParameter);
 			set => ResendDraftsParameter = value.ToString();
 		}
-
-		public string Identifier { get; set; }
+		public string UseClientAuthenticationParameter
+		{
+			get => GetStringParameter("useClient");
+			set => SetStringParameter("useClient", value);
+		}
+		public bool UseClientAuthentication
+		{
+			get => UseClientAuthenticationParameter != null && Convert.ToBoolean(UseClientAuthenticationParameter);
+			set => UseClientAuthenticationParameter = value.ToString();
+		}
 
 		private string GetStringParameter(string p)
 		{

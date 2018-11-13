@@ -15,7 +15,7 @@
              FontFamily="Segoe UI"	
 			 Title="Be Global Translation provider"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Height="450" Width="600">
+             d:DesignHeight="450" d:DesignWidth="800" Height="500" Width="600">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -52,7 +52,7 @@
 
 		<TabControl Grid.Column="0" Grid.Row="1" 
 		            Margin="0,0,0,15"
-					Height="300"
+					Height="auto"
 		            controls:TabControlHelper.Underlined="SelectedTabItem"
 		            controls:TabControlHelper.UnderlineMouseOverBrush="#00CED1" Foreground="#00CED1"
 		             >

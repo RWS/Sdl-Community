@@ -135,6 +135,7 @@
     <Compile Include="Ui\BeGlobalWindow.xaml.cs">
       <DependentUpon>BeGlobalWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Authentication.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\BeGlobalWindowViewModel.cs" />
     <Compile Include="Ui\Login.xaml.cs">
