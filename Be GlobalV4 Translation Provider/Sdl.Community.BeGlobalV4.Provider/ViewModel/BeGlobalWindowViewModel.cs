@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Forms;
+﻿using System.Windows;
 using System.Windows.Input;
-using MahApps.Metro.Controls;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -15,22 +11,27 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 	{
 		public BeGlobalTranslationOptions Options { get; set; }
 		public LoginViewModel LoginViewModel { get; set; }
-		public SettingsViewModel SettingsViewModel { get; set; }
-		
-
+		public SettingsViewModel SettingsViewModel { get; set; }	
 		private ICommand _okCommand;
 		private readonly BeGlobalWindow _mainWindow;
 
 		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options, TranslationProviderCredential credentialStore)
 		{
-			LoginViewModel = new LoginViewModel(mainWindow);
+			LoginViewModel = new LoginViewModel(mainWindow, options);
 			SettingsViewModel = new SettingsViewModel(mainWindow);
 			Options = options;
-			_mainWindow = mainWindow;	
-			if (credentialStore != null)
+			_mainWindow = mainWindow;
+
+			if (credentialStore == null) return;
+			if (options.UseClientAuthentication)
 			{
 				_mainWindow.LoginTab.ClientKeyBox.Password = options.ClientId;
 				_mainWindow.LoginTab.ClientSecretBox.Password = options.ClientSecret;
+			}
+			else
+			{  
+				LoginViewModel.Email = options.ClientId;
+				_mainWindow.LoginTab.PasswordBox.Password = options.ClientSecret;
 			}
 		}	
 

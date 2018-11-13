@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
@@ -14,7 +15,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private string _userAuthVisibility;
 		private string _email;
 
-		public LoginViewModel(BeGlobalWindow mainWindow)
+		public LoginViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options)
 		{
 			_mainWindow = mainWindow;	
 			ClientAuthVisibility = "Collapsed";
@@ -31,7 +32,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					Type = "User"
 				}
 			};
-			SelectedOption = AuthenticationOptions[1];
+			SelectedOption = options.UseClientAuthentication ? AuthenticationOptions[0] : AuthenticationOptions[1];	  
 		}
 
 		public List<Authentication> AuthenticationOptions { get; set; }

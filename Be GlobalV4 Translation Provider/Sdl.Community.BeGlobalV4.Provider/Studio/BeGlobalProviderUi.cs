@@ -132,10 +132,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			ITranslationProviderCredentialStore credentialStore)
 		{
 			throw new NotImplementedException();
-		}  
-
-		
-
-		
+		} 
 	}
 }
