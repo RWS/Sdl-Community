@@ -9,7 +9,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
 	[TranslationProviderFactory(Id = "BeGlobalTranslationProviderFactory",
 		Name = "BeGlobalTranslationProviderFactory",
-		Description = "Be Global Translation Provider")]
+		Description = "BeGlobal4 Translation Provider")]
 	public class BeGlobalTranslationProviderFactory	: ITranslationProviderFactory
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,

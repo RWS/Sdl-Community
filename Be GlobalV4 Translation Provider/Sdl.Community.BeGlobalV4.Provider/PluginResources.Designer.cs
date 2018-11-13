@@ -70,7 +70,7 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Be Global MT Provider.
+        ///   Looks up a localized string similar to BeGlobal4 MT Provider.
         /// </summary>
         public static string Plugin_NiceName {
             get {

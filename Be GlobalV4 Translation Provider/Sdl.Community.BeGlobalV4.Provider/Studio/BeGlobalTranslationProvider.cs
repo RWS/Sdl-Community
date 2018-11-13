@@ -9,7 +9,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public static readonly string ListTranslationProviderScheme = "beglobaltranslationprovider";
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, "BeGlobal");
 		public Uri Uri => Options.Uri;
-		public string Name => "Be Global Translation provider";
+		public string Name => "BeGlobal4 Translation Provider";
 		public bool SupportsTaggedInput => true;  
 		public bool SupportsScoring => false;	  
 		public bool SupportsSearchForTranslationUnits => true; 
