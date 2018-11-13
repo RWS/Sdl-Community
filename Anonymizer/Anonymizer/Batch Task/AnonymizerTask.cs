@@ -1,5 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Windows;
+using System.Windows.Threading;
 using Newtonsoft.Json;
 using Sdl.Community.projectAnonymizer.Helpers;
 using Sdl.Community.projectAnonymizer.Models;
@@ -8,6 +12,7 @@ using Sdl.Community.projectAnonymizer.Ui;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
@@ -28,6 +33,11 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			{
 				acceptWindow.ShowDialog();
 			}
+
+			//if (Application.Current == null)
+			//	new Application();
+
+			//Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 		}
 
 		private void CreateAcceptFile()
@@ -80,8 +90,40 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			{
 				ProjectBackup.CreateProjectBackup(projectController.CurrentProject.FilePath);
 			}
+
 			var key = _settings.EncryptionKey == "<dummy-encryption-key>" ? "" : AnonymizeData.DecryptData(_settings.EncryptionKey, Constants.Key);
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid, key, _settings.EncryptionState.HasFlag(State.PatternsEncrypted))));
+
+			var projectFiles = projectController.CurrentProject.GetTargetLanguageFiles();
+			var unParsedProjectFiles = new List<ProjectFile>();
+
+			foreach (var file in projectFiles)
+			{
+				if (TaskFiles.GetIds().Contains(file.Id))
+				{
+					continue;
+				}
+				unParsedProjectFiles.Add(file);
+			}
+
+			var editor = SdlTradosStudio.Application.GetController<EditorController>();
+			var activeDocs = editor.GetDocuments().ToList();
+			
+			foreach (var activeDoc in activeDocs)
+			{
+				Application.Current.Dispatcher.Invoke(() => { editor.Close(activeDoc); });
+			}
+		
+			foreach (var file in unParsedProjectFiles)
+			{
+
+				var converter = DefaultFileTypeManager.CreateInstance(true)
+					.GetConverterToDefaultBilingual(file.LocalFilePath, file.LocalFilePath, null);
+				var contentProcessor = new AnonymizerPreProcessor(selectedPatternsFromGrid, key,
+					_settings.EncryptionState.HasFlag(State.PatternsEncrypted));
+				converter.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
+				converter.Parse();
+			}
 		}
 	}
 
@@ -111,7 +153,36 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			if (!_settings.ShouldDeanonymize ?? false)
 				return;
 
+			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings)));
+
+			var projectFiles = projectController.CurrentProject.GetTargetLanguageFiles();
+			var unParsedProjectFiles = new List<ProjectFile>();
+
+			foreach (var file in projectFiles)
+			{
+				if (TaskFiles.GetIds().Contains(file.Id))
+				{
+					continue;
+				}
+				unParsedProjectFiles.Add(file);
+			}
+
+			var editor = SdlTradosStudio.Application.GetController<EditorController>();
+			var activeDocs = editor.GetDocuments().ToList();
+
+			foreach (var activeDoc in activeDocs)
+			{
+				Application.Current.Dispatcher.Invoke(() => { editor.Close(activeDoc); });
+			}
+
+			foreach (var file in unParsedProjectFiles)
+			{
+				var converter = DefaultFileTypeManager.CreateInstance(true).GetConverterToDefaultBilingual(file.LocalFilePath, file.LocalFilePath, null);
+				var contentProcessor = new DecryptDataProcessor(_settings);
+				converter.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
+				converter.Parse();
+			}
 		}
 
 		public override void TaskComplete()
