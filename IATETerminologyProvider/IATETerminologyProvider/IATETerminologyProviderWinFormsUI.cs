@@ -1,4 +1,5 @@
-﻿using Sdl.Terminology.TerminologyProvider.Core;
+﻿using IATETerminologyProvider.Service;
+using Sdl.Terminology.TerminologyProvider.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,50 +10,46 @@ using System.Windows.Forms;
 namespace IATETerminologyProvider
 {
 	[TerminologyProviderWinFormsUI]
-	class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI
+	public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI
 	{
-		public bool SupportsEditing
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+		public string TypeName => PluginResources.IATETerminologyProviderName;
+		public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
 
-		public string TypeDescription
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
-
-		public string TypeName
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
-
+		public bool SupportsEditing => true;
+		
 		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
 		{
-			throw new NotImplementedException();
+			var result = new List<ITerminologyProvider>();
+			try
+			{
+				var IATETerminologyProvider = new IATETerminologyProvider();
+
+				result.Add(IATETerminologyProvider);
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+			return result.ToArray();
 		}
 
 		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 		{
-			throw new NotImplementedException();
+			return true;
 		}
 
 		public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
 		{
-			throw new NotImplementedException();
+			return new TerminologyProviderDisplayInfo
+			{
+				Name = "IATE Terminology Provider",
+				TooltipText = "IATE Terminology Provider"
+			};
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
-			throw new NotImplementedException();
+			return terminologyProviderUri.Scheme == "IATEglossary";
 		}
 	}
 }

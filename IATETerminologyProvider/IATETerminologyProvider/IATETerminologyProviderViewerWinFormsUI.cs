@@ -12,11 +12,13 @@ namespace IATETerminologyProvider
 	[TerminologyProviderViewerWinFormsUI]
 	class IATETerminologyProviderViewerWinFormsUI : ITerminologyProviderViewerWinFormsUI
 	{
+		private IATETerminologyProvider _terminologyProvider;
+
 		public Control Control
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return null;
 			}
 		}
 
@@ -24,7 +26,7 @@ namespace IATETerminologyProvider
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return true;
 			}
 		}
 
@@ -32,7 +34,7 @@ namespace IATETerminologyProvider
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return null;
 			}
 
 			set
@@ -46,37 +48,32 @@ namespace IATETerminologyProvider
 
 		public void AddAndEditTerm(IEntry term, string source, string target)
 		{
-			throw new NotImplementedException();
 		}
 
 		public void AddTerm(string source, string target)
 		{
-			throw new NotImplementedException();
 		}
 
 		public void EditTerm(IEntry term)
 		{
-			throw new NotImplementedException();
 		}
 
 		public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
 		{
-			throw new NotImplementedException();
+			_terminologyProvider = (IATETerminologyProvider)terminologyProvider;
 		}
 
 		public void JumpToTerm(IEntry entry)
 		{
-			throw new NotImplementedException();
 		}
 
 		public void Release()
 		{
-			throw new NotImplementedException();
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
-			throw new NotImplementedException();
+			return terminologyProviderUri.Scheme == "IATEglossary";
 		}
 	}
 }

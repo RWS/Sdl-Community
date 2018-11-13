@@ -9,11 +9,15 @@ namespace IATETerminologyProvider
 {
 	class IATETerminologyProvider : AbstractTerminologyProvider
 	{
+		public IATETerminologyProvider()
+		{
+
+		}
 		public override IDefinition Definition
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return null;
 			}
 		}
 
@@ -21,7 +25,8 @@ namespace IATETerminologyProvider
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return null;
+
 			}
 		}
 
@@ -29,7 +34,8 @@ namespace IATETerminologyProvider
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return null;
+
 			}
 		}
 
@@ -37,28 +43,32 @@ namespace IATETerminologyProvider
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return new Uri("https://iate.europa.eu/em-api/entries/_search");
 			}
 		}
 
 		public override IEntry GetEntry(int id)
 		{
-			throw new NotImplementedException();
+			return null;
+
 		}
 
 		public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
 		{
-			throw new NotImplementedException();
+			return null;
+
 		}
 
 		public override IList<ILanguage> GetLanguages()
 		{
-			throw new NotImplementedException();
+			return null;
+
 		}
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
-			throw new NotImplementedException();
+			return null;
+
 		}
 	}
 }

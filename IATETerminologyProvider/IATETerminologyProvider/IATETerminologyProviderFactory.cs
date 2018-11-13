@@ -10,12 +10,12 @@ namespace IATETerminologyProvider
 	{
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
 		{
-			throw new NotImplementedException();
+			return null;
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
-			throw new NotImplementedException();
+			return terminologyProviderUri.Scheme == "IATEglossary";
 		}
 	}
 }
