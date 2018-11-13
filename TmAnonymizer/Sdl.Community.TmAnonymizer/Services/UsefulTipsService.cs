@@ -22,9 +22,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		public void AddUsefulTips()
 		{
 			try
-			{
-				var defaultLanguage = "en";
-				var pathService = new PathService(defaultLanguage);
+			{				
+				var pathService = new PathService();
 				var tipsService = new TipsProvider(pathService);
 
 				var tipContexts = new List<TipContext>();
