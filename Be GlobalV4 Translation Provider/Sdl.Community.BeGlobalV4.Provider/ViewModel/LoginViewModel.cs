@@ -10,16 +10,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
 	public class LoginViewModel : BaseViewModel
 	{
-		private readonly BeGlobalWindow _mainWindow;
 		private Authentication _selectedOption;
 		private string _clientAuthVisibility;
 		private string _userAuthVisibility;
 		private string _email;
 		private ICommand _navigateCommand;
 
-		public LoginViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options)
+		public LoginViewModel(BeGlobalTranslationOptions options)
 		{
-			_mainWindow = mainWindow;	
 			ClientAuthVisibility = "Collapsed";
 			UserAuthVisibility = "Visible";
 			AuthenticationOptions = new List<Authentication>

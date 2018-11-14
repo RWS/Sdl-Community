@@ -17,8 +17,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options, TranslationProviderCredential credentialStore)
 		{
-			LoginViewModel = new LoginViewModel(mainWindow, options);
-			SettingsViewModel = new SettingsViewModel(mainWindow);
+			LoginViewModel = new LoginViewModel(options);
+			SettingsViewModel = new SettingsViewModel(options);
 			Options = options;
 			_mainWindow = mainWindow;
 
@@ -53,6 +53,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private bool IsWindowValid(Login loginTab)
 		{
+			Options.ResendDrafts = SettingsViewModel.ReSendChecked;
 			if (LoginViewModel.SelectedOption.Type.Equals("User"))
 			{
 				var password = loginTab.PasswordBox.Password;
