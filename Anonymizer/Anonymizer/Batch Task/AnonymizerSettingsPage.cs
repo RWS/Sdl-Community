@@ -1,4 +1,7 @@
-﻿using Sdl.Community.projectAnonymizer.Helpers;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using Sdl.Community.projectAnonymizer.Helpers;
+using Sdl.Community.projectAnonymizer.Models;
 using Sdl.Community.projectAnonymizer.Process_Xliff;
 using Sdl.Community.projectAnonymizer.Ui;
 using Sdl.Core.Settings;
@@ -46,9 +49,24 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 				_settings.EncryptionKey = _control.EncryptionKey;
 			}
 
-			_settings.RegexPatterns = _control.RegexPatterns;
+			_settings.RegexPatterns = GetListOfValidRegexPatterns();
 			_settings.SelectAll = _control.SelectAll;
 			_settings.HasBeenCheckedByControl = false;
+		}
+
+		private BindingList<RegexPattern> GetListOfValidRegexPatterns()
+		{
+			var  listOfValidPatterns = new BindingList<RegexPattern>();
+
+			foreach (var pattern in _control.RegexPatterns)
+			{
+				if (!string.IsNullOrEmpty(pattern.Pattern))
+				{
+					listOfValidPatterns.Add(pattern);
+				}
+			}
+
+			return listOfValidPatterns;
 		}
 
 		public override bool ValidateInput()

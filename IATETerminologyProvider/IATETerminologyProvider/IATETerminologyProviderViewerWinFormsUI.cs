@@ -1,11 +1,7 @@
-﻿using Sdl.Terminology.TerminologyProvider.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
+using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace IATETerminologyProvider
 {
@@ -14,37 +10,15 @@ namespace IATETerminologyProvider
 	{
 		private IATETerminologyProvider _terminologyProvider;
 
-		public Control Control
-		{
-			get
-			{
-				return null;
-			}
-		}
-
-		public bool Initialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public IEntry SelectedTerm
-		{
-			get
-			{
-				return null;
-			}
-
-			set
-			{
-				throw new NotImplementedException();
-			}
-		}
-
-		public event EventHandler<EntryEventArgs> SelectedTermChanged;
+		public Control Control { get; set; }
+		
+		public bool Initialized => true;
+		public IEntry SelectedTerm { get; set; }
 		public event EventHandler TermChanged;
+		public event EventHandler<EntryEventArgs> SelectedTermChanged;
+		public event Action<IEntry> JumpToTermAction;
+		public event Action<string, string> AddTermAction;
+
 
 		public void AddAndEditTerm(IEntry term, string source, string target)
 		{
@@ -52,6 +26,7 @@ namespace IATETerminologyProvider
 
 		public void AddTerm(string source, string target)
 		{
+			AddTermAction?.Invoke(source, target);
 		}
 
 		public void EditTerm(IEntry term)
@@ -65,15 +40,17 @@ namespace IATETerminologyProvider
 
 		public void JumpToTerm(IEntry entry)
 		{
+			JumpToTermAction?.Invoke(entry);
 		}
 
 		public void Release()
 		{
+			_terminologyProvider = null;
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
-			return terminologyProviderUri.Scheme == "IATEglossary";
+			return terminologyProviderUri.Scheme == "iateglossary";
 		}
 	}
 }
