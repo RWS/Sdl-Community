@@ -33,11 +33,6 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			{
 				acceptWindow.ShowDialog();
 			}
-
-			//if (Application.Current == null)
-			//	new Application();
-
-			//Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 		}
 
 		private void CreateAcceptFile()
@@ -94,6 +89,29 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			var key = _settings.EncryptionKey == "<dummy-encryption-key>" ? "" : AnonymizeData.DecryptData(_settings.EncryptionKey, Constants.Key);
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid, key, _settings.EncryptionState.HasFlag(State.PatternsEncrypted))));
 
+			ParseRestOfFiles(projectController, selectedPatternsFromGrid, key);
+		}
+
+		private void ParseRestOfFiles(ProjectsController projectController, List<RegexPattern> selectedPatternsFromGrid, string key)
+		{
+			var unParsedProjectFiles = GetUnparsedFiles(projectController);
+
+			CloseOpenDocuments();
+
+			foreach (var file in unParsedProjectFiles)
+			{
+
+				var converter = DefaultFileTypeManager.CreateInstance(true)
+					.GetConverterToDefaultBilingual(file.LocalFilePath, file.LocalFilePath, null);
+				var contentProcessor = new AnonymizerPreProcessor(selectedPatternsFromGrid, key,
+					_settings.EncryptionState.HasFlag(State.PatternsEncrypted));
+				converter.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
+				converter.Parse();
+			}
+		}
+
+		private List<ProjectFile> GetUnparsedFiles(ProjectsController projectController)
+		{
 			var projectFiles = projectController.CurrentProject.GetTargetLanguageFiles();
 			var unParsedProjectFiles = new List<ProjectFile>();
 
@@ -106,23 +124,17 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 				unParsedProjectFiles.Add(file);
 			}
 
+			return unParsedProjectFiles;
+		}
+
+		private static void CloseOpenDocuments()
+		{
 			var editor = SdlTradosStudio.Application.GetController<EditorController>();
 			var activeDocs = editor.GetDocuments().ToList();
-			
+
 			foreach (var activeDoc in activeDocs)
 			{
 				Application.Current.Dispatcher.Invoke(() => { editor.Close(activeDoc); });
-			}
-		
-			foreach (var file in unParsedProjectFiles)
-			{
-
-				var converter = DefaultFileTypeManager.CreateInstance(true)
-					.GetConverterToDefaultBilingual(file.LocalFilePath, file.LocalFilePath, null);
-				var contentProcessor = new AnonymizerPreProcessor(selectedPatternsFromGrid, key,
-					_settings.EncryptionState.HasFlag(State.PatternsEncrypted));
-				converter.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
-				converter.Parse();
 			}
 		}
 	}
