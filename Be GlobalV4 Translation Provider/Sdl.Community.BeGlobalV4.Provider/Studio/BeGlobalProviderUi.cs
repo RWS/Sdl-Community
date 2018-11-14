@@ -123,7 +123,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var info = new TranslationProviderDisplayInfo
 			{
 				Name = "BeGlobal Translation provider",
-				TooltipText = "BeGlobal Translation provider"
+				TooltipText = "BeGlobal Translation provider",
+				SearchResultImage = PluginResources.logoRe,
+				TranslationProviderIcon = PluginResources.global
 			};
 			return info;
 		}

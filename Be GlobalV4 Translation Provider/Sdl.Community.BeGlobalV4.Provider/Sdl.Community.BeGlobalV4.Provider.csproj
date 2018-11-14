@@ -148,6 +148,8 @@
     <Compile Include="ViewModel\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\logoRe.png" />
+    <Resource Include="Resources\global.ico" />
     <Resource Include="Resources\logoB.png" />
     <Resource Include="Resources\sdl.png" />
     <EmbeddedResource Include="PluginResources.resx">

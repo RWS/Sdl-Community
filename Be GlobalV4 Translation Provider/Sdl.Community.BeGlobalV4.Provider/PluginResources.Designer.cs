@@ -61,11 +61,31 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon global {
+            get {
+                object obj = ResourceManager.GetObject("global", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap logoB {
             get {
                 object obj = ResourceManager.GetObject("logoB", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap logoRe {
+            get {
+                object obj = ResourceManager.GetObject("logoRe", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

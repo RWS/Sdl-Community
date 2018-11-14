@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
@@ -14,6 +15,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private string _clientAuthVisibility;
 		private string _userAuthVisibility;
 		private string _email;
+		private ICommand _navigateCommand;
 
 		public LoginViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options)
 		{
@@ -33,6 +35,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				}
 			};
 			SelectedOption = options.UseClientAuthentication ? AuthenticationOptions[0] : AuthenticationOptions[1];	  
+		}
+
+		public ICommand NavigateCommand => _navigateCommand ?? (_navigateCommand = new RelayCommand(Navigate));
+
+		private void Navigate(object obj)
+		{
+			Process.Start("https://translate.sdlbeglobal.com/");
 		}
 
 		public List<Authentication> AuthenticationOptions { get; set; }
