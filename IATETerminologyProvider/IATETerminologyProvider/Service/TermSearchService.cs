@@ -24,6 +24,18 @@ namespace IATETerminologyProvider.Service
 			request.AddParameter("Content-Type", "application/json");
 			request.AddParameter("Accept", "application/json");
 
+			var bodyModel = SetApiRequestBodyValues(destination, source, text);
+			request.AddJsonBody(bodyModel);
+
+			var response = client.Execute(request);
+
+			//To Do: map needed information from response into IList<ISearchResult> and return the list
+			return result;
+		}
+
+		// Set the needed fields for the API search request
+		private object SetApiRequestBodyValues(ILanguage destination, ILanguage source, string text)
+		{
 			var targetLanguges = new List<string>();
 			targetLanguges.Add(destination.Locale.TwoLetterISOLanguageName);
 
@@ -49,13 +61,7 @@ namespace IATETerminologyProvider.Service
 				filter_by_domains = new List<int>(),
 				query_operator = 1
 			};
-
-			request.AddJsonBody(bodyModel);
-
-			var response = client.Execute(request);
-
-			//To Do: map needed information from response into IList<ISearchResult> and return the list
-			return result;
+			return bodyModel;
 		}
 	}
 }
