@@ -261,9 +261,8 @@
             this.pictureBox1.Size = new System.Drawing.Size(180, 24);
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
-            this.toolTip2.SetToolTip(this.pictureBox1, "Leaderboard score:\r\nCompete against translators from around the world for prizes " +
-        "and prestige!  Earn points for keeping a high efficiency percentage in all of yo" +
-        "ur completed projects.");
+            this.toolTip2.SetToolTip(this.pictureBox1, "Leaderboard score:\r\n Earn points for keeping a high efficiency percentage in all " +
+        "of your translation projects.");
             // 
             // toolTip1
             // 
