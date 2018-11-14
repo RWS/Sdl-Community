@@ -28,9 +28,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 				var tipContexts = new List<TipContext>();
 				foreach (var language in tipsProvider.SupportedLanguages)
-				{
-					pathService.LanguageId = language;
-
+				{					
 					var tipsLanguageFullPath = GetTipsLanguagePath(language);
 
 					CreateTipsImportContent(tipsLanguageFullPath, language);
