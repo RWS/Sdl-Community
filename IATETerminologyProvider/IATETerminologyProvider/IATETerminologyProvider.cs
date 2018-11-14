@@ -49,10 +49,12 @@ namespace IATETerminologyProvider
 			var result = new List<ISearchResult>();
 
 			var searchService = new TermSearchService(_providerSettings);
-			searchService.GetTerms(text, source, destination, maxResultsCount);
-			
-			// To Do: add the results from the response in the result
-
+			var t = Task.Factory.StartNew(() =>
+			{
+				// result = searchService.GetTerms(text, source, destination, maxResultsCount);
+				searchService.GetTerms(text, source, destination, maxResultsCount);
+			});
+			t.Wait();
 			return result;
 		}
 
