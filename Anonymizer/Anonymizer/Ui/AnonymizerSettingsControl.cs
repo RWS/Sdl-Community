@@ -224,6 +224,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 		private void EncryptHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
 		{
+			RemoveEmptyRows();
 			foreach (var pattern in RegexPatterns)
 			{
 				pattern.ShouldEncrypt = e.IsChecked;
@@ -235,6 +236,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 		private void ExportHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
 		{
+			RemoveEmptyRows();
 			foreach (var pattern in RegexPatterns)
 			{
 				pattern.ShouldEnable = e.IsChecked;
@@ -274,6 +276,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 		private void selectAll_CheckedChanged(object sender, EventArgs e)
 		{
+			RemoveEmptyRows();
 			var shouldSelect = ((CheckBox)sender).Checked;
 			foreach (var pattern in RegexPatterns)
 			{
@@ -290,6 +293,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 		private void exportBtn_Click(object sender, EventArgs e)
 		{
+			RemoveEmptyRows();
 			if (expressionsGrid.SelectedRows.Count > 0)
 			{
 				var fileDialog = new SaveFileDialog
@@ -316,8 +320,25 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			}
 		}
 
+		private void RemoveEmptyRows()
+		{
+			var regexPatternsCount = RegexPatterns.Count;
+
+			for (int i=0; i<regexPatternsCount; i++)
+			{
+				if (string.IsNullOrWhiteSpace(RegexPatterns[i].Pattern))
+				{
+					RegexPatterns.RemoveAt(i);
+					i--;
+					regexPatternsCount--;
+				}
+			}
+			
+		}
+
 		private void importBtn_Click(object sender, EventArgs e)
 		{
+			RemoveEmptyRows();
 			var fileDialog = new OpenFileDialog
 			{
 				Title = @"Please select the files you want to import",
@@ -382,7 +403,9 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 		private void addNewPatternButton_Click(object sender, EventArgs e)
 		{
+			RemoveEmptyRows();
 			RegexPatterns.AddNew();
+			expressionsGrid.Focus();
 		}
 	}
 }
