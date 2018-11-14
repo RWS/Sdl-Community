@@ -90,10 +90,10 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-	<Style x:Key="StudioGreenButtonsStyle" TargetType="{x:Type Button}">
+	<Style x:Key="BeGlobalBlueButtonsStyle" TargetType="{x:Type Button}">
 		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-		<Setter Property="Background" Value="#00CED1"/>
-		<Setter Property="BorderBrush" Value="#00CED1"/>
+		<Setter Property="Background" Value="#0E202B"/>
+		<Setter Property="BorderBrush" Value="#0E202B"/>
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="Foreground" Value="#ffffff"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>

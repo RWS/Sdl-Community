@@ -148,6 +148,7 @@
     <Compile Include="ViewModel\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\logoB.png" />
     <Resource Include="Resources\sdl.png" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

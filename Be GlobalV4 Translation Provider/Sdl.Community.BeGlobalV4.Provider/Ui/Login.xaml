@@ -32,10 +32,12 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<TextBlock Margin="0,20,10,15" Width="550" Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">The BeGlobal is a paid machine translation service. 
-			Please purchase a BeGlobal Subscription in order to get an Client Id and use this service.<LineBreak/>
+		<TextBlock Margin="15,20,10,15" Width="550" Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please enter your valid SDL BeGlobal account information.  The Client ID and Secret can be retrieved by a BeGlobal admin user from the 
+			<Hyperlink NavigateUri="https://translate.sdlbeglobal.com/">
+				BeGlobal user interface.<LineBreak/>
+			</Hyperlink>
+			The Username and Password are the same as the logins you use for the BeGlobal user interface.
 			</TextBlock>
 		<TextBlock Grid.Row="1" Style="{DynamicResource TextBlockColor}" Margin="15,0,10,5">
 			Please chose what authentication type you want to use:
@@ -106,6 +108,5 @@
 		</StackPanel>
 	
 		<TextBlock Name="ValidationBlock" Grid.Row="6" Grid.Column="0" Foreground="DarkRed" Margin="15,0,0,0" Visibility="Collapsed"> Both fields are required</TextBlock>
-		<TextBlock Grid.Row="7" Grid.Column="0"  Style="{DynamicResource TextBlockColor}" Margin="15,20,0,10" > Those credentials will then be used in all projects where you will be using the Be GlobalTranslation plug-in.</TextBlock>
 	</Grid>
 </UserControl>
