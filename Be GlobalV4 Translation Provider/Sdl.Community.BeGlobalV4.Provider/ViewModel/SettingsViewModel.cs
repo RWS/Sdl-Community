@@ -22,7 +22,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				new TranslationModel
 				{
 					DisplayName = "Generic MT",
-					Model = "genericmt"
+					Model = "genericnmt"
 				},
 				new TranslationModel
 				{

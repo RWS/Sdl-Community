@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:views ="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
-             xmlns:local="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
              helpers:WindowCloser.DialogResult="{Binding DialogResult}"

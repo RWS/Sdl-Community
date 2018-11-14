@@ -39,15 +39,33 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
 			var words = rgx.Matches(sourcetext);
 
+			//For german and < > characters 
 			if (words.Count > 0)
 			{
 				var matchesIndexes = GetMatchesIndexes(sourcetext, words);
 				sourcetext = ReplaceCharacters(matchesIndexes, sourcetext);
-			}  
+			}
+
+			// for < words > 
+			var shouldEncodeBrackets = ShouldEncodeBrackets(sourcetext);
+			if (shouldEncodeBrackets)
+			{
+				sourcetext = EncodeBracket(sourcetext);
+			}
+				
 
 			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", ClientId, ClientSecret,
 				sourceLanguage, targetLanguage, _model, UseClientAuthentication);
-			var translatedText = beGlobalTranslator.TranslateText(sourcetext);
+			var translatedText = HttpUtility.UrlDecode(beGlobalTranslator.TranslateText(sourcetext));
+			if (words.Count > 0 || shouldEncodeBrackets)
+			{
+				// used to decode < > characters
+				translatedText = HttpUtility.HtmlDecode(translatedText);
+			}
+			//if (shouldEncodeBrackets)
+			//{
+			//	translatedText = 
+			//}
 
 			return translatedText;
 		}
@@ -83,6 +101,22 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 			}
 			return finalText.ToString();
+		}
+
+		private bool ShouldEncodeBrackets(string sourceText)
+		{
+			var isMatch = sourceText.Contains('<');
+			if (isMatch)
+			{
+				var isTagSymbol = sourceText.Contains("tg");
+				return !isTagSymbol;	 
+			}
+			return false;
+		}
+
+		private string EncodeBracket(string sourceText)
+		{
+			return HttpUtility.HtmlEncode(sourceText);
 		}
 
 		private int[] GetMatchesIndexes(string sourcetext, MatchCollection matches)
