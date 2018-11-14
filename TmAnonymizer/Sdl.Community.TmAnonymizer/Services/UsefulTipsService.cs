@@ -24,10 +24,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			try
 			{				
 				var pathService = new PathService();
-				var tipsService = new TipsProvider(pathService);
+				var tipsProvider = new TipsProvider(pathService);
 
 				var tipContexts = new List<TipContext>();
-				foreach (var language in tipsService.SupportedLanguages)
+				foreach (var language in tipsProvider.SupportedLanguages)
 				{
 					pathService.LanguageId = language;
 
@@ -36,7 +36,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					CreateTipsImportContent(tipsLanguageFullPath, language);
 
 					var tipsImportFile = Path.Combine(tipsLanguageFullPath, "TipsImport.xml");
-					var tips = GetTipsForImport(tipsService, tipsImportFile, tipsLanguageFullPath);
+					var tips = GetTipsForImport(tipsProvider, tipsImportFile, tipsLanguageFullPath);
 
 					if (tips?.Count > 0)
 					{
@@ -48,7 +48,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					}
 				}
 
-				tipsService.AddTips(tipContexts, StringResources.Application_Name);
+				tipsProvider.AddTips(tipContexts, StringResources.Application_Name);
 			}
 			catch (Exception ex)
 			{

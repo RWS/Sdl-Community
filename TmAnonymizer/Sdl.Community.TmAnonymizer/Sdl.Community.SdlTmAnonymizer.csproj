@@ -52,11 +52,11 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="presentationframework.aero2" />
-    <Reference Include="Sdl.Community.UsefulTipsService, Version=1.1.5.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.5\lib\net472\Sdl.Community.UsefulTipsService.dll</HintPath>
+    <Reference Include="Sdl.Community.UsefulTipsService, Version=1.1.7.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.7\lib\net472\Sdl.Community.UsefulTipsService.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Community.UsefulTipsService.Update, Version=1.1.5.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.5\lib\net472\Sdl.Community.UsefulTipsService.Update.exe</HintPath>
+    <Reference Include="Sdl.Community.UsefulTipsService.Update, Version=1.1.7.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.7\lib\net472\Sdl.Community.UsefulTipsService.Update.exe</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
