@@ -1,11 +1,9 @@
-﻿using IATETerminologyProvider.Service;
-using Sdl.Terminology.TerminologyProvider.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using IATETerminologyProvider.Service;
+using IATETerminologyProvider.Ui;
+using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace IATETerminologyProvider
 {
@@ -16,19 +14,23 @@ namespace IATETerminologyProvider
 		public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
 
 		public bool SupportsEditing => true;
-		
+
 		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
 		{
 			var result = new List<ITerminologyProvider>();
-			try
+
+			var settingsDialog = new Settings();
+			var dialogResult = settingsDialog.ShowDialog();
+			if (dialogResult == DialogResult.OK ||
+				dialogResult == DialogResult.Yes)
 			{
-				var IATETerminologyProvider = new IATETerminologyProvider();
+				var providerSettings = settingsDialog.GetSettings();
+				var persistenceService = new PersistenceService();
+				persistenceService.AddSettings(providerSettings);
+				var termSearchService = new TermSearchService(providerSettings);
+				var IATETerminologyProvider = new IATETerminologyProvider(providerSettings);
 
 				result.Add(IATETerminologyProvider);
-			}
-			catch (Exception ex)
-			{
-				throw ex;
 			}
 			return result.ToArray();
 		}
@@ -49,7 +51,7 @@ namespace IATETerminologyProvider
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
-			return terminologyProviderUri.Scheme == "IATEglossary";
+			return terminologyProviderUri.Scheme == "iateglossary";
 		}
 	}
 }

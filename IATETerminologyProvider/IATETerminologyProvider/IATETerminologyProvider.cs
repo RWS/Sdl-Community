@@ -1,51 +1,30 @@
-﻿using Sdl.Terminology.TerminologyProvider.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IATETerminologyProvider.Helpers;
+using IATETerminologyProvider.Model;
+using IATETerminologyProvider.Service;
+using Sdl.Terminology.TerminologyProvider.Core;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace IATETerminologyProvider
 {
-	class IATETerminologyProvider : AbstractTerminologyProvider
+	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
-		public IATETerminologyProvider()
+		private ProviderSettings _providerSettings;
+		public IATETerminologyProvider(ProviderSettings providerSettings)
 		{
-
+			_providerSettings = providerSettings;
 		}
-		public override IDefinition Definition
-		{
-			get
-			{
-				return null;
-			}
-		}
+		public const string IATEUriTemplate = "iateglossary://";
 
-		public override string Description
-		{
-			get
-			{
-				return null;
+		public override IDefinition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
 
-			}
-		}
+		public override string Description => PluginResources.IATETerminologyProviderDescription;
 
-		public override string Name
-		{
-			get
-			{
-				return null;
+		public override string Name => PluginResources.IATETerminologyProviderName;
 
-			}
-		}
-
-		public override Uri Uri
-		{
-			get
-			{
-				return new Uri("https://iate.europa.eu/em-api/entries/_search");
-			}
-		}
+		public override Uri Uri => new Uri((IATEUriTemplate + "https://iate.europa.eu/em-api/entries/_search").RemoveUriForbiddenCharacters());
 
 		public override IEntry GetEntry(int id)
 		{
@@ -61,14 +40,68 @@ namespace IATETerminologyProvider
 
 		public override IList<ILanguage> GetLanguages()
 		{
-			return null;
-
+			return GetDefinitionLanguages().Cast<ILanguage>().ToList();
 		}
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
-			return null;
+			var searchService = new TermSearchService(_providerSettings);
+			searchService.GetTerms();
 
+			return null;
+		}
+
+		public IList<IDescriptiveField> GetDescriptiveFields()
+		{
+			var result = new List<IDescriptiveField>();
+
+			var approvedField = new DescriptiveField
+			{
+				Label = "Approved",
+				Level = FieldLevel.TermLevel,
+				Mandatory = false,
+				Multiple = true,
+				PickListValues = new List<string> { "Approved", "Not Approved" },
+				Type = FieldType.String
+			};
+			result.Add(approvedField);
+
+			return result;
+		}
+
+		public IList<IDefinitionLanguage> GetDefinitionLanguages()
+		{
+			var result = new List<IDefinitionLanguage>();
+			var currentProject = GetProjectController().CurrentProject;
+			var projTargetLanguage = currentProject.GetTargetLanguageFiles()[0].Language;
+			var projSourceLanguage = currentProject.GetSourceLanguageFiles()[0].Language;
+
+			var sourceLanguage = new DefinitionLanguage
+			{
+				IsBidirectional = true,
+				Locale = projSourceLanguage.CultureInfo,
+				Name = projSourceLanguage.EnglishName,
+
+				TargetOnly = false
+			};
+
+			result.Add(sourceLanguage);
+
+			var targetLanguage = new DefinitionLanguage
+			{
+				IsBidirectional = true,
+				Locale = projTargetLanguage.CultureInfo,
+				Name = projTargetLanguage.EnglishName,
+				TargetOnly = false
+			};
+
+			result.Add(targetLanguage);
+			return result;
+		}
+
+		public ProjectsController GetProjectController()
+		{
+			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
 	}
 }
