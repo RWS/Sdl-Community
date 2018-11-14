@@ -4,5 +4,9 @@
   <Version>1.0</Version>
   <Description>Plugin description</Description>
   <Author>SDL Community Developers</Author>
+	<Include>
+		<File>Newtonsoft.Json.dll</File>
+		<File>RestSharp.dll</File>
+	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>

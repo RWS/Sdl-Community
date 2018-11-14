@@ -9,8 +9,8 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.YourProductivity.UI
 {
-	[RibbonGroup("Sdl.Community.Productivity", Name = "YourProductivity", ContextByType = typeof(EditorController))]
-    [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
+	[RibbonGroup("Sdl.Community.Productivity", Name = "#YourProductivity")]
+    [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
     public class ProductivityRibbon : AbstractRibbonGroup
     {
     }
