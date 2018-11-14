@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Service;
@@ -45,10 +46,14 @@ namespace IATETerminologyProvider
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
-			var searchService = new TermSearchService(_providerSettings);
-			searchService.GetTerms();
+			var result = new List<ISearchResult>();
 
-			return null;
+			var searchService = new TermSearchService(_providerSettings);
+			searchService.GetTerms(text, source, destination, maxResultsCount);
+			
+			// To Do: add the results from the response in the result
+
+			return result;
 		}
 
 		public IList<IDescriptiveField> GetDescriptiveFields()
@@ -80,7 +85,7 @@ namespace IATETerminologyProvider
 			{
 				IsBidirectional = true,
 				Locale = projSourceLanguage.CultureInfo,
-				Name = projSourceLanguage.EnglishName,
+				Name = projSourceLanguage.DisplayName,
 
 				TargetOnly = false
 			};
@@ -91,7 +96,7 @@ namespace IATETerminologyProvider
 			{
 				IsBidirectional = true,
 				Locale = projTargetLanguage.CultureInfo,
-				Name = projTargetLanguage.EnglishName,
+				Name = projTargetLanguage.DisplayName,
 				TargetOnly = false
 			};
 
