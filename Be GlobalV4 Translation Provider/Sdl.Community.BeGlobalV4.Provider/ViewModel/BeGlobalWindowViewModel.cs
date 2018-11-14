@@ -54,6 +54,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private bool IsWindowValid(Login loginTab)
 		{
 			Options.ResendDrafts = SettingsViewModel.ReSendChecked;
+			Options.Model = SettingsViewModel.SelectedModelOption.Model;
 			if (LoginViewModel.SelectedOption.Type.Equals("User"))
 			{
 				var password = loginTab.PasswordBox.Password;

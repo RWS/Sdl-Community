@@ -21,20 +21,20 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public string ClientId { get; set; }
 		public string ClientSecret { get; set; }
 		public bool UseClientAuthentication { get; set; }
+		private readonly string _model;		 
 
-		public BeGlobalConnecter(string clientId,string clientSecret, bool useClientAuthentication)
+		public BeGlobalConnecter(string clientId,string clientSecret, bool useClientAuthentication, string model)
 		{
 			ClientId = clientId;
 			ClientSecret = clientSecret;
 			UseClientAuthentication = useClientAuthentication;
+			_model = model;
 		}
 
 		public string Translate(LanguagePair languageDirection, string sourcetext)
-		{
-			//const string tagOption = @"xml";
+		{ 
 			var targetLanguage = GetCorespondingLangCode(languageDirection.TargetCulture.ThreeLetterISOLanguageName);
 			var sourceLanguage = GetCorespondingLangCode(languageDirection.SourceCulture.ThreeLetterISOLanguageName);
-			var translatedText = string.Empty;
 
 			var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
 			var words = rgx.Matches(sourcetext);
@@ -43,10 +43,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				var matchesIndexes = GetMatchesIndexes(sourcetext, words);
 				sourcetext = ReplaceCharacters(matchesIndexes, sourcetext);
-			}
+			}  
+
 			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", ClientId, ClientSecret,
-				sourceLanguage, targetLanguage, "genericnmt", UseClientAuthentication);
-			translatedText = beGlobalTranslator.TranslateText(sourcetext);
+				sourceLanguage, targetLanguage, _model, UseClientAuthentication);
+			var translatedText = beGlobalTranslator.TranslateText(sourcetext);
 
 			return translatedText;
 		}

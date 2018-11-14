@@ -16,9 +16,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public string ClientId { get; set; }
 		public string ClientSecret { get; set; }
+
 		
 		public Uri Uri => _uriBuilder.Uri;		 
 		private readonly TranslationProviderUriBuilder _uriBuilder;
+
+		public string Model
+		{
+			get => GetStringParameter("model");
+			set => SetStringParameter("model", value);
+		}
 
 		public string ResendDraftsParameter
 		{

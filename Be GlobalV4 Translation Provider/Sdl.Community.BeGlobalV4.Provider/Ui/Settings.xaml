@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
@@ -19,11 +19,24 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="150" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<TextBlock  Margin="10,20,0,10"  Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please select
+		<TextBlock  Margin="10,10,0,10"  Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please select
 			the settings you want to apply to the Translation Provider.
 		</TextBlock>
-		<CheckBox Margin="10,20,0,10" Grid.Row="1" FontFamily="Segoe UI" IsChecked="{Binding ReSendChecked}">Re-send draft and translated segments</CheckBox>
-    </Grid>
+		<CheckBox Margin="10,10,0,10" Grid.Row="1" FontFamily="Segoe UI" IsChecked="{Binding ReSendChecked}">Re-send draft and translated segments</CheckBox>
+		<TextBlock  Margin="10,10,0,10"  Grid.Row="2" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">
+			Please select engine model : 
+		</TextBlock>
+		<ComboBox 
+			Grid.Row="3"  HorizontalAlignment="Left"
+			Width="240"
+			ItemsSource="{Binding TranslationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			SelectedItem="{Binding SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			DisplayMemberPath ="DisplayName" IsSynchronizedWithCurrentItem="True"
+			Margin="10,5,0,10" BorderThickness="1"
+			controls:TextBoxHelper.ClearTextButton="True"
+			controls:TextBoxHelper.Watermark="Type"/>
+	</Grid>
 </UserControl>

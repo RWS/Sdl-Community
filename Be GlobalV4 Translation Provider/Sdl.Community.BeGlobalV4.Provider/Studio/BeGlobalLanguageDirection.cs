@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -93,8 +94,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private string LookupBeGlobal(string sourcetext)
 		{
 			if (_beGlobalConnect == null)
-			{
-				_beGlobalConnect = new BeGlobalConnecter(_options.ClientId, _options.ClientSecret, _options.UseClientAuthentication);
+			{ 
+				_beGlobalConnect = new BeGlobalConnecter(_options.ClientId, _options.ClientSecret, _options.UseClientAuthentication,_options.Model);
 			}
 			else
 			{

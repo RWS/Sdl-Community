@@ -2,7 +2,7 @@
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.BeGlobalV4.Provider</PlugInName>
   <Version>1.0</Version>
-  <Description>Plugin description</Description>
+  <Description>BeGlobal4 translation provider</Description>
   <Author>Sdl Community</Author>
   <Include>
 		<File>Newtonsoft.Json.dll</File>

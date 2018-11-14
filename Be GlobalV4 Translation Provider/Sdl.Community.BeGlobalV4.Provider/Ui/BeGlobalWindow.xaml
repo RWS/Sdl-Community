@@ -64,8 +64,8 @@
 			<controls:MetroTabItem Header="Login" Margin="10,0,0,0" Width="100">
 				<views:Login x:Name="LoginTab" DataContext="{Binding LoginViewModel}" ></views:Login>
 			</controls:MetroTabItem>
-			<controls:MetroTabItem Header="Settings" Margin="25,0,0,0" Width="200">
-				<views:Settings DataContext="{Binding SettingsViewModel}"></views:Settings>
+			<controls:MetroTabItem Header="Settings" Margin="25,0,0,0" Width="150">
+				<views:Settings DataContext="{Binding SettingsViewModel}" Height="300"></views:Settings>
 			</controls:MetroTabItem>
 		</TabControl>
 
