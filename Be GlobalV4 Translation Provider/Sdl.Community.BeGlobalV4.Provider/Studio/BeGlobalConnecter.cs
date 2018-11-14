@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Web;
-using System.Xml;
-using Newtonsoft.Json;
-using RestSharp;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.Core;
@@ -62,11 +54,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				// used to decode < > characters
 				translatedText = HttpUtility.HtmlDecode(translatedText);
 			}
-			//if (shouldEncodeBrackets)
-			//{
-			//	translatedText = 
-			//}
-
+				
 			return translatedText;
 		}
 
@@ -77,31 +65,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				return  "ger";
 			}
 			return languageCode; 
-		}
-
-		private string EncodeSpaces(int[] matchesIndexes, string sourceText)
-		{
-			var spaceRgx = new Regex("([\\s]+){2}");
-			var finalText = new StringBuilder();
-			var splitedText = sourceText.SplitAt(matchesIndexes).ToList();
-
-			foreach (var text in splitedText)
-			{
-				var hasMultipleSpace = spaceRgx.IsMatch(text);
-				var containsTab = text.Contains('\t');
-				if (hasMultipleSpace || containsTab)
-				{
-					var encodedSpace = Uri.EscapeDataString(text);
-					finalText.Append(encodedSpace);
-				}
-				else
-				{
-					finalText.Append(text);
-				}
-
-			}
-			return finalText.ToString();
-		}
+		}	 
 
 		private bool ShouldEncodeBrackets(string sourceText)
 		{
