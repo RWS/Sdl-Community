@@ -45,27 +45,12 @@ namespace IATETerminologyProvider.Service
 			var targetLanguges = new List<string>();
 			targetLanguges.Add(destination.Locale.TwoLetterISOLanguageName);
 
-			var searchInFields = new List<int>();
-			searchInFields.Add(0);
-
-			var searchInTermsTypes = new List<int>();
-			searchInTermsTypes.Add(0);
-			searchInTermsTypes.Add(1);
-			searchInTermsTypes.Add(2);
-			searchInTermsTypes.Add(3);
-			searchInTermsTypes.Add(4);
-
 			var bodyModel = new
 			{
 				query = text,
 				source = source.Locale.TwoLetterISOLanguageName,
 				targets = targetLanguges,
-				include_subdomains = true,
-				filter_by_entry_collection = new List<int>(),
-				search_in_fields = searchInFields,
-				search_in_term_types = searchInTermsTypes,
-				filter_by_domains = new List<int>(),
-				query_operator = 1
+				include_subdomains = true
 			};
 			return bodyModel;
 		}
