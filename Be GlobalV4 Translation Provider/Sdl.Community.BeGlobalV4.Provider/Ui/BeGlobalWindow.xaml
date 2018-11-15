@@ -12,7 +12,7 @@
              WindowTitleBrush="#0E202B"
              GlowBrush="#0E202B"
              FontFamily="Segoe UI"	
-			 Title="BeGlobal4 Translation provider"
+			 Title="SDL BeGlobal (NMT) Translation provider"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Height="520" Width="600">
 	<Window.Resources>
@@ -47,8 +47,8 @@
 		<StackPanel Grid.Row="0" Orientation="Horizontal">
 			<TextBlock Margin="15,15,20,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Width="400" 
 					   Style="{DynamicResource TextBlockColor}">
-				Welcome to the SDL BeGlobal translation provider for Studio. <LineBreak/><LineBreak/>
-				SDL BeGlobal is SDL's state-of-the-art secure machine translation cloud product for enterprises with various paid subscription models.
+				Welcome to the SDL BeGlobal (NMT) translation provider for Studio. <LineBreak/><LineBreak/>
+				SDL BeGlobal (NMT) is SDL's state-of-the-art secure machine translation cloud product for enterprises with various paid subscription models.
 			</TextBlock>
 			<Image Source="../Resources/logoB.png" Width="150" Height="70" HorizontalAlignment="Center"  Margin="0,0,0,0"></Image>
 		</StackPanel>

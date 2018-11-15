@@ -12,13 +12,13 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
 	[TranslationProviderWinFormsUi(
-		Id = "BeGlobalProviderUi",
-		Name = "BeGlobalProviderUi",
-		Description = "BeGlobal4 Translation Provider")]
+		Id = "SDLBeGlobal(NMT)ProviderUi",
+		Name = "SDLBeGlobal(NMT)ProviderUi",
+		Description = "SDL BeGlobal (NMT) Translation Provider")]
 	public class BeGlobalProviderUi  : ITranslationProviderWinFormsUI
 	{
-		public string TypeName => "BeGlobal4 MT Translation Provider"; 
-		public string TypeDescription => "BeGlobal4 MT Translation Provider";
+		public string TypeName => "SDL BeGlobal (NMT) Translation Provider"; 
+		public string TypeDescription => "SDL BeGlobal (NMT) Translation Provider";
 		public bool SupportsEditing => true;
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
@@ -122,8 +122,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var info = new TranslationProviderDisplayInfo
 			{
-				Name = "BeGlobal Translation provider",
-				TooltipText = "BeGlobal Translation provider",
+				Name = "SDL BeGlobal (NMT) Translation provider",
+				TooltipText = "SDL BeGlobal (NMT) Translation provider",
 				SearchResultImage = PluginResources.logoRe,
 				TranslationProviderIcon = PluginResources.global
 			};
