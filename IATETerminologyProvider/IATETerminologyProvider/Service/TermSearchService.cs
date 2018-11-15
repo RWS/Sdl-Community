@@ -1,7 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
+using IATETerminologyProvider.Model.ResponseModels;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
+using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace IATETerminologyProvider.Service
@@ -16,8 +22,6 @@ namespace IATETerminologyProvider.Service
 	
 		public IList<ISearchResult> GetTerms(string text, ILanguage source, ILanguage destination, int maxResultsCount)
 		{
-			var result = new List<ISearchResult>();
-
 			// maxResults (the number of returned words) value is set from the Termbase -> Search Settings
 			var client = new RestClient(ApiUrls.BaseUri("true", _providerSettings.Offset.ToString(), maxResultsCount.ToString()));
 
@@ -38,8 +42,8 @@ namespace IATETerminologyProvider.Service
 			request.AddJsonBody(bodyModel);
 
 			var response = client.Execute(request);
-
-			//To Do: map needed information from response into IList<ISearchResult> and return the list
+			
+			var result = MapResponseValues(response);
 			return result;
 		}
 
@@ -57,6 +61,53 @@ namespace IATETerminologyProvider.Service
 				include_subdomains = true
 			};
 			return bodyModel;
+		}
+
+		private IList<ISearchResult> MapResponseValues(IRestResponse response)
+		{
+			var termsList = new List<ISearchResult>();
+
+			var jObject = JObject.Parse(response.Content);
+			var itemTokens = (JArray)jObject.SelectToken("items");
+			if (itemTokens != null)
+			{
+				foreach (var item in itemTokens)
+				{
+					// get language childrens (source + target languages)
+					var languageTokens = item.SelectToken("language").Children().ToList();
+					if(languageTokens.Any())
+					{
+						//remove the first token(which corresponds to the Source Language)
+						languageTokens.Remove(languageTokens[0]);
+
+						// foreach language token remained(which represents the target languages) get the terms
+						foreach(JProperty languageToken in languageTokens)
+						{
+							var termEntry = languageToken.FirstOrDefault().SelectToken("term_entries").Last;
+							var termValue = termEntry.SelectToken("term_value").ToString();
+							var termId = termEntry.SelectToken("id").ToString();
+							var langTwoLetters = languageToken.Name;
+							var languageModel = new LanguageModel
+							{
+								Name = new Language(langTwoLetters).DisplayName,
+								Locale = new Language(langTwoLetters).CultureInfo
+							};		
+
+							int result;
+							var termResult = new SearchResult
+							{
+								Text = termValue,
+								Id = int.TryParse(termId, out result) ? int.Parse(termId) : 0,
+								Score = 100,
+								Language = languageModel
+							};
+							termsList.Add(termResult);
+						}
+					}
+				}
+			}
+
+			return termsList;
 		}
 	}
 }

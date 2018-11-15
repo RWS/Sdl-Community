@@ -104,9 +104,11 @@
     <Compile Include="IATETerminologyProviderViewerWinFormsUI.cs" />
     <Compile Include="IATETerminologyProvider.cs" />
     <Compile Include="IATETerminologyProviderFactory.cs" />
+    <Compile Include="Model\LanguageModel.cs" />
     <Compile Include="Model\ProviderSettings.cs" />
     <Compile Include="Model\ResponseModels\CreationResponseModel.cs" />
     <Compile Include="Model\ResponseModels\CrossRefsResponseModel.cs" />
+    <Compile Include="Model\ResponseModels\DefinitionReferencesResponseModel.cs" />
     <Compile Include="Model\ResponseModels\DomainsResponseModel.cs" />
     <Compile Include="Model\ResponseModels\ItemsResponseModel.cs" />
     <Compile Include="Model\ResponseModels\JsonResponseModel.cs" />
@@ -115,7 +117,10 @@
     <Compile Include="Model\ResponseModels\MetaResponseModel.cs" />
     <Compile Include="Model\ResponseModels\ModificationResponseModel.cs" />
     <Compile Include="Model\ResponseModels\NextResponseModel.cs" />
+    <Compile Include="Model\ResponseModels\NoteResponseModel.cs" />
     <Compile Include="Model\ResponseModels\RequestResponseModel.cs" />
+    <Compile Include="Model\ResponseModels\TermEntriesResponseModel.cs" />
+    <Compile Include="Model\ResponseModels\TermReferencesResponseModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

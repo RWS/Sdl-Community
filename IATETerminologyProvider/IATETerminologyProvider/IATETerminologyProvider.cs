@@ -46,13 +46,12 @@ namespace IATETerminologyProvider
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
-			var result = new List<ISearchResult>();
+			IList<ISearchResult> result = new List<ISearchResult>();
 
 			var searchService = new TermSearchService(_providerSettings);
 			var t = Task.Factory.StartNew(() =>
 			{
-				// result = searchService.GetTerms(text, source, destination, maxResultsCount);
-				searchService.GetTerms(text, source, destination, maxResultsCount);
+				result = searchService.GetTerms(text, source, destination, maxResultsCount);
 			});
 			t.Wait();
 			return result;
