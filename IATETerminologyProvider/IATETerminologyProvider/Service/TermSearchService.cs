@@ -29,7 +29,6 @@ namespace IATETerminologyProvider.Service
 			request.AddHeader("Origin", "https://iate.europa.eu");
 			request.AddHeader("Host", "iate.europa.eu");			
 			request.AddHeader("Access-Control-Allow-Origin", "*");
-			request.AddHeader("Proxy Connection", "Keep-Alive");
 
 			var bodyModel = SetApiRequestBodyValues(destination, source, text);
 			request.AddJsonBody(bodyModel);
@@ -50,11 +49,11 @@ namespace IATETerminologyProvider.Service
 			searchInFields.Add(0);
 
 			var searchInTermsTypes = new List<int>();
-			searchInFields.Add(0);
-			searchInFields.Add(1);
-			searchInFields.Add(2);
-			searchInFields.Add(3);
-			searchInFields.Add(4);
+			searchInTermsTypes.Add(0);
+			searchInTermsTypes.Add(1);
+			searchInTermsTypes.Add(2);
+			searchInTermsTypes.Add(3);
+			searchInTermsTypes.Add(4);
 
 			var bodyModel = new
 			{
