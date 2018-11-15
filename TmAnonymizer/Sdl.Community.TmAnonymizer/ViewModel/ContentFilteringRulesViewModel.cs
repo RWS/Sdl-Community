@@ -335,7 +335,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						});
 					}
 					else
-					{						
+					{
 						existingRule.Name = rule.Name;
 						existingRule.Description = rule.Description;
 					}
@@ -354,35 +354,40 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var message = MessageBox.Show(StringResources.RemoveRule_Are_you_sure_you_want_to_remove_selected_rules,
 				Application.ProductName, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
-			if (message == DialogResult.OK)
+			if (message == DialogResult.OK && SelectedItems != null)
 			{
-				if (SelectedItems != null)
+				var selectedRuleIds = new List<string>();
+				foreach (var selectedItem in SelectedItems)
 				{
-					var selectedRuleIds = (from object selectedItem in SelectedItems select ((Rule)selectedItem).Id).ToList();
-					var rules = new List<Rule>();
-					foreach (var rule in Rules)
+					if (selectedItem is Rule rule)
 					{
-						rules.Add(rule.Clone() as Rule);
+						selectedRuleIds.Add(rule.Id);
 					}
-
-					SelectedItems.Clear();
-
-					foreach (var id in selectedRuleIds)
-					{
-						var ruleRoRemove = rules.FirstOrDefault(r => r.Id.Equals(id));
-						if (ruleRoRemove != null)
-						{
-							rules.Remove(ruleRoRemove);
-						}
-					}
-
-					UpdateRuleOrder(rules);
-
-					Rules = new ObservableCollection<Rule>(rules.OrderBy(a => a.Order));
-
-					_settings.Rules = Rules.ToList();
-					_settingsService.SaveSettings(_settings);
 				}
+
+				var rules = new List<Rule>();
+				foreach (var rule in Rules)
+				{
+					rules.Add(rule.Clone() as Rule);
+				}
+
+				SelectedItems.Clear();
+
+				foreach (var id in selectedRuleIds)
+				{
+					var ruleRoRemove = rules.FirstOrDefault(r => r.Id.Equals(id));
+					if (ruleRoRemove != null)
+					{
+						rules.Remove(ruleRoRemove);
+					}
+				}
+
+				UpdateRuleOrder(rules);
+
+				Rules = new ObservableCollection<Rule>(rules.OrderBy(a => a.Order));
+
+				_settings.Rules = Rules.ToList();
+				_settingsService.SaveSettings(_settings);
 			}
 		}
 
