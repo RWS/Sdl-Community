@@ -4,5 +4,5 @@
   <Version>1.0</Version>
   <Description>Sdl.Studio.SpotCheck</Description>
   <Author></Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
 </PluginPackage>

@@ -8,7 +8,7 @@
     <ProjectGuid>{65A1A6C7-7A2B-4260-8329-131032AAA305}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Studio.SpotCheck</RootNamespace>
+    <RootNamespace>Sdl.Community.SpotCheck</RootNamespace>
     <AssemblyName>Sdl.Studio.SpotCheck</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
