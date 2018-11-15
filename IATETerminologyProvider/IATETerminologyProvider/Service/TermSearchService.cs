@@ -20,9 +20,16 @@ namespace IATETerminologyProvider.Service
 
 			var client = new RestClient(ApiUrls.BaseUri("true", _providerSettings.Offset.ToString(), _providerSettings.Limit.ToString()));
 			var request = new RestRequest("", Method.POST);
-			request.AddParameter("Connection", "keep-alive");
-			request.AddParameter("Content-Type", "application/json");
-			request.AddParameter("Accept", "application/json");
+			request.AddHeader("Connection", "Keep-Alive");
+			request.AddHeader("Cache-Control", "no-cache");
+			request.AddHeader("Pragma", "no-cache");
+			request.AddHeader("Accept", "application/json");
+			request.AddHeader("Accept-Encoding", "gzip, deflate, br");
+			request.AddHeader("Content-Type", "application/json");
+			request.AddHeader("Origin", "https://iate.europa.eu");
+			request.AddHeader("Host", "iate.europa.eu");			
+			request.AddHeader("Access-Control-Allow-Origin", "*");
+			request.AddHeader("Proxy Connection", "Keep-Alive");
 
 			var bodyModel = SetApiRequestBodyValues(destination, source, text);
 			request.AddJsonBody(bodyModel);
