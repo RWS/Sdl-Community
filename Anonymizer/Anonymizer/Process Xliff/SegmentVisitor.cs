@@ -85,22 +85,23 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 								//in the case we have only PI in the segment
 								//remove the text -> add the anonymized data in the same position
 								
-								//Patrick says I have to look here for the bug, it could be that we are inserting a tag without realizing it... 
-								//We must check <<AllSubItems>> for tags
 								if (elementContainer.AllSubItems.ToList().Count.Equals(1))
 								{
 									if (elementContainer.AllSubItems.ToList().ElementAtOrDefault(count) == null)
 									{
+										RandomizeTag(markupData);
 										elementContainer.Insert(count, markupData);
 									}
 									else
 									{
 										elementContainer.AllSubItems.ToList()[0].RemoveFromParent();
+										RandomizeTag(markupData);
 										elementContainer.Insert(0, markupData);
 									}
 								}
 								else
 								{
+									RandomizeTag(markupData);
 									elementContainer.Insert(count, markupData);
 								}
 								count++;
@@ -109,6 +110,14 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 					}
 				}
 				catch (Exception e) { }
+			}
+		}
+
+		private static void RandomizeTag(IAbstractMarkupData markupData)
+		{
+			if (markupData is IPlaceholderTag tag)
+			{
+				tag.Properties.TagId = new TagId(Guid.NewGuid().ToString());
 			}
 		}
 
