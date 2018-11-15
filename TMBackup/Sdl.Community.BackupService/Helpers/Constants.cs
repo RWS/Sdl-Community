@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Sdl.Community.BackupService.Helpers
 {
@@ -27,9 +28,9 @@ namespace Sdl.Community.BackupService.Helpers
 		public const string PatternErrorMessage = "Action cannot be saved! Please ensure that patern is filled!";
 
 		public const string UpdateActionMessage = "Please ensure that all fields are filled in order to update the action!";
-
-		public static readonly string DeployPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community\TMBackup", Environment.UserName);
-		public static readonly string SdlCommunityPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community", Environment.UserName);
+		
+		public static readonly string DeployPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL Community\TMBackup");
+		public static readonly string SdlCommunityPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL Community");
 
 		public static readonly string TaskDetailValue = "TMBackupTask ";
 

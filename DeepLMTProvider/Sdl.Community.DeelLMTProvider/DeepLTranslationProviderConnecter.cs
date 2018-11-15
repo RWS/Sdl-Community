@@ -83,8 +83,13 @@ namespace Sdl.Community.DeepLMTProvider
 					var matchesIndexes = GetMatchesIndexes(sourcetext, spaces);
 					sourcetext = EncodeSpaces(matchesIndexes, sourcetext);
 				}
-				//sourcetext = HttpUtility.HtmlEncode(sourcetext);
-				//sourcetext = Uri.EscapeDataString(sourcetext);
+
+				// for < words > 
+				var shouldEncodeBrackets = ShouldEncodeBrackets(sourcetext);
+				if (shouldEncodeBrackets)
+				{
+					sourcetext = EncodeBracket(sourcetext);
+				}  
 
 				request.AddParameter("text", sourcetext);
 				request.AddParameter("source_lang", sourceLanguage);
@@ -103,7 +108,7 @@ namespace Sdl.Community.DeepLMTProvider
 				{
 					translatedText = translatedObject.Translations[0].Text;
 					translatedText = HttpUtility.UrlDecode(translatedText);
-					if (words.Count > 0)
+					if (words.Count > 0 || shouldEncodeBrackets)
 					{
 						// used to decode < > characters
 						translatedText = HttpUtility.HtmlDecode(translatedText);
@@ -117,6 +122,22 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 
 			return translatedText;
+		}
+
+		private bool ShouldEncodeBrackets(string sourceText)
+		{
+			var isMatch = sourceText.Contains('<');
+			if (isMatch)
+			{
+				var isTagSymbol = sourceText.Contains("tg");
+				return !isTagSymbol;
+			}
+			return false;
+		}
+
+		private string EncodeBracket(string sourceText)
+		{
+			return HttpUtility.HtmlEncode(sourceText);
 		}
 
 		private string EncodeSpaces(int[] matchesIndexes, string sourceText)

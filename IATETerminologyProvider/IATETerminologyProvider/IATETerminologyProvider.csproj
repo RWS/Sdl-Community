@@ -126,9 +126,7 @@
     <Compile Include="Service\Interfaces\ITermSearchService.cs" />
     <Compile Include="Service\PersistenceService.cs" />
     <Compile Include="Service\TermSearchService.cs" />
-    <Compile Include="Ui\Settings.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Ui\Settings.cs" />
     <Compile Include="Ui\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
