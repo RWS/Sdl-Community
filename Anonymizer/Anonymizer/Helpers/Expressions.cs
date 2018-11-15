@@ -12,7 +12,7 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 	{
 		public static void ExportExporessions(string filePath, List<RegexPattern> patterns)
 		{
-			var package = GetExcelPackage(filePath);
+			var package = GetExcelPackage(filePath, true);
 			var worksheet = package.Workbook.Worksheets.Add("Exported expressions");
 			var lineNumber = 1;
 			var order = 0;
@@ -112,9 +112,12 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 			return true;
 		}
 
-		private static ExcelPackage GetExcelPackage(string filePath)
+		private static ExcelPackage GetExcelPackage(string filePath, bool isExport = false)
 		{
-			CreateExcelWithPatterns(ref filePath);
+			if (isExport)
+			{
+				CreateExcelWithPatterns(ref filePath);
+			}
 
 			var fileInfo = new FileInfo(filePath);
 			var excelPackage = new ExcelPackage(fileInfo);
