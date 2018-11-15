@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -147,6 +147,8 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\deepLIcon.ico" />
+    <EmbeddedResource Include="Resources\DeepL.ico" />
     <EmbeddedResource Include="Resources\deepLResized.png" />
     <EmbeddedResource Include="Resources\deepL_logo_new.png" />
     <EmbeddedResource Include="Resources\DeepL.png" />

@@ -113,7 +113,9 @@ namespace Sdl.Community.DeepLMTProvider
 			var info = new TranslationProviderDisplayInfo
 			{
 				Name = "DeepL Translation provider",
-				TooltipText = "DeepL Translation provider"
+				TooltipText = "DeepL Translation provider",
+				SearchResultImage = PluginResources.DeepL,
+				TranslationProviderIcon = PluginResources.deepLIcon
 			};
 			return info;
         }

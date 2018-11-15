@@ -47,10 +47,10 @@
 					Name="DeepLTabControl"
 		            mah:ControlsHelper.HeaderFontSize="15"
 		            mah:TabControlHelper.UnderlineMouseOverBrush="#3C92C0" Foreground="#0C2D47">
-			<mah:MetroTabItem Header="Login" IsSelected="True">
+			<mah:MetroTabItem Header="Login" IsSelected="True" Margin="10,0,40,0" Width="120">
 				<ui:Login x:Name="LoginTab"></ui:Login>
 			</mah:MetroTabItem>
-			<mah:MetroTabItem Header="Provider Settings" Height="42" VerticalAlignment="Top" Foreground="#0C2D47">
+			<mah:MetroTabItem Header="Settings" Height="42" VerticalAlignment="Top" Foreground="#0C2D47" >
 				<ui:Settings x:Name="SettingsTab"></ui:Settings>
 			</mah:MetroTabItem>
 		</TabControl>
