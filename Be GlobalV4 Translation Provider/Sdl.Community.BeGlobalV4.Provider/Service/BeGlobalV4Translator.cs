@@ -89,7 +89,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			});
 			var response = _client.Execute(request);
 			if (response.StatusCode != System.Net.HttpStatusCode.OK && response.StatusCode != System.Net.HttpStatusCode.Accepted)
-				throw new Exception("UploadText failed: " + response.Content);
+			{
+				if (response.Content.Contains("does not exist"))
+				{
+					throw  new Exception("Language pair or engine model selected does not exist");
+				}
+			}  
 			dynamic json = JsonConvert.DeserializeObject(response.Content);
 			return json;
 		}
