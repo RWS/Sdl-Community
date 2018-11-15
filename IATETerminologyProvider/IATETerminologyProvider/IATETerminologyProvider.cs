@@ -13,6 +13,7 @@ namespace IATETerminologyProvider
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
 		private ProviderSettings _providerSettings;
+		private IList<ISearchResult> _termsResult = new List<ISearchResult>();
 		public IATETerminologyProvider(ProviderSettings providerSettings)
 		{
 			_providerSettings = providerSettings;
@@ -29,14 +30,22 @@ namespace IATETerminologyProvider
 
 		public override IEntry GetEntry(int id)
 		{
-			return null;
-
+			var entryModel = new EntryModel
+			{
+				Id = id,
+				SearchText = _termsResult.FirstOrDefault(t=>t.Id == id).Text
+			};
+			return entryModel;
 		}
 
 		public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
 		{
-			return null;
-
+			var entryModel = new EntryModel
+			{
+				Id = id,
+				SearchText = _termsResult.FirstOrDefault(t => t.Id == id).Text
+			};
+			return entryModel;
 		}
 
 		public override IList<ILanguage> GetLanguages()
@@ -45,16 +54,14 @@ namespace IATETerminologyProvider
 		}
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
-		{
-			IList<ISearchResult> result = new List<ISearchResult>();
-
+		{			
 			var searchService = new TermSearchService(_providerSettings);
 			var t = Task.Factory.StartNew(() =>
 			{
-				result = searchService.GetTerms(text, source, destination, maxResultsCount);
+				_termsResult = searchService.GetTerms(text, source, destination, maxResultsCount);
 			});
 			t.Wait();
-			return result;
+			return _termsResult;
 		}
 
 		public IList<IDescriptiveField> GetDescriptiveFields()
