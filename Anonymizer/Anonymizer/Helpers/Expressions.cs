@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Windows.Forms;
 using OfficeOpenXml;
 using Sdl.Community.projectAnonymizer.Models;
@@ -113,9 +114,28 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 
 		private static ExcelPackage GetExcelPackage(string filePath)
 		{
+			CreateExcelWithPatterns(ref filePath);
+
 			var fileInfo = new FileInfo(filePath);
 			var excelPackage = new ExcelPackage(fileInfo);
 			return excelPackage;
+		}
+
+		private static void CreateExcelWithPatterns(ref string filePath)
+		{
+			try
+			{
+				if (File.Exists(filePath))
+				{
+					File.Delete(filePath);
+				}
+			}
+			catch (Exception e)
+			{
+				Console.Write(e);
+				filePath = filePath.Insert(filePath.IndexOf(".xlsx"), "(new)");
+				CreateExcelWithPatterns(ref filePath);
+			}
 		}
 	}
 }

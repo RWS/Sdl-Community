@@ -18,7 +18,11 @@ namespace IATETerminologyProvider.Service
 		{
 			var result = new List<ISearchResult>();
 
-			var client = new RestClient(ApiUrls.BaseUri("true", _providerSettings.Offset.ToString(), _providerSettings.Limit.ToString()));
+			// maxResults (the number of returned words) value is set from the Termbase -> Search Settings
+			var client = new RestClient(ApiUrls.BaseUri("true", _providerSettings.Offset.ToString(), maxResultsCount.ToString()));
+
+			// _providerSettings.Offset (the number of returned words) is set from the Provider Settings grid
+			//var client = new RestClient(ApiUrls.BaseUri("true", _providerSettings.Offset.ToString(), _providerSettings.Limit.ToString()));
 			var request = new RestRequest("", Method.POST);
 			request.AddHeader("Connection", "Keep-Alive");
 			request.AddHeader("Cache-Control", "no-cache");
