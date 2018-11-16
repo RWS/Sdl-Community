@@ -83,9 +83,9 @@ namespace Sdl.Community.projectAnonymizer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap lockxxx {
+        internal static System.Drawing.Bitmap lockImage {
             get {
-                object obj = ResourceManager.GetObject("lockxxx", resourceCulture);
+                object obj = ResourceManager.GetObject("lockImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
