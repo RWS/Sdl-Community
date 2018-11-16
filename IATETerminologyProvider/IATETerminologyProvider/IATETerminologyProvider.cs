@@ -12,40 +12,36 @@ namespace IATETerminologyProvider
 {
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
+		#region Private Fields
 		private ProviderSettings _providerSettings;
 		private IList<ISearchResult> _termsResult = new List<ISearchResult>();
+		private IList<EntryModel> _entryModels = new List<EntryModel>();
+		#endregion
+
+		#region Constructors
 		public IATETerminologyProvider(ProviderSettings providerSettings)
 		{
 			_providerSettings = providerSettings;
 		}
+		#endregion
+
+		#region Public Properties
 		public const string IATEUriTemplate = "iateglossary://";
-
 		public override IDefinition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
-
 		public override string Description => PluginResources.IATETerminologyProviderDescription;
-
 		public override string Name => PluginResources.IATETerminologyProviderName;
-
 		public override Uri Uri => new Uri((IATEUriTemplate + "https://iate.europa.eu/em-api/entries/_search").RemoveUriForbiddenCharacters());
+		#endregion
 
+		#region Public Methods
 		public override IEntry GetEntry(int id)
 		{
-			var entryModel = new EntryModel
-			{
-				Id = id,
-				SearchText = _termsResult.FirstOrDefault(t=>t.Id == id).Text
-			};
-			return entryModel;
+			return _entryModels.FirstOrDefault(e => e.Id == id);
 		}
 
 		public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
 		{
-			var entryModel = new EntryModel
-			{
-				Id = id,
-				SearchText = _termsResult.FirstOrDefault(t => t.Id == id).Text
-			};
-			return entryModel;
+			return _entryModels.FirstOrDefault(e => e.Id == id);
 		}
 
 		public override IList<ILanguage> GetLanguages()
@@ -54,13 +50,18 @@ namespace IATETerminologyProvider
 		}
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
-		{			
+		{
 			var searchService = new TermSearchService(_providerSettings);
 			var t = Task.Factory.StartNew(() =>
 			{
 				_termsResult = searchService.GetTerms(text, source, destination, maxResultsCount);
 			});
 			t.Wait();
+
+			if (_termsResult.Count > 0)
+			{
+				CreateEntryModels(text, source, destination);
+			}
 			return _termsResult;
 		}
 
@@ -116,5 +117,79 @@ namespace IATETerminologyProvider
 		{
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
+		#endregion
+
+		#region Private Methods
+		// Create entry models (used to return the text in the Termbase Search panel)
+		private void CreateEntryModels(string text, ILanguage sourceLanguage, ILanguage targetLanguage)
+		{
+			var languages = GetLanguages();
+
+			foreach (var termResult in _termsResult)
+			{
+				var entryModel = new EntryModel
+				{
+					SearchText = termResult.Text,
+					Id = termResult.Id,
+					Fields = new List<IEntryField>(),
+					Transactions = new List<IEntryTransaction>(),
+					Languages = SetEntryLanguages(languages, text, sourceLanguage, termResult.Id)
+				};
+				_entryModels.Add(entryModel);
+			}
+		}
+
+		// Set entry languages for the entry models
+		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, string text, ILanguage sourceLanguage, int id)
+		{
+			IList<IEntryLanguage> entryLanguages = new List<IEntryLanguage>();
+
+			foreach(var language in languages)
+			{
+				var entryLanguage = new EntryLanguageModel
+				{
+					Fields = new List<IEntryField>(),
+					Locale = language.Locale,
+					Name = language.Name,
+					ParentEntry = null,					
+					Terms = CreateEntryTerms(language, text, sourceLanguage, id)
+				};
+				entryLanguages.Add(entryLanguage);
+			}
+			return entryLanguages;
+		}
+
+		// Create Entry terms for the entry languages
+		private IList<IEntryTerm> CreateEntryTerms(ILanguage language, string text, ILanguage sourceLanguage, int id)
+		{
+			IList<IEntryTerm> entryTerms = new List<IEntryTerm>();
+
+			// if language is Source language, create entryTerm with value from source language text
+			// otherwise create entry terms for the target language search results
+			if (language.Name.Equals(sourceLanguage.Name))
+			{
+				var entryTerm = new EntryTerm
+				{
+					Value = text
+				};
+				entryTerms.Add(entryTerm);
+			}
+			else
+			{
+				// add IEntryTerm only for the current ISearchResult term(otherwise it will duplicate all the term for each ISearchResult term)
+				var terms = _termsResult.Where(t => t.Id == id).ToList();
+				foreach (var term in terms)
+				{
+					var entryTerm = new EntryTerm
+					{
+						Value = term.Text
+					};
+					entryTerms.Add(entryTerm);
+				}
+			}
+
+			return entryTerms;
+		}
+		#endregion
 	}
 }

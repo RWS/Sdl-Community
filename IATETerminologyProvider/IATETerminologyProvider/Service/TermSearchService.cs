@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
-using IATETerminologyProvider.Model.ResponseModels;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using Sdl.Core.Globalization;
@@ -14,16 +11,22 @@ namespace IATETerminologyProvider.Service
 {
 	public class TermSearchService
 	{
+		#region Private Fields
 		private ProviderSettings _providerSettings;
+		#endregion
+
+		#region Constructors
 		public TermSearchService(ProviderSettings providerSettings)
 		{
 			_providerSettings = providerSettings;
 		}
-	
+		#endregion
+
+		#region Public Methods
 		public IList<ISearchResult> GetTerms(string text, ILanguage source, ILanguage destination, int maxResultsCount)
 		{
 			// maxResults (the number of returned words) value is set from the Termbase -> Search Settings
-			var client = new RestClient(ApiUrls.BaseUri("true", _providerSettings.Offset.ToString(), maxResultsCount.ToString()));
+			var client = new RestClient(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()));
 
 			// _providerSettings.Offset (the number of returned words) is set from the Provider Settings grid
 			//var client = new RestClient(ApiUrls.BaseUri("true", _providerSettings.Offset.ToString(), _providerSettings.Limit.ToString()));
@@ -46,7 +49,9 @@ namespace IATETerminologyProvider.Service
 			var result = MapResponseValues(response);
 			return result;
 		}
+		#endregion
 
+		#region Private Methods
 		// Set the needed fields for the API search request
 		private object SetApiRequestBodyValues(ILanguage destination, ILanguage source, string text)
 		{
@@ -106,8 +111,8 @@ namespace IATETerminologyProvider.Service
 					}
 				}
 			}
-
 			return termsList;
 		}
+		#endregion
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows.Forms;
 using IATETerminologyProvider.Model;
 
@@ -7,13 +6,25 @@ namespace IATETerminologyProvider.Ui
 {
 	public partial class Settings : Form
 	{
+		#region Private Fields
 		private ProviderSettings _providerSettings;
+		#endregion
 
+		#region Constructors
 		public Settings()
 		{
 			InitializeComponent();
 		}
+		#endregion
 
+		#region Public Methods
+		public ProviderSettings GetSettings()
+		{
+			return _providerSettings;
+		}
+		#endregion
+
+		#region Private Methods
 		protected override void OnClosing(CancelEventArgs e)
 		{
 			int result;
@@ -24,10 +35,6 @@ namespace IATETerminologyProvider.Ui
 			};
 			_providerSettings = providerSettings;
 		}
-
-		public ProviderSettings GetSettings()
-		{
-			return _providerSettings;
-		}
+		#endregion
 	}
 }
