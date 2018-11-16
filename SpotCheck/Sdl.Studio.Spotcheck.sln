@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Studio.Spotcheck", "Sdl.Studio.Spotcheck.csproj", "{65A1A6C7-7A2B-4260-8329-131032AAA305}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Spotcheck", "Sdl.Community.Spotcheck.csproj", "{65A1A6C7-7A2B-4260-8329-131032AAA305}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
