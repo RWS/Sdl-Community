@@ -9,30 +9,20 @@ namespace IATETerminologyProvider.Service
 {
 	public class PersistenceService
 	{
+		#region Private Fields
 		private readonly string _persistancePath;
 		private List<ProviderSettings> _providerSettingList = new List<ProviderSettings>();
+		#endregion
 
+		#region Constructors
 		public PersistenceService()
 		{
 			_persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 				@"SDL Community\IATETerminologyProvider\IATETerminology.json");
 		}
+		#endregion
 
-		internal void WriteToFile()
-		{
-			if (!File.Exists(_persistancePath))
-			{
-				var directory = Path.GetDirectoryName(_persistancePath);
-				if (directory != null && !Directory.Exists(directory))
-				{
-					Directory.CreateDirectory(directory);
-				}
-			}
-
-			var json = JsonConvert.SerializeObject(_providerSettingList);
-			File.WriteAllText(_persistancePath, json);
-		}
-
+		#region Public Methods
 		public void AddSettings(ProviderSettings providerSettings)
 		{
 			if (providerSettings == null)
@@ -75,5 +65,22 @@ namespace IATETerminologyProvider.Service
 
 			return providerSettings;
 		}
+		#endregion
+
+		#region Internal methods
+		internal void WriteToFile()
+		{
+			if (!File.Exists(_persistancePath))
+			{
+				var directory = Path.GetDirectoryName(_persistancePath);
+				if (directory != null && !Directory.Exists(directory))
+				{
+					Directory.CreateDirectory(directory);
+				}
+			}
+			var json = JsonConvert.SerializeObject(_providerSettingList);
+			File.WriteAllText(_persistancePath, json);
+		}
+		#endregion
 	}
 }

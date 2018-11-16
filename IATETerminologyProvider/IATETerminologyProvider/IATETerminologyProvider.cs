@@ -12,24 +12,28 @@ namespace IATETerminologyProvider
 {
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
+		#region Private Fields
 		private ProviderSettings _providerSettings;
 		private IList<ISearchResult> _termsResult = new List<ISearchResult>();
 		private IList<EntryModel> _entryModels = new List<EntryModel>();
+		#endregion
 
+		#region Constructors
 		public IATETerminologyProvider(ProviderSettings providerSettings)
 		{
 			_providerSettings = providerSettings;
 		}
+		#endregion
+
+		#region Public Properties
 		public const string IATEUriTemplate = "iateglossary://";
-
 		public override IDefinition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
-
 		public override string Description => PluginResources.IATETerminologyProviderDescription;
-
 		public override string Name => PluginResources.IATETerminologyProviderName;
-
 		public override Uri Uri => new Uri((IATEUriTemplate + "https://iate.europa.eu/em-api/entries/_search").RemoveUriForbiddenCharacters());
+		#endregion
 
+		#region Public Methods
 		public override IEntry GetEntry(int id)
 		{
 			return _entryModels.FirstOrDefault(e => e.Id == id);
@@ -113,7 +117,9 @@ namespace IATETerminologyProvider
 		{
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
+		#endregion
 
+		#region Private Methods
 		// Create entry models (used to return the text in the Termbase Search panel)
 		private void CreateEntryModels(string text, ILanguage sourceLanguage, ILanguage targetLanguage)
 		{
@@ -170,6 +176,7 @@ namespace IATETerminologyProvider
 			}
 			else
 			{
+				// add IEntryTerm only for the current ISearchResult term(otherwise it will duplicate all the term for each ISearchResult term)
 				var terms = _termsResult.Where(t => t.Id == id).ToList();
 				foreach (var term in terms)
 				{
@@ -183,5 +190,6 @@ namespace IATETerminologyProvider
 
 			return entryTerms;
 		}
+		#endregion
 	}
 }

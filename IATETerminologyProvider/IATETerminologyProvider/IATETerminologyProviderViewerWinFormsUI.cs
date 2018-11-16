@@ -8,18 +8,21 @@ namespace IATETerminologyProvider
 	[TerminologyProviderViewerWinFormsUI]
 	class IATETerminologyProviderViewerWinFormsUI : ITerminologyProviderViewerWinFormsUI
 	{
+		#region Private Fields
 		private IATETerminologyProvider _terminologyProvider;
+		#endregion
 
+		#region Public Properties
 		public Control Control { get; set; }
-		
 		public bool Initialized => true;
 		public IEntry SelectedTerm { get; set; }
 		public event EventHandler TermChanged;
 		public event EventHandler<EntryEventArgs> SelectedTermChanged;
 		public event Action<IEntry> JumpToTermAction;
 		public event Action<string, string> AddTermAction;
+		#endregion
 
-
+		#region Public Methods
 		public void AddAndEditTerm(IEntry term, string source, string target)
 		{
 		}
@@ -52,5 +55,6 @@ namespace IATETerminologyProvider
 		{
 			return terminologyProviderUri.Scheme == "iateglossary";
 		}
+		#endregion
 	}
 }

@@ -7,6 +7,7 @@ namespace IATETerminologyProvider
 	[TerminologyProviderFactory(Id = "IATETerminologyProvider",	Name = "IATE Terminology Provider", Description = "IATE terminology provider factory")]
 	public class IATETerminologyProviderFactory : ITerminologyProviderFactory
 	{
+		#region Public Methodss
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
 			return terminologyProviderUri.Scheme == "iateglossary";
@@ -35,5 +36,6 @@ namespace IATETerminologyProvider
 			}
 			return terminologyProvider;
 		}
+		#endregion
 	}
 }
