@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
-namespace Sdl.Community.projectAnonymizer.Helpers
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 {
 	public delegate void CheckBoxHeaderClickHandler(CheckBoxHeaderCellEventArgs e);
 
@@ -51,10 +51,9 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 			location.Y = cellBounds.Y + (cellBounds.Height / 2 - checkboxsize.Height / 2);
 			cellboundsLocation = cellBounds.Location;
 
-			if (IsChecked)
-				state = CheckBoxState.CheckedNormal;
-			else
-				state = CheckBoxState.UncheckedNormal;
+			state = IsChecked 
+				? CheckBoxState.CheckedNormal 
+				: CheckBoxState.UncheckedNormal;
 
 			CheckBoxRenderer.DrawCheckBox(graphics, location, state);
 		}

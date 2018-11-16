@@ -131,6 +131,16 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Lock {
+            get {
+                object obj = ResourceManager.GetObject("Lock", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sdl.Community.SdlDataProtectionSuite.
         /// </summary>
         internal static string Plugin_Name {
@@ -255,16 +265,6 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         internal static System.Drawing.Icon Up {
             get {
                 object obj = ResourceManager.GetObject("Up", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon wiki {
-            get {
-                object obj = ResourceManager.GetObject("wiki", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

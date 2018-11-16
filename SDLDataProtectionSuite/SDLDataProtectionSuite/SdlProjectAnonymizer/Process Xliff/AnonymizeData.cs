@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Sdl.Community.projectAnonymizer.Process_Xliff
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff
 {
 	public static class AnonymizeData
 	{

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Sdl.Community.projectAnonymizer.Batch_Task;
-using Sdl.Community.projectAnonymizer.Helpers;
-using Sdl.Community.projectAnonymizer.Process_Xliff;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
 using Sdl.Desktop.IntegrationApi;
 
-namespace Sdl.Community.projectAnonymizer.Ui
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 {
 	public partial class DecryptSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{

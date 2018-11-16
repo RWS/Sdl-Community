@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel;
-using Sdl.Community.projectAnonymizer.Helpers;
-using Sdl.Community.projectAnonymizer.Models;
-using Sdl.Community.projectAnonymizer.Process_Xliff;
-using Sdl.Community.projectAnonymizer.Ui;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 
-namespace Sdl.Community.projectAnonymizer.Batch_Task
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 {
 	public class DecryptSettingsPage : DefaultSettingsPage<DecryptSettingsControl, AnonymizerSettings>
 	{

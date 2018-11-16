@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
-using Sdl.Community.projectAnonymizer.Models;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.projectAnonymizer.Process_Xliff
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff
 {
 	public class SegmentVisitor : IMarkupDataVisitor
 	{

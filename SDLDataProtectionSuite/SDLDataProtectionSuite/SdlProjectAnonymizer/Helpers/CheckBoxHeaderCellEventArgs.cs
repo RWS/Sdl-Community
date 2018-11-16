@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sdl.Community.projectAnonymizer.Helpers
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 {
 	public class CheckBoxHeaderCellEventArgs : EventArgs
 	{

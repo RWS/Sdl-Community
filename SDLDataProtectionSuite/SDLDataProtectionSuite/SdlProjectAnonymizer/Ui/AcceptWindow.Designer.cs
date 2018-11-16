@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.projectAnonymizer.Ui
+﻿namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 {
 	partial class AcceptWindow
 	{
@@ -105,6 +105,8 @@
 			this.ClientSize = new System.Drawing.Size(419, 205);
 			this.Controls.Add(this.mainPanel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "AcceptWindow";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Project Anonymizer";

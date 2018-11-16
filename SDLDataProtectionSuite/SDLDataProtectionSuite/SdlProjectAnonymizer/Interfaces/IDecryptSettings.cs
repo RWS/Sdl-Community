@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.projectAnonymizer.Interfaces
+﻿namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Interfaces
 {
 	internal interface IDecryptSettings
 	{

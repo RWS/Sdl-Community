@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.projectAnonymizer.Ui
+﻿namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 {
 	partial class DecryptSettingsControl
 	{
@@ -40,6 +40,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DecryptSettingsControl));
 			this.decryptPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.messageLbl = new System.Windows.Forms.Label();
 			this.decryptionPanel = new System.Windows.Forms.Panel();
@@ -129,7 +130,7 @@
 			// lockPictureBox
 			// 
 			this.lockPictureBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.lockPictureBox.Image = global::Sdl.Community.projectAnonymizer.PluginResources.lockxxx;
+			this.lockPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("lockPictureBox.Image")));
 			this.lockPictureBox.Location = new System.Drawing.Point(294, 17);
 			this.lockPictureBox.Name = "lockPictureBox";
 			this.lockPictureBox.Size = new System.Drawing.Size(129, 132);

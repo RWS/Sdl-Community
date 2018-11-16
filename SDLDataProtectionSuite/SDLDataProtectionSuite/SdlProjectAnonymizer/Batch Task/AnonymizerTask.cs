@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Threading;
 using Newtonsoft.Json;
-using Sdl.Community.projectAnonymizer.Helpers;
-using Sdl.Community.projectAnonymizer.Models;
-using Sdl.Community.projectAnonymizer.Process_Xliff;
-using Sdl.Community.projectAnonymizer.Ui;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
@@ -18,9 +16,9 @@ using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-using Constants = Sdl.Community.projectAnonymizer.Helpers.Constants;
+using Constants = Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers.Constants;
 
-namespace Sdl.Community.projectAnonymizer.Batch_Task
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 {
 	[ApplicationInitializer]
 	public class ApplicationInitializer : IApplicationInitializer

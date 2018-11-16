@@ -2,10 +2,10 @@
 using System.IO;
 using System.Windows.Forms;
 using Newtonsoft.Json;
-using Sdl.Community.projectAnonymizer.Helpers;
-using Sdl.Community.projectAnonymizer.Models;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 
-namespace Sdl.Community.projectAnonymizer.Ui
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 {
 	public partial class AcceptWindow : Form
 	{
@@ -26,6 +26,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			{
 				Accept = ((CheckBox)sender).Checked
 			};
+
 			File.WriteAllText(Constants.AcceptFilePath, JsonConvert.SerializeObject(agreement));
 		}
 	}

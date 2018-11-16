@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
-using Sdl.Community.projectAnonymizer.Models;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 
-namespace Sdl.Community.projectAnonymizer.Helpers
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 {
 	public static class AgreementMethods
 	{

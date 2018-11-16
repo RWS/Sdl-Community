@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.projectAnonymizer.Ui
+﻿namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 {
 	partial class AnonymizerSettingsControl
 	{
@@ -216,8 +216,7 @@
             // 
             // lockPictureBox
             // 
-            this.lockPictureBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lockPictureBox.Image = global::Sdl.Community.projectAnonymizer.PluginResources.lockxxx;
+            this.lockPictureBox.Anchor = System.Windows.Forms.AnchorStyles.Top;			
             this.lockPictureBox.Location = new System.Drawing.Point(350, 17);
             this.lockPictureBox.Name = "lockPictureBox";
             this.lockPictureBox.Size = new System.Drawing.Size(129, 132);

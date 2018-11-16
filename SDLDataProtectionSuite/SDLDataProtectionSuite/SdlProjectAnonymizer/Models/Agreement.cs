@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.projectAnonymizer.Models
+﻿namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models
 {
 	public class Agreement
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Sdl.Community.projectAnonymizer.Helpers
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 {
 	public static class ProjectBackup
 	{
@@ -16,7 +16,9 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 			{
 				Directory.CreateDirectory(backupFolderPath);
 			}
-			var projectBackupPath = Path.Combine(backupFolderPath, projectName);
+
+			var projectBackupPath = Path.Combine(backupFolderPath, projectName ?? throw new InvalidOperationException());
+			
 			//Create a backup of initial project
 			//Create it only once
 			if (!Directory.Exists(projectBackupPath))

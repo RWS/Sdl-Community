@@ -1,19 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using Sdl.Community.projectAnonymizer.Models;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 
-namespace Sdl.Community.projectAnonymizer.Helpers
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 {
 	public static class Constants
 	{
 		public static string AcceptFolderPath = Path.Combine(
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-			@"SDL Community\Anonymizer Projects Accept");
+			@"SDL Community\ProjectAnonymizer");
 
 		public static string Key = @"dGhpc2lzdGhlZW5jb2RlZGt0eQ==";
 
-		public static string AcceptFilePath = Path.Combine(AcceptFolderPath, "accept.json");
+		public static string AcceptFilePath = Path.Combine(AcceptFolderPath, "settings.json");
 
 		public static BindingList<RegexPattern> GetDefaultRegexPatterns()
 		{
@@ -21,7 +21,7 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 			{
 				new RegexPattern
 				{
-					Id = "1",
+					Id = Guid.NewGuid().ToString(),
 					Description = "Email addresses",
 					Pattern = @"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b",
 					IsDefaultPath = true
@@ -29,28 +29,28 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 
 				new RegexPattern
 				{
-					Id = "2",
+					Id =Guid.NewGuid().ToString(),
 					Description = "PCI (Payment Card Industry)",
 					Pattern = @"\b(?:\d[ -]*?){13,16}\b",
 					IsDefaultPath = true
 				},
 				new RegexPattern
 				{
-					Id = "3",
+					Id = Guid.NewGuid().ToString(),
 					Description = "IP4 Address",
 					Pattern = @"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b",
 					IsDefaultPath = true
 				},
 				new RegexPattern
 				{
-					Id = "4",
+					Id = Guid.NewGuid().ToString(),
 					Description = "IP6 Address",
 					Pattern = @"\b(?<![:.\w])(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}(?![:.\w])\b",
 					IsDefaultPath = true
 				},
 				new RegexPattern
 				{
-					Id = "5",
+					Id = Guid.NewGuid().ToString(),
 					Description = "MAC Address",
 					Pattern = @"\b[0-9A-F]{2}([-:]?)(?:[0-9A-F]{2}\1){4}[0-9A-F]{2}\b",
 					IsDefaultPath = true
@@ -58,14 +58,14 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 
 				new RegexPattern
 				{
-					Id = "8",
+					Id = Guid.NewGuid().ToString(),
 					Description = "UK National Insurance Number",
 					Pattern = @"\b[A-Z]{2}\s\d{2}\s\d{2}\s\d{2}\s[A-Z]\b",
 					IsDefaultPath = true
 				},
 				new RegexPattern
 				{
-					Id = "9",
+					Id = Guid.NewGuid().ToString(),
 					Description= "Social Security Numbers",
 					Pattern = @"\b(?!000)(?!666)[0-8][0-9]{2}[- ](?!00)[0-9]{2}[- ](?!0000)[0-9]{4}\b",
 					IsDefaultPath = true

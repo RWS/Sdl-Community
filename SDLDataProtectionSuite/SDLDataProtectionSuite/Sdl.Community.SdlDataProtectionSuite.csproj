@@ -49,6 +49,9 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Sdl.Core.Settings">
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -60,6 +63,9 @@
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
       <Private>True</Private>
@@ -80,6 +86,9 @@
     <Reference Include="Sdl.MultiTerm.Client.Api">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.MultiTerm.Client.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <Private>True</Private>
@@ -157,6 +166,45 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="SdlProjectAnonymizer\Batch Task\AnonymizerSettings.cs" />
+    <Compile Include="SdlProjectAnonymizer\Batch Task\AnonymizerSettingsPage.cs" />
+    <Compile Include="SdlProjectAnonymizer\Batch Task\AnonymizerTask.cs" />
+    <Compile Include="SdlProjectAnonymizer\Batch Task\DecryptSettingsPage.cs" />
+    <Compile Include="SdlProjectAnonymizer\Batch Task\StateEnum.cs" />
+    <Compile Include="SdlProjectAnonymizer\Helpers\AgreementMethods.cs" />
+    <Compile Include="SdlProjectAnonymizer\Helpers\CheckBoxHeaderCellEventArgs.cs" />
+    <Compile Include="SdlProjectAnonymizer\Helpers\Constants.cs" />
+    <Compile Include="SdlProjectAnonymizer\Helpers\CustomColumnHeader.cs" />
+    <Compile Include="SdlProjectAnonymizer\Helpers\Expressions.cs" />
+    <Compile Include="SdlProjectAnonymizer\Helpers\ProjectBackup.cs" />
+    <Compile Include="SdlProjectAnonymizer\Interfaces\IAnonymizerSettings.cs" />
+    <Compile Include="SdlProjectAnonymizer\Interfaces\IDecryptSettings.cs" />
+    <Compile Include="SdlProjectAnonymizer\Models\Agreement.cs" />
+    <Compile Include="SdlProjectAnonymizer\Models\AnonymizedData.cs" />
+    <Compile Include="SdlProjectAnonymizer\Models\RegexPattern.cs" />
+    <Compile Include="SdlProjectAnonymizer\Process Xliff\AnonymizeData.cs" />
+    <Compile Include="SdlProjectAnonymizer\Process Xliff\AnonymizerPreProcessor.cs" />
+    <Compile Include="SdlProjectAnonymizer\Process Xliff\DecryptDataProcessor.cs" />
+    <Compile Include="SdlProjectAnonymizer\Process Xliff\DecryptSegmentVisitor.cs" />
+    <Compile Include="SdlProjectAnonymizer\Process Xliff\SegmentVisitor.cs" />
+    <Compile Include="SdlProjectAnonymizer\Ui\AcceptWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SdlProjectAnonymizer\Ui\AcceptWindow.Designer.cs">
+      <DependentUpon>AcceptWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SdlProjectAnonymizer\Ui\AnonymizerSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SdlProjectAnonymizer\Ui\AnonymizerSettingsControl.Designer.cs">
+      <DependentUpon>AnonymizerSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SdlProjectAnonymizer\Ui\DecryptSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SdlProjectAnonymizer\Ui\DecryptSettingsControl.Designer.cs">
+      <DependentUpon>DecryptSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="SdlTmAnonymizer\Behaviours\DragDropBehaviour.cs" />
     <Compile Include="SdlTmAnonymizer\Behaviours\EventBehaviourFactory.cs" />
     <Compile Include="SdlTmAnonymizer\Commands\CommandHandler.cs" />
@@ -325,6 +373,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="Resources\icon.ico" />
+    <Resource Include="Resources\lockImage.png" />
+    <Content Include="Resources\question.ico" />
+    <Resource Include="Resources\unlock.ico" />
     <Resource Include="Resources\ApplyChanges.ico" />
     <Resource Include="Resources\CheckedCircle.png" />
     <Resource Include="Resources\Delete.ico" />
@@ -353,13 +405,21 @@
     <Resource Include="Resources\TranslationMemory.ico" />
     <Resource Include="Resources\TranslationMemoryCache.ico" />
     <Resource Include="Resources\Up.ico" />
-    <Content Include="Resources\wiki.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SdlProjectAnonymizer\Ui\AcceptWindow.resx">
+      <DependentUpon>AcceptWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SdlProjectAnonymizer\Ui\AnonymizerSettingsControl.resx">
+      <DependentUpon>AnonymizerSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SdlProjectAnonymizer\Ui\DecryptSettingsControl.resx">
+      <DependentUpon>DecryptSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SdlTmAnonymizer\Controls\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sdl.Community.projectAnonymizer.Batch_Task
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 {
 	[Flags]
 	public enum State

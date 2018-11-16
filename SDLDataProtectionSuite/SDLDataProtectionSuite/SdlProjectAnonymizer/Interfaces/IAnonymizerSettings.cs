@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
-using Sdl.Community.projectAnonymizer.Models;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 
-namespace Sdl.Community.projectAnonymizer.Interfaces
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Interfaces
 {
 	public interface IAnonymizerSettings
 	{

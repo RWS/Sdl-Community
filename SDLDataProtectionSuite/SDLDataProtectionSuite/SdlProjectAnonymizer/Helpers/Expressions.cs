@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Windows.Forms;
 using OfficeOpenXml;
-using Sdl.Community.projectAnonymizer.Models;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 
-namespace Sdl.Community.projectAnonymizer.Helpers
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 {
 	public static class Expressions
 	{
@@ -136,7 +135,7 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 			catch (Exception e)
 			{
 				Console.Write(e);
-				filePath = filePath.Insert(filePath.IndexOf(".xlsx"), "(new)");
+				filePath = filePath.Insert(filePath.IndexOf(".xlsx", StringComparison.Ordinal), "(new)");
 				CreateExcelWithPatterns(ref filePath);
 			}
 		}

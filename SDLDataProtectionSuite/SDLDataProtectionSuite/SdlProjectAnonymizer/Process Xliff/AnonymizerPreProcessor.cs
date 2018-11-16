@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Sdl.Community.projectAnonymizer.Models;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace Sdl.Community.projectAnonymizer.Process_Xliff
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff
 {
 	public class AnonymizerPreProcessor : AbstractBilingualContentProcessor
 	{

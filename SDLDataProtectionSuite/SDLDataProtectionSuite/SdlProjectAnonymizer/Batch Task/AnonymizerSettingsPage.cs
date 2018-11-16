@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using Sdl.Community.projectAnonymizer.Helpers;
-using Sdl.Community.projectAnonymizer.Models;
-using Sdl.Community.projectAnonymizer.Process_Xliff;
-using Sdl.Community.projectAnonymizer.Ui;
+﻿using System.ComponentModel;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 
-namespace Sdl.Community.projectAnonymizer.Batch_Task
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 {
 	public class AnonymizerSettingsPage : DefaultSettingsPage<AnonymizerSettingsControl, AnonymizerSettings>
 	{
@@ -32,8 +31,13 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		public override object GetControl()
 		{
 			_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<AnonymizerSettings>();
+
 			_control = base.GetControl() as AnonymizerSettingsControl;
-			_control.Settings = _settings;
+			if (_control != null)
+			{
+				_control.Settings = _settings;			
+			}
+
 			return _control;
 		}
 

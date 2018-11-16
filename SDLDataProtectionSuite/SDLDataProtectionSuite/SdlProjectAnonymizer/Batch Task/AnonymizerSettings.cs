@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel;
-using Sdl.Community.projectAnonymizer.Helpers;
-using Sdl.Community.projectAnonymizer.Interfaces;
-using Sdl.Community.projectAnonymizer.Models;
-using Sdl.Community.projectAnonymizer.Process_Xliff;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Interfaces;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
 using Sdl.Core.Settings;
 
-namespace Sdl.Community.projectAnonymizer.Batch_Task
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 {
 	public class AnonymizerSettings : SettingsGroup, IAnonymizerSettings
 	{
-		private BindingList<RegexPattern> _regexPatterns = new BindingList<RegexPattern>();
+		private readonly BindingList<RegexPattern> _regexPatterns = new BindingList<RegexPattern>();
 
 		public bool? IsOldVersion
 		{

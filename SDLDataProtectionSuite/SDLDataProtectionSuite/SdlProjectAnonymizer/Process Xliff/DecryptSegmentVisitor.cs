@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Sdl.Community.projectAnonymizer.Batch_Task;
-using Sdl.Community.projectAnonymizer.Helpers;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.projectAnonymizer.Process_Xliff
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff
 {
 	public class DecryptSegmentVisitor : IMarkupDataVisitor
 	{
