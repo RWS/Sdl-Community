@@ -61,7 +61,7 @@ namespace Sdl.Community.SpotCheck {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Trados Studio SpotCheck Plugin.
+        ///   Looks up a localized string similar to Sdl.Community.SpotCheck.
         /// </summary>
         internal static string Plugin_Name {
             get {
