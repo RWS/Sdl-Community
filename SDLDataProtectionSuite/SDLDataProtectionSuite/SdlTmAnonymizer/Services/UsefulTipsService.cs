@@ -46,7 +46,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 					}
 				}
 
-				tipsProvider.AddTips(tipContexts, StringResources.Application_Name);
+				tipsProvider.AddTips(tipContexts, StringResources.SDLTM_Anonymizer_Name);
 			}
 			catch (Exception ex)
 			{

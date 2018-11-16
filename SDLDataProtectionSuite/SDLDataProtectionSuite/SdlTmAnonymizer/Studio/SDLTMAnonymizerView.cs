@@ -14,7 +14,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 	[View(
 		Id = "SDLTMAnonymizerView",
 		Name = "SDLTM Anonymizer",
-		Icon = "icon",
+		Icon = "SDLTMAnonymizer",
 		Description = "Anonymize personal information in Translation Memories",
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation),
 		AllowViewParts = true)]

@@ -180,40 +180,43 @@
   <data name="Login_Not_Authorized" xml:space="preserve">
     <value>Not Authorized!</value>
   </data>
-	<data name="AcceptsNoLiability_Description_Line02" xml:space="preserve">
+  <data name="AcceptsNoLiability_Description_Line02" xml:space="preserve">
     <value>SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables.</value>
   </data>
-	<data name="Process_cancelled_by_user" xml:space="preserve">
+  <data name="Process_cancelled_by_user" xml:space="preserve">
     <value>Process cancelled by user.</value>
   </data>
-	<data name="Process_failed" xml:space="preserve">
+  <data name="Process_failed" xml:space="preserve">
     <value>Process failed. </value>
   </data>
-	<data name="Reading_servers" xml:space="preserve">
+  <data name="Reading_servers" xml:space="preserve">
     <value>Reading servers...</value>
   </data>
-	<data name="Loading_data" xml:space="preserve">
+  <data name="Loading_data" xml:space="preserve">
     <value>Loading data...</value>
   </data>
-	<data name="Updating_Multiple_PickList_fields" xml:space="preserve">
+  <data name="Updating_Multiple_PickList_fields" xml:space="preserve">
     <value>Updating 'Multiple PickList' fields...</value>
   </data>
-	<data name="Applying_changes" xml:space="preserve">
+  <data name="Applying_changes" xml:space="preserve">
     <value>Applying changes</value>
   </data>
-	<data name="Operation_type_is_not_supported" xml:space="preserve">
+  <data name="Operation_type_is_not_supported" xml:space="preserve">
     <value>Operation type is not supported</value>
   </data>
-	<data name="System_OutOfMemoryException_was_thrown" xml:space="preserve">
+  <data name="System_OutOfMemoryException_was_thrown" xml:space="preserve">
     <value>System.OutOfMemoryException was thrown.</value>
   </data>
-	<data name="Please_wait_while_process_will_be_cancelled" xml:space="preserve">
+  <data name="Please_wait_while_process_will_be_cancelled" xml:space="preserve">
     <value>Please wait while process will be cancelled...</value>
   </data>
-	<data name="Cant_compare_different_field_types" xml:space="preserve">
+  <data name="Cant_compare_different_field_types" xml:space="preserve">
     <value>Can't compare different field types</value>
   </data>
-	<data name="Application_Name" xml:space="preserve">
+  <data name="SDLTM_Anonymizer_Name" xml:space="preserve">
     <value>SDLTM Anonymizer</value>
+  </data>
+  <data name="SDLTM_Anonymizer_Description" xml:space="preserve">
+    <value>SDLTM Anonymizer is a plugin for SDL Trados Studio that provides functionality to anonymize personal information in both server and file-based Translation Memories</value>
   </data>
 </root>

@@ -150,7 +150,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PluginResources.Designer.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="SdlTmAnonymizer\Behaviours\DragDropBehaviour.cs" />
@@ -313,7 +317,11 @@
     <Compile Include="SdlTmAnonymizer\View\TranslationMemoryView.xaml.cs">
       <DependentUpon>TranslationMemoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StringResources.Designer.cs" />
+    <Compile Include="StringResources1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StringResources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
@@ -325,7 +333,7 @@
     <Resource Include="Resources\ExportTo.ico" />
     <Resource Include="Resources\Folder.ico" />
     <Resource Include="Resources\help.ico" />
-    <Content Include="Resources\icon.ico" />
+    <Content Include="Resources\SDLTMAnonymizer.ico" />
     <Resource Include="Resources\ImportFrom.ico" />
     <Resource Include="Resources\information.ico" />
     <Resource Include="Resources\Preview.ico" />
@@ -334,10 +342,10 @@
     <Resource Include="Resources\RemoveCache.ico" />
     <Resource Include="Resources\Report.ico" />
     <Content Include="Resources\ReportsView.ico" />
-    <Content Include="Resources\SDLTMAnoymizer.Add.FileBasedTM.gif" />
-    <Content Include="Resources\SDLTMAnoymizer.Anonymize.CustomFields.gif" />
-    <Content Include="Resources\SDLTMAnoymizer.Anonymize.Data.gif" />
-    <Content Include="Resources\SDLTMAnoymizer.Anonymize.SystemFields.gif" />
+    <Content Include="Resources\Gifs\SDLTMAnonymizer.Add.FileBasedTM.gif" />
+    <Content Include="Resources\Gifs\SDLTMAnonymizer.Anonymize.CustomFields.gif" />
+    <Content Include="Resources\Gifs\SDLTMAnonymizer.Anonymize.Data.gif" />
+    <Content Include="Resources\Gifs\SDLTMAnonymizer.Anonymize.SystemFields.gif" />
     <Resource Include="Resources\ServerBasedTranslationMemory.ico" />
     <Resource Include="Resources\ServerBasedTranslationMemoryCache.ico" />
     <Resource Include="Resources\Settings.ico" />
@@ -350,20 +358,30 @@
   <ItemGroup>
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="SdlTmAnonymizer\Controls\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SdlTmAnonymizer\View\TmAnonymizerExplorerControl.resx">
       <DependentUpon>TmAnonymizerExplorerControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SdlTmAnonymizer\View\TmAnonymizerLogViewControl.resx">
       <DependentUpon>TmAnonymizerLogViewControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SdlTmAnonymizer\View\TmAnonymizerViewControl.resx">
       <DependentUpon>TmAnonymizerViewControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="StringResources.resx" />
+    <EmbeddedResource Include="StringResources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StringResources1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Page Include="SdlTmAnonymizer\Controls\LabelledTextBox.xaml">
@@ -450,15 +468,15 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="SdlTmAnonymizer\UsefulTips\de\de.zip" />
-    <None Include="SdlTmAnonymizer\UsefulTips\en\en.zip" />
-    <None Include="SdlTmAnonymizer\UsefulTips\es\es.zip" />
-    <None Include="SdlTmAnonymizer\UsefulTips\fr\fr.zip" />
-    <None Include="SdlTmAnonymizer\UsefulTips\it\it.zip" />
-    <None Include="SdlTmAnonymizer\UsefulTips\ja\ja.zip" />
-    <None Include="SdlTmAnonymizer\UsefulTips\ko\ko.zip" />
-    <None Include="SdlTmAnonymizer\UsefulTips\ru\ru.zip" />
-    <None Include="SdlTmAnonymizer\UsefulTips\zh\zh.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\de\de.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\en\en.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\es\es.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\fr\fr.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\it\it.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\ja\ja.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\ko\ko.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\ru\ru.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\zh\zh.zip" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\SdlCommunity.snk">
@@ -466,7 +484,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="SdlProjectAnonymizer\Properties\" />
     <Folder Include="SdlTmAnonymizer\Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

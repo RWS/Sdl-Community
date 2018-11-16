@@ -9,12 +9,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Controls
 		public AboutBox()
 		{
 			InitializeComponent();
-			this.Text = String.Format("About {0}", "SDLTM Anonymizer");
-			this.labelProductName.Text = "SDLTM Anonymizer";
+			this.Text = String.Format("About {0}", StringResources.SDLTM_Anonymizer_Name);
+			this.labelProductName.Text = StringResources.SDLTM_Anonymizer_Name;
 			this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
 			this.labelCopyright.Text = AssemblyCopyright;
 			this.labelCompanyName.Text = AssemblyCompany;
-			this.textBoxDescription.Text = AssemblyDescription;
+			this.textBoxDescription.Text = StringResources.SDLTM_Anonymizer_Description;
 		}
 
 		#region Assembly Attribute Accessors
