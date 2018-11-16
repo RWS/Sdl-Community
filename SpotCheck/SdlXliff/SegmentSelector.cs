@@ -61,7 +61,7 @@ namespace Sdl.Studio.SpotCheck.SdlXliff
             _segmentMap = new Dictionary<XmlNode, int>(_segments.Count);
 
             int requiredSegments = GetSegmentLimit(settings);
-            List<XmlNode> remaining = _segments.Where(n => WordCount(n.InnerText) >= settings.MinWords && WordCount(n.InnerText) <= settings.MaxWords).ToList();
+            List<XmlNode> remaining = _segments.Where(n => WordCounter.Count(n.InnerText) >= settings.MinWords && WordCounter.Count(n.InnerText) <= settings.MaxWords).ToList();
 
             // need to preserve original positions while remaining shrinks
             Dictionary<XmlNode, int> segmentIndexMap = new Dictionary<XmlNode, int>(_segments.Count);
