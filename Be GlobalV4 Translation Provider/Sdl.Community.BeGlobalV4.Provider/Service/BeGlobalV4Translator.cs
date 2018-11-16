@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -121,6 +122,33 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			if (response.StatusCode != System.Net.HttpStatusCode.OK)
 				throw new Exception("Downloading translation failed: " + response.Content);
 			return response.RawBytes;
+		}
+
+		public void TranslateFile(string sourcepath, string targetpath)
+		{
+			var id = UploadFile(sourcepath);
+			var rawTranslation = WaitForTranslation(id);
+			using (var bw = new BinaryWriter(new FileStream(targetpath, FileMode.Create)))
+			{
+				bw.Write(rawTranslation);
+			}
+		}
+
+		private string UploadFile(string path)
+		{
+			var request = new RestRequest("/mt/translations/async", Method.POST);
+			// Because of the added file, RestSharp will create a Content-Type = multipart/form-data request for this
+			request.AddFile("input", path, "application/octet-stream");
+			request.AddParameter("sourceLanguageId", _source);
+			request.AddParameter("targetLanguageId", _target);
+			request.AddParameter("model", _flavor);
+			request.AddParameter("inputFormat", "XML");
+
+			var response = _client.Execute(request);
+			if (response.StatusCode != System.Net.HttpStatusCode.OK && response.StatusCode != System.Net.HttpStatusCode.Accepted)
+				throw new Exception("UploadFilefailed: " + response.Content);
+			dynamic json = JsonConvert.DeserializeObject(response.Content);
+			return json.requestId.Value;
 		}
 
 		private IRestResponse RestGet(string command)

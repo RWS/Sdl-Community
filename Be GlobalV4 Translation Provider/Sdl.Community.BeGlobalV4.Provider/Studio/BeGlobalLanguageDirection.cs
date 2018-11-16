@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -17,6 +19,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private readonly LanguagePair _languageDirection;
 		private BeGlobalConnecter _beGlobalConnect;
 		private TranslationUnit _inputTu;
+		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
 
 		public ITranslationProvider TranslationProvider => _beGlobalTranslationProvider;
 		public CultureInfo SourceLanguage { get; }
@@ -28,6 +31,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			_beGlobalTranslationProvider = beGlobalTranslationProvider;
 			_languageDirection = languageDirection;
 			_options = beGlobalTranslationProvider.Options;
+			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 		}
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
@@ -68,25 +72,45 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public void PrepareTempData(List<PreTranslateSegment> preTranslatesegments)
 		{
-			var preTranslateHelp = new PreTranslateTempFile();
-			var filePath = preTranslateHelp.CreateXmlFile();
-
-			for (int i = 0; i < preTranslatesegments.Count; i++)
+			try
 			{
-				var sourceText = string.Empty;
-				var newseg = preTranslatesegments[i].TranslationUnit.SourceSegment.Duplicate();
+				var preTranslateHelp = new PreTranslateTempFile();
+				var filePath = preTranslateHelp.CreateXmlFile();
 
-				if (newseg.HasTags)
+				for (int i = 0; i < preTranslatesegments.Count; i++)
 				{
-					var tagPlacer = new BeGlobalTagPlacer(newseg);
-					sourceText = tagPlacer.PreparedSourceText;
+					var sourceText = string.Empty;
+					var newseg = preTranslatesegments[i].TranslationUnit.SourceSegment.Duplicate();
+
+					if (newseg.HasTags)
+					{
+						var tagPlacer = new BeGlobalTagPlacer(newseg);
+						sourceText = tagPlacer.PreparedSourceText;
+					}
+					else
+					{
+						sourceText = newseg.ToPlain();
+					}
+					sourceText =_normalizeSourceTextHelper.NormalizeText(sourceText);
+					preTranslateHelp.WriteSegments(filePath, i, sourceText);
 				}
-				else
-				{
-					sourceText = newseg.ToPlain(); 
-				}
-				preTranslateHelp.WriteSegments(filePath,i,sourceText);	 
+
+				var sourceLanguage =
+					_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.SourceCulture.ThreeLetterISOLanguageName);
+				var targetLanguage =
+					_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.TargetCulture.ThreeLetterISOLanguageName);
+
+				var translator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", _options.ClientId,
+					_options.ClientSecret, sourceLanguage, targetLanguage, _options.Model, _options.UseClientAuthentication);
+
+				var translatedFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "translated.xml");
+				translator.TranslateFile(filePath, translatedFile);
 			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+			}
+			
 
 		}
 
@@ -162,53 +186,69 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			// bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
 			var results = new List<SearchResults>();
+
+			var i = 0;
+			foreach (var tu in translationUnits)
+			{
+				if (mask == null || mask[i])
+				{
+					var result = SearchTranslationUnit(settings, tu);
+					results.Add(result);
+				}
+				else
+				{
+					results.Add(null);
+				}
+				i++;
+			}
+
 			// plugin is called from pre-translate batch task 
 			//we receive the data in chunchs of 10 segments
-			if (translationUnits.Length > 1)
-			{
-			   var preTranslateList= new List<PreTranslateSegment>();
-				var i = 0;
-				foreach (var tu in translationUnits)
-				{
-					if (mask == null || mask[i])
-					{
-						var preTranslate = new PreTranslateSegment
-						{
-							SearchSettings = settings,
-							TranslationUnit = tu
-						};
-						preTranslateList.Add(preTranslate);
-						//var result = SearchTranslationUnit(settings, tu);
-						//results.Add(result);
-					}
-					else
-					{
-						results.Add(null);
-					}
-					i++;
-				}
-				PrepareTempData(preTranslateList);
-			}
-			else
-			{
-				var i = 0;
-				foreach (var tu in translationUnits)
-				{
-					if (mask == null || mask[i])
-					{
-						var result = SearchTranslationUnit(settings, tu);
-						results.Add(result);
-					}
-					else
-					{
-						results.Add(null);
-					}
-					i++;
-				}
-			}
-			
+			//if (translationUnits.Length > 1)
+			//{
+			//   var preTranslateList= new List<PreTranslateSegment>();
+			//	var i = 0;
+			//	foreach (var tu in translationUnits)
+			//	{
+			//		if (mask == null || mask[i])
+			//		{
+			//			var preTranslate = new PreTranslateSegment
+			//			{
+			//				SearchSettings = settings,
+			//				TranslationUnit = tu
+			//			};
+			//			preTranslateList.Add(preTranslate);
+			//			//var result = SearchTranslationUnit(settings, tu);
+			//			//results.Add(result);
+			//		}
+			//		else
+			//		{
+			//			results.Add(null);
+			//		}
+			//		i++;
+			//	}
+			//	PrepareTempData(preTranslateList);
+			//}
+			//else
+			//{
+			//	var i = 0;
+			//	foreach (var tu in translationUnits)
+			//	{
+			//		if (mask == null || mask[i])
+			//		{
+			//			var result = SearchTranslationUnit(settings, tu);
+			//			results.Add(result);
+			//		}
+			//		else
+			//		{
+			//			results.Add(null);
+			//		}
+			//		i++;
+			//	}
+			//}
 
-			
+
+
 			return results.ToArray();
 		}
 
