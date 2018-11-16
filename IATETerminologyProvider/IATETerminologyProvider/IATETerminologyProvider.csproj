@@ -104,6 +104,7 @@
     <Compile Include="IATETerminologyProviderViewerWinFormsUI.cs" />
     <Compile Include="IATETerminologyProvider.cs" />
     <Compile Include="IATETerminologyProviderFactory.cs" />
+    <Compile Include="Model\EntryLanguageModel.cs" />
     <Compile Include="Model\EntryModel.cs" />
     <Compile Include="Model\LanguageModel.cs" />
     <Compile Include="Model\ProviderSettings.cs" />

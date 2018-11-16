@@ -14,6 +14,8 @@ namespace IATETerminologyProvider
 	{
 		private ProviderSettings _providerSettings;
 		private IList<ISearchResult> _termsResult = new List<ISearchResult>();
+		private IList<EntryModel> _entryModels = new List<EntryModel>();
+
 		public IATETerminologyProvider(ProviderSettings providerSettings)
 		{
 			_providerSettings = providerSettings;
@@ -30,22 +32,12 @@ namespace IATETerminologyProvider
 
 		public override IEntry GetEntry(int id)
 		{
-			var entryModel = new EntryModel
-			{
-				Id = id,
-				SearchText = _termsResult.FirstOrDefault(t=>t.Id == id).Text
-			};
-			return entryModel;
+			return _entryModels.Where(e => e.Id == id).FirstOrDefault();
 		}
 
 		public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
 		{
-			var entryModel = new EntryModel
-			{
-				Id = id,
-				SearchText = _termsResult.FirstOrDefault(t => t.Id == id).Text
-			};
-			return entryModel;
+			return _entryModels.Where(e => e.Id == id).FirstOrDefault();
 		}
 
 		public override IList<ILanguage> GetLanguages()
@@ -54,13 +46,18 @@ namespace IATETerminologyProvider
 		}
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
-		{			
+		{
 			var searchService = new TermSearchService(_providerSettings);
 			var t = Task.Factory.StartNew(() =>
 			{
 				_termsResult = searchService.GetTerms(text, source, destination, maxResultsCount);
 			});
 			t.Wait();
+
+			if (_termsResult.Count > 0)
+			{
+				CreateEntryModels(text, source, destination);
+			}
 			return _termsResult;
 		}
 
@@ -115,6 +112,75 @@ namespace IATETerminologyProvider
 		public ProjectsController GetProjectController()
 		{
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
+		}
+
+		// Create entry models (used to return the text in the Termbase Search panel)
+		private void CreateEntryModels(string text, ILanguage sourceLanguage, ILanguage targetLanguage)
+		{
+			var languages = GetLanguages();
+
+			foreach (var termResult in _termsResult)
+			{
+				var entryModel = new EntryModel
+				{
+					SearchText = termResult.Text,
+					Id = termResult.Id,
+					Fields = new List<IEntryField>(),
+					Transactions = new List<IEntryTransaction>(),
+					Languages = SetEntryLanguages(languages, text, sourceLanguage)
+				};
+				_entryModels.Add(entryModel);
+			}
+		}
+
+		// Set entry languages for the entry models
+		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, string text, ILanguage sourceLanguage)
+		{
+			IList<IEntryLanguage> entryLanguages = new List<IEntryLanguage>();
+
+			foreach(var language in languages)
+			{
+				var entryLanguage = new EntryLanguageModel
+				{
+					Fields = new List<IEntryField>(),
+					Locale = language.Locale,
+					Name = language.Name,
+					ParentEntry = null,					
+					Terms = CreateEntryTerms(language, text, sourceLanguage)
+				};
+				entryLanguages.Add(entryLanguage);
+			}
+			return entryLanguages;
+		}
+
+		// Create Entry terms for the entry languages
+		private IList<IEntryTerm> CreateEntryTerms(ILanguage language, string text, ILanguage sourceLanguage)
+		{
+			IList<IEntryTerm> entryTerms = new List<IEntryTerm>();
+
+			// if language is Source language, create entryTerm with value from source language text
+			// otherwise create entry terms for the target language search results
+			if (language.Name.Equals(sourceLanguage.Name))
+			{
+				var entryTerm = new EntryTerm
+				{
+					Value = text					
+				};
+				entryTerms.Add(entryTerm);
+			}
+			else
+			{
+				foreach(var term in _termsResult)
+				{
+					var entryTerm = new EntryTerm
+					{
+						Value = term.Text
+					};
+					entryTerms.Add(entryTerm);
+				}
+			}
+
+			return entryTerms;
 		}
 	}
 }
