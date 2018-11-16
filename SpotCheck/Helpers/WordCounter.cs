@@ -1,4 +1,6 @@
-﻿namespace Sdl.Studio.SpotCheck.Helpers
+﻿using System;
+
+namespace Sdl.Studio.SpotCheck.Helpers
 {
     class WordCounter
     {
@@ -18,14 +20,14 @@
                 }
                 else
                 {
-                    if (!inWord && c != ' ' && c != '\t')
+                    if (!inWord && char.IsLetter(c))
                     {
                         inWord = true;
-                        ++nonAsianWordCount;
+	                    ++nonAsianWordCount;
                     }
                     else if (inWord && (c == ' ' || c == '\t'))
                     {
-                        inWord = false;
+	                    inWord = false;
                     }
                 }
             }
