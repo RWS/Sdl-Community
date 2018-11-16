@@ -129,7 +129,7 @@
 			// lockPictureBox
 			// 
 			this.lockPictureBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.lockPictureBox.Image = global::Sdl.Community.projectAnonymizer.PluginResources.lockxxx;
+			this.lockPictureBox.Image = global::Sdl.Community.projectAnonymizer.PluginResources.lockImage;
 			this.lockPictureBox.Location = new System.Drawing.Point(294, 17);
 			this.lockPictureBox.Name = "lockPictureBox";
 			this.lockPictureBox.Size = new System.Drawing.Size(129, 132);
