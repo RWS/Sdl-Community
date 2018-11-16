@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Xml;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 {
@@ -40,22 +42,40 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 			doc.Save(filePath);
 		}
 
-		public void WriteSegments(string filePath,int id, string segmentText)
+		public void WriteSegments(string filePath,string id, string segmentText)
 		{
 			var doc = new XmlDocument();
-			doc.Load(filePath);
+			doc.Load(filePath);	 
 
-			//var body = doc.GetElementsByTagName("body")[0];
 			var root = doc.DocumentElement;
 			var segment = doc.CreateElement("segment");
 			segment.InnerText = segmentText;
 			var idAttribute = doc.CreateAttribute("id");
-			idAttribute.Value = id.ToString();
-			segment.Attributes.Append(idAttribute);
+			idAttribute.Value = id;
+			segment.Attributes.Append(idAttribute);		 
 
-			//segment.Attributes
 			root?.AppendChild(segment);
 			doc.Save(filePath);
+		}
+
+		public List<PreTranslation> GetTranslationFromTemp(string filePath)
+		{
+			var doc = new XmlDocument();
+			doc.Load(filePath);
+			var preTranslations = new List<PreTranslation>();
+			var root = doc.GetElementsByTagName("root")[0];
+			foreach (XmlNode node in root.ChildNodes)
+			{
+				var preTranslation = new PreTranslation();
+				var id = node?.Attributes?["id"];
+				if (id != null)
+				{
+					preTranslation.Id = id.Value;
+					preTranslation.Translation = HttpUtility.HtmlDecode(node.InnerText);
+					preTranslations.Add(preTranslation);
+				} 
+			}  
+			return preTranslations;
 		}
 	}
 }

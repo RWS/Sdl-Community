@@ -91,8 +91,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					{
 						sourceText = newseg.ToPlain();
 					}
-					sourceText =_normalizeSourceTextHelper.NormalizeText(sourceText);
-					preTranslateHelp.WriteSegments(filePath, i, sourceText);
+					sourceText = _normalizeSourceTextHelper.NormalizeText(sourceText);
+					preTranslateHelp.WriteSegments(filePath, preTranslatesegments[i].Id, sourceText);
 				}
 
 				var sourceLanguage =
@@ -105,13 +105,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 				var translatedFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "translated.xml");
 				translator.TranslateFile(filePath, translatedFile);
+
+				var translationResults = preTranslateHelp.GetTranslationFromTemp(translatedFile);
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine(e);
 			}
-			
-
 		}
 
 		private SearchResult CreateSearchResult(Segment segment, Segment translation)
@@ -182,72 +182,58 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			throw new NotImplementedException();
 		}
 
-		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
+		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits,
+			bool[] mask)
 		{
 			// bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
 			var results = new List<SearchResults>();
 
-			var i = 0;
-			foreach (var tu in translationUnits)
-			{
-				if (mask == null || mask[i])
-				{
-					var result = SearchTranslationUnit(settings, tu);
-					results.Add(result);
-				}
-				else
-				{
-					results.Add(null);
-				}
-				i++;
-			}
-
 			// plugin is called from pre-translate batch task 
-			//we receive the data in chunchs of 10 segments
-			//if (translationUnits.Length > 1)
-			//{
-			//   var preTranslateList= new List<PreTranslateSegment>();
-			//	var i = 0;
-			//	foreach (var tu in translationUnits)
-			//	{
-			//		if (mask == null || mask[i])
-			//		{
-			//			var preTranslate = new PreTranslateSegment
-			//			{
-			//				SearchSettings = settings,
-			//				TranslationUnit = tu
-			//			};
-			//			preTranslateList.Add(preTranslate);
-			//			//var result = SearchTranslationUnit(settings, tu);
-			//			//results.Add(result);
-			//		}
-			//		else
-			//		{
-			//			results.Add(null);
-			//		}
-			//		i++;
-			//	}
-			//	PrepareTempData(preTranslateList);
-			//}
-			//else
-			//{
-			//	var i = 0;
-			//	foreach (var tu in translationUnits)
-			//	{
-			//		if (mask == null || mask[i])
-			//		{
-			//			var result = SearchTranslationUnit(settings, tu);
-			//			results.Add(result);
-			//		}
-			//		else
-			//		{
-			//			results.Add(null);
-			//		}
-			//		i++;
-			//	}
-			//}
-
-
+			//we receive the data in chunk of 10 segments
+			if (translationUnits.Length > 2)
+			{
+				var preTranslateList = new List<PreTranslateSegment>();
+				var i = 0;
+				foreach (var tu in translationUnits)
+				{
+					if (mask == null || mask[i])
+					{
+						var preTranslate = new PreTranslateSegment
+						{
+							SearchSettings = settings,
+							TranslationUnit = tu,
+							Id = i.ToString()
+						};
+						preTranslateList.Add(preTranslate);
+						//var result = SearchTranslationUnit(settings, tu);
+						//results.Add(result);
+					}
+					//else
+					//{
+					//	preTranslateList.Add(null);
+					//	//results.Add(null);
+					//}
+					i++;
+				}
+				PrepareTempData(preTranslateList);
+			}
+			else
+			{
+				var i = 0;
+				foreach (var tu in translationUnits)
+				{
+					if (mask == null || mask[i])
+					{
+						var result = SearchTranslationUnit(settings, tu);
+						results.Add(result);
+					}
+					else
+					{
+						results.Add(null);
+					}
+					i++;
+				}
+			}  
 
 			return results.ToArray();
 		}

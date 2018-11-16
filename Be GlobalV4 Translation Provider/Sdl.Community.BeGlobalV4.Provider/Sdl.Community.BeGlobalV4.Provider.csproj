@@ -120,6 +120,7 @@
     <Compile Include="Model\BeGlobalTag.cs" />
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\PreTranslateSegment.cs" />
+    <Compile Include="Model\PreTranslation.cs" />
     <Compile Include="Model\TagInfo.cs" />
     <Compile Include="Model\TranslationModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
