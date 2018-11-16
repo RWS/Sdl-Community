@@ -174,7 +174,7 @@
     <Resource Include="Resources\Delete.ico" />
     <Content Include="Resources\icon.ico" />
     <None Include="Resources\Up.ico" />
-    <None Include="Resources\lock.png" />
+    <Resource Include="Resources\lock.png" />
     <EmbeddedResource Include="Ui\AcceptWindow.resx">
       <DependentUpon>AcceptWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -187,7 +187,7 @@
     <None Include="Resources\unlock.ico" />
     <None Include="Resources\question.ico" />
     <EmbeddedResource Include="PluginResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>

@@ -8,6 +8,7 @@ using Sdl.Community.projectAnonymizer.Batch_Task;
 using Sdl.Community.projectAnonymizer.Helpers;
 using Sdl.Community.projectAnonymizer.Models;
 using Sdl.Community.projectAnonymizer.Process_Xliff;
+using Sdl.Community.ProjectAnonymizer;
 using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.projectAnonymizer.Ui
