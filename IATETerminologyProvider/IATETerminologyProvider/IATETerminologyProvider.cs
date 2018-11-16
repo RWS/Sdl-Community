@@ -32,12 +32,12 @@ namespace IATETerminologyProvider
 
 		public override IEntry GetEntry(int id)
 		{
-			return _entryModels.Where(e => e.Id == id).FirstOrDefault();
+			return _entryModels.FirstOrDefault(e => e.Id == id);
 		}
 
 		public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
 		{
-			return _entryModels.Where(e => e.Id == id).FirstOrDefault();
+			return _entryModels.FirstOrDefault(e => e.Id == id);
 		}
 
 		public override IList<ILanguage> GetLanguages()
@@ -127,14 +127,14 @@ namespace IATETerminologyProvider
 					Id = termResult.Id,
 					Fields = new List<IEntryField>(),
 					Transactions = new List<IEntryTransaction>(),
-					Languages = SetEntryLanguages(languages, text, sourceLanguage)
+					Languages = SetEntryLanguages(languages, text, sourceLanguage, termResult.Id)
 				};
 				_entryModels.Add(entryModel);
 			}
 		}
 
 		// Set entry languages for the entry models
-		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, string text, ILanguage sourceLanguage)
+		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, string text, ILanguage sourceLanguage, int id)
 		{
 			IList<IEntryLanguage> entryLanguages = new List<IEntryLanguage>();
 
@@ -146,7 +146,7 @@ namespace IATETerminologyProvider
 					Locale = language.Locale,
 					Name = language.Name,
 					ParentEntry = null,					
-					Terms = CreateEntryTerms(language, text, sourceLanguage)
+					Terms = CreateEntryTerms(language, text, sourceLanguage, id)
 				};
 				entryLanguages.Add(entryLanguage);
 			}
@@ -154,7 +154,7 @@ namespace IATETerminologyProvider
 		}
 
 		// Create Entry terms for the entry languages
-		private IList<IEntryTerm> CreateEntryTerms(ILanguage language, string text, ILanguage sourceLanguage)
+		private IList<IEntryTerm> CreateEntryTerms(ILanguage language, string text, ILanguage sourceLanguage, int id)
 		{
 			IList<IEntryTerm> entryTerms = new List<IEntryTerm>();
 
@@ -164,13 +164,14 @@ namespace IATETerminologyProvider
 			{
 				var entryTerm = new EntryTerm
 				{
-					Value = text					
+					Value = text
 				};
 				entryTerms.Add(entryTerm);
 			}
 			else
 			{
-				foreach(var term in _termsResult)
+				var terms = _termsResult.Where(t => t.Id == id).ToList();
+				foreach (var term in terms)
 				{
 					var entryTerm = new EntryTerm
 					{
