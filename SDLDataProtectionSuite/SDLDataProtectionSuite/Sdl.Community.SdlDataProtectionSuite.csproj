@@ -1,0 +1,485 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{88B68CE7-3D7C-43E0-9035-0028560AA3BB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sdl.Community.SdlDataProtectionSuite</RootNamespace>
+    <AssemblyName>Sdl.Community.SdlDataProtectionSuite</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <CreatePluginPackage>true</CreatePluginPackage>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.MultiTerm.Client.Api">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.MultiTerm.Client.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Core">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.FileBased">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Settings">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
+      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="Sdl.Community.UsefulTipsService, Version=1.1.9.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.9\lib\net472\Sdl.Community.UsefulTipsService.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sdl.Community.UsefulTipsService.Update, Version=1.1.9.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.9\lib\net472\Sdl.Community.UsefulTipsService.Update.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework.PackageSupport, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SegmentComparer, Version=1.0.3.0, Culture=neutral, PublicKeyToken=89aa17d6612aafb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\SegmentComparer.1.0.3\lib\net452\SegmentComparer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.109.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.109.2\lib\net46\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.7.18313.20590, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.Toolkit.3.7.18313.20590\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="PluginResources.Designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="SdlTmAnonymizer\Behaviours\DragDropBehaviour.cs" />
+    <Compile Include="SdlTmAnonymizer\Behaviours\EventBehaviourFactory.cs" />
+    <Compile Include="SdlTmAnonymizer\Commands\CommandHandler.cs" />
+    <Compile Include="SdlTmAnonymizer\Commands\RelayCommand.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\Controls\AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\Controls\BindableParagraphBlock.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\BindingDataProxy.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\BindingWebBrowserSource.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\CustomTextBox.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\EnabledImage.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\FolderSelectDialog.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\LabelledTextBox.xaml.cs">
+      <DependentUpon>LabelledTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\Controls\ProgressDialog\ProgressDialog.xaml.cs">
+      <DependentUpon>ProgressDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\Controls\ProgressDialog\ProgressDialogCancellationExcpetion.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\ProgressDialog\ProgressDialogContext.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\ProgressDialog\ProgressDialogResult.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\ProgressDialog\ProgressDialogSettings.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\RichTextBoxFormatter.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\SelectAwareDataGrid.cs" />
+    <Compile Include="SdlTmAnonymizer\Controls\SortAwareDataGrid.cs" />
+    <Compile Include="SdlTmAnonymizer\Converters\GrayScaleConverter.cs" />
+    <Compile Include="SdlTmAnonymizer\Converters\VisibilityToBooleanConverter.cs" />
+    <Compile Include="SdlTmAnonymizer\EventArgs\SelectedTabIndexArgs.cs" />
+    <Compile Include="SdlTmAnonymizer\Extensions\ListExtensions.cs" />
+    <Compile Include="SdlTmAnonymizer\Extensions\StringExtensions.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\AnonymizeTranslationMemory.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\Comparison\Part.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\ContentSearchResult.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\Credentials.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\CustomField.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\CustomFieldValue.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\FieldDefinitions\DateTimeFieldValue.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\FieldDefinitions\FieldValue.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\FieldDefinitions\IntFieldValue.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\FieldDefinitions\MultiplePicklistFieldValue.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\FieldDefinitions\MultipleStringFieldValue.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\FieldDefinitions\PicklistItem.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\FieldDefinitions\SinglePicklistFieldValue.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\FieldDefinitions\SingleStringFieldValue.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\LanguageDirection.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\Log\Action.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\Log\Report.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\Log\ReportFile.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\MatchResult.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\ModelBase.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\PathInfo.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\Position.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\Rule.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\ServerTmBackUp.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\Settings.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TmFile.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TmLanguageDirection.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TmSegment.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TmTranslationUnit.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TM\DateAttribute.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TM\NumericAttribute.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TM\PickListAttribute.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TM\PickListValue.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TM\StringAttribute.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TM\TmAttribute.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TM\TranslationMemory.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TM\TranslationUnit.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TM\TranslationUnitContext.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\TranslationUnitDetails.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\User.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\WordDetails.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\ContentParsingService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\Converters\FieldValueTypeConverter.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\Converters\SegmentElementTypeConverter.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\CustomFieldsService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\ExcelImportExportService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\ReflectorService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\SegmentElementVisitorService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\SegmentService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\SelectedWordsVisitorService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\SerializerService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\SettingsService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\SqliteTMService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\SystemFieldsService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\TextComparisonService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\TmService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\UsefulTipsService.cs" />
+    <Compile Include="SdlTmAnonymizer\Studio\SDLTMAnonymizerLogViewPart.cs" />
+    <Compile Include="SdlTmAnonymizer\Studio\SDLTMAnonymizerView.cs" />
+    <Compile Include="SdlTmAnonymizer\Studio\SDLTMAnonymizierViewRibbon.cs" />
+    <Compile Include="SdlTmAnonymizer\ViewModel\AcceptViewModel.cs" />
+    <Compile Include="SdlTmAnonymizer\ViewModel\ContentFilteringRulesViewModel.cs" />
+    <Compile Include="SdlTmAnonymizer\ViewModel\CustomFieldsViewModel.cs" />
+    <Compile Include="SdlTmAnonymizer\ViewModel\LoginViewModel.cs" />
+    <Compile Include="SdlTmAnonymizer\ViewModel\LogViewModel.cs" />
+    <Compile Include="SdlTmAnonymizer\ViewModel\MainViewModel.cs" />
+    <Compile Include="SdlTmAnonymizer\ViewModel\PreviewViewModel.cs" />
+    <Compile Include="SdlTmAnonymizer\ViewModel\SelectServersViewModel.cs" />
+    <Compile Include="SdlTmAnonymizer\ViewModel\SettingsViewModel.cs" />
+    <Compile Include="SdlTmAnonymizer\ViewModel\SystemFieldsViewModel.cs" />
+    <Compile Include="SdlTmAnonymizer\ViewModel\TranslationMemoryViewModel.cs" />
+    <Compile Include="SdlTmAnonymizer\ViewModel\ViewModelBase.cs" />
+    <Compile Include="SdlTmAnonymizer\View\AcceptView.xaml.cs">
+      <DependentUpon>AcceptView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\ContentFilteringRulesView.xaml.cs">
+      <DependentUpon>ContentFilteringRulesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\CustomFieldsView.xaml.cs">
+      <DependentUpon>CustomFieldsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\LogView.xaml.cs">
+      <DependentUpon>LogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\MainExplorerView.xaml.cs">
+      <DependentUpon>MainExplorerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\PreviewView.xaml.cs">
+      <DependentUpon>PreviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\SelectServersView.xaml.cs">
+      <DependentUpon>SelectServersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\SystemFieldsView.xaml.cs">
+      <DependentUpon>SystemFieldsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\TmAnonymizerExplorerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\TmAnonymizerExplorerControl.Designer.cs">
+      <DependentUpon>TmAnonymizerExplorerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\TmAnonymizerLogViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\TmAnonymizerLogViewControl.Designer.cs">
+      <DependentUpon>TmAnonymizerLogViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\TmAnonymizerViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\TmAnonymizerViewControl.Designer.cs">
+      <DependentUpon>TmAnonymizerViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SdlTmAnonymizer\View\TranslationMemoryView.xaml.cs">
+      <DependentUpon>TranslationMemoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StringResources.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="pluginpackage.manifest.xml" />
+    <Resource Include="Resources\ApplyChanges.ico" />
+    <Resource Include="Resources\CheckedCircle.png" />
+    <Resource Include="Resources\Delete.ico" />
+    <Resource Include="Resources\Down.ico" />
+    <Resource Include="Resources\Excel.ico" />
+    <Resource Include="Resources\ExportTo.ico" />
+    <Resource Include="Resources\Folder.ico" />
+    <Resource Include="Resources\help.ico" />
+    <Content Include="Resources\icon.ico" />
+    <Resource Include="Resources\ImportFrom.ico" />
+    <Resource Include="Resources\information.ico" />
+    <Resource Include="Resources\Preview.ico" />
+    <Resource Include="Resources\PreviewChanges.ico" />
+    <Resource Include="Resources\Remove.ico" />
+    <Resource Include="Resources\RemoveCache.ico" />
+    <Resource Include="Resources\Report.ico" />
+    <Content Include="Resources\ReportsView.ico" />
+    <Content Include="Resources\SDLTMAnoymizer.Add.FileBasedTM.gif" />
+    <Content Include="Resources\SDLTMAnoymizer.Anonymize.CustomFields.gif" />
+    <Content Include="Resources\SDLTMAnoymizer.Anonymize.Data.gif" />
+    <Content Include="Resources\SDLTMAnoymizer.Anonymize.SystemFields.gif" />
+    <Resource Include="Resources\ServerBasedTranslationMemory.ico" />
+    <Resource Include="Resources\ServerBasedTranslationMemoryCache.ico" />
+    <Resource Include="Resources\Settings.ico" />
+    <Resource Include="Resources\TranslationMemoriesFolder_Open.ico" />
+    <Resource Include="Resources\TranslationMemory.ico" />
+    <Resource Include="Resources\TranslationMemoryCache.ico" />
+    <Resource Include="Resources\Up.ico" />
+    <Content Include="Resources\wiki.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="PluginResources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SdlTmAnonymizer\Controls\AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SdlTmAnonymizer\View\TmAnonymizerExplorerControl.resx">
+      <DependentUpon>TmAnonymizerExplorerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SdlTmAnonymizer\View\TmAnonymizerLogViewControl.resx">
+      <DependentUpon>TmAnonymizerLogViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SdlTmAnonymizer\View\TmAnonymizerViewControl.resx">
+      <DependentUpon>TmAnonymizerViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StringResources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="SdlTmAnonymizer\Controls\LabelledTextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\Controls\ProgressDialog\ProgressDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\Styles\ButtonsStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\Styles\DataGridStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\Styles\TabControlStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\Styles\TextBlockStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\Styles\TextBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\Styles\ToolTipStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\AcceptView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\ContentFilteringRulesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\CustomFieldsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\LoginView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\LogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\MainExplorerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\MainView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\PreviewView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\SelectServersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\SettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\SystemFieldsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\TranslationMemoryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="SdlTmAnonymizer\UsefulTips\de\de.zip" />
+    <None Include="SdlTmAnonymizer\UsefulTips\en\en.zip" />
+    <None Include="SdlTmAnonymizer\UsefulTips\es\es.zip" />
+    <None Include="SdlTmAnonymizer\UsefulTips\fr\fr.zip" />
+    <None Include="SdlTmAnonymizer\UsefulTips\it\it.zip" />
+    <None Include="SdlTmAnonymizer\UsefulTips\ja\ja.zip" />
+    <None Include="SdlTmAnonymizer\UsefulTips\ko\ko.zip" />
+    <None Include="SdlTmAnonymizer\UsefulTips\ru\ru.zip" />
+    <None Include="SdlTmAnonymizer\UsefulTips\zh\zh.zip" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\SdlCommunity.snk">
+      <Link>SdlCommunity.snk</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SdlProjectAnonymizer\Properties\" />
+    <Folder Include="SdlTmAnonymizer\Connected Services\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PluginDeploymentPath>$(AppData)\SDL\SDL Trados Studio\15\Plugins</PluginDeploymentPath>
+  </PropertyGroup>
+  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets'))" />
+  </Target>
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets')" />
+</Project>

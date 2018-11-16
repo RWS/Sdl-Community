@@ -120,7 +120,6 @@
       <HintPath>..\packages\SegmentComparer.1.0.3\lib\net452\SegmentComparer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />

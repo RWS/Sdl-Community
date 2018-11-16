@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>SDL.Data.Protection.Suite</PlugInName>
+  <Version>1.0.1.0</Version>
+  <Description></Description>
+  <Author></Author>
+	<Include>
+		<File>EPPlus.dll</File>
+		<File>Xceed.Wpf.Toolkit.dll</File>
+		<File>Newtonsoft.Json.dll</File>
+		<File>System.Data.SQLite.dll</File>
+		<File>SegmentComparer.dll</File>
+		<File>Sdl.Community.UsefulTipsService.dll</File>
+		<File>Sdl.Community.UsefulTipsService.Update.exe</File>
+	</Include>
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+</PluginPackage>
