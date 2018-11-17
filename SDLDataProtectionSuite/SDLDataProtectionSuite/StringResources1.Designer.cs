@@ -97,6 +97,15 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backup: {0}.
+        /// </summary>
+        internal static string Backup_0 {
+            get {
+                return ResourceManager.GetString("Backup_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t compare different field types.
         /// </summary>
         internal static string Cant_compare_different_field_types {
@@ -241,6 +250,24 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parsing: {0} of {1} Translation Units ({2}-{3}).
+        /// </summary>
+        internal static string Parsing_0_of_1_Translation_Units_2_3 {
+            get {
+                return ResourceManager.GetString("Parsing_0_of_1_Translation_Units_2_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parsing content....
+        /// </summary>
+        internal static string Parsing_content {
+            get {
+                return ResourceManager.GetString("Parsing_content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password is rquired.
         /// </summary>
         internal static string Password_is_rquired {
@@ -268,6 +295,15 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preparing: {0} of {1} Translation Units.
+        /// </summary>
+        internal static string Preparing_0_of_1_Translation_Units {
+            get {
+                return ResourceManager.GetString("Preparing_0_of_1_Translation_Units", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Process cancelled by user..
         /// </summary>
         internal static string Process_cancelled_by_user {
@@ -282,6 +318,24 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         internal static string Process_failed {
             get {
                 return ResourceManager.GetString("Process_failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reading: {0} of {1} Translation Units.
+        /// </summary>
+        internal static string Reading_0_of_1_Translation_Units {
+            get {
+                return ResourceManager.GetString("Reading_0_of_1_Translation_Units", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reading data from cache....
+        /// </summary>
+        internal static string Reading_data_from_cache {
+            get {
+                return ResourceManager.GetString("Reading_data_from_cache", resourceCulture);
             }
         }
         
@@ -313,6 +367,15 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Saving data to cache....
+        /// </summary>
+        internal static string Saving_data_to_cache {
+            get {
+                return ResourceManager.GetString("Saving_data_to_cache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SDLTM Anonymizer is a plugin for SDL Trados Studio that provides functionality to anonymize personal information in both server and file-based Translation Memories.
         /// </summary>
         internal static string SDLTM_Anonymizer_Description {
@@ -336,6 +399,24 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         internal static string System_OutOfMemoryException_was_thrown {
             get {
                 return ResourceManager.GetString("System_OutOfMemoryException_was_thrown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One or more errors occurred..
+        /// </summary>
+        internal static string TmService_BackupServerBasedTms_One_or_more_errors_occurred_ {
+            get {
+                return ResourceManager.GetString("TmService_BackupServerBasedTms_One_or_more_errors_occurred_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating: {0} of {1} Translation Units.
+        /// </summary>
+        internal static string Updating_0_of_1_Translation_Units {
+            get {
+                return ResourceManager.GetString("Updating_0_of_1_Translation_Units", resourceCulture);
             }
         }
         

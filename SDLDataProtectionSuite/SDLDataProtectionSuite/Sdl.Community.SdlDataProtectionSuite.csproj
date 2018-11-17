@@ -50,7 +50,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <Private>True</Private>
@@ -65,7 +65,7 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
       <Private>True</Private>
@@ -88,7 +88,7 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.MultiTerm.Client.Api.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <Private>True</Private>
@@ -374,6 +374,7 @@
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
     <Content Include="Resources\icon.ico" />
+    <Resource Include="Resources\SDPS.ico" />
     <Resource Include="Resources\lockImage.png" />
     <Content Include="Resources\question.ico" />
     <Resource Include="Resources\unlock.ico" />

@@ -57,7 +57,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 				{
 					var serializer = new SerializerService();
 
-					context.Report(0, "Reading data from cache...");
+					context.Report(0, StringResources.Reading_data_from_cache);
 
 					languageDirection.TranslationUnits = serializer.Read<List<TmTranslationUnit>>(tmFile.CachePath);
 
@@ -116,7 +116,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 
 		public void SaveTmCacheStorage(ProgressDialogContext context, TmFile tmFile, TmLanguageDirection languageDirection)
 		{
-			context.Report(0, "Saving data to cache...");
+			context.Report(0, StringResources.Saving_data_to_cache);
 			if (string.IsNullOrEmpty(tmFile.CachePath) || !File.Exists(tmFile.CachePath))
 			{
 				var path = Path.Combine(_settingsService.PathInfo.TemporaryStorageFullPath,
@@ -199,7 +199,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 
 		private IEnumerable<ContentSearchResult> ParseTranslationUnits(ProgressDialogContext context, TmFile tmFile, IReadOnlyCollection<TmTranslationUnit> tus)
 		{
-			context.Report(0, "Parsing content...");
+			context.Report(0, StringResources.Parsing_content);
 
 			decimal iTotal = tus.Count;
 			decimal iCurrent = 0;
@@ -218,8 +218,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 					}
 
 					var progress = iCurrent / iTotal * 100;
-					context.Report(Convert.ToInt32(progress), "Parsing: " + iCurrent + " of " + iTotal + " Translation Units " +
-															  "(" + tu.SourceSegment.Language + "-" + tu.TargetSegment.Language + ")");
+					context.Report(Convert.ToInt32(progress), string.Format(StringResources.Parsing_0_of_1_Translation_Units_2_3,
+															iCurrent, iTotal, tu.SourceSegment.Language, tu.TargetSegment.Language));
 				}
 
 				var sourceText = tu.SourceSegment.ToPlain();
@@ -326,9 +326,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 					}
 
 					var progress = iCurrent / iTotalUnits * 100;
-					context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+					context?.Report(Convert.ToInt32(progress), string.Format(StringResources.Updating_0_of_1_Translation_Units, iCurrent, iTotalUnits));
 
-					var tusToUpdate = new List<Sdl.LanguagePlatform.TranslationMemory.TranslationUnit>();
+					var tusToUpdate = new List<LanguagePlatform.TranslationMemory.TranslationUnit>();
 					foreach (var tu in tus)
 					{
 						if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
@@ -426,12 +426,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 						}
 
 						var progress = iCurrent / iTotalUnits * 100;
-						context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+						context?.Report(Convert.ToInt32(progress), string.Format(StringResources.Updating_0_of_1_Translation_Units, iCurrent, iTotalUnits));
 					}
 
 					foreach (var languageDirection in tm.LanguageDirections)
 					{
-						var tusToUpdate = new List<Sdl.LanguagePlatform.TranslationMemory.TranslationUnit>();
+						var tusToUpdate = new List<LanguagePlatform.TranslationMemory.TranslationUnit>();
 						foreach (var tu in tus)
 						{
 							if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
@@ -472,8 +472,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			return updatedCount;
 		}
 
-		private static IEnumerable<Model.Log.Action> GetResultActions(IReadOnlyList<ImportResult> results, IReadOnlyList<TranslationUnitDetails> unitsClone, 
-			IReadOnlyList<Sdl.LanguagePlatform.TranslationMemory.TranslationUnit> unitsUpdated, IReadOnlyCollection<TmTranslationUnit> unitsReference)
+		private static IEnumerable<Model.Log.Action> GetResultActions(IReadOnlyList<ImportResult> results, IReadOnlyList<TranslationUnitDetails> unitsClone,
+			IReadOnlyList<LanguagePlatform.TranslationMemory.TranslationUnit> unitsUpdated, IReadOnlyCollection<TmTranslationUnit> unitsReference)
 		{
 			var details = new List<Model.Log.Action>();
 
@@ -484,7 +484,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 				// var previousTu = unitsUpdated.FirstOrDefault(a => a.TranslationUnit.ResourceId.Id == result.TuId.Id);
 
 				var updateTu = unitsUpdated[i]; // we need this value to recover the correct resource ID, because of issue mentioned above.
-				var previousTu = unitsClone.FirstOrDefault(a => a.TranslationUnit.ResourceId.Id == updateTu.ResourceId.Id);	
+				var previousTu = unitsClone.FirstOrDefault(a => a.TranslationUnit.ResourceId.Id == updateTu.ResourceId.Id);
 				var tuReference = unitsReference.FirstOrDefault(a => a.ResourceId.Id == updateTu.ResourceId.Id);
 
 				if (tuReference != null && previousTu != null)
@@ -547,9 +547,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			return unitsClone;
 		}
 
-		public Sdl.LanguagePlatform.TranslationMemory.TranslationUnit CreateTranslationUnit(TmTranslationUnit tu, ITranslationProviderLanguageDirection languageDirection)
+		public LanguagePlatform.TranslationMemory.TranslationUnit CreateTranslationUnit(TmTranslationUnit tu, ITranslationProviderLanguageDirection languageDirection)
 		{
-			var unit = new Sdl.LanguagePlatform.TranslationMemory.TranslationUnit
+			var unit = new LanguagePlatform.TranslationMemory.TranslationUnit
 			{
 				ResourceId = tu.ResourceId,
 				FieldValues = GetFieldValues(tu.FieldValues),
@@ -702,7 +702,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			}
 			catch (Exception exception)
 			{
-				if (exception.Message.Equals("One or more errors occurred.") && exception.InnerException != null)
+				if (exception.Message.Equals(StringResources.TmService_BackupServerBasedTms_One_or_more_errors_occurred_) && exception.InnerException != null)
 				{
 					MessageBox.Show(exception.InnerException.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
@@ -735,7 +735,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 						continue;
 					}
 
-					context.Report(0, "Backup " + tm.Path);
+					context.Report(0, string.Format(StringResources.Backup_0, tm.Path));
 
 					var tmInfo = new FileInfo(tm.Path);
 
@@ -1024,7 +1024,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 						}
 
 						var progress = iCurrent / iTotalUnits * 100;
-						context?.Report(Convert.ToInt32(progress), "Preparing: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+						context?.Report(Convert.ToInt32(progress), string.Format(StringResources.Preparing_0_of_1_Translation_Units, iCurrent, iTotalUnits));
 					}
 
 					AnonymizeTranslationUnit(details, rules);
@@ -1100,7 +1100,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 
 				var iCurrent = i * unitCount;
 				var progress = iCurrent / iTotalUnits * 100;
-				context?.Report(Convert.ToInt32(progress), "Reading: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+				context?.Report(Convert.ToInt32(progress), string.Format(StringResources.Reading_0_of_1_Translation_Units, iCurrent, iTotalUnits));
 
 				tus.AddRange(AddTranslationUnits(languageDirection.GetTranslationUnits(ref tmIterator)));
 			}
@@ -1126,7 +1126,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			localLanguageDirection.TranslationUnitsCount = tus.Count;
 		}
 
-		private static IEnumerable<TmTranslationUnit> AddTranslationUnits(IEnumerable<Sdl.LanguagePlatform.TranslationMemory.TranslationUnit> units)
+		private static IEnumerable<TmTranslationUnit> AddTranslationUnits(IEnumerable<LanguagePlatform.TranslationMemory.TranslationUnit> units)
 		{
 			var tus = new List<TmTranslationUnit>();
 			tus.AddRange(units.Select(unit => new TmTranslationUnit

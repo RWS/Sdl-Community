@@ -219,4 +219,31 @@
   <data name="SDLTM_Anonymizer_Description" xml:space="preserve">
     <value>SDLTM Anonymizer is a plugin for SDL Trados Studio that provides functionality to anonymize personal information in both server and file-based Translation Memories</value>
   </data>
+  <data name="TmService_BackupServerBasedTms_One_or_more_errors_occurred_" xml:space="preserve">
+    <value>One or more errors occurred.</value>
+  </data>
+  <data name="Backup_0" xml:space="preserve">
+    <value>Backup: {0}</value>
+  </data>
+  <data name="Reading_0_of_1_Translation_Units" xml:space="preserve">
+    <value>Reading: {0} of {1} Translation Units</value>
+  </data>
+  <data name="Preparing_0_of_1_Translation_Units" xml:space="preserve">
+    <value>Preparing: {0} of {1} Translation Units</value>
+  </data>
+  <data name="Updating_0_of_1_Translation_Units" xml:space="preserve">
+    <value>Updating: {0} of {1} Translation Units</value>
+  </data>
+  <data name="Parsing_0_of_1_Translation_Units_2_3" xml:space="preserve">
+    <value>Parsing: {0} of {1} Translation Units ({2}-{3})</value>
+  </data>
+  <data name="Parsing_content" xml:space="preserve">
+    <value>Parsing content...</value>
+  </data>
+  <data name="Saving_data_to_cache" xml:space="preserve">
+    <value>Saving data to cache...</value>
+  </data>
+  <data name="Reading_data_from_cache" xml:space="preserve">
+    <value>Reading data from cache...</value>
+  </data>
 </root>

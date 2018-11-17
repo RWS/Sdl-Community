@@ -222,6 +222,16 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon SDPS {
+            get {
+                object obj = ResourceManager.GetObject("SDPS", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon ServerBasedTranslationMemory {
             get {
                 object obj = ResourceManager.GetObject("ServerBasedTranslationMemory", resourceCulture);
