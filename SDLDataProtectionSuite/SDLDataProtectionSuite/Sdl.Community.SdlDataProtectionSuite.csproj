@@ -293,7 +293,6 @@
     <Compile Include="SdlTmAnonymizer\Services\SettingsService.cs" />
     <Compile Include="SdlTmAnonymizer\Services\SqliteTMService.cs" />
     <Compile Include="SdlTmAnonymizer\Services\SystemFieldsService.cs" />
-    <Compile Include="SdlTmAnonymizer\Services\TextComparisonService.cs" />
     <Compile Include="SdlTmAnonymizer\Services\TmService.cs" />
     <Compile Include="SdlTmAnonymizer\Services\UsefulTipsService.cs" />
     <Compile Include="SdlTmAnonymizer\Studio\SDLTMAnonymizerLogViewPart.cs" />
@@ -365,7 +364,7 @@
     <Compile Include="SdlTmAnonymizer\View\TranslationMemoryView.xaml.cs">
       <DependentUpon>TranslationMemoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StringResources1.Designer.cs">
+    <Compile Include="StringResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>StringResources.resx</DependentUpon>
@@ -441,7 +440,7 @@
     <EmbeddedResource Include="StringResources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>StringResources1.Designer.cs</LastGenOutput>
+      <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

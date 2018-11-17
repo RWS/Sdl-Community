@@ -61,20 +61,31 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The tool has been designed to help the Client create specific rules in accordance with their requirements and tag identifiable information..
+        ///   Looks up a localized string similar to Activate the &apos;Enable&apos; checkbox for all data that should be encrypted using an encryption key..
         /// </summary>
-        internal static string AcceptsNoLiability_Description_Line01 {
+        internal static string Activate_the_Enable_checkbox_for_all_data_that_should_be_encrypted_using_an_encryption_key {
             get {
-                return ResourceManager.GetString("AcceptsNoLiability_Description_Line01", resourceCulture);
+                return ResourceManager.GetString("Activate_the_Enable_checkbox_for_all_data_that_should_be_encrypted_using_an_encry" +
+                        "ption_key", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables..
+        ///   Looks up a localized string similar to Activate the &apos;Enable&apos; checkbox for all rules that should be applied to this project..
         /// </summary>
-        internal static string AcceptsNoLiability_Description_Line02 {
+        internal static string Activate_the_Enable_checkbox_for_all_rules_that_should_be_applied_to_this_project {
             get {
-                return ResourceManager.GetString("AcceptsNoLiability_Description_Line02", resourceCulture);
+                return ResourceManager.GetString("Activate_the_Enable_checkbox_for_all_rules_that_should_be_applied_to_this_project" +
+                        "", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add an encryption key.
+        /// </summary>
+        internal static string Add_an_encryption_key {
+            get {
+                return ResourceManager.GetString("Add_an_encryption_key", resourceCulture);
             }
         }
         
@@ -97,6 +108,15 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the expressions?.
+        /// </summary>
+        internal static string Are_you_sure_you_want_to_delete_the_expressions {
+            get {
+                return ResourceManager.GetString("Are_you_sure_you_want_to_delete_the_expressions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backup: {0}.
         /// </summary>
         internal static string Backup_0 {
@@ -115,11 +135,38 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click finish to untag the text.
+        /// </summary>
+        internal static string Click_finish_to_untag_the_text {
+            get {
+                return ResourceManager.GetString("Click_finish_to_untag_the_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirmation.
         /// </summary>
         internal static string Confirmation {
             get {
                 return ResourceManager.GetString("Confirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Decryption key doesn&apos;t match the encryption key..
+        /// </summary>
+        internal static string Decryption_key_doesn_t_match_the_encryption_key {
+            get {
+                return ResourceManager.GetString("Decryption_key_doesn_t_match_the_encryption_key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Do not forget this or you won’t be able to decrypt the data later).
+        /// </summary>
+        internal static string Do_not_forget_this_or_you_wont_be_able_to_decrypt_the_data_later {
+            get {
+                return ResourceManager.GetString("Do_not_forget_this_or_you_wont_be_able_to_decrypt_the_data_later", resourceCulture);
             }
         }
         
@@ -169,6 +216,33 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export selected expressions.
+        /// </summary>
+        internal static string Export_selected_expressions {
+            get {
+                return ResourceManager.GetString("Export_selected_expressions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export selected expressions to disk.
+        /// </summary>
+        internal static string Export_selected_expressions_to_disk {
+            get {
+                return ResourceManager.GetString("Export_selected_expressions_to_disk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File was exported successfully to selected location.
+        /// </summary>
+        internal static string File_was_exported_successfully_to_selected_location {
+            get {
+                return ResourceManager.GetString("File_was_exported_successfully_to_selected_location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a folder.
         /// </summary>
         internal static string FolderSelectDialog_Title_Select_a_folder {
@@ -205,6 +279,24 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import regular expressions in to current project.
+        /// </summary>
+        internal static string Import_regular_expressions_in_to_current_project {
+            get {
+                return ResourceManager.GetString("Import_regular_expressions_in_to_current_project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid import format, found &apos;{0}&apos;, expected column header name &apos;{1}&apos;.
+        /// </summary>
+        internal static string Invalid_import_format_found_0_expected_column_header_name_1 {
+            get {
+                return ResourceManager.GetString("Invalid_import_format_found_0_expected_column_header_name_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading data....
         /// </summary>
         internal static string Loading_data {
@@ -219,6 +311,15 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         internal static string Login_Not_Authorized {
             get {
                 return ResourceManager.GetString("Login_Not_Authorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New regular expressions, or plain text, can be added either by typing them into the empty row at the end of the grid, or by importing an Excel file containing the rules or lists of names, addresses etc... .
+        /// </summary>
+        internal static string New_regular_expressions_or_plain_text__can_be_added_either_by_typing_them_into_ {
+            get {
+                return ResourceManager.GetString("New_regular_expressions_or_plain_text__can_be_added_either_by_typing_them_into_", resourceCulture);
             }
         }
         
@@ -277,11 +378,38 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please confirm.
+        /// </summary>
+        internal static string Please_confirm {
+            get {
+                return ResourceManager.GetString("Please_confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select at least one row to export.
+        /// </summary>
+        internal static string Please_select_at_least_one_row_to_export {
+            get {
+                return ResourceManager.GetString("Please_select_at_least_one_row_to_export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select at least one translation memory and a rule to preview the changes..
         /// </summary>
         internal static string Please_select_at_least_one_translation_memory_and_a_rule_to_preview_the_changes {
             get {
                 return ResourceManager.GetString("Please_select_at_least_one_translation_memory_and_a_rule_to_preview_the_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select the files you want to import.
+        /// </summary>
+        internal static string Please_select_the_files_you_want_to_import {
+            get {
+                return ResourceManager.GetString("Please_select_the_files_you_want_to_import", resourceCulture);
             }
         }
         
@@ -376,6 +504,24 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The tool has been designed to help the Client create specific rules in accordance with their requirements and tag identifiable information..
+        /// </summary>
+        internal static string SDLProjectAnonymizer_AcceptDescription_Line01 {
+            get {
+                return ResourceManager.GetString("SDLProjectAnonymizer_AcceptDescription_Line01", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables..
+        /// </summary>
+        internal static string SDLProjectAnonymizer_AcceptDescription_Line02 {
+            get {
+                return ResourceManager.GetString("SDLProjectAnonymizer_AcceptDescription_Line02", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SDLTM Anonymizer is a plugin for SDL Trados Studio that provides functionality to anonymize personal information in both server and file-based Translation Memories.
         /// </summary>
         internal static string SDLTM_Anonymizer_Description {
@@ -394,6 +540,42 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The tool has been designed to help the Client create specific rules in accordance with their requirements and tag identifiable information..
+        /// </summary>
+        internal static string SDLTMAnonymizer_AcceptsNoLiability_Description_Line01 {
+            get {
+                return ResourceManager.GetString("SDLTMAnonymizer_AcceptsNoLiability_Description_Line01", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables..
+        /// </summary>
+        internal static string SDLTMAnonymizer_AcceptsNoLiability_Description_Line02 {
+            get {
+                return ResourceManager.GetString("SDLTMAnonymizer_AcceptsNoLiability_Description_Line02", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select all rules with Ctrl+A..
+        /// </summary>
+        internal static string Select_all_rules_with_Ctrl_A {
+            get {
+                return ResourceManager.GetString("Select_all_rules_with_Ctrl_A", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source directory does not exist or could not be found: {0}.
+        /// </summary>
+        internal static string Source_directory_does_not_exist_or_could_not_be_found_0 {
+            get {
+                return ResourceManager.GetString("Source_directory_does_not_exist_or_could_not_be_found_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to System.OutOfMemoryException was thrown..
         /// </summary>
         internal static string System_OutOfMemoryException_was_thrown {
@@ -408,6 +590,24 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         internal static string TmService_BackupServerBasedTms_One_or_more_errors_occurred_ {
             get {
                 return ResourceManager.GetString("TmService_BackupServerBasedTms_One_or_more_errors_occurred_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To edit a rule double click on the cell..
+        /// </summary>
+        internal static string To_edit_a_rule_double_click_on_the_cell {
+            get {
+                return ResourceManager.GetString("To_edit_a_rule_double_click_on_the_cell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To remove a rule select the rows and hit the ‘Delete’ key.  .
+        /// </summary>
+        internal static string To_remove_a_rule_select_the_rows_and_hit_the_Delete_key {
+            get {
+                return ResourceManager.GetString("To_remove_a_rule_select_the_rows_and_hit_the_Delete_key", resourceCulture);
             }
         }
         

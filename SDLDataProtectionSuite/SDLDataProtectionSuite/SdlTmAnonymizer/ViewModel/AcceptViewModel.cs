@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.View;
@@ -15,9 +16,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 		public AcceptViewModel(SettingsService settingsService)
 		{
 			_settingsService = settingsService;
-			Description = StringResources.AcceptsNoLiability_Description_Line01 +
-						  "\r\n\r\n" + 
-			              StringResources.AcceptsNoLiability_Description_Line02;
+			Description = StringResources.SDLTMAnonymizer_AcceptsNoLiability_Description_Line01 +
+			              Environment.NewLine + Environment.NewLine +
+						  StringResources.SDLTMAnonymizer_AcceptsNoLiability_Description_Line02;
 		}
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 

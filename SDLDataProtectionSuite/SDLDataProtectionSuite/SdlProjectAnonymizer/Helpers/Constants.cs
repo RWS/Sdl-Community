@@ -9,7 +9,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 	{
 		public static string AcceptFolderPath = Path.Combine(
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-			@"SDL Community\ProjectAnonymizer");
+			@"SDL Community\SDLProjectAnonymizer");
 
 		public static string Key = @"dGhpc2lzdGhlZW5jb2RlZGt0eQ==";
 
@@ -76,25 +76,25 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 		public static string GetGridDescription()
 		{
 			return
-				@"Activate the “Enable” checkbox for all rules that should be applied to this project." +
-				Environment.NewLine + @"Activate the “Encrypt” checkbox for all data that should be encrypted using an encryption key." +
-				Environment.NewLine + @"New regular expressions, or plain text, can be added either by typing them into the empty row at the end of the grid, or by importing an Excel file containing the rules or lists of names, addresses etc. " +
-				Environment.NewLine + @"To edit a rule double click on the cell." +
-				Environment.NewLine + @"To remove a rule select the rows and hit the ‘Delete’ key.  Select all rules with Ctrl+A.";
+				StringResources.Activate_the_Enable_checkbox_for_all_rules_that_should_be_applied_to_this_project +
+				Environment.NewLine + StringResources.Activate_the_Enable_checkbox_for_all_data_that_should_be_encrypted_using_an_encryption_key +
+				Environment.NewLine + StringResources.New_regular_expressions_or_plain_text__can_be_added_either_by_typing_them_into_ +
+				Environment.NewLine + StringResources.To_edit_a_rule_double_click_on_the_cell +
+				Environment.NewLine + StringResources.To_remove_a_rule_select_the_rows_and_hit_the_Delete_key + StringResources.Select_all_rules_with_Ctrl_A;
 		}
 
 		public static string GetKeyDescription()
 		{
-			return @"Add an encryption key" +
-				   Environment.NewLine + @"(Do not forget this or you won’t be able to decrypt the data later)";
+			return StringResources.Add_an_encryption_key +
+				   Environment.NewLine + StringResources.Do_not_forget_this_or_you_wont_be_able_to_decrypt_the_data_later;
 		}
 
 		public static string AcceptDescription()
 		{
 			return
-				@"The tool has been designed to help the Client create specific rules in accordance with their requirements and tag identifiable information." +
+				StringResources.SDLProjectAnonymizer_AcceptDescription_Line01 +
 				Environment.NewLine +
-				@"SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables.";
+				StringResources.SDLProjectAnonymizer_AcceptDescription_Line02;
 		}
 	}
 }

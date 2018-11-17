@@ -36,7 +36,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 
 			if (Settings.EncryptionState.HasFlag(State.Decrypted))
 			{
-				encryptedMessage.Text = "Click finish to untag the text";
+				encryptedMessage.Text = StringResources.Click_finish_to_untag_the_text;
 				decryptionBox.Enabled = false;
 			}
 
@@ -65,7 +65,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 			if (!anonymizerKey.Equals(AnonymizeData.EncryptData(decryptionBox.Text, Constants.Key)))
 			{
 				messageLbl.Visible = true;
-				messageLbl.Text = "Decryption key doesn't match the encryption key.";
+				messageLbl.Text = StringResources.Decryption_key_doesn_t_match_the_encryption_key;
 				messageLbl.ForeColor = Color.Crimson;
 			}
 		}

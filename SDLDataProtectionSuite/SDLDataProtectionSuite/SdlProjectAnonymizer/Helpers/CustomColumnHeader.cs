@@ -9,14 +9,15 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 	public class CustomColumnHeader : DataGridViewColumnHeaderCell
 	{
 		public bool IsChecked;
-		public CheckBoxState state = CheckBoxState.UncheckedNormal;
-		private Size checkboxsize;
-		private Point location;
-		private Point cellboundsLocation;
+		public CheckBoxState CheckboxState = CheckBoxState.UncheckedNormal;
+		private Size _checkboxsize;
+		private Point _location;
+		private Point _cellboundsLocation;
+
 		public CustomColumnHeader()
 		{
-			location = new Point();
-			cellboundsLocation = new Point();
+			_location = new Point();
+			_cellboundsLocation = new Point();
 			IsChecked = false;
 		}
 
@@ -24,9 +25,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 		protected override void OnMouseClick(DataGridViewCellMouseEventArgs e)
 		{
 			/* Make a condition to check whether the click is fired inside a checkbox region */
-			Point clickpoint = new Point(e.X + cellboundsLocation.X, e.Y + cellboundsLocation.Y);
+			var clickpoint = new Point(e.X + _cellboundsLocation.X, e.Y + _cellboundsLocation.Y);
 
-			if ((clickpoint.X > location.X && clickpoint.X < (location.X + checkboxsize.Width)) && (clickpoint.Y > location.Y && clickpoint.Y < (location.Y + checkboxsize.Height)))
+			if ((clickpoint.X > _location.X && clickpoint.X < (_location.X + _checkboxsize.Width)) && (clickpoint.Y > _location.Y && clickpoint.Y < (_location.Y + _checkboxsize.Height)))
 			{
 				IsChecked = !IsChecked;
 				if (OnCheckBoxHeaderClick != null)
@@ -46,16 +47,16 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 			base.Paint(graphics, clipBounds, cellBounds, rowIndex, dataGridViewElementState,
 				value, formattedValue, errorText, cellStyle, advancedBorderStyle, paintParts);
 
-			checkboxsize = CheckBoxRenderer.GetGlyphSize(graphics, CheckBoxState.UncheckedNormal);
-			location.X = cellBounds.X + (cellBounds.Width / 2 - checkboxsize.Width / 2);
-			location.Y = cellBounds.Y + (cellBounds.Height / 2 - checkboxsize.Height / 2);
-			cellboundsLocation = cellBounds.Location;
+			_checkboxsize = CheckBoxRenderer.GetGlyphSize(graphics, CheckBoxState.UncheckedNormal);
+			_location.X = cellBounds.X + (cellBounds.Width / 2 - _checkboxsize.Width / 2);
+			_location.Y = cellBounds.Y + (cellBounds.Height / 2 - _checkboxsize.Height / 2);
+			_cellboundsLocation = cellBounds.Location;
 
-			state = IsChecked 
+			CheckboxState = IsChecked 
 				? CheckBoxState.CheckedNormal 
 				: CheckBoxState.UncheckedNormal;
 
-			CheckBoxRenderer.DrawCheckBox(graphics, location, state);
+			CheckBoxRenderer.DrawCheckBox(graphics, _location, CheckboxState);
 		}
 	}
 }

@@ -10,15 +10,27 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 			var projectFolder = Path.GetDirectoryName(projectPath);
 			var projectName = Path.GetFileNameWithoutExtension(projectPath);
 
-			var backupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				@"SDL Community\Anonymizer Projects BackUp");
+			var communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community");
+			var projectFolderPath = Path.Combine(communityFolderPath, "SDLProjectAnonymizer");
+			var backupFolderPath = Path.Combine(projectFolderPath, "Backup");
+
+			if (!Directory.Exists(communityFolderPath))
+			{
+				Directory.CreateDirectory(communityFolderPath);
+			}
+
+			if (!Directory.Exists(projectFolderPath))
+			{
+				Directory.CreateDirectory(projectFolderPath);
+			}
+
 			if (!Directory.Exists(backupFolderPath))
 			{
 				Directory.CreateDirectory(backupFolderPath);
 			}
 
 			var projectBackupPath = Path.Combine(backupFolderPath, projectName ?? throw new InvalidOperationException());
-			
+
 			//Create a backup of initial project
 			//Create it only once
 			if (!Directory.Exists(projectBackupPath))
@@ -36,8 +48,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 			if (!dir.Exists)
 			{
 				throw new DirectoryNotFoundException(
-					"Source directory does not exist or could not be found: "
-					+ sourceDirName);
+					string.Format(StringResources.Source_directory_does_not_exist_or_could_not_be_found_0, sourceDirName));
 			}
 
 			var dirs = dir.GetDirectories();

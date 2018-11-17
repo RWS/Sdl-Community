@@ -164,7 +164,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 				}
 
 				var progress = iCurrent / iTotalUnits * 100;
-				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+				context?.Report(Convert.ToInt32(progress), string.Format(StringResources.Updating_0_of_1_Translation_Units, iCurrent, iTotalUnits));
 
 				var filteredTusToUpdate = new List<TmTranslationUnit>();
 				foreach (var tu in tus)
@@ -193,7 +193,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 						if (tusToUpdate.Count > 0)
 						{
 							var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
-							updatedCount += results.Count(result => result.Action != Sdl.LanguagePlatform.TranslationMemory.Action.Error);
+							updatedCount += results.Count(result => result.Action != LanguagePlatform.TranslationMemory.Action.Error);
 						}
 					}
 				}
@@ -262,7 +262,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 				}
 
 				var progress = iCurrent / iTotalUnits * 100;
-				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+				context?.Report(Convert.ToInt32(progress), string.Format(StringResources.Updating_0_of_1_Translation_Units, iCurrent, iTotalUnits));
 
 				var filteredTusToUpdate = new List<TmTranslationUnit>();
 				foreach (var tu in tus)

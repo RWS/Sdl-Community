@@ -456,7 +456,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 		{
 			if (string.Compare(colmun, expected, StringComparison.InvariantCultureIgnoreCase) != 0)
 			{
-				MessageBox.Show("Invalid import format, found '" + colmun + "', expected column header name '" + expected + "'", "SDLTM Anonymizer");
+				MessageBox.Show(string.Format(StringResources.Invalid_import_format_found_0_expected_column_header_name_1, colmun, expected), StringResources.SDLTM_Anonymizer_Name);
 
 				return false;
 			}

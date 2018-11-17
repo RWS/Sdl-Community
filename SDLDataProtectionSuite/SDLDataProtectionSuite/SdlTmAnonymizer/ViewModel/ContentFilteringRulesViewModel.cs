@@ -584,7 +584,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			else if (result.OperationFailed)
 			{
 				SourceSearchResults.Clear();
-				MessageBox.Show(StringResources.Process_failed + "\r\n\r\n" + result.Error.Message, Application.ProductName);
+				MessageBox.Show(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message, Application.ProductName);
 			}
 			else
 			{

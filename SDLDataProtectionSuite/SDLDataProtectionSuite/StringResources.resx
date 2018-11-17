@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AcceptsNoLiability_Description_Line01" xml:space="preserve">
+  <data name="SDLTMAnonymizer_AcceptsNoLiability_Description_Line01" xml:space="preserve">
     <value>The tool has been designed to help the Client create specific rules in accordance with their requirements and tag identifiable information.</value>
   </data>
   <data name="Url_is_required" xml:space="preserve">
@@ -180,7 +180,7 @@
   <data name="Login_Not_Authorized" xml:space="preserve">
     <value>Not Authorized!</value>
   </data>
-  <data name="AcceptsNoLiability_Description_Line02" xml:space="preserve">
+  <data name="SDLTMAnonymizer_AcceptsNoLiability_Description_Line02" xml:space="preserve">
     <value>SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables.</value>
   </data>
   <data name="Process_cancelled_by_user" xml:space="preserve">
@@ -245,5 +245,71 @@
   </data>
   <data name="Reading_data_from_cache" xml:space="preserve">
     <value>Reading data from cache...</value>
+  </data>
+  <data name="Source_directory_does_not_exist_or_could_not_be_found_0" xml:space="preserve">
+    <value>Source directory does not exist or could not be found: {0}</value>
+  </data>
+  <data name="Activate_the_Enable_checkbox_for_all_rules_that_should_be_applied_to_this_project" xml:space="preserve">
+    <value>Activate the 'Enable' checkbox for all rules that should be applied to this project.</value>
+  </data>
+  <data name="Activate_the_Enable_checkbox_for_all_data_that_should_be_encrypted_using_an_encryption_key" xml:space="preserve">
+    <value>Activate the 'Enable' checkbox for all data that should be encrypted using an encryption key.</value>
+  </data>
+  <data name="New_regular_expressions_or_plain_text__can_be_added_either_by_typing_them_into_" xml:space="preserve">
+    <value>New regular expressions, or plain text, can be added either by typing them into the empty row at the end of the grid, or by importing an Excel file containing the rules or lists of names, addresses etc... </value>
+  </data>
+  <data name="To_edit_a_rule_double_click_on_the_cell" xml:space="preserve">
+    <value>To edit a rule double click on the cell.</value>
+  </data>
+  <data name="To_remove_a_rule_select_the_rows_and_hit_the_Delete_key" xml:space="preserve">
+    <value>To remove a rule select the rows and hit the ‘Delete’ key.  </value>
+  </data>
+  <data name="Select_all_rules_with_Ctrl_A" xml:space="preserve">
+    <value>Select all rules with Ctrl+A.</value>
+  </data>
+  <data name="Do_not_forget_this_or_you_wont_be_able_to_decrypt_the_data_later" xml:space="preserve">
+    <value>(Do not forget this or you won’t be able to decrypt the data later)</value>
+  </data>
+  <data name="Add_an_encryption_key" xml:space="preserve">
+    <value>Add an encryption key</value>
+  </data>
+  <data name="SDLProjectAnonymizer_AcceptDescription_Line01" xml:space="preserve">
+    <value>The tool has been designed to help the Client create specific rules in accordance with their requirements and tag identifiable information.</value>
+  </data>
+  <data name="SDLProjectAnonymizer_AcceptDescription_Line02" xml:space="preserve">
+    <value>SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables.</value>
+  </data>
+	<data name="Export_selected_expressions_to_disk" xml:space="preserve">
+    <value>Export selected expressions to disk</value>
+  </data>
+	<data name="Import_regular_expressions_in_to_current_project" xml:space="preserve">
+    <value>Import regular expressions in to current project</value>
+  </data>
+	<data name="Are_you_sure_you_want_to_delete_the_expressions" xml:space="preserve">
+    <value>Are you sure you want to delete the expressions?</value>
+  </data>
+	<data name="Please_confirm" xml:space="preserve">
+    <value>Please confirm</value>
+  </data>
+	<data name="Please_select_the_files_you_want_to_import" xml:space="preserve">
+    <value>Please select the files you want to import</value>
+  </data>
+	<data name="Please_select_at_least_one_row_to_export" xml:space="preserve">
+    <value>Please select at least one row to export</value>
+  </data>
+	<data name="File_was_exported_successfully_to_selected_location" xml:space="preserve">
+    <value>File was exported successfully to selected location</value>
+  </data>
+	<data name="Export_selected_expressions" xml:space="preserve">
+    <value>Export selected expressions</value>
+  </data>
+	<data name="Click_finish_to_untag_the_text" xml:space="preserve">
+    <value>Click finish to untag the text</value>
+  </data>
+	<data name="Decryption_key_doesn_t_match_the_encryption_key" xml:space="preserve">
+    <value>Decryption key doesn't match the encryption key.</value>
+  </data>
+	<data name="Invalid_import_format_found_0_expected_column_header_name_1" xml:space="preserve">
+    <value>Invalid import format, found '{0}', expected column header name '{1}'</value>
   </data>
 </root>

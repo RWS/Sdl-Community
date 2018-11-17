@@ -14,7 +14,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 {
 	public partial class AnonymizerSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{
-		private BindingList<RegexPattern> regexPatterns;
+		private BindingList<RegexPattern> _regexPatterns;
 
 		public AnonymizerSettingsControl()
 		{
@@ -38,7 +38,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 			get
 			{
 				expressionsGrid.EndEdit();
-				foreach (var pattern in regexPatterns)
+				foreach (var pattern in _regexPatterns)
 				{
 					if (string.IsNullOrEmpty(pattern.Id))
 					{
@@ -46,11 +46,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 					}
 				}
 
-				return regexPatterns;
+				return _regexPatterns;
 			}
 			set
 			{
-				regexPatterns = value;
+				_regexPatterns = value;
 			}
 		}
 
@@ -62,9 +62,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 
 			//create tooltips for buttons
 			var exportTooltip = new ToolTip();
-			exportTooltip.SetToolTip(exportBtn, "Export selected expressions to disk");
+			exportTooltip.SetToolTip(exportBtn, StringResources.Export_selected_expressions_to_disk);
 			var importTooltip = new ToolTip();
-			importTooltip.SetToolTip(importBtn, "Import regular expressions in to current project");
+			importTooltip.SetToolTip(importBtn, StringResources.Import_regular_expressions_in_to_current_project);
 
 			//labels text
 			descriptionLbl.Text = Constants.GetGridDescription();
@@ -298,7 +298,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 			{
 				var fileDialog = new SaveFileDialog
 				{
-					Title = @"Export selected expressions",
+					Title = StringResources.Export_selected_expressions,
 					Filter = @"Excel |*.xlsx"
 				};
 				var result = fileDialog.ShowDialog();
@@ -311,12 +311,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 						selectedExpressions.Add(regexPattern);
 					}
 					Expressions.ExportExporessions(fileDialog.FileName, selectedExpressions);
-					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show(StringResources.File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
 			else
 			{
-				MessageBox.Show(@"Please select at least one row to export", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(StringResources.Please_select_at_least_one_row_to_export, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 		}
 
@@ -341,7 +341,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 			RemoveEmptyRows();
 			var fileDialog = new OpenFileDialog
 			{
-				Title = @"Please select the files you want to import",
+				Title = StringResources.Please_select_the_files_you_want_to_import,
 				Filter = @"Excel |*.xlsx",
 				CheckFileExists = true,
 				CheckPathExists = true,
@@ -356,7 +356,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 			}
 		}
 
-		private void ImportExpressionsInSettings(List<RegexPattern> expressions)
+		private void ImportExpressionsInSettings(IEnumerable<RegexPattern> expressions)
 		{
 			foreach (var expression in expressions)
 			{
@@ -376,7 +376,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 		{
 			if (e.KeyCode.Equals(Keys.Delete))
 			{
-				var result = MessageBox.Show(@"Are you sure you want to delete the expressions?", @"Please confirm",
+				var result = MessageBox.Show(StringResources.Are_you_sure_you_want_to_delete_the_expressions, StringResources.Please_confirm,
 					MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
 				if (result == DialogResult.OK)

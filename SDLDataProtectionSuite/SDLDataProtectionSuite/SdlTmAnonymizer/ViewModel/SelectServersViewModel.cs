@@ -67,7 +67,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 
 				if (result.OperationFailed)
 				{
-					throw new Exception(StringResources.Process_failed + "\r\n\r\n" + result.Error.Message);
+					throw new Exception(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message);
 				}
 			});
 		}
