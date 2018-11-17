@@ -312,4 +312,16 @@
 	<data name="Invalid_import_format_found_0_expected_column_header_name_1" xml:space="preserve">
     <value>Invalid import format, found '{0}', expected column header name '{1}'</value>
   </data>
+	<data name="Only_the_first_0_comparison_differences_are_identified_in_view" xml:space="preserve">
+    <value>Only the first {0} comparison differences are identified in view</value>
+  </data>
+	<data name="Invalid_Backup_TMs_path" xml:space="preserve">
+    <value>Invalid Backup TMs path!</value>
+  </data>
+	<data name="Invalid_Log_report_path" xml:space="preserve">
+    <value>Invalid Log report path!</value>
+  </data>
+	<data name="Browse_Select_folder" xml:space="preserve">
+    <value>Select folder</value>
+  </data>
 </root>

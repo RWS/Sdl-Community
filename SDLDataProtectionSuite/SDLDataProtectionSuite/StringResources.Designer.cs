@@ -126,6 +126,15 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select folder.
+        /// </summary>
+        internal static string Browse_Select_folder {
+            get {
+                return ResourceManager.GetString("Browse_Select_folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t compare different field types.
         /// </summary>
         internal static string Cant_compare_different_field_types {
@@ -288,11 +297,29 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid Backup TMs path!.
+        /// </summary>
+        internal static string Invalid_Backup_TMs_path {
+            get {
+                return ResourceManager.GetString("Invalid_Backup_TMs_path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid import format, found &apos;{0}&apos;, expected column header name &apos;{1}&apos;.
         /// </summary>
         internal static string Invalid_import_format_found_0_expected_column_header_name_1 {
             get {
                 return ResourceManager.GetString("Invalid_import_format_found_0_expected_column_header_name_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Log report path!.
+        /// </summary>
+        internal static string Invalid_Log_report_path {
+            get {
+                return ResourceManager.GetString("Invalid_Log_report_path", resourceCulture);
             }
         }
         
@@ -338,6 +365,15 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         internal static string Ok_Please_wait_until_we_connect_to_GroupShare {
             get {
                 return ResourceManager.GetString("Ok_Please_wait_until_we_connect_to_GroupShare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only the first {0} comparison differences are identified in view.
+        /// </summary>
+        internal static string Only_the_first_0_comparison_differences_are_identified_in_view {
+            get {
+                return ResourceManager.GetString("Only_the_first_0_comparison_differences_are_identified_in_view", resourceCulture);
             }
         }
         

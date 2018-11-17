@@ -95,11 +95,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 		{
 			if (Backup && (string.IsNullOrEmpty(BackupFullPath) || !Directory.Exists(BackupFullPath)))
 			{
-				MessageBox.Show("Invalid Backup TMs path!", "Settings");
+				MessageBox.Show(StringResources.Invalid_Backup_TMs_path, StringResources.SDLTM_Anonymizer_Name);
 			}
 			else if (Backup && (string.IsNullOrEmpty(LogsFullPath) || !Directory.Exists(LogsFullPath)))
 			{
-				MessageBox.Show("Invalid Log report path!", "Settings");
+				MessageBox.Show(StringResources.Invalid_Log_report_path, StringResources.SDLTM_Anonymizer_Name);
 			}
 			else
 			{
@@ -116,7 +116,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 		{
 			var folderDialog = new FolderSelectDialog
 			{
-				Title = "Select folder",
+				Title = StringResources.Browse_Select_folder,
 				InitialDirectory = (string)parameter == nameof(Backup) ? BackupFullPath : LogsFullPath
 			};
 

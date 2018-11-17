@@ -191,7 +191,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 
 						if (_report.Actions.Count > VisibleActionsLimit)
 						{
-							MessageBox.Show("Only the first " + VisibleActionsLimit + " comparison differences are identified in view", "SDLTM Anonymizer");
+							MessageBox.Show(string.Format(StringResources.Only_the_first_0_comparison_differences_are_identified_in_view, VisibleActionsLimit), StringResources.SDLTM_Anonymizer_Name);
 						}
 
 						var comparer = new SegmentComparer.Comparer();
