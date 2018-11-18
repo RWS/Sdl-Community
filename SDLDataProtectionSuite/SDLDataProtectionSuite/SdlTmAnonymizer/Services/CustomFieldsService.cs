@@ -83,9 +83,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			var units = GetUpdatableTranslationUnits(customFields, translationUnits);
 
 			var report = new Report(tmFile)
-			{				
-				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportScope.CustomFields),				
-				UpdatedCount = units.Count,				
+			{
+				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportScope.CustomFields),
+				UpdatedCount = units.Count,
 				Scope = Report.ReportScope.CustomFields
 			};
 
@@ -139,8 +139,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			var units = GetUpdatableTranslationUnits(customFields, translationUnits);
 
 			var report = new Report(tmFile)
-			{				
-				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportScope.CustomFields),				
+			{
+				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportScope.CustomFields),
 				UpdatedCount = units.Count,
 				Scope = Report.ReportScope.CustomFields,
 			};
@@ -329,7 +329,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			return updatedCount;
 		}
 
-		private List<TmTranslationUnit> GetUpdatableTranslationUnits(List<CustomField> customFields, IEnumerable<TmTranslationUnit> translationUnits)
+		private List<TmTranslationUnit> GetUpdatableTranslationUnits(IReadOnlyCollection<CustomField> customFields, IEnumerable<TmTranslationUnit> translationUnits)
 		{
 			var units = new List<TmTranslationUnit>();
 
@@ -1022,6 +1022,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 							foreach (var fieldValue in customField.FieldValues.Where(n =>
 								n.IsSelected && n.NewValue != null && n.Value != n.NewValue))
 							{
+								exists = reports.ContainsKey(customField.ValueType);
+
 								var detail = details.FirstOrDefault(a =>
 									a.Name == customField.Name &&
 									a.Type == customField.ValueType.ToString() &&
