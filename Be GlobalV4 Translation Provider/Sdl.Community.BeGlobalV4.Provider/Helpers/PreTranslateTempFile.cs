@@ -33,7 +33,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 		{
 			var doc = new XmlDocument();
 			var root = doc.CreateElement("root");
-			var ns = "http://sample/namespace";
+			const string ns = "http://sample/namespace";
 			var nsAttribute = doc.CreateAttribute("xmlns", "xx","http://www.w3.org/2000/xmlns/");
 			nsAttribute.Value = ns;
 			root.Attributes.Append(nsAttribute);

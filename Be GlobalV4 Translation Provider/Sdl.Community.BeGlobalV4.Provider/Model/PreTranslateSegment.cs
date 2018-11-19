@@ -1,4 +1,5 @@
-﻿using Sdl.LanguagePlatform.TranslationMemory;
+﻿using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Model
 {
@@ -7,6 +8,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 		public SearchSettings SearchSettings { get; set; }
 		public TranslationUnit TranslationUnit { get; set; }
 		public string Id { get; set; }
-		public string Translation { get; set; }
-	}
+		public string PlainTranslation { get; set; }
+		public Segment TranslationSegment { get; set; }
+	}																
 }

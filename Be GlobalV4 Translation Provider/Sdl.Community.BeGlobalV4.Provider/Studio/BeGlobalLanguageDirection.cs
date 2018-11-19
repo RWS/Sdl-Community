@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
@@ -20,6 +21,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private BeGlobalConnecter _beGlobalConnect;
 		private TranslationUnit _inputTu;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
+		private readonly PreTranslateTempFile _preTranslateHelp;
 
 		public ITranslationProvider TranslationProvider => _beGlobalTranslationProvider;
 		public CultureInfo SourceLanguage { get; }
@@ -32,6 +34,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			_languageDirection = languageDirection;
 			_options = beGlobalTranslationProvider.Options;
 			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
+			_preTranslateHelp =  new PreTranslateTempFile();
 		}
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
@@ -70,12 +73,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 		}
 
-		public void PrepareTempData(List<PreTranslateSegment> preTranslatesegments)
+		public string PrepareTempData(List<PreTranslateSegment> preTranslatesegments)
 		{
 			try
 			{
-				var preTranslateHelp = new PreTranslateTempFile();
-				var filePath = preTranslateHelp.CreateXmlFile();
+				var filePath = _preTranslateHelp.CreateXmlFile();
 
 				for (int i = 0; i < preTranslatesegments.Count; i++)
 				{
@@ -92,7 +94,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						sourceText = newseg.ToPlain();
 					}
 					sourceText = _normalizeSourceTextHelper.NormalizeText(sourceText);
-					preTranslateHelp.WriteSegments(filePath, preTranslatesegments[i].Id, sourceText);
+					_preTranslateHelp.WriteSegments(filePath, preTranslatesegments[i].Id, sourceText);
 				}
 
 				var sourceLanguage =
@@ -105,13 +107,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 				var translatedFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "translated.xml");
 				translator.TranslateFile(filePath, translatedFile);
-
-				var translationResults = preTranslateHelp.GetTranslationFromTemp(translatedFile);
+				return translatedFile;  
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine(e);
 			}
+			return string.Empty;
 		}
 
 		private SearchResult CreateSearchResult(Segment segment, Segment translation)
@@ -187,12 +189,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			// bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
 			var results = new List<SearchResults>();
+			var preTranslateList = new List<PreTranslateSegment>();
 
 			// plugin is called from pre-translate batch task 
 			//we receive the data in chunk of 10 segments
 			if (translationUnits.Length > 2)
-			{
-				var preTranslateList = new List<PreTranslateSegment>();
+			{ 
 				var i = 0;
 				foreach (var tu in translationUnits)
 				{
@@ -204,18 +206,33 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 							TranslationUnit = tu,
 							Id = i.ToString()
 						};
-						preTranslateList.Add(preTranslate);
-						//var result = SearchTranslationUnit(settings, tu);
-						//results.Add(result);
-					}
-					//else
-					//{
-					//	preTranslateList.Add(null);
-					//	//results.Add(null);
-					//}
+						preTranslateList.Add(preTranslate);	
+					}  
 					i++;
 				}
-				PrepareTempData(preTranslateList);
+				if (preTranslateList.Count > 0)
+				{
+					//Create temp file with translations
+					var translatedFilePath = PrepareTempData(preTranslateList);
+					if (!string.IsNullOrEmpty(translatedFilePath))
+					{   //parse translated xml 
+						var translationResults = _preTranslateHelp.GetTranslationFromTemp(translatedFilePath);
+						if (translationResults != null)
+						{
+							foreach (var preTranslateSegment in preTranslateList)
+							{
+								var translationResult = translationResults.FirstOrDefault(s => s.Id.Equals(preTranslateSegment.Id));
+								if (translationResult != null)
+								{
+									preTranslateSegment.PlainTranslation = translationResult.Translation;
+								}
+							}
+						}
+						var preTranslateSearchResults =GetPreTranslationSearchResults(preTranslateList);
+						return preTranslateSearchResults.ToArray();
+					}
+				}
+
 			}
 			else
 			{
@@ -234,8 +251,36 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					i++;
 				}
 			}  
-
 			return results.ToArray();
+		}
+
+		private List<SearchResults> GetPreTranslationSearchResults(List<PreTranslateSegment> preTranslateList)
+		{
+			var resultsList = new List<SearchResults>();
+			foreach (var preTranslate in preTranslateList)
+			{
+				var translation = new Segment(_languageDirection.TargetCulture);
+				var newSeg = preTranslate.TranslationUnit.SourceSegment.Duplicate();
+				if (newSeg.HasTags)
+				{
+					var tagPlacer = new BeGlobalTagPlacer(newSeg);
+
+					translation = tagPlacer.GetTaggedSegment(preTranslate.PlainTranslation);
+					preTranslate.TranslationSegment = translation;
+				}
+				else
+				{
+					translation.Add(preTranslate.PlainTranslation);
+				}  
+				var searchResult = CreateSearchResult(newSeg, translation);
+				var results = new SearchResults
+				{
+					SourceSegment = newSeg
+				};
+				results.Add(searchResult);
+				resultsList.Add(results);
+			}
+			return resultsList;
 		}
 
 		public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
