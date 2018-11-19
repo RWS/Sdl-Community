@@ -206,8 +206,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 							TranslationUnit = tu,
 							Id = i.ToString()
 						};
-						preTranslateList.Add(preTranslate);	
-					}  
+						preTranslateList.Add(preTranslate);
+					}
+					else
+					{
+						results.Add(null);
+					}
 					i++;
 				}
 				if (preTranslateList.Count > 0)
@@ -229,10 +233,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 							}
 						}
 						var preTranslateSearchResults =GetPreTranslationSearchResults(preTranslateList);
-						return preTranslateSearchResults.ToArray();
+						results.AddRange(preTranslateSearchResults);
 					}
 				}
-
 			}
 			else
 			{
