@@ -99,7 +99,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 				Name = "Encrypt"
 			};
 			expressionsGrid.Columns.Add(exportColumn);
-			
+
 			var pattern = new DataGridViewTextBoxColumn
 			{
 				HeaderText = @"Regex Pattern",
@@ -115,7 +115,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 			};
 			expressionsGrid.Columns.Add(description);
 			expressionsGrid.Columns.Add(shouldEncryptColumn);
-			
+
 			var moveUpButtonColumn = new DataGridViewImageColumn()
 			{
 				Width = 20,
@@ -195,7 +195,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 			{
 				for (int i = index; i < RegexPatterns.Count - 1; i++)
 				{
-					RegexPatterns[i] = RegexPatterns[i+1];
+					RegexPatterns[i] = RegexPatterns[i + 1];
 				}
 
 				RegexPatterns.RemoveAt(RegexPatterns.Count - 1);
@@ -249,9 +249,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 		private void ReadExistingExpressions()
 		{
 			if (Settings.DefaultListAlreadyAdded || Settings.RegexPatterns.Count > 0)
+			{
 				return;
+			}
 
 			Settings.RegexPatterns.Clear();
+
 			var patterns = Constants.GetDefaultRegexPatterns();
 			foreach (var pattern in patterns)
 			{
@@ -286,7 +289,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 			Settings.RegexPatterns = RegexPatterns;
 			Settings.EnableAll = shouldSelect;
 			Settings.EncryptAll = shouldSelect;
-			((CustomColumnHeader) expressionsGrid.Columns[0].HeaderCell).IsChecked = shouldSelect;
+			((CustomColumnHeader)expressionsGrid.Columns[0].HeaderCell).IsChecked = shouldSelect;
 			((CustomColumnHeader)expressionsGrid.Columns[3].HeaderCell).IsChecked = shouldSelect;
 			expressionsGrid.Refresh();
 		}
@@ -324,7 +327,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 		{
 			var regexPatternsCount = RegexPatterns.Count;
 
-			for (int i=0; i<regexPatternsCount; i++)
+			for (int i = 0; i < regexPatternsCount; i++)
 			{
 				if (string.IsNullOrWhiteSpace(RegexPatterns[i].Pattern))
 				{
@@ -333,7 +336,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 					regexPatternsCount--;
 				}
 			}
-			
+
 		}
 
 		private void importBtn_Click(object sender, EventArgs e)

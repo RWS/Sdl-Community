@@ -187,6 +187,7 @@
     <Compile Include="SdlProjectAnonymizer\Process Xliff\DecryptDataProcessor.cs" />
     <Compile Include="SdlProjectAnonymizer\Process Xliff\DecryptSegmentVisitor.cs" />
     <Compile Include="SdlProjectAnonymizer\Process Xliff\SegmentVisitor.cs" />
+    <Compile Include="SdlProjectAnonymizer\Services\AnonymizerSettingsService.cs" />
     <Compile Include="SdlProjectAnonymizer\Ui\AcceptWindow.cs">
       <SubType>Form</SubType>
     </Compile>

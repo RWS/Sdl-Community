@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Interfaces;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Services;
 using Sdl.Core.Settings;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 {
@@ -37,8 +40,29 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 
 		public BindingList<RegexPattern> RegexPatterns
 		{
-			get => GetSetting<BindingList<RegexPattern>>(nameof(RegexPatterns));
+			get
+			{
+				BindingList<RegexPattern> regexPatterns;
+				try
+				{
+					regexPatterns = GetSetting<BindingList<RegexPattern>>(nameof(RegexPatterns));
+				}
+				catch
+				{
+					var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
+					var selectedProjects = projectsController.SelectedProjects?.ToList();
+					if (!(selectedProjects?.Count > 0))
+					{
+						return new BindingList<RegexPattern>();
+					}
+
+					var settingsService = new AnonymizerSettingsService(selectedProjects[0].FilePath);					
+					regexPatterns = new BindingList<RegexPattern>(settingsService.GetRegexPatternSettings());
+				}
+
+				return regexPatterns;
+			}
 			set => GetSetting<BindingList<RegexPattern>>(nameof(RegexPatterns)).Value = value;
 		}
 
@@ -111,6 +135,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			get => GetSetting<bool?>(nameof(HasBeenCheckedByControl));
 			set => GetSetting<bool?>(nameof(HasBeenCheckedByControl)).Value = value;
 		}
-		
+
 	}
 }

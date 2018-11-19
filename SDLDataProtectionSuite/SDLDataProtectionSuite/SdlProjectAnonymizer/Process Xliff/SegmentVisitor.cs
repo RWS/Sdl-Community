@@ -15,7 +15,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 		private readonly bool _arePatternsEcrypted;
 		private IDocumentItemFactory _factory;
 		private IPropertiesFactory _propertiesFactory;
-		private string _id = null;
 
 		public SegmentVisitor(List<RegexPattern> patterns, string encryptionKey, bool arePatternsEcnrypted)
 		{
@@ -43,6 +42,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
+			// ignored for this implementation
 		}
 
 		public void VisitText(IText text)
@@ -83,7 +83,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 							{
 								//in the case we have only PI in the segment
 								//remove the text -> add the anonymized data in the same position
-								
+
 								if (elementContainer.AllSubItems.ToList().Count.Equals(1))
 								{
 									if (elementContainer.AllSubItems.ToList().ElementAtOrDefault(count) == null)
@@ -108,7 +108,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 						}
 					}
 				}
-				catch (Exception e) { }
+				catch
+				{
+					// catch all; ignored
+				}
 			}
 		}
 
@@ -127,10 +130,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 
 		public void VisitLocationMarker(ILocationMarker location)
 		{
+			// ignored for this implementation
 		}
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
 		{
+			// ignored for this implementation
 		}
 
 		public void VisitOtherMarker(IOtherMarker marker)
@@ -140,10 +145,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 
 		public void VisitLockedContent(ILockedContent lockedContent)
 		{
+			// ignored for this implementation
 		}
 
 		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
 		{
+			// ignored for this implementation
 		}
 
 		private string Anonymizer(string text, bool isTagContent)
@@ -164,14 +171,15 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 
 		private string ProcessMatchData(Match match, RegexPattern pattern, bool isTagContent)
 		{
-			string encryptedText;
 			//Check if the match should be encrypted
-			encryptedText = pattern.ShouldEncrypt ? AnonymizeData.EncryptData(match.ToString(), _encryptionKey) : match.ToString();
+			var encryptedText = pattern.ShouldEncrypt ? AnonymizeData.EncryptData(match.ToString(), _encryptionKey) : match.ToString();
+
 			//For tag content we need to add {} for decrypting the data
 			if (isTagContent)
 			{
 				return string.Concat("{", encryptedText, "}");
 			}
+
 			return encryptedText;
 		}
 
@@ -223,9 +231,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 				if (anonymizedDataList[0].PositionInOriginalText.Equals(0))
 				{
 					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].MatchText.Length);
-								
-					AddPlaceholderTag(segmentContent, segmentText);					
-					AnonymizeContent(remainingSegmentText, segmentContent);			
+
+					AddPlaceholderTag(segmentContent, segmentText);
+					AnonymizeContent(remainingSegmentText, segmentContent);
 				}
 				else
 				{
@@ -244,7 +252,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 				}
 			}
 			else
-			{				
+			{
 				AddPlaceholderTag(segmentContent, segmentText);
 			}
 		}
@@ -255,7 +263,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 			var tag = _factory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(processedData));
 			tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
 
-			segmentContent.Add(tag);		
+			segmentContent.Add(tag);
 		}
 
 		private void AnonymizeContent(IText text, List<IAbstractMarkupData> segmentContent)
