@@ -247,25 +247,25 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 			}
 		}
 
-		private void AddPlaceholderTag(ICollection<IAbstractMarkupData> segmentContent, IText remainingSegmentText)
+		private void AddPlaceholderTag(ICollection<IAbstractMarkupData> segmentContent, IText text)
 		{
-			var processedData = Anonymizer(remainingSegmentText.Properties.Text, false);
+			var processedData = Anonymizer(text.Properties.Text, false);
 			var tag = _factory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(processedData));
 			tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
 
 			segmentContent.Add(tag);		
 		}
 
-		private void AnonymizeContent(IText segmentText, List<IAbstractMarkupData> segmentContent)
+		private void AnonymizeContent(IText text, List<IAbstractMarkupData> segmentContent)
 		{
-			if (ShouldAnonymize(segmentText.Properties.Text))
+			if (ShouldAnonymize(text.Properties.Text))
 			{
-				var remainingData = GetAnonymizedData(segmentText.Properties.Text);
-				GetSubsegmentPi(segmentText, segmentContent, remainingData);
+				var remainingData = GetAnonymizedData(text.Properties.Text);
+				GetSubsegmentPi(text, segmentContent, remainingData);
 			}
 			else
 			{
-				segmentContent.Add(segmentText);
+				segmentContent.Add(text);
 			}
 		}
 
