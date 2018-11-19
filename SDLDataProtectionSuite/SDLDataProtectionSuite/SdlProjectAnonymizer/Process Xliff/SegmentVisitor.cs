@@ -43,10 +43,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
-			//if (!string.IsNullOrEmpty(_id))
-			//{
-			//	if (_id == tag.TagProperties.ta)
-			//}
 		}
 
 		public void VisitText(IText text)
@@ -60,6 +56,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 				try
 				{
 					var anonymizedData = GetAnonymizedData(text.Properties.Text);
+					if (anonymizedData.Count == 0)
+					{
+						return;
+					}
 
 					GetSubsegmentPi(text, markUpCollection, anonymizedData);
 
@@ -204,6 +204,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 						PositionInOriginalText = match.Index,
 						EncryptedText = AnonymizeData.EncryptData(match.ToString(), _encryptionKey)
 					};
+
+					if (string.IsNullOrEmpty(data.MatchText))
+					{
+						continue;
+					}
 
 					anonymizedData.Add(data);
 				}
