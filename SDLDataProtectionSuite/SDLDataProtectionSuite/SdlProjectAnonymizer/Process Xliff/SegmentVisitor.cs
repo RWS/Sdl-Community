@@ -204,6 +204,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 						PositionInOriginalText = match.Index,
 						EncryptedText = AnonymizeData.EncryptData(match.ToString(), _encryptionKey)
 					};
+
 					anonymizedData.Add(data);
 				}
 			}
@@ -219,37 +220,16 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 				if (anonymizedDataList[0].PositionInOriginalText.Equals(0))
 				{
 					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].MatchText.Length);
-
-					//check if we should encrypt or only tag the data
-					var processedData = Anonymizer(segmentText.Properties.Text, false);
-					var tag = _factory.CreatePlaceholderTag(
-						_propertiesFactory.CreatePlaceholderTagProperties(processedData));
-					tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
-					//Add encrypted tag to collection
-					segmentContent.Add(tag);
-
-					if (ShouldAnonymize(remainingSegmentText.Properties.Text))
-					{
-						var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
-						GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
-					}
-					else
-					{
-						segmentContent.Add(remainingSegmentText);
-					}
+								
+					AddPlaceholderTag(segmentContent, segmentText);
+					AddPlaceholderTag(segmentContent, remainingSegmentText);
+					AnonymizeContent(remainingSegmentText, segmentContent);				
 				}
 				else
 				{
 					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].PositionInOriginalText);
-					if (ShouldAnonymize(segmentText.Properties.Text))
-					{
-						var remainingData = GetAnonymizedData(segmentText.Properties.Text);
-						GetSubsegmentPi(segmentText, segmentContent, remainingData);
-					}
-					else
-					{
-						segmentContent.Add(segmentText);
-					}
+					AnonymizeContent(segmentText, segmentContent);
+
 					if (ShouldAnonymize(remainingSegmentText.Properties.Text))
 					{
 						var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
@@ -257,22 +237,35 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 					}
 					else
 					{
-						var processedData = Anonymizer(remainingSegmentText.Properties.Text, false);
-						var tag = _factory.CreatePlaceholderTag(
-							_propertiesFactory.CreatePlaceholderTagProperties(processedData));
-						tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
-						segmentContent.Add(tag);
+						AddPlaceholderTag(segmentContent, remainingSegmentText);
 					}
 				}
-			} //segment contains only PI data
+			}
+			else
+			{				
+				AddPlaceholderTag(segmentContent, segmentText);
+			}
+		}
+
+		private void AddPlaceholderTag(ICollection<IAbstractMarkupData> segmentContent, IText remainingSegmentText)
+		{
+			var processedData = Anonymizer(remainingSegmentText.Properties.Text, false);
+			var tag = _factory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(processedData));
+			tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
+
+			segmentContent.Add(tag);		
+		}
+
+		private void AnonymizeContent(IText segmentText, List<IAbstractMarkupData> segmentContent)
+		{
+			if (ShouldAnonymize(segmentText.Properties.Text))
+			{
+				var remainingData = GetAnonymizedData(segmentText.Properties.Text);
+				GetSubsegmentPi(segmentText, segmentContent, remainingData);
+			}
 			else
 			{
-				var processedData = Anonymizer(segmentText.Properties.Text, false);
-				var tag = _factory.CreatePlaceholderTag(
-					_propertiesFactory.CreatePlaceholderTagProperties(processedData));
-
-				tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
-				segmentContent.Add(tag);
+				segmentContent.Add(segmentText);
 			}
 		}
 
