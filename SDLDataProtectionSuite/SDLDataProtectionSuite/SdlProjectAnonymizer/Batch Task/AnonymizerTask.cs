@@ -98,7 +98,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 
 			foreach (var file in unParsedProjectFiles)
 			{
-
 				var converter = DefaultFileTypeManager.CreateInstance(true)
 					.GetConverterToDefaultBilingual(file.LocalFilePath, file.LocalFilePath, null);
 				var contentProcessor = new AnonymizerPreProcessor(selectedPatternsFromGrid, key,

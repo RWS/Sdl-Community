@@ -153,7 +153,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 				var regex = DecryptIfEncrypted(pattern);
 
 				var match = regex.Match(text);
-				if (match.Success)
+				if (match.Success && match.Value.Length > 0)
 				{
 					var result = regex.Replace(text, matchText => ProcessMatchData(matchText, pattern, isTagContent));
 					return result;
@@ -181,7 +181,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 			{
 				var regex = DecryptIfEncrypted(pattern);
 				var match = regex.Match(text);
-				if (match.Success)
+				if (match.Success && match.Value.Length > 0)
 				{
 					return true;
 				}
@@ -198,19 +198,17 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 				var matches = regex.Matches(segmentText);
 				foreach (Match match in matches)
 				{
-					var data = new AnonymizedData
+					if (match.Value.Length > 0)
 					{
-						MatchText = match.Value,
-						PositionInOriginalText = match.Index,
-						EncryptedText = AnonymizeData.EncryptData(match.ToString(), _encryptionKey)
-					};
+						var data = new AnonymizedData
+						{
+							MatchText = match.Value,
+							PositionInOriginalText = match.Index,
+							EncryptedText = AnonymizeData.EncryptData(match.ToString(), _encryptionKey)
+						};
 
-					if (string.IsNullOrEmpty(data.MatchText))
-					{
-						continue;
+						anonymizedData.Add(data);
 					}
-
-					anonymizedData.Add(data);
 				}
 			}
 			return anonymizedData;
@@ -227,7 +225,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].MatchText.Length);
 								
 					AddPlaceholderTag(segmentContent, segmentText);					
-					AnonymizeContent(remainingSegmentText, segmentContent);				
+					AnonymizeContent(remainingSegmentText, segmentContent);			
 				}
 				else
 				{
