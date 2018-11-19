@@ -1,0 +1,17 @@
+﻿using Sdl.Terminology.TerminologyProvider.Core;
+
+namespace IATETerminologyProvider.Model
+{
+	public class SearchResultModel : ISearchResult
+	{
+		public int Id { get; set; }
+
+		public string Text { get; set; }
+
+		public int Score { get; set; }
+
+		public ILanguage Language { get; set; }
+
+		public string Definition { get; set; }
+	}
+}

@@ -92,6 +92,8 @@ namespace IATETerminologyProvider.Service
 							var termValue = termEntry.SelectToken("term_value").ToString();
 							var termId = termEntry.SelectToken("id").ToString();
 							var langTwoLetters = languageToken.Name;
+							var definition = languageToken.SelectToken("definition");
+
 							var languageModel = new LanguageModel
 							{
 								Name = new Language(langTwoLetters).DisplayName,
@@ -99,12 +101,13 @@ namespace IATETerminologyProvider.Service
 							};		
 
 							int result;
-							var termResult = new SearchResult
+							var termResult = new SearchResultModel
 							{
 								Text = termValue,
 								Id = int.TryParse(termId, out result) ? int.Parse(termId) : 0,
 								Score = 100,
-								Language = languageModel
+								Language = languageModel,
+								Definition = definition != null ? definition.ToString() :  string.Empty
 							};
 							termsList.Add(termResult);
 						}

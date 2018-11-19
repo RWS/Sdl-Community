@@ -94,8 +94,7 @@ namespace IATETerminologyProvider
 			{
 				IsBidirectional = true,
 				Locale = projSourceLanguage.CultureInfo,
-				Name = projSourceLanguage.DisplayName,
-
+				Name = projSourceLanguage.DisplayName,				
 				TargetOnly = false
 			};
 
@@ -124,35 +123,35 @@ namespace IATETerminologyProvider
 		private void CreateEntryModels(string text, ILanguage sourceLanguage, ILanguage targetLanguage)
 		{
 			var languages = GetLanguages();
-
-			foreach (var termResult in _termsResult)
+			_entryModels.Clear();
+			foreach (SearchResultModel termResult in _termsResult)
 			{
 				var entryModel = new EntryModel
 				{
-					SearchText = termResult.Text,
+					SearchText = text,
 					Id = termResult.Id,
-					Fields = new List<IEntryField>(),
+					Fields = SetEntryFields(termResult.Definition),
 					Transactions = new List<IEntryTransaction>(),
-					Languages = SetEntryLanguages(languages, text, sourceLanguage, termResult.Id)
+					Languages = SetEntryLanguages(languages, text, sourceLanguage, termResult.Id, termResult.Definition)
 				};
 				_entryModels.Add(entryModel);
 			}
 		}
 
 		// Set entry languages for the entry models
-		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, string text, ILanguage sourceLanguage, int id)
+		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, string text, ILanguage sourceLanguage, int id, string fieldDefinition)
 		{
 			IList<IEntryLanguage> entryLanguages = new List<IEntryLanguage>();
-
-			foreach(var language in languages)
+			foreach (var language in languages)
 			{
 				var entryLanguage = new EntryLanguageModel
 				{
-					Fields = new List<IEntryField>(),
+					Fields = SetEntryFields(fieldDefinition),
 					Locale = language.Locale,
 					Name = language.Name,
-					ParentEntry = null,					
-					Terms = CreateEntryTerms(language, text, sourceLanguage, id)
+					ParentEntry = null,
+					Terms = CreateEntryTerms(language, text, sourceLanguage, id),
+					IsSource = language.Name.Equals(sourceLanguage.Name) ? true : false
 				};
 				entryLanguages.Add(entryLanguage);
 			}
@@ -187,8 +186,23 @@ namespace IATETerminologyProvider
 					entryTerms.Add(entryTerm);
 				}
 			}
-
 			return entryTerms;
+		}
+
+		// Set field definition
+		private IList<IEntryField> SetEntryFields(string fieldDefinition)
+		{
+			IList<IEntryField> entryFields = new List<IEntryField>();
+			if (!string.IsNullOrEmpty(fieldDefinition))
+			{
+				var entryField = new EntryField
+				{
+					Name = "Definition",
+					Value = fieldDefinition
+				};
+				entryFields.Add(entryField);
+			}
+			return entryFields;
 		}
 		#endregion
 	}
