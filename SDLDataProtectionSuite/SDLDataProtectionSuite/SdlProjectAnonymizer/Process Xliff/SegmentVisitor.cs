@@ -221,8 +221,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 				{
 					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].MatchText.Length);
 								
-					AddPlaceholderTag(segmentContent, segmentText);
-					AddPlaceholderTag(segmentContent, remainingSegmentText);
+					AddPlaceholderTag(segmentContent, segmentText);					
 					AnonymizeContent(remainingSegmentText, segmentContent);				
 				}
 				else
