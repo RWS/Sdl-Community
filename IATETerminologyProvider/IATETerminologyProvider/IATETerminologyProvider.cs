@@ -69,16 +69,13 @@ namespace IATETerminologyProvider
 		{
 			var result = new List<IDescriptiveField>();
 
-			var approvedField = new DescriptiveField
+			var definitionField = new DescriptiveField
 			{
 				Label = "Definition",
-				Level = FieldLevel.TermLevel,
-				Mandatory = false,
-				Multiple = true,
-				PickListValues = new List<string> { "Definition", "Not Definition" },
+				Level = FieldLevel.EntryLevel,
 				Type = FieldType.String
 			};
-			result.Add(approvedField);
+			result.Add(definitionField);
 
 			return result;
 		}
