@@ -13,6 +13,7 @@ namespace IATETerminologyProvider.Service
 	{
 		#region Private Fields
 		private ProviderSettings _providerSettings;
+		private static int _id = new int();
 		#endregion
 
 		#region Constructors
@@ -78,36 +79,35 @@ namespace IATETerminologyProvider.Service
 			{
 				foreach (var item in itemTokens)
 				{
+					_id++;
 					// get language childrens (source + target languages)
 					var languageTokens = item.SelectToken("language").Children().ToList();
 					if(languageTokens.Any())
 					{
-						//remove the first token(which corresponds to the Source Language)
-						languageTokens.Remove(languageTokens[0]);
-
-						// foreach language token remained(which represents the target languages) get the terms
+						// foreach language token get the terms
 						foreach(JProperty languageToken in languageTokens)
 						{
 							var termEntry = languageToken.FirstOrDefault().SelectToken("term_entries").Last;
 							var termValue = termEntry.SelectToken("term_value").ToString();
-							var termId = termEntry.SelectToken("id").ToString();
 							var langTwoLetters = languageToken.Name;
-							var definition = languageToken.SelectToken("definition");
+							var definition = languageToken.Children().FirstOrDefault() != null
+								? languageToken.Children().FirstOrDefault().SelectToken("definition")
+								: null;
+							var termId = termEntry.SelectToken("id").ToString();
 
 							var languageModel = new LanguageModel
 							{
 								Name = new Language(langTwoLetters).DisplayName,
 								Locale = new Language(langTwoLetters).CultureInfo
-							};		
+							};
 
-							int result;
 							var termResult = new SearchResultModel
 							{
 								Text = termValue,
-								Id = int.TryParse(termId, out result) ? int.Parse(termId) : 0,
+								Id = _id,
 								Score = 100,
 								Language = languageModel,
-								Definition = definition != null ? definition.ToString() :  string.Empty
+								Definition = definition != null ? definition.ToString() : string.Empty
 							};
 							termsList.Add(termResult);
 						}
