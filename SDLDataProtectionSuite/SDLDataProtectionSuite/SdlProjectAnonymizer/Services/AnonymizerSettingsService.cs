@@ -22,11 +22,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Services
 		/// <returns></returns>
 		public List<RegexPattern> GetRegexPatternSettings()
 		{
-			var regexPatternsResults = new List<RegexPattern>();
+			var regexPatternResults = new List<RegexPattern>();
 
 			if (string.IsNullOrEmpty(_projectFile) || !File.Exists(_projectFile))
 			{
-				return regexPatternsResults;
+				return regexPatternResults;
 			}
 
 			string settingsContent;
@@ -102,12 +102,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Services
 							newRegexPattern.ShouldEncrypt = !string.IsNullOrEmpty(value) && Convert.ToBoolean(value);
 						}
 
-						regexPatternsResults.Add(newRegexPattern);
+						regexPatternResults.Add(newRegexPattern);
 					}
 				}
 			}
 
-			return regexPatternsResults;
+			return regexPatternResults;
 		}
 	}
 }

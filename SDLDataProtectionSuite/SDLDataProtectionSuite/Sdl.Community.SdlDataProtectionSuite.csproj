@@ -166,10 +166,13 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="SdlProjectAnonymizer\Batch Task\AnonymizerHelpAction.cs" />
     <Compile Include="SdlProjectAnonymizer\Batch Task\AnonymizerSettings.cs" />
     <Compile Include="SdlProjectAnonymizer\Batch Task\AnonymizerSettingsPage.cs" />
     <Compile Include="SdlProjectAnonymizer\Batch Task\AnonymizerTask.cs" />
+    <Compile Include="SdlProjectAnonymizer\ApplicationInitializer.cs" />
     <Compile Include="SdlProjectAnonymizer\Batch Task\DecryptSettingsPage.cs" />
+    <Compile Include="SdlProjectAnonymizer\Batch Task\DecryptTask.cs" />
     <Compile Include="SdlProjectAnonymizer\Batch Task\StateEnum.cs" />
     <Compile Include="SdlProjectAnonymizer\Helpers\AgreementMethods.cs" />
     <Compile Include="SdlProjectAnonymizer\Helpers\CheckBoxHeaderCellEventArgs.cs" />
@@ -187,6 +190,7 @@
     <Compile Include="SdlProjectAnonymizer\Process Xliff\DecryptDataProcessor.cs" />
     <Compile Include="SdlProjectAnonymizer\Process Xliff\DecryptSegmentVisitor.cs" />
     <Compile Include="SdlProjectAnonymizer\Process Xliff\SegmentVisitor.cs" />
+    <Compile Include="SdlProjectAnonymizer\Services\ActiveViewService.cs" />
     <Compile Include="SdlProjectAnonymizer\Services\AnonymizerSettingsService.cs" />
     <Compile Include="SdlProjectAnonymizer\Ui\AcceptWindow.cs">
       <SubType>Form</SubType>

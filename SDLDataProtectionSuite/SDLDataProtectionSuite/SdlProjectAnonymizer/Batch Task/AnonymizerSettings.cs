@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Interfaces;
@@ -49,21 +50,46 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 				}
 				catch
 				{
-					var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+					var projectFile = GetProjectFile();
 
-					var selectedProjects = projectsController.SelectedProjects?.ToList();
-					if (!(selectedProjects?.Count > 0))
+					if (string.IsNullOrEmpty(projectFile) || !File.Exists(projectFile))
 					{
 						return new BindingList<RegexPattern>();
 					}
 
-					var settingsService = new AnonymizerSettingsService(selectedProjects[0].FilePath);					
+					var settingsService = new AnonymizerSettingsService(projectFile);
 					regexPatterns = new BindingList<RegexPattern>(settingsService.GetRegexPatternSettings());
 				}
 
 				return regexPatterns;
 			}
 			set => GetSetting<BindingList<RegexPattern>>(nameof(RegexPatterns)).Value = value;
+		}
+
+		private static string GetProjectFile()
+		{
+			var projectFile = string.Empty;
+
+			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+
+			if (ActiveViewService.Instance.ProjectsViewIsActive)
+			{
+				var selectedProjects = projectsController?.SelectedProjects?.ToList();
+				if (selectedProjects?.Count > 0)
+				{
+					projectFile = selectedProjects[0].FilePath;
+				}
+				else if (projectsController?.CurrentProject != null)
+				{
+					projectFile = projectsController.CurrentProject.FilePath;
+				}
+			}
+			else if (projectsController?.CurrentProject != null)
+			{
+				projectFile = projectsController.CurrentProject.FilePath;
+			}
+
+			return projectFile;
 		}
 
 		public string EncryptionKey
