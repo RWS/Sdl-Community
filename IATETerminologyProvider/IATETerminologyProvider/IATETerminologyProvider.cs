@@ -71,11 +71,11 @@ namespace IATETerminologyProvider
 
 			var approvedField = new DescriptiveField
 			{
-				Label = "Approved",
+				Label = "Definition",
 				Level = FieldLevel.TermLevel,
 				Mandatory = false,
 				Multiple = true,
-				PickListValues = new List<string> { "Approved", "Not Approved" },
+				PickListValues = new List<string> { "Definition", "Not Definition" },
 				Type = FieldType.String
 			};
 			result.Add(approvedField);
@@ -124,6 +124,7 @@ namespace IATETerminologyProvider
 		{
 			var languages = GetLanguages();
 			_entryModels.Clear();
+
 			foreach (SearchResultModel termResult in _termsResult)
 			{
 				var entryModel = new EntryModel
@@ -146,7 +147,8 @@ namespace IATETerminologyProvider
 			{
 				var entryLanguage = new EntryLanguageModel
 				{
-					Fields = SetEntryFields(fieldDefinition),
+					//Fields = SetEntryFields(fieldDefinition),
+					Fields = new List<IEntryField>(),
 					Locale = language.Locale,
 					Name = language.Name,
 					ParentEntry = null,
