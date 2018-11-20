@@ -85,31 +85,36 @@ namespace IATETerminologyProvider.Service
 					if(languageTokens.Any())
 					{
 						// foreach language token get the terms
-						foreach(JProperty languageToken in languageTokens)
+						foreach (JProperty languageToken in languageTokens)
 						{
-							var termEntry = languageToken.FirstOrDefault().SelectToken("term_entries").Last;
-							var termValue = termEntry.SelectToken("term_value").ToString();
-							var langTwoLetters = languageToken.Name;
-							var definition = languageToken.Children().FirstOrDefault() != null
-								? languageToken.Children().FirstOrDefault().SelectToken("definition")
-								: null;
-							var termId = termEntry.SelectToken("id").ToString();
-
-							var languageModel = new LanguageModel
+							// Latin translations are automatically returned by IATE API response->"la" code
+							// Ignore the "la" translations
+							if (!languageToken.Name.Equals("la"))
 							{
-								Name = new Language(langTwoLetters).DisplayName,
-								Locale = new Language(langTwoLetters).CultureInfo
-							};
+								var termEntry = languageToken.FirstOrDefault().SelectToken("term_entries").Last;
+								var termValue = termEntry.SelectToken("term_value").ToString();
+								var langTwoLetters = languageToken.Name;
+								var definition = languageToken.Children().FirstOrDefault() != null
+									? languageToken.Children().FirstOrDefault().SelectToken("definition")
+									: null;
+								var termId = termEntry.SelectToken("id").ToString();
 
-							var termResult = new SearchResultModel
-							{
-								Text = termValue,
-								Id = _id,
-								Score = 100,
-								Language = languageModel,
-								Definition = definition != null ? definition.ToString() : string.Empty
-							};
-							termsList.Add(termResult);
+								var languageModel = new LanguageModel
+								{
+									Name = new Language(langTwoLetters).DisplayName,
+									Locale = new Language(langTwoLetters).CultureInfo
+								};
+
+								var termResult = new SearchResultModel
+								{
+									Text = termValue,
+									Id = _id,
+									Score = 100,
+									Language = languageModel,
+									Definition = definition != null ? definition.ToString() : string.Empty
+								};
+								termsList.Add(termResult);
+							}
 						}
 					}
 				}
