@@ -40,11 +40,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Services
 			_projectsController.Activate();
 		}
 
-		public bool ProjectsViewIsActive { get; set; }
+		public bool ProjectsViewIsActive { get; private set; }
 
-		public bool FilesViewIsActive { get; set; }
+		public bool FilesViewIsActive { get; private set; }
 
-		public bool EditorViewIsActive { get; set; }
+		public bool EditorViewIsActive { get; private set; }
 
 		private static void ProjectsController_ActivationChanged(object sender, ActivationChangedEventArgs e)
 		{
