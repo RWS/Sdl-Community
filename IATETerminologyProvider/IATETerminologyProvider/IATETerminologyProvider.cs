@@ -77,6 +77,14 @@ namespace IATETerminologyProvider
 			};
 			result.Add(definitionField);
 
+			var domainField = new DescriptiveField
+			{
+				Label = "Domain",
+				Level = FieldLevel.TermLevel,
+				Type = FieldType.String
+			};
+			result.Add(domainField);
+
 			return result;
 		}
 
@@ -128,7 +136,7 @@ namespace IATETerminologyProvider
 				{
 					SearchText = termResult.Text,
 					Id = termResult.Id,
-					Fields = SetEntryFields(termResult.Definition),
+					Fields = SetEntryFields(termResult.Definition, "test"),
 					Transactions = new List<IEntryTransaction>(),
 					Languages = SetEntryLanguages(languages, sourceLanguage, termResult.Id, termResult.Definition)
 				};
@@ -197,17 +205,27 @@ namespace IATETerminologyProvider
 		}
 
 		// Set field definition
-		private IList<IEntryField> SetEntryFields(string fieldDefinition)
+		private IList<IEntryField> SetEntryFields(string fieldDefinition, string domain)
 		{
 			IList<IEntryField> entryFields = new List<IEntryField>();
 			if (!string.IsNullOrEmpty(fieldDefinition))
 			{
-				var entryField = new EntryField
+				var definitionEntryField = new EntryField
 				{
 					Name = "Definition",
 					Value = fieldDefinition
 				};
-				entryFields.Add(entryField);
+				entryFields.Add(definitionEntryField);
+			}
+
+			if (!string.IsNullOrEmpty(domain))
+			{
+				var domainEntryField = new EntryField
+				{
+					Name = "Domain",
+					Value = domain
+				};
+				entryFields.Add(domainEntryField);
 			}
 			return entryFields;
 		}

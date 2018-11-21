@@ -27,11 +27,11 @@ namespace IATETerminologyProvider.Ui
 		#region Private Methods
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			int result;
 			var providerSettings = new ProviderSettings
 			{
-				Limit = int.TryParse(txtBox_Limit.Text, out result) ? int.Parse(txtBox_Limit.Text) : 0,
-				Offset = int.TryParse(txtBox_Offset.Text, out result) ? int.Parse(txtBox_Offset.Text) : 0
+				AllDomains = ckb_AllDomains.Checked,
+				NoDomains = ckb_NoDomains.Checked,
+				NoDuplicates = ckb_NoDuplicates.Checked,
 			};
 			_providerSettings = providerSettings;
 		}

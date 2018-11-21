@@ -21,6 +21,10 @@ namespace IATETerminologyProvider.Service
 		{
 			_providerSettings = providerSettings;
 		}
+		public TermSearchService()
+		{
+
+		}
 		#endregion
 
 		#region Public Methods
@@ -49,7 +53,7 @@ namespace IATETerminologyProvider.Service
 			
 			var result = MapResponseValues(response);
 			return result;
-		}
+		}		
 		#endregion
 
 		#region Private Methods

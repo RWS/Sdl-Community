@@ -2,7 +2,8 @@
 {
 	public class ProviderSettings
 	{
-		public int Limit { get; set; }
-		public int Offset { get; set; }
+		public bool AllDomains { get; set; }
+		public bool NoDomains { get; set; }
+		public bool NoDuplicates { get; set; }
 	}
 }

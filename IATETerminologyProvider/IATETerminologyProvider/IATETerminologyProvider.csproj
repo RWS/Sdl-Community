@@ -110,21 +110,10 @@
     <Compile Include="Model\EntryModel.cs" />
     <Compile Include="Model\LanguageModel.cs" />
     <Compile Include="Model\ProviderSettings.cs" />
-    <Compile Include="Model\ResponseModels\CreationResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\CrossRefsResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\DefinitionReferencesResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\DomainsResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\ItemsResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\JsonResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\LanguageResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\MetadataResponseModel.cs" />
+    <Compile Include="Model\ResponseModels\JsonDomainResponseModel.cs" />
     <Compile Include="Model\ResponseModels\MetaResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\ModificationResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\NextResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\NoteResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\RequestResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\TermEntriesResponseModel.cs" />
-    <Compile Include="Model\ResponseModels\TermReferencesResponseModel.cs" />
+    <Compile Include="Model\ResponseModels\ItemsResponseModel.cs" />
+    <Compile Include="Model\ResponseModels\SubdomainsResponseModel.cs" />
     <Compile Include="Model\SearchResultModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -133,9 +122,12 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Service\DomainService.cs" />
     <Compile Include="Service\PersistenceService.cs" />
     <Compile Include="Service\TermSearchService.cs" />
-    <Compile Include="Ui\Settings.cs" />
+    <Compile Include="Ui\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Ui\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>

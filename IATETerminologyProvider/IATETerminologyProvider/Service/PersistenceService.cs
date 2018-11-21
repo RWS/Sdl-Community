@@ -38,7 +38,10 @@ namespace IATETerminologyProvider.Service
 
 				if (result != null)
 				{
-					result.Limit = providerSettings.Limit;					
+					//result.Limit = providerSettings.Limit;		
+					result.AllDomains = providerSettings.AllDomains;
+					result.NoDomains = providerSettings.NoDomains;
+					result.NoDuplicates = providerSettings.NoDuplicates;
 				}
 				else
 				{
