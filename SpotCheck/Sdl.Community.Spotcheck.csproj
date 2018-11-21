@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.SpotCheck</RootNamespace>
-    <AssemblyName>Sdl.Studio.SpotCheck</AssemblyName>
+    <AssemblyName>Sdl.Community.SpotCheck</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
