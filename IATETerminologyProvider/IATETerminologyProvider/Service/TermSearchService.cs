@@ -144,7 +144,7 @@ namespace IATETerminologyProvider.Service
 				if (result != null)
 				{
 					domain = $"{result.Name}, ";
-					if (result.Domains != null)
+					if (result.Subdomains != null)
 					{
 						GetSubdomain(domain, result);
 					}
@@ -157,7 +157,7 @@ namespace IATETerminologyProvider.Service
 		{
 			if (domainResult.Domains.Count > 0)
 			{
-				foreach (var domainRes in domainResult.Domains)
+				foreach (var domainRes in domainResult.Subdomains)
 				{
 					var result = DomainService.Domains.Where(d => d.Code.Equals(domainRes.Code)).FirstOrDefault();
 					domain = $"{result.Name}, ";

@@ -63,6 +63,7 @@
             this.ckb_AllDomains.TabIndex = 3;
             this.ckb_AllDomains.Text = "All Domains";
             this.ckb_AllDomains.UseVisualStyleBackColor = true;
+            this.ckb_AllDomains.CheckedChanged += new System.EventHandler(this.ckb_AllDomains_CheckedChanged);
             // 
             // ckb_NoDuplicates
             // 
@@ -73,6 +74,7 @@
             this.ckb_NoDuplicates.TabIndex = 4;
             this.ckb_NoDuplicates.Text = "No terms duplicates";
             this.ckb_NoDuplicates.UseVisualStyleBackColor = true;
+            this.ckb_NoDuplicates.CheckedChanged += new System.EventHandler(this.ckb_NoDuplicates_CheckedChanged);
             // 
             // ckb_NoDomains
             // 
@@ -83,6 +85,7 @@
             this.ckb_NoDomains.TabIndex = 5;
             this.ckb_NoDomains.Text = "No domains";
             this.ckb_NoDomains.UseVisualStyleBackColor = true;
+            this.ckb_NoDomains.CheckedChanged += new System.EventHandler(this.ckb_NoDomains_CheckedChanged);
             // 
             // Settings
             // 

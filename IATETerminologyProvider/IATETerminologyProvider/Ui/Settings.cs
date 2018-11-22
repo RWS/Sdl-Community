@@ -35,6 +35,48 @@ namespace IATETerminologyProvider.Ui
 			};
 			_providerSettings = providerSettings;
 		}
+		
+		private void ckb_NoDomains_CheckedChanged(object sender, System.EventArgs e)
+		{
+			if (ckb_NoDomains.Checked)
+			{
+				ckb_AllDomains.Enabled = false;
+				ckb_NoDuplicates.Enabled = false;
+			}
+			else
+			{
+				ckb_AllDomains.Enabled = true;
+				ckb_NoDuplicates.Enabled = true;
+			}
+		}
+
+		private void ckb_AllDomains_CheckedChanged(object sender, System.EventArgs e)
+		{
+			if (ckb_AllDomains.Checked)
+			{
+				ckb_NoDomains.Enabled = false;
+				ckb_NoDuplicates.Enabled = false;
+			}
+			else
+			{
+				ckb_NoDomains.Enabled = true;
+				ckb_NoDuplicates.Enabled = true;
+			}
+		}
+
+		private void ckb_NoDuplicates_CheckedChanged(object sender, System.EventArgs e)
+		{
+			if (ckb_NoDuplicates.Checked)
+			{
+				ckb_NoDomains.Enabled = false;
+				ckb_AllDomains.Enabled = false;
+			}
+			else
+			{
+				ckb_NoDomains.Enabled = true;
+				ckb_AllDomains.Enabled = true;
+			}
+		}
 		#endregion
 	}
 }
