@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
@@ -33,7 +34,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			if (!_settings.ShouldDeanonymize ?? false)
+			if (!AgreementMethods.UserAgreed())
+			{
+				CancelHelper.CancelTaskIfRequested(true);
+			}
+
+            if (!_settings.ShouldDeanonymize ?? false)
 			{
 				return;
 			}

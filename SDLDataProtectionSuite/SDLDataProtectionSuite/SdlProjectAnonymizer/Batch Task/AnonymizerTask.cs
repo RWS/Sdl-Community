@@ -36,6 +36,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
+			if (!AgreementMethods.UserAgreed())
+			{
+				CancelHelper.CancelTaskIfRequested(true);
+			}
+
 			if (!_settings.ShouldAnonymize ?? false)
 			{
 				return;

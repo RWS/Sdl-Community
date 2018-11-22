@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
@@ -8,14 +10,22 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 	{
 		public static bool UserAgreed()
 		{
-			if (File.Exists(Constants.AcceptFilePath))
-			{
-				var json = File.ReadAllText(Constants.AcceptFilePath);
-				var accepted = JsonConvert.DeserializeObject<Agreement>(json);
+			var accepted = false;
+			var settingsFilePathInfo = new SdlDataProtectionSuite.SdlTmAnonymizer.Model.PathInfo();
 
-				return accepted.Accept;
+			var settingsJson = File.ReadAllText(settingsFilePathInfo.SettingsFilePath);
+
+			var jsonObject = JObject.Parse(settingsJson);
+
+			foreach (KeyValuePair<string, JToken> p in jsonObject)
+			{
+				if (p.Key == "Accepted")
+				{
+					accepted = (bool)p.Value;
+				}
 			}
-			return false;
+
+			return accepted;
 		}
 	}
 }
