@@ -2,6 +2,8 @@
 using System.Linq;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
+using IATETerminologyProvider.Model.ResponseModels;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using Sdl.Core.Globalization;
@@ -50,8 +52,9 @@ namespace IATETerminologyProvider.Service
 			request.AddJsonBody(bodyModel);
 
 			var response = client.Execute(request);
-			
-			var result = MapResponseValues(response);
+			var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(response.Content);
+
+			var result = MapResponseValues(response, domainsJsonResponse);
 			return result;
 		}		
 		#endregion
@@ -73,16 +76,17 @@ namespace IATETerminologyProvider.Service
 			return bodyModel;
 		}
 
-		private IList<ISearchResult> MapResponseValues(IRestResponse response)
+		private IList<ISearchResult> MapResponseValues(IRestResponse response, JsonDomainResponseModel domainResponseModel)
 		{
-			var termsList = new List<ISearchResult>();
-
+			var termsList = new List<ISearchResult>();			
 			var jObject = JObject.Parse(response.Content);
 			var itemTokens = (JArray)jObject.SelectToken("items");
 			if (itemTokens != null)
 			{
 				foreach (var item in itemTokens)
 				{
+					var domain = SetTermDomain(item, domainResponseModel);
+
 					_id++;
 					// get language childrens (source + target languages)
 					var languageTokens = item.SelectToken("language").Children().ToList();
@@ -101,7 +105,6 @@ namespace IATETerminologyProvider.Service
 								var definition = languageToken.Children().FirstOrDefault() != null
 									? languageToken.Children().FirstOrDefault().SelectToken("definition")
 									: null;
-								var termId = termEntry.SelectToken("id").ToString();
 
 								var languageModel = new LanguageModel
 								{
@@ -115,7 +118,8 @@ namespace IATETerminologyProvider.Service
 									Id = _id,
 									Score = 100,
 									Language = languageModel,
-									Definition = definition != null ? definition.ToString() : string.Empty
+									Definition = definition != null ? definition.ToString() : string.Empty,
+									Domain = domain
 								};
 								termsList.Add(termResult);
 							}
@@ -124,6 +128,47 @@ namespace IATETerminologyProvider.Service
 				}
 			}
 			return termsList;
+		}
+
+		private string SetTermDomain(JToken item, JsonDomainResponseModel domainResponseModel)
+		{
+			var domains = DomainService.Domains;
+			var itemId = item.SelectToken("id").ToString();
+			var domain = string.Empty;
+
+			//using the first term domain, because it has the code returned by Iate API which returns all domains
+			var itemResponseDomain = domainResponseModel.Items.Where(i => i.Id.Equals(itemId)).FirstOrDefault();
+			foreach(var itemDomain in itemResponseDomain.Domains)
+			{
+				var result = domains.Where(d => d.Code.Equals(itemDomain.Code)).FirstOrDefault();
+				if (result != null)
+				{
+					domain = $"{result.Name}, ";
+					if (result.Domains != null)
+					{
+						GetSubdomain(domain, result);
+					}
+				}
+			}
+			return domain;
+		}
+
+		public string GetSubdomain(string domain, ItemsResponseModel domainResult)
+		{
+			if (domainResult.Domains.Count > 0)
+			{
+				foreach (var domainRes in domainResult.Domains)
+				{
+					var result = DomainService.Domains.Where(d => d.Code.Equals(domainRes.Code)).FirstOrDefault();
+					domain = $"{result.Name}, ";
+
+					if(result.Domains !=null)
+					{
+						domain = GetSubdomain(domain, result);
+					}
+				}				
+			}
+			return domain;
 		}
 		#endregion
 	}

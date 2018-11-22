@@ -15,8 +15,6 @@ namespace IATETerminologyProvider.Service
 		#region Public Methods
 		public static async void GetDomains()
 		{
-			Domains.Clear();
-
 			var client = new RestClient(ApiUrls.GetDomainUri());
 			var request = new RestRequest("", Method.GET);
 			request.AddHeader("Connection", "Keep-Alive");
@@ -32,9 +30,9 @@ namespace IATETerminologyProvider.Service
 			var response = await client.ExecuteTaskAsync(request);
 			var jsonDomainsModel = JsonConvert.DeserializeObject<JsonDomainResponseModel>(response.Content);
 
-			if(jsonDomainsModel.Items != null)
+			if (jsonDomainsModel.Items != null)
 			{
-				foreach(var item in jsonDomainsModel.Items)
+				foreach (var item in jsonDomainsModel.Items)
 				{
 					var domain = new ItemsResponseModel
 					{
@@ -45,6 +43,7 @@ namespace IATETerminologyProvider.Service
 					Domains.Add(domain);
 				}
 			}
+
 		}
 		#endregion
 	}

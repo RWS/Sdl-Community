@@ -114,6 +114,7 @@
     <Compile Include="Model\ResponseModels\MetaResponseModel.cs" />
     <Compile Include="Model\ResponseModels\ItemsResponseModel.cs" />
     <Compile Include="Model\ResponseModels\SubdomainsResponseModel.cs" />
+    <Compile Include="Model\ResponseModels\TermsDomainResponseModel.cs" />
     <Compile Include="Model\SearchResultModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>

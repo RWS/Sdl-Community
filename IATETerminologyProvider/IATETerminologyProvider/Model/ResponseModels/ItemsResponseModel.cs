@@ -12,5 +12,7 @@ namespace IATETerminologyProvider.Model.ResponseModels
 		public string Name { get; set; }
 		public string Level { get; set; }
 		public List<SubdomainsResponseModel> Subdomains { get; set; }
+		public List<TermsDomainResponseModel> Domains { get; set; }
+		public string Id { get; set; }
 	}
 }

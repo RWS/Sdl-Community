@@ -13,5 +13,7 @@ namespace IATETerminologyProvider.Model
 		public ILanguage Language { get; set; }
 
 		public string Definition { get; set; }
+
+		public string Domain { get; set; }
 	}
 }
