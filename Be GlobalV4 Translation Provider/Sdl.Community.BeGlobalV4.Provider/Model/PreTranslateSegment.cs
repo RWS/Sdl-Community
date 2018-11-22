@@ -7,8 +7,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 	{
 		public SearchSettings SearchSettings { get; set; }
 		public TranslationUnit TranslationUnit { get; set; }
-		public string Id { get; set; }
 		public string PlainTranslation { get; set; }
+		public string SourceText { get; set; }
 		public Segment TranslationSegment { get; set; }
 	}																
 }

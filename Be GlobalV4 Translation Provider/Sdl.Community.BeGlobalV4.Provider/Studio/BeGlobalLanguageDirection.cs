@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
@@ -10,6 +12,7 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
@@ -73,15 +76,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 		}
 
-		public string PrepareTempData(List<PreTranslateSegment> preTranslatesegments)
+		public async Task<List<PreTranslateSegment>> PrepareTempData(List<PreTranslateSegment> preTranslatesegments)
 		{
 			try
 			{
-				var filePath = _preTranslateHelp.CreateXmlFile();
-
-				for (int i = 0; i < preTranslatesegments.Count; i++)
+				for (var i = 0; i < preTranslatesegments.Count; i++)
 				{
-					var sourceText = string.Empty;
+					string sourceText;
 					var newseg = preTranslatesegments[i].TranslationUnit.SourceSegment.Duplicate();
 
 					if (newseg.HasTags)
@@ -94,7 +95,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						sourceText = newseg.ToPlain();
 					}
 					sourceText = _normalizeSourceTextHelper.NormalizeText(sourceText);
-					_preTranslateHelp.WriteSegments(filePath, preTranslatesegments[i].Id, sourceText);
+					preTranslatesegments[i].SourceText = sourceText;
 				}
 
 				var sourceLanguage =
@@ -105,15 +106,19 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				var translator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", _options.ClientId,
 					_options.ClientSecret, sourceLanguage, targetLanguage, _options.Model, _options.UseClientAuthentication);
 
-				var translatedFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "translated.xml");
-				translator.TranslateFile(filePath, translatedFile);
-				return translatedFile;  
+				await Task.Run(() => Parallel.ForEach(preTranslatesegments, segment =>
+				{
+					var translation = HttpUtility.UrlDecode(translator.TranslateText(segment.SourceText));
+					segment.PlainTranslation = HttpUtility.HtmlDecode(translation);
+				})).ConfigureAwait(true);
+
+				return preTranslatesegments;   
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine(e);
 			}
-			return string.Empty;
+			return preTranslatesegments;
 		}
 
 		private SearchResult CreateSearchResult(Segment segment, Segment translation)
@@ -203,8 +208,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						var preTranslate = new PreTranslateSegment
 						{
 							SearchSettings = settings,
-							TranslationUnit = tu,
-							Id = i.ToString()
+							TranslationUnit = tu
 						};
 						preTranslateList.Add(preTranslate);
 					}
@@ -217,24 +221,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				if (preTranslateList.Count > 0)
 				{
 					//Create temp file with translations
-					var translatedFilePath = PrepareTempData(preTranslateList);
-					if (!string.IsNullOrEmpty(translatedFilePath))
-					{   //parse translated xml 
-						var translationResults = _preTranslateHelp.GetTranslationFromTemp(translatedFilePath);
-						if (translationResults != null)
-						{
-							foreach (var preTranslateSegment in preTranslateList)
-							{
-								var translationResult = translationResults.FirstOrDefault(s => s.Id.Equals(preTranslateSegment.Id));
-								if (translationResult != null)
-								{
-									preTranslateSegment.PlainTranslation = translationResult.Translation;
-								}
-							}
-						}
-						var preTranslateSearchResults =GetPreTranslationSearchResults(preTranslateList);
-						results.AddRange(preTranslateSearchResults);
-					}
+					var translatedSegments = PrepareTempData(preTranslateList).Result;
+					var preTranslateSearchResults = GetPreTranslationSearchResults(translatedSegments);
+					results.AddRange(preTranslateSearchResults);
 				}
 			}
 			else

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -66,11 +63,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			var json = UploadText(text, quick);
 			if (quick)
 			{
-				return json.translation[0];
+				return json != null ? json.translation[0] : string.Empty;
 			}
 			var rawData = WaitForTranslation(json.requestId.Value);
 			json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
-			return json.translation[0];
+			return json != null ? json.translation[0] : string.Empty;
 		}  
 
 		public dynamic UploadText(string text, bool quick)
