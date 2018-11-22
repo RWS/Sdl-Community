@@ -29,6 +29,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 
 		protected override void OnLoad(EventArgs e)
 		{
+			SuspendLayout();
+			lockPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+			ResumeLayout();
 			if (Settings.EncryptionState == State.DefaultState)
 			{
 				Settings.EncryptionState = IsProjectAnonymized() ? State.DataEncrypted : State.Decrypted;
