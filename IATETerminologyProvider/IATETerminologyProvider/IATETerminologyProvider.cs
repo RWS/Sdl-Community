@@ -92,7 +92,7 @@ namespace IATETerminologyProvider
 			var subdomainField = new DescriptiveField
 			{
 				Label = "Subdomain",
-				Level = FieldLevel.EntryLevel,
+				Level = FieldLevel.LanguageLevel,
 				Mandatory = true,
 				Multiple = true,
 				Type = FieldType.String
@@ -152,26 +152,26 @@ namespace IATETerminologyProvider
 					Id = termResult.Id,
 					Fields = SetEntryFields(termResult),
 					Transactions = new List<IEntryTransaction>(),
-					Languages = SetEntryLanguages(languages, sourceLanguage, termResult.Id, termResult.Definition)
+					Languages = SetEntryLanguages(languages, sourceLanguage, termResult)
 				};
 				_entryModels.Add(entryModel);
 			}
 		}
 
 		// Set entry languages for the entry models
-		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, ILanguage sourceLanguage, int id, string fieldDefinition)
+		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, ILanguage sourceLanguage, SearchResultModel termResult)
 		{
 			IList<IEntryLanguage> entryLanguages = new List<IEntryLanguage>();
 			foreach (var language in languages)
 			{
 				var entryLanguage = new EntryLanguageModel
 				{
-					//Fields = SetEntryFields(fieldDefinition),
-					Fields = new List<IEntryField>(),
+					Fields = !language.Name.Equals(sourceLanguage.Name) ? SetEntryFields(termResult) : new List<IEntryField>(),
+					//Fields = new List<IEntryField>(),
 					Locale = language.Locale,
 					Name = language.Name,
 					ParentEntry = null,
-					Terms = CreateEntryTerms(language, sourceLanguage, id),
+					Terms = CreateEntryTerms(language, sourceLanguage, termResult.Id),
 					IsSource = language.Name.Equals(sourceLanguage.Name) ? true : false
 				};
 				entryLanguages.Add(entryLanguage);
@@ -221,7 +221,7 @@ namespace IATETerminologyProvider
 		// Set field definition
 		private IList<IEntryField> SetEntryFields(SearchResultModel searchResultModel)
 		{
-			IList<IEntryField> entryFields = new List<IEntryField>();
+			var entryFields = new List<IEntryField>();
 			if (!string.IsNullOrEmpty(searchResultModel.Definition))
 			{
 				var definitionEntryField = new EntryField
@@ -254,5 +254,5 @@ namespace IATETerminologyProvider
 			return entryFields;
 		}
 		#endregion
+		}
 	}
-}
