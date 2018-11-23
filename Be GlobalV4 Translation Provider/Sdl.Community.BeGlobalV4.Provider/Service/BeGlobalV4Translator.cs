@@ -139,7 +139,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			request.AddParameter("sourceLanguageId", _source);
 			request.AddParameter("targetLanguageId", _target);
 			request.AddParameter("model", _flavor);
-			request.AddParameter("inputFormat", "XML");
+			request.AddParameter("inputFormat", "HTML");
 
 			var response = _client.Execute(request);
 			if (response.StatusCode != System.Net.HttpStatusCode.OK && response.StatusCode != System.Net.HttpStatusCode.Accepted)

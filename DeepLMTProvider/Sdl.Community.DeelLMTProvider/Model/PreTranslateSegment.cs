@@ -1,7 +1,7 @@
 ﻿using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Model
+namespace Sdl.Community.DeepLMTProvider.Model
 {
 	public class PreTranslateSegment
 	{
@@ -9,7 +9,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 		public TranslationUnit TranslationUnit { get; set; }
 		public string PlainTranslation { get; set; }
 		public string SourceText { get; set; }
-		public string Id { get; set; }
 		public Segment TranslationSegment { get; set; }
-	}																
+	}
 }
