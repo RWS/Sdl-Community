@@ -12,7 +12,7 @@ using UserControl = System.Windows.Forms.UserControl;
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 {
 	[View(
-		Id = "SDLTMAnonymizerView",
+		Id = "SDPSTMAnonymizerView",
 		Name = "SDLTM Anonymizer",
 		Icon = "SDLTMAnonymizer",
 		Description = "Anonymize personal information in Translation Memories",

@@ -12,7 +12,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 {
-	[AutomaticTask("Decrypt Task",
+	[AutomaticTask("SDPSDecryptTask",
 		"Unprotect Data",
 		"Unprotect data in preparation for saving the target files",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]

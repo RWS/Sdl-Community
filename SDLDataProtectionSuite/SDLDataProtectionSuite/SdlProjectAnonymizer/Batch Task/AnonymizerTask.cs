@@ -14,7 +14,7 @@ using Constants = Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Help
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 {
-	[AutomaticTask("Anonymizer Task",
+	[AutomaticTask("SDPSAnonymizerTask",
 				   "Protect Data",
 				   "Protect data during the project, with or without encryption",
 				   GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
