@@ -89,6 +89,16 @@ namespace IATETerminologyProvider
 			};
 			result.Add(domainField);
 
+			var subdomainField = new DescriptiveField
+			{
+				Label = "Subdomain",
+				Level = FieldLevel.EntryLevel,
+				Mandatory = true,
+				Multiple = true,
+				Type = FieldType.String
+			};
+			result.Add(subdomainField);
+
 			return result;
 		}
 
@@ -140,7 +150,7 @@ namespace IATETerminologyProvider
 				{
 					SearchText = termResult.Text,
 					Id = termResult.Id,
-					Fields = SetEntryFields(termResult.Definition, termResult.Domain),
+					Fields = SetEntryFields(termResult),
 					Transactions = new List<IEntryTransaction>(),
 					Languages = SetEntryLanguages(languages, sourceLanguage, termResult.Id, termResult.Definition)
 				};
@@ -209,25 +219,35 @@ namespace IATETerminologyProvider
 		}
 
 		// Set field definition
-		private IList<IEntryField> SetEntryFields(string fieldDefinition, string domain)
+		private IList<IEntryField> SetEntryFields(SearchResultModel searchResultModel)
 		{
 			IList<IEntryField> entryFields = new List<IEntryField>();
-			if (!string.IsNullOrEmpty(fieldDefinition))
+			if (!string.IsNullOrEmpty(searchResultModel.Definition))
 			{
 				var definitionEntryField = new EntryField
 				{
 					Name = "Definition",
-					Value = fieldDefinition
+					Value = searchResultModel.Definition
 				};
 				entryFields.Add(definitionEntryField);
 			}
 
-			if (!string.IsNullOrEmpty(domain))
+			if (!string.IsNullOrEmpty(searchResultModel.Domain))
 			{
 				var domainEntryField = new EntryField
 				{
 					Name = "Domain",
-					Value = domain
+					Value = searchResultModel.Domain
+				};
+				entryFields.Add(domainEntryField);
+			}
+
+			if (!string.IsNullOrEmpty(searchResultModel.Subdomain))
+			{
+				var domainEntryField = new EntryField
+				{
+					Name = "Subdomain",
+					Value = searchResultModel.Subdomain
 				};
 				entryFields.Add(domainEntryField);
 			}
