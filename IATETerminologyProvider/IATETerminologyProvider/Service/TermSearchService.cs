@@ -85,7 +85,10 @@ namespace IATETerminologyProvider.Service
 			{
 				foreach (var item in itemTokens)
 				{
-					var domain = SetTermDomain(item, domainResponseModel);
+					var itemId = item.SelectToken("id").ToString();
+					var domainModel = domainResponseModel.Items.Where(i => i.Id == itemId).FirstOrDefault();
+					var domain = SetTermDomain(item, domainModel);
+					//var subdomains = SetTermSubdomain(item, domainModel);
 
 					_id++;
 					// get language childrens (source + target languages)
@@ -130,45 +133,21 @@ namespace IATETerminologyProvider.Service
 			return termsList;
 		}
 
-		private string SetTermDomain(JToken item, JsonDomainResponseModel domainResponseModel)
+		// Set term main domain
+		private string SetTermDomain(JToken item, ItemsResponseModel itemDomains)
 		{
-			var domains = DomainService.Domains;
-			var itemId = item.SelectToken("id").ToString();
 			var domain = string.Empty;
-
-			//using the first term domain, because it has the code returned by Iate API which returns all domains
-			var itemResponseDomain = domainResponseModel.Items.Where(i => i.Id.Equals(itemId)).FirstOrDefault();
-			foreach(var itemDomain in itemResponseDomain.Domains)
+			var domains = DomainService.Domains;
+			foreach (var itemDomain in itemDomains.Domains)
 			{
 				var result = domains.Where(d => d.Code.Equals(itemDomain.Code)).FirstOrDefault();
 				if (result != null)
 				{
 					domain = $"{result.Name}, ";
-					if (result.Subdomains != null)
-					{
-						GetSubdomain(domain, result);
-					}
 				}
 			}
-			return domain;
-		}
+			return domain.TrimEnd(',');
 
-		public string GetSubdomain(string domain, ItemsResponseModel domainResult)
-		{
-			if (domainResult.Domains.Count > 0)
-			{
-				foreach (var domainRes in domainResult.Subdomains)
-				{
-					var result = DomainService.Domains.Where(d => d.Code.Equals(domainRes.Code)).FirstOrDefault();
-					domain = $"{result.Name}, ";
-
-					if(result.Domains !=null)
-					{
-						domain = GetSubdomain(domain, result);
-					}
-				}				
-			}
-			return domain;
 		}
 		#endregion
 	}
