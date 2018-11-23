@@ -69,7 +69,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Controls
 			}
 
 			foreach (var sortDescription in _sortDescriptions)
-			{				
+			{
 				view.SortDescriptions.Add(sortDescription);
 
 				var column = Columns.FirstOrDefault(c => c.SortMemberPath == sortDescription.PropertyName);
@@ -89,10 +89,17 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Controls
 				return;
 			}
 
-			_sortDescriptions.Clear();
-
 			var view = CollectionViewSource.GetDefaultView(ItemsSource);
 			
+			if (_sortDescriptions == null)
+			{
+				_sortDescriptions = new List<SortDescription>();
+			}
+			else
+			{
+				_sortDescriptions.Clear();
+			}
+
 			AddSegmentNumberSorter(view);
 
 			foreach (var sortDescription in view.SortDescriptions)
@@ -100,7 +107,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Controls
 				_sortDescriptions.Add(new SortDescription(sortDescription.PropertyName, sortDescription.Direction));
 			}
 		}
-		
+
 		private void SetDefaultSortDescriptions()
 		{
 			if (string.IsNullOrEmpty(DefaultColumnName) || DefaultColumnName == "[none]")
@@ -117,8 +124,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Controls
 		private static void AddSegmentNumberSorter(ICollectionView view)
 		{
 			if (view.SortDescriptions.Count > 0 &&
-			    view.SortDescriptions[0].PropertyName == "SegmentNumber" &&
-			    view.CurrentItem is ContentSearchResult)
+				view.SortDescriptions[0].PropertyName == "SegmentNumber" &&
+				view.CurrentItem is ContentSearchResult)
 			{
 				var collection = (ListCollectionView)view;
 				collection.CustomSort = new SegmentNumberSorter(view.SortDescriptions[0]);
@@ -158,8 +165,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Controls
 				var intx = searchResultX.TranslationUnit.ResourceId.Id;
 				var inty = searchResultY.TranslationUnit.ResourceId.Id;
 
-				return _sortDescription.Direction == ListSortDirection.Ascending 
-					? intx.CompareTo(inty) 
+				return _sortDescription.Direction == ListSortDirection.Ascending
+					? intx.CompareTo(inty)
 					: inty.CompareTo(intx);
 			}
 			catch
@@ -169,7 +176,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Controls
 
 			return _sortDescription.Direction == ListSortDirection.Ascending
 				? string.Compare(searchResultX.TranslationUnit.ResourceId.Id.ToString(), searchResultY.TranslationUnit.ResourceId.Id.ToString(), StringComparison.Ordinal)
-				: string.Compare(searchResultY.TranslationUnit.ResourceId.Id.ToString(), searchResultX.TranslationUnit.ResourceId.Id.ToString(), StringComparison.Ordinal);			
+				: string.Compare(searchResultY.TranslationUnit.ResourceId.Id.ToString(), searchResultX.TranslationUnit.ResourceId.Id.ToString(), StringComparison.Ordinal);
 		}
 	}
 }
