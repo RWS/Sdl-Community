@@ -146,8 +146,14 @@ namespace IATETerminologyProvider.Service
 					domain = $"{result.Name}, ";
 				}
 			}
-			return domain.TrimEnd(',');
+			return domain.TrimEnd(' ').TrimEnd(',');
+		}
 
+		private List<string> SetTermSubdomains()
+		{
+			var subdomains = new List<string>();
+
+			return subdomains;
 		}
 		#endregion
 	}

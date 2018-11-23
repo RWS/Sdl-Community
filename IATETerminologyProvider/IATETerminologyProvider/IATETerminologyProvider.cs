@@ -73,6 +73,8 @@ namespace IATETerminologyProvider
 			{
 				Label = "Definition",
 				Level = FieldLevel.EntryLevel,
+				Mandatory = true,
+				Multiple = true,
 				Type = FieldType.String
 			};
 			result.Add(definitionField);
@@ -80,7 +82,9 @@ namespace IATETerminologyProvider
 			var domainField = new DescriptiveField
 			{
 				Label = "Domain",
-				Level = FieldLevel.TermLevel,
+				Level = FieldLevel.EntryLevel,
+				Mandatory = true,
+				Multiple = true,
 				Type = FieldType.String
 			};
 			result.Add(domainField);
@@ -136,7 +140,7 @@ namespace IATETerminologyProvider
 				{
 					SearchText = termResult.Text,
 					Id = termResult.Id,
-					Fields = SetEntryFields(termResult.Definition, "test"),
+					Fields = SetEntryFields(termResult.Definition, termResult.Domain),
 					Transactions = new List<IEntryTransaction>(),
 					Languages = SetEntryLanguages(languages, sourceLanguage, termResult.Id, termResult.Definition)
 				};
