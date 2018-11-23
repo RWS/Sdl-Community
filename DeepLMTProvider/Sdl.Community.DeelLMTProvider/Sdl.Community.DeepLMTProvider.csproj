@@ -126,9 +126,11 @@
     <Compile Include="DeepLTranslationProviderTagPlacer.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Model\DeepLTag.cs" />
+    <Compile Include="Model\PreTranslateSegment.cs" />
     <Compile Include="Model\TagInfo.cs" />
     <Compile Include="Model\TranslationDetails.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
+    <Compile Include="NormalizeSourceTextHelper.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

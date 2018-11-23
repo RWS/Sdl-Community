@@ -17,13 +17,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 
 			var jsonObject = JObject.Parse(settingsJson);
 
-			foreach (KeyValuePair<string, JToken> p in jsonObject)
-			{
-				if (p.Key == "Accepted")
-				{
-					accepted = (bool)p.Value;
-				}
-			}
+			accepted = (bool)jsonObject["Accepted"];
 
 			return accepted;
 		}

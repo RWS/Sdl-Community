@@ -15,5 +15,7 @@ namespace IATETerminologyProvider.Model
 		public string Definition { get; set; }
 
 		public string Domain { get; set; }
+
+		public string Subdomain { get; set; }
 	}
 }

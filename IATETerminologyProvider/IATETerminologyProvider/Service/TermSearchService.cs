@@ -15,6 +15,9 @@ namespace IATETerminologyProvider.Service
 	{
 		#region Private Fields
 		private ProviderSettings _providerSettings;
+		private List<ItemsResponseModel> _domains = DomainService.Domains;
+		private List<string> _subdomains = new List<string>();
+
 		private static int _id = new int();
 		#endregion
 
@@ -87,8 +90,8 @@ namespace IATETerminologyProvider.Service
 				{
 					var itemId = item.SelectToken("id").ToString();
 					var domainModel = domainResponseModel.Items.Where(i => i.Id == itemId).FirstOrDefault();
-					var domain = SetTermDomain(item, domainModel);
-					//var subdomains = SetTermSubdomain(item, domainModel);
+					var domain = SetTermDomain(domainModel);
+					SetTermSubdomains(domainModel);
 
 					_id++;
 					// get language childrens (source + target languages)
@@ -122,7 +125,8 @@ namespace IATETerminologyProvider.Service
 									Score = 100,
 									Language = languageModel,
 									Definition = definition != null ? definition.ToString() : string.Empty,
-									Domain = domain
+									Domain = domain,
+									Subdomain = FormatSubdomain()
 								};
 								termsList.Add(termResult);
 							}
@@ -134,20 +138,80 @@ namespace IATETerminologyProvider.Service
 		}
 
 		// Set term main domain
-		private string SetTermDomain(JToken item, ItemsResponseModel itemDomains)
+		private string SetTermDomain(ItemsResponseModel itemDomains)
 		{
 			var domain = string.Empty;
-			var domains = DomainService.Domains;
 			foreach (var itemDomain in itemDomains.Domains)
 			{
-				var result = domains.Where(d => d.Code.Equals(itemDomain.Code)).FirstOrDefault();
+				var result = _domains.Where(d => d.Code.Equals(itemDomain.Code)).FirstOrDefault();
 				if (result != null)
 				{
 					domain = $"{result.Name}, ";
 				}
 			}
-			return domain.TrimEnd(',');
+			return domain.TrimEnd(' ').TrimEnd(',');
+		}
 
+
+		// Set term subdomain
+		private void SetTermSubdomains(ItemsResponseModel mainDomains)
+		{
+			// clear _subdomains list for each term
+			_subdomains.Clear();
+			if (_domains.Count > 0)
+			{
+				foreach (var mainDomain in mainDomains.Domains)
+				{
+					foreach (var domain in _domains)
+					{
+						// if result returns null, means that code belongs to a subdomain
+						var result = domain.Code.Equals(mainDomain.Code) ? domain : null;
+						if (result == null && domain.Subdomains != null)
+						{
+							GetSubdomainsRecursively(domain.Subdomains, mainDomain.Code, mainDomain.Note);
+						}
+					}
+				}
+			}
+		}
+
+		private void GetSubdomainsRecursively(List<SubdomainsResponseModel> subdomains, string code, string note)
+		{
+			foreach (var subdomain in subdomains)
+			{
+				if (subdomain.Code.Equals(code))
+				{
+					if (!string.IsNullOrEmpty(note))
+					{
+						var subdomainName = $"{subdomain.Name}. {note}";
+						_subdomains.Add(subdomainName);
+					}
+					else
+					{
+						_subdomains.Add(subdomain.Name);
+					}
+				}
+				else
+				{
+					if (subdomain.Subdomains != null)
+					{
+						GetSubdomainsRecursively(subdomain.Subdomains, code, note);
+					}
+				}
+			}
+		}
+
+		// Format the subdomain in order to be displayed user friendly.
+		private string FormatSubdomain()
+		{
+			var result = string.Empty;
+			int subdomainNo = 0;
+			foreach (var subdomain in _subdomains)
+			{
+				subdomainNo++;
+				result+= $"{ subdomainNo}.{subdomain}. ";
+			}
+			return result.TrimEnd(' ');
 		}
 		#endregion
 	}
