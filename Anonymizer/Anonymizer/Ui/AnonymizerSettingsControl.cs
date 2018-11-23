@@ -78,7 +78,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			exportHeaderCell.OnCheckBoxHeaderClick += ExportHeaderCell_OnCheckBoxHeaderClick;
 			var exportColumn = new DataGridViewCheckBoxColumn
 			{
-				Width = 100,
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
 				HeaderText = @"Enable?",
 				DataPropertyName = "ShouldEnable",
 				Name = "Enable",
@@ -92,8 +92,8 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			encryptHeaderCell.OnCheckBoxHeaderClick += EncryptHeaderCell_OnCheckBoxHeaderClick;
 			var shouldEncryptColumn = new DataGridViewCheckBoxColumn
 			{
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
 				HeaderText = @"Encrypt?",
-				Width = 105,
 				DataPropertyName = "ShouldEncrypt",
 				HeaderCell = encryptHeaderCell,
 				Name = "Encrypt"
@@ -118,7 +118,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			
 			var moveUpButtonColumn = new DataGridViewImageColumn()
 			{
-				Width = 20,
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
 				Icon = new Icon(PluginResources.Up, 16, 16),
 				ValuesAreIcons = true,
 				DisplayIndex = 4,
@@ -129,7 +129,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 			var moveDownButtonColumn = new DataGridViewImageColumn()
 			{
-				Width = 20,
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
 				Icon = new Icon(PluginResources.Down, 16, 16),
 				ValuesAreIcons = true,
 				DisplayIndex = 5,
@@ -139,7 +139,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 			var deleteButtonColumn = new DataGridViewImageColumn()
 			{
-				Width = 20,
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
 				Icon = new Icon(PluginResources.Delete, 16, 16),
 				ValuesAreIcons = true,
 				DisplayIndex = 6,

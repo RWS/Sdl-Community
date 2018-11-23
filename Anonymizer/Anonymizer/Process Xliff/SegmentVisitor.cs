@@ -44,10 +44,6 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
-			//if (!string.IsNullOrEmpty(_id))
-			//{
-			//	if (_id == tag.TagProperties.ta)
-			//}
 		}
 
 		public void VisitText(IText text)
@@ -154,7 +150,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 				var regex = DecryptIfEncrypted(pattern);
 
 				var match = regex.Match(text);
-				if (match.Success)
+				if (match.Success && match.Value.Length > 0)
 				{
 					var result = regex.Replace(text, matchText => ProcessMatchData(matchText, pattern, isTagContent));
 					return result;
@@ -182,7 +178,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			{
 				var regex = DecryptIfEncrypted(pattern);
 				var match = regex.Match(text);
-				if (match.Success)
+				if (match.Success && match.Value.Length > 0)
 				{
 					return true;
 				}
@@ -199,13 +195,16 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 				var matches = regex.Matches(segmentText);
 				foreach (Match match in matches)
 				{
-					var data = new AnonymizedData
+					if (match.Value.Length > 0)
 					{
-						MatchText = match.Value,
-						PositionInOriginalText = match.Index,
-						EncryptedText = AnonymizeData.EncryptData(match.ToString(), _encryptionKey)
-					};
-					anonymizedData.Add(data);
+						var data = new AnonymizedData
+						{
+							MatchText = match.Value,
+							PositionInOriginalText = match.Index,
+							EncryptedText = AnonymizeData.EncryptData(match.ToString(), _encryptionKey)
+						};
+						anonymizedData.Add(data);
+					}
 				}
 			}
 			return anonymizedData;
@@ -221,36 +220,14 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 				{
 					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].MatchText.Length);
 
-					//check if we should encrypt or only tag the data
-					var processedData = Anonymizer(segmentText.Properties.Text, false);
-					var tag = _factory.CreatePlaceholderTag(
-						_propertiesFactory.CreatePlaceholderTagProperties(processedData));
-					tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
-					//Add encrypted tag to collection
-					segmentContent.Add(tag);
-
-					if (ShouldAnonymize(remainingSegmentText.Properties.Text))
-					{
-						var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
-						GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
-					}
-					else
-					{
-						segmentContent.Add(remainingSegmentText);
-					}
+					AddPlaceHolderTag(segmentContent, segmentText);
+					AnonymizeContent(remainingSegmentText, segmentContent);
 				}
 				else
 				{
 					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].PositionInOriginalText);
-					if (ShouldAnonymize(segmentText.Properties.Text))
-					{
-						var remainingData = GetAnonymizedData(segmentText.Properties.Text);
-						GetSubsegmentPi(segmentText, segmentContent, remainingData);
-					}
-					else
-					{
-						segmentContent.Add(segmentText);
-					}
+					AnonymizeContent(segmentText, segmentContent);
+					
 					if (ShouldAnonymize(remainingSegmentText.Properties.Text))
 					{
 						var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
@@ -258,23 +235,36 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 					}
 					else
 					{
-						var processedData = Anonymizer(remainingSegmentText.Properties.Text, false);
-						var tag = _factory.CreatePlaceholderTag(
-							_propertiesFactory.CreatePlaceholderTagProperties(processedData));
-						tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
-						segmentContent.Add(tag);
+						AddPlaceHolderTag(segmentContent, remainingSegmentText);
 					}
 				}
 			} //segment contains only PI data
 			else
 			{
-				var processedData = Anonymizer(segmentText.Properties.Text, false);
-				var tag = _factory.CreatePlaceholderTag(
-					_propertiesFactory.CreatePlaceholderTagProperties(processedData));
-
-				tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
-				segmentContent.Add(tag);
+				AddPlaceHolderTag(segmentContent, segmentText);
 			}
+		}
+
+		private void AnonymizeContent(IText text, List<IAbstractMarkupData> segmentContent)
+		{
+			if (ShouldAnonymize(text.Properties.Text))
+			{
+				var remainingData = GetAnonymizedData(text.Properties.Text);
+				GetSubsegmentPi(text, segmentContent, remainingData);
+			}
+			else
+			{
+				segmentContent.Add(text);
+			}
+		}
+
+		private void AddPlaceHolderTag(ICollection<IAbstractMarkupData> segmentContent, IText text)
+		{
+			var processedData = Anonymizer(text.Properties.Text, false);
+			var tag = _factory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(processedData));
+			tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
+
+			segmentContent.Add(tag);
 		}
 
 		private void VisitChildren(IAbstractMarkupDataContainer container)

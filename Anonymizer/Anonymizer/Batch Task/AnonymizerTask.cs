@@ -27,6 +27,11 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 	{
 		public void Execute()
 		{
+			if (Application.Current == null)
+			{
+				new Application();
+			}
+
 			CreateAcceptFile();
 			var acceptWindow = new AcceptWindow();
 			if (!AgreementMethods.UserAgreed())
@@ -77,7 +82,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		{
 			if (!_settings.ShouldAnonymize ?? false)
 			{
-				return;
+				CancelHelper.CancelTaskIfRequested(true);
 			}
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			var selectedPatternsFromGrid = _settings.RegexPatterns.Where(e => e.ShouldEnable).ToList();
@@ -163,7 +168,9 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			if (!_settings.ShouldDeanonymize ?? false)
-				return;
+			{
+				CancelHelper.CancelTaskIfRequested(true);
+			}
 
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings)));
