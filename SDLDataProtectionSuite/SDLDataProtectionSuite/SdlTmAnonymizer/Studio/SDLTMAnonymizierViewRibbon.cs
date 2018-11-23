@@ -7,15 +7,15 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 {
-	[RibbonGroup("SDPSTmAnonymizerSettingsRibbonGroup", "Configuration")]
+	[RibbonGroup("SDLTMAnonymizerSettingsRibbonGroup", "Configuration")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-	public class SDPSTmAnonymizerSettingsRibbonGroup : AbstractRibbonGroup
+	public class SDLTMAnonymizerSettingsRibbonGroup : AbstractRibbonGroup
 	{
 	}
 
-	[Action("SDPSTmAnonymizerTmRibbonGroupSettingsAction", typeof(SDLTMAnonymizerView), Name = " Settings ", Icon = "Settings", Description = "Settings ")]
-	[ActionLayout(typeof(SDPSTmAnonymizerSettingsRibbonGroup), 7, DisplayType.Large)]
-	public class SDPSTmAnonymizerTmRibbonGroupSettingsAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("SDLTMAnonymizerRibbonGroupSettingsAction", typeof(SDLTMAnonymizerView), Name = " Settings ", Icon = "Settings", Description = "Settings ")]
+	[ActionLayout(typeof(SDLTMAnonymizerSettingsRibbonGroup), 7, DisplayType.Large)]
+	public class SDLTMAnonymizerRibbonGroupSettingsAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -33,15 +33,15 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 	}
 
 
-	[RibbonGroup("SDPSTmAnonymizerTMRibbonGroup", "Translation Memories")]
+	[RibbonGroup("SDLTMAnonymizerRibbonGroup", "Translation Memories")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-	public class SDPSTmAnonymizerTmRibbonGroup : AbstractRibbonGroup
+	public class SDLTMAnonymizerRibbonGroup : AbstractRibbonGroup
 	{
 	}
 
-	[Action("SDPSTmAnonymizerTmRibbonGroupAddFileBasedTmAction", typeof(SDLTMAnonymizerView), Name = "Add file-based TM", Icon = "TranslationMemory", Description = "Add file-based TM")]
-	[ActionLayout(typeof(SDPSTmAnonymizerTmRibbonGroup), 6, DisplayType.Large)]
-	public class SDPSTmAnonymizerTmRibbonGroupAddFileBasedTmAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("SDLTMAnonymizerRibbonGroupAddFileBasedTmAction", typeof(SDLTMAnonymizerView), Name = "Add file-based TM", Icon = "TranslationMemory", Description = "Add file-based TM")]
+	[ActionLayout(typeof(SDLTMAnonymizerRibbonGroup), 6, DisplayType.Large)]
+	public class SDLTMAnonymizerRibbonGroupAddFileBasedTmAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -54,9 +54,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[Action("SDPSTmAnonymizerTmRibbonGroupAddServerTmAction", typeof(SDLTMAnonymizerView), Name = "Add server TM", Icon = "ServerBasedTranslationMemory", Description = "Add server TM")]
-	[ActionLayout(typeof(SDPSTmAnonymizerTmRibbonGroup), 5, DisplayType.Large)]
-	public class SDPSTmAnonymizerTmRibbonGroupAddServerTmAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("SDLTMAnonymizerRibbonGroupAddServerTmAction", typeof(SDLTMAnonymizerView), Name = "Add server TM", Icon = "ServerBasedTranslationMemory", Description = "Add server TM")]
+	[ActionLayout(typeof(SDLTMAnonymizerRibbonGroup), 5, DisplayType.Large)]
+	public class SDLTMAnonymizerRibbonGroupAddServerTmAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -69,9 +69,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[Action("SDPSTmAnonymizerTMRibbonGroupOpenFolderAction", typeof(SDLTMAnonymizerView), Name = "Select Folder", Icon = "TranslationMemoriesFolder_Open", Description = "Add all file-based TMs in the selected folder")]
-	[ActionLayout(typeof(SDPSTmAnonymizerTmRibbonGroup), 4, DisplayType.Normal)]
-	public class SDPSTmAnonymizerTmRibbonGroupOpenFolderAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("SDLTMAnonymizerRibbonGroupOpenFolderAction", typeof(SDLTMAnonymizerView), Name = "Select Folder", Icon = "TranslationMemoriesFolder_Open", Description = "Add all file-based TMs in the selected folder")]
+	[ActionLayout(typeof(SDLTMAnonymizerRibbonGroup), 4, DisplayType.Normal)]
+	public class SDLTMAnonymizerRibbonGroupOpenFolderAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -84,9 +84,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[Action("SDPSTmAnonymizerTmRibbonGroupRemoveTmAction", typeof(SDLTMAnonymizerView), Name = "Remove TM", Icon = "Remove", Description = "Remove TM")]
-	[ActionLayout(typeof(SDPSTmAnonymizerTmRibbonGroup), 3, DisplayType.Normal)]
-	public class SDPSTmAnonymizerTmRibbonGroupRemoveTmAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("SDLTMAnonymizerRibbonGroupRemoveTmAction", typeof(SDLTMAnonymizerView), Name = "Remove TM", Icon = "Remove", Description = "Remove TM")]
+	[ActionLayout(typeof(SDLTMAnonymizerRibbonGroup), 3, DisplayType.Normal)]
+	public class SDLTMAnonymizerRibbonGroupRemoveTmAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -99,9 +99,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[Action("SDPSTmAnonymizerTmRibbonGroupRemoveTmCacheAction", typeof(SDLTMAnonymizerView), Name = "Clear TM Cache", Icon = "RemoveCache", Description = "Clear TM Cache")]
-	[ActionLayout(typeof(SDPSTmAnonymizerTmRibbonGroup), 2, DisplayType.Normal)]
-	public class SDPSTmAnonymizerTmRibbonGroupRemoveTmCacheAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("SDLTMAnonymizerRibbonGroupRemoveTmCacheAction", typeof(SDLTMAnonymizerView), Name = "Clear TM Cache", Icon = "RemoveCache", Description = "Clear TM Cache")]
+	[ActionLayout(typeof(SDLTMAnonymizerRibbonGroup), 2, DisplayType.Normal)]
+	public class SDLTMAnonymizerRibbonGroupRemoveTmCacheAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -114,15 +114,15 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[RibbonGroup("SDPSTmAnonymizerTasksRibbonGroup", "  Tasks ")]
+	[RibbonGroup("SDLTMAnonymizerTasksRibbonGroup", "  Tasks ")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-	public class SDPSTmAnonymizerTasksRibbonGroup : AbstractRibbonGroup
+	public class SDLTMAnonymizerTasksRibbonGroup : AbstractRibbonGroup
 	{
 	}
 
-	[Action("SDPSTmAnonymizerTasksRibbonGrouppProcessAction", typeof(SDLTMAnonymizerView), Name = "Preview Changes", Icon = "PreviewChanges", Description = "Preview Changes (Content Filtering Rules)")]
-	[ActionLayout(typeof(SDPSTmAnonymizerTasksRibbonGroup), 4, DisplayType.Large)]
-	public class SDPSTmAnonymizerTasksRibbonGroupProcessAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("SDLTMAnonymizerTasksRibbonGrouppProcessAction", typeof(SDLTMAnonymizerView), Name = "Preview Changes", Icon = "PreviewChanges", Description = "Preview Changes (Content Filtering Rules)")]
+	[ActionLayout(typeof(SDLTMAnonymizerTasksRibbonGroup), 4, DisplayType.Large)]
+	public class SDLTMAnonymizerTasksRibbonGroupProcessAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -182,9 +182,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[Action("SDPSTmAnonymizerTasksRibbonGroupExportAction", typeof(SDLTMAnonymizerView), Name = "Export", Icon = "ExportTo", Description = "Export the selected Rules")]
-	[ActionLayout(typeof(SDPSTmAnonymizerTasksRibbonGroup), 3, DisplayType.Normal)]
-	public class SDPSTmAnonymizerTasksRibbonGroupExportAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("SDLTMAnonymizerTasksRibbonGroupExportAction", typeof(SDLTMAnonymizerView), Name = "Export", Icon = "ExportTo", Description = "Export the selected Rules")]
+	[ActionLayout(typeof(SDLTMAnonymizerTasksRibbonGroup), 3, DisplayType.Normal)]
+	public class SDLTMAnonymizerTasksRibbonGroupExportAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -243,9 +243,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 	}
 
 
-	[Action("SDPSTmAnonymizerTasksRibbonGroupImportAction", typeof(SDLTMAnonymizerView), Name = "Import", Icon = "ImportFrom", Description = "Import Rules")]
-	[ActionLayout(typeof(SDPSTmAnonymizerTasksRibbonGroup), 2, DisplayType.Normal)]
-	public class SDPSTmAnonymizerTasksRibbonGroupImportAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("SDLTMAnonymizerTasksRibbonGroupImportAction", typeof(SDLTMAnonymizerView), Name = "Import", Icon = "ImportFrom", Description = "Import Rules")]
+	[ActionLayout(typeof(SDLTMAnonymizerTasksRibbonGroup), 2, DisplayType.Normal)]
+	public class SDLTMAnonymizerTasksRibbonGroupImportAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -302,9 +302,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[Action("SDPSTmAnonymizerTasksRibbonGroupRemoveAction", typeof(SDLTMAnonymizerView), Name = "Remove ", Icon = "Delete", Description = "Remove the slected Rules")]
-	[ActionLayout(typeof(SDPSTmAnonymizerTasksRibbonGroup), 1, DisplayType.Normal)]
-	public class SDPSTmAnonymizerTasksRibbonGroupRemoveAction : AbstractViewControllerAction<SDLTMAnonymizerView>
+	[Action("SDLTMAnonymizerTasksRibbonGroupRemoveAction", typeof(SDLTMAnonymizerView), Name = "Remove ", Icon = "Delete", Description = "Remove the slected Rules")]
+	[ActionLayout(typeof(SDLTMAnonymizerTasksRibbonGroup), 1, DisplayType.Normal)]
+	public class SDLTMAnonymizerTasksRibbonGroupRemoveAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
 		protected override void Execute()
 		{
@@ -337,15 +337,15 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 	}
 
 
-	[RibbonGroup("SDPSTmAnonymizerHelpRibbonGroup", "    Help    ")]
+	[RibbonGroup("SDLTMAnonymizerHelpRibbonGroup", "    Help    ")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-	public class SDPSTmAnonymizerHelpRibbonGroup : AbstractRibbonGroup
+	public class SDLTMAnonymizerHelpRibbonGroup : AbstractRibbonGroup
 	{
 	}
 
-	[Action("SDPSTmAnonymizerHelpRibbonGroupHelpAction", typeof(SDLTMAnonymizerView), Name = "Online Help", Icon = "help", Description = "An wiki page will be opened in browser with user documentation")]
-	[ActionLayout(typeof(SDPSTmAnonymizerHelpRibbonGroup), 1, DisplayType.Large)]
-	public class SDPSTmAnonymizerHelpRibbonGroupHelpAction : AbstractAction
+	[Action("SDLTMAnonymizerHelpRibbonGroupHelpAction", typeof(SDLTMAnonymizerView), Name = "Online Help", Icon = "help", Description = "An wiki page will be opened in browser with user documentation")]
+	[ActionLayout(typeof(SDLTMAnonymizerHelpRibbonGroup), 1, DisplayType.Large)]
+	public class SDLTMAnonymizerHelpRibbonGroupHelpAction : AbstractAction
 	{
 		protected override void Execute()
 		{
@@ -353,9 +353,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[Action("SDPSTmAnonymizerHelpRibbonGroupAboutAction", typeof(SDLTMAnonymizerView), Name = "About", Icon = "information", Description = "About")]
-	[ActionLayout(typeof(SDPSTmAnonymizerHelpRibbonGroup), 0, DisplayType.Large)]
-	public class SDPSTmAnonymizerHelpRibbonGroupAboutAction : AbstractAction
+	[Action("SDLTMAnonymizerHelpRibbonGroupAboutAction", typeof(SDLTMAnonymizerView), Name = "About", Icon = "information", Description = "About")]
+	[ActionLayout(typeof(SDLTMAnonymizerHelpRibbonGroup), 0, DisplayType.Large)]
+	public class SDLTMAnonymizerHelpRibbonGroupAboutAction : AbstractAction
 	{
 		protected override void Execute()
 		{

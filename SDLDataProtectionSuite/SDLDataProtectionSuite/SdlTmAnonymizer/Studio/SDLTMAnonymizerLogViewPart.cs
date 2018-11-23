@@ -7,7 +7,7 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 {
 	[ViewPart(
-		Id = "SDPSTMAnonymizerLogViewPart",
+		Id = "SDLTMAnonymizerLogViewPart",
 		Name = "Log Report",
 		Icon = "ReportsView",
 		Description = "Log Report")]
