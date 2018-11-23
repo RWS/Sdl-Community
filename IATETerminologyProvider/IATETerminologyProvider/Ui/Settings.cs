@@ -27,13 +27,55 @@ namespace IATETerminologyProvider.Ui
 		#region Private Methods
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			int result;
 			var providerSettings = new ProviderSettings
 			{
-				Limit = int.TryParse(txtBox_Limit.Text, out result) ? int.Parse(txtBox_Limit.Text) : 0,
-				Offset = int.TryParse(txtBox_Offset.Text, out result) ? int.Parse(txtBox_Offset.Text) : 0
+				AllDomains = ckb_AllDomains.Checked,
+				NoDomains = ckb_NoDomains.Checked,
+				NoDuplicates = ckb_NoDuplicates.Checked,
 			};
 			_providerSettings = providerSettings;
+		}
+		
+		private void ckb_NoDomains_CheckedChanged(object sender, System.EventArgs e)
+		{
+			if (ckb_NoDomains.Checked)
+			{
+				ckb_AllDomains.Enabled = false;
+				ckb_NoDuplicates.Enabled = false;
+			}
+			else
+			{
+				ckb_AllDomains.Enabled = true;
+				ckb_NoDuplicates.Enabled = true;
+			}
+		}
+
+		private void ckb_AllDomains_CheckedChanged(object sender, System.EventArgs e)
+		{
+			if (ckb_AllDomains.Checked)
+			{
+				ckb_NoDomains.Enabled = false;
+				ckb_NoDuplicates.Enabled = false;
+			}
+			else
+			{
+				ckb_NoDomains.Enabled = true;
+				ckb_NoDuplicates.Enabled = true;
+			}
+		}
+
+		private void ckb_NoDuplicates_CheckedChanged(object sender, System.EventArgs e)
+		{
+			if (ckb_NoDuplicates.Checked)
+			{
+				ckb_NoDomains.Enabled = false;
+				ckb_AllDomains.Enabled = false;
+			}
+			else
+			{
+				ckb_NoDomains.Enabled = true;
+				ckb_AllDomains.Enabled = true;
+			}
 		}
 		#endregion
 	}

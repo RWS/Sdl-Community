@@ -59,7 +59,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
-
+			SuspendLayout();
+			expressionsGrid.SuspendLayout();
 			//create tooltips for buttons
 			var exportTooltip = new ToolTip();
 			exportTooltip.SetToolTip(exportBtn, StringResources.Export_selected_expressions_to_disk);
@@ -82,7 +83,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 				HeaderText = @"Enable?",
 				DataPropertyName = "ShouldEnable",
 				Name = "Enable",
-				HeaderCell = exportHeaderCell
+				HeaderCell = exportHeaderCell,
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
 			};
 
 			var encryptHeaderCell = new CustomColumnHeader
@@ -92,6 +94,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 			encryptHeaderCell.OnCheckBoxHeaderClick += EncryptHeaderCell_OnCheckBoxHeaderClick;
 			var shouldEncryptColumn = new DataGridViewCheckBoxColumn
 			{
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
 				HeaderText = @"Encrypt?",
 				Width = 105,
 				DataPropertyName = "ShouldEncrypt",
@@ -118,7 +121,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 
 			var moveUpButtonColumn = new DataGridViewImageColumn()
 			{
-				Width = 20,
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.NotSet,
 				Icon = new Icon(PluginResources.Up, 16, 16),
 				ValuesAreIcons = true,
 				DisplayIndex = 4,
@@ -127,19 +130,20 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 			expressionsGrid.Columns.Add(moveUpButtonColumn);
 			expressionsGrid.CellClick += UpDownDeleteButtonClick;
 
+			expressionsGrid.SuspendLayout();
 			var moveDownButtonColumn = new DataGridViewImageColumn()
 			{
-				Width = 20,
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.NotSet,
 				Icon = new Icon(PluginResources.Down, 16, 16),
 				ValuesAreIcons = true,
 				DisplayIndex = 5,
 			};
 
 			expressionsGrid.Columns.Add(moveDownButtonColumn);
-
+			expressionsGrid.ResumeLayout();
 			var deleteButtonColumn = new DataGridViewImageColumn()
 			{
-				Width = 20,
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.NotSet,
 				Icon = new Icon(PluginResources.Delete, 16, 16),
 				ValuesAreIcons = true,
 				DisplayIndex = 6,
@@ -151,6 +155,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 			defaultRow.DefaultCellStyle = null;
 
 			expressionsGrid.AllowUserToAddRows = false;
+
+			expressionsGrid.ResumeLayout();
+			ResumeLayout();
 
 			if (Settings.EncryptionState == State.DefaultState)
 			{

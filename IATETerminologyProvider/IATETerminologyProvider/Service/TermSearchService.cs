@@ -2,6 +2,8 @@
 using System.Linq;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
+using IATETerminologyProvider.Model.ResponseModels;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using Sdl.Core.Globalization;
@@ -13,12 +15,17 @@ namespace IATETerminologyProvider.Service
 	{
 		#region Private Fields
 		private ProviderSettings _providerSettings;
+		private static int _id = new int();
 		#endregion
 
 		#region Constructors
 		public TermSearchService(ProviderSettings providerSettings)
 		{
 			_providerSettings = providerSettings;
+		}
+		public TermSearchService()
+		{
+
 		}
 		#endregion
 
@@ -45,10 +52,11 @@ namespace IATETerminologyProvider.Service
 			request.AddJsonBody(bodyModel);
 
 			var response = client.Execute(request);
-			
-			var result = MapResponseValues(response);
+			var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(response.Content);
+
+			var result = MapResponseValues(response, domainsJsonResponse);
 			return result;
-		}
+		}		
 		#endregion
 
 		#region Private Methods
@@ -68,53 +76,78 @@ namespace IATETerminologyProvider.Service
 			return bodyModel;
 		}
 
-		private IList<ISearchResult> MapResponseValues(IRestResponse response)
+		private IList<ISearchResult> MapResponseValues(IRestResponse response, JsonDomainResponseModel domainResponseModel)
 		{
-			var termsList = new List<ISearchResult>();
-
+			var termsList = new List<ISearchResult>();			
 			var jObject = JObject.Parse(response.Content);
 			var itemTokens = (JArray)jObject.SelectToken("items");
 			if (itemTokens != null)
 			{
 				foreach (var item in itemTokens)
 				{
+					var itemId = item.SelectToken("id").ToString();
+					var domainModel = domainResponseModel.Items.Where(i => i.Id == itemId).FirstOrDefault();
+					var domain = SetTermDomain(item, domainModel);
+					//var subdomains = SetTermSubdomain(item, domainModel);
+
+					_id++;
 					// get language childrens (source + target languages)
 					var languageTokens = item.SelectToken("language").Children().ToList();
 					if(languageTokens.Any())
 					{
-						//remove the first token(which corresponds to the Source Language)
-						languageTokens.Remove(languageTokens[0]);
-
-						// foreach language token remained(which represents the target languages) get the terms
-						foreach(JProperty languageToken in languageTokens)
+						// foreach language token get the terms
+						foreach (JProperty languageToken in languageTokens)
 						{
-							var termEntry = languageToken.FirstOrDefault().SelectToken("term_entries").Last;
-							var termValue = termEntry.SelectToken("term_value").ToString();
-							var termId = termEntry.SelectToken("id").ToString();
-							var langTwoLetters = languageToken.Name;
-							var definition = languageToken.SelectToken("definition");
-
-							var languageModel = new LanguageModel
+							// Latin translations are automatically returned by IATE API response->"la" code
+							// Ignore the "la" translations
+							if (!languageToken.Name.Equals("la"))
 							{
-								Name = new Language(langTwoLetters).DisplayName,
-								Locale = new Language(langTwoLetters).CultureInfo
-							};		
+								var termEntry = languageToken.FirstOrDefault().SelectToken("term_entries").Last;
+								var termValue = termEntry.SelectToken("term_value").ToString();
+								var langTwoLetters = languageToken.Name;
+								var definition = languageToken.Children().FirstOrDefault() != null
+									? languageToken.Children().FirstOrDefault().SelectToken("definition")
+									: null;
 
-							int result;
-							var termResult = new SearchResultModel
-							{
-								Text = termValue,
-								Id = int.TryParse(termId, out result) ? int.Parse(termId) : 0,
-								Score = 100,
-								Language = languageModel,
-								Definition = definition != null ? definition.ToString() :  string.Empty
-							};
-							termsList.Add(termResult);
+								var languageModel = new LanguageModel
+								{
+									Name = new Language(langTwoLetters).DisplayName,
+									Locale = new Language(langTwoLetters).CultureInfo
+								};
+
+								var termResult = new SearchResultModel
+								{
+									Text = termValue,
+									Id = _id,
+									Score = 100,
+									Language = languageModel,
+									Definition = definition != null ? definition.ToString() : string.Empty,
+									Domain = domain
+								};
+								termsList.Add(termResult);
+							}
 						}
 					}
 				}
 			}
 			return termsList;
+		}
+
+		// Set term main domain
+		private string SetTermDomain(JToken item, ItemsResponseModel itemDomains)
+		{
+			var domain = string.Empty;
+			var domains = DomainService.Domains;
+			foreach (var itemDomain in itemDomains.Domains)
+			{
+				var result = domains.Where(d => d.Code.Equals(itemDomain.Code)).FirstOrDefault();
+				if (result != null)
+				{
+					domain = $"{result.Name}, ";
+				}
+			}
+			return domain.TrimEnd(',');
+
 		}
 		#endregion
 	}

@@ -60,7 +60,7 @@ namespace IATETerminologyProvider
 
 			if (_termsResult.Count > 0)
 			{
-				CreateEntryModels(text, source, destination);
+				CreateEntryTerms(source, destination);				
 			}
 			return _termsResult;
 		}
@@ -69,16 +69,21 @@ namespace IATETerminologyProvider
 		{
 			var result = new List<IDescriptiveField>();
 
-			var approvedField = new DescriptiveField
+			var definitionField = new DescriptiveField
 			{
 				Label = "Definition",
-				Level = FieldLevel.TermLevel,
-				Mandatory = false,
-				Multiple = true,
-				PickListValues = new List<string> { "Definition", "Not Definition" },
+				Level = FieldLevel.EntryLevel,
 				Type = FieldType.String
 			};
-			result.Add(approvedField);
+			result.Add(definitionField);
+
+			var domainField = new DescriptiveField
+			{
+				Label = "Domain",
+				Level = FieldLevel.TermLevel,
+				Type = FieldType.String
+			};
+			result.Add(domainField);
 
 			return result;
 		}
@@ -120,27 +125,27 @@ namespace IATETerminologyProvider
 
 		#region Private Methods
 		// Create entry models (used to return the text in the Termbase Search panel)
-		private void CreateEntryModels(string text, ILanguage sourceLanguage, ILanguage targetLanguage)
+		private void CreateEntryTerms(ILanguage sourceLanguage, ILanguage targetLanguage)
 		{
 			var languages = GetLanguages();
 			_entryModels.Clear();
 
-			foreach (SearchResultModel termResult in _termsResult)
+			foreach (SearchResultModel termResult in _termsResult.Where(s=>s.Language.Name.Equals(sourceLanguage.Locale.Parent.DisplayName)))
 			{
 				var entryModel = new EntryModel
 				{
-					SearchText = text,
+					SearchText = termResult.Text,
 					Id = termResult.Id,
-					Fields = SetEntryFields(termResult.Definition),
+					Fields = SetEntryFields(termResult.Definition, "test"),
 					Transactions = new List<IEntryTransaction>(),
-					Languages = SetEntryLanguages(languages, text, sourceLanguage, termResult.Id, termResult.Definition)
+					Languages = SetEntryLanguages(languages, sourceLanguage, termResult.Id, termResult.Definition)
 				};
 				_entryModels.Add(entryModel);
 			}
 		}
 
 		// Set entry languages for the entry models
-		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, string text, ILanguage sourceLanguage, int id, string fieldDefinition)
+		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, ILanguage sourceLanguage, int id, string fieldDefinition)
 		{
 			IList<IEntryLanguage> entryLanguages = new List<IEntryLanguage>();
 			foreach (var language in languages)
@@ -152,7 +157,7 @@ namespace IATETerminologyProvider
 					Locale = language.Locale,
 					Name = language.Name,
 					ParentEntry = null,
-					Terms = CreateEntryTerms(language, text, sourceLanguage, id),
+					Terms = CreateEntryTerms(language, sourceLanguage, id),
 					IsSource = language.Name.Equals(sourceLanguage.Name) ? true : false
 				};
 				entryLanguages.Add(entryLanguage);
@@ -161,48 +166,66 @@ namespace IATETerminologyProvider
 		}
 
 		// Create Entry terms for the entry languages
-		private IList<IEntryTerm> CreateEntryTerms(ILanguage language, string text, ILanguage sourceLanguage, int id)
+		private IList<IEntryTerm> CreateEntryTerms(ILanguage language, ILanguage sourceLanguage, int id)
 		{
 			IList<IEntryTerm> entryTerms = new List<IEntryTerm>();
+			var terms = _termsResult.Where(t => t.Id == id).ToList();
 
 			// if language is Source language, create entryTerm with value from source language text
 			// otherwise create entry terms for the target language search results
 			if (language.Name.Equals(sourceLanguage.Name))
 			{
-				var entryTerm = new EntryTerm
-				{
-					Value = text
-				};
-				entryTerms.Add(entryTerm);
-			}
-			else
-			{
-				// add IEntryTerm only for the current ISearchResult term(otherwise it will duplicate all the term for each ISearchResult term)
-				var terms = _termsResult.Where(t => t.Id == id).ToList();
-				foreach (var term in terms)
+				var sourceLangTerm = terms.FirstOrDefault(t => t.Language.Name.Equals(sourceLanguage.Locale.Parent.DisplayName));
+				if (sourceLangTerm != null)
 				{
 					var entryTerm = new EntryTerm
 					{
-						Value = term.Text
+						Value = sourceLangTerm.Text
 					};
 					entryTerms.Add(entryTerm);
+				}
+			}
+			else
+			{
+				// add IEntryTerm only for the current ISearchResult term(otherwise it will duplicate all the term for each ISearchResult term)				
+				foreach (var term in terms)
+				{
+					// add terms for the target
+					if (!term.Language.Name.Equals(sourceLanguage.Locale.Parent.DisplayName))
+					{
+						var entryTerm = new EntryTerm
+						{
+							Value = term.Text
+						};
+						entryTerms.Add(entryTerm);
+					}
 				}
 			}
 			return entryTerms;
 		}
 
 		// Set field definition
-		private IList<IEntryField> SetEntryFields(string fieldDefinition)
+		private IList<IEntryField> SetEntryFields(string fieldDefinition, string domain)
 		{
 			IList<IEntryField> entryFields = new List<IEntryField>();
 			if (!string.IsNullOrEmpty(fieldDefinition))
 			{
-				var entryField = new EntryField
+				var definitionEntryField = new EntryField
 				{
 					Name = "Definition",
 					Value = fieldDefinition
 				};
-				entryFields.Add(entryField);
+				entryFields.Add(definitionEntryField);
+			}
+
+			if (!string.IsNullOrEmpty(domain))
+			{
+				var domainEntryField = new EntryField
+				{
+					Name = "Domain",
+					Value = domain
+				};
+				entryFields.Add(domainEntryField);
 			}
 			return entryFields;
 		}

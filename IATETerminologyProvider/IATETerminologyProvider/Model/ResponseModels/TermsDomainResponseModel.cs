@@ -1,8 +1,8 @@
 ﻿namespace IATETerminologyProvider.Model.ResponseModels
 {
-	public class CrossRefsResponseModel
+	public class TermsDomainResponseModel
 	{
 		public string Code { get; set; }
-		public int Type { get; set; }
+		public string Note { get; set; }
 	}
 }

@@ -1,4 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Windows;
+using Newtonsoft.Json.Linq;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
@@ -23,7 +27,16 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 
 		public override bool ValidateInput()
 		{
-			return AgreementMethods.UserAgreed();
+			var accepted = AgreementMethods.UserAgreed();
+
+			if (!accepted)
+			{
+				MessageBox.Show(
+					"You must agree to the terms and conditions of the SDL Data Protection Suite before using Project Anonymizer",
+					"Agreement");
+			}
+
+			return accepted;
 		}
 
 		public override void Save()
