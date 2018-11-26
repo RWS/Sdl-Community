@@ -47,7 +47,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 
 		public bool EvaluateRow(DisplayFilterRowInfo rowInfo)
 		{
-			var success = !(!Settings.ShowAllContent && !rowInfo.IsSegment);
+			var success = Settings.ShowAllContent || rowInfo.IsSegment;
 
 			if (rowInfo.IsSegment)
 			{
@@ -59,11 +59,9 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				if (success && Settings.SegmentReviewTypes != null && Settings.SegmentReviewTypes.Any())
 					success = rowInfo.IsSegmentReviewTypes(Settings);
 
-
 				if (success && Settings.ConfirmationLevels != null && Settings.ConfirmationLevels.Any())
 					success = rowInfo.IsConfirmationLevelFound(Settings);
 
-				
 				if (success && Settings.OriginTypes != null && Settings.OriginTypes.Any())
 				{
 					if (!Settings.OriginTypes.Contains("EditedF") && !Settings.OriginTypes.Contains("UneditedF"))
