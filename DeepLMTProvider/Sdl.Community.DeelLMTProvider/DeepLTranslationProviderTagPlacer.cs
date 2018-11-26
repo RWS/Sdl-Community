@@ -160,18 +160,36 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			//first create a regex to put our array separators around the tags
 			var str = _returnedText;
-			var pattern = @"(<tg[0-9]*\>)|(<\/tg[0-9]*\>)|(\<tg[0-9]*/\>)";
+			const string tagsPattern = @"(<tg[0-9]*\>)|(<\/tg[0-9]*\>)|(\<tg[0-9]*/\>)";
+			const string aplhanumericPattern = @"(<tgpt[0-9]*\>)|(<\/tgpt[0-9]*\>)|(\<tgpt[0-9]*/\>)";
 
-			var rgx = new Regex(pattern);
-			var matches = rgx.Matches(_returnedText);
-
-			foreach (Match myMatch in matches)
+			var tagRgx = new Regex(tagsPattern);
+			var tagMatches = tagRgx.Matches(str);
+			if (tagMatches.Count > 0)
 			{
-				str = str.Replace(myMatch.Value, "```" + myMatch.Value + "```"); //puts our separator around tagtexts
+				str = AddSeparators(str, tagMatches);
 			}
-			var stringSeparators = new [] { "```" }; //split at our inserted marker....is there a better way?
+
+			var alphaRgx = new Regex(aplhanumericPattern);
+			var alphaMatches = alphaRgx.Matches(str);
+			if (alphaMatches.Count > 0)
+			{
+				str = AddSeparators(str, alphaMatches);
+
+			}
+
+			var stringSeparators = new[] { "```" };
 			var strAr = str.Split(stringSeparators, StringSplitOptions.None);
 			return strAr;
+		}
+
+		private string AddSeparators(string text, MatchCollection matches)
+		{
+			foreach (Match match in matches)
+			{
+				text = text.Replace(match.Value, "```" + match.Value + "```"); //puts our separator around tagtexts
+			}
+			return text;
 		}
 	}
 }
