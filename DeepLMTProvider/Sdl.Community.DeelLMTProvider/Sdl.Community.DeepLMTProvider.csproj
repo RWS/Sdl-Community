@@ -85,6 +85,9 @@
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
@@ -122,6 +125,8 @@
     <Compile Include="DeepLMtTranslationProviderFactory.cs" />
     <Compile Include="DeepLMtTranslationProviderLanguageDirection.cs" />
     <Compile Include="DeepLMtTranslationProviderWinFormsUI.cs" />
+    <Compile Include="DeepLTellMe\DeepLStoreAction.cs" />
+    <Compile Include="DeepLTellMe\DeepLTellMeProvider.cs" />
     <Compile Include="DeepLTranslationProviderConnecter.cs" />
     <Compile Include="DeepLTranslationProviderTagPlacer.cs" />
     <Compile Include="Helpers.cs" />
@@ -149,6 +154,7 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\SDLAppStore.ico" />
     <EmbeddedResource Include="Resources\deepLIcon.ico" />
     <EmbeddedResource Include="Resources\DeepL.ico" />
     <EmbeddedResource Include="Resources\deepLResized.png" />

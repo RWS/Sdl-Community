@@ -129,6 +129,16 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon SDLAppStore {
+            get {
+                object obj = ResourceManager.GetObject("SDLAppStore", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [segment already translated...source not re-sent].
         /// </summary>
         internal static string TranslationLookupDraftNotResentMessage {
