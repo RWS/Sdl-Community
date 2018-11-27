@@ -22,10 +22,30 @@ namespace IATETerminologyProvider.ViewModel
 		#endregion
 
 		#region Public Constructors
-		public SettingsViewModel()
-		{
+		public SettingsViewModel(ProviderSettings providerSettings)
+		{			
 			LoadDomains();
 			LoadTermTypes();
+			if (providerSettings != null)
+			{
+				foreach (var domainCode in providerSettings.Domains)
+				{
+					var domain = Domains.Where(d => d.Code.Equals(domainCode)).FirstOrDefault();
+					if (domain != null)
+					{
+						domain.IsSelected = true;
+					}
+				}
+
+				foreach (var termTypeName in providerSettings.TermTypes)
+				{
+					var termType = TermTypes.Where(t => t.Name.Equals(termTypeName)).FirstOrDefault();
+					if (termType != null)
+					{
+						termType.IsSelected = true;
+					}					
+				}
+			}
 		}
 		#endregion
 

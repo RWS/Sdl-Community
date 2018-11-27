@@ -26,7 +26,7 @@ namespace IATETerminologyProvider
 		#endregion
 
 		#region Public Properties
-		public const string IATEUriTemplate = "iateglossary://";
+		public const string IATEUriTemplate = Constants.IATEUriTemplate;
 		public override IDefinition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
 		public override string Description => PluginResources.IATETerminologyProviderDescription;
 		public override string Name => PluginResources.IATETerminologyProviderName;
