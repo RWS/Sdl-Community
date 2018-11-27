@@ -1,0 +1,95 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Style x:Key="DgHeaderStyle" TargetType="{x:Type DataGrid}">
+		<Setter Property="ColumnHeaderStyle" Value="{DynamicResource DgcHeaderStyle}"/>
+	</Style>
+	<Style x:Key="DgcHeaderStyle" TargetType="DataGridColumnHeader">
+		<Setter Property="Height" Value="30"/>
+		<Setter Property="Background" Value="#59BEC9" />
+		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="FontSize" Value="12" />
+		<Setter Property="FontFamily" Value="Calibri" />
+	</Style>
+	<Style x:Key="DgrStyle" TargetType="DataGridRow">
+		<Style.Triggers>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Setter Property="Background" Value="#00CED1" />
+				<Setter Property="BorderBrush" Value="#00CED1" />
+				<Setter Property="Foreground" Value="#ffffff" />
+			</Trigger>
+			<Trigger Property="IsSelected" Value="True">
+				<Setter Property="Background" Value="#008C95" />
+				<Setter Property="BorderBrush" Value="#008C95" />
+				<Setter Property="Foreground" Value="#ffffff" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+	<Style x:Key="WhiteHeader" TargetType="DataGridColumnHeader">
+		<Setter Property="Height" Value="30"/>
+		<Setter Property="Background" Value="White" />
+		<Setter Property="Foreground" Value="Black"/>
+		<Setter Property="FontSize" Value="12" />
+		<Setter Property="FontFamily" Value="Calibri" />
+	</Style>
+	<Style x:Key="DataGridContentCellCentering" TargetType="{x:Type DataGridCell}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type DataGridCell}">
+					<Grid>
+						<ContentPresenter VerticalAlignment="Center" />
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<!--Hides overflow arrow from toolbar-->
+	<Style x:Key="Toolbar" TargetType="{x:Type ToolBar}">
+		<Setter Property="SnapsToDevicePixels" Value="true"/>
+		<Setter Property="OverridesDefaultStyle" Value="true"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ToolBar}">
+					<Border x:Name="Border"  CornerRadius="2" BorderThickness="1" Background="WhiteSmoke" BorderBrush="WhiteSmoke">
+						<DockPanel >
+							<ToggleButton Visibility="Collapsed"  DockPanel.Dock="Right" IsEnabled="False" IsChecked="False" ClickMode="Press">
+								<Popup x:Name="OverflowPopup" AllowsTransparency="true" Placement="Bottom" IsOpen="{Binding Path=IsOverflowOpen,RelativeSource={RelativeSource TemplatedParent}}" StaysOpen="false" Focusable="false" PopupAnimation="Slide">
+									<Border x:Name="DropDownBorder" Background="White" BorderThickness="1" BorderBrush="white">
+										<ToolBarOverflowPanel x:Name="PART_ToolBarOverflowPanel" Margin="2" WrapWidth="200" Focusable="true"  FocusVisualStyle="{x:Null}" KeyboardNavigation.TabNavigation="Cycle" KeyboardNavigation.DirectionalNavigation="Cycle" Visibility="Collapsed"/>
+									</Border>
+								</Popup>
+							</ToggleButton>
+							<ToolBarPanel x:Name="PART_ToolBarPanel" IsItemsHost="true" Margin="0,1,2,2"/>
+						</DockPanel>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<!--Wrap text of text block-->
+	<Style TargetType="{x:Type TextBlock}" x:Key="WrapText">
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"></Setter>
+	</Style>
+
+	<Style TargetType="{x:Type DataGridRow}" x:Key="SelectedRowCollor">
+		<Style.Resources>
+			<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#43BF60" />
+			<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#43BF60" />
+			<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+			<SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
+		</Style.Resources>
+	</Style>
+
+	<!--Set cell background color when the row is selected and the cell has tooltip-->
+	<Style TargetType="DataGridCell" x:Key="TooltipTrigger">
+		<Style.Triggers>
+			<Trigger Property="IsSelected" Value="true">
+				<Setter Property="Background" Value="#f9d4c0" />
+				<Setter Property="BorderThickness" Value="0"></Setter>
+			</Trigger>
+		</Style.Triggers>
+		<!--Set tooltip text dynamically-->
+		<Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self},Path=Content.Text}"/>
+	</Style>
+</ResourceDictionary>

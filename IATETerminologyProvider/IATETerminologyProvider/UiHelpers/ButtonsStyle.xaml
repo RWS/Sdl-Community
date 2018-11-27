@@ -1,0 +1,254 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<Style x:Key="BaseButtonStyle" TargetType="{x:Type Button}">
+		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+		<Setter Property="Background" Value="#ffffff"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<!--<Setter Property="Foreground" Value="#ED7030"/>-->
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Padding" Value="16,3,16,3"/>
+		<Setter Property="Margin" Value="0,0,3,0"></Setter>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<Border Name="Chrome"
+					        Background="{TemplateBinding Background}"
+					        BorderBrush="{TemplateBinding BorderBrush}"
+					        BorderThickness="{TemplateBinding BorderThickness}"
+					        SnapsToDevicePixels="true">
+						<ContentPresenter Name="Presenter" Margin="{TemplateBinding Padding}"
+						                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+						                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+						                  RecognizesAccessKey="True"
+						                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsEnabled" Value="false">
+							<Setter Property="Foreground" Value="#ED7030" />
+						</Trigger>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Cursor" Value="Hand"/>
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter Property="Cursor" Value="Hand"/>
+						</Trigger>
+						<Trigger Property="IsFocused" Value="true">
+							<Setter Property="Cursor" Value="Hand"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="LightGreenButtonsStyle" TargetType="{x:Type Button}">
+		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+		<Setter Property="Background" Value="#3D9DAA"/>
+		<Setter Property="BorderBrush" Value="#FF2D7E89"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Foreground" Value="#ffffff"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Padding" Value="16,3,16,3"/>
+		<Setter Property="Height" Value="30"></Setter>
+		<Setter Property="Margin" Value="0,0,0,0"></Setter>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<Border Name="Chrome"
+					        Background="{TemplateBinding Background}"
+					        BorderBrush="{TemplateBinding BorderBrush}"
+					        BorderThickness="{TemplateBinding BorderThickness}"
+					        SnapsToDevicePixels="true">
+						<ContentPresenter Name="Presenter" Margin="{TemplateBinding Padding}"
+						                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+						                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+						                  RecognizesAccessKey="True"
+						                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsEnabled" Value="false">
+							<Setter Property="Foreground" Value="#333333" />
+						</Trigger>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" Value="#3EA691" />
+							<Setter Property="BorderBrush" Value="#3EA691" />
+							<Setter Property="Foreground" Value="#ffffff" />
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter Property="Background" Value="#3D9DAA" />
+							<Setter Property="BorderBrush" Value="#3D9DAA"/>
+							<Setter Property="Foreground" Value="#ffffff"/>
+						</Trigger>
+						<Trigger Property="IsFocused" Value="true">
+							<Setter TargetName="Chrome" Property="BorderBrush" Value="#3EA691" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="StudioGreenButtonsStyle" TargetType="{x:Type Button}">
+		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+		<Setter Property="Background" Value="#3EA691"/>
+		<Setter Property="BorderBrush" Value="#3EA691"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="Foreground" Value="#ffffff"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Padding" Value="16,3,16,3"/>
+		<Setter Property="Width" Value="150"></Setter>
+		<Setter Property="Height" Value="30"></Setter>
+		<Setter Property="Margin" Value="0,0,10,0"></Setter>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<Border Name="Chrome"
+					        Background="{TemplateBinding Background}"
+					        BorderBrush="{TemplateBinding BorderBrush}"
+					        BorderThickness="{TemplateBinding BorderThickness}"
+					        SnapsToDevicePixels="true">
+						<ContentPresenter Name="Presenter" Margin="{TemplateBinding Padding}"
+						                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+						                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+						                  RecognizesAccessKey="True"
+						                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsEnabled" Value="false">
+							<Setter Property="Foreground" Value="#333333" />
+						</Trigger>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" Value="#3D9DAA" />
+							<Setter Property="BorderBrush" Value="#3D9DAA" />
+							<Setter Property="Foreground" Value="#ffffff" />
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter Property="Background" Value="#3EA691" />
+							<Setter Property="BorderBrush" Value="#3EA691"/>
+							<Setter Property="Foreground" Value="#ffffff"/>
+						</Trigger>
+						<Trigger Property="IsFocused" Value="true">
+							<Setter TargetName="Chrome" Property="BorderBrush" Value="#3D9DAA" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Button">
+					<Border>
+						<Border.Style>
+							<Style TargetType="{x:Type Border}">
+								<Style.Triggers>
+									<Trigger Property="IsMouseOver" Value="True">
+										<Setter Property="Background" Value="Transparent"/>
+									</Trigger>
+								</Style.Triggers>
+							</Style>
+						</Border.Style>
+						<Grid Background="Transparent">
+							<ContentPresenter></ContentPresenter>
+						</Grid>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="OrangeButtonsStyle" TargetType="{x:Type Button}">
+		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+		<Setter Property="Background" Value="#ED7030"/>
+		<Setter Property="BorderBrush" Value="#ED7030"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="Foreground" Value="#ffffff"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Padding" Value="16,3,16,3"/>
+		<Setter Property="Width" Value="100"></Setter>
+		<Setter Property="Height" Value="30"></Setter>
+		<Setter Property="Margin" Value="0,0,10,0"></Setter>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<Border Name="Chrome"
+					        Background="{TemplateBinding Background}"
+					        BorderBrush="{TemplateBinding BorderBrush}"
+					        BorderThickness="{TemplateBinding BorderThickness}"
+					        SnapsToDevicePixels="true">
+						<ContentPresenter Name="Presenter" Margin="{TemplateBinding Padding}"
+						                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+						                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+						                  RecognizesAccessKey="True"
+						                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsEnabled" Value="false">
+							<Setter Property="Foreground" Value="#333333" />
+						</Trigger>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" Value="#FFE06510" />
+							<Setter Property="BorderBrush" Value="#FFE06510" />
+							<Setter Property="Foreground" Value="#ffffff" />
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter Property="Background" Value="#ED7030" />
+							<Setter Property="BorderBrush" Value="#ED7030"/>
+							<Setter Property="Foreground" Value="#ffffff"/>
+						</Trigger>
+						<Trigger Property="IsFocused" Value="true">
+							<Setter TargetName="Chrome" Property="BorderBrush" Value="#FFE06510" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="NavigationButtonsStyle" TargetType="{x:Type Button}">
+		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Cursor" Value="Hand"></Setter>
+		<Setter Property="Foreground" Value="#ED7030"/>
+		<Setter Property="Width" Value="25"></Setter>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<Border Name="Chrome"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true">
+						<ContentPresenter Name="Presenter" Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsEnabled" Value="false">
+							<Setter Property="Foreground" Value="#333333" />
+						</Trigger>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" Value="Transparent" />
+							<Setter Property="BorderBrush" Value="Transparent" />
+							<Setter Property="Foreground" Value="LightGray" />
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter Property="Background" Value="Transparent" />
+							<Setter Property="BorderBrush" Value="Transparent"/>
+							<Setter Property="Foreground" Value="#ED7030"/>
+						</Trigger>
+						<Trigger Property="IsFocused" Value="true">
+							<Setter TargetName="Chrome" Property="BorderBrush" Value="LightGray" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>

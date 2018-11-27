@@ -27,13 +27,13 @@ namespace IATETerminologyProvider.Ui
 		#region Private Methods
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			var providerSettings = new ProviderSettings
-			{
-				AllDomains = ckb_AllDomains.Checked,
-				NoDomains = ckb_NoDomains.Checked,
-				NoDuplicates = ckb_NoDuplicates.Checked,
-			};
-			_providerSettings = providerSettings;
+			//var providerSettings = new ProviderSettings
+			//{
+			//	AllDomains = ckb_AllDomains.Checked,
+			//	NoDomains = ckb_NoDomains.Checked,
+			//	NoDuplicates = ckb_NoDuplicates.Checked,
+			//};
+			//_providerSettings = providerSettings;
 		}
 		
 		private void ckb_NoDomains_CheckedChanged(object sender, System.EventArgs e)

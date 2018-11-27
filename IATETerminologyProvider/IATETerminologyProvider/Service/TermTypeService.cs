@@ -1,18 +1,20 @@
 ﻿using System.Collections.ObjectModel;
 using IATETerminologyProvider.Helpers;
+using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
 using RestSharp;
 
 namespace IATETerminologyProvider.Service
 {
-	public static class DomainService
-	{
+	public static class TermTypeService
+    {
 		#region Public Methods
-		public static ObservableCollection<ItemsResponseModel> GetDomains()
+		public static ObservableCollection<TermTypeModel> GetTermTypes()
 		{
-			var domains = new ObservableCollection<ItemsResponseModel>();
-			var client = new RestClient(ApiUrls.GetDomainUri());
+			var termTypes = new ObservableCollection<TermTypeModel>();
+			// the parameters set below to get term types are the same used in IATE environment.
+			var client = new RestClient(ApiUrls.GetTermTypeUri("true", "en", "100", "0"));
 			var request = new RestRequest("", Method.GET);
 			request.AddHeader("Connection", "Keep-Alive");
 			request.AddHeader("Cache-Control", "no-cache");
@@ -25,22 +27,22 @@ namespace IATETerminologyProvider.Service
 			request.AddHeader("Access-Control-Allow-Origin", "*");
 
 			var response = client.Execute(request);
-			var jsonDomainsModel = JsonConvert.DeserializeObject<JsonDomainResponseModel>(response.Content);
+			var jsonTermTypesModel = JsonConvert.DeserializeObject<TermTypeResponseModel>(response.Content);
 
-			if (jsonDomainsModel.Items != null)
+			if (jsonTermTypesModel.Items != null)
 			{
-				foreach (var item in jsonDomainsModel.Items)
+				int result;
+				foreach (var item in jsonTermTypesModel.Items)
 				{
-					var domain = new ItemsResponseModel
+					var termType = new TermTypeModel
 					{
-						Code = item.Code,
-						Name = item.Name,
-						Subdomains = item.Subdomains
+						Code = int.TryParse(item.Code, out result) ? int.Parse(item.Code) : 0,
+						Name = item.Name
 					};
-					domains.Add(domain);
+					termTypes.Add(termType);
 				}
 			}
-			return domains;
+			return termTypes;
 		}
 		#endregion
 	}

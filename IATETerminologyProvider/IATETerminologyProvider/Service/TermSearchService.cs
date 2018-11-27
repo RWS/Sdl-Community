@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
@@ -15,7 +16,7 @@ namespace IATETerminologyProvider.Service
 	{
 		#region Private Fields
 		private ProviderSettings _providerSettings;
-		private List<ItemsResponseModel> _domains = DomainService.Domains;
+		private ObservableCollection<ItemsResponseModel> _domains = DomainService.GetDomains();
 		private List<string> _subdomains = new List<string>();
 
 		private static int _id = new int();
