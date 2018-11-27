@@ -160,6 +160,9 @@
       <HintPath>C:\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -194,6 +197,10 @@
     <Compile Include="Model\TranslationDetails.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
     <Compile Include="MstConnect\ApiConnecter.cs" />
+    <Compile Include="MTEnhancedTellMe\MTEhancedTellMeProvider.cs" />
+    <Compile Include="MTEnhancedTellMe\MTEnhancedCommunityHelpAction.cs" />
+    <Compile Include="MTEnhancedTellMe\MTEnhancedHelpAction.cs" />
+    <Compile Include="MTEnhancedTellMe\MTEnhancedStoreAction.cs" />
     <Compile Include="MtProviderConfDialogResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -231,6 +238,8 @@
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Question.ico" />
+    <Resource Include="Resources\SDLAppStore.ico" />
     <None Include="packages.config" />
     <None Include="Service References\TranslatorService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
