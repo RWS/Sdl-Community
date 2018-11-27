@@ -14,7 +14,6 @@ namespace IATETerminologyProvider.ViewModel
 	{
 		#region Private Fields
 		private ICommand _saveSettingsCommand;
-		private ICommand _cancelCommand;
 		private DomainModel _selectedDomain;
 		private ObservableCollection<DomainModel> _domains = new ObservableCollection<DomainModel>();
 		private TermTypeModel _selectedTermType;
@@ -50,7 +49,6 @@ namespace IATETerminologyProvider.ViewModel
 		#endregion
 
 		#region Public Properties		
-		
 		public DomainModel SelectedDomain
 		{
 			get => _selectedDomain;
@@ -90,14 +88,12 @@ namespace IATETerminologyProvider.ViewModel
 				OnPropertyChanged();
 			}
 		}
-
-
+		
 		public ProviderSettings ProviderSettings { get; set; }
 		#endregion
 
 		#region Commands
 		public ICommand SaveSettingsCommand => _saveSettingsCommand ?? (_saveSettingsCommand = new CommandHandler(SaveSettingsAction, true));
-		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true));
 		#endregion
 
 		#region Actions
@@ -134,10 +130,6 @@ namespace IATETerminologyProvider.ViewModel
 
 				OnSaveSettingsCommandRaised?.Invoke();
 			}
-		}
-
-		private void CancelAction()
-		{
 		}
 		#endregion
 

@@ -18,13 +18,12 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
-	<Border BorderBrush="#FF0B6266" BorderThickness="0.4">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="30"></RowDefinition>
 			<RowDefinition Height="20"></RowDefinition>
 			<RowDefinition Height="300"></RowDefinition>
-			<RowDefinition Height="20"></RowDefinition>
+			<RowDefinition Height="25"></RowDefinition>
 			<RowDefinition Height="200"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
 			</Grid.RowDefinitions>
@@ -34,8 +33,6 @@
 
 		<TextBlock Grid.Row="0" Style="{DynamicResource TextBlockColor}" Margin="10,5,0,0">Please fill following settings:</TextBlock>
 		<TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Domain:</TextBlock>
-		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Term Type:</TextBlock>
-
 		<DataGrid Style="{DynamicResource AzureDataGrid}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="2 0 0 10" AutoGenerateColumns="False" 
                   ItemsSource="{Binding Domains, Mode=TwoWay,
                   UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True,IsAsync=True}"                
@@ -69,7 +66,8 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
-			<DataGrid Style="{DynamicResource AzureDataGrid}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="2 0 0 5" AutoGenerateColumns="False" 
+		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}" Margin="10,5,0,0"> Term Type:</TextBlock>
+		<DataGrid Style="{DynamicResource AzureDataGrid}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="2 10 0 5" AutoGenerateColumns="False" 
                   ItemsSource="{Binding TermTypes, Mode=TwoWay,
                   UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True,IsAsync=True}"                
                   SelectionMode ="Extended"
@@ -101,19 +99,11 @@
 					</DataGridTextColumn>
 				</DataGrid.Columns>
 		</DataGrid>
-
-			<Button  Grid.Row="5" Grid.Column="0" Style="{DynamicResource LightGreenButtonsStyle }"  
+		<Button  Grid.Row="5" Grid.Column="0" Style="{DynamicResource LightGreenButtonsStyle }"  
                  Cursor="Hand"
 	             Command="{Binding SaveSettingsCommand}" 
                  HorizontalAlignment="Right"
-	             FontFamily="Segoe UI" Content="Save Settings" VerticalAlignment="Bottom" Margin="0,5,130,50" Width="120">
-		</Button>
-			<Button  Grid.Row="5" Grid.Column="0" Style="{DynamicResource LightGreenButtonsStyle }"  
-                 Cursor="Hand"
-	             Command="{Binding CancelCommand}" 
-                 HorizontalAlignment="Right"
-	             FontFamily="Segoe UI" Content="Cancel" VerticalAlignment="Bottom" Margin="0,5,5,50" Width="100">
-		</Button>
+	             FontFamily="Segoe UI" Content="Save Settings" VerticalAlignment="Bottom" Margin="0,2,5,20" Width="120">
+		</Button>			
 	</Grid>
-	</Border>
 </controls:MetroWindow>

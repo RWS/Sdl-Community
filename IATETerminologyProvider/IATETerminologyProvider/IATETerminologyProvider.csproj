@@ -156,12 +156,6 @@
     <Compile Include="Service\PersistenceService.cs" />
     <Compile Include="Service\TermSearchService.cs" />
     <Compile Include="Service\TermTypeService.cs" />
-    <Compile Include="Ui\Settings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Ui\Settings.Designer.cs">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </Compile>
     <Compile Include="Ui\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -210,9 +204,6 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Ui\Settings.resx">
-      <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
