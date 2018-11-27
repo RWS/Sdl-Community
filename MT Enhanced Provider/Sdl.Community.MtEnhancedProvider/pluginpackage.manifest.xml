@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>MT Enhanced Trados Plugin</PlugInName>
-  <Version>4.2</Version>
+  <Version>4.3</Version>
   <Description>MT Enhanced Trados Plugin</Description>
   <Author>Sdl Community</Author>
 	<Include>
