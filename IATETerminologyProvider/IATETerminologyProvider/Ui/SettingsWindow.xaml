@@ -48,7 +48,7 @@
                   HorizontalScrollBarVisibility="Auto"
                   RowHeaderWidth="0"
                   CanUserAddRows="False"
-				  BorderBrush="LightGray" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGreen">
+				  BorderBrush="LightGray" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#008C95">
 				<DataGrid.Resources>
 					<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle}" />
 				</DataGrid.Resources>
@@ -81,7 +81,7 @@
                   HorizontalScrollBarVisibility="Auto"
                   RowHeaderWidth="0"
                   CanUserAddRows="False" 
-				  BorderBrush="LightGray" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGreen">
+				  BorderBrush="LightGray" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#008C95">
 				<DataGrid.Resources>
 					<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle}" />
 				</DataGrid.Resources>

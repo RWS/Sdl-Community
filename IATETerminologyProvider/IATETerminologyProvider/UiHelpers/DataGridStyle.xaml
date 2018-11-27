@@ -18,8 +18,8 @@
 				<Setter Property="Foreground" Value="#ffffff" />
 			</Trigger>
 			<Trigger Property="IsSelected" Value="True">
-				<Setter Property="Background" Value="#008C95" />
-				<Setter Property="BorderBrush" Value="#008C95" />
+				<Setter Property="Background" Value="#FF179EBB" />
+				<Setter Property="BorderBrush" Value="#FF179EBB" />
 				<Setter Property="Foreground" Value="#ffffff" />
 			</Trigger>
 		</Style.Triggers>
@@ -74,8 +74,8 @@
 
 	<Style TargetType="{x:Type DataGridRow}" x:Key="SelectedRowCollor">
 		<Style.Resources>
-			<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#43BF60" />
-			<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#43BF60" />
+			<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF9DE6EE" />
+			<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#FF9DE6EE" />
 			<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
 			<SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
 		</Style.Resources>

@@ -49,6 +49,11 @@ namespace IATETerminologyProvider
 		
 		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 		{
+			var persistenceService = new PersistenceService();
+			var providerSettings = persistenceService.Load();
+
+			//_settingsWindow.ShowDialog();
+
 			return true;
 		}
 

@@ -46,7 +46,7 @@
 	<Style x:Key="LightGreenButtonsStyle" TargetType="{x:Type Button}">
 		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
 		<Setter Property="Background" Value="#3D9DAA"/>
-		<Setter Property="BorderBrush" Value="#FF2D7E89"/>
+		<Setter Property="BorderBrush" Value="#FF328E9B"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Foreground" Value="#ffffff"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
