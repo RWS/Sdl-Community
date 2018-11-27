@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 using IATETerminologyProvider.Commands;
+using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Service;
 
@@ -87,15 +89,26 @@ namespace IATETerminologyProvider.ViewModel
 				ProviderSettings.Domains = new List<string>();
 				ProviderSettings.TermTypes = new List<string>();
 
-				var selectedItems = Domains.Where(d => d.IsSelected).ToList();
-				if (selectedItems != null)
+				// Add selected domains to provider settings
+				var selectedDomains = Domains.Where(d => d.IsSelected).ToList();
+				if (selectedDomains != null)
 				{
-					foreach(var selectedItem in selectedItems)
+					foreach (var selectedDomain in selectedDomains)
 					{
-						ProviderSettings.Domains.Add(selectedItem.Name);
+						ProviderSettings.Domains.Add(selectedDomain.Code);
 					}
 				}
-				//To Do: add the TermTypes to providerSettings
+
+				// Add selected term types to provider settings
+				var selectedTermTypes = TermTypes.Where(d => d.IsSelected).ToList();
+				if (selectedTermTypes != null)
+				{
+					foreach (var selectedTermType in selectedTermTypes)
+					{
+						ProviderSettings.TermTypes.Add(selectedTermType.Name);
+					}
+				}
+
 				var persistenceService = new PersistenceService();
 				persistenceService.AddSettings(ProviderSettings);
 
@@ -115,14 +128,18 @@ namespace IATETerminologyProvider.ViewModel
 		private void LoadDomains()
 		{
 			var domains = DomainService.GetDomains();
-			foreach(var domain in domains)
+			foreach (var domain in domains)
 			{
-				var domainModel = new DomainModel
+				if (!domain.Name.Equals(Constants.NotSpecifiedCode))
 				{
-					Code = domain.Code,
-					Name = domain.Name
-				};
-				Domains.Add(domainModel);
+					var selectedDomainName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(domain.Name.ToLower());
+					var domainModel = new DomainModel
+					{
+						Code = domain.Code,
+						Name = selectedDomainName
+					};
+					Domains.Add(domainModel);
+				}
 			}
 		}
 

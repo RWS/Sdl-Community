@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Model.ResponseModels;
@@ -34,10 +35,12 @@ namespace IATETerminologyProvider.Service
 				int result;
 				foreach (var item in jsonTermTypesModel.Items)
 				{
+					var selectedTermTypeName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(item.Name.ToLower());
+
 					var termType = new TermTypeModel
 					{
 						Code = int.TryParse(item.Code, out result) ? int.Parse(item.Code) : 0,
-						Name = item.Name
+						Name = selectedTermTypeName
 					};
 					termTypes.Add(termType);
 				}

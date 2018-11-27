@@ -125,6 +125,7 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="IATETerminologyProviderWinFormsUI.cs" />
     <Compile Include="IATETerminologyProviderViewerWinFormsUI.cs" />

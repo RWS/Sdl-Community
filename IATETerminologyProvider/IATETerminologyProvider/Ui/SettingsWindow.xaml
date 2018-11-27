@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-		GlowBrush="#FF1F717C" WindowTitleBrush="#FF1F717C"
+		GlowBrush="#FF179EBB" WindowTitleBrush="#FF179EBB"
         Height="640" Width="800" ResizeMode="NoResize">
 	<Window.Resources>
 		<ResourceDictionary>
@@ -21,21 +21,22 @@
 	<Border BorderBrush="#FF0B6266" BorderThickness="0.4">
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="60"></RowDefinition>
+			<RowDefinition Height="30"></RowDefinition>
+			<RowDefinition Height="20"></RowDefinition>
 			<RowDefinition Height="300"></RowDefinition>
+			<RowDefinition Height="20"></RowDefinition>
 			<RowDefinition Height="200"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
-		</Grid.RowDefinitions>
+			</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="230"></ColumnDefinition>
 			<ColumnDefinition Width="*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
 
-		<TextBlock Grid.Row="0" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,20">Please fill following settings:</TextBlock>
+		<TextBlock Grid.Row="0" Style="{DynamicResource TextBlockColor}" Margin="10,5,0,0">Please fill following settings:</TextBlock>
 		<TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Domain:</TextBlock>
-		<TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Term Type:</TextBlock>
+		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Term Type:</TextBlock>
 
-		<DataGrid Style="{DynamicResource AzureDataGrid}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="2 0 0 5" AutoGenerateColumns="False" 
+		<DataGrid Style="{DynamicResource AzureDataGrid}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="2 0 0 10" AutoGenerateColumns="False" 
                   ItemsSource="{Binding Domains, Mode=TwoWay,
                   UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True,IsAsync=True}"                
                   SelectionMode ="Extended"
@@ -46,7 +47,8 @@
                   VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Auto"
                   RowHeaderWidth="0"
-                  CanUserAddRows="False" BorderBrush="#FF0B6266">
+                  CanUserAddRows="False"
+				  BorderBrush="LightGray" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGreen">
 				<DataGrid.Resources>
 					<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle}" />
 				</DataGrid.Resources>
@@ -67,7 +69,7 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
-			<DataGrid Style="{DynamicResource AzureDataGrid}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="2 0 0 5" AutoGenerateColumns="False" 
+			<DataGrid Style="{DynamicResource AzureDataGrid}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="2 0 0 5" AutoGenerateColumns="False" 
                   ItemsSource="{Binding TermTypes, Mode=TwoWay,
                   UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True,IsAsync=True}"                
                   SelectionMode ="Extended"
@@ -78,7 +80,8 @@
                   VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Auto"
                   RowHeaderWidth="0"
-                  CanUserAddRows="False" BorderBrush="#FF0B6266">
+                  CanUserAddRows="False" 
+				  BorderBrush="LightGray" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGreen">
 				<DataGrid.Resources>
 					<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle}" />
 				</DataGrid.Resources>
@@ -99,17 +102,17 @@
 				</DataGrid.Columns>
 		</DataGrid>
 
-			<Button  Grid.Row="3" Grid.Column="1" Style="{DynamicResource LightGreenButtonsStyle }"  
+			<Button  Grid.Row="5" Grid.Column="0" Style="{DynamicResource LightGreenButtonsStyle }"  
                  Cursor="Hand"
 	             Command="{Binding SaveSettingsCommand}" 
                  HorizontalAlignment="Right"
 	             FontFamily="Segoe UI" Content="Save Settings" VerticalAlignment="Bottom" Margin="0,5,130,50" Width="120">
 		</Button>
-			<Button  Grid.Row="3" Grid.Column="1" Style="{DynamicResource LightGreenButtonsStyle }"  
+			<Button  Grid.Row="5" Grid.Column="0" Style="{DynamicResource LightGreenButtonsStyle }"  
                  Cursor="Hand"
 	             Command="{Binding CancelCommand}" 
                  HorizontalAlignment="Right"
-	             FontFamily="Segoe UI" Content="Cancel" VerticalAlignment="Bottom" Margin="0,5,10,50" Width="100">
+	             FontFamily="Segoe UI" Content="Cancel" VerticalAlignment="Bottom" Margin="0,5,5,50" Width="100">
 		</Button>
 	</Grid>
 	</Border>
