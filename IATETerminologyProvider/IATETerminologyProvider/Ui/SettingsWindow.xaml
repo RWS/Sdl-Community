@@ -6,7 +6,7 @@
         mc:Ignorable="d"
 		Title="IATE terminology provider settings"
 		WindowStartupLocation="CenterScreen"
-        Height="615" Width="800" ResizeMode="NoResize">
+        Height="610" Width="800" ResizeMode="NoResize">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -17,9 +17,9 @@
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="20"></RowDefinition>
-			<RowDefinition Height="340"></RowDefinition>
+			<RowDefinition Height="338"></RowDefinition>
 			<RowDefinition Height="25"></RowDefinition>
-			<RowDefinition Height="160"></RowDefinition>
+			<RowDefinition Height="158"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
 			</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
@@ -27,7 +27,7 @@
 		</Grid.ColumnDefinitions>
 
 		<TextBlock Grid.Row="0" Grid.Column="0" Margin="10 5 0 0"> Select domain(s):</TextBlock>
-		<DataGrid  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="2 8 0 10" AutoGenerateColumns="False" 
+		<DataGrid  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="2 8 0 0" AutoGenerateColumns="False" 
                   ItemsSource="{Binding Domains, Mode=TwoWay,
                   UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True,IsAsync=True}"                
                   SelectionMode ="Extended"
@@ -57,7 +57,7 @@
 		</DataGrid>
 
 		<TextBlock Grid.Row="2" Grid.Column="0" Margin="10,5,0,0">Select term type(s):</TextBlock>
-		<DataGrid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="2 10 0 5" AutoGenerateColumns="False" 
+		<DataGrid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="2 10 0 0" AutoGenerateColumns="False" 
                   ItemsSource="{Binding TermTypes, Mode=TwoWay,
                   UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True,IsAsync=True}"                
                   SelectionMode ="Extended"
@@ -70,14 +70,11 @@
                   RowHeaderWidth="0"
                   CanUserAddRows="False" 
 				  BorderBrush="LightGray" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGray" Background="White">
-				<DataGrid.Resources>
-					<Style TargetType="{x:Type DataGridColumnHeader}"/>
-				</DataGrid.Resources>
-				<DataGrid.RowStyle>
-					<Style TargetType="DataGridRow"></Style>
-				</DataGrid.RowStyle>
-				<DataGrid.Columns>
-					<DataGridTemplateColumn  Width="Auto" MinWidth="50">
+			<DataGrid.RowStyle>
+				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}"></Style>
+			</DataGrid.RowStyle>
+			<DataGrid.Columns>
+					<DataGridTemplateColumn  MaxWidth="50" MinWidth="50">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
@@ -93,7 +90,7 @@
                  Cursor="Hand"
 	             Command="{Binding SaveSettingsCommand}" 
                  HorizontalAlignment="Right"
-	             FontFamily="Segoe UI" Content="Save Settings" VerticalAlignment="Bottom" Margin="0,2,5,20" Width="120">
+	             FontFamily="Segoe UI" Content="Save Settings" VerticalAlignment="Bottom" Margin="0,5,5,20" Width="120">
 		</Button>			
 	</Grid>
 </Window>

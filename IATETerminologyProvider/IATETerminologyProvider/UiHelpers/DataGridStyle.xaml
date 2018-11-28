@@ -3,8 +3,7 @@
 	<Style x:Key="DgrStyle" TargetType="DataGridRow">
 		<Style.Triggers>		
 			<Trigger Property="IsSelected" Value="True">
-				<Setter Property="Background" Value="#F6F6F4" />
-				<Setter Property="BorderBrush" Value="#F6F6F4" />
+				<Setter Property="Background" Value="#677689" />
 				<Setter Property="Foreground" Value="#ffffff" />
 			</Trigger>
 		</Style.Triggers>
