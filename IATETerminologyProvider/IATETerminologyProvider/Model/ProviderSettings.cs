@@ -5,6 +5,6 @@ namespace IATETerminologyProvider.Model
 	public class ProviderSettings
 	{
 		public List<string> Domains { get; set; }
-		public List<string> TermTypes { get; set; }
+		public List<int> TermTypes { get; set; }
 	}
 }

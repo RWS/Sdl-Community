@@ -27,10 +27,6 @@ namespace IATETerminologyProvider.Service
 		{
 			_providerSettings = providerSettings;
 		}
-		public TermSearchService()
-		{
-
-		}
 		#endregion
 
 		#region Public Methods
@@ -38,9 +34,7 @@ namespace IATETerminologyProvider.Service
 		{
 			// maxResults (the number of returned words) value is set from the Termbase -> Search Settings
 			var client = new RestClient(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()));
-
-			// _providerSettings.Offset (the number of returned words) is set from the Provider Settings grid
-			//var client = new RestClient(ApiUrls.BaseUri("true", _providerSettings.Offset.ToString(), _providerSettings.Limit.ToString()));
+			
 			var request = new RestRequest("", Method.POST);
 			request.AddHeader("Connection", "Keep-Alive");
 			request.AddHeader("Cache-Control", "no-cache");
@@ -68,15 +62,26 @@ namespace IATETerminologyProvider.Service
 		private object SetApiRequestBodyValues(ILanguage destination, ILanguage source, string text)
 		{
 			var targetLanguges = new List<string>();
+			var filteredDomains = new List<string>();
+			var filteredTermTypes = new List<int>();
+
 			targetLanguges.Add(destination.Locale.TwoLetterISOLanguageName);
+			if (_providerSettings != null)
+			{
+				filteredDomains = _providerSettings.Domains.Count > 0 ? _providerSettings.Domains : filteredDomains;
+				filteredTermTypes = _providerSettings.TermTypes.Count > 0 ? _providerSettings.TermTypes : filteredTermTypes;
+			}
 
 			var bodyModel = new
 			{
 				query = text,
 				source = source.Locale.TwoLetterISOLanguageName,
 				targets = targetLanguges,
-				include_subdomains = true
+				include_subdomains = true,
+				filter_by_domains = filteredDomains,
+				search_in_term_types = filteredTermTypes
 			};
+
 			return bodyModel;
 		}
 
@@ -152,7 +157,6 @@ namespace IATETerminologyProvider.Service
 			}
 			return domain.TrimEnd(' ').TrimEnd(',');
 		}
-
 
 		// Set term subdomain
 		private void SetTermSubdomains(ItemsResponseModel mainDomains)

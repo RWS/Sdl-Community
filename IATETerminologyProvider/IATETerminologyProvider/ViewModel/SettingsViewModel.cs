@@ -25,26 +25,7 @@ namespace IATETerminologyProvider.ViewModel
 		{			
 			LoadDomains();
 			LoadTermTypes();
-			if (providerSettings != null)
-			{
-				foreach (var domainCode in providerSettings.Domains)
-				{
-					var domain = Domains.Where(d => d.Code.Equals(domainCode)).FirstOrDefault();
-					if (domain != null)
-					{
-						domain.IsSelected = true;
-					}
-				}
-
-				foreach (var termTypeName in providerSettings.TermTypes)
-				{
-					var termType = TermTypes.Where(t => t.Name.Equals(termTypeName)).FirstOrDefault();
-					if (termType != null)
-					{
-						termType.IsSelected = true;
-					}					
-				}
-			}
+			SetFieldsSelection(providerSettings);
 		}
 		#endregion
 
@@ -103,7 +84,7 @@ namespace IATETerminologyProvider.ViewModel
 			{
 				ProviderSettings = new ProviderSettings();
 				ProviderSettings.Domains = new List<string>();
-				ProviderSettings.TermTypes = new List<string>();
+				ProviderSettings.TermTypes = new List<int>();
 
 				// Add selected domains to provider settings
 				var selectedDomains = Domains.Where(d => d.IsSelected).ToList();
@@ -121,7 +102,7 @@ namespace IATETerminologyProvider.ViewModel
 				{
 					foreach (var selectedTermType in selectedTermTypes)
 					{
-						ProviderSettings.TermTypes.Add(selectedTermType.Name);
+						ProviderSettings.TermTypes.Add(selectedTermType.Code);
 					}
 				}
 
@@ -158,6 +139,31 @@ namespace IATETerminologyProvider.ViewModel
 		private void LoadTermTypes()
 		{
 			TermTypes = TermTypeService.GetTermTypes();
+		}
+
+		// Set UI Settings fields selection based on the provider settings file (for domains and term types).
+		private void SetFieldsSelection(ProviderSettings providerSettings)
+		{
+			if (providerSettings != null)
+			{
+				foreach (var domainCode in providerSettings.Domains)
+				{
+					var domain = Domains.Where(d => d.Code.Equals(domainCode)).FirstOrDefault();
+					if (domain != null)
+					{
+						domain.IsSelected = true;
+					}
+				}
+
+				foreach (var termTypeCode in providerSettings.TermTypes)
+				{
+					var termType = TermTypes.Where(t => t.Code.Equals(termTypeCode)).FirstOrDefault();
+					if (termType != null)
+					{
+						termType.IsSelected = true;
+					}
+				}
+			}
 		}
 		#endregion
 

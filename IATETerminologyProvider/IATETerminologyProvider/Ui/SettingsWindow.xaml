@@ -6,7 +6,7 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
 		Title="IATE terminology provider settings"
-		GlowBrush="#FF179EBB" WindowTitleBrush="#FF179EBB"
+		GlowBrush="#FF179EBB" WindowTitleBrush="#FF179EBB" WindowStartupLocation="CenterScreen"
         Height="615" Width="800" ResizeMode="NoResize">
 	<Window.Resources>
 		<ResourceDictionary>
