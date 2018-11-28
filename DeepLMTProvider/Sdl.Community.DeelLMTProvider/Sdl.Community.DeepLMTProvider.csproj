@@ -125,6 +125,7 @@
     <Compile Include="DeepLMtTranslationProviderFactory.cs" />
     <Compile Include="DeepLMtTranslationProviderLanguageDirection.cs" />
     <Compile Include="DeepLMtTranslationProviderWinFormsUI.cs" />
+    <Compile Include="DeepLTellMe\DeepLCommunitySupportAction.cs" />
     <Compile Include="DeepLTellMe\DeepLContactAction.cs" />
     <Compile Include="DeepLTellMe\DeepLHelpAction.cs" />
     <Compile Include="DeepLTellMe\DeepLStoreAction.cs" />
@@ -156,6 +157,7 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\TellMe1.ico" />
     <EmbeddedResource Include="Resources\Question.ico" />
     <EmbeddedResource Include="Resources\SDLAppStore.ico" />
     <EmbeddedResource Include="Resources\deepLIcon.ico" />

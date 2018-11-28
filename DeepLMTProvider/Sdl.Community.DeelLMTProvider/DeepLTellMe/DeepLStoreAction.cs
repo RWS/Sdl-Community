@@ -18,6 +18,6 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 
 		public override bool IsAvailable => true;
 		public override string Category => "DeepL results";
-		public override Icon Icon => PluginResources.SDLAppStore;
+		public override Icon Icon => PluginResources.TellMe1;
 	}
 }

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.TellMe.ProviderApi;
+﻿using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 {
 	[TellMeProvider]
 	public class DeepLTellMeProvider : ITellMeProvider
 	{
-		public string Name =>"DeepL tell me provider";
+		public string Name => "DeepL tell me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
@@ -24,7 +19,11 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 			},
 			new DeepLHelpAction
 			{
-				Keywords =  new[] {"deepL", "deepl help", "deepl guide"}
+				Keywords = new[] {"deepL", "deepl help", "deepl guide"}
+			},
+			new DeepLCommunitySupportAction
+			{
+				Keywords = new[] {"deepL", "deepl community", "deepl support"}
 			}
 		};
 	}
