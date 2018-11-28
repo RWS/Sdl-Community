@@ -20,8 +20,9 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 	/// <summary>
 	/// Interaction logic for DeepLWindow.xaml
 	/// </summary>
-	public partial class DeepLWindow 
+	public partial class DeepLWindow
 	{
+		private bool _tellMeAction;
 		public DeepLTranslationOptions Options { get; set; }
 		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore)
 		{
@@ -36,6 +37,17 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 				SettingsTab.Resend.IsChecked = options.ResendDrafts;
 			}
 		}
+		public DeepLWindow(DeepLTranslationOptions options, bool tellMeAction)
+		{
+			InitializeComponent();
+			_tellMeAction = tellMeAction;
+			Options = options;
+			if (options != null)
+			{
+				SettingsTab.Resend.IsChecked = options.ResendDrafts;
+			}
+		}
+
 		public DeepLWindow()
 		{
 			InitializeComponent();
@@ -47,6 +59,11 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			if (SettingsTab.Resend.IsChecked != null)
 			{
 				Options.ResendDrafts = SettingsTab.Resend.IsChecked.Value;
+			}
+			if (_tellMeAction)
+			{
+				DialogResult = true;
+				Close();
 			}
 			if (!string.IsNullOrEmpty(Options.ApiKey))
 			{

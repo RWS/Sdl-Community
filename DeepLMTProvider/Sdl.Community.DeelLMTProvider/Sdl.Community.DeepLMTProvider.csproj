@@ -128,6 +128,7 @@
     <Compile Include="DeepLTellMe\DeepLCommunitySupportAction.cs" />
     <Compile Include="DeepLTellMe\DeepLContactAction.cs" />
     <Compile Include="DeepLTellMe\DeepLHelpAction.cs" />
+    <Compile Include="DeepLTellMe\DeepLSettingsAction.cs" />
     <Compile Include="DeepLTellMe\DeepLStoreAction.cs" />
     <Compile Include="DeepLTellMe\DeepLTellMeProvider.cs" />
     <Compile Include="DeepLTranslationProviderConnecter.cs" />
