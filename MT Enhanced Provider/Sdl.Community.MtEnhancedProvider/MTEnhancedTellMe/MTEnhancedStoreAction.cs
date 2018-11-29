@@ -8,7 +8,7 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 	{
 		public MTEnhancedStoreAction()
 		{
-			Name = "Download MTEnhanced Provider from the AppStore";
+			Name = "Download MT Enhanced Provider from the AppStore";
 		}
 
 		public override void Execute()

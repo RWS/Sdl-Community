@@ -9,7 +9,7 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 	{
 		public MTEnhancedSettingsAction()
 		{
-			Name = "MTEnhanced Provider options";
+			Name = "MT Enhanced Provider options";
 		}
 
 		public override void Execute()

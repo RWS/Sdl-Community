@@ -11,19 +11,19 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 		{
 			new MTEnhancedStoreAction
 			{
-				Keywords = new[] {"mtenhanced", "mtenhanced store", "mtenhanced download"}
+				Keywords = new[] {"mt enhanced", "mtenhanced store", "mtenhanced download"}
 			},
 			new MTEnhancedHelpAction
 			{
-				Keywords = new[] {"mtenhanced", "mtenhanced help", "mtenhanced guide"}
+				Keywords = new[] {"mt enhanced", "mtenhanced help", "mtenhanced guide"}
 			},
 			new MTEnhancedCommunityForumAction()
 			{
-				Keywords = new[] {"mtenhanced", "mtenhanced forum", "mtenhanced report"}
+				Keywords = new[] {"mt enhanced", "mtenhanced forum", "mtenhanced report"}
 			},
 			new MTEnhancedSettingsAction()
 			{
-				Keywords = new[] {"mtenhanced", "mtenhanced settings", "mtenhanced edit"}
+				Keywords = new[] {"mt enhanced", "mtenhanced settings", "mtenhanced edit"}
 			}
 		};
 	}
