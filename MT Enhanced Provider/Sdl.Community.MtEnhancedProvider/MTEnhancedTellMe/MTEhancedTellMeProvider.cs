@@ -25,6 +25,10 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 			new MTEnhancedCommunityForumAction()
 			{
 				Keywords = new[] {"mtenhanced", "mtenhanced forum", "mtenhanced report"}
+			},
+			new MTEnhancedSettingsAction()
+			{
+				Keywords = new[] {"mtenhanced", "mtenhanced settings", "mtenhanced edit"}
 			}
 		};
 	}
