@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Drawing;
 using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
@@ -19,5 +20,7 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 		public override bool IsAvailable => true;
 
 		public override string Category => "MT Enhanced Provider";
+
+		public override Icon Icon => PluginResources.AppStoreIcon;
 	}
 }

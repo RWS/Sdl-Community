@@ -257,8 +257,10 @@
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\ForumIcon.ico" />
+    <Resource Include="Resources\AppStoreIcon.ico" />
+    <Resource Include="Resources\Settings.ico" />
     <Resource Include="Resources\Question.ico" />
-    <Resource Include="Resources\SDLAppStore.ico" />
     <None Include="packages.config" />
     <None Include="Service References\TranslatorService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>

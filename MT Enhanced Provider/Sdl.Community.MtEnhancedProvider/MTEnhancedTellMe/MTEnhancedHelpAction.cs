@@ -8,7 +8,7 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 	{
 		public MTEnhancedHelpAction()
 		{
-			Name = "MTEnhanced Provider help";
+			Name = "Microsoft Translator wiki in the SDL Community";
 		}
 
 		public override void Execute()

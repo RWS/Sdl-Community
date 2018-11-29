@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -8,7 +9,7 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 	{
 		public MTEnhancedSettingsAction()
 		{
-			Name = "MTEnhanced Settings";
+			Name = "MTEnhanced Provider options";
 		}
 
 		public override void Execute()
@@ -38,5 +39,7 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 		public override bool IsAvailable => true;
 
 		public override string Category => "MT Enhanced Provider";
+
+		public override Icon Icon => PluginResources.Settings;
 	}
 }
