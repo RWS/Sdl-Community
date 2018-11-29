@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-
 namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 {
 	public class MTEnhancedSettingsAction : AbstractTellMeAction
