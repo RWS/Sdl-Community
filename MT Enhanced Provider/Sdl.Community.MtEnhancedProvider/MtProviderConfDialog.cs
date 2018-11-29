@@ -17,11 +17,10 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
-    public partial class MtProviderConfDialog : Form
+	public partial class MtProviderConfDialog : Form
     {
         ITranslationProviderCredentialStore credstore;
         Point showcredsloc;

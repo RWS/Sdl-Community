@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
@@ -10,7 +9,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
-    public class MtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
+	public class MtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
     {
         #region "PrivateMembers"
         private readonly MtTranslationProvider _provider;

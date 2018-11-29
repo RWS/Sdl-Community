@@ -5,23 +5,16 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.ServiceModel;
-using System.ServiceModel.Description;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
-using System.Windows.Documents;
 using Newtonsoft.Json;
 using RestSharp;
-using RestSharp.Deserializers;
 using Sdl.Community.MtEnhancedProvider.Model;
-using Sdl.Community.MtEnhancedProvider.TranslatorService;
-using Translation = Sdl.Community.MtEnhancedProvider.Model.Translation;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
 {
-    internal class ApiConnecter
+	internal class ApiConnecter
     {
         private static string _authToken; 
         private static DateTime _tokenExpiresAt; //to keep track of when token expires

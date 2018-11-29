@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Forms;
 using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -24,9 +21,6 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 				entry.MainTranslationProvider.Uri.OriginalString.Contains("mtenhancedprovider"));
 
 			var mtTranslationOptions = new MtTranslationOptions(translationProvider.MainTranslationProvider.Uri);
-			var apiKey = mtTranslationOptions.ClientId;
-			//var cs = new TranslationProviderCredentialStore();
-			//cs.AddCredential(new Uri("mtenhancedprovidergt:///"), new TranslationProviderCredential(apiKey, true));
 
 			var dialog = new MtProviderConfDialog(mtTranslationOptions, true);
 			dialog.ShowDialog();
