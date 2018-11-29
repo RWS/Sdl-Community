@@ -21,6 +21,6 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 
 		public override string Category => "MT Enhanced Provider";
 
-		public override Icon Icon => PluginResources.AppStoreIcon;
+		public override Icon Icon => PluginResources.Download;
 	}
 }

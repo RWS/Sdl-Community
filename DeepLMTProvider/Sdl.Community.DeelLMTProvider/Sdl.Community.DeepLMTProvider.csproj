@@ -158,9 +158,10 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Settings.ico" />
+    <EmbeddedResource Include="Resources\ForumIcon.ico" />
     <EmbeddedResource Include="Resources\TellMe1.ico" />
     <EmbeddedResource Include="Resources\Question.ico" />
-    <EmbeddedResource Include="Resources\SDLAppStore.ico" />
     <EmbeddedResource Include="Resources\deepLIcon.ico" />
     <EmbeddedResource Include="Resources\DeepL.ico" />
     <EmbeddedResource Include="Resources\deepLResized.png" />

@@ -20,20 +20,23 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 			var translationProvider = settings.Entries.FirstOrDefault(entry =>
 				entry.MainTranslationProvider.Uri.OriginalString.Contains("mtenhancedprovider"));
 
-			var mtTranslationOptions = new MtTranslationOptions(translationProvider.MainTranslationProvider.Uri);
-
-			var dialog = new MtProviderConfDialog(mtTranslationOptions, true);
-			dialog.ShowDialog();
-
-			if (dialog.DialogResult == DialogResult.OK)
+			if (translationProvider != null)
 			{
-				settings.Entries.Find(entry =>
-						entry.MainTranslationProvider.Uri.ToString().Contains("mtenhancedprovider"))
-					.MainTranslationProvider
-					.Uri = mtTranslationOptions.Uri;
+				var mtTranslationOptions = new MtTranslationOptions(translationProvider.MainTranslationProvider.Uri);
 
-				currentProject.UpdateTranslationProviderConfiguration(settings);
-			};
+				var dialog = new MtProviderConfDialog(mtTranslationOptions, true);
+				dialog.ShowDialog();
+
+				if (dialog.DialogResult == DialogResult.OK)
+				{
+					settings.Entries.Find(entry =>
+							entry.MainTranslationProvider.Uri.ToString().Contains("mtenhancedprovider"))
+						.MainTranslationProvider
+						.Uri = mtTranslationOptions.Uri;
+
+					currentProject.UpdateTranslationProviderConfiguration(settings);
+				}
+			}
 		}
 
 		public override bool IsAvailable => true;

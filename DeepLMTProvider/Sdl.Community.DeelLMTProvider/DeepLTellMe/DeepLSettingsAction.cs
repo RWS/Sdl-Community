@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Drawing;
+using System.Linq;
 using System.Xml;
 using Sdl.Community.DeepLMTProvider.WPF;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
@@ -11,14 +12,14 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 	{
 		public DeepLSettingsAction()
 		{
-			Name = "DeepL provider settings for active project";
+			Name = "DeepL options";
 		}
 		public override void Execute()
 		{
 			var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
 			var settings = currentProject.GetTranslationProviderConfiguration();
-			var settingsFile = currentProject.FilePath;
-			var translationProvider = settings.Entries.FirstOrDefault(entry => entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider:///"));
+
+			var translationProvider = settings.Entries.FirstOrDefault(entry => entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider"));
 			if (translationProvider != null)
 			{
 				var uri = translationProvider.MainTranslationProvider.Uri;
@@ -27,11 +28,12 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 				dialog.ShowDialog();
 				if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
 				{
-					var newOptionsUri = dialog.Options.Uri.ToString();
-					if (!string.IsNullOrEmpty(newOptionsUri))
-					{
-						SaveNewSettings(settingsFile,newOptionsUri);
-					}
+					settings.Entries
+						.Find(entry =>
+							entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider"))
+						.MainTranslationProvider.Uri = options.Uri;
+
+					currentProject.UpdateTranslationProviderConfiguration(settings);
 				}
 			}
 		}
@@ -39,34 +41,6 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 		public override bool IsAvailable => true;
 		public override string Category => "DeepL results";
 
-		private void SaveNewSettings(string filePath,string uri)
-		{
-			var xml = new XmlDocument();
-			xml.Load(filePath);
-
-			var cascadeItemNodes = xml.GetElementsByTagName("CascadeItem");
-			foreach (XmlNode cascadeNode in cascadeItemNodes)
-			{
-				foreach (XmlNode child in cascadeNode.ChildNodes)
-				{
-					if (child.Name.Equals("CascadeEntryItem"))
-					{
-						var mainTranslation = child.ChildNodes.OfType<XmlElement>()
-							.FirstOrDefault(t => t.Name.Equals("MainTranslationProviderItem"));
-						if (mainTranslation != null)
-						{
-							foreach (XmlAttribute attribute in mainTranslation.Attributes)
-							{
-								if (attribute.Name.Equals("Uri") && attribute.Value.Contains("deepltranslationprovider:///"))
-								{
-									attribute.Value = uri;
-								}
-							}  
-						}
-					}
-				}
-			}
-			xml.Save(filePath);
-		}
+		public override Icon Icon => PluginResources.Settings;
 	}
 }

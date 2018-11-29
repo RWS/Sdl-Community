@@ -90,9 +90,9 @@ namespace Sdl.Community.MtEnhancedProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon AppStoreIcon {
+        public static System.Drawing.Icon Download {
             get {
-                object obj = ResourceManager.GetObject("AppStoreIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

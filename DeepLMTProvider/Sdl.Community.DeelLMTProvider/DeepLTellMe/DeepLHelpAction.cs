@@ -8,7 +8,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 	{
 		public DeepLHelpAction()
 		{
-			Name = "DeepL help";
+			Name = "DeepL wiki in the SDL Community";
 		}
 
 		public override void Execute()

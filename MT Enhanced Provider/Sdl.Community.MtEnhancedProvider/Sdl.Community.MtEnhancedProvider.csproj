@@ -257,8 +257,8 @@
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\ForumIcon.ico" />
-    <Resource Include="Resources\AppStoreIcon.ico" />
     <Resource Include="Resources\Settings.ico" />
     <Resource Include="Resources\Question.ico" />
     <None Include="packages.config" />
