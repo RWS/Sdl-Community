@@ -4,7 +4,6 @@ using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
-using Sdl.Community.BeGlobalV4.Provider.Ui;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {

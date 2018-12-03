@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -55,7 +56,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 				if (value.Equals(1) && IsWindowValid())
 				{
-					SetEngineModel();	
+					SettingsViewModel.MessageVisibility = "Collapsed";
+					SetEngineModel();
 				}
 				OnPropertyChanged();
 			}
@@ -100,9 +102,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				if (isValid)
 				{
 					WindowCloser.SetDialogResult(_mainWindow, true);
-					_mainWindow.Close(); 
-				}	
-			} 
+					_mainWindow.Close();
+				}  
+			}
 		}
 
 		private void SetEngineModel()
@@ -136,45 +138,56 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			var loginTab = _mainWindow?.LoginTab;	  
 			Options.ResendDrafts = SettingsViewModel.ReSendChecked;
 			Options.Model = SettingsViewModel.SelectedModelOption?.Model;
-			if (LoginViewModel.SelectedOption.Type.Equals("User"))
+			try
 			{
-				var password = loginTab?.PasswordBox.Password;
-				if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(LoginViewModel.Email))
+				if (LoginViewModel.SelectedOption.Type.Equals("User"))
 				{
-					Options.ClientId = LoginViewModel.Email;
-					Options.ClientSecret = password;
-					loginTab.ValidationBlock.Visibility = Visibility.Collapsed;
-					if (Options.Model == null)
+					var password = loginTab?.PasswordBox.Password;
+					if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(LoginViewModel.Email))
 					{
-						SetEngineModel();
+						Options.ClientId = LoginViewModel.Email;
+						Options.ClientSecret = password;
+						loginTab.ValidationBlock.Visibility = Visibility.Collapsed;
+						if (Options.Model == null)
+						{
+							SetEngineModel();
+						}
+						Options.UseClientAuthentication = false;
+						return true;
 					}
-					Options.UseClientAuthentication = false;
-					return true;
+				}
+				else
+				{
+					var clientId = loginTab?.ClientKeyBox.Password;
+					var clientSecret = loginTab?.ClientSecretBox.Password;
+					if (!string.IsNullOrEmpty(clientId?.TrimEnd()) && !string.IsNullOrEmpty(clientSecret.TrimEnd()))
+					{
+						Options.ClientId = clientId;
+						Options.ClientSecret = clientSecret;
+						Options.UseClientAuthentication = true;
+						if (Options.Model == null)
+						{
+							SetEngineModel();
+						}
+						loginTab.ValidationBlock.Visibility = Visibility.Collapsed;
+						return true;
+					}
+				}
+				if (loginTab != null)
+				{
+					loginTab.ValidationBlock.Visibility = Visibility.Visible;
 				}
 			}
-			else
+			catch (Exception e)
 			{
-				var clientId = loginTab?.ClientKeyBox.Password;
-				var clientSecret = loginTab?.ClientSecretBox.Password;
-				if (!string.IsNullOrEmpty(clientId?.TrimEnd()) && !string.IsNullOrEmpty(clientSecret.TrimEnd()))
+				SettingsViewModel.MessageVisibility = "Visible";
+				if (loginTab != null)
 				{
-					Options.ClientId = clientId;
-					Options.ClientSecret = clientSecret;
-					Options.UseClientAuthentication = true;
-					if (Options.Model == null)
-					{
-						SetEngineModel();
-					}
-					loginTab.ValidationBlock.Visibility = Visibility.Collapsed;
-					return true;
-				}	
-			}
-			if (loginTab != null)
-			{
-				loginTab.ValidationBlock.Visibility = Visibility.Visible;
-			}
+					loginTab.ValidationBlock.Visibility = Visibility.Visible;
+					loginTab.ValidationBlock.Text = e.Message.Contains("Acquiring token failed") ? "Please verify your credentials." : e.Message;
+				}
+			} 
 			return false;
 		}
-		
 	}
 }

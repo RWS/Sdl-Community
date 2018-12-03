@@ -21,16 +21,19 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<TextBlock  Margin="10,10,0,10"  Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please select
-			the settings you want to apply to the Translation Provider.
+			the settings you want to apply to the Translation Provider.	You must be logged in to make this selection.
 		</TextBlock>
-		<CheckBox Margin="10,10,0,10" Grid.Row="1" FontFamily="Segoe UI" IsChecked="{Binding ReSendChecked}">Re-send draft and translated segments</CheckBox>
-		<TextBlock  Margin="10,10,0,10"  Grid.Row="2" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">
+		<TextBlock Grid.Row="1" Grid.Column="0" Foreground="DarkRed" Margin="10,0,0,0" Visibility="{Binding MessageVisibility}">Please verify your credentials </TextBlock>
+
+		<CheckBox Margin="10,10,0,10" Grid.Row="2" FontFamily="Segoe UI" IsChecked="{Binding ReSendChecked}">Re-send draft and translated segments</CheckBox>
+		<TextBlock  Margin="10,10,0,10"  Grid.Row="3" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">
 			Please select engine model : 
 		</TextBlock>
 		<ComboBox 
-			Grid.Row="3"  HorizontalAlignment="Left"
+			Grid.Row="4"  HorizontalAlignment="Left"
 			Width="240"
 			ItemsSource="{Binding TranslationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

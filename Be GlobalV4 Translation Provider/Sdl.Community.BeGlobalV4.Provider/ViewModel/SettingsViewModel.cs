@@ -9,11 +9,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 	{
 		private bool _reSendChecked;
 		private TranslationModel _selectedModel;
-
+		private string _messageVisibility;
 		public SettingsViewModel(BeGlobalTranslationOptions options)
 		{
-			TranslationOptions = new ObservableCollection<TranslationModel>();	 
-
+			TranslationOptions = new ObservableCollection<TranslationModel>();
+			MessageVisibility = "Collapsed";
 			if (options != null)
 			{
 				ReSendChecked = options.ResendDrafts;
@@ -35,6 +35,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			set
 			{
 				_reSendChecked = value;
+				OnPropertyChanged();
+			}
+		}
+		public string MessageVisibility
+		{
+			get => _messageVisibility;
+			set
+			{
+				_messageVisibility = value;
 				OnPropertyChanged();
 			}
 		}
