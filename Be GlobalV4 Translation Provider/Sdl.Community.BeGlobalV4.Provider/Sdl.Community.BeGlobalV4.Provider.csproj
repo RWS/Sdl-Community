@@ -55,6 +55,13 @@
     <Reference Include="Sdl.Core.PluginFramework.PackageSupport, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
@@ -95,6 +102,9 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -117,12 +127,15 @@
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
+    <Compile Include="Model\BeGlobalLanguagePair.cs" />
     <Compile Include="Model\BeGlobalTag.cs" />
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\PreTranslateSegment.cs" />
     <Compile Include="Model\PreTranslation.cs" />
+    <Compile Include="Model\SubscriptionInfo.cs" />
     <Compile Include="Model\TagInfo.cs" />
     <Compile Include="Model\TranslationModel.cs" />
+    <Compile Include="Model\UserDetails.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

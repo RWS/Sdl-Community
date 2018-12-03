@@ -55,6 +55,7 @@
 
 		<TabControl Grid.Column="0" Grid.Row="1" 
 		            Margin="0,0,0,15"
+					SelectedIndex="{Binding SelectedIndex}"
 		            HorizontalAlignment="Left"
 					Height="auto"
 		            controls:TabControlHelper.Underlined="SelectedTabItem"

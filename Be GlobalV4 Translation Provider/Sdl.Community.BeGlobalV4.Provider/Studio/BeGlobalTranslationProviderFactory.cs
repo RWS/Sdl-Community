@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
@@ -16,8 +14,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			ITranslationProviderCredentialStore credentialStore)
 		{
 			var originalUri = new Uri("beglobaltranslationprovider:///");
-			var options = new BeGlobalTranslationOptions(translationProviderUri);
-
+			var options = new BeGlobalTranslationOptions(translationProviderUri)
+			{
+				SubscriptionInfo = new List<SubscriptionInfo>()
+			};
 			if (credentialStore.GetCredential(originalUri) != null)
 			{
 				var credentials = credentialStore.GetCredential(originalUri);

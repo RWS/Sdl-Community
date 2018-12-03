@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
@@ -12,47 +12,21 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		public SettingsViewModel(BeGlobalTranslationOptions options)
 		{
-			TranslationOptions = new List<TranslationModel>
-			{
-				new TranslationModel
-				{
-					DisplayName = "Generic",
-					Model = "generic"
-				},
-				new TranslationModel
-				{
-					DisplayName = "Generic MT",
-					Model = "genericnmt"
-				},
-				new TranslationModel
-				{
-					DisplayName = "Informal",
-					Model = "informal"
-				},
-				new TranslationModel
-				{
-					DisplayName = "trvlvrt",
-					Model = "trvlvrt"
-				}
-			};
+			TranslationOptions = new ObservableCollection<TranslationModel>();	 
 
 			if (options != null)
 			{
 				ReSendChecked = options.ResendDrafts;
 				if (options.Model != null)
 				{
-					var selectedModelIndex = TranslationOptions.FindIndex(m => m.Model.Equals(options.Model));
-					SelectedModelOption = TranslationOptions[selectedModelIndex];
+					var model = TranslationOptions.FirstOrDefault(m => m.Model.Equals(options.Model));
+					if (model != null)
+					{
+						var selectedModelIndex = TranslationOptions.IndexOf(model);
+						SelectedModelOption = TranslationOptions[selectedModelIndex];
+					} 
 				}
-				else
-				{
-					SelectedModelOption = TranslationOptions[0];
-				}  
 			}
-			else
-			{
-				SelectedModelOption = TranslationOptions[0];
-			}  
 		}
 
 		public bool ReSendChecked
@@ -75,6 +49,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		public List<TranslationModel> TranslationOptions { get; set; }
+		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }
 	}
 }

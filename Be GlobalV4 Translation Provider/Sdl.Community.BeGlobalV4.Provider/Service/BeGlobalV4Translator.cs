@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using RestSharp;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Service
 {
@@ -68,7 +69,30 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			var rawData = WaitForTranslation(json.requestId.Value);
 			json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
 			return json != null ? json.translation[0] : string.Empty;
-		}  
+		}
+
+		public int GetUserInformation()
+		{
+			var request = new RestRequest("/accounts/api-credentials/self")
+			{
+				RequestFormat = DataFormat.Json
+			};
+			var response = _client.Execute(request);
+			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
+			return user.AccountId;
+		}
+
+		public SubscriptionInfo GetLanguagePairs(string accountId)
+		{
+			var request = new RestRequest($"/accounts/{accountId}/subscriptions/language-pairs")
+			{
+				RequestFormat = DataFormat.Json
+			};
+			var response = _client.Execute(request);
+			var subscriptionInfo = JsonConvert.DeserializeObject<SubscriptionInfo>(response.Content);
+			return subscriptionInfo;
+		}
+
 
 		public dynamic UploadText(string text, bool quick)
 		{
@@ -119,33 +143,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			if (response.StatusCode != System.Net.HttpStatusCode.OK)
 				throw new Exception("Downloading translation failed: " + response.Content);
 			return response.RawBytes;
-		}
-
-		public void TranslateFile(string sourcepath, string targetpath)
-		{
-			var id = UploadFile(sourcepath);
-			var rawTranslation = WaitForTranslation(id);
-			using (var bw = new BinaryWriter(new FileStream(targetpath, FileMode.Create)))
-			{
-				bw.Write(rawTranslation);
-			}
-		}
-
-		private string UploadFile(string path)
-		{
-			var request = new RestRequest("/mt/translations/async", Method.POST);
-			// Because of the added file, RestSharp will create a Content-Type = multipart/form-data request for this
-			request.AddFile("input", path, "application/octet-stream");
-			request.AddParameter("sourceLanguageId", _source);
-			request.AddParameter("targetLanguageId", _target);
-			request.AddParameter("model", _flavor);
-			request.AddParameter("inputFormat", "HTML");
-
-			var response = _client.Execute(request);
-			if (response.StatusCode != System.Net.HttpStatusCode.OK && response.StatusCode != System.Net.HttpStatusCode.Accepted)
-				throw new Exception("UploadFilefailed: " + response.Content);
-			dynamic json = JsonConvert.DeserializeObject(response.Content);
-			return json.requestId.Value;
 		}
 
 		private IRestResponse RestGet(string command)

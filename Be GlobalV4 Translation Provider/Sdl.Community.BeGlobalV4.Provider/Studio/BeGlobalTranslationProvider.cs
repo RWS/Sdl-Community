@@ -1,4 +1,6 @@
 ﻿using System;
+using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -38,6 +40,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
 			// here we need to get the language directions from Be Global
+			//var normalizeSourceTextHelper = new NormalizeSourceTextHelper();
+			//var sourceLanguage =
+			//	normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.SourceCulture.ThreeLetterISOLanguageName);
+			//var targetLanguage =
+			//	normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.TargetCulture.ThreeLetterISOLanguageName);
+				
+			//var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com",Options.ClientId,Options.ClientSecret,sourceLanguage,targetLanguage,Options.Model,Options.UseClientAuthentication);
+			//var accountId =beGlobalTranslator.GetUserInformation();
+			//var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+
 			return true;
 		}
 

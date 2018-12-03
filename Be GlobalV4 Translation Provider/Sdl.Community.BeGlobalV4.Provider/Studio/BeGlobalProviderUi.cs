@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.Community.BeGlobalV4.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
@@ -23,7 +24,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			var options = new BeGlobalTranslationOptions();
+			var options = new BeGlobalTranslationOptions
+			{
+				SubscriptionInfo = new List<SubscriptionInfo>()
+			};
 			var credentials = GetCredentials(credentialStore, "beglobaltranslationprovider:///");
 			
 			var beGlobalWindow = new BeGlobalWindow();
