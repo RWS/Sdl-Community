@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
@@ -14,10 +13,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			ITranslationProviderCredentialStore credentialStore)
 		{
 			var originalUri = new Uri("beglobaltranslationprovider:///");
-			var options = new BeGlobalTranslationOptions(translationProviderUri)
-			{
-				SubscriptionInfo = new List<SubscriptionInfo>()
-			};
+			var options = new BeGlobalTranslationOptions(translationProviderUri);
+
 			if (credentialStore.GetCredential(originalUri) != null)
 			{
 				var credentials = credentialStore.GetCredential(originalUri);
@@ -29,6 +26,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				credentialStore.AddCredential(originalUri, new TranslationProviderCredential(originalUri.ToString(), true));	
 			}
+
+			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", options.ClientId,
+				options.ClientSecret, string.Empty, string.Empty, options.Model, options.UseClientAuthentication);
+			var accountId = beGlobalTranslator.GetUserInformation();
+			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+			options.SubscriptionInfo = subscriptionInfo;
 			return  new BeGlobalTranslationProvider(options);
 		}
 

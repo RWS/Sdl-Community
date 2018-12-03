@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -18,7 +17,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public string ClientId { get; set; }
 		public string ClientSecret { get; set; }
-		public List<SubscriptionInfo> SubscriptionInfo { get; set; }
+		public SubscriptionInfo SubscriptionInfo { get; set; }
 		
 		public Uri Uri => _uriBuilder.Uri;		 
 		private readonly TranslationProviderUriBuilder _uriBuilder;
