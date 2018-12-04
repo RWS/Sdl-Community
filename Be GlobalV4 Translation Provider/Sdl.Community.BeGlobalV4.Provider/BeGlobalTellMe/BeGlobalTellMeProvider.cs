@@ -10,20 +10,20 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 		{
 			new BeGlobalCommunitySupportAction
 			{
-				Keywords = new []{ "beGlobal", "beGlobal community", "beGlobal support" }
+				Keywords = new []{ "beglobal", "beglobal community", "beglobal support" }
 			},
 			new BeGlobalContactAction
 			{
-				Keywords = new []{ "beGlobal", "beGlobal contact", "beGlobal trial" }
+				Keywords = new []{ "beglobal", "beglobal contact", "beglobal trial" }
 			},
 			new BeGlobalHelpAction
 			{
-				Keywords = new []{ "beGlobal", "beGlobal help", "beGlobal guide" }
+				Keywords = new []{ "beglobal", "beglobal help", "beglobal guide" }
 			},
 			new BeGlobalStoreAction
 			{
-				Keywords = new []{ "beGlobal", "beGlobal store", "beGlobal download" }
-			}
+				Keywords = new []{ "beglobal", "beglobal store", "beglobal download" }
+			},
 		};
 	}
 }
