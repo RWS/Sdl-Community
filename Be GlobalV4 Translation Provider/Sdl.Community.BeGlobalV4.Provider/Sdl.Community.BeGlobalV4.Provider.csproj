@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -98,6 +98,9 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Terminology.TerminologyProvider.Core">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
@@ -122,6 +125,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BeGlobalTellMe\BeGlobalCommunitySupportAction.cs" />
+    <Compile Include="BeGlobalTellMe\BeGlobalContactAction.cs" />
+    <Compile Include="BeGlobalTellMe\BeGlobalHelpAction.cs" />
+    <Compile Include="BeGlobalTellMe\BeGlobalStoreAction.cs" />
+    <Compile Include="BeGlobalTellMe\BeGlobalTellMeProvider.cs" />
     <Compile Include="Helpers\NormalizeSourceTextHelper.cs" />
     <Compile Include="Helpers\PreTranslateTempFile.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
@@ -167,6 +175,10 @@
     <Compile Include="ViewModel\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\TellMe1.ico" />
+    <EmbeddedResource Include="Resources\Settings.ico" />
+    <EmbeddedResource Include="Resources\Question.ico" />
+    <EmbeddedResource Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\logoRe.png" />
     <Resource Include="Resources\global.ico" />
     <Resource Include="Resources\logoB.png" />
