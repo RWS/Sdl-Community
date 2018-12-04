@@ -1,0 +1,111 @@
+﻿<UserControl x:Class="Sdl.Community.BeGlobalV4.Provider.Ui.Login"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" 
+             FontFamily="Segoe UI"
+             d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"></ResourceDictionary>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<TextBlock Margin="15,20,10,15" Width="550" Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please enter your valid SDL BeGlobal (NMT) account information.  The Client ID and Secret can be retrieved by a BeGlobal admin user from the 
+			<Hyperlink NavigateUri="https://translate.sdlbeglobal.com/" Command="{Binding NavigateCommand}">
+				SDL BeGlobal (NMT) user interface.<LineBreak/>
+			</Hyperlink>
+			The Username and Password are the same as the logins you use for the SDL BeGlobal (NMT) user interface.
+			</TextBlock>
+		<TextBlock Grid.Row="1" Style="{DynamicResource TextBlockColor}" Margin="15,0,10,5">
+			Please chose what authentication type you want to use:
+		</TextBlock>
+		<ComboBox 
+			Grid.Row="2"  HorizontalAlignment="Left"
+			Width="200"
+			ItemsSource="{Binding AuthenticationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			SelectedItem="{Binding SelectedOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			DisplayMemberPath ="DisplayName" IsSynchronizedWithCurrentItem="True"
+			Margin="15,5,0,10" BorderThickness="1"
+			controls:TextBoxHelper.ClearTextButton="True"
+			controls:TextBoxHelper.Watermark="Type"/>
+		<TextBlock Grid.Row="3" Style="{DynamicResource TextBlockColor}" Margin="15,0,10,15">
+			Please enter your Credentials below:
+		</TextBlock>
+		<StackPanel Grid.Row="4">
+			<StackPanel x:Name="ClientId" Visibility="{Binding ClientAuthVisibility}">
+				<PasswordBox  
+					HorizontalAlignment="Left"
+					Name="ClientKeyBox"
+					controls:TextBoxHelper.UseFloatingWatermark="True"  
+					controls:TextBoxHelper.Watermark="Client Id"
+					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+					controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+					Width="300"
+					Margin="15,0,0,10"	  
+					IsEnabled="True">
+				</PasswordBox>
+				<PasswordBox  
+					HorizontalAlignment="Left"
+					Name="ClientSecretBox"
+					controls:TextBoxHelper.UseFloatingWatermark="True"  
+					controls:TextBoxHelper.Watermark="Client Secret"
+					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+					controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+					Width="300"
+					Margin="15,0,0,0"	  
+					IsEnabled="True">
+				</PasswordBox>
+			</StackPanel>
+
+			<StackPanel x:Name="UserCredentials" Visibility="{Binding UserAuthVisibility}">
+				<TextBox  
+					HorizontalAlignment="Left"
+					Name="EmailBox"
+					controls:TextBoxHelper.UseFloatingWatermark="True"  
+					controls:TextBoxHelper.Watermark="Email"
+					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+					Text="{Binding Email,UpdateSourceTrigger=PropertyChanged}"
+					Width="300"
+					Margin="15,0,0,10"	  
+					IsEnabled="True">
+				</TextBox>
+				<PasswordBox  
+					HorizontalAlignment="Left"
+					Name="PasswordBox"
+					controls:TextBoxHelper.UseFloatingWatermark="True"  
+					controls:TextBoxHelper.Watermark="Password"
+					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+					controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+					Width="300"
+					Margin="15,0,0,0"	  
+					IsEnabled="True">
+				</PasswordBox>
+			</StackPanel>
+
+		</StackPanel>
+	
+		<TextBlock Name="ValidationBlock" Grid.Row="6" Grid.Column="0" Foreground="DarkRed" Margin="15,0,0,0" Visibility="Collapsed"> Both fields are required</TextBlock>
+	</Grid>
+</UserControl>
