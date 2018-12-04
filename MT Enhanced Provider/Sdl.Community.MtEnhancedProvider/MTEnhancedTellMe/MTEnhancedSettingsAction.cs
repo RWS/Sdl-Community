@@ -17,15 +17,14 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 
 		public override void Execute()
 		{
-			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
 
-			if (projectsController.CurrentProject == null)
+			if (currentProject == null)
 			{
 				MessageBox.Show("No project is set as active");
 			}
 			else
 			{
-				var currentProject = projectsController.CurrentProject;
 				var settings = currentProject.GetTranslationProviderConfiguration();
 				if (!settings.Entries.Any(entry => entry.MainTranslationProvider.Uri.OriginalString.Contains("mtenhancedprovider")))
 				{

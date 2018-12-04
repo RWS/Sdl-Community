@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml;
 using Sdl.Community.DeepLMTProvider.WPF;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
@@ -12,28 +13,47 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 	{
 		public DeepLSettingsAction()
 		{
-			Name = "DeepL options";
+			Name = "DeepL MT Provider options";
 		}
 		public override void Execute()
 		{
 			var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
-			var settings = currentProject.GetTranslationProviderConfiguration();
 
-			var translationProvider = settings.Entries.FirstOrDefault(entry => entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider"));
-			if (translationProvider != null)
+			if (currentProject == null)
 			{
-				var uri = translationProvider.MainTranslationProvider.Uri;
-				var options = new DeepLTranslationOptions(uri);
-				var dialog = new DeepLWindow(options, true);
-				dialog.ShowDialog();
-				if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
-				{
-					settings.Entries
-						.Find(entry =>
-							entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider"))
-						.MainTranslationProvider.Uri = options.Uri;
+				MessageBox.Show("No project is set as active");
+			}
+			else
+			{
+				var settings = currentProject.GetTranslationProviderConfiguration();
 
-					currentProject.UpdateTranslationProviderConfiguration(settings);
+				if (!settings.Entries.Any(entry =>
+					entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider")))
+				{
+					MessageBox.Show(
+						"DeepL is not set on this project\nPlease set it in project settings before using TellMe to access it");
+				}
+				else
+				{
+					var translationProvider = settings.Entries.FirstOrDefault(entry =>
+						entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider"));
+					if (translationProvider != null)
+					{
+						var uri = translationProvider.MainTranslationProvider.Uri;
+						var options = new DeepLTranslationOptions(uri);
+						var dialog = new DeepLWindow(options, true);
+						dialog.ShowDialog();
+						if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
+						{
+							settings.Entries
+								.Find(entry =>
+									entry.MainTranslationProvider.Uri.OriginalString.Contains(
+										"deepltranslationprovider"))
+								.MainTranslationProvider.Uri = options.Uri;
+
+							currentProject.UpdateTranslationProviderConfiguration(settings);
+						}
+					}
 				}
 			}
 		}
