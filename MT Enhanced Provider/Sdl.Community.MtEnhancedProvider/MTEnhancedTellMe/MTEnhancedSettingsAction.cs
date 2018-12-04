@@ -27,8 +27,7 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 			{
 				var currentProject = projectsController.CurrentProject;
 				var settings = currentProject.GetTranslationProviderConfiguration();
-
-				if (settings.Entries.Count == 0)
+				if (!settings.Entries.Any(entry => entry.MainTranslationProvider.Uri.OriginalString.Contains("mtenhancedprovider")))
 				{
 					MessageBox.Show(
 						"MT Enhanced Provider is not set on this project\nPlease set it in project settings before using TellMe to access it");
