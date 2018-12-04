@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Web;
 using System.IO;
+using System.Net.Http;
 using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.DeelLMTProvider.Model;
@@ -55,33 +57,59 @@ namespace Sdl.Community.DeepLMTProvider
 
 			try
 			{
-				var client = new RestClient(@"https://api.deepl.com/v1")
-				{
-					UserAgent = "SDL Trados 2019 (v" + _pluginVersion + ",id" + _identifier + ")"
-				};
-				var request = new RestRequest("translate", Method.POST);
-
 				sourceText = normalizeHelper.NormalizeText(sourceText);
 
-				request.AddParameter("text", sourceText);
-				request.AddParameter("source_lang", sourceLanguage);
-				request.AddParameter("target_lang", targetLanguage);
-				//adding this resolve line breaks issue and missing ##login##
-				request.AddParameter("preserve_formatting", 1);
-				//tag handling cause issues on uppercase words
-				request.AddParameter("tag_handling", tagOption);
-				//if we add this the formattiong is not right
-				//request.AddParameter("split_sentences", 0);
-				request.AddParameter("auth_key", ApiKey);
-
-				var response = client.Execute(request).Content;
-				var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(response);
-				if (translatedObject != null)
+				using (var httpClient = new HttpClient())
 				{
-					translatedText = translatedObject.Translations[0].Text;
-					translatedText = HttpUtility.UrlDecode(translatedText);
-					translatedText = HttpUtility.HtmlDecode(translatedText);
+					var values = new Dictionary<string, string>
+					{
+						{"text", sourceText},
+						{"source_lang",sourceLanguage },
+						{"target_lang",targetLanguage},
+						{"preserve_formatting","1" },
+						{"tag_handling","xml" },
+						{"auth_key",ApiKey }
+
+					};
+					httpClient.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
+					var content = new FormUrlEncodedContent(values);
+					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result.Content.ReadAsStringAsync().Result;
+					var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(response);
+
+					if (translatedObject != null)
+					{
+						translatedText = translatedObject.Translations[0].Text;
+						translatedText = HttpUtility.UrlDecode(translatedText);
+						translatedText = HttpUtility.HtmlDecode(translatedText);
+					}
 				}
+				//var client = new RestClient(@"https://api.deepl.com/v1")
+				//{
+				//	UserAgent = "SDL Trados 2019 (v" + _pluginVersion + ",id" + _identifier + ")"
+				//};
+				//var request = new RestRequest("translate", Method.POST);
+
+				//sourceText = normalizeHelper.NormalizeText(sourceText);
+
+				//request.AddParameter("text", sourceText);
+				//request.AddParameter("source_lang", sourceLanguage);
+				//request.AddParameter("target_lang", targetLanguage);
+				////adding this resolve line breaks issue and missing ##login##
+				//request.AddParameter("preserve_formatting", 1);
+				////tag handling cause issues on uppercase words
+				//request.AddParameter("tag_handling", tagOption);
+				////if we add this the formattiong is not right
+				////request.AddParameter("split_sentences", 0);
+				//request.AddParameter("auth_key", ApiKey);
+
+				//var response = client.Execute(request).Content;
+				//var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(response);
+				//if (translatedObject != null)
+				//{
+				//	translatedText = translatedObject.Translations[0].Text;
+				//	translatedText = HttpUtility.UrlDecode(translatedText);
+				//	translatedText = HttpUtility.HtmlDecode(translatedText);
+				//}
 			}
 			catch (WebException e)
 			{
