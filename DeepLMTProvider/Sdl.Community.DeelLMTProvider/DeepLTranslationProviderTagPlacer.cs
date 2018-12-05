@@ -160,15 +160,7 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			//first create a regex to put our array separators around the tags
 			var str = _returnedText;
-			const string tagsPattern = @"(<tg[0-9]*\>)|(<\/tg[0-9]*\>)|(\<tg[0-9]*/\>)";
-			const string aplhanumericPattern = @"(<tgpt[0-9]*\>)|(<\/tgpt[0-9]*\>)|(\<tgpt[0-9]*/\>)";
-
-			var tagRgx = new Regex(tagsPattern);
-			var tagMatches = tagRgx.Matches(str);
-			if (tagMatches.Count > 0)
-			{
-				str = AddSeparators(str, tagMatches);
-			}
+			const string aplhanumericPattern = @"</?([a-z]*)[0-9]*/?>";
 
 			var alphaRgx = new Regex(aplhanumericPattern);
 			var alphaMatches = alphaRgx.Matches(str);
