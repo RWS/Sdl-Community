@@ -288,8 +288,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 				await Task.Run(() => Parallel.ForEach(preTranslatesegments, segment =>
 				{
-					var translation = HttpUtility.UrlDecode(translator.Translate(_languageDirection, segment.SourceText));
-					segment.PlainTranslation = HttpUtility.HtmlDecode(translation);
+					segment.PlainTranslation = translator.Translate(_languageDirection, segment.SourceText);
 				})).ConfigureAwait(true);
 
 				return preTranslatesegments;
