@@ -287,10 +287,9 @@ namespace Sdl.Community.DeepLMTProvider
 			  var translator = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier);
 
 				await Task.Run(() => Parallel.ForEach(preTranslatesegments, segment =>
-			    {
-				    var translation = HttpUtility.UrlDecode(translator.Translate(_languageDirection,segment.SourceText));
-				    segment.PlainTranslation = HttpUtility.HtmlDecode(translation);
-			    })).ConfigureAwait(true);
+				{
+					segment.PlainTranslation = translator.Translate(_languageDirection, segment.SourceText);
+				})).ConfigureAwait(true);
 
 			    return preTranslatesegments;
 		    }
