@@ -40,7 +40,7 @@ namespace IATETerminologyProvider.Ui
 				if (terms.Count > 0)
 				{
 					lblTermText.Text = terms[0].Value;
-					CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblTermText.Text.ToLower());
+					lblTermText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblTermText.Text.ToLower());
 
 					lblDefinitionText.Text = terms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault() != null
 						? terms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault().Value
@@ -49,17 +49,17 @@ namespace IATETerminologyProvider.Ui
 					lblDomainText.Text = terms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault() != null
 						? terms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault().Value
 						: string.Empty;
-					CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblDomainText.Text.ToLower());
+					lblDomainText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblDomainText.Text.ToLower());
 
 					lblSubdomainText.Text = terms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault() != null
 						? terms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault().Value
 						: string.Empty;
-					CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblSubdomainText.Text.ToLower());
+					lblSubdomainText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblSubdomainText.Text.ToLower());
 
 					lblTermTypeText.Text = terms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault() != null
 						? terms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault().Value
 						: string.Empty;
-					CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblTermTypeText.Text.ToLower());
+					lblTermTypeText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblTermTypeText.Text.ToLower());
 				}
 				ShowFields();
 			}
