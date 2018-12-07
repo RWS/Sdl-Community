@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.mainTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.headerLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.descriptionLbl = new System.Windows.Forms.Label();
             this.settingsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.customSettingsGroupBox = new System.Windows.Forms.GroupBox();
             this.customSettingsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -62,7 +63,6 @@
             this.submitBtn = new System.Windows.Forms.Button();
             this.chkIsReadOnly = new System.Windows.Forms.CheckBox();
             this.providerSettingsBindingSource3 = new System.Windows.Forms.BindingSource(this.components);
-            this.descriptionLbl = new System.Windows.Forms.Label();
             this.mainTableLayout.SuspendLayout();
             this.headerLayoutPanel.SuspendLayout();
             this.settingsLayoutPanel.SuspendLayout();
@@ -109,9 +109,21 @@
             this.headerLayoutPanel.Name = "headerLayoutPanel";
             this.headerLayoutPanel.RowCount = 1;
             this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 63F));
+            this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 64F));
             this.headerLayoutPanel.Size = new System.Drawing.Size(631, 64);
             this.headerLayoutPanel.TabIndex = 0;
+            // 
+            // descriptionLbl
+            // 
+            this.descriptionLbl.AutoSize = true;
+            this.descriptionLbl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.descriptionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.descriptionLbl.Location = new System.Drawing.Point(3, 0);
+            this.descriptionLbl.Name = "descriptionLbl";
+            this.descriptionLbl.Size = new System.Drawing.Size(625, 64);
+            this.descriptionLbl.TabIndex = 0;
+            this.descriptionLbl.Text = "label1";
+            this.descriptionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // settingsLayoutPanel
             // 
@@ -394,7 +406,7 @@
             // 
             this.chkIsReadOnly.AutoSize = true;
             this.chkIsReadOnly.Location = new System.Drawing.Point(98, 2);
-            this.chkIsReadOnly.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chkIsReadOnly.Margin = new System.Windows.Forms.Padding(2);
             this.chkIsReadOnly.Name = "chkIsReadOnly";
             this.chkIsReadOnly.Size = new System.Drawing.Size(87, 17);
             this.chkIsReadOnly.TabIndex = 16;
@@ -404,18 +416,6 @@
             // providerSettingsBindingSource3
             // 
             this.providerSettingsBindingSource3.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
-            // 
-            // descriptionLbl
-            // 
-            this.descriptionLbl.AutoSize = true;
-            this.descriptionLbl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.descriptionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.descriptionLbl.Location = new System.Drawing.Point(3, 0);
-            this.descriptionLbl.Name = "descriptionLbl";
-            this.descriptionLbl.Size = new System.Drawing.Size(625, 64);
-            this.descriptionLbl.TabIndex = 0;
-            this.descriptionLbl.Text = "label1";
-            this.descriptionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Settings
             // 

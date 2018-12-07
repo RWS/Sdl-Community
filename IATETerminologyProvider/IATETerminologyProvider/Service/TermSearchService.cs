@@ -211,7 +211,7 @@ namespace IATETerminologyProvider.Service
 		{
 			var result = string.Empty;
 			int subdomainNo = 0;
-			foreach (var subdomain in _subdomains)
+			foreach (var subdomain in _subdomains.ToList())
 			{
 				subdomainNo++;
 				result+= $"{ subdomainNo}.{subdomain}. ";

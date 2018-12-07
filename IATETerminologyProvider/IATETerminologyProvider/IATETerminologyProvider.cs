@@ -52,11 +52,14 @@ namespace IATETerminologyProvider
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
 			var searchService = new TermSearchService(_providerSettings);
-			var t = Task.Factory.StartNew(() =>
+			var textResults = text.Split(' ').ToList();
+			_termsResult.Clear();
+			
+			Parallel.ForEach(textResults, (textResult) =>
 			{
-				_termsResult = searchService.GetTerms(text, source, destination, maxResultsCount);
+				var termResults = searchService.GetTerms(textResult, source, destination, maxResultsCount);
+				((List<ISearchResult>)_termsResult).AddRange(termResults);
 			});
-			t.Wait();
 
 			if (_termsResult.Count > 0)
 			{
@@ -202,14 +205,15 @@ namespace IATETerminologyProvider
 			else
 			{
 				// add IEntryTerm only for the current ISearchResult term(otherwise it will duplicate all the term for each ISearchResult term)				
-				foreach (var term in terms)
+				foreach (SearchResultModel term in terms)
 				{
 					// add terms for the target
 					if (!term.Language.Name.Equals(sourceLanguage.Locale.Parent.DisplayName))
 					{
 						var entryTerm = new EntryTerm
 						{
-							Value = term.Text
+							Value = term.Text,
+							Fields = SetEntryFields(term)
 						};
 						entryTerms.Add(entryTerm);
 					}

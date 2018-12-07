@@ -156,6 +156,12 @@
     <Compile Include="Service\PersistenceService.cs" />
     <Compile Include="Service\TermSearchService.cs" />
     <Compile Include="Service\TermTypeService.cs" />
+    <Compile Include="Ui\IATETermsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ui\IATETermsControl.Designer.cs">
+      <DependentUpon>IATETermsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ui\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -170,6 +176,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="LanguageFlags\german.png" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -185,9 +192,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ui\IATETermsControl.resx">
+      <DependentUpon>IATETermsControl.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
