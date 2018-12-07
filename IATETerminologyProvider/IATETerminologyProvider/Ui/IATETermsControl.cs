@@ -48,6 +48,9 @@ namespace IATETerminologyProvider.Ui
 					lblSubdomainText.Text = terms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault() != null
 						? terms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault().Value
 						: string.Empty;
+					lblTermTypeText.Text = terms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault() != null
+						? terms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault().Value
+						: string.Empty;
 				}
 				ShowFields();
 			}
@@ -62,6 +65,7 @@ namespace IATETerminologyProvider.Ui
 			lblDefinition.Visible = !string.IsNullOrEmpty(lblDefinitionText.Text) ? true : false;
 			lblDomain.Visible = !string.IsNullOrEmpty(lblDomainText.Text) ? true : false;
 			lblSubDomain.Visible  = !string.IsNullOrEmpty(lblSubdomainText.Text) ? true : false;
+			lblTermType.Visible = !string.IsNullOrEmpty(lblTermTypeText.Text) ? true : false;
 		}
 		#endregion
 	}

@@ -18,7 +18,7 @@ namespace IATETerminologyProvider.Service
 		private ProviderSettings _providerSettings;
 		private ObservableCollection<ItemsResponseModel> _domains = DomainService.GetDomains();
 		private List<string> _subdomains = new List<string>();
-
+		private ObservableCollection<TermTypeModel> _termTypes = TermTypeService.GetTermTypes();
 		private static int _id = new int();
 		#endregion
 
@@ -113,6 +113,7 @@ namespace IATETerminologyProvider.Service
 							{
 								var termEntry = languageToken.FirstOrDefault().SelectToken("term_entries").Last;
 								var termValue = termEntry.SelectToken("term_value").ToString();
+								var termType = GetTermTypeByCode(termEntry.SelectToken("type").ToString());
 								var langTwoLetters = languageToken.Name;
 								var definition = languageToken.Children().FirstOrDefault() != null
 									? languageToken.Children().FirstOrDefault().SelectToken("definition")
@@ -132,7 +133,8 @@ namespace IATETerminologyProvider.Service
 									Language = languageModel,
 									Definition = definition != null ? definition.ToString() : string.Empty,
 									Domain = domain,
-									Subdomain = FormatSubdomain()
+									Subdomain = FormatSubdomain(),
+									TermType = termType
 								};
 								termsList.Add(termResult);
 							}
@@ -217,6 +219,19 @@ namespace IATETerminologyProvider.Service
 				result+= $"{ subdomainNo}.{subdomain}. ";
 			}
 			return result.TrimEnd(' ');
+		}
+
+		// Return term type name based on the term type code
+		private string GetTermTypeByCode(string termTypeCode)
+		{
+			int result;
+			int typeCode = int.TryParse(termTypeCode, out result) ? int.Parse(termTypeCode) : 0;
+
+			if (_termTypes.Count > 0)
+			{
+				return _termTypes.FirstOrDefault(t => t.Code == typeCode).Name;
+			}
+			return string.Empty;
 		}
 		#endregion
 	}

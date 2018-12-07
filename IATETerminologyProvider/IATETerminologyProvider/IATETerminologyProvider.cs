@@ -255,6 +255,16 @@ namespace IATETerminologyProvider
 				};
 				entryFields.Add(domainEntryField);
 			}
+
+			if (!string.IsNullOrEmpty(searchResultModel.TermType))
+			{
+				var termTypeEntryField = new EntryField
+				{
+					Name = "TermType",
+					Value = searchResultModel.TermType
+				};
+				entryFields.Add(termTypeEntryField);
+			}
 			return entryFields;
 		}
 		#endregion
