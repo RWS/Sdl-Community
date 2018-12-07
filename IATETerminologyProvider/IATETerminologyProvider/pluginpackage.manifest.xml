@@ -7,9 +7,6 @@
 	<Include>
 		<File>Newtonsoft.Json.dll</File>
 		<File>RestSharp.dll</File>
-		<File>MahApps.Metro.dll</File>
-		<File>System.Windows.Interactivity.dll</File>
-		<File>FontAwesome.WPF.dll</File>
 	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>
