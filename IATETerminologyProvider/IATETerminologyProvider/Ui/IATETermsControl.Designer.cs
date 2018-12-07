@@ -28,7 +28,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IATETermsControl));
             this.lblLanguageText = new System.Windows.Forms.Label();
             this.lblDefinition = new System.Windows.Forms.Label();
             this.lblDefinitionText = new System.Windows.Forms.Label();
@@ -45,10 +44,10 @@
             // lblLanguageText
             // 
             this.lblLanguageText.AutoSize = true;
-            this.lblLanguageText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lblLanguageText.Location = new System.Drawing.Point(44, 7);
+            this.lblLanguageText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.lblLanguageText.Location = new System.Drawing.Point(40, 7);
             this.lblLanguageText.Name = "lblLanguageText";
-            this.lblLanguageText.Size = new System.Drawing.Size(0, 15);
+            this.lblLanguageText.Size = new System.Drawing.Size(0, 16);
             this.lblLanguageText.TabIndex = 0;
             // 
             // lblDefinition
@@ -108,10 +107,9 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(0, 7);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(35, 23);
+            this.pictureBox1.Size = new System.Drawing.Size(30, 23);
             this.pictureBox1.TabIndex = 7;
             this.pictureBox1.TabStop = false;
             // 

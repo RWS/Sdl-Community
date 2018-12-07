@@ -126,6 +126,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Helpers\LanguageFlags.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="IATETerminologyProviderWinFormsUI.cs" />
     <Compile Include="IATETerminologyProviderViewerWinFormsUI.cs" />
@@ -176,7 +177,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LanguageFlags\german.png" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Windows.Forms;
+using IATETerminologyProvider.Helpers;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace IATETerminologyProvider.Ui
@@ -26,10 +27,13 @@ namespace IATETerminologyProvider.Ui
 		#region Public Methods
 		public void JumpToTerm(IEntry entry)
 		{
-			//get the entry by Id from all the terms result and map the following values from the target language
+			var languageFlags = new LanguageFlags();
 			var entryLanguage = entry.Languages[1];
+
+			//get the entry by Id from all the terms result and map the following values from the target language
 			if (entryLanguage != null)
 			{
+				pictureBox1.Load(languageFlags.GetImageStudioCodeByLanguageCode(entryLanguage.Locale.Name));
 				lblLanguageText.Text = entryLanguage.Name;
 				var terms = entryLanguage.Terms;
 				if (terms.Count > 0)
