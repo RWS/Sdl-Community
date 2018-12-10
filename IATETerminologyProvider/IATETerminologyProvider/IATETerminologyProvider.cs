@@ -54,7 +54,8 @@ namespace IATETerminologyProvider
 			var searchService = new TermSearchService(_providerSettings);
 			var textResults = text.Split(' ').ToList();
 			_termsResult.Clear();
-			
+
+			//search terms for each word in text (active segment)
 			Parallel.ForEach(textResults, (textResult) =>
 			{
 				var termResults = searchService.GetTerms(textResult, source, destination, maxResultsCount);
@@ -170,7 +171,6 @@ namespace IATETerminologyProvider
 				var entryLanguage = new EntryLanguageModel
 				{
 					Fields = !language.Name.Equals(sourceLanguage.Name) ? SetEntryFields(termResult) : new List<IEntryField>(),
-					//Fields = new List<IEntryField>(),
 					Locale = language.Locale,
 					Name = language.Name,
 					ParentEntry = null,
