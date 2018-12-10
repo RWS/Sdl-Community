@@ -42,7 +42,7 @@ namespace IATETerminologyProvider.Ui
 					lblTermText.Text = terms[0].Value;
 					lblTermText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblTermText.Text.ToLower());
 
-					lblDefinitionText.Text = terms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault() != null
+					txtDefinitionText.Text = terms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault() != null
 						? terms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault().Value
 						: string.Empty;
 
@@ -71,7 +71,7 @@ namespace IATETerminologyProvider.Ui
 		{
 			lblLanguageText.Visible = !string.IsNullOrEmpty(lblLanguageText.Text) ? true : false;
 			lblTerm.Visible = !string.IsNullOrEmpty(lblTermText.Text) ? true : false;
-			lblDefinition.Visible = !string.IsNullOrEmpty(lblDefinitionText.Text) ? true : false;
+			lblDefinition.Visible = !string.IsNullOrEmpty(txtDefinitionText.Text) ? true : false;
 			lblDomain.Visible = !string.IsNullOrEmpty(lblDomainText.Text) ? true : false;
 			lblSubDomain.Visible  = !string.IsNullOrEmpty(lblSubdomainText.Text) ? true : false;
 			lblTermType.Visible = !string.IsNullOrEmpty(lblTermTypeText.Text) ? true : false;

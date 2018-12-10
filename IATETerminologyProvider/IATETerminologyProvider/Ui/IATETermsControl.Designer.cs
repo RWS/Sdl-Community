@@ -29,7 +29,6 @@
 		private void InitializeComponent()
 		{
             this.lblLanguageText = new System.Windows.Forms.Label();
-            this.lblDefinitionText = new System.Windows.Forms.Label();
             this.lblDomain = new System.Windows.Forms.Label();
             this.lblSubDomain = new System.Windows.Forms.Label();
             this.lblSubdomainText = new System.Windows.Forms.Label();
@@ -40,6 +39,7 @@
             this.lblTermType = new System.Windows.Forms.Label();
             this.lblTermTypeText = new System.Windows.Forms.Label();
             this.lblDefinition = new System.Windows.Forms.Label();
+            this.txtDefinitionText = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,17 +52,8 @@
             this.lblLanguageText.Size = new System.Drawing.Size(0, 16);
             this.lblLanguageText.TabIndex = 0;
             // 
-            // lblDefinitionText
-            // 
-            this.lblDefinitionText.AutoSize = true;
-            this.lblDefinitionText.Location = new System.Drawing.Point(83, 115);
-            this.lblDefinitionText.Name = "lblDefinitionText";
-            this.lblDefinitionText.Size = new System.Drawing.Size(0, 13);
-            this.lblDefinitionText.TabIndex = 2;
-            // 
             // lblDomain
             // 
-            this.lblDomain.AutoSize = true;
             this.lblDomain.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.lblDomain.Location = new System.Drawing.Point(20, 78);
             this.lblDomain.Name = "lblDomain";
@@ -153,11 +144,23 @@
             this.lblDefinition.TabIndex = 12;
             this.lblDefinition.Text = "Definition:";
             // 
+            // txtDefinitionText
+            // 
+            this.txtDefinitionText.BackColor = System.Drawing.SystemColors.Window;
+            this.txtDefinitionText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtDefinitionText.Location = new System.Drawing.Point(84, 115);
+            this.txtDefinitionText.Multiline = true;
+            this.txtDefinitionText.Name = "txtDefinitionText";
+            this.txtDefinitionText.ReadOnly = true;
+            this.txtDefinitionText.Size = new System.Drawing.Size(400, 52);
+            this.txtDefinitionText.TabIndex = 13;
+            // 
             // IATETermsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
+            this.Controls.Add(this.txtDefinitionText);
             this.Controls.Add(this.lblDefinition);
             this.Controls.Add(this.lblTermTypeText);
             this.Controls.Add(this.lblTermType);
@@ -168,7 +171,6 @@
             this.Controls.Add(this.lblSubdomainText);
             this.Controls.Add(this.lblSubDomain);
             this.Controls.Add(this.lblDomain);
-            this.Controls.Add(this.lblDefinitionText);
             this.Controls.Add(this.lblLanguageText);
             this.Name = "IATETermsControl";
             this.Size = new System.Drawing.Size(508, 506);
@@ -181,7 +183,6 @@
 		#endregion
 
 		private System.Windows.Forms.Label lblLanguageText;
-		private System.Windows.Forms.Label lblDefinitionText;
 		private System.Windows.Forms.Label lblDomain;
 		private System.Windows.Forms.Label lblSubDomain;
 		private System.Windows.Forms.Label lblSubdomainText;
@@ -192,5 +193,6 @@
 		private System.Windows.Forms.Label lblTermType;
 		private System.Windows.Forms.Label lblTermTypeText;
 		private System.Windows.Forms.Label lblDefinition;
+		private System.Windows.Forms.TextBox txtDefinitionText;
 	}
 }
