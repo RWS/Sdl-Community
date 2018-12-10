@@ -87,6 +87,10 @@
       <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.Terminology.TerminologyProvider.Core">
       <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
@@ -119,6 +123,10 @@
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\LanguageFlags.cs" />
     <Compile Include="Helpers\Utils.cs" />
+    <Compile Include="IATEProviderTellMe\IATECommunitySupportAction.cs" />
+    <Compile Include="IATEProviderTellMe\IATEContactAction.cs" />
+    <Compile Include="IATEProviderTellMe\IATEStoreAction.cs" />
+    <Compile Include="IATEProviderTellMe\IATETellMeProvider.cs" />
     <Compile Include="IATETerminologyProviderWinFormsUI.cs" />
     <Compile Include="IATETerminologyProviderViewerWinFormsUI.cs" />
     <Compile Include="IATETerminologyProvider.cs" />
@@ -171,6 +179,9 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\ForumIcon.ico" />
+    <None Include="Resources\Iate_logo.ico" />
+    <None Include="Resources\Download.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
