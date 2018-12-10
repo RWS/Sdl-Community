@@ -152,7 +152,7 @@
             this.txtDefinitionText.Multiline = true;
             this.txtDefinitionText.Name = "txtDefinitionText";
             this.txtDefinitionText.ReadOnly = true;
-            this.txtDefinitionText.Size = new System.Drawing.Size(400, 52);
+            this.txtDefinitionText.Size = new System.Drawing.Size(513, 52);
             this.txtDefinitionText.TabIndex = 13;
             // 
             // IATETermsControl
@@ -173,7 +173,7 @@
             this.Controls.Add(this.lblDomain);
             this.Controls.Add(this.lblLanguageText);
             this.Name = "IATETermsControl";
-            this.Size = new System.Drawing.Size(508, 506);
+            this.Size = new System.Drawing.Size(843, 486);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
