@@ -46,7 +46,7 @@ namespace IATETerminologyProvider.Ui
 						: string.Empty;
 
 					lblDomainText.Text = terms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault() != null
-						? Utils.UppercaseFirstLetter(terms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault().Value)
+						? Utils.UppercaseFirstLetter(terms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault().Value.ToLower())
 						: string.Empty;
 
 					lblSubdomainText.Text = terms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault() != null
