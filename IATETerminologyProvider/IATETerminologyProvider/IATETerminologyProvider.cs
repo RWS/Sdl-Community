@@ -197,7 +197,8 @@ namespace IATETerminologyProvider
 				{
 					var entryTerm = new EntryTerm
 					{
-						Value = sourceLangTerm.Text
+						Value = sourceLangTerm.Text,
+						Fields = SetEntryFields((SearchResultModel)sourceLangTerm)
 					};
 					entryTerms.Add(entryTerm);
 				}

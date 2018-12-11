@@ -28,153 +28,292 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.lblLanguageText = new System.Windows.Forms.Label();
-            this.lblDomain = new System.Windows.Forms.Label();
-            this.lblSubDomain = new System.Windows.Forms.Label();
-            this.lblSubdomainText = new System.Windows.Forms.Label();
-            this.lblDomainText = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.lblTerm = new System.Windows.Forms.Label();
-            this.lblTermText = new System.Windows.Forms.Label();
-            this.lblTermType = new System.Windows.Forms.Label();
-            this.lblTermTypeText = new System.Windows.Forms.Label();
-            this.lblDefinition = new System.Windows.Forms.Label();
-            this.txtDefinitionText = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.lblTargetLanguageText = new System.Windows.Forms.Label();
+            this.lblTargetDomain = new System.Windows.Forms.Label();
+            this.lblTargetSubDomain = new System.Windows.Forms.Label();
+            this.lblTargetSubdomainText = new System.Windows.Forms.Label();
+            this.lblTargetDomainText = new System.Windows.Forms.Label();
+            this.pictureBoxTarget = new System.Windows.Forms.PictureBox();
+            this.lblTargetTerm = new System.Windows.Forms.Label();
+            this.lblTargetTermText = new System.Windows.Forms.Label();
+            this.lblTargetTermType = new System.Windows.Forms.Label();
+            this.lblTargetTermTypeText = new System.Windows.Forms.Label();
+            this.lblTargetDefinition = new System.Windows.Forms.Label();
+            this.txtTargetDefinitionText = new System.Windows.Forms.TextBox();
+            this.txtSourceDefinitionText = new System.Windows.Forms.TextBox();
+            this.lblSourceDefinition = new System.Windows.Forms.Label();
+            this.lblSourceTermTypeText = new System.Windows.Forms.Label();
+            this.lblSourceTermType = new System.Windows.Forms.Label();
+            this.lblSourceTermText = new System.Windows.Forms.Label();
+            this.lblSourceTerm = new System.Windows.Forms.Label();
+            this.pictureBoxSource = new System.Windows.Forms.PictureBox();
+            this.lblSourceDomainText = new System.Windows.Forms.Label();
+            this.lblSourceSubdomainText = new System.Windows.Forms.Label();
+            this.lblSourceSubdomain = new System.Windows.Forms.Label();
+            this.lblSourceDomain = new System.Windows.Forms.Label();
+            this.lblSourceLanguageText = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTarget)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSource)).BeginInit();
             this.SuspendLayout();
             // 
-            // lblLanguageText
+            // lblTargetLanguageText
             // 
-            this.lblLanguageText.AutoSize = true;
-            this.lblLanguageText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lblLanguageText.Location = new System.Drawing.Point(38, 7);
-            this.lblLanguageText.Name = "lblLanguageText";
-            this.lblLanguageText.Size = new System.Drawing.Size(0, 16);
-            this.lblLanguageText.TabIndex = 0;
+            this.lblTargetLanguageText.AutoSize = true;
+            this.lblTargetLanguageText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.lblTargetLanguageText.Location = new System.Drawing.Point(31, 221);
+            this.lblTargetLanguageText.Name = "lblTargetLanguageText";
+            this.lblTargetLanguageText.Size = new System.Drawing.Size(0, 16);
+            this.lblTargetLanguageText.TabIndex = 0;
             // 
-            // lblDomain
+            // lblTargetDomain
             // 
-            this.lblDomain.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblDomain.Location = new System.Drawing.Point(20, 78);
-            this.lblDomain.Name = "lblDomain";
-            this.lblDomain.Size = new System.Drawing.Size(46, 13);
-            this.lblDomain.TabIndex = 3;
-            this.lblDomain.Text = "Domain:";
+            this.lblTargetDomain.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblTargetDomain.Location = new System.Drawing.Point(13, 292);
+            this.lblTargetDomain.Name = "lblTargetDomain";
+            this.lblTargetDomain.Size = new System.Drawing.Size(46, 13);
+            this.lblTargetDomain.TabIndex = 3;
+            this.lblTargetDomain.Text = "Domain:";
             // 
-            // lblSubDomain
+            // lblTargetSubDomain
             // 
-            this.lblSubDomain.AutoSize = true;
-            this.lblSubDomain.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblSubDomain.Location = new System.Drawing.Point(20, 97);
-            this.lblSubDomain.Name = "lblSubDomain";
-            this.lblSubDomain.Size = new System.Drawing.Size(63, 13);
-            this.lblSubDomain.TabIndex = 4;
-            this.lblSubDomain.Text = "Subdomain:";
+            this.lblTargetSubDomain.AutoSize = true;
+            this.lblTargetSubDomain.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblTargetSubDomain.Location = new System.Drawing.Point(13, 311);
+            this.lblTargetSubDomain.Name = "lblTargetSubDomain";
+            this.lblTargetSubDomain.Size = new System.Drawing.Size(63, 13);
+            this.lblTargetSubDomain.TabIndex = 4;
+            this.lblTargetSubDomain.Text = "Subdomain:";
             // 
-            // lblSubdomainText
+            // lblTargetSubdomainText
             // 
-            this.lblSubdomainText.AutoSize = true;
-            this.lblSubdomainText.Location = new System.Drawing.Point(83, 98);
-            this.lblSubdomainText.Name = "lblSubdomainText";
-            this.lblSubdomainText.Size = new System.Drawing.Size(0, 13);
-            this.lblSubdomainText.TabIndex = 5;
+            this.lblTargetSubdomainText.AutoSize = true;
+            this.lblTargetSubdomainText.Location = new System.Drawing.Point(76, 312);
+            this.lblTargetSubdomainText.Name = "lblTargetSubdomainText";
+            this.lblTargetSubdomainText.Size = new System.Drawing.Size(0, 13);
+            this.lblTargetSubdomainText.TabIndex = 5;
             // 
-            // lblDomainText
+            // lblTargetDomainText
             // 
-            this.lblDomainText.AutoSize = true;
-            this.lblDomainText.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lblDomainText.Location = new System.Drawing.Point(83, 78);
-            this.lblDomainText.Name = "lblDomainText";
-            this.lblDomainText.Size = new System.Drawing.Size(0, 13);
-            this.lblDomainText.TabIndex = 6;
+            this.lblTargetDomainText.AutoSize = true;
+            this.lblTargetDomainText.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblTargetDomainText.Location = new System.Drawing.Point(76, 292);
+            this.lblTargetDomainText.Name = "lblTargetDomainText";
+            this.lblTargetDomainText.Size = new System.Drawing.Size(0, 13);
+            this.lblTargetDomainText.TabIndex = 6;
             // 
-            // pictureBox1
+            // pictureBoxTarget
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(10, 7);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(30, 23);
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxTarget.Location = new System.Drawing.Point(3, 221);
+            this.pictureBoxTarget.Name = "pictureBoxTarget";
+            this.pictureBoxTarget.Size = new System.Drawing.Size(30, 23);
+            this.pictureBoxTarget.TabIndex = 7;
+            this.pictureBoxTarget.TabStop = false;
             // 
-            // lblTerm
+            // lblTargetTerm
             // 
-            this.lblTerm.AutoSize = true;
-            this.lblTerm.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblTerm.Location = new System.Drawing.Point(20, 42);
-            this.lblTerm.Name = "lblTerm";
-            this.lblTerm.Size = new System.Drawing.Size(34, 13);
-            this.lblTerm.TabIndex = 8;
-            this.lblTerm.Text = "Term:";
+            this.lblTargetTerm.AutoSize = true;
+            this.lblTargetTerm.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblTargetTerm.Location = new System.Drawing.Point(13, 256);
+            this.lblTargetTerm.Name = "lblTargetTerm";
+            this.lblTargetTerm.Size = new System.Drawing.Size(34, 13);
+            this.lblTargetTerm.TabIndex = 8;
+            this.lblTargetTerm.Text = "Term:";
             // 
-            // lblTermText
+            // lblTargetTermText
             // 
-            this.lblTermText.AutoSize = true;
-            this.lblTermText.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblTermText.Location = new System.Drawing.Point(83, 42);
-            this.lblTermText.Name = "lblTermText";
-            this.lblTermText.Size = new System.Drawing.Size(0, 13);
-            this.lblTermText.TabIndex = 9;
+            this.lblTargetTermText.AutoSize = true;
+            this.lblTargetTermText.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblTargetTermText.Location = new System.Drawing.Point(76, 256);
+            this.lblTargetTermText.Name = "lblTargetTermText";
+            this.lblTargetTermText.Size = new System.Drawing.Size(0, 13);
+            this.lblTargetTermText.TabIndex = 9;
             // 
-            // lblTermType
+            // lblTargetTermType
             // 
-            this.lblTermType.AutoSize = true;
-            this.lblTermType.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblTermType.Location = new System.Drawing.Point(20, 60);
-            this.lblTermType.Name = "lblTermType";
-            this.lblTermType.Size = new System.Drawing.Size(61, 13);
-            this.lblTermType.TabIndex = 10;
-            this.lblTermType.Text = "Term Type:";
+            this.lblTargetTermType.AutoSize = true;
+            this.lblTargetTermType.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblTargetTermType.Location = new System.Drawing.Point(13, 274);
+            this.lblTargetTermType.Name = "lblTargetTermType";
+            this.lblTargetTermType.Size = new System.Drawing.Size(61, 13);
+            this.lblTargetTermType.TabIndex = 10;
+            this.lblTargetTermType.Text = "Term Type:";
             // 
-            // lblTermTypeText
+            // lblTargetTermTypeText
             // 
-            this.lblTermTypeText.AutoSize = true;
-            this.lblTermTypeText.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblTermTypeText.Location = new System.Drawing.Point(83, 60);
-            this.lblTermTypeText.Name = "lblTermTypeText";
-            this.lblTermTypeText.Size = new System.Drawing.Size(0, 13);
-            this.lblTermTypeText.TabIndex = 11;
+            this.lblTargetTermTypeText.AutoSize = true;
+            this.lblTargetTermTypeText.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblTargetTermTypeText.Location = new System.Drawing.Point(76, 274);
+            this.lblTargetTermTypeText.Name = "lblTargetTermTypeText";
+            this.lblTargetTermTypeText.Size = new System.Drawing.Size(0, 13);
+            this.lblTargetTermTypeText.TabIndex = 11;
             // 
-            // lblDefinition
+            // lblTargetDefinition
             // 
-            this.lblDefinition.AutoSize = true;
-            this.lblDefinition.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblDefinition.Location = new System.Drawing.Point(20, 115);
-            this.lblDefinition.Name = "lblDefinition";
-            this.lblDefinition.Size = new System.Drawing.Size(54, 13);
-            this.lblDefinition.TabIndex = 12;
-            this.lblDefinition.Text = "Definition:";
+            this.lblTargetDefinition.AutoSize = true;
+            this.lblTargetDefinition.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblTargetDefinition.Location = new System.Drawing.Point(13, 327);
+            this.lblTargetDefinition.Name = "lblTargetDefinition";
+            this.lblTargetDefinition.Size = new System.Drawing.Size(54, 13);
+            this.lblTargetDefinition.TabIndex = 12;
+            this.lblTargetDefinition.Text = "Definition:";
             // 
-            // txtDefinitionText
+            // txtTargetDefinitionText
             // 
-            this.txtDefinitionText.BackColor = System.Drawing.SystemColors.Window;
-            this.txtDefinitionText.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtDefinitionText.Location = new System.Drawing.Point(86, 115);
-            this.txtDefinitionText.Multiline = true;
-            this.txtDefinitionText.Name = "txtDefinitionText";
-            this.txtDefinitionText.ReadOnly = true;
-            this.txtDefinitionText.Size = new System.Drawing.Size(513, 52);
-            this.txtDefinitionText.TabIndex = 13;
+            this.txtTargetDefinitionText.BackColor = System.Drawing.SystemColors.Window;
+            this.txtTargetDefinitionText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtTargetDefinitionText.Location = new System.Drawing.Point(82, 328);
+            this.txtTargetDefinitionText.Multiline = true;
+            this.txtTargetDefinitionText.Name = "txtTargetDefinitionText";
+            this.txtTargetDefinitionText.ReadOnly = true;
+            this.txtTargetDefinitionText.Size = new System.Drawing.Size(513, 52);
+            this.txtTargetDefinitionText.TabIndex = 13;
+            // 
+            // txtSourceDefinitionText
+            // 
+            this.txtSourceDefinitionText.BackColor = System.Drawing.SystemColors.Window;
+            this.txtSourceDefinitionText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtSourceDefinitionText.Location = new System.Drawing.Point(79, 108);
+            this.txtSourceDefinitionText.Multiline = true;
+            this.txtSourceDefinitionText.Name = "txtSourceDefinitionText";
+            this.txtSourceDefinitionText.ReadOnly = true;
+            this.txtSourceDefinitionText.Size = new System.Drawing.Size(513, 52);
+            this.txtSourceDefinitionText.TabIndex = 25;
+            // 
+            // lblSourceDefinition
+            // 
+            this.lblSourceDefinition.AutoSize = true;
+            this.lblSourceDefinition.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblSourceDefinition.Location = new System.Drawing.Point(13, 108);
+            this.lblSourceDefinition.Name = "lblSourceDefinition";
+            this.lblSourceDefinition.Size = new System.Drawing.Size(54, 13);
+            this.lblSourceDefinition.TabIndex = 24;
+            this.lblSourceDefinition.Text = "Definition:";
+            // 
+            // lblSourceTermTypeText
+            // 
+            this.lblSourceTermTypeText.AutoSize = true;
+            this.lblSourceTermTypeText.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblSourceTermTypeText.Location = new System.Drawing.Point(76, 53);
+            this.lblSourceTermTypeText.Name = "lblSourceTermTypeText";
+            this.lblSourceTermTypeText.Size = new System.Drawing.Size(0, 13);
+            this.lblSourceTermTypeText.TabIndex = 23;
+            // 
+            // lblSourceTermType
+            // 
+            this.lblSourceTermType.AutoSize = true;
+            this.lblSourceTermType.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblSourceTermType.Location = new System.Drawing.Point(13, 53);
+            this.lblSourceTermType.Name = "lblSourceTermType";
+            this.lblSourceTermType.Size = new System.Drawing.Size(61, 13);
+            this.lblSourceTermType.TabIndex = 22;
+            this.lblSourceTermType.Text = "Term Type:";
+            // 
+            // lblSourceTermText
+            // 
+            this.lblSourceTermText.AutoSize = true;
+            this.lblSourceTermText.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblSourceTermText.Location = new System.Drawing.Point(76, 35);
+            this.lblSourceTermText.Name = "lblSourceTermText";
+            this.lblSourceTermText.Size = new System.Drawing.Size(0, 13);
+            this.lblSourceTermText.TabIndex = 21;
+            // 
+            // lblSourceTerm
+            // 
+            this.lblSourceTerm.AutoSize = true;
+            this.lblSourceTerm.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblSourceTerm.Location = new System.Drawing.Point(13, 35);
+            this.lblSourceTerm.Name = "lblSourceTerm";
+            this.lblSourceTerm.Size = new System.Drawing.Size(34, 13);
+            this.lblSourceTerm.TabIndex = 20;
+            this.lblSourceTerm.Text = "Term:";
+            // 
+            // pictureBoxSource
+            // 
+            this.pictureBoxSource.Location = new System.Drawing.Point(3, 0);
+            this.pictureBoxSource.Name = "pictureBoxSource";
+            this.pictureBoxSource.Size = new System.Drawing.Size(30, 23);
+            this.pictureBoxSource.TabIndex = 19;
+            this.pictureBoxSource.TabStop = false;
+            // 
+            // lblSourceDomainText
+            // 
+            this.lblSourceDomainText.AutoSize = true;
+            this.lblSourceDomainText.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblSourceDomainText.Location = new System.Drawing.Point(76, 71);
+            this.lblSourceDomainText.Name = "lblSourceDomainText";
+            this.lblSourceDomainText.Size = new System.Drawing.Size(0, 13);
+            this.lblSourceDomainText.TabIndex = 18;
+            // 
+            // lblSourceSubdomainText
+            // 
+            this.lblSourceSubdomainText.AutoSize = true;
+            this.lblSourceSubdomainText.Location = new System.Drawing.Point(76, 91);
+            this.lblSourceSubdomainText.Name = "lblSourceSubdomainText";
+            this.lblSourceSubdomainText.Size = new System.Drawing.Size(0, 13);
+            this.lblSourceSubdomainText.TabIndex = 17;
+            // 
+            // lblSourceSubdomain
+            // 
+            this.lblSourceSubdomain.AutoSize = true;
+            this.lblSourceSubdomain.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblSourceSubdomain.Location = new System.Drawing.Point(13, 90);
+            this.lblSourceSubdomain.Name = "lblSourceSubdomain";
+            this.lblSourceSubdomain.Size = new System.Drawing.Size(63, 13);
+            this.lblSourceSubdomain.TabIndex = 16;
+            this.lblSourceSubdomain.Text = "Subdomain:";
+            // 
+            // lblSourceDomain
+            // 
+            this.lblSourceDomain.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblSourceDomain.Location = new System.Drawing.Point(13, 71);
+            this.lblSourceDomain.Name = "lblSourceDomain";
+            this.lblSourceDomain.Size = new System.Drawing.Size(46, 13);
+            this.lblSourceDomain.TabIndex = 15;
+            this.lblSourceDomain.Text = "Domain:";
+            // 
+            // lblSourceLanguageText
+            // 
+            this.lblSourceLanguageText.AutoSize = true;
+            this.lblSourceLanguageText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.lblSourceLanguageText.Location = new System.Drawing.Point(31, 0);
+            this.lblSourceLanguageText.Name = "lblSourceLanguageText";
+            this.lblSourceLanguageText.Size = new System.Drawing.Size(0, 16);
+            this.lblSourceLanguageText.TabIndex = 14;
             // 
             // IATETermsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.Controls.Add(this.txtDefinitionText);
-            this.Controls.Add(this.lblDefinition);
-            this.Controls.Add(this.lblTermTypeText);
-            this.Controls.Add(this.lblTermType);
-            this.Controls.Add(this.lblTermText);
-            this.Controls.Add(this.lblTerm);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.lblDomainText);
-            this.Controls.Add(this.lblSubdomainText);
-            this.Controls.Add(this.lblSubDomain);
-            this.Controls.Add(this.lblDomain);
-            this.Controls.Add(this.lblLanguageText);
+            this.Controls.Add(this.txtSourceDefinitionText);
+            this.Controls.Add(this.lblSourceDefinition);
+            this.Controls.Add(this.lblSourceTermTypeText);
+            this.Controls.Add(this.lblSourceTermType);
+            this.Controls.Add(this.lblSourceTermText);
+            this.Controls.Add(this.lblSourceTerm);
+            this.Controls.Add(this.pictureBoxSource);
+            this.Controls.Add(this.lblSourceDomainText);
+            this.Controls.Add(this.lblSourceSubdomainText);
+            this.Controls.Add(this.lblSourceSubdomain);
+            this.Controls.Add(this.lblSourceDomain);
+            this.Controls.Add(this.lblSourceLanguageText);
+            this.Controls.Add(this.txtTargetDefinitionText);
+            this.Controls.Add(this.lblTargetDefinition);
+            this.Controls.Add(this.lblTargetTermTypeText);
+            this.Controls.Add(this.lblTargetTermType);
+            this.Controls.Add(this.lblTargetTermText);
+            this.Controls.Add(this.lblTargetTerm);
+            this.Controls.Add(this.pictureBoxTarget);
+            this.Controls.Add(this.lblTargetDomainText);
+            this.Controls.Add(this.lblTargetSubdomainText);
+            this.Controls.Add(this.lblTargetSubDomain);
+            this.Controls.Add(this.lblTargetDomain);
+            this.Controls.Add(this.lblTargetLanguageText);
             this.Name = "IATETermsControl";
-            this.Size = new System.Drawing.Size(843, 486);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.Size = new System.Drawing.Size(761, 517);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTarget)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -182,17 +321,29 @@
 
 		#endregion
 
-		private System.Windows.Forms.Label lblLanguageText;
-		private System.Windows.Forms.Label lblDomain;
-		private System.Windows.Forms.Label lblSubDomain;
-		private System.Windows.Forms.Label lblSubdomainText;
-		private System.Windows.Forms.Label lblDomainText;
-		private System.Windows.Forms.PictureBox pictureBox1;
-		private System.Windows.Forms.Label lblTerm;
-		private System.Windows.Forms.Label lblTermText;
-		private System.Windows.Forms.Label lblTermType;
-		private System.Windows.Forms.Label lblTermTypeText;
-		private System.Windows.Forms.Label lblDefinition;
-		private System.Windows.Forms.TextBox txtDefinitionText;
+		private System.Windows.Forms.Label lblTargetLanguageText;
+		private System.Windows.Forms.Label lblTargetDomain;
+		private System.Windows.Forms.Label lblTargetSubDomain;
+		private System.Windows.Forms.Label lblTargetSubdomainText;
+		private System.Windows.Forms.Label lblTargetDomainText;
+		private System.Windows.Forms.PictureBox pictureBoxTarget;
+		private System.Windows.Forms.Label lblTargetTerm;
+		private System.Windows.Forms.Label lblTargetTermText;
+		private System.Windows.Forms.Label lblTargetTermType;
+		private System.Windows.Forms.Label lblTargetTermTypeText;
+		private System.Windows.Forms.Label lblTargetDefinition;
+		private System.Windows.Forms.TextBox txtTargetDefinitionText;
+		private System.Windows.Forms.TextBox txtSourceDefinitionText;
+		private System.Windows.Forms.Label lblSourceDefinition;
+		private System.Windows.Forms.Label lblSourceTermTypeText;
+		private System.Windows.Forms.Label lblSourceTermType;
+		private System.Windows.Forms.Label lblSourceTermText;
+		private System.Windows.Forms.Label lblSourceTerm;
+		private System.Windows.Forms.PictureBox pictureBoxSource;
+		private System.Windows.Forms.Label lblSourceDomainText;
+		private System.Windows.Forms.Label lblSourceSubdomainText;
+		private System.Windows.Forms.Label lblSourceSubdomain;
+		private System.Windows.Forms.Label lblSourceDomain;
+		private System.Windows.Forms.Label lblSourceLanguageText;
 	}
 }
