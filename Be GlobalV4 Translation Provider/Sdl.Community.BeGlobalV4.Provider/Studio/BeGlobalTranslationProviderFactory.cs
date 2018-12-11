@@ -7,7 +7,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 	[TranslationProviderFactory(Id = "BeGlobalTranslationProviderFactory",
 		Name = "BeGlobalTranslationProviderFactory",
 		Description = "BeGlobal4 Translation Provider")]
-	public class BeGlobalTranslationProviderFactory	: ITranslationProviderFactory
+	public class BeGlobalTranslationProviderFactory : ITranslationProviderFactory
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
@@ -24,15 +24,24 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			else
 			{
-				credentialStore.AddCredential(originalUri, new TranslationProviderCredential(originalUri.ToString(), true));	
+				credentialStore.AddCredential(originalUri, new TranslationProviderCredential(originalUri.ToString(), true));
 			}
 
 			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", options.ClientId,
 				options.ClientSecret, string.Empty, string.Empty, options.Model, options.UseClientAuthentication);
-			var accountId = beGlobalTranslator.GetUserInformation();
+
+			int accountId;
+			if (options.UseClientAuthentication)
+			{
+				accountId = beGlobalTranslator.GetClientInformation();
+			}
+			else
+			{
+				accountId = beGlobalTranslator.GetUserInformation();
+			}
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
 			options.SubscriptionInfo = subscriptionInfo;
-			return  new BeGlobalTranslationProvider(options);
+			return new BeGlobalTranslationProvider(options);
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
@@ -47,7 +56,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			return supportsProvider;
 		}
 
-	
+
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
 		{

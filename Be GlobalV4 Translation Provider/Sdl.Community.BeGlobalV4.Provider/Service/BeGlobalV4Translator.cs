@@ -50,6 +50,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				};
 				request.AddBody(new { username = user, password = password });
 			}
+			request.AddHeader("Trace-ID", Guid.NewGuid().ToString());
 			request.RequestFormat = DataFormat.Json;
 			var response = _client.Execute(request);
 			if (response.StatusCode != System.Net.HttpStatusCode.OK)
@@ -71,7 +72,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			return json != null ? json.translation[0] : string.Empty;
 		}
 
-		public int GetUserInformation()
+		public int GetClientInformation()
 		{
 			var request = new RestRequest("/accounts/api-credentials/self")
 			{
@@ -79,7 +80,26 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			};
 			var response = _client.Execute(request);
 			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
-			return user.AccountId;
+			if (user != null)
+			{
+				return user.AccountId;
+			}
+			return 0;
+		}
+
+		public int GetUserInformation()
+		{
+			var request = new RestRequest("/accounts/users/self")
+			{
+				RequestFormat = DataFormat.Json
+			};
+			var response = _client.Execute(request);
+			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
+			if (user != null)
+			{
+				return user.AccountId;
+			}
+			return 0;
 		}
 
 		public SubscriptionInfo GetLanguagePairs(string accountId)
@@ -114,9 +134,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				if (response.Content.Contains("does not exist"))
 				{
-					throw  new Exception("Language pair or engine model selected does not exist");
+					throw new Exception("Language pair or engine model selected does not exist");
 				}
-			}  
+			}
 			dynamic json = JsonConvert.DeserializeObject(response.Content);
 			return json;
 		}

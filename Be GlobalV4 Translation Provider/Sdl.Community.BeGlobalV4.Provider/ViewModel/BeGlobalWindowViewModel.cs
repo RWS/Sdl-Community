@@ -146,7 +146,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private void SetEngineModel()
 		{
 			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options.ClientId, Options.ClientSecret, string.Empty, string.Empty, Options.Model, Options.UseClientAuthentication);
-			var accountId = beGlobalTranslator.GetUserInformation();
+			int accountId;
+			if (Options.UseClientAuthentication)
+			{
+				accountId = beGlobalTranslator.GetClientInformation();
+			}
+			else
+			{
+				accountId = beGlobalTranslator.GetUserInformation();
+			}
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
 
 			GetEngineModels(subscriptionInfo.LanguagePairs);
