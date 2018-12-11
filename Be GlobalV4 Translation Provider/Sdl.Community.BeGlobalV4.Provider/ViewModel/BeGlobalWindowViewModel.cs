@@ -194,12 +194,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					{
 						Options.ClientId = LoginViewModel.Email;
 						Options.ClientSecret = password;
+						Options.UseClientAuthentication = false;		 
 						loginTab.ValidationBlock.Visibility = Visibility.Collapsed;
 						if (Options.Model == null)
 						{
 							SetEngineModel();
 						}
-						Options.UseClientAuthentication = false;
 						return true;
 					}
 				}
