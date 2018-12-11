@@ -39,17 +39,15 @@ namespace IATETerminologyProvider.Ui
 				var terms = entryLanguage.Terms;
 				if (terms.Count > 0)
 				{
-					lblTermText.Text = terms[0].Value;
-					lblTermText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblTermText.Text.ToLower());
+					lblTermText.Text = Utils.UppercaseFirstLetter(terms[0].Value);
 
 					txtDefinitionText.Text = terms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault() != null
 						? Utils.UppercaseFirstLetter(terms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault().Value)
 						: string.Empty;
 
 					lblDomainText.Text = terms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault() != null
-						? terms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault().Value
+						? Utils.UppercaseFirstLetter(terms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault().Value)
 						: string.Empty;
-					lblDomainText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblDomainText.Text.ToLower());
 
 					lblSubdomainText.Text = terms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault() != null
 						? terms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault().Value
@@ -57,9 +55,8 @@ namespace IATETerminologyProvider.Ui
 					lblSubdomainText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblSubdomainText.Text.ToLower());
 
 					lblTermTypeText.Text = terms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault() != null
-						? terms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault().Value
+						? Utils.UppercaseFirstLetter(terms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault().Value)
 						: string.Empty;
-					lblTermTypeText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblTermTypeText.Text.ToLower());
 				}
 				ShowFields();
 			}

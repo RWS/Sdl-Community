@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 using IATETerminologyProvider.Commands;
@@ -125,7 +124,7 @@ namespace IATETerminologyProvider.ViewModel
 			{
 				if (!domain.Name.Equals(Constants.NotSpecifiedCode))
 				{
-					var selectedDomainName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(domain.Name.ToLower());
+					var selectedDomainName = Utils.UppercaseFirstLetter(domain.Name.ToLower());
 					var domainModel = new DomainModel
 					{
 						Code = domain.Code,
