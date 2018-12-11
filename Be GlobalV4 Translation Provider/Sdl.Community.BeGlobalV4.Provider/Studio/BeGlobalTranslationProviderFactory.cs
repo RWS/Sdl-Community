@@ -29,7 +29,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", options.ClientId,
 				options.ClientSecret, string.Empty, string.Empty, options.Model, options.UseClientAuthentication);
-			var accountId = beGlobalTranslator.GetUserInformation();
+
+			int accountId;
+			if (options.UseClientAuthentication)
+			{
+				accountId = beGlobalTranslator.GetClientInformation();
+			}
+			else
+			{
+				accountId = beGlobalTranslator.GetUserInformation();
+			}			 
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
 			options.SubscriptionInfo = subscriptionInfo;
 			return  new BeGlobalTranslationProvider(options);
