@@ -48,16 +48,19 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			set
 			{
 				_selectedOption = value;
-				if (_selectedOption.Type.Equals("User"))
+				if (_selectedOption != null)
 				{
-					ClientAuthVisibility = "Collapsed";
-					UserAuthVisibility = "Visible";
-				}
-				else
-				{
-					ClientAuthVisibility = "Visible";
-					UserAuthVisibility = "Collapsed";
-				}
+					if (_selectedOption.Type.Equals("User"))
+					{
+						ClientAuthVisibility = "Collapsed";
+						UserAuthVisibility = "Visible";
+					}
+					else
+					{
+						ClientAuthVisibility = "Visible";
+						UserAuthVisibility = "Collapsed";
+					}
+				}  
 				OnPropertyChanged();  
 			}
 		}

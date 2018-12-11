@@ -152,11 +152,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			GetEngineModels(subscriptionInfo.LanguagePairs);
 			if (Options?.Model == null)
 			{
-				SettingsViewModel.SelectedModelOption = SettingsViewModel.TranslationOptions?[0];
-				if (Options != null)
+				if (SettingsViewModel.TranslationOptions?.Count > 0)
 				{
-					Options.Model = SettingsViewModel.TranslationOptions?[0].Model;
-				}
+					SettingsViewModel.SelectedModelOption = SettingsViewModel.TranslationOptions?[0];
+					if (Options != null)
+					{
+						Options.Model = SettingsViewModel.TranslationOptions?[0].Model;
+					}
+				}	
 			}
 			else
 			{
