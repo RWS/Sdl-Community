@@ -9,6 +9,11 @@ namespace IATETerminologyProvider.Service
 	public static class DomainService
 	{
 		#region Public Methods
+
+		/// <summary>
+		/// Get domains from IATE database.
+		/// </summary>
+		/// <returns>domains</returns>
 		public static ObservableCollection<ItemsResponseModel> GetDomains()
 		{
 			var domains = new ObservableCollection<ItemsResponseModel>();

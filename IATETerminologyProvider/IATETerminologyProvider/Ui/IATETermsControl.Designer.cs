@@ -60,7 +60,7 @@
             // 
             this.lblTargetLanguageText.AutoSize = true;
             this.lblTargetLanguageText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lblTargetLanguageText.Location = new System.Drawing.Point(29, 178);
+            this.lblTargetLanguageText.Location = new System.Drawing.Point(31, 196);
             this.lblTargetLanguageText.Name = "lblTargetLanguageText";
             this.lblTargetLanguageText.Size = new System.Drawing.Size(0, 16);
             this.lblTargetLanguageText.TabIndex = 0;
@@ -68,7 +68,7 @@
             // lblTargetDomain
             // 
             this.lblTargetDomain.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblTargetDomain.Location = new System.Drawing.Point(13, 249);
+            this.lblTargetDomain.Location = new System.Drawing.Point(13, 268);
             this.lblTargetDomain.Name = "lblTargetDomain";
             this.lblTargetDomain.Size = new System.Drawing.Size(46, 13);
             this.lblTargetDomain.TabIndex = 3;
@@ -78,7 +78,7 @@
             // 
             this.lblTargetSubDomain.AutoSize = true;
             this.lblTargetSubDomain.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblTargetSubDomain.Location = new System.Drawing.Point(13, 268);
+            this.lblTargetSubDomain.Location = new System.Drawing.Point(13, 287);
             this.lblTargetSubDomain.Name = "lblTargetSubDomain";
             this.lblTargetSubDomain.Size = new System.Drawing.Size(63, 13);
             this.lblTargetSubDomain.TabIndex = 4;
@@ -87,7 +87,7 @@
             // lblTargetSubdomainText
             // 
             this.lblTargetSubdomainText.AutoSize = true;
-            this.lblTargetSubdomainText.Location = new System.Drawing.Point(76, 269);
+            this.lblTargetSubdomainText.Location = new System.Drawing.Point(76, 288);
             this.lblTargetSubdomainText.Name = "lblTargetSubdomainText";
             this.lblTargetSubdomainText.Size = new System.Drawing.Size(0, 13);
             this.lblTargetSubdomainText.TabIndex = 5;
@@ -96,14 +96,14 @@
             // 
             this.lblTargetDomainText.AutoSize = true;
             this.lblTargetDomainText.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lblTargetDomainText.Location = new System.Drawing.Point(76, 249);
+            this.lblTargetDomainText.Location = new System.Drawing.Point(76, 268);
             this.lblTargetDomainText.Name = "lblTargetDomainText";
             this.lblTargetDomainText.Size = new System.Drawing.Size(0, 13);
             this.lblTargetDomainText.TabIndex = 6;
             // 
             // pictureBoxTarget
             // 
-            this.pictureBoxTarget.Location = new System.Drawing.Point(3, 178);
+            this.pictureBoxTarget.Location = new System.Drawing.Point(3, 197);
             this.pictureBoxTarget.Name = "pictureBoxTarget";
             this.pictureBoxTarget.Size = new System.Drawing.Size(30, 23);
             this.pictureBoxTarget.TabIndex = 7;
@@ -113,7 +113,7 @@
             // 
             this.lblTargetTerm.AutoSize = true;
             this.lblTargetTerm.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblTargetTerm.Location = new System.Drawing.Point(13, 213);
+            this.lblTargetTerm.Location = new System.Drawing.Point(13, 232);
             this.lblTargetTerm.Name = "lblTargetTerm";
             this.lblTargetTerm.Size = new System.Drawing.Size(34, 13);
             this.lblTargetTerm.TabIndex = 8;
@@ -123,7 +123,7 @@
             // 
             this.lblTargetTermText.AutoSize = true;
             this.lblTargetTermText.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblTargetTermText.Location = new System.Drawing.Point(76, 213);
+            this.lblTargetTermText.Location = new System.Drawing.Point(76, 232);
             this.lblTargetTermText.Name = "lblTargetTermText";
             this.lblTargetTermText.Size = new System.Drawing.Size(0, 13);
             this.lblTargetTermText.TabIndex = 9;
@@ -132,7 +132,7 @@
             // 
             this.lblTargetTermType.AutoSize = true;
             this.lblTargetTermType.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblTargetTermType.Location = new System.Drawing.Point(13, 231);
+            this.lblTargetTermType.Location = new System.Drawing.Point(13, 250);
             this.lblTargetTermType.Name = "lblTargetTermType";
             this.lblTargetTermType.Size = new System.Drawing.Size(61, 13);
             this.lblTargetTermType.TabIndex = 10;
@@ -142,7 +142,7 @@
             // 
             this.lblTargetTermTypeText.AutoSize = true;
             this.lblTargetTermTypeText.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblTargetTermTypeText.Location = new System.Drawing.Point(76, 231);
+            this.lblTargetTermTypeText.Location = new System.Drawing.Point(76, 250);
             this.lblTargetTermTypeText.Name = "lblTargetTermTypeText";
             this.lblTargetTermTypeText.Size = new System.Drawing.Size(0, 13);
             this.lblTargetTermTypeText.TabIndex = 11;
@@ -151,7 +151,7 @@
             // 
             this.lblTargetDefinition.AutoSize = true;
             this.lblTargetDefinition.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblTargetDefinition.Location = new System.Drawing.Point(13, 284);
+            this.lblTargetDefinition.Location = new System.Drawing.Point(13, 303);
             this.lblTargetDefinition.Name = "lblTargetDefinition";
             this.lblTargetDefinition.Size = new System.Drawing.Size(54, 13);
             this.lblTargetDefinition.TabIndex = 12;
@@ -161,7 +161,7 @@
             // 
             this.txtTargetDefinitionText.BackColor = System.Drawing.SystemColors.Window;
             this.txtTargetDefinitionText.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtTargetDefinitionText.Location = new System.Drawing.Point(82, 285);
+            this.txtTargetDefinitionText.Location = new System.Drawing.Point(82, 304);
             this.txtTargetDefinitionText.Multiline = true;
             this.txtTargetDefinitionText.Name = "txtTargetDefinitionText";
             this.txtTargetDefinitionText.ReadOnly = true;
@@ -229,7 +229,7 @@
             // 
             // pictureBoxSource
             // 
-            this.pictureBoxSource.Location = new System.Drawing.Point(3, 0);
+            this.pictureBoxSource.Location = new System.Drawing.Point(3, 1);
             this.pictureBoxSource.Name = "pictureBoxSource";
             this.pictureBoxSource.Size = new System.Drawing.Size(30, 23);
             this.pictureBoxSource.TabIndex = 19;

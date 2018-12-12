@@ -10,6 +10,10 @@ namespace IATETerminologyProvider.Service
 	public static class TermTypeService
     {
 		#region Public Methods
+		/// <summary>
+		/// Get term types from IATE database.
+		/// </summary>
+		/// <returns>termTypes</returns>
 		public static ObservableCollection<TermTypeModel> GetTermTypes()
 		{
 			var termTypes = new ObservableCollection<TermTypeModel>();

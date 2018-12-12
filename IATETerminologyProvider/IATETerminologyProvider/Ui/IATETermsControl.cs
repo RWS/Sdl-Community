@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using IATETerminologyProvider.Helpers;
@@ -49,6 +48,12 @@ namespace IATETerminologyProvider.Ui
 		#endregion
 
 		#region Private Methods
+
+		/// <summary>
+		/// Set target fields values in the Termbase Viewer
+		/// </summary>
+		/// <param name="languageFlags">all languages flags</param>
+		/// <param name="entryTargetLanguage">target term entry language</param>
 		private void SetTargetFields(LanguageFlags languageFlags, IEntryLanguage entryTargetLanguage)
 		{
 			pictureBoxTarget.Load(languageFlags.GetImageStudioCodeByLanguageCode(entryTargetLanguage.Locale.Name));
@@ -77,6 +82,11 @@ namespace IATETerminologyProvider.Ui
 			}
 		}
 		
+		/// <summary>
+		/// Set source fields values in the Termbase Viewer
+		/// </summary>
+		/// <param name="languageFlags">all languages flags</param>
+		/// <param name="entrySourceLanguage">source term entry language</param>
 		private void SetSourceFields(LanguageFlags languageFlags, IEntryLanguage entrySourceLanguage)
 		{
 			pictureBoxSource.Load(languageFlags.GetImageStudioCodeByLanguageCode(entrySourceLanguage.Locale.Name));
@@ -105,6 +115,9 @@ namespace IATETerminologyProvider.Ui
 			}
 		}
 
+		/// <summary>
+		/// Show/Hide the fields in the Termbase Viewer based on value existence.
+		/// </summary>
 		private void ShowFields()
 		{
 			lblSourceLanguageText.Visible = !string.IsNullOrEmpty(lblSourceLanguageText.Text) ? true : false;

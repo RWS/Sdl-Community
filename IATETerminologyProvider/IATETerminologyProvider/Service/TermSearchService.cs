@@ -30,6 +30,14 @@ namespace IATETerminologyProvider.Service
 		#endregion
 
 		#region Public Methods
+		/// <summary>
+		/// Get terms from IATE database.
+		/// </summary>
+		/// <param name="text">text used for searching</param>
+		/// <param name="source">source language</param>
+		/// <param name="destination">target language</param>
+		/// <param name="maxResultsCount">number of maximum results returned(set up in Studio Termbase search settings)</param>
+		/// <returns>terms</returns>
 		public IList<ISearchResult> GetTerms(string text, ILanguage source, ILanguage destination, int maxResultsCount)
 		{
 			// maxResults (the number of returned words) value is set from the Termbase -> Search Settings
@@ -58,6 +66,7 @@ namespace IATETerminologyProvider.Service
 		#endregion
 
 		#region Private Methods
+		
 		// Set the needed fields for the API search request
 		private object SetApiRequestBodyValues(ILanguage destination, ILanguage source, string text)
 		{
@@ -81,10 +90,15 @@ namespace IATETerminologyProvider.Service
 				filter_by_domains = filteredDomains,
 				search_in_term_types = filteredTermTypes
 			};
-
 			return bodyModel;
 		}
 
+		/// <summary>
+		/// Map the terms values returned from the IATE API response with the SearchResultModel
+		/// </summary>
+		/// <param name="response">IATE API response</param>
+		/// <param name="domainResponseModel">domains response model</param>
+		/// <returns>list of terms</returns>
 		private IList<ISearchResult> MapResponseValues(IRestResponse response, JsonDomainResponseModel domainResponseModel)
 		{
 			var termsList = new List<ISearchResult>();			
@@ -182,6 +196,7 @@ namespace IATETerminologyProvider.Service
 			}
 		}
 
+		// Get subdomains recursively
 		private void GetSubdomainsRecursively(List<SubdomainsResponseModel> subdomains, string code, string note)
 		{
 			foreach (var subdomain in subdomains)
@@ -208,7 +223,7 @@ namespace IATETerminologyProvider.Service
 			}
 		}
 
-		// Format the subdomain in order to be displayed user friendly.
+		// Format the subdomain in a user friendly mode.
 		private string FormatSubdomain()
 		{
 			var result = string.Empty;
@@ -221,7 +236,7 @@ namespace IATETerminologyProvider.Service
 			return result.TrimEnd(' ');
 		}
 
-		// Return term type name based on the term type code
+		// Return the term type name based on the term type code.
 		private string GetTermTypeByCode(string termTypeCode)
 		{
 			int result;

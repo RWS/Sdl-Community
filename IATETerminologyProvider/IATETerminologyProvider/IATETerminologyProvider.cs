@@ -142,7 +142,11 @@ namespace IATETerminologyProvider
 		#endregion
 
 		#region Private Methods
-		// Create entry models (used to return the text in the Termbase Search panel)
+		/// <summary>
+		/// Create entry models (used to return the text in the Termbase Search panel)
+		/// </summary>
+		/// <param name="sourceLanguage">source language</param>
+		/// <param name="targetLanguage">target language</param>
 		private void CreateEntryTerms(ILanguage sourceLanguage, ILanguage targetLanguage)
 		{
 			var languages = GetLanguages();
@@ -162,7 +166,13 @@ namespace IATETerminologyProvider
 			}
 		}
 
-		// Set entry languages for the entry models
+		/// <summary>
+		/// Set entry languages for the entry models
+		/// </summary>
+		/// <param name="languages">source and target languages</param>
+		/// <param name="sourceLanguage">source language</param>
+		/// <param name="termResult">term result</param>
+		/// <returns>entryLanguages</returns>
 		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, ILanguage sourceLanguage, SearchResultModel termResult)
 		{
 			IList<IEntryLanguage> entryLanguages = new List<IEntryLanguage>();
@@ -182,7 +192,13 @@ namespace IATETerminologyProvider
 			return entryLanguages;
 		}
 
-		// Create Entry terms for the entry languages
+		/// <summary>
+		/// Create Entry terms for the entry languages
+		/// </summary>
+		/// <param name="language">document language</param>
+		/// <param name="sourceLanguage">term source language</param>
+		/// <param name="id">term id</param>
+		/// <returns>entryTerms</returns>
 		private IList<IEntryTerm> CreateEntryTerms(ILanguage language, ILanguage sourceLanguage, int id)
 		{
 			IList<IEntryTerm> entryTerms = new List<IEntryTerm>();
@@ -223,7 +239,12 @@ namespace IATETerminologyProvider
 			return entryTerms;
 		}
 
-		// Set field definition
+		/// <summary>
+		/// Set the glossary descriptive fields based on the needed values from the search result.
+		/// Entry fields are used in the Hitlist Settings and also to display information in the Termbase Viewer
+		/// </summary>
+		/// <param name="searchResultModel">the search result model with values retrieved from API search result</param>
+		/// <returns>entryFields</returns>
 		private IList<IEntryField> SetEntryFields(SearchResultModel searchResultModel)
 		{
 			var entryFields = new List<IEntryField>();
