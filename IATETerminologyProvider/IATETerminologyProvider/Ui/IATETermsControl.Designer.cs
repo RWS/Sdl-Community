@@ -311,7 +311,7 @@
             this.Controls.Add(this.lblTargetDomain);
             this.Controls.Add(this.lblTargetLanguageText);
             this.Name = "IATETermsControl";
-            this.Size = new System.Drawing.Size(761, 517);
+            this.Size = new System.Drawing.Size(697, 507);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTarget)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSource)).EndInit();
             this.ResumeLayout(false);
