@@ -65,20 +65,20 @@ namespace IATETerminologyProvider.Ui
 
 				txtTargetDefinitionText.Text = targetTerms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault() != null
 					? Utils.UppercaseFirstLetter(targetTerms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault().Value)
-					: string.Empty;
+					: "-";
 
 				lblTargetDomainText.Text = targetTerms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault() != null
 					? Utils.UppercaseFirstLetter(targetTerms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault().Value.ToLower())
-					: string.Empty;
+					: "-";
 
 				lblTargetSubdomainText.Text = targetTerms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault() != null
 					? targetTerms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault().Value
-					: string.Empty;
+					: "-";
 				lblTargetSubdomainText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblTargetSubdomainText.Text.ToLower());
 
 				lblTargetTermTypeText.Text = targetTerms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault() != null
 					? Utils.UppercaseFirstLetter(targetTerms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault().Value)
-					: string.Empty;
+					: "-";
 			}
 		}
 		
@@ -98,20 +98,20 @@ namespace IATETerminologyProvider.Ui
 
 				txtSourceDefinitionText.Text = sourceTerms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault() != null
 					? Utils.UppercaseFirstLetter(sourceTerms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault().Value)
-					: string.Empty;
+					: "-";
 
 				lblSourceDomainText.Text = sourceTerms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault() != null
 					? Utils.UppercaseFirstLetter(sourceTerms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault().Value.ToLower())
-					: string.Empty;
+					: "-";
 
 				lblSourceSubdomainText.Text = sourceTerms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault() != null
 					? sourceTerms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault().Value
-					: string.Empty;
+					: "-";
 				lblSourceSubdomainText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblTargetSubdomainText.Text.ToLower());
 
 				lblSourceTermTypeText.Text = sourceTerms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault() != null
 					? Utils.UppercaseFirstLetter(sourceTerms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault().Value)
-					: string.Empty;
+					: "-";
 			}
 		}
 
