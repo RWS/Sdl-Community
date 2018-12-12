@@ -16,12 +16,7 @@ namespace IATETerminologyProvider
 		}
 
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
-		{
-			var domains = DomainService.GetDomains();
-			if (domains.Count == 0)
-			{
-				GetDomains();
-			}
+		{	
 			IATETerminologyProvider terminologyProvider;
 			try
 			{
@@ -35,11 +30,6 @@ namespace IATETerminologyProvider
 				throw ex;
 			}
 			return terminologyProvider;
-		}
-
-		private void GetDomains()
-		{
-			DomainService.GetDomains();
 		}
 		#endregion
 	}
