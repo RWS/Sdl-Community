@@ -60,19 +60,26 @@ namespace IATETerminologyProvider
 				{
 					var targetLanguages = string.Empty;
 					var currentSelection = activeDocument.Selection != null ? activeDocument.Selection.Current.ToString().TrimEnd() : string.Empty;
-					var sourceLanguage = activeDocument.ActiveFile.SourceFile.Language.CultureInfo.TwoLetterISOLanguageName;
-					var targetFiles = activeDocument.ActiveFile.TargetFiles;
+					if (activeDocument.ActiveFile != null)
+					{
+						var sourceFile = activeDocument.ActiveFile.SourceFile;
+						if (sourceFile != null)
+						{
+							var sourceLanguage = activeDocument.ActiveFile.SourceFile.Language.CultureInfo.TwoLetterISOLanguageName;
+							var targetFiles = activeDocument.ActiveFile.SourceFile.TargetFiles;
 
-					foreach (var targetFile in targetFiles)
-					{
-						var targetLanguage = targetFile.Language.CultureInfo.TwoLetterISOLanguageName;
-						targetLanguages += $"{targetLanguage},";
-					}
-										
-					if (!string.IsNullOrEmpty(currentSelection))
-					{
-						var url = @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=" + targetLanguages.TrimEnd(',');
-						System.Diagnostics.Process.Start(url);
+							foreach (var targetFile in targetFiles)
+							{
+								var targetLanguage = targetFile.Language.CultureInfo.TwoLetterISOLanguageName;
+								targetLanguages += $"{targetLanguage},";
+							}
+
+							if (!string.IsNullOrEmpty(currentSelection))
+							{
+								var url = @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=" + targetLanguages.TrimEnd(',');
+								System.Diagnostics.Process.Start(url);
+							}
+						}
 					}
 				}
 			}
