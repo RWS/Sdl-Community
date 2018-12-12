@@ -107,7 +107,7 @@ namespace IATETerminologyProvider.Ui
 				lblSourceSubdomainText.Text = sourceTerms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault() != null
 					? sourceTerms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault().Value
 					: "-";
-				lblSourceSubdomainText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblTargetSubdomainText.Text.ToLower());
+				lblSourceSubdomainText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblSourceSubdomainText.Text.ToLower());
 
 				lblSourceTermTypeText.Text = sourceTerms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault() != null
 					? Utils.UppercaseFirstLetter(sourceTerms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault().Value)
