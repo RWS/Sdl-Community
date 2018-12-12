@@ -2222,7 +2222,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAARwBBQEcAQUBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAASQBBQEkAQUBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ
@@ -2474,16 +2474,16 @@
   <data name="reverseBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI1SURBVEhLvZTPa9NgGMdfRXCgbqAwEAbif+CfIHYiol7c
-        QcOSromhWDc8bbYNZRkEWgvbiiar0noaLaiVLogoHvQ4q4Uqoyoe3EGG6MH1MDyuW7/uyUi7t7M/ph/4
-        QvM+z/fz0kDL/hf7dF0/fWt83AgEAnlVHSnKkrQk+0bKXq/3Iy+YYQe76KALB1xbSgIDYWjoRygUKmaz
-        2celUsn8vbZmVKtVvZVgFx104YALTtIzNug5s67I4rdyuZzgCdoJHHDBSXrGzg561i9dvLCBCFev/Bob
-        G/2kT04uJqanX6ZSqYVMJvMon3+SsW17HsFnnGGGHeyig67jgZP0jPlE8bMz2KvASXrGDMM4KQjCCm+x
-        k8AFJ+m30DTtuCQNf+UV2gkccJG2nmg0eqyb14UuHKTjE4/HjyiK8p4n2C3ooEua3an9WHpU9doiT8QL
-        dtGhemvUCgf8fv8rntAd7GCXau1RK+4fvXH9KU+MYIYdWq/jsCVGei1pqcdSTtBRc1TV97ZRjjMa76DX
-        EvW+Oe8GcsiSlum4OcGJiUjjBTijcR1ueesXBIMhSDUt/K5QKMw9SKdtY2oqQONtePKWXhEuSJrmM/yZ
-        3S7aD0s/l2cqlcopGv+hYzmIxWIq5OJz8zXK/Wl51fzw4hyNu5ODXC53/s33Lwm3pP++vAJJ13LQ+A2c
-        HJyVVt3PHclBJBwW7yWTC7VLbnpy+rxb2rWcx568lr/hXPJP5A59d32Xj95RB+ixCYxtAkXCpdKSSp8A
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI1SURBVEhLvZTPa9NgGMffibCBuoHCQBiI/4F/gq6CiHpx
+        Bw0mXRNDsW542mwbyjIItBamRZNVaT2NFtRKF0Q2POhxVgtVRlU8uIMM0YPrYXhct37dk5HWt7M/ph/4
+        QvM+z/fz0kDL/hc9uq6fvDkxYQQCgbyqjhZlSVqWfaNlr9f7gRfMsINddNCFA65tJYGBMDLyPRQKFbPZ
+        7JNSqWT+Wl83qtWq3kqwiw66cMAFJ+kZ8wyf2lBk8Wu5XE7wBO0EDrjgJD1jpz3DGxfOn9tEhMuXfo6P
+        j33Up6aWEjMzL1Kp1Hwmk3mczz/N2LY9h+AzzjDDDnbRQdfxwEl6xnyi+MkZ7FXgJD1jhmEcFwRhlbfY
+        SeCCk/TbaJp2VJKufOEV2gkccJG2nmg0eqSb14UuHKTjE4/HDymK8o4n2C3ooEua3an9WPpU9eoST8QL
+        dtGhemvUCvv9fv9LntAd7GCXau1RK+4bu37tGU+MYIYdWq/joCVG+i1puc9SjtFRc1TV96ZRjjMa/0G/
+        JeoDs95N5IAlrdBxc4KTk5HGC3BG4zrc8tYvCAZDkGpa+G2hUJh9mE7bxvR0gMY78OQtvSJckDTN5/gz
+        u1W0H5V+rNyuVConaPybjuUgFoupkIsL5iuUB9Pymvl+8QyNu5ODXC539vW3zwm3ZPCBvApJ13LQ+A2c
+        9N6R1tzPHclBJBwW7yeT87VLbnhy+pxb2rWcx568lr/hXPJP5A4D93wXD99Vh+ixCYxtAeqNpcYcCrdt
         AAAAAElFTkSuQmCC
 </value>
   </data>
@@ -2499,11 +2499,11 @@
   <data name="generateXliff.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADmSURBVEhL3ZXBCcJAEEXTgR2I3QjuxLUCvagdKB5zSwV2
-        4D148ygWYAupwAaUsPJhVoI7JruLyOKHRwiZ+T+zA0n2U+WkTAhE6p7T5EREQ7boFprWq2VdluW5j912
-        c30FKVVrPR6xzWehGM3GmKKPpmkK+0IzPX14hYQEAFt/rKqDDek8rpgAe6S44h47YTtXMQHvYPFs5woF
-        IQFtsBO7eLZz1Q4Y7OdG4nZZiKAHvekExJDWBJI5kMxBcEAMaU0gmQPJHAQHxJDWBJI5kMxBcEAMXgG+
-        fzQJ+8lmO1d4+A3Y7i+UZU9BrttOhRW4VgAAAABJRU5ErkJggg==
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADmSURBVEhL3ZXBCcJAEEXTgR2I3YjsxFiBHtQSAh5zSwV2
+        4D148ygWYAupwAYiYeXDDAR3TLKLyOKHRwiZ+T+zA0nyU6VkrA9EpklpcSGiKVv0C0373bYuy/I6xCHP
+        7xJkjKmzbD5jm89CMZqttcUQbdsW8kKrbPkcFeITAKT+XFUnCek9rpAAOVJccY+dsJ2rkIB3sHi2c4UC
+        n4Au2Iksnu1cdQMmx7XVeNw2KuhBbzwBIcQ1gWYONHPgHRBCXBNo5kAzB94BIcQ1gWYONHPgHRDCqICx
+        fzQN+WSznSs8/AZs9xdKkhernds1DZcuDgAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="generateXliff.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
@@ -2961,6 +2961,12 @@
   <data name="&gt;&gt;reverseBtn.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;generateXliff.Name" xml:space="preserve">
+    <value>generateXliff</value>
+  </data>
+  <data name="&gt;&gt;generateXliff.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;helpButton.Name" xml:space="preserve">
     <value>helpButton</value>
   </data>
@@ -2984,12 +2990,6 @@
   </data>
   <data name="&gt;&gt;backgroundWorker1.Type" xml:space="preserve">
     <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;generateXliff.Name" xml:space="preserve">
-    <value>generateXliff</value>
-  </data>
-  <data name="&gt;&gt;generateXliff.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>DisplayFilterControl</value>
