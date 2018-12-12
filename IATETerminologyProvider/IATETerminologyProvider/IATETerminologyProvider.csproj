@@ -127,6 +127,7 @@
     <Compile Include="IATEProviderTellMe\IATEContactAction.cs" />
     <Compile Include="IATEProviderTellMe\IATEStoreAction.cs" />
     <Compile Include="IATEProviderTellMe\IATETellMeProvider.cs" />
+    <Compile Include="IATETerminologyProviderAction.cs" />
     <Compile Include="IATETerminologyProviderWinFormsUI.cs" />
     <Compile Include="IATETerminologyProviderViewerWinFormsUI.cs" />
     <Compile Include="IATETerminologyProvider.cs" />
