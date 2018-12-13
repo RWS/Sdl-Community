@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Web;
 using System.IO;
+using System.Net.Http;
+using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.DeelLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
 using System.Xml;
+using RestSharp.Extensions;
 
 namespace Sdl.Community.DeepLMTProvider
 {
@@ -55,38 +60,60 @@ namespace Sdl.Community.DeepLMTProvider
 
 			try
 			{
-				var client = new RestClient(@"https://api.deepl.com/v1")
-				{
-					UserAgent = "SDL Trados 2019 (v" + _pluginVersion + ",id" + _identifier + ")"
-				};
-				var request = new RestRequest("translate", Method.POST);
-
 				sourceText = normalizeHelper.NormalizeText(sourceText);
 
-				request.AddParameter("text", sourceText);
-				request.AddParameter("source_lang", sourceLanguage);
-				request.AddParameter("target_lang", targetLanguage);
-				//adding this resolve line breaks issue and missing ##login##
-				request.AddParameter("preserve_formatting", 1);
-				//tag handling cause issues on uppercase words
-				request.AddParameter("tag_handling", tagOption);
-				//if we add this the formattiong is not right
-				//request.AddParameter("split_sentences", 0);
-				request.AddParameter("auth_key", ApiKey);
-
-				var response = client.Execute(request).Content;
-				var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(response);
-				if (translatedObject != null)
+				using (var httpClient = new HttpClient())
 				{
-					translatedText = translatedObject.Translations[0].Text;
-					translatedText = HttpUtility.UrlDecode(translatedText);
-					translatedText = HttpUtility.HtmlDecode(translatedText);
+					var values = new Dictionary<string, string>
+					{
+						{"text", sourceText},
+						{"source_lang",sourceLanguage },
+						{"target_lang",targetLanguage},
+						{"preserve_formatting","1" },
+						{"tag_handling","xml" },
+						{"auth_key",ApiKey },
+					};
+					httpClient.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
+					var content = new FormUrlEncodedContent(values);
+					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result.Content.ReadAsStringAsync().Result;
+					var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(response);
+
+					if (translatedObject != null)
+					{
+						translatedText = translatedObject.Translations[0].Text;
+						translatedText = DecodeWhenNeeded(translatedText);
+						translatedText = HttpUtility.HtmlDecode(translatedText);
+					}
 				}
 			}
 			catch (WebException e)
 			{
 				var eReason = Helpers.ProcessWebException(e);
 				throw new Exception(eReason);
+			}
+
+			return translatedText;
+		}
+
+		private string DecodeWhenNeeded(string translatedText)
+		{
+			if (translatedText.Contains("%"))
+			{
+				translatedText = HttpUtility.UrlDecode(translatedText);
+				translatedText = RemovePercentSymbols(translatedText);
+			}
+
+			return translatedText;
+		}
+
+		private string RemovePercentSymbols(string translatedText)
+		{
+			while (translatedText.Contains("%"))
+			{
+				var index = translatedText.IndexOf("%", StringComparison.Ordinal);
+				var sb = new StringBuilder(translatedText);
+				sb.Remove(index, 1);
+				translatedText = sb.ToString();
 			}
 
 			return translatedText;

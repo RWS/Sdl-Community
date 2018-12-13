@@ -90,6 +90,12 @@
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.ProjectAutomation.FileBased">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -159,10 +165,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TellMe\AdvancedDisplayFilterTellMeProvider.cs" />
+    <Compile Include="TellMe\CommunityForumAction.cs" />
+    <Compile Include="TellMe\HelpAction.cs" />
+    <Compile Include="TellMe\OpenAdvancedDisplayFilter.cs" />
+    <Compile Include="TellMe\OpenProjectFilesAction.cs" />
+    <Compile Include="TellMe\StoreAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="3rd party\Cyotek.Windows.Forms.ColorPicker.dll" />
     <Content Include="Images\filter.ico" />
+    <EmbeddedResource Include="Resources\OpenFiles.ico" />
+    <EmbeddedResource Include="Resources\Download.ico" />
+    <EmbeddedResource Include="Resources\ForumIcon.ico" />
+    <EmbeddedResource Include="Resources\Question.ico" />
     <EmbeddedResource Include="Resources\File.ico" />
     <EmbeddedResource Include="Resources\eyedropper.png" />
     <None Include="..\SdlCommunity.snk">
@@ -171,11 +187,11 @@
     <None Include="app.config" />
     <None Include="Images\ok.32x32.png" />
     <None Include="Images\ok.ico" />
-    <Content Include="PluginResources.resx">
+    <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-    </Content>
+    </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>

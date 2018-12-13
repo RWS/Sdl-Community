@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Windows.Forms;
+using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Service;
 using Sdl.Terminology.TerminologyProvider.Core;
 
@@ -11,15 +11,11 @@ namespace IATETerminologyProvider
 		#region Public Methodss
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
-			return terminologyProviderUri.Scheme == "iateglossary";
+			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
 		}
 
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
-		{
-			if (DomainService.Domains.Count == 0)
-			{
-				GetDomains();
-			}
+		{	
 			IATETerminologyProvider terminologyProvider;
 			try
 			{
@@ -33,11 +29,6 @@ namespace IATETerminologyProvider
 				throw ex;
 			}
 			return terminologyProvider;
-		}
-
-		private void GetDomains()
-		{
-			DomainService.GetDomains();
 		}
 		#endregion
 	}

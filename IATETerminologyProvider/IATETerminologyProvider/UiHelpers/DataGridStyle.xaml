@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Style x:Key="DgrStyle" TargetType="DataGridRow">
+		<Style.Triggers>		
+			<Trigger Property="IsSelected" Value="True">
+				<Setter Property="Background" Value="#677689" />
+				<Setter Property="Foreground" Value="#ffffff" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+</ResourceDictionary>

@@ -11,5 +11,10 @@
 		{
 			return @"https://iate.europa.eu/em-api/domains/_tree";
 		}
+
+		public static string GetTermTypeUri(string expand, string trans_lang, string limit, string offset)
+		{
+			return @"https://iate.europa.eu//em-api/inventories/_term-types?expand=" + expand + "&trans_lang=" + trans_lang + "&limit=" + limit + "&offset=" + offset;
+		}
 	}
 }

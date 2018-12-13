@@ -20,7 +20,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
-    public partial class MtProviderConfDialog : Form
+	public partial class MtProviderConfDialog : Form
     {
         ITranslationProviderCredentialStore credstore;
         Point showcredsloc;
@@ -30,7 +30,7 @@ namespace Sdl.Community.MtEnhancedProvider
         TranslationProviderCredential msCred;
         const string msTranslatorString = "Microsoft Translator"; //these strings should not be localized or changed and are therefore hard-coded as constants
         const string gTranslateString = "Google Translate"; //these strings should not be localized or changed and are therefore hard-coded as constants
-
+	    private bool _isTellMeAction;
 
         #region "ProviderConfDialog"
         public MtProviderConfDialog(MtTranslationOptions options, ITranslationProviderCredentialStore credentialStore)
@@ -40,10 +40,22 @@ namespace Sdl.Community.MtEnhancedProvider
             uriGt = new Uri("mtenhancedprovidergt:///");
             Options = options;
             InitializeComponent();
-            UpdateDialog();
+	        UpdateDialog();
         }
 
-        public MtProviderConfDialog(MtTranslationOptions options, string caption, ITranslationProviderCredentialStore credentialStore)
+	    public MtProviderConfDialog(MtTranslationOptions options, bool isTellMeAction)
+	    {
+		    _isTellMeAction = isTellMeAction;
+		    uriMs = new Uri("mtenhancedprovidermst:///");
+		    uriGt = new Uri("mtenhancedprovidergt:///");
+		    Options = options;
+		    InitializeComponent();
+		    UpdateDialog();
+		    tabControl1.SelectedTab = tabPage3;
+		    tabPage1.Enabled = false;
+	    }
+
+		public MtProviderConfDialog(MtTranslationOptions options, string caption, ITranslationProviderCredentialStore credentialStore)
         {
             this.credstore = credentialStore;
             uriMs = new Uri("mtenhancedprovidermst:///");
@@ -232,7 +244,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
         private void btn_Cancel_Click(object sender, EventArgs e)
         {
-
+	        Close();
         }
 
         /// <summary>
@@ -289,14 +301,28 @@ namespace Sdl.Community.MtEnhancedProvider
             if (comboProvider.Text.Equals(msTranslatorString) //these strings should not be localized and are therefore hard-coded
                 && txtClientId.Text == string.Empty)
             {
-                prompt += newLine + MtProviderConfDialogResources.validationMessageNoClientId;
-                result = false;
+	            if (_isTellMeAction)
+	            {
+		            result = true;
+	            }
+				else
+	            {
+		            prompt += newLine + MtProviderConfDialogResources.validationMessageNoClientId;
+		            result = false;
+	            }
             }
             if (comboProvider.Text.Equals(gTranslateString) //these strings should not be localized and are therefore hard-coded
                 && textApiKey.Text == string.Empty)
             {
-                prompt += newLine + MtProviderConfDialogResources.validationMessageNoApiKey;
-                result = false;
+	            if (_isTellMeAction)
+	            {
+		            result = true;
+	            }
+				else
+	            {
+		            prompt += newLine + MtProviderConfDialogResources.validationMessageNoApiKey;
+		            result = false;
+	            }
             }
             if (chkCatId.Checked && txtCatId.Text == string.Empty)
             {

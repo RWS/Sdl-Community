@@ -89,11 +89,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					return true;
 				}
 
-				var isRepeted = rowInfo.SegmentPair?.Properties?.TranslationOrigin?.IsRepeated;
-
-				if (!isRepeted != null)
+				if (rowInfo.SegmentPair.Properties.TranslationOrigin != null)
 				{
-					return true;
+					var isRepeated = rowInfo.SegmentPair.Properties.TranslationOrigin.IsRepeated;
+					return !isRepeated;
 				}
 
 				return false;

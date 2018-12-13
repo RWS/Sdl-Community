@@ -1,9 +1,10 @@
-﻿namespace IATETerminologyProvider.Model
+﻿using System.Collections.Generic;
+
+namespace IATETerminologyProvider.Model
 {
 	public class ProviderSettings
 	{
-		public bool AllDomains { get; set; }
-		public bool NoDomains { get; set; }
-		public bool NoDuplicates { get; set; }
+		public List<string> Domains { get; set; }
+		public List<int> TermTypes { get; set; }
 	}
 }

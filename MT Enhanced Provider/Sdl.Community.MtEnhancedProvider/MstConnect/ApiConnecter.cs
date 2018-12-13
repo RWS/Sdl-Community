@@ -5,23 +5,16 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.ServiceModel;
-using System.ServiceModel.Description;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
-using System.Windows.Documents;
 using Newtonsoft.Json;
 using RestSharp;
-using RestSharp.Deserializers;
 using Sdl.Community.MtEnhancedProvider.Model;
-using Sdl.Community.MtEnhancedProvider.TranslatorService;
-using Translation = Sdl.Community.MtEnhancedProvider.Model.Translation;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
 {
-    internal class ApiConnecter
+	internal class ApiConnecter
     {
         private static string _authToken; 
         private static DateTime _tokenExpiresAt; //to keep track of when token expires
@@ -318,9 +311,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
             if (new[] { "zh-TW", "zh-HK", "zh-MO", "zh-Hant", "zh-CHT" }.Contains(ci.Name)) return "zh-Hant";
 			if (new[] { "zh-CN", "zh-SG", "zh-Hans-HK", "zh-Hans-MO", "zh-Hans", "zh-CHS" }.Contains(ci.Name)) return "zh-Hans";
             
-            // deal with norwegian..MST needs "no" instead of nn or nb
-            if (ci.Name.Equals("nb-NO") || ci.Name.Equals("nn-NO")) return "no";
-            //otherwise, return the two-letter code
             return ci.TwoLetterISOLanguageName;
 
         }

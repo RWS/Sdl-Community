@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
@@ -8,13 +8,15 @@ namespace IATETerminologyProvider.Service
 {
 	public static class DomainService
 	{
-		#region Public Properties
-		public static List<ItemsResponseModel> Domains = new List<ItemsResponseModel>();
-		#endregion
-
 		#region Public Methods
-		public static async void GetDomains()
+
+		/// <summary>
+		/// Get domains from IATE database.
+		/// </summary>
+		/// <returns>domains</returns>
+		public static ObservableCollection<ItemsResponseModel> GetDomains()
 		{
+			var domains = new ObservableCollection<ItemsResponseModel>();
 			var client = new RestClient(ApiUrls.GetDomainUri());
 			var request = new RestRequest("", Method.GET);
 			request.AddHeader("Connection", "Keep-Alive");
@@ -27,7 +29,7 @@ namespace IATETerminologyProvider.Service
 			request.AddHeader("Host", "iate.europa.eu");
 			request.AddHeader("Access-Control-Allow-Origin", "*");
 
-			var response = await client.ExecuteTaskAsync(request);
+			var response = client.Execute(request);
 			var jsonDomainsModel = JsonConvert.DeserializeObject<JsonDomainResponseModel>(response.Content);
 
 			if (jsonDomainsModel.Items != null)
@@ -40,10 +42,10 @@ namespace IATETerminologyProvider.Service
 						Name = item.Name,
 						Subdomains = item.Subdomains
 					};
-					Domains.Add(domain);
+					domains.Add(domain);
 				}
 			}
-
+			return domains;
 		}
 		#endregion
 	}

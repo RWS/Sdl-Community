@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
@@ -15,9 +16,9 @@ namespace IATETerminologyProvider.Service
 	{
 		#region Private Fields
 		private ProviderSettings _providerSettings;
-		private List<ItemsResponseModel> _domains = DomainService.Domains;
+		private ObservableCollection<ItemsResponseModel> _domains = DomainService.GetDomains();
 		private List<string> _subdomains = new List<string>();
-
+		private ObservableCollection<TermTypeModel> _termTypes = TermTypeService.GetTermTypes();
 		private static int _id = new int();
 		#endregion
 
@@ -26,20 +27,22 @@ namespace IATETerminologyProvider.Service
 		{
 			_providerSettings = providerSettings;
 		}
-		public TermSearchService()
-		{
-
-		}
 		#endregion
 
 		#region Public Methods
+		/// <summary>
+		/// Get terms from IATE database.
+		/// </summary>
+		/// <param name="text">text used for searching</param>
+		/// <param name="source">source language</param>
+		/// <param name="destination">target language</param>
+		/// <param name="maxResultsCount">number of maximum results returned(set up in Studio Termbase search settings)</param>
+		/// <returns>terms</returns>
 		public IList<ISearchResult> GetTerms(string text, ILanguage source, ILanguage destination, int maxResultsCount)
 		{
 			// maxResults (the number of returned words) value is set from the Termbase -> Search Settings
 			var client = new RestClient(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()));
-
-			// _providerSettings.Offset (the number of returned words) is set from the Provider Settings grid
-			//var client = new RestClient(ApiUrls.BaseUri("true", _providerSettings.Offset.ToString(), _providerSettings.Limit.ToString()));
+			
 			var request = new RestRequest("", Method.POST);
 			request.AddHeader("Connection", "Keep-Alive");
 			request.AddHeader("Cache-Control", "no-cache");
@@ -63,22 +66,39 @@ namespace IATETerminologyProvider.Service
 		#endregion
 
 		#region Private Methods
+		
 		// Set the needed fields for the API search request
 		private object SetApiRequestBodyValues(ILanguage destination, ILanguage source, string text)
 		{
 			var targetLanguges = new List<string>();
+			var filteredDomains = new List<string>();
+			var filteredTermTypes = new List<int>();
+
 			targetLanguges.Add(destination.Locale.TwoLetterISOLanguageName);
+			if (_providerSettings != null)
+			{
+				filteredDomains = _providerSettings.Domains.Count > 0 ? _providerSettings.Domains : filteredDomains;
+				filteredTermTypes = _providerSettings.TermTypes.Count > 0 ? _providerSettings.TermTypes : filteredTermTypes;
+			}
 
 			var bodyModel = new
 			{
 				query = text,
 				source = source.Locale.TwoLetterISOLanguageName,
 				targets = targetLanguges,
-				include_subdomains = true
+				include_subdomains = true,
+				filter_by_domains = filteredDomains,
+				search_in_term_types = filteredTermTypes
 			};
 			return bodyModel;
 		}
 
+		/// <summary>
+		/// Map the terms values returned from the IATE API response with the SearchResultModel
+		/// </summary>
+		/// <param name="response">IATE API response</param>
+		/// <param name="domainResponseModel">domains response model</param>
+		/// <returns>list of terms</returns>
 		private IList<ISearchResult> MapResponseValues(IRestResponse response, JsonDomainResponseModel domainResponseModel)
 		{
 			var termsList = new List<ISearchResult>();			
@@ -107,6 +127,7 @@ namespace IATETerminologyProvider.Service
 							{
 								var termEntry = languageToken.FirstOrDefault().SelectToken("term_entries").Last;
 								var termValue = termEntry.SelectToken("term_value").ToString();
+								var termType = GetTermTypeByCode(termEntry.SelectToken("type").ToString());
 								var langTwoLetters = languageToken.Name;
 								var definition = languageToken.Children().FirstOrDefault() != null
 									? languageToken.Children().FirstOrDefault().SelectToken("definition")
@@ -126,7 +147,8 @@ namespace IATETerminologyProvider.Service
 									Language = languageModel,
 									Definition = definition != null ? definition.ToString() : string.Empty,
 									Domain = domain,
-									Subdomain = FormatSubdomain()
+									Subdomain = FormatSubdomain(),
+									TermType = termType
 								};
 								termsList.Add(termResult);
 							}
@@ -152,7 +174,6 @@ namespace IATETerminologyProvider.Service
 			return domain.TrimEnd(' ').TrimEnd(',');
 		}
 
-
 		// Set term subdomain
 		private void SetTermSubdomains(ItemsResponseModel mainDomains)
 		{
@@ -175,6 +196,7 @@ namespace IATETerminologyProvider.Service
 			}
 		}
 
+		// Get subdomains recursively
 		private void GetSubdomainsRecursively(List<SubdomainsResponseModel> subdomains, string code, string note)
 		{
 			foreach (var subdomain in subdomains)
@@ -201,17 +223,30 @@ namespace IATETerminologyProvider.Service
 			}
 		}
 
-		// Format the subdomain in order to be displayed user friendly.
+		// Format the subdomain in a user friendly mode.
 		private string FormatSubdomain()
 		{
 			var result = string.Empty;
 			int subdomainNo = 0;
-			foreach (var subdomain in _subdomains)
+			foreach (var subdomain in _subdomains.ToList())
 			{
 				subdomainNo++;
-				result+= $"{ subdomainNo}.{subdomain}. ";
+				result+= $"{ subdomainNo}.{subdomain}  ";
 			}
 			return result.TrimEnd(' ');
+		}
+
+		// Return the term type name based on the term type code.
+		private string GetTermTypeByCode(string termTypeCode)
+		{
+			int result;
+			int typeCode = int.TryParse(termTypeCode, out result) ? int.Parse(termTypeCode) : 0;
+
+			if (_termTypes.Count > 0)
+			{
+				return _termTypes.FirstOrDefault(t => t.Code == typeCode).Name;
+			}
+			return string.Empty;
 		}
 		#endregion
 	}

@@ -41,7 +41,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
         private TranslationProviderCredential GetMyCredentials(ITranslationProviderCredentialStore credentialStore, string uri)
         {
-            var myUri = new Uri(uri);
+			var myUri = new Uri(uri);
             TranslationProviderCredential cred = null;
 
             if (credentialStore.GetCredential(myUri) != null)

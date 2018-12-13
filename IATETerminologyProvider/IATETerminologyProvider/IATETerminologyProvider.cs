@@ -26,7 +26,7 @@ namespace IATETerminologyProvider
 		#endregion
 
 		#region Public Properties
-		public const string IATEUriTemplate = "iateglossary://";
+		public const string IATEUriTemplate = Constants.IATEUriTemplate;
 		public override IDefinition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
 		public override string Description => PluginResources.IATETerminologyProviderDescription;
 		public override string Name => PluginResources.IATETerminologyProviderName;
@@ -52,11 +52,15 @@ namespace IATETerminologyProvider
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
 			var searchService = new TermSearchService(_providerSettings);
-			var t = Task.Factory.StartNew(() =>
+			var textResults = text.Split(' ').ToList();
+			_termsResult.Clear();
+
+			//search terms for each word in text (active segment)
+			Parallel.ForEach(textResults, (textResult) =>
 			{
-				_termsResult = searchService.GetTerms(text, source, destination, maxResultsCount);
+				var termResults = searchService.GetTerms(textResult, source, destination, maxResultsCount);
+				((List<ISearchResult>)_termsResult).AddRange(termResults);
 			});
-			t.Wait();
 
 			if (_termsResult.Count > 0)
 			{
@@ -92,7 +96,7 @@ namespace IATETerminologyProvider
 			var subdomainField = new DescriptiveField
 			{
 				Label = "Subdomain",
-				Level = FieldLevel.EntryLevel,
+				Level = FieldLevel.LanguageLevel,
 				Mandatory = true,
 				Multiple = true,
 				Type = FieldType.String
@@ -138,7 +142,11 @@ namespace IATETerminologyProvider
 		#endregion
 
 		#region Private Methods
-		// Create entry models (used to return the text in the Termbase Search panel)
+		/// <summary>
+		/// Create entry models (used to return the text in the Termbase Search panel)
+		/// </summary>
+		/// <param name="sourceLanguage">source language</param>
+		/// <param name="targetLanguage">target language</param>
 		private void CreateEntryTerms(ILanguage sourceLanguage, ILanguage targetLanguage)
 		{
 			var languages = GetLanguages();
@@ -152,26 +160,31 @@ namespace IATETerminologyProvider
 					Id = termResult.Id,
 					Fields = SetEntryFields(termResult),
 					Transactions = new List<IEntryTransaction>(),
-					Languages = SetEntryLanguages(languages, sourceLanguage, termResult.Id, termResult.Definition)
+					Languages = SetEntryLanguages(languages, sourceLanguage, termResult)
 				};
 				_entryModels.Add(entryModel);
 			}
 		}
 
-		// Set entry languages for the entry models
-		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, ILanguage sourceLanguage, int id, string fieldDefinition)
+		/// <summary>
+		/// Set entry languages for the entry models
+		/// </summary>
+		/// <param name="languages">source and target languages</param>
+		/// <param name="sourceLanguage">source language</param>
+		/// <param name="termResult">term result</param>
+		/// <returns>entryLanguages</returns>
+		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, ILanguage sourceLanguage, SearchResultModel termResult)
 		{
 			IList<IEntryLanguage> entryLanguages = new List<IEntryLanguage>();
 			foreach (var language in languages)
 			{
 				var entryLanguage = new EntryLanguageModel
 				{
-					//Fields = SetEntryFields(fieldDefinition),
-					Fields = new List<IEntryField>(),
+					Fields = !language.Name.Equals(sourceLanguage.Name) ? SetEntryFields(termResult) : new List<IEntryField>(),
 					Locale = language.Locale,
 					Name = language.Name,
 					ParentEntry = null,
-					Terms = CreateEntryTerms(language, sourceLanguage, id),
+					Terms = CreateEntryTerms(language, sourceLanguage, termResult.Id),
 					IsSource = language.Name.Equals(sourceLanguage.Name) ? true : false
 				};
 				entryLanguages.Add(entryLanguage);
@@ -179,7 +192,13 @@ namespace IATETerminologyProvider
 			return entryLanguages;
 		}
 
-		// Create Entry terms for the entry languages
+		/// <summary>
+		/// Create Entry terms for the entry languages
+		/// </summary>
+		/// <param name="language">document language</param>
+		/// <param name="sourceLanguage">term source language</param>
+		/// <param name="id">term id</param>
+		/// <returns>entryTerms</returns>
 		private IList<IEntryTerm> CreateEntryTerms(ILanguage language, ILanguage sourceLanguage, int id)
 		{
 			IList<IEntryTerm> entryTerms = new List<IEntryTerm>();
@@ -194,7 +213,8 @@ namespace IATETerminologyProvider
 				{
 					var entryTerm = new EntryTerm
 					{
-						Value = sourceLangTerm.Text
+						Value = sourceLangTerm.Text,
+						Fields = SetEntryFields((SearchResultModel)sourceLangTerm)
 					};
 					entryTerms.Add(entryTerm);
 				}
@@ -202,14 +222,15 @@ namespace IATETerminologyProvider
 			else
 			{
 				// add IEntryTerm only for the current ISearchResult term(otherwise it will duplicate all the term for each ISearchResult term)				
-				foreach (var term in terms)
+				foreach (SearchResultModel term in terms)
 				{
 					// add terms for the target
 					if (!term.Language.Name.Equals(sourceLanguage.Locale.Parent.DisplayName))
 					{
 						var entryTerm = new EntryTerm
 						{
-							Value = term.Text
+							Value = term.Text,
+							Fields = SetEntryFields(term)
 						};
 						entryTerms.Add(entryTerm);
 					}
@@ -218,10 +239,15 @@ namespace IATETerminologyProvider
 			return entryTerms;
 		}
 
-		// Set field definition
+		/// <summary>
+		/// Set the glossary descriptive fields based on the needed values from the search result.
+		/// Entry fields are used in the Hitlist Settings and also to display information in the Termbase Viewer
+		/// </summary>
+		/// <param name="searchResultModel">the search result model with values retrieved from API search result</param>
+		/// <returns>entryFields</returns>
 		private IList<IEntryField> SetEntryFields(SearchResultModel searchResultModel)
 		{
-			IList<IEntryField> entryFields = new List<IEntryField>();
+			var entryFields = new List<IEntryField>();
 			if (!string.IsNullOrEmpty(searchResultModel.Definition))
 			{
 				var definitionEntryField = new EntryField
@@ -251,8 +277,18 @@ namespace IATETerminologyProvider
 				};
 				entryFields.Add(domainEntryField);
 			}
+
+			if (!string.IsNullOrEmpty(searchResultModel.TermType))
+			{
+				var termTypeEntryField = new EntryField
+				{
+					Name = "TermType",
+					Value = searchResultModel.TermType
+				};
+				entryFields.Add(termTypeEntryField);
+			}
 			return entryFields;
 		}
 		#endregion
+		}
 	}
-}
