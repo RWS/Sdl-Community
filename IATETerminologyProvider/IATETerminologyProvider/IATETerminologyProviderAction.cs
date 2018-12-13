@@ -29,12 +29,23 @@ namespace IATETerminologyProvider
 				var activeDocument = editorController != null ? editorController.ActiveDocument : null;
 				if (activeDocument != null)
 				{
+					var url = string.Empty;
 					var currentSelection = activeDocument.Selection != null ? activeDocument.Selection.Current.ToString().TrimEnd()	: string.Empty;
 					var sourceLanguage = activeDocument.ActiveFile.SourceFile.Language.CultureInfo.TwoLetterISOLanguageName;
 
 					if (!string.IsNullOrEmpty(currentSelection))
 					{
-						var url = @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=all";
+						if (activeDocument.FocusedDocumentContent.Equals(FocusedDocumentContent.Target))
+						{
+							// set the URL source language from the target segment of the editor
+							sourceLanguage = activeDocument.ActiveFile.Language.CultureInfo.TwoLetterISOLanguageName;
+							url = @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=all";
+						}
+						else
+						{
+							// set the language from the source side of the editor
+							url = @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=all";
+						}
 						System.Diagnostics.Process.Start(url);
 					}
 					else
@@ -57,22 +68,26 @@ namespace IATETerminologyProvider
 				var activeDocument = editorController != null ? editorController.ActiveDocument : null;
 				if (activeDocument != null)
 				{
-					var targetLanguages = string.Empty;
+					var url = string.Empty;
 					var currentSelection = activeDocument.Selection != null ? activeDocument.Selection.Current.ToString().TrimEnd() : string.Empty;
-					if (activeDocument.ActiveFile != null && !string.IsNullOrEmpty(currentSelection))
+					var activeFile = activeDocument.ActiveFile;
+					if (activeFile != null && !string.IsNullOrEmpty(currentSelection))
 					{
-						var sourceFile = activeDocument.ActiveFile.SourceFile;
-						if (sourceFile != null)
-						{
-							var sourceLanguage = activeDocument.ActiveFile.SourceFile.Language.CultureInfo.TwoLetterISOLanguageName;
-							var targetFiles = activeDocument.ActiveFile.SourceFile.TargetFiles;
+						var sourceLanguage = activeFile.SourceFile.Language.CultureInfo.TwoLetterISOLanguageName;
+						var targetLanguage = activeFile.Language.CultureInfo.TwoLetterISOLanguageName;
 
-							foreach (var targetFile in targetFiles)
+						if (!string.IsNullOrEmpty(currentSelection))
+						{
+							if (activeDocument.FocusedDocumentContent.Equals(FocusedDocumentContent.Target))
 							{
-								var targetLanguage = targetFile.Language.CultureInfo.TwoLetterISOLanguageName;
-								targetLanguages += $"{targetLanguage},";
+								// inverse the languages in case user wants to navigate to a term/phrase selected from the target segment
+								url = @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + targetLanguage + "&tl=" + sourceLanguage;
 							}
-							var url = @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=" + targetLanguages.TrimEnd(',');
+							else
+							{
+								// set the language from the source side of the editor
+								url = @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=" + targetLanguage;
+							}
 							System.Diagnostics.Process.Start(url);
 						}
 					}
