@@ -16,5 +16,15 @@
 		{
 			return @"https://iate.europa.eu//em-api/inventories/_term-types?expand=" + expand + "&trans_lang=" + trans_lang + "&limit=" + limit + "&offset=" + offset;
 		}
+
+		public static string SearchAllURI(string currentSelection, string sourceLanguage)
+		{
+			return @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=all";
+		}
+
+		public static string SearchSourceTargetURI(string currentSelection, string sourceLanguage, string targetLanguage)
+		{
+			return @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=" + targetLanguage;
+		}
 	}
 }
