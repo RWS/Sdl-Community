@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Service;
 using Sdl.Terminology.TerminologyProvider.Core;

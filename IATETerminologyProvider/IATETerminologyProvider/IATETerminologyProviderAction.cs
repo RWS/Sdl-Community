@@ -10,16 +10,16 @@ namespace IATETerminologyProvider
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class IATETerminologyProviderAction: AbstractRibbonGroup
 	{
+		public static EditorController GetEditorController()
+		{
+			return SdlTradosStudio.Application.GetController<EditorController>();
+		}
+
 		[Action("IATESearchAllAction", Name = "Search IATE (all)", Icon = "Iate_logo")]
 		[ActionLayout(typeof(IATETerminologyProviderAction), 20, DisplayType.Large)]
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 10, DisplayType.Large)]
 		public class IATESearchAllAction : AbstractAction
 		{
-			public EditorController GetEditorController()
-			{
-				return SdlTradosStudio.Application.GetController<EditorController>();
-			}
-
 			// Navigate to the IATE search term based on the document source and all existing target languages(from IATE)
 			protected override void Execute()
 			{
@@ -43,12 +43,7 @@ namespace IATETerminologyProvider
 		[ActionLayout(typeof(IATETerminologyProviderAction), 20, DisplayType.Large)]
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 10, DisplayType.Large)]
 		public class IATESearchSourceLanguageAction : AbstractAction
-		{
-			public EditorController GetEditorController()
-			{
-				return SdlTradosStudio.Application.GetController<EditorController>();
-			}
-
+		{	
 			// Navigate to the IATE search term based on only source and target languages set on the active document
 			protected override void Execute()
 			{
@@ -58,7 +53,7 @@ namespace IATETerminologyProvider
 				{
 					var targetLanguages = string.Empty;
 					var currentSelection = activeDocument.Selection != null ? activeDocument.Selection.Current.ToString().TrimEnd() : string.Empty;
-					if (activeDocument.ActiveFile != null)
+					if (activeDocument.ActiveFile != null && !string.IsNullOrEmpty(currentSelection))
 					{
 						var sourceFile = activeDocument.ActiveFile.SourceFile;
 						if (sourceFile != null)
@@ -71,12 +66,8 @@ namespace IATETerminologyProvider
 								var targetLanguage = targetFile.Language.CultureInfo.TwoLetterISOLanguageName;
 								targetLanguages += $"{targetLanguage},";
 							}
-
-							if (!string.IsNullOrEmpty(currentSelection))
-							{
-								var url = @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=" + targetLanguages.TrimEnd(',');
-								System.Diagnostics.Process.Start(url);
-							}
+							var url = @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=" + targetLanguages.TrimEnd(',');
+							System.Diagnostics.Process.Start(url);
 						}
 					}
 				}
