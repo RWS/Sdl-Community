@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Advanced Display Filter</PlugInName>
-  <Version>3.9</Version>
+  <Version>3.9.1</Version>
   <Description>Advanced display filter that allows more options in filtering the rows visible from the editor</Description>
-  <Author>Sdl Community</Author>
+  <Author>Sdl Community Developers</Author>
   <Include>
     <File>Sdl.Community.Toolkit.Integration.dll</File>
     <File>Sdl.Community.Toolkit.FileType.dll</File>
