@@ -155,28 +155,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
-			if (segments == null)
-			{
-				throw new ArgumentNullException("segments in SearchSegmentsMasked");
-			}
-			if (mask == null || mask.Length != segments.Length)
-			{
-				throw new ArgumentException("mask in SearchSegmentsMasked");
-			}
-
-			var results = new SearchResults[segments.Length];
-			for (var p = 0; p < segments.Length; ++p)
-			{
-				if (mask[p])
-				{
-					results[p] = SearchSegment(settings, segments[p]);
-				}
-				else
-				{
-					results[p] = null;
-				}
-			}
-			return results;
+			throw new NotImplementedException();
 		}
 
 		public SearchResults SearchText(SearchSettings settings, string segment)
