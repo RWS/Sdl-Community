@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.TellMe.ProviderApi;
+﻿using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.TellMe
 {
@@ -18,21 +13,24 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.TellMe
 			{
 				Keywords = new[]
 				{
-					"community advanced display filter", "community advanced display filter store", "community advanced display filter download"
+					"community advanced display filter", "community advanced display filter store",
+					"community advanced display filter download"
 				}
 			},
 			new HelpAction
 			{
 				Keywords = new[]
 				{
-					"community advanced display filter", "community advanced display filter help", "community advanced display filter guide"
+					"community advanced display filter", "community advanced display filter help",
+					"community advanced display filter guide"
 				}
 			},
 			new CommunityForumAction
 			{
 				Keywords = new[]
 				{
-					"community advanced display filter", "community advanced display filter forum", "community advanced display filter report"
+					"community advanced display filter", "community advanced display filter forum",
+					"community advanced display filter report"
 				}
 			},
 			new OpenProjectFilesAction
