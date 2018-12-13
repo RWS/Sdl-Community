@@ -161,7 +161,7 @@
             // 
             this.txtTargetDefinitionText.BackColor = System.Drawing.SystemColors.Window;
             this.txtTargetDefinitionText.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtTargetDefinitionText.Location = new System.Drawing.Point(82, 304);
+            this.txtTargetDefinitionText.Location = new System.Drawing.Point(79, 304);
             this.txtTargetDefinitionText.Multiline = true;
             this.txtTargetDefinitionText.Name = "txtTargetDefinitionText";
             this.txtTargetDefinitionText.ReadOnly = true;
