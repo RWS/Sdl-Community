@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Windows;
+using IATETerminologyProvider.Helpers;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -35,6 +37,10 @@ namespace IATETerminologyProvider
 						var url = @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=all";
 						System.Diagnostics.Process.Start(url);
 					}
+					else
+					{
+						MessageBox.Show(Constants.NoTermSelected, string.Empty, MessageBoxButton.OK, MessageBoxImage.Information);
+					}
 				}
 			}
 		}
@@ -69,6 +75,10 @@ namespace IATETerminologyProvider
 							var url = @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=" + targetLanguages.TrimEnd(',');
 							System.Diagnostics.Process.Start(url);
 						}
+					}
+					else
+					{
+						MessageBox.Show(Constants.NoTermSelected, string.Empty, MessageBoxButton.OK, MessageBoxImage.Information);
 					}
 				}
 			}

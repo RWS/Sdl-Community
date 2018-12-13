@@ -8,5 +8,7 @@
 		public const string IATEUriTemplate = "iateglossary://";
 
 		public static readonly string NotSpecifiedCode = "Domain code not specified";
+		public static readonly string NoTermSelected = "No term/phrase was selected!";
+
 	}
 }
