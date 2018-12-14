@@ -179,17 +179,15 @@ namespace Sdl.Community.DeepLMTProvider
 			bool[] mask)
 		{
 			// bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
-			var results = new List<SearchResults>(mask.Length);
 
-			for (int i = 0; i < results.Capacity; i++)
+			var noOfResults = mask.Length;
+
+			var results = new List<SearchResults>(noOfResults);
+			var preTranslateList = new List<PreTranslateSegment>(noOfResults);
+
+			for (int i = 0; i < noOfResults; i++)
 			{
 				results.Add(null);
-			}
-
-			var preTranslateList = new List<PreTranslateSegment>(mask.Length);
-
-			for (int i = 0; i < results.Capacity; i++)
-			{
 				preTranslateList.Add(null);
 			}
 
