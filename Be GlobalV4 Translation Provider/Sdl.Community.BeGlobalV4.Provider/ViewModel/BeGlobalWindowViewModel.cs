@@ -95,7 +95,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void GetEngineModels(List<BeGlobalLanguagePair>languagePairs)
 		{
-			var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo();
+			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			var currentProject = projectsController.CurrentProject != null ? projectsController.CurrentProject.GetProjectInfo() : projectsController.SelectedProjects.ToList()[0].GetProjectInfo();
 			var sourceLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(currentProject.SourceLanguage.CultureInfo.ThreeLetterISOLanguageName);
 			var pairsWithSameSource = languagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
 			foreach (var projectTargetLanguage in currentProject.TargetLanguages)
