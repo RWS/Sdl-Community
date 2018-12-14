@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SDL.Data.Protection.Suite</PlugInName>
-  <Version>1.0.8.0</Version>
+  <Version>1.0.9.0</Version>
   <Description></Description>
   <Author></Author>
 	<Include>
