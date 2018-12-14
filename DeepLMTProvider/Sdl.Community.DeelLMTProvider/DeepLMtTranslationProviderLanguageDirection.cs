@@ -179,14 +179,14 @@ namespace Sdl.Community.DeepLMTProvider
 			bool[] mask)
 		{
 			// bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
-			var results = new List<SearchResults>(10);
+			var results = new List<SearchResults>(mask.Length);
 
 			for (int i = 0; i < results.Capacity; i++)
 			{
 				results.Add(null);
 			}
 
-			var preTranslateList = new List<PreTranslateSegment>(10);
+			var preTranslateList = new List<PreTranslateSegment>(mask.Length);
 
 			for (int i = 0; i < results.Capacity; i++)
 			{
@@ -210,11 +210,6 @@ namespace Sdl.Community.DeepLMTProvider
 						preTranslateList.RemoveAt(i);
 						preTranslateList.Insert(i, preTranslate);
 					}
-					else
-					{
-						results.RemoveAt(i);
-						results.Insert(i, null);
-					}
 					i++;
 				}
 				if (preTranslateList.Count > 0)
@@ -232,7 +227,6 @@ namespace Sdl.Community.DeepLMTProvider
 							results.Insert(index, result);
 						}
 					}
-					//results.AddRange(preTranslateSearchResults);
 				}
 			}
 			else
@@ -246,11 +240,6 @@ namespace Sdl.Community.DeepLMTProvider
 						results.RemoveAt(i);
 						results.Insert(i, result);
 					}
-					else
-					{
-						results.RemoveAt(i);
-						results.Insert(i, null);
-					}
 					i++;
 				}
 			}
@@ -259,7 +248,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 		private List<SearchResults> GetPreTranslationSearchResults(List<PreTranslateSegment> preTranslateList)
 		{
-			var resultsList = new List<SearchResults>(10);
+			var resultsList = new List<SearchResults>(preTranslateList.Capacity);
 
 			for (int i = 0; i < resultsList.Capacity; i++)
 			{
