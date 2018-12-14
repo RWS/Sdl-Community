@@ -17,8 +17,7 @@ namespace IATETerminologyProvider.IATEProviderTellMe
 
 		public override void Execute()
 		{
-			// To do: add the link to the SDL app store after plugin will be published
-			//Process.Start("https://appstore.sdl.com/language/app/deepl-translation-provider/847/");
+			Process.Start("https://appstore.sdl.com/language/app/iate-terminology/950/");
 		}
 	}
 }

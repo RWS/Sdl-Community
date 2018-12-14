@@ -179,8 +179,19 @@ namespace Sdl.Community.DeepLMTProvider
 			bool[] mask)
 		{
 			// bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
-			var results = new List<SearchResults>();
-			var preTranslateList = new List<PreTranslateSegment>();
+			var results = new List<SearchResults>(mask.Length);
+
+			for (int i = 0; i < results.Capacity; i++)
+			{
+				results.Add(null);
+			}
+
+			var preTranslateList = new List<PreTranslateSegment>(mask.Length);
+
+			for (int i = 0; i < results.Capacity; i++)
+			{
+				preTranslateList.Add(null);
+			}
 
 			// plugin is called from pre-translate batch task 
 			//we receive the data in chunk of 10 segments
@@ -196,11 +207,8 @@ namespace Sdl.Community.DeepLMTProvider
 							SearchSettings = settings,
 							TranslationUnit = tu
 						};
-						preTranslateList.Add(preTranslate);
-					}
-					else
-					{
-						results.Add(null);
+						preTranslateList.RemoveAt(i);
+						preTranslateList.Insert(i, preTranslate);
 					}
 					i++;
 				}
@@ -209,7 +217,16 @@ namespace Sdl.Community.DeepLMTProvider
 					//Create temp file with translations
 					var translatedSegments = PrepareTempData(preTranslateList).Result;
 					var preTranslateSearchResults = GetPreTranslationSearchResults(translatedSegments);
-					results.AddRange(preTranslateSearchResults);
+
+					foreach (var result in preTranslateSearchResults)
+					{
+						if (result != null)
+						{
+							var index = preTranslateSearchResults.IndexOf(result);
+							results.RemoveAt(index);
+							results.Insert(index, result);
+						}
+					}
 				}
 			}
 			else
@@ -220,11 +237,8 @@ namespace Sdl.Community.DeepLMTProvider
 					if (mask == null || mask[i])
 					{
 						var result = SearchTranslationUnit(settings, tu);
-						results.Add(result);
-					}
-					else
-					{
-						results.Add(null);
+						results.RemoveAt(i);
+						results.Insert(i, result);
 					}
 					i++;
 				}
@@ -234,30 +248,44 @@ namespace Sdl.Community.DeepLMTProvider
 
 		private List<SearchResults> GetPreTranslationSearchResults(List<PreTranslateSegment> preTranslateList)
 		{
-			var resultsList = new List<SearchResults>();
+			var resultsList = new List<SearchResults>(preTranslateList.Capacity);
+
+			for (int i = 0; i < resultsList.Capacity; i++)
+			{
+				resultsList.Add(null);
+			}
+
 			foreach (var preTranslate in preTranslateList)
 			{
-				var translation = new Segment(_languageDirection.TargetCulture);
-				var newSeg = preTranslate.TranslationUnit.SourceSegment.Duplicate();
-				if (newSeg.HasTags)
+				if (preTranslate != null)
 				{
-					var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
+					var translation = new Segment(_languageDirection.TargetCulture);
+					var newSeg = preTranslate.TranslationUnit.SourceSegment.Duplicate();
+					if (newSeg.HasTags)
+					{
+						var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
 
-					translation = tagPlacer.GetTaggedSegment(preTranslate.PlainTranslation);
-					preTranslate.TranslationSegment = translation;
+						translation = tagPlacer.GetTaggedSegment(preTranslate.PlainTranslation);
+						preTranslate.TranslationSegment = translation;
+					}
+					else
+					{
+						translation.Add(preTranslate.PlainTranslation);
+					}
+
+					var searchResult = CreateSearchResult(newSeg, translation);
+					var results = new SearchResults
+					{
+						SourceSegment = newSeg
+					};
+					results.Add(searchResult);
+
+					var index = preTranslateList.IndexOf(preTranslate);
+					resultsList.RemoveAt(index);
+					resultsList.Insert(index, results);
 				}
-				else
-				{
-					translation.Add(preTranslate.PlainTranslation);
-				}
-				var searchResult = CreateSearchResult(newSeg, translation);
-				var results = new SearchResults
-				{
-					SourceSegment = newSeg
-				};
-				results.Add(searchResult);
-				resultsList.Add(results);
 			}
+
 			return resultsList;
 		}
 
@@ -267,20 +295,24 @@ namespace Sdl.Community.DeepLMTProvider
 			{
 				for (var i = 0; i < preTranslatesegments.Count; i++)
 				{
-					string sourceText;
-					var newseg = preTranslatesegments[i].TranslationUnit.SourceSegment.Duplicate();
+					if (preTranslatesegments[i] != null)
+					{
+						string sourceText;
+						var newseg = preTranslatesegments[i].TranslationUnit.SourceSegment.Duplicate();
 
-					if (newseg.HasTags)
-					{
-						var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
-						sourceText = tagPlacer.PreparedSourceText;
+						if (newseg.HasTags)
+						{
+							var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
+							sourceText = tagPlacer.PreparedSourceText;
+						}
+						else
+						{
+							sourceText = newseg.ToPlain();
+						}
+
+						sourceText = _normalizeSourceTextHelper.NormalizeText(sourceText);
+						preTranslatesegments[i].SourceText = sourceText;
 					}
-					else
-					{
-						sourceText = newseg.ToPlain();
-					}
-					sourceText = _normalizeSourceTextHelper.NormalizeText(sourceText);
-					preTranslatesegments[i].SourceText = sourceText;
 				}
 
 
@@ -288,7 +320,10 @@ namespace Sdl.Community.DeepLMTProvider
 
 				await Task.Run(() => Parallel.ForEach(preTranslatesegments, segment =>
 				{
-					segment.PlainTranslation = translator.Translate(_languageDirection, segment.SourceText);
+					if (segment != null)
+					{
+						segment.PlainTranslation = translator.Translate(_languageDirection, segment.SourceText);
+					}
 				})).ConfigureAwait(true);
 
 				return preTranslatesegments;
