@@ -45,6 +45,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			{
 				return;
 			}
+
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			var selectedPatternsFromGrid = _settings.RegexPatterns.Where(e => e.ShouldEnable).ToList();
 			if (projectController.CurrentProject != null)

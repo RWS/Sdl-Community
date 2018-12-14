@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
+﻿using System.IO;
 using Newtonsoft.Json.Linq;
-using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 {

@@ -1,15 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Windows;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui;
-using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 

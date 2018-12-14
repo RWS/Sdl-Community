@@ -21,14 +21,28 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
 			base.ProcessParagraphUnit(paragraphUnit);
-			if (paragraphUnit.IsStructure) { return; }
-			foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
+			if (paragraphUnit.IsStructure)
 			{
-				var segmentVisitor = new SegmentVisitor(_patterns, _encryptionKey, _arePatternsEncrypted);
-				segmentVisitor.ReplaceText(segmentPair.Source, ItemFactory, PropertiesFactory);
-				if (segmentPair.Target != null)
+				return;
+			}
+
+			var segmentPairs = paragraphUnit.SegmentPairs.ToList();
+
+			var segmentVisitor = new SegmentVisitor(ItemFactory, PropertiesFactory, _patterns, _encryptionKey, _arePatternsEncrypted);
+
+			if (segmentPairs.Count == 0 && paragraphUnit.Source != null)
+			{
+				segmentVisitor.ReplaceText(paragraphUnit.Source);
+			}
+			else
+			{
+				foreach (var segmentPair in segmentPairs)
 				{
-					segmentVisitor.ReplaceText(segmentPair.Target, ItemFactory, PropertiesFactory);
+					segmentVisitor.ReplaceText(segmentPair.Source);
+					if (segmentPair.Target != null)
+					{
+						segmentVisitor.ReplaceText(segmentPair.Target);
+					}
 				}
 			}
 		}

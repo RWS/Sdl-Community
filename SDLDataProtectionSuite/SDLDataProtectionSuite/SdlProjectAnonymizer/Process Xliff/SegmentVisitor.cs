@@ -13,21 +13,28 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 		private readonly List<RegexPattern> _patterns;
 		private readonly string _encryptionKey;
 		private readonly bool _arePatternsEcrypted;
-		private IDocumentItemFactory _factory;
-		private IPropertiesFactory _propertiesFactory;
+		private readonly IDocumentItemFactory _documentItemFactory;
+		private readonly IPropertiesFactory _propertiesFactory;
 
-		public SegmentVisitor(List<RegexPattern> patterns, string encryptionKey, bool arePatternsEcnrypted)
+		public SegmentVisitor(IDocumentItemFactory documentItemDocumentItemFactory, IPropertiesFactory propertiesFactory, 
+			List<RegexPattern> patterns, string encryptionKey, bool arePatternsEcnrypted)
 		{
+			_documentItemFactory = documentItemDocumentItemFactory;
+			_propertiesFactory = propertiesFactory;
+
 			_arePatternsEcrypted = arePatternsEcnrypted;
 			_patterns = patterns;
 			_encryptionKey = encryptionKey;
 		}
 
-		public void ReplaceText(ISegment segment, IDocumentItemFactory factory, IPropertiesFactory propertiesFactory)
-		{
-			_factory = factory;
-			_propertiesFactory = propertiesFactory;
+		public void ReplaceText(ISegment segment)
+		{			
 			VisitChildren(segment);
+		}
+
+		public void ReplaceText(IParagraph paragraph)
+		{
+			VisitChildren(paragraph);
 		}
 
 		public void VisitTagPair(ITagPair tagPair)
@@ -37,6 +44,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 				tagPair.StartTagProperties.TagContent = Anonymizer(tagPair.StartTagProperties.TagContent, true);
 				tagPair.TagProperties.SetMetaData("Anonymizer", "Anonymizer");
 			}
+
 			VisitChildren(tagPair);
 		}
 
@@ -194,6 +202,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 					return true;
 				}
 			}
+
 			return false;
 		}
 
@@ -219,6 +228,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 					}
 				}
 			}
+
 			return anonymizedData;
 		}
 
@@ -260,7 +270,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 		private void AddPlaceholderTag(ICollection<IAbstractMarkupData> segmentContent, IText text)
 		{
 			var processedData = Anonymizer(text.Properties.Text, false);
-			var tag = _factory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(processedData));
+			var tag = _documentItemFactory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(processedData));
 			tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
 
 			segmentContent.Add(tag);
@@ -282,7 +292,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 		private void VisitChildren(IAbstractMarkupDataContainer container)
 		{
 			if (container == null)
+			{
 				return;
+			}
+
 			foreach (var item in container.ToList())
 			{
 				item.AcceptVisitor(this);
@@ -291,7 +304,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 
 		private Regex DecryptIfEncrypted(RegexPattern pattern)
 		{
-			return new Regex(!_arePatternsEcrypted ? pattern.Pattern : AnonymizeData.DecryptData(pattern.Pattern, _encryptionKey), RegexOptions.IgnoreCase);
+			return new Regex(!_arePatternsEcrypted 
+				? pattern.Pattern 
+				: AnonymizeData.DecryptData(pattern.Pattern, _encryptionKey), RegexOptions.IgnoreCase);
 		}
 	}
 }

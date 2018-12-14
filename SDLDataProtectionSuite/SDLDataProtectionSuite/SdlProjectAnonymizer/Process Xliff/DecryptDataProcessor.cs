@@ -16,18 +16,33 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
 			if (!(_decryptSettings.HasBeenCheckedByControl ?? false))
+			{
 				return;
+			}
 
 			base.ProcessParagraphUnit(paragraphUnit);
-			if (paragraphUnit.IsStructure) { return; }
-
-			foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
+			if (paragraphUnit.IsStructure)
 			{
-				var decryptVisitor = new DecryptSegmentVisitor(_decryptSettings);
-				decryptVisitor.DecryptText(segmentPair.Source, ItemFactory, PropertiesFactory);
-				if (segmentPair.Target != null)
-				{
-					decryptVisitor.DecryptText(segmentPair.Target, ItemFactory, PropertiesFactory);
+				return;
+			}
+
+			var segmentPairs = paragraphUnit.SegmentPairs.ToList();
+
+			var decryptVisitor = new DecryptSegmentVisitor(ItemFactory, PropertiesFactory, _decryptSettings);
+
+			if (segmentPairs.Count == 0 && paragraphUnit.Source != null)
+			{
+				decryptVisitor.DecryptText(paragraphUnit.Source);
+			}
+			else
+			{
+				foreach (var segmentPair in segmentPairs)
+				{					
+					decryptVisitor.DecryptText(segmentPair.Source);
+					if (segmentPair.Target != null)
+					{
+						decryptVisitor.DecryptText(segmentPair.Target);
+					}
 				}
 			}
 		}

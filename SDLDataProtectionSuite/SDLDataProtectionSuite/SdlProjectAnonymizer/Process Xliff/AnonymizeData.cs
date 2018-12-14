@@ -19,6 +19,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 				//set the block size in bits for the cryptographic operation.
 				BlockSize = 0x80
 			};
+
 			//set the symmetric key that is used for encryption & decryption.
 			var passBytes = Encoding.UTF8.GetBytes(encryptionkey);
 			//set the initialization vector (IV) for the symmetric algorithm
@@ -29,6 +30,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 			{
 				len = encryptionkeyBytes.Length;
 			}
+
 			Array.Copy(passBytes, encryptionkeyBytes, len);
 
 			objrij.Key = encryptionkeyBytes;
@@ -37,6 +39,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 			//Creates symmetric AES object with the current key and initialization vector IV.
 			var objtransform = objrij.CreateEncryptor();
 			var textDataByte = Encoding.UTF8.GetBytes(textData);
+
 			//Final transform the test string.
 			return Convert.ToBase64String(objtransform.TransformFinalBlock(textDataByte, 0, textDataByte.Length));
 		}
@@ -59,10 +62,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 			{
 				len = encryptionkeyBytes.Length;
 			}
+
 			Array.Copy(passBytes, encryptionkeyBytes, len);
 			objrij.Key = encryptionkeyBytes;
 			objrij.IV = encryptionkeyBytes;
 			var textByte = objrij.CreateDecryptor().TransformFinalBlock(encryptedTextByte, 0, encryptedTextByte.Length);
+
 			return Encoding.UTF8.GetString(textByte);  //it will return readable string
 		}
 	}

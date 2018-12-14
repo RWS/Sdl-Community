@@ -161,6 +161,5 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			get => GetSetting<bool?>(nameof(HasBeenCheckedByControl));
 			set => GetSetting<bool?>(nameof(HasBeenCheckedByControl)).Value = value;
 		}
-
 	}
 }
