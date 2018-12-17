@@ -52,6 +52,9 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
+			var space = new Regex(@"\s{2,}");
+			sourceText = space.Replace(sourceText, " ");
+
 			const string tagOption = @"xml";
 			var targetLanguage = languageDirection.TargetCulture.TwoLetterISOLanguageName;
 			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
