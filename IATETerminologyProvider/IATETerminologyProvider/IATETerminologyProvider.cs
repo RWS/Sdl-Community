@@ -57,6 +57,7 @@ namespace IATETerminologyProvider
 
 			foreach (var textSearchResult in textSearchList)
 			{
+				// split after tab space
 				textResults.AddRange(textSearchResult.Split('\t').ToList());
 			}
 			_termsResult.Clear();
