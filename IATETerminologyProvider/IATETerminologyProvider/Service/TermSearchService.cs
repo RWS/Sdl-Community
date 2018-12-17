@@ -101,56 +101,59 @@ namespace IATETerminologyProvider.Service
 		/// <returns>list of terms</returns>
 		private IList<ISearchResult> MapResponseValues(IRestResponse response, JsonDomainResponseModel domainResponseModel)
 		{
-			var termsList = new List<ISearchResult>();			
-			var jObject = JObject.Parse(response.Content);
-			var itemTokens = (JArray)jObject.SelectToken("items");
-			if (itemTokens != null)
+			var termsList = new List<ISearchResult>();
+			if (!string.IsNullOrEmpty(response.Content))
 			{
-				foreach (var item in itemTokens)
+				var jObject = JObject.Parse(response.Content);
+				var itemTokens = (JArray)jObject.SelectToken("items");
+				if (itemTokens != null)
 				{
-					var itemId = item.SelectToken("id").ToString();
-					var domainModel = domainResponseModel.Items.Where(i => i.Id == itemId).FirstOrDefault();
-					var domain = SetTermDomain(domainModel);
-					SetTermSubdomains(domainModel);
-
-					_id++;
-					// get language childrens (source + target languages)
-					var languageTokens = item.SelectToken("language").Children().ToList();
-					if(languageTokens.Any())
+					foreach (var item in itemTokens)
 					{
-						// foreach language token get the terms
-						foreach (JProperty languageToken in languageTokens)
+						var itemId = item.SelectToken("id").ToString();
+						var domainModel = domainResponseModel.Items.Where(i => i.Id == itemId).FirstOrDefault();
+						var domain = SetTermDomain(domainModel);
+						SetTermSubdomains(domainModel);
+
+						_id++;
+						// get language childrens (source + target languages)
+						var languageTokens = item.SelectToken("language").Children().ToList();
+						if (languageTokens.Any())
 						{
-							// Latin translations are automatically returned by IATE API response->"la" code
-							// Ignore the "la" translations
-							if (!languageToken.Name.Equals("la"))
+							// foreach language token get the terms
+							foreach (JProperty languageToken in languageTokens)
 							{
-								var termEntry = languageToken.FirstOrDefault().SelectToken("term_entries").Last;
-								var termValue = termEntry.SelectToken("term_value").ToString();
-								var termType = GetTermTypeByCode(termEntry.SelectToken("type").ToString());
-								var langTwoLetters = languageToken.Name;
-								var definition = languageToken.Children().FirstOrDefault() != null
-									? languageToken.Children().FirstOrDefault().SelectToken("definition")
-									: null;
-
-								var languageModel = new LanguageModel
+								// Latin translations are automatically returned by IATE API response->"la" code
+								// Ignore the "la" translations
+								if (!languageToken.Name.Equals("la"))
 								{
-									Name = new Language(langTwoLetters).DisplayName,
-									Locale = new Language(langTwoLetters).CultureInfo
-								};
+									var termEntry = languageToken.FirstOrDefault().SelectToken("term_entries").Last;
+									var termValue = termEntry.SelectToken("term_value").ToString();
+									var termType = GetTermTypeByCode(termEntry.SelectToken("type").ToString());
+									var langTwoLetters = languageToken.Name;
+									var definition = languageToken.Children().FirstOrDefault() != null
+										? languageToken.Children().FirstOrDefault().SelectToken("definition")
+										: null;
 
-								var termResult = new SearchResultModel
-								{
-									Text = termValue,
-									Id = _id,
-									Score = 100,
-									Language = languageModel,
-									Definition = definition != null ? definition.ToString() : string.Empty,
-									Domain = domain,
-									Subdomain = FormatSubdomain(),
-									TermType = termType
-								};
-								termsList.Add(termResult);
+									var languageModel = new LanguageModel
+									{
+										Name = new Language(langTwoLetters).DisplayName,
+										Locale = new Language(langTwoLetters).CultureInfo
+									};
+
+									var termResult = new SearchResultModel
+									{
+										Text = termValue,
+										Id = _id,
+										Score = 100,
+										Language = languageModel,
+										Definition = definition != null ? definition.ToString() : string.Empty,
+										Domain = domain,
+										Subdomain = FormatSubdomain(),
+										TermType = termType
+									};
+									termsList.Add(termResult);
+								}
 							}
 						}
 					}
