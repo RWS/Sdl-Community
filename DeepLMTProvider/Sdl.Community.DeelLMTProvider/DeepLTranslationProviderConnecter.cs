@@ -100,20 +100,6 @@ namespace Sdl.Community.DeepLMTProvider
 			if (translatedText.Contains("%"))
 			{
 				translatedText = HttpUtility.UrlDecode(translatedText);
-				translatedText = RemovePercentSymbols(translatedText);
-			}
-
-			return translatedText;
-		}
-
-		private string RemovePercentSymbols(string translatedText)
-		{
-			while (translatedText.Contains("%"))
-			{
-				var index = translatedText.IndexOf("%", StringComparison.Ordinal);
-				var sb = new StringBuilder(translatedText);
-				sb.Remove(index, 1);
-				translatedText = sb.ToString();
 			}
 
 			return translatedText;
