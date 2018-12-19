@@ -175,7 +175,10 @@ namespace ETSTranslationProvider.ETSApi
                     SetETSApiVersion(options);
             }
 
-            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+			ServicePointManager.Expect100Continue = true;
+			ServicePointManager.DefaultConnectionLimit = 9999;
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+			ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
             using (var httpClient = new HttpClient())
             {
                 if (options.UseBasicAuthentication)
@@ -306,7 +309,11 @@ namespace ETSTranslationProvider.ETSApi
                     SetETSApiVersion(options);
             }
 
-            using (var httpClient = new HttpClient())
+			ServicePointManager.Expect100Continue = true;
+			ServicePointManager.DefaultConnectionLimit = 9999;
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+
+			using (var httpClient = new HttpClient())
             {
                 // Build the URI for querying the token
                 UriBuilder builder = new UriBuilder(options.Uri);
