@@ -92,7 +92,7 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			if (translatedText.Contains("%"))
 			{
-				translatedText = HttpUtility.UrlDecode(translatedText);
+				translatedText = Uri.UnescapeDataString(translatedText);
 			}
 
 			var greater = new Regex(@"&gt;");
