@@ -52,10 +52,6 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
-			var space = new Regex(@"\s{2,}");
-			sourceText = space.Replace(sourceText, " ");
-
-			const string tagOption = @"xml";
 			var targetLanguage = languageDirection.TargetCulture.TwoLetterISOLanguageName;
 			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
 			var translatedText = string.Empty;
@@ -67,17 +63,12 @@ namespace Sdl.Community.DeepLMTProvider
 
 				using (var httpClient = new HttpClient())
 				{
-					var values = new Dictionary<string, string>
-					{
-						{"text", sourceText},
-						{"source_lang",sourceLanguage },
-						{"target_lang",targetLanguage},
-						{"preserve_formatting","1" },
-						{"tag_handling","xml" },
-						{"auth_key",ApiKey },
-					};
-					httpClient.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
-					var content = new FormUrlEncodedContent(values);
+					var content = new StringContent($"text={sourceText}" +
+					                                $"&source_lang={sourceLanguage}" +
+					                                $"&target_lang={targetLanguage}" +
+					                                "&preserve_formatting=1" +
+					                                $"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
+
 					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result.Content.ReadAsStringAsync().Result;
 					var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(response);
 
@@ -85,7 +76,6 @@ namespace Sdl.Community.DeepLMTProvider
 					{
 						translatedText = translatedObject.Translations[0].Text;
 						translatedText = DecodeWhenNeeded(translatedText);
-						translatedText = HttpUtility.HtmlDecode(translatedText);
 					}
 				}
 			}
@@ -104,6 +94,17 @@ namespace Sdl.Community.DeepLMTProvider
 			{
 				translatedText = HttpUtility.UrlDecode(translatedText);
 			}
+
+			var greater = new Regex(@"&gt;");
+			var less = new Regex(@"&lt;");
+
+			translatedText = greater.Replace(translatedText, ">");
+			translatedText = less.Replace(translatedText, "<");
+
+			//the only HTML encodings that appear to be used by DeepL
+			//besides the ones we're sending to escape tags
+			var amp = new Regex("&amp;|&amp");
+			translatedText = amp.Replace(translatedText, "&");
 
 			return translatedText;
 		}

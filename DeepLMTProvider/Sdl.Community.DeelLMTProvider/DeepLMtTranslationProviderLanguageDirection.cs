@@ -309,7 +309,6 @@ namespace Sdl.Community.DeepLMTProvider
 							sourceText = newseg.ToPlain();
 						}
 
-						sourceText = _normalizeSourceTextHelper.NormalizeText(sourceText);
 						preTranslatesegments[i].SourceText = sourceText;
 					}
 				}
