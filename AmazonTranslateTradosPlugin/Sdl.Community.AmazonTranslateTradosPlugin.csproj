@@ -119,8 +119,10 @@
     <Compile Include="EditCollection.cs" />
     <Compile Include="AmzConnect\ApiConnecter.cs" />
     <Compile Include="EditItem.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="LanguageDetails.cs" />
     <Compile Include="LanguageResponse.cs" />
+    <Compile Include="Model\JsonAmazonSettings.cs" />
     <Compile Include="MtProviderConfDialogResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Amazon Translate Trados Plugin</PlugInName>
-  <Version>2.0</Version>
+  <Version>2.1</Version>
   <Description>Amazon Translate Trados Plugin</Description>
-  <Author>Sdl Community</Author>
+  <Author>SDL Community Developers</Author>
 	<Include>
 		<File>Newtonsoft.Json.dll</File>
 		<File>RestSharp.dll</File>
 		<File>AWSSDK.Core.dll</File>
 		<File>AWSSDK.Translate.dll</File>
 	</Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0"/>
 </PluginPackage>

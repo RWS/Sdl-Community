@@ -13,8 +13,12 @@
    limitations under the License.*/
 
 using System;
+using System.IO;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using Sdl.Community.AmazonTranslateProvider;
+using Sdl.Community.AmazonTranslateTradosPlugin.Helpers;
+using Sdl.Community.AmazonTranslateTradosPlugin.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -85,6 +89,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
                     loadOptions.AccessKey = creds.UserName;
                     loadOptions.SecretKey = creds.Password;
                     loadOptions.PersistAWSCreds = getCredAmz.Persist;
+					loadOptions.RegionName = GetRegionName();
                 }
                 catch { } //swallow b/c it will just fail to fill in instead of crashing the whole program 
             }
@@ -96,9 +101,10 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             {
                 var testProvider = new MtTranslationProvider(dialog.Options);
 
-                //set cred
+                //set credentials
                 var creds2 = new GenericCredentials(dialog.Options.AccessKey, dialog.Options.SecretKey);
                 SetCredentials(credentialStore, creds2, dialog.Options.PersistAWSCreds);
+				SetRegionName(dialog.Options.RegionName);
 
                 return new ITranslationProvider[] { testProvider };
             }
@@ -239,6 +245,57 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
         public string TypeName => PluginResources.Plugin_NiceName;
 
-        #endregion
-    }
+		#endregion
+
+		#region Private Methods
+		/// <summary>
+		/// Set Region name in the .json settings file when user is adding the provider
+		/// </summary>
+		/// <param name="regionName">regionaName set from UI</param>
+		private void SetRegionName(string regionName)
+		{
+			if (!Directory.Exists(Constants.JsonFilePath))
+			{
+				Directory.CreateDirectory(Constants.JsonFilePath);
+			}
+			var docPath = Path.Combine(Constants.JsonFilePath, Constants.JsonFileName);
+			var jsonAmazonSettings = new JsonAmazonSettings { RegionName = regionName };
+			var jsonResult = JsonConvert.SerializeObject(jsonAmazonSettings);
+
+			if (File.Exists(docPath))
+			{
+				File.Delete(docPath);
+			}
+			File.Create(docPath).Dispose();
+
+			using (var tw = new StreamWriter(docPath, true))
+			{
+				tw.WriteLine(jsonResult);
+				tw.Close();
+			}
+		}
+
+		/// <summary>
+		/// Get region name from the.json settings file
+		/// </summary>
+		/// <returns>region name</returns>
+		private string GetRegionName()
+		{
+			var docPath = Path.Combine(Constants.JsonFilePath, Constants.JsonFileName);
+			if (File.Exists(docPath))
+			{
+				using (var r = new StreamReader(docPath))
+				{
+					var json = r.ReadToEnd();
+					var item = JsonConvert.DeserializeObject<JsonAmazonSettings>(json);
+					if (!string.IsNullOrEmpty(item.RegionName))
+					{
+						return item.RegionName;
+					}
+				}
+			}
+			return string.Empty;
+		}
+		#endregion
+	}
 }
