@@ -166,7 +166,7 @@ namespace ExportToExcel
             else
             {
                 cbl_ExcludedStatuses.Enabled = false;
-				excludeLockedBtn.Enabled = false;
+				//excludeLockedBtn.Enabled = false;
             }
         }
 
@@ -194,8 +194,21 @@ namespace ExportToExcel
 			if (rb_ExcludeCategory.Checked)
 			{
 				rb_ExcludeCategory.Enabled = true;
+				SwitchStatus_CategoryItems(true);
 				_settings.ExcludeExportType = GeneratorSettings.ExclusionType.Category;
 			}
+			else
+			{
+				SwitchStatus_CategoryItems(false);
+			}
+		}
+
+	    private void SwitchStatus_CategoryItems(bool status)
+		{
+			cb_DontExportContext.Enabled = status;
+			cb_DontExportExact.Enabled = status;
+			cb_DontExportFuzzy.Enabled = status;
+			cb_DontExportNoMatch.Enabled = status;
 		}
 	}
 }
