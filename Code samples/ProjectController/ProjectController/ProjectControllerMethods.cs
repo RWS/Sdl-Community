@@ -15,7 +15,7 @@ namespace ProjectController
 
 			//editor controler
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			var activeProjectFromEditor = editorController.ActiveDocument.Project;
+			var activeProjectFromEditor = editorController.ActiveDocument?.Project;
 		}
 	}
 }
