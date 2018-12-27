@@ -22,7 +22,7 @@ namespace DeepLMTProvider.Tests
 			var expectedText = expected;
 
 			// Act
-			var actualText = normalizeSourceTextHelper.NormalizeText(toBeNormalized, removeTabs);
+			var actualText = normalizeSourceTextHelper.NormalizeText(toBeNormalized);
 
 			// Assert
 			Assert.Equal(expectedText, actualText);
