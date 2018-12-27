@@ -80,7 +80,7 @@ namespace Sdl.Community.DeepLMTProvider
 			return finalText;
 		}
 
-		public string NormalizeText(string sourceText)
+		public string NormalizeText(string sourceText, bool removeTabs = true)
 		{
 			var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
 			var words = rgx.Matches(sourceText);
@@ -100,17 +100,21 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 
 			//search for spaces
-			
-			var spacesCollection = ShouldNormalizeSpaces(sourceText);
-			if (spacesCollection.Count > 0)
+			if (!removeTabs)
 			{
-				var matchesIndexes = GetMatchesIndexes(sourceText, spacesCollection);
-				sourceText = NormalizeSpaces(matchesIndexes, sourceText);
+				var spacesCollection = ShouldNormalizeSpaces(sourceText);
+				if (spacesCollection.Count > 0)
+				{
+					var matchesIndexes = GetMatchesIndexes(sourceText, spacesCollection);
+					sourceText = NormalizeSpaces(matchesIndexes, sourceText);
+				}
+			}
+			else
+			{
+				sourceText = Regex.Replace(sourceText, @"\s{2,}|\s", " ");
 			}
 
-			sourceText = Uri.EscapeDataString(sourceText);
-			sourceText = Regex.Replace(sourceText, "%09", "%2509");
-			return sourceText;
+			return Uri.EscapeDataString(sourceText);
 		}
 
 		private string NormalizeSpaces(int[] matchesIndexes, string sourceText)
