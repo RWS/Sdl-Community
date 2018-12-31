@@ -131,7 +131,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Legacy Converter](http://appstore.sdl.com/app/sdlxliff-to-legacy-converter/134/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)|
 | [Number verifier](http://appstore.sdl.com/app/sdl-number-verifier/440/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Number%20Verifier)|
 | [Post Edit Compare](https://appstore.sdl.com/language/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Post%20Edit%20Compare)|
-| [Star Transit](http://appstore.sdl.com/app/transitpackage-handler/573/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit)|
+| [Star Transit](http://appstore.sdl.com/app/transitpackage-handler/573/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/StarTransit)|
 | [Project Anonymizer](https://appstore.sdl.com/language/app/projectanonymizer/895/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Anonymizer)|
 | [Project Terms](https://appstore.sdl.com/language/app/projecttermextract/817/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ProjectTerms)|
 | [Qualitivity](http://appstore.sdl.com/app/qualitivity/612/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Qualitivity)|
