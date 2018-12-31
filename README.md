@@ -145,6 +145,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Word Cloud](http://appstore.sdl.com/app/sdl-trados-studio-word-cloud/402/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/studio_2017/Word%20Cloud)|
   
 ## Other plugins
+
 | Plugin Name | Description |
 | --- | --- |
 | [Hunspell Dictionary Manager](https://appstore.sdl.com/language/app/hunspell-dictionary-manager/928/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/studio_2017/HunspellDictionaryManager)|
