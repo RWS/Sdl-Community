@@ -105,7 +105,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [TM Lifting](http://appstore.sdl.com/app/tm-lifting/419/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/studio_2017/TMLifting)|
 | [BeGlobalV4 Translation Provider](https://appstore.sdl.com/language/app/sdl-beglobal-nmt/941/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/studio_2017/Be%20GlobalV4%20Translation%20Provider)|
 | [Amazon Translate](https://appstore.sdl.com/language/app/amazon-translate-mt-provider/925/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/studio_2017/AmazonTranslateTradosPlugin)|
-| [ETS Translation Provider](https://appstore.sdl.com/language/app/sdl-ets/843/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/studio_2017/ETS%20Translation%20Provider)|
+| [ETS Translation Provider](https://appstore.sdl.com/language/app/sdl-ets/843/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ETS%20Translation%20Provider)|
 
 ## Integration Api
 
