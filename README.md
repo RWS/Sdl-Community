@@ -144,6 +144,11 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
 | [Word Cloud](http://appstore.sdl.com/app/sdl-trados-studio-word-cloud/402/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Word%20Cloud)|
   
+## Other plugins
+
+| Plugin Name | Description |
+| --- | --- |
+| [Hunspell Dictionary Manager](https://appstore.sdl.com/language/app/hunspell-dictionary-manager/928/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/HunspellDictionaryManager)|
 
 
 ## We want your feedback
