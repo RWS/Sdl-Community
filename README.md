@@ -20,7 +20,7 @@ If you have any questions, don't hesitate to ask on the [Sdl Language Developer 
 
 #### Required Tools
 To get started with this repository, install the following tools:
-1. **SDL Trados Studio 2017**. These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having it installed.
+1. **SDL Trados Studio 2019**. These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having it installed.
 2. **Developer licence**. If you don't have a licence please send an email to app-signing@sdl.com.
 3. **.NET 4.5.2**
 4. **Microsoft Visual Studio 2013, 2015 or 2017**. If you don't have Microsoft Visual Studio you can install the community edition  for free [here](https://www.visualstudio.com/).
@@ -33,7 +33,7 @@ Once you have installed the tools, follow the steps below:
 
 2. After the repository was cloned, navigate to the repository path you've specified when cloning the repository. Each plugin has a dedicated folder. All you need to do is to find the plugin you're looking for, enter the folder and open the solution file using Microsoft Visual Studio.
 
-3. Build the solution. After the build has succeeded, open SDL Trados Studio 2017. Click "Yes" when the warning message appears. After Studio loads, the built plugin will be available in Studio.
+3. Build the solution. After the build has succeeded, open SDL Trados Studio 2019. Click "Yes" when the warning message appears. After Studio loads, the built plugin will be available in Studio.
 
  ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
 
