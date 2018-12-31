@@ -150,6 +150,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | --- | --- |
 | [Hunspell Dictionary Manager](https://appstore.sdl.com/language/app/hunspell-dictionary-manager/928/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/studio_2017/HunspellDictionaryManager)|
 
+
 ## We want your feedback
 
 If you have any suggestions or find any issues please go [here](https://github.com/sdl/SDL-Community/issues) and let us know.
