@@ -80,7 +80,7 @@ namespace Sdl.Community.DeepLMTProvider
 			return finalText;
 		}
 
-		public string NormalizeText(string sourceText)
+		public string NormalizeText(string sourceText, bool removeTabs = true)
 		{
 			var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
 			var words = rgx.Matches(sourceText);
@@ -100,30 +100,47 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 
 			//search for spaces
-			var spacesCollection = ShouldEncodeSpaces(sourceText);
-			if (spacesCollection.Count > 0)
+			if (!removeTabs)
 			{
-				var matchesIndexes = GetMatchesIndexes(sourceText, spacesCollection);
-				sourceText = EncodeSpaces(matchesIndexes, sourceText);
+				var spacesCollection = ShouldNormalizeSpaces(sourceText);
+				if (spacesCollection.Count > 0)
+				{
+					var matchesIndexes = GetMatchesIndexes(sourceText, spacesCollection);
+					sourceText = NormalizeSpaces(matchesIndexes, sourceText);
+				}
+			}
+			else
+			{
+				sourceText = Regex.Replace(sourceText, @"\s{2,}|\s", " ");
 			}
 
-			return sourceText;
+			return Uri.EscapeDataString(sourceText);
 		}
 
-		private string EncodeSpaces(int[] matchesIndexes, string sourceText)
+		private string NormalizeSpaces(int[] matchesIndexes, string sourceText)
 		{
-			var spaceRgx = new Regex("([\\s]+){2}");
+			var spaceRgx = new Regex(@"\s{2,}");
 			var finalText = new StringBuilder();
 			var splitedText = sourceText.SplitAt(matchesIndexes).ToList();
 
 			foreach (var text in splitedText)
 			{
-				var hasMultipleSpace = spaceRgx.IsMatch(text);
+				var isSpace = spaceRgx.IsMatch(text);
 				var containsTab = text.Contains('\t');
-				if (hasMultipleSpace || containsTab)
+				if (isSpace)
 				{
-					var encodedSpace = Uri.EscapeDataString(text);
-					finalText.Append(encodedSpace);
+					string space;
+
+					if (containsTab)
+					{
+						space = spaceRgx.Replace(text, "\t");
+					}
+					else
+					{
+						space = spaceRgx.Replace(text, " ");
+					}
+
+					finalText.Append(space);
 				}
 				else
 				{
@@ -133,9 +150,9 @@ namespace Sdl.Community.DeepLMTProvider
 			return finalText.ToString();
 		}
 
-		private MatchCollection ShouldEncodeSpaces(string sourceText)
+		private MatchCollection ShouldNormalizeSpaces(string sourceText)
 		{
-			var spaceRgx = new Regex("[\\s]+");
+			var spaceRgx = new Regex(@"\s{2,}");
 			return spaceRgx.Matches(sourceText);
 		}
 	}

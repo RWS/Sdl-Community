@@ -13,6 +13,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 			{
 				return "ger";
 			}
+			//Language code for Dutch in BeGlobal is dut	    
+			if (languageCode.Equals("nld"))
+			{
+				return "dut";
+			}
 			return languageCode;
 		}
 

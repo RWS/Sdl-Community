@@ -37,13 +37,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>$(SDL_EXTERNALS_PATH)\libraries\trados-sdk-5.0\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <HintPath>$(SDL_EXTERNALS_PATH)\libraries\trados-sdk-5.0\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
-      <HintPath>$(SDL_EXTERNALS_PATH)\libraries\trados-sdk-5.0\Studio5\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.MultiTerm.TermRecognition.Interop">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.MultiTerm.TermRecognition.Interop.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

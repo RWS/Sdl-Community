@@ -20,7 +20,7 @@ If you have any questions, don't hesitate to ask on the [Sdl Language Developer 
 
 #### Required Tools
 To get started with this repository, install the following tools:
-1. **SDL Trados Studio 2017**. These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having it installed.
+1. **SDL Trados Studio 2019**. These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having it installed.
 2. **Developer licence**. If you don't have a licence please send an email to app-signing@sdl.com.
 3. **.NET 4.5.2**
 4. **Microsoft Visual Studio 2013, 2015 or 2017**. If you don't have Microsoft Visual Studio you can install the community edition  for free [here](https://www.visualstudio.com/).
@@ -33,7 +33,7 @@ Once you have installed the tools, follow the steps below:
 
 2. After the repository was cloned, navigate to the repository path you've specified when cloning the repository. Each plugin has a dedicated folder. All you need to do is to find the plugin you're looking for, enter the folder and open the solution file using Microsoft Visual Studio.
 
-3. Build the solution. After the build has succeeded, open SDL Trados Studio 2017. Click "Yes" when the warning message appears. After Studio loads, the built plugin will be available in Studio.
+3. Build the solution. After the build has succeeded, open SDL Trados Studio 2019. Click "Yes" when the warning message appears. After Studio loads, the built plugin will be available in Studio.
 
  ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
 
@@ -60,7 +60,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Number verifier](http://appstore.sdl.com/app/sdl-number-verifier/440/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Number%20Verifier)|
 | [Post Edit Compare](https://appstore.sdl.com/language/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Post%20Edit%20Compare)|
 | [Segment Status Switcher](http://appstore.sdl.com/app/segment-status-switcher/754/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SegmentStatusSwitcher)|
-| [Star Transit](http://appstore.sdl.com/app/transitpackage-handler/573/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit)|
+| [Star Transit](http://appstore.sdl.com/app/transitpackage-handler/573/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/StarTransit)|
 | [SDL TM Anonymizer]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TmAnonymizer)|
 
 
@@ -89,6 +89,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | Plugin Name | Description |
 | --- | --- |
 | [Excel Termonology](https://appstore.sdl.com/language/app/termexcelerator/534/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.ExcelTerminology)|
+| [IATE Termonology Provider](https://appstore.sdl.com/language/app/iate-terminology/950/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/IATETerminologyProvider)|
 
 ## Translation Memory Api
 
@@ -102,6 +103,9 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
 | [TM Optimizer](http://appstore.sdl.com/app/tm-optimizer/347/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TM%20Optimizer)|
 | [TM Lifting](http://appstore.sdl.com/app/tm-lifting/419/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMLifting)|
+| [BeGlobalV4 Translation Provider](https://appstore.sdl.com/language/app/sdl-beglobal-nmt/941/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Be%20GlobalV4%20Translation%20Provider)|
+| [Amazon Translate](https://appstore.sdl.com/language/app/amazon-translate-mt-provider/925/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AmazonTranslateTradosPlugin)|
+| [ETS Translation Provider](https://appstore.sdl.com/language/app/sdl-ets/843/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ETS%20Translation%20Provider)|
 
 ## Integration Api
 
@@ -127,7 +131,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Legacy Converter](http://appstore.sdl.com/app/sdlxliff-to-legacy-converter/134/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)|
 | [Number verifier](http://appstore.sdl.com/app/sdl-number-verifier/440/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Number%20Verifier)|
 | [Post Edit Compare](https://appstore.sdl.com/language/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Post%20Edit%20Compare)|
-| [Star Transit](http://appstore.sdl.com/app/transitpackage-handler/573/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit)|
+| [Star Transit](http://appstore.sdl.com/app/transitpackage-handler/573/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/StarTransit)|
 | [Project Anonymizer](https://appstore.sdl.com/language/app/projectanonymizer/895/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Anonymizer)|
 | [Project Terms](https://appstore.sdl.com/language/app/projecttermextract/817/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ProjectTerms)|
 | [Qualitivity](http://appstore.sdl.com/app/qualitivity/612/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Qualitivity)|
@@ -140,6 +144,11 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
 | [Word Cloud](http://appstore.sdl.com/app/sdl-trados-studio-word-cloud/402/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Word%20Cloud)|
   
+## Other plugins
+
+| Plugin Name | Description |
+| --- | --- |
+| [Hunspell Dictionary Manager](https://appstore.sdl.com/language/app/hunspell-dictionary-manager/928/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/HunspellDictionaryManager)|
 
 
 ## We want your feedback

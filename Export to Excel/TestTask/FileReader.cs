@@ -74,7 +74,7 @@ namespace ExportToExcel
 			        return true;
 		        }
 	        }
-	        else
+	        if (_convertSettings.ExcludeExportType == GeneratorSettings.ExclusionType.Category)
 	        {
 		        if (origin == null)
 		        {
@@ -84,7 +84,6 @@ namespace ExportToExcel
 		        if ((origin.TextContextMatchLevel == TextContextMatchLevel.SourceAndTarget) &&
 		            _convertSettings.DontExportContext)
 		        {
-
 			        return true;
 		        }
 

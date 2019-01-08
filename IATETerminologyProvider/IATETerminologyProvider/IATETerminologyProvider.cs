@@ -51,8 +51,15 @@ namespace IATETerminologyProvider
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
+			var textResults = new List<string>();
 			var searchService = new TermSearchService(_providerSettings);
-			var textResults = text.Split(' ').ToList();
+			var textSearchList = text.Split(' ').ToList();
+
+			foreach(var textSearchResult in textSearchList)
+			{
+				// split after tab space
+				textResults.AddRange(textSearchResult.Split('\t').ToList());
+			}
 			_termsResult.Clear();
 
 			//search terms for each word in text (active segment)

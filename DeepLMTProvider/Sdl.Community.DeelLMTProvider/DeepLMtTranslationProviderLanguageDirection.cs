@@ -131,13 +131,14 @@ namespace Sdl.Community.DeepLMTProvider
 			#endregion
 
 			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
-
+			
 			//maybe this we need to add the score which Christine  requested
 			//
 			var score = 0; //score to 0...change if needed to support scoring
 			tu.Origin = TranslationUnitOrigin.MachineTranslation;
 			var searchResult = new SearchResult(tu)
 			{
+				TranslationProposal = new TranslationUnit(tu),
 				ScoringResult = new ScoringResult
 				{
 					BaseScore = score
@@ -308,7 +309,6 @@ namespace Sdl.Community.DeepLMTProvider
 							sourceText = newseg.ToPlain();
 						}
 
-						sourceText = _normalizeSourceTextHelper.NormalizeText(sourceText);
 						preTranslatesegments[i].SourceText = sourceText;
 					}
 				}

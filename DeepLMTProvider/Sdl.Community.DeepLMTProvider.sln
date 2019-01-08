@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.DeepLMTProvid
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.DeepLMTProvider.WPF", "Sdl.Community.DeepLMTProvider.WPF\Sdl.Community.DeepLMTProvider.WPF.csproj", "{B645E128-286D-49E4-BC45-8EC319AB9CAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeepLMTProvider.Tests", "DeepLMTProvider.Tests\DeepLMTProvider.Tests.csproj", "{80CE1806-029A-403D-BBA4-6FC85D8EE68E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B645E128-286D-49E4-BC45-8EC319AB9CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B645E128-286D-49E4-BC45-8EC319AB9CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B645E128-286D-49E4-BC45-8EC319AB9CAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80CE1806-029A-403D-BBA4-6FC85D8EE68E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80CE1806-029A-403D-BBA4-6FC85D8EE68E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80CE1806-029A-403D-BBA4-6FC85D8EE68E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80CE1806-029A-403D-BBA4-6FC85D8EE68E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -71,6 +71,9 @@
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.TranslationStudio.Common">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudio.Common.dll</HintPath>
@@ -112,6 +115,10 @@
     <Compile Include="ExclusionsUI.designer.cs">
       <DependentUpon>ExclusionsUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExportToExcelTellMe\CommunityForumAction.cs" />
+    <Compile Include="ExportToExcelTellMe\ExportToExcelTellMeProvider.cs" />
+    <Compile Include="ExportToExcelTellMe\HelpAction.cs" />
+    <Compile Include="ExportToExcelTellMe\StoreAction.cs" />
     <Compile Include="ExportTypeUI.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -141,6 +148,9 @@
     <Compile Include="Worker.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ForumIcon.ico" />
+    <EmbeddedResource Include="Resources\Question.ico" />
+    <EmbeddedResource Include="Resources\Download ExportToExcel.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>

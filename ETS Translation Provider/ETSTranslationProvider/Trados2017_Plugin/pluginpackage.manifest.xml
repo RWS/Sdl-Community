@@ -10,5 +10,6 @@
     <File>SegmentParser.dll</File>
     <File>XliffConverter.dll</File>
     <File>NLog.dll</File>
-  </Include>
+		<File>Newtonsoft.Json.dll</File>
+	</Include>
 </PluginPackage>
