@@ -1,3 +1,5 @@
+[![Build Status](https://sdl.visualstudio.com/TradosStudio/_apis/build/status/AppStore/TradosStudio%20-%20AppStore)]
+
 ## Table of contents 
 
 1. [Intro](#intro)
