@@ -24,7 +24,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var credentials = GetCredentials(credentialStore, "beglobaltranslationprovider:///");
 			
 			var beGlobalWindow = new BeGlobalWindow();
-			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow,options, credentials);
+			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow,options, credentials,languagePairs);
 			beGlobalWindow.DataContext = beGlobalVm;
 
 			beGlobalWindow.ShowDialog();
@@ -64,7 +64,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				editProvider.Options.ClientSecret = clientSecret;
 			}
 			var beGlobalWindow = new BeGlobalWindow();
-			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow,editProvider.Options,savedCredentials);
+			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow,editProvider.Options,savedCredentials,languagePairs);
 			beGlobalWindow.DataContext = beGlobalVm;
 			
 			beGlobalWindow.ShowDialog();

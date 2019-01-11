@@ -8,8 +8,8 @@ using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
@@ -23,14 +23,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private readonly bool _tellMeAction;   
 		private readonly BeGlobalWindow _mainWindow;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
+		private readonly LanguagePair[] _languagePairs;
 
 		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options,
-			TranslationProviderCredential credentialStore)
+			TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
 		{
 			LoginViewModel = new LoginViewModel(options);
 			SettingsViewModel = new SettingsViewModel(options);
 			Options = options;
 			_mainWindow = mainWindow;
+			_languagePairs = languagePairs;
 			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 
 			if (credentialStore == null) return;
@@ -93,31 +95,32 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		private void GetEngineModels(List<BeGlobalLanguagePair>languagePairs)
+		private void GetEngineModels(List<BeGlobalLanguagePair> beGlobalLanguagePairs)
 		{
-			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			var currentProject = projectsController.CurrentProject != null ? projectsController.CurrentProject.GetProjectInfo() : projectsController.SelectedProjects.ToList()[0].GetProjectInfo();
-			var sourceLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(currentProject.SourceLanguage.CultureInfo.ThreeLetterISOLanguageName);
-			var pairsWithSameSource = languagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
-			foreach (var projectTargetLanguage in currentProject.TargetLanguages)
+			var sourceLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(_languagePairs?[0].SourceCulture.ThreeLetterISOLanguageName);
+			var pairsWithSameSource = beGlobalLanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
+			if (_languagePairs?.Count() > 0)
 			{
-				var targetLanguage =
-					_normalizeSourceTextHelper.GetCorespondingLangCode(projectTargetLanguage.CultureInfo.ThreeLetterISOLanguageName);
+				foreach (var languagePair in _languagePairs)
+				{
+					var targetLanguage =
+						_normalizeSourceTextHelper.GetCorespondingLangCode(languagePair.TargetCulture.ThreeLetterISOLanguageName);
 
-				var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
+					var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
 
-				foreach (var languagePair in serviceLanguagePairs)
-				{ 
-					if (SettingsViewModel?.TranslationOptions != null)
+					foreach (var serviceLanguagePair in serviceLanguagePairs)
 					{
-						var engineExists = SettingsViewModel.TranslationOptions.Any(e => e.Model.Equals(languagePair.Model));
-						if (!engineExists)
+						if (SettingsViewModel?.TranslationOptions != null)
 						{
-							SettingsViewModel.TranslationOptions.Add(new TranslationModel
+							var engineExists = SettingsViewModel.TranslationOptions.Any(e => e.Model.Equals(serviceLanguagePair.Model));
+							if (!engineExists)
 							{
-								Model = languagePair.Model,
-								DisplayName = languagePair.DisplayName
-							});
+								SettingsViewModel.TranslationOptions.Add(new TranslationModel
+								{
+									Model = serviceLanguagePair.Model,
+									DisplayName = serviceLanguagePair.DisplayName
+								});
+							}
 						}
 					}
 				}
