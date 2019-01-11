@@ -91,10 +91,10 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <SpecificVersion>False</SpecificVersion>
