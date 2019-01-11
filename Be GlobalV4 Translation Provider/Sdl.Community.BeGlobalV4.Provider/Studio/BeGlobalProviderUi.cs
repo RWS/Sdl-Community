@@ -11,9 +11,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		Id = "SDLBeGlobal(NMT)ProviderUi",
 		Name = "SDLBeGlobal(NMT)ProviderUi",
 		Description = "SDL BeGlobal (NMT) Translation Provider")]
-	public class BeGlobalProviderUi  : ITranslationProviderWinFormsUI
+	public class BeGlobalProviderUi : ITranslationProviderWinFormsUI
 	{
-		public string TypeName => "SDL BeGlobal (NMT) Translation Provider"; 
+		public string TypeName => "SDL BeGlobal (NMT) Translation Provider";
 		public string TypeDescription => "SDL BeGlobal (NMT) Translation Provider";
 		public bool SupportsEditing => true;
 
@@ -22,9 +22,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var options = new BeGlobalTranslationOptions();
 
 			var credentials = GetCredentials(credentialStore, "beglobaltranslationprovider:///");
-			
+
 			var beGlobalWindow = new BeGlobalWindow();
-			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow,options, credentials);
+			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, credentials, languagePairs);
 			beGlobalWindow.DataContext = beGlobalVm;
 
 			beGlobalWindow.ShowDialog();
@@ -36,7 +36,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				};
 				var clientId = beGlobalVm.Options.ClientId;
 				var clientSecret = beGlobalVm.Options.ClientSecret;
-				SetBeGlobalCredentials(credentialStore, clientId,clientSecret, true);
+				SetBeGlobalCredentials(credentialStore, clientId, clientSecret, true);
 				return new ITranslationProvider[] { provider };
 			}
 			return null;
@@ -64,22 +64,22 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				editProvider.Options.ClientSecret = clientSecret;
 			}
 			var beGlobalWindow = new BeGlobalWindow();
-			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow,editProvider.Options,savedCredentials);
+			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, editProvider.Options, savedCredentials, languagePairs);
 			beGlobalWindow.DataContext = beGlobalVm;
-			
+
 			beGlobalWindow.ShowDialog();
 			if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 			{
 				editProvider.Options = beGlobalVm.Options;
 				var clientId = editProvider.Options.ClientId;
-				var clientSecret = beGlobalVm.Options.ClientSecret;	  
+				var clientSecret = beGlobalVm.Options.ClientSecret;
 				SetBeGlobalCredentials(credentialStore, clientId, clientSecret, true);
 				return true;
 			}
 			return false;
 		}
 
-		private void SetBeGlobalCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret,bool persistKey)
+		private void SetBeGlobalCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool persistKey)
 		{
 			var uri = new Uri("beglobaltranslationprovider:///");
 
@@ -131,6 +131,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			ITranslationProviderCredentialStore credentialStore)
 		{
 			throw new NotImplementedException();
-		} 
+		}
 	}
 }

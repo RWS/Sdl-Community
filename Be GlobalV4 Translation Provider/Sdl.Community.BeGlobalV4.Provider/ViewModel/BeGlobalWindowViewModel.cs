@@ -8,8 +8,8 @@ using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
@@ -17,19 +17,22 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 	{
 		public BeGlobalTranslationOptions Options { get; set; }
 		public LoginViewModel LoginViewModel { get; set; }
-		public SettingsViewModel SettingsViewModel { get; set; }	
+		public SettingsViewModel SettingsViewModel { get; set; }
 		private ICommand _okCommand;
 		private int _selectedIndex;
+		private readonly bool _tellMeAction;
 		private readonly BeGlobalWindow _mainWindow;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
+		private readonly LanguagePair[] _languagePairs;
 
 		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options,
-			TranslationProviderCredential credentialStore)
+			TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
 		{
 			LoginViewModel = new LoginViewModel(options);
 			SettingsViewModel = new SettingsViewModel(options);
 			Options = options;
 			_mainWindow = mainWindow;
+			_languagePairs = languagePairs;
 			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 
 			if (credentialStore == null) return;
@@ -43,6 +46,35 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				LoginViewModel.Email = options.ClientId;
 				_mainWindow.LoginTab.PasswordBox.Password = options.ClientSecret;
 			}
+		}
+
+		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options, bool tellMeAction)
+		{
+			LoginViewModel = new LoginViewModel(options);
+			SettingsViewModel = new SettingsViewModel(options);
+			Options = options;
+			if (options != null)
+			{
+				var mtModel = SettingsViewModel.TranslationOptions.FirstOrDefault(m => m.Model.Equals(options.Model));
+				if (mtModel != null)
+				{
+					var selectedModelIndex = SettingsViewModel.TranslationOptions.IndexOf(mtModel);
+					SettingsViewModel.SelectedModelOption = SettingsViewModel.TranslationOptions[selectedModelIndex];
+				}
+				else if (SettingsViewModel.TranslationOptions.Count.Equals(0))
+				{
+					var translationModel = new TranslationModel
+					{
+						Model = options.Model,
+						DisplayName = options.Model
+					};
+					SettingsViewModel.TranslationOptions.Add(translationModel);
+					SettingsViewModel.SelectedModelOption = translationModel;
+				}
+			}
+			_mainWindow = mainWindow;
+			_tellMeAction = tellMeAction;
+			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 		}
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
@@ -63,40 +95,47 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		private void GetEngineModels(List<BeGlobalLanguagePair>languagePairs)
+		private void GetEngineModels(List<BeGlobalLanguagePair> beGlobalLanguagePairs)
 		{
-			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			var currentProject = projectsController.CurrentProject != null ? projectsController.CurrentProject.GetProjectInfo() : projectsController.SelectedProjects.ToList()[0].GetProjectInfo();
-			var sourceLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(currentProject.SourceLanguage.CultureInfo.ThreeLetterISOLanguageName);
-			var pairsWithSameSource = languagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
-			foreach (var projectTargetLanguage in currentProject.TargetLanguages)
+			var sourceLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(_languagePairs?[0].SourceCulture.ThreeLetterISOLanguageName);
+			var pairsWithSameSource = beGlobalLanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
+			if (_languagePairs?.Count() > 0)
 			{
-				var targetLanguage =
-					_normalizeSourceTextHelper.GetCorespondingLangCode(projectTargetLanguage.CultureInfo.ThreeLetterISOLanguageName);
+				foreach (var languagePair in _languagePairs)
+				{
+					var targetLanguage =
+						_normalizeSourceTextHelper.GetCorespondingLangCode(languagePair.TargetCulture.ThreeLetterISOLanguageName);
 
-				var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
+					var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
 
-				foreach (var languagePair in serviceLanguagePairs)
-				{ 
-					if (SettingsViewModel?.TranslationOptions != null)
+					foreach (var serviceLanguagePair in serviceLanguagePairs)
 					{
-						var engineExists = SettingsViewModel.TranslationOptions.Any(e => e.Model.Equals(languagePair.Model));
-						if (!engineExists)
+						if (SettingsViewModel?.TranslationOptions != null)
 						{
-							SettingsViewModel.TranslationOptions.Add(new TranslationModel
+							var engineExists = SettingsViewModel.TranslationOptions.Any(e => e.Model.Equals(serviceLanguagePair.Model));
+							if (!engineExists)
 							{
-								Model = languagePair.Model,
-								DisplayName = languagePair.DisplayName
-							});
+								SettingsViewModel.TranslationOptions.Add(new TranslationModel
+								{
+									Model = serviceLanguagePair.Model,
+									DisplayName = serviceLanguagePair.DisplayName
+								});
+							}
 						}
 					}
 				}
-			} 
+			}
 		}
 
 		private void Ok(object parameter)
 		{
 			var loginTab = parameter as Login;
+
+			if (_tellMeAction)
+			{
+				WindowCloser.SetDialogResult(_mainWindow, true);
+				_mainWindow.Close();
+			}
 			if (loginTab != null)
 			{
 				var isValid = IsWindowValid();
@@ -104,14 +143,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				{
 					WindowCloser.SetDialogResult(_mainWindow, true);
 					_mainWindow.Close();
-				}  
+				}
 			}
 		}
 
 		private void SetEngineModel()
 		{
 			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options.ClientId, Options.ClientSecret, string.Empty, string.Empty, Options.Model, Options.UseClientAuthentication);
-
 			int accountId;
 			if (Options.UseClientAuthentication)
 			{
@@ -120,7 +158,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			else
 			{
 				accountId = beGlobalTranslator.GetUserInformation();
-			}  
+			}
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
 
 			GetEngineModels(subscriptionInfo.LanguagePairs);
@@ -133,7 +171,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					{
 						Options.Model = SettingsViewModel.TranslationOptions?[0].Model;
 					}
-				} 
+				}
 			}
 			else
 			{
@@ -143,12 +181,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					var selectedModelIndex = SettingsViewModel.TranslationOptions.IndexOf(mtModel);
 					SettingsViewModel.SelectedModelOption = SettingsViewModel.TranslationOptions[selectedModelIndex];
 				}
-			}	   
+			}
 		}
 
 		private bool IsWindowValid()
 		{
-			var loginTab = _mainWindow?.LoginTab;	  
+			var loginTab = _mainWindow?.LoginTab;
 			Options.ResendDrafts = SettingsViewModel.ReSendChecked;
 			Options.Model = SettingsViewModel.SelectedModelOption?.Model;
 			try
@@ -199,7 +237,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					loginTab.ValidationBlock.Visibility = Visibility.Visible;
 					loginTab.ValidationBlock.Text = e.Message.Contains("Acquiring token failed") ? "Please verify your credentials." : e.Message;
 				}
-			} 
+			}
 			return false;
 		}
 	}
