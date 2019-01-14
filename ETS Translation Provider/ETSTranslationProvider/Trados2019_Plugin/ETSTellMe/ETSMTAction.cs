@@ -12,7 +12,7 @@ namespace ETSTranslationProvider.ETSTellMe
 
 		public ETSMTAction()
 		{
-			Name = "SDL official web site MT section";
+			Name = "SDL official MT documentation";
 		}
 
 		public override void Execute()
