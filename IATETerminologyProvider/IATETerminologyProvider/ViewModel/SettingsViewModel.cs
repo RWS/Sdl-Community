@@ -13,10 +13,10 @@ namespace IATETerminologyProvider.ViewModel
 	{
 		#region Private Fields
 		private ICommand _saveSettingsCommand;
-		private DomainModel _selectedDomain;
-		private ObservableCollection<DomainModel> _domains = new ObservableCollection<DomainModel>();
+		private DomainModel _selectedDomain;		
 		private TermTypeModel _selectedTermType;
-		private ObservableCollection<TermTypeModel> _termTypes = new ObservableCollection<TermTypeModel>();
+		private ObservableCollection<DomainModel> _domains;
+		private ObservableCollection<TermTypeModel> _termTypes;
 		#endregion
 
 		#region Public Constructors
@@ -81,28 +81,24 @@ namespace IATETerminologyProvider.ViewModel
 		{
 			if (Domains.Count > 0)
 			{
-				ProviderSettings = new ProviderSettings();
-				ProviderSettings.Domains = new List<string>();
-				ProviderSettings.TermTypes = new List<int>();
+				ProviderSettings = new ProviderSettings
+				{
+					Domains = new List<string>(),
+					TermTypes = new List<int>()
+				};
 
 				// Add selected domains to provider settings
 				var selectedDomains = Domains.Where(d => d.IsSelected).ToList();
-				if (selectedDomains != null)
+				foreach (var selectedDomain in selectedDomains)
 				{
-					foreach (var selectedDomain in selectedDomains)
-					{
-						ProviderSettings.Domains.Add(selectedDomain.Code);
-					}
+					ProviderSettings.Domains.Add(selectedDomain.Code);
 				}
 
 				// Add selected term types to provider settings
 				var selectedTermTypes = TermTypes.Where(d => d.IsSelected).ToList();
-				if (selectedTermTypes != null)
+				foreach (var selectedTermType in selectedTermTypes)
 				{
-					foreach (var selectedTermType in selectedTermTypes)
-					{
-						ProviderSettings.TermTypes.Add(selectedTermType.Code);
-					}
+					ProviderSettings.TermTypes.Add(selectedTermType.Code);
 				}
 
 				var persistenceService = new PersistenceService();
@@ -119,6 +115,7 @@ namespace IATETerminologyProvider.ViewModel
 		#region Private Methods
 		private void LoadDomains()
 		{
+			_domains = new ObservableCollection<DomainModel>();
 			var domains = DomainService.GetDomains();
 			foreach (var domain in domains)
 			{
@@ -137,6 +134,7 @@ namespace IATETerminologyProvider.ViewModel
 
 		private void LoadTermTypes()
 		{
+			_termTypes = new ObservableCollection<TermTypeModel>();
 			TermTypes = TermTypeService.GetTermTypes();
 		}
 
@@ -147,7 +145,7 @@ namespace IATETerminologyProvider.ViewModel
 			{
 				foreach (var domainCode in providerSettings.Domains)
 				{
-					var domain = Domains.Where(d => d.Code.Equals(domainCode)).FirstOrDefault();
+					var domain = Domains.FirstOrDefault(d => d.Code.Equals(domainCode));
 					if (domain != null)
 					{
 						domain.IsSelected = true;
@@ -156,7 +154,7 @@ namespace IATETerminologyProvider.ViewModel
 
 				foreach (var termTypeCode in providerSettings.TermTypes)
 				{
-					var termType = TermTypes.Where(t => t.Code.Equals(termTypeCode)).FirstOrDefault();
+					var termType = TermTypes.FirstOrDefault(t => t.Code.Equals(termTypeCode));
 					if (termType != null)
 					{
 						termType.IsSelected = true;

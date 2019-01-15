@@ -9,14 +9,11 @@ using Sdl.Terminology.TerminologyProvider.Core;
 namespace IATETerminologyProvider
 {
 	[TerminologyProviderViewerWinFormsUI]
-	class IATETerminologyProviderViewerWinFormsUI : ITerminologyProviderViewerWinFormsUI
-	{
-		#region Private Fields
+	internal class IATETerminologyProviderViewerWinFormsUI : ITerminologyProviderViewerWinFormsUI
+	{		
 		private IATETerminologyProvider _iateTerminologyProvider;
 		private IATETermsControl _control;
-		#endregion
-
-		#region Public Properties
+		
 		public Control Control
 		{
 			get
@@ -27,18 +24,22 @@ namespace IATETerminologyProvider
 					BackColor = Color.White
 				};
 
-				JumpToTermAction += _control.JumpToTerm;
-				//_iateTerminologyProvider.TermsLoaded += _control.SetTerms;
+				if (JumpToTermAction != null)
+				{
+					JumpToTermAction -= _control.JumpToTerm;
+				}
+
+				JumpToTermAction += _control.JumpToTerm;				
+
 
 				return _control;
 			}
 		}
 
 		public bool Initialized => true;
-		public IEntry SelectedTerm { get; set; }		
-		#endregion
 
-		#region Public Methods
+		public IEntry SelectedTerm { get; set; }		
+		
 		public void AddAndEditTerm(IEntry term, string source, string target)
 		{
 		}
@@ -71,13 +72,10 @@ namespace IATETerminologyProvider
 		{
 			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
 		}
-		#endregion
 
-		#region Events
 		public event EventHandler TermChanged;
 		public event EventHandler<EntryEventArgs> SelectedTermChanged;
 		public event Action<IEntry> JumpToTermAction;
-		public event Action<string, string> AddTermAction;
-		#endregion
+		public event Action<string, string> AddTermAction;		
 	}
 }

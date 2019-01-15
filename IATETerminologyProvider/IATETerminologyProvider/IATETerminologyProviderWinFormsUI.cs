@@ -12,31 +12,25 @@ namespace IATETerminologyProvider
 {
 	[TerminologyProviderWinFormsUI]
 	public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI
-	{
-		#region Private Fields
+	{	
 		private SettingsViewModel _settingsViewModel;
-		private SettingsWindow _settingsWindow;
-		#endregion
+		private SettingsWindow _settingsWindow;		
 
-		#region Public Properties
 		public string TypeName => PluginResources.IATETerminologyProviderName;
 		public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
 		public bool SupportsEditing => true;
-		#endregion
-
-		#region Public Methods
 		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
 		{
-			var result = SetTerminologyProvider(null);
+			var result = SetTerminologyProvider(null, null);
 			return result;					
 		}
 		
 		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 		{
 			var persistenceService = new PersistenceService();
-			var providerSettings = persistenceService.Load();
+			var providerSettings = persistenceService.Load();	
 
-			SetTerminologyProvider(providerSettings);
+			SetTerminologyProvider(terminologyProvider as IATETerminologyProvider, providerSettings);
 
 			return true;
 		}
@@ -54,32 +48,38 @@ namespace IATETerminologyProvider
 		{
 			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
 		}
-		#endregion
 
-		#region Private Methods
 		private ProviderSettings GetProviderSettings()
 		{
 			_settingsWindow?.Close();
 			return _settingsViewModel.ProviderSettings;
 		}
 
-		private ITerminologyProvider[] SetTerminologyProvider(ProviderSettings providerSettings)
+		private ITerminologyProvider[] SetTerminologyProvider(IATETerminologyProvider provider, ProviderSettings providerSettings)
 		{
 			var result = new List<ITerminologyProvider>();
 
+			if (_settingsViewModel != null)
+			{
+				_settingsViewModel.OnSaveSettingsCommandRaised -= GetProviderSettings;
+			}
+			
 			_settingsViewModel = new SettingsViewModel(providerSettings);
 			_settingsWindow = new SettingsWindow(_settingsViewModel);
-			_settingsViewModel.OnSaveSettingsCommandRaised += GetProviderSettings;
 
+			if (_settingsViewModel != null)
+			{				
+				_settingsViewModel.OnSaveSettingsCommandRaised += GetProviderSettings;
+			}
+			
 			_settingsWindow.ShowDialog();
 
-			var termSearchService = new TermSearchService(_settingsViewModel.ProviderSettings);
-			var IATETerminologyProvider = new IATETerminologyProvider(_settingsViewModel.ProviderSettings);
+			providerSettings = _settingsViewModel.ProviderSettings;
+			provider.UpdateSettings(providerSettings);
 
-			result.Add(IATETerminologyProvider);
+			result.Add(provider);
 
 			return result.ToArray();
 		}
-		#endregion
 	}
 }
