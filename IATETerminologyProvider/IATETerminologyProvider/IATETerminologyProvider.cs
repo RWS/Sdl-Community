@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using IATETerminologyProvider.EventArgs;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Service;
@@ -12,28 +12,27 @@ namespace IATETerminologyProvider
 {
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
-		#region Private Fields
+		private IList<EntryModel> _entryModels;
 		private ProviderSettings _providerSettings;
-		private IList<ISearchResult> _termsResult = new List<ISearchResult>();
-		private IList<EntryModel> _entryModels = new List<EntryModel>();
-		#endregion
+		private TermSearchService _searchService;	
 
-		#region Constructors
+		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
+
 		public IATETerminologyProvider(ProviderSettings providerSettings)
 		{
-			_providerSettings = providerSettings;
+			UpdateSettings(providerSettings);
 		}
-		#endregion
 
-		#region Public Properties
-		public const string IATEUriTemplate = Constants.IATEUriTemplate;
+		public const string IateUriTemplate = Constants.IATEUriTemplate;
+
 		public override IDefinition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
-		public override string Description => PluginResources.IATETerminologyProviderDescription;
-		public override string Name => PluginResources.IATETerminologyProviderName;
-		public override Uri Uri => new Uri((IATEUriTemplate + "https://iate.europa.eu/em-api/entries/_search").RemoveUriForbiddenCharacters());
-		#endregion
 
-		#region Public Methods
+		public override string Description => PluginResources.IATETerminologyProviderDescription;
+
+		public override string Name => PluginResources.IATETerminologyProviderName;
+
+		public override Uri Uri => new Uri((IateUriTemplate + "https://iate.europa.eu/em-api/entries/_search").RemoveUriForbiddenCharacters());
+
 		public override IEntry GetEntry(int id)
 		{
 			return _entryModels.FirstOrDefault(e => e.Id == id);
@@ -49,31 +48,31 @@ namespace IATETerminologyProvider
 			return GetDefinitionLanguages().Cast<ILanguage>().ToList();
 		}
 
-		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
+		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
-			var textResults = new List<string>();
-			var searchService = new TermSearchService(_providerSettings);
-			var textSearchList = text.Split(' ').ToList();
-
-			foreach(var textSearchResult in textSearchList)
+			_entryModels.Clear();
+			
+			if (_searchService.GetTerms(text, source, target, maxResultsCount) is List<ISearchResult> results && results.Count > 0)
 			{
-				// split after tab space
-				textResults.AddRange(textSearchResult.Split('\t').ToList());
+				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
+
+				results = RemoveDuplicateTerms(termGroups, source, target);
+				results = MaxSearchResults(results, maxResultsCount);
+				CreateEntryTerms(results, source, GetLanguages());
+
+				OnTermEntriesChanged(new TermEntriesChangedEventArgs { EntryModels = _entryModels, SourceLanguage = source});
+				return results;
 			}
-			_termsResult.Clear();
 
-			//search terms for each word in text (active segment)
-			Parallel.ForEach(textResults, (textResult) =>
-			{
-				var termResults = searchService.GetTerms(textResult, source, destination, maxResultsCount);
-				((List<ISearchResult>)_termsResult).AddRange(termResults);
-			});
+			OnTermEntriesChanged(null);
+			return null;
+		}
 
-			if (_termsResult.Count > 0)
-			{
-				CreateEntryTerms(source, destination);				
-			}
-			return _termsResult;
+		public void UpdateSettings(ProviderSettings providerSettings)
+		{			
+			_providerSettings = providerSettings;
+			_entryModels = new List<EntryModel>();
+			_searchService = new TermSearchService(_providerSettings);			
 		}
 
 		public IList<IDescriptiveField> GetDescriptiveFields()
@@ -124,7 +123,7 @@ namespace IATETerminologyProvider
 			{
 				IsBidirectional = true,
 				Locale = projSourceLanguage.CultureInfo,
-				Name = projSourceLanguage.DisplayName,				
+				Name = projSourceLanguage.DisplayName,
 				TargetOnly = false
 			};
 
@@ -146,115 +145,91 @@ namespace IATETerminologyProvider
 		{
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
-		#endregion
-
-		#region Private Methods
-		/// <summary>
-		/// Create entry models (used to return the text in the Termbase Search panel)
-		/// </summary>
-		/// <param name="sourceLanguage">source language</param>
-		/// <param name="targetLanguage">target language</param>
-		private void CreateEntryTerms(ILanguage sourceLanguage, ILanguage targetLanguage)
+		
+		public string GetStatusName(int value)
 		{
-			var languages = GetLanguages();
+			switch (value)
+			{
+				case 0: return "Deprecated";
+				case 1: return "Obsolete";
+				case 2: return ""; // TODO: confirm value
+				case 3: return "Preferred";
+				default: return ""; // TODO: confirm default value
+			}
+		}
+
+		protected virtual void OnTermEntriesChanged(TermEntriesChangedEventArgs e)
+		{
+			TermEntriesChanged?.Invoke(this, e);
+		}
+		
+		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)
+		{
 			_entryModels.Clear();
 
-			foreach (SearchResultModel termResult in _termsResult.Where(s=>s.Language.Name.Equals(sourceLanguage.Locale.Parent.DisplayName)))
+			foreach (var searchResult in termsResult.Where(s => s.Language.Locale.TwoLetterISOLanguageName.Equals(sourceLanguage.Locale.TwoLetterISOLanguageName)))
 			{
+				var termResult = (SearchResultModel)searchResult;
+
 				var entryModel = new EntryModel
 				{
 					SearchText = termResult.Text,
 					Id = termResult.Id,
-					Fields = SetEntryFields(termResult),
+					ItemId = termResult.ItemId,
+					Fields = SetEntryFields(termResult, 0),
 					Transactions = new List<IEntryTransaction>(),
-					Languages = SetEntryLanguages(languages, sourceLanguage, termResult)
+					Languages = SetEntryLanguages(termsResult, sourceLanguage, languages, termResult)
 				};
+
 				_entryModels.Add(entryModel);
 			}
 		}
-
-		/// <summary>
-		/// Set entry languages for the entry models
-		/// </summary>
-		/// <param name="languages">source and target languages</param>
-		/// <param name="sourceLanguage">source language</param>
-		/// <param name="termResult">term result</param>
-		/// <returns>entryLanguages</returns>
-		private IList<IEntryLanguage> SetEntryLanguages(IList<ILanguage> languages, ILanguage sourceLanguage, SearchResultModel termResult)
+		
+		private IList<IEntryLanguage> SetEntryLanguages(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IEnumerable<ILanguage> languages, SearchResultModel termResult)
 		{
-			IList<IEntryLanguage> entryLanguages = new List<IEntryLanguage>();
+			var entryLanguages = new List<IEntryLanguage>();
 			foreach (var language in languages)
 			{
 				var entryLanguage = new EntryLanguageModel
 				{
-					Fields = !language.Name.Equals(sourceLanguage.Name) ? SetEntryFields(termResult) : new List<IEntryField>(),
+					Fields = !language.Locale.TwoLetterISOLanguageName.Equals(sourceLanguage.Locale.TwoLetterISOLanguageName) ? SetEntryFields(termResult, 1) : new List<IEntryField>(),
 					Locale = language.Locale,
 					Name = language.Name,
 					ParentEntry = null,
-					Terms = CreateEntryTerms(language, sourceLanguage, termResult.Id),
-					IsSource = language.Name.Equals(sourceLanguage.Name) ? true : false
+					Terms = CreateEntryTerms(termsResult, language, termResult.Id),
+					IsSource = language.Locale.TwoLetterISOLanguageName.Equals(sourceLanguage.Locale.TwoLetterISOLanguageName)
 				};
 				entryLanguages.Add(entryLanguage);
 			}
+
 			return entryLanguages;
 		}
-
-		/// <summary>
-		/// Create Entry terms for the entry languages
-		/// </summary>
-		/// <param name="language">document language</param>
-		/// <param name="sourceLanguage">term source language</param>
-		/// <param name="id">term id</param>
-		/// <returns>entryTerms</returns>
-		private IList<IEntryTerm> CreateEntryTerms(ILanguage language, ILanguage sourceLanguage, int id)
+		
+		private IList<IEntryTerm> CreateEntryTerms(IEnumerable<ISearchResult> termsResult, ILanguage language, int id)
 		{
 			IList<IEntryTerm> entryTerms = new List<IEntryTerm>();
-			var terms = _termsResult.Where(t => t.Id == id).ToList();
+			var terms = termsResult.Where(t => t.Id == id && t.Language.Locale.TwoLetterISOLanguageName == language.Locale.TwoLetterISOLanguageName).ToList();
 
-			// if language is Source language, create entryTerm with value from source language text
-			// otherwise create entry terms for the target language search results
-			if (language.Name.Equals(sourceLanguage.Name))
+			foreach (var searchResult in terms)
 			{
-				var sourceLangTerm = terms.FirstOrDefault(t => t.Language.Name.Equals(sourceLanguage.Locale.Parent.DisplayName));
-				if (sourceLangTerm != null)
+				var term = (SearchResultModel)searchResult;
+
+				var entryTerm = new EntryTerm
 				{
-					var entryTerm = new EntryTerm
-					{
-						Value = sourceLangTerm.Text,
-						Fields = SetEntryFields((SearchResultModel)sourceLangTerm)
-					};
-					entryTerms.Add(entryTerm);
-				}
+					Value = term.Text,
+					Fields = SetEntryFields(term, 2)
+				};
+
+				entryTerms.Add(entryTerm);
 			}
-			else
-			{
-				// add IEntryTerm only for the current ISearchResult term(otherwise it will duplicate all the term for each ISearchResult term)				
-				foreach (SearchResultModel term in terms)
-				{
-					// add terms for the target
-					if (!term.Language.Name.Equals(sourceLanguage.Locale.Parent.DisplayName))
-					{
-						var entryTerm = new EntryTerm
-						{
-							Value = term.Text,
-							Fields = SetEntryFields(term)
-						};
-						entryTerms.Add(entryTerm);
-					}
-				}
-			}
+
 			return entryTerms;
 		}
-
-		/// <summary>
-		/// Set the glossary descriptive fields based on the needed values from the search result.
-		/// Entry fields are used in the Hitlist Settings and also to display information in the Termbase Viewer
-		/// </summary>
-		/// <param name="searchResultModel">the search result model with values retrieved from API search result</param>
-		/// <returns>entryFields</returns>
-		private IList<IEntryField> SetEntryFields(SearchResultModel searchResultModel)
+		
+		private IList<IEntryField> SetEntryFields(SearchResultModel searchResultModel, int level)
 		{
 			var entryFields = new List<IEntryField>();
+
 			if (!string.IsNullOrEmpty(searchResultModel.Definition))
 			{
 				var definitionEntryField = new EntryField
@@ -285,17 +260,148 @@ namespace IATETerminologyProvider
 				entryFields.Add(domainEntryField);
 			}
 
-			if (!string.IsNullOrEmpty(searchResultModel.TermType))
+			if (level == 2) // term
 			{
-				var termTypeEntryField = new EntryField
+				if (!string.IsNullOrEmpty(searchResultModel.TermType))
 				{
-					Name = "TermType",
-					Value = searchResultModel.TermType
-				};
-				entryFields.Add(termTypeEntryField);
+					var termTypeEntryField = new EntryField
+					{
+						Name = "Type",
+						Value = searchResultModel.TermType
+					};
+					entryFields.Add(termTypeEntryField);
+				}
+
+				if (searchResultModel.Evaluation > -1)
+				{
+					var evaluationEntryField = new EntryField
+					{
+						Name = "Status",
+						Value = GetStatusName(searchResultModel.Evaluation)
+					};
+					entryFields.Add(evaluationEntryField);
+				}
 			}
+
 			return entryFields;
 		}
-		#endregion
+
+		private static List<ISearchResult> MaxSearchResults(List<ISearchResult> searchResults, int maxResultsCount)
+		{
+			var results = new List<ISearchResult>();
+			if (searchResults.Count > maxResultsCount)
+			{
+				for (var i = 0; i < maxResultsCount; i++)
+				{
+					results.Add(searchResults[i]);
+				}
+			}
+			else
+			{
+				results = searchResults;
+			}
+
+			return results;
 		}
+
+		private static List<TermResultGroup> SortSearchResultsByPriority(string text, List<TermResultGroup> termsResult, ILanguage source)
+		{
+			var index = new List<int>();
+			var secondaryIndex = new List<int>();
+
+			foreach (var termResult in termsResult)
+			{
+				var sourceTerms = termResult.Results.Where(a => a.Language.Locale.TwoLetterISOLanguageName == source.Locale.TwoLetterISOLanguageName).ToList();
+
+				foreach (var sourceTerm in sourceTerms)
+				{
+					if (text.IndexOf(sourceTerm.Text, StringComparison.InvariantCultureIgnoreCase) > -1)
+					{
+						if (!index.Contains(sourceTerm.Id))
+						{
+							index.Add(sourceTerm.Id);
+							if (secondaryIndex.Contains(sourceTerm.Id))
+							{
+								secondaryIndex.Remove(sourceTerm.Id);
+							}
+						}
+					}
+					else
+					{
+						if (!secondaryIndex.Contains(sourceTerm.Id) && !index.Contains(sourceTerm.Id))
+						{
+							secondaryIndex.Add(sourceTerm.Id);
+						}
+					}
+				}
+			}
+
+			index.AddRange(secondaryIndex);
+
+			termsResult = termsResult.OrderBy(a => index.IndexOf(a.Id)).ToList();
+			return termsResult;
+		}
+
+		private static List<ISearchResult> RemoveDuplicateTerms(IReadOnlyCollection<TermResultGroup> termGroups, ILanguage source, ILanguage target)
+		{
+			var results = new List<ISearchResult>();
+
+			var indexes = new List<string>();
+			foreach (var termGroup in termGroups)
+			{
+				var sourceTerms = termGroup.Results.Where(a => a.Language.Locale.TwoLetterISOLanguageName == source.Locale.TwoLetterISOLanguageName).ToList();
+				var targetTerms = termGroup.Results.Where(a => a.Language.Locale.TwoLetterISOLanguageName == target.Locale.TwoLetterISOLanguageName).ToList();
+
+				foreach (var sourceTerm in sourceTerms)
+				{
+					for (var j = targetTerms.Count - 1; j >= 0; j--)
+					{
+						var index = $"Source: {sourceTerm.Text};Target: {targetTerms[j].Text}";
+						if (!indexes.Contains(index))
+						{
+							indexes.Add(index);
+						}
+						else
+						{
+							targetTerms.RemoveAt(j);
+						}
+					}
+				}
+
+				if (targetTerms.Count == 0)
+				{
+					termGroup.Results.Clear();
+				}
+			}
+
+			foreach (var resultGroup in termGroups)
+			{
+				if (resultGroup.Results.Count > 0)
+				{
+					results.AddRange(resultGroup.Results);
+				}
+			}
+
+			return results;
+		}
+
+		private static List<TermResultGroup> GetTermResultGroups(IEnumerable<ISearchResult> termsResult)
+		{
+			var resultGroups = new List<TermResultGroup>();
+			foreach (var searchResult in termsResult)
+			{
+				var resultGroup = resultGroups.FirstOrDefault(a => a.Id == searchResult.Id);
+				if (resultGroup != null)
+				{
+					resultGroup.Results.Add(searchResult);
+				}
+				else
+				{
+					resultGroups.Add(new TermResultGroup { Id = searchResult.Id, Results = new List<ISearchResult> { searchResult } });
+				}
+			}
+
+			return resultGroups;
+		}				
 	}
+}

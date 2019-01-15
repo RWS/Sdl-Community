@@ -35,7 +35,7 @@ namespace IATETerminologyProvider.Helpers
 		{
 			var lang = new Language(new CultureInfo(languageCode));
 			var langFlag = lang.GetFlagImage();
-			DirectoryInfo dirInfo = new DirectoryInfo(Path.Combine(Path.GetTempPath(), "Flags"));
+			var dirInfo = new DirectoryInfo(Path.Combine(Path.GetTempPath(), "Flags"));
 
 			if (!dirInfo.Exists)
 			{

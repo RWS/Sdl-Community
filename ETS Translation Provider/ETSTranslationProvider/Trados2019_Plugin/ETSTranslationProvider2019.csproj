@@ -91,6 +91,10 @@
       <SpecificVersion>True</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
@@ -125,6 +129,13 @@
     <Compile Include="..\ETSApi\TradosToETSLP.cs" />
     <Compile Include="..\Log.cs" />
     <Compile Include="..\PluginConfiguration.cs" />
+    <Compile Include="ETSTellMe\ETSLanguagePairsAction.cs" />
+    <Compile Include="ETSTellMe\ETSMTAction.cs" />
+    <Compile Include="ETSTellMe\ETSOfficialWebAction.cs" />
+    <Compile Include="ETSTellMe\ETSStoreAction.cs" />
+    <Compile Include="ETSTellMe\ETSTellMeProvider.cs" />
+    <Compile Include="ETSTellMe\ETSTranslationServerAction.cs" />
+    <Compile Include="ETSTellMe\ETSCommunitySupportAction.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -141,6 +152,9 @@
   <ItemGroup>
     <Content Include="..\Resources\icon.ico" />
     <Content Include="..\Resources\icon.png" />
+    <None Include="Resources\LanguagePairsIcon.ico" />
+    <None Include="Resources\ForumIcon.ico" />
+    <None Include="Resources\Download.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -215,6 +229,7 @@
       <Name>XliffConverter</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

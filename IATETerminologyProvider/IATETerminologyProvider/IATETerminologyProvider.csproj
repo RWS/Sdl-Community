@@ -55,6 +55,10 @@
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.Core.Settings, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
       <Private>False</Private>
@@ -119,6 +123,7 @@
   <ItemGroup>
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="EventArgs\TermEntryModelChanged.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\LanguageFlags.cs" />
@@ -135,7 +140,9 @@
     <Compile Include="Model\DomainModel.cs" />
     <Compile Include="Model\EntryLanguageModel.cs" />
     <Compile Include="Model\EntryModel.cs" />
+    <Compile Include="Model\EntryModelObject.cs" />
     <Compile Include="Model\LanguageModel.cs" />
+    <Compile Include="Model\PathInfo.cs" />
     <Compile Include="Model\ProviderSettings.cs" />
     <Compile Include="Model\ResponseModels\JsonDomainResponseModel.cs" />
     <Compile Include="Model\ResponseModels\MetaResponseModel.cs" />
@@ -144,6 +151,7 @@
     <Compile Include="Model\ResponseModels\TermsDomainResponseModel.cs" />
     <Compile Include="Model\ResponseModels\TermTypeResponseModel.cs" />
     <Compile Include="Model\SearchResultModel.cs" />
+    <Compile Include="Model\TermResultGroup.cs" />
     <Compile Include="Model\TermTypeModel.cs" />
     <Compile Include="Model\ViewModelBase.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -155,6 +163,8 @@
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Service\DomainService.cs" />
     <Compile Include="Service\PersistenceService.cs" />
+    <Compile Include="Service\SerializerService.cs" />
+    <Compile Include="Service\TermSearchCriteriaService.cs" />
     <Compile Include="Service\TermSearchService.cs" />
     <Compile Include="Service\TermTypeService.cs" />
     <Compile Include="Ui\IATETermsControl.cs">
@@ -180,6 +190,7 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Resources\report.xslt" />
     <None Include="Resources\ForumIcon.ico" />
     <None Include="Resources\Iate_logo.ico" />
     <None Include="Resources\Download.ico" />

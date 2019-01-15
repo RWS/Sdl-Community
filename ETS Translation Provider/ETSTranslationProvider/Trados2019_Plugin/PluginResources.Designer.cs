@@ -63,6 +63,26 @@ namespace ETSTranslationProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon icon_icon {
             get {
                 object obj = ResourceManager.GetObject("icon_icon", resourceCulture);
@@ -77,6 +97,16 @@ namespace ETSTranslationProvider {
             get {
                 object obj = ResourceManager.GetObject("icon_symbol", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon LanguagePairsIcon {
+            get {
+                object obj = ResourceManager.GetObject("LanguagePairsIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
