@@ -140,6 +140,7 @@
     <Compile Include="Model\DomainModel.cs" />
     <Compile Include="Model\EntryLanguageModel.cs" />
     <Compile Include="Model\EntryModel.cs" />
+    <Compile Include="Model\EntryModelObject.cs" />
     <Compile Include="Model\LanguageModel.cs" />
     <Compile Include="Model\PathInfo.cs" />
     <Compile Include="Model\ProviderSettings.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Model\ResponseModels\TermsDomainResponseModel.cs" />
     <Compile Include="Model\ResponseModels\TermTypeResponseModel.cs" />
     <Compile Include="Model\SearchResultModel.cs" />
+    <Compile Include="Model\TermResultGroup.cs" />
     <Compile Include="Model\TermTypeModel.cs" />
     <Compile Include="Model\ViewModelBase.cs" />
     <Compile Include="PluginResources.Designer.cs">

@@ -75,7 +75,15 @@ namespace IATETerminologyProvider
 			_settingsWindow.ShowDialog();
 
 			providerSettings = _settingsViewModel.ProviderSettings;
-			provider.UpdateSettings(providerSettings);
+
+			if (provider == null)
+			{
+				provider = new IATETerminologyProvider(providerSettings);
+			}
+			else
+			{
+				provider.UpdateSettings(providerSettings);
+			}
 
 			result.Add(provider);
 

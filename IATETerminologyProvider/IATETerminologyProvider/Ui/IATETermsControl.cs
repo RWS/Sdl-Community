@@ -16,6 +16,7 @@ namespace IATETerminologyProvider.Ui
 	{
 		private readonly IATETerminologyProvider _iateTerminologyProvider;
 		private readonly PathInfo _pathInfo;
+		private readonly object _lockObject = new object();
 
 		public IATETermsControl()
 		{
@@ -38,7 +39,7 @@ namespace IATETerminologyProvider.Ui
 
 		public void JumpToTerm(IEntry entry)
 		{
-			SelectEntryItem(entry);			
+			SelectEntryItem(entry);
 		}
 
 		private void SelectEntryItem(IEntry entry)
@@ -96,35 +97,43 @@ namespace IATETerminologyProvider.Ui
 				return;
 			}
 
-			listBox1.Items.Clear();
-
-			var index = new List<string>();
-
-			foreach (var entryModel in entryModels)
+			lock (_lockObject)
 			{
-				var sourceTerms = entryModel.Languages.Where(a => a.Locale.TwoLetterISOLanguageName == sourceLanguage.Locale.TwoLetterISOLanguageName).ToList();
-				foreach (var sourceTerm in sourceTerms)
-				{
-					foreach (var entryTerm in sourceTerm.Terms)
-					{
-						//var type = entryTerm.Fields.FirstOrDefault(a => a.Name == "Type" && a.Value == "Term");
-						if (!index.Contains(entryTerm.Value))
-						{
-							listBox1.Items.Add(new EntryModelObject
-							{
-								Entry = entryModel,
-								Text = entryTerm.Value
-							});
+				var items = new List<EntryModelObject>();
 
-							index.Add(entryTerm.Value);
+				var index = new List<string>();
+
+				foreach (var entryModel in entryModels)
+				{
+					var sourceTerms = entryModel.Languages
+						.Where(a => a.Locale.TwoLetterISOLanguageName == sourceLanguage.Locale.TwoLetterISOLanguageName).ToList();
+					foreach (var sourceTerm in sourceTerms)
+					{
+						foreach (var entryTerm in sourceTerm.Terms)
+						{
+							if (!index.Contains(entryTerm.Value))
+							{
+								items.Add(new EntryModelObject
+								{
+									Entry = entryModel,
+									Text = entryTerm.Value
+								});
+
+								index.Add(entryTerm.Value);
+							}
 						}
 					}
 				}
-			}
-
-			if (listBox1.Items.Count > 0)
-			{
-				listBox1.SelectedItem = listBox1.Items[0];
+				
+				listBox1.BeginUpdate();
+				listBox1.Items.Clear();
+				listBox1.Items.AddRange(items.ToArray());
+				listBox1.EndUpdate();
+								
+				if (listBox1.Items.Count > 0)
+				{
+					SelectEntry(((EntryModelObject)listBox1.Items[0]).Entry);
+				}
 			}
 		}
 
@@ -256,7 +265,7 @@ namespace IATETerminologyProvider.Ui
 			xmlTxtWriter.WriteEndElement(); //fields
 		}
 
-		private void listBox1_SelectedIndexChanged(object sender, System.EventArgs e)
+		private void ListBoxSelectedIndexChanged(object sender, System.EventArgs e)
 		{
 			if (listBox1.SelectedItems.Count > 0)
 			{
@@ -264,16 +273,6 @@ namespace IATETerminologyProvider.Ui
 				{
 					SelectEntry(item.Entry);
 				}
-			}
-		}
-
-		private class EntryModelObject
-		{
-			public EntryModel Entry { get; set; }
-			public string Text { get; set; }
-			public override string ToString()
-			{
-				return Text;
 			}
 		}
 	}

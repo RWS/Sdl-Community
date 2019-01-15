@@ -14,8 +14,7 @@ namespace IATETerminologyProvider
 	{
 		private IList<EntryModel> _entryModels;
 		private ProviderSettings _providerSettings;
-		private TermSearchService _searchService;
-		private ProjectsController _projectsController;		
+		private TermSearchService _searchService;	
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -70,11 +69,10 @@ namespace IATETerminologyProvider
 		}
 
 		public void UpdateSettings(ProviderSettings providerSettings)
-		{
+		{			
 			_providerSettings = providerSettings;
 			_entryModels = new List<EntryModel>();
-			_searchService = new TermSearchService(_providerSettings);
-			_projectsController = GetProjectController();
+			_searchService = new TermSearchService(_providerSettings);			
 		}
 
 		public IList<IDescriptiveField> GetDescriptiveFields()
@@ -160,12 +158,11 @@ namespace IATETerminologyProvider
 			}
 		}
 
-		/// <summary>
-		/// Create entry models (used to return the text in the Termbase Search panel)
-		/// </summary>
-		/// <param name="termsResult"></param>
-		/// <param name="sourceLanguage">source language</param>
-		/// <param name="languages"></param>
+		protected virtual void OnTermEntriesChanged(TermEntriesChangedEventArgs e)
+		{
+			TermEntriesChanged?.Invoke(this, e);
+		}
+		
 		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)
 		{
 			_entryModels.Clear();
@@ -187,15 +184,7 @@ namespace IATETerminologyProvider
 				_entryModels.Add(entryModel);
 			}
 		}
-
-		/// <summary>
-		/// Set entry languages for the entry models
-		/// </summary>
-		/// <param name="termsResult"></param>
-		/// <param name="languages">source and target languages</param>
-		/// <param name="sourceLanguage">source language</param>
-		/// <param name="termResult">term result</param>
-		/// <returns>entryLanguages</returns>
+		
 		private IList<IEntryLanguage> SetEntryLanguages(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IEnumerable<ILanguage> languages, SearchResultModel termResult)
 		{
 			var entryLanguages = new List<IEntryLanguage>();
@@ -215,14 +204,7 @@ namespace IATETerminologyProvider
 
 			return entryLanguages;
 		}
-
-		/// <summary>
-		/// Create Entry terms for the entry languages
-		/// </summary>
-		/// <param name="termsResult"></param>
-		/// <param name="language">document language</param>
-		/// <param name="id">term id</param>
-		/// <returns>entryTerms</returns>
+		
 		private IList<IEntryTerm> CreateEntryTerms(IEnumerable<ISearchResult> termsResult, ILanguage language, int id)
 		{
 			IList<IEntryTerm> entryTerms = new List<IEntryTerm>();
@@ -243,14 +225,7 @@ namespace IATETerminologyProvider
 
 			return entryTerms;
 		}
-
-		/// <summary>
-		/// Set the glossary descriptive fields based on the needed values from the search result.
-		/// Entry fields are used in the Hitlist Settings and also to display information in the Termbase Viewer
-		/// </summary>
-		/// <param name="searchResultModel">the search result model with values retrieved from API search result</param>
-		/// <param name="level"></param>
-		/// <returns>entryFields</returns>
+		
 		private IList<IEntryField> SetEntryFields(SearchResultModel searchResultModel, int level)
 		{
 			var entryFields = new List<IEntryField>();
@@ -427,17 +402,6 @@ namespace IATETerminologyProvider
 			}
 
 			return resultGroups;
-		}
-
-		private class TermResultGroup
-		{
-			public int Id { get; set; }
-			public List<ISearchResult> Results { get; set; }
-		}
-
-		protected virtual void OnTermEntriesChanged(TermEntriesChangedEventArgs e)
-		{
-			TermEntriesChanged?.Invoke(this, e);
-		}
+		}				
 	}
 }

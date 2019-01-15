@@ -17,7 +17,7 @@ namespace IATETerminologyProvider
 		public Control Control
 		{
 			get
-			{
+			{				
 				_control = new IATETermsControl(_iateTerminologyProvider)
 				{
 					Text = @"IATETerminologyProviderViewerWinFormsUI",
@@ -54,7 +54,7 @@ namespace IATETerminologyProvider
 		}
 
 		public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
-		{
+		{			
 			_iateTerminologyProvider = (IATETerminologyProvider)terminologyProvider;
 		}
 
@@ -65,7 +65,8 @@ namespace IATETerminologyProvider
 
 		public void Release()
 		{
-			_iateTerminologyProvider = null;
+			_iateTerminologyProvider.Dispose();
+			_control?.Dispose();
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
