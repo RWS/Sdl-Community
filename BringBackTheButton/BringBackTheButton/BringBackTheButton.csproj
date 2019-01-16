@@ -61,6 +61,10 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -122,6 +126,8 @@
     </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TellMe\BringBackTheButtonAction.cs" />
+    <Compile Include="TellMe\BringBackTheButtonTellMeProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\icon.ico" />
