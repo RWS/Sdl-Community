@@ -13,7 +13,7 @@ namespace IATETerminologyProvider
 	{		
 		private IATETerminologyProvider _iateTerminologyProvider;
 		private IATETermsControl _control;
-		
+
 		public Control Control
 		{
 			get
@@ -23,14 +23,8 @@ namespace IATETerminologyProvider
 					Text = @"IATETerminologyProviderViewerWinFormsUI",
 					BackColor = Color.White
 				};
-
-				if (JumpToTermAction != null)
-				{
-					JumpToTermAction -= _control.JumpToTerm;
-				}
-
+				
 				JumpToTermAction += _control.JumpToTerm;				
-
 
 				return _control;
 			}
@@ -65,8 +59,12 @@ namespace IATETerminologyProvider
 
 		public void Release()
 		{
-			_iateTerminologyProvider.Dispose();
-			_control?.Dispose();
+			if (JumpToTermAction != null)
+			{
+				JumpToTermAction -= _control.JumpToTerm;
+			}
+			
+			_control.ReleaseSubscribers();
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)

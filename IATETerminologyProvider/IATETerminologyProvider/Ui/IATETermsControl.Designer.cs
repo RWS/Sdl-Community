@@ -43,8 +43,7 @@
 			this.listBox1.Name = "listBox1";
 			this.listBox1.Size = new System.Drawing.Size(192, 505);
 			this.listBox1.Sorted = true;
-			this.listBox1.TabIndex = 7;
-			this.listBox1.SelectedIndexChanged += new System.EventHandler(this.ListBoxSelectedIndexChanged);
+			this.listBox1.TabIndex = 7;		
 			// 
 			// splitter1
 			// 

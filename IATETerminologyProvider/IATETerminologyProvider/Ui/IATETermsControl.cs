@@ -28,11 +28,10 @@ namespace IATETerminologyProvider.Ui
 			_iateTerminologyProvider = iateTerminologyProvider;
 			_pathInfo = new PathInfo();
 
-			if (_iateTerminologyProvider != null)
-			{
-				_iateTerminologyProvider.TermEntriesChanged -= OnTermEntriesChanged;
-				_iateTerminologyProvider.TermEntriesChanged += OnTermEntriesChanged;
-			}
+			ReleaseSubscribers();
+
+			_iateTerminologyProvider.TermEntriesChanged += OnTermEntriesChanged;
+			listBox1.SelectedIndexChanged += ListBoxSelectedIndexChanged;
 
 			CreateReportTemplate(Path.Combine(_pathInfo.TemporaryStorageFullPath, "report.xslt"));
 		}
@@ -40,6 +39,19 @@ namespace IATETerminologyProvider.Ui
 		public void JumpToTerm(IEntry entry)
 		{
 			SelectEntryItem(entry);
+		}
+
+		public void ReleaseSubscribers()
+		{
+			if (_iateTerminologyProvider != null)
+			{
+				_iateTerminologyProvider.TermEntriesChanged -= OnTermEntriesChanged;
+			}
+
+			if (listBox1 != null)
+			{
+				listBox1.SelectedIndexChanged -= ListBoxSelectedIndexChanged;
+			}
 		}
 
 		private void SelectEntryItem(IEntry entry)
@@ -51,7 +63,7 @@ namespace IATETerminologyProvider.Ui
 
 			foreach (var item in listBox1.Items.Cast<EntryModelObject>())
 			{
-				if (item.Entry.ItemId == entryModel.ItemId)
+				if (item.Entry.ItemId == entryModel.ItemId || item.Entry.Id == entryModel.Id)
 				{
 					listBox1.SelectedItem = item;
 					break;
@@ -124,16 +136,16 @@ namespace IATETerminologyProvider.Ui
 						}
 					}
 				}
-				
+
 				listBox1.BeginUpdate();
 				listBox1.Items.Clear();
 				listBox1.Items.AddRange(items.ToArray());
-				listBox1.EndUpdate();
-								
+
 				if (listBox1.Items.Count > 0)
 				{
-					SelectEntry(((EntryModelObject)listBox1.Items[0]).Entry);
+					listBox1.SelectedItem = listBox1.Items[0];
 				}
+				listBox1.EndUpdate();
 			}
 		}
 
@@ -267,12 +279,9 @@ namespace IATETerminologyProvider.Ui
 
 		private void ListBoxSelectedIndexChanged(object sender, System.EventArgs e)
 		{
-			if (listBox1.SelectedItems.Count > 0)
+			if (listBox1.SelectedItem != null && listBox1.SelectedItem is EntryModelObject item)
 			{
-				if (listBox1.SelectedItems[0] is EntryModelObject item)
-				{
-					SelectEntry(item.Entry);
-				}
+				SelectEntry(item.Entry);
 			}
 		}
 	}
