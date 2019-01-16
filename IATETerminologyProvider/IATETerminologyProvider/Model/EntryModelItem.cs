@@ -1,6 +1,6 @@
 ﻿namespace IATETerminologyProvider.Model
 {
-	public class EntryModelObject
+	public class EntryModelItem
 	{
 		public EntryModel Entry { get; set; }
 		public string Text { get; set; }

@@ -5,6 +5,7 @@ using IATETerminologyProvider.EventArgs;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Service;
+using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -14,8 +15,8 @@ namespace IATETerminologyProvider
 	{
 		private IList<EntryModel> _entryModels;
 		private ProviderSettings _providerSettings;
-		private TermSearchService _searchService;	
-
+		private TermSearchService _searchService;
+		
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
 		public IATETerminologyProvider(ProviderSettings providerSettings)
@@ -60,7 +61,7 @@ namespace IATETerminologyProvider
 				results = MaxSearchResults(results, maxResultsCount);
 				CreateEntryTerms(results, source, GetLanguages());
 
-				OnTermEntriesChanged(new TermEntriesChangedEventArgs { EntryModels = _entryModels, SourceLanguage = source});
+				OnTermEntriesChanged(new TermEntriesChangedEventArgs { EntryModels = _entryModels, SourceLanguage = new Language(source.Locale.Name) });
 				return results;
 			}
 
@@ -113,7 +114,7 @@ namespace IATETerminologyProvider
 		}
 
 		public IList<IDefinitionLanguage> GetDefinitionLanguages()
-		{
+		{			
 			var result = new List<IDefinitionLanguage>();
 			var currentProject = GetProjectController().CurrentProject;
 			var projTargetLanguage = currentProject.GetTargetLanguageFiles()[0].Language;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using IATETerminologyProvider.Model;
-using Sdl.Terminology.TerminologyProvider.Core;
+using Sdl.Core.Globalization;
 
 namespace IATETerminologyProvider.EventArgs
 {
@@ -8,6 +8,6 @@ namespace IATETerminologyProvider.EventArgs
 	{
 		public IList<EntryModel> EntryModels { get; set; }
 
-		public ILanguage SourceLanguage { get; set; }
+		public Language SourceLanguage { get; set; }
 	}
 }

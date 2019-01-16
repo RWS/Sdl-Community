@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Xml;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
+using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace IATETerminologyProvider.Ui
@@ -54,6 +55,21 @@ namespace IATETerminologyProvider.Ui
 			}
 		}
 
+		public IEnumerable<IEntry> GetEntries()
+		{
+			return listBox1.Items.Cast<EntryModelItem>().Select(item => item.Entry).Cast<IEntry>().ToList();
+		}
+
+		public IEntry GetSelectedEntry()
+		{
+			return ((EntryModelItem) listBox1.SelectedItem)?.Entry;
+		}
+
+		public void UpdateEntriesInView(IEnumerable<IEntry> entries, Language sourceLanguage, IEntry selectedEntry)
+		{
+			UpdateEntriesInViewInternal(entries.Cast<EntryModel>(), sourceLanguage, selectedEntry);
+		}
+
 		private void SelectEntryItem(IEntry entry)
 		{
 			if (!(entry is EntryModel entryModel))
@@ -61,7 +77,7 @@ namespace IATETerminologyProvider.Ui
 				return;
 			}
 
-			foreach (var item in listBox1.Items.Cast<EntryModelObject>())
+			foreach (var item in listBox1.Items.Cast<EntryModelItem>())
 			{
 				if (item.Entry.ItemId == entryModel.ItemId || item.Entry.Id == entryModel.Id)
 				{
@@ -98,40 +114,39 @@ namespace IATETerminologyProvider.Ui
 
 		private void OnTermEntriesChanged(object sender, EventArgs.TermEntriesChangedEventArgs e)
 		{
-			UpdateEntriesInView(e.EntryModels, e.SourceLanguage);
+			UpdateEntriesInViewInternal(e.EntryModels, e.SourceLanguage, null);
 		}
 
-		private void UpdateEntriesInView(IEnumerable<EntryModel> entryModels, ILanguage sourceLanguage)
+		private void UpdateEntriesInViewInternal(IEnumerable<EntryModel> entryModels, Language sourceLanguage, IEntry selectedEntry)
 		{
 			if (InvokeRequired)
 			{
-				BeginInvoke(new Action<IEnumerable<EntryModel>, ILanguage>(UpdateEntriesInView), entryModels, sourceLanguage);
+				BeginInvoke(new Action<IEnumerable<EntryModel>, Language, IEntry>(UpdateEntriesInViewInternal), entryModels, sourceLanguage, selectedEntry);
 				return;
 			}
 
 			lock (_lockObject)
 			{
-				var items = new List<EntryModelObject>();
-
-				var index = new List<string>();
+				var items = new List<EntryModelItem>();
+				var indexes = new List<string>();
 
 				foreach (var entryModel in entryModels)
 				{
 					var sourceTerms = entryModel.Languages
-						.Where(a => a.Locale.TwoLetterISOLanguageName == sourceLanguage.Locale.TwoLetterISOLanguageName).ToList();
+						.Where(a => a.Locale.TwoLetterISOLanguageName == sourceLanguage.CultureInfo.TwoLetterISOLanguageName).ToList();
 					foreach (var sourceTerm in sourceTerms)
 					{
 						foreach (var entryTerm in sourceTerm.Terms)
 						{
-							if (!index.Contains(entryTerm.Value))
+							if (!indexes.Contains(entryTerm.Value))
 							{
-								items.Add(new EntryModelObject
+								items.Add(new EntryModelItem
 								{
 									Entry = entryModel,
 									Text = entryTerm.Value
 								});
 
-								index.Add(entryTerm.Value);
+								indexes.Add(entryTerm.Value);
 							}
 						}
 					}
@@ -143,8 +158,16 @@ namespace IATETerminologyProvider.Ui
 
 				if (listBox1.Items.Count > 0)
 				{
-					listBox1.SelectedItem = listBox1.Items[0];
+					if (selectedEntry != null)
+					{
+						SelectEntryItem(selectedEntry);
+					}
+					else
+					{
+						listBox1.SelectedItem = listBox1.Items[0];
+					}
 				}
+
 				listBox1.EndUpdate();
 			}
 		}
@@ -279,7 +302,7 @@ namespace IATETerminologyProvider.Ui
 
 		private void ListBoxSelectedIndexChanged(object sender, System.EventArgs e)
 		{
-			if (listBox1.SelectedItem != null && listBox1.SelectedItem is EntryModelObject item)
+			if (listBox1.SelectedItem != null && listBox1.SelectedItem is EntryModelItem item)
 			{
 				SelectEntry(item.Entry);
 			}
