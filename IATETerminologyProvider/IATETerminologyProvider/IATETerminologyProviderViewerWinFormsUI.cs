@@ -14,7 +14,7 @@ namespace IATETerminologyProvider
 	{
 		private IATETerminologyProvider _iateTerminologyProvider;
 		private IATETermsControl _control;
-		private DocumentEntriesStateService _documentEntriesStateService;
+		private DocumentStateService _documentStateService;
 
 		public event EventHandler TermChanged;
 		public event EventHandler<EntryEventArgs> SelectedTermChanged;
@@ -33,12 +33,12 @@ namespace IATETerminologyProvider
 
 				JumpToTermAction += _control.JumpToTerm;
 
-				if (_documentEntriesStateService == null)
+				if (_documentStateService == null)
 				{
-					_documentEntriesStateService = new DocumentEntriesStateService();
+					_documentStateService = new DocumentStateService();
 				}
 
-				_documentEntriesStateService.UpdateDocumentEntriesState(_control);
+				_documentStateService.UpdateDocumentEntriesState(_control);
 
 				return _control;
 			}
@@ -78,7 +78,7 @@ namespace IATETerminologyProvider
 				JumpToTermAction -= _control.JumpToTerm;
 			}
 
-			_documentEntriesStateService.SaveDocumentEntriesState(_control);
+			_documentStateService.SaveDocumentEntriesState(_control);
 
 			_control?.ReleaseSubscribers();
 		}		

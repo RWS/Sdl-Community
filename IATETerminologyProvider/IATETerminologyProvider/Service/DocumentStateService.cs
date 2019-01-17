@@ -6,22 +6,17 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace IATETerminologyProvider.Service
 {
-	public class DocumentEntriesStateService
+	public class DocumentStateService
 	{
 		private EditorController _editorController;
 		private string _activeDocumentId;
 		private readonly List<DocumentEntryState> _documentEntriesState;
 
-		public DocumentEntriesStateService()
+		public DocumentStateService()
 		{			
 			_documentEntriesState = new List<DocumentEntryState>();
 			_editorController = GetEditorController();
-		}
-
-		private static EditorController GetEditorController()
-		{
-			return SdlTradosStudio.Application.GetController<EditorController>();
-		}
+		}		
 
 		public void UpdateDocumentEntriesState(IATETermsControl iateTermsControl)
 		{
@@ -62,6 +57,11 @@ namespace IATETerminologyProvider.Service
 					});
 				}
 			}
+		}
+
+		private static EditorController GetEditorController()
+		{
+			return SdlTradosStudio.Application.GetController<EditorController>();
 		}
 	}
 }

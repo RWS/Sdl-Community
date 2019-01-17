@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using IATETerminologyProvider.EventArgs;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Service;
 using Sdl.Core.Globalization;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.LanguagePlatform.Core;
 using Sdl.Terminology.TerminologyProvider.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -16,7 +21,12 @@ namespace IATETerminologyProvider
 		private IList<EntryModel> _entryModels;
 		private ProviderSettings _providerSettings;
 		private TermSearchService _searchService;
-		
+		private EditorController _editorController;
+		private Document _activeDocument;
+		private CancellationTokenSource _cancellationTokenSource;
+		private ISegmentPair _selectedSegmentPair;
+		private SegmentVisitor _segmentVisitor;
+
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
 		public IATETerminologyProvider(ProviderSettings providerSettings)
@@ -51,29 +61,82 @@ namespace IATETerminologyProvider
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
-			_entryModels.Clear();
-			
-			if (_searchService.GetTerms(text, source, target, maxResultsCount) is List<ISearchResult> results && results.Count > 0)
+			// prevent lookahead from performing searches
+			if (!IsActiveSegmentText(text, source))
 			{
-				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
-
-				results = RemoveDuplicateTerms(termGroups, source, target);
-				results = MaxSearchResults(results, maxResultsCount);
-				CreateEntryTerms(results, source, GetLanguages());
-
-				OnTermEntriesChanged(new TermEntriesChangedEventArgs { EntryModels = _entryModels, SourceLanguage = new Language(source.Locale.Name) });
-				return results;
+				return null;
 			}
 
-			OnTermEntriesChanged(null);
-			return null;
+			_entryModels.Clear();
+
+			var results = new List<ISearchResult>();
+
+			_cancellationTokenSource = new CancellationTokenSource();
+
+			var task = Task.Run(delegate
+		   {
+			   var searchResults = _searchService.GetTerms(text, source, target, maxResultsCount, _cancellationTokenSource.Token);
+			   if (searchResults.Result != null && !_cancellationTokenSource.IsCancellationRequested)
+			   {
+				   var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(searchResults.Result), source);
+
+				   results = RemoveDuplicateTerms(termGroups, source, target);
+				   results = MaxSearchResults(results, maxResultsCount);
+				   CreateEntryTerms(results, source, GetLanguages());
+			   }
+		   }, _cancellationTokenSource.Token);
+			Task.WaitAll(task);
+
+			OnTermEntriesChanged(new TermEntriesChangedEventArgs
+			{
+				EntryModels = _entryModels,
+				SourceLanguage = new Language(source.Locale.Name)
+			});
+
+			return results;
+		}
+
+		private bool IsActiveSegmentText(string text, ILanguage source)
+		{
+			if (_selectedSegmentPair?.Source == null)
+			{
+				return true;
+			}
+			
+			var regex = new Regex(@"[\s\t]+", RegexOptions.None);
+			var searchText = regex.Replace(text, string.Empty);
+
+			var segment = new Segment(source.Locale);
+			_segmentVisitor = new SegmentVisitor(segment, true);
+			_segmentVisitor.VisitSegment(_selectedSegmentPair.Source);
+			
+			var sourceText = regex.Replace(_segmentVisitor.Segment.ToPlain(), string.Empty);						
+
+			return string.Compare(searchText, sourceText, StringComparison.InvariantCultureIgnoreCase) == 0;
+		}
+
+		public override void Dispose()
+		{
+			if (_activeDocument != null)
+			{
+				_activeDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+			}
+
+			if (_editorController != null)
+			{
+				_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+			}
+
+			base.Dispose();
 		}
 
 		public void UpdateSettings(ProviderSettings providerSettings)
-		{			
+		{
 			_providerSettings = providerSettings;
 			_entryModels = new List<EntryModel>();
-			_searchService = new TermSearchService(_providerSettings);			
+			_searchService = new TermSearchService(_providerSettings);
+
+			InitializeEditorController();
 		}
 
 		public IList<IDescriptiveField> GetDescriptiveFields()
@@ -114,7 +177,7 @@ namespace IATETerminologyProvider
 		}
 
 		public IList<IDefinitionLanguage> GetDefinitionLanguages()
-		{			
+		{
 			var result = new List<IDefinitionLanguage>();
 			var currentProject = GetProjectController().CurrentProject;
 			var projTargetLanguage = currentProject.GetTargetLanguageFiles()[0].Language;
@@ -146,7 +209,7 @@ namespace IATETerminologyProvider
 		{
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
-		
+
 		public string GetStatusName(int value)
 		{
 			switch (value)
@@ -163,7 +226,7 @@ namespace IATETerminologyProvider
 		{
 			TermEntriesChanged?.Invoke(this, e);
 		}
-		
+
 		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)
 		{
 			_entryModels.Clear();
@@ -185,7 +248,7 @@ namespace IATETerminologyProvider
 				_entryModels.Add(entryModel);
 			}
 		}
-		
+
 		private IList<IEntryLanguage> SetEntryLanguages(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IEnumerable<ILanguage> languages, SearchResultModel termResult)
 		{
 			var entryLanguages = new List<IEntryLanguage>();
@@ -205,7 +268,7 @@ namespace IATETerminologyProvider
 
 			return entryLanguages;
 		}
-		
+
 		private IList<IEntryTerm> CreateEntryTerms(IEnumerable<ISearchResult> termsResult, ILanguage language, int id)
 		{
 			IList<IEntryTerm> entryTerms = new List<IEntryTerm>();
@@ -226,7 +289,7 @@ namespace IATETerminologyProvider
 
 			return entryTerms;
 		}
-		
+
 		private IList<IEntryField> SetEntryFields(SearchResultModel searchResultModel, int level)
 		{
 			var entryFields = new List<IEntryField>();
@@ -285,6 +348,11 @@ namespace IATETerminologyProvider
 			}
 
 			return entryFields;
+		}
+
+		private static EditorController GetEditorController()
+		{
+			return SdlTradosStudio.Application.GetController<EditorController>();
 		}
 
 		private static List<ISearchResult> MaxSearchResults(List<ISearchResult> searchResults, int maxResultsCount)
@@ -403,6 +471,47 @@ namespace IATETerminologyProvider
 			}
 
 			return resultGroups;
-		}				
+		}
+
+		private void InitializeEditorController()
+		{
+			if (_editorController == null)
+			{
+				_editorController = GetEditorController();
+				if (_editorController != null)
+				{
+					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+
+					SetActiveDocument(_editorController.ActiveDocument);
+				}
+			}
+		}
+
+		private void ActiveDocument_ActiveSegmentChanged(object sender, System.EventArgs e)
+		{
+			_selectedSegmentPair = _editorController?.ActiveDocument?.GetActiveSegmentPair();
+			_cancellationTokenSource?.Cancel();
+		}
+
+		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
+		{
+			SetActiveDocument(e.Document);
+		}
+
+		private void SetActiveDocument(Document document)
+		{
+			if (_activeDocument != null)
+			{
+				_activeDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+			}
+
+			_activeDocument = document;
+			_selectedSegmentPair = _activeDocument?.GetActiveSegmentPair();
+
+			if (_activeDocument != null)
+			{
+				_activeDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
+			}
+		}
 	}
 }

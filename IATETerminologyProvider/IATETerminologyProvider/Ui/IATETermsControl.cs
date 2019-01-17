@@ -32,9 +32,17 @@ namespace IATETerminologyProvider.Ui
 			ReleaseSubscribers();
 
 			_iateTerminologyProvider.TermEntriesChanged += OnTermEntriesChanged;
-			listBox1.SelectedIndexChanged += ListBoxSelectedIndexChanged;
+			treeView1.AfterSelect += TreeView1_AfterSelect;
 
 			CreateReportTemplate(Path.Combine(_pathInfo.TemporaryStorageFullPath, "report.xslt"));
+		}
+
+		private void TreeView1_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+			if (e.Node?.Tag != null && e.Node?.Tag is EntryModel item)
+			{
+				SelectEntry(item);
+			}
 		}
 
 		public void JumpToTerm(IEntry entry)
@@ -49,20 +57,34 @@ namespace IATETerminologyProvider.Ui
 				_iateTerminologyProvider.TermEntriesChanged -= OnTermEntriesChanged;
 			}
 
-			if (listBox1 != null)
+			if (treeView1 != null)
 			{
-				listBox1.SelectedIndexChanged -= ListBoxSelectedIndexChanged;
+				treeView1.AfterSelect -= TreeView1_AfterSelect;
 			}
 		}
 
 		public IEnumerable<IEntry> GetEntries()
 		{
-			return listBox1.Items.Cast<EntryModelItem>().Select(item => item.Entry).Cast<IEntry>().ToList();
+			var entries = new List<IEntry>();
+			foreach (TreeNode node in treeView1.Nodes)
+			{
+				entries.Add(node.Tag as EntryModel);
+
+				if (node.Nodes.Count > 0)
+				{
+					foreach (TreeNode childNode in node.Nodes)
+					{
+						entries.Add(childNode.Tag as EntryModel);
+					}
+				}
+			}
+
+			return entries;
 		}
 
 		public IEntry GetSelectedEntry()
 		{
-			return ((EntryModelItem) listBox1.SelectedItem)?.Entry;
+			return (EntryModel)treeView1.SelectedNode.Tag;
 		}
 
 		public void UpdateEntriesInView(IEnumerable<IEntry> entries, Language sourceLanguage, IEntry selectedEntry)
@@ -77,14 +99,47 @@ namespace IATETerminologyProvider.Ui
 				return;
 			}
 
-			foreach (var item in listBox1.Items.Cast<EntryModelItem>())
+			foreach (TreeNode node in treeView1.Nodes)
 			{
-				if (item.Entry.ItemId == entryModel.ItemId || item.Entry.Id == entryModel.Id)
+				var foundNode = FoundNode(node, entryModel);
+
+				if (foundNode)
 				{
-					listBox1.SelectedItem = item;
+					treeView1.SelectedNode = node;					
+				}
+				else if (node.Nodes.Count > 0)
+				{
+					foreach (TreeNode childNode in node.Nodes)
+					{
+						foundNode = FoundNode(childNode, entryModel);
+						if (foundNode)
+						{
+							treeView1.SelectedNode = childNode;
+							break;
+						}
+					}					
+				}
+
+				if (foundNode)
+				{
 					break;
 				}
 			}
+
+			treeView1.SelectedNode?.EnsureVisible();
+		}
+
+		private static bool FoundNode(TreeNode node, EntryModel entryModel)
+		{
+			if (node.Tag is EntryModel item)
+			{
+				if (item.ItemId == entryModel.ItemId || item.Id == entryModel.Id)
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		private void SelectEntry(IEntry entry)
@@ -127,36 +182,63 @@ namespace IATETerminologyProvider.Ui
 
 			lock (_lockObject)
 			{
-				var items = new List<EntryModelItem>();
-				var indexes = new List<string>();
+				var items = new Dictionary<string, List<EntryModelItem>>();
+				var index = new List<string>();
 
 				foreach (var entryModel in entryModels)
 				{
 					var sourceTerms = entryModel.Languages
 						.Where(a => a.Locale.TwoLetterISOLanguageName == sourceLanguage.CultureInfo.TwoLetterISOLanguageName).ToList();
+
 					foreach (var sourceTerm in sourceTerms)
 					{
 						foreach (var entryTerm in sourceTerm.Terms)
 						{
-							if (!indexes.Contains(entryTerm.Value))
+							var indexItem = $"Source.{entryTerm.Value}.ItemId.{entryModel.ItemId}";
+
+							if (!index.Contains(indexItem))
 							{
-								items.Add(new EntryModelItem
+								var item = new EntryModelItem
 								{
+									Guid = Guid.NewGuid(),
 									Entry = entryModel,
 									Text = entryTerm.Value
-								});
+								};
 
-								indexes.Add(entryTerm.Value);
+								if (items.ContainsKey(item.Text))
+								{
+									items[item.Text].Add(item);
+								}
+								else
+								{
+									items.Add(item.Text, new List<EntryModelItem> { item });
+								}
+
+								index.Add(indexItem);
 							}
 						}
 					}
 				}
 
-				listBox1.BeginUpdate();
-				listBox1.Items.Clear();
-				listBox1.Items.AddRange(items.ToArray());
+				treeView1.BeginUpdate();
+				treeView1.Nodes.Clear();
+				foreach (var item in items)
+				{
+					var node = treeView1.Nodes.Add(item.Value[0].Guid.ToString(), item.Value[0].Text);
+					node.Tag = item.Value[0].Entry;
+					if (item.Value.Count > 1)
+					{
+						for (var i = 1; i < item.Value.Count; i++)
+						{
+							var subNode = node.Nodes.Add(item.Value[i].Guid.ToString(), item.Value[i].Text);
+							subNode.Tag = item.Value[i].Entry;
+						}
+					}
+				}
 
-				if (listBox1.Items.Count > 0)
+				treeView1.Sort();
+
+				if (treeView1.Nodes.Count > 0)
 				{
 					if (selectedEntry != null)
 					{
@@ -164,11 +246,15 @@ namespace IATETerminologyProvider.Ui
 					}
 					else
 					{
-						listBox1.SelectedItem = listBox1.Items[0];
+						SelectEntryItem(treeView1.Nodes[0].Tag as EntryModel);												
 					}
 				}
+				else
+				{
+					SelectEntry(null);
+				}
 
-				listBox1.EndUpdate();
+				treeView1.EndUpdate();
 			}
 		}
 
@@ -210,11 +296,14 @@ namespace IATETerminologyProvider.Ui
 		{
 			xmlTxtWriter.WriteStartElement("Report");
 			xmlTxtWriter.WriteAttributeString("xml:space", "preserve");
-			xmlTxtWriter.WriteAttributeString("ItemId", ((EntryModel)entry).ItemId);
+			if (entry != null)
+			{
+				xmlTxtWriter.WriteAttributeString("ItemId", ((EntryModel)entry).ItemId);
 
-			WriteFields(entry.Fields, xmlTxtWriter);
+				WriteFields(entry.Fields, xmlTxtWriter);
 
-			WriteLanguages(entry, xmlTxtWriter);
+				WriteLanguages(entry, xmlTxtWriter);
+			}
 
 			xmlTxtWriter.WriteEndElement(); //report
 		}
@@ -298,14 +387,6 @@ namespace IATETerminologyProvider.Ui
 			}
 
 			xmlTxtWriter.WriteEndElement(); //fields
-		}
-
-		private void ListBoxSelectedIndexChanged(object sender, System.EventArgs e)
-		{
-			if (listBox1.SelectedItem != null && listBox1.SelectedItem is EntryModelItem item)
-			{
-				SelectEntry(item.Entry);
-			}
 		}
 	}
 }

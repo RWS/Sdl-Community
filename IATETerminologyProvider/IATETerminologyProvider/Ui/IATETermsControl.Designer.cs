@@ -28,41 +28,39 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.listBox1 = new System.Windows.Forms.ListBox();
-			this.splitter1 = new System.Windows.Forms.Splitter();
+			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.webBrowser1 = new System.Windows.Forms.WebBrowser();
+			this.splitter1 = new System.Windows.Forms.Splitter();
 			this.SuspendLayout();
 			// 
-			// listBox1
+			// treeView1
 			// 
-			this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.listBox1.Dock = System.Windows.Forms.DockStyle.Left;
-			this.listBox1.FormattingEnabled = true;
-			this.listBox1.Location = new System.Drawing.Point(1, 1);
-			this.listBox1.Margin = new System.Windows.Forms.Padding(5);
-			this.listBox1.Name = "listBox1";
-			this.listBox1.Size = new System.Drawing.Size(192, 505);
-			this.listBox1.Sorted = true;
-			this.listBox1.TabIndex = 7;		
+			this.treeView1.Dock = System.Windows.Forms.DockStyle.Left;
+			this.treeView1.FullRowSelect = true;
+			this.treeView1.HideSelection = false;
+			this.treeView1.Location = new System.Drawing.Point(1, 1);
+			this.treeView1.Name = "treeView1";
+			this.treeView1.Size = new System.Drawing.Size(178, 505);
+			this.treeView1.TabIndex = 0;
+			// 
+			// webBrowser1
+			// 
+			this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.webBrowser1.Location = new System.Drawing.Point(182, 1);
+			this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+			this.webBrowser1.Name = "webBrowser1";
+			this.webBrowser1.Size = new System.Drawing.Size(514, 505);
+			this.webBrowser1.TabIndex = 11;
 			// 
 			// splitter1
 			// 
 			this.splitter1.BackColor = System.Drawing.SystemColors.Control;
 			this.splitter1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.splitter1.Location = new System.Drawing.Point(193, 1);
+			this.splitter1.Location = new System.Drawing.Point(179, 1);
 			this.splitter1.Name = "splitter1";
 			this.splitter1.Size = new System.Drawing.Size(3, 505);
-			this.splitter1.TabIndex = 8;
+			this.splitter1.TabIndex = 10;
 			this.splitter1.TabStop = false;
-			// 
-			// webBrowser1
-			// 
-			this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.webBrowser1.Location = new System.Drawing.Point(196, 1);
-			this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-			this.webBrowser1.Name = "webBrowser1";
-			this.webBrowser1.Size = new System.Drawing.Size(500, 505);
-			this.webBrowser1.TabIndex = 9;
 			// 
 			// IATETermsControl
 			// 
@@ -72,7 +70,7 @@
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.Controls.Add(this.webBrowser1);
 			this.Controls.Add(this.splitter1);
-			this.Controls.Add(this.listBox1);
+			this.Controls.Add(this.treeView1);
 			this.Name = "IATETermsControl";
 			this.Padding = new System.Windows.Forms.Padding(1);
 			this.Size = new System.Drawing.Size(697, 507);
@@ -81,8 +79,9 @@
 		}
 
 		#endregion
-		private System.Windows.Forms.ListBox listBox1;
-		private System.Windows.Forms.Splitter splitter1;
+
+		private System.Windows.Forms.TreeView treeView1;
 		private System.Windows.Forms.WebBrowser webBrowser1;
+		private System.Windows.Forms.Splitter splitter1;
 	}
 }

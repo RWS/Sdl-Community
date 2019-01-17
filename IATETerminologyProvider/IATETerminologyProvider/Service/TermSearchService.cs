@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Model.ResponseModels;
@@ -34,8 +36,9 @@ namespace IATETerminologyProvider.Service
 		/// <param name="source">source language</param>
 		/// <param name="target">target language</param>
 		/// <param name="maxResultsCount">number of maximum results returned(set up in Studio Termbase search settings)</param>
+		/// <param name="cancellationToken"></param>
 		/// <returns>terms</returns>
-		public IList<ISearchResult> GetTerms(string text, ILanguage source, ILanguage target, int maxResultsCount)
+		public async Task<List<ISearchResult>> GetTerms(string text, ILanguage source, ILanguage target, int maxResultsCount, CancellationToken cancellationToken)
 		{
 			// maxResults (the number of returned words) value is set from the Termbase -> Search Settings
 			var client = new RestClient(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()));
@@ -54,7 +57,12 @@ namespace IATETerminologyProvider.Service
 			var bodyModel = SetApiRequestBodyValues(source, target, text);
 			request.AddJsonBody(bodyModel);
 
-			var response = client.Execute(request);
+			var response = await client.ExecutePostTaskAsync(request, cancellationToken);
+			if (response.ErrorException != null || cancellationToken.IsCancellationRequested)
+			{
+				return null;
+			}
+
 			var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(response.Content);
 
 			var result = MapResponseValues(response, domainsJsonResponse);
@@ -96,7 +104,7 @@ namespace IATETerminologyProvider.Service
 		/// <param name="response">IATE API response</param>
 		/// <param name="domainResponseModel">domains response model</param>
 		/// <returns>list of terms</returns>
-		private IList<ISearchResult> MapResponseValues(IRestResponse response, JsonDomainResponseModel domainResponseModel)
+		private List<ISearchResult> MapResponseValues(IRestResponse response, JsonDomainResponseModel domainResponseModel)
 		{
 			var termsList = new List<ISearchResult>();
 			if (!string.IsNullOrEmpty(response.Content))
@@ -152,7 +160,7 @@ namespace IATETerminologyProvider.Service
 									var metaData = termEntry.SelectToken("metadata");
 
 									if (metaData != null)
-									{										
+									{
 										var displayOrderObject = metaData.SelectToken("display_order");
 										if (displayOrderObject != null)
 										{
@@ -185,7 +193,7 @@ namespace IATETerminologyProvider.Service
 										TermType = termType,
 										DisplayOrder = displayOrder,
 										Evaluation = evaluation
-									};						
+									};
 
 									searchResultItems.Add(termResult);
 								}

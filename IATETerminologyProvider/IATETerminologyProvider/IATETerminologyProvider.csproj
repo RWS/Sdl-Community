@@ -55,10 +55,6 @@
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Sdl.Core.Settings, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
       <Private>False</Private>
@@ -78,6 +74,9 @@
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <Private>False</Private>
@@ -162,9 +161,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Service\DocumentEntriesState.cs" />
+    <Compile Include="Service\DocumentStateService.cs" />
     <Compile Include="Service\DomainService.cs" />
     <Compile Include="Service\PersistenceService.cs" />
+    <Compile Include="Service\SegmentVisitor.cs" />
     <Compile Include="Service\SerializerService.cs" />
     <Compile Include="Service\TermSearchCriteriaService.cs" />
     <Compile Include="Service\TermSearchService.cs" />
