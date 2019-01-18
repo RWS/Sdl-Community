@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading;
 using IATETerminologyProvider.EventArgs;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Service;
 using Sdl.Core.Globalization;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.LanguagePlatform.Core;
 using Sdl.Terminology.TerminologyProvider.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -20,11 +16,6 @@ namespace IATETerminologyProvider
 		private IList<EntryModel> _entryModels;
 		private ProviderSettings _providerSettings;
 		private TermSearchService _searchService;
-		private EditorController _editorController;
-		private Document _activeDocument;
-		private CancellationTokenSource _cancellationTokenSource;
-		private ISegmentPair _selectedSegmentPair;
-		private SegmentVisitor _segmentVisitor;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -59,13 +50,7 @@ namespace IATETerminologyProvider
 		}
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
-		{
-			// prevent lookahead from performing searches
-			if (!IsActiveSegmentText(text, source))
-			{
-				return null;
-			}
-
+		{		
 			_entryModels.Clear();
 
 			var results = _searchService.GetTerms(text, source, target, maxResultsCount);
@@ -85,49 +70,13 @@ namespace IATETerminologyProvider
 			});
 
 			return results;
-		}
-
-		private bool IsActiveSegmentText(string text, ILanguage source)
-		{
-			_selectedSegmentPair = _editorController?.ActiveDocument?.GetActiveSegmentPair();
-			if (_selectedSegmentPair?.Source == null)
-			{
-				return true;
-			}
-
-			var regex = new Regex(@"[\s\t]+", RegexOptions.None);
-			var searchText = regex.Replace(text, string.Empty);
-
-			var segment = new Segment(source.Locale);
-			_segmentVisitor = new SegmentVisitor(segment, true);
-			_segmentVisitor.VisitSegment(_selectedSegmentPair.Source);
-			var sourceText = regex.Replace(_segmentVisitor.Segment.ToPlain(), string.Empty);
-
-			return string.Compare(searchText, sourceText, StringComparison.InvariantCultureIgnoreCase) == 0;
-		}
-
-		public override void Dispose()
-		{
-			if (_activeDocument != null)
-			{
-				_activeDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
-			}
-
-			if (_editorController != null)
-			{
-				_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
-			}
-
-			base.Dispose();
-		}
+		}		
 
 		public void UpdateSettings(ProviderSettings providerSettings)
 		{
 			_providerSettings = providerSettings;
 			_entryModels = new List<EntryModel>();
 			_searchService = new TermSearchService(_providerSettings);
-
-			InitializeEditorController();
 		}
 
 		public IList<IDescriptiveField> GetDescriptiveFields()
@@ -340,12 +289,7 @@ namespace IATETerminologyProvider
 
 			return entryFields;
 		}
-
-		private static EditorController GetEditorController()
-		{
-			return SdlTradosStudio.Application.GetController<EditorController>();
-		}
-
+	
 		private static List<ISearchResult> MaxSearchResults(List<ISearchResult> searchResults, int maxResultsCount)
 		{
 			var results = new List<ISearchResult>();
@@ -462,46 +406,6 @@ namespace IATETerminologyProvider
 			}
 
 			return resultGroups;
-		}
-
-		private void InitializeEditorController()
-		{
-			if (_editorController == null)
-			{
-				_editorController = GetEditorController();
-				if (_editorController != null)
-				{
-					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
-
-					SetActiveDocument(_editorController.ActiveDocument);
-				}
-			}
-		}
-
-		private void ActiveDocument_ActiveSegmentChanged(object sender, System.EventArgs e)
-		{
-			_cancellationTokenSource?.Cancel();
-		}
-
-		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
-		{
-			SetActiveDocument(e.Document);
-		}
-
-		private void SetActiveDocument(Document document)
-		{
-			if (_activeDocument != null)
-			{
-				_activeDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
-			}
-
-			_activeDocument = document;
-			_selectedSegmentPair = _activeDocument?.GetActiveSegmentPair();
-
-			if (_activeDocument != null)
-			{
-				_activeDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
-			}
-		}
+		}					
 	}
 }
