@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using IATETerminologyProvider.EventArgs;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Service;
 using Sdl.Core.Globalization;
+using Sdl.LanguagePlatform.Core;
 using Sdl.Terminology.TerminologyProvider.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -16,7 +18,7 @@ namespace IATETerminologyProvider
 		private IList<EntryModel> _entryModels;
 		private ProviderSettings _providerSettings;
 		private TermSearchService _searchService;
-		private EditorController _editorController;
+		private EditorController _editorController;		
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -51,7 +53,7 @@ namespace IATETerminologyProvider
 		}
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
-		{		
+		{
 			_entryModels.Clear();
 
 			var results = _searchService.GetTerms(text, source, target, maxResultsCount);
@@ -64,14 +66,17 @@ namespace IATETerminologyProvider
 				CreateEntryTerms(results, source, GetLanguages());
 			}
 
-			OnTermEntriesChanged(new TermEntriesChangedEventArgs
+			if (IsActiveSegmentText(text, source))
 			{
-				EntryModels = _entryModels,
-				SourceLanguage = new Language(source.Locale.Name)
-			});
+				OnTermEntriesChanged(new TermEntriesChangedEventArgs
+				{
+					EntryModels = _entryModels,
+					SourceLanguage = new Language(source.Locale.Name)
+				});
+			}
 
 			return results;
-		}		
+		}
 
 		public void UpdateSettings(ProviderSettings providerSettings)
 		{
@@ -185,6 +190,25 @@ namespace IATETerminologyProvider
 			TermEntriesChanged?.Invoke(this, e);
 		}
 
+		private bool IsActiveSegmentText(string text, ILanguage source)
+		{
+			var selectedSegmentPair = _editorController?.ActiveDocument?.GetActiveSegmentPair();
+			if (selectedSegmentPair?.Source == null)
+			{
+				return true;
+			}
+
+			var regex = new Regex(@"[\s\t]+", RegexOptions.None);
+			var searchText = regex.Replace(text, string.Empty);
+
+			var segment = new Segment(source.Locale);
+			var segmentVisitor = new SegmentVisitor(segment, true);
+			segmentVisitor.VisitSegment(selectedSegmentPair.Source);
+			var sourceText = regex.Replace(segmentVisitor.Segment.ToPlain(), string.Empty);
+
+			return string.Compare(searchText, sourceText, StringComparison.InvariantCultureIgnoreCase) == 0;
+		}
+
 		private void InitializeEditorController()
 		{
 			if (_editorController == null)
@@ -192,7 +216,7 @@ namespace IATETerminologyProvider
 				_editorController = GetEditorController();
 				if (_editorController != null)
 				{
-					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;				
+					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 				}
 			}
 		}
@@ -203,7 +227,7 @@ namespace IATETerminologyProvider
 			{
 				OnTermEntriesChanged(null);
 			}
-		}		
+		}
 
 		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)
 		{
@@ -327,7 +351,7 @@ namespace IATETerminologyProvider
 
 			return entryFields;
 		}
-	
+
 		private static List<ISearchResult> MaxSearchResults(List<ISearchResult> searchResults, int maxResultsCount)
 		{
 			var results = new List<ISearchResult>();
@@ -444,6 +468,6 @@ namespace IATETerminologyProvider
 			}
 
 			return resultGroups;
-		}					
+		}
 	}
 }
