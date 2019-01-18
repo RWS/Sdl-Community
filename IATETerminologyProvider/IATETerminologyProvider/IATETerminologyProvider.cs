@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using IATETerminologyProvider.EventArgs;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
@@ -69,23 +68,15 @@ namespace IATETerminologyProvider
 
 			_entryModels.Clear();
 
-			var results = new List<ISearchResult>();
+			var results = _searchService.GetTerms(text, source, target, maxResultsCount);
+			if (results != null)
+			{
+				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
 
-			_cancellationTokenSource = new CancellationTokenSource();
-
-			var task = Task.Run(delegate
-		   {
-			   var searchResults = _searchService.GetTerms(text, source, target, maxResultsCount, _cancellationTokenSource.Token);
-			   if (searchResults.Result != null && !_cancellationTokenSource.IsCancellationRequested)
-			   {
-				   var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(searchResults.Result), source);
-
-				   results = RemoveDuplicateTerms(termGroups, source, target);
-				   results = MaxSearchResults(results, maxResultsCount);
-				   CreateEntryTerms(results, source, GetLanguages());
-			   }
-		   }, _cancellationTokenSource.Token);
-			Task.WaitAll(task);
+				results = RemoveDuplicateTerms(termGroups, source, target);
+				results = MaxSearchResults(results, maxResultsCount);
+				CreateEntryTerms(results, source, GetLanguages());
+			}
 
 			OnTermEntriesChanged(new TermEntriesChangedEventArgs
 			{
@@ -98,19 +89,19 @@ namespace IATETerminologyProvider
 
 		private bool IsActiveSegmentText(string text, ILanguage source)
 		{
+			_selectedSegmentPair = _editorController?.ActiveDocument?.GetActiveSegmentPair();
 			if (_selectedSegmentPair?.Source == null)
 			{
 				return true;
 			}
-			
+
 			var regex = new Regex(@"[\s\t]+", RegexOptions.None);
 			var searchText = regex.Replace(text, string.Empty);
 
 			var segment = new Segment(source.Locale);
 			_segmentVisitor = new SegmentVisitor(segment, true);
 			_segmentVisitor.VisitSegment(_selectedSegmentPair.Source);
-			
-			var sourceText = regex.Replace(_segmentVisitor.Segment.ToPlain(), string.Empty);						
+			var sourceText = regex.Replace(_segmentVisitor.Segment.ToPlain(), string.Empty);
 
 			return string.Compare(searchText, sourceText, StringComparison.InvariantCultureIgnoreCase) == 0;
 		}
@@ -489,7 +480,6 @@ namespace IATETerminologyProvider
 
 		private void ActiveDocument_ActiveSegmentChanged(object sender, System.EventArgs e)
 		{
-			_selectedSegmentPair = _editorController?.ActiveDocument?.GetActiveSegmentPair();
 			_cancellationTokenSource?.Cancel();
 		}
 

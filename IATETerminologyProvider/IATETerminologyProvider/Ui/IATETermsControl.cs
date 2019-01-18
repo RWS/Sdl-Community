@@ -105,7 +105,7 @@ namespace IATETerminologyProvider.Ui
 
 				if (foundNode)
 				{
-					treeView1.SelectedNode = node;					
+					treeView1.SelectedNode = node;
 				}
 				else if (node.Nodes.Count > 0)
 				{
@@ -117,7 +117,7 @@ namespace IATETerminologyProvider.Ui
 							treeView1.SelectedNode = childNode;
 							break;
 						}
-					}					
+					}
 				}
 
 				if (foundNode)
@@ -180,82 +180,85 @@ namespace IATETerminologyProvider.Ui
 				return;
 			}
 
-			lock (_lockObject)
+			var items = GetEntryModelItems(entryModels, sourceLanguage);
+
+			treeView1.BeginUpdate();
+			treeView1.Nodes.Clear();
+			foreach (var item in items)
 			{
-				var items = new Dictionary<string, List<EntryModelItem>>();
-				var index = new List<string>();
-
-				foreach (var entryModel in entryModels)
+				var node = treeView1.Nodes.Add(item.Value[0].Guid.ToString(), item.Value[0].Text);
+				node.Tag = item.Value[0].Entry;
+				if (item.Value.Count > 1)
 				{
-					var sourceTerms = entryModel.Languages
-						.Where(a => a.Locale.TwoLetterISOLanguageName == sourceLanguage.CultureInfo.TwoLetterISOLanguageName).ToList();
-
-					foreach (var sourceTerm in sourceTerms)
+					for (var i = 1; i < item.Value.Count; i++)
 					{
-						foreach (var entryTerm in sourceTerm.Terms)
-						{
-							var indexItem = $"Source.{entryTerm.Value}.ItemId.{entryModel.ItemId}";
-
-							if (!index.Contains(indexItem))
-							{
-								var item = new EntryModelItem
-								{
-									Guid = Guid.NewGuid(),
-									Entry = entryModel,
-									Text = entryTerm.Value
-								};
-
-								if (items.ContainsKey(item.Text))
-								{
-									items[item.Text].Add(item);
-								}
-								else
-								{
-									items.Add(item.Text, new List<EntryModelItem> { item });
-								}
-
-								index.Add(indexItem);
-							}
-						}
+						var subNode = node.Nodes.Add(item.Value[i].Guid.ToString(), item.Value[i].Text);
+						subNode.Tag = item.Value[i].Entry;
 					}
 				}
+			}
 
-				treeView1.BeginUpdate();
-				treeView1.Nodes.Clear();
-				foreach (var item in items)
+			treeView1.Sort();
+			if (treeView1.Nodes.Count > 0)
+			{
+				if (selectedEntry != null)
 				{
-					var node = treeView1.Nodes.Add(item.Value[0].Guid.ToString(), item.Value[0].Text);
-					node.Tag = item.Value[0].Entry;
-					if (item.Value.Count > 1)
-					{
-						for (var i = 1; i < item.Value.Count; i++)
-						{
-							var subNode = node.Nodes.Add(item.Value[i].Guid.ToString(), item.Value[i].Text);
-							subNode.Tag = item.Value[i].Entry;
-						}
-					}
-				}
-
-				treeView1.Sort();
-
-				if (treeView1.Nodes.Count > 0)
-				{
-					if (selectedEntry != null)
-					{
-						SelectEntryItem(selectedEntry);
-					}
-					else
-					{
-						SelectEntryItem(treeView1.Nodes[0].Tag as EntryModel);												
-					}
+					SelectEntryItem(selectedEntry);
 				}
 				else
 				{
-					SelectEntry(null);
+					SelectEntryItem(treeView1.Nodes[0].Tag as EntryModel);
 				}
-
-				treeView1.EndUpdate();
 			}
+			else
+			{
+				SelectEntry(null);
+			}
+
+			treeView1.EndUpdate();
+		}
+
+		private static Dictionary<string, List<EntryModelItem>> GetEntryModelItems(IEnumerable<EntryModel> entryModels, Language sourceLanguage)
+		{
+			var items = new Dictionary<string, List<EntryModelItem>>();
+			var index = new List<string>();
+
+			foreach (var entryModel in entryModels)
+			{
+				var sourceTerms = entryModel.Languages
+					.Where(a => a.Locale.TwoLetterISOLanguageName == sourceLanguage.CultureInfo.TwoLetterISOLanguageName).ToList();
+
+				foreach (var sourceTerm in sourceTerms)
+				{
+					foreach (var entryTerm in sourceTerm.Terms)
+					{
+						var indexItem = $"Source.{entryTerm.Value}.ItemId.{entryModel.ItemId}";
+
+						if (!index.Contains(indexItem))
+						{
+							var item = new EntryModelItem
+							{
+								Guid = Guid.NewGuid(),
+								Entry = entryModel,
+								Text = entryTerm.Value
+							};
+
+							if (items.ContainsKey(item.Text))
+							{
+								items[item.Text].Add(item);
+							}
+							else
+							{
+								items.Add(item.Text, new List<EntryModelItem> { item });
+							}
+
+							index.Add(indexItem);
+						}
+					}
+				}
+			}
+
+			return items;
 		}
 
 		private static void CreateReportTemplate(string fullFilePath)
