@@ -36,9 +36,8 @@ namespace IATETerminologyProvider.Service
 		/// <param name="source">source language</param>
 		/// <param name="target">target language</param>
 		/// <param name="maxResultsCount">number of maximum results returned(set up in Studio Termbase search settings)</param>
-		/// <param name="cancellationToken"></param>
 		/// <returns>terms</returns>
-		public async Task<List<ISearchResult>> GetTerms(string text, ILanguage source, ILanguage target, int maxResultsCount, CancellationToken cancellationToken)
+		public List<ISearchResult> GetTerms(string text, ILanguage source, ILanguage target, int maxResultsCount)
 		{
 			// maxResults (the number of returned words) value is set from the Termbase -> Search Settings
 			var client = new RestClient(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()));
@@ -57,18 +56,13 @@ namespace IATETerminologyProvider.Service
 			var bodyModel = SetApiRequestBodyValues(source, target, text);
 			request.AddJsonBody(bodyModel);
 
-			var response = await client.ExecutePostTaskAsync(request, cancellationToken);
-			if (response.ErrorException != null || cancellationToken.IsCancellationRequested)
-			{
-				return null;
-			}
+			var response = client.Execute(request);
 
 			var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(response.Content);
 
 			var result = MapResponseValues(response, domainsJsonResponse);
 			return result;
 		}
-
 
 		// Set the needed fields for the API search request
 		private object SetApiRequestBodyValues(ILanguage source, ILanguage destination, string text)
