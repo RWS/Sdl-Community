@@ -4,7 +4,7 @@ using Sdl.Community.TMOptimizerLib;
 
 namespace Sdl.Community.TMOptimizer.Control
 {
-    public abstract class ProcessingStep : INotifyPropertyChanged
+	public abstract class ProcessingStep : INotifyPropertyChanged
     {
         private int _progress;
 
@@ -148,10 +148,7 @@ namespace Sdl.Community.TMOptimizer.Control
 
         private void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
     }
 }

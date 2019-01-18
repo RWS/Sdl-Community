@@ -1,14 +1,10 @@
-﻿using Sdl.Community.TMOptimizerLib;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Windows;
+using Sdl.Community.TMOptimizerLib;
 
 namespace Sdl.Community.TMOptimizer
 {
-    public abstract class ProcessingStep : INotifyPropertyChanged
+	public abstract class ProcessingStep : INotifyPropertyChanged
     {
         private int _progress;
 
@@ -23,8 +19,7 @@ namespace Sdl.Community.TMOptimizer
             get;
             set;
         }
-
-
+		
         public string Name
         {
             get;
@@ -57,9 +52,7 @@ namespace Sdl.Community.TMOptimizer
                 OnPropertyChanged("StatusMessage");
             }
         }
-
-
-
+		
         public Exception Error
         {
             get;
@@ -113,8 +106,7 @@ namespace Sdl.Community.TMOptimizer
                 Error = e;
                 ProcessingState = ProcessingState.Failed;
                 return;
-            }
-            
+            }            
         }
 
         protected abstract void ExecuteImpl();
@@ -125,37 +117,33 @@ namespace Sdl.Community.TMOptimizer
             OnReportProgress();
         }
 
-        /// <summary>
-        /// Attached Progress event and takes care of forwarding cancellation requests to the processor.
-        /// </summary>
-        /// <param name="processor"></param>
-        protected void AttachProcessorEvents(ProcessorBase processor)
-        {
-            processor.Progress += (sender, e) => 
-                {
-                    if (CancelRequested)
-                    {
-                        e.Cancel = true;
-                        return;
-                    }
+		/// <summary>
+		/// Attached Progress event and takes care of forwarding cancellation requests to the processor.
+		/// </summary>
+		/// <param name="processor"></param>
+		protected void AttachProcessorEvents(ProcessorBase processor)
+		{
+			processor.Progress += (sender, e) =>
+				{
+					if (CancelRequested)
+					{
+						e.Cancel = true;
+						return;
+					}
 
-                    ReportProgress(e.Progress);
-                };
-        }
+					ReportProgress(e.Progress);
+				};
+		}
 
         protected virtual void OnReportProgress()
         {
         }
 
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
     }
 }

@@ -1,23 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Sdl.Community.TMOptimizer
 {
-    /// <summary>
-    /// Interaction logic for InputWizardPageControl.xaml
-    /// </summary>
-    public partial class InputWizardPageControl : UserControl, IWizardPageControl
+	/// <summary>
+	/// Interaction logic for InputWizardPageControl.xaml
+	/// </summary>
+	public partial class InputWizardPageControl : UserControl, IWizardPageControl
     {
         public InputWizardPageControl()
         {
@@ -38,8 +29,8 @@ namespace Sdl.Community.TMOptimizer
 
         private void RemoveTMX_Click(object sender, RoutedEventArgs e)
         {
-            List<InputTmxFile> selectedTmxFiles = new List<InputTmxFile>(_inputTmxFilesDataGrid.SelectedItems.Cast<InputTmxFile>());
-            foreach (InputTmxFile f in selectedTmxFiles)
+            var selectedTmxFiles = new List<InputTmxFile>(_inputTmxFilesDataGrid.SelectedItems.Cast<InputTmxFile>());
+            foreach (var f in selectedTmxFiles)
             {
                 ViewModel.InputTmxFiles.Remove(f);
             }

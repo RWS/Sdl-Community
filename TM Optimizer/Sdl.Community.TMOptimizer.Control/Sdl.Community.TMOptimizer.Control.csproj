@@ -111,7 +111,6 @@
     <Compile Include="ProcessingWizardPageControl.xaml.cs">
       <DependentUpon>ProcessingWizardPageControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TestButton.cs" />
     <Compile Include="WizardMode.cs" />
     <Compile Include="WizardPageControl.cs" />
     <Page Include="InputWizardPageControl.xaml">
@@ -131,7 +130,6 @@
     <Compile Include="DeleteTempFilesStep.cs" />
     <Compile Include="EnumRadioButton.cs" />
     <Compile Include="ExportStudioTmStep.cs" />
-    <Compile Include="HelpManager.cs" />
     <Compile Include="ImportStudioTmStep.cs" />
     <Compile Include="InputTmxFile.cs" />
     <Compile Include="OutputMethod.cs" />

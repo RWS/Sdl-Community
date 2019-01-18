@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Sdl.Community.TMOptimizerLib;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.Community.TMOptimizerLib;
 
 namespace Sdl.Community.TMOptimizer
 {
-    /// <summary>
-    /// Export a Studio TM to TMX
-    /// </summary>
-    class ExportStudioTmStep : ProcessingStep
+	/// <summary>
+	/// Export a Studio TM to TMX
+	/// </summary>
+	class ExportStudioTmStep : ProcessingStep
     {
         private FileBasedTranslationMemory _translationMemory;
         private TmxFile _exportTmxFile;

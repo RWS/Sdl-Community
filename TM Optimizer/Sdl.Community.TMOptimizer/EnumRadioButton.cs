@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace Sdl.Community.TMOptimizer
 {
-    /// <summary>
-    /// Radio button that supports binding to an enum.
-    /// </summary>
-    public class EnumRadioButton : RadioButton
+	/// <summary>
+	/// Radio button that supports binding to an enum.
+	/// </summary>
+	public class EnumRadioButton : RadioButton
     {
         public EnumRadioButton()
         {

@@ -1,20 +1,11 @@
-﻿using Sdl.Core.Globalization;
-using Sdl.LanguagePlatform.Core.Tokenization;
-using Sdl.LanguagePlatform.TranslationMemory;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
 namespace Sdl.Community.TMOptimizer
 {
-    /// <summary>
-    /// Deletes temp files created during processing.
-    /// </summary>
-    class DeleteTempFilesStep : ProcessingStep
+	/// <summary>
+	/// Deletes temp files created during processing.
+	/// </summary>
+	class DeleteTempFilesStep : ProcessingStep
     {
         public DeleteTempFilesStep() : base("Delete temp files")
         {

@@ -1,20 +1,17 @@
-﻿using Sdl.Core.Globalization;
+﻿using System;
+using System.Globalization;
+using System.IO;
+using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core.Tokenization;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.IO;
 
 namespace Sdl.Community.TMOptimizer
 {
-    /// <summary>
-    /// Create an empty Studio TM
-    /// </summary>
-    class CreateStudioTmStep : ProcessingStep
+	/// <summary>
+	/// Create an empty Studio TM
+	/// </summary>
+	class CreateStudioTmStep : ProcessingStep
     {
         private TranslationMemoryReference _tm;
         private Language _sourceLanguage;
@@ -54,7 +51,7 @@ namespace Sdl.Community.TMOptimizer
                 recognizers = BuiltinRecognizers.RecognizeAll;
             }
 
-            FileBasedTranslationMemory tm = new FileBasedTranslationMemory(
+			var tm = new FileBasedTranslationMemory(
                     _tm.FilePath,
                     String.Empty,
                     sourceCulture,
@@ -83,17 +80,17 @@ namespace Sdl.Community.TMOptimizer
 
         private void CopyTmLanguageResources(FileBasedTranslationMemory templateTm, FileBasedTranslationMemory tm)
         {
-            ITranslationMemoryLanguageDirection languageDirection = tm.LanguageDirection;
+            var languageDirection = tm.LanguageDirection;
 
-            // Copy any sourcelanguage resources from the template tm to the new tm
-            LanguageResourceBundle sourceLanguageBundle = templateTm.LanguageResourceBundles[languageDirection.SourceLanguage];
+			// Copy any sourcelanguage resources from the template tm to the new tm
+			var sourceLanguageBundle = templateTm.LanguageResourceBundles[languageDirection.SourceLanguage];
             if (sourceLanguageBundle != null)
             {
                 tm.LanguageResourceBundles.Add(sourceLanguageBundle.Clone());
             }
 
-            // Copy any target language resources from the template tm to the new tm
-            LanguageResourceBundle targetLanguageBundle = templateTm.LanguageResourceBundles[languageDirection.TargetLanguage];
+			// Copy any target language resources from the template tm to the new tm
+			var targetLanguageBundle = templateTm.LanguageResourceBundles[languageDirection.TargetLanguage];
             if (targetLanguageBundle != null)
             {
                 tm.LanguageResourceBundles.Add(targetLanguageBundle.Clone());
@@ -103,7 +100,7 @@ namespace Sdl.Community.TMOptimizer
 
         private void CopyTmFieldDefinitions(FileBasedTranslationMemory templateTm, FileBasedTranslationMemory tm)
         {
-            foreach (FieldDefinition field in templateTm.FieldDefinitions)
+            foreach (var field in templateTm.FieldDefinitions)
             {
                 tm.FieldDefinitions.Add(field.Clone());
             }
