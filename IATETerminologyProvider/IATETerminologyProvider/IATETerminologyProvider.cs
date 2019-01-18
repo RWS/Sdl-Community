@@ -16,6 +16,7 @@ namespace IATETerminologyProvider
 		private IList<EntryModel> _entryModels;
 		private ProviderSettings _providerSettings;
 		private TermSearchService _searchService;
+		private EditorController _editorController;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -77,6 +78,8 @@ namespace IATETerminologyProvider
 			_providerSettings = providerSettings;
 			_entryModels = new List<EntryModel>();
 			_searchService = new TermSearchService(_providerSettings);
+
+			InitializeEditorController();
 		}
 
 		public IList<IDescriptiveField> GetDescriptiveFields()
@@ -150,6 +153,11 @@ namespace IATETerminologyProvider
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
 
+		public EditorController GetEditorController()
+		{
+			return SdlTradosStudio.Application.GetController<EditorController>();
+		}
+
 		public string GetStatusName(int value)
 		{
 			switch (value)
@@ -162,10 +170,40 @@ namespace IATETerminologyProvider
 			}
 		}
 
+		public override void Dispose()
+		{
+			if (_editorController != null)
+			{
+				_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+			}
+
+			base.Dispose();
+		}
+
 		protected virtual void OnTermEntriesChanged(TermEntriesChangedEventArgs e)
 		{
 			TermEntriesChanged?.Invoke(this, e);
 		}
+
+		private void InitializeEditorController()
+		{
+			if (_editorController == null)
+			{
+				_editorController = GetEditorController();
+				if (_editorController != null)
+				{
+					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;				
+				}
+			}
+		}
+
+		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
+		{
+			if (e.Document == null)
+			{
+				OnTermEntriesChanged(null);
+			}
+		}		
 
 		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)
 		{
