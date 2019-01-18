@@ -1,18 +1,24 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using IATETerminologyProvider.Helpers;
+using IATETerminologyProvider.Model;
+using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace IATETerminologyProvider.Ui
 {
 	public partial class IATETermsControl : UserControl
 	{
-		#region Private Fields
 		private readonly IATETerminologyProvider _iateTerminologyProvider;
-		#endregion
+		private readonly PathInfo _pathInfo;
+		private readonly object _lockObject = new object();
 
-		#region Constructors
 		public IATETermsControl()
 		{
 			InitializeComponent();
@@ -20,122 +26,367 @@ namespace IATETerminologyProvider.Ui
 
 		public IATETermsControl(IATETerminologyProvider iateTerminologyProvider) : this()
 		{
-			ShowFields();
 			_iateTerminologyProvider = iateTerminologyProvider;
-		}
-		#endregion
+			_pathInfo = new PathInfo();
 
-		#region Public Methods
+			ReleaseSubscribers();
+
+			_iateTerminologyProvider.TermEntriesChanged += OnTermEntriesChanged;
+			treeView1.AfterSelect += TreeView1_AfterSelect;
+
+			CreateReportTemplate(Path.Combine(_pathInfo.TemporaryStorageFullPath, "report.xslt"));
+		}
+
+		private void TreeView1_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+			if (e.Node?.Tag != null && e.Node?.Tag is EntryModel item)
+			{
+				SelectEntry(item);
+			}
+		}
+
 		public void JumpToTerm(IEntry entry)
 		{
+			SelectEntryItem(entry);
+		}
+
+		public void ReleaseSubscribers()
+		{
+			if (_iateTerminologyProvider != null)
+			{
+				_iateTerminologyProvider.TermEntriesChanged -= OnTermEntriesChanged;
+			}
+
+			if (treeView1 != null)
+			{
+				treeView1.AfterSelect -= TreeView1_AfterSelect;
+			}
+		}
+
+		public IEnumerable<IEntry> GetEntries()
+		{
+			var entries = new List<IEntry>();
+			foreach (TreeNode node in treeView1.Nodes)
+			{
+				entries.Add(node.Tag as EntryModel);
+
+				if (node.Nodes.Count > 0)
+				{
+					foreach (TreeNode childNode in node.Nodes)
+					{
+						entries.Add(childNode.Tag as EntryModel);
+					}
+				}
+			}
+
+			return entries;
+		}
+
+		public IEntry GetSelectedEntry()
+		{
+			return (EntryModel)treeView1.SelectedNode.Tag;
+		}
+
+		public void UpdateEntriesInView(IEnumerable<IEntry> entries, Language sourceLanguage, IEntry selectedEntry)
+		{
+			UpdateEntriesInViewInternal(entries.Cast<EntryModel>(), sourceLanguage, selectedEntry);
+		}
+
+		private void SelectEntryItem(IEntry entry)
+		{
+			if (!(entry is EntryModel entryModel))
+			{
+				return;
+			}
+
+			foreach (TreeNode node in treeView1.Nodes)
+			{
+				var foundNode = FoundNode(node, entryModel);
+
+				if (foundNode)
+				{
+					treeView1.SelectedNode = node;					
+				}
+				else if (node.Nodes.Count > 0)
+				{
+					foreach (TreeNode childNode in node.Nodes)
+					{
+						foundNode = FoundNode(childNode, entryModel);
+						if (foundNode)
+						{
+							treeView1.SelectedNode = childNode;
+							break;
+						}
+					}					
+				}
+
+				if (foundNode)
+				{
+					break;
+				}
+			}
+
+			treeView1.SelectedNode?.EnsureVisible();
+		}
+
+		private static bool FoundNode(TreeNode node, EntryModel entryModel)
+		{
+			if (node.Tag is EntryModel item)
+			{
+				if (item.ItemId == entryModel.ItemId || item.Id == entryModel.Id)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private void SelectEntry(IEntry entry)
+		{
+			var reportXmlFulPath = Path.Combine(_pathInfo.TemporaryStorageFullPath, "report.xml");
+
+			var xmlTxtWriter = new XmlTextWriter(reportXmlFulPath, Encoding.UTF8)
+			{
+				Formatting = Formatting.None,
+				Indentation = 3,
+				Namespaces = false
+			};
+			xmlTxtWriter.WriteStartDocument(true);
+
+			xmlTxtWriter.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + "report.xslt" + "'");
+			xmlTxtWriter.WriteComment("IATETerminologyProvider by SDL Community Developers, 2019");
+
+			WriteReport(entry, xmlTxtWriter);
+
+			xmlTxtWriter.WriteEndDocument();
+			xmlTxtWriter.Flush();
+			xmlTxtWriter.Close();
+
+			webBrowser1.Url = new Uri(Path.Combine("file://", reportXmlFulPath));
+			webBrowser1.Refresh();
+		}
+
+		private void OnTermEntriesChanged(object sender, EventArgs.TermEntriesChangedEventArgs e)
+		{
+			UpdateEntriesInViewInternal(e.EntryModels, e.SourceLanguage, null);
+		}
+
+		private void UpdateEntriesInViewInternal(IEnumerable<EntryModel> entryModels, Language sourceLanguage, IEntry selectedEntry)
+		{
+			if (InvokeRequired)
+			{
+				BeginInvoke(new Action<IEnumerable<EntryModel>, Language, IEntry>(UpdateEntriesInViewInternal), entryModels, sourceLanguage, selectedEntry);
+				return;
+			}
+
+			lock (_lockObject)
+			{
+				var items = new Dictionary<string, List<EntryModelItem>>();
+				var index = new List<string>();
+
+				foreach (var entryModel in entryModels)
+				{
+					var sourceTerms = entryModel.Languages
+						.Where(a => a.Locale.TwoLetterISOLanguageName == sourceLanguage.CultureInfo.TwoLetterISOLanguageName).ToList();
+
+					foreach (var sourceTerm in sourceTerms)
+					{
+						foreach (var entryTerm in sourceTerm.Terms)
+						{
+							var indexItem = $"Source.{entryTerm.Value}.ItemId.{entryModel.ItemId}";
+
+							if (!index.Contains(indexItem))
+							{
+								var item = new EntryModelItem
+								{
+									Guid = Guid.NewGuid(),
+									Entry = entryModel,
+									Text = entryTerm.Value
+								};
+
+								if (items.ContainsKey(item.Text))
+								{
+									items[item.Text].Add(item);
+								}
+								else
+								{
+									items.Add(item.Text, new List<EntryModelItem> { item });
+								}
+
+								index.Add(indexItem);
+							}
+						}
+					}
+				}
+
+				treeView1.BeginUpdate();
+				treeView1.Nodes.Clear();
+				foreach (var item in items)
+				{
+					var node = treeView1.Nodes.Add(item.Value[0].Guid.ToString(), item.Value[0].Text);
+					node.Tag = item.Value[0].Entry;
+					if (item.Value.Count > 1)
+					{
+						for (var i = 1; i < item.Value.Count; i++)
+						{
+							var subNode = node.Nodes.Add(item.Value[i].Guid.ToString(), item.Value[i].Text);
+							subNode.Tag = item.Value[i].Entry;
+						}
+					}
+				}
+
+				treeView1.Sort();
+
+				if (treeView1.Nodes.Count > 0)
+				{
+					if (selectedEntry != null)
+					{
+						SelectEntryItem(selectedEntry);
+					}
+					else
+					{
+						SelectEntryItem(treeView1.Nodes[0].Tag as EntryModel);												
+					}
+				}
+				else
+				{
+					SelectEntry(null);
+				}
+
+				treeView1.EndUpdate();
+			}
+		}
+
+		private static void CreateReportTemplate(string fullFilePath)
+		{
+			if (File.Exists(fullFilePath))
+			{
+				File.Delete(fullFilePath);
+			}
+
+			var reportTemplate = "IATETerminologyProvider.Resources.report.xslt";
+
+			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(reportTemplate))
+			{
+				if (stream != null)
+				{
+					using (var reader = new BinaryReader(stream))
+					{
+						using (Stream writer = File.Create(fullFilePath))
+						{
+							var buffer = new byte[2048];
+							while (true)
+							{
+								var current = reader.Read(buffer, 0, buffer.Length);
+								if (current == 0)
+								{
+									break;
+								}
+
+								writer.Write(buffer, 0, current);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private static void WriteReport(IEntry entry, XmlWriter xmlTxtWriter)
+		{
+			xmlTxtWriter.WriteStartElement("Report");
+			xmlTxtWriter.WriteAttributeString("xml:space", "preserve");
+			if (entry != null)
+			{
+				xmlTxtWriter.WriteAttributeString("ItemId", ((EntryModel)entry).ItemId);
+
+				WriteFields(entry.Fields, xmlTxtWriter);
+
+				WriteLanguages(entry, xmlTxtWriter);
+			}
+
+			xmlTxtWriter.WriteEndElement(); //report
+		}
+
+		private static void WriteLanguages(IEntry entry, XmlWriter xmlTxtWriter)
+		{
+			xmlTxtWriter.WriteStartElement("Languages");
+
+			for (var i = 0; i < entry.Languages.Count; i++)
+			{
+				WriteLanguage(entry.Languages[i], i == 0, xmlTxtWriter);
+			}
+
+			xmlTxtWriter.WriteEndElement(); //Languages
+		}
+
+		private static void WriteLanguage(IEntryLanguage language, bool isSource, XmlWriter xmlTxtWriter)
+		{
 			var languageFlags = new LanguageFlags();
-			var entrySourceLanguage = entry.Languages[0];
-			var entryTargetLanguage = entry.Languages[1];
+			var fullPath = languageFlags.GetImageStudioCodeByLanguageCode(language.Locale.Name);
 
-			//get the entry by Id from all the source terms result and map the following values from the target language
-			if (entrySourceLanguage != null)
-			{
-				SetSourceFields(languageFlags, entrySourceLanguage);
-			}
+			xmlTxtWriter.WriteStartElement("Language");
+			xmlTxtWriter.WriteAttributeString("Name", language.Name);
+			xmlTxtWriter.WriteAttributeString("CultureInfo", language.Locale.Name);
+			xmlTxtWriter.WriteAttributeString("TwoLetterISOLanguageName", language.Locale.TwoLetterISOLanguageName);
+			xmlTxtWriter.WriteAttributeString("IsSource", isSource.ToString());
+			xmlTxtWriter.WriteAttributeString("FlagFullPath", File.Exists(fullPath) ? fullPath : string.Empty);
 
-			//get the entry by Id from all the target terms result and map the following values from the target language
-			if (entryTargetLanguage != null)
-			{
-				SetTargetFields(languageFlags, entryTargetLanguage);
-			}
-			ShowFields();
+			WriteFields(language.Fields, xmlTxtWriter);
+
+			WriteTerms(language, xmlTxtWriter);
+
+			xmlTxtWriter.WriteEndElement(); //Language
 		}
-		#endregion
 
-		#region Private Methods
-
-		/// <summary>
-		/// Set target fields values in the Termbase Viewer
-		/// </summary>
-		/// <param name="languageFlags">all languages flags</param>
-		/// <param name="entryTargetLanguage">target term entry language</param>
-		private void SetTargetFields(LanguageFlags languageFlags, IEntryLanguage entryTargetLanguage)
+		private static void WriteTerms(IEntryLanguage language, XmlWriter xmlTxtWriter)
 		{
-			pictureBoxTarget.Load(languageFlags.GetImageStudioCodeByLanguageCode(entryTargetLanguage.Locale.Name));
-			lblTargetLanguageText.Text = entryTargetLanguage.Name;
-			var targetTerms = entryTargetLanguage.Terms;
-			if (targetTerms.Count > 0)
+			xmlTxtWriter.WriteStartElement("Terms");
+
+			if (language.Terms.Count > 0)
 			{
-				lblTargetTermText.Text = Utils.UppercaseFirstLetter(targetTerms[0].Value);
+				var fields = language.Terms[0].Fields.Where(entryField =>
+					entryField.Name == "Definition" || entryField.Name == "Domain" || entryField.Name == "Subdomain").ToList();
 
-				txtTargetDefinitionText.Text = targetTerms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault() != null
-					? Utils.UppercaseFirstLetter(targetTerms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault().Value)
-					: "-";
-
-				lblTargetDomainText.Text = targetTerms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault() != null
-					? Utils.UppercaseFirstLetter(targetTerms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault().Value.ToLower())
-					: "-";
-
-				lblTargetSubdomainText.Text = targetTerms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault() != null
-					? targetTerms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault().Value
-					: "-";
-				lblTargetSubdomainText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblTargetSubdomainText.Text.ToLower());
-
-				lblTargetTermTypeText.Text = targetTerms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault() != null
-					? Utils.UppercaseFirstLetter(targetTerms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault().Value)
-					: "-";
+				WriteFields(fields, xmlTxtWriter);
 			}
-		}
-		
-		/// <summary>
-		/// Set source fields values in the Termbase Viewer
-		/// </summary>
-		/// <param name="languageFlags">all languages flags</param>
-		/// <param name="entrySourceLanguage">source term entry language</param>
-		private void SetSourceFields(LanguageFlags languageFlags, IEntryLanguage entrySourceLanguage)
-		{
-			pictureBoxSource.Load(languageFlags.GetImageStudioCodeByLanguageCode(entrySourceLanguage.Locale.Name));
-			lblSourceLanguageText.Text = entrySourceLanguage.Name;
-			var sourceTerms = entrySourceLanguage.Terms;
-			if (sourceTerms.Count > 0)
+
+			foreach (var term in language.Terms)
 			{
-				lblSourceTermText.Text = Utils.UppercaseFirstLetter(sourceTerms[0].Value);
-
-				txtSourceDefinitionText.Text = sourceTerms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault() != null
-					? Utils.UppercaseFirstLetter(sourceTerms[0].Fields.Where(f => f.Name.Equals("Definition")).FirstOrDefault().Value)
-					: "-";
-
-				lblSourceDomainText.Text = sourceTerms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault() != null
-					? Utils.UppercaseFirstLetter(sourceTerms[0].Fields.Where(f => f.Name.Equals("Domain")).FirstOrDefault().Value.ToLower())
-					: "-";
-
-				lblSourceSubdomainText.Text = sourceTerms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault() != null
-					? sourceTerms[0].Fields.Where(f => f.Name.Equals("Subdomain")).FirstOrDefault().Value
-					: "-";
-				lblSourceSubdomainText.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lblSourceSubdomainText.Text.ToLower());
-
-				lblSourceTermTypeText.Text = sourceTerms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault() != null
-					? Utils.UppercaseFirstLetter(sourceTerms[0].Fields.Where(f => f.Name.Equals("TermType")).FirstOrDefault().Value)
-					: "-";
+				WriteTerm(term, xmlTxtWriter);
 			}
+
+			xmlTxtWriter.WriteEndElement(); //Terms
 		}
 
-		/// <summary>
-		/// Show/Hide the fields in the Termbase Viewer based on value existence.
-		/// </summary>
-		private void ShowFields()
+		private static void WriteTerm(IEntryTerm term, XmlWriter xmlTxtWriter)
 		{
-			lblSourceLanguageText.Visible = !string.IsNullOrEmpty(lblSourceLanguageText.Text) ? true : false;
-			lblSourceTerm.Visible = !string.IsNullOrEmpty(lblSourceTermText.Text) ? true : false;
-			lblSourceDefinition.Visible = !string.IsNullOrEmpty(txtSourceDefinitionText.Text) ? true : false;
-			txtSourceDefinitionText.Visible = !string.IsNullOrEmpty(txtSourceDefinitionText.Text) ? true : false;
-			lblSourceDomain.Visible = !string.IsNullOrEmpty(lblSourceDomainText.Text) ? true : false;
-			lblSourceSubdomain.Visible = !string.IsNullOrEmpty(lblSourceSubdomainText.Text) ? true : false;
-			lblSourceTermType.Visible = !string.IsNullOrEmpty(lblSourceTermTypeText.Text) ? true : false;
+			xmlTxtWriter.WriteStartElement("Term");
 
-			lblTargetLanguageText.Visible = !string.IsNullOrEmpty(lblTargetLanguageText.Text) ? true : false;
-			lblTargetTerm.Visible = !string.IsNullOrEmpty(lblTargetTermText.Text) ? true : false;
-			lblTargetDefinition.Visible = !string.IsNullOrEmpty(txtTargetDefinitionText.Text) ? true : false;
-			txtTargetDefinitionText.Visible = !string.IsNullOrEmpty(txtTargetDefinitionText.Text) ? true : false;
-			lblTargetDomain.Visible = !string.IsNullOrEmpty(lblTargetDomainText.Text) ? true : false;
-			lblTargetSubDomain.Visible  = !string.IsNullOrEmpty(lblTargetSubdomainText.Text) ? true : false;
-			lblTargetTermType.Visible = !string.IsNullOrEmpty(lblTargetTermTypeText.Text) ? true : false;
+			xmlTxtWriter.WriteAttributeString("Value", term.Value);
+
+			var fields = term.Fields.Where(entryField =>
+				entryField.Name == "Type" || entryField.Name == "Status").ToList();
+
+			WriteFields(fields, xmlTxtWriter);
+
+			xmlTxtWriter.WriteEndElement(); //Term
 		}
-		#endregion
+
+		private static void WriteFields(IEnumerable<IEntryField> fields, XmlWriter xmlTxtWriter)
+		{
+			xmlTxtWriter.WriteStartElement("Fields");
+			foreach (var field in fields)
+			{
+				xmlTxtWriter.WriteStartElement("Field");
+
+				xmlTxtWriter.WriteAttributeString("Name", field.Name);
+				xmlTxtWriter.WriteAttributeString("Value", field.Value);
+
+				xmlTxtWriter.WriteEndElement(); //field
+			}
+
+			xmlTxtWriter.WriteEndElement(); //fields
+		}
 	}
 }

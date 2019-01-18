@@ -3,20 +3,24 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using IATETerminologyProvider.Helpers;
+using IATETerminologyProvider.Service;
 using IATETerminologyProvider.Ui;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace IATETerminologyProvider
 {
 	[TerminologyProviderViewerWinFormsUI]
-	class IATETerminologyProviderViewerWinFormsUI : ITerminologyProviderViewerWinFormsUI
+	internal class IATETerminologyProviderViewerWinFormsUI : ITerminologyProviderViewerWinFormsUI
 	{
-		#region Private Fields
 		private IATETerminologyProvider _iateTerminologyProvider;
 		private IATETermsControl _control;
-		#endregion
+		private DocumentStateService _documentStateService;
 
-		#region Public Properties
+		public event EventHandler TermChanged;
+		public event EventHandler<EntryEventArgs> SelectedTermChanged;
+		public event Action<IEntry> JumpToTermAction;
+		public event Action<string, string> AddTermAction;
+
 		public Control Control
 		{
 			get
@@ -28,17 +32,22 @@ namespace IATETerminologyProvider
 				};
 
 				JumpToTermAction += _control.JumpToTerm;
-				//_iateTerminologyProvider.TermsLoaded += _control.SetTerms;
+
+				if (_documentStateService == null)
+				{
+					_documentStateService = new DocumentStateService();
+				}
+
+				_documentStateService.UpdateDocumentEntriesState(_control);
 
 				return _control;
 			}
-		}
+		}		
 
 		public bool Initialized => true;
-		public IEntry SelectedTerm { get; set; }		
-		#endregion
 
-		#region Public Methods
+		public IEntry SelectedTerm { get; set; }
+
 		public void AddAndEditTerm(IEntry term, string source, string target)
 		{
 		}
@@ -64,20 +73,19 @@ namespace IATETerminologyProvider
 
 		public void Release()
 		{
-			_iateTerminologyProvider = null;
-		}
+			if (JumpToTermAction != null)
+			{
+				JumpToTermAction -= _control.JumpToTerm;
+			}
+
+			_documentStateService.SaveDocumentEntriesState(_control);
+
+			_control?.ReleaseSubscribers();
+		}		
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
 			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
-		}
-		#endregion
-
-		#region Events
-		public event EventHandler TermChanged;
-		public event EventHandler<EntryEventArgs> SelectedTermChanged;
-		public event Action<IEntry> JumpToTermAction;
-		public event Action<string, string> AddTermAction;
-		#endregion
+		}	
 	}
 }
