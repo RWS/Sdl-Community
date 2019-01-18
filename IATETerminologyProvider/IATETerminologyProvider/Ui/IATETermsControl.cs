@@ -17,7 +17,6 @@ namespace IATETerminologyProvider.Ui
 	{
 		private readonly IATETerminologyProvider _iateTerminologyProvider;
 		private readonly PathInfo _pathInfo;
-		private readonly object _lockObject = new object();
 
 		public IATETermsControl()
 		{
@@ -84,7 +83,7 @@ namespace IATETerminologyProvider.Ui
 
 		public IEntry GetSelectedEntry()
 		{
-			return (EntryModel)treeView1.SelectedNode.Tag;
+			return (EntryModel)treeView1.SelectedNode?.Tag;
 		}
 
 		public void UpdateEntriesInView(IEnumerable<IEntry> entries, Language sourceLanguage, IEntry selectedEntry)
@@ -169,7 +168,14 @@ namespace IATETerminologyProvider.Ui
 
 		private void OnTermEntriesChanged(object sender, EventArgs.TermEntriesChangedEventArgs e)
 		{
-			UpdateEntriesInViewInternal(e.EntryModels, e.SourceLanguage, null);
+			if (e == null)
+			{
+				UpdateEntriesInViewInternal(new List<EntryModel>(), null, null);
+			}
+			else
+			{
+				UpdateEntriesInViewInternal(e.EntryModels ?? new List<EntryModel>(), e.SourceLanguage, null);
+			}
 		}
 
 		private void UpdateEntriesInViewInternal(IEnumerable<EntryModel> entryModels, Language sourceLanguage, IEntry selectedEntry)
