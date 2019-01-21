@@ -10,10 +10,10 @@ namespace Sdl.Community.TMOptimizer
         protected override void OnStartup(StartupEventArgs e)
         {
             // First assign the MainWindow to the main form
-            TMCleanerViewModel viewModel = new TMCleanerViewModel();
-            MainWindow window = new MainWindow();
+            var viewModel = new TMCleanerViewModel();
+            var window = new MainWindow();
             window.DataContext = viewModel;
-            Application.Current.MainWindow = window; // main win
+            Application.Current.MainWindow = window; // main window
             window.Show();
         }
     }
