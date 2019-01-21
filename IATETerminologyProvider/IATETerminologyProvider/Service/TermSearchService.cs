@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Model.ResponseModels;
@@ -38,10 +36,9 @@ namespace IATETerminologyProvider.Service
 		/// <param name="maxResultsCount">number of maximum results returned(set up in Studio Termbase search settings)</param>
 		/// <returns>terms</returns>
 		public List<ISearchResult> GetTerms(string text, ILanguage source, ILanguage target, int maxResultsCount)
-		{
+		{						
 			// maxResults (the number of returned words) value is set from the Termbase -> Search Settings
-			var client = new RestClient(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()));
-
+			var client = new RestClient(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()));		
 			var request = new RestRequest("", Method.POST);
 			request.AddHeader("Connection", "Keep-Alive");
 			request.AddHeader("Cache-Control", "no-cache");
@@ -51,7 +48,7 @@ namespace IATETerminologyProvider.Service
 			request.AddHeader("Content-Type", "application/json");
 			request.AddHeader("Origin", "https://iate.europa.eu");
 			request.AddHeader("Host", "iate.europa.eu");
-			request.AddHeader("Access-Control-Allow-Origin", "*");
+			request.AddHeader("Access-Control-Allow-Origin", "*");			
 
 			var bodyModel = SetApiRequestBodyValues(source, target, text);
 			request.AddJsonBody(bodyModel);
@@ -127,9 +124,9 @@ namespace IATETerminologyProvider.Service
 							{
 								var languageToken = (JProperty)jToken;
 
-								// Latin translations are automatically returned by IATE API response->"la" code
-								// Ignore the "la" translations
-								if (languageToken.Name.Equals("la"))
+								// Multilingual and Latin translations are automatically returned by IATE API response->"la" code
+								// Ignore the "mul" and "la" translations
+								if (languageToken.Name.Equals("la") || languageToken.Name.Equals("mul"))
 								{
 									continue;
 								}
@@ -168,28 +165,35 @@ namespace IATETerminologyProvider.Service
 										}
 									}
 
-									var languageModel = new LanguageModel
+									try
 									{
-										Name = new Language(langTwoLetters).DisplayName,
-										Locale = new Language(langTwoLetters).CultureInfo
-									};
+										var languageModel = new LanguageModel
+										{
+											Name = new Language(langTwoLetters).DisplayName,
+											Locale = new Language(langTwoLetters).CultureInfo
+										};
 
-									var termResult = new SearchResultModel
+										var termResult = new SearchResultModel
+										{
+											Text = termValue,
+											Id = _termIndexId,
+											ItemId = itemId,
+											Score = 100,
+											Language = languageModel,
+											Definition = definition?.ToString() ?? string.Empty,
+											Domain = domain,
+											Subdomain = FormatSubdomain(),
+											TermType = termType,
+											DisplayOrder = displayOrder,
+											Evaluation = evaluation
+										};
+
+										searchResultItems.Add(termResult);
+									}
+									catch
 									{
-										Text = termValue,
-										Id = _termIndexId,
-										ItemId = itemId,
-										Score = 100,
-										Language = languageModel,
-										Definition = definition?.ToString() ?? string.Empty,
-										Domain = domain,
-										Subdomain = FormatSubdomain(),
-										TermType = termType,
-										DisplayOrder = displayOrder,
-										Evaluation = evaluation
-									};
-
-									searchResultItems.Add(termResult);
+										// catch all; ignore
+									}
 								}
 							}
 						}
