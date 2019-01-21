@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
+	<Product Id="*" Name="TMOptimizer 2017" Language="1033" Version="1.2" Manufacturer="Sdl" UpgradeCode="2ac0d894-8df4-4131-8d9c-61e21d20b224">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<Icon Id="product.ico" SourceFile="$(var.ProjectDir)product.ico" />
+		<Property Id="ARPPRODUCTICON" Value="product.ico" />
+
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
+
+		<Property Id="WIXUI_INSTALLDIR" Value="Studio5" />
+		<!--bellow line describes the UI of the Wix installer which does not include the possibility to select an installation path-->
+
+		<UIRef Id="WixUI_Minimal"/>
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes"/>
+
+		<!-- Compoments needed for the installation - by defining the below components, installer knows to install the application to Desktop and Program Data. -->
+		<Feature Id="ProductFeature" Title="Sdl.Community.TMOptimizer.Installer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id='ApplicationProgramDataShortcut' />
+			<ComponentRef Id='ApplicationShortcutDesktop' />
+		</Feature>
+	</Product>
+
+	<!-- Create shortcut to the Desktop directory. Use .exe from the INSTALLFOLDER where the application together with all 
+	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
+	<Fragment>
+		<DirectoryRef Id="DesktopFolder">
+			<Component Id="ApplicationShortcutDesktop" Guid="b0ef83fe-3af5-4545-937e-531a5bd50dcd">
+				<Shortcut Id="ApplicationDesktopShortcut" Name="TMOptimizer2017" Icon="product.ico" Description="TMOptimizer2017" Target="[Studio5]Sdl.Community.TMOptimizer.exe" WorkingDirectory="Studio5" />
+				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.TMOptimizer" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+
+	<!-- Create shortcut to the SDLTradosStudio2017Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
+	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
+	<Fragment>
+		<DirectoryRef Id="SDLTradosStudio2017Apps">
+			<Component Id="ApplicationProgramDataShortcut" Guid="5eb76858-f47b-4991-9cb6-60840b385d56">
+				<Shortcut Id="ApplicationProgDataShortcut" Name="TMOptimizer2017" Icon="product.ico" Description="TMOptimizer2017" Target="[Studio5]\Sdl.Community.TMOptimizer.exe" WorkingDirectory="TMOptimizer" />
+				<RemoveFolder Id="RemoveSDLTradosStudio2017Apps" Directory="SDLTradosStudio2017Apps" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Communities.TMOptimizerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<!-- Define location where the app will be installed, Studio5 folder (it is used because dll's needs to be loaded from the Studio folder)-->
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="SDL" Name="SDL" >
+					<Directory Id="SDLTradosStudio" Name="SDL Trados Studio" >
+						<Directory Id="Studio5" Name="Studio5"/>
+					</Directory>
+				</Directory>
+			</Directory>
+
+			<!-- Define location where the shortcut will be added: in our case, folder SDLTradosStudio2017Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
+			 Way to construct the path where the shortcut will be added -->
+			<Directory Id="ProgramMenuFolder"  Name="All Programs folder">
+				<Directory Id="SDLTradosStudio2017Apps" Name="SDL Trados Studio 2017 Apps" />
+			</Directory>
+
+			<!-- Define location where the shortcut will be added: in our case: Desktop -->
+			<Directory Id="DesktopFolder" Name="Desktop" />
+		</Directory>
+	</Fragment>
+
+	<!-- .exe and .dll's which are installed to selected location when user is running the .msi file-->
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="Studio5">
+			<Component Id="Sdl.Community.TMOptimizer">
+				<File Id="Sdl.Community.TMOptimizer.exe" Name="Sdl.Community.TMOptimizer.exe" Source="$(var.Sdl.Community.TMOptimizer.TargetPath)" KeyPath="yes" />
+			</Component>
+
+			<Component Id="Sdl.Community.TMOptimizer.exe.config" Guid="55dfa363-c959-49cb-861e-c05c75860968">
+				<File Id="Sdl.Community.TMOptimizer.exe.config" Name="Sdl.Community.TMOptimizer.exe.config" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.Community.TMOptimizer.exe.config" />
+			</Component>
+
+			<Component Id="Sdl.Community.TMOptimizerLib.dll" Guid="*">
+				<File Id="Sdl.Community.TMOptimizerLib.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.Community.TMOptimizerLib.dll" />
+			</Component>
+
+			<Component Id="Xceed.Wpf.Toolkit.dll">
+				<File Id="Xceed.Wpf.Toolkit.dll" Name="Xceed.Wpf.Toolkit.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Xceed.Wpf.Toolkit.dll"  />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
