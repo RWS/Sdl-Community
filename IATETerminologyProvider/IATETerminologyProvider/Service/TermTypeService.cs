@@ -33,7 +33,7 @@ namespace IATETerminologyProvider.Service
 			var response = client.Execute(request);
 			var jsonTermTypesModel = JsonConvert.DeserializeObject<TermTypeResponseModel>(response.Content);
 
-			if (jsonTermTypesModel.Items != null)
+			if (jsonTermTypesModel?.Items != null)
 			{
 				int result;
 				foreach (var item in jsonTermTypesModel.Items)

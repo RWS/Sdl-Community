@@ -32,7 +32,7 @@ namespace IATETerminologyProvider.Service
 			var response = client.Execute(request);
 			var jsonDomainsModel = JsonConvert.DeserializeObject<JsonDomainResponseModel>(response.Content);
 
-			if (jsonDomainsModel.Items != null)
+			if (jsonDomainsModel?.Items != null)
 			{
 				foreach (var item in jsonDomainsModel.Items)
 				{
