@@ -9,18 +9,22 @@ namespace IATETerminologyProvider.IATEProviderTellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new IATECommunitySupportAction
+			new IATECommunityWikiAction
 			{
-				Keywords = new[] {"iate", "iate community", "iate support"}
+				Keywords = new[] {"iate", "iate community", "iate support", "iate wiki" }
+			},
+			new IATECommunityForumAction
+			{
+				Keywords = new[] {"iate", "iate community", "iate support", "iate forum" }
 			},
 			new IATEStoreAction
 			{
-				Keywords = new[] {"iate", "iate store", "iate download"}
+				Keywords = new[] {"iate", "iate store", "iate download", "iate appstore" }
 			},
 			new IATEContactAction
 			{
 				Keywords = new[] {"iate", "iate contact", "iate official", "iate website", "iate web search"}
-			},
+			}
 		};
 	}
 }

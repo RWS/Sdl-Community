@@ -127,7 +127,8 @@
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\LanguageFlags.cs" />
     <Compile Include="Helpers\Utils.cs" />
-    <Compile Include="IATEProviderTellMe\IATECommunitySupportAction.cs" />
+    <Compile Include="IATEProviderTellMe\IATECommunityWikiAction.cs" />
+    <Compile Include="IATEProviderTellMe\IATECommunityForumAction.cs" />
     <Compile Include="IATEProviderTellMe\IATEContactAction.cs" />
     <Compile Include="IATEProviderTellMe\IATEStoreAction.cs" />
     <Compile Include="IATEProviderTellMe\IATETellMeProvider.cs" />
