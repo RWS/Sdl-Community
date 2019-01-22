@@ -88,7 +88,7 @@
 		<xsl:for-each select=".">			
 			<tr>			
 				<td width="2%">		
-					<img width="32" >
+					<img width="28" >
 						<xsl:attribute name="src">
 							<xsl:value-of select="@FlagFullPath"/>
 						</xsl:attribute>
@@ -195,7 +195,36 @@
 				<xsl:when test="$Structure='Term'">
 					<td>
 						<span style="margin-right:5; color:gray;">&#160;&#160;&#160;&#160;&#160;<xsl:value-of select="@Name"/>: </span>
-						<xsl:value-of select="@Value"/>	
+
+						<span>
+							<xsl:choose>
+								<xsl:when test="@Value = 'Deprecated'">
+									<xsl:attribute name="style">
+										<xsl:value-of select="'color:DarkRed;'"/>
+										<xsl:value-of select="'font-weight:bold;'"/>
+									</xsl:attribute>
+								</xsl:when>
+								<xsl:when test="@Value = 'Obsolete'">
+									<xsl:attribute name="style">
+										<xsl:value-of select="'color:DarkRed;'"/>
+										<xsl:value-of select="'font-weight:bold;'"/>
+									</xsl:attribute>
+								</xsl:when>
+								<xsl:when test="@Value = 'Preferred'">
+									<xsl:attribute name="style">
+										<xsl:value-of select="'color:DarkGreen;'"/>
+										<xsl:value-of select="'font-weight:bold;'"/>
+									</xsl:attribute>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:attribute name="style">
+										<xsl:value-of select="'color:Black;'"/>
+									</xsl:attribute>
+								</xsl:otherwise>
+							</xsl:choose>
+
+							<xsl:value-of select="@Value"/>
+						</span>
 					</td>
 				</xsl:when>
 				<xsl:otherwise>
