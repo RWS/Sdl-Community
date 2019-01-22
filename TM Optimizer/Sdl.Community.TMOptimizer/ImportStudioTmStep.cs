@@ -1,17 +1,14 @@
-﻿using Sdl.Community.TMOptimizerLib;
+﻿using System;
+using Sdl.Community.TMOptimizerLib;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Sdl.Community.TMOptimizer
 {
-    /// <summary>
-    /// Imports a TMX file into a Studio TM
-    /// </summary>
-    class ImportStudioTmStep : ProcessingStep
+	/// <summary>
+	/// Imports a TMX file into a Studio TM
+	/// </summary>
+	class ImportStudioTmStep : ProcessingStep
     {
         private TranslationMemoryReference _outputTranslationMemory;
         private string _name;

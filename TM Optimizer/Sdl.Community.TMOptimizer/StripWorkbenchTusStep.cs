@@ -1,12 +1,9 @@
-﻿using Sdl.Community.TMOptimizerLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
+using Sdl.Community.TMOptimizerLib;
 
 namespace Sdl.Community.TMOptimizer
 {
-    class StripWorkbenchTusStep : ProcessingStep
+	class StripWorkbenchTusStep : ProcessingStep
     {
         private TmxFile _inputTmxFile;
         private TmxFile _outputTmxFile;
