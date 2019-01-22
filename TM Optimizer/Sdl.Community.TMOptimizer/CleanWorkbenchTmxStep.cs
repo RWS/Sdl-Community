@@ -1,16 +1,13 @@
-﻿using Sdl.Community.TMOptimizerLib;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text;
+using Sdl.Community.TMOptimizerLib;
 
 namespace Sdl.Community.TMOptimizer
 {
-    /// <summary>
-    /// Cleans a Workbench TMX file, removing unnecessary formatting tags
-    /// </summary>
-    class CleanWorkbenchTmxStep : ProcessingStep
+	/// <summary>
+	/// Cleans a Workbench TMX file, removing unnecessary formatting tags
+	/// </summary>
+	class CleanWorkbenchTmxStep : ProcessingStep
     {
         private TmxFile _inputTmxFile;
         private TmxFile _outputTmxFile;

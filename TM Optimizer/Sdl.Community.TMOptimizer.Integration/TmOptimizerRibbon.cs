@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.TMOptimizer.Control;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
@@ -10,7 +6,7 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 
 namespace Sdl.Community.TMOptimizer.Integration
 {
-    [RibbonGroup("Sdl.Community.TmOptimizer", Name = "TmOptimizer")]
+	[RibbonGroup("Sdl.Community.TmOptimizer", Name = "TmOptimizer")]
     [RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
     class TmOptimizerRibbon : AbstractRibbonGroup
     {

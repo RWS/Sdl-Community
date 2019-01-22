@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel;
 
 namespace Sdl.Community.TMOptimizerLib
 {
-    public class ProgressEventArgs : CancelEventArgs
+	public class ProgressEventArgs : CancelEventArgs
     {
         public int Progress
         {

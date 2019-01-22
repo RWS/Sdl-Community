@@ -13,7 +13,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TMOptimizer.Control
 {
-    public class TMCleanerViewModel : INotifyPropertyChanged
+	public class TMCleanerViewModel : INotifyPropertyChanged
     {
         public TMCleanerViewModel()
         {
@@ -183,11 +183,8 @@ namespace Sdl.Community.TMOptimizer.Control
 
         private void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 
         public void SelectExistingTranslationMemory()
         {

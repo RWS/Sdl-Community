@@ -3,7 +3,7 @@ using Sdl.Community.TMOptimizerLib;
 
 namespace Sdl.Community.TMOptimizer.Control
 {
-    class StripWorkbenchTusStep : ProcessingStep
+	class StripWorkbenchTusStep : ProcessingStep
     {
         private TmxFile _inputTmxFile;
         private TmxFile _outputTmxFile;

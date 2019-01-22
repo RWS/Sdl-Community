@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.TMOptimizer.Control
 {
-    public enum ProcessingState
+	public enum ProcessingState
     {
         NotProcessing,
         Processing,
