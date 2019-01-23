@@ -3,6 +3,6 @@
   <PlugInName>Segment Status Switcher</PlugInName>
   <Version>1.2</Version>
   <Description>Keyboard shortcuts for changing segments status</Description>
-  <Author>SDL Community</Author>
+  <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="14.0" maxversion="15.0"/>
 </PluginPackage>
