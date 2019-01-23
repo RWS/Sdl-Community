@@ -2150,7 +2150,7 @@ namespace SDLXLIFFSliceOrChange
             PostProcessSearchResult(_replaceResults, sourceSettings, targeSettings);
         }
 
-        private void PostProcessSearchResult(List<FileData> results, SearchSettings sourceSettings = null, SearchSettings targeSettings = null)
+        private void PostProcessSearchResult(IEnumerable<FileData> results, SearchSettings sourceSettings = null, SearchSettings targetSettings = null)
         {
             StepProcess("Post processing search result ...");
 
@@ -2191,8 +2191,7 @@ namespace SDLXLIFFSliceOrChange
                             var searchResultsToRemove = new List<IndexData>();
                             foreach (var searchResult in sResult.Value.SearchResults)
                             {
-                               // String subText = sResultText.Substring(searchResult.IndexStart, searchResult.Length);
-                                if (!Regex.IsMatch(sResultText, sourceSettings.SearchText))
+                                if (!Regex.IsMatch(sResultText, sourceSettings.SearchText, !sourceSettings.MatchCase ? RegexOptions.IgnoreCase : RegexOptions.None))
                                 {
                                     searchResultsToRemove.Add(searchResult);
                                 }
@@ -2205,7 +2204,7 @@ namespace SDLXLIFFSliceOrChange
                         }
                     }
 
-                    if (targeSettings != null && targeSettings.SearchInTag && fileData.SearchTargetResults.Any(ssr => ssr.Value.Tags.Count > 0))
+                    if (targetSettings != null && targetSettings.SearchInTag && fileData.SearchTargetResults.Any(ssr => ssr.Value.Tags.Count > 0))
                     {
                         var sResults = fileData.SearchTargetResults.Where(ssr => ssr.Value.Tags.Count > 0);
                         foreach (var sResult in sResults)
@@ -2226,7 +2225,7 @@ namespace SDLXLIFFSliceOrChange
                         }
                     }
 
-                    if (targeSettings != null && targeSettings.UseRegex &&
+                    if (targetSettings != null && targetSettings.UseRegex &&
                         fileData.SearchTargetResults.Any(sr => sr.Value.MatchesCount > 0))
                     {
                         StepProcess("Post processing target result ...");
@@ -2237,8 +2236,7 @@ namespace SDLXLIFFSliceOrChange
                             var searchResultsToRemove = new List<IndexData>();
                             foreach (var searchResult in sResult.Value.SearchResults)
                             {
-                               // String subText = tResultText.Substring(searchResult.IndexStart, searchResult.Length);
-                                if (!Regex.IsMatch(tResultText, targeSettings.SearchText))
+                                if (!Regex.IsMatch(tResultText, targetSettings.SearchText, !targetSettings.MatchCase ? RegexOptions.IgnoreCase : RegexOptions.None))
                                 {
                                     searchResultsToRemove.Add(searchResult);
                                 }
