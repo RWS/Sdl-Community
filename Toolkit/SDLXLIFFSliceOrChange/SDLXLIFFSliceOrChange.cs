@@ -317,7 +317,15 @@ namespace SDLXLIFFSliceOrChange
 			var studioFolder = string.Empty;
 			if (studioVersion != null)
 			{
-				if (studioVersion.Version.Equals("Studio15"))
+				if (studioVersion.Version.Equals("Studio4"))
+				{
+					studioFolder = "Studio 2015";
+				}
+				else if (studioVersion.Version.Equals("Studio5"))
+				{
+					studioFolder = "Studio 2017";
+				}
+				else if (studioVersion.Version.Equals("Studio15"))
 				{
 					studioFolder = "Studio 2019";
 				}
