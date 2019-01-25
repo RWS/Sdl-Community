@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
 	public class TemplateLoader
 	{
-        public string GetTmTemplateFolderPath()
+		public string GetTmTemplateFolderPath()
 		{
 			var data =
 				LoadDataFromFile(

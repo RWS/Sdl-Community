@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-			 xmlns:viewModels="clr-namespace:Sdl.Community.ApplyTMTemplate.ViewModels"
 			 xmlns:converters="clr-namespace:Sdl.Community.ApplyTMTemplate.Converters"
              WindowStartupLocation="CenterScreen"
              mc:Ignorable="d" 

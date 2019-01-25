@@ -5,10 +5,9 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 {
 	public class TranslationMemory : ModelBase
 	{
-		private bool _isSelected;
-		private bool _isEnabled;
 		private string _checked;
-
+		private bool _isEnabled;
+		private bool _isSelected;
 		public TranslationMemory(FileBasedTranslationMemory tm)
 		{
 			_isSelected = false;
@@ -17,24 +16,24 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			Tm = tm;
 		}
 
-		public void ToggleCheckedUnchecked(bool onOff)
-		{
-			if (onOff)
-			{
-				Checked = "../Resources/Checked.ico";
-			}
-			else
-			{
-				Checked = "../Resources/Unchecked.ico";
-			}
-		}
-
 		public string Checked
 		{
 			get => _checked;
 			set
 			{
 				_checked = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string Icon => @"../Resources/FileBasedTM.ico";
+
+		public bool IsEnabled
+		{
+			get => _isEnabled;
+			set
+			{
+				_isEnabled = value;
 				OnPropertyChanged();
 			}
 		}
@@ -49,20 +48,20 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 		}
 
-		public bool IsEnabled
-		{
-			get => _isEnabled;
-			set
-			{
-				_isEnabled = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public string Icon => @"../Resources/FileBasedTM.ico";
-
 		public string Name => Tm.Name;
 
 		public FileBasedTranslationMemory Tm { get; }
-    }
+
+		public void ToggleCheckedUnchecked(bool onOff)
+		{
+			if (onOff)
+			{
+				Checked = "../Resources/Checked.ico";
+			}
+			else
+			{
+				Checked = "../Resources/Unchecked.ico";
+			}
+		}
+	}
 }
