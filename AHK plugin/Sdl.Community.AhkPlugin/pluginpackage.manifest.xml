@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Sdl.Community.AhkPlugin</PlugInName>
-	<Version>2.2</Version>
+	<Version>2.2.1</Version>
 	<Description>AhkPlugin</Description>
-	<Author>SDL Community</Author>
+	<Author>SDL Community Developers</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="12.0"  maxversion="15.0"/>
 	<Include>
 		<File>Sdl.Community.AhkPlugin.Model.dll</File>
