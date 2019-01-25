@@ -3,6 +3,6 @@
 	<PlugInName>Sdl.Community.Legit</PlugInName>
 	<Version>2.0.1</Version>
 	<Description>Sdl.Community.Legit</Description>
-	<Author>Microsoft</Author>
+	<Author>SDL Community Developers</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>
