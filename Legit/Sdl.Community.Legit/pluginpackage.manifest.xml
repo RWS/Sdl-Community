@@ -3,7 +3,7 @@
 	<PlugInName>Sdl.Community.Legit.Integration</PlugInName>
 	<Version>1.1.1</Version>
 	<Description>Sdl.Community.Legit.Integration</Description>
-	<Author>Microsoft</Author>
+	<Author>SDL Community Developers</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="12.0" maxversion="15.0"/>
 	<Include>
 		<File>SDLlegit.dll</File>
