@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml;
@@ -23,32 +21,34 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 {
 	public class MainWindowViewModel : ModelBase
 	{
-		private string _resourceTemplatePath;
-		private ICommand _browseCommand;
-		private ICommand _addFolderCommand;
-		private ICommand _applyTemplateCommand;
-		private ICommand _addTMsCommand;
-		private ICommand _removeTMsCommand;
-		private bool _selectedProjectChecked;
-		private bool _currentProjectChecked;
-		private bool _variablesChecked;
 		private bool _abbreviationsChecked;
+		private ICommand _addFolderCommand;
+		private ICommand _addTMsCommand;
+		private ICommand _applyTemplateCommand;
+		private ICommand _browseCommand;
+		private bool _currentProjectChecked;
 		private bool _ordinalFollowersChecked;
+		private ICommand _removeTMsCommand;
+		private string _resourceTemplatePath;
 		private bool _segmentationRulesChecked;
+		private bool _selectedProjectChecked;
 		private TemplateLoader _templateLoader;
 		private ObservableCollection<TranslationMemory> _tmCollection;
 		private string _tmPath;
-
+		private bool _variablesChecked;
 		public MainWindowViewModel()
 		{
+			_templateLoader = new TemplateLoader();
 			_tmPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
 				@"Studio 2019\Translation Memories");
+
 			_variablesChecked = true;
 			_abbreviationsChecked = true;
 			_ordinalFollowersChecked = true;
 			_segmentationRulesChecked = true;
+
 			_tmCollection = new ObservableCollection<TranslationMemory>();
-			_templateLoader = new TemplateLoader();
+
 			var tmTemplatesFolder = _templateLoader.GetTmTemplateFolderPath();
 			if (Directory.Exists(tmTemplatesFolder))
 			{
@@ -60,17 +60,19 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-
-
-		public ObservableCollection<TranslationMemory> TmCollection
+		public bool AbbreviationsChecked
 		{
-			get => _tmCollection;
+			get => _abbreviationsChecked;
 			set
 			{
-				_tmCollection = value;
+				_abbreviationsChecked = value;
 				OnPropertyChanged();
 			}
 		}
+
+		public ICommand AddFolderCommand => _addFolderCommand ?? (_addFolderCommand = new CommandHandler(AddFolder, true));
+
+		public ICommand AddTMCommand => _addTMsCommand ?? (_addTMsCommand = new CommandHandler(AddTMs, true));
 
 		public bool AllTmsChecked
 		{
@@ -89,12 +91,39 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		private void ToggleCheckAllTms(bool onOff)
+		public ICommand ApplyTemplateCommand => _applyTemplateCommand ?? (_applyTemplateCommand = new CommandHandler(ApplyTmTemplate, true));
+
+		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true));
+
+		public bool OrdinalFollowersChecked
 		{
-			foreach (TranslationMemory translationMemory in TmCollection)
+			get => _ordinalFollowersChecked;
+			set
 			{
-				translationMemory.IsSelected = onOff;
-				translationMemory.IsEnabled = !onOff;
+				_ordinalFollowersChecked = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public ICommand RemoveTMsCommand => _removeTMsCommand ?? (_removeTMsCommand = new CommandHandler(RemoveTMs, true));
+
+		public string ResourceTemplatePath
+		{
+			get => _resourceTemplatePath;
+			set
+			{
+				_resourceTemplatePath = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool SegmentationRulesChecked
+		{
+			get => _segmentationRulesChecked;
+			set
+			{
+				_segmentationRulesChecked = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -113,16 +142,15 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public string ResourceTemplatePath
+		public ObservableCollection<TranslationMemory> TmCollection
 		{
-			get => _resourceTemplatePath;
+			get => _tmCollection;
 			set
 			{
-				_resourceTemplatePath = value;
+				_tmCollection = value;
 				OnPropertyChanged();
 			}
 		}
-
 		public bool VariablesChecked
 		{
 			get => _variablesChecked;
@@ -131,64 +159,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				_variablesChecked = value;
 				OnPropertyChanged();
 			}
-		}
-
-		public bool AbbreviationsChecked
-		{
-			get => _abbreviationsChecked;
-			set
-			{
-				_abbreviationsChecked = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool OrdinalFollowersChecked
-		{
-			get => _ordinalFollowersChecked;
-			set
-			{
-				_ordinalFollowersChecked = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool SegmentationRulesChecked
-		{
-			get => _segmentationRulesChecked;
-			set
-			{
-				_segmentationRulesChecked = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true));
-
-		public ICommand AddFolderCommand => _addFolderCommand ?? (_addFolderCommand = new CommandHandler(AddFolder, true));
-
-		public ICommand AddTMCommand => _addTMsCommand ?? (_addTMsCommand = new CommandHandler(AddTMs, true)); 
-
-		public ICommand ApplyTemplateCommand => _applyTemplateCommand ?? (_applyTemplateCommand = new CommandHandler(ApplyTmTemplate, true));
-
-		public ICommand RemoveTMsCommand => _removeTMsCommand ?? (_removeTMsCommand = new CommandHandler(RemoveTMs, true));
-
-		private void RemoveTMs()
-		{
-			TmCollection = new ObservableCollection<TranslationMemory>(TmCollection.Where(tm => !tm.IsSelected));
-		}
-
-		private void AddTMs()
-		{
-			var dlg = new OpenFileDialog()
-			{
-				Filter = "Translation Memories|*.sdltm|All Files|*.*",
-				InitialDirectory = String.IsNullOrEmpty(_tmPath) ? Environment.CurrentDirectory : _tmPath,
-				Multiselect = true
-			};
-
-			dlg.ShowDialog();
-			ValidateAndAddTms(dlg.FileNames);
 		}
 
 		private void AddFolder()
@@ -211,80 +181,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			{
 				var files = Directory.GetFiles(tmPath);
 				ValidateAndAddTms(files);
-			}
-		}
-
-		private void ValidateAndAddTms(string[] files)
-		{
-			foreach (var file in files)
-			{
-				var fileBasedTM = new FileBasedTranslationMemory(file);
-				if (Path.GetExtension(file) == ".sdltm" && TmCollection.All(tm => tm.Name != fileBasedTM.Name))
-				{
-					TmCollection.Add(new TranslationMemory(fileBasedTM));
-				}
-			}
-		}
-
-		private void Browse()
-		{
-			var dlg = new OpenFileDialog
-			{
-				Filter = "Language resource templates|*.resource|All Files|*.*",
-				InitialDirectory = ResourceTemplatePath.Substring(0, ResourceTemplatePath.LastIndexOf('\\') + 1)
-			};
-
-			var result = dlg.ShowDialog();
-
-			if (result == true)
-			{
-				ResourceTemplatePath = dlg.FileName;
-			}
-		}
-
-		private void ApplyTmTemplate()
-		{
-			if (String.IsNullOrEmpty(ResourceTemplatePath))
-			{
-				MessageBox.Show("Please select a Resource Template", "Resource Template", MessageBoxButtons.OK);
-				return;
-			}
-
-			var lrt = _templateLoader.LoadDataFromFile(ResourceTemplatePath, "LanguageResource");
-
-			var langResBundlesList = new List<LanguageResourceBundle>();
-			var defaultLangResProvider = new DefaultLanguageResourceProvider();
-
-			foreach (XmlNode res in lrt)
-			{
-				var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == Int32.Parse(res.Attributes["Lcid"].Value));
-
-				if (lr == null)
-				{
-					lr = defaultLangResProvider.GetDefaultLanguageResources(CultureInfo.GetCultureInfo(Int32.Parse(res.Attributes["Lcid"].Value)));
-					langResBundlesList.Add(lr);
-				}
-
-				AddLanguageResourceToBundle(lr, res);
-			}
-
-			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
-
-			foreach (LanguageResourceBundle languageResourceBundle in langResBundlesList)
-			{
-				foreach (TranslationMemory translationMemory in selectedTmList)
-				{
-					if (translationMemory.Tm.LanguageResourceBundles.FirstOrDefault(lrb => lrb.Language.Equals(languageResourceBundle.Language)) != null)
-					{
-						translationMemory.ToggleCheckedUnchecked(true);
-						translationMemory.Tm.LanguageResourceBundles.Add(languageResourceBundle);
-						translationMemory.Tm.Save();
-					}
-					else
-					{
-						translationMemory.ToggleCheckedUnchecked(false);
-					}
-				}
 			}
 		}
 
@@ -342,6 +238,106 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					CultureInfo.GetCultureInfo(langResBundle.Language.LCID), null);
 
 				langResBundle.SegmentationRules = segmentRules;
+			}
+		}
+
+		private void AddTMs()
+		{
+			var dlg = new OpenFileDialog()
+			{
+				Filter = "Translation Memories|*.sdltm|All Files|*.*",
+				InitialDirectory = String.IsNullOrEmpty(_tmPath) ? Environment.CurrentDirectory : _tmPath,
+				Multiselect = true
+			};
+
+			dlg.ShowDialog();
+			ValidateAndAddTms(dlg.FileNames);
+		}
+
+		private void ApplyTmTemplate()
+		{
+			if (String.IsNullOrEmpty(ResourceTemplatePath))
+			{
+				MessageBox.Show("Please select a Resource Template", "Resource Template", MessageBoxButtons.OK);
+				return;
+			}
+
+			var lrt = _templateLoader.LoadDataFromFile(ResourceTemplatePath, "LanguageResource");
+
+			var langResBundlesList = new List<LanguageResourceBundle>();
+			var defaultLangResProvider = new DefaultLanguageResourceProvider();
+
+			foreach (XmlNode res in lrt)
+			{
+				var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == Int32.Parse(res.Attributes["Lcid"].Value));
+
+				if (lr == null)
+				{
+					lr = defaultLangResProvider.GetDefaultLanguageResources(CultureInfo.GetCultureInfo(Int32.Parse(res.Attributes["Lcid"].Value)));
+					langResBundlesList.Add(lr);
+				}
+
+				AddLanguageResourceToBundle(lr, res);
+			}
+
+			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
+
+			foreach (LanguageResourceBundle languageResourceBundle in langResBundlesList)
+			{
+				foreach (TranslationMemory translationMemory in selectedTmList)
+				{
+					if (translationMemory.Tm.LanguageResourceBundles.FirstOrDefault(lrb => lrb.Language.Equals(languageResourceBundle.Language)) != null)
+					{
+						translationMemory.ToggleCheckedUnchecked(true);
+						translationMemory.Tm.LanguageResourceBundles.Add(languageResourceBundle);
+						translationMemory.Tm.Save();
+					}
+					else
+					{
+						translationMemory.ToggleCheckedUnchecked(false);
+					}
+				}
+			}
+		}
+
+		private void Browse()
+		{
+			var dlg = new OpenFileDialog
+			{
+				Filter = "Language resource templates|*.resource|All Files|*.*",
+				InitialDirectory = ResourceTemplatePath.Substring(0, ResourceTemplatePath.LastIndexOf('\\') + 1)
+			};
+
+			var result = dlg.ShowDialog();
+
+			if (result == true)
+			{
+				ResourceTemplatePath = dlg.FileName;
+			}
+		}
+
+		private void RemoveTMs()
+		{
+			TmCollection = new ObservableCollection<TranslationMemory>(TmCollection.Where(tm => !tm.IsSelected));
+		}
+
+		private void ToggleCheckAllTms(bool onOff)
+		{
+			foreach (TranslationMemory translationMemory in TmCollection)
+			{
+				translationMemory.IsSelected = onOff;
+				translationMemory.IsEnabled = !onOff;
+			}
+		}
+		private void ValidateAndAddTms(string[] files)
+		{
+			foreach (var file in files)
+			{
+				var fileBasedTM = new FileBasedTranslationMemory(file);
+				if (Path.GetExtension(file) == ".sdltm" && TmCollection.All(tm => tm.Name != fileBasedTM.Name))
+				{
+					TmCollection.Add(new TranslationMemory(fileBasedTM));
+				}
 			}
 		}
 	}
