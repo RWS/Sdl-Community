@@ -1,20 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Sdl.Community.ReportExporter.Helpers;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
-using Sdl.ProjectAutomation.AutomaticTasks;
-using Sdl.ProjectAutomation.Core;
-using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
@@ -59,5 +47,4 @@ namespace Sdl.Community.ReportExporter
 			dialog.ShowDialog();
 		}
 	}
-
 }
