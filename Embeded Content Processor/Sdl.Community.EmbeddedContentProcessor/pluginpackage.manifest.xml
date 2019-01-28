@@ -4,5 +4,5 @@
   <Version>0.1.4.1</Version>
   <Description>Sdl.Community.EmbeddedContentProcessor</Description>
   <Author>SDL Community Developers</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="14.0" maxversion="15.0"/>
+  <RequiredProduct name="SDLTradosStudio" minversion="11.0" maxversion="15.0"/>
 </PluginPackage>
