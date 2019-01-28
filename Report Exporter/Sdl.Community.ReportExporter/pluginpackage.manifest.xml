@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.ReportExporter</PlugInName>
-  <Version>3.0</Version>
+  <Version>3.0.1</Version>
   <Description>Plugin which exports Studio analysis report to CSV</Description>
-  <Author></Author>
+  <Author>SDL Community Developers</Author>
 	<Include>
 		<File>Sdl.Community.Toolkit.Core.dll</File>
 	</Include>
