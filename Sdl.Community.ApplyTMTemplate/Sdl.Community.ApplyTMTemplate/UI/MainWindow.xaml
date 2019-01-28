@@ -1,103 +1,76 @@
 ﻿<controls:MetroWindow x:Class="Sdl.Community.ApplyTMTemplate.UI.MainWindow"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-			 xmlns:converters="clr-namespace:Sdl.Community.ApplyTMTemplate.Converters"
-             WindowStartupLocation="CenterScreen"
-             mc:Ignorable="d" 
-			 GlowBrush="#0C2D47"
-			 WindowTitleBrush="SteelBlue"
-			 Title="Apply TM Template" Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.7'}" MaxWidth="500" MinWidth="500" MinHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.5'}">
+					  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					  xmlns:utilities="clr-namespace:Sdl.Community.ApplyTMTemplate.Utilities"
+			          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+					  xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+					  xmlns:converters="clr-namespace:Sdl.Community.ApplyTMTemplate.Converters"
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../UiHelpers/MetroStyle.xaml"/>
-                <ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
-                <ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml" />
-                <ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/DataGridStyle.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
+		              WindowStartupLocation="CenterScreen"
+		              mc:Ignorable="d"
+				 	  GlowBrush="#0C2D47"
+					  WindowTitleBrush="SteelBlue"
+					  Title="Apply TM Template" Width="500" Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.7'}" MinWidth="500" MinHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.61'}">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../UiHelpers/MetroStyle.xaml" />
+				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml" />
+				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml" />
+				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml" />
+				<ResourceDictionary Source="../UiHelpers/DataGridStyle.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="10,10,0,0"  Grid.ColumnSpan="3"/>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
 
+		<TextBlock Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="10,10,0,0"  Grid.ColumnSpan="3" />
 
-        <TextBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding ResourceTemplatePath}" Width="367"/>
-        <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="5,10,10,0" Style="{DynamicResource DarkBlueButtonsStyle}" Command="{Binding BrowseCommand}">Browse</Button>
+		<WrapPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Grid.ColumnSpan="2">
+			<TextBox HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding ResourceTemplatePath}"
+		             Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+								Converter={converters:RatioConverter}, ConverterParameter='0.74'}" />
+			<Button HorizontalAlignment="Right" Margin="5,10,10,0"
+		            Style="{DynamicResource DarkBlueButtonsStyle}" Command="{Binding BrowseCommand}" Content="Browse" />
+		</WrapPanel>
 
-		<StackPanel Grid.Row="2" Margin="0,10,0,0">
-		    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0" Text="Apply to:" />
-
-		    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-				<RadioButton Margin="10,0,0,0" IsChecked="{Binding AllTmsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-			    <TextBlock VerticalAlignment="Center">All TMs</TextBlock>
-		    </StackPanel>
-
-		    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-				<RadioButton Margin="10,0,0,0" IsChecked="{Binding SelectedTmsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-				<TextBlock VerticalAlignment="Center">Selected TMs</TextBlock>
-		    </StackPanel>
-	    </StackPanel>
-
-		<StackPanel Grid.Row="2" Grid.Column="1" Margin="0,10,0,0">
-			<TextBlock Text="What to apply:"/>
-			<StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-				<CheckBox IsChecked="{Binding VariablesChecked}"/>
-				<TextBlock Text="Variables"/>
-			</StackPanel>
-			<StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-				<CheckBox IsChecked="{Binding AbbreviationsChecked}"/>
-				<TextBlock Text="Abbreviations"/>
-			</StackPanel>
-			<StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-				<CheckBox IsChecked="{Binding OrdinalFollowersChecked}"/>
-				<TextBlock Text="Ordinal followers"/>
-			</StackPanel>
-			<StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-				<CheckBox IsChecked="{Binding SegmentationRulesChecked}"/>
-				<TextBlock Text="Segmentation rules"/>
-			</StackPanel>
+		<StackPanel Grid.Row="2" Grid.Column="0" Margin="10,10,0,0">
+			<TextBlock Text="What to apply:" />
+			<CheckBox IsChecked="{Binding VariablesChecked}" Content="Variables" Margin="10,15,0,0" />
+			<CheckBox IsChecked="{Binding AbbreviationsChecked}" Content="Abbreviations" Margin="10,10,0,0" />
+			<CheckBox IsChecked="{Binding OrdinalFollowersChecked}" Content="Ordinal followers" Margin="10,10,0,0" />
+			<CheckBox IsChecked="{Binding SegmentationRulesChecked}" Content="Segmentation rules" Margin="10,10,0,0" />
 		</StackPanel>
 
-	    <!--<Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,20,10,0">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>-->
+		<StackPanel Margin="10,20,0,0" Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
+			<Button HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}">
+				<Image Source="../Resources/AddFolder.ico" Width="15" Height="15"></Image>
+			</Button>
 
-	    <StackPanel Margin="10,20,0,0" Grid.Row="3" Orientation="Horizontal">
-		    <Button Grid.Column="0" HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}">
-			    <Image Source="../Resources/AddFolder.ico" Width="15" Height="15"></Image>
-		    </Button>
+			<Button HorizontalContentAlignment="Left" Command="{Binding AddTMCommand}">
+				<Image Source="../Resources/PlusSign.ico" Width="15" Height="15"></Image>
+			</Button>
 
-		    <Button Grid.Column="1" HorizontalContentAlignment="Left" Command="{Binding AddTMCommand}">
-			    <Image Source="../Resources/PlusSign.ico" Width="15" Height="15"></Image>
-		    </Button>
-
-		    <Button Grid.Column="2" HorizontalContentAlignment="Left" Command="{Binding RemoveTMsCommand}">
-			    <Image Source="../Resources/Remove.ico" Width="15" Height="15"></Image>
-		    </Button></StackPanel>
-		<!--</Grid>-->
+			<Button HorizontalContentAlignment="Left" Command="{Binding RemoveTMsCommand}">
+				<Image Source="../Resources/Remove.ico" Width="15" Height="15"></Image>
+			</Button>
+		</StackPanel>
 
 		<DataGrid  Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TmCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 		           IsReadOnly="True"
@@ -106,23 +79,34 @@
 		           SelectionUnit="FullRow"
 		           Margin="10,0,10,10"
 				   VerticalScrollBarVisibility="Auto"
-		           CanUserAddRows="False">
-
-			
+		           CanUserAddRows="False"
+		           AllowDrop="True"
+		           utilities:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}">
 
 			<DataGrid.RowStyle>
-				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}"/>
+				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
 			</DataGrid.RowStyle>
 
 			<DataGrid.Resources>
-				<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle}"/>
+				<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle}" />
 			</DataGrid.Resources>
 
 			<DataGrid.Columns>
-				<DataGridTemplateColumn Width="Auto" MinWidth="50" Header="Use">
+				<DataGridTemplateColumn Width="Auto" MinWidth="50">
+
+					<DataGridTemplateColumn.Header>
+						<CheckBox HorizontalContentAlignment="Left" IsChecked="{Binding Path=DataContext.AllTmsChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Content="Use">
+							<CheckBox.Style>
+								<Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+									<Setter Property="Foreground" Value="White"></Setter>
+								</Style>
+							</CheckBox.Style>
+						</CheckBox>
+					</DataGridTemplateColumn.Header>
+
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<CheckBox IsEnabled="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+							<CheckBox Margin="1,0,0,0" HorizontalAlignment="Left" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -130,9 +114,9 @@
 				<DataGridTemplateColumn Width="*" Header="TM Name">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<StackPanel Orientation="Horizontal">
-								<Image Source="{Binding Icon}" Width="25" Height="25"/>
-								<TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+							<StackPanel Orientation="Horizontal" Margin="60,0,0,0">
+								<Image Source="{Binding Icon}" Width="25" Height="25" HorizontalAlignment="Center" />
+								<TextBlock Text="{Binding Name}" Margin="5" HorizontalAlignment="Left" />
 							</StackPanel>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
@@ -141,7 +125,7 @@
 				<DataGridTemplateColumn Width="*" Header="Template applied">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<Image Source="{Binding Checked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15"/>
+							<Image Source="{Binding Checked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -149,6 +133,5 @@
 		</DataGrid>
 
 		<Button Style="{DynamicResource DarkBlueButtonsStyle}" Grid.Row="5" Grid.Column="1" RenderTransformOrigin="0.487,1.938" HorizontalAlignment="Right" Margin="0,10,10,10" Command="{Binding ApplyTemplateCommand}">Apply</Button>
-
-    </Grid>
+	</Grid>
 </controls:MetroWindow>

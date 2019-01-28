@@ -21,21 +21,22 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 {
 	public class MainWindowViewModel : ModelBase
 	{
+		private readonly TemplateLoader _templateLoader;
 		private bool _abbreviationsChecked;
 		private ICommand _addFolderCommand;
 		private ICommand _addTMsCommand;
 		private ICommand _applyTemplateCommand;
 		private ICommand _browseCommand;
-		private bool _currentProjectChecked;
+		private ICommand _dragEnterCommand;
 		private bool _ordinalFollowersChecked;
 		private ICommand _removeTMsCommand;
 		private string _resourceTemplatePath;
 		private bool _segmentationRulesChecked;
 		private bool _selectedProjectChecked;
-		private TemplateLoader _templateLoader;
 		private ObservableCollection<TranslationMemory> _tmCollection;
 		private string _tmPath;
 		private bool _variablesChecked;
+
 		public MainWindowViewModel()
 		{
 			_templateLoader = new TemplateLoader();
@@ -81,11 +82,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			{
 				ToggleCheckAllTms(value);
 
-				if (value)
-				{
-					SelectedTmsChecked = !value;
-				}
-
 				_selectedProjectChecked = value;
 				OnPropertyChanged();
 			}
@@ -94,6 +90,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		public ICommand ApplyTemplateCommand => _applyTemplateCommand ?? (_applyTemplateCommand = new CommandHandler(ApplyTmTemplate, true));
 
 		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true));
+
+		public ICommand DragEnterCommand => _dragEnterCommand ??
+											(_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
 		public bool OrdinalFollowersChecked
 		{
@@ -127,21 +126,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public bool SelectedTmsChecked
-		{
-			get => _currentProjectChecked;
-			set
-			{
-				if (value)
-				{
-					AllTmsChecked = !value;
-				}
-
-				_currentProjectChecked = value;
-				OnPropertyChanged();
-			}
-		}
-
 		public ObservableCollection<TranslationMemory> TmCollection
 		{
 			get => _tmCollection;
@@ -151,6 +135,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				OnPropertyChanged();
 			}
 		}
+
 		public bool VariablesChecked
 		{
 			get => _variablesChecked;
@@ -246,7 +231,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			var dlg = new OpenFileDialog()
 			{
 				Filter = "Translation Memories|*.sdltm|All Files|*.*",
-				InitialDirectory = String.IsNullOrEmpty(_tmPath) ? Environment.CurrentDirectory : _tmPath,
+				InitialDirectory = string.IsNullOrEmpty(_tmPath) ? Environment.CurrentDirectory : _tmPath,
 				Multiselect = true
 			};
 
@@ -256,7 +241,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void ApplyTmTemplate()
 		{
-			if (String.IsNullOrEmpty(ResourceTemplatePath))
+			if (string.IsNullOrEmpty(ResourceTemplatePath))
 			{
 				MessageBox.Show("Please select a Resource Template", "Resource Template", MessageBoxButtons.OK);
 				return;
@@ -282,9 +267,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
 
-			foreach (LanguageResourceBundle languageResourceBundle in langResBundlesList)
+			foreach (var languageResourceBundle in langResBundlesList)
 			{
-				foreach (TranslationMemory translationMemory in selectedTmList)
+				foreach (var translationMemory in selectedTmList)
 				{
 					if (translationMemory.Tm.LanguageResourceBundles.FirstOrDefault(lrb => lrb.Language.Equals(languageResourceBundle.Language)) != null)
 					{
@@ -316,6 +301,12 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
+		private void HandlePreviewDrop(object droppedFile)
+		{
+			if (droppedFile == null) return;
+
+			ValidateAndAddTms(droppedFile as string[]);
+		}
 		private void RemoveTMs()
 		{
 			TmCollection = new ObservableCollection<TranslationMemory>(TmCollection.Where(tm => !tm.IsSelected));
@@ -323,12 +314,12 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void ToggleCheckAllTms(bool onOff)
 		{
-			foreach (TranslationMemory translationMemory in TmCollection)
+			foreach (var translationMemory in TmCollection)
 			{
 				translationMemory.IsSelected = onOff;
-				translationMemory.IsEnabled = !onOff;
 			}
 		}
+
 		private void ValidateAndAddTms(string[] files)
 		{
 			foreach (var file in files)

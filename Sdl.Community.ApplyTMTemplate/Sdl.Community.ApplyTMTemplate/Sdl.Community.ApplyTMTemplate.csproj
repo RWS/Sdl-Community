@@ -89,6 +89,9 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -114,6 +117,7 @@
     <Compile Include="ApplyTMTemplateAction.cs" />
     <Compile Include="ApplyTMTemplateRibbonGroup.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\RatioConverter.cs" />
     <Compile Include="Models\TranslationMemory.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -123,20 +127,29 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="TellMe\ApplyTMCommunitySupportAction.cs" />
+    <Compile Include="TellMe\ApplyTMStoreAction.cs" />
+    <Compile Include="TellMe\ApplyTMtemplateAction.cs" />
+    <Compile Include="TellMe\ApplyTMTemplateHelpAction.cs" />
+    <Compile Include="TellMe\ApplyTMTemplateTellMeProvider.cs" />
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\DropBehaviour.cs" />
     <Compile Include="Utilities\TemplateLoader.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ModelBase.cs" />
     <Compile Include="ViewModels\TranslationMemoryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Question.ico" />
+    <Resource Include="Resources\ForumIcon.ico" />
+    <Resource Include="Resources\ATTDownload.ico" />
+    <Resource Include="Resources\Checked.ico" />
+    <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\Remove.ico" />
     <Resource Include="Resources\AddFolder.ico" />
     <Resource Include="Resources\PlusSign.ico" />
-    <Resource Include="Resources\Unchecked.ico" />
-    <Resource Include="Resources\Checked.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>

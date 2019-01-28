@@ -9,9 +9,10 @@
 		<Setter Property="Foreground" Value="White"/>
 		<Setter Property="FontSize" Value="12" />
 		<Setter Property="FontFamily" Value="Calibri" />
+		<Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
 	</Style>
     <Style x:Key="DgrStyle" TargetType="DataGridRow">
-        <Style.Triggers>
+	    <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="LightSkyBlue" />
                 <Setter Property="BorderBrush" Value="#00CED1" />
