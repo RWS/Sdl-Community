@@ -11,7 +11,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 		public TranslationMemory(FileBasedTranslationMemory tm)
 		{
 			_isSelected = false;
-			_isEnabled = false;
+			_isEnabled = true;
 			_checked = "";
 			Tm = tm;
 		}
