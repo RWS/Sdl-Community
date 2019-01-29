@@ -33,6 +33,6 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 
 	    public override string Category => "Apply TM Template results";
 
-	    public override Icon Icon => PluginResources.ATTDownload;
+	    public override Icon Icon => PluginResources.ATTA;
 	}
 }

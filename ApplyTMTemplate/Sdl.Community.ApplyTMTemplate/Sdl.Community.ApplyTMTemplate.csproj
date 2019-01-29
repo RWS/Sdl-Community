@@ -139,9 +139,10 @@
     <Compile Include="ViewModels\TranslationMemoryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\Question.ico" />
     <Resource Include="Resources\ForumIcon.ico" />
-    <Resource Include="Resources\ATTDownload.ico" />
+    <Resource Include="Resources\ATTA.ico" />
     <Resource Include="Resources\Checked.ico" />
     <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\Remove.ico" />

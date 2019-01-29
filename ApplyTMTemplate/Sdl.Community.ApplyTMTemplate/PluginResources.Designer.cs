@@ -73,9 +73,9 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ATTDownload {
+        internal static System.Drawing.Icon ATTA {
             get {
-                object obj = ResourceManager.GetObject("ATTDownload", resourceCulture);
+                object obj = ResourceManager.GetObject("ATTA", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -86,6 +86,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         internal static System.Drawing.Icon Checked {
             get {
                 object obj = ResourceManager.GetObject("Checked", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
