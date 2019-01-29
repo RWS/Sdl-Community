@@ -3,10 +3,11 @@
   <PlugInName>Sdl.Community.ApplyTMTemplate</PlugInName>
   <Version>1.0</Version>
   <Description>Apply TM Template</Description>
-  <Author>Sdl Community</Author>
+  <Author>Sdl Community Developers</Author>
   <Include>
 		<File>Sdl.Community.Toolkit.Core.dll</File>
 		<File>MahApps.Metro.dll</File>
+		<File>System.Windows.Interactivity.dll</File>
   </Include>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>
