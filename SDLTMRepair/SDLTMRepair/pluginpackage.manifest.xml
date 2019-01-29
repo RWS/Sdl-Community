@@ -1,11 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Sdl.Community.TMRepair</PlugInName>
-	<Version>2.0</Version>
+	<Version>2.0.1</Version>
 	<Description>Sdl.Community.TMRepair</Description>
-	<Author>Microsoft</Author>
+	<Author>Sdl Community Developers</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="15.0" />
-	<Include>
-		<File>sqlite3.exe</File>
-	</Include>
 </PluginPackage>
