@@ -120,7 +120,7 @@ namespace ETSTranslationProvider
             if (!AuthenticateCredentials(credentials, false))
                 return;
 
-            if (Options.APIVersion != ETSApi.APIVersion.v2)
+            if (Options.ApiVersion != ETSApi.APIVersion.v2)
                 return;
 
             var languagePairChoices = Options.SetPreferredLanguages(LanguagePairs);
@@ -253,7 +253,7 @@ namespace ETSTranslationProvider
         {
             // Expire the old LPs in case we've changed the host and reset the API version
             ETSApi.ETSTranslatorHelper.ExpireLanguagePairs();
-            Options.APIVersion = ETSApi.APIVersion.Unknown;
+            Options.ApiVersion = ETSApi.APIVersion.Unknown;
 
             string token;
             try
@@ -281,7 +281,7 @@ namespace ETSTranslationProvider
             Options.ApiToken = token;
 
             tabControl.Controls.RemoveByKey("LPTab");
-            if (Options.APIVersion == ETSApi.APIVersion.v2)
+            if (Options.ApiVersion == ETSApi.APIVersion.v2)
             {
                 tabControl.Invoke(new Action(() =>
                 {
