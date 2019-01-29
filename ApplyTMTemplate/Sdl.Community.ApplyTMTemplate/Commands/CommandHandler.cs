@@ -23,6 +23,7 @@ namespace Sdl.Community.ApplyTMTemplate.Commands
 		}
 
 		public event EventHandler CanExecuteChanged;
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		public bool CanExecute(object parameter)
@@ -34,6 +35,7 @@ namespace Sdl.Community.ApplyTMTemplate.Commands
 		{
 			_action();
 		}
+
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

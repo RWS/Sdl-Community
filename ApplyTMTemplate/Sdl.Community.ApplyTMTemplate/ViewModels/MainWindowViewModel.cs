@@ -266,20 +266,24 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 
 			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
+			MarkTmsAsNotChecked();
 
 			foreach (var languageResourceBundle in langResBundlesList)
 			{
 				foreach (var translationMemory in selectedTmList)
 				{
-					if (translationMemory.Tm.LanguageResourceBundles.FirstOrDefault(lrb => lrb.Language.Equals(languageResourceBundle.Language)) != null)
+					var langDirOfTm = translationMemory.Tm.LanguageDirection;
+
+					if (langDirOfTm.SourceLanguage.Equals(languageResourceBundle.Language) ||
+						langDirOfTm.TargetLanguage.Equals(languageResourceBundle.Language))
 					{
-						translationMemory.ToggleCheckedUnchecked(true);
+						translationMemory.MarkTmApplied();
 						translationMemory.Tm.LanguageResourceBundles.Add(languageResourceBundle);
 						translationMemory.Tm.Save();
 					}
 					else
 					{
-						translationMemory.ToggleCheckedUnchecked(false);
+						translationMemory.MarkTmNotApplied();
 					}
 				}
 			}
@@ -307,6 +311,15 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			ValidateAndAddTms(droppedFile as string[]);
 		}
+
+		private void MarkTmsAsNotChecked()
+		{
+			foreach (var tm in TmCollection)
+			{
+				tm.Checked = "";
+			}
+		}
+
 		private void RemoveTMs()
 		{
 			TmCollection = new ObservableCollection<TranslationMemory>(TmCollection.Where(tm => !tm.IsSelected));
