@@ -228,7 +228,7 @@
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
     <ProjectGuid>{55C78039-78E8-4C86-95FD-459363251E88}</ProjectGuid>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
