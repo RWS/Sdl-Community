@@ -54,11 +54,11 @@ namespace ETSTranslationProvider.ETSApi
 
             lock (optionsLock)
             {
-                if (options.APIVersion == APIVersion.Unknown)
+                if (options.ApiVersion == APIVersion.Unknown)
                     SetETSApiVersion(options);
             }
 
-            if (options.APIVersion == APIVersion.v1)
+            if (options.ApiVersion == APIVersion.v1)
             {
                 queryString["sourceLanguageId"] = languageDirection.SourceCulture.ToETSCode();
                 queryString["targetLanguageId"] = languageDirection.TargetCulture.ToETSCode();
@@ -171,7 +171,7 @@ namespace ETSTranslationProvider.ETSApi
 
             lock (optionsLock)
             {
-                if (options.APIVersion == APIVersion.Unknown)
+                if (options.ApiVersion == APIVersion.Unknown)
                     SetETSApiVersion(options);
             }
 
@@ -194,7 +194,7 @@ namespace ETSTranslationProvider.ETSApi
                 }
 
                 UriBuilder builder = new UriBuilder(options.Uri);
-                builder.Path = string.Format("/api/{0}/{1}", options.APIVersionString, path);
+                builder.Path = string.Format("/api/{0}/{1}", options.ApiVersionString, path);
                 builder.Scheme = useHTTP ? Uri.UriSchemeHttp : Uri.UriSchemeHttps;
 
                 if (parameters != null)
@@ -245,14 +245,14 @@ namespace ETSTranslationProvider.ETSApi
         {
             try
             {
-                options.APIVersion = APIVersion.v2;
+                options.ApiVersion = APIVersion.v2;
                 string systemInfo = ContactETSServer(ETSGet, options, "system/info");
                 if (systemInfo == null)
-                    options.APIVersion = APIVersion.v1;
+                    options.ApiVersion = APIVersion.v1;
             }
             catch
             {
-                options.APIVersion = APIVersion.v1;
+                options.ApiVersion = APIVersion.v1;
             }
 
         }
@@ -305,7 +305,7 @@ namespace ETSTranslationProvider.ETSApi
 
             lock (optionsLock)
             {
-                if (options.APIVersion == APIVersion.Unknown)
+                if (options.ApiVersion == APIVersion.Unknown)
                     SetETSApiVersion(options);
             }
 
@@ -317,7 +317,7 @@ namespace ETSTranslationProvider.ETSApi
             {
                 // Build the URI for querying the token
                 UriBuilder builder = new UriBuilder(options.Uri);
-                builder.Path = string.Format("/api/{0}/auth", options.APIVersionString);
+                builder.Path = string.Format("/api/{0}/auth", options.ApiVersionString);
 
                 // Pass in the username and password as parameters to retrieve the auth token
                 NameValueCollection queryString = HttpUtility.ParseQueryString(string.Empty);

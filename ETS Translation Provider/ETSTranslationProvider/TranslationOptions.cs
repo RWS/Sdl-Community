@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using ETSTranslationProvider.ETSApi;
 
 namespace ETSTranslationProvider
 {
@@ -14,14 +15,14 @@ namespace ETSTranslationProvider
     {
         public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
 
-        TranslationProviderUriBuilder _uriBuilder;
+	    readonly TranslationProviderUriBuilder _uriBuilder;
 
         public TranslationOptions()
         {
             _uriBuilder = new TranslationProviderUriBuilder(TranslationProvider.TranslationProviderScheme);
             UseBasicAuthentication = true;
             Port = 8001;
-            LPPreferences = new Dictionary<CultureInfo, ETSApi.ETSLanguagePair>();
+            LPPreferences = new Dictionary<CultureInfo, ETSLanguagePair>();
         }
 
         public TranslationOptions(Uri uri) : this()
@@ -29,7 +30,7 @@ namespace ETSTranslationProvider
             _uriBuilder = new TranslationProviderUriBuilder(uri);
         }
 
-        public Dictionary<CultureInfo, ETSApi.ETSLanguagePair> LPPreferences { get; private set; }
+        public Dictionary<CultureInfo, ETSLanguagePair> LPPreferences { get; }
 
         public bool PersistCredentials { get; set; }
 
@@ -41,11 +42,8 @@ namespace ETSTranslationProvider
         #region URI Properties
         public string Host
         {
-            get
-            {
-                return _uriBuilder.HostName;
-            }
-            set
+            get => _uriBuilder.HostName;
+	        set
             {
                 _uriBuilder.HostName = value;
                 ResolvedHost = null;
@@ -59,19 +57,18 @@ namespace ETSTranslationProvider
             if (ResolvedHost != null)
                 return ResolvedHost;
 
-            // If the host is an IP address, preserve that, otherwise get the DNS host and cache it.
-            IPAddress address;
-            ResolvedHost = IPAddress.TryParse(Host, out address) ? Host : Dns.GetHostEntry(Host).HostName;
-            return ResolvedHost;
+			// If the host is an IP address, preserve that, otherwise get the DNS host and cache it.
+			ResolvedHost = IPAddress.TryParse(Host, out var address) ? Host : Dns.GetHostEntry(Host).HostName;
+			return ResolvedHost;
         }
 
-        public ETSApi.TradosToETSLP[] SetPreferredLanguages(LanguagePair[] languagePairs)
+        public TradosToETSLP[] SetPreferredLanguages(LanguagePair[] languagePairs)
         {
-            ETSApi.ETSLanguagePair[] etsLanguagePairs = ETSApi.ETSTranslatorHelper.GetLanguagePairs(this);
+            var etsLanguagePairs = ETSTranslatorHelper.GetLanguagePairs(this);
             if (!etsLanguagePairs.Any())
                 return null;
 
-            ETSApi.TradosToETSLP[] languagePairChoices = languagePairs.GroupJoin(
+            var languagePairChoices = languagePairs.GroupJoin(
                 etsLanguagePairs,
                 requestedLP =>
                     new
@@ -89,13 +86,27 @@ namespace ETSTranslationProvider
                     new ETSApi.TradosToETSLP(
                         tradosCulture: requestedLP.TargetCulture, 
                         etsLPs: installedLP.OrderBy(lp => lp.LanguagePairId).ToList())
-                ).ToArray();
+                ).ToList();
 
+			// Fix for French Canada engine	 which has language code on server frc
+	        var frenchCanadianLp = languagePairs.FirstOrDefault(lp => lp.SourceCulture.ThreeLetterWindowsLanguageName.Equals("FRC") ||
+	                                                   lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals("FRC"));
+	        if (frenchCanadianLp!=null)
+	        {
+		        var etsLangPair = etsLanguagePairs.FirstOrDefault(lp => lp.SourceLanguageId.Equals("frc") ||
+		                                                       lp.TargetLanguageId.Equals("frc"));
+		        if (etsLangPair != null)
+		        {
+			        var projectSourceLanguage = languagePairChoices.FirstOrDefault(s => s.TradosCulture.ThreeLetterISOLanguageName.Equals("fra"));
+			        projectSourceLanguage?.ETSLPs.Add(etsLangPair);
+		        }
+	        }
+			 
             // Empty out the previous LP choices.
             foreach (var lpChoice in languagePairChoices)
             {
                 // By default, select the preferences to be the first LP of each set.
-                ETSApi.ETSLanguagePair defaultOption = lpChoice.ETSLPs.FirstOrDefault();
+                var defaultOption = lpChoice.ETSLPs.FirstOrDefault();
                 // Verify that the preferred LP still exists on ets server and if not, remove it from preferences
                 if (LPPreferences.ContainsKey(lpChoice.TradosCulture) &&
                     !lpChoice.ETSLPs.Contains(LPPreferences[lpChoice.TradosCulture]))
@@ -104,37 +115,27 @@ namespace ETSTranslationProvider
                 if (defaultOption != null && !LPPreferences.ContainsKey(lpChoice.TradosCulture))
                     LPPreferences[lpChoice.TradosCulture] = defaultOption;
             }
-            return languagePairChoices;
+            return languagePairChoices.ToArray();
         }
 
         public int Port
         {
-            get
-            {
-                return _uriBuilder.Port;
-            }
-            set
-            {
-                _uriBuilder.Port = value;
-            }
+            get => _uriBuilder.Port;
+	        set => _uriBuilder.Port = value;
         }
-        public ETSApi.APIVersion APIVersion { get; set; }
+        public APIVersion ApiVersion { get; set; }
 
-        public string APIVersionString
+        public string ApiVersionString => ApiVersion == APIVersion.v1 ? "v1" : "v2";
+
+	    public Uri Uri
         {
             get
             {
-                return APIVersion == ETSApi.APIVersion.v1 ? "v1" : "v2";
-            }
-        }
-
-        public Uri Uri
-        {
-            get
-            {
-                UriBuilder resolvedUri = new UriBuilder(_uriBuilder.Uri);
-                resolvedUri.Host = ResolveHost();
-                return resolvedUri.Uri;
+				var resolvedUri = new UriBuilder(_uriBuilder.Uri)
+				{
+					Host = ResolveHost()
+				};
+				return resolvedUri.Uri;
             }
         }
         #endregion

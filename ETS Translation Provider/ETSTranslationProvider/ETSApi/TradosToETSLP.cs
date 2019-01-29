@@ -10,7 +10,7 @@ namespace ETSTranslationProvider.ETSApi
             TradosCulture = tradosCulture;
             ETSLPs = etsLPs;
         }
-        public CultureInfo TradosCulture { get; private set; }
-        public List<ETSLanguagePair> ETSLPs { get; private set; }
+        public CultureInfo TradosCulture { get; }
+        public List<ETSLanguagePair> ETSLPs { get; }
     }
 }
