@@ -152,7 +152,6 @@
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Resources\FileBasedTM.ico" />
-    <Resource Include="Resources\ATTA.ico" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
