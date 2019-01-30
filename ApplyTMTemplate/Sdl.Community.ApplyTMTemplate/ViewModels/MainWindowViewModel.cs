@@ -269,25 +269,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
 			MarkTmsAsNotChecked();
 
-			foreach (var languageResourceBundle in langResBundlesList)
-			{
-				foreach (var translationMemory in selectedTmList)
-				{
-					var langDirOfTm = translationMemory.Tm.LanguageDirection;
+			var template = new TemplateModel(langResBundlesList);
 
-					if (langDirOfTm.SourceLanguage.Equals(languageResourceBundle.Language) ||
-						langDirOfTm.TargetLanguage.Equals(languageResourceBundle.Language))
-					{
-						translationMemory.MarkTmApplied();
-						translationMemory.Tm.LanguageResourceBundles.Add(languageResourceBundle);
-						translationMemory.Tm.Save();
-					}
-					else
-					{
-						translationMemory.MarkTmNotApplied();
-					}
-				}
-			}
+			template.ApplyTmTemplate(selectedTmList);
 		}
 
 		private void Browse()

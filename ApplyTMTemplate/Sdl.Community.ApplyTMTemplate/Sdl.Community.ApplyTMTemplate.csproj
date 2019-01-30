@@ -119,6 +119,7 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\RatioConverter.cs" />
+    <Compile Include="Models\TemplateModel.cs" />
     <Compile Include="Models\TranslationMemory.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
