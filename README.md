@@ -120,7 +120,6 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [InSource](http://appstore.sdl.com/app/sdl-insource/548/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource)|
 | [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
 | [Term Injector](http://appstore.sdl.com/app/terminjector/97/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermInjector)|
-| [AdaptiveMT Trainer](https://appstore.sdl.com/language/app/adaptivemt-trainer/863/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdaptiveMT)|
 | [Community Advenced Display Filter](https://appstore.sdl.com/language/app/community-advanced-display-filter/849/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
 | [AutoHotKey Manager](https://appstore.sdl.com/language/app/autohotkey-manager/893/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AHK%20plugin) |
 | [Qualitivity](http://appstore.sdl.com/app/qualitivity/612/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Qualitivity)|
