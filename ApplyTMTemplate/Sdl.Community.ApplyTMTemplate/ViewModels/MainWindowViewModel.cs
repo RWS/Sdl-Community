@@ -23,19 +23,22 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 	{
 		private readonly TemplateLoader _templateLoader;
 		private bool _abbreviationsChecked;
+		private bool _ordinalFollowersChecked;
+		private bool _segmentationRulesChecked;
+		private bool _selectedProjectChecked;
+		private bool _variablesChecked;
+
+		private string _tmPath;
+		private string _resourceTemplatePath;
+
 		private ICommand _addFolderCommand;
 		private ICommand _addTMsCommand;
 		private ICommand _applyTemplateCommand;
 		private ICommand _browseCommand;
 		private ICommand _dragEnterCommand;
-		private bool _ordinalFollowersChecked;
 		private ICommand _removeTMsCommand;
-		private string _resourceTemplatePath;
-		private bool _segmentationRulesChecked;
-		private bool _selectedProjectChecked;
+
 		private ObservableCollection<TranslationMemory> _tmCollection;
-		private string _tmPath;
-		private bool _variablesChecked;
 
 		public MainWindowViewModel(TemplateLoader templateLoader)
 		{
