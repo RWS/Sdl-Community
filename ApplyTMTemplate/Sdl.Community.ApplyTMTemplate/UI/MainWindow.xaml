@@ -6,12 +6,11 @@
 				      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 					  xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
 					  xmlns:converters="clr-namespace:Sdl.Community.ApplyTMTemplate.Converters"
-
 		              WindowStartupLocation="CenterScreen"
 		              mc:Ignorable="d"
 				 	  GlowBrush="#0C2D47"
 					  WindowTitleBrush="SteelBlue"
-					  Title="Apply TM Template" Width="500" Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.7'}" MinWidth="500" MinHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.61'}">
+					  Title="Apply TM Template" Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.44'}" Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.7'}" MinWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.26'}" MinHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.61'}">
 
 	<Window.Resources>
 		<ResourceDictionary>
