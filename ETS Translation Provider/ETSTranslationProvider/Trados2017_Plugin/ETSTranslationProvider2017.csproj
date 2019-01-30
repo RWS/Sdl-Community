@@ -216,10 +216,6 @@
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!--<UsingTask TaskName="ETSLanguageResourceBuilder.GenerateLanguageResourceTask" AssemblyFile="..\..\ETSLanguageResourceBuilder\bin\Debug\ETSLanguageResourceBuilder.dll" />
-  <Target Name="BeforeBuild">
-    <GenerateLanguageResourceTask XMTExternalsDir="$(SDL_EXTERNALS_PATH)" />
-  </Target>-->
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
