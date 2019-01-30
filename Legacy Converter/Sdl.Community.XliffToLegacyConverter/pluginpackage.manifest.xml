@@ -3,7 +3,7 @@
   <PlugInName>SdlXliffToLegacyConverter</PlugInName>
   <Version>2.2</Version>
   <Description>SdlXliff to Legacy Converter</Description>
-  <Author>Sdl Community Developers</Author>
+  <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
   <Include>
     <File>Sdl.Community.XliffReadWrite.dll</File>
