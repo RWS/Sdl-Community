@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SdlXliffToLegacyConverter</PlugInName>
-  <Version>1.3</Version>
+  <Version>1.3.1</Version>
   <Description>SdlXliff to Legacy Converter</Description>
-  <Author>Sdl Community</Author>
+  <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" maxversion="15.0"/>
   <Include>
     <File>Sdl.Community.XliffReadWrite.dll</File>
