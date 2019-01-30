@@ -40,6 +40,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		public MainWindowViewModel(TemplateLoader templateLoader)
 		{
 			_templateLoader = templateLoader;
+
 			_tmPath = _tmPath == null ? _templateLoader.GetTmFolderPath() : Environment.CurrentDirectory;
 
 			_variablesChecked = true;
@@ -70,9 +71,15 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public ICommand AddFolderCommand => _addFolderCommand ?? (_addFolderCommand = new CommandHandler(AddFolder, true));
-
-		public ICommand AddTMCommand => _addTMsCommand ?? (_addTMsCommand = new CommandHandler(AddTMs, true));
+		public bool OrdinalFollowersChecked
+		{
+			get => _ordinalFollowersChecked;
+			set
+			{
+				_ordinalFollowersChecked = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public bool AllTmsChecked
 		{
@@ -85,25 +92,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				OnPropertyChanged();
 			}
 		}
-
-		public ICommand ApplyTemplateCommand => _applyTemplateCommand ?? (_applyTemplateCommand = new CommandHandler(ApplyTmTemplate, true));
-
-		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true));
-
-		public ICommand DragEnterCommand => _dragEnterCommand ??
-											(_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
-
-		public bool OrdinalFollowersChecked
-		{
-			get => _ordinalFollowersChecked;
-			set
-			{
-				_ordinalFollowersChecked = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public ICommand RemoveTMsCommand => _removeTMsCommand ?? (_removeTMsCommand = new CommandHandler(RemoveTMs, true));
 
 		public string ResourceTemplatePath
 		{
@@ -144,6 +132,19 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				OnPropertyChanged();
 			}
 		}
+
+		public ICommand AddFolderCommand => _addFolderCommand ?? (_addFolderCommand = new CommandHandler(AddFolder, true));
+
+		public ICommand AddTMCommand => _addTMsCommand ?? (_addTMsCommand = new CommandHandler(AddTMs, true));
+
+		public ICommand ApplyTemplateCommand => _applyTemplateCommand ?? (_applyTemplateCommand = new CommandHandler(ApplyTmTemplate, true));
+
+		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true));
+
+		public ICommand DragEnterCommand => _dragEnterCommand ??
+											(_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
+
+		public ICommand RemoveTMsCommand => _removeTMsCommand ?? (_removeTMsCommand = new CommandHandler(RemoveTMs, true));
 
 		private void AddFolder()
 		{
