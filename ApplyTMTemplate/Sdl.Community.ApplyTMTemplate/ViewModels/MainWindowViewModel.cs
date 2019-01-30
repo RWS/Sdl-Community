@@ -37,11 +37,10 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private string _tmPath;
 		private bool _variablesChecked;
 
-		public MainWindowViewModel()
+		public MainWindowViewModel(TemplateLoader templateLoader)
 		{
-			_templateLoader = new TemplateLoader();
-			_tmPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-				@"Studio 2019\Translation Memories");
+			_templateLoader = templateLoader;
+			_tmPath = _tmPath == null ? _templateLoader.GetTmFolderPath() : Environment.CurrentDirectory;
 
 			_variablesChecked = true;
 			_abbreviationsChecked = true;
@@ -148,25 +147,23 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void AddFolder()
 		{
-			var tmPath = "";
 			var dlg = new FolderBrowserDialog
 			{
 				SelectedPath = _tmPath ?? Environment.CurrentDirectory,
-				Description = "Select TMs' Folder"
+				Description = @"Select TMs' Folder"
 			};
 
 			var result = dlg.ShowDialog();
 
 			if (result == DialogResult.OK)
 			{
-				tmPath = dlg.SelectedPath;
+				_tmPath = dlg.SelectedPath;
 			}
 
-			if (!string.IsNullOrEmpty(tmPath))
-			{
-				var files = Directory.GetFiles(tmPath);
-				ValidateAndAddTms(files);
-			}
+			if (string.IsNullOrEmpty(_tmPath)) return;
+
+			var files = Directory.GetFiles(_tmPath);
+			ValidateAndAddTms(files);
 		}
 
 		private void AddLanguageResourceToBundle(LanguageResourceBundle langResBundle, XmlNode resource)

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sdl.Community.ApplyTMTemplate.UI;
+using Sdl.Community.ApplyTMTemplate.Utilities;
 using Sdl.Community.ApplyTMTemplate.ViewModels;
 using Sdl.TellMe.ProviderApi;
 
@@ -19,7 +20,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 
 	    public override void Execute()
 	    {
-			var mainWindowViewModel = new MainWindowViewModel();
+			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader());
 
 		    var mainWindow = new MainWindow
 		    {
