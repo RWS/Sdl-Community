@@ -47,31 +47,31 @@
       <HintPath>Lib\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework">
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.Core.PluginFramework.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.PluginFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform">
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Lingua">
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Lingua.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Lingua.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -86,7 +86,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Trados.Interop.TMAccess, Version=2.1.0.0, Culture=neutral, PublicKeyToken=4316ebe69d6f1d49, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Trados.Interop.TMAccess.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Trados.Interop.TMAccess.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
