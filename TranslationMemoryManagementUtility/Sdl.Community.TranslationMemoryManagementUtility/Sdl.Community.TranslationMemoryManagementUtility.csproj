@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -14,7 +14,8 @@
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-  <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath></PropertyGroup>
+    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -100,7 +101,9 @@
     <EmbeddedResource Include="OptionsPanel.resx">
       <DependentUpon>OptionsPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="pluginpackage.manifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
@@ -150,12 +153,12 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.15.0.1\Build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.1\Build\net45\Sdl.Core.PluginFramework.Build.targets')" />
+  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.1\Build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.15.0.1\Build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
