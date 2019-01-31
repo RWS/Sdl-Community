@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.DeepLMTProvider</PlugInName>
-  <Version>4.8.5</Version>
+  <Version>4.8.6</Version>
   <Description>DeepL translation provider</Description>
-  <Author>Sdl Community</Author>
+  <Author>SDL Community Developers</Author>
   <Include>
     <File>Newtonsoft.Json.dll</File>
-	<File>RestSharp.dll</File>
-	<File>Sdl.Community.DeepLMTProvider.WPF.dll</File>
-	<File>MahApps.Metro.dll</File>
-	<File>System.Windows.Interactivity.dll</File>
-  </Include>
+		<File>RestSharp.dll</File>
+		<File>Sdl.Community.DeepLMTProvider.WPF.dll</File>
+		<File>MahApps.Metro.dll</File>
+		<File>System.Windows.Interactivity.dll</File>
+	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>
