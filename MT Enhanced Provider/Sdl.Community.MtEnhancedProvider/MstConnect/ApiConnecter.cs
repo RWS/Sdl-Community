@@ -50,75 +50,77 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         {
             _subscriptionKey = cid;
         }
-        
-        
-        /// <summary>
-        /// translates the text input
-        /// </summary>
-        /// <param name="sourceLang"></param>
-        /// <param name="targetLang"></param>
-        /// <param name="textToTranslate"></param>
-        /// <param name="categoryId"></param>
-        /// <param name="format"></param>
-        /// <returns></returns>
-        internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId, string format)
-        {
+
+
+		/// <summary>
+		/// translates the text input
+		/// </summary>
+		/// <param name="sourceLang"></param>
+		/// <param name="targetLang"></param>
+		/// <param name="textToTranslate"></param>
+		/// <param name="categoryId"></param>
+		/// <param name="format"></param>
+		/// <returns></returns>
+		internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId,
+			string format)
+		{
 			//convert our language codes
-	        var sourceLc = convertLangCode(sourceLang);
-	        var targetLc = convertLangCode(targetLang);
+			var sourceLc = convertLangCode(sourceLang);
+			var targetLc = convertLangCode(targetLang);
 
-	        //check to see if token is null
-	        if (_authToken == null) _authToken = GetAuthToken();
-	        //check to see if token expired and if so, get a new one
-	        if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
-	        var translatedText = string.Empty;
-	        try
-	        {
-		        //search for words like this <word> 
-		        var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
-		        var words = rgx.Matches(textToTranslate);
-		        if (words.Count > 0)
-		        {
-			        textToTranslate = ReplaceCharacters(textToTranslate, words);
-		        }
+			//check to see if token is null
+			if (_authToken == null) _authToken = GetAuthToken();
+			//check to see if token expired and if so, get a new one
+			if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
+			var translatedText = string.Empty;
+			try
+			{
+				//search for words like this <word> 
+				var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
+				var words = rgx.Matches(textToTranslate);
+				if (words.Count > 0)
+				{
+					textToTranslate = ReplaceCharacters(textToTranslate, words);
+				}
 
-		        const string host = "https://api.cognitive.microsofttranslator.com";
-		        const string path = "/translate?api-version=3.0";
-		        var languageParams = string.Format("&from={0}&to={1}&textType={2}", sourceLc, targetLc, "html");
-		        var uri = string.Concat(host, path, languageParams);
-		        var body = new object[]
-		        {
-			        new
-			        {
-				        Text =textToTranslate
-			        }
-		        };
-		        var requestBody = JsonConvert.SerializeObject(body);
-		        using (var httpClient = new HttpClient())
-		        {
-			        using (var httpRequest = new HttpRequestMessage())
-			        {
-				        httpRequest.Method = HttpMethod.Post;
-				        httpRequest.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-				        httpRequest.RequestUri = new Uri(uri);
-				        httpRequest.Headers.Add("Authorization", _authToken);
+				const string host = "https://api.cognitive.microsofttranslator.com";
+				const string path = "/translate?api-version=3.0";
+				var category = categoryId == "" ? "general" : categoryId;
+				var languageParams = string.Format("&from={0}&to={1}&textType={2}&category={3}", sourceLc, targetLc, "html", category);
+				var uri = string.Concat(host, path, languageParams);
+				var body = new object[]
+				{
+					new
+					{
+						Text =textToTranslate
+					}
+				};
+				var requestBody = JsonConvert.SerializeObject(body);
+				using (var httpClient = new HttpClient())
+				{
+					using (var httpRequest = new HttpRequestMessage())
+					{
+						httpRequest.Method = HttpMethod.Post;
+						httpRequest.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+						httpRequest.RequestUri = new Uri(uri);
+						httpRequest.Headers.Add("Authorization", _authToken);
 
-				        var response = httpClient.SendAsync(httpRequest).Result;
-				        var responseBody = response.Content.ReadAsStringAsync().Result;
-				        var responseTranslation = JsonConvert.DeserializeObject<List<TranslationResponse>>(responseBody);
-				        translatedText = responseTranslation[0].Translations[0].Text;
-			        }
-		        }
-	        }
-	        catch (WebException exception)
-	        {
-		        var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-		        throw new Exception(mesg);
-	        }
-	        return translatedText;
+						var response = httpClient.SendAsync(httpRequest).Result;
+						var responseBody = response.Content.ReadAsStringAsync().Result;
+						var responseTranslation = JsonConvert.DeserializeObject<List<TranslationResponse>>(responseBody);
+						translatedText = responseTranslation[0].Translations[0].Text;
+					}
+				}
+			}
+			catch (WebException exception)
+			{
+				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
+				throw new Exception(mesg);
+			}
+			return translatedText;
 		}
 
-	    private string ReplaceCharacters(string textToTranslate, MatchCollection matches)
+		private string ReplaceCharacters(string textToTranslate, MatchCollection matches)
 	    {
 			var indexes = new List<int>();
 		    foreach (Match match in matches)
