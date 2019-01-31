@@ -48,7 +48,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			return null;
 		}
 
-		public List<LanguageResourceBundle> GetLanguageResourceBundles()
+		public List<LanguageResourceBundle> GetLanguageResourceBundles(string resource)
 		{
 			return null;
 		}

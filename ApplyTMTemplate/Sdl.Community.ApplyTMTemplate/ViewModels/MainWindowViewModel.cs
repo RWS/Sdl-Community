@@ -157,12 +157,12 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			if (result == DialogResult.OK)
 			{
 				_tmPath = dlg.SelectedPath;
+
+				if (string.IsNullOrEmpty(_tmPath)) return;
+
+				var files = Directory.GetFiles(_tmPath);
+				_tmLoader.GetTms(files, TmCollection);
 			}
-
-			if (string.IsNullOrEmpty(_tmPath)) return;
-
-			var files = Directory.GetFiles(_tmPath);
-			AddRangeToTmCollection(_tmLoader.GetTms(files));
 		}
 
 		private void AddLanguageResourceToBundle(LanguageResourceBundle langResBundle, XmlNode resource)
@@ -232,7 +232,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			};
 
 			dlg.ShowDialog();
-			AddRangeToTmCollection(_tmLoader.GetTms(dlg.FileNames));
+			_tmLoader.GetTms(dlg.FileNames, TmCollection);
 		}
 
 		private void ApplyTmTemplate()
@@ -262,7 +262,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 
 			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
-			MarkTmsAsNotChecked();
 
 			var template = new Template(langResBundlesList);
 
@@ -289,22 +288,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			if (droppedFile == null) return;
 
-			AddRangeToTmCollection(_tmLoader.GetTms(droppedFile as string[]));
-		}
-
-		private void AddRangeToTmCollection(ObservableCollection<TranslationMemory> translationMemories)
-		{
-			foreach (var translationMemory in translationMemories)
-			{
-				TmCollection.Add(translationMemory);
-			}
+			_tmLoader.GetTms(droppedFile as string[], TmCollection);
 		}
 
 		private void MarkTmsAsNotChecked()
 		{
 			foreach (var tm in TmCollection)
 			{
-				tm.Checked = "";
+				tm.SourceStatus = "";
 			}
 		}
 

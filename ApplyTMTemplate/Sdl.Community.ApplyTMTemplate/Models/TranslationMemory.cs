@@ -6,24 +6,28 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 {
 	public class TranslationMemory : ModelBase
 	{
-		private string _checked;
-		private string _statusToolTip;
+		private string _sourceStatus;
+		private string _targetStatus;
+		private string _sourceStatusToolTip;
+		private string _targetStatusToolTip;
 		private bool _isSelected;
 
 		public TranslationMemory(FileBasedTranslationMemory tm)
 		{
-			_statusToolTip = "Nothing processed yet";
+			_sourceStatusToolTip = "Nothing processed yet";
+			_targetStatusToolTip = "Nothing processed yet";
 			_isSelected = false;
-			_checked = "";
+			_sourceStatus = "";
+			_targetStatus = "";
 			Tm = tm;
 		}
 
-		public string Checked
+		public string SourceStatus
 		{
-			get => _checked;
+			get => _sourceStatus;
 			set
 			{
-				_checked = value;
+				_sourceStatus = value;
 				OnPropertyChanged();
 			}
 		}
@@ -40,12 +44,12 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 		}
 
-		public string StatusToolTip
+		public string SourceStatusToolTip
 		{
-			get => _statusToolTip;
+			get => _sourceStatusToolTip;
 			set
 			{
-				_statusToolTip = value;
+				_sourceStatusToolTip = value;
 				OnPropertyChanged();
 			}
 		}
@@ -54,28 +58,56 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 		public FileBasedTranslationMemory Tm { get; }
 
-		public void MarkTmApplied()
+		public string TargetStatus
 		{
-			if (Checked != "") return;
-
-			Checked = "../Resources/Checked.ico";
-			StatusToolTip = "Template applied";
+			get => _targetStatus;
+			set
+			{
+				_targetStatus = value;
+				OnPropertyChanged();
+			}
 		}
 
-		public void MarkTmNotApplied()
+		public string TargetStatusToolTip
 		{
-			if (Checked != "") return;
+			get => _targetStatusToolTip;
+			set
+			{
+				_targetStatusToolTip = value;
+				OnPropertyChanged();
+			}
+		}
 
-			Checked = "../Resources/Unchecked.ico";
-			StatusToolTip = "Template's languages don't correspond with any of this TM's languages";
+		public void MarkSourceModified()
+		{
+			SourceStatus = "../Resources/Checked.ico";
+			SourceStatusToolTip = "Template applied on Source language";
+		}
+
+		public void MarkSourceNotModified()
+		{
+			SourceStatus = "../Resources/Unchecked.ico";
+			SourceStatusToolTip = "Source language doesn't correspond with any of the template's languages and was not modified";
+		}
+
+		public void MarkTargetModified()
+		{
+			TargetStatus = "../Resources/Checked.ico";
+			TargetStatusToolTip = "Template applied on Target language";
+		}
+
+		public void MarkTargetNotModified()
+		{
+			TargetStatus = "../Resources/Unchecked.ico";
+			TargetStatusToolTip = "Target language doesn't correspond with any of the template's languages and was not modified";
 		}
 
 		public void MarkTmCorrupted()
 		{
-			if (Checked != "") return;
-
-			Checked = "../Resources/Error.ico";
-			StatusToolTip = "This TM is corrupted or the file is not a TM";
+			SourceStatus = "../Resources/Error.ico";
+			TargetStatus = "../Resources/Error.ico";
+			SourceStatusToolTip = "This TM is corrupted or the file is not a TM";
+			TargetStatusToolTip = "This TM is corrupted or the file is not a TM";;
 		}
 
 		public void ApplyTemplate(LanguageResourceBundle languageResourceBundle)
@@ -84,19 +116,29 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 			try
 			{
-				if (langDirOfTm.SourceLanguage.Equals(languageResourceBundle.Language) ||
-				    langDirOfTm.TargetLanguage.Equals(languageResourceBundle.Language))
+				if (langDirOfTm.SourceLanguage.Equals(languageResourceBundle.Language))
 				{
 					Tm.LanguageResourceBundles.Add(languageResourceBundle);
 					Tm.Save();
-					MarkTmApplied();
+					MarkSourceModified();
 				}
 				else
 				{
-					MarkTmNotApplied();
+					MarkSourceNotModified();
+				}
+
+				if (langDirOfTm.TargetLanguage.Equals(languageResourceBundle.Language))
+				{
+					Tm.LanguageResourceBundles.Add(languageResourceBundle);
+					Tm.Save();
+					MarkTargetModified();
+				}
+				else
+				{
+					MarkTargetNotModified();
 				}
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				MarkTmCorrupted();
 			}
