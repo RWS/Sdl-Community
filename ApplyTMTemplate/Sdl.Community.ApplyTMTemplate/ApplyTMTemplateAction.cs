@@ -12,7 +12,7 @@ namespace Sdl.Community.ApplyTMTemplate
 	{
 		protected override void Execute()
 		{
-			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader());
+			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader());
 
 			var mainWindow = new MainWindow
 			{

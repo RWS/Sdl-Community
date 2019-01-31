@@ -20,7 +20,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 
 	    public override void Execute()
 	    {
-			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader());
+			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader());
 
 		    var mainWindow = new MainWindow
 		    {

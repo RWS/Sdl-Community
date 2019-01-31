@@ -3,7 +3,7 @@
   <PlugInName>Sdl.Community.ApplyTMTemplate</PlugInName>
   <Version>1.0.0</Version>
   <Description>Apply TM Template</Description>
-  <Author>Sdl Community Developers</Author>
+  <Author>SDL Community Developers</Author>
   <Include>
 		<File>Sdl.Community.Toolkit.Core.dll</File>
 		<File>MahApps.Metro.dll</File>
