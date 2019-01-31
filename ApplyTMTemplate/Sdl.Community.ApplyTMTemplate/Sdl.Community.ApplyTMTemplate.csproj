@@ -119,7 +119,7 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\RatioConverter.cs" />
-    <Compile Include="Models\TemplateModel.cs" />
+    <Compile Include="Models\Template.cs" />
     <Compile Include="Models\TranslationMemory.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -138,6 +138,7 @@
     </Compile>
     <Compile Include="Utilities\DropBehaviour.cs" />
     <Compile Include="Utilities\TemplateLoader.cs" />
+    <Compile Include="Utilities\TMLoader.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ModelBase.cs" />
     <Compile Include="ViewModels\TranslationMemoryViewModel.cs" />

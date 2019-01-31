@@ -54,14 +54,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			_tmCollection = new ObservableCollection<TranslationMemory>();
 
 			var tmTemplatesFolder = _templateLoader.GetTmTemplateFolderPath();
-			if (Directory.Exists(tmTemplatesFolder))
-			{
-				ResourceTemplatePath = Directory.GetFiles(tmTemplatesFolder)[0];
-			}
-			else
-			{
-				ResourceTemplatePath = "";
-			}
+			ResourceTemplatePath = Directory.Exists(tmTemplatesFolder) ? Directory.GetFiles(tmTemplatesFolder)[0] : "";
 		}
 
 		public bool AbbreviationsChecked
@@ -255,11 +248,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			foreach (XmlNode res in lrt)
 			{
-				var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == Int32.Parse(res.Attributes["Lcid"].Value));
+				var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == int.Parse(res.Attributes["Lcid"].Value));
 
 				if (lr == null)
 				{
-					lr = defaultLangResProvider.GetDefaultLanguageResources(CultureInfo.GetCultureInfo(Int32.Parse(res.Attributes["Lcid"].Value)));
+					lr = defaultLangResProvider.GetDefaultLanguageResources(CultureInfo.GetCultureInfo(int.Parse(res.Attributes["Lcid"].Value)));
 					langResBundlesList.Add(lr);
 				}
 
@@ -269,7 +262,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
 			MarkTmsAsNotChecked();
 
-			var template = new TemplateModel(langResBundlesList);
+			var template = new Template(langResBundlesList);
 
 			template.ApplyTmTemplate(selectedTmList);
 		}
@@ -318,14 +311,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		private void ValidateAndAddTms(string[] files)
+		private void ValidateAndAddTms(IEnumerable<string> files)
 		{
 			foreach (var file in files)
 			{
-				var fileBasedTM = new FileBasedTranslationMemory(file);
-				if (Path.GetExtension(file) == ".sdltm" && TmCollection.All(tm => tm.Name != fileBasedTM.Name))
+				var fileBasedTm = new FileBasedTranslationMemory(file);
+				if (Path.GetExtension(file) == ".sdltm" && TmCollection.All(tm => tm.Name != fileBasedTm.Name))
 				{
-					TmCollection.Add(new TranslationMemory(fileBasedTM));
+					TmCollection.Add(new TranslationMemory(fileBasedTm));
 				}
 			}
 		}

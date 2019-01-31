@@ -54,5 +54,23 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 			Checked = "../Resources/Unchecked.ico";
 		}
+
+		public void ApplyTemplate(LanguageResourceBundle languageResourceBundle)
+		{
+			var langDirOfTm = Tm.LanguageDirection;
+
+			if (langDirOfTm.SourceLanguage.Equals(languageResourceBundle.Language) ||
+			    langDirOfTm.TargetLanguage.Equals(languageResourceBundle.Language))
+			{
+				MarkTmApplied();
+				Tm.LanguageResourceBundles.Add(languageResourceBundle);
+				Tm.Save();
+			}
+			else
+			{
+				MarkTmNotApplied();
+			}
+
+		}
 	}
 }
