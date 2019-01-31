@@ -22,6 +22,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 	public class MainWindowViewModel : ModelBase
 	{
 		private readonly TemplateLoader _templateLoader;
+		private readonly TMLoader _tmLoader;
 		private bool _abbreviationsChecked;
 		private bool _ordinalFollowersChecked;
 		private bool _segmentationRulesChecked;
@@ -40,9 +41,10 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private ObservableCollection<TranslationMemory> _tmCollection;
 
-		public MainWindowViewModel(TemplateLoader templateLoader)
+		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader)
 		{
 			_templateLoader = templateLoader;
+			_tmLoader = tmLoader;
 
 			_tmPath = _tmPath == null ? _templateLoader.GetTmFolderPath() : Environment.CurrentDirectory;
 
@@ -160,7 +162,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			if (string.IsNullOrEmpty(_tmPath)) return;
 
 			var files = Directory.GetFiles(_tmPath);
-			ValidateAndAddTms(files);
+			AddRangeToTmCollection(_tmLoader.GetTms(files));
 		}
 
 		private void AddLanguageResourceToBundle(LanguageResourceBundle langResBundle, XmlNode resource)
@@ -230,7 +232,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			};
 
 			dlg.ShowDialog();
-			ValidateAndAddTms(dlg.FileNames);
+			AddRangeToTmCollection(_tmLoader.GetTms(dlg.FileNames));
 		}
 
 		private void ApplyTmTemplate()
@@ -287,7 +289,15 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			if (droppedFile == null) return;
 
-			ValidateAndAddTms(droppedFile as string[]);
+			AddRangeToTmCollection(_tmLoader.GetTms(droppedFile as string[]));
+		}
+
+		private void AddRangeToTmCollection(ObservableCollection<TranslationMemory> translationMemories)
+		{
+			foreach (var translationMemory in translationMemories)
+			{
+				TmCollection.Add(translationMemory);
+			}
 		}
 
 		private void MarkTmsAsNotChecked()
@@ -308,18 +318,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			foreach (var translationMemory in TmCollection)
 			{
 				translationMemory.IsSelected = onOff;
-			}
-		}
-
-		private void ValidateAndAddTms(IEnumerable<string> files)
-		{
-			foreach (var file in files)
-			{
-				var fileBasedTm = new FileBasedTranslationMemory(file);
-				if (Path.GetExtension(file) == ".sdltm" && TmCollection.All(tm => tm.Name != fileBasedTm.Name))
-				{
-					TmCollection.Add(new TranslationMemory(fileBasedTm));
-				}
 			}
 		}
 	}

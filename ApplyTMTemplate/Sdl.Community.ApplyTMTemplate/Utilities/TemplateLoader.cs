@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
@@ -43,6 +45,11 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				}
 			}
 
+			return null;
+		}
+
+		public List<LanguageResourceBundle> GetLanguageResourceBundles()
+		{
 			return null;
 		}
 

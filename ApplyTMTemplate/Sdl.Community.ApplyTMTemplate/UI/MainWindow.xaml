@@ -124,7 +124,7 @@
 				<DataGridTemplateColumn Width="*" Header="Template applied">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<Image Source="{Binding Checked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15" />
+							<Image Source="{Binding Checked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15" ToolTip="{Binding StatusToolTip}"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
