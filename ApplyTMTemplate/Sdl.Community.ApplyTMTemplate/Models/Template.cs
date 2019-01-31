@@ -7,9 +7,9 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ApplyTMTemplate.Models
 {
-	public class TemplateModel
+	public class Template
 	{
-		public TemplateModel(List<LanguageResourceBundle> resourceBundle)
+		public Template(List<LanguageResourceBundle> resourceBundle)
 		{
 			ResourceBundles = resourceBundle;
 		}
@@ -22,19 +22,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			{
 				foreach (var translationMemory in translationMemories)
 				{
-					var langDirOfTm = translationMemory.Tm.LanguageDirection;
-
-					if (langDirOfTm.SourceLanguage.Equals(languageResourceBundle.Language) ||
-					    langDirOfTm.TargetLanguage.Equals(languageResourceBundle.Language))
-					{
-						translationMemory.MarkTmApplied();
-						translationMemory.Tm.LanguageResourceBundles.Add(languageResourceBundle);
-						translationMemory.Tm.Save();
-					}
-					else
-					{
-						translationMemory.MarkTmNotApplied();
-					}
+					translationMemory.ApplyTemplate(languageResourceBundle);
 				}
 			}
 		}
