@@ -35,9 +35,11 @@
   <ItemGroup>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework.PackageSupport, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.dll</HintPath>

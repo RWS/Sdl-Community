@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.TranslationMemoryManagementUtility</PlugInName>
-  <Version>1.0.0.5</Version>
+  <Version>1.0.0.6</Version>
   <Description>SDL Translation Memory Management Utility</Description>
-  <Author>SDL Community</Author>
+  <Author>SDL Community Developers</Author>
   <Include>
     <File>Sdl.Community.Utilities.TMTool.Lib.dll</File>
     <File>Sdl.Community.Utilities.TMTool.Task.dll</File>
