@@ -124,7 +124,12 @@
 				<DataGridTemplateColumn Width="*" Header="Template applied">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<Image Source="{Binding Checked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15" ToolTip="{Binding StatusToolTip}"/>
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+								<TextBlock Text="Source" Margin="0,0,10,0"/>
+								<Image Source="{Binding SourceStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15" ToolTip="{Binding SourceStatusToolTip}" Margin="0,0,10,0"/>
+								<TextBlock Text="Target" Margin="0,0,10,0"/>
+								<Image Source="{Binding TargetStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15" ToolTip="{Binding TargetStatusToolTip}" />
+							</StackPanel>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

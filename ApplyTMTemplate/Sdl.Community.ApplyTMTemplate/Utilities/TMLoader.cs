@@ -12,11 +12,14 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
 	public class TMLoader
 	{
-		private bool IsValid(string file) => Path.GetExtension(file) != ".sdltm";
-
-		public ObservableCollection<TranslationMemory> GetTms(IEnumerable<string> files)
+		private bool IsValid(string file)
 		{
-			var tmCollection = new ObservableCollection<TranslationMemory>();
+			return Path.GetExtension(file) != ".sdltm";
+		}
+
+		public ObservableCollection<TranslationMemory> GetTms(IEnumerable<string> files, ObservableCollection<TranslationMemory> tmCollection)
+		{
+
 
 			foreach (var file in files)
 			{
