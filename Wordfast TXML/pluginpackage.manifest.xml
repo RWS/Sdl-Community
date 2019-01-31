@@ -3,6 +3,6 @@
   <PlugInName>Sdl.Community.FileTypeSupport.TXML</PlugInName>
   <Version>1.1.1.0</Version>
   <Description>Sdl.Community.FileTypeSupport.TXML</Description>
-  <Author></Author>
+  <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" maxversion="15.0" minversion="12.0" />
 </PluginPackage>
