@@ -115,9 +115,7 @@
     <Compile Include="..\ETSApi\ETSTranslatorHelper.cs" />
     <Compile Include="..\ETSApi\ETSLanguagePair.cs" />
     <Compile Include="..\ETSApi\LanguagePairResult.cs" />
-    <Compile Include="..\Dialogs\ProviderConfDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="..\Dialogs\ProviderConfDialog.cs" />
     <Compile Include="..\Dialogs\ProviderConfDialog.Designer.cs">
       <DependentUpon>ProviderConfDialog.cs</DependentUpon>
     </Compile>
