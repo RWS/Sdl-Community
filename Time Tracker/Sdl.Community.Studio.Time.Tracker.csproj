@@ -65,31 +65,36 @@
   <ItemGroup>
     <Reference Include="Sdl.Core.PluginFramework">
       <HintPath>packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework.PackageSupport">
       <HintPath>packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Studio.Time.Tracker.DocumentFormat.OpenXml">
       <HintPath>ThirdParty\Open XML SDK\V2.5\lib\Studio.Time.Tracker.DocumentFormat.OpenXml.dll</HintPath>
