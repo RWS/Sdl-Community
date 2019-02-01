@@ -120,11 +120,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplyTMTemplateAction.cs" />
-    <Compile Include="ApplyTMTemplateRibbonGroup.cs" />
+    <Compile Include="Studio\ApplyTMTemplateAction.cs" />
+    <Compile Include="Studio\ApplyTMTemplateRibbonGroup.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\RatioConverter.cs" />
+    <Compile Include="Models\Options.cs" />
     <Compile Include="Models\Template.cs" />
     <Compile Include="Models\TranslationMemory.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -143,11 +144,12 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\DropBehaviour.cs" />
+    <Compile Include="Utilities\FolderSelectDialog.cs" />
+    <Compile Include="Utilities\Reflector.cs" />
     <Compile Include="Utilities\TemplateLoader.cs" />
     <Compile Include="Utilities\TMLoader.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ModelBase.cs" />
-    <Compile Include="ViewModels\TranslationMemoryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Error.ico" />
