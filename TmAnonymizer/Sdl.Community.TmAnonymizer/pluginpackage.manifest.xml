@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.SDLTmAnonymizer</PlugInName>
-  <Version>1.9.7</Version>
+  <Version>1.9.8</Version>
   <Description></Description>
-  <Author></Author>
+  <Author>SDL Community Developers</Author>
 	<Include>
 		<File>EPPlus.dll</File>
 		<File>Xceed.Wpf.Toolkit.dll</File>
