@@ -27,7 +27,11 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			get => _sourceStatus;
 			set
 			{
-				_sourceStatus = value;
+				if (!_sourceStatus.ToLower().Contains("checked"))
+				{
+					_sourceStatus = value;
+				}
+
 				OnPropertyChanged();
 			}
 		}
@@ -63,7 +67,11 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			get => _targetStatus;
 			set
 			{
-				_targetStatus = value;
+				if (!_targetStatus.ToLower().Contains("checked"))
+				{
+					_targetStatus = value;
+				}
+
 				OnPropertyChanged();
 			}
 		}

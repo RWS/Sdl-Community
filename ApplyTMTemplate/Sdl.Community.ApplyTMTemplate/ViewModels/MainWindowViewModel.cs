@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml;
+using Sdl.Community.AhkPlugin.Helpers;
 using Sdl.Community.ApplyTMTemplate.Commands;
 using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.Community.ApplyTMTemplate.Utilities;
@@ -79,6 +80,35 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
+		public bool SegmentationRulesChecked
+		{
+			get => _segmentationRulesChecked;
+			set
+			{
+				_segmentationRulesChecked = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool VariablesChecked
+		{
+			get => _variablesChecked;
+			set
+			{
+				_variablesChecked = value;
+				OnPropertyChanged();
+			}
+		}
+		public string ResourceTemplatePath
+		{
+			get => _resourceTemplatePath;
+			set
+			{
+				_resourceTemplatePath = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public bool AllTmsChecked
 		{
 			get => _selectedProjectChecked;
@@ -91,42 +121,12 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public string ResourceTemplatePath
-		{
-			get => _resourceTemplatePath;
-			set
-			{
-				_resourceTemplatePath = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool SegmentationRulesChecked
-		{
-			get => _segmentationRulesChecked;
-			set
-			{
-				_segmentationRulesChecked = value;
-				OnPropertyChanged();
-			}
-		}
-
 		public ObservableCollection<TranslationMemory> TmCollection
 		{
 			get => _tmCollection;
 			set
 			{
 				_tmCollection = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool VariablesChecked
-		{
-			get => _variablesChecked;
-			set
-			{
-				_variablesChecked = value;
 				OnPropertyChanged();
 			}
 		}
@@ -146,80 +146,20 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void AddFolder()
 		{
-			var dlg = new FolderBrowserDialog
+			var dlg = new FolderSelectDialog
 			{
-				SelectedPath = _tmPath ?? Environment.CurrentDirectory,
-				Description = @"Select TMs' Folder"
+				Title = "Please select the folder containing the TMs",
+				InitialDirectory = _tmPath ?? Environment.CurrentDirectory
 			};
 
-			var result = dlg.ShowDialog();
+			if (!dlg.ShowDialog()) return;
 
-			if (result == DialogResult.OK)
-			{
-				_tmPath = dlg.SelectedPath;
+			_tmPath = dlg.FileName;
 
-				if (string.IsNullOrEmpty(_tmPath)) return;
+			if (string.IsNullOrEmpty(_tmPath)) return;
 
-				var files = Directory.GetFiles(_tmPath);
-				_tmLoader.GetTms(files, TmCollection);
-			}
-		}
-
-		private void AddLanguageResourceToBundle(LanguageResourceBundle langResBundle, XmlNode resource)
-		{
-			if (resource.Attributes["Type"].Value == "Variables" && VariablesChecked)
-			{
-				var vars = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
-
-				langResBundle.Variables = new Wordlist();
-
-				foreach (Match s in Regex.Matches(vars, @"([^\s]+)"))
-				{
-					langResBundle.Variables.Add(s.ToString());
-				}
-
-				return;
-			}
-
-			if (resource.Attributes["Type"].Value == "Abbreviations" && AbbreviationsChecked)
-			{
-				var abbrevs = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
-
-				langResBundle.Abbreviations = new Wordlist();
-
-				foreach (Match s in Regex.Matches(abbrevs, @"([^\s]+)"))
-				{
-					langResBundle.Abbreviations.Add(s.ToString());
-				}
-
-				return;
-			}
-
-			if (resource.Attributes["Type"].Value == "OrdinalFollowers" && OrdinalFollowersChecked)
-			{
-				var ordFollowers = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
-
-				langResBundle.OrdinalFollowers = new Wordlist();
-
-				foreach (Match s in Regex.Matches(ordFollowers, @"([^\s]+)"))
-				{
-					langResBundle.OrdinalFollowers.Add(s.ToString());
-				}
-
-				return;
-			}
-
-			if (resource.Attributes["Type"].Value == "SegmentationRules" && SegmentationRulesChecked)
-			{
-				var segRules = Convert.FromBase64String(resource.InnerText);
-
-				var stream = new MemoryStream(segRules);
-
-				var segmentRules = SegmentationRules.Load(stream,
-					CultureInfo.GetCultureInfo(langResBundle.Language.LCID), null);
-
-				langResBundle.SegmentationRules = segmentRules;
-			}
+			var files = Directory.GetFiles(_tmPath);
+			_tmLoader.GetTms(files, TmCollection);
 		}
 
 		private void AddTMs()
@@ -237,35 +177,21 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void ApplyTmTemplate()
 		{
-			if (string.IsNullOrEmpty(ResourceTemplatePath))
-			{
-				MessageBox.Show("Please select a Resource Template", "Resource Template", MessageBoxButtons.OK);
-				return;
-			}
-
-			var lrt = _templateLoader.LoadDataFromFile(ResourceTemplatePath, "LanguageResource");
-
-			var langResBundlesList = new List<LanguageResourceBundle>();
-			var defaultLangResProvider = new DefaultLanguageResourceProvider();
-
-			foreach (XmlNode res in lrt)
-			{
-				var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == int.Parse(res.Attributes["Lcid"].Value));
-
-				if (lr == null)
-				{
-					lr = defaultLangResProvider.GetDefaultLanguageResources(CultureInfo.GetCultureInfo(int.Parse(res.Attributes["Lcid"].Value)));
-					langResBundlesList.Add(lr);
-				}
-
-				AddLanguageResourceToBundle(lr, res);
-			}
+			var langResBundlesList = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath);
 
 			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
 
 			var template = new Template(langResBundlesList);
 
-			template.ApplyTmTemplate(selectedTmList);
+			var options = new Options
+			{
+				AbbreviationsChecked = AbbreviationsChecked,
+				VariablesChecked = VariablesChecked,
+				OrdinalFollowersChecked = OrdinalFollowersChecked,
+				SegmentationRulesChecked = SegmentationRulesChecked
+			};
+
+			template.ApplyTmTemplate(selectedTmList, options);
 		}
 
 		private void Browse()
@@ -289,14 +215,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			if (droppedFile == null) return;
 
 			_tmLoader.GetTms(droppedFile as string[], TmCollection);
-		}
-
-		private void MarkTmsAsNotChecked()
-		{
-			foreach (var tm in TmCollection)
-			{
-				tm.SourceStatus = "";
-			}
 		}
 
 		private void RemoveTMs()
