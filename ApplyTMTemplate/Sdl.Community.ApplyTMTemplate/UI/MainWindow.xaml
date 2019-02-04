@@ -5,6 +5,8 @@
 			          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 				      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 					  xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+					  xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+					  Dialog:DialogParticipation.Register="{Binding}"
 					  xmlns:converters="clr-namespace:Sdl.Community.ApplyTMTemplate.Converters"
 		              WindowStartupLocation="CenterScreen"
 		              mc:Ignorable="d"
@@ -41,10 +43,10 @@
 
 		<TextBlock Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="10,10,0,0"  Grid.ColumnSpan="3" />
 
-		<WrapPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Grid.ColumnSpan="2">
+		<WrapPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Grid.ColumnSpan="2">	
 			<TextBox HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding ResourceTemplatePath}"
 		             Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
-								Converter={converters:RatioConverter}, ConverterParameter='0.74'}" />
+									 Converter={converters:RatioConverter}, ConverterParameter='0.74'}" />
 			<Button HorizontalAlignment="Right" Margin="5,10,10,0"
 		            Style="{DynamicResource DarkBlueButtonsStyle}" Command="{Binding BrowseCommand}" Content="Browse" />
 		</WrapPanel>

@@ -5,13 +5,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Xml;
+using MahApps.Metro.Controls.Dialogs;
+using Sdl.Community.ApplyTMTemplate.ViewModels;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Segmentation;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
@@ -57,15 +59,28 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			return null;
 		}
 
-		public List<LanguageResourceBundle> GetLanguageResourceBundlesFromFile(string resourceTemplatePath)
+		public List<LanguageResourceBundle> GetLanguageResourceBundlesFromFile(string resourceTemplatePath, out string message)
 		{
+			message = "";
+
 			if (string.IsNullOrEmpty(resourceTemplatePath))
 			{
-				MessageBox.Show("Please select a Resource Template", "Resource Template", MessageBoxButtons.OK);
+				message = "Select a template";
+				return null;
+			}
+
+			if (!File.Exists(resourceTemplatePath))
+			{
+				message = "The file path of the template is not correct!";
 				return null;
 			}
 
 			var lrt = LoadDataFromFile(resourceTemplatePath, "LanguageResource");
+
+			if (lrt.Count == 0)
+			{
+				message = "This template is corrupted or the file is not a template";
+			}
 
 			var langResBundlesList = new List<LanguageResourceBundle>();
 			var defaultLangResProvider = new DefaultLanguageResourceProvider();
