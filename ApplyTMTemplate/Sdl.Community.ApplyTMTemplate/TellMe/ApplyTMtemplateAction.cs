@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.ApplyTMTemplate.UI;
 using Sdl.Community.ApplyTMTemplate.Utilities;
 using Sdl.Community.ApplyTMTemplate.ViewModels;
@@ -20,13 +21,14 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 
 	    public override void Execute()
 	    {
-			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader());
+			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader(), DialogCoordinator.Instance);
 
 		    var mainWindow = new MainWindow
 		    {
 			    DataContext = mainWindowViewModel
 		    };
 
+			System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(mainWindow);
 		    mainWindow.Show();
 		}
 

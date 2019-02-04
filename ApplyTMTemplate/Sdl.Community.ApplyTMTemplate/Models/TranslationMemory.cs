@@ -53,7 +53,10 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			get => _sourceStatusToolTip;
 			set
 			{
-				_sourceStatusToolTip = value;
+				if (!_sourceStatusToolTip.ToLower().Contains("applied"))
+				{
+					_sourceStatusToolTip = value;
+				}
 				OnPropertyChanged();
 			}
 		}
@@ -81,7 +84,10 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			get => _targetStatusToolTip;
 			set
 			{
-				_targetStatusToolTip = value;
+				if (!_targetStatusToolTip.ToLower().Contains("applied"))
+				{
+					_targetStatusToolTip = value;
+				}
 				OnPropertyChanged();
 			}
 		}

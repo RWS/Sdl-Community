@@ -19,7 +19,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 		public ObservableCollection<TranslationMemory> GetTms(IEnumerable<string> files, ObservableCollection<TranslationMemory> tmCollection)
 		{
-
+			var newTmsCollection = new ObservableCollection<TranslationMemory>();
 
 			foreach (var file in files)
 			{
@@ -29,11 +29,11 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 				if (tmCollection.All(tm => tm.Name != fileBasedTm.Name))
 				{
-					tmCollection.Add(new TranslationMemory(fileBasedTm));
+					newTmsCollection.Add(new TranslationMemory(fileBasedTm));
 				}
 			}
 
-			return tmCollection;
+			return newTmsCollection;
 		}
 	}
 }

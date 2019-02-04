@@ -17,6 +17,7 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Segmentation;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace Sdl.Community.ApplyTMTemplate.ViewModels
 {
@@ -27,7 +28,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private bool _abbreviationsChecked;
 		private bool _ordinalFollowersChecked;
 		private bool _segmentationRulesChecked;
-		private bool _selectedProjectChecked;
+		private bool _allTmsChecked;
 		private bool _variablesChecked;
 
 		private string _tmPath;
@@ -39,13 +40,15 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private ICommand _browseCommand;
 		private ICommand _dragEnterCommand;
 		private ICommand _removeTMsCommand;
+		private readonly IDialogCoordinator _dialogCoordinator;
 
 		private ObservableCollection<TranslationMemory> _tmCollection;
 
-		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader)
+		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader, IDialogCoordinator dialogCoordinator)
 		{
 			_templateLoader = templateLoader;
 			_tmLoader = tmLoader;
+			_dialogCoordinator = dialogCoordinator;
 
 			_tmPath = _tmPath == null ? _templateLoader.GetTmFolderPath() : Environment.CurrentDirectory;
 
@@ -99,6 +102,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				OnPropertyChanged();
 			}
 		}
+
 		public string ResourceTemplatePath
 		{
 			get => _resourceTemplatePath;
@@ -111,12 +115,12 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public bool AllTmsChecked
 		{
-			get => _selectedProjectChecked;
+			get => _allTmsChecked;
 			set
 			{
 				ToggleCheckAllTms(value);
 
-				_selectedProjectChecked = value;
+				_allTmsChecked = value;
 				OnPropertyChanged();
 			}
 		}
@@ -129,6 +133,24 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				_tmCollection = value;
 				OnPropertyChanged();
 			}
+		}
+
+		private void Tm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (AreAllTmsSelectedOrUnselected())
+			{
+				AllTmsChecked = TmCollection[0].IsSelected;
+			}
+		}
+
+		private bool AreAllTmsSelectedOrUnselected()
+		{
+			for (var i = 0; i < TmCollection.Count - 1; i++)
+			{
+				if (TmCollection[i].IsSelected != TmCollection[i + 1].IsSelected) return false;
+			}
+
+			return true;
 		}
 
 		public ICommand AddFolderCommand => _addFolderCommand ?? (_addFolderCommand = new CommandHandler(AddFolder, true));
@@ -159,7 +181,17 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			if (string.IsNullOrEmpty(_tmPath)) return;
 
 			var files = Directory.GetFiles(_tmPath);
-			_tmLoader.GetTms(files, TmCollection);
+
+			AddRange(_tmLoader.GetTms(files, TmCollection));
+		}
+
+		private void AddRange(ObservableCollection<TranslationMemory> tmsCollection)
+		{
+			foreach (var tm in tmsCollection)
+			{
+				TmCollection.Add(tm);
+				tm.PropertyChanged += Tm_PropertyChanged;
+			}
 		}
 
 		private void AddTMs()
@@ -172,14 +204,26 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			};
 
 			dlg.ShowDialog();
-			_tmLoader.GetTms(dlg.FileNames, TmCollection);
+			AddRange(_tmLoader.GetTms(dlg.FileNames, TmCollection));
 		}
 
-		private void ApplyTmTemplate()
+		private async void ApplyTmTemplate()
 		{
-			var langResBundlesList = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath);
+			var langResBundlesList = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out var message);
+
+			if (langResBundlesList == null || langResBundlesList.Count == 0)
+			{
+				await _dialogCoordinator.ShowMessageAsync(this, "Warning", message);
+				return;
+			}
 
 			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
+
+			if (selectedTmList.Count == 0)
+			{
+				await _dialogCoordinator.ShowMessageAsync(this, "Warning", "Select at least one TM");
+				return;
+			}
 
 			var template = new Template(langResBundlesList);
 
@@ -214,19 +258,27 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			if (droppedFile == null) return;
 
-			_tmLoader.GetTms(droppedFile as string[], TmCollection);
+			AddRange(_tmLoader.GetTms(droppedFile as string[], TmCollection));
 		}
 
 		private void RemoveTMs()
 		{
 			TmCollection = new ObservableCollection<TranslationMemory>(TmCollection.Where(tm => !tm.IsSelected));
+
+			if (TmCollection.Count == 0)
+			{
+				AllTmsChecked = false;
+			}
 		}
 
 		private void ToggleCheckAllTms(bool onOff)
 		{
 			foreach (var translationMemory in TmCollection)
 			{
-				translationMemory.IsSelected = onOff;
+				if (translationMemory.IsSelected != onOff)
+				{
+					translationMemory.IsSelected = onOff;
+				}
 			}
 		}
 	}
