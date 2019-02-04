@@ -177,9 +177,9 @@ namespace TradosPluginTests
         /// </summary>
         public void ETSApi_SetETSApiVersion_v8()
         {
-            apiKeyTranslationOptions.APIVersion = APIVersion.Unknown;
+            apiKeyTranslationOptions.ApiVersion = APIVersion.Unknown;
             ETSTranslatorHelper.SetETSApiVersion(apiKeyTranslationOptions);
-            Assert.AreEqual(APIVersion.v2, apiKeyTranslationOptions.APIVersion);
+            Assert.AreEqual(APIVersion.v2, apiKeyTranslationOptions.ApiVersion);
         }
     }
 }
