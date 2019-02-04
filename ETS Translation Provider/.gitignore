@@ -1,0 +1,6 @@
+*.csproj.user
+*.suo
+TestResults
+**/bin/
+**/obj/
+packages/

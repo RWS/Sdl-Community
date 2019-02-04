@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XliffConverter", "XliffConverter\XliffConverter.csproj", "{C8F2C2FC-5A3E-4BE7-9788-F6F24EB69F72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETSLPConverter", "ETSLPConverter\ETSLPConverter.csproj", "{CEBE84EB-A630-4957-B93A-3B60456B5FB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SegmentParser", "SegmentParser\SegmentParser.csproj", "{42858567-AADA-4A61-9D04-BF151137146B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Trados2017_Plugin", "Trados2017_Plugin", "{3CF70B26-B099-4D07-A61A-3E8098A8E77E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETSTranslationProvider2017", "ETSTranslationProvider\Trados2017_Plugin\ETSTranslationProvider2017.csproj", "{2D963716-8FC4-4353-ADDD-7A6C0F7717DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradosPluginTests2017", "TradosPluginTests\Trados2017_Plugin\TradosPluginTests2017.csproj", "{725782AC-3A51-42C3-800D-1D6163F83F1F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2D963716-8FC4-4353-ADDD-7A6C0F7717DE} = {2D963716-8FC4-4353-ADDD-7A6C0F7717DE}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8F2C2FC-5A3E-4BE7-9788-F6F24EB69F72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8F2C2FC-5A3E-4BE7-9788-F6F24EB69F72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8F2C2FC-5A3E-4BE7-9788-F6F24EB69F72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8F2C2FC-5A3E-4BE7-9788-F6F24EB69F72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEBE84EB-A630-4957-B93A-3B60456B5FB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEBE84EB-A630-4957-B93A-3B60456B5FB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEBE84EB-A630-4957-B93A-3B60456B5FB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEBE84EB-A630-4957-B93A-3B60456B5FB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42858567-AADA-4A61-9D04-BF151137146B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42858567-AADA-4A61-9D04-BF151137146B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42858567-AADA-4A61-9D04-BF151137146B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42858567-AADA-4A61-9D04-BF151137146B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D963716-8FC4-4353-ADDD-7A6C0F7717DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D963716-8FC4-4353-ADDD-7A6C0F7717DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D963716-8FC4-4353-ADDD-7A6C0F7717DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D963716-8FC4-4353-ADDD-7A6C0F7717DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{725782AC-3A51-42C3-800D-1D6163F83F1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{725782AC-3A51-42C3-800D-1D6163F83F1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{725782AC-3A51-42C3-800D-1D6163F83F1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{725782AC-3A51-42C3-800D-1D6163F83F1F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2D963716-8FC4-4353-ADDD-7A6C0F7717DE} = {3CF70B26-B099-4D07-A61A-3E8098A8E77E}
+		{725782AC-3A51-42C3-800D-1D6163F83F1F} = {3CF70B26-B099-4D07-A61A-3E8098A8E77E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3F87FD92-A0CE-4B61-92BA-DDA1FB5060FD}
+	EndGlobalSection
+EndGlobal

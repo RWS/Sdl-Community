@@ -1,0 +1,139 @@
+﻿<1 id=34>Confidentielles par<2 id=38/></1><3 id=43/><4 id=47/><5 id=50>l'installation nmt</5>
+Nerveux machine Translation
+Un complète Guide de l'installation
+et de pré-translation
+Février 2018
+Contenu
+Configuration d'nmt via la de règlements contre la FTA Plugin
+Accédez à la sdl AppStore à la sdl de règlements contre la FTA plugin :
+<1 id=194>Https://appstore.sdl.com/language/app/sdl-ets/843/</1>
+Https://appstore.sdl.com/language/app/sdl-ets/843/
+Cliquez sur l' <1 id=201>Télécharger</1> et dans le journal d'avec votre <2 id=204>compte sdl</2> aux services (<3 id=207>https://oos.sdl.com).</3><4 id=208></4>
+Parvenir à l'à votre manager ou soulevez un réception du ticket par le <1 id=214>Service dans le centre</1> si vous ne dans le journal d'.
+C:\Utilisateurs\dvaldivia\AppData\Local\Microsoft\Windows\commerciales temporaires des fichiers Internet\Contenu.Outlook\kx69fsdp\oos.sdl.com
+Choisissez la dernière version disponibles, s'il y a lieu.
+Tick la case à considérer <1 id=217>Termes et conditions</1> et cliquez sur <2 id=220>continuer</2>.
+Une fois téléchargez, le .sdlplugin fichier et de l'SDL Trados Studio plugin installateur de lancer.
+<1 id=223>Considérer la licence de l'Accord, cliquez sur <2 id=247>le prochain</2>, sélectionnez le Studio instance où l'plugin sera installé (</1><3 id=262>uniquement version 2017 est dès</3><4 id=271>) et de choisir<5 id=277>tous de votre machines de domaine</5>.</4>
+Puis, cliquez sur <1 id=283>le prochain</1> et <2 id=289>Terminer</2>.
+Après que, dans SDL Trados Studio, aller <1 id=298>les paramètres de projet</1> -> <2 id=304>Tous les forment des groupes de la langue</2> (ou votre spécifiques langue pair, selon votre projet) -> <3 id=328>Utiliser…</3>
+<1 id=334>Cliquez sur </1><2 id=337>la sdl translation fournisseur…</2>
+Remarque :
+À ce point, veuillez devoir supporter dans l'esprit d'que <1 id=355>vous ne voir toute moteur si elle’s disponibles pour la langue forment des groupes de dans votre projet</1>.
+Vous won’t être en mesure d'ajouter ou d'appliquer toute moteur sinon.
+Entrez les données suivantes :
+Hôte :
+34.235.10.97
+Port :
+8001
+La clé api :
+Ag_OQiGTPrOZgVC
+Veuillez traiter de cette <1 id=380><2 id=376>demeurent confidentiels sdl interne de données</2><3 id=379>.</3></1>
+Vous ne doit pas précisé!
+Également, veuillez note que cette identification hybride actuel
+Remarque :
+Veuillez vous assurez d'sélectionnez l' <1 id=389>enregistrer les services tick dans la boîte de.</1>
+En raison de la nature de l'plugin lui-même, vous besoin de coller l'hôte adresse IP lorsque favorisant le nmt moteur.
+Pour votre prise, lieu, un txt fichier sur votre Desktop ou semblables, (également les instructions à l' <1 id=392>Annexe</1> à l'utilisation AutoHotKey).
+<1 id=403/>Puis moteur sera déjà configurée et il est tout aussi cette :
+Remarque :
+Il n'y a pas d'unique que vous pouvez configurer, depuis nmt n'a pas de fournir de plusieurs moteurs à choisir de.
+Une fois que vous voir l'écran ci-dessous, tout est prêt à aller.
+Si vous êtes à l'aide d'un non-de la langue, l'plugin d'afficher une erreur.
+Vérifier que les pré-translation est correctement configurée
+Après l'nmt moteur via la de règlements contre la FTA plugin, vous devez assurez-vous que tout est correctement configurée de sorte que la sortie sera d pour les fichiers dans votre projet.
+Dans le Studio, à <1 id=445>tous les forment des groupes de la langue</1> -> <2 id=448>Le traitement</2> -> <3 id=454>Préfinancement d'omission de fichiers</3> et vérifiez qu'un <4 id=469>minimum de manière à la valeur</4> de 75 % (ou votre faible fuzzy valeur), et d' <5 id=481>Appliquer générateur translation</5> est activé.
+Remarque :
+Selon votre projet, matériaux et d'options peut être configurée dans une langue spécifique pair ou de <1 id=492>tous les forment des groupes de la langue</1>.
+Comme une question de la règle, si vous voir les éléments suivants :
+Vous à l'ajouter à votre matériaux et les paramètres de l'spécifiques langue pair, au lieu de <1 id=499>tous les forment des groupes de la langue</1>.
+Pour le, seulement aller à la langue appropriées combinaison en vertu de <1 id=502>tous les Langue forment des groupes de deux</1> et suivez les étapes dans ce guide.
+Exécutant un préfinancement d'omission de Batch Monitor tâche
+Il existe deux scenarios dans laquelle vous souhaitez d'appliquer nmt pré-translation à un projet :
+S'il n'est faudrait demander existants
+Dans ce cas, après avoir d'un requis TMs, suivez les étapes dans ce guide de l'installation nmt correctement et un préfinancement d'omission de Batch Monitor tâche.
+Seulement cliquez sur <1 id=519>le des tâches</1> et sélectionnez <2 id=522>pré-des fichiers de l'omission</2>, comme par l'screenshot à la gauche.
+Depuis tout a déjà été configurée, cliquez sur <1 id=525>le prochain</1> et <2 id=528>Terminer</2>.
+S'il est faudrait demander existants
+Dans ce cas, vous devez supprimer toute faudrait demander existante.
+Pour le, vous pouvez suivre deux approches différentes :
+<1 id=536>Ouvrir tous les fichiers dans votre translation projet et de l'utilisation d'une vue filtered</1>, comme :
+Puis, sélectionnez tous les limite et appuyez sur <1 id=543>F4</1> pour copier du texte source à la colonne cible.
+Selon la taille du projet, cette peut être feasible ou d'trop long de processus.
+Si vous trouverez il trop de temps-solution, puis peut que vous devez utiliser une approche différente :
+Utiliser un plugin.
+Nous recommandons à l'aide d' <1 id=552>Intégré étudiée avec les actions, qui peut être téléchargés à partir de l'AppStore ici</1>. <2 id=556></2>
+Après l'installation, vous seulement besoin pour le droit cliquez sur l'à un projet et sélectionnez la prochaine options de “propre” toute faudrait demander existants limite :
+Https://appstore.sdl.com/language/app/integrated-segment-actions/530/
+Après clic sur l' <1 id=566>exécuter les actions sur tous les fichiers de projet</1>, votre limite sera prêt pour vous d'appliquer le nmt et de sortie, vous pouvez suivez les étapes que si faudrait demander n'avait été mis.
+L'annexe
+<1 id=577>Important considération </1>dans le projet de la création d'un paquet
+Veuillez vous assurez d'sélectionnez l'option suivantes lorsque vous créez un projet paquet si vous devez à rembourser de l'un des ressources naturelles externes.
+Sinon, il sera “retrace” de la de l'identification hybride actuel.
+<1 id=591>Important considération </1>dans les projets éditer les
+Veuillez supprimer les règlements contre la FTA translation fournisseur de ligne de votre projet Paramètres avant battu un projet pour le serveur.
+Nouveau, il sera retrace de l'identification hybride actuel 85 externe aux utilisateurs.
+AutoHotKey script de charge de l'identification hybride actuel la
+Stef Mandigers (<1 id=605>Merci pour l'!</1>) de l'office Hengelo a créé un seul AutoHotKey script que populates les données champs d'une pratique ctrl + 00 V.
+Ci-dessous, vous pouvez trouver un travail .ahk fichier que vous pouvez utiliser ou extraire les script de à merge avec de courant .ahk fichier que vous sont déjà à l'aide.
+Preparations
+La première de tous les, assurez le nMT plugin est configuré en suivant les instructions dans <1 id=619>l'installation NMT Instructions.docx</1>
+Après la configuration initiale, l'entrée du manuel de l'hôte est requis pour chaque fois le moteur nMT est connecté à un projet.
+Nous avons élaboré un AutoHotkey à l'entrée et confirmer le nombre automatiquement.
+Général
+D'envoi à l'aide d'AutoHotkey, la première vous besoin d'installer sur votre machine.
+Installation fichier peut être trouvé dans le logiciel Centre et sur le site web (<1 id=627>https://autohotkey.com/).</1>
+AutoHotkey fonctionne avec script de fichiers à l'extension de fichier .ahk.
+Https://autohotkey.com/
+Chargement script existants
+Utiliser un script, rester double-cliquez.
+Il est devenu active, et une logo AutoHotkey de l'afficher dans votre tâche bar (“h”).
+'Effectuer un clic droit sur l'icône donne vous plusieurs options :
+<1 id=657><2 id=654>Pause</2></1>pour supprimer le script suspendus, mais partie de l'icône dans votre tâche bar.
+<1 id=663><2 id=660>Sortie de l'</2></1>à supprimer elle de votre tâche bar tout à fait autre chose.
+Comme une par défaut, CHAT interactifs sera retirée et d'être reloaded après rebooting (à moins que vous lieu, un 00 dans votre local charger dossier)
+<1 id=669><2 id=666>Modifier ce script</2></1>de ouvrir le script en notepad.
+Après la de changements et sauver les (et clôture le script fichier), vous devez pour <1 id=675><2 id=672>recharger cette Scriptfor</2></1>les modifications pour devenir efficace.
+Suivante :
+De charge l'annexe <1 id=678>nMT numéro d'hôte.ahk</1> fichier.
+Dans le Studio, aller <1 id=684>les paramètres de projet</1> -> <2 id=690>Tous les forment des groupes de la langue</2> (ou votre spécifiques langue pair, selon votre projet) -> <3 id=696>Utiliser…</3>
+Cliquez sur <1 id=702>la sdl translation fournisseur…</1>
+Cette l'écran apparaissent :
+Assurez votre curseur dans l'est dans l' <1 id=712>Hôte</1> dans le champ (il est probablement déjà est par défaut).
+Sur votre clavier, maintenant, appuyez sur <1 id=715>focaliser davantage sur + V.</1>
+L' <1 id=730>Hôte</1> dans le champ et la <2 id=733>clé api</2> dans le champ sera automatiquement populated.
+La fenêtre seront terminés automatiquement ainsi.
+L'nMT fournisseur est maintenant à votre projet.
+Afin d'en charge automatiquement le .ahk fichier de chaque fois que vous démarrez votre machine, lieu, un 00 pour le fichier dans votre charger dossier (si vous avez de l'examen des droits de l'homme admin) :
+C:\ProgramData\Microsoft\Windows\dans le menu Démarrer\Programmes\de démarrer.
+Par exemple :
+De modifier le hotkey
+Ne pas que l'hotkey combinaison?
+Vous pouvez de changement il reste par de modifier le script.
+En Notepad, vous voir cette :
+Pour entrer votre méthode combinaison avant de l'double colon et des congés les autres variables du.
+Comme un général de référence :
+N°est la clé de Windows
+^ est la clé de commande
++ est focaliser davantage sur la touche
+Suite L'est Alt touche
+Enregistrer l'script et recharger.
+L'annexe B
+Détermination des votre sdl de règlements contre la FTA app
+Veuillez suivez les étapes dans l'ordre de supprimer d'installation existant de l'sdl de règlements contre la FTA plugin et remplacer le il avec un mis à jour version :
+Cliquez sur le lien ci-dessous pour aller à l'SDL Trados Studio plugins dossier :
+<1 id=762>C:\Utilisateurs pourquoi%username %\AppData\itinérance nationale\sdl\SDL Trados Studio\14\Plugins</1>
+C:\Utilisateurs pourquoi%username %\AppData\itinérance nationale\sdl\SDL Trados Studio\14\Plugins
+Supprimer les références aux “sdl de règlements contre la FTA” <1 id=772>dans les deux les dossiers</1>:
+Nous, de supprimer ce fichier en “106” dossier :
+Et de ce dossier trop, en vertu “Unpacked” :
+Allez à l'appstore, la dernière version disponibles et installer.
+Seulement suivez les instructions dans la section de ce guide.
+<1 id=801>Profiter de</1> votre produit de nouvelles app. <2 id=802/>
+SDL (lse :
+SDL) est le mondial innovator dans une langue translation technologie, services et la gestion de contenu.
+Pour plus de 20 ans, sdl a transformée progressivement les résultats par d'activation d'nuanced des expériences avec les clients dans le globe de sorte qu'ils peut créer des connexions personnalisé se trouver n'et sur un périphérique.
+Sont vous dans le savoir?
+En savoir plus à SDL.com.
+Le droit d'auteur © 2017 sdl plc. Tous droits réservés.
+Tous les compagnie produit ou les noms de service referenced présent sont des propriétés de leurs des propriétaires.
