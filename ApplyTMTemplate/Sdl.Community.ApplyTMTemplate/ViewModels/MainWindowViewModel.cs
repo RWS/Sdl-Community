@@ -198,7 +198,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			var dlg = new OpenFileDialog()
 			{
-				Filter = "Translation Memories|*.sdltm|All Files|*.*",
+				Filter = "Translation Memories|*.sdltm",
 				InitialDirectory = string.IsNullOrEmpty(_tmPath) ? Environment.CurrentDirectory : _tmPath,
 				Multiselect = true
 			};
@@ -242,7 +242,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			var dlg = new OpenFileDialog
 			{
-				Filter = "Language resource templates|*.resource|All Files|*.*",
+				Filter = "Language resource templates|*.resource",
 				InitialDirectory = ResourceTemplatePath.Substring(0, ResourceTemplatePath.LastIndexOf('\\') + 1)
 			};
 
