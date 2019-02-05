@@ -137,9 +137,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void Tm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			if (AreAllTmsSelectedOrUnselected())
+			if (e.PropertyName == "IsSelected" && TmCollection[0].IsSelected && AreAllTmsSelectedOrUnselected())
 			{
-				AllTmsChecked = TmCollection[0].IsSelected;
+				AllTmsChecked = true;
 			}
 		}
 
@@ -209,6 +209,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private async void ApplyTmTemplate()
 		{
+
 			var langResBundlesList = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out var message);
 
 			if (langResBundlesList == null || langResBundlesList.Count == 0)
@@ -218,6 +219,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 
 			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
+			UnMarkTms(selectedTmList);
 
 			if (selectedTmList.Count == 0)
 			{
@@ -236,6 +238,15 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			};
 
 			template.ApplyTmTemplate(selectedTmList, options);
+		}
+
+		private void UnMarkTms(List<TranslationMemory> tms)
+		{
+			foreach (var tm in tms)
+			{
+				tm.UnmarkTm();
+				tm.UnmarkTm();
+			}
 		}
 
 		private void Browse()
