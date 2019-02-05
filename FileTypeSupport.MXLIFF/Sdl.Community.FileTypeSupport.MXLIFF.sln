@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Files", "Sample Files", "{9017DB20-B1E7-49FC-BFC8-33AA3C078828}"
+	ProjectSection(SolutionItems) = preProject
+		Sample Files\27789 - MSDN Library_4896451-en-lt_lt-T.mxliff = Sample Files\27789 - MSDN Library_4896451-en-lt_lt-T.mxliff
+		Sample Files\28669_DMC_6029645-en_us-lt_lt-T.mxliff = Sample Files\28669_DMC_6029645-en_us-lt_lt-T.mxliff
+		Sample Files\28669_DMC_6029651-en_us-et_ee-T.mxliff = Sample Files\28669_DMC_6029651-en_us-et_ee-T.mxliff
+		Sample Files\Resources_5018336-en-lv_lv-T.mxliff = Sample Files\Resources_5018336-en-lv_lv-T.mxliff
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.FileTypeSupport.MXLIFF", "Sdl.Community.FileTypeSupport.MXLIFF.csproj", "{5617D5CC-88D8-44D0-9431-CF963A39DCEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5617D5CC-88D8-44D0-9431-CF963A39DCEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5617D5CC-88D8-44D0-9431-CF963A39DCEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5617D5CC-88D8-44D0-9431-CF963A39DCEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5617D5CC-88D8-44D0-9431-CF963A39DCEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4D11204B-89FE-406C-9B91-C8BCC7D44616}
+	EndGlobalSection
+EndGlobal
