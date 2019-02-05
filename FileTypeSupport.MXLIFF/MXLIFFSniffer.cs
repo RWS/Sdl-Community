@@ -3,7 +3,7 @@ using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using System.Xml;
 
-namespace FileTypeSupport.MXLIFF
+namespace Sdl.Community.FileTypeSupport.MXLIFF
 {
     internal class MXLIFFSniffer : INativeFileSniffer
     {

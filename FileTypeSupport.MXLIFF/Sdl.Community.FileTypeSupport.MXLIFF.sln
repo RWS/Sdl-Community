@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Files", "Sample File
 		Sample Files\Resources_5018336-en-lv_lv-T.mxliff = Sample Files\Resources_5018336-en-lv_lv-T.mxliff
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileTypeSupport.MXLIFF", "FileTypeSupport.MXLIFF.csproj", "{5617D5CC-88D8-44D0-9431-CF963A39DCEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileTypeSupport.MXLIFF", "Sdl.Community.FileTypeSupport.MXLIFF.csproj", "{5617D5CC-88D8-44D0-9431-CF963A39DCEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

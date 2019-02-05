@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace FileTypeSupport.MXLIFF
+namespace Sdl.Community.FileTypeSupport.MXLIFF
 {
     internal class MXLIFFWriter : AbstractBilingualFileTypeComponent, IBilingualWriter, INativeOutputSettingsAware
     {

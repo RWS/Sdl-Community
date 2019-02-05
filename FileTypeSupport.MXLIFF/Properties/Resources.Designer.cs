@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FileTypeSupport.MXLIFF.Properties {
+namespace Sdl.Community.FileTypeSupport.MXLIFF.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace FileTypeSupport.MXLIFF.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FileTypeSupport.MXLIFF.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.FileTypeSupport.MXLIFF.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FileTypeSupport.MXLIFF
+namespace Sdl.Community.FileTypeSupport.MXLIFF
 {
     internal class MXLIFFTextExtractor : IMarkupDataVisitor
     {

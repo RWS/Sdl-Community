@@ -8,7 +8,7 @@
     <ProjectGuid>{5617D5CC-88D8-44D0-9431-CF963A39DCEE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FileTypeSupport.MXLIFF</RootNamespace>
+    <RootNamespace>Sdl.Community.FileTypeSupport.MXLIFF</RootNamespace>
     <AssemblyName>MXLIFFFileType</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FileTypeSupport.MXLIFF.Properties {
+namespace Sdl.Community.FileTypeSupport.MXLIFF.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

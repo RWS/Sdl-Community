@@ -1,4 +1,4 @@
-﻿namespace FileTypeSupport.MXLIFF
+﻿namespace Sdl.Community.FileTypeSupport.MXLIFF
 {
     using Sdl.Core.Globalization;
     using Sdl.Core.Settings;
