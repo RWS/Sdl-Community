@@ -19,18 +19,28 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
 	public class TemplateLoader
 	{
+		private readonly string _path;
+
+		public TemplateLoader()
+		{
+			var studio = new Toolkit.Core.Studio().GetStudioVersion().ExecutableVersion;
+
+			_path = studio.Major == 15
+				? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					@"SDL\SDL Trados Studio\15.0.0.0\UserSettings.xml")
+				: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					@"SDL\SDL Trados Studio\14.0.0.0\UserSettings.xml");
+		}
+
 		public string GetTmTemplateFolderPath()
 		{
-			var data =
-				LoadDataFromFile(
-					Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-						@"SDL\SDL Trados Studio\15.0.0.0\UserSettings.xml"), "Setting");
+			var data = LoadDataFromFile(_path, "Setting");
 
 			foreach (XmlNode setting in data)
 			{
 				var id = setting?.Attributes?["Id"];
 
-				if (id.Value == "RecentLanguageResourceGroupFolder")
+				if (id?.Value == "RecentLanguageResourceGroupFolder")
 				{
 					return setting.InnerText;
 				}
@@ -41,10 +51,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 		public string GetTmFolderPath()
 		{
-			var data =
-				LoadDataFromFile(
-					Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-						@"SDL\SDL Trados Studio\15.0.0.0\UserSettings.xml"), "Setting");
+			var data = LoadDataFromFile(_path, "Setting");
 
 			foreach (XmlNode setting in data)
 			{
@@ -52,7 +59,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 				if (id.Value == "RecentTranslationMemoryFolder")
 				{
-					return setting.InnerText;
+					return setting?.InnerText;
 				}
 			}
 
