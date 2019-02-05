@@ -90,7 +90,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.MultiTerm.TMO.Interop">
-      <HintPath>$(ProgramFiles)\Common Files\SDL\MultiTerm14\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
+      <HintPath>$(ProgramFiles)\Common Files\SDL\MultiTerm15\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Sdl.ProjectApi, Version=14.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
