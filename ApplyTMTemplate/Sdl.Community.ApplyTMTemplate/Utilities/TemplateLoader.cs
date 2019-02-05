@@ -82,6 +82,12 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				return null;
 			}
 
+			if (Path.GetExtension(resourceTemplatePath) != ".resource")
+			{
+				message = @"The file is not of the required type, ""resource""";
+				return null;
+			}
+
 			var lrt = LoadDataFromFile(resourceTemplatePath, "LanguageResource");
 
 			if (lrt.Count == 0)
@@ -94,7 +100,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 			foreach (XmlNode res in lrt)
 			{
-				var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == int.Parse(res.Attributes["Lcid"].Value));
+				var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == int.Parse(res?.Attributes?["Lcid"]?.Value));
 
 				if (lr == null)
 				{
@@ -110,7 +116,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 		private void AddLanguageResourceToBundle(LanguageResourceBundle langResBundle, XmlNode resource)
 		{
-			if (resource.Attributes["Type"].Value == "Variables")
+			if (resource?.Attributes?["Type"].Value == "Variables")
 			{
 				var vars = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
 
@@ -124,7 +130,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				return;
 			}
 
-			if (resource.Attributes["Type"].Value == "Abbreviations")
+			if (resource?.Attributes?["Type"].Value == "Abbreviations")
 			{
 				var abbrevs = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
 
@@ -138,7 +144,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				return;
 			}
 
-			if (resource.Attributes["Type"].Value == "OrdinalFollowers")
+			if (resource?.Attributes?["Type"].Value == "OrdinalFollowers")
 			{
 				var ordFollowers = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
 
@@ -152,7 +158,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				return;
 			}
 
-			if (resource.Attributes["Type"].Value == "SegmentationRules")
+			if (resource?.Attributes?["Type"].Value == "SegmentationRules")
 			{
 				var segRules = Convert.FromBase64String(resource.InnerText);
 
