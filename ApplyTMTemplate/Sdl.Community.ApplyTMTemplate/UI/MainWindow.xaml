@@ -59,16 +59,16 @@
 			<CheckBox IsChecked="{Binding SegmentationRulesChecked}" Content="Segmentation rules" Margin="10,10,0,0" />
 		</StackPanel>
 
-		<StackPanel Margin="10,20,0,0" Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
+		<StackPanel Margin="10,20,0,0" Grid.Row="3" Grid.Column="0" Orientation="Horizontal" ToolTip="Add Folder">
 			<Button HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}">
 				<Image Source="../Resources/AddFolder.ico" Width="15" Height="15"></Image>
 			</Button>
 
-			<Button HorizontalContentAlignment="Left" Command="{Binding AddTMCommand}">
+			<Button HorizontalContentAlignment="Left" Command="{Binding AddTMCommand}" ToolTip="Add TMs">
 				<Image Source="../Resources/PlusSign.ico" Width="15" Height="15"></Image>
 			</Button>
 
-			<Button HorizontalContentAlignment="Left" Command="{Binding RemoveTMsCommand}">
+			<Button HorizontalContentAlignment="Left" Command="{Binding RemoveTMsCommand}" ToolTip="Remove TMs">
 				<Image Source="../Resources/Remove.ico" Width="15" Height="15"></Image>
 			</Button>
 		</StackPanel>

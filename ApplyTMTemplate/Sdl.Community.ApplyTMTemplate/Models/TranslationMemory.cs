@@ -27,7 +27,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			get => _sourceStatus;
 			set
 			{
-				if (!_sourceStatus.ToLower().Contains("checked"))
+				if (_sourceStatus.ToLower().Contains("unchecked") || _sourceStatus == "")
 				{
 					_sourceStatus = value;
 				}
@@ -70,7 +70,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			get => _targetStatus;
 			set
 			{
-				if (!_targetStatus.ToLower().Contains("checked"))
+				if (_targetStatus.ToLower().Contains("unchecked") || _targetStatus == "")
 				{
 					_targetStatus = value;
 				}
@@ -122,6 +122,14 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			TargetStatus = "../Resources/Error.ico";
 			SourceStatusToolTip = "This TM is corrupted or the file is not a TM";
 			TargetStatusToolTip = "This TM is corrupted or the file is not a TM";;
+		}
+
+		public void UnmarkTm()
+		{
+			_sourceStatus = "";
+			_sourceStatusToolTip = "";
+			_targetStatus = "";
+			_targetStatusToolTip = "";
 		}
 
 		public void ApplyTemplate(LanguageResourceBundle languageResourceBundle)
