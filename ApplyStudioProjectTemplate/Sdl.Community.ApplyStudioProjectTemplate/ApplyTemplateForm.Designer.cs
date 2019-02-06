@@ -786,7 +786,7 @@
 			this.AboutButton.Name = "AboutButton";
 			this.AboutButton.Size = new System.Drawing.Size(82, 23);
 			this.AboutButton.TabIndex = 8;
-			this.AboutButton.Text = "About...";
+			this.AboutButton.Text = "Help";
 			this.AboutButton.UseVisualStyleBackColor = true;
 			this.AboutButton.Click += new System.EventHandler(this.AboutButton_Click);
 			// 
