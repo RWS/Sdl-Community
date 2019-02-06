@@ -1,11 +1,11 @@
-﻿using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
+﻿using System;
+using System.IO;
+using System.Xml.Linq;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.Settings;
-using System;
-using System.IO;
-using System.Xml.Linq;
 
 namespace Sdl.Community.FailSafeTask
 {

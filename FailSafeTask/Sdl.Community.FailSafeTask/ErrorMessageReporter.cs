@@ -1,6 +1,6 @@
-﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.FailSafeTask
 {

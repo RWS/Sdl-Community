@@ -3,7 +3,7 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 
 namespace Sdl.Community.FailSafeTask
 {
-    internal class CopySourceToTarget : AbstractBilingualContentHandler
+	internal class CopySourceToTarget : AbstractBilingualContentHandler
     {
         private readonly IDocumentItemFactory itemFactory = DefaultDocumentItemFactory.CreateInstance();
 
