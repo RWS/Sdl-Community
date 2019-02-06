@@ -1,9 +1,9 @@
-﻿namespace Sdl.Community.FailSafeTask
-{
-    using Sdl.FileTypeSupport.Framework.BilingualApi;
-    using System;
-    using System.Collections.Generic;
+﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
+using System;
+using System.Collections.Generic;
 
+namespace Sdl.Community.FailSafeTask
+{
     public class ErrorMessageReporter : AbstractBilingualContentHandler
     {
         private readonly List<Tuple<string, string>> messages = new List<Tuple<string, string>>();

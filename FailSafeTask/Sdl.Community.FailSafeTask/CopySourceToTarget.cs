@@ -1,9 +1,9 @@
-﻿namespace Sdl.Community.FailSafeTask
-{
-    using Sdl.FileTypeSupport.Framework.BilingualApi;
-    using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
+﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 
-    internal class CopySourceToTarget : AbstractBilingualContentHandler
+namespace Sdl.Community.FailSafeTask
+{
+	internal class CopySourceToTarget : AbstractBilingualContentHandler
     {
         private readonly IDocumentItemFactory itemFactory = DefaultDocumentItemFactory.CreateInstance();
 

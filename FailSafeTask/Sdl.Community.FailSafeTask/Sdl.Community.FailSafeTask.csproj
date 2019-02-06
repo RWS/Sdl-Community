@@ -165,6 +165,11 @@
     </Compile>
     <Compile Include="FailSafeTaskSettings.cs" />
     <Compile Include="FailSafeTaskSettingsPage.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -172,12 +177,13 @@
     <EmbeddedResource Include="FailSafeTask.xsl">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="PluginResources.resx">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="PluginResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FailSafeTaskControl.resx">
