@@ -73,13 +73,13 @@
 			this.OkButton = new System.Windows.Forms.Button();
 			this.FormToolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.TranslationQualityAssessment = new System.Windows.Forms.ComboBox();
+			this.matchRepairBox = new System.Windows.Forms.ComboBox();
 			this.ShowToolTips = new System.Windows.Forms.CheckBox();
 			this.AboutButton = new System.Windows.Forms.Button();
 			this.QualityGroup = new System.Windows.Forms.GroupBox();
 			this.TranslationQualityAssessmentLabel = new System.Windows.Forms.Label();
 			this.matchRepairGroupBox = new System.Windows.Forms.GroupBox();
 			this.matchRepLabel = new System.Windows.Forms.Label();
-			this.matchRepairBox = new System.Windows.Forms.ComboBox();
 			this.TranslationProvidersGroup.SuspendLayout();
 			this.TranslationMemoriesGroup.SuspendLayout();
 			this.TerminologyGroup.SuspendLayout();
@@ -721,6 +721,22 @@
 			this.TranslationQualityAssessment.SelectedIndexChanged += new System.EventHandler(this.TranslationQualityAssessment_SelectedIndexChanged);
 			this.TranslationQualityAssessment.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
 			// 
+			// matchRepairBox
+			// 
+			this.matchRepairBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.matchRepairBox.FormattingEnabled = true;
+			this.matchRepairBox.Items.AddRange(new object[] {
+            "Keep",
+            "Overwrite"});
+			this.matchRepairBox.Location = new System.Drawing.Point(193, 33);
+			this.matchRepairBox.Name = "matchRepairBox";
+			this.matchRepairBox.Size = new System.Drawing.Size(80, 21);
+			this.matchRepairBox.TabIndex = 1;
+			this.matchRepairBox.Tag = "Match Repair Settings";
+			this.FormToolTip.SetToolTip(this.matchRepairBox, "Select the behaviour for applying the Match Repair settings");
+			this.matchRepairBox.SelectedIndexChanged += new System.EventHandler(this.matchRepairBox_SelectedIndexChanged);
+			this.matchRepairBox.MouseEnter += new System.EventHandler(this.matchRepairBox_MouseEnter);
+			// 
 			// ShowToolTips
 			// 
 			this.ShowToolTips.Location = new System.Drawing.Point(12, 503);
@@ -737,7 +753,7 @@
 			this.AboutButton.Name = "AboutButton";
 			this.AboutButton.Size = new System.Drawing.Size(82, 23);
 			this.AboutButton.TabIndex = 8;
-			this.AboutButton.Text = "About...";
+			this.AboutButton.Text = "Help";
 			this.AboutButton.UseVisualStyleBackColor = true;
 			this.AboutButton.Click += new System.EventHandler(this.AboutButton_Click);
 			// 
@@ -785,22 +801,6 @@
 			this.matchRepLabel.Size = new System.Drawing.Size(66, 13);
 			this.matchRepLabel.TabIndex = 0;
 			this.matchRepLabel.Text = "Match repair";
-			// 
-			// matchRepairBox
-			// 
-			this.matchRepairBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.matchRepairBox.FormattingEnabled = true;
-			this.matchRepairBox.Items.AddRange(new object[] {
-            "Keep",
-            "Overwrite"});
-			this.matchRepairBox.Location = new System.Drawing.Point(193, 33);
-			this.matchRepairBox.Name = "matchRepairBox";
-			this.matchRepairBox.Size = new System.Drawing.Size(80, 21);
-			this.matchRepairBox.TabIndex = 1;
-			this.matchRepairBox.Tag = "Match Repair Settings";
-			this.FormToolTip.SetToolTip(this.matchRepairBox, "Select the behaviour for applying the Match Repair settings");
-			this.matchRepairBox.SelectedIndexChanged += new System.EventHandler(this.matchRepairBox_SelectedIndexChanged);
-			this.matchRepairBox.MouseEnter += new System.EventHandler(this.matchRepairBox_MouseEnter);
 			// 
 			// ApplyTemplateForm
 			// 
