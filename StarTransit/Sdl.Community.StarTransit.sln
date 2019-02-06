@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.StarTransit", "Sdl.Community.StarTransit\Sdl.Community.StarTransit.csproj", "{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.StarTransit.UI", "Sdl.Community.StarTransit.UI\Sdl.Community.StarTransit.UI.csproj", "{DC2686E0-8C10-4A3A-966A-2E7CD6806538}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.StarTransit.Shared", "Sdl.Community.StarTransit.Shared\Sdl.Community.StarTransit.Shared.csproj", "{80113C78-7889-4D14-A233-48DE24DE11A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.FileType.Transit", "Sdl.Community.FileTypeSupport.Transit\Sdl.Community.FileType.Transit.csproj", "{5617D5CC-88D8-44D0-9431-CF963A39DCEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,8 +29,15 @@ Global
 		{80113C78-7889-4D14-A233-48DE24DE11A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80113C78-7889-4D14-A233-48DE24DE11A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80113C78-7889-4D14-A233-48DE24DE11A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5617D5CC-88D8-44D0-9431-CF963A39DCEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5617D5CC-88D8-44D0-9431-CF963A39DCEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5617D5CC-88D8-44D0-9431-CF963A39DCEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5617D5CC-88D8-44D0-9431-CF963A39DCEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BB9584A3-11FB-4EDD-9601-CD38CE3288F6}
 	EndGlobalSection
 EndGlobal
