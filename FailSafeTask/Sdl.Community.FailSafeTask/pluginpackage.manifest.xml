@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>Sdl.Community.FailSafeTask</PlugInName>
+  <Version>2.2</Version>
+  <Description>A plug-in for Trados Studio that allows you to verify that all translations can be generated.</Description>
+  <Author>SDL Community Developers</Author>
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+</PluginPackage>
