@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.TargetWordCount.Models;
 using Sdl.Community.TargetWordCount.Utilities;
-using Sdl.Desktop.IntegrationApi;.
+using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.TargetWordCount
 {
