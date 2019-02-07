@@ -16,7 +16,6 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
-    <!--<CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>-->
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -90,6 +89,10 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -117,8 +120,17 @@
     <Compile Include="Models\InvoiceItem.cs" />
     <Compile Include="Models\RateInfo.cs" />
     <Compile Include="Models\SegmentCountInfo.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ReportBuilder.cs" />
     <Compile Include="ReportGenerator.cs" />
+    <Compile Include="TellMe\TargetWordCountCommunityForumAction.cs" />
+    <Compile Include="TellMe\TargetWordCountStoreAction.cs" />
+    <Compile Include="TellMe\TargetWordCountTellMeProvider.cs" />
+    <Compile Include="TellMe\TargetWordCountWikiAction.cs" />
     <Compile Include="Utilities\SettingsManager.cs" />
     <Compile Include="Utilities\XmlUtilities.cs" />
     <Compile Include="WordCountBatchTask.cs" />
@@ -135,10 +147,13 @@
     <Compile Include="SegmentWordCounter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PluginResources.resx">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="pluginpackage.manifest.xml" />
+    <None Include="Resources\ForumIcon.ico" />
+    <None Include="Resources\Download.ico" />
+    <EmbeddedResource Include="PluginResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="TargetWordCount.xsl">
       <SubType>Designer</SubType>
     </EmbeddedResource>

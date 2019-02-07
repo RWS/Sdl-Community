@@ -2,6 +2,7 @@
 
 namespace Sdl.Community.FailSafeTask.TellMe
 {
+	[TellMeProvider]
 	public class FailSafeTaskTellMeProvider : ITellMeProvider
 	{
 		public string Name => "Fail safe task tell me provider";
