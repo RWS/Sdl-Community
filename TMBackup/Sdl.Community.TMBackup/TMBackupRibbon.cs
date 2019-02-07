@@ -46,6 +46,7 @@ namespace Sdl.Community.TMBackup
 
 			if (!directoryFiles.Contains(path))
 			{
+				//To do: change the path from where to get the manifest resource stream (get from unpacked) 
 				var executingAssembly = Assembly.GetExecutingAssembly();
 				var exeStream = executingAssembly.GetManifestResourceStream("Sdl.Community.TMBackup.BackupFilesExe.Sdl.Community.BackupFiles.exe");
 				using (exeStream)
