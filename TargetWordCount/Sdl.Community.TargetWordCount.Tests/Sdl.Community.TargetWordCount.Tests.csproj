@@ -8,8 +8,8 @@
     <ProjectGuid>{BEC7C34A-D1A1-473C-9817-BEC354DC6B3B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leo.TargetWordCount.Tests</RootNamespace>
-    <AssemblyName>Leo.TargetWordCount.Tests</AssemblyName>
+    <RootNamespace>Sdl.Community.TargetWordCount.Tests</RootNamespace>
+    <AssemblyName>Sdl.Community.TargetWordCount.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -124,13 +124,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.TargetWordCount\Sdl.Community.TargetWordCount.csproj">
-      <Project>{1cbf7231-a95e-43a5-942e-49d3a9c99d4a}</Project>
-      <Name>Leo.TargetWordCount</Name>
-    </ProjectReference>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+    <ProjectReference Include="..\Sdl.Community.TargetWordCount\Sdl.Community.TargetWordCount.csproj">
+      <Project>{1cbf7231-a95e-43a5-942e-49d3a9c99d4a}</Project>
+      <Name>Sdl.Community.TargetWordCount</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
