@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+﻿using System.Collections.Generic;
 using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.TargetWordCount.Models
@@ -48,15 +46,11 @@ namespace Sdl.Community.TargetWordCount.Models
 
         public void Increment(string key, CountData countData)
         {
-            //Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(key));
-            //Contract.Requires<ArgumentNullException>(countData != null);
-
             info[key].Increment(countData);
         }
 
         public void Increment(CountTotal total)
         {
-			//Contract.Requires<ArgumentNullException>(total != null);
 			if (total != null)
 			{
 				info[Locked].Increment(total.info[Locked]);

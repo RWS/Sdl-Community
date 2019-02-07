@@ -1,11 +1,9 @@
-﻿using System.Diagnostics.Contracts;
-using Sdl.Community.TargetWordCount.Models;
+﻿using Sdl.Community.TargetWordCount.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.TargetWordCount
 {
-	//[ContractClass(typeof(ISegmentWordCounterContract))]
-    public interface ISegmentWordCounter
+	public interface ISegmentWordCounter
     {
         FileCountInfo FileCountInfo { get; }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Sdl.Community.TargetWordCount.Models;
 using Sdl.Core.Globalization;
@@ -14,9 +12,6 @@ namespace Sdl.Community.TargetWordCount
 
 		public static string Generate(List<ISegmentWordCounter> counters, IWordCountBatchTaskSettings settings)
 		{
-			//Contract.Requires<ArgumentNullException>(counters != null);
-			//Contract.Requires<ArgumentNullException>(settings != null);
-
 			var grandTotal = new CountTotal();
 			var fileData = new List<CountTotal>();
 

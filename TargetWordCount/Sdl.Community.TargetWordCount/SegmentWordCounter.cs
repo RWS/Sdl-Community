@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using Sdl.Community.TargetWordCount.Models;
 using Sdl.Core.Globalization;
@@ -22,10 +21,6 @@ namespace Sdl.Community.TargetWordCount
 
 		public SegmentWordCounter(string name, IWordCountBatchTaskSettings settings, WordCounter wordCounter)
 		{
-			//Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(name));
-			//Contract.Requires<ArgumentNullException>(settings != null);
-			//Contract.Requires<ArgumentNullException>(wordCounter != null);
-
 			FileName = name;
 			this.settings = settings;
 			this.wordCounter = wordCounter;

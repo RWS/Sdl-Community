@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 using Sdl.Community.TargetWordCount.Models;
 using Sdl.ProjectAutomation.Core;
@@ -13,9 +12,6 @@ namespace Sdl.Community.TargetWordCount
 
 		public void BuildFileTable(CountTotal total, IWordCountBatchTaskSettings settings)
 		{
-			//Contract.Requires<ArgumentNullException>(total != null);
-			//Contract.Requires<ArgumentNullException>(settings != null);
-
 			string countType = GetCountType(total, settings);
 
 			var parent = new XElement("File",
@@ -29,9 +25,6 @@ namespace Sdl.Community.TargetWordCount
 
 		public void BuildTotalTable(CountTotal total, IWordCountBatchTaskSettings settings)
 		{
-			//Contract.Requires<ArgumentNullException>(total != null);
-			//Contract.Requires<ArgumentNullException>(settings != null);
-
 			string countType = GetCountType(total, settings);
 
 			var parent = new XElement("GrandTotal",

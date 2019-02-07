@@ -198,10 +198,10 @@ namespace Sdl.Community.TargetWordCount
 
 		private void LoadButton_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog ofd = new OpenFileDialog();
+			var ofd = new OpenFileDialog();
 			ofd.Filter = "xml files (*.xml)|*.xml";
 
-			DialogResult dr = ofd.ShowDialog();
+			var dr = ofd.ShowDialog();
 			if (dr == DialogResult.OK)
 			{
 				var fileName = ofd.FileName;
@@ -213,13 +213,6 @@ namespace Sdl.Community.TargetWordCount
 				dataGridView.Rows.Clear();
 				AddRows();
 			}
-		}
-
-		//[ContractInvariantMethod]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
-		private void ObjectInvariant()
-		{
-			//Contract.Invariant(Settings != null);
 		}
 
 		private void ReportLockedCheckBox_CheckedChanged(object sender, EventArgs e)

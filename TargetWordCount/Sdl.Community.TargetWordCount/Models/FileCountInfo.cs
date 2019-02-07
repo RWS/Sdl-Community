@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+﻿using System.Collections.Generic;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
@@ -10,11 +8,6 @@ namespace Sdl.Community.TargetWordCount.Models
     {
         public FileCountInfo(List<SegmentCountInfo> segmentCounts, Language[] languages, IRepetitionsTable repTable)
         {
-            //Contract.Requires<ArgumentNullException>(segmentCounts != null);
-            //Contract.Requires<ArgumentNullException>(languages != null);
-            //Contract.Requires<ArgumentNullException>(languages.Length > 1);
-            //Contract.Requires<ArgumentNullException>(repTable != null);
-
             SegmentCounts = segmentCounts;
 
             SourceInfo = languages[0];
