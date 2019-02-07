@@ -29,13 +29,7 @@ namespace Sdl.Community.StarTransit
 		protected override async void Execute()
 		{
 			EnsureApplicationResources();
-#if !DEBUG
-									            TelemetryService.Instance.Init();
 
-									            // check for new version
-									            await TelemetryService.Instance.CheckForUpdates(true);
-									            TelemetryService.Instance.SendCrashes(false);
-#endif
 			var pathToTempFolder = CreateTempPackageFolder();
 			try
 			{

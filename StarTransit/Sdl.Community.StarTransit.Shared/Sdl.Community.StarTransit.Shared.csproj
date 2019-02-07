@@ -152,7 +152,6 @@
     <Compile Include="Services\TemplateService.cs" />
     <Compile Include="Utils\CustomDateTime.cs" />
     <Compile Include="Utils\Extensions.cs" />
-    <Compile Include="Utils\TelemetryService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
