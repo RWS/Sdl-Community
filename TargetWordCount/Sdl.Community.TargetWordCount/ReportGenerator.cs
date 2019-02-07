@@ -14,8 +14,8 @@ namespace Sdl.Community.TargetWordCount
 
 		public static string Generate(List<ISegmentWordCounter> counters, IWordCountBatchTaskSettings settings)
 		{
-			Contract.Requires<ArgumentNullException>(counters != null);
-			Contract.Requires<ArgumentNullException>(settings != null);
+			//Contract.Requires<ArgumentNullException>(counters != null);
+			//Contract.Requires<ArgumentNullException>(settings != null);
 
 			var grandTotal = new CountTotal();
 			var fileData = new List<CountTotal>();

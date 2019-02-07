@@ -10,10 +10,10 @@ namespace Sdl.Community.TargetWordCount.Models
     {
         public FileCountInfo(List<SegmentCountInfo> segmentCounts, Language[] languages, IRepetitionsTable repTable)
         {
-            Contract.Requires<ArgumentNullException>(segmentCounts != null);
-            Contract.Requires<ArgumentNullException>(languages != null);
-            Contract.Requires<ArgumentNullException>(languages.Length > 1);
-            Contract.Requires<ArgumentNullException>(repTable != null);
+            //Contract.Requires<ArgumentNullException>(segmentCounts != null);
+            //Contract.Requires<ArgumentNullException>(languages != null);
+            //Contract.Requires<ArgumentNullException>(languages.Length > 1);
+            //Contract.Requires<ArgumentNullException>(repTable != null);
 
             SegmentCounts = segmentCounts;
 

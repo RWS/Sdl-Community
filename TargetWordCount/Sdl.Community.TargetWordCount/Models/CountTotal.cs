@@ -48,28 +48,30 @@ namespace Sdl.Community.TargetWordCount.Models
 
         public void Increment(string key, CountData countData)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(key));
-            Contract.Requires<ArgumentNullException>(countData != null);
+            //Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(key));
+            //Contract.Requires<ArgumentNullException>(countData != null);
 
             info[key].Increment(countData);
         }
 
         public void Increment(CountTotal total)
         {
-            Contract.Requires<ArgumentNullException>(total != null);
-
-            info[Locked].Increment(total.info[Locked]);
-            info[ContextMatch].Increment(total.info[ContextMatch]);
-            info[Repetitions].Increment(total.info[Repetitions]);
-            info[CrossFileRepetitions].Increment(total.info[CrossFileRepetitions]);
-            info[OneHundredPercent].Increment(total.info[OneHundredPercent]);
-            info[NinetyFivePercent].Increment(total.info[NinetyFivePercent]);
-            info[EightyFivePercent].Increment(total.info[EightyFivePercent]);
-            info[SeventyFivePercent].Increment(total.info[SeventyFivePercent]);
-            info[FiftyPercent].Increment(total.info[FiftyPercent]);
-            info[New].Increment(total.info[New]);
-            info[PerfectMatch].Increment(total.info[PerfectMatch]);
-            info[Total].Increment(total.info[Total]);
+			//Contract.Requires<ArgumentNullException>(total != null);
+			if (total != null)
+			{
+				info[Locked].Increment(total.info[Locked]);
+				info[ContextMatch].Increment(total.info[ContextMatch]);
+				info[Repetitions].Increment(total.info[Repetitions]);
+				info[CrossFileRepetitions].Increment(total.info[CrossFileRepetitions]);
+				info[OneHundredPercent].Increment(total.info[OneHundredPercent]);
+				info[NinetyFivePercent].Increment(total.info[NinetyFivePercent]);
+				info[EightyFivePercent].Increment(total.info[EightyFivePercent]);
+				info[SeventyFivePercent].Increment(total.info[SeventyFivePercent]);
+				info[FiftyPercent].Increment(total.info[FiftyPercent]);
+				info[New].Increment(total.info[New]);
+				info[PerfectMatch].Increment(total.info[PerfectMatch]);
+				info[Total].Increment(total.info[Total]);
+			}
         }
     }
 }

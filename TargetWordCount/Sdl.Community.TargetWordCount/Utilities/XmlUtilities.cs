@@ -10,10 +10,10 @@ namespace Sdl.Community.TargetWordCount.Utilities
     {
         public static SerializableSettings Deserialize(string openPath)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(openPath));
-            Contract.Ensures(Contract.Result<SerializableSettings>() != null);
+            //Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(openPath));
+            //Contract.Ensures(Contract.Result<SerializableSettings>() != null);
 
-            XmlSerializer deserializer = new XmlSerializer(typeof(SerializableSettings));
+            var deserializer = new XmlSerializer(typeof(SerializableSettings));
 
             using (TextReader reader = new StreamReader(openPath))
             {
@@ -24,8 +24,8 @@ namespace Sdl.Community.TargetWordCount.Utilities
 
         public static void Serialize(SerializableSettings settings, string savePath)
         {
-            Contract.Requires<ArgumentNullException>(settings != null);
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(savePath));
+            //Contract.Requires<ArgumentNullException>(settings != null);
+            //Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(savePath));
 
             XmlSerializer serializer = new XmlSerializer(typeof(SerializableSettings));
 

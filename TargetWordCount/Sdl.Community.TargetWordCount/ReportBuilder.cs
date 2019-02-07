@@ -13,8 +13,8 @@ namespace Sdl.Community.TargetWordCount
 
 		public void BuildFileTable(CountTotal total, IWordCountBatchTaskSettings settings)
 		{
-			Contract.Requires<ArgumentNullException>(total != null);
-			Contract.Requires<ArgumentNullException>(settings != null);
+			//Contract.Requires<ArgumentNullException>(total != null);
+			//Contract.Requires<ArgumentNullException>(settings != null);
 
 			string countType = GetCountType(total, settings);
 
@@ -29,8 +29,8 @@ namespace Sdl.Community.TargetWordCount
 
 		public void BuildTotalTable(CountTotal total, IWordCountBatchTaskSettings settings)
 		{
-			Contract.Requires<ArgumentNullException>(total != null);
-			Contract.Requires<ArgumentNullException>(settings != null);
+			//Contract.Requires<ArgumentNullException>(total != null);
+			//Contract.Requires<ArgumentNullException>(settings != null);
 
 			string countType = GetCountType(total, settings);
 

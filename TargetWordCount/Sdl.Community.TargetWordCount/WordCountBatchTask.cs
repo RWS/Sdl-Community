@@ -57,7 +57,7 @@ namespace Sdl.Community.TargetWordCount
 
         protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
         {
-            Contract.Assume(settings != null);
+            //Contract.Assume(settings != null);
 
             tempCounter = new SegmentWordCounter(projectFile.Name, settings, GetWordCounter(projectFile));
             multiFileConverter.AddBilingualProcessor(tempCounter);

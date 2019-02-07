@@ -4,7 +4,7 @@ using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.TargetWordCount
 {
-	[ContractClass(typeof(ISegmentWordCounterContract))]
+	//[ContractClass(typeof(ISegmentWordCounterContract))]
     public interface ISegmentWordCounter
     {
         FileCountInfo FileCountInfo { get; }

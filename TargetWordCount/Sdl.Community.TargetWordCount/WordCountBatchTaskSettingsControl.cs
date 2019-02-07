@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
@@ -216,11 +215,11 @@ namespace Sdl.Community.TargetWordCount
 			}
 		}
 
-		[ContractInvariantMethod]
+		//[ContractInvariantMethod]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
 		private void ObjectInvariant()
 		{
-			Contract.Invariant(Settings != null);
+			//Contract.Invariant(Settings != null);
 		}
 
 		private void ReportLockedCheckBox_CheckedChanged(object sender, EventArgs e)

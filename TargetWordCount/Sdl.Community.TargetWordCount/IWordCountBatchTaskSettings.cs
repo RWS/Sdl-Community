@@ -5,7 +5,7 @@ using Sdl.Community.TargetWordCount.Models;
 
 namespace Sdl.Community.TargetWordCount
 {
-	[ContractClass(typeof(IWordCountBatchTaskSettingsContract))]
+	//[ContractClass(typeof(IWordCountBatchTaskSettingsContract))]
 	public interface IWordCountBatchTaskSettings
 	{
 		string Culture { get; set; }

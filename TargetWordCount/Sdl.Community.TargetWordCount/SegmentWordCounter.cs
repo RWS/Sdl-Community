@@ -22,9 +22,9 @@ namespace Sdl.Community.TargetWordCount
 
 		public SegmentWordCounter(string name, IWordCountBatchTaskSettings settings, WordCounter wordCounter)
 		{
-			Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(name));
-			Contract.Requires<ArgumentNullException>(settings != null);
-			Contract.Requires<ArgumentNullException>(wordCounter != null);
+			//Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(name));
+			//Contract.Requires<ArgumentNullException>(settings != null);
+			//Contract.Requires<ArgumentNullException>(wordCounter != null);
 
 			FileName = name;
 			this.settings = settings;
