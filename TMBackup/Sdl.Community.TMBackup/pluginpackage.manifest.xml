@@ -6,7 +6,6 @@
   <Author>SDL Community Developers</Author>
   <Include>
     <File>Sdl.Community.BackupService.dll</File>
-    <File>Sdl.Community.Backup.dll</File>
     <File>Newtonsoft.Json.dll</File>
     <File>Microsoft.Win32.TaskScheduler.dll</File>
     <File>Sdl.Community.Toolkit.Core.dll</File>
