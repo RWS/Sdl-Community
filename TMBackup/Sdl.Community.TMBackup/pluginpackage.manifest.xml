@@ -3,7 +3,7 @@
   <PlugInName>Sdl.Community.TMBackup</PlugInName>
   <Version>1.0.1.0</Version>
   <Description>Backup translation memory/termbase files</Description>>
-  <Author>SDL Community</Author>
+  <Author>SDL Community Developers</Author>
   <Include>
     <File>Sdl.Community.BackupService.dll</File>
     <File>Sdl.Community.Backup.dll</File>
