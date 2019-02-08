@@ -85,5 +85,8 @@
       <Name>Sdl.Community.BackupService</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sdl.Community.Toolkit.Core.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
