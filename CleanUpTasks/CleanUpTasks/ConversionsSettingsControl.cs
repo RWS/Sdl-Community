@@ -8,8 +8,8 @@ namespace Sdl.Community.CleanUpTasks
 {
 	public partial class ConversionsSettingsControl : UserControl, IConversionsSettingsControl
     {
-        private IConversionsSettingsPresenter presenter = null;
-        private BatchTaskMode taskMode;
+        private IConversionsSettingsPresenter _presenter;
+        private BatchTaskMode _taskMode;
 
         public ConversionsSettingsControl()
         {
@@ -23,33 +23,33 @@ namespace Sdl.Community.CleanUpTasks
             downButton.Click += DownButton_Click;
         }
 
-        public Button Add { get { return addButton; } }
+        public Button Add => addButton;
 
-        public Button Down { get { return downButton; } }
+	    public Button Down => downButton;
 
-        public Button Edit { get { return editButton; } }
+	    public Button Edit => editButton;
 
-        public CheckedListBox FileList { get { return checkedListBox; } }
+	    public CheckedListBox FileList => checkedListBox;
 
-        public Button New { get { return generateButton; } }
+	    public Button New => generateButton;
 
-        public Button Remove { get { return removeButton; } }
+	    public Button Remove => removeButton;
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+	    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ICleanUpConversionSettings Settings { get; set; } = new CleanUpSourceSettings();
 
-        public Button Up { get { return upButton; } }
+        public Button Up => upButton;
 
-        public CheckBox ApplyToNonTranslatables { get { return useOnTranslatableCheckBox; } }
+	    public CheckBox ApplyToNonTranslatables => useOnTranslatableCheckBox;
 
-        public void SaveSettings()
+	    public void SaveSettings()
         {
-            presenter.SaveSettings();
+            _presenter.SaveSettings();
         }
 
         public void SetPresenter(IConversionsSettingsPresenter presenter)
         {
-            this.presenter = presenter;
+            _presenter = presenter;
         }
 
         public void SetSettings(ICleanUpConversionSettings settings, BatchTaskMode taskMode)
@@ -61,19 +61,19 @@ namespace Sdl.Community.CleanUpTasks
                                                  nameof(settings.ApplyToNonTranslatables));
 
             Settings = settings;
-            this.taskMode = taskMode;
+            _taskMode = taskMode;
         }
 
         public void InitializeUI()
         {
-            presenter.Initialize();
+            _presenter.Initialize();
         }
 
         private void AddButton_Click(object sender, System.EventArgs e)
         {
             try
             {
-                presenter.AddFile();
+                _presenter.AddFile();
             }
             catch (InvalidOperationException ex)
             {
@@ -85,33 +85,33 @@ namespace Sdl.Community.CleanUpTasks
 
         private void DownButton_Click(object sender, EventArgs e)
         {
-            presenter.DownClick();
+            _presenter.DownClick();
         }
 
         private void EditButton_Click(object sender, System.EventArgs e)
         {
-            using (var view = ViewFactory.Create<IConversionFileView>(Settings, ConversionFileViewMode.Existing, taskMode))
+            using (var view = ViewFactory.Create<IConversionFileView>(Settings, ConversionFileViewMode.Existing, _taskMode))
             {
-                presenter.EditFile(view);
+                _presenter.EditFile(view);
             }
         }
 
         private void GenerateButton_Click(object sender, System.EventArgs e)
         {
-            using (var view = ViewFactory.Create<IConversionFileView>(Settings, ConversionFileViewMode.New, taskMode))
+            using (var view = ViewFactory.Create<IConversionFileView>(Settings, ConversionFileViewMode.New, _taskMode))
             {
-                presenter.GenerateFile(view);
+                _presenter.GenerateFile(view);
             }
         }
 
         private void RemoveButton_Click(object sender, System.EventArgs e)
         {
-            presenter.RemoveFile();
+            _presenter.RemoveFile();
         }
 
         private void UpButton_Click(object sender, EventArgs e)
         {
-            presenter.UpClick();
+            _presenter.UpClick();
         }
     }
 }

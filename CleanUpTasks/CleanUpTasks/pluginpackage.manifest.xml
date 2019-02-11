@@ -8,8 +8,8 @@
   <Include>
     <File>UIToolbox.CheckGroupBox.dll</File>
     <File>Equin.ApplicationFramework.BindingListView.dll</File>
-    <File>Sdl.Community.CheckBoxComboBox</File>
-	  <File>Sdl.Community.UIToolbox.CheckGroupBox.dll</File>
+    <File>Sdl.Community.CheckBoxComboBox.dll</File>
+	<File>Sdl.Community.UIToolbox.CheckGroupBox.dll</File>
     <File>HtmlAgilityPack.dll</File>
   </Include>
 </PluginPackage>
