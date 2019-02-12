@@ -118,7 +118,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="Sdl.Community.UsefulTipsService, Version=1.1.9.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.9\lib\net472\Sdl.Community.UsefulTipsService.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.Community.UsefulTipsService.Update, Version=1.1.9.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.9\lib\net472\Sdl.Community.UsefulTipsService.Update.exe</HintPath>
@@ -379,7 +379,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="pluginpackage.manifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Resources\icon.ico" />
     <Resource Include="Resources\SDPS.ico" />
     <Resource Include="Resources\lockImage.png" />

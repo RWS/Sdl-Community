@@ -48,7 +48,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 				value, formattedValue, errorText, cellStyle, advancedBorderStyle, paintParts);
 
 			_checkboxsize = CheckBoxRenderer.GetGlyphSize(graphics, CheckBoxState.UncheckedNormal);
-			_location.X = cellBounds.X + (cellBounds.Width / 2 - _checkboxsize.Width / 2);
+			_location.X = cellBounds.X + (cellBounds.Width / 2 - _checkboxsize.Width / 2) - 1;
 			_location.Y = cellBounds.Y + (cellBounds.Height / 2 - _checkboxsize.Height / 2);
 			_cellboundsLocation = cellBounds.Location;
 

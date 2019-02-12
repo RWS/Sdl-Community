@@ -80,6 +80,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 					{
 						var elementContainer = abstractMarkupData.Parent;
 
+						count = elementContainer.IndexOf(text);
+						elementContainer[count].RemoveFromParent();
+
 						foreach (var markupData in markUpCollection)
 						{
 							//that means is a text we don't need to add it
@@ -170,7 +173,15 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 				var match = regex.Match(text);
 				if (match.Success && match.Value.Length > 0)
 				{
-					var result = regex.Replace(text, matchText => ProcessMatchData(matchText, pattern, isTagContent));
+					var result = regex.Replace(text, matchText =>
+					{
+						if (matchText.Success && matchText.Value.Length > 0)
+						{
+							return ProcessMatchData(matchText, pattern, isTagContent);
+						}
+
+						return null;
+					});
 					return result;
 				}
 			}
@@ -196,10 +207,14 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 			foreach (var pattern in _patterns)
 			{
 				var regex = DecryptIfEncrypted(pattern);
-				var match = regex.Match(text);
-				if (match.Success && match.Value.Length > 0)
+				var matches = regex.Matches(text);
+
+				foreach (Match match in matches)
 				{
-					return true;
+					if (match.Success && match.Value.Length > 0)
+					{
+						return true;
+					}
 				}
 			}
 
@@ -215,7 +230,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 				var matches = regex.Matches(segmentText);
 				foreach (Match match in matches)
 				{
-					if (match.Value.Length > 0)
+					if (match.Success && match.Value.Length > 0)
 					{
 						var data = new AnonymizedData
 						{
@@ -250,15 +265,15 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].PositionInOriginalText);
 					AnonymizeContent(segmentText, segmentContent);
 
-					if (ShouldAnonymize(remainingSegmentText.Properties.Text))
-					{
-						var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
-						GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
-					}
-					else
-					{
-						AddPlaceholderTag(segmentContent, remainingSegmentText);
-					}
+					//if (ShouldAnonymize(remainingSegmentText.Properties.Text))
+					//{
+					var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
+					GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
+					//}
+					//else
+					//{
+					//	AddPlaceholderTag(segmentContent, remainingSegmentText);
+					//}
 				}
 			}
 			else

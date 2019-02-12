@@ -47,7 +47,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings)));
 
-			var projectFiles = projectController.CurrentProject.GetTargetLanguageFiles();
+			var project = projectController.CurrentProject ?? projectController.SelectedProjects.ToList()[0];
+			var projectFiles = project.GetTargetLanguageFiles();
 			var unParsedProjectFiles = new List<ProjectFile>();
 
 			foreach (var file in projectFiles)

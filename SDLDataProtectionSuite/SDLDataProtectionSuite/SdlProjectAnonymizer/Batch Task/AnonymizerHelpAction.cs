@@ -5,7 +5,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 {
 	[Action("SDPSProjectAnonymizerHelpAction",
-		Name = "Help",
+		Name = "Project Anonymizer Help",
 		Description = "Help",
 		Icon = "question"
 	)]
