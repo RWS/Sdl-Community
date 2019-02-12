@@ -110,6 +110,7 @@ namespace Sdl.Community.CleanUpTasks
             {
                 PersistData(view.SavedFilePath);
             }
+			view.Form.Close();
         }
 
         private void AddColumnsToGrid()
