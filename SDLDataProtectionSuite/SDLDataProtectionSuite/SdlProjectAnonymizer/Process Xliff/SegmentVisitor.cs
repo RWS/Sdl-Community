@@ -265,15 +265,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].PositionInOriginalText);
 					AnonymizeContent(segmentText, segmentContent);
 
-					//if (ShouldAnonymize(remainingSegmentText.Properties.Text))
-					//{
 					var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
 					GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
-					//}
-					//else
-					//{
-					//	AddPlaceholderTag(segmentContent, remainingSegmentText);
-					//}
 				}
 			}
 			else

@@ -36,18 +36,27 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 						var bodyElement = (XmlElement) fileElement.GetElementsByTagName("body")[0];
 						var groupElements = bodyElement.GetElementsByTagName("group");
+
 						var removedGroups = new List<XmlNode>();
 
-						foreach (var groupElement in groupElements.OfType<XmlElement>().ToList())
+						if (groupElements.Count > 0)
 						{
-							SliceInBody(groupElement, removedGroups);
-						}
+							foreach (var groupElement in groupElements.OfType<XmlElement>().ToList())
+							{
+								SliceInBody(groupElement, removedGroups);
+							}
 
-						foreach (var group in removedGroups.OfType<XmlElement>())
+							foreach (var group in removedGroups.OfType<XmlElement>())
+							{
+								bodyElement.RemoveChild(group);
+							}
+						}
+						else
 						{
-							bodyElement.RemoveChild(group);
+							SliceInBody(bodyElement, removedGroups, true);	
 						}
 					}
+
 					using (var writer = new XmlTextWriter(_xliffPath, Encoding.UTF8))
 					{
 						_xmlDoc.Save(writer);
@@ -79,10 +88,21 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			}
 		}
 
-		private void SliceInBody(XmlElement groupElement, List<XmlNode> removedGroups)
+		private void SliceInBody(XmlElement groupElement, List<XmlNode> removedGroups, bool isSingleGroup = false)
 		{
+			List<XmlElement> transUnits;
+
 			var removedTransUnits = new List<XmlNode>();
-			var transUnits = groupElement.ChildNodes.OfType<XmlElement>().Where(node => node.Name == "trans-unit").ToList();
+
+			if (isSingleGroup)
+			{
+				transUnits = groupElement.ChildNodes.OfType<XmlElement>().ToList();
+			}
+			else
+			{
+				transUnits = groupElement.ChildNodes.OfType<XmlElement>().Where(node => node.Name == "trans-unit")
+					.ToList();
+			}
 
 			foreach (var transUnit in transUnits.ToList())
 			{
@@ -102,11 +122,11 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 					//the id of the segment is in mrk elements
 					if (segs.Count > 1)
-					{	
-						RemoveSegmentFromSourceOrTarget( transUnit,  "source");
-						RemoveSegmentFromSourceOrTarget( transUnit,  "target");
-						RemoveSegmentFromSourceOrTarget( transUnit,  "seg-source");
-						RemoveSegmentFromSourceOrTarget( transUnit,  "target-source");
+					{
+						RemoveSegmentFromSourceOrTarget(transUnit, "source");
+						RemoveSegmentFromSourceOrTarget(transUnit, "target");
+						RemoveSegmentFromSourceOrTarget(transUnit, "seg-source");
+						RemoveSegmentFromSourceOrTarget(transUnit, "target-source");
 					}
 					else
 					{
@@ -130,6 +150,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 						segDef.RemoveChild(segmentNode);
 						removedSegDefs.Add(segDef);
 					}
+
 					foreach (var rSegDef in removedSegDefs.OfType<XmlElement>())
 					{
 						//remove from translation unit -> seg-defs
@@ -138,20 +159,21 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 							transUnit.RemoveChild(rSegDef);
 							removedTransUnits.Add(transUnit);
 						}
-
 					}
+
 					removedSegDefs.Clear();
 					removedSegments.Clear();
 				}
 
-				foreach (var rTransaltionUnit in removedTransUnits.OfType<XmlElement>())
+				foreach (var rTranslationUnit in removedTransUnits.OfType<XmlElement>())
 				{
 					//remove from group -> translation unit
-					groupElement.RemoveChild(rTransaltionUnit);
+					groupElement.RemoveChild(rTranslationUnit);
 					removedGroups?.Add(groupElement);
 				}
+
+				removedTransUnits.Clear();
 			}
-			removedTransUnits.Clear();
 		}
 
 		private void RemoveSegmentFromSourceOrTarget(XmlElement transUnit, string tagName)
