@@ -136,4 +136,10 @@
   <data name="Plugin_Name" xml:space="preserve">
     <value>Sdl.Community.IATETerminologyProvider</value>
   </data>
+  <data name="TermSearchService_Error_in_requesting_access_token" xml:space="preserve">
+    <value>Error in requesting the access token</value>
+  </data>
+  <data name="TermSearchService_Error_in_refreshing_access_token" xml:space="preserve">
+    <value>Error in refreshing the access token</value>
+  </data>
 </root>

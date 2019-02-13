@@ -137,6 +137,7 @@
     <Compile Include="IATETerminologyProviderViewerWinFormsUI.cs" />
     <Compile Include="IATETerminologyProvider.cs" />
     <Compile Include="IATETerminologyProviderFactory.cs" />
+    <Compile Include="Model\ResponseModels\JsonAccessTokenModel.cs" />
     <Compile Include="Model\DocumentEntryState.cs" />
     <Compile Include="Model\DomainModel.cs" />
     <Compile Include="Model\EntryLanguageModel.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Service\DocumentStateService.cs" />
     <Compile Include="Service\DomainService.cs" />
+    <Compile Include="Service\AccessTokenService.cs" />
     <Compile Include="Service\PersistenceService.cs" />
     <Compile Include="Service\SegmentVisitor.cs" />
     <Compile Include="Service\SerializerService.cs" />
@@ -208,6 +210,7 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Ui\IATETermsControl.resx">
       <DependentUpon>IATETermsControl.cs</DependentUpon>
