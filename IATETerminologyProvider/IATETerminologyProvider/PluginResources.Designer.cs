@@ -116,5 +116,23 @@ namespace IATETerminologyProvider {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error in refreshing the access token.
+        /// </summary>
+        internal static string TermSearchService_Error_in_refreshing_access_token {
+            get {
+                return ResourceManager.GetString("TermSearchService_Error_in_refreshing_access_token", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error in requesting the access token.
+        /// </summary>
+        internal static string TermSearchService_Error_in_requesting_access_token {
+            get {
+                return ResourceManager.GetString("TermSearchService_Error_in_requesting_access_token", resourceCulture);
+            }
+        }
     }
 }
