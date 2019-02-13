@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using IATETerminologyProvider.Helpers;
@@ -18,10 +19,12 @@ namespace IATETerminologyProvider.Service
 		private readonly ObservableCollection<ItemsResponseModel> _domains;
 		private readonly List<string> _subdomains = new List<string>();
 		private readonly ObservableCollection<TermTypeModel> _termTypes;
+		private readonly AccessTokenService _accessTokenService;
 		private int _termIndexId;
 
 		public TermSearchService(ProviderSettings providerSettings)
 		{
+			_accessTokenService = new AccessTokenService();
 			_domains = DomainService.GetDomains();
 			_termTypes = TermTypeService.GetTermTypes();
 			_providerSettings = providerSettings;
@@ -36,10 +39,18 @@ namespace IATETerminologyProvider.Service
 		/// <param name="maxResultsCount">number of maximum results returned(set up in Studio Termbase search settings)</param>
 		/// <returns>terms</returns>
 		public List<ISearchResult> GetTerms(string text, ILanguage source, ILanguage target, int maxResultsCount)
-		{						
+		{
+			SetAccessToken();
+
 			// maxResults (the number of returned words) value is set from the Termbase -> Search Settings
-			var client = new RestClient(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()));		
+			var client = new RestClient(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()));
 			var request = new RestRequest("", Method.POST);
+
+			if (!string.IsNullOrEmpty(_accessTokenService.AccessToken))
+			{
+				request.AddHeader("Authorization", "Bearer " + _accessTokenService.AccessToken);
+			}
+
 			request.AddHeader("Connection", "Keep-Alive");
 			request.AddHeader("Cache-Control", "no-cache");
 			request.AddHeader("Pragma", "no-cache");
@@ -48,7 +59,7 @@ namespace IATETerminologyProvider.Service
 			request.AddHeader("Content-Type", "application/json");
 			request.AddHeader("Origin", "https://iate.europa.eu");
 			request.AddHeader("Host", "iate.europa.eu");
-			request.AddHeader("Access-Control-Allow-Origin", "*");			
+			request.AddHeader("Access-Control-Allow-Origin", "*");
 
 			var bodyModel = SetApiRequestBodyValues(source, target, text);
 			request.AddJsonBody(bodyModel);
@@ -59,6 +70,28 @@ namespace IATETerminologyProvider.Service
 
 			var result = MapResponseValues(response, domainsJsonResponse);
 			return result;
+		}
+
+		private void SetAccessToken()
+		{
+			if (_accessTokenService.RefreshTokenExpired
+			    || _accessTokenService.RequestedAccessToken == DateTime.MinValue
+			    || string.IsNullOrEmpty(_accessTokenService.AccessToken))
+			{
+				var success = _accessTokenService.GetAccessToken();
+				if (!success)
+				{
+					throw new Exception(PluginResources.TermSearchService_Error_in_requesting_access_token);
+				}
+			}
+			else if (_accessTokenService.AccessTokenExpired)
+			{
+				var success = _accessTokenService.ExtendAccessToken();
+				if (!success)
+				{
+					throw new Exception(PluginResources.TermSearchService_Error_in_refreshing_access_token);
+				}
+			}
 		}
 
 		// Set the needed fields for the API search request
