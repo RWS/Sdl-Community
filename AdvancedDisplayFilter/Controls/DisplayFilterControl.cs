@@ -1826,6 +1826,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			if (saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
 				var selectedFilePath = saveFileDialog.FileName;
+
+				if (File.Exists(selectedFilePath))
+				{
+					File.Delete(selectedFilePath);
+				}
+
 				var activeFilePath = ActiveDocument?.ActiveFile?.LocalFilePath;
 
 				if (activeFilePath != null)
