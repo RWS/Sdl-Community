@@ -21,49 +21,9 @@ namespace Sdl.Community.Jobs.UI
     /// </summary>
     public partial class JobsView : UserControl
     {
-
-       
-
         public JobsView()
         {
-            EnsureApplicationResources();
             InitializeComponent();
-        }
-
-        private void EnsureApplicationResources()
-        {
-            if (Application.Current == null)
-            {
-                new Application();
-
-                var controlsResources = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml")
-                };
-                var fontsResources = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml")
-                };
-                var colorsResources = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml")
-                };
-                var blueResources = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml")
-                };
-                var baseLightResources = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml")
-                };
-              
-                Application.Current.Resources.MergedDictionaries.Add(controlsResources);
-                Application.Current.Resources.MergedDictionaries.Add(fontsResources);
-                Application.Current.Resources.MergedDictionaries.Add(colorsResources);
-                Application.Current.Resources.MergedDictionaries.Add(blueResources);
-                Application.Current.Resources.MergedDictionaries.Add(baseLightResources);
-
-            }
         }
 
         public void SetJobs(List<JobViewModel> jobs)

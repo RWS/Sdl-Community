@@ -157,7 +157,7 @@ namespace Sdl.Community.Jobs.Services
 
             CurrentPage = page;
 
-            HasNext = response.Links.Next != null;
+            HasNext = response.Links?.Next != null;
             HasPrevious = CurrentPage > 1;
 
 
