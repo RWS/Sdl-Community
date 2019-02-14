@@ -27,8 +27,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{ 
-			var targetLanguage = _normalizeTextHelper.GetCorespondingLangCode(languageDirection.TargetCulture.ThreeLetterISOLanguageName);
-			var sourceLanguage = _normalizeTextHelper.GetCorespondingLangCode(languageDirection.SourceCulture.ThreeLetterISOLanguageName);
+			var targetLanguage = _normalizeTextHelper.GetCorespondingLangCode(languageDirection.TargetCulture);
+			var sourceLanguage = _normalizeTextHelper.GetCorespondingLangCode(languageDirection.SourceCulture);
 																														  
 			sourceText = _normalizeTextHelper.NormalizeText(sourceText);	
 
