@@ -41,9 +41,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			var sourceLanguage =
-				normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.SourceCulture.ThreeLetterISOLanguageName);
+				normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.SourceCulture);
 			var targetLanguage =
-				normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.TargetCulture.ThreeLetterISOLanguageName);
+				normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.TargetCulture);
 
 			if (Options?.SubscriptionInfo?.LanguagePairs?.Count > 0)
 			{

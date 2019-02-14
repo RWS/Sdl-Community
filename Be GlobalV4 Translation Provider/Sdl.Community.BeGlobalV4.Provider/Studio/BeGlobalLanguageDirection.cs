@@ -103,9 +103,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				}
 
 				var sourceLanguage =
-					_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.SourceCulture.ThreeLetterISOLanguageName);
+					_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.SourceCulture);
 				var targetLanguage =
-					_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.TargetCulture.ThreeLetterISOLanguageName);
+					_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.TargetCulture);
 
 				var translator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", _options.ClientId,
 					_options.ClientSecret, sourceLanguage, targetLanguage, _options.Model, _options.UseClientAuthentication);
