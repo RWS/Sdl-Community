@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
@@ -16,19 +17,43 @@ namespace Sdl.Community.CleanUpTasks.Utilities
 
             try
             {
-                // Pattern could contain $
-                // We replace $ for verifying well-formed xml
-                pattern = pattern.Replace("$", "A");
-                XElement elem = XElement.Parse(pattern);
+				// Pattern could contain $
+				// We replace $ for verifying well-formed xml
+				   pattern = pattern.Replace("$", "A");		
+
+				var elem = XElement.Parse(pattern);
 
                 return true;
             }
-            catch (XmlException)
+            catch (XmlException ex)
             {
-                // TODO: Log
-            }
+	            return false;
+	            //        if (pattern.Contains("=\"<") && pattern.Contains(">\""))
+	            //        {
+	            //         var tagFirstQuotesPosition = pattern.IndexOf("=\"<", StringComparison.Ordinal);
 
-            return false;
+	            //         var tagCharacterFirstPosition = tagFirstQuotesPosition + 2;
+	            //         var builder = new StringBuilder(pattern);
+	            //         builder.Remove(tagCharacterFirstPosition, 1);
+	            //         builder.Insert(tagCharacterFirstPosition, "&lt;");
+
+	            //         var tagLastQuotesPosition = builder.ToString().IndexOf(">\"", StringComparison.Ordinal);
+
+	            //         builder.Remove(tagLastQuotesPosition, 1);
+	            //         builder.Insert(tagLastQuotesPosition, "&gt;");		
+
+	            //var encodedPattern = builder.ToString();
+	            //         try
+	            //         {
+	            //          XElement.Parse(encodedPattern);
+	            //          return true;
+	            //         }
+	            //         catch (Exception e)
+	            //         {
+	            //          return false;
+	            //         }	 
+	            //        }	  
+            }
         }
 
         public static bool IsValidRegexPattern(string pattern)

@@ -7,17 +7,17 @@ namespace Sdl.Community.CleanUpTasks
 {
 	public class SegmentProcessor
     {
-        private readonly ICleanUpSourceSettings settings = null;
+        private readonly ICleanUpSourceSettings _settings ;
 
         public SegmentProcessor(ICleanUpSourceSettings settings)
         {
-            this.settings = settings;
+            _settings = settings;
         }
 
         public void Run(IMultiFileConverter multiFileConverter, IProject project, ProjectFile projectFile, IXmlReportGenerator reportGenerator)
         {
             reportGenerator.AddFile(projectFile.LocalFilePath);
-            multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new SegmentContentHandler(settings, project, reportGenerator)));
+            multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new SegmentContentHandler(_settings, project, reportGenerator)));
         }
     }
 }

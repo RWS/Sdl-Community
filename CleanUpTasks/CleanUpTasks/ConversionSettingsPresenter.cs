@@ -11,15 +11,15 @@ namespace Sdl.Community.CleanUpTasks
 {
 	public class ConversionSettingsPresenter : IConversionsSettingsPresenter
     {
-        private readonly IConversionsSettingsControl control = null;
-        private readonly Dictionary<string, bool> convFiles = new Dictionary<string, bool>();
-        private readonly IFileDialog dialog = null;
-        private bool isDisabled = false;
+        private readonly IConversionsSettingsControl _control ;
+        private readonly Dictionary<string, bool> _convFiles = new Dictionary<string, bool>();
+        private readonly IFileDialog _dialog ;
+        private bool _isDisabled ;
 
         public ConversionSettingsPresenter(IConversionsSettingsControl control, IFileDialog dialog)
         {			  
-            this.control = control;
-            this.dialog = dialog;
+            _control = control;
+            _dialog = dialog;
 
             control.SetPresenter(this);
             UpdateButtons();
@@ -27,7 +27,7 @@ namespace Sdl.Community.CleanUpTasks
 
         public void AddFile()
         {
-            var files = dialog.GetFile(control.Settings.LastFileDirectory);
+            var files = _dialog.GetFile(_control.Settings.LastFileDirectory);
 
             foreach (var file in files)
             {
@@ -36,28 +36,26 @@ namespace Sdl.Community.CleanUpTasks
                     XmlUtilities.Deserialize(file);
                     AddFileInternal(file);
                 }
-            }
-
-            control.Settings.ConversionFiles = convFiles;
+            }			
             UpdateLastFileDirectory();
         }
 
         public void DownClick()
         {
-            if (control.FileList.Items.Count > 1)
+            if (_control.FileList.Items.Count > 1)
             {
-                if (control.FileList.SelectedIndex > -1 &&
-                    control.FileList.SelectedIndex < control.FileList.Items.Count - 1)
+                if (_control.FileList.SelectedIndex > -1 &&
+                    _control.FileList.SelectedIndex < _control.FileList.Items.Count - 1)
                 {
-                    int selectedIndex = control.FileList.SelectedIndex;
-                    var checkState = control.FileList.GetItemCheckState(selectedIndex);
-                    var convFile = control.FileList.SelectedItem as ConversionFile;
+                    int selectedIndex = _control.FileList.SelectedIndex;
+                    var checkState = _control.FileList.GetItemCheckState(selectedIndex);
+                    var convFile = _control.FileList.SelectedItem as ConversionFile;
 
-                    control.FileList.Items.RemoveAt(selectedIndex);
-                    control.FileList.Items.Insert(selectedIndex + 1, convFile);
+                    _control.FileList.Items.RemoveAt(selectedIndex);
+                    _control.FileList.Items.Insert(selectedIndex + 1, convFile);
 
-                    control.FileList.SelectedIndex = selectedIndex + 1;
-                    control.FileList.SetItemCheckState(control.FileList.SelectedIndex, checkState);
+                    _control.FileList.SelectedIndex = selectedIndex + 1;
+                    _control.FileList.SetItemCheckState(_control.FileList.SelectedIndex, checkState);
                 }
             }
         }
@@ -72,7 +70,6 @@ namespace Sdl.Community.CleanUpTasks
                 DialogResult dr = ShowFileViewDialog(view);
                 if (dr == DialogResult.OK)
                 {
-                    // TODO: Do something here?
                 }
             }
         }
@@ -89,9 +86,9 @@ namespace Sdl.Community.CleanUpTasks
 
         public void Initialize()
         {
-            var fileList = control.FileList.Items;
+            var fileList = _control.FileList.Items;
 
-            foreach (var pair in control.Settings.ConversionFiles)
+            foreach (var pair in _control.Settings.ConversionFiles)
             {
                 var convFile = new ConversionFile { FullPath = pair.Key, FileName = Path.GetFileName(pair.Key) };
                 fileList.Add(convFile, pair.Value);
@@ -106,20 +103,20 @@ namespace Sdl.Community.CleanUpTasks
             var curItem = GetCurItem();
             if (curItem != null)
             {
-                control.FileList.Items.Remove(curItem);
-                convFiles.Remove(curItem.FullPath);
+                _control.FileList.Items.Remove(curItem);
+                _convFiles.Remove(curItem.FullPath);
                 UpdateButtons();
             }
 
-            control.Settings.ConversionFiles = convFiles;
+            _control.Settings.ConversionFiles = _convFiles;
         }
 
         public void SaveSettings()
         {
             var dict = new Dictionary<string, bool>();
 
-            var count = control.FileList.Items.Count;
-            var fileList = control.FileList;
+            var count = _control.FileList.Items.Count;
+            var fileList = _control.FileList;
 
             for (int i = 0; i < count; ++i)
             {
@@ -128,33 +125,39 @@ namespace Sdl.Community.CleanUpTasks
 
                 if (checkState == CheckState.Checked)
                 {
-                    dict.Add(item.FullPath, true);
+	                if (item != null)
+	                {
+		                dict.Add(item.FullPath, true);
+	                }
                 }
                 else
                 {
-                    dict.Add(item.FullPath, false);
+	                if (item != null)
+	                {
+		                dict.Add(item.FullPath, false);
+	                }
                 }
             }
 
-            control.Settings.ConversionFiles = dict;
+            _control.Settings.ConversionFiles = dict;
         }
 
         public void UpClick()
         {
-            if (control.FileList.Items.Count > 1)
+            if (_control.FileList.Items.Count > 1)
             {
-                if (control.FileList.SelectedIndex > 0)
+                if (_control.FileList.SelectedIndex > 0)
                 {
-                    int selectedIndex = control.FileList.SelectedIndex;
-                    var checkState = control.FileList.GetItemCheckState(selectedIndex);
-                    var convFile = control.FileList.SelectedItem as ConversionFile;
+                    int selectedIndex = _control.FileList.SelectedIndex;
+                    var checkState = _control.FileList.GetItemCheckState(selectedIndex);
+                    var convFile = _control.FileList.SelectedItem as ConversionFile;
 
-                    control.FileList.Items.RemoveAt(selectedIndex);
-                    control.FileList.Items.Insert(selectedIndex - 1, convFile);
+                    _control.FileList.Items.RemoveAt(selectedIndex);
+                    _control.FileList.Items.Insert(selectedIndex - 1, convFile);
 
-                    control.FileList.SelectedIndex = selectedIndex - 1;
+                    _control.FileList.SelectedIndex = selectedIndex - 1;
 
-                    control.FileList.SetItemCheckState(control.FileList.SelectedIndex, checkState);
+                    _control.FileList.SetItemCheckState(_control.FileList.SelectedIndex, checkState);
                 }
             }
         }
@@ -169,56 +172,58 @@ namespace Sdl.Community.CleanUpTasks
         {
             var convFile = new ConversionFile { FullPath = file, FileName = Path.GetFileName(file) };
 
-            var fileList = control.FileList.Items;
+            var fileList = _control.FileList.Items;
 
-            if (control.FileList.FindStringExact(convFile.FileName) == ListBox.NoMatches)
+            if (_control.FileList.FindStringExact(convFile.FileName) == ListBox.NoMatches)
             {
                 fileList.Add(convFile, true);
-                convFiles.Add(file, false);
-                UpdateButtons();
+                _convFiles.Add(file, true);
+				_control.Settings.ConversionFiles = _convFiles;
+
+				UpdateButtons();
             }
         }
 
         private ConversionFile GetCurItem()
         {
-            return control.FileList.SelectedItem as ConversionFile;
+            return _control.FileList.SelectedItem as ConversionFile;
         }
 
         private void UpdateButtons()
         {
-            if (control.FileList.Items.Count == 0)
+            if (_control.FileList.Items.Count == 0)
             {
-                control.Edit.Enabled = false;
-                control.Remove.Enabled = false;
-                control.Up.Enabled = false;
-                control.Down.Enabled = false;
-                isDisabled = true;
+                _control.Edit.Enabled = false;
+                _control.Remove.Enabled = false;
+                _control.Up.Enabled = false;
+                _control.Down.Enabled = false;
+                _isDisabled = true;
             }
-            else if (isDisabled)
+            else if (_isDisabled)
             {
-                control.Edit.Enabled = true;
-                control.Remove.Enabled = true;
-                control.Up.Enabled = true;
-                control.Down.Enabled = true;
-                isDisabled = false;
+                _control.Edit.Enabled = true;
+                _control.Remove.Enabled = true;
+                _control.Up.Enabled = true;
+                _control.Down.Enabled = true;
+                _isDisabled = false;
             }
         }
 
         private void UpdateLastFileDirectory()
         {
-            if (convFiles.Count > 0)
+            if (_convFiles.Count > 0)
             {
-                var newDirectory = Path.GetDirectoryName(convFiles.Last().Key);
+                var newDirectory = Path.GetDirectoryName(_convFiles.Last().Key);
 
                 if (!string.IsNullOrEmpty(newDirectory))
                 {
                     // http://stackoverflow.com/a/1756776/906773
                     if (string.Compare(
                         Path.GetFullPath(newDirectory).TrimEnd(Path.DirectorySeparatorChar),
-                        Path.GetFullPath(control.Settings.LastFileDirectory).TrimEnd(Path.DirectorySeparatorChar),
+                        Path.GetFullPath(_control.Settings.LastFileDirectory).TrimEnd(Path.DirectorySeparatorChar),
                         StringComparison.OrdinalIgnoreCase) != 0)
                     {
-                        control.Settings.LastFileDirectory = newDirectory;
+                        _control.Settings.LastFileDirectory = newDirectory;
                     }
                 }
             }

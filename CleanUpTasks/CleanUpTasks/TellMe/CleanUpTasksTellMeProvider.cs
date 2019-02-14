@@ -11,15 +11,15 @@ namespace Sdl.Community.CleanUpTasks.TellMe
 		{
 			new CleanUpTasksStoreAction
 			{
-				Keywords = new []{ "cleanUpTasks", "cleanUpTasks store", "cleanUpTasks download" }
+				Keywords = new []{ "cleanup", "cleanUpTasks store", "cleanUpTasks download" }
 			},
 			new CleanUpTasksSupportAction
 			{
-				Keywords = new []{ "cleanUpTasks", "cleanUpTasks community", "cleanUpTasks support" }
+				Keywords = new []{ "cleanup", "cleanUpTasks community", "cleanUpTasks support" }
 			},
 			new CleanUpTasksHelpAction
 			{
-				Keywords = new[] { "cleanUpTasks", "cleanUpTasks help", "cleanUpTasks guide" } 
+				Keywords = new[] { "cleanup", "cleanUpTasks help", "cleanUpTasks guide" } 
 			}
 		};
 
