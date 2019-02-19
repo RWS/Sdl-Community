@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using NSubstitute;
 using Sdl.Community.TargetWordCount.Models;
 using Sdl.Core.Globalization;
@@ -56,7 +57,7 @@ namespace Sdl.Community.TargetWordCount.Tests
 			};
 
 			var settings = Substitute.For<IWordCountBatchTaskSettings>();
-			settings.InvoiceRates = new List<InvoiceItem>()
+			settings.InvoiceRates = new BindingList<InvoiceItem>()
 			{
 				new InvoiceItem(RateType.PerfectMatch, "1.25"),
 				new InvoiceItem(RateType.ContextMatch, "10"),

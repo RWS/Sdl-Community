@@ -65,16 +65,16 @@
             this.groupBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox.Location = new System.Drawing.Point(0, 0);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(504, 108);
+            this.groupBox.Size = new System.Drawing.Size(504, 117);
             this.groupBox.TabIndex = 1;
             this.groupBox.TabStop = false;
             // 
             // includeSpacesCheckBox
             // 
             this.includeSpacesCheckBox.AutoSize = true;
-            this.includeSpacesCheckBox.Location = new System.Drawing.Point(395, 49);
+            this.includeSpacesCheckBox.Location = new System.Drawing.Point(395, 53);
             this.includeSpacesCheckBox.Name = "includeSpacesCheckBox";
-            this.includeSpacesCheckBox.Size = new System.Drawing.Size(100, 16);
+            this.includeSpacesCheckBox.Size = new System.Drawing.Size(98, 17);
             this.includeSpacesCheckBox.TabIndex = 10;
             this.includeSpacesCheckBox.Text = "Include spaces";
             this.includeSpacesCheckBox.UseVisualStyleBackColor = true;
@@ -82,43 +82,43 @@
             // charPerLineLabel
             // 
             this.charPerLineLabel.AutoSize = true;
-            this.charPerLineLabel.Location = new System.Drawing.Point(235, 49);
+            this.charPerLineLabel.Location = new System.Drawing.Point(235, 53);
             this.charPerLineLabel.Name = "charPerLineLabel";
-            this.charPerLineLabel.Size = new System.Drawing.Size(105, 12);
+            this.charPerLineLabel.Size = new System.Drawing.Size(98, 13);
             this.charPerLineLabel.TabIndex = 9;
             this.charPerLineLabel.Text = "Characters per line:";
             // 
             // charPerLineTextBox
             // 
-            this.charPerLineTextBox.Location = new System.Drawing.Point(346, 46);
+            this.charPerLineTextBox.Location = new System.Drawing.Point(346, 50);
             this.charPerLineTextBox.Name = "charPerLineTextBox";
-            this.charPerLineTextBox.Size = new System.Drawing.Size(43, 19);
+            this.charPerLineTextBox.Size = new System.Drawing.Size(43, 20);
             this.charPerLineTextBox.TabIndex = 8;
             // 
             // lineCountCheckBox
             // 
             this.lineCountCheckBox.AutoSize = true;
-            this.lineCountCheckBox.Location = new System.Drawing.Point(349, 17);
+            this.lineCountCheckBox.Location = new System.Drawing.Point(349, 18);
             this.lineCountCheckBox.Name = "lineCountCheckBox";
-            this.lineCountCheckBox.Size = new System.Drawing.Size(114, 16);
+            this.lineCountCheckBox.Size = new System.Drawing.Size(107, 17);
             this.lineCountCheckBox.TabIndex = 7;
             this.lineCountCheckBox.Text = "Calculate per line";
             this.lineCountCheckBox.UseVisualStyleBackColor = true;
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(12, 79);
+            this.saveButton.Location = new System.Drawing.Point(12, 86);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(75, 23);
+            this.saveButton.Size = new System.Drawing.Size(75, 25);
             this.saveButton.TabIndex = 6;
             this.saveButton.Text = "Save Rates";
             this.saveButton.UseVisualStyleBackColor = true;
             // 
             // loadButton
             // 
-            this.loadButton.Location = new System.Drawing.Point(93, 79);
+            this.loadButton.Location = new System.Drawing.Point(93, 86);
             this.loadButton.Name = "loadButton";
-            this.loadButton.Size = new System.Drawing.Size(75, 23);
+            this.loadButton.Size = new System.Drawing.Size(75, 25);
             this.loadButton.TabIndex = 5;
             this.loadButton.Text = "Load Rates";
             this.loadButton.UseVisualStyleBackColor = true;
@@ -126,9 +126,9 @@
             // cultureLabel
             // 
             this.cultureLabel.AutoSize = true;
-            this.cultureLabel.Location = new System.Drawing.Point(6, 49);
+            this.cultureLabel.Location = new System.Drawing.Point(6, 53);
             this.cultureLabel.Name = "cultureLabel";
-            this.cultureLabel.Size = new System.Drawing.Size(81, 12);
+            this.cultureLabel.Size = new System.Drawing.Size(78, 13);
             this.cultureLabel.TabIndex = 4;
             this.cultureLabel.Text = "Select country:";
             this.toolTip.SetToolTip(this.cultureLabel, "Select country to use for formatting the currency");
@@ -137,17 +137,17 @@
             // 
             this.cultureComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cultureComboBox.FormattingEnabled = true;
-            this.cultureComboBox.Location = new System.Drawing.Point(93, 46);
+            this.cultureComboBox.Location = new System.Drawing.Point(93, 50);
             this.cultureComboBox.Name = "cultureComboBox";
-            this.cultureComboBox.Size = new System.Drawing.Size(136, 20);
+            this.cultureComboBox.Size = new System.Drawing.Size(136, 21);
             this.cultureComboBox.TabIndex = 3;
             // 
             // reportLockedCheckBox
             // 
             this.reportLockedCheckBox.AutoSize = true;
-            this.reportLockedCheckBox.Location = new System.Drawing.Point(132, 18);
+            this.reportLockedCheckBox.Location = new System.Drawing.Point(132, 20);
             this.reportLockedCheckBox.Name = "reportLockedCheckBox";
-            this.reportLockedCheckBox.Size = new System.Drawing.Size(210, 16);
+            this.reportLockedCheckBox.Size = new System.Drawing.Size(200, 17);
             this.reportLockedCheckBox.TabIndex = 2;
             this.reportLockedCheckBox.Text = "Report Locked Segments Separately";
             this.reportLockedCheckBox.UseVisualStyleBackColor = true;
@@ -155,9 +155,9 @@
             // targetRadioButton
             // 
             this.targetRadioButton.AutoSize = true;
-            this.targetRadioButton.Location = new System.Drawing.Point(70, 18);
+            this.targetRadioButton.Location = new System.Drawing.Point(70, 20);
             this.targetRadioButton.Name = "targetRadioButton";
-            this.targetRadioButton.Size = new System.Drawing.Size(56, 16);
+            this.targetRadioButton.Size = new System.Drawing.Size(56, 17);
             this.targetRadioButton.TabIndex = 1;
             this.targetRadioButton.TabStop = true;
             this.targetRadioButton.Text = "Target";
@@ -166,9 +166,9 @@
             // sourceRadioButton
             // 
             this.sourceRadioButton.AutoSize = true;
-            this.sourceRadioButton.Location = new System.Drawing.Point(6, 18);
+            this.sourceRadioButton.Location = new System.Drawing.Point(6, 20);
             this.sourceRadioButton.Name = "sourceRadioButton";
-            this.sourceRadioButton.Size = new System.Drawing.Size(58, 16);
+            this.sourceRadioButton.Size = new System.Drawing.Size(59, 17);
             this.sourceRadioButton.TabIndex = 0;
             this.sourceRadioButton.TabStop = true;
             this.sourceRadioButton.Text = "Source";
@@ -183,11 +183,11 @@
             this.TypeColumn,
             this.RateColumn});
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.Location = new System.Drawing.Point(0, 108);
-            this.dataGridView.MinimumSize = new System.Drawing.Size(599, 357);
+            this.dataGridView.Location = new System.Drawing.Point(0, 117);
+            this.dataGridView.MinimumSize = new System.Drawing.Size(599, 387);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersVisible = false;
-            this.dataGridView.Size = new System.Drawing.Size(599, 357);
+            this.dataGridView.Size = new System.Drawing.Size(599, 387);
             this.dataGridView.TabIndex = 2;
             // 
             // TypeColumn
@@ -205,13 +205,13 @@
             // 
             // WordCountBatchTaskSettingsControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.groupBox);
-            this.MinimumSize = new System.Drawing.Size(504, 436);
+            this.MinimumSize = new System.Drawing.Size(504, 472);
             this.Name = "WordCountBatchTaskSettingsControl";
-            this.Size = new System.Drawing.Size(504, 436);
+            this.Size = new System.Drawing.Size(504, 472);
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
@@ -227,7 +227,7 @@
         private System.Windows.Forms.Label cultureLabel;
         private System.Windows.Forms.ComboBox cultureComboBox;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.DataGridView dataGridView;
+        public System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn TypeColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn RateColumn;
         private System.Windows.Forms.Button loadButton;

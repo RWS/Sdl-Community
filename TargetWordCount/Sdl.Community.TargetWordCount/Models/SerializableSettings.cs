@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel;
 
 namespace Sdl.Community.TargetWordCount.Models
 {
@@ -8,7 +8,7 @@ namespace Sdl.Community.TargetWordCount.Models
 
         public bool IncludeSpaces { get; set; }
 
-        public List<InvoiceItem> InvoiceRates { get; set; }
+        public BindingList<InvoiceItem> InvoiceRates { get; set; }
 
         public bool ReportLockedSeperately { get; set; }
 
