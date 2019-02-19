@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel;
 using Sdl.Community.TargetWordCount.Models;
 using Sdl.Core.Settings;
 
@@ -18,10 +18,10 @@ namespace Sdl.Community.TargetWordCount
 			set { GetSetting<bool>(nameof(IncludeSpaces)).Value = value; }
 		}
 
-		public List<InvoiceItem> InvoiceRates
+		public BindingList<InvoiceItem> InvoiceRates
 		{
-			get { return GetSetting<List<InvoiceItem>>(nameof(InvoiceRates)); }
-			set { GetSetting<List<InvoiceItem>>(nameof(InvoiceRates)).Value = value; }
+			get { return GetSetting<BindingList<InvoiceItem>>(nameof(InvoiceRates)); }
+			set { GetSetting<BindingList<InvoiceItem>>(nameof(InvoiceRates)).Value = value; }
 		}
 
 		public bool ReportLockedSeperately
@@ -62,7 +62,7 @@ namespace Sdl.Community.TargetWordCount
 					return false;
 
 				case nameof(InvoiceRates):
-					return new List<InvoiceItem>()
+					return new BindingList<InvoiceItem>()
 					{
 						new InvoiceItem(RateType.Locked, string.Empty),
 						new InvoiceItem(RateType.PerfectMatch, string.Empty),

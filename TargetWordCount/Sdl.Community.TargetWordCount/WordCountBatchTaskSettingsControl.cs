@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
@@ -39,6 +40,18 @@ namespace Sdl.Community.TargetWordCount
 		}
 
 		public WordCountBatchTaskSettings Settings { get; set; }
+
+		public void SetInvoiceRates()
+		{
+			var invoiceRates = new BindingList<InvoiceItem>();
+			foreach (DataGridViewRow row in dataGridView.Rows)
+			{
+				var rateType = displayString.First(p => p.Value == row.Cells[0].Value.ToString()).Key;
+				var rate = row.Cells[1].Value.ToString();
+				invoiceRates.Add(new InvoiceItem(rateType, rate));
+			}
+			Settings.InvoiceRates = invoiceRates;
+		}
 
 		protected override void OnLeave(EventArgs e)
 		{
@@ -230,7 +243,7 @@ namespace Sdl.Community.TargetWordCount
 			var sfdg = new SaveFileDialog();
 			sfdg.Filter = "xml files (*.xml)|*.xml";
 
-			DialogResult dr = sfdg.ShowDialog();
+			var dr = sfdg.ShowDialog();
 
 			if (dr == DialogResult.OK)
 			{
@@ -243,7 +256,7 @@ namespace Sdl.Community.TargetWordCount
 
 		private void UpdateSettings()
 		{
-			var invoiceRates = new List<InvoiceItem>();
+			var invoiceRates = new BindingList<InvoiceItem>();
 
 			foreach (DataGridViewRow row in dataGridView.Rows)
 			{

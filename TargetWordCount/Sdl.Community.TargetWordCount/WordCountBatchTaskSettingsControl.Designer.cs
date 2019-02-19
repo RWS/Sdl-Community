@@ -227,7 +227,7 @@
         private System.Windows.Forms.Label cultureLabel;
         private System.Windows.Forms.ComboBox cultureComboBox;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.DataGridView dataGridView;
+        public System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn TypeColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn RateColumn;
         private System.Windows.Forms.Button loadButton;
