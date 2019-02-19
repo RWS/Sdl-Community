@@ -318,6 +318,7 @@
     <Compile Include="SegmentLockerPresenter.cs" />
     <Compile Include="SegmentProcessor.cs" />
     <Compile Include="ConversionCleanupHandler.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="TagHandler.cs" />
     <Compile Include="TagSettingsPresenter.cs" />
     <Compile Include="TagsSettingsControl.cs">

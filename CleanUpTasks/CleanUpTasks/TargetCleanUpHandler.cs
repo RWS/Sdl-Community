@@ -9,206 +9,214 @@ using Sdl.FileTypeSupport.Framework.BilingualApi;
 namespace Sdl.Community.CleanUpTasks
 {
 	public class TargetCleanUpHandler : SegmentHandlerBase, ISegmentHandler
-    {
-        private readonly List<IPlaceholderTag> phTags = new List<IPlaceholderTag>();
-        private readonly ICleanUpSourceSettings settings = null;
-        private readonly List<ITagPair> tagPairs = new List<ITagPair>();
+	{
+		private readonly List<IPlaceholderTag> phTags = new List<IPlaceholderTag>();
+		private readonly ICleanUpSourceSettings settings = null;
+		private readonly List<ITagPair> tagPairs = new List<ITagPair>();
 
-        public TargetCleanUpHandler(ICleanUpSourceSettings settings,
-                                    IDocumentItemFactory itemFactory,
-                                    ICleanUpMessageReporter reporter)
-            : base(itemFactory, reporter)
-        {
-            this.settings = settings;
-        }
+		public TargetCleanUpHandler(ICleanUpSourceSettings settings,
+			IDocumentItemFactory itemFactory,
+			ICleanUpMessageReporter reporter)
+			: base(itemFactory, reporter)
+		{
+			this.settings = settings;
+		}
 
-        public void VisitPlaceholderTag(IPlaceholderTag tag)
-        {
-            var tagContent = tag.TagProperties.TagContent;
+		public void VisitPlaceholderTag(IPlaceholderTag tag)
+		{
+			var tagContent = tag.TagProperties.TagContent;
 
-            if (tagContent != null)
-            {
-                // Remove spacing before performing comparison
-                if (settings.Placeholders.Any(p => Regex.Replace(p.Content, @"\s", "") == Regex.Replace(tagContent, @"\s", "")))
-                {
-                    phTags.Add(tag);
-                }
-            }
-        }
+			if (tagContent != null)
+			{
+				phTags.Add(tag);
+			}
+		}
 
-        public void VisitSegment(ISegment segment)
-        {
-            VisitChildren(segment);
+		public void VisitSegment(ISegment segment)
+		{
+			VisitChildren(segment);
 
-            ProcessPlaceholderTags();
+			ProcessPlaceholderTags();
 
-            ProcessTagPairs();
+			ProcessTagPairs();
 
-            // Merge all adjacent IText
-            ITextMerger merger = new ITextMerger();
-            merger.VisitSegment(segment);
-            merger.Merge();
-        }
+			// Merge all adjacent IText
+			ITextMerger merger = new ITextMerger();
+			merger.VisitSegment(segment);
+			merger.Merge();
+		}
 
-        public void VisitTagPair(ITagPair tagPair)
-        {
-            var tagContent = tagPair.StartTagProperties.TagContent;
+		public void VisitTagPair(ITagPair tagPair)
+		{
+			var tagContent = tagPair.StartTagProperties.TagContent;
 
-            if (tagContent != null)
-            {
-                // Remove spacing before performing comparison
-                if (settings.Placeholders.Any(p => ComparePlaceholders(p, tagContent)))
-                {
-                    tagPairs.Add(tagPair);
-                }
-            }
+			if (tagContent != null)
+			{
+				// Remove spacing before performing comparison
+				if (settings.Placeholders.Any(p => ComparePlaceholders(p, tagContent)))
+				{
+					tagPairs.Add(tagPair);
+				}
+			}
 
-            VisitChildren(tagPair);
-        }
+			VisitChildren(tagPair);
+		}
 
-        private static bool ComparePlaceholders(Placeholder p, string tagContent)
-        {
-            // Removes all spacing and single and double quotations before doing a comparison
-            return Regex.Replace(p.Content, @"\s", "").Replace("\"", "").Replace("'", "")
-                == Regex.Replace(tagContent, @"\s", "").Replace("\"", "").Replace("'", "");
-        }
+		private static bool ComparePlaceholders(Placeholder p, string tagContent)
+		{
+			// Removes all spacing and single and double quotations before doing a comparison
+			return Regex.Replace(p.Content, @"\s", "").Replace("\"", "").Replace("'", "")
+			       == Regex.Replace(tagContent, @"\s", "").Replace("\"", "").Replace("'", "");
+		}
 
-        private string ConvertTagToText(IPlaceholderTag phTag)
-        {
-            var content = phTag.TagProperties.TagContent;
+		private bool IsTag(string text)
+		{
+			return text.Contains('<') && text.Contains('>');
+		}
 
-            var text = string.Empty;
+		private string ConvertTagToText(IPlaceholderTag phTag)
+		{
+			var content = phTag.TagProperties.TagContent;
 
-            HtmlParser parser = new HtmlParser(content);
-            HtmlTag tag;
-            if (parser.ParseNext("*", out tag))
-            {
-                if (tag.Attributes.Count() > 0)
-                {
-                    var isTagPair = settings.Placeholders.Where(p => Regex.Replace(p.Content, @"\s+", "") == Regex.Replace(content, @"\s+", "")).First().IsTagPair;
-                    if (isTagPair)
-                    {
-                        text = content;    
-                    }
-                    else
-                    {
-                        text = tag.Attributes.Values.First();
-                    }
-                }
-                else
-                {
-                    if (tag.HasEndTag)
-                    {
-                        text = $"</{tag.Name}>";
-                    }
-                    else if (tag.TrailingSlash)
-                    {
-                        // Check if there is a space before the trailing slash
-                        if (tag.SpaceBeforeTrailingSlash)
-                        {
-                            text = $"<{tag.Name} />";
-                        }
-                        else
-                        {
-                            text = $"<{tag.Name}/>";
-                        }
-                    }
-                    else
-                    {
-                        text = $"<{tag.Name}>";
-                    }
-                }
-            }
+			var text = string.Empty;
+			if (!IsTag(content) && Regex.IsMatch(content, "(?:>|≤|<|≥)\\d+"))
+			{
+				text = content;
+			}
+			else
+			{
+				var parser = new HtmlParser(content);
+				HtmlTag tag;
+				if (parser.ParseNext("*", out tag))
+				{
+					if (tag.Attributes.Any())
+					{
+						var isTagPair = settings.Placeholders.First(p => Regex.Replace(p.Content, @"\s+", "") == Regex.Replace(content, @"\s+", "")).IsTagPair;
+						if (isTagPair)
+						{
+							text = content;
+						}
+						else
+						{
+							text = tag.Attributes.Values.First();
+						}
+					}
+					else
+					{
+						if (tag.HasEndTag)
+						{
+							text = $"</{tag.Name}>";
+						}
+						else if (tag.TrailingSlash)
+						{
+							// Check if there is a space before the trailing slash
+							if (tag.SpaceBeforeTrailingSlash)
+							{
+								text = $"<{tag.Name} />";
+							}
+							else
+							{
+								text = $"<{tag.Name}/>";
+							}
+						}
+						else
+						{
+							text = $"<{tag.Name}>";
+						}
+					}
+				}
+			}
 
-            return text;
-        }
 
-        private void ProcessPlaceholderTags()
-        {
-            foreach (var tag in phTags)
-            {
-                var text = ConvertTagToText(tag);
+			return text;
+		}
 
-                if (!string.IsNullOrEmpty(text))
-                {
-                    var parent = tag.Parent;
-                    var index = tag.IndexInParent;
+		private void ProcessPlaceholderTags()
+		{
+			foreach (var tag in phTags)
+			{
+				var text = ConvertTagToText(tag);
 
-                    var itext = CreateIText(text);
+				if (!string.IsNullOrEmpty(text))
+				{
+					var parent = tag.Parent;
+					var index = tag.IndexInParent;
 
-                    tag.RemoveFromParent();
+					var itext = CreateIText(text);
 
-                    parent.Insert(index++, itext);
-                }
-            }
-        }
+					tag.RemoveFromParent();
 
-        private void ProcessTagPairs()
-        {
-            foreach (var pair in tagPairs)
-            {
-                var startTag = CreateIText(pair.StartTagProperties.TagContent);
-                var endTag = CreateIText(pair.EndTagProperties.TagContent);
-                var parent = pair.Parent;
+					parent.Insert(index++, itext);
+				}
+			}
+		}
 
-                var index = pair.IndexInParent;
+		private void ProcessTagPairs()
+		{
+			foreach (var pair in tagPairs)
+			{
+				var startTag = CreateIText(pair.StartTagProperties.TagContent);
+				var endTag = CreateIText(pair.EndTagProperties.TagContent);
+				var parent = pair.Parent;
 
-                var children = pair.ToList();
-                children.Insert(0, startTag);
-                children.Add(endTag);
+				var index = pair.IndexInParent;
 
-                foreach (var item in children)
-                {
-                    if (item.Parent != null)
-                    {
-                        item.RemoveFromParent();
-                    }
+				var children = pair.ToList();
+				children.Insert(0, startTag);
+				children.Add(endTag);
 
-                    if (index >= 0)
-                    {
-                        parent.Insert(index++, item);
-                    }
-                }
+				foreach (var item in children)
+				{
+					if (item.Parent != null)
+					{
+						item.RemoveFromParent();
+					}
 
-                pair.RemoveFromParent();
-            }
-        }
+					if (index >= 0)
+					{
+						parent.Insert(index++, item);
+					}
+				}
 
-        private void VisitChildren(IAbstractMarkupDataContainer container)
-        {
+				pair.RemoveFromParent();
+			}
+		}
 
-            foreach (var item in container)
-            {
-                item.AcceptVisitor(this);
-            }
-        }
+		private void VisitChildren(IAbstractMarkupDataContainer container)
+		{
 
-        #region Not Used
+			foreach (var item in container)
+			{
+				item.AcceptVisitor(this);
+			}
+		}
 
-        public void VisitCommentMarker(ICommentMarker commentMarker)
-        {
-        }
+		#region Not Used
 
-        public void VisitLocationMarker(ILocationMarker location)
-        {
-        }
+		public void VisitCommentMarker(ICommentMarker commentMarker)
+		{
+		}
 
-        public void VisitLockedContent(ILockedContent lockedContent)
-        {
-        }
+		public void VisitLocationMarker(ILocationMarker location)
+		{
+		}
 
-        public void VisitOtherMarker(IOtherMarker marker)
-        {
-        }
+		public void VisitLockedContent(ILockedContent lockedContent)
+		{
+		}
 
-        public void VisitRevisionMarker(IRevisionMarker revisionMarker)
-        {
-        }
+		public void VisitOtherMarker(IOtherMarker marker)
+		{
+		}
 
-        public void VisitText(IText text)
-        {
-        }
+		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
+		{
+		}
 
-        #endregion Not Used
-    }
+		public void VisitText(IText text)
+		{
+		}
+
+		#endregion Not Used
+	}
 }

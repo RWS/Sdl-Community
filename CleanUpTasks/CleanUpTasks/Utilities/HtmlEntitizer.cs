@@ -1,37 +1,54 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Sdl.Community.CleanUpTasks.Utilities
 {
 	public class HtmlEntitizer
-    {
-        private readonly HashSet<string> entitizedValues = new HashSet<string>();
+	{	  
+		public string Entitize(string input, string searchText)
+		{
+			var splitedList = GetOriginalTextSplited(input, searchText);
+			var builder = new StringBuilder();
+			foreach (var text in splitedList)
+			{
+				if (!IsTag(text))
+				{
+					var updatedString = text.Replace("<", "&lt;");
+					builder.Append(updatedString);
+				}
+				else
+				{
+					builder.Append(text);
+				}
+			}
+			return builder.ToString();
+		}
 
-        public string Entitize(string input)
-        {
-            foreach (Match m in Regex.Matches(input, @"<\s*[0-9]+"))
-            {
-                var updatedString = m.Value.Replace("<", "&lt;");
-                entitizedValues.Add(updatedString);
+		private bool IsTag(string text)
+		{
+			return text.Contains('<') && text.Contains('>');
+		}
 
-                input = input.Replace(m.Value, updatedString);
-            }
+		public List<string> GetOriginalTextSplited(string input, string searchText)
+		{
+			var matchesIndexs = new List<int>();
+			var matchCollection = Regex.Matches(input, searchText);
+			foreach (Match match in matchCollection)
+			{
+				if (match.Index != 0)
+				{
+					matchesIndexs.Add(match.Index);
+				}
+				matchesIndexs.Add(match.Index + match.Length);
+			}
+			return input.SplitAt(matchesIndexs.ToArray()).ToList();
+		}
 
-            return input;
-        }
-
-        public string DeEntitize(string input)
-        {
-            foreach (var s in entitizedValues)
-            {
-                if (input.Contains(s))
-                {
-                    var updatedString = s.Replace("&lt;", "<");
-                    input = input.Replace(s, updatedString);
-                }
-            }
-
-            return input;
-        }
-    }
+		public string DeEntitize(string input)
+		{
+			return input.Replace("&lt;", "<");
+		}
+	}
 }
