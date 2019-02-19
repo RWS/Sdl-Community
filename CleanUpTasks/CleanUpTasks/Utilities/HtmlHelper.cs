@@ -26,9 +26,9 @@ namespace Sdl.Community.CleanUpTasks.Utilities
             this.tagTable = tagTable;
         }
 
-        public IEnumerable<HtmlParseError> ParseErrors { get { return document.ParseErrors; } }
+        public IEnumerable<HtmlParseError> ParseErrors => document.ParseErrors;
 
-        public IEnumerable<HtmlNode> Descendants()
+	    public IEnumerable<HtmlNode> Descendants()
         {
             return document.DocumentNode.Descendants();
         }

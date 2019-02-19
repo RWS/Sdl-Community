@@ -140,12 +140,12 @@ namespace Sdl.Community.CleanUpTasks
             return false;
         }
 
-        private List<IAbstractMarkupData> CreateMarkupData(string input, HtmlTagTable tagTable, HtmlEntitizer entitizer)
+        private List<IAbstractMarkupData> CreateMarkupData(string input, HtmlTagTable tagTable, HtmlEntitizer entitizer,ConversionItem conversionItem)
         {
             var markupList = new List<IAbstractMarkupData>();
-            var parser = new HtmlHelper(entitizer.Entitize(input), tagTable);
+            var parser = new HtmlHelper(entitizer.Entitize(input,conversionItem.Search.Text), tagTable);
 
-            if (parser.ParseErrors.Count() > 0)
+            if (parser.ParseErrors.Any())
             {
                 return ParseTagsFallback(input, markupList);
             }
@@ -190,7 +190,7 @@ namespace Sdl.Community.CleanUpTasks
                             }
                             else
                             {
-                                var list = CreateMarkupData(node.InnerHtml, tagTable, entitizer);
+                                var list = CreateMarkupData(node.InnerHtml, tagTable, entitizer,conversionItem);
 
                                 foreach (var item in list)
                                 {
@@ -205,7 +205,7 @@ namespace Sdl.Community.CleanUpTasks
                             var phTag = CreatePlaceHolderTag(stTag);
                             markupList.Add(phTag);
 
-                            var list = CreateMarkupData(node.InnerHtml, tagTable, entitizer);
+                            var list = CreateMarkupData(node.InnerHtml, tagTable, entitizer,conversionItem);
 
                             foreach (var item in list)
                             {
@@ -218,8 +218,19 @@ namespace Sdl.Community.CleanUpTasks
                 }
                 else if (node.NodeType == HtmlNodeType.Text)
                 {
-                    markupList.Add(CreateIText(entitizer.DeEntitize(node.InnerText)));
-                }
+					//check for data like {M:>0},{M:<0},{M:≥0} which is treated like a text but tghe intention is to convert them in placeholder 
+	                if (Regex.IsMatch(input, "(?:>|≤|<|≥)\\d+"))
+	                {
+		                var originalTextSplited =
+			                entitizer.GetOriginalTextSplited(entitizer.DeEntitize(node.InnerText), conversionItem.Search.Text);
+
+		                ReplaceSpecialPlaceholders(originalTextSplited, markupList);
+	                }
+	                else
+	                {
+						markupList.Add(CreateIText(entitizer.DeEntitize(node.InnerText)));
+					}
+				}
                 else
                 {
                     markupList.Add(CreateIText(entitizer.DeEntitize(node.InnerHtml)));
@@ -229,7 +240,24 @@ namespace Sdl.Community.CleanUpTasks
             return markupList;
         }
 
-        private List<IAbstractMarkupData> ParseTagsFallback(string input, List<IAbstractMarkupData> markupList)
+	    private void ReplaceSpecialPlaceholders(List<string> splitedText, List<IAbstractMarkupData> markupList)
+	    {
+		    foreach (var text in splitedText)
+		    {
+			    if (Regex.IsMatch(text, "(?:>|≤|<|≥)\\d+"))
+			    {
+				    var phTag = CreatePlaceHolderTag(text);
+				    markupList.Add(phTag);
+				}  //Create text
+			    else
+			    {
+					markupList.Add(CreateIText(text));
+			    }
+			}
+	    }
+
+
+	    private List<IAbstractMarkupData> ParseTagsFallback(string input, List<IAbstractMarkupData> markupList)
         {
             // Fall back on regex parsing
             foreach (var chunk in Regex.Split(input, "(<.+?>)"))
@@ -268,7 +296,7 @@ namespace Sdl.Community.CleanUpTasks
             }
         }
 
-        private void CreatePlaceHolder(string updatedText, IText itext, string replacementText)
+        private void CreatePlaceHolder(string updatedText, IText itext, string replacementText, ConversionItem conversionItem)
         {
             if (string.IsNullOrEmpty(replacementText))
             {
@@ -338,7 +366,7 @@ namespace Sdl.Community.CleanUpTasks
 
                 if (matchTagPair.Success)
                 {
-                    CreateTagPair(updatedText, itext, parent);
+                    CreateTagPair(updatedText, itext, parent,conversionItem);
                 }
                 else
                 {
@@ -347,10 +375,10 @@ namespace Sdl.Community.CleanUpTasks
             }
         }
 
-        private void CreateTagPair(string updatedText, IText itext, IAbstractMarkupDataContainer parent)
+        private void CreateTagPair(string updatedText, IText itext, IAbstractMarkupDataContainer parent,ConversionItem conversionItem)
         {
             var entitizer = new HtmlEntitizer();
-            var markupData = CreateMarkupData(updatedText, new HtmlTagTable(entitizer.Entitize(updatedText)), entitizer);
+            var markupData = CreateMarkupData(updatedText, new HtmlTagTable(entitizer.Entitize(updatedText,conversionItem.Search.Text)), entitizer,conversionItem);
 
             var index = itext.IndexInParent;
 
@@ -441,7 +469,7 @@ namespace Sdl.Community.CleanUpTasks
                 {
                     Log(original, itext, item, original);
 
-                    CreateTagPair(original, itext, itext.Parent);
+                    CreateTagPair(original, itext, itext.Parent,item);
 
                     StoreTagPair(original);
                 }
@@ -468,7 +496,7 @@ namespace Sdl.Community.CleanUpTasks
                 {
                     Log(original, itext, item, updatedText);
 
-                    CreatePlaceHolder(updatedText, itext, replacement.Text);
+                    CreatePlaceHolder(updatedText, itext, replacement.Text,item);
                 }
             }
             else if (!search.TagPair && !search.EmbeddedTags && !replacement.Placeholder)
@@ -512,10 +540,10 @@ namespace Sdl.Community.CleanUpTasks
             textList = updater.TextList;
         }
 
-        private void ReplaceTagPair(string updatedText, ITagPair tagPair, IAbstractMarkupDataContainer parent)
+        private void ReplaceTagPair(string updatedText, ITagPair tagPair, IAbstractMarkupDataContainer parent,ConversionItem conversionItem)
         {
             var entitizer = new HtmlEntitizer();
-            var markupData = CreateMarkupData(updatedText, new HtmlTagTable(entitizer.Entitize(updatedText)), entitizer);
+            var markupData = CreateMarkupData(updatedText, new HtmlTagTable(entitizer.Entitize(updatedText,conversionItem.Search.Text)), entitizer,conversionItem);
 
             var index = tagPair.IndexInParent;
 
@@ -590,7 +618,7 @@ namespace Sdl.Community.CleanUpTasks
 
                     if (result)
                     {
-                        UpdateTagPair(updatedText, fullText, tagpair);
+                        UpdateTagPair(updatedText, fullText, tagpair,item);
 
                         if (tagpair.Parent is ISegment)
                         {
@@ -611,10 +639,6 @@ namespace Sdl.Community.CleanUpTasks
             {
                 var startTag1 = Regex.Match(match1.Groups[1].Value, "<(.+?)\\b.*>");
                 var startTag2 = Regex.Match(match2.Groups[1].Value, "<(.+?)\\b.*>");
-
-                // TagPair may contain invalid xml, such as non-quoted attributes
-                //var startTag1 = XElement.Parse(updatedText).Name;
-                //var startTag2 = XElement.Parse(fullText).Name;
 
                 if (startTag1.Success && startTag2.Success)
                 {
@@ -816,14 +840,14 @@ namespace Sdl.Community.CleanUpTasks
             }
         }
 
-        private void UpdateTagContent(string updatedText, ITagPair tagPair)
+        private void UpdateTagContent(string updatedText, ITagPair tagPair,ConversionItem conversionItem)
         {
             var match = Regex.Match(updatedText, "(<.+?>)(.+?)(</.+?>)");
 
             if (match.Success)
             {
                 var entitizer = new HtmlEntitizer();
-                var markupData = CreateMarkupData(match.Groups[2].Value, new HtmlTagTable(entitizer.Entitize(match.Groups[2].Value)), entitizer);
+                var markupData = CreateMarkupData(match.Groups[2].Value, new HtmlTagTable(entitizer.Entitize(match.Groups[2].Value,conversionItem.Search.Text)), entitizer,conversionItem);
 
                 if (markupData.Count > 0)
                 {
@@ -841,7 +865,7 @@ namespace Sdl.Community.CleanUpTasks
             }
         }
 
-        private void UpdateTagPair(string updatedText, string fullText, ITagPair tagPair)
+        private void UpdateTagPair(string updatedText, string fullText, ITagPair tagPair,ConversionItem conversionItem)
         {
             var parent = tagPair.Parent;
 
@@ -852,7 +876,7 @@ namespace Sdl.Community.CleanUpTasks
                     // Check if element name changed
                     if (TagsChanged(updatedText, fullText))
                     {
-                        ReplaceTagPair(updatedText, tagPair, parent);
+                        ReplaceTagPair(updatedText, tagPair, parent,conversionItem);
                     }
                     else
                     {
@@ -900,7 +924,7 @@ namespace Sdl.Community.CleanUpTasks
 
                         if (ContentChanged(updatedText, fullText))
                         {
-                            UpdateTagContent(updatedText, tagPair);
+                            UpdateTagContent(updatedText, tagPair,conversionItem);
                         }
                     }
                 }

@@ -344,6 +344,7 @@
     <Compile Include="Utilities\HtmlTag.cs" />
     <Compile Include="Utilities\ITextMerger.cs" />
     <Compile Include="Utilities\HtmlTagTable.cs" />
+    <Compile Include="Utilities\StringExtensions.cs" />
     <Compile Include="Utilities\TextListUpdater.cs" />
     <Compile Include="Utilities\BindableBase.cs" />
     <Compile Include="Utilities\CleanUpMessageReporter.cs" />

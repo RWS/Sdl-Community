@@ -1,26 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Sdl.Community.CleanUpTasks.Utilities
 {
 	public class HtmlTagTable
     {
-        private readonly Dictionary<string, HtmlTag> tagTable = new Dictionary<string, HtmlTag>();
+	    public readonly Dictionary<string, HtmlTag> _tagTable = new Dictionary<string, HtmlTag>();
 
         public HtmlTagTable(string html)
         {
             BuildTagTable(html);
         }
 
-        public Dictionary<string, HtmlTag> Table { get { return tagTable; } }
+        public Dictionary<string, HtmlTag> Table => _tagTable;
 
-        private void BuildTagTable(string html)
+	    private void BuildTagTable(string html)
         {
             HtmlTag tag;
-            HtmlParser parse = new HtmlParser(html);
+            var parse = new HtmlParser(html);
             while (parse.ParseNext("*", out tag))
             {
-                if (!tagTable.ContainsKey(tag.Name))
+                if (!_tagTable.ContainsKey(tag.Name))
                 {
                     if (tag.HasEndTag)
                     {
@@ -28,11 +27,11 @@ namespace Sdl.Community.CleanUpTasks.Utilities
                         tag.IsEndGhostTag = true;
                     }
 
-                    tagTable.Add(tag.Name, tag);
+                    _tagTable.Add(tag.Name, tag);
                 }
                 else
                 {
-                    tagTable[tag.Name].HasEndTag = tag.HasEndTag;
+                    _tagTable[tag.Name].HasEndTag = tag.HasEndTag;
                 }
             }
         }
