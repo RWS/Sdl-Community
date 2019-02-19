@@ -7,9 +7,7 @@ using Sdl.FileTypeSupport.Framework.BilingualApi;
 namespace Sdl.Community.CleanUpTasks.Utilities
 {
 	public class HtmlEntitizer 
-	{
-        private readonly HashSet<string> _entitizedValues = new HashSet<string>();
-
+	{	 
         public string Entitize(string input, string searchText)
         {	
 	        var splitedList = GetOriginalTextSplited(input, searchText);

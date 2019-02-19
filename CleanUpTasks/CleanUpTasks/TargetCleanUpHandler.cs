@@ -28,12 +28,8 @@ namespace Sdl.Community.CleanUpTasks
 
             if (tagContent != null)
             {
-                // Remove spacing before performing comparison
-                if (settings.Placeholders.Any(p => Regex.Replace(p.Content, @"\s", "") == Regex.Replace(tagContent, @"\s", "")))
-                {
-                    phTags.Add(tag);
-                }
-            }
+				phTags.Add(tag);
+			}
         }
 
         public void VisitSegment(ISegment segment)
@@ -73,52 +69,64 @@ namespace Sdl.Community.CleanUpTasks
                 == Regex.Replace(tagContent, @"\s", "").Replace("\"", "").Replace("'", "");
         }
 
-        private string ConvertTagToText(IPlaceholderTag phTag)
+	    private bool IsTag(string text)
+	    {
+		    return text.Contains('<') && text.Contains('>');
+	    }
+
+		private string ConvertTagToText(IPlaceholderTag phTag)
         {
             var content = phTag.TagProperties.TagContent;
 
             var text = string.Empty;
-
-            HtmlParser parser = new HtmlParser(content);
-            HtmlTag tag;
-            if (parser.ParseNext("*", out tag))
-            {
-                if (tag.Attributes.Count() > 0)
-                {
-                    var isTagPair = settings.Placeholders.Where(p => Regex.Replace(p.Content, @"\s+", "") == Regex.Replace(content, @"\s+", "")).First().IsTagPair;
-                    if (isTagPair)
-                    {
-                        text = content;    
-                    }
-                    else
-                    {
-                        text = tag.Attributes.Values.First();
-                    }
-                }
-                else
-                {
-                    if (tag.HasEndTag)
-                    {
-                        text = $"</{tag.Name}>";
-                    }
-                    else if (tag.TrailingSlash)
-                    {
-                        // Check if there is a space before the trailing slash
-                        if (tag.SpaceBeforeTrailingSlash)
-                        {
-                            text = $"<{tag.Name} />";
-                        }
-                        else
-                        {
-                            text = $"<{tag.Name}/>";
-                        }
-                    }
-                    else
-                    {
-                        text = $"<{tag.Name}>";
-                    }
-                }
-            }
+			if(!IsTag(content) && Regex.IsMatch(content, "(?:>|≤|<|≥)\\d+"))
+			{
+				text = content;
+			}
+			else
+	        {
+				var parser = new HtmlParser(content);
+		        HtmlTag tag;
+		        if (parser.ParseNext("*", out tag))
+		        {
+			        if (tag.Attributes.Any())
+			        {
+				        var isTagPair = settings.Placeholders.First(p => Regex.Replace(p.Content, @"\s+", "") == Regex.Replace(content, @"\s+", "")).IsTagPair;
+				        if (isTagPair)
+				        {
+					        text = content;
+				        }
+				        else
+				        {
+					        text = tag.Attributes.Values.First();
+				        }
+			        }
+			        else
+			        {
+				        if (tag.HasEndTag)
+				        {
+					        text = $"</{tag.Name}>";
+				        }
+				        else if (tag.TrailingSlash)
+				        {
+					        // Check if there is a space before the trailing slash
+					        if (tag.SpaceBeforeTrailingSlash)
+					        {
+						        text = $"<{tag.Name} />";
+					        }
+					        else
+					        {
+						        text = $"<{tag.Name}/>";
+					        }
+				        }
+				        else
+				        {
+					        text = $"<{tag.Name}>";
+				        }
+			        }
+		        }
+			}
+            
 
             return text;
         }
