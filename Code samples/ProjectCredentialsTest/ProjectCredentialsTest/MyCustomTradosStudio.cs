@@ -14,6 +14,7 @@ namespace ProjectCredentialsTest
 		{
 			var termbaseUri = new Uri("sdltm.http://gs2017dev.sdl.com");
 
+
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			projectController.CurrentProject.Credentials.AddCredential(termbaseUri, true, "", "");
 		}
