@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Newtonsoft.Json;
 
 namespace Sdl.Community.ControlledMTProviders.Provider
 {
-    public class ControlledMtProvidersProvider : ITranslationProvider
+	public class ControlledMtProvidersProvider : ITranslationProvider
     {
         internal const string ProviderUriScheme = "sdlcommunityMMTP";
         internal const string ProviderUri = ProviderUriScheme + "://";
@@ -56,16 +55,13 @@ namespace Sdl.Community.ControlledMTProviders.Provider
         {
             _mtProvidersUri = GetDefaultMtProvidersUri();
 
-            foreach (var mtProvider in _mtProviders)
-            {
-                if (mtProvider.TranslationMethod == TranslationMethod.MachineTranslation)
-                {
-                    if (!_mtProvidersUri.Any(uri => uri.Scheme.Equals(mtProvider.Uri.Scheme)))
-                    {
-                        _mtProvidersUri.Add(mtProvider.Uri);
-                    }
-                }
-            }
+			foreach (var mtProvider in _mtProviders)
+			{
+				if (!_mtProvidersUri.Any(uri => uri.Scheme.Equals(mtProvider.Uri.Scheme)))
+				{
+					_mtProvidersUri.Add(mtProvider.Uri);
+				}
+			}
 
             return _mtProvidersUri;
         }
