@@ -56,16 +56,13 @@ namespace Sdl.Community.ControlledMTProviders.Provider
         {
             _mtProvidersUri = GetDefaultMtProvidersUri();
 
-            foreach (var mtProvider in _mtProviders)
-            {
-                if (mtProvider.TranslationMethod == TranslationMethod.MachineTranslation)
-                {
-                    if (!_mtProvidersUri.Any(uri => uri.Scheme.Equals(mtProvider.Uri.Scheme)))
-                    {
-                        _mtProvidersUri.Add(mtProvider.Uri);
-                    }
-                }
-            }
+			foreach (var mtProvider in _mtProviders)
+			{
+				if (!_mtProvidersUri.Any(uri => uri.Scheme.Equals(mtProvider.Uri.Scheme)))
+				{
+					_mtProvidersUri.Add(mtProvider.Uri);
+				}
+			}
 
             return _mtProvidersUri;
         }
