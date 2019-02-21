@@ -15,8 +15,8 @@ namespace MultiTermTestPlugin
 			Application oMt = new ApplicationClass();
 
 			var oServerRep = oMt.ServerRepository;
-			oServerRep.Location = "http://gs2017dev.sdl.com";
-			oServerRep.Connect("SDLCommunity", "Commun1tyRocks");
+			oServerRep.Location = "GsLocation";
+			oServerRep.Connect("username", "pass");
 			Console.WriteLine("Connection successful: " + oServerRep.IsConnected);
 
 			var oTbs = oServerRep.Termbases;
