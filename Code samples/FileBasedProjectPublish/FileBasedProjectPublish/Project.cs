@@ -53,7 +53,7 @@ namespace FileBasedProjectPublish
                     true,
                     "User",
                     "Password",
-                    "/TestAPI",
+                    "GS Organization",
                     (sender, args) => { });
             }
             else
