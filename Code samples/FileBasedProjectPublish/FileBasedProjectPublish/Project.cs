@@ -13,7 +13,7 @@ namespace FileBasedProjectPublish
     {
         public void Execute()
         {
-            var groupShareServer = "http://gs2017dev.sdl.com ";
+            var groupShareServer = "groupShareServer";
 
             var projectFolder = Path.Combine(Path.GetTempPath(), "ProjectTemp");
             if (!Directory.Exists(projectFolder))
@@ -51,8 +51,8 @@ namespace FileBasedProjectPublish
                 var result = fileBasedProject.PublishProject(
                     new Uri(groupShareServer),
                     true,
-                    "SDLCommunity",
-                    "Commun1tyRocks",
+                    "User",
+                    "Password",
                     "/TestAPI",
                     (sender, args) => { });
             }
