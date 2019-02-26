@@ -8,6 +8,7 @@ using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI;
 using Sdl.Community.StarTransit.UI.Controls;
+using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -28,7 +29,7 @@ namespace Sdl.Community.StarTransit
 	{
 		protected override async void Execute()
 		{
-			EnsureApplicationResources();
+			Utils.EnsureApplicationResources();
 
 			var pathToTempFolder = CreateTempPackageFolder();
 			try
@@ -78,46 +79,6 @@ namespace Sdl.Community.StarTransit
 			Directory.CreateDirectory(pathToTempFolder);
 			return pathToTempFolder;
 		}
-
-		private void EnsureApplicationResources()
-		{
-			if (Application.Current == null)
-			{
-				new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
-
-				var controlsResources = new ResourceDictionary
-				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml")
-				};
-				var fontsResources = new ResourceDictionary
-				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml")
-				};
-				var colorsResources = new ResourceDictionary
-				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml")
-				};
-				var greenResources = new ResourceDictionary
-				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/Green.xaml")
-				};
-				var baseLightResources = new ResourceDictionary
-				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml")
-				};
-				var flatButtonsResources = new ResourceDictionary
-				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml")
-				};
-
-				Application.Current.Resources.MergedDictionaries.Add(controlsResources);
-				Application.Current.Resources.MergedDictionaries.Add(fontsResources);
-				Application.Current.Resources.MergedDictionaries.Add(colorsResources);
-				Application.Current.Resources.MergedDictionaries.Add(greenResources);
-				Application.Current.Resources.MergedDictionaries.Add(baseLightResources);
-				Application.Current.Resources.MergedDictionaries.Add(flatButtonsResources);
-			}
-		}
 	}
 
 	[Action("Sdl.Community.StarTransit.Return", Name = "StarTransit return package", Icon = "return_package", Description = "StarTransit return package")]
@@ -127,7 +88,8 @@ namespace Sdl.Community.StarTransit
 	{
 		protected override void Execute()
 		{
-			EnsureApplicationResources();
+			Utils.EnsureApplicationResources();
+
 			var returnService = new ReturnPackageService();
 			var returnPackage = returnService.GetReturnPackage();
 
@@ -140,46 +102,6 @@ namespace Sdl.Community.StarTransit
 			{
 				ReturnPackageMainWindow window = new ReturnPackageMainWindow(returnPackage.Item1);
 				window.ShowDialog();
-			}
-		}
-
-		private void EnsureApplicationResources()
-		{
-			if (Application.Current == null)
-			{
-				new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
-
-				var controlsResources = new ResourceDictionary
-				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml")
-				};
-				var fontsResources = new ResourceDictionary
-				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml")
-				};
-				var colorsResources = new ResourceDictionary
-				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml")
-				};
-				var blueResources = new ResourceDictionary
-				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml")
-				};
-				var baseLightResources = new ResourceDictionary
-				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml")
-				};
-				var flatButtonsResources = new ResourceDictionary
-				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml")
-				};
-
-				Application.Current.Resources.MergedDictionaries.Add(controlsResources);
-				Application.Current.Resources.MergedDictionaries.Add(fontsResources);
-				Application.Current.Resources.MergedDictionaries.Add(colorsResources);
-				Application.Current.Resources.MergedDictionaries.Add(blueResources);
-				Application.Current.Resources.MergedDictionaries.Add(baseLightResources);
-				Application.Current.Resources.MergedDictionaries.Add(flatButtonsResources);
 			}
 		}
 	}
