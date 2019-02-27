@@ -29,6 +29,7 @@ namespace Sdl.Community.StarTransit
 	{
 		protected override async void Execute()
 		{
+
 			Utils.EnsureApplicationResources();
 
 			var pathToTempFolder = CreateTempPackageFolder();
