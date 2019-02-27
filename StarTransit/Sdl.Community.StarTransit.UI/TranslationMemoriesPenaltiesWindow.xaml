@@ -12,6 +12,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source=".\UIHelpers\ButtonsStyle.xaml"/>
+				<ResourceDictionary Source=".\UIHelpers\MetroStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
