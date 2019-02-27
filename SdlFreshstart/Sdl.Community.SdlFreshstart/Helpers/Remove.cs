@@ -78,7 +78,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 		    }
 		    catch (Exception e)
 		    {
-			    
+			    throw e;
 		    }
 	    }
 

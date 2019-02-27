@@ -37,9 +37,11 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private string _restoreForeground;
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private readonly Persistence _persistenceSettings;
+		private readonly IDialogCoordinator _dialogCoordinator;
 
-		public StudioViewModel(MainWindow mainWindow)
+		public StudioViewModel(MainWindow mainWindow, IDialogCoordinator dialogCoordinator)
 		{
+			_dialogCoordinator = dialogCoordinator;
 			_mainWindow = mainWindow;
 			_persistenceSettings = new Persistence();
 		    _folderDescription = string.Empty;
@@ -591,7 +593,14 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 					_persistenceSettings.SaveSettings(foldersToClearOrRestore,true);
 					await Remove.BackupFiles(foldersToClearOrRestore);
 
-					await Remove.FromSelectedLocations(foldersToClearOrRestore);
+					try
+					{
+						await Remove.FromSelectedLocations(foldersToClearOrRestore);
+					}
+					catch(Exception e)
+					{
+						await _dialogCoordinator.ShowMessageAsync(this, "Warning", @"Not all files/folder have been deleted");
+					}
 
 					UnselectGrids();
 					//to close the message

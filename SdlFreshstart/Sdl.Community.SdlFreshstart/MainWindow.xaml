@@ -6,6 +6,7 @@
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:views="clr-namespace:Sdl.Community.SdlFreshstart.Views"
                       mc:Ignorable="d"
+        
         ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
         BorderThickness="0"
         FontSize="14"
