@@ -57,7 +57,7 @@ namespace Sdl.Community.StarTransit
 						PathToPrjFile = package.PathToPrjFile
 					};
 
-					// Start BackgroundWorder in InitializeMain method to have app working separately than Trados Studio processs
+					// Start BackgroundWorder in InitializeMain method to have app working separately than Trados Studio process
 					Program.InitializeMain(packageModel);
 				}
 			}
