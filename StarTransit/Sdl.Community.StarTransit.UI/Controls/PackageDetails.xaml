@@ -9,6 +9,7 @@
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UIHelpers\MetroStyle.xaml"/>
 				<ResourceDictionary Source="..\UIHelpers\ButtonsStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

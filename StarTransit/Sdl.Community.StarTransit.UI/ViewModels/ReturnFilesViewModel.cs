@@ -25,12 +25,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private ReturnPackageMainWindow _window;
         private ObservableCollection<CellViewModel> _listView = new ObservableCollection<CellViewModel>();
 
-        public ReturnFilesViewModel(ReturnPackage returnPackage, ReturnPackageMainWindow window)
-        {
-            _returnPackage = returnPackage;
-            _window = window;
-            _title = "Please select files for the return package";
-			if (returnPackage != null || returnPackage.TargetFiles.Count > 0)
+		public ReturnFilesViewModel(ReturnPackage returnPackage, ReturnPackageMainWindow window)
+		{
+			_returnPackage = returnPackage;
+			_window = window;
+			_title = "Please select files for the return package";
+
+			if(returnPackage?.TargetFiles != null && returnPackage.TargetFiles.Count > 0)
 			{
 				var xliffFiles = returnPackage.TargetFiles.Where(file => file.Name.EndsWith(".sdlxliff")).ToList();
 				if (xliffFiles.Count() != 0)
