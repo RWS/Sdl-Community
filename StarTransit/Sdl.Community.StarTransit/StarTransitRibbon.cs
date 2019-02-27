@@ -29,7 +29,7 @@ namespace Sdl.Community.StarTransit
 	{
 		protected override async void Execute()
 		{
-			//Utils.EnsureApplicationResources();
+			Utils.EnsureApplicationResources();
 
 			var pathToTempFolder = CreateTempPackageFolder();
 			try
@@ -88,7 +88,7 @@ namespace Sdl.Community.StarTransit
 	{
 		protected override void Execute()
 		{
-			//Utils.EnsureApplicationResources();
+			Utils.EnsureApplicationResources();
 
 			var returnService = new ReturnPackageService();
 			var returnPackage = returnService.GetReturnPackage();
