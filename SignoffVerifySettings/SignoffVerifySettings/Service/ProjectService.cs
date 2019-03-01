@@ -52,15 +52,22 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			var langFileXMLNodeModels = new List<LanguageFileXmlNodeModel>();
 			foreach (XmlNode elem in languageFileElements)
 			{
-				var languageFileXmlNodeModel = new LanguageFileXmlNodeModel
+				if (elem.Attributes.Count > 0)
 				{
-					LanguageFileGUID = elem.Attributes["Guid"].Value,
-					SettingsBundleGuid = elem.Attributes["SettingsBundleGuid"].Value,
-					LanguageCode = elem.Attributes["LanguageCode"].Value
-				};
-				langFileXMLNodeModels.Add(languageFileXmlNodeModel);
+					var languageFileXmlNodeModel = new LanguageFileXmlNodeModel
+					{
+						LanguageFileGUID = elem.Attributes["Guid"].Value,
+						SettingsBundleGuid = elem.Attributes["SettingsBundleGuid"].Value,
+						LanguageCode = elem.Attributes["LanguageCode"].Value
+					};
+					langFileXMLNodeModels.Add(languageFileXmlNodeModel);
+				}
 			}
-			var sourceLangauge = currentProject.GetProjectInfo().SourceLanguage.CultureInfo.Name;
+			var sourceLangauge = currentProject.GetProjectInfo() != null ? currentProject.GetProjectInfo().SourceLanguage != null
+				? currentProject.GetProjectInfo().SourceLanguage.CultureInfo != null
+				? currentProject.GetProjectInfo().SourceLanguage.CultureInfo.Name
+				:string.Empty :string.Empty : string.Empty;
+
 			var targetFiles = langFileXMLNodeModels.Where(l => l.LanguageCode != sourceLangauge).ToList();
 			return targetFiles;
 		}

@@ -99,7 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileConverter.cs" />
-    <Compile Include="Model\LanguageFileXMLNodeModel.cs" />
+    <Compile Include="Model\LanguageFileXmlNodeModel.cs" />
     <Compile Include="Service\ProjectService.cs" />
     <Compile Include="SignoffVerifySettingsBatchTask.cs" />
     <Compile Include="SignoffVerifySettings.cs" />
