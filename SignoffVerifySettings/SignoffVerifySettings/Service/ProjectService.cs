@@ -44,21 +44,21 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		}
 
 		// Get Target Language File tag attributes from the .sdlproj xml document 
-		private List<LanguageFileXMLNodeModel> GetTargetFilesSettingsGuids(FileBasedProject currentProject)
+		private List<LanguageFileXmlNodeModel> GetTargetFilesSettingsGuids(FileBasedProject currentProject)
 		{
 			var doc = new XmlDocument();
 			doc.Load(currentProject.FilePath);
 			var languageFileElements = doc.GetElementsByTagName("LanguageFile");
-			var langFileXMLNodeModels = new List<LanguageFileXMLNodeModel>();
+			var langFileXMLNodeModels = new List<LanguageFileXmlNodeModel>();
 			foreach (XmlNode elem in languageFileElements)
 			{
-				var languageFileXMLNodeModel = new LanguageFileXMLNodeModel
+				var languageFileXmlNodeModel = new LanguageFileXmlNodeModel
 				{
 					LanguageFileGUID = elem.Attributes["Guid"].Value,
 					SettingsBundleGuid = elem.Attributes["SettingsBundleGuid"].Value,
 					LanguageCode = elem.Attributes["LanguageCode"].Value
 				};
-				langFileXMLNodeModels.Add(languageFileXMLNodeModel);
+				langFileXMLNodeModels.Add(languageFileXmlNodeModel);
 			}
 			var sourceLangauge = currentProject.GetProjectInfo().SourceLanguage.CultureInfo.Name;
 			var targetFiles = langFileXMLNodeModels.Where(l => l.LanguageCode != sourceLangauge).ToList();

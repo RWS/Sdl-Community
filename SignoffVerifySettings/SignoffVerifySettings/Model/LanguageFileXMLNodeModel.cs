@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.SignoffVerifySettings.Model
 {
-	public class LanguageFileXMLNodeModel
+	public class LanguageFileXmlNodeModel
 	{
 		public string LanguageFileGUID { get; set; }
 		public string SettingsBundleGuid { get; set; }
