@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+	<PlugInName>SignoffVerifySettings</PlugInName>
+	<Version>1.0</Version>
+	<Description>Batch task which collects verification information from the GS project and generates report</Description>
+	<Author>SDL Community Developers</Author>
+	<RequiredProduct name="SDLTradosStudio" minversion="14.0" maxversion="15.0"/>
+	<Include>
+		<File>Sdl.Community.Toolkit.Core.dll</File>
+	</Include>
+</PluginPackage>

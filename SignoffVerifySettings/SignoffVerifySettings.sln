@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.SignoffVerifySettings", "SignoffVerifySettings\Sdl.Community.SignoffVerifySettings.csproj", "{68A60186-1CC5-47A7-991D-1BCE274FFC8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.SignoffVerifySettings.UnitTests", "Sdl.Community.SignoffVerifySettings.UnitTests\Sdl.Community.SignoffVerifySettings.UnitTests.csproj", "{BE38E7F2-3771-4C6B-9FB4-047FF9567BEB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68A60186-1CC5-47A7-991D-1BCE274FFC8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68A60186-1CC5-47A7-991D-1BCE274FFC8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68A60186-1CC5-47A7-991D-1BCE274FFC8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68A60186-1CC5-47A7-991D-1BCE274FFC8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE38E7F2-3771-4C6B-9FB4-047FF9567BEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE38E7F2-3771-4C6B-9FB4-047FF9567BEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE38E7F2-3771-4C6B-9FB4-047FF9567BEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE38E7F2-3771-4C6B-9FB4-047FF9567BEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B6D194E-35BA-44DB-A111-B364B07E82AA}
+	EndGlobalSection
+EndGlobal
