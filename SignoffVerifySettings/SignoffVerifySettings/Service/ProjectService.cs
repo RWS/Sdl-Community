@@ -110,7 +110,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 								// get the number of assignees
 								var assigneesNumber = childNode.LastChild != null
 									? childNode.LastChild != null
-									? childNode.LastChild.ChildNodes.Count > 0
+									? childNode.LastChild.LastChild != null
 									? childNode.LastChild.LastChild.ChildNodes.Count > 0
 									? childNode.LastChild.LastChild.ChildNodes.Count
 									: 0 : 0 : 0 : 0;
