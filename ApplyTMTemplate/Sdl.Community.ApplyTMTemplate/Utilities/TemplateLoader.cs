@@ -66,10 +66,10 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			return null;
 		}
 
-		public List<LanguageResourceBundle> GetLanguageResourceBundlesFromFile(string resourceTemplatePath, out string message, out List<int> unIDedLangs)
+		public List<LanguageResourceBundle> GetLanguageResourceBundlesFromFile(string resourceTemplatePath, out string message, out List<int> unIDedLanguages)
 		{
 			message = "";
-			unIDedLangs = new List<int>();
+			unIDedLanguages = new List<int>();
 
 			if (string.IsNullOrEmpty(resourceTemplatePath))
 			{
@@ -114,9 +114,9 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 					}
 					catch (Exception)
 					{
-						if (!unIDedLangs.Exists(id => id == lcid))
+						if (!unIDedLanguages.Exists(id => id == lcid))
 						{
-							unIDedLangs.Add(lcid);
+							unIDedLanguages.Add(lcid);
 						}
 						continue;
 					}

@@ -210,14 +210,16 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private async void ApplyTmTemplate()
 		{
 
-			var langResBundlesList = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out string message, out List<int> unIDedLangs);
-			string idedLanguages = langResBundlesList.Aggregate("", (l ,  j) => l + ' ' + j.LanguageCode);
-			string unIDedLanguages = unIDedLangs.Aggregate("", (i, j) => i + ' ' + j);
-			
-			await _dialogCoordinator.ShowMessageAsync(this, "Error", $"The following languages were identified: {idedLanguages}\n" +
-			                                                         $"The following languages couldn't be identified because the LCID(s) is(are) not unique: {unIDedLanguages}");
+			var langResBundlesList = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out var message, out var unIDedLanguagess);
 
-			if (langResBundlesList == null || langResBundlesList.Count == 0)
+			//transform the list of unIDedLanguages and idedLanguages into two strings, respectively
+			var idedLanguages = langResBundlesList.Aggregate("", (l ,  j) => l + "\n  \u2022" + j.LanguageCode);
+			var unIDedLanguages = unIDedLanguagess.Aggregate("", (i, j) => i + "\n  \u2022" + j);
+			
+			await _dialogCoordinator.ShowMessageAsync(this, "Error", $"The following languages were identified:{idedLanguages}" +
+			                                                         $"\n\nThe following languages couldn't be identified because their LCID is not unique:{unIDedLanguages}");
+
+			if (langResBundlesList.Count == 0)
 			{
 				await _dialogCoordinator.ShowMessageAsync(this, "Warning", message);
 				return;
