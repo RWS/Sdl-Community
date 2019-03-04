@@ -66,9 +66,10 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			return null;
 		}
 
-		public List<LanguageResourceBundle> GetLanguageResourceBundlesFromFile(string resourceTemplatePath, out string message)
+		public List<LanguageResourceBundle> GetLanguageResourceBundlesFromFile(string resourceTemplatePath, out string message, out List<int> unIDedLangs)
 		{
 			message = "";
+			unIDedLangs = new List<int>();
 
 			if (string.IsNullOrEmpty(resourceTemplatePath))
 			{
@@ -104,7 +105,23 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 				if (lr == null)
 				{
-					lr = defaultLangResProvider.GetDefaultLanguageResources(CultureInfo.GetCultureInfo(int.Parse(res.Attributes["Lcid"].Value)));
+					var lcid = int.Parse(res.Attributes["Lcid"].Value);
+					CultureInfo culture = null;
+
+					try
+					{
+						culture = CultureInfo.GetCultureInfo(lcid);
+					}
+					catch (Exception)
+					{
+						if (!unIDedLangs.Exists(id => id == lcid))
+						{
+							unIDedLangs.Add(lcid);
+						}
+						continue;
+					}
+
+					lr = defaultLangResProvider.GetDefaultLanguageResources(culture);
 					langResBundlesList.Add(lr);
 				}
 
