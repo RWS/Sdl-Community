@@ -151,4 +151,22 @@
   <data name="Error" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Error.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Identified_Languages" xml:space="preserve">
+    <value>The following languages were identified:</value>
+  </data>
+  <data name="Unidentified_Languages" xml:space="preserve">
+    <value>The following languages couldn't be identified because their LCID is not unique:</value>
+  </data>
+  <data name="Error_Window_Title" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Select_at_least_one_TM" xml:space="preserve">
+    <value>Select at least one TM</value>
+  </data>
+  <data name="Warning_Window_Title" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Please_select_the_folder_containing_the_TMs" xml:space="preserve">
+    <value>Please select the folder containing the TMs</value>
+  </data>
 </root>
