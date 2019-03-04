@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using Sdl.Community.SignoffVerifySettings.Helpers;
 using Sdl.Community.SignoffVerifySettings.Model;
 using Sdl.Community.Toolkit.Core;
 using Sdl.ProjectAutomation.FileBased;
@@ -33,6 +34,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 					var targetLanguages = projectInfo.TargetLanguages;
 				}
 				var targetFiles = GetTargetFilesSettingsGuids(currentProject);
+				GetSettingsBundleInformation(targetFiles, currentProject);
 			}			
 		}
 
@@ -73,9 +75,53 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		}
 
 		// Get Settings Bundle for the target files from the .sdlproj xml document using the Settings Bundle Guids
-		private void GetSettingsBundleInformation()
+		private void GetSettingsBundleInformation(List<LanguageFileXmlNodeModel> targetFiles, FileBasedProject currentProject)
 		{
+			var doc = new XmlDocument();
+			doc.Load(currentProject.FilePath);
+			var settings = currentProject.GetSettings();
+			var phaseXmlNodeModels = new List<PhaseXmlNodeModel>();
 
+			//foreach target file check if exists one specific settingsBundle 
+			foreach (var targetFile in targetFiles)
+			{
+				var settingsBundles = doc.SelectSingleNode($"//SettingsBundle[@Guid='{targetFile.SettingsBundleGuid}']");
+				foreach(XmlNode settingBundle in settingsBundles)
+				{
+					foreach(XmlNode childNode in settingBundle.ChildNodes)
+					{
+						if(childNode.Attributes.Count > 0)
+						{
+							var phaseXmlNodeModel = new PhaseXmlNodeModel();
+							//To do: move the below code in a generic method (GetPhaseInformation()) in Utils.cs, because it needs to be used also for the other phases
+							if (childNode.Attributes["Id"].Value.Equals(Constants.ReviewPhase))
+							{
+								foreach (XmlNode node in childNode.ChildNodes)
+								{
+									if (node.Attributes["Id"].Value.Equals(Constants.IsCurrentAssignment))
+									{
+										// get info for the current assignement of the phase
+										phaseXmlNodeModel.PhaseName = Constants.ReviewPhase;
+										phaseXmlNodeModel.IsCurrentAssignment = node.InnerText;
+										phaseXmlNodeModel.TargetFileGuid = targetFile.LanguageFileGUID;										
+									}
+								}
+
+								// get the number of assignees
+								var assigneesNumber = childNode.LastChild != null
+									? childNode.LastChild != null
+									? childNode.LastChild.ChildNodes.Count > 0
+									? childNode.LastChild.LastChild.ChildNodes.Count > 0
+									? childNode.LastChild.LastChild.ChildNodes.Count
+									: 0 : 0 : 0 : 0;
+
+								phaseXmlNodeModel.AssigneesNumber = assigneesNumber;
+								phaseXmlNodeModels.Add(phaseXmlNodeModel);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
