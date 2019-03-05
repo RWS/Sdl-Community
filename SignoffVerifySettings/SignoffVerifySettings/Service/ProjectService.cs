@@ -11,11 +11,20 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 {
 	public class ProjectService
 	{
+		private List<PhaseXmlNodeModel> _phaseXmlNodeModels = new List<PhaseXmlNodeModel>();
+
+		/// <summary>
+		/// Get project controller
+		/// </summary>
+		/// <returns>information for the Project Controller</returns>
 		public ProjectsController GetProjectController()
 		{
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
 
+		/// <summary>
+		/// Get current project information which will be displayed in the Signoff Verify Settings report
+		/// </summary>
 		public void GetCurrentProjectInformation()
 		{
 			// Studio version
@@ -38,18 +47,24 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			}			
 		}
 
-		// Get the opened Studio version
+		/// <summary>
+		/// Get the opened Studio version
+		/// </summary>
+		/// <returns></returns>
 		private string GetStudioVersion()
 		{
 			var studioVersion = new Studio().GetStudioVersion();
 			return studioVersion != null ? studioVersion.Version : string.Empty;
 		}
 
-		// Get Target Language File tag attributes from the .sdlproj xml document 
+		/// <summary>
+		/// Get Target Language File tag attributes from the .sdlproj xml document 
+		/// </summary>
+		/// <param name="currentProject">current project selected</param>
+		/// <returns></returns>
 		private List<LanguageFileXmlNodeModel> GetTargetFilesSettingsGuids(FileBasedProject currentProject)
 		{
-			var doc = new XmlDocument();
-			doc.Load(currentProject.FilePath);
+			var doc = Utils.LoadXmlDocument(currentProject);
 			var languageFileElements = doc.GetElementsByTagName("LanguageFile");
 			var langFileXMLNodeModels = new List<LanguageFileXmlNodeModel>();
 			foreach (XmlNode elem in languageFileElements)
@@ -74,15 +89,17 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			return targetFiles;
 		}
 
-		// Get Settings Bundle for the target files from the .sdlproj xml document using the Settings Bundle Guids
+		/// <summary>
+		/// Get Settings Bundle information for the target files from the .sdlproj xml document using the Settings Bundle Guids
+		/// </summary>
+		/// <param name="targetFiles">target files</param>
+		/// <param name="currentProject">current project selected</param>
 		private void GetSettingsBundleInformation(List<LanguageFileXmlNodeModel> targetFiles, FileBasedProject currentProject)
 		{
-			var doc = new XmlDocument();
-			doc.Load(currentProject.FilePath);
+			var doc = Utils.LoadXmlDocument(currentProject);
 			var settings = currentProject.GetSettings();
-			var phaseXmlNodeModels = new List<PhaseXmlNodeModel>();
 
-			//foreach target file check if exists one specific settingsBundle 
+			//foreach target file get the phase information
 			foreach (var targetFile in targetFiles)
 			{
 				var settingsBundles = doc.SelectSingleNode($"//SettingsBundle[@Guid='{targetFile.SettingsBundleGuid}']");
@@ -90,38 +107,25 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 				{
 					foreach(XmlNode childNode in settingBundle.ChildNodes)
 					{
-						if(childNode.Attributes.Count > 0)
+						if (childNode.Attributes.Count > 0)
 						{
-							var phaseXmlNodeModel = new PhaseXmlNodeModel();
-							//To do: move the below code in a generic method (GetPhaseInformation()) in Utils.cs, because it needs to be used also for the other phases
-							if (childNode.Attributes["Id"].Value.Equals(Constants.ReviewPhase))
-							{
-								foreach (XmlNode node in childNode.ChildNodes)
-								{
-									if (node.Attributes["Id"].Value.Equals(Constants.IsCurrentAssignment))
-									{
-										// get info for the current assignement of the phase
-										phaseXmlNodeModel.PhaseName = Constants.ReviewPhase;
-										phaseXmlNodeModel.IsCurrentAssignment = node.InnerText;
-										phaseXmlNodeModel.TargetFileGuid = targetFile.LanguageFileGUID;										
-									}
-								}
-
-								// get the number of assignees
-								var assigneesNumber = childNode.LastChild != null
-									? childNode.LastChild != null
-									? childNode.LastChild.LastChild != null
-									? childNode.LastChild.LastChild.ChildNodes.Count > 0
-									? childNode.LastChild.LastChild.ChildNodes.Count
-									: 0 : 0 : 0 : 0;
-
-								phaseXmlNodeModel.AssigneesNumber = assigneesNumber;
-								phaseXmlNodeModels.Add(phaseXmlNodeModel);
-							}
+							Utils.GetPhaseInformation(Constants.ReviewPhase, childNode, targetFile, _phaseXmlNodeModels);
+							Utils.GetPhaseInformation(Constants.TranslationPhase, childNode, targetFile, _phaseXmlNodeModels);
+							Utils.GetPhaseInformation(Constants.PreparationPhase, childNode, targetFile, _phaseXmlNodeModels);
+							Utils.GetPhaseInformation(Constants.FinalisationPhase, childNode, targetFile, _phaseXmlNodeModels);
 						}
 					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// Get the QA Verification information based on the report which is generated after the Verify Files batch task ran.
+		/// </summary>
+		/// <param name="currentProject">current project selected</param>
+		private void GetQAVerificationInfo(FileBasedProject currentProject)
+		{
+			var doc = Utils.LoadXmlDocument(currentProject);
 		}
 	}
 }

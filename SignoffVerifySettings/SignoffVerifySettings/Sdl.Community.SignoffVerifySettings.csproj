@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileConverter.cs" />
+    <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Model\LanguageFileXmlNodeModel.cs" />
     <Compile Include="Model\PhaseXmlNodeModel.cs" />
     <Compile Include="Service\ProjectService.cs" />
@@ -110,7 +111,7 @@
     <Compile Include="SignoffVerifySettingsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Utils\Constants.cs" />
+    <Compile Include="Helpers\Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PluginResources.resx" />
