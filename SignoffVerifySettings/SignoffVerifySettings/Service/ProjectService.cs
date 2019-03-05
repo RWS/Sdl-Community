@@ -13,7 +13,8 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 {
 	public class ProjectService
 	{
-		private List<PhaseXmlNodeModel> _phaseXmlNodeModel = new List<PhaseXmlNodeModel>();
+		private List<PhaseXmlNodeModel> _phaseXmlNodeModels = new List<PhaseXmlNodeModel>();
+		private List<LanguageFileXmlNodeModel> _targetFiles = new List<LanguageFileXmlNodeModel>();
 
 		/// <summary>
 		/// Get project controller
@@ -44,10 +45,10 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 					var sourceLanguage = projectInfo.SourceLanguage;
 					var targetLanguages = projectInfo.TargetLanguages;
 				}
-				var targetFiles = GetTargetFilesSettingsGuids(currentProject);
-				//GetSettingsBundleInformation(targetFiles, currentProject);
+				_targetFiles = GetTargetFilesSettingsGuids(currentProject);
+				GetSettingsBundleInformation(currentProject);
 
-				GetQAVerificationInfo(projectInfo, targetFiles);
+				GetQAVerificationInfo(projectInfo);
 
 			}
 		}
@@ -90,8 +91,8 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 				? currentProject.GetProjectInfo().SourceLanguage.CultureInfo.Name
 				:string.Empty :string.Empty : string.Empty;
 
-			var targetFiles = langFileXMLNodeModels.Where(l => l.LanguageCode != sourceLangauge).ToList();
-			return targetFiles;
+			_targetFiles = langFileXMLNodeModels.Where(l => l.LanguageCode != sourceLangauge).ToList();
+			return _targetFiles;
 		}
 
 		/// <summary>
@@ -99,13 +100,13 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// </summary>
 		/// <param name="targetFiles">target files</param>
 		/// <param name="currentProject">current project selected</param>
-		private void GetSettingsBundleInformation(List<LanguageFileXmlNodeModel> targetFiles, FileBasedProject currentProject)
+		private void GetSettingsBundleInformation(FileBasedProject currentProject)
 		{
 			var doc = Utils.LoadXmlDocument(currentProject.FilePath);
 			var settings = currentProject.GetSettings();
 
 			//foreach target file get the phase information
-			foreach (var targetFile in targetFiles)
+			foreach (var targetFile in _targetFiles)
 			{
 				var settingsBundles = doc.SelectSingleNode($"//SettingsBundle[@Guid='{targetFile.SettingsBundleGuid}']");
 				foreach(XmlNode settingBundle in settingsBundles)
@@ -114,10 +115,10 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 					{
 						if (childNode.Attributes.Count > 0)
 						{
-							Utils.GetPhaseInformation(Constants.ReviewPhase, childNode, targetFile, _phaseXmlNodeModel);
-							Utils.GetPhaseInformation(Constants.TranslationPhase, childNode, targetFile, _phaseXmlNodeModel);
-							Utils.GetPhaseInformation(Constants.PreparationPhase, childNode, targetFile, _phaseXmlNodeModel);
-							Utils.GetPhaseInformation(Constants.FinalisationPhase, childNode, targetFile, _phaseXmlNodeModel);
+							Utils.GetPhaseInformation(Constants.ReviewPhase, childNode, targetFile, _phaseXmlNodeModels);
+							Utils.GetPhaseInformation(Constants.TranslationPhase, childNode, targetFile, _phaseXmlNodeModels);
+							Utils.GetPhaseInformation(Constants.PreparationPhase, childNode, targetFile, _phaseXmlNodeModels);
+							Utils.GetPhaseInformation(Constants.FinalisationPhase, childNode, targetFile, _phaseXmlNodeModels);
 						}
 					}
 				}
@@ -128,17 +129,40 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// Get the QA Verification information based on the report which is generated after the Verify Files batch task ran.
 		/// </summary>
 		/// <param name="currentProject">current project selected</param>
-		private void GetQAVerificationInfo(ProjectInfo projectInfo, List<LanguageFileXmlNodeModel> targetFiles)
+		private void GetQAVerificationInfo(ProjectInfo projectInfo)
 		{
 			//get report info for each targetFile
-			foreach (var targetFile in targetFiles)
-			{
-				string reportPath = $@"{projectInfo.LocalProjectFolder}\Reports\Veriy Files {projectInfo.SourceLanguage.LanguageCode}_{targetFile.LanguageCode}.xml";
+			foreach (var targetFile in _targetFiles)
+			{				
+				string reportPath = $@"{projectInfo.LocalProjectFolder}\Reports\Verify Files {projectInfo.SourceLanguage.CultureInfo.Name}_{targetFile.LanguageCode}.xml";
 				if (File.Exists(reportPath))
 				{
-					var doc = Utils.LoadXmlDocument(reportPath);
+					var doc = Utils.LoadXmlDocument(reportPath);					
+					var fileNodes = doc.GetElementsByTagName("file");
+					foreach (XmlNode fileNode in fileNodes)
+					{
+						if (fileNode.Attributes.Count > 0)
+						{
+							// get the info only for those target files on which the 'Verify Files' batch task has been run.
+							var reportFileGuid = fileNode.Attributes["guid"].Value;
+							if (targetFile.LanguageFileGUID.Equals(reportFileGuid))
+							{
+								targetFile.FileName = fileNode.Attributes["name"].Value;
+
+								// the first element is selected, because there is only one 'task' tag defined in the report structure
+								var taskInfoNode = doc.GetElementsByTagName("taskInfo")[0];
+								if (taskInfoNode.Attributes.Count > 0)
+								{
+									targetFile.RunAt = taskInfoNode.Attributes["runAt"].Value;
+								}
+							}
+						}
+					}
 				}
 			}
+
+			// get info from the last "Verify Files" report which is generated after running the "Verify Files" batch task on all files
+
 		}
 	}
 }

@@ -101,8 +101,7 @@
     <Compile Include="FileConverter.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Model\LanguageFileXmlNodeModel.cs" />
-    <Compile Include="Model\QAVerificationModel.cs" />
-    <Compile Include="Model\TargetFileXmlModel.cs" />
+    <Compile Include="Model\PhaseXmlNodeModel.cs" />
     <Compile Include="Service\ProjectService.cs" />
     <Compile Include="SignoffVerifySettingsBatchTask.cs" />
     <Compile Include="SignoffVerifySettings.cs" />
