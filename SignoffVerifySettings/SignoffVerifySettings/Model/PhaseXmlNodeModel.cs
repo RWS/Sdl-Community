@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.SignoffVerifySettings.Model
 {
-	public class TargetFileXmlModel
+	public class PhaseXmlNodeModel
 	{
 		public string TargetFileGuid { get; set; }
 		public string PhaseName { get; set; }

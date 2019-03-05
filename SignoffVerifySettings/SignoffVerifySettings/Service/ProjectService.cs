@@ -13,7 +13,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 {
 	public class ProjectService
 	{
-		private List<TargetFileXmlModel> _targetFileXmlModels = new List<TargetFileXmlModel>();
+		private List<PhaseXmlNodeModel> _phaseXmlNodeModel = new List<PhaseXmlNodeModel>();
 
 		/// <summary>
 		/// Get project controller
@@ -47,7 +47,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 				var targetFiles = GetTargetFilesSettingsGuids(currentProject);
 				//GetSettingsBundleInformation(targetFiles, currentProject);
 
-				GetQAVerificationInfo(projectInfo);
+				GetQAVerificationInfo(projectInfo, targetFiles);
 
 			}
 		}
@@ -114,10 +114,10 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 					{
 						if (childNode.Attributes.Count > 0)
 						{
-							Utils.GetPhaseInformation(Constants.ReviewPhase, childNode, targetFile, _targetFileXmlModels);
-							Utils.GetPhaseInformation(Constants.TranslationPhase, childNode, targetFile, _targetFileXmlModels);
-							Utils.GetPhaseInformation(Constants.PreparationPhase, childNode, targetFile, _targetFileXmlModels);
-							Utils.GetPhaseInformation(Constants.FinalisationPhase, childNode, targetFile, _targetFileXmlModels);
+							Utils.GetPhaseInformation(Constants.ReviewPhase, childNode, targetFile, _phaseXmlNodeModel);
+							Utils.GetPhaseInformation(Constants.TranslationPhase, childNode, targetFile, _phaseXmlNodeModel);
+							Utils.GetPhaseInformation(Constants.PreparationPhase, childNode, targetFile, _phaseXmlNodeModel);
+							Utils.GetPhaseInformation(Constants.FinalisationPhase, childNode, targetFile, _phaseXmlNodeModel);
 						}
 					}
 				}
@@ -128,12 +128,12 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// Get the QA Verification information based on the report which is generated after the Verify Files batch task ran.
 		/// </summary>
 		/// <param name="currentProject">current project selected</param>
-		private void GetQAVerificationInfo(ProjectInfo projectInfo)
+		private void GetQAVerificationInfo(ProjectInfo projectInfo, List<LanguageFileXmlNodeModel> targetFiles)
 		{
 			//get report info for each targetFile
-			foreach (var targetFile in _targetFileXmlModels)
+			foreach (var targetFile in targetFiles)
 			{
-				string reportPath = $@"{projectInfo.LocalProjectFolder}\Reports\Veriy Files {projectInfo.SourceLanguage.LanguageCode}_{targetFile.TargetLanguageCode}.xml";
+				string reportPath = $@"{projectInfo.LocalProjectFolder}\Reports\Veriy Files {projectInfo.SourceLanguage.LanguageCode}_{targetFile.LanguageCode}.xml";
 				if (File.Exists(reportPath))
 				{
 					var doc = Utils.LoadXmlDocument(reportPath);
