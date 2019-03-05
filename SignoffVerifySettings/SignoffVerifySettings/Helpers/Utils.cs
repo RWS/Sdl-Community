@@ -52,10 +52,10 @@ namespace Sdl.Community.SignoffVerifySettings.Helpers
 		/// </summary>
 		/// <param name="currentProject">current project</param>
 		/// <returns>XmlDocument</returns>
-		public static XmlDocument LoadXmlDocument(FileBasedProject currentProject)
+		public static XmlDocument LoadXmlDocument(string filePath)
 		{
 			var doc = new XmlDocument();
-			doc.Load(currentProject.FilePath);
+			doc.Load(filePath);
 
 			return doc;
 		}

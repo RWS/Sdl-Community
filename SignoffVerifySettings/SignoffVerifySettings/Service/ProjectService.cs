@@ -33,17 +33,18 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			var currentProject = GetProjectController().CurrentProject;
 			if (currentProject != null)
 			{
-				var projectInfo = currentProject.GetProjectInfo();
-				if (projectInfo != null)
-				{
-					// Project Name
-					var projectName = projectInfo.Name;
-					// Language Pairs
-					var sourceLanguage = projectInfo.SourceLanguage;
-					var targetLanguages = projectInfo.TargetLanguages;
-				}
-				var targetFiles = GetTargetFilesSettingsGuids(currentProject);
-				GetSettingsBundleInformation(targetFiles, currentProject);
+				//var projectInfo = currentProject.GetProjectInfo();
+				//if (projectInfo != null)
+				//{
+				//	// Project Name
+				//	var projectName = projectInfo.Name;
+				//	// Language Pairs
+				//	var sourceLanguage = projectInfo.SourceLanguage;
+				//	var targetLanguages = projectInfo.TargetLanguages;
+				//}
+				//var targetFiles = GetTargetFilesSettingsGuids(currentProject);
+				//GetSettingsBundleInformation(targetFiles, currentProject);
+				GetQAVerificationInfo(currentProject);
 			}			
 		}
 
@@ -64,7 +65,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// <returns></returns>
 		private List<LanguageFileXmlNodeModel> GetTargetFilesSettingsGuids(FileBasedProject currentProject)
 		{
-			var doc = Utils.LoadXmlDocument(currentProject);
+			var doc = Utils.LoadXmlDocument(currentProject.FilePath);
 			var languageFileElements = doc.GetElementsByTagName("LanguageFile");
 			var langFileXMLNodeModels = new List<LanguageFileXmlNodeModel>();
 			foreach (XmlNode elem in languageFileElements)
@@ -96,7 +97,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// <param name="currentProject">current project selected</param>
 		private void GetSettingsBundleInformation(List<LanguageFileXmlNodeModel> targetFiles, FileBasedProject currentProject)
 		{
-			var doc = Utils.LoadXmlDocument(currentProject);
+			var doc = Utils.LoadXmlDocument(currentProject.FilePath);
 			var settings = currentProject.GetSettings();
 
 			//foreach target file get the phase information
@@ -125,7 +126,8 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// <param name="currentProject">current project selected</param>
 		private void GetQAVerificationInfo(FileBasedProject currentProject)
 		{
-			var doc = Utils.LoadXmlDocument(currentProject);
+			//string reportPath = 
+			var doc = Utils.LoadXmlDocument("");
 		}
 	}
 }
