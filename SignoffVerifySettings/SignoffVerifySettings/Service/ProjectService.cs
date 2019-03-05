@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using Sdl.Community.SignoffVerifySettings.Helpers;
 using Sdl.Community.SignoffVerifySettings.Model;
 using Sdl.Community.Toolkit.Core;
+using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -11,7 +13,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 {
 	public class ProjectService
 	{
-		private List<PhaseXmlNodeModel> _phaseXmlNodeModels = new List<PhaseXmlNodeModel>();
+		private List<TargetFileXmlModel> _targetFileXmlModels = new List<TargetFileXmlModel>();
 
 		/// <summary>
 		/// Get project controller
@@ -33,19 +35,21 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			var currentProject = GetProjectController().CurrentProject;
 			if (currentProject != null)
 			{
-				//var projectInfo = currentProject.GetProjectInfo();
-				//if (projectInfo != null)
-				//{
-				//	// Project Name
-				//	var projectName = projectInfo.Name;
-				//	// Language Pairs
-				//	var sourceLanguage = projectInfo.SourceLanguage;
-				//	var targetLanguages = projectInfo.TargetLanguages;
-				//}
-				//var targetFiles = GetTargetFilesSettingsGuids(currentProject);
+				var projectInfo = currentProject.GetProjectInfo();
+				if (projectInfo != null)
+				{
+					// Project Name
+					var projectName = projectInfo.Name;
+					// Language Pairs
+					var sourceLanguage = projectInfo.SourceLanguage;
+					var targetLanguages = projectInfo.TargetLanguages;
+				}
+				var targetFiles = GetTargetFilesSettingsGuids(currentProject);
 				//GetSettingsBundleInformation(targetFiles, currentProject);
-				GetQAVerificationInfo(currentProject);
-			}			
+
+				GetQAVerificationInfo(projectInfo);
+
+			}
 		}
 
 		/// <summary>
@@ -110,10 +114,10 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 					{
 						if (childNode.Attributes.Count > 0)
 						{
-							Utils.GetPhaseInformation(Constants.ReviewPhase, childNode, targetFile, _phaseXmlNodeModels);
-							Utils.GetPhaseInformation(Constants.TranslationPhase, childNode, targetFile, _phaseXmlNodeModels);
-							Utils.GetPhaseInformation(Constants.PreparationPhase, childNode, targetFile, _phaseXmlNodeModels);
-							Utils.GetPhaseInformation(Constants.FinalisationPhase, childNode, targetFile, _phaseXmlNodeModels);
+							Utils.GetPhaseInformation(Constants.ReviewPhase, childNode, targetFile, _targetFileXmlModels);
+							Utils.GetPhaseInformation(Constants.TranslationPhase, childNode, targetFile, _targetFileXmlModels);
+							Utils.GetPhaseInformation(Constants.PreparationPhase, childNode, targetFile, _targetFileXmlModels);
+							Utils.GetPhaseInformation(Constants.FinalisationPhase, childNode, targetFile, _targetFileXmlModels);
 						}
 					}
 				}
@@ -124,10 +128,17 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// Get the QA Verification information based on the report which is generated after the Verify Files batch task ran.
 		/// </summary>
 		/// <param name="currentProject">current project selected</param>
-		private void GetQAVerificationInfo(FileBasedProject currentProject)
+		private void GetQAVerificationInfo(ProjectInfo projectInfo)
 		{
-			//string reportPath = 
-			var doc = Utils.LoadXmlDocument("");
+			//get report info for each targetFile
+			foreach (var targetFile in _targetFileXmlModels)
+			{
+				string reportPath = $@"{projectInfo.LocalProjectFolder}\Reports\Veriy Files {projectInfo.SourceLanguage.LanguageCode}_{targetFile.TargetLanguageCode}.xml";
+				if (File.Exists(reportPath))
+				{
+					var doc = Utils.LoadXmlDocument(reportPath);
+				}
+			}
 		}
 	}
 }

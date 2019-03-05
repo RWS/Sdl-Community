@@ -1,12 +1,13 @@
 ﻿namespace Sdl.Community.SignoffVerifySettings.Model
 {
-	public class PhaseXmlNodeModel
+	public class TargetFileXmlModel
 	{
 		public string TargetFileGuid { get; set; }
 		public string PhaseName { get; set; }
 		public int AssigneesNumber { get; set; }
+		public string TargetLanguageCode { get; set; }
 
 		// Used to identify which phase is assigned to user(s)
-		public string IsCurrentAssignment { get; set; }		
+		public string IsCurrentAssignment { get; set; }
 	}
 }
