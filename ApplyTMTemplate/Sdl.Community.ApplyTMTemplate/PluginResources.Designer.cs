@@ -111,6 +111,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Error_Window_Title {
+            get {
+                return ResourceManager.GetString("Error_Window_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon FileBasedTM {
@@ -127,6 +136,24 @@ namespace Sdl.Community.ApplyTMTemplate {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following languages were identified:.
+        /// </summary>
+        internal static string Identified_Languages {
+            get {
+                return ResourceManager.GetString("Identified_Languages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select the folder containing the TMs.
+        /// </summary>
+        internal static string Please_select_the_folder_containing_the_TMs {
+            get {
+                return ResourceManager.GetString("Please_select_the_folder_containing_the_TMs", resourceCulture);
             }
         }
         
@@ -161,12 +188,39 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select at least one TM.
+        /// </summary>
+        internal static string Select_at_least_one_TM {
+            get {
+                return ResourceManager.GetString("Select_at_least_one_TM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon Unchecked {
             get {
                 object obj = ResourceManager.GetObject("Unchecked", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following languages couldn&apos;t be identified because their LCID is not unique:.
+        /// </summary>
+        internal static string Unidentified_Languages {
+            get {
+                return ResourceManager.GetString("Unidentified_Languages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        internal static string Warning_Window_Title {
+            get {
+                return ResourceManager.GetString("Warning_Window_Title", resourceCulture);
             }
         }
     }

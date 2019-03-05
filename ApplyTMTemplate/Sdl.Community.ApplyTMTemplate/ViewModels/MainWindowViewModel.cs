@@ -170,7 +170,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			var dlg = new FolderSelectDialog
 			{
-				Title = "Please select the folder containing the TMs",
+				Title = PluginResources.Please_select_the_folder_containing_the_TMs,
 				InitialDirectory = _tmPath ?? Environment.CurrentDirectory
 			};
 
@@ -210,16 +210,18 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private async void ApplyTmTemplate()
 		{
 
-			var langResBundlesList = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out string message, out List<int> unIDedLangs);
-			string idedLanguages = langResBundlesList.Aggregate("", (l ,  j) => l + ' ' + j.LanguageCode);
-			string unIDedLanguages = unIDedLangs.Aggregate("", (i, j) => i + ' ' + j);
-			
-			await _dialogCoordinator.ShowMessageAsync(this, "Error", $"The following languages were identified: {idedLanguages}\n" +
-			                                                         $"The following languages couldn't be identified because the LCID(s) is(are) not unique: {unIDedLanguages}");
+			var langResBundlesList = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out var message, out var unIDedLanguagess);
 
-			if (langResBundlesList == null || langResBundlesList.Count == 0)
+			//transform the list of unIDedLanguages and idedLanguages into two strings, respectively
+			var idedLanguages = langResBundlesList.Aggregate("", (l ,  j) => l + "\n  \u2022" + j.LanguageCode);
+			var unIDedLanguages = unIDedLanguagess.Aggregate("", (i, j) => i + "\n  \u2022" + j);
+			
+			await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title, $"{PluginResources.Identified_Languages}{idedLanguages}" +
+			                                                         $"\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}");
+
+			if (langResBundlesList.Count == 0)
 			{
-				await _dialogCoordinator.ShowMessageAsync(this, "Warning", message);
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, message);
 				return;
 			}
 
@@ -228,7 +230,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			if (selectedTmList.Count == 0)
 			{
-				await _dialogCoordinator.ShowMessageAsync(this, "Warning", "Select at least one TM");
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, PluginResources.Select_at_least_one_TM);
 				return;
 			}
 
