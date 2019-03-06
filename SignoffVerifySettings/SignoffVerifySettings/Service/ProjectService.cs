@@ -58,6 +58,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 				projectInfoReportModel.PhaseXmlNodeModels = _phaseXmlNodeModels;
 				projectInfoReportModel.LanguageFileXmlNodeModels = _targetFiles;
 				projectInfoReportModel.RunAt = runAt;
+				GetMaterialsInfo(currentProject);
 			}
 		}
 		#endregion
@@ -198,8 +199,25 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			return runAt;
 		}
 
-		private void GetMaterialsInfo()
+		private void GetMaterialsInfo(FileBasedProject currentProject)
 		{
+			// get RegExRules & CheckRexEx values
+			var regExRulesNodeValue = _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='RegExRules']") != null
+				? _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='RegExRules']").FirstChild != null 
+				? _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='RegExRules']").FirstChild.Value 
+				: string.Empty : string.Empty;
+			var checkRegExRulesNodeValue = _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='CheckRegEx']") != null
+				? _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='CheckRegEx']").FirstChild != null
+				? _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='CheckRegEx']").FirstChild.Value
+				: string.Empty : string.Empty;
+
+			// get translation memories & termbases used
+			var translationMemories = currentProject.GetTranslationProviderConfiguration().Entries;
+			var termbases = currentProject.GetTermbaseConfiguration().Termbases;
+
+			//To do: set the aboce TMs and TBs accordingly to the object which will be used on the report creation
+			// check if when setting a TM to a file (open file in editor, go to project settings->assing tm),
+			// if the value of which file the TM is assigned to is stored in the translationMemories configuration result
 		}
 		#endregion
 	}
