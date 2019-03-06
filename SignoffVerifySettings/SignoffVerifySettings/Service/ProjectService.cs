@@ -13,18 +13,24 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 {
 	public class ProjectService
 	{
+		#region Private Fields
 		private List<PhaseXmlNodeModel> _phaseXmlNodeModels = new List<PhaseXmlNodeModel>();
 		private List<LanguageFileXmlNodeModel> _targetFiles = new List<LanguageFileXmlNodeModel>();
+		private ProjectsController _projectsController = new ProjectsController();
+		private XmlDocument _document = new XmlDocument();
+		private readonly Utils _utils;
+		#endregion
 
-		/// <summary>
-		/// Get project controller
-		/// </summary>
-		/// <returns>information for the Project Controller</returns>
-		public ProjectsController GetProjectController()
+		#region Constructors
+		public ProjectService()
 		{
-			return SdlTradosStudio.Application.GetController<ProjectsController>();
+			_utils = new Utils();
+			_projectsController = GetProjectController();			
+			_document = _utils.LoadXmlDocument(_projectsController != null ? _projectsController.CurrentProject != null? _projectsController.CurrentProject.FilePath : null : null);
 		}
+		#endregion
 
+		#region Public Methods
 		/// <summary>
 		/// Get current project information which will be displayed in the Signoff Verify Settings report
 		/// </summary>
@@ -54,6 +60,17 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 				projectInfoReportModel.RunAt = runAt;
 			}
 		}
+		#endregion
+
+		#region Private Methods
+		/// <summary>
+		/// Get project controller
+		/// </summary>
+		/// <returns>information for the Project Controller</returns>
+		private ProjectsController GetProjectController()
+		{
+			return SdlTradosStudio.Application.GetController<ProjectsController>();
+		}
 
 		/// <summary>
 		/// Get the opened Studio version
@@ -72,8 +89,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// <returns></returns>
 		private List<LanguageFileXmlNodeModel> GetTargetFilesSettingsGuids(FileBasedProject currentProject)
 		{
-			var doc = Utils.LoadXmlDocument(currentProject.FilePath);
-			var languageFileElements = doc.GetElementsByTagName("LanguageFile");
+			var languageFileElements = _document.GetElementsByTagName("LanguageFile");
 			var langFileXMLNodeModels = new List<LanguageFileXmlNodeModel>();
 			foreach (XmlNode elem in languageFileElements)
 			{
@@ -104,23 +120,22 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// <param name="currentProject">current project selected</param>
 		private void GetSettingsBundleInformation(FileBasedProject currentProject)
 		{
-			var doc = Utils.LoadXmlDocument(currentProject.FilePath);
 			var settings = currentProject.GetSettings();
 
 			//foreach target file get the phase information
 			foreach (var targetFile in _targetFiles)
 			{
-				var settingsBundles = doc.SelectSingleNode($"//SettingsBundle[@Guid='{targetFile.SettingsBundleGuid}']");
+				var settingsBundles = _document.SelectSingleNode($"//SettingsBundle[@Guid='{targetFile.SettingsBundleGuid}']");
 				foreach(XmlNode settingBundle in settingsBundles)
 				{
 					foreach(XmlNode childNode in settingBundle.ChildNodes)
 					{
 						if (childNode.Attributes.Count > 0)
 						{
-							Utils.GetPhaseInformation(Constants.ReviewPhase, childNode, targetFile, _phaseXmlNodeModels);
-							Utils.GetPhaseInformation(Constants.TranslationPhase, childNode, targetFile, _phaseXmlNodeModels);
-							Utils.GetPhaseInformation(Constants.PreparationPhase, childNode, targetFile, _phaseXmlNodeModels);
-							Utils.GetPhaseInformation(Constants.FinalisationPhase, childNode, targetFile, _phaseXmlNodeModels);
+							_utils.GetPhaseInformation(Constants.ReviewPhase, childNode, targetFile, _phaseXmlNodeModels);
+							_utils.GetPhaseInformation(Constants.TranslationPhase, childNode, targetFile, _phaseXmlNodeModels);
+							_utils.GetPhaseInformation(Constants.PreparationPhase, childNode, targetFile, _phaseXmlNodeModels);
+							_utils.GetPhaseInformation(Constants.FinalisationPhase, childNode, targetFile, _phaseXmlNodeModels);
 						}
 					}
 				}
@@ -150,7 +165,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 					var reportPath = fileInfo.FullName;
 					if (File.Exists(reportPath))
 					{
-						var doc = Utils.LoadXmlDocument(reportPath);
+						var doc = _utils.LoadXmlDocument(reportPath);
 						var fileNodes = doc.GetElementsByTagName("file");
 						foreach (XmlNode fileNode in fileNodes)
 						{
@@ -161,7 +176,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 								if (targetFile.LanguageFileGUID.Equals(reportFileGuid))
 								{
 									targetFile.FileName = fileNode.Attributes["name"].Value;
-									targetFile.RunAt = Utils.GetRunAtValue(doc);
+									targetFile.RunAt = _utils.GetRunAtValue(doc);
 								}
 							}
 						}
@@ -176,11 +191,16 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 				var reportPath = allReportFilesInfo.FullName;
 				if (File.Exists(reportPath))
 				{
-					var doc = Utils.LoadXmlDocument(reportPath);
-					runAt = Utils.GetRunAtValue(doc);
+					var doc = _utils.LoadXmlDocument(reportPath);
+					runAt = _utils.GetRunAtValue(doc);
 				}
 			}
 			return runAt;
 		}
+
+		private void GetMaterialsInfo()
+		{
+		}
+		#endregion
 	}
 }

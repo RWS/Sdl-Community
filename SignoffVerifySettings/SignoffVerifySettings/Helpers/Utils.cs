@@ -4,7 +4,7 @@ using Sdl.Community.SignoffVerifySettings.Model;
 
 namespace Sdl.Community.SignoffVerifySettings.Helpers
 {
-	public static class Utils
+	public class Utils
 	{
 		/// <summary>
 		/// Get phase information from .sdlproj doc, for the corresponding target file SettingsBundle, for each SettingsGroup of the phase
@@ -13,7 +13,7 @@ namespace Sdl.Community.SignoffVerifySettings.Helpers
 		/// <param name="childNode">child node which represents the phase SettingsGroup tag</param>
 		/// <param name="targetFile">target file</param>
 		/// <param name="phaseXmlNodeModel">list of the phaseXmlNodeModels used to store the information from .sdlproj document</param>
-		public static void GetPhaseInformation(
+		public void GetPhaseInformation(
 			string phaseType,
 			XmlNode childNode,
 			LanguageFileXmlNodeModel targetFile,
@@ -52,7 +52,7 @@ namespace Sdl.Community.SignoffVerifySettings.Helpers
 		/// </summary>
 		/// <param name="document">report .xml document</param>
 		/// <returns>RunAt value</returns>
-		public static string GetRunAtValue(XmlDocument document)
+		public string GetRunAtValue(XmlDocument document)
 		{
 			var runAt = string.Empty;
 			// the first element is selected, because there is only one 'task' tag defined in the report structure
@@ -69,7 +69,7 @@ namespace Sdl.Community.SignoffVerifySettings.Helpers
 		/// </summary>
 		/// <param name="currentProject">current project</param>
 		/// <returns>XmlDocument</returns>
-		public static XmlDocument LoadXmlDocument(string filePath)
+		public XmlDocument LoadXmlDocument(string filePath)
 		{
 			var doc = new XmlDocument();
 			doc.Load(filePath);
