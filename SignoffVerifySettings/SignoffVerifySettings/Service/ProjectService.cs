@@ -161,7 +161,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 								if (targetFile.LanguageFileGUID.Equals(reportFileGuid))
 								{
 									targetFile.FileName = fileNode.Attributes["name"].Value;
-									Utils.GetRunAtValue(doc);
+									targetFile.RunAt = Utils.GetRunAtValue(doc);
 								}
 							}
 						}
