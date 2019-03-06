@@ -32,24 +32,26 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		{
 			// Studio version
 			var studioVersion = GetStudioVersion();
-
 			var currentProject = GetProjectController().CurrentProject;
 			if (currentProject != null)
 			{
+				var projectInfoReportModel = new ProjectInfoReportModel();
 				var projectInfo = currentProject.GetProjectInfo();
 				if (projectInfo != null)
 				{
 					// Project Name
-					var projectName = projectInfo.Name;
+					projectInfoReportModel.ProjectName = projectInfo.Name;
 					// Language Pairs
-					var sourceLanguage = projectInfo.SourceLanguage;
-					var targetLanguages = projectInfo.TargetLanguages;
+					projectInfoReportModel.SourceLanguage = projectInfo.SourceLanguage;
+					projectInfoReportModel.TargetLanguages = projectInfo.TargetLanguages.ToList();
 				}
 				_targetFiles = GetTargetFilesSettingsGuids(currentProject);
 				GetSettingsBundleInformation(currentProject);
+				var runAtAllFiles = GetQAVerificationInfo(projectInfo);
 
-				GetQAVerificationInfo(projectInfo);
-
+				projectInfoReportModel.PhaseXmlNodeModels = _phaseXmlNodeModels;
+				projectInfoReportModel.LanguageFileXmlNodeModels = _targetFiles;
+				projectInfoReportModel.RunAtAllTargetFiles = runAtAllFiles;
 			}
 		}
 
@@ -126,34 +128,46 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		}
 
 		/// <summary>
-		/// Get the QA Verification information based on the report which is generated after the Verify Files batch task ran.
+		/// Get the QA Verification last DateTime (RunAt value) based on the report which is generated after the Verify Files batch task has ran.
+		/// The information for each target file is stored in _targetFiles list and "RunAt" info for the project is returned by the method as string
 		/// </summary>
 		/// <param name="currentProject">current project selected</param>
-		private void GetQAVerificationInfo(ProjectInfo projectInfo)
+		private string GetQAVerificationInfo(ProjectInfo projectInfo)
 		{
+			var runAtAllFiles = string.Empty;
+			var directoryInfo = new DirectoryInfo($@"{projectInfo.LocalProjectFolder}\Reports\");
+
 			//get report info for each targetFile
 			foreach (var targetFile in _targetFiles)
-			{				
-				string reportPath = $@"{projectInfo.LocalProjectFolder}\Reports\Verify Files {projectInfo.SourceLanguage.CultureInfo.Name}_{targetFile.LanguageCode}.xml";
-				if (File.Exists(reportPath))
-				{
-					var doc = Utils.LoadXmlDocument(reportPath);					
-					var fileNodes = doc.GetElementsByTagName("file");
-					foreach (XmlNode fileNode in fileNodes)
-					{
-						if (fileNode.Attributes.Count > 0)
-						{
-							// get the info only for those target files on which the 'Verify Files' batch task has been run.
-							var reportFileGuid = fileNode.Attributes["guid"].Value;
-							if (targetFile.LanguageFileGUID.Equals(reportFileGuid))
-							{
-								targetFile.FileName = fileNode.Attributes["name"].Value;
+			{
+				var fileInfo = directoryInfo
+					.GetFiles()
+					.OrderByDescending(f => f.LastWriteTime)
+					.FirstOrDefault(n => n.Name.StartsWith($@"Verify Files {projectInfo.SourceLanguage.CultureInfo.Name}_{targetFile.LanguageCode}"));
 
-								// the first element is selected, because there is only one 'task' tag defined in the report structure
-								var taskInfoNode = doc.GetElementsByTagName("taskInfo")[0];
-								if (taskInfoNode.Attributes.Count > 0)
+				if (fileInfo != null)
+				{
+					var reportPath = fileInfo.FullName;
+					if (File.Exists(reportPath))
+					{
+						var doc = Utils.LoadXmlDocument(reportPath);
+						var fileNodes = doc.GetElementsByTagName("file");
+						foreach (XmlNode fileNode in fileNodes)
+						{
+							if (fileNode.Attributes.Count > 0)
+							{
+								// get the info only for those target files on which the 'Verify Files' batch task has been run.
+								var reportFileGuid = fileNode.Attributes["guid"].Value;
+								if (targetFile.LanguageFileGUID.Equals(reportFileGuid))
 								{
-									targetFile.RunAt = taskInfoNode.Attributes["runAt"].Value;
+									targetFile.FileName = fileNode.Attributes["name"].Value;
+
+									// the first element is selected, because there is only one 'task' tag defined in the report structure
+									var taskInfoNode = doc.GetElementsByTagName("taskInfo")[0];
+									if (taskInfoNode.Attributes.Count > 0)
+									{
+										targetFile.RunAt = taskInfoNode.Attributes["runAt"].Value;
+									}
 								}
 							}
 						}
@@ -161,8 +175,31 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 				}
 			}
 
-			// get info from the last "Verify Files" report which is generated after running the "Verify Files" batch task on all files
+			// get "RunAt" info from the last "Verify Files" report which is generated after running the "Verify Files" batch task on all files
+			var allReportFilesInfo = directoryInfo.GetFiles().OrderByDescending(f => f.LastWriteTime).FirstOrDefault(n => n.Name.StartsWith("Verify Files ("));
 
+			if (allReportFilesInfo != null)
+			{
+				var reportPath = allReportFilesInfo.FullName;
+				if (File.Exists(reportPath))
+				{
+					var doc = Utils.LoadXmlDocument(reportPath);
+					var fileNodes = doc.GetElementsByTagName("file");
+					foreach (XmlNode fileNode in fileNodes)
+					{
+						if (fileNode.Attributes.Count > 0)
+						{
+							// the first element is selected, because there is only one 'task' tag defined in the report structure
+							var taskInfoNode = doc.GetElementsByTagName("taskInfo")[0];
+							if (taskInfoNode.Attributes.Count > 0)
+							{
+								runAtAllFiles = taskInfoNode.Attributes["runAt"].Value;
+							}
+						}
+					}
+				}
+			}
+			return runAtAllFiles;
 		}
 	}
 }
