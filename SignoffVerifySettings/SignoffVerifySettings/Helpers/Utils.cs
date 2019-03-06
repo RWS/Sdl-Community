@@ -48,6 +48,23 @@ namespace Sdl.Community.SignoffVerifySettings.Helpers
 		}
 
 		/// <summary>
+		/// Get the "RunAt" value from the "Verify Files .xml" report or "Verify Files {sourceLanguage name-targetLanguage name}.xml" report
+		/// </summary>
+		/// <param name="document">report .xml document</param>
+		/// <returns>RunAt value</returns>
+		public static string GetRunAtValue(XmlDocument document)
+		{
+			var runAt = string.Empty;
+			// the first element is selected, because there is only one 'task' tag defined in the report structure
+			var taskInfoNode = document.GetElementsByTagName("taskInfo")[0];
+			if (taskInfoNode.Attributes.Count > 0)
+			{
+				runAt = taskInfoNode.Attributes["runAt"].Value;
+			}
+			return runAt;
+		}
+
+		/// <summary>
 		/// Load the .sdlproj Xml Document from the current project
 		/// </summary>
 		/// <param name="currentProject">current project</param>

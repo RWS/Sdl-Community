@@ -47,11 +47,11 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 				}
 				_targetFiles = GetTargetFilesSettingsGuids(currentProject);
 				GetSettingsBundleInformation(currentProject);
-				var runAtAllFiles = GetQAVerificationInfo(projectInfo);
+				var runAt = GetQAVerificationInfo(projectInfo);
 
 				projectInfoReportModel.PhaseXmlNodeModels = _phaseXmlNodeModels;
 				projectInfoReportModel.LanguageFileXmlNodeModels = _targetFiles;
-				projectInfoReportModel.RunAtAllTargetFiles = runAtAllFiles;
+				projectInfoReportModel.RunAt = runAt;
 			}
 		}
 
@@ -134,7 +134,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// <param name="currentProject">current project selected</param>
 		private string GetQAVerificationInfo(ProjectInfo projectInfo)
 		{
-			var runAtAllFiles = string.Empty;
+			var runAt = string.Empty;
 			var directoryInfo = new DirectoryInfo($@"{projectInfo.LocalProjectFolder}\Reports\");
 
 			//get report info for each targetFile
@@ -161,13 +161,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 								if (targetFile.LanguageFileGUID.Equals(reportFileGuid))
 								{
 									targetFile.FileName = fileNode.Attributes["name"].Value;
-
-									// the first element is selected, because there is only one 'task' tag defined in the report structure
-									var taskInfoNode = doc.GetElementsByTagName("taskInfo")[0];
-									if (taskInfoNode.Attributes.Count > 0)
-									{
-										targetFile.RunAt = taskInfoNode.Attributes["runAt"].Value;
-									}
+									Utils.GetRunAtValue(doc);
 								}
 							}
 						}
@@ -177,29 +171,16 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 
 			// get "RunAt" info from the last "Verify Files" report which is generated after running the "Verify Files" batch task on all files
 			var allReportFilesInfo = directoryInfo.GetFiles().OrderByDescending(f => f.LastWriteTime).FirstOrDefault(n => n.Name.StartsWith("Verify Files ("));
-
 			if (allReportFilesInfo != null)
 			{
 				var reportPath = allReportFilesInfo.FullName;
 				if (File.Exists(reportPath))
 				{
 					var doc = Utils.LoadXmlDocument(reportPath);
-					var fileNodes = doc.GetElementsByTagName("file");
-					foreach (XmlNode fileNode in fileNodes)
-					{
-						if (fileNode.Attributes.Count > 0)
-						{
-							// the first element is selected, because there is only one 'task' tag defined in the report structure
-							var taskInfoNode = doc.GetElementsByTagName("taskInfo")[0];
-							if (taskInfoNode.Attributes.Count > 0)
-							{
-								runAtAllFiles = taskInfoNode.Attributes["runAt"].Value;
-							}
-						}
-					}
+					runAt = Utils.GetRunAtValue(doc);
 				}
 			}
-			return runAtAllFiles;
+			return runAt;
 		}
 	}
 }
