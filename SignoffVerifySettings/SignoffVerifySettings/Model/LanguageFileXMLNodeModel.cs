@@ -6,6 +6,9 @@
 		public string LanguageFileGUID { get; set; }
 		public string SettingsBundleGuid { get; set; }
 		public string LanguageCode { get; set; }
+		// TargetFileFullPath used to compare with the information retrieved from the Number Verifier.
+		// cannot use the target FileGuid because in NumberVerifier it is not exposed
+		public string TargetFileFullPath { get; set; }
 
 		// QAVerification "Verify Files" report properties
 		public string FileName { get; set; }

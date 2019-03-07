@@ -107,7 +107,8 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 					{
 						LanguageFileGUID = languageFileNode.Attributes["Guid"].Value,
 						SettingsBundleGuid = languageFileNode.Attributes["SettingsBundleGuid"].Value,
-						LanguageCode = languageFileNode.Attributes["LanguageCode"].Value
+						LanguageCode = languageFileNode.Attributes["LanguageCode"].Value,
+						TargetFileFullPath = taskFile.LocalFilePath
 					};
 					langFileXMLNodeModels.Add(languageFileXmlNodeModel);
 				}
