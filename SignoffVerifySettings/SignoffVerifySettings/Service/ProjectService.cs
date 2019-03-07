@@ -32,10 +32,11 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 
 		#region Public Methods
 		/// <summary>
-		/// Get current project information which will be displayed in the Signoff Verify Settings report
+		/// Get current project information which will be displayed in the Signoff Verify Settings report based on the selected files
 		/// </summary>
-		public void GetCurrentProjectInformation()
-		{
+		/// <param name="taskFiles">selected files from the project based on which the batch task is running</param>
+		public void GetCurrentProjectInformation(ProjectFile[] taskFiles)
+		{			
 			// Studio version
 			var studioVersion = GetStudioVersion();
 			var currentProject = GetProjectController().CurrentProject;
@@ -51,7 +52,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 					projectInfoReportModel.SourceLanguage = projectInfo.SourceLanguage;
 					projectInfoReportModel.TargetLanguages = projectInfo.TargetLanguages.ToList();
 				}
-				_targetFiles = GetTargetFilesSettingsGuids(currentProject);
+				_targetFiles = GetTargetFilesSettingsGuids(currentProject, taskFiles);
 				GetSettingsBundleInformation(currentProject);
 				var runAt = GetQAVerificationInfo(projectInfo);
 
@@ -88,30 +89,32 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// Get Target Language File tag attributes from the .sdlproj xml document 
 		/// </summary>
 		/// <param name="currentProject">current project selected</param>
+		/// <param name="taskFiles">selected project files from where the information is retrieved</param>
 		/// <returns></returns>
-		private List<LanguageFileXmlNodeModel> GetTargetFilesSettingsGuids(FileBasedProject currentProject)
+		private List<LanguageFileXmlNodeModel> GetTargetFilesSettingsGuids(FileBasedProject currentProject, ProjectFile[] taskFiles)
 		{
-			var languageFileElements = _document.GetElementsByTagName("LanguageFile");
 			var langFileXMLNodeModels = new List<LanguageFileXmlNodeModel>();
-			foreach (XmlNode elem in languageFileElements)
+			foreach (var taskFile in taskFiles)
 			{
-				if (elem.Attributes.Count > 0)
+				var languageFileNode = _document.SelectSingleNode($"//LanguageFile[@Guid='{taskFile.Id}']");
+
+				if (languageFileNode.Attributes.Count > 0)
 				{
 					var languageFileXmlNodeModel = new LanguageFileXmlNodeModel
 					{
-						LanguageFileGUID = elem.Attributes["Guid"].Value,
-						SettingsBundleGuid = elem.Attributes["SettingsBundleGuid"].Value,
-						LanguageCode = elem.Attributes["LanguageCode"].Value
+						LanguageFileGUID = languageFileNode.Attributes["Guid"].Value,
+						SettingsBundleGuid = languageFileNode.Attributes["SettingsBundleGuid"].Value,
+						LanguageCode = languageFileNode.Attributes["LanguageCode"].Value
 					};
 					langFileXMLNodeModels.Add(languageFileXmlNodeModel);
 				}
 			}
 			var sourceLangauge = currentProject.GetProjectInfo() != null ? currentProject.GetProjectInfo().SourceLanguage != null
-				? currentProject.GetProjectInfo().SourceLanguage.CultureInfo != null
-				? currentProject.GetProjectInfo().SourceLanguage.CultureInfo.Name
-				:string.Empty :string.Empty : string.Empty;
-
+					? currentProject.GetProjectInfo().SourceLanguage.CultureInfo != null
+					? currentProject.GetProjectInfo().SourceLanguage.CultureInfo.Name
+					: string.Empty : string.Empty : string.Empty;
 			_targetFiles = langFileXMLNodeModels.Where(l => l.LanguageCode != sourceLangauge).ToList();
+
 			return _targetFiles;
 		}
 

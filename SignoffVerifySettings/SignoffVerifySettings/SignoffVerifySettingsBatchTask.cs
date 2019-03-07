@@ -12,8 +12,11 @@ namespace Sdl.Community.SignoffVerifySettings
 	{
 		protected override void OnInitializeTask()
 		{
-			var projectService = new ProjectService();
-			projectService.GetCurrentProjectInformation();
+			if (TaskFiles.Length > 0)
+			{
+				var projectService = new ProjectService();
+				projectService.GetCurrentProjectInformation(TaskFiles);
+			}
 		}
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
@@ -24,6 +27,6 @@ namespace Sdl.Community.SignoffVerifySettings
 		public override void TaskComplete()
 		{
 			base.TaskComplete();
-		}		
+		}
 	}
 }
