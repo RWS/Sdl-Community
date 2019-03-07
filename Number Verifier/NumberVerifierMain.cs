@@ -22,6 +22,9 @@ using Sdl.Core.PluginFramework;
 using Sdl.Community.NumberVerifier.Processors;
 using Sdl.Community.NumberVerifier.Specifications;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System.IO;
+using Newtonsoft.Json;
+using static System.Environment;
 
 namespace Sdl.Community.NumberVerifier
 {
@@ -223,6 +226,7 @@ namespace Sdl.Community.NumberVerifier
 
 		public void Initialize(IDocumentProperties documentInfo)
 		{
+			SetJsonSettings(Path.GetFileName(documentInfo.LastOpenedAsPath));
 			_sourceMatchingThousandSeparators = string.Concat(VerificationSettings.GetSourceThousandSeparators());
 			_targetMatchingThousandSeparators = string.Concat(VerificationSettings.GetTargetThousandSeparators());
 			_sourceMatchingDecimalSeparators = string.Concat(VerificationSettings.GetSourceDecimalSeparators());
@@ -278,7 +282,7 @@ namespace Sdl.Community.NumberVerifier
 		public void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
 			if (Enabled)
-			{
+			{				
 				// Apply the verification logic.
 				CheckParagraphUnit(paragraphUnit);
 			}
@@ -1281,6 +1285,39 @@ namespace Sdl.Community.NumberVerifier
 			hindiDictionary.Add("9", "٩");
 
 			return hindiDictionary;
+		}
+
+		/// <summary>
+		/// Create a settings .json settings file where to store date time and the file on which the NumberVerifier has run
+		/// The file will be used for SignoffVerifySettings app.
+		/// </summary>
+		/// <param name="fileName">file name on which the Number Verifier is executing</param>
+		private void SetJsonSettings(string fileName)
+		{
+			var numberVerifierSettingsModel = new NumberVerifierSettingsModel
+			{
+				ExecutedDateTime = DateTime.UtcNow.ToString(),
+				FileName = fileName
+			};
+			var jsonResult = JsonConvert.SerializeObject(numberVerifierSettingsModel);
+						
+			var directoryPath = $@"{GetFolderPath(SpecialFolder.ApplicationData)}\SDL Community\NumberVerifier";
+			var jsonPath = $@"{directoryPath}\NumberVerifierSettings.json";
+			if (!Directory.Exists(directoryPath))
+			{
+				Directory.CreateDirectory(directoryPath);
+			}
+			if (File.Exists(jsonPath))
+			{
+				File.Delete(jsonPath);
+			}
+			File.Create(jsonPath).Dispose();
+
+			using (var tw = new StreamWriter(jsonPath, true))
+			{
+				tw.WriteLine(jsonResult);
+				tw.Close();
+			}
 		}
 
 		public List<NumberModel> GetFormatedNumbers(string textGroupResult, string[] textGroups)

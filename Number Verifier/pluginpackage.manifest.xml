@@ -5,4 +5,7 @@
   <Description>Verifies that numbers have not been changed during translation/editing.</Description>
   <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" maxversion="15.0" />
+	<Include>
+		<File>Newtonsoft.Json.dll</File>
+	</Include>
 </PluginPackage>
