@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sdl.Core.Globalization;
+using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.SignoffVerifySettings.Model
 {
@@ -19,5 +20,11 @@ namespace Sdl.Community.SignoffVerifySettings.Model
 		
 		// used to display phase information for each target file
 		public List<PhaseXmlNodeModel> PhaseXmlNodeModels { get; set; }
+
+		// used to display the Materials information
+		public List<TranslationProviderCascadeEntry> TranslationMemories { get; set; }
+		public List<Termbase> Termbases { get; set; }
+		public string RegexRules { get; set; }
+		public string CheckRegexRules { get; set; }
 	}
 }
