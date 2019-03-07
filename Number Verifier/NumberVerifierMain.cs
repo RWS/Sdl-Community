@@ -226,7 +226,8 @@ namespace Sdl.Community.NumberVerifier
 
 		public void Initialize(IDocumentProperties documentInfo)
 		{
-			SetJsonSettings(Path.GetFileName(documentInfo.LastOpenedAsPath));
+			SetJsonSettings(documentInfo.LastOpenedAsPath);
+
 			_sourceMatchingThousandSeparators = string.Concat(VerificationSettings.GetSourceThousandSeparators());
 			_targetMatchingThousandSeparators = string.Concat(VerificationSettings.GetTargetThousandSeparators());
 			_sourceMatchingDecimalSeparators = string.Concat(VerificationSettings.GetSourceDecimalSeparators());
@@ -1292,12 +1293,12 @@ namespace Sdl.Community.NumberVerifier
 		/// The file will be used for SignoffVerifySettings app.
 		/// </summary>
 		/// <param name="fileName">file name on which the Number Verifier is executing</param>
-		private void SetJsonSettings(string fileName)
+		private void SetJsonSettings(string lastOpenFilePath)
 		{
 			var numberVerifierSettingsModel = new NumberVerifierSettingsModel
 			{
-				ExecutedDateTime = DateTime.UtcNow.ToString(),
-				FileName = fileName
+				FileFullPath = lastOpenFilePath,
+				ExecutedDateTime = DateTime.UtcNow.ToString()
 			};
 			var jsonResult = JsonConvert.SerializeObject(numberVerifierSettingsModel);
 						

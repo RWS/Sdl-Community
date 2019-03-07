@@ -2,7 +2,7 @@
 {
 	public class NumberVerifierSettingsModel
 	{
+		public string FileFullPath { get; set; }
 		public string ExecutedDateTime { get; set; }
-		public string FileName { get; set; }
 	}
 }
