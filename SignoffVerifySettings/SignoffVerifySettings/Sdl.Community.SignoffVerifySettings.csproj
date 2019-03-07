@@ -103,6 +103,7 @@
     <Compile Include="Model\LanguageFileXmlNodeModel.cs" />
     <Compile Include="Model\PhaseXmlNodeModel.cs" />
     <Compile Include="Model\ProjectInfoReportModel.cs" />
+    <Compile Include="Model\QAVerificationSettingsModel.cs" />
     <Compile Include="Service\ProjectService.cs" />
     <Compile Include="SignoffVerifySettingsBatchTask.cs" />
     <Compile Include="SignoffVerifySettings.cs" />

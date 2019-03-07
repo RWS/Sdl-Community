@@ -26,5 +26,9 @@ namespace Sdl.Community.SignoffVerifySettings.Model
 		public List<Termbase> Termbases { get; set; }
 		public string RegexRules { get; set; }
 		public string CheckRegexRules { get; set; }
+		public string QACheckerRanResult { get; set; }
+
+		// used to display the settings applied for the QA Verification
+		public List<QAVerificationSettingsModel> QAVerificationSettingsModels { get; set; }
 	}
 }

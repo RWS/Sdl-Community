@@ -59,6 +59,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 				projectInfoReportModel.LanguageFileXmlNodeModels = _targetFiles;
 				projectInfoReportModel.RunAt = runAt;
 				GetMaterialsInfo(currentProject, projectInfoReportModel);
+				projectInfoReportModel.QAVerificationSettingsModels = GetQASettings();
 			}
 		}
 		#endregion
@@ -199,6 +200,12 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			return runAt;
 		}
 
+		/// <summary>
+		/// Get the Materials information: Translation Memories, Termbases and if Regex expression have been used.
+		/// Get also the QACheckerRanResult value which represents the QA Checker if has been run or not. 
+		/// </summary>
+		/// <param name="currentProject">current selected project</param>
+		/// <param name="projectInfoReportModel">projectInfoReportModel used further to display the information into report</param>
 		private void GetMaterialsInfo(FileBasedProject currentProject, ProjectInfoReportModel projectInfoReportModel)
 		{
 			// get RegExRules & CheckRexEx values
@@ -214,6 +221,31 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			// get translation memories & termbases used
 			projectInfoReportModel.TranslationMemories = currentProject.GetTranslationProviderConfiguration().Entries;
 			projectInfoReportModel.Termbases = currentProject.GetTermbaseConfiguration().Termbases;
+
+			// the below value represent the QA Checker if has been run or not (if has been run, then the 'Verification Report' exists in .sdlproj)
+			projectInfoReportModel.QACheckerRanResult = _document.SelectSingleNode($"//Reports/Report[@Name='Verification Report']") != null
+				? "QA Checker had executed"
+				: "QA Checker did not executed";
+		}
+
+		/// <summary>
+		/// Get all the QA Settings applied
+		/// </summary>
+		/// <returns>list of QA settings which are applied to project</returns>
+		private List<QAVerificationSettingsModel> GetQASettings()
+		{
+			var qaVerificationSettingsModels = new List<QAVerificationSettingsModel>();
+			var qaVerificationSettings = _document.SelectSingleNode($"//SettingsGroup[@Id='QAVerificationSettings']");
+			foreach(XmlNode qaVerifcaitionSetting in qaVerificationSettings)
+			{
+				var qaVerificationSettingsModel = new QAVerificationSettingsModel
+				{
+					Name = qaVerifcaitionSetting.Attributes.Count > 0 ? qaVerifcaitionSetting.Attributes["Id"].Value : string.Empty,
+					Value = qaVerifcaitionSetting.FirstChild != null ? qaVerifcaitionSetting.FirstChild.Value : string.Empty
+				};
+				qaVerificationSettingsModels.Add(qaVerificationSettingsModel);
+			}
+			return qaVerificationSettingsModels;
 		}
 		#endregion
 	}
