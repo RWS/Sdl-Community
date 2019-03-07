@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Community.Toolkit.Core, Version=0.7.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Community.Toolkit.Core.Studio2017.0.7.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
@@ -101,6 +104,7 @@
     <Compile Include="FileConverter.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Model\LanguageFileXmlNodeModel.cs" />
+    <Compile Include="Model\NumberVerifierSettingsModel.cs" />
     <Compile Include="Model\PhaseXmlNodeModel.cs" />
     <Compile Include="Model\ProjectInfoReportModel.cs" />
     <Compile Include="Model\QAVerificationSettingsModel.cs" />

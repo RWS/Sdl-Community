@@ -2,12 +2,14 @@
 using System.IO;
 using System.Linq;
 using System.Xml;
+using Newtonsoft.Json;
 using Sdl.Community.SignoffVerifySettings.Helpers;
 using Sdl.Community.SignoffVerifySettings.Model;
 using Sdl.Community.Toolkit.Core;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using static System.Environment;
 
 namespace Sdl.Community.SignoffVerifySettings.Service
 {
@@ -61,6 +63,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 				projectInfoReportModel.RunAt = runAt;
 				GetMaterialsInfo(currentProject, projectInfoReportModel);
 				projectInfoReportModel.QAVerificationSettingsModels = GetQASettings();
+				projectInfoReportModel.NumberVerifierSettingsModel = GetNumberVerifierSettings();
 			}
 		}
 		#endregion
@@ -249,6 +252,26 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 				qaVerificationSettingsModels.Add(qaVerificationSettingsModel);
 			}
 			return qaVerificationSettingsModels;
+		}
+
+		/// <summary>
+		/// Get information related to date and file on which NumberVerifier had been executed
+		/// </summary>
+		/// <returns>NumberVerifierSettingsModel</returns>
+		private NumberVerifierSettingsModel GetNumberVerifierSettings()
+		{
+			var directoryPath = $@"{GetFolderPath(SpecialFolder.ApplicationData)}\SDL Community\NumberVerifier";
+			var jsonPath = $@"{directoryPath}\NumberVerifierSettings.json";
+
+			if (File.Exists(jsonPath))
+			{
+				using (var r = new StreamReader(jsonPath))
+				{
+					var json = r.ReadToEnd();
+					return JsonConvert.DeserializeObject<NumberVerifierSettingsModel>(json);
+				}
+			}
+			return new NumberVerifierSettingsModel();
 		}
 		#endregion
 	}
