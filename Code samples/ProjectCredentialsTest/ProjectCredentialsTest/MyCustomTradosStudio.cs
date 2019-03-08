@@ -12,7 +12,7 @@ namespace ProjectCredentialsTest
 	{
 		protected override void Execute()
 		{
-			var termbaseUri = new Uri("sdltm.http://gs2017dev.sdl.com");
+			var termbaseUri = new Uri("");
 
 
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
