@@ -1302,7 +1302,7 @@ namespace Sdl.Community.NumberVerifier
 			};
 			var jsonResult = JsonConvert.SerializeObject(numberVerifierSettingsModel);
 						
-			var directoryPath = $@"{GetFolderPath(SpecialFolder.ApplicationData)}\SDL Community\NumberVerifier";
+			var directoryPath = $@"{GetFolderPath(SpecialFolder.ApplicationData)}\SDL Community\Number Verifier\Number Verifier 2017";
 			var jsonPath = $@"{directoryPath}\NumberVerifierSettings.json";
 			if (!Directory.Exists(directoryPath))
 			{

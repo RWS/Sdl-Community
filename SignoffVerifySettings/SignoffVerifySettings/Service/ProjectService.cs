@@ -261,8 +261,8 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// <returns>NumberVerifierSettingsModel</returns>
 		private NumberVerifierSettingsModel GetNumberVerifierSettings()
 		{
-			var directoryPath = $@"{GetFolderPath(SpecialFolder.ApplicationData)}\SDL Community\NumberVerifier";
-			var jsonPath = $@"{directoryPath}\NumberVerifierSettings.json";
+			var directoryPath = $@"{GetFolderPath(SpecialFolder.ApplicationData)}\{Constants.NumberVerifier2017CommunityPath}";
+			var jsonPath = $@"{directoryPath}\{Constants.NumberVerifierSettingsJson}";
 
 			if (File.Exists(jsonPath))
 			{
