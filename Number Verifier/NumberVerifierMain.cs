@@ -4,24 +4,18 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
-using Sdl.Core.Settings;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.Verification.Api;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Windows.Forms;
 using Sdl.Community.Extended.MessageUI;
 using Sdl.Community.NumberVerifier.Composers;
 using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Model;
 using Sdl.Core.Globalization;
-using Sdl.Core.PluginFramework;
-using Sdl.Community.NumberVerifier.Processors;
-using Sdl.Community.NumberVerifier.Specifications;
+using Sdl.Core.Settings;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Verification.Api;
 
 namespace Sdl.Community.NumberVerifier
 {
