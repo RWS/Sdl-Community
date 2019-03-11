@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
+using Sdl.Community.NumberVerifier.Model;
 
 namespace Sdl.Community.NumberVerifier
 {
@@ -302,9 +304,9 @@ namespace Sdl.Community.NumberVerifier
             InitializeComponent();
             this.VScroll = true;
         }
+		public List<TargetFileSetting> TargetFileSettings { get; set; }
 
-       
-        private void rb_PreventLocalizations_CheckedChanged(object sender, System.EventArgs e)
+		private void rb_PreventLocalizations_CheckedChanged(object sender, System.EventArgs e)
         {
            
 

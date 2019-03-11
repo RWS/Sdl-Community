@@ -1,8 +1,8 @@
 ﻿namespace Sdl.Community.NumberVerifier.Model
 {
-	public class NumberVerifierSettingsModel
+	public class TargetFileSetting
 	{
-		public string FileFullPath { get; set; }
+		public string FileName { get; set; }
 		public string ExecutedDateTime { get; set; }
 	}
 }

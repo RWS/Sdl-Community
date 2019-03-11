@@ -98,6 +98,7 @@ namespace Sdl.Community.NumberVerifier
             _Control.GetSourceDecimalCustomSeparator= _ControlSettings.GetSourceDecimalCustomSeparator;
             _Control.GetTargetDecimalCustomSeparator= _ControlSettings.GetTargetDecimalCustomSeparator;
 			_Control.GetAlphanumericsCustomSeparator = _ControlSettings.GetAlphanumericsCustomSeparator;
+			_Control.TargetFileSettings = _ControlSettings.TargetFileSettings;
 		}
 
         #endregion
@@ -203,7 +204,8 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.Reset("GetTargetDecimalCustomSeparator");
 			_Control.GetAlphanumericsCustomSeparator = _ControlSettings.GetAlphanumericsCustomSeparator;
 			_ControlSettings.Reset("GetAlphanumericsCustomSeparator");
-
+			_Control.TargetFileSettings = _ControlSettings.TargetFileSettings;
+			_ControlSettings.Reset("TargetFileSettings");
 		}
 		#endregion
 
@@ -271,6 +273,7 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.GetSourceDecimalCustomSeparator = _Control.GetSourceDecimalCustomSeparator;
             _ControlSettings.GetTargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
 			_ControlSettings.GetAlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
+			_ControlSettings.TargetFileSettings = _Control.TargetFileSettings;
 
 		}
 
@@ -328,6 +331,7 @@ namespace Sdl.Community.NumberVerifier
 			_ControlSettings.GetTargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
 			_ControlSettings.GetAlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
 			_ControlSettings.HindiNumberVerification = _Control.HindiNumberVerification;
+			_ControlSettings.TargetFileSettings = _Control.TargetFileSettings;
 		}
 
 		// Call EndEdit after all changes have been saved in the Save() call.

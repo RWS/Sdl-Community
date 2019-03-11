@@ -181,8 +181,8 @@
     <Compile Include="Model\ExtractData.cs" />
     <Compile Include="Model\NumberModel.cs" />
     <Compile Include="Model\NumberResults.cs" />
-    <Compile Include="Model\NumberVerifierSettingsModel.cs" />
     <Compile Include="Model\ProjectControllerAdapterModel.cs" />
+    <Compile Include="Model\TargetFileSetting.cs" />
     <Compile Include="NumberVerifierMain.cs" />
     <Compile Include="GUI\NumberVerifierUI.cs">
       <SubType>UserControl</SubType>
