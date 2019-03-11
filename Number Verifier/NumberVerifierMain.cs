@@ -3,11 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 using Sdl.Community.Extended.MessageUI;
 using Sdl.Community.NumberVerifier.Composers;
 using Sdl.Community.NumberVerifier.Interfaces;
@@ -18,7 +16,6 @@ using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Verification.Api;
-using static System.Environment;
 
 namespace Sdl.Community.NumberVerifier
 {
@@ -220,8 +217,6 @@ namespace Sdl.Community.NumberVerifier
 
 		public void Initialize(IDocumentProperties documentInfo)
 		{
-			SetJsonSettings(documentInfo.LastOpenedAsPath);
-
 			_sourceMatchingThousandSeparators = string.Concat(VerificationSettings.GetSourceThousandSeparators());
 			_targetMatchingThousandSeparators = string.Concat(VerificationSettings.GetTargetThousandSeparators());
 			_sourceMatchingDecimalSeparators = string.Concat(VerificationSettings.GetSourceDecimalSeparators());
@@ -1343,38 +1338,5 @@ namespace Sdl.Community.NumberVerifier
 			return result;
 		}
 		#endregion
-
-		/// <summary>
-		/// Create a settings .json settings file where to store date time and the file on which the NumberVerifier has run
-		/// The file will be used for SignoffVerifySettings app.
-		/// </summary>
-		/// <param name="fileName">file name on which the Number Verifier is executing</param>
-		private void SetJsonSettings(string lastOpenFilePath)
-		{
-			var numberVerifierSettingsModel = new NumberVerifierSettingsModel
-			{
-				FileFullPath = lastOpenFilePath,
-				ExecutedDateTime = DateTime.UtcNow.ToString()
-			};
-			var jsonResult = JsonConvert.SerializeObject(numberVerifierSettingsModel);
-
-			var directoryPath = $@"{GetFolderPath(SpecialFolder.ApplicationData)}\SDL Community\Number Verifier\Number Verifier 2019";
-			var jsonPath = $@"{directoryPath}\NumberVerifierSettings.json";
-			if (!Directory.Exists(directoryPath))
-			{
-				Directory.CreateDirectory(directoryPath);
-			}
-			if (File.Exists(jsonPath))
-			{
-				File.Delete(jsonPath);
-			}
-			File.Create(jsonPath).Dispose();
-
-			using (var tw = new StreamWriter(jsonPath, true))
-			{
-				tw.WriteLine(jsonResult);
-				tw.Close();
-			}
-		}
 	}
 }
