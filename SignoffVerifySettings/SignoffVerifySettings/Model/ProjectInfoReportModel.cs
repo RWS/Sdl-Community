@@ -31,7 +31,7 @@ namespace Sdl.Community.SignoffVerifySettings.Model
 		// used to display the settings applied for the QA Verification
 		public List<QAVerificationSettingsModel> QAVerificationSettingsModels { get; set; }
 
-		// used to display when and on which file the NumberVerifier had been executed
-		public NumberVerifierSettingsModel NumberVerifierSettingsModel { get; set; }
+		// used to display when and on which file(s) the NumberVerifier had been executed
+		public List<NumberVerifierSettingsModel> NumberVerifierSettingsModels { get; set; }
 	}
 }

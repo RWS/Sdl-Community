@@ -54,7 +54,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 					projectInfoReportModel.SourceLanguage = projectInfo.SourceLanguage;
 					projectInfoReportModel.TargetLanguages = projectInfo.TargetLanguages.ToList();
 				}
-				_targetFiles = GetTargetFilesSettingsGuids(currentProject, taskFiles);
+				_targetFiles = GetTargetFilesSettings(currentProject, taskFiles);
 				GetSettingsBundleInformation(currentProject);
 				var runAt = GetQAVerificationInfo(projectInfo);
 
@@ -63,7 +63,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 				projectInfoReportModel.RunAt = runAt;
 				GetMaterialsInfo(currentProject, projectInfoReportModel);
 				projectInfoReportModel.QAVerificationSettingsModels = GetQASettings();
-				projectInfoReportModel.NumberVerifierSettingsModel = GetNumberVerifierSettings();
+				projectInfoReportModel.NumberVerifierSettingsModels = GetNumberVerifierSettings();
 			}
 		}
 		#endregion
@@ -94,7 +94,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// <param name="currentProject">current project selected</param>
 		/// <param name="taskFiles">selected project files from where the information is retrieved</param>
 		/// <returns></returns>
-		private List<LanguageFileXmlNodeModel> GetTargetFilesSettingsGuids(FileBasedProject currentProject, ProjectFile[] taskFiles)
+		private List<LanguageFileXmlNodeModel> GetTargetFilesSettings(FileBasedProject currentProject, ProjectFile[] taskFiles)
 		{
 			var langFileXMLNodeModels = new List<LanguageFileXmlNodeModel>();
 			foreach (var taskFile in taskFiles)
@@ -108,7 +108,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 						LanguageFileGUID = languageFileNode.Attributes["Guid"].Value,
 						SettingsBundleGuid = languageFileNode.Attributes["SettingsBundleGuid"].Value,
 						LanguageCode = languageFileNode.Attributes["LanguageCode"].Value,
-						TargetFileFullPath = taskFile.LocalFilePath
+						FileName = Path.GetFileName(taskFile.LocalFilePath)
 					};
 					langFileXMLNodeModels.Add(languageFileXmlNodeModel);
 				}
@@ -258,21 +258,13 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// <summary>
 		/// Get information related to date and file on which NumberVerifier had been executed
 		/// </summary>
-		/// <returns>NumberVerifierSettingsModel</returns>
-		private NumberVerifierSettingsModel GetNumberVerifierSettings()
+		/// <returns>list of NumberVerifierSettingsModel</returns>
+		private List<NumberVerifierSettingsModel> GetNumberVerifierSettings()
 		{
-			var directoryPath = $@"{GetFolderPath(SpecialFolder.ApplicationData)}\{Constants.NumberVerifier2017CommunityPath}";
-			var jsonPath = $@"{directoryPath}\{Constants.NumberVerifierSettingsJson}";
+			var numberVerifierModels = new List<NumberVerifierSettingsModel>();
+			var numberVerifierSettings = _document.SelectSingleNode($"//SettingsGroup[@Id='NumberVerifierSettings']");
 
-			if (File.Exists(jsonPath))
-			{
-				using (var r = new StreamReader(jsonPath))
-				{
-					var json = r.ReadToEnd();
-					return JsonConvert.DeserializeObject<NumberVerifierSettingsModel>(json);
-				}
-			}
-			return new NumberVerifierSettingsModel();
+			return numberVerifierModels;
 		}
 		#endregion
 	}
