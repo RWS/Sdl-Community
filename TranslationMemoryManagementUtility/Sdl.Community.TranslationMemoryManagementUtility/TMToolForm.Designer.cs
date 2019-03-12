@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Remove Duplicates");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Revert Index");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Reverse Index");
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("TM Task  ", new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2});
