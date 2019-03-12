@@ -107,6 +107,7 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TMResultsForm.resx">
       <DependentUpon>TMResultsForm.cs</DependentUpon>
