@@ -51,7 +51,9 @@ namespace Sdl.Community.TargetWordCount
 				var langDirection = keys[key];
 
 				CreateReport(CreateReportName(langDirection), "Count for each file", report, langDirection);
+				ReportGenerator.GenerateHelixReport(langDirection);
 			}
+
 		}
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
