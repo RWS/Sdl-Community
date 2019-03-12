@@ -264,6 +264,9 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			var numberVerifierModels = new List<NumberVerifierSettingsModel>();
 			var numberVerifierSettings = _document.SelectSingleNode($"//SettingsGroup[@Id='NumberVerifierSettings']");
 
+			// To Do: get the information from numberVerifierSettings group for each file which exists in there
+			// and add it to numberVerifierModels list
+
 			return numberVerifierModels;
 		}
 		#endregion
