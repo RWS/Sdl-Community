@@ -31,12 +31,12 @@ namespace IATETerminologyProvider.Service
 		{
 			Reset();
 
-			_accessTokenLifespan = accessTokenLifespan.TotalSeconds > 0 ? accessTokenLifespan : new TimeSpan(0, 3, 0, 0);
-			_refreshTokenLifespan = refreshTokenLifespan.TotalSeconds > 0 ? refreshTokenLifespan : new TimeSpan(0, 12, 0, 0);
+			_accessTokenLifespan = accessTokenLifespan.TotalSeconds > 0 ? accessTokenLifespan : new TimeSpan(0, 2, 45, 0);
+			_refreshTokenLifespan = refreshTokenLifespan.TotalSeconds > 0 ? refreshTokenLifespan : new TimeSpan(0, 8, 45, 0);
 
 			_timer = new System.Timers.Timer
 			{
-				Interval = 1000
+				Interval = 60000
 			};
 
 			_timer.Elapsed += Timer_Elapsed;
@@ -44,8 +44,6 @@ namespace IATETerminologyProvider.Service
 			_timer.AutoReset = true;
 			_timer.Start();
 		}
-
-
 
 		public AccessTokenService() : this(new TimeSpan(0), new TimeSpan(0)) { }
 
