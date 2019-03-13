@@ -24,7 +24,7 @@ namespace IATETerminologyProvider.Service
 
 		public TermSearchService(ProviderSettings providerSettings)
 		{
-			_accessTokenService = new AccessTokenService(new TimeSpan(0, 0, 3, 0), new TimeSpan(0, 0, 3, 0));
+			_accessTokenService = new AccessTokenService();
 			_domains = DomainService.GetDomains();
 			_termTypes = TermTypeService.GetTermTypes();
 			_providerSettings = providerSettings;
