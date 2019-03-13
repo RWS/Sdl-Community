@@ -46,31 +46,34 @@ namespace Sdl.Community.TargetWordCount
 		/// <param name="projectFiles">project files for the language direction on which the batch task is running</param>
 		public static void GenerateHelixReport(LanguageDirection languageDirection, List<ProjectFile> projectFiles)
 		{
-			var currentProject = GetProjectController().CurrentProject;
-			var projectInfo = currentProject != null ?  currentProject.GetProjectInfo() : null;
-			if (projectInfo != null)
+			var currentProject = GetProjectController() != null ? GetProjectController().CurrentProject : null;
+			if (currentProject != null)
 			{
-				var directoryFolder = $@"{projectInfo.LocalProjectFolder}\Reports\StudioTargetWordCount";
-				if (!Directory.Exists(directoryFolder))
+				var projectInfo = currentProject.GetProjectInfo();
+				if (projectInfo != null)
 				{
-					Directory.CreateDirectory(directoryFolder);
+					var directoryFolder = $@"{projectInfo.LocalProjectFolder}\Reports\StudioTargetWordCount";
+					if (!Directory.Exists(directoryFolder))
+					{
+						Directory.CreateDirectory(directoryFolder);
+					}
+
+					var directoryInfo = new DirectoryInfo($@"{projectInfo.LocalProjectFolder}\Reports\");
+					var fileInfo = directoryInfo
+						.GetFiles()
+						.OrderByDescending(f => f.LastWriteTime)
+						.FirstOrDefault(n => n.Name.StartsWith($@"Target Word Count {languageDirection.SourceLanguage.CultureInfo.Name}_{languageDirection.TargetLanguage.CultureInfo.Name}"));
+
+					var helixReportPath = Path.Combine(directoryFolder, Path.GetFileName(fileInfo.FullName));
+					if (File.Exists(helixReportPath))
+					{
+						File.Delete(helixReportPath);
+					}
+					File.Create(helixReportPath).Dispose();
+
+					// Create the new helix report xml report structure as the one from the Studio WordCount.xml report
+					CreateReportDocument(projectInfo, languageDirection, helixReportPath, fileInfo, projectFiles);
 				}
-
-				var directoryInfo = new DirectoryInfo($@"{projectInfo.LocalProjectFolder}\Reports\");
-				var fileInfo = directoryInfo
-					.GetFiles()
-					.OrderByDescending(f => f.LastWriteTime)
-					.FirstOrDefault(n => n.Name.StartsWith($@"Target Word Count {languageDirection.SourceLanguage.CultureInfo.Name}_{languageDirection.TargetLanguage.CultureInfo.Name}"));
-
-				var helixReportPath = Path.Combine(directoryFolder, Path.GetFileName(fileInfo.FullName));				
-				if (File.Exists(helixReportPath))
-				{
-					File.Delete(helixReportPath);
-				}
-				File.Create(helixReportPath).Dispose();
-
-				// Create the new helix report xml report structure as the one from the Studio WordCount.xml report
-				CreateReportDocument(projectInfo, languageDirection, helixReportPath, fileInfo, projectFiles);
 			}
 		}
 
