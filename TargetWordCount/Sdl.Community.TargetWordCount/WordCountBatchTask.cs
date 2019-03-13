@@ -17,6 +17,7 @@ namespace Sdl.Community.TargetWordCount
 		private readonly Dictionary<string, LanguageDirection> keys = new Dictionary<string, LanguageDirection>();
 		private IWordCountBatchTaskSettings settings = null;
 		private SegmentWordCounter tempCounter = null;
+		private List<ProjectFile> _projectFiles = new List<ProjectFile>();
 
 		private string CreateKey(LanguageDirection langDir)
 		{
@@ -25,6 +26,7 @@ namespace Sdl.Community.TargetWordCount
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
+			_projectFiles.Add(projectFile);
 			var key = CreateKey(projectFile.GetLanguageDirection());
 
 			if (counters.ContainsKey(key))
@@ -51,7 +53,7 @@ namespace Sdl.Community.TargetWordCount
 				var langDirection = keys[key];
 
 				CreateReport(CreateReportName(langDirection), "Count for each file", report, langDirection);
-				ReportGenerator.GenerateHelixReport(langDirection);
+				ReportGenerator.GenerateHelixReport(langDirection, _projectFiles);
 			}
 
 		}

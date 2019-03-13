@@ -43,7 +43,7 @@ namespace Sdl.Community.TargetWordCount
 		/// The already reports which are generated through TargetWordCount app are not compatible in Helix
 		/// </summary>
 		/// <param name="languageDirection"></param>
-		public static void GenerateHelixReport(LanguageDirection languageDirection)
+		public static void GenerateHelixReport(LanguageDirection languageDirection, List<ProjectFile> projectFiles)
 		{
 			var currentProject = GetProjectController().CurrentProject;
 			var projectInfo = currentProject != null ?  currentProject.GetProjectInfo() : null;
@@ -69,7 +69,7 @@ namespace Sdl.Community.TargetWordCount
 				File.Create(helixReportPath).Dispose();
 
 				// Create the new helix report xml report structure as the one from the Studio WordCount.xml report
-				CreateHelixReportFile(projectInfo, helixReportPath);
+				CreateReportDocument(projectInfo, languageDirection, helixReportPath, fileInfo, projectFiles);
 
 			}
 		}
@@ -82,10 +82,14 @@ namespace Sdl.Community.TargetWordCount
 		/// </summary>
 		/// <param name="projectInfo">project information</param>
 		/// <param name="helixReportPath">the new TargetWordCount xml report path which will be used in Helix</param>
-		private static void CreateHelixReportFile(ProjectInfo projectInfo, string helixReportPath)
+		private static void CreateReportDocument(
+			ProjectInfo projectInfo,
+			LanguageDirection languageDirection,
+			string helixReportPath,
+			FileInfo fileInfo,
+			 List<ProjectFile> projectFiles)
 		{
 			var doc = new XmlDocument();
-			doc.Load(helixReportPath);
 
 			var taskElement = doc.CreateElement(string.Empty, "task", string.Empty);
 			taskElement.SetAttribute("name", "wordcount");
@@ -94,13 +98,46 @@ namespace Sdl.Community.TargetWordCount
 			var taskInfoElement = doc.CreateElement(string.Empty, "taskInfo", string.Empty);
 			taskInfoElement.SetAttribute("taskId", Guid.NewGuid().ToString());
 			taskInfoElement.SetAttribute("runAt", DateTime.UtcNow.ToString());
-			taskInfoElement.SetAttribute("tunTime", "Less than 1 second");
+			taskInfoElement.SetAttribute("runTime", "Less than 1 second");
 			taskElement.AppendChild(taskInfoElement);
 
 			var projectElement = doc.CreateElement(string.Empty, "project", string.Empty);
 			taskInfoElement.SetAttribute("name", projectInfo.Name);
 			taskInfoElement.SetAttribute("number", projectInfo.Id.ToString());
 			taskInfoElement.AppendChild(projectElement);
+
+			var languageElement = doc.CreateElement(string.Empty, "language", string.Empty);
+			languageElement.SetAttribute("lcid", languageDirection.TargetLanguage.CultureInfo.LCID.ToString());
+			languageElement.SetAttribute("name", languageDirection.TargetLanguage.DisplayName);
+			taskElement.AppendChild(languageElement);
+
+			// take the files values from the Target Word Count {sourceLanguage_languageDirection.TargetLanguage}.xml report
+			// and add the files nodes to the doc 
+			SetTargetFilesNode(taskElement, languageElement, fileInfo, projectFiles);
+			doc.Save(helixReportPath);
+		}
+
+		private static void SetTargetFilesNode(XmlElement taskElement, XmlElement languageElement, FileInfo fileInfo, List<ProjectFile> projectFiles)
+		{
+			var doc = new XmlDocument();
+			doc.Load(fileInfo.FullName);
+			foreach(var projectFile in projectFiles)
+			{
+				var fileNode = doc.SelectSingleNode($"//File[@Name='{projectFile.Name}']");
+
+				var fileElement = doc.CreateElement(string.Empty, "file", string.Empty);
+				fileElement.SetAttribute("name", projectFile.Name);
+				fileElement.SetAttribute("guid", projectFile.Id.ToString());
+				taskElement.AppendChild(fileElement);
+
+				var totalElement = doc.CreateElement(string.Empty, "total", string.Empty);
+				totalElement.SetAttribute("segments", "");
+				totalElement.SetAttribute("characters", string.Empty);
+				totalElement.SetAttribute("placeables", string.Empty);
+				totalElement.SetAttribute("tags", string.Empty);
+				totalElement.SetAttribute("words", "");
+				fileElement.AppendChild(totalElement);
+			}
 
 		}
 
