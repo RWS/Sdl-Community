@@ -42,7 +42,8 @@ namespace Sdl.Community.TargetWordCount
 		/// Generate new .xml reports( the reports will be imported manually in Helix).
 		/// The already reports which are generated through TargetWordCount app are not compatible in Helix
 		/// </summary>
-		/// <param name="languageDirection"></param>
+		/// <param name="languageDirection">language direction</param>
+		/// <param name="projectFiles">project files for the language direction on which the batch task is running</param>
 		public static void GenerateHelixReport(LanguageDirection languageDirection, List<ProjectFile> projectFiles)
 		{
 			var currentProject = GetProjectController().CurrentProject;
