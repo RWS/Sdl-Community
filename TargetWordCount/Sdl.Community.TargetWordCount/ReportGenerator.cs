@@ -108,7 +108,7 @@ namespace Sdl.Community.TargetWordCount
 
 			var projectElement = doc.CreateElement(string.Empty, "project", string.Empty);
 			projectElement.SetAttribute("name", projectInfo.Name);
-			projectElement.SetAttribute("number", projectInfo.Id.ToString());
+			projectElement.SetAttribute("number", projectInfo.Id != null ? projectInfo.Id.ToString() : Guid.NewGuid().ToString());
 			taskInfoElement.AppendChild(projectElement);
 
 			var languageElement = doc.CreateElement(string.Empty, "language", string.Empty);
@@ -124,23 +124,25 @@ namespace Sdl.Community.TargetWordCount
 			foreach (var projectFile in projectFiles)
 			{
 				var fileNode = document.SelectSingleNode($"//File[@Name='{projectFile.Name}']");
-				var totalNodeAttributes = fileNode.SelectSingleNode("Total") != null ? fileNode.SelectSingleNode("Total").Attributes : null;
-				if (totalNodeAttributes.Count > 0)
+				if (fileNode != null)
 				{
-					var fileElement = doc.CreateElement(string.Empty, "file", string.Empty);
-					fileElement.SetAttribute("name", projectFile.Name);
-					fileElement.SetAttribute("guid", projectFile.Id.ToString());
-					languageElement.AppendChild(fileElement);
+					var totalNodeAttributes = fileNode.SelectSingleNode("Total") != null ? fileNode.SelectSingleNode("Total").Attributes : null;
+					if (totalNodeAttributes.Count > 0)
+					{
+						var fileElement = doc.CreateElement(string.Empty, "file", string.Empty);
+						fileElement.SetAttribute("name", projectFile.Name);
+						fileElement.SetAttribute("guid", projectFile.Id.ToString());
+						languageElement.AppendChild(fileElement);
 
-					SetNewTotalElement(doc, totalNodeAttributes["Segments"].Value, totalNodeAttributes["Count"].Value, fileElement);
-					totalSegments += int.TryParse(totalNodeAttributes["Segments"].Value, out number) != false ? int.Parse(totalNodeAttributes["Segments"].Value) : 0;
-					totalWords += int.TryParse(totalNodeAttributes["Count"].Value, out number) != false ? int.Parse(totalNodeAttributes["Count"].Value) : 0;
+						SetNewTotalElement(doc, totalNodeAttributes["Segments"].Value, totalNodeAttributes["Count"].Value, fileElement);
+						totalSegments += int.TryParse(totalNodeAttributes["Segments"].Value, out number) != false ? int.Parse(totalNodeAttributes["Segments"].Value) : 0;
+						totalWords += int.TryParse(totalNodeAttributes["Count"].Value, out number) != false ? int.Parse(totalNodeAttributes["Count"].Value) : 0;
+					}
 				}
+				var batchTotalElement = doc.CreateElement(string.Empty, "batchTotal", string.Empty);
+				taskElement.AppendChild(batchTotalElement);
+				SetNewTotalElement(doc, totalSegments.ToString(), totalWords.ToString(), batchTotalElement);
 			}
-			var batchTotalElement = doc.CreateElement(string.Empty, "batchTotal", string.Empty);
-			taskElement.AppendChild(batchTotalElement);
-			SetNewTotalElement(doc, totalSegments.ToString(), totalWords.ToString(), batchTotalElement);
-
 			doc.Save(helixReportPath);
 		}
 
