@@ -139,10 +139,11 @@ namespace Sdl.Community.TargetWordCount
 						totalWords += int.TryParse(totalNodeAttributes["Count"].Value, out number) != false ? int.Parse(totalNodeAttributes["Count"].Value) : 0;
 					}
 				}
-				var batchTotalElement = doc.CreateElement(string.Empty, "batchTotal", string.Empty);
-				taskElement.AppendChild(batchTotalElement);
-				SetNewTotalElement(doc, totalSegments.ToString(), totalWords.ToString(), batchTotalElement);
 			}
+			var batchTotalElement = doc.CreateElement(string.Empty, "batchTotal", string.Empty);
+			taskElement.AppendChild(batchTotalElement);
+			SetNewTotalElement(doc, totalSegments.ToString(), totalWords.ToString(), batchTotalElement);
+
 			doc.Save(helixReportPath);
 		}
 
