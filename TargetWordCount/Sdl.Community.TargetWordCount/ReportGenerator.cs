@@ -71,10 +71,8 @@ namespace Sdl.Community.TargetWordCount
 
 				// Create the new helix report xml report structure as the one from the Studio WordCount.xml report
 				CreateReportDocument(projectInfo, languageDirection, helixReportPath, fileInfo, projectFiles);
-
 			}
 		}
-
 
 		/// <summary>
 		/// Create the ..\Reports\StudioTargetWordCount\{targetWordCountReportName}.xml structure based on the Studio WordCount.xml report structure
@@ -122,7 +120,7 @@ namespace Sdl.Community.TargetWordCount
 			// and add the files nodes to the doc for each projectFiles on which the TargetWordCount batch task had been run.
 			var document = new XmlDocument();
 			document.Load(fileInfo.FullName);
-			
+
 			foreach (var projectFile in projectFiles)
 			{
 				var fileNode = document.SelectSingleNode($"//File[@Name='{projectFile.Name}']");
@@ -145,7 +143,7 @@ namespace Sdl.Community.TargetWordCount
 
 			doc.Save(helixReportPath);
 		}
-			
+
 		// Create the elements in report for the following xml elements: 'Total' and 'BatchTotal' 
 		private static void SetNewTotalElement(XmlDocument doc, string segmentValue, string wordCountValue, XmlElement parentElement)
 		{
