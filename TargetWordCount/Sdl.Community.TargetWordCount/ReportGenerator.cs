@@ -81,7 +81,10 @@ namespace Sdl.Community.TargetWordCount
 		/// and the ..\Reports\StudioTargetWordCount\{targetWordCountReportName}.xml will be imported in Helix
 		/// </summary>
 		/// <param name="projectInfo">project information</param>
+		/// <param name="languageDirection">file language direction</param>
 		/// <param name="helixReportPath">the new TargetWordCount xml report path which will be used in Helix</param>
+		/// <param name="fileInfo">file info</param>
+		/// <param name="projectFiles">list of the project files on which the batch task is running</param>
 		private static void CreateReportDocument(
 			ProjectInfo projectInfo,
 			LanguageDirection languageDirection,
@@ -90,6 +93,9 @@ namespace Sdl.Community.TargetWordCount
 			List<ProjectFile> projectFiles)
 		{
 			var doc = new XmlDocument();
+			int totalSegments = 0;
+			int totalWords = 0;
+			int number;
 
 			var taskElement = doc.CreateElement(string.Empty, "task", string.Empty);
 			taskElement.SetAttribute("name", "wordcount");
@@ -112,25 +118,11 @@ namespace Sdl.Community.TargetWordCount
 			taskElement.AppendChild(languageElement);
 
 			// take the files values from the Target Word Count {sourceLanguage_languageDirection.TargetLanguage}.xml report
-			// and add the files nodes to the doc 
-			projectFiles = projectFiles.Where(p => p.Language.DisplayName.Equals(languageDirection.TargetLanguage.DisplayName)).ToList();
-			SetTargetFilesNode(doc, taskElement, languageElement, fileInfo, projectFiles);
-			doc.Save(helixReportPath);
-		}
-
-		private static void SetTargetFilesNode(
-			XmlDocument doc,
-			XmlElement taskElement,
-			XmlElement languageElement,
-			FileInfo fileInfo,
-			List<ProjectFile> projectFiles)
-		{
+			// and add the files nodes to the doc for each projectFiles on which the TargetWordCount batch task had been run.
 			var document = new XmlDocument();
 			document.Load(fileInfo.FullName);
-			int totalSegments = 0;
-			int totalWords = 0;
-			int number;
-			foreach(var projectFile in projectFiles)
+			
+			foreach (var projectFile in projectFiles)
 			{
 				var fileNode = document.SelectSingleNode($"//File[@Name='{projectFile.Name}']");
 				var totalNodeAttributes = fileNode.SelectSingleNode("Total") != null ? fileNode.SelectSingleNode("Total").Attributes : null;
@@ -141,17 +133,20 @@ namespace Sdl.Community.TargetWordCount
 					fileElement.SetAttribute("guid", projectFile.Id.ToString());
 					languageElement.AppendChild(fileElement);
 
-					SetTotalElements(doc, totalNodeAttributes["Segments"].Value, totalNodeAttributes["Count"].Value, fileElement);
+					SetNewTotalElement(doc, totalNodeAttributes["Segments"].Value, totalNodeAttributes["Count"].Value, fileElement);
 					totalSegments += int.TryParse(totalNodeAttributes["Segments"].Value, out number) != false ? int.Parse(totalNodeAttributes["Segments"].Value) : 0;
 					totalWords += int.TryParse(totalNodeAttributes["Count"].Value, out number) != false ? int.Parse(totalNodeAttributes["Count"].Value) : 0;
-				}				
+				}
 			}
 			var batchTotalElement = doc.CreateElement(string.Empty, "batchTotal", string.Empty);
 			taskElement.AppendChild(batchTotalElement);
-			SetTotalElements(doc, totalSegments.ToString(), totalWords.ToString(), batchTotalElement);
-		}
+			SetNewTotalElement(doc, totalSegments.ToString(), totalWords.ToString(), batchTotalElement);
 
-		private static void SetTotalElements(XmlDocument doc, string segmentValue, string wordCountValue, XmlElement parentElement)
+			doc.Save(helixReportPath);
+		}
+			
+		// Create the elements in report for the following xml elements: 'Total' and 'BatchTotal' 
+		private static void SetNewTotalElement(XmlDocument doc, string segmentValue, string wordCountValue, XmlElement parentElement)
 		{
 			var totalElement = doc.CreateElement(string.Empty, "total", string.Empty);
 			totalElement.SetAttribute("segments", segmentValue);

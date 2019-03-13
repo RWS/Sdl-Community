@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
@@ -53,7 +54,8 @@ namespace Sdl.Community.TargetWordCount
 				var langDirection = keys[key];
 
 				CreateReport(CreateReportName(langDirection), "Count for each file", report, langDirection);
-				ReportGenerator.GenerateHelixReport(langDirection, _projectFiles);
+				var projectFiles = _projectFiles.Where(p => p.Language.DisplayName.Equals(langDirection.TargetLanguage.DisplayName)).ToList();
+				ReportGenerator.GenerateHelixReport(langDirection, projectFiles);
 			}
 
 		}
