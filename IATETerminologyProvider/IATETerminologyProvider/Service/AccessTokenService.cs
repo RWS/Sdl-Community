@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Threading;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
@@ -31,7 +25,7 @@ namespace IATETerminologyProvider.Service
 		private string _userName;
 		private string _password;
 
-		private readonly DispatcherTimer _timer;
+		private readonly System.Timers.Timer _timer;
 
 		public AccessTokenService(TimeSpan accessTokenLifespan, TimeSpan refreshTokenLifespan)
 		{
@@ -40,19 +34,25 @@ namespace IATETerminologyProvider.Service
 			_accessTokenLifespan = accessTokenLifespan.TotalSeconds > 0 ? accessTokenLifespan : new TimeSpan(0, 3, 0, 0);
 			_refreshTokenLifespan = refreshTokenLifespan.TotalSeconds > 0 ? refreshTokenLifespan : new TimeSpan(0, 12, 0, 0);
 
-			_timer = new DispatcherTimer
+			_timer = new System.Timers.Timer
 			{
-				Interval = TimeSpan.FromMilliseconds(1000)
+				Interval = 1000
 			};
-			_timer.Tick += Timer_Tick;
+
+			_timer.Elapsed += Timer_Elapsed;
+			_timer.Enabled = true;
+			_timer.AutoReset = true;
 			_timer.Start();
 		}
+
+
 
 		public AccessTokenService() : this(new TimeSpan(0), new TimeSpan(0)) { }
 
 		public bool GetAccessToken(string userName, string password)
 		{
-			if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
+			if (string.IsNullOrEmpty(userName) 
+			    || string.IsNullOrEmpty(password))
 			{
 				return false;
 			}
@@ -82,17 +82,14 @@ namespace IATETerminologyProvider.Service
 			}
 
 			return false;
-		}
-
-		public bool GetAccessToken()
-		{
-			return GetAccessToken("SDL_PLUGIN", "E9KWtWahXs4hvE9z");
-		}
+		}		
 
 		public bool ExtendAccessToken()
 		{
-			if (_accessTokenExtended || string.IsNullOrEmpty(_accessToken) ||
-				string.IsNullOrEmpty(RefreshToken) || _requestedAccessToken == DateTime.MinValue)
+			if (_accessTokenExtended || 
+			    string.IsNullOrEmpty(_accessToken) ||
+				string.IsNullOrEmpty(RefreshToken) || 
+			    _requestedAccessToken == DateTime.MinValue)
 			{
 				return false;
 			}
@@ -299,7 +296,7 @@ namespace IATETerminologyProvider.Service
 			_password = string.Empty;
 		}
 
-		private void Timer_Tick(object sender, System.EventArgs e)
+		private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (!_accessTokenExpired && _requestedAccessToken > DateTime.MinValue)
 			{
@@ -313,7 +310,7 @@ namespace IATETerminologyProvider.Service
 			{
 				var expireTime = _extendedRefreshToken.AddSeconds(_refreshTokenLifespan.TotalSeconds);
 				if (expireTime < DateTime.Now.AddMinutes(1))
-				{
+				{					
 					_refreshTokenExpired = true;
 				}
 			}
@@ -330,7 +327,9 @@ namespace IATETerminologyProvider.Service
 		{
 			if (_timer != null)
 			{
-				_timer.Tick -= Timer_Tick;
+				_timer.Stop();
+				_timer.Elapsed -= Timer_Elapsed;
+				_timer.Close();
 			}
 		}
 	}

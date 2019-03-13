@@ -24,7 +24,7 @@ namespace IATETerminologyProvider.Service
 
 		public TermSearchService(ProviderSettings providerSettings)
 		{
-			_accessTokenService = new AccessTokenService();
+			_accessTokenService = new AccessTokenService(new TimeSpan(0, 0, 3, 0), new TimeSpan(0, 0, 3, 0));
 			_domains = DomainService.GetDomains();
 			_termTypes = TermTypeService.GetTermTypes();
 			_providerSettings = providerSettings;
@@ -75,16 +75,16 @@ namespace IATETerminologyProvider.Service
 		private void SetAccessToken()
 		{
 			if (_accessTokenService.RefreshTokenExpired
-			    || _accessTokenService.RequestedAccessToken == DateTime.MinValue
-			    || string.IsNullOrEmpty(_accessTokenService.AccessToken))
+				|| _accessTokenService.RequestedAccessToken == DateTime.MinValue
+				|| string.IsNullOrEmpty(_accessTokenService.AccessToken))
 			{
-				var success = _accessTokenService.GetAccessToken();
+				var success = _accessTokenService.GetAccessToken("SDL_PLUGIN", "E9KWtWahXs4hvE9z");
 				if (!success)
 				{
 					throw new Exception(PluginResources.TermSearchService_Error_in_requesting_access_token);
 				}
 			}
-			else if (_accessTokenService.AccessTokenExpired)
+			else if (_accessTokenService.AccessTokenExpired && !_accessTokenService.AccessTokenExtended)
 			{
 				var success = _accessTokenService.ExtendAccessToken();
 				if (!success)
