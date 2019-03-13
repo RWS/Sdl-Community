@@ -113,32 +113,53 @@ namespace Sdl.Community.TargetWordCount
 
 			// take the files values from the Target Word Count {sourceLanguage_languageDirection.TargetLanguage}.xml report
 			// and add the files nodes to the doc 
+			projectFiles = projectFiles.Where(p => p.Language.DisplayName.Equals(languageDirection.TargetLanguage.DisplayName)).ToList();
 			SetTargetFilesNode(taskElement, languageElement, fileInfo, projectFiles);
 			doc.Save(helixReportPath);
 		}
 
-		private static void SetTargetFilesNode(XmlElement taskElement, XmlElement languageElement, FileInfo fileInfo, List<ProjectFile> projectFiles)
+		private static void SetTargetFilesNode(
+			XmlElement taskElement,
+			XmlElement languageElement,
+			FileInfo fileInfo,
+			List<ProjectFile> projectFiles)
 		{
 			var doc = new XmlDocument();
 			doc.Load(fileInfo.FullName);
+			int totalSegments = 0;
+			int totalWords = 0;
+			int number;
 			foreach(var projectFile in projectFiles)
 			{
 				var fileNode = doc.SelectSingleNode($"//File[@Name='{projectFile.Name}']");
+				var totalNodeAttributes = fileNode.SelectSingleNode("Total") != null ? fileNode.SelectSingleNode("Total").Attributes : null;
+				if (totalNodeAttributes.Count > 0)
+				{
+					var fileElement = doc.CreateElement(string.Empty, "file", string.Empty);
+					fileElement.SetAttribute("name", projectFile.Name);
+					fileElement.SetAttribute("guid", projectFile.Id.ToString());
+					taskElement.AppendChild(fileElement);
 
-				var fileElement = doc.CreateElement(string.Empty, "file", string.Empty);
-				fileElement.SetAttribute("name", projectFile.Name);
-				fileElement.SetAttribute("guid", projectFile.Id.ToString());
-				taskElement.AppendChild(fileElement);
-
-				var totalElement = doc.CreateElement(string.Empty, "total", string.Empty);
-				totalElement.SetAttribute("segments", "");
-				totalElement.SetAttribute("characters", string.Empty);
-				totalElement.SetAttribute("placeables", string.Empty);
-				totalElement.SetAttribute("tags", string.Empty);
-				totalElement.SetAttribute("words", "");
-				fileElement.AppendChild(totalElement);
+					var totalElement = doc.CreateElement(string.Empty, "total", string.Empty);
+					totalElement.SetAttribute("segments", totalNodeAttributes["Segments"].Value);
+					totalElement.SetAttribute("characters", string.Empty);
+					totalElement.SetAttribute("placeables", string.Empty);
+					totalElement.SetAttribute("tags", string.Empty);
+					totalElement.SetAttribute("words", totalNodeAttributes["Count"].Value);
+					fileElement.AppendChild(totalElement);
+					totalSegments += int.TryParse(totalNodeAttributes["Segments"].Value, out number) != false ? int.Parse(totalNodeAttributes["Segments"].Value) : 0;
+					totalWords += int.TryParse(totalNodeAttributes["Count"].Value, out number) != false ? int.Parse(totalNodeAttributes["Count"].Value) : 0;
+				}				
 			}
-
+			var batchTotalElement = doc.CreateElement(string.Empty, "batchTotal", string.Empty);
+			taskElement.AppendChild(batchTotalElement);
+			var totalBatchElement = doc.CreateElement(string.Empty, "total", string.Empty);
+			totalBatchElement.SetAttribute("segments", totalSegments.ToString());
+			totalBatchElement.SetAttribute("characters", string.Empty);
+			totalBatchElement.SetAttribute("placeables", string.Empty);
+			totalBatchElement.SetAttribute("tags", string.Empty);
+			totalBatchElement.SetAttribute("words", totalWords.ToString());
+			batchTotalElement.AppendChild(totalBatchElement);
 		}
 
 		private static void AccumulateCountData(IWordCountBatchTaskSettings settings, ISegmentWordCounter counter, CountTotal info)
