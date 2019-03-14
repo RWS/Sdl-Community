@@ -1,4 +1,5 @@
 ![Build Status](https://sdl.visualstudio.com/TradosStudio/_apis/build/status/AppStore/TradosStudio%20-%20AppStore)
+![GitHub repo size in bytes](https://img.shields.io/github/repo-size/sdl/sdl-community.svg)
 
 ## Table of contents 
 
