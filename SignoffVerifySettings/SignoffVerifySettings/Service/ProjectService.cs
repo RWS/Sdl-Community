@@ -250,12 +250,12 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			var qaVerificationSettings = _document.SelectSingleNode($"//SettingsGroup[@Id='QAVerificationSettings']");
 			if (qaVerificationSettings != null)
 			{
-				foreach (XmlNode qaVerifcaitionSetting in qaVerificationSettings)
+				foreach (XmlNode qaVerificationSetting in qaVerificationSettings)
 				{
 					var qaVerificationSettingsModel = new QAVerificationSettingsModel
 					{
-						Name = qaVerifcaitionSetting.Attributes.Count > 0 ? qaVerifcaitionSetting.Attributes["Id"].Value : string.Empty,
-						Value = qaVerifcaitionSetting.FirstChild != null ? qaVerifcaitionSetting.FirstChild.Value : string.Empty
+						Name = qaVerificationSetting.Attributes.Count > 0 ? qaVerificationSetting.Attributes["Id"].Value : string.Empty,
+						Value = qaVerificationSetting.FirstChild != null ? qaVerificationSetting.FirstChild.Value : string.Empty
 					};
 					qaVerificationSettingsModels.Add(qaVerificationSettingsModel);
 				}
@@ -270,11 +270,15 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		private List<NumberVerifierSettingsModel> GetNumberVerifierSettings()
 		{
 			var numberVerifierModels = new List<NumberVerifierSettingsModel>();
-			var numberVerifierSettings = _document.SelectSingleNode($"//SettingsGroup[@Id='NumberVerifierSettings']");
+			var numberVerifierSettingsNode = _document.SelectSingleNode($"//SettingsGroup[@Id='NumberVerifierSettings']");
 			if (numberVerifierSettings != null)
 			{
+				var targetFileSettingsNode = numberVerifierSettingsNode.SelectSingleNode($"//Setting[@Id='TargetFileSettings']");
 				// To Do: get the information from NumberVerifierSettings group ->TargetFileSetting node for each file which exists in there and add it to numberVerifierModels list 
-				// Note: the developement is currently stopped on this Studio 2017 version, because of the GS connection issues
+				if (targetFileSettingsNode != null)
+				{
+					//var arrayOfTargetSettingNode = 
+				}
 			}
 			return numberVerifierModels;
 		}
