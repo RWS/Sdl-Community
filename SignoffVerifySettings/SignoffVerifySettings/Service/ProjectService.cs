@@ -274,10 +274,25 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			if (numberVerifierSettingsNode != null)
 			{
 				var targetFileSettingsNode = numberVerifierSettingsNode.SelectSingleNode($"//Setting[@Id='TargetFileSettings']");
-				// To Do: get the information from NumberVerifierSettings group ->TargetFileSetting node for each file which exists in there and add it to numberVerifierModels list 
 				if (targetFileSettingsNode != null)
 				{
-					//var arrayOfTargetSettingNode = 
+					// the FirstChild ("ArrayOfTargetFileSetting") is taken because it always will exist only one child node on the TargetFileSettings node
+					if (targetFileSettingsNode.FirstChild != null)
+					{
+						foreach(XmlElement targetFileChildNode in targetFileSettingsNode.FirstChild.ChildNodes)
+						{
+							if (targetFileChildNode.ChildNodes != null)
+							{
+								// take the values by index, because the Node structure will not change(this is how is defined in NumberVerifier app) 
+								var numberVeriferModel = new NumberVerifierSettingsModel
+								{
+									ExecutedDateTime = targetFileChildNode.ChildNodes[0].InnerXml,
+									FileName = targetFileChildNode.ChildNodes[1].InnerXml
+								};
+								numberVerifierModels.Add(numberVeriferModel);
+							}						
+						}
+					}
 				}
 			}
 			return numberVerifierModels;
