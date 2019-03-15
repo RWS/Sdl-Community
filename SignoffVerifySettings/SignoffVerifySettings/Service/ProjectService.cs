@@ -100,17 +100,19 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			foreach (var taskFile in taskFiles)
 			{
 				var languageFileNode = _document.SelectSingleNode($"//LanguageFile[@Guid='{taskFile.Id}']");
-
-				if (languageFileNode.Attributes.Count > 0)
+				if (languageFileNode != null)
 				{
-					var languageFileXmlNodeModel = new LanguageFileXmlNodeModel
+					if (languageFileNode.Attributes.Count > 0)
 					{
-						LanguageFileGUID = languageFileNode.Attributes["Guid"].Value,
-						SettingsBundleGuid = languageFileNode.Attributes["SettingsBundleGuid"].Value,
-						LanguageCode = languageFileNode.Attributes["LanguageCode"].Value,
-						FileName = Path.GetFileName(taskFile.LocalFilePath)
-					};
-					langFileXMLNodeModels.Add(languageFileXmlNodeModel);
+						var languageFileXmlNodeModel = new LanguageFileXmlNodeModel
+						{
+							LanguageFileGUID = languageFileNode.Attributes["Guid"].Value,
+							SettingsBundleGuid = languageFileNode.Attributes["SettingsBundleGuid"].Value,
+							LanguageCode = languageFileNode.Attributes["LanguageCode"].Value,
+							FileName = Path.GetFileName(taskFile.LocalFilePath)
+						};
+						langFileXMLNodeModels.Add(languageFileXmlNodeModel);
+					}
 				}
 			}
 			var sourceLangauge = currentProject.GetProjectInfo() != null ? currentProject.GetProjectInfo().SourceLanguage != null
@@ -135,16 +137,19 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			foreach (var targetFile in _targetFiles)
 			{
 				var settingsBundles = _document.SelectSingleNode($"//SettingsBundle[@Guid='{targetFile.SettingsBundleGuid}']");
-				foreach(XmlNode settingBundle in settingsBundles)
+				if (settingsBundles != null)
 				{
-					foreach(XmlNode childNode in settingBundle.ChildNodes)
+					foreach (XmlNode settingBundle in settingsBundles)
 					{
-						if (childNode.Attributes.Count > 0)
+						foreach (XmlNode childNode in settingBundle.ChildNodes)
 						{
-							_utils.GetPhaseInformation(Constants.ReviewPhase, childNode, targetFile, _phaseXmlNodeModels);
-							_utils.GetPhaseInformation(Constants.TranslationPhase, childNode, targetFile, _phaseXmlNodeModels);
-							_utils.GetPhaseInformation(Constants.PreparationPhase, childNode, targetFile, _phaseXmlNodeModels);
-							_utils.GetPhaseInformation(Constants.FinalisationPhase, childNode, targetFile, _phaseXmlNodeModels);
+							if (childNode.Attributes.Count > 0)
+							{
+								_utils.GetPhaseInformation(Constants.ReviewPhase, childNode, targetFile, _phaseXmlNodeModels);
+								_utils.GetPhaseInformation(Constants.TranslationPhase, childNode, targetFile, _phaseXmlNodeModels);
+								_utils.GetPhaseInformation(Constants.PreparationPhase, childNode, targetFile, _phaseXmlNodeModels);
+								_utils.GetPhaseInformation(Constants.FinalisationPhase, childNode, targetFile, _phaseXmlNodeModels);
+							}
 						}
 					}
 				}
@@ -243,14 +248,17 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		{
 			var qaVerificationSettingsModels = new List<QAVerificationSettingsModel>();
 			var qaVerificationSettings = _document.SelectSingleNode($"//SettingsGroup[@Id='QAVerificationSettings']");
-			foreach(XmlNode qaVerifcaitionSetting in qaVerificationSettings)
+			if (qaVerificationSettings != null)
 			{
-				var qaVerificationSettingsModel = new QAVerificationSettingsModel
+				foreach (XmlNode qaVerifcaitionSetting in qaVerificationSettings)
 				{
-					Name = qaVerifcaitionSetting.Attributes.Count > 0 ? qaVerifcaitionSetting.Attributes["Id"].Value : string.Empty,
-					Value = qaVerifcaitionSetting.FirstChild != null ? qaVerifcaitionSetting.FirstChild.Value : string.Empty
-				};
-				qaVerificationSettingsModels.Add(qaVerificationSettingsModel);
+					var qaVerificationSettingsModel = new QAVerificationSettingsModel
+					{
+						Name = qaVerifcaitionSetting.Attributes.Count > 0 ? qaVerifcaitionSetting.Attributes["Id"].Value : string.Empty,
+						Value = qaVerifcaitionSetting.FirstChild != null ? qaVerifcaitionSetting.FirstChild.Value : string.Empty
+					};
+					qaVerificationSettingsModels.Add(qaVerificationSettingsModel);
+				}
 			}
 			return qaVerificationSettingsModels;
 		}
@@ -263,10 +271,11 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		{
 			var numberVerifierModels = new List<NumberVerifierSettingsModel>();
 			var numberVerifierSettings = _document.SelectSingleNode($"//SettingsGroup[@Id='NumberVerifierSettings']");
-
-			// To Do: get the information from numberVerifierSettings group for each file which exists in there
-			// and add it to numberVerifierModels list
-
+			if (numberVerifierSettings != null)
+			{
+				// To Do: get the information from numberVerifierSettings group for each file which exists in there
+				// and add it to numberVerifierModels list
+			}
 			return numberVerifierModels;
 		}
 		#endregion
