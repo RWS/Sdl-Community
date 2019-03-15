@@ -273,8 +273,8 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			var numberVerifierSettings = _document.SelectSingleNode($"//SettingsGroup[@Id='NumberVerifierSettings']");
 			if (numberVerifierSettings != null)
 			{
-				// To Do: get the information from numberVerifierSettings group for each file which exists in there
-				// and add it to numberVerifierModels list
+				// To Do: get the information from NumberVerifierSettings group ->TargetFileSetting node for each file which exists in there and add it to numberVerifierModels list 
+				// Note: the developement is currently stopped on this Studio 2017 version, because of the GS connection issues
 			}
 			return numberVerifierModels;
 		}
