@@ -271,7 +271,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		{
 			var numberVerifierModels = new List<NumberVerifierSettingsModel>();
 			var numberVerifierSettingsNode = _document.SelectSingleNode($"//SettingsGroup[@Id='NumberVerifierSettings']");
-			if (numberVerifierSettings != null)
+			if (numberVerifierSettingsNode != null)
 			{
 				var targetFileSettingsNode = numberVerifierSettingsNode.SelectSingleNode($"//Setting[@Id='TargetFileSettings']");
 				// To Do: get the information from NumberVerifierSettings group ->TargetFileSetting node for each file which exists in there and add it to numberVerifierModels list 

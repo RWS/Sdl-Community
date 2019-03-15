@@ -224,7 +224,7 @@ namespace Sdl.Community.NumberVerifier
 			var projectController = GetProjectController();
 			if (projectController != null)
 			{
-				SetSettingsGroups(projectController.CurrentProject);
+				SetSettingsGroups(documentInfo.TargetLanguage, projectController.CurrentProject);
 			}
 
 			_sourceMatchingThousandSeparators = string.Concat(VerificationSettings.GetSourceThousandSeparators());
@@ -1350,7 +1350,7 @@ namespace Sdl.Community.NumberVerifier
 		/// Set TargetFileSettings settings group to store the file name and last date time on which the Number Verification has been run.
 		/// </summary>
 		/// <param name="currentProject">current project</param>
-		private void SetSettingsGroups(FileBasedProject currentProject)
+		private void SetSettingsGroups(Language targetLanguage, FileBasedProject currentProject)
 		{
 			var targetFileSettingsResult = new List<TargetFileSetting>();
 			var settings = _sharedObjects.GetSharedObject<ISettingsBundle>("SettingsBundle");
@@ -1379,7 +1379,7 @@ namespace Sdl.Community.NumberVerifier
 			targetFileSettingsResult.Add(targetFileSetting);		
 			
 			numberVerifierSettings.TargetFileSettings = targetFileSettingsResult;
-			currentProject.UpdateSettings(settings);
+			currentProject.UpdateSettings(targetLanguage, settings);
 			currentProject.Save();
 		}
 		
