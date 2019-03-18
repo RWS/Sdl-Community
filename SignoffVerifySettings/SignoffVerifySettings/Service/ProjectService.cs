@@ -2,14 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Xml;
-using Newtonsoft.Json;
 using Sdl.Community.SignoffVerifySettings.Helpers;
 using Sdl.Community.SignoffVerifySettings.Model;
 using Sdl.Community.Toolkit.Core;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using static System.Environment;
 
 namespace Sdl.Community.SignoffVerifySettings.Service
 {
@@ -319,6 +317,10 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 			return numberVerifierModels;
 		}
 
+		/// <summary>
+		/// Get the language directions used to get the neccessary information for the NumberVerifierSettings groups
+		/// </summary>
+		/// <returns>list of LanguageDirectionModel</returns>
 		private List<LanguageDirectionModel> GetLanguageDirections()
 		{
 			var languageDirections = new List<LanguageDirectionModel>();
