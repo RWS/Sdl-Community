@@ -37,6 +37,7 @@ namespace Sdl.Community.NumberVerifier
 		private INumberVerifierSettings _verificationSettings;
 		private string _language;
 		private string _fileName;
+		//private List<TargetFileSetting> _targetFileSettingsResult = new List<TargetFileSetting>();
 		#endregion
 
 		public NumberVerifierMain() : this(null)
@@ -1352,23 +1353,24 @@ namespace Sdl.Community.NumberVerifier
 		/// <param name="currentProject">current project</param>
 		private void SetSettingsGroups(Language targetLanguage, FileBasedProject currentProject)
 		{
+			// To Do: fix the issue with overriding the added targetfile in .sdlproj
 			var targetFileSettingsResult = new List<TargetFileSetting>();
 			var settings = _sharedObjects.GetSharedObject<ISettingsBundle>("SettingsBundle");
 			var numberVerifierSettings = settings.GetSettingsGroup<NumberVerifierSettings>();
 
-			if (numberVerifierSettings.TargetFileSettings == null)
+			if (numberVerifierSettings.TargetFileSettings.Value == null)
 			{
-				numberVerifierSettings.TargetFileSettings = new List<TargetFileSetting>();
+				numberVerifierSettings.TargetFileSettings.Value = new List<TargetFileSetting>();
 			}
 			else
 			{
-				targetFileSettingsResult = numberVerifierSettings.TargetFileSettings;
+				targetFileSettingsResult = numberVerifierSettings.TargetFileSettings.Value;
 				var fileSettings = targetFileSettingsResult.FirstOrDefault(f => f.FileName.Equals(_fileName));
 				if (fileSettings != null)
 				{
 					// Remove the old file settings
 					targetFileSettingsResult.Remove(fileSettings);
-					numberVerifierSettings.TargetFileSettings = new List<TargetFileSetting>();
+					numberVerifierSettings.TargetFileSettings.Value = new List<TargetFileSetting>();
 				}
 			}
 			var targetFileSetting = new TargetFileSetting
@@ -1378,7 +1380,7 @@ namespace Sdl.Community.NumberVerifier
 			};
 			targetFileSettingsResult.Add(targetFileSetting);		
 			
-			numberVerifierSettings.TargetFileSettings = targetFileSettingsResult;
+			numberVerifierSettings.TargetFileSettings.Value = targetFileSettingsResult;
 			currentProject.UpdateSettings(targetLanguage, settings);
 			currentProject.Save();
 		}

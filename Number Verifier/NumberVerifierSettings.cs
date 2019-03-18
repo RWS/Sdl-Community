@@ -319,10 +319,11 @@ namespace Sdl.Community.NumberVerifier
 			get { return GetSetting<string>(nameof(GetHindi)).Value; }
 		}
 
-		public List<TargetFileSetting> TargetFileSettings
+		private const string TargetFileSetting = "TargetFileSettings";
+		public Setting<List<TargetFileSetting>> TargetFileSettings
 		{
-			set { GetSetting<List<TargetFileSetting>>(nameof(TargetFileSettings)).Value = value; }
-			get { return GetSetting<List<TargetFileSetting>>(nameof(TargetFileSettings)).Value; }
+			get { return GetSetting<List<TargetFileSetting>>(TargetFileSetting); }
+			//set { GetSetting<List<TargetFileSetting>>(TargetFileSetting).Value = value; }
 		}
 
 
@@ -423,7 +424,9 @@ namespace Sdl.Community.NumberVerifier
                     return false;
                 case nameof(TargetOmitLeadingZero):
                     return false;
-                default:
+				case nameof(TargetFileSettings):
+					return TargetFileSettings;
+				default:
                     return base.GetDefaultValue(settingId);
             }
         }

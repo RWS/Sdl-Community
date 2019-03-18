@@ -62,7 +62,7 @@ namespace Sdl.Community.NumberVerifier.Interfaces
         string GetTargetDecimalCustomSeparator { get; set; }
 		string GetAlphanumericsCustomSeparator { get; set; }
 		string GetHindi { get; set; }
-		List<TargetFileSetting> TargetFileSettings { get; set; }
+		Setting<List<TargetFileSetting>> TargetFileSettings { get; }
 
 		IEnumerable<string> GetSourceDecimalSeparators();
         IEnumerable<string> GetSourceThousandSeparators();
