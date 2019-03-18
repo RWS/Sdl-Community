@@ -323,7 +323,6 @@ namespace Sdl.Community.NumberVerifier
 		public Setting<List<TargetFileSetting>> TargetFileSettings
 		{
 			get { return GetSetting<List<TargetFileSetting>>(TargetFileSetting); }
-			//set { GetSetting<List<TargetFileSetting>>(TargetFileSetting).Value = value; }
 		}
 
 
@@ -425,7 +424,7 @@ namespace Sdl.Community.NumberVerifier
                 case nameof(TargetOmitLeadingZero):
                     return false;
 				case nameof(TargetFileSettings):
-					return TargetFileSettings;
+					return new List<TargetFileSetting>();
 				default:
                     return base.GetDefaultValue(settingId);
             }
