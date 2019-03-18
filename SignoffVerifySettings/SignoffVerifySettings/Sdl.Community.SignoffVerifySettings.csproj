@@ -103,6 +103,7 @@
   <ItemGroup>
     <Compile Include="FileConverter.cs" />
     <Compile Include="Helpers\Utils.cs" />
+    <Compile Include="Model\LanguageDirectionModel.cs" />
     <Compile Include="Model\LanguageFileXmlNodeModel.cs" />
     <Compile Include="Model\NumberVerifierSettingsModel.cs" />
     <Compile Include="Model\PhaseXmlNodeModel.cs" />

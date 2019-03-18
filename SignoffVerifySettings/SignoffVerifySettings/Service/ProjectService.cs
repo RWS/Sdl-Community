@@ -27,8 +27,11 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		public ProjectService()
 		{
 			_utils = new Utils();
-			_projectsController = GetProjectController();			
-			_document = _utils.LoadXmlDocument(_projectsController != null ? _projectsController.CurrentProject != null? _projectsController.CurrentProject.FilePath : null : null);
+			_projectsController = GetProjectController();
+			_document = _utils.LoadXmlDocument(_projectsController != null ? _projectsController.CurrentProject != null
+										? _projectsController.CurrentProject.FilePath
+										: null
+										: null);
 		}
 		#endregion
 
@@ -38,7 +41,7 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		/// </summary>
 		/// <param name="taskFiles">selected files from the project based on which the batch task is running</param>
 		public void GetCurrentProjectInformation(ProjectFile[] taskFiles)
-		{			
+		{
 			// Studio version
 			var studioVersion = GetStudioVersion();
 			var currentProject = GetProjectController().CurrentProject;
@@ -222,8 +225,8 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		{
 			// get RegExRules & CheckRexEx values
 			projectInfoReportModel.RegexRules = _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='RegExRules']") != null
-				? _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='RegExRules']").FirstChild != null 
-				? _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='RegExRules']").FirstChild.Value 
+				? _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='RegExRules']").FirstChild != null
+				? _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='RegExRules']").FirstChild.Value
 				: string.Empty : string.Empty;
 			projectInfoReportModel.CheckRegexRules = _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='CheckRegEx']") != null
 				? _document.SelectSingleNode($"//SettingsGroup/Setting[@Id='CheckRegEx']").FirstChild != null
@@ -270,32 +273,69 @@ namespace Sdl.Community.SignoffVerifySettings.Service
 		private List<NumberVerifierSettingsModel> GetNumberVerifierSettings()
 		{
 			var numberVerifierModels = new List<NumberVerifierSettingsModel>();
-			var numberVerifierSettingsNode = _document.SelectSingleNode($"//SettingsGroup[@Id='NumberVerifierSettings']");
-			if (numberVerifierSettingsNode != null)
+			var languageDirections = GetLanguageDirections();
+			foreach (var targetFile in _targetFiles)
 			{
-				var targetFileSettingsNode = numberVerifierSettingsNode.SelectSingleNode($"//Setting[@Id='TargetFileSettings']");
-				if (targetFileSettingsNode != null)
+				var fileLanguageDirection = languageDirections.Where(l => l.TargetLanguage.Equals(targetFile.LanguageCode)).FirstOrDefault();
+
+				if (fileLanguageDirection != null)
 				{
-					// the FirstChild ("ArrayOfTargetFileSetting") is taken because it always will exist only one child node on the TargetFileSettings node
-					if (targetFileSettingsNode.FirstChild != null)
+					var settingsBundleNode = _document.SelectSingleNode($"//SettingsBundle[@Guid='{fileLanguageDirection.SettingsBundleGuid}']");
+					if (settingsBundleNode != null)
 					{
-						foreach(XmlElement targetFileChildNode in targetFileSettingsNode.FirstChild.ChildNodes)
+						var numberVerSettingsGroupNode = settingsBundleNode.SelectSingleNode($"//SettingsGroup[@Id='NumberVerifierSettings']");
+						if (numberVerSettingsGroupNode != null)
 						{
-							if (targetFileChildNode.ChildNodes != null)
+							var targetFileSettingsNode = numberVerSettingsGroupNode.SelectSingleNode($"//Setting[@Id='TargetFileSettings']");
+							if (targetFileSettingsNode != null)
 							{
-								// take the values by index, because the Node structure will not change(this is how is defined in NumberVerifier app) 
-								var numberVeriferModel = new NumberVerifierSettingsModel
+								//the FirstChild("ArrayOfTargetFileSetting") is taken because it always will exist only one child node on the TargetFileSettings node
+								if (targetFileSettingsNode.FirstChild != null)
 								{
-									ExecutedDateTime = targetFileChildNode.ChildNodes[0].InnerXml,
-									FileName = targetFileChildNode.ChildNodes[1].InnerXml
-								};
-								numberVerifierModels.Add(numberVeriferModel);
-							}						
+									foreach (XmlElement targetFileChildNode in targetFileSettingsNode.FirstChild.ChildNodes)
+									{
+										if (targetFileChildNode.ChildNodes != null)
+										{
+											// get the values from the ChildNodes only for the target file on which the batch task is running
+											if (targetFile.FileName.Equals(targetFileChildNode.ChildNodes[1].InnerXml))
+											{
+												// take the values by index, because the Node structure will not change(this is how is defined in NumberVerifier app) 
+												var numberVeriferModel = new NumberVerifierSettingsModel
+												{
+													ExecutedDateTime = targetFileChildNode.ChildNodes[0].InnerXml,
+													FileName = targetFileChildNode.ChildNodes[1].InnerXml,
+													TargetLanguageCode = fileLanguageDirection.TargetLanguage
+												};
+												numberVerifierModels.Add(numberVeriferModel);
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 				}
 			}
 			return numberVerifierModels;
+		}
+
+		private List<LanguageDirectionModel> GetLanguageDirections()
+		{
+			var languageDirections = new List<LanguageDirectionModel>();
+			var languageDirectionsNodes = _document.SelectSingleNode($"//LanguageDirections");
+			if (languageDirectionsNodes != null)
+			{
+				foreach (XmlNode childNode in languageDirectionsNodes.ChildNodes)
+				{
+					var languageDirectionModel = new LanguageDirectionModel
+					{
+						SettingsBundleGuid = childNode.Attributes["SettingsBundleGuid"].Value,
+						TargetLanguage = childNode.Attributes["TargetLanguageCode"].Value
+					};
+					languageDirections.Add(languageDirectionModel);
+				}
+			}
+			return languageDirections;
 		}
 		#endregion
 	}

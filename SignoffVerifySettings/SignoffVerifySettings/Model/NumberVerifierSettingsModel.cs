@@ -4,5 +4,6 @@
 	{
 		public string FileName { get; set; }
 		public string ExecutedDateTime { get; set; }
+		public string TargetLanguageCode { get; set; }
 	}
 }
