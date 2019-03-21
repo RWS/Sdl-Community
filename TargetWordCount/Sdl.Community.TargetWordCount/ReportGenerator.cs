@@ -117,7 +117,7 @@ namespace Sdl.Community.TargetWordCount
 			var languageElement = doc.CreateElement(string.Empty, "language", string.Empty);
 			languageElement.SetAttribute("lcid", languageDirection.TargetLanguage.CultureInfo.LCID.ToString());
 			languageElement.SetAttribute("name", languageDirection.TargetLanguage.DisplayName);
-			taskElement.AppendChild(languageElement);
+			taskInfoElement.AppendChild(languageElement);
 
 			// take the files values from the Target Word Count {sourceLanguage_languageDirection.TargetLanguage}.xml report
 			// and add the files nodes to the doc for each projectFiles on which the TargetWordCount batch task had been run.
@@ -135,9 +135,16 @@ namespace Sdl.Community.TargetWordCount
 						var fileElement = doc.CreateElement(string.Empty, "file", string.Empty);
 						fileElement.SetAttribute("name", projectFile.Name);
 						fileElement.SetAttribute("guid", projectFile.Id.ToString());
-						languageElement.AppendChild(fileElement);
+						taskElement.AppendChild(fileElement);
 
-						SetNewTotalElement(doc, totalNodeAttributes["Segments"].Value, totalNodeAttributes["Count"].Value, fileElement);
+						var analyseElement = doc.CreateElement(string.Empty, "analyse", string.Empty);
+						fileElement.AppendChild(analyseElement);
+
+						SetAnalyseElement(doc, "perfect", "0", "0", analyseElement);
+						SetAnalyseElement(doc, "inContextExact", "0", "0", analyseElement);
+						SetAnalyseElement(doc, "repeated", "0", "0", analyseElement);
+						SetAnalyseElement(doc, "total", totalNodeAttributes["Segments"].Value, totalNodeAttributes["Count"].Value, analyseElement);
+						SetAnalyseElement(doc, "new", totalNodeAttributes["Segments"].Value, totalNodeAttributes["Count"].Value, analyseElement);
 						totalSegments += int.TryParse(totalNodeAttributes["Segments"].Value, out number) != false ? int.Parse(totalNodeAttributes["Segments"].Value) : 0;
 						totalWords += int.TryParse(totalNodeAttributes["Count"].Value, out number) != false ? int.Parse(totalNodeAttributes["Count"].Value) : 0;
 					}
@@ -145,16 +152,21 @@ namespace Sdl.Community.TargetWordCount
 			}
 			var batchTotalElement = doc.CreateElement(string.Empty, "batchTotal", string.Empty);
 			taskElement.AppendChild(batchTotalElement);
-			SetNewTotalElement(doc, totalSegments.ToString(), totalWords.ToString(), batchTotalElement);
+			var batchAnalyseElement = doc.CreateElement(string.Empty, "analyse", string.Empty);
+			batchTotalElement.AppendChild(batchAnalyseElement);
+
+			SetAnalyseElement(doc, "total", totalSegments.ToString(), totalWords.ToString(), batchAnalyseElement);
 
 			doc.Save(helixReportPath);
 		}
 
 		// Create the elements in report for the following xml elements: 'Total' and 'BatchTotal' 
-		private static void SetNewTotalElement(XmlDocument doc, string segmentValue, string wordCountValue, XmlElement parentElement)
+		private static void SetAnalyseElement(XmlDocument doc, string elementName, string segmentsValue, string wordCountValue, XmlElement parentElement)
 		{
-			var totalElement = doc.CreateElement(string.Empty, "total", string.Empty);
-			totalElement.SetAttribute("segments", segmentValue);
+			segmentsValue = !segmentsValue.Equals("0") ? segmentsValue : "0";
+			wordCountValue = !wordCountValue.Equals("0") ? wordCountValue : "0";
+			var totalElement = doc.CreateElement(string.Empty, elementName, string.Empty);
+			totalElement.SetAttribute("segments", segmentsValue);
 			totalElement.SetAttribute("characters", string.Empty);
 			totalElement.SetAttribute("placeables", string.Empty);
 			totalElement.SetAttribute("tags", string.Empty);
