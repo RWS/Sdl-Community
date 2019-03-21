@@ -115,6 +115,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Models\SerializableSettings.cs" />
     <Compile Include="PlainTextExtractor.cs" />
     <Compile Include="CountUnit.cs" />
