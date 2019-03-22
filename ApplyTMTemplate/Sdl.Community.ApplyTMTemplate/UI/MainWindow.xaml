@@ -12,7 +12,7 @@
 		              mc:Ignorable="d"
 				 	  GlowBrush="#0C2D47"
 					  WindowTitleBrush="SteelBlue"
-					  Title="Apply TM Template" Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.44'}" Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.7'}" MinWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.26'}" MinHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.61'}">
+					  Title="Apply TM Template" Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.48'}" Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.7'}" MinWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.48'}" MinHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.61'}">
 
 	<Window.Resources>
 		<ResourceDictionary>
@@ -43,13 +43,13 @@
 
 		<TextBlock Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="10,10,0,0"  Grid.ColumnSpan="3" />
 
-		<WrapPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Grid.ColumnSpan="2">	
-			<TextBox HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding ResourceTemplatePath}"
-		             Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
-									 Converter={converters:RatioConverter}, ConverterParameter='0.74'}" />
-			<Button HorizontalAlignment="Right" Margin="5,10,10,0"
-		            Style="{DynamicResource DarkBlueButtonsStyle}" Command="{Binding BrowseCommand}" Content="Browse" />
-		</WrapPanel>
+		<TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding ResourceTemplatePath}"
+	             Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={converters:RatioConverter}, ConverterParameter='0.61'}" />
+		<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,0,0,0">
+			<Button Margin="5,10,10,0" Style="{DynamicResource DarkBlueButtonsStyle}" Command="{Binding BrowseCommand}" Content="Browse" />
+			<Button Margin="5,10,10,0" Style="{DynamicResource DarkBlueButtonsStyle}" Command="{Binding ExportCommand}" Content="Export"/>
+			<Button Margin="5,10,10,0" Style="{DynamicResource DarkBlueButtonsStyle}" Command="{Binding ImportCommand}" Content="Import"/>
+		</StackPanel>
 
 		<StackPanel Grid.Row="2" Grid.Column="0" Margin="10,10,0,0">
 			<TextBlock Text="What to apply:" />
@@ -64,7 +64,7 @@
 				<Image Source="../Resources/AddFolder.ico" Width="15" Height="15"></Image>
 			</Button>
 
-			<Button HorizontalContentAlignment="Left" Command="{Binding AddTMCommand}" ToolTip="Add TMs">
+			<Button HorizontalContentAlignment="Left" Command="{Binding AddTmCommand}" ToolTip="Add TMs">
 				<Image Source="../Resources/PlusSign.ico" Width="15" Height="15"></Image>
 			</Button>
 
@@ -138,6 +138,7 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
+		<controls:ProgressRing Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.Row="5" Visibility="{Binding ProgressVisibility}" Width="40"/>
 		<Button Style="{DynamicResource DarkBlueButtonsStyle}" Grid.Row="5" Grid.Column="1" RenderTransformOrigin="0.487,1.938" HorizontalAlignment="Right" Margin="0,10,10,10" Command="{Binding ApplyTemplateCommand}">Apply</Button>
 	</Grid>
 </controls:MetroWindow>

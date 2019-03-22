@@ -5,12 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Forms;
 using System.Xml;
-using MahApps.Metro.Controls.Dialogs;
-using Sdl.Community.ApplyTMTemplate.ViewModels;
+using System.Xml.Serialization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Segmentation;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -20,17 +16,29 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 	public class TemplateLoader
 	{
 		private readonly string _path;
+		private readonly Version _studioVersion;
 
 		public TemplateLoader()
 		{
-			var studio = new Toolkit.Core.Studio().GetStudioVersion().ExecutableVersion;
+			_studioVersion = new Toolkit.Core.Studio().GetStudioVersion().ExecutableVersion;
 
-			_path = studio.Major == 15
-				? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-					@"SDL\SDL Trados Studio\15.0.0.0\UserSettings.xml")
-				: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+			if (_studioVersion.Major == 15)
+			{
+				_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					@"SDL\SDL Trados Studio\15.0.0.0\UserSettings.xml");
+
+				DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Studio 2019");
+			}
+			else
+			{
+				_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 					@"SDL\SDL Trados Studio\14.0.0.0\UserSettings.xml");
+
+				DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Studio 2017");
+			}
 		}
+
+		public string DefaultPath { get; set; }
 
 		public string GetTmTemplateFolderPath()
 		{
@@ -46,7 +54,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				}
 			}
 
-			return null;
+			return DefaultPath;
 		}
 
 		public string GetTmFolderPath()
@@ -63,7 +71,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				}
 			}
 
-			return null;
+			return DefaultPath;
 		}
 
 		public List<LanguageResourceBundle> GetLanguageResourceBundlesFromFile(string resourceTemplatePath, out string message, out List<int> unIDedLanguages)
@@ -105,12 +113,13 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 				if (lr == null)
 				{
-					var lcid = int.Parse(res.Attributes["Lcid"].Value);
-					CultureInfo culture = null;
+					var lcid = int.Parse(res?.Attributes?["Lcid"]?.Value);
+					CultureInfo culture;
 
 					try
 					{
-						culture = CultureInfo.GetCultureInfo(lcid);
+						culture = CultureInfoExtensions.GetCultureInfo(lcid);
+						if (CultureInfo.GetCultures(CultureTypes.AllCultures).Where(ci => ci.LCID == lcid).ToList().Count > 1) throw new Exception();
 					}
 					catch (Exception)
 					{
@@ -131,63 +140,6 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			return langResBundlesList;
 		}
 
-		private void AddLanguageResourceToBundle(LanguageResourceBundle langResBundle, XmlNode resource)
-		{
-			if (resource?.Attributes?["Type"].Value == "Variables")
-			{
-				var vars = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
-
-				langResBundle.Variables = new Wordlist();
-
-				foreach (Match s in Regex.Matches(vars, @"([^\s]+)"))
-				{
-					langResBundle.Variables.Add(s.ToString());
-				}
-
-				return;
-			}
-
-			if (resource?.Attributes?["Type"].Value == "Abbreviations")
-			{
-				var abbrevs = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
-
-				langResBundle.Abbreviations = new Wordlist();
-
-				foreach (Match s in Regex.Matches(abbrevs, @"([^\s]+)"))
-				{
-					langResBundle.Abbreviations.Add(s.ToString());
-				}
-
-				return;
-			}
-
-			if (resource?.Attributes?["Type"].Value == "OrdinalFollowers")
-			{
-				var ordFollowers = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
-
-				langResBundle.OrdinalFollowers = new Wordlist();
-
-				foreach (Match s in Regex.Matches(ordFollowers, @"([^\s]+)"))
-				{
-					langResBundle.OrdinalFollowers.Add(s.ToString());
-				}
-
-				return;
-			}
-
-			if (resource?.Attributes?["Type"].Value == "SegmentationRules")
-			{
-				var segRules = Convert.FromBase64String(resource.InnerText);
-
-				var stream = new MemoryStream(segRules);
-
-				var segmentRules = SegmentationRules.Load(stream,
-					CultureInfo.GetCultureInfo(langResBundle.Language.LCID), null);
-
-				langResBundle.SegmentationRules = segmentRules;
-			}
-		}
-
 		public XmlNodeList LoadDataFromFile(string filePath, string element)
 		{
 			var doc = new XmlDocument();
@@ -195,6 +147,64 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			var data = doc.GetElementsByTagName(element);
 
 			return data;
+		}
+
+		private void AddLanguageResourceToBundle(LanguageResourceBundle langResBundle, XmlNode resource)
+		{
+			switch (resource?.Attributes?["Type"].Value)
+			{
+				case "Variables":
+					{
+						var vars = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
+
+						langResBundle.Variables = new Wordlist();
+
+						foreach (Match s in Regex.Matches(vars, @"([^\s]+)"))
+						{
+							langResBundle.Variables.Add(s.ToString());
+						}
+
+						return;
+					}
+				case "Abbreviations":
+					{
+						var abbrevs = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
+
+						langResBundle.Abbreviations = new Wordlist();
+
+						foreach (Match s in Regex.Matches(abbrevs, @"([^\s]+)"))
+						{
+							langResBundle.Abbreviations.Add(s.ToString());
+						}
+
+						return;
+					}
+				case "OrdinalFollowers":
+					{
+						var ordFollowers = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
+
+						langResBundle.OrdinalFollowers = new Wordlist();
+
+						foreach (Match s in Regex.Matches(ordFollowers, @"([^\s]+)"))
+						{
+							langResBundle.OrdinalFollowers.Add(s.ToString());
+						}
+
+						return;
+					}
+				case "SegmentationRules":
+					{
+						var segRules = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
+
+						var xmlSerializer = new XmlSerializer(typeof(SegmentationRules));
+
+						var stringReader = new StringReader(segRules);
+						var segmentRules = (SegmentationRules)xmlSerializer.Deserialize(stringReader);
+
+						langResBundle.SegmentationRules = segmentRules;
+						break;
+					}
+			}
 		}
 	}
 }

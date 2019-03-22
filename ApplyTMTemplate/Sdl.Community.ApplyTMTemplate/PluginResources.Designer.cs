@@ -120,6 +120,24 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export language resources.
+        /// </summary>
+        internal static string Export_language_resources {
+            get {
+                return ResourceManager.GetString("Export_language_resources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to excel.
+        /// </summary>
+        internal static string Export_Window_Title {
+            get {
+                return ResourceManager.GetString("Export_Window_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon FileBasedTM {
@@ -149,7 +167,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select the folder containing the TMs.
+        ///   Looks up a localized string similar to Import resources from excel spreadsheet or translation memory.
+        /// </summary>
+        internal static string Import_window_title {
+            get {
+                return ResourceManager.GetString("Import_window_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  select the folder containing the TMs.
         /// </summary>
         internal static string Please_select_the_folder_containing_the_TMs {
             get {

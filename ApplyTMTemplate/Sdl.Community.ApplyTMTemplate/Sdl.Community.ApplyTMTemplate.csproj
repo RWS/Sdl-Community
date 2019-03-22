@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=4.5.3.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.1\lib\net40\EPPlus.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -121,6 +125,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Studio\ApplyTMTemplateAction.cs" />
     <Compile Include="Studio\ApplyTMTemplateRibbonGroup.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
@@ -145,10 +150,12 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\DropBehaviour.cs" />
+    <Compile Include="Utilities\ExcelImportExportService.cs" />
     <Compile Include="Utilities\FolderSelectDialog.cs" />
     <Compile Include="Utilities\Reflector.cs" />
     <Compile Include="Utilities\TemplateLoader.cs" />
     <Compile Include="Utilities\TMLoader.cs" />
+    <Compile Include="Utilities\Utf8StringWriter.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ModelBase.cs" />
   </ItemGroup>
@@ -166,6 +173,7 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Resource Include="Resources\FileBasedTM.ico" />
     <Content Include="pluginpackage.manifest.xml">
