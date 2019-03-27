@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>SDL ETS Translation Provider</PlugInName>
-  <Version>2.2.2</Version>
+  <PlugInName>SDL ETS Translation Provider for Trados 2019</PlugInName>
+  <Version>2.2.5</Version>
   <Description>SDL ETS Translation Provider</Description>
   <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
@@ -10,6 +10,6 @@
     <File>SegmentParser.dll</File>
     <File>XliffConverter.dll</File>
     <File>NLog.dll</File>
-		<File>Newtonsoft.Json.dll</File>
+	<File>Newtonsoft.Json.dll</File>
 	</Include>
 </PluginPackage>
