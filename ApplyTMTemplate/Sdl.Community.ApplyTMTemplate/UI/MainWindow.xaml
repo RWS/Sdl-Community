@@ -139,7 +139,7 @@
 		</DataGrid>
 
 		<StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-			<controls:ProgressRing Visibility="{Binding ProgressVisibility}" Width="40" />
+			<controls:ProgressRing Visibility="{Binding ProgressVisibility}" Width="30" />
 			<Button Style="{DynamicResource DarkBlueButtonsStyle}" RenderTransformOrigin="0.487,1.938" HorizontalAlignment="Right" Margin="0,10,10,10" Command="{Binding ApplyTemplateCommand}" Content="Apply"/>
 		</StackPanel>
 	</Grid>

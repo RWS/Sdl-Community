@@ -233,11 +233,29 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The report was generated successfully.
+        /// </summary>
+        internal static string Report_generated_successfully {
+            get {
+                return ResourceManager.GetString("Report_generated_successfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select at least one TM.
         /// </summary>
         internal static string Select_at_least_one_TM {
             get {
                 return ResourceManager.GetString("Select_at_least_one_TM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success.
+        /// </summary>
+        internal static string Success_Window_Title {
+            get {
+                return ResourceManager.GetString("Success_Window_Title", resourceCulture);
             }
         }
         

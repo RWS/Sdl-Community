@@ -109,32 +109,36 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 			foreach (XmlNode res in lrt)
 			{
-				var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == int.Parse(res?.Attributes?["Lcid"]?.Value));
+				var successful = int.TryParse(res?.Attributes?["Lcid"]?.Value, out var lcid);
 
-				if (lr == null)
+				if (successful)
 				{
-					var lcid = int.Parse(res?.Attributes?["Lcid"]?.Value);
-					CultureInfo culture;
+					var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == lcid);
 
-					try
+					if (lr == null)
 					{
-						culture = CultureInfoExtensions.GetCultureInfo(lcid);
-						if (CultureInfo.GetCultures(CultureTypes.AllCultures).Where(ci => ci.LCID == lcid).ToList().Count > 1) throw new Exception();
-					}
-					catch (Exception)
-					{
-						if (!unIDedLanguages.Exists(id => id == lcid))
+						CultureInfo culture;
+
+						try
 						{
-							unIDedLanguages.Add(lcid);
+							culture = CultureInfoExtensions.GetCultureInfo(lcid);
+							if (CultureInfo.GetCultures(CultureTypes.AllCultures).Where(ci => ci.LCID == lcid).ToList().Count > 1) throw new Exception();
 						}
-						continue;
+						catch (Exception)
+						{
+							if (!unIDedLanguages.Exists(id => id == lcid))
+							{
+								unIDedLanguages.Add(lcid);
+							}
+							continue;
+						}
+
+						lr = defaultLangResProvider.GetDefaultLanguageResources(culture);
+						langResBundlesList.Add(lr);
 					}
 
-					lr = defaultLangResProvider.GetDefaultLanguageResources(culture);
-					langResBundlesList.Add(lr);
+					AddLanguageResourceToBundle(lr, res);
 				}
-
-				AddLanguageResourceToBundle(lr, res);
 			}
 
 			return langResBundlesList;

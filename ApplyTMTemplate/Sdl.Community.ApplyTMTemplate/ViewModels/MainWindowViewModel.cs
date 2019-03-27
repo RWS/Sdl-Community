@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -336,31 +337,31 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			var result = dlg.ShowDialog();
 
-			if (!(result ?? false)) return;
-
-			ProgressVisibility = "Visible";
-			await Task.Run(() =>
+			if (result ?? false)
 			{
-				if (dlg.FileName.Contains(".xlsx"))
+				ProgressVisibility = "Visible";
+				await Task.Run(() =>
 				{
-					try
+					if (dlg.FileName.Contains(".xlsx"))
 					{
-						_importExportService.ImportResources(dlg.FileName, ResourceTemplatePath,
-							new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked,
-								SegmentationRulesChecked), _langResBundlesList);
+						try
+						{
+							_importExportService.ImportResources(dlg.FileName, ResourceTemplatePath,
+								new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked,
+									SegmentationRulesChecked), _langResBundlesList);
+						}
+						catch (Exception e)
+						{
+							_dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title, e.Message);
+						}
 					}
-					catch (Exception e)
-					{
-						_dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title,
-							e.Message);
-					}
-				}
 
-				if (dlg.FileName.Contains(".sdltm"))
-				{
-				}
-			});
-			ProgressVisibility = "Hidden";
+					if (dlg.FileName.Contains(".sdltm"))
+					{
+					}
+				});
+				ProgressVisibility = "Hidden";
+			}
 		}
 
 		private async void Export()
@@ -401,6 +402,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			{
 				_importExportService.ExportResources(_langResBundlesList, filePath);
 			});
+
+			await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Report_generated_successfully);
+			Process.Start(filePath);
 
 			ProgressVisibility = "Hidden";
 		}
