@@ -61,6 +61,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A new file was created.
+        /// </summary>
+        internal static string A_new_file_created {
+            get {
+                return ResourceManager.GetString("A_new_file_created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon AddFolder {
@@ -120,6 +129,33 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export language resources.
+        /// </summary>
+        internal static string Export_language_resources {
+            get {
+                return ResourceManager.GetString("Export_language_resources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to excel.
+        /// </summary>
+        internal static string Export_Window_Title {
+            get {
+                return ResourceManager.GetString("Export_Window_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported resources.
+        /// </summary>
+        internal static string Exported_filename {
+            get {
+                return ResourceManager.GetString("Exported_filename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon FileBasedTM {
@@ -149,7 +185,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select the folder containing the TMs.
+        ///   Looks up a localized string similar to Import language resources.
+        /// </summary>
+        internal static string Import_window_title {
+            get {
+                return ResourceManager.GetString("Import_window_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  select the folder containing the TMs.
         /// </summary>
         internal static string Please_select_the_folder_containing_the_TMs {
             get {
@@ -188,11 +233,29 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The report was generated successfully.
+        /// </summary>
+        internal static string Report_generated_successfully {
+            get {
+                return ResourceManager.GetString("Report_generated_successfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select at least one TM.
         /// </summary>
         internal static string Select_at_least_one_TM {
             get {
                 return ResourceManager.GetString("Select_at_least_one_TM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success.
+        /// </summary>
+        internal static string Success_Window_Title {
+            get {
+                return ResourceManager.GetString("Success_Window_Title", resourceCulture);
             }
         }
         

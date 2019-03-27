@@ -167,6 +167,27 @@
     <value>Warning</value>
   </data>
   <data name="Please_select_the_folder_containing_the_TMs" xml:space="preserve">
-    <value>Please select the folder containing the TMs</value>
+    <value> select the folder containing the TMs</value>
+  </data>
+  <data name="Export_Window_Title" xml:space="preserve">
+    <value>Export to excel</value>
+  </data>
+  <data name="Export_language_resources" xml:space="preserve">
+    <value>Export language resources</value>
+  </data>
+  <data name="Import_window_title" xml:space="preserve">
+    <value>Import language resources</value>
+  </data>
+  <data name="A_new_file_created" xml:space="preserve">
+    <value>A new file was created</value>
+  </data>
+  <data name="Exported_filename" xml:space="preserve">
+    <value>Exported resources</value>
+  </data>
+  <data name="Success_Window_Title" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="Report_generated_successfully" xml:space="preserve">
+    <value>The report was generated successfully</value>
   </data>
 </root>
