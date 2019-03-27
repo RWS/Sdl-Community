@@ -178,4 +178,7 @@
   <data name="Import_window_title" xml:space="preserve">
     <value>Import resources from excel spreadsheet or translation memory</value>
   </data>
+  <data name="A_new_file_created" xml:space="preserve">
+    <value>A new file was created</value>
+  </data>
 </root>

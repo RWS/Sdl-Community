@@ -61,6 +61,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A new file was created.
+        /// </summary>
+        internal static string A_new_file_created {
+            get {
+                return ResourceManager.GetString("A_new_file_created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon AddFolder {

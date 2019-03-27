@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -19,13 +21,6 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
 	public class ExcelImportExportService
 	{
-		private XmlSerializer _xmlSerializer;
-
-		public ExcelImportExportService()
-		{
-			_xmlSerializer = new XmlSerializer(typeof(SegmentationRule));
-		}
-
 		private ExcelPackage GetExcelPackage(string filePath)
 		{
 			var fileInfo = new FileInfo(filePath);
@@ -33,7 +28,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			return excelPackage;
 		}
 
-		public void ImportResources(string filePathFrom, string filePathTo, Settings settings)
+		public void ImportResources(string filePathFrom, string filePathTo, Settings settings, List<LanguageResourceBundle> languageResourceBundles)
 		{
 			using (var package = GetExcelPackage(filePathFrom))
 			{
@@ -44,6 +39,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 					var column03 = workSheet.Cells[1, 3].Value;
 					var column04 = workSheet.Cells[1, 4].Value;
 
+					//more validation is necessary
 					if (AreColumnsValid(column01, column02, column03, column04)) return;
 
 					var abbreviations = new Wordlist();
@@ -53,7 +49,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 					ReadFromExcel(workSheet, abbreviations, ordinalFollowers, variables, segmentationRules);
 
-					var languageResourceBundle =
+					var newLanguageResourceBundle =
 						new LanguageResourceBundle(CultureInfoExtensions.GetCultureInfo(workSheet.Name))
 						{
 							Abbreviations = abbreviations,
@@ -62,37 +58,202 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 							SegmentationRules = segmentationRules
 						};
 
-					var languageResourceFile = LoadDataFromFile(filePathTo);
+					var relevantResourceBundleFromTheTemplateSerialized = languageResourceBundles.FirstOrDefault(lrb => lrb.Language.LCID == newLanguageResourceBundle.Language.LCID);
 
-					SaveToXml(filePathTo, languageResourceFile, workSheet, languageResourceBundle);
+					SaveToXml(filePathTo, newLanguageResourceBundle, relevantResourceBundleFromTheTemplateSerialized);
 				}
 			}
 		}
 
-		private static void SaveToXml(string filePathTo, XmlDocument languageResourceFile, ExcelWorksheet workSheet,
-			LanguageResourceBundle languageResourceBundle)
+		private void SaveToXml(string filePathTo, LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle deserializedTemplate)
 		{
-			var xmlElement = languageResourceFile.CreateElement("LanguageResource");
-			xmlElement.SetAttribute("Type", "SegmentationRules");
-			xmlElement.SetAttribute("Lcid", CultureInfoExtensions.GetCultureInfo(workSheet.Name).LCID.ToString());
+			var currentCultureLcid = deserializedTemplate?.Language.LCID ?? newLanguageResourceBundle.Language.LCID;
+			var defaultLanguageResourceProvider = GetDefaultResourceBundles(currentCultureLcid);
+			var serializedTemplate = LoadDataFromFile(filePathTo);
+			XmlNode node;
 
-			var xmlSerializer = new XmlSerializer(typeof(SegmentationRules));
-			var stringWriter = new Utf8StringWriter();
+			//check if there are any abbreviations to be added (besides the default ones or the ones already in the template)
 
-			xmlSerializer.Serialize(stringWriter, languageResourceBundle.SegmentationRules);
+			//template to compare with
+			var defaultOrOldTemplate = deserializedTemplate ?? defaultLanguageResourceProvider;
+			var abrrevsToBeAdded = new Wordlist();
+			foreach (var itemA in newLanguageResourceBundle.Abbreviations.Items)
+			{
+				if (defaultOrOldTemplate.Abbreviations.Items.All(itemB => !itemA.Equals(itemB, StringComparison.OrdinalIgnoreCase)))
+				{
+					abrrevsToBeAdded.Add(itemA);
+				}
+			}
 
-			var segmentationRulesBytes = Encoding.UTF8.GetBytes(stringWriter.ToString());
+			//add them if there are any
+			if (abrrevsToBeAdded.Count > 0)
+			{
+				node = serializedTemplate.SelectSingleNode($"/LanguageResourceGroup[@Type='Abbreviations' and @Lcid='{currentCultureLcid.ToString()}']");
 
-			var segmentationRulesBase64 = Convert.ToBase64String(segmentationRulesBytes);
+				foreach (var abbrev in abrrevsToBeAdded.Items)
+				{
+					defaultOrOldTemplate.Abbreviations.Add(abbrev);
+				}
 
-			xmlElement.InnerText = segmentationRulesBase64;
+				node?.ParentNode?.RemoveChild(node);
 
-			languageResourceFile?.GetElementsByTagName("LanguageResourceGroup")[0].AppendChild(xmlElement);
+				var xmlElement = CreateLanguageResourceNode(serializedTemplate, "Abbreviations", currentCultureLcid.ToString());
 
-			var xmlTextWriter = new XmlTextWriter(filePathTo, Encoding.UTF8) {Formatting = Formatting.None};
+				var stringWriter = new Utf8StringWriter();
+				defaultOrOldTemplate.Abbreviations.Save(stringWriter);
+				var bytesAbbreviations = Encoding.UTF8.GetBytes(stringWriter.ToString());
+				var base64Abbreviations = Convert.ToBase64String(bytesAbbreviations);
+				xmlElement.InnerText = base64Abbreviations;
 
-			languageResourceFile.Save(xmlTextWriter);
+				serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
+			}
+
+			//check if there are any ordinalFollowers to be added (besides the default ones
+			var ordinalFollowersToBeAdded = new Wordlist();
+			foreach (var itemA in newLanguageResourceBundle.OrdinalFollowers.Items)
+			{
+				if (defaultOrOldTemplate.OrdinalFollowers.Items.All(itemB => !itemA.Equals(itemB, StringComparison.OrdinalIgnoreCase)))
+				{
+					ordinalFollowersToBeAdded.Add(itemA);
+				}
+			}
+
+			//add them if there are any
+			if (ordinalFollowersToBeAdded.Count > 0)
+			{
+				node = serializedTemplate.SelectSingleNode($"/LanguageResourceGroup[@Type='OrdinalFollowers' and @Lcid='{currentCultureLcid.ToString()}']");
+
+				foreach (var abbrev in ordinalFollowersToBeAdded.Items)
+				{
+					defaultOrOldTemplate.OrdinalFollowers.Add(abbrev);
+				}
+
+				node?.ParentNode?.RemoveChild(node);
+
+				var xmlElement = CreateLanguageResourceNode(serializedTemplate, "OrdinalFollowers", currentCultureLcid.ToString());
+
+				var stringWriter = new Utf8StringWriter();
+				defaultOrOldTemplate.OrdinalFollowers.Save(stringWriter);
+				var bytesOrdinalFollowers = Encoding.UTF8.GetBytes(stringWriter.ToString());
+				var base64OrdinalFollowers = Convert.ToBase64String(bytesOrdinalFollowers);
+				xmlElement.InnerText = base64OrdinalFollowers;
+
+				serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
+			}
+
+			//check if there are any variables to be added (besides the default ones
+			var variablesToBeAdded = new Wordlist();
+			foreach (var itemA in newLanguageResourceBundle.Variables.Items)
+			{
+				if (defaultOrOldTemplate.Variables.Items.All(itemB => !itemA.Equals(itemB, StringComparison.OrdinalIgnoreCase)))
+				{
+					variablesToBeAdded.Add(itemA);
+				}
+			}
+
+			//add them if there are any
+			if (variablesToBeAdded.Count > 0)
+			{
+				node = serializedTemplate.SelectSingleNode($"/LanguageResourceGroup[@Type='Variables' and @Lcid='{currentCultureLcid.ToString()}']");
+				foreach (var abbrev in variablesToBeAdded.Items)
+				{
+					defaultOrOldTemplate.Variables.Add(abbrev);
+				}
+
+				node?.ParentNode?.RemoveChild(node);
+
+				var xmlElement = CreateLanguageResourceNode(serializedTemplate, "Variables", currentCultureLcid.ToString());
+
+				var stringWriter = new Utf8StringWriter();
+				defaultOrOldTemplate.Variables.Save(stringWriter);
+				var bytesVariables = Encoding.UTF8.GetBytes(stringWriter.ToString());
+				var base64Variables = Convert.ToBase64String(bytesVariables);
+				xmlElement.InnerText = base64Variables;
+
+				serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
+			}
+
+			//check if there are any segmentation rules to add (besides the default ones)
+			var segmentationRulesToBeAdded = new SegmentationRules();
+			foreach (var ruleA in newLanguageResourceBundle.SegmentationRules.Rules)
+			{
+				if (defaultOrOldTemplate.SegmentationRules.Rules.All(ruleB => !ruleA.Description.Text.Equals(ruleB.Description.Text, StringComparison.OrdinalIgnoreCase)))
+				{
+					segmentationRulesToBeAdded.AddRule(ruleA);
+				}
+			}
+
+			//add them if there are any
+			if (segmentationRulesToBeAdded.Count > 0)
+			{
+				node = serializedTemplate.SelectSingleNode($"/LanguageResourceGroup/LanguageResource[@Type='SegmentationRules' and @Lcid='{currentCultureLcid}']");
+
+				segmentationRulesToBeAdded.Rules.AddRange(defaultOrOldTemplate.SegmentationRules.Rules);
+				node?.ParentNode?.RemoveChild(node);
+
+				var xmlElement = CreateLanguageResourceNode(serializedTemplate, "SegmentationRules", currentCultureLcid.ToString());
+				var memoryStream = new MemoryStream();
+				segmentationRulesToBeAdded.Save(memoryStream);
+				var segmentationRulesBase64 = Convert.ToBase64String(memoryStream.ToArray());
+				xmlElement.InnerText = segmentationRulesBase64;
+				serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
+			}
+
+			var xmlTextWriter = new XmlTextWriter(filePathTo, Encoding.UTF8) { Formatting = Formatting.None };
+			serializedTemplate.Save(xmlTextWriter);
 		}
+
+		private LanguageResourceBundle GetDefaultResourceBundles(int currentCultureLcid)
+		{
+			var defaultLanguageResourceProvider = new DefaultLanguageResourceProvider().GetDefaultLanguageResources(CultureInfoExtensions.GetCultureInfo(currentCultureLcid));
+
+			if (defaultLanguageResourceProvider.Abbreviations == null)
+			{
+				defaultLanguageResourceProvider.Abbreviations = new Wordlist();
+			}
+
+			if (defaultLanguageResourceProvider.OrdinalFollowers == null)
+			{
+				defaultLanguageResourceProvider.OrdinalFollowers = new Wordlist();
+			}
+
+			if (defaultLanguageResourceProvider.Variables == null)
+			{
+				defaultLanguageResourceProvider.Variables = new Wordlist();
+			}
+
+			if (defaultLanguageResourceProvider.SegmentationRules == null)
+			{
+				defaultLanguageResourceProvider.SegmentationRules = new SegmentationRules();
+			}
+
+			return defaultLanguageResourceProvider;
+		}
+
+		//private string SerializeConvertToBase64(LanguageResourceBundle languageResourceBundle, string property)
+		//{
+		//	var stringWriter = new Utf8StringWriter();
+		//	var type = DetermineTypeOfProperty(property);
+		//	var xmlSerializer = new XmlSerializer(type);
+		//	xmlSerializer.Serialize(stringWriter, languageResourceBundle.GetType().GetProperty(property).GetMethod.Invoke(languageResourceBundle, null));
+		//	var bytes = Encoding.UTF8.GetBytes(stringWriter.ToString());
+		//	var base64 = Convert.ToBase64String(bytes);
+		//	return base64;
+		//}
+
+		//private Type DetermineTypeOfProperty(string property)
+		//{
+		//	switch (property)
+		//	{
+		//		case "Abbreviations":
+		//		case "Variables":
+		//		case "OrdinalFollowers":
+		//			return typeof(Wordlist);
+		//		default:
+		//			return typeof(SegmentationRules);
+		//	}
+
+		//}
 
 		private void ReadFromExcel(ExcelWorksheet workSheet, Wordlist abbreviations, Wordlist ordinalFollowers,
 			Wordlist variables, SegmentationRules segmentationRules)
@@ -108,14 +269,15 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				if (serializedSegmentationRule == null) continue;
 
 				var stringReader = new StringReader(serializedSegmentationRule);
+				var xmlSerializer = new XmlSerializer(typeof(SegmentationRule));
 
-				var segmentationRule = (SegmentationRule) _xmlSerializer.Deserialize(stringReader);
+				var segmentationRule = (SegmentationRule) xmlSerializer.Deserialize(stringReader);
 
 				segmentationRules.AddRule(segmentationRule);
 			}
 		}
 
-		private static bool AreColumnsValid(object column01, object column02, object column03, object column04)
+		private bool AreColumnsValid(object column01, object column02, object column03, object column04)
 		{
 			return !column01.ToString().Equals("Abbreviations") &&
 			       !column02.ToString().Equals("OrdinalFollowers") &&
@@ -123,9 +285,18 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			       !column04.ToString().Equals("SegmentationRules");
 		}
 
-		public void ExportResources(List<LanguageResourceBundle> template, string filePath)
+		private XmlElement CreateLanguageResourceNode(XmlDocument langResFile, string type, string lcid)
 		{
-			using (var package = GetExcelPackage(filePath))
+			var langResNode = langResFile.CreateElement("LanguageResource");
+			langResNode.SetAttribute("Type", type);
+			langResNode.SetAttribute("Lcid", lcid);
+
+			return langResNode;
+		}
+
+		public void ExportResources(List<LanguageResourceBundle> template, string filePathTo)
+		{
+			using (var package = GetExcelPackage(filePathTo))
 			{
 				foreach (var languageResourceBundle in template)
 				{
@@ -144,9 +315,12 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 					worksheet.Cells["A" + lineNumber].Style.Font.Color.SetColor(Color.White);
 					worksheet.Cells["A" + lineNumber].Style.Font.Name = "Sommet Rounded";
 
-					foreach (var abbreviation in languageResourceBundle.Abbreviations.Items)
+					if (languageResourceBundle.Abbreviations != null)
 					{
-						worksheet.Cells["A" + ++lineNumber].Value = abbreviation;
+						foreach (var abbreviation in languageResourceBundle.Abbreviations.Items)
+						{
+							worksheet.Cells["A" + ++lineNumber].Value = abbreviation;
+						}
 					}
 
 					lineNumber = 1;
@@ -157,9 +331,12 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 					worksheet.Cells["B" + lineNumber].Style.Font.Color.SetColor(Color.White);
 					worksheet.Cells["B" + lineNumber].Style.Font.Name = "Sommet Rounded";
 
-					foreach (var ordinalFollower in languageResourceBundle.OrdinalFollowers.Items)
+					if (languageResourceBundle.OrdinalFollowers != null)
 					{
-						worksheet.Cells["B" + ++lineNumber].Value = ordinalFollower;
+						foreach (var ordinalFollower in languageResourceBundle.OrdinalFollowers.Items)
+						{
+							worksheet.Cells["B" + ++lineNumber].Value = ordinalFollower;
+						}
 					}
 
 					lineNumber = 1;
@@ -169,9 +346,13 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 					worksheet.Cells["C" + lineNumber].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(37, 189, 89));
 					worksheet.Cells["C" + lineNumber].Style.Font.Color.SetColor(Color.White);
 					worksheet.Cells["C" + lineNumber].Style.Font.Name = "Sommet Rounded";
-					foreach (var variable in languageResourceBundle.Variables.Items)
+
+					if (languageResourceBundle.Variables != null)
 					{
-						worksheet.Cells["C" + ++lineNumber].Value = variable;
+						foreach (var variable in languageResourceBundle.Variables.Items)
+						{
+							worksheet.Cells["C" + ++lineNumber].Value = variable;
+						}
 					}
 
 					lineNumber = 1;
@@ -181,11 +362,16 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 					worksheet.Cells["D" + lineNumber].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(37, 189, 89));
 					worksheet.Cells["D" + lineNumber].Style.Font.Color.SetColor(Color.White);
 					worksheet.Cells["D" + lineNumber].Style.Font.Name = "Sommet Rounded";
-					foreach (var segmentationRule in languageResourceBundle.SegmentationRules.Rules)
+
+					if (languageResourceBundle.SegmentationRules != null)
 					{
-						var stringWriter = new Utf8StringWriter();
-						_xmlSerializer.Serialize(stringWriter, segmentationRule);
-						worksheet.Cells["D" + ++lineNumber].Value = stringWriter.ToString();
+						foreach (var segmentationRule in languageResourceBundle.SegmentationRules.Rules)
+						{
+							var stringWriter = new Utf8StringWriter();
+							var xmlSerializer = new XmlSerializer(typeof(SegmentationRule));
+							xmlSerializer.Serialize(stringWriter, segmentationRule);
+							worksheet.Cells["D" + ++lineNumber].Value = stringWriter.ToString();
+						}
 					}
 				}
 				package.Save();

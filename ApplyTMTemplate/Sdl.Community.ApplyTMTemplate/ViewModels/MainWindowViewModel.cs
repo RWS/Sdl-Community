@@ -52,8 +52,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			_tmLoader = tmLoader;
 			_dialogCoordinator = dialogCoordinator;
 
-			_importExportService = new ExcelImportExportService();
-
 			_tmPath = _templateLoader.GetTmFolderPath();
 
 			_variablesChecked = true;
@@ -67,6 +65,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			_resourceTemplatePath = _templateLoader.GetTmTemplateFolderPath();
 
 			LoadResourcesFromTemplate();
+			_importExportService = new ExcelImportExportService();
 		}
 
 		public string ProgressVisibility
@@ -237,8 +236,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private async void ApplyTmTemplate()
 		{
-			ProgressVisibility = "Visible";
-
 			if (_langResBundlesList == null || _langResBundlesList.Count == 0)
 			{
 				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, _message);
@@ -275,8 +272,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				SegmentationRulesChecked = SegmentationRulesChecked
 			};
 
+			ProgressVisibility = "Visible";
 			await Task.Run(() => template.ApplyTmTemplate(selectedTmList, options));
-
 			ProgressVisibility = "Hidden";
 		}
 
@@ -313,7 +310,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					{
 						_importExportService.ImportResources(dlg.FileName, ResourceTemplatePath,
 							new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked,
-								SegmentationRulesChecked));
+								SegmentationRulesChecked), _langResBundlesList);
 					}
 					catch (Exception e)
 					{
@@ -326,6 +323,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				{
 				}
 			});
+			//LoadResourcesFromTemplate();
 			ProgressVisibility = "Hidden";
 		}
 
@@ -358,16 +356,57 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			var result = dlg.ShowDialog();
 
-			if (result == DialogResult.OK)
+			if (result != DialogResult.OK) return;
+
+			ProgressVisibility = "Visible";
+			var filePath = dlg.FileName;
+
+			if (File.Exists(filePath))
 			{
-				ProgressVisibility = "Visible";
-				var filePath = dlg.FileName;
-				await Task.Run(() =>
+				try
 				{
-					_importExportService.ExportResources(_langResBundlesList, filePath);
-				});
-				ProgressVisibility = "Hidden";
+					File.Delete(filePath);
+				}
+				catch(Exception e)
+				{
+					filePath = CreateNewFile(filePath);
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, $"{e.Message}\n\n{PluginResources.A_new_file_created}: {filePath}");
+				}
 			}
+
+			await Task.Run(() =>
+			{
+				_importExportService.ExportResources(_langResBundlesList, filePath);
+			});
+
+			ProgressVisibility = "Hidden";
+		}
+
+		private static string CreateNewFile(string filePath)
+		{
+			var index = 0;
+			while (true)
+			{
+				if (index == 0)
+				{
+					filePath = filePath.Insert(filePath.IndexOf(".xlsx", StringComparison.OrdinalIgnoreCase),
+						$"_{index}");
+				}
+				else
+				{
+					filePath = filePath.Replace((index - 1).ToString(), index.ToString());
+				}
+
+				if (File.Exists(filePath))
+				{
+					index++;
+					continue;
+				}
+
+				break;
+			}
+
+			return filePath;
 		}
 
 		private void Browse()
