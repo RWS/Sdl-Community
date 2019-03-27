@@ -60,6 +60,10 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Settings.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.Core.TM.ImportExport">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.TM.ImportExport.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.dll</HintPath>
       <Private>False</Private>

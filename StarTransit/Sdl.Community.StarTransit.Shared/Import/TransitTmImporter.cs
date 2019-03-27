@@ -6,7 +6,6 @@ using Sdl.LanguagePlatform.Core.Tokenization;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
-
 namespace Sdl.Community.StarTransit.Shared.Import
 {
 	public class TransitTmImporter
