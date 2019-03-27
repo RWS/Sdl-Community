@@ -64,7 +64,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			_resourceTemplatePath = _templateLoader.GetTmTemplateFolderPath();
 
-			LoadResourcesFromTemplate();
+			//LoadResourcesFromTemplate();
 			_importExportService = new ExcelImportExportService();
 		}
 
@@ -126,7 +126,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				if (_resourceTemplatePath != value)
 				{
 					_resourceTemplatePath = value;
-					LoadResourcesFromTemplate();
+					//LoadResourcesFromTemplate();
 					OnPropertyChanged(nameof(ResourceTemplatePath));
 				}
 			}
@@ -169,6 +169,33 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
 		public ICommand RemoveTMsCommand => _removeTMsCommand ?? (_removeTMsCommand = new CommandHandler(RemoveTMs, true));
+
+		private string CreateNewFile(string filePath)
+		{
+			var index = 0;
+			while (true)
+			{
+				if (index == 0)
+				{
+					filePath = filePath.Insert(filePath.IndexOf(".xlsx", StringComparison.OrdinalIgnoreCase),
+						$"_{index}");
+				}
+				else
+				{
+					filePath = filePath.Replace((index - 1).ToString(), index.ToString());
+				}
+
+				if (File.Exists(filePath))
+				{
+					index++;
+					continue;
+				}
+
+				break;
+			}
+
+			return filePath;
+		}
 
 		private void Tm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
@@ -236,22 +263,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private async void ApplyTmTemplate()
 		{
-			if (_langResBundlesList == null || _langResBundlesList.Count == 0)
-			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, _message);
-				return;
-			}
+			LoadResourcesFromTemplate();
 
-			//transform the list of unIDedLanguages and idedLanguages into two strings, respectively
-			var idedLanguages = _langResBundlesList.Aggregate("", (l, j) => l + "\n  \u2022" + j.LanguageCode);
-			var unIDedLanguages = _unIDedLanguagess.Aggregate("", (i, j) => i + "\n  \u2022" + j);
-
-			if (unIDedLanguages != "")
-			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title,
-					$"{PluginResources.Identified_Languages}{idedLanguages}" +
-					$"\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}");
-			}
+			if (await ValidateAndShowErrors()) return;
 
 			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
 			UnMarkTms(selectedTmList);
@@ -277,6 +291,28 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			ProgressVisibility = "Hidden";
 		}
 
+		private async Task<bool> ValidateAndShowErrors()
+		{
+			if (_langResBundlesList == null || _langResBundlesList.Count == 0)
+			{
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, _message);
+				return true;
+			}
+
+			//transform the list of unIDedLanguages and idedLanguages into two strings, respectively
+			var idedLanguages = _langResBundlesList.Aggregate("", (l, j) => l + "\n  \u2022" + j.LanguageCode);
+			var unIDedLanguages = _unIDedLanguagess.Aggregate("", (i, j) => i + "\n  \u2022" + j);
+
+			if (unIDedLanguages != "")
+			{
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title,
+					$"{PluginResources.Identified_Languages}{idedLanguages}" +
+					$"\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}");
+			}
+
+			return false;
+		}
+
 		private void UnMarkTms(List<TranslationMemory> tms)
 		{
 			foreach (var tm in tms)
@@ -288,13 +324,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private async void Import()
 		{
+			LoadResourcesFromTemplate();
+
+			if (await ValidateAndShowErrors()) return;
+
 			var dlg = new OpenFileDialog()
 			{
 				Title = PluginResources.Import_window_title,
 				Filter = "Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx",
-				InitialDirectory = ResourceTemplatePath.Contains(".")
-					? ResourceTemplatePath.Substring(0, ResourceTemplatePath.LastIndexOf('\\') + 1)
-					: ResourceTemplatePath
 			};
 
 			var result = dlg.ShowDialog();
@@ -323,34 +360,20 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				{
 				}
 			});
-			//LoadResourcesFromTemplate();
 			ProgressVisibility = "Hidden";
 		}
 
 		private async void Export()
 		{
-			if (_langResBundlesList == null || _langResBundlesList.Count == 0)
-			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, _message);
-				return;
-			}
+			LoadResourcesFromTemplate();
 
-			//transform the list of unIDedLanguages and idedLanguages into two strings, respectively
-			var idedLanguages = _langResBundlesList.Aggregate("", (l, j) => l + "\n  \u2022" + j.LanguageCode);
-			var unIDedLanguages = _unIDedLanguagess.Aggregate("", (i, j) => i + "\n  \u2022" + j);
-
-			if (unIDedLanguages != "")
-			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title,
-					$"{PluginResources.Identified_Languages}{idedLanguages}" +
-					$"\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}");
-			}
+			if (await ValidateAndShowErrors()) return;
 
 			var dlg = new SaveFileDialog
 			{
 				Title = PluginResources.Export_language_resources,
 				Filter = @"Excel |*.xlsx",
-				FileName = "Exported resources",
+				FileName = PluginResources.Exported_filename,
 				AddExtension = true
 			};
 
@@ -367,7 +390,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				{
 					File.Delete(filePath);
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
 					filePath = CreateNewFile(filePath);
 					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, $"{e.Message}\n\n{PluginResources.A_new_file_created}: {filePath}");
@@ -380,33 +403,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			});
 
 			ProgressVisibility = "Hidden";
-		}
-
-		private static string CreateNewFile(string filePath)
-		{
-			var index = 0;
-			while (true)
-			{
-				if (index == 0)
-				{
-					filePath = filePath.Insert(filePath.IndexOf(".xlsx", StringComparison.OrdinalIgnoreCase),
-						$"_{index}");
-				}
-				else
-				{
-					filePath = filePath.Replace((index - 1).ToString(), index.ToString());
-				}
-
-				if (File.Exists(filePath))
-				{
-					index++;
-					continue;
-				}
-
-				break;
-			}
-
-			return filePath;
 		}
 
 		private void Browse()

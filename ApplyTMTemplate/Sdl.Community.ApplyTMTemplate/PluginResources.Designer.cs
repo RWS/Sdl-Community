@@ -147,6 +147,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exported resources.
+        /// </summary>
+        internal static string Exported_filename {
+            get {
+                return ResourceManager.GetString("Exported_filename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon FileBasedTM {
@@ -176,7 +185,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import resources from excel spreadsheet or translation memory.
+        ///   Looks up a localized string similar to Import language resources.
         /// </summary>
         internal static string Import_window_title {
             get {

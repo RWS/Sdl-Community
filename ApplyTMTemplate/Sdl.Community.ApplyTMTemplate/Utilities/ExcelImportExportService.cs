@@ -70,108 +70,33 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			var currentCultureLcid = deserializedTemplate?.Language.LCID ?? newLanguageResourceBundle.Language.LCID;
 			var defaultLanguageResourceProvider = GetDefaultResourceBundles(currentCultureLcid);
 			var serializedTemplate = LoadDataFromFile(filePathTo);
-			XmlNode node;
 
-			//check if there are any abbreviations to be added (besides the default ones or the ones already in the template)
-
-			//template to compare with
+			//template to use and compare the new one with
 			var defaultOrOldTemplate = deserializedTemplate ?? defaultLanguageResourceProvider;
-			var abrrevsToBeAdded = new Wordlist();
-			foreach (var itemA in newLanguageResourceBundle.Abbreviations.Items)
-			{
-				if (defaultOrOldTemplate.Abbreviations.Items.All(itemB => !itemA.Equals(itemB, StringComparison.OrdinalIgnoreCase)))
-				{
-					abrrevsToBeAdded.Add(itemA);
-				}
-			}
 
-			//add them if there are any
-			if (abrrevsToBeAdded.Count > 0)
-			{
-				node = serializedTemplate.SelectSingleNode($"/LanguageResourceGroup[@Type='Abbreviations' and @Lcid='{currentCultureLcid.ToString()}']");
+			var node = serializedTemplate.SelectSingleNode($"/LanguageResourceGroup/LanguageResource[@Type='Abbreviations' and @Lcid='{currentCultureLcid.ToString()}']");
+			AddItemsToWordlist(newLanguageResourceBundle, defaultOrOldTemplate, "Abbreviations");
+			node?.ParentNode?.RemoveChild(node);
 
-				foreach (var abbrev in abrrevsToBeAdded.Items)
-				{
-					defaultOrOldTemplate.Abbreviations.Add(abbrev);
-				}
+			var xmlElement = CreateLanguageResourceNode(serializedTemplate, "Abbreviations", currentCultureLcid.ToString());
+			xmlElement.InnerText = ConvertWordlistToBase64(defaultOrOldTemplate, "Abbreviations");
+			serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
 
-				node?.ParentNode?.RemoveChild(node);
+			node = serializedTemplate.SelectSingleNode($"/LanguageResourceGroup/LanguageResource[@Type='OrdinalFollowers' and @Lcid='{currentCultureLcid.ToString()}']");
+			AddItemsToWordlist(newLanguageResourceBundle, defaultOrOldTemplate, "OrdinalFollowers");
+			node?.ParentNode?.RemoveChild(node);
 
-				var xmlElement = CreateLanguageResourceNode(serializedTemplate, "Abbreviations", currentCultureLcid.ToString());
+			xmlElement = CreateLanguageResourceNode(serializedTemplate, "OrdinalFollowers", currentCultureLcid.ToString());
+			xmlElement.InnerText = ConvertWordlistToBase64(defaultOrOldTemplate, "OrdinalFollowers");
+			serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
 
-				var stringWriter = new Utf8StringWriter();
-				defaultOrOldTemplate.Abbreviations.Save(stringWriter);
-				var bytesAbbreviations = Encoding.UTF8.GetBytes(stringWriter.ToString());
-				var base64Abbreviations = Convert.ToBase64String(bytesAbbreviations);
-				xmlElement.InnerText = base64Abbreviations;
+			node = serializedTemplate.SelectSingleNode($"/LanguageResourceGroup/LanguageResource[@Type='Variables' and @Lcid='{currentCultureLcid.ToString()}']");
+			AddItemsToWordlist(newLanguageResourceBundle, defaultOrOldTemplate, "Variables");
+			node?.ParentNode?.RemoveChild(node);
 
-				serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
-			}
-
-			//check if there are any ordinalFollowers to be added (besides the default ones
-			var ordinalFollowersToBeAdded = new Wordlist();
-			foreach (var itemA in newLanguageResourceBundle.OrdinalFollowers.Items)
-			{
-				if (defaultOrOldTemplate.OrdinalFollowers.Items.All(itemB => !itemA.Equals(itemB, StringComparison.OrdinalIgnoreCase)))
-				{
-					ordinalFollowersToBeAdded.Add(itemA);
-				}
-			}
-
-			//add them if there are any
-			if (ordinalFollowersToBeAdded.Count > 0)
-			{
-				node = serializedTemplate.SelectSingleNode($"/LanguageResourceGroup[@Type='OrdinalFollowers' and @Lcid='{currentCultureLcid.ToString()}']");
-
-				foreach (var abbrev in ordinalFollowersToBeAdded.Items)
-				{
-					defaultOrOldTemplate.OrdinalFollowers.Add(abbrev);
-				}
-
-				node?.ParentNode?.RemoveChild(node);
-
-				var xmlElement = CreateLanguageResourceNode(serializedTemplate, "OrdinalFollowers", currentCultureLcid.ToString());
-
-				var stringWriter = new Utf8StringWriter();
-				defaultOrOldTemplate.OrdinalFollowers.Save(stringWriter);
-				var bytesOrdinalFollowers = Encoding.UTF8.GetBytes(stringWriter.ToString());
-				var base64OrdinalFollowers = Convert.ToBase64String(bytesOrdinalFollowers);
-				xmlElement.InnerText = base64OrdinalFollowers;
-
-				serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
-			}
-
-			//check if there are any variables to be added (besides the default ones
-			var variablesToBeAdded = new Wordlist();
-			foreach (var itemA in newLanguageResourceBundle.Variables.Items)
-			{
-				if (defaultOrOldTemplate.Variables.Items.All(itemB => !itemA.Equals(itemB, StringComparison.OrdinalIgnoreCase)))
-				{
-					variablesToBeAdded.Add(itemA);
-				}
-			}
-
-			//add them if there are any
-			if (variablesToBeAdded.Count > 0)
-			{
-				node = serializedTemplate.SelectSingleNode($"/LanguageResourceGroup[@Type='Variables' and @Lcid='{currentCultureLcid.ToString()}']");
-				foreach (var abbrev in variablesToBeAdded.Items)
-				{
-					defaultOrOldTemplate.Variables.Add(abbrev);
-				}
-
-				node?.ParentNode?.RemoveChild(node);
-
-				var xmlElement = CreateLanguageResourceNode(serializedTemplate, "Variables", currentCultureLcid.ToString());
-
-				var stringWriter = new Utf8StringWriter();
-				defaultOrOldTemplate.Variables.Save(stringWriter);
-				var bytesVariables = Encoding.UTF8.GetBytes(stringWriter.ToString());
-				var base64Variables = Convert.ToBase64String(bytesVariables);
-				xmlElement.InnerText = base64Variables;
-
-				serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
-			}
+			xmlElement = CreateLanguageResourceNode(serializedTemplate, "Variables", currentCultureLcid.ToString());
+			xmlElement.InnerText = ConvertWordlistToBase64(defaultOrOldTemplate, "Variables");
+			serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
 
 			//check if there are any segmentation rules to add (besides the default ones)
 			var segmentationRulesToBeAdded = new SegmentationRules();
@@ -191,16 +116,41 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				segmentationRulesToBeAdded.Rules.AddRange(defaultOrOldTemplate.SegmentationRules.Rules);
 				node?.ParentNode?.RemoveChild(node);
 
-				var xmlElement = CreateLanguageResourceNode(serializedTemplate, "SegmentationRules", currentCultureLcid.ToString());
-				var memoryStream = new MemoryStream();
-				segmentationRulesToBeAdded.Save(memoryStream);
-				var segmentationRulesBase64 = Convert.ToBase64String(memoryStream.ToArray());
-				xmlElement.InnerText = segmentationRulesBase64;
+				xmlElement = CreateLanguageResourceNode(serializedTemplate, "SegmentationRules", currentCultureLcid.ToString());
+				xmlElement.InnerText = ConvertSegmentationRulesToBase64(defaultOrOldTemplate, segmentationRulesToBeAdded);
 				serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
 			}
 
 			var xmlTextWriter = new XmlTextWriter(filePathTo, Encoding.UTF8) { Formatting = Formatting.None };
 			serializedTemplate.Save(xmlTextWriter);
+		}
+
+		private static void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle defaultOrOldTemplate, string property)
+		{
+			var getterOfDefaultOrOldTemplate = (typeof(LanguageResourceBundle).GetProperty(property).GetMethod.Invoke(defaultOrOldTemplate, null) as Wordlist);
+			var getterOfNewLanguageResourceBundle = (typeof(LanguageResourceBundle).GetProperty(property).GetMethod.Invoke(newLanguageResourceBundle, null) as Wordlist);
+
+			foreach (var abbrev in getterOfNewLanguageResourceBundle.Items)
+			{
+				getterOfDefaultOrOldTemplate.Add(abbrev);
+			}
+		}
+
+		private static string ConvertWordlistToBase64(LanguageResourceBundle defaultOrOldTemplate, string property)
+		{
+			var stringWriter = new Utf8StringWriter();
+			(typeof(LanguageResourceBundle).GetProperty(property).GetMethod.Invoke(defaultOrOldTemplate, null) as Wordlist).Save(stringWriter);
+			var bytesAbbreviations = Encoding.UTF8.GetBytes(stringWriter.ToString());
+			var base64Abbreviations = Convert.ToBase64String(bytesAbbreviations);
+			return base64Abbreviations;
+		}
+
+		private static string ConvertSegmentationRulesToBase64(LanguageResourceBundle defaultOrOldTemplate, SegmentationRules segmentationRulesToBeAdded)
+		{
+			var memoryStream = new MemoryStream();
+			segmentationRulesToBeAdded.Save(memoryStream);
+			var segmentationRulesBase64 = Convert.ToBase64String(memoryStream.ToArray());
+			return segmentationRulesBase64;
 		}
 
 		private LanguageResourceBundle GetDefaultResourceBundles(int currentCultureLcid)
@@ -229,31 +179,6 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 			return defaultLanguageResourceProvider;
 		}
-
-		//private string SerializeConvertToBase64(LanguageResourceBundle languageResourceBundle, string property)
-		//{
-		//	var stringWriter = new Utf8StringWriter();
-		//	var type = DetermineTypeOfProperty(property);
-		//	var xmlSerializer = new XmlSerializer(type);
-		//	xmlSerializer.Serialize(stringWriter, languageResourceBundle.GetType().GetProperty(property).GetMethod.Invoke(languageResourceBundle, null));
-		//	var bytes = Encoding.UTF8.GetBytes(stringWriter.ToString());
-		//	var base64 = Convert.ToBase64String(bytes);
-		//	return base64;
-		//}
-
-		//private Type DetermineTypeOfProperty(string property)
-		//{
-		//	switch (property)
-		//	{
-		//		case "Abbreviations":
-		//		case "Variables":
-		//		case "OrdinalFollowers":
-		//			return typeof(Wordlist);
-		//		default:
-		//			return typeof(SegmentationRules);
-		//	}
-
-		//}
 
 		private void ReadFromExcel(ExcelWorksheet workSheet, Wordlist abbreviations, Wordlist ordinalFollowers,
 			Wordlist variables, SegmentationRules segmentationRules)

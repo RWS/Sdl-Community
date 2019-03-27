@@ -138,7 +138,9 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
-		<controls:ProgressRing Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.Row="5" Visibility="{Binding ProgressVisibility}" Width="40"/>
-		<Button Style="{DynamicResource DarkBlueButtonsStyle}" Grid.Row="5" Grid.Column="1" RenderTransformOrigin="0.487,1.938" HorizontalAlignment="Right" Margin="0,10,10,10" Command="{Binding ApplyTemplateCommand}">Apply</Button>
+		<StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+			<controls:ProgressRing Visibility="{Binding ProgressVisibility}" Width="40" />
+			<Button Style="{DynamicResource DarkBlueButtonsStyle}" RenderTransformOrigin="0.487,1.938" HorizontalAlignment="Right" Margin="0,10,10,10" Command="{Binding ApplyTemplateCommand}" Content="Apply"/>
+		</StackPanel>
 	</Grid>
 </controls:MetroWindow>
