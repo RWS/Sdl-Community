@@ -51,6 +51,8 @@
 			<Button Margin="5,10,10,0" Style="{DynamicResource DarkBlueButtonsStyle}" Command="{Binding ImportCommand}" Content="Import"/>
 		</StackPanel>
 
+		<controls:ToggleSwitch Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Header="Import from" OffLabel="Excel" OnLabel="TMs" IsChecked="{Binding ToggleExcelTM, Mode=TwoWay}"/>
+
 		<StackPanel Grid.Row="2" Grid.Column="0" Margin="10,10,0,0">
 			<TextBlock Text="What to apply:" />
 			<CheckBox IsChecked="{Binding VariablesChecked}" Content="Variables" Margin="10,15,0,0" />

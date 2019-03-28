@@ -121,7 +121,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			SourceStatus = "../Resources/Error.ico";
 			TargetStatus = "../Resources/Error.ico";
 			SourceStatusToolTip = "This TM is corrupted or the file is not a TM";
-			TargetStatusToolTip = "This TM is corrupted or the file is not a TM";;
+			TargetStatusToolTip = "This TM is corrupted or the file is not a TM"; ;
 		}
 
 		public void UnmarkTm()
@@ -164,7 +164,6 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			{
 				MarkTmCorrupted();
 			}
-
 		}
 	}
 }
