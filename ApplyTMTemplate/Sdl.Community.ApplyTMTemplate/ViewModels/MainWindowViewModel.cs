@@ -65,7 +65,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			_resourceTemplatePath = _templateLoader.GetTmTemplateFolderPath();
 
-			//LoadResourcesFromTemplate();
 			_importExportService = new ExcelImportExportService();
 		}
 
@@ -360,6 +359,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					{
 					}
 				});
+
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
+
 				ProgressVisibility = "Hidden";
 			}
 		}

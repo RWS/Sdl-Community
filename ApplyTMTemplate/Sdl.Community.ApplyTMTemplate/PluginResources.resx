@@ -190,4 +190,7 @@
   <data name="Report_generated_successfully" xml:space="preserve">
     <value>The report was generated successfully</value>
   </data>
+  <data name="Resources_Imported_Successfully" xml:space="preserve">
+    <value>The resources were imported successfully</value>
+  </data>
 </root>
