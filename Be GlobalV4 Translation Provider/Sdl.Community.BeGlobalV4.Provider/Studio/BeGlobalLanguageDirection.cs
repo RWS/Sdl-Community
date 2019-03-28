@@ -157,7 +157,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			if (_beGlobalConnect == null)
 			{ 
-				_beGlobalConnect = new BeGlobalConnecter(_options.ClientId, _options.ClientSecret, _options.UseClientAuthentication,_options.Model);
+				_beGlobalConnect = new BeGlobalConnecter(_options.ClientId, _options.ClientSecret, _options.UseClientAuthentication,_options.Model,
+					_languageDirection);
 			}
 			else
 			{
@@ -166,7 +167,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				_beGlobalConnect.UseClientAuthentication = _options.UseClientAuthentication;
 			}
 
-			var translatedText = _beGlobalConnect.Translate(_languageDirection, sourcetext);
+			var translatedText = _beGlobalConnect.Translate(sourcetext);
 			return translatedText;
 		}
 
