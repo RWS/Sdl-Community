@@ -17,7 +17,23 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
 	public class ExcelImportExportService
 	{
-		public void ImportResources(string filePathFrom, string filePathTo, Settings settings, List<LanguageResourceBundle> languageResourceBundles)
+		public void ImportResourcesFromSDLTM(List<TranslationMemory> translationMemories, Settings settings, string templatePath, List<LanguageResourceBundle> deserializedTemplate)
+		{
+			var newLanguageResourceBundles = new List<LanguageResourceBundle>();
+
+			foreach (var tm in translationMemories)
+			{
+				foreach (var bundle in tm.Tm.LanguageResourceBundles)
+				{
+					newLanguageResourceBundles.Add(bundle);
+				}
+			}
+
+			ExcludeWhatIsNotNeeded(newLanguageResourceBundles, settings);
+			SaveToXml(templatePath, newLanguageResourceBundles, deserializedTemplate);
+		}
+
+		public void ImportResourcesFromExcel(string filePathFrom, string filePathTo, Settings settings, List<LanguageResourceBundle> deserializedTemplate)
 		{
 			using (var package = GetExcelPackage(filePathFrom))
 			{
@@ -51,7 +67,34 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 					newLanguageResourceBundles.Add(newLanguageResourceBundle);
 				}
 
-				SaveToXml(filePathTo, newLanguageResourceBundles, languageResourceBundles);
+				ExcludeWhatIsNotNeeded(newLanguageResourceBundles, settings);
+				SaveToXml(filePathTo, newLanguageResourceBundles, deserializedTemplate);
+			}
+		}
+
+		public void ExcludeWhatIsNotNeeded(List<LanguageResourceBundle> languageResourceBundles, Settings settings)
+		{
+			foreach (var bundle in languageResourceBundles)
+			{
+				if (!settings.AbbreviationsChecked)
+				{
+					bundle.Abbreviations = new Wordlist();
+				}
+
+				if (!settings.OrdinalFollowersChecked)
+				{
+					bundle.OrdinalFollowers = new Wordlist();
+				}
+
+				if (!settings.VariablesChecked)
+				{
+					bundle.Variables = new Wordlist();
+				}
+
+				if (!settings.SegmentationRulesChecked)
+				{
+					bundle.SegmentationRules = new SegmentationRules();
+				}
 			}
 		}
 
@@ -185,6 +228,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			var excelPackage = new ExcelPackage(fileInfo);
 			return excelPackage;
 		}
+
 		private void SaveToXml(string filePathTo, List<LanguageResourceBundle> newLanguageResourceBundles, List<LanguageResourceBundle> deserializedTemplate)
 		{
 			var serializedTemplate = LoadDataFromFile(filePathTo);
@@ -255,6 +299,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			var xmlTextWriter = new XmlTextWriter(filePathTo, Encoding.UTF8) { Formatting = Formatting.None };
 			serializedTemplate.Save(xmlTextWriter);
 		}
+
 		private LanguageResourceBundle GetDefaultResourceBundles(int currentCultureLcid)
 		{
 			var defaultLanguageResourceProvider = new DefaultLanguageResourceProvider().GetDefaultLanguageResources(CultureInfoExtensions.GetCultureInfo(currentCultureLcid));
