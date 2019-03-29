@@ -152,6 +152,11 @@ namespace ETSTranslationProvider
 					results[i].Add(CreateSearchResult(segments[i], translations[translationIndex]));
 					translationIndex++;
 				}
+				else
+				{
+					results[i].SourceSegment = new Segment();
+					results[i].Add(CreateSearchResult(new Segment(), new Segment()));
+				}
 			}
             return results;
         }
