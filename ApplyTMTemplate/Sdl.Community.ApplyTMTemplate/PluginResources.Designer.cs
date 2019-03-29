@@ -194,6 +194,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No languages could be identified.
+        /// </summary>
+        internal static string No_Languages_IDed {
+            get {
+                return ResourceManager.GetString("No_Languages_IDed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  select the folder containing the TMs.
         /// </summary>
         internal static string Please_select_the_folder_containing_the_TMs {
@@ -288,11 +297,11 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warning.
+        ///   Looks up a localized string similar to Warning regarding the template.
         /// </summary>
-        internal static string Warning_Window_Title {
+        internal static string Warning_Window_Title_Template {
             get {
-                return ResourceManager.GetString("Warning_Window_Title", resourceCulture);
+                return ResourceManager.GetString("Warning_Window_Title_Template", resourceCulture);
             }
         }
     }

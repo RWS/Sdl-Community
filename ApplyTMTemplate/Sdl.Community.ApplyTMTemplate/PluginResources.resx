@@ -163,8 +163,8 @@
   <data name="Select_at_least_one_TM" xml:space="preserve">
     <value>Select at least one TM</value>
   </data>
-  <data name="Warning_Window_Title" xml:space="preserve">
-    <value>Warning</value>
+  <data name="Warning_Window_Title_Template" xml:space="preserve">
+    <value>Warning regarding the template</value>
   </data>
   <data name="Please_select_the_folder_containing_the_TMs" xml:space="preserve">
     <value> select the folder containing the TMs</value>
@@ -192,5 +192,8 @@
   </data>
   <data name="Resources_Imported_Successfully" xml:space="preserve">
     <value>The resources were imported successfully</value>
+  </data>
+  <data name="No_Languages_IDed" xml:space="preserve">
+    <value>No languages could be identified</value>
   </data>
 </root>

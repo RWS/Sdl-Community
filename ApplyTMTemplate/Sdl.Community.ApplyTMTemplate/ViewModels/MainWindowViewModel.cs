@@ -64,8 +64,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			_tmCollection = new ObservableCollection<TranslationMemory>();
 
-			_resourceTemplatePath = _templateLoader.GetTmTemplateFolderPath();
-
 			_importExportService = new ExcelImportExportService();
 		}
 
@@ -275,14 +273,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			LoadResourcesFromTemplate();
 
-			if (await ValidateAndShowErrors()) return;
+			if (!await ValidateTemplateAndShowErrors()) return;
 
 			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
 			UnMarkTms(selectedTmList);
 
 			if (selectedTmList.Count == 0)
 			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, PluginResources.Select_at_least_one_TM);
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title_Template, PluginResources.Select_at_least_one_TM);
 				return;
 			}
 
@@ -301,26 +299,37 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			ProgressVisibility = "Hidden";
 		}
 
-		private async Task<bool> ValidateAndShowErrors()
+		private async Task<bool> ValidateTemplateAndShowErrors()
 		{
+			var isValid = true;
+
+			var unIDedLanguages = _unIDedLanguagess.Aggregate("", (i, j) => i + "\n  \u2022" + j);
 			if (_langResBundlesList == null || _langResBundlesList.Count == 0)
 			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, _message);
-				return true;
+				isValid = false;
+
+				if (unIDedLanguages != "")
+				{
+					_message = $"{PluginResources.No_Languages_IDed}\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}";
+				}
 			}
-
-			//transform the list of unIDedLanguages and idedLanguages into two strings, respectively
-			var idedLanguages = _langResBundlesList.Aggregate("", (l, j) => l + "\n  \u2022" + j.LanguageCode);
-			var unIDedLanguages = _unIDedLanguagess.Aggregate("", (i, j) => i + "\n  \u2022" + j);
-
-			if (unIDedLanguages != "")
+			else
 			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title,
-					$"{PluginResources.Identified_Languages}{idedLanguages}" +
-					$"\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}");
+				if (unIDedLanguages != "")
+				{
+					var idedLanguages = _langResBundlesList.Aggregate("", (l, j) => l + "\n  \u2022" + j.LanguageCode);
+					_message = $"{PluginResources.Identified_Languages}{idedLanguages}" +
+					           $"\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}";
+				}
 			}
 
-			return false;
+			if (unIDedLanguages != "" || !isValid)
+			{
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title_Template,
+					_message);
+			}
+
+			return isValid;
 		}
 
 		private void UnMarkTms(List<TranslationMemory> tms)
@@ -336,7 +345,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			LoadResourcesFromTemplate();
 
-			if (await ValidateAndShowErrors()) return;
+			if (!await ValidateTemplateAndShowErrors()) return;
 
 			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
 
@@ -379,21 +388,29 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			{
 				ProgressVisibility = "Visible";
 				var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
-				await Task.Run(() =>
+				if (selectedTmList.Count > 0)
 				{
-					try
+					await Task.Run(() =>
 					{
-						_importExportService.ImportResourcesFromSDLTM(selectedTmList, settings, ResourceTemplatePath, _langResBundlesList);
-					}
-					catch (Exception e)
-					{
-						_dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title,
-							e.Message);
-					}
-				});
+						try
+						{
+							_importExportService.ImportResourcesFromSDLTM(selectedTmList, settings,
+								ResourceTemplatePath, _langResBundlesList);
+						}
+						catch (Exception e)
+						{
+							_dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title, e.Message);
+						}
+					});
 
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title,
-					PluginResources.Resources_Imported_Successfully);
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title,
+						PluginResources.Resources_Imported_Successfully);
+				}
+				else
+				{
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title,
+						PluginResources.Select_at_least_one_TM);
+				}
 
 				ProgressVisibility = "Hidden";
 			}
@@ -403,7 +420,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			LoadResourcesFromTemplate();
 
-			if (await ValidateAndShowErrors()) return;
+			if (!await ValidateTemplateAndShowErrors()) return;
 
 			var dlg = new SaveFileDialog
 			{
@@ -429,7 +446,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				catch (Exception e)
 				{
 					filePath = CreateNewFile(filePath);
-					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, $"{e.Message}\n\n{PluginResources.A_new_file_created}: {filePath}");
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title_Template, $"{e.Message}\n\n{PluginResources.A_new_file_created}: {filePath}");
 				}
 			}
 
@@ -449,9 +466,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			var dlg = new OpenFileDialog
 			{
 				Filter = "Language resource templates|*.resource",
-				InitialDirectory = ResourceTemplatePath.Contains(".")
-					? ResourceTemplatePath.Substring(0, ResourceTemplatePath.LastIndexOf('\\') + 1)
-					: ResourceTemplatePath
 			};
 
 			var result = dlg.ShowDialog();
