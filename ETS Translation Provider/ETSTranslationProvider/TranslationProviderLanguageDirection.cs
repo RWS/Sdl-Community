@@ -138,18 +138,26 @@ namespace ETSTranslationProvider
             Segment[] translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
 
             int translationIndex = 0;
-            for (int i = 0; i < segments.Length; i++)
-            {
-                if (mask != null && !mask[i])
-                {
-                    results[i] = null;
-                    continue;
-                }
-                results[i] = new SearchResults();
-                results[i].SourceSegment = segments[i].Duplicate();
-                results[i].Add(CreateSearchResult(segments[i], translations[translationIndex]));
-                translationIndex++;
-            }
+			for (int i = 0; i < segments.Length; i++)
+			{
+				if (mask != null && !mask[i])
+				{
+					results[i] = null;
+					continue;
+				}
+				results[i] = new SearchResults();
+				if (segments[i] != null)
+				{
+					results[i].SourceSegment = segments[i].Duplicate();
+					results[i].Add(CreateSearchResult(segments[i], translations[translationIndex]));
+					translationIndex++;
+				}
+				else
+				{
+					results[i].SourceSegment = new Segment();
+					results[i].Add(CreateSearchResult(new Segment(), new Segment()));
+				}
+			}
             return results;
         }
 
@@ -232,28 +240,32 @@ namespace ETSTranslationProvider
             if (mask == null || mask.Length != translationUnits.Length)
                 throw new ArgumentException("Mask in SearchSegmentsMasked");
 
-            return SearchSegments(settings, translationUnits.Select(tu => tu.SourceSegment).ToArray(), mask);
+            return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
         }
 
-        /// <summary>
-        /// Prepares a source translation string for request. It ultimately removes all the tags data,
-        /// storing them temporarily in a dictionary, which then can be used to reinstate the tags' text.
-        /// Function taken from previous ETS Plugin.
-        /// </summary>
-        /// <param name="segment"></param>
-        /// <param name="hasTags"></param>
-        /// <param name="tagMapping"></param>
-        /// <returns></returns>
-        public XliffConverter.xliff CreateXliffFile(Segment[] segments)
-        {
-            Log.logger.Trace("");
-            XliffConverter.xliff xliffDocument = new XliffConverter.xliff(
-                languageDirection.SourceCulture,
-                languageDirection.TargetCulture);
-            foreach (Segment seg in segments)
-                xliffDocument.AddSourceSegment(seg);
-            return xliffDocument;
-        }
+		/// <summary>
+		/// Prepares a source translation string for request. It ultimately removes all the tags data,
+		/// storing them temporarily in a dictionary, which then can be used to reinstate the tags' text.
+		/// Function taken from previous ETS Plugin.
+		/// </summary>
+		/// <param name="segment"></param>
+		/// <param name="hasTags"></param>
+		/// <param name="tagMapping"></param>
+		/// <returns></returns>
+		public XliffConverter.xliff CreateXliffFile(Segment[] segments)
+		{
+			Log.logger.Trace("");
+			var xliffDocument = new XliffConverter.xliff(languageDirection.SourceCulture, languageDirection.TargetCulture);
+
+			foreach (var seg in segments)
+			{
+				if (seg != null)
+				{
+					xliffDocument.AddSourceSegment(seg);
+				}
+			}
+			return xliffDocument;
+		}
 
         #region Unnecessary Training Methods
         /// <summary>
