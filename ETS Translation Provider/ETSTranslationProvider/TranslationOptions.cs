@@ -90,15 +90,18 @@ namespace ETSTranslationProvider
 
 			// Fix for French Canada engine	 which has language code on server frc
 			var frenchCanadianLp = languagePairs.FirstOrDefault(lp => lp.SourceCulture.ThreeLetterWindowsLanguageName.Equals("FRC") ||
-			                                                          lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals("FRC"));
+																	  lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals("FRC"));
 			if (frenchCanadianLp != null)
 			{
-				var etsLangPair = etsLanguagePairs.FirstOrDefault(lp => lp.SourceLanguageId.Equals("frc") ||
-				                                                        lp.TargetLanguageId.Equals("frc"));
-				if (etsLangPair != null)
+				var etsLangPairEngines = etsLanguagePairs.Where(lp => lp.SourceLanguageId.Equals("frc") ||
+																		lp.TargetLanguageId.Equals("frc")).ToList();
+				if (etsLangPairEngines.Any())
 				{
 					var projectSourceLanguage = languagePairChoices.FirstOrDefault(s => s.TradosCulture.ThreeLetterISOLanguageName.Equals("fra"));
-					projectSourceLanguage?.ETSLPs.Add(etsLangPair);
+					foreach (var etsEngine in etsLangPairEngines)
+					{
+						projectSourceLanguage?.ETSLPs.Add(etsEngine);
+					}
 				}
 			}
 
@@ -109,7 +112,7 @@ namespace ETSTranslationProvider
 				var defaultOption = lpChoice.ETSLPs.FirstOrDefault();
 				// Verify that the preferred LP still exists on ets server and if not, remove it from preferences
 				if (LPPreferences.ContainsKey(lpChoice.TradosCulture) &&
-				    !lpChoice.ETSLPs.Contains(LPPreferences[lpChoice.TradosCulture]))
+					!lpChoice.ETSLPs.Contains(LPPreferences[lpChoice.TradosCulture]))
 					LPPreferences.Remove(lpChoice.TradosCulture);
 
 				if (defaultOption != null && !LPPreferences.ContainsKey(lpChoice.TradosCulture))
