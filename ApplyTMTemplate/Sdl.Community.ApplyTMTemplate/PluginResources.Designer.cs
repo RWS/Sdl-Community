@@ -242,6 +242,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The resources were imported successfully.
+        /// </summary>
+        internal static string Resources_Imported_Successfully {
+            get {
+                return ResourceManager.GetString("Resources_Imported_Successfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select at least one TM.
         /// </summary>
         internal static string Select_at_least_one_TM {

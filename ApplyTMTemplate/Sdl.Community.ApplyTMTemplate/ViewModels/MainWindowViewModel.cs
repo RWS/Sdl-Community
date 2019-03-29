@@ -27,6 +27,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private bool _segmentationRulesChecked;
 		private bool _variablesChecked;
 		private bool _allTmsChecked;
+		private bool _toggleExcelTM;
 
 		private string _tmPath;
 		private string _resourceTemplatePath;
@@ -65,7 +66,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			_resourceTemplatePath = _templateLoader.GetTmTemplateFolderPath();
 
-			//LoadResourcesFromTemplate();
 			_importExportService = new ExcelImportExportService();
 		}
 
@@ -76,6 +76,16 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			{
 				_progressVisibility = value;
 				OnPropertyChanged();
+			}
+		}
+
+		public bool ToggleExcelTM
+		{
+			get => _toggleExcelTM;
+			set
+			{
+				_toggleExcelTM = value;
+				OnPropertyChanged(nameof(ToggleExcelTM));
 			}
 		}
 
@@ -127,7 +137,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				if (_resourceTemplatePath != value)
 				{
 					_resourceTemplatePath = value;
-					//LoadResourcesFromTemplate();
 					OnPropertyChanged(nameof(ResourceTemplatePath));
 				}
 			}
@@ -329,37 +338,63 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			if (await ValidateAndShowErrors()) return;
 
-			var dlg = new OpenFileDialog()
+			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
+
+			if (!ToggleExcelTM)
 			{
-				Title = PluginResources.Import_window_title,
-				Filter = "Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx",
-			};
+				var dlg = new OpenFileDialog()
+				{
+					Title = PluginResources.Import_window_title,
+					Filter = "Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx",
+				};
 
-			var result = dlg.ShowDialog();
+				var result = dlg.ShowDialog();
 
-			if (result ?? false)
+				if (result ?? false)
+				{
+					ProgressVisibility = "Visible";
+					await Task.Run(() =>
+					{
+						if (dlg.FileName.Contains(".xlsx"))
+						{
+							try
+							{
+								_importExportService.ImportResourcesFromExcel(dlg.FileName, ResourceTemplatePath, settings, _langResBundlesList);
+							}
+							catch (Exception e)
+							{
+								_dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title,
+									e.Message);
+							}
+						}
+					});
+
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title,
+						PluginResources.Resources_Imported_Successfully);
+
+					ProgressVisibility = "Hidden";
+				}
+			}
+			else
 			{
 				ProgressVisibility = "Visible";
+				var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
 				await Task.Run(() =>
 				{
-					if (dlg.FileName.Contains(".xlsx"))
+					try
 					{
-						try
-						{
-							_importExportService.ImportResources(dlg.FileName, ResourceTemplatePath,
-								new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked,
-									SegmentationRulesChecked), _langResBundlesList);
-						}
-						catch (Exception e)
-						{
-							_dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title, e.Message);
-						}
+						_importExportService.ImportResourcesFromSDLTM(selectedTmList, settings, ResourceTemplatePath, _langResBundlesList);
 					}
-
-					if (dlg.FileName.Contains(".sdltm"))
+					catch (Exception e)
 					{
+						_dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title,
+							e.Message);
 					}
 				});
+
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title,
+					PluginResources.Resources_Imported_Successfully);
+
 				ProgressVisibility = "Hidden";
 			}
 		}
