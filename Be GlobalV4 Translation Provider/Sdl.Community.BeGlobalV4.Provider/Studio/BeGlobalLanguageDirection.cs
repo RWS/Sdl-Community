@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
@@ -12,7 +10,6 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
