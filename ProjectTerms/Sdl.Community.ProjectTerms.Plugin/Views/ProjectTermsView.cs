@@ -43,7 +43,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
                 buttonExtractTerms.Text = PluginResources.Button_ExtractTermsFiles;
             }
 
-            if (!File.Exists(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath(), true)))
+            if (!File.Exists(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjectPath(), true)))
             {
                 buttonAdd.Enabled = false;
                 buttonDelete.Enabled = false;

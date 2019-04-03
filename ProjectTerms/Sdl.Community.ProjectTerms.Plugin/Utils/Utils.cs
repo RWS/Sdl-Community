@@ -118,7 +118,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
             return parent;
         }
 
-        public static string GetProjecPath()
+        public static string GetProjectPath()
         {
             return SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().LocalProjectFolder;
         }
@@ -130,7 +130,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
 
         public static string GenerateBlackListPath()
         {
-            return Path.Combine(Utils.GetProjecPath(), PluginResources.BlacklistFileName);
+            return Path.Combine(Utils.GetProjectPath(), PluginResources.BlacklistFileName);
         }
 
         public static string GetExistedFileName(string directoryPath)
