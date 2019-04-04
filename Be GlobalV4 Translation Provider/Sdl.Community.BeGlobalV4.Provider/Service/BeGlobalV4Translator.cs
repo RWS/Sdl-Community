@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using RestSharp;
+using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Service
@@ -52,12 +53,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			request.AddHeader("Trace-ID", Guid.NewGuid().ToString());
 			request.RequestFormat = DataFormat.Json;
-			var response = _client.Execute(request);
-			if (response.StatusCode != System.Net.HttpStatusCode.OK)
-				throw new Exception("Acquiring token failed: " + response.Content);
-			dynamic json = JsonConvert.DeserializeObject(response.Content);
-			_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
+			var token = ApiToken.GetToken(request, _client);
+
+			_client.AddDefaultHeader("Authorization", $"Bearer {token}");
 		}
+
+		
 
 		public string TranslateText(string text)
 		{
