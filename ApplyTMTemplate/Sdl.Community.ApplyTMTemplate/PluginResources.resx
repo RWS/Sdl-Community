@@ -196,4 +196,7 @@
   <data name="No_Languages_IDed" xml:space="preserve">
     <value>No languages could be identified</value>
   </data>
+  <data name="Select_A_Template" xml:space="preserve">
+    <value>Select a template</value>
+  </data>
 </root>

@@ -131,7 +131,6 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\RatioConverter.cs" />
-    <Compile Include="Models\Options.cs" />
     <Compile Include="Models\Template.cs" />
     <Compile Include="Models\TranslationMemory.cs" />
     <Compile Include="PluginResources.Designer.cs">

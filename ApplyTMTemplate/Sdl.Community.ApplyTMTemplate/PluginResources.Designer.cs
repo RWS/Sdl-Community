@@ -260,6 +260,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a template.
+        /// </summary>
+        internal static string Select_A_Template {
+            get {
+                return ResourceManager.GetString("Select_A_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select at least one TM.
         /// </summary>
         internal static string Select_at_least_one_TM {

@@ -40,23 +40,6 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 		public string DefaultPath { get; set; }
 
-		public string GetTmTemplateFolderPath()
-		{
-			var data = LoadDataFromFile(_path, "Setting");
-
-			foreach (XmlNode setting in data)
-			{
-				var id = setting?.Attributes?["Id"];
-
-				if (id?.Value == "RecentLanguageResourceGroupFolder")
-				{
-					return setting.InnerText;
-				}
-			}
-
-			return DefaultPath;
-		}
-
 		public string GetTmFolderPath()
 		{
 			var data = LoadDataFromFile(_path, "Setting");
@@ -105,40 +88,37 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			}
 
 			var langResBundlesList = new List<LanguageResourceBundle>();
-			var defaultLangResProvider = new DefaultLanguageResourceProvider();
 
 			foreach (XmlNode res in lrt)
 			{
 				var successful = int.TryParse(res?.Attributes?["Lcid"]?.Value, out var lcid);
 
-				if (successful)
+				if (!successful) continue;
+				var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == lcid);
+
+				if (lr == null)
 				{
-					var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == lcid);
+					CultureInfo culture;
 
-					if (lr == null)
+					try
 					{
-						CultureInfo culture;
-
-						try
+						culture = CultureInfoExtensions.GetCultureInfo(lcid);
+						if (CultureInfo.GetCultures(CultureTypes.AllCultures).Where(ci => ci.LCID == lcid).ToList().Count > 1) throw new Exception();
+					}
+					catch (Exception)
+					{
+						if (!unIDedLanguages.Exists(id => id == lcid))
 						{
-							culture = CultureInfoExtensions.GetCultureInfo(lcid);
-							if (CultureInfo.GetCultures(CultureTypes.AllCultures).Where(ci => ci.LCID == lcid).ToList().Count > 1) throw new Exception();
+							unIDedLanguages.Add(lcid);
 						}
-						catch (Exception)
-						{
-							if (!unIDedLanguages.Exists(id => id == lcid))
-							{
-								unIDedLanguages.Add(lcid);
-							}
-							continue;
-						}
-
-						lr = defaultLangResProvider.GetDefaultLanguageResources(culture);
-						langResBundlesList.Add(lr);
+						continue;
 					}
 
-					AddLanguageResourceToBundle(lr, res);
+					lr = new LanguageResourceBundle(culture);
+					langResBundlesList.Add(lr);
 				}
+
+				AddLanguageResourceToBundle(lr, res);
 			}
 
 			return langResBundlesList;

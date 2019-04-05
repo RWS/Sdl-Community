@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Xml;
 using System.Xml.Serialization;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -17,10 +15,9 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
 	public class ExcelImportExportService
 	{
-		public void ImportResourcesFromSDLTM(List<TranslationMemory> translationMemories, Settings settings, string templatePath, List<LanguageResourceBundle> deserializedTemplate)
+		public void ImportResourcesFromSdltm(List<TranslationMemory> translationMemories, Settings settings, string templatePath, FileBasedLanguageResourcesTemplate deserializedTemplate)
 		{
 			var newLanguageResourceBundles = new List<LanguageResourceBundle>();
-
 			foreach (var tm in translationMemories)
 			{
 				foreach (var bundle in tm.Tm.LanguageResourceBundles)
@@ -30,10 +27,13 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			}
 
 			ExcludeWhatIsNotNeeded(newLanguageResourceBundles, settings);
-			SaveToXml(templatePath, newLanguageResourceBundles, deserializedTemplate);
+
+			AddNewBundles(deserializedTemplate, newLanguageResourceBundles);
+
+			deserializedTemplate.SaveAs(templatePath);
 		}
 
-		public void ImportResourcesFromExcel(string filePathFrom, string filePathTo, Settings settings, List<LanguageResourceBundle> deserializedTemplate)
+		public void ImportResourcesFromExcel(string filePathFrom, string filePathTo, Settings settings, FileBasedLanguageResourcesTemplate deserializedTemplate)
 		{
 			using (var package = GetExcelPackage(filePathFrom))
 			{
@@ -66,9 +66,10 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 					newLanguageResourceBundles.Add(newLanguageResourceBundle);
 				}
-
 				ExcludeWhatIsNotNeeded(newLanguageResourceBundles, settings);
-				SaveToXml(filePathTo, newLanguageResourceBundles, deserializedTemplate);
+				AddNewBundles(deserializedTemplate, newLanguageResourceBundles);
+
+				deserializedTemplate.SaveAs(filePathTo);
 			}
 		}
 
@@ -76,33 +77,33 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 		{
 			foreach (var bundle in languageResourceBundles)
 			{
-				if (!settings.AbbreviationsChecked)
+				if (bundle.Abbreviations != null && (!settings.AbbreviationsChecked || bundle.Abbreviations.Count == 0))
 				{
-					bundle.Abbreviations = new Wordlist();
+					bundle.Abbreviations = null;
 				}
 
-				if (!settings.OrdinalFollowersChecked)
+				if (bundle.OrdinalFollowers != null && (!settings.OrdinalFollowersChecked || bundle.OrdinalFollowers.Count == 0))
 				{
-					bundle.OrdinalFollowers = new Wordlist();
+					bundle.OrdinalFollowers = null;
 				}
 
-				if (!settings.VariablesChecked)
+				if (bundle.Variables != null && (!settings.VariablesChecked || bundle.Variables.Count == 0))
 				{
-					bundle.Variables = new Wordlist();
+					bundle.Variables = null;
 				}
 
-				if (!settings.SegmentationRulesChecked)
+				if (bundle.SegmentationRules != null && (!settings.SegmentationRulesChecked || bundle.SegmentationRules.Count == 0))
 				{
-					bundle.SegmentationRules = new SegmentationRules();
+					bundle.SegmentationRules = null;
 				}
 			}
 		}
 
-		public void ExportResources(List<LanguageResourceBundle> template, string filePathTo)
+		public void ExportResources(FileBasedLanguageResourcesTemplate template, string filePathTo, Settings settings)
 		{
 			using (var package = GetExcelPackage(filePathTo))
 			{
-				foreach (var languageResourceBundle in template)
+				foreach (var languageResourceBundle in template.LanguageResourceBundles)
 				{
 					var worksheet = package.Workbook.Worksheets.Add(languageResourceBundle.Language.Name);
 
@@ -113,13 +114,9 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 					var lineNumber = 1;
 
-					worksheet.Cells["A" + lineNumber].Value = "Abbreviations";
-					worksheet.Cells["A" + lineNumber].Style.Fill.PatternType = ExcelFillStyle.Solid;
-					worksheet.Cells["A" + lineNumber].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(37, 189, 89));
-					worksheet.Cells["A" + lineNumber].Style.Font.Color.SetColor(Color.White);
-					worksheet.Cells["A" + lineNumber].Style.Font.Name = "Sommet Rounded";
+					SetCellStyle(worksheet, "A", lineNumber, "Abbreviations");
 
-					if (languageResourceBundle.Abbreviations != null)
+					if (settings.AbbreviationsChecked && languageResourceBundle.Abbreviations != null)
 					{
 						foreach (var abbreviation in languageResourceBundle.Abbreviations.Items)
 						{
@@ -129,13 +126,9 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 					lineNumber = 1;
 
-					worksheet.Cells["B" + lineNumber].Value = "OrdinalFollowers";
-					worksheet.Cells["B" + lineNumber].Style.Fill.PatternType = ExcelFillStyle.Solid;
-					worksheet.Cells["B" + lineNumber].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(37, 189, 89));
-					worksheet.Cells["B" + lineNumber].Style.Font.Color.SetColor(Color.White);
-					worksheet.Cells["B" + lineNumber].Style.Font.Name = "Sommet Rounded";
+					SetCellStyle(worksheet, "B", lineNumber, "OrdinalFollowers");
 
-					if (languageResourceBundle.OrdinalFollowers != null)
+					if (settings.OrdinalFollowersChecked && languageResourceBundle.OrdinalFollowers != null)
 					{
 						foreach (var ordinalFollower in languageResourceBundle.OrdinalFollowers.Items)
 						{
@@ -145,13 +138,9 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 					lineNumber = 1;
 
-					worksheet.Cells["C" + lineNumber].Value = "Variables";
-					worksheet.Cells["C" + lineNumber].Style.Fill.PatternType = ExcelFillStyle.Solid;
-					worksheet.Cells["C" + lineNumber].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(37, 189, 89));
-					worksheet.Cells["C" + lineNumber].Style.Font.Color.SetColor(Color.White);
-					worksheet.Cells["C" + lineNumber].Style.Font.Name = "Sommet Rounded";
+					SetCellStyle(worksheet, "C", lineNumber, "Variables");
 
-					if (languageResourceBundle.Variables != null)
+					if (settings.VariablesChecked && languageResourceBundle.Variables != null)
 					{
 						foreach (var variable in languageResourceBundle.Variables.Items)
 						{
@@ -161,13 +150,9 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 					lineNumber = 1;
 
-					worksheet.Cells["D" + lineNumber].Value = "SegmentationRules";
-					worksheet.Cells["D" + lineNumber].Style.Fill.PatternType = ExcelFillStyle.Solid;
-					worksheet.Cells["D" + lineNumber].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(37, 189, 89));
-					worksheet.Cells["D" + lineNumber].Style.Font.Color.SetColor(Color.White);
-					worksheet.Cells["D" + lineNumber].Style.Font.Name = "Sommet Rounded";
+					SetCellStyle(worksheet, "D", lineNumber, "SegmentationRules");
 
-					if (languageResourceBundle.SegmentationRules != null)
+					if (settings.SegmentationRulesChecked && languageResourceBundle.SegmentationRules != null)
 					{
 						foreach (var segmentationRule in languageResourceBundle.SegmentationRules.Rules)
 						{
@@ -183,12 +168,90 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			}
 		}
 
-		public XmlDocument LoadDataFromFile(string filePath)
+		private static void SetCellStyle(ExcelWorksheet worksheet, string columnLetter, int lineNumber, string property)
 		{
-			var doc = new XmlDocument();
-			doc.Load(filePath);
+			worksheet.Cells[columnLetter + lineNumber].Value = property;
+			worksheet.Cells[columnLetter + lineNumber].Style.Fill.PatternType = ExcelFillStyle.Solid;
+			worksheet.Cells[columnLetter + lineNumber].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(37, 189, 89));
+			worksheet.Cells[columnLetter + lineNumber].Style.Font.Color.SetColor(Color.White);
+			worksheet.Cells[columnLetter + lineNumber].Style.Font.Name = "Sommet Rounded";
+		}
 
-			return doc;
+		private void AddNewBundles(FileBasedLanguageResourcesTemplate deserializedTemplate, List<LanguageResourceBundle> newLanguageResourceBundles)
+		{
+			foreach (var newBundle in newLanguageResourceBundles)
+			{
+				var correspondingBundleInTemplate = deserializedTemplate.LanguageResourceBundles[newBundle.Language];
+
+				//in case there is already a bundle for that culture, we need to go into more detail and see what to add and what is already there
+				if (correspondingBundleInTemplate != null)
+				{
+					if (newBundle.Abbreviations != null)
+					{
+						if (correspondingBundleInTemplate.Abbreviations != null)
+						{
+							AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Abbreviations");
+						}
+						else
+						{
+							correspondingBundleInTemplate.Abbreviations = new Wordlist(newBundle.Abbreviations);
+						}
+					}
+
+					if (newBundle.OrdinalFollowers != null)
+					{
+						if (correspondingBundleInTemplate.OrdinalFollowers != null)
+						{
+							AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "OrdinalFollowers");
+						}
+						else
+						{
+							correspondingBundleInTemplate.OrdinalFollowers = new Wordlist(newBundle.OrdinalFollowers);
+						}
+					}
+
+					if (newBundle.Variables != null)
+					{
+						if (correspondingBundleInTemplate.Variables != null)
+						{
+							AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Variables");
+						}
+						else
+						{
+							correspondingBundleInTemplate.Variables = new Wordlist(newBundle.Variables);
+						}
+					}
+
+					if (newBundle.SegmentationRules != null)
+					{
+						if (correspondingBundleInTemplate.SegmentationRules != null)
+						{
+							var newSegmentationRules = new SegmentationRules();
+							foreach (var newRule in newBundle.SegmentationRules.Rules)
+							{
+								if (correspondingBundleInTemplate.SegmentationRules.Rules.All(oldRule =>
+									string.Equals(newRule.Description.Text, oldRule.Description.Text,
+										StringComparison.OrdinalIgnoreCase)))
+								{
+									newSegmentationRules.AddRule(newRule);
+								}
+							}
+
+							correspondingBundleInTemplate.SegmentationRules.Rules.AddRange(newSegmentationRules.Rules);
+						}
+						else
+						{
+							correspondingBundleInTemplate.SegmentationRules =
+								new SegmentationRules(newBundle.SegmentationRules);
+						}
+					}
+				}
+				//otherwise, just add the newBundle
+				else
+				{
+					deserializedTemplate.LanguageResourceBundles.Add(newBundle);
+				}
+			}
 		}
 
 		private static void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle defaultOrOldTemplate, string property)
@@ -205,126 +268,11 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			}
 		}
 
-		private static string ConvertWordlistToBase64(LanguageResourceBundle defaultOrOldTemplate, string property)
-		{
-			var stringWriter = new Utf8StringWriter();
-
-			(typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod?.Invoke(defaultOrOldTemplate, null) as Wordlist)?.Save(stringWriter);
-
-			var bytesAbbreviations = Encoding.UTF8.GetBytes(stringWriter.ToString());
-			return Convert.ToBase64String(bytesAbbreviations);
-		}
-
-		private static string ConvertSegmentationRulesToBase64(SegmentationRules segmentationRulesToBeAdded)
-		{
-			var memoryStream = new MemoryStream();
-			segmentationRulesToBeAdded.Save(memoryStream);
-			return Convert.ToBase64String(memoryStream.ToArray());
-		}
-
 		private ExcelPackage GetExcelPackage(string filePath)
 		{
 			var fileInfo = new FileInfo(filePath);
 			var excelPackage = new ExcelPackage(fileInfo);
 			return excelPackage;
-		}
-
-		private void SaveToXml(string filePathTo, List<LanguageResourceBundle> newLanguageResourceBundles, List<LanguageResourceBundle> deserializedTemplate)
-		{
-			var serializedTemplate = LoadDataFromFile(filePathTo);
-			foreach (var newLanguageResourceBundle in newLanguageResourceBundles)
-			{
-				var currentCultureLcid = newLanguageResourceBundle.Language.LCID;
-				var defaultLanguageResourceProvider = GetDefaultResourceBundles(currentCultureLcid);
-
-				var languageResourceBundleFromTemplate = deserializedTemplate.FirstOrDefault(lrb => lrb.Language.LCID == currentCultureLcid);
-				//template to use and compare the new one with
-				var defaultOrOldTemplate = languageResourceBundleFromTemplate ?? defaultLanguageResourceProvider;
-
-				var node = serializedTemplate.SelectSingleNode(
-					$"/LanguageResourceGroup/LanguageResource[@Type='Abbreviations' and @Lcid='{currentCultureLcid.ToString()}']");
-				AddItemsToWordlist(newLanguageResourceBundle, defaultOrOldTemplate, "Abbreviations");
-				node?.ParentNode?.RemoveChild(node);
-
-				var xmlElement = CreateLanguageResourceNode(serializedTemplate, "Abbreviations", currentCultureLcid.ToString());
-				xmlElement.InnerText = ConvertWordlistToBase64(defaultOrOldTemplate, "Abbreviations");
-				serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
-
-				node = serializedTemplate.SelectSingleNode(
-					$"/LanguageResourceGroup/LanguageResource[@Type='OrdinalFollowers' and @Lcid='{currentCultureLcid.ToString()}']");
-				AddItemsToWordlist(newLanguageResourceBundle, defaultOrOldTemplate, "OrdinalFollowers");
-				node?.ParentNode?.RemoveChild(node);
-
-				xmlElement = CreateLanguageResourceNode(serializedTemplate, "OrdinalFollowers",
-					currentCultureLcid.ToString());
-				xmlElement.InnerText = ConvertWordlistToBase64(defaultOrOldTemplate, "OrdinalFollowers");
-				serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
-
-				node = serializedTemplate.SelectSingleNode(
-					$"/LanguageResourceGroup/LanguageResource[@Type='Variables' and @Lcid='{currentCultureLcid.ToString()}']");
-				AddItemsToWordlist(newLanguageResourceBundle, defaultOrOldTemplate, "Variables");
-				node?.ParentNode?.RemoveChild(node);
-
-				xmlElement = CreateLanguageResourceNode(serializedTemplate, "Variables", currentCultureLcid.ToString());
-				xmlElement.InnerText = ConvertWordlistToBase64(defaultOrOldTemplate, "Variables");
-				serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
-
-				//check if there are any segmentation rules to add (besides the default ones)
-				var segmentationRulesToBeAdded = new SegmentationRules();
-				foreach (var ruleA in newLanguageResourceBundle.SegmentationRules.Rules)
-				{
-					if (defaultOrOldTemplate.SegmentationRules.Rules.All(ruleB =>
-						!ruleA.Description.Text.Equals(ruleB.Description.Text, StringComparison.OrdinalIgnoreCase)))
-					{
-						segmentationRulesToBeAdded.AddRule(ruleA);
-					}
-				}
-
-				//add them if there are any
-				if (segmentationRulesToBeAdded.Count > 0)
-				{
-					node = serializedTemplate.SelectSingleNode(
-						$"/LanguageResourceGroup/LanguageResource[@Type='SegmentationRules' and @Lcid='{currentCultureLcid}']");
-
-					segmentationRulesToBeAdded.Rules.AddRange(defaultOrOldTemplate.SegmentationRules.Rules);
-					node?.ParentNode?.RemoveChild(node);
-
-					xmlElement = CreateLanguageResourceNode(serializedTemplate, "SegmentationRules",
-						currentCultureLcid.ToString());
-					xmlElement.InnerText = ConvertSegmentationRulesToBase64(segmentationRulesToBeAdded);
-					serializedTemplate.SelectSingleNode("/LanguageResourceGroup")?.AppendChild(xmlElement);
-				}
-			}
-
-			var xmlTextWriter = new XmlTextWriter(filePathTo, Encoding.UTF8) { Formatting = Formatting.None };
-			serializedTemplate.Save(xmlTextWriter);
-		}
-
-		private LanguageResourceBundle GetDefaultResourceBundles(int currentCultureLcid)
-		{
-			var defaultLanguageResourceProvider = new DefaultLanguageResourceProvider().GetDefaultLanguageResources(CultureInfoExtensions.GetCultureInfo(currentCultureLcid));
-
-			if (defaultLanguageResourceProvider.Abbreviations == null)
-			{
-				defaultLanguageResourceProvider.Abbreviations = new Wordlist();
-			}
-
-			if (defaultLanguageResourceProvider.OrdinalFollowers == null)
-			{
-				defaultLanguageResourceProvider.OrdinalFollowers = new Wordlist();
-			}
-
-			if (defaultLanguageResourceProvider.Variables == null)
-			{
-				defaultLanguageResourceProvider.Variables = new Wordlist();
-			}
-
-			if (defaultLanguageResourceProvider.SegmentationRules == null)
-			{
-				defaultLanguageResourceProvider.SegmentationRules = new SegmentationRules();
-			}
-
-			return defaultLanguageResourceProvider;
 		}
 
 		private void ReadFromExcel(ExcelWorksheet workSheet, Wordlist abbreviations, Wordlist ordinalFollowers, Wordlist variables, SegmentationRules segmentationRules)
@@ -354,15 +302,6 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				   !column02.ToString().Equals("OrdinalFollowers") &&
 				   !column03.ToString().Equals("Variables") &&
 				   !column04.ToString().Equals("SegmentationRules");
-		}
-
-		private XmlElement CreateLanguageResourceNode(XmlDocument langResFile, string type, string lcid)
-		{
-			var langResNode = langResFile.CreateElement("LanguageResource");
-			langResNode.SetAttribute("Type", type);
-			langResNode.SetAttribute("Lcid", lcid);
-
-			return langResNode;
 		}
 	}
 }
