@@ -59,33 +59,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 		public List<LanguageResourceBundle> GetLanguageResourceBundlesFromFile(string resourceTemplatePath, out string message, out List<int> unIDedLanguages)
 		{
-			message = "";
-			unIDedLanguages = new List<int>();
-
-			if (string.IsNullOrEmpty(resourceTemplatePath))
-			{
-				message = "Select a template";
-				return null;
-			}
-
-			if (!File.Exists(resourceTemplatePath))
-			{
-				message = "The file path of the template is not correct!";
-				return null;
-			}
-
-			if (Path.GetExtension(resourceTemplatePath) != ".resource")
-			{
-				message = @"The file is not of the required type, ""resource""";
-				return null;
-			}
-
-			var lrt = LoadDataFromFile(resourceTemplatePath, "LanguageResource");
-
-			if (lrt.Count == 0)
-			{
-				message = "This template is corrupted or the file is not a template";
-			}
+			if (ValidateFile(resourceTemplatePath, out message, out unIDedLanguages, out var lrt)) return null;
 
 			var langResBundlesList = new List<LanguageResourceBundle>();
 
@@ -122,6 +96,40 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			}
 
 			return langResBundlesList;
+		}
+
+		private bool ValidateFile(string resourceTemplatePath, out string message, out List<int> unIDedLanguages, out XmlNodeList lrt)
+		{
+			message = "";
+			unIDedLanguages = new List<int>();
+			lrt = null;
+
+			if (string.IsNullOrEmpty(resourceTemplatePath))
+			{
+				message = "Select a template";
+				return true;
+			}
+
+			if (!File.Exists(resourceTemplatePath))
+			{
+				message = "The file path of the template is not correct!";
+				return true;
+			}
+
+			if (Path.GetExtension(resourceTemplatePath) != ".resource")
+			{
+				message = @"The file is not of the required type, ""resource""";
+				return true;
+			}
+
+			lrt = LoadDataFromFile(resourceTemplatePath, "LanguageResource");
+
+			if (lrt.Count == 0)
+			{
+				message = "This template is corrupted or the file is not a template";
+			}
+
+			return false;
 		}
 
 		public XmlNodeList LoadDataFromFile(string filePath, string element)

@@ -38,39 +38,43 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			using (var package = GetExcelPackage(filePathFrom))
 			{
 				var newLanguageResourceBundles = new List<LanguageResourceBundle>();
-
-				foreach (var workSheet in package.Workbook.Worksheets)
-				{
-					var column01 = workSheet.Cells[1, 1].Value;
-					var column02 = workSheet.Cells[1, 2].Value;
-					var column03 = workSheet.Cells[1, 3].Value;
-					var column04 = workSheet.Cells[1, 4].Value;
-
-					if (AreColumnsValid(column01, column02, column03, column04)) return;
-
-					var abbreviations = new Wordlist();
-					var ordinalFollowers = new Wordlist();
-					var variables = new Wordlist();
-					var segmentationRules = new SegmentationRules();
-
-					ReadFromExcel(workSheet, abbreviations, ordinalFollowers, variables, segmentationRules);
-
-					var newLanguageResourceBundle =
-						new LanguageResourceBundle(CultureInfoExtensions.GetCultureInfo(workSheet.Name))
-						{
-							Abbreviations = abbreviations,
-							OrdinalFollowers = ordinalFollowers,
-							Variables = variables,
-							SegmentationRules = segmentationRules
-						};
-
-					newLanguageResourceBundles.Add(newLanguageResourceBundle);
-				}
-				ExcludeWhatIsNotNeeded(newLanguageResourceBundles, settings);
-				AddNewBundles(deserializedTemplate, newLanguageResourceBundles);
+				NewMethod(settings, deserializedTemplate, package, newLanguageResourceBundles);
 
 				deserializedTemplate.SaveAs(filePathTo);
 			}
+		}
+
+		private void NewMethod(Settings settings, FileBasedLanguageResourcesTemplate deserializedTemplate, ExcelPackage package, List<LanguageResourceBundle> newLanguageResourceBundles)
+		{
+			foreach (var workSheet in package.Workbook.Worksheets)
+			{
+				var column01 = workSheet.Cells[1, 1].Value;
+				var column02 = workSheet.Cells[1, 2].Value;
+				var column03 = workSheet.Cells[1, 3].Value;
+				var column04 = workSheet.Cells[1, 4].Value;
+
+				if (AreColumnsValid(column01, column02, column03, column04)) return;
+
+				var abbreviations = new Wordlist();
+				var ordinalFollowers = new Wordlist();
+				var variables = new Wordlist();
+				var segmentationRules = new SegmentationRules();
+
+				ReadFromExcel(workSheet, abbreviations, ordinalFollowers, variables, segmentationRules);
+
+				var newLanguageResourceBundle =
+					new LanguageResourceBundle(CultureInfoExtensions.GetCultureInfo(workSheet.Name))
+					{
+						Abbreviations = abbreviations,
+						OrdinalFollowers = ordinalFollowers,
+						Variables = variables,
+						SegmentationRules = segmentationRules
+					};
+
+				newLanguageResourceBundles.Add(newLanguageResourceBundle);
+			}
+			ExcludeWhatIsNotNeeded(newLanguageResourceBundles, settings);
+			AddNewBundles(deserializedTemplate, newLanguageResourceBundles);
 		}
 
 		public void ExcludeWhatIsNotNeeded(List<LanguageResourceBundle> languageResourceBundles, Settings settings)
@@ -186,65 +190,10 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				//in case there is already a bundle for that culture, we need to go into more detail and see what to add and what is already there
 				if (correspondingBundleInTemplate != null)
 				{
-					if (newBundle.Abbreviations != null)
-					{
-						if (correspondingBundleInTemplate.Abbreviations != null)
-						{
-							AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Abbreviations");
-						}
-						else
-						{
-							correspondingBundleInTemplate.Abbreviations = new Wordlist(newBundle.Abbreviations);
-						}
-					}
-
-					if (newBundle.OrdinalFollowers != null)
-					{
-						if (correspondingBundleInTemplate.OrdinalFollowers != null)
-						{
-							AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "OrdinalFollowers");
-						}
-						else
-						{
-							correspondingBundleInTemplate.OrdinalFollowers = new Wordlist(newBundle.OrdinalFollowers);
-						}
-					}
-
-					if (newBundle.Variables != null)
-					{
-						if (correspondingBundleInTemplate.Variables != null)
-						{
-							AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Variables");
-						}
-						else
-						{
-							correspondingBundleInTemplate.Variables = new Wordlist(newBundle.Variables);
-						}
-					}
-
-					if (newBundle.SegmentationRules != null)
-					{
-						if (correspondingBundleInTemplate.SegmentationRules != null)
-						{
-							var newSegmentationRules = new SegmentationRules();
-							foreach (var newRule in newBundle.SegmentationRules.Rules)
-							{
-								if (correspondingBundleInTemplate.SegmentationRules.Rules.All(oldRule =>
-									string.Equals(newRule.Description.Text, oldRule.Description.Text,
-										StringComparison.OrdinalIgnoreCase)))
-								{
-									newSegmentationRules.AddRule(newRule);
-								}
-							}
-
-							correspondingBundleInTemplate.SegmentationRules.Rules.AddRange(newSegmentationRules.Rules);
-						}
-						else
-						{
-							correspondingBundleInTemplate.SegmentationRules =
-								new SegmentationRules(newBundle.SegmentationRules);
-						}
-					}
+					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Abbreviations");
+					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "OrdinalFollowers");
+					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Variables");
+					AddSegmentationRulesToBundle(newBundle, correspondingBundleInTemplate);
 				}
 				//otherwise, just add the newBundle
 				else
@@ -254,17 +203,49 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			}
 		}
 
-		private static void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle defaultOrOldTemplate, string property)
+		private static void AddSegmentationRulesToBundle(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
 		{
-			var getterOfDefaultOrOldTemplate = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(defaultOrOldTemplate, null) as Wordlist);
-			var getterOfNewLanguageResourceBundle = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(newLanguageResourceBundle, null) as Wordlist);
-
-			if (getterOfNewLanguageResourceBundle != null && getterOfNewLanguageResourceBundle.Items.Any())
+			if (newBundle.SegmentationRules == null) return;
+			if (correspondingBundleInTemplate.SegmentationRules != null)
 			{
-				foreach (var abbrev in getterOfNewLanguageResourceBundle.Items)
+				var newSegmentationRules = new SegmentationRules();
+				foreach (var newRule in newBundle.SegmentationRules.Rules)
 				{
-					getterOfDefaultOrOldTemplate?.Add(abbrev);
+					if (correspondingBundleInTemplate.SegmentationRules.Rules.All(oldRule =>
+						string.Equals(newRule.Description.Text, oldRule.Description.Text,
+							StringComparison.OrdinalIgnoreCase)))
+					{
+						newSegmentationRules.AddRule(newRule);
+					}
 				}
+
+				correspondingBundleInTemplate.SegmentationRules.Rules.AddRange(newSegmentationRules.Rules);
+			}
+			else
+			{
+				correspondingBundleInTemplate.SegmentationRules =
+					new SegmentationRules(newBundle.SegmentationRules);
+			}
+		}
+
+		private static void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle template, string property)
+		{
+			var templateBundleGetter = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(template, null) as Wordlist);
+			var templateBundleSetter = typeof(LanguageResourceBundle).GetProperty(property)?.SetMethod;
+			var newBundleGetter = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(newLanguageResourceBundle, null) as Wordlist);
+
+			if (newBundleGetter == null || !newBundleGetter.Items.Any()) return;
+
+			if (templateBundleGetter != null && templateBundleGetter.Items.Any())
+			{
+				foreach (var abbrev in newBundleGetter.Items)
+				{
+					templateBundleGetter.Add(abbrev);
+				}
+			}
+			else
+			{
+				templateBundleSetter?.Invoke(template, new [] {new Wordlist(newBundleGetter)});
 			}
 		}
 
