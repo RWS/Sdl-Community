@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
-	  <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-	  <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B008D046-5127-4120-A5BA-41E4E27F35A8}</ProjectGuid>
@@ -211,8 +211,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EditCollection.cs" />
+    <Compile Include="Model\Error.cs" />
     <Compile Include="Model\LanguageDetails.cs" />
     <Compile Include="Model\LanguageResponse.cs" />
+    <Compile Include="Model\ResponseMessage.cs" />
     <Compile Include="Model\TagInfo.cs" />
     <Compile Include="Model\Translation.cs" />
     <Compile Include="Model\TranslationDetails.cs" />
