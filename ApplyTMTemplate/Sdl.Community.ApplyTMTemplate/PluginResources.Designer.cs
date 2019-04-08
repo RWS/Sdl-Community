@@ -19,7 +19,7 @@ namespace Sdl.Community.ApplyTMTemplate {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -194,6 +194,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No languages could be identified.
+        /// </summary>
+        internal static string No_Languages_IDed {
+            get {
+                return ResourceManager.GetString("No_Languages_IDed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  select the folder containing the TMs.
         /// </summary>
         internal static string Please_select_the_folder_containing_the_TMs {
@@ -251,6 +260,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a template.
+        /// </summary>
+        internal static string Select_A_Template {
+            get {
+                return ResourceManager.GetString("Select_A_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select at least one TM.
         /// </summary>
         internal static string Select_at_least_one_TM {
@@ -265,6 +283,33 @@ namespace Sdl.Community.ApplyTMTemplate {
         internal static string Success_Window_Title {
             get {
                 return ResourceManager.GetString("Success_Window_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This template is corrupted or the file is not a template.
+        /// </summary>
+        internal static string Template_corrupted_or_file_not_template {
+            get {
+                return ResourceManager.GetString("Template_corrupted_or_file_not_template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file path of the template is not correct!.
+        /// </summary>
+        internal static string Template_filePath_Not_Correct {
+            get {
+                return ResourceManager.GetString("Template_filePath_Not_Correct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file is not of the required type.
+        /// </summary>
+        internal static string The_file_is_not_of_the_required_type {
+            get {
+                return ResourceManager.GetString("The_file_is_not_of_the_required_type", resourceCulture);
             }
         }
         
@@ -288,11 +333,11 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warning.
+        ///   Looks up a localized string similar to Warning regarding the template.
         /// </summary>
-        internal static string Warning_Window_Title {
+        internal static string Warning_Window_Title_Template {
             get {
-                return ResourceManager.GetString("Warning_Window_Title", resourceCulture);
+                return ResourceManager.GetString("Warning_Window_Title_Template", resourceCulture);
             }
         }
     }
