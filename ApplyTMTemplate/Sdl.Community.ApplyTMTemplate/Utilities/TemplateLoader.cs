@@ -117,12 +117,6 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				return true;
 			}
 
-			if (Path.GetExtension(resourceTemplatePath) != ".resource")
-			{
-				message = PluginResources.The_file_is_not_of_the_required_type +  @"""resource""";
-				return true;
-			}
-
 			lrt = LoadDataFromFile(resourceTemplatePath, "LanguageResource");
 
 			if (lrt.Count == 0)

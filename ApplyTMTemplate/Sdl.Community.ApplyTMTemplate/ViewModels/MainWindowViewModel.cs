@@ -369,30 +369,30 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 				var result = dlg.ShowDialog();
 
-				if (result ?? false)
+				if (!(result ?? false)) return;
+
+				ProgressVisibility = "Visible";
+				try
 				{
-					ProgressVisibility = "Visible";
 					await Task.Run(() =>
 					{
 						if (dlg.FileName.Contains(".xlsx"))
 						{
-							try
-							{
-								_importExportService.ImportResourcesFromExcel(dlg.FileName, ResourceTemplatePath, settings, _template);
-							}
-							catch (Exception e)
-							{
-								_dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title,
-									e.Message);
-							}
+							_importExportService.ImportResourcesFromExcel(dlg.FileName, ResourceTemplatePath, settings, _template);
 						}
 					});
-
-					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title,
-						PluginResources.Resources_Imported_Successfully);
+				}
+				catch (Exception e)
+				{
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title, e.Message);
 
 					ProgressVisibility = "Hidden";
+					return;
 				}
+
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
+
+				ProgressVisibility = "Hidden";
 			}
 			else
 			{
@@ -400,26 +400,26 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
 				if (selectedTmList.Count > 0)
 				{
-					await Task.Run(() =>
+					try
 					{
-						try
+						await Task.Run(() =>
 						{
-							_importExportService.ImportResourcesFromSdltm(selectedTmList, settings,
-								ResourceTemplatePath, _template);
-						}
-						catch (Exception e)
-						{
-							_dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title, e.Message);
-						}
-					});
+							_importExportService.ImportResourcesFromSdltm(selectedTmList, settings, ResourceTemplatePath, _template);
+						});
+					}
+					catch (Exception e)
+					{
+						await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title, e.Message);
 
-					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title,
-						PluginResources.Resources_Imported_Successfully);
+						ProgressVisibility = "Hidden";
+						return;
+					}
+
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
 				}
 				else
 				{
-					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title,
-						PluginResources.Select_at_least_one_TM);
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Select_at_least_one_TM);
 				}
 
 				ProgressVisibility = "Hidden";
@@ -477,7 +477,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			var dlg = new OpenFileDialog
 			{
-				Filter = "Language resource templates|*.resource",
+				Filter = "Language resource templates|*.sdltm.resource",
 			};
 
 			var result = dlg.ShowDialog();

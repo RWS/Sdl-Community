@@ -18,7 +18,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 
 	    public override void Execute()
 	    {
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/");
+			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/4567.applytm-template");
 		}
 
 	    public override bool IsAvailable => true;

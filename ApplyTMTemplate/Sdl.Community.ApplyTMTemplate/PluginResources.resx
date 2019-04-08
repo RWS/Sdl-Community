@@ -208,4 +208,7 @@
   <data name="The_file_is_not_of_the_required_type" xml:space="preserve">
     <value>The file is not of the required type</value>
   </data>
+  <data name="Excel_spreadsheet_not_in_correct_format" xml:space="preserve">
+    <value>The excel document is not in the correct format</value>
+  </data>
 </root>

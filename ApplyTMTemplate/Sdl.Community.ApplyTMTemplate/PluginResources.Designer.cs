@@ -129,6 +129,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The excel document is not in the correct format.
+        /// </summary>
+        internal static string Excel_spreadsheet_not_in_correct_format {
+            get {
+                return ResourceManager.GetString("Excel_spreadsheet_not_in_correct_format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export language resources.
         /// </summary>
         internal static string Export_language_resources {
