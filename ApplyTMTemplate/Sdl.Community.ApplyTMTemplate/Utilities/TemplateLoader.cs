@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
+using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Segmentation;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -40,23 +41,6 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 		public string DefaultPath { get; set; }
 
-		public string GetTmTemplateFolderPath()
-		{
-			var data = LoadDataFromFile(_path, "Setting");
-
-			foreach (XmlNode setting in data)
-			{
-				var id = setting?.Attributes?["Id"];
-
-				if (id?.Value == "RecentLanguageResourceGroupFolder")
-				{
-					return setting.InnerText;
-				}
-			}
-
-			return DefaultPath;
-		}
-
 		public string GetTmFolderPath()
 		{
 			var data = LoadDataFromFile(_path, "Setting");
@@ -76,72 +60,77 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 		public List<LanguageResourceBundle> GetLanguageResourceBundlesFromFile(string resourceTemplatePath, out string message, out List<int> unIDedLanguages)
 		{
-			message = "";
-			unIDedLanguages = new List<int>();
-
-			if (string.IsNullOrEmpty(resourceTemplatePath))
-			{
-				message = "Select a template";
-				return null;
-			}
-
-			if (!File.Exists(resourceTemplatePath))
-			{
-				message = "The file path of the template is not correct!";
-				return null;
-			}
-
-			if (Path.GetExtension(resourceTemplatePath) != ".resource")
-			{
-				message = @"The file is not of the required type, ""resource""";
-				return null;
-			}
-
-			var lrt = LoadDataFromFile(resourceTemplatePath, "LanguageResource");
-
-			if (lrt.Count == 0)
-			{
-				message = "This template is corrupted or the file is not a template";
-			}
+			if (ValidateFile(resourceTemplatePath, out message, out unIDedLanguages, out var lrt)) return null;
 
 			var langResBundlesList = new List<LanguageResourceBundle>();
-			var defaultLangResProvider = new DefaultLanguageResourceProvider();
 
 			foreach (XmlNode res in lrt)
 			{
 				var successful = int.TryParse(res?.Attributes?["Lcid"]?.Value, out var lcid);
 
-				if (successful)
+				if (!successful) continue;
+				var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == lcid);
+
+				if (lr == null)
 				{
-					var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == lcid);
+					CultureInfo culture;
 
-					if (lr == null)
+					try
 					{
-						CultureInfo culture;
-
-						try
+						culture = CultureInfoExtensions.GetCultureInfo(lcid);
+						if (CultureInfo.GetCultures(CultureTypes.AllCultures).Where(ci => ci.LCID == lcid).ToList().Count > 1) throw new Exception();
+					}
+					catch (Exception)
+					{
+						if (!unIDedLanguages.Exists(id => id == lcid))
 						{
-							culture = CultureInfoExtensions.GetCultureInfo(lcid);
-							if (CultureInfo.GetCultures(CultureTypes.AllCultures).Where(ci => ci.LCID == lcid).ToList().Count > 1) throw new Exception();
+							unIDedLanguages.Add(lcid);
 						}
-						catch (Exception)
-						{
-							if (!unIDedLanguages.Exists(id => id == lcid))
-							{
-								unIDedLanguages.Add(lcid);
-							}
-							continue;
-						}
-
-						lr = defaultLangResProvider.GetDefaultLanguageResources(culture);
-						langResBundlesList.Add(lr);
+						continue;
 					}
 
-					AddLanguageResourceToBundle(lr, res);
+					lr = new LanguageResourceBundle(culture);
+					langResBundlesList.Add(lr);
 				}
+
+				AddLanguageResourceToBundle(lr, res);
 			}
 
 			return langResBundlesList;
+		}
+
+		private bool ValidateFile(string resourceTemplatePath, out string message, out List<int> unIDedLanguages, out XmlNodeList lrt)
+		{
+			message = "";
+			unIDedLanguages = new List<int>();
+			lrt = null;
+
+			if (string.IsNullOrEmpty(resourceTemplatePath))
+			{
+				message = PluginResources.Select_A_Template;
+				return true;
+			}
+
+			if (!File.Exists(resourceTemplatePath))
+			{
+				message = PluginResources.Template_filePath_Not_Correct;
+				return true;
+			}
+
+			if (Path.GetExtension(resourceTemplatePath) != ".resource")
+			{
+				message = PluginResources.The_file_is_not_of_the_required_type +  @"""resource""";
+				return true;
+			}
+
+			lrt = LoadDataFromFile(resourceTemplatePath, "LanguageResource");
+
+			if (lrt.Count == 0)
+			{
+				message = PluginResources.Template_corrupted_or_file_not_template;
+			}
+
+			return false;
 		}
 
 		public XmlNodeList LoadDataFromFile(string filePath, string element)
@@ -155,59 +144,22 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 		private void AddLanguageResourceToBundle(LanguageResourceBundle langResBundle, XmlNode resource)
 		{
-			switch (resource?.Attributes?["Type"].Value)
+			var allResourceTypes = new List<string>() { "Variables" , "Abbreviations", "OrdinalFollowers" };
+			
+			var resourceAdder = new Resource();
+			foreach (var resourceType in allResourceTypes)
 			{
-				case "Variables":
-					{
-						var vars = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
-
-						langResBundle.Variables = new Wordlist();
-
-						foreach (Match s in Regex.Matches(vars, @"([^\s]+)"))
-						{
-							langResBundle.Variables.Add(s.ToString());
-						}
-
-						return;
-					}
-				case "Abbreviations":
-					{
-						var abbrevs = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
-
-						langResBundle.Abbreviations = new Wordlist();
-
-						foreach (Match s in Regex.Matches(abbrevs, @"([^\s]+)"))
-						{
-							langResBundle.Abbreviations.Add(s.ToString());
-						}
-
-						return;
-					}
-				case "OrdinalFollowers":
-					{
-						var ordFollowers = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
-
-						langResBundle.OrdinalFollowers = new Wordlist();
-
-						foreach (Match s in Regex.Matches(ordFollowers, @"([^\s]+)"))
-						{
-							langResBundle.OrdinalFollowers.Add(s.ToString());
-						}
-
-						return;
-					}
-				case "SegmentationRules":
-					{
-						var segRules = Encoding.UTF8.GetString(Convert.FromBase64String(resource.InnerText));
-
-						var xmlSerializer = new XmlSerializer(typeof(SegmentationRules));
-
-						var stringReader = new StringReader(segRules);
-						var segmentRules = (SegmentationRules)xmlSerializer.Deserialize(stringReader);
-
-						langResBundle.SegmentationRules = segmentRules;
-						break;
-					}
+				if (resourceType == resource?.Attributes?["Type"].Value)
+				{
+					resourceAdder.SetResourceType(new WordlistResource(resource, resourceType));
+					resourceAdder.AddLanguageResourceToBundle(langResBundle);
+				}
+			}
+			
+			if (resource?.Attributes?["Type"].Value == "SegmentationRules")
+			{
+				resourceAdder.SetResourceType(new SegmentationRulesResource(resource));
+				resourceAdder.AddLanguageResourceToBundle(langResBundle);
 			}
 		}
 	}

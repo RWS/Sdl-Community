@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,7 +44,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private ICommand _dragEnterCommand;
 		private ICommand _removeTMsCommand;
 		private ObservableCollection<TranslationMemory> _tmCollection;
-		private List<LanguageResourceBundle> _langResBundlesList;
+		private FileBasedLanguageResourcesTemplate _template;
 		private List<int> _unIDedLanguagess;
 
 		private ExcelImportExportService _importExportService;
@@ -63,8 +64,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			_progressVisibility = "Hidden";
 
 			_tmCollection = new ObservableCollection<TranslationMemory>();
-
-			_resourceTemplatePath = _templateLoader.GetTmTemplateFolderPath();
 
 			_importExportService = new ExcelImportExportService();
 		}
@@ -268,59 +267,79 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void LoadResourcesFromTemplate()
 		{
-			_langResBundlesList = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out _message, out _unIDedLanguagess);
+			var languageResourceBundles = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out _message, out _unIDedLanguagess);
+
+			CreateTemplateObjectFromBundles(languageResourceBundles);
+		}
+
+		private void CreateTemplateObjectFromBundles(List<LanguageResourceBundle> languageResourceBundles)
+		{
+			if (languageResourceBundles == null) return;
+
+			_template = new FileBasedLanguageResourcesTemplate();
+
+			foreach (var bundle in languageResourceBundles)
+			{
+				_template.LanguageResourceBundles.Add(bundle);
+			}
 		}
 
 		private async void ApplyTmTemplate()
 		{
 			LoadResourcesFromTemplate();
 
-			if (await ValidateAndShowErrors()) return;
+			if (!await ValidateTemplateAndShowErrors()) return;
 
 			var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
 			UnMarkTms(selectedTmList);
 
 			if (selectedTmList.Count == 0)
 			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, PluginResources.Select_at_least_one_TM);
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title_Template, PluginResources.Select_at_least_one_TM);
 				return;
 			}
 
-			var template = new Template(_langResBundlesList);
+			var template = new Template(_template);
 
-			var options = new Options
-			{
-				AbbreviationsChecked = AbbreviationsChecked,
-				VariablesChecked = VariablesChecked,
-				OrdinalFollowersChecked = OrdinalFollowersChecked,
-				SegmentationRulesChecked = SegmentationRulesChecked
-			};
+			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
 
 			ProgressVisibility = "Visible";
-			await Task.Run(() => template.ApplyTmTemplate(selectedTmList, options));
+			await Task.Run(() => template.ApplyTmTemplate(selectedTmList, settings));
 			ProgressVisibility = "Hidden";
 		}
 
-		private async Task<bool> ValidateAndShowErrors()
+		private async Task<bool> ValidateTemplateAndShowErrors()
 		{
-			if (_langResBundlesList == null || _langResBundlesList.Count == 0)
+			var isValid = true;
+
+			var unIDedLanguages = _unIDedLanguagess?.Aggregate("", (i, j) => i + "\n  \u2022" + j);
+
+			if (_template == null || _template.LanguageResourceBundles.Count == 0)
 			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, _message);
-				return true;
+				isValid = false;
+
+				if (!string.IsNullOrEmpty(unIDedLanguages))
+				{
+					_message = $"{PluginResources.No_Languages_IDed}\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}";
+				}
+			}
+			else
+			{
+				if (!string.IsNullOrEmpty(unIDedLanguages))
+				{
+					var idedLanguages = _template.LanguageResourceBundles.Aggregate("", (l, j) => l + "\n  \u2022" + j.LanguageCode);
+					_message = $"{PluginResources.Identified_Languages}{idedLanguages}" +
+					           $"\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}";
+				}
 			}
 
-			//transform the list of unIDedLanguages and idedLanguages into two strings, respectively
-			var idedLanguages = _langResBundlesList.Aggregate("", (l, j) => l + "\n  \u2022" + j.LanguageCode);
-			var unIDedLanguages = _unIDedLanguagess.Aggregate("", (i, j) => i + "\n  \u2022" + j);
-
-			if (unIDedLanguages != "")
+			if (!string.IsNullOrEmpty(unIDedLanguages) || !isValid)
 			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title,
-					$"{PluginResources.Identified_Languages}{idedLanguages}" +
-					$"\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}");
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title_Template,
+					_message);
 			}
 
-			return false;
+			return isValid;
 		}
 
 		private void UnMarkTms(List<TranslationMemory> tms)
@@ -336,7 +355,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			LoadResourcesFromTemplate();
 
-			if (await ValidateAndShowErrors()) return;
+			if (!await ValidateTemplateAndShowErrors()) return;
 
 			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
 
@@ -359,7 +378,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 						{
 							try
 							{
-								_importExportService.ImportResourcesFromExcel(dlg.FileName, ResourceTemplatePath, settings, _langResBundlesList);
+								_importExportService.ImportResourcesFromExcel(dlg.FileName, ResourceTemplatePath, settings, _template);
 							}
 							catch (Exception e)
 							{
@@ -379,21 +398,29 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			{
 				ProgressVisibility = "Visible";
 				var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
-				await Task.Run(() =>
+				if (selectedTmList.Count > 0)
 				{
-					try
+					await Task.Run(() =>
 					{
-						_importExportService.ImportResourcesFromSDLTM(selectedTmList, settings, ResourceTemplatePath, _langResBundlesList);
-					}
-					catch (Exception e)
-					{
-						_dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title,
-							e.Message);
-					}
-				});
+						try
+						{
+							_importExportService.ImportResourcesFromSdltm(selectedTmList, settings,
+								ResourceTemplatePath, _template);
+						}
+						catch (Exception e)
+						{
+							_dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title, e.Message);
+						}
+					});
 
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title,
-					PluginResources.Resources_Imported_Successfully);
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title,
+						PluginResources.Resources_Imported_Successfully);
+				}
+				else
+				{
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title,
+						PluginResources.Select_at_least_one_TM);
+				}
 
 				ProgressVisibility = "Hidden";
 			}
@@ -403,14 +430,16 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			LoadResourcesFromTemplate();
 
-			if (await ValidateAndShowErrors()) return;
+			if (!await ValidateTemplateAndShowErrors()) return;
+
+			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
 
 			var dlg = new SaveFileDialog
 			{
 				Title = PluginResources.Export_language_resources,
 				Filter = @"Excel |*.xlsx",
 				FileName = PluginResources.Exported_filename,
-				AddExtension = true
+				AddExtension = false
 			};
 
 			var result = dlg.ShowDialog();
@@ -429,13 +458,13 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				catch (Exception e)
 				{
 					filePath = CreateNewFile(filePath);
-					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title, $"{e.Message}\n\n{PluginResources.A_new_file_created}: {filePath}");
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title_Template, $"{e.Message}\n\n{PluginResources.A_new_file_created}: {filePath}");
 				}
 			}
 
 			await Task.Run(() =>
 			{
-				_importExportService.ExportResources(_langResBundlesList, filePath);
+				_importExportService.ExportResources(_template, filePath, settings);
 			});
 
 			await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Report_generated_successfully);
@@ -449,9 +478,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			var dlg = new OpenFileDialog
 			{
 				Filter = "Language resource templates|*.resource",
-				InitialDirectory = ResourceTemplatePath.Contains(".")
-					? ResourceTemplatePath.Substring(0, ResourceTemplatePath.LastIndexOf('\\') + 1)
-					: ResourceTemplatePath
 			};
 
 			var result = dlg.ShowDialog();
