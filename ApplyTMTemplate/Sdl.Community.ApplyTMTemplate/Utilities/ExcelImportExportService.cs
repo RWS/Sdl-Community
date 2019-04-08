@@ -38,13 +38,13 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			using (var package = GetExcelPackage(filePathFrom))
 			{
 				var newLanguageResourceBundles = new List<LanguageResourceBundle>();
-				NewMethod(settings, deserializedTemplate, package, newLanguageResourceBundles);
+				ReadFromExcel(settings, deserializedTemplate, package, newLanguageResourceBundles);
 
 				deserializedTemplate.SaveAs(filePathTo);
 			}
 		}
 
-		private void NewMethod(Settings settings, FileBasedLanguageResourcesTemplate deserializedTemplate, ExcelPackage package, List<LanguageResourceBundle> newLanguageResourceBundles)
+		private void ReadFromExcel(Settings settings, FileBasedLanguageResourcesTemplate deserializedTemplate, ExcelPackage package, List<LanguageResourceBundle> newLanguageResourceBundles)
 		{
 			foreach (var workSheet in package.Workbook.Worksheets)
 			{
@@ -223,8 +223,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			}
 			else
 			{
-				correspondingBundleInTemplate.SegmentationRules =
-					new SegmentationRules(newBundle.SegmentationRules);
+				correspondingBundleInTemplate.SegmentationRules = new SegmentationRules(newBundle.SegmentationRules);
 			}
 		}
 

@@ -268,6 +268,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private void LoadResourcesFromTemplate()
 		{
 			var languageResourceBundles = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out _message, out _unIDedLanguagess);
+
+			CreateTemplateObjectFromBundles(languageResourceBundles);
+		}
+
+		private void CreateTemplateObjectFromBundles(List<LanguageResourceBundle> languageResourceBundles)
+		{
+			if (languageResourceBundles == null) return;
+
 			_template = new FileBasedLanguageResourcesTemplate();
 
 			foreach (var bundle in languageResourceBundles)

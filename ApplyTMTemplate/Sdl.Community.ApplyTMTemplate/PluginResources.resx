@@ -199,4 +199,13 @@
   <data name="Select_A_Template" xml:space="preserve">
     <value>Select a template</value>
   </data>
+  <data name="Template_corrupted_or_file_not_template" xml:space="preserve">
+    <value>This template is corrupted or the file is not a template</value>
+  </data>
+  <data name="Template_filePath_Not_Correct" xml:space="preserve">
+    <value>The file path of the template is not correct!</value>
+  </data>
+  <data name="The_file_is_not_of_the_required_type" xml:space="preserve">
+    <value>The file is not of the required type</value>
+  </data>
 </root>
