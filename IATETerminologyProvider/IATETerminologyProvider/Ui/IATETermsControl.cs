@@ -20,7 +20,7 @@ namespace IATETerminologyProvider.Ui
 
 		public IATETermsControl()
 		{
-			InitializeComponent();
+			InitializeComponent();		
 		}
 
 		public IATETermsControl(IATETerminologyProvider iateTerminologyProvider) : this()

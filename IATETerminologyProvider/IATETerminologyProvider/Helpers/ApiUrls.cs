@@ -1,4 +1,6 @@
-﻿namespace IATETerminologyProvider.Helpers
+﻿using System.Web;
+
+namespace IATETerminologyProvider.Helpers
 {
 	public class ApiUrls
 	{
@@ -27,14 +29,18 @@
 			return @"https://iate.europa.eu//em-api/inventories/_term-types?expand=" + expand + "&trans_lang=" + trans_lang + "&limit=" + limit + "&offset=" + offset;
 		}
 
-		public static string SearchAllURI(string currentSelection, string sourceLanguage)
+		public static string SearchAllUri(string currentSelection, string sourceLanguage)
 		{
-			return @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=all";
+			var encodedString = HttpUtility.UrlEncode(currentSelection);			
+			var uri = @"http://iate.europa.eu/search/byUrl?term=" + encodedString + "&sl=" + sourceLanguage + "&tl=all";						
+			return uri;
 		}
 
-		public static string SearchSourceTargetURI(string currentSelection, string sourceLanguage, string targetLanguage)
+		public static string SearchSourceTargetUri(string currentSelection, string sourceLanguage, string targetLanguage)
 		{
-			return @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=" + targetLanguage;
+			var encodedString = HttpUtility.UrlEncode(currentSelection);
+			var uri = @"http://iate.europa.eu/search/byUrl?term=" + encodedString + "&sl=" + sourceLanguage + "&tl=" + targetLanguage;			
+			return uri;
 		}
 	}
 }

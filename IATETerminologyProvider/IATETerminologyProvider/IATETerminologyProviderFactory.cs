@@ -5,7 +5,7 @@ using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace IATETerminologyProvider
 {
-	[TerminologyProviderFactory(Id = "IATETerminologyProvider",	Name = "IATE Terminology Provider", Description = "IATE terminology provider factory")]
+	[TerminologyProviderFactory(Id = "IATETerminologyProvider",	Name = "IATE Terminology Provider", Icon= "Iate_logo", Description = "IATE terminology provider factory")]
 	public class IATETerminologyProviderFactory : ITerminologyProviderFactory
 	{				
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)

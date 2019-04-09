@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+		Icon="../Resources/IATE_settings.ico"
 		Title="IATE terminology provider settings"
 		WindowStartupLocation="CenterScreen"
         Height="610" Width="800" ResizeMode="NoResize">
@@ -16,18 +17,15 @@
 	</Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="20"></RowDefinition>
-			<RowDefinition Height="338"></RowDefinition>
-			<RowDefinition Height="25"></RowDefinition>
-			<RowDefinition Height="158"></RowDefinition>
-			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="2*"/>
+			<RowDefinition Height="25"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-		</Grid.ColumnDefinitions>
-
-		<TextBlock Grid.Row="0" Grid.Column="0" Margin="10 5 0 0"> Select domain(s):</TextBlock>
-		<DataGrid  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="2 8 0 0" AutoGenerateColumns="False" 
+		
+		<TextBlock Grid.Row="0" Margin="10 5 0 0"> Select domain(s):</TextBlock>
+		<DataGrid  Grid.Row="1" Margin="10,5,10,10" AutoGenerateColumns="False" 
                   ItemsSource="{Binding Domains, Mode=TwoWay,
                   UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True,IsAsync=True}"                
                   SelectionMode ="Extended"
@@ -56,8 +54,8 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
-		<TextBlock Grid.Row="2" Grid.Column="0" Margin="10,5,0,0">Select term type(s):</TextBlock>
-		<DataGrid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="2 10 0 0" AutoGenerateColumns="False" 
+		<TextBlock Grid.Row="2" Margin="10,5,0,0">Select term type(s):</TextBlock>
+		<DataGrid Grid.Row="3" Margin="10,5,10,10" AutoGenerateColumns="False" 
                   ItemsSource="{Binding TermTypes, Mode=TwoWay,
                   UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True,IsAsync=True}"                
                   SelectionMode ="Extended"
@@ -86,11 +84,12 @@
 					</DataGridTextColumn>
 				</DataGrid.Columns>
 		</DataGrid>
-		<Button  Grid.Row="4" Grid.Column="0"  
-                 Cursor="Hand"
+
+		<Button Grid.Row="4" 
+                 Cursor="Hand" Height="24"
 	             Command="{Binding SaveSettingsCommand}" 
                  HorizontalAlignment="Right"
-	             FontFamily="Segoe UI" Content="Save Settings" VerticalAlignment="Bottom" Margin="0,5,5,20" Width="120">
+	             FontFamily="Segoe UI" Content="Save Settings" VerticalAlignment="Bottom" Margin="10" Width="120">
 		</Button>			
 	</Grid>
 </Window>

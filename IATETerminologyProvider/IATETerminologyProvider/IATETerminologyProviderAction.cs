@@ -37,12 +37,12 @@ namespace IATETerminologyProvider
 					if (activeDocument.FocusedDocumentContent.Equals(FocusedDocumentContent.Target))
 					{
 						// inverse the languages in case user wants to navigate to a term/phrase selected from the target segment
-						url = isSearchAll ? ApiUrls.SearchAllURI(currentSelection, targetLanguage) : ApiUrls.SearchSourceTargetURI(currentSelection, targetLanguage, sourceLanguage);
+						url = isSearchAll ? ApiUrls.SearchAllUri(currentSelection, targetLanguage) : ApiUrls.SearchSourceTargetUri(currentSelection, targetLanguage, sourceLanguage);
 					}
 					else
 					{
 						// set the language from the source side of the editor
-						url = isSearchAll ? ApiUrls.SearchAllURI(currentSelection, sourceLanguage) : ApiUrls.SearchSourceTargetURI(currentSelection, sourceLanguage, targetLanguage);
+						url = isSearchAll ? ApiUrls.SearchAllUri(currentSelection, sourceLanguage) : ApiUrls.SearchSourceTargetUri(currentSelection, sourceLanguage, targetLanguage);
 					}
 					System.Diagnostics.Process.Start(url);
 				}

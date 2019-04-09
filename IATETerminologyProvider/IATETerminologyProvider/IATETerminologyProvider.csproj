@@ -187,9 +187,12 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Resource Include="Resources\IATE_logo.png" />
+    <Resource Include="Resources\IATE_settings.ico" />
+    <Resource Include="Resources\IATE_settings.png" />
     <EmbeddedResource Include="Resources\report.xslt" />
     <None Include="Resources\ForumIcon.ico" />
-    <None Include="Resources\Iate_logo.ico" />
+    <Resource Include="Resources\Iate_logo.ico" />
     <None Include="Resources\Download.ico" />
   </ItemGroup>
   <ItemGroup>
