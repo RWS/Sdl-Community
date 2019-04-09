@@ -38,6 +38,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			using (var package = GetExcelPackage(filePathFrom))
 			{
 				var newLanguageResourceBundles = new List<LanguageResourceBundle>();
+
 				ReadFromExcel(settings, deserializedTemplate, package, newLanguageResourceBundles);
 
 				deserializedTemplate.SaveAs(filePathTo);
@@ -53,7 +54,10 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				var column03 = workSheet.Cells[1, 3].Value;
 				var column04 = workSheet.Cells[1, 4].Value;
 
-				if (AreColumnsValid(column01, column02, column03, column04)) return;
+				if (!AreColumnsValid(column01, column02, column03, column04))
+				{
+					throw new Exception(PluginResources.Excel_spreadsheet_not_in_correct_format);
+				}
 
 				var abbreviations = new Wordlist();
 				var ordinalFollowers = new Wordlist();
@@ -278,10 +282,20 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 		private bool AreColumnsValid(object column01, object column02, object column03, object column04)
 		{
-			return !column01.ToString().Equals("Abbreviations") &&
-				   !column02.ToString().Equals("OrdinalFollowers") &&
-				   !column03.ToString().Equals("Variables") &&
-				   !column04.ToString().Equals("SegmentationRules");
+			bool areValid;
+			try
+			{
+				areValid = !column01.ToString().Equals("Abbreviations") ||
+				           !column02.ToString().Equals("OrdinalFollowers") ||
+				           !column03.ToString().Equals("Variables") ||
+				           !column04.ToString().Equals("SegmentationRules");
+			}
+			catch
+			{
+				areValid = false;
+			}
+
+			return areValid;
 		}
 	}
 }
