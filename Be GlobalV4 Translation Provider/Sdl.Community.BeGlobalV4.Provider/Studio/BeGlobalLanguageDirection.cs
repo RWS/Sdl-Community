@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
@@ -12,7 +10,6 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
@@ -157,7 +154,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			if (_beGlobalConnect == null)
 			{ 
-				_beGlobalConnect = new BeGlobalConnecter(_options.ClientId, _options.ClientSecret, _options.UseClientAuthentication,_options.Model);
+				_beGlobalConnect = new BeGlobalConnecter(_options.ClientId, _options.ClientSecret, _options.UseClientAuthentication,_options.Model,
+					_languageDirection);
 			}
 			else
 			{
@@ -166,7 +164,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				_beGlobalConnect.UseClientAuthentication = _options.UseClientAuthentication;
 			}
 
-			var translatedText = _beGlobalConnect.Translate(_languageDirection, sourcetext);
+			var translatedText = _beGlobalConnect.Translate(sourcetext);
 			return translatedText;
 		}
 

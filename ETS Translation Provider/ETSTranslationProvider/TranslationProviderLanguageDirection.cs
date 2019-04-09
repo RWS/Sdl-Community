@@ -35,24 +35,26 @@ namespace ETSTranslationProvider
             get { return provider; }
         }
 
-        /// <summary>
-        /// Used to translate a single segment.
-        /// </summary>
-        /// <param name="settings"></param>
-        /// <param name="segment"></param>
-        /// <returns></returns>
-        public SearchResults SearchSegment(SearchSettings settings, Segment segment)
-        {
-            Log.logger.Trace("");
+		/// <summary>
+		/// Used to translate a single segment.
+		/// </summary>
+		/// <param name="settings"></param>
+		/// <param name="segment"></param>
+		/// <returns></returns>
+		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
+		{
+			Log.logger.Trace("");
 
-            SearchResults results = new SearchResults();
-            Segment translation = TranslateSegments(new Segment[] { segment }).First();
-
-            results.SourceSegment = segment.Duplicate();
-            results.Add(CreateSearchResult(segment, translation));
-
-            return results;
-        }
+			var results = new SearchResults();
+			var translation = TranslateSegments(new Segment[] { segment }).First();
+			if (translation != null)
+			{
+				results.SourceSegment = segment.Duplicate();
+				results.Add(CreateSearchResult(segment, translation));
+				return results;
+			}
+			return new SearchResults();
+		}
 
         /// <summary>
         /// Creates a translated segment by calling upon the ETS API (via helper methods)
@@ -62,23 +64,27 @@ namespace ETSTranslationProvider
         private Segment[] TranslateSegments(Segment[] sourceSegments)
         {
             Log.logger.Trace("");
-            try
-            {
-                XliffConverter.xliff xliffDocument = CreateXliffFile(sourceSegments);
+			try
+			{
+				var xliffDocument = CreateXliffFile(sourceSegments);
 
-                string translatedXliffText = ETSTranslatorHelper.GetTranslation(
-                    provider.Options,
-                    languageDirection,
-                    xliffDocument);
+				string translatedXliffText = ETSTranslatorHelper.GetTranslation(
+					provider.Options,
+					languageDirection,
+					xliffDocument);
 
-                XliffConverter.xliff translatedXliff = XliffConverter.Converter.ParseXliffString(translatedXliffText);
-                return translatedXliff.GetTargetSegments();
-            }
-            catch (Exception e)
-            {
-                Log.logger.Error(e, "Error in TranslateSegments");
-                return new Segment[sourceSegments.Length];
-            }
+				var translatedXliff = XliffConverter.Converter.ParseXliffString(translatedXliffText);
+				if (translatedXliff != null)
+				{
+					return translatedXliff.GetTargetSegments();
+				}
+				return new Segment[sourceSegments.Length];
+			}
+			catch (Exception e)
+			{
+				Log.logger.Error(e, "Error in TranslateSegments");
+				return new Segment[sourceSegments.Length];
+			}
         }
 
         /// <summary>
@@ -122,36 +128,46 @@ namespace ETSTranslationProvider
             return SearchSegments(settings, segments, null);
         }
 
-        /// <summary>
-        /// Translate an array of segments.
-        /// </summary>
-        /// <param name="settings"></param>
-        /// <param name="segments">Array of segments to be translated (depending on the truthiness of
-        /// corresponding mask)</param>
-        /// <param name="mask">Whether to translate a segment or not</param>
-        /// <returns></returns>
-        public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
-        {
-            Log.logger.Trace("");
+		/// <summary>
+		/// Translate an array of segments.
+		/// </summary>
+		/// <param name="settings"></param>
+		/// <param name="segments">Array of segments to be translated (depending on the truthiness of
+		/// corresponding mask)</param>
+		/// <param name="mask">Whether to translate a segment or not</param>
+		/// <returns></returns>
+		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
+		{
+			Log.logger.Trace("");
 
-            SearchResults[] results = new SearchResults[segments.Length];
-            Segment[] translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
-
-            int translationIndex = 0;
-            for (int i = 0; i < segments.Length; i++)
-            {
-                if (mask != null && !mask[i])
-                {
-                    results[i] = null;
-                    continue;
-                }
-                results[i] = new SearchResults();
-                results[i].SourceSegment = segments[i].Duplicate();
-                results[i].Add(CreateSearchResult(segments[i], translations[translationIndex]));
-                translationIndex++;
-            }
-            return results;
-        }
+			var results = new SearchResults[segments.Length];
+			var translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
+			if (!translations.All(translation => translation == null))
+			{
+				int translationIndex = 0;
+				for (int i = 0; i < segments.Length; i++)
+				{
+					if (mask != null && !mask[i])
+					{
+						results[i] = null;
+						continue;
+					}
+					results[i] = new SearchResults();
+					if (segments[i] != null)
+					{
+						results[i].SourceSegment = segments[i].Duplicate();
+						results[i].Add(CreateSearchResult(segments[i], translations[translationIndex]));
+						translationIndex++;
+					}
+					else
+					{
+						results[i].SourceSegment = new Segment();
+						results[i].Add(CreateSearchResult(new Segment(), new Segment()));
+					}
+				}
+			}
+			return results;
+		}
 
         /// <summary>
         /// Translate an array of segments depending on the partner mask array's values.
@@ -232,28 +248,32 @@ namespace ETSTranslationProvider
             if (mask == null || mask.Length != translationUnits.Length)
                 throw new ArgumentException("Mask in SearchSegmentsMasked");
 
-            return SearchSegments(settings, translationUnits.Select(tu => tu.SourceSegment).ToArray(), mask);
+            return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
         }
 
-        /// <summary>
-        /// Prepares a source translation string for request. It ultimately removes all the tags data,
-        /// storing them temporarily in a dictionary, which then can be used to reinstate the tags' text.
-        /// Function taken from previous ETS Plugin.
-        /// </summary>
-        /// <param name="segment"></param>
-        /// <param name="hasTags"></param>
-        /// <param name="tagMapping"></param>
-        /// <returns></returns>
-        public XliffConverter.xliff CreateXliffFile(Segment[] segments)
-        {
-            Log.logger.Trace("");
-            XliffConverter.xliff xliffDocument = new XliffConverter.xliff(
-                languageDirection.SourceCulture,
-                languageDirection.TargetCulture);
-            foreach (Segment seg in segments)
-                xliffDocument.AddSourceSegment(seg);
-            return xliffDocument;
-        }
+		/// <summary>
+		/// Prepares a source translation string for request. It ultimately removes all the tags data,
+		/// storing them temporarily in a dictionary, which then can be used to reinstate the tags' text.
+		/// Function taken from previous ETS Plugin.
+		/// </summary>
+		/// <param name="segment"></param>
+		/// <param name="hasTags"></param>
+		/// <param name="tagMapping"></param>
+		/// <returns></returns>
+		public XliffConverter.xliff CreateXliffFile(Segment[] segments)
+		{
+			Log.logger.Trace("");
+			var xliffDocument = new XliffConverter.xliff(languageDirection.SourceCulture, languageDirection.TargetCulture);
+
+			foreach (var seg in segments)
+			{
+				if (seg != null)
+				{
+					xliffDocument.AddSourceSegment(seg);
+				}
+			}
+			return xliffDocument;
+		}
 
         #region Unnecessary Training Methods
         /// <summary>

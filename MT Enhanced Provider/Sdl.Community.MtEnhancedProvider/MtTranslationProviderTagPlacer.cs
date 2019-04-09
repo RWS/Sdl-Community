@@ -206,33 +206,56 @@ namespace Sdl.Community.MtEnhancedProvider
         /// <returns></returns>
         private string[] GetTargetElements()
         {
-            //first create a regex to put our array separators around the tags
-            var str = _returnedText;
-	        const string tagsPattern = @"(<tg[0-9]*\>)|(<\/tg[0-9]*\>)|(\<tg[0-9]*/\>)";
-	        const string aplhanumericPattern = @"(<tgpt[0-9]*\>)|(<\/tgpt[0-9]*\>)|(\<tgpt[0-9]*/\>)";
+	        //first create a regex to put our array separators around the tags
+	        var translation = _returnedText;
 
-			var tagRgx = new Regex(tagsPattern);
-            var tagMatches = tagRgx.Matches(_returnedText);
-
-	        if (tagMatches.Count > 0)
-	        {
-		        str = AddSeparators(str, tagMatches);
-	        }
-
-	        var alphaRgx = new Regex(aplhanumericPattern);
-	        var alphaMatches = alphaRgx.Matches(str);
-	        if (alphaMatches.Count > 0)
-	        {
-		        str = AddSeparators(str, alphaMatches);
-
-	        }
+	        translation = GetTags(translation);
+	        translation = GetAlphanumericTags(translation);
+	        translation = GetTagsWithDecimals(translation);
 
 	        var stringSeparators = new[] { "```" };
-	        var strAr = str.Split(stringSeparators, StringSplitOptions.None);
+	        var strAr = translation.Split(stringSeparators, StringSplitOptions.None);
 	        return strAr;
 		}
 
-	    private string AddSeparators(string text, MatchCollection matches)
+	    private string GetTagsWithDecimals(string translation)
+	    {
+		    const string decimalPattern = @"(<tg[0-9,\.]*\>)|(<\/tg[0-9,\.]*\>)|(\<tg[0-9,\.]*/\>)";
+
+		    var tagRgx = new Regex(decimalPattern);
+		    var tagMatches = tagRgx.Matches(translation);
+		    if (tagMatches.Count > 0)
+		    {
+			    return AddSeparators(translation, tagMatches);
+		    }
+		    return translation;
+	    }
+
+	    private string GetTags(string translation)
+	    {
+		    const string tagsPattern = @"(<tg[0-9]*\>)|(<\/tg[0-9]*\>)|(\<tg[0-9]*/\>)";
+		    var tagRgx = new Regex(tagsPattern);
+		    var tagMatches = tagRgx.Matches(translation);
+		    if (tagMatches.Count > 0)
+		    {
+			    return AddSeparators(translation, tagMatches);
+		    }
+		    return translation;
+	    }
+
+	    private string GetAlphanumericTags(string translation)
+	    {
+		    const string aplhanumericPattern = @"(<tgpt[0-9]*\>)|(<\/tgpt[0-9]*\>)|(\<tgpt[0-9]*/\>)";
+		    var alphaRgx = new Regex(aplhanumericPattern);
+		    var alphaMatches = alphaRgx.Matches(translation);
+		    if (alphaMatches.Count > 0)
+		    {
+			    return AddSeparators(translation, alphaMatches);
+		    }
+		    return translation;
+	    }
+
+		private string AddSeparators(string text, MatchCollection matches)
 	    {
 		    foreach (Match match in matches)
 		    {

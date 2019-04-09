@@ -1,7 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml;
+using Sdl.Community.TargetWordCount.Helpers;
 using Sdl.Community.TargetWordCount.Models;
 using Sdl.Core.Globalization;
+using Sdl.ProjectAutomation.AutomaticTasks;
+using Sdl.ProjectAutomation.Core;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.TargetWordCount
 {
@@ -9,6 +16,15 @@ namespace Sdl.Community.TargetWordCount
 	{
 		private const string Characters = "Characters";
 		private const string Words = "Words";
+
+		/// <summary>
+		/// Get project controller
+		/// </summary>
+		/// <returns>information for the Project Controller</returns>
+		private static ProjectsController GetProjectController()
+		{
+			return SdlTradosStudio.Application.GetController<ProjectsController>();
+		}
 
 		public static string Generate(List<ISegmentWordCounter> counters, IWordCountBatchTaskSettings settings)
 		{
@@ -21,6 +37,142 @@ namespace Sdl.Community.TargetWordCount
 			grandTotal.FileName = "Total";
 
 			return CreateReport(grandTotal, fileData, settings);
+		}
+
+		/// <summary>
+		/// Generate new .xml reports( the reports will be imported manually in Helix).
+		/// The already reports which are generated through TargetWordCount app are not compatible in Helix
+		/// </summary>
+		/// <param name="languageDirection">language direction</param>
+		/// <param name="projectFiles">project files for the language direction on which the batch task is running</param>
+		public static void GenerateHelixReport(LanguageDirection languageDirection, List<ProjectFile> projectFiles)
+		{
+			var currentProject = GetProjectController() != null ? GetProjectController().CurrentProject : null;
+			if (currentProject != null)
+			{
+				var projectInfo = currentProject.GetProjectInfo();
+				if (projectInfo != null)
+				{
+					var directoryFolder = $@"{projectInfo.LocalProjectFolder}{Constants.ReportFolder}";
+					if (!Directory.Exists(directoryFolder))
+					{
+						Directory.CreateDirectory(directoryFolder);
+					}
+
+					var directoryInfo = new DirectoryInfo($@"{projectInfo.LocalProjectFolder}{Constants.Reports}");
+					var fileInfo = directoryInfo
+						.GetFiles()
+						.OrderByDescending(f => f.LastWriteTime)
+						.FirstOrDefault(n => n.Name.StartsWith($@"{Constants.TargetWordCount} {languageDirection.SourceLanguage.CultureInfo.Name}_{languageDirection.TargetLanguage.CultureInfo.Name}"));
+
+					var helixReportPath = Path.Combine(directoryFolder, Path.GetFileName(fileInfo.FullName));
+					if (File.Exists(helixReportPath))
+					{
+						File.Delete(helixReportPath);
+					}
+					File.Create(helixReportPath).Dispose();
+
+					// Create the new helix report xml report structure as the one from the Studio WordCount.xml report
+					CreateReportDocument(projectInfo, languageDirection, helixReportPath, fileInfo, projectFiles);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Create the ..\Reports\StudioTargetWordCount\{targetWordCountReportName}.xml structure based on the Studio WordCount.xml report structure
+		/// The WordCount.xml structure is needed, because it is compatible with Helix import process,
+		/// and the ..\Reports\StudioTargetWordCount\{targetWordCountReportName}.xml will be imported in Helix
+		/// </summary>
+		/// <param name="projectInfo">project information</param>
+		/// <param name="languageDirection">file language direction</param>
+		/// <param name="helixReportPath">the new TargetWordCount xml report path which will be used in Helix</param>
+		/// <param name="fileInfo">file info</param>
+		/// <param name="projectFiles">list of the project files on which the batch task is running</param>
+		private static void CreateReportDocument(
+			ProjectInfo projectInfo,
+			LanguageDirection languageDirection,
+			string helixReportPath,
+			FileInfo fileInfo,
+			List<ProjectFile> projectFiles)
+		{
+			var doc = new XmlDocument();
+			int totalSegments = 0;
+			int totalWords = 0;
+			int number;
+
+			var taskElement = doc.CreateElement(string.Empty, Constants.Task, string.Empty);
+			taskElement.SetAttribute(Constants.Name, Constants.WordCount);
+			doc.AppendChild(taskElement);
+
+			var taskInfoElement = doc.CreateElement(string.Empty, Constants.TaskInfo, string.Empty);
+			taskInfoElement.SetAttribute(Constants.TaskId, Guid.NewGuid().ToString());
+			taskInfoElement.SetAttribute(Constants.RunAt, DateTime.UtcNow.ToString());
+			taskInfoElement.SetAttribute(Constants.RunTime, Constants.OneSecondLess);
+			taskElement.AppendChild(taskInfoElement);
+
+			var projectElement = doc.CreateElement(string.Empty, Constants.Project, string.Empty);
+			projectElement.SetAttribute(Constants.Name, projectInfo.Name);
+			projectElement.SetAttribute(Constants.Number, projectInfo.Id != null ? projectInfo.Id.ToString() : Guid.NewGuid().ToString());
+			taskInfoElement.AppendChild(projectElement);
+
+			var languageElement = doc.CreateElement(string.Empty, Constants.Language, string.Empty);
+			languageElement.SetAttribute(Constants.Lcid, languageDirection.TargetLanguage.CultureInfo.LCID.ToString());
+			languageElement.SetAttribute(Constants.Name, languageDirection.TargetLanguage.DisplayName);
+			taskInfoElement.AppendChild(languageElement);
+
+			// take the files values from the Target Word Count {sourceLanguage_languageDirection.TargetLanguage}.xml report
+			// and add the files nodes to the doc for each projectFiles on which the TargetWordCount batch task had been run.
+			var document = new XmlDocument();
+			document.Load(fileInfo.FullName);
+
+			foreach (var projectFile in projectFiles)
+			{
+				var fileNode = document.SelectSingleNode($"{Constants.FilePath}'{projectFile.Name}']");
+				if (fileNode != null)
+				{
+					var totalNodeAttributes = fileNode.SelectSingleNode(Constants.Total) != null ? fileNode.SelectSingleNode(Constants.Total).Attributes : null;
+					if (totalNodeAttributes.Count > 0)
+					{
+						var fileElement = doc.CreateElement(string.Empty, Constants.File, string.Empty);
+						fileElement.SetAttribute(Constants.Name, projectFile.Name);
+						fileElement.SetAttribute(Constants.Guid, projectFile.Id.ToString());
+						taskElement.AppendChild(fileElement);
+
+						var analyseElement = doc.CreateElement(string.Empty, Constants.Analyse, string.Empty);
+						fileElement.AppendChild(analyseElement);
+
+						SetAnalyseElement(doc, Constants.Perfect, Constants.Zero, Constants.Zero, analyseElement);
+						SetAnalyseElement(doc, Constants.InContextExact, Constants.Zero, Constants.Zero, analyseElement);
+						SetAnalyseElement(doc, Constants.Repeated, Constants.Zero, Constants.Zero, analyseElement);
+						SetAnalyseElement(doc, Constants.LowTotal, totalNodeAttributes[Constants.Segments].Value, totalNodeAttributes[Constants.Count].Value, analyseElement);
+						SetAnalyseElement(doc, Constants.New, totalNodeAttributes[Constants.Segments].Value, totalNodeAttributes[Constants.Count].Value, analyseElement);
+						totalSegments += int.TryParse(totalNodeAttributes[Constants.Segments].Value, out number) != false ? int.Parse(totalNodeAttributes[Constants.Segments].Value) : 0;
+						totalWords += int.TryParse(totalNodeAttributes[Constants.Count].Value, out number) != false ? int.Parse(totalNodeAttributes[Constants.Count].Value) : 0;
+					}
+				}
+			}
+			var batchTotalElement = doc.CreateElement(string.Empty, Constants.BatchTotal, string.Empty);
+			taskElement.AppendChild(batchTotalElement);
+			var batchAnalyseElement = doc.CreateElement(string.Empty, Constants.Analyse, string.Empty);
+			batchTotalElement.AppendChild(batchAnalyseElement);
+
+			SetAnalyseElement(doc, Constants.LowTotal, totalSegments.ToString(), totalWords.ToString(), batchAnalyseElement);
+
+			doc.Save(helixReportPath);
+		}
+
+		// Create the elements in report for the following xml elements: 'Total' and 'BatchTotal' 
+		private static void SetAnalyseElement(XmlDocument doc, string elementName, string segmentsValue, string wordCountValue, XmlElement parentElement)
+		{
+			segmentsValue = !segmentsValue.Equals(Constants.Zero) ? segmentsValue : Constants.Zero;
+			wordCountValue = !wordCountValue.Equals(Constants.Zero) ? wordCountValue : Constants.Zero;
+			var totalElement = doc.CreateElement(string.Empty, elementName, string.Empty);
+			totalElement.SetAttribute(Constants.LowSegments, segmentsValue);
+			totalElement.SetAttribute(Constants.Characters, string.Empty);
+			totalElement.SetAttribute(Constants.Placeables, string.Empty);
+			totalElement.SetAttribute(Constants.Tags, string.Empty);
+			totalElement.SetAttribute(Constants.Words, wordCountValue);
+			parentElement.AppendChild(totalElement);
 		}
 
 		private static void AccumulateCountData(IWordCountBatchTaskSettings settings, ISegmentWordCounter counter, CountTotal info)

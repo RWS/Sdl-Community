@@ -19,7 +19,7 @@ namespace Sdl.Community.ApplyTMTemplate {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -57,6 +57,15 @@ namespace Sdl.Community.ApplyTMTemplate {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A new file was created.
+        /// </summary>
+        internal static string A_new_file_created {
+            get {
+                return ResourceManager.GetString("A_new_file_created", resourceCulture);
             }
         }
         
@@ -120,6 +129,42 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The excel document is not in the correct format.
+        /// </summary>
+        internal static string Excel_spreadsheet_not_in_correct_format {
+            get {
+                return ResourceManager.GetString("Excel_spreadsheet_not_in_correct_format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export language resources.
+        /// </summary>
+        internal static string Export_language_resources {
+            get {
+                return ResourceManager.GetString("Export_language_resources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to excel.
+        /// </summary>
+        internal static string Export_Window_Title {
+            get {
+                return ResourceManager.GetString("Export_Window_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported resources.
+        /// </summary>
+        internal static string Exported_filename {
+            get {
+                return ResourceManager.GetString("Exported_filename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon FileBasedTM {
@@ -149,7 +194,25 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select the folder containing the TMs.
+        ///   Looks up a localized string similar to Import language resources.
+        /// </summary>
+        internal static string Import_window_title {
+            get {
+                return ResourceManager.GetString("Import_window_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No languages could be identified.
+        /// </summary>
+        internal static string No_Languages_IDed {
+            get {
+                return ResourceManager.GetString("No_Languages_IDed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  select the folder containing the TMs.
         /// </summary>
         internal static string Please_select_the_folder_containing_the_TMs {
             get {
@@ -188,11 +251,74 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The report was generated successfully.
+        /// </summary>
+        internal static string Report_generated_successfully {
+            get {
+                return ResourceManager.GetString("Report_generated_successfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The resources were imported successfully.
+        /// </summary>
+        internal static string Resources_Imported_Successfully {
+            get {
+                return ResourceManager.GetString("Resources_Imported_Successfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a template.
+        /// </summary>
+        internal static string Select_A_Template {
+            get {
+                return ResourceManager.GetString("Select_A_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select at least one TM.
         /// </summary>
         internal static string Select_at_least_one_TM {
             get {
                 return ResourceManager.GetString("Select_at_least_one_TM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success.
+        /// </summary>
+        internal static string Success_Window_Title {
+            get {
+                return ResourceManager.GetString("Success_Window_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This template is corrupted or the file is not a template.
+        /// </summary>
+        internal static string Template_corrupted_or_file_not_template {
+            get {
+                return ResourceManager.GetString("Template_corrupted_or_file_not_template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file path of the template is not correct!.
+        /// </summary>
+        internal static string Template_filePath_Not_Correct {
+            get {
+                return ResourceManager.GetString("Template_filePath_Not_Correct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file is not of the required type.
+        /// </summary>
+        internal static string The_file_is_not_of_the_required_type {
+            get {
+                return ResourceManager.GetString("The_file_is_not_of_the_required_type", resourceCulture);
             }
         }
         
@@ -216,11 +342,11 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warning.
+        ///   Looks up a localized string similar to Warning regarding the template.
         /// </summary>
-        internal static string Warning_Window_Title {
+        internal static string Warning_Window_Title_Template {
             get {
-                return ResourceManager.GetString("Warning_Window_Title", resourceCulture);
+                return ResourceManager.GetString("Warning_Window_Title_Template", resourceCulture);
             }
         }
     }

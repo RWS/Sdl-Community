@@ -1,43 +1,41 @@
 ﻿using System.Collections.Generic;
-using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.Core.Segmentation;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ApplyTMTemplate.Models
 {
 	public class Template
 	{
-		public Template(List<LanguageResourceBundle> resourceBundle)
+		public Template(FileBasedLanguageResourcesTemplate template)
 		{
-			ResourceBundles = resourceBundle;
+			ResourceTemplate = template;
 		}
 
-		public List<LanguageResourceBundle> ResourceBundles { get; set; }
+		public FileBasedLanguageResourcesTemplate ResourceTemplate { get; set; }
 
-		public void ApplyTmTemplate(List<TranslationMemory> translationMemories, Options options)
+		public void ApplyTmTemplate(List<TranslationMemory> translationMemories, Settings settings)
 		{
 			var resourceBundlesWithOptions = new List<LanguageResourceBundle>();
 
-			foreach (var resourceBundle in ResourceBundles)
+			foreach (var resourceBundle in ResourceTemplate.LanguageResourceBundles)
 			{
 				var newResourceBundle = new LanguageResourceBundle(resourceBundle.Language);
 
-				if (options.VariablesChecked)
+				if (settings.VariablesChecked)
 				{
 					newResourceBundle.Variables = resourceBundle.Variables;
 				}
 
-				if (options.AbbreviationsChecked)
+				if (settings.AbbreviationsChecked)
 				{
 					newResourceBundle.Abbreviations = resourceBundle.Abbreviations;
 				}
 
-				if (options.OrdinalFollowersChecked)
+				if (settings.OrdinalFollowersChecked)
 				{
 					newResourceBundle.OrdinalFollowers = resourceBundle.OrdinalFollowers;
 				}
 
-				if (options.SegmentationRulesChecked)
+				if (settings.SegmentationRulesChecked)
 				{
 					newResourceBundle.SegmentationRules = resourceBundle.SegmentationRules;
 				}
