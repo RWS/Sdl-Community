@@ -95,7 +95,12 @@ namespace Sdl.Community.DeepLMTProvider
 						//add that trailing space to our tag as leading space
 						theTag.PadRight = nextText.Substring(0, whitespace);
 					}
-					_tagsDictionary.Add(tagText, theTag); //add our new tag code to the dict with the corresponding tag
+
+					 //add our new tag code to the dict with the corresponding tag if it's not already there
+					 if (!_tagsDictionary.ContainsKey(tagText))
+					 {
+						 _tagsDictionary.Add(tagText, theTag);
+					 }
 				}
 				else
 				{//if not a tag
@@ -162,7 +167,7 @@ namespace Sdl.Community.DeepLMTProvider
 			var str = _returnedText;
 			const string aplhanumericPattern = @"</?([a-z]*)[0-9]*/?>";
 
-			var alphaRgx = new Regex(aplhanumericPattern);
+			var alphaRgx = new Regex(aplhanumericPattern, RegexOptions.IgnoreCase);
 			var alphaMatches = alphaRgx.Matches(str);
 			if (alphaMatches.Count > 0)
 			{
