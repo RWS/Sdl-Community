@@ -68,7 +68,7 @@ namespace Sdl.Community.DeepLMTProvider
 					                                $"&target_lang={targetLanguage}" +
 					                                "&preserve_formatting=1" +
 					                                $"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
-
+					httpClient.DefaultRequestHeaders.Add("Trace-ID", "SDL Trados Studio 2017");
 					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result.Content.ReadAsStringAsync().Result;
 					var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(response);
 
