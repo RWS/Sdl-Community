@@ -187,8 +187,8 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 		{
 			if (Tm.LanguageResourceBundles.Count < 2)
 			{
-				var sourceLanguage = Tm.LanguageDirection.SourceLanguage;
-				var targetLanguage = Tm.LanguageDirection.TargetLanguage;
+				var sourceLanguage = Tm?.LanguageDirection?.SourceLanguage;
+				var targetLanguage = Tm?.LanguageDirection?.TargetLanguage;
 				if (Tm.LanguageResourceBundles[sourceLanguage] == null)
 				{
 					Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(sourceLanguage));
