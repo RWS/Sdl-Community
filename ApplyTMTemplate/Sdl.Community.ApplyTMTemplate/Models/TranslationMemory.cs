@@ -150,6 +150,8 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 		private void AddLanguageResourceBundleToTm(LanguageResourceBundle languageResourceBundle)
 		{
+			ValidateTm();
+
 			MarkSourceNotModified();
 			MarkTargetNotModified();
 
@@ -179,6 +181,24 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 			AddSegmentationRulesToBundle(languageResourceBundle, Tm.LanguageResourceBundles[cultureOfNewBundle]);
 			Tm.Save();
+		}
+
+		private void ValidateTm()
+		{
+			if (Tm.LanguageResourceBundles.Count < 2)
+			{
+				var sourceLanguage = Tm?.LanguageDirection?.SourceLanguage;
+				var targetLanguage = Tm?.LanguageDirection?.TargetLanguage;
+				if (Tm.LanguageResourceBundles[sourceLanguage] == null)
+				{
+					Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(sourceLanguage));
+				}
+
+				if (Tm.LanguageResourceBundles[targetLanguage] == null)
+				{
+					Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(targetLanguage));
+				}
+			}
 		}
 
 		private static void AddSegmentationRulesToBundle(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
