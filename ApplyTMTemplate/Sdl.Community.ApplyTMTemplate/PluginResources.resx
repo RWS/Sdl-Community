@@ -211,4 +211,10 @@
   <data name="Excel_spreadsheet_not_in_correct_format" xml:space="preserve">
     <value>The excel document is not in the correct format</value>
   </data>
+  <data name="No_Resources_in_TMs" xml:space="preserve">
+    <value>There are no resources added to any of the selected TMs</value>
+  </data>
+  <data name="Template_has_no_resources" xml:space="preserve">
+    <value>The selected template has no resources</value>
+  </data>
 </root>

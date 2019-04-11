@@ -117,11 +117,28 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				return true;
 			}
 
-			lrt = LoadDataFromFile(resourceTemplatePath, "LanguageResource");
+			try
+			{
+				lrt = LoadDataFromFile(resourceTemplatePath, "LanguageResource");
+			}
+			catch
+			{
+				message = PluginResources.Template_corrupted_or_file_not_template;
+				return true;
+			}
 
 			if (lrt.Count == 0)
 			{
+				message = PluginResources.Template_has_no_resources;
+				return true;
+			}
+
+			var langResGroup = LoadDataFromFile(resourceTemplatePath, "LanguageResourceGroup");
+
+			if (langResGroup.Count == 0)
+			{
 				message = PluginResources.Template_corrupted_or_file_not_template;
+				return true;
 			}
 
 			return false;

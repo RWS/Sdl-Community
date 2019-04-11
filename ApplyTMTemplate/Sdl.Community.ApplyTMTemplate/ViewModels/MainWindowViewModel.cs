@@ -274,9 +274,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void CreateTemplateObjectFromBundles(List<LanguageResourceBundle> languageResourceBundles)
 		{
-			if (languageResourceBundles == null) return;
-
 			_template = new FileBasedLanguageResourcesTemplate();
+
+			if (languageResourceBundles == null) return;
 
 			foreach (var bundle in languageResourceBundles)
 			{
@@ -308,28 +308,37 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			ProgressVisibility = "Hidden";
 		}
 
-		private async Task<bool> ValidateTemplateAndShowErrors()
+		private async Task<bool> ValidateTemplateAndShowErrors(bool checkIfBundlesPresent = true)
 		{
 			var isValid = true;
 
 			var unIDedLanguages = _unIDedLanguagess?.Aggregate("", (i, j) => i + "\n  \u2022" + j);
 
-			if (_template == null || _template.LanguageResourceBundles.Count == 0)
+			if (checkIfBundlesPresent)
 			{
-				isValid = false;
-
-				if (!string.IsNullOrEmpty(unIDedLanguages))
+				if (_template == null || _template.LanguageResourceBundles.Count == 0)
 				{
-					_message = $"{PluginResources.No_Languages_IDed}\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}";
+					isValid = false;
+
+					if (!string.IsNullOrEmpty(unIDedLanguages))
+					{
+						_message = $"{PluginResources.No_Languages_IDed}\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}";
+					}
+				}
+				else
+				{
+					if (!string.IsNullOrEmpty(unIDedLanguages))
+					{
+						var idedLanguages = _template.LanguageResourceBundles.Aggregate("",(l, j) => l + "\n  \u2022" + j.LanguageCode);
+						_message = $"{PluginResources.Identified_Languages}{idedLanguages}" + $"\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}";
+					}
 				}
 			}
 			else
 			{
-				if (!string.IsNullOrEmpty(unIDedLanguages))
+				if (_message == PluginResources.Template_corrupted_or_file_not_template)
 				{
-					var idedLanguages = _template.LanguageResourceBundles.Aggregate("", (l, j) => l + "\n  \u2022" + j.LanguageCode);
-					_message = $"{PluginResources.Identified_Languages}{idedLanguages}" +
-					           $"\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}";
+					isValid = false;
 				}
 			}
 
@@ -355,7 +364,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			LoadResourcesFromTemplate();
 
-			if (!await ValidateTemplateAndShowErrors()) return;
+			if (!await ValidateTemplateAndShowErrors(false)) return;
 
 			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
 
