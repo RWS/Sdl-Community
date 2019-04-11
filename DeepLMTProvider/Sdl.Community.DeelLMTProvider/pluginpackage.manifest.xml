@@ -10,6 +10,7 @@
 		<File>Sdl.Community.DeepLMTProvider.WPF.dll</File>
 		<File>MahApps.Metro.dll</File>
 		<File>System.Windows.Interactivity.dll</File>
+		<File>Sdl.Community.Toolkit.Core.dll</File>
 	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>
