@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Sdl.Community.ApplyTMTemplate.ViewModels;
+using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.Core.Segmentation;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ApplyTMTemplate.Models
@@ -134,35 +138,109 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 		public void ApplyTemplate(LanguageResourceBundle languageResourceBundle)
 		{
-			var langDirOfTm = Tm.LanguageDirection;
-
 			try
 			{
-				if (langDirOfTm.SourceLanguage.Equals(languageResourceBundle.Language))
-				{
-					Tm.LanguageResourceBundles.Add(languageResourceBundle);
-					Tm.Save();
-					MarkSourceModified();
-				}
-				else
-				{
-					MarkSourceNotModified();
-				}
-
-				if (langDirOfTm.TargetLanguage.Equals(languageResourceBundle.Language))
-				{
-					Tm.LanguageResourceBundles.Add(languageResourceBundle);
-					Tm.Save();
-					MarkTargetModified();
-				}
-				else
-				{
-					MarkTargetNotModified();
-				}
+				AddLanguageResourceBundleToTm(languageResourceBundle);
 			}
 			catch (Exception)
 			{
 				MarkTmCorrupted();
+			}
+		}
+
+		private void AddLanguageResourceBundleToTm(LanguageResourceBundle languageResourceBundle)
+		{
+			ValidateTm();
+
+			MarkSourceNotModified();
+			MarkTargetNotModified();
+
+			var cultureOfNewBundle = languageResourceBundle.Language;
+			var cultureOfSource = Tm.LanguageDirection.SourceLanguage;
+			var cultureOfTarget = Tm.LanguageDirection.TargetLanguage;
+			bool thisLangResIsValid = false;
+
+			if (cultureOfNewBundle.Equals(cultureOfSource))
+			{
+				MarkSourceModified();
+				thisLangResIsValid = true;
+			}
+
+			if (cultureOfNewBundle.Equals(cultureOfTarget))
+			{
+				MarkTargetModified();
+				thisLangResIsValid = true;
+			}
+
+			if (!thisLangResIsValid) return;
+
+			var properties = new List<string>{ "Abbreviations", "OrdinalFollowers", "Variables" };
+			foreach (var property in properties)
+			{
+				AddItemsToWordlist(languageResourceBundle, Tm.LanguageResourceBundles[cultureOfNewBundle], property);
+			}
+			AddSegmentationRulesToBundle(languageResourceBundle, Tm.LanguageResourceBundles[cultureOfNewBundle]);
+			Tm.Save();
+		}
+
+		private void ValidateTm()
+		{
+			if (Tm.LanguageResourceBundles.Count < 2)
+			{
+				var sourceLanguage = Tm?.LanguageDirection?.SourceLanguage;
+				var targetLanguage = Tm?.LanguageDirection?.TargetLanguage;
+				if (Tm.LanguageResourceBundles[sourceLanguage] == null)
+				{
+					Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(sourceLanguage));
+				}
+
+				if (Tm.LanguageResourceBundles[targetLanguage] == null)
+				{
+					Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(targetLanguage));
+				}
+			}
+		}
+
+		private static void AddSegmentationRulesToBundle(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
+		{
+			if (newBundle.SegmentationRules == null) return;
+			if (correspondingBundleInTemplate.SegmentationRules != null)
+			{
+				var newSegmentationRules = new SegmentationRules();
+				foreach (var newRule in newBundle.SegmentationRules.Rules)
+				{
+					if (correspondingBundleInTemplate.SegmentationRules.Rules.All(oldRule => !string.Equals(newRule.Description.Text, oldRule.Description.Text, StringComparison.OrdinalIgnoreCase)))
+					{
+						newSegmentationRules.AddRule(newRule);
+					}
+				}
+
+				correspondingBundleInTemplate.SegmentationRules.Rules.AddRange(newSegmentationRules.Rules);
+			}
+			else
+			{
+				correspondingBundleInTemplate.SegmentationRules = new SegmentationRules(newBundle.SegmentationRules);
+			}
+		}
+
+		private static void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle template, string property)
+		{
+			var templateBundleGetter = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(template, null) as Wordlist);
+			var templateBundleSetter = typeof(LanguageResourceBundle).GetProperty(property)?.SetMethod;
+			var newBundleGetter = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(newLanguageResourceBundle, null) as Wordlist);
+
+			if (newBundleGetter == null || !newBundleGetter.Items.Any()) return;
+
+			if (templateBundleGetter != null && templateBundleGetter.Items.Any())
+			{
+				foreach (var abbrev in newBundleGetter.Items)
+				{
+					templateBundleGetter.Add(abbrev);
+				}
+			}
+			else
+			{
+				templateBundleSetter?.Invoke(template, new[] { new Wordlist(newBundleGetter) });
 			}
 		}
 	}

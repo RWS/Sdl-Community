@@ -216,7 +216,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 				foreach (var newRule in newBundle.SegmentationRules.Rules)
 				{
 					if (correspondingBundleInTemplate.SegmentationRules.Rules.All(oldRule =>
-						string.Equals(newRule.Description.Text, oldRule.Description.Text,
+						!string.Equals(newRule.Description.Text, oldRule.Description.Text,
 							StringComparison.OrdinalIgnoreCase)))
 					{
 						newSegmentationRules.AddRule(newRule);
@@ -285,10 +285,10 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			bool areValid;
 			try
 			{
-				areValid = !column01.ToString().Equals("Abbreviations") ||
-				           !column02.ToString().Equals("OrdinalFollowers") ||
-				           !column03.ToString().Equals("Variables") ||
-				           !column04.ToString().Equals("SegmentationRules");
+				areValid = column01.ToString().Equals("Abbreviations") &&
+				           column02.ToString().Equals("OrdinalFollowers") &&
+				           column03.ToString().Equals("Variables") &&
+				           column04.ToString().Equals("SegmentationRules");
 			}
 			catch
 			{
