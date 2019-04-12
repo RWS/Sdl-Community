@@ -20,11 +20,14 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			var newLanguageResourceBundles = new List<LanguageResourceBundle>();
 			foreach (var tm in translationMemories)
 			{
+				if (tm.Tm.LanguageResourceBundles.Count == 0) continue;
 				foreach (var bundle in tm.Tm.LanguageResourceBundles)
 				{
 					newLanguageResourceBundles.Add(bundle);
 				}
 			}
+
+			if (newLanguageResourceBundles.Count == 0) throw new Exception(PluginResources.No_Resources_in_TMs);
 
 			ExcludeWhatIsNotNeeded(newLanguageResourceBundles, settings);
 

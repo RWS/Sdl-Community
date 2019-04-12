@@ -212,6 +212,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no resources added to any of the selected TMs.
+        /// </summary>
+        internal static string No_Resources_in_TMs {
+            get {
+                return ResourceManager.GetString("No_Resources_in_TMs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  select the folder containing the TMs.
         /// </summary>
         internal static string Please_select_the_folder_containing_the_TMs {
@@ -310,6 +319,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         internal static string Template_filePath_Not_Correct {
             get {
                 return ResourceManager.GetString("Template_filePath_Not_Correct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected template has no resources.
+        /// </summary>
+        internal static string Template_has_no_resources {
+            get {
+                return ResourceManager.GetString("Template_has_no_resources", resourceCulture);
             }
         }
         
