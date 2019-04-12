@@ -5,14 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Community.Plugins.AdvancedDisplayFilter;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
-using Sdl.Community.Toolkit.Integration.DisplayFilter;
 using Sdl.Community.Toolkit.FileType;
+using Sdl.Community.Toolkit.Integration.DisplayFilter;
+using Sdl.FileTypeSupport.Framework.NativeApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
@@ -57,6 +57,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					OddsNo = oddBtn.Checked,
 					EvenNo = evenBtn.Checked,
 					Grouped = groupedBtn.Checked,
+					None = noneBtn.Checked,
 					UseRegexCommentSearch = commentRegexBox.Checked,
 					Colors = new List<string>(),
 					FuzzyMin = fuzzyMin.Text,
@@ -102,6 +103,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				
 				oddBtn.Checked = value.OddsNo;
 				evenBtn.Checked = value.EvenNo;
+				noneBtn.Checked = value.None;
 				groupedBtn.Checked = value.Grouped;
 				splitCheckBox.Checked = value.SplitSegments;
 				mergedCheckbox.Checked = value.MergedSegments;
@@ -843,54 +845,54 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     + (current != string.Empty ? " " + "|" + " " : string.Empty)
                     + ContextInfoList.FirstOrDefault(a => a.ContextType == item).DisplayCode) + ")");
 
-	        if (CustomFilter != null)
-	        {
-		        //filter color
-		        if (CustomFilter.Colors != null)
-		        {
-			        if (CustomFilter.Colors.Count > 0)
-			        {
-				        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Colors + ":"
-				                                        + "(" + CustomFilter.Colors.Aggregate(string.Empty,
-					                                        (current, item) => current
-					                                                           + (current != string.Empty
-						                                                           ? " " + "|" + " "
-						                                                           : string.Empty)
-					                                                           + CustomFilter.Colors.FirstOrDefault(a => a == item)) +
-				                                        ")");
-			        }
-		        }
+			if (CustomFilter != null)
+			{
+				//filter color
+				if (CustomFilter.Colors != null)
+				{
+					if (CustomFilter.Colors.Count > 0)
+					{
+						filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Colors + ":"
+														+ "(" + CustomFilter.Colors.Aggregate(string.Empty,
+															(current, item) => current
+																			   + (current != string.Empty
+																				   ? " " + "|" + " "
+																				   : string.Empty)
+																			   + CustomFilter.Colors.FirstOrDefault(a => a == item)) +
+														")");
+					}
+				}
 
-		        if (CustomFilter.SplitSegments)
-		        {
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SplitSegments + ":\"" +
-			                                        CustomFilter.SplitSegments + "\"");
-		        }
-		        if (CustomFilter.MergedSegments)
-		        {
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MergedSegments + ":\"" + CustomFilter.MergedSegments + "\"");
-		        }
-		        if (CustomFilter.MergedAcross)
-		        {
+				if (CustomFilter.SplitSegments)
+				{
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SplitSegments + ":\"" +
+													CustomFilter.SplitSegments + "\"");
+				}
+				if (CustomFilter.MergedSegments)
+				{
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MergedSegments + ":\"" + CustomFilter.MergedSegments + "\"");
+				}
+				if (CustomFilter.MergedAcross)
+				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MergedAcross + ":\"" + CustomFilter.MergedAcross + "\"");
 				}
 				if (CustomFilter.EvenNo)
-		        {
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_EvenSegments + ":\"" +
-			                                        CustomFilter.EvenNo + "\"");
-		        }
+				{
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_EvenSegments + ":\"" +
+													CustomFilter.EvenNo + "\"");
+				}
 
-		        if (CustomFilter.OddsNo)
-		        {
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_OddSegments + ":\"" +
-			                                        CustomFilter.OddsNo + "\"");
-		        }
+				if (CustomFilter.OddsNo)
+				{
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_OddSegments + ":\"" +
+													CustomFilter.OddsNo + "\"");
+				}
 
-		        if (CustomFilter.Grouped)
-		        {
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_GroupedList + ":\"" +
-			                                        CustomFilter.Grouped + "\"");
-		        }
+				if (CustomFilter.Grouped)
+				{
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_GroupedList + ":\"" +
+													CustomFilter.Grouped + "\"");
+				}
 
 		        if (CustomFilter.UseRegexCommentSearch)
 		        {
@@ -1704,8 +1706,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			}
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
-		
-	    private void colorsListView_SelectedIndexChanged(object sender, EventArgs e)
+
+		private void noneBtn_CheckedChanged(object sender, EventArgs e)
+		{
+			if(noneBtn.Checked)
+			{
+				segmentsBox.Enabled = true;
+			}
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void colorsListView_SelectedIndexChanged(object sender, EventArgs e)
 	    {
 		    var selectedColors = colorsListView.SelectedItems;
 		  
@@ -1842,6 +1853,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 				MessageBox.Show(@"File was generated at the following location: "+selectedFilePath,string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
-		}
+		}		
 	}
 }
