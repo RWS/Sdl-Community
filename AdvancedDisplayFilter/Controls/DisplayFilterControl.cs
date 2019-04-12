@@ -1711,7 +1711,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			if(noneBtn.Checked)
 			{
-				segmentsBox.Enabled = true;
+				segmentsBox.Enabled = false;
 			}
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
