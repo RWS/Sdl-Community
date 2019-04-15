@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using RestSharp;
@@ -54,20 +53,19 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			request.RequestFormat = DataFormat.Json;
 			var response = _client.Execute(request);
 			if (response.StatusCode != System.Net.HttpStatusCode.OK)
+			{
 				throw new Exception("Acquiring token failed: " + response.Content);
+			}
 			dynamic json = JsonConvert.DeserializeObject(response.Content);
 			_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
 		}
 
 		public string TranslateText(string text)
 		{
-			var quick = text.Length < 5000; // quick (synchronous) translation only recommended for short plain text strings
-			var json = UploadText(text, quick);
-			if (quick)
-			{
-				return json != null ? json.translation[0] : string.Empty;
-			}
+			var json = UploadText(text);
+
 			var rawData = WaitForTranslation(json.requestId.Value);
+
 			json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
 			return json != null ? json.translation[0] : string.Empty;
 		}
@@ -114,9 +112,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		}
 
 
-		public dynamic UploadText(string text, bool quick)
+		public dynamic UploadText(string text)
 		{
-			var request = new RestRequest("/mt/translations/" + (quick ? "sync" : "async"), Method.POST)
+			var request = new RestRequest("/mt/translations/async", Method.POST)
 			{
 				RequestFormat = DataFormat.Json
 			};
@@ -127,7 +125,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				sourceLanguageId = _source,
 				targetLanguageId = _target,
 				model = _flavor,
-				inputFormat = "xliff",
+				inputFormat = "xliff"
 			});
 			var response = _client.Execute(request);
 			if (response.StatusCode != System.Net.HttpStatusCode.OK && response.StatusCode != System.Net.HttpStatusCode.Accepted)
@@ -149,19 +147,25 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				response = RestGet($"/mt/translations/async/{id}");
 				if (response.StatusCode != System.Net.HttpStatusCode.OK)
+				{
 					throw new Exception("Polling state failed: " + response.Content);
+				}
 
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
 				status = json.translationStatus;
 
 				if (!status.Equals("DONE", StringComparison.CurrentCultureIgnoreCase))
+				{
 					System.Threading.Thread.Sleep(1000);
+				}
 			}
 			while (!status.Equals("DONE", StringComparison.CurrentCultureIgnoreCase)); // check for FAILED to catch errors
 
 			response = RestGet($"/mt/translations/async/{id}/content");
 			if (response.StatusCode != System.Net.HttpStatusCode.OK)
+			{
 				throw new Exception("Downloading translation failed: " + response.Content);
+			}
 			return response.RawBytes;
 		}
 
