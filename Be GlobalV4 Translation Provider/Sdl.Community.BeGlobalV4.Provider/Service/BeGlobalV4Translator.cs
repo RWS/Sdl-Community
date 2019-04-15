@@ -127,7 +127,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				sourceLanguageId = _source,
 				targetLanguageId = _target,
 				model = _flavor,
-				inputFormat = "HTML",
+				inputFormat = "xliff",
 			});
 			var response = _client.Execute(request);
 			if (response.StatusCode != System.Net.HttpStatusCode.OK && response.StatusCode != System.Net.HttpStatusCode.Accepted)
