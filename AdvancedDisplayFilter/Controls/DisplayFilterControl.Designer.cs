@@ -132,6 +132,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.noneBtn = new System.Windows.Forms.RadioButton();
             this.panel_body.SuspendLayout();
             this.tabControl_filter.SuspendLayout();
             this.tabPage_content.SuspendLayout();
@@ -661,6 +662,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.noneBtn);
             this.groupBox1.Controls.Add(this.groupedBtn);
             this.groupBox1.Controls.Add(this.oddBtn);
             this.groupBox1.Controls.Add(this.evenBtn);
@@ -868,6 +870,14 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
             // 
+            // noneBtn
+            // 
+            resources.ApplyResources(this.noneBtn, "noneBtn");
+            this.noneBtn.Name = "noneBtn";
+            this.noneBtn.TabStop = true;
+            this.noneBtn.UseVisualStyleBackColor = true;
+            this.noneBtn.CheckedChanged += new System.EventHandler(this.noneBtn_CheckedChanged);
+            // 
             // DisplayFilterControl
             // 
             resources.ApplyResources(this, "$this");
@@ -1023,5 +1033,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private CheckBox createdByCheck;
 		private ToolStripButton helpButton;
 		private ToolStripButton generateXliff;
+		private RadioButton noneBtn;
 	}
 }
