@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
-using System.Web;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 {
@@ -46,7 +46,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 
 		private  string EncodeBracket(string sourceText)
 		{
-			return HttpUtility.HtmlEncode(sourceText);
+			return WebUtility.HtmlEncode(sourceText);
 		}
 
 		private  int[] GetMatchesIndexes(string sourcetext, MatchCollection matches)
