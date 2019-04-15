@@ -46,8 +46,7 @@
       <HintPath>..\packages\RestSharp.106.5.4\lib\net452\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=0.7.2.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>3rd party\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+      <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.Studio2017.0.7.2\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -185,7 +184,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="3rd party\Sdl.Community.Toolkit.LanguagePlatform.dll" />
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>
   <ItemGroup>
