@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Web;
+using System.Net;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
@@ -65,8 +65,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				var translator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", _options.ClientId,
 					_options.ClientSecret, sourceLanguage, targetLanguage, _options.Model, _options.UseClientAuthentication);
 
-				var translatedXliffText = HttpUtility.UrlDecode(translator.TranslateText(xliffDocument.ToString()));
-
+				var translatedXliffText = WebUtility.UrlDecode(translator.TranslateText(xliffDocument.ToString()));
 
 				var translatedXliff = Converter.ParseXliffString(translatedXliffText);
 				if (translatedXliff != null)
