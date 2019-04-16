@@ -1,14 +1,13 @@
-using NLog;
-using NLog.Config;
-using NLog.Targets;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
 
 namespace ETSTranslationProvider
 {
-    static class Log
+	static class Log
     {
         public static Logger logger { get; private set; }
 
@@ -23,11 +22,11 @@ namespace ETSTranslationProvider
                 var config = new LoggingConfiguration();
                 config.AddTarget("file", fileTarget);
 
-                string assemblyName = assembly.GetName().Name;
+				var assemblyName = assembly.GetName().Name;
 
-                PluginConfiguration configFromFile = PluginConfiguration.CurrentInstance;
-                string logFileDirectory = Path.Combine(configFromFile.Directory, "Logs");
-                string logFileName = string.Format("{0}.log.txt", assemblyName);
+				var configFromFile = PluginConfiguration.CurrentInstance;
+				var logFileDirectory = Path.Combine(configFromFile.Directory, "Logs");
+				var logFileName = string.Format("{0}.log.txt", assemblyName);
 
                 // Create the directory in case it doesn't exist. Does nothing if it does.
                 Directory.CreateDirectory(logFileDirectory);
@@ -48,7 +47,7 @@ namespace ETSTranslationProvider
                                     "${pad:padding=-55:inner=${exception}}";
 
                 // If there is a configuration file, read the log level from that.
-                LogLevel targetLogLevel = LogLevel.Info;
+                var targetLogLevel = LogLevel.Info;
                 if (configFromFile != null && configFromFile.LogLevel != null)
                     targetLogLevel = LogLevel.FromString(configFromFile.LogLevel);
 

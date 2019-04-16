@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2D963716-8FC4-4353-ADDD-7A6C0F7717DE}</ProjectGuid>
+    <ProjectGuid>{5DF3208A-65A1-4988-B997-C361FC9C5A0A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Trados2017_Plugin</AppDesignerFolder>
     <RootNamespace>ETSTranslationProvider</RootNamespace>
@@ -67,16 +67,19 @@
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=0.7.2.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Sdl.Community.Toolkit.LanguagePlatform.Studio2017.0.7.2\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Globalization.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.Core.PluginFramework">
       <HintPath>..\..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Sdl.Core.PluginFramework.PackageSupport, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.Core.PluginFramework.PackageSupport">
       <HintPath>..\..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -90,10 +93,8 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>True</SpecificVersion>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -146,12 +147,17 @@
   <ItemGroup>
     <Content Include="..\Resources\icon.ico" />
     <Content Include="..\Resources\icon.png" />
+    <None Include="Resources\LanguagePairsIcon.ico" />
+    <None Include="Resources\ForumIcon.ico" />
+    <None Include="Resources\Download.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="pluginpackage.manifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -209,30 +215,26 @@
       <Project>{cebe84eb-a630-4957-b93a-3b60456b5fb7}</Project>
       <Name>ETSLPConverter</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SegmentParser\SegmentParser.csproj">
-      <Project>{42858567-aada-4a61-9d04-bf151137146b}</Project>
-      <Name>SegmentParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\XliffConverter\XliffConverter.csproj">
-      <Project>{c8f2c2fc-5a3e-4be7-9788-f6f24eb69f72}</Project>
-      <Name>XliffConverter</Name>
-    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!--<UsingTask TaskName="ETSLanguageResourceBuilder.GenerateLanguageResourceTask" AssemblyFile="..\..\ETSLanguageResourceBuilder\bin\Debug\ETSLanguageResourceBuilder.dll" />
+  <Target Name="BeforeBuild">
+    <GenerateLanguageResourceTask XMTExternalsDir="$(SDL_EXTERNALS_PATH)" />
+  </Target>-->
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PluginDeploymentPath>$(AppData)\SDL\SDL Trados Studio\14\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\14\Plugins</PluginDeploymentPath>
   </PropertyGroup>
+  <Import Project="..\..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Sdl.Core.PluginFramework.Build.15.0.2\Build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Sdl.Core.PluginFramework.Build.15.0.2\Build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
   </Target>
-  <Import Project="..\..\packages\Sdl.Core.PluginFramework.Build.15.0.2\Build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\..\packages\Sdl.Core.PluginFramework.Build.15.0.2\Build\net45\Sdl.Core.PluginFramework.Build.targets')" />
 </Project>

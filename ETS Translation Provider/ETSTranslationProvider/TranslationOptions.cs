@@ -1,13 +1,13 @@
-﻿using ETSLPConverter;
-using Newtonsoft.Json;
-using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using ETSLPConverter;
 using ETSTranslationProvider.ETSApi;
+using Newtonsoft.Json;
+using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace ETSTranslationProvider
 {
@@ -55,8 +55,9 @@ namespace ETSTranslationProvider
 		private string ResolveHost()
 		{
 			if (ResolvedHost != null)
+			{
 				return ResolvedHost;
-
+			}
 			// If the host is an IP address, preserve that, otherwise get the DNS host and cache it.
 			ResolvedHost = IPAddress.TryParse(Host, out var address) ? Host : Dns.GetHostEntry(Host).HostName;
 			return ResolvedHost;
@@ -66,8 +67,9 @@ namespace ETSTranslationProvider
 		{
 			var etsLanguagePairs = ETSTranslatorHelper.GetLanguagePairs(this);
 			if (!etsLanguagePairs.Any())
+			{
 				return null;
-
+			}
 			var languagePairChoices = languagePairs.GroupJoin(
 				etsLanguagePairs,
 				requestedLP =>
@@ -90,11 +92,11 @@ namespace ETSTranslationProvider
 
 			// Fix for French Canada engine	 which has language code on server frc
 			var frenchCanadianLp = languagePairs.FirstOrDefault(lp => lp.SourceCulture.ThreeLetterWindowsLanguageName.Equals("FRC") ||
-																	  lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals("FRC"));
+			                                                          lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals("FRC"));
 			if (frenchCanadianLp != null)
 			{
 				var etsLangPairEngines = etsLanguagePairs.Where(lp => lp.SourceLanguageId.Equals("frc") ||
-																		lp.TargetLanguageId.Equals("frc")).ToList();
+				                                                        lp.TargetLanguageId.Equals("frc")).ToList();
 				if (etsLangPairEngines.Any())
 				{
 					var projectSourceLanguage = languagePairChoices.FirstOrDefault(s => s.TradosCulture.ThreeLetterISOLanguageName.Equals("fra"));
@@ -110,13 +112,16 @@ namespace ETSTranslationProvider
 			{
 				// By default, select the preferences to be the first LP of each set.
 				var defaultOption = lpChoice.ETSLPs.FirstOrDefault();
+				
 				// Verify that the preferred LP still exists on ets server and if not, remove it from preferences
-				if (LPPreferences.ContainsKey(lpChoice.TradosCulture) &&
-					!lpChoice.ETSLPs.Contains(LPPreferences[lpChoice.TradosCulture]))
+				if (LPPreferences.ContainsKey(lpChoice.TradosCulture) && !lpChoice.ETSLPs.Contains(LPPreferences[lpChoice.TradosCulture]))
+				{
 					LPPreferences.Remove(lpChoice.TradosCulture);
-
+				}
 				if (defaultOption != null && !LPPreferences.ContainsKey(lpChoice.TradosCulture))
+				{
 					LPPreferences[lpChoice.TradosCulture] = defaultOption;
+				}
 			}
 			return languagePairChoices.ToArray();
 		}
@@ -126,6 +131,7 @@ namespace ETSTranslationProvider
 			get => _uriBuilder.Port;
 			set => _uriBuilder.Port = value;
 		}
+
 		public APIVersion ApiVersion { get; set; }
 
 		public string ApiVersionString => ApiVersion == APIVersion.v1 ? "v1" : "v2";

@@ -1,14 +1,13 @@
+using System;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
 
 namespace ETSTranslationProvider
 {
-    [TranslationProviderFactory(
+	[TranslationProviderFactory(
         Id = "TranslationProviderFactory",
         Name = "TranslationProviderFactory",
         Description = "ETS translation provider.")]
-
     public class TranslationProviderFactory : ITranslationProviderFactory
     {
         public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
@@ -21,15 +20,15 @@ namespace ETSTranslationProvider
                 throw new Exception("Cannot handle URI.");
             }
 
-            TranslationProviderCredential credentials = credentialStore.GetCredential(translationProviderUri);
+            var credentials = credentialStore.GetCredential(translationProviderUri);
             if (credentials == null)
             {
                 //Throw TranslationProviderAuthenticationException, which will cause Studio to call GetCredentialsFromUser
                 throw new TranslationProviderAuthenticationException();
             }
 
-            TranslationOptions options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
-            GenericCredentials genericCredentials = new GenericCredentials(credentials.Credential);
+            var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+            var genericCredentials = new GenericCredentials(credentials.Credential);
 
             if (options.UseBasicAuthentication)
             {
@@ -40,7 +39,6 @@ namespace ETSTranslationProvider
                 options.ApiToken = genericCredentials["API-Key"];
                 ETSApi.ETSTranslatorHelper.VerifyBasicAPIToken(options, genericCredentials);
             }
-
             return new TranslationProvider(options);
         }
 

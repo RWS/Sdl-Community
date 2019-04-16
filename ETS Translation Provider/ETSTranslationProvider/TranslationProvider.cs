@@ -1,13 +1,13 @@
+using System;
+using System.Linq;
 using ETSLPConverter;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
-using System.Linq;
 
 namespace ETSTranslationProvider
 {
-    public class TranslationProvider : ITranslationProvider
+	public class TranslationProvider : ITranslationProvider
     {
         public const string TranslationProviderScheme = "ets";
 
@@ -158,4 +158,3 @@ namespace ETSTranslationProvider
         #endregion
     }
 }
-

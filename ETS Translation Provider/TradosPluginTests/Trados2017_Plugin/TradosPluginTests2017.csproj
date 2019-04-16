@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{725782AC-3A51-42C3-800D-1D6163F83F1F}</ProjectGuid>
+    <ProjectGuid>{56A97DE3-02E3-4A34-97C1-6B9F62A567D4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TradosPluginTests</RootNamespace>
@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,6 +37,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=0.7.2.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Sdl.Community.Toolkit.LanguagePlatform.Studio2017.0.7.2\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
@@ -46,8 +50,7 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>True</SpecificVersion>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -101,16 +104,8 @@
       <Name>ETSLPConverter</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ETSTranslationProvider\Trados2017_Plugin\ETSTranslationProvider2017.csproj">
-      <Project>{2d963716-8fc4-4353-addd-7a6c0f7717de}</Project>
+      <Project>{5df3208a-65a1-4988-b997-c361fc9c5a0a}</Project>
       <Name>ETSTranslationProvider2017</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SegmentParser\SegmentParser.csproj">
-      <Project>{42858567-aada-4a61-9d04-bf151137146b}</Project>
-      <Name>SegmentParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\XliffConverter\XliffConverter.csproj">
-      <Project>{c8f2c2fc-5a3e-4be7-9788-f6f24eb69f72}</Project>
-      <Name>XliffConverter</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -139,10 +134,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
