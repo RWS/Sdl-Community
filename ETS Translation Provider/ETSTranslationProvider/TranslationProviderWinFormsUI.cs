@@ -1,11 +1,11 @@
-using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using System.Windows.Forms;
+using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace ETSTranslationProvider
 {
-    [TranslationProviderWinFormsUi(
+	[TranslationProviderWinFormsUi(
         Id = "TranslationProviderWinFormsUI",
         Name = "TranslationProviderWinFormsUI",
         Description = "TranslationProviderWinFormsUI")]
@@ -22,7 +22,7 @@ namespace ETSTranslationProvider
         public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
             Log.logger.Trace("");
-            ProviderConfDialog dialog = new ProviderConfDialog(new TranslationOptions(), credentialStore, languagePairs);
+            var dialog = new ProviderConfDialog(new TranslationOptions(), credentialStore, languagePairs);
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
                 return new ITranslationProvider[] { new TranslationProvider(dialog.Options) };
@@ -50,16 +50,20 @@ namespace ETSTranslationProvider
         /// <param name="languagePairs"></param>
         /// <param name="credentialStore"></param>
         /// <returns></returns>
-        public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
+        public bool Edit(
+			IWin32Window owner,
+			ITranslationProvider translationProvider,
+			LanguagePair[] languagePairs,
+			ITranslationProviderCredentialStore credentialStore)
         {
             Log.logger.Trace("");
-            TranslationProvider editProvider = translationProvider as TranslationProvider;
+            var editProvider = translationProvider as TranslationProvider;
             if (editProvider == null)
             {
                 return false;
             }
 
-            ProviderConfDialog dialog = new ProviderConfDialog(editProvider.Options, credentialStore, languagePairs);
+            var dialog = new ProviderConfDialog(editProvider.Options, credentialStore, languagePairs);
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
                 editProvider.Options = dialog.Options;
@@ -85,8 +89,9 @@ namespace ETSTranslationProvider
             Log.logger.Trace("");
             var options = new TranslationOptions(translationProviderUri);
 
-            var dialog = new ProviderConfDialog(options, credentialStore, null);
-            dialog.DisplayForCredentialsOnly(); //only show controls for setting credentials, as that is the only thing that will end up getting saved
+			//only show controls for setting credentials, as that is the only thing that will end up getting saved
+			var dialog = new ProviderConfDialog(options, credentialStore, null);
+			dialog.DisplayForCredentialsOnly(); 
 
             return (dialog.ShowDialog(owner) == DialogResult.OK);
         }
@@ -101,7 +106,7 @@ namespace ETSTranslationProvider
         public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
         {
             Log.logger.Trace("");
-            TranslationProviderDisplayInfo info = new TranslationProviderDisplayInfo();
+            var info = new TranslationProviderDisplayInfo();
             info.Name = PluginResources.Plugin_NiceName;
             info.TranslationProviderIcon = PluginResources.icon_icon;
             info.TooltipText = PluginResources.Plugin_Tooltip;
@@ -112,9 +117,10 @@ namespace ETSTranslationProvider
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
             Log.logger.Trace("");
-            if (translationProviderUri == null)
-                throw new ArgumentNullException("translationProviderUri", "URI not supported by the plug-in.");
-
+			if (translationProviderUri == null)
+			{
+				throw new ArgumentNullException("translationProviderUri", "URI not supported by the plug-in.");
+			}
             return string.Equals(translationProviderUri.Scheme, TranslationProvider.TranslationProviderScheme, StringComparison.CurrentCultureIgnoreCase);
         }
 

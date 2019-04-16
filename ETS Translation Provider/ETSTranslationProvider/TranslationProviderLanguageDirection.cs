@@ -1,14 +1,15 @@
+using System;
+using System.Linq;
 using ETSTranslationProvider.ETSApi;
+using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
-using System.Linq;
 
 namespace ETSTranslationProvider
 {
-    public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
+	public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
     {
         private TranslationProvider provider;
         private LanguagePair languageDirection;
@@ -68,12 +69,12 @@ namespace ETSTranslationProvider
 			{
 				var xliffDocument = CreateXliffFile(sourceSegments);
 
-				string translatedXliffText = ETSTranslatorHelper.GetTranslation(
+				var translatedXliffText = ETSTranslatorHelper.GetTranslation(
 					provider.Options,
 					languageDirection,
 					xliffDocument);
 
-				var translatedXliff = XliffConverter.Converter.ParseXliffString(translatedXliffText);
+				var translatedXliff = Converter.ParseXliffString(translatedXliffText);
 				if (translatedXliff != null)
 				{
 					return translatedXliff.GetTargetSegments();
@@ -97,14 +98,14 @@ namespace ETSTranslationProvider
         private static SearchResult CreateSearchResult(Segment searchSegment, Segment translation)
         {
             Log.logger.Trace("");
-            TranslationUnit unit = new TranslationUnit();
+            var unit = new TranslationUnit();
             unit.SourceSegment = searchSegment;
             unit.TargetSegment = translation;
             unit.ConfirmationLevel = ConfirmationLevel.Translated;
             unit.ResourceId = new PersistentObjectToken(unit.GetHashCode(), Guid.Empty);
             unit.Origin = TranslationUnitOrigin.MachineTranslation;
 
-            SearchResult searchResult = new SearchResult(unit);
+            var searchResult = new SearchResult(unit);
 
             // We do not currently support scoring, so always say that we're 25% sure on this translation.
             searchResult.ScoringResult = new ScoringResult() { BaseScore = 25 };
@@ -200,7 +201,7 @@ namespace ETSTranslationProvider
         public SearchResults SearchText(SearchSettings settings, string segment)
         {
             Log.logger.Trace("");
-            Segment seg = new Segment(languageDirection.SourceCulture);
+            var seg = new Segment(languageDirection.SourceCulture);
             seg.Add(segment);
             return SearchSegment(settings, seg);
         }
@@ -229,41 +230,43 @@ namespace ETSTranslationProvider
             return SearchSegments(settings, translationUnits.Select(tu => tu.SourceSegment).ToArray());
         }
 
-        /// <summary>
-        /// Translate an array of translation units using their source segments.
-        /// Translation depends on the corresponding mask array.
-        /// </summary>
-        /// <param name="settings"></param>
-        /// <param name="translationUnits"></param>
-        /// <param name="mask"></param>
-        /// <returns></returns>
-        public SearchResults[] SearchTranslationUnitsMasked(
-            SearchSettings settings,
-            TranslationUnit[] translationUnits,
-            bool[] mask)
-        {
-            Log.logger.Trace("");
-            if (translationUnits == null)
-                throw new ArgumentNullException("translationUnits", "TranslationUnits in SearchSegmentsMasked");
-            if (mask == null || mask.Length != translationUnits.Length)
-                throw new ArgumentException("Mask in SearchSegmentsMasked");
+		/// <summary>
+		/// Translate an array of translation units using their source segments.
+		/// Translation depends on the corresponding mask array.
+		/// </summary>
+		/// <param name="settings"></param>
+		/// <param name="translationUnits"></param>
+		/// <param name="mask"></param>
+		/// <returns></returns>
+		public SearchResults[] SearchTranslationUnitsMasked(
+			SearchSettings settings,
+			TranslationUnit[] translationUnits,
+			bool[] mask)
+		{
+			Log.logger.Trace("");
+			if (translationUnits == null)
+			{
+				throw new ArgumentNullException("translationUnits", "TranslationUnits in SearchSegmentsMasked");
+			}
+			if (mask == null || mask.Length != translationUnits.Length)
+			{
+				throw new ArgumentException("Mask in SearchSegmentsMasked");
+			}
 
-            return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
-        }
+			return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
+		}
 
 		/// <summary>
 		/// Prepares a source translation string for request. It ultimately removes all the tags data,
 		/// storing them temporarily in a dictionary, which then can be used to reinstate the tags' text.
 		/// Function taken from previous ETS Plugin.
 		/// </summary>
-		/// <param name="segment"></param>
-		/// <param name="hasTags"></param>
-		/// <param name="tagMapping"></param>
-		/// <returns></returns>
-		public XliffConverter.xliff CreateXliffFile(Segment[] segments)
+		/// <param name="segments"></param>
+		/// <returns>Xliff</returns>
+		public Xliff CreateXliffFile(Segment[] segments)
 		{
 			Log.logger.Trace("");
-			var xliffDocument = new XliffConverter.xliff(languageDirection.SourceCulture, languageDirection.TargetCulture);
+			var xliffDocument = new Xliff(languageDirection.SourceCulture, languageDirection.TargetCulture);
 
 			foreach (var seg in segments)
 			{

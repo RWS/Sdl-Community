@@ -67,6 +67,9 @@
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=1.2.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Sdl.Community.Toolkit.LanguagePlatform.1.2.0\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -223,14 +226,6 @@
     <ProjectReference Include="..\..\ETSLPConverter\ETSLPConverter.csproj">
       <Project>{cebe84eb-a630-4957-b93a-3b60456b5fb7}</Project>
       <Name>ETSLPConverter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SegmentParser\SegmentParser.csproj">
-      <Project>{42858567-aada-4a61-9d04-bf151137146b}</Project>
-      <Name>SegmentParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\XliffConverter\XliffConverter.csproj">
-      <Project>{c8f2c2fc-5a3e-4be7-9788-f6f24eb69f72}</Project>
-      <Name>XliffConverter</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

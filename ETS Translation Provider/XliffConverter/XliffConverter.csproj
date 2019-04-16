@@ -70,12 +70,6 @@
     <Compile Include="XliffFile.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SegmentParser\SegmentParser.csproj">
-      <Project>{42858567-aada-4a61-9d04-bf151137146b}</Project>
-      <Name>SegmentParser</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="sdl.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
