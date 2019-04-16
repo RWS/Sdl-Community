@@ -21,7 +21,8 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 
 	    public override void Execute()
 	    {
-			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader(), DialogCoordinator.Instance);
+			var timedTextBoxViewModel = new ViewModels.TimedTextBox();
+			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader(), DialogCoordinator.Instance, timedTextBoxViewModel);
 
 		    var mainWindow = new MainWindow
 		    {

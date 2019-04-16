@@ -152,10 +152,10 @@
     <value>Resources\Error.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Identified_Languages" xml:space="preserve">
-    <value>The following languages were identified:</value>
+    <value>The following languages were identified in the template:</value>
   </data>
   <data name="Unidentified_Languages" xml:space="preserve">
-    <value>The following languages couldn't be identified because their LCID is not unique:</value>
+    <value>The following languages in the template couldn't be identified because their LCID is not unique:</value>
   </data>
   <data name="Error_Window_Title" xml:space="preserve">
     <value>Error</value>
@@ -163,11 +163,11 @@
   <data name="Select_at_least_one_TM" xml:space="preserve">
     <value>Select at least one TM</value>
   </data>
-  <data name="Warning_Window_Title_Template" xml:space="preserve">
-    <value>Warning regarding the template</value>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
   </data>
   <data name="Please_select_the_folder_containing_the_TMs" xml:space="preserve">
-    <value> select the folder containing the TMs</value>
+    <value>Select the folder containing the TMs</value>
   </data>
   <data name="Export_Window_Title" xml:space="preserve">
     <value>Export to excel</value>
@@ -194,7 +194,7 @@
     <value>The resources were imported successfully</value>
   </data>
   <data name="No_Languages_IDed" xml:space="preserve">
-    <value>No languages could be identified</value>
+    <value>No languages could be identified in the template</value>
   </data>
   <data name="Select_A_Template" xml:space="preserve">
     <value>Select a template</value>
@@ -203,7 +203,7 @@
     <value>This template is corrupted or the file is not a template</value>
   </data>
   <data name="Template_filePath_Not_Correct" xml:space="preserve">
-    <value>The file path of the template is not correct!</value>
+    <value>The file path of the template is not correct</value>
   </data>
   <data name="The_file_is_not_of_the_required_type" xml:space="preserve">
     <value>The file is not of the required type</value>
@@ -216,5 +216,23 @@
   </data>
   <data name="Template_has_no_resources" xml:space="preserve">
     <value>The selected template has no resources</value>
+  </data>
+  <data name="From_TM_Radio_Button_Tooltip" xml:space="preserve">
+    <value>Switch this on to import resources from the TMs selected in the grid into the template</value>
+  </data>
+  <data name="From_Excel_Radio_Button_Tooltip" xml:space="preserve">
+    <value>Switch this on to import resources from an excel spreadsheet into the template</value>
+  </data>
+  <data name="Import_button_Tooltip" xml:space="preserve">
+    <value>Import resources [from excel/from TMs] into the template</value>
+  </data>
+  <data name="Apply_button_Tooltip" xml:space="preserve">
+    <value>Apply the template on the TMs selected</value>
+  </data>
+  <data name="Export_button_Tooltip" xml:space="preserve">
+    <value>Export resources from the template to an excel spreadsheet</value>
+  </data>
+  <data name="Browse_button_Tooltip" xml:space="preserve">
+    <value>Choose a template...</value>
   </data>
 </root>

@@ -48,12 +48,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private List<int> _unIDedLanguagess;
 
 		private ExcelImportExportService _importExportService;
+		private TimedTextBox _timedTextBoxViewModel;
 
-		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader, IDialogCoordinator dialogCoordinator)
+		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader, IDialogCoordinator dialogCoordinator, TimedTextBox timedTextBoxViewModel)
 		{
 			_templateLoader = templateLoader;
 			_tmLoader = tmLoader;
 			_dialogCoordinator = dialogCoordinator;
+			TimedTextBoxViewModel = timedTextBoxViewModel;
 
 			_tmPath = _templateLoader.GetTmFolderPath();
 
@@ -66,6 +68,22 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			_tmCollection = new ObservableCollection<TranslationMemory>();
 
 			_importExportService = new ExcelImportExportService();
+		}
+
+		public TimedTextBox TimedTextBoxViewModel
+		{
+			get => _timedTextBoxViewModel;
+			set
+			{
+				_timedTextBoxViewModel = value;
+				_timedTextBoxViewModel.ShouldStartValidation += StartLoadingResourcesAndValidate;
+			}
+		}
+
+		public async void StartLoadingResourcesAndValidate(object sender, EventArgs e)
+		{
+			LoadResourcesFromTemplate();
+			await ValidateTemplateAndShowErrors();
 		}
 
 		public string ProgressVisibility
@@ -130,14 +148,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public string ResourceTemplatePath
 		{
-			get => _resourceTemplatePath;
+			get => _timedTextBoxViewModel.Path;
 			set
 			{
-				if (_resourceTemplatePath != value)
-				{
-					_resourceTemplatePath = value;
-					OnPropertyChanged(nameof(ResourceTemplatePath));
-				}
+				_timedTextBoxViewModel.Path = value;
+				OnPropertyChanged(nameof(ResourceTemplatePath));
 			}
 		}
 
@@ -173,7 +188,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export, true));
 
-		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(Import, true));
+		public ICommand ImportCommand => _importCommand ?? (_importCommand = new RelayCommand(Import, (s)=>!string.IsNullOrEmpty(ResourceTemplatePath)));
 
 		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
@@ -295,7 +310,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			if (selectedTmList.Count == 0)
 			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title_Template, PluginResources.Select_at_least_one_TM);
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning, PluginResources.Select_at_least_one_TM);
 				return;
 			}
 
@@ -344,7 +359,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			if (!string.IsNullOrEmpty(unIDedLanguages) || !isValid)
 			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title_Template,
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning,
 					_message);
 			}
 
@@ -360,7 +375,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		private async void Import()
+		private async void Import(object parameter =  null)
 		{
 			LoadResourcesFromTemplate();
 
@@ -428,7 +443,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				}
 				else
 				{
-					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Select_at_least_one_TM);
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning, PluginResources.Select_at_least_one_TM);
 				}
 
 				ProgressVisibility = "Hidden";
@@ -467,7 +482,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				catch (Exception e)
 				{
 					filePath = CreateNewFile(filePath);
-					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning_Window_Title_Template, $"{e.Message}\n\n{PluginResources.A_new_file_created}: {filePath}");
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning, $"{e.Message}\n\n{PluginResources.A_new_file_created}: {filePath}");
 				}
 			}
 
