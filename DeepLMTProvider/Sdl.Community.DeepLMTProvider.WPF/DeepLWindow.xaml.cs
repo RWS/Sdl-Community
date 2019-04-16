@@ -45,7 +45,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 		private void Ok_Click(object sender, RoutedEventArgs e)
 		{
-			Options.ApiKey = LoginTab.ApiKeyBox.Password;
+			Options.ApiKey = LoginTab.ApiKeyBox.Password.TrimEnd();
 			if (SettingsTab.Resend.IsChecked != null)
 			{
 				Options.ResendDrafts = SettingsTab.Resend.IsChecked.Value;
