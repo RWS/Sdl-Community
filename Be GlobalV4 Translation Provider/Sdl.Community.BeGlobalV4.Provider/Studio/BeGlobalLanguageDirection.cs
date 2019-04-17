@@ -51,34 +51,29 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			results.Add(CreateSearchResult(segment, translation));
 			return results;
 		}
+
 		private Segment[] TranslateSegments(Segment[] sourceSegments)
 		{
-			try
+			var xliffDocument = CreateXliffFile(sourceSegments);
+
+			var sourceLanguage =
+				_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.SourceCulture);
+			var targetLanguage =
+				_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.TargetCulture);
+
+			var translator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", _options.ClientId,
+				_options.ClientSecret, sourceLanguage, targetLanguage, _options.Model, _options.UseClientAuthentication);
+
+			var translatedXliffText = WebUtility.UrlDecode(translator.TranslateText(xliffDocument.ToString()));
+
+			var translatedXliff = Converter.ParseXliffString(translatedXliffText);
+			if (translatedXliff != null)
 			{
-				var xliffDocument = CreateXliffFile(sourceSegments);
-
-				var sourceLanguage =
-					_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.SourceCulture);
-				var targetLanguage =
-					_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.TargetCulture);
-
-				var translator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", _options.ClientId,
-					_options.ClientSecret, sourceLanguage, targetLanguage, _options.Model, _options.UseClientAuthentication);
-
-				var translatedXliffText = WebUtility.UrlDecode(translator.TranslateText(xliffDocument.ToString()));
-
-				var translatedXliff = Converter.ParseXliffString(translatedXliffText);
-				if (translatedXliff != null)
-				{
-					return translatedXliff.GetTargetSegments();
-				}
-				return new Segment[sourceSegments.Length];
+				return translatedXliff.GetTargetSegments();
 			}
-			catch (Exception e)
-			{
-				return new Segment[sourceSegments.Length];
-			}
+			return new Segment[sourceSegments.Length];
 		}
+
 		public Xliff CreateXliffFile(Segment[] segments)
 		{
 			var xliffDocument = new Xliff(SourceLanguage, TargetLanguage);
