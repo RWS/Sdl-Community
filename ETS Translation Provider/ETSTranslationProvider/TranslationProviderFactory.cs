@@ -10,7 +10,10 @@ namespace ETSTranslationProvider
         Description = "ETS translation provider.")]
     public class TranslationProviderFactory : ITranslationProviderFactory
     {
-        public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
+        public ITranslationProvider CreateTranslationProvider(
+			Uri translationProviderUri,
+			string translationProviderState,
+			ITranslationProviderCredentialStore credentialStore)
         {
             Log.Logger.Info("Attempting to create a new translation provider with URI: {0}", translationProviderUri);
 
