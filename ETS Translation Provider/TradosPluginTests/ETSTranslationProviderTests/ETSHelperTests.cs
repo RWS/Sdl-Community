@@ -1,16 +1,17 @@
-﻿using ETSLPConverter;
+﻿using System;
+using System.Globalization;
+using System.Linq;
+using ETSLPConverter;
 using ETSTranslationProvider;
 using ETSTranslationProvider.ETSApi;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
-using System.Globalization;
-using System.Linq;
 
 namespace TradosPluginTests
 {
-    [TestClass]
+	[TestClass]
     public class ETSHelperTests
     {
         public ETSHelperTests()
@@ -37,7 +38,7 @@ namespace TradosPluginTests
         [TestMethod]
         public void ETSApi_VerifyAPIKey_NoExceptionThrown()
         {
-            GenericCredentials credentials = new GenericCredentials(null, null);
+			var credentials = new GenericCredentials(null, null);
             credentials["API-Key"] = apiKeyTranslationOptions.ApiToken;
             credentials["UseApiKey"] = "true";
             try
@@ -50,24 +51,29 @@ namespace TradosPluginTests
             }
         }
 
-        /// <summary>
-        /// Tests GetLanguagePairs and verifies that the ETS instance the tests are running on has EngFra as a
-        /// language pair
-        /// </summary>
-        [TestMethod]
-        public void ETSApi_FetchLPs_AtLeastFraEngReturned()
-        {
-            ETSLanguagePair[] lps = ETSTranslatorHelper.GetLanguagePairs(apiKeyTranslationOptions);
-            if (!lps.Any())
-                Assert.Fail("Expected at least one LP returned");
-            // I realize not every ETS server will have german, but for sake of further tests, the host we choose to test with should.
-            // Otherwise we'd have to code up an entire mock for the ETS API.
-            if (!lps.Any(lp =>
-                lp.SourceLanguageId.Equals("eng", StringComparison.OrdinalIgnoreCase)
-                && lp.TargetLanguageId.Equals("fra", StringComparison.OrdinalIgnoreCase)
-            ))
-                Assert.Fail("Expected EngFra as one of the LPs");
-        }
+		/// <summary>
+		/// Tests GetLanguagePairs and verifies that the ETS instance the tests are running on has EngFra as a
+		/// language pair
+		/// </summary>
+		[TestMethod]
+		public void ETSApi_FetchLPs_AtLeastFraEngReturned()
+		{
+			var lps = ETSTranslatorHelper.GetLanguagePairs(apiKeyTranslationOptions);
+			if (!lps.Any())
+			{
+				Assert.Fail("Expected at least one LP returned");
+			}
+			
+			// I realize not every ETS server will have german, but for sake of further tests, the host we choose to test with should.
+			// Otherwise we'd have to code up an entire mock for the ETS API.
+			if (!lps.Any(lp =>
+				lp.SourceLanguageId.Equals("eng", StringComparison.OrdinalIgnoreCase)
+				&& lp.TargetLanguageId.Equals("fra", StringComparison.OrdinalIgnoreCase)
+			))
+			{
+				Assert.Fail("Expected EngFra as one of the LPs");
+			}
+		}
 
         /// <summary>
         /// Tests we are able to retrieve a non-null authentication token from the server using the user credentials
@@ -75,16 +81,18 @@ namespace TradosPluginTests
         [TestMethod]
         public void ETSApi_GetBasicAuthToken_GetsToken()
         {
-            try
-            {
-                string token = ETSTranslatorHelper.GetAuthToken(basicAuthTranslationOptions, userCredentials);
-                if (token == null)
-                    Assert.Fail("Expected token, but got null");
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail("Expected no exception, but got: " + ex.Message);
-            }
+			try
+			{
+				var token = ETSTranslatorHelper.GetAuthToken(basicAuthTranslationOptions, userCredentials);
+				if (token == null)
+				{
+					Assert.Fail("Expected token, but got null");
+				}
+			}
+			catch (Exception ex)
+			{
+				Assert.Fail("Expected no exception, but got: " + ex.Message);
+			}
         }
 
         /// <summary>
@@ -94,22 +102,22 @@ namespace TradosPluginTests
         public void ETSApi_FetchTranslationNoTags_ValidTranslation()
         {
 
-            XliffConverter.xliff xliffDocument = new XliffConverter.xliff(engFraLP.SourceCulture, engFraLP.TargetCulture);
+            var xliffDocument = new Xliff(engFraLP.SourceCulture, engFraLP.TargetCulture);
             xliffDocument.AddSourceText(StringResource.BasicText);
 
-            string translatedXliffText = ETSTranslatorHelper.GetTranslation(apiKeyTranslationOptions, engFraLP, xliffDocument);
-            XliffConverter.xliff translatedXliff = XliffConverter.Converter.ParseXliffString(translatedXliffText);
+			var translatedXliffText = ETSTranslatorHelper.GetTranslation(apiKeyTranslationOptions, engFraLP, xliffDocument);
+            var translatedXliff = Sdl.Community.Toolkit.LanguagePlatform.XliffConverter.Converter.ParseXliffString(translatedXliffText);
 
             Assert.IsTrue(translatedXliff.GetTargetSegments().Any());
             Assert.AreEqual(
                    StringResource.BasicTranslation,
                    translatedXliff.GetTargetSegments()[0].ToString());
 
-            string token = ETSTranslatorHelper.GetAuthToken(basicAuthTranslationOptions, userCredentials);
+			var token = ETSTranslatorHelper.GetAuthToken(basicAuthTranslationOptions, userCredentials);
             basicAuthTranslationOptions.ApiToken = token;
 
             translatedXliffText = ETSTranslatorHelper.GetTranslation(basicAuthTranslationOptions, engFraLP, xliffDocument);
-            translatedXliff = XliffConverter.Converter.ParseXliffString(translatedXliffText);
+            translatedXliff = Sdl.Community.Toolkit.LanguagePlatform.XliffConverter.Converter.ParseXliffString(translatedXliffText);
 
             Assert.IsTrue(translatedXliff.GetTargetSegments().Any());
             Assert.AreEqual(
@@ -123,16 +131,14 @@ namespace TradosPluginTests
         [TestMethod]
         public void ETSApi_FetchTranslationEmoji_ValidTranslation()
         {
-            XliffConverter.xliff xliffDocument = new XliffConverter.xliff(engFraLP.SourceCulture, engFraLP.TargetCulture, encodeUTF16: true);
+            var xliffDocument = new Xliff(engFraLP.SourceCulture, engFraLP.TargetCulture, encodeUtf16: true);
 
             xliffDocument.AddSourceText(StringResource.BasicEmojiTest);
 
-            string translatedXliffText = ETSTranslatorHelper.GetTranslation(apiKeyTranslationOptions, engFraLP, xliffDocument);
-            XliffConverter.xliff translatedXliff = XliffConverter.Converter.ParseXliffString(translatedXliffText);
+			var translatedXliffText = ETSTranslatorHelper.GetTranslation(apiKeyTranslationOptions, engFraLP, xliffDocument);
+            var translatedXliff = Sdl.Community.Toolkit.LanguagePlatform.XliffConverter.Converter.ParseXliffString(translatedXliffText);
             Assert.IsTrue(translatedXliff.GetTargetSegments().Any());
-            Assert.AreEqual(
-                   StringResource.BasicEmojiTranslation,
-                   translatedXliff.GetTargetSegments()[0].ToString());
+            Assert.AreEqual( StringResource.BasicEmojiTranslation, translatedXliff.GetTargetSegments()[0].ToString());
         }
 
         /// <summary>
@@ -142,7 +148,7 @@ namespace TradosPluginTests
         [ExpectedException(typeof(Exception))]
         public void ETSApi_FetchTranslation_InvalidTranslation()
         {
-            XliffConverter.xliff xliffDocument = new XliffConverter.xliff(engFraLP.SourceCulture, engFraLP.TargetCulture);
+            var xliffDocument = new Xliff(engFraLP.SourceCulture, engFraLP.TargetCulture);
             xliffDocument.AddSourceText(StringResource.BasicText);
 
             ETSTranslatorHelper.GetTranslation(apiKeyTranslationOptions, engInvLP, xliffDocument);
