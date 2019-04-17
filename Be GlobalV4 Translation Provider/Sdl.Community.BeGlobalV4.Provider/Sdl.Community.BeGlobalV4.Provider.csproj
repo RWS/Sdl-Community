@@ -139,9 +139,11 @@
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Model\BeGlobalLanguagePair.cs" />
     <Compile Include="Model\BeGlobalTag.cs" />
+    <Compile Include="Model\ErrorDetails.cs" />
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\PreTranslateSegment.cs" />
     <Compile Include="Model\PreTranslation.cs" />
+    <Compile Include="Model\ResponseError.cs" />
     <Compile Include="Model\SubscriptionInfo.cs" />
     <Compile Include="Model\TagInfo.cs" />
     <Compile Include="Model\TranslationModel.cs" />
