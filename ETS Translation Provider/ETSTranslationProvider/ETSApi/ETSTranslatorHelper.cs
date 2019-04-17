@@ -211,14 +211,20 @@ namespace ETSTranslationProvider.ETSApi
                 }
                 catch (Exception e)
                 {
-                    while (e.InnerException != null)
-                        e = e.InnerException;
+					while (e.InnerException != null)
+					{
+						e = e.InnerException;
+					}
 
-                    if (!useHTTP && e.HResult == (int)ErrorHResult.HandshakeFailure)
-                        return ContactETSServer(etsHttpMethod, options, path, parameters, true);
-                    if (timesToRetry > 0)
-                        return ContactETSServer(etsHttpMethod, options, path, parameters, useHTTP, --timesToRetry);
-                    Log.Logger.Error("Exception thrown when translating. Hresult is " + e.HResult);
+					if (!useHTTP && e.HResult == (int)ErrorHResult.HandshakeFailure)
+					{
+						return ContactETSServer(etsHttpMethod, options, path, parameters, true);
+					}
+					if (timesToRetry > 0)
+					{
+						return ContactETSServer(etsHttpMethod, options, path, parameters, useHTTP, --timesToRetry);
+					}
+					Log.Logger.Error("Exception thrown when translating. Hresult is " + e.HResult);
                     throw TranslateAggregateException(e);
                 }
 
@@ -238,6 +244,7 @@ namespace ETSTranslationProvider.ETSApi
                         httpResponse.Content.ReadAsStringAsync().Result);
                 }
                 Log.Logger.Error("{0} status code resulting in failure of segment", (int)httpResponse.StatusCode);
+
 				if (timesToRetry > 0)
 				{
 					return ContactETSServer(etsHttpMethod, options, path, parameters, useHTTP, --timesToRetry);

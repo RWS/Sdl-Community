@@ -13,8 +13,8 @@ namespace ETSTranslationProvider
 {
 	public class TranslationOptions
 	{
-		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
-
+		private string ResolvedHost { get; set; }
+		
 		readonly TranslationProviderUriBuilder _uriBuilder;
 
 		public TranslationOptions()
@@ -29,6 +29,8 @@ namespace ETSTranslationProvider
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(uri);
 		}
+
+		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
 
 		public Dictionary<CultureInfo, ETSLanguagePair> LPPreferences { get; }
 
@@ -50,17 +52,26 @@ namespace ETSTranslationProvider
 			}
 		}
 
-		private string ResolvedHost { get; set; }
-
-		private string ResolveHost()
+		public int Port
 		{
-			if (ResolvedHost != null)
+			get => _uriBuilder.Port;
+			set => _uriBuilder.Port = value;
+		}
+
+		public APIVersion ApiVersion { get; set; }
+
+		public string ApiVersionString => ApiVersion == APIVersion.v1 ? "v1" : "v2";
+
+		public Uri Uri
+		{
+			get
 			{
-				return ResolvedHost;
+				var resolvedUri = new UriBuilder(_uriBuilder.Uri)
+				{
+					Host = ResolveHost()
+				};
+				return resolvedUri.Uri;
 			}
-			// If the host is an IP address, preserve that, otherwise get the DNS host and cache it.
-			ResolvedHost = IPAddress.TryParse(Host, out var address) ? Host : Dns.GetHostEntry(Host).HostName;
-			return ResolvedHost;
 		}
 
 		public TradosToETSLP[] SetPreferredLanguages(LanguagePair[] languagePairs)
@@ -106,13 +117,33 @@ namespace ETSTranslationProvider
 					}
 				}
 			}
+			RemoveLPChoices(languagePairChoices);
 
-			// Empty out the previous LP choices.
+			return languagePairChoices.ToArray();
+		}
+
+		private string ResolveHost()
+		{
+			if (ResolvedHost != null)
+			{
+				return ResolvedHost;
+			}
+			// If the host is an IP address, preserve that, otherwise get the DNS host and cache it.
+			ResolvedHost = IPAddress.TryParse(Host, out var address) ? Host : Dns.GetHostEntry(Host).HostName;
+			return ResolvedHost;
+		}
+
+		/// <summary>
+		/// Empty out the previous LP choices.
+		/// </summary>
+		/// <param name="languagePairChoices">languagePairChoices</param>
+		private void RemoveLPChoices(List<TradosToETSLP> languagePairChoices)
+		{			
 			foreach (var lpChoice in languagePairChoices)
 			{
 				// By default, select the preferences to be the first LP of each set.
 				var defaultOption = lpChoice.ETSLPs.FirstOrDefault();
-				
+
 				// Verify that the preferred LP still exists on ets server and if not, remove it from preferences
 				if (LPPreferences.ContainsKey(lpChoice.TradosCulture) && !lpChoice.ETSLPs.Contains(LPPreferences[lpChoice.TradosCulture]))
 				{
@@ -122,29 +153,6 @@ namespace ETSTranslationProvider
 				{
 					LPPreferences[lpChoice.TradosCulture] = defaultOption;
 				}
-			}
-			return languagePairChoices.ToArray();
-		}
-
-		public int Port
-		{
-			get => _uriBuilder.Port;
-			set => _uriBuilder.Port = value;
-		}
-
-		public APIVersion ApiVersion { get; set; }
-
-		public string ApiVersionString => ApiVersion == APIVersion.v1 ? "v1" : "v2";
-
-		public Uri Uri
-		{
-			get
-			{
-				var resolvedUri = new UriBuilder(_uriBuilder.Uri)
-				{
-					Host = ResolveHost()
-				};
-				return resolvedUri.Uri;
 			}
 		}
 		#endregion
