@@ -2,6 +2,6 @@
 {
     class ETSTranslationOutput
     {
-        public string translation { get; set; }
+        public string Translation { get; set; }
     }
 }
