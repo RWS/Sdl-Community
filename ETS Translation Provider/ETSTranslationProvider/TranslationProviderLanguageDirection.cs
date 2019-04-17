@@ -36,6 +36,11 @@ namespace ETSTranslationProvider
 			get { return provider; }
 		}
 
+		public bool CanReverseLanguageDirection
+		{
+			get { return false; }
+		}
+
 		/// <summary>
 		/// Used to translate a single segment.
 		/// </summary>
@@ -113,13 +118,6 @@ namespace ETSTranslationProvider
 
 			return searchResult;
 		}
-
-
-		public bool CanReverseLanguageDirection
-		{
-			get { return false; }
-		}
-
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
 		{
