@@ -21,7 +21,7 @@ namespace ETSTranslationProvider
         /// <returns></returns>
         public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             var dialog = new ProviderConfDialog(new TranslationOptions(), credentialStore, languagePairs);
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
@@ -56,7 +56,7 @@ namespace ETSTranslationProvider
 			LanguagePair[] languagePairs,
 			ITranslationProviderCredentialStore credentialStore)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             var editProvider = translationProvider as TranslationProvider;
             if (editProvider == null)
             {
@@ -86,7 +86,7 @@ namespace ETSTranslationProvider
         /// <returns></returns>
         public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             var options = new TranslationOptions(translationProviderUri);
 
 			//only show controls for setting credentials, as that is the only thing that will end up getting saved
@@ -96,27 +96,29 @@ namespace ETSTranslationProvider
             return (dialog.ShowDialog(owner) == DialogResult.OK);
         }
 
-        /// <summary>
-        /// Used for displaying the plug-in info such as the plug-in name,
-        /// tooltip, and icon.
-        /// </summary>
-        /// <param name="translationProviderUri"></param>
-        /// <param name="translationProviderState"></param>
-        /// <returns></returns>
-        public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
-        {
-            Log.logger.Trace("");
-            var info = new TranslationProviderDisplayInfo();
-            info.Name = PluginResources.Plugin_NiceName;
-            info.TranslationProviderIcon = PluginResources.icon_icon;
-            info.TooltipText = PluginResources.Plugin_Tooltip;
-            info.SearchResultImage = PluginResources.icon_symbol;
-            return info;
+		/// <summary>
+		/// Used for displaying the plug-in info such as the plug-in name,
+		/// tooltip, and icon.
+		/// </summary>
+		/// <param name="translationProviderUri"></param>
+		/// <param name="translationProviderState"></param>
+		/// <returns></returns>
+		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
+		{
+			Log.Logger.Trace("");
+			var info = new TranslationProviderDisplayInfo
+			{
+				Name = PluginResources.Plugin_NiceName,
+				TranslationProviderIcon = PluginResources.icon_icon,
+				TooltipText = PluginResources.Plugin_Tooltip,
+				SearchResultImage = PluginResources.icon_symbol,
+			};
+			return info;
         }
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
 			if (translationProviderUri == null)
 			{
 				throw new ArgumentNullException("translationProviderUri", "URI not supported by the plug-in.");

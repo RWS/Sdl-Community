@@ -12,11 +12,11 @@ namespace ETSTranslationProvider
     {
         public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
-            Log.logger.Info("Attempting to create a new translation provider with URI: {0}", translationProviderUri);
+            Log.Logger.Info("Attempting to create a new translation provider with URI: {0}", translationProviderUri);
 
             if (!SupportsTranslationProviderUri(translationProviderUri))
             {
-                Log.logger.Error("Cannot handle URI {0}.", translationProviderUri);
+                Log.Logger.Error("Cannot handle URI {0}.", translationProviderUri);
                 throw new Exception("Cannot handle URI.");
             }
 
@@ -44,10 +44,10 @@ namespace ETSTranslationProvider
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             if (translationProviderUri == null)
             {
-                Log.logger.Error("Attempted to use null translation provider URI.");
+                Log.Logger.Error("Attempted to use null translation provider URI.");
                 throw new ArgumentNullException("translationProviderUri", "Translation provider URI not supported.");
             }
             return string.Equals(translationProviderUri.Scheme, TranslationProvider.TranslationProviderScheme, StringComparison.OrdinalIgnoreCase);
@@ -55,7 +55,7 @@ namespace ETSTranslationProvider
 
         public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             return new TranslationProviderInfo()
             {
                 TranslationMethod = TranslationOptions.ProviderTranslationMethod,

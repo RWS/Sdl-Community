@@ -47,7 +47,7 @@ namespace ETSTranslationProvider.ETSApi
             LanguagePair languageDirection,
 			Xliff xliffFile)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
 			var text = xliffFile.ToString();
 			var queryString = HttpUtility.ParseQueryString(string.Empty);
 			var encodedInput = text.Base64Encode();
@@ -84,7 +84,7 @@ namespace ETSTranslationProvider.ETSApi
             }
             queryString["inputFormat"] = "application/x-xliff";
 
-            Log.logger.Debug("Sending translation request for: {0}", encodedInput);
+            Log.Logger.Debug("Sending translation request for: {0}", encodedInput);
             string jsonResult;
             try
             {
@@ -92,13 +92,13 @@ namespace ETSTranslationProvider.ETSApi
             }
             catch (Exception e)
             {
-                Log.logger.Error(e, "Error translating " + encodedInput);
+                Log.Logger.Error(e, "Error translating " + encodedInput);
                 throw;
             }
 
-            var encodedTranslation = JsonConvert.DeserializeObject<ETSTranslationOutput>(jsonResult).translation;
+            var encodedTranslation = JsonConvert.DeserializeObject<ETSTranslationOutput>(jsonResult).Translation;
 			var decodedTranslation = encodedTranslation.Base64Decode();
-            Log.logger.Debug("Resultant translation is: {0}", encodedTranslation);
+            Log.Logger.Debug("Resultant translation is: {0}", encodedTranslation);
             return decodedTranslation;
         }
 
@@ -109,7 +109,7 @@ namespace ETSTranslationProvider.ETSApi
         /// <returns></returns>
         public static ETSLanguagePair[] GetLanguagePairs(TranslationOptions options)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             lock (languageLock)
             {
                 if (LanguagePairsOnServer == null || !LanguagePairsOnServer.Any())
@@ -136,7 +136,7 @@ namespace ETSTranslationProvider.ETSApi
                     }
                     catch (Exception e)
                     {
-                        Log.logger.Error(e, "Unable to get the language pairs:");
+                        Log.Logger.Error(e, "Unable to get the language pairs:");
 
                         if (Environment.UserInteractive)
                             MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -169,7 +169,7 @@ namespace ETSTranslationProvider.ETSApi
             bool useHTTP = false,
             int timesToRetry = 5)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
 
 			lock (optionsLock)
 			{
@@ -218,7 +218,7 @@ namespace ETSTranslationProvider.ETSApi
                         return ContactETSServer(etsHttpMethod, options, path, parameters, true);
                     if (timesToRetry > 0)
                         return ContactETSServer(etsHttpMethod, options, path, parameters, useHTTP, --timesToRetry);
-                    Log.logger.Error("Exception thrown when translating. Hresult is " + e.HResult);
+                    Log.Logger.Error("Exception thrown when translating. Hresult is " + e.HResult);
                     throw TranslateAggregateException(e);
                 }
 
@@ -228,16 +228,16 @@ namespace ETSTranslationProvider.ETSApi
                 }
                 else if (httpResponse.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    Log.logger.Error("Invalid credentials received.");
+                    Log.Logger.Error("Invalid credentials received.");
                     throw new UnauthorizedAccessException("The credentials provided are not authorized.");
                 }
                 else if (httpResponse.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    Log.logger.Error("Bad request received: {0}", httpResponse.Content.ReadAsStringAsync().Result);
+                    Log.Logger.Error("Bad request received: {0}", httpResponse.Content.ReadAsStringAsync().Result);
                     throw new Exception("There was a problem with the request: " +
                         httpResponse.Content.ReadAsStringAsync().Result);
                 }
-                Log.logger.Error("{0} status code resulting in failure of segment", (int)httpResponse.StatusCode);
+                Log.Logger.Error("{0} status code resulting in failure of segment", (int)httpResponse.StatusCode);
 				if (timesToRetry > 0)
 				{
 					return ContactETSServer(etsHttpMethod, options, path, parameters, useHTTP, --timesToRetry);
@@ -270,7 +270,7 @@ namespace ETSTranslationProvider.ETSApi
         /// <param name="credentials"></param>
         public static void VerifyBasicAPIToken(TranslationOptions options, GenericCredentials credentials)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
 			if (options == null)
 			{
 				throw new ArgumentNullException("Options is null");
@@ -311,7 +311,7 @@ namespace ETSTranslationProvider.ETSApi
             GenericCredentials credentials,
             bool useHTTP = false)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
 
 			lock (optionsLock)
 			{
@@ -378,7 +378,7 @@ namespace ETSTranslationProvider.ETSApi
         /// <returns></returns>
         private static Exception TranslateAggregateException(Exception culprit)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
 			while (culprit.InnerException != null)
 			{
 				culprit = culprit.InnerException;
@@ -401,7 +401,7 @@ namespace ETSTranslationProvider.ETSApi
 			{
 				return new WebException("The request has been cancelled, either due to timeout or being interrupted externally.");
 			}
-            Log.logger.Error(culprit);
+            Log.Logger.Error(culprit);
             return culprit;
         }
 
@@ -413,7 +413,7 @@ namespace ETSTranslationProvider.ETSApi
         /// <returns></returns>
         private static string Base64Encode(this string text)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
         }
 
@@ -424,7 +424,7 @@ namespace ETSTranslationProvider.ETSApi
         /// <returns></returns>
         private static string Base64Decode(this string encodedText)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             return Encoding.UTF8.GetString(Convert.FromBase64String(encodedText));
         }
         #endregion
