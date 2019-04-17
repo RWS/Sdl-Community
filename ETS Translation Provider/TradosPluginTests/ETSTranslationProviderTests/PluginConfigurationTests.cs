@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
+﻿using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TradosPluginTests
 {
-    [TestClass]
+	[TestClass]
     public class PluginConfigurationTests
     {
         /// <summary>
@@ -12,11 +12,11 @@ namespace TradosPluginTests
         [TestMethod]
         public void PluginConfiguration_GetCurrentInstance_NewConfiguration()
         {
-            if (File.Exists(Path.Combine(ETSTranslationProvider.PluginConfiguration.CurrentInstance.Directory,
-                "config.json")))
-                File.Delete(Path.Combine(ETSTranslationProvider.PluginConfiguration.CurrentInstance.Directory,
-                    "config.json"));
-            var newPluginConfiguration = ETSTranslationProvider.PluginConfiguration.CurrentInstance;
+			if (File.Exists(Path.Combine(ETSTranslationProvider.PluginConfiguration.CurrentInstance.Directory, "config.json")))
+			{
+				File.Delete(Path.Combine(ETSTranslationProvider.PluginConfiguration.CurrentInstance.Directory, "config.json"));
+			}
+			var newPluginConfiguration = ETSTranslationProvider.PluginConfiguration.CurrentInstance;
             Assert.IsNull(newPluginConfiguration.DefaultConnection);
             Assert.IsNull(newPluginConfiguration.LogLevel);
         }
@@ -32,9 +32,10 @@ namespace TradosPluginTests
                 host: "foobar.languageweaver.com",
                 port: 8001
             );
+
             newPluginConfiguration.LogLevel = "DEBUG";
             newPluginConfiguration.SaveToFile();
-            ETSTranslationProvider.PluginConfiguration savedConfiguration = ETSTranslationProvider.PluginConfiguration.ParseConfiguration(newPluginConfiguration.Directory);
+			var savedConfiguration = ETSTranslationProvider.PluginConfiguration.ParseConfiguration(newPluginConfiguration.Directory);
             Assert.AreEqual(savedConfiguration.LogLevel, newPluginConfiguration.LogLevel);
             Assert.AreEqual(savedConfiguration.DefaultConnection.Value.Host, newPluginConfiguration.DefaultConnection.Value.Host);
             Assert.AreEqual(savedConfiguration.DefaultConnection.Value.Port, newPluginConfiguration.DefaultConnection.Value.Port);
@@ -49,9 +50,12 @@ namespace TradosPluginTests
         public void PluginConfiguration_ParseConfiguration_NoSuchFile()
         {
             var currentConfiguration = ETSTranslationProvider.PluginConfiguration.CurrentInstance;
-            if (File.Exists(Path.Combine(currentConfiguration.Directory, "config.json")))
-                File.Delete(Path.Combine(currentConfiguration.Directory, "config.json"));
-            // Above has not been saved to a directory yet.
+			if (File.Exists(Path.Combine(currentConfiguration.Directory, "config.json")))
+			{
+				File.Delete(Path.Combine(currentConfiguration.Directory, "config.json"));
+			}
+			
+			// Above has not been saved to a directory yet.
             Assert.IsNull(ETSTranslationProvider.PluginConfiguration.ParseConfiguration(currentConfiguration.Directory));
         }
     }

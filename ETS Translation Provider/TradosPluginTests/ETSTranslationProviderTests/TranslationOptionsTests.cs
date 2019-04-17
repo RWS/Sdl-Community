@@ -1,10 +1,10 @@
-﻿using ETSTranslationProvider;
+﻿using System;
+using ETSTranslationProvider;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace TradosPluginTests
 {
-    [TestClass]
+	[TestClass]
     public class TranslationOptionsTests
     {
         /// <summary>
@@ -13,7 +13,8 @@ namespace TradosPluginTests
         [TestMethod]
         public void Constructor_Parameterless_NullOrEmptyValues()
         {
-            TranslationOptions options = new TranslationOptions();
+            var options = new TranslationOptions();
+
             Assert.AreEqual(options.Host, null);
             Assert.AreEqual(options.ApiToken, null);
             Assert.AreEqual(options.Port, 8001);
@@ -26,8 +27,8 @@ namespace TradosPluginTests
         [ExpectedException(typeof(UriFormatException))]
         public void Constructor_Parameterless_ThrowsException()
         {
-            TranslationOptions options = new TranslationOptions();
-            Uri invalidUri = options.Uri;
+            var options = new TranslationOptions();
+            var invalidUri = options.Uri;
         }
 
         /// <summary>
@@ -37,10 +38,11 @@ namespace TradosPluginTests
         [TestMethod]
         public void Constructor_Parameters_ValidValues()
         {
-            TranslationOptions options = new TranslationOptions(new Uri(StringResource.ApiUrl));
+            var options = new TranslationOptions(new Uri(StringResource.ApiUrl));
 
             string host = StringResource.ApiHost;
             int port = 8001;
+
             Assert.AreEqual(options.Port, port);
             // localhost should be resolved via DNS to wgitbuild#
             Assert.AreNotEqual(options.Uri.ToString(), StringResource.ApiUrl);
