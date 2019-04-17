@@ -15,14 +15,14 @@ namespace ETSTranslationProvider
 
         public TranslationProvider(TranslationOptions options)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             Options = options;
         }
 
         #region ITranslationProvider Properties
         public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             return new TranslationProviderLanguageDirection(this, languageDirection);
         }
 
@@ -33,7 +33,7 @@ namespace ETSTranslationProvider
 
         public void LoadState(string translationProviderState)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             Options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
         }
 
@@ -44,12 +44,12 @@ namespace ETSTranslationProvider
 
         public void RefreshStatusInfo()
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
         }
 
         public string SerializeState()
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             return JsonConvert.SerializeObject(Options);
         }
 
@@ -80,7 +80,7 @@ namespace ETSTranslationProvider
 
         public bool SupportsLanguageDirection(LanguagePair languageDirection)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             return ETSApi.ETSTranslatorHelper.GetLanguagePairs(Options).Any(lp =>
                 languageDirection.SourceCulture.ToETSCode().Equals(lp.SourceLanguageId) &&
                 languageDirection.TargetCulture.ToETSCode().Equals(lp.TargetLanguageId));

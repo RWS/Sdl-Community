@@ -9,7 +9,7 @@ namespace ETSTranslationProvider
 {
 	static class Log
     {
-        public static Logger logger { get; private set; }
+        public static Logger Logger { get; private set; }
 
         static Log()
         {
@@ -56,17 +56,17 @@ namespace ETSTranslationProvider
                 LogManager.Configuration = config;
             }
 
-            logger = LogManager.GetCurrentClassLogger();
-            logger.Info("-----------------------------------------------");
-            logger.Info("Starting Log for {0}", assembly.FullName);
+            Logger = LogManager.GetCurrentClassLogger();
+            Logger.Info("-----------------------------------------------");
+            Logger.Info("Starting Log for {0}", assembly.FullName);
 
             Application.ThreadException += new ThreadExceptionEventHandler(LogUncaughtException);
         }
 
         static void LogUncaughtException(object sender, ThreadExceptionEventArgs e)
         {
-            logger.Trace("");
-            logger.Error(e.Exception, "An uncaught exception was thrown:");
+            Logger.Trace("");
+            Logger.Error(e.Exception, "An uncaught exception was thrown:");
             throw e.Exception;
         }
     }
