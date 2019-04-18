@@ -18,7 +18,8 @@ namespace IATETerminologyProvider
 		private IList<EntryModel> _entryModels;
 		private ProviderSettings _providerSettings;
 		private TermSearchService _searchService;
-		private EditorController _editorController;		
+		private EditorController _editorController;
+		private Language _targetLanguage;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -125,11 +126,11 @@ namespace IATETerminologyProvider
 		}
 
 		public IList<IDefinitionLanguage> GetDefinitionLanguages()
-		{
+		{			
 			var result = new List<IDefinitionLanguage>();
 			var currentProject = GetProjectController().CurrentProject;
-			var projTargetLanguage = currentProject.GetTargetLanguageFiles()[0].Language;
-			var projSourceLanguage = currentProject.GetSourceLanguageFiles()[0].Language;
+			var projTargetLanguage = _targetLanguage;	
+			var projSourceLanguage = currentProject.GetProjectInfo().SourceLanguage;
 
 			var sourceLanguage = new DefinitionLanguage
 			{
@@ -217,6 +218,8 @@ namespace IATETerminologyProvider
 				if (_editorController != null)
 				{
 					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+					
+					_targetLanguage = _editorController.ActiveDocument?.ActiveFile?.Language;					
 				}
 			}
 		}
@@ -227,6 +230,8 @@ namespace IATETerminologyProvider
 			{
 				OnTermEntriesChanged(null);
 			}
+
+			_targetLanguage = e.Document?.ActiveFile?.Language;
 		}
 
 		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)
