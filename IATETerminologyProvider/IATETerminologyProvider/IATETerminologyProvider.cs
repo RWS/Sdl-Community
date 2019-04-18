@@ -26,7 +26,7 @@ namespace IATETerminologyProvider
 
 		public IATETerminologyProvider(ProviderSettings providerSettings)
 		{
-			UpdateSettings(providerSettings);
+			UpdateSettings(providerSettings);			
 		}
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
@@ -130,8 +130,13 @@ namespace IATETerminologyProvider
 		{			
 			var result = new List<IDefinitionLanguage>();
 			var currentProject = _projectsController.CurrentProject;
-			var projTargetLanguage = _targetLanguage;	
-			var projSourceLanguage = currentProject.GetProjectInfo().SourceLanguage;
+			var projectInfo = currentProject.GetProjectInfo();
+			if (_targetLanguage == null)
+			{
+				_targetLanguage = projectInfo.TargetLanguages[0];
+			}	
+			
+			var projSourceLanguage = projectInfo.SourceLanguage;
 
 			var sourceLanguage = new DefinitionLanguage
 			{
@@ -146,8 +151,8 @@ namespace IATETerminologyProvider
 			var targetLanguage = new DefinitionLanguage
 			{
 				IsBidirectional = true,
-				Locale = projTargetLanguage.CultureInfo,
-				Name = projTargetLanguage.DisplayName,
+				Locale = _targetLanguage.CultureInfo,
+				Name = _targetLanguage.DisplayName,
 				TargetOnly = false
 			};
 
@@ -217,12 +222,12 @@ namespace IATETerminologyProvider
 			{
 				_projectsController = GetProjectController();
 				_editorController = GetEditorController();
-
+				
 				if (_editorController != null)
 				{
 					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 					
-					_targetLanguage = _editorController.ActiveDocument?.ActiveFile?.Language;					
+					_targetLanguage = _editorController.ActiveDocument?.ActiveFile?.Language;
 				}
 			}
 		}
