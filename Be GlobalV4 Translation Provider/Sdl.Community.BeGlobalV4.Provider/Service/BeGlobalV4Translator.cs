@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using RestSharp;
@@ -10,29 +9,18 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 	public class BeGlobalV4Translator
 	{
 		private readonly IRestClient _client;
-		private readonly string _source;
-		private readonly string _target;
 		private readonly string _flavor;
 
 		public BeGlobalV4Translator(
 			string server,
 			string user,
 			string password,
-			string source,
-			string target,
 			string flavor,
 			bool useClientAuthentication)
 		{
-			_source = source;
-			_target = target;
 			_flavor = flavor;
 
 			_client = new RestClient(string.Format($"{server}/v4"));
-
-			// get a (time limited) token for authorisation
-			// this can be a rather expensive call, and tokens remain valid for 24 hours, 
-			// so buffering is recommended if you need to get repeated requests
-
 			IRestRequest request;
 			if (useClientAuthentication)
 			{
@@ -50,26 +38,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				};
 				request.AddBody(new { username = user, password = password });
 			}
-			request.AddHeader("Trace-ID", Guid.NewGuid().ToString());
+			AddTraceId(request);
 			request.RequestFormat = DataFormat.Json;
 			var response = _client.Execute(request);
 			if (response.StatusCode != System.Net.HttpStatusCode.OK)
+			{
 				throw new Exception("Acquiring token failed: " + response.Content);
+			}
 			dynamic json = JsonConvert.DeserializeObject(response.Content);
 			_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
-		}
-
-		public string TranslateText(string text)
-		{
-			var quick = text.Length < 5000; // quick (synchronous) translation only recommended for short plain text strings
-			var json = UploadText(text, quick);
-			if (quick)
-			{
-				return json != null ? json.translation[0] : string.Empty;
-			}
-			var rawData = WaitForTranslation(json.requestId.Value);
-			json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
-			return json != null ? json.translation[0] : string.Empty;
 		}
 
 		public int GetClientInformation()
@@ -78,13 +55,49 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				RequestFormat = DataFormat.Json
 			};
+			AddTraceId(request);
+
 			var response = _client.Execute(request);
 			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
+			if (!response.IsSuccessful)
+			{
+				ShowErrors(response);
+			}
 			if (user != null)
 			{
 				return user.AccountId;
 			}
 			return 0;
+		}
+
+		public string TranslateText(string text,string sourceLanguage, string targetLanguage)
+		{
+			var request = new RestRequest("/mt/translations/async", Method.POST)
+			{
+				RequestFormat = DataFormat.Json
+			};
+			AddTraceId(request);
+
+			string[] texts = { text };
+			request.AddBody(new
+			{
+				input = texts,
+				sourceLanguageId = sourceLanguage,
+				targetLanguageId = targetLanguage,
+				model = _flavor,
+				inputFormat = "xliff"
+			});
+			var response = _client.Execute(request);
+			if (!response.IsSuccessful)
+			{
+				ShowErrors(response);
+			}
+			dynamic json = JsonConvert.DeserializeObject(response.Content);
+
+			var rawData = WaitForTranslation(json?.requestId?.Value);
+
+			json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
+			return json != null ? json.translation[0] : string.Empty;
 		}
 
 		public int GetUserInformation()
@@ -93,13 +106,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				RequestFormat = DataFormat.Json
 			};
+			AddTraceId(request);
+
 			var response = _client.Execute(request);
 			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
-			if (user != null)
+			if (!response.IsSuccessful)
 			{
-				return user.AccountId;
+				ShowErrors(response);
 			}
-			return 0;
+			return user != null ? user.AccountId : 0;
 		}
 
 		public SubscriptionInfo GetLanguagePairs(string accountId)
@@ -108,37 +123,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				RequestFormat = DataFormat.Json
 			};
+			AddTraceId(request);
+
 			var response = _client.Execute(request);
+			if (!response.IsSuccessful)
+			{
+				ShowErrors(response);
+			}
 			var subscriptionInfo = JsonConvert.DeserializeObject<SubscriptionInfo>(response.Content);
 			return subscriptionInfo;
-		}
-
-
-		public dynamic UploadText(string text, bool quick)
-		{
-			var request = new RestRequest("/mt/translations/" + (quick ? "sync" : "async"), Method.POST)
-			{
-				RequestFormat = DataFormat.Json
-			};
-			string[] texts = { text }; // could have multiple strings here, with a total max length of 5000 chars
-			request.AddBody(new
-			{
-				input = texts,
-				sourceLanguageId = _source,
-				targetLanguageId = _target,
-				model = _flavor,
-				inputFormat = "xliff",
-			});
-			var response = _client.Execute(request);
-			if (response.StatusCode != System.Net.HttpStatusCode.OK && response.StatusCode != System.Net.HttpStatusCode.Accepted)
-			{
-				if (response.Content.Contains("does not exist"))
-				{
-					throw new Exception("Language pair or engine model selected does not exist");
-				}
-			}
-			dynamic json = JsonConvert.DeserializeObject(response.Content);
-			return json;
 		}
 
 		private byte[] WaitForTranslation(string id)
@@ -148,20 +141,31 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			do
 			{
 				response = RestGet($"/mt/translations/async/{id}");
-				if (response.StatusCode != System.Net.HttpStatusCode.OK)
-					throw new Exception("Polling state failed: " + response.Content);
+				if (!response.IsSuccessful)
+				{
+					ShowErrors(response);
+				}
 
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
 				status = json.translationStatus;
 
 				if (!status.Equals("DONE", StringComparison.CurrentCultureIgnoreCase))
-					System.Threading.Thread.Sleep(1000);
-			}
-			while (!status.Equals("DONE", StringComparison.CurrentCultureIgnoreCase)); // check for FAILED to catch errors
+				{
+					System.Threading.Thread.Sleep(300);
+				}
+				if (status.Equals("FAILED"))
+				{
+					ShowErrors(response);
+
+				}
+			} while (status.Equals("INIT", StringComparison.CurrentCultureIgnoreCase) ||
+			         status.Equals("TRANSLATING", StringComparison.CurrentCultureIgnoreCase));
 
 			response = RestGet($"/mt/translations/async/{id}/content");
-			if (response.StatusCode != System.Net.HttpStatusCode.OK)
-				throw new Exception("Downloading translation failed: " + response.Content);
+			if (!response.IsSuccessful)
+			{
+				ShowErrors(response);
+			}
 			return response.RawBytes;
 		}
 
@@ -171,8 +175,26 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				RequestFormat = DataFormat.Json
 			};
+			AddTraceId(request);
+
 			var response = _client.Execute(request);
 			return response;
+		}
+		private void AddTraceId(IRestRequest request)
+		{
+			request.AddHeader("Trace-ID", $"Studio2019_{Guid.NewGuid().ToString()}");
+		}
+
+		private void ShowErrors(IRestResponse response)
+		{
+			var responseContent = JsonConvert.DeserializeObject<ResponseError>(response.Content);
+			if (responseContent?.Errors != null)
+			{
+				foreach (var error in responseContent.Errors)
+				{
+					throw new Exception($"Error code: {error.Code}, {error.Description}");
+				}
+			}
 		}
 	}
 }

@@ -2,8 +2,8 @@
 
 namespace Sdl.Community.BeGlobalV4.Provider.Model
 {
-	public class SubscriptionInfo
+	public class ResponseError
 	{
-		public List<BeGlobalLanguagePair> LanguagePairs { get; set; }
+		public List<ErrorDetails> Errors { get; set; }
 	}
 }
