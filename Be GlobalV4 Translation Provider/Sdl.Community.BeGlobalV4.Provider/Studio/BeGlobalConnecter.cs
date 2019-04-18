@@ -1,4 +1,4 @@
-﻿using System.Web;
+﻿using System.Net;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.Core;
@@ -30,8 +30,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public string Translate(string sourceText)
 		{ 
 			sourceText = _normalizeTextHelper.NormalizeText(sourceText);	
-			var translatedText = HttpUtility.UrlDecode(_beGlobalTranslator.TranslateText(sourceText)); 
-			translatedText = HttpUtility.HtmlDecode(translatedText);	 
+			var translatedText = WebUtility.UrlDecode(_beGlobalTranslator.TranslateText(sourceText)); 
+			translatedText = WebUtility.HtmlDecode(translatedText);	 
 			return translatedText;
 		}
 

@@ -1,21 +1,22 @@
+using System;
+using System.Linq;
 using ETSTranslationProvider.ETSApi;
+using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
-using System.Linq;
 
 namespace ETSTranslationProvider
 {
-    public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
+	public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
     {
         private TranslationProvider provider;
         private LanguagePair languageDirection;
 
         public TranslationProviderLanguageDirection(TranslationProvider provider, LanguagePair languages)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             this.provider = provider;
             languageDirection = languages;
         }
@@ -35,6 +36,11 @@ namespace ETSTranslationProvider
             get { return provider; }
         }
 
+		public bool CanReverseLanguageDirection
+		{
+			get { return false; }
+		}
+
 		/// <summary>
 		/// Used to translate a single segment.
 		/// </summary>
@@ -43,7 +49,7 @@ namespace ETSTranslationProvider
 		/// <returns></returns>
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
-			Log.logger.Trace("");
+			Log.Logger.Trace("");
 
 			var results = new SearchResults();
 			var translation = TranslateSegments(new Segment[] { segment }).First();
@@ -63,17 +69,17 @@ namespace ETSTranslationProvider
         /// <returns></returns>
         private Segment[] TranslateSegments(Segment[] sourceSegments)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
 			try
 			{
 				var xliffDocument = CreateXliffFile(sourceSegments);
 
-				string translatedXliffText = ETSTranslatorHelper.GetTranslation(
+				var translatedXliffText = ETSTranslatorHelper.GetTranslation(
 					provider.Options,
 					languageDirection,
 					xliffDocument);
 
-				var translatedXliff = XliffConverter.Converter.ParseXliffString(translatedXliffText);
+				var translatedXliff = Converter.ParseXliffString(translatedXliffText);
 				if (translatedXliff != null)
 				{
 					return translatedXliff.GetTargetSegments();
@@ -82,43 +88,37 @@ namespace ETSTranslationProvider
 			}
 			catch (Exception e)
 			{
-				Log.logger.Error(e, "Error in TranslateSegments");
+				Log.Logger.Error(e, "Error in TranslateSegments");
 				return new Segment[sourceSegments.Length];
 			}
         }
 
-        /// <summary>
-        /// Creates a consumable SearchResult using the source segment and translated segment
-        /// </summary>
-        /// <param name="searchSegment"></param>
-        /// <param name="translation"></param>
-        /// <param name="sourceSegment"></param>
-        /// <returns></returns>
-        private static SearchResult CreateSearchResult(Segment searchSegment, Segment translation)
-        {
-            Log.logger.Trace("");
-            TranslationUnit unit = new TranslationUnit();
-            unit.SourceSegment = searchSegment;
-            unit.TargetSegment = translation;
-            unit.ConfirmationLevel = ConfirmationLevel.Translated;
-            unit.ResourceId = new PersistentObjectToken(unit.GetHashCode(), Guid.Empty);
-            unit.Origin = TranslationUnitOrigin.MachineTranslation;
-
-            SearchResult searchResult = new SearchResult(unit);
+		/// <summary>
+		/// Creates a consumable SearchResult using the source segment and translated segment
+		/// </summary>
+		/// <param name="searchSegment"></param>
+		/// <param name="translation"></param>
+		/// <param name="sourceSegment"></param>
+		/// <returns></returns>
+		private static SearchResult CreateSearchResult(Segment searchSegment, Segment translation)
+		{
+			Log.Logger.Trace("");
+			var unit = new TranslationUnit
+			{
+				SourceSegment = searchSegment,
+				TargetSegment = translation,
+				ConfirmationLevel = ConfirmationLevel.Translated,
+				Origin = TranslationUnitOrigin.MachineTranslation
+			};
+			unit.ResourceId = new PersistentObjectToken(unit.GetHashCode(), Guid.Empty);
+            var searchResult = new SearchResult(unit);
 
             // We do not currently support scoring, so always say that we're 25% sure on this translation.
             searchResult.ScoringResult = new ScoringResult() { BaseScore = 25 };
 
             return searchResult;
         }
-
-
-        public bool CanReverseLanguageDirection
-        {
-            get { return false; }
-        }
-
-
+		
         public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
         {
             // Need this vs having mask parameter default to null as inheritence doesn't allow default values to
@@ -138,7 +138,7 @@ namespace ETSTranslationProvider
 		/// <returns></returns>
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
-			Log.logger.Trace("");
+			Log.Logger.Trace("");
 
 			var results = new SearchResults[segments.Length];
 			var translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
@@ -178,7 +178,7 @@ namespace ETSTranslationProvider
         /// <returns></returns>
         public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             if (segments == null)
             {
                 throw new ArgumentNullException("segments", "Segments in SearchSegmentsMasked");
@@ -199,8 +199,8 @@ namespace ETSTranslationProvider
         /// <returns></returns>
         public SearchResults SearchText(SearchSettings settings, string segment)
         {
-            Log.logger.Trace("");
-            Segment seg = new Segment(languageDirection.SourceCulture);
+            Log.Logger.Trace("");
+            var seg = new Segment(languageDirection.SourceCulture);
             seg.Add(segment);
             return SearchSegment(settings, seg);
         }
@@ -213,7 +213,7 @@ namespace ETSTranslationProvider
         /// <returns></returns>
         public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             return SearchSegment(settings, translationUnit.SourceSegment);
         }
 
@@ -225,45 +225,47 @@ namespace ETSTranslationProvider
         /// <returns></returns>
         public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             return SearchSegments(settings, translationUnits.Select(tu => tu.SourceSegment).ToArray());
         }
 
-        /// <summary>
-        /// Translate an array of translation units using their source segments.
-        /// Translation depends on the corresponding mask array.
-        /// </summary>
-        /// <param name="settings"></param>
-        /// <param name="translationUnits"></param>
-        /// <param name="mask"></param>
-        /// <returns></returns>
-        public SearchResults[] SearchTranslationUnitsMasked(
-            SearchSettings settings,
-            TranslationUnit[] translationUnits,
-            bool[] mask)
-        {
-            Log.logger.Trace("");
-            if (translationUnits == null)
-                throw new ArgumentNullException("translationUnits", "TranslationUnits in SearchSegmentsMasked");
-            if (mask == null || mask.Length != translationUnits.Length)
-                throw new ArgumentException("Mask in SearchSegmentsMasked");
+		/// <summary>
+		/// Translate an array of translation units using their source segments.
+		/// Translation depends on the corresponding mask array.
+		/// </summary>
+		/// <param name="settings"></param>
+		/// <param name="translationUnits"></param>
+		/// <param name="mask"></param>
+		/// <returns></returns>
+		public SearchResults[] SearchTranslationUnitsMasked(
+			SearchSettings settings,
+			TranslationUnit[] translationUnits,
+			bool[] mask)
+		{
+			Log.Logger.Trace("");
+			if (translationUnits == null)
+			{
+				throw new ArgumentNullException("translationUnits", "TranslationUnits in SearchSegmentsMasked");
+			}
+			if (mask == null || mask.Length != translationUnits.Length)
+			{
+				throw new ArgumentException("Mask in SearchSegmentsMasked");
+			}
 
-            return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
-        }
+			return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
+		}
 
 		/// <summary>
 		/// Prepares a source translation string for request. It ultimately removes all the tags data,
 		/// storing them temporarily in a dictionary, which then can be used to reinstate the tags' text.
 		/// Function taken from previous ETS Plugin.
 		/// </summary>
-		/// <param name="segment"></param>
-		/// <param name="hasTags"></param>
-		/// <param name="tagMapping"></param>
-		/// <returns></returns>
-		public XliffConverter.xliff CreateXliffFile(Segment[] segments)
+		/// <param name="segments"></param>
+		/// <returns>Xliff</returns>
+		public Xliff CreateXliffFile(Segment[] segments)
 		{
-			Log.logger.Trace("");
-			var xliffDocument = new XliffConverter.xliff(languageDirection.SourceCulture, languageDirection.TargetCulture);
+			Log.Logger.Trace("");
+			var xliffDocument = new Xliff(languageDirection.SourceCulture, languageDirection.TargetCulture);
 
 			foreach (var seg in segments)
 			{
@@ -289,7 +291,7 @@ namespace ETSTranslationProvider
             ImportSettings settings,
             bool[] mask)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             throw new NotImplementedException();
         }
 
@@ -301,7 +303,7 @@ namespace ETSTranslationProvider
         /// <returns></returns>
         public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             throw new NotImplementedException();
         }
 
@@ -313,7 +315,7 @@ namespace ETSTranslationProvider
         /// <returns></returns>
         public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             throw new NotImplementedException();
         }
         /// <summary>
@@ -331,7 +333,7 @@ namespace ETSTranslationProvider
             ImportSettings settings,
             bool[] mask)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             throw new NotImplementedException();
         }
 
@@ -344,7 +346,7 @@ namespace ETSTranslationProvider
         /// <returns></returns>
         public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             throw new NotImplementedException();
         }
 
@@ -357,7 +359,7 @@ namespace ETSTranslationProvider
         /// <returns></returns>
         public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             throw new NotImplementedException();
         }
 
@@ -374,7 +376,7 @@ namespace ETSTranslationProvider
             int[] previousTranslationHashes,
             ImportSettings settings)
         {
-            Log.logger.Trace("");
+            Log.Logger.Trace("");
             throw new NotImplementedException();
         }
         #endregion

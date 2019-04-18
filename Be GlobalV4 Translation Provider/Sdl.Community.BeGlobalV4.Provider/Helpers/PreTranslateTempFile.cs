@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
+using System.Net;
 using System.Xml;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 
@@ -71,7 +68,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 				if (id != null)
 				{
 					preTranslation.Id = id.Value;
-					preTranslation.Translation = HttpUtility.HtmlDecode(node.InnerText);
+					preTranslation.Translation = WebUtility.HtmlDecode(node.InnerText);
 					preTranslations.Add(preTranslation);
 				} 
 			}  

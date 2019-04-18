@@ -1,10 +1,10 @@
-﻿using ETSLPConverter;
+﻿using System.Globalization;
+using ETSLPConverter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Globalization;
 
 namespace TradosPluginTests
 {
-    [TestClass]
+	[TestClass]
     public class ETSLPConverterExtensionsTests
     {
         /// <summary>
@@ -27,7 +27,8 @@ namespace TradosPluginTests
         {
             Assert.AreEqual("nor", CultureInfo.GetCultureInfo("nb-no").ToETSCode());
             Assert.AreEqual("nor", CultureInfo.GetCultureInfo("nn-no").ToETSCode());
-            // Depending on the version of windows, it may not support nb-sj, so if a CultureNotFoundException is
+            
+			// Depending on the version of windows, it may not support nb-sj, so if a CultureNotFoundException is
             // thrown, there's little we can do about it.
             try
             {
@@ -35,6 +36,7 @@ namespace TradosPluginTests
             }
             catch (CultureNotFoundException)
             { }
+
             Assert.AreEqual("cht", CultureInfo.GetCultureInfo("zh-mo").ToETSCode());
             Assert.AreEqual("cht", CultureInfo.GetCultureInfo("zh-hk").ToETSCode());
             Assert.AreEqual("cht", CultureInfo.GetCultureInfo("zh-tw").ToETSCode());
