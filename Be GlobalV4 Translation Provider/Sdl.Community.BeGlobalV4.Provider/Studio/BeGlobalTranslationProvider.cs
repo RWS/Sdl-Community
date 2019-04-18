@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -31,19 +32,20 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;	 
 		public bool IsReadOnly => true;
 		public BeGlobalTranslationOptions Options { get; set; }
+		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
 
 		public BeGlobalTranslationProvider(BeGlobalTranslationOptions options)
 		{
 			Options = options;
+			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 		}
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			var normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			var sourceLanguage =
-				normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.SourceCulture);
+				_normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.SourceCulture);
 			var targetLanguage =
-				normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.TargetCulture);
+				_normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.TargetCulture);
 
 			if (Options?.SubscriptionInfo?.LanguagePairs?.Count > 0)
 			{

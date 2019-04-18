@@ -18,13 +18,15 @@ namespace IATETerminologyProvider
 		private IList<EntryModel> _entryModels;
 		private ProviderSettings _providerSettings;
 		private TermSearchService _searchService;
-		private EditorController _editorController;		
+		private EditorController _editorController;
+		private ProjectsController _projectsController;
+		private Language _targetLanguage;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
 		public IATETerminologyProvider(ProviderSettings providerSettings)
 		{
-			UpdateSettings(providerSettings);
+			UpdateSettings(providerSettings);			
 		}
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
@@ -125,11 +127,16 @@ namespace IATETerminologyProvider
 		}
 
 		public IList<IDefinitionLanguage> GetDefinitionLanguages()
-		{
+		{			
 			var result = new List<IDefinitionLanguage>();
-			var currentProject = GetProjectController().CurrentProject;
-			var projTargetLanguage = currentProject.GetTargetLanguageFiles()[0].Language;
-			var projSourceLanguage = currentProject.GetSourceLanguageFiles()[0].Language;
+			var currentProject = _projectsController.CurrentProject;
+			var projectInfo = currentProject.GetProjectInfo();
+			if (_targetLanguage == null)
+			{
+				_targetLanguage = projectInfo.TargetLanguages[0];
+			}	
+			
+			var projSourceLanguage = projectInfo.SourceLanguage;
 
 			var sourceLanguage = new DefinitionLanguage
 			{
@@ -144,8 +151,8 @@ namespace IATETerminologyProvider
 			var targetLanguage = new DefinitionLanguage
 			{
 				IsBidirectional = true,
-				Locale = projTargetLanguage.CultureInfo,
-				Name = projTargetLanguage.DisplayName,
+				Locale = _targetLanguage.CultureInfo,
+				Name = _targetLanguage.DisplayName,
 				TargetOnly = false
 			};
 
@@ -213,10 +220,14 @@ namespace IATETerminologyProvider
 		{
 			if (_editorController == null)
 			{
+				_projectsController = GetProjectController();
 				_editorController = GetEditorController();
+				
 				if (_editorController != null)
 				{
 					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+					
+					_targetLanguage = _editorController.ActiveDocument?.ActiveFile?.Language;
 				}
 			}
 		}
@@ -227,6 +238,8 @@ namespace IATETerminologyProvider
 			{
 				OnTermEntriesChanged(null);
 			}
+
+			_targetLanguage = e.Document?.ActiveFile?.Language;
 		}
 
 		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)

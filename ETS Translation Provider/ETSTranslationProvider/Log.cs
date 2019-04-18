@@ -1,16 +1,15 @@
-using NLog;
-using NLog.Config;
-using NLog.Targets;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
 
 namespace ETSTranslationProvider
 {
-    static class Log
+	static class Log
     {
-        public static Logger logger { get; private set; }
+        public static Logger Logger { get; private set; }
 
         static Log()
         {
@@ -23,11 +22,11 @@ namespace ETSTranslationProvider
                 var config = new LoggingConfiguration();
                 config.AddTarget("file", fileTarget);
 
-                string assemblyName = assembly.GetName().Name;
+				var assemblyName = assembly.GetName().Name;
 
-                PluginConfiguration configFromFile = PluginConfiguration.CurrentInstance;
-                string logFileDirectory = Path.Combine(configFromFile.Directory, "Logs");
-                string logFileName = string.Format("{0}.log.txt", assemblyName);
+				var configFromFile = PluginConfiguration.CurrentInstance;
+				var logFileDirectory = Path.Combine(configFromFile.Directory, "Logs");
+				var logFileName = string.Format("{0}.log.txt", assemblyName);
 
                 // Create the directory in case it doesn't exist. Does nothing if it does.
                 Directory.CreateDirectory(logFileDirectory);
@@ -48,7 +47,7 @@ namespace ETSTranslationProvider
                                     "${pad:padding=-55:inner=${exception}}";
 
                 // If there is a configuration file, read the log level from that.
-                LogLevel targetLogLevel = LogLevel.Info;
+                var targetLogLevel = LogLevel.Info;
                 if (configFromFile != null && configFromFile.LogLevel != null)
                     targetLogLevel = LogLevel.FromString(configFromFile.LogLevel);
 
@@ -57,17 +56,17 @@ namespace ETSTranslationProvider
                 LogManager.Configuration = config;
             }
 
-            logger = LogManager.GetCurrentClassLogger();
-            logger.Info("-----------------------------------------------");
-            logger.Info("Starting Log for {0}", assembly.FullName);
+            Logger = LogManager.GetCurrentClassLogger();
+            Logger.Info("-----------------------------------------------");
+            Logger.Info("Starting Log for {0}", assembly.FullName);
 
             Application.ThreadException += new ThreadExceptionEventHandler(LogUncaughtException);
         }
 
         static void LogUncaughtException(object sender, ThreadExceptionEventArgs e)
         {
-            logger.Trace("");
-            logger.Error(e.Exception, "An uncaught exception was thrown:");
+            Logger.Trace("");
+            Logger.Error(e.Exception, "An uncaught exception was thrown:");
             throw e.Exception;
         }
     }

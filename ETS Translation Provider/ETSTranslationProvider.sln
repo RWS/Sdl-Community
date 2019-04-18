@@ -1,22 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETSTranslationProvider2019", "ETSTranslationProvider\Trados2019_Plugin\ETSTranslationProvider2019.csproj", "{5DF3208A-65A1-4988-B997-C361FC9C5A0A}"
 	ProjectSection(ProjectDependencies) = postProject
-		{42858567-AADA-4A61-9D04-BF151137146B} = {42858567-AADA-4A61-9D04-BF151137146B}
 		{CEBE84EB-A630-4957-B93A-3B60456B5FB7} = {CEBE84EB-A630-4957-B93A-3B60456B5FB7}
-		{C8F2C2FC-5A3E-4BE7-9788-F6F24EB69F72} = {C8F2C2FC-5A3E-4BE7-9788-F6F24EB69F72}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradosPluginTests2019", "TradosPluginTests\Trados2019_Plugin\TradosPluginTests2019.csproj", "{56A97DE3-02E3-4A34-97C1-6B9F62A567D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XliffConverter", "XliffConverter\XliffConverter.csproj", "{C8F2C2FC-5A3E-4BE7-9788-F6F24EB69F72}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETSLPConverter", "ETSLPConverter\ETSLPConverter.csproj", "{CEBE84EB-A630-4957-B93A-3B60456B5FB7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SegmentParser", "SegmentParser\SegmentParser.csproj", "{42858567-AADA-4A61-9D04-BF151137146B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Trados2019_Plugin", "Trados2019_Plugin", "{7D7458FA-4F4B-49BD-B486-8875CAB1B322}"
 EndProject
@@ -34,18 +28,10 @@ Global
 		{56A97DE3-02E3-4A34-97C1-6B9F62A567D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56A97DE3-02E3-4A34-97C1-6B9F62A567D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56A97DE3-02E3-4A34-97C1-6B9F62A567D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C8F2C2FC-5A3E-4BE7-9788-F6F24EB69F72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C8F2C2FC-5A3E-4BE7-9788-F6F24EB69F72}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C8F2C2FC-5A3E-4BE7-9788-F6F24EB69F72}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C8F2C2FC-5A3E-4BE7-9788-F6F24EB69F72}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CEBE84EB-A630-4957-B93A-3B60456B5FB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CEBE84EB-A630-4957-B93A-3B60456B5FB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEBE84EB-A630-4957-B93A-3B60456B5FB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEBE84EB-A630-4957-B93A-3B60456B5FB7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42858567-AADA-4A61-9D04-BF151137146B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42858567-AADA-4A61-9D04-BF151137146B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42858567-AADA-4A61-9D04-BF151137146B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42858567-AADA-4A61-9D04-BF151137146B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
