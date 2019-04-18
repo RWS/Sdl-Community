@@ -28,13 +28,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private bool _segmentationRulesChecked;
 		private bool _variablesChecked;
 		private bool _allTmsChecked;
+		private bool _toggleExcelTm;
 
-		private bool _toggleExcelTM;
-
-		//private bool _templateValidWithResources;
-		//private bool _templateValidNoResources;
 		private TemplateValidity _templateValidity;
-		private bool _toggleDirection;
 
 		private string _tmPath;
 		private string _message;
@@ -93,14 +89,15 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			LoadResourcesFromTemplate();
 
-			if (ValidateTemplate())
-			{
-				_templateValidity = TemplateValidity.IsValid | TemplateValidity.HasResources;
-			}
-
+			//check if the template is valid(resources ignored)
 			if (ValidateTemplate(false))
 			{
 				_templateValidity = TemplateValidity.IsValid;
+			}
+			//check if the template has any resources
+			if (ValidateTemplate())
+			{
+				_templateValidity = TemplateValidity.IsValid | TemplateValidity.HasResources;
 			}
 
 			OnPropertyChanged(nameof(CanExecuteApply));
@@ -122,10 +119,10 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public bool ToggleExcelTM
 		{
-			get => _toggleExcelTM;
+			get => _toggleExcelTm;
 			set
 			{
-				_toggleExcelTM = value;
+				_toggleExcelTm = value;
 				OnPropertyChanged(nameof(ToggleExcelTM));
 				OnPropertyChanged(nameof(CanExecuteImport));
 				OnPropertyChanged(nameof(ImportButtonText));
@@ -224,13 +221,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public ICommand AddFolderCommand =>
-			_addFolderCommand ?? (_addFolderCommand = new CommandHandler(AddFolder, true));
+		public ICommand AddFolderCommand => _addFolderCommand ?? (_addFolderCommand = new CommandHandler(AddFolder, true));
 
 		public ICommand AddTmCommand => _addTmsCommand ?? (_addTmsCommand = new CommandHandler(AddTms, true));
 
-		public ICommand ApplyTemplateCommand => _applyTemplateCommand ??
-		                                        (_applyTemplateCommand = new CommandHandler(ApplyTmTemplate, true));
+		public ICommand ApplyTemplateCommand => _applyTemplateCommand ?? (_applyTemplateCommand = new CommandHandler(ApplyTmTemplate, true));
 
 		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true));
 
@@ -238,21 +233,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(Import, true));
 
-		public ICommand DragEnterCommand =>
-			_dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
+		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
-		public ICommand RemoveTMsCommand =>
-			_removeTMsCommand ?? (_removeTMsCommand = new CommandHandler(RemoveTMs, true));
-
-		public bool ToggleDirection
-		{
-			get => _toggleDirection;
-			set
-			{
-				_toggleDirection = value;
-				OnPropertyChanged(nameof(ToggleDirection));
-			}
-		}
+		public ICommand RemoveTMsCommand => _removeTMsCommand ?? (_removeTMsCommand = new CommandHandler(RemoveTMs, true));
 
 		private string CreateNewFile(string filePath)
 		{
@@ -364,17 +347,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void LoadResourcesFromTemplate()
 		{
-			//var languageResourceBundles = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out _message, out _unIDedLanguages);
-
-			//if (languageResourceBundles != null)
-			//{
-			//	CreateTemplateObjectFromBundles(languageResourceBundles);
-			//}
-			//else
-			//{
-			//	_template = null;
-			//}
-
 			_template = CreateTemplateObjectFromBundles(
 				_templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out _message,
 					out _unIDedLanguages));
@@ -507,7 +479,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			return TmCollection.Any(tm => tm.IsSelected);
 		}
 
-		public bool CanExecuteApply => (int)_templateValidity > 0 && IsThereAnyTmSelected();
+		public bool CanExecuteApply => (int)_templateValidity > 1 && IsThereAnyTmSelected();
 
 		private void UnMarkTms(List<TranslationMemory> tms)
 		{
