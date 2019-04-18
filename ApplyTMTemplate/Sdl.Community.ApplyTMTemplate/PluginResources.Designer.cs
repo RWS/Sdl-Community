@@ -22,7 +22,7 @@ namespace Sdl.Community.ApplyTMTemplate {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PluginResources {
+    public class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.ApplyTMTemplate.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to A new file was created.
         /// </summary>
-        internal static string A_new_file_created {
+        public static string A_new_file_created {
             get {
                 return ResourceManager.GetString("A_new_file_created", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon AddFolder {
+        public static System.Drawing.Icon AddFolder {
             get {
                 object obj = ResourceManager.GetObject("AddFolder", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -80,9 +80,18 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply the template on the TMs selected.
+        /// </summary>
+        public static string Apply_button_Tooltip {
+            get {
+                return ResourceManager.GetString("Apply_button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ATTA {
+        public static System.Drawing.Icon ATTA {
             get {
                 object obj = ResourceManager.GetObject("ATTA", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -90,9 +99,18 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose a template....
+        /// </summary>
+        public static string Browse_button_Tooltip {
+            get {
+                return ResourceManager.GetString("Browse_button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Checked {
+        public static System.Drawing.Icon Checked {
             get {
                 object obj = ResourceManager.GetObject("Checked", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -102,7 +120,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Download {
+        public static System.Drawing.Icon Download {
             get {
                 object obj = ResourceManager.GetObject("Download", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -112,7 +130,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Error {
+        public static System.Drawing.Icon Error {
             get {
                 object obj = ResourceManager.GetObject("Error", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -122,7 +140,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
-        internal static string Error_Window_Title {
+        public static string Error_Window_Title {
             get {
                 return ResourceManager.GetString("Error_Window_Title", resourceCulture);
             }
@@ -131,16 +149,25 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to The excel document is not in the correct format.
         /// </summary>
-        internal static string Excel_spreadsheet_not_in_correct_format {
+        public static string Excel_spreadsheet_not_in_correct_format {
             get {
                 return ResourceManager.GetString("Excel_spreadsheet_not_in_correct_format", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export resources from the template to an excel spreadsheet.
+        /// </summary>
+        public static string Export_button_Tooltip {
+            get {
+                return ResourceManager.GetString("Export_button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export language resources.
         /// </summary>
-        internal static string Export_language_resources {
+        public static string Export_language_resources {
             get {
                 return ResourceManager.GetString("Export_language_resources", resourceCulture);
             }
@@ -149,7 +176,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to Export to excel.
         /// </summary>
-        internal static string Export_Window_Title {
+        public static string Export_Window_Title {
             get {
                 return ResourceManager.GetString("Export_Window_Title", resourceCulture);
             }
@@ -158,7 +185,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to Exported resources.
         /// </summary>
-        internal static string Exported_filename {
+        public static string Exported_filename {
             get {
                 return ResourceManager.GetString("Exported_filename", resourceCulture);
             }
@@ -167,7 +194,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon FileBasedTM {
+        public static System.Drawing.Icon FileBasedTM {
             get {
                 object obj = ResourceManager.GetObject("FileBasedTM", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -177,7 +204,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ForumIcon {
+        public static System.Drawing.Icon ForumIcon {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -185,27 +212,54 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following languages were identified:.
+        ///   Looks up a localized string similar to Switch this on to import resources from an excel spreadsheet into the template.
         /// </summary>
-        internal static string Identified_Languages {
+        public static string From_Excel_Radio_Button_Tooltip {
+            get {
+                return ResourceManager.GetString("From_Excel_Radio_Button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch this on to import resources from the TMs selected in the grid into the template.
+        /// </summary>
+        public static string From_TM_Radio_Button_Tooltip {
+            get {
+                return ResourceManager.GetString("From_TM_Radio_Button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following languages were identified in the template:.
+        /// </summary>
+        public static string Identified_Languages {
             get {
                 return ResourceManager.GetString("Identified_Languages", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import resources [from excel/from TMs] into the template.
+        /// </summary>
+        public static string Import_button_Tooltip {
+            get {
+                return ResourceManager.GetString("Import_button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import language resources.
         /// </summary>
-        internal static string Import_window_title {
+        public static string Import_window_title {
             get {
                 return ResourceManager.GetString("Import_window_title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No languages could be identified.
+        ///   Looks up a localized string similar to No languages could be identified in the template.
         /// </summary>
-        internal static string No_Languages_IDed {
+        public static string No_Languages_IDed {
             get {
                 return ResourceManager.GetString("No_Languages_IDed", resourceCulture);
             }
@@ -214,16 +268,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to There are no resources added to any of the selected TMs.
         /// </summary>
-        internal static string No_Resources_in_TMs {
+        public static string No_Resources_in_TMs {
             get {
                 return ResourceManager.GetString("No_Resources_in_TMs", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  select the folder containing the TMs.
+        ///   Looks up a localized string similar to Select the folder containing the TMs.
         /// </summary>
-        internal static string Please_select_the_folder_containing_the_TMs {
+        public static string Please_select_the_folder_containing_the_TMs {
             get {
                 return ResourceManager.GetString("Please_select_the_folder_containing_the_TMs", resourceCulture);
             }
@@ -232,7 +286,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon PlusSign {
+        public static System.Drawing.Icon PlusSign {
             get {
                 object obj = ResourceManager.GetObject("PlusSign", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -242,7 +296,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Question {
+        public static System.Drawing.Icon Question {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -252,7 +306,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Remove {
+        public static System.Drawing.Icon Remove {
             get {
                 object obj = ResourceManager.GetObject("Remove", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -262,7 +316,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to The report was generated successfully.
         /// </summary>
-        internal static string Report_generated_successfully {
+        public static string Report_generated_successfully {
             get {
                 return ResourceManager.GetString("Report_generated_successfully", resourceCulture);
             }
@@ -271,7 +325,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to The resources were imported successfully.
         /// </summary>
-        internal static string Resources_Imported_Successfully {
+        public static string Resources_Imported_Successfully {
             get {
                 return ResourceManager.GetString("Resources_Imported_Successfully", resourceCulture);
             }
@@ -280,7 +334,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to Select a template.
         /// </summary>
-        internal static string Select_A_Template {
+        public static string Select_A_Template {
             get {
                 return ResourceManager.GetString("Select_A_Template", resourceCulture);
             }
@@ -289,7 +343,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to Select at least one TM.
         /// </summary>
-        internal static string Select_at_least_one_TM {
+        public static string Select_at_least_one_TM {
             get {
                 return ResourceManager.GetString("Select_at_least_one_TM", resourceCulture);
             }
@@ -298,7 +352,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to Success.
         /// </summary>
-        internal static string Success_Window_Title {
+        public static string Success_Window_Title {
             get {
                 return ResourceManager.GetString("Success_Window_Title", resourceCulture);
             }
@@ -307,16 +361,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to This template is corrupted or the file is not a template.
         /// </summary>
-        internal static string Template_corrupted_or_file_not_template {
+        public static string Template_corrupted_or_file_not_template {
             get {
                 return ResourceManager.GetString("Template_corrupted_or_file_not_template", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file path of the template is not correct!.
+        ///   Looks up a localized string similar to The file path of the template is not correct.
         /// </summary>
-        internal static string Template_filePath_Not_Correct {
+        public static string Template_filePath_Not_Correct {
             get {
                 return ResourceManager.GetString("Template_filePath_Not_Correct", resourceCulture);
             }
@@ -325,7 +379,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to The selected template has no resources.
         /// </summary>
-        internal static string Template_has_no_resources {
+        public static string Template_has_no_resources {
             get {
                 return ResourceManager.GetString("Template_has_no_resources", resourceCulture);
             }
@@ -334,7 +388,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to The file is not of the required type.
         /// </summary>
-        internal static string The_file_is_not_of_the_required_type {
+        public static string The_file_is_not_of_the_required_type {
             get {
                 return ResourceManager.GetString("The_file_is_not_of_the_required_type", resourceCulture);
             }
@@ -343,7 +397,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Unchecked {
+        public static System.Drawing.Icon Unchecked {
             get {
                 object obj = ResourceManager.GetObject("Unchecked", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -351,20 +405,20 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following languages couldn&apos;t be identified because their LCID is not unique:.
+        ///   Looks up a localized string similar to The following languages in the template couldn&apos;t be identified because their LCID is not unique:.
         /// </summary>
-        internal static string Unidentified_Languages {
+        public static string Unidentified_Languages {
             get {
                 return ResourceManager.GetString("Unidentified_Languages", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warning regarding the template.
+        ///   Looks up a localized string similar to Warning.
         /// </summary>
-        internal static string Warning_Window_Title_Template {
+        public static string Warning {
             get {
-                return ResourceManager.GetString("Warning_Window_Title_Template", resourceCulture);
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
     }

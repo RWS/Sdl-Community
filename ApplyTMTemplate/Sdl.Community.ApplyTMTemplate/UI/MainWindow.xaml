@@ -8,10 +8,14 @@
 					  xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
 					  Dialog:DialogParticipation.Register="{Binding}"
 					  xmlns:converters="clr-namespace:Sdl.Community.ApplyTMTemplate.Converters"
-		              WindowStartupLocation="CenterScreen"
+					  xmlns:applyTmTemplate="clr-namespace:Sdl.Community.ApplyTMTemplate"
+					  xmlns:ui="clr-namespace:Sdl.Community.ApplyTMTemplate.UI"
+					  xmlns:viewModels="clr-namespace:Sdl.Community.ApplyTMTemplate.ViewModels"
+					  xmlns:models="clr-namespace:Sdl.Community.ApplyTMTemplate.Models"
+					  WindowStartupLocation="CenterScreen"
 		              mc:Ignorable="d"
 				 	  GlowBrush="#0C2D47"
-					  WindowTitleBrush="SteelBlue"
+					  WindowTitleBrush="#008264"
 					  Title="Apply TM Template" Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.48'}" Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.7'}" MinWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.48'}" MinHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.61'}">
 
 	<Window.Resources>
@@ -22,7 +26,24 @@
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/DataGridStyle.xaml" />
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+			<Style TargetType="Button" x:Key="SdlWizardStyleButton" BasedOn="{StaticResource SdlSecondaryButtonStyle}">
+				<Setter Property="MinWidth" Value="70"></Setter>
+				<Setter Property="Height" Value="34"></Setter>
+				<Setter Property="Margin" Value="5,9,5,11"></Setter>
+			</Style>
+			<Style TargetType="Button" x:Key="SdlWizardStyleButtonGreen" BasedOn="{StaticResource SdlPrimaryButtonStyle}">
+				<Setter Property="MinWidth" Value="70"></Setter>
+				<Setter Property="Height" Value="34"></Setter>
+				<Setter Property="Margin" Value="5,9,5,11"></Setter>
+			</Style>
+
+			<DataTemplate DataType="{x:Type viewModels:TimedTextBox}">
+				<ui:TimedTextBox/>
+			</DataTemplate>
+
 		</ResourceDictionary>
 	</Window.Resources>
 
@@ -43,15 +64,12 @@
 
 		<TextBlock Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="10,10,0,0"  Grid.ColumnSpan="3" />
 
-		<TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding ResourceTemplatePath}"
-	             Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Converter={converters:RatioConverter}, ConverterParameter='0.61'}" />
-		<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,0,0,0">
-			<Button Margin="5,10,10,0" Style="{DynamicResource DarkBlueButtonsStyle}" Command="{Binding BrowseCommand}" Content="Browse" />
-			<Button Margin="5,10,10,0" Style="{DynamicResource DarkBlueButtonsStyle}" Command="{Binding ExportCommand}" Content="Export"/>
-			<Button Margin="5,10,10,0" Style="{DynamicResource DarkBlueButtonsStyle}" Command="{Binding ImportCommand}" Content="Import"/>
-		</StackPanel>
+		<DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,0,0,0">
+			<Button DockPanel.Dock="Right" Margin="5,10,10,0" Style="{StaticResource SdlWizardStyleButton}" Command="{Binding BrowseCommand}" Content="Choose template" VerticalAlignment="Top" ToolTip="{x:Static applyTmTemplate:PluginResources.Browse_button_Tooltip}"/>
+			<ContentControl DockPanel.Dock="Left" Margin="10,10,10,0" Content="{Binding TimedTextBoxViewModel}"/>
+		</DockPanel>
 
-		<controls:ToggleSwitch Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Header="Import from" OffLabel="Excel" OnLabel="TMs" IsChecked="{Binding ToggleExcelTM, Mode=TwoWay}"/>
+		
 
 		<StackPanel Grid.Row="2" Grid.Column="0" Margin="10,10,0,0">
 			<TextBlock Text="What to apply:" />
@@ -140,9 +158,45 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
+		<StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
+			<Button Margin="10,10,0,0" Style="{StaticResource SdlWizardStyleButtonGreen}" Command="{Binding ExportCommand}"
+					IsEnabled="{Binding CanExecuteExport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+			        Content="Export resources" ToolTip="{x:Static applyTmTemplate:PluginResources.Export_button_Tooltip}"/>
+			<Button Margin="5,10,10,0" Style="{StaticResource SdlWizardStyleButtonGreen}" Command="{Binding ImportCommand}"
+					IsEnabled="{Binding CanExecuteImport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+			        Content="Import resources" ToolTip="{x:Static applyTmTemplate:PluginResources.Import_button_Tooltip}"/>
+			<RadioButton x:Name="FromTm" Content="From the TMs" Margin="10, 20, 10, 10" ToolTip="{x:Static applyTmTemplate:PluginResources.From_TM_Radio_Button_Tooltip}" IsChecked="{Binding ToggleExcelTM}">
+				<RadioButton.Style>
+					<Style TargetType="RadioButton" BasedOn="{StaticResource MetroRadioButton}">
+						<Style.Triggers>
+							<DataTrigger Binding = "{Binding IsChecked, ElementName=FromExcel}" Value="True">
+								<Setter Property="IsChecked" Value="False"></Setter>
+							</DataTrigger>
+							<DataTrigger Binding = "{Binding IsChecked, ElementName=FromExcel}" Value="False">
+								<Setter Property="IsChecked" Value="True"></Setter>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</RadioButton.Style>
+			</RadioButton>
+			<RadioButton x:Name="FromExcel" Content="From Excel" Margin="10, 20, 10, 10" ToolTip="{x:Static applyTmTemplate:PluginResources.From_Excel_Radio_Button_Tooltip}">
+				<RadioButton.Style>
+					<Style TargetType="RadioButton" BasedOn="{StaticResource MetroRadioButton}">
+						<Style.Triggers>
+							<DataTrigger Binding = "{Binding IsChecked, ElementName=FromTm}" Value="True">
+								<Setter Property="IsChecked" Value="False"></Setter>
+							</DataTrigger>
+							<DataTrigger Binding = "{Binding IsChecked, ElementName=FromTm}" Value="False">
+								<Setter Property="IsChecked" Value="True"></Setter>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</RadioButton.Style>
+			</RadioButton>
+		</StackPanel>
 		<StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 			<controls:ProgressRing Visibility="{Binding ProgressVisibility}" Width="30" />
-			<Button Style="{DynamicResource DarkBlueButtonsStyle}" RenderTransformOrigin="0.487,1.938" HorizontalAlignment="Right" Margin="0,10,10,10" Command="{Binding ApplyTemplateCommand}" Content="Apply"/>
+			<Button IsEnabled="{Binding CanExecuteApply, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SdlWizardStyleButtonGreen}" RenderTransformOrigin="0.487,1.938" HorizontalAlignment="Right" Margin="0,10,10,0" Command="{Binding ApplyTemplateCommand}" Content="Template -> TMs" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}"/>
 		</StackPanel>
 	</Grid>
 </controls:MetroWindow>
