@@ -38,7 +38,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				};
 				request.AddBody(new { username = user, password = password });
 			}
-			request.AddHeader("Trace-ID", Guid.NewGuid().ToString());
+			AddTraceId(request);
 			request.RequestFormat = DataFormat.Json;
 			var response = _client.Execute(request);
 			if (response.StatusCode != System.Net.HttpStatusCode.OK)
@@ -55,6 +55,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				RequestFormat = DataFormat.Json
 			};
+			AddTraceId(request);
+
 			var response = _client.Execute(request);
 			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
 			if (!response.IsSuccessful)
@@ -74,6 +76,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				RequestFormat = DataFormat.Json
 			};
+			AddTraceId(request);
+
 			string[] texts = { text };
 			request.AddBody(new
 			{
@@ -102,6 +106,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				RequestFormat = DataFormat.Json
 			};
+			AddTraceId(request);
+
 			var response = _client.Execute(request);
 			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
 			if (!response.IsSuccessful)
@@ -117,6 +123,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				RequestFormat = DataFormat.Json
 			};
+			AddTraceId(request);
+
 			var response = _client.Execute(request);
 			if (!response.IsSuccessful)
 			{
@@ -167,8 +175,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				RequestFormat = DataFormat.Json
 			};
+			AddTraceId(request);
+
 			var response = _client.Execute(request);
 			return response;
+		}
+		private void AddTraceId(IRestRequest request)
+		{
+			request.AddHeader("Trace-ID", $"Studio2019_{Guid.NewGuid().ToString()}");
 		}
 
 		private void ShowErrors(IRestResponse response)
