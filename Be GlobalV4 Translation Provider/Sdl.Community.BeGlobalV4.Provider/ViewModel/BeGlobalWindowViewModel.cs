@@ -149,7 +149,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void SetEngineModel()
 		{
-			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options.ClientId, Options.ClientSecret, string.Empty, string.Empty, Options.Model, Options.UseClientAuthentication);
+			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options.ClientId, Options.ClientSecret, Options.Model, Options.UseClientAuthentication);
 			int accountId;
 			if (Options.UseClientAuthentication)
 			{

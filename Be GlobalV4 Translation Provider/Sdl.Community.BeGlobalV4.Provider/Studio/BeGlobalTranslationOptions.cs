@@ -1,5 +1,6 @@
 ﻿using System;
 using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
@@ -18,8 +19,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public string ClientId { get; set; }
 		public string ClientSecret { get; set; }
 		public SubscriptionInfo SubscriptionInfo { get; set; }
-		
-		public Uri Uri => _uriBuilder.Uri;		 
+		public BeGlobalV4Translator BeGlobalService { get; set; }
+
+		public Uri Uri => _uriBuilder.Uri;
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 
 		public string Model
@@ -58,6 +60,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private void SetStringParameter(string p, string value)
 		{
 			_uriBuilder[p] = value;
-		} 
+		}
 	}
 }

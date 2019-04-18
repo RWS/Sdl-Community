@@ -9,21 +9,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 	public class BeGlobalV4Translator
 	{
 		private readonly IRestClient _client;
-		private readonly string _source;
-		private readonly string _target;
 		private readonly string _flavor;
 
 		public BeGlobalV4Translator(
 			string server,
 			string user,
 			string password,
-			string source,
-			string target,
 			string flavor,
 			bool useClientAuthentication)
 		{
-			_source = source;
-			_target = target;
 			_flavor = flavor;
 
 			_client = new RestClient(string.Format($"{server}/v4"));
@@ -55,16 +49,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
 		}
 
-		public string TranslateText(string text)
-		{
-			var json = UploadText(text);
-
-			var rawData = WaitForTranslation(json.requestId.Value);
-
-			json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
-			return json != null ? json.translation[0] : string.Empty;
-		}
-
 		public int GetClientInformation()
 		{
 			var request = new RestRequest("/accounts/api-credentials/self")
@@ -82,6 +66,34 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				return user.AccountId;
 			}
 			return 0;
+		}
+
+		public string TranslateText(string text, string sourceLanguage, string targetLanguage)
+		{
+			var request = new RestRequest("/mt/translations/async", Method.POST)
+			{
+				RequestFormat = DataFormat.Json
+			};
+			string[] texts = { text };
+			request.AddBody(new
+			{
+				input = texts,
+				sourceLanguageId = sourceLanguage,
+				targetLanguageId = targetLanguage,
+				model = _flavor,
+				inputFormat = "xliff"
+			});
+			var response = _client.Execute(request);
+			if (!response.IsSuccessful)
+			{
+				ShowErrors(response);
+			}
+			dynamic json = JsonConvert.DeserializeObject(response.Content);
+
+			var rawData = WaitForTranslation(json?.requestId?.Value);
+
+			json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
+			return json != null ? json.translation[0] : string.Empty;
 		}
 
 		public int GetUserInformation()
@@ -112,31 +124,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			var subscriptionInfo = JsonConvert.DeserializeObject<SubscriptionInfo>(response.Content);
 			return subscriptionInfo;
-		}
-
-
-		public dynamic UploadText(string text)
-		{
-			var request = new RestRequest("/mt/translations/async", Method.POST)
-			{
-				RequestFormat = DataFormat.Json
-			};
-			string[] texts = { text };
-			request.AddBody(new
-			{
-				input = texts,
-				sourceLanguageId = _source,
-				targetLanguageId = _target,
-				model = _flavor,
-				inputFormat = "xliff"
-			});
-			var response = _client.Execute(request);
-			if (!response.IsSuccessful)
-			{
-				ShowErrors(response);
-			}
-			dynamic json = JsonConvert.DeserializeObject(response.Content);
-			return json;
 		}
 
 		private byte[] WaitForTranslation(string id)
