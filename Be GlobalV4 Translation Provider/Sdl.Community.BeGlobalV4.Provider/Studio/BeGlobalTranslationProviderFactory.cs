@@ -1,4 +1,5 @@
 ﻿using System;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -9,6 +10,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		Description = "BeGlobal4 Translation Provider")]
 	public class BeGlobalTranslationProviderFactory : ITranslationProviderFactory
 	{
+		private string _url = "https://translate-api.sdlbeglobal.com";
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
@@ -21,25 +23,27 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				var splitedCredentials = credentials.Credential.Split('#');
 				options.ClientId = splitedCredentials[0];
 				options.ClientSecret = splitedCredentials[1];
+				if (options.BeGlobalService == null)
+				{
+					options.BeGlobalService = new BeGlobalV4Translator(_url, options.ClientId, options.ClientSecret, options.Model, options.UseClientAuthentication);
+				}
 			}
 			else
 			{
 				credentialStore.AddCredential(originalUri, new TranslationProviderCredential(originalUri.ToString(), true));
 			}
 
-			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", options.ClientId,
-				options.ClientSecret, string.Empty, string.Empty, options.Model, options.UseClientAuthentication);
-
 			int accountId;
 			if (options.UseClientAuthentication)
 			{
-				accountId = beGlobalTranslator.GetClientInformation();
+				accountId = options.BeGlobalService.GetClientInformation();
 			}
 			else
 			{
-				accountId = beGlobalTranslator.GetUserInformation();
+				accountId = options.BeGlobalService.GetUserInformation();
 			}
-			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+
+			var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
 			options.SubscriptionInfo = subscriptionInfo;
 			return new BeGlobalTranslationProvider(options);
 		}
