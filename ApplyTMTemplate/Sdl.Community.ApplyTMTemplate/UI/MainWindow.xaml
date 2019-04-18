@@ -59,14 +59,38 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
-			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
 		<TextBlock Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="10,10,0,0"  Grid.ColumnSpan="3" />
 
 		<DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,0,0,0">
-			<Button DockPanel.Dock="Right" Margin="5,10,10,0" Style="{StaticResource SdlWizardStyleButton}" Command="{Binding BrowseCommand}" Content="Choose template" VerticalAlignment="Top" ToolTip="{x:Static applyTmTemplate:PluginResources.Browse_button_Tooltip}"/>
-			<ContentControl DockPanel.Dock="Left" Margin="10,10,10,0" Content="{Binding TimedTextBoxViewModel}"/>
+			<TextBlock DockPanel.Dock="Bottom" Margin="0,22,10,0" HorizontalAlignment="Right"
+			           IsEnabled="{Binding CanExecuteExport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+			           ToolTip="{x:Static applyTmTemplate:PluginResources.Export_button_Tooltip}">
+				<TextBlock.Style>
+					<Style TargetType="TextBlock">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="False">
+								<Setter Property="Visibility" Value="Collapsed"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="True">
+								<Setter Property="Visibility" Value="Visible"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</TextBlock.Style>
+				<Hyperlink TextDecorations="UnderLine" Command="{Binding ExportCommand}">Export to excel...
+						<Hyperlink.Style>
+							<Style TargetType="Hyperlink"
+							       BasedOn="{StaticResource {x:Type Hyperlink}}">
+								<Setter Property="Foreground" Value="#0C0"/>
+							</Style>
+						</Hyperlink.Style>
+					</Hyperlink>
+			</TextBlock>
+			<Button DockPanel.Dock="Right" Margin="0,10,10,1" Style="{StaticResource SdlWizardStyleButton}" Command="{Binding BrowseCommand}" Content="Choose template" VerticalAlignment="Top" ToolTip="{x:Static applyTmTemplate:PluginResources.Browse_button_Tooltip}"/>
+			<ContentControl Height="33" DockPanel.Dock="Left" Margin="10,10,10,0" Content="{Binding TimedTextBoxViewModel}"/>
 		</DockPanel>
 
 		
@@ -158,13 +182,11 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
-		<StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
-			<Button Margin="10,10,0,0" Style="{StaticResource SdlWizardStyleButtonGreen}" Command="{Binding ExportCommand}"
-					IsEnabled="{Binding CanExecuteExport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-			        Content="Export resources" ToolTip="{x:Static applyTmTemplate:PluginResources.Export_button_Tooltip}"/>
-			<Button Margin="5,10,10,0" Style="{StaticResource SdlWizardStyleButtonGreen}" Command="{Binding ImportCommand}"
-					IsEnabled="{Binding CanExecuteImport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-			        Content="Import resources" ToolTip="{x:Static applyTmTemplate:PluginResources.Import_button_Tooltip}"/>
+		<StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
+			
+			<Button Margin="10,10,10,0" Style="{StaticResource SdlWizardStyleButtonGreen}" Command="{Binding ImportCommand}"
+			        IsEnabled="{Binding CanExecuteImport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+			        Content="{Binding ImportButtonText}" ToolTip="{x:Static applyTmTemplate:PluginResources.Import_button_Tooltip}"/>
 			<RadioButton x:Name="FromTm" Content="From the TMs" Margin="10, 20, 10, 10" ToolTip="{x:Static applyTmTemplate:PluginResources.From_TM_Radio_Button_Tooltip}" IsChecked="{Binding ToggleExcelTM}">
 				<RadioButton.Style>
 					<Style TargetType="RadioButton" BasedOn="{StaticResource MetroRadioButton}">
@@ -196,7 +218,8 @@
 		</StackPanel>
 		<StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 			<controls:ProgressRing Visibility="{Binding ProgressVisibility}" Width="30" />
-			<Button IsEnabled="{Binding CanExecuteApply, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SdlWizardStyleButtonGreen}" RenderTransformOrigin="0.487,1.938" HorizontalAlignment="Right" Margin="0,10,10,0" Command="{Binding ApplyTemplateCommand}" Content="Template -> TMs" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}"/>
+			
+			<Button IsEnabled="{Binding CanExecuteApply, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SdlWizardStyleButtonGreen}" RenderTransformOrigin="0.487,1.938" HorizontalAlignment="Right" Margin="0,10,10,0" Command="{Binding ApplyTemplateCommand}" Content="Apply: Template -> TMs" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}"/>
 		</StackPanel>
 	</Grid>
 </controls:MetroWindow>

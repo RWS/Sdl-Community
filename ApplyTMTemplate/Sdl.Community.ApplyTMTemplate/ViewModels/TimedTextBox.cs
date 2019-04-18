@@ -26,7 +26,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			set
 			{
 				_path = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Path));
 			}
 		}
 
