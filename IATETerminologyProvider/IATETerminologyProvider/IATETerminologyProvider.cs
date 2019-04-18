@@ -19,6 +19,7 @@ namespace IATETerminologyProvider
 		private ProviderSettings _providerSettings;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
+		private ProjectsController _projectsController;
 		private Language _targetLanguage;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
@@ -128,7 +129,7 @@ namespace IATETerminologyProvider
 		public IList<IDefinitionLanguage> GetDefinitionLanguages()
 		{			
 			var result = new List<IDefinitionLanguage>();
-			var currentProject = GetProjectController().CurrentProject;
+			var currentProject = _projectsController.CurrentProject;
 			var projTargetLanguage = _targetLanguage;	
 			var projSourceLanguage = currentProject.GetProjectInfo().SourceLanguage;
 
@@ -214,7 +215,9 @@ namespace IATETerminologyProvider
 		{
 			if (_editorController == null)
 			{
+				_projectsController = GetProjectController();
 				_editorController = GetEditorController();
+
 				if (_editorController != null)
 				{
 					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
