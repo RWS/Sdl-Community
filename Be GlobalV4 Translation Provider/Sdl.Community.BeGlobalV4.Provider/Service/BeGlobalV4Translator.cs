@@ -158,8 +158,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				{
 					System.Threading.Thread.Sleep(300);
 				}
-			}
-			while (!status.Equals("DONE", StringComparison.CurrentCultureIgnoreCase)); // check for FAILED to catch errors
+				if (status.Equals("FAILED"))
+				{
+					ShowErrors(response);
+
+				}
+			} while (status.Equals("INIT", StringComparison.CurrentCultureIgnoreCase) ||
+			         status.Equals("TRANSLATING", StringComparison.CurrentCultureIgnoreCase));
 
 			response = RestGet($"/mt/translations/async/{id}/content");
 			if (!response.IsSuccessful)

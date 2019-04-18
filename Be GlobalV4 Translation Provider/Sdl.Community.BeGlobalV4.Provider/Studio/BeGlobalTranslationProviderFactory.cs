@@ -56,8 +56,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			return supportsProvider;
 		}
 
-
-
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
 		{
 			var info = new TranslationProviderInfo
