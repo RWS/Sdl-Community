@@ -230,6 +230,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon GreenDropDown {
+            get {
+                object obj = ResourceManager.GetObject("GreenDropDown", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The following languages were identified in the template:.
         /// </summary>
         public static string Identified_Languages {
