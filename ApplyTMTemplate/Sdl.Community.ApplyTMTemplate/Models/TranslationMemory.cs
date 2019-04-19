@@ -148,59 +148,6 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 		}
 
-		private void AddLanguageResourceBundleToTm(LanguageResourceBundle languageResourceBundle)
-		{
-			ValidateTm();
-
-			MarkSourceNotModified();
-			MarkTargetNotModified();
-
-			var cultureOfNewBundle = languageResourceBundle.Language;
-			var cultureOfSource = Tm.LanguageDirection.SourceLanguage;
-			var cultureOfTarget = Tm.LanguageDirection.TargetLanguage;
-			bool thisLangResIsValid = false;
-
-			if (cultureOfNewBundle.Equals(cultureOfSource))
-			{
-				MarkSourceModified();
-				thisLangResIsValid = true;
-			}
-
-			if (cultureOfNewBundle.Equals(cultureOfTarget))
-			{
-				MarkTargetModified();
-				thisLangResIsValid = true;
-			}
-
-			if (!thisLangResIsValid) return;
-
-			var properties = new List<string>{ "Abbreviations", "OrdinalFollowers", "Variables" };
-			foreach (var property in properties)
-			{
-				AddItemsToWordlist(languageResourceBundle, Tm.LanguageResourceBundles[cultureOfNewBundle], property);
-			}
-			AddSegmentationRulesToBundle(languageResourceBundle, Tm.LanguageResourceBundles[cultureOfNewBundle]);
-			Tm.Save();
-		}
-
-		private void ValidateTm()
-		{
-			if (Tm.LanguageResourceBundles.Count < 2)
-			{
-				var sourceLanguage = Tm?.LanguageDirection?.SourceLanguage;
-				var targetLanguage = Tm?.LanguageDirection?.TargetLanguage;
-				if (Tm.LanguageResourceBundles[sourceLanguage] == null)
-				{
-					Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(sourceLanguage));
-				}
-
-				if (Tm.LanguageResourceBundles[targetLanguage] == null)
-				{
-					Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(targetLanguage));
-				}
-			}
-		}
-
 		private static void AddSegmentationRulesToBundle(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
 		{
 			if (newBundle.SegmentationRules == null) return;
@@ -241,6 +188,59 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			else
 			{
 				templateBundleSetter?.Invoke(template, new[] { new Wordlist(newBundleGetter) });
+			}
+		}
+
+		private void AddLanguageResourceBundleToTm(LanguageResourceBundle languageResourceBundle)
+		{
+			ValidateTm();
+
+			MarkSourceNotModified();
+			MarkTargetNotModified();
+
+			var cultureOfNewBundle = languageResourceBundle.Language;
+			var cultureOfSource = Tm.LanguageDirection.SourceLanguage;
+			var cultureOfTarget = Tm.LanguageDirection.TargetLanguage;
+			bool thisLangResIsValid = false;
+
+			if (cultureOfNewBundle.Equals(cultureOfSource))
+			{
+				MarkSourceModified();
+				thisLangResIsValid = true;
+			}
+
+			if (cultureOfNewBundle.Equals(cultureOfTarget))
+			{
+				MarkTargetModified();
+				thisLangResIsValid = true;
+			}
+
+			if (!thisLangResIsValid) return;
+
+			var properties = new List<string> { "Abbreviations", "OrdinalFollowers", "Variables" };
+			foreach (var property in properties)
+			{
+				AddItemsToWordlist(languageResourceBundle, Tm.LanguageResourceBundles[cultureOfNewBundle], property);
+			}
+			AddSegmentationRulesToBundle(languageResourceBundle, Tm.LanguageResourceBundles[cultureOfNewBundle]);
+			Tm.Save();
+		}
+
+		private void ValidateTm()
+		{
+			if (Tm.LanguageResourceBundles.Count < 2)
+			{
+				var sourceLanguage = Tm?.LanguageDirection?.SourceLanguage;
+				var targetLanguage = Tm?.LanguageDirection?.TargetLanguage;
+				if (Tm.LanguageResourceBundles[sourceLanguage] == null)
+				{
+					Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(sourceLanguage));
+				}
+
+				if (Tm.LanguageResourceBundles[targetLanguage] == null)
+				{
+					Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(targetLanguage));
+				}
 			}
 		}
 	}

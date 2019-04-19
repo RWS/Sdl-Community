@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 	<Style x:Key="TextBlockColor" TargetType="{x:Type TextBlock}">
-		<Setter Property="Foreground" Value="#0C2D47"/>
+		<Setter Property="Foreground" Value="#0C2D47" />
 		<Setter Property="FontFamily" Value="Segoe UI"></Setter>
 		<Setter Property="Margin" Value="10,0,0,0"></Setter>
 	</Style>

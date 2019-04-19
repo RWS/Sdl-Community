@@ -2,13 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
 	<Style x:Key="DgHeaderStyle" TargetType="{x:Type DataGrid}">
-		<Setter Property="ColumnHeaderStyle" Value="{DynamicResource DgcHeaderStyle}"/>
+		<Setter Property="ColumnHeaderStyle" Value="{DynamicResource DgcHeaderStyle}" />
 	</Style>
 
 	<Style x:Key="DgcHeaderStyle" TargetType="DataGridColumnHeader">
-		<Setter Property="Height" Value="30"/>
+		<Setter Property="Height" Value="30" />
 		<Setter Property="Background" Value="#3EA691" />
-		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="Foreground" Value="White" />
 		<Setter Property="FontSize" Value="12" />
 		<Setter Property="FontFamily" Value="Segoe UI" />
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -18,11 +18,11 @@
 		<Setter Property="MaxHeight" Value="150" />
 		<Style.Triggers>
 			<Trigger Property="IsEditing" Value="true">
-				<Setter Property="BorderBrush" Value="Red"/>
-				<Setter Property="BorderThickness" Value="2"/>
+				<Setter Property="BorderBrush" Value="Red" />
+				<Setter Property="BorderThickness" Value="2" />
 			</Trigger>
 			<!--<Trigger Property="Validation.HasError" Value="true">
-				<Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+				<Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
 			</Trigger>-->
 		</Style.Triggers>
 	</Style>
@@ -45,21 +45,21 @@
 
 	<!--Hides overflow arrow from toolbar-->
 	<Style x:Key="Toolbar" TargetType="{x:Type ToolBar}">
-		<Setter Property="SnapsToDevicePixels" Value="true"/>
-		<Setter Property="OverridesDefaultStyle" Value="true"/>
+		<Setter Property="SnapsToDevicePixels" Value="true" />
+		<Setter Property="OverridesDefaultStyle" Value="true" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type ToolBar}">
 					<Border x:Name="Border"  CornerRadius="2" BorderThickness="1" Background="WhiteSmoke" BorderBrush="WhiteSmoke">
-						<DockPanel >
+						<DockPanel>
 							<ToggleButton Visibility="Collapsed"  DockPanel.Dock="Right" IsEnabled="False" IsChecked="False" ClickMode="Press">
 								<Popup x:Name="OverflowPopup" AllowsTransparency="true" Placement="Bottom" IsOpen="{Binding Path=IsOverflowOpen,RelativeSource={RelativeSource TemplatedParent}}" StaysOpen="false" Focusable="false" PopupAnimation="Slide">
 									<Border x:Name="DropDownBorder" Background="White" BorderThickness="1" BorderBrush="white">
-										<ToolBarOverflowPanel x:Name="PART_ToolBarOverflowPanel" Margin="2" WrapWidth="200" Focusable="true"  FocusVisualStyle="{x:Null}" KeyboardNavigation.TabNavigation="Cycle" KeyboardNavigation.DirectionalNavigation="Cycle" Visibility="Collapsed"/>
+										<ToolBarOverflowPanel x:Name="PART_ToolBarOverflowPanel" Margin="2" WrapWidth="200" Focusable="true"  FocusVisualStyle="{x:Null}" KeyboardNavigation.TabNavigation="Cycle" KeyboardNavigation.DirectionalNavigation="Cycle" Visibility="Collapsed" />
 									</Border>
 								</Popup>
 							</ToggleButton>
-							<ToolBarPanel x:Name="PART_ToolBarPanel" IsItemsHost="true" Margin="0,1,2,2"/>
+							<ToolBarPanel x:Name="PART_ToolBarPanel" IsItemsHost="true" Margin="0,1,2,2" />
 						</DockPanel>
 					</Border>
 				</ControlTemplate>
@@ -69,11 +69,9 @@
 
 	<!--Wrap text of text block-->
 	<Style TargetType="{x:Type TextBlock}" x:Key="WrapText">
-		<Setter Property="TextWrapping" Value="Wrap"/>
-		<Setter Property="VerticalAlignment" Value="Top"/>
+		<Setter Property="TextWrapping" Value="Wrap" />
+		<Setter Property="VerticalAlignment" Value="Top" />
 	</Style>
-
-
 
 	<!-- Shared colors-->
 	<SolidColorBrush x:Key="InnerBorderColor">#BFCDD4</SolidColorBrush>
@@ -83,22 +81,21 @@
 	<SolidColorBrush x:Key="InformationTitleColor">#303030</SolidColorBrush>
 
 	<Style x:Key="CellInformationText" TargetType="TextBlock">
-		<Setter Property="Margin" Value="2,0,0,0"/>
+		<Setter Property="Margin" Value="2,0,0,0" />
 		<Setter Property="VerticalAlignment" Value="Center"></Setter>
 		<Setter Property="TextTrimming" Value="CharacterEllipsis"></Setter>
-		<Setter Property="TextWrapping" Value="NoWrap"/>
+		<Setter Property="TextWrapping" Value="NoWrap" />
 	</Style>
-
 
 	<!--Data Grid Header Thumb Style-->
 	<Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
-		<Setter Property="Width" Value="8"/>
-		<Setter Property="Background" Value="Transparent"/>
-		<Setter Property="Cursor" Value="SizeWE"/>
+		<Setter Property="Width" Value="8" />
+		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="Cursor" Value="SizeWE" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Thumb}">
-					<Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}"/>
+					<Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" />
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
@@ -106,11 +103,11 @@
 
 	<!--Data Grid Header Styles-->
 	<Style x:Key="StandardColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
-		<Setter Property="Background" Value="White"/>
-		<Setter Property="FontSize" Value="11"/>
-		<Setter Property="Padding" Value="5"/>
-		<Setter Property="Foreground" Value="{StaticResource InformationTitleColor}"/>
-		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="Background" Value="White" />
+		<Setter Property="FontSize" Value="11" />
+		<Setter Property="Padding" Value="5" />
+		<Setter Property="Foreground" Value="{StaticResource InformationTitleColor}" />
+		<Setter Property="FontWeight" Value="Bold" />
 		<Setter Property="BorderBrush" Value="{StaticResource InnerBorderColor}" />
 		<Setter Property="BorderThickness" Value="0 0 1 1" />
 
@@ -122,18 +119,17 @@
 							<DockPanel>
 								<Path x:Uid="SortArrow" x:Name="SortArrow"
                                       DockPanel.Dock="Right"
-                                      HorizontalAlignment="Right" VerticalAlignment="Center"                                           
+                                      HorizontalAlignment="Right" VerticalAlignment="Center"
                                       Width="8" Height="6" Margin="2,0,5,0"
                                       Stretch="Fill" Opacity="0.5" Fill="Black"
                                       RenderTransformOrigin="0.5,0.4"
                                       Visibility="Collapsed"
                                       Data="M0,0 L1,0 0.5,1 z" />
-								<ContentPresenter  RecognizesAccessKey="True" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-
+								<ContentPresenter  RecognizesAccessKey="True" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
 							</DockPanel>
 						</themes:DataGridHeaderBorder>
-						<Thumb x:Uid="PART_LeftHeaderGripper" x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Style="{StaticResource ColumnHeaderGripperStyle}"/>
-						<Thumb x:Uid="PART_RightHeaderGripper" x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderGripperStyle}"/>
+						<Thumb x:Uid="PART_LeftHeaderGripper" x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Style="{StaticResource ColumnHeaderGripperStyle}" />
+						<Thumb x:Uid="PART_RightHeaderGripper" x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderGripperStyle}" />
 					</Grid>
 
 					<ControlTemplate.Triggers>
@@ -149,12 +145,10 @@
 							<Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
 						</Trigger>
 					</ControlTemplate.Triggers>
-
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
 	</Style>
-
 
 	<Style x:Key="NoRightBorderColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource StandardColumnHeaderStyle}">
 		<Setter Property="BorderThickness" Value="0 0 0 1" ></Setter>
@@ -165,16 +159,14 @@
 		<Setter Property="HorizontalContentAlignment" Value="Right" ></Setter>
 	</Style>
 
-	<Style x:Key="FilesGridCellStyle" TargetType="{x:Type DataGridCell}" >
+	<Style x:Key="FilesGridCellStyle" TargetType="{x:Type DataGridCell}">
 		<Setter Property="Foreground" Value="{StaticResource InformationTitleColor}" />
 		<Style.Triggers>
 			<Trigger Property="IsSelected" Value="True">
 				<Setter Property="Background" Value="{StaticResource RowItemHighlight}" />
 				<Setter Property="BorderBrush" Value="{StaticResource RowItemHighlight}" />
 			</Trigger>
-
 		</Style.Triggers>
-
 	</Style>
 
 	<Style x:Key="FilesGridStyle" TargetType="{x:Type DataGrid}">
@@ -192,25 +184,24 @@
 		<Setter Property="CellStyle" Value="{StaticResource FilesGridCellStyle}"></Setter>
 	</Style>
 
-
 	<Style x:Key="GridRowDetailListViewContainerStyle" TargetType="{x:Type ListViewItem}">
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type ListViewItem}">
-					<Border SnapsToDevicePixels="True" 
-                                BorderThickness="{TemplateBinding BorderThickness}"   
-                                BorderBrush="{TemplateBinding BorderBrush}"   
+					<Border SnapsToDevicePixels="True"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
                                 Background="{TemplateBinding Background}">
 						<Border x:Uid="InnerBorder" Name="InnerBorder" CornerRadius="1" BorderThickness="1">
 							<Grid Background="{TemplateBinding Background}">
-								<GridViewRowPresenter 
-                                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"   
+								<GridViewRowPresenter
+                                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 							</Grid>
 						</Border>
 					</Border>
 					<ControlTemplate.Triggers>
-						<Trigger Property="IsMouseOver" Value="True" >
+						<Trigger Property="IsMouseOver" Value="True">
 							<Setter Property="Background" Value="{StaticResource RowItemHighlight}" />
 							<Setter Property="BorderBrush" Value="Transparent" />
 						</Trigger>
@@ -225,7 +216,7 @@
 								<Condition Property="IsMouseOver" Value="True" />
 							</MultiTrigger.Conditions>
 							<Setter Property="Background" Value="{StaticResource RowItemHighlight}" />
-							<Setter Property="BorderBrush" Value="{StaticResource RowItemFocusedBorder}"  />
+							<Setter Property="BorderBrush" Value="{StaticResource RowItemFocusedBorder}" />
 						</MultiTrigger>
 						<Trigger Property="IsEnabled" Value="False">
 							<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />

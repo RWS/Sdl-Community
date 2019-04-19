@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -81,30 +80,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				_timedTextBoxViewModel = value;
 				_timedTextBoxViewModel.ShouldStartValidation += StartLoadingResourcesAndValidate;
 			}
-		}
-
-		public async void StartLoadingResourcesAndValidate(object sender, EventArgs e)
-		{
-			_templateValidity = TemplateValidity.IsNotValid;
-
-			LoadResourcesFromTemplate();
-
-			//check if the template is valid(resources ignored)
-			if (ValidateTemplate(false))
-			{
-				_templateValidity = TemplateValidity.IsValid;
-			}
-			//check if the template has any resources
-			if (ValidateTemplate())
-			{
-				_templateValidity = TemplateValidity.IsValid | TemplateValidity.HasResources;
-			}
-
-			OnPropertyChanged(nameof(CanExecuteApply));
-			OnPropertyChanged(nameof(CanExecuteImport));
-			OnPropertyChanged(nameof(CanExecuteExport));
-
-			await ShowMessages();
 		}
 
 		public string ProgressVisibility
@@ -237,6 +212,49 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public ICommand RemoveTMsCommand => _removeTMsCommand ?? (_removeTMsCommand = new CommandHandler(RemoveTMs, true));
 
+		public bool CanExecuteImport
+		{
+			get
+			{
+				if (!ToggleExcelTM && _templateValidity > 0)
+				{
+					return true;
+				}
+
+				if (ToggleExcelTM && _templateValidity > 0 && IsThereAnyTmSelected())
+				{
+					return true;
+				}
+
+				return false;
+			}
+		}
+
+		public bool CanExecuteApply => (int)_templateValidity > 1 && IsThereAnyTmSelected();
+
+		public async void StartLoadingResourcesAndValidate(object sender, EventArgs e)
+		{
+			_templateValidity = TemplateValidity.IsNotValid;
+
+			LoadResourcesFromTemplate();
+
+			//check if the template is valid(resources ignored)
+			if (ValidateTemplate(false))
+			{
+				_templateValidity = TemplateValidity.IsValid;
+			}
+			//check if the template has any resources
+			if (ValidateTemplate())
+			{
+				_templateValidity = TemplateValidity.IsValid | TemplateValidity.HasResources;
+			}
+
+			OnPropertyChanged(nameof(CanExecuteApply));
+			OnPropertyChanged(nameof(CanExecuteImport));
+			OnPropertyChanged(nameof(CanExecuteExport));
+
+			await ShowMessages();
+		}
 		private string CreateNewFile(string filePath)
 		{
 			var index = 0;
@@ -434,18 +452,17 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 								_template.LanguageResourceBundles.Aggregate("",
 									(l, j) => l + "\n  \u2022" + j.LanguageCode);
 							_message = $"{PluginResources.Identified_Languages}{idedLanguages}" +
-							           $"\n\n{PluginResources.Unidentified_Languages}{_unIDedLanguagesAsString}";
+									   $"\n\n{PluginResources.Unidentified_Languages}{_unIDedLanguagesAsString}";
 						}
 					}
 				}
 				else
 				{
 					if (_message == PluginResources.Template_corrupted_or_file_not_template ||
-					    _message == PluginResources.Template_filePath_Not_Correct)
+						_message == PluginResources.Template_filePath_Not_Correct)
 					{
 						isValid = false;
 					}
-
 				}
 			}
 			else
@@ -455,32 +472,10 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			return isValid;
 		}
-
-		public bool CanExecuteImport
-		{
-			get
-			{
-				if (!ToggleExcelTM && _templateValidity > 0)
-				{
-					return true;
-				}
-
-				if (ToggleExcelTM && _templateValidity > 0 && IsThereAnyTmSelected())
-				{
-					return true;
-				}
-
-				return false;
-			}
-		}
-
 		private bool IsThereAnyTmSelected()
 		{
 			return TmCollection.Any(tm => tm.IsSelected);
 		}
-
-		public bool CanExecuteApply => (int)_templateValidity > 1 && IsThereAnyTmSelected();
-
 		private void UnMarkTms(List<TranslationMemory> tms)
 		{
 			foreach (var tm in tms)

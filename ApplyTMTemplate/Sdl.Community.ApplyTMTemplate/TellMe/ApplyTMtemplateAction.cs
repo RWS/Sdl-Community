@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.ApplyTMTemplate.UI;
 using Sdl.Community.ApplyTMTemplate.Utilities;
@@ -12,31 +7,31 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.ApplyTMTemplate.TellMe
 {
-    public class ApplyTMTemplateAction : AbstractTellMeAction
-    {
-	    public ApplyTMTemplateAction()
-	    {
-		    Name = "Start Apply TM Template";
-	    }
+	public class ApplyTMTemplateAction : AbstractTellMeAction
+	{
+		public ApplyTMTemplateAction()
+		{
+			Name = "Start Apply TM Template";
+		}
 
-	    public override void Execute()
-	    {
+		public override void Execute()
+		{
 			var timedTextBoxViewModel = new ViewModels.TimedTextBox();
 			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader(), DialogCoordinator.Instance, timedTextBoxViewModel);
 
-		    var mainWindow = new MainWindow
-		    {
-			    DataContext = mainWindowViewModel
-		    };
+			var mainWindow = new MainWindow
+			{
+				DataContext = mainWindowViewModel
+			};
 
 			System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(mainWindow);
-		    mainWindow.Show();
+			mainWindow.Show();
 		}
 
-	    public override bool IsAvailable => true;
+		public override bool IsAvailable => true;
 
-	    public override string Category => "Apply TM Template results";
+		public override string Category => "Apply TM Template results";
 
-	    public override Icon Icon => PluginResources.ATTA;
+		public override Icon Icon => PluginResources.ATTA;
 	}
 }
