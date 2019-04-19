@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net462\ControlzEx.dll</HintPath>
+    </Reference>
     <Reference Include="EPPlus, Version=4.5.3.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.5.3.1\lib\net40\EPPlus.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -44,8 +47,9 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Sdl.Community.Toolkit.Core">
-      <HintPath>..\..\Toolkit\packages\Sdl.Community.Toolkit.Core.0.9.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Sdl.Community.Toolkit.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.Core.1.1.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
@@ -112,6 +116,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -125,10 +130,13 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
+    <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Models\IResource.cs" />
     <Compile Include="Models\Resource.cs" />
     <Compile Include="Models\SegmentationRulesResource.cs" />
     <Compile Include="Models\Settings.cs" />
+    <Compile Include="ViewModels\TimedTextBox.cs" />
     <Compile Include="Models\WordlistResource.cs" />
     <Compile Include="Studio\ApplyTMTemplateAction.cs" />
     <Compile Include="Studio\ApplyTMTemplateRibbonGroup.cs" />
@@ -152,6 +160,9 @@
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\TimedTextBox.xaml.cs">
+      <DependentUpon>TimedTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\DropBehaviour.cs" />
     <Compile Include="Utilities\ExcelImportExportService.cs" />
     <Compile Include="Utilities\FolderSelectDialog.cs" />
@@ -174,7 +185,7 @@
     <Resource Include="Resources\AddFolder.ico" />
     <Resource Include="Resources\PlusSign.ico" />
     <EmbeddedResource Include="PluginResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -188,11 +199,23 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="UiHelpers\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UiHelpers\ButtonsStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UiHelpers\DataGridStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\DataGridStyle2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\General.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -209,6 +232,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\TimedTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

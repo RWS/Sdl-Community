@@ -13,7 +13,8 @@ namespace Sdl.Community.ApplyTMTemplate
 	{
 		protected override void Execute()
 		{
-			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader(), DialogCoordinator.Instance);
+			var timedTextBox = new ViewModels.TimedTextBox();
+			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader(), DialogCoordinator.Instance, timedTextBox);
 
 			var mainWindow = new MainWindow
 			{
