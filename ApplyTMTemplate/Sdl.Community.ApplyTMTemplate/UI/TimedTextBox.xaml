@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:ui="clr-namespace:Sdl.Community.ApplyTMTemplate.UI"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-	<TextBox controls:TextBoxHelper.Watermark="Enter path of template..." Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+	<TextBox VerticalAlignment="Center" VerticalContentAlignment="Center" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ui:TimedTextBox}, Path=ActualHeight}" controls:TextBoxHelper.Watermark="Enter path of template..." Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 </UserControl>
