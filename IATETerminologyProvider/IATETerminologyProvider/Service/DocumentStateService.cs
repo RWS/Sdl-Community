@@ -22,13 +22,21 @@ namespace IATETerminologyProvider.Service
 		{
 			if (iateTermsControl != null && _editorController != null)
 			{
-				_activeDocumentId = _editorController.ActiveDocument.Files?.ToList()[0].Id.ToString();
+				var activeFile = _editorController.ActiveDocument.Files?.ToList()[0];
+
+				if (activeFile == null)
+				{
+					return;
+				}
+
+				_activeDocumentId = activeFile.Id.ToString();				
 
 				var documentEntries = _documentEntriesState.FirstOrDefault(a => a.DocumentId == _activeDocumentId);
 				if (documentEntries != null)
 				{
+					var projectInfo = _editorController.ActiveDocument.Project.GetProjectInfo();
 					iateTermsControl.UpdateEntriesInView(documentEntries.Entries,
-						_editorController.ActiveDocument.Project.GetProjectInfo().SourceLanguage, documentEntries.SelectedEntry);
+						projectInfo.SourceLanguage, activeFile.Language, documentEntries.SelectedEntry);
 				}
 			}
 		}

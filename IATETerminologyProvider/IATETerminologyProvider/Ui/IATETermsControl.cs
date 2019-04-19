@@ -17,6 +17,8 @@ namespace IATETerminologyProvider.Ui
 	{
 		private readonly IATETerminologyProvider _iateTerminologyProvider;
 		private readonly PathInfo _pathInfo;
+		private Language _selectedSourceLanguage;
+		private Language _selectedTargetLanguage;
 
 		public IATETermsControl()
 		{
@@ -86,9 +88,9 @@ namespace IATETerminologyProvider.Ui
 			return (EntryModel)treeView1.SelectedNode?.Tag;
 		}
 
-		public void UpdateEntriesInView(IEnumerable<IEntry> entries, Language sourceLanguage, IEntry selectedEntry)
+		public void UpdateEntriesInView(IEnumerable<IEntry> entries, Language sourceLanguage, Language targetLanguage, IEntry selectedEntry)
 		{
-			UpdateEntriesInViewInternal(entries.Cast<EntryModel>(), sourceLanguage, selectedEntry);
+			UpdateEntriesInViewInternal(entries.Cast<EntryModel>(), sourceLanguage, targetLanguage, selectedEntry);
 		}
 
 		private void SelectEntryItem(IEntry entry)
@@ -170,28 +172,31 @@ namespace IATETerminologyProvider.Ui
 		{
 			if (e == null)
 			{
-				UpdateEntriesInViewInternal(new List<EntryModel>(), null, null);
+				UpdateEntriesInViewInternal(new List<EntryModel>(), null, null, null);
 			}
 			else
 			{
-				UpdateEntriesInViewInternal(e.EntryModels ?? new List<EntryModel>(), e.SourceLanguage, null);
+				UpdateEntriesInViewInternal(e.EntryModels ?? new List<EntryModel>(), e.SourceLanguage, e.TargetLanguage, null);
 			}
 		}
 
-		private void UpdateEntriesInViewInternal(IEnumerable<EntryModel> entryModels, Language sourceLanguage, IEntry selectedEntry)
+		private void UpdateEntriesInViewInternal(IEnumerable<EntryModel> entryModels, Language sourceLanguage, Language targetLanguage, IEntry selectedEntry)
 		{
 			if (InvokeRequired)
 			{
-				BeginInvoke(new Action<IEnumerable<EntryModel>, Language, IEntry>(UpdateEntriesInViewInternal), entryModels, sourceLanguage, selectedEntry);
+				BeginInvoke(new Action<IEnumerable<EntryModel>, Language, Language, IEntry>(UpdateEntriesInViewInternal), entryModels, sourceLanguage, targetLanguage, selectedEntry);
 				return;
 			}
+
+			_selectedSourceLanguage = sourceLanguage;
+			_selectedTargetLanguage = targetLanguage;
 
 			var items = GetEntryModelItems(entryModels, sourceLanguage);
 
 			treeView1.BeginUpdate();
 			treeView1.Nodes.Clear();
 			foreach (var item in items)
-			{
+			{				
 				var node = treeView1.Nodes.Add(item.Value[0].Guid.ToString(), item.Value[0].Text);
 				node.Tag = item.Value[0].Entry;
 				if (item.Value.Count > 1)
@@ -301,7 +306,7 @@ namespace IATETerminologyProvider.Ui
 			}
 		}
 
-		private static void WriteReport(IEntry entry, XmlWriter xmlTxtWriter)
+		private void WriteReport(IEntry entry, XmlWriter xmlTxtWriter)
 		{
 			xmlTxtWriter.WriteStartElement("Report");
 			xmlTxtWriter.WriteAttributeString("xml:space", "preserve");
@@ -317,19 +322,23 @@ namespace IATETerminologyProvider.Ui
 			xmlTxtWriter.WriteEndElement(); //report
 		}
 
-		private static void WriteLanguages(IEntry entry, XmlWriter xmlTxtWriter)
+		private void WriteLanguages(IEntry entry, XmlWriter xmlTxtWriter)
 		{
 			xmlTxtWriter.WriteStartElement("Languages");
 
 			for (var i = 0; i < entry.Languages.Count; i++)
 			{
-				WriteLanguage(entry.Languages[i], i == 0, xmlTxtWriter);
+				if (string.Compare(entry.Languages[i].Locale.Name, _selectedSourceLanguage.CultureInfo.Name, StringComparison.InvariantCultureIgnoreCase) == 0 ||
+				    string.Compare(entry.Languages[i].Locale.Name, _selectedTargetLanguage.CultureInfo.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+				{
+					WriteLanguage(entry.Languages[i], i == 0, xmlTxtWriter);
+				}
 			}
 
 			xmlTxtWriter.WriteEndElement(); //Languages
 		}
 
-		private static void WriteLanguage(IEntryLanguage language, bool isSource, XmlWriter xmlTxtWriter)
+		private void WriteLanguage(IEntryLanguage language, bool isSource, XmlWriter xmlTxtWriter)
 		{
 			var languageFlags = new LanguageFlags();
 			var fullPath = languageFlags.GetImageStudioCodeByLanguageCode(language.Locale.Name);
