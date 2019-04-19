@@ -5,7 +5,7 @@
 	</Style>
 	<Style x:Key="DgcHeaderStyle" TargetType="DataGridColumnHeader">
 		<Setter Property="Height" Value="30"/>
-        <Setter Property="Background" Value="SteelBlue" />
+		<Setter Property="Background" Value="#008264"/> 
 		<Setter Property="Foreground" Value="White"/>
 		<Setter Property="FontSize" Value="12" />
 		<Setter Property="FontFamily" Value="Calibri" />
@@ -14,24 +14,24 @@
     <Style x:Key="DgrStyle" TargetType="DataGridRow">
 	    <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="LightSkyBlue" />
-                <Setter Property="BorderBrush" Value="#00CED1" />
+				<Setter Property="Background" Value="#e5e5e5" />
+				<Setter Property="BorderBrush" Value="#e5e5e5" />
                 <Setter Property="Foreground" Value="#ffffff" />
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-				<Setter Property="Background" Value="CornflowerBlue" />
-                <Setter Property="BorderBrush" Value="#008C95" />
+				<Setter Property="Background" Value="#c9c9c9" />
+				<Setter Property="BorderBrush" Value="#c9c9c9" />
                 <Setter Property="Foreground" Value="#ffffff" />
             </Trigger>
         </Style.Triggers>
     </Style>
     <Style x:Key="WhiteHeader" TargetType="DataGridColumnHeader">
         <Setter Property="Height" Value="30"/>
-        <Setter Property="Background" Value="White" />
-        <Setter Property="Foreground" Value="Black"/>
+		<Setter Property="Background" Value="White" />
+		<Setter Property="Foreground" Value="Black"/>
         <Setter Property="FontSize" Value="12" />
-        <Setter Property="FontFamily" Value="Calibri" />
-    </Style>
+		<Setter Property="FontFamily" Value="Calibri" />
+	</Style>
     <Style x:Key="DataGridContentCellCentering" TargetType="{x:Type DataGridCell}">
 		<Setter Property="Template">
 			<Setter.Value>

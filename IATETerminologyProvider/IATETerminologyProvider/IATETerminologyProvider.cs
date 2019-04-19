@@ -19,14 +19,13 @@ namespace IATETerminologyProvider
 		private ProviderSettings _providerSettings;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
-		private ProjectsController _projectsController;
-		private Language _targetLanguage;
+		private ProjectsController _projectsController;		
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
 		public IATETerminologyProvider(ProviderSettings providerSettings)
 		{
-			UpdateSettings(providerSettings);
+			UpdateSettings(providerSettings);			
 		}
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
@@ -73,7 +72,8 @@ namespace IATETerminologyProvider
 				OnTermEntriesChanged(new TermEntriesChangedEventArgs
 				{
 					EntryModels = _entryModels,
-					SourceLanguage = new Language(source.Locale.Name)
+					SourceLanguage = new Language(source.Locale.Name),
+					TargetLanguage = new Language(target.Locale.Name)
 				});
 			}
 
@@ -130,28 +130,30 @@ namespace IATETerminologyProvider
 		{			
 			var result = new List<IDefinitionLanguage>();
 			var currentProject = _projectsController.CurrentProject;
-			var projTargetLanguage = _targetLanguage;	
-			var projSourceLanguage = currentProject.GetProjectInfo().SourceLanguage;
+			var projectInfo = currentProject.GetProjectInfo();
 
 			var sourceLanguage = new DefinitionLanguage
 			{
 				IsBidirectional = true,
-				Locale = projSourceLanguage.CultureInfo,
-				Name = projSourceLanguage.DisplayName,
+				Locale = projectInfo.SourceLanguage.CultureInfo,
+				Name = projectInfo.SourceLanguage.DisplayName,
 				TargetOnly = false
-			};
-
+			};						
 			result.Add(sourceLanguage);
 
-			var targetLanguage = new DefinitionLanguage
+			foreach (var language in projectInfo.TargetLanguages)
 			{
-				IsBidirectional = true,
-				Locale = projTargetLanguage.CultureInfo,
-				Name = projTargetLanguage.DisplayName,
-				TargetOnly = false
-			};
+				var targetLanguage = new DefinitionLanguage
+				{
+					IsBidirectional = true,
+					Locale = language.CultureInfo,
+					Name = language.DisplayName,
+					TargetOnly = false
+				};
 
-			result.Add(targetLanguage);
+				result.Add(targetLanguage);
+			}
+		
 			return result;
 		}
 
@@ -217,12 +219,10 @@ namespace IATETerminologyProvider
 			{
 				_projectsController = GetProjectController();
 				_editorController = GetEditorController();
-
+				
 				if (_editorController != null)
 				{
-					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
-					
-					_targetLanguage = _editorController.ActiveDocument?.ActiveFile?.Language;					
+					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;				
 				}
 			}
 		}
@@ -233,8 +233,6 @@ namespace IATETerminologyProvider
 			{
 				OnTermEntriesChanged(null);
 			}
-
-			_targetLanguage = e.Document?.ActiveFile?.Language;
 		}
 
 		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)

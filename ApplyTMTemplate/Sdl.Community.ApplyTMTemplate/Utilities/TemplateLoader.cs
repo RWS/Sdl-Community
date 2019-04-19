@@ -43,7 +43,15 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 		public string GetTmFolderPath()
 		{
-			var data = LoadDataFromFile(_path, "Setting");
+			XmlNodeList data;
+			try
+			{
+				data = LoadDataFromFile(_path, "Setting");
+			}
+			catch
+			{
+				return DefaultPath;
+			}
 
 			foreach (XmlNode setting in data)
 			{
