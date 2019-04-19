@@ -69,28 +69,19 @@ namespace ETSTranslationProvider
 		/// <returns></returns>
 		private Segment[] TranslateSegments(Segment[] sourceSegments)
 		{
-			Log.Logger.Trace("");
-			try
-			{
-				var xliffDocument = CreateXliffFile(sourceSegments);
+			var xliffDocument = CreateXliffFile(sourceSegments);
 
-				var translatedXliffText = ETSTranslatorHelper.GetTranslation(
-					provider.Options,
-					languageDirection,
-					xliffDocument);
+			var translatedXliffText = ETSTranslatorHelper.GetTranslation(
+				provider.Options,
+				languageDirection,
+				xliffDocument);
 
-				var translatedXliff = Converter.ParseXliffString(translatedXliffText);
-				if (translatedXliff != null)
-				{
-					return translatedXliff.GetTargetSegments();
-				}
-				return new Segment[sourceSegments.Length];
-			}
-			catch (Exception e)
+			var translatedXliff = Converter.ParseXliffString(translatedXliffText);
+			if (translatedXliff != null)
 			{
-				Log.Logger.Error(e, "Error in TranslateSegments");
-				return new Segment[sourceSegments.Length];
+				return translatedXliff.GetTargetSegments();
 			}
+			return new Segment[sourceSegments.Length];
 		}
 
 		/// <summary>
