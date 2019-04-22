@@ -189,7 +189,7 @@
     <Compile Include="ViewModel\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\AdaptiveEngine.ico" />
+    <Resource Include="Resources\AdaptiveEngine.ico" />
     <EmbeddedResource Include="Resources\TellMe1.ico" />
     <EmbeddedResource Include="Resources\Settings.ico" />
     <EmbeddedResource Include="Resources\Question.ico" />

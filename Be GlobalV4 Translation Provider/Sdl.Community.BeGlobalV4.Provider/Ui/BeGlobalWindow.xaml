@@ -3,18 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 xmlns:views ="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
              helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 	         ResizeMode="NoResize"
              WindowStartupLocation="CenterScreen"
+             TitleCharacterCasing="Normal"
              WindowTitleBrush="#0E202B"
              GlowBrush="#0E202B"
-             FontFamily="Segoe UI"	
+             FontFamily="Calibri"	
 			 Title="SDL BeGlobal (NMT) Translation provider"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Height="400" Width="600">
+             d:DesignHeight="450" d:DesignWidth="800" Height="450" Width="600">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -32,9 +32,6 @@
 	</Window.Resources>
 	
 	<Grid>
-		<Grid.Resources>
-			<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
-		</Grid.Resources>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
@@ -46,7 +43,7 @@
 		</Grid.ColumnDefinitions>
 
 		<StackPanel Grid.Row="0" Orientation="Horizontal">
-			<TextBlock Margin="15,15,20,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Width="400" 
+			<TextBlock Margin="15,15,20,0" HorizontalAlignment="Center" TextWrapping="Wrap" Width="400" FontSize="15" 
 					   Style="{DynamicResource TextBlockColor}">
 				Welcome to the SDL BeGlobal (NMT) translation provider for Studio. <LineBreak/><LineBreak/>
 				SDL BeGlobal (NMT) is SDL's state-of-the-art secure machine translation cloud product for enterprises with various paid subscription models.
@@ -54,22 +51,30 @@
 			<Image Source="../Resources/logoB.png" Width="150" Height="70" HorizontalAlignment="Center"  Margin="0,0,0,0"></Image>
 		</StackPanel>
 		<StackPanel Grid.Row="1" MinHeight="250">
-			<TextBlock  Margin="10,10,0,10"  TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please select
-				the settings you want to apply to the Translation Provider.	You must be logged in to make this selection.
+			<TextBlock  Margin="15,40,0,10"  TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please select
+				the settings you want to apply to the Translation Provider.
 			</TextBlock>
-			<CheckBox Margin="10,10,0,10" FontFamily="Segoe UI" IsChecked="{Binding ReSendChecked}">Re-send draft and translated segments</CheckBox>
-			<TextBlock  Margin="10,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">
+			<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}">Re-send draft and translated segments</CheckBox>
+			<TextBlock  Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">
 				Please select engine model :
 			</TextBlock>
 			<ComboBox 
 				HorizontalAlignment="Left"
 				Width="240"
+				FontFamily="Calibri"
 				ItemsSource="{Binding TranslationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				SelectedItem="{Binding SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-				DisplayMemberPath ="DisplayName" IsSynchronizedWithCurrentItem="True"
-				Margin="10,5,0,10" BorderThickness="1"
-				controls:TextBoxHelper.ClearTextButton="True"
-				controls:TextBoxHelper.Watermark="Type"/>
+				Margin="15,5,0,10" BorderThickness="1"
+				controls:TextBoxHelper.Watermark="Type">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal">
+							<Image Source="../Resources/AdaptiveEngine.ico" Width="20" Height="20" />
+							<TextBlock Text="{Binding DisplayName}" Margin="10,0,0,0" FontFamily="Calibri" VerticalAlignment="Center"/>
+						</StackPanel>
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
 		</StackPanel>
 
 		<StackPanel Grid.Row="2"  Orientation="Vertical"  VerticalAlignment="Bottom">
