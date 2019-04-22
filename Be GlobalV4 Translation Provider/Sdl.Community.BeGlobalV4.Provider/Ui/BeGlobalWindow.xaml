@@ -6,7 +6,8 @@
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
              helpers:WindowCloser.DialogResult="{Binding DialogResult}"
-	         ResizeMode="NoResize"
+             WindowCloseButtonStyle="{DynamicResource CleanCloseWindowButtonStyle}"
+			 ResizeMode="NoResize"
              WindowStartupLocation="CenterScreen"
              TitleCharacterCasing="Normal"
              WindowTitleBrush="#0E202B"
@@ -28,6 +29,18 @@
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"></ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
+			<!--set red background to X button on hover-->
+			<Style x:Key="CleanCloseWindowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MetroWindowButtonStyle}">
+				<Style.Triggers>
+					<Trigger Property="IsMouseOver" Value="True">
+						<Setter Property="Background" Value="#EB2F2F" />
+						<Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
+					</Trigger>
+					<Trigger Property="IsPressed" Value="True">
+						<Setter Property="Background" Value="#7C0000" />
+					</Trigger>
+				</Style.Triggers>
+			</Style>
 		</ResourceDictionary>
 	</Window.Resources>
 	
@@ -74,6 +87,11 @@
 						</StackPanel>
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
+				<ComboBox.ItemContainerStyle>
+					<Style TargetType="{x:Type ComboBoxItem}">
+						<Setter Property="BorderThickness" Value="0"/>
+					</Style>
+				</ComboBox.ItemContainerStyle>
 			</ComboBox>
 		</StackPanel>
 
