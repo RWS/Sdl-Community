@@ -43,7 +43,7 @@
 			</Style>
 		</ResourceDictionary>
 	</Window.Resources>
-	
+
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -51,23 +51,19 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
-
 		<StackPanel Grid.Row="0" Orientation="Horizontal">
-			<TextBlock Margin="15,15,20,0" HorizontalAlignment="Center" TextWrapping="Wrap" Width="400" FontSize="15" 
+			<TextBlock Margin="15,15,0,0" HorizontalAlignment="Center" TextWrapping="Wrap" Width="390" FontSize="14" 
 					   Style="{DynamicResource TextBlockColor}">
 				Welcome to the SDL BeGlobal (NMT) translation provider for Studio. <LineBreak/><LineBreak/>
 				SDL BeGlobal (NMT) is SDL's state-of-the-art secure machine translation cloud product for enterprises with various paid subscription models.
 			</TextBlock>
-			<Image Source="../Resources/logoB.png" Width="150" Height="70" HorizontalAlignment="Center"  Margin="0,0,0,0"></Image>
+			<Image Source="../Resources/logoB.png" Width="150" Height="70" HorizontalAlignment="Center"></Image>
 		</StackPanel>
 		<StackPanel Grid.Row="1" MinHeight="250">
 			<TextBlock  Margin="15,40,0,10"  TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please select
 				the settings you want to apply to the Translation Provider.
 			</TextBlock>
-			<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}">Re-send draft and translated segments</CheckBox>
+			<!--<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}">Re-send draft and translated segments</CheckBox>-->
 			<TextBlock  Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">
 				Please select engine model :
 			</TextBlock>
@@ -97,7 +93,7 @@
 
 		<StackPanel Grid.Row="2"  Orientation="Vertical"  VerticalAlignment="Bottom">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-				<Button  Style="{DynamicResource SdlPrimaryButtonStyle}" Width="125" Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=LoginTab}"/> 
+				<Button  Style="{DynamicResource SdlPrimaryButtonStyle}" Width="125" Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
 				<Button  Style="{DynamicResource SdlSecondaryButtonStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="15,0,30,0" />
 			</StackPanel>
 		</StackPanel>
