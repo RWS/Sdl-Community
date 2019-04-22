@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 

@@ -26,21 +26,21 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 			var translationProvider = settings.Entries.FirstOrDefault(entry => entry.MainTranslationProvider.Uri.OriginalString.Contains("beglobaltranslationprovider"));
 			if (translationProvider != null)
 			{
-				var uri = translationProvider.MainTranslationProvider.Uri;
-				 var options = new BeGlobalTranslationOptions(uri);
-				var beGlobalWindow =   new BeGlobalWindow();
-				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options,true);
-				beGlobalWindow.DataContext = beGlobalVm;
-				beGlobalWindow.ShowDialog();
-				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
-				{
-					settings.Entries
-						.Find(entry =>
-							entry.MainTranslationProvider.Uri.OriginalString.Contains("beglobaltranslationprovider"))
-						.MainTranslationProvider.Uri = options.Uri;
+				//var uri = translationProvider.MainTranslationProvider.Uri;
+				// var options = new BeGlobalTranslationOptions(uri);
+				//var beGlobalWindow =   new BeGlobalWindow();
+				//var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options,true);
+				//beGlobalWindow.DataContext = beGlobalVm;
+				//beGlobalWindow.ShowDialog();
+				//if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+				//{
+				//	settings.Entries
+				//		.Find(entry =>
+				//			entry.MainTranslationProvider.Uri.OriginalString.Contains("beglobaltranslationprovider"))
+				//		.MainTranslationProvider.Uri = options.Uri;
 
-					currentProject.UpdateTranslationProviderConfiguration(settings);
-				}
+				//	currentProject.UpdateTranslationProviderConfiguration(settings);
+				//}
 			}
 		}
 

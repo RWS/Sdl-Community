@@ -17,35 +17,30 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public string TypeName => "SDL BeGlobal (NMT) Translation Provider"; 
 		public string TypeDescription => "SDL BeGlobal (NMT) Translation Provider";
 		public bool SupportsEditing => true;
-		private readonly string _url = "https://translate-api.sdlbeglobal.com";
+		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			var options = new BeGlobalTranslationOptions();
+			var token = _studioCredentials.GetToken();
 
-			var credentials = GetCredentials(credentialStore, "beglobaltranslationprovider:///");
-			
-			var beGlobalWindow = new BeGlobalWindow();
-			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow,options, credentials,languagePairs);
-			beGlobalWindow.DataContext = beGlobalVm;
-
-			beGlobalWindow.ShowDialog();
-			if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+			if (!string.IsNullOrEmpty(token))
 			{
-				var clientId = beGlobalVm.Options.ClientId;
-				var clientSecret = beGlobalVm.Options.ClientSecret;
+				var beGlobalWindow = new BeGlobalWindow();
+				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options,  languagePairs);
+				beGlobalWindow.DataContext = beGlobalVm;
 
-				var beGlobalService = new BeGlobalV4Translator(_url, clientId,
-					clientSecret, beGlobalVm.Options.Model, beGlobalVm.Options.UseClientAuthentication);
-				beGlobalVm.Options.BeGlobalService = beGlobalService;
-				var provider = new BeGlobalTranslationProvider(options)
+				beGlobalWindow.ShowDialog();
+				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 				{
-					Options = beGlobalVm.Options
-				};
-
-				SetBeGlobalCredentials(credentialStore, clientId,clientSecret, true);
-
-				return new ITranslationProvider[] { provider };
+					var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options.Model);
+					beGlobalVm.Options.BeGlobalService = beGlobalService;
+					var provider = new BeGlobalTranslationProvider(options)
+					{
+						Options = beGlobalVm.Options
+					};
+					return new ITranslationProvider[] { provider };
+				}
 			}
 			return null;
 		}
@@ -60,30 +55,24 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				return false;
 			}
 
-			//get saved key if there is one and put it into options
-			var savedCredentials = GetCredentials(credentialStore, "beglobaltranslationprovider:///");
-			if (savedCredentials != null)
+			var token = _studioCredentials.GetToken();
+			if (!string.IsNullOrEmpty(token))
 			{
-				var splitedCredentials = savedCredentials.Credential.Split('#');
-				var clientId = splitedCredentials[0];
-				var clientSecret = splitedCredentials[1];
+				var beGlobalWindow = new BeGlobalWindow();
+				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, editProvider.Options, languagePairs);
+				beGlobalWindow.DataContext = beGlobalVm;
 
-				editProvider.Options.ClientId = clientId;
-				editProvider.Options.ClientSecret = clientSecret;
+				beGlobalWindow.ShowDialog();
+				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+				{
+					editProvider.Options = beGlobalVm.Options;
+					var clientId = editProvider.Options.ClientId;
+					var clientSecret = beGlobalVm.Options.ClientSecret;
+					SetBeGlobalCredentials(credentialStore, clientId, clientSecret, true);
+					return true;
+				}
 			}
-			var beGlobalWindow = new BeGlobalWindow();
-			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow,editProvider.Options,savedCredentials,languagePairs);
-			beGlobalWindow.DataContext = beGlobalVm;
 			
-			beGlobalWindow.ShowDialog();
-			if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
-			{
-				editProvider.Options = beGlobalVm.Options;
-				var clientId = editProvider.Options.ClientId;
-				var clientSecret = beGlobalVm.Options.ClientSecret;	  
-				SetBeGlobalCredentials(credentialStore, clientId, clientSecret, true);
-				return true;
-			}
 			return false;
 		}
 

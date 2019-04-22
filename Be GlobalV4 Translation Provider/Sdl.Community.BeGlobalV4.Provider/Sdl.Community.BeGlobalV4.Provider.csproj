@@ -82,6 +82,9 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.LanguageCloud.IdentityApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
@@ -153,8 +156,6 @@
     <Compile Include="Model\ResponseError.cs" />
     <Compile Include="Model\ErrorDetails.cs" />
     <Compile Include="Model\Options.cs" />
-    <Compile Include="Model\PreTranslateSegment.cs" />
-    <Compile Include="Model\PreTranslation.cs" />
     <Compile Include="Model\SubscriptionInfo.cs" />
     <Compile Include="Model\TranslationModel.cs" />
     <Compile Include="Model\UserDetails.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Studio\BeGlobalTranslationOptions.cs" />
     <Compile Include="Studio\BeGlobalTranslationProvider.cs" />
     <Compile Include="Studio\BeGlobalTranslationProviderFactory.cs" />
+    <Compile Include="Studio\StudioCredentials.cs" />
     <Compile Include="Ui\BeGlobalWindow.xaml.cs">
       <DependentUpon>BeGlobalWindow.xaml</DependentUpon>
     </Compile>
@@ -184,7 +186,6 @@
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\LoginViewModel.cs" />
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\TellMe1.ico" />
@@ -198,6 +199,7 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>
