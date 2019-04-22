@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Windows.Forms;
+using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.Community.BeGlobalV4.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Application = System.Windows.Application;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
+	
 	[TranslationProviderWinFormsUi(
 		Id = "SDLBeGlobal(NMT)ProviderUi",
 		Name = "SDLBeGlobal(NMT)ProviderUi",
@@ -21,9 +24,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
+			AppItializer.EnsureInitializer();
 			var options = new BeGlobalTranslationOptions();
-			var token = _studioCredentials.GetToken();
+			var token = string.Empty;
 
+			Application.Current?.Dispatcher?.Invoke(() =>
+			{
+				token = _studioCredentials.GetToken();
+			});
 			if (!string.IsNullOrEmpty(token))
 			{
 				var beGlobalWindow = new BeGlobalWindow();
@@ -54,8 +62,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				return false;
 			}
+			var token = string.Empty;
+			AppItializer.EnsureInitializer();
+			Application.Current?.Dispatcher?.Invoke(() =>
+			{
+				token = _studioCredentials.GetToken();
+			});
 
-			var token = _studioCredentials.GetToken();
 			if (!string.IsNullOrEmpty(token))
 			{
 				var beGlobalWindow = new BeGlobalWindow();
@@ -72,7 +85,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					return true;
 				}
 			}
-			
 			return false;
 		}
 
@@ -84,20 +96,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var credentials = new TranslationProviderCredential(credential, persistKey);
 			credentialStore.RemoveCredential(uri);
 			credentialStore.AddCredential(uri, credentials);
-		}
-
-		private TranslationProviderCredential GetCredentials(ITranslationProviderCredentialStore credentialStore, string uri)
-		{
-			var providerUri = new Uri(uri);
-			TranslationProviderCredential cred = null;
-
-			if (credentialStore.GetCredential(providerUri) != null)
-			{
-				//get the credential to return
-				cred = new TranslationProviderCredential(credentialStore.GetCredential(providerUri).Credential, credentialStore.GetCredential(providerUri).Persist);
-			}
-
-			return cred;
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

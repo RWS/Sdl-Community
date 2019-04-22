@@ -1,4 +1,5 @@
 ﻿using System;
+using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -9,9 +10,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		Description = "BeGlobal4 Translation Provider")]
 	public class BeGlobalTranslationProviderFactory : ITranslationProviderFactory
 	{
+		[STAThread]
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
+			AppItializer.EnsureInitializer();
+
 			var options = new BeGlobalTranslationOptions(translationProviderUri);
 			if (options.BeGlobalService == null)
 			{

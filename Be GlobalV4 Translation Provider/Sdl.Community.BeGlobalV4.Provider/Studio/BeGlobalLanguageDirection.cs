@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Windows;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.Core.Globalization;
@@ -24,6 +25,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public CultureInfo SourceLanguage { get; }
 		public CultureInfo TargetLanguage { get; }
 		public bool CanReverseLanguageDirection { get; }
+		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
 
 		public BeGlobalLanguageDirection(BeGlobalTranslationProvider beGlobalTranslationProvider,LanguagePair languageDirection)
 		{
@@ -52,6 +54,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			//		return new[] {translation};
 			//	}
 			//}
+
+			//maybe the user logged out since the provider was added or the token expired
+
+			Application.Current?.Dispatcher?.Invoke(() =>
+			{
+				_studioCredentials.GetToken();
+			});
+
+
 			var xliffDocument = CreateXliffFile(sourceSegments);
 
 			var sourceLanguage =
@@ -59,7 +70,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var targetLanguage =
 				_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.TargetCulture);
 
-			var translatedXliffText = WebUtility.UrlDecode(_options.BeGlobalService.TranslateText(xliffDocument.ToString(), sourceLanguage, targetLanguage));
+			var translatedXliffText =
+				WebUtility.UrlDecode(
+					_options.BeGlobalService.TranslateText(xliffDocument.ToString(), sourceLanguage, targetLanguage));
 
 			var translatedXliff = Converter.ParseXliffString(translatedXliffText);
 			if (translatedXliff != null)

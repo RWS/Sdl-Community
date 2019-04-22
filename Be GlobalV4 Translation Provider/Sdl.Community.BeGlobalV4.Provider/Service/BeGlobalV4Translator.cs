@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Text;
+using System.Windows;
 using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
+using DataFormat = RestSharp.DataFormat;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Service
 {
@@ -13,11 +15,19 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		private readonly string _flavor;
 		private readonly string _url = "https://translate-api.sdlbeglobal.com";
 
+		
 		public BeGlobalV4Translator(string flavor)
 		{
 			_flavor = flavor;
 			var studioCredentials = new StudioCredentials();
-			var accessToken = studioCredentials.GetToken();
+			var accessToken = string.Empty;
+
+			Application.Current?.Dispatcher?.Invoke(() =>
+			{
+				accessToken = studioCredentials.GetToken();
+			});
+			accessToken = studioCredentials.GetToken();
+
 
 			_client = new RestClient($"{_url}/v4");
 
