@@ -26,6 +26,7 @@
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"></ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
@@ -73,8 +74,8 @@
 
 		<StackPanel Grid.Row="2"  Orientation="Vertical"  VerticalAlignment="Bottom">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-				<Button  Style="{DynamicResource BeGlobalBlueButtonsStyle}" Width="125" Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=LoginTab}"/> 
-				<Button  Style="{DynamicResource BeGlobalBlueButtonsStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="0,0,30,0" />
+				<Button  Style="{DynamicResource SdlPrimaryButtonStyle}" Width="125" Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=LoginTab}"/> 
+				<Button  Style="{DynamicResource SdlSecondaryButtonStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="15,0,30,0" />
 			</StackPanel>
 		</StackPanel>
 	</Grid>

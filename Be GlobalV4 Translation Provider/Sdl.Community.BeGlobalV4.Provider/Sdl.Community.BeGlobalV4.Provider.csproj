@@ -189,6 +189,7 @@
     <Compile Include="ViewModel\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\AdaptiveEngine.ico" />
     <EmbeddedResource Include="Resources\TellMe1.ico" />
     <EmbeddedResource Include="Resources\Settings.ico" />
     <EmbeddedResource Include="Resources\Question.ico" />
@@ -212,7 +213,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="UiHelpers\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UiHelpers\ButtonsStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\General.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
