@@ -130,6 +130,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon DropDownTriangle {
+            get {
+                object obj = ResourceManager.GetObject("DropDownTriangle", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon Error {
             get {
                 object obj = ResourceManager.GetObject("Error", resourceCulture);

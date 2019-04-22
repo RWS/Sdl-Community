@@ -25,9 +25,9 @@
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml" />
-				<ResourceDictionary Source="../UiHelpers/DataGridStyle.xaml" />
+				<ResourceDictionary Source="../UiHelpers/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
-				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="Button" x:Key="SdlWizardStyleButton" BasedOn="{StaticResource SdlSecondaryButtonStyle}">
 				<Setter Property="MinWidth" Value="70"></Setter>
@@ -138,7 +138,7 @@
 			</DataGrid.RowStyle>
 
 			<DataGrid.Resources>
-				<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle}" />
+				<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle2}" />
 			</DataGrid.Resources>
 
 			<DataGrid.Columns>
@@ -187,7 +187,7 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
-		<StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
+		<StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
 
 			<Button Margin="10,10,10,0" Style="{StaticResource SdlWizardStyleButtonGreen}" Command="{Binding ImportCommand}"
 			        IsEnabled="{Binding CanExecuteImport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"

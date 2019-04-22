@@ -5,7 +5,7 @@
 		<Setter Property="ColumnHeaderStyle" Value="{DynamicResource DgcHeaderStyle}" />
 	</Style>
 
-	<Style x:Key="DgcHeaderStyle" TargetType="DataGridColumnHeader">
+	<Style x:Key="DgcHeaderStyle2" TargetType="DataGridColumnHeader">
 		<Setter Property="Height" Value="30" />
 		<Setter Property="Background" Value="#3EA691" />
 		<Setter Property="Foreground" Value="White" />

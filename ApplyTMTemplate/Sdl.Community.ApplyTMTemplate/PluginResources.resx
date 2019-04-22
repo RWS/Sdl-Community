@@ -235,6 +235,9 @@
   <data name="Browse_button_Tooltip" xml:space="preserve">
     <value>Choose a template...</value>
   </data>
+  <data name="DropDownTriangle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\dropdowntriangle.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="GreenDropDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\GreenDropDown.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

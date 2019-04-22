@@ -7,19 +7,33 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-		<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
+			<ControlTemplate x:Key="Unpressed">
+				<Image Source="../Resources/DropDownTriangle.ico"/>
+			</ControlTemplate>
+			<ControlTemplate x:Key="Pressed">
+				<Image Source="../Resources/GreenDropDown.ico"/>
+			</ControlTemplate>
 	</UserControl.Resources>
 	<Border BorderBrush="Black"
 	        BorderThickness="1"
 	        VerticalAlignment="Center"
-	        CornerRadius="5"
 	        Height="32">
 		<DockPanel>
-			<Button DockPanel.Dock="Right"
-			        Height="20"
+			<Button Name="Button" DockPanel.Dock="Right"
+			        Height="15"
 			        Background="White" BorderBrush="White"
-			        Command="{Binding Command}">
-				<Image DockPanel.Dock="Right" Source="../Resources/GreenDropDown.ico"></Image>
+			        Command="{Binding Command}"
+			        Margin="0,0,8,0">
+				<Button.Style>
+					<Style TargetType="{x:Type Button}">
+						<Setter Property="Template" Value="{StaticResource Unpressed}"/>
+						<Style.Triggers>
+							<Trigger Property="IsPressed" Value="True">
+								<Setter Property="Template" Value="{StaticResource Pressed}"/>
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</Button.Style>
 			</Button>
 			<TextBox BorderBrush="White"
 					 VerticalAlignment="Center" VerticalContentAlignment="Center"
