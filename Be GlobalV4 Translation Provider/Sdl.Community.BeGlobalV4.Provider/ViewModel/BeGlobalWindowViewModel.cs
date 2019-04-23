@@ -13,22 +13,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
 	public class BeGlobalWindowViewModel : BaseViewModel
 	{
-		public BeGlobalTranslationOptions Options { get; set; }
-		public LoginViewModel LoginViewModel { get; set; }
-		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }
-
-		//public SettingsViewModel SettingsViewModel { get; set; }	
 		private ICommand _okCommand;
-		private readonly bool _tellMeAction;
 		private  bool _reSendChecked;
 		private readonly BeGlobalWindow _mainWindow;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
 		private readonly LanguagePair[] _languagePairs;
 		private TranslationModel _selectedModel;
+		public BeGlobalTranslationOptions Options { get; set; }
+		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }
 
 		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options, LanguagePair[] languagePairs)
 		{
-			LoginViewModel = new LoginViewModel(options);
 			Options = options;
 			_mainWindow = mainWindow;
 			_languagePairs = languagePairs;
@@ -43,36 +38,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			GetEngineModels(subscriptionInfo.LanguagePairs);
 			SetEngineModel();
 		}
-
-		//TODO: fix this this constructor used for TELL ME
-		//public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options, bool tellMeAction)
-		//{
-		//	LoginViewModel = new LoginViewModel(options);
-		//	TranslationOptions = new ObservableCollection<TranslationModel>();
-		//	Options = options;
-		//	if (options != null)
-		//	{
-		//		var mtModel = TranslationOptions?.FirstOrDefault(m => m.Model.Equals(options.Model));
-		//		if (mtModel != null)
-		//		{
-		//			var selectedModelIndex = TranslationOptions.IndexOf(mtModel);
-		//			SettingsViewModel.SelectedModelOption = SettingsViewModel.TranslationOptions[selectedModelIndex];
-		//		}
-		//		else if(SettingsViewModel.TranslationOptions.Count.Equals(0))
-		//		{
-		//			var translationModel = new TranslationModel
-		//			{
-		//				Model = options.Model,
-		//				DisplayName = options.Model
-		//			};
-		//			SettingsViewModel.TranslationOptions.Add(translationModel);
-		//			SettingsViewModel.SelectedModelOption = translationModel;
-		//		}
-		//	}
-		//	_mainWindow = mainWindow;
-		//	_tellMeAction = tellMeAction;
-		//	_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
-		//}
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 		public bool ReSendChecked
@@ -101,7 +66,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				OnPropertyChanged(nameof(SelectedModelOption));
 			}
 		}
-
 
 		private void GetEngineModels(List<BeGlobalLanguagePair> beGlobalLanguagePairs)
 		{
