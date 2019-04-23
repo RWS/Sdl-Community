@@ -24,6 +24,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 			{
 				Keywords = new []{ "beglobal", "beglobal store", "beglobal download" }
 			},
+			new BeGlobalSettingsAction
+			{
+				Keywords = new []{ "beglobal", "beglobal settings ","settings" }
+			}
 		};
 	}
 }

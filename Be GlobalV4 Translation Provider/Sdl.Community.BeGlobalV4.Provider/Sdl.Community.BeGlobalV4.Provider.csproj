@@ -82,6 +82,9 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.LanguageCloud.IdentityApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
@@ -144,17 +147,14 @@
     <Compile Include="BeGlobalTellMe\BeGlobalSettingsAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalStoreAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalTellMeProvider.cs" />
+    <Compile Include="Helpers\AppItializer.cs" />
     <Compile Include="Helpers\NormalizeSourceTextHelper.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Model\BeGlobalLanguagePair.cs" />
-    <Compile Include="Model\BeGlobalTag.cs" />
     <Compile Include="Model\ResponseError.cs" />
     <Compile Include="Model\ErrorDetails.cs" />
-    <Compile Include="Model\Options.cs" />
-    <Compile Include="Model\PreTranslateSegment.cs" />
-    <Compile Include="Model\PreTranslation.cs" />
     <Compile Include="Model\SubscriptionInfo.cs" />
     <Compile Include="Model\TranslationModel.cs" />
     <Compile Include="Model\UserDetails.cs" />
@@ -171,22 +171,15 @@
     <Compile Include="Studio\BeGlobalTranslationOptions.cs" />
     <Compile Include="Studio\BeGlobalTranslationProvider.cs" />
     <Compile Include="Studio\BeGlobalTranslationProviderFactory.cs" />
+    <Compile Include="Studio\StudioCredentials.cs" />
     <Compile Include="Ui\BeGlobalWindow.xaml.cs">
       <DependentUpon>BeGlobalWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\Authentication.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\BeGlobalWindowViewModel.cs" />
-    <Compile Include="Ui\Login.xaml.cs">
-      <DependentUpon>Login.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Ui\Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModel\LoginViewModel.cs" />
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\AdaptiveEngine.ico" />
     <EmbeddedResource Include="Resources\TellMe1.ico" />
     <EmbeddedResource Include="Resources\Settings.ico" />
     <EmbeddedResource Include="Resources\Question.ico" />
@@ -198,6 +191,7 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>
@@ -209,7 +203,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="UiHelpers\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UiHelpers\ButtonsStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\General.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -222,14 +224,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Ui\BeGlobalWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Ui\Login.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Ui\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

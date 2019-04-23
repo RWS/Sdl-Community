@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Text;
+using System.Windows;
 using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.BeGlobalV4.Provider.Studio;
+using DataFormat = RestSharp.DataFormat;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Service
 {
@@ -10,64 +13,28 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 	{
 		private readonly IRestClient _client;
 		private readonly string _flavor;
+		private readonly string _url = "https://translate-api.sdlbeglobal.com";
 
-		public BeGlobalV4Translator(
-			string server,
-			string user,
-			string password,
-			string flavor,
-			bool useClientAuthentication)
+		
+		public BeGlobalV4Translator(string flavor)
 		{
 			_flavor = flavor;
+			var studioCredentials = new StudioCredentials();
+			var accessToken = string.Empty;
 
-			_client = new RestClient(string.Format($"{server}/v4"));
-			IRestRequest request;
-			if (useClientAuthentication)
+			Application.Current?.Dispatcher?.Invoke(() =>
 			{
-				request = new RestRequest("/token", Method.POST)
-				{
-					RequestFormat = DataFormat.Json
-				};
-				request.AddBody(new { clientId = user, clientSecret = password });
-			}
-			else
-			{
-				request = new RestRequest("/token/user", Method.POST)
-				{
-					RequestFormat = DataFormat.Json
-				};
-				request.AddBody(new { username = user, password = password });
-			}
-			AddTraceId(request);
-			request.RequestFormat = DataFormat.Json;
-			var response = _client.Execute(request);
-			if (response.StatusCode != System.Net.HttpStatusCode.OK)
-			{
-				throw new Exception("Acquiring token failed: " + response.Content);
-			}
-			dynamic json = JsonConvert.DeserializeObject(response.Content);
-			_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
-		}
+				accessToken = studioCredentials.GetToken();
+			});
+			accessToken = studioCredentials.GetToken();
 
-		public int GetClientInformation()
-		{
-			var request = new RestRequest("/accounts/api-credentials/self")
-			{
-				RequestFormat = DataFormat.Json
-			};
-			AddTraceId(request);
 
-			var response = _client.Execute(request);
-			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
-			if (!response.IsSuccessful)
+			_client = new RestClient($"{_url}/v4");
+
+			if (!string.IsNullOrEmpty(accessToken))
 			{
-				ShowErrors(response);
+				_client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
 			}
-			if (user != null)
-			{
-				return user.AccountId;
-			}
-			return 0;
 		}
 
 		public string TranslateText(string text,string sourceLanguage, string targetLanguage)

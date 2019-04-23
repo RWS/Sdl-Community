@@ -3,18 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 xmlns:views ="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
              helpers:WindowCloser.DialogResult="{Binding DialogResult}"
-	         ResizeMode="NoResize"
+             WindowCloseButtonStyle="{DynamicResource CleanCloseWindowButtonStyle}"
+			 ResizeMode="NoResize"
              WindowStartupLocation="CenterScreen"
+             TitleCharacterCasing="Normal"
              WindowTitleBrush="#0E202B"
              GlowBrush="#0E202B"
-             FontFamily="Segoe UI"	
+             FontFamily="Calibri"	
 			 Title="SDL BeGlobal (NMT) Translation provider"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Height="520" Width="600">
+             d:DesignHeight="450" d:DesignWidth="800" Height="450" Width="600">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -26,53 +27,74 @@
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"></ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
+			<!--set red background to X button on hover-->
+			<Style x:Key="CleanCloseWindowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MetroWindowButtonStyle}">
+				<Style.Triggers>
+					<Trigger Property="IsMouseOver" Value="True">
+						<Setter Property="Background" Value="#EB2F2F" />
+						<Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
+					</Trigger>
+					<Trigger Property="IsPressed" Value="True">
+						<Setter Property="Background" Value="#7C0000" />
+					</Trigger>
+				</Style.Triggers>
+			</Style>
 		</ResourceDictionary>
 	</Window.Resources>
-	
+
 	<Grid>
-		<Grid.Resources>
-			<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
-		</Grid.Resources>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
-
 		<StackPanel Grid.Row="0" Orientation="Horizontal">
-			<TextBlock Margin="15,15,20,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Width="400" 
+			<TextBlock Margin="15,15,0,0" HorizontalAlignment="Center" TextWrapping="Wrap" Width="390" FontSize="14" 
 					   Style="{DynamicResource TextBlockColor}">
 				Welcome to the SDL BeGlobal (NMT) translation provider for Studio. <LineBreak/><LineBreak/>
 				SDL BeGlobal (NMT) is SDL's state-of-the-art secure machine translation cloud product for enterprises with various paid subscription models.
 			</TextBlock>
-			<Image Source="../Resources/logoB.png" Width="150" Height="70" HorizontalAlignment="Center"  Margin="0,0,0,0"></Image>
+			<Image Source="../Resources/logoB.png" Width="150" Height="70" HorizontalAlignment="Center"></Image>
 		</StackPanel>
-
-		<TabControl Grid.Column="0" Grid.Row="1" 
-		            Margin="0,0,0,15"
-					SelectedIndex="{Binding SelectedIndex}"
-		            HorizontalAlignment="Left"
-					Height="auto"
-		            controls:TabControlHelper.Underlined="SelectedTabItem"
-		            controls:TabControlHelper.UnderlineMouseOverBrush="#0E202B" Foreground="#0E202B"
-		             >
-			<controls:MetroTabItem Header="Login" Margin="10,0,0,0" Width="100">
-				<views:Login x:Name="LoginTab" DataContext="{Binding LoginViewModel}" ></views:Login>
-			</controls:MetroTabItem>
-			<controls:MetroTabItem Header="Settings" Margin="25,0,0,0" Width="150">
-				<views:Settings DataContext="{Binding SettingsViewModel}" Height="300"></views:Settings>
-			</controls:MetroTabItem>
-		</TabControl>
+		<StackPanel Grid.Row="1" MinHeight="250">
+			<TextBlock  Margin="15,40,0,10"  TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please select
+				the settings you want to apply to the Translation Provider.
+			</TextBlock>
+			<!--<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}">Re-send draft and translated segments</CheckBox>-->
+			<TextBlock  Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">
+				Please select engine model :
+			</TextBlock>
+			<ComboBox 
+				HorizontalAlignment="Left"
+				Width="240"
+				FontFamily="Calibri"
+				ItemsSource="{Binding TranslationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				SelectedItem="{Binding SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				Margin="15,5,0,10" BorderThickness="1"
+				controls:TextBoxHelper.Watermark="Type">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal">
+							<Image Source="../Resources/AdaptiveEngine.ico" Width="20" Height="20" />
+							<TextBlock Text="{Binding DisplayName}" Margin="10,0,0,0" FontFamily="Calibri" VerticalAlignment="Center"/>
+						</StackPanel>
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+				<ComboBox.ItemContainerStyle>
+					<Style TargetType="{x:Type ComboBoxItem}">
+						<Setter Property="BorderThickness" Value="0"/>
+					</Style>
+				</ComboBox.ItemContainerStyle>
+			</ComboBox>
+		</StackPanel>
 
 		<StackPanel Grid.Row="2"  Orientation="Vertical"  VerticalAlignment="Bottom">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-				<Button  Style="{DynamicResource BeGlobalBlueButtonsStyle}" Width="125" Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=LoginTab}"/> 
-				<Button  Style="{DynamicResource BeGlobalBlueButtonsStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="0,0,30,0" />
+				<Button  Style="{DynamicResource SdlPrimaryButtonStyle}" Width="125" Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
+				<Button  Style="{DynamicResource SdlSecondaryButtonStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="15,0,30,0" />
 			</StackPanel>
 		</StackPanel>
 	</Grid>
