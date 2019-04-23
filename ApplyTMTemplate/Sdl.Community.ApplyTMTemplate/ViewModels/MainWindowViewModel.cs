@@ -78,6 +78,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			set
 			{
 				_timedTextBoxViewModel = value;
+				_timedTextBoxViewModel.Command = BrowseCommand;
 				_timedTextBoxViewModel.ShouldStartValidation += StartLoadingResourcesAndValidate;
 			}
 		}
@@ -171,20 +172,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public string ImportButtonText
-		{
-			get
-			{
-				if (!ToggleExcelTM)
-				{
-					return "Import: Excel -> template";
-				}
-				else
-				{
-					return "Import: TMs -> template";
-				}
-			}
-		}
+		public string ImportButtonText => ToggleExcelTM ?  "Import: TMs -> template" : "Import: Excel -> template";
 
 		public ObservableCollection<TranslationMemory> TmCollection
 		{

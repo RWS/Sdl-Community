@@ -25,9 +25,9 @@
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml" />
-				<ResourceDictionary Source="../UiHelpers/DataGridStyle.xaml" />
+				<ResourceDictionary Source="../UiHelpers/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
-				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="Button" x:Key="SdlWizardStyleButton" BasedOn="{StaticResource SdlSecondaryButtonStyle}">
 				<Setter Property="MinWidth" Value="70"></Setter>
@@ -88,8 +88,7 @@
 						</Hyperlink.Style>
 					</Hyperlink>
 			</TextBlock>
-			<Button DockPanel.Dock="Right" Margin="0,10,10,1" Style="{StaticResource SdlWizardStyleButton}" Command="{Binding BrowseCommand}" Content="Choose template" VerticalAlignment="Top" ToolTip="{x:Static applyTmTemplate:PluginResources.Browse_button_Tooltip}" />
-			<ContentControl Height="33" DockPanel.Dock="Left" Margin="10,10,10,0" Content="{Binding TimedTextBoxViewModel}" />
+			<ContentControl Height="32" DockPanel.Dock="Left" Margin="10,10,10,0" Content="{Binding TimedTextBoxViewModel}"/>
 		</DockPanel>
 
 		<StackPanel Grid.Row="2" Grid.Column="0" Margin="10,10,0,0">
@@ -102,15 +101,24 @@
 
 		<StackPanel Margin="10,20,0,0" Grid.Row="3" Grid.Column="0" Orientation="Horizontal" ToolTip="Add Folder">
 			<Button HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}">
-				<Image Source="../Resources/AddFolder.ico" Width="15" Height="15"></Image>
+				<StackPanel Orientation="Horizontal">
+					<Image Source="../Resources/AddFolder.ico" Width="15" Height="15"></Image>
+					<TextBlock FontSize="12" FontFamily="SommetRounded" Margin="5,0,0,0" Text="AddFolder"/>
+				</StackPanel>
 			</Button>
 
 			<Button HorizontalContentAlignment="Left" Command="{Binding AddTmCommand}" ToolTip="Add TMs">
-				<Image Source="../Resources/PlusSign.ico" Width="15" Height="15"></Image>
+				<StackPanel Orientation="Horizontal">
+					<Image Source="../Resources/PlusSign.ico" Width="15" Height="15"></Image>
+					<TextBlock FontSize="12" FontFamily="SommetRounded" Margin="5,0,0,0" Text="AddTMs"/>
+				</StackPanel>
 			</Button>
 
 			<Button HorizontalContentAlignment="Left" Command="{Binding RemoveTMsCommand}" ToolTip="Remove TMs">
-				<Image Source="../Resources/Remove.ico" Width="15" Height="15"></Image>
+				<StackPanel Orientation="Horizontal">
+					<Image Source="../Resources/Remove.ico" Width="15" Height="15"></Image>
+					<TextBlock FontSize="12" FontFamily="SommetRounded" Margin="5,0,0,0" Text="RemoveTMs"/>
+				</StackPanel>
 			</Button>
 		</StackPanel>
 
@@ -130,7 +138,7 @@
 			</DataGrid.RowStyle>
 
 			<DataGrid.Resources>
-				<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle}" />
+				<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle2}" />
 			</DataGrid.Resources>
 
 			<DataGrid.Columns>
@@ -179,7 +187,7 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
-		<StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
+		<StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
 
 			<Button Margin="10,10,10,0" Style="{StaticResource SdlWizardStyleButtonGreen}" Command="{Binding ImportCommand}"
 			        IsEnabled="{Binding CanExecuteImport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"

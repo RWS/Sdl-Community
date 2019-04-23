@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Sdl.Community.ApplyTMTemplate.ViewModels
 {
@@ -23,6 +24,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				OnPropertyChanged(nameof(Path));
 			}
 		}
+
+		public ICommand Command { get; set; }
 
 		public Timer Timer { get; } = new Timer { Interval = 500 };
 
