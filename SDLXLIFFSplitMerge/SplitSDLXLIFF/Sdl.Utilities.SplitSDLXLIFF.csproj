@@ -200,16 +200,6 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Lib\Sdl.Utilities.SplitSDLXLIFF.Lib.csproj">
-      <Project>{b4f2fdee-3167-4295-a831-36b5bbbc9557}</Project>
-      <Name>Sdl.Utilities.SplitSDLXLIFF.Lib</Name>
-    </ProjectReference>
-    <ProjectReference Include="Wizard\Sdl.Utilities.SplitSDLXLIFF.Wizard.csproj">
-      <Project>{80614F74-563D-418E-9BF6-1294F73521C0}</Project>
-      <Name>Sdl.Utilities.SplitSDLXLIFF.Wizard</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="FilterDefinition%28C77668%29.ico" />
     <Content Include="Resources\FilterDefinition%28C77668%29.ico" />
   </ItemGroup>
@@ -234,6 +224,16 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Lib\Sdl.Utilities.SplitSDLXLIFF.Lib.csproj">
+      <Project>{b4f2fdee-3167-4295-a831-36b5bbbc9557}</Project>
+      <Name>Sdl.Utilities.SplitSDLXLIFF.Lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="Wizard\Sdl.Utilities.SplitSDLXLIFF.Wizard.csproj">
+      <Project>{80614f74-563d-418e-9bf6-1294f73521c0}</Project>
+      <Name>Sdl.Utilities.SplitSDLXLIFF.Wizard</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
