@@ -130,6 +130,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon DropDownTriangle {
+            get {
+                object obj = ResourceManager.GetObject("DropDownTriangle", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon Error {
             get {
                 object obj = ResourceManager.GetObject("Error", resourceCulture);
@@ -226,6 +236,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string From_TM_Radio_Button_Tooltip {
             get {
                 return ResourceManager.GetString("From_TM_Radio_Button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon GreenDropDown {
+            get {
+                object obj = ResourceManager.GetObject("GreenDropDown", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

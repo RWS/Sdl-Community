@@ -48,42 +48,6 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			}
 		}
 
-		private void ReadFromExcel(Settings settings, FileBasedLanguageResourcesTemplate deserializedTemplate, ExcelPackage package, List<LanguageResourceBundle> newLanguageResourceBundles)
-		{
-			foreach (var workSheet in package.Workbook.Worksheets)
-			{
-				var column01 = workSheet.Cells[1, 1].Value;
-				var column02 = workSheet.Cells[1, 2].Value;
-				var column03 = workSheet.Cells[1, 3].Value;
-				var column04 = workSheet.Cells[1, 4].Value;
-
-				if (!AreColumnsValid(column01, column02, column03, column04))
-				{
-					throw new Exception(PluginResources.Excel_spreadsheet_not_in_correct_format);
-				}
-
-				var abbreviations = new Wordlist();
-				var ordinalFollowers = new Wordlist();
-				var variables = new Wordlist();
-				var segmentationRules = new SegmentationRules();
-
-				ReadFromExcel(workSheet, abbreviations, ordinalFollowers, variables, segmentationRules);
-
-				var newLanguageResourceBundle =
-					new LanguageResourceBundle(CultureInfoExtensions.GetCultureInfo(workSheet.Name))
-					{
-						Abbreviations = abbreviations,
-						OrdinalFollowers = ordinalFollowers,
-						Variables = variables,
-						SegmentationRules = segmentationRules
-					};
-
-				newLanguageResourceBundles.Add(newLanguageResourceBundle);
-			}
-			ExcludeWhatIsNotNeeded(newLanguageResourceBundles, settings);
-			AddNewBundles(deserializedTemplate, newLanguageResourceBundles);
-		}
-
 		public void ExcludeWhatIsNotNeeded(List<LanguageResourceBundle> languageResourceBundles, Settings settings)
 		{
 			foreach (var bundle in languageResourceBundles)
@@ -188,28 +152,6 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			worksheet.Cells[columnLetter + lineNumber].Style.Font.Name = "Sommet Rounded";
 		}
 
-		private void AddNewBundles(FileBasedLanguageResourcesTemplate deserializedTemplate, List<LanguageResourceBundle> newLanguageResourceBundles)
-		{
-			foreach (var newBundle in newLanguageResourceBundles)
-			{
-				var correspondingBundleInTemplate = deserializedTemplate.LanguageResourceBundles[newBundle.Language];
-
-				//in case there is already a bundle for that culture, we need to go into more detail and see what to add and what is already there
-				if (correspondingBundleInTemplate != null)
-				{
-					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Abbreviations");
-					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "OrdinalFollowers");
-					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Variables");
-					AddSegmentationRulesToBundle(newBundle, correspondingBundleInTemplate);
-				}
-				//otherwise, just add the newBundle
-				else
-				{
-					deserializedTemplate.LanguageResourceBundles.Add(newBundle);
-				}
-			}
-		}
-
 		private static void AddSegmentationRulesToBundle(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
 		{
 			if (newBundle.SegmentationRules == null) return;
@@ -251,10 +193,66 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			}
 			else
 			{
-				templateBundleSetter?.Invoke(template, new [] {new Wordlist(newBundleGetter)});
+				templateBundleSetter?.Invoke(template, new[] { new Wordlist(newBundleGetter) });
 			}
 		}
 
+		private void ReadFromExcel(Settings settings, FileBasedLanguageResourcesTemplate deserializedTemplate, ExcelPackage package, List<LanguageResourceBundle> newLanguageResourceBundles)
+		{
+			foreach (var workSheet in package.Workbook.Worksheets)
+			{
+				var column01 = workSheet.Cells[1, 1].Value;
+				var column02 = workSheet.Cells[1, 2].Value;
+				var column03 = workSheet.Cells[1, 3].Value;
+				var column04 = workSheet.Cells[1, 4].Value;
+
+				if (!AreColumnsValid(column01, column02, column03, column04))
+				{
+					throw new Exception(PluginResources.Excel_spreadsheet_not_in_correct_format);
+				}
+
+				var abbreviations = new Wordlist();
+				var ordinalFollowers = new Wordlist();
+				var variables = new Wordlist();
+				var segmentationRules = new SegmentationRules();
+
+				ReadFromExcel(workSheet, abbreviations, ordinalFollowers, variables, segmentationRules);
+
+				var newLanguageResourceBundle =
+					new LanguageResourceBundle(CultureInfoExtensions.GetCultureInfo(workSheet.Name))
+					{
+						Abbreviations = abbreviations,
+						OrdinalFollowers = ordinalFollowers,
+						Variables = variables,
+						SegmentationRules = segmentationRules
+					};
+
+				newLanguageResourceBundles.Add(newLanguageResourceBundle);
+			}
+			ExcludeWhatIsNotNeeded(newLanguageResourceBundles, settings);
+			AddNewBundles(deserializedTemplate, newLanguageResourceBundles);
+		}
+		private void AddNewBundles(FileBasedLanguageResourcesTemplate deserializedTemplate, List<LanguageResourceBundle> newLanguageResourceBundles)
+		{
+			foreach (var newBundle in newLanguageResourceBundles)
+			{
+				var correspondingBundleInTemplate = deserializedTemplate.LanguageResourceBundles[newBundle.Language];
+
+				//in case there is already a bundle for that culture, we need to go into more detail and see what to add and what is already there
+				if (correspondingBundleInTemplate != null)
+				{
+					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Abbreviations");
+					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "OrdinalFollowers");
+					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Variables");
+					AddSegmentationRulesToBundle(newBundle, correspondingBundleInTemplate);
+				}
+				//otherwise, just add the newBundle
+				else
+				{
+					deserializedTemplate.LanguageResourceBundles.Add(newBundle);
+				}
+			}
+		}
 		private ExcelPackage GetExcelPackage(string filePath)
 		{
 			var fileInfo = new FileInfo(filePath);
@@ -289,9 +287,9 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			try
 			{
 				areValid = column01.ToString().Equals("Abbreviations") &&
-				           column02.ToString().Equals("OrdinalFollowers") &&
-				           column03.ToString().Equals("Variables") &&
-				           column04.ToString().Equals("SegmentationRules");
+						   column02.ToString().Equals("OrdinalFollowers") &&
+						   column03.ToString().Equals("Variables") &&
+						   column04.ToString().Equals("SegmentationRules");
 			}
 			catch
 			{

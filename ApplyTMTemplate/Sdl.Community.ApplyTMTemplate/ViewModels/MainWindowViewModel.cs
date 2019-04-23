@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,10 +27,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private bool _segmentationRulesChecked;
 		private bool _variablesChecked;
 		private bool _allTmsChecked;
-		private bool _toggleExcelTM;
-		private bool _templateValidWithResources;
-		private bool _templateValidNoResources;
-		private bool _toggleDirection;
+		private bool _toggleExcelTm;
+
+		private TemplateValidity _templateValidity;
 
 		private string _tmPath;
 		private string _message;
@@ -53,7 +51,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private ExcelImportExportService _importExportService;
 		private TimedTextBox _timedTextBoxViewModel;
 
-		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader, IDialogCoordinator dialogCoordinator, TimedTextBox timedTextBoxViewModel)
+		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader,
+			IDialogCoordinator dialogCoordinator, TimedTextBox timedTextBoxViewModel)
 		{
 			_templateLoader = templateLoader;
 			_tmLoader = tmLoader;
@@ -79,20 +78,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			set
 			{
 				_timedTextBoxViewModel = value;
+				_timedTextBoxViewModel.Command = BrowseCommand;
 				_timedTextBoxViewModel.ShouldStartValidation += StartLoadingResourcesAndValidate;
 			}
-		}
-
-		public async void StartLoadingResourcesAndValidate(object sender, EventArgs e)
-		{
-			LoadResourcesFromTemplate();
-
-			_templateValidWithResources = await ValidateTemplateAndShowErrors();
-			_templateValidNoResources = await ValidateTemplateAndShowErrors(false);
-
-			OnPropertyChanged(nameof(CanExecuteApply));
-			OnPropertyChanged(nameof(CanExecuteImport));
-			OnPropertyChanged(nameof(CanExecuteExport));
 		}
 
 		public string ProgressVisibility
@@ -107,12 +95,13 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public bool ToggleExcelTM
 		{
-			get => _toggleExcelTM;
+			get => _toggleExcelTm;
 			set
 			{
-				_toggleExcelTM = value;
+				_toggleExcelTm = value;
 				OnPropertyChanged(nameof(ToggleExcelTM));
 				OnPropertyChanged(nameof(CanExecuteImport));
+				OnPropertyChanged(nameof(ImportButtonText));
 			}
 		}
 
@@ -156,7 +145,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public bool CanExecuteExport => _templateValidWithResources;
+		public bool CanExecuteExport => _templateValidity.HasFlag(TemplateValidity.HasResources);
 
 		public string ResourceTemplatePath
 		{
@@ -183,6 +172,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
+		public string ImportButtonText => ToggleExcelTM ?  "Import: TMs -> template" : "Import: Excel -> template";
+
 		public ObservableCollection<TranslationMemory> TmCollection
 		{
 			get => _tmCollection;
@@ -201,7 +192,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true));
 
-		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export,  true));
+		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export, true));
 
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(Import, true));
 
@@ -209,16 +200,49 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public ICommand RemoveTMsCommand => _removeTMsCommand ?? (_removeTMsCommand = new CommandHandler(RemoveTMs, true));
 
-		public bool ToggleDirection
+		public bool CanExecuteImport
 		{
-			get => _toggleDirection;
-			set
+			get
 			{
-				_toggleDirection = value;
-				OnPropertyChanged(nameof(ToggleDirection));
+				if (!ToggleExcelTM && _templateValidity > 0)
+				{
+					return true;
+				}
+
+				if (ToggleExcelTM && _templateValidity > 0 && IsThereAnyTmSelected())
+				{
+					return true;
+				}
+
+				return false;
 			}
 		}
 
+		public bool CanExecuteApply => (int)_templateValidity > 1 && IsThereAnyTmSelected();
+
+		public async void StartLoadingResourcesAndValidate(object sender, EventArgs e)
+		{
+			_templateValidity = TemplateValidity.IsNotValid;
+
+			LoadResourcesFromTemplate();
+
+			//check if the template is valid(resources ignored)
+			if (ValidateTemplate(false))
+			{
+				_templateValidity = TemplateValidity.IsValid;
+			}
+			//check if the template has any resources
+			if (ValidateTemplate())
+			{
+				_templateValidity = TemplateValidity.IsValid | TemplateValidity.HasResources;
+			}
+
+			OnPropertyChanged(nameof(CanExecuteApply));
+			OnPropertyChanged(nameof(CanExecuteImport));
+			OnPropertyChanged(nameof(CanExecuteExport));
+
+			await ShowMessages();
+		}
 		private string CreateNewFile(string filePath)
 		{
 			var index = 0;
@@ -329,125 +353,117 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void LoadResourcesFromTemplate()
 		{
-			var languageResourceBundles = _templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out _message, out _unIDedLanguages);
-
-			CreateTemplateObjectFromBundles(languageResourceBundles);
+			_template = CreateTemplateObjectFromBundles(
+				_templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out _message,
+					out _unIDedLanguages));
 		}
 
-		private void CreateTemplateObjectFromBundles(List<LanguageResourceBundle> languageResourceBundles)
+		private FileBasedLanguageResourcesTemplate CreateTemplateObjectFromBundles(
+			List<LanguageResourceBundle> languageResourceBundles)
 		{
 			_template = new FileBasedLanguageResourcesTemplate();
 
-			if (languageResourceBundles == null) return;
+			if (_message == PluginResources.Template_has_no_resources) return _template;
+			if (languageResourceBundles == null) return null;
 
 			foreach (var bundle in languageResourceBundles)
 			{
 				_template.LanguageResourceBundles.Add(bundle);
 			}
+
+			return _template;
 		}
 
 		private async void ApplyTmTemplate()
 		{
 			LoadResourcesFromTemplate();
 
-			if (!await ValidateTemplateAndShowErrors()) return;
+			var isValid = ValidateTemplate();
+			await ShowMessages();
+
+			if (!isValid) return;
 
 			var selectedTms = TmCollection.Where(tm => tm.IsSelected).ToList();
 			UnMarkTms(selectedTms);
 
 			if (selectedTms.Count == 0)
 			{
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning, PluginResources.Select_at_least_one_TM);
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning,
+					PluginResources.Select_at_least_one_TM);
 				return;
 			}
 
 			var template = new Template(_template);
 
-			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
+			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked,
+				SegmentationRulesChecked);
 
 			ProgressVisibility = "Visible";
 			await Task.Run(() => template.ApplyTmTemplate(selectedTms, settings));
 			ProgressVisibility = "Hidden";
 		}
 
-		private async Task<bool> ValidateTemplateAndShowErrors(bool checkIfBundlesPresent = true)
+		private async Task ShowMessages()
 		{
-			var isValid = ValidateTemplate(checkIfBundlesPresent, out _unIDedLanguagesAsString);
-
-			if (!string.IsNullOrEmpty(_unIDedLanguagesAsString) || !isValid)
+			if (!string.IsNullOrEmpty(_message))
 			{
 				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning,
 					_message);
 			}
-
-			return isValid;
 		}
 
-		private bool ValidateTemplate(bool checkIfBundlesPresent, out string unIDedLanguages)
+		private bool ValidateTemplate(bool checkIfBundlesPresent = true)
 		{
 			var isValid = true;
 
-			unIDedLanguages = _unIDedLanguages?.Aggregate("", (i, j) => i + "\n  \u2022" + j);
+			_unIDedLanguagesAsString = _unIDedLanguages?.Aggregate("", (i, j) => i + "\n  \u2022" + j);
 
-			if (checkIfBundlesPresent)
+			if (_template != null)
 			{
-				if (_template == null || _template.LanguageResourceBundles.Count == 0)
+				if (checkIfBundlesPresent)
 				{
-					isValid = false;
-
-					if (!string.IsNullOrEmpty(unIDedLanguages))
+					if (_template.LanguageResourceBundles.Count == 0)
 					{
-						_message = $"{PluginResources.No_Languages_IDed}\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}";
+						isValid = false;
+
+						if (!string.IsNullOrEmpty(_unIDedLanguagesAsString))
+						{
+							_message =
+								$"{PluginResources.No_Languages_IDed}\n\n{PluginResources.Unidentified_Languages}{_unIDedLanguagesAsString}";
+						}
+					}
+					else
+					{
+						if (!string.IsNullOrEmpty(_unIDedLanguagesAsString))
+						{
+							var idedLanguages =
+								_template.LanguageResourceBundles.Aggregate("",
+									(l, j) => l + "\n  \u2022" + j.LanguageCode);
+							_message = $"{PluginResources.Identified_Languages}{idedLanguages}" +
+									   $"\n\n{PluginResources.Unidentified_Languages}{_unIDedLanguagesAsString}";
+						}
 					}
 				}
 				else
 				{
-					if (!string.IsNullOrEmpty(unIDedLanguages))
+					if (_message == PluginResources.Template_corrupted_or_file_not_template ||
+						_message == PluginResources.Template_filePath_Not_Correct)
 					{
-						var idedLanguages = _template.LanguageResourceBundles.Aggregate("", (l, j) => l + "\n  \u2022" + j.LanguageCode);
-						_message = $"{PluginResources.Identified_Languages}{idedLanguages}" +
-						           $"\n\n{PluginResources.Unidentified_Languages}{unIDedLanguages}";
+						isValid = false;
 					}
 				}
 			}
 			else
 			{
-				if (_message == PluginResources.Template_corrupted_or_file_not_template)
-				{
-					isValid = false;
-				}
-
+				isValid = false;
 			}
 
 			return isValid;
 		}
-
-		public bool CanExecuteImport
-		{
-			get
-			{
-				if (!ToggleExcelTM && (_templateValidNoResources || _templateValidWithResources))
-				{
-					return true;
-				}
-
-				if (ToggleExcelTM && (_templateValidNoResources || _templateValidWithResources) &&
-				    IsThereAnyTmSelected())
-				{
-					return true;
-				}
-
-				return false;
-			}
-		}
-
 		private bool IsThereAnyTmSelected()
 		{
 			return TmCollection.Any(tm => tm.IsSelected);
 		}
-
-		public bool CanExecuteApply => _templateValidWithResources && IsThereAnyTmSelected();
-
 		private void UnMarkTms(List<TranslationMemory> tms)
 		{
 			foreach (var tm in tms)
@@ -461,7 +477,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			LoadResourcesFromTemplate();
 
-			if (!await ValidateTemplateAndShowErrors(false)) return;
+			var isValid = ValidateTemplate(false);
+			await ShowMessages();
+			if (!isValid) return;
 
 			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
 
@@ -536,7 +554,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			LoadResourcesFromTemplate();
 
-			if (!await ValidateTemplateAndShowErrors()) return;
+			var isValid = ValidateTemplate();
+			await ShowMessages();
+			if (!isValid) return;
 
 			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
 

@@ -136,6 +136,7 @@
     <Compile Include="Models\Resource.cs" />
     <Compile Include="Models\SegmentationRulesResource.cs" />
     <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\TemplateValidity.cs" />
     <Compile Include="ViewModels\TimedTextBox.cs" />
     <Compile Include="Models\WordlistResource.cs" />
     <Compile Include="Studio\ApplyTMTemplateAction.cs" />
@@ -174,6 +175,8 @@
     <Compile Include="ViewModels\ModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\GreenDropDown.ico" />
+    <Resource Include="Resources\DropDownTriangle.ico" />
     <Resource Include="Resources\Error.ico" />
     <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\Question.ico" />

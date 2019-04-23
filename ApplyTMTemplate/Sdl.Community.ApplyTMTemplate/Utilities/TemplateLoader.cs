@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Xml;
-using System.Xml.Serialization;
 using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.Core.Segmentation;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ApplyTMTemplate.Utilities
@@ -107,6 +103,15 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			return langResBundlesList;
 		}
 
+		public XmlNodeList LoadDataFromFile(string filePath, string element)
+		{
+			var doc = new XmlDocument();
+			doc.Load(filePath);
+			var data = doc.GetElementsByTagName(element);
+
+			return data;
+		}
+
 		private bool ValidateFile(string resourceTemplatePath, out string message, out List<int> unIDedLanguages, out XmlNodeList lrt)
 		{
 			message = "";
@@ -151,20 +156,10 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 			return false;
 		}
-
-		public XmlNodeList LoadDataFromFile(string filePath, string element)
-		{
-			var doc = new XmlDocument();
-			doc.Load(filePath);
-			var data = doc.GetElementsByTagName(element);
-
-			return data;
-		}
-
 		private void AddLanguageResourceToBundle(LanguageResourceBundle langResBundle, XmlNode resource)
 		{
-			var allResourceTypes = new List<string>() { "Variables" , "Abbreviations", "OrdinalFollowers" };
-			
+			var allResourceTypes = new List<string>() { "Variables", "Abbreviations", "OrdinalFollowers" };
+
 			var resourceAdder = new Resource();
 			foreach (var resourceType in allResourceTypes)
 			{
@@ -174,7 +169,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 					resourceAdder.AddLanguageResourceToBundle(langResBundle);
 				}
 			}
-			
+
 			if (resource?.Attributes?["Type"].Value == "SegmentationRules")
 			{
 				resourceAdder.SetResourceType(new SegmentationRulesResource(resource));

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -26,7 +23,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			var vars = Encoding.UTF8.GetString(Convert.FromBase64String(_resource.InnerText));
 
 			var langResBundleSetter = typeof(LanguageResourceBundle).GetProperty(_propertyName)?.SetMethod;
-			langResBundleSetter?.Invoke(langResBundle, new[] {new Wordlist()});
+			langResBundleSetter?.Invoke(langResBundle, new[] { new Wordlist() });
 
 			var langResBundleGetter = (typeof(LanguageResourceBundle).GetProperty(_propertyName)?.GetMethod.Invoke(langResBundle, null) as Wordlist);
 

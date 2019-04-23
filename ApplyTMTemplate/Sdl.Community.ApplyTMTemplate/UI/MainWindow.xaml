@@ -25,9 +25,9 @@
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml" />
-				<ResourceDictionary Source="../UiHelpers/DataGridStyle.xaml" />
-				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/DataGridStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="Button" x:Key="SdlWizardStyleButton" BasedOn="{StaticResource SdlSecondaryButtonStyle}">
 				<Setter Property="MinWidth" Value="70"></Setter>
@@ -41,9 +41,8 @@
 			</Style>
 
 			<DataTemplate DataType="{x:Type viewModels:TimedTextBox}">
-				<ui:TimedTextBox/>
+				<ui:TimedTextBox />
 			</DataTemplate>
-
 		</ResourceDictionary>
 	</Window.Resources>
 
@@ -65,11 +64,32 @@
 		<TextBlock Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="10,10,0,0"  Grid.ColumnSpan="3" />
 
 		<DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,0,0,0">
-			<Button DockPanel.Dock="Right" Margin="5,10,10,0" Style="{StaticResource SdlWizardStyleButton}" Command="{Binding BrowseCommand}" Content="Choose template" VerticalAlignment="Top" ToolTip="{x:Static applyTmTemplate:PluginResources.Browse_button_Tooltip}"/>
-			<ContentControl DockPanel.Dock="Left" Margin="10,10,10,0" Content="{Binding TimedTextBoxViewModel}"/>
+			<TextBlock DockPanel.Dock="Bottom" Margin="0,22,10,0" HorizontalAlignment="Right"
+			           IsEnabled="{Binding CanExecuteExport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+			           ToolTip="{x:Static applyTmTemplate:PluginResources.Export_button_Tooltip}">
+				<TextBlock.Style>
+					<Style TargetType="TextBlock">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="False">
+								<Setter Property="Visibility" Value="Collapsed" />
+							</DataTrigger>
+							<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="True">
+								<Setter Property="Visibility" Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</TextBlock.Style>
+				<Hyperlink TextDecorations="UnderLine" Command="{Binding ExportCommand}">Export to excel...
+						<Hyperlink.Style>
+							<Style TargetType="Hyperlink"
+							       BasedOn="{StaticResource {x:Type Hyperlink}}">
+								<Setter Property="Foreground" Value="#0C0" />
+							</Style>
+						</Hyperlink.Style>
+					</Hyperlink>
+			</TextBlock>
+			<ContentControl Height="32" DockPanel.Dock="Left" Margin="10,10,10,0" Content="{Binding TimedTextBoxViewModel}"/>
 		</DockPanel>
-
-		
 
 		<StackPanel Grid.Row="2" Grid.Column="0" Margin="10,10,0,0">
 			<TextBlock Text="What to apply:" />
@@ -81,15 +101,24 @@
 
 		<StackPanel Margin="10,20,0,0" Grid.Row="3" Grid.Column="0" Orientation="Horizontal" ToolTip="Add Folder">
 			<Button HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}">
-				<Image Source="../Resources/AddFolder.ico" Width="15" Height="15"></Image>
+				<StackPanel Orientation="Horizontal">
+					<Image Source="../Resources/AddFolder.ico" Width="15" Height="15"></Image>
+					<TextBlock FontSize="12" FontFamily="SommetRounded" Margin="5,0,0,0" Text="AddFolder"/>
+				</StackPanel>
 			</Button>
 
 			<Button HorizontalContentAlignment="Left" Command="{Binding AddTmCommand}" ToolTip="Add TMs">
-				<Image Source="../Resources/PlusSign.ico" Width="15" Height="15"></Image>
+				<StackPanel Orientation="Horizontal">
+					<Image Source="../Resources/PlusSign.ico" Width="15" Height="15"></Image>
+					<TextBlock FontSize="12" FontFamily="SommetRounded" Margin="5,0,0,0" Text="AddTMs"/>
+				</StackPanel>
 			</Button>
 
 			<Button HorizontalContentAlignment="Left" Command="{Binding RemoveTMsCommand}" ToolTip="Remove TMs">
-				<Image Source="../Resources/Remove.ico" Width="15" Height="15"></Image>
+				<StackPanel Orientation="Horizontal">
+					<Image Source="../Resources/Remove.ico" Width="15" Height="15"></Image>
+					<TextBlock FontSize="12" FontFamily="SommetRounded" Margin="5,0,0,0" Text="RemoveTMs"/>
+				</StackPanel>
 			</Button>
 		</StackPanel>
 
@@ -109,7 +138,7 @@
 			</DataGrid.RowStyle>
 
 			<DataGrid.Resources>
-				<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle}" />
+				<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle2}" />
 			</DataGrid.Resources>
 
 			<DataGrid.Columns>
@@ -147,9 +176,9 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-								<TextBlock Text="Source" Margin="0,0,10,0"/>
-								<Image Source="{Binding SourceStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15" ToolTip="{Binding SourceStatusToolTip}" Margin="0,0,10,0"/>
-								<TextBlock Text="Target" Margin="0,0,10,0"/>
+								<TextBlock Text="Source" Margin="0,0,10,0" />
+								<Image Source="{Binding SourceStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15" ToolTip="{Binding SourceStatusToolTip}" Margin="0,0,10,0" />
+								<TextBlock Text="Target" Margin="0,0,10,0" />
 								<Image Source="{Binding TargetStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15" ToolTip="{Binding TargetStatusToolTip}" />
 							</StackPanel>
 						</DataTemplate>
@@ -159,12 +188,10 @@
 		</DataGrid>
 
 		<StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
-			<Button Margin="10,10,0,0" Style="{StaticResource SdlWizardStyleButtonGreen}" Command="{Binding ExportCommand}"
-					IsEnabled="{Binding CanExecuteExport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-			        Content="Export resources" ToolTip="{x:Static applyTmTemplate:PluginResources.Export_button_Tooltip}"/>
-			<Button Margin="5,10,10,0" Style="{StaticResource SdlWizardStyleButtonGreen}" Command="{Binding ImportCommand}"
-					IsEnabled="{Binding CanExecuteImport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-			        Content="Import resources" ToolTip="{x:Static applyTmTemplate:PluginResources.Import_button_Tooltip}"/>
+
+			<Button Margin="10,10,10,0" Style="{StaticResource SdlWizardStyleButtonGreen}" Command="{Binding ImportCommand}"
+			        IsEnabled="{Binding CanExecuteImport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+			        Content="{Binding ImportButtonText}" ToolTip="{x:Static applyTmTemplate:PluginResources.Import_button_Tooltip}" />
 			<RadioButton x:Name="FromTm" Content="From the TMs" Margin="10, 20, 10, 10" ToolTip="{x:Static applyTmTemplate:PluginResources.From_TM_Radio_Button_Tooltip}" IsChecked="{Binding ToggleExcelTM}">
 				<RadioButton.Style>
 					<Style TargetType="RadioButton" BasedOn="{StaticResource MetroRadioButton}">
@@ -196,7 +223,8 @@
 		</StackPanel>
 		<StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 			<controls:ProgressRing Visibility="{Binding ProgressVisibility}" Width="30" />
-			<Button IsEnabled="{Binding CanExecuteApply, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SdlWizardStyleButtonGreen}" RenderTransformOrigin="0.487,1.938" HorizontalAlignment="Right" Margin="0,10,10,0" Command="{Binding ApplyTemplateCommand}" Content="Template -> TMs" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}"/>
+
+			<Button IsEnabled="{Binding CanExecuteApply, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SdlWizardStyleButtonGreen}" RenderTransformOrigin="0.487,1.938" HorizontalAlignment="Right" Margin="0,10,10,0" Command="{Binding ApplyTemplateCommand}" Content="Apply: Template -> TMs" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
 		</StackPanel>
 	</Grid>
 </controls:MetroWindow>
