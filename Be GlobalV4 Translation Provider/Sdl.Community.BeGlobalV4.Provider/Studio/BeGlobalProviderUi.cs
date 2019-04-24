@@ -21,6 +21,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public string TypeDescription => "SDL BeGlobal (NMT) Translation Provider";
 		public bool SupportsEditing => true;
 		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
+		public static readonly Log Log = Log.Instance;
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
@@ -79,23 +80,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 				{
 					editProvider.Options = beGlobalVm.Options;
-					var clientId = editProvider.Options.ClientId;
-					var clientSecret = beGlobalVm.Options.ClientSecret;
-					SetBeGlobalCredentials(credentialStore, clientId, clientSecret, true);
 					return true;
 				}
 			}
 			return false;
-		}
-
-		private void SetBeGlobalCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret,bool persistKey)
-		{
-			var uri = new Uri("beglobaltranslationprovider:///");
-
-			var credential = $"{clientId}#{clientSecret}";
-			var credentials = new TranslationProviderCredential(credential, persistKey);
-			credentialStore.RemoveCredential(uri);
-			credentialStore.AddCredential(uri, credentials);
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

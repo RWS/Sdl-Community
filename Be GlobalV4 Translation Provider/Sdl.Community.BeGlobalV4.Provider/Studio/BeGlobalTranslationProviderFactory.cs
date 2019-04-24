@@ -1,4 +1,7 @@
 ﻿using System;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -10,6 +13,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		Description = "BeGlobal4 Translation Provider")]
 	public class BeGlobalTranslationProviderFactory : ITranslationProviderFactory
 	{
+		public static readonly Log Log = Log.Instance;	
 		[STAThread]
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
@@ -21,11 +25,18 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				options.BeGlobalService = new BeGlobalV4Translator(options.Model);
 			}
+			try
+			{
+				var accountId = options.BeGlobalService.GetUserInformation();
+				var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
+				options.SubscriptionInfo = subscriptionInfo;
+				Log.Logger.Debug("test");
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error(e, "Error on CreateTranslationProvider");
+			}
 
-			var accountId = options.BeGlobalService.GetUserInformation();
-
-			var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
-			options.SubscriptionInfo = subscriptionInfo;
 			return new BeGlobalTranslationProvider(options);
 		}
 
