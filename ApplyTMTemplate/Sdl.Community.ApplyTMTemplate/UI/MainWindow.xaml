@@ -11,10 +11,11 @@
 					  xmlns:applyTmTemplate="clr-namespace:Sdl.Community.ApplyTMTemplate"
 					  xmlns:ui="clr-namespace:Sdl.Community.ApplyTMTemplate.UI"
 					  xmlns:viewModels="clr-namespace:Sdl.Community.ApplyTMTemplate.ViewModels"
-					  xmlns:models="clr-namespace:Sdl.Community.ApplyTMTemplate.Models"
 					  WindowStartupLocation="CenterScreen"
+					  TitleCharacterCasing="Normal"
 		              mc:Ignorable="d"
 				 	  GlowBrush="#0C2D47"
+					  FontFamily="Calibri"
 					  WindowTitleBrush="#008264"
 					  Title="Apply TM Template" Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.48'}" Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.7'}" MinWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.48'}" MinHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.61'}">
 
@@ -61,7 +62,7 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<TextBlock Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="10,10,0,0"  Grid.ColumnSpan="3" />
+		<TextBlock FontWeight="Bold" FontSize="13" Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="10,10,0,0"  Grid.ColumnSpan="3" />
 
 		<DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,0,0,0">
 			<TextBlock DockPanel.Dock="Bottom" Margin="0,22,10,0" HorizontalAlignment="Right"
@@ -88,36 +89,36 @@
 						</Hyperlink.Style>
 					</Hyperlink>
 			</TextBlock>
-			<ContentControl Height="32" DockPanel.Dock="Left" Margin="10,10,10,0" Content="{Binding TimedTextBoxViewModel}"/>
+			<ui:TimedTextBox Height="32" Content="{Binding TimedTextBoxViewModel}" Margin="0,0,10,0"></ui:TimedTextBox>
 		</DockPanel>
 
 		<StackPanel Grid.Row="2" Grid.Column="0" Margin="10,10,0,0">
 			<TextBlock Text="What to apply:" />
-			<CheckBox IsChecked="{Binding VariablesChecked}" Content="Variables" Margin="10,15,0,0" />
-			<CheckBox IsChecked="{Binding AbbreviationsChecked}" Content="Abbreviations" Margin="10,10,0,0" />
-			<CheckBox IsChecked="{Binding OrdinalFollowersChecked}" Content="Ordinal followers" Margin="10,10,0,0" />
-			<CheckBox IsChecked="{Binding SegmentationRulesChecked}" Content="Segmentation rules" Margin="10,10,0,0" />
+			<CheckBox IsChecked="{Binding VariablesChecked}" Content="Variables" Margin="10,15,0,0" FontFamily="Calibri"/>
+			<CheckBox IsChecked="{Binding AbbreviationsChecked}" Content="Abbreviations" Margin="10,10,0,0" FontFamily="Calibri"/>
+			<CheckBox IsChecked="{Binding OrdinalFollowersChecked}" Content="Ordinal followers" Margin="10,10,0,0" FontFamily="Calibri"/>
+			<CheckBox IsChecked="{Binding SegmentationRulesChecked}" Content="Segmentation rules" Margin="10,10,0,0" FontFamily="Calibri"/>
 		</StackPanel>
 
 		<StackPanel Margin="10,20,0,0" Grid.Row="3" Grid.Column="0" Orientation="Horizontal" ToolTip="Add Folder">
 			<Button HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}">
 				<StackPanel Orientation="Horizontal">
 					<Image Source="../Resources/AddFolder.ico" Width="15" Height="15"></Image>
-					<TextBlock FontSize="12" FontFamily="SommetRounded" Margin="5,0,0,0" Text="AddFolder"/>
+					<TextBlock FontSize="12" FontFamily="Calibri" Margin="5,0,0,0" Text="AddFolder"/>
 				</StackPanel>
 			</Button>
 
 			<Button HorizontalContentAlignment="Left" Command="{Binding AddTmCommand}" ToolTip="Add TMs">
 				<StackPanel Orientation="Horizontal">
 					<Image Source="../Resources/PlusSign.ico" Width="15" Height="15"></Image>
-					<TextBlock FontSize="12" FontFamily="SommetRounded" Margin="5,0,0,0" Text="AddTMs"/>
+					<TextBlock FontSize="12" FontFamily="Calibri" Margin="5,0,0,0" Text="AddTMs"/>
 				</StackPanel>
 			</Button>
 
 			<Button HorizontalContentAlignment="Left" Command="{Binding RemoveTMsCommand}" ToolTip="Remove TMs">
 				<StackPanel Orientation="Horizontal">
 					<Image Source="../Resources/Remove.ico" Width="15" Height="15"></Image>
-					<TextBlock FontSize="12" FontFamily="SommetRounded" Margin="5,0,0,0" Text="RemoveTMs"/>
+					<TextBlock FontSize="12" FontFamily="Calibri" Margin="5,0,0,0" Text="RemoveTMs"/>
 				</StackPanel>
 			</Button>
 		</StackPanel>
@@ -186,41 +187,6 @@
 				</DataGridTemplateColumn>
 			</DataGrid.Columns>
 		</DataGrid>
-
-		<StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
-
-			<Button Margin="10,10,10,0" Style="{StaticResource SdlWizardStyleButtonGreen}" Command="{Binding ImportCommand}"
-			        IsEnabled="{Binding CanExecuteImport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-			        Content="{Binding ImportButtonText}" ToolTip="{x:Static applyTmTemplate:PluginResources.Import_button_Tooltip}" />
-			<RadioButton x:Name="FromTm" Content="From the TMs" Margin="10, 20, 10, 10" ToolTip="{x:Static applyTmTemplate:PluginResources.From_TM_Radio_Button_Tooltip}" IsChecked="{Binding ToggleExcelTM}">
-				<RadioButton.Style>
-					<Style TargetType="RadioButton" BasedOn="{StaticResource MetroRadioButton}">
-						<Style.Triggers>
-							<DataTrigger Binding = "{Binding IsChecked, ElementName=FromExcel}" Value="True">
-								<Setter Property="IsChecked" Value="False"></Setter>
-							</DataTrigger>
-							<DataTrigger Binding = "{Binding IsChecked, ElementName=FromExcel}" Value="False">
-								<Setter Property="IsChecked" Value="True"></Setter>
-							</DataTrigger>
-						</Style.Triggers>
-					</Style>
-				</RadioButton.Style>
-			</RadioButton>
-			<RadioButton x:Name="FromExcel" Content="From Excel" Margin="10, 20, 10, 10" ToolTip="{x:Static applyTmTemplate:PluginResources.From_Excel_Radio_Button_Tooltip}">
-				<RadioButton.Style>
-					<Style TargetType="RadioButton" BasedOn="{StaticResource MetroRadioButton}">
-						<Style.Triggers>
-							<DataTrigger Binding = "{Binding IsChecked, ElementName=FromTm}" Value="True">
-								<Setter Property="IsChecked" Value="False"></Setter>
-							</DataTrigger>
-							<DataTrigger Binding = "{Binding IsChecked, ElementName=FromTm}" Value="False">
-								<Setter Property="IsChecked" Value="True"></Setter>
-							</DataTrigger>
-						</Style.Triggers>
-					</Style>
-				</RadioButton.Style>
-			</RadioButton>
-		</StackPanel>
 		<StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 			<controls:ProgressRing Visibility="{Binding ProgressVisibility}" Width="30" />
 

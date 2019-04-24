@@ -268,6 +268,24 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import from Excel to template.
+        /// </summary>
+        public static string Import_Excel_To_Template {
+            get {
+                return ResourceManager.GetString("Import_Excel_To_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import from TMs to template.
+        /// </summary>
+        public static string Import_Tms_To_Template {
+            get {
+                return ResourceManager.GetString("Import_Tms_To_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import language resources.
         /// </summary>
         public static string Import_window_title {

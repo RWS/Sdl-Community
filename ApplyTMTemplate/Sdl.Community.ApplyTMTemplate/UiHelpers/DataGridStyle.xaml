@@ -8,7 +8,7 @@
 		<Setter Property="Background" Value="#008264" />
 		<Setter Property="Foreground" Value="White" />
 		<Setter Property="FontSize" Value="12" />
-		<Setter Property="FontFamily" Value="Calibri" />
+		<Setter Property="FontFamily" Value="Sommet Rounded" />
 		<Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
 	</Style>
 	<Style x:Key="DgrStyle" TargetType="DataGridRow">

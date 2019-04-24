@@ -178,9 +178,9 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 		private static void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle template, string property)
 		{
-			var templateBundleGetter = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(template, null) as Wordlist);
+			var templateBundleGetter = typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(template, null) as Wordlist;
 			var templateBundleSetter = typeof(LanguageResourceBundle).GetProperty(property)?.SetMethod;
-			var newBundleGetter = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(newLanguageResourceBundle, null) as Wordlist);
+			var newBundleGetter = typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(newLanguageResourceBundle, null) as Wordlist;
 
 			if (newBundleGetter == null || !newBundleGetter.Items.Any()) return;
 

@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
@@ -48,7 +50,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private FileBasedLanguageResourcesTemplate _template;
 		private List<int> _unIDedLanguages;
 
-		private ExcelImportExportService _importExportService;
+		private readonly ExcelImportExportService _importExportService;
 		private TimedTextBox _timedTextBoxViewModel;
 
 		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader,
@@ -78,7 +80,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			set
 			{
 				_timedTextBoxViewModel = value;
-				_timedTextBoxViewModel.Command = BrowseCommand;
+				_timedTextBoxViewModel.BrowseCommand = BrowseCommand;
+				_timedTextBoxViewModel.ImportCommand = ImportCommand;
 				_timedTextBoxViewModel.ShouldStartValidation += StartLoadingResourcesAndValidate;
 			}
 		}
@@ -90,18 +93,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			{
 				_progressVisibility = value;
 				OnPropertyChanged(nameof(ProgressVisibility));
-			}
-		}
-
-		public bool ToggleExcelTM
-		{
-			get => _toggleExcelTm;
-			set
-			{
-				_toggleExcelTm = value;
-				OnPropertyChanged(nameof(ToggleExcelTM));
-				OnPropertyChanged(nameof(CanExecuteImport));
-				OnPropertyChanged(nameof(ImportButtonText));
 			}
 		}
 
@@ -172,8 +163,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public string ImportButtonText => ToggleExcelTM ?  "Import: TMs -> template" : "Import: Excel -> template";
-
 		public ObservableCollection<TranslationMemory> TmCollection
 		{
 			get => _tmCollection;
@@ -194,29 +183,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export, true));
 
-		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(Import, true));
+		public ICommand ImportCommand => _importCommand ?? (_importCommand = new RelayCommand(Import));
 
 		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
 		public ICommand RemoveTMsCommand => _removeTMsCommand ?? (_removeTMsCommand = new CommandHandler(RemoveTMs, true));
-
-		public bool CanExecuteImport
-		{
-			get
-			{
-				if (!ToggleExcelTM && _templateValidity > 0)
-				{
-					return true;
-				}
-
-				if (ToggleExcelTM && _templateValidity > 0 && IsThereAnyTmSelected())
-				{
-					return true;
-				}
-
-				return false;
-			}
-		}
 
 		public bool CanExecuteApply => (int)_templateValidity > 1 && IsThereAnyTmSelected();
 
@@ -238,7 +209,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 
 			OnPropertyChanged(nameof(CanExecuteApply));
-			OnPropertyChanged(nameof(CanExecuteImport));
 			OnPropertyChanged(nameof(CanExecuteExport));
 
 			await ShowMessages();
@@ -284,13 +254,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				if (translationMemorySender.IsSelected)
 				{
 					OnPropertyChanged(nameof(CanExecuteApply));
-					OnPropertyChanged(nameof(CanExecuteImport));
 				}
 
 				if (!translationMemorySender.IsSelected && AreAllTmsSelectedOrUnselected())
 				{
 					OnPropertyChanged(nameof(CanExecuteApply));
-					OnPropertyChanged(nameof(CanExecuteImport));
 				}
 
 				if (AllTmsChecked && !translationMemorySender.IsSelected)
@@ -403,10 +371,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			ProgressVisibility = "Hidden";
 		}
 
-		private async Task ShowMessages()
+		private async Task ShowMessages(bool withoutBundlesMessage = false)
 		{
 			if (!string.IsNullOrEmpty(_message))
 			{
+				if (withoutBundlesMessage && _message.Equals(PluginResources.Template_has_no_resources)) return; // Don't show messages regarding the lack of resources in the template if we do an import
 				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning,
 					_message);
 			}
@@ -473,17 +442,17 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		private async void Import()
+		private async void Import(object parameter)
 		{
 			LoadResourcesFromTemplate();
 
 			var isValid = ValidateTemplate(false);
-			await ShowMessages();
+			await ShowMessages(true);
 			if (!isValid) return;
 
 			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
 
-			if (!ToggleExcelTM)
+			if ((parameter as System.Windows.Controls.Button)?.Name == "ImportFromExcel")
 			{
 				var dlg = new OpenFileDialog()
 				{
@@ -630,7 +599,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				AllTmsChecked = false;
 			}
 
-			OnPropertyChanged(nameof(CanExecuteImport));
 			OnPropertyChanged(nameof(CanExecuteApply));
 		}
 

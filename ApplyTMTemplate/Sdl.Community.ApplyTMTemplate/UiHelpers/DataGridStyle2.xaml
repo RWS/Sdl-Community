@@ -10,7 +10,7 @@
 		<Setter Property="Background" Value="#3EA691" />
 		<Setter Property="Foreground" Value="White" />
 		<Setter Property="FontSize" Value="12" />
-		<Setter Property="FontFamily" Value="Segoe UI" />
+		<Setter Property="FontFamily" Value="Sommet Rounded" />
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
 	</Style>
 

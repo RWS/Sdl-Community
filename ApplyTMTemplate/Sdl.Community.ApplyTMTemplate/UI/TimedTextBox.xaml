@@ -3,43 +3,70 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:applyTmTemplate="clr-namespace:Sdl.Community.ApplyTMTemplate"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:ui="clr-namespace:Sdl.Community.ApplyTMTemplate.UI"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-			<ControlTemplate x:Key="Unpressed">
-				<Image Source="../Resources/DropDownTriangle.ico"/>
-			</ControlTemplate>
-			<ControlTemplate x:Key="Pressed">
-				<Image Source="../Resources/GreenDropDown.ico"/>
-			</ControlTemplate>
+		<ControlTemplate x:Key="Unpressed">
+			<Image Source="../Resources/DropDownTriangle.ico"/>
+		</ControlTemplate>
+		<ControlTemplate x:Key="Pressed">
+			<Image Source="../Resources/GreenDropDown.ico"/>
+		</ControlTemplate>
+		
 	</UserControl.Resources>
 	<Border BorderBrush="Black"
-	        BorderThickness="1"
+	        BorderThickness="0.5"
 	        VerticalAlignment="Center"
-	        Height="32">
+	        Height="30">
 		<DockPanel>
-			<Button Name="Button" DockPanel.Dock="Right"
-			        Height="15"
-			        Background="White" BorderBrush="White"
-			        Command="{Binding Command}"
-			        Margin="0,0,8,0">
-				<Button.Style>
-					<Style TargetType="{x:Type Button}">
-						<Setter Property="Template" Value="{StaticResource Unpressed}"/>
-						<Style.Triggers>
-							<Trigger Property="IsPressed" Value="True">
-								<Setter Property="Template" Value="{StaticResource Pressed}"/>
-							</Trigger>
-						</Style.Triggers>
-					</Style>
-				</Button.Style>
-			</Button>
-			<TextBox BorderBrush="White"
+			<StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+				<Button Height="20"
+						Margin="0,0,8,0"
+				        Background="White" BorderBrush="White"
+				        Command="{Binding MenuCommand}"
+						HorizontalAlignment="Right">
+					<Button.Style>
+						<Style TargetType="{x:Type Button}">
+							<Setter Property="Template" Value="{StaticResource Unpressed}" />
+							<Style.Triggers>
+								<Trigger Property="IsPressed" Value="True">
+									<Setter Property="Template" Value="{StaticResource Pressed}" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</Button.Style>
+				</Button>
+				<Popup IsOpen="{Binding IsOpen}" 
+				       Height="Auto"
+				       PopupAnimation="Fade"
+					   StaysOpen="False"
+				       AllowsTransparency="True"
+				       HorizontalAlignment="Left">
+					<Border BorderBrush="Black"
+					        BorderThickness="0.5">
+						<StackPanel Background="WhiteSmoke">
+							<Button Command="{Binding BrowseCommand}" Background="White">
+								<TextBlock Padding="5" Text="Choose template" />
+							</Button>
+							<Button Name="ImportFromExcel" Command="{Binding ImportCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Background="White">
+								<TextBlock Padding="5" Text="{x:Static applyTmTemplate:PluginResources.Import_Excel_To_Template}" />
+							</Button>
+							<Button Name="ImportFromTms" Command="{Binding ImportCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Background="White">
+								<TextBlock Padding="5" Text="{x:Static applyTmTemplate:PluginResources.Import_Tms_To_Template}" />
+							</Button>
+						</StackPanel>
+					</Border>
+				</Popup>
+			</StackPanel>
+			<TextBox DockPanel.Dock="Left" BorderBrush="White"
+					 FontFamily="Calibri"
 					 VerticalAlignment="Center" VerticalContentAlignment="Center"
-			         Height="20"
+			         Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ui:TimedTextBox}, Path=Height}"
 			         controls:TextBoxHelper.Watermark="Enter path of template..."
-			         Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+			         Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 				<TextBox.Style>
 					<Style TargetType="TextBox">
 						<Setter Property="Template">
