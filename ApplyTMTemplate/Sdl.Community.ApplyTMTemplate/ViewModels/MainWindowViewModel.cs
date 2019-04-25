@@ -180,7 +180,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public ICommand RemoveTMsCommand => _removeTMsCommand ?? (_removeTMsCommand = new CommandHandler(RemoveTMs, true));
 
-		public bool CanExecuteApply => (int)_templateValidity > 1 && IsThereAnyTmSelected();
+		public bool CanExecuteApply => (int)_templateValidity > 1 && SelectedTmsList.Count > 0;
 
 		public async void StartLoadingResourcesAndValidate(object sender, EventArgs e)
 		{
@@ -233,40 +233,16 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void Tm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == "IsSelected")
-			{
-				if (!(sender is TranslationMemory translationMemorySender)) return;
+			if (e.PropertyName != "IsSelected") return;
 
-				if (AreAllTmsSelected())
-				{
-					OnPropertyChanged(nameof(AllTmsChecked));
-				}
+			OnPropertyChanged(nameof(AllTmsChecked));
+			OnPropertyChanged(nameof(CanExecuteApply));
 
-				if (translationMemorySender.IsSelected)
-				{
-					OnPropertyChanged(nameof(CanExecuteApply));
-				}
-
-				if (!AreAllTmsSelected())
-				{
-					OnPropertyChanged(nameof(CanExecuteApply));
-				}
-
-				if (!translationMemorySender.IsSelected)
-				{
-					OnPropertyChanged(nameof(AllTmsChecked));
-				}
-			}
 		}
 
 		private bool AreAllTmsSelected()
 		{
-			for (var i = 0; i < TmCollection.Count - 1; i++)
-			{
-				if (TmCollection[i].IsSelected != TmCollection[i + 1].IsSelected) return false;
-			}
-
-			return TmCollection[0].IsSelected;
+			return TmCollection.Count > 0 && TmCollection.All(tm => tm.IsSelected);
 		}
 
 		private void AddFolder()
@@ -339,21 +315,17 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			if (!isValid) return;
 
-			var selectedTms = TmCollection.Where(tm => tm.IsSelected).ToList();
-			UnmarkTms(selectedTms);
+			UnmarkTms(SelectedTmsList);
 
-			if (selectedTms.Count == 0)
+			if (SelectedTmsList.Count == 0)
 			{
 				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning,
 					PluginResources.Select_at_least_one_TM);
 				return;
 			}
 
-			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked,
-				SegmentationRulesChecked);
-
 			ProgressVisibility = "Visible";
-			await Task.Run(() => _template.ApplyTmTemplate(selectedTms));
+			await Task.Run(() => _template.ApplyTmTemplate(SelectedTmsList));
 			ProgressVisibility = "Hidden";
 		}
 
@@ -370,14 +342,12 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private bool ValidateTemplate(bool checkIfBundlesPresent = true)
 		{
 			var isValid = true;
-
 			_unIDedLanguagesAsString = _unIDedLanguages?.Aggregate("", (i, j) => i + "\n  \u2022" + j);
-
 			if (_template != null)
 			{
 				if (_template.LanguageResourceBundles != null && checkIfBundlesPresent)
 				{
-					if ( _template.LanguageResourceBundles.Count == 0)
+					if (_template.LanguageResourceBundles.Count == 0)
 					{
 						isValid = false;
 
@@ -402,7 +372,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				else
 				{
 					if (_message == PluginResources.Template_corrupted_or_file_not_template ||
-						_message == PluginResources.Template_filePath_Not_Correct)
+					    _message == PluginResources.Template_filePath_Not_Correct)
 					{
 						isValid = false;
 					}
@@ -415,18 +385,16 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			return isValid;
 		}
-		private bool IsThereAnyTmSelected()
-		{
-			return TmCollection.Any(tm => tm.IsSelected);
-		}
+
 		private void UnmarkTms(List<TranslationMemory> tms)
 		{
 			foreach (var tm in tms)
 			{
 				tm.UnmarkTm();
-				tm.UnmarkTm();
 			}
 		}
+
+		public List<TranslationMemory> SelectedTmsList => TmCollection.Where(tm => tm.IsSelected).ToList();
 
 		private async void Import(object parameter)
 		{
@@ -472,14 +440,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			else
 			{
 				ProgressVisibility = "Visible";
-				var selectedTmList = TmCollection.Where(tm => tm.IsSelected).ToList();
-				if (selectedTmList.Count > 0)
+				
+				if (SelectedTmsList.Count > 0)
 				{
 					try
 					{
 						await Task.Run(() =>
 						{
-							_template.ImportResourcesFromSdltm(selectedTmList);
+							_template.ImportResourcesFromSdltm(SelectedTmsList);
 						});
 					}
 					catch (Exception e)
