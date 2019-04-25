@@ -9,10 +9,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-		<ControlTemplate x:Key="Unpressed">
+		<ControlTemplate x:Key="Unpressed" TargetType="{x:Type Button}">
 			<Image Source="../Resources/DropDownTriangle.ico"/>
 		</ControlTemplate>
-		<ControlTemplate x:Key="Pressed">
+		<ControlTemplate x:Key="Pressed" TargetType="{x:Type Button}">
 			<Image Source="../Resources/GreenDropDown.ico"/>
 		</ControlTemplate>
 		
@@ -48,14 +48,17 @@
 					<Border BorderBrush="Black"
 					        BorderThickness="0.5">
 						<StackPanel Background="WhiteSmoke">
-							<Button Command="{Binding BrowseCommand}" Background="White">
+							<Button Command="{Binding BrowseCommand}" >
 								<TextBlock Padding="5" Text="Choose template" />
 							</Button>
-							<Button Name="ImportFromExcel" Command="{Binding ImportCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Background="White">
+							<Button Name="ImportFromExcel" Command="{Binding ImportCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 								<TextBlock Padding="5" Text="{x:Static applyTmTemplate:PluginResources.Import_Excel_To_Template}" />
 							</Button>
-							<Button Name="ImportFromTms" Command="{Binding ImportCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Background="White">
+							<Button Name="ImportFromTms" Command="{Binding ImportCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 								<TextBlock Padding="5" Text="{x:Static applyTmTemplate:PluginResources.Import_Tms_To_Template}" />
+							</Button>
+							<Button Name="ExportToExcel" Command="{Binding ExportCommand}">
+								<TextBlock Padding="5" Text="{x:Static applyTmTemplate:PluginResources.Export_To_Excel}" />
 							</Button>
 						</StackPanel>
 					</Border>

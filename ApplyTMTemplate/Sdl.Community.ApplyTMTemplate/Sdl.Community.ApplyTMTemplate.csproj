@@ -48,9 +48,6 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
-    <Reference Include="Sdl.Community.Toolkit.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.Core.1.1.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
       <Private>False</Private>
@@ -165,7 +162,6 @@
       <DependentUpon>TimedTextBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\DropBehaviour.cs" />
-    <Compile Include="Utilities\ExcelImportExportService.cs" />
     <Compile Include="Utilities\FolderSelectDialog.cs" />
     <Compile Include="Utilities\Reflector.cs" />
     <Compile Include="Utilities\TemplateLoader.cs" />

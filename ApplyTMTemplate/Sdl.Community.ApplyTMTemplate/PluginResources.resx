@@ -247,4 +247,22 @@
   <data name="Import_Tms_To_Template" xml:space="preserve">
     <value>Import from TMs to template</value>
   </data>
+  <data name="SourceModifiedMarker" xml:space="preserve">
+    <value>Template applied on Source language</value>
+  </data>
+  <data name="SourceNotModifiedMarker" xml:space="preserve">
+    <value>Source language doesn't correspond with any of the template's languages and was not modified</value>
+  </data>
+  <data name="TargetModifiedMarker" xml:space="preserve">
+    <value>Template applied on Target language</value>
+  </data>
+  <data name="TargetNotModified" xml:space="preserve">
+    <value>Target language doesn't correspond with any of the template's languages and was not modified</value>
+  </data>
+  <data name="TmCorruptedMarker" xml:space="preserve">
+    <value>This TM is corrupted or the file is not a TM</value>
+  </data>
+  <data name="Export_To_Excel" xml:space="preserve">
+    <value>Export to excel</value>
+  </data>
 </root>

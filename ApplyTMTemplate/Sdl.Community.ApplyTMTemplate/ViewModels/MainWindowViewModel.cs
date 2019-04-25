@@ -28,8 +28,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private bool _ordinalFollowersChecked;
 		private bool _segmentationRulesChecked;
 		private bool _variablesChecked;
-		private bool _allTmsChecked;
-		private bool _toggleExcelTm;
 
 		private TemplateValidity _templateValidity;
 
@@ -40,17 +38,16 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private ICommand _addFolderCommand;
 		private ICommand _addTmsCommand;
+		private ICommand _removeTMsCommand;
 		private ICommand _applyTemplateCommand;
 		private ICommand _browseCommand;
 		private ICommand _exportCommand;
 		private ICommand _importCommand;
 		private ICommand _dragEnterCommand;
-		private ICommand _removeTMsCommand;
 		private ObservableCollection<TranslationMemory> _tmCollection;
-		private FileBasedLanguageResourcesTemplate _template;
+		private Template _template;
 		private List<int> _unIDedLanguages;
 
-		private readonly ExcelImportExportService _importExportService;
 		private TimedTextBox _timedTextBoxViewModel;
 
 		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader,
@@ -70,8 +67,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			_progressVisibility = "Hidden";
 
 			_tmCollection = new ObservableCollection<TranslationMemory>();
-
-			_importExportService = new ExcelImportExportService();
 		}
 
 		public TimedTextBox TimedTextBoxViewModel
@@ -82,6 +77,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				_timedTextBoxViewModel = value;
 				_timedTextBoxViewModel.BrowseCommand = BrowseCommand;
 				_timedTextBoxViewModel.ImportCommand = ImportCommand;
+				_timedTextBoxViewModel.ExportCommand = ExportCommand;
 				_timedTextBoxViewModel.ShouldStartValidation += StartLoadingResourcesAndValidate;
 			}
 		}
@@ -150,7 +146,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public bool AllTmsChecked
 		{
-			get => _allTmsChecked;
+			get => AreAllTmsSelected();
 			set
 			{
 				if (value)
@@ -158,7 +154,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					ToggleCheckAllTms(true);
 				}
 
-				_allTmsChecked = value;
 				OnPropertyChanged(nameof(AllTmsChecked));
 			}
 		}
@@ -246,9 +241,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			{
 				if (!(sender is TranslationMemory translationMemorySender)) return;
 
-				if (translationMemorySender.IsSelected && AreAllTmsSelectedOrUnselected())
+				if (AreAllTmsSelected())
 				{
-					AllTmsChecked = true;
+					OnPropertyChanged(nameof(AllTmsChecked));
 				}
 
 				if (translationMemorySender.IsSelected)
@@ -256,26 +251,26 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					OnPropertyChanged(nameof(CanExecuteApply));
 				}
 
-				if (!translationMemorySender.IsSelected && AreAllTmsSelectedOrUnselected())
+				if (!AreAllTmsSelected())
 				{
 					OnPropertyChanged(nameof(CanExecuteApply));
 				}
 
-				if (AllTmsChecked && !translationMemorySender.IsSelected)
+				if (!translationMemorySender.IsSelected)
 				{
-					AllTmsChecked = false;
+					OnPropertyChanged(nameof(AllTmsChecked));
 				}
 			}
 		}
 
-		private bool AreAllTmsSelectedOrUnselected()
+		private bool AreAllTmsSelected()
 		{
 			for (var i = 0; i < TmCollection.Count - 1; i++)
 			{
 				if (TmCollection[i].IsSelected != TmCollection[i + 1].IsSelected) return false;
 			}
 
-			return true;
+			return TmCollection[0].IsSelected;
 		}
 
 		private void AddFolder()
@@ -326,10 +321,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					out _unIDedLanguages));
 		}
 
-		private FileBasedLanguageResourcesTemplate CreateTemplateObjectFromBundles(
-			List<LanguageResourceBundle> languageResourceBundles)
+		private Template CreateTemplateObjectFromBundles(List<LanguageResourceBundle> languageResourceBundles)
 		{
-			_template = new FileBasedLanguageResourcesTemplate();
+			_template = new Template(new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked), ResourceTemplatePath);
 
 			if (_message == PluginResources.Template_has_no_resources) return _template;
 			if (languageResourceBundles == null) return null;
@@ -344,15 +338,13 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private async void ApplyTmTemplate()
 		{
-			LoadResourcesFromTemplate();
-
 			var isValid = ValidateTemplate();
 			await ShowMessages();
 
 			if (!isValid) return;
 
 			var selectedTms = TmCollection.Where(tm => tm.IsSelected).ToList();
-			UnMarkTms(selectedTms);
+			UnmarkTms(selectedTms);
 
 			if (selectedTms.Count == 0)
 			{
@@ -361,13 +353,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				return;
 			}
 
-			var template = new Template(_template);
-
 			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked,
 				SegmentationRulesChecked);
 
 			ProgressVisibility = "Visible";
-			await Task.Run(() => template.ApplyTmTemplate(selectedTms, settings));
+			await Task.Run(() => _template.ApplyTmTemplate(selectedTms));
 			ProgressVisibility = "Hidden";
 		}
 
@@ -389,9 +379,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			if (_template != null)
 			{
-				if (checkIfBundlesPresent)
+				if (_template.LanguageResourceBundles != null && checkIfBundlesPresent)
 				{
-					if (_template.LanguageResourceBundles.Count == 0)
+					if ( _template.LanguageResourceBundles.Count == 0)
 					{
 						isValid = false;
 
@@ -409,7 +399,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 								_template.LanguageResourceBundles.Aggregate("",
 									(l, j) => l + "\n  \u2022" + j.LanguageCode);
 							_message = $"{PluginResources.Identified_Languages}{idedLanguages}" +
-									   $"\n\n{PluginResources.Unidentified_Languages}{_unIDedLanguagesAsString}";
+							           $"\n\n{PluginResources.Unidentified_Languages}{_unIDedLanguagesAsString}";
 						}
 					}
 				}
@@ -433,7 +423,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			return TmCollection.Any(tm => tm.IsSelected);
 		}
-		private void UnMarkTms(List<TranslationMemory> tms)
+		private void UnmarkTms(List<TranslationMemory> tms)
 		{
 			foreach (var tm in tms)
 			{
@@ -444,13 +434,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private async void Import(object parameter)
 		{
-			LoadResourcesFromTemplate();
-
 			var isValid = ValidateTemplate(false);
 			await ShowMessages(true);
 			if (!isValid) return;
-
-			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
 
 			if ((parameter as System.Windows.Controls.Button)?.Name == "ImportFromExcel")
 			{
@@ -471,7 +457,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					{
 						if (dlg.FileName.Contains(".xlsx"))
 						{
-							_importExportService.ImportResourcesFromExcel(dlg.FileName, ResourceTemplatePath, settings, _template);
+							_template.ImportResourcesFromExcel(dlg.FileName);
 						}
 					});
 				}
@@ -497,7 +483,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					{
 						await Task.Run(() =>
 						{
-							_importExportService.ImportResourcesFromSdltm(selectedTmList, settings, ResourceTemplatePath, _template);
+							_template.ImportResourcesFromSdltm(selectedTmList);
 						});
 					}
 					catch (Exception e)
@@ -517,6 +503,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 				ProgressVisibility = "Hidden";
 			}
+
+			_templateValidity = TemplateValidity.HasResources;
+			OnPropertyChanged(nameof(CanExecuteExport));
 		}
 
 		private async void Export()
@@ -559,7 +548,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			await Task.Run(() =>
 			{
-				_importExportService.ExportResources(_template, filePath, settings);
+				_template.ExportResources(_template, filePath, settings);
 			});
 
 			await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Report_generated_successfully);
@@ -594,11 +583,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			TmCollection = new ObservableCollection<TranslationMemory>(TmCollection.Where(tm => !tm.IsSelected));
 
-			if (TmCollection.Count == 0)
-			{
-				AllTmsChecked = false;
-			}
-
+			OnPropertyChanged(nameof(AllTmsChecked));
 			OnPropertyChanged(nameof(CanExecuteApply));
 		}
 

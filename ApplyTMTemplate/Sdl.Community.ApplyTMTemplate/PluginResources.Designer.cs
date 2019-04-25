@@ -186,6 +186,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to Export to excel.
         /// </summary>
+        public static string Export_To_Excel {
+            get {
+                return ResourceManager.GetString("Export_To_Excel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to excel.
+        /// </summary>
         public static string Export_Window_Title {
             get {
                 return ResourceManager.GetString("Export_Window_Title", resourceCulture);
@@ -388,11 +397,47 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Template applied on Source language.
+        /// </summary>
+        public static string SourceModifiedMarker {
+            get {
+                return ResourceManager.GetString("SourceModifiedMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source language doesn&apos;t correspond with any of the template&apos;s languages and was not modified.
+        /// </summary>
+        public static string SourceNotModifiedMarker {
+            get {
+                return ResourceManager.GetString("SourceNotModifiedMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Success.
         /// </summary>
         public static string Success_Window_Title {
             get {
                 return ResourceManager.GetString("Success_Window_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template applied on Target language.
+        /// </summary>
+        public static string TargetModifiedMarker {
+            get {
+                return ResourceManager.GetString("TargetModifiedMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target language doesn&apos;t correspond with any of the template&apos;s languages and was not modified.
+        /// </summary>
+        public static string TargetNotModified {
+            get {
+                return ResourceManager.GetString("TargetNotModified", resourceCulture);
             }
         }
         
@@ -429,6 +474,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string The_file_is_not_of_the_required_type {
             get {
                 return ResourceManager.GetString("The_file_is_not_of_the_required_type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This TM is corrupted or the file is not a TM.
+        /// </summary>
+        public static string TmCorruptedMarker {
+            get {
+                return ResourceManager.GetString("TmCorruptedMarker", resourceCulture);
             }
         }
         

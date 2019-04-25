@@ -40,6 +40,15 @@
 				<Setter Property="Height" Value="34"></Setter>
 				<Setter Property="Margin" Value="5,9,5,11"></Setter>
 			</Style>
+			<Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+				<Setter Property="FontSize" Value="12"/>
+				<Setter Property="FontFamily" Value="Calibri"/>
+				<Setter Property="Margin" Value="5,0,0,0"/>
+			</Style>
+			<Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+				<Setter Property="Margin" Value="10,15,0,0"/>
+				<Setter Property="FontFamily" Value="Calibri"/>
+			</Style>
 
 			<DataTemplate DataType="{x:Type viewModels:TimedTextBox}">
 				<ui:TimedTextBox />
@@ -64,61 +73,35 @@
 
 		<TextBlock FontWeight="Bold" FontSize="13" Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="10,10,0,0"  Grid.ColumnSpan="3" />
 
-		<DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,0,0,0">
-			<TextBlock DockPanel.Dock="Bottom" Margin="0,22,10,0" HorizontalAlignment="Right"
-			           IsEnabled="{Binding CanExecuteExport, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-			           ToolTip="{x:Static applyTmTemplate:PluginResources.Export_button_Tooltip}">
-				<TextBlock.Style>
-					<Style TargetType="TextBlock">
-						<Style.Triggers>
-							<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="False">
-								<Setter Property="Visibility" Value="Collapsed" />
-							</DataTrigger>
-							<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled}" Value="True">
-								<Setter Property="Visibility" Value="Visible" />
-							</DataTrigger>
-						</Style.Triggers>
-					</Style>
-				</TextBlock.Style>
-				<Hyperlink TextDecorations="UnderLine" Command="{Binding ExportCommand}">Export to excel...
-						<Hyperlink.Style>
-							<Style TargetType="Hyperlink"
-							       BasedOn="{StaticResource {x:Type Hyperlink}}">
-								<Setter Property="Foreground" Value="#0C0" />
-							</Style>
-						</Hyperlink.Style>
-					</Hyperlink>
-			</TextBlock>
-			<ui:TimedTextBox Height="32" Content="{Binding TimedTextBoxViewModel}" Margin="0,0,10,0"></ui:TimedTextBox>
-		</DockPanel>
+			<ui:TimedTextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="32" Content="{Binding TimedTextBoxViewModel}" Margin="5,0,10,0"></ui:TimedTextBox>
 
 		<StackPanel Grid.Row="2" Grid.Column="0" Margin="10,10,0,0">
 			<TextBlock Text="What to apply:" />
-			<CheckBox IsChecked="{Binding VariablesChecked}" Content="Variables" Margin="10,15,0,0" FontFamily="Calibri"/>
-			<CheckBox IsChecked="{Binding AbbreviationsChecked}" Content="Abbreviations" Margin="10,10,0,0" FontFamily="Calibri"/>
-			<CheckBox IsChecked="{Binding OrdinalFollowersChecked}" Content="Ordinal followers" Margin="10,10,0,0" FontFamily="Calibri"/>
-			<CheckBox IsChecked="{Binding SegmentationRulesChecked}" Content="Segmentation rules" Margin="10,10,0,0" FontFamily="Calibri"/>
+			<CheckBox IsChecked="{Binding VariablesChecked}" Content="Variables" Style="{StaticResource CheckBoxStyle}"/>
+			<CheckBox IsChecked="{Binding AbbreviationsChecked}" Content="Abbreviations" Style="{StaticResource CheckBoxStyle}"/>
+			<CheckBox IsChecked="{Binding OrdinalFollowersChecked}" Content="Ordinal followers" Style="{StaticResource CheckBoxStyle}"/>
+			<CheckBox IsChecked="{Binding SegmentationRulesChecked}" Content="Segmentation rules" Style="{StaticResource CheckBoxStyle}"/>
 		</StackPanel>
 
 		<StackPanel Margin="10,20,0,0" Grid.Row="3" Grid.Column="0" Orientation="Horizontal" ToolTip="Add Folder">
 			<Button HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}">
 				<StackPanel Orientation="Horizontal">
-					<Image Source="../Resources/AddFolder.ico" Width="15" Height="15"></Image>
-					<TextBlock FontSize="12" FontFamily="Calibri" Margin="5,0,0,0" Text="AddFolder"/>
+					<Image Source="../Resources/AddFolder.ico" Width="15" Height="15"/>
+					<TextBlock Style="{StaticResource TextBlockStyle}" Text="AddFolder"/>
 				</StackPanel>
 			</Button>
 
 			<Button HorizontalContentAlignment="Left" Command="{Binding AddTmCommand}" ToolTip="Add TMs">
 				<StackPanel Orientation="Horizontal">
 					<Image Source="../Resources/PlusSign.ico" Width="15" Height="15"></Image>
-					<TextBlock FontSize="12" FontFamily="Calibri" Margin="5,0,0,0" Text="AddTMs"/>
+					<TextBlock Style="{StaticResource TextBlockStyle}" Text="AddTMs"/>
 				</StackPanel>
 			</Button>
 
 			<Button HorizontalContentAlignment="Left" Command="{Binding RemoveTMsCommand}" ToolTip="Remove TMs">
 				<StackPanel Orientation="Horizontal">
 					<Image Source="../Resources/Remove.ico" Width="15" Height="15"></Image>
-					<TextBlock FontSize="12" FontFamily="Calibri" Margin="5,0,0,0" Text="RemoveTMs"/>
+					<TextBlock Style="{StaticResource TextBlockStyle}" Text="RemoveTMs"/>
 				</StackPanel>
 			</Button>
 		</StackPanel>

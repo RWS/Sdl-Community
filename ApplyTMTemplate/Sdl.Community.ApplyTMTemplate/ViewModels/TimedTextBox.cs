@@ -43,6 +43,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		//property needed for dynamic accessing of command it holds since the property of the command itself is rerouted
 		public ICommand BrowseField { get; set; } 
 		public ICommand ImportFromExcelField { get; set; }
+		public ICommand ExportField { get; set; }
 
 		//all commands rerouted for the purpose of adding common functionality(close menu) to all of them
 		public ICommand BrowseCommand
@@ -54,6 +55,12 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			get => new RelayCommand(s => CommandHandlerMethod(s, nameof(ImportFromExcelField)));
 			set => ImportFromExcelField = value;
+		}
+
+		public ICommand ExportCommand
+		{
+			get => new RelayCommand(s => CommandHandlerMethod(s, nameof(ExportField)));
+			set => ExportField = value;
 		}
 
 		public ICommand MenuCommand => _menuCommand ?? (_menuCommand = new CommandHandler(ToggleMenu, true));
