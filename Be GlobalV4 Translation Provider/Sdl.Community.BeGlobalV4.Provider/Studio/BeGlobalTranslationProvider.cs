@@ -41,20 +41,27 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			var sourceLanguage =
-				_normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.SourceCulture);
-			var targetLanguage =
-				_normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.TargetCulture);
-
-			if (Options?.SubscriptionInfo?.LanguagePairs?.Count > 0)
+			try
 			{
-				var languagePair =
-					Options.SubscriptionInfo.LanguagePairs.FirstOrDefault(
-						l => l.SourceLanguageId.Equals(sourceLanguage) && l.TargetLanguageId.Equals(targetLanguage));
-				if (languagePair != null)
+				var sourceLanguage =
+					_normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.SourceCulture);
+				var targetLanguage =
+					_normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.TargetCulture);
+
+				if (Options?.SubscriptionInfo?.LanguagePairs?.Count > 0)
 				{
-					return true;
+					var languagePair =
+						Options.SubscriptionInfo.LanguagePairs.FirstOrDefault(
+							l => l.SourceLanguageId.Equals(sourceLanguage) && l.TargetLanguageId.Equals(targetLanguage));
+					if (languagePair != null)
+					{
+						return true;
+					}
 				}
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"SupportsLanguageDirection: {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}
