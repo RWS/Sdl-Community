@@ -105,37 +105,44 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 		private byte[] WaitForTranslation(string id)
 		{
-			IRestResponse response;
-			string status;
-			do
+			try
 			{
-				response = RestGet($"/mt/translations/async/{id}");
+				IRestResponse response;
+				string status;
+				do
+				{
+					response = RestGet($"/mt/translations/async/{id}");
+					if (!response.IsSuccessful || response.StatusCode != HttpStatusCode.OK)
+					{
+						ShowErrors(response);
+					}
+
+					dynamic json = JsonConvert.DeserializeObject(response.Content);
+					status = json.translationStatus;
+
+					if (!status.Equals("DONE", StringComparison.CurrentCultureIgnoreCase))
+					{
+						System.Threading.Thread.Sleep(300);
+					}
+					if (status.Equals("FAILED"))
+					{
+						ShowErrors(response);
+					}
+				} while (status.Equals("INIT", StringComparison.CurrentCultureIgnoreCase) ||
+				         status.Equals("TRANSLATING", StringComparison.CurrentCultureIgnoreCase));
+
+				response = RestGet($"/mt/translations/async/{id}/content");
 				if (!response.IsSuccessful || response.StatusCode != HttpStatusCode.OK)
 				{
 					ShowErrors(response);
 				}
-
-				dynamic json = JsonConvert.DeserializeObject(response.Content);
-				status = json.translationStatus;
-
-				if (!status.Equals("DONE", StringComparison.CurrentCultureIgnoreCase))
-				{
-					System.Threading.Thread.Sleep(300);
-				}
-				if (status.Equals("FAILED"))
-				{
-					ShowErrors(response);
-
-				}
-			} while (status.Equals("INIT", StringComparison.CurrentCultureIgnoreCase) ||
-			         status.Equals("TRANSLATING", StringComparison.CurrentCultureIgnoreCase));
-
-			response = RestGet($"/mt/translations/async/{id}/content");
-			if (!response.IsSuccessful || response.StatusCode != HttpStatusCode.OK)
-			{
-				ShowErrors(response);
+				return response.RawBytes;
 			}
-			return response.RawBytes;
+			catch (Exception e)
+			{
+				Log.Logger.Error($"Wait for translation method: {e.Message}\n {e.StackTrace}");
+			}
+			return new byte[1];
 		}
 
 		private IRestResponse RestGet(string command)

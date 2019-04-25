@@ -30,7 +30,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				var accountId = options.BeGlobalService.GetUserInformation();
 				var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
 				options.SubscriptionInfo = subscriptionInfo;
-				Log.Logger.Debug("test");
 			}
 			catch (Exception e)
 			{

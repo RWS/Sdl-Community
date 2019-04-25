@@ -25,31 +25,38 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			AppItializer.EnsureInitializer();
-			var options = new BeGlobalTranslationOptions();
-			var token = string.Empty;
-
-			Application.Current?.Dispatcher?.Invoke(() =>
+			try
 			{
-				token = _studioCredentials.GetToken();
-			});
-			if (!string.IsNullOrEmpty(token))
-			{
-				var beGlobalWindow = new BeGlobalWindow();
-				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options,  languagePairs);
-				beGlobalWindow.DataContext = beGlobalVm;
+				AppItializer.EnsureInitializer();
+				var options = new BeGlobalTranslationOptions();
+				var token = string.Empty;
 
-				beGlobalWindow.ShowDialog();
-				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+				Application.Current?.Dispatcher?.Invoke(() =>
 				{
-					var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options.Model);
-					beGlobalVm.Options.BeGlobalService = beGlobalService;
-					var provider = new BeGlobalTranslationProvider(options)
+					token = _studioCredentials.GetToken();
+				});
+				if (!string.IsNullOrEmpty(token))
+				{
+					var beGlobalWindow = new BeGlobalWindow();
+					var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, languagePairs);
+					beGlobalWindow.DataContext = beGlobalVm;
+
+					beGlobalWindow.ShowDialog();
+					if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 					{
-						Options = beGlobalVm.Options
-					};
-					return new ITranslationProvider[] { provider };
+						var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options.Model);
+						beGlobalVm.Options.BeGlobalService = beGlobalService;
+						var provider = new BeGlobalTranslationProvider(options)
+						{
+							Options = beGlobalVm.Options
+						};
+						return new ITranslationProvider[] { provider };
+					}
 				}
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"Browse: {e.Message}\n {e.StackTrace}");
 			}
 			return null;
 		}
@@ -57,31 +64,38 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs,
 			ITranslationProviderCredentialStore credentialStore)
 		{
-			var editProvider = translationProvider as BeGlobalTranslationProvider;
-
-			if (editProvider == null)
+			try
 			{
-				return false;
-			}
-			var token = string.Empty;
-			AppItializer.EnsureInitializer();
-			Application.Current?.Dispatcher?.Invoke(() =>
-			{
-				token = _studioCredentials.GetToken();
-			});
+				var editProvider = translationProvider as BeGlobalTranslationProvider;
 
-			if (!string.IsNullOrEmpty(token))
-			{
-				var beGlobalWindow = new BeGlobalWindow();
-				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, editProvider.Options, languagePairs);
-				beGlobalWindow.DataContext = beGlobalVm;
-
-				beGlobalWindow.ShowDialog();
-				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+				if (editProvider == null)
 				{
-					editProvider.Options = beGlobalVm.Options;
-					return true;
+					return false;
 				}
+				var token = string.Empty;
+				AppItializer.EnsureInitializer();
+				Application.Current?.Dispatcher?.Invoke(() =>
+				{
+					token = _studioCredentials.GetToken();
+				});
+
+				if (!string.IsNullOrEmpty(token))
+				{
+					var beGlobalWindow = new BeGlobalWindow();
+					var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, editProvider.Options, languagePairs);
+					beGlobalWindow.DataContext = beGlobalVm;
+
+					beGlobalWindow.ShowDialog();
+					if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+					{
+						editProvider.Options = beGlobalVm.Options;
+						return true;
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"Edit window: {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}
