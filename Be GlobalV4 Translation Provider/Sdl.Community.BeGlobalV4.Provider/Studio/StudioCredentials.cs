@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Sdl.LanguageCloud.IdentityApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
@@ -15,7 +16,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			return string.Empty;
 		}
-
+		[STAThread]
 		public  bool IsLoggedIn(out string message)
 		{
 			message = string.Empty;
@@ -28,7 +29,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			return true;
 		}
-
 		public  bool IsLoggedIn()
 		{
 			if (!IsLoggedIn(out var message))

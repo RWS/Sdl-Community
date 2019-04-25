@@ -43,25 +43,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		private Segment[] TranslateSegments(Segment[] sourceSegments)
 		{
-			// if "Resend option is disabled we show a message
-			//foreach (var translationUnit in _translationUnits)
-			//{
-			//	if (!_options.ResendDrafts && translationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
-			//	{
-			//		var translation = new Segment(_languageDirection.TargetCulture);
-
-			//		translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-			//		return new[] {translation};
-			//	}
-			//}
-
 			//maybe the user logged out since the provider was added or the token expired
 
 			Application.Current?.Dispatcher?.Invoke(() =>
 			{
 				_studioCredentials.GetToken();
 			});
-
 
 			var xliffDocument = CreateXliffFile(sourceSegments);
 
@@ -223,7 +210,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (mask == null || mask.Length != translationUnits.Length)
 				throw new ArgumentException("Mask in SearchSegmentsMasked");
 
-			SearchTranslationUnits(settings, translationUnits);
 			return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
 		}
 
