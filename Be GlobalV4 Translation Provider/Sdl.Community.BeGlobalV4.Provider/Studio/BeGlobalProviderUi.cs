@@ -23,6 +23,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
 		public static readonly Log Log = Log.Instance;
 
+		[STAThread]
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			try
@@ -61,6 +62,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			return null;
 		}
 
+		[STAThread]
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs,
 			ITranslationProviderCredentialStore credentialStore)
 		{

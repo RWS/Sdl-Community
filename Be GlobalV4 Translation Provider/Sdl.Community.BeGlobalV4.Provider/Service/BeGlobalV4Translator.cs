@@ -173,6 +173,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			if (response.StatusCode == HttpStatusCode.Forbidden)
 			{
+				MessageBox.Show("Forbidden: Please check your license", string.Empty, MessageBoxButton.OK);
 				throw new Exception("Forbidden: Please check your license");
 			}
 		}
