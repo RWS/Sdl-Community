@@ -30,7 +30,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			TranslationOptions = new ObservableCollection<TranslationModel>();
 
-			var beGlobalTranslator = new BeGlobalV4Translator(Options.Model);
+			var beGlobalTranslator = new BeGlobalV4Translator(Options?.Model);
 			var accountId = beGlobalTranslator.GetUserInformation();
 
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
