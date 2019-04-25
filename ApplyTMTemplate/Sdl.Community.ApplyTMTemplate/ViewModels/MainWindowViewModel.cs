@@ -28,14 +28,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private bool _ordinalFollowersChecked;
 		private bool _segmentationRulesChecked;
 		private bool _variablesChecked;
-
 		private TemplateValidity _templateValidity;
-
 		private string _tmPath;
 		private string _message;
 		private string _progressVisibility;
 		private string _unIDedLanguagesAsString;
-
 		private ICommand _addFolderCommand;
 		private ICommand _addTmsCommand;
 		private ICommand _removeTMsCommand;
@@ -47,7 +44,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private ObservableCollection<TranslationMemory> _tmCollection;
 		private Template _template;
 		private List<int> _unIDedLanguages;
-
 		private TimedTextBox _timedTextBoxViewModel;
 
 		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader,
