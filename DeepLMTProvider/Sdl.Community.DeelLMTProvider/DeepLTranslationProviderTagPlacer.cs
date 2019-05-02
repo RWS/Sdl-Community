@@ -67,7 +67,7 @@ namespace Sdl.Community.DeepLMTProvider
 						tagInfo.IsClosed = true;
 						tagText = "</tg" + tagInfo.TagId + ">";
 					}
-					if (theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder)
+					if (theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder || theTag.SdlTag.Type == TagType.LockedContent)
 					{
 						tagText = "<tg" + tagInfo.TagId + "/>";
 					}
