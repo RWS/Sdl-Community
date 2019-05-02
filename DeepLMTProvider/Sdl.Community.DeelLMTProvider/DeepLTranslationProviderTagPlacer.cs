@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Web;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -67,7 +64,7 @@ namespace Sdl.Community.DeepLMTProvider
 						tagInfo.IsClosed = true;
 						tagText = "</tg" + tagInfo.TagId + ">";
 					}
-					if (theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder)
+					if (theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder || theTag.SdlTag.Type == TagType.LockedContent)
 					{
 						tagText = "<tg" + tagInfo.TagId + "/>";
 					}
