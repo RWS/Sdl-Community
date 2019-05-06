@@ -12,8 +12,9 @@ namespace ETSTranslationProvider
         public const string TranslationProviderScheme = "ets";
 
         public TranslationOptions Options { get; set; }
+		public static readonly Log Log = Log.Instance;
 
-        public TranslationProvider(TranslationOptions options)
+		public TranslationProvider(TranslationOptions options)
         {
             Log.Logger.Trace("");
             Options = options;

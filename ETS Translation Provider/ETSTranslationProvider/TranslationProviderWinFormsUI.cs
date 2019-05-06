@@ -11,15 +11,17 @@ namespace ETSTranslationProvider
         Description = "TranslationProviderWinFormsUI")]
     public class TranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
     {
-        /// <summary>
-        /// Show the plug-in settings form when the user is adding the translation provider plug-in
-        /// through the GUI of SDL Trados Studio
-        /// </summary>
-        /// <param name="owner"></param>
-        /// <param name="languagePairs"></param>
-        /// <param name="credentialStore"></param>
-        /// <returns></returns>
-        public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
+		public static readonly Log Log = Log.Instance;
+
+		/// <summary>
+		/// Show the plug-in settings form when the user is adding the translation provider plug-in
+		/// through the GUI of SDL Trados Studio
+		/// </summary>
+		/// <param name="owner"></param>
+		/// <param name="languagePairs"></param>
+		/// <param name="credentialStore"></param>
+		/// <returns></returns>
+		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
             Log.Logger.Trace("");
             var dialog = new ProviderConfDialog(new TranslationOptions(), credentialStore, languagePairs);

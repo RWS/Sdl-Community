@@ -14,7 +14,9 @@ namespace ETSTranslationProvider
         private TranslationProvider provider;
         private LanguagePair languageDirection;
 
-        public TranslationProviderLanguageDirection(TranslationProvider provider, LanguagePair languages)
+		public static readonly Log Log = Log.Instance;
+
+		public TranslationProviderLanguageDirection(TranslationProvider provider, LanguagePair languages)
         {
             Log.Logger.Trace("");
             this.provider = provider;
