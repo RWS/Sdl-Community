@@ -1,4 +1,5 @@
-﻿using Sdl.LanguagePlatform.Core;
+﻿using ETSTranslationProvider.Helpers;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using System.Linq;
@@ -14,8 +15,9 @@ namespace ETSTranslationProvider
         private System.Timers.Timer lpPopulationTimer = new System.Timers.Timer(500);
 
         public TranslationOptions Options { get; set; }
+		public static readonly Log Log = Log.Instance;
 
-        public ProviderConfDialog(TranslationOptions options, ITranslationProviderCredentialStore store, LanguagePair[] languagePairs)
+		public ProviderConfDialog(TranslationOptions options, ITranslationProviderCredentialStore store, LanguagePair[] languagePairs)
         {
             credentialStore = store;
             Options = options;
@@ -96,33 +98,38 @@ namespace ETSTranslationProvider
         {
             // If the port is not a number or out of port range, don't build the URI
             int? port = GetPort();
-            if (!port.HasValue)
-                return null;
-
-            UriBuilder uriBuilder = new UriBuilder(TranslationProvider.TranslationProviderScheme, HostNameField.Text, port.Value);
-
+			if (!port.HasValue)
+			{
+				return null;
+			}            
             try
             {
-                return uriBuilder.Uri;
+				var uriBuilder = new UriBuilder(TranslationProvider.TranslationProviderScheme, HostNameField.Text, port.Value);
+				return uriBuilder.Uri;
             }
-            catch (UriFormatException)
+            catch (UriFormatException e)
             {
-                return null;
-            }
-        }
+				Log.Logger.Error($"{Constants.BuildUri}: {e.Message}\n {e.StackTrace}");
+				return null;
+			}
+		}
 
         private void PopulateLanguagePairs()
         {
-            if (LanguagePairs == null || LanguagePairs.Length == 0)
-                return;
+			if (LanguagePairs == null || LanguagePairs.Length == 0)
+			{
+				return;
+			}
+            var credentials = GetCredentials();
+			if (!AuthenticateCredentials(credentials, false))
+			{
+				return;
+			}
 
-            GenericCredentials credentials = GetCredentials();
-            if (!AuthenticateCredentials(credentials, false))
-                return;
-
-            if (Options.ApiVersion != ETSApi.APIVersion.v2)
-                return;
-
+			if (Options.ApiVersion != ETSApi.APIVersion.v2)
+			{
+				return;
+			}
             var languagePairChoices = Options.SetPreferredLanguages(LanguagePairs);
 
             // Since this is run on a separate thread, use invoke to communicate with the master thread.
@@ -268,14 +275,17 @@ namespace ETSTranslationProvider
                     ETSApi.ETSTranslatorHelper.VerifyBasicAPIToken(Options, credentials);
                 }
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                if (showAlertOnFailure)
-                {
-                    DialogResult = DialogResult.None;
-                    if (Environment.UserInteractive)
-                        MessageBox.Show(exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+				Log.Logger.Error($"{Constants.AuthenticateCredentials}: {e.Message}\n {e.StackTrace}");
+				if (showAlertOnFailure)
+				{
+					DialogResult = DialogResult.None;
+					if (Environment.UserInteractive)
+					{
+						MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
                 return false;
             }
             Options.ApiToken = token;

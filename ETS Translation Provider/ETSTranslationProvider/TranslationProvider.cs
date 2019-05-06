@@ -9,7 +9,8 @@ namespace ETSTranslationProvider
 {
 	public class TranslationProvider : ITranslationProvider
     {
-        public const string TranslationProviderScheme = "ets";
+		public static readonly Log Log = Log.Instance;
+		public const string TranslationProviderScheme = "ets";
 
         public TranslationOptions Options { get; set; }
 

@@ -21,6 +21,8 @@ namespace ETSTranslationProvider
 			languageDirection = languages;
 		}
 
+		public static readonly Log Log = Log.Instance;
+
 		public System.Globalization.CultureInfo SourceLanguage
 		{
 			get { return languageDirection.SourceCulture; }
