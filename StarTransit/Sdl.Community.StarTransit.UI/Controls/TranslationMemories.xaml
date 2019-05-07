@@ -3,8 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
-             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400">
@@ -51,7 +49,7 @@
                 <Setter Property="Margin" Value="0,10,0,0"/>
             </Style>
         </Grid.Resources>
-        <ListView x:Name="listView"
+        <ListView 
                 Margin="0"
                 Background="White"
                 BorderBrush="{x:Null}"
@@ -71,26 +69,26 @@
             <StackPanel  >
                 <Grid VerticalAlignment="Stretch">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50"></RowDefinition>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="60"></RowDefinition>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="60"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"></ColumnDefinition>
-                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,10,0,0" FontSize="13" FontWeight="DemiBold"></TextBlock>
-					<StackPanel Grid.Row="1" Margin="20,20,0,0">
-						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="0,5,0,0" x:Name="None" Content="None" GroupName="1" IsChecked="{Binding IsNoneChecked}"  Command="{Binding SetBtnNameCommand}"/>
-						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Create"  Content="Create TM" GroupName="1"  IsChecked="{Binding IsCreateChecked}"  Command="{Binding SetBtnNameCommand}"/>
-						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"/>
+					<StackPanel Grid.Row="1" Margin="20,20,0,0"  Grid.Column="0">
+						<RadioButton Style="{DynamicResource MetroRadioButton}" Margin="0,5,0,0" x:Name="None" Content="None" GroupName="1" IsChecked="{Binding IsNoneChecked}"  Command="{Binding SetBtnNameCommand}"/>
+						<RadioButton Style="{DynamicResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Create"  Content="Create TM" GroupName="1"  IsChecked="{Binding IsCreateChecked}"  Command="{Binding SetBtnNameCommand}"/>
+						<RadioButton Style="{DynamicResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"/>
                     </StackPanel>
                     <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}" Grid.Row="1" Grid.Column="1"
 							Width="auto" Height="auto" Margin="0,50,123,0" Visibility="{Binding Visibility}" Background="#FF3EA691" BorderBrush="#FF3EA691" Foreground="White">						
 					</Button>
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="TM name:" Margin="20,15,22,15"/>
-                    <TextBox Style="{StaticResource MetroTextBox}"
+                    <TextBox Style="{DynamicResource MetroTextBox}"
 						Controls:TextBoxHelper.ClearTextButton="True"                
 						Controls:TextBoxHelper.IsWaitingForData="True"
 						Controls:TextBoxHelper.UseFloatingWatermark="True" 
