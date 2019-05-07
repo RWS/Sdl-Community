@@ -265,4 +265,28 @@
   <data name="Export_To_Excel" xml:space="preserve">
     <value>Export to excel</value>
   </data>
+  <data name="Enter_path_of_template" xml:space="preserve">
+    <value>Enter the path of the template here...</value>
+  </data>
+  <data name="LanguageResourceTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\LanguageResourceTemplate.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Choose_Template" xml:space="preserve">
+    <value>Choose a template...</value>
+  </data>
+  <data name="ExcelIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ExcelIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Export" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Export.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Export2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Export2.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SaveToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SaveToExcel.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="UploadFromExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\UploadFromExcel.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

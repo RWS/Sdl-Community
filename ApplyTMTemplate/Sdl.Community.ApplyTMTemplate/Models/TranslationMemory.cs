@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sdl.Community.ApplyTMTemplate.Utilities;
 using Sdl.Community.ApplyTMTemplate.ViewModels;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Segmentation;
@@ -18,13 +19,24 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 		public TranslationMemory(FileBasedTranslationMemory tm)
 		{
+			var languageFlags = new LanguageFlags();
 			_sourceStatusToolTip = "Nothing processed yet";
 			_targetStatusToolTip = "Nothing processed yet";
 			_isSelected = false;
 			_sourceStatus = "";
 			_targetStatus = "";
 			Tm = tm;
+			SourceLanguageFlagUri = languageFlags.GetImageStudioCodeByLanguageCode(tm.LanguageDirection.SourceLanguage.Name);
+			TargetLanguageFlagUri= languageFlags.GetImageStudioCodeByLanguageCode(tm.LanguageDirection.TargetLanguage.Name);
+			SourceLanguage = tm.LanguageDirection.SourceLanguage.Name;
+			TargetLanguage = tm.LanguageDirection.TargetLanguage.Name;
 		}
+
+		public string SourceLanguageFlagUri { get; set; }
+		public string TargetLanguageFlagUri { get; set; }
+
+		public string SourceLanguage { get; set; }
+		public string TargetLanguage { get; set; }
 
 		public string SourceStatus
 		{

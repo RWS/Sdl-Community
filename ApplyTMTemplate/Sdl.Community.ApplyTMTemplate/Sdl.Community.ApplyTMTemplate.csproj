@@ -48,6 +48,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
       <Private>False</Private>
@@ -127,13 +130,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
-    <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Models\IResource.cs" />
     <Compile Include="Models\Resource.cs" />
     <Compile Include="Models\SegmentationRulesResource.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\TemplateValidity.cs" />
+    <Compile Include="Utilities\LanguageFlags.cs" />
     <Compile Include="ViewModels\TimedTextBox.cs" />
     <Compile Include="Models\WordlistResource.cs" />
     <Compile Include="Studio\ApplyTMTemplateAction.cs" />
@@ -171,6 +173,12 @@
     <Compile Include="ViewModels\ModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\UploadFromExcel.ico" />
+    <Resource Include="Resources\SaveToExcel.ico" />
+    <Resource Include="Resources\Export2.ico" />
+    <Resource Include="Resources\Export.ico" />
+    <Resource Include="Resources\ExcelIcon.ico" />
+    <Resource Include="Resources\LanguageResourceTemplate.ico" />
     <Resource Include="Resources\GreenDropDown.ico" />
     <Resource Include="Resources\DropDownTriangle.ico" />
     <Resource Include="Resources\Error.ico" />
@@ -206,10 +214,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\DataGridStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="UiHelpers\DataGridStyle2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -239,7 +243,12 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

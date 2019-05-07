@@ -11,6 +11,7 @@
 					  xmlns:applyTmTemplate="clr-namespace:Sdl.Community.ApplyTMTemplate"
 					  xmlns:ui="clr-namespace:Sdl.Community.ApplyTMTemplate.UI"
 					  xmlns:viewModels="clr-namespace:Sdl.Community.ApplyTMTemplate.ViewModels"
+					  WindowCloseButtonStyle="{DynamicResource CleanCloseWindowButtonStyle}"
 					  WindowStartupLocation="CenterScreen"
 					  TitleCharacterCasing="Normal"
 		              mc:Ignorable="d"
@@ -26,14 +27,19 @@
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml" />
-				<ResourceDictionary Source="../UiHelpers/DataGridStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<Style TargetType="Button" x:Key="SdlWizardStyleButton" BasedOn="{StaticResource SdlSecondaryButtonStyle}">
-				<Setter Property="MinWidth" Value="70"></Setter>
-				<Setter Property="Height" Value="34"></Setter>
-				<Setter Property="Margin" Value="5,9,5,11"></Setter>
+			<Style x:Key="CleanCloseWindowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MetroWindowButtonStyle}">
+				<Style.Triggers>
+					<Trigger Property="IsMouseOver" Value="True">
+						<Setter Property="Background" Value="#EB2F2F" />
+						<Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
+					</Trigger>
+					<Trigger Property="IsPressed" Value="True">
+						<Setter Property="Background" Value="#7C0000" />
+					</Trigger>
+				</Style.Triggers>
 			</Style>
 			<Style TargetType="Button" x:Key="SdlWizardStyleButtonGreen" BasedOn="{StaticResource SdlPrimaryButtonStyle}">
 				<Setter Property="MinWidth" Value="70"></Setter>
@@ -43,13 +49,17 @@
 			<Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
 				<Setter Property="FontSize" Value="12"/>
 				<Setter Property="FontFamily" Value="Calibri"/>
-				<Setter Property="Margin" Value="5,0,0,0"/>
+				<Setter Property="Margin" Value="5,5,0,0"/>
 			</Style>
 			<Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
-				<Setter Property="Margin" Value="10,15,0,0"/>
+				<Setter Property="Padding" Value="5"/>
 				<Setter Property="FontFamily" Value="Calibri"/>
 			</Style>
-
+			<Style x:Key="ImageStyle" TargetType="Image">
+				<Setter Property="Width" Value="15"/>
+				<Setter Property="Height" Value="15"/>
+				<Setter Property="HorizontalAlignment" Value="Right"/>
+			</Style>
 			<DataTemplate DataType="{x:Type viewModels:TimedTextBox}">
 				<ui:TimedTextBox />
 			</DataTemplate>
@@ -67,23 +77,28 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<TextBlock FontWeight="Bold" FontSize="13" Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="10,10,0,0"  Grid.ColumnSpan="3" />
+		<TextBlock FontSize="13" FontWeight="Bold" Grid.Row="0" Style="{StaticResource TextBlockStyle}" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="5,10,0,0"  Grid.ColumnSpan="3" />
 
-			<ui:TimedTextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="32" Content="{Binding TimedTextBoxViewModel}" Margin="5,0,10,0"></ui:TimedTextBox>
+		<ui:TimedTextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="32" Content="{Binding TimedTextBoxViewModel}" Margin="10,0,10,0"/>
 
-		<StackPanel Grid.Row="2" Grid.Column="0" Margin="10,10,0,0">
-			<TextBlock Text="What to apply:" />
-			<CheckBox IsChecked="{Binding VariablesChecked}" Content="Variables" Style="{StaticResource CheckBoxStyle}"/>
-			<CheckBox IsChecked="{Binding AbbreviationsChecked}" Content="Abbreviations" Style="{StaticResource CheckBoxStyle}"/>
-			<CheckBox IsChecked="{Binding OrdinalFollowersChecked}" Content="Ordinal followers" Style="{StaticResource CheckBoxStyle}"/>
-			<CheckBox IsChecked="{Binding SegmentationRulesChecked}" Content="Segmentation rules" Style="{StaticResource CheckBoxStyle}"/>
+		<StackPanel Grid.Column="0" Orientation="Horizontal" Grid.Row="2" Margin="0,5,0,0">
+			<TextBlock Text="What to apply:" FontSize="13" Style="{StaticResource TextBlockStyle}" />
 		</StackPanel>
 
-		<StackPanel Margin="10,20,0,0" Grid.Row="3" Grid.Column="0" Orientation="Horizontal" ToolTip="Add Folder">
+		<StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,10,0,0">
+			<CheckBox Name="SelectAll" Content="Select all..." Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding SelectAllChecked}" Margin="0,0,30,0"/>
+			<CheckBox Content="Variables" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding VariablesChecked}"/>
+			<CheckBox Content="Abbreviations" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding AbbreviationsChecked}"/>
+			<CheckBox Content="Ordinal followers" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding OrdinalFollowersChecked}"/>
+			<CheckBox Content="Segmentation rules" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding SegmentationRulesChecked}"/>
+		</StackPanel>
+
+		<StackPanel Margin="5,20,0,0" Grid.Row="4" Grid.Column="0" Orientation="Horizontal" ToolTip="Add Folder">
 			<Button HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}">
 				<StackPanel Orientation="Horizontal">
 					<Image Source="../Resources/AddFolder.ico" Width="15" Height="15"/>
@@ -106,49 +121,43 @@
 			</Button>
 		</StackPanel>
 
-		<DataGrid  Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TmCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		<DataGrid  Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TmCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 		           IsReadOnly="True"
+				   Style="{StaticResource FilesGridStyle}"
 		           SelectionMode="Extended"
-		           AutoGenerateColumns="False"
 		           SelectionUnit="FullRow"
-		           Margin="10,0,10,10"
+		           Margin="5,0,10,10"
 				   VerticalScrollBarVisibility="Auto"
-		           CanUserAddRows="False"
 		           AllowDrop="True"
-		           utilities:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}">
+		           utilities:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}"
+		           GridLinesVisibility="None">
 
 			<DataGrid.RowStyle>
 				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
 			</DataGrid.RowStyle>
 
-			<DataGrid.Resources>
-				<Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DgcHeaderStyle2}" />
-			</DataGrid.Resources>
-
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Width="Auto" MinWidth="50">
 
 					<DataGridTemplateColumn.Header>
-						<CheckBox HorizontalContentAlignment="Left" IsChecked="{Binding Path=DataContext.AllTmsChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Content="Use">
-							<CheckBox.Style>
-								<Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
-									<Setter Property="Foreground" Value="White"></Setter>
-								</Style>
-							</CheckBox.Style>
-						</CheckBox>
+							<CheckBox IsChecked="{Binding Path=DataContext.AllTmsChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									  FontSize="11"
+									  VerticalContentAlignment="Top"
+									  Style="{StaticResource CheckBoxStyle}"
+									  Content="Use"/>
 					</DataGridTemplateColumn.Header>
 
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<CheckBox Margin="1,0,0,0" HorizontalAlignment="Left" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<CheckBox Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="4,0,0,0"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Width="*" Header="TM Name">
+				<DataGridTemplateColumn Width="*" Header="TM Name" SortMemberPath="Name">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<StackPanel Orientation="Horizontal" Margin="60,0,0,0">
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
 								<Image Source="{Binding Icon}" Width="25" Height="25" HorizontalAlignment="Center" />
 								<TextBlock Text="{Binding Name}" Margin="5" HorizontalAlignment="Left" />
 							</StackPanel>
@@ -156,24 +165,40 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Width="*" Header="Template applied">
+				<DataGridTemplateColumn Width="0.2*" Header="Source language" SortMemberPath="SourceLanguage">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-								<TextBlock Text="Source" Margin="0,0,10,0" />
-								<Image Source="{Binding SourceStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15" ToolTip="{Binding SourceStatusToolTip}" Margin="0,0,10,0" />
-								<TextBlock Text="Target" Margin="0,0,10,0" />
-								<Image Source="{Binding TargetStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15" ToolTip="{Binding TargetStatusToolTip}" />
-							</StackPanel>
+							<DockPanel>
+								<Image DockPanel.Dock="Left" Source="{Binding SourceLanguageFlagUri}" Width="25" Height="25"/>
+								<TextBlock DockPanel.Dock="Left" Text="{Binding SourceLanguage}" Margin="5" />
+								<Image DockPanel.Dock="Right" Source="{Binding SourceStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  
+								       ToolTip="{Binding SourceStatusToolTip}" 
+								       Style="{StaticResource ImageStyle}"/>
+							</DockPanel>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
+
+				<DataGridTemplateColumn Width="0.2*" Header="Target language" SortMemberPath="TargetLanguage">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<DockPanel>
+								<Image DockPanel.Dock="Left" Source="{Binding TargetLanguageFlagUri}" Width="25" Height="25" />
+								<TextBlock DockPanel.Dock="Left" Text="{Binding TargetLanguage}" Margin="5"  />
+								<Image DockPanel.Dock="Right" 
+									   Source="{Binding TargetStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+								       ToolTip="{Binding TargetStatusToolTip}" 
+								       Style="{StaticResource ImageStyle}"/>
+							</DockPanel>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
 			</DataGrid.Columns>
 		</DataGrid>
-		<StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+		<StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 			<controls:ProgressRing Visibility="{Binding ProgressVisibility}" Width="30" />
-
-			<Button IsEnabled="{Binding CanExecuteApply, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SdlWizardStyleButtonGreen}" RenderTransformOrigin="0.487,1.938" HorizontalAlignment="Right" Margin="0,10,10,0" Command="{Binding ApplyTemplateCommand}" Content="Apply: Template -> TMs" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
+			<Button IsEnabled="{Binding CanExecuteApply, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SdlWizardStyleButtonGreen}" HorizontalAlignment="Right" Margin="0,10,10,0" Command="{Binding ApplyTemplateCommand}" Content="Apply" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
 		</StackPanel>
 	</Grid>
 </controls:MetroWindow>

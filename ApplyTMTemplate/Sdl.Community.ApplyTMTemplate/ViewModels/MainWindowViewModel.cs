@@ -15,6 +15,7 @@ using Sdl.Community.ApplyTMTemplate.Commands;
 using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.Community.ApplyTMTemplate.Utilities;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Button = System.Windows.Controls.Button;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace Sdl.Community.ApplyTMTemplate.ViewModels
@@ -41,6 +42,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private ICommand _exportCommand;
 		private ICommand _importCommand;
 		private ICommand _dragEnterCommand;
+		private bool _selectAllChecked;
 		private ObservableCollection<TranslationMemory> _tmCollection;
 		private Template _template;
 		private List<int> _unIDedLanguages;
@@ -60,6 +62,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			_abbreviationsChecked = true;
 			_ordinalFollowersChecked = true;
 			_segmentationRulesChecked = true;
+			_selectAllChecked = true;
 			_progressVisibility = "Hidden";
 
 			_tmCollection = new ObservableCollection<TranslationMemory>();
@@ -151,6 +154,20 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				}
 
 				OnPropertyChanged(nameof(AllTmsChecked));
+			}
+		}
+
+		public bool SelectAllChecked
+		{
+			get => _selectAllChecked;
+			set
+			{
+				_selectAllChecked = value;
+				AbbreviationsChecked = value;
+				VariablesChecked = value;
+				OrdinalFollowersChecked = value;
+				SegmentationRulesChecked = value;
+				OnPropertyChanged(nameof(SelectAllChecked));
 			}
 		}
 
@@ -380,6 +397,10 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 			else
 			{
+				if (string.IsNullOrEmpty(ResourceTemplatePath))
+				{
+					_message = PluginResources.Select_A_Template;
+				}
 				isValid = false;
 			}
 
@@ -402,21 +423,21 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			await ShowMessages(true);
 			if (!isValid) return;
 
-			if ((parameter as System.Windows.Controls.Button)?.Name == "ImportFromExcel")
+			try
 			{
-				var dlg = new OpenFileDialog()
+				if ((parameter as Button)?.Name == "ImportFromExcel")
 				{
-					Title = PluginResources.Import_window_title,
-					Filter = "Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx",
-				};
+					var dlg = new OpenFileDialog()
+					{
+						Title = PluginResources.Import_window_title,
+						Filter = "Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx",
+					};
 
-				var result = dlg.ShowDialog();
+					var result = dlg.ShowDialog();
 
-				if (!(result ?? false)) return;
+					if (!(result ?? false)) return;
 
-				ProgressVisibility = "Visible";
-				try
-				{
+					ProgressVisibility = "Visible";
 					await Task.Run(() =>
 					{
 						if (dlg.FileName.Contains(".xlsx"))
@@ -424,48 +445,36 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 							_template.ImportResourcesFromExcel(dlg.FileName);
 						}
 					});
-				}
-				catch (Exception e)
-				{
-					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title, e.Message);
+					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
 
 					ProgressVisibility = "Hidden";
-					return;
 				}
-
-				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
-
-				ProgressVisibility = "Hidden";
-			}
-			else
-			{
-				ProgressVisibility = "Visible";
-				
-				if (SelectedTmsList.Count > 0)
+				else
 				{
-					try
+					ProgressVisibility = "Visible";
+				
+					if (SelectedTmsList.Count > 0)
 					{
 						await Task.Run(() =>
 						{
 							_template.ImportResourcesFromSdltm(SelectedTmsList);
 						});
+						await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
 					}
-					catch (Exception e)
+					else
 					{
-						await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title, e.Message);
-
-						ProgressVisibility = "Hidden";
-						return;
+						await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning, PluginResources.Select_at_least_one_TM);
 					}
 
-					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
+					ProgressVisibility = "Hidden";
 				}
-				else
-				{
-					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning, PluginResources.Select_at_least_one_TM);
-				}
+			}
+			catch (Exception e)
+			{
+				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title, e.Message);
 
 				ProgressVisibility = "Hidden";
+				return;
 			}
 
 			_templateValidity = TemplateValidity.HasResources;
