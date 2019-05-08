@@ -13,26 +13,13 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 	public class TemplateLoader
 	{
 		private readonly string _path;
-		private readonly Version _studioVersion;
 
 		public TemplateLoader()
 		{
-			_studioVersion = new Toolkit.Core.Studio().GetStudioVersion().ExecutableVersion;
+			_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+				@"SDL\SDL Trados Studio\15.0.0.0\UserSettings.xml");
 
-			if (_studioVersion.Major == 15)
-			{
-				_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-					@"SDL\SDL Trados Studio\15.0.0.0\UserSettings.xml");
-
-				DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Studio 2019");
-			}
-			else
-			{
-				_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-					@"SDL\SDL Trados Studio\14.0.0.0\UserSettings.xml");
-
-				DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Studio 2017");
-			}
+			DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Studio 2019");
 		}
 
 		public string DefaultPath { get; set; }
@@ -133,22 +120,13 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			try
 			{
 				lrt = LoadDataFromFile(resourceTemplatePath, "LanguageResource");
+				if (lrt.Count == 0)
+				{
+					message = PluginResources.Template_has_no_resources;
+					return true;
+				}
 			}
 			catch
-			{
-				message = PluginResources.Template_corrupted_or_file_not_template;
-				return true;
-			}
-
-			if (lrt.Count == 0)
-			{
-				message = PluginResources.Template_has_no_resources;
-				return true;
-			}
-
-			var langResGroup = LoadDataFromFile(resourceTemplatePath, "LanguageResourceGroup");
-
-			if (langResGroup.Count == 0)
 			{
 				message = PluginResources.Template_corrupted_or_file_not_template;
 				return true;
