@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sdl.Community.ApplyTMTemplate.Utilities;
 using Sdl.Community.ApplyTMTemplate.ViewModels;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Segmentation;
@@ -18,13 +19,24 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 		public TranslationMemory(FileBasedTranslationMemory tm)
 		{
+			var languageFlags = new LanguageFlags();
 			_sourceStatusToolTip = "Nothing processed yet";
 			_targetStatusToolTip = "Nothing processed yet";
 			_isSelected = false;
 			_sourceStatus = "";
 			_targetStatus = "";
 			Tm = tm;
+			SourceLanguageFlagUri = languageFlags.GetImageStudioCodeByLanguageCode(tm.LanguageDirection.SourceLanguage.Name);
+			TargetLanguageFlagUri= languageFlags.GetImageStudioCodeByLanguageCode(tm.LanguageDirection.TargetLanguage.Name);
+			SourceLanguage = tm.LanguageDirection.SourceLanguage.Name;
+			TargetLanguage = tm.LanguageDirection.TargetLanguage.Name;
 		}
+
+		public string SourceLanguageFlagUri { get; set; }
+		public string TargetLanguageFlagUri { get; set; }
+
+		public string SourceLanguage { get; set; }
+		public string TargetLanguage { get; set; }
 
 		public string SourceStatus
 		{
@@ -57,7 +69,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			get => _sourceStatusToolTip;
 			set
 			{
-				if (!_sourceStatusToolTip.ToLower().Contains("applied"))
+				if (!_sourceStatusToolTip.Equals(PluginResources.SourceModifiedMarker))
 				{
 					_sourceStatusToolTip = value;
 				}
@@ -88,7 +100,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			get => _targetStatusToolTip;
 			set
 			{
-				if (!_targetStatusToolTip.ToLower().Contains("applied"))
+				if (!_targetStatusToolTip.Equals(PluginResources.TargetModifiedMarker))
 				{
 					_targetStatusToolTip = value;
 				}
@@ -99,33 +111,33 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 		public void MarkSourceModified()
 		{
 			SourceStatus = "../Resources/Checked.ico";
-			SourceStatusToolTip = "Template applied on Source language";
+			SourceStatusToolTip = PluginResources.SourceModifiedMarker;
 		}
 
 		public void MarkSourceNotModified()
 		{
 			SourceStatus = "../Resources/Unchecked.ico";
-			SourceStatusToolTip = "Source language doesn't correspond with any of the template's languages and was not modified";
+			SourceStatusToolTip = PluginResources.SourceNotModifiedMarker;
 		}
 
 		public void MarkTargetModified()
 		{
 			TargetStatus = "../Resources/Checked.ico";
-			TargetStatusToolTip = "Template applied on Target language";
+			TargetStatusToolTip = PluginResources.TargetModifiedMarker;
 		}
 
 		public void MarkTargetNotModified()
 		{
 			TargetStatus = "../Resources/Unchecked.ico";
-			TargetStatusToolTip = "Target language doesn't correspond with any of the template's languages and was not modified";
+			TargetStatusToolTip = PluginResources.TargetNotModified;
 		}
 
 		public void MarkTmCorrupted()
 		{
 			SourceStatus = "../Resources/Error.ico";
 			TargetStatus = "../Resources/Error.ico";
-			SourceStatusToolTip = "This TM is corrupted or the file is not a TM";
-			TargetStatusToolTip = "This TM is corrupted or the file is not a TM"; ;
+			SourceStatusToolTip = PluginResources.TmCorruptedMarker;
+			TargetStatusToolTip = PluginResources.TmCorruptedMarker;
 		}
 
 		public void UnmarkTm()

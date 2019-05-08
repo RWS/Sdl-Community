@@ -118,6 +118,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose a template....
+        /// </summary>
+        public static string Choose_Template {
+            get {
+                return ResourceManager.GetString("Choose_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Download {
@@ -134,6 +143,15 @@ namespace Sdl.Community.ApplyTMTemplate {
             get {
                 object obj = ResourceManager.GetObject("DropDownTriangle", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the path of the template here....
+        /// </summary>
+        public static string Enter_path_of_template {
+            get {
+                return ResourceManager.GetString("Enter_path_of_template", resourceCulture);
             }
         }
         
@@ -166,6 +184,26 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ExcelIcon {
+            get {
+                object obj = ResourceManager.GetObject("ExcelIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Export {
+            get {
+                object obj = ResourceManager.GetObject("Export", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export resources from the template to an excel spreadsheet.
         /// </summary>
         public static string Export_button_Tooltip {
@@ -186,9 +224,28 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized string similar to Export to excel.
         /// </summary>
+        public static string Export_To_Excel {
+            get {
+                return ResourceManager.GetString("Export_To_Excel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to excel.
+        /// </summary>
         public static string Export_Window_Title {
             get {
                 return ResourceManager.GetString("Export_Window_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Export2 {
+            get {
+                object obj = ResourceManager.GetObject("Export2", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -268,11 +325,39 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import from Excel to template.
+        /// </summary>
+        public static string Import_Excel_To_Template {
+            get {
+                return ResourceManager.GetString("Import_Excel_To_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import from TMs to template.
+        /// </summary>
+        public static string Import_Tms_To_Template {
+            get {
+                return ResourceManager.GetString("Import_Tms_To_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import language resources.
         /// </summary>
         public static string Import_window_title {
             get {
                 return ResourceManager.GetString("Import_window_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon LanguageResourceTemplate {
+            get {
+                object obj = ResourceManager.GetObject("LanguageResourceTemplate", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -352,6 +437,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon SaveToExcel {
+            get {
+                object obj = ResourceManager.GetObject("SaveToExcel", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a template.
         /// </summary>
         public static string Select_A_Template {
@@ -370,11 +465,47 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Template applied on Source language.
+        /// </summary>
+        public static string SourceModifiedMarker {
+            get {
+                return ResourceManager.GetString("SourceModifiedMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source language doesn&apos;t correspond with any of the template&apos;s languages and was not modified.
+        /// </summary>
+        public static string SourceNotModifiedMarker {
+            get {
+                return ResourceManager.GetString("SourceNotModifiedMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Success.
         /// </summary>
         public static string Success_Window_Title {
             get {
                 return ResourceManager.GetString("Success_Window_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template applied on Target language.
+        /// </summary>
+        public static string TargetModifiedMarker {
+            get {
+                return ResourceManager.GetString("TargetModifiedMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target language doesn&apos;t correspond with any of the template&apos;s languages and was not modified.
+        /// </summary>
+        public static string TargetNotModified {
+            get {
+                return ResourceManager.GetString("TargetNotModified", resourceCulture);
             }
         }
         
@@ -415,6 +546,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This TM is corrupted or the file is not a TM.
+        /// </summary>
+        public static string TmCorruptedMarker {
+            get {
+                return ResourceManager.GetString("TmCorruptedMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Unchecked {
@@ -430,6 +570,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string Unidentified_Languages {
             get {
                 return ResourceManager.GetString("Unidentified_Languages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon UploadFromExcel {
+            get {
+                object obj = ResourceManager.GetObject("UploadFromExcel", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

@@ -3,43 +3,146 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:applyTmTemplate="clr-namespace:Sdl.Community.ApplyTMTemplate"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:ui="clr-namespace:Sdl.Community.ApplyTMTemplate.UI"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-			<ControlTemplate x:Key="Unpressed">
-				<Image Source="../Resources/DropDownTriangle.ico"/>
+
+		<ResourceDictionary>
+
+			<ControlTemplate x:Key="Unpressed" TargetType="{x:Type Button}">
+					<Image Source="../Resources/DropDownTriangle.ico" />
 			</ControlTemplate>
-			<ControlTemplate x:Key="Pressed">
-				<Image Source="../Resources/GreenDropDown.ico"/>
+
+			<ControlTemplate x:Key="Pressed" TargetType="{x:Type Button}">
+				<Image Source="../Resources/GreenDropDown.ico" />
 			</ControlTemplate>
+
+			<Style x:Key="MenuButtonStyle" TargetType="{x:Type Button}">
+				<Setter Property="Height" Value="30"/>
+				<Setter Property="Background" Value="White" />
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type Button}">
+							<Border Background="{TemplateBinding Background}" BorderBrush="White" BorderThickness="0">
+								<ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" />
+							</Border>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+				<Style.Triggers>
+					<Trigger Property="IsMouseOver" Value="True">
+						<Setter Property="Background" Value="#CDE5F6" />
+					</Trigger>
+				</Style.Triggers>
+			</Style>
+
+			<Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}">
+				<Setter Property="Padding" Value="5"/>
+				<Setter Property="FontSize" Value="12"/>
+				<Setter Property="FontFamily" Value="Calibri"/>
+				<Setter Property="SnapsToDevicePixels" Value="True"/>
+			</Style>
+
+			<Style x:Key="StackPanelStyle" TargetType="{x:Type StackPanel}">
+				<Setter Property="Margin" Value="2"/>
+			</Style>
+
+		</ResourceDictionary>
+
 	</UserControl.Resources>
 	<Border BorderBrush="Black"
-	        BorderThickness="1"
+	        BorderThickness="0.5"
 	        VerticalAlignment="Center"
-	        Height="32">
+	        Height="30">
 		<DockPanel>
-			<Button Name="Button" DockPanel.Dock="Right"
-			        Height="15"
-			        Background="White" BorderBrush="White"
-			        Command="{Binding Command}"
-			        Margin="0,0,8,0">
-				<Button.Style>
-					<Style TargetType="{x:Type Button}">
-						<Setter Property="Template" Value="{StaticResource Unpressed}"/>
-						<Style.Triggers>
-							<Trigger Property="IsPressed" Value="True">
-								<Setter Property="Template" Value="{StaticResource Pressed}"/>
-							</Trigger>
-						</Style.Triggers>
-					</Style>
-				</Button.Style>
-			</Button>
-			<TextBox BorderBrush="White"
+			<StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+				<Button Height="20"
+						Margin="0,0,8,0"
+				        Background="White" BorderBrush="White"
+				        Command="{Binding MenuCommand}"
+						HorizontalAlignment="Right">
+					<Button.Style>
+						<Style TargetType="{x:Type Button}">
+							<Setter Property="Template" Value="{StaticResource Unpressed}" />
+							<Style.Triggers>
+								<Trigger Property="IsPressed" Value="True">
+									<Setter Property="Template" Value="{StaticResource Pressed}" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</Button.Style>
+				</Button>
+				<Canvas Width="300">
+				<Popup IsOpen="{Binding IsOpen}" 
+				       Height="Auto"
+					   Width="300"
+				       PopupAnimation="Fade"
+					   StaysOpen="False"
+				       AllowsTransparency="True"
+				       HorizontalAlignment="Right">
+					
+						<Border BorderBrush="Black"
+						        BorderThickness="0.8"
+						        SnapsToDevicePixels="True">
+							<StackPanel Background="WhiteSmoke">
+
+								<Button Style="{StaticResource MenuButtonStyle}"
+								        Command="{Binding BrowseCommand}"
+								        HorizontalContentAlignment="Left">
+									<StackPanel Style="{StaticResource StackPanelStyle}" Orientation="Horizontal">
+										<Image Source="../Resources/LanguageResourceTemplate.ico"/>
+										<TextBlock Style="{StaticResource TextBlockStyle}"
+										           Text="{x:Static applyTmTemplate:PluginResources.Choose_Template}" />
+										
+									</StackPanel>
+								</Button>
+
+								<Button Style="{StaticResource MenuButtonStyle}"
+								        Name="ImportFromTms"
+								        Command="{Binding ImportCommand}"
+								        CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+									<StackPanel Style="{StaticResource StackPanelStyle}" Orientation="Horizontal">
+										<Image Source="../Resources/FileBasedTM.ico" />
+										<TextBlock Style="{StaticResource TextBlockStyle}"
+										           Text="{x:Static applyTmTemplate:PluginResources.Import_Tms_To_Template}" />
+									</StackPanel>
+								</Button>
+
+								<Button Name="ImportFromExcel"
+								        Style="{StaticResource MenuButtonStyle}"
+								        Command="{Binding ImportCommand}"
+								        CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+									<StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelStyle}">
+										<Image Source="../Resources/UploadFromExcel.ico" />
+										<TextBlock Style="{StaticResource TextBlockStyle}"
+										           Text="{x:Static applyTmTemplate:PluginResources.Import_Excel_To_Template}" />
+									</StackPanel>
+									
+								</Button>
+
+								<Button Name="ExportToExcel"
+								        Style="{StaticResource MenuButtonStyle}"
+								        Command="{Binding ExportCommand}">
+									<StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelStyle}">
+										<Image Source="../Resources/SaveToExcel.ico"/>
+										<TextBlock Style="{StaticResource TextBlockStyle}"
+										           Text="{x:Static applyTmTemplate:PluginResources.Export_To_Excel}" />
+									</StackPanel>
+								</Button>
+							</StackPanel>
+						</Border>
+				</Popup>
+				</Canvas>
+			</StackPanel>
+			<TextBox DockPanel.Dock="Left" BorderBrush="White"
+					 FontFamily="Calibri"
 					 VerticalAlignment="Center" VerticalContentAlignment="Center"
-			         Height="20"
-			         controls:TextBoxHelper.Watermark="Enter path of template..."
-			         Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+			         Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ui:TimedTextBox}, Path=Height}"
+			         controls:TextBoxHelper.Watermark="{x:Static applyTmTemplate:PluginResources.Enter_path_of_template}"
+			         Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 				<TextBox.Style>
 					<Style TargetType="TextBox">
 						<Setter Property="Template">
