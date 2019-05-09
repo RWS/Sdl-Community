@@ -104,6 +104,8 @@
     <Compile Include="Helpers\ApiUrl.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\Credentials.cs" />
+    <Compile Include="Model\GsFile.cs" />
+    <Compile Include="Model\GsFileVersion.cs" />
     <Compile Include="Model\ProjectDetails.cs" />
     <Compile Include="Model\ProjectResponse.cs" />
     <Compile Include="MyCustomTradosStudio.cs" />

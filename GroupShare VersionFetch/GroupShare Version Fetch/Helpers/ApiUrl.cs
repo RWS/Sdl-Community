@@ -27,5 +27,15 @@ namespace Sdl.Community.GSVersionFetch.Helpers
 			httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 			request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Authentication.Token);
 		}
+
+		public static string GetProjectFiles(string projectId)
+		{
+			return $"{BaseUrl}/{CurrentProjectServerUrl}/projects/{projectId}/files";
+		}
+
+		public static string GetFileVersions(string languageFileId)
+		{
+			return $"{BaseUrl}/{CurrentProjectServerUrl}/projects/fileversions/{languageFileId}";
+		}
 	}
 }
