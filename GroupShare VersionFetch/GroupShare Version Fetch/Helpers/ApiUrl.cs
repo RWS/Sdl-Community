@@ -21,13 +21,6 @@ namespace Sdl.Community.GSVersionFetch.Helpers
 			return $"{BaseUrl}/{CurrentProjectServerUrl}/projects";
 		}
 
-		public static void AddRequestHeaders(HttpClient httpClient,HttpRequestMessage request)
-		{
-			httpClient.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
-			httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-			request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Authentication.Token);
-		}
-
 		public static string GetProjectFiles(string projectId)
 		{
 			return $"{BaseUrl}/{CurrentProjectServerUrl}/projects/{projectId}/files";
@@ -36,6 +29,18 @@ namespace Sdl.Community.GSVersionFetch.Helpers
 		public static string GetFileVersions(string languageFileId)
 		{
 			return $"{BaseUrl}/{CurrentProjectServerUrl}/projects/fileversions/{languageFileId}";
+		}
+
+		public static string DownloadFileVersion(string projectId, string languageFileId, int version)
+		{
+			return $"{BaseUrl}/{CurrentProjectServerUrl}/projects/{projectId}/fileversions/download/{languageFileId}/{version}";
+		}
+
+		public static void AddRequestHeaders(HttpClient httpClient, HttpRequestMessage request)
+		{
+			httpClient.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
+			httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+			request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Authentication.Token);
 		}
 	}
 }

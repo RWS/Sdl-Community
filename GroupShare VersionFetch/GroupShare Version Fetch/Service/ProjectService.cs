@@ -64,5 +64,22 @@ namespace Sdl.Community.GSVersionFetch.Service
 				throw new Exception(filesResponse);
 			}
 		}
+
+		public async Task<byte[]> DownloadFileVersion(string projectId, string languageFileId, int version)
+		{
+			using (var httpClient = new HttpClient())
+			{
+				var request = new HttpRequestMessage(HttpMethod.Get, new Uri(ApiUrl.DownloadFileVersion(projectId,languageFileId,version)));
+				ApiUrl.AddRequestHeaders(httpClient, request);
+
+				var responseMessage = await httpClient.SendAsync(request);
+				var fileResponse = await responseMessage.Content.ReadAsByteArrayAsync();
+				if (responseMessage.StatusCode == HttpStatusCode.OK)
+				{
+					return fileResponse;
+				}
+				throw new Exception(responseMessage.StatusCode.ToString());
+			}
+		}
 	}
 }
