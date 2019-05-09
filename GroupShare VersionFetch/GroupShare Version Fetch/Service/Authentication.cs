@@ -26,7 +26,7 @@ namespace Sdl.Community.GSVersionFetch.Service
 			{
 				httpClient.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
 				var request = new HttpRequestMessage(HttpMethod.Post, new Uri(ApiUrl.Login()));
-				var authorizationHeader = GetEuthorizationHeader(credentials);
+				var authorizationHeader = GetAuthorizationHeader(credentials);
 				request.Headers.Authorization = new AuthenticationHeaderValue("Basic",authorizationHeader);
 
 				var content = JsonConvert.SerializeObject(ApiUrl.Scopes);
@@ -45,7 +45,7 @@ namespace Sdl.Community.GSVersionFetch.Service
 			}
 		}
 
-		private static string GetEuthorizationHeader(Credentials credentials)
+		private static string GetAuthorizationHeader(Credentials credentials)
 		{
 			if (string.IsNullOrEmpty(credentials.Password) || string.IsNullOrEmpty(credentials.UserName)) return string.Empty;
 
