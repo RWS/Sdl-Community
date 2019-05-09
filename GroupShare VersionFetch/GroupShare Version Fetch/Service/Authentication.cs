@@ -36,7 +36,7 @@ namespace Sdl.Community.GSVersionFetch.Service
 				var response = await responseMessage.Content.ReadAsStringAsync();
 				if (responseMessage.StatusCode == HttpStatusCode.OK)
 				{
-					Token = response;
+					Token = JsonConvert.DeserializeObject<string>(response);
 					return response;
 				}
 
