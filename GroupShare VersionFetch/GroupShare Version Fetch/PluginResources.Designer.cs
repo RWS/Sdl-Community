@@ -77,5 +77,68 @@ namespace Sdl.Community.GSVersionFetch {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GS Version Fetch.
+        /// </summary>
+        public static string ProjectWizard_Create_a_New_Project {
+            get {
+                return ResourceManager.GetString("ProjectWizard_Create_a_New_Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} completed.
+        /// </summary>
+        public static string ProjectWizard_StepsCompleted {
+            get {
+                return ResourceManager.GetString("ProjectWizard_StepsCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string WindowsControl_Close {
+            get {
+                return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        public static string WindowsControl_Help {
+            get {
+                return ResourceManager.GetString("WindowsControl_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximize.
+        /// </summary>
+        public static string WindowsControl_Maximize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Maximize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        public static string WindowsControl_Minimize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore.
+        /// </summary>
+        public static string WindowsControl_Restore {
+            get {
+                return ResourceManager.GetString("WindowsControl_Restore", resourceCulture);
+            }
+        }
     }
 }

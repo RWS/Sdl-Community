@@ -12,23 +12,19 @@ using Sdl.Community.GSVersionFetch.Commands;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
-	public class WizardViewModel : INotifyPropertyChanged, IDisposable
+	public class ProjectWizardViewModel : INotifyPropertyChanged, IDisposable
 	{
 		private const int WindowMargin = 40;
-
 		private Size _iconSize = new Size(18, 18);
-
-		private WizardViewModelBase _currentPage;
-		private ObservableCollection<WizardViewModelBase> _pages;
-
+		private ProjectWizardViewModelBase _currentPage;
+		private ObservableCollection<ProjectWizardViewModelBase> _pages;
 		private RelayCommand _moveNextCommand;
 		private RelayCommand _moveBackCommand;
 		private RelayCommand _finishCommand;
 		private RelayCommand _cancelCommand;
-
 		private readonly Window _window;
 
-		public WizardViewModel(Window window, ObservableCollection<WizardViewModelBase> pages)
+		public ProjectWizardViewModel(Window window, ObservableCollection<ProjectWizardViewModelBase> pages)
 		{
 			_window = window;
 
@@ -36,6 +32,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				_window.SizeChanged += Window_SizeChanged;
 			}
+
 			Pages = pages;
 
 			if (_window != null)
@@ -46,7 +43,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			SetCurrentPage(Pages[0]);
 		}
 
-		private void SetCurrentPage(WizardViewModelBase currentPage)
+		private void SetCurrentPage(ProjectWizardViewModelBase currentPage)
 		{
 			CurrentPage = currentPage;
 			_window.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
@@ -98,8 +95,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		public string WindowTitle { get; private set; }
 
-
-		public WizardViewModelBase CurrentPage
+		public ProjectWizardViewModelBase CurrentPage
 		{
 			get => _currentPage;
 			private set
@@ -116,7 +112,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 				_currentPage = value;
 
-				WindowTitle = PluginResources.Plugin_Name + " - " + CurrentPage.DisplayName;
+				WindowTitle = PluginResources.ProjectWizard_Create_a_New_Project + " - " + CurrentPage.DisplayName;
 
 				// move focus to the page in the wizard early
 				OnPropertyChanged(nameof(CurrentPage));
@@ -134,7 +130,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		public ObservableCollection<WizardViewModelBase> Pages
+		public ObservableCollection<ProjectWizardViewModelBase> Pages
 		{
 			get => _pages;
 			set
@@ -157,7 +153,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		private void AddEventhandlers(ObservableCollection<WizardViewModelBase> pages)
+		private void AddEventhandlers(ObservableCollection<ProjectWizardViewModelBase> pages)
 		{
 			foreach (var viewModelBase in pages)
 			{
@@ -167,7 +163,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			pages.CollectionChanged += Pages_CollectionChanged;
 		}
 
-		private void RemoveEventhandlers(ObservableCollection<WizardViewModelBase> pages)
+		private void RemoveEventhandlers(ObservableCollection<ProjectWizardViewModelBase> pages)
 		{
 			foreach (var viewModelBase in pages)
 			{
@@ -179,12 +175,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		private void Pages_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			foreach (WizardViewModelBase viewModelBase in e.OldItems)
+			foreach (ProjectWizardViewModelBase viewModelBase in e.OldItems)
 			{
 				viewModelBase.PropertyChanged -= Pages_PropertyChanged;
 			}
 
-			foreach (WizardViewModelBase viewModelBase in e.NewItems)
+			foreach (ProjectWizardViewModelBase viewModelBase in e.NewItems)
 			{
 				viewModelBase.PropertyChanged += Pages_PropertyChanged;
 			}
@@ -216,18 +212,25 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		public bool IsComplete => IsOnLastPage && CurrentPage.IsComplete;
 
 		public string CompletedSteps =>
-			string.Format(PluginResources.HelixWizard_StepsCompleted, Pages.Count(page => page.IsVisited), Pages.Count);
+			string.Format(PluginResources.ProjectWizard_StepsCompleted, Pages.Count(page => page.IsVisited), Pages.Count);
 
 		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new RelayCommand(CancelWizard, () => CanCancel));
 
 		private void CancelWizard()
 		{
-			//HelixModel = null;
 			OnRequestClose();
 		}
 
-		private bool CanCancel => CurrentPage != null
-		                          && (IsOnLastPage && CurrentPage.IsComplete) ? false : true;
+		private bool CanCancel
+		{
+			get
+			{
+				return CurrentPage != null
+					   && (IsOnLastPage && CurrentPage.IsComplete)
+					? false
+					: true;
+			}
+		}
 
 		public ICommand FinishCommand => _finishCommand ?? (_finishCommand = new RelayCommand(FinishWizard, () => CanFinish));
 
@@ -237,8 +240,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				return CurrentPage != null
 					   && ((CurrentPageIndex == 0 && CurrentPage.IsValid)
-							|| (IsOnLastPage && CurrentPage.IsComplete)
-							|| (CurrentPageIndex > 0 && !IsOnLastPage));
+						   || (IsOnLastPage && CurrentPage.IsComplete)
+						   || (CurrentPageIndex > 0 && !IsOnLastPage));
 			}
 		}
 
@@ -260,7 +263,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 			else
 			{
-				//HelixModel = null;
 				OnRequestClose();
 			}
 		}
@@ -308,14 +310,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		private bool CanMoveToPreviousPage
-		{
-			get
-			{
-				return (CurrentPageIndex > 0 && !CurrentPage.IsOnLastPage)
-					   || (CurrentPage.IsOnLastPage && !CurrentPage.IsComplete);
-			}
-		}
+		private bool CanMoveToPreviousPage => (CurrentPageIndex > 0 && !CurrentPage.IsOnLastPage)
+		                                      || (CurrentPage.IsOnLastPage && !CurrentPage.IsComplete);
 
 		private void MoveToPreviousPage()
 		{

@@ -3,29 +3,21 @@ using System.Runtime.CompilerServices;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
-	public abstract class WizardViewModelBase : INotifyPropertyChanged
+	public abstract class ProjectWizardViewModelBase : INotifyPropertyChanged
 	{
 		private bool _isVisited;
-
 		private bool _isComplete;
-
 		private bool _isUpdated;
-
 		private bool _nextIsVisited;
-
 		private bool _previousIsVisited;
-
 		private bool _isCurrentPage;
-
 		private double _labelLineWidth;
-
 		private double _labelTextWidth;
 
-		protected WizardViewModelBase(object view)
+		protected ProjectWizardViewModelBase(object view)
 		{
 			View = view;
 		}
-
 		public double LabelLineWidth
 		{
 			get => _labelLineWidth;

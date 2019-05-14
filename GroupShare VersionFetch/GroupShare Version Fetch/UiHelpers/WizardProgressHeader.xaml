@@ -1,0 +1,184 @@
+﻿<UserControl x:Class="Sdl.Community.GSVersionFetch.UiHelpers.WizardProgressHeader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:Sdl.Community.GSVersionFetch.UiHelpers"
+             xmlns:viewModel="clr-namespace:Sdl.Community.GSVersionFetch.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+	<Control.Resources>
+
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="General.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<Style TargetType="{x:Type controls:WizardProgressHeader}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
+				<Setter Property="FontSize" Value="11"/>
+				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
+			</Style>
+
+			<Style TargetType="Rectangle" x:Key="ProgressHeaderIndicatorLine" >
+				<Setter Property="Fill" Value="{StaticResource WizardProgressHeader.Subway.Default}" />
+				<Setter Property="Height" Value="2" />
+				<Setter Property="Width" Value="{Binding Path=LabelLineWidth}" />
+			</Style>
+
+			<Style TargetType="Rectangle" x:Key="ProgressHeaderIndicatorLineLeftSide" BasedOn="{StaticResource ProgressHeaderIndicatorLine}" >
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding Path=IsOnFirstPage}" Value="True">
+						<Setter Property="Width" Value="0" />
+					</DataTrigger>
+					<DataTrigger Binding="{Binding Path=IsVisited}" Value="True">
+						<Setter Property="Fill" Value="{StaticResource WizardProgressHeader.Subway.Active}" />
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+
+			<Style TargetType="Rectangle" x:Key="ProgressHeaderIndicatorLineRightSide" BasedOn="{StaticResource ProgressHeaderIndicatorLine}" >
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding Path=IsOnLastPage}" Value="True">
+						<Setter Property="Width" Value="0" />
+					</DataTrigger>
+					<DataTrigger Binding="{Binding Path=NextIsVisited}" Value="True">
+						<Setter Property="Fill" Value="{StaticResource WizardProgressHeader.Subway.Active}" />
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+
+			<Style TargetType="TextBlock" x:Key="ProgressHeaderCompletedLabel">
+				<Setter Property="HorizontalAlignment" Value="Right"/>
+				<Setter Property="Foreground" Value="{StaticResource WizardProgressHeader.Label.Forground}"/>
+				<Setter Property="Text" Value="{Binding Path=CompletedSteps}"/>
+				<Setter Property="Margin" Value="0 50 0 0"/>
+			</Style>
+
+			<Style TargetType="TextBlock" x:Key="ProgressHeaderIndicatorLabel">
+				<Setter Property="Padding" Value="0" />
+				<Setter Property="Margin" Value="0" />
+				<Setter Property="TextWrapping" Value="WrapWithOverflow" />
+				<Setter Property="Foreground" Value="{StaticResource WizardProgressHeader.Default.Forground}"/>
+				<Setter Property="FontWeight" Value="Bold"/>
+				<Setter Property="TextAlignment" Value="Center" />
+				<Setter Property="Width" Value="{Binding Path=LabelTextWidth}" />
+				<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+				<Setter Property="Text" Value="{Binding Path=DisplayName}"/>
+				<Setter Property="ToolTip" Value="{Binding Path=DisplayName}"/>
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding Path=IsOnFirstPage}" Value="True">
+						<Setter Property="TextAlignment" Value="Left" />
+					</DataTrigger>
+					<DataTrigger Binding="{Binding Path=IsOnLastPage}" Value="True">
+						<Setter Property="TextAlignment" Value="Right" />
+					</DataTrigger>
+					<DataTrigger Binding="{Binding Path=IsCurrentPage}" Value="True">
+						<Setter Property="Foreground" Value="{StaticResource WizardProgressHeader.Active.Forground}"/>
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+
+			<DataTemplate x:Key="ProgressHeaderIndicatorIconNumber" DataType="viewModel:WizardViewModelBase">
+				<Border CornerRadius="50"
+                        Width="18"
+                        Height="18"
+                        Margin="0"
+                        Padding="0,2,0,2"
+                        Background="{StaticResource WizardProgressHeader.Subway.Default}"  
+                        BorderBrush="{StaticResource WizardProgressHeader.Subway.Active}">
+					<Border.Style>
+						<Style TargetType="Border">
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding Path=IsCurrentPage}" Value="False">
+									<Setter Property="BorderThickness" Value="0"/>
+								</DataTrigger>
+								<DataTrigger Binding="{Binding Path=IsCurrentPage}" Value="True">
+									<Setter Property="BorderThickness" Value="1"/>
+								</DataTrigger>
+								<DataTrigger Binding="{Binding Path=IsVisited}" Value="True">
+									<Setter Property="BorderThickness" Value="1"/>
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</Border.Style>
+					<TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Text="{Binding Path=PageIndex}" >
+						<TextBlock.Style>
+							<Style TargetType="TextBlock">
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Path=IsCurrentPage}" Value="False">
+										<Setter Property="Foreground" Value="{StaticResource WizardProgressHeader.Default.Forground}"/>
+									</DataTrigger>
+									<DataTrigger Binding="{Binding Path=IsCurrentPage}" Value="True">
+										<Setter Property="Foreground" Value="{StaticResource WizardProgressHeader.Active.Forground}"/>
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</TextBlock.Style>
+					</TextBlock>
+				</Border>
+			</DataTemplate>
+
+			<DataTemplate x:Key="ProgressHeaderIndicatorIconValid">
+				<Grid Margin="0" Background="Transparent">
+					<Path Data="M38.67,0.016C17.922-0.581,0.62,15.754,0.024,36.501c-0.011,0.365-0.016,0.731-0.016,1.096 c0,20.755,16.826,37.581,37.581,37.581S75.17,58.352,75.17,37.597C75.179,17.256,59.001,0.601,38.67,0.016z M54.335,18.994 l7.446,7.446L39.444,48.754l-7.446,7.446l-7.422-7.446L13.396,37.597l7.446-7.446l11.157,11.157L54.335,18.994z" 
+                          SnapsToDevicePixels="False"
+                          Fill="{StaticResource WizardProgressHeader.Subway.Active}" 
+                          Stretch="Fill"
+                          Height="18" 
+                          Width="18"/>
+				</Grid>
+			</DataTemplate>
+
+			<Style x:Key="ProgressHeaderIndicatorIcon" TargetType="ContentPresenter">
+				<Setter Property="ContentTemplate" Value="{StaticResource ProgressHeaderIndicatorIconNumber}"/>
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding Path=IsUpdated}" Value="True">
+						<Setter Property="ContentTemplate" Value="{StaticResource ProgressHeaderIndicatorIconValid}"/>
+					</DataTrigger>
+					<DataTrigger Binding="{Binding Path=IsVisited}" Value="True">
+						<Setter Property="ContentTemplate" Value="{StaticResource ProgressHeaderIndicatorIconValid}"/>
+					</DataTrigger>
+					<DataTrigger Binding="{Binding Path=IsCurrentPage}" Value="True">
+						<Setter Property="ContentTemplate" Value="{StaticResource ProgressHeaderIndicatorIconNumber}"/>
+					</DataTrigger>
+					<DataTrigger Binding="{Binding Path=IsComplete}" Value="True">
+						<Setter Property="ContentTemplate" Value="{StaticResource ProgressHeaderIndicatorIconValid}"/>
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+
+
+			<DataTemplate x:Key="ProgressHeaderIndicator">
+				<Grid Margin="0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+
+					<Rectangle Grid.Column="0" Grid.Row="0" Style="{StaticResource ProgressHeaderIndicatorLineLeftSide}" />
+					<ContentPresenter Grid.Column="1" Grid.Row="0" Style="{StaticResource ProgressHeaderIndicatorIcon}" Content="{Binding}"/>
+					<Rectangle Grid.Column="2" Grid.Row="0" Style="{StaticResource ProgressHeaderIndicatorLineRightSide}" />
+					<TextBlock Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Style="{DynamicResource ProgressHeaderIndicatorLabel}"  />
+				</Grid>
+			</DataTemplate>
+
+		</ResourceDictionary>
+	</Control.Resources>
+
+	<Grid HorizontalAlignment="Center" Margin="0">
+		<ItemsControl ItemsSource="{Binding Path=Pages}" ItemTemplate="{StaticResource ProgressHeaderIndicator}" >
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal"/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+		</ItemsControl>
+		<TextBlock Style="{StaticResource ProgressHeaderCompletedLabel}"/>
+	</Grid>
+</UserControl>
