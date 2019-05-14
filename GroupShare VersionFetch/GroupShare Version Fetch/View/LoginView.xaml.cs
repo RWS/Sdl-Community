@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Sdl.Community.GSVersionFetch.View
 {
 	/// <summary>
-	/// Interaction logic for WizardProgressHeader.xaml
+	/// Interaction logic for LoginView.xaml
 	/// </summary>
-	public partial class WizardProgressHeader : UserControl
+	public partial class LoginView : UserControl
 	{
-		public WizardProgressHeader()
+		public LoginView()
 		{
 			InitializeComponent();
 		}
