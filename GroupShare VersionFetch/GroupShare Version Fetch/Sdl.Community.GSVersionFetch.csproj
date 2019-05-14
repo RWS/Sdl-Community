@@ -125,10 +125,14 @@
     <Compile Include="UiHelpers\WizardProgressHeader.xaml.cs">
       <DependentUpon>WizardProgressHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\FilesViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\ProjectsViewModel.cs" />
     <Compile Include="ViewModel\ProjectWizardViewModel.cs" />
     <Compile Include="ViewModel\ProjectWizardViewModelBase.cs" />
+    <Compile Include="View\FilesView.xaml.cs">
+      <DependentUpon>FilesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -175,6 +179,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UiHelpers\WizardProgressHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FilesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -8,7 +8,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.GSVersionFetch.Studio
 {
-	[RibbonGroup("GsVersion", Name = "StarTransit", ContextByType = typeof(ProjectsController))]
+	[RibbonGroup("GsVersion", Name = "GS Version Fetch", ContextByType = typeof(ProjectsController))]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	public class GsVersionFetchRibbon : AbstractRibbonGroup
 	{
@@ -35,7 +35,8 @@ namespace Sdl.Community.GSVersionFetch.Studio
 			return  new ObservableCollection<ProjectWizardViewModelBase>
 			{
 				new LoginViewModel(new LoginView()),
-				new ProjectsViewModel(new ProjectsView())
+				new ProjectsViewModel(new ProjectsView()),
+				new FilesViewModel(new FilesView())
 			};
 		}
 	}
