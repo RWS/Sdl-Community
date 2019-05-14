@@ -96,7 +96,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\TranslationMemory.ico" />
+    <None Include="Resources\TM_icon.ico" />
     <None Include="packages.config" />
     <EmbeddedResource Include="OptionsPanel.resx">
       <DependentUpon>OptionsPanel.cs</DependentUpon>

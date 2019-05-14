@@ -19,7 +19,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -225,9 +225,9 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon TranslationMemory {
+        internal static System.Drawing.Icon TM_icon {
             get {
-                object obj = ResourceManager.GetObject("TranslationMemory", resourceCulture);
+                object obj = ResourceManager.GetObject("TM_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
