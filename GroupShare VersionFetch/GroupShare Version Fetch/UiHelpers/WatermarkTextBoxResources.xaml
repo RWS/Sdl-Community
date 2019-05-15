@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary x:Uid="ResourceDictionary_1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
     xmlns:uiHelpers="clr-namespace:Sdl.Community.GSVersionFetch.UiHelpers">
     <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
 
@@ -7,6 +8,7 @@
     <Style x:Uid="Style_1" x:Key="ClearButtonStyle" TargetType="Button">
         <Setter x:Uid="Setter_1" Property="Height" Value="12" />
         <Setter x:Uid="Setter_2" Property="Width" Value="12" />
+		<Setter Property="Cursor" Value="Hand"/>
         <Setter x:Uid="Setter_3" Property="BorderThickness" Value="0"/>
         <Setter x:Uid="Setter_4" Property="Template">
             <Setter.Value>
@@ -38,7 +40,6 @@
                         <DockPanel x:Uid="DockPanel_1" >
                             <Button x:Uid="CloseBtn" x:Name="CloseBtn" DockPanel.Dock="Right"
                                         Background="{Binding Background, ElementName=TextBox}"
-                                        BorderThickness="0"
                                         Style="{StaticResource ClearButtonStyle}"
                                         HorizontalAlignment="Right" 
                                         HorizontalContentAlignment="Center"
@@ -46,8 +47,8 @@
                                         Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, 
                                                     Path=ClearButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}, 
                                                     UpdateSourceTrigger=PropertyChanged}"
-                                        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, 
-                                                 Path=ClearCommand, UpdateSourceTrigger=PropertyChanged}"/>
+										uiHelpers:TextBoxWatermarkHelper.IsClearTextButtonBehaviorEnabled="true"
+                                        />
                             <Grid x:Uid="Grid_2" DockPanel.Dock="Left">
                                 <ScrollViewer x:Uid="PART_ContentHost" x:Name="PART_ContentHost"
 											  Margin="4,0,0,0" VerticalAlignment="Center"/>

@@ -7,38 +7,15 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	{
 		private bool _isValid;
 		private string _url;
+		private string _userName;
 		private ICommand _clearCommand;
 
 		public LoginViewModel(object view): base(view)
 		{
 			_isValid = true;
-			//_url = "test";
-			ClearCommand = new DelegateCommand(ExecuteClearCommand, CanExecuteClearCommand);
-
-		}
-
-		public DelegateCommand ClearCommand { get; }
-
-		private bool CanExecuteClearCommand()
-		{
-			return true;
-		}
-		//public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new CommandHandler(ClearTextBox,true));
-
-		private void ClearTextBox()
-		{
-			
-		}
-
-
-		private void ExecuteClearCommand()
-		{
-			Url = string.Empty;
-			OnPropertyChanged(nameof(Url));
 		}
 
 		public override string DisplayName => "Login";
-		public bool ClearButtonVisible => _url.Length > 0;
 		public override bool IsValid
 		{
 			get => _isValid;
@@ -58,7 +35,15 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				_url = value;
 				OnPropertyChanged(nameof(Url));
-				OnPropertyChanged("ClearButtonVisible");
+			}
+		}
+		public string UserName
+		{
+			get => _userName;
+			set
+			{
+				_userName = value;
+				OnPropertyChanged(nameof(UserName));
 			}
 		}
 	}
