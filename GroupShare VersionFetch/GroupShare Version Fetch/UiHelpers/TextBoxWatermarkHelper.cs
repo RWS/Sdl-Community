@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
 using Sdl.Community.GSVersionFetch.Helpers;
 
 namespace Sdl.Community.GSVersionFetch.UiHelpers
@@ -19,15 +17,14 @@ namespace Sdl.Community.GSVersionFetch.UiHelpers
 			"WatermarkText", typeof(string), typeof(TextBoxWatermarkHelper),
 			new PropertyMetadata("Watermark", OnWatermarkTextChanged));
 
-		public static readonly DependencyProperty ClearTextButtonProperty = DependencyProperty.RegisterAttached("ClearTextButton", typeof(bool), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(false, ButtonCommandOrClearTextChanged));
-		public static readonly DependencyProperty TextLengthProperty = DependencyProperty.RegisterAttached("TextLength", typeof(int), typeof(TextBoxWatermarkHelper), new UIPropertyMetadata(0));
-		public static readonly DependencyProperty HasTextProperty = DependencyProperty.RegisterAttached("HasText", typeof(bool), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsRender));
-		public static readonly DependencyProperty ButtonContentTemplateProperty = DependencyProperty.RegisterAttached("ButtonContentTemplate", typeof(DataTemplate), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata((DataTemplate)null));
-		public static readonly DependencyProperty ButtonTemplateProperty = DependencyProperty.RegisterAttached("ButtonTemplate", typeof(ControlTemplate), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(null));
-		public static readonly DependencyProperty IsClearTextButtonBehaviorEnabledProperty = DependencyProperty.RegisterAttached("IsClearTextButtonBehaviorEnabled", typeof(bool), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(false, IsClearTextButtonBehaviorEnabledChanged));
-		public static readonly DependencyProperty ButtonCommandProperty = DependencyProperty.RegisterAttached("ButtonCommand", typeof(ICommand), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(null, ButtonCommandOrClearTextChanged));
-		public static readonly DependencyProperty ButtonCommandParameterProperty = DependencyProperty.RegisterAttached("ButtonCommandParameter", typeof(object), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(null));
+		public static readonly DependencyProperty IsClearTextButtonBehaviorEnabledProperty = DependencyProperty.RegisterAttached(
+			"IsClearTextButtonBehaviorEnabled", typeof(bool), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(false, IsClearTextButtonBehaviorEnabledChanged));
 
+		public static readonly DependencyProperty ButtonCommandProperty = DependencyProperty.RegisterAttached(
+			"ButtonCommand", typeof(ICommand), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(null, ButtonCommandOrClearTextChanged));
+
+		public static readonly DependencyProperty ButtonCommandParameterProperty = DependencyProperty.RegisterAttached(
+			"ButtonCommandParameter", typeof(object), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(null));
 
 		private static void ButtonCommandOrClearTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -53,26 +50,8 @@ namespace Sdl.Community.GSVersionFetch.UiHelpers
 					PasswordChanged(passbox, new RoutedEventArgs());
 				}
 			}
-			var combobox = d as ComboBox;
-			if (combobox != null)
-			{
-				// only one loaded event
-				combobox.Loaded -= ComboBoxLoaded;
-				combobox.Loaded += ComboBoxLoaded;
-				if (combobox.IsLoaded)
-				{
-					ComboBoxLoaded(combobox, new RoutedEventArgs());
-				}
-			}
 		}
-		static void ComboBoxLoaded(object sender, RoutedEventArgs e)
-		{
-			var comboBox = sender as ComboBox;
-			if (comboBox != null)
-			{
-				comboBox.SetValue(HasTextProperty, !string.IsNullOrWhiteSpace(comboBox.Text) || comboBox.SelectedItem != null);
-			}
-		}
+
 		private static void IsClearTextButtonBehaviorEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			var button = d as Button;
@@ -105,7 +84,6 @@ namespace Sdl.Community.GSVersionFetch.UiHelpers
 			if (parent is TextBox)
 			{
 				((TextBox) parent).Clear();
-				((TextBox)parent).SetValue(IsWatermarkVisibleProperty, true);
 				((TextBox)parent).GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
 			}
 			else if (parent is PasswordBox)
@@ -139,13 +117,10 @@ namespace Sdl.Community.GSVersionFetch.UiHelpers
 		{
 			SetTextLength(sender as PasswordBox, passwordBox => passwordBox.Password.Length);
 		}
-		public static bool GetClearTextButton(DependencyObject d)
-		{
-			return (bool)d.GetValue(ClearTextButtonProperty);
-		}
+
 		public static object GetButtonCommandParameter(DependencyObject d)
 		{
-			return (object)d.GetValue(ButtonCommandParameterProperty);
+			return d.GetValue(ButtonCommandParameterProperty);
 		}
 
 		private static void TextChanged(object sender, RoutedEventArgs e)
@@ -157,13 +132,7 @@ namespace Sdl.Community.GSVersionFetch.UiHelpers
 			if (sender != null)
 			{
 				var value = funcTextLength(sender);
-				sender.SetValue(TextLengthProperty, value);
-				sender.SetValue(HasTextProperty, value >= 1);
 			}
-		}
-		public static ControlTemplate GetButtonTemplate(DependencyObject d)
-		{
-			return (ControlTemplate)d.GetValue(ButtonTemplateProperty);
 		}
 		public static string GetWatermarkText(TextBox control)
 		{
