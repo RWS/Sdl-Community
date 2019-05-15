@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Forms.Integration;
 using Sdl.Community.GSVersionFetch.View;
 using Sdl.Community.GSVersionFetch.ViewModel;
 using Sdl.Desktop.IntegrationApi;
@@ -27,12 +28,14 @@ namespace Sdl.Community.GSVersionFetch.Studio
 			var pages = CreatePages();
 
 			var projectWizard = new ProjectWizard(pages);
+			ElementHost.EnableModelessKeyboardInterop(projectWizard);
 			projectWizard.Show();
 		}
 
 		private ObservableCollection<ProjectWizardViewModelBase> CreatePages()
 		{
-			return  new ObservableCollection<ProjectWizardViewModelBase>
+
+			return new ObservableCollection<ProjectWizardViewModelBase>
 			{
 				new LoginViewModel(new LoginView()),
 				new ProjectsViewModel(new ProjectsView()),

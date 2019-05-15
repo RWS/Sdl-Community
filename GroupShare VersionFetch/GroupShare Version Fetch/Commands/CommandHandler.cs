@@ -1,30 +1,42 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace Sdl.Community.GSVersionFetch.Commands
 {
-	public class CommandHandler
+	public class CommandHandler : ICommand, INotifyPropertyChanged
 	{
-		private readonly Action<object> _execute;
-		private readonly Predicate<object> _canExecute;
-
-		public CommandHandler(Action<object> execute) : this(execute, null) { }
-
-		public CommandHandler(Action<object> execute, Predicate<object> canExecute)
+		public event EventHandler CanExecuteChanged;
+		private readonly Action _action;
+		private readonly bool _canExecute;
+		public CommandHandler(Action action, bool canExecute)
 		{
-			_execute = execute ?? throw new ArgumentNullException(nameof(execute));
+			_action = action;
 			_canExecute = canExecute;
+		}
+
+		public CommandHandler(bool canExecute)
+		{
+			_canExecute = canExecute;
+
 		}
 
 		public bool CanExecute(object parameter)
 		{
-			return _canExecute?.Invoke(parameter) ?? true;
+			return _canExecute;
 		}
 
 		public void Execute(object parameter)
 		{
-			_execute(parameter);
+			_action();
 		}
 
-		public event EventHandler CanExecuteChanged;
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 	}
 }
