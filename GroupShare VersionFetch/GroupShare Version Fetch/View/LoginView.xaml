@@ -26,21 +26,30 @@
 		<TextBlock Grid.Row="0" Style="{DynamicResource TextBoxFontFamily}" FontSize="15" Margin="0,10" Foreground="{DynamicResource WizardProgressHeader.Label.Forground}"
 		           Text="Please enter your GroupShare credentials" HorizontalAlignment="Center" />
 		<StackPanel Grid.Row="1" HorizontalAlignment="Center">
-			<TextBlock Text="GroupShare server url" Style="{DynamicResource TextBoxLoginLable}"/>
+			<TextBlock TextWrapping="Wrap" Style="{DynamicResource TextBoxLoginLable}">
+				GroupShare server url <Span Foreground="Red">*</Span>
+			</TextBlock>
 			<TextBox Style="{DynamicResource WatermarkTextBox}" Width="200" Height="35"
 			         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Url" 
 			         Text="{Binding Url,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 			
-			<TextBlock Text="User name" Style="{DynamicResource TextBoxLoginLable}"/>
+			<TextBlock TextWrapping="Wrap" Style="{DynamicResource TextBoxLoginLable}">
+				User name <Span Foreground="Red">*</Span>
+			</TextBlock>
 			<TextBox Style="{DynamicResource WatermarkTextBox}" Width="200" Height="35" 
 			         uiHelpers:TextBoxWatermarkHelper.WatermarkText="User name" 
 			         Text="{Binding UserName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-			<TextBlock Text="Password" Style="{DynamicResource TextBoxLoginLable}"/>
+			<TextBlock TextWrapping="Wrap" Style="{DynamicResource TextBoxLoginLable}">
+				Password <Span Foreground="Red">*</Span>
+			</TextBlock>
 			<PasswordBox Style="{DynamicResource WatermarkPasswordBox}" 
+						 Name="PasswordBox"
 			             uiHelpers:TextBoxWatermarkHelper.WatermarkText="Password" 
 			             Width="200" Height="35" />
-			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Content="Sign in" Width="200" Height="35" Margin="0,15"/>
+			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Content="Sign in" Width="200" Height="35" Margin="0,15"
+					Command="{Binding LoginCommand}"
+					CommandParameter="{Binding ElementName=PasswordBox}"/>
 		</StackPanel>
 	</Grid>
 	

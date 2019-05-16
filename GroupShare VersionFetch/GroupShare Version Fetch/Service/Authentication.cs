@@ -39,7 +39,6 @@ namespace Sdl.Community.GSVersionFetch.Service
 					Token = JsonConvert.DeserializeObject<string>(response);
 					return response;
 				}
-
 				// if the respsonse is anything other than 200 -> OK, then throw and exception with the response message
 				throw new Exception(response);
 			}

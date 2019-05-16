@@ -1,5 +1,8 @@
-﻿using System.Windows.Input;
+﻿using System.Windows.Controls;
+using System.Windows.Input;
 using Sdl.Community.GSVersionFetch.Commands;
+using Sdl.Community.GSVersionFetch.Model;
+using Sdl.Community.GSVersionFetch.Service;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
@@ -8,7 +11,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private bool _isValid;
 		private string _url;
 		private string _userName;
-		private string _password;
+		private ICommand _loginCommand;
 
 		public LoginViewModel(object view): base(view)
 		{
@@ -44,6 +47,23 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				_userName = value;
 				OnPropertyChanged(nameof(UserName));
+			}
+		}
+		public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new ParameterCommand(LoginUser));
+
+		private async void LoginUser(object parameter)
+		{
+			var passwordBox = parameter as PasswordBox;
+			var password = passwordBox?.Password;
+			if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
+			{
+				var credentials = new Credentials
+				{
+					UserName = UserName,
+					ServiceUrl = Url,
+					Password = password
+				};
+				var token = await Authentication.Login(credentials);
 			}
 		}
 	}
