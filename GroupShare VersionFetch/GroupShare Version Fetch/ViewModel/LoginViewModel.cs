@@ -8,7 +8,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private bool _isValid;
 		private string _url;
 		private string _userName;
-		private ICommand _clearCommand;
+		private string _password;
 
 		public LoginViewModel(object view): base(view)
 		{
