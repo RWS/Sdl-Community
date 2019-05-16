@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Sdl.Community.GSVersionFetch.View"
              xmlns:viewModel="clr-namespace:Sdl.Community.GSVersionFetch.ViewModel"
              xmlns:uiHelpers="clr-namespace:Sdl.Community.GSVersionFetch.UiHelpers"
              mc:Ignorable="d" 
@@ -12,19 +11,37 @@
 	<UserControl.Resources>
 		<ResourceDictionary x:Uid="ResourceDictionary_1">
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary  Source="../UiHelpers/WatermarkTextBoxResources.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/General.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<StackPanel>
-		<TextBox Style="{DynamicResource WatermarkTextBox}" Width="200" Height="50" 
-				 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Url" 
-				 Text="{Binding Url,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-		<TextBox Style="{DynamicResource WatermarkTextBox}" Width="200" Height="50" Margin="0,10,0,0"
-		         uiHelpers:TextBoxWatermarkHelper.WatermarkText="User name" 
-		         Text="{Binding UserName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-		<PasswordBox Style="{DynamicResource WatermarkPasswordBox}" 
-		             uiHelpers:TextBoxWatermarkHelper.WatermarkText="Password" 
-					 Width="200" Height="50" Margin="0,10,0,0"/>
-	</StackPanel>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+		<TextBlock Grid.Row="0" Style="{DynamicResource TextBoxFontFamily}" FontSize="15" Margin="0,10" Foreground="{DynamicResource WizardProgressHeader.Label.Forground}"
+		           Text="Please enter your GroupShare credentials" HorizontalAlignment="Center" />
+		<StackPanel Grid.Row="1" HorizontalAlignment="Center">
+			<TextBlock Text="GroupShare server url" Style="{DynamicResource TextBoxLoginLable}"/>
+			<TextBox Style="{DynamicResource WatermarkTextBox}" Width="200" Height="35"
+			         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Url" 
+			         Text="{Binding Url,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+			
+			<TextBlock Text="User name" Style="{DynamicResource TextBoxLoginLable}"/>
+			<TextBox Style="{DynamicResource WatermarkTextBox}" Width="200" Height="35" 
+			         uiHelpers:TextBoxWatermarkHelper.WatermarkText="User name" 
+			         Text="{Binding UserName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+			<TextBlock Text="Password" Style="{DynamicResource TextBoxLoginLable}"/>
+			<PasswordBox Style="{DynamicResource WatermarkPasswordBox}" 
+			             uiHelpers:TextBoxWatermarkHelper.WatermarkText="Password" 
+			             Width="200" Height="35" />
+			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Content="Sign in" Width="200" Height="35" Margin="0,15"/>
+		</StackPanel>
+	</Grid>
+	
 </UserControl>
