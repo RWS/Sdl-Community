@@ -23,9 +23,14 @@
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
 		</Grid.RowDefinitions>
-		<TextBlock Grid.Row="0" Style="{DynamicResource TextBoxFontFamily}" FontSize="15" Margin="0,10" Foreground="{DynamicResource WizardProgressHeader.Label.Forground}"
+		<TextBlock Grid.Row="0" Margin="0,5,0,10" FontFamily="Segoe UI" FontSize="20" TextAlignment="Center"
+		           Text="{Binding TextMessage}"
+				   Foreground="{Binding TextMessageBrush}"
+				   Visibility="{Binding TextMessageVisibility}"/>
+
+		<TextBlock Grid.Row="1" Style="{DynamicResource TextBoxFontFamily}" FontSize="15" Margin="0,10" Foreground="{DynamicResource WizardProgressHeader.Label.Forground}"
 		           Text="Please enter your GroupShare credentials" HorizontalAlignment="Center" />
-		<StackPanel Grid.Row="1" HorizontalAlignment="Center">
+		<StackPanel Grid.Row="2" HorizontalAlignment="Center">
 			<TextBlock TextWrapping="Wrap" Style="{DynamicResource TextBoxLoginLable}">
 				GroupShare server url <Span Foreground="Red">*</Span>
 			</TextBlock>
