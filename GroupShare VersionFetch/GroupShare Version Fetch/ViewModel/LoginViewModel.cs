@@ -19,8 +19,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	public class LoginViewModel: ProjectWizardViewModelBase
 	{
 		private bool _isValid;
-		private string _url;
-		private string _userName;
+		//private string _url;
+		//private string _userName;
 		private string _textMessage;
 		private string _textMessageVisibility;
 		private SolidColorBrush _textMessageBrush;
@@ -94,15 +94,16 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				_textMessageBrush = value;
 				OnPropertyChanged(nameof(TextMessageBrush));
 			}
-		}
+		}	
 
+	//	public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new AwaitableDelegateCommand(AuthenticateUser));
 		public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new ParameterCommand(AuthenticateUser));
-
 
 		private async void AuthenticateUser(object parameter)
 		{
 			var passwordBox = parameter as PasswordBox;
-			var password = passwordBox?.Password;
+				var password = passwordBox?.Password;
+			var test = _view.FindName("PasswordBox") as PasswordBox;
 			if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 			{
 				_wizardModel.UserCredentials.UserName = UserName;
@@ -111,7 +112,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				
 				if (Uri.IsWellFormedUriString(Url, UriKind.Absolute))
 				{
-					var statusCode = await Authentication.Login(_wizardModel.UserCredentials);
+						var statusCode = await Authentication.Login(_wizardModel.UserCredentials);
 					if (statusCode == HttpStatusCode.OK)
 					{
 						IsValid = true;

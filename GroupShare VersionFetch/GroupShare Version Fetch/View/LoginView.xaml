@@ -15,6 +15,7 @@
 				<ResourceDictionary Source="../UiHelpers/General.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
@@ -22,6 +23,10 @@
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+
 		</Grid.RowDefinitions>
 		<TextBlock Grid.Row="0" Margin="0,5,0,10" FontFamily="Segoe UI" FontSize="20" TextAlignment="Center"
 		           Text="{Binding TextMessage}"
@@ -30,32 +35,56 @@
 
 		<TextBlock Grid.Row="1" Style="{DynamicResource TextBoxFontFamily}" FontSize="15" Margin="0,10" Foreground="{DynamicResource WizardProgressHeader.Label.Forground}"
 		           Text="Please enter your GroupShare credentials" HorizontalAlignment="Center" />
-		<StackPanel Grid.Row="2" HorizontalAlignment="Center">
-			<TextBlock x:Name="UrlTextBlock" TextWrapping="Wrap" Style="{DynamicResource TextBoxLoginLable}">
+		<Grid Grid.Row="2" HorizontalAlignment="Center">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+			</Grid.RowDefinitions>
+			<TextBlock x:Name="UrlTextBlock"  Grid.Row="0" TextWrapping="Wrap" Style="{DynamicResource TextBoxLoginLable}">
 				GroupShare server url <Span Foreground="Red">*</Span>
 			</TextBlock>
-			<TextBox Style="{DynamicResource WatermarkTextBox}" Width="200" Height="35"
-			         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Url" 
-			         Text="{Binding Url,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-			
-			<TextBlock TextWrapping="Wrap" Style="{DynamicResource TextBoxLoginLable}">
-				User name <Span Foreground="Red">*</Span>
+			<TextBlock Grid.Row="1" Foreground="#999999" Background="Transparent" FontStyle="Italic" Padding="5,0,2,0" Text="Url" VerticalAlignment="Center"
+			           Visibility="{Binding ElementName=UrlBox, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
 			</TextBlock>
-			<TextBox Style="{DynamicResource WatermarkTextBox}" Width="200" Height="35" 
-			         uiHelpers:TextBoxWatermarkHelper.WatermarkText="User name" 
-			         Text="{Binding UserName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-			<TextBlock TextWrapping="Wrap" Style="{DynamicResource TextBoxLoginLable}">
-				Password <Span Foreground="Red">*</Span>
+			<TextBox Name="UrlBox" Padding="2,0,2,0" Grid.Row="1" Background="Transparent"
+			         Text="{Binding Url,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					 Width="200" Height="35" VerticalContentAlignment="Center" 	          
+			         >
+			</TextBox>
+		</Grid>
+		<Grid Grid.Row="3" HorizontalAlignment="Center">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+			</Grid.RowDefinitions>
+			<TextBlock Grid.Row="0" TextWrapping="Wrap" Style="{DynamicResource TextBoxLoginLable}">
+				User name<Span Foreground="Red">*</Span>
 			</TextBlock>
-			<PasswordBox Style="{DynamicResource WatermarkPasswordBox}" 
-						 Name="PasswordBox"
-			             uiHelpers:TextBoxWatermarkHelper.WatermarkText="Password" 
-			             Width="200" Height="35" />
-			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Content="Sign in" Width="200" Height="35" Margin="0,15"
+			<TextBlock Grid.Row="1" Foreground="#999999" Background="Transparent" FontStyle="Italic" Padding="5,0,2,0" Text="User name" VerticalAlignment="Center"
+			           Visibility="{Binding ElementName=UserBox, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
+			</TextBlock>
+			<TextBox Name="UserBox" Padding="2,0,2,0" Grid.Row="1" Background="Transparent"
+			         Text="{Binding UserName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			         Width="200" Height="35" VerticalContentAlignment="Center" 	          
+			/>
+		</Grid>
+		<Grid Grid.Row="4" HorizontalAlignment="Center">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+			</Grid.RowDefinitions>
+			<TextBlock Grid.Row="0" TextWrapping="Wrap" Style="{DynamicResource TextBoxLoginLable}">
+				Password<Span Foreground="Red">*</Span>
+			</TextBlock>
+			<TextBlock Grid.Row="1" Foreground="#999999" Background="Transparent" FontStyle="Italic" Padding="5,0,2,0" Text="Password" VerticalAlignment="Center"
+			          Visibility="{Binding ElementName=PasswordBox, Path=Password.Password, Converter={StaticResource BooleanToVisibilityConverter}}">  <!-- here i need to check if there is something in the passwordbox-->
+			</TextBlock>
+			<PasswordBox Name="PasswordBox" Padding="2,0,2,0" Grid.Row="1" Background="Transparent"
+			         Width="200" Height="35" VerticalContentAlignment="Center" 	          
+			/>
+		</Grid>
+			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Grid.Row="5" Content="Sign in" Width="200" Height="35" Margin="0,15"
 					Command="{Binding LoginCommand}"
 					CommandParameter="{Binding ElementName=PasswordBox}"/>
-		</StackPanel>
 	</Grid>
-	
 </UserControl>

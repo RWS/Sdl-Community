@@ -101,11 +101,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AwaitableDelegateCommand.cs" />
+    <Compile Include="Commands\CommandExtensions.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Commands\ParameterCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Helpers\ApiUrl.cs" />
     <Compile Include="Helpers\TreeHelper.cs" />
+    <Compile Include="Interface\IAsyncCommand.cs" />
+    <Compile Include="Interface\IRaiseCanExecuteChanged.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\Credentials.cs" />
     <Compile Include="Model\GsFile.cs" />
