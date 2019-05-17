@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
@@ -33,6 +34,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
+		public Window Window { get; set; }
 		public double LabelTextWidth
 		{
 			get => _labelTextWidth;

@@ -1,11 +1,18 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Sdl.Community.GSVersionFetch.Commands;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
+using Sdl.Community.GSVersionFetch.View;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
@@ -18,13 +25,17 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private string _textMessageVisibility;
 		private SolidColorBrush _textMessageBrush;
 		private ICommand _loginCommand;
+		private readonly UserControl _view;
+		private readonly WizardModel _wizardModel;
 
-		public LoginViewModel(object view): base(view)
+		public LoginViewModel(WizardModel wizardModel,object view): base(view)
 		{
 			_isValid = false;
+			_view =(UserControl)view;
+			_wizardModel = wizardModel;
 			_textMessageVisibility = "Collapsed";
 		}
-
+		
 		public override string DisplayName => "Login";
 		public override bool IsValid
 		{
@@ -40,19 +51,19 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		}
 		public string Url
 		{
-			get => _url;
+			get => _wizardModel.UserCredentials.ServiceUrl;
 			set
 			{
-				_url = value;
+				_wizardModel.UserCredentials.ServiceUrl = value;
 				OnPropertyChanged(nameof(Url));
 			}
 		}
 		public string UserName
 		{
-			get => _userName;
+			get => _wizardModel.UserCredentials.UserName;
 			set
 			{
-				_userName = value;
+				_wizardModel.UserCredentials.UserName = value;
 				OnPropertyChanged(nameof(UserName));
 			}
 		}
@@ -87,27 +98,27 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new ParameterCommand(AuthenticateUser));
 
+
 		private async void AuthenticateUser(object parameter)
 		{
 			var passwordBox = parameter as PasswordBox;
 			var password = passwordBox?.Password;
 			if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 			{
-				var credentials = new Credentials
-				{
-					UserName = UserName,
-					ServiceUrl = Url.TrimEnd().TrimStart(),
-					Password = password
-				};
+				_wizardModel.UserCredentials.UserName = UserName;
+				_wizardModel.UserCredentials.Password = password;
+				_wizardModel.UserCredentials.ServiceUrl = Url.TrimEnd().TrimStart();
+				
 				if (Uri.IsWellFormedUriString(Url, UriKind.Absolute))
 				{
-					var statusCode = await Authentication.Login(credentials);
+					var statusCode = await Authentication.Login(_wizardModel.UserCredentials);
 					if (statusCode == HttpStatusCode.OK)
 					{
-						TextMessageVisibility = "Visible";
-						TextMessage = PluginResources.AuthenticationSuccess;
-						TextMessageBrush = (SolidColorBrush) new BrushConverter().ConvertFrom("#017701");
 						IsValid = true;
+						TextMessage = PluginResources.AuthenticationSuccess;
+						TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#017701");
+						TextMessageVisibility = "Visible";
+						_view.Dispatcher.Invoke(delegate { SendKeys.SendWait("{TAB}"); }, DispatcherPriority.ApplicationIdle);
 					}
 					else
 					{

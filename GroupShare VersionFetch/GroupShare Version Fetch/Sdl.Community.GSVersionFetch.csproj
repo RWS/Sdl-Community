@@ -112,6 +112,7 @@
     <Compile Include="Model\GsFileVersion.cs" />
     <Compile Include="Model\ProjectDetails.cs" />
     <Compile Include="Model\ProjectResponse.cs" />
+    <Compile Include="Model\WizardModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
