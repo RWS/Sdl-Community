@@ -61,11 +61,29 @@ namespace Sdl.Community.GSVersionFetch {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You were successfully authenticated into GroupShare.
+        /// </summary>
+        public static string AuthenticationSuccess {
+            get {
+                return ResourceManager.GetString("AuthenticationSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} of {1} completed.
         /// </summary>
         public static string HelixWizard_StepsCompleted {
             get {
                 return ResourceManager.GetString("HelixWizard_StepsCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Format of the Url is not correct.
+        /// </summary>
+        public static string Incorrect_Url_Format {
+            get {
+                return ResourceManager.GetString("Incorrect_Url_Format", resourceCulture);
             }
         }
         
@@ -93,6 +111,15 @@ namespace Sdl.Community.GSVersionFetch {
         public static string ProjectWizard_StepsCompleted {
             get {
                 return ResourceManager.GetString("ProjectWizard_StepsCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All fields are required.
+        /// </summary>
+        public static string Required_Fields {
+            get {
+                return ResourceManager.GetString("Required_Fields", resourceCulture);
             }
         }
         

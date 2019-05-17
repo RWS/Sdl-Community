@@ -86,20 +86,9 @@ namespace Sdl.Community.GSVersionFetch.UiHelpers
 				((TextBox) parent).Clear();
 				((TextBox)parent).GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
 			}
-			else if (parent is PasswordBox)
+			else
 			{
-				((PasswordBox) parent).Clear();
-				//((PasswordBox)parent).GetBindingExpression(PasswordBoxBindingBehavior.PasswordProperty)?.UpdateSource();
-			}
-			else if (parent is ComboBox)
-			{
-				if (((ComboBox) parent).IsEditable)
-				{
-					((ComboBox) parent).Text = string.Empty;
-					((ComboBox) parent).GetBindingExpression(ComboBox.TextProperty)?.UpdateSource();
-				}
-				((ComboBox) parent).SelectedItem = null;
-				((ComboBox) parent).GetBindingExpression(ComboBox.SelectedItemProperty)?.UpdateSource();
+				(parent as PasswordBox)?.Clear();
 			}
 		}
 
@@ -134,34 +123,43 @@ namespace Sdl.Community.GSVersionFetch.UiHelpers
 				var value = funcTextLength(sender);
 			}
 		}
-		public static string GetWatermarkText(TextBox control)
+		public static string GetWatermarkText(DependencyObject  control)
 		{
 			return (string)control.GetValue(WatermarkTextProperty);
 		}
 
-		public static bool GetIsWatermarkVisible(TextBox control)
+		public static bool GetIsWatermarkVisible(DependencyObject control)
 		{
 			return (bool)control.GetValue(IsWatermarkVisibleProperty);
 		}
 
-		public static void SetWatermarkText(TextBox control, string text)
+		public static void SetWatermarkText(DependencyObject control, string text)
 		{
 			control.SetValue(WatermarkTextProperty, text);
 		}
 
 		private static void OnWatermarkTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			var control = d as TextBox;
-			if (control == null) return;
+			var textBox = d as TextBox;
+			var passwordBox = d as PasswordBox;
+			d?.SetValue(IsWatermarkVisibleProperty, true);
 
-			control.SetValue(IsWatermarkVisibleProperty, true);
-			control.LostFocus += OnControlLostFocus;
-			control.GotFocus += OnControlGotFocus;
+			if (textBox!=null)
+			{
+				textBox.LostFocus += OnControlLostFocus;
+				textBox.GotFocus += OnControlGotFocus;
+			}
+			if (passwordBox != null)
+			{
+				passwordBox.LostFocus += OnControlLostFocus;
+				passwordBox.GotFocus += OnControlGotFocus;
+			}
 		}
 
 		private static void OnControlGotFocus(object sender, RoutedEventArgs e)
 		{
 			(sender as TextBox)?.SetValue(IsWatermarkVisibleProperty, false);
+			(sender as PasswordBox)?.SetValue(IsWatermarkVisibleProperty, false);
 		}
 
 		private static void OnControlLostFocus(object sender, RoutedEventArgs e)
@@ -169,7 +167,16 @@ namespace Sdl.Community.GSVersionFetch.UiHelpers
 			if (sender is TextBox control)
 			{
 				if (string.IsNullOrEmpty(control.Text))
+				{
 					control.SetValue(IsWatermarkVisibleProperty, true);
+				}
+			}
+			if (sender is PasswordBox passwordControl)
+			{
+				if (string.IsNullOrEmpty(passwordControl.Password))
+				{
+					passwordControl.SetValue(IsWatermarkVisibleProperty, true);
+				}
 			}
 		}
 	}

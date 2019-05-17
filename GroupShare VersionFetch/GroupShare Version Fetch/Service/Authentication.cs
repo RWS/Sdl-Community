@@ -14,14 +14,9 @@ namespace Sdl.Community.GSVersionFetch.Service
 	{
 		public static string Token;
 
-		public static async Task<string> Login(Credentials credentials)
+		public static async Task<HttpStatusCode> Login(Credentials credentials)
 		{
-			if (credentials == null)
-			{
-				return null;
-			}
-
-			ApiUrl.BaseUrl = credentials.ServiceUrl;
+			ApiUrl.BaseUrl = credentials?.ServiceUrl;
 			using (var httpClient = new HttpClient())
 			{
 				httpClient.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
@@ -37,11 +32,8 @@ namespace Sdl.Community.GSVersionFetch.Service
 				if (responseMessage.StatusCode == HttpStatusCode.OK)
 				{
 					Token = JsonConvert.DeserializeObject<string>(response);
-					return response;
 				}
-
-				// if the respsonse is anything other than 200 -> OK, then throw and exception with the response message
-				throw new Exception(response);
+				return responseMessage.StatusCode;
 			}
 		}
 

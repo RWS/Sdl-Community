@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AuthenticationSuccess" xml:space="preserve">
+    <value>You were successfully authenticated into GroupShare</value>
+  </data>
   <data name="HelixWizard_StepsCompleted" xml:space="preserve">
     <value>{0} of {1} completed</value>
+  </data>
+  <data name="Incorrect_Url_Format" xml:space="preserve">
+    <value>Format of the Url is not correct</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
     <value>GroupShare_Version_Fetch</value>
@@ -128,6 +134,9 @@
   </data>
   <data name="ProjectWizard_StepsCompleted" xml:space="preserve">
     <value>{0} of {1} completed</value>
+  </data>
+  <data name="Required_Fields" xml:space="preserve">
+    <value>All fields are required</value>
   </data>
   <data name="WindowsControl_Close" xml:space="preserve">
     <value>Close</value>

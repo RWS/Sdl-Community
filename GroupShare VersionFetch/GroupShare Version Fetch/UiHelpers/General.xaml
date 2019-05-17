@@ -52,5 +52,16 @@
         <Setter x:Uid="Setter_23" Property="Foreground" Value="#0096D6" />
         <Setter x:Uid="Setter_24" Property="TextDecorations" Value="" />
     </Style>
+	
+	<Style x:Key="TextBoxFontFamily" TargetType="TextBlock">
+		<Setter Property="FontFamily" Value="Segoe UI"/>
+	</Style>
+	<Style x:Key="TextBoxLoginLable" TargetType="TextBlock">
+		<Setter Property="FontFamily" Value="Segoe UI"/>
+		<Setter Property="FontSize" Value="11"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Foreground" Value="{DynamicResource WindowsControl.Control.Text}"/>
+	</Style>
 
 </ResourceDictionary>
