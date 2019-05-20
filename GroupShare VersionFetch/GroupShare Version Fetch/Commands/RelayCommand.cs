@@ -4,6 +4,7 @@ using System.Windows.Input;
 
 namespace Sdl.Community.GSVersionFetch.Commands
 {
+	//USED FOR WIZARD COMMANDS
 	/// <summary>
 	/// A command whose sole purpose is to 
 	/// relay its functionality to other

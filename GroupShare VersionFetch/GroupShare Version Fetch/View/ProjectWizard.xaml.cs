@@ -27,10 +27,11 @@ namespace Sdl.Community.GSVersionFetch.View
 			DataContext = _model;
 		}
 
-		private static void UpdatePageIndexes(IReadOnlyList<ProjectWizardViewModelBase> pages)
+		private  void UpdatePageIndexes(IReadOnlyList<ProjectWizardViewModelBase> pages)
 		{
 			for (var i = 0; i < pages.Count; i++)
 			{
+				pages[i].Window = this;
 				pages[i].PageIndex = i + 1;
 				pages[i].TotalPages = pages.Count;
 			}

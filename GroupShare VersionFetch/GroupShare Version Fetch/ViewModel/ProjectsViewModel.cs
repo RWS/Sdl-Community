@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.GSVersionFetch.Model;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
 	public class ProjectsViewModel: ProjectWizardViewModelBase
 	{
 		private bool _isValid;
-
-		public ProjectsViewModel(object view) : base(view)
+		private WizardModel _wizardModel;
+		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
 		{
+			_wizardModel = wizardModel;
 		}
 
 		public override string DisplayName => "GroupShare Projects";
