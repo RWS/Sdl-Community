@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:Sdl.Community.GSVersionFetch.ViewModel"
-             xmlns:uiHelpers="clr-namespace:Sdl.Community.GSVersionFetch.UiHelpers"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModel:LoginViewModel}">
 
@@ -77,11 +77,16 @@
 				Password<Span Foreground="Red">*</Span>
 			</TextBlock>
 			<TextBlock Grid.Row="1" Foreground="#999999" Background="Transparent" FontStyle="Italic" Padding="5,0,2,0" Text="Password" VerticalAlignment="Center"
-			          Visibility="{Binding ElementName=PasswordBox, Path=Password.Password, Converter={StaticResource BooleanToVisibilityConverter}}">  <!-- here i need to check if there is something in the passwordbox-->
+			          Visibility="{Binding PasswordBoxVisibility}">
 			</TextBlock>
 			<PasswordBox Name="PasswordBox" Padding="2,0,2,0" Grid.Row="1" Background="Transparent"
-			         Width="200" Height="35" VerticalContentAlignment="Center" 	          
-			/>
+			         Width="200" Height="35" VerticalContentAlignment="Center">
+				<i:Interaction.Triggers>
+					<i:EventTrigger EventName="PasswordChanged">
+						<i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=PasswordBox,  Mode=OneWay}"/>
+					</i:EventTrigger>
+				</i:Interaction.Triggers>
+			</PasswordBox>
 		</Grid>
 			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Grid.Row="5" Content="Sign in" Width="200" Height="35" Margin="0,15"
 					Command="{Binding LoginCommand}"

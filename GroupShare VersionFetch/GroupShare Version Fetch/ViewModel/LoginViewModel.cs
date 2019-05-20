@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -11,7 +8,6 @@ using System.Windows.Threading;
 using Sdl.Community.GSVersionFetch.Commands;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
-using Sdl.Community.GSVersionFetch.View;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
@@ -19,12 +15,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	public class LoginViewModel: ProjectWizardViewModelBase
 	{
 		private bool _isValid;
-		//private string _url;
-		//private string _userName;
 		private string _textMessage;
 		private string _textMessageVisibility;
+		private string _passwordBoxVisibility;
 		private SolidColorBrush _textMessageBrush;
 		private ICommand _loginCommand;
+		private ICommand _passwordChangedCommand;
 		private readonly UserControl _view;
 		private readonly WizardModel _wizardModel;
 
@@ -34,6 +30,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			_view =(UserControl)view;
 			_wizardModel = wizardModel;
 			_textMessageVisibility = "Collapsed";
+			_passwordBoxVisibility = "Visible";
 		}
 		
 		public override string DisplayName => "Login";
@@ -76,6 +73,15 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				OnPropertyChanged(nameof(TextMessage));
 			}
 		}
+		public string PasswordBoxVisibility
+		{
+			get => _passwordBoxVisibility;
+			set
+			{
+				_passwordBoxVisibility = value;
+				OnPropertyChanged(nameof(PasswordBoxVisibility));
+			}
+		}
 		public string TextMessageVisibility
 		{
 			get => _textMessageVisibility;
@@ -98,12 +104,18 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 	//	public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new AwaitableDelegateCommand(AuthenticateUser));
 		public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new ParameterCommand(AuthenticateUser));
+		public ICommand PasswordChangedCommand => _passwordChangedCommand ?? (_passwordChangedCommand = new ParameterCommand(PasswordChanged));
+
+		private void PasswordChanged(object parameter)
+		{
+			var passwordBoxText = (parameter as PasswordBox)?.Password;
+			PasswordBoxVisibility = string.IsNullOrEmpty(passwordBoxText) ? "Visible" : "Collapsed";
+		}
 
 		private async void AuthenticateUser(object parameter)
 		{
 			var passwordBox = parameter as PasswordBox;
-				var password = passwordBox?.Password;
-			var test = _view.FindName("PasswordBox") as PasswordBox;
+			var password = passwordBox?.Password;
 			if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 			{
 				_wizardModel.UserCredentials.UserName = UserName;
