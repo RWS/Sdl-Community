@@ -1,7 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows;
 using System.Windows.Forms.Integration;
-using System.Windows.Threading;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.View;
 using Sdl.Community.GSVersionFetch.ViewModel;
@@ -28,14 +26,6 @@ namespace Sdl.Community.GSVersionFetch.Studio
 	{
 		protected override void Execute()
 		{
-			//if (Application.Current == null)
-			//{
-			//	new Application();
-			//}
-			//if (Application.Current != null)
-			//{
-			//	Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-			//}
 			var wizardModel = new WizardModel
 			{
 				UserCredentials = new Credentials(),
@@ -46,7 +36,6 @@ namespace Sdl.Community.GSVersionFetch.Studio
 			var projectWizard = new ProjectWizard(pages);
 			ElementHost.EnableModelessKeyboardInterop(projectWizard);
 			projectWizard.Show();
-			//Dispatcher.Run();
 		}
 
 		private ObservableCollection<ProjectWizardViewModelBase> CreatePages(WizardModel wizardModel)

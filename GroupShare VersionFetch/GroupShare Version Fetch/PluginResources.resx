@@ -135,6 +135,9 @@
   <data name="ProjectWizard_StepsCompleted" xml:space="preserve">
     <value>{0} of {1} completed</value>
   </data>
+  <data name="RemoteNameCouldNotBeSolved" xml:space="preserve">
+    <value>The remote name</value>
+  </data>
   <data name="Required_Fields" xml:space="preserve">
     <value>All fields are required</value>
   </data>

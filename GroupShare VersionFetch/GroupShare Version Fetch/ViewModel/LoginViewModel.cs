@@ -118,13 +118,13 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			var password = passwordBox?.Password;
 			if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 			{
-				_wizardModel.UserCredentials.UserName = UserName;
-				_wizardModel.UserCredentials.Password = password;
+				_wizardModel.UserCredentials.UserName = UserName.TrimEnd().TrimStart();
+				_wizardModel.UserCredentials.Password = password.TrimEnd().TrimStart();
 				_wizardModel.UserCredentials.ServiceUrl = Url.TrimEnd().TrimStart();
 				
 				if (Uri.IsWellFormedUriString(Url, UriKind.Absolute))
 				{
-						var statusCode = await Authentication.Login(_wizardModel.UserCredentials);
+					var statusCode = await Authentication.Login(_wizardModel.UserCredentials);
 					if (statusCode == HttpStatusCode.OK)
 					{
 						IsValid = true;

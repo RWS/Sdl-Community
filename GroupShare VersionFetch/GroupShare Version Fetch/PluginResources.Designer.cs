@@ -115,6 +115,15 @@ namespace Sdl.Community.GSVersionFetch {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The remote name.
+        /// </summary>
+        public static string RemoteNameCouldNotBeSolved {
+            get {
+                return ResourceManager.GetString("RemoteNameCouldNotBeSolved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All fields are required.
         /// </summary>
         public static string Required_Fields {
