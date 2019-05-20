@@ -2,7 +2,7 @@
 
 namespace Sdl.Community.GSVersionFetch.Model
 {
-	public class ProjectDetails
+	public class ProjectDetailsResponse
 	{
 		public string ProjectId { get; set; }
 		public string Name { get; set; }

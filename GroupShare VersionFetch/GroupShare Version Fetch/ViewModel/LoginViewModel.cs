@@ -116,6 +116,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		{
 			var passwordBox = parameter as PasswordBox;
 			var password = passwordBox?.Password;
+			var projectService = new ProjectService();
 			if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 			{
 				_wizardModel.UserCredentials.UserName = UserName.TrimEnd().TrimStart();
@@ -130,6 +131,19 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						IsValid = true;
 						TextMessage = PluginResources.AuthenticationSuccess;
 						TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#017701");
+						var projectsResponse = await projectService.GetGsProjects();
+						if (projectsResponse?.Items != null)
+						{
+							foreach (var project in projectsResponse.Items)
+							{
+								var gsProject = new GsProject
+								{
+									Name = project.Name
+								};
+								_wizardModel?.GsProjects.Add(gsProject);
+							}
+						}
+
 						TextMessageVisibility = "Visible";
 						_view.Dispatcher.Invoke(delegate { SendKeys.SendWait("{TAB}"); }, DispatcherPriority.ApplicationIdle);
 					}

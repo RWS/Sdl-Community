@@ -4,9 +4,55 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.GSVersionFetch.View"
+             xmlns:viewModel="clr-namespace:Sdl.Community.GSVersionFetch.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            <TextBlock>Projects</TextBlock>
-    </Grid>
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModel:ProjectsViewModel}">
+
+	<UserControl.Resources>
+		<ResourceDictionary x:Uid="ResourceDictionary_1">
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../UiHelpers/General.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+				<Setter Property="Padding" Value="5"/>
+				<Setter Property="FontFamily" Value="Segoe UI"/>
+			</Style>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<DataGrid  
+		          ItemsSource="{Binding GsProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		          SelectionMode="Extended"
+		          SelectionUnit="FullRow"
+		          Style="{StaticResource FilesGridStyle}"
+		          GridLinesVisibility="None"
+		          VerticalScrollBarVisibility="Auto"
+			MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+				  IsReadOnly="True">
+			<DataGrid.RowStyle>
+				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
+			</DataGrid.RowStyle>
+			<DataGrid.Columns>
+				<DataGridTemplateColumn Width="Auto">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="4,0,0,0"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn  Header="Project name" SortMemberPath="Name">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+								<Image Source="../Resources/openserverproject.ico" Width="25" Height="25" HorizontalAlignment="Center" />
+								<TextBlock Text="{Binding Name}" Margin="5" HorizontalAlignment="Center" />
+							</StackPanel>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+		</DataGrid>
+	</Grid>
 </UserControl>

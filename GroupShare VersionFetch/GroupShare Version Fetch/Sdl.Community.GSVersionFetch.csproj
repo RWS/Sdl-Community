@@ -118,7 +118,8 @@
     <Compile Include="Model\Credentials.cs" />
     <Compile Include="Model\GsFile.cs" />
     <Compile Include="Model\GsFileVersion.cs" />
-    <Compile Include="Model\ProjectDetails.cs" />
+    <Compile Include="Model\GsProject.cs" />
+    <Compile Include="Model\ProjectDetailsResponse.cs" />
     <Compile Include="Model\ProjectResponse.cs" />
     <Compile Include="Model\WizardModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -158,6 +159,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Project_Published.ico" />
+    <Resource Include="Resources\openserverproject.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
@@ -177,6 +180,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UiHelpers\DataGridStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\DataGridStyle2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
