@@ -135,7 +135,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(400, 200);
             this.Name = "TMResultsForm";
-            this.Text = "SDL Translation Memory Task Results 2018";
+            this.Text = "SDL Translation Memory Task Results 2019";
             this.Load += new System.EventHandler(this.TMResultsForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

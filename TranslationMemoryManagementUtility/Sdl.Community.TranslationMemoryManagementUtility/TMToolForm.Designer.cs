@@ -253,7 +253,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(658, 455);
             this.Name = "TMToolForm";
-            this.Text = "SDL Translation Memory Management 2018";
+            this.Text = "SDL Translation Memory Management 2019";
             this.Load += new System.EventHandler(this.TMToolForm_Load);
             this.Resize += new System.EventHandler(this.TMToolForm_Resize);
             this.tabsPages.ResumeLayout(false);
