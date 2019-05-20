@@ -1,9 +1,9 @@
-﻿using Sdl.Community.Utilities.TMTool.Task;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using Sdl.Community.Utilities.TMTool.Task;
 
 namespace Sdl.Community.TranslationMemoryManagementUtility
 {
@@ -207,7 +207,8 @@ namespace Sdl.Community.TranslationMemoryManagementUtility
 				return;
 			}
 
-			pbProgress.Value = (int)progress;
+			var progressVal = (int)progress > 100 ? 100 : (int)progress;
+			pbProgress.Value = progressVal;
 			lblOperation.Text = operationMsg;
 		}
 		/// <summary>
