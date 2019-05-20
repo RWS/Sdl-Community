@@ -26,5 +26,6 @@ namespace Sdl.Community.GSVersionFetch.Model
 			}
 		}
 
+
 	}
 }

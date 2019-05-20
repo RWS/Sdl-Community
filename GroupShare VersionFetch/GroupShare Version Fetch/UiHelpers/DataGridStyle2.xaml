@@ -22,11 +22,13 @@
 				<Setter Property="Background" Value="#E5F2FA" />
 				<Setter Property="BorderBrush" Value="#E5F2FA" />
 				<Setter Property="Foreground" Value="#ffffff" />
+				<Setter Property="VerticalContentAlignment" Value="Center"/>
 			</Trigger>
 			<Trigger Property="IsSelected" Value="True">
 				<Setter Property="Background" Value="#c9c9c9" />
 				<Setter Property="BorderBrush" Value="#c9c9c9" />
 				<Setter Property="Foreground" Value="#ffffff" />
+				<Setter Property="VerticalContentAlignment" Value="Center"/>
 			</Trigger>
 		</Style.Triggers>
 	</Style>

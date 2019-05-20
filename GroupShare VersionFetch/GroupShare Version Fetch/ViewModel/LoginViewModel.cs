@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Net;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -6,8 +9,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Sdl.Community.GSVersionFetch.Commands;
+using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
+using Sdl.Core.Globalization;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
@@ -115,6 +120,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private async void AuthenticateUser(object parameter)
 		{
 			var passwordBox = parameter as PasswordBox;
+			var languageFlagsHelper = new LanguageFlags();
 			var password = passwordBox?.Password;
 			var projectService = new ProjectService();
 			if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
@@ -136,9 +142,20 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						{
 							foreach (var project in projectsResponse.Items)
 							{
+								var testLanguages = new ObservableCollection<TargetLanguageFlag>();
+								var targetLanguages = new TargetLanguageFlag
+								{
+									Path = languageFlagsHelper.GetImageStudioCodeByLanguageCode(project.SourceLanguage)
+								};
+								testLanguages.Add(targetLanguages);
+								testLanguages.Add(targetLanguages);
+
 								var gsProject = new GsProject
 								{
-									Name = project.Name
+									Name = project.Name,
+									DueDate = project.DueDate?.ToString(),
+									SourceLanguageFlagUri = languageFlagsHelper.GetImageStudioCodeByLanguageCode(project.SourceLanguage),
+									TargetLanguageFlagsUri = testLanguages
 								};
 								_wizardModel?.GsProjects.Add(gsProject);
 							}
