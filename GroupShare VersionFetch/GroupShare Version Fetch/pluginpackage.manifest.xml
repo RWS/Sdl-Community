@@ -7,5 +7,6 @@
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
   <Include>
 	<File>Newtonsoft.Json.dll</File>
+	<File>System.Windows.Interactivity.dll</File>
   </Include>
 </PluginPackage>

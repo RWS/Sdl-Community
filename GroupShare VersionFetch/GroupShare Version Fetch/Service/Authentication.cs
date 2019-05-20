@@ -17,23 +17,35 @@ namespace Sdl.Community.GSVersionFetch.Service
 		public static async Task<HttpStatusCode> Login(Credentials credentials)
 		{
 			ApiUrl.BaseUrl = credentials?.ServiceUrl;
-			using (var httpClient = new HttpClient())
+			try
 			{
-				httpClient.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
-				var request = new HttpRequestMessage(HttpMethod.Post, new Uri(ApiUrl.Login()));
-				var authorizationHeader = GetAuthorizationHeader(credentials);
-				request.Headers.Authorization = new AuthenticationHeaderValue("Basic",authorizationHeader);
-
-				var content = JsonConvert.SerializeObject(ApiUrl.Scopes);
-				request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
-				var responseMessage = await httpClient.SendAsync(request);
-
-				var response = await responseMessage.Content.ReadAsStringAsync();
-				if (responseMessage.StatusCode == HttpStatusCode.OK)
+				using (var httpClient = new HttpClient())
 				{
-					Token = JsonConvert.DeserializeObject<string>(response);
+					httpClient.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
+					var request = new HttpRequestMessage(HttpMethod.Post, new Uri(ApiUrl.Login()));
+					var authorizationHeader = GetAuthorizationHeader(credentials);
+					request.Headers.Authorization = new AuthenticationHeaderValue("Basic", authorizationHeader);
+
+					var content = JsonConvert.SerializeObject(ApiUrl.Scopes);
+					request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
+					var responseMessage = await httpClient.SendAsync(request);
+
+					var response = await responseMessage.Content.ReadAsStringAsync();
+					if (responseMessage.StatusCode == HttpStatusCode.OK)
+					{
+						Token = JsonConvert.DeserializeObject<string>(response);
+					}
+					return responseMessage.StatusCode;
 				}
-				return responseMessage.StatusCode;
+			}
+			catch (Exception e)
+			{
+				if (e.InnerException != null && e.InnerException.Message.Contains(PluginResources.RemoteNameCouldNotBeSolved))
+				{
+					var badRequest = HttpStatusCode.BadRequest;
+					return badRequest;
+				}
+				return HttpStatusCode.InternalServerError;
 			}
 		}
 
