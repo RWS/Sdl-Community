@@ -29,7 +29,8 @@ namespace Sdl.Community.GSVersionFetch.Studio
 			var wizardModel = new WizardModel
 			{
 				UserCredentials = new Credentials(),
-				GsProjects = new ObservableCollection<ProjectDetails>()
+				GsProjects = new ObservableCollection<GsProject>()
+				
 			};
 			var pages = CreatePages(wizardModel);
 

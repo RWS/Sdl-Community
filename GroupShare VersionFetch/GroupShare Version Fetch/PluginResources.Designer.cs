@@ -88,11 +88,31 @@ namespace Sdl.Community.GSVersionFetch {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon openserverproject {
+            get {
+                object obj = ResourceManager.GetObject("openserverproject", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to GroupShare_Version_Fetch.
         /// </summary>
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Project_Published {
+            get {
+                object obj = ResourceManager.GetObject("Project_Published", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

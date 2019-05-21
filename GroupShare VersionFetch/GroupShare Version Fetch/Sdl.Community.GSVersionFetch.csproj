@@ -40,6 +40,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
@@ -111,6 +114,7 @@
     <Compile Include="Commands\ParameterCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Helpers\ApiUrl.cs" />
+    <Compile Include="Helpers\LanguageFlags.cs" />
     <Compile Include="Helpers\TreeHelper.cs" />
     <Compile Include="Interface\IAsyncCommand.cs" />
     <Compile Include="Interface\IRaiseCanExecuteChanged.cs" />
@@ -118,8 +122,10 @@
     <Compile Include="Model\Credentials.cs" />
     <Compile Include="Model\GsFile.cs" />
     <Compile Include="Model\GsFileVersion.cs" />
-    <Compile Include="Model\ProjectDetails.cs" />
+    <Compile Include="Model\GsProject.cs" />
+    <Compile Include="Model\ProjectDetailsResponse.cs" />
     <Compile Include="Model\ProjectResponse.cs" />
+    <Compile Include="Model\TargetLanguageFlag.cs" />
     <Compile Include="Model\WizardModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -158,6 +164,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Project_Published.ico" />
+    <Resource Include="Resources\openserverproject.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
@@ -177,6 +185,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UiHelpers\DataGridStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\DataGridStyle2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

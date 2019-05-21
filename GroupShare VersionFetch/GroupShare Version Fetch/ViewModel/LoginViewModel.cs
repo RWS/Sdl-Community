@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Net;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -6,8 +9,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Sdl.Community.GSVersionFetch.Commands;
+using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
+using Sdl.Core.Globalization;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
@@ -115,7 +120,9 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private async void AuthenticateUser(object parameter)
 		{
 			var passwordBox = parameter as PasswordBox;
+			var languageFlagsHelper = new LanguageFlags();
 			var password = passwordBox?.Password;
+			var projectService = new ProjectService();
 			if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 			{
 				_wizardModel.UserCredentials.UserName = UserName.TrimEnd().TrimStart();
@@ -130,6 +137,22 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						IsValid = true;
 						TextMessage = PluginResources.AuthenticationSuccess;
 						TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#017701");
+						var projectsResponse = await projectService.GetGsProjects();
+						if (projectsResponse?.Items != null)
+						{
+							foreach (var project in projectsResponse.Items)
+							{
+								var gsProject = new GsProject
+								{
+									Name = project.Name,
+									DueDate = project.DueDate?.ToString(),
+									SourceLanguageFlagUri = languageFlagsHelper.GetImageStudioCodeByLanguageCode(project.SourceLanguage),
+									TargetLanguageFlagsUri = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage)
+								};
+								_wizardModel?.GsProjects.Add(gsProject);
+							}
+						}
+
 						TextMessageVisibility = "Visible";
 						_view.Dispatcher.Invoke(delegate { SendKeys.SendWait("{TAB}"); }, DispatcherPriority.ApplicationIdle);
 					}
