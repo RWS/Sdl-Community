@@ -147,8 +147,13 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 									Name = project.Name,
 									DueDate = project.DueDate?.ToString(),
 									Image = new Language(project.SourceLanguage).GetFlagImage(),
-									TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage)
+									TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage),
 								};
+
+								if (Enum.TryParse<ProjectStatus.Status>(project.Status.ToString(), out _))
+								{
+									gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
+								}
 								_wizardModel?.GsProjects.Add(gsProject);
 							}
 						}

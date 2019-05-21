@@ -25,9 +25,9 @@
 			</Style>
 
 			<Style TargetType="Button" x:Key="SdlWizardStyleButton" BasedOn="{StaticResource SdlSecondaryButtonStyle}">
-				<Setter Property="MinWidth" Value="70"></Setter>
-				<Setter Property="Height" Value="34"></Setter>
-				<Setter Property="Margin" Value="5,9,5,11"></Setter>
+				<Setter Property="MinWidth" Value="70"/>
+				<Setter Property="Height" Value="34"/>
+				<Setter Property="Margin" Value="5,9,5,11"/>
 			</Style>
 
 			<Style TargetType="Button" x:Key="SdlWizardStyleNextButton" BasedOn="{StaticResource SdlWizardStyleButton}">

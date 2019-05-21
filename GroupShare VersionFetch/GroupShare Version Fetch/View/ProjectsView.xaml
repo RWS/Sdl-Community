@@ -48,7 +48,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 				
-				<DataGridTemplateColumn  Header="Project name" SortMemberPath="Name">
+				<DataGridTemplateColumn  Header="Project name" SortMemberPath="Name" Width="*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<StackPanel Orientation="Horizontal" >
@@ -59,7 +59,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Width="Auto" Header="Language pairs">
+				<DataGridTemplateColumn Width="*" Header="Language pairs">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<DockPanel>
@@ -82,10 +82,28 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Width="Auto" Header="Delivery date">
+				<DataGridTemplateColumn  Header="Status" Width="auto">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<TextBlock Text="{Binding DueDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+							<StackPanel Orientation="Horizontal" >
+								<TextBox Text="{Binding Status,Mode=TwoWay}" Background="{StaticResource ProjectStatus.Label.InProgress}" Foreground="White" Margin="5"  VerticalAlignment="Center" FontSize="10" Padding="1">
+									<TextBox.Resources>
+										<Style TargetType="{x:Type Border}">
+											<Setter Property="CornerRadius" Value="3"/>
+											<Setter Property="BorderThickness" Value="0,0,0,0"/>
+											<Setter Property="BorderBrush" Value="{StaticResource ProjectStatus.Label.InProgress}"/>
+										</Style>
+									</TextBox.Resources>
+								</TextBox>
+							</StackPanel>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTemplateColumn Width="*" Header="Delivery date" >
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding DueDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,10"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

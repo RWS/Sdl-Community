@@ -125,6 +125,7 @@
     <Compile Include="Model\GsProject.cs" />
     <Compile Include="Model\ProjectDetailsResponse.cs" />
     <Compile Include="Model\ProjectResponse.cs" />
+    <Compile Include="Model\ProjectStatus.cs" />
     <Compile Include="Model\TargetLanguageFlag.cs" />
     <Compile Include="Model\WizardModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
