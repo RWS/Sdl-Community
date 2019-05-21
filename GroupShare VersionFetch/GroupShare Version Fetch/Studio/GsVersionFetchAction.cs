@@ -41,7 +41,6 @@ namespace Sdl.Community.GSVersionFetch.Studio
 
 		private ObservableCollection<ProjectWizardViewModelBase> CreatePages(WizardModel wizardModel)
 		{
-
 			return new ObservableCollection<ProjectWizardViewModelBase>
 			{
 				new LoginViewModel(wizardModel,new LoginView()),

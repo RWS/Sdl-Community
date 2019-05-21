@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
 
@@ -12,12 +10,33 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	public class ProjectsViewModel: ProjectWizardViewModelBase
 	{
 		private bool _isValid;
-		private WizardModel _wizardModel;
+		private readonly WizardModel _wizardModel;
 		private readonly ProjectService _projectService;
 		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
 		{
 			_wizardModel = wizardModel;
 			_projectService = new ProjectService();
+
+			wizardModel.GsProjects.CollectionChanged += GsProjects_CollectionChanged;
+		}
+
+		private void GsProjects_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			var projects = (ObservableCollection<GsProject>) sender;
+
+			if (projects?.Any() == null) return;
+			foreach (var project in projects)
+			{
+				project.PropertyChanged += GsProject_PropertyChanged;
+			}
+		}
+
+		private void GsProject_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName.Equals("IsSelected"))
+			{
+				IsValid = _wizardModel.GsProjects.Any(p => p.IsSelected);
+			}
 		}
 
 		public override string DisplayName => "GroupShare Projects";
