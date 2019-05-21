@@ -24,7 +24,6 @@
 		<DataGrid  
 		          ItemsSource="{Binding GsProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 		          SelectionMode="Extended"
-			
 		          SelectionUnit="FullRow"
 		          Style="{StaticResource FilesGridStyle}"
 		          GridLinesVisibility="None"
@@ -59,17 +58,22 @@
 				<DataGridTemplateColumn Width="Auto" Header="Language pairs">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<DockPanel >
+							<DockPanel>
 								<Image DockPanel.Dock="Left"  Source="{Binding SourceLanguageFlagUri}" Width="25" Height="25" />
-								<TextBlock Text="->" VerticalAlignment="Center"/>
-									<ItemsControl ItemsSource="{Binding TargetLanguageFlagsUri,Mode=TwoWay}">
-										<ItemsControl.ItemTemplate>
-											<DataTemplate>
-												<Image Source="{Binding Path}" Width="25" Height="25"/>
-											</DataTemplate>
-										</ItemsControl.ItemTemplate>
-									</ItemsControl>
-								</DockPanel>
+								<Image Source="../Resources/arrow_right_blue.png" VerticalAlignment="Center" Width="10" Height="15" Margin="5"/>
+								<ItemsControl ItemsSource="{Binding TargetLanguageFlagsUri,Mode=TwoWay}">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<WrapPanel />
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Image Source="{Binding Path}" Width="25" Height="25" Margin="5,0,0,0"/>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</DockPanel>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
