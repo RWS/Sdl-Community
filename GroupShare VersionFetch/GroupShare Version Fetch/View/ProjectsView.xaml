@@ -3,10 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Sdl.Community.GSVersionFetch.View"
-             xmlns:converters="clr-namespace:Sdl.Community.GSVersionFetch.UiHelpers"
              xmlns:viewModel="clr-namespace:Sdl.Community.GSVersionFetch.ViewModel"
-             xmlns:helpers="clr-namespace:Sdl.Community.GSVersionFetch.Helpers"
              mc:Ignorable="d"  
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModel:ProjectsViewModel}">
 
@@ -52,8 +49,8 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<StackPanel Orientation="Horizontal" >
-								<Image Source="../Resources/openserverproject.ico" Width="25" Height="25" HorizontalAlignment="Center" />
-								<TextBlock Text="{Binding Name}" Margin="5" HorizontalAlignment="Center" />
+								<Image Source="../Resources/openserverproject.ico" Width="25" Height="25" />
+								<TextBlock Text="{Binding Name}" Margin="5"  VerticalAlignment="Center"/>
 							</StackPanel>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
@@ -62,19 +59,17 @@
 				<DataGridTemplateColumn Width="Auto" Header="Language pairs">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<DockPanel>
+							<DockPanel >
 								<Image DockPanel.Dock="Left"  Source="{Binding SourceLanguageFlagUri}" Width="25" Height="25" />
 								<TextBlock Text="->" VerticalAlignment="Center"/>
-								<ItemsControl ItemsSource="{Binding TargetLanguageFlagsUri,Mode=TwoWay}">
-									<ItemsControl.ItemTemplate>
-										<DataTemplate>
-											<Image Source="{Binding Path}" />
-										</DataTemplate>
-									</ItemsControl.ItemTemplate>
-
-								</ItemsControl>
-
-							</DockPanel>
+									<ItemsControl ItemsSource="{Binding TargetLanguageFlagsUri,Mode=TwoWay}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Image Source="{Binding Path}" Width="25" Height="25"/>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</DockPanel>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -86,7 +81,6 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-
 			</DataGrid.Columns>
 		</DataGrid>
 	</Grid>

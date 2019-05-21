@@ -142,20 +142,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						{
 							foreach (var project in projectsResponse.Items)
 							{
-								var testLanguages = new ObservableCollection<TargetLanguageFlag>();
-								var targetLanguages = new TargetLanguageFlag
-								{
-									Path = languageFlagsHelper.GetImageStudioCodeByLanguageCode(project.SourceLanguage)
-								};
-								testLanguages.Add(targetLanguages);
-								testLanguages.Add(targetLanguages);
-
 								var gsProject = new GsProject
 								{
 									Name = project.Name,
 									DueDate = project.DueDate?.ToString(),
 									SourceLanguageFlagUri = languageFlagsHelper.GetImageStudioCodeByLanguageCode(project.SourceLanguage),
-									TargetLanguageFlagsUri = testLanguages
+									TargetLanguageFlagsUri = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage)
 								};
 								_wizardModel?.GsProjects.Add(gsProject);
 							}

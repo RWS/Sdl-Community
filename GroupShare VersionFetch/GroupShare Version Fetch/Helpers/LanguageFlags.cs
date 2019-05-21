@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Core.Globalization;
 
 namespace Sdl.Community.GSVersionFetch.Helpers
@@ -76,6 +78,37 @@ namespace Sdl.Community.GSVersionFetch.Helpers
 			var locationSplited = entyLocation?.Split(new[] { "SDLTradosStudio.exe" }, StringSplitOptions.None);
 
 			return locationSplited != null ? locationSplited[0] : string.Empty;
+		}
+
+		/// <summary>
+		/// From GS if the project has multiple target languages we receive the value like this: "de-DE,fr-FR"
+		/// </summary>
+		public ObservableCollection<TargetLanguageFlag> GetTargetLanguageFlags(string projectTargetLanguage)
+		{
+			var targetLanguageFlags = new ObservableCollection<TargetLanguageFlag>();
+			try
+			{
+				if (!string.IsNullOrEmpty(projectTargetLanguage))
+				{
+					var splitedTargetCode = projectTargetLanguage.Split(',');
+					if (splitedTargetCode.Length > 0)
+					{
+						foreach (var targetLanguage in splitedTargetCode)
+						{
+							var targetLanguageFlag = new TargetLanguageFlag
+							{
+								Path = GetImageStudioCodeByLanguageCode(targetLanguage)
+							};
+							targetLanguageFlags.Add(targetLanguageFlag);
+						}
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				// here we'll add logging
+			}
+			return targetLanguageFlags;
 		}
 	}
 }
