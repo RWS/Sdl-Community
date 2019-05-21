@@ -86,16 +86,34 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<StackPanel Orientation="Horizontal" >
-								<TextBox Text="{Binding Status,Mode=TwoWay}" Background="{StaticResource ProjectStatus.Label.InProgress}" Foreground="White" Margin="5"  VerticalAlignment="Center" FontSize="10" Padding="1">
+								<TextBox Text="{Binding Status,Mode=TwoWay}" Foreground="White" Margin="5" TextAlignment="Center" Width="60" VerticalAlignment="Center" FontSize="10" Padding="1">
 									<TextBox.Resources>
 										<Style TargetType="{x:Type Border}">
 											<Setter Property="CornerRadius" Value="3"/>
 											<Setter Property="BorderThickness" Value="0,0,0,0"/>
-											<Setter Property="BorderBrush" Value="{StaticResource ProjectStatus.Label.InProgress}"/>
 										</Style>
+										<Style TargetType="TextBox" >
+											<Style.Triggers>
+												<DataTrigger Binding="{Binding Status}" Value="Started">
+													<Setter Property="Background" Value="{StaticResource ProjectStatus.Label.InProgress}" />
+												</DataTrigger>
+												<DataTrigger Binding="{Binding Status}" Value="Completed">
+													<Setter Property="Background" Value="{StaticResource ProjectStatus.Label.Completed}" />
+												</DataTrigger>
+												<DataTrigger Binding="{Binding Status}" Value="Archived">
+													<Setter Property="Background" Value="{StaticResource ProjectStatus.Label.Archived}" />
+												</DataTrigger>
+												<DataTrigger Binding="{Binding Status}" Value="Detached">
+													<Setter Property="Background" Value="{StaticResource ProjectStatus.Label.Archived}" />
+												</DataTrigger>
+											</Style.Triggers>
+										</Style>
+
 									</TextBox.Resources>
+
 								</TextBox>
 							</StackPanel>
+
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

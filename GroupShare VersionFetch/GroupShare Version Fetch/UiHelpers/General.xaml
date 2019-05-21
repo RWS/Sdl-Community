@@ -47,6 +47,8 @@
 	<SolidColorBrush x:Key="WizardProgressHeader.Label.Forground" Color="#808080" />
 
 	<SolidColorBrush x:Key="ProjectStatus.Label.InProgress" Color="#E4784C" />
+	<SolidColorBrush x:Key="ProjectStatus.Label.Archived" Color="#B5B5B5" />
+	<SolidColorBrush x:Key="ProjectStatus.Label.Completed" Color="#329264" />
 
 
 	<Style x:Uid="SdlHyperlink" x:Key="SdlHyperlinkStyle" TargetType="Hyperlink">
