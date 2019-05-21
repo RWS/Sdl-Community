@@ -61,6 +61,16 @@ namespace Sdl.Community.GSVersionFetch {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap arrow_right_blue {
+            get {
+                object obj = ResourceManager.GetObject("arrow_right_blue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You were successfully authenticated into GroupShare.
         /// </summary>
         public static string AuthenticationSuccess {
