@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.Drawing;
 
 namespace Sdl.Community.GSVersionFetch.Model
 {
@@ -28,9 +28,8 @@ namespace Sdl.Community.GSVersionFetch.Model
 			}
 		}
 
-		public string SourceLanguageFlagUri { get; set; }
-		public ObservableCollection<TargetLanguageFlag> TargetLanguageFlagsUri { get; set; }
-
+		public Image Image { get; set; }
+		public ObservableCollection<TargetLanguageFlag> TargetLanguageFlags { get; set; }
 		public string Status { get; set; }
 		public string DueDate { get; set; }
 	}

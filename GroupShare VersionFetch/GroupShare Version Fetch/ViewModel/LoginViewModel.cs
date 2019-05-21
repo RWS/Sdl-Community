@@ -146,8 +146,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 								{
 									Name = project.Name,
 									DueDate = project.DueDate?.ToString(),
-									SourceLanguageFlagUri = languageFlagsHelper.GetImageStudioCodeByLanguageCode(project.SourceLanguage),
-									TargetLanguageFlagsUri = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage)
+									Image = new Language(project.SourceLanguage).GetFlagImage(),
+									TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage)
 								};
 								_wizardModel?.GsProjects.Add(gsProject);
 							}

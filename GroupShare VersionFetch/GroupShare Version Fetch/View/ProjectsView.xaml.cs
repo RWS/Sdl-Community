@@ -23,6 +23,7 @@ namespace Sdl.Community.GSVersionFetch.View
 		public ProjectsView()
 		{
 			InitializeComponent();
+			
 		}
 	}
 }

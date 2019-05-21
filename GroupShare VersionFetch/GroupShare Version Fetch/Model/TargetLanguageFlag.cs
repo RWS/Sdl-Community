@@ -1,7 +1,9 @@
-﻿namespace Sdl.Community.GSVersionFetch.Model
+﻿using System.Drawing;
+
+namespace Sdl.Community.GSVersionFetch.Model
 {
 	public class TargetLanguageFlag
 	{
-		public string Path { get; set; }
+		public Image Image { get; set; }
 	}
 }
