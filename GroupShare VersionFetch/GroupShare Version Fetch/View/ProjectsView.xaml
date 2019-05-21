@@ -86,7 +86,7 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<StackPanel Orientation="Horizontal" >
-								<TextBox Text="{Binding Status,Mode=TwoWay}" Foreground="White" Margin="5" TextAlignment="Center" Width="60" VerticalAlignment="Center" FontSize="10" Padding="1">
+								<TextBox Text="{Binding Status,Mode=TwoWay}" IsReadOnly="True" Foreground="White" Margin="5" TextAlignment="Center" Width="60" VerticalAlignment="Center" FontSize="10" Padding="1">
 									<TextBox.Resources>
 										<Style TargetType="{x:Type Border}">
 											<Setter Property="CornerRadius" Value="3"/>
@@ -108,12 +108,9 @@
 												</DataTrigger>
 											</Style.Triggers>
 										</Style>
-
 									</TextBox.Resources>
-
 								</TextBox>
 							</StackPanel>
-
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
