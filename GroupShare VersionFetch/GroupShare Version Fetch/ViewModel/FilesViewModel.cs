@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
+using Sdl.Core.Globalization;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
@@ -32,7 +31,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					foreach (var selectedProject in selectedProjects)
 					{
 						var files = await _projectService.GetProjectFiles(selectedProject.ProjectId);
-						SetProjectIdOnGsFiles(selectedProject.ProjectId, files);
+						SetFileProperties(selectedProject.ProjectId,selectedProject.Name, files);
 					}
 				}
 			}
@@ -51,13 +50,26 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
+		public ObservableCollection<GsFile> GsFiles
+		{
+			get => _wizardModel?.GsFiles;
+			set
+			{
+				_wizardModel.GsFiles = value;
+				OnPropertyChanged(nameof(GsFiles));
+			}
+		}
+
 		public override string DisplayName => " Projects files";
 
-		private void SetProjectIdOnGsFiles(string projectId, IEnumerable<GsFile> files)
+		private void SetFileProperties(string projectId, string projectName,IEnumerable<GsFile> files)
 		{
 			foreach (var gsFile in files)
 			{
 				gsFile.ProjectId = projectId;
+				gsFile.ProjectName = projectName;
+				gsFile.LanguageFlagImage = new Language(gsFile.LanguageCode).GetFlagImage();
+				gsFile.LanguageName = new Language(gsFile.LanguageCode).DisplayName;
 				_wizardModel?.GsFiles?.Add(gsFile);
 			}
 		}
