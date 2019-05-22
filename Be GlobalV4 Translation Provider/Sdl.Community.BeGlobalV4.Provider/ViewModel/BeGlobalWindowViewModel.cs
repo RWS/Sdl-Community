@@ -24,6 +24,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private readonly BeGlobalWindow _mainWindow;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
 		private readonly LanguagePair[] _languagePairs;
+		public static readonly Log Log = Log.Instance;
 
 		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options,
 			TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
@@ -237,6 +238,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					loginTab.ValidationBlock.Visibility = Visibility.Visible;
 					loginTab.ValidationBlock.Text = e.Message.Contains("Acquiring token failed") ? "Please verify your credentials." : e.Message;
 				}
+				Log.Logger.Error($"Is window valid method: {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}

@@ -77,7 +77,5 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public void LoadState(string translationProviderState)
 		{
 		}
-
-
 	}
 }

@@ -2,6 +2,7 @@
 using System.Text;
 using Newtonsoft.Json;
 using RestSharp;
+using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Service
@@ -10,6 +11,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 	{
 		private readonly IRestClient _client;
 		private readonly string _flavor;
+		public static readonly Log Log = Log.Instance;
 
 		public BeGlobalV4Translator(
 			string server,
@@ -19,7 +21,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			bool useClientAuthentication)
 		{
 			_flavor = flavor;
-
 			_client = new RestClient(string.Format($"{server}/v4"));
 			IRestRequest request;
 			if (useClientAuthentication)
@@ -51,121 +52,161 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 		public int GetClientInformation()
 		{
-			var request = new RestRequest("/accounts/api-credentials/self")
+			try
 			{
-				RequestFormat = DataFormat.Json
-			};
-			AddTraceId(request);
-			var response = _client.Execute(request);
-			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
-			if (!response.IsSuccessful)
-			{
-				ShowErrors(response);
+				var request = new RestRequest("/accounts/api-credentials/self")
+				{
+					RequestFormat = DataFormat.Json
+				};
+				AddTraceId(request);
+				var response = _client.Execute(request);
+				var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
+				if (!response.IsSuccessful)
+				{
+					ShowErrors(response);
+				}
+				if (user != null)
+				{
+					return user.AccountId;
+				}
+				return 0;
 			}
-			if (user != null)
+			catch (Exception e)
 			{
-				return user.AccountId;
+				Log.Logger.Error($"Get client information method: {e.Message}\n {e.StackTrace}");
 			}
 			return 0;
 		}
 
 		public string TranslateText(string text, string sourceLanguage, string targetLanguage)
 		{
-			var request = new RestRequest("/mt/translations/async", Method.POST)
+			try
 			{
-				RequestFormat = DataFormat.Json
-			};
-			AddTraceId(request);
+				var request = new RestRequest("/mt/translations/async", Method.POST)
+				{
+					RequestFormat = DataFormat.Json
+				};
+				AddTraceId(request);
 
-			string[] texts = { text };
-			request.AddBody(new
-			{
-				input = texts,
-				sourceLanguageId = sourceLanguage,
-				targetLanguageId = targetLanguage,
-				model = _flavor,
-				inputFormat = "xliff"
-			});
-			var response = _client.Execute(request);
-			if (!response.IsSuccessful)
-			{
-				ShowErrors(response);
-			}
-			dynamic json = JsonConvert.DeserializeObject(response.Content);
-
-			var rawData = WaitForTranslation(json?.requestId?.Value);
-
-			json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
-			return json != null ? json.translation[0] : string.Empty;
-		}
-
-		public int GetUserInformation()
-		{
-			var request = new RestRequest("/accounts/users/self")
-			{
-				RequestFormat = DataFormat.Json
-			};
-			AddTraceId(request);
-
-			var response = _client.Execute(request);
-			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
-			if (!response.IsSuccessful)
-			{
-				ShowErrors(response);
-			}
-			return user != null ? user.AccountId : 0;
-		}
-
-		public SubscriptionInfo GetLanguagePairs(string accountId)
-		{
-			var request = new RestRequest($"/accounts/{accountId}/subscriptions/language-pairs")
-			{
-				RequestFormat = DataFormat.Json
-			};
-			AddTraceId(request);
-
-			var response = _client.Execute(request);
-			if (!response.IsSuccessful)
-			{
-				ShowErrors(response);
-			}
-			var subscriptionInfo = JsonConvert.DeserializeObject<SubscriptionInfo>(response.Content);
-			return subscriptionInfo;
-		}
-
-		private byte[] WaitForTranslation(string id)
-		{
-			IRestResponse response;
-			string status;
-			do
-			{
-				response = RestGet($"/mt/translations/async/{id}");
+				string[] texts = { text };
+				request.AddBody(new
+				{
+					input = texts,
+					sourceLanguageId = sourceLanguage,
+					targetLanguageId = targetLanguage,
+					model = _flavor,
+					inputFormat = "xliff"
+				});
+				var response = _client.Execute(request);
 				if (!response.IsSuccessful)
 				{
 					ShowErrors(response);
 				}
-
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
-				status = json.translationStatus;
 
-				if (!status.Equals("DONE", StringComparison.CurrentCultureIgnoreCase))
+				var rawData = WaitForTranslation(json?.requestId?.Value);
+
+				json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
+				return json != null ? json.translation[0] : string.Empty;
+			}
+			catch(Exception e)
+			{
+				Log.Logger.Error($"Translate text method: {e.Message}\n {e.StackTrace}");
+			}
+			return string.Empty;
+		}
+
+		public int GetUserInformation()
+		{
+			try
+			{
+				var request = new RestRequest("/accounts/users/self")
 				{
-					System.Threading.Thread.Sleep(300);
-				}
-				if (status.Equals("FAILED"))
+					RequestFormat = DataFormat.Json
+				};
+				AddTraceId(request);
+
+				var response = _client.Execute(request);
+				var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
+				if (!response.IsSuccessful)
 				{
 					ShowErrors(response);
-
 				}
-			} while (status.Equals("INIT", StringComparison.CurrentCultureIgnoreCase) ||
-					 status.Equals("TRANSLATING", StringComparison.CurrentCultureIgnoreCase));
-
-			response = RestGet($"/mt/translations/async/{id}/content");
-			if (!response.IsSuccessful)
-			{
-				ShowErrors(response);
+				return user != null ? user.AccountId : 0;
 			}
-			return response.RawBytes;
+			catch (Exception e)
+			{
+				Log.Logger.Error($"Get user information method: {e.Message}\n {e.StackTrace}");
+			}
+			return 0;
+		}
+
+		public SubscriptionInfo GetLanguagePairs(string accountId)
+		{
+			try
+			{
+				var request = new RestRequest($"/accounts/{accountId}/subscriptions/language-pairs")
+				{
+					RequestFormat = DataFormat.Json
+				};
+				AddTraceId(request);
+
+				var response = _client.Execute(request);
+				if (!response.IsSuccessful)
+				{
+					ShowErrors(response);
+				}
+				var subscriptionInfo = JsonConvert.DeserializeObject<SubscriptionInfo>(response.Content);
+				return subscriptionInfo;
+			}
+			catch(Exception e)
+			{
+				Log.Logger.Error($"Subscription info method: {e.Message}\n {e.StackTrace}");
+			}
+			return new SubscriptionInfo();
+		}
+
+		private byte[] WaitForTranslation(string id)
+		{
+			try
+			{
+				IRestResponse response;
+				string status;
+				do
+				{
+					response = RestGet($"/mt/translations/async/{id}");
+					if (!response.IsSuccessful)
+					{
+						ShowErrors(response);
+					}
+
+					dynamic json = JsonConvert.DeserializeObject(response.Content);
+					status = json.translationStatus;
+
+					if (!status.Equals("DONE", StringComparison.CurrentCultureIgnoreCase))
+					{
+						System.Threading.Thread.Sleep(300);
+					}
+					if (status.Equals("FAILED"))
+					{
+						ShowErrors(response);
+
+					}
+				} while (status.Equals("INIT", StringComparison.CurrentCultureIgnoreCase) ||
+						 status.Equals("TRANSLATING", StringComparison.CurrentCultureIgnoreCase));
+
+				response = RestGet($"/mt/translations/async/{id}/content");
+				if (!response.IsSuccessful)
+				{
+					ShowErrors(response);
+				}
+				return response.RawBytes;
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"Wait for translation method: {e.Message}\n {e.StackTrace}");
+			}
+			return new byte[1];
 		}
 
 		private IRestResponse RestGet(string command)
