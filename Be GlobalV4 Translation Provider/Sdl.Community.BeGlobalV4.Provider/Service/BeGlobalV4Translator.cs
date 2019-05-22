@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows;
@@ -39,7 +40,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 		}
 
-		public string TranslateText(string text,string sourceLanguage, string targetLanguage)
+		public string TranslateText(string text, string sourceLanguage, string targetLanguage)
 		{
 			try
 			{
@@ -153,7 +154,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 						ShowErrors(response);
 					}
 				} while (status.Equals("INIT", StringComparison.CurrentCultureIgnoreCase) ||
-				         status.Equals("TRANSLATING", StringComparison.CurrentCultureIgnoreCase));
+						 status.Equals("TRANSLATING", StringComparison.CurrentCultureIgnoreCase));
 
 				response = RestGet($"/mt/translations/async/{id}/content");
 				if (!response.IsSuccessful || response.StatusCode != HttpStatusCode.OK)
@@ -182,7 +183,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		}
 		private void AddTraceId(IRestRequest request)
 		{
-			request.AddHeader("Trace-ID", $"Studio2019.{Guid.NewGuid().ToString()}");
+			var pluginVersion = VersionHelper.GetPluginVersion();
+			var studioVersion = VersionHelper.GetStudioVersion();
+			request.AddHeader("Trace-ID", $"BeGlobal {pluginVersion} - {studioVersion}.{Guid.NewGuid().ToString()}");
 		}
 
 		private void ShowErrors(IRestResponse response)
@@ -201,5 +204,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				throw new Exception("Forbidden: Please check your license");
 			}
 		}
+
+		private string GetTraceIdInfo()
+		{
+			var traceIdInfo = string.Empty;
+
+			return traceIdInfo;
+		}		
 	}
 }
