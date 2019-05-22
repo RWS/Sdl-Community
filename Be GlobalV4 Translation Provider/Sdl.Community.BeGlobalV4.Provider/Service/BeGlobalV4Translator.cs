@@ -204,12 +204,5 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				throw new Exception("Forbidden: Please check your license");
 			}
 		}
-
-		private string GetTraceIdInfo()
-		{
-			var traceIdInfo = string.Empty;
-
-			return traceIdInfo;
-		}		
 	}
 }
