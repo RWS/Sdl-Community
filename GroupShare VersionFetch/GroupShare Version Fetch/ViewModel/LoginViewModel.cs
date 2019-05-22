@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Net;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -148,6 +145,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 									DueDate = project.DueDate?.ToString(),
 									Image = new Language(project.SourceLanguage).GetFlagImage(),
 									TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage),
+									ProjectId = project.ProjectId
 								};
 
 								if (Enum.TryParse<ProjectStatus.Status>(project.Status.ToString(), out _))

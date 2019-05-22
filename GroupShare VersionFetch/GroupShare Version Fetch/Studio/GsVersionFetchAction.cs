@@ -29,12 +29,13 @@ namespace Sdl.Community.GSVersionFetch.Studio
 			var wizardModel = new WizardModel
 			{
 				UserCredentials = new Credentials(),
-				GsProjects = new ObservableCollection<GsProject>()
-				
+				GsProjects = new ObservableCollection<GsProject>(),
+				GsFiles =   new ObservableCollection<GsFile>()
 			};
 			var pages = CreatePages(wizardModel);
 
 			var projectWizard = new ProjectWizard(pages);
+			
 			ElementHost.EnableModelessKeyboardInterop(projectWizard);
 			projectWizard.Show();
 		}
@@ -45,7 +46,7 @@ namespace Sdl.Community.GSVersionFetch.Studio
 			{
 				new LoginViewModel(wizardModel,new LoginView()),
 				new ProjectsViewModel(wizardModel,new ProjectsView()),
-				new FilesViewModel(new FilesView())
+				new FilesViewModel(wizardModel,new FilesView())
 			};
 		}
 	}

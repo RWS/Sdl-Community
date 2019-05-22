@@ -3,7 +3,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Sdl.Community.GSVersionFetch.Model;
-using Sdl.Community.GSVersionFetch.Service;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
@@ -11,12 +10,10 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	{
 		private bool _isValid;
 		private readonly WizardModel _wizardModel;
-		private readonly ProjectService _projectService;
+
 		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
 		{
 			_wizardModel = wizardModel;
-			_projectService = new ProjectService();
-
 			wizardModel.GsProjects.CollectionChanged += GsProjects_CollectionChanged;
 		}
 
@@ -30,6 +27,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				project.PropertyChanged += GsProject_PropertyChanged;
 			}
 		}
+		
 
 		private void GsProject_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -52,6 +50,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				OnPropertyChanged(nameof(IsValid));
 			}
 		}
+
 		public ObservableCollection<GsProject> GsProjects
 		{
 			get => _wizardModel.GsProjects;

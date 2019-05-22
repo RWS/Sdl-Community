@@ -18,6 +18,8 @@ namespace Sdl.Community.GSVersionFetch.Model
 			}
 		}
 
+		public string ProjectId { get; set; }
+
 		public bool IsSelected
 		{
 			get => _isSelected;

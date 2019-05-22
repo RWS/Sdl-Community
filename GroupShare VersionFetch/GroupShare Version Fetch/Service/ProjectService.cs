@@ -32,20 +32,26 @@ namespace Sdl.Community.GSVersionFetch.Service
 
 		public async Task<List<GsFile>> GetProjectFiles(string projectId)
 		{
-			using (var httpClient = new HttpClient())
+			try
 			{
-				var request = new HttpRequestMessage(HttpMethod.Get, new Uri(ApiUrl.GetProjectFiles(projectId)));
-				ApiUrl.AddRequestHeaders(httpClient, request);
-
-				var responseMessage = await httpClient.SendAsync(request);
-				var filesResponse = await responseMessage.Content.ReadAsStringAsync();
-				if (responseMessage.StatusCode == HttpStatusCode.OK)
+				using (var httpClient = new HttpClient())
 				{
-					return JsonConvert.DeserializeObject<List<GsFile>>(filesResponse);
-				}
+					var request = new HttpRequestMessage(HttpMethod.Get, new Uri(ApiUrl.GetProjectFiles(projectId)));
+					ApiUrl.AddRequestHeaders(httpClient, request);
 
-				throw new Exception(filesResponse);
+					var responseMessage = await httpClient.SendAsync(request);
+					var filesResponse = await responseMessage.Content.ReadAsStringAsync();
+					if (responseMessage.StatusCode == HttpStatusCode.OK)
+					{
+						return JsonConvert.DeserializeObject<List<GsFile>>(filesResponse);
+					}
+				}
 			}
+			catch (Exception e)
+			{
+				// here we'll add loging
+			}
+			return new List<GsFile>();
 		}
 
 		public async Task<List<GsFileVersion>> GetFileVersion(string languageFileId)
