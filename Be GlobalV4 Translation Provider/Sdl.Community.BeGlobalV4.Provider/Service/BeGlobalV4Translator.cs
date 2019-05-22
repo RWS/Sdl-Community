@@ -223,7 +223,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 		private void AddTraceId(IRestRequest request)
 		{
-			request.AddHeader("Trace-ID", $"Studio2017_{Guid.NewGuid().ToString()}");
+			var pluginVersion = VersionHelper.GetPluginVersion();
+			var studioVersion = VersionHelper.GetStudioVersion();
+			request.AddHeader("Trace-ID", $"BeGlobal {pluginVersion} - {studioVersion}.{Guid.NewGuid().ToString()}");
 		}
 
 		private void ShowErrors(IRestResponse response)
