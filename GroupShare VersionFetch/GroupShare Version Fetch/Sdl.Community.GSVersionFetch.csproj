@@ -114,7 +114,9 @@
     <Compile Include="Commands\ParameterCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Helpers\ApiUrl.cs" />
+    <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\LanguageFlags.cs" />
+    <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\TreeHelper.cs" />
     <Compile Include="Interface\IAsyncCommand.cs" />
     <Compile Include="Interface\IRaiseCanExecuteChanged.cs" />

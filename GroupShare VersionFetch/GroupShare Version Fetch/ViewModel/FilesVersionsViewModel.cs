@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Media;
+using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
 
@@ -55,6 +56,31 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		    }
 	    }
 
+	    private async void Window_Closing(object sender, CancelEventArgs e)
+	    {
+		    if (IsComplete && IsCurrentPage)
+		    {
+			    var folderSelect = new FolderSelectDialog
+			    {
+				    Title = "Please select download location"
+			    };
+			    if (folderSelect.ShowDialog())
+			    {
+				    var folderPath = folderSelect.FileName;
+				    if (!string.IsNullOrEmpty(folderPath))
+				    {
+					    var selectedVersions = FilesVersions.Where(v => v.IsSelected);
+					    foreach (var selectedVersion in selectedVersions)
+					    {
+							//TODO: write files on disk, we need to have a naming convention, because if the project has multiple languages file name is the same for each language
+						    var file =await _projectService.DownloadFileVersion(selectedVersion.ProjectId, selectedVersion.LanguageFileId,
+							    selectedVersion.Version);
+					    }
+				    }
+			    }
+			}
+		}
+
 	    private async void FilesVersionsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(CurrentPageChanged))
@@ -71,6 +97,11 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						SetFileProperties(selectedFile, fileVersions);
 					}
 				}
+			}
+			if (e.PropertyName.Equals("Window"))
+			{
+				Window.Closing -= Window_Closing;
+				Window.Closing += Window_Closing;
 			}
 		}
 
@@ -155,7 +186,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			    fileVersion.ProjectName = selectedFile.ProjectName;
 			    fileVersion.LanguageFlagImage = selectedFile.LanguageFlagImage;
 			    fileVersion.LanguageName = selectedFile.LanguageName;
-
+			    fileVersion.ProjectId = selectedFile.ProjectId;
 			    _wizardModel?.FileVersions?.Add(fileVersion);
 		    }
 		    TextMessageVisibility = "Collapsed";
