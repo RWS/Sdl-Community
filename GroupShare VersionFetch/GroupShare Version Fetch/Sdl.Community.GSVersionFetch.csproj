@@ -166,6 +166,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\text_proofread.ico" />
     <Resource Include="Resources\arrow_right_blue.png" />
     <None Include="Resources\Project_Published.ico" />
     <Resource Include="Resources\openserverproject.ico" />

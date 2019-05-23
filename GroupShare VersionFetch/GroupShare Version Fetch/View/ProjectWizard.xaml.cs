@@ -23,7 +23,6 @@ namespace Sdl.Community.GSVersionFetch.View
 
 			_model = new ProjectWizardViewModel(this, pages);
 			_model.RequestClose += ProjectWizardViewModel_RequestClose;
-
 			DataContext = _model;
 		}
 
@@ -31,7 +30,6 @@ namespace Sdl.Community.GSVersionFetch.View
 		{
 			for (var i = 0; i < pages.Count; i++)
 			{
-				pages[i].Window = this;
 				pages[i].PageIndex = i + 1;
 				pages[i].TotalPages = pages.Count;
 			}

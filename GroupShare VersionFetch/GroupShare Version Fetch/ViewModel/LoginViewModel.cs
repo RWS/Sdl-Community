@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Net;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -136,7 +133,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					{
 						IsValid = true;
 						TextMessage = PluginResources.AuthenticationSuccess;
-						TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#017701");
+						TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
 						var projectsResponse = await projectService.GetGsProjects();
 						if (projectsResponse?.Items != null)
 						{
@@ -148,6 +145,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 									DueDate = project.DueDate?.ToString(),
 									Image = new Language(project.SourceLanguage).GetFlagImage(),
 									TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage),
+									ProjectId = project.ProjectId
 								};
 
 								if (Enum.TryParse<ProjectStatus.Status>(project.Status.ToString(), out _))
