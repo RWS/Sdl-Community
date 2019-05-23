@@ -1,0 +1,164 @@
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Media;
+using Sdl.Community.GSVersionFetch.Model;
+using Sdl.Community.GSVersionFetch.Service;
+
+namespace Sdl.Community.GSVersionFetch.ViewModel
+{
+    public class FilesVersionsViewModel : ProjectWizardViewModelBase
+    {
+	    private bool _isValid;
+	    private readonly ProjectService _projectService;
+		private readonly WizardModel _wizardModel;
+	    private SolidColorBrush _textMessageBrush;
+	    private string _textMessage;
+	    private string _textMessageVisibility;
+
+		public FilesVersionsViewModel(WizardModel wizardModel,object view) : base(view)
+		{
+			_wizardModel = wizardModel;
+			_projectService = new ProjectService();
+			PropertyChanged += FilesVersionsViewModel_PropertyChanged;
+			_wizardModel.FileVersions.CollectionChanged += FileVersions_CollectionChanged;
+		}
+
+		private void FileVersions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.OldItems != null)
+			{
+				foreach (GsFileVersion gsFile in e.OldItems)
+				{
+					gsFile.PropertyChanged -= GsFile_PropertyChanged;
+				}
+			}
+			if (e.NewItems == null) return;
+			foreach (GsFileVersion gsFile in e.NewItems)
+			{
+				gsFile.PropertyChanged += GsFile_PropertyChanged; 
+			}
+		}
+
+	    private void GsFile_PropertyChanged(object sender, PropertyChangedEventArgs e)
+	    {
+		    if (e.PropertyName.Equals("IsSelected"))
+		    {
+			    OnPropertyChanged(nameof(AllFilesChecked));
+			    if (_wizardModel?.GsFiles != null)
+			    {
+				    IsValid = _wizardModel.GsFiles.Any(f => f.IsSelected);
+				    IsComplete = IsValid;
+			    }
+		    }
+	    }
+
+	    private async void FilesVersionsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(CurrentPageChanged))
+			{
+				if (IsCurrentPage)
+				{
+					TextMessage = "Please wait, we are loading files versions";
+					TextMessageVisibility = "Visible";
+					TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
+					var selectedFiles = _wizardModel.GsFiles.Where(f => f.IsSelected);
+					foreach (var selectedFile in selectedFiles)
+					{
+						var fileVersions = await _projectService.GetFileVersion(selectedFile.UniqueId.ToString());
+						SetFileProperties(selectedFile, fileVersions);
+					}
+				}
+			}
+		}
+
+	    public override string DisplayName => "Files versions";
+		public override bool IsValid
+		{
+			get => _isValid;
+			set
+			{
+				if (_isValid == value)
+					return;
+
+				_isValid = value;
+				OnPropertyChanged(nameof(IsValid));
+			}
+		}
+
+	    public ObservableCollection<GsFileVersion> FilesVersions
+	    {
+		    get => _wizardModel.FileVersions;
+		    set
+		    {
+			    _wizardModel.FileVersions = value;
+			    OnPropertyChanged(nameof(FilesVersions));
+		    }
+	    }
+	    public bool AllFilesChecked
+	    {
+		    get => AreAllFilesSelected();
+		    set
+		    {
+			    ToggleCheckAllFiles(value);
+			    IsComplete = value;
+			    OnPropertyChanged(nameof(AllFilesChecked));
+		    }
+	    }
+	    public string TextMessage
+	    {
+		    get => _textMessage;
+		    set
+		    {
+			    _textMessage = value;
+			    OnPropertyChanged(nameof(TextMessage));
+		    }
+	    }
+	    public string TextMessageVisibility
+	    {
+		    get => _textMessageVisibility;
+		    set
+		    {
+			    _textMessageVisibility = value;
+			    OnPropertyChanged(nameof(TextMessageVisibility));
+		    }
+	    }
+	    public SolidColorBrush TextMessageBrush
+	    {
+		    get => _textMessageBrush;
+		    set
+		    {
+			    _textMessageBrush = value;
+			    OnPropertyChanged(nameof(TextMessageBrush));
+		    }
+	    }
+
+		private void ToggleCheckAllFiles(bool value)
+	    {
+			foreach (var fileVersion in FilesVersions)
+			{
+				fileVersion.IsSelected = value;
+			}
+		}
+
+	    private bool AreAllFilesSelected()
+	    {
+			return FilesVersions?.Count > 0 && FilesVersions.All(f => f.IsSelected);
+		}
+
+		private void SetFileProperties(GsFile selectedFile, List<GsFileVersion> fileVersions)
+	    {
+		    foreach (var fileVersion in fileVersions)
+		    {
+			    fileVersion.ProjectName = selectedFile.ProjectName;
+			    fileVersion.LanguageFlagImage = selectedFile.LanguageFlagImage;
+			    fileVersion.LanguageName = selectedFile.LanguageName;
+
+			    _wizardModel?.FileVersions?.Add(fileVersion);
+		    }
+		    TextMessageVisibility = "Collapsed";
+		}
+	}
+}

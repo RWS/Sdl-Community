@@ -30,7 +30,8 @@ namespace Sdl.Community.GSVersionFetch.Studio
 			{
 				UserCredentials = new Credentials(),
 				GsProjects = new ObservableCollection<GsProject>(),
-				GsFiles =   new ObservableCollection<GsFile>()
+				GsFiles =   new ObservableCollection<GsFile>(),
+				FileVersions = new ObservableCollection<GsFileVersion>()
 			};
 			var pages = CreatePages(wizardModel);
 
@@ -46,7 +47,8 @@ namespace Sdl.Community.GSVersionFetch.Studio
 			{
 				new LoginViewModel(wizardModel,new LoginView()),
 				new ProjectsViewModel(wizardModel,new ProjectsView()),
-				new FilesViewModel(wizardModel,new FilesView())
+				new FilesViewModel(wizardModel,new FilesView()),
+				new FilesVersionsViewModel(wizardModel,new FilesVersionsView())
 			};
 		}
 	}

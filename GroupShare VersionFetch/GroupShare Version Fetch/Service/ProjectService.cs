@@ -13,21 +13,26 @@ namespace Sdl.Community.GSVersionFetch.Service
 	{
 		public async Task<ProjectResponse> GetGsProjects()
 		{
-			using (var httpClient = new HttpClient())
+			try
 			{
-				var request = new HttpRequestMessage(HttpMethod.Get, new Uri(ApiUrl.GetProjects()));
-				ApiUrl.AddRequestHeaders(httpClient, request);
-
-				var responseMessage = await httpClient.SendAsync(request);
-				var projectsResponse = await responseMessage.Content.ReadAsStringAsync();
-				if (responseMessage.StatusCode == HttpStatusCode.OK)
+				using (var httpClient = new HttpClient())
 				{
-					return JsonConvert.DeserializeObject<ProjectResponse>(projectsResponse);
-				}
+					var request = new HttpRequestMessage(HttpMethod.Get, new Uri(ApiUrl.GetProjects()));
+					ApiUrl.AddRequestHeaders(httpClient, request);
 
-				// if the respsonse is anything other than 200 -> OK, then throw and exception with the response message
-				throw new Exception(projectsResponse);
+					var responseMessage = await httpClient.SendAsync(request);
+					var projectsResponse = await responseMessage.Content.ReadAsStringAsync();
+					if (responseMessage.StatusCode == HttpStatusCode.OK)
+					{
+						return JsonConvert.DeserializeObject<ProjectResponse>(projectsResponse);
+					}
+				}
 			}
+			catch (Exception e)
+			{
+				// here we'll add loging
+			}
+			return new ProjectResponse();
 		}
 
 		public async Task<List<GsFile>> GetProjectFiles(string projectId)
@@ -56,19 +61,26 @@ namespace Sdl.Community.GSVersionFetch.Service
 
 		public async Task<List<GsFileVersion>> GetFileVersion(string languageFileId)
 		{
-			using (var httpClient = new HttpClient())
+			try
 			{
-				var request = new HttpRequestMessage(HttpMethod.Get, new Uri(ApiUrl.GetFileVersions(languageFileId)));
-				ApiUrl.AddRequestHeaders(httpClient, request);
-
-				var responseMessage = await httpClient.SendAsync(request);
-				var filesResponse = await responseMessage.Content.ReadAsStringAsync();
-				if (responseMessage.StatusCode == HttpStatusCode.OK)
+				using (var httpClient = new HttpClient())
 				{
-					return JsonConvert.DeserializeObject<List<GsFileVersion>>(filesResponse);
+					var request = new HttpRequestMessage(HttpMethod.Get, new Uri(ApiUrl.GetFileVersions(languageFileId)));
+					ApiUrl.AddRequestHeaders(httpClient, request);
+
+					var responseMessage = await httpClient.SendAsync(request);
+					var filesResponse = await responseMessage.Content.ReadAsStringAsync();
+					if (responseMessage.StatusCode == HttpStatusCode.OK)
+					{
+						return JsonConvert.DeserializeObject<List<GsFileVersion>>(filesResponse);
+					}
 				}
-				throw new Exception(filesResponse);
 			}
+			catch (Exception e)
+			{
+				// here we'll add loging
+			}
+			return new List<GsFileVersion>();
 		}
 
 		public async Task<byte[]> DownloadFileVersion(string projectId, string languageFileId, int version)
