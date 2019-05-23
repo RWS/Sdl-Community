@@ -24,7 +24,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			_projectService = new ProjectService();
 			_wizardModel = wizardModel;
 			PropertyChanged += FilesViewModel_PropertyChanged;
-			wizardModel.GsFiles.CollectionChanged += GsFiles_CollectionChanged;
+			_wizardModel.GsFiles.CollectionChanged += GsFiles_CollectionChanged;
 		}
 
 		private void GsFiles_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -91,7 +91,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		public bool AllFilesChecked
 		{
-			get => AreAlFilesSelected();
+			get => AreAllFilesSelected();
 			set
 			{
 				ToggleCheckAllFiles(value);
@@ -135,7 +135,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		private bool AreAlFilesSelected()
+		private bool AreAllFilesSelected()
 		{
 			return GsFiles?.Count > 0 && GsFiles.All(f => f.IsSelected);
 		}

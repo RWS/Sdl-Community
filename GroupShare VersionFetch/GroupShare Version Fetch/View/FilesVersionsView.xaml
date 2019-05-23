@@ -29,6 +29,10 @@
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
 		</Grid.RowDefinitions>
+		<TextBlock Grid.Row="0" Margin="0,5,0,10" FontFamily="Segoe UI" FontSize="20" TextAlignment="Center"
+		           Text="{Binding TextMessage}"
+		           Foreground="{Binding TextMessageBrush}"
+		           Visibility="{Binding TextMessageVisibility}"/>
 		<DataGrid 			
 			Grid.Row="1"
 			ItemsSource="{Binding FilesVersions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
