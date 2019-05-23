@@ -133,7 +133,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					{
 						IsValid = true;
 						TextMessage = PluginResources.AuthenticationSuccess;
-						TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#017701");
+						TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
 						var projectsResponse = await projectService.GetGsProjects();
 						if (projectsResponse?.Items != null)
 						{

@@ -6,7 +6,6 @@ namespace Sdl.Community.GSVersionFetch.Model
 	public class GsFile : BaseModel
 	{
 		private bool _isSelected;
-
 		public Guid UniqueId { get; set; }
 		public string FileName { get; set; }
 		public int FileSize { get; set; }

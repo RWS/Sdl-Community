@@ -19,10 +19,16 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		private void GsProjects_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			var projects = (ObservableCollection<GsProject>) sender;
+			if (e.OldItems != null)
+			{
+				foreach (GsProject gsProject in e.OldItems)
+				{
+					gsProject.PropertyChanged -= GsProject_PropertyChanged;
+				}
+			}
 
-			if (projects?.Any() == null) return;
-			foreach (var project in projects)
+			if (e.NewItems == null) return;
+			foreach (GsProject project in e.NewItems)
 			{
 				project.PropertyChanged += GsProject_PropertyChanged;
 			}
