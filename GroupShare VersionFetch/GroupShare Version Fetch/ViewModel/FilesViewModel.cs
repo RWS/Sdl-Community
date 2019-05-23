@@ -48,7 +48,11 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		{
 			if (e.PropertyName.Equals("IsSelected"))
 			{
-				OnPropertyChanged(nameof(AllFilesChecked)); 
+				OnPropertyChanged(nameof(AllFilesChecked));
+				if (_wizardModel?.GsFiles != null)
+				{
+					IsValid = _wizardModel.GsFiles.Any(f => f.IsSelected);
+				}
 			}
 		}
 
@@ -62,7 +66,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					TextMessageVisibility = "Visible";
 					TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
 					var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected);
-					_wizardModel?.GsFiles?.Clear();
+					//_wizardModel?.GsFiles?.Clear();
 					foreach (var selectedProject in selectedProjects)
 					{
 						var files = await _projectService.GetProjectFiles(selectedProject.ProjectId);
