@@ -24,8 +24,17 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
-            <DataGrid
-	            ItemsSource="{Binding GsFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+		<TextBlock Grid.Row="0" Margin="0,5,0,10" FontFamily="Segoe UI" FontSize="20" TextAlignment="Center"
+		           Text="{Binding TextMessage}"
+		           Foreground="{Binding TextMessageBrush}"
+		           Visibility="{Binding TextMessageVisibility}"/>
+		<DataGrid
+				Grid.Row="1"
+				ItemsSource="{Binding GsFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 	            SelectionMode="Extended"
 	            Padding="5"
 	            SelectionUnit="FullRow"

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Media;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
 using Sdl.Core.Globalization;
@@ -14,6 +15,9 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private bool _isValid;
 		private readonly ProjectService _projectService;
 		private readonly WizardModel _wizardModel;
+		private SolidColorBrush _textMessageBrush;
+		private string _textMessage;
+		private string _textMessageVisibility;
 
 		public FilesViewModel(WizardModel wizardModel,object view) : base(view)
 		{
@@ -54,7 +58,11 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				if (IsCurrentPage)
 				{
+					TextMessage = "Please wait, we are loading GroupShare files";
+					TextMessageVisibility = "Visible";
+					TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
 					var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected);
+					_wizardModel?.GsFiles?.Clear();
 					foreach (var selectedProject in selectedProjects)
 					{
 						var files = await _projectService.GetProjectFiles(selectedProject.ProjectId);
@@ -84,6 +92,34 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				ToggleCheckAllFiles(value);
 				OnPropertyChanged(nameof(AllFilesChecked));
+			}
+		}
+
+		public string TextMessage
+		{
+			get => _textMessage;
+			set
+			{
+				_textMessage = value;
+				OnPropertyChanged(nameof(TextMessage));
+			}
+		}
+		public string TextMessageVisibility
+		{
+			get => _textMessageVisibility;
+			set
+			{
+				_textMessageVisibility = value;
+				OnPropertyChanged(nameof(TextMessageVisibility));
+			}
+		}
+		public SolidColorBrush TextMessageBrush
+		{
+			get => _textMessageBrush;
+			set
+			{
+				_textMessageBrush = value;
+				OnPropertyChanged(nameof(TextMessageBrush));
 			}
 		}
 
@@ -122,6 +158,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				gsFile.LanguageName = new Language(gsFile.LanguageCode).DisplayName; 
 				_wizardModel?.GsFiles?.Add(gsFile);
 			}
+			TextMessageVisibility = "Collapsed";
 		}
 	}
 }
