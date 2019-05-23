@@ -9,6 +9,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 {
 	public sealed class Log
 	{
+		public static Logger Logger;
+		private static readonly Lazy<Log> _instance = new Lazy<Log>(() => new Log());
+		public static Log Instance { get { return _instance.Value; } }
+
 		private Log()
 		{
 			var config = new LoggingConfiguration();
@@ -38,9 +42,5 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 			//NLog object
 			Logger = LogManager.GetCurrentClassLogger();
 		}
-
-		private static Log _instance;
-		public static Log Instance => _instance ?? (_instance = new Log());
-		public static Logger Logger;
 	}
 }
