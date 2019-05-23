@@ -14,6 +14,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private bool _isCurrentPage;
 		private double _labelLineWidth;
 		private double _labelTextWidth;
+		private Window _window;
 
 		protected ProjectWizardViewModelBase(object view)
 		{
@@ -34,7 +35,16 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		public Window Window { get; set; }
+		public Window Window
+		{
+			get => _window;
+			set
+			{
+				_window = value;
+				OnPropertyChanged(nameof(Window));
+			}
+		}
+
 		public double LabelTextWidth
 		{
 			get => _labelTextWidth;

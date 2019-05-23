@@ -46,6 +46,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private void SetCurrentPage(ProjectWizardViewModelBase currentPage)
 		{
 			CurrentPage = currentPage;
+			CurrentPage.Window = _window;
 			_window.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
 		}
 

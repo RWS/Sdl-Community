@@ -32,6 +32,7 @@ namespace Sdl.Community.GSVersionFetch.View
 			{
 				pages[i].PageIndex = i + 1;
 				pages[i].TotalPages = pages.Count;
+				pages[i].Window = this;
 			}
 		}
 
