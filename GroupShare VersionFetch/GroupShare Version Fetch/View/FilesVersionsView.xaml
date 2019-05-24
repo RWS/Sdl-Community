@@ -28,13 +28,26 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
 		</Grid.RowDefinitions>
+		
 		<TextBlock Grid.Row="0" Margin="0,5,0,10" FontFamily="Segoe UI" FontSize="20" TextAlignment="Center"
 		           Text="{Binding TextMessage}"
 		           Foreground="{Binding TextMessageBrush}"
 		           Visibility="{Binding TextMessageVisibility}"/>
+		
+		<StackPanel Grid.Row="1" Orientation="Horizontal" Height="30" Margin="5,0,5,10">
+			<TextBlock Style="{DynamicResource TextBoxFontFamily}" FontSize="13" Text="Select specific version" Width="auto" Margin="0,0,5,0" VerticalAlignment="Center" />
+			<TextBox   Text="{Binding SelectedVersion,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+					   Width="50" Margin="10,0,0,0" ToolTip="Add version and hit ENTER" VerticalContentAlignment="Center">
+				<TextBox.InputBindings>
+					<KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
+				</TextBox.InputBindings>
+			</TextBox>
+		</StackPanel>
+
 		<DataGrid 			
-			Grid.Row="1"
+			Grid.Row="2"
 			ItemsSource="{Binding FilesVersions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 	        SelectionMode="Extended"
 	        Padding="5"
@@ -69,7 +82,7 @@
 						<DataTemplate>
 							<StackPanel Orientation="Horizontal" >
 								<Image Source="../Resources/text_proofread.ico" Width="25" Height="25" />
-								<TextBlock Text="{Binding FileName}" Margin="5"  VerticalAlignment="Center"/>
+								<TextBlock Text="{Binding FileName}" Margin="5"  VerticalAlignment="Center" ToolTip="{Binding FileName}"/>
 							</StackPanel>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
@@ -78,7 +91,7 @@
 				<DataGridTemplateColumn Width="auto" Header="Version">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<TextBlock Text="{Binding Version,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,10"/>
+							<TextBlock Text="{Binding Version,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -88,7 +101,7 @@
 						<DataTemplate>
 							<DockPanel>
 								<Image DockPanel.Dock="Left" Source="{Binding Path=LanguageFlagImage, Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
-								<TextBlock Text="{Binding LanguageName}" Margin="5"  VerticalAlignment="Center"/>
+								<TextBlock Text="{Binding LanguageName}" Margin="5"  VerticalAlignment="Center" ToolTip="{Binding LanguageName}"/>
 							</DockPanel>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
@@ -97,7 +110,7 @@
 				<DataGridTemplateColumn Width="*" Header="Project name" SortMemberPath="ProjectName">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<TextBlock Text="{Binding ProjectName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,10"/>
+							<TextBlock Text="{Binding ProjectName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding ProjectName}" VerticalAlignment="Center" Margin="0,0,5,0"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -105,7 +118,7 @@
 				<DataGridTemplateColumn Width="*" Header="Comment">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<TextBlock Text="{Binding CheckInComment,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,10"/>
+							<TextBlock Text="{Binding CheckInComment,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding CheckInComment}" VerticalAlignment="Center" Margin="0,0,5,0"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -113,7 +126,7 @@
 				<DataGridTemplateColumn Width="*" Header="Created At">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<TextBlock Text="{Binding CreatedAt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,10"/>
+							<TextBlock Text="{Binding CreatedAt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding CreatedAt}" VerticalAlignment="Center" Margin="0,0,5,0"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -121,7 +134,7 @@
 				<DataGridTemplateColumn Width="*" Header="Created By">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<TextBlock Text="{Binding CreatedBy,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,10"/>
+							<TextBlock Text="{Binding CreatedBy,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding CreatedBy}" VerticalAlignment="Center" Margin="0,0,5,0"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

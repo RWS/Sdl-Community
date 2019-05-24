@@ -80,6 +80,15 @@ namespace Sdl.Community.GSVersionFetch {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please wait, we are loading files versions.
+        /// </summary>
+        public static string Files_Version_Loading {
+            get {
+                return ResourceManager.GetString("Files_Version_Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} of {1} completed.
         /// </summary>
         public static string HelixWizard_StepsCompleted {
@@ -169,6 +178,15 @@ namespace Sdl.Community.GSVersionFetch {
             get {
                 object obj = ResourceManager.GetObject("text_proofread", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only numbers are allowed.
+        /// </summary>
+        public static string Version_Validation {
+            get {
+                return ResourceManager.GetString("Version_Validation", resourceCulture);
             }
         }
         

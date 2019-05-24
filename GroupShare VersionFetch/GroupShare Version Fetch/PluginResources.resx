@@ -169,4 +169,10 @@
   <data name="text_proofread" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\text_proofread.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Version_Validation" xml:space="preserve">
+    <value>Only numbers are allowed</value>
+  </data>
+  <data name="Files_Version_Loading" xml:space="preserve">
+    <value>Please wait, we are loading files versions</value>
+  </data>
 </root>

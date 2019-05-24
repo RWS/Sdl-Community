@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 using System.Windows.Media;
+using Sdl.Community.GSVersionFetch.Commands;
 using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
@@ -13,11 +16,13 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
     public class FilesVersionsViewModel : ProjectWizardViewModelBase
     {
 	    private bool _isValid;
-	    private readonly ProjectService _projectService;
+	    private ICommand _enterCommand;
+		private readonly ProjectService _projectService;
 		private readonly WizardModel _wizardModel;
 	    private SolidColorBrush _textMessageBrush;
 	    private string _textMessage;
-	    private string _textMessageVisibility;
+	    private string _selectedVersion;
+		private string _textMessageVisibility;
 
 		public FilesVersionsViewModel(WizardModel wizardModel,object view) : base(view)
 		{
@@ -60,24 +65,28 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	    {
 		    if (IsComplete && IsCurrentPage)
 		    {
-			    var folderSelect = new FolderSelectDialog
+			    var anySelectedFile = FilesVersions.Any(f => f.IsSelected);
+			    if (anySelectedFile)
 			    {
-				    Title = "Please select download location"
-			    };
-			    if (folderSelect.ShowDialog())
-			    {
-				    var folderPath = folderSelect.FileName;
-				    if (!string.IsNullOrEmpty(folderPath))
+					var folderSelect = new FolderSelectDialog
 				    {
-					    var selectedVersions = FilesVersions.Where(v => v.IsSelected);
-					    foreach (var selectedVersion in selectedVersions)
+					    Title = "Please select download location"
+				    };
+				    if (folderSelect.ShowDialog())
+				    {
+					    var folderPath = folderSelect.FileName;
+					    if (!string.IsNullOrEmpty(folderPath))
 					    {
-							//TODO: write files on disk, we need to have a naming convention, because if the project has multiple languages file name is the same for each language
-						    var file =await _projectService.DownloadFileVersion(selectedVersion.ProjectId, selectedVersion.LanguageFileId,
-							    selectedVersion.Version);
+						    var selectedVersions = FilesVersions.Where(v => v.IsSelected);
+						    foreach (var selectedVersion in selectedVersions)
+						    {
+							    //TODO: write files on disk, we need to have a naming convention, because if the project has multiple languages file name is the same for each language
+							    var file = await _projectService.DownloadFileVersion(selectedVersion.ProjectId, selectedVersion.LanguageFileId,
+								    selectedVersion.Version);
+						    }
 					    }
 				    }
-			    }
+				}
 			}
 		}
 
@@ -87,7 +96,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				if (IsCurrentPage)
 				{
-					TextMessage = "Please wait, we are loading files versions";
+					TextMessage = PluginResources.Files_Version_Loading;
 					TextMessageVisibility = "Visible";
 					TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
 					var selectedFiles = _wizardModel.GsFiles.Where(f => f.IsSelected);
@@ -147,6 +156,21 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			    OnPropertyChanged(nameof(TextMessage));
 		    }
 	    }
+
+	    public string SelectedVersion
+	    {
+		    get => _selectedVersion;
+		    set
+		    {
+			    if (IsValidVersion(value))
+			    {
+					_selectedVersion = value;
+				    TextMessageVisibility = "Collapsed";
+				    OnPropertyChanged(nameof(SelectedVersion));
+				}
+		    }
+	    }
+
 	    public string TextMessageVisibility
 	    {
 		    get => _textMessageVisibility;
@@ -179,7 +203,46 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			return FilesVersions?.Count > 0 && FilesVersions.All(f => f.IsSelected);
 		}
 
-		private void SetFileProperties(GsFile selectedFile, List<GsFileVersion> fileVersions)
+	    private bool IsValidVersion(string version)
+	    {
+		    if (string.IsNullOrEmpty(version))
+		    {
+			    ToggleCheckAllFiles(false);
+				return true;
+		    }
+		    if (int.TryParse(version, out _))
+		    {
+			    return true;
+		    }
+
+		    TextMessage = PluginResources.Version_Validation;
+		    TextMessageVisibility = "Visible";
+		    TextMessageBrush = new SolidColorBrush(Colors.Red);
+		    return false;
+	    }
+	    public ICommand EnterCommand => _enterCommand ?? (_enterCommand = new CommandHandler(SelectSpecificVersion,true));
+
+	    private void SelectSpecificVersion()
+	    {
+		    if (!string.IsNullOrEmpty(SelectedVersion))
+		    {
+			    var filesVersion = FilesVersions.Where(f => f.Version.Equals(int.Parse(SelectedVersion))).ToList();
+			    if (filesVersion.Any())
+			    {
+				    foreach (var file in filesVersion)
+				    {
+					    file.IsSelected = true;
+				    }
+			    }
+		    }
+		    else
+			{	//for empty box we'll deselect all boxes
+				ToggleCheckAllFiles(false);
+		    }
+	    }
+
+
+	    private void SetFileProperties(GsFile selectedFile, List<GsFileVersion> fileVersions)
 	    {
 		    foreach (var fileVersion in fileVersions)
 		    {
