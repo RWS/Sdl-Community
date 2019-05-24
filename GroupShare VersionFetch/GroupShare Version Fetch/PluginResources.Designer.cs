@@ -80,6 +80,15 @@ namespace Sdl.Community.GSVersionFetch {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File were downloaded at selected location.
+        /// </summary>
+        public static string Download_Message {
+            get {
+                return ResourceManager.GetString("Download_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please wait, we are loading files versions.
         /// </summary>
         public static string Files_Version_Loading {
@@ -168,6 +177,15 @@ namespace Sdl.Community.GSVersionFetch {
         public static string Required_Fields {
             get {
                 return ResourceManager.GetString("Required_Fields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select where to download selected files.
+        /// </summary>
+        public static string SelectFolderTitle {
+            get {
+                return ResourceManager.GetString("SelectFolderTitle", resourceCulture);
             }
         }
         

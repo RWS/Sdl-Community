@@ -172,7 +172,13 @@
   <data name="Version_Validation" xml:space="preserve">
     <value>Only numbers are allowed</value>
   </data>
+  <data name="Download_Message" xml:space="preserve">
+    <value>File were downloaded at selected location</value>
+  </data>
   <data name="Files_Version_Loading" xml:space="preserve">
     <value>Please wait, we are loading files versions</value>
+  </data>
+  <data name="SelectFolderTitle" xml:space="preserve">
+    <value>Please select where to download selected files</value>
   </data>
 </root>

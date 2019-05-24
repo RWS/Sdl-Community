@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Sdl.Community.GSVersionFetch.Commands;
@@ -64,61 +65,87 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		    }
 	    }
 
-	    private async void Window_Closing(object sender, CancelEventArgs e)
+	    private  void Window_Closing(object sender, CancelEventArgs e)
 	    {
-		    if (IsComplete && IsCurrentPage)
+		    try
 		    {
-			    var anySelectedFile = FilesVersions.Any(f => f.IsSelected);
-			    if (anySelectedFile)
+			    if (IsComplete && IsCurrentPage)
 			    {
-					var folderSelect = new FolderSelectDialog
+				    var anySelectedFile = FilesVersions.Any(f => f.IsSelected);
+				    if (anySelectedFile)
 				    {
-					    Title = "Please select download location"
-				    };
-				    if (folderSelect.ShowDialog())
-				    {
-					    var selectedFolderPath = folderSelect.FileName;
-					    if (!string.IsNullOrEmpty(selectedFolderPath))
+					    var folderSelect = new FolderSelectDialog
 					    {
-						    var selectedVersionsGroups = FilesVersions.Where(v => v.IsSelected).GroupBy(p=>p.ProjectName);
-						    foreach (var group in selectedVersionsGroups)
+						    Title = PluginResources.SelectFolderTitle
+					    };
+					    if (folderSelect.ShowDialog())
+					    {
+						    var selectedFolderPath = folderSelect.FileName;
+						    if (!string.IsNullOrEmpty(selectedFolderPath))
 						    {
-							    var projectName = group.Key; //TODO create project folder
-							    var fileVersionsGroup = group.ToList().GroupBy(l=>l.LanguageCode);
-							    foreach (var languageGroup in fileVersionsGroup)
+							    GroupFilesByFolderStructure(selectedFolderPath);
+
+							    var result = MessageBox.Show(PluginResources.Download_Message, string.Empty, MessageBoxButton.OK,
+								    MessageBoxImage.Information);
+							    if (result == MessageBoxResult.OK)
 							    {
-								    var languageCode = languageGroup.Key;
-								    var languageFolderPath = Path.Combine(selectedFolderPath, projectName, languageCode);
-
-								    var versionGroups = languageGroup.ToList().GroupBy(f=>f.Version);
-								    foreach (var versionGroup in versionGroups)
-								    {
-									    var versionFolderPath = Path.Combine(languageFolderPath, versionGroup.Key.ToString());
-									    if (!Directory.Exists(versionFolderPath))
-									    {
-										    Directory.CreateDirectory(versionFolderPath);
-									    }
-									    var files = versionGroup.ToList();
-										foreach (var file in files)
-										{
-											var rawFile = await _projectService.DownloadFileVersion(file.ProjectId, file.LanguageFileId,
-												file.Version);
-
-											var filePath = Path.Combine(versionFolderPath, file.FileName);
-											if (File.Exists(filePath))
-											{
-												File.Delete(filePath);
-											}
-											File.WriteAllBytes(filePath,rawFile);
-										}
-									}
-								}
+								    Process.Start(selectedFolderPath);
+							    }
 						    }
-						    Process.Start(selectedFolderPath);
-						}
+					    }
 				    }
-				}
-			}
+			    }
+		    }
+		    catch (Exception ex)
+		    {
+			    //Here we'll log issue
+		    }
+
+		}
+
+	    private void GroupFilesByFolderStructure(string selectedFolderPath)
+	    {
+		    var selectedVersionsGroups =
+			    FilesVersions.Where(v => v.IsSelected).GroupBy(p => p.ProjectName); //Group by project name
+		    foreach (var group in selectedVersionsGroups)
+		    {
+			    var projectName = group.Key;
+			    var fileVersionsGroup = group.ToList().GroupBy(l => l.LanguageCode); //Group by language code
+			    foreach (var languageGroup in fileVersionsGroup)
+			    {
+				    var languageCode = languageGroup.Key;
+				    var languageFolderPath = Path.Combine(selectedFolderPath, projectName, languageCode);
+
+				    var versionGroups = languageGroup.ToList().GroupBy(f => f.Version);
+				    foreach (var versionGroup in versionGroups)
+				    {
+					    var versionFolderPath = Path.Combine(languageFolderPath, versionGroup.Key.ToString()); //Group by file version
+					    var files = versionGroup.ToList();
+
+					    SaveFiles(versionFolderPath, files);
+				    }
+			    }
+		    }
+	    }
+
+	    private async void SaveFiles(string folderPath,List<GsFileVersion> files)
+	    {
+			if (!Directory.Exists(folderPath))
+		    {
+			    Directory.CreateDirectory(folderPath);
+		    }
+		    foreach (var file in files)
+		    {
+			    var rawFile = await _projectService.DownloadFileVersion(file.ProjectId, file.LanguageFileId,
+				    file.Version);
+
+			    var filePath = Path.Combine(folderPath, file.FileName);
+			    if (File.Exists(filePath))
+			    {
+				    File.Delete(filePath);
+			    }
+			    File.WriteAllBytes(filePath, rawFile);
+		    }
 		}
 
 	    private async void FilesVersionsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
