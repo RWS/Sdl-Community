@@ -6,8 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Sdl.Community.GSVersionFetch.Commands;
@@ -21,6 +19,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
     {
 	    private bool _isValid;
 	    private ICommand _enterCommand;
+	    private ICommand _downloadFilesCommand;
 		private readonly ProjectService _projectService;
 		private readonly WizardModel _wizardModel;
 	    private SolidColorBrush _textMessageBrush;
@@ -60,48 +59,9 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			    if (_wizardModel?.GsFiles != null)
 			    {
 				    IsValid = _wizardModel.GsFiles.Any(f => f.IsSelected);
-				    IsComplete = IsValid;
 			    }
 		    }
 	    }
-
-	    private  void Window_Closing(object sender, CancelEventArgs e)
-	    {
-		    try
-		    {
-			    if (IsComplete && IsCurrentPage)
-			    {
-				    var anySelectedFile = FilesVersions.Any(f => f.IsSelected);
-				    if (anySelectedFile)
-				    {
-					    var folderSelect = new FolderSelectDialog
-					    {
-						    Title = PluginResources.SelectFolderTitle
-					    };
-					    if (folderSelect.ShowDialog())
-					    {
-						    var selectedFolderPath = folderSelect.FileName;
-						    if (!string.IsNullOrEmpty(selectedFolderPath))
-						    {
-							    GroupFilesByFolderStructure(selectedFolderPath);
-
-							    var result = MessageBox.Show(PluginResources.Download_Message, string.Empty, MessageBoxButton.OK,
-								    MessageBoxImage.Information);
-							    if (result == MessageBoxResult.OK)
-							    {
-								    Process.Start(selectedFolderPath);
-							    }
-						    }
-					    }
-				    }
-			    }
-		    }
-		    catch (Exception ex)
-		    {
-			    //Here we'll log issue
-		    }
-
-		}
 
 	    private void GroupFilesByFolderStructure(string selectedFolderPath)
 	    {
@@ -158,17 +118,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					TextMessageVisibility = "Visible";
 					TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
 					var selectedFiles = _wizardModel.GsFiles.Where(f => f.IsSelected);
-					foreach (var selectedFile in selectedFiles)
+					foreach (var selectedFile in selectedFiles.ToList())
 					{
 						var fileVersions = await _projectService.GetFileVersion(selectedFile.UniqueId.ToString());
 						SetFileProperties(selectedFile, fileVersions);
 					}
 				}
-			}
-			if (e.PropertyName.Equals("Window"))
-			{
-				Window.Closing -= Window_Closing;
-				Window.Closing += Window_Closing;
 			}
 		}
 
@@ -279,6 +234,44 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		    return false;
 	    }
 	    public ICommand EnterCommand => _enterCommand ?? (_enterCommand = new CommandHandler(SelectSpecificVersion,true));
+
+	    public ICommand DownloadFilesCommand =>
+		    _downloadFilesCommand ?? (_downloadFilesCommand = new CommandHandler(ShowSelectFolderDialog, true));
+
+	    private void ShowSelectFolderDialog()
+	    {
+		    try
+		    {
+			    var anySelectedFile = FilesVersions.Any(f => f.IsSelected);
+			    if (anySelectedFile)
+			    {
+				    var folderSelect = new FolderSelectDialog
+				    {
+					    Title = PluginResources.SelectFolderTitle
+				    };
+				    if (folderSelect.ShowDialog())
+				    {
+					    var selectedFolderPath = folderSelect.FileName;
+					    if (!string.IsNullOrEmpty(selectedFolderPath))
+					    {
+						    GroupFilesByFolderStructure(selectedFolderPath);
+
+						    TextMessageVisibility = "Visible";
+						    TextMessage = PluginResources.Download_Message;
+						    TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
+
+							ToggleCheckAllFiles(false);
+						    Process.Start(selectedFolderPath);
+						}
+				    }
+			    }
+		    }
+		    catch (Exception ex)
+		    {
+			    //Here we'll log issue
+		    }
+	    }
+
 
 	    private void SelectSpecificVersion()
 	    {
