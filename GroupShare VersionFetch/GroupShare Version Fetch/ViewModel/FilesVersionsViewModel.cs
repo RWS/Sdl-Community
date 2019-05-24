@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Input;
 using System.Windows.Media;
 using Sdl.Community.GSVersionFetch.Commands;
@@ -74,17 +77,45 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				    };
 				    if (folderSelect.ShowDialog())
 				    {
-					    var folderPath = folderSelect.FileName;
-					    if (!string.IsNullOrEmpty(folderPath))
+					    var selectedFolderPath = folderSelect.FileName;
+					    if (!string.IsNullOrEmpty(selectedFolderPath))
 					    {
-						    var selectedVersions = FilesVersions.Where(v => v.IsSelected);
-						    foreach (var selectedVersion in selectedVersions)
+						    var selectedVersionsGroups = FilesVersions.Where(v => v.IsSelected).GroupBy(p=>p.ProjectName);
+						    foreach (var group in selectedVersionsGroups)
 						    {
-							    //TODO: write files on disk, we need to have a naming convention, because if the project has multiple languages file name is the same for each language
-							    var file = await _projectService.DownloadFileVersion(selectedVersion.ProjectId, selectedVersion.LanguageFileId,
-								    selectedVersion.Version);
+							    var projectName = group.Key; //TODO create project folder
+							    var fileVersionsGroup = group.ToList().GroupBy(l=>l.LanguageCode);
+							    foreach (var languageGroup in fileVersionsGroup)
+							    {
+								    var languageCode = languageGroup.Key;
+								    var languageFolderPath = Path.Combine(selectedFolderPath, projectName, languageCode);
+
+								    var versionGroups = languageGroup.ToList().GroupBy(f=>f.Version);
+								    foreach (var versionGroup in versionGroups)
+								    {
+									    var versionFolderPath = Path.Combine(languageFolderPath, versionGroup.Key.ToString());
+									    if (!Directory.Exists(versionFolderPath))
+									    {
+										    Directory.CreateDirectory(versionFolderPath);
+									    }
+									    var files = versionGroup.ToList();
+										foreach (var file in files)
+										{
+											var rawFile = await _projectService.DownloadFileVersion(file.ProjectId, file.LanguageFileId,
+												file.Version);
+
+											var filePath = Path.Combine(versionFolderPath, file.FileName);
+											if (File.Exists(filePath))
+											{
+												File.Delete(filePath);
+											}
+											File.WriteAllBytes(filePath,rawFile);
+										}
+									}
+								}
 						    }
-					    }
+						    Process.Start(selectedFolderPath);
+						}
 				    }
 				}
 			}
@@ -249,6 +280,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			    fileVersion.ProjectName = selectedFile.ProjectName;
 			    fileVersion.LanguageFlagImage = selectedFile.LanguageFlagImage;
 			    fileVersion.LanguageName = selectedFile.LanguageName;
+			    fileVersion.LanguageCode = selectedFile.LanguageCode;
 			    fileVersion.ProjectId = selectedFile.ProjectId;
 			    _wizardModel?.FileVersions?.Add(fileVersion);
 		    }

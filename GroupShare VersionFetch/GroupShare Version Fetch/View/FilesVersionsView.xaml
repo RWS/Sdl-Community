@@ -87,8 +87,8 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				
-				<DataGridTemplateColumn Width="auto" Header="Version">
+
+				<DataGridTemplateColumn Width="auto" Header="Version" SortMemberPath="Version">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<TextBlock Text="{Binding Version,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center" />
