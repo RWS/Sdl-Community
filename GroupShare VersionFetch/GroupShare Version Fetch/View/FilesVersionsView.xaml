@@ -36,15 +36,16 @@
 		           Foreground="{Binding TextMessageBrush}"
 		           Visibility="{Binding TextMessageVisibility}"/>
 		
-		<StackPanel Grid.Row="1" Orientation="Horizontal" Height="30" Margin="5,0,5,10">
-			<TextBlock Style="{DynamicResource TextBoxFontFamily}" FontSize="13" Text="Select specific version" Width="auto" Margin="0,0,5,0" VerticalAlignment="Center" />
-			<TextBox   Text="{Binding SelectedVersion,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-					   Width="50" Margin="10,0,0,0" ToolTip="Add version and hit ENTER" VerticalContentAlignment="Center">
-				<TextBox.InputBindings>
-					<KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
-				</TextBox.InputBindings>
-			</TextBox>
-		</StackPanel>
+		<DockPanel Grid.Row="1" Height="30" Margin="5,10,5,10">
+				<TextBlock Style="{DynamicResource TextBoxFontFamily}" DockPanel.Dock="Left" FontSize="13" Text="Select specific version" Width="auto" Margin="0,0,5,0"  VerticalAlignment="Center" />
+				<TextBox   Text="{Binding SelectedVersion,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DockPanel.Dock="Left"
+				           Width="50" Margin="10,0,0,0" ToolTip="Add version and hit ENTER" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+					<TextBox.InputBindings>
+						<KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
+					</TextBox.InputBindings>
+				</TextBox>
+				<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding DownloadFilesCommand}" HorizontalAlignment="Right" Content="Download files" />
+		</DockPanel>
 
 		<DataGrid 			
 			Grid.Row="2"
