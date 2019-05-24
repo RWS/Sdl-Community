@@ -88,14 +88,14 @@
 				<DataGridTemplateColumn Width="*" Header="Project name" SortMemberPath="ProjectName">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<TextBlock Text="{Binding ProjectName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,10"/>
+							<TextBlock Text="{Binding ProjectName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="0,0,5,0"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 		        <DataGridTemplateColumn Width="*" Header="Status">
 			        <DataGridTemplateColumn.CellTemplate>
 				        <DataTemplate>
-					        <TextBlock Text="{Binding Status,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,10"/>
+							<TextBlock Text="{Binding Status,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="0,0,5,0"/>
 				        </DataTemplate>
 			        </DataGridTemplateColumn.CellTemplate>
 		        </DataGridTemplateColumn>

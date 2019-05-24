@@ -8,6 +8,7 @@ namespace Sdl.Community.GSVersionFetch.Model
 		private ObservableCollection<GsProject> _gsProjects;
 		private ObservableCollection<GsFile> _gsFiles;
 		private ObservableCollection<GsFileVersion> _filesFileVersions;
+		private string _version;
 		public Credentials UserCredentials
 		{
 			get => _userCredentials;
@@ -45,6 +46,16 @@ namespace Sdl.Community.GSVersionFetch.Model
 			{
 				_filesFileVersions = value;
 				OnPropertyChanged(nameof(FileVersions));
+			}
+		}
+
+		public string Version
+		{
+			get => _version;
+			set
+			{
+				_version = value;
+				OnPropertyChanged(nameof(Version));
 			}
 		}
 	}

@@ -31,7 +31,8 @@ namespace Sdl.Community.GSVersionFetch.Studio
 				UserCredentials = new Credentials(),
 				GsProjects = new ObservableCollection<GsProject>(),
 				GsFiles =   new ObservableCollection<GsFile>(),
-				FileVersions = new ObservableCollection<GsFileVersion>()
+				FileVersions = new ObservableCollection<GsFileVersion>(),
+				Version = string.Empty
 			};
 			var pages = CreatePages(wizardModel);
 
