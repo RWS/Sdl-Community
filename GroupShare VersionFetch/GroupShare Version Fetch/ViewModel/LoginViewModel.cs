@@ -104,7 +104,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}	
 
-	//	public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new AwaitableDelegateCommand(AuthenticateUser));
 		public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new ParameterCommand(AuthenticateUser));
 		public ICommand PasswordChangedCommand => _passwordChangedCommand ?? (_passwordChangedCommand = new ParameterCommand(PasswordChanged));
 

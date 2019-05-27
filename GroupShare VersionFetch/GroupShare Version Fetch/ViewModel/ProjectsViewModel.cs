@@ -1,14 +1,22 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Sdl.Community.GSVersionFetch.Commands;
+using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
+using Sdl.Community.GSVersionFetch.Service;
+using Sdl.Core.Globalization;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
 	public class ProjectsViewModel: ProjectWizardViewModelBase
 	{
 		private bool _isValid;
+		private ICommand _refreshProjectsCommand;
 		private readonly WizardModel _wizardModel;
 
 		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
@@ -19,7 +27,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		private void GsProjects_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-				if (e.OldItems != null)
+			if (e.OldItems != null)
 			{
 				foreach (GsProject gsProject in e.OldItems)
 				{
@@ -33,7 +41,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				project.PropertyChanged += GsProject_PropertyChanged;
 			}
 		}
-		
+
 
 		private void GsProject_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -64,6 +72,38 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				_wizardModel.GsProjects = value;
 				OnPropertyChanged(nameof(GsProjects));
+			}
+		}
+		public ICommand RefreshProjectsCommand =>
+			_refreshProjectsCommand ?? (_refreshProjectsCommand = new AwaitableDelegateCommand(RefreshProjects));
+
+		private async Task RefreshProjects()
+		{
+			_wizardModel?.GsProjects?.Clear();
+			var projectService = new ProjectService();
+			var languageFlagsHelper = new LanguageFlags();
+			var projectsResponse = await projectService.GetGsProjects();
+			if (projectsResponse?.Items != null)
+			{
+				foreach (var project in projectsResponse.Items)
+				{
+					var gsProject = new GsProject
+					{
+						Name = project.Name,
+						DueDate = project.DueDate?.ToString(),
+						Image = new Language(project.SourceLanguage).GetFlagImage(),
+						TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage),
+						ProjectId = project.ProjectId,
+						SourceLanguage = project.SourceLanguage
+					};
+
+					if (Enum.TryParse<ProjectStatus.Status>(project.Status.ToString(), out _))
+					{
+						gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
+					}
+					_wizardModel?.GsProjects?.Add(gsProject);
+				}
+				IsValid = false;
 			}
 		}
 	}
