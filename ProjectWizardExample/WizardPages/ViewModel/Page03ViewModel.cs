@@ -23,13 +23,13 @@ namespace ProjectWizardExample.WizardPages.ViewModel
 	    public override bool OnChangePage(int position, out string message)
 	    {
 		    message = string.Empty;
-		    var currentPageIndex = PageIndex - 1;
-		    if (position == currentPageIndex)
+		    var pagePosition = PageIndex - 1;
+		    if (position == pagePosition)
 		    {
 			    return false;
 		    }
 
-		    if (!IsValid && position > currentPageIndex)
+		    if (!IsValid && position > pagePosition)
 		    {
 			    message = StringResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
 			              string.Format(StringResources.The_data_on__0__is_not_valid, _displayName);
