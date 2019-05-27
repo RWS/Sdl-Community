@@ -31,7 +31,7 @@ namespace ProjectWizardExample.Wizard.View
 
 		private void Model_SelectedPageChanged(object sender, EventArgs.SelectedPageEventArgs e)
 		{
-			if (_model.CurrentPageIndex == e.PagePosition)
+			if (_model.CurrentPagePosition == e.PagePosition)
 			{
 				return;
 			}
@@ -42,8 +42,12 @@ namespace ProjectWizardExample.Wizard.View
 			}
 
 			if (!_model.CanMoveToPage(e.PagePosition, out var message))
-			{				
-				MessageBox.Show(message, _model.WindowTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+			{
+				if (!string.IsNullOrEmpty(message))
+				{
+					MessageBox.Show(message, _model.WindowTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+				}
+
 				return;
 			}
 

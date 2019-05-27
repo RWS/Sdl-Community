@@ -50,50 +50,47 @@ namespace ProjectWizardExample.Wizard.ViewModel
 
 		public event EventHandler<SelectedPageEventArgs> SelectedPageChanged;
 
-		public bool CanMoveToPage(int index, out string message)
+		public bool CanMoveToPage(int position, out string message)
 		{
 			message = string.Empty;
 
-			var currentPageIndex = CurrentPageIndex;
+			var currentPagePosition = CurrentPagePosition;
 			var currentPage = CurrentPage;
 
-			if (currentPageIndex == index)
+			if (currentPagePosition == position)
 			{
 				return false;
 			}
 
-			if (index > currentPageIndex)
+			if (!currentPage.OnChangePage(position, out var outMessage))
 			{
-				if (!currentPage.OnChangePage(out var outMessage))
+				message = outMessage;
+				return false;
+			}
+
+			if (position > currentPagePosition && !currentPage.IsLastPage)
+			{
+				var notValid = new List<IProgressHeaderItem>();
+				for (var i = currentPagePosition + 1; i < position; i++)
 				{
-					message = outMessage;
-					return false;
+					var page = Pages[i];
+					if (!page.IsValid)
+					{
+						notValid.Add(page);
+					}
 				}
 
-				if (!currentPage.IsLastPage)
+				if (notValid.Count > 0)
 				{
-					var notValid = new List<IProgressHeaderItem>();
-					for (var i = currentPageIndex + 1; i < index; i++)
+					var pageNames = string.Empty;
+					foreach (var page in notValid)
 					{
-						var page = Pages[i];
-						if (!page.IsValid)
-						{
-							notValid.Add(page);
-						}
+						pageNames += (string.IsNullOrEmpty(pageNames) ? string.Empty : Environment.NewLine) + " * " + page.DisplayName;
 					}
-
-					if (notValid.Count > 0)
-					{
-						var pageNames = string.Empty;
-						foreach (var page in notValid)
-						{
-							pageNames += (string.IsNullOrEmpty(pageNames) ? string.Empty : Environment.NewLine) + " * " + page.DisplayName;
-						}
-						message = StringResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
-								  StringResources.DataOnTheFollowingPagesAreNotValid + Environment.NewLine  +
-								  $"{pageNames}";
-						return false;
-					}
+					message = StringResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
+							  StringResources.DataOnTheFollowingPagesAreNotValid + Environment.NewLine +
+							  $"{pageNames}";
+					return false;
 				}
 			}
 
@@ -248,7 +245,7 @@ namespace ProjectWizardExample.Wizard.ViewModel
 			}
 		}
 
-		public int CurrentPageIndex
+		public int CurrentPagePosition
 		{
 			get
 			{
@@ -261,7 +258,7 @@ namespace ProjectWizardExample.Wizard.ViewModel
 			}
 		}
 
-		public bool IsLastPage => CurrentPageIndex == Pages.Count - 1;
+		public bool IsLastPage => CurrentPagePosition == Pages.Count - 1;
 
 		public bool IsComplete => IsLastPage && CurrentPage.IsComplete;
 
@@ -275,12 +272,12 @@ namespace ProjectWizardExample.Wizard.ViewModel
 				return;
 			}
 
-			if (CurrentPageIndex < Pages.Count - 1)
+			if (CurrentPagePosition < Pages.Count - 1)
 			{
 				_currentPage.NextIsVisited = true;
 				OnPropertyChanged(nameof(CurrentPage));
 
-				SetCurrentPage(CurrentPageIndex + 1);
+				SetCurrentPage(CurrentPagePosition + 1);
 			}
 			else
 			{
@@ -316,7 +313,7 @@ namespace ProjectWizardExample.Wizard.ViewModel
 				_currentPage.PreviousIsVisited = true;
 				OnPropertyChanged(nameof(CurrentPage));
 
-				SetCurrentPage(CurrentPageIndex - 1);
+				SetCurrentPage(CurrentPagePosition - 1);
 			}
 		}
 
@@ -333,14 +330,14 @@ namespace ProjectWizardExample.Wizard.ViewModel
 				item.PreviousIsVisited = true;
 
 				// assigned true only when the next page is visited.
-				if (item.PageIndex <= CurrentPageIndex)
+				if (item.PageIndex <= CurrentPagePosition)
 				{
 					item.NextIsVisited = true;
 				}
 
 				// stop assigning the visited properties when the page index is equal or greater than 
 				// the last PageIndex visited that is nearest to completion of the wizard
-				if (item.PageIndex >= CurrentPageIndex)
+				if (item.PageIndex >= CurrentPagePosition)
 				{
 					break;
 				}
@@ -428,9 +425,9 @@ namespace ProjectWizardExample.Wizard.ViewModel
 			get
 			{
 				return CurrentPage != null
-					   && ((CurrentPageIndex == 0 && CurrentPage.IsValid)
+					   && ((CurrentPagePosition == 0 && CurrentPage.IsValid)
 						   || (IsLastPage && CurrentPage.IsComplete)
-						   || (CurrentPageIndex > 0 && !IsLastPage));
+						   || (CurrentPagePosition > 0 && !IsLastPage));
 			}
 		}
 
@@ -440,7 +437,7 @@ namespace ProjectWizardExample.Wizard.ViewModel
 			if (!IsLastPage)
 			{
 				var lastPage = Pages[Pages.Count - 1];
-				for (var i = CurrentPageIndex; i < lastPage.PageIndex; i++)
+				for (var i = CurrentPagePosition; i < lastPage.PageIndex; i++)
 				{
 					Pages[i].PreviousIsVisited = true;
 					Pages[i].IsVisited = true;
@@ -462,7 +459,7 @@ namespace ProjectWizardExample.Wizard.ViewModel
 		{
 			get
 			{
-				return (CurrentPageIndex > 0 && !CurrentPage.IsLastPage)
+				return (CurrentPagePosition > 0 && !CurrentPage.IsLastPage)
 					   || (CurrentPage.IsLastPage && !CurrentPage.IsComplete);
 			}
 		}

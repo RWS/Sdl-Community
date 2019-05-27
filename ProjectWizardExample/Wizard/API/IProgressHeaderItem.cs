@@ -30,6 +30,6 @@ namespace ProjectWizardExample.Wizard.API
 
 		bool IsComplete { get; set; }
 
-		bool OnChangePage(out string message);
+		bool OnChangePage(int position, out string message);
 	}
 }

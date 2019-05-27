@@ -4,14 +4,14 @@ using ProjectWizardExample.Wizard.ViewModel;
 
 namespace ProjectWizardExample.WizardPages.ViewModel
 {
-    public class Page01ViewModel : ProjectWizardViewModelBase
-    {
-	    private readonly Project _project;
+	public class Page01ViewModel : ProjectWizardViewModelBase
+	{
+		private readonly Project _project;
 		private bool _isValid;
-	    private string _displayName;
+		private string _displayName;
 
 		public Page01ViewModel(Project project, object view)
-            : base(view)
+			: base(view)
 		{
 			_project = project;
 			_isValid = true;
@@ -20,57 +20,63 @@ namespace ProjectWizardExample.WizardPages.ViewModel
 			PropertyChanged += ViewModel_PropertyChanged;
 		}
 
-	    public override bool OnChangePage(out string message)
-	    {
-		    message = string.Empty;
+		public override bool OnChangePage(int position, out string message)
+		{
+			message = string.Empty;
 
-		    if (!IsValid)
-		    {
-			    message = StringResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
-			              string.Format(StringResources.The_data_on__0__is_not_valid, _displayName);
-			    return false;
+			var pagePosition = PageIndex - 1;
+			if (position == pagePosition)
+			{
+				return false;
 			}
 
-		    return true;
-	    }
+			if (!IsValid && position > pagePosition)
+			{
+				message = StringResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
+						  string.Format(StringResources.The_data_on__0__is_not_valid, _displayName);
+				return false;
+			}
 
-	    public override string DisplayName
-	    {
-		    get => _displayName;
-		    set
-		    {
-			    if (_displayName == value)
-			    {
-				    return;
-			    }
+			return true;
+		}
 
-			    _displayName = value;
-			    OnPropertyChanged(nameof(DisplayName));
-		    }
-	    }
+		public override string DisplayName
+		{
+			get => _displayName;
+			set
+			{
+				if (_displayName == value)
+				{
+					return;
+				}
+
+				_displayName = value;
+				OnPropertyChanged(nameof(DisplayName));
+			}
+		}
 
 		public override bool IsValid
-        {
-            get => _isValid;
-            set
-            {
-                if (_isValid == value)
-                    return;
+		{
+			get => _isValid;
+			set
+			{
+				if (_isValid == value)
+					return;
 
-                _isValid = value;
-                OnPropertyChanged(nameof(IsValid));
-            }
-        }
+				_isValid = value;
+				OnPropertyChanged(nameof(IsValid));
+			}
+		}
 
-	    private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-	    {
-		    if (e.PropertyName == nameof(CurrentPageChanged))
-		    {
-			    if (IsCurrentPage)
-			    {
-				    // do something                     
-			    }
-		    }
-	    }
+		private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(CurrentPageChanged))
+			{
+				if (IsCurrentPage)
+				{
+					// do something                     
+				}
+			}
+		}
 	}
 }

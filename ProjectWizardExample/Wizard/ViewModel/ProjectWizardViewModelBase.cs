@@ -104,7 +104,7 @@ namespace ProjectWizardExample.Wizard.ViewModel
 				_isComplete = value;
 				OnPropertyChanged(nameof(IsComplete));
 			}
-		}
+		}		
 
 		public bool IsUpdated
 		{
@@ -151,7 +151,7 @@ namespace ProjectWizardExample.Wizard.ViewModel
 			}
 		}
 
-		public abstract bool OnChangePage(out string message);
+		public abstract bool OnChangePage(int position, out string message);		
 
 		public abstract string DisplayName { get; set; }		
 

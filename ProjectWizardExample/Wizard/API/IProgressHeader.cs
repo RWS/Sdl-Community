@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Windows.Input;
 using ProjectWizardExample.EventArgs;
 
@@ -26,7 +25,7 @@ namespace ProjectWizardExample.Wizard.API
 
 		void MoveToSelectedPage(IProgressHeaderItem item);
 
-		bool CanMoveToPage(int index, out string message);
+		bool CanMoveToPage(int position, out string message);
 
 		ICommand SelectedPageCommand { get; }
 
