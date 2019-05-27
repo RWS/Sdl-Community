@@ -18,10 +18,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private SolidColorBrush _textMessageBrush;
 		private string _textMessage;
 		private string _textMessageVisibility;
+		private readonly ObservableCollection<GsProject> _oldSelectedProjects;
 
 		public FilesViewModel(WizardModel wizardModel,object view) : base(view)
 		{
 			_projectService = new ProjectService();
+			_oldSelectedProjects = new ObservableCollection<GsProject>();
 			_wizardModel = wizardModel;
 			PropertyChanged += FilesViewModel_PropertyChanged;
 			_wizardModel.GsFiles.CollectionChanged += GsFiles_CollectionChanged;
@@ -56,7 +58,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		private async void FilesViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		private void FilesViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(CurrentPageChanged))
 			{
@@ -65,12 +67,53 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					TextMessage = "Please wait, we are loading GroupShare files";
 					TextMessageVisibility = "Visible";
 					TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
-					var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected);
-					//_wizardModel?.GsFiles?.Clear();
-					foreach (var selectedProject in selectedProjects)
+					var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected).ToList();
+
+					if (_oldSelectedProjects.Count==0) // initial step
 					{
-						var files = await _projectService.GetProjectFiles(selectedProject.ProjectId);
-						SetFileProperties(selectedProject.ProjectId,selectedProject.Name, files);
+						AddFilesToGrid(selectedProjects);
+					}
+					else
+					{
+						var addedProjects = selectedProjects.Except(_oldSelectedProjects).ToList();
+						AddFilesToGrid(addedProjects);
+
+						// get the removed projects
+						var removedProjects = _oldSelectedProjects.Except(selectedProjects).ToList();
+						RemoveFilesFromGrid(removedProjects);
+					}
+				}
+			}
+		}
+
+		private async void AddFilesToGrid(List<GsProject> projects)
+		{
+			foreach (var project in projects)
+			{
+				_oldSelectedProjects.Add(project);
+				var files = await _projectService.GetProjectFiles(project.ProjectId);
+				SetFileProperties(project, files);
+			}
+		}
+
+		private void RemoveFilesFromGrid(List<GsProject> removedProjects)
+		{
+			foreach (var removedProject in removedProjects)
+			{
+				var projectToBeRemoved = _oldSelectedProjects.FirstOrDefault(p => p.ProjectId.Equals(removedProject.ProjectId));
+				if (projectToBeRemoved != null)
+				{
+					_oldSelectedProjects.Remove(projectToBeRemoved);
+
+					//remove coresponding files for removed project from grid
+					var filesToBeRemoved = _wizardModel?.GsFiles.Where(p => p.ProjectId.Equals(projectToBeRemoved.ProjectId)).ToList();
+					if (filesToBeRemoved != null)
+					{
+						foreach (var file in filesToBeRemoved)
+						{
+							_wizardModel?.GsFiles.Remove(file);
+						}
+						OnPropertyChanged(nameof(GsFiles));
 					}
 				}
 			}
@@ -152,15 +195,18 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		public override string DisplayName => " Projects files";
 
-		private void SetFileProperties(string projectId, string projectName,IEnumerable<GsFile> files)
+		private void SetFileProperties(GsProject project, IEnumerable<GsFile> files)
 		{
 			foreach (var gsFile in files)
 			{
-				gsFile.ProjectId = projectId;
-				gsFile.ProjectName = projectName;
-				gsFile.LanguageFlagImage = new Language(gsFile.LanguageCode).GetFlagImage();
-				gsFile.LanguageName = new Language(gsFile.LanguageCode).DisplayName; 
-				_wizardModel?.GsFiles?.Add(gsFile);
+				if (gsFile.LanguageCode != project.SourceLanguage)
+				{
+					gsFile.ProjectId = project.ProjectId;
+					gsFile.ProjectName = project.Name;
+					gsFile.LanguageFlagImage = new Language(gsFile.LanguageCode).GetFlagImage();
+					gsFile.LanguageName = new Language(gsFile.LanguageCode).DisplayName;
+					_wizardModel?.GsFiles?.Add(gsFile);
+				}
 			}
 			TextMessageVisibility = "Collapsed";
 		}
