@@ -75,7 +75,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					}
 					else
 					{
-						//get the projects which are selected in wizard and they are not in the old list => a new project was selected and we need to download the files only for it
 						var addedProjects = selectedProjects.Except(_oldSelectedProjects).ToList();
 						AddFilesToGrid(addedProjects);
 

@@ -12,6 +12,7 @@ using Sdl.Community.GSVersionFetch.Commands;
 using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
+using Sdl.Community.GSVersionFetch.UiHelpers;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
@@ -26,11 +27,13 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	    private string _textMessage;
 	    private string _selectedVersion;
 		private string _textMessageVisibility;
+	    private readonly ObservableCollection<GsFile> _oldSelectedFiles;
 
 		public FilesVersionsViewModel(WizardModel wizardModel,object view) : base(view)
 		{
 			_wizardModel = wizardModel;
 			_projectService = new ProjectService();
+			_oldSelectedFiles = new ObservableCollection<GsFile>();
 			PropertyChanged += FilesVersionsViewModel_PropertyChanged;
 			_wizardModel.FileVersions.CollectionChanged += FileVersions_CollectionChanged;
 		}
@@ -108,7 +111,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		    }
 		}
 
-	    private async void FilesVersionsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+	    private void FilesVersionsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(CurrentPageChanged))
 			{
@@ -117,13 +120,59 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					TextMessage = PluginResources.Files_Version_Loading;
 					TextMessageVisibility = "Visible";
 					TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
-					var selectedFiles = _wizardModel.GsFiles.Where(f => f.IsSelected);
-					foreach (var selectedFile in selectedFiles.ToList())
+					var selectedFiles = _wizardModel.GsFiles.Where(f => f.IsSelected).ToList();
+					if (_oldSelectedFiles.Count == 0)
 					{
-						var fileVersions = await _projectService.GetFileVersion(selectedFile.UniqueId.ToString());
-						SetFileProperties(selectedFile, fileVersions);
+						AddVersionsToGrid(selectedFiles);
+					}
+					else
+					{
+						//get the files which are selected in wizard and they are not in the old list => a new file was selected and we need to download the files versions only for it
+						var addedFiles = selectedFiles.Except(_oldSelectedFiles).ToList();
+						AddVersionsToGrid(addedFiles);
+
+						//get the removed files
+						var removedFiles = _oldSelectedFiles.Except(selectedFiles).ToList();
+						RemoveFilesFromGrid(removedFiles);
 					}
 				}
+			}
+		}
+
+	    private void RemoveFilesFromGrid(List<GsFile> removedFiles)
+	    {
+		    foreach (var removedFile in removedFiles)
+		    {
+			    var fileToBeRemoved =
+				    _oldSelectedFiles.FirstOrDefault(f => f.UniqueId.ToString().Equals(removedFile.UniqueId.ToString()));
+			    if (fileToBeRemoved != null)
+			    {
+				    _oldSelectedFiles.Remove(fileToBeRemoved);
+
+				    //remove coresponding files versions for removed files from grid
+				    var versionsToRemove = _wizardModel?.FileVersions?.Where(f => f.OriginalFileId.ToString().Equals(removedFile.UniqueId.ToString()))
+					    .ToList();
+				    {
+					    if (versionsToRemove != null)
+					    {
+						    foreach (var version in versionsToRemove)
+						    {
+							    _wizardModel?.FileVersions?.Remove(version);
+								OnPropertyChanged(nameof(FilesVersions));
+						    }
+					    }
+				    }
+				}
+			}
+	    }
+
+	    private async void AddVersionsToGrid(List<GsFile> selectedFiles)
+	    {
+			foreach (var selectedFile in selectedFiles)
+			{
+				_oldSelectedFiles.Add(selectedFile);
+				var fileVersions = await _projectService.GetFileVersion(selectedFile.UniqueId.ToString());
+				SetFileProperties(selectedFile, fileVersions);
 			}
 		}
 
@@ -272,7 +321,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		    }
 	    }
 
-
 	    private void SelectSpecificVersion()
 	    {
 		    if (!string.IsNullOrEmpty(SelectedVersion))
@@ -302,6 +350,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			    fileVersion.LanguageName = selectedFile.LanguageName;
 			    fileVersion.LanguageCode = selectedFile.LanguageCode;
 			    fileVersion.ProjectId = selectedFile.ProjectId;
+			    fileVersion.OriginalFileId = selectedFile.UniqueId;
 			    _wizardModel?.FileVersions?.Add(fileVersion);
 		    }
 		    TextMessageVisibility = "Collapsed";
