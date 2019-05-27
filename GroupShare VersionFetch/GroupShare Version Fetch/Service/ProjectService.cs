@@ -11,6 +11,8 @@ namespace Sdl.Community.GSVersionFetch.Service
 {
 	public class ProjectService
 	{
+		public static readonly Log Log = Log.Instance;
+
 		public async Task<ProjectResponse> GetGsProjects()
 		{
 			try
@@ -30,7 +32,7 @@ namespace Sdl.Community.GSVersionFetch.Service
 			}
 			catch (Exception e)
 			{
-				// here we'll add loging
+				Log.Logger.Error($"GetGsProjects service method: {e.Message}\n {e.StackTrace}");
 			}
 			return new ProjectResponse();
 		}
@@ -54,7 +56,7 @@ namespace Sdl.Community.GSVersionFetch.Service
 			}
 			catch (Exception e)
 			{
-				// here we'll add loging
+				Log.Logger.Error($"GetProjectFiles service method: {e.Message}\n {e.StackTrace}");
 			}
 			return new List<GsFile>();
 		}
@@ -78,26 +80,34 @@ namespace Sdl.Community.GSVersionFetch.Service
 			}
 			catch (Exception e)
 			{
-				// here we'll add loging
+				Log.Logger.Error($"GetFileVersion service method: {e.Message}\n {e.StackTrace}");
+
 			}
 			return new List<GsFileVersion>();
 		}
 
 		public async Task<byte[]> DownloadFileVersion(string projectId, string languageFileId, int version)
 		{
-			using (var httpClient = new HttpClient())
+			try
 			{
-				var request = new HttpRequestMessage(HttpMethod.Get, new Uri(ApiUrl.DownloadFileVersion(projectId,languageFileId,version)));
-				ApiUrl.AddRequestHeaders(httpClient, request);
-
-				var responseMessage = await httpClient.SendAsync(request);
-				var fileResponse = await responseMessage.Content.ReadAsByteArrayAsync();
-				if (responseMessage.StatusCode == HttpStatusCode.OK)
+				using (var httpClient = new HttpClient())
 				{
-					return fileResponse;
+					var request = new HttpRequestMessage(HttpMethod.Get, new Uri(ApiUrl.DownloadFileVersion(projectId, languageFileId, version)));
+					ApiUrl.AddRequestHeaders(httpClient, request);
+
+					var responseMessage = await httpClient.SendAsync(request);
+					var fileResponse = await responseMessage.Content.ReadAsByteArrayAsync();
+					if (responseMessage.StatusCode == HttpStatusCode.OK)
+					{
+						return fileResponse;
+					}
 				}
-				throw new Exception(responseMessage.StatusCode.ToString());
 			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"DownloadFileVersion service method: {e.Message}\n {e.StackTrace}");
+			}
+			return new byte[0];
 		}
 	}
 }

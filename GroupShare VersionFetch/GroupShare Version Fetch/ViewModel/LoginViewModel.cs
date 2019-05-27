@@ -25,6 +25,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private ICommand _passwordChangedCommand;
 		private readonly UserControl _view;
 		private readonly WizardModel _wizardModel;
+		public static readonly Log Log = Log.Instance;
 
 		public LoginViewModel(WizardModel wizardModel,object view): base(view)
 		{
@@ -115,63 +116,70 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		private async void AuthenticateUser(object parameter)
 		{
-			var passwordBox = parameter as PasswordBox;
-			var languageFlagsHelper = new LanguageFlags();
-			var password = passwordBox?.Password;
-			var projectService = new ProjectService();
-			if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
+			try
 			{
-				_wizardModel.UserCredentials.UserName = UserName.TrimEnd().TrimStart();
-				_wizardModel.UserCredentials.Password = password.TrimEnd().TrimStart();
-				_wizardModel.UserCredentials.ServiceUrl = Url.TrimEnd().TrimStart();
-				
-				if (Uri.IsWellFormedUriString(Url, UriKind.Absolute))
+				var passwordBox = parameter as PasswordBox;
+				var languageFlagsHelper = new LanguageFlags();
+				var password = passwordBox?.Password;
+				var projectService = new ProjectService();
+				if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 				{
-					var statusCode = await Authentication.Login(_wizardModel.UserCredentials);
-					if (statusCode == HttpStatusCode.OK)
+					_wizardModel.UserCredentials.UserName = UserName.TrimEnd().TrimStart();
+					_wizardModel.UserCredentials.Password = password.TrimEnd().TrimStart();
+					_wizardModel.UserCredentials.ServiceUrl = Url.TrimEnd().TrimStart();
+
+					if (Uri.IsWellFormedUriString(Url, UriKind.Absolute))
 					{
-						IsValid = true;
-						TextMessage = PluginResources.AuthenticationSuccess;
-						TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
-						var projectsResponse = await projectService.GetGsProjects();
-						if (projectsResponse?.Items != null)
+						var statusCode = await Authentication.Login(_wizardModel.UserCredentials);
+						if (statusCode == HttpStatusCode.OK)
 						{
-							foreach (var project in projectsResponse.Items)
+							IsValid = true;
+							TextMessage = PluginResources.AuthenticationSuccess;
+							TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
+							var projectsResponse = await projectService.GetGsProjects();
+							if (projectsResponse?.Items != null)
 							{
-								var gsProject = new GsProject
+								foreach (var project in projectsResponse.Items)
 								{
-									Name = project.Name,
-									DueDate = project.DueDate?.ToString(),
-									Image = new Language(project.SourceLanguage).GetFlagImage(),
-									TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage),
-									ProjectId = project.ProjectId,
-									SourceLanguage = project.SourceLanguage
-								};
+									var gsProject = new GsProject
+									{
+										Name = project.Name,
+										DueDate = project.DueDate?.ToString(),
+										Image = new Language(project.SourceLanguage).GetFlagImage(),
+										TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage),
+										ProjectId = project.ProjectId,
+										SourceLanguage = project.SourceLanguage
+									};
 
-								if (Enum.TryParse<ProjectStatus.Status>(project.Status.ToString(), out _))
-								{
-									gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
+									if (Enum.TryParse<ProjectStatus.Status>(project.Status.ToString(), out _))
+									{
+										gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
+									}
+									_wizardModel?.GsProjects.Add(gsProject);
 								}
-								_wizardModel?.GsProjects.Add(gsProject);
 							}
-						}
 
-						TextMessageVisibility = "Visible";
-						_view.Dispatcher.Invoke(delegate { SendKeys.SendWait("{TAB}"); }, DispatcherPriority.ApplicationIdle);
+							TextMessageVisibility = "Visible";
+							_view.Dispatcher.Invoke(delegate { SendKeys.SendWait("{TAB}"); }, DispatcherPriority.ApplicationIdle);
+						}
+						else
+						{
+							ShowErrorMessage(statusCode.ToString());
+						}
 					}
 					else
 					{
-						ShowErrorMessage(statusCode.ToString());
+						ShowErrorMessage(PluginResources.Incorrect_Url_Format);
 					}
 				}
 				else
 				{
-					ShowErrorMessage(PluginResources.Incorrect_Url_Format);
+					ShowErrorMessage(PluginResources.Required_Fields);
 				}
 			}
-			else
+			catch (Exception e)
 			{
-				ShowErrorMessage(PluginResources.Required_Fields);
+				Log.Logger.Error($"AuthenticateUser method {e.Message}\n {e.StackTrace}");
 			}
 		}
 

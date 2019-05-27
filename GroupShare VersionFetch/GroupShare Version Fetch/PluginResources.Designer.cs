@@ -108,6 +108,26 @@ namespace Sdl.Community.GSVersionFetch {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap gs_fetch_versions {
+            get {
+                object obj = ResourceManager.GetObject("gs_fetch_versions", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon gs_fetch_versions_Hep_icon {
+            get {
+                object obj = ResourceManager.GetObject("gs_fetch_versions_Hep_icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} of {1} completed.
         /// </summary>
         public static string HelixWizard_StepsCompleted {

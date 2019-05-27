@@ -19,7 +19,7 @@ namespace Sdl.Community.GSVersionFetch.Studio
 
 	[Action("GsVersion",
 		Name = "GS Version Fetch",
-		Icon = "app_icon2_32px",
+		Icon = "gs_fetch_versions_Hep_icon",
 		Description = "GroupShare Version Fetch")]
 	[ActionLayout(typeof(GsVersionFetchRibbon), 20, DisplayType.Large)]
 

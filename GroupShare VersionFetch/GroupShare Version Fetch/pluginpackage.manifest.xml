@@ -8,5 +8,6 @@
   <Include>
 	<File>Newtonsoft.Json.dll</File>
 	<File>System.Windows.Interactivity.dll</File>
+	<File>NLog.dll</File>
   </Include>
 </PluginPackage>

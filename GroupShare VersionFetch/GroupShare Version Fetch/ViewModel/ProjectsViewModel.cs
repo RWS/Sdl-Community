@@ -18,6 +18,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private bool _isValid;
 		private ICommand _refreshProjectsCommand;
 		private readonly WizardModel _wizardModel;
+		public static readonly Log Log = Log.Instance;
 
 		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
 		{
@@ -79,31 +80,38 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		private async Task RefreshProjects()
 		{
-			_wizardModel?.GsProjects?.Clear();
-			var projectService = new ProjectService();
-			var languageFlagsHelper = new LanguageFlags();
-			var projectsResponse = await projectService.GetGsProjects();
-			if (projectsResponse?.Items != null)
+			try
 			{
-				foreach (var project in projectsResponse.Items)
+				_wizardModel?.GsProjects?.Clear();
+				var projectService = new ProjectService();
+				var languageFlagsHelper = new LanguageFlags();
+				var projectsResponse = await projectService.GetGsProjects();
+				if (projectsResponse?.Items != null)
 				{
-					var gsProject = new GsProject
+					foreach (var project in projectsResponse.Items)
 					{
-						Name = project.Name,
-						DueDate = project.DueDate?.ToString(),
-						Image = new Language(project.SourceLanguage).GetFlagImage(),
-						TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage),
-						ProjectId = project.ProjectId,
-						SourceLanguage = project.SourceLanguage
-					};
+						var gsProject = new GsProject
+						{
+							Name = project.Name,
+							DueDate = project.DueDate?.ToString(),
+							Image = new Language(project.SourceLanguage).GetFlagImage(),
+							TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage),
+							ProjectId = project.ProjectId,
+							SourceLanguage = project.SourceLanguage
+						};
 
-					if (Enum.TryParse<ProjectStatus.Status>(project.Status.ToString(), out _))
-					{
-						gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
+						if (Enum.TryParse<ProjectStatus.Status>(project.Status.ToString(), out _))
+						{
+							gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
+						}
+						_wizardModel?.GsProjects?.Add(gsProject);
 					}
-					_wizardModel?.GsProjects?.Add(gsProject);
+					IsValid = false;
 				}
-				IsValid = false;
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"RefreshProjects method: {e.Message}\n {e.StackTrace}");
 			}
 		}
 	}
