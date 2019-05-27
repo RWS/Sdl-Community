@@ -181,4 +181,10 @@
   <data name="SelectFolderTitle" xml:space="preserve">
     <value>Please select where to download selected files</value>
   </data>
+  <data name="app_icon2_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\app_icon2_32px.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Please_wait_message" xml:space="preserve">
+    <value>Please wait until the selected files are downloaded</value>
+  </data>
 </root>

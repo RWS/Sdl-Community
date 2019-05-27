@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Windows.Forms.Integration;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.View;
@@ -10,7 +11,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.GSVersionFetch.Studio
 {
-	[RibbonGroup("GsVersion", Name = "GS Version Fetch", ContextByType = typeof(ProjectsController))]
+	[RibbonGroup("GsVersion", Name = "", ContextByType = typeof(ProjectsController))]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	public class GsVersionFetchRibbon : AbstractRibbonGroup
 	{
@@ -18,7 +19,7 @@ namespace Sdl.Community.GSVersionFetch.Studio
 
 	[Action("GsVersion",
 		Name = "GS Version Fetch",
-		Icon = "",
+		Icon = "app_icon2_32px",
 		Description = "GroupShare Version Fetch")]
 	[ActionLayout(typeof(GsVersionFetchRibbon), 20, DisplayType.Large)]
 

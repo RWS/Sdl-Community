@@ -61,6 +61,16 @@ namespace Sdl.Community.GSVersionFetch {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon app_icon2_32px {
+            get {
+                object obj = ResourceManager.GetObject("app_icon2_32px", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap arrow_right_blue {
@@ -122,6 +132,15 @@ namespace Sdl.Community.GSVersionFetch {
             get {
                 object obj = ResourceManager.GetObject("openserverproject", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait until the selected files are downloaded.
+        /// </summary>
+        public static string Please_wait_message {
+            get {
+                return ResourceManager.GetString("Please_wait_message", resourceCulture);
             }
         }
         
