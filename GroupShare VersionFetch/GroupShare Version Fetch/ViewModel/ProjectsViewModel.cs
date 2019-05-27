@@ -14,12 +14,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
 		{
 			_wizardModel = wizardModel;
-			wizardModel.GsProjects.CollectionChanged += GsProjects_CollectionChanged;
+			_wizardModel.GsProjects.CollectionChanged += GsProjects_CollectionChanged;
 		}
 
 		private void GsProjects_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			if (e.OldItems != null)
+				if (e.OldItems != null)
 			{
 				foreach (GsProject gsProject in e.OldItems)
 				{

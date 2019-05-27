@@ -18,6 +18,7 @@ namespace Sdl.Community.GSVersionFetch.Model
 		public Image LanguageFlagImage { get; set; }
 		public string LanguageName { get; set; }
 		public string LanguageCode { get; set; }
+		public Guid OriginalFileId { get; set; }
 
 		public string ProjectName { get; set; }
 		public bool IsSelected
