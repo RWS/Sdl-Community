@@ -92,7 +92,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				_oldSelectedProjects.Add(project);
 				var files = await _projectService.GetProjectFiles(project.ProjectId);
-				SetFileProperties(project.ProjectId, project.Name, files);
+				SetFileProperties(project, files);
 			}
 		}
 
@@ -195,15 +195,18 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		public override string DisplayName => " Projects files";
 
-		private void SetFileProperties(string projectId, string projectName,IEnumerable<GsFile> files)
+		private void SetFileProperties(GsProject project, IEnumerable<GsFile> files)
 		{
 			foreach (var gsFile in files)
 			{
-				gsFile.ProjectId = projectId;
-				gsFile.ProjectName = projectName;
-				gsFile.LanguageFlagImage = new Language(gsFile.LanguageCode).GetFlagImage();
-				gsFile.LanguageName = new Language(gsFile.LanguageCode).DisplayName; 
-				_wizardModel?.GsFiles?.Add(gsFile);
+				if (gsFile.LanguageCode != project.SourceLanguage)
+				{
+					gsFile.ProjectId = project.ProjectId;
+					gsFile.ProjectName = project.Name;
+					gsFile.LanguageFlagImage = new Language(gsFile.LanguageCode).GetFlagImage();
+					gsFile.LanguageName = new Language(gsFile.LanguageCode).DisplayName;
+					_wizardModel?.GsFiles?.Add(gsFile);
+				}
 			}
 			TextMessageVisibility = "Collapsed";
 		}

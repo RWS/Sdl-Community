@@ -34,5 +34,6 @@ namespace Sdl.Community.GSVersionFetch.Model
 		public ObservableCollection<TargetLanguageFlag> TargetLanguageFlags { get; set; }
 		public string Status { get; set; }
 		public string DueDate { get; set; }
+		public string SourceLanguage { get; set; }
 	}
 }
