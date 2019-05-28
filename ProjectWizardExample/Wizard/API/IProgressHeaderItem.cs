@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace ProjectWizardExample.Wizard.API
+﻿namespace ProjectWizardExample.Wizard.API
 {
 	public interface IProgressHeaderItem
 	{
@@ -9,6 +7,8 @@ namespace ProjectWizardExample.Wizard.API
 		bool IsLastPage { get; }
 
 		bool IsFirstPage { get; }
+
+		int PagePosition { get; set; }
 
 		int PageIndex { get; set; }
 
@@ -30,6 +30,14 @@ namespace ProjectWizardExample.Wizard.API
 
 		bool IsComplete { get; set; }
 
-		bool OnChangePage(int position, out string message);
+		/// <summary>
+		/// Executed when a request is made to change the current page to the
+		/// page position in the pages collection.
+		/// </summary>
+		/// <param name="position">The new page position in the pages collection.</param>
+		/// <param name="message">An error message</param>
+		/// <returns>Returns true is no error; false if an error occurs that pervents
+		/// the user from moving away from the page (e.g. data validation error on the page)</returns>
+		bool OnPageChange(int position, out string message);
 	}
 }

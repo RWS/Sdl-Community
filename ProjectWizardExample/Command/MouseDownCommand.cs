@@ -26,7 +26,7 @@ namespace ProjectWizardExample.Command
 				{
 					if (frameworkElement.DataContext is IProgressHeaderItem progressHeaderItem)
 					{
-						_progressHeader.MoveToSelectedPage(progressHeaderItem);
+						_progressHeader.VisitSelectedPage(progressHeaderItem);
 					}
 				}
 			}
