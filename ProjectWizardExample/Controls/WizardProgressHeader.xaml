@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:ProjectWizardExample.Controls"
              xmlns:controls="clr-namespace:ProjectWizardExample.Controls"
              xmlns:behaviours="clr-namespace:ProjectWizardExample.Behaviours"
+             xmlns:viewModel="clr-namespace:ProjectWizardExample.Wizard.ViewModel"
              mc:Ignorable="d" Height="Auto" Width="Auto">
 	<Control.Resources>
 
@@ -80,7 +81,7 @@
 				</Style.Triggers>
 			</Style>
 
-			<DataTemplate x:Key="ProgressHeaderIndicatorIconNumber" DataType="viewModel:WizardViewModelBase">
+			<DataTemplate x:Key="ProgressHeaderIndicatorIconNumber" DataType="viewModel:ProjectWizardViewModelBase">
 				<Border CornerRadius="50"
                         Width="18"
                         Height="18"
