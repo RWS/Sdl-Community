@@ -24,7 +24,7 @@
 			<Style TargetType="Rectangle" x:Key="ProgressHeaderIndicatorLine" >
 				<Setter Property="Fill" Value="{StaticResource WizardProgressHeader.Subway.Default}" />
 				<Setter Property="Height" Value="2" />
-				<Setter Property="Width" Value="{Binding Path=LabelLineWidth}" />
+				<Setter Property="Width" Value="{Binding Path=ItemLineWidth}" />
 			</Style>
 
 			<Style TargetType="Rectangle" x:Key="ProgressHeaderIndicatorLineLeftSide" BasedOn="{StaticResource ProgressHeaderIndicatorLine}" >

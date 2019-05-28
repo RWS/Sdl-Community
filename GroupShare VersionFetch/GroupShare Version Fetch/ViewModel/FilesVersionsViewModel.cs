@@ -6,13 +6,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using Sdl.Community.GSVersionFetch.Commands;
 using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
-using Sdl.Community.GSVersionFetch.UiHelpers;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
@@ -113,7 +113,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		    }
 		}
 
-	    private void FilesVersionsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+	    private async void FilesVersionsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(CurrentPageChanged))
 			{
@@ -122,7 +122,11 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					TextMessage = PluginResources.Files_Version_Loading;
 					TextMessageVisibility = "Visible";
 					TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
-					var selectedFiles = _wizardModel.GsFiles.Where(f => f.IsSelected).ToList();
+					if (_wizardModel?.GsFiles?.Count == 0)
+					{
+						await GetProjectFiles().ConfigureAwait(true);
+					}
+					var selectedFiles = _wizardModel?.GsFiles?.Where(f => f.IsSelected).ToList();
 					if (_oldSelectedFiles.Count == 0)
 					{
 						AddVersionsToGrid(selectedFiles);
@@ -130,7 +134,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					else
 					{
 						//get the files which are selected in wizard and they are not in the old list => a new file was selected and we need to download the files versions only for it
-						var addedFiles = selectedFiles.Except(_oldSelectedFiles).ToList();
+						var addedFiles = selectedFiles?.Except(_oldSelectedFiles).ToList();
 						AddVersionsToGrid(addedFiles);
 
 						//get the removed files
@@ -140,8 +144,17 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				}
 			}
 		}
+	    private async Task GetProjectFiles()
+	    {
+		    var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected).ToList();
+		    foreach (var project in selectedProjects)
+		    {
+			    var files = await _projectService.GetProjectFiles(project.ProjectId).ConfigureAwait(true);
+			    project.SetFileProperties(_wizardModel, files,true);
+		    }
+	    }
 
-	    private void RemoveFilesFromGrid(List<GsFile> removedFiles)
+		private void RemoveFilesFromGrid(List<GsFile> removedFiles)
 	    {
 		    foreach (var removedFile in removedFiles)
 		    {

@@ -44,7 +44,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				project.PropertyChanged += GsProject_PropertyChanged;
 			}
 		}
-		public override bool OnChangePage(int position, out string message)
+		public override  bool OnChangePage(int position, out string message)
 		{
 			message = string.Empty;
 
@@ -56,11 +56,9 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 			if (!IsValid && position > pagePosition)
 			{
-				message = PluginResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
-				          string.Format(PluginResources.The_data_on__0__is_not_valid, _displayName);
+				message = "Please select at least one project before moving to next page";
 				return false;
 			}
-
 			return true;
 		}
 

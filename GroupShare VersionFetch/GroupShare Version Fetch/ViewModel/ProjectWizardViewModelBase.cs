@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using Sdl.Community.GSVersionFetch.Interface;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
@@ -14,7 +13,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private bool _previousIsVisited;
 		private bool _isCurrentPage;
 		private double _itemLineWidth;
-		private double _labelTextWidth;
 		private double _itemTextWidth;
 
 		protected ProjectWizardViewModelBase(object view)

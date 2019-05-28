@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -68,31 +67,31 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				return false;
 			}
 
-			if (position > currentPagePosition && !currentPage.IsLastPage)
-			{
-				var notValid = new List<IProgressHeaderItem>();
-				for (var i = currentPagePosition + 1; i < position; i++)
-				{
-					var page = Pages[i];
-					if (!page.IsValid)
-					{
-						notValid.Add(page);
-					}
-				}
+			//if (position > currentPagePosition && !currentPage.IsLastPage)
+			//{
+			//	var notValid = new List<IProgressHeaderItem>();
+			//	for (var i = currentPagePosition + 1; i < position; i++)
+			//	{
+			//		var page = Pages[i];
+			//		if (!page.IsValid)
+			//		{
+			//			notValid.Add(page);
+			//		}
+			//	}
 
-				if (notValid.Count > 0)
-				{
-					var pageNames = string.Empty;
-					foreach (var page in notValid)
-					{
-						pageNames += (string.IsNullOrEmpty(pageNames) ? string.Empty : Environment.NewLine) + " * " + page.DisplayName;
-					}
-					message = PluginResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
-					          PluginResources.DataOnTheFollowingPagesAreNotValid + Environment.NewLine +
-							  $"{pageNames}";
-					return false;
-				}
-			}
+			//	if (notValid.Count > 0)
+			//	{
+			//		var pageNames = string.Empty;
+			//		foreach (var page in notValid)
+			//		{
+			//			pageNames += (string.IsNullOrEmpty(pageNames) ? string.Empty : Environment.NewLine) + " * " + page.DisplayName;
+			//		}
+			//		message = PluginResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
+			//		          PluginResources.DataOnTheFollowingPagesAreNotValid + Environment.NewLine +
+			//				  $"{pageNames}";
+			//		return false;
+			//	}
+			//}
 
 			return true;
 		}

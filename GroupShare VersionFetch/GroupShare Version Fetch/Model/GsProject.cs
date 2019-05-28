@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
+using Sdl.Core.Globalization;
 
 namespace Sdl.Community.GSVersionFetch.Model
 {
@@ -35,5 +37,21 @@ namespace Sdl.Community.GSVersionFetch.Model
 		public string Status { get; set; }
 		public string DueDate { get; set; }
 		public string SourceLanguage { get; set; }
+
+		public void SetFileProperties(WizardModel wizardModel,List<GsFile> projectFiles,bool selectFile)
+		{
+			foreach (var gsFile in projectFiles)
+			{
+				if (gsFile.LanguageCode != SourceLanguage)
+				{
+					gsFile.IsSelected = selectFile;
+					gsFile.ProjectId = ProjectId;
+					gsFile.ProjectName = Name;
+					gsFile.LanguageFlagImage = new Language(gsFile.LanguageCode).GetFlagImage();
+					gsFile.LanguageName = new Language(gsFile.LanguageCode).DisplayName;
+					wizardModel?.GsFiles?.Add(gsFile);
+				}
+			}
+		}
 	}
 }
