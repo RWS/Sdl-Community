@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Media;
+using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
 using Sdl.Core.Globalization;
@@ -13,6 +15,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	public class FilesViewModel : ProjectWizardViewModelBase
 	{
 		private bool _isValid;
+		public static readonly Log Log = Log.Instance;
 		private readonly ProjectService _projectService;
 		private readonly WizardModel _wizardModel;
 		private SolidColorBrush _textMessageBrush;
@@ -64,23 +67,31 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				if (IsCurrentPage)
 				{
-					TextMessage = "Please wait, we are loading GroupShare files";
-					TextMessageVisibility = "Visible";
-					TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
-					var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected).ToList();
-
-					if (_oldSelectedProjects.Count==0) // initial step
+					try
 					{
-						AddFilesToGrid(selectedProjects);
+						TextMessage = "Please wait, we are loading GroupShare files";
+						TextMessageVisibility = "Visible";
+						TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
+						var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected).ToList();
+
+						if (_oldSelectedProjects.Count == 0) // initial step
+						{
+							AddFilesToGrid(selectedProjects);
+						}
+						else
+						{
+							var addedProjects = selectedProjects.Except(_oldSelectedProjects).ToList();
+							AddFilesToGrid(addedProjects);
+
+							// get the removed projects
+							var removedProjects = _oldSelectedProjects.Except(selectedProjects).ToList();
+							RemoveFilesFromGrid(removedProjects);
+						}
 					}
-					else
+					catch (Exception ex)
 					{
-						var addedProjects = selectedProjects.Except(_oldSelectedProjects).ToList();
-						AddFilesToGrid(addedProjects);
+						Log.Logger.Error($"FilesViewModel_PropertyChanged method: {ex.Message}\n {ex.StackTrace}");
 
-						// get the removed projects
-						var removedProjects = _oldSelectedProjects.Except(selectedProjects).ToList();
-						RemoveFilesFromGrid(removedProjects);
 					}
 				}
 			}

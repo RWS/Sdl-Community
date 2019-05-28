@@ -205,7 +205,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		    set
 		    {
 			    ToggleCheckAllFiles(value);
-			    IsComplete = value;
 			    OnPropertyChanged(nameof(AllFilesChecked));
 		    }
 	    }
@@ -303,11 +302,13 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					    var selectedFolderPath = folderSelect.FileName;
 					    if (!string.IsNullOrEmpty(selectedFolderPath))
 					    {
-						    GroupFilesByFolderStructure(selectedFolderPath);
-
-						    TextMessageVisibility = "Visible";
-						    TextMessage = PluginResources.Download_Message;
 						    TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
+							TextMessageVisibility = "Visible";
+						    TextMessage = PluginResources.Please_wait_message;
+
+							GroupFilesByFolderStructure(selectedFolderPath);
+
+						    TextMessage = PluginResources.Download_Message;
 
 							ToggleCheckAllFiles(false);
 						    Process.Start(selectedFolderPath);

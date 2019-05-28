@@ -23,9 +23,16 @@
 			</Style>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid>
+	<Grid Margin="10">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding RefreshProjectsCommand}"
+				HorizontalAlignment="Right" Content="Refresh projects" Margin="0,10,10,5" />
+
 		<DataGrid  
-		          ItemsSource="{Binding GsProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		          ItemsSource="{Binding GsProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"
 		          SelectionMode="Extended"
 				  Padding="5"
 		          SelectionUnit="FullRow"
