@@ -28,10 +28,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	    private string _selectedVersion;
 		private string _textMessageVisibility;
 	    private readonly ObservableCollection<GsFile> _oldSelectedFiles;
+	    private string _displayName;
 
-		public FilesVersionsViewModel(WizardModel wizardModel,object view) : base(view)
+	    public FilesVersionsViewModel(WizardModel wizardModel,object view) : base(view)
 		{
 			_wizardModel = wizardModel;
+			_displayName="Files versions";
 			_projectService = new ProjectService();
 			_oldSelectedFiles = new ObservableCollection<GsFile>();
 			PropertyChanged += FilesVersionsViewModel_PropertyChanged;
@@ -175,8 +177,40 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				SetFileProperties(selectedFile, fileVersions);
 			}
 		}
+	    public override bool OnChangePage(int position, out string message)
+	    {
+		    message = string.Empty;
 
-	    public override string DisplayName => "Files versions";
+		    var pagePosition = PageIndex - 1;
+		    if (position == pagePosition)
+		    {
+			    return false;
+		    }
+
+		    if (!IsValid && position > pagePosition)
+		    {
+			    message = PluginResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
+			              string.Format(PluginResources.The_data_on__0__is_not_valid, _displayName);
+			    return false;
+		    }
+
+		    return true;
+	    }
+
+	    public override string DisplayName
+	    {
+		    get => _displayName;
+		    set
+		    {
+			    if (_displayName == value)
+			    {
+				    return;
+			    }
+
+			    _displayName = value;
+			    OnPropertyChanged(nameof(DisplayName));
+		    }
+	    }
 		public override bool IsValid
 		{
 			get => _isValid;

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Markup;
+using Sdl.Community.GSVersionFetch.Helpers;
+using Sdl.Community.GSVersionFetch.Interface;
 using Sdl.Community.GSVersionFetch.ViewModel;
 
 namespace Sdl.Community.GSVersionFetch.View
@@ -14,7 +16,7 @@ namespace Sdl.Community.GSVersionFetch.View
 	{
 		private readonly ProjectWizardViewModel _model;
 
-		public ProjectWizard(ObservableCollection<ProjectWizardViewModelBase> pages)
+		public ProjectWizard(ObservableCollection<IProgressHeaderItem> pages)
 		{
 			InitializeComponent();
 
@@ -22,25 +24,51 @@ namespace Sdl.Community.GSVersionFetch.View
 			AddDataTemplates(this, pages);
 
 			_model = new ProjectWizardViewModel(this, pages);
+			_model.SelectedPageChanged += Model_SelectedPageChanged;
 			_model.RequestClose += ProjectWizardViewModel_RequestClose;
+
 			DataContext = _model;
 		}
 
-		private  void UpdatePageIndexes(IReadOnlyList<ProjectWizardViewModelBase> pages)
+		private void Model_SelectedPageChanged(object sender, SelectedPageEventArgs e)
+		{
+			if (_model.CurrentPagePosition == e.PagePosition)
+			{
+				return;
+			}
+
+			if (_model.CurrentPage.IsLastPage && _model.CurrentPage.IsComplete)
+			{
+				return;
+			}
+
+			if (!_model.CanMoveToPage(e.PagePosition, out var message))
+			{
+				if (!string.IsNullOrEmpty(message))
+				{
+					MessageBox.Show(message, _model.WindowTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+				}
+
+				return;
+			}
+
+			_model?.SetCurrentPage(e.PagePosition);
+		}
+
+		private static void UpdatePageIndexes(IReadOnlyList<IProgressHeaderItem> pages)
 		{
 			for (var i = 0; i < pages.Count; i++)
 			{
 				pages[i].PageIndex = i + 1;
 				pages[i].TotalPages = pages.Count;
-				pages[i].Window = this;
 			}
 		}
 
-		public static void AddDataTemplates(FrameworkElement element, IEnumerable<ProjectWizardViewModelBase> pages)
+		public static void AddDataTemplates(FrameworkElement element, IEnumerable<IProgressHeaderItem> pages)
 		{
 			foreach (var page in pages)
 			{
-				AddDataTemplate(element, page.GetType(), page.View.GetType());
+				AddDataTemplate(element, page.GetType(), ((ProjectWizardViewModelBase)page).View.GetType());
 			}
 		}
 
@@ -70,7 +98,7 @@ namespace Sdl.Community.GSVersionFetch.View
 			return template;
 		}
 
-		private void ProjectWizardViewModel_RequestClose(object sender, EventArgs e)
+		private void ProjectWizardViewModel_RequestClose(object sender, System.EventArgs e)
 		{
 			Close();
 		}

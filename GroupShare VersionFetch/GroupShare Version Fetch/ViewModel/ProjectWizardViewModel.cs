@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -9,22 +10,26 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Sdl.Community.GSVersionFetch.Commands;
+using Sdl.Community.GSVersionFetch.Helpers;
+using Sdl.Community.GSVersionFetch.Interface;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
-	public class ProjectWizardViewModel : INotifyPropertyChanged, IDisposable
+	public class ProjectWizardViewModel : INotifyPropertyChanged, IProgressHeader, IDisposable
 	{
+		private readonly Window _window;
 		private const int WindowMargin = 40;
 		private Size _iconSize = new Size(18, 18);
-		private ProjectWizardViewModelBase _currentPage;
-		private ObservableCollection<ProjectWizardViewModelBase> _pages;
+		private double _actualWidth;
+		private IProgressHeaderItem _currentPage;
+		private ObservableCollection<IProgressHeaderItem> _pages;
 		private RelayCommand _moveNextCommand;
 		private RelayCommand _moveBackCommand;
 		private RelayCommand _finishCommand;
 		private RelayCommand _cancelCommand;
-		private readonly Window _window;
+		private ICommand _selectedPageCommand;
 
-		public ProjectWizardViewModel(Window window, ObservableCollection<ProjectWizardViewModelBase> pages)
+		public ProjectWizardViewModel(Window window, ObservableCollection<IProgressHeaderItem> pages)
 		{
 			_window = window;
 
@@ -37,30 +42,116 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 			if (_window != null)
 			{
-				CalculateProjectNodeSizes(_window.ActualWidth);
+				CalculateProgressHeaderItemsSize(_window.ActualWidth);
 			}
 
-			SetCurrentPage(Pages[0]);
+			SetCurrentPage(0);
 		}
 
-		private void SetCurrentPage(ProjectWizardViewModelBase currentPage)
+		public event EventHandler<SelectedPageEventArgs> SelectedPageChanged;
+
+		public bool CanMoveToPage(int position, out string message)
 		{
-			CurrentPage = currentPage;
-			CurrentPage.Window = _window;
+			message = string.Empty;
+
+			var currentPagePosition = CurrentPagePosition;
+			var currentPage = CurrentPage;
+
+			if (currentPagePosition == position)
+			{
+				return false;
+			}
+
+			if (!currentPage.OnChangePage(position, out var outMessage))
+			{
+				message = outMessage;
+				return false;
+			}
+
+			if (position > currentPagePosition && !currentPage.IsLastPage)
+			{
+				var notValid = new List<IProgressHeaderItem>();
+				for (var i = currentPagePosition + 1; i < position; i++)
+				{
+					var page = Pages[i];
+					if (!page.IsValid)
+					{
+						notValid.Add(page);
+					}
+				}
+
+				if (notValid.Count > 0)
+				{
+					var pageNames = string.Empty;
+					foreach (var page in notValid)
+					{
+						pageNames += (string.IsNullOrEmpty(pageNames) ? string.Empty : Environment.NewLine) + " * " + page.DisplayName;
+					}
+					message = PluginResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
+					          PluginResources.DataOnTheFollowingPagesAreNotValid + Environment.NewLine +
+							  $"{pageNames}";
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		public ICommand SelectedPageCommand => _selectedPageCommand ?? (_selectedPageCommand = new MouseDownCommand(this));
+
+		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new RelayCommand(CancelWizard, () => CanCancel));
+
+		public ICommand FinishCommand => _finishCommand ?? (_finishCommand = new RelayCommand(FinishWizard, () => CanFinish));
+
+		public void UpdateCurrentPageState(bool isValid, bool isComplete)
+		{
+			foreach (var page in Pages)
+			{
+				page.IsCurrentPage = false;
+				page.IsComplete = IsComplete;
+			}
+
+			CurrentPage.IsCurrentPage = true;
+			CurrentPage.IsVisited = true;
+			CurrentPage.IsValid = isValid;
+			CurrentPage.IsComplete = isComplete;
+
+
+			OnPropertyChanged(nameof(CompletedProgressStepsMessage));
+			CalculateProgressHeaderItemsSize(_actualWidth);
+		}
+
+		public void MoveToSelectedPage(IProgressHeaderItem item)
+		{
+			SelectedPageChanged?.Invoke(this, new SelectedPageEventArgs
+			{
+				ProgressHeaderItem = item,
+				PagePosition = GetCurrentPagePosition(item)
+			});
+		}
+
+		public void SetCurrentPage(int index)
+		{
+			// check if null or empty collection
+			if (Pages == null || Pages.Count == 0)
+			{
+				return;
+			}
+
+			CurrentPage = Pages[index];
+			UpdateVisitedPages();
+
 			_window.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
 		}
 
-		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-		{
-			CalculateProjectNodeSizes(_window.ActualWidth);
-		}
-
-		private void CalculateProjectNodeSizes(double actualWidth)
+		public void CalculateProgressHeaderItemsSize(double actualWidth)
 		{
 			if (_window == null || actualWidth <= 0 || Pages == null)
 			{
 				return;
 			}
+
+			_actualWidth = actualWidth;
 
 			// (ICON)[LINE]
 			// [TEXT------]
@@ -81,25 +172,25 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 			foreach (var page in Pages)
 			{
-				if (page.IsOnFirstPage || page.IsOnLastPage)
+				if (page.IsFirstPage || page.IsLastPage)
 				{
-					page.LabelLineWidth = fixedLineWidth - fixedLineWidth / 2;
-					page.LabelTextWidth = (fixedLineWidth - fixedLineWidth / 2) + _iconSize.Width;
+					page.ItemLineWidth = fixedLineWidth - fixedLineWidth / 2;
+					page.ItemTextWidth = (fixedLineWidth - fixedLineWidth / 2) + _iconSize.Width;
 				}
 				else
 				{
-					page.LabelLineWidth = fixedLineWidth / 2;
-					page.LabelTextWidth = fixedLineWidth + _iconSize.Width;
+					page.ItemLineWidth = fixedLineWidth / 2;
+					page.ItemTextWidth = fixedLineWidth + _iconSize.Width;
 				}
 			}
 		}
 
 		public string WindowTitle { get; private set; }
 
-		public ProjectWizardViewModelBase CurrentPage
+		public IProgressHeaderItem CurrentPage
 		{
 			get => _currentPage;
-			private set
+			set
 			{
 				if (value == _currentPage)
 				{
@@ -125,13 +216,13 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				}
 
 				OnPropertyChanged(nameof(CurrentPage));
-				OnPropertyChanged(nameof(IsOnLastPage));
+				OnPropertyChanged(nameof(IsLastPage));
 				OnPropertyChanged(nameof(WindowTitle));
-				OnPropertyChanged(nameof(CompletedSteps));
+				OnPropertyChanged(nameof(CompletedProgressStepsMessage));
 			}
 		}
 
-		public ObservableCollection<ProjectWizardViewModelBase> Pages
+		public ObservableCollection<IProgressHeaderItem> Pages
 		{
 			get => _pages;
 			set
@@ -154,20 +245,126 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		private void AddEventhandlers(ObservableCollection<ProjectWizardViewModelBase> pages)
+		public int CurrentPagePosition
 		{
-			foreach (var viewModelBase in pages)
+			get
 			{
+				if (CurrentPage == null)
+				{
+					Debug.Fail("The current page is null!");
+				}
+
+				return Pages.IndexOf(CurrentPage);
+			}
+		}
+
+		public bool IsLastPage => CurrentPagePosition == Pages.Count - 1;
+
+		public bool IsComplete => IsLastPage && CurrentPage.IsComplete;
+
+		public string CompletedProgressStepsMessage =>
+			string.Format(PluginResources.ProjectWizard_StepsCompleted, Pages.Count(page => page.IsVisited), Pages.Count);
+
+		public void MoveToNextPage()
+		{
+			if (!CanMoveToNextPage)
+			{
+				return;
+			}
+
+			if (CurrentPagePosition < Pages.Count - 1)
+			{
+				_currentPage.NextIsVisited = true;
+				OnPropertyChanged(nameof(CurrentPage));
+
+				SetCurrentPage(CurrentPagePosition + 1);
+			}
+			else
+			{
+				OnRequestClose();
+			}
+		}
+
+		public ICommand MoveBackCommand
+		{
+			get
+			{
+				return _moveBackCommand ?? (_moveBackCommand = new RelayCommand(
+						   MoveToPreviousPage,
+						   () => CanMoveToPreviousPage));
+			}
+		}
+
+		public ICommand MoveNextCommand
+		{
+			get
+			{
+				return _moveNextCommand ??
+					   (_moveNextCommand = new RelayCommand(
+						   MoveToNextPage,
+						   () => CanMoveToNextPage));
+			}
+		}
+
+		public void MoveToPreviousPage()
+		{
+			if (CanMoveToPreviousPage)
+			{
+				_currentPage.PreviousIsVisited = true;
+				OnPropertyChanged(nameof(CurrentPage));
+
+				SetCurrentPage(CurrentPagePosition - 1);
+			}
+		}
+
+		private void UpdateVisitedPages()
+		{
+			if (CurrentPage == null)
+			{
+				return;
+			}
+
+			foreach (var item in Pages)
+			{
+				item.IsVisited = true;
+				item.PreviousIsVisited = true;
+
+				// assigned true only when the next page is visited.
+				if (item.PageIndex <= CurrentPagePosition)
+				{
+					item.NextIsVisited = true;
+				}
+
+				// stop assigning the visited properties when the page index is equal or greater than 
+				// the last PageIndex visited that is nearest to completion of the wizard
+				if (item.PageIndex >= CurrentPagePosition)
+				{
+					break;
+				}
+			}
+		}
+
+		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			CalculateProgressHeaderItemsSize(_window.ActualWidth);
+		}
+
+		private void AddEventhandlers(ObservableCollection<IProgressHeaderItem> pages)
+		{
+			foreach (var page in pages)
+			{
+				var viewModelBase = (ProjectWizardViewModelBase)page;
 				viewModelBase.PropertyChanged += Pages_PropertyChanged;
 			}
 
 			pages.CollectionChanged += Pages_CollectionChanged;
 		}
 
-		private void RemoveEventhandlers(ObservableCollection<ProjectWizardViewModelBase> pages)
+		private void RemoveEventhandlers(ObservableCollection<IProgressHeaderItem> pages)
 		{
-			foreach (var viewModelBase in pages)
+			foreach (var page in pages)
 			{
+				var viewModelBase = (ProjectWizardViewModelBase)page;
 				viewModelBase.PropertyChanged -= Pages_PropertyChanged;
 			}
 
@@ -191,31 +388,24 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		{
 			if (e.PropertyName == "IsValid")
 			{
-				OnPropertyChanged(nameof(CompletedSteps));
+				OnPropertyChanged(nameof(CompletedProgressStepsMessage));
 			}
 		}
 
-		private int CurrentPageIndex
+		private int GetCurrentPagePosition(IProgressHeaderItem item)
 		{
-			get
+			var index = 0;
+			foreach (var progressHeaderItem in Pages)
 			{
-				if (CurrentPage == null)
+				if (progressHeaderItem.Equals(item))
 				{
-					Debug.Fail("The current page is null!");
+					return index;
 				}
 
-				return Pages.IndexOf(CurrentPage);
+				index++;
 			}
+			return -1;
 		}
-
-		public bool IsOnLastPage => CurrentPageIndex == Pages.Count - 1;
-
-		public bool IsComplete => IsOnLastPage && CurrentPage.IsComplete;
-
-		public string CompletedSteps =>
-			string.Format(PluginResources.ProjectWizard_StepsCompleted, Pages.Count(page => page.IsVisited), Pages.Count);
-
-		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new RelayCommand(CancelWizard, () => CanCancel));
 
 		private void CancelWizard()
 		{
@@ -226,40 +416,35 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		{
 			get
 			{
-				return CurrentPage != null
-					   && (IsOnLastPage && CurrentPage.IsComplete)
-					? false
-					: true;
+				return CurrentPage == null || !IsLastPage || !CurrentPage.IsComplete;
 			}
 		}
-
-		public ICommand FinishCommand => _finishCommand ?? (_finishCommand = new RelayCommand(FinishWizard, () => CanFinish));
 
 		private bool CanFinish
 		{
 			get
 			{
 				return CurrentPage != null
-					   && ((CurrentPageIndex == 0 && CurrentPage.IsValid)
-						   || (IsOnLastPage && CurrentPage.IsComplete)
-						   || (CurrentPageIndex > 0 && !IsOnLastPage));
+					   && ((CurrentPagePosition == 0 && CurrentPage.IsValid)
+						   || (IsLastPage && CurrentPage.IsComplete)
+						   || (CurrentPagePosition > 0 && !IsLastPage));
 			}
 		}
 
 		private void FinishWizard()
 		{
 
-			if (!IsOnLastPage)
+			if (!IsLastPage)
 			{
 				var lastPage = Pages[Pages.Count - 1];
-				for (var i = CurrentPageIndex; i < lastPage.PageIndex; i++)
+				for (var i = CurrentPagePosition; i < lastPage.PageIndex; i++)
 				{
 					Pages[i].PreviousIsVisited = true;
 					Pages[i].IsVisited = true;
 					Pages[i].NextIsVisited = true;
 				}
 
-				SetCurrentPage(Pages[Pages.Count - 1]);
+				SetCurrentPage(Pages.Count - 1);
 			}
 
 			else
@@ -268,60 +453,14 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		public ICommand MoveNextCommand
+		private bool CanMoveToNextPage => CurrentPage != null && CurrentPage.IsValid && !CurrentPage.IsLastPage;
+
+		private bool CanMoveToPreviousPage
 		{
 			get
 			{
-				return _moveNextCommand ??
-					   (_moveNextCommand = new RelayCommand(
-						   MoveToNextPage,
-						   () => CanMoveToNextPage));
-			}
-		}
-
-		private void MoveToNextPage()
-		{
-			if (!CanMoveToNextPage)
-			{
-				return;
-			}
-
-			if (CurrentPageIndex < Pages.Count - 1)
-			{
-				_currentPage.NextIsVisited = true;
-				OnPropertyChanged(nameof(CurrentPage));
-
-				SetCurrentPage(Pages[CurrentPageIndex + 1]);
-			}
-			else
-			{
-				OnRequestClose();
-			}
-		}
-
-		private bool CanMoveToNextPage => CurrentPage != null && CurrentPage.IsValid && !CurrentPage.IsOnLastPage;
-
-		public ICommand MoveBackCommand
-		{
-			get
-			{
-				return _moveBackCommand ?? (_moveBackCommand = new RelayCommand(
-						   MoveToPreviousPage,
-						   () => CanMoveToPreviousPage));
-			}
-		}
-
-		private bool CanMoveToPreviousPage => (CurrentPageIndex > 0 && !CurrentPage.IsOnLastPage)
-		                                      || (CurrentPage.IsOnLastPage && !CurrentPage.IsComplete);
-
-		private void MoveToPreviousPage()
-		{
-			if (CanMoveToPreviousPage)
-			{
-				_currentPage.PreviousIsVisited = true;
-				OnPropertyChanged(nameof(CurrentPage));
-
-				SetCurrentPage(Pages[CurrentPageIndex - 1]);
+				return (CurrentPagePosition > 0 && !CurrentPage.IsLastPage)
+					   || (CurrentPage.IsLastPage && !CurrentPage.IsComplete);
 			}
 		}
 

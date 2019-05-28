@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using Sdl.Community.GSVersionFetch.Interface;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
-	public abstract class ProjectWizardViewModelBase : INotifyPropertyChanged
+	public abstract class ProjectWizardViewModelBase : IProgressHeaderItem, INotifyPropertyChanged
 	{
 		private bool _isVisited;
 		private bool _isComplete;
@@ -12,51 +13,41 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private bool _nextIsVisited;
 		private bool _previousIsVisited;
 		private bool _isCurrentPage;
-		private double _labelLineWidth;
+		private double _itemLineWidth;
 		private double _labelTextWidth;
-		private Window _window;
+		private double _itemTextWidth;
 
 		protected ProjectWizardViewModelBase(object view)
 		{
 			View = view;
 		}
-		public double LabelLineWidth
+		public double ItemLineWidth
 		{
-			get => _labelLineWidth;
+			get => _itemLineWidth;
 			set
 			{
-				if (_labelLineWidth == value)
+				if (_itemLineWidth == value)
 				{
 					return;
 				}
 
-				_labelLineWidth = value;
-				OnPropertyChanged(nameof(LabelLineWidth));
+				_itemLineWidth = value;
+				OnPropertyChanged(nameof(ItemLineWidth));
 			}
 		}
 
-		public Window Window
+		public double ItemTextWidth
 		{
-			get => _window;
+			get => _itemTextWidth;
 			set
 			{
-				_window = value;
-				OnPropertyChanged(nameof(Window));
-			}
-		}
-
-		public double LabelTextWidth
-		{
-			get => _labelTextWidth;
-			set
-			{
-				if (_labelTextWidth == value)
+				if (_itemTextWidth == value)
 				{
 					return;
 				}
 
-				_labelTextWidth = value;
-				OnPropertyChanged(nameof(LabelTextWidth));
+				_itemTextWidth = value;
+				OnPropertyChanged(nameof(ItemTextWidth));
 			}
 		}
 
@@ -64,9 +55,9 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		public int PageIndex { get; set; }
 
-		public bool IsOnFirstPage => PageIndex == 1;
+		public bool IsFirstPage => PageIndex == 1;
 
-		public bool IsOnLastPage => PageIndex == TotalPages;
+		public bool IsLastPage => PageIndex == TotalPages;
 
 		public object View { get; }
 
@@ -84,7 +75,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 				_isCurrentPage = value;
 				OnPropertyChanged(nameof(IsCurrentPage));
-
 				OnPropertyChanged(nameof(CurrentPageChanged));
 			}
 		}
@@ -162,7 +152,9 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		public abstract string DisplayName { get; }
+		public abstract bool OnChangePage(int position, out string message);
+
+		public abstract string DisplayName { get; set; }
 
 		public abstract bool IsValid { get; set; }
 

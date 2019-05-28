@@ -16,6 +16,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	public class ProjectsViewModel: ProjectWizardViewModelBase
 	{
 		private bool _isValid;
+		private string _displayName;
 		private ICommand _refreshProjectsCommand;
 		private readonly WizardModel _wizardModel;
 		public static readonly Log Log = Log.Instance;
@@ -23,6 +24,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
 		{
 			_wizardModel = wizardModel;
+			_displayName = "GroupShare Projects";
 			_wizardModel.GsProjects.CollectionChanged += GsProjects_CollectionChanged;
 		}
 
@@ -42,7 +44,25 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				project.PropertyChanged += GsProject_PropertyChanged;
 			}
 		}
+		public override bool OnChangePage(int position, out string message)
+		{
+			message = string.Empty;
 
+			var pagePosition = PageIndex - 1;
+			if (position == pagePosition)
+			{
+				return false;
+			}
+
+			if (!IsValid && position > pagePosition)
+			{
+				message = PluginResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
+				          string.Format(PluginResources.The_data_on__0__is_not_valid, _displayName);
+				return false;
+			}
+
+			return true;
+		}
 
 		private void GsProject_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -51,8 +71,20 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				IsValid = _wizardModel.GsProjects.Any(p => p.IsSelected);
 			}
 		}
+		public override string DisplayName
+		{
+			get => _displayName;
+			set
+			{
+				if (_displayName == value)
+				{
+					return;
+				}
 
-		public override string DisplayName => "GroupShare Projects";
+				_displayName = value;
+				OnPropertyChanged(nameof(DisplayName));
+			}
+		}
 		public override bool IsValid
 		{
 			get => _isValid;

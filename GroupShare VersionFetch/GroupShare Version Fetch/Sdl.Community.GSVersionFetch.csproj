@@ -118,19 +118,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviours\EventBehaviourFactory.cs" />
+    <Compile Include="Behaviours\MouseDownBehaviour.cs" />
     <Compile Include="Commands\AwaitableDelegateCommand.cs" />
     <Compile Include="Commands\CommandExtensions.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Commands\MouseDownCommand.cs" />
     <Compile Include="Commands\ParameterCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Extensions\EventsExtensions.cs" />
     <Compile Include="Helpers\ApiUrl.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\LanguageFlags.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Reflector.cs" />
+    <Compile Include="Helpers\SelectedPageEventArgs.cs" />
     <Compile Include="Helpers\TreeHelper.cs" />
     <Compile Include="Interface\IAsyncCommand.cs" />
+    <Compile Include="Interface\IProgressHeader.cs" />
+    <Compile Include="Interface\IProgressHeaderItem.cs" />
     <Compile Include="Interface\IRaiseCanExecuteChanged.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\Credentials.cs" />

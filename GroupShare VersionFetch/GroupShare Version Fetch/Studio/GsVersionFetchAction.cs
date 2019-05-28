@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Windows.Forms.Integration;
+using Sdl.Community.GSVersionFetch.Interface;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.View;
 using Sdl.Community.GSVersionFetch.ViewModel;
@@ -43,9 +44,9 @@ namespace Sdl.Community.GSVersionFetch.Studio
 			projectWizard.Show();
 		}
 
-		private ObservableCollection<ProjectWizardViewModelBase> CreatePages(WizardModel wizardModel)
+		private ObservableCollection<IProgressHeaderItem> CreatePages(WizardModel wizardModel)
 		{
-			return new ObservableCollection<ProjectWizardViewModelBase>
+			return new ObservableCollection<IProgressHeaderItem>
 			{
 				new LoginViewModel(wizardModel,new LoginView()),
 				new ProjectsViewModel(wizardModel,new ProjectsView()),

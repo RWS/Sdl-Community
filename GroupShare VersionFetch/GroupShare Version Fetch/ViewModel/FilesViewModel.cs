@@ -22,11 +22,13 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private string _textMessage;
 		private string _textMessageVisibility;
 		private readonly ObservableCollection<GsProject> _oldSelectedProjects;
+		private string _displayName;
 
 		public FilesViewModel(WizardModel wizardModel,object view) : base(view)
 		{
 			_projectService = new ProjectService();
 			_oldSelectedProjects = new ObservableCollection<GsProject>();
+			_displayName = "Projects files";
 			_wizardModel = wizardModel;
 			PropertyChanged += FilesViewModel_PropertyChanged;
 			_wizardModel.GsFiles.CollectionChanged += GsFiles_CollectionChanged;
@@ -204,7 +206,39 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		public override string DisplayName => " Projects files";
+		public override string DisplayName
+		{
+			get => _displayName;
+			set
+			{
+				if (_displayName == value)
+				{
+					return;
+				}
+
+				_displayName = value;
+				OnPropertyChanged(nameof(DisplayName));
+			}
+		}
+		public override bool OnChangePage(int position, out string message)
+		{
+			message = string.Empty;
+
+			var pagePosition = PageIndex - 1;
+			if (position == pagePosition)
+			{
+				return false;
+			}
+
+			if (!IsValid && position > pagePosition)
+			{
+				message = PluginResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
+				          string.Format(PluginResources.The_data_on__0__is_not_valid, _displayName);
+				return false;
+			}
+
+			return true;
+		}
 
 		private void SetFileProperties(GsProject project, IEnumerable<GsFile> files)
 		{
