@@ -95,6 +95,20 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				OnPropertyChanged(nameof(IsValid));
 			}
 		}
+		public int ProjectsNumber
+		{
+			get => _wizardModel.ProjectsNumber;
+			set
+			{
+				if (_wizardModel?.ProjectsNumber == value)
+					return;
+				if (_wizardModel != null)
+				{
+					_wizardModel.ProjectsNumber = value;
+				}				
+				OnPropertyChanged(nameof(ProjectsNumber));
+			}
+		}
 
 		public ObservableCollection<GsProject> GsProjects
 		{

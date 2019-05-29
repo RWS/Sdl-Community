@@ -173,6 +173,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 							var projectsResponse = await projectService.GetGsProjects();
 							if (projectsResponse?.Items != null)
 							{
+								_wizardModel.ProjectsNumber = projectsResponse.Count;
 								foreach (var project in projectsResponse.Items)
 								{
 									var gsProject = new GsProject

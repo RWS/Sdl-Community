@@ -227,6 +227,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\bk.png" />
+    <Resource Include="Resources\nx.png" />
+    <Resource Include="Resources\back.png" />
     <EmbeddedResource Include="Resources\gs_fetch_versions_Hep_icon.ico" />
     <EmbeddedResource Include="Resources\gs_fetch_versions.png" />
     <EmbeddedResource Include="Resources\app_icon2_32px.ico" />
