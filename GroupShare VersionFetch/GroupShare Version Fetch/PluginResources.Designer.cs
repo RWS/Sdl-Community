@@ -90,6 +90,25 @@ namespace Sdl.Community.GSVersionFetch {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap bk {
+            get {
+                object obj = ResourceManager.GetObject("bk", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data on the following pages are not valid:.
+        /// </summary>
+        public static string DataOnTheFollowingPagesAreNotValid {
+            get {
+                return ResourceManager.GetString("DataOnTheFollowingPagesAreNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File were downloaded at selected location.
         /// </summary>
         public static string Download_Message {
@@ -142,6 +161,16 @@ namespace Sdl.Community.GSVersionFetch {
         public static string Incorrect_Url_Format {
             get {
                 return ResourceManager.GetString("Incorrect_Url_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap nx {
+            get {
+                object obj = ResourceManager.GetObject("nx", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -235,6 +264,24 @@ namespace Sdl.Community.GSVersionFetch {
             get {
                 object obj = ResourceManager.GetObject("text_proofread", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The data on {0} is not valid!.
+        /// </summary>
+        public static string The_data_on__0__is_not_valid {
+            get {
+                return ResourceManager.GetString("The_data_on__0__is_not_valid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to navigate to the selected page..
+        /// </summary>
+        public static string UnableToNavigateToSelectedPage {
+            get {
+                return ResourceManager.GetString("UnableToNavigateToSelectedPage", resourceCulture);
             }
         }
         

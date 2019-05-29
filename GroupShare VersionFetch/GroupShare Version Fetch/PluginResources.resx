@@ -193,4 +193,19 @@
   <data name="Please_wait_message" xml:space="preserve">
     <value>Please wait until the selected files are downloaded</value>
   </data>
+  <data name="DataOnTheFollowingPagesAreNotValid" xml:space="preserve">
+    <value>Data on the following pages are not valid:</value>
+  </data>
+  <data name="The_data_on__0__is_not_valid" xml:space="preserve">
+    <value>The data on {0} is not valid!</value>
+  </data>
+  <data name="UnableToNavigateToSelectedPage" xml:space="preserve">
+    <value>Unable to navigate to the selected page.</value>
+  </data>
+  <data name="bk" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\bk.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nx" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\nx.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

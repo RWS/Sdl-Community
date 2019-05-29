@@ -16,13 +16,19 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	public class ProjectsViewModel: ProjectWizardViewModelBase
 	{
 		private bool _isValid;
+		private string _displayName;
 		private ICommand _refreshProjectsCommand;
+		private ICommand _nextPageCommand;
+		private ICommand _previousPageCommand;
+		private int _currentPageNumber;
 		private readonly WizardModel _wizardModel;
 		public static readonly Log Log = Log.Instance;
 
 		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
 		{
+			_currentPageNumber = 1;
 			_wizardModel = wizardModel;
+			_displayName = "GroupShare Projects";
 			_wizardModel.GsProjects.CollectionChanged += GsProjects_CollectionChanged;
 		}
 
@@ -42,7 +48,23 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				project.PropertyChanged += GsProject_PropertyChanged;
 			}
 		}
+		public override  bool OnChangePage(int position, out string message)
+		{
+			message = string.Empty;
 
+			var pagePosition = PageIndex - 1;
+			if (position == pagePosition)
+			{
+				return false;
+			}
+
+			if (!IsValid && position > pagePosition)
+			{
+				message = "Please select at least one project before moving to next page";
+				return false;
+			}
+			return true;
+		}
 
 		private void GsProject_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -51,8 +73,20 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				IsValid = _wizardModel.GsProjects.Any(p => p.IsSelected);
 			}
 		}
+		public override string DisplayName
+		{
+			get => _displayName;
+			set
+			{
+				if (_displayName == value)
+				{
+					return;
+				}
 
-		public override string DisplayName => "GroupShare Projects";
+				_displayName = value;
+				OnPropertyChanged(nameof(DisplayName));
+			}
+		}
 		public override bool IsValid
 		{
 			get => _isValid;
@@ -63,6 +97,30 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 				_isValid = value;
 				OnPropertyChanged(nameof(IsValid));
+			}
+		}
+		public int ProjectsNumber
+		{
+			get => _wizardModel.ProjectsNumber;
+			set
+			{
+				if (_wizardModel?.ProjectsNumber == value)
+					return;
+				if (_wizardModel != null)
+				{
+					_wizardModel.ProjectsNumber = value;
+				}				
+				OnPropertyChanged(nameof(ProjectsNumber));
+			}
+		}
+
+		public int CurrentPageNumber
+		{
+			get => _currentPageNumber;
+			set
+			{
+				_currentPageNumber = value;
+				OnPropertyChanged(nameof(CurrentPageNumber));
 			}
 		}
 
@@ -77,6 +135,17 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		}
 		public ICommand RefreshProjectsCommand =>
 			_refreshProjectsCommand ?? (_refreshProjectsCommand = new AwaitableDelegateCommand(RefreshProjects));
+		public ICommand NextPageCommand => _nextPageCommand ?? (_nextPageCommand = new CommandHandler(DisplayNextPage, true));
+		public ICommand PreviousPageCommand => _previousPageCommand ?? (_previousPageCommand = new CommandHandler(DisplayPreviousPage, true));
+
+		private void DisplayPreviousPage()
+		{
+		}
+
+		private void DisplayNextPage()
+		{
+			
+		}
 
 		private async Task RefreshProjects()
 		{

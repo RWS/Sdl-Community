@@ -20,6 +20,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private string _textMessage;
 		private string _textMessageVisibility;
 		private string _passwordBoxVisibility;
+		private string _displayName;
 		private SolidColorBrush _textMessageBrush;
 		private ICommand _loginCommand;
 		private ICommand _passwordChangedCommand;
@@ -30,13 +31,27 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		public LoginViewModel(WizardModel wizardModel,object view): base(view)
 		{
 			_isValid = false;
+			_displayName = "Login";
 			_view =(UserControl)view;
 			_wizardModel = wizardModel;
 			_textMessageVisibility = "Collapsed";
 			_passwordBoxVisibility = "Visible";
 		}
-		
-		public override string DisplayName => "Login";
+
+		public override string DisplayName
+		{
+			get => _displayName;
+			set
+			{
+				if (_displayName == value)
+				{
+					return;
+				}
+
+				_displayName = value;
+				OnPropertyChanged(nameof(DisplayName));
+			}
+		}
 		public override bool IsValid
 		{
 			get => _isValid;
@@ -57,6 +72,25 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				_wizardModel.UserCredentials.ServiceUrl = value;
 				OnPropertyChanged(nameof(Url));
 			}
+		}
+		public override bool OnChangePage(int position, out string message)
+		{
+			message = string.Empty;
+
+			var pagePosition = PageIndex - 1;
+			if (position == pagePosition)
+			{
+				return false;
+			}
+
+			if (!IsValid && position > pagePosition)
+			{
+				message = PluginResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
+				          string.Format(PluginResources.The_data_on__0__is_not_valid, _displayName);
+				return false;
+			}
+
+			return true;
 		}
 		public string UserName
 		{
@@ -139,6 +173,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 							var projectsResponse = await projectService.GetGsProjects();
 							if (projectsResponse?.Items != null)
 							{
+								_wizardModel.ProjectsNumber = projectsResponse.Count;
 								foreach (var project in projectsResponse.Items)
 								{
 									var gsProject = new GsProject

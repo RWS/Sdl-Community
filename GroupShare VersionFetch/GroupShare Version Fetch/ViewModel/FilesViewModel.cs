@@ -22,11 +22,13 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private string _textMessage;
 		private string _textMessageVisibility;
 		private readonly ObservableCollection<GsProject> _oldSelectedProjects;
+		private string _displayName;
 
 		public FilesViewModel(WizardModel wizardModel,object view) : base(view)
 		{
 			_projectService = new ProjectService();
 			_oldSelectedProjects = new ObservableCollection<GsProject>();
+			_displayName = "Projects files";
 			_wizardModel = wizardModel;
 			PropertyChanged += FilesViewModel_PropertyChanged;
 			_wizardModel.GsFiles.CollectionChanged += GsFiles_CollectionChanged;
@@ -69,29 +71,33 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				{
 					try
 					{
-						TextMessage = "Please wait, we are loading GroupShare files";
-						TextMessageVisibility = "Visible";
-						TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
-						var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected).ToList();
+						ShowMessage("Please wait, we are loading GroupShare files", "#00A8EB");
 
-						if (_oldSelectedProjects.Count == 0) // initial step
+						var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected).ToList();
+						if (selectedProjects.Count > 0)
 						{
-							AddFilesToGrid(selectedProjects);
-						}
-						else
-						{
+							IsValid = true;
+							if (_oldSelectedProjects?.Count == 0)
+							{
+								InitializeOldList(selectedProjects);
+							}
 							var addedProjects = selectedProjects.Except(_oldSelectedProjects).ToList();
-							AddFilesToGrid(addedProjects);
+							if (addedProjects.Count > 0)
+							{
+								AddFilesToGrid(addedProjects);
+							}
 
 							// get the removed projects
 							var removedProjects = _oldSelectedProjects.Except(selectedProjects).ToList();
-							RemoveFilesFromGrid(removedProjects);
+							if (removedProjects?.Count > 0)
+							{
+								RemoveFilesFromGrid(removedProjects);
+							}
 						}
 					}
 					catch (Exception ex)
 					{
 						Log.Logger.Error($"FilesViewModel_PropertyChanged method: {ex.Message}\n {ex.StackTrace}");
-
 					}
 				}
 			}
@@ -104,6 +110,14 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				_oldSelectedProjects.Add(project);
 				var files = await _projectService.GetProjectFiles(project.ProjectId);
 				SetFileProperties(project, files);
+			}
+		}
+
+		private void InitializeOldList(List<GsProject> selectedProjects)
+		{
+			foreach (var selectedProject in selectedProjects)
+			{
+				_oldSelectedProjects.Add(selectedProject);
 			}
 		}
 
@@ -124,8 +138,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						{
 							_wizardModel?.GsFiles.Remove(file);
 						}
-						OnPropertyChanged(nameof(GsFiles));
 					}
+					OnPropertyChanged(nameof(GsFiles));
 				}
 			}
 		}
@@ -204,7 +218,39 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		public override string DisplayName => " Projects files";
+		public override string DisplayName
+		{
+			get => _displayName;
+			set
+			{
+				if (_displayName == value)
+				{
+					return;
+				}
+
+				_displayName = value;
+				OnPropertyChanged(nameof(DisplayName));
+			}
+		}
+		public override bool OnChangePage(int position, out string message)
+		{
+			message = string.Empty;
+
+			var pagePosition = PageIndex - 1;
+			if (position == pagePosition)
+			{
+				return false;
+			}
+
+			if (!IsValid && position > pagePosition)
+			{
+				message = PluginResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
+				          string.Format(PluginResources.The_data_on__0__is_not_valid, _displayName);
+				return false;
+			}
+
+			return true;
+		}
 
 		private void SetFileProperties(GsProject project, IEnumerable<GsFile> files)
 		{
@@ -216,10 +262,22 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					gsFile.ProjectName = project.Name;
 					gsFile.LanguageFlagImage = new Language(gsFile.LanguageCode).GetFlagImage();
 					gsFile.LanguageName = new Language(gsFile.LanguageCode).DisplayName;
-					_wizardModel?.GsFiles?.Add(gsFile);
+
+					var file = _wizardModel.GsFiles.FirstOrDefault(f => f.UniqueId.ToString().Equals(gsFile.UniqueId.ToString()));
+					if (file == null)
+					{
+						_wizardModel?.GsFiles?.Add(gsFile);
+					}
 				}
 			}
 			TextMessageVisibility = "Collapsed";
+		}
+
+		private void ShowMessage(string message, string color)
+		{
+			TextMessage = message;
+			TextMessageVisibility = "Visible";
+			TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(color);
 		}
 	}
 }

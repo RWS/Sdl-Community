@@ -28,8 +28,25 @@
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding RefreshProjectsCommand}"
-				HorizontalAlignment="Right" Content="Refresh projects" Margin="0,10,10,5" />
+		<DockPanel  Margin="0,0,0,10">
+				<StackPanel Orientation="Horizontal" Margin="5,10,10,5">
+					<TextBlock Text="Total projects:" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
+					<TextBlock Text="{Binding ProjectsNumber,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,10,0"  VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
+					
+					<Button Background="Transparent" BorderThickness="0" Cursor="Hand" Command="{Binding PreviousPageCommand}">
+							<Image Source="../Resources/bk.png" Width="15" Height="15"/>
+					</Button>
+					<TextBlock Text="Page" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
+					<TextBox Width="50" Text="{Binding CurrentPageNumber}" Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+					<Button Background="Transparent" BorderThickness="0" Cursor="Hand" Command="{Binding NextPageCommand}">
+						<Image Source="../Resources/nx.png" Width="15" Height="15"/>
+					</Button>
+					<TextBlock Text="of 10" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
+			</StackPanel>
+			
+			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding RefreshProjectsCommand}"
+			        HorizontalAlignment="Right" Content="Refresh projects" Margin="0,10,10,5" />
+		</DockPanel>
 
 		<DataGrid  
 		          ItemsSource="{Binding GsProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"

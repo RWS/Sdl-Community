@@ -67,5 +67,9 @@
 		<Setter Property="HorizontalAlignment" Value="Left"/>
 		<Setter Property="Foreground" Value="{DynamicResource WindowsControl.Control.Text}"/>
 	</Style>
-
+	<Style x:Key="PaginationTextBlock" TargetType="TextBlock">
+		<Setter Property="FontFamily" Value="Segoe UI"/>
+		<Setter Property="FontSize" Value="11"/>
+		<Setter Property="Foreground" Value="{StaticResource WizardProgressHeader.Label.Forground}"/>
+	</Style>
 </ResourceDictionary>

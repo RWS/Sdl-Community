@@ -13,8 +13,8 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
+				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
 				<ResourceDictionary Source="../UiHelpers/General.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
@@ -32,7 +32,7 @@
 
 			<Style TargetType="Button" x:Key="SdlWizardStyleNextButton" BasedOn="{StaticResource SdlWizardStyleButton}">
 				<Style.Triggers>
-					<DataTrigger Binding="{Binding Path=IsOnLastPage}" Value="True">
+					<DataTrigger Binding="{Binding Path=IsLastPage}" Value="True">
 						<Setter Property="IsEnabled" Value="False" />
 					</DataTrigger>
 				</Style.Triggers>
@@ -44,7 +44,7 @@
 				<Setter Property="Margin" Value="5,9,5,11"></Setter>
 				<Setter Property="IsEnabled" Value="False" />
 				<Style.Triggers>
-					<DataTrigger Binding="{Binding Path=IsOnLastPage}" Value="True">
+					<DataTrigger Binding="{Binding Path=IsLastPage}" Value="True">
 						<Setter Property="IsEnabled" Value="True" />
 					</DataTrigger>
 				</Style.Triggers>
@@ -52,6 +52,7 @@
 
 		</ResourceDictionary>
 	</Window.Resources>
+
 	<Border Style="{StaticResource WindowControlBorderStyle}" >
 		<Grid Margin="1,0,0,0">
 			<Grid.ColumnDefinitions>
