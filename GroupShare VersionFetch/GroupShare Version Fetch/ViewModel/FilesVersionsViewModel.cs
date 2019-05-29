@@ -119,27 +119,29 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				if (IsCurrentPage)
 				{
-					TextMessage = PluginResources.Files_Version_Loading;
-					TextMessageVisibility = "Visible";
-					TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
+					ShowMessage(PluginResources.Files_Version_Loading, "#00A8EB");
+
 					if (_wizardModel?.GsFiles?.Count == 0)
 					{
 						await GetProjectFiles().ConfigureAwait(true);
 					}
 					var selectedFiles = _wizardModel?.GsFiles?.Where(f => f.IsSelected).ToList();
-					if (_oldSelectedFiles.Count == 0)
-					{
-						AddVersionsToGrid(selectedFiles);
-					}
-					else
+
+					if (selectedFiles?.Count > 0)
 					{
 						//get the files which are selected in wizard and they are not in the old list => a new file was selected and we need to download the files versions only for it
-						var addedFiles = selectedFiles?.Except(_oldSelectedFiles).ToList();
-						AddVersionsToGrid(addedFiles);
+						var addedFiles = selectedFiles.Except(_oldSelectedFiles).ToList();
+						if (addedFiles.Count > 0)
+						{
+							AddVersionsToGrid(addedFiles);
+						}
 
 						//get the removed files
 						var removedFiles = _oldSelectedFiles.Except(selectedFiles).ToList();
-						RemoveFilesFromGrid(removedFiles);
+						if (removedFiles.Count > 0)
+						{
+							RemoveFilesFromGrid(removedFiles);
+						}
 					}
 				}
 			}
@@ -323,9 +325,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			    return true;
 		    }
 
-		    TextMessage = PluginResources.Version_Validation;
-		    TextMessageVisibility = "Visible";
-		    TextMessageBrush = new SolidColorBrush(Colors.Red);
+			ShowMessage(PluginResources.Version_Validation,"#FF00");
 		    return false;
 	    }
 	    public ICommand EnterCommand => _enterCommand ?? (_enterCommand = new CommandHandler(SelectSpecificVersion,true));
@@ -365,9 +365,9 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		    }
 		    catch (Exception ex)
 		    {
-			    //Here we'll log issue
+			    Log.Logger.Error($"ShowSelectFolderDialog method: {ex.Message}\n {ex.StackTrace}");
 		    }
-	    }
+		}
 
 	    private void SelectSpecificVersion()
 	    {
@@ -403,5 +403,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		    }
 		    TextMessageVisibility = "Collapsed";
 		}
+
+	    private void ShowMessage(string message, string color)
+	    {
+		    TextMessage = message;
+		    TextMessageVisibility = "Visible";
+		    TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(color);
+	    }
 	}
 }

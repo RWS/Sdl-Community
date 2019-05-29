@@ -71,29 +71,28 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				{
 					try
 					{
-						TextMessage = "Please wait, we are loading GroupShare files";
-						TextMessageVisibility = "Visible";
-						TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
-						var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected).ToList();
+						ShowMessage("Please wait, we are loading GroupShare files", "#00A8EB");
 
-						if (_oldSelectedProjects.Count == 0) // initial step
-						{
-							AddFilesToGrid(selectedProjects);
-						}
-						else
+						var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected).ToList();
+						if (selectedProjects.Count > 0)
 						{
 							var addedProjects = selectedProjects.Except(_oldSelectedProjects).ToList();
-							AddFilesToGrid(addedProjects);
+							if (addedProjects.Count > 0)
+							{
+								AddFilesToGrid(addedProjects);
+							}
 
 							// get the removed projects
 							var removedProjects = _oldSelectedProjects.Except(selectedProjects).ToList();
-							RemoveFilesFromGrid(removedProjects);
+							if (removedProjects.Count > 0)
+							{
+								RemoveFilesFromGrid(removedProjects);
+							}
 						}
 					}
 					catch (Exception ex)
 					{
 						Log.Logger.Error($"FilesViewModel_PropertyChanged method: {ex.Message}\n {ex.StackTrace}");
-
 					}
 				}
 			}
@@ -254,6 +253,13 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				}
 			}
 			TextMessageVisibility = "Collapsed";
+		}
+
+		private void ShowMessage(string message, string color)
+		{
+			TextMessage = message;
+			TextMessageVisibility = "Visible";
+			TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(color);
 		}
 	}
 }
