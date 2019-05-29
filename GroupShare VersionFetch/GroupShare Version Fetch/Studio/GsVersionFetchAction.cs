@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Windows.Forms.Integration;
 using Sdl.Community.GSVersionFetch.Interface;
 using Sdl.Community.GSVersionFetch.Model;

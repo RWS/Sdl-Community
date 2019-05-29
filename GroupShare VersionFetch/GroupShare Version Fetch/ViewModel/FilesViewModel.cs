@@ -76,6 +76,11 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected).ToList();
 						if (selectedProjects.Count > 0)
 						{
+							IsValid = true;
+							if (_oldSelectedProjects?.Count == 0)
+							{
+								InitializeOldList(selectedProjects);
+							}
 							var addedProjects = selectedProjects.Except(_oldSelectedProjects).ToList();
 							if (addedProjects.Count > 0)
 							{
@@ -84,7 +89,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 							// get the removed projects
 							var removedProjects = _oldSelectedProjects.Except(selectedProjects).ToList();
-							if (removedProjects.Count > 0)
+							if (removedProjects?.Count > 0)
 							{
 								RemoveFilesFromGrid(removedProjects);
 							}
@@ -108,6 +113,14 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
+		private void InitializeOldList(List<GsProject> selectedProjects)
+		{
+			foreach (var selectedProject in selectedProjects)
+			{
+				_oldSelectedProjects.Add(selectedProject);
+			}
+		}
+
 		private void RemoveFilesFromGrid(List<GsProject> removedProjects)
 		{
 			foreach (var removedProject in removedProjects)
@@ -125,8 +138,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						{
 							_wizardModel?.GsFiles.Remove(file);
 						}
-						OnPropertyChanged(nameof(GsFiles));
 					}
+					OnPropertyChanged(nameof(GsFiles));
 				}
 			}
 		}
@@ -249,7 +262,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					gsFile.ProjectName = project.Name;
 					gsFile.LanguageFlagImage = new Language(gsFile.LanguageCode).GetFlagImage();
 					gsFile.LanguageName = new Language(gsFile.LanguageCode).DisplayName;
-					_wizardModel?.GsFiles?.Add(gsFile);
+
+					var file = _wizardModel.GsFiles.FirstOrDefault(f => f.UniqueId.ToString().Equals(gsFile.UniqueId.ToString()));
+					if (file == null)
+					{
+						_wizardModel?.GsFiles?.Add(gsFile);
+					}
 				}
 			}
 			TextMessageVisibility = "Collapsed";

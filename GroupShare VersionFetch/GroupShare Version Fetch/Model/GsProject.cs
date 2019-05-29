@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 using Sdl.Core.Globalization;
 
 namespace Sdl.Community.GSVersionFetch.Model
@@ -49,7 +50,12 @@ namespace Sdl.Community.GSVersionFetch.Model
 					gsFile.ProjectName = Name;
 					gsFile.LanguageFlagImage = new Language(gsFile.LanguageCode).GetFlagImage();
 					gsFile.LanguageName = new Language(gsFile.LanguageCode).DisplayName;
-					wizardModel?.GsFiles?.Add(gsFile);
+
+					var file = wizardModel.GsFiles.FirstOrDefault(f => f.UniqueId.ToString().Equals(gsFile.UniqueId.ToString()));
+					if (file ==null)
+					{
+						wizardModel.GsFiles?.Add(gsFile);
+					}
 				}
 			}
 		}

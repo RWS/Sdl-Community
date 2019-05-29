@@ -121,10 +121,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				{
 					ShowMessage(PluginResources.Files_Version_Loading, "#00A8EB");
 
-					if (_wizardModel?.GsFiles?.Count == 0)
-					{
-						await GetProjectFiles().ConfigureAwait(true);
-					}
+					await GetProjectFiles().ConfigureAwait(true);
 					var selectedFiles = _wizardModel?.GsFiles?.Where(f => f.IsSelected).ToList();
 
 					if (selectedFiles?.Count > 0)
@@ -143,6 +140,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 							RemoveFilesFromGrid(removedFiles);
 						}
 					}
+					TextMessageVisibility = "Collapsed";
 				}
 			}
 		}
@@ -401,7 +399,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			    fileVersion.OriginalFileId = selectedFile.UniqueId;
 			    _wizardModel?.FileVersions?.Add(fileVersion);
 		    }
-		    TextMessageVisibility = "Collapsed";
 		}
 
 	    private void ShowMessage(string message, string color)
