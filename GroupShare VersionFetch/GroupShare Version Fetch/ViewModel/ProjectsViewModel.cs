@@ -18,11 +18,15 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private bool _isValid;
 		private string _displayName;
 		private ICommand _refreshProjectsCommand;
+		private ICommand _nextPageCommand;
+		private ICommand _previousPageCommand;
+		private int _currentPageNumber;
 		private readonly WizardModel _wizardModel;
 		public static readonly Log Log = Log.Instance;
 
 		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
 		{
+			_currentPageNumber = 1;
 			_wizardModel = wizardModel;
 			_displayName = "GroupShare Projects";
 			_wizardModel.GsProjects.CollectionChanged += GsProjects_CollectionChanged;
@@ -110,6 +114,16 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
+		public int CurrentPageNumber
+		{
+			get => _currentPageNumber;
+			set
+			{
+				_currentPageNumber = value;
+				OnPropertyChanged(nameof(CurrentPageNumber));
+			}
+		}
+
 		public ObservableCollection<GsProject> GsProjects
 		{
 			get => _wizardModel.GsProjects;
@@ -121,6 +135,17 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		}
 		public ICommand RefreshProjectsCommand =>
 			_refreshProjectsCommand ?? (_refreshProjectsCommand = new AwaitableDelegateCommand(RefreshProjects));
+		public ICommand NextPageCommand => _nextPageCommand ?? (_nextPageCommand = new CommandHandler(DisplayNextPage, true));
+		public ICommand PreviousPageCommand => _previousPageCommand ?? (_previousPageCommand = new CommandHandler(DisplayPreviousPage, true));
+
+		private void DisplayPreviousPage()
+		{
+		}
+
+		private void DisplayNextPage()
+		{
+			
+		}
 
 		private async Task RefreshProjects()
 		{
