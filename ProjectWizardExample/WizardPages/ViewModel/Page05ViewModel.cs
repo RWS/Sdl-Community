@@ -21,7 +21,7 @@ namespace ProjectWizardExample.WizardPages.ViewModel
 			PropertyChanged += ViewModel_PropertyChanged;
 		}
 
-	    public override bool OnChangePage(int position, out string message)
+	    public override bool OnPageChange(int position, out string message)
 	    {
 		    message = string.Empty;		   
 		    return true;

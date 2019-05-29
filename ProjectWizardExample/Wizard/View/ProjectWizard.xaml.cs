@@ -41,7 +41,7 @@ namespace ProjectWizardExample.Wizard.View
 				return;
 			}
 
-			if (!_model.CanMoveToPage(e.PagePosition, out var message))
+			if (!_model.CanVisitPage(e.PagePosition, out var message))
 			{
 				if (!string.IsNullOrEmpty(message))
 				{
@@ -58,6 +58,7 @@ namespace ProjectWizardExample.Wizard.View
 		{
 			for (var i = 0; i < pages.Count; i++)
 			{
+				pages[i].PagePosition = i;
 				pages[i].PageIndex = i + 1;
 				pages[i].TotalPages = pages.Count;
 			}

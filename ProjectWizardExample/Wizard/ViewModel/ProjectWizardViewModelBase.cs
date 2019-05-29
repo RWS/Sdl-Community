@@ -52,9 +52,11 @@ namespace ProjectWizardExample.Wizard.ViewModel
 
 		public int TotalPages { get; set; }
 
+		public int PagePosition { get; set; }
+
 		public int PageIndex { get; set; }
 
-		public bool IsFirstPage => PageIndex == 1;
+		public bool IsFirstPage => PageIndex == 1;		
 
 		public bool IsLastPage => PageIndex == TotalPages;
 
@@ -151,7 +153,7 @@ namespace ProjectWizardExample.Wizard.ViewModel
 			}
 		}
 
-		public abstract bool OnChangePage(int position, out string message);		
+		public abstract bool OnPageChange(int position, out string message);		
 
 		public abstract string DisplayName { get; set; }		
 

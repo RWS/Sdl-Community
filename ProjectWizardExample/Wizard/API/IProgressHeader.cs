@@ -17,15 +17,15 @@ namespace ProjectWizardExample.Wizard.API
 
 		void UpdateCurrentPageState(bool isValid, bool isComplete);
 
-		void MoveToNextPage();
+		void VisitNextPage();
 
-		void MoveToPreviousPage();
+		void VisitPreviousPage();
 
 		void SetCurrentPage(int index);		
 
-		void MoveToSelectedPage(IProgressHeaderItem item);
+		void VisitSelectedPage(IProgressHeaderItem item);
 
-		bool CanMoveToPage(int position, out string message);
+		bool CanVisitPage(int position, out string message);
 
 		ICommand SelectedPageCommand { get; }
 

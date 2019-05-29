@@ -97,8 +97,8 @@
                             <ColumnDefinition SharedSizeGroup="Buttons" />
                             <ColumnDefinition Width="10" />
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Grid.Row="0" Command="{Binding Path=MoveBackCommand}" Style="{StaticResource SdlWizardStyleButton}" Content="Back" />
-                        <Button Grid.Column="1" Grid.Row="0" Command="{Binding Path=MoveNextCommand}" Style="{StaticResource SdlWizardStyleNextButton}" Content="Next" />
+                        <Button Grid.Column="0" Grid.Row="0" Command="{Binding Path=VisitPreviousCommand}" Style="{StaticResource SdlWizardStyleButton}" Content="Back" />
+                        <Button Grid.Column="1" Grid.Row="0" Command="{Binding Path=VisitNextCommand}" Style="{StaticResource SdlWizardStyleNextButton}" Content="Next" />
                         <Button Grid.Column="3" Grid.Row="0" Command="{Binding Path=FinishCommand}" Style="{StaticResource SdlWizardStyleFinishButton}" Content="Finish"/>
                         <Button Grid.Column="4" Grid.Row="0" Command="{Binding Path=CancelCommand}" Style="{StaticResource SdlWizardStyleButton}" Content="Cancel" />
                     </Grid>

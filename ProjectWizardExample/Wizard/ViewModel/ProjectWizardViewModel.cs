@@ -23,8 +23,8 @@ namespace ProjectWizardExample.Wizard.ViewModel
 		private double _actualWidth;
 		private IProgressHeaderItem _currentPage;
 		private ObservableCollection<IProgressHeaderItem> _pages;
-		private RelayCommand _moveNextCommand;
-		private RelayCommand _moveBackCommand;
+		private RelayCommand _visitNextCommand;
+		private RelayCommand _visitPreviousCommand;
 		private RelayCommand _finishCommand;
 		private RelayCommand _cancelCommand;
 		private ICommand _selectedPageCommand;
@@ -50,7 +50,7 @@ namespace ProjectWizardExample.Wizard.ViewModel
 
 		public event EventHandler<SelectedPageEventArgs> SelectedPageChanged;
 
-		public bool CanMoveToPage(int position, out string message)
+		public bool CanVisitPage(int position, out string message)
 		{
 			message = string.Empty;
 
@@ -62,7 +62,7 @@ namespace ProjectWizardExample.Wizard.ViewModel
 				return false;
 			}
 
-			if (!currentPage.OnChangePage(position, out var outMessage))
+			if (!currentPage.OnPageChange(position, out var outMessage))
 			{
 				message = outMessage;
 				return false;
@@ -103,85 +103,24 @@ namespace ProjectWizardExample.Wizard.ViewModel
 
 		public ICommand FinishCommand => _finishCommand ?? (_finishCommand = new RelayCommand(FinishWizard, () => CanFinish));
 
-		public void UpdateCurrentPageState(bool isValid, bool isComplete)
+		public ICommand VisitPreviousCommand
 		{
-			foreach (var page in Pages)
+			get
 			{
-				page.IsCurrentPage = false;
-				page.IsComplete = IsComplete;
+				return _visitPreviousCommand ?? (_visitPreviousCommand = new RelayCommand(
+					       VisitPreviousPage,
+					       () => CanVisitPreviousPage));
 			}
-
-			CurrentPage.IsCurrentPage = true;
-			CurrentPage.IsVisited = true;
-			CurrentPage.IsValid = isValid;
-			CurrentPage.IsComplete = isComplete;
-
-
-			OnPropertyChanged(nameof(CompletedProgressStepsMessage));
-			CalculateProgressHeaderItemsSize(_actualWidth);
 		}
 
-		public void MoveToSelectedPage(IProgressHeaderItem item)
+		public ICommand VisitNextCommand
 		{
-			SelectedPageChanged?.Invoke(this, new SelectedPageEventArgs
+			get
 			{
-				ProgressHeaderItem = item,
-				PagePosition = GetCurrentPagePosition(item)
-			});
-		}
-
-		public void SetCurrentPage(int index)
-		{
-			// check if null or empty collection
-			if (Pages == null || Pages.Count == 0)
-			{
-				return;
-			}
-
-			CurrentPage = Pages[index];
-			UpdateVisitedPages();
-
-			_window.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
-		}
-
-		public void CalculateProgressHeaderItemsSize(double actualWidth)
-		{
-			if (_window == null || actualWidth <= 0 || Pages == null)
-			{
-				return;
-			}
-
-			_actualWidth = actualWidth;
-
-			// (ICON)[LINE]
-			// [TEXT------]
-
-			// [LINE](ICON)[LINE]
-			// [------TEXT------]
-
-			// [LINE](ICON)
-			// [------TEXT]
-
-			var totalItems = Pages.Count;
-
-			var controlActualWidth = actualWidth - WindowMargin;
-			var totalIconWidth = _iconSize.Width * totalItems;
-
-			var totalLineWidth = controlActualWidth - totalIconWidth;
-			var fixedLineWidth = totalLineWidth / (Pages.Count - 1);
-
-			foreach (var page in Pages)
-			{
-				if (page.IsFirstPage || page.IsLastPage)
-				{
-					page.ItemLineWidth = fixedLineWidth - fixedLineWidth / 2;
-					page.ItemTextWidth = (fixedLineWidth - fixedLineWidth / 2) + _iconSize.Width;
-				}
-				else
-				{
-					page.ItemLineWidth = fixedLineWidth / 2;
-					page.ItemTextWidth = fixedLineWidth + _iconSize.Width;
-				}
+				return _visitNextCommand ??
+				       (_visitNextCommand = new RelayCommand(
+					       VisitNextPage,
+					       () => CanVisitNextPage));
 			}
 		}
 
@@ -262,12 +201,105 @@ namespace ProjectWizardExample.Wizard.ViewModel
 
 		public bool IsComplete => IsLastPage && CurrentPage.IsComplete;
 
+		private bool CanVisitPreviousPage
+		{
+			get
+			{
+				return (CurrentPagePosition > 0 && !CurrentPage.IsLastPage)
+				       || (CurrentPage.IsLastPage && !CurrentPage.IsComplete);
+			}
+		}
+
+		private bool CanVisitNextPage => CurrentPage != null && CurrentPage.IsValid && !CurrentPage.IsLastPage;
+
 		public string CompletedProgressStepsMessage =>
 			string.Format(StringResources.ProjectWizard_StepsCompleted, Pages.Count(page => page.IsVisited), Pages.Count);
 
-		public void MoveToNextPage()
+		public void UpdateCurrentPageState(bool isValid, bool isComplete)
 		{
-			if (!CanMoveToNextPage)
+			foreach (var page in Pages)
+			{
+				page.IsCurrentPage = false;
+				page.IsComplete = IsComplete;
+			}
+
+			CurrentPage.IsCurrentPage = true;
+			CurrentPage.IsVisited = true;
+			CurrentPage.IsValid = isValid;
+			CurrentPage.IsComplete = isComplete;
+
+
+			OnPropertyChanged(nameof(CompletedProgressStepsMessage));
+			CalculateProgressHeaderItemsSize(_actualWidth);
+		}
+
+		public void VisitSelectedPage(IProgressHeaderItem item)
+		{
+			SelectedPageChanged?.Invoke(this, new SelectedPageEventArgs
+			{
+				ProgressHeaderItem = item,
+				PagePosition = GetCurrentPagePosition(item)
+			});
+		}
+
+		public void SetCurrentPage(int index)
+		{
+			// check if null or empty collection
+			if (Pages == null || Pages.Count == 0)
+			{
+				return;
+			}
+
+			CurrentPage = Pages[index];
+			UpdateVisitedPages();
+
+			_window.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
+		}
+
+		public void CalculateProgressHeaderItemsSize(double actualWidth)
+		{
+			if (_window == null || actualWidth <= 0 || Pages == null)
+			{
+				return;
+			}
+
+			_actualWidth = actualWidth;
+
+			// (ICON)[LINE]
+			// [TEXT------]
+
+			// [LINE](ICON)[LINE]
+			// [------TEXT------]
+
+			// [LINE](ICON)
+			// [------TEXT]
+
+			var totalItems = Pages.Count;
+
+			var controlActualWidth = actualWidth - WindowMargin;
+			var totalIconWidth = _iconSize.Width * totalItems;
+
+			var totalLineWidth = controlActualWidth - totalIconWidth;
+			var fixedLineWidth = totalLineWidth / (Pages.Count - 1);
+
+			foreach (var page in Pages)
+			{
+				if (page.IsFirstPage || page.IsLastPage)
+				{
+					page.ItemLineWidth = fixedLineWidth - fixedLineWidth / 2;
+					page.ItemTextWidth = (fixedLineWidth - fixedLineWidth / 2) + _iconSize.Width;
+				}
+				else
+				{
+					page.ItemLineWidth = fixedLineWidth / 2;
+					page.ItemTextWidth = fixedLineWidth + _iconSize.Width;
+				}
+			}
+		}
+
+		public void VisitNextPage()
+		{
+			if (!CanVisitNextPage)
 			{
 				return;
 			}
@@ -284,31 +316,10 @@ namespace ProjectWizardExample.Wizard.ViewModel
 				OnRequestClose();
 			}
 		}
-
-		public ICommand MoveBackCommand
+	
+		public void VisitPreviousPage()
 		{
-			get
-			{
-				return _moveBackCommand ?? (_moveBackCommand = new RelayCommand(
-						   MoveToPreviousPage,
-						   () => CanMoveToPreviousPage));
-			}
-		}
-
-		public ICommand MoveNextCommand
-		{
-			get
-			{
-				return _moveNextCommand ??
-					   (_moveNextCommand = new RelayCommand(
-						   MoveToNextPage,
-						   () => CanMoveToNextPage));
-			}
-		}
-
-		public void MoveToPreviousPage()
-		{
-			if (CanMoveToPreviousPage)
+			if (CanVisitPreviousPage)
 			{
 				_currentPage.PreviousIsVisited = true;
 				OnPropertyChanged(nameof(CurrentPage));
@@ -450,17 +461,6 @@ namespace ProjectWizardExample.Wizard.ViewModel
 			else
 			{
 				OnRequestClose();
-			}
-		}
-
-		private bool CanMoveToNextPage => CurrentPage != null && CurrentPage.IsValid && !CurrentPage.IsLastPage;
-
-		private bool CanMoveToPreviousPage
-		{
-			get
-			{
-				return (CurrentPagePosition > 0 && !CurrentPage.IsLastPage)
-					   || (CurrentPage.IsLastPage && !CurrentPage.IsComplete);
 			}
 		}
 

@@ -20,18 +20,18 @@ namespace ProjectWizardExample.WizardPages.ViewModel
 			PropertyChanged += ViewModel_PropertyChanged;
 		}
 
-	    public override bool OnChangePage(int position, out string message)
+	    public override bool OnPageChange(int position, out string message)
 	    {
 		    message = string.Empty;
-		    var pagePosition = PageIndex - 1;
-		    if (position == pagePosition)
+
+			if (position == PagePosition)
 		    {
 			    return false;
 		    }
 
-		    if (!IsValid && position > pagePosition)
+		    if (!IsValid && position > PagePosition)
 		    {
-			    message = StringResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
+				message = StringResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
 			              string.Format(StringResources.The_data_on__0__is_not_valid, _displayName);
 			    return false;
 		    }
