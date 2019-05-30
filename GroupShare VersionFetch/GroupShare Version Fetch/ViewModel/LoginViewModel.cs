@@ -153,9 +153,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			try
 			{
 				var passwordBox = parameter as PasswordBox;
-				var languageFlagsHelper = new LanguageFlags();
 				var password = passwordBox?.Password;
-				var projectService = new ProjectService();
 				if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 				{
 					_wizardModel.UserCredentials.UserName = UserName.TrimEnd().TrimStart();
@@ -168,55 +166,26 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						if (statusCode == HttpStatusCode.OK)
 						{
 							IsValid = true;
-							TextMessage = PluginResources.AuthenticationSuccess;
-							TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
-							var projectFilter = new ProjectFilter
-							{
-								Page = 1,
-								PageSize = 50
-							};
-							var projectsResponse = await projectService.GetGsProjects(projectFilter);
-							if (projectsResponse?.Items != null)
-							{
-								_wizardModel.ProjectsNumber = projectsResponse.Count;
-								_wizardModel.TotalPages = (projectsResponse.Count +projectFilter.PageSize-1)/ projectFilter.PageSize;
-								foreach (var project in projectsResponse.Items)
-								{
-									var gsProject = new GsProject
-									{
-										Name = project.Name,
-										DueDate = project.DueDate?.ToString(),
-										Image = new Language(project.SourceLanguage).GetFlagImage(),
-										TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage),
-										ProjectId = project.ProjectId,
-										SourceLanguage = project.SourceLanguage
-									};
+							ShowMessage(PluginResources.AuthenticationSuccess,"#00A8EB");
 
-									if (Enum.TryParse<ProjectStatus.Status>(project.Status.ToString(), out _))
-									{
-										gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
-									}
-									_wizardModel?.GsProjects.Add(gsProject);
-									_wizardModel?.ProjectsForCurrentPage.Add(gsProject);
-								}
-							}
+							var utils = new Utils();
+							await utils.SetGsProjectsToWizard(_wizardModel, 0);
 
-							TextMessageVisibility = "Visible";
 							_view.Dispatcher.Invoke(delegate { SendKeys.SendWait("{TAB}"); }, DispatcherPriority.ApplicationIdle);
 						}
 						else
 						{
-							ShowErrorMessage(statusCode.ToString());
+							ShowMessage(statusCode.ToString(), "#FF2121");
 						}
 					}
 					else
 					{
-						ShowErrorMessage(PluginResources.Incorrect_Url_Format);
+						ShowMessage(PluginResources.Incorrect_Url_Format, "#FF2121");
 					}
 				}
 				else
 				{
-					ShowErrorMessage(PluginResources.Required_Fields);
+					ShowMessage(PluginResources.Required_Fields, "#FF2121");
 				}
 			}
 			catch (Exception e)
@@ -225,11 +194,11 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		private void ShowErrorMessage(string message)
+		private void ShowMessage(string message, string color)
 		{
-			TextMessageVisibility = "Visible";
 			TextMessage = message;
-			TextMessageBrush = new SolidColorBrush(Colors.Red);
+			TextMessageVisibility = "Visible";
+			TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(color);
 		}
 	}
 }

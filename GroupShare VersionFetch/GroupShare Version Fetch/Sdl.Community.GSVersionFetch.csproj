@@ -171,6 +171,7 @@
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\SelectedPageEventArgs.cs" />
     <Compile Include="Helpers\TreeHelper.cs" />
+    <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Interface\IAsyncCommand.cs" />
     <Compile Include="Interface\IProgressHeader.cs" />
     <Compile Include="Interface\IProgressHeaderItem.cs" />

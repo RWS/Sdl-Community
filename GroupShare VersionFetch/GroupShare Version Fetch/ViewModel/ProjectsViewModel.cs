@@ -238,41 +238,11 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		{
 			try
 			{
-				var projectService = new ProjectService();
-				var languageFlagsHelper = new LanguageFlags();
-				var projectFilter = new ProjectFilter
-				{
-					Page = CurrentPageNumber,
-					PageSize = 50
-				};
-				var projectsResponse = await projectService.GetGsProjects(projectFilter);
-				if (projectsResponse?.Items != null)
-				{
-					_wizardModel.ProjectsNumber = projectsResponse.Count;
-					_wizardModel.TotalPages = (projectsResponse.Count + projectFilter.PageSize - 1) / projectFilter.PageSize;
+				var utils = new Utils();
+				await utils.SetGsProjectsToWizard(_wizardModel, CurrentPageNumber);
 
-					foreach (var project in projectsResponse.Items)
-					{
-						var gsProject = new GsProject
-						{
-							Name = project.Name,
-							DueDate = project.DueDate?.ToString(),
-							Image = new Language(project.SourceLanguage).GetFlagImage(),
-							TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage),
-							ProjectId = project.ProjectId,
-							SourceLanguage = project.SourceLanguage
-						};
-
-						if (Enum.TryParse<ProjectStatus.Status>(project.Status.ToString(), out _))
-						{
-							gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
-						}
-						_wizardModel?.GsProjects?.Add(gsProject);
-						_wizardModel?.ProjectsForCurrentPage?.Add(gsProject);
-					}
-					IsValid = false;
-					UpdateNavigationButtons();
-				}
+				IsValid = false;
+				UpdateNavigationButtons();
 			}
 			catch (Exception e)
 			{
