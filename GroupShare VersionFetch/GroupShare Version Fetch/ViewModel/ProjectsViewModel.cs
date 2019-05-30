@@ -126,35 +126,84 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		public ObservableCollection<GsProject> GsProjects
 		{
-			get => _wizardModel.GsProjects;
+			get => _wizardModel?.GsProjects;
 			set
 			{
 				_wizardModel.GsProjects = value;
 				OnPropertyChanged(nameof(GsProjects));
 			}
 		}
+		public ObservableCollection<GsProject> ProjectsForCurrentPage
+		{
+			get => _wizardModel?.ProjectsForCurrentPage;
+			set
+			{
+				_wizardModel.ProjectsForCurrentPage = value;
+				OnPropertyChanged(nameof(ProjectsForCurrentPage));
+			}
+		}
 		public ICommand RefreshProjectsCommand =>
 			_refreshProjectsCommand ?? (_refreshProjectsCommand = new AwaitableDelegateCommand(RefreshProjects));
-		public ICommand NextPageCommand => _nextPageCommand ?? (_nextPageCommand = new CommandHandler(DisplayNextPage, true));
-		public ICommand PreviousPageCommand => _previousPageCommand ?? (_previousPageCommand = new CommandHandler(DisplayPreviousPage, true));
+		public ICommand NextPageCommand => _nextPageCommand ?? (_nextPageCommand = new AwaitableDelegateCommand(DisplayNextPage));
+		public ICommand PreviousPageCommand => _previousPageCommand ?? (_previousPageCommand = new AwaitableDelegateCommand(DisplayPreviousPage));
 
-		private void DisplayPreviousPage()
+		private async Task DisplayPreviousPage()
 		{
+			CurrentPageNumber--;
+			await GetProjects();
 		}
 
-		private void DisplayNextPage()
+		private async Task DisplayNextPage()
 		{
-			
+			CurrentPageNumber++;
+			await GetProjects();
+		}
+
+		private async Task GetProjects()
+		{
+			_wizardModel?.ProjectsForCurrentPage.Clear();
+
+			if (!ExistsProjectsForCurrentPage())
+			{
+				await LoadProjectsForCurrentPage();
+			}
+		}
+
+		private bool ExistsProjectsForCurrentPage()
+		{
+			var page = CurrentPageNumber - 1;
+			var projectsList = _wizardModel?.GsProjects.Skip(page * 50).Take(50).ToList();
+
+			if (projectsList?.Count > 0 && _wizardModel!=null)
+			{
+				foreach (var project in projectsList)
+				{
+					_wizardModel.ProjectsForCurrentPage.Add(project);
+				}
+				return true;
+			}
+			return false;
 		}
 
 		private async Task RefreshProjects()
 		{
+			_wizardModel?.GsProjects?.Clear();
+			_wizardModel?.ProjectsForCurrentPage?.Clear();
+
+			await LoadProjectsForCurrentPage();
+		}
+
+		private async Task LoadProjectsForCurrentPage()
+		{
 			try
 			{
-				_wizardModel?.GsProjects?.Clear();
 				var projectService = new ProjectService();
 				var languageFlagsHelper = new LanguageFlags();
-				var projectsResponse = await projectService.GetGsProjects();
+				var projectFilter = new ProjectFilter
+				{
+					Page = CurrentPageNumber
+				};
+				var projectsResponse = await projectService.GetGsProjects(projectFilter);
 				if (projectsResponse?.Items != null)
 				{
 					foreach (var project in projectsResponse.Items)
@@ -174,6 +223,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 							gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
 						}
 						_wizardModel?.GsProjects?.Add(gsProject);
+						_wizardModel?.ProjectsForCurrentPage?.Add(gsProject);
 					}
 					IsValid = false;
 				}

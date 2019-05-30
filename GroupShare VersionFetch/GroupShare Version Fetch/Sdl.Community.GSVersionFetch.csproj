@@ -181,6 +181,7 @@
     <Compile Include="Model\GsFileVersion.cs" />
     <Compile Include="Model\GsProject.cs" />
     <Compile Include="Model\ProjectDetailsResponse.cs" />
+    <Compile Include="Model\ProjectFilter.cs" />
     <Compile Include="Model\ProjectResponse.cs" />
     <Compile Include="Model\ProjectStatus.cs" />
     <Compile Include="Model\TargetLanguageFlag.cs" />

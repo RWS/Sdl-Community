@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
 using Xunit;
 
@@ -13,7 +14,11 @@ namespace Sdl.Community.GSVersionFetch.Tests
 		public async Task GetProjects()
 		{
 			await _authentication.Login().ConfigureAwait(true);
-			var gsProjects = await _projectService.GetGsProjects();
+			var projectFilter = new ProjectFilter
+			{
+				Page = 1
+			};
+			var gsProjects = await _projectService.GetGsProjects(projectFilter);
 			Assert.True(gsProjects!=null);
 		}
 	}

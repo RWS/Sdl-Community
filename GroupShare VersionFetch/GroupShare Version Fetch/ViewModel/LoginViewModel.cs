@@ -170,7 +170,11 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 							IsValid = true;
 							TextMessage = PluginResources.AuthenticationSuccess;
 							TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
-							var projectsResponse = await projectService.GetGsProjects();
+							var projectFilter = new ProjectFilter
+							{
+								Page = 1
+							};
+							var projectsResponse = await projectService.GetGsProjects(projectFilter);
 							if (projectsResponse?.Items != null)
 							{
 								_wizardModel.ProjectsNumber = projectsResponse.Count;
@@ -191,6 +195,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 										gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
 									}
 									_wizardModel?.GsProjects.Add(gsProject);
+									_wizardModel?.ProjectsForCurrentPage.Add(gsProject);
 								}
 							}
 

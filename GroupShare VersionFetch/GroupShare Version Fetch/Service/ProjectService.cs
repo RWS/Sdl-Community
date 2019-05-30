@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using Newtonsoft.Json;
 using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
@@ -13,13 +14,20 @@ namespace Sdl.Community.GSVersionFetch.Service
 	{
 		public static readonly Log Log = Log.Instance;
 
-		public async Task<ProjectResponse> GetGsProjects()
+		public async Task<ProjectResponse> GetGsProjects(ProjectFilter projectFilter)
 		{
 			try
 			{
 				using (var httpClient = new HttpClient())
 				{
-					var request = new HttpRequestMessage(HttpMethod.Get, new Uri(ApiUrl.GetProjects()));
+					var baseUrl = ApiUrl.GetProjects();
+					var builder = new UriBuilder(baseUrl);
+					var query = HttpUtility.ParseQueryString(builder.Query);
+					query["page"] = projectFilter.Page.ToString();
+					query["start"] = "0";
+					query["limit"] = "50";
+					builder.Query = query.ToString();
+					var request = new HttpRequestMessage(HttpMethod.Get, new Uri(builder.ToString()));
 					ApiUrl.AddRequestHeaders(httpClient, request);
 
 					var responseMessage = await httpClient.SendAsync(request);

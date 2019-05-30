@@ -37,7 +37,7 @@
 							<Image Source="../Resources/bk.png" Width="15" Height="15"/>
 					</Button>
 					<TextBlock Text="Page" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
-					<TextBox Width="50" Text="{Binding CurrentPageNumber}" Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+					<TextBlock Text="{Binding CurrentPageNumber}" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
 					<Button Background="Transparent" BorderThickness="0" Cursor="Hand" Command="{Binding NextPageCommand}">
 						<Image Source="../Resources/nx.png" Width="15" Height="15"/>
 					</Button>
@@ -49,7 +49,7 @@
 		</DockPanel>
 
 		<DataGrid  
-		          ItemsSource="{Binding GsProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"
+		          ItemsSource="{Binding ProjectsForCurrentPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"
 		          SelectionMode="Extended"
 				  Padding="5"
 		          SelectionUnit="FullRow"
