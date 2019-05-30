@@ -32,16 +32,39 @@
 				<StackPanel Orientation="Horizontal" Margin="5,10,10,5">
 					<TextBlock Text="Total projects:" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
 					<TextBlock Text="{Binding ProjectsNumber,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,10,0"  VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
-					
-					<Button Background="Transparent" BorderThickness="0" Cursor="Hand" Command="{Binding PreviousPageCommand}">
-							<Image Source="../Resources/bk.png" Width="15" Height="15"/>
+
+					<Button Style="{DynamicResource NavigationButtonsStyle}" IsEnabled="{Binding IsPreviousEnabled}" Command="{Binding PreviousPageCommand}">
+						<Image Width="20" Height="20">
+							<Image.Style>
+							<Style TargetType="{x:Type Image}">
+								<Setter Property="Source" Value="../Resources/bk.png"/>
+								<Style.Triggers>
+									<DataTrigger Value="false" Binding="{Binding IsPreviousEnabled}">
+										<Setter Property="Source" Value="../Resources/bkGr.png"/>
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+							</Image.Style>
+						</Image>
 					</Button>
 					<TextBlock Text="Page" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
-					<TextBox Width="50" Text="{Binding CurrentPageNumber}" Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-					<Button Background="Transparent" BorderThickness="0" Cursor="Hand" Command="{Binding NextPageCommand}">
-						<Image Source="../Resources/nx.png" Width="15" Height="15"/>
+					<TextBlock Text="{Binding CurrentPageNumber}" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
+					<Button Style="{DynamicResource NavigationButtonsStyle}" IsEnabled="{Binding IsNextEnabled}" Command="{Binding NextPageCommand}">
+						<Image Width="20" Height="20">
+							<Image.Style>
+								<Style TargetType="{x:Type Image}">
+									<Setter Property="Source" Value="../Resources/nx.png" />
+									<Style.Triggers>
+										<DataTrigger Value="false" Binding="{Binding IsNextEnabled}">
+											<Setter Property="Source" Value="../Resources/nxGr.png"/>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</Image.Style>
+						</Image>
 					</Button>
-					<TextBlock Text="of 10" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
+				<TextBlock Text="of " VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
+				<TextBlock Text="{Binding PagesNumber}" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
 			</StackPanel>
 			
 			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding RefreshProjectsCommand}"
@@ -49,7 +72,7 @@
 		</DockPanel>
 
 		<DataGrid  
-		          ItemsSource="{Binding GsProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"
+		          ItemsSource="{Binding ProjectsForCurrentPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"
 		          SelectionMode="Extended"
 				  Padding="5"
 		          SelectionUnit="FullRow"

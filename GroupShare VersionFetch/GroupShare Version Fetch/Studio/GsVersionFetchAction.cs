@@ -31,6 +31,7 @@ namespace Sdl.Community.GSVersionFetch.Studio
 			{
 				UserCredentials = new Credentials(),
 				GsProjects = new ObservableCollection<GsProject>(),
+				ProjectsForCurrentPage = new ObservableCollection<GsProject>(),
 				GsFiles =   new ObservableCollection<GsFile>(),
 				FileVersions = new ObservableCollection<GsFileVersion>(),
 				Version = string.Empty

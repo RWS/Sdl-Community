@@ -16,6 +16,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	public class ProjectsViewModel: ProjectWizardViewModelBase
 	{
 		private bool _isValid;
+		private bool _isPreviousEnabled;
+		private bool _isNextEnabled;
 		private string _displayName;
 		private ICommand _refreshProjectsCommand;
 		private ICommand _nextPageCommand;
@@ -29,6 +31,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			_currentPageNumber = 1;
 			_wizardModel = wizardModel;
 			_displayName = "GroupShare Projects";
+			_isPreviousEnabled = false;
+			_isNextEnabled = true;
 			_wizardModel.GsProjects.CollectionChanged += GsProjects_CollectionChanged;
 		}
 
@@ -99,6 +103,30 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				OnPropertyChanged(nameof(IsValid));
 			}
 		}
+		public  bool IsPreviousEnabled
+		{
+			get => _isPreviousEnabled;
+			set
+			{
+				if (_isPreviousEnabled == value)
+					return;
+
+				_isPreviousEnabled = value;
+				OnPropertyChanged(nameof(IsPreviousEnabled));
+			}
+		}
+		public bool IsNextEnabled
+		{
+			get => _isNextEnabled;
+			set
+			{
+				if (_isNextEnabled == value)
+					return;
+
+				_isNextEnabled = value;
+				OnPropertyChanged(nameof(IsNextEnabled));
+			}
+		}
 		public int ProjectsNumber
 		{
 			get => _wizardModel.ProjectsNumber;
@@ -123,64 +151,111 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				OnPropertyChanged(nameof(CurrentPageNumber));
 			}
 		}
+		public int PagesNumber
+		{
+			get => _wizardModel.TotalPages;
+			set
+			{
+				_wizardModel.TotalPages = value;
+				OnPropertyChanged(nameof(PagesNumber));
+			}
+		}
 
 		public ObservableCollection<GsProject> GsProjects
 		{
-			get => _wizardModel.GsProjects;
+			get => _wizardModel?.GsProjects;
 			set
 			{
 				_wizardModel.GsProjects = value;
 				OnPropertyChanged(nameof(GsProjects));
 			}
 		}
+		public ObservableCollection<GsProject> ProjectsForCurrentPage
+		{
+			get => _wizardModel?.ProjectsForCurrentPage;
+			set
+			{
+				_wizardModel.ProjectsForCurrentPage = value;
+				OnPropertyChanged(nameof(ProjectsForCurrentPage));
+			}
+		}
 		public ICommand RefreshProjectsCommand =>
 			_refreshProjectsCommand ?? (_refreshProjectsCommand = new AwaitableDelegateCommand(RefreshProjects));
-		public ICommand NextPageCommand => _nextPageCommand ?? (_nextPageCommand = new CommandHandler(DisplayNextPage, true));
-		public ICommand PreviousPageCommand => _previousPageCommand ?? (_previousPageCommand = new CommandHandler(DisplayPreviousPage, true));
+		public ICommand NextPageCommand => _nextPageCommand ?? (_nextPageCommand = new AwaitableDelegateCommand(DisplayNextPage));
+		public ICommand PreviousPageCommand => _previousPageCommand ?? (_previousPageCommand = new AwaitableDelegateCommand(DisplayPreviousPage));
 
-		private void DisplayPreviousPage()
+		private async Task DisplayPreviousPage()
 		{
+			CurrentPageNumber--;
+			await GetProjects();
 		}
 
-		private void DisplayNextPage()
+		private async Task DisplayNextPage()
 		{
-			
+			CurrentPageNumber++;
+			await GetProjects();
+		}
+
+		private async Task GetProjects()
+		{
+			_wizardModel?.ProjectsForCurrentPage.Clear();
+
+			if (!ExistsProjectsForCurrentPage())
+			{
+				await LoadProjectsForCurrentPage();
+			}
+			else
+			{
+				UpdateNavigationButtons();
+			}
+		}
+
+		private bool ExistsProjectsForCurrentPage()
+		{
+			var page = CurrentPageNumber - 1;
+			var projectsList = _wizardModel?.GsProjects.Skip(page * 50).Take(50).ToList();
+
+			if (projectsList?.Count > 0 && _wizardModel!=null)
+			{
+				foreach (var project in projectsList)
+				{
+					_wizardModel.ProjectsForCurrentPage.Add(project);
+				}
+				return true;
+			}
+			return false;
 		}
 
 		private async Task RefreshProjects()
 		{
+			_wizardModel?.GsProjects?.Clear();
+			_wizardModel?.ProjectsForCurrentPage?.Clear();
+
+			await LoadProjectsForCurrentPage();
+		}
+
+		private async Task LoadProjectsForCurrentPage()
+		{
 			try
 			{
-				_wizardModel?.GsProjects?.Clear();
-				var projectService = new ProjectService();
-				var languageFlagsHelper = new LanguageFlags();
-				var projectsResponse = await projectService.GetGsProjects();
-				if (projectsResponse?.Items != null)
-				{
-					foreach (var project in projectsResponse.Items)
-					{
-						var gsProject = new GsProject
-						{
-							Name = project.Name,
-							DueDate = project.DueDate?.ToString(),
-							Image = new Language(project.SourceLanguage).GetFlagImage(),
-							TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage),
-							ProjectId = project.ProjectId,
-							SourceLanguage = project.SourceLanguage
-						};
+				var utils = new Utils();
+				await utils.SetGsProjectsToWizard(_wizardModel, CurrentPageNumber);
 
-						if (Enum.TryParse<ProjectStatus.Status>(project.Status.ToString(), out _))
-						{
-							gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
-						}
-						_wizardModel?.GsProjects?.Add(gsProject);
-					}
-					IsValid = false;
-				}
+				IsValid = false;
+				UpdateNavigationButtons();
 			}
 			catch (Exception e)
 			{
 				Log.Logger.Error($"RefreshProjects method: {e.Message}\n {e.StackTrace}");
+			}
+		}
+		private void UpdateNavigationButtons()
+		{
+			IsPreviousEnabled = !CurrentPageNumber.Equals(1);
+
+			if (PagesNumber > 0)
+			{
+				IsNextEnabled = !CurrentPageNumber.Equals(PagesNumber);
 			}
 		}
 	}

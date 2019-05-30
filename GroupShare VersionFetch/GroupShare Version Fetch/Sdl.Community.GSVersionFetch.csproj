@@ -171,6 +171,7 @@
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\SelectedPageEventArgs.cs" />
     <Compile Include="Helpers\TreeHelper.cs" />
+    <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Interface\IAsyncCommand.cs" />
     <Compile Include="Interface\IProgressHeader.cs" />
     <Compile Include="Interface\IProgressHeaderItem.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Model\GsFileVersion.cs" />
     <Compile Include="Model\GsProject.cs" />
     <Compile Include="Model\ProjectDetailsResponse.cs" />
+    <Compile Include="Model\ProjectFilter.cs" />
     <Compile Include="Model\ProjectResponse.cs" />
     <Compile Include="Model\ProjectStatus.cs" />
     <Compile Include="Model\TargetLanguageFlag.cs" />
@@ -227,6 +229,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\nxGr.png" />
+    <Resource Include="Resources\bkGr.png" />
     <Resource Include="Resources\bk.png" />
     <Resource Include="Resources\nx.png" />
     <Resource Include="Resources\back.png" />

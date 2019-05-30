@@ -100,6 +100,16 @@ namespace Sdl.Community.GSVersionFetch {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap bkGr {
+            get {
+                object obj = ResourceManager.GetObject("bkGr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data on the following pages are not valid:.
         /// </summary>
         public static string DataOnTheFollowingPagesAreNotValid {
@@ -170,6 +180,16 @@ namespace Sdl.Community.GSVersionFetch {
         public static System.Drawing.Bitmap nx {
             get {
                 object obj = ResourceManager.GetObject("nx", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap nxGr {
+            get {
+                object obj = ResourceManager.GetObject("nxGr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

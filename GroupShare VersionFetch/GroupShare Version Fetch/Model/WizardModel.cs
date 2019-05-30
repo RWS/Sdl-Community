@@ -6,8 +6,10 @@ namespace Sdl.Community.GSVersionFetch.Model
 	{
 		private Credentials _userCredentials;
 		private ObservableCollection<GsProject> _gsProjects;
+		private ObservableCollection<GsProject> _projectsForCurrentPage;
 		private ObservableCollection<GsFile> _gsFiles;
 		private ObservableCollection<GsFileVersion> _filesFileVersions;
+		private int _totalPages;
 		private string _version;
 		private int _projectsNumber;
 		public Credentials UserCredentials
@@ -26,6 +28,15 @@ namespace Sdl.Community.GSVersionFetch.Model
 			set
 			{
 				_gsProjects = value;
+				OnPropertyChanged(nameof(GsProjects));
+			}
+		}
+		public ObservableCollection<GsProject> ProjectsForCurrentPage
+		{
+			get => _projectsForCurrentPage;
+			set
+			{
+				_projectsForCurrentPage = value;
 				OnPropertyChanged(nameof(GsProjects));
 			}
 		}
@@ -63,6 +74,15 @@ namespace Sdl.Community.GSVersionFetch.Model
 			{
 				_projectsNumber = value;
 				OnPropertyChanged(nameof(ProjectsNumber));
+			}
+		}
+		public int TotalPages
+		{
+			get => _totalPages;
+			set
+			{
+				_totalPages = value;
+				OnPropertyChanged(nameof(TotalPages));
 			}
 		}
 	}

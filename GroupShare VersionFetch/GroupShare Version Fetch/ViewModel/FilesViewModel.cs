@@ -76,11 +76,9 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected).ToList();
 						if (selectedProjects.Count > 0)
 						{
-							IsValid = true;
-							if (_oldSelectedProjects?.Count == 0)
-							{
-								InitializeOldList(selectedProjects);
-							}
+							var selectedFilesCount = _wizardModel.GsFiles.Count(f => f.IsSelected);
+							IsValid = selectedFilesCount > 0;
+
 							var addedProjects = selectedProjects.Except(_oldSelectedProjects).ToList();
 							if (addedProjects.Count > 0)
 							{
@@ -89,7 +87,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 							// get the removed projects
 							var removedProjects = _oldSelectedProjects.Except(selectedProjects).ToList();
-							if (removedProjects?.Count > 0)
+							if (removedProjects.Count > 0)
 							{
 								RemoveFilesFromGrid(removedProjects);
 							}
@@ -110,14 +108,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				_oldSelectedProjects.Add(project);
 				var files = await _projectService.GetProjectFiles(project.ProjectId);
 				SetFileProperties(project, files);
-			}
-		}
-
-		private void InitializeOldList(List<GsProject> selectedProjects)
-		{
-			foreach (var selectedProject in selectedProjects)
-			{
-				_oldSelectedProjects.Add(selectedProject);
 			}
 		}
 
