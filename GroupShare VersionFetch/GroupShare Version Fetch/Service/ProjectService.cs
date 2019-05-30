@@ -25,7 +25,7 @@ namespace Sdl.Community.GSVersionFetch.Service
 					var query = HttpUtility.ParseQueryString(builder.Query);
 					query["page"] = projectFilter.Page.ToString();
 					query["start"] = "0";
-					query["limit"] = "50";
+					query["limit"] = projectFilter.PageSize.ToString();
 					builder.Query = query.ToString();
 					var request = new HttpRequestMessage(HttpMethod.Get, new Uri(builder.ToString()));
 					ApiUrl.AddRequestHeaders(httpClient, request);

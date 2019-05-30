@@ -228,6 +228,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\nxGr.png" />
+    <Resource Include="Resources\bkGr.png" />
     <Resource Include="Resources\bk.png" />
     <Resource Include="Resources\nx.png" />
     <Resource Include="Resources\back.png" />

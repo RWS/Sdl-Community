@@ -16,6 +16,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	public class ProjectsViewModel: ProjectWizardViewModelBase
 	{
 		private bool _isValid;
+		private bool _isPreviousEnabled;
+		private bool _isNextEnabled;
 		private string _displayName;
 		private ICommand _refreshProjectsCommand;
 		private ICommand _nextPageCommand;
@@ -29,6 +31,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			_currentPageNumber = 1;
 			_wizardModel = wizardModel;
 			_displayName = "GroupShare Projects";
+			_isPreviousEnabled = false;
+			_isNextEnabled = true;
 			_wizardModel.GsProjects.CollectionChanged += GsProjects_CollectionChanged;
 		}
 
@@ -99,6 +103,30 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				OnPropertyChanged(nameof(IsValid));
 			}
 		}
+		public  bool IsPreviousEnabled
+		{
+			get => _isPreviousEnabled;
+			set
+			{
+				if (_isPreviousEnabled == value)
+					return;
+
+				_isPreviousEnabled = value;
+				OnPropertyChanged(nameof(IsPreviousEnabled));
+			}
+		}
+		public bool IsNextEnabled
+		{
+			get => _isNextEnabled;
+			set
+			{
+				if (_isNextEnabled == value)
+					return;
+
+				_isNextEnabled = value;
+				OnPropertyChanged(nameof(IsNextEnabled));
+			}
+		}
 		public int ProjectsNumber
 		{
 			get => _wizardModel.ProjectsNumber;
@@ -121,6 +149,15 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				_currentPageNumber = value;
 				OnPropertyChanged(nameof(CurrentPageNumber));
+			}
+		}
+		public int PagesNumber
+		{
+			get => _wizardModel.TotalPages;
+			set
+			{
+				_wizardModel.TotalPages = value;
+				OnPropertyChanged(nameof(PagesNumber));
 			}
 		}
 
@@ -167,6 +204,10 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				await LoadProjectsForCurrentPage();
 			}
+			else
+			{
+				UpdateNavigationButtons();
+			}
 		}
 
 		private bool ExistsProjectsForCurrentPage()
@@ -201,11 +242,15 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				var languageFlagsHelper = new LanguageFlags();
 				var projectFilter = new ProjectFilter
 				{
-					Page = CurrentPageNumber
+					Page = CurrentPageNumber,
+					PageSize = 50
 				};
 				var projectsResponse = await projectService.GetGsProjects(projectFilter);
 				if (projectsResponse?.Items != null)
 				{
+					_wizardModel.ProjectsNumber = projectsResponse.Count;
+					_wizardModel.TotalPages = (projectsResponse.Count + projectFilter.PageSize - 1) / projectFilter.PageSize;
+
 					foreach (var project in projectsResponse.Items)
 					{
 						var gsProject = new GsProject
@@ -226,11 +271,21 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						_wizardModel?.ProjectsForCurrentPage?.Add(gsProject);
 					}
 					IsValid = false;
+					UpdateNavigationButtons();
 				}
 			}
 			catch (Exception e)
 			{
 				Log.Logger.Error($"RefreshProjects method: {e.Message}\n {e.StackTrace}");
+			}
+		}
+		private void UpdateNavigationButtons()
+		{
+			IsPreviousEnabled = !CurrentPageNumber.Equals(1);
+
+			if (PagesNumber > 0)
+			{
+				IsNextEnabled = !CurrentPageNumber.Equals(PagesNumber);
 			}
 		}
 	}

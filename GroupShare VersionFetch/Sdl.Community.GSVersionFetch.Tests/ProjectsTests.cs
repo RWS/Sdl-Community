@@ -16,7 +16,8 @@ namespace Sdl.Community.GSVersionFetch.Tests
 			await _authentication.Login().ConfigureAwait(true);
 			var projectFilter = new ProjectFilter
 			{
-				Page = 1
+				Page = 1,
+				PageSize = 50
 			};
 			var gsProjects = await _projectService.GetGsProjects(projectFilter);
 			Assert.True(gsProjects!=null);

@@ -172,12 +172,14 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 							TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
 							var projectFilter = new ProjectFilter
 							{
-								Page = 1
+								Page = 1,
+								PageSize = 50
 							};
 							var projectsResponse = await projectService.GetGsProjects(projectFilter);
 							if (projectsResponse?.Items != null)
 							{
 								_wizardModel.ProjectsNumber = projectsResponse.Count;
+								_wizardModel.TotalPages = (projectsResponse.Count +projectFilter.PageSize-1)/ projectFilter.PageSize;
 								foreach (var project in projectsResponse.Items)
 								{
 									var gsProject = new GsProject
