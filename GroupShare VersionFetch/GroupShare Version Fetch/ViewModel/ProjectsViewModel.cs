@@ -19,6 +19,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private bool _isPreviousEnabled;
 		private bool _isNextEnabled;
 		private string _displayName;
+		private string _searchText;
 		private ICommand _refreshProjectsCommand;
 		private ICommand _nextPageCommand;
 		private ICommand _previousPageCommand;
@@ -29,6 +30,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
 		{
 			_currentPageNumber = 1;
+			_searchText = string.Empty;
 			_wizardModel = wizardModel;
 			_displayName = "GroupShare Projects";
 			_isPreviousEnabled = false;
@@ -91,6 +93,17 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				OnPropertyChanged(nameof(DisplayName));
 			}
 		}
+
+		public string SearchText
+		{
+			get => _searchText;
+			set
+			{
+				_searchText = value;
+				OnPropertyChanged(SearchText);
+			}
+		}
+
 		public override bool IsValid
 		{
 			get => _isValid;

@@ -1,6 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web;
+using Newtonsoft.Json;
+using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
 
 namespace Sdl.Community.GSVersionFetch.Helpers
@@ -42,5 +47,31 @@ namespace Sdl.Community.GSVersionFetch.Helpers
 			httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 			request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Authentication.Token);
 		}
+
+		public static string GetQuerryString(ProjectFilter projectFilter)
+		{
+			var baseUrl = GetProjects();
+			var builder = new UriBuilder(baseUrl);
+			var query = HttpUtility.ParseQueryString(builder.Query);
+			query["page"] = projectFilter.Page.ToString();
+			query["start"] = "0";
+			query["limit"] = projectFilter.PageSize.ToString();
+
+			//projectFilter.Filter = new Filter
+			//{
+			//	OrgPath = "/",
+			//	Status = 7,
+			//	ProjectName = "an",
+			//	IncludeSubOrgs = true
+			//};
+			if (projectFilter.Filter!=null)
+			{
+				query["filter"] = JsonConvert.SerializeObject(projectFilter.Filter); 
+			}
+			builder.Query = query.ToString();
+
+			return builder.ToString();
+		}
+
 	}
 }
