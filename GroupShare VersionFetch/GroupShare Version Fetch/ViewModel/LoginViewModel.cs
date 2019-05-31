@@ -169,7 +169,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 							ShowMessage(PluginResources.AuthenticationSuccess,"#00A8EB");
 
 							var utils = new Utils();
-							await utils.SetGsProjectsToWizard(_wizardModel, 0);
+							await utils.SetGsProjectsToWizard(_wizardModel, 1);
 
 							_view.Dispatcher.Invoke(delegate { SendKeys.SendWait("{TAB}"); }, DispatcherPriority.ApplicationIdle);
 						}

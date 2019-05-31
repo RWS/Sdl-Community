@@ -20,21 +20,15 @@ namespace Sdl.Community.GSVersionFetch.Service
 			{
 				using (var httpClient = new HttpClient())
 				{
-					var baseUrl = ApiUrl.GetProjects();
-					var builder = new UriBuilder(baseUrl);
-					var query = HttpUtility.ParseQueryString(builder.Query);
-					query["page"] = projectFilter.Page.ToString();
-					query["start"] = "0";
-					query["limit"] = projectFilter.PageSize.ToString();
-					builder.Query = query.ToString();
-					var request = new HttpRequestMessage(HttpMethod.Get, new Uri(builder.ToString()));
+					var queryString=ApiUrl.GetQuerryString(projectFilter);
+					var request = new HttpRequestMessage(HttpMethod.Get, new Uri(queryString));
 					ApiUrl.AddRequestHeaders(httpClient, request);
 
 					var responseMessage = await httpClient.SendAsync(request);
 					var projectsResponse = await responseMessage.Content.ReadAsStringAsync();
-					if (responseMessage.StatusCode == HttpStatusCode.OK)
+						if (responseMessage.StatusCode == HttpStatusCode.OK)
 					{
-						return JsonConvert.DeserializeObject<ProjectResponse>(projectsResponse);
+							return JsonConvert.DeserializeObject<ProjectResponse>(projectsResponse);
 					}
 				}
 			}

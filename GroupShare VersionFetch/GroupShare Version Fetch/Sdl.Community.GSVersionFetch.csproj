@@ -178,6 +178,7 @@
     <Compile Include="Interface\IRaiseCanExecuteChanged.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\Credentials.cs" />
+    <Compile Include="Model\Filter.cs" />
     <Compile Include="Model\GsFile.cs" />
     <Compile Include="Model\GsFileVersion.cs" />
     <Compile Include="Model\GsProject.cs" />
