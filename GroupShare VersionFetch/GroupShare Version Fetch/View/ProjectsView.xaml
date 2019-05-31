@@ -16,6 +16,7 @@
 				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<uiHelpers:ImageToBitmapImageConverter x:Key="ImageConverter"/>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
 			<Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
 				<Setter Property="Padding" Value="5"/>
@@ -29,7 +30,7 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		<DockPanel  Margin="0,0,0,10">
-				<StackPanel Orientation="Horizontal" Margin="5,10,10,5">
+				<StackPanel Orientation="Horizontal" Margin="5,10,15,5">
 					<TextBlock Text="Total projects:" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
 					<TextBlock Text="{Binding ProjectsNumber,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,10,0"  VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
 
@@ -63,11 +64,25 @@
 							</Image.Style>
 						</Image>
 					</Button>
-				<TextBlock Text="of " VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
-				<TextBlock Text="{Binding PagesNumber}" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
-			</StackPanel>
+					<TextBlock Text="of " VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
+					<TextBlock Text="{Binding PagesNumber}" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
+				</StackPanel>
 			
-			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding RefreshProjectsCommand}"
+				<Grid  HorizontalAlignment="Center" VerticalAlignment="Center">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+				</Grid.RowDefinitions>
+				<TextBlock Grid.Row="1" Foreground="#999999" Background="Transparent" FontStyle="Italic" Padding="5,0,2,0" Text="Project name" VerticalAlignment="Center" 
+				           Visibility="{Binding ElementName=SearchBox, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
+				</TextBlock>
+				<TextBox Name="SearchBox" Padding="2,0,2,0" Grid.Row="1" Background="Transparent"
+				         Text="{Binding SearchText,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				         Width="200" Height="35" VerticalContentAlignment="Center" 	          
+				/>
+			</Grid>
+
+				<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding RefreshProjectsCommand}"
 			        HorizontalAlignment="Right" Content="Refresh projects" Margin="0,10,10,5" />
 		</DockPanel>
 
