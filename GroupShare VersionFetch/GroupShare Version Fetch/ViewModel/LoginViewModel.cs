@@ -154,6 +154,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				var passwordBox = parameter as PasswordBox;
 				var password = passwordBox?.Password;
+				var utils = new Utils();
 				if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 				{
 					_wizardModel.UserCredentials.UserName = UserName.TrimEnd().TrimStart();
@@ -168,8 +169,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 							IsValid = true;
 							ShowMessage(PluginResources.AuthenticationSuccess,"#00A8EB");
 
-							var utils = new Utils();
-							await utils.SetGsProjectsToWizard(_wizardModel, 1);
+							var filter = new ProjectFilter
+							{
+								PageSize = 50,
+								Page = 1
+							};
+							await utils.SetGsProjectsToWizard(_wizardModel, filter);
 
 							_view.Dispatcher.Invoke(delegate { SendKeys.SendWait("{TAB}"); }, DispatcherPriority.ApplicationIdle);
 						}

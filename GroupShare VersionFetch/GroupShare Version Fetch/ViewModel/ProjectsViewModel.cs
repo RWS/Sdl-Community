@@ -8,8 +8,6 @@ using System.Windows.Input;
 using Sdl.Community.GSVersionFetch.Commands;
 using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
-using Sdl.Community.GSVersionFetch.Service;
-using Sdl.Core.Globalization;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
@@ -30,7 +28,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
 		{
 			_currentPageNumber = 1;
-			_searchText = string.Empty;
 			_wizardModel = wizardModel;
 			_displayName = "GroupShare Projects";
 			_searchText = string.Empty;
@@ -101,6 +98,9 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			set
 			{
 				_searchText = value;
+				_wizardModel?.GsProjects?.Clear();
+				_wizardModel?.ProjectsForCurrentPage?.Clear();
+				LoadProjectsForCurrentPage();
 				OnPropertyChanged(SearchText);
 			}
 		}
@@ -155,7 +155,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				OnPropertyChanged(nameof(ProjectsNumber));
 			}
 		}
-
+		
 		public int CurrentPageNumber
 		{
 			get => _currentPageNumber;
@@ -253,7 +253,19 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			try
 			{
 				var utils = new Utils();
-				await utils.SetGsProjectsToWizard(_wizardModel, CurrentPageNumber);
+				var filter = new ProjectFilter
+				{
+					Filter = new Filter
+					{
+						ProjectName = SearchText,
+						OrgPath = "/",
+						Status = 7,
+						IncludeSubOrgs = true
+					},
+					PageSize = 50,
+					Page = CurrentPageNumber
+				};
+				await utils.SetGsProjectsToWizard(_wizardModel, filter);
 
 				IsValid = false;
 				UpdateNavigationButtons();
@@ -266,7 +278,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private void UpdateNavigationButtons()
 		{
 			IsPreviousEnabled = !CurrentPageNumber.Equals(1);
-
 			if (PagesNumber > 0)
 			{
 				IsNextEnabled = !CurrentPageNumber.Equals(PagesNumber);

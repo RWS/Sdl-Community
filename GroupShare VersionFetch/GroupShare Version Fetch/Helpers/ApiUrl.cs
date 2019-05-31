@@ -57,13 +57,6 @@ namespace Sdl.Community.GSVersionFetch.Helpers
 			query["start"] = "0";
 			query["limit"] = projectFilter.PageSize.ToString();
 
-			//projectFilter.Filter = new Filter
-			//{
-			//	OrgPath = "/",
-			//	Status = 7,
-			//	ProjectName = "an",
-			//	IncludeSubOrgs = true
-			//};
 			if (projectFilter.Filter!=null)
 			{
 				query["filter"] = JsonConvert.SerializeObject(projectFilter.Filter); 

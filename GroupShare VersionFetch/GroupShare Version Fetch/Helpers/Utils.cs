@@ -15,16 +15,12 @@ namespace Sdl.Community.GSVersionFetch.Helpers
 		    _projectService = new ProjectService();
 	    }
 
-	    public async Task SetGsProjectsToWizard(WizardModel wizardModel, int currentPageNumber)
+	    public async Task SetGsProjectsToWizard(WizardModel wizardModel, ProjectFilter projectFilter)
 	    {
 			try
 			{
 				var languageFlagsHelper = new LanguageFlags();
-				var projectFilter = new ProjectFilter
-				{
-					Page = currentPageNumber,
-					PageSize = 50
-				};
+
 				var projectsResponse = await _projectService.GetGsProjects(projectFilter);
 				if (projectsResponse?.Items != null)
 				{
