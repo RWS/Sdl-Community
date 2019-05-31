@@ -33,6 +33,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			_searchText = string.Empty;
 			_wizardModel = wizardModel;
 			_displayName = "GroupShare Projects";
+			_searchText = string.Empty;
 			_isPreviousEnabled = false;
 			_isNextEnabled = true;
 			_wizardModel.GsProjects.CollectionChanged += GsProjects_CollectionChanged;

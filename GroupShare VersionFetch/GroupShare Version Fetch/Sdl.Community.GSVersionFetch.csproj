@@ -230,6 +230,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Lookup.png" />
+    <None Include="Resources\closetab.gif" />
+    <Resource Include="Resources\text_needs_review_translation.ico" />
     <Resource Include="Resources\nxGr.png" />
     <Resource Include="Resources\bkGr.png" />
     <Resource Include="Resources\bk.png" />
