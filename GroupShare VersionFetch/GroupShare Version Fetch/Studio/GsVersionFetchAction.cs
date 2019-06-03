@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Forms.Integration;
 using Sdl.Community.GSVersionFetch.Interface;
 using Sdl.Community.GSVersionFetch.Model;
@@ -34,7 +35,8 @@ namespace Sdl.Community.GSVersionFetch.Studio
 				ProjectsForCurrentPage = new ObservableCollection<GsProject>(),
 				GsFiles =   new ObservableCollection<GsFile>(),
 				FileVersions = new ObservableCollection<GsFileVersion>(),
-				Organizations = new ObservableCollection<Organization>(),
+				Organizations = new ObservableCollection<OrganizationResponse>(),
+				OrganizationsTreeView = new List<OrganizationHierarchy>(),
 				Version = string.Empty
 			};
 			var pages = CreatePages(wizardModel);

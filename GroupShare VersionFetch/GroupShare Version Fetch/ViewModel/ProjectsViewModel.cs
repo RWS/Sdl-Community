@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -201,6 +202,32 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				OnPropertyChanged(nameof(ProjectsForCurrentPage));
 			}
 		}
+
+		public ObservableCollection<OrganizationResponse> Organizations
+		{
+			get => _wizardModel?.Organizations;
+			set
+			{
+				if (_wizardModel.Organizations == value)
+				{
+					return;
+				}
+				_wizardModel.Organizations = value;
+				OnPropertyChanged(nameof(Organizations));
+			}
+		}
+
+		public List<OrganizationHierarchy> Items
+		{
+			get => _wizardModel?.OrganizationsTreeView;
+
+			set
+			{
+				_wizardModel.OrganizationsTreeView = value;
+				OnPropertyChanged(nameof(Items));
+			}
+		}
+
 		public ICommand RefreshProjectsCommand =>
 			_refreshProjectsCommand ?? (_refreshProjectsCommand = new AwaitableDelegateCommand(RefreshProjects));
 		public ICommand NextPageCommand => _nextPageCommand ?? (_nextPageCommand = new AwaitableDelegateCommand(DisplayNextPage));

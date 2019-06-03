@@ -16,6 +16,10 @@
 				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<uiHelpers:ImageToBitmapImageConverter x:Key="ImageConverter"/>
+			
+			<HierarchicalDataTemplate x:Key="treeViewDataTemplate" ItemsSource="{Binding Children}">
+				<TextBlock Text="{Binding Title}" />
+			</HierarchicalDataTemplate>
 
 			<Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
 				<Setter Property="Padding" Value="5"/>
@@ -66,7 +70,12 @@
 					<TextBlock Text="of " VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
 				<TextBlock Text="{Binding PagesNumber,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
 				</StackPanel>
-				<Border BorderThickness="0.5" BorderBrush="LightGray" Height="27">
+
+			<uiHelpers:ComboBoxTreeView x:Name="comboBox" ItemsSource="{Binding Items,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem}" 
+			                        ItemTemplate="{StaticResource treeViewDataTemplate}"
+			                        HorizontalAlignment="Center"  Width="200" Margin="0,10,0,0" />
+
+			<Border BorderThickness="0.5" BorderBrush="LightGray" Height="27">
 					<DockPanel  Margin="10,5,5,0" Background="White" VerticalAlignment="Center" Height="27">
 						<TextBox Text="{Binding SearchText,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" 
 								 Width="150" Height="27" VerticalContentAlignment="Center" VerticalAlignment="Center"/>

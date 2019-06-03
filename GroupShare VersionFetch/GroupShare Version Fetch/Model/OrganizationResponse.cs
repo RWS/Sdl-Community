@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sdl.Community.GSVersionFetch.Model
+﻿namespace Sdl.Community.GSVersionFetch.Model
 {
-	public class Organization : BaseModel
+	public class OrganizationResponse : BaseModel
 	{
 		private string _name;
 		private string _path;
@@ -39,6 +33,10 @@ namespace Sdl.Community.GSVersionFetch.Model
 				OnPropertyChanged(nameof(Path));
 			}
 		}
+
+		public string UniqueId { get; set; }
+		public bool IsLibrary { get; set; }
+		public string ParentOrganizationId { get; set; }
 
 	}
 }

@@ -13,7 +13,7 @@ namespace Sdl.Community.GSVersionFetch.Service
 	{
 		public static readonly Log Log = Log.Instance;
 
-		public async Task<List<Organization>> GetOrganizations()
+		public async Task<List<OrganizationResponse>> GetOrganizations()
 		{
 			try
 			{
@@ -26,7 +26,7 @@ namespace Sdl.Community.GSVersionFetch.Service
 					var organizationsResponse = await responseMessage.Content.ReadAsStringAsync();
 					if (responseMessage.StatusCode == HttpStatusCode.OK)
 					{
-						return JsonConvert.DeserializeObject<List<Organization>>(organizationsResponse);
+						return JsonConvert.DeserializeObject<List<OrganizationResponse>>(organizationsResponse);
 					}
 				}
 			}
@@ -34,7 +34,7 @@ namespace Sdl.Community.GSVersionFetch.Service
 			{
 				Log.Logger.Error($"GetOrganizations service method: {e.Message}\n {e.StackTrace}");
 			}
-			return new List<Organization>();
+			return new List<OrganizationResponse>();
 		}
 	}
 }

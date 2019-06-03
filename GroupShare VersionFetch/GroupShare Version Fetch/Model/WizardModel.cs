@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Sdl.Community.GSVersionFetch.Model
 {
@@ -9,7 +10,8 @@ namespace Sdl.Community.GSVersionFetch.Model
 		private ObservableCollection<GsProject> _projectsForCurrentPage;
 		private ObservableCollection<GsFile> _gsFiles;
 		private ObservableCollection<GsFileVersion> _filesFileVersions;
-		private ObservableCollection<Organization> _organizations;
+		private ObservableCollection<OrganizationResponse> _organizations;
+		private List<OrganizationHierarchy> _organizationsTreeView;
 		private int _totalPages;
 		private string _version;
 		private int _projectsNumber;
@@ -60,7 +62,7 @@ namespace Sdl.Community.GSVersionFetch.Model
 			}
 		}
 
-		public ObservableCollection<Organization> Organizations
+		public ObservableCollection<OrganizationResponse> Organizations
 		{
 			get => _organizations;
 			set
@@ -71,6 +73,20 @@ namespace Sdl.Community.GSVersionFetch.Model
 				}
 				_organizations = value;
 				OnPropertyChanged(nameof(Organizations));
+			}
+		}
+
+		public List<OrganizationHierarchy> OrganizationsTreeView
+		{
+			get => _organizationsTreeView;
+			set
+			{
+				if (_organizationsTreeView == value)
+				{
+					return;
+				}
+				_organizationsTreeView = value;
+				OnPropertyChanged(nameof(OrganizationsTreeView));
 			}
 		}
 

@@ -177,6 +177,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 							await utils.SetGsProjectsToWizard(_wizardModel, filter);
 
 							var organizations =await organizationService.GetOrganizations();
+							utils.SegOrganizationsToWizard(_wizardModel, organizations);
 							if (organizations?.Count > 0)
 							{
 								foreach (var organization in organizations)
