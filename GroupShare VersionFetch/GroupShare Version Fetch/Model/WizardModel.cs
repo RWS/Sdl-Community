@@ -72,6 +72,10 @@ namespace Sdl.Community.GSVersionFetch.Model
 			get => _projectsNumber;
 			set
 			{
+				if (_projectsNumber == value)
+				{
+					return;
+				}
 				_projectsNumber = value;
 				OnPropertyChanged(nameof(ProjectsNumber));
 			}
@@ -81,6 +85,10 @@ namespace Sdl.Community.GSVersionFetch.Model
 			get => _totalPages;
 			set
 			{
+				if (_totalPages == value)
+				{
+					return;
+				}
 				_totalPages = value;
 				OnPropertyChanged(nameof(TotalPages));
 			}

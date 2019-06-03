@@ -16,7 +16,6 @@
 				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<uiHelpers:ImageToBitmapImageConverter x:Key="ImageConverter"/>
-			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
 			<Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
 				<Setter Property="Padding" Value="5"/>
@@ -49,7 +48,7 @@
 						</Image>
 					</Button>
 					<TextBlock Text="Page" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
-					<TextBlock Text="{Binding CurrentPageNumber}" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
+				<TextBlock Text="{Binding CurrentPageNumber,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
 					<Button Style="{DynamicResource NavigationButtonsStyle}" IsEnabled="{Binding IsNextEnabled}" Command="{Binding NextPageCommand}">
 						<Image Width="20" Height="20">
 							<Image.Style>
@@ -65,7 +64,7 @@
 						</Image>
 					</Button>
 					<TextBlock Text="of " VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
-					<TextBlock Text="{Binding PagesNumber}" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
+				<TextBlock Text="{Binding PagesNumber,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{DynamicResource PaginationTextBlock}"/>
 				</StackPanel>
 				<Border BorderThickness="0.5" BorderBrush="LightGray" Height="27">
 					<DockPanel  Margin="10,5,5,0" Background="White" VerticalAlignment="Center" Height="27">

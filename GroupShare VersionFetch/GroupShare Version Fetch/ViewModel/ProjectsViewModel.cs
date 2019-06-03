@@ -5,9 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Sdl.Community.GSVersionFetch.Commands;
 using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
@@ -23,6 +25,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private ICommand _previousPageCommand;
 		private int _currentPageNumber;
 		private readonly WizardModel _wizardModel;
+		private readonly UserControl _view;
 		public static readonly Log Log = Log.Instance;
 
 		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
@@ -32,6 +35,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			_displayName = "GroupShare Projects";
 			_searchText = string.Empty;
 			_isPreviousEnabled = false;
+			_view = (UserControl)view;
 			_isNextEnabled = true;
 			_wizardModel.GsProjects.CollectionChanged += GsProjects_CollectionChanged;
 		}
@@ -100,8 +104,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				_searchText = value;
 				_wizardModel?.GsProjects?.Clear();
 				_wizardModel?.ProjectsForCurrentPage?.Clear();
-				LoadProjectsForCurrentPage();
 				OnPropertyChanged(SearchText);
+				_view.Dispatcher.Invoke(async () =>
+				{
+					await LoadProjectsForCurrentPage();
+				},DispatcherPriority.ContextIdle);
+	
 			}
 		}
 
@@ -269,6 +277,13 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 				IsValid = false;
 				UpdateNavigationButtons();
+				_view.Dispatcher?.BeginInvoke(DispatcherPriority.ContextIdle, new Action(delegate
+				{
+					OnPropertyChanged(nameof(ProjectsNumber));
+					OnPropertyChanged(nameof(PagesNumber));
+
+				}));
+
 			}
 			catch (Exception e)
 			{
