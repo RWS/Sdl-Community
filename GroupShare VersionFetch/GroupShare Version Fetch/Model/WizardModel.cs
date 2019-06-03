@@ -9,6 +9,7 @@ namespace Sdl.Community.GSVersionFetch.Model
 		private ObservableCollection<GsProject> _projectsForCurrentPage;
 		private ObservableCollection<GsFile> _gsFiles;
 		private ObservableCollection<GsFileVersion> _filesFileVersions;
+		private ObservableCollection<Organization> _organizations;
 		private int _totalPages;
 		private string _version;
 		private int _projectsNumber;
@@ -58,6 +59,21 @@ namespace Sdl.Community.GSVersionFetch.Model
 				OnPropertyChanged(nameof(FileVersions));
 			}
 		}
+
+		public ObservableCollection<Organization> Organizations
+		{
+			get => _organizations;
+			set
+			{
+				if (_organizations == value)
+				{
+					return;
+				}
+				_organizations = value;
+				OnPropertyChanged(nameof(Organizations));
+			}
+		}
+
 		public string Version
 		{
 			get => _version;

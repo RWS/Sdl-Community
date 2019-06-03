@@ -9,7 +9,6 @@ using Sdl.Community.GSVersionFetch.Commands;
 using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
-using Sdl.Core.Globalization;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
@@ -155,6 +154,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				var passwordBox = parameter as PasswordBox;
 				var password = passwordBox?.Password;
 				var utils = new Utils();
+				var organizationService = new OrganizationService();
 				if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 				{
 					_wizardModel.UserCredentials.UserName = UserName.TrimEnd().TrimStart();
@@ -176,6 +176,14 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 							};
 							await utils.SetGsProjectsToWizard(_wizardModel, filter);
 
+							var organizations =await organizationService.GetOrganizations();
+							if (organizations?.Count > 0)
+							{
+								foreach (var organization in organizations)
+								{
+									_wizardModel?.Organizations.Add(organization);
+								}
+							}
 							_view.Dispatcher.Invoke(delegate { SendKeys.SendWait("{TAB}"); }, DispatcherPriority.ApplicationIdle);
 						}
 						else

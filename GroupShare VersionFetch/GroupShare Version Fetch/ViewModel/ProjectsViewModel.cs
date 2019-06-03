@@ -281,7 +281,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				{
 					OnPropertyChanged(nameof(ProjectsNumber));
 					OnPropertyChanged(nameof(PagesNumber));
-
 				}));
 
 			}
