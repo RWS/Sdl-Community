@@ -12,5 +12,6 @@
 		<File>Raven.Client.Lightweight.dll</File>
 		<File>Raven.Database.dll</File>
 		<File>Newtonsoft.Json.dll</File>
+		<File>NLog.dll</File>
 	</Include>
 </PluginPackage>
