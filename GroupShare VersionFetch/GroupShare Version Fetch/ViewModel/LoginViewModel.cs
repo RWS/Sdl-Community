@@ -21,6 +21,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private string _textMessageVisibility;
 		private string _passwordBoxVisibility;
 		private string _displayName;
+		private readonly Utils _utils;
 		private SolidColorBrush _textMessageBrush;
 		private ICommand _loginCommand;
 		private ICommand _passwordChangedCommand;
@@ -30,12 +31,19 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		public LoginViewModel(WizardModel wizardModel,object view): base(view)
 		{
+			_utils = new Utils();
 			_isValid = false;
 			_displayName = "Login";
 			_view =(UserControl)view;
 			_wizardModel = wizardModel;
 			_textMessageVisibility = "Collapsed";
 			_passwordBoxVisibility = "Visible";
+			var userDetails = _utils.GetStoredUserDetails();
+			if (userDetails != null)
+			{
+				_wizardModel.UserCredentials.ServiceUrl = userDetails.ServiceUrl;
+				_wizardModel.UserCredentials.UserName = userDetails.UserName;
+			}
 		}
 
 		public override string DisplayName
@@ -154,7 +162,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				var passwordBox = parameter as PasswordBox;
 				var password = passwordBox?.Password;
-				var utils = new Utils();
 				var organizationService = new OrganizationService();
 				if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 				{
@@ -167,6 +174,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						var statusCode = await Authentication.Login(_wizardModel.UserCredentials);
 						if (statusCode == HttpStatusCode.OK)
 						{
+							_wizardModel.UserCredentials.Password = string.Empty;
+							_utils.SetUserDetails(_wizardModel.UserCredentials);
 							IsValid = true;
 							ShowMessage(PluginResources.AuthenticationSuccess,"#00A8EB");
 
@@ -175,10 +184,10 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 								PageSize = 50,
 								Page = 1
 							};
-							await utils.SetGsProjectsToWizard(_wizardModel, filter);
+							await _utils.SetGsProjectsToWizard(_wizardModel, filter);
 
 							var organizations =await organizationService.GetOrganizations();
-							utils.SegOrganizationsToWizard(_wizardModel, organizations.OrderBy(o=>o.Name).ToList());
+							_utils.SegOrganizationsToWizard(_wizardModel, organizations.OrderBy(o=>o.Name).ToList());
 							if (organizations?.Count > 0)
 							{
 								foreach (var organization in organizations)

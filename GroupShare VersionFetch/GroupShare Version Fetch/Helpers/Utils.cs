@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
 using Sdl.Core.Globalization;
@@ -11,8 +13,11 @@ namespace Sdl.Community.GSVersionFetch.Helpers
     public class Utils
     {
 	    private readonly ProjectService _projectService;
+	    public readonly string SettingsFolderPath = $@"C:\Users\{Environment.UserName}\AppData\Roaming\SDL Community\GSVFSettings";
+	    public readonly string JsonFileName = "GsvfSettings.json";
 
-	    public Utils()
+
+		public Utils()
 	    {
 		    _projectService = new ProjectService();
 	    }
@@ -72,5 +77,41 @@ namespace Sdl.Community.GSVersionFetch.Helpers
 			    wizardModel.Organizations.Add(organization);
 		    }
 	    }
-    }
+
+	    public void SetUserDetails(Credentials credentials)
+	    {
+		    if (!Directory.Exists(SettingsFolderPath))
+		    {
+			    Directory.CreateDirectory(SettingsFolderPath);
+		    }
+		    var docPath = Path.Combine(SettingsFolderPath, JsonFileName);
+		    var jsonResult = JsonConvert.SerializeObject(credentials);
+
+		    if (File.Exists(docPath))
+		    {
+			    File.Delete(docPath);
+		    }
+		    File.Create(docPath).Dispose();
+
+		    using (var tw = new StreamWriter(docPath, true))
+		    {
+			    tw.WriteLine(jsonResult);
+			    tw.Close();
+		    }
+		}
+	    public Credentials GetStoredUserDetails()
+	    {
+		    var docPath = Path.Combine(SettingsFolderPath, JsonFileName);
+			if (File.Exists(docPath))
+		    {
+			    using (var r = new StreamReader(docPath))
+			    {
+				    var json = r.ReadToEnd();
+				    var credentials = JsonConvert.DeserializeObject<Credentials>(json);
+				    return credentials;
+			    }
+		    }
+		    return null;
+	    }
+	}
 }
