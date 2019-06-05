@@ -103,14 +103,11 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			set
 			{
 				_searchText = value;
-				_wizardModel?.GsProjects?.Clear();
-				_wizardModel?.ProjectsForCurrentPage?.Clear();
 				OnPropertyChanged(SearchText);
 				_view.Dispatcher.Invoke(async () =>
 				{
 					await LoadProjectsForCurrentPage();
 				},DispatcherPriority.ContextIdle);
-	
 			}
 		}
 
@@ -217,14 +214,17 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		public List<OrganizationHierarchy> Items
+		public OrganizationResponse SelectedOrganization
 		{
-			get => _wizardModel?.OrganizationsTreeView;
-
+			get => _wizardModel?.SelectedOrganization;
 			set
 			{
-				_wizardModel.OrganizationsTreeView = value;
-				OnPropertyChanged(nameof(Items));
+				_wizardModel.SelectedOrganization = value;
+				OnPropertyChanged(nameof(SelectedOrganization));
+				_view.Dispatcher.Invoke(async () =>
+				{
+					await LoadProjectsForCurrentPage();
+				}, DispatcherPriority.ContextIdle);
 			}
 		}
 
@@ -287,6 +287,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		{
 			try
 			{
+				_wizardModel?.GsProjects?.Clear();
+				_wizardModel?.ProjectsForCurrentPage?.Clear();
 				var utils = new Utils();
 				var filter = new ProjectFilter
 				{
@@ -300,6 +302,10 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 					PageSize = 50,
 					Page = CurrentPageNumber
 				};
+				if (SelectedOrganization!=null)
+				{
+					filter.Filter.OrgPath = SelectedOrganization.Path;
+				}
 				await utils.SetGsProjectsToWizard(_wizardModel, filter);
 
 				IsValid = false;

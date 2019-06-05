@@ -37,6 +37,5 @@
 		public string UniqueId { get; set; }
 		public bool IsLibrary { get; set; }
 		public string ParentOrganizationId { get; set; }
-
 	}
 }

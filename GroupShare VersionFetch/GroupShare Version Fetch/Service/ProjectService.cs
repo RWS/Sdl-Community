@@ -20,7 +20,7 @@ namespace Sdl.Community.GSVersionFetch.Service
 				using (var httpClient = new HttpClient())
 				{
 					var queryString = ApiUrl.GetQuerryString(projectFilter);
-					var request = new HttpRequestMessage(HttpMethod.Get, new Uri(queryString));
+						var request = new HttpRequestMessage(HttpMethod.Get, new Uri(queryString));
 					ApiUrl.AddRequestHeaders(httpClient, request);
 
 					var responseMessage = await httpClient.SendAsync(request);

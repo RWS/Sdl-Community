@@ -36,7 +36,7 @@ namespace Sdl.Community.GSVersionFetch.Studio
 				GsFiles =   new ObservableCollection<GsFile>(),
 				FileVersions = new ObservableCollection<GsFileVersion>(),
 				Organizations = new ObservableCollection<OrganizationResponse>(),
-				OrganizationsTreeView = new List<OrganizationHierarchy>(),
+				SelectedOrganization = new OrganizationResponse(),
 				Version = string.Empty
 			};
 			var pages = CreatePages(wizardModel);

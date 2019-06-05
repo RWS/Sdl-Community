@@ -164,8 +164,6 @@
     <Compile Include="Commands\ParameterCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Extensions\EventsExtensions.cs" />
-    <Compile Include="Extensions\ExtendedTreeView.cs" />
-    <Compile Include="Extensions\ExtendedTreeViewItem.cs" />
     <Compile Include="Helpers\ApiUrl.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\LanguageFlags.cs" />
@@ -185,7 +183,6 @@
     <Compile Include="Model\GsFile.cs" />
     <Compile Include="Model\GsFileVersion.cs" />
     <Compile Include="Model\GsProject.cs" />
-    <Compile Include="Model\OrganizationHierarchy.cs" />
     <Compile Include="Model\OrganizationResponse.cs" />
     <Compile Include="Model\ProjectDetailsResponse.cs" />
     <Compile Include="Model\ProjectFilter.cs" />
@@ -204,7 +201,6 @@
     <Compile Include="Service\OrganizationService.cs" />
     <Compile Include="Service\ProjectService.cs" />
     <Compile Include="Studio\GsVersionFetchAction.cs" />
-    <Compile Include="UiHelpers\ComboBoxTreeView.cs" />
     <Compile Include="UiHelpers\ImageToBitmapImageConverter.cs" />
     <Compile Include="UiHelpers\TextBoxWatermarkHelper.cs" />
     <Compile Include="UiHelpers\WindowsControl.xaml.cs">
@@ -280,10 +276,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UiHelpers\General.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UiHelpers\TreeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -11,7 +11,7 @@ namespace Sdl.Community.GSVersionFetch.Model
 		private ObservableCollection<GsFile> _gsFiles;
 		private ObservableCollection<GsFileVersion> _filesFileVersions;
 		private ObservableCollection<OrganizationResponse> _organizations;
-		private List<OrganizationHierarchy> _organizationsTreeView;
+		private OrganizationResponse _selectedOrganization;
 		private int _totalPages;
 		private string _version;
 		private int _projectsNumber;
@@ -76,17 +76,13 @@ namespace Sdl.Community.GSVersionFetch.Model
 			}
 		}
 
-		public List<OrganizationHierarchy> OrganizationsTreeView
+		public OrganizationResponse SelectedOrganization
 		{
-			get => _organizationsTreeView;
+			get => _selectedOrganization;
 			set
 			{
-				if (_organizationsTreeView == value)
-				{
-					return;
-				}
-				_organizationsTreeView = value;
-				OnPropertyChanged(nameof(OrganizationsTreeView));
+				_selectedOrganization = value;
+				OnPropertyChanged(nameof(SelectedOrganization));
 			}
 		}
 

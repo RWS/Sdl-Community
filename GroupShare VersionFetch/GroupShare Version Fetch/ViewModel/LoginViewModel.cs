@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -177,7 +178,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 							await utils.SetGsProjectsToWizard(_wizardModel, filter);
 
 							var organizations =await organizationService.GetOrganizations();
-							utils.SegOrganizationsToWizard(_wizardModel, organizations);
+							utils.SegOrganizationsToWizard(_wizardModel, organizations.OrderBy(o=>o.Name).ToList());
 							if (organizations?.Count > 0)
 							{
 								foreach (var organization in organizations)
