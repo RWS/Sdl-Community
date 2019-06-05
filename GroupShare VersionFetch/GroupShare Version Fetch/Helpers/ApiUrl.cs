@@ -14,7 +14,8 @@ namespace Sdl.Community.GSVersionFetch.Helpers
 	{
 		public static string BaseUrl;
 		public  static List<string> Scopes= new List<string> {"ManagementRestApi", "ProjectServerRestApi", "MultiTermRestApi", "TMServerRestApi"};
-		private static string CurrentProjectServerUrl = "api/projectserver/v2";
+		private static readonly string CurrentProjectServerUrl = "api/projectserver/v2";
+		private static readonly string CurrentManagementServerUrl = "api/management/v2";
 
 		public static string Login()
 		{
@@ -57,13 +58,6 @@ namespace Sdl.Community.GSVersionFetch.Helpers
 			query["start"] = "0";
 			query["limit"] = projectFilter.PageSize.ToString();
 
-			//projectFilter.Filter = new Filter
-			//{
-			//	OrgPath = "/",
-			//	Status = 7,
-			//	ProjectName = "an",
-			//	IncludeSubOrgs = true
-			//};
 			if (projectFilter.Filter!=null)
 			{
 				query["filter"] = JsonConvert.SerializeObject(projectFilter.Filter); 
@@ -73,5 +67,9 @@ namespace Sdl.Community.GSVersionFetch.Helpers
 			return builder.ToString();
 		}
 
+		public static string GetOrganizations()
+		{
+			return $"{BaseUrl}/{CurrentManagementServerUrl}/organizations";
+		}
 	}
 }

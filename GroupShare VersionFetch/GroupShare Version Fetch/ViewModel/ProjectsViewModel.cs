@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Sdl.Community.GSVersionFetch.Commands;
 using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
-using Sdl.Community.GSVersionFetch.Service;
-using Sdl.Core.Globalization;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
@@ -25,15 +26,17 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private ICommand _previousPageCommand;
 		private int _currentPageNumber;
 		private readonly WizardModel _wizardModel;
+		private readonly UserControl _view;
 		public static readonly Log Log = Log.Instance;
 
 		public ProjectsViewModel(WizardModel wizardModel, object view) : base(view)
 		{
 			_currentPageNumber = 1;
-			_searchText = string.Empty;
 			_wizardModel = wizardModel;
 			_displayName = "GroupShare Projects";
+			_searchText = string.Empty;
 			_isPreviousEnabled = false;
+			_view = (UserControl)view;
 			_isNextEnabled = true;
 			_wizardModel.GsProjects.CollectionChanged += GsProjects_CollectionChanged;
 		}
@@ -101,6 +104,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				_searchText = value;
 				OnPropertyChanged(SearchText);
+				_wizardModel?.GsProjects?.Clear();
+				_wizardModel?.ProjectsForCurrentPage?.Clear();
+				_view.Dispatcher.Invoke(async () =>
+				{
+					await LoadProjectsForCurrentPage();
+				},DispatcherPriority.ContextIdle);
 			}
 		}
 
@@ -154,7 +163,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				OnPropertyChanged(nameof(ProjectsNumber));
 			}
 		}
-
+		
 		public int CurrentPageNumber
 		{
 			get => _currentPageNumber;
@@ -192,6 +201,42 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				OnPropertyChanged(nameof(ProjectsForCurrentPage));
 			}
 		}
+
+		public ObservableCollection<OrganizationResponse> Organizations
+		{
+			get => _wizardModel?.Organizations;
+			set
+			{
+				if (_wizardModel.Organizations == value)
+				{
+					return;
+				}
+				_wizardModel.Organizations = value;
+				OnPropertyChanged(nameof(Organizations));
+			}
+		}
+
+		public OrganizationResponse SelectedOrganization
+		{
+			get => _wizardModel?.SelectedOrganization;
+			set
+			{
+				if (_wizardModel != null)
+				{
+					_wizardModel?.GsProjects?.Clear();
+					_wizardModel?.ProjectsForCurrentPage?.Clear();
+					_wizardModel.SelectedOrganization = value;
+
+					_view.Dispatcher.Invoke(async () =>
+					{
+						await LoadProjectsForCurrentPage();
+					}, DispatcherPriority.ContextIdle);
+				}
+				OnPropertyChanged(nameof(SelectedOrganization));
+
+			}
+		}
+
 		public ICommand RefreshProjectsCommand =>
 			_refreshProjectsCommand ?? (_refreshProjectsCommand = new AwaitableDelegateCommand(RefreshProjects));
 		public ICommand NextPageCommand => _nextPageCommand ?? (_nextPageCommand = new AwaitableDelegateCommand(DisplayNextPage));
@@ -252,10 +297,32 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			try
 			{
 				var utils = new Utils();
-				await utils.SetGsProjectsToWizard(_wizardModel, CurrentPageNumber);
+				var filter = new ProjectFilter
+				{
+					Filter = new Filter
+					{
+						ProjectName = SearchText,
+						OrgPath = "/",
+						Status = 7,
+						IncludeSubOrgs = true
+					},
+					PageSize = 50,
+					Page = CurrentPageNumber
+				};
+				if (SelectedOrganization!=null)
+				{
+					filter.Filter.OrgPath = SelectedOrganization.Path;
+				}
+				await utils.SetGsProjectsToWizard(_wizardModel, filter);
 
 				IsValid = false;
 				UpdateNavigationButtons();
+				_view.Dispatcher?.BeginInvoke(DispatcherPriority.ContextIdle, new Action(delegate
+				{
+					OnPropertyChanged(nameof(ProjectsNumber));
+					OnPropertyChanged(nameof(PagesNumber));
+				}));
+
 			}
 			catch (Exception e)
 			{
@@ -265,7 +332,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private void UpdateNavigationButtons()
 		{
 			IsPreviousEnabled = !CurrentPageNumber.Equals(1);
-
 			if (PagesNumber > 0)
 			{
 				IsNextEnabled = !CurrentPageNumber.Equals(PagesNumber);

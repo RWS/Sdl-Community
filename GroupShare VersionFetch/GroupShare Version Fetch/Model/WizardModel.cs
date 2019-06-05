@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Sdl.Community.GSVersionFetch.Model
 {
@@ -9,6 +10,8 @@ namespace Sdl.Community.GSVersionFetch.Model
 		private ObservableCollection<GsProject> _projectsForCurrentPage;
 		private ObservableCollection<GsFile> _gsFiles;
 		private ObservableCollection<GsFileVersion> _filesFileVersions;
+		private ObservableCollection<OrganizationResponse> _organizations;
+		private OrganizationResponse _selectedOrganization;
 		private int _totalPages;
 		private string _version;
 		private int _projectsNumber;
@@ -58,6 +61,31 @@ namespace Sdl.Community.GSVersionFetch.Model
 				OnPropertyChanged(nameof(FileVersions));
 			}
 		}
+
+		public ObservableCollection<OrganizationResponse> Organizations
+		{
+			get => _organizations;
+			set
+			{
+				if (_organizations == value)
+				{
+					return;
+				}
+				_organizations = value;
+				OnPropertyChanged(nameof(Organizations));
+			}
+		}
+
+		public OrganizationResponse SelectedOrganization
+		{
+			get => _selectedOrganization;
+			set
+			{
+				_selectedOrganization = value;
+				OnPropertyChanged(nameof(SelectedOrganization));
+			}
+		}
+
 		public string Version
 		{
 			get => _version;
@@ -72,6 +100,10 @@ namespace Sdl.Community.GSVersionFetch.Model
 			get => _projectsNumber;
 			set
 			{
+				if (_projectsNumber == value)
+				{
+					return;
+				}
 				_projectsNumber = value;
 				OnPropertyChanged(nameof(ProjectsNumber));
 			}
@@ -81,6 +113,10 @@ namespace Sdl.Community.GSVersionFetch.Model
 			get => _totalPages;
 			set
 			{
+				if (_totalPages == value)
+				{
+					return;
+				}
 				_totalPages = value;
 				OnPropertyChanged(nameof(TotalPages));
 			}

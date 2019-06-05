@@ -110,6 +110,16 @@ namespace Sdl.Community.GSVersionFetch {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap closetab {
+            get {
+                object obj = ResourceManager.GetObject("closetab", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data on the following pages are not valid:.
         /// </summary>
         public static string DataOnTheFollowingPagesAreNotValid {
@@ -171,6 +181,16 @@ namespace Sdl.Community.GSVersionFetch {
         public static string Incorrect_Url_Format {
             get {
                 return ResourceManager.GetString("Incorrect_Url_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Lookup {
+            get {
+                object obj = ResourceManager.GetObject("Lookup", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

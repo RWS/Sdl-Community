@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using Newtonsoft.Json;
 using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
@@ -20,15 +19,15 @@ namespace Sdl.Community.GSVersionFetch.Service
 			{
 				using (var httpClient = new HttpClient())
 				{
-					var queryString=ApiUrl.GetQuerryString(projectFilter);
-					var request = new HttpRequestMessage(HttpMethod.Get, new Uri(queryString));
+					var queryString = ApiUrl.GetQuerryString(projectFilter);
+						var request = new HttpRequestMessage(HttpMethod.Get, new Uri(queryString));
 					ApiUrl.AddRequestHeaders(httpClient, request);
 
 					var responseMessage = await httpClient.SendAsync(request);
 					var projectsResponse = await responseMessage.Content.ReadAsStringAsync();
-						if (responseMessage.StatusCode == HttpStatusCode.OK)
+					if (responseMessage.StatusCode == HttpStatusCode.OK)
 					{
-							return JsonConvert.DeserializeObject<ProjectResponse>(projectsResponse);
+						return JsonConvert.DeserializeObject<ProjectResponse>(projectsResponse);
 					}
 				}
 			}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -9,7 +10,6 @@ using Sdl.Community.GSVersionFetch.Commands;
 using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
-using Sdl.Core.Globalization;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
@@ -21,6 +21,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private string _textMessageVisibility;
 		private string _passwordBoxVisibility;
 		private string _displayName;
+		private readonly Utils _utils;
 		private SolidColorBrush _textMessageBrush;
 		private ICommand _loginCommand;
 		private ICommand _passwordChangedCommand;
@@ -30,12 +31,19 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		public LoginViewModel(WizardModel wizardModel,object view): base(view)
 		{
+			_utils = new Utils();
 			_isValid = false;
 			_displayName = "Login";
 			_view =(UserControl)view;
 			_wizardModel = wizardModel;
 			_textMessageVisibility = "Collapsed";
 			_passwordBoxVisibility = "Visible";
+			var userDetails = _utils.GetStoredUserDetails();
+			if (userDetails != null)
+			{
+				_wizardModel.UserCredentials.ServiceUrl = userDetails.ServiceUrl;
+				_wizardModel.UserCredentials.UserName = userDetails.UserName;
+			}
 		}
 
 		public override string DisplayName
@@ -154,6 +162,7 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				var passwordBox = parameter as PasswordBox;
 				var password = passwordBox?.Password;
+				var organizationService = new OrganizationService();
 				if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 				{
 					_wizardModel.UserCredentials.UserName = UserName.TrimEnd().TrimStart();
@@ -165,12 +174,27 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						var statusCode = await Authentication.Login(_wizardModel.UserCredentials);
 						if (statusCode == HttpStatusCode.OK)
 						{
+							_wizardModel.UserCredentials.Password = string.Empty;
+							_utils.SetUserDetails(_wizardModel.UserCredentials);
 							IsValid = true;
 							ShowMessage(PluginResources.AuthenticationSuccess,"#00A8EB");
 
-							var utils = new Utils();
-							await utils.SetGsProjectsToWizard(_wizardModel, 1);
+							var filter = new ProjectFilter
+							{
+								PageSize = 50,
+								Page = 1
+							};
+							await _utils.SetGsProjectsToWizard(_wizardModel, filter);
 
+							var organizations =await organizationService.GetOrganizations();
+							_utils.SegOrganizationsToWizard(_wizardModel, organizations.OrderBy(o=>o.Name).ToList());
+							if (organizations?.Count > 0)
+							{
+								foreach (var organization in organizations)
+								{
+									_wizardModel?.Organizations.Add(organization);
+								}
+							}
 							_view.Dispatcher.Invoke(delegate { SendKeys.SendWait("{TAB}"); }, DispatcherPriority.ApplicationIdle);
 						}
 						else

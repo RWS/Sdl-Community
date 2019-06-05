@@ -313,13 +313,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 	    private bool IsValidVersion(string version)
 	    {
-		    if (string.IsNullOrEmpty(version))
-		    {
-			    ToggleCheckAllFiles(false);
+			if (string.IsNullOrEmpty(version))
+			{
 				return true;
-		    }
-		    if (int.TryParse(version, out _))
-		    {
+			}
+			if (int.TryParse(version, out _))
+			{
 			    return true;
 		    }
 
