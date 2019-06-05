@@ -104,6 +104,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			{
 				_searchText = value;
 				OnPropertyChanged(SearchText);
+				_wizardModel?.GsProjects?.Clear();
+				_wizardModel?.ProjectsForCurrentPage?.Clear();
 				_view.Dispatcher.Invoke(async () =>
 				{
 					await LoadProjectsForCurrentPage();
@@ -219,12 +221,19 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			get => _wizardModel?.SelectedOrganization;
 			set
 			{
-				_wizardModel.SelectedOrganization = value;
-				OnPropertyChanged(nameof(SelectedOrganization));
-				_view.Dispatcher.Invoke(async () =>
+				if (_wizardModel != null)
 				{
-					await LoadProjectsForCurrentPage();
-				}, DispatcherPriority.ContextIdle);
+					_wizardModel?.GsProjects?.Clear();
+					_wizardModel?.ProjectsForCurrentPage?.Clear();
+					_wizardModel.SelectedOrganization = value;
+
+					_view.Dispatcher.Invoke(async () =>
+					{
+						await LoadProjectsForCurrentPage();
+					}, DispatcherPriority.ContextIdle);
+				}
+				OnPropertyChanged(nameof(SelectedOrganization));
+
 			}
 		}
 
@@ -287,8 +296,6 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		{
 			try
 			{
-				_wizardModel?.GsProjects?.Clear();
-				_wizardModel?.ProjectsForCurrentPage?.Clear();
 				var utils = new Utils();
 				var filter = new ProjectFilter
 				{
