@@ -45,8 +45,17 @@ namespace Sdl.Community.GSVersionFetch.Helpers
 						{
 							gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
 						}
-						wizardModel.GsProjects?.Add(gsProject);
-						wizardModel.ProjectsForCurrentPage?.Add(gsProject);
+
+						var projectExistInWizard = wizardModel.GsProjects.FirstOrDefault(p => p.ProjectId.Equals(gsProject.ProjectId));
+						if (projectExistInWizard == null)
+						{
+							wizardModel.GsProjects?.Add(gsProject);
+						}
+						var projectExistInCurrentPage = wizardModel.ProjectsForCurrentPage.FirstOrDefault(p => p.ProjectId.Equals(gsProject.ProjectId));
+						if (projectExistInCurrentPage == null)
+						{
+							wizardModel.ProjectsForCurrentPage?.Add(gsProject);
+						}
 					}
 				}
 			}
