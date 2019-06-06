@@ -35,6 +35,8 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private ObservableCollection<KeyValuePair<string,Script>> _scriptsCollection = new ObservableCollection<KeyValuePair<string, Script>>();
 		private ObservableCollection<ImportScriptItemTemplate> _filesNameCollection = new ObservableCollection<ImportScriptItemTemplate>();
 
+		public static readonly Log Log = Log.Instance;
+
 		public ImportScriptPageViewModel(MainWindowViewModel mainWindowViewModel)
 		{
 			_mainWindowViewModel = mainWindowViewModel;
@@ -73,83 +75,113 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    }
 		private async void ImportScriptsToMaster()
 	    {
-		    var scriptsToBeImported = ScriptsCollection.Where(s => s.Value.IsSelected).Select(s =>s.Value).ToList();
-		    if (scriptsToBeImported.Count > 0)
-		    {
-			    foreach (var script in scriptsToBeImported)
-			    {
-				    script.IsSelected = false;
-				    script.ScriptStateAction = script.Active ? "Disable" : "Enable";
-				    script.RowColor = script.Active ? "Black" : "DarkGray";
-					await _scriptDb.AddNewScript(script);
-				    RemoveScriptFromGrid(script);
-			    }
+			try
+			{
+				var scriptsToBeImported = ScriptsCollection.Where(s => s.Value.IsSelected).Select(s => s.Value).ToList();
+				if (scriptsToBeImported.Count > 0)
+				{
+					foreach (var script in scriptsToBeImported)
+					{
+						script.IsSelected = false;
+						script.ScriptStateAction = script.Active ? "Disable" : "Enable";
+						script.RowColor = script.Active ? "Black" : "DarkGray";
+						await _scriptDb.AddNewScript(script);
+						RemoveScriptFromGrid(script);
+					}
 
-			    var masterScript = await _masterScriptDb.GetMasterScript();
-			    masterScript.Scripts.AddRange(scriptsToBeImported);
-			    await _masterScriptDb.UpdateScript(masterScript);
-			    //write masterscript on the disk
-			    ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
-				
-			    Message = "Scripts imported successfully";
-				MessageVisibility = "Visible";
-				Helpers.Ui.Select(GetObservableCollectionOfScripts(), false);
-		    }
-		    else
-		    {
-				 MessageBox.Show("Please select at least one script from the grid to import", "Warning",
-					MessageBoxButton.OK, MessageBoxImage.Warning);
+					var masterScript = await _masterScriptDb.GetMasterScript();
+					masterScript.Scripts.AddRange(scriptsToBeImported);
+					await _masterScriptDb.UpdateScript(masterScript);
+					//write masterscript on the disk
+					ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
+
+					Message = "Scripts imported successfully";
+					MessageVisibility = "Visible";
+					Helpers.Ui.Select(GetObservableCollectionOfScripts(), false);
+				}
+				else
+				{
+					MessageBox.Show("Please select at least one script from the grid to import", "Warning",
+					   MessageBoxButton.OK, MessageBoxImage.Warning);
+				}
 			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.ImportScript}: {Constants.Message}: {ex.Message}\n " +
+					$"{Constants.StackTrace}: {ex.StackTrace}\n {Constants.InnerException}: {ex.InnerException}");
+			}
+		}
 
-	    }
-		
-
-	    private void RemoveScriptFromGrid(Script script)
-	    {
-		    var scriptToBeRemoved = ScriptsCollection.FirstOrDefault(s => s.Value.ScriptId.Equals(script.ScriptId));
-		    ScriptsCollection.Remove(scriptToBeRemoved);
-	    }
+		private void RemoveScriptFromGrid(Script script)
+		{
+			try
+			{
+				var scriptToBeRemoved = ScriptsCollection.FirstOrDefault(s => s.Value.ScriptId.Equals(script.ScriptId));
+				ScriptsCollection.Remove(scriptToBeRemoved);
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.RemoveScriptFromGrid}: {Constants.Message}: {ex.Message}\n " +
+					$"{Constants.StackTrace}: {ex.StackTrace}\n {Constants.InnerException}: {ex.InnerException}");
+			}
+		}
 
 	    private void ChangeState(object row)
 	    {
-		    var script = ((KeyValuePair<string, Script>)row).Value;
-		    if (script == null) return;
-		    Helpers.Ui.SetStateColors(script);
-		    ProcessScript.ChangeScriptState(script);
+			try
+			{
+				var script = ((KeyValuePair<string, Script>)row).Value;
+				if (script == null) return;
+				Helpers.Ui.SetStateColors(script);
+				ProcessScript.ChangeScriptState(script);
 
-		    var scriptToBeUpdated = ScriptsCollection.FirstOrDefault(s => s.Value.ScriptId.Equals(script.ScriptId)).Value;
-		    scriptToBeUpdated.Active = script.Active;
-		    scriptToBeUpdated.Text = script.Text;
-		    scriptToBeUpdated.RowColor = script.RowColor;
-		    scriptToBeUpdated.ScriptStateAction = script.ScriptStateAction;
-	    }
+				var scriptToBeUpdated = ScriptsCollection.FirstOrDefault(s => s.Value.ScriptId.Equals(script.ScriptId)).Value;
+				scriptToBeUpdated.Active = script.Active;
+				scriptToBeUpdated.Text = script.Text;
+				scriptToBeUpdated.RowColor = script.RowColor;
+				scriptToBeUpdated.ScriptStateAction = script.ScriptStateAction;
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.ChangeState}: {Constants.Message}: {ex.Message}\n " +
+					$"{Constants.StackTrace}: {ex.StackTrace}\n {Constants.InnerException}: {ex.InnerException}");
+			}
+		}
 
 		private void RemoveFile(object file)
 	    {
-		    if (file != null)
-		    {
-			    var filePath = (string) file;
-			    var fileName = Path.GetFileNameWithoutExtension(filePath);
-			    var fileToRemove = FilesNameCollection.FirstOrDefault(f => f.FilePath.Equals(filePath));
-			    if (fileToRemove != null)
-			    {
-				    FilesNameCollection.Remove(fileToRemove);
-					//remove the scripts which coresponds with the removed file from the grid
-				    var scriptsToBeRemoved = ScriptsCollection.Where(s => s.Key.Equals(fileName)).ToList();
-				    foreach (var script in scriptsToBeRemoved)
-				    {
-					    ScriptsCollection.Remove(script);
-				    }
-					
-			    }
-			    if (ScriptsCollection.Count.Equals(0))
-			    {
-				    MessageVisibility = "Hidden";
+			try
+			{
+				if (file != null)
+				{
+					var filePath = (string)file;
+					var fileName = Path.GetFileNameWithoutExtension(filePath);
+					var fileToRemove = FilesNameCollection.FirstOrDefault(f => f.FilePath.Equals(filePath));
+					if (fileToRemove != null)
+					{
+						FilesNameCollection.Remove(fileToRemove);
+						//remove the scripts which coresponds with the removed file from the grid
+						var scriptsToBeRemoved = ScriptsCollection.Where(s => s.Key.Equals(fileName)).ToList();
+						foreach (var script in scriptsToBeRemoved)
+						{
+							ScriptsCollection.Remove(script);
+						}
 
+					}
+					if (ScriptsCollection.Count.Equals(0))
+					{
+						MessageVisibility = "Hidden";
+
+					}
 				}
-		    }
-		    SetGridVisibility();
-	    }
+				SetGridVisibility();
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.RemoveFile}: {Constants.Message}: {ex.Message}\n " +
+					$"{Constants.StackTrace}: {ex.StackTrace}\n {Constants.InnerException}: {ex.InnerException}");
+			}
+		}
 
 		private async void HandlePreviewDrop(object dropedFile)
 	    {

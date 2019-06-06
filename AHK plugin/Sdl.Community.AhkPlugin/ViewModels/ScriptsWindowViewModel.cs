@@ -35,6 +35,8 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private bool _selectAll;
 		private readonly ScriptDb _scriptsDb;
 		private readonly MasterScriptDb _masterScriptDb;
+
+		public static readonly Log Log = Log.Instance;
 		
 		public ScriptsWindowViewModel(MainWindowViewModel mainWindowViewModel)
 		{
@@ -43,11 +45,18 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 		public ScriptsWindowViewModel()
 		{
-			 _scriptsDb = new ScriptDb();
+			_scriptsDb = new ScriptDb();
 			_masterScriptDb = new MasterScriptDb();
-			var savedScripts = _masterScriptDb.GetMasterScript().Result.Scripts;
-
-			ScriptsCollection = new ObservableCollection<Script>(savedScripts);
+			try
+			{
+				var savedScripts = _masterScriptDb.GetMasterScript().Result.Scripts;
+				ScriptsCollection = new ObservableCollection<Script>(savedScripts);
+			}
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"{Constants.GetMasterScript}: {Constants.Message}: {ex.Message}\n " +
+					$"{Constants.StackTrace}: {ex.StackTrace}\n {Constants.InnerException}: {ex.InnerException}");
+			}
 		}
 
 		public ICommand AddCommand => _addCommand ?? (_addCommand = new CommandHandler(AddScriptAction, true));
@@ -66,50 +75,67 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		{
 			Helpers.Ui.Select(ScriptsCollection,SelectAll);
 		}
+
 		private async void ChangePath()
 		{
-			var folderDialog = new FolderSelectDialog
+			try
 			{
-				Title = "Select a folder where the master script should be saved"
-			};
-			var folderPath = string.Empty;
-			if (folderDialog.ShowDialog())
-			{
-				folderPath = folderDialog.FileName;
-			}
-			if (!string.IsNullOrEmpty(folderPath))
-			{
-				var masterScript = await _masterScriptDb.GetMasterScript();
-				masterScript.Location = folderPath;
-				await _masterScriptDb.UpdateScript(masterScript);
+				var folderDialog = new FolderSelectDialog
+				{
+					Title = "Select a folder where the master script should be saved"
+				};
+				var folderPath = string.Empty;
+				if (folderDialog.ShowDialog())
+				{
+					folderPath = folderDialog.FileName;
+				}
+				if (!string.IsNullOrEmpty(folderPath))
+				{
+					var masterScript = await _masterScriptDb.GetMasterScript();
+					masterScript.Location = folderPath;
+					await _masterScriptDb.UpdateScript(masterScript);
 
-				ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
+					ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.ChangePath}: {Constants.Message}: {ex.Message}\n " +
+					$"{Constants.StackTrace}: {ex.StackTrace}\n {Constants.InnerException}: {ex.InnerException}");
 			}
 		}
 
 		private void ExportScripts()
 		{
-			if (ScriptsCollection.Any(s => s.IsSelected))
+			try
 			{
-				var folderDialog = new SaveFileDialog
+				if (ScriptsCollection.Any(s => s.IsSelected))
 				{
-					Title = @"Select a location where the script should be exported",
-					DefaultExt = "ahk"
-				};
-				if (folderDialog.ShowDialog() == DialogResult.OK)
+					var folderDialog = new SaveFileDialog
+					{
+						Title = @"Select a location where the script should be exported",
+						DefaultExt = "ahk"
+					};
+					if (folderDialog.ShowDialog() == DialogResult.OK)
+					{
+						var folderPath = folderDialog.FileName;
+						var selectedScripts = ScriptsCollection.Where(s => s.IsSelected).ToList();
+						ProcessScript.ExportScript(Path.Combine(folderPath, folderDialog.FileName), selectedScripts);
+						MessageBox.Show("Script was exported successfully to selected location", "",
+							MessageBoxButton.OK, MessageBoxImage.Information);
+						Helpers.Ui.Select(ScriptsCollection, false);
+					}
+				}
+				else
 				{
-					var folderPath = folderDialog.FileName;
-					var selectedScripts = ScriptsCollection.Where(s => s.IsSelected).ToList();
-					ProcessScript.ExportScript(Path.Combine(folderPath, folderDialog.FileName), selectedScripts);
-					MessageBox.Show("Script was exported successfully to selected location", "",
-						MessageBoxButton.OK, MessageBoxImage.Information);
-					Helpers.Ui.Select(ScriptsCollection, false);
+					MessageBox.Show("Please select at least one script from the grid to export", "Warning",
+						MessageBoxButton.OK, MessageBoxImage.Warning);
 				}
 			}
-			else
+			catch (Exception ex)
 			{
-				MessageBox.Show("Please select at least one script from the grid to export", "Warning",
-					MessageBoxButton.OK, MessageBoxImage.Warning);
+				Log.Logger.Error($"{Constants.ExportScripts}: {Constants.Message}: {ex.Message}\n " +
+					$"{Constants.StackTrace}: {ex.StackTrace}\n {Constants.InnerException}: {ex.InnerException}");
 			}
 		}
 
@@ -118,30 +144,37 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 		private void RemoveScripts()
 		{
-			if (ScriptsCollection.Any(s => s.IsSelected))
+			try
 			{
-				var messageResult = MessageBox.Show("Are you sure you want to delete selected scripts?", "Confirmation",
-					MessageBoxButton.OKCancel, MessageBoxImage.Question);
-				if (messageResult != MessageBoxResult.OK) return;
-				var scriptsToBeRemoved = ScriptsCollection.Where(s => s.IsSelected).ToList();
-				//remove from UI
-				foreach (var script in scriptsToBeRemoved)
+				if (ScriptsCollection.Any(s => s.IsSelected))
 				{
-					ScriptsCollection.Remove(script);
+					var messageResult = MessageBox.Show("Are you sure you want to delete selected scripts?", "Confirmation",
+						MessageBoxButton.OKCancel, MessageBoxImage.Question);
+					if (messageResult != MessageBoxResult.OK) return;
+					var scriptsToBeRemoved = ScriptsCollection.Where(s => s.IsSelected).ToList();
+					//remove from UI
+					foreach (var script in scriptsToBeRemoved)
+					{
+						ScriptsCollection.Remove(script);
+					}
+					//Remove from db
+					_scriptsDb.RemoveScripts(scriptsToBeRemoved);
+					_masterScriptDb.RemoveScripts(scriptsToBeRemoved);
+					//write masterscript on the disk
+					var masterScript = _masterScriptDb.GetMasterScript().Result;
+					ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
 				}
-				//Remove from db
-				_scriptsDb.RemoveScripts(scriptsToBeRemoved);
-				_masterScriptDb.RemoveScripts(scriptsToBeRemoved);
-				//write masterscript on the disk
-				var masterScript = _masterScriptDb.GetMasterScript().Result;
-				ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
+				else
+				{
+					MessageBox.Show("Please select at least one script from the grid to be removed", "Warning",
+					   MessageBoxButton.OK, MessageBoxImage.Warning);
+				}
 			}
-			else
+			catch (Exception ex)
 			{
-				 MessageBox.Show("Please select at least one script from the grid to be removed", "Warning",
-					MessageBoxButton.OK, MessageBoxImage.Warning);
+				Log.Logger.Error($"{Constants.RemoveScripts}: {Constants.Message}: {ex.Message}\n " +
+					$"{Constants.StackTrace}: {ex.StackTrace}\n {Constants.InnerException}: {ex.InnerException}");
 			}
-			
 		}
 
 		private void AddScriptAction()
@@ -151,12 +184,20 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 		private void ChangeState(object row)
 		{
-			var script = (Script) row;
-			if (script != null)
+			try
 			{
-				Helpers.Ui.SetStateColors(script);
-				ProcessScript.ChangeScriptState(script);
-				ProcessScript.SaveScriptToMaster(script);
+				var script = (Script)row;
+				if (script != null)
+				{
+					Helpers.Ui.SetStateColors(script);
+					ProcessScript.ChangeScriptState(script);
+					ProcessScript.SaveScriptToMaster(script);
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.ChangeState}: {Constants.Message}: {ex.Message}\n " +
+					$"{Constants.StackTrace}: {ex.StackTrace}\n {Constants.InnerException}: {ex.InnerException}");
 			}
 		}
 
