@@ -6,7 +6,25 @@
              xmlns:viewModel="clr-namespace:Sdl.Community.SdiViewer"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModel:SdiControlViewModel}">
-    <Grid>
-		<TextBlock Text="{Binding Test}"/>
-    </Grid>
+	<UserControl.Resources>
+		<ResourceDictionary Source="DataGridStyle2.xaml"/>
+	</UserControl.Resources>
+	<StackPanel>
+		<TextBlock FontFamily="Segoe UI" Text="Document structure information" Height="auto" FontSize="14" FontWeight="Bold" Foreground="#0D1E2D" Margin="0,0,0,10"/>
+		<DataGrid 
+			ItemsSource="{Binding Path=PropertiesCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			GridLinesVisibility="None"
+			IsReadOnly="True"
+			Style="{StaticResource FilesGridStyle}">
+			<DataGrid.RowStyle>
+				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
+			</DataGrid.RowStyle>
+			<DataGrid.Columns>
+				<DataGridTextColumn Width="*" Header="Location" Binding="{Binding DisplayName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+				<DataGridTextColumn Width="auto" Header="Code" Binding="{Binding Code,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+				<DataGridTextColumn Width="*"  Header="Description" Binding="{Binding Description,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+			</DataGrid.Columns>
+		</DataGrid>
+	</StackPanel>
+	
 </UserControl>

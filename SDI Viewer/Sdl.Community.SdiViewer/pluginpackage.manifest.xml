@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>SDI Viewer</PlugInName>
+  <PlugInName>DSI Viewer</PlugInName>
   <Version>1.0.0.0</Version>
-  <Description>SDI Viewer</Description>
+  <Description>DSI Viewer</Description>
   <Author>SDL Community </Author>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>

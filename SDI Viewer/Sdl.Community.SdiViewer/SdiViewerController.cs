@@ -6,9 +6,9 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace Sdl.Community.SdiViewer
 {
 	[ViewPart(
-		Id = "SDI Viewer",
-		Name = "SDI Viewer",
-		Description = "SDI Viewer",
+		Id = "DSI Viewer",
+		Name = "DSI Viewer",
+		Description = "DSI Viewer",
 		Icon = "")]
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
 	public class SdiViewerController : AbstractViewPartController
