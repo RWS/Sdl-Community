@@ -9,9 +9,9 @@
 	<UserControl.Resources>
 		<ResourceDictionary Source="DataGridStyle2.xaml"/>
 	</UserControl.Resources>
-	<StackPanel>
-		<TextBlock FontFamily="Segoe UI" Text="Document structure information" Height="auto" FontSize="14" FontWeight="Bold" Foreground="#0D1E2D" Margin="0,0,0,10"/>
-		<DataGrid 
+	<StackPanel >
+		<TextBlock Padding="3"  FontFamily="Segoe UI" Text="Document structure information" Height="auto" FontSize="14" FontWeight="Bold" Foreground="#0D1E2D" Margin="0,0,0,10"/>
+		<DataGrid Padding="3" Margin="5"
 			ItemsSource="{Binding Path=PropertiesCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			GridLinesVisibility="None"
 			IsReadOnly="True"
