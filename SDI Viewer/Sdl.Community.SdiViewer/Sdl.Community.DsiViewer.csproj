@@ -109,6 +109,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ds.ico" />
     <EmbeddedResource Include="PluginResources.resx" />
     <Content Include="pluginpackage.manifest.xml" />
     <EmbeddedResource Include="DsiControl.resx">

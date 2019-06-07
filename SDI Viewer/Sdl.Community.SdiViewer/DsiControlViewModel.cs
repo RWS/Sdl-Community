@@ -21,8 +21,6 @@ namespace Sdl.Community.DsiViewer
 			if (activeDoc != null)
 			{
 				activeDoc.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
-				var activeFile = activeDoc.ActiveFile;
-				_editorController.ActiveDocument.SetActiveSegmentPair(activeFile, "1");
 			}
 		}
 

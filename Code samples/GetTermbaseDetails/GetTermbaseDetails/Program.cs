@@ -21,8 +21,9 @@ namespace GetTermbaseDetails
 				"",
 				new Uri("http://gs2017dev.sdl.com"),
 				GroupShareClient.AllScopes).Result;
-			var projectRequest = new ProjectsRequest("/Test API",true, 1) { Filter = { ProjectName = "a" } };
-			var result =  gsClient.Project.GetProject(projectRequest).Result;
+			var contepts = gsClient.Terminology.GetConcept(new ConceptResponse("GermanCharacters", "1")).Result;
+			//var projectRequest = new ProjectsRequest("/Test API",true, 1) { Filter = { ProjectName = "a" } };
+			//var result =  gsClient.Project.GetProject(projectRequest).Result;
 
 
 		}
