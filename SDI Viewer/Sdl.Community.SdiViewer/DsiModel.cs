@@ -1,6 +1,6 @@
-﻿namespace Sdl.Community.SdiViewer
+﻿namespace Sdl.Community.DsiViewer
 {
-	public class SdiModel: ModelBase
+	public class DsiModel: ModelBase
 	{
 		private string _displayName;
 		private string _code;

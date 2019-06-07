@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.SdiViewer
+﻿namespace Sdl.Community.DsiViewer
 {
 	partial class SdiControl
 	{

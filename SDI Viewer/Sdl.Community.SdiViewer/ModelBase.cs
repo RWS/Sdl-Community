@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Sdl.Community.SdiViewer
+namespace Sdl.Community.DsiViewer
 {
 	public class ModelBase:INotifyPropertyChanged
 	{

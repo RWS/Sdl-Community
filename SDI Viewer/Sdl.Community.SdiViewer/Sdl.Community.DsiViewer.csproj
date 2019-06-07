@@ -8,8 +8,8 @@
     <ProjectGuid>{35B4E386-002D-41BF-8B20-43E758B8250A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.SdiViewer</RootNamespace>
-    <AssemblyName>Sdl.Community.SdiViewer</AssemblyName>
+    <RootNamespace>Sdl.Community.DsiViewer</RootNamespace>
+    <AssemblyName>Sdl.Community.DsiViewer</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>
@@ -92,27 +92,27 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DsiControlViewModel.cs" />
     <Compile Include="ModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="SdiControl.cs">
+    <Compile Include="DsiControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SdiControl.Designer.cs">
-      <DependentUpon>SdiControl.cs</DependentUpon>
+    <Compile Include="DsiControl.Designer.cs">
+      <DependentUpon>DsiControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="SdiControlViewModel.cs" />
-    <Compile Include="SdiModel.cs" />
-    <Compile Include="SdiViewerController.cs" />
-    <Compile Include="SdiWpfControl.xaml.cs">
-      <DependentUpon>SdiWpfControl.xaml</DependentUpon>
+    <Compile Include="DsiModel.cs" />
+    <Compile Include="DsiViewerController.cs" />
+    <Compile Include="DsiWpfControl.xaml.cs">
+      <DependentUpon>DsiWpfControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PluginResources.resx" />
     <Content Include="pluginpackage.manifest.xml" />
-    <EmbeddedResource Include="SdiControl.resx">
-      <DependentUpon>SdiControl.cs</DependentUpon>
+    <EmbeddedResource Include="DsiControl.resx">
+      <DependentUpon>DsiControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +126,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SdiWpfControl.xaml">
+    <Page Include="DsiWpfControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -3,7 +3,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.SdiViewer
+namespace Sdl.Community.DsiViewer
 {
 	[ViewPart(
 		Id = "DSI Viewer",
@@ -11,7 +11,7 @@ namespace Sdl.Community.SdiViewer
 		Description = "DSI Viewer",
 		Icon = "")]
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
-	public class SdiViewerController : AbstractViewPartController
+	public class DsiViewerController : AbstractViewPartController
 	{
 		private readonly SdiControl _control = new SdiControl(); 
 		protected override Control GetContentControl()
