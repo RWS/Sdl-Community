@@ -20,9 +20,16 @@
 				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
-				<DataGridTextColumn Width="*" Header="Location" Binding="{Binding DisplayName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+				<DataGridTextColumn Width="auto" Header="Location" Binding="{Binding DisplayName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 				<DataGridTextColumn Width="auto" Header="Code" Binding="{Binding Code,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-				<DataGridTextColumn Width="*"  Header="Description" Binding="{Binding Description,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+				<DataGridTextColumn Width="*"  Header="Description" 
+									Binding="{Binding Description,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+					<DataGridTextColumn.ElementStyle>
+						<Style>
+							<Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+						</Style>
+					</DataGridTextColumn.ElementStyle>
+				</DataGridTextColumn>
 			</DataGrid.Columns>
 		</DataGrid>
 	</StackPanel>
