@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.TuToTm.View;
+using Sdl.Community.TuToTm.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -21,7 +22,12 @@ namespace Sdl.Community.TuToTm
 	{
 		protected override void Execute()
 		{
-			var window = new MainWindow();
+			var viewModel = new MainWindowViewModel();
+			var window = new MainWindow
+			{
+				DataContext = viewModel
+			};
+			
 			window.Show();
 		}
 	}

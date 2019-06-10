@@ -19,7 +19,6 @@ namespace Sdl.Community.TuToTm.Commands
 		public CommandHandler(bool canExecute)
 		{
 			_canExecute = canExecute;
-
 		}
 
 		public bool CanExecute(object parameter)
