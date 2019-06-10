@@ -1,0 +1,135 @@
+﻿<Window x:Class="Sdl.Community.TuToTm.View.MainWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModel="clr-namespace:Sdl.Community.TuToTm.ViewModel"
+             xmlns:uiHelpers="clr-namespace:Sdl.Community.TuToTm.UiHelpers"
+			 WindowStartupLocation="CenterScreen"
+			 WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResizeWithGrip"
+             mc:Ignorable="d" 
+			 Title="TU to TM"
+             d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="950" MinWidth="750" d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
+				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
+				<ResourceDictionary Source="../UiHelpers/General.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			
+			<uiHelpers:ImageToBitmapImageConverter x:Key="ImageConverter"/>
+
+			<Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+				<Setter Property="Padding" Value="5"/>
+				<Setter Property="FontFamily" Value="Segoe UI"/>
+			</Style>
+
+			<Style x:Key="TextboxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+				<Setter Property="TextWrapping" Value="Wrap"/>
+				<Setter Property="FontFamily" Value="Segoe UI"/>
+				<Setter Property="Height" Value="50"/>
+				<Setter Property="Width" Value="300"/>
+			</Style>
+		</ResourceDictionary>
+	</Window.Resources>
+	<Border Style="{StaticResource WindowControlBorderStyle}" >
+		<Grid Margin="1,0,0,0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="auto" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="35" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="auto" />
+			</Grid.RowDefinitions>
+
+			<!-- BORDER CONTROL -->
+			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top" Grid.ColumnSpan="2"/>
+
+			<!-- CURRENT PAGE AREA -->
+			<Border Background="White" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Padding="5">
+				<DataGrid ItemsSource="{Binding TmsCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				          SelectionMode="Extended"
+				          SelectionUnit="FullRow"
+				          Style="{StaticResource FilesGridStyle}"
+				          IsReadOnly="True"
+				          GridLinesVisibility="None"
+				          VerticalScrollBarVisibility="Auto"
+				          VerticalContentAlignment="Center">
+					<DataGrid.RowStyle>
+						<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
+					</DataGrid.RowStyle>
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Width="Auto">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									          Margin="4,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn  Header="Tm name" SortMemberPath="Name" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal" >
+										<Image Source="../Resources/TranslationMemory.ico" Width="20" Height="20" />
+										<TextBlock Text="{Binding Name}" Margin="5"  VerticalAlignment="Center"/>
+									</StackPanel>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Width="auto" Header="Language pair">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<DockPanel>
+										<Image DockPanel.Dock="Left" Source="{Binding Path=SourceFlag, Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
+										<Image Source="../Resources/arrow_right_blue.png" VerticalAlignment="Center" Width="10" Height="15" Margin="5"/>
+										<Image DockPanel.Dock="Left" Source="{Binding Path=TargetFlag, Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
+									</DockPanel>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTextColumn Header="Description" Width="auto" Binding="{Binding Description}" >
+						<DataGridTextColumn.ElementStyle>
+							<Style>
+								<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+							</Style>
+						</DataGridTextColumn.ElementStyle>
+						</DataGridTextColumn>
+							<DataGridTextColumn Width="*"  Header="Path" Binding="{Binding TmPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+							<DataGridTextColumn.ElementStyle>
+								<Style>
+									<Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+								</Style>
+							</DataGridTextColumn.ElementStyle>
+						</DataGridTextColumn>
+						<DataGridTemplateColumn Width="auto">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<Button Style="{DynamicResource NavigationButtonsStyle}" Command="{Binding Path=DataContext.RemoveTmCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}">
+										<Image Width="20" Height="20" Source="../Resources/Remove.ico"/>
+									</Button>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+			</Border>
+			<StackPanel Grid.Column="0" Grid.Row="2" Width="auto">
+				<TextBlock Text="Please fill TU details" FontFamily="Segoe UI" FontSize="15" FontWeight="Bold" Foreground="#0D1E2D" Margin="10"/>
+				<WrapPanel Orientation="Horizontal" Margin="5,0,0,10">
+					<TextBlock Text="Source"  FontFamily="Segoe UI" VerticalAlignment="Center"/>
+					<TextBox Text="{Binding SourceText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" SpellCheck.IsEnabled="True" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
+					<TextBlock Text="Target"  FontFamily="Segoe UI" VerticalAlignment="Center"/>
+					<TextBox Text="{Binding TargetText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" SpellCheck.IsEnabled="True" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
+				</WrapPanel>
+			</StackPanel>
+			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding UpdateCommand}" Grid.Row="2" Grid.Column="1" Height="30"
+			        Content="Update TM" Margin="5,20,20,15" HorizontalAlignment="Right" HorizontalContentAlignment="Right"/>
+		</Grid>
+	</Border>
+</Window>
