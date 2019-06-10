@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TuToTm.Model
 {
@@ -28,7 +29,7 @@ namespace Sdl.Community.TuToTm.Model
 
 		public string SourceLanguage { get; set; }
 		public string TargetLanguage { get; set; }
-
+		public FileBasedTranslationMemory FileBasedTranslationMemory { get; set; }
 		public string TmPath { get; set; }
 		public Image SourceFlag { get; set; }
 		public Image TargetFlag { get; set; }

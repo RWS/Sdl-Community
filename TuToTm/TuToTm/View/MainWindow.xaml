@@ -51,9 +51,10 @@
 
 			<!-- CURRENT PAGE AREA -->
 			<Border Background="White" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Padding="5">
-				<DataGrid ItemsSource="{Binding TmsCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-				          SelectionMode="Extended"
+				<uiHelpers:CustomDataGrid ItemsSource="{Binding TmsCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				          SelectionMode="Single"
 				          SelectionUnit="FullRow"
+						  SelectedItemsList="{Binding SelectedTms, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				          Style="{StaticResource FilesGridStyle}"
 				          IsReadOnly="True"
 				          GridLinesVisibility="None"
@@ -117,15 +118,15 @@
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
 					</DataGrid.Columns>
-				</DataGrid>
+				</uiHelpers:CustomDataGrid>
 			</Border>
 			<StackPanel Grid.Column="0" Grid.Row="2" Width="auto">
 				<TextBlock Text="Please fill TU details" FontFamily="Segoe UI" FontSize="15" FontWeight="Bold" Foreground="#0D1E2D" Margin="10"/>
 				<WrapPanel Orientation="Horizontal" Margin="5,0,0,10">
 					<TextBlock Text="Source"  FontFamily="Segoe UI" VerticalAlignment="Center"/>
-					<TextBox Text="{Binding SourceText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" SpellCheck.IsEnabled="True" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
+					<TextBox Text="{Binding SourceText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
 					<TextBlock Text="Target"  FontFamily="Segoe UI" VerticalAlignment="Center"/>
-					<TextBox Text="{Binding TargetText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" SpellCheck.IsEnabled="True" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
+					<TextBox Text="{Binding TargetText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
 				</WrapPanel>
 			</StackPanel>
 			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding UpdateCommand}" Grid.Row="2" Grid.Column="1" Height="30"
