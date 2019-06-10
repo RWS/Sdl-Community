@@ -9,7 +9,7 @@
 			 WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResizeWithGrip"
              mc:Ignorable="d" 
 			 Title="TU to TM"
-             d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="950" d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}">
+             d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="950" MinWidth="750" d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -25,26 +25,34 @@
 				<Setter Property="Padding" Value="5"/>
 				<Setter Property="FontFamily" Value="Segoe UI"/>
 			</Style>
+
+			<Style x:Key="TextboxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+				<Setter Property="TextWrapping" Value="Wrap"/>
+				<Setter Property="FontFamily" Value="Segoe UI"/>
+				<Setter Property="Height" Value="50"/>
+				<Setter Property="Width" Value="300"/>
+			</Style>
 		</ResourceDictionary>
 	</Window.Resources>
 	<Border Style="{StaticResource WindowControlBorderStyle}" >
 		<Grid Margin="1,0,0,0">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="auto" />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="35" />
 				<RowDefinition Height="*" />
+				<RowDefinition Height="auto" />
 			</Grid.RowDefinitions>
 
 			<!-- BORDER CONTROL -->
-			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top" />
+			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top" Grid.ColumnSpan="2"/>
 
 			<!-- CURRENT PAGE AREA -->
-			<Border Background="White" Grid.Column="0" Grid.Row="1">
+			<Border Background="White" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Padding="5">
 				<DataGrid ItemsSource="{Binding TmsCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				          SelectionMode="Extended"
-				          Padding="5"
 				          SelectionUnit="FullRow"
 				          Style="{StaticResource FilesGridStyle}"
 				          IsReadOnly="True"
@@ -111,6 +119,17 @@
 					</DataGrid.Columns>
 				</DataGrid>
 			</Border>
+			<StackPanel Grid.Column="0" Grid.Row="2" Width="auto">
+				<TextBlock Text="Please fill TU details" FontFamily="Segoe UI" FontSize="15" FontWeight="Bold" Foreground="#0D1E2D" Margin="10"/>
+				<WrapPanel Orientation="Horizontal" Margin="5,0,0,10">
+					<TextBlock Text="Source"  FontFamily="Segoe UI" VerticalAlignment="Center"/>
+					<TextBox Text="{Binding SourceText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" SpellCheck.IsEnabled="True" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
+					<TextBlock Text="Target"  FontFamily="Segoe UI" VerticalAlignment="Center"/>
+					<TextBox Text="{Binding TargetText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" SpellCheck.IsEnabled="True" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
+				</WrapPanel>
+			</StackPanel>
+			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding UpdateCommand}" Grid.Row="2" Grid.Column="1" Height="30"
+			        Content="Update TM" Margin="5,20,20,15" HorizontalAlignment="Right" HorizontalContentAlignment="Right"/>
 		</Grid>
 	</Border>
 </Window>

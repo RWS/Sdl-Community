@@ -15,6 +15,9 @@ namespace Sdl.Community.TuToTm.ViewModel
 	{
 		private ObservableCollection<TmDetails> _tmCollection;
 		private ICommand _removeTmCommand;
+		private string _sourceText;
+		private string _targetText;
+
 
 		public MainWindowViewModel()
 		{
@@ -34,6 +37,33 @@ namespace Sdl.Community.TuToTm.ViewModel
 			{
 				_tmCollection = value;
 				OnPropertyChanged(nameof(TmsCollection));
+			}
+		}
+
+		public string SourceText
+		{
+			get => _sourceText;
+			set
+			{
+				if (_sourceText == value)
+				{
+					return;
+				}
+				_sourceText = value;
+				OnPropertyChanged(nameof(SourceText));
+			}
+		}
+		public string TargetText
+		{
+			get => _targetText;
+			set
+			{
+				if (_targetText == value)
+				{
+					return;
+				}
+				_targetText = value;
+				OnPropertyChanged(nameof(TargetText));
 			}
 		}
 

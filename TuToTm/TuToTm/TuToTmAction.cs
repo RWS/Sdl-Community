@@ -1,4 +1,5 @@
-﻿using Sdl.Community.TuToTm.View;
+﻿using System.Windows.Forms.Integration;
+using Sdl.Community.TuToTm.View;
 using Sdl.Community.TuToTm.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -27,7 +28,7 @@ namespace Sdl.Community.TuToTm
 			{
 				DataContext = viewModel
 			};
-			
+			ElementHost.EnableModelessKeyboardInterop(window);
 			window.Show();
 		}
 	}
