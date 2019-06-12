@@ -42,6 +42,8 @@
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="35" />
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
 				<RowDefinition Height="*" />
 				<RowDefinition Height="auto" />
 			</Grid.RowDefinitions>
@@ -50,9 +52,17 @@
 			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top" Grid.ColumnSpan="2"/>
 
 			<!-- CURRENT PAGE AREA -->
-			<Border Background="White" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Padding="5">
+			<TextBlock Grid.Row="1" Margin="0,5,0,0" Grid.ColumnSpan="2" Grid.Column="0" FontFamily="Segoe UI" FontSize="20" TextAlignment="Center"
+			           Text="{Binding TextMessage}"
+			           Foreground="{Binding TextMessageBrush}"
+			           Visibility="{Binding TextMessageVisibility}"/>
+			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding AddCommand}" Grid.Row="2" Grid.Column="1" Height="30"
+			        Content="Add TM" Margin="5,20,20,5" Width="75" HorizontalAlignment="Right"/>
+			
+			<Border Background="White" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Padding="5">
 				<DataGrid ItemsSource="{Binding TmsCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-				          SelectionMode="Extended"
+				          SelectionMode="Single"
+						  SelectedItem="{Binding SelectedTm}"
 				          SelectionUnit="FullRow"
 				          Style="{StaticResource FilesGridStyle}"
 				          IsReadOnly="True"
@@ -119,17 +129,18 @@
 					</DataGrid.Columns>
 				</DataGrid>
 			</Border>
-			<StackPanel Grid.Column="0" Grid.Row="2" Width="auto">
+			
+			<StackPanel Grid.Column="0" Grid.Row="4" Width="auto">
 				<TextBlock Text="Please fill TU details" FontFamily="Segoe UI" FontSize="15" FontWeight="Bold" Foreground="#0D1E2D" Margin="10"/>
 				<WrapPanel Orientation="Horizontal" Margin="5,0,0,10">
 					<TextBlock Text="Source"  FontFamily="Segoe UI" VerticalAlignment="Center"/>
-					<TextBox Text="{Binding SourceText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" SpellCheck.IsEnabled="True" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
+					<TextBox Text="{Binding SourceText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
 					<TextBlock Text="Target"  FontFamily="Segoe UI" VerticalAlignment="Center"/>
-					<TextBox Text="{Binding TargetText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" SpellCheck.IsEnabled="True" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
+					<TextBox Text="{Binding TargetText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
 				</WrapPanel>
 			</StackPanel>
-			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding UpdateCommand}" Grid.Row="2" Grid.Column="1" Height="30"
-			        Content="Update TM" Margin="5,20,20,15" HorizontalAlignment="Right" HorizontalContentAlignment="Right"/>
+			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding UpdateCommand}" Grid.Row="4" Grid.Column="1" Height="30"
+			        Content="Update TM" Margin="5,20,20,15" HorizontalAlignment="Right"/>
 		</Grid>
 	</Border>
 </Window>
