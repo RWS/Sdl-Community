@@ -34,12 +34,22 @@ namespace Sdl.Community.DsiViewer
 			{
 				foreach (var context in contexts.Contexts)
 				{
+					var color = context.DisplayColor;
+
 					var sdiModel = new DsiModel
 					{
 						DisplayName = context.DisplayName,
 						Description = context.Description,
-						Code = context.DisplayCode
+						Code = context.DisplayCode,
 					};
+					if (color.Name == "0") // it doesn't have a color set
+					{
+						sdiModel.RowColor ="White";
+					}
+					else
+					{
+						sdiModel.RowColor = "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
+					}
 					PropertiesCollection.Add(sdiModel);
 				}
 			}

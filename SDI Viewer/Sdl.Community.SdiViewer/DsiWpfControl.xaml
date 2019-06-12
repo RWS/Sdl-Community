@@ -17,7 +17,10 @@
 			IsReadOnly="True"
 			Style="{StaticResource FilesGridStyle}">
 			<DataGrid.RowStyle>
-				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
+				
+				<Style TargetType="DataGridRow">
+					<Setter Property="Background" Value="{Binding RowColor}" />
+				</Style>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
 				<DataGridTextColumn Width="auto" Header="Location" Binding="{Binding DisplayName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
