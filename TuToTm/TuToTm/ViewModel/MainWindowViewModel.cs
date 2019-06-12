@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Media;
 using Sdl.Community.TuToTm.Commands;
 using Sdl.Community.TuToTm.Helpers;
 using Sdl.Community.TuToTm.Model;
@@ -11,21 +14,49 @@ namespace Sdl.Community.TuToTm.ViewModel
 	public class MainWindowViewModel:BaseModel
 	{
 		private ObservableCollection<TmDetails> _tmCollection;
+		private TmDetails _selectedTm;
+		private SolidColorBrush _textMessageBrush;
 		private readonly TmHelper _tmHelper;
 		private ICommand _removeTmCommand;
 		private ICommand _updateCommand;
+		private string _textMessage;
+		private string _textMessageVisibility;
 		private string _sourceText;
 		private string _targetText;
-		private IList _selectedTms;
 
 		public MainWindowViewModel()
 		{
 			_tmCollection = new ObservableCollection<TmDetails>();
+			_tmCollection.CollectionChanged += _tmCollection_CollectionChanged;
 			_tmHelper = new TmHelper();
+			_textMessageVisibility = "Collapsed";
 			var tmsDetails = _tmHelper.LoadLocalUserTms();
 			foreach (var tm in tmsDetails)
 			{
 				_tmCollection.Add(tm);
+			}
+		}
+
+		private void _tmCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.OldItems != null)
+			{
+				foreach (TmDetails tm in e.OldItems)
+				{
+					tm.PropertyChanged -= Tm_PropertyChanged;
+				}
+			}
+			if (e.NewItems == null) return;
+			foreach (TmDetails tm in e.NewItems)
+			{
+				tm.PropertyChanged += Tm_PropertyChanged;
+			}
+		}
+		private void Tm_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName.Equals("IsSelected"))
+			{
+				TextMessageVisibility = "Collapsed";
 			}
 		}
 
@@ -39,6 +70,16 @@ namespace Sdl.Community.TuToTm.ViewModel
 			}
 		}
 
+		public TmDetails SelectedTm
+		{
+			get => _selectedTm;
+			set
+			{
+				_selectedTm = value;
+				OnPropertyChanged(nameof(SelectedTm));
+			}
+		}
+
 		public string SourceText
 		{
 			get => _sourceText;
@@ -49,6 +90,7 @@ namespace Sdl.Community.TuToTm.ViewModel
 					return;
 				}
 				_sourceText = value;
+				TextMessageVisibility = "Collapsed";
 				OnPropertyChanged(nameof(SourceText));
 			}
 		}
@@ -62,20 +104,39 @@ namespace Sdl.Community.TuToTm.ViewModel
 					return;
 				}
 				_targetText = value;
+				TextMessageVisibility = "Collapsed";
 				OnPropertyChanged(nameof(TargetText));
 			}
 		}
-		public IList SelectedTms
+		public string TextMessage
 		{
-			get => _selectedTms;
+			get => _textMessage;
 			set
 			{
-				_selectedTms = value;
-
-				OnPropertyChanged(nameof(SelectedTms));
+				if (_textMessage == value) { return;}
+				_textMessage = value;
+				OnPropertyChanged(nameof(TextMessage));
 			}
 		}
-
+		public string TextMessageVisibility
+		{
+			get => _textMessageVisibility;
+			set
+			{
+				if(_textMessageVisibility == value) { return;}
+				_textMessageVisibility = value;
+				OnPropertyChanged(nameof(TextMessageVisibility));
+			}
+		}
+		public SolidColorBrush TextMessageBrush
+		{
+			get => _textMessageBrush;
+			set
+			{
+				_textMessageBrush = value;
+				OnPropertyChanged(nameof(TextMessageBrush));
+			}
+		}
 		public ICommand RemoveTmCommand => _removeTmCommand ?? (_removeTmCommand = new CommandHandler(RemoveTm, true));
 		public ICommand UpdateCommand => _updateCommand ?? (_updateCommand = new CommandHandler(UpdateTm, true));
 
@@ -84,10 +145,16 @@ namespace Sdl.Community.TuToTm.ViewModel
 			var selectedTms = TmsCollection.Where(t => t.IsSelected).ToList();
 			if (selectedTms.Any() && AreTextFieldsCompleted())
 			{
+				TextMessageVisibility = "Collapsed";
 				foreach (var selectedTm in selectedTms)
 				{
-					_tmHelper.AddTu(selectedTm,SourceText,TargetText);
+					_tmHelper.AddTu(selectedTm, SourceText, TargetText);
 				}
+				ShowMessage(@"Selected TMs were successfully updated", "#00A8EB");
+			}
+			else
+			{
+				ShowMessage(@"Please select at least one TM", "#FF2121");
 			}
 		}
 
@@ -98,16 +165,17 @@ namespace Sdl.Community.TuToTm.ViewModel
 
 		private void RemoveTm()
 		{
-			if (SelectedTms.Count > 0)
+			if (SelectedTm != null)
 			{
-				var selectedTm = SelectedTms[0] as TmDetails;
-
-				var tmToRemove = TmsCollection.FirstOrDefault(t => t.TmPath.Equals(selectedTm?.TmPath));
-				if (tmToRemove != null)
-				{
-					TmsCollection.Remove(tmToRemove);
-				}
+				var tmToRemove = TmsCollection.FirstOrDefault(t => t.TmPath.Equals(SelectedTm.TmPath));
+				TmsCollection.Remove(tmToRemove);
 			}
+		}
+		private void ShowMessage(string message, string color)
+		{
+			TextMessage = message;
+			TextMessageVisibility = "Visible";
+			TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(color);
 		}
 	}
 }

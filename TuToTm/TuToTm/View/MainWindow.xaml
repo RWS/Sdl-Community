@@ -42,6 +42,7 @@
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="35" />
+				<RowDefinition Height="auto"/>
 				<RowDefinition Height="*" />
 				<RowDefinition Height="auto" />
 			</Grid.RowDefinitions>
@@ -50,11 +51,15 @@
 			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top" Grid.ColumnSpan="2"/>
 
 			<!-- CURRENT PAGE AREA -->
-			<Border Background="White" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Padding="5">
-				<uiHelpers:CustomDataGrid ItemsSource="{Binding TmsCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			<TextBlock Grid.Row="1" Margin="0,5,0,10" Grid.ColumnSpan="2" Grid.Column="0" FontFamily="Segoe UI" FontSize="20" TextAlignment="Center"
+			           Text="{Binding TextMessage}"
+			           Foreground="{Binding TextMessageBrush}"
+			           Visibility="{Binding TextMessageVisibility}"/>
+			<Border Background="White" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Padding="5">
+				<DataGrid ItemsSource="{Binding TmsCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				          SelectionMode="Single"
+						  SelectedItem="{Binding SelectedTm}"
 				          SelectionUnit="FullRow"
-						  SelectedItemsList="{Binding SelectedTms, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				          Style="{StaticResource FilesGridStyle}"
 				          IsReadOnly="True"
 				          GridLinesVisibility="None"
@@ -118,9 +123,9 @@
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
 					</DataGrid.Columns>
-				</uiHelpers:CustomDataGrid>
+				</DataGrid>
 			</Border>
-			<StackPanel Grid.Column="0" Grid.Row="2" Width="auto">
+			<StackPanel Grid.Column="0" Grid.Row="3" Width="auto">
 				<TextBlock Text="Please fill TU details" FontFamily="Segoe UI" FontSize="15" FontWeight="Bold" Foreground="#0D1E2D" Margin="10"/>
 				<WrapPanel Orientation="Horizontal" Margin="5,0,0,10">
 					<TextBlock Text="Source"  FontFamily="Segoe UI" VerticalAlignment="Center"/>
@@ -129,7 +134,7 @@
 					<TextBox Text="{Binding TargetText,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextboxStyle}" Margin="10,0,15,5" VerticalContentAlignment="Center"/>
 				</WrapPanel>
 			</StackPanel>
-			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding UpdateCommand}" Grid.Row="2" Grid.Column="1" Height="30"
+			<Button Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding UpdateCommand}" Grid.Row="3" Grid.Column="1" Height="30"
 			        Content="Update TM" Margin="5,20,20,15" HorizontalAlignment="Right" HorizontalContentAlignment="Right"/>
 		</Grid>
 	</Border>
