@@ -1,13 +1,15 @@
-﻿using System.Collections;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.Win32;
 using Sdl.Community.TuToTm.Commands;
 using Sdl.Community.TuToTm.Helpers;
 using Sdl.Community.TuToTm.Model;
+using Sdl.Core.Globalization;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TuToTm.ViewModel
 {
@@ -19,6 +21,7 @@ namespace Sdl.Community.TuToTm.ViewModel
 		private readonly TmHelper _tmHelper;
 		private ICommand _removeTmCommand;
 		private ICommand _updateCommand;
+		private ICommand _addCommand;
 		private string _textMessage;
 		private string _textMessageVisibility;
 		private string _sourceText;
@@ -139,13 +142,50 @@ namespace Sdl.Community.TuToTm.ViewModel
 		}
 		public ICommand RemoveTmCommand => _removeTmCommand ?? (_removeTmCommand = new CommandHandler(RemoveTm, true));
 		public ICommand UpdateCommand => _updateCommand ?? (_updateCommand = new CommandHandler(UpdateTm, true));
+		public ICommand AddCommand => _addCommand ?? (_addCommand = new CommandHandler(AddTm, true));
+
+		private void AddTm()
+		{
+			var openFileDialog = new OpenFileDialog
+			{
+				Filter = "SDL TM Files |*.sdltm",
+				Multiselect = true
+			};
+			if (openFileDialog.ShowDialog() == true)
+			{
+				var tmsPath = openFileDialog.FileNames;
+				foreach (var tmPath in tmsPath)
+				{
+					var tmExists = TmsCollection.FirstOrDefault(t => t.TmPath.Equals(tmPath));
+					if (tmExists == null)
+					{
+						var sdlTm = new FileBasedTranslationMemory(tmPath);
+						var tmDetails = new TmDetails
+						{
+							TmPath = tmPath,
+							Name = sdlTm.Name,
+							SourceFlag = new Language(sdlTm.LanguageDirection.SourceLanguage.Name).GetFlagImage(),
+							TargetFlag = new Language(sdlTm.LanguageDirection.TargetLanguage.Name).GetFlagImage(),
+							FileBasedTranslationMemory = sdlTm
+						};
+						TmsCollection.Add(tmDetails);
+					}
+				}
+			}
+		}
 
 		private void UpdateTm()
 		{
+			TextMessageVisibility = "Collapsed";
 			var selectedTms = TmsCollection.Where(t => t.IsSelected).ToList();
-			if (selectedTms.Any() && AreTextFieldsCompleted())
+
+			if (!AreTextFieldsCompleted())
 			{
-				TextMessageVisibility = "Collapsed";
+				ShowMessage(@"Please add source and target text", "#FF2121");
+				return;
+			}
+			if (selectedTms.Any())
+			{
 				foreach (var selectedTm in selectedTms)
 				{
 					_tmHelper.AddTu(selectedTm, SourceText, TargetText);
@@ -168,7 +208,10 @@ namespace Sdl.Community.TuToTm.ViewModel
 			if (SelectedTm != null)
 			{
 				var tmToRemove = TmsCollection.FirstOrDefault(t => t.TmPath.Equals(SelectedTm.TmPath));
-				TmsCollection.Remove(tmToRemove);
+				if (tmToRemove != null)
+				{
+					TmsCollection.Remove(tmToRemove);
+				}
 			}
 		}
 		private void ShowMessage(string message, string color)
