@@ -1,10 +1,13 @@
-﻿namespace Sdl.Community.DsiViewer
+﻿using System.Drawing;
+
+namespace Sdl.Community.DsiViewer
 {
 	public class DsiModel: ModelBase
 	{
 		private string _displayName;
 		private string _code;
 		private string _description;
+		private string _rowColor;
 		public string DisplayName
 		{
 			get => _displayName;
@@ -42,6 +45,19 @@
 				}
 				_description = value;
 				OnPropertyChanged(nameof(Description));
+			}
+		}
+		public string RowColor
+		{
+			get => _rowColor;
+			set
+			{
+				if (_rowColor == value)
+				{
+					return;
+				}
+				_rowColor = value;
+				OnPropertyChanged(nameof(RowColor));
 			}
 		}
 	}

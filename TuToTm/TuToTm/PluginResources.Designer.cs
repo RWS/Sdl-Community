@@ -100,6 +100,16 @@ namespace Sdl.Community.TuToTm {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon tu2tm {
+            get {
+                object obj = ResourceManager.GetObject("tu2tm", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string WindowsControl_Close {

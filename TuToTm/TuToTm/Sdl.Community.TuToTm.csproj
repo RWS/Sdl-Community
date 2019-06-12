@@ -134,6 +134,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\tu2tm.ico" />
     <Resource Include="Resources\Remove.ico" />
     <Resource Include="Resources\arrow_right_blue.png" />
     <Resource Include="Resources\TranslationMemory.ico" />

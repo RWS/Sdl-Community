@@ -3,12 +3,11 @@ using Sdl.Community.TuToTm.View;
 using Sdl.Community.TuToTm.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 namespace Sdl.Community.TuToTm
 {
-	[RibbonGroup("TuToTm", Name = "", ContextByType = typeof(ProjectsController))]
+	[RibbonGroup("TuToTm", Name = "")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	public class TuToTmRibbon : AbstractRibbonGroup
 	{
@@ -16,7 +15,7 @@ namespace Sdl.Community.TuToTm
 
 	[Action("TuToTm",
 		Name = "TU to TM",
-		Icon = "",
+		Icon = "tu2tm",
 		Description = "TU to TM")]
 	[ActionLayout(typeof(TuToTmRibbon), 20, DisplayType.Large)]
 	public class TuToTmAction:AbstractAction
