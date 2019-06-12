@@ -14,14 +14,19 @@
 		<DataGrid Padding="3" Margin="5"
 			ItemsSource="{Binding Path=PropertiesCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			GridLinesVisibility="None"
+		    SelectionUnit ="CellOrRowHeader"
 			IsReadOnly="True"
 			Style="{StaticResource FilesGridStyle}">
 			<DataGrid.RowStyle>
-				
 				<Style TargetType="DataGridRow">
 					<Setter Property="Background" Value="{Binding RowColor}" />
 				</Style>
 			</DataGrid.RowStyle>
+			<DataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Command="Copy"/>
+				</ContextMenu>
+			</DataGrid.ContextMenu>
 			<DataGrid.Columns>
 				<DataGridTextColumn Width="auto" Header="Location" Binding="{Binding DisplayName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 				<DataGridTextColumn Width="auto" Header="Code" Binding="{Binding Code,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
