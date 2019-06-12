@@ -129,7 +129,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				Name = "SDL BeGlobal (NMT) Translation provider",
 				TooltipText = "SDL BeGlobal (NMT) Translation provider",
-				SearchResultImage = PluginResources.logoRe,
+				SearchResultImage = PluginResources.logoRes,
 				TranslationProviderIcon = PluginResources.global
 			};
 			return info;
