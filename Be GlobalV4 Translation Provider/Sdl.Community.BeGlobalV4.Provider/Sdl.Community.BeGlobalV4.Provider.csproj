@@ -166,6 +166,7 @@
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\VersionHelper.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
+    <Compile Include="Helpers\WindowsControlUtils.cs" />
     <Compile Include="Model\BeGlobalLanguagePair.cs" />
     <Compile Include="Model\ResponseError.cs" />
     <Compile Include="Model\ErrorDetails.cs" />
@@ -186,6 +187,9 @@
     <Compile Include="Studio\BeGlobalTranslationProvider.cs" />
     <Compile Include="Studio\BeGlobalTranslationProviderFactory.cs" />
     <Compile Include="Studio\StudioCredentials.cs" />
+    <Compile Include="UiHelpers\WindowsControl.xaml.cs">
+      <DependentUpon>WindowsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ui\BeGlobalWindow.xaml.cs">
       <DependentUpon>BeGlobalWindow.xaml</DependentUpon>
     </Compile>
@@ -243,6 +247,14 @@
     <Page Include="UiHelpers\TextBoxStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\WindowsBorder.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\WindowsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ui\BeGlobalWindow.xaml">
       <SubType>Designer</SubType>
