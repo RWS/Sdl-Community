@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -9,7 +10,6 @@ using Sdl.Community.GSVersionFetch.Commands;
 using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
-using Sdl.Core.Globalization;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
@@ -20,6 +20,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		private string _textMessage;
 		private string _textMessageVisibility;
 		private string _passwordBoxVisibility;
+		private string _displayName;
+		private readonly Utils _utils;
 		private SolidColorBrush _textMessageBrush;
 		private ICommand _loginCommand;
 		private ICommand _passwordChangedCommand;
@@ -29,14 +31,35 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 		public LoginViewModel(WizardModel wizardModel,object view): base(view)
 		{
+			_utils = new Utils();
 			_isValid = false;
+			_displayName = "Login";
 			_view =(UserControl)view;
 			_wizardModel = wizardModel;
 			_textMessageVisibility = "Collapsed";
 			_passwordBoxVisibility = "Visible";
+			var userDetails = _utils.GetStoredUserDetails();
+			if (userDetails != null)
+			{
+				_wizardModel.UserCredentials.ServiceUrl = userDetails.ServiceUrl;
+				_wizardModel.UserCredentials.UserName = userDetails.UserName;
+			}
 		}
-		
-		public override string DisplayName => "Login";
+
+		public override string DisplayName
+		{
+			get => _displayName;
+			set
+			{
+				if (_displayName == value)
+				{
+					return;
+				}
+
+				_displayName = value;
+				OnPropertyChanged(nameof(DisplayName));
+			}
+		}
 		public override bool IsValid
 		{
 			get => _isValid;
@@ -57,6 +80,25 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				_wizardModel.UserCredentials.ServiceUrl = value;
 				OnPropertyChanged(nameof(Url));
 			}
+		}
+		public override bool OnChangePage(int position, out string message)
+		{
+			message = string.Empty;
+
+			var pagePosition = PageIndex - 1;
+			if (position == pagePosition)
+			{
+				return false;
+			}
+
+			if (!IsValid && position > pagePosition)
+			{
+				message = PluginResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
+				          string.Format(PluginResources.The_data_on__0__is_not_valid, _displayName);
+				return false;
+			}
+
+			return true;
 		}
 		public string UserName
 		{
@@ -119,9 +161,8 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			try
 			{
 				var passwordBox = parameter as PasswordBox;
-				var languageFlagsHelper = new LanguageFlags();
 				var password = passwordBox?.Password;
-				var projectService = new ProjectService();
+				var organizationService = new OrganizationService();
 				if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(password))
 				{
 					_wizardModel.UserCredentials.UserName = UserName.TrimEnd().TrimStart();
@@ -133,48 +174,42 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 						var statusCode = await Authentication.Login(_wizardModel.UserCredentials);
 						if (statusCode == HttpStatusCode.OK)
 						{
+							_wizardModel.UserCredentials.Password = string.Empty;
+							_utils.SetUserDetails(_wizardModel.UserCredentials);
 							IsValid = true;
-							TextMessage = PluginResources.AuthenticationSuccess;
-							TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
-							var projectsResponse = await projectService.GetGsProjects();
-							if (projectsResponse?.Items != null)
-							{
-								foreach (var project in projectsResponse.Items)
-								{
-									var gsProject = new GsProject
-									{
-										Name = project.Name,
-										DueDate = project.DueDate?.ToString(),
-										Image = new Language(project.SourceLanguage).GetFlagImage(),
-										TargetLanguageFlags = languageFlagsHelper.GetTargetLanguageFlags(project.TargetLanguage),
-										ProjectId = project.ProjectId,
-										SourceLanguage = project.SourceLanguage
-									};
+							ShowMessage(PluginResources.AuthenticationSuccess,"#00A8EB");
 
-									if (Enum.TryParse<ProjectStatus.Status>(project.Status.ToString(), out _))
-									{
-										gsProject.Status = Enum.Parse(typeof(ProjectStatus.Status), project.Status.ToString()).ToString();
-									}
-									_wizardModel?.GsProjects.Add(gsProject);
+							var filter = new ProjectFilter
+							{
+								PageSize = 50,
+								Page = 1
+							};
+							await _utils.SetGsProjectsToWizard(_wizardModel, filter);
+
+							var organizations =await organizationService.GetOrganizations();
+							_utils.SegOrganizationsToWizard(_wizardModel, organizations.OrderBy(o=>o.Name).ToList());
+							if (organizations?.Count > 0)
+							{
+								foreach (var organization in organizations)
+								{
+									_wizardModel?.Organizations.Add(organization);
 								}
 							}
-
-							TextMessageVisibility = "Visible";
 							_view.Dispatcher.Invoke(delegate { SendKeys.SendWait("{TAB}"); }, DispatcherPriority.ApplicationIdle);
 						}
 						else
 						{
-							ShowErrorMessage(statusCode.ToString());
+							ShowMessage(statusCode.ToString(), "#FF2121");
 						}
 					}
 					else
 					{
-						ShowErrorMessage(PluginResources.Incorrect_Url_Format);
+						ShowMessage(PluginResources.Incorrect_Url_Format, "#FF2121");
 					}
 				}
 				else
 				{
-					ShowErrorMessage(PluginResources.Required_Fields);
+					ShowMessage(PluginResources.Required_Fields, "#FF2121");
 				}
 			}
 			catch (Exception e)
@@ -183,11 +218,11 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			}
 		}
 
-		private void ShowErrorMessage(string message)
+		private void ShowMessage(string message, string color)
 		{
-			TextMessageVisibility = "Visible";
 			TextMessage = message;
-			TextMessageBrush = new SolidColorBrush(Colors.Red);
+			TextMessageVisibility = "Visible";
+			TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(color);
 		}
 	}
 }

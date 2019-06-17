@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Sdl.Community.GSVersionFetch.Model
@@ -23,6 +24,19 @@ namespace Sdl.Community.GSVersionFetch.Model
 			{
 				_isSelected = value;
 				OnPropertyChanged(nameof(IsSelected));
+			}
+		}
+		public void SetFileProperties(WizardModel wizardModel,List<GsFileVersion> fileVersions)
+		{
+			foreach (var fileVersion in fileVersions)
+			{
+				fileVersion.ProjectName = ProjectName;
+				fileVersion.LanguageFlagImage = LanguageFlagImage;
+				fileVersion.LanguageName = LanguageName;
+				fileVersion.LanguageCode = LanguageCode;
+				fileVersion.ProjectId = ProjectId;
+				fileVersion.OriginalFileId = UniqueId;
+				wizardModel?.FileVersions?.Add(fileVersion);
 			}
 		}
 	}

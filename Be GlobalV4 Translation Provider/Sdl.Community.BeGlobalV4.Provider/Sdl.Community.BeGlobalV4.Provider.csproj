@@ -193,6 +193,7 @@
     <Compile Include="ViewModel\BeGlobalWindowViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\logoRes.png" />
     <Resource Include="Resources\AdaptiveEngine.ico" />
     <EmbeddedResource Include="Resources\TellMe1.ico" />
     <EmbeddedResource Include="Resources\Settings.ico" />

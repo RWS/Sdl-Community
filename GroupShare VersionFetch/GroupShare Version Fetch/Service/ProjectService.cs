@@ -13,13 +13,14 @@ namespace Sdl.Community.GSVersionFetch.Service
 	{
 		public static readonly Log Log = Log.Instance;
 
-		public async Task<ProjectResponse> GetGsProjects()
+		public async Task<ProjectResponse> GetGsProjects(ProjectFilter projectFilter)
 		{
 			try
 			{
 				using (var httpClient = new HttpClient())
 				{
-					var request = new HttpRequestMessage(HttpMethod.Get, new Uri(ApiUrl.GetProjects()));
+					var queryString = ApiUrl.GetQuerryString(projectFilter);
+						var request = new HttpRequestMessage(HttpMethod.Get, new Uri(queryString));
 					ApiUrl.AddRequestHeaders(httpClient, request);
 
 					var responseMessage = await httpClient.SendAsync(request);

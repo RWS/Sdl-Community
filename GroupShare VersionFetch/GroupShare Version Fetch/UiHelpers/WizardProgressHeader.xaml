@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:Sdl.Community.GSVersionFetch.UiHelpers"
              xmlns:viewModel="clr-namespace:Sdl.Community.GSVersionFetch.ViewModel"
+             xmlns:behaviours="clr-namespace:Sdl.Community.GSVersionFetch.Behaviours"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<Control.Resources>
@@ -23,12 +24,12 @@
 			<Style TargetType="Rectangle" x:Key="ProgressHeaderIndicatorLine" >
 				<Setter Property="Fill" Value="{StaticResource WizardProgressHeader.Subway.Default}" />
 				<Setter Property="Height" Value="2" />
-				<Setter Property="Width" Value="{Binding Path=LabelLineWidth}" />
+				<Setter Property="Width" Value="{Binding Path=ItemLineWidth}" />
 			</Style>
 
 			<Style TargetType="Rectangle" x:Key="ProgressHeaderIndicatorLineLeftSide" BasedOn="{StaticResource ProgressHeaderIndicatorLine}" >
 				<Style.Triggers>
-					<DataTrigger Binding="{Binding Path=IsOnFirstPage}" Value="True">
+					<DataTrigger Binding="{Binding Path=IsFirstPage}" Value="True">
 						<Setter Property="Width" Value="0" />
 					</DataTrigger>
 					<DataTrigger Binding="{Binding Path=IsVisited}" Value="True">
@@ -39,7 +40,7 @@
 
 			<Style TargetType="Rectangle" x:Key="ProgressHeaderIndicatorLineRightSide" BasedOn="{StaticResource ProgressHeaderIndicatorLine}" >
 				<Style.Triggers>
-					<DataTrigger Binding="{Binding Path=IsOnLastPage}" Value="True">
+					<DataTrigger Binding="{Binding Path=IsLastPage}" Value="True">
 						<Setter Property="Width" Value="0" />
 					</DataTrigger>
 					<DataTrigger Binding="{Binding Path=NextIsVisited}" Value="True">
@@ -51,7 +52,7 @@
 			<Style TargetType="TextBlock" x:Key="ProgressHeaderCompletedLabel">
 				<Setter Property="HorizontalAlignment" Value="Right"/>
 				<Setter Property="Foreground" Value="{StaticResource WizardProgressHeader.Label.Forground}"/>
-				<Setter Property="Text" Value="{Binding Path=CompletedSteps}"/>
+				<Setter Property="Text" Value="{Binding Path=CompletedProgressStepsMessage}"/>
 				<Setter Property="Margin" Value="0 50 0 0"/>
 			</Style>
 
@@ -62,15 +63,15 @@
 				<Setter Property="Foreground" Value="{StaticResource WizardProgressHeader.Default.Forground}"/>
 				<Setter Property="FontWeight" Value="Bold"/>
 				<Setter Property="TextAlignment" Value="Center" />
-				<Setter Property="Width" Value="{Binding Path=LabelTextWidth}" />
+				<Setter Property="Width" Value="{Binding Path=ItemTextWidth}" />
 				<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
 				<Setter Property="Text" Value="{Binding Path=DisplayName}"/>
 				<Setter Property="ToolTip" Value="{Binding Path=DisplayName}"/>
 				<Style.Triggers>
-					<DataTrigger Binding="{Binding Path=IsOnFirstPage}" Value="True">
+					<DataTrigger Binding="{Binding Path=IsFirstPage}" Value="True">
 						<Setter Property="TextAlignment" Value="Left" />
 					</DataTrigger>
-					<DataTrigger Binding="{Binding Path=IsOnLastPage}" Value="True">
+					<DataTrigger Binding="{Binding Path=IsLastPage}" Value="True">
 						<Setter Property="TextAlignment" Value="Right" />
 					</DataTrigger>
 					<DataTrigger Binding="{Binding Path=IsCurrentPage}" Value="True">
@@ -148,9 +149,25 @@
 				</Style.Triggers>
 			</Style>
 
+			<Style x:Key="ProgressHeaderItemCursor" TargetType="Grid">
+				<Setter Property="Cursor" Value="Arrow"/>
+				<Style.Triggers>
+					<MultiDataTrigger>
+						<MultiDataTrigger.Conditions>
+							<Condition Binding="{Binding Path=IsComplete}" Value="False"/>
+							<Condition Binding="{Binding Path=IsCurrentPage}" Value="False"/>
+						</MultiDataTrigger.Conditions>
+						<MultiDataTrigger.Setters>
+							<Setter Property="Cursor" Value="Hand"/>
+						</MultiDataTrigger.Setters>
+					</MultiDataTrigger>
+				</Style.Triggers>
+			</Style>
 
 			<DataTemplate x:Key="ProgressHeaderIndicator">
-				<Grid Margin="0">
+				<Grid Margin="0"
+				      ForceCursor="True" Style="{DynamicResource ProgressHeaderItemCursor}"
+				      behaviours:MouseDownBehaviour.MouseDown="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SelectedPageCommand}">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
 						<ColumnDefinition Width="Auto" />

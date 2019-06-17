@@ -1,6 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Forms.Integration;
+using Sdl.Community.GSVersionFetch.Interface;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.View;
 using Sdl.Community.GSVersionFetch.ViewModel;
@@ -31,8 +32,11 @@ namespace Sdl.Community.GSVersionFetch.Studio
 			{
 				UserCredentials = new Credentials(),
 				GsProjects = new ObservableCollection<GsProject>(),
+				ProjectsForCurrentPage = new ObservableCollection<GsProject>(),
 				GsFiles =   new ObservableCollection<GsFile>(),
 				FileVersions = new ObservableCollection<GsFileVersion>(),
+				Organizations = new ObservableCollection<OrganizationResponse>(),
+				SelectedOrganization = new OrganizationResponse(),
 				Version = string.Empty
 			};
 			var pages = CreatePages(wizardModel);
@@ -43,9 +47,9 @@ namespace Sdl.Community.GSVersionFetch.Studio
 			projectWizard.Show();
 		}
 
-		private ObservableCollection<ProjectWizardViewModelBase> CreatePages(WizardModel wizardModel)
+		private ObservableCollection<IProgressHeaderItem> CreatePages(WizardModel wizardModel)
 		{
-			return new ObservableCollection<ProjectWizardViewModelBase>
+			return new ObservableCollection<IProgressHeaderItem>
 			{
 				new LoginViewModel(wizardModel,new LoginView()),
 				new ProjectsViewModel(wizardModel,new ProjectsView()),

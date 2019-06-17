@@ -6,13 +6,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using Sdl.Community.GSVersionFetch.Commands;
 using Sdl.Community.GSVersionFetch.Helpers;
 using Sdl.Community.GSVersionFetch.Model;
 using Sdl.Community.GSVersionFetch.Service;
-using Sdl.Community.GSVersionFetch.UiHelpers;
 
 namespace Sdl.Community.GSVersionFetch.ViewModel
 {
@@ -28,10 +28,12 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 	    private string _selectedVersion;
 		private string _textMessageVisibility;
 	    private readonly ObservableCollection<GsFile> _oldSelectedFiles;
+	    private string _displayName;
 
-		public FilesVersionsViewModel(WizardModel wizardModel,object view) : base(view)
+	    public FilesVersionsViewModel(WizardModel wizardModel,object view) : base(view)
 		{
 			_wizardModel = wizardModel;
+			_displayName="Files versions";
 			_projectService = new ProjectService();
 			_oldSelectedFiles = new ObservableCollection<GsFile>();
 			PropertyChanged += FilesVersionsViewModel_PropertyChanged;
@@ -111,35 +113,48 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		    }
 		}
 
-	    private void FilesVersionsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+	    private async void FilesVersionsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(CurrentPageChanged))
 			{
 				if (IsCurrentPage)
 				{
-					TextMessage = PluginResources.Files_Version_Loading;
-					TextMessageVisibility = "Visible";
-					TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A8EB");
-					var selectedFiles = _wizardModel.GsFiles.Where(f => f.IsSelected).ToList();
-					if (_oldSelectedFiles.Count == 0)
-					{
-						AddVersionsToGrid(selectedFiles);
-					}
-					else
+					ShowMessage(PluginResources.Files_Version_Loading, "#00A8EB");
+
+					await GetProjectFiles().ConfigureAwait(true);
+					var selectedFiles = _wizardModel?.GsFiles?.Where(f => f.IsSelected).ToList();
+
+					if (selectedFiles?.Count > 0)
 					{
 						//get the files which are selected in wizard and they are not in the old list => a new file was selected and we need to download the files versions only for it
 						var addedFiles = selectedFiles.Except(_oldSelectedFiles).ToList();
-						AddVersionsToGrid(addedFiles);
+						if (addedFiles.Count > 0)
+						{
+							AddVersionsToGrid(addedFiles);
+						}
 
 						//get the removed files
 						var removedFiles = _oldSelectedFiles.Except(selectedFiles).ToList();
-						RemoveFilesFromGrid(removedFiles);
+						if (removedFiles.Count > 0)
+						{
+							RemoveFilesFromGrid(removedFiles);
+						}
 					}
+					TextMessageVisibility = "Collapsed";
 				}
 			}
 		}
+	    private async Task GetProjectFiles()
+	    {
+		    var selectedProjects = _wizardModel.GsProjects.Where(p => p.IsSelected).ToList();
+		    foreach (var project in selectedProjects)
+		    {
+			    var files = await _projectService.GetProjectFiles(project.ProjectId).ConfigureAwait(true);
+			    project.SetFileProperties(_wizardModel, files,true);
+		    }
+	    }
 
-	    private void RemoveFilesFromGrid(List<GsFile> removedFiles)
+		private void RemoveFilesFromGrid(List<GsFile> removedFiles)
 	    {
 		    foreach (var removedFile in removedFiles)
 		    {
@@ -175,8 +190,40 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 				SetFileProperties(selectedFile, fileVersions);
 			}
 		}
+	    public override bool OnChangePage(int position, out string message)
+	    {
+		    message = string.Empty;
 
-	    public override string DisplayName => "Files versions";
+		    var pagePosition = PageIndex - 1;
+		    if (position == pagePosition)
+		    {
+			    return false;
+		    }
+
+		    if (!IsValid && position > pagePosition)
+		    {
+			    message = PluginResources.UnableToNavigateToSelectedPage + Environment.NewLine + Environment.NewLine +
+			              string.Format(PluginResources.The_data_on__0__is_not_valid, _displayName);
+			    return false;
+		    }
+
+		    return true;
+	    }
+
+	    public override string DisplayName
+	    {
+		    get => _displayName;
+		    set
+		    {
+			    if (_displayName == value)
+			    {
+				    return;
+			    }
+
+			    _displayName = value;
+			    OnPropertyChanged(nameof(DisplayName));
+		    }
+	    }
 		public override bool IsValid
 		{
 			get => _isValid;
@@ -266,19 +313,16 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 
 	    private bool IsValidVersion(string version)
 	    {
-		    if (string.IsNullOrEmpty(version))
-		    {
-			    ToggleCheckAllFiles(false);
+			if (string.IsNullOrEmpty(version))
+			{
 				return true;
-		    }
-		    if (int.TryParse(version, out _))
-		    {
+			}
+			if (int.TryParse(version, out _))
+			{
 			    return true;
 		    }
 
-		    TextMessage = PluginResources.Version_Validation;
-		    TextMessageVisibility = "Visible";
-		    TextMessageBrush = new SolidColorBrush(Colors.Red);
+			ShowMessage(PluginResources.Version_Validation,"#FF00");
 		    return false;
 	    }
 	    public ICommand EnterCommand => _enterCommand ?? (_enterCommand = new CommandHandler(SelectSpecificVersion,true));
@@ -318,9 +362,9 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 		    }
 		    catch (Exception ex)
 		    {
-			    //Here we'll log issue
+			    Log.Logger.Error($"ShowSelectFolderDialog method: {ex.Message}\n {ex.StackTrace}");
 		    }
-	    }
+		}
 
 	    private void SelectSpecificVersion()
 	    {
@@ -354,7 +398,13 @@ namespace Sdl.Community.GSVersionFetch.ViewModel
 			    fileVersion.OriginalFileId = selectedFile.UniqueId;
 			    _wizardModel?.FileVersions?.Add(fileVersion);
 		    }
-		    TextMessageVisibility = "Collapsed";
 		}
+
+	    private void ShowMessage(string message, string color)
+	    {
+		    TextMessage = message;
+		    TextMessageVisibility = "Visible";
+		    TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(color);
+	    }
 	}
 }
