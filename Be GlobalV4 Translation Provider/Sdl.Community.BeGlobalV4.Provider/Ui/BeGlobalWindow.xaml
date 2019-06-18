@@ -56,7 +56,7 @@
 			</Border>
 			<StackPanel Grid.Row="2" MinHeight="250">
 				<TextBlock  Margin="15,15,0,10"  TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select the settings you want to apply to the Translation Provider."/>
-				<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}">Re-send draft and translated segments</CheckBox>
+				<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments"/>
 				<TextBlock  Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select engine model :"/>
 				<ComboBox 
 					HorizontalAlignment="Left"
