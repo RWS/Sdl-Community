@@ -31,7 +31,7 @@ namespace IATETerminologyProvider.Helpers
 
 		public static string SearchAllUri(string currentSelection, string sourceLanguage)
 		{
-			var encodedString = HttpUtility.UrlEncode(currentSelection);			
+			var encodedString = HttpUtility.UrlEncode(currentSelection);
 			var uri = @"http://iate.europa.eu/search/byUrl?term=" + encodedString + "&sl=" + sourceLanguage + "&tl=all";						
 			return uri;
 		}
