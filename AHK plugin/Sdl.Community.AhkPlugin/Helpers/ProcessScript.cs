@@ -118,11 +118,11 @@ namespace Sdl.Community.AhkPlugin.Helpers
 
 			File.WriteAllLines(filePath, scriptLines,Encoding.UTF8);
 			//set custom property
-			//var fileProperties = new OleDocumentProperties();
-			//fileProperties.Open(filePath);
-			//object customProperty = "GeneratedByAhkPlugin";
-			//fileProperties.CustomProperties.Add("SdlCommunity", ref customProperty);
-			//fileProperties.Close(true);
+			var fileProperties = new OleDocumentProperties();
+			fileProperties.Open(filePath);
+			object customProperty = "GeneratedByAhkPlugin";
+			fileProperties.CustomProperties.Add("SdlCommunity", ref customProperty);
+			fileProperties.Close(true);
 		}
 
 		private static List<string> CreateScriptLinesContent(Script script)

@@ -21,7 +21,6 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    private readonly DbContext _dbContext;
 		private string _messageColor;
 	    private bool _isDisabled;
-
 		public static readonly Log Log = Log.Instance;
 		
 		public AddScriptViewModel(MainWindowViewModel mainWindowViewModel)
