@@ -19,12 +19,12 @@
 			<local:ImportScriptPage />
 		</DataTemplate>
 		<DataTemplate DataType="{x:Type viewModels:EditScriptPageViewModel}">
-			<local:EditScriptPage></local:EditScriptPage>
+			<local:EditScriptPage/>
 		</DataTemplate>
 	</Window.Resources>
 	<Grid>
         <DockPanel>
-	        <ContentControl Content="{Binding CurrentViewModel}"></ContentControl>
+	        <ContentControl Content="{Binding CurrentViewModel}"/>
 		</DockPanel>
     </Grid>
 </Window>

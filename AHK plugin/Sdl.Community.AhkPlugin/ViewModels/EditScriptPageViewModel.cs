@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.AhkPlugin.Helpers;
 using Sdl.Community.AhkPlugin.Model;
-using Sdl.Community.AhkPlugin.Repository.DataBase;
 
 namespace Sdl.Community.AhkPlugin.ViewModels
 {
@@ -19,8 +18,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private string _scriptContent;
 		private bool _isDisabled;
 		private static Script _script;
-		private static readonly MasterScriptDb MasterScriptDb = new MasterScriptDb();
-
+		private static readonly DbContext DbContext = new DbContext();
 		public static readonly Log Log = Log.Instance;
 
 		public EditScriptPageViewModel()
@@ -109,7 +107,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		{
 			try
 			{
-				var masterScript = await MasterScriptDb.GetMasterScript();
+				var masterScript = await DbContext.GetMasterScript();
 				var scriptToBeUpdated = masterScript.Scripts.FirstOrDefault(s => s.ScriptId.Equals(_script.ScriptId));
 				if (scriptToBeUpdated != null)
 				{
@@ -119,7 +117,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 					scriptToBeUpdated.Description = ScriptDescription;
 					scriptToBeUpdated.ScriptStateAction = !IsDisabled ? "Disable" : "Enable";
 					scriptToBeUpdated.RowColor = !IsDisabled ? "Black" : "DarkGray";
-					await MasterScriptDb.UpdateScript(masterScript);
+					await DbContext.UpdateScript(masterScript);
 					//write masterscript on the disk
 					ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
 					var result = MessageBox.Show("Script edited successfully", string.Empty,
