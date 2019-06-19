@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Windows;
+using System.Windows.Threading;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.Core.Globalization;
@@ -14,7 +15,7 @@ using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
-	public class BeGlobalLanguageDirection	: ITranslationProviderLanguageDirection
+	public class BeGlobalLanguageDirection : ITranslationProviderLanguageDirection
 	{
 		private readonly BeGlobalTranslationProvider _beGlobalTranslationProvider;
 		private readonly BeGlobalTranslationOptions _options;
@@ -27,7 +28,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public bool CanReverseLanguageDirection { get; }
 		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
 
-		public BeGlobalLanguageDirection(BeGlobalTranslationProvider beGlobalTranslationProvider,LanguagePair languageDirection)
+		public BeGlobalLanguageDirection(BeGlobalTranslationProvider beGlobalTranslationProvider, LanguagePair languageDirection)
 		{
 			_beGlobalTranslationProvider = beGlobalTranslationProvider;
 			_languageDirection = languageDirection;
@@ -45,10 +46,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			//maybe the user logged out since the provider was added or the token expired
 
-			Application.Current?.Dispatcher?.Invoke(() =>
-			{
-				_studioCredentials.GetToken();
-			});
+			//Application.Current?.Dispatcher?.Invoke(() =>
+			//{
+			//	_studioCredentials.GetToken();
+			//});
+			_studioCredentials.GetToken();
+
 
 			var xliffDocument = CreateXliffFile(sourceSegments);
 
@@ -84,13 +87,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		}
 
 		private SearchResult CreateSearchResult(Segment segment, Segment translation)
-		{ 
+		{
 			var tu = new TranslationUnit
 			{
 				SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
 				TargetSegment = translation
 			};
-			   
+
 			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
 
 			const int score = 0; //score to 0...change if needed to support scoring
@@ -117,12 +120,69 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		/// <returns></returns>
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
+			var segmentsToTranslate = segments.Where((seg, i) => mask == null || mask[i]).ToArray();
+			var translationIndex = 0;
 			var results = new SearchResults[segments.Length];
-			var translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
+			if (!_options.ResendDrafts)
+			{
+				var intermediarSegments = new List<Segment>();
+				foreach (var segment in segmentsToTranslate)
+				{
+					var corespondingTu = _translationUnits.FirstOrDefault(tu => tu.SourceSegment.Equals(segment));
+					if (corespondingTu != null)
+					{
+						if (corespondingTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
+						{
 
+							var intermediarTranslations = TranslateSegments(intermediarSegments.ToArray());
+							AddTranslationToResults(intermediarTranslations, intermediarSegments.ToArray(), results, translationIndex,mask);
+
+							//add current TU as search result
+							var translation = new Segment(_languageDirection.TargetCulture);
+							translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
+
+							var currentTu = new List<Segment>
+							{
+								translation
+							};
+							AddTranslationToResults(currentTu.ToArray(), segments,results, translationIndex, mask);
+
+							Array.Clear(intermediarTranslations, 0, intermediarTranslations.Length);
+							intermediarSegments.Clear();
+
+						}
+						else
+						{
+							intermediarSegments.Add(segment);
+						}
+					}
+				}
+				if (intermediarSegments.Count > 0)
+				{
+					var intermediarTranslations = TranslateSegments(intermediarSegments.ToArray());
+					AddTranslationToResults(intermediarTranslations, segments, results, translationIndex,mask);
+				}
+			}
+			else
+			{
+				var translations = TranslateSegments(segmentsToTranslate);
+				AddTranslationToResults(translations, segments, results, translationIndex,mask);
+			}
+
+			return results;
+		}
+		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
+		{
+			// Need this vs having mask parameter default to null as inheritence doesn't allow default values to
+			// count as the same thing as having no parameter at all. IE, you can't have
+			// public string foo(string s = null) override public string foo().
+			return SearchSegments(settings, segments, null);
+		}
+
+		private void AddTranslationToResults(Segment[] translations, Segment[] segments, SearchResults[] results, int translationIndex,bool[] mask)
+		{
 			if (translations.Any(translation => translation != null))
 			{
-				var translationIndex = 0;
 				for (var i = 0; i < segments.Length; i++)
 				{
 					if (mask != null && !mask[i])
@@ -144,14 +204,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					}
 				}
 			}
-			return results;
-		}
-		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
-		{
-			// Need this vs having mask parameter default to null as inheritence doesn't allow default values to
-			// count as the same thing as having no parameter at all. IE, you can't have
-			// public string foo(string s = null) override public string foo().
-			return SearchSegments(settings, segments, null);
 		}
 
 		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
@@ -210,6 +262,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (mask == null || mask.Length != translationUnits.Length)
 				throw new ArgumentException("Mask in SearchSegmentsMasked");
 
+			_translationUnits.Clear();
+			_translationUnits.AddRange(translationUnits);
 			return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
 		}
 
