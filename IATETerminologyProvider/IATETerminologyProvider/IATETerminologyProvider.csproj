@@ -154,6 +154,13 @@
     <Compile Include="Service\TermSearchCriteriaService.cs" />
     <Compile Include="Service\TermSearchService.cs" />
     <Compile Include="Service\TermTypeService.cs" />
+    <Compile Include="Ui\SearchResultsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ui\SearchResultsControl.Designer.cs">
+      <DependentUpon>SearchResultsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\SearchResultsViewerController.cs" />
     <Compile Include="Ui\IATETermsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -177,6 +184,12 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Ui\SearchResultsControl.resx">
+      <DependentUpon>SearchResultsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <Resource Include="Resources\IATE_logo.png" />
+    <Resource Include="Resources\IATE_settings.ico" />
+    <Resource Include="Resources\IATE_settings.png" />
     <EmbeddedResource Include="Resources\report.xslt" />
     <None Include="Resources\ForumIcon.ico" />
     <None Include="Resources\Iate_logo.ico" />
