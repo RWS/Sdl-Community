@@ -7,20 +7,24 @@
         d:DesignHeight="500" d:DesignWidth="600"
         mc:Ignorable="d">
 	<UserControl.DataContext>
-		<viewModels:ScriptsWindowViewModel ></viewModels:ScriptsWindowViewModel>
+		<viewModels:ScriptsWindowViewModel />
 	</UserControl.DataContext>
 <UserControl.Resources>
 	<ResourceDictionary>
 		<ResourceDictionary.MergedDictionaries>
+			<ResourceDictionary Source="..\UiHelpers\Buttons.xaml"/>
 			<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
-			<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
-				<ResourceDictionary Source="..\UiHelpers\TextBoxStyle.xaml"/>
-			</ResourceDictionary.MergedDictionaries>
-	</ResourceDictionary>
+				<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
+			<ResourceDictionary Source="..\UiHelpers\TextBoxStyle.xaml"/>
+		</ResourceDictionary.MergedDictionaries>
+		<Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+			<Setter Property="Padding" Value="5"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+		</Style>
+		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid >
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
@@ -38,24 +42,33 @@
 
 		<StackPanel Grid.Column="0" Grid.Row="2" Margin="10,0,0,0" Orientation="Vertical">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Content="Export" Command="{Binding ExportCommand}"/>
-				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Content="Import" Command="{Binding ImportCommand}"/>
+				<Button  Style="{DynamicResource SdlPrimaryButtonStyle}" Content="Export" Command="{Binding ExportCommand}" Margin="0,0,10,0" Width="70"/>
+				<Button  Style="{DynamicResource SdlPrimaryButtonStyle}" Content="Import" Command="{Binding ImportCommand}" Width="70"/>
 			</StackPanel>
 		</StackPanel>
 		<StackPanel Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Orientation="Vertical">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Content="Remove" Command="{Binding RemoveScriptCommand}"/>
-				<Button Style="{DynamicResource StudioGreenButtonsStyle}" Content="Add" Command="{Binding AddCommand}"/>
+				<Button  Style="{DynamicResource SdlDarkGreenButtonStyle}" Content="Remove" Command="{Binding RemoveScriptCommand}" Width="70" />
+				<Button Style="{DynamicResource SdlDarkGreenButtonStyle}" Content="Add" Command="{Binding AddCommand}" Margin="10,0,10,0" Width="70"/>
 			</StackPanel>
 		</StackPanel>
-		<CheckBox  Grid.Row="3" Grid.Column="0" FontFamily="Segoe UI" Margin="10,20,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}"> Select all</CheckBox>
-		<DataGrid Style="{DynamicResource DgHeaderStyle}" Grid.Column="0" Visibility="Visible" VerticalScrollBarVisibility="Auto"
-				  Grid.Row="4" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"
-				  ColumnWidth="*"
-				  FontFamily="Segoe UI"
-				  ItemsSource="{Binding ScriptsCollection, Mode=TwoWay}"  Margin="10,10,10,0"  Background="White"
-				  AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False" RowHeight="22" >
+		<DataGrid  
+			Grid.Column="0" Visibility="Visible"
+			Grid.Row="3" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"
+			FontFamily="Segoe UI"
+		    SelectionMode="Extended"
+			Margin="0,10,10,0"
+		    SelectionUnit="FullRow"
+		    Style="{StaticResource FilesGridStyle}"
+		    VerticalScrollBarVisibility="Auto"
+		    VerticalContentAlignment="Center"
+			ItemsSource="{Binding ScriptsCollection, Mode=TwoWay}"  Background="White"
+			MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}"
+			GridLinesVisibility="None">
 			<DataGrid.RowStyle>
+				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
+			</DataGrid.RowStyle>
+			<!--<DataGrid.RowStyle>
 				<Style TargetType="DataGridRow">
 					<Setter Property="ToolTip">
 						<Setter.Value>
@@ -64,15 +77,28 @@
 					</Setter>
 					<Setter Property="TextElement.Foreground" Value="{Binding RowColor}"/>
 				</Style>
-			</DataGrid.RowStyle>
+			</DataGrid.RowStyle>-->
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}"	Header = "Select scripts" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
-				<DataGridTextColumn Width="100" Header="Script name" Binding="{Binding Name}" />
-				<DataGridTextColumn Width="230" Header="Description" Binding="{Binding Description}" />
-				<DataGridTemplateColumn Width="auto">
+				<DataGridTemplateColumn Width="Auto">
+					<DataGridTemplateColumn.Header>
+						<CheckBox IsChecked="{Binding Path=DataContext.AllFilesChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						          VerticalContentAlignment="Center"
+						          Style="{StaticResource CheckBoxStyle}"
+						          Content="Select all"/>
+					</DataGridTemplateColumn.Header>
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate >
-							<StackPanel Orientation="Vertical" >
+						<DataTemplate>
+							<CheckBox Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							          Margin="4,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTextColumn Width="auto" Header="Script name" Binding="{Binding Name}" />
+				<DataGridTextColumn Width="*" Header="Description" Binding="{Binding Description}" />
+				<DataGridTemplateColumn Width="150">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Vertical" Width="auto">
 								<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 									<Button Style="{DynamicResource BaseButtonStyle}" Content="{Binding ScriptStateAction}"  Command="{Binding Path=DataContext.ChangeScriptStateCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
 									<Button Style="{DynamicResource BaseButtonStyle}" Content="Edit"  Command="{Binding Path=DataContext.EditScriptCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
