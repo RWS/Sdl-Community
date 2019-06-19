@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using IATETerminologyProvider.Helpers;
+using IATETerminologyProvider.Ui;
+using Sdl.Core.PluginFramework;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -11,9 +14,14 @@ namespace IATETerminologyProvider
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class IATETerminologyProviderAction: AbstractRibbonGroup
 	{
-		public static EditorController GetEditorController()
+        private static EditorController GetEditorController()
 		{
 			return SdlTradosStudio.Application.GetController<EditorController>();
+		}
+
+		private static SearchResultsViewerController GetSearchResultsController()
+		{
+			return SdlTradosStudio.Application.GetController<SearchResultsViewerController>();
 		}
 
 		/// <summary>
@@ -37,20 +45,35 @@ namespace IATETerminologyProvider
 					if (activeDocument.FocusedDocumentContent.Equals(FocusedDocumentContent.Target))
 					{
 						// inverse the languages in case user wants to navigate to a term/phrase selected from the target segment
-						url = isSearchAll ? ApiUrls.SearchAllUri(currentSelection, targetLanguage) : ApiUrls.SearchSourceTargetUri(currentSelection, targetLanguage, sourceLanguage);
+						url = isSearchAll
+							? ApiUrls.SearchAllUri(currentSelection, targetLanguage)
+							: ApiUrls.SearchSourceTargetUri(currentSelection, targetLanguage, sourceLanguage);
 					}
 					else
 					{
 						// set the language from the source side of the editor
-						url = isSearchAll ? ApiUrls.SearchAllUri(currentSelection, sourceLanguage) : ApiUrls.SearchSourceTargetUri(currentSelection, sourceLanguage, targetLanguage);
+						url = isSearchAll
+							? ApiUrls.SearchAllUri(currentSelection, sourceLanguage)
+							: ApiUrls.SearchSourceTargetUri(currentSelection, sourceLanguage, targetLanguage);
 					}
-					System.Diagnostics.Process.Start(url);
+
+					ShowBrowserResults(url);
 				}
 				else
 				{
 					MessageBox.Show(Constants.NoTermSelected, string.Empty, MessageBoxButton.OK, MessageBoxImage.Information);
 				}
 			}
+		}
+
+		private static void ShowBrowserResults(string url)
+		{
+			var searchResultsController = GetSearchResultsController();
+
+			var browser = searchResultsController.Browser;
+			browser.ScriptErrorsSuppressed = true;
+			browser.Navigate(url, false);
+			searchResultsController.Show();
 		}
 
 		[Action("IATESearchAllAction", Name = "Search IATE (all)", Icon = "Iate_logo")]
