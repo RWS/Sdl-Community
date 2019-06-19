@@ -12,5 +12,6 @@
 		<File>Raven.Client.Lightweight.dll</File>
 		<File>Raven.Database.dll</File>
 		<File>NLog.dll</File>
+		<File>LiteDB.dll</File>
 	</Include>
 </PluginPackage>

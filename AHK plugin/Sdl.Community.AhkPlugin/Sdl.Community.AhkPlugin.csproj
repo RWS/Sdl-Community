@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,17 +53,14 @@
       <HintPath>3rd party\Interop.DSOFile.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="LiteDB, Version=4.1.4.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>packages\LiteDB.4.1.4\lib\net40\LiteDB.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>packages\NLog.4.6.4\lib\net45\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=3.5.5.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>packages\RavenDB.Database.3.5.5\lib\net45\Raven.Abstractions.dll</HintPath>
-    </Reference>
     <Reference Include="Raven.Client.Lightweight, Version=3.5.5.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <HintPath>packages\RavenDB.Client.3.5.5\lib\net45\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Database, Version=3.5.5.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>packages\RavenDB.Database.3.5.5\lib\net45\Raven.Database.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
@@ -113,6 +111,7 @@
   <ItemGroup>
     <Compile Include="Helpers\CommandHandler.cs" />
     <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Helpers\DbContext.cs" />
     <Compile Include="Helpers\DropBehavior.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Log.cs" />
@@ -121,6 +120,9 @@
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\Ui.cs" />
     <Compile Include="ItemTemplates\ImportScriptItemTemplate.cs" />
+    <Compile Include="Model\MasterScript.cs" />
+    <Compile Include="Model\ModelBase.cs" />
+    <Compile Include="Model\Script.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Ui\AddScriptPage.xaml.cs">
       <DependentUpon>AddScriptPage.xaml</DependentUpon>
@@ -213,6 +215,7 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -225,9 +228,6 @@
     <Content Include="3rd party\dsofile.dll" />
     <Content Include="3rd party\Interop.DSOFile.dll" />
     <Content Include="pluginpackage.manifest.xml" />
-    <None Include="packages\RavenDB.Database.3.5.5\tools\Raven.Studio.Html5.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -240,17 +240,10 @@
     <None Include="Resources\question.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.AhkPlugin.Model\Sdl.Community.AhkPlugin.Model.csproj">
-      <Project>{839dfe71-5952-482a-9e34-fbb434b30fe7}</Project>
-      <Name>Sdl.Community.AhkPlugin.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sdl.Community.AhkPlugin.Repository\Sdl.Community.AhkPlugin.Repository.csproj">
-      <Project>{e3827883-98f9-4b09-8790-ef4e3e49c08d}</Project>
-      <Name>Sdl.Community.AhkPlugin.Repository</Name>
-    </ProjectReference>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
+    <Folder Include="packages\RavenDB.Database.3.5.5\tools\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" />

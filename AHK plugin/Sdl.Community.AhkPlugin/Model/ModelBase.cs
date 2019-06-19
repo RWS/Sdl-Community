@@ -2,9 +2,9 @@
 using System.Runtime.CompilerServices;
 using Sdl.Community.AhkPlugin.Annotations;
 
-namespace Sdl.Community.AhkPlugin.ViewModels
+namespace Sdl.Community.AhkPlugin.Model
 {
-    public class ViewModelBase: INotifyPropertyChanged
+	public class ModelBase : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 

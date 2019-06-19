@@ -3,17 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Raven.Abstractions.Extensions;
 using Sdl.Community.AhkPlugin.Helpers;
 using Sdl.Community.AhkPlugin.ItemTemplates;
 using Sdl.Community.AhkPlugin.Model;
-using Sdl.Community.AhkPlugin.Repository.DataBase;
-
 
 namespace Sdl.Community.AhkPlugin.ViewModels
 {
@@ -26,8 +20,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    private ICommand _addToMasterCommand;
 	    private ICommand _changeScriptStateCommand;
 	    private ICommand _selectAllCommand;
-		private readonly ScriptDb _scriptDb;
-	    private readonly MasterScriptDb _masterScriptDb;
+	    private readonly DbContext _dbContext;
 		private string _gridVisibility;
 	    private string _message;
 	    private string _messageVisibility;
@@ -46,8 +39,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    {
 		    _gridVisibility = "Hidden";
 		    _messageVisibility = "Hidden";
-		    _scriptDb = new ScriptDb();
-		    _masterScriptDb = new MasterScriptDb();
+		    _dbContext = new DbContext();
 		}
 	    public ICommand BackCommand => _backCommand ?? (_backCommand = new CommandHandler(BackToScriptsList, true));
 
@@ -85,13 +77,14 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 						script.IsSelected = false;
 						script.ScriptStateAction = script.Active ? "Disable" : "Enable";
 						script.RowColor = script.Active ? "Black" : "DarkGray";
-						await _scriptDb.AddNewScript(script);
+
+						//await _dbContext.AddNewScript(script);
 						RemoveScriptFromGrid(script);
 					}
 
-					var masterScript = await _masterScriptDb.GetMasterScript();
+					var masterScript = await _dbContext.GetMasterScript();
 					masterScript.Scripts.AddRange(scriptsToBeImported);
-					await _masterScriptDb.UpdateScript(masterScript);
+					await _dbContext.UpdateScript(masterScript);
 					//write masterscript on the disk
 					ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
 

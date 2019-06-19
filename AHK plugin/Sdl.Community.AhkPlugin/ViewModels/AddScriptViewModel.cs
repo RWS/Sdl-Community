@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.AhkPlugin.Helpers;
 using Sdl.Community.AhkPlugin.Model;
-using Sdl.Community.AhkPlugin.Repository.DataBase;
-using Sdl.Community.AhkPlugin.Ui;
 
 namespace Sdl.Community.AhkPlugin.ViewModels
 {
@@ -24,11 +18,9 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    private string _message;
 	    private string _messageVisibility;
 	    private bool _formIsValid;
-	    private readonly ScriptDb _scriptDb;
-	    private readonly MasterScriptDb _masterScriptDb;
+	    private readonly DbContext _dbContext;
 		private string _messageColor;
 	    private bool _isDisabled;
-
 		public static readonly Log Log = Log.Instance;
 		
 		public AddScriptViewModel(MainWindowViewModel mainWindowViewModel)
@@ -44,8 +36,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		    _message = string.Empty;
 		    _messageVisibility = "Hidden";
 		    _messageColor = string.Empty;
-		    _scriptDb = new ScriptDb();
-			_masterScriptDb = new MasterScriptDb();
+			_dbContext = new DbContext();
 		    _isDisabled = false;
 	    }
 
@@ -191,13 +182,10 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 					script.ScriptStateAction = script.Active ? "Disable" : "Enable";
 					script.RowColor = script.Active ? "Black" : "DarkGray";
 
-					//add new script in data base
-					await _scriptDb.AddNewScript(script);
-
-					//add the script in master script too
-					var masterScript = await _masterScriptDb.GetMasterScript();
+					//add the script in master script 
+					var masterScript = await _dbContext.GetMasterScript();
 					masterScript.Scripts.Add(script);
-					await _masterScriptDb.UpdateScript(masterScript);
+					await _dbContext.UpdateScript(masterScript);
 
 					//write masterscript on the disk
 					ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);

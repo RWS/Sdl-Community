@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.AhkPlugin.Helpers;
+using LiteDB;
 using Sdl.Community.AhkPlugin.Model;
-using Sdl.Community.AhkPlugin.Repository.DataBase;
-using Sdl.Community.AhkPlugin.Repository.Raven;
 using Sdl.Community.AhkPlugin.Ui;
 using Sdl.Community.AhkPlugin.ViewModels;
 using Sdl.Desktop.IntegrationApi;
@@ -21,16 +16,33 @@ namespace Sdl.Community.AhkPlugin
 	[ApplicationInitializer]
 	public class InitializePlugin : IApplicationInitializer
 	{
-		/// <summary>
-		/// Create raven context when Studio starts, in this way when we click on rebbon AHK window appears immediately
-		/// </summary>
 		public void Execute()
 		{
-			RavenContext.Current.CreateSession();
-			var masterScriptDb = new MasterScriptDb();
-			var masterScript = masterScriptDb.GetMasterScript().Result;
+			// Open database (or create if not exits)
+			var defaultFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+				"SDL Community", "AhkMasterScript");
+			if (!Directory.Exists(defaultFolderPath))
+			{
+				Directory.CreateDirectory(defaultFolderPath);
+			}
+			var defaultDbPath = Path.Combine(defaultFolderPath, "Ahk.db");
 
-			//ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), new List<Script>());
+			using (var db = new LiteDatabase(defaultDbPath))
+			{
+				var masterScriptCollection = db.GetCollection<MasterScript>("masterScript");
+				var masterScript = masterScriptCollection.FindOne(m => m.Name.Contains("AhkMasterScript.ahk"));
+				if (masterScript != null) return;
+
+				//create master script if does not exist
+				var master = new MasterScript
+				{
+					Id = 1,
+					Name = "AhkMasterScript.ahk",
+					Location = defaultFolderPath,
+					Scripts = new List<Script>()
+				};
+				masterScriptCollection.Insert(master);
+			}
 		}
 	}
 

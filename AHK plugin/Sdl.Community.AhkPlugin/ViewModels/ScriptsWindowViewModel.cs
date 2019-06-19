@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Sdl.Community.AhkPlugin.Annotations;
 using Sdl.Community.AhkPlugin.Helpers;
-using Sdl.Community.AhkPlugin.ItemTemplates;
 using Sdl.Community.AhkPlugin.Model;
-using Sdl.Community.AhkPlugin.Repository.DataBase;
-using Sdl.Community.AhkPlugin.Ui;
 using MessageBox = System.Windows.MessageBox;
 
 namespace Sdl.Community.AhkPlugin.ViewModels
@@ -33,9 +24,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private ICommand _selectAllCommand;
 		private ICommand _editScriptCommand;
 		private bool _selectAll;
-		private readonly ScriptDb _scriptsDb;
-		private readonly MasterScriptDb _masterScriptDb;
-
+		private readonly DbContext _dbContext;
 		public static readonly Log Log = Log.Instance;
 		
 		public ScriptsWindowViewModel(MainWindowViewModel mainWindowViewModel)
@@ -45,12 +34,11 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 		public ScriptsWindowViewModel()
 		{
-			_scriptsDb = new ScriptDb();
-			_masterScriptDb = new MasterScriptDb();
+			_dbContext = new DbContext();
 			try
 			{
-				var savedScripts = _masterScriptDb.GetMasterScript().Result.Scripts;
-				ScriptsCollection = new ObservableCollection<Script>(savedScripts);
+				var masterScript = _dbContext.GetMasterScript().Result; 
+				ScriptsCollection = new ObservableCollection<Script>(masterScript.Scripts);
 			}
 			catch(Exception ex)
 			{
@@ -91,9 +79,9 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				}
 				if (!string.IsNullOrEmpty(folderPath))
 				{
-					var masterScript = await _masterScriptDb.GetMasterScript();
+					var masterScript = await _dbContext.GetMasterScript();
 					masterScript.Location = folderPath;
-					await _masterScriptDb.UpdateScript(masterScript);
+					await _dbContext.UpdateScript(masterScript);
 
 					ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
 				}
@@ -158,10 +146,9 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 						ScriptsCollection.Remove(script);
 					}
 					//Remove from db
-					_scriptsDb.RemoveScripts(scriptsToBeRemoved);
-					_masterScriptDb.RemoveScripts(scriptsToBeRemoved);
+					_dbContext.RemoveScripts(scriptsToBeRemoved);
 					//write masterscript on the disk
-					var masterScript = _masterScriptDb.GetMasterScript().Result;
+					var masterScript = _dbContext.GetMasterScript().Result;
 					ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
 				}
 				else

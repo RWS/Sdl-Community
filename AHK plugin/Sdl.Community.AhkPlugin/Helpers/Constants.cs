@@ -1,4 +1,7 @@
-﻿namespace Sdl.Community.AhkPlugin.Helpers
+﻿using System;
+using System.IO;
+
+namespace Sdl.Community.AhkPlugin.Helpers
 {
 	public static class Constants
 	{
@@ -16,5 +19,15 @@
 		public static readonly string RemoveFile = "Remove file method";
 		public static readonly string SaveScript = "Save script method";
 		public static readonly string InsertScript = "Insert script method";
+		public static string GetDbDefaultPath()
+		{
+			var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+				"SDL Community", "AhkMasterScript", "Ahk.db");
+			if (!Directory.Exists(defaultPath))
+			{
+				Directory.CreateDirectory(defaultPath);
+			}
+			return defaultPath;
+		}
 	}
 }
