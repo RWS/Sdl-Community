@@ -4,7 +4,6 @@
 	<Style x:Key="TextBlockColor" TargetType="{x:Type TextBlock}">
 		<Setter Property="FontFamily" Value="Segoe UI"/>
 		<Setter Property="Margin" Value="10,0,0,0"/>
-		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="Foreground" Value="{DynamicResource WindowsControl.Control.Text}"/>
 	</Style>
 </ResourceDictionary>

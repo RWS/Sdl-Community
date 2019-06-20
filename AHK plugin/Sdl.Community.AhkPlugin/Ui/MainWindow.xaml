@@ -8,7 +8,7 @@
         xmlns:uiHelpers="clr-namespace:Sdl.Community.AhkPlugin.UiHelpers"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResizeWithGrip"
+        WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"
         Title="AutoHotKey Plugin" Height="500" Width="950">
 	<Window.Resources>
 		<ResourceDictionary>
@@ -41,12 +41,12 @@
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="35" />
-				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
 			<!-- BORDER CONTROL -->
 			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" Background="White" />
-			<Border Grid.Column="0" Grid.Row="1" >
+			<Border Grid.Column="0" Grid.Row="1" Margin="0,0,0,20" >
 					<ContentControl Content="{Binding CurrentViewModel}"/>
 			</Border>
 		</Grid>

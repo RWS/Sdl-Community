@@ -98,14 +98,8 @@ namespace Sdl.Community.AhkPlugin.UiHelpers
 
 			Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
 			{
-				if (string.IsNullOrWhiteSpace(ControlMinimize))
-					ControlMinimize = PluginResources.WindowsControl_Minimize;
-				if (string.IsNullOrWhiteSpace(ControlMaximize))
-					ControlMaximize = PluginResources.WindowsControl_Maximize;
 				if (string.IsNullOrWhiteSpace(ControlClose))
 					ControlClose = PluginResources.WindowsControl_Close;
-				if (string.IsNullOrWhiteSpace(ControlRestore))
-					ControlRestore = PluginResources.WindowsControl_Restore;
 			}));
 		}
 

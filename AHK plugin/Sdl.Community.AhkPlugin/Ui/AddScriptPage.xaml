@@ -44,13 +44,14 @@
 		</StackPanel>
 	
 		<TextBlock Grid.Column="0" Grid.Row="2" Style="{DynamicResource TextBlockColor}" Text="{Binding Message}" Foreground="{Binding MessageColor}" Visibility="{Binding MessageVisibility }" Margin="10,0,0,10"/>
-		<CheckBox Grid.Column="0" Grid.Row="3"  IsChecked= "{Binding IsDisabled,UpdateSourceTrigger=PropertyChanged}" Foreground="{DynamicResource WindowsControl.Control.Text}" FontWeight="Bold" FontFamily="Segoe UI" Margin="10,0,0,10">Is disabled script</CheckBox>
+		<CheckBox Grid.Column="0" Grid.Row="3"  IsChecked= "{Binding IsDisabled,UpdateSourceTrigger=PropertyChanged}" Foreground="{DynamicResource WindowsControl.Control.Text}" 
+				  FontFamily="Segoe UI" Margin="10,0,0,10">Is disabled script</CheckBox>
 		<!--text block area-->
-		<TextBlock Grid.Column="0" Grid.Row="4" Style="{DynamicResource TextBlockColor}" Text="Script name*"/>
+		<TextBlock Grid.Column="0" Grid.Row="4" Style="{DynamicResource TextBlockColor}">Script name<Span Foreground="Red">*</Span></TextBlock>
 		<TextBox Name="ScriptNameTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptName}" Grid.Column="1" Grid.Row="4" Height="40"/>
-		<TextBlock Grid.Column="0" Grid.Row="5" Style="{DynamicResource TextBlockColor}" Text="Description*" Grid.RowSpan="2"/>
+		<TextBlock Grid.Column="0" Grid.Row="5" Style="{DynamicResource TextBlockColor}" Grid.RowSpan="2">Description<Span Foreground="Red">*</Span></TextBlock>
 		<TextBox Name="DescriptionTextBlock" Style="{DynamicResource TextBoxStyle}"  Text="{Binding ScriptDescription}" Grid.Column="1" Grid.Row="5" Height="70" />
-		<TextBlock   Grid.Column="0" Grid.Row="6" Style="{DynamicResource TextBlockColor}" Text="Script content*"/>
+		<TextBlock   Grid.Column="0" Grid.Row="6" Style="{DynamicResource TextBlockColor}">Script content<Span Foreground="Red">*</Span></TextBlock>
 		<TextBox Name="SctiptContentTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptContent}" Grid.Column="1" Grid.Row="6" Height="150"/>
 	</Grid>
 </UserControl>

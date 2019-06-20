@@ -58,30 +58,7 @@
 					<Path SnapsToDevicePixels="True" Data="F1M0,6L0,9 9,9 9,6 0,6z" 
                               Fill="{Binding Foreground, ElementName=MinimizeButton}" />
 				</Button>
-				<Button x:Name="RestoreButton" Width="34" Height="26" IsEnabled="True" Click="MaxButton_Click">
-					<Button.Style>
-						<Style TargetType="Button" BasedOn="{StaticResource WindowControlButtonStyle}">
-							<Setter Property="ToolTip" Value="{Binding Path=ControlMaximize, ElementName=WizardWindowControl}" />
-							<Style.Triggers>
-								<DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=WindowState}" Value="Maximized">
-									<Setter Property="ToolTip" Value="{Binding Path=ControlRestore, ElementName=WizardWindowControl}" />
-								</DataTrigger>
-							</Style.Triggers>
-						</Style>
-					</Button.Style>
-					<Path SnapsToDevicePixels="True" Fill="{Binding Foreground, ElementName=RestoreButton}">
-						<Path.Style>
-							<Style TargetType="Path">
-								<Setter Property="Data" Value="F1M0,0L0,9 9,9 9,0 0,0 0,3 8,3 8,8 1,8 1,3z" />
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=WindowState}" Value="Maximized">
-										<Setter Property="Data" Value="F1M0,10L0,3 3,3 3,0 10,0 10,2 4,2 4,3 7,3 7,6 6,6 6,5 1,5 1,10z M1,10L7,10 7,7 10,7 10,2 9,2 9,6 6,6 6,9 1,9z" />
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</Path.Style>
-					</Path>
-				</Button>
+
 
 				<Button Style="{StaticResource WindowControlButtonStyle}" x:Name="CloseButton" Width="34" Height="26"
                             ToolTip="{Binding Path=ControlClose, ElementName=WizardWindowControl}"  
