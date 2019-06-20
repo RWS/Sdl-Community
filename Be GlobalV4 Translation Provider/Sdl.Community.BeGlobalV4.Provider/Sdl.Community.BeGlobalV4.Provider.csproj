@@ -168,6 +168,7 @@
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Helpers\WindowsControlUtils.cs" />
     <Compile Include="Model\BeGlobalLanguagePair.cs" />
+    <Compile Include="Model\BeGlobalSegment.cs" />
     <Compile Include="Model\ResponseError.cs" />
     <Compile Include="Model\ErrorDetails.cs" />
     <Compile Include="Model\SubscriptionInfo.cs" />
