@@ -392,6 +392,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			EditorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 
 			ActiveDocument = EditorController.ActiveDocument;
+			ActiveDocumentChanged(ActiveDocument);
 
 			OnApplyDisplayFilter += ApplyDisplayFilter;
 
@@ -581,35 +582,46 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void AddColor(string color)
 		{
-			if (!string.IsNullOrEmpty(color))
+			if (!string.IsNullOrEmpty(color) && !AvailableColorsList.Contains(color))
 			{
-				if (!AvailableColorsList.Contains(color))
-				{
-					AvailableColorsList.Add(color);
-				}
+				AvailableColorsList.Add(color);
 			}
-
 		}
+
 		private void PopulateColorList()
 		{
 			try
 			{
 				AvailableColorsList.Clear();
+
 				foreach (var segmentPair in ActiveDocument.SegmentPairs)
 				{
-					var colorCodesList = ColorPickerHelper.GetColorsList(segmentPair.Source);
-					foreach (var color in colorCodesList)
+					var paragraphUnit = ColorPickerHelper.GetParagraphUnit(segmentPair);
+					var colors = paragraphUnit != null
+						? ColorPickerHelper.GetColorsList(paragraphUnit.Source)
+						: ColorPickerHelper.GetColorsList(segmentPair.Source);
+
+					foreach (var color in colors)
 					{
 						AddColor(color);
 					}
-					if (colorCodesList.Count > 0) continue;
+
+					if (colors.Count > 0)
+					{
+						continue;
+					}
+
 					var contextInfoList = segmentPair.GetParagraphUnitProperties().Contexts.Contexts;
 					var colorCode = ColorPickerHelper.DefaultFormatingColorCode(contextInfoList);
 					AddColor(colorCode);
 				}
+
 				SetAddColorsToListView();
 			}
-			catch (Exception e) { }
+			catch
+			{
+				// catch all; ignore
+			}
 
 		}
 
@@ -704,15 +716,23 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 			UpdateFilteredCountDisplay(e.FilteredSegmentPairsCount, e.TotalSegmentPairsCount);
 		}
+
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
+		{
+			ActiveDocumentChanged(e.Document);
+		}
+
+		private void ActiveDocumentChanged(Document document)
 		{
 			InitializeSettings();
 
 			if (ActiveDocument != null)
+			{
 				ActiveDocument.DocumentFilterChanged -= ActiveDocument_DocumentFilterChanged;
+			}
 
 			// get a reference to the active document            
-			ActiveDocument = e.Document;
+			ActiveDocument = document;
 
 			if (ActiveDocument != null)
 			{
@@ -722,16 +742,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				PopulateContextInfoList();
 
 				if (ActiveDocument.DisplayFilter != null &&
-					ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
+				    ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
 				{
 					//invalidate UI with display settings recovered from the active document
-					DisplayFilterSettings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings;
+					DisplayFilterSettings = ((DisplayFilter) ActiveDocument.DisplayFilter).Settings;
 				}
+
 				PopulateColorList();
 
 				UpdateFilteredCountDisplay(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
 			}
 		}
+
 		private void ApplyDisplayFilter(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customFilterSettings, bool reverse, FilteredCountsCallback result)
 		{
 			if (ActiveDocument == null)
