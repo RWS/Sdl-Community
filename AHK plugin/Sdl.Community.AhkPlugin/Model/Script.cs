@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.AhkPlugin.Model
 {
-	public class Script:ModelBase
+	public class Script : ModelBase
 	{
 		private bool _isSelected;
 		private bool _isActiveScript;
@@ -11,7 +11,8 @@
 
 		public string ScriptId { get; set; }
 		public string Name { get; set; }
-		public string Description {
+		public string Description
+		{
 			get => _description;
 			set
 			{
@@ -19,7 +20,8 @@
 				OnPropertyChanged(nameof(Description));
 			}
 		}
-		public string Text {
+		public string Text
+		{
 			get => _text;
 			set
 			{
@@ -37,7 +39,7 @@
 				OnPropertyChanged(nameof(ScriptStateAction));
 			}
 		}
-	
+
 		public string RowColor
 		{
 			get => _rowColor;
