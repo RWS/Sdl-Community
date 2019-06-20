@@ -41,17 +41,14 @@
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="35" />
-				<RowDefinition Height="auto"/>
 				<RowDefinition Height="*"/>
-				<RowDefinition Height="auto" />
 			</Grid.RowDefinitions>
 
 			<!-- BORDER CONTROL -->
-			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
-
-			<DockPanel Grid.Column="0" Grid.Row="1" >
+			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" Background="White" />
+			<Border Grid.Column="0" Grid.Row="1" >
 					<ContentControl Content="{Binding CurrentViewModel}"/>
-			</DockPanel>
+			</Border>
 		</Grid>
 	</Border>
 </Window>
