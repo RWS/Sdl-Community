@@ -1,153 +1,118 @@
-﻿using Sdl.LanguagePlatform.Core;
+﻿using System.IO;
+using System.Linq;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.RecordSourceTU
 {
-    public class RecordsSourceTuLanguageDirection : ITranslationMemoryLanguageDirection
+	public class RecordsSourceTuLanguageDirection : ITranslationMemoryLanguageDirection
     {
-        private readonly ITranslationProviderLanguageDirection _fileBasedTranslationProviderLanguageDirection;
+		#region Private fields
+		private readonly ITranslationProviderLanguageDirection _fileBasedTranslationProviderLanguageDirection;
         private readonly ITranslationMemoryLanguageDirection _tmlanguageDirection;
+		private EditorController _editorController = null;
+		private string _activeFileName = string.Empty;
+		#endregion
 
-
-        public RecordsSourceTuLanguageDirection(ITranslationProviderLanguageDirection languageDirection, ITranslationMemoryLanguageDirection tmlanguageDirection)
+		#region Constructors
+		public RecordsSourceTuLanguageDirection(ITranslationProviderLanguageDirection languageDirection, ITranslationMemoryLanguageDirection tmlanguageDirection)
         {
             _fileBasedTranslationProviderLanguageDirection = languageDirection;
             _tmlanguageDirection = tmlanguageDirection;
-        }
+			_editorController = GetEditorController();
+			_editorController.Opened += _editorController_Opened;
+			
+		}
+		#endregion
 
-        #region ITranslationProviderLanguageDirection Members
+		#region Events
+		private void _editorController_Opened(object sender, DocumentEventArgs e)
+		{
+			var activeDoc = _editorController.ActiveDocument;
+			if (activeDoc != null)
+			{
+				activeDoc.ActiveSegmentChanged += ActiveDoc_ActiveSegmentChanged;
+			}
+		}
 
-        public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
+		private void ActiveDoc_ActiveSegmentChanged(object sender, System.EventArgs e)
+		{
+			var document = sender as Document;
+			
+			// used to get the info for each active file when files are merged during project creation
+			if (document?.Files.Count() == 1)
+			{
+				_activeFileName = Path.GetFileName(document?.ActiveFileProperties?.FileConversionProperties?.OriginalFilePath);
+			}
+			else
+			{
+				// used to get the info for each active file when files are merged after creating project 
+				_activeFileName = Path.GetFileName(document?.ActiveFile?.LocalFilePath);
+			}
+
+		}
+		#endregion
+
+		#region ITranslationProviderLanguageDirection Members
+		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
         {
-            var results = _fileBasedTranslationProviderLanguageDirection.AddOrUpdateTranslationUnits(translationUnits,
-                previousTranslationHashes, settings);
-            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
+            var results = _fileBasedTranslationProviderLanguageDirection.AddOrUpdateTranslationUnits(
+				translationUnits,
+                previousTranslationHashes,
+				settings);
 
-            for (int i = 0; i < results.Length; i++)
-            {
-                var result = results[i];
-                if (result == null) continue;
-                var translationUnit = translationUnits[i];
-
-                if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
-                {
-                    var customFieldsValue = new CustomFieldValues
-                    {
-                        FileNameFullPath = translationUnit.GetFilePath(),
-                        ProjectName = translationUnit.GetProjectName()
-                    };
-                    tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
-                }
-            }
+			ProcessTranslationUnits(translationUnits, results);
 
             return results;
         }
 
         public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
         {
-            var results =
-                _fileBasedTranslationProviderLanguageDirection.AddOrUpdateTranslationUnitsMasked(translationUnits,
-                    previousTranslationHashes, settings, mask);
+            var results = _fileBasedTranslationProviderLanguageDirection.AddOrUpdateTranslationUnitsMasked(
+				translationUnits,
+                previousTranslationHashes,
+				settings,
+				mask);
 
-
-            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
-
-            for (int i = 0; i < results.Length; i++)
-            {
-                var result = results[i];
-                if (result == null) continue;
-                var translationUnit = translationUnits[i];
-
-                if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
-                {
-                    var customFieldsValue = new CustomFieldValues
-                    {
-                        FileNameFullPath = translationUnit.GetFilePath(),
-                        ProjectName = translationUnit.GetProjectName()
-                    };
-                    tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
-                }
-            }
+			ProcessTranslationUnits(translationUnits, results);
 
             return results;
         }
 
         public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
         {
-            var result =
-                _fileBasedTranslationProviderLanguageDirection.AddTranslationUnit(translationUnit,
-                    settings);
+            var result = _fileBasedTranslationProviderLanguageDirection.AddTranslationUnit(translationUnit, settings);
             if (result == null) return null;
-            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
 
+			var translationUnits = new TranslationUnit[] { translationUnit };
+			var results = new ImportResult[] { result };
 
-
-            if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
-            {
-                var customFieldsValue = new CustomFieldValues
-                {
-                    FileNameFullPath = translationUnit.GetFilePath(),
-                    ProjectName = translationUnit.GetProjectName()
-                };
-                tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
-            }
-
-            return result;
+			ProcessTranslationUnits(translationUnits, results);
+			return result;
         }
 
         public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
         {
-            var results =
-              _fileBasedTranslationProviderLanguageDirection.AddTranslationUnits(translationUnits,
-                   settings);
+            var results = _fileBasedTranslationProviderLanguageDirection.AddTranslationUnits(
+				translationUnits,
+                settings);
 
-            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
-
-            for (int i = 0; i < results.Length; i++)
-            {
-                var result = results[i];
-                if (result == null) continue;
-                var translationUnit = translationUnits[i];
-
-                if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
-                {
-                    var customFieldsValue = new CustomFieldValues
-                    {
-                        FileNameFullPath = translationUnit.GetFilePath(),
-                        ProjectName = translationUnit.GetProjectName()
-                    };
-                    tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
-                }
-            }
+			ProcessTranslationUnits(translationUnits, results);
 
             return results;
         }
 
         public ImportResult[] AddTranslationUnitsMasked(TranslationUnit[] translationUnits, ImportSettings settings, bool[] mask)
         {
-            var results =
-                _fileBasedTranslationProviderLanguageDirection.AddTranslationUnitsMasked(translationUnits,
-                    settings, mask);
+            var results = _fileBasedTranslationProviderLanguageDirection.AddTranslationUnitsMasked(
+				translationUnits,
+                settings,
+				mask);
 
-            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
-
-            for (int i = 0; i < results.Length; i++)
-            {
-                var result = results[i];
-                if (result == null) continue;
-                var translationUnit = translationUnits[i];
-
-                if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
-                {
-                    var customFieldsValue = new CustomFieldValues
-                    {
-                        FileNameFullPath = translationUnit.GetFilePath(),
-                        ProjectName = translationUnit.GetProjectName()
-                    };
-                    tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
-                }
-            }
+			ProcessTranslationUnits(translationUnits, results);
+			
             return results;
         }
 
@@ -191,9 +156,10 @@ namespace Sdl.Community.RecordSourceTU
 
         public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
         {
-            return _fileBasedTranslationProviderLanguageDirection.SearchTranslationUnitsMasked(settings,
-                translationUnits, mask);
-
+            return _fileBasedTranslationProviderLanguageDirection.SearchTranslationUnitsMasked(
+				settings,
+                translationUnits,
+				mask);
         }
 
         public System.Globalization.CultureInfo SourceLanguage
@@ -213,49 +179,24 @@ namespace Sdl.Community.RecordSourceTU
 
         public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
         {
-            var result =
-                _fileBasedTranslationProviderLanguageDirection.UpdateTranslationUnit(translationUnit);
+            var result =  _fileBasedTranslationProviderLanguageDirection.UpdateTranslationUnit(translationUnit);
             if (result == null) return null;
-            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
 
+			var translationUnits = new TranslationUnit[] { translationUnit };
+			var results = new ImportResult[] { result };
 
+			ProcessTranslationUnits(translationUnits, results);
 
-            if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
-            {
-                var customFieldsValue = new CustomFieldValues
-                {
-                    FileNameFullPath = translationUnit.GetFilePath(),
-                    ProjectName = translationUnit.GetProjectName()
-                };
-                tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
-            }
             return result;
         }
 
         public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
         {
-            var results =
-              _fileBasedTranslationProviderLanguageDirection.UpdateTranslationUnits(translationUnits);
+            var results = _fileBasedTranslationProviderLanguageDirection.UpdateTranslationUnits(translationUnits);			
 
-            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
+			ProcessTranslationUnits(translationUnits, results);
 
-            for (int i = 0; i < results.Length; i++)
-            {
-                var result = results[i];
-                if (result == null) continue;
-                var translationUnit = translationUnits[i];
-
-                if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
-                {
-                    var customFieldsValue = new CustomFieldValues
-                    {
-                        FileNameFullPath = translationUnit.GetFilePath(),
-                        ProjectName = translationUnit.GetProjectName()
-                    };
-                    tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
-                }
-            }
-            return results;
+			return results;
         }
 
         #endregion
@@ -339,5 +280,34 @@ namespace Sdl.Community.RecordSourceTU
         {
             return _tmlanguageDirection.UpdateTranslationUnitsMasked(translationUnits, mask);
         }
-    }
+
+		#region Private Methods
+		private EditorController GetEditorController()
+		{
+			return SdlTradosStudio.Application.GetController<EditorController>();
+		}
+
+		private void ProcessTranslationUnits(TranslationUnit[] translationUnits, ImportResult[] results)
+		{
+			var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
+
+			for (int i = 0; i < results.Length; i++)
+			{
+				var result = results[i];
+				if (result == null) continue;
+				var translationUnit = translationUnits[i];
+
+				if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
+				{
+					var customFieldsValue = new CustomFieldValues
+					{
+						FileNameFullPath = _activeFileName,
+						ProjectName = translationUnit.GetProjectName()
+					};
+					tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
+				}
+			}
+		}
+		#endregion
+	}
 }
