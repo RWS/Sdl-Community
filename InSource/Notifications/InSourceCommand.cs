@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.InSource.Notifications
@@ -12,13 +7,12 @@ namespace Sdl.Community.InSource.Notifications
 	public class InSourceCommand : IStudioNotificationCommand
 	{
 		private readonly Action action;
+		public event EventHandler CanExecuteChanged;
 
 		public InSourceCommand(Action action)
 		{
 			this.action = action;
 		}
-
-		public event EventHandler CanExecuteChanged;
 
 		public bool CanExecute(object parameter)
 		{

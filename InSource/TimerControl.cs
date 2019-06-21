@@ -26,7 +26,6 @@ namespace Sdl.Community.InSource
             _timer.AutoReset = true;
 
             intervalTextBox.TextChanged += TimeTextBox_TextChanged;
-
         }
 
         protected override void OnLoad(EventArgs e)
@@ -90,8 +89,6 @@ namespace Sdl.Community.InSource
             {
                 _timeLeft--;
                 remainingTime.Text = _timeLeft + @" minutes until project request is checked. ";
-
-
             }
             if (_timeLeft == 0)
             {
@@ -99,11 +96,8 @@ namespace Sdl.Community.InSource
                 _timeLeft = _timerSettings.Minutes;
                 remainingTime.Text = _timeLeft + @" minutes until project request is checked. ";
             }
-               
-            
         }
-
-
+		
         private void TimeTextBox_TextChanged(object sender, EventArgs e)
         {
             if (Regex.IsMatch(intervalTextBox.Text, "^[0-9]*$"))
@@ -122,7 +116,6 @@ namespace Sdl.Community.InSource
                  MessageBox.Show(@"Please set a number for timer ",@"Warning" , MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
             }
-          
         }
 
         private void timerCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -134,8 +127,6 @@ namespace Sdl.Community.InSource
                 remainingTime.ForeColor = Color.Black;
                 remainingTime.ForeColor = Color.Black;
                 _timerSettings.HasTimer = true;
-               
-
             }
             else
             {
@@ -155,11 +146,7 @@ namespace Sdl.Community.InSource
 
        private void OnCheckForProjectsRequestEvent()
         {
-            
-            if (CheckForProjectsRequestEvent != null)
-            {
-                CheckForProjectsRequestEvent(this, EventArgs.Empty);
-            }
-        }
+			CheckForProjectsRequestEvent?.Invoke(this, EventArgs.Empty);
+		}
     }
 }

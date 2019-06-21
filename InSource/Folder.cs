@@ -2,10 +2,9 @@
 
 namespace Sdl.Community.InSource
 {
-    public class Folder
-    {
-        public string Path { get; set; }
-
-        public ProjectTemplateInfo ProjectTemplate{ get; set; }
-    }
+	public class Folder
+	{
+		public string Path { get; set; }
+		public ProjectTemplateInfo ProjectTemplate { get; set; }
+	}
 }

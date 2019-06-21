@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.InSource.Notifications
