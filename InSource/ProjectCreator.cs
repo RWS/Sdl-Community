@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Sdl.Community.InSource.Helpers;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 
@@ -16,8 +17,9 @@ namespace Sdl.Community.InSource
         public event EventHandler<ProjectMessageEventArgs> MessageReported;
         private double _currentProgress;
 	    private readonly ProjectRequest _projectRequest;
+	    public static readonly Log Log = Log.Instance;
 
-        public ProjectCreator(List<ProjectRequest> requests, ProjectTemplateInfo projectTemplate)
+		public ProjectCreator(List<ProjectRequest> requests, ProjectTemplateInfo projectTemplate)
         {
             Requests = requests;
             ProjectTemplate = projectTemplate;
@@ -65,72 +67,80 @@ namespace Sdl.Community.InSource
 
 	    private FileBasedProject CreateProject(ProjectRequest request)
 	    {
-		    if (request?.ProjectTemplate != null)
+		    try
 		    {
-			    var projectInfo = new ProjectInfo
-			    {
-				    Name = request.Name,
-				    LocalProjectFolder = GetProjectFolderPath(request.Name, request.ProjectTemplate.Uri.LocalPath),
-			    };
-			    var project = new FileBasedProject(projectInfo,
-				    new ProjectTemplateReference(request.ProjectTemplate.Uri));
+				if (request?.ProjectTemplate != null)
+				{
+					var projectInfo = new ProjectInfo
+					{
+						Name = request.Name,
+						LocalProjectFolder = GetProjectFolderPath(request.Name, request.ProjectTemplate.Uri?.LocalPath)
+					};
+					var project = new FileBasedProject(projectInfo,
+						new ProjectTemplateReference(request.ProjectTemplate.Uri));
 
-			    OnMessageReported(project, $"Creating project {request.Name}");
+					OnMessageReported(project, $"Creating project {request.Name}");
 
-			    if (request.Files != null)
-			    {
-				    //path to subdirectory
-				    var subdirectoryPath = Path.GetDirectoryName(request.Files[0]);
+					if (request.Files != null)
+					{
+						//path to subdirectory
+						var subdirectoryPath = Path.GetDirectoryName(request.Files[0]);
 
-				    var projectFiles = project.AddFolderWithFiles(subdirectoryPath, true);
-				    project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+						var projectFiles = project.AddFolderWithFiles(subdirectoryPath, true);
+						project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
 
-				    //when a template is created from a Single file project, task sequencies is null.
-				    try
-				    {
-					    var taskSequence = project.RunDefaultTaskSequence(projectFiles.GetIds(),
-						    (sender, e)
-							    =>
-						    {
-							    if (Requests != null)
-							    {
-								    OnProgressChanged(_currentProgress + (double) e.PercentComplete / Requests.Count);
-							    }
-						    }
-						    , (sender, e)
-							    =>
-						    {
-							    OnMessageReported(project, e.Message);
-						    });
+						//when a template is created from a Single file project, task sequencies is null.
+						try
+						{
+							var taskSequence = project.RunDefaultTaskSequence(projectFiles.GetIds(),
+								(sender, e)
+									=>
+								{
+									if (Requests != null)
+									{
+										OnProgressChanged(_currentProgress + (double)e.PercentComplete / Requests.Count);
+									}
+								}
+								, (sender, e)
+									=>
+								{
+									OnMessageReported(project, e.Message);
+								});
 
-					    project.Save();
+							project.Save();
 
-					    if (taskSequence.Status == TaskStatus.Completed)
-					    {
-						    if (SuccessfulRequests != null)
-						    {
-							    SuccessfulRequests.Add(Tuple.Create(request, project));
-							    OnMessageReported(project, $"Project {request.Name} created successfully.");
-							    return project;
-						    }
-					    }
-					    else
-					    {
-						    OnMessageReported(project, $"Project {request.Name} creation failed.");
-						    return null;
-					    }
-				    }
-				    catch (Exception ex)
-				    {
-					    MessageBox.Show(
-						    @"Please go to File -> Setup -> Project templates -> Select a template -> Edit -> Default Task Sequence -> Ok after that run again Content connector");
-				    }
-			    }
-			    return project;
+							if (taskSequence.Status == TaskStatus.Completed)
+							{
+								if (SuccessfulRequests != null)
+								{
+									SuccessfulRequests.Add(Tuple.Create(request, project));
+									OnMessageReported(project, $"Project {request.Name} created successfully.");
+									return project;
+								}
+							}
+							else
+							{
+								OnMessageReported(project, $"Project {request.Name} creation failed.");
+								return null;
+							}
+						}
+						catch (Exception ex)
+						{
+							Log.Logger.Error($"ProjectCreator-> CreateProject method: {ex.Message}\n {ex.StackTrace}");
+							MessageBox.Show(
+								@"Please go to File -> Setup -> Project templates -> Select a template -> Edit -> Default Task Sequence -> Ok after that run again Content connector");
+						}
+					}
+					return project;
+				}
+
+				MessageBox.Show(@"Please select a project template from InSource view", @"Project template is missing",
+					MessageBoxButtons.OK);
+			}
+		    catch (Exception e)
+		    {
+				Log.Logger.Error($"ProjectCreator-> CreateProject method: {e.Message}\n {e.StackTrace}");
 		    }
-
-		    MessageBox.Show(@"Please select a project template from InSource view", @"Project template is missing",
-			    MessageBoxButtons.OK);
 		    return null;
 	    }
 
@@ -143,23 +153,31 @@ namespace Sdl.Community.InSource
         /// <returns></returns>
         private string GetProjectFolderPath(string name,string pathToTemplate)
         {
-            var templateXml = XElement.Load(pathToTemplate);
-            var settingsGroup =
-                templateXml.Descendants("SettingsGroup")
-                    .Where(s => s.Attribute("Id").Value.Equals("ProjectTemplateSettings"));
-            var location =
-                settingsGroup.Descendants("Setting")
-                    .Where(id => id.Attribute("Id").Value.Equals("ProjectLocation"))
-                    .Select(l => l.Value).FirstOrDefault();
-            var rootFolder = location; 
-            string folder;
-            int num = 1;
-            do 
-            {
-                num++;
-            }
-            while (Directory.Exists(folder = Path.Combine(rootFolder, name + "-" + num)));
-            return folder;
+	        try
+	        {
+		        var templateXml = XElement.Load(pathToTemplate);
+		        var settingsGroup =
+			        templateXml.Descendants("SettingsGroup")
+				        .Where(s => s.Attribute("Id").Value.Equals("ProjectTemplateSettings"));
+		        var location =
+			        settingsGroup.Descendants("Setting")
+				        .Where(id => id.Attribute("Id").Value.Equals("ProjectLocation"))
+				        .Select(l => l.Value).FirstOrDefault();
+		        var rootFolder = location;
+		        string folder;
+		        int num = 1;
+		        do
+		        {
+			        num++;
+		        }
+		        while (Directory.Exists(folder = Path.Combine(rootFolder, name + "-" + num)));
+		        return folder;
+			}
+	        catch (Exception e)
+			{
+				Log.Logger.Error($"GetProjectFolderPath method: {e.Message}\n {e.StackTrace}");
+			}
+	        return string.Empty;
         }
 
         private void OnProgressChanged(double progress)

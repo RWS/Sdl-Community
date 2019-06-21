@@ -50,6 +50,9 @@
       <HintPath>packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>packages\NLog.4.6.5\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="ObjectListView, Version=2.9.0.25611, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>packages\ObjectListView.Official.2.9.0\lib\net20\ObjectListView.dll</HintPath>
       <Private>True</Private>
@@ -133,8 +136,13 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -145,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\FolderSelectDialog.cs" />
+    <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="InSourceViewRibbonGroup.cs" />
     <Compile Include="InSource.cs" />

@@ -17,8 +17,8 @@ namespace Sdl.Community.InSource
         private  List<ProjectRequest> _folderPathList;
         private readonly List<ProjectRequest> _selectedFolders;
         private readonly List<ProjectRequest> _watchFolders;
-
-	    public InSourceViewControl()
+	    public static readonly Log Log = Log.Instance;
+		public InSourceViewControl()
 	    {
 		    InitializeComponent();
 		    _persistence = new Persistence();
@@ -175,8 +175,8 @@ namespace Sdl.Community.InSource
             }
             catch (Exception exception)
             {
-	            throw exception;
-            }
+				Log.Logger.Error($"FoldersListView_CellEditStarting: {exception.Message}\n {exception.StackTrace}");
+			}
         }
 
         private void InitializeListView(List<ProjectRequest> watchFolders)
