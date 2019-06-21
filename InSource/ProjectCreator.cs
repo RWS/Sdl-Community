@@ -10,7 +10,7 @@ using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.InSource
 {
-    class ProjectCreator
+    public class ProjectCreator
     {
         public event ProgressChangedEventHandler ProgressChanged;
         public event EventHandler<ProjectMessageEventArgs> MessageReported;
@@ -31,7 +31,7 @@ namespace Sdl.Community.InSource
 	    }
         List<ProjectRequest> Requests
         {
-            get; set;
+            get;
         }
 
         public List<Tuple<ProjectRequest, FileBasedProject>> SuccessfulRequests
@@ -42,95 +42,100 @@ namespace Sdl.Community.InSource
         ProjectTemplateInfo ProjectTemplate
         {
             get;
-            set;
         }
 
-        public void Execute()
-        {
-            _currentProgress = 0;
-	        if (Requests!=null)
-	        {
-		        foreach (ProjectRequest request in Requests)
-		        {
-			        CreateProject(request);
-			        _currentProgress += 100.0 / Requests.Count;
-			        OnProgressChanged(_currentProgress);
-		        }
-	        }
-	        else
-	        {
-		        CreateProject(_projectRequest);
-	        }
-            
-            OnProgressChanged(100);
-        }
+	    public FileBasedProject Execute()
+	    {
+		    _currentProgress = 0;
+		    if (Requests != null)
+		    {
+			    foreach (var request in Requests)
+			    {
+				    var project = CreateProject(request);
+				    _currentProgress += 100.0 / Requests.Count;
+				    OnProgressChanged(_currentProgress);
+				    return project;
+			    }
+		    }
 
-        private FileBasedProject CreateProject(ProjectRequest request)
-        {
-            var projectInfo = new ProjectInfo
-            {
-                Name = request.Name,
-                LocalProjectFolder = GetProjectFolderPath(request.Name,request.ProjectTemplate.Uri.LocalPath),
-               };
-            var project = new FileBasedProject(projectInfo,
-                new ProjectTemplateReference(request.ProjectTemplate.Uri));
-            // new ProjectTemplateReference(ProjectTemplate.Uri));
+		    var fileBasedProject = CreateProject(_projectRequest);
+		    OnProgressChanged(100);
+		    return fileBasedProject;
+	    }
 
-            OnMessageReported(project, String.Format("Creating project {0}", request.Name));
+	    private FileBasedProject CreateProject(ProjectRequest request)
+	    {
+		    if (request?.ProjectTemplate != null)
+		    {
+			    var projectInfo = new ProjectInfo
+			    {
+				    Name = request.Name,
+				    LocalProjectFolder = GetProjectFolderPath(request.Name, request.ProjectTemplate.Uri.LocalPath),
+			    };
+			    var project = new FileBasedProject(projectInfo,
+				    new ProjectTemplateReference(request.ProjectTemplate.Uri));
 
-            //path to subdirectory
-            var subdirectoryPath =
-                request.Files[0].Substring(0, request.Files[0].IndexOf(request.Name, StringComparison.Ordinal)) +
-                request.Name;
+			    OnMessageReported(project, $"Creating project {request.Name}");
 
-            ProjectFile[] projectFiles = project.AddFolderWithFiles(subdirectoryPath, true);
-            project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+			    if (request.Files != null)
+			    {
+				    //path to subdirectory
+				    var subdirectoryPath = Path.GetDirectoryName(request.Files[0]);
 
-            //when a template is created from a Single file project, task sequencies is null.
-            try
-            {
-                var taskSequence = project.RunDefaultTaskSequence(projectFiles.GetIds(),
-                    (sender, e)
-                        =>
-                    {
-	                    if (Requests != null)
-	                    {
-							OnProgressChanged(_currentProgress + (double)e.PercentComplete / Requests.Count);
-						}
-                    }
-                    , (sender, e)
-                        =>
-                    {
-                        OnMessageReported(project, e.Message);
-                    });
+				    var projectFiles = project.AddFolderWithFiles(subdirectoryPath, true);
+				    project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
 
-                project.Save();
+				    //when a template is created from a Single file project, task sequencies is null.
+				    try
+				    {
+					    var taskSequence = project.RunDefaultTaskSequence(projectFiles.GetIds(),
+						    (sender, e)
+							    =>
+						    {
+							    if (Requests != null)
+							    {
+								    OnProgressChanged(_currentProgress + (double) e.PercentComplete / Requests.Count);
+							    }
+						    }
+						    , (sender, e)
+							    =>
+						    {
+							    OnMessageReported(project, e.Message);
+						    });
 
-                if (taskSequence.Status == TaskStatus.Completed)
-                {
-	                if (SuccessfulRequests != null)
-	                {
-						SuccessfulRequests.Add(Tuple.Create(request, project));
-		                OnMessageReported(project, string.Format("Project {0} created successfully.", request.Name));
-		                return project;
-					}
-                }
-                else
-                {
-                    OnMessageReported(project, string.Format("Project {0} creation failed.", request.Name));
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    @"Please go to File -> Setup -> Project templates -> Select a template -> Edit -> Default Task Sequence -> Ok after that run again Content connector");
-            }
-            return project;
-        }
+					    project.Save();
 
-        
-        /// <summary>
+					    if (taskSequence.Status == TaskStatus.Completed)
+					    {
+						    if (SuccessfulRequests != null)
+						    {
+							    SuccessfulRequests.Add(Tuple.Create(request, project));
+							    OnMessageReported(project, $"Project {request.Name} created successfully.");
+							    return project;
+						    }
+					    }
+					    else
+					    {
+						    OnMessageReported(project, $"Project {request.Name} creation failed.");
+						    return null;
+					    }
+				    }
+				    catch (Exception ex)
+				    {
+					    MessageBox.Show(
+						    @"Please go to File -> Setup -> Project templates -> Select a template -> Edit -> Default Task Sequence -> Ok after that run again Content connector");
+				    }
+			    }
+			    return project;
+		    }
+
+		    MessageBox.Show(@"Please select a project template from InSource view", @"Project template is missing",
+			    MessageBoxButtons.OK);
+		    return null;
+	    }
+
+
+	    /// <summary>
         /// Reads the project folder location from selected template
         /// </summary>
         /// <param name="name"></param>
@@ -173,7 +178,7 @@ namespace Sdl.Community.InSource
 		}
     }
 
-    class ProjectMessageEventArgs : EventArgs
+    public class ProjectMessageEventArgs : EventArgs
     {
         public FileBasedProject Project { get; set; }
         public string Message {get; set;}

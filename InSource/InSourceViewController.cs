@@ -27,10 +27,8 @@ namespace Sdl.Community.InSource
     public class InSourceViewController : AbstractViewController, INotifyPropertyChanged
     {
         #region private fields
-       
         private static readonly Lazy<InSourceViewControl> Control = new Lazy<InSourceViewControl>(() => new InSourceViewControl());
         private static readonly Lazy<TimerControl> TimerControl = new Lazy<TimerControl>();
-
         private ProjectTemplateInfo _selectedProjectTemplate;
         private List<ProjectRequest> _projectRequests;
         private List<ProjectRequest> _selectedProjects;
@@ -76,16 +74,14 @@ namespace Sdl.Community.InSource
             get;
             set;
         }
-
         public IEnumerable<ProjectTemplateInfo> ProjectTemplates => ProjectsController.GetProjectTemplates();
-
 	    public ProjectTemplateInfo SelectedProjectTemplate
         {
             get => _selectedProjectTemplate;
 		    set
             {
                 _selectedProjectTemplate = value;
-                OnPropertyChanged("SelectedProjectTemplate");
+                OnPropertyChanged(nameof(SelectedProjectTemplate));
             }
         }
 
@@ -95,7 +91,7 @@ namespace Sdl.Community.InSource
 	        set
             {
                 _projectRequests = value;
-                OnPropertyChanged("ProjectRequests");
+                OnPropertyChanged(nameof(ProjectRequests));
 
                 OnProjectRequestsChanged();
             }
@@ -127,7 +123,7 @@ namespace Sdl.Community.InSource
 	        set
             {
                 _percentComplete = value;
-                OnPropertyChanged("PercentComplete");
+                OnPropertyChanged(nameof(PercentComplete));
             }
         }
 
@@ -195,10 +191,13 @@ namespace Sdl.Community.InSource
 			if (notification != null)
 			{
 				var project = ProjectRequests.FirstOrDefault(n => n.NotificationId.Equals(notification.Id));
-				CreateProjectsFromNotifications(project);
+				var fileBasedProject= CreateProjectsFromNotifications(project);
 				//remove the notificatio from list
-				_notificationGroup.Notifications.Remove(notification);
-				
+				if (fileBasedProject != null)
+				{
+					_notificationGroup.Notifications.Remove(notification);
+				}
+
 				if (_notificationGroup.Notifications.Count > 0)
 				{
 					var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
@@ -206,6 +205,7 @@ namespace Sdl.Community.InSource
 				}
 				else
 				{
+					if (fileBasedProject == null) return;
 					var removeNotificationEvent = new RemoveStudioGroupNotificationEvent(NotificationGroupId);
 					_eventAggregator.Publish(removeNotificationEvent);
 				}
@@ -270,166 +270,157 @@ namespace Sdl.Community.InSource
             return projectRequest;
         }
 
-	    public void CreateProjectsFromNotifications(ProjectRequest projectFromNotifications)
+	    public FileBasedProject CreateProjectsFromNotifications(ProjectRequest projectFromNotifications)
 	    {
-			ProjectCreator creator;
-			var worker = new BackgroundWorker
-			{
-				WorkerReportsProgress = true
-			};
+		    ProjectCreator creator;
+		    FileBasedProject project=null;
+		    var worker = new BackgroundWorker
+		    {
+			    WorkerReportsProgress = true
+		    };
 		    worker.DoWork += (sender, e) =>
 		    {
 			    creator = new ProjectCreator(projectFromNotifications, projectFromNotifications.ProjectTemplate);
-			    creator.Execute();
+			   project = creator.Execute();
 		    };
 
-			    worker.RunWorkerCompleted += (sender, e) =>
+		    worker.RunWorkerCompleted += (sender, e) =>
+		    {
+			    if (e.Error != null)
 			    {
-				    if (e.Error != null)
+				    MessageBox.Show(e.Error.ToString());
+			    }
+			    else
+			    {
+				    if (project != null)
 				    {
-					    MessageBox.Show(e.Error.ToString());
-				    }
-				    else
-				    {
-					    InSource.Instance.RequestAccepted(projectFromNotifications);
-						//Remove the created project from project request
-						//this will refresh the list from view part
+						InSource.Instance.RequestAccepted(projectFromNotifications);
+					    //Remove the created project from project request
+					    //this will refresh the list from view part
 					    ProjectRequests.Remove(projectFromNotifications);
 
 					    OnProjectRequestsChanged();
-						MessageBox.Show("Project "+ projectFromNotifications.Name +" was created");
-					}
-			    };
-			    worker.RunWorkerAsync();
+					    MessageBox.Show($"Project {projectFromNotifications.Name} was created");
+				    }
+			    }
+		    };
+		    worker.RunWorkerAsync();
+		    return project;
 		}
 
-        public void CreateProjects()
-        {
-            Control.Value.ClearMessages();
+		public void CreateProjects()
+	    {
+		    Control.Value.ClearMessages();
 
-            ProjectCreator creator = null;
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.WorkerReportsProgress = true;
+		    ProjectCreator creator = null;
+		    var worker = new BackgroundWorker
+		    {
+			    WorkerReportsProgress = true
+		    };
 
-            if (SelectedProjects == null || SelectedProjects.Count == 0)
-            {
-                MessageBox.Show(@"Please select a project");
-            }
-            else
-            {
-                if (SelectedProjects != null && SelectedProjects.Count != 0)
-                {
-                    foreach (var selectedProject in SelectedProjects)
-                    {
-                        if (selectedProject.ProjectTemplate != null)
-                        {
-                            _hasTemplateList.Add(true);
-                        }
-                        else
-                        {
-                            _hasTemplateList.Add(false);
-                        }
+		    if (SelectedProjects == null || SelectedProjects.Count == 0)
+		    {
+			    MessageBox.Show(@"Please select a project");
+		    }
+		    else
+		    {
+			    if (SelectedProjects != null && SelectedProjects.Count != 0)
+			    {
+				    foreach (var selectedProject in SelectedProjects)
+				    {
+					    _hasTemplateList.Add(selectedProject.ProjectTemplate != null);
 
-                        if (HasFiles(selectedProject.Path))
-                        {
-                            _hasFiles.Add(true);
-                        }
-                        else
-                        {
-                            _hasFiles.Add(false);
-                        }
-                    }
-                }
-                if (!_hasFiles.Contains(true))
-                {
-                    if (!_hasTemplateList.Contains(false))
-                    {
-                        if (SelectedProjects != null && (SelectedProjects.Count != 0 && SelectedProjects != null))
-                        {
+					    _hasFiles.Add(HasFiles(selectedProject.Path));
+				    }
+			    }
+			    if (!_hasFiles.Contains(true))
+			    {
+				    if (!_hasTemplateList.Contains(false))
+				    {
+					    if (SelectedProjects != null && (SelectedProjects.Count != 0 && SelectedProjects != null))
+					    {
 
-                            worker.DoWork += (sender, e) =>
-                            {
-                                if (SelectedProjects.Count != 0 && SelectedProjects != null)
-                                {
-                                    creator = new ProjectCreator(SelectedProjects, SelectedProjectTemplate);
-                                }
-                                else
-                                {
-                                    creator = new ProjectCreator(ProjectRequests, SelectedProjectTemplate);
-                                }
+						    worker.DoWork += (sender, e) =>
+						    {
+							    if (SelectedProjects.Count != 0 && SelectedProjects != null)
+							    {
+								    creator = new ProjectCreator(SelectedProjects, SelectedProjectTemplate);
+							    }
+							    else
+							    {
+								    creator = new ProjectCreator(ProjectRequests, SelectedProjectTemplate);
+							    }
 
-                                creator.ProgressChanged +=
-                                    (sender2, e2) => { worker.ReportProgress(e2.ProgressPercentage); };
-                                creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Project, e2.Message); };
-                                creator.Execute();
-                            };
-                            worker.ProgressChanged += (sender, e) =>
-                            {
-                                PercentComplete = e.ProgressPercentage;
-                            };
-                            worker.RunWorkerCompleted += (sender, e) =>
-                            {
+							    creator.ProgressChanged +=
+								    (sender2, e2) => { worker.ReportProgress(e2.ProgressPercentage); };
+							    creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Project, e2.Message); };
+							    creator.Execute();
+						    };
+						    worker.ProgressChanged += (sender, e) =>
+						    {
+							    PercentComplete = e.ProgressPercentage;
+						    };
+						    worker.RunWorkerCompleted += (sender, e) =>
+						    {
 
-                                if (e.Error != null)
-                                {
-                                    MessageBox.Show(e.Error.ToString());
-                                }
-                                else
-                                {
-	                                foreach (
-		                                Tuple<ProjectRequest, FileBasedProject> request in creator.SuccessfulRequests)
-	                                {
-		                                // accept the request
-		                                InSource.Instance.RequestAccepted(request.Item1);
+							    if (e.Error != null)
+							    {
+								    MessageBox.Show(e.Error.ToString());
+							    }
+							    else
+							    {
+								    foreach (
+									    var request in creator.SuccessfulRequests)
+								    {
+									    // accept the request
+									    InSource.Instance.RequestAccepted(request.Item1);
 
-		                                // remove the request from the list of requests
-		                                ProjectRequests.Remove(request.Item1);
+									    // remove the request from the list of requests
+									    ProjectRequests.Remove(request.Item1);
 
-										//remove notification for project created from the View part
-		                                var notification =
-			                                _notificationGroup.Notifications.FirstOrDefault(n => n.Id.Equals(request.Item1
-				                                .NotificationId));
-		                                if (notification != null)
-		                                {
-			                                _notificationGroup.Notifications.Remove(notification);
-			                                if (_notificationGroup.Notifications.Count > 0)
-			                                {
-				                                var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
+									    //remove notification for project created from the View part
+									    var notification =
+										    _notificationGroup.Notifications.FirstOrDefault(n => n.Id.Equals(request.Item1
+											    .NotificationId));
+									    if (notification != null)
+									    {
+										    _notificationGroup.Notifications.Remove(notification);
+										    if (_notificationGroup.Notifications.Count > 0)
+										    {
+											    var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
 
-				                                _eventAggregator.Publish(addNotificationEvent);
-			                                }
-			                                else
-			                                {
-				                                var removeNotificationEvent = new RemoveStudioGroupNotificationEvent(NotificationGroupId);
-												_eventAggregator.Publish(removeNotificationEvent);
-			                                }
+											    _eventAggregator.Publish(addNotificationEvent);
+										    }
+										    else
+										    {
+											    var removeNotificationEvent = new RemoveStudioGroupNotificationEvent(NotificationGroupId);
+											    _eventAggregator.Publish(removeNotificationEvent);
+										    }
 
-		                                }
-		                                OnProjectRequestsChanged();
-	                                }
-                                }
-                            };
-                            worker.RunWorkerAsync();
+									    }
+									    OnProjectRequestsChanged();
+								    }
+							    }
+						    };
+						    worker.RunWorkerAsync();
+					    }
+				    }
+				    else
+				    {
+					    MessageBox.Show(@"Please choose a custom template");
+					    _hasTemplateList.Clear();
+				    }
+			    }
+			    else
+			    {
+				    MessageBox.Show(
+					    @"Watch folders should contain only folders, please put the files in a directory, and after that click CHECK PROJECT REQUESTS BUTTON ");
+				    _hasFiles.Clear();
+			    }
+		    }
+	    }
 
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show(@"Please choose a custom template");
-                        _hasTemplateList.Clear();
-                    }
-
-                }
-                else
-                {
-                    MessageBox.Show(
-                        @"Watch folders should contain only folders, please put the files in a directory, and after that click CHECK PROJECT REQUESTS BUTTON ");
-                    _hasFiles.Clear();
-                }
-            }
-        }
-
-        private bool HasFiles(string path)
+	    private bool HasFiles(string path)
         {
             var hasFiles = Directory.EnumerateFiles(path).Any();
             return hasFiles;
