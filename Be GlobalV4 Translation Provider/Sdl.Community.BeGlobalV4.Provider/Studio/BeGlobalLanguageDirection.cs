@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
@@ -106,56 +107,115 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		/// <returns></returns>
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
-			var segmentsToTranslate = segments.Where((seg, i) => mask == null || mask[i]).ToArray();
-			var translationIndex = 0;
 			var results = new SearchResults[segments.Length];
+
+			var beGlobalSegments = new List<BeGlobalSegment>();
+			var alreadyTranslatedSegments = new List<BeGlobalSegment>();
 			if (!_options.ResendDrafts)
 			{
-				var intermediarSegments = new List<Segment>();
-				foreach (var segment in segmentsToTranslate)
+				// Re-send draft segment logic
+				for (var i = 0; i < segments.Length; i++)
 				{
-					var corespondingTu = _translationUnits.FirstOrDefault(tu => tu.SourceSegment.Equals(segment));
-					if (corespondingTu != null)
+					if (mask != null && !mask[i])
 					{
-						if (corespondingTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
+						results[i] = null;
+						continue;
+					}
+					var corespondingTu = _translationUnits.FirstOrDefault(tu => tu.SourceSegment.Equals(segments[i]));
+					//locked segments should not be translated
+					if (corespondingTu != null && (corespondingTu.ConfirmationLevel != ConfirmationLevel.Unspecified || corespondingTu.DocumentSegmentPair.Properties.IsLocked))
+					{
+						var translation = new Segment(_languageDirection.TargetCulture);
+						translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
+
+						var alreadyTranslatedSegment = new BeGlobalSegment
 						{
-
-							var intermediarTranslations = TranslateSegments(intermediarSegments.ToArray());
-							AddTranslationToResults(intermediarTranslations, intermediarSegments.ToArray(), results, translationIndex, mask);
-
-							//add current TU as search result
-							var translation = new Segment(_languageDirection.TargetCulture);
-							translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-
-							var currentTu = new List<Segment>
-							{
-								translation
-							};
-							AddTranslationToResults(currentTu.ToArray(), segments, results, translationIndex, mask);
-
-							Array.Clear(intermediarTranslations, 0, intermediarTranslations.Length);
-							intermediarSegments.Clear();
-
-						}
-						else
+							Translation = translation,
+							Segment = segments[i],
+							Index = i,
+							SearchResult = CreateSearchResult(segments[i], translation)
+						};
+						alreadyTranslatedSegments.Add(alreadyTranslatedSegment);
+					}
+					else
+					{
+						var segmentToBeTranslated = new BeGlobalSegment
 						{
-							intermediarSegments.Add(segment);
-						}
+							Segment = segments[i],
+							Index = i
+						};
+						beGlobalSegments.Add(segmentToBeTranslated);
 					}
 				}
-				if (intermediarSegments.Count > 0)
+				if (beGlobalSegments.Count > 0)
 				{
-					var intermediarTranslations = TranslateSegments(intermediarSegments.ToArray());
-					AddTranslationToResults(intermediarTranslations, segments, results, translationIndex, mask);
+					GetTranslations(beGlobalSegments);
+					SetSearchResults(results, beGlobalSegments);
+				}
+				if (alreadyTranslatedSegments.Count > 0)
+				{
+					SetSearchResults(results, alreadyTranslatedSegments);
 				}
 			}
 			else
 			{
-				var translations = TranslateSegments(segmentsToTranslate);
-				AddTranslationToResults(translations, segments, results, translationIndex, mask);
-			}
+				var translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
 
+				if (translations.Any(translation => translation != null))
+				{
+					var translationIndex = 0;
+					for (var i = 0; i < segments.Length; i++)
+					{
+						if (mask != null && !mask[i])
+						{
+							results[i] = null;
+							continue;
+						}
+						results[i] = new SearchResults();
+						if (segments[i] != null)
+						{
+							results[i].SourceSegment = segments[i].Duplicate();
+							results[i].Add(CreateSearchResult(segments[i], translations[translationIndex]));
+							translationIndex++;
+						}
+						else
+						{
+							results[i].SourceSegment = new Segment();
+							results[i].Add(CreateSearchResult(new Segment(), new Segment()));
+						}
+					}
+				}
+			}
 			return results;
+		}
+		private void SetSearchResults(SearchResults[] results, List<BeGlobalSegment> translatedSegments)
+		{
+			foreach (var segment in translatedSegments)
+			{
+				if (segment?.Segment != null)
+				{
+					results[segment.Index] = new SearchResults
+					{
+						SourceSegment = segment.Segment.Duplicate()
+					};
+					results[segment.Index].Add(segment.SearchResult);
+				}
+			}
+		}
+
+		private void GetTranslations(List<BeGlobalSegment> beGlobalSegments)
+		{
+			var segmentsToBeTranslated = new List<Segment>();
+			foreach (var segment in beGlobalSegments)
+			{
+				segmentsToBeTranslated.Add(segment.Segment);
+			}
+			var translations = TranslateSegments(segmentsToBeTranslated.ToArray());
+			for (var i = 0; i < beGlobalSegments.Count; i++)
+			{
+				beGlobalSegments[i].Translation = translations[i];
+				beGlobalSegments[i].SearchResult = CreateSearchResult(beGlobalSegments[i].Segment, translations[i]);
+			}
 		}
 		private void AddTranslationToResults(Segment[] translations, Segment[] segments, SearchResults[] results, int translationIndex, bool[] mask)
 		{
