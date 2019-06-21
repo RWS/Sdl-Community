@@ -218,9 +218,13 @@ namespace Sdl.Community.InSource
             var foldersPath = new List<string>();
             foreach (var watch in watchFoldersPath)
             {
-                foldersPath.Add(watch.Path);
-            }
-
+	            var hasFiles = Directory.GetFiles(watch.Path, "*.*",SearchOption.AllDirectories).Any();
+				//if the watch folder doesn't have file a new notification will be created for each watch folder, so we add only the folders which has files
+	            if (hasFiles)
+	            {
+					foldersPath.Add(watch.Path);
+				}
+			}
             return foldersPath;
         }
 

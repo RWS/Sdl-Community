@@ -22,10 +22,7 @@ namespace Sdl.Community.InSource
         }
 
 	    public Guid NotificationId { get; set; }	
-
         public string Path { get; set; }
-
         public ProjectTemplateInfo ProjectTemplate { get; set; }
-
     }
 }

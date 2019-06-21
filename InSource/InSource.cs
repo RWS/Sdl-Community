@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Sdl.Community.InSource
 {
-    class InSource
+    public class InSource
     {
         public static readonly InSource Instance = new InSource();
         public static Persistence Persistence = new Persistence();
@@ -23,13 +23,13 @@ namespace Sdl.Community.InSource
         {
             ProjectRequests = new List<ProjectRequest>();
 
-            List<ProjectRequest> dropFolderList = GetIncomingRequestsFolder();
+            var dropFolderList = GetIncomingRequestsFolder();
 
             foreach (var folder in dropFolderList)
             {
                 foreach (string directory in Directory.GetDirectories(folder.Path))
                 {
-                    DirectoryInfo dirInfo = new DirectoryInfo(directory);
+	                var dirInfo = new DirectoryInfo(directory);
                     if (dirInfo.Name != "AcceptedRequests")
                     {
                         ProjectRequests.Add(new ProjectRequest
@@ -89,17 +89,14 @@ namespace Sdl.Community.InSource
                     } //that means we have a subfolder in watch folder
                     else
                     {
-
                         var subdirectories = Directory.GetDirectories(_requestPath);
                         foreach (var subdirectory in subdirectories)
                         {
                             var currentDirInfo = new DirectoryInfo(subdirectory);
                             CheckForSubfolders(currentDirInfo, acceptedRequestFolder);
-
                         }
 
                         var currentDirectory = Directory.GetDirectories(_requestPath);
-
                         if (currentDirectory.Length == 0)
                         {
                             Directory.Delete(_requestPath);
@@ -125,7 +122,6 @@ namespace Sdl.Community.InSource
             }
             Persistence.Update(request);
         }
-
   
         private void CheckForSubfolders(DirectoryInfo directory,string root)
         {
@@ -150,13 +146,11 @@ namespace Sdl.Community.InSource
                     {
                         Directory.Delete(pathToDelete);
                     }
-
                 }
                 catch (Exception e)
                 {
 	                throw e;
                 }
-                
             }
             if (subdirectories.Length != 0)
             {
@@ -182,6 +176,5 @@ namespace Sdl.Community.InSource
                 }
             }
         }
-
     }
 }

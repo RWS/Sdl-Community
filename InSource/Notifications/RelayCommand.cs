@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-
 
 namespace Sdl.Community.InSource.Notifications
 {
@@ -38,9 +31,5 @@ namespace Sdl.Community.InSource.Notifications
 		}
 
 		public event EventHandler CanExecuteChanged;
-
-		
 	}
-
-
 }

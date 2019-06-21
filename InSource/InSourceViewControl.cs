@@ -18,16 +18,17 @@ namespace Sdl.Community.InSource
         private readonly List<ProjectRequest> _selectedFolders;
         private readonly List<ProjectRequest> _watchFolders;
 
-        public InSourceViewControl(){
+	    public InSourceViewControl()
+	    {
+		    InitializeComponent();
+		    _persistence = new Persistence();
+		    _projectsListBox.SelectedIndexChanged += _projectsListBox_SelectedIndexChanged;
+		    _folderPathList = new List<ProjectRequest>();
+		    _selectedFolders = new List<ProjectRequest>();
+		    _watchFolders = new List<ProjectRequest>();
+	    }
 
-	        InitializeComponent();
-            _persistence = new Persistence();
-            _projectsListBox.SelectedIndexChanged += _projectsListBox_SelectedIndexChanged;
-            _folderPathList = new List<ProjectRequest>();
-            _selectedFolders = new List<ProjectRequest>();
-            _watchFolders = new List<ProjectRequest>();
-        }
-        protected override void OnLoad(EventArgs e)
+	    protected override void OnLoad(EventArgs e)
         {
             foldersListView.ShowGroups = false;
 
@@ -156,7 +157,7 @@ namespace Sdl.Community.InSource
                 //displays only cumstom templates
                 if (_controller.ProjectTemplates.Count() != 0)
                 {
-                    foreach (ProjectTemplateInfo projectTemplate in _controller.ProjectTemplates)
+                    foreach (var projectTemplate in _controller.ProjectTemplates)
                     {
                         if (projectTemplate.Name != "Default" && projectTemplate.Name != "SDL Trados")
                         {
@@ -221,13 +222,12 @@ namespace Sdl.Community.InSource
 
             if (_controller.ProjectRequests != null)
             {
-                foreach (ProjectRequest projectRequest in _controller.ProjectRequests)
+                foreach (var projectRequest in _controller.ProjectRequests)
                 {
                     if (!projectRequest.Path.Contains(projectRequest.Name))
                     {
                         _projectsListBox.Items.Add(projectRequest);
                     }
-                    
                 }
             }
             LoadFileList();
@@ -237,18 +237,15 @@ namespace Sdl.Community.InSource
         {
             _filesListView.Items.Clear();
 
-            ProjectRequest selectedProject = _projectsListBox.SelectedItem as ProjectRequest;
-            if (selectedProject != null)
-            {
-                if (selectedProject.Files != null)
-                {
-                    foreach (string file in selectedProject.Files)
-                    {
-                        string fileName = Path.GetFileName(file);
-                        _filesListView.Items.Add(fileName);
-                    }
-                }
-            }
+            var selectedProject = _projectsListBox.SelectedItem as ProjectRequest;
+	        if (selectedProject?.Files != null)
+	        {
+		        foreach (var file in selectedProject.Files)
+		        {
+			        var fileName = Path.GetFileName(file);
+			        _filesListView.Items.Add(fileName);
+		        }
+	        }
         }
 
         void _controller_ProjectRequestsChanged(object sender, EventArgs e)
@@ -286,19 +283,23 @@ namespace Sdl.Community.InSource
                         var directoryInfo = new DirectoryInfo(directory);
                         if (_folderPathList != null)
                         {
-                            if (directoryInfo.Name != "AcceptedRequests")
-                            {
-                                var selectedFolder = new ProjectRequest
-                                {
-                                    Name = directoryInfo.Name,
-                                    Path = folderPath,
-                                    Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories),
-                                };
-                                if (!_folderPathList.Contains(selectedFolder))
-                                {
-                                    _folderPathList.Add(selectedFolder);
-                                }
-                            }
+	                        if (directoryInfo.Name != "AcceptedRequests")
+	                        {
+		                        var selectedFolder = new ProjectRequest
+		                        {
+			                        Name = directoryInfo.Name,
+			                        Path = folderPath,
+			                        Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories),
+		                        };
+		                        if (!_folderPathList.Contains(selectedFolder))
+		                        {
+			                        _folderPathList.Add(selectedFolder);
+		                        }
+	                        }
+	                        else
+	                        {
+		                        SetWatchFolder(folderPath);
+	                        }
                         }
                     }
                 }
