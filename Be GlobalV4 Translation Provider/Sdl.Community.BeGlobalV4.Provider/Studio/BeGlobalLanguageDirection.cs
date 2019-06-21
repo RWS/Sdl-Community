@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Windows;
-using System.Windows.Threading;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
@@ -20,7 +19,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private readonly BeGlobalTranslationProvider _beGlobalTranslationProvider;
 		private readonly BeGlobalTranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
-		private List<TranslationUnit> _translationUnits;
+		private readonly List<TranslationUnit> _translationUnits;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
 		public ITranslationProvider TranslationProvider => _beGlobalTranslationProvider;
 		public CultureInfo SourceLanguage { get; }
@@ -120,69 +119,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		/// <returns></returns>
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
-			var segmentsToTranslate = segments.Where((seg, i) => mask == null || mask[i]).ToArray();
-			var translationIndex = 0;
 			var results = new SearchResults[segments.Length];
+
+			var beGlobalSegments = new List<BeGlobalSegment>();
+			var alreadyTranslatedSegments = new List<BeGlobalSegment>();
 			if (!_options.ResendDrafts)
 			{
-				var intermediarSegments = new List<Segment>();
-				foreach (var segment in segmentsToTranslate)
-				{
-					var corespondingTu = _translationUnits.FirstOrDefault(tu => tu.SourceSegment.Equals(segment));
-					if (corespondingTu != null)
-					{
-						if (corespondingTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
-						{
-
-							var intermediarTranslations = TranslateSegments(intermediarSegments.ToArray());
-							AddTranslationToResults(intermediarTranslations, intermediarSegments.ToArray(), results, translationIndex,mask);
-
-							//add current TU as search result
-							var translation = new Segment(_languageDirection.TargetCulture);
-							translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-
-							var currentTu = new List<Segment>
-							{
-								translation
-							};
-							AddTranslationToResults(currentTu.ToArray(), segments,results, translationIndex, mask);
-
-							Array.Clear(intermediarTranslations, 0, intermediarTranslations.Length);
-							intermediarSegments.Clear();
-
-						}
-						else
-						{
-							intermediarSegments.Add(segment);
-						}
-					}
-				}
-				if (intermediarSegments.Count > 0)
-				{
-					var intermediarTranslations = TranslateSegments(intermediarSegments.ToArray());
-					AddTranslationToResults(intermediarTranslations, segments, results, translationIndex,mask);
-				}
-			}
-			else
-			{
-				var translations = TranslateSegments(segmentsToTranslate);
-				AddTranslationToResults(translations, segments, results, translationIndex,mask);
-			}
-
-			return results;
-		}
-		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
-		{
-			// Need this vs having mask parameter default to null as inheritence doesn't allow default values to
-			// count as the same thing as having no parameter at all. IE, you can't have
-			// public string foo(string s = null) override public string foo().
-			return SearchSegments(settings, segments, null);
-		}
-
-		private void AddTranslationToResults(Segment[] translations, Segment[] segments, SearchResults[] results, int translationIndex,bool[] mask)
-		{
-			if (translations.Any(translation => translation != null))
-			{
+				// Re-send draft segment logic
 				for (var i = 0; i < segments.Length; i++)
 				{
 					if (mask != null && !mask[i])
@@ -190,20 +133,110 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						results[i] = null;
 						continue;
 					}
-					results[i] = new SearchResults();
-					if (segments[i] != null)
+					var corespondingTu = _translationUnits.FirstOrDefault(tu => tu.SourceSegment.Equals(segments[i]));
+					//locked segments should not be translated
+					if (corespondingTu != null && (corespondingTu.ConfirmationLevel != ConfirmationLevel.Unspecified || corespondingTu.DocumentSegmentPair.Properties.IsLocked))
 					{
-						results[i].SourceSegment = segments[i].Duplicate();
-						results[i].Add(CreateSearchResult(segments[i], translations[translationIndex]));
-						translationIndex++;
+						var translation = new Segment(_languageDirection.TargetCulture);
+						translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
+
+						var alreadyTranslatedSegment = new BeGlobalSegment
+						{
+							Translation = translation,
+							Segment = segments[i],
+							Index = i,
+							SearchResult = CreateSearchResult(segments[i], translation)
+						};
+						alreadyTranslatedSegments.Add(alreadyTranslatedSegment);
 					}
 					else
 					{
-						results[i].SourceSegment = new Segment();
-						results[i].Add(CreateSearchResult(new Segment(), new Segment()));
+						var segmentToBeTranslated = new BeGlobalSegment
+						{
+							Segment = segments[i],
+							Index = i
+						};
+						beGlobalSegments.Add(segmentToBeTranslated);
+					}
+				}
+				if (beGlobalSegments.Count > 0)
+				{
+					GetTranslations(beGlobalSegments);
+					SetSearchResults(results, beGlobalSegments);
+				}
+				if (alreadyTranslatedSegments.Count > 0)
+				{
+					SetSearchResults(results, alreadyTranslatedSegments);
+				}
+			}
+			else
+			{
+				var translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
+
+				if (translations.Any(translation => translation != null))
+				{
+					var translationIndex = 0;
+					for (var i = 0; i < segments.Length; i++)
+					{
+						if (mask != null && !mask[i])
+						{
+							results[i] = null;
+							continue;
+						}
+						results[i] = new SearchResults();
+						if (segments[i] != null)
+						{
+							results[i].SourceSegment = segments[i].Duplicate();
+							results[i].Add(CreateSearchResult(segments[i], translations[translationIndex]));
+							translationIndex++;
+						}
+						else
+						{
+							results[i].SourceSegment = new Segment();
+							results[i].Add(CreateSearchResult(new Segment(), new Segment()));
+						}
 					}
 				}
 			}
+			return results;
+		}
+
+		private void SetSearchResults(SearchResults[]results,List<BeGlobalSegment> translatedSegments)
+		{
+			foreach (var segment in translatedSegments)
+			{
+				if (segment?.Segment != null)
+				{
+					results[segment.Index] = new SearchResults
+					{
+						SourceSegment = segment.Segment.Duplicate()
+					};
+					results[segment.Index].Add(segment.SearchResult);
+				}
+			}
+		}
+
+		private void GetTranslations(List<BeGlobalSegment>beGlobalSegments)
+		{
+			var segmentsToBeTranslated = new List<Segment>();
+			foreach (var segment in beGlobalSegments)
+			{
+				segmentsToBeTranslated.Add(segment.Segment);
+			}
+			var translations = TranslateSegments(segmentsToBeTranslated.ToArray());
+			for (var i = 0; i < beGlobalSegments.Count; i++)
+			{
+				beGlobalSegments[i].Translation = translations[i];
+				beGlobalSegments[i].SearchResult = CreateSearchResult(beGlobalSegments[i].Segment, translations[i]);
+			}
+		}
+
+		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
+		{
+			// Need this vs having mask parameter default to null as inheritence doesn't allow default values to
+			// count as the same thing as having no parameter at all. IE, you can't have
+			// public string foo(string s = null) override public string foo().
+			return SearchSegments(settings, segments, null);
 		}
 
 		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
