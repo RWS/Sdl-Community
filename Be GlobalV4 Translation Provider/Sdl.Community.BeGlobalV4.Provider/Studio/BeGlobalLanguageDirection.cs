@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Windows;
-using System.Windows.Threading;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
@@ -21,7 +19,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private readonly BeGlobalTranslationProvider _beGlobalTranslationProvider;
 		private readonly BeGlobalTranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
-		private List<TranslationUnit> _translationUnits;
+		private readonly List<TranslationUnit> _translationUnits;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
 		public ITranslationProvider TranslationProvider => _beGlobalTranslationProvider;
 		public CultureInfo SourceLanguage { get; }
@@ -136,7 +134,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						continue;
 					}
 					var corespondingTu = _translationUnits.FirstOrDefault(tu => tu.SourceSegment.Equals(segments[i]));
-					if (corespondingTu != null && corespondingTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
+					//locked segments should not be translated
+					if (corespondingTu != null && (corespondingTu.ConfirmationLevel != ConfirmationLevel.Unspecified || corespondingTu.DocumentSegmentPair.Properties.IsLocked))
 					{
 						var translation = new Segment(_languageDirection.TargetCulture);
 						translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
@@ -173,6 +172,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			else
 			{
 				var translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
+
 				if (translations.Any(translation => translation != null))
 				{
 					var translationIndex = 0;

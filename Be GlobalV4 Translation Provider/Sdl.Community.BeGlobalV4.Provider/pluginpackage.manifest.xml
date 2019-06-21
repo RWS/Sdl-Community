@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.BeGlobalV4.Provider</PlugInName>
-  <Version>2.2.4.3</Version>
+  <Version>2.2.4.4</Version>
   <Description>SDL BeGlobal (NMT) translation provider</Description>
   <Author>SDL Community Developers</Author>
   <Include>
