@@ -56,11 +56,9 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 	    private void SelectAllScripts()
 	    {
-		    
 		    Helpers.Ui.Select(GetObservableCollectionOfScripts(), SelectAll);
 	    }
-
-	    private ObservableCollection<Script> GetObservableCollectionOfScripts()
+		private ObservableCollection<Script> GetObservableCollectionOfScripts()
 	    {
 			var scripts = ScriptsCollection.Select(s => s.Value).ToList();
 		    return new ObservableCollection<Script>(scripts);

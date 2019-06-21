@@ -63,6 +63,26 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		{
 			Helpers.Ui.Select(ScriptsCollection,SelectAll);
 		}
+		public bool AllFilesChecked
+		{
+			get => AreAllFilesSelected();
+			set
+			{
+				ToggleCheckAllFiles(value);
+				OnPropertyChanged(nameof(AllFilesChecked));
+			}
+		}
+		private bool AreAllFilesSelected()
+		{
+			return ScriptsCollection?.Count > 0 && ScriptsCollection.All(f => f.IsSelected);
+		}
+		private void ToggleCheckAllFiles(bool value)
+		{
+			foreach (var script in ScriptsCollection)
+			{
+				script.IsSelected = value;
+			}
+		}
 
 		private async void ChangePath()
 		{
@@ -112,6 +132,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 						MessageBox.Show("Script was exported successfully to selected location", "",
 							MessageBoxButton.OK, MessageBoxImage.Information);
 						Helpers.Ui.Select(ScriptsCollection, false);
+						SelectAll = false;
 					}
 				}
 				else

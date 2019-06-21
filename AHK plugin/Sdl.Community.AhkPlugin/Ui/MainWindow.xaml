@@ -5,26 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sdl.Community.AhkPlugin.Ui"
         xmlns:viewModels="clr-namespace:Sdl.Community.AhkPlugin.ViewModels"
+        xmlns:uiHelpers="clr-namespace:Sdl.Community.AhkPlugin.UiHelpers"
         mc:Ignorable="d"
-        Icon="..\Resources/icon.png"
-        Title="AutoHotKey Plugin" Height="600" Width="600" WindowStartupLocation="CenterScreen" >
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"
+        Title="AutoHotKey Plugin" Height="500" Width="950">
 	<Window.Resources>
-		<DataTemplate DataType="{x:Type viewModels:ScriptsWindowViewModel}">
-			<local:ScriptsWindow />
-		</DataTemplate>
-		<DataTemplate DataType="{x:Type viewModels:AddScriptViewModel}">
-			<local:AddScriptPage />
-		</DataTemplate>
-		<DataTemplate DataType="{x:Type viewModels:ImportScriptPageViewModel}">
-			<local:ImportScriptPage />
-		</DataTemplate>
-		<DataTemplate DataType="{x:Type viewModels:EditScriptPageViewModel}">
-			<local:EditScriptPage/>
-		</DataTemplate>
+		<ResourceDictionary>
+			<DataTemplate DataType="{x:Type viewModels:ScriptsWindowViewModel}">
+				<local:ScriptsWindow />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewModels:AddScriptViewModel}">
+				<local:AddScriptPage />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewModels:ImportScriptPageViewModel}">
+				<local:ImportScriptPage />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type viewModels:EditScriptPageViewModel}">
+				<local:EditScriptPage/>
+			</DataTemplate>
+
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
 	</Window.Resources>
-	<Grid>
-        <DockPanel>
-	        <ContentControl Content="{Binding CurrentViewModel}"/>
-		</DockPanel>
-    </Grid>
+	<Border Style="{StaticResource WindowControlBorderStyle}" >
+		<Grid Margin="1,0,0,0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="35" />
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+
+			<!-- BORDER CONTROL -->
+			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" Background="White" />
+			<Border Grid.Column="0" Grid.Row="1" Margin="0,0,0,20" >
+					<ContentControl Content="{Binding CurrentViewModel}"/>
+			</Border>
+		</Grid>
+	</Border>
 </Window>

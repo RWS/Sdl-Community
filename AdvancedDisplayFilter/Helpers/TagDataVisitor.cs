@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
@@ -14,6 +12,13 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		public TagDataVisitor()
 		{
 			_colorCodeList = new List<string>();
+		}
+
+		public List<string> GetTagsColorCode(IParagraph paragraph)
+		{
+			_colorCodeList.Clear();
+			VisitChildren(paragraph);
+			return _colorCodeList;
 		}
 
 		public List<string> GetTagsColorCode(ISegment segment)

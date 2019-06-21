@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -9,25 +10,31 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 {
 	public static class ColorPickerHelper
-	{
-		private static List<string> _selectedColorsCode = new List<string>();
-
-		public static bool ContainsColor(DisplayFilterRowInfo rowInfo, List<string> colorsCode)
-		{
-			
-			_selectedColorsCode = colorsCode;
+	{		
+		public static bool ContainsColor(DisplayFilterRowInfo rowInfo, List<string> colorsCodes)
+		{						
 			var visitor = new TagDataVisitor();
-			var colorCodes = visitor.GetTagsColorCode(rowInfo.SegmentPair.Source);
-			foreach (var selectedColor in colorsCode)
+			
+			var paragraphUnit = GetParagraphUnit(rowInfo.SegmentPair);
+			var colors = paragraphUnit != null 
+				? visitor.GetTagsColorCode(paragraphUnit.Source) 
+				: visitor.GetTagsColorCode(rowInfo.SegmentPair.Source);
+			
+			foreach (var selectedColor in colors)
 			{
-				//code has #ffffff form in Studio: ffffff
-				if (colorCodes.Contains(selectedColor.Substring(1, selectedColor.Length - 1)))
+				var colorCodeA = selectedColor.TrimStart('#');
+				foreach (var color in colorsCodes)
 				{
-					return true;
-				}
+					var colorCodeB = color.TrimStart('#');
+					if (string.Compare(colorCodeA, colorCodeB, StringComparison.InvariantCultureIgnoreCase) == 0)
+					{
+						return true;
+					}
+				}				
 			}
+
 			var colorTextWithoutTag = DefaultFormatingColorCode(rowInfo.ContextInfo);
-			var containsColor = ContainsColor(colorTextWithoutTag);
+			var containsColor = colorsCodes.Contains("#" + colorTextWithoutTag);
 
 			return containsColor;
 		}
@@ -126,16 +133,38 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			return string.Empty;
 		}
 
-		public static bool ContainsColor(string colorCode)
-		{
-			return _selectedColorsCode.Contains("#" + colorCode);
-		}
+	
 
 		public static string GetHexCode(byte red, byte green, byte blue)
 		{
 			var hexCode = $"{red:X2}{green:X2}{blue:X2}";
 
 			return hexCode;
+		}
+
+		public static IParagraphUnit GetParagraphUnit(ISegmentPair segmentPair)
+		{
+			var type = segmentPair.GetType();
+			var memberInfo = type.GetMember("_segmentPair", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (memberInfo.Length > 0)
+			{
+				var fieldInfo = memberInfo[0] as FieldInfo;
+				if (fieldInfo != null)
+				{
+					var iSegmentPair = fieldInfo.GetValue(segmentPair) as ISegmentPair;
+					return iSegmentPair?.Source.ParentParagraphUnit;
+				}
+			}
+
+			return null;
+		}
+
+		public static List<string> GetColorsList(IParagraph paragraph)
+		{
+			var visitor = new TagDataVisitor();
+			var colorCodes = visitor.GetTagsColorCode(paragraph);
+
+			return colorCodes;
 		}
 
 		public static List<string> GetColorsList(ISegment segment)
