@@ -598,7 +598,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				{
 					var paragraphUnit = ColorPickerHelper.GetParagraphUnit(segmentPair);
 					var colors = paragraphUnit != null
-						? ColorPickerHelper.GetColorsList(paragraphUnit.Source)
+						? ColorPickerHelper.GetColorsList(paragraphUnit.Source, segmentPair.Source)
 						: ColorPickerHelper.GetColorsList(segmentPair.Source);
 
 					foreach (var color in colors)
@@ -613,6 +613,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 					var contextInfoList = segmentPair.GetParagraphUnitProperties().Contexts.Contexts;
 					var colorCode = ColorPickerHelper.DefaultFormatingColorCode(contextInfoList);
+					
 					AddColor(colorCode);
 				}
 
@@ -623,7 +624,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				// catch all; ignore
 			}
 
-		}
+		}		
 
 		private void SetAddColorsToListView()
 		{
