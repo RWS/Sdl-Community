@@ -308,8 +308,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (mask == null || mask.Length != translationUnits.Length)
 				throw new ArgumentException("Mask in SearchSegmentsMasked");
 
+			var translationUnit = translationUnits.Where((seg, i) => mask == null || mask[i]).ToArray();
 			_translationUnits.Clear();
-			_translationUnits.AddRange(translationUnits);
+			_translationUnits.AddRange(translationUnit);
 			return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
 		}
 
