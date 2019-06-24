@@ -335,6 +335,5 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			throw new NotImplementedException();
 		}
-
 	}
 }
