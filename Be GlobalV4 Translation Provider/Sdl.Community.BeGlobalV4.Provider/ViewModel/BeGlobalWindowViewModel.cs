@@ -34,7 +34,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			var accountId = beGlobalTranslator.GetUserInformation();
 
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
-
+			if (Options != null)
+			{
+				ReSendChecked = options.ResendDrafts;
+			}
 			GetEngineModels(subscriptionInfo.LanguagePairs);
 			SetEngineModel();
 		}

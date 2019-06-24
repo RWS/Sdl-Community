@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>InSource!</PlugInName>
-  <Version>2.4</Version>
+  <Version>2.4.0.1</Version>
   <Description>Supports watch folders for the automatic creation of Projects.</Description>
-  <Author>SDL Community</Author>
+  <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
   <Include>
     <File>Newtonsoft.Json.dll</File>
     <File>ObjectListView.dll</File>
-    </Include>
+	<File>NLog.dll</File>
+  </Include>
 </PluginPackage>
