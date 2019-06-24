@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -17,7 +16,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			
 			var paragraphUnit = GetParagraphUnit(rowInfo.SegmentPair);
 			var colors = paragraphUnit != null 
-				? visitor.GetTagsColorCode(paragraphUnit.Source) 
+				? visitor.GetTagsColorCode(paragraphUnit.Source, rowInfo.SegmentPair.Source) 
 				: visitor.GetTagsColorCode(rowInfo.SegmentPair.Source);
 			
 			foreach (var selectedColor in colors)
@@ -35,7 +34,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 			var colorTextWithoutTag = DefaultFormatingColorCode(rowInfo.ContextInfo);
 			var containsColor = colorsCodes.Contains("#" + colorTextWithoutTag);
-
+			
 			return containsColor;
 		}
 
@@ -60,12 +59,12 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 									if (style.Contains("No character style"))
 									{
 										var colors = color.Split(',');
-										var red = string.Empty;
-										var green = string.Empty;
-										var blue = string.Empty;
+										string red;
+										string green;
+										string blue;
 
 										//for  files which color code is like this "0,12,12,12"
-										if (colors.Count().Equals(4))
+										if (colors.Length.Equals(4))
 										{
 											red = colors[1];
 											green = colors[2];
@@ -73,8 +72,9 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 											return ParseColorCode(red, green, blue);
 										}
+
 										//"12,12,12"
-										if (colors.Count().Equals(3))
+										if (colors.Length.Equals(3))
 										{
 											red = colors[0];
 											green = colors[1];
@@ -89,9 +89,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					}
 					
 				}
-				var colorFromMetadata = GetColorFromMetadata(contextInfo[0]);
-				return colorFromMetadata;
+				var colorCode = GetColorFromMetadata(contextInfo[0]);				
+				return colorCode;
 			}
+
 			return string.Empty;
 		}
 		private static string GetColorFromMetadata(IContextInfo contextInfo)
@@ -158,10 +159,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			return null;
 		}
 
-		public static List<string> GetColorsList(IParagraph paragraph)
+		public static List<string> GetColorsList(IParagraph paragraph, ISegment segment)
 		{
 			var visitor = new TagDataVisitor();
-			var colorCodes = visitor.GetTagsColorCode(paragraph);
+			var colorCodes = visitor.GetTagsColorCode(paragraph, segment);
 
 			return colorCodes;
 		}
