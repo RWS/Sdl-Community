@@ -213,7 +213,9 @@
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="pluginpackage.manifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\SdlCommunity.snk">
