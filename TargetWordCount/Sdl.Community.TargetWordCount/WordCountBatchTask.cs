@@ -57,7 +57,6 @@ namespace Sdl.Community.TargetWordCount
 				var projectFiles = _projectFiles.Where(p => p.Language.DisplayName.Equals(langDirection.TargetLanguage.DisplayName)).ToList();
 				ReportGenerator.GenerateHelixReport(langDirection, projectFiles);
 			}
-
 		}
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)

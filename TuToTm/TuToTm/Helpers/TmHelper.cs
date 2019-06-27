@@ -81,6 +81,5 @@ namespace Sdl.Community.TuToTm.Helpers
 
 			return settings;
 		}
-
 	}
 }
