@@ -414,6 +414,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// commentRegexBox
 			// 
 			resources.ApplyResources(this.commentRegexBox, "commentRegexBox");
+			this.tableLayoutPanel3.SetColumnSpan(this.commentRegexBox, 2);
 			this.commentRegexBox.Name = "commentRegexBox";
 			this.commentRegexBox.UseVisualStyleBackColor = true;
 			this.commentRegexBox.CheckedChanged += new System.EventHandler(this.commentRegexBox_CheckedChanged);
