@@ -607,7 +607,7 @@
     <value>listView_selected</value>
   </data>
   <data name="&gt;&gt;listView_selected.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.3.6.2, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.3.6.1, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;listView_selected.Parent" xml:space="preserve">
     <value>panel10</value>
@@ -730,7 +730,7 @@
     <value>listView_available</value>
   </data>
   <data name="&gt;&gt;listView_available.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.3.6.2, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.3.6.1, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;listView_available.Parent" xml:space="preserve">
     <value>panel11</value>
@@ -937,13 +937,13 @@
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="comboBox_commentSeverity.Location" type="System.Drawing.Point, System.Drawing">
-    <value>310, 86</value>
+    <value>119, 86</value>
   </data>
   <data name="comboBox_commentSeverity.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="comboBox_commentSeverity.Size" type="System.Drawing.Size, System.Drawing">
-    <value>457, 21</value>
+    <value>648, 21</value>
   </data>
   <data name="comboBox_commentSeverity.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -976,7 +976,7 @@
     <value>2, 0, 2, 0</value>
   </data>
   <data name="label_commentText.Size" type="System.Drawing.Size, System.Drawing">
-    <value>302, 24</value>
+    <value>111, 24</value>
   </data>
   <data name="label_commentText.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1015,7 +1015,7 @@
     <value>2, 0, 2, 0</value>
   </data>
   <data name="label_commentSeverity.Size" type="System.Drawing.Size, System.Drawing">
-    <value>302, 24</value>
+    <value>111, 24</value>
   </data>
   <data name="label_commentSeverity.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -1042,13 +1042,13 @@
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="textBox_commentText.Location" type="System.Drawing.Point, System.Drawing">
-    <value>310, 38</value>
+    <value>119, 38</value>
   </data>
   <data name="textBox_commentText.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="textBox_commentText.Size" type="System.Drawing.Size, System.Drawing">
-    <value>457, 20</value>
+    <value>648, 20</value>
   </data>
   <data name="textBox_commentText.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1069,13 +1069,13 @@
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="textBox_commentAuthor.Location" type="System.Drawing.Point, System.Drawing">
-    <value>310, 62</value>
+    <value>119, 62</value>
   </data>
   <data name="textBox_commentAuthor.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="textBox_commentAuthor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>457, 20</value>
+    <value>648, 20</value>
   </data>
   <data name="textBox_commentAuthor.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -1108,7 +1108,7 @@
     <value>2, 0, 2, 0</value>
   </data>
   <data name="label_commentAuthor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>302, 24</value>
+    <value>111, 24</value>
   </data>
   <data name="label_commentAuthor.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -1231,7 +1231,7 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel3.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="comboBox_commentSeverity" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_commentText" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label_commentSeverity" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_commentText" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBox_commentAuthor" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_commentAuthor" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label_tab_comments_filter_message" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="commentRegexBox" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,40,Percent,60" /&gt;&lt;Rows Styles="Absolute,32,Absolute,24,Absolute,24,Absolute,24,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="comboBox_commentSeverity" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_commentText" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label_commentSeverity" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_commentText" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBox_commentAuthor" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_commentAuthor" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label_tab_comments_filter_message" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="commentRegexBox" Row="4" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,15,Percent,85" /&gt;&lt;Rows Styles="Absolute,32,Absolute,24,Absolute,24,Absolute,24,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tabPage_comments.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 27</value>
@@ -2297,7 +2297,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAWQBBQFkAQUBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAWwBBQFsAQUBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ
@@ -2650,7 +2650,7 @@
     <value>filterExpressionControl</value>
   </data>
   <data name="&gt;&gt;filterExpressionControl.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression, Sdl.Community.AdvancedDisplayFilter, Version=4.3.6.2, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression, Sdl.Community.AdvancedDisplayFilter, Version=4.3.6.1, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;filterExpressionControl.Parent" xml:space="preserve">
     <value>panel_filterExpression</value>
@@ -2962,6 +2962,18 @@
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
     <value>790, 503</value>
   </data>
+  <data name="&gt;&gt;columnHeader_filtersSelected_name.Name" xml:space="preserve">
+    <value>columnHeader_filtersSelected_name</value>
+  </data>
+  <data name="&gt;&gt;columnHeader_filtersSelected_name.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;columnHeader_filtersAvailable_name.Name" xml:space="preserve">
+    <value>columnHeader_filtersAvailable_name</value>
+  </data>
+  <data name="&gt;&gt;columnHeader_filtersAvailable_name.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;columnHeader_code.Name" xml:space="preserve">
     <value>columnHeader_code</value>
   </data>
@@ -3051,18 +3063,6 @@
   </data>
   <data name="&gt;&gt;backgroundWorker1.Type" xml:space="preserve">
     <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;columnHeader_filtersSelected_name.Name" xml:space="preserve">
-    <value>columnHeader_filtersSelected_name</value>
-  </data>
-  <data name="&gt;&gt;columnHeader_filtersSelected_name.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;columnHeader_filtersAvailable_name.Name" xml:space="preserve">
-    <value>columnHeader_filtersAvailable_name</value>
-  </data>
-  <data name="&gt;&gt;columnHeader_filtersAvailable_name.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>DisplayFilterControl</value>
