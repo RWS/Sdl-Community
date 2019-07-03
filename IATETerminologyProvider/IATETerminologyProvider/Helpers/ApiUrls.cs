@@ -32,13 +32,13 @@ namespace IATETerminologyProvider.Helpers
 		public static string SearchAllUri(string currentSelection, string sourceLanguage)
 		{
 			var encodedString = HttpUtility.UrlEncode(currentSelection);
-			var uri = @"http://iate.europa.eu/search/byUrl?term=" + encodedString + "&sl=" + sourceLanguage + "&tl=all";						
+			var uri = @"https://iate.europa.eu/search/byUrl?term=" + encodedString + "&sl=" + sourceLanguage + "&tl=all";						
 			return uri;
 		}
 
 		public static string SearchSourceTargetUri(string currentSelection, string sourceLanguage, string targetLanguage)
 		{
-			return @"http://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=" + targetLanguage;
+			return @"https://iate.europa.eu/search/byUrl?term=" + currentSelection + "&sl=" + sourceLanguage + "&tl=" + targetLanguage;
 		}
 	}
 }
