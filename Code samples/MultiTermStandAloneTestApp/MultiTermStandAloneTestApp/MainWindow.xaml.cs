@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using Sdl.MultiTerm.TMO.Interop;
+using MultiTermIX;
 
 namespace MultiTermStandAloneTestApp
 {

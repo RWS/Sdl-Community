@@ -35,10 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sdl.MultiTerm.TMO.Interop">
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL MultiTerm\MultiTerm14\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -97,6 +93,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MultiTermIX">
+      <Guid>{B03EA0D6-7A9B-4899-9E2A-70B5CE4D9D17}</Guid>
+      <VersionMajor>14</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
