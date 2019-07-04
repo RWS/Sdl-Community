@@ -142,7 +142,7 @@
     <value>2, 0, 2, 0</value>
   </data>
   <data name="label_source.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 24</value>
+    <value>111, 24</value>
   </data>
   <data name="label_source.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -169,13 +169,13 @@
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="textBox_source.Location" type="System.Drawing.Point, System.Drawing">
-    <value>52, 38</value>
+    <value>119, 38</value>
   </data>
   <data name="textBox_source.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="textBox_source.Size" type="System.Drawing.Size, System.Drawing">
-    <value>715, 20</value>
+    <value>648, 20</value>
   </data>
   <data name="textBox_source.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -199,10 +199,10 @@
     <value>NoControl</value>
   </data>
   <data name="checkBox_caseSensitive.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 120</value>
+    <value>4, 142</value>
   </data>
   <data name="checkBox_caseSensitive.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+    <value>2, 5, 2, 2</value>
   </data>
   <data name="checkBox_caseSensitive.Size" type="System.Drawing.Size, System.Drawing">
     <value>96, 17</value>
@@ -241,7 +241,7 @@
     <value>2, 0, 2, 0</value>
   </data>
   <data name="label_target.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 24</value>
+    <value>111, 24</value>
   </data>
   <data name="label_target.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -264,31 +264,31 @@
   <data name="&gt;&gt;label_target.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="textBox_target.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+  <data name="target_textbox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
-  <data name="textBox_target.Location" type="System.Drawing.Point, System.Drawing">
-    <value>52, 62</value>
+  <data name="target_textbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>119, 62</value>
   </data>
-  <data name="textBox_target.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="target_textbox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
-  <data name="textBox_target.Size" type="System.Drawing.Size, System.Drawing">
-    <value>715, 20</value>
+  <data name="target_textbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>648, 20</value>
   </data>
-  <data name="textBox_target.TabIndex" type="System.Int32, mscorlib">
+  <data name="target_textbox.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
-  <data name="&gt;&gt;textBox_target.Name" xml:space="preserve">
-    <value>textBox_target</value>
+  <data name="&gt;&gt;target_textbox.Name" xml:space="preserve">
+    <value>target_textbox</value>
   </data>
-  <data name="&gt;&gt;textBox_target.Type" xml:space="preserve">
+  <data name="&gt;&gt;target_textbox.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;textBox_target.Parent" xml:space="preserve">
+  <data name="&gt;&gt;target_textbox.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
   </data>
-  <data name="&gt;&gt;textBox_target.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;target_textbox.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
   <data name="checkBox_regularExpression.AutoSize" type="System.Boolean, mscorlib">
@@ -298,10 +298,10 @@
     <value>NoControl</value>
   </data>
   <data name="checkBox_regularExpression.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 96</value>
+    <value>4, 118</value>
   </data>
   <data name="checkBox_regularExpression.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+    <value>2, 10, 2, 2</value>
   </data>
   <data name="checkBox_regularExpression.Size" type="System.Drawing.Size, System.Drawing">
     <value>117, 17</value>
@@ -360,6 +360,66 @@
   <data name="&gt;&gt;label_tab_content_filter_message.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
+  <data name="stringIdLbl.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="stringIdLbl.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="stringIdLbl.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="stringIdLbl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 84</value>
+  </data>
+  <data name="stringIdLbl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 24</value>
+  </data>
+  <data name="stringIdLbl.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="stringIdLbl.Text" xml:space="preserve">
+    <value>String Id:</value>
+  </data>
+  <data name="stringIdLbl.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;stringIdLbl.Name" xml:space="preserve">
+    <value>stringIdLbl</value>
+  </data>
+  <data name="&gt;&gt;stringIdLbl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;stringIdLbl.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;stringIdLbl.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="stringId_textbox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="stringId_textbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>120, 87</value>
+  </data>
+  <data name="stringId_textbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>646, 20</value>
+  </data>
+  <data name="stringId_textbox.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;stringId_textbox.Name" xml:space="preserve">
+    <value>stringId_textbox</value>
+  </data>
+  <data name="&gt;&gt;stringId_textbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;stringId_textbox.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;stringId_textbox.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
   <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -394,7 +454,7 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label_source" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_source" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_caseSensitive" Row="5" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="label_target" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_target" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_regularExpression" Row="4" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="label_tab_content_filter_message" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,15,Percent,85" /&gt;&lt;Rows Styles="Absolute,32,Absolute,24,Absolute,24,Absolute,10,Absolute,24,Absolute,24,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label_source" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_source" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_caseSensitive" Row="5" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="label_target" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="target_textbox" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_regularExpression" Row="4" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="label_tab_content_filter_message" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="stringIdLbl" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="stringId_textbox" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,15,Percent,85" /&gt;&lt;Rows Styles="Absolute,32,Absolute,24,Absolute,24,Absolute,24,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tabPage_content.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 27</value>
@@ -2306,7 +2366,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAaQBBQGkAQUBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAcwBBQHMAQUBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ

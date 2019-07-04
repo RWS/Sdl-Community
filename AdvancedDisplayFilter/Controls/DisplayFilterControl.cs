@@ -147,7 +147,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					IsRegularExpression = checkBox_regularExpression.Checked,
 					IsCaseSensitive = checkBox_caseSensitive.Checked,
 					SourceText = textBox_source.Text.Trim(),
-					TargetText = textBox_target.Text.Trim(),
+					TargetText = target_textbox.Text.Trim(),
 					CommentText = textBox_commentText.Text.Trim(),
 					CommentAuthor = textBox_commentAuthor.Text.Trim(),
 					CommentSeverity = comboBox_commentSeverity.SelectedIndex,
@@ -193,7 +193,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				#region  |  content panel  |
 
 				textBox_source.Text = value.SourceText;
-				textBox_target.Text = value.TargetText;
+				target_textbox.Text = value.TargetText;
 
 				checkBox_regularExpression.Checked = value.IsRegularExpression;
 				checkBox_caseSensitive.Checked = value.IsCaseSensitive;
@@ -438,7 +438,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			#region  |  content panel  |
 
 			textBox_source.Text = string.Empty;
-			textBox_target.Text = string.Empty;
+			target_textbox.Text = string.Empty;
 
 			checkBox_regularExpression.Checked = false;
 			checkBox_caseSensitive.Checked = false;
@@ -1152,7 +1152,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					|| !string.IsNullOrEmpty(settings.TargetText)))
 				{
 
-					var item1 = textBox_source.Text + ", " + textBox_target.Text + ", " +
+					var item1 = textBox_source.Text + ", " + target_textbox.Text + ", " +
 								checkBox_regularExpression.Checked + ", " + checkBox_caseSensitive.Checked;
 
 					var item2 = settings.SourceText + ", " + settings.TargetText + ", " +

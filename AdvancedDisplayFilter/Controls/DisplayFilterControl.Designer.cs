@@ -40,7 +40,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.textBox_source = new System.Windows.Forms.TextBox();
 			this.checkBox_caseSensitive = new System.Windows.Forms.CheckBox();
 			this.label_target = new System.Windows.Forms.Label();
-			this.textBox_target = new System.Windows.Forms.TextBox();
+			this.target_textbox = new System.Windows.Forms.TextBox();
 			this.checkBox_regularExpression = new System.Windows.Forms.CheckBox();
 			this.label_tab_content_filter_message = new System.Windows.Forms.Label();
 			this.tabPage_filters = new System.Windows.Forms.TabPage();
@@ -128,6 +128,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.stringIdLbl = new System.Windows.Forms.Label();
+			this.stringId_textbox = new System.Windows.Forms.TextBox();
 			this.listView_selected = new Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended();
 			this.columnHeader_filtersSelected_name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.listView_available = new Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended();
@@ -203,9 +205,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel1.Controls.Add(this.textBox_source, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.checkBox_caseSensitive, 0, 5);
 			this.tableLayoutPanel1.Controls.Add(this.label_target, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.textBox_target, 1, 2);
+			this.tableLayoutPanel1.Controls.Add(this.target_textbox, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.checkBox_regularExpression, 0, 4);
 			this.tableLayoutPanel1.Controls.Add(this.label_tab_content_filter_message, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.stringIdLbl, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.stringId_textbox, 1, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			// 
 			// label_source
@@ -233,12 +237,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.label_target, "label_target");
 			this.label_target.Name = "label_target";
 			// 
-			// textBox_target
+			// target_textbox
 			// 
-			resources.ApplyResources(this.textBox_target, "textBox_target");
-			this.textBox_target.Name = "textBox_target";
-			this.textBox_target.TextChanged += new System.EventHandler(this.textBox_target_TextChanged);
-			this.textBox_target.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_target_KeyUp);
+			resources.ApplyResources(this.target_textbox, "target_textbox");
+			this.target_textbox.Name = "target_textbox";
+			this.target_textbox.TextChanged += new System.EventHandler(this.textBox_target_TextChanged);
+			this.target_textbox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_target_KeyUp);
 			// 
 			// checkBox_regularExpression
 			// 
@@ -836,6 +840,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
+			// stringIdLbl
+			// 
+			resources.ApplyResources(this.stringIdLbl, "stringIdLbl");
+			this.stringIdLbl.Name = "stringIdLbl";
+			// 
+			// stringId_textbox
+			// 
+			resources.ApplyResources(this.stringId_textbox, "stringId_textbox");
+			this.stringId_textbox.Name = "stringId_textbox";
+			// 
 			// listView_selected
 			// 
 			this.listView_selected.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -940,7 +954,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         private System.Windows.Forms.TabControl tabControl_filter;
         private System.Windows.Forms.TabPage tabPage_content;
         private System.Windows.Forms.CheckBox checkBox_regularExpression;
-        public System.Windows.Forms.TextBox textBox_target;
+        public System.Windows.Forms.TextBox target_textbox;
         private System.Windows.Forms.Label label_source;
         private System.Windows.Forms.Label label_target;
         public System.Windows.Forms.TextBox textBox_source;
@@ -1035,5 +1049,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private ToolStripButton helpButton;
 		private ToolStripButton generateXliff;
 		private RadioButton noneBtn;
+		private Label stringIdLbl;
+		private TextBox stringId_textbox;
 	}
 }
