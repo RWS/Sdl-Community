@@ -972,7 +972,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				}
 				if (!string.IsNullOrEmpty(CustomFilter.ContextInfoStringId))
 				{
-					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_StringId + ":\"" + CustomFilter.ContextInfoStringId);
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_StringId + ":\"" + CustomFilter.ContextInfoStringId + "\"");
 				}
 			}
 		}

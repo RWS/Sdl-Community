@@ -667,7 +667,7 @@
     <value>listView_selected</value>
   </data>
   <data name="&gt;&gt;listView_selected.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.3.6.1, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.3.6.2, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;listView_selected.Parent" xml:space="preserve">
     <value>panel10</value>
@@ -790,7 +790,7 @@
     <value>listView_available</value>
   </data>
   <data name="&gt;&gt;listView_available.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.3.6.1, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.3.6.2, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;listView_available.Parent" xml:space="preserve">
     <value>panel11</value>
@@ -2366,7 +2366,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAeQBBQHkAQUBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAewBBQHsAQUBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ
@@ -2663,10 +2663,10 @@
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADuSURBVDhPYxgkoP4/k820S2nW0y83EIWnXS6wn3+fA6qb
-        gcFm6qUAq2kXbaFcgsByylV5oEH5UC4Dg9X0iwnm088rQLlEAZBLoEzsBujaBhrp2Pre0bT2faxr7+cC
+        gcFm6qUAq2kXbaFcgsByylV5oEH5UC4Dg9X0iwnm088rQLlEAZBLoEzsBujaBhrp2Prc0bD2faxr7+cC
         FYYDggbY29uzAClGLVv/uTp2/s0QUQQgaAAI6Nj6p+vY+j3QswlQgwrBAXEG2Psl6tr5Yw1c4gywC5it
         ZeNXCOWiACJdEKShbesvC+WiABQDQOkAiO2hXILAdtYFRaABiHQASolW06+kgkzFhq2mXZoASWyXJkDF
-        8lFSIjEAYsDlPVAuecB89iVxKJNagIEBAAN6im+JfCDlAAAAAElFTkSuQmCC
+        8lFSIjEAYsDlPVAuecB89iVxKJNagIEBAP4Vim0jVoHjAAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="helpButton.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
@@ -2721,7 +2721,7 @@
     <value>filterExpressionControl</value>
   </data>
   <data name="&gt;&gt;filterExpressionControl.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression, Sdl.Community.AdvancedDisplayFilter, Version=4.3.6.1, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression, Sdl.Community.AdvancedDisplayFilter, Version=4.3.6.2, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;filterExpressionControl.Parent" xml:space="preserve">
     <value>panel_filterExpression</value>
@@ -3033,6 +3033,18 @@
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
     <value>790, 503</value>
   </data>
+  <data name="&gt;&gt;columnHeader_filtersSelected_name.Name" xml:space="preserve">
+    <value>columnHeader_filtersSelected_name</value>
+  </data>
+  <data name="&gt;&gt;columnHeader_filtersSelected_name.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;columnHeader_filtersAvailable_name.Name" xml:space="preserve">
+    <value>columnHeader_filtersAvailable_name</value>
+  </data>
+  <data name="&gt;&gt;columnHeader_filtersAvailable_name.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;columnHeader_code.Name" xml:space="preserve">
     <value>columnHeader_code</value>
   </data>
@@ -3122,18 +3134,6 @@
   </data>
   <data name="&gt;&gt;backgroundWorker1.Type" xml:space="preserve">
     <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;columnHeader_filtersSelected_name.Name" xml:space="preserve">
-    <value>columnHeader_filtersSelected_name</value>
-  </data>
-  <data name="&gt;&gt;columnHeader_filtersSelected_name.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;columnHeader_filtersAvailable_name.Name" xml:space="preserve">
-    <value>columnHeader_filtersAvailable_name</value>
-  </data>
-  <data name="&gt;&gt;columnHeader_filtersAvailable_name.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>DisplayFilterControl</value>
