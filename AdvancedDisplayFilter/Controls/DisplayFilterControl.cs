@@ -74,7 +74,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					CreatedBy = createdByBox.Text,
 					CreatedByChecked = createdByCheck.Checked,
 					EditedFuzzy = _editedFuzzy,
-					UnEditedFuzzy = _unEditedFuzzy
+					UnEditedFuzzy = _unEditedFuzzy,
+					ContextInfoStringId = stringId_textbox.Text
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -120,6 +121,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				modifiedByCheck.Checked = value.ModifiedByChecked;
 				createdByBox.Text = value.CreatedBy;
 				createdByCheck.Checked = value.CreatedByChecked;
+				stringId_textbox.Text = value.ContextInfoStringId;
 				foreach (var color in value.Colors)
 				{
 					foreach (ListViewItem colorItem in colorsListView.Items)
@@ -142,7 +144,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			get
 			{
 				#region  |  get settings  |
-				var settings = new DisplayFilterSettings()
+				var settings = new DisplayFilterSettings
 				{
 					IsRegularExpression = checkBox_regularExpression.Checked,
 					IsCaseSensitive = checkBox_caseSensitive.Checked,
@@ -433,6 +435,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			createdByCheck.Checked = false;
 			_unEditedFuzzy = false;
 			_editedFuzzy = false;
+			stringId_textbox.Text = string.Empty;
 			#endregion
 
 			#region  |  content panel  |
@@ -815,8 +818,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 														+ "(" + DisplayFilterSettings.OriginTypes.Aggregate(string.Empty,
 															(current, item) => current
 																			   + Helper.GetTypeName((OriginType)Enum.Parse(
-																				   typeof(OriginType), item, true))) + ")");
-				}
+																				   typeof(OriginType), item, true))) + ")");				}
 			}
 			catch (Exception e)
 			{
@@ -968,11 +970,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_UnEdited + ":\"" +
 													CustomFilter.UnEditedFuzzy + "\"");
 				}
+				if (!string.IsNullOrEmpty(CustomFilter.ContextInfoStringId))
+				{
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_StringId + ":\"" + CustomFilter.ContextInfoStringId);
+				}
 			}
-
 		}
-
-
 
 		#region  |  Helpers  |
 
@@ -1017,8 +1020,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				}
 			}
 		}
-
-
 
 		private void InvalidateIconsFilterApplied_colorPicker(CustomFilterSettings customFilter)
 		{
@@ -1068,7 +1069,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private void InvalidateIconsFilterApplied_contentTab(DisplayFilterSettings settings)
 		{
 			if (!string.IsNullOrEmpty(settings.SourceText)
-				|| !string.IsNullOrEmpty(settings.TargetText))
+				|| !string.IsNullOrEmpty(settings.TargetText) || !string.IsNullOrEmpty(CustomFilter.ContextInfoStringId))
 			{
 				tabPage_content.ImageIndex = 0;
 			}
@@ -1775,8 +1776,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
 
-
-
 		private void sourceSameBox_CheckedChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
@@ -1877,6 +1876,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 				MessageBox.Show(@"File was generated at the following location: " + selectedFilePath, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
+		}
+
+		private void stringId_textbox_TextChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_content);
 		}
 	}
 }

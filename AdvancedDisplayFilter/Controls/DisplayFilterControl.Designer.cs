@@ -43,6 +43,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.target_textbox = new System.Windows.Forms.TextBox();
 			this.checkBox_regularExpression = new System.Windows.Forms.CheckBox();
 			this.label_tab_content_filter_message = new System.Windows.Forms.Label();
+			this.stringIdLbl = new System.Windows.Forms.Label();
+			this.stringId_textbox = new System.Windows.Forms.TextBox();
 			this.tabPage_filters = new System.Windows.Forms.TabPage();
 			this.panel8 = new System.Windows.Forms.Panel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -128,8 +130,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			this.stringIdLbl = new System.Windows.Forms.Label();
-			this.stringId_textbox = new System.Windows.Forms.TextBox();
 			this.listView_selected = new Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended();
 			this.columnHeader_filtersSelected_name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.listView_available = new Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended();
@@ -257,6 +257,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.label_tab_content_filter_message, "label_tab_content_filter_message");
 			this.tableLayoutPanel1.SetColumnSpan(this.label_tab_content_filter_message, 2);
 			this.label_tab_content_filter_message.Name = "label_tab_content_filter_message";
+			// 
+			// stringIdLbl
+			// 
+			resources.ApplyResources(this.stringIdLbl, "stringIdLbl");
+			this.stringIdLbl.Name = "stringIdLbl";
+			// 
+			// stringId_textbox
+			// 
+			resources.ApplyResources(this.stringId_textbox, "stringId_textbox");
+			this.stringId_textbox.Name = "stringId_textbox";
+			this.stringId_textbox.TextChanged += new System.EventHandler(this.stringId_textbox_TextChanged);
 			// 
 			// tabPage_filters
 			// 
@@ -839,16 +850,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
-			// 
-			// stringIdLbl
-			// 
-			resources.ApplyResources(this.stringIdLbl, "stringIdLbl");
-			this.stringIdLbl.Name = "stringIdLbl";
-			// 
-			// stringId_textbox
-			// 
-			resources.ApplyResources(this.stringId_textbox, "stringId_textbox");
-			this.stringId_textbox.Name = "stringId_textbox";
 			// 
 			// listView_selected
 			// 
