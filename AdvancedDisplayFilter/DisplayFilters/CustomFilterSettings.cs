@@ -28,5 +28,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public string CreatedBy { get; set; }
 		public bool EditedFuzzy { get; set; }
 		public bool UnEditedFuzzy { get; set; }
+		public string ContextInfoStringId { get; set; }
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.Toolkit.FileType;
 using Sdl.Community.Toolkit.Integration;
@@ -12,9 +13,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 {
 	public static class CustomFilterHelper
 	{
-		public static bool Filter(CustomFilterSettings customSettings, DisplayFilterRowInfo rowInfo,bool success,Document  activeDocument)
+		public static bool Filter(CustomFilterSettings customSettings, DisplayFilterSettings filterSettings,
+			DisplayFilterRowInfo rowInfo, bool success, Document activeDocument)
 		{
-			
+
 			var rowId = rowInfo.SegmentPair.Properties.Id.Id;
 			if (success && customSettings.EvenNo)
 			{
@@ -56,7 +58,9 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				{
 					success = ColorPickerHelper.ContainsColor(rowInfo, customSettings.Colors);
 				}
-				catch (Exception e) { }
+				catch (Exception e)
+				{
+				}
 			}
 
 			//fuzzy
@@ -111,13 +115,51 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			}
 			if (success && customSettings.EditedFuzzy)
 			{
-				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) && FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
+				          FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
 			}
 			if (success && customSettings.UnEditedFuzzy)
 			{
-				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target)&& !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
+				          !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+			}
+
+			//String id seach
+			if (success && !string.IsNullOrEmpty(customSettings.ContextInfoStringId))
+			{
+				if (filterSettings.IsRegularExpression)
+				{
+					success = StringIdRegexSearch(rowInfo, customSettings.ContextInfoStringId, filterSettings.IsCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
+				}
+				else
+				{
+					foreach (var contextInfo in rowInfo.ContextInfo)
+					{
+						if (contextInfo?.DisplayName == customSettings.ContextInfoStringId)
+						{
+							return true;
+						}
+					}
+					return false;
+				}
 			}
 			return success;
+		}
+
+		private static bool StringIdRegexSearch(DisplayFilterRowInfo rowInfo,string regexExpression,RegexOptions options)
+		{
+			var regex = new Regex(regexExpression, options);
+			foreach (var contextInfo in rowInfo.ContextInfo)
+			{
+				if (contextInfo != null)
+				{
+					if (regex.Match(contextInfo.DisplayName).Success)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		public static  bool Reverse(DisplayFilterSettings settings,bool success, DisplayFilterRowInfo rowInfo, CustomFilterSettings customSettings, Document activeDocument)
@@ -262,6 +304,24 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				else
 				{
 					return false;
+				}
+			}
+			//String id seach
+			if (!success && !string.IsNullOrEmpty(customSettings.ContextInfoStringId))
+			{
+				if (settings.IsRegularExpression)
+				{
+					success = StringIdRegexSearch(rowInfo, customSettings.ContextInfoStringId, settings.IsCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
+				}
+				else
+				{
+					foreach (var contextInfo in rowInfo.ContextInfo)
+					{
+						if (contextInfo?.DisplayName == customSettings.ContextInfoStringId)
+						{
+							success = true;
+						}
+					}
 				}
 			}
 			return !success;
