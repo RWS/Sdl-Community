@@ -334,4 +334,7 @@
   <data name="File" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\File.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DisplayFilterControl_StringId" xml:space="preserve">
+    <value>Document structure String id</value>
+  </data>
 </root>

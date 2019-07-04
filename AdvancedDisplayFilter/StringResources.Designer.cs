@@ -584,6 +584,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Document structure String id.
+        /// </summary>
+        internal static string DisplayFilterControl_StringId {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_StringId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Target.
         /// </summary>
         internal static string DisplayFilterControl_Target {

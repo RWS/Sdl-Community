@@ -74,7 +74,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					CreatedBy = createdByBox.Text,
 					CreatedByChecked = createdByCheck.Checked,
 					EditedFuzzy = _editedFuzzy,
-					UnEditedFuzzy = _unEditedFuzzy
+					UnEditedFuzzy = _unEditedFuzzy,
+					ContextInfoStringId = stringId_textbox.Text
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -120,6 +121,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				modifiedByCheck.Checked = value.ModifiedByChecked;
 				createdByBox.Text = value.CreatedBy;
 				createdByCheck.Checked = value.CreatedByChecked;
+				stringId_textbox.Text = value.ContextInfoStringId;
 				foreach (var color in value.Colors)
 				{
 					foreach (ListViewItem colorItem in colorsListView.Items)
@@ -142,12 +144,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			get
 			{
 				#region  |  get settings  |
-				var settings = new DisplayFilterSettings()
+				var settings = new DisplayFilterSettings
 				{
 					IsRegularExpression = checkBox_regularExpression.Checked,
 					IsCaseSensitive = checkBox_caseSensitive.Checked,
 					SourceText = textBox_source.Text.Trim(),
-					TargetText = textBox_target.Text.Trim(),
+					TargetText = target_textbox.Text.Trim(),
 					CommentText = textBox_commentText.Text.Trim(),
 					CommentAuthor = textBox_commentAuthor.Text.Trim(),
 					CommentSeverity = comboBox_commentSeverity.SelectedIndex,
@@ -193,7 +195,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				#region  |  content panel  |
 
 				textBox_source.Text = value.SourceText;
-				textBox_target.Text = value.TargetText;
+				target_textbox.Text = value.TargetText;
 
 				checkBox_regularExpression.Checked = value.IsRegularExpression;
 				checkBox_caseSensitive.Checked = value.IsCaseSensitive;
@@ -433,12 +435,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			createdByCheck.Checked = false;
 			_unEditedFuzzy = false;
 			_editedFuzzy = false;
+			stringId_textbox.Text = string.Empty;
 			#endregion
 
 			#region  |  content panel  |
 
 			textBox_source.Text = string.Empty;
-			textBox_target.Text = string.Empty;
+			target_textbox.Text = string.Empty;
 
 			checkBox_regularExpression.Checked = false;
 			checkBox_caseSensitive.Checked = false;
@@ -613,7 +616,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 					var contextInfoList = segmentPair.GetParagraphUnitProperties().Contexts.Contexts;
 					var colorCode = ColorPickerHelper.DefaultFormatingColorCode(contextInfoList);
-					
+
 					AddColor(colorCode);
 				}
 
@@ -624,7 +627,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				// catch all; ignore
 			}
 
-		}		
+		}
 
 		private void SetAddColorsToListView()
 		{
@@ -743,10 +746,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				PopulateContextInfoList();
 
 				if (ActiveDocument.DisplayFilter != null &&
-				    ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
+					ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
 				{
 					//invalidate UI with display settings recovered from the active document
-					DisplayFilterSettings = ((DisplayFilter) ActiveDocument.DisplayFilter).Settings;
+					DisplayFilterSettings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings;
 				}
 
 				PopulateColorList();
@@ -968,11 +971,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_UnEdited + ":\"" +
 													CustomFilter.UnEditedFuzzy + "\"");
 				}
+				if (!string.IsNullOrEmpty(CustomFilter.ContextInfoStringId))
+				{
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_StringId + ":\"" + CustomFilter.ContextInfoStringId);
+				}
 			}
-
 		}
-
-
 
 		#region  |  Helpers  |
 
@@ -1017,8 +1021,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				}
 			}
 		}
-
-
 
 		private void InvalidateIconsFilterApplied_colorPicker(CustomFilterSettings customFilter)
 		{
@@ -1068,7 +1070,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private void InvalidateIconsFilterApplied_contentTab(DisplayFilterSettings settings)
 		{
 			if (!string.IsNullOrEmpty(settings.SourceText)
-				|| !string.IsNullOrEmpty(settings.TargetText))
+				|| !string.IsNullOrEmpty(settings.TargetText) || !string.IsNullOrEmpty(CustomFilter.ContextInfoStringId))
 			{
 				tabPage_content.ImageIndex = 0;
 			}
@@ -1152,7 +1154,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					|| !string.IsNullOrEmpty(settings.TargetText)))
 				{
 
-					var item1 = textBox_source.Text + ", " + textBox_target.Text + ", " +
+					var item1 = textBox_source.Text + ", " + target_textbox.Text + ", " +
 								checkBox_regularExpression.Checked + ", " + checkBox_caseSensitive.Checked;
 
 					var item2 = settings.SourceText + ", " + settings.TargetText + ", " +
@@ -1775,8 +1777,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
 
-
-
 		private void sourceSameBox_CheckedChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
@@ -1877,6 +1877,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 				MessageBox.Show(@"File was generated at the following location: " + selectedFilePath, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
+		}
+
+		private void stringId_textbox_TextChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_content);
 		}
 	}
 }
