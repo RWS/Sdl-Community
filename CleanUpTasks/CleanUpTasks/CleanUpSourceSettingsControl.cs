@@ -29,9 +29,14 @@ namespace Sdl.Community.CleanUpTasks
 
         protected override void OnLeave(EventArgs e)
         {
-            segmentLockerControl.SaveSettings();
-            tagsSettingsControl.SaveSettings();
-            conversionsSettingsControl.SaveSettings();
+	        SaveSettings();
+        }
+
+        public void SaveSettings()
+        {
+	        segmentLockerControl.SaveSettings();
+	        tagsSettingsControl.SaveSettings();
+	        conversionsSettingsControl.SaveSettings();
         }
 
         protected override void OnLoad(EventArgs e)
