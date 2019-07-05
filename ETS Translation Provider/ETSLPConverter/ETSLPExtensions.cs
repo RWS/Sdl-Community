@@ -1,44 +1,45 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Globalization;
-using System.Resources;
+using System.Linq;
 
 namespace ETSLPConverter
 {
     public static class ETSLPExtensions
     {
-        public static string ToETSCode(this CultureInfo language)
-        {
-            var languageCode = language.IetfLanguageTag.ToLower();
+	    public static string ToETSCode(this CultureInfo language)
+	    {
+		    var languageCode = language.IetfLanguageTag.ToLower();
 
-			// Make an exception for languages that require generics, but don't share a common ietf prefix with the generic
-			// (ie nb-no doesn't have "no" as its first half, which in languages.xml, it should)
-			if (Converter.ForcedGenericLPs.ContainsKey(languageCode))
-			{
-				return Converter.ForcedGenericLPs[languageCode];
-			}
+		    // Make an exception for languages that require generics, but don't share a common ietf prefix with the generic
+		    // (ie nb-no doesn't have "no" as its first half, which in languages.xml, it should)
+		    if (Converter.ForcedGenericLPs.ContainsKey(languageCode))
+		    {
+			    return Converter.ForcedGenericLPs[languageCode];
+		    }
 
-            var languageResource = ETSLanguages.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
-            var bestMatch = string.Empty;
+		    var languageResource = ETSLanguages.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
 
-            foreach (DictionaryEntry entry in languageResource)
-            {
-                var nonETSCode = entry.Value.ToString();
-				// The more generic the nonETSCode, the better (less hyphens) with the
-				// exception of certain cultures in the exception list above.
-				if (languageCode.StartsWith(nonETSCode, StringComparison.OrdinalIgnoreCase))
-				{
-					if (Converter.LanguageCodeExceptions.Contains(nonETSCode.ToLower()))
-					{
-						return entry.Key.ToString();
-					}
-					else if (bestMatch == null || nonETSCode.IndexOf('-') == -1)
-					{
-						bestMatch = entry.Key.ToString();
-					}
-				}
-            }
-            return bestMatch;
-        }
+		    var languagesDictionary = languageResource.Cast<DictionaryEntry>()
+			    .ToDictionary(x => x.Key.ToString(),
+				    x => x.Value.ToString());
+
+		    var currentLanguage =
+			    languagesDictionary.Keys.FirstOrDefault(k => k.Equals(language.ThreeLetterWindowsLanguageName.ToLower()));
+
+		    if (!string.IsNullOrEmpty(currentLanguage))
+		    {
+			    return currentLanguage.ToLower();
+		    }
+
+			//the language code used for ets for en-Us is eng
+		    currentLanguage =
+			    languagesDictionary.Keys.FirstOrDefault(k => k.Equals(language.ThreeLetterISOLanguageName.ToLower()));
+		    if (!string.IsNullOrEmpty(currentLanguage))
+		    {
+			    return currentLanguage;
+		    }
+		    return language.ThreeLetterISOLanguageName.ToLower();
+
+	    }
     }
 }
