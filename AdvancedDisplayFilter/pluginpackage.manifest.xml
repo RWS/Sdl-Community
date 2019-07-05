@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Advanced Display Filter</PlugInName>
-  <Version>4.3.6.2</Version>
+  <Version>4.3.6.3</Version>
   <Description>Advanced display filter that allows more options in filtering the rows visible from the editor</Description>
   <Author>SDL Community Developers</Author>
   <Include>

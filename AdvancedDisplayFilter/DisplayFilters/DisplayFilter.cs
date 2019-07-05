@@ -53,7 +53,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 			{
 				if (ReverseSearch)
 				{
-					return CustomFilterHelper.Reverse(Settings,success, rowInfo,CustomSettings,ActiveDocument);
+					return CustomFilterHelper.Reverse(Settings, success, rowInfo, CustomSettings, ActiveDocument);
 				}
 
 				if (success && Settings.SegmentReviewTypes != null && Settings.SegmentReviewTypes.Any())
@@ -92,7 +92,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				if (success && Settings.SourceText.Trim() != string.Empty)
 				{
 					success = rowInfo.IsTextFoundInSource(Settings);
-				
+
 					if (Settings.IsRegularExpression)
 					{
 						var textVisitor = new SegmentTextVisitor();
@@ -124,7 +124,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				// check custom settings
 				if (success)
 				{
-					success = CustomFilterHelper.Filter(CustomSettings,rowInfo,success, ActiveDocument);
+					success = CustomFilterHelper.Filter(CustomSettings, Settings, rowInfo, success, ActiveDocument);
 				}
 			}
 			return success;
