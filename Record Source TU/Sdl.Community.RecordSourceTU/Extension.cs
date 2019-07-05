@@ -54,7 +54,7 @@ namespace Sdl.Community.RecordSourceTU
 			if (editorController.ActiveDocument == null)
 			{
 				var projectName =
-					ProjectNameHelper(translationUnit.FileProperties.FileConversionProperties.InputFilePath);
+					ProjectNameHelper(translationUnit.FileProperties.FileConversionProperties.OriginalFilePath);
 				return projectName;
 			}
 
