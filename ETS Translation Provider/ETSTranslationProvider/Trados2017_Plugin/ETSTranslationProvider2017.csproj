@@ -132,6 +132,7 @@
     <Compile Include="..\Log.cs" />
     <Compile Include="..\PluginConfiguration.cs" />
     <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Model\CustomEngines.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
