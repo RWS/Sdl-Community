@@ -412,16 +412,9 @@ namespace Sdl.Community.NumberVerifier
 
 			var numberResults = new NumberResults(VerificationSettings,
 				sourceAlphanumericsList,
-				targetAlphanumericsList);
-
-			if (numberResults.SourceNumbers.Any())
-			{
-				numberResults.SourceNumbers[0] = sourceText;
-			}
-			if (numberResults.TargetNumbers.Any())
-			{
-				numberResults.TargetNumbers[0] = targetText;
-			}
+				targetAlphanumericsList,
+				sourceText,
+				targetText);
 
 			var alphanumericErrorComposer = new AlphanumericErrorComposer();
 			var verifyProcessor = alphanumericErrorComposer.Compose();
@@ -520,12 +513,15 @@ namespace Sdl.Community.NumberVerifier
 		public List<ErrorReporting> CheckSourceAndTarget(string sourceText, string targetText)
 		{
 			var errorList = new List<ErrorReporting>();
-			var errorListAlphanumericsResult = new List<ErrorReporting>();
 			var hindiNumbers = GetHindiNumbers();
 			var hindiVerificationList = new List<string>();
+			var errorsListFromNormalizedNumbers = Enumerable.Empty<ErrorReporting>();
 
-			IEnumerable<ErrorReporting> errorsListFromNormalizedNumbers = Enumerable.Empty<ErrorReporting>();
-			var errorsListFromAlphanumerics = CheckAlphanumerics(sourceText, targetText);
+			if (_verificationSettings.CustomsSeparatorsAlphanumerics)
+			{
+				var errorsListFromAlphanumerics = CheckAlphanumerics(sourceText, targetText);
+				errorList.AddRange(errorsListFromAlphanumerics);
+			}
 
 			if (_verificationSettings.HindiNumberVerification)
 			{
@@ -553,16 +549,7 @@ namespace Sdl.Community.NumberVerifier
 			else
 			{
 				errorsListFromNormalizedNumbers = CheckNumbers(sourceText, targetText);
-			}
-
-			foreach (var error in errorsListFromAlphanumerics)
-			{
-				error.SourceNumberIssues = sourceText;
-				error.TargetNumberIssues = targetText;	
-				errorListAlphanumericsResult.Add(error);
 			}			
-
-			errorList.AddRange(errorListAlphanumericsResult);
 			errorList.AddRange(errorsListFromNormalizedNumbers);
 
 			return errorList;
