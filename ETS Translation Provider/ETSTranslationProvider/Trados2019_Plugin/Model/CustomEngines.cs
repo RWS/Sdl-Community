@@ -4,16 +4,19 @@ namespace ETSTranslationProvider.Model
 {
 	public class CustomEngines
 	{
-		//Key ETS engine three letter code
-		//Value parent three letter iso language name
+		//ETS engine three letter code
 		public CustomEngines()
 		{
-			FrenchCanada = new KeyValuePair<string, string>("frc", "fra");
-			SpanishChile = new KeyValuePair<string, string>("esl", "spa");
+			FrenchCanadaEngineCode = "FRC";
+			SpanishLatinAmericanEngineCode = "ESL";
+			LatinAmericanLanguageCodes = new List<string>
+			{
+				"ESS","ESV","ESB","ZZZ","ESL","ESO","ESC","ESK","ESD","ESF","ESE","ESG","ESH","ESJ","ESP","ESM","ESP","ESI","ESA","ESZ","ESR","ESU","EST","ESY"
+			};
 		}
 
-		public KeyValuePair<string, string> FrenchCanada { get; set; }
-		public KeyValuePair<string, string> SpanishChile { get; set; }
-
+		public string FrenchCanadaEngineCode { get; set; }
+		public string SpanishLatinAmericanEngineCode { get; set; }
+		public List<string> LatinAmericanLanguageCodes { get; set; }
 	}
 }

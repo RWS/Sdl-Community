@@ -104,14 +104,27 @@ namespace ETSTranslationProvider
 
 			var customEnginesMapping = new CustomEngines();
 
-			//Fix for Spanish Chile - esl
-			var spChileLp = languagePairs.FirstOrDefault(lp => lp.SourceCulture.ThreeLetterWindowsLanguageName.Equals("ESL") ||
-			                                                   lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals("ESL"));
-
-			if (spChileLp != null)
+			//Fix for Spanish latin amerincan flavours
+			foreach (var languagePair in languagePairs)
 			{
-				AddAditionalETSEngine(customEnginesMapping.SpanishChile.Key, customEnginesMapping.SpanishChile.Value,
-					languagePairChoices, etsLanguagePairs);
+				var sourceSpanish = customEnginesMapping.LatinAmericanLanguageCodes.FirstOrDefault(s =>
+					s.Equals(languagePair.SourceCulture.ThreeLetterWindowsLanguageName));
+
+				if (sourceSpanish != null)
+				{
+					AddAditionalETSEngine(languagePair.SourceCulture.ThreeLetterWindowsLanguageName,customEnginesMapping.SpanishLatinAmericanEngineCode, languagePairChoices,
+						etsLanguagePairs);
+				}
+				else
+				{
+					var targetSpanish = customEnginesMapping.LatinAmericanLanguageCodes.FirstOrDefault(s =>
+						s.Equals(languagePair.TargetCulture.ThreeLetterWindowsLanguageName));
+					if (targetSpanish != null)
+					{
+						AddAditionalETSEngine(languagePair.TargetCulture.ThreeLetterWindowsLanguageName, customEnginesMapping.SpanishLatinAmericanEngineCode, languagePairChoices,
+							etsLanguagePairs);
+					}
+				}
 			}
 
 			// Fix for French Canada engine	 which has language code on server frc
@@ -119,8 +132,7 @@ namespace ETSTranslationProvider
 			                                                          lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals("FRC"));
 			if (frenchCanadianLp != null)
 			{
-				AddAditionalETSEngine(customEnginesMapping.FrenchCanada.Key, customEnginesMapping.FrenchCanada.Value,
-					languagePairChoices, etsLanguagePairs);
+				AddAditionalETSEngine(customEnginesMapping.FrenchCanadaEngineCode, customEnginesMapping.FrenchCanadaEngineCode, languagePairChoices, etsLanguagePairs);
 			}
 			RemoveLPChoices(languagePairChoices);
 
@@ -128,17 +140,16 @@ namespace ETSTranslationProvider
 		}
 
 		/// <summary>
-		/// Fix for Spanish Chile - esl (engine)
-		/// Fix for French Canada engine which has language code on server frc
+		/// Used for flavours of a language to map the flavour to parent language code
 		/// </summary>
-		private void AddAditionalETSEngine(string engineCode,string parentCode,List<TradosToETSLP> languagePairChoices, ETSLanguagePair[] etsLanguagePairs)
+		private void AddAditionalETSEngine(string languageWindowsCode, string engineCode,List<TradosToETSLP> languagePairChoices, ETSLanguagePair[] etsLanguagePairs)
 		{
-			if (!string.IsNullOrEmpty(engineCode)&& !string.IsNullOrEmpty(parentCode))
+			if (!string.IsNullOrEmpty(engineCode))
 			{
 				{
-					var etsLangPairEngines = etsLanguagePairs.Where(lp => lp.SourceLanguageId.Equals(engineCode) ||
-					                                                      lp.TargetLanguageId.Equals(engineCode)).ToList();
-					var projectSourceLanguage = languagePairChoices.FirstOrDefault(s => s.TradosCulture.ThreeLetterISOLanguageName.Equals(parentCode));
+					var etsLangPairEngines = etsLanguagePairs.Where(lp => lp.SourceLanguageId.Equals(engineCode.ToLower()) ||
+					                                                      lp.TargetLanguageId.Equals(engineCode.ToLower())).ToList();
+					var projectSourceLanguage = languagePairChoices.FirstOrDefault(s => s.TradosCulture.ThreeLetterWindowsLanguageName.Equals(languageWindowsCode));
 					foreach (var etsEngine in etsLangPairEngines)
 					{
 						projectSourceLanguage?.ETSLPs?.Add(etsEngine);
