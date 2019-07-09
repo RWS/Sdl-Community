@@ -113,11 +113,5 @@ namespace Sdl.Community.RecordSourceTU
 			}
 			return null;
 		}
-
-		private static string ProjectNameHelper(string projectPath)
-		{
-			var projectName = projectPath.Substring(projectPath.LastIndexOf(@"\", StringComparison.Ordinal) - 1);
-			return projectName;
-		}
 	}
 }
