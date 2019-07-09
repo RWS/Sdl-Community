@@ -87,6 +87,10 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
       <Private>False</Private>
@@ -210,6 +214,10 @@
     <Compile Include="Specifications\ReportRemovedNumbersSpecification.cs" />
     <Compile Include="Specifications\LocalizationSpecification\RequireLocalizationSpecification.cs" />
     <Compile Include="Specifications\SkipTheDashSpecification.cs" />
+    <Compile Include="TellMe\NumberVerifierTellMeProvider.cs" />
+    <Compile Include="TellMe\NumVerifierCommunityForumAction.cs" />
+    <Compile Include="TellMe\NumVerifierCommunityWikiAction.cs" />
+    <Compile Include="TellMe\NumVerifierStoreAction.cs" />
     <Compile Include="TextGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +245,8 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\ForumIcon.ico" />
+    <None Include="Resources\Download.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
