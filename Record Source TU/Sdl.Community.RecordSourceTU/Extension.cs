@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using MoreLinq;
@@ -125,7 +126,7 @@ namespace Sdl.Community.RecordSourceTU
 
 		private static string ProjectNameHelper(string projectPath)
 		{
-			var projectName = projectPath.Substring(projectPath.LastIndexOf(@"\", StringComparison.Ordinal) - 1);
+			var projectName = Path.GetFileNameWithoutExtension(projectPath);
 			return projectName;
 		}
 	}
