@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using MoreLinq;
@@ -50,18 +49,8 @@ namespace Sdl.Community.RecordSourceTU
 
 		public static string GetProjectName(this TranslationUnit translationUnit)
 		{
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			if (editorController == null) return "N/A";
-			if (editorController.ActiveDocument == null)
-			{
-				var projectName =
-					ProjectNameHelper(translationUnit.FileProperties.FileConversionProperties.OriginalFilePath);
-				return projectName;
-			}
-
-			var projectInfo = editorController.ActiveDocument.Project.GetProjectInfo();
-
-			return projectInfo.Name;
+			var pController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			return pController != null ? pController.CurrentProject.GetProjectInfo().Name : "";
 		}
 
 		public static ProjectFile TryGetActiveFile(this Document document)
@@ -122,12 +111,6 @@ namespace Sdl.Community.RecordSourceTU
 				return document.Files.ElementAt(index);
 			}
 			return null;
-		}
-
-		private static string ProjectNameHelper(string projectPath)
-		{
-			var projectName = Path.GetFileNameWithoutExtension(projectPath);
-			return projectName;
 		}
 	}
 }
