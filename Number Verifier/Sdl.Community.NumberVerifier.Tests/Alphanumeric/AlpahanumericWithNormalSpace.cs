@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 {
-    public class AlpahanumericWithNormalSpace
+	public class AlpahanumericWithNormalSpace
     {
-
         [Theory]
         [InlineData("AB14 word C12", ",.", ",.")]
         public List<string> FindAlphanumericsNormalSpace(string text, string decimalSeparators, string thousandSeparators)
@@ -23,7 +18,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
             Assert.True(textAlphanumericsList.Count != 0);
             return textAlphanumericsList;
-
         }
 
         [Theory]
@@ -31,7 +25,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
         public void CheckIfAlphanumericsAreCorrectNormalSpace(string text, string decimalSeparators, string thousandSeparators)
         {
             var alphanumericsList = FindAlphanumericsNormalSpace(text, decimalSeparators, thousandSeparators);
-
 
             Assert.True(alphanumericsList.Contains("AB14"));
             Assert.True(alphanumericsList.Contains("C12"));
@@ -76,18 +69,18 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 		}
 
 		// To Do: mock somehow in GetAlphanumericList() method the customs separators retrieved in _verificationSettings.GetAlphanumericsCustomSeparator
-		//[Theory]
-		//[InlineData("*BB-1254AE word")]
-		//public List<string> AlphanumericCustomsSeparators(string text)
-		//{
-		//	var iNumberSettingsMock = Utilities.NumberVerifierLocalizationsSettings.AllowLocalization();
-		//	NumberVerifierLocalizationsSettings.InitSeparators(iNumberSettingsMock);
-		//	var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
+		[Theory]
+		[InlineData("*BB-1254AE word")]
+		public List<string> AlphanumericCustomsSeparators(string text)
+		{
+			var iNumberSettingsMock = Utilities.NumberVerifierLocalizationsSettings.AllowLocalization();
+			NumberVerifierLocalizationsSettings.InitSeparators(iNumberSettingsMock);
+			var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
 
-		//	var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
+			var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
 
-		//	Assert.True(textAlphanumericsList.Count != 0);
-		//	return textAlphanumericsList;
-		//}
+			Assert.True(textAlphanumericsList.Count != 0);
+			return textAlphanumericsList;
+		}
 	}
 }

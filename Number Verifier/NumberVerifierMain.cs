@@ -526,32 +526,42 @@ namespace Sdl.Community.NumberVerifier
 			if (_verificationSettings.HindiNumberVerification)
 			{
 				var projectController = GetProjectController();
-				if(projectController.CurrentProject != null)
+				if (projectController.CurrentProject != null)
 				{
 					var projectInfo = projectController.CurrentProject.GetProjectInfo();
 					var sourceLanguage = projectInfo.SourceLanguage.DisplayName;
-					if(sourceLanguage == "Hindi (India)" || projectInfo.TargetLanguages.Any(l=>l.DisplayName == "Hindi (India)"))
+					if (sourceLanguage == "Hindi (India)" || projectInfo.TargetLanguages.Any(l => l.DisplayName == "Hindi (India)"))
 					{
-						var result = GetTargetFromHindiNumbers(sourceText, targetText);
+						var result = GetTargetFromHindiNumbers(sourceText, targetText, sourceLanguage);
 
 						foreach (var targetRes in result)
 						{
 							errorsListFromNormalizedNumbers = CheckNumbers(targetRes.SourceText, targetRes.TargetText);
 							errorList.AddRange(errorsListFromNormalizedNumbers);
 						}
+						return errorList;
 					}
 					else
 					{
-						errorsListFromNormalizedNumbers = CheckNumbers(sourceText, targetText);
+						return ReturnErrorList(errorsListFromNormalizedNumbers, errorList, sourceText, targetText);
 					}
-				}			
+				}
 			}
 			else
 			{
-				errorsListFromNormalizedNumbers = CheckNumbers(sourceText, targetText);
-			}			
-			errorList.AddRange(errorsListFromNormalizedNumbers);
+				return ReturnErrorList(errorsListFromNormalizedNumbers, errorList, sourceText,targetText);
+			}
+			return errorList;
+		}
 
+		private List<ErrorReporting> ReturnErrorList(
+			IEnumerable<ErrorReporting> errorsListFromNormalizedNumbers,
+			List<ErrorReporting> errorList, 
+			string sourceText,
+			string targetText)
+		{
+			errorsListFromNormalizedNumbers = CheckNumbers(sourceText, targetText);
+			errorList.AddRange(errorsListFromNormalizedNumbers);
 			return errorList;
 		}
 
@@ -1171,85 +1181,77 @@ namespace Sdl.Community.NumberVerifier
 					 && !(VerificationSettings.ExcludeDraftSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
 		}
 
-		private List<NumberModel> GetTargetFromHindiNumbers(string source, string target)
+		public List<NumberModel> GetTargetFromHindiNumbers(string source, string target, string sourceLanguage)
 		{
-			var _projectController = GetProjectController();
+			var result = new List<NumberModel>();
+			var sb = new StringBuilder();
 
-			List<NumberModel> result = new List<NumberModel>();
-			StringBuilder sb = new StringBuilder();
+			var hindiNumbers = GetHindiNumbers();
 
-			if (_projectController.CurrentProject != null)
+			if (sourceLanguage == "Hindi (India)")
 			{
-				var projectInfo = _projectController.CurrentProject.GetProjectInfo();
-				_language = projectInfo.SourceLanguage.DisplayName;
+				string sourceResult = string.Empty;
+				var sourceGroupResult = new List<string>();
 
-				var hindiNumbers = GetHindiNumbers();
+				var targetGroups = target.Split(' ').ToArray();
+				var sourceGroups = source.Split(' ').ToArray();
 
-				if (_language == "Hindi (India)")
+				foreach (var sourceGroup in sourceGroups)
 				{
-					string sourceResult = string.Empty;
-					string sourceGroupResult = string.Empty;
-
-					var targetGroups = target.Split(' ').ToArray();
-					var sourceGroups = source.Split(' ').ToArray();
-
-					foreach (var sourceGroup in sourceGroups)
+					foreach (var s in sourceGroup)
 					{
-						foreach (var s in sourceGroup)
+						if (hindiNumbers.ContainsValue(s.ToString()))
 						{
-							if (hindiNumbers.ContainsValue(s.ToString()))
-							{
-								//add arabic values to result 
-								sourceResult = sb.Append(hindiNumbers.FirstOrDefault(h => h.Value == s.ToString()).Key).ToString();
-							}
-							else
-							{
-								// add separator like , or . (or just the number)
-								sourceResult = sb.Append(s.ToString()).ToString();
-							}
+							//add arabic values to result 
+							sourceResult = sb.Append(hindiNumbers.FirstOrDefault(h => h.Value == s.ToString()).Key).ToString();
 						}
-						sourceGroupResult = sourceGroupResult + " " + sourceResult;
-						sourceResult = string.Empty;
-						sb.Clear();
+						else
+						{
+							// add separator like , or . (or just the number)
+							sourceResult = sb.Append(s.ToString()).ToString();
+						}
 					}
-					result = GetFormatedNumbers(sourceGroupResult, targetGroups);
+					sourceGroupResult.Add(sourceResult);
+					sourceResult = string.Empty;
+					sb.Clear();
 				}
-				else
+				result = GetFormatedNumbers(sourceGroupResult.ToArray(), targetGroups);
+			}
+			else
+			{
+				string targetResult = string.Empty;
+				var targetGroupResult = new List<string>();
+
+				var targetGroups = target.Split(' ').ToArray();
+				var sourceGroups = source.Split(' ').ToArray();
+
+				foreach (var targetGroup in targetGroups)
 				{
-					string targetResult = string.Empty;
-					string targetGroupResult = string.Empty;
-
-					var targetGroups = target.Split(' ').ToArray();
-					var sourceGroups = source.Split(' ').ToArray();
-
-					foreach (var targetGroup in targetGroups)
+					foreach (var t in targetGroup)
 					{
-						foreach (var t in targetGroup)
+						if (hindiNumbers.ContainsValue(t.ToString()))
 						{
-							if (hindiNumbers.ContainsValue(t.ToString()))
-							{
-								//add arabic values to result 
-								targetResult = sb.Append(hindiNumbers.FirstOrDefault(h => h.Value == t.ToString()).Key).ToString();
-							}
-							else
-							{
-								// add separator like , or . (or just the number)
-								targetResult = sb.Append(t.ToString()).ToString();
-							}
+							//add arabic values to result 
+							targetResult = sb.Append(hindiNumbers.FirstOrDefault(h => h.Value == t.ToString()).Key).ToString();
 						}
-						targetGroupResult = targetGroupResult + " " + targetResult;
-						targetResult = string.Empty;
-						sb.Clear();
+						else
+						{
+							// add separator like , or . (or just the number)
+							targetResult = sb.Append(t.ToString()).ToString();
+						}
 					}
-					result = GetFormatedNumbers(targetGroupResult, sourceGroups);
+					targetGroupResult.Add(targetResult);
+					targetResult = string.Empty;
+					sb.Clear();
 				}
+				result = GetFormatedNumbers(sourceGroups, targetGroupResult.ToArray());
 			}
 			return result;
 		}
 
 		private Dictionary<string,string> GetHindiNumbers()
 		{
-			Dictionary<string, string> hindiDictionary = new Dictionary<string, string>();
+			var hindiDictionary = new Dictionary<string, string>();
 			hindiDictionary.Add("0", "٠");
 			hindiDictionary.Add("1", "١");
 			hindiDictionary.Add("2", "٢");
@@ -1264,14 +1266,10 @@ namespace Sdl.Community.NumberVerifier
 			return hindiDictionary;
 		}
 
-		public List<NumberModel> GetFormatedNumbers(string textGroupResult, string[] textGroups)
+		public List<NumberModel> GetFormatedNumbers(string[] targetGroupRes, string[] textGroups)
 		{
-			List<NumberModel> result = new List<NumberModel>();
-
-			var targetGroupRes = textGroupResult.Split(' ').ToArray();
-			targetGroupRes = targetGroupRes.Skip(1).ToArray();
-
-			var res = textGroups.Zip(targetGroupRes, (s, t) => new NumberModel { SourceText = s, TargetText = t }).ToList();
+			var result = new List<NumberModel>();			
+			var res = textGroups.Zip(targetGroupRes, (t, s) => new NumberModel { TargetText = t, SourceText = s }).ToList();
 
 			// add thousand separator or decimal separtor in the target text as it is in the source text where needed
 			foreach (var numberRes in res)
