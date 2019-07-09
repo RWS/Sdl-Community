@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using ETSLPConverter;
 using ETSTranslationProvider.ETSApi;
+using ETSTranslationProvider.Model;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -101,25 +102,60 @@ namespace ETSTranslationProvider
 						etsLPs: installedLP.OrderBy(lp => lp.LanguagePairId).ToList())
 			).ToList();
 
+			var customEnginesMapping = new CustomEngines();
+
+			//Fix for Spanish latin amerincan flavours
+			foreach (var languagePair in languagePairs)
+			{
+				var sourceSpanish = customEnginesMapping.LatinAmericanLanguageCodes.FirstOrDefault(s =>
+					s.Equals(languagePair.SourceCulture.ThreeLetterWindowsLanguageName));
+
+				if (sourceSpanish != null)
+				{
+					AddAditionalETSEngine(languagePair.SourceCulture.ThreeLetterWindowsLanguageName,customEnginesMapping.SpanishLatinAmericanEngineCode, languagePairChoices,
+						etsLanguagePairs);
+				}
+				else
+				{
+					var targetSpanish = customEnginesMapping.LatinAmericanLanguageCodes.FirstOrDefault(s =>
+						s.Equals(languagePair.TargetCulture.ThreeLetterWindowsLanguageName));
+					if (targetSpanish != null)
+					{
+						AddAditionalETSEngine(languagePair.TargetCulture.ThreeLetterWindowsLanguageName, customEnginesMapping.SpanishLatinAmericanEngineCode, languagePairChoices,
+							etsLanguagePairs);
+					}
+				}
+			}
+
 			// Fix for French Canada engine	 which has language code on server frc
 			var frenchCanadianLp = languagePairs.FirstOrDefault(lp => lp.SourceCulture.ThreeLetterWindowsLanguageName.Equals("FRC") ||
 			                                                          lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals("FRC"));
 			if (frenchCanadianLp != null)
 			{
-				var etsLangPairEngines = etsLanguagePairs.Where(lp => lp.SourceLanguageId.Equals("frc") ||
-				                                                        lp.TargetLanguageId.Equals("frc")).ToList();
-				if (etsLangPairEngines.Any())
-				{
-					var projectSourceLanguage = languagePairChoices.FirstOrDefault(s => s.TradosCulture.ThreeLetterISOLanguageName.Equals("fra"));
-					foreach (var etsEngine in etsLangPairEngines)
-					{
-						projectSourceLanguage?.ETSLPs.Add(etsEngine);
-					}
-				}
+				AddAditionalETSEngine(customEnginesMapping.FrenchCanadaEngineCode, customEnginesMapping.FrenchCanadaEngineCode, languagePairChoices, etsLanguagePairs);
 			}
 			RemoveLPChoices(languagePairChoices);
 
 			return languagePairChoices.ToArray();
+		}
+
+		/// <summary>
+		/// Used for flavours of a language to map the flavour to parent language code
+		/// </summary>
+		private void AddAditionalETSEngine(string languageWindowsCode, string engineCode,List<TradosToETSLP> languagePairChoices, ETSLanguagePair[] etsLanguagePairs)
+		{
+			if (!string.IsNullOrEmpty(engineCode))
+			{
+				{
+					var etsLangPairEngines = etsLanguagePairs.Where(lp => lp.SourceLanguageId.Equals(engineCode.ToLower()) ||
+					                                                      lp.TargetLanguageId.Equals(engineCode.ToLower())).ToList();
+					var projectSourceLanguage = languagePairChoices.FirstOrDefault(s => s.TradosCulture.ThreeLetterWindowsLanguageName.Equals(languageWindowsCode));
+					foreach (var etsEngine in etsLangPairEngines)
+					{
+						projectSourceLanguage?.ETSLPs?.Add(etsEngine);
+					}
+				}
+			}
 		}
 
 		private string ResolveHost()
