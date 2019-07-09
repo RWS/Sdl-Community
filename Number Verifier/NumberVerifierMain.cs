@@ -525,10 +525,10 @@ namespace Sdl.Community.NumberVerifier
 
 			if (_verificationSettings.HindiNumberVerification)
 			{
-				var _projectController = GetProjectController();
-				if(_projectController.CurrentProject != null)
+				var projectController = GetProjectController();
+				if(projectController.CurrentProject != null)
 				{
-					var projectInfo = _projectController.CurrentProject.GetProjectInfo();
+					var projectInfo = projectController.CurrentProject.GetProjectInfo();
 					var sourceLanguage = projectInfo.SourceLanguage.DisplayName;
 					if(sourceLanguage == "Hindi (India)" || projectInfo.TargetLanguages.Any(l=>l.DisplayName == "Hindi (India)"))
 					{
