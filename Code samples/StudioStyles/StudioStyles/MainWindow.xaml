@@ -3,14 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
         d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
         xmlns:local="clr-namespace:StudioStyles"
         xmlns:viewModel="clr-namespace:StudioStyles.ViewModel"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         Title="Studio styles sample app" Height="800" Width="800">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
@@ -19,7 +22,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/NumericUpDown.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/RadioButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
-
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TreeViewResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
@@ -62,6 +65,10 @@
 				<RadioButton Style="{DynamicResource Sdl.RadioButton.GenericStyle}" GroupName="Studio" Content="Studio 2019" Margin="5"/>
 			</StackPanel>
 		</GroupBox>
+		<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" Height="50">
+			
+		</mah:ProgressRing>
+		<controls:NumericUpDown Style="{DynamicResource Sdl.NumericUpDown.Generic}" Width="150" HorizontalAlignment="Left" Margin="10"/>
 
 
 
