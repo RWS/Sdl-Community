@@ -8,7 +8,7 @@ namespace Sdl.Community.RecordSourceTU
 {
     public partial class SourceTmConfiguration : Form
     {
-        private const string SelectCustomField = "Select an existing custom field";
+        private const string SelectCustomField = "Or create one";
 
         private readonly Uri _providerUri;
         private AddSourceTmConfigurations _addSourceTmConfigurations;
@@ -55,13 +55,18 @@ namespace Sdl.Community.RecordSourceTU
             projectNameFields.Insert(0, SelectCustomField);
             cmbProjectNameField.Items.AddRange(projectNameFields.ToArray());
 
-            SetConfigurationData(txtFilenameField, cmbFilenameFields, addSourceTmConfiguration.FileNameField);
+            cmbFilenameFields.SelectedIndexChanged += Boxes_SelectedIndexChanged;
+            cmbCompletePathField.SelectedIndexChanged += Boxes_SelectedIndexChanged;
+            cmbProjectNameField.SelectedIndexChanged += Boxes_SelectedIndexChanged;
+
+			SetConfigurationData(txtFilenameField, cmbFilenameFields, addSourceTmConfiguration.FileNameField);
             SetConfigurationData(txtCompletePathField, cmbCompletePathField, addSourceTmConfiguration.FullPathField);
             SetConfigurationData(txtProjectNameField, cmbProjectNameField, addSourceTmConfiguration.ProjectNameField);
             
             chkFullPath.Checked = addSourceTmConfiguration.StoreFullPath;
             chkFileName.Checked = addSourceTmConfiguration.StoreFilename;
             chkProjectName.Checked = addSourceTmConfiguration.StoreProjectName;
+            
         }
 
         private void SetConfigurationData(TextBox textBox, ComboBox cmbFields, string fieldName)
@@ -174,5 +179,42 @@ namespace Sdl.Community.RecordSourceTU
             }
             return textBox.Text;
         }
-    }
+
+        private void ToggleCorrespondingTextField(ComboBox comboBox)
+        {
+	        var onOff = comboBox.SelectedIndex == 0;
+
+	        switch (comboBox.Name)
+	        {
+				case "cmbFilenameFields":
+					ToggleTextField(txtFilenameField, onOff);
+					break;
+				case "cmbCompletePathField":
+					ToggleTextField(txtCompletePathField, onOff);
+					break;
+				case "cmbProjectNameField":
+					ToggleTextField(txtProjectNameField, onOff);
+					break;
+			}
+        }
+
+        private void ToggleTextField(TextBox textBox, bool onOff)
+        {
+	        if (textBox.Enabled == onOff) return;
+	        textBox.Enabled = onOff;
+
+	        if (!onOff)
+	        {
+		        textBox.Text = "";
+	        }
+        }
+
+		private void Boxes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+			if (sender is ComboBox comboBox)
+	        {
+		        ToggleCorrespondingTextField(comboBox);
+	        }
+        }
+	}
 }
