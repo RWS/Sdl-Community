@@ -31,9 +31,11 @@
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelSource = new System.Windows.Forms.TableLayoutPanel();
             this.panel_Source = new System.Windows.Forms.Panel();
+            this.source_richTextBox = new System.Windows.Forms.RichTextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanelTarget = new System.Windows.Forms.TableLayoutPanel();
             this.panel_Target = new System.Windows.Forms.Panel();
+            this.target_richTextBox = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
@@ -42,8 +44,6 @@
             this.tb_SourceIssues = new System.Windows.Forms.TextBox();
             this.tb_TargetIssues = new System.Windows.Forms.TextBox();
             this.tb_ErrorDetails = new System.Windows.Forms.TextBox();
-            this.target_richTextBox = new System.Windows.Forms.RichTextBox();
-            this.source_richTextBox = new System.Windows.Forms.RichTextBox();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutPanelSource.SuspendLayout();
             this.panel_Source.SuspendLayout();
@@ -100,6 +100,16 @@
             this.panel_Source.Size = new System.Drawing.Size(373, 74);
             this.panel_Source.TabIndex = 19;
             // 
+            // source_richTextBox
+            // 
+            this.source_richTextBox.BackColor = System.Drawing.SystemColors.Control;
+            this.source_richTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.source_richTextBox.Location = new System.Drawing.Point(0, 0);
+            this.source_richTextBox.Name = "source_richTextBox";
+            this.source_richTextBox.Size = new System.Drawing.Size(369, 70);
+            this.source_richTextBox.TabIndex = 0;
+            this.source_richTextBox.Text = "";
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -137,6 +147,16 @@
             this.panel_Target.Name = "panel_Target";
             this.panel_Target.Size = new System.Drawing.Size(373, 75);
             this.panel_Target.TabIndex = 21;
+            // 
+            // target_richTextBox
+            // 
+            this.target_richTextBox.BackColor = System.Drawing.SystemColors.Control;
+            this.target_richTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.target_richTextBox.Location = new System.Drawing.Point(0, 0);
+            this.target_richTextBox.Name = "target_richTextBox";
+            this.target_richTextBox.Size = new System.Drawing.Size(369, 71);
+            this.target_richTextBox.TabIndex = 0;
+            this.target_richTextBox.Text = "";
             // 
             // label1
             // 
@@ -241,24 +261,6 @@
             this.tb_ErrorDetails.Size = new System.Drawing.Size(145, 53);
             this.tb_ErrorDetails.TabIndex = 7;
             this.tb_ErrorDetails.WordWrap = false;
-            // 
-            // target_richTextBox
-            // 
-            this.target_richTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.target_richTextBox.Location = new System.Drawing.Point(0, 0);
-            this.target_richTextBox.Name = "target_richTextBox";
-            this.target_richTextBox.Size = new System.Drawing.Size(369, 71);
-            this.target_richTextBox.TabIndex = 0;
-            this.target_richTextBox.Text = "";
-            // 
-            // source_richTextBox
-            // 
-            this.source_richTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.source_richTextBox.Location = new System.Drawing.Point(0, 0);
-            this.source_richTextBox.Name = "source_richTextBox";
-            this.source_richTextBox.Size = new System.Drawing.Size(369, 70);
-            this.source_richTextBox.TabIndex = 0;
-            this.source_richTextBox.Text = "";
             // 
             // NumberVerifierMessageUI
             // 

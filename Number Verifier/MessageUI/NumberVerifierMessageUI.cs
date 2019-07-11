@@ -1,52 +1,52 @@
 ﻿using System;
+using System.Drawing;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
-
 using Sdl.DesktopEditor.BasicControls;
 using Sdl.DesktopEditor.EditorApi;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.Verification.Api;
-using System.Linq;
-using System.Drawing;
 
 namespace Sdl.Community.Extended.MessageUI
 {
-    public partial class NumberVerifierMessageUI : UserControl, ISuggestionProvider, ISegmentChangedAware
-    {
-        #region Create Edit Controls
+	public partial class NumberVerifierMessageUI : UserControl, ISuggestionProvider, ISegmentChangedAware
+	{
+		#region Create Edit Controls
 
-        private readonly BasicSegmentEditControl _sourceSegmentControl = new BasicSegmentEditControl();
-        private readonly BasicSegmentEditControl _targetSegmentControl = new BasicSegmentEditControl();
-        
-        #endregion
+		private readonly BasicSegmentEditControl _sourceSegmentControl = new BasicSegmentEditControl();
+		private readonly BasicSegmentEditControl _targetSegmentControl = new BasicSegmentEditControl();
 
-        private bool _hasSegmentChanged = false;
+		#endregion
 
-        private Suggestion _suggestion;
+		private bool _hasSegmentChanged = false;
 
-        #region Constructor
-        public NumberVerifierMessageUI(MessageEventArgs messageEventArgs, IBilingualDocument bilingualDocument, ISegment sourceSegment, ISegment targetSegment)
-        {
-            MessageEventArgs = messageEventArgs;
-            BilingualDocument = bilingualDocument;
-            SourceSegment = sourceSegment;
-            TargetSegment = targetSegment;
-            InitializeComponent();
-            
-            _sourceSegmentControl.Dock = DockStyle.Fill;
-            _sourceSegmentControl.IsReadOnly = false;
-            _sourceSegmentControl.ReplaceDocumentSegment(sourceSegment.Clone() as ISegment);
-            panel_Source.Controls.Add(_sourceSegmentControl);
-            _sourceSegmentControl.ReplaceDocumentSegment(sourceSegment);
+		private Suggestion _suggestion;
 
-            _targetSegmentControl.Dock = DockStyle.Fill;
-            _targetSegmentControl.IsReadOnly = false;
+		#region Constructor
+		public NumberVerifierMessageUI(MessageEventArgs messageEventArgs, IBilingualDocument bilingualDocument, ISegment sourceSegment, ISegment targetSegment)
+		{
+			MessageEventArgs = messageEventArgs;
+			BilingualDocument = bilingualDocument;
+			SourceSegment = sourceSegment;
+			TargetSegment = targetSegment;
+			InitializeComponent();
+
+			_sourceSegmentControl.Dock = DockStyle.Fill;
+			_sourceSegmentControl.IsReadOnly = false;
+			_sourceSegmentControl.ReplaceDocumentSegment(sourceSegment.Clone() as ISegment);
+			panel_Source.Controls.Add(_sourceSegmentControl);
+			_sourceSegmentControl.ReplaceDocumentSegment(sourceSegment);
+
+			_targetSegmentControl.Dock = DockStyle.Fill;
+			_targetSegmentControl.IsReadOnly = false;
 			_targetSegmentControl.ReplaceDocumentSegment(targetSegment.Clone() as ISegment);
-            panel_Target.Controls.Add(_targetSegmentControl);
-            _targetSegmentControl.ReplaceDocumentSegment((ISegment)targetSegment.Clone());
+			panel_Target.Controls.Add(_targetSegmentControl);
+			_targetSegmentControl.ReplaceDocumentSegment((ISegment)targetSegment.Clone());
 
-            _targetSegmentControl.SegmentContentChanged += OnSegmentContentChanged;
+			_targetSegmentControl.SegmentContentChanged += OnSegmentContentChanged;
 
 			//set up the target and source rich box which will be used to identify the issued text(s)
 			target_richTextBox.Text = targetSegment[0].ToString();
@@ -54,171 +54,162 @@ namespace Sdl.Community.Extended.MessageUI
 
 			_hasSegmentChanged = false;
 
-            UpdateMessage(messageEventArgs);
-        }
-        #endregion
-
-        public MessageEventArgs MessageEventArgs
-        {
-            get;
-            private set;
-        }
-
-        public IBilingualDocument BilingualDocument
-        {
-            get;
-            private set;
-        }
-
-        public ISegment SourceSegment
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// TargetSegment property represents the target segment.
-        /// </summary>
-        public ISegment TargetSegment
-        {
-            get;
-            private set;
-        }
-
-
-        #region ISegmentChangedAware implementation
-        /// <summary>
-        /// Returns true if object was manually edited
-        /// </summary>
-        public bool HasSegmentChanged
-        {
-            get { return _hasSegmentChanged; }
-        }
-
-        /// <summary>
-        /// Returns edited segment
-        /// </summary>
-        public ISegment EditedSegment
-        {
-            get { return _targetSegmentControl.GetDocumentSegment(); }
-        }
-
-        /// <summary>
-        /// The paragraph unit ID for edited segment in the original document.
-        /// Note: The segment may not reference the original document so the paragraph ID may be null.
-        /// </summary>
-        public ParagraphUnitId? TargetParagraphId
-        {
-            get { return MessageEventArgs.FromLocation.ParagrahUnitId; }
-        }
-
-        /// <summary>
-        /// The segment ID for the edited segment in the original document.
-        /// </summary>
-        public SegmentId? TargetSegmentId
-        {
-            get { return MessageEventArgs.FromLocation.SegmentId; }
-        }
-
-        /// <summary>
-        /// Reset target segment content to original value 
-        /// </summary>
-        public void ResetSegment()
-        {
-            // don't listen for events when contents are reset
-            _targetSegmentControl.SegmentContentChanged -= OnSegmentContentChanged;
-
-            // show target segment in segment control
-            _targetSegmentControl.ReplaceDocumentSegment((ISegment)TargetSegment.Clone());
-
-            _hasSegmentChanged = false;
-
-            // start listening to changes again 
-            _targetSegmentControl.SegmentContentChanged += OnSegmentContentChanged;
-
-        }
-
-        public event EventHandler<EventArgs> SegmentChanged;
-
-        #endregion
-
-
-        #region Private members
-        /// <summary>
-        /// Updates the message from the given message event arguments.
-        /// </summary>
-        /// <param name="messageEventArgs">message event arguments</param>
-        private void UpdateMessage(MessageEventArgs messageEventArgs)
-        {
-            var messageData = (NumberVerifierMessageData)messageEventArgs.ExtendedData;
-            tb_ErrorDetails.Text = messageEventArgs.Level.ToString() + "\r\n" + messageEventArgs.Message;
-            tb_SourceIssues.Text = messageData.SourceIssues;
-            tb_TargetIssues.Text = messageData.TargetIssues;
-			
-			UnderlineText(tb_SourceIssues.Text, tb_TargetIssues.Text);
+			UpdateMessage(messageEventArgs);
 		}
+		#endregion
 
-        /// <summary>
-        /// Handle content changed event
-        /// </summary>
-        /// <param name="sender">sender</param>
-        /// <param name="args">Always null</param>
-        private void OnSegmentContentChanged(object sender, EventArgs args)
-        {
-            _hasSegmentChanged = true;
-            if (SegmentChanged != null)
-            {
-                SegmentChanged(this, null);
-            }
-        }
-
-		private void UnderlineText(string sourceIssue, string targetIssue)
+		public MessageEventArgs MessageEventArgs
 		{
-			var sourceSplits = source_richTextBox.Text.Split(' ').ToList();
-			foreach (var item in sourceSplits)
-			{
-				if (!string.IsNullOrEmpty(sourceIssue) &&
-					!string.IsNullOrEmpty(item) 
-					&& (sourceIssue.Contains(item) || item.Contains(sourceIssue)))
-				{
-					int indexToText = source_richTextBox.Find(item);
-					int endIndex = item.Length;
-					source_richTextBox.Select(indexToText, endIndex);
-
-					source_richTextBox.SelectionColor = Color.Red;
-				}
-			}
-
-			var targetSplits = target_richTextBox.Text.Split(' ').ToList();
-			foreach(var item in targetSplits)
-			{
-				if(!string.IsNullOrEmpty(targetIssue)
-					&& !string.IsNullOrEmpty(item)
-					&& (targetIssue.Contains(item) || item.Contains(targetIssue)))
-				{
-					int indexToText = target_richTextBox.Find(item);
-					int endIndex = item.Length;
-					target_richTextBox.Select(indexToText, endIndex);
-					target_richTextBox.SelectionBackColor = Color.Gold;
-				}
-			}
+			get;
+			private set;
 		}
 
+		public IBilingualDocument BilingualDocument
+		{
+			get;
+			private set;
+		}
+
+		public ISegment SourceSegment
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// TargetSegment property represents the target segment.
+		/// </summary>
+		public ISegment TargetSegment
+		{
+			get;
+			private set;
+		}
+
+
+		#region ISegmentChangedAware implementation
+		/// <summary>
+		/// Returns true if object was manually edited
+		/// </summary>
+		public bool HasSegmentChanged
+		{
+			get { return _hasSegmentChanged; }
+		}
+
+		/// <summary>
+		/// Returns edited segment
+		/// </summary>
+		public ISegment EditedSegment
+		{
+			get { return _targetSegmentControl.GetDocumentSegment(); }
+		}
+
+		/// <summary>
+		/// The paragraph unit ID for edited segment in the original document.
+		/// Note: The segment may not reference the original document so the paragraph ID may be null.
+		/// </summary>
+		public ParagraphUnitId? TargetParagraphId
+		{
+			get { return MessageEventArgs.FromLocation.ParagrahUnitId; }
+		}
+
+		/// <summary>
+		/// The segment ID for the edited segment in the original document.
+		/// </summary>
+		public SegmentId? TargetSegmentId
+		{
+			get { return MessageEventArgs.FromLocation.SegmentId; }
+		}
+
+		/// <summary>
+		/// Reset target segment content to original value 
+		/// </summary>
+		public void ResetSegment()
+		{
+			// don't listen for events when contents are reset
+			_targetSegmentControl.SegmentContentChanged -= OnSegmentContentChanged;
+
+			// show target segment in segment control
+			_targetSegmentControl.ReplaceDocumentSegment((ISegment)TargetSegment.Clone());
+
+			_hasSegmentChanged = false;
+
+			// start listening to changes again 
+			_targetSegmentControl.SegmentContentChanged += OnSegmentContentChanged;
+
+		}
+
+		public event EventHandler<EventArgs> SegmentChanged;
+
+		#endregion
+
+
+		#region Private members
+		/// <summary>
+		/// Updates the message from the given message event arguments.
+		/// </summary>
+		/// <param name="messageEventArgs">message event arguments</param>
+		private void UpdateMessage(MessageEventArgs messageEventArgs)
+		{
+			var messageData = (NumberVerifierMessageData)messageEventArgs.ExtendedData;
+			tb_ErrorDetails.Text = messageEventArgs.Level.ToString() + "\r\n" + messageEventArgs.Message;
+			tb_SourceIssues.Text = messageData.SourceIssues;
+			tb_TargetIssues.Text = messageData.TargetIssues;
+
+			ColorTextIssues(tb_SourceIssues.Text, source_richTextBox);
+			ColorTextIssues(tb_TargetIssues.Text, target_richTextBox);
+		}
+
+		/// <summary>
+		/// Handle content changed event
+		/// </summary>
+		/// <param name="sender">sender</param>
+		/// <param name="args">Always null</param>
+		private void OnSegmentContentChanged(object sender, EventArgs args)
+		{
+			_hasSegmentChanged = true;
+			SegmentChanged?.Invoke(this, null);
+		}
+
+		/// <summary>
+		/// Color the text(s) (from the Message Details window) which was found as an issue after the number verification process executed.
+		/// </summary>
+		/// <param name="textIssue">text issue</param>
+		/// <param name="richTextBox">source/target rich box which contains the entire source and target segment text</param>
+		private void ColorTextIssues(string textIssue, RichTextBox richTextBox)
+		{	
+			// remove the \r\n or \t chars from the text in order to be identified correctly
+			var containsReturnChar = textIssue.Contains("\n") ?	textIssue.Contains("\r") ? textIssue.Contains("\n\r") ?	textIssue.Contains("\t")
+				? true : true : true : true: false;
+			var formatedTexts = containsReturnChar ? Regex.Replace(textIssue, @"\t|\n|\r", " ")?.Split(' ')?.ToList() : textIssue.Split(' ').ToList();
+
+			foreach(var formatedText in formatedTexts)
+			{
+				if (!string.IsNullOrEmpty(formatedText))
+				{
+					// if the text with issue matched with the text from the source/target segment, then color the text
+					var matchIssue = Regex.Match(richTextBox.Text, formatedText);
+					if (matchIssue.Success)
+					{
+						int endIndex = formatedText.Length;
+						richTextBox.Select(matchIssue.Index, endIndex);
+						richTextBox.SelectionBackColor = Color.Gold;
+					}
+				}
+			}			
+		}
 		#endregion
 		#region ISuggestionProvider
 		public Suggestion GetSuggestion()
-        {
-            return _suggestion;
-        }
+		{
+			return _suggestion;
+		}
 
-        public bool HasSuggestion()
-        {
-            return false;
-        }
+		public bool HasSuggestion()
+		{
+			return false;
+		}
 
-        public event EventHandler SuggestionChanged;
-        #endregion
-
-
-    }
+		public event EventHandler SuggestionChanged;
+		#endregion
+	}
 }
