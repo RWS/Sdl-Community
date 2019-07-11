@@ -177,12 +177,10 @@ namespace Sdl.Community.Extended.MessageUI
 		/// <param name="richTextBox">source/target rich box which contains the entire source and target segment text</param>
 		private void ColorTextIssues(string textIssue, RichTextBox richTextBox)
 		{	
-			// remove the \r\n or \t chars from the text in order to be identified correctly
-			var containsReturnChar = textIssue.Contains("\n") ?	textIssue.Contains("\r") ? textIssue.Contains("\n\r") ?	textIssue.Contains("\t")
-				? true : true : true : true: false;
-			var formatedTexts = containsReturnChar ? Regex.Replace(textIssue, @"\t|\n|\r", " ")?.Split(' ')?.ToList() : textIssue.Split(' ').ToList();
+			// remove the special chars from the text in order to be identified correctly	
+			var formatedTexts = Regex.Replace(textIssue, @"[^0-9a-zA-Z\._]", " ")?.Split(' ')?.ToList();
 
-			foreach(var formatedText in formatedTexts)
+			foreach (var formatedText in formatedTexts)
 			{
 				if (!string.IsNullOrEmpty(formatedText))
 				{
