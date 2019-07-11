@@ -13,7 +13,7 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />-->
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
@@ -23,11 +23,15 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/RadioButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TreeViewResources.xaml"/>
+
+				<!--<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls.Controls.WatermarkTextBox;component/WatermarkTextBoxResources.xaml"/>-->
+
+
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
     <StackPanel>
-		<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Buttons styles example" FontSize="15" Margin="10,5,0,10"/>
+		<!--<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Buttons styles example" FontSize="15" Margin="10,5,0,10"/>
 		<StackPanel Orientation="Horizontal">
 			<Button Style="{DynamicResource Sdl.Button.PrimaryStyle}" Content="Primary Style" Margin="10,0,10,10"/>
 			<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" Content="Secondary Style" Margin="10,0,10,10"/>
@@ -56,22 +60,27 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
-		<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Groupbox and RadioButtons example" FontSize="15" Margin="10,5,0,10"/>
+		<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Groupbox and RadioButtons example" FontSize="15" Margin="10,5,0,10"/>-->
 
-		<GroupBox Style="{DynamicResource Sdl.GroupBox.SingleLineStyle}" Header="Studio versions" Width="300" HorizontalAlignment="Left" Margin="10">
+		<!--<GroupBox Style="{DynamicResource Sdl.GroupBox.SingleLineStyle}" Header="Studio versions" Width="300" HorizontalAlignment="Left" Margin="10">
 			<StackPanel >
 				<RadioButton Style="{DynamicResource Sdl.RadioButton.GenericStyle}" GroupName="Studio" Content="Studio 2015" Margin="5"/>
 				<RadioButton Style="{DynamicResource Sdl.RadioButton.GenericStyle}" GroupName="Studio" Content="Studio 2017" Margin="5"/>
 				<RadioButton Style="{DynamicResource Sdl.RadioButton.GenericStyle}" GroupName="Studio" Content="Studio 2019" Margin="5"/>
 			</StackPanel>
-		</GroupBox>
-		<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" Height="50">
+		</GroupBox>-->
+		<!--<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" Height="50">
 			
-		</mah:ProgressRing>
-		<controls:NumericUpDown Style="{DynamicResource Sdl.NumericUpDown.Generic}" Width="150" HorizontalAlignment="Left" Margin="10"/>
+		</mah:ProgressRing>-->
+		<!--<controls:NumericUpDown Style="{DynamicResource Sdl.NumericUpDown.Generic}" Width="150" HorizontalAlignment="Left" Margin="10"/>-->
+		<!--<TextBox Style="{DynamicResource WatermarkTextBox}"></TextBox>-->
+		<Border BorderBrush="Aqua" BorderThickness="5">
+			<controls:BindablePasswordBox Height="100" Width="200" HorizontalAlignment="Left"  Background="Red"  IsEnabled="True"></controls:BindablePasswordBox>
 
-
-
+		</Border>
+		<!--<PasswordBox  Margin="10" Width="100" Background="Red"></PasswordBox>
+		<TextBox Margin="10" Width="100" BorderThickness="10"/>-->
+<!--<TextBox Background="blue"></TextBox>-->
 
 	</StackPanel>
 </Window>
