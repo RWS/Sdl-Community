@@ -7,6 +7,8 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.Verification.Api;
+using System.Linq;
+using System.Drawing;
 
 namespace Sdl.Community.Extended.MessageUI
 {
@@ -40,17 +42,19 @@ namespace Sdl.Community.Extended.MessageUI
 
             _targetSegmentControl.Dock = DockStyle.Fill;
             _targetSegmentControl.IsReadOnly = false;
-            _targetSegmentControl.ReplaceDocumentSegment(targetSegment.Clone() as ISegment);
+			_targetSegmentControl.ReplaceDocumentSegment(targetSegment.Clone() as ISegment);
             panel_Target.Controls.Add(_targetSegmentControl);
             _targetSegmentControl.ReplaceDocumentSegment((ISegment)targetSegment.Clone());
 
             _targetSegmentControl.SegmentContentChanged += OnSegmentContentChanged;
 
-            _hasSegmentChanged = false;
+			//set up the target and source rich box which will be used to identify the issued text(s)
+			target_richTextBox.Text = targetSegment[0].ToString();
+			source_richTextBox.Text = sourceSegment[0].ToString();
+
+			_hasSegmentChanged = false;
 
             UpdateMessage(messageEventArgs);
-
-
         }
         #endregion
 
@@ -146,11 +150,13 @@ namespace Sdl.Community.Extended.MessageUI
         /// <param name="messageEventArgs">message event arguments</param>
         private void UpdateMessage(MessageEventArgs messageEventArgs)
         {
-            NumberVerifierMessageData messageData = (NumberVerifierMessageData)messageEventArgs.ExtendedData;
+            var messageData = (NumberVerifierMessageData)messageEventArgs.ExtendedData;
             tb_ErrorDetails.Text = messageEventArgs.Level.ToString() + "\r\n" + messageEventArgs.Message;
             tb_SourceIssues.Text = messageData.SourceIssues;
             tb_TargetIssues.Text = messageData.TargetIssues;
-        }
+			
+			UnderlineText(tb_SourceIssues.Text, tb_TargetIssues.Text);
+		}
 
         /// <summary>
         /// Handle content changed event
@@ -166,9 +172,41 @@ namespace Sdl.Community.Extended.MessageUI
             }
         }
 
-        #endregion
-        #region ISuggestionProvider
-        public Suggestion GetSuggestion()
+		private void UnderlineText(string sourceIssue, string targetIssue)
+		{
+			var sourceSplits = source_richTextBox.Text.Split(' ').ToList();
+			foreach (var item in sourceSplits)
+			{
+				if (!string.IsNullOrEmpty(sourceIssue) &&
+					!string.IsNullOrEmpty(item) 
+					&& (sourceIssue.Contains(item) || item.Contains(sourceIssue)))
+				{
+					int indexToText = source_richTextBox.Find(item);
+					int endIndex = item.Length;
+					source_richTextBox.Select(indexToText, endIndex);
+
+					source_richTextBox.SelectionColor = Color.Red;
+				}
+			}
+
+			var targetSplits = target_richTextBox.Text.Split(' ').ToList();
+			foreach(var item in targetSplits)
+			{
+				if(!string.IsNullOrEmpty(targetIssue)
+					&& !string.IsNullOrEmpty(item)
+					&& (targetIssue.Contains(item) || item.Contains(targetIssue)))
+				{
+					int indexToText = target_richTextBox.Find(item);
+					int endIndex = item.Length;
+					target_richTextBox.Select(indexToText, endIndex);
+					target_richTextBox.SelectionBackColor = Color.Gold;
+				}
+			}
+		}
+
+		#endregion
+		#region ISuggestionProvider
+		public Suggestion GetSuggestion()
         {
             return _suggestion;
         }
