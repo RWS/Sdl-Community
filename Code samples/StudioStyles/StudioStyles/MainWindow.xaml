@@ -23,10 +23,8 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/RadioButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TreeViewResources.xaml"/>
-
-				<!--<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls.Controls.WatermarkTextBox;component/WatermarkTextBoxResources.xaml"/>-->
-
-
+				<!--<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml"/>-->
+				<ResourceDictionary Source="WatermarkTextBoxResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
@@ -74,13 +72,15 @@
 		</mah:ProgressRing>-->
 		<!--<controls:NumericUpDown Style="{DynamicResource Sdl.NumericUpDown.Generic}" Width="150" HorizontalAlignment="Left" Margin="10"/>-->
 		<!--<TextBox Style="{DynamicResource WatermarkTextBox}"></TextBox>-->
-		<Border BorderBrush="Aqua" BorderThickness="5">
-			<controls:BindablePasswordBox Height="100" Width="200" HorizontalAlignment="Left"  Background="Red"  IsEnabled="True"></controls:BindablePasswordBox>
+		
+		<TextBox Style="{DynamicResource WatermarkTextBox}" 
+				 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=300}"
+		         local:TextBoxWatermarkHelper.WatermarkText ="{Binding SearchWatermarkText}"
+				 
+		/>
+			
+		<TextBox Margin="20"></TextBox>
 
-		</Border>
-		<!--<PasswordBox  Margin="10" Width="100" Background="Red"></PasswordBox>
-		<TextBox Margin="10" Width="100" BorderThickness="10"/>-->
-<!--<TextBox Background="blue"></TextBox>-->
 
 	</StackPanel>
 </Window>
