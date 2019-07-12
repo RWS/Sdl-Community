@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Sdl.Community.NumberVerifier;
 using Sdl.DesktopEditor.BasicControls;
 using Sdl.DesktopEditor.EditorApi;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -176,9 +178,22 @@ namespace Sdl.Community.Extended.MessageUI
 		/// <param name="textIssue">text issue</param>
 		/// <param name="richTextBox">source/target rich box which contains the entire source and target segment text</param>
 		private void ColorTextIssues(string textIssue, RichTextBox richTextBox)
-		{	
+		{
+			var formatedTexts = new List<string>();
+			//Check if textIssue is Hindi numbers
+			var numberVerifierMain = new NumberVerifierMain();
+			var hindiNumbers = numberVerifierMain.GetHindiNumbers();
+			var textIssueChars = textIssue.ToCharArray();
+			if(hindiNumbers.Any(h=>textIssueChars.Any(t=>t.ToString().Equals(h.Value))))
+			{
+				formatedTexts = Regex.Replace(textIssue, @"\r\n ? |\n ? |\r", " ")?.Split(' ')?.ToList();
+			}
+
 			// remove the special chars from the text in order to be identified correctly	
-			var formatedTexts = Regex.Replace(textIssue, @"[^0-9a-zA-Z\._]", " ")?.Split(' ')?.ToList();
+			if (!formatedTexts.Any())
+			{
+				formatedTexts = Regex.Replace(textIssue, @"[^0-9a-zA-Z\._]", " ")?.Split(' ')?.ToList();
+			}
 
 			foreach (var formatedText in formatedTexts)
 			{

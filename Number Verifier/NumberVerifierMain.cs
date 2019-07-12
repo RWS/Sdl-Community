@@ -408,11 +408,11 @@ namespace Sdl.Community.NumberVerifier
 			var targetAlphanumericsList = GetAlphanumericList(targetText);
 
 			// remove alphanumeric names found both in source and target from respective list
-			RemoveMatchingAlphanumerics(sourceAlphanumericsList, targetAlphanumericsList);
+			RemoveMatchingAlphanumerics(sourceAlphanumericsList.Item2, targetAlphanumericsList.Item2);
 
 			var numberResults = new NumberResults(VerificationSettings,
-				sourceAlphanumericsList,
-				targetAlphanumericsList,
+				sourceAlphanumericsList.Item1,
+				targetAlphanumericsList.Item1,
 				sourceText,
 				targetText);
 
@@ -445,6 +445,11 @@ namespace Sdl.Community.NumberVerifier
 			var tulpleList = Tuple.Create(numberList, normalizedNumberList);
 
 			return tulpleList;
+		}
+
+		public Tuple<List<string>, List<string>> GetAlphnumericsTuple(List<string> alphaNumericsList, List<string> normalizedAlphaNumericsList)
+		{			
+			return Tuple.Create(alphaNumericsList, normalizedAlphaNumericsList);
 		}
 
 		/// <summary>
@@ -513,7 +518,6 @@ namespace Sdl.Community.NumberVerifier
 		public List<ErrorReporting> CheckSourceAndTarget(string sourceText, string targetText)
 		{
 			var errorList = new List<ErrorReporting>();
-			var hindiNumbers = GetHindiNumbers();
 			var hindiVerificationList = new List<string>();
 			var errorsListFromNormalizedNumbers = Enumerable.Empty<ErrorReporting>();
 
@@ -1093,9 +1097,9 @@ namespace Sdl.Community.NumberVerifier
 			}
 		}
 
-		public List<string> GetAlphanumericList(string text)
+		public Tuple<List<string>, List<string>> GetAlphanumericList(string text)
 		{
-			var alphaList = new List<string>();
+			var normalizedAlphaList = new List<string>();
 			var words = Regex.Split(text, @"\s");
 
 			// The below foreach is used when checking those tags like Source: "<color=70236>Word" and Target:<color=70236>OtherWord
@@ -1148,19 +1152,26 @@ namespace Sdl.Community.NumberVerifier
 				}
 				var regex = string.Format(@"^-?\u2212?(^(?=.*[a-zA-Z{0}])(?=.*[0-9]).+$)", res);
 
-				alphaList.AddRange(
+				normalizedAlphaList.AddRange(
 					from word in wordsRes
 					from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), regex)
 					select Regex.Replace(match.Value, "\u2212|-", "m"));
 			}
 			else
 			{
-				alphaList.AddRange(
+				normalizedAlphaList.AddRange(
 					from word in wordsRes
 					from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), @"^-?\u2212?(^(?=.*[a-zA-Z-])(?=.*[0-9]).+$)")
 					select Regex.Replace(match.Value, "\u2212|-", "m"));
 			}
-			return alphaList;
+
+			//get all the words which are normalized and put them in source tuple item
+			var unNormalizedAlphanumerics = new List<string>();
+			unNormalizedAlphanumerics.AddRange(from word in wordsRes
+								from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), @"^-?\u2212?(^(?=.*[a-zA-Z-])(?=.*[0-9]).+$)")
+								select word);
+
+			return GetAlphnumericsTuple(unNormalizedAlphanumerics, normalizedAlphaList);
 		}
 
 		private string GetSegmentText(ISegment segment)
@@ -1185,7 +1196,7 @@ namespace Sdl.Community.NumberVerifier
 		{
 			var result = new List<NumberModel>();
 			var sb = new StringBuilder();
-
+			var hindiDictionary = new Dictionary<string, string>();
 			var hindiNumbers = GetHindiNumbers();
 
 			if (sourceLanguage == "Hindi (India)")
@@ -1211,11 +1222,12 @@ namespace Sdl.Community.NumberVerifier
 							sourceResult = sb.Append(s.ToString()).ToString();
 						}
 					}
+					hindiDictionary.Add(sourceResult, sourceGroup);
 					sourceGroupResult.Add(sourceResult);
 					sourceResult = string.Empty;
 					sb.Clear();
 				}
-				result = GetFormatedNumbers(sourceGroupResult.ToArray(), targetGroups);
+				result = GetFormatedNumbers(sourceGroupResult.ToArray(), targetGroups, hindiDictionary, sourceLanguage);
 			}
 			else
 			{
@@ -1240,16 +1252,20 @@ namespace Sdl.Community.NumberVerifier
 							targetResult = sb.Append(t.ToString()).ToString();
 						}
 					}
+
+					// To Do: add somehow the corresponding source text instead of targetGroup below, so it should display the message correctly in messaged details window
+					hindiDictionary.Add(targetGroup, targetResult);
 					targetGroupResult.Add(targetResult);
 					targetResult = string.Empty;
 					sb.Clear();
 				}
-				result = GetFormatedNumbers(sourceGroups, targetGroupResult.ToArray());
+
+				result = GetFormatedNumbers(sourceGroups, targetGroupResult.ToArray(), hindiDictionary, sourceLanguage);
 			}
 			return result;
 		}
 
-		private Dictionary<string,string> GetHindiNumbers()
+		public Dictionary<string,string> GetHindiNumbers()
 		{
 			var hindiDictionary = new Dictionary<string, string>();
 			hindiDictionary.Add("0", "٠");
@@ -1266,10 +1282,15 @@ namespace Sdl.Community.NumberVerifier
 			return hindiDictionary;
 		}
 
-		public List<NumberModel> GetFormatedNumbers(string[] targetGroupRes, string[] textGroups)
+		public List<NumberModel> GetFormatedNumbers(
+			string[] targetGroupRes,
+			string[] textGroups,
+			Dictionary<string, string> hindiDictionary,
+			string sourceLanguage)
 		{
 			var result = new List<NumberModel>();			
 			var res = textGroups.Zip(targetGroupRes, (t, s) => new NumberModel { TargetText = t, SourceText = s }).ToList();
+//			var sourceText = string.Empty;
 
 			// add thousand separator or decimal separtor in the target text as it is in the source text where needed
 			foreach (var numberRes in res)
@@ -1314,12 +1335,26 @@ namespace Sdl.Community.NumberVerifier
 						numberRes.TargetText = Regex.Replace(numberRes.TargetText, "\\.+\\,+", ".");
 					}
 				}
-				result.Add(new NumberModel
+
+				if (sourceLanguage.Equals("Hindi (India)"))
 				{
-					SourceText = numberRes.SourceText,
-					TargetText = numberRes.TargetText
-				});
-			}
+					var sourceText = hindiDictionary.Where(s => s.Key.Equals(numberRes.SourceText)).FirstOrDefault();
+					result.Add(new NumberModel
+					{
+						SourceText = !string.IsNullOrEmpty(sourceText.Value) ? sourceText.Value : numberRes.SourceText,
+						TargetText = numberRes.TargetText
+					});
+				}
+				else
+				{
+					var sourceText = hindiDictionary.Where(s => s.Key.Equals(numberRes.SourceText)).FirstOrDefault();
+					result.Add(new NumberModel
+					{
+						SourceText = !string.IsNullOrEmpty(sourceText.Value) ? sourceText.Value : numberRes.SourceText,
+						TargetText = numberRes.TargetText
+					});
+				}
+				}
 			return result;
 		}
 		#endregion
