@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
+        xmlns:behaviours="clr-namespace:Sdl.Desktop.Platform.Controls.Behaviours;assembly=Sdl.Desktop.Platform.Controls"
         d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
         xmlns:local="clr-namespace:StudioStyles"
         xmlns:viewModel="clr-namespace:StudioStyles.ViewModel"
@@ -73,14 +74,17 @@
 		<!--<controls:NumericUpDown Style="{DynamicResource Sdl.NumericUpDown.Generic}" Width="150" HorizontalAlignment="Left" Margin="10"/>-->
 		<!--<TextBox Style="{DynamicResource WatermarkTextBox}"></TextBox>-->
 		
-		<TextBox Style="{DynamicResource WatermarkTextBox}" 
+		<!--<TextBox Style="{DynamicResource WatermarkTextBox}" 
 				 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=300}"
 		         local:TextBoxWatermarkHelper.WatermarkText ="{Binding SearchWatermarkText}"
 				 
-		/>
-			
-		<TextBox Margin="20"></TextBox>
+		/>-->
 
+		<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Flease drop a File" FontSize="15" Margin="10,5,0,5"/>
+
+		<Border BorderThickness="1" BorderBrush="#0096D6"  Margin="10">
+			<Grid Height="100" Background="GhostWhite" AllowDrop="True" behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"/>
+		</Border>
 
 	</StackPanel>
 </Window>

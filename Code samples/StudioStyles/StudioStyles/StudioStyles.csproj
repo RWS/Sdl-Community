@@ -71,6 +71,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\Plugin.cs" />
     <Compile Include="TextBoxWatermarkHelper.cs" />

@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
+using System.Windows;
 using System.Windows.Input;
 using StudioStyles.Commands;
 using StudioStyles.Model;
@@ -11,6 +13,7 @@ namespace StudioStyles.ViewModel
 		private string _searchWatermarkText;
 		private string _searchText;
 		private ICommand _clearCommand;
+		private ICommand _dragDropCommand;
 
 		public MainWindowViewModel()
 		{
@@ -69,6 +72,26 @@ namespace StudioStyles.ViewModel
 			}
 		}
 		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new CommandHandler(Clear, true));
+		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new RelayCommand(DragAndDrop));
+
+		private void DragAndDrop(object parameter)
+		{
+			if (parameter == null || !(parameter is DragEventArgs eventArgs)) return;
+
+			var fileDrop = eventArgs.Data.GetData(DataFormats.FileDrop, false);
+			if (fileDrop is string[] filesOrDirectories && filesOrDirectories.Length > 0)
+			{
+				foreach (var fullPath in filesOrDirectories)
+				{
+					var fileAttributes = File.GetAttributes(fullPath);
+					if (fileAttributes.HasFlag(FileAttributes.Directory))
+					{
+						//is directory
+					}
+					//is file
+				}
+			}
+		}
 
 		private void Clear()
 		{
