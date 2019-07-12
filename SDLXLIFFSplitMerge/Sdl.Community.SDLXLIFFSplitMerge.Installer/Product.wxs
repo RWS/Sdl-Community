@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="SDLXLIFF Split and Merge 2019" Language="1033" Version="2.0.0.2" Manufacturer="Sdl Community" UpgradeCode="9242c6b1-3ff5-45cb-a7d5-7cbc02b170a0">
+	<Product Id="*" Name="SDLXLIFF Split and Merge 2019" Language="1033" Version="2.0.0.3" Manufacturer="Sdl Community" UpgradeCode="9242c6b1-3ff5-45cb-a7d5-7cbc02b170a0">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
