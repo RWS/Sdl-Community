@@ -13,6 +13,7 @@ namespace StudioStyles.ViewModel
 		private string _searchWatermarkText;
 		private string _searchText;
 		private string _uri;
+		private string _content;
 		private ICommand _clearCommand;
 		private ICommand _dragDropCommand;
 		private ICommand _windowLoadedCommand;
@@ -43,6 +44,8 @@ namespace StudioStyles.ViewModel
 				},
 			};
 			_uri = "https://google.com";
+			Content =
+				"<html>\r\n<body>\r\n\r\n<p>This is a paragraph.</p>\r\n<p>This is another paragraph.</p>\r\n\r\n</body>\r\n</html>";
 		}
 
 		public ObservableCollection<Plugin> PluginsCollection
@@ -80,6 +83,15 @@ namespace StudioStyles.ViewModel
 			{
 				_uri = value;
 				OnPropertyChanged(nameof(Uri));
+			}
+		}
+		public string Content
+		{
+			get => _content;
+			set
+			{
+				_content = value;
+				OnPropertyChanged(nameof(Content));
 			}
 		}
 		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new CommandHandler(Clear, true));
