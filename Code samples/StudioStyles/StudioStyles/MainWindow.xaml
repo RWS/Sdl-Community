@@ -6,6 +6,7 @@
         xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
         xmlns:behaviours="clr-namespace:Sdl.Desktop.Platform.Controls.Behaviours;assembly=Sdl.Desktop.Platform.Controls"
         d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
+        behaviours:WindowLoadedBehaviour.Loaded ="{Binding WindowLoadedCommand}"
         xmlns:local="clr-namespace:StudioStyles"
         xmlns:viewModel="clr-namespace:StudioStyles.ViewModel"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"

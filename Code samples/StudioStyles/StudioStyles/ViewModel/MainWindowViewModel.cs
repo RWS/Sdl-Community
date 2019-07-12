@@ -14,7 +14,7 @@ namespace StudioStyles.ViewModel
 		private string _searchText;
 		private ICommand _clearCommand;
 		private ICommand _dragDropCommand;
-
+		private ICommand _windowLoadedCommand;
 		public MainWindowViewModel()
 		{
 			_searchWatermarkText = "Andrea";
@@ -72,6 +72,14 @@ namespace StudioStyles.ViewModel
 			}
 		}
 		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new CommandHandler(Clear, true));
+
+		#region behaviours
+
+		public ICommand WindowLoadedCommand =>_windowLoadedCommand ?? (_windowLoadedCommand = new CommandHandler(WindowLoaded, true));
+
+		private void WindowLoaded()
+		{
+		}
 		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new RelayCommand(DragAndDrop));
 
 		private void DragAndDrop(object parameter)
@@ -92,6 +100,8 @@ namespace StudioStyles.ViewModel
 				}
 			}
 		}
+
+		#endregion
 
 		private void Clear()
 		{
