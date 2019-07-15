@@ -1196,18 +1196,21 @@ namespace Sdl.Community.NumberVerifier
 		{
 			var result = new List<NumberModel>();
 			var sb = new StringBuilder();
-			var hindiDictionary = new Dictionary<string, string>();
-			var targetDictionary = new Dictionary<string, string>();
 			var hindiNumbers = GetHindiNumbers();
-			var targetGroups = target.Split(' ').ToArray();
-			var sourceGroups = source.Split(' ').ToArray();
-
+			var hindiNumberModel = new HindiNumberModel
+			{
+				SourceGroups = source.Split(' ').ToArray(),
+				TargetGroups = target.Split(' ').ToArray(),
+				SourceLanguage = sourceLanguage,
+				TargetDictionary = new Dictionary<string, string>(),
+				HindiDictionary = new Dictionary<string, string>(),
+				TextGroups = new string[] { }
+			};
 			if (sourceLanguage == "Hindi (India)")
 			{
-				string sourceResult = string.Empty;
+				var sourceResult = string.Empty;
 				var sourceGroupResult = new List<string>();
-
-				foreach (var sourceGroup in sourceGroups)
+				foreach (var sourceGroup in hindiNumberModel.SourceGroups)
 				{
 					foreach (var s in sourceGroup)
 					{
@@ -1222,19 +1225,19 @@ namespace Sdl.Community.NumberVerifier
 							sourceResult = sb.Append(s.ToString()).ToString();
 						}
 					}
-					hindiDictionary.Add(sourceResult, sourceGroup);
+					hindiNumberModel.HindiDictionary.Add(sourceResult, sourceGroup);
 					sourceGroupResult.Add(sourceResult);
 					sourceResult = string.Empty;
+					hindiNumberModel.TextGroups = sourceGroupResult.ToArray();
 					sb.Clear();
 				}
-				result = GetFormatedNumbers(sourceGroupResult.ToArray(), targetGroups, sourceLanguage, hindiDictionary, null);
+				result = GetFormatedNumbers(hindiNumberModel);
 			}
 			else
 			{
-				string targetResult = string.Empty;
+				var targetResult = string.Empty;
 				var targetGroupResult = new List<string>();
-
-				foreach (var targetGroup in targetGroups)
+				foreach (var targetGroup in hindiNumberModel.TargetGroups)
 				{
 					foreach (var t in targetGroup)
 					{
@@ -1249,18 +1252,14 @@ namespace Sdl.Community.NumberVerifier
 							targetResult = sb.Append(t.ToString()).ToString();
 						}
 					}
-
-					// To Do: add into hindiDictionary the corresponding source text from sourceGroups instead of targetGroup below, so it should display the message correctly in messaged details window
-					// besides de source and targetResult, also the targetGroup needs to be added because it contains the original hindi text which was in target segment and needs to be used
-					// in the message details target box
-					hindiDictionary.Add(source, targetResult);
-					targetDictionary.Add(targetResult, targetGroup);
+					hindiNumberModel.HindiDictionary.Add(source, targetResult);
+					hindiNumberModel.TargetDictionary.Add(targetResult, targetGroup);
 					targetGroupResult.Add(targetResult);
 					targetResult = string.Empty;
+					hindiNumberModel.TextGroups = hindiNumberModel.SourceGroups;
 					sb.Clear();
 				}
-
-				result = GetFormatedNumbers(sourceGroups, targetGroupResult.ToArray(), sourceLanguage, hindiDictionary, targetDictionary);
+				result = GetFormatedNumbers(hindiNumberModel);
 			}
 			return result;
 		}
@@ -1282,15 +1281,11 @@ namespace Sdl.Community.NumberVerifier
 			return hindiDictionary;
 		}
 
-		public List<NumberModel> GetFormatedNumbers(
-			string[] targetGroupRes,
-			string[] textGroups,
-			string sourceLanguage,
-			Dictionary<string, string> hindiDictionary,
-			Dictionary<string, string> targetDictionary)
+		public List<NumberModel> GetFormatedNumbers(HindiNumberModel hindiNumberModel)
 		{
 			var result = new List<NumberModel>();			
-			var res = textGroups.Zip(targetGroupRes, (t, s) => new NumberModel { TargetText = t, SourceText = s }).ToList();
+			//var res = hindiNumberModel.TextGroups.Zip(hindiNumberModel.TargetGroups, (t, s) => new NumberModel { TargetText = t, SourceText = s }).ToList();
+			var res = hindiNumberModel.TextGroups.Zip(hindiNumberModel.TargetGroups, (s, t) => new NumberModel { SourceText = s, TargetText = t }).ToList();
 
 			// add thousand separator or decimal separtor in the target text as it is in the source text where needed
 			foreach (var numberRes in res)
@@ -1336,9 +1331,9 @@ namespace Sdl.Community.NumberVerifier
 					}
 				}
 
-				if (sourceLanguage.Equals("Hindi (India)"))
+				if (hindiNumberModel.SourceLanguage.Equals("Hindi (India)"))
 				{
-					var sourceText = hindiDictionary.Where(s => s.Key.Equals(numberRes.SourceText)).FirstOrDefault();
+					var sourceText = hindiNumberModel.HindiDictionary.Where(s => s.Key.Equals(numberRes.SourceText)).FirstOrDefault();
 					result.Add(new NumberModel
 					{
 						SourceText = !string.IsNullOrEmpty(sourceText.Value) ? sourceText.Value : numberRes.SourceText,
@@ -1346,10 +1341,10 @@ namespace Sdl.Community.NumberVerifier
 					});
 				}
 				// map to the corresponding source text for the Hindi target numbers found with issues
-				if (targetDictionary != null)
+				if (hindiNumberModel.TargetDictionary.Count > 0)
 				{
-					var sourceText = hindiDictionary.Where(s => s.Key.Contains(numberRes.SourceText)).FirstOrDefault();
-					var targetText = targetDictionary.Where(t => t.Key.Contains(numberRes.TargetText)).FirstOrDefault();
+					var sourceText = hindiNumberModel.HindiDictionary.Where(s => s.Key.Contains(numberRes.SourceText)).FirstOrDefault();
+					var targetText = hindiNumberModel.TargetDictionary.Where(t => t.Key.Contains(sourceText.Value)).FirstOrDefault();
 					result.Add(new NumberModel
 					{
 						SourceText = !string.IsNullOrEmpty(sourceText.Key) ? sourceText.Key : numberRes.SourceText,
