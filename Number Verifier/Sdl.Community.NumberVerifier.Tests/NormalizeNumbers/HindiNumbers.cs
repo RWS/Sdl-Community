@@ -31,7 +31,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 			var results = numberVerifierMain.GetTargetFromHindiNumbers(source, target, sourceLanguage);
 
-			Assert.All(results, result => Assert.Equal(result.SourceText, result.TargetArabicText));
+			Assert.All(results, result => Assert.Equal(result.SourceArabicText, result.TargetArabicText));
 		}
 
 		/// <summary>

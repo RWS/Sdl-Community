@@ -1291,7 +1291,6 @@ namespace Sdl.Community.NumberVerifier
 		public List<NumberModel> GetFormatedNumbers(HindiNumberModel hindiNumberModel)
 		{
 			var result = new List<NumberModel>();			
-			//var res = hindiNumberModel.TextGroups.Zip(hindiNumberModel.TargetGroups, (t, s) => new NumberModel { TargetText = t, SourceText = s }).ToList();
 			var res = hindiNumberModel.TextGroups.Zip(hindiNumberModel.TargetGroups, (s, t) => new NumberModel { SourceText = s, TargetText = t }).ToList();
 
 			// add thousand separator or decimal separtor in the target text as it is in the source text where needed
@@ -1344,6 +1343,7 @@ namespace Sdl.Community.NumberVerifier
 					result.Add(new NumberModel
 					{
 						SourceText = !string.IsNullOrEmpty(sourceText.Value) ? sourceText.Value : numberRes.SourceText,
+						SourceArabicText = numberRes.SourceText,
 						TargetText = numberRes.TargetText,
 						TargetArabicText = sourceText.Key
 					});
