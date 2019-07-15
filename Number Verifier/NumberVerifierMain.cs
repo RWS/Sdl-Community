@@ -313,7 +313,9 @@ namespace Sdl.Community.NumberVerifier
 
 							var extendedData = new NumberVerifierMessageData(errorMessage.SourceNumberIssues,
 								errorMessage.TargetNumberIssues,
-								segmentPair.Target);
+								segmentPair.Target,
+								errorMessage.InitialSourceNumber,
+								errorMessage.InitialTargetNumber);
 
 							#endregion
 
@@ -411,6 +413,8 @@ namespace Sdl.Community.NumberVerifier
 			RemoveMatchingAlphanumerics(sourceAlphanumericsList.Item2, targetAlphanumericsList.Item2);
 
 			var numberResults = new NumberResults(VerificationSettings,
+				sourceAlphanumericsList.Item2,
+				targetAlphanumericsList.Item2,
 				sourceAlphanumericsList.Item1,
 				targetAlphanumericsList.Item1,
 				sourceText,
@@ -498,10 +502,13 @@ namespace Sdl.Community.NumberVerifier
 			RemoveNumbersUndefinedThousandsAndDecimalSeparator(targetNumberList, sourceNumberList,
 				sourceNormalizedNumberList, targetNormalizedNumberList);
 
-
 			var numberResults = new NumberResults(VerificationSettings,
 				sourceNumberList,
-				targetNumberList, sourceText, targetText);
+				targetNumberList,
+				sourceNumberList,
+				targetNumberList,
+				sourceText, 
+				targetText);
 			
 			var numberErrorComposer = new NumberErrorComposer();
 			var verifyProcessor = numberErrorComposer.Compose();
@@ -1337,7 +1344,8 @@ namespace Sdl.Community.NumberVerifier
 					result.Add(new NumberModel
 					{
 						SourceText = !string.IsNullOrEmpty(sourceText.Value) ? sourceText.Value : numberRes.SourceText,
-						TargetText = numberRes.TargetText
+						TargetText = numberRes.TargetText,
+						TargetArabicText = sourceText.Key
 					});
 				}
 				// map to the corresponding source text for the Hindi target numbers found with issues
@@ -1348,7 +1356,8 @@ namespace Sdl.Community.NumberVerifier
 					result.Add(new NumberModel
 					{
 						SourceText = !string.IsNullOrEmpty(sourceText.Key) ? sourceText.Key : numberRes.SourceText,
-						TargetText = targetText.Value
+						TargetText = targetText.Value,
+						TargetArabicText = targetText.Key
 					});
 				}
 			}

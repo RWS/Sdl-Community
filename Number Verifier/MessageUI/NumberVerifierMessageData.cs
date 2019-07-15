@@ -5,14 +5,17 @@ namespace Sdl.Community.Extended.MessageUI
 {
     public class NumberVerifierMessageData : ExtendedMessageEventData
     {
-        public NumberVerifierMessageData(string sourceIssues, string targetIssues, ISegment replacementSuggestion)
+        public NumberVerifierMessageData(string sourceIssues, string targetIssues, ISegment replacementSuggestion, string initialSourceIssues, string initialTargetIssues)
         {
-            this.SourceIssues = sourceIssues;
-            this.TargetIssues = targetIssues;
-            this.ReplacementSuggestion = replacementSuggestion;
+            SourceIssues = sourceIssues;
+			InitialSourceIssues = initialSourceIssues;
+			InitialTargetIssues = initialTargetIssues;
+
+			TargetIssues = targetIssues;
+            ReplacementSuggestion = replacementSuggestion;
             
             //Identifier for this custom message type
-            this.MessageType = "Sdl.Verification.Sdk.NumberVerifier.MessageUI, Number_Issue";
+            MessageType = "Sdl.Verification.Sdk.NumberVerifier.MessageUI, Number_Issue";
         }
 
         /// <summary>
@@ -30,10 +33,22 @@ namespace Sdl.Community.Extended.MessageUI
             private set;
         }
 
-        /// <summary>
-        /// Suggestion which will be used in the custom UI for target segment replacement.
-        /// </summary>
-        public ISegment ReplacementSuggestion
+		public string InitialSourceIssues
+		{
+			get;
+			private set;
+		}
+
+		public string InitialTargetIssues
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Suggestion which will be used in the custom UI for target segment replacement.
+		/// </summary>
+		public ISegment ReplacementSuggestion
         {
             get; 
             private set;

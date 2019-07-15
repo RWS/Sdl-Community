@@ -17,5 +17,7 @@ namespace Sdl.Community.NumberVerifier.Model
         public string TargetNumberIssues { get; set; }
         public string SourceNumberIssues { get; set; }
 
-    }
+		public string InitialTargetNumber { get; set; }
+		public string InitialSourceNumber{ get; set; }
+	}
 }

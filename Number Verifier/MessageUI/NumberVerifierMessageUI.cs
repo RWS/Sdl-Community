@@ -154,8 +154,8 @@ namespace Sdl.Community.Extended.MessageUI
 		{
 			var messageData = (NumberVerifierMessageData)messageEventArgs.ExtendedData;
 			tb_ErrorDetails.Text = messageEventArgs.Level.ToString() + "\r\n" + messageEventArgs.Message;
-			tb_SourceIssues.Text = messageData.SourceIssues;
-			tb_TargetIssues.Text = messageData.TargetIssues;
+			tb_SourceIssues.Text = messageData.InitialSourceIssues;
+			tb_TargetIssues.Text = messageData.InitialTargetIssues;
 
 			ColorTextIssues(tb_SourceIssues.Text, source_richTextBox);
 			ColorTextIssues(tb_TargetIssues.Text, target_richTextBox);

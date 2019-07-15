@@ -128,8 +128,10 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+			numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
+			numberVerifierSettings.Setup(d => d.GetAlphanumericsCustomSeparator).Returns("-");
 
-            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);

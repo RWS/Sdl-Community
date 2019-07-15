@@ -4,5 +4,6 @@
 	{
 		public string SourceText { get; set; }
 		public string TargetText { get; set; }
+		public string TargetArabicText { get; set; }
 	}
 }

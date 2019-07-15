@@ -1,73 +1,42 @@
-﻿using Sdl.Community.NumberVerifier.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Sdl.Community.NumberVerifier.Interfaces;
 
 namespace Sdl.Community.NumberVerifier.Model
 {
-    public class NumberResults : INumberResults
+	public class NumberResults : INumberResults
     {
-        private INumberVerifierSettings _settings;
-        private List<string> _sourceNumbers;
-        private List<string> _targetNumbers;
-        private string _targetText;
-
-        public NumberResults(INumberVerifierSettings settings, 
-            List<string> sourceNumbers,
-            List<string> targetNumbers)
+		public NumberResults(INumberVerifierSettings settings, List<string> sourceNumbers, List<string> targetNumbers)
         {
-            _settings = settings;
-            _sourceNumbers = sourceNumbers;
-            _targetNumbers = targetNumbers;
+            Settings = settings;
+            SourceNumbers = sourceNumbers;
+            TargetNumbers = targetNumbers;
         }
 
-        public NumberResults(INumberVerifierSettings settings, List<string> sourceNumbers, List<string> targetNumbers,string sourceText,string targetText) 
+        public NumberResults(
+			INumberVerifierSettings settings, 
+			List<string> sourceNumbers,
+			List<string> targetNumbers,
+			List<string> initialSourceNumbers,
+			List<string> initialTargetNumbers,
+			string sourceText,
+			string targetText) 
             :this(settings, sourceNumbers,targetNumbers)
         {
             SourceText = sourceText;
-            _targetText = targetText;
-        }
+			TargetText = targetText;
+			InitialSourceNumbers = initialSourceNumbers;
+			InitialTargetNumbers = initialTargetNumbers;
+		}
 
-        public INumberVerifierSettings Settings
-        {
-            get
-            {
-                return _settings;
-            }
+		public INumberVerifierSettings Settings { get; set; }
 
-            set
-            {
-                _settings = value;
-            }
-        }
+        public List<string> SourceNumbers { get; set; }
 
-        public List<string> SourceNumbers
-        {
-            get
-            {
-                return _sourceNumbers;
-            }
+        public List<string> TargetNumbers { get; set; }
 
-            set
-            {
-                _sourceNumbers = value;
-            }
-        }
+		public List<string> InitialSourceNumbers { get; set; }
 
-        public List<string> TargetNumbers
-        {
-            get
-            {
-                return _targetNumbers;
-            }
-
-            set
-            {
-                _targetNumbers = value;
-            }
-        }
+        public List<string> InitialTargetNumbers { get; set; }
 
         public string SourceText { get; set; }
 
