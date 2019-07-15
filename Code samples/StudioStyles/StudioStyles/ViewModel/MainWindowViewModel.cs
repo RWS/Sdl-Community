@@ -14,12 +14,13 @@ namespace StudioStyles.ViewModel
 		private string _searchText;
 		private string _uri;
 		private string _content;
+		private string _password;
 		private ICommand _clearCommand;
 		private ICommand _dragDropCommand;
 		private ICommand _windowLoadedCommand;
 		public MainWindowViewModel()
 		{
-			_searchWatermarkText = "Andrea";
+			_searchWatermarkText = "Studio 2019 SR2";
 			_pluginsCollection = new ObservableCollection<Plugin>
 			{
 				new Plugin
@@ -76,6 +77,15 @@ namespace StudioStyles.ViewModel
 				OnPropertyChanged(nameof(SearchText));
 			}
 		}
+		public string Password
+		{
+			get => _password;
+			set
+			{
+				_password = value;
+				OnPropertyChanged(nameof(Password));
+			}
+		}
 		public string Uri
 		{
 			get => _uri;
@@ -129,7 +139,7 @@ namespace StudioStyles.ViewModel
 		private void Clear()
 		{
 			SearchText = string.Empty;
-			SearchWatermarkText = "Andrea";
+			SearchWatermarkText = "Studio 2019 SR2";
 		}
 	}
 }

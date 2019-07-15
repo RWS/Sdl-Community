@@ -6,10 +6,9 @@
         xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
         xmlns:behaviours="clr-namespace:Sdl.Desktop.Platform.Controls.Behaviours;assembly=Sdl.Desktop.Platform.Controls"
         d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
-        behaviours:WindowLoadedBehaviour.Loaded ="{Binding WindowLoadedCommand}"
-        xmlns:local="clr-namespace:StudioStyles"
         xmlns:viewModel="clr-namespace:StudioStyles.ViewModel"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:watermarkTextBox="clr-namespace:Sdl.Desktop.Platform.Controls.Controls.WatermarkTextBox;assembly=Sdl.Desktop.Platform.Controls"
         mc:Ignorable="d"
         Title="Studio styles sample app" Height="800" Width="800">
 	<Window.Resources>
@@ -25,8 +24,8 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/RadioButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TreeViewResources.xaml"/>
-				<!--<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml"/>-->
-				<ResourceDictionary Source="WatermarkTextBoxResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/BindablePasswordBoxStyle.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
@@ -75,21 +74,30 @@
 		<!--<controls:NumericUpDown Style="{DynamicResource Sdl.NumericUpDown.Generic}" Width="150" HorizontalAlignment="Left" Margin="10"/>-->
 		<!--<TextBox Style="{DynamicResource WatermarkTextBox}"></TextBox>-->
 		
-		<!--<TextBox Style="{DynamicResource WatermarkTextBox}" 
-				 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=300}"
-		         local:TextBoxWatermarkHelper.WatermarkText ="{Binding SearchWatermarkText}"
+		<TextBox Style="{DynamicResource WatermarkTextBox}" 
+				 Margin="20"
+				 Width="200"
+				 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		         watermarkTextBox:TextBoxWatermarkHelper.WatermarkText ="{Binding SearchWatermarkText}"
 				 
-		/>-->
+		/>
+		<controls:BindablePasswordBox 
+			Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}" 
+			Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+			Width="200"
+			PasswordMaxLength="64"
+		/>
+		
 
-		<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Flease drop a File" FontSize="15" Margin="10,5,0,5"/>
+		<!--<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Flease drop a File" FontSize="15" Margin="10,5,0,5"/>-->
 
 		<!--<Border BorderThickness="1" BorderBrush="#0096D6"  Margin="10">
 			<Grid Height="100" Background="GhostWhite" AllowDrop="True" behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"/>
 		</Border>-->
 
 		<!--<WebBrowser behaviours:WebBrowserBindableSourceBehavior.BindableSource ="{Binding Uri, UpdateSourceTrigger=PropertyChanged}" Width="auto" Height="200"/>-->
-		<TextBox behaviours:TextBlockAutoToolTipBehavior.AutoTooltip="True" ToolTip="This is a tooltip" Text="Studio 2019" Width="100"/>
-	    <WebBrowser behaviours:WebBrowserContentSource.Html ="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Width="auto" Height="200"/>
+		<!--<TextBox behaviours:TextBlockAutoToolTipBehavior.AutoTooltip="True" ToolTip="This is a tooltip" Text="Studio 2019" Width="100"/>
+	    <WebBrowser behaviours:WebBrowserContentSource.Html ="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Width="auto" Height="200"/>-->
 
 	</StackPanel>
 </Window>
