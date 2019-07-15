@@ -5,18 +5,31 @@ namespace Sdl.Community.Extended.MessageUI
 {
     public class NumberVerifierMessageData : ExtendedMessageEventData
     {
-        public NumberVerifierMessageData(string sourceIssues, string targetIssues, ISegment replacementSuggestion, string initialSourceIssues, string initialTargetIssues)
-        {
-            SourceIssues = sourceIssues;
+		public NumberVerifierMessageData(
+			string sourceIssues,
+			string targetIssues,
+			ISegment replacementSuggestion,
+			string initialSourceIssues,
+			string initialTargetIssues,
+			string errorMessage)
+		{
+			SourceIssues = sourceIssues;
 			InitialSourceIssues = initialSourceIssues;
 			InitialTargetIssues = initialTargetIssues;
 
 			TargetIssues = targetIssues;
-            ReplacementSuggestion = replacementSuggestion;
-            
-            //Identifier for this custom message type
-            MessageType = "Sdl.Verification.Sdk.NumberVerifier.MessageUI, Number_Issue";
-        }
+			ReplacementSuggestion = replacementSuggestion;
+
+			//Identifier for this custom message type
+			if (errorMessage.Equals("Alphanumeric name modified."))
+			{
+				MessageType = "Alphanumeric_Issue";
+			}
+			else
+			{
+				MessageType = "Number_Issue";
+			}
+		}
 
         /// <summary>
         /// Information which will be displayed in our custom UI.

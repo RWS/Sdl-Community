@@ -315,7 +315,8 @@ namespace Sdl.Community.NumberVerifier
 								errorMessage.TargetNumberIssues,
 								segmentPair.Target,
 								errorMessage.InitialSourceNumber,
-								errorMessage.InitialTargetNumber);
+								errorMessage.InitialTargetNumber,
+								errorMessage.ErrorMessage);
 
 							#endregion
 
@@ -462,25 +463,37 @@ namespace Sdl.Community.NumberVerifier
 		/// <param name="sourceText"></param>
 		/// <param name="targetText"></param>
 		/// <returns></returns>
-		public IEnumerable<ErrorReporting> CheckNumbers(string sourceText, string targetText)
+		public IEnumerable<ErrorReporting> CheckNumbers(string sourceLanguage, string targetLanguage, NumberModel numberModel)
 		{
+			var initialSourceHindiText = numberModel.SourceText;
+			var initialTargetHindiText = numberModel.TargetText;
+
+			if (targetLanguage.Equals("Hindi (India)"))
+			{
+				numberModel.SourceText = numberModel.SourceArabicText;
+				numberModel.TargetText = numberModel.TargetArabicText;
+			}
+			if(sourceLanguage.Equals("Hindi (India)"))
+			{
+				numberModel.SourceText = numberModel.SourceArabicText;
+			}
 			var sourceDecimalExtractComposer = new SourceDecimalSeparatorsExtractComposer().Compose();
 			var sourceThousandsExtractComposer = new SourceThousandSeparatorsExtractComposer().Compose();
 
-			var sourceDecimalSeparators = sourceDecimalExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { sourceText }));
-			var sourceThousandSeparators = sourceThousandsExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { sourceText }));
+			var sourceDecimalSeparators = sourceDecimalExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { numberModel.SourceText }));
+			var sourceThousandSeparators = sourceThousandsExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { numberModel.SourceText }));
 
-			var sourceList = GetNumbersTuple(sourceText, string.Concat(sourceDecimalSeparators),
+			var sourceList = GetNumbersTuple(numberModel.SourceText, string.Concat(sourceDecimalSeparators),
 				string.Concat(sourceThousandSeparators), VerificationSettings.SourceNoSeparator,
 				VerificationSettings.SourceOmitLeadingZero);
 
 			var targetDecimalExtractComposer = new TargetDecimalSeparatorsExtractComposer().Compose();
 			var targetThousandsExtractComposer = new TargetThousandSeparatorsExtractComposer().Compose();
 
-			var targetDecimalSeparators = targetDecimalExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { targetText }));
-			var targetThousandSeparators = targetThousandsExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { targetText }));
+			var targetDecimalSeparators = targetDecimalExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { numberModel.TargetText }));
+			var targetThousandSeparators = targetThousandsExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { numberModel.TargetText }));
 
-			var targetList = GetNumbersTuple(targetText, string.Concat(targetDecimalSeparators),
+			var targetList = GetNumbersTuple(numberModel.TargetText, string.Concat(targetDecimalSeparators),
 				string.Concat(targetThousandSeparators), VerificationSettings.TargetNoSeparator,
 				VerificationSettings.TargetOmitLeadingZero);
 
@@ -502,17 +515,19 @@ namespace Sdl.Community.NumberVerifier
 			RemoveNumbersUndefinedThousandsAndDecimalSeparator(targetNumberList, sourceNumberList,
 				sourceNormalizedNumberList, targetNormalizedNumberList);
 
+			var sourceHindiList = initialSourceHindiText.Equals(numberModel.SourceText) ? new List<string>() { numberModel.SourceText } : new List<string>() { initialSourceHindiText };
+			var targetHindiList = initialTargetHindiText.Equals(numberModel.TargetText) ? new List<string>() { numberModel.TargetText } : new List<string>() { initialTargetHindiText };
 			var numberResults = new NumberResults(VerificationSettings,
 				sourceNumberList,
 				targetNumberList,
-				sourceNumberList,
-				targetNumberList,
-				sourceText, 
-				targetText);
-			
+				sourceHindiList,
+				targetHindiList,
+				!string.IsNullOrEmpty(numberModel.SourceArabicText) ? numberModel.SourceArabicText : numberModel.SourceText,
+				!string.IsNullOrEmpty(numberModel.TargetArabicText) ? numberModel.TargetArabicText : numberModel.TargetText);
+
 			var numberErrorComposer = new NumberErrorComposer();
 			var verifyProcessor = numberErrorComposer.Compose();
-						
+
 			return verifyProcessor.Verify(numberResults);
 		}
 
@@ -527,6 +542,11 @@ namespace Sdl.Community.NumberVerifier
 			var errorList = new List<ErrorReporting>();
 			var hindiVerificationList = new List<string>();
 			var errorsListFromNormalizedNumbers = Enumerable.Empty<ErrorReporting>();
+			var numberModel = new NumberModel
+			{
+				SourceText = sourceText,
+				TargetText = targetText
+			};
 
 			if (_verificationSettings.CustomsSeparatorsAlphanumerics)
 			{
@@ -544,23 +564,24 @@ namespace Sdl.Community.NumberVerifier
 					if (sourceLanguage == "Hindi (India)" || projectInfo.TargetLanguages.Any(l => l.DisplayName == "Hindi (India)"))
 					{
 						var result = GetTargetFromHindiNumbers(sourceText, targetText, sourceLanguage);
-
+						var targetLanguage = projectInfo.TargetLanguages.FirstOrDefault(l => l.DisplayName == "Hindi (India)");
+						var targetLanguageName = targetLanguage != null ? targetLanguage.DisplayName : string.Empty;
 						foreach (var targetRes in result)
 						{
-							errorsListFromNormalizedNumbers = CheckNumbers(targetRes.SourceText, targetRes.TargetText);
+							errorsListFromNormalizedNumbers = CheckNumbers(sourceLanguage, targetLanguageName, targetRes);
 							errorList.AddRange(errorsListFromNormalizedNumbers);
 						}
 						return errorList;
 					}
 					else
-					{
-						return ReturnErrorList(errorsListFromNormalizedNumbers, errorList, sourceText, targetText);
+					{						
+						return ReturnErrorList(errorsListFromNormalizedNumbers, errorList, numberModel);
 					}
 				}
 			}
 			else
 			{
-				return ReturnErrorList(errorsListFromNormalizedNumbers, errorList, sourceText,targetText);
+				return ReturnErrorList(errorsListFromNormalizedNumbers, errorList, numberModel);
 			}
 			return errorList;
 		}
@@ -568,10 +589,9 @@ namespace Sdl.Community.NumberVerifier
 		private List<ErrorReporting> ReturnErrorList(
 			IEnumerable<ErrorReporting> errorsListFromNormalizedNumbers,
 			List<ErrorReporting> errorList, 
-			string sourceText,
-			string targetText)
+			NumberModel numberModel)
 		{
-			errorsListFromNormalizedNumbers = CheckNumbers(sourceText, targetText);
+			errorsListFromNormalizedNumbers = CheckNumbers(string.Empty, string.Empty, numberModel);
 			errorList.AddRange(errorsListFromNormalizedNumbers);
 			return errorList;
 		}
@@ -1356,6 +1376,7 @@ namespace Sdl.Community.NumberVerifier
 					result.Add(new NumberModel
 					{
 						SourceText = !string.IsNullOrEmpty(sourceText.Key) ? sourceText.Key : numberRes.SourceText,
+						SourceArabicText = numberRes.SourceText,
 						TargetText = targetText.Value,
 						TargetArabicText = targetText.Key
 					});
