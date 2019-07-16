@@ -5,12 +5,12 @@ using System.Runtime.CompilerServices;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
-using RestSharp;
 
 namespace IATETerminologyProvider.Service
 {
 	public class AccessTokenService : INotifyPropertyChanged, IDisposable
 	{
+		private readonly System.Timers.Timer _timer;
 		private DateTime _requestedAccessToken;
 		private DateTime _extendedRefreshToken;
 
@@ -25,8 +25,6 @@ namespace IATETerminologyProvider.Service
 		private string _refreshToken;
 		private string _userName;
 		private string _password;
-
-		private readonly System.Timers.Timer _timer;
 
 		public AccessTokenService(TimeSpan accessTokenLifespan, TimeSpan refreshTokenLifespan)
 		{
@@ -46,72 +44,11 @@ namespace IATETerminologyProvider.Service
 			_timer.Start();
 		}
 
-		public AccessTokenService() : this(new TimeSpan(0), new TimeSpan(0)) { }
-
-		public bool GetAccessToken(string userName, string password)
+		public AccessTokenService() : this(new TimeSpan(0), new TimeSpan(0))
 		{
-			if (string.IsNullOrEmpty(userName) 
-			    || string.IsNullOrEmpty(password))
-			{
-				return false;
-			}
-
-			Reset();
-
-			_userName = userName;
-			_password = password;
-
-			var response = GetAccessTokenResponse(userName, password);
-			if (response != null && response.Tokens.Count > 0)
-			{
-				_accessToken = response.Tokens[0];
-				_refreshToken = response.RefreshToken;
-
-				_accessTokenExpired = false;
-				_accessTokenExtended = false;
-				_refreshTokenExpired = false;
-
-				_requestedAccessToken = DateTime.Now;
-				_extendedRefreshToken = DateTime.MinValue;
-
-				OnPropertyChanged(nameof(AccessToken));
-				OnPropertyChanged(nameof(RequestedAccessToken));
-
-				return true;
-			}
-
-			return false;
-		}		
-
-		public bool ExtendAccessToken()
-		{
-			if (_accessTokenExtended || 
-			    string.IsNullOrEmpty(_accessToken) ||
-				string.IsNullOrEmpty(RefreshToken) || 
-			    _requestedAccessToken == DateTime.MinValue)
-			{
-				return false;
-			}
-
-			var response = GetExtendAccessTokenResponse();
-			if (response != null && response.Tokens.Count > 0)
-			{
-				_accessToken = response.Tokens[0];
-				_refreshToken = response.RefreshToken;
-
-				_accessTokenExpired = true;
-				_accessTokenExtended = true;
-				_refreshTokenExpired = false;
-
-				_extendedRefreshToken = DateTime.Now;
-
-				OnPropertyChanged(nameof(ExtendedRefreshToken));
-
-				return true;
-			}
-
-			return true;
 		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		public bool AccessTokenExpired
 		{
@@ -248,22 +185,84 @@ namespace IATETerminologyProvider.Service
 			}
 		}
 
-		private JsonAccessTokenModel GetAccessTokenResponse(string userName, string password)
+		public bool GetAccessToken(string userName, string password)
 		{
-			var httpClient = new HttpClient
+			if (string.IsNullOrEmpty(userName)
+				|| string.IsNullOrEmpty(password))
 			{
-				BaseAddress = new Uri(ApiUrls.GetAccessTokenUri(userName, password))
-			};
-			return GetResponse(httpClient);
+				return false;
+			}
+
+			Reset();
+
+			_userName = userName;
+			_password = password;
+
+			var response = GetAccessTokenResponse(userName, password);
+			if (response != null && response.Tokens.Count > 0)
+			{
+				_accessToken = response.Tokens[0];
+				_refreshToken = response.RefreshToken;
+
+				_accessTokenExpired = false;
+				_accessTokenExtended = false;
+				_refreshTokenExpired = false;
+
+				_requestedAccessToken = DateTime.Now;
+				_extendedRefreshToken = DateTime.MinValue;
+
+				OnPropertyChanged(nameof(AccessToken));
+				OnPropertyChanged(nameof(RequestedAccessToken));
+
+				return true;
+			}
+
+			return false;
 		}
 
-		private JsonAccessTokenModel GetExtendAccessTokenResponse()
+		public bool ExtendAccessToken()
 		{
-			var httpClient = new HttpClient
+			if (_accessTokenExtended ||
+				string.IsNullOrEmpty(_accessToken) ||
+				string.IsNullOrEmpty(RefreshToken) ||
+				_requestedAccessToken == DateTime.MinValue)
 			{
-				BaseAddress = new Uri(ApiUrls.GetExtendAccessTokenUri(RefreshToken))
-			};
-			return GetResponse(httpClient);
+				return false;
+			}
+
+			var response = GetExtendAccessTokenResponse();
+			if (response != null && response.Tokens.Count > 0)
+			{
+				_accessToken = response.Tokens[0];
+				_refreshToken = response.RefreshToken;
+
+				_accessTokenExpired = true;
+				_accessTokenExtended = true;
+				_refreshTokenExpired = false;
+
+				_extendedRefreshToken = DateTime.Now;
+
+				OnPropertyChanged(nameof(ExtendedRefreshToken));
+
+				return true;
+			}
+
+			return true;
+		}
+
+		public void Dispose()
+		{
+			if (_timer != null)
+			{
+				_timer.Stop();
+				_timer.Elapsed -= Timer_Elapsed;
+				_timer.Close();
+			}
+		}
+
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		private static JsonAccessTokenModel GetResponse(HttpClient httpClient)
@@ -281,6 +280,24 @@ namespace IATETerminologyProvider.Service
 
 			var accessTokenRespose = JsonConvert.DeserializeObject<JsonAccessTokenModel>(httpResponseAsString);
 			return accessTokenRespose;
+		}
+
+		private JsonAccessTokenModel GetAccessTokenResponse(string userName, string password)
+		{
+			var httpClient = new HttpClient
+			{
+				BaseAddress = new Uri(ApiUrls.GetAccessTokenUri(userName, password))
+			};
+			return GetResponse(httpClient);
+		}
+
+		private JsonAccessTokenModel GetExtendAccessTokenResponse()
+		{
+			var httpClient = new HttpClient
+			{
+				BaseAddress = new Uri(ApiUrls.GetExtendAccessTokenUri(RefreshToken))
+			};
+			return GetResponse(httpClient);
 		}
 
 		private void Reset()
@@ -313,26 +330,9 @@ namespace IATETerminologyProvider.Service
 			{
 				var expireTime = _extendedRefreshToken.AddSeconds(_refreshTokenLifespan.TotalSeconds);
 				if (expireTime < DateTime.Now.AddMinutes(1))
-				{					
+				{
 					_refreshTokenExpired = true;
 				}
-			}
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
-
-		public void Dispose()
-		{
-			if (_timer != null)
-			{
-				_timer.Stop();
-				_timer.Elapsed -= Timer_Elapsed;
-				_timer.Close();
 			}
 		}
 	}

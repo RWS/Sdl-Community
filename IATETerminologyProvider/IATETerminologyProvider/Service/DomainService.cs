@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
@@ -21,9 +19,8 @@ namespace IATETerminologyProvider.Service
 		{
 			var domains = new ObservableCollection<ItemsResponseModel>();
 
-			var httpClient = new HttpClient {BaseAddress = new Uri(ApiUrls.GetDomainUri())};
+			var httpClient = new HttpClient { BaseAddress = new Uri(ApiUrls.GetDomainUri()) };
 			Utils.AddDefaultParameters(httpClient);
-
 
 			var httpRequest = new HttpRequestMessage
 			{
@@ -37,23 +34,23 @@ namespace IATETerminologyProvider.Service
 			var jsonDomainsModel =
 				JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseAsString);
 
-				if (jsonDomainsModel?.Items != null)
+			if (jsonDomainsModel?.Items != null)
+			{
+				foreach (var item in jsonDomainsModel.Items)
 				{
-					foreach (var item in jsonDomainsModel.Items)
+					var domain = new ItemsResponseModel
 					{
-						var domain = new ItemsResponseModel
-						{
-							Code = item.Code, Name = item.Name, Subdomains = item.Subdomains
-						};
-						domains.Add(domain);
-					}
+						Code = item.Code,
+						Name = item.Name,
+						Subdomains = item.Subdomains
+					};
+					domains.Add(domain);
 				}
+			}
 
-				return domains;
+			return domains;
 		}
 
-		
-
-		#endregion
+		#endregion Public Methods
 	}
 }
