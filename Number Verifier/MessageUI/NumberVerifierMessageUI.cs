@@ -154,7 +154,7 @@ namespace Sdl.Community.Extended.MessageUI
 		{
 			var messageData = (NumberVerifierMessageData)messageEventArgs.ExtendedData;
 			tb_ErrorDetails.Text = messageEventArgs.Level.ToString() + "\r\n" + messageEventArgs.Message;
-			if (messageData.MessageType.Equals("Alphanumeric_Issue"))
+			if (messageData.MessageType.Equals("Alphanumeric_Issue") || messageData.MessageType.Equals("Hindi_Issue"))
 			{
 				tb_SourceIssues.Text = messageData.InitialSourceIssues;
 				tb_TargetIssues.Text = messageData.InitialTargetIssues;				

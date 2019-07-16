@@ -310,13 +310,17 @@ namespace Sdl.Community.NumberVerifier
 						if (extendedMessageReporter != null)
 						{
 							#region CreateExtendedData
-
-							var extendedData = new NumberVerifierMessageData(errorMessage.SourceNumberIssues,
-								errorMessage.TargetNumberIssues,
-								segmentPair.Target,
-								errorMessage.InitialSourceNumber,
-								errorMessage.InitialTargetNumber,
-								errorMessage.ErrorMessage);
+							var messageDataModel = new MessageDataModel
+							{
+								SourceIssues = errorMessage.SourceNumberIssues,
+								TargetIssues = errorMessage.TargetNumberIssues,
+								ReplacementSuggestion = segmentPair.Target,
+								InitialSourceIssues = errorMessage.InitialSourceNumber,
+								InitialTargetIssues = errorMessage.InitialTargetNumber,
+								ErrorMessage = errorMessage.ErrorMessage,
+								IsHindiVerification = errorMessage.IsHindiVerification
+							};
+							var extendedData = new NumberVerifierMessageData(messageDataModel);
 
 							#endregion
 
@@ -412,14 +416,17 @@ namespace Sdl.Community.NumberVerifier
 
 			// remove alphanumeric names found both in source and target from respective list
 			RemoveMatchingAlphanumerics(sourceAlphanumericsList.Item2, targetAlphanumericsList.Item2);
-
-			var numberResults = new NumberResults(VerificationSettings,
-				sourceAlphanumericsList.Item2,
-				targetAlphanumericsList.Item2,
-				sourceAlphanumericsList.Item1,
-				targetAlphanumericsList.Item1,
-				sourceText,
-				targetText);
+			var numberModel = new NumberModel
+			{
+				Settings = VerificationSettings,
+				SourceNumbers = sourceAlphanumericsList.Item2,
+				TargetNumbers = targetAlphanumericsList.Item2,
+				InitialSourceNumbers = sourceAlphanumericsList.Item1,
+				InitialTargetNumbers = targetAlphanumericsList.Item1,
+				SourceText = sourceText,
+				TargetText = targetText
+			};
+			var numberResults = new NumberResults(numberModel);
 
 			var alphanumericErrorComposer = new AlphanumericErrorComposer();
 			var verifyProcessor = alphanumericErrorComposer.Compose();
@@ -467,15 +474,17 @@ namespace Sdl.Community.NumberVerifier
 		{
 			var initialSourceHindiText = numberModel.SourceText;
 			var initialTargetHindiText = numberModel.TargetText;
-
+			var isHindiVerification = false;
 			if (targetLanguage.Equals("Hindi (India)"))
 			{
 				numberModel.SourceText = numberModel.SourceArabicText;
 				numberModel.TargetText = numberModel.TargetArabicText;
+				isHindiVerification = true;
 			}
 			if(sourceLanguage.Equals("Hindi (India)"))
 			{
 				numberModel.SourceText = numberModel.SourceArabicText;
+				isHindiVerification = true;
 			}
 			var sourceDecimalExtractComposer = new SourceDecimalSeparatorsExtractComposer().Compose();
 			var sourceThousandsExtractComposer = new SourceThousandSeparatorsExtractComposer().Compose();
@@ -517,14 +526,20 @@ namespace Sdl.Community.NumberVerifier
 
 			var sourceHindiList = initialSourceHindiText.Equals(numberModel.SourceText) ? new List<string>() { numberModel.SourceText } : new List<string>() { initialSourceHindiText };
 			var targetHindiList = initialTargetHindiText.Equals(numberModel.TargetText) ? new List<string>() { numberModel.TargetText } : new List<string>() { initialTargetHindiText };
-			var numberResults = new NumberResults(VerificationSettings,
-				sourceNumberList,
-				targetNumberList,
-				sourceHindiList,
-				targetHindiList,
-				!string.IsNullOrEmpty(numberModel.SourceArabicText) ? numberModel.SourceArabicText : numberModel.SourceText,
-				!string.IsNullOrEmpty(numberModel.TargetArabicText) ? numberModel.TargetArabicText : numberModel.TargetText);
 
+			var numberModelRes = new NumberModel
+			{
+				Settings = VerificationSettings,
+				SourceNumbers = sourceNumberList,
+				TargetNumbers = targetNumberList,
+				InitialSourceNumbers = sourceHindiList,
+				InitialTargetNumbers = targetHindiList,
+				SourceText = !string.IsNullOrEmpty(numberModel.SourceArabicText) ? numberModel.SourceArabicText : numberModel.SourceText,
+				TargetText = !string.IsNullOrEmpty(numberModel.TargetArabicText) ? numberModel.TargetArabicText : numberModel.TargetText,
+				IsHindiVerification = isHindiVerification
+			};
+
+			var numberResults = new NumberResults(numberModelRes);
 			var numberErrorComposer = new NumberErrorComposer();
 			var verifyProcessor = numberErrorComposer.Compose();
 

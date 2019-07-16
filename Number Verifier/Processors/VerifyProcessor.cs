@@ -40,7 +40,8 @@ namespace Sdl.Community.NumberVerifier.Processors
 				SourceNumberIssues = SourceMessageProcessor.GenerateMessage(numberResults),
 				TargetNumberIssues = TargetMessageProcessor.GenerateMessage(numberResults),
 				InitialSourceNumber = initialSourceNumbers,
-				InitialTargetNumber = initialTargetNumbers
+				InitialTargetNumber = initialTargetNumbers,
+				IsHindiVerification = numberResults.IsHindiVerification
 			};
 		}
 

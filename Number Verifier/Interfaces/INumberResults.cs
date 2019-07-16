@@ -11,5 +11,6 @@ namespace Sdl.Community.NumberVerifier.Interfaces
 		List<string> InitialTargetNumbers { get; set; }
 		string SourceText { get; set; }
         string  TargetText { get; set; }
+		bool IsHindiVerification { get; set; }
     }
 }

@@ -5,27 +5,16 @@ namespace Sdl.Community.NumberVerifier.Model
 {
 	public class NumberResults : INumberResults
     {
-		public NumberResults(INumberVerifierSettings settings, List<string> sourceNumbers, List<string> targetNumbers)
+        public NumberResults(NumberModel numberModel)
         {
-            Settings = settings;
-            SourceNumbers = sourceNumbers;
-            TargetNumbers = targetNumbers;
-        }
-
-        public NumberResults(
-			INumberVerifierSettings settings, 
-			List<string> sourceNumbers,
-			List<string> targetNumbers,
-			List<string> initialSourceNumbers,
-			List<string> initialTargetNumbers,
-			string sourceText,
-			string targetText) 
-            :this(settings, sourceNumbers,targetNumbers)
-        {
-            SourceText = sourceText;
-			TargetText = targetText;
-			InitialSourceNumbers = initialSourceNumbers;
-			InitialTargetNumbers = initialTargetNumbers;
+            SourceText = numberModel.SourceText;
+			TargetText = numberModel.TargetText;
+			InitialSourceNumbers = numberModel.InitialSourceNumbers;
+			InitialTargetNumbers = numberModel.InitialTargetNumbers;
+			IsHindiVerification = numberModel.IsHindiVerification;
+			SourceNumbers = numberModel.SourceNumbers;
+			TargetNumbers = numberModel.TargetNumbers;
+			Settings = numberModel.Settings;
 		}
 
 		public INumberVerifierSettings Settings { get; set; }
@@ -41,5 +30,7 @@ namespace Sdl.Community.NumberVerifier.Model
         public string SourceText { get; set; }
 
         public string TargetText { get; set; }
-    }
+
+		public bool IsHindiVerification { get; set; }
+	}
 }
