@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Sdl.Community.NumberVerifier;
+using Sdl.Community.NumberVerifier.Helpers;
 using Sdl.DesktopEditor.BasicControls;
 using Sdl.DesktopEditor.EditorApi;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -154,7 +155,7 @@ namespace Sdl.Community.Extended.MessageUI
 		{
 			var messageData = (NumberVerifierMessageData)messageEventArgs.ExtendedData;
 			tb_ErrorDetails.Text = messageEventArgs.Level.ToString() + "\r\n" + messageEventArgs.Message;
-			if (messageData.MessageType.Equals("Alphanumeric_Issue") || messageData.MessageType.Equals("Hindi_Issue"))
+			if (messageData.MessageType.Equals(Constants.AlphanumericIssue) || messageData.MessageType.Equals(Constants.HindiIssue))
 			{
 				tb_SourceIssues.Text = messageData.InitialSourceIssues;
 				tb_TargetIssues.Text = messageData.InitialTargetIssues;				

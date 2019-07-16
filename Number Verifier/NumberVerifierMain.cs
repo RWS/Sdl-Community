@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Sdl.Community.Extended.MessageUI;
 using Sdl.Community.NumberVerifier.Composers;
+using Sdl.Community.NumberVerifier.Helpers;
 using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Model;
 using Sdl.Core.Globalization;
@@ -475,13 +476,13 @@ namespace Sdl.Community.NumberVerifier
 			var initialSourceHindiText = numberModel.SourceText;
 			var initialTargetHindiText = numberModel.TargetText;
 			var isHindiVerification = false;
-			if (targetLanguage.Equals("Hindi (India)"))
+			if (targetLanguage.Equals(Constants.HindiLanguage))
 			{
 				numberModel.SourceText = numberModel.SourceArabicText;
 				numberModel.TargetText = numberModel.TargetArabicText;
 				isHindiVerification = true;
 			}
-			if(sourceLanguage.Equals("Hindi (India)"))
+			if(sourceLanguage.Equals(Constants.HindiLanguage))
 			{
 				numberModel.SourceText = numberModel.SourceArabicText;
 				isHindiVerification = true;
@@ -576,10 +577,10 @@ namespace Sdl.Community.NumberVerifier
 				{
 					var projectInfo = projectController.CurrentProject.GetProjectInfo();
 					var sourceLanguage = projectInfo.SourceLanguage.DisplayName;
-					if (sourceLanguage == "Hindi (India)" || projectInfo.TargetLanguages.Any(l => l.DisplayName == "Hindi (India)"))
+					if (sourceLanguage.Equals(Constants.HindiLanguage) || projectInfo.TargetLanguages.Any(l => l.DisplayName.Equals(Constants.HindiLanguage)))
 					{
 						var result = GetTargetFromHindiNumbers(sourceText, targetText, sourceLanguage);
-						var targetLanguage = projectInfo.TargetLanguages.FirstOrDefault(l => l.DisplayName == "Hindi (India)");
+						var targetLanguage = projectInfo.TargetLanguages.FirstOrDefault(l => l.DisplayName.Equals(Constants.HindiLanguage));
 						var targetLanguageName = targetLanguage != null ? targetLanguage.DisplayName : string.Empty;
 						foreach (var targetRes in result)
 						{
@@ -1248,7 +1249,7 @@ namespace Sdl.Community.NumberVerifier
 				HindiDictionary = new Dictionary<string, string>(),
 				TextGroups = new string[] { }
 			};
-			if (sourceLanguage == "Hindi (India)")
+			if (sourceLanguage.Equals(Constants.HindiLanguage))
 			{
 				var sourceResult = string.Empty;
 				var sourceGroupResult = new List<string>();
@@ -1372,7 +1373,7 @@ namespace Sdl.Community.NumberVerifier
 					}
 				}
 
-				if (hindiNumberModel.SourceLanguage.Equals("Hindi (India)"))
+				if (hindiNumberModel.SourceLanguage.Equals(Constants.HindiLanguage))
 				{
 					var sourceText = hindiNumberModel.HindiDictionary.Where(s => s.Key.Equals(numberRes.SourceText)).FirstOrDefault();
 					result.Add(new NumberModel

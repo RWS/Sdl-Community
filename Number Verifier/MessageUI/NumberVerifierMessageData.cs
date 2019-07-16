@@ -1,4 +1,5 @@
-﻿using Sdl.Community.NumberVerifier.Model;
+﻿using Sdl.Community.NumberVerifier.Helpers;
+using Sdl.Community.NumberVerifier.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 
@@ -15,17 +16,17 @@ namespace Sdl.Community.Extended.MessageUI
 			ReplacementSuggestion = messageDataModel.ReplacementSuggestion;
 
 			//Identifier for this custom message type
-			if (messageDataModel.ErrorMessage.Equals("Alphanumeric name modified."))
+			if (messageDataModel.ErrorMessage.Equals(Constants.AlphanumericMessage))
 			{
-				MessageType = "Alphanumeric_Issue";
+				MessageType = Constants.AlphanumericIssue;
 			}
 			else if (messageDataModel.IsHindiVerification)
 			{
-				MessageType = "Hindi_Issue";
+				MessageType = Constants.HindiIssue;
 			}
 			else
 			{
-				MessageType = "Number_Issue";
+				MessageType = Constants.NumberIssue;
 			}
 		}
 

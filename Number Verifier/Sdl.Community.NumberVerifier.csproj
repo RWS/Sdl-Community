@@ -130,11 +130,11 @@
       <DependentUpon>NumberVerifierHelp.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\NumberVerifierHelpPage.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Interfaces\IErrorMessageProcessor.cs" />
     <Compile Include="Interfaces\IExtractProcessor.cs" />
     <Compile Include="Interfaces\IExtractSpecification.cs" />
     <Compile Include="Interfaces\IExtractData.cs" />
-    <Compile Include="Interfaces\IHindiNumbersVerifier.cs" />
     <Compile Include="Interfaces\INumberResults.cs" />
     <Compile Include="Interfaces\INumberVerifierMethods.cs" />
     <Compile Include="Interfaces\INumberVerifierSeparators.cs" />
@@ -256,9 +256,7 @@
     <EmbeddedResource Include="Resources\Number Verifier Help.rtf" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
