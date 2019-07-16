@@ -22,7 +22,6 @@ namespace IATETerminologyProvider.Service
 			var domains = new ObservableCollection<ItemsResponseModel>();
 
 			var httpClient = new HttpClient {BaseAddress = new Uri(ApiUrls.GetDomainUri())};
-			//we accept only application/json because it is the only encoding we can handle at the moment
 			Utils.AddDefaultParameters(httpClient);
 
 

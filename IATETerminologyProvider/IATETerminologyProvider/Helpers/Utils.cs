@@ -25,6 +25,7 @@ namespace IATETerminologyProvider.Helpers
 
 		public static void AddDefaultParameters(HttpClient httpClient)
 		{
+			//we accept only application/json because it is the only encoding we can handle at the moment
 			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			httpClient.DefaultRequestHeaders.Connection.Add("Keep-Alive");
 			httpClient.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
