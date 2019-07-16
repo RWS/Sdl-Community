@@ -9,7 +9,6 @@ using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using RestSharp;
 using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
