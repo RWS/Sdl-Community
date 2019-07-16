@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model.ResponseModels;
@@ -249,32 +250,36 @@ namespace IATETerminologyProvider.Service
 
 		private JsonAccessTokenModel GetAccessTokenResponse(string userName, string password)
 		{
-			var client = new RestClient(ApiUrls.GetAccessTokenUri(userName, password));
-			return GetResponse(client);
+			var httpClient = new HttpClient
+			{
+				BaseAddress = new Uri(ApiUrls.GetAccessTokenUri(userName, password))
+			};
+			return GetResponse(httpClient);
 		}
 
 		private JsonAccessTokenModel GetExtendAccessTokenResponse()
 		{
-			var client = new RestClient(ApiUrls.GetExtendAccessTokenUri(RefreshToken));
-			return GetResponse(client);
+			var httpClient = new HttpClient
+			{
+				BaseAddress = new Uri(ApiUrls.GetExtendAccessTokenUri(RefreshToken))
+			};
+			return GetResponse(httpClient);
 		}
 
-		private static JsonAccessTokenModel GetResponse(IRestClient client)
+		private static JsonAccessTokenModel GetResponse(HttpClient httpClient)
 		{
-			var request = new RestRequest("", Method.GET);
-			request.AddHeader("Connection", "Keep-Alive");
-			request.AddHeader("Cache-Control", "no-cache");
-			request.AddHeader("Pragma", "no-cache");
-			request.AddHeader("Accept", "application/json");
-			request.AddHeader("Accept-Encoding", "gzip, deflate, br");
-			request.AddHeader("Content-Type", "application/json");
-			request.AddHeader("Origin", "https://iate.europa.eu");
-			request.AddHeader("Host", "iate.europa.eu");
-			request.AddHeader("Access-Control-Allow-Origin", "*");
+			Utils.AddDefaultParameters(httpClient);
 
-			var response = client.Execute(request);
+			var httpRequest = new HttpRequestMessage
+			{
+				Method = HttpMethod.Get
+			};
 
-			var accessTokenRespose = JsonConvert.DeserializeObject<JsonAccessTokenModel>(response.Content);
+			var httpResponse = httpClient.SendAsync(httpRequest);
+
+			var httpResponseAsString = httpResponse.Result.Content.ReadAsStringAsync().Result;
+
+			var accessTokenRespose = JsonConvert.DeserializeObject<JsonAccessTokenModel>(httpResponseAsString);
 			return accessTokenRespose;
 		}
 
