@@ -124,7 +124,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				// check custom settings
 				if (success)
 				{
-					success = CustomFilterHelper.Filter(CustomSettings,rowInfo,success, ActiveDocument);
+					success = CustomFilterHelper.Filter(CustomSettings,Settings,rowInfo,success, ActiveDocument);
 				}
 			}
 			return success;

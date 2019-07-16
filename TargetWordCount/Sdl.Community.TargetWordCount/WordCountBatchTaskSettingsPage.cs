@@ -1,5 +1,4 @@
-﻿using Sdl.Core.Settings;
-using Sdl.Desktop.IntegrationApi;
+﻿using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.TargetWordCount
 {

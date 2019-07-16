@@ -2,13 +2,13 @@
 using Sdl.Community.TuToTm.View;
 using Sdl.Community.TuToTm.ViewModel;
 using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 namespace Sdl.Community.TuToTm
 {
 	[RibbonGroup("TuToTm", Name = "")]
-	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
+	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	public class TuToTmRibbon : AbstractRibbonGroup
 	{
 	}

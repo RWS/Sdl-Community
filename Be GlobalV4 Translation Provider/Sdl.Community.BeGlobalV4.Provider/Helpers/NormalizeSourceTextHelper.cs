@@ -27,6 +27,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 				{
 					return "dut";
 				}
+				//Language code for Slovak in BeGlobal is slo
+				if (cultureInfo.ThreeLetterISOLanguageName.Equals("slk"))
+				{
+					return "slo";
+				}
 				return cultureInfo.ThreeLetterISOLanguageName;
 			}
 			return string.Empty;

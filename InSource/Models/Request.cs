@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Sdl.Community.InSource.Models
 {
@@ -11,6 +7,5 @@ namespace Sdl.Community.InSource.Models
        public List<ProjectRequest> ProjectRequest { get; set; }
        public TimerModel Timer { get; set; }
        public bool DeleteFolders { get; set; }
-    
     }
 }

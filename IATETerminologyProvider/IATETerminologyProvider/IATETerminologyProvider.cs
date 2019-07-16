@@ -40,12 +40,12 @@ namespace IATETerminologyProvider
 
 		public override IEntry GetEntry(int id)
 		{
-			return _entryModels.FirstOrDefault(e => e.Id == id);
+			return _entryModels.ToList().FirstOrDefault(e => e.Id == id);
 		}
 
 		public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
 		{
-			return _entryModels.FirstOrDefault(e => e.Id == id);
+			return _entryModels.ToList().FirstOrDefault(e => e.Id == id);
 		}
 
 		public override IList<ILanguage> GetLanguages()

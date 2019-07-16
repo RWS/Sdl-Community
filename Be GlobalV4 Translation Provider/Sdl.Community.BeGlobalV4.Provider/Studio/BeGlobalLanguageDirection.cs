@@ -133,7 +133,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						results[i] = null;
 						continue;
 					}
+
 					var corespondingTu = _translationUnits.FirstOrDefault(tu => tu.SourceSegment.Equals(segments[i]));
+
 					//locked segments should not be translated
 					if (corespondingTu != null && (corespondingTu.ConfirmationLevel != ConfirmationLevel.Unspecified || corespondingTu.DocumentSegmentPair.Properties.IsLocked))
 					{
@@ -295,8 +297,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (mask == null || mask.Length != translationUnits.Length)
 				throw new ArgumentException("Mask in SearchSegmentsMasked");
 
+			var translationUnit = translationUnits.Where((seg, i) => mask == null || mask[i]).ToArray();
 			_translationUnits.Clear();
-			_translationUnits.AddRange(translationUnits);
+			_translationUnits.AddRange(translationUnit);
 			return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
 		}
 
@@ -335,6 +338,5 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			throw new NotImplementedException();
 		}
-
 	}
 }
