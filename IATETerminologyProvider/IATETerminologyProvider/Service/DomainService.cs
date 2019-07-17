@@ -9,8 +9,6 @@ namespace IATETerminologyProvider.Service
 {
 	public static class DomainService
 	{
-		#region Public Methods
-
 		/// <summary>
 		/// Get domains from IATE database.
 		/// </summary>
@@ -29,7 +27,7 @@ namespace IATETerminologyProvider.Service
 
 			var httpResponse = httpClient.SendAsync(httpRequest);
 
-			var httpResponseAsString = httpResponse.Result.Content.ReadAsStringAsync().Result;
+			var httpResponseAsString = httpResponse?.Result?.Content?.ReadAsStringAsync().Result;
 
 			var jsonDomainsModel =
 				JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseAsString);
@@ -50,7 +48,5 @@ namespace IATETerminologyProvider.Service
 
 			return domains;
 		}
-
-		#endregion Public Methods
 	}
 }

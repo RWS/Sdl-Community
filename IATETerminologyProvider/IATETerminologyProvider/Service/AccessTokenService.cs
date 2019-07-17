@@ -276,7 +276,7 @@ namespace IATETerminologyProvider.Service
 
 			var httpResponse = httpClient.SendAsync(httpRequest);
 
-			var httpResponseAsString = httpResponse.Result.Content.ReadAsStringAsync().Result;
+			var httpResponseAsString = httpResponse?.Result?.Content?.ReadAsStringAsync().Result;
 
 			var accessTokenRespose = JsonConvert.DeserializeObject<JsonAccessTokenModel>(httpResponseAsString);
 			return accessTokenRespose;
