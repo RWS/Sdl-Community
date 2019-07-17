@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Model.ResponseModels;
@@ -9,7 +10,7 @@ namespace IATETerminologyProvider.Service
 {
 	public static class TermTypeService
     {
-		#region Public Methods
+		public static readonly Log Log = Log.Instance;
 		/// <summary>
 		/// Get term types from IATE database.
 		/// </summary>
@@ -30,26 +31,35 @@ namespace IATETerminologyProvider.Service
 			request.AddHeader("Host", "iate.europa.eu");
 			request.AddHeader("Access-Control-Allow-Origin", "*");
 
-			var response = client.Execute(request);
-			var jsonTermTypesModel = JsonConvert.DeserializeObject<TermTypeResponseModel>(response.Content);
-
-			if (jsonTermTypesModel?.Items != null)
+			try
 			{
-				int result;
-				foreach (var item in jsonTermTypesModel.Items)
-				{
-					var selectedTermTypeName = Utils.UppercaseFirstLetter(item.Name.ToLower());
+				var response = client.Execute(request);
+				var jsonTermTypesModel = JsonConvert.DeserializeObject<TermTypeResponseModel>(response.Content);
 
-					var termType = new TermTypeModel
+				if (jsonTermTypesModel?.Items != null)
+				{
+					int result;
+					foreach (var item in jsonTermTypesModel.Items)
 					{
-						Code = int.TryParse(item.Code, out result) ? int.Parse(item.Code) : 0,
-						Name = selectedTermTypeName
-					};
-					termTypes.Add(termType);
+						var selectedTermTypeName = Utils.UppercaseFirstLetter(item.Name.ToLower());
+
+						var termType = new TermTypeModel
+						{
+							Code = int.TryParse(item.Code, out result) ? int.Parse(item.Code) : 0,
+							Name = selectedTermTypeName
+						};
+						termTypes.Add(termType);
+					}
 				}
+
+				return termTypes;
 			}
-			return termTypes;
+			catch (Exception e)
+			{
+				Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
+			}
+
+			return null;
 		}
-		#endregion
 	}
 }

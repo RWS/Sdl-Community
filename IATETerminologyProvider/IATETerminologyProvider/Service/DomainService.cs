@@ -9,6 +9,8 @@ namespace IATETerminologyProvider.Service
 {
 	public static class DomainService
 	{
+		public static readonly Log Log = Log.Instance;
+
 		/// <summary>
 		/// Get domains from IATE database.
 		/// </summary>
@@ -25,28 +27,37 @@ namespace IATETerminologyProvider.Service
 				Method = HttpMethod.Get
 			};
 
-			var httpResponse = httpClient.SendAsync(httpRequest);
-
-			var httpResponseAsString = httpResponse?.Result?.Content?.ReadAsStringAsync().Result;
-
-			var jsonDomainsModel =
-				JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseAsString);
-
-			if (jsonDomainsModel?.Items != null)
+			try
 			{
-				foreach (var item in jsonDomainsModel.Items)
+				var httpResponse = httpClient.SendAsync(httpRequest);
+
+				var httpResponseAsString = httpResponse?.Result?.Content?.ReadAsStringAsync().Result;
+
+				var jsonDomainsModel =
+					JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseAsString);
+
+				if (jsonDomainsModel?.Items != null)
 				{
-					var domain = new ItemsResponseModel
+					foreach (var item in jsonDomainsModel.Items)
 					{
-						Code = item.Code,
-						Name = item.Name,
-						Subdomains = item.Subdomains
-					};
-					domains.Add(domain);
+						var domain = new ItemsResponseModel
+						{
+							Code = item.Code,
+							Name = item.Name,
+							Subdomains = item.Subdomains
+						};
+						domains.Add(domain);
+					}
 				}
+
+				return domains;
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
 			}
 
-			return domains;
+			return null;
 		}
 	}
 }

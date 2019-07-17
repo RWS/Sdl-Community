@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using Newtonsoft.Json;
 
@@ -12,6 +13,7 @@ namespace IATETerminologyProvider.Service
 		#region Private Fields
 		private readonly string _persistancePath;
 		private List<ProviderSettings> _providerSettingList = new List<ProviderSettings>();
+        public static readonly Log Log = Log.Instance;
 		#endregion
 
 		#region Constructors
@@ -71,16 +73,24 @@ namespace IATETerminologyProvider.Service
 		#region Internal methods
 		internal void WriteToFile()
 		{
-			if (!File.Exists(_persistancePath))
+			try
 			{
-				var directory = Path.GetDirectoryName(_persistancePath);
-				if (directory != null && !Directory.Exists(directory))
+				if (!File.Exists(_persistancePath))
 				{
-					Directory.CreateDirectory(directory);
+					var directory = Path.GetDirectoryName(_persistancePath);
+					if (directory != null && !Directory.Exists(directory))
+					{
+						Directory.CreateDirectory(directory);
+					}
 				}
+
+				var json = JsonConvert.SerializeObject(_providerSettingList);
+				File.WriteAllText(_persistancePath, json);
 			}
-			var json = JsonConvert.SerializeObject(_providerSettingList);
-			File.WriteAllText(_persistancePath, json);
+			catch (Exception e)
+			{
+                Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
+			}
 		}
 		#endregion
 	}
