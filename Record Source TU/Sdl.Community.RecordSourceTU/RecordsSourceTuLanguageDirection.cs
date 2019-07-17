@@ -301,7 +301,7 @@ namespace Sdl.Community.RecordSourceTU
 				{
 					var customFieldsValue = new CustomFieldValues
 					{
-						FileNameFullPath = _activeFileName,
+						FileNameFullPath = translationUnit.GetFilePath(),
 						ProjectName = translationUnit.GetProjectName()
 					};
 					tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);

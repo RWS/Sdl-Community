@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using RestSharp;
 using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
@@ -42,33 +43,28 @@ namespace IATETerminologyProvider.Service
 		{
 			SetAccessToken();
 
-			// maxResults (the number of returned words) value is set from the Termbase -> Search Settings
-			var client = new RestClient(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()));
-			var request = new RestRequest("", Method.POST);
+			var httpClient = new HttpClient
+			{
+				BaseAddress = new Uri(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()))
+			};
+
+			Utils.AddDefaultParameters(httpClient);
+
+			var httpRequest = new HttpRequestMessage { Method = HttpMethod.Post };
 
 			if (!string.IsNullOrEmpty(_accessTokenService.AccessToken))
 			{
-				request.AddHeader("Authorization", "Bearer " + _accessTokenService.AccessToken);
+				httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _accessTokenService.AccessToken);
 			}
 
-			request.AddHeader("Connection", "Keep-Alive");
-			request.AddHeader("Cache-Control", "no-cache");
-			request.AddHeader("Pragma", "no-cache");
-			request.AddHeader("Accept", "application/json");
-			request.AddHeader("Accept-Encoding", "gzip, deflate, br");
-			request.AddHeader("Content-Type", "application/json");
-			request.AddHeader("Origin", "https://iate.europa.eu");
-			request.AddHeader("Host", "iate.europa.eu");
-			request.AddHeader("Access-Control-Allow-Origin", "*");
-
 			var bodyModel = SetApiRequestBodyValues(source, target, text);
-			request.AddJsonBody(bodyModel);
+			httpRequest.Content = new StringContent(JsonConvert.SerializeObject(bodyModel), Encoding.UTF8, "application/json");
 
-			var response = client.Execute(request);
+			var httpResponse = httpClient.SendAsync(httpRequest)?.Result;
+			var httpResponseString = httpResponse?.Content?.ReadAsStringAsync().Result;
+			var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseString);
 
-			var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(response.Content);
-
-			var result = MapResponseValues(response, domainsJsonResponse);
+			var result = MapResponseValues(httpResponseString, domainsJsonResponse);
 			return result;
 		}
 
@@ -128,12 +124,12 @@ namespace IATETerminologyProvider.Service
 		/// <param name="response">IATE API response</param>
 		/// <param name="domainResponseModel">domains response model</param>
 		/// <returns>list of terms</returns>
-		private List<ISearchResult> MapResponseValues(IRestResponse response, JsonDomainResponseModel domainResponseModel)
+		private List<ISearchResult> MapResponseValues(string response, JsonDomainResponseModel domainResponseModel)
 		{
 			var termsList = new List<ISearchResult>();
-			if (!string.IsNullOrEmpty(response.Content))
+			if (!string.IsNullOrEmpty(response))
 			{
-				var jObject = JObject.Parse(response.Content);
+				var jObject = JObject.Parse(response);
 				var itemTokens = (JArray)jObject.SelectToken("items");
 				if (itemTokens != null)
 				{

@@ -31,9 +31,11 @@
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelSource = new System.Windows.Forms.TableLayoutPanel();
             this.panel_Source = new System.Windows.Forms.Panel();
+            this.source_richTextBox = new System.Windows.Forms.RichTextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanelTarget = new System.Windows.Forms.TableLayoutPanel();
             this.panel_Target = new System.Windows.Forms.Panel();
+            this.target_richTextBox = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
@@ -44,7 +46,9 @@
             this.tb_ErrorDetails = new System.Windows.Forms.TextBox();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutPanelSource.SuspendLayout();
+            this.panel_Source.SuspendLayout();
             this.tableLayoutPanelTarget.SuspendLayout();
+            this.panel_Target.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,10 +94,21 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_Source.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel_Source.Controls.Add(this.source_richTextBox);
             this.panel_Source.Location = new System.Drawing.Point(3, 21);
             this.panel_Source.Name = "panel_Source";
             this.panel_Source.Size = new System.Drawing.Size(373, 74);
             this.panel_Source.TabIndex = 19;
+            // 
+            // source_richTextBox
+            // 
+            this.source_richTextBox.BackColor = System.Drawing.SystemColors.Control;
+            this.source_richTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.source_richTextBox.Location = new System.Drawing.Point(0, 0);
+            this.source_richTextBox.Name = "source_richTextBox";
+            this.source_richTextBox.Size = new System.Drawing.Size(369, 70);
+            this.source_richTextBox.TabIndex = 0;
+            this.source_richTextBox.Text = "";
             // 
             // label3
             // 
@@ -127,10 +142,21 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_Target.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel_Target.Controls.Add(this.target_richTextBox);
             this.panel_Target.Location = new System.Drawing.Point(3, 21);
             this.panel_Target.Name = "panel_Target";
             this.panel_Target.Size = new System.Drawing.Size(373, 75);
             this.panel_Target.TabIndex = 21;
+            // 
+            // target_richTextBox
+            // 
+            this.target_richTextBox.BackColor = System.Drawing.SystemColors.Control;
+            this.target_richTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.target_richTextBox.Location = new System.Drawing.Point(0, 0);
+            this.target_richTextBox.Name = "target_richTextBox";
+            this.target_richTextBox.Size = new System.Drawing.Size(369, 71);
+            this.target_richTextBox.TabIndex = 0;
+            this.target_richTextBox.Text = "";
             // 
             // label1
             // 
@@ -247,8 +273,10 @@
             this.tableLayoutPanelMain.ResumeLayout(false);
             this.tableLayoutPanelSource.ResumeLayout(false);
             this.tableLayoutPanelSource.PerformLayout();
+            this.panel_Source.ResumeLayout(false);
             this.tableLayoutPanelTarget.ResumeLayout(false);
             this.tableLayoutPanelTarget.PerformLayout();
+            this.panel_Target.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
@@ -271,5 +299,7 @@
         private System.Windows.Forms.TextBox tb_SourceIssues;
         private System.Windows.Forms.TextBox tb_TargetIssues;
         private System.Windows.Forms.TextBox tb_ErrorDetails;
-    }
+		private System.Windows.Forms.RichTextBox target_richTextBox;
+		private System.Windows.Forms.RichTextBox source_richTextBox;
+	}
 }

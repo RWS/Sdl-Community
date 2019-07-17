@@ -87,6 +87,10 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
       <Private>False</Private>
@@ -126,11 +130,11 @@
       <DependentUpon>NumberVerifierHelp.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\NumberVerifierHelpPage.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Interfaces\IErrorMessageProcessor.cs" />
     <Compile Include="Interfaces\IExtractProcessor.cs" />
     <Compile Include="Interfaces\IExtractSpecification.cs" />
     <Compile Include="Interfaces\IExtractData.cs" />
-    <Compile Include="Interfaces\IHindiNumbersVerifier.cs" />
     <Compile Include="Interfaces\INumberResults.cs" />
     <Compile Include="Interfaces\INumberVerifierMethods.cs" />
     <Compile Include="Interfaces\INumberVerifierSeparators.cs" />
@@ -148,8 +152,10 @@
     </Compile>
     <Compile Include="Model\ErrorReporting.cs" />
     <Compile Include="Model\ExtractData.cs" />
+    <Compile Include="Model\HindiNumberModel.cs" />
     <Compile Include="Model\NumberModel.cs" />
     <Compile Include="Model\NumberResults.cs" />
+    <Compile Include="Model\MessageDataModel.cs" />
     <Compile Include="Model\ProjectControllerAdapterModel.cs" />
     <Compile Include="NumberVerifierMain.cs" />
     <Compile Include="GUI\NumberVerifierUI.cs">
@@ -210,6 +216,10 @@
     <Compile Include="Specifications\ReportRemovedNumbersSpecification.cs" />
     <Compile Include="Specifications\LocalizationSpecification\RequireLocalizationSpecification.cs" />
     <Compile Include="Specifications\SkipTheDashSpecification.cs" />
+    <Compile Include="TellMe\NumberVerifierTellMeProvider.cs" />
+    <Compile Include="TellMe\NumVerifierCommunityForumAction.cs" />
+    <Compile Include="TellMe\NumVerifierCommunityWikiAction.cs" />
+    <Compile Include="TellMe\NumVerifierStoreAction.cs" />
     <Compile Include="TextGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +247,8 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\ForumIcon.ico" />
+    <None Include="Resources\Download.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
@@ -244,9 +256,7 @@
     <EmbeddedResource Include="Resources\Number Verifier Help.rtf" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
