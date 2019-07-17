@@ -169,8 +169,6 @@
     <Compile Include="Service\AccessTokenService.cs" />
     <Compile Include="Service\PersistenceService.cs" />
     <Compile Include="Service\SegmentVisitor.cs" />
-    <Compile Include="Service\SerializerService.cs" />
-    <Compile Include="Service\TermSearchCriteriaService.cs" />
     <Compile Include="Service\TermSearchService.cs" />
     <Compile Include="Service\TermTypeService.cs" />
     <Compile Include="Ui\SearchResultsControl.cs">
