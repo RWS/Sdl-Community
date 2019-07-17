@@ -10,6 +10,7 @@ namespace IATETerminologyProvider.Service
 {
 	public class AccessTokenService : INotifyPropertyChanged, IDisposable
 	{
+		public static readonly Log Log = Log.Instance;
 		private readonly System.Timers.Timer _timer;
 		private DateTime _requestedAccessToken;
 		private DateTime _extendedRefreshToken;
@@ -274,12 +275,20 @@ namespace IATETerminologyProvider.Service
 				Method = HttpMethod.Get
 			};
 
-			var httpResponse = httpClient.SendAsync(httpRequest);
+			try
+			{
+				var httpResponse = httpClient.SendAsync(httpRequest);
+				var httpResponseAsString = httpResponse?.Result?.Content?.ReadAsStringAsync().Result;
+				var accessTokenRespose = JsonConvert.DeserializeObject<JsonAccessTokenModel>(httpResponseAsString);
 
-			var httpResponseAsString = httpResponse?.Result?.Content?.ReadAsStringAsync().Result;
+				return accessTokenRespose;
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
+			}
 
-			var accessTokenRespose = JsonConvert.DeserializeObject<JsonAccessTokenModel>(httpResponseAsString);
-			return accessTokenRespose;
+			return null;
 		}
 
 		private JsonAccessTokenModel GetAccessTokenResponse(string userName, string password)
