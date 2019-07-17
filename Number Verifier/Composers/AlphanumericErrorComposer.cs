@@ -34,7 +34,6 @@ namespace Sdl.Community.NumberVerifier.Composers
                 {
                    ErrorMessage = PluginResources.Error_AlphanumericsModified
                 }
-
             };
         }
     }

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Moq;
-using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Model;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -12,9 +7,8 @@ using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 {
-    public class NormalizeAlphanumerics
-    {
-        
+	public class NormalizeAlphanumerics
+    {        
         public List<ErrorReporting> ReportModifiedAlphanumerics(string source, string target,NumberVerifierMain numberVerifierMain)
         {     
             //run initialize method in order to set chosen separators
@@ -22,8 +16,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             numberVerifierMain.Initialize(docPropMock.Object);
 
             return numberVerifierMain.CheckSourceAndTarget(source, target);
-
-           
         }
 
         [Theory]
@@ -136,8 +128,10 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+			numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
+			numberVerifierSettings.Setup(d => d.GetAlphanumericsCustomSeparator).Returns("-");
 
-            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);

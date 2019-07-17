@@ -157,11 +157,11 @@
       <DependentUpon>NumberVerifierHelp.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\NumberVerifierHelpPage.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Interfaces\IErrorMessageProcessor.cs" />
     <Compile Include="Interfaces\IExtractProcessor.cs" />
     <Compile Include="Interfaces\IExtractSpecification.cs" />
     <Compile Include="Interfaces\IExtractData.cs" />
-    <Compile Include="Interfaces\IHindiNumbersVerifier.cs" />
     <Compile Include="Interfaces\INumberResults.cs" />
     <Compile Include="Interfaces\INumberVerifierMethods.cs" />
     <Compile Include="Interfaces\INumberVerifierSeparators.cs" />
@@ -169,6 +169,14 @@
     <Compile Include="Interfaces\ISkipTheDashProcessor.cs" />
     <Compile Include="Interfaces\IVerifyProcessor.cs" />
     <Compile Include="Interfaces\IVerifySpecification.cs" />
+    <Compile Include="MessageUI\CustomMessageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MessageUI\CustomMessageControl.designer.cs">
+      <DependentUpon>CustomMessageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MessageUI\CustomMessageControlPlugIn.cs" />
+    <Compile Include="MessageUI\CustomMessageData.cs" />
     <Compile Include="MessageUI\NumberVerifierMessageData.cs" />
     <Compile Include="MessageUI\NumberVerifierMessagePlugIn.cs" />
     <Compile Include="MessageUI\NumberVerifierMessageUI.cs">
@@ -179,6 +187,8 @@
     </Compile>
     <Compile Include="Model\ErrorReporting.cs" />
     <Compile Include="Model\ExtractData.cs" />
+    <Compile Include="Model\HindiNumberModel.cs" />
+    <Compile Include="Model\MessageDataModel.cs" />
     <Compile Include="Model\NumberModel.cs" />
     <Compile Include="Model\NumberResults.cs" />
     <Compile Include="Model\ProjectControllerAdapterModel.cs" />
@@ -190,6 +200,7 @@
     <Compile Include="GUI\NumberVerifierUI.Designer.cs">
       <DependentUpon>NumberVerifierUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="NumberVerifierMessageData.cs" />
     <Compile Include="NumberVerifierSettings.cs" />
     <Compile Include="GUI\NumberVerifierUIPage.cs" />
     <Compile Include="Processors\AggregateExtendedMessageOnNewLineErrorMessageProcessor.cs" />
@@ -251,6 +262,9 @@
     <EmbeddedResource Include="GUI\NumberVerifierUI.resx">
       <DependentUpon>NumberVerifierUI.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MessageUI\CustomMessageControl.resx">
+      <DependentUpon>CustomMessageControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MessageUI\NumberVerifierMessageUI.resx">
       <DependentUpon>NumberVerifierMessageUI.cs</DependentUpon>
     </EmbeddedResource>
@@ -293,9 +307,7 @@
     <EmbeddedResource Include="Resources\Number Verifier Help.rtf" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
     <PluginDeploymentPath>$(AppData)\SDL\SDL Trados Studio\14\Plugins</PluginDeploymentPath>

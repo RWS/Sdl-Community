@@ -4,7 +4,6 @@ using System.Linq;
 using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
-using Sdl.Community.NumberVerifier.Model;
 using Sdl.Core.Settings;
 
 namespace Sdl.Community.NumberVerifier.Interfaces
@@ -62,7 +61,6 @@ namespace Sdl.Community.NumberVerifier.Interfaces
         string GetTargetDecimalCustomSeparator { get; set; }
 		string GetAlphanumericsCustomSeparator { get; set; }
 		string GetHindi { get; set; }
-		Setting<List<TargetFileSetting>> TargetFileSettings { get; }
 
 		IEnumerable<string> GetSourceDecimalSeparators();
         IEnumerable<string> GetSourceThousandSeparators();

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sdl.Community.NumberVerifier.Interfaces;
-using Sdl.Community.NumberVerifier.Model;
 using Sdl.Core.Settings;
 
 namespace Sdl.Community.NumberVerifier
@@ -319,12 +318,6 @@ namespace Sdl.Community.NumberVerifier
 			get { return GetSetting<string>(nameof(GetHindi)).Value; }
 		}
 
-		private const string TargetFileSetting = "TargetFileSettings";
-		public Setting<List<TargetFileSetting>> TargetFileSettings
-		{
-			get { return GetSetting<List<TargetFileSetting>>(TargetFileSetting); }
-		}
-
 
 		#endregion
 
@@ -423,9 +416,7 @@ namespace Sdl.Community.NumberVerifier
                     return false;
                 case nameof(TargetOmitLeadingZero):
                     return false;
-				case nameof(TargetFileSettings):
-					return new List<TargetFileSetting>();
-				default:
+                default:
                     return base.GetDefaultValue(settingId);
             }
         }
