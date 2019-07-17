@@ -9,5 +9,6 @@
     <File>Newtonsoft.Json.dll</File>
     <File>ObjectListView.dll</File>
 	<File>NLog.dll</File>
+	<File>System.Reactive.dll</File>
   </Include>
 </PluginPackage>
