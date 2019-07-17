@@ -60,8 +60,8 @@ namespace IATETerminologyProvider.Service
 			var bodyModel = SetApiRequestBodyValues(source, target, text);
 			httpRequest.Content = new StringContent(JsonConvert.SerializeObject(bodyModel), Encoding.UTF8, "application/json");
 
-			var httpResponse = httpClient.SendAsync(httpRequest).Result;
-			var httpResponseString = httpResponse.Content.ReadAsStringAsync().Result;
+			var httpResponse = httpClient.SendAsync(httpRequest)?.Result;
+			var httpResponseString = httpResponse?.Content?.ReadAsStringAsync().Result;
 			var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseString);
 
 			var result = MapResponseValues(httpResponseString, domainsJsonResponse);
