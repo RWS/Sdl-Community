@@ -52,7 +52,7 @@ namespace Sdl.Community.InSource
 
 			_notificationGroup = new InSourceNotificationGroup(NotificationGroupId)
 		    {
-			    Title = "InSource projects Notifications"
+			    Title = "InSource Notifications"
 		    };
 	    }
 
@@ -150,13 +150,16 @@ namespace Sdl.Community.InSource
 				    {
 					    ProjectRequests.AddRange(GetNewDirectories(warchFolder, projectRequest));
 					}
-				    Persistence.SaveProjectRequestList(ProjectRequests);
-
-					foreach (var newProjectRequest in ProjectRequests)
+				    if (ProjectRequests?.Count>0)
 				    {
-					    var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
-					    CreateSudioNotification(newProjectRequest, newProjectPath);
-				    }
+						Persistence.SaveProjectRequestList(ProjectRequests);
+
+					    foreach (var newProjectRequest in ProjectRequests)
+					    {
+						    var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
+						    CreateSudioNotification(newProjectRequest, newProjectPath);
+					    }
+					}
 
 					//publish notification
 				    var groupEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
@@ -285,9 +288,10 @@ namespace Sdl.Community.InSource
             return projectRequest;
         }
 
-	    public FileBasedProject CreateProjectsFromNotifications(ProjectRequest projectFromNotifications,
-		    InSourceNotification notification)
+	    public FileBasedProject CreateProjectsFromNotifications(ProjectRequest projectFromNotifications, InSourceNotification notification)
 	    {
+			var waitWindow = new WaitWindow();
+			waitWindow.Show();
 		    ProjectCreator creator;
 		    FileBasedProject project = null;
 		    var worker = new BackgroundWorker
@@ -317,6 +321,7 @@ namespace Sdl.Community.InSource
 					    ClearNotification(notification);
 
 					    OnProjectRequestsChanged();
+						waitWindow.Close();
 					    MessageBox.Show($@"Project {projectFromNotifications.Name} was created");
 				    }
 			    }
