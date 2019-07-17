@@ -167,7 +167,8 @@ namespace Sdl.Community.InSource
 							    "Project request path",
 							    newProjectPath
 						    },
-						    IsActionVisible = true
+						    IsActionVisible = true,
+							AllowsUserToDismiss = true
 					    };
 
 					    Action action = () => CreateProjectFromNotification(notification);
@@ -177,7 +178,13 @@ namespace Sdl.Community.InSource
 						    CommandToolTip = "Create new project"
 					    };
 					    notification.Action = _createProjectCommand;
-					    _notificationGroup.Notifications.Add(notification);
+
+						//dismiss notification action
+					    Action clearAction = () => ClearNotification(notification);
+					    var clearNotificationCommand = new InSourceCommand(clearAction);
+					    notification.ClearNotificationAction = clearNotificationCommand;
+
+						_notificationGroup.Notifications.Add(notification);
 
 				    }
 				    var groupEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
@@ -200,24 +207,8 @@ namespace Sdl.Community.InSource
 			    if (notification != null)
 			    {
 				    var project = ProjectRequests.FirstOrDefault(n => n.NotificationId.Equals(notification.Id));
-				    var fileBasedProject = CreateProjectsFromNotifications(project);
-				    //remove the notificatio from list
-				    if (fileBasedProject != null)
-				    {
-					    _notificationGroup.Notifications.Remove(notification);
-				    }
 
-				    if (_notificationGroup.Notifications.Count > 0)
-				    {
-					    var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
-					    _eventAggregator.Publish(addNotificationEvent);
-				    }
-				    else
-				    {
-					    if (fileBasedProject == null) return;
-					    var removeNotificationEvent = new RemoveStudioGroupNotificationEvent(NotificationGroupId);
-					    _eventAggregator.Publish(removeNotificationEvent);
-				    }
+				    CreateProjectsFromNotifications(project,notification);
 			    }
 			}
 		    catch (Exception e)
@@ -225,6 +216,10 @@ namespace Sdl.Community.InSource
 				Log.Logger.Error($"CreateProjectFromNotification method: {e.Message}\n {e.StackTrace}");
 			}
 		}
+	    private void ClearNotification(InSourceNotification notification)
+	    {
+		    _eventAggregator.Publish(new RemoveStudioNotificationFromGroupEvent(NotificationGroupId, notification.Id));
+	    }
 
 		private List<string> GetWatchFolders(List<ProjectRequest> projectRequest)
         {
@@ -288,10 +283,11 @@ namespace Sdl.Community.InSource
             return projectRequest;
         }
 
-	    public FileBasedProject CreateProjectsFromNotifications(ProjectRequest projectFromNotifications)
+	    public FileBasedProject CreateProjectsFromNotifications(ProjectRequest projectFromNotifications,
+		    InSourceNotification notification)
 	    {
 		    ProjectCreator creator;
-		    FileBasedProject project=null;
+		    FileBasedProject project = null;
 		    var worker = new BackgroundWorker
 		    {
 			    WorkerReportsProgress = true
@@ -299,7 +295,7 @@ namespace Sdl.Community.InSource
 		    worker.DoWork += (sender, e) =>
 		    {
 			    creator = new ProjectCreator(projectFromNotifications, projectFromNotifications.ProjectTemplate);
-			   project = creator.Execute();
+			    project = creator.Execute();
 		    };
 
 		    worker.RunWorkerCompleted += (sender, e) =>
@@ -312,21 +308,22 @@ namespace Sdl.Community.InSource
 			    {
 				    if (project != null)
 				    {
-						InSource.Instance.RequestAccepted(projectFromNotifications);
+					    InSource.Instance.RequestAccepted(projectFromNotifications);
 					    //Remove the created project from project request
 					    //this will refresh the list from view part
 					    ProjectRequests.Remove(projectFromNotifications);
+					    ClearNotification(notification);
 
 					    OnProjectRequestsChanged();
-					    MessageBox.Show($"Project {projectFromNotifications.Name} was created");
+					    MessageBox.Show($@"Project {projectFromNotifications.Name} was created");
 				    }
 			    }
 		    };
 		    worker.RunWorkerAsync();
 		    return project;
-		}
+	    }
 
-		public void CreateProjects()
+	    public void CreateProjects()
 	    {
 		    try
 		    {
