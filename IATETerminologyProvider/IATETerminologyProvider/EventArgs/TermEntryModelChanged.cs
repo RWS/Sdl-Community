@@ -4,7 +4,7 @@ using Sdl.Core.Globalization;
 
 namespace IATETerminologyProvider.EventArgs
 {
-	public class TermEntriesChangedEventArgs: System.EventArgs
+	public class TermEntriesChangedEventArgs : System.EventArgs
 	{
 		public IList<EntryModel> EntryModels { get; set; }
 
