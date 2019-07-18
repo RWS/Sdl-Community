@@ -18,7 +18,8 @@ namespace IATETerminologyProvider
 		private IList<EntryModel> _entryModels;
 		private ProviderSettings _providerSettings;
 		private TermSearchService _searchService;
-		private EditorController _editorController;		
+		private EditorController _editorController;
+		private ProjectsController _projectsController;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -71,7 +72,8 @@ namespace IATETerminologyProvider
 				OnTermEntriesChanged(new TermEntriesChangedEventArgs
 				{
 					EntryModels = _entryModels,
-					SourceLanguage = new Language(source.Locale.Name)
+					SourceLanguage = new Language(source.Locale.Name),
+					TargetLanguage = new Language(target.Locale.Name)
 				});
 			}
 
@@ -127,29 +129,31 @@ namespace IATETerminologyProvider
 		public IList<IDefinitionLanguage> GetDefinitionLanguages()
 		{
 			var result = new List<IDefinitionLanguage>();
-			var currentProject = GetProjectController().CurrentProject;
-			var projTargetLanguage = currentProject.GetTargetLanguageFiles()[0].Language;
-			var projSourceLanguage = currentProject.GetSourceLanguageFiles()[0].Language;
+			var currentProject = _projectsController.CurrentProject;
+			var projectInfo = currentProject.GetProjectInfo();
 
 			var sourceLanguage = new DefinitionLanguage
 			{
 				IsBidirectional = true,
-				Locale = projSourceLanguage.CultureInfo,
-				Name = projSourceLanguage.DisplayName,
+				Locale = projectInfo.SourceLanguage.CultureInfo,
+				Name = projectInfo.SourceLanguage.DisplayName,
 				TargetOnly = false
 			};
-
 			result.Add(sourceLanguage);
 
-			var targetLanguage = new DefinitionLanguage
+			foreach (var language in projectInfo.TargetLanguages)
 			{
-				IsBidirectional = true,
-				Locale = projTargetLanguage.CultureInfo,
-				Name = projTargetLanguage.DisplayName,
-				TargetOnly = false
-			};
+				var targetLanguage = new DefinitionLanguage
+				{
+					IsBidirectional = true,
+					Locale = language.CultureInfo,
+					Name = language.DisplayName,
+					TargetOnly = false
+				};
 
-			result.Add(targetLanguage);
+				result.Add(targetLanguage);
+			}
+
 			return result;
 		}
 
@@ -213,7 +217,9 @@ namespace IATETerminologyProvider
 		{
 			if (_editorController == null)
 			{
+				_projectsController = GetProjectController();
 				_editorController = GetEditorController();
+
 				if (_editorController != null)
 				{
 					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
