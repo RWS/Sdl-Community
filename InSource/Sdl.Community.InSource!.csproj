@@ -130,6 +130,9 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -214,6 +217,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Tellme\InSourceCommunitySupportAction.cs" />
+    <Compile Include="Tellme\InSourceHelpAction.cs" />
+    <Compile Include="Tellme\InSourceStoreAction.cs" />
+    <Compile Include="Tellme\InSourceTellMeProvider.cs" />
     <Compile Include="TimerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -256,13 +263,15 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Resources\delete.ico" />
+    <EmbeddedResource Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\InSource_large.ico" />
-    <None Include="Resources\question.ico" />
+    <EmbeddedResource Include="Resources\Question.ico" />
     <Content Include="Resources\remove.ico" />
     <Content Include="Resources\CheckForProjects.ico" />
     <Content Include="Resources\CreateProjects.ico" />
     <Content Include="Resources\money_bill.ico" />
     <Content Include="Resources\opensourceimage.ico" />
+    <EmbeddedResource Include="Resources\TellMe1.ico" />
     <Content Include="Resources\Wikipedia.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +285,7 @@
     <None Include="packages.config" />
     <None Include="samples.snk" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
