@@ -39,17 +39,19 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClosedXML, Version=0.93.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ClosedXML.0.93.0\lib\net40\ClosedXML.dll</HintPath>
+    <Reference Include="ClosedXML, Version=0.93.0.0, Culture=neutral, PublicKeyToken=c874c2d6fbc05442, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\ClosedXML.dll</HintPath>
     </Reference>
-    <Reference Include="DocumentFormat.OpenXml, Version=2.8.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
-      <HintPath>..\packages\DocumentFormat.OpenXml.2.8.1\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
     </Reference>
     <Reference Include="FastMember.Signed, Version=1.3.0.0, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
-      <HintPath>..\packages\FastMember.Signed.1.3.0\lib\net45\FastMember.Signed.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\FastMember.Signed.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
@@ -153,12 +155,13 @@
     <Compile Include="TqaRibbonGroup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\ClosedXML.dll" />
+    <Content Include="Resources\FastMember.Signed.dll" />
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
     <None Include="app.config" />
     <None Include="Resources\ClosedXmlStudioFix.exe" />
-    <None Include="Resources\ClosedXML.dll" />
     <EmbeddedResource Include="HelpForm.resx">
       <DependentUpon>HelpForm.cs</DependentUpon>
     </EmbeddedResource>
