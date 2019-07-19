@@ -71,38 +71,44 @@ namespace Sdl.Community.DeepLMTProvider
 				SourceSegment = segment.Duplicate()
 			};
 
-			// if there are match in tm the provider will not search the segment
-			#region "Confirmation Level"
-			if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
+			try
 			{
-				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-				//later get these strings from resource file
-				results.Add(CreateSearchResult(segment, translation));
-				return results;
+				// if there are match in tm the provider will not search the segment
+				#region "Confirmation Level"
+				if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
+				{
+					translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
+					//later get these strings from resource file
+					results.Add(CreateSearchResult(segment, translation));
+					return results;
+				}
+				var newseg = segment.Duplicate();
+				if (newseg.HasTags)
+				{
+					var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
+					var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
+					translation = tagPlacer.GetTaggedSegment(translatedText);
+
+					results.Add(CreateSearchResult(newseg, translation));
+					return results;
+				}
+				else
+				{
+					var sourcetext = newseg.ToPlain();
+
+					var translatedText = LookupDeepl(sourcetext);
+					translation.Add(translatedText);
+
+					results.Add(CreateSearchResult(newseg, translation));
+					return results;
+				}
+				#endregion
 			}
-			var newseg = segment.Duplicate();
-			if (newseg.HasTags)
+			catch (Exception e)
 			{
-				var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
-				var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
-				translation = tagPlacer.GetTaggedSegment(translatedText);
-
-				results.Add(CreateSearchResult(newseg, translation));
-				return results;
+				
 			}
-			else
-			{
-
-				var sourcetext = newseg.ToPlain();
-
-				var translatedText = LookupDeepl(sourcetext);
-				translation.Add(translatedText);
-
-				results.Add(CreateSearchResult(newseg, translation));
-				return results;
-			}
-
-			#endregion
+			return results;
 		}
 
 		private string LookupDeepl(string sourcetext)
