@@ -145,4 +145,7 @@
   <data name="OpenFiles" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\OpenFiles.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="AddComment" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\AddComment.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
