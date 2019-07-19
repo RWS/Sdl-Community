@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -74,17 +75,15 @@ namespace Sdl.Community.DeepLMTProvider
 					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result.Content.ReadAsStringAsync().Result;
 					var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(response);
 
-					if (translatedObject != null)
+					if (translatedObject != null && translatedObject.Translations.Any())
 					{
 						translatedText = translatedObject.Translations[0].Text;
 						translatedText = DecodeWhenNeeded(translatedText);
 					}
 				}
 			}
-			catch (WebException e)
+			catch (Exception e)
 			{
-				var eReason = Helpers.ProcessWebException(e);
-				throw new Exception(eReason);
 			}
 
 			return translatedText;
