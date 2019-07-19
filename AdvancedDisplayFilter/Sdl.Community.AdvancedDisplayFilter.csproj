@@ -121,6 +121,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\AddCommentAction.cs" />
+    <Compile Include="Controls\AddCommentWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\AddCommentWindow.Designer.cs">
+      <DependentUpon>AddCommentWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DisplayFilterControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -178,6 +185,10 @@
   <ItemGroup>
     <Content Include="3rd party\Cyotek.Windows.Forms.ColorPicker.dll" />
     <Content Include="Images\filter.ico" />
+    <EmbeddedResource Include="Controls\AddCommentWindow.resx">
+      <DependentUpon>AddCommentWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AddComment.ico" />
     <EmbeddedResource Include="Resources\OpenFiles.ico" />
     <EmbeddedResource Include="Resources\Download.ico" />
     <EmbeddedResource Include="Resources\ForumIcon.ico" />
