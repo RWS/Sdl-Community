@@ -128,7 +128,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataConverter.cs" />
-    <Compile Include="HelpButton.cs" />
     <Compile Include="Model\Entry.cs" />
     <Compile Include="HelpForm.cs">
       <SubType>Form</SubType>
