@@ -13,6 +13,16 @@ namespace Sdl.Community.Qualitivity.Tracking
 {
 	public class TrackedDocumentEvents
 	{
+		public static long GetTargetCursorPosition()
+		{
+			if (Tracked.StudioWindow.InvokeRequired)
+			{
+				return (long)Tracked.StudioWindow.Invoke(new Func<long>(GetTargetCursorPosition));
+			}
+			
+			return Tracked.ActiveDocument.Selection.Target.From.CursorPosition;
+		}
+
 		public static void TranslationOriginChanged(object sender, EventArgs e)
 		{
 			if (Tracked.ActiveDocument == null)
@@ -139,7 +149,8 @@ namespace Sdl.Community.Qualitivity.Tracking
 			//get the latest version of the target content
 			TrackedController.ContentProcessor.ProcessSegment(e.Segments.FirstOrDefault(), true, new List<string>());
 			var trackingSegmentContentTrg = string.Empty;
-			var targetSectionsCurrent = TrackedController.GetRecordContentSections(TrackedController.ContentProcessor.SegmentSections
+			var targetSectionsCurrent = TrackedController.GetRecordContentSections(
+				TrackedController.ContentProcessor.SegmentSections
 				, ContentSection.LanguageType.Target
 				, ref trackingSegmentContentTrg);
 
@@ -153,8 +164,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 				contentSection.Content = string.Empty;
 				contentSection.RevisionMarker = null;
-			}
-
+			}	
 
 			var comparisonUnits = ComparisonUnitDifferences(trackedDocument, targetSectionsCurrent, keyStroke);
 
@@ -162,7 +172,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 			{
 				// add the key stroke data  |
 				AddKeyStrokeData(keyStroke, comparisonUnits, trackedDocument);
-
 			}
 			catch (Exception ex)
 			{
@@ -182,38 +191,49 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 		}
 
-		private static void AddKeyStrokeData(KeyStroke keyStroke, List<ComparisonUnit> comparisonUnits, TrackedDocuments trackedDocument)
+		private static void AddKeyStrokeData(KeyStroke keyStroke, IEnumerable<ComparisonUnit> comparisonUnits, TrackedDocuments trackedDocuments)
 		{
 			var textDelete = string.Empty;
 			keyStroke.Text = string.Empty;
+
+			// identify the starting position of content, added, removed or replaced.				
+			keyStroke.Position = Convert.ToInt32(GetTargetCursorPosition());
+			keyStroke.X = Cursor.Position.X;
+			keyStroke.Y = Cursor.Position.Y;
 
 			foreach (var comparisonUnit in comparisonUnits)
 			{
 				switch (comparisonUnit.Type)
 				{
 					case ComparisonUnit.ComparisonType.New:
-						foreach (var trgu in comparisonUnit.Section)
 						{
-							keyStroke.Text += trgu.Content;
+							foreach (var section in comparisonUnit.Section)
+							{						
+								keyStroke.Text += section.Content;
+							}
+							break;
 						}
-						break;
 					case ComparisonUnit.ComparisonType.Removed:
 						{
-							textDelete = comparisonUnit.Section.Aggregate(textDelete, (current, trgu) => current + trgu.Content);
+							foreach (var section in comparisonUnit.Section)
+							{					
+								textDelete = textDelete + section.Content;
+							}
+							break;
 						}
-						break;
 				}
 			}
-
-			// logical deduction
+			
 			// needs to be revised!
 			// 1. exclude translations from providers
-			// 2. exclude suggestions from termbase? no api handler here... TODO
-			// 3. if content changed is greater than 1 char in length then check the key char
-			//  - 3.a. if the char == tab or return, then we can assume that this was derived from auto-suggest; however
-			//         this does not take into account when the user has selected the auto-suggestion via mouse selection
+			// 2. exclude suggestions from termbase? no api handler here...
+			// 3. if content that has changed is greater than 1 char in length, then evaluate
+			//  - 3.a. if the char == tab or return, then we assume that this was derived from auto-suggest; however
+			//         this does not take into account when the user has selected the auto-suggestion via mouse etc...
 			if (string.Compare(keyStroke.Key, @"[Tab]", StringComparison.OrdinalIgnoreCase) == 0 && keyStroke.Text.Length > 1)
+			{
 				keyStroke.OriginType = @"auto-suggest";
+			}
 
 			//if the user hit the back key then attempt to get the selection from the comparison if it is not already present
 			if (string.Compare(keyStroke.Key, @"[Back]", StringComparison.OrdinalIgnoreCase) == 0
@@ -226,20 +246,19 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 
 
-			if (keyStroke.Text == string.Empty && keyStroke.Selection == string.Empty)
+			if (string.IsNullOrEmpty(keyStroke.Text) && string.IsNullOrEmpty(keyStroke.Selection))
 			{
 				return;
 			}
 
 			//add the key stroke object to the list
-			trackedDocument.ActiveSegment.CurrentTranslationKeyStokeObjectId = keyStroke.Id;
-			trackedDocument.ActiveSegment.CurrentTranslationKeyStrokeObjectCheck = true;
-			trackedDocument.ActiveSegment.CurrentKeyStrokes.Add(keyStroke);
-
+			trackedDocuments.ActiveSegment.CurrentTranslationKeyStokeObjectId = keyStroke.Id;
+			trackedDocuments.ActiveSegment.CurrentTranslationKeyStrokeObjectCheck = true;
+			trackedDocuments.ActiveSegment.CurrentKeyStrokes.Add(keyStroke);
 		}
 
-		private static List<ComparisonUnit> ComparisonUnitDifferences(TrackedDocuments trackedDocument, List<ContentSection> targetSectionsCurrent,
-			KeyStroke keyStroke)
+
+		private static IEnumerable<ComparisonUnit> ComparisonUnitDifferences(TrackedDocuments trackedDocument, List<ContentSection> targetSectionsCurrent, KeyStroke keyStroke)
 		{
 			//compare at a character level to understand what was added or removed (no transposition)
 			var textComparer = new TextComparer { Type = TextComparer.ComparisonType.Characters };
@@ -280,27 +299,27 @@ namespace Sdl.Community.Qualitivity.Tracking
 						continue;
 					}
 
-					var indexStartingPointA = indexCharDiffCounter - contentSection.Content.Length;
-					var indexStartingPointB = indexStartingPointA;
-					if (indexCharDiffStart > indexStartingPointA)
+					var indexA = indexCharDiffCounter - contentSection.Content.Length;
+					var indexB = indexA;
+					if (indexCharDiffStart > indexA)
 					{
-						indexStartingPointB = indexCharDiffStart - indexStartingPointA;
+						indexB = indexCharDiffStart - indexA;
 					}
 
-					var indexStartingPointBBefore = contentSection.Content.Substring(0, indexStartingPointB);
-					var indexStartingPointBAfter = contentSection.Content.Substring(indexStartingPointB);
+					var textSeed = contentSection.Content.Substring(0, indexB);
+					var textSelection = contentSection.Content.Substring(indexB);
 
-					if (indexStartingPointBAfter.IndexOf(trackedDocument.ActiveSegment.CurrentTargetSelection, StringComparison.Ordinal) <= -1)
+					if (textSelection.IndexOf(trackedDocument.ActiveSegment.CurrentTargetSelection, StringComparison.Ordinal) <= -1)
 					{
 						continue;
 					}
 
 					//remove the selection
-					var indexBefore = indexStartingPointBAfter.IndexOf(keyStroke.Selection, StringComparison.Ordinal);
-					var strBefore = indexStartingPointBAfter.Substring(0, indexBefore);
-					var strAfter = indexStartingPointBAfter.Substring(indexBefore + trackedDocument.ActiveSegment.CurrentTargetSelection.Length);
+					var index = textSelection.IndexOf(keyStroke.Selection, StringComparison.Ordinal);
+					var textBefore = textSelection.Substring(0, index);
+					var textAfter = textSelection.Substring(index + trackedDocument.ActiveSegment.CurrentTargetSelection.Length);
 
-					contentSection.Content = indexStartingPointBBefore + strBefore + strAfter;
+					contentSection.Content = textSeed + textBefore + textAfter;
 
 					//redo the comparison
 					comparisonUnits = textComparer.GetComparisonTextUnits(trackedDocument.ActiveSegment.CurrentTargetSections, targetSectionsCurrent, false);
@@ -334,7 +353,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 
 			var dr = MessageBox.Show(PluginResources.The_activity_tracker_is_not_running_ + "\r\n\r\n"
-			                         + PluginResources.Note_The_current_change_will_be_ignored, Application.ProductName, MessageBoxButtons.YesNo);
+									 + PluginResources.Note_The_current_change_will_be_ignored, Application.ProductName, MessageBoxButtons.YesNo);
 
 			if (dr == DialogResult.Yes)
 			{
@@ -458,8 +477,8 @@ namespace Sdl.Community.Qualitivity.Tracking
 								ks.Text = Helper.GetCompiledSegmentText(trackedDocuments.ActiveSegment.CurrentTargetSections, true);
 							}
 
-							ks.OriginSystem = Tracked.ActiveDocument.ActiveSegmentPair.Target.Properties.TranslationOrigin.OriginSystem != null 
-								? Tracked.ActiveDocument.ActiveSegmentPair.Target.Properties.TranslationOrigin.OriginSystem 
+							ks.OriginSystem = Tracked.ActiveDocument.ActiveSegmentPair.Target.Properties.TranslationOrigin.OriginSystem != null
+								? Tracked.ActiveDocument.ActiveSegmentPair.Target.Properties.TranslationOrigin.OriginSystem
 								: string.Empty;
 						}
 					}
@@ -472,7 +491,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 			{
 				MessageBox.Show(ex.Message);
 			}
-
 		}
 	}
 }
