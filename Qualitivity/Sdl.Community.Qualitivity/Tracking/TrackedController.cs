@@ -30,25 +30,13 @@ namespace Sdl.Community.Qualitivity.Tracking
 {
 	public class TrackedController
 	{
-		private static QualitivityViewController _controller { get; set; }
-		public static QualitivityViewController Controller
-		{
-			get
-			{
-				return _controller;
-			}
-			set
-			{
 
-				_controller = value;
-			}
-		}
 
 		private static ContentGenerator _contentProcessor;
-		internal static ContentGenerator ContentProcessor
-		{
-			get { return _contentProcessor ?? (_contentProcessor = new ContentGenerator()); }
-		}
+
+		public static QualitivityViewController Controller { get; set; }
+
+		public static ContentGenerator ContentProcessor => _contentProcessor ?? (_contentProcessor = new ContentGenerator());
 
 		public static void ProgressChanged(int maximum, int current, string message)
 		{
@@ -69,25 +57,13 @@ namespace Sdl.Community.Qualitivity.Tracking
 						ProgressWindow.ProgressDialog.DocumentsMaximum)
 			};
 
-
-
-
 			progress.TotalProgressMaximum = ProgressWindow.ProgressDialog.DocumentsMaximum * progress.CurrentProgressMaximum;
 			progress.TotalProgressValue = (ProgressWindow.ProgressDialog.DocumentCurrentIndex - 1) * progress.CurrentProgressMaximum + progress.CurrentProgressValue;
 			progress.TotalProgressPercentage = Convert.ToString(Math.Round(Convert.ToDouble(progress.TotalProgressValue) / Convert.ToDouble(progress.TotalProgressMaximum) * 100, 0), CultureInfo.InvariantCulture) + "%";
 
-
-
 			ProgressWindow.ProgressDialogWorker.ReportProgress(current, progress);
-
-
-
 		}
 
-		/// <summary>
-		/// add new document to the list of tracked entries
-		/// </summary>
-		/// <param name="doc"></param>
 		public static void TrackNewDocumentEntry(Document doc)
 		{
 			var projectFile = doc.Files.FirstOrDefault();
@@ -124,6 +100,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			#endregion
 
 			#region  |  Tracked Document Documents  |
+
 			foreach (var file in doc.Files)
 			{
 				var trackedDocument = new TrackedDocument
@@ -529,10 +506,10 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 			var sourceLanguage = doc.ActiveFileProperties.FileConversionProperties.SourceLanguage.CultureInfo;
 			var targetLanguage = doc.ActiveFileProperties.FileConversionProperties.TargetLanguage.CultureInfo;
-			
+
 			var segmentPairProcessor = new SegmentPairProcessor(
 				new Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage), new Toolkit.LanguagePlatform.Models.PathInfo());
-			
+
 			var parser = new ContentGenerator();
 
 			foreach (var segPair in doc.SegmentPairs)
@@ -562,7 +539,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 				{
 					// catch all
 				}
-								
+
 				switch (match.ToUpper())
 				{
 					case "PM":
@@ -1110,6 +1087,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 			return contentSections;
 		}
+
 		public static DocumentActivity GetDocumentActivity(Activity activity, Project project, TrackedDocuments trackedDocuments)
 		{
 			var documentActivity = new DocumentActivity
@@ -1259,7 +1237,9 @@ namespace Sdl.Community.Qualitivity.Tracking
 				trackedDocuments.ActiveSegment.CurrentSegmentTimer.Stop();
 
 				var targetCommentsChanged = false;
+
 				#region  |  targetCommentsChanged  |
+
 				ContentProcessor.ProcessSegment(trackedDocuments.ActiveSegment.CurrentSegmentSelected.Target, true, new List<string>());
 
 				var trackingTargetComments = new List<Comment>();
@@ -1370,7 +1350,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 						, ref trackingSegmentContentSrc);
 
 					try
-					{						
+					{
 						var results = trackedDocuments.ActiveDocument.SegmentPairProcessor.GetSegmentPairInfo(trackedDocuments.ActiveSegment.CurrentSegmentSelected);
 						if (results != null)
 						{
@@ -1383,7 +1363,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 					catch
 					{
 						// catch all
-					}				
+					}
 
 					#region  |  translationOrigins  |
 
@@ -1439,14 +1419,17 @@ namespace Sdl.Community.Qualitivity.Tracking
 					if (Convert.ToBoolean(Tracked.Settings.GetTrackingProperty("recordKeyStokes").Value))
 					{
 						record.TargetKeyStrokes = new List<KeyStroke>();
+
 						foreach (var ks in trackedDocuments.ActiveSegment.CurrentKeyStrokes)
+						{
 							record.TargetKeyStrokes.Add((KeyStroke)ks.Clone());
+						}
 
 						#region  |  sanity check against the auto-translation cycle  |
-						//might not have been picked up by the key stroke sequence
-						//this check ensures that the system and origin information will be correctly 
-						//allocated to the last key stroke entry
 
+						// might not have been picked up by the key stroke sequence
+						// this check ensures that the system and origin information will be correctly 
+						// allocated to the last key stroke entry
 						if (string.Compare(record.TranslationOrigins.Updated.OriginType, "interactive", StringComparison.OrdinalIgnoreCase) != 0)
 						{
 							if (record.TargetKeyStrokes.Count > 0)
@@ -1457,7 +1440,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 									if (string.Compare(trackingSegmentContentTrg, ks.Text, StringComparison.OrdinalIgnoreCase) == 0)
 									{
 										ks.OriginType = record.TranslationOrigins.Updated.OriginType;
-										ks.OriginSystem = record.TranslationOrigins.Updated.OriginSystem != null ? record.TranslationOrigins.Updated.OriginSystem : string.Empty;
+										ks.OriginSystem = record.TranslationOrigins.Updated.OriginSystem ?? string.Empty;
 										ks.Match = ((int)trackedDocuments.ActiveSegment.CurrentISegmentPairProperties.TranslationOrigin.MatchPercent).ToString();
 									}
 									else
@@ -1468,13 +1451,13 @@ namespace Sdl.Community.Qualitivity.Tracking
 											Created = trackedDocuments.ActiveSegment.CurrentSegmentClosed,
 											Text = trackingSegmentContentTrg,
 											OriginType = record.TranslationOrigins.Updated.OriginType,
-											OriginSystem =
-											record.TranslationOrigins.Updated.OriginSystem ?? string.Empty,
-											Match =
-											((int)
-												trackedDocuments.ActiveSegment.CurrentISegmentPairProperties
-													.TranslationOrigin.MatchPercent).ToString()
-										};
+											OriginSystem = record.TranslationOrigins.Updated.OriginSystem ?? string.Empty,
+											Match = ((int)trackedDocuments.ActiveSegment.CurrentISegmentPairProperties.TranslationOrigin.MatchPercent).ToString(),
+											Position = Convert.ToInt32(TrackedDocumentEvents.GetTargetCursorPosition()),
+											X = Cursor.Position.X,
+											Y = Cursor.Position.Y
+									};
+
 										record.TargetKeyStrokes.Add(ks);
 									}
 								}
@@ -1486,20 +1469,17 @@ namespace Sdl.Community.Qualitivity.Tracking
 									Created = trackedDocuments.ActiveSegment.CurrentSegmentClosed,
 									Text = trackingSegmentContentTrg,
 									OriginType = record.TranslationOrigins.Updated.OriginType,
-									OriginSystem =
-									record.TranslationOrigins.Updated.OriginSystem != null
-										? record.TranslationOrigins.Updated.OriginSystem
-										: string.Empty,
-									Match =
-									((int)
-										trackedDocuments.ActiveSegment.CurrentISegmentPairProperties.TranslationOrigin
-											.MatchPercent).ToString()
+									OriginSystem = record.TranslationOrigins.Updated.OriginSystem ?? string.Empty,
+									Match = ((int)trackedDocuments.ActiveSegment.CurrentISegmentPairProperties.TranslationOrigin.MatchPercent).ToString(),
+									Position = Convert.ToInt32(TrackedDocumentEvents.GetTargetCursorPosition()),
+									X = Cursor.Position.X,
+									Y = Cursor.Position.Y
 								};
 
-								;
 								record.TargetKeyStrokes.Add(keyStroke);
 							}
 						}
+
 						#endregion
 
 						trackedDocuments.ActiveSegment.CurrentKeyStrokes = new List<KeyStroke>();
@@ -1555,6 +1535,200 @@ namespace Sdl.Community.Qualitivity.Tracking
 				Tracked.DocumentSegmentPairs.Add(uniqueId, segmentPair);
 			}
 		}
+
+		public static void InitializeDocumentTracking(Document doc)
+		{
+			#region  |  initialize document cache item  |
+
+			var projectFile = doc?.Files.FirstOrDefault();
+			if (projectFile == null)
+			{
+				return;
+			}
+
+			var trackedDocuments = Tracked.DictCacheDocumentItems[projectFile.Id.ToString()];
+
+			//get active document
+			trackedDocuments.ActiveDocument = trackedDocuments.Documents.Find(a => a.Id == doc.ActiveFile.Id.ToString());
+
+
+			trackedDocuments.ActiveSegment.CurrentSegmentContentHasChanged = false;
+			trackedDocuments.ActiveSegment.CurrentSegmentSelected = null;
+
+			#endregion
+
+			#region  |  add handlers  |
+
+			doc.SegmentsConfirmationLevelChanged -= TrackedDocumentEvents.ConfirmationLevelChanged;
+			doc.SegmentsTranslationOriginChanged -= TrackedDocumentEvents.TranslationOriginChanged;
+			doc.ActiveSegmentChanged -= TrackedDocumentEvents.ActiveSegmentChanged;
+			doc.ContentChanged -= TrackedDocumentEvents.ContentChanged;
+			doc.Selection.Changed -= TrackedDocumentEvents.SelectionChanged;
+			doc.Selection.Source.Changed -= TrackedDocumentEvents.SourceChanged;
+			doc.Selection.Target.Changed -= TrackedDocumentEvents.TargetChanged;
+
+			doc.SegmentsConfirmationLevelChanged += TrackedDocumentEvents.ConfirmationLevelChanged;
+			doc.SegmentsTranslationOriginChanged += TrackedDocumentEvents.TranslationOriginChanged;
+			doc.ActiveSegmentChanged += TrackedDocumentEvents.ActiveSegmentChanged;
+			doc.ContentChanged += TrackedDocumentEvents.ContentChanged;
+			doc.Selection.Changed += TrackedDocumentEvents.SelectionChanged;
+			doc.Selection.Source.Changed += TrackedDocumentEvents.SourceChanged;
+			doc.Selection.Target.Changed += TrackedDocumentEvents.TargetChanged;
+
+			#endregion
+			try
+			{
+				TrackSegmentPairs(doc);
+
+				if ((Tracked.TrackingState == Tracked.TimerState.Started || Tracked.TrackingState == Tracked.TimerState.Paused)
+					&& trackedDocuments.ActiveDocument.Id != string.Empty)
+				{
+					InitializeActiveSegment(trackedDocuments);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+		}
+
+		public static List<Activity> DuplicateProjectActivity_DoWork(object sender, DoWorkEventArgs e)
+		{
+
+			var projectActivities = DuplicateProjectActivity_DoWork(e.Argument as List<Activity>);
+			e.Result = projectActivities;
+
+			return projectActivities;
+		}
+
+		public static List<DocumentActivity> CreateDocumentActivity_DoWork(object sender, DoWorkEventArgs e)
+		{
+			var documentActivities = CreateDocumentActivity_DoWork(e.Argument as List<DocumentActivity>);
+			e.Result = documentActivities;
+
+			return documentActivities;
+		}
+
+		public static List<DocumentActivity> UpdateDocumentActivity_DoWork(object sender, DoWorkEventArgs e)
+		{
+			var documentActivities = UpdateDocumentActivity_DoWork(e.Argument as List<DocumentActivity>);
+			e.Result = documentActivities;
+
+			return documentActivities;
+		}
+
+		private static List<Activity> DuplicateProjectActivity_DoWork(List<Activity> projectActivities)
+		{
+			var query = new Query();
+			var activitiesCloned = new List<Activity>();
+
+			try
+			{
+				query.ProgressChanged += ProgressChanged;
+
+				var totalDocumentActivities = projectActivities.Sum(activity => activity.Activities.Count);
+
+				ProgressWindow.ProgressDialog.DocumentCurrentIndex = 0;
+				ProgressWindow.ProgressDialog.DocumentsMaximum = totalDocumentActivities;
+				ProgressWindow.ProgressDialog.DocumentProgressLabelStringFormat = PluginResources.Updating_0_of_1_documents;
+				ProgressWindow.ProgressDialog.DialogProcessingMessage = PluginResources.Create_New_Document_Activity_Message;
+
+				foreach (var activity in projectActivities)
+				{
+					var activityClone = (Activity)activity.Clone();
+					activityClone.Id = -1;
+					activityClone.Name = activityClone.Name + "_copy";
+
+					activityClone.Id = query.CreateActivity(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath, activityClone);
+					activitiesCloned.Add(activityClone);
+
+					var documentActivities = query.GetDocumentActivities(
+						Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath + "_" + activity.ProjectId.ToString().PadLeft(6, '0')
+						, Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath
+						, activity.Id, null);
+
+					foreach (var documentActivity in documentActivities)
+					{
+						if (!(documentActivity.Clone() is DocumentActivity documentActivityClone))
+						{
+							continue;
+						}
+
+						documentActivityClone.ProjectActivityId = activityClone.Id;
+
+						ProgressWindow.ProgressDialog.DocumentCurrentIndex++;
+						documentActivity.Id = query.CreateDocumentActivity(
+							Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath + "_" + documentActivity.ProjectId.ToString().PadLeft(6, '0')
+							, documentActivityClone);
+					}
+				}
+			}
+			finally
+			{
+				query.ProgressChanged -= ProgressChanged;
+			}
+
+			return activitiesCloned;
+		}
+
+		private static List<DocumentActivity> CreateDocumentActivity_DoWork(List<DocumentActivity> documentActivities)
+		{
+			var query = new Query();
+
+			try
+			{
+				query.ProgressChanged += ProgressChanged;
+
+				ProgressWindow.ProgressDialog.DocumentCurrentIndex = 0;
+				ProgressWindow.ProgressDialog.DocumentsMaximum = documentActivities.Count;
+				ProgressWindow.ProgressDialog.DocumentProgressLabelStringFormat = PluginResources.Updating_0_of_1_documents;
+				ProgressWindow.ProgressDialog.DialogProcessingMessage = PluginResources.Create_New_Document_Activity_Message;
+
+				foreach (var documentActivity in documentActivities)
+				{
+					ProgressWindow.ProgressDialog.DocumentCurrentIndex++;
+					documentActivity.Id = query.CreateDocumentActivity(
+						Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath + "_" + documentActivity.ProjectId.ToString().PadLeft(6, '0')
+						, documentActivity);
+				}
+			}
+			finally
+			{
+				query.ProgressChanged -= ProgressChanged;
+			}
+
+			return documentActivities;
+		}
+
+		private static List<DocumentActivity> UpdateDocumentActivity_DoWork(List<DocumentActivity> documentActivities)
+		{
+			var query = new Query();
+
+			try
+			{
+				query.ProgressChanged += ProgressChanged;
+
+				ProgressWindow.ProgressDialog.DocumentCurrentIndex = 0;
+				ProgressWindow.ProgressDialog.DocumentsMaximum = documentActivities.Count;
+				ProgressWindow.ProgressDialog.DocumentProgressLabelStringFormat = PluginResources.Updating_0_of_1_documents;
+				ProgressWindow.ProgressDialog.DialogProcessingMessage = PluginResources.Update_Document_Activity_Message;
+
+				foreach (var documentActivity in documentActivities)
+				{
+					ProgressWindow.ProgressDialog.DocumentCurrentIndex++;
+					query.UpdateDocumentActivity(
+						Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath + "_" + documentActivity.ProjectId.ToString().PadLeft(6, '0')
+						, documentActivity);
+				}
+			}
+			finally
+			{
+				query.ProgressChanged -= ProgressChanged;
+			}
+
+			return documentActivities;
+		}
+
 		private static void TrackSegmentPair(string currentSegmentUniqueId)
 		{
 			if (Tracked.DocumentSegmentPairs.ContainsKey(currentSegmentUniqueId))
@@ -1608,195 +1782,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 			segmentPair.Origin.TextContextMatchLevel = segPair.Properties.TranslationOrigin.TextContextMatchLevel.ToString();
 
 			return segmentPair;
-		}
-		public static void InitializeDocumentTracking(Document doc)
-		{
-			#region  |  initialize document cache item  |
-
-			var projectFile = doc?.Files.FirstOrDefault();
-			if (projectFile == null)
-			{
-				return;
-			}
-
-			var trackedDocuments = Tracked.DictCacheDocumentItems[projectFile.Id.ToString()];
-
-			//get active document
-			trackedDocuments.ActiveDocument = trackedDocuments.Documents.Find(a => a.Id == doc.ActiveFile.Id.ToString());
-
-
-			trackedDocuments.ActiveSegment.CurrentSegmentContentHasChanged = false;
-			trackedDocuments.ActiveSegment.CurrentSegmentSelected = null;
-
-			#endregion
-
-			#region  |  add handlers  |
-
-			doc.SegmentsConfirmationLevelChanged -= TrackedDocumentEvents.ConfirmationLevelChanged;
-			doc.SegmentsTranslationOriginChanged -= TrackedDocumentEvents.TranslationOriginChanged;
-			doc.ActiveSegmentChanged -= TrackedDocumentEvents.ActiveSegmentChanged;
-			doc.ContentChanged -= TrackedDocumentEvents.ContentChanged;
-			doc.Selection.Changed -= TrackedDocumentEvents.SelectionChanged;
-			doc.Selection.Source.Changed -= TrackedDocumentEvents.SourceChanged;
-			doc.Selection.Target.Changed -= TrackedDocumentEvents.TargetChanged;
-
-			doc.SegmentsConfirmationLevelChanged += TrackedDocumentEvents.ConfirmationLevelChanged;
-			doc.SegmentsTranslationOriginChanged += TrackedDocumentEvents.TranslationOriginChanged;
-			doc.ActiveSegmentChanged += TrackedDocumentEvents.ActiveSegmentChanged;
-			doc.ContentChanged += TrackedDocumentEvents.ContentChanged;
-			doc.Selection.Changed += TrackedDocumentEvents.SelectionChanged;
-			doc.Selection.Source.Changed += TrackedDocumentEvents.SourceChanged;
-			doc.Selection.Target.Changed += TrackedDocumentEvents.TargetChanged;
-
-			#endregion
-			try
-			{
-
-				TrackSegmentPairs(doc);
-
-				if ((Tracked.TrackingState == Tracked.TimerState.Started || Tracked.TrackingState == Tracked.TimerState.Paused)
-					&& trackedDocuments.ActiveDocument.Id != string.Empty)
-				{
-					InitializeActiveSegment(trackedDocuments);
-				}
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
-		}
-
-		public static List<Activity> DuplicateProjectActivity_DoWork(object sender, DoWorkEventArgs e)
-		{
-
-			var projectActivities = DuplicateProjectActivity_DoWork(e.Argument as List<Activity>);
-			e.Result = projectActivities;
-			return projectActivities;
-
-		}
-		private static List<Activity> DuplicateProjectActivity_DoWork(List<Activity> projectActivities)
-		{
-			var query = new Query();
-
-			var activitiesCloned = new List<Activity>();
-
-			try
-			{
-				query.ProgressChanged += ProgressChanged;
-
-				var totalDocumentActivities = projectActivities.Sum(activity => activity.Activities.Count);
-
-				ProgressWindow.ProgressDialog.DocumentCurrentIndex = 0;
-				ProgressWindow.ProgressDialog.DocumentsMaximum = totalDocumentActivities;
-				ProgressWindow.ProgressDialog.DocumentProgressLabelStringFormat = PluginResources.Updating_0_of_1_documents;
-				ProgressWindow.ProgressDialog.DialogProcessingMessage = PluginResources.Create_New_Document_Activity_Message;
-
-				foreach (var activity in projectActivities)
-				{
-					var activityClone = (Activity)activity.Clone();
-					activityClone.Id = -1;
-					activityClone.Name = activityClone.Name + "_copy";
-
-					activityClone.Id = query.CreateActivity(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath, activityClone);
-					activitiesCloned.Add(activityClone);
-
-					var documentActivities = query.GetDocumentActivities(
-						Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath + "_" + activity.ProjectId.ToString().PadLeft(6, '0')
-						, Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath
-						, activity.Id, null);
-
-					foreach (var documentActivity in documentActivities)
-					{
-						var documentActivityClone = documentActivity.Clone() as DocumentActivity;
-						if (documentActivityClone == null) continue;
-						documentActivityClone.ProjectActivityId = activityClone.Id;
-
-						ProgressWindow.ProgressDialog.DocumentCurrentIndex++;
-						documentActivity.Id = query.CreateDocumentActivity(
-							Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath + "_" + documentActivity.ProjectId.ToString().PadLeft(6, '0')
-							, documentActivityClone);
-					}
-				}
-			}
-			finally
-			{
-				query.ProgressChanged -= ProgressChanged;
-			}
-
-			return activitiesCloned;
-		}
-
-		public static List<DocumentActivity> CreateDocumentActivity_DoWork(object sender, DoWorkEventArgs e)
-		{
-			var documentActivities = CreateDocumentActivity_DoWork(e.Argument as List<DocumentActivity>);
-			e.Result = documentActivities;
-			return documentActivities;
-
-		}
-		private static List<DocumentActivity> CreateDocumentActivity_DoWork(List<DocumentActivity> documentActivities)
-		{
-			var query = new Query();
-
-			try
-			{
-				query.ProgressChanged += ProgressChanged;
-
-				ProgressWindow.ProgressDialog.DocumentCurrentIndex = 0;
-				ProgressWindow.ProgressDialog.DocumentsMaximum = documentActivities.Count;
-				ProgressWindow.ProgressDialog.DocumentProgressLabelStringFormat = PluginResources.Updating_0_of_1_documents;
-				ProgressWindow.ProgressDialog.DialogProcessingMessage = PluginResources.Create_New_Document_Activity_Message;
-
-				foreach (var documentActivity in documentActivities)
-				{
-					ProgressWindow.ProgressDialog.DocumentCurrentIndex++;
-					documentActivity.Id = query.CreateDocumentActivity(
-						Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath + "_" + documentActivity.ProjectId.ToString().PadLeft(6, '0')
-						, documentActivity);
-				}
-			}
-			finally
-			{
-				query.ProgressChanged -= ProgressChanged;
-			}
-
-			return documentActivities;
-		}
-
-		public static List<DocumentActivity> UpdateDocumentActivity_DoWork(object sender, DoWorkEventArgs e)
-		{
-
-			var documentActivities = UpdateDocumentActivity_DoWork(e.Argument as List<DocumentActivity>);
-			e.Result = documentActivities;
-			return documentActivities;
-
-		}
-		private static List<DocumentActivity> UpdateDocumentActivity_DoWork(List<DocumentActivity> documentActivities)
-		{
-			var query = new Query();
-
-			try
-			{
-				query.ProgressChanged += ProgressChanged;
-
-				ProgressWindow.ProgressDialog.DocumentCurrentIndex = 0;
-				ProgressWindow.ProgressDialog.DocumentsMaximum = documentActivities.Count;
-				ProgressWindow.ProgressDialog.DocumentProgressLabelStringFormat = PluginResources.Updating_0_of_1_documents;
-				ProgressWindow.ProgressDialog.DialogProcessingMessage = PluginResources.Update_Document_Activity_Message;
-
-				foreach (var documentActivity in documentActivities)
-				{
-					ProgressWindow.ProgressDialog.DocumentCurrentIndex++;
-					query.UpdateDocumentActivity(
-						Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath + "_" + documentActivity.ProjectId.ToString().PadLeft(6, '0')
-						, documentActivity);
-				}
-			}
-			finally
-			{
-				query.ProgressChanged -= ProgressChanged;
-			}
-
-			return documentActivities;
 		}
 	}
 }
