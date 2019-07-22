@@ -19,8 +19,8 @@ namespace Sdl.Community.Qualitivity.Tracking
 			{
 				return (long)Tracked.StudioWindow.Invoke(new Func<long>(GetTargetCursorPosition));
 			}
-			
-			return Tracked.ActiveDocument.Selection.Target.From.CursorPosition;
+
+			return Tracked.ActiveDocument.Selection.Target.From != null ? Tracked.ActiveDocument.Selection.Target.From.CursorPosition : 0;
 		}
 
 		public static void TranslationOriginChanged(object sender, EventArgs e)
@@ -164,7 +164,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 				contentSection.Content = string.Empty;
 				contentSection.RevisionMarker = null;
-			}	
+			}
 
 			var comparisonUnits = ComparisonUnitDifferences(trackedDocument, targetSectionsCurrent, keyStroke);
 
@@ -191,39 +191,67 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 		}
 
-		private static void AddKeyStrokeData(KeyStroke keyStroke, IEnumerable<ComparisonUnit> comparisonUnits, TrackedDocuments trackedDocuments)
+		private static string GetTypedText(IEnumerable<ComparisonUnit> comparisonUnits)
 		{
-			var textDelete = string.Empty;
-			keyStroke.Text = string.Empty;
+			var result = string.Empty;
+			foreach (var comparisonUnit in comparisonUnits)
+			{
+				if (comparisonUnit.Type == ComparisonUnit.ComparisonType.New)
+				{
+					foreach (var section in comparisonUnit.Section)
+					{
+						result += section.Content;
+					}
+				}
+			}
 
-			// identify the starting position of content, added, removed or replaced.				
-			keyStroke.Position = Convert.ToInt32(GetTargetCursorPosition());
-			keyStroke.X = Cursor.Position.X;
-			keyStroke.Y = Cursor.Position.Y;
+			return result;
+		}
 
+		private static string GetSelectedText(IEnumerable<ComparisonUnit> comparisonUnits)
+		{
+			var text = string.Empty;
+			var tempIdentical = string.Empty;
 			foreach (var comparisonUnit in comparisonUnits)
 			{
 				switch (comparisonUnit.Type)
 				{
-					case ComparisonUnit.ComparisonType.New:
+					case ComparisonUnit.ComparisonType.Removed:
 						{
+							if (!string.IsNullOrEmpty(text))
+							{
+								text += tempIdentical;
+								tempIdentical = string.Empty;
+							}
+
 							foreach (var section in comparisonUnit.Section)
-							{						
-								keyStroke.Text += section.Content;
+							{
+								text += section.Content;
 							}
 							break;
 						}
-					case ComparisonUnit.ComparisonType.Removed:
+					case ComparisonUnit.ComparisonType.Identical:
 						{
+							tempIdentical = string.Empty;
 							foreach (var section in comparisonUnit.Section)
-							{					
-								textDelete = textDelete + section.Content;
+							{
+								tempIdentical += section.Content;
 							}
 							break;
 						}
 				}
 			}
-			
+			return text;
+		}
+
+		private static void AddKeyStrokeData(KeyStroke keyStroke, IEnumerable<ComparisonUnit> comparisonUnits, TrackedDocuments trackedDocuments)
+		{
+			// identify the starting position of content, added, removed or replaced.				
+			keyStroke.Text = GetTypedText(comparisonUnits);
+			keyStroke.Position = Convert.ToInt32(GetTargetCursorPosition());
+			keyStroke.X = Cursor.Position.X;
+			keyStroke.Y = Cursor.Position.Y;
+
 			// needs to be revised!
 			// 1. exclude translations from providers
 			// 2. exclude suggestions from termbase? no api handler here...
@@ -236,15 +264,10 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 
 			//if the user hit the back key then attempt to get the selection from the comparison if it is not already present
-			if (string.Compare(keyStroke.Key, @"[Back]", StringComparison.OrdinalIgnoreCase) == 0
-				|| string.Compare(keyStroke.Key, @"[Delete]", StringComparison.OrdinalIgnoreCase) == 0
-				&& keyStroke.Text == string.Empty
-				&& keyStroke.Selection == string.Empty
-				&& textDelete != string.Empty)
+			if (string.IsNullOrEmpty(keyStroke.Selection))
 			{
-				keyStroke.Selection = textDelete;
-			}
-
+				keyStroke.Selection = GetSelectedText(comparisonUnits);
+			}			
 
 			if (string.IsNullOrEmpty(keyStroke.Text) && string.IsNullOrEmpty(keyStroke.Selection))
 			{
