@@ -1,27 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Web;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-using RestSharp;
 using Sdl.Community.DeelLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
 using System.Xml;
-using RestSharp.Extensions;
 
 namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter
 	{
-
 		public string ApiKey { get; set; }
 		private readonly string _pluginVersion = "";
 		private readonly string _identifier;
+		public static readonly Log Log = Log.Instance;
 
 		public DeepLTranslationProviderConnecter(string key, string identifier)
 		{
@@ -48,6 +43,7 @@ namespace Sdl.Community.DeepLMTProvider
 			catch (Exception e)
 			{
 				// broad catch here, if anything goes wrong with determining the version we don't want the user to be disturbed in any way
+				Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 		}
 
@@ -65,13 +61,13 @@ namespace Sdl.Community.DeepLMTProvider
 				using (var httpClient = new HttpClient())
 				{
 					var content = new StringContent($"text={sourceText}" +
-					                                $"&source_lang={sourceLanguage}" +
-					                                $"&target_lang={targetLanguage}" +
-					                                "&preserve_formatting=1" +
-					                                $"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
+													$"&source_lang={sourceLanguage}" +
+													$"&target_lang={targetLanguage}" +
+													"&preserve_formatting=1" +
+													$"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
 
 					var studioVersion = new Toolkit.Core.Studio().GetStudioVersion().ExecutableVersion;
-					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2017 {studioVersion}/plugin 3.8.7");
+					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 {studioVersion}/plugin 3.8.9.1");
 					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result.Content.ReadAsStringAsync().Result;
 					var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(response);
 
@@ -84,6 +80,7 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 			catch (Exception e)
 			{
+				Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 
 			return translatedText;
