@@ -5,7 +5,6 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using System.Globalization;
 using System.Threading.Tasks;
-using System.Web;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
@@ -19,15 +18,13 @@ namespace Sdl.Community.DeepLMTProvider
 		private readonly LanguagePair _languageDirection;
 		private TranslationUnit _inputTu;
 		private DeepLTranslationProviderConnecter _deeplConnect;
-		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
-
+		public static readonly Log Log = Log.Instance;
 
 		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection)
 		{
 			_deepLMtTranslationProvider = deepLMtTranslationProvider;
 			_languageDirection = languageDirection;
 			_options = deepLMtTranslationProvider.Options;
-			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 		}
 
 		public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
@@ -106,7 +103,7 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 			catch (Exception e)
 			{
-				
+				Log.Logger.Error($"SearchSegment method: {e.Message}\n {e.StackTrace}");
 			}
 			return results;
 		}
@@ -290,7 +287,6 @@ namespace Sdl.Community.DeepLMTProvider
 					resultsList.Insert(index, results);
 				}
 			}
-
 			return resultsList;
 		}
 
@@ -319,7 +315,6 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 				}
 
-
 				var translator = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier);
 
 				await Task.Run(() => Parallel.ForEach(preTranslatesegments, segment =>
@@ -334,7 +329,7 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e);
+				Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 			return preTranslatesegments;
 		}

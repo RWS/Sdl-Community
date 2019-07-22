@@ -21,7 +21,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 
 			if (currentProject == null)
 			{
-				MessageBox.Show("No project is set as active");
+				MessageBox.Show(@"No project is set as active");
 			}
 			else
 			{
@@ -31,7 +31,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 					entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider")))
 				{
 					MessageBox.Show(
-						"DeepL is not set on this project\nPlease set it in project settings before using TellMe to access it");
+						@"DeepL is not set on this project\nPlease set it in project settings before using TellMe to access it");
 				}
 				else
 				{
@@ -60,7 +60,6 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 
 		public override bool IsAvailable => true;
 		public override string Category => "DeepL results";
-
 		public override Icon Icon => PluginResources.Settings;
 	}
 }
