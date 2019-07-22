@@ -379,7 +379,10 @@ namespace Sdl.Community.Qualitivity.Dialogs.Export
             Excel.SetCellValue(spreadsheet, worksheet3, 15, 1, "Origin System", false, false);
             Excel.SetCellValue(spreadsheet, worksheet3, 16, 1, "Origin Type", false, false);
             Excel.SetCellValue(spreadsheet, worksheet3, 17, 1, "Match", false, false);
-            index = 1;
+	        Excel.SetCellValue(spreadsheet, worksheet3, 18, 1, "Position", false, false);
+	        //Excel.SetCellValue(spreadsheet, worksheet3, 19, 1, "X", false, false);
+	        //Excel.SetCellValue(spreadsheet, worksheet3, 20, 1, "Y", false, false);
+			index = 1;
             foreach (var activity in xmlDasList)
             {
                 Project activityProject = null;
@@ -427,7 +430,10 @@ namespace Sdl.Community.Qualitivity.Dialogs.Export
                     Excel.SetCellValue(spreadsheet, worksheet3, 15, uIndex, ks.OriginType, false, false);
                     Excel.SetCellValue(spreadsheet, worksheet3, 16, uIndex, ks.OriginSystem, false, false);
                     Excel.SetCellValue(spreadsheet, worksheet3, 17, uIndex, ks.Match, false, false);
-                }
+	                Excel.SetCellValue(spreadsheet, worksheet3, 18, uIndex, ks.Position.ToString(), false, false);
+	                //Excel.SetCellValue(spreadsheet, worksheet3, 19, uIndex, ks.X.ToString(), false, false);
+	                //Excel.SetCellValue(spreadsheet, worksheet3, 20, uIndex, ks.Y.ToString(), false, false);
+				}
             }
             Excel.SetColumnWidth(worksheet3, 8, 23);
             Excel.SetColumnWidth(worksheet3, 12, 25);
@@ -679,16 +685,19 @@ namespace Sdl.Community.Qualitivity.Dialogs.Export
                                                 {
                                                     xmlTextWriter.WriteStartElement("ks");
                                                     xmlTextWriter.WriteAttributeString("created", Helper.GetStringFromDateTimeMilli(ks.Created.Value));
-                                                    xmlTextWriter.WriteAttributeString("ALT", ks.Alt.ToString());
-                                                    xmlTextWriter.WriteAttributeString("CTRL", ks.Ctrl.ToString());
-                                                    xmlTextWriter.WriteAttributeString("SHIFT", ks.Shift.ToString());
+                                                    xmlTextWriter.WriteAttributeString("alt", ks.Alt.ToString());
+                                                    xmlTextWriter.WriteAttributeString("ctrl", ks.Ctrl.ToString());
+                                                    xmlTextWriter.WriteAttributeString("shift", ks.Shift.ToString());
                                                     xmlTextWriter.WriteAttributeString("key", ks.Key);
                                                     xmlTextWriter.WriteAttributeString("text", ks.Text);
                                                     xmlTextWriter.WriteAttributeString("selection", ks.Selection);
                                                     xmlTextWriter.WriteAttributeString("system", ks.OriginSystem);
                                                     xmlTextWriter.WriteAttributeString("origin", ks.OriginType);
                                                     xmlTextWriter.WriteAttributeString("match", ks.Match);
-                                                    xmlTextWriter.WriteEndElement();//ks
+	                                                xmlTextWriter.WriteAttributeString("position", ks.Position.ToString());
+	                                                //xmlTextWriter.WriteAttributeString("x", ks.X.ToString());
+	                                                //xmlTextWriter.WriteAttributeString("y", ks.Y.ToString());
+													xmlTextWriter.WriteEndElement();//ks
                                                 }
                                             }
                                             xmlTextWriter.WriteEndElement();//key_strokes
@@ -724,9 +733,6 @@ namespace Sdl.Community.Qualitivity.Dialogs.Export
                             }
                         }
 
-
-
-
                         xmlTextWriter.WriteEndElement();//Project
 
                         #endregion
@@ -737,10 +743,6 @@ namespace Sdl.Community.Qualitivity.Dialogs.Export
                 xmlTextWriter.WriteEndElement();
 
             }
-
-
-
         }
-
     }
 }
