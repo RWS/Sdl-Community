@@ -9,6 +9,7 @@ namespace Sdl.Community.NumberVerifier.Processors
 		{
 			char[] charsToRemove = { ' ', ',' };
 			var result = new StringBuilder();
+			result.AppendFormat($"{errorMessage} ");
 
 			if (numberResult.SourceNumbers.Count > 0)
 			{
