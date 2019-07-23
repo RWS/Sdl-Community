@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Sdl.Community.NumberVerifier;
@@ -52,8 +53,19 @@ namespace Sdl.Community.Extended.MessageUI
 			_targetSegmentControl.SegmentContentChanged += OnSegmentContentChanged;
 
 			//set up the target and source rich box which will be used to identify the issued text(s)
-			target_richTextBox.Text = targetSegment.Any() ? targetSegment[0].ToString() : string.Empty;
-			source_richTextBox.Text = sourceSegment.Any() ? sourceSegment[0].ToString() : string.Empty;
+			var sourceText = new StringBuilder();
+			var targetText = new StringBuilder();
+
+			foreach (var item in targetSegment?.AllSubItems)
+			{
+				targetText.AppendFormat($"{item.ToString()} ");
+			}
+			foreach (var item in sourceSegment?.AllSubItems)
+			{
+				sourceText.AppendFormat($"{item.ToString()} ");
+			}
+			target_richTextBox.Text = targetText.ToString();
+			source_richTextBox.Text = sourceText.ToString();
 
 			_hasSegmentChanged = false;
 
