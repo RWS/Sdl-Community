@@ -56,7 +56,7 @@
 		<TextBlock  x:Name="dueDate" TextWrapping="Wrap" Text="Due Date / Time" Grid.Row="6"/>
 		<TextBlock  x:Name="sourceLanguage" TextWrapping="Wrap" Text="Source language" Grid.Row="8"/>
 		<TextBlock  x:Name="targetLanguage" TextWrapping="Wrap" Text="Target language" Grid.Row="9" Grid.RowSpan="2"/>
-        <TextBox Style="{StaticResource MetroTextBox}" IsReadOnly="True"
+		<TextBox Style="{DynamicResource MetroTextBox}" IsReadOnly="True"
                 Controls:TextBoxHelper.ClearTextButton="True"                
                 Controls:TextBoxHelper.IsWaitingForData="True"
                 Controls:TextBoxHelper.UseFloatingWatermark="True" 
@@ -67,7 +67,7 @@
                  Text="{Binding Name}"
                  x:Name="txtName" Grid.Column="1" TextWrapping="Wrap" Grid.ColumnSpan="2"/>
 
-		<TextBox Style="{StaticResource MetroTextBox}" IsReadOnly="True"
+		<TextBox Style="{DynamicResource MetroTextBox}" IsReadOnly="True"
                 Controls:TextBoxHelper.ClearTextButton="True"               
                 Controls:TextBoxHelper.IsWaitingForData="True"
                 Controls:TextBoxHelper.UseFloatingWatermark="True" 
@@ -84,7 +84,7 @@
                
             </Grid.ColumnDefinitions>
 			<Button x:Name="button" Style="{DynamicResource StudioGreenButtonsStyle}" Content="Browse" ToolTip="Browse for package" Grid.Column="1" Margin ="0,8.157,0,13.763"  Command="{Binding BrowseCommand}" Grid.ColumnSpan="2" />
-            <TextBox Style="{StaticResource MetroTextBox}"
+			<TextBox Style="{DynamicResource MetroTextBox}"
                 Controls:TextBoxHelper.ClearTextButton="True"                
                 Controls:TextBoxHelper.IsWaitingForData="True"
                 Controls:TextBoxHelper.UseFloatingWatermark="True" 
@@ -96,10 +96,10 @@
                 x:Name="txtLocation" TextWrapping="Wrap" Grid.Column="0" IsEnabled="False"/>
 
         </Grid>
-		<ComboBox Style="{StaticResource MetroComboBox}" x:Name="customersCombo" ItemsSource="{Binding Customers,Mode=TwoWay}"
+		<ComboBox Style="{DynamicResource MetroComboBox}" x:Name="customersCombo" ItemsSource="{Binding Customers,Mode=TwoWay}"
 				  SelectedValue="{Binding SelectedCustomer }" IsEditable="True" IsReadOnly="True"
 				  DisplayMemberPath="Name" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,0,10"/>
-		<ComboBox Style="{StaticResource MetroComboBox}" x:Name="comboBox" ItemsSource="{Binding Templates,Mode=TwoWay}" IsEditable="True" IsReadOnly="True"
+		<ComboBox Style="{DynamicResource MetroComboBox}" x:Name="comboBox" ItemsSource="{Binding Templates,Mode=TwoWay}" IsEditable="True" IsReadOnly="True"
 				  SelectedValue="{Binding Path=Template, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}"
 				  Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2"/>      
         <Grid Grid.Column="1" Grid.Row="6">
@@ -109,13 +109,13 @@
             </Grid.RowDefinitions>
        
             <StackPanel Grid.Row="0" Orientation="Horizontal">
-				<CheckBox Style="{StaticResource MetroCheckBox}" x:Name="hasDueDate"  Margin="0,5,0,10" IsChecked="{Binding HasDueDate}" />
-				<DatePicker Style="{StaticResource MetroDatePicker}" SelectedDate="{Binding DueDate}"  IsEnabled="{Binding HasDueDate}" x:Name="dueDatePicker" Margin="5,0,0,10" Width="170"/>
+				<CheckBox Style="{DynamicResource MetroCheckBox}" x:Name="hasDueDate"  Margin="0,5,0,10" IsChecked="{Binding HasDueDate}" />
+				<DatePicker Style="{DynamicResource MetroDatePicker}" SelectedDate="{Binding DueDate}"  IsEnabled="{Binding HasDueDate}" x:Name="dueDatePicker" Margin="5,0,0,10" Width="170"/>
             </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-				<ComboBox Style="{StaticResource MetroComboBox}" x:Name="hourCombo" Text="H" Margin ="0,0,0,10" IsEnabled="{Binding HasDueDate}"  ItemsSource="{Binding HourList ,Mode=TwoWay}" SelectedValue="{Binding SelectedHour }" IsEditable="True" IsReadOnly="True"/>
-				<ComboBox Style="{StaticResource MetroComboBox}" x:Name="minutesCombo" Text="M" Margin ="5,0,0,10" IsEnabled="{Binding HasDueDate}"  ItemsSource="{Binding MinutesList,Mode=TwoWay}" SelectedValue="{Binding SelectedMinute}" IsEditable="True" IsReadOnly="True"/>
-				<ComboBox Style="{StaticResource MetroComboBox}" x:Name="amCombo" Text="PM/AM" Margin ="5,0,0,10" IsEnabled="{Binding HasDueDate}" ItemsSource="{Binding MomentsList,Mode=TwoWay}" SelectedValue="{Binding SelectedMoment}" IsEditable="True" IsReadOnly="True"/>
+				<ComboBox Style="{DynamicResource MetroComboBox}" x:Name="hourCombo" Text="H" Margin ="0,0,0,10" IsEnabled="{Binding HasDueDate}"  ItemsSource="{Binding HourList ,Mode=TwoWay}" SelectedValue="{Binding SelectedHour }" IsEditable="True" IsReadOnly="True"/>
+				<ComboBox Style="{DynamicResource MetroComboBox}" x:Name="minutesCombo" Text="M" Margin ="5,0,0,10" IsEnabled="{Binding HasDueDate}"  ItemsSource="{Binding MinutesList,Mode=TwoWay}" SelectedValue="{Binding SelectedMinute}" IsEditable="True" IsReadOnly="True"/>
+				<ComboBox Style="{DynamicResource MetroComboBox}" x:Name="amCombo" Text="PM/AM" Margin ="5,0,0,10" IsEnabled="{Binding HasDueDate}" ItemsSource="{Binding MomentsList,Mode=TwoWay}" SelectedValue="{Binding SelectedMoment}" IsEditable="True" IsReadOnly="True"/>
         </StackPanel>
 
         </Grid>

@@ -82,15 +82,15 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,10,0,0" FontSize="13" FontWeight="DemiBold"></TextBlock>
 					<StackPanel Grid.Row="1" Margin="20,20,0,0">
-						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="0,5,0,0" x:Name="None" Content="None" GroupName="1" IsChecked="{Binding IsNoneChecked}"  Command="{Binding SetBtnNameCommand}"/>
-						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Create"  Content="Create TM" GroupName="1"  IsChecked="{Binding IsCreateChecked}"  Command="{Binding SetBtnNameCommand}"/>
-						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"/>
+						<RadioButton Style="{DynamicResource MetroRadioButton}" Margin="0,5,0,0" x:Name="None" Content="None" GroupName="1" IsChecked="{Binding IsNoneChecked}"  Command="{Binding SetBtnNameCommand}"/>
+						<RadioButton Style="{DynamicResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Create"  Content="Create TM" GroupName="1"  IsChecked="{Binding IsCreateChecked}"  Command="{Binding SetBtnNameCommand}"/>
+						<RadioButton Style="{DynamicResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"/>
                     </StackPanel>
                     <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}"
 							Grid.Row="1" Grid.Column="1" Width="auto" Height="auto" Margin="0,50,123,0" Visibility="{Binding Visibility}" Background="#FF3EA691" BorderBrush="#FF3EA691" Foreground="White">						
 					</Button>
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="TM name:" Margin="20,15,22,15"/>
-                    <TextBox Style="{StaticResource MetroTextBox}"
+					<TextBox Style="{DynamicResource MetroTextBox}"
 						Controls:TextBoxHelper.ClearTextButton="True"                
 						Controls:TextBoxHelper.IsWaitingForData="True"
 						Controls:TextBoxHelper.UseFloatingWatermark="True" 
