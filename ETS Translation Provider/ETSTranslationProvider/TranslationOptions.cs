@@ -134,7 +134,6 @@ namespace ETSTranslationProvider
 			{
 				AddAditionalETSEngine(customEnginesMapping.FrenchCanadaEngineCode, customEnginesMapping.FrenchCanadaEngineCode, languagePairChoices, etsLanguagePairs);
 			}
-			RemoveLPChoices(languagePairChoices);
 
 			return languagePairChoices.ToArray();
 		}
@@ -167,29 +166,6 @@ namespace ETSTranslationProvider
 			// If the host is an IP address, preserve that, otherwise get the DNS host and cache it.
 			ResolvedHost = IPAddress.TryParse(Host, out var address) ? Host : Dns.GetHostEntry(Host).HostName;
 			return ResolvedHost;
-		}
-
-		/// <summary>
-		/// Empty out the previous LP choices.
-		/// </summary>
-		/// <param name="languagePairChoices">languagePairChoices</param>
-		private void RemoveLPChoices(List<TradosToETSLP> languagePairChoices)
-		{
-			foreach (var lpChoice in languagePairChoices)
-			{
-				// By default, select the preferences to be the first LP of each set.
-				var defaultOption = lpChoice.ETSLPs.FirstOrDefault();
-
-				// Verify that the preferred LP still exists on ets server and if not, remove it from preferences
-				if (LPPreferences.ContainsKey(lpChoice.TradosCulture) && !lpChoice.ETSLPs.Contains(LPPreferences[lpChoice.TradosCulture]))
-				{
-					LPPreferences.Remove(lpChoice.TradosCulture);
-				}
-				if (defaultOption != null && !LPPreferences.ContainsKey(lpChoice.TradosCulture))
-				{
-					LPPreferences[lpChoice.TradosCulture] = defaultOption;
-				}
-			}
 		}
 		#endregion
 	}
