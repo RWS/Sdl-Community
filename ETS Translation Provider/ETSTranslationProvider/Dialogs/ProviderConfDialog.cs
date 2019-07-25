@@ -158,10 +158,19 @@ namespace ETSTranslationProvider
 				TradosLPs.DataBindingComplete += TradosLPs_DataBindingComplete;
 
 				TradosLPs.DataSource = languagePairChoices;
-				
+
 				if (Options?.LPPreferences?.Count > 0)
 				{
 					SetPreferedLanguageFlavours();
+				}//set the default value in the case which users add the translation provider in project creation step
+				else
+				{
+					for (var i = 0; i < languagePairChoices.Length; i++)
+					{
+						var comboBox = (DataGridViewComboBoxCell)TradosLPs?.Rows[i].Cells[1];
+						comboBox.Value = languagePairChoices[i].ETSLPs?.First()?.LanguagePairId;
+						Options.LPPreferences[languagePairChoices[i].TradosCulture] = languagePairChoices[i].ETSLPs?.First();
+					}
 				}
 				// Handlers for when the combobox changes
 				TradosLPs.CellValueChanged += TradosLPs_CellValueChanged;
@@ -186,11 +195,24 @@ namespace ETSTranslationProvider
 
 		    for (var i = 0; i < Options.LPPreferences.Count; i++)
 		    {
-			    var comboBox = (DataGridViewComboBoxCell) TradosLPs.Rows[i].Cells[comboboxColumnIndex];
-			    comboBox.Value = Options.LPPreferences.ToList()[i].Value?.LanguagePairId;
-		    }
+			    var comboBox = (DataGridViewComboBoxCell) TradosLPs?.Rows[i].Cells[comboboxColumnIndex];
+			    if (comboBox != null)
+			    {
+					comboBox.Value = Options.LPPreferences.ToList()[i].Value?.LanguagePairId;
+				}
+			}
 		}
+	    private void TradosLPs_CellEnter(object sender, DataGridViewCellEventArgs e)
+	    {
+		    var tradosLPs = sender as DataGridView;
 
+		    // Check to make sure the cell clicked is the cell containing the combobox
+		    if (e.RowIndex != -1 && e.ColumnIndex != -1 && tradosLPs.Columns[e.ColumnIndex] is DataGridViewComboBoxColumn)
+		    {
+			    tradosLPs.BeginEdit(true);
+			    ((ComboBox)tradosLPs.EditingControl).DroppedDown = true;
+		    }
+	    }
 		private void TradosLPs_CellValueChanged(object sender, DataGridViewCellEventArgs e)
 		{
 			const int comboboxColumnIndex = 1;
