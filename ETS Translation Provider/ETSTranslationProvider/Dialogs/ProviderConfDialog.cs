@@ -175,7 +175,18 @@ namespace ETSTranslationProvider
 				// Handlers for when the combobox changes
 				TradosLPs.CellValueChanged += TradosLPs_CellValueChanged;
 				TradosLPs.CurrentCellDirtyStateChanged += TradosLPs_CurrentCellDirtyStateChanged;
+				TradosLPs.DataError += TradosLPs_DataError;
 			}));
+		}
+
+		/// <summary>
+		/// This errror handle is for DataGridViewCombobox cell value is not valid error
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void TradosLPs_DataError(object sender, DataGridViewDataErrorEventArgs e)
+		{
+			
 		}
 
 		// This event handler manually raises the CellValueChanged event
