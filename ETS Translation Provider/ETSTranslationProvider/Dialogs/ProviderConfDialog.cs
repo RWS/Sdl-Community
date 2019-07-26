@@ -159,23 +159,60 @@ namespace ETSTranslationProvider
 
 				TradosLPs.DataSource = languagePairChoices;
 
-				if (Options?.LPPreferences?.Count > 0)
-				{
-					SetPreferedLanguageFlavours();
-				}//set the default value in the case which users add the translation provider in project creation step
-				else
-				{
-					for (var i = 0; i < languagePairChoices.Length; i++)
-					{
-						var comboBox = (DataGridViewComboBoxCell)TradosLPs?.Rows[i].Cells[1];
-						comboBox.Value = languagePairChoices[i].ETSLPs?.First()?.LanguagePairId;
-						Options.LPPreferences[languagePairChoices[i].TradosCulture] = languagePairChoices[i].ETSLPs?.First();
-					}
-				}
 				// Handlers for when the combobox changes
 				TradosLPs.CellValueChanged += TradosLPs_CellValueChanged;
 				TradosLPs.CurrentCellDirtyStateChanged += TradosLPs_CurrentCellDirtyStateChanged;
+				TradosLPs.DataError += TradosLPs_DataError;
+				try
+				{
+					if (Options?.LPPreferences != null)
+					{
+						if (Options.LPPreferences.Count > 0)
+						{
+							SetPreferedLanguageFlavours();
+						}//set the default value in the case which users add the translation provider in project creation step
+						else
+						{
+							for (var i = 0; i < languagePairChoices.Length; i++)
+							{
+								Options.LPPreferences[languagePairChoices[i].TradosCulture] = languagePairChoices[i].ETSLPs?.FirstOrDefault();
+								var comboBox = (DataGridViewComboBoxCell)TradosLPs?.Rows[i].Cells[1];
+								comboBox.Value = languagePairChoices[i].ETSLPs?.FirstOrDefault()?.LanguagePairId;
+							}
+						}
+					}
+				}
+				catch (Exception e)
+				{
+					Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
+				}
 			}));
+		}
+
+		/// <summary>
+		/// This errror handle is for DataGridViewCombobox cell value is not valid error
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void TradosLPs_DataError(object sender, DataGridViewDataErrorEventArgs e)
+		{
+			if (e.Exception.Message.Contains("value is not valid"))
+			{
+				var lp = TradosLPs.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+				Log.Logger.Info($"lp:{lp}");
+
+				foreach (var langP in Options.LPPreferences)
+				{
+					Log.Logger.Info($"LPPreferences foreach {langP.Value.LanguagePairId}");
+				}
+
+				Log.Logger.Error($"{e.Exception.Message}\n {e.Exception.StackTrace}");
+				if (!((DataGridViewComboBoxColumn)TradosLPs.Columns[e.ColumnIndex]).Items.Contains(lp))
+				{
+					((DataGridViewComboBoxColumn)TradosLPs.Columns[e.ColumnIndex]).Items.Add(lp);
+					e.ThrowException = false;
+				}
+			}
 		}
 
 		// This event handler manually raises the CellValueChanged event
