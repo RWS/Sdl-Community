@@ -159,23 +159,33 @@ namespace ETSTranslationProvider
 
 				TradosLPs.DataSource = languagePairChoices;
 
-				if (Options?.LPPreferences?.Count > 0)
-				{
-					SetPreferedLanguageFlavours();
-				}//set the default value in the case which users add the translation provider in project creation step
-				else
-				{
-					for (var i = 0; i < languagePairChoices.Length; i++)
-					{
-						var comboBox = (DataGridViewComboBoxCell)TradosLPs?.Rows[i].Cells[1];
-						comboBox.Value = languagePairChoices[i].ETSLPs?.First()?.LanguagePairId;
-						Options.LPPreferences[languagePairChoices[i].TradosCulture] = languagePairChoices[i].ETSLPs?.First();
-					}
-				}
 				// Handlers for when the combobox changes
 				TradosLPs.CellValueChanged += TradosLPs_CellValueChanged;
 				TradosLPs.CurrentCellDirtyStateChanged += TradosLPs_CurrentCellDirtyStateChanged;
 				TradosLPs.DataError += TradosLPs_DataError;
+				try
+				{
+					if (Options?.LPPreferences != null)
+					{
+						if (Options.LPPreferences.Count > 0)
+						{
+							SetPreferedLanguageFlavours();
+						}//set the default value in the case which users add the translation provider in project creation step
+						else
+						{
+							for (var i = 0; i < languagePairChoices.Length; i++)
+							{
+								var comboBox = (DataGridViewComboBoxCell)TradosLPs?.Rows[i].Cells[1];
+								comboBox.Value = languagePairChoices[i].ETSLPs?.First()?.LanguagePairId;
+								Options.LPPreferences[languagePairChoices[i].TradosCulture] = languagePairChoices[i].ETSLPs?.First();
+							}
+						}
+					}
+				}
+				catch (Exception e)
+				{
+					Log.Logger.Error(e.Message);
+				}
 			}));
 		}
 
@@ -186,7 +196,10 @@ namespace ETSTranslationProvider
 		/// <param name="e"></param>
 		private void TradosLPs_DataError(object sender, DataGridViewDataErrorEventArgs e)
 		{
-			
+			if (e.Exception.Message.Contains("value is not valid"))
+			{
+				e.ThrowException = false;
+			}
 		}
 
 		// This event handler manually raises the CellValueChanged event
