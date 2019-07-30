@@ -283,6 +283,15 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 					worksheet.Column(3).Width = 20;
 					worksheet.Column(4).Width = 100;
 
+					//every column that has its Style.Locked set to true will be read-only if IsProtected is also set to true;
+					//we need to make just the segmentation rules column read-only
+					worksheet.Column(1).Style.Locked = false;
+					worksheet.Column(2).Style.Locked = false;
+					worksheet.Column(3).Style.Locked = false;
+					worksheet.Column(4).Style.Locked = true;
+
+					worksheet.Protection.IsProtected = true;
+
 					var lineNumber = 1;
 
 					SetCellStyle(worksheet, "A", lineNumber, "Abbreviations");

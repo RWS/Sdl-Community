@@ -75,13 +75,14 @@
 						</Style>
 					</Button.Style>
 				</Button>
-				<Canvas Width="300">
+				<Canvas Width="Auto">
 				<Popup IsOpen="{Binding IsOpen}" 
 				       Height="Auto"
 					   Width="300"
 				       PopupAnimation="Fade"
 					   StaysOpen="False"
 				       AllowsTransparency="True"
+					   Placement="Left"
 				       HorizontalAlignment="Right">
 					
 						<Border BorderBrush="Black"
