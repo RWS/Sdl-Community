@@ -17,9 +17,6 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
 
         <Grid Grid.Row="0" Visibility="{Binding UseExistingTranslationMemory, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions >
@@ -31,8 +28,8 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <Label HorizontalAlignment="Left" TabIndex="0" Target="{Binding ElementName=tmxPathBox, Mode=OneWay}">_Specify the Studio translation memory to clean up:</Label>
-            <TextBox x:Name="tmxPathBox" Grid.Row="1" Text="{Binding Path=InputTranslationMemory.FilePath, Mode=TwoWay}" TabIndex="1"/>
-            <Button Grid.Row="1" Grid.Column="1" Margin="8.346,0.04,-0.346,-0.12" MinWidth="100" Click="BrowseTM_Click" TabIndex="2">_Browse...</Button>
+			<TextBox x:Name="tmxPathBox" Grid.Column="0" Grid.Row="1" Text="{Binding Path=InputTranslationMemory.FilePath, Mode=TwoWay}" Height="20" TabIndex="1"/>
+            <Button Grid.Row="1" Grid.Column="0" Margin="8.346,0.04,-0.346,-0.12" MinWidth="100" Click="BrowseTM_Click" TabIndex="2">_Browse...</Button>
         </Grid>
 
         <Label Grid.Row="1" TabIndex="3" Target="{Binding ElementName=_inputTmxFilesDataGrid, Mode=OneWay}">Specify _TRADOS Workbench TMX files to clean up:</Label>
