@@ -102,7 +102,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				ScoringResult = new ScoringResult
 				{
 					BaseScore = score
-				}
+				},
+                TranslationProposal = tu
 			};
 			tu.ConfirmationLevel = ConfirmationLevel.Draft;
 
@@ -113,7 +114,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		/// Translate an array of segments.
 		/// </summary>
 		/// <param name="settings"></param>
-		/// <param name="segments">Array of segments to be translated (depending on the truthiness of
+		/// <param name="segments">Array of segments to be translated (depending on the truthfulness of
 		/// corresponding mask)</param>
 		/// <param name="mask">Whether to translate a segment or not</param>
 		/// <returns></returns>
