@@ -48,7 +48,6 @@ namespace IATETerminologyProvider.Service
 			{
 				BaseAddress = new Uri(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()))
 			};
-
 			Utils.AddDefaultParameters(httpClient);
 
 			var httpRequest = new HttpRequestMessage { Method = HttpMethod.Post };
@@ -241,7 +240,7 @@ namespace IATETerminologyProvider.Service
 			var domain = string.Empty;
 			foreach (var itemDomain in itemDomains.Domains)
 			{
-				var result = _domains.FirstOrDefault(d => d.Code.Equals(itemDomain.Code));
+				var result = _domains?.FirstOrDefault(d => d.Code.Equals(itemDomain.Code));
 				if (result != null)
 				{
 					domain = $"{result.Name}, ";
@@ -255,7 +254,7 @@ namespace IATETerminologyProvider.Service
 		{
 			// clear _subdomains list for each term
 			_subdomains.Clear();
-			if (_domains.Count > 0)
+			if (_domains?.Count > 0)
 			{
 				foreach (var mainDomain in mainDomains.Domains)
 				{
@@ -316,7 +315,7 @@ namespace IATETerminologyProvider.Service
 		private string GetTermTypeByCode(string termTypeCode)
 		{
 			var typeCode = int.TryParse(termTypeCode, out _) ? int.Parse(termTypeCode) : 0;
-			return _termTypes.Count > 0 ? _termTypes.FirstOrDefault(t => t.Code == typeCode)?.Name : string.Empty;
+			return _termTypes?.Count > 0 ? _termTypes?.FirstOrDefault(t => t.Code == typeCode)?.Name : string.Empty;
 		}
 	}
 }
