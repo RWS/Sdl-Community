@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
-namespace Sdl.Community.InSource.Notifications
+namespace NotificationsSample
 {
-	public class InSourceNotification: IStudioNotification
+	public class SampleNotification : IStudioNotification
 	{
-		public InSourceNotification(Guid id)
+		public SampleNotification(Guid id)
 		{
 			Id = id;
 		}
