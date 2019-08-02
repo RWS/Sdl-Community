@@ -42,10 +42,10 @@
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Controls">
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15Beta\Sdl.Desktop.Platform.Controls.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15Beta\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
