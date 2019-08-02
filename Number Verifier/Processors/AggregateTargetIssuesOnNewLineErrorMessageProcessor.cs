@@ -9,7 +9,7 @@ namespace Sdl.Community.NumberVerifier.Processors
 {
     public class AggregateTargetIssuesOnNewLineErrorMessageProcessor : IErrorMessageProcessor
     {
-        public string GenerateMessage(INumberResults numberResult)
+        public string GenerateMessage(INumberResults numberResult, string errorMessage)
         {
             var result = new StringBuilder();
             foreach (var sourceNumber in numberResult.TargetNumbers)

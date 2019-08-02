@@ -16,6 +16,7 @@ namespace IATETerminologyProvider.Service
 {
 	public class TermSearchService
 	{
+		public static readonly Log Log = Log.Instance;
 		private readonly ProviderSettings _providerSettings;
 		private readonly ObservableCollection<ItemsResponseModel> _domains;
 		private readonly List<string> _subdomains = new List<string>();
@@ -219,9 +220,9 @@ namespace IATETerminologyProvider.Service
 
 										searchResultItems.Add(termResult);
 									}
-									catch
+									catch (Exception e)
 									{
-										// catch all; ignore
+										Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
 									}
 								}
 							}

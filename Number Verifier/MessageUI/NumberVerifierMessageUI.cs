@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Sdl.Community.NumberVerifier;
@@ -52,8 +53,19 @@ namespace Sdl.Community.Extended.MessageUI
 			_targetSegmentControl.SegmentContentChanged += OnSegmentContentChanged;
 
 			//set up the target and source rich box which will be used to identify the issued text(s)
-			target_richTextBox.Text = targetSegment[0].ToString();
-			source_richTextBox.Text = sourceSegment[0].ToString();
+			var sourceText = new StringBuilder();
+			var targetText = new StringBuilder();
+
+			foreach (var item in targetSegment?.AllSubItems)
+			{
+				targetText.AppendFormat($"{item.ToString()} ");
+			}			
+			foreach (var item in sourceSegment?.AllSubItems)
+			{
+				sourceText.AppendFormat($"{item.ToString()} ");
+			}
+			target_richTextBox.Text = targetText.ToString();
+			source_richTextBox.Text = sourceText.ToString();
 
 			_hasSegmentChanged = false;
 
@@ -158,7 +170,7 @@ namespace Sdl.Community.Extended.MessageUI
 			if (messageData.MessageType.Equals(Constants.AlphanumericIssue) || messageData.MessageType.Equals(Constants.HindiIssue))
 			{
 				tb_SourceIssues.Text = messageData.InitialSourceIssues;
-				tb_TargetIssues.Text = messageData.InitialTargetIssues;				
+				tb_TargetIssues.Text = messageData.InitialTargetIssues;
 			}
 			else
 			{
@@ -166,8 +178,14 @@ namespace Sdl.Community.Extended.MessageUI
 				tb_TargetIssues.Text = messageData.TargetIssues;
 			}
 
-			ColorTextIssues(tb_SourceIssues.Text, source_richTextBox);
-			ColorTextIssues(tb_TargetIssues.Text, target_richTextBox);
+			if (!string.IsNullOrEmpty(source_richTextBox.Text))
+			{
+				ColorTextIssues(tb_SourceIssues.Text, source_richTextBox);
+			}
+			if (!string.IsNullOrEmpty(target_richTextBox.Text))
+			{
+				ColorTextIssues(tb_TargetIssues.Text, target_richTextBox);
+			}
 		}
 
 		/// <summary>

@@ -5,7 +5,6 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using System.Globalization;
 using System.Threading.Tasks;
-using System.Web;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
@@ -19,15 +18,13 @@ namespace Sdl.Community.DeepLMTProvider
 		private readonly LanguagePair _languageDirection;
 		private TranslationUnit _inputTu;
 		private DeepLTranslationProviderConnecter _deeplConnect;
-		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
-
+		public static readonly Log Log = Log.Instance;
 
 		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection)
 		{
 			_deepLMtTranslationProvider = deepLMtTranslationProvider;
 			_languageDirection = languageDirection;
 			_options = deepLMtTranslationProvider.Options;
-			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 		}
 
 		public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
@@ -71,38 +68,44 @@ namespace Sdl.Community.DeepLMTProvider
 				SourceSegment = segment.Duplicate()
 			};
 
-			// if there are match in tm the provider will not search the segment
-			#region "Confirmation Level"
-			if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
+			try
 			{
-				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-				//later get these strings from resource file
-				results.Add(CreateSearchResult(segment, translation));
-				return results;
+				// if there are match in tm the provider will not search the segment
+				#region "Confirmation Level"
+				if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
+				{
+					translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
+					//later get these strings from resource file
+					results.Add(CreateSearchResult(segment, translation));
+					return results;
+				}
+				var newseg = segment.Duplicate();
+				if (newseg.HasTags)
+				{
+					var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
+					var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
+					translation = tagPlacer.GetTaggedSegment(translatedText);
+
+					results.Add(CreateSearchResult(newseg, translation));
+					return results;
+				}
+				else
+				{
+					var sourcetext = newseg.ToPlain();
+
+					var translatedText = LookupDeepl(sourcetext);
+					translation.Add(translatedText);
+
+					results.Add(CreateSearchResult(newseg, translation));
+					return results;
+				}
+				#endregion
 			}
-			var newseg = segment.Duplicate();
-			if (newseg.HasTags)
+			catch (Exception e)
 			{
-				var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
-				var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
-				translation = tagPlacer.GetTaggedSegment(translatedText);
-
-				results.Add(CreateSearchResult(newseg, translation));
-				return results;
+				Log.Logger.Error($"SearchSegment method: {e.Message}\n {e.StackTrace}");
 			}
-			else
-			{
-
-				var sourcetext = newseg.ToPlain();
-
-				var translatedText = LookupDeepl(sourcetext);
-				translation.Add(translatedText);
-
-				results.Add(CreateSearchResult(newseg, translation));
-				return results;
-			}
-
-			#endregion
+			return results;
 		}
 
 		private string LookupDeepl(string sourcetext)
@@ -284,7 +287,6 @@ namespace Sdl.Community.DeepLMTProvider
 					resultsList.Insert(index, results);
 				}
 			}
-
 			return resultsList;
 		}
 
@@ -313,7 +315,6 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 				}
 
-
 				var translator = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier);
 
 				await Task.Run(() => Parallel.ForEach(preTranslatesegments, segment =>
@@ -328,7 +329,7 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e);
+				Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 			return preTranslatesegments;
 		}

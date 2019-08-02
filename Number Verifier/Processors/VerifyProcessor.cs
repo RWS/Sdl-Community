@@ -36,9 +36,9 @@ namespace Sdl.Community.NumberVerifier.Processors
 			{
 				ErrorLevel = GetNumbersErrorLevel(numberResults),
 				ErrorMessage = ErrorMessage,
-				ExtendedErrorMessage = ExtendedErrorMessageProcessor.GenerateMessage(numberResults),
-				SourceNumberIssues = SourceMessageProcessor.GenerateMessage(numberResults),
-				TargetNumberIssues = TargetMessageProcessor.GenerateMessage(numberResults),
+				ExtendedErrorMessage = ExtendedErrorMessageProcessor.GenerateMessage(numberResults, ErrorMessage),
+				SourceNumberIssues = SourceMessageProcessor.GenerateMessage(numberResults, ErrorMessage),
+				TargetNumberIssues = TargetMessageProcessor.GenerateMessage(numberResults, ErrorMessage),
 				InitialSourceNumber = initialSourceNumbers,
 				InitialTargetNumber = initialTargetNumbers,
 				IsHindiVerification = numberResults.IsHindiVerification
