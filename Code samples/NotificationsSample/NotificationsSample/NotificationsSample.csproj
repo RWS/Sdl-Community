@@ -41,7 +41,7 @@
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15Beta\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <Private>True</Private>
