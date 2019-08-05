@@ -36,6 +36,7 @@ namespace IATETerminologyProvider.Service
 			{
 				var httpResponseAsString = httpClient.SendAsync(httpRequest).Result.Content.ReadAsStringAsync().Result;
 				var jsonTermTypesModel = JsonConvert.DeserializeObject<TermTypeResponseModel>(httpResponseAsString);
+				// the below Logger.Info should be removed, because it is used only to identify user's issue (otherwise will impact the performance of the app).
 				Log.Logger.Info($"GetTermTypes method: The response when receiving term types: {httpResponseAsString}");
 
 				if (jsonTermTypesModel?.Items != null)
