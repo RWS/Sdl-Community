@@ -337,4 +337,16 @@
   <data name="DisplayFilterControl_StringId" xml:space="preserve">
     <value>Document structure String id</value>
   </data>
+  <data name="DisplayFilterControl_UseTagsAlso" xml:space="preserve">
+    <value>Also use tag content</value>
+  </data>
+  <data name="DisplayFilterControl_UseTagsOnly" xml:space="preserve">
+    <value>Use only tag content</value>
+  </data>
+  <data name="DisplayFilter_IncludeTags_Tooltip" xml:space="preserve">
+    <value>Using this option will filter the results based on matches found within the translatable text AND within the content of any tags in your file(s).</value>
+  </data>
+  <data name="DisplayFilter_OnlyTags_Tooltip" xml:space="preserve">
+    <value>Using this option will filter the results based on matches that are ONLY found within the content of any tags in your file(s). It will not filter on the translatable text.</value>
+  </data>
 </root>

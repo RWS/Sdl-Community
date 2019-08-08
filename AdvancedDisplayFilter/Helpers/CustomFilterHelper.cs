@@ -124,7 +124,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 						  !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
 			}
 
-			//String id seach
+			//String id search
 			if (success && !string.IsNullOrEmpty(customSettings.ContextInfoStringId))
 			{
 				if (filterSettings.IsRegularExpression)

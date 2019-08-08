@@ -5,6 +5,7 @@ using Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.Toolkit.FileType;
 using Sdl.Community.Toolkit.Integration;
 using Sdl.Community.Toolkit.Integration.DisplayFilter;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
@@ -91,20 +92,12 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 
 				if (success && Settings.SourceText.Trim() != string.Empty)
 				{
-					success = rowInfo.IsTextFoundInSource(Settings);
-
-					if (Settings.IsRegularExpression)
-					{
-						var textVisitor = new SegmentTextVisitor();
-						var text = textVisitor.GetText(rowInfo.SegmentPair.Source);
-						success = ContentHelper.SearchContentRegularExpression(text,
-							Settings.SourceText);
-					}
+					success = IsExpressionFound(Settings.SourceText, rowInfo.SegmentPair.Source);
 				}
-
 				if (success && Settings.TargetText.Trim() != string.Empty)
-					success = rowInfo.IsTextFoundInTarget(Settings);
-
+				{
+					success = IsExpressionFound(Settings.TargetText, rowInfo.SegmentPair.Target);
+				}
 
 				if (success && !CustomSettings.UseRegexCommentSearch && Settings.CommentText.Trim() != string.Empty)
 					success = rowInfo.IsTextFoundInComment(Settings);
@@ -124,9 +117,31 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				// check custom settings
 				if (success)
 				{
-					success = CustomFilterHelper.Filter(CustomSettings, Settings, rowInfo, success, ActiveDocument);
+					success = CustomFilterHelper.Filter(CustomSettings, Settings, rowInfo, true, ActiveDocument);
 				}
 			}
+			return success;
+		}
+
+		private bool IsExpressionFound(string searchString, ISegment segment)
+		{
+			var textVisitor = new SegmentTextVisitor();
+			string text;
+			if (CustomSettings.UseTagContent)
+			{
+				text = CustomSettings.AndOrTagContent
+					? textVisitor.GetRawText(segment)
+					: textVisitor.GetJustTagContent(segment);
+			}
+			else
+			{
+				text = textVisitor.GetText(segment);
+			}
+
+			var success = Settings.IsRegularExpression
+				? ContentHelper.SearchContentRegularExpression(text, searchString)
+				: text.Contains(searchString);
+
 			return success;
 		}
 	}

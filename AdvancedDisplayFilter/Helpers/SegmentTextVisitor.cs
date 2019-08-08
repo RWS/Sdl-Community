@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 {
 	public class SegmentTextVisitor : IMarkupDataVisitor
 	{
-		private readonly StringBuilder _textBuilder = new StringBuilder();
-	
-		public void VisitText(IText text)
+		private enum DetailLevel
 		{
-			_textBuilder.Append(text.Properties.Text);
-			
+			JustText,
+			Raw,
+			JustTagContent
 		}
+
+		private readonly StringBuilder _textBuilder = new StringBuilder();
+		private DetailLevel _detailLevel;
 
 		public string GetText(ISegment segment)
 		{
@@ -26,9 +22,31 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 			return _textBuilder.ToString();
 		}
-		public void VisitSegment(ISegment segment)
+
+		public string GetRawText(ISegment segment)
 		{
-			VisitChildren(segment);
+			_textBuilder.Clear();
+			_detailLevel = DetailLevel.Raw;
+			return GetText(segment);
+		}
+
+		public string GetJustTagContent(ISegment segment)
+		{
+			_textBuilder.Clear();
+			_detailLevel = DetailLevel.JustTagContent;
+			return GetText(segment);
+		}
+
+		public void VisitCommentMarker(ICommentMarker commentMarker)
+		{
+		}
+
+		public void VisitLocationMarker(ILocationMarker location)
+		{
+		}
+
+		public void VisitLockedContent(ILockedContent lockedContent)
+		{
 		}
 
 		public void VisitOtherMarker(IOtherMarker marker)
@@ -36,91 +54,65 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			VisitChildren(marker);
 		}
 
-		private void VisitChildren(IAbstractMarkupDataContainer container)
-		{
-			if (container == null)
-				return;
-			foreach (var item in container)
-			{
-				item.AcceptVisitor(this);
-			}
-		}
-
-		public void VisitTagPair(ITagPair tagPair)
-		{
-			foreach (dynamic subItem in tagPair.AllSubItems)
-			{
-				if (PropertyExist(subItem, "AllSubItems"))
-				{
-					foreach (dynamic innerSubitem in subItem.AllSubItems)
-					{
-						AppendText(innerSubitem);
-					}
-				}
-				else
-				{
-					AppendText(subItem);
-				}
-			}
-
-		}
-
-		private  void AppendText(dynamic tag)
-		{
-			if (PropertyExist(tag, "Properties"))
-			{
-				var property = tag.Properties;
-				if (property != null)
-				{
-					if (PropertyExist(property, "Text"))
-					{
-						var text = property.Text;
-						_textBuilder.Append(text);
-					}
-
-				}
-			}
-			
-		}
 		/// <summary>
 		/// Check if tag pair contains specified property
 		/// </summary>
 		/// <param name="tagPair"></param>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		public static bool PropertyExist(dynamic tagPair, string name)
-		{
-			var tP = tagPair as ExpandoObject;
-			if (tP != null)
-				return ((IDictionary<string, object>)tagPair).ContainsKey(name);
-
-			return tagPair.GetType().GetProperty(name) != null;
-		}
-
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
-
-		}
-
-		public void VisitLocationMarker(ILocationMarker location)
-		{
-			
-		}
-
-		public void VisitCommentMarker(ICommentMarker commentMarker)
-		{
-			
-		}
-
-		public void VisitLockedContent(ILockedContent lockedContent)
-		{
-			
+			if (_detailLevel == DetailLevel.JustTagContent)
+			{
+				_textBuilder.Append(tag.TagProperties.TagContent);
+			}
 		}
 
 		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
 		{
-			
 		}
-		
+
+		public void VisitSegment(ISegment segment)
+		{
+			VisitChildren(segment);
+		}
+
+		public void VisitTagPair(ITagPair tagPair)
+		{
+			if (_detailLevel == DetailLevel.JustText)
+			{
+				VisitChildren(tagPair);
+			}
+			if (_detailLevel == DetailLevel.JustTagContent)
+			{
+				_textBuilder.Append(tagPair.TagProperties.TagContent);
+				VisitChildren(tagPair);
+			}
+		}
+
+		public void VisitText(IText text)
+		{
+			if (_detailLevel == DetailLevel.JustText)
+			{
+				_textBuilder.Append(text.Properties.Text);
+			}
+		}
+
+		private void VisitChildren(IAbstractMarkupDataContainer container)
+		{
+			if (container == null)
+				return;
+			if (_detailLevel == DetailLevel.Raw)
+			{
+				_textBuilder.Append(container);
+			}
+			else
+			{
+				foreach (var item in container)
+				{
+					item.AcceptVisitor(this);
+				}
+			}
+		}
 	}
 }
