@@ -1903,24 +1903,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             }
 		}
 
-		public string GetTagContentFilterExpression(bool isTagContentChecked)
-		{
-			var tagContent_filterExpression = string.Empty;
-
-			if (isTagContentChecked)
-			{
-				tagContent_filterExpression = (onlyTags_radioButton.Checked
-					? onlyTags_radioButton.Checked
-					: alsoTags_radioButton.Checked).ToString();
-			}
-			else
-			{
-				tagContent_filterExpression = string.Empty;
-			}
-
-			return tagContent_filterExpression;
-		}
-
 		private void alsoTags_radioButton_CheckedChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_content);
