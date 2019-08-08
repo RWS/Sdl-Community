@@ -18,8 +18,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
 	public partial class DisplayFilterControl : UserControl
 	{
-		#region  |  Delegates  |
-
 		public delegate void OnApplyFilterHandler(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customSettings, bool reverse, FilteredCountsCallback result);
 		public event OnApplyFilterHandler OnApplyDisplayFilter;
 		public delegate void FilteredCountsCallback(int filteredSegments, int totalSegments);
@@ -28,9 +26,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private bool _editedFuzzy;
 		private bool _unEditedFuzzy;
 		private bool _reverseFilter;
-		#endregion
-
-		#region  |  Properties  |
 
 		private static EditorController GetEditorController()
 		{
@@ -75,7 +70,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					CreatedByChecked = createdByCheck.Checked,
 					EditedFuzzy = _editedFuzzy,
 					UnEditedFuzzy = _unEditedFuzzy,
-					ContextInfoStringId = stringId_textbox.Text
+					ContextInfoStringId = stringId_textbox.Text,
+                    UseTagContent = checkBox_TagContent.Checked,
+                    AndOrTagContent = alsoTags_radioButton.Checked
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -372,9 +369,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		#endregion
 
 
-		#endregion
-
-		#region  |  Constructor  |
 		public DisplayFilterControl()
 		{
 			InitializeComponent();
@@ -406,8 +400,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 			segmentsBox.Enabled = false;
 		}
-		#endregion
-
+		
 		private void InitializeSettings()
 		{
 			#region segments number
@@ -974,6 +967,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_StringId + ":\"" + CustomFilter.ContextInfoStringId + "\"");
 				}
+
+				if (CustomFilter.UseTagContent)
+				{
+					filterExpressionControl.AddItem(CustomFilter.AndOrTagContent ? StringResources.DisplayFilterControl_UseTagsAlso: StringResources.DisplayFilterControl_UseTagsOnly);
+				}
 			}
 		}
 
@@ -1148,18 +1146,26 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			{
 				var settings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings;
 
-				if (tabPage == tabPage_content
-					&& (!string.IsNullOrEmpty(settings.SourceText)
-					|| !string.IsNullOrEmpty(settings.TargetText)))
+				if (tabPage == tabPage_content)
 				{
+					if (!string.IsNullOrEmpty(settings.SourceText)
+					    || !string.IsNullOrEmpty(settings.TargetText))
+					{
 
-					var item1 = textBox_source.Text + ", " + target_textbox.Text + ", " +
-								checkBox_regularExpression.Checked + ", " + checkBox_caseSensitive.Checked;
+						var andOrTagContent = alsoTags_radioButton.Checked
+							? alsoTags_radioButton.Checked
+							: onlyTags_radioButton.Checked;
 
-					var item2 = settings.SourceText + ", " + settings.TargetText + ", " +
-								settings.IsRegularExpression + ", " + settings.IsCaseSensitive;
+						var item1 = textBox_source.Text + ", " + target_textbox.Text + ", " +
+						            checkBox_regularExpression.Checked + ", " + checkBox_caseSensitive.Checked +',' +
+									checkBox_TagContent.Checked + ',' + ',' + andOrTagContent;
 
-					tabPage.ImageIndex = string.CompareOrdinal(item1, item2) == 0 ? 0 : 1;
+						var item2 = settings.SourceText + ", " + settings.TargetText + ", " +
+						            settings.IsRegularExpression + ", " + settings.IsCaseSensitive + ',' +
+									_customSettings.UseTagContent + ',' + _customSettings.AndOrTagContent;
+
+						tabPage.ImageIndex = string.CompareOrdinal(item1, item2) == 0 ? 0 : 1;
+					}
 				}
 				else if (tabPage == tabPage_filters
 					&& (settings.SegmentReviewTypes.Any()
@@ -1510,6 +1516,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		}
 
 		private void checkBox_caseSensitive_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_content);
+		}
+
+		private void onlyTags_radioButton_CheckedChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_content);
 		}
@@ -1879,6 +1890,38 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		}
 
 		private void stringId_textbox_TextChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_content);
+		}
+
+		private void CheckBox_TagContent_CheckedChanged(object sender, EventArgs e)
+		{
+            if (sender is CheckBox chkBox)
+            {
+	            content_groupBox.Enabled = chkBox.Checked;
+				InvalidateIconsFilterEdited(tabPage_content);
+            }
+		}
+
+		public string GetTagContentFilterExpression(bool isTagContentChecked)
+		{
+			var tagContent_filterExpression = string.Empty;
+
+			if (isTagContentChecked)
+			{
+				tagContent_filterExpression = (onlyTags_radioButton.Checked
+					? onlyTags_radioButton.Checked
+					: alsoTags_radioButton.Checked).ToString();
+			}
+			else
+			{
+				tagContent_filterExpression = string.Empty;
+			}
+
+			return tagContent_filterExpression;
+		}
+
+		private void alsoTags_radioButton_CheckedChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_content);
 		}
