@@ -19,7 +19,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class StringResources {
@@ -57,6 +57,24 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using this option will filter the results based on matches found within the translatable text AND within the content of any tags in your file(s)..
+        /// </summary>
+        internal static string DisplayFilter_IncludeTags_Tooltip {
+            get {
+                return ResourceManager.GetString("DisplayFilter_IncludeTags_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using this option will filter the results based on matches that are ONLY found within the content of any tags in your file(s). It will not filter on the translatable text..
+        /// </summary>
+        internal static string DisplayFilter_OnlyTags_Tooltip {
+            get {
+                return ResourceManager.GetString("DisplayFilter_OnlyTags_Tooltip", resourceCulture);
             }
         }
         
@@ -661,6 +679,24 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_UseRegexComments {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_UseRegexComments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Also use tag content.
+        /// </summary>
+        internal static string DisplayFilterControl_UseTagsAlso {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_UseTagsAlso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use only tag content.
+        /// </summary>
+        internal static string DisplayFilterControl_UseTagsOnly {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_UseTagsOnly", resourceCulture);
             }
         }
         
