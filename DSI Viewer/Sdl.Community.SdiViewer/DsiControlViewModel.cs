@@ -20,14 +20,20 @@ namespace Sdl.Community.DsiViewer
 			var activeDoc = _editorController.ActiveDocument;
 			if (activeDoc != null)
 			{
+				AddProperties();
 				activeDoc.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
 			}
 		}
 
 		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
 		{
+			AddProperties();
+		}
+
+		private void AddProperties()
+		{
 			PropertiesCollection.Clear();
-			var doc = sender as Document;
+			var doc = _editorController.ActiveDocument;
 			var segment = doc?.ActiveSegmentPair;
 			var contexts = segment?.GetParagraphUnitProperties().Contexts;
 			if (contexts?.Contexts?.Count > 0)
@@ -44,13 +50,15 @@ namespace Sdl.Community.DsiViewer
 					};
 					if (color.Name == "0") // it doesn't have a color set
 					{
-						sdiModel.RowColor ="White";
+						sdiModel.RowColor = "White";
 					}
 					else
 					{
 						sdiModel.RowColor = "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
 					}
+
 					PropertiesCollection.Add(sdiModel);
+
 				}
 			}
 		}
@@ -64,6 +72,7 @@ namespace Sdl.Community.DsiViewer
 				OnPropertyChanged(nameof(PropertiesCollection));
 			}
 		}
+
 		private EditorController GetEditorController()
 		{
 			return SdlTradosStudio.Application.GetController<EditorController>();
