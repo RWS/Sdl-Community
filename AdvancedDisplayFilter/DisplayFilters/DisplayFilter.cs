@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.Toolkit.FileType;
 using Sdl.Community.Toolkit.Integration;
@@ -90,20 +91,20 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 					success = rowInfo.IsSegmentContentTypes(Settings);
 
 
-				if (success && Settings.SourceText.Trim() != string.Empty)
+				if (success && !string.IsNullOrEmpty(Settings.SourceText))
 				{
 					success = IsExpressionFound(Settings.SourceText, rowInfo.SegmentPair.Source);
 				}
-				if (success && Settings.TargetText.Trim() != string.Empty)
+				if (success && !string.IsNullOrEmpty(Settings.TargetText))
 				{
 					success = IsExpressionFound(Settings.TargetText, rowInfo.SegmentPair.Target);
 				}
 
-				if (success && !CustomSettings.UseRegexCommentSearch && Settings.CommentText.Trim() != string.Empty)
+				if (success && !CustomSettings.UseRegexCommentSearch && !string.IsNullOrEmpty(Settings.CommentText))
 					success = rowInfo.IsTextFoundInComment(Settings);
 
 
-				if (success && Settings.CommentAuthor.Trim() != string.Empty)
+				if (success && !string.IsNullOrEmpty(Settings.CommentAuthor))
 					success = rowInfo.IsAuthorFoundInComment(Settings);
 
 
@@ -138,9 +139,12 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				text = textVisitor.GetText(segment);
 			}
 
+			var regexOptions = Settings.IsCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase;
+			var textSearchOptions = Settings.IsCaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
 			var success = Settings.IsRegularExpression
-				? ContentHelper.SearchContentRegularExpression(text, searchString)
-				: text.Contains(searchString);
+				? ContentHelper.SearchContentRegularExpression(text, searchString, regexOptions)
+				: text.IndexOf(searchString, textSearchOptions) > -1;
 
 			return success;
 		}

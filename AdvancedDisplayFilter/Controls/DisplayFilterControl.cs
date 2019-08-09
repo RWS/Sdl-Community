@@ -145,10 +145,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				{
 					IsRegularExpression = checkBox_regularExpression.Checked,
 					IsCaseSensitive = checkBox_caseSensitive.Checked,
-					SourceText = textBox_source.Text.Trim(),
-					TargetText = target_textbox.Text.Trim(),
-					CommentText = textBox_commentText.Text.Trim(),
-					CommentAuthor = textBox_commentAuthor.Text.Trim(),
+					SourceText = textBox_source.Text,
+					TargetText = target_textbox.Text,
+					CommentText = textBox_commentText.Text,
+					CommentAuthor = textBox_commentAuthor.Text,
 					CommentSeverity = comboBox_commentSeverity.SelectedIndex,
 					ShowAllContent = false
 				};
@@ -438,6 +438,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 			checkBox_regularExpression.Checked = false;
 			checkBox_caseSensitive.Checked = false;
+			checkBox_TagContent.Checked = false;
+
+			alsoTags_radioButton.Checked = true;
+
 			#endregion
 
 			#region  |  filters panel  |
