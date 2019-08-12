@@ -30,10 +30,7 @@ namespace IATETerminologyProvider.Service
 			{
 				var httpResponse = httpClient.SendAsync(httpRequest);
 				var httpResponseAsString = httpResponse?.Result?.Content?.ReadAsStringAsync().Result;
-
-				// the below Logger.Info should be removed, because it is used only to identify user's issue (otherwise will impact the performance of the app).
-				Log.Logger.Info($"The response when receiving domains: {httpResponseAsString}");
-
+								
 				var jsonDomainsModel = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseAsString);
 				if (jsonDomainsModel?.Items != null)
 				{
