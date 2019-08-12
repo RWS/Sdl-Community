@@ -124,7 +124,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				          !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
 			}
 
-			//String id seach
+			//String id search
 			if (success && !string.IsNullOrEmpty(customSettings.ContextInfoStringId))
 			{
 				if (filterSettings.IsRegularExpression)
@@ -193,19 +193,19 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				success = rowInfo.IsSegmentContentTypes(settings);
 
 
-			if (!success && settings.SourceText.Trim() != string.Empty)
+			if (!success && !string.IsNullOrEmpty(settings.SourceText))
 				success = rowInfo.IsTextFoundInSource(settings);
 
 
-			if (!success && settings.TargetText.Trim() != string.Empty)
+			if (!success && !string.IsNullOrEmpty(settings.TargetText))
 				success = rowInfo.IsTextFoundInTarget(settings);
 
 
-			if (!success && !customSettings.UseRegexCommentSearch && settings.CommentText.Trim() != string.Empty)
+			if (!success && !customSettings.UseRegexCommentSearch && !string.IsNullOrEmpty(settings.CommentText))
 				success = rowInfo.IsTextFoundInComment(settings);
 
 
-			if (!success && settings.CommentAuthor.Trim() != string.Empty)
+			if (!success && !string.IsNullOrEmpty(settings.CommentAuthor))
 				success = rowInfo.IsAuthorFoundInComment(settings);
 
 

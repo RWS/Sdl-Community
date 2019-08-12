@@ -29,5 +29,11 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public bool EditedFuzzy { get; set; }
 		public bool UnEditedFuzzy { get; set; }
 		public string ContextInfoStringId { get; set; }
+		public bool UseTagContent { get; set; }
+		/// <summary>
+		/// Set this to true to ALSO search inside tags and
+		/// Set this to false to search ONLY inside tags
+		/// </summary>
+		public bool AndOrTagContent { get; set; }
 	}
 }

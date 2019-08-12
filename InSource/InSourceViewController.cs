@@ -25,7 +25,6 @@ namespace Sdl.Community.InSource
         LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
     public class InSourceViewController : AbstractViewController, INotifyPropertyChanged
     {
-        #region private fields
         private static readonly Lazy<InSourceViewControl> Control = new Lazy<InSourceViewControl>(() => new InSourceViewControl());
         private static readonly Lazy<TimerControl> TimerControl = new Lazy<TimerControl>();
         private ProjectTemplateInfo _selectedProjectTemplate;
@@ -41,11 +40,10 @@ namespace Sdl.Community.InSource
 	    private readonly InSourceNotificationGroup _notificationGroup;
 	    public static readonly Log Log = Log.Instance;
 
-		#endregion private fields
-
 		public event EventHandler ProjectRequestsChanged;
+	    public event PropertyChangedEventHandler PropertyChanged;
 
-	    public InSourceViewController()
+		public InSourceViewController()
 	    {
 		    _projectRequests = new List<ProjectRequest>();
 		    _hasTemplateList = new List<bool>();
@@ -144,53 +142,67 @@ namespace Sdl.Community.InSource
 			    _eventAggregator.Publish(addNotificationEvent);
 
 			    var projectRequest = Persistence.Load();
-			    var newProjectRequestList = new List<ProjectRequest>();
 			    if (projectRequest != null)
 			    {
 				    var watchFoldersList = GetWatchFolders(projectRequest);
-				    foreach (var warchFolder in watchFoldersList)
+				    ProjectRequests.Clear();
+					foreach (var warchFolder in watchFoldersList)
 				    {
-					    newProjectRequestList.AddRange(GetNewDirectories(warchFolder, projectRequest));
-				    }
-				    Persistence.SaveProjectRequestList(newProjectRequestList);
-				    ProjectRequests = newProjectRequestList;
-
-				    foreach (var newProjectRequest in ProjectRequests)
+					    ProjectRequests.AddRange(GetNewDirectories(warchFolder, projectRequest));
+					}
+				    if (ProjectRequests?.Count>0)
 				    {
-					    var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
+						Persistence.SaveProjectRequestList(ProjectRequests);
 
-					    var notification = new InSourceNotification(newProjectRequest.NotificationId)
+					    foreach (var newProjectRequest in ProjectRequests)
 					    {
-						    Title = newProjectRequest.Name,
-						    AlwaysVisibleDetails = new List<string>
-						    {
-							    "Project request path",
-							    newProjectPath
-						    },
-						    IsActionVisible = true
-					    };
+						    var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
+						    CreateSudioNotification(newProjectRequest, newProjectPath);
+					    }
+					}
 
-					    Action action = () => CreateProjectFromNotification(notification);
-					    _createProjectCommand = new InSourceCommand(action)
-					    {
-						    CommandText = "Create project",
-						    CommandToolTip = "Create new project"
-					    };
-					    notification.Action = _createProjectCommand;
-					    _notificationGroup.Notifications.Add(notification);
-
-				    }
+					//publish notification
 				    var groupEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
 				    _eventAggregator.Publish(groupEvent);
 
 				    var showNotification = new ShowStudioNotificationsViewEvent(true, true);
 				    _eventAggregator.Publish(showNotification);
 			    }
-			}
+		    }
 		    catch (Exception e)
 		    {
 				Log.Logger.Error($"CheckForProjects method: {e.Message}\n {e.StackTrace}");
 			}
+	    }
+
+	    public void CreateSudioNotification(ProjectRequest newProjectRequest,string newProjectPath)
+	    {
+		    var notification = new InSourceNotification(newProjectRequest.NotificationId)
+		    {
+			    Title = newProjectRequest.Name,
+			    AlwaysVisibleDetails = new List<string>
+			    {
+				    "Project request path",
+				    newProjectPath
+			    },
+			    IsActionVisible = true,
+			    AllowsUserToDismiss = true
+		    };
+
+		    Action createProjectAction = () => CreateProjectFromNotification(notification);
+		    _createProjectCommand = new InSourceCommand(createProjectAction)
+		    {
+			    CommandText = "Create project",
+			    CommandToolTip = "Create new project"
+		    };
+		    notification.Action = _createProjectCommand;
+
+		    //dismiss notification action
+		    Action dismissAction = () => ClearNotification(notification);
+		    var clearNotificationCommand = new InSourceCommand(dismissAction);
+		    notification.ClearNotificationAction = clearNotificationCommand;
+
+		    _notificationGroup.Notifications.Add(notification);
 	    }
 
 	    private void CreateProjectFromNotification(InSourceNotification notification)
@@ -200,24 +212,8 @@ namespace Sdl.Community.InSource
 			    if (notification != null)
 			    {
 				    var project = ProjectRequests.FirstOrDefault(n => n.NotificationId.Equals(notification.Id));
-				    var fileBasedProject = CreateProjectsFromNotifications(project);
-				    //remove the notificatio from list
-				    if (fileBasedProject != null)
-				    {
-					    _notificationGroup.Notifications.Remove(notification);
-				    }
 
-				    if (_notificationGroup.Notifications.Count > 0)
-				    {
-					    var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
-					    _eventAggregator.Publish(addNotificationEvent);
-				    }
-				    else
-				    {
-					    if (fileBasedProject == null) return;
-					    var removeNotificationEvent = new RemoveStudioGroupNotificationEvent(NotificationGroupId);
-					    _eventAggregator.Publish(removeNotificationEvent);
-				    }
+				    CreateProjectsFromNotifications(project,notification);
 			    }
 			}
 		    catch (Exception e)
@@ -225,6 +221,10 @@ namespace Sdl.Community.InSource
 				Log.Logger.Error($"CreateProjectFromNotification method: {e.Message}\n {e.StackTrace}");
 			}
 		}
+	    private void ClearNotification(InSourceNotification notification)
+	    {
+		    _eventAggregator.Publish(new RemoveStudioNotificationFromGroupEvent(NotificationGroupId, notification.Id));
+	    }
 
 		private List<string> GetWatchFolders(List<ProjectRequest> projectRequest)
         {
@@ -288,10 +288,12 @@ namespace Sdl.Community.InSource
             return projectRequest;
         }
 
-	    public FileBasedProject CreateProjectsFromNotifications(ProjectRequest projectFromNotifications)
+	    public FileBasedProject CreateProjectsFromNotifications(ProjectRequest projectFromNotifications, InSourceNotification notification)
 	    {
+			var waitWindow = new WaitWindow();
+			waitWindow.Show();
 		    ProjectCreator creator;
-		    FileBasedProject project=null;
+		    FileBasedProject project = null;
 		    var worker = new BackgroundWorker
 		    {
 			    WorkerReportsProgress = true
@@ -299,7 +301,7 @@ namespace Sdl.Community.InSource
 		    worker.DoWork += (sender, e) =>
 		    {
 			    creator = new ProjectCreator(projectFromNotifications, projectFromNotifications.ProjectTemplate);
-			   project = creator.Execute();
+			    project = creator.Execute();
 		    };
 
 		    worker.RunWorkerCompleted += (sender, e) =>
@@ -312,21 +314,23 @@ namespace Sdl.Community.InSource
 			    {
 				    if (project != null)
 				    {
-						InSource.Instance.RequestAccepted(projectFromNotifications);
+					    InSource.Instance.RequestAccepted(projectFromNotifications);
 					    //Remove the created project from project request
 					    //this will refresh the list from view part
 					    ProjectRequests.Remove(projectFromNotifications);
+					    ClearNotification(notification);
 
 					    OnProjectRequestsChanged();
-					    MessageBox.Show($"Project {projectFromNotifications.Name} was created");
+						waitWindow.Close();
+					    MessageBox.Show($@"Project {projectFromNotifications.Name} was created");
 				    }
 			    }
 		    };
 		    worker.RunWorkerAsync();
 		    return project;
-		}
+	    }
 
-		public void CreateProjects()
+	    public void CreateProjects()
 	    {
 		    try
 		    {
@@ -388,8 +392,7 @@ namespace Sdl.Community.InSource
 									}
 									else
 									{
-										foreach (
-											var request in creator.SuccessfulRequests)
+										foreach (var request in creator.SuccessfulRequests)
 										{
 											// accept the request
 											InSource.Instance.RequestAccepted(request.Item1);
@@ -399,23 +402,10 @@ namespace Sdl.Community.InSource
 
 											//remove notification for project created from the View part
 											var notification =
-												_notificationGroup.Notifications.FirstOrDefault(n => n.Id.Equals(request.Item1
-													.NotificationId));
+												(InSourceNotification)_notificationGroup.Notifications.FirstOrDefault(n => n.Id.Equals(request.Item1.NotificationId)); 
 											if (notification != null)
 											{
-												_notificationGroup.Notifications.Remove(notification);
-												if (_notificationGroup.Notifications.Count > 0)
-												{
-													var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
-
-													_eventAggregator.Publish(addNotificationEvent);
-												}
-												else
-												{
-													var removeNotificationEvent = new RemoveStudioGroupNotificationEvent(NotificationGroupId);
-													_eventAggregator.Publish(removeNotificationEvent);
-												}
-
+												ClearNotification(notification);
 											}
 											OnProjectRequestsChanged();
 										}
@@ -458,8 +448,6 @@ namespace Sdl.Community.InSource
         {
             Control.Value.BeginInvoke(new Action(() => Control.Value.ReportMessage(fileBasedProject, message)));
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)
         {
