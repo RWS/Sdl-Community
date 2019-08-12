@@ -1290,7 +1290,7 @@ namespace Sdl.Community.XliffReadWrite.SDLXLIFF
             }
         }
 
-        public Sdl.FileTypeSupport.Framework.FileJanitor ZippedCurrentFile
+        public FileTypeSupport.Framework.FileJanitor ZippedCurrentFile
         {
             get;
             set;

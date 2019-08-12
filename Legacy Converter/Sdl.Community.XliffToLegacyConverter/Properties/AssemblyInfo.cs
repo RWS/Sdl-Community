@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SDLXLIFF to Legacy Converter")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("SDLXLIFF to Legacy Converter")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("SDL Community")]
+[assembly: AssemblyCompany("SDL Community Developers")]
 [assembly: AssemblyProduct("SDLXLIFF to Legacy Converter")]
 [assembly: AssemblyCopyright("SDL Community © 2017")]
 [assembly: AssemblyTrademark("")]

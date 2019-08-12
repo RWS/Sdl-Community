@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SdlXliffReadWrite")]
+[assembly: AssemblyTitle("SDLXLIFF Read/Write")]
 [assembly: AssemblyDescription("SDLXLIFF Read/Write")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Sdl Community")]
-[assembly: AssemblyProduct("SdlXliffReadWrite")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCompany("Sdl Community Developers")]
+[assembly: AssemblyProduct("SDLXLIFF Read/Write")]
+[assembly: AssemblyCopyright("SDL Community © 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.25")]
-[assembly: AssemblyFileVersion("1.0.0.25")]
+[assembly: AssemblyVersion("2.2.1.0")]
+[assembly: AssemblyFileVersion("2.2.1.0")]
