@@ -6,11 +6,20 @@ namespace IATETerminologyProvider.Ui
 	/// Interaction logic for SettingsWindow.xaml
 	/// </summary>
 	public partial class SettingsWindow
-    {
-        public SettingsWindow(SettingsViewModel settingsViewModel)
+	{
+		private readonly SettingsViewModel _model;
+		public SettingsWindow(SettingsViewModel model)
         {
 			InitializeComponent();
-			DataContext = settingsViewModel;
+
+	        _model = model;
+			Loaded += SettingsWindow_Loaded;			
 		}
-    }
+
+		private void SettingsWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
+		{
+			Loaded -= SettingsWindow_Loaded;
+			DataContext = _model;
+		}
+	}
 }
