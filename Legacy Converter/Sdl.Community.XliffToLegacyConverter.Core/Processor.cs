@@ -205,7 +205,7 @@ namespace Sdl.Community.XliffToLegacyConverter.Core
 		public static List<TagUnit> SeperateTags(string text)
 		{
 
-			
+
 
 			//simple function to recover the tag information
 			var tags = new List<TagUnit>();
@@ -247,7 +247,7 @@ namespace Sdl.Community.XliffToLegacyConverter.Core
 			}
 
 			var regexXref = new Regex(@"[XREF[^\]]*\][^\]]*\]", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-			
+
 			try
 			{
 				foreach (var section in sections)
@@ -332,19 +332,19 @@ namespace Sdl.Community.XliffToLegacyConverter.Core
 									var tagId = string.Empty;
 									var tagName = GetEndTagName(ttag);
 									tags.Add(new TagUnit(tagId, tagName, ttag, TagUnit.TagUnitState.IsClosing, TagUnit.TagUnitType.IsTag));
-								}								
+								}
 								else if (tagType == TagUnit.TagUnitState.IsEmpty)
 								{
 									var tagId = string.Empty;
 									var tagName = GetStartTagName(ttag, ref tagId);
-									tags.Add(new TagUnit(tagId, tagName, ttag, TagUnit.TagUnitState.IsEmpty, TagUnit.TagUnitType.IsTag));									
+									tags.Add(new TagUnit(tagId, tagName, ttag, TagUnit.TagUnitState.IsEmpty, TagUnit.TagUnitType.IsTag));
 								}
 								else
 								{
 									var tagId = string.Empty;
 									var tagName = GetStartTagName(ttag, ref tagId);
 									tags.Add(new TagUnit(tagId, tagName, ttag, TagUnit.TagUnitState.IsOpening, TagUnit.TagUnitType.IsTag));
-								}								
+								}
 							}
 
 							str = atag;
@@ -401,7 +401,7 @@ namespace Sdl.Community.XliffToLegacyConverter.Core
 		}
 
 		private static TagUnit.TagUnitState GetSectionType(string content)
-		{			
+		{
 			var regex = new Regex(@"[\s\t]+", RegexOptions.Singleline);
 			content = regex.Replace(content, string.Empty);
 

@@ -30,9 +30,9 @@ namespace Sdl.Community.XliffToLegacyConverter
 
 		}
 
-		private void FormMain_Load(object sender, EventArgs e)
-		{
-			Text = @"Legacy Converter";
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+	        Text = @"Legacy Converter";
 
 
 			textBox_reportFileName.Text = @"SDLXLIFF to Legacy Converter Report "
@@ -1669,14 +1669,14 @@ namespace Sdl.Community.XliffToLegacyConverter
 			}
 		}
 
-		private void toolStripButton_Help_Click(object sender, EventArgs e)
-		{
+        private void toolStripButton_Help_Click(object sender, EventArgs e)
+        {
 			Process.Start(@"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3280.legacy-converter");
-		}
+        }
 
-		private void help1ToolStripMenuItem_Click(object sender, EventArgs e)
-		{
+        private void help1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 			Process.Start(@"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3280.legacy-converter");
-		}
-	}
+        }
+    }
 }
