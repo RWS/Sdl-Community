@@ -56,9 +56,6 @@
     <ApplicationIcon>SdlXliffToLegacyConverter.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
@@ -67,10 +64,6 @@
   <PropertyGroup>
     <StartupObject>
     </StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>false</SignManifests>
-    <PluginDeploymentPath>$(AppData)\SDL\SDL Trados Studio\14\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -173,18 +166,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.XliffReadWrite\Sdl.Community.XliffReadWrite.csproj">
-      <Project>{300AF6D6-0D86-4653-9692-3D8098CED12D}</Project>
-      <Name>Sdl.Community.XliffReadWrite</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Sdl.Community.XliffToLegacyConverter.Core\Sdl.Community.XliffToLegacyConverter.Core.csproj">
-      <Project>{BA2E924D-C1B3-4901-9D74-1F3157EBB778}</Project>
-      <Name>Sdl.Community.XliffToLegacyConverter.Core</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -202,9 +183,25 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="pluginpackage.manifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="SdlXliffToLegacyConverter.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sdl.Community.XliffReadWrite\Sdl.Community.XliffReadWrite.csproj">
+      <Project>{300af6d6-0d86-4653-9692-3d8098ced12d}</Project>
+      <Name>Sdl.Community.XliffReadWrite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.XliffToLegacyConverter.Core\Sdl.Community.XliffToLegacyConverter.Core.csproj">
+      <Project>{ba2e924d-c1b3-4901-9d74-1f3157ebb778}</Project>
+      <Name>Sdl.Community.XliffToLegacyConverter.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\14\Plugins</PluginDeploymentPath>
+  </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
