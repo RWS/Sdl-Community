@@ -12,39 +12,26 @@ namespace Sdl.Community.ExcelTerminology
 {
 	public class TerminologyProviderExcel : AbstractTerminologyProvider
 	{
-		public const string ExcelUriTemplate = "excelglossary://";
-
 		private List<ExcelEntry> _termEntries;
-
+		private readonly ITermSearchService _termSearchService;
 		private readonly ProviderSettings _providerSettings;
 
+		public const string ExcelUriTemplate = "excelglossary://";
+
 		public ProviderSettings ProviderSettings => _providerSettings;
-
-		private readonly ITermSearchService _termSearchService;
-
+		public override bool IsReadOnly => false;
 		public List<ExcelEntry> Terms => _termEntries;
-
+		public override string Name => Path.GetFileName(_providerSettings.TermFilePath);
+		public override string Description => PluginResources.ExcelTerminologyProviderDescription;
+		public override Uri Uri => new Uri((ExcelUriTemplate + Path.GetFileName(_providerSettings.TermFilePath)).RemoveUriForbiddenCharacters());
+		public override IDefinition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
+		
 		public event Action<List<ExcelEntry>> TermsLoaded;
-		public override string Name =>
-			Path.GetFileName(_providerSettings.TermFilePath);
-		public override string Description =>
-			PluginResources.ExcelTerminologyProviderDescription;
-
-		public override Uri Uri =>
-			new Uri((ExcelUriTemplate +
-			         Path.GetFileName(_providerSettings.TermFilePath))
-				.RemoveUriForbiddenCharacters());
-
-
-		public override IDefinition Definition =>
-			new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
 
 		public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService)
 		{
 			_providerSettings = providerSettings ?? throw new ArgumentNullException(nameof(providerSettings));
-
 			_termSearchService = termSearchService ?? throw new ArgumentNullException(nameof(termSearchService));
-
 			_termEntries = new List<ExcelEntry>();
 		}
 
@@ -52,6 +39,7 @@ namespace Sdl.Community.ExcelTerminology
 		{
 			_providerSettings = providerSettings;
 		}
+
 		public async Task LoadEntries()
 		{
 			try
@@ -148,5 +136,4 @@ namespace Sdl.Community.ExcelTerminology
 			return results;
 		}
 	}
-
 }
