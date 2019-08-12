@@ -14,12 +14,12 @@ namespace Sdl.Community.XliffToLegacyConverter
 	{
 		#region Interop-Defines
 		[DllImport("user32.dll")]
-		private	static extern IntPtr SendMessage(IntPtr hWnd, int msg,	IntPtr wPar, IntPtr	lPar);
+		private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wPar, IntPtr lPar);
 
 		// ListView messages
-		private const int LVM_FIRST					= 0x1000;
-		private const int LVM_GETCOLUMNORDERARRAY	= (LVM_FIRST + 59);
-		
+		private const int LVM_FIRST = 0x1000;
+		private const int LVM_GETCOLUMNORDERARRAY = (LVM_FIRST + 59);
+
 		// Windows Messages
 		private const int WM_PAINT = 0x000F;
 		#endregion
@@ -37,8 +37,8 @@ namespace Sdl.Community.XliffToLegacyConverter
 		}
 
 		private ArrayList _embeddedControls = new ArrayList();
-		
-		public ListViewEx() {}
+
+		public ListViewEx() { }
 
 		/// <summary>
 		/// Retrieve the order in which columns appear
@@ -46,10 +46,10 @@ namespace Sdl.Community.XliffToLegacyConverter
 		/// <returns>Current display order of column indices</returns>
 		protected int[] GetColumnOrder()
 		{
-			var lPar	= Marshal.AllocHGlobal(Marshal.SizeOf(typeof(int)) * Columns.Count);
+			var lPar = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(int)) * Columns.Count);
 
 			var res = SendMessage(Handle, LVM_GETCOLUMNORDERARRAY, new IntPtr(Columns.Count), lPar);
-			if (res.ToInt32() == 0)	// Something went wrong
+			if (res.ToInt32() == 0) // Something went wrong
 			{
 				Marshal.FreeHGlobal(lPar);
 				return null;
@@ -81,25 +81,25 @@ namespace Sdl.Community.XliffToLegacyConverter
 				return subItemRect;
 
 			if (SubItem >= order.Length)
-				throw new IndexOutOfRangeException("SubItem "+SubItem+" out of range");
+				throw new IndexOutOfRangeException("SubItem " + SubItem + " out of range");
 
 			// Retrieve the bounds of the entire ListViewItem (all subitems)
 			var lviBounds = Item.GetBounds(ItemBoundsPortion.Entire);
-			var	subItemX = lviBounds.Left;
+			var subItemX = lviBounds.Left;
 
 			// Calculate the X position of the SubItem.
 			// Because the columns can be reordered we have to use Columns[order[i]] instead of Columns[i] !
 			ColumnHeader col;
 			int i;
-			for (i=0; i<order.Length; i++)
+			for (i = 0; i < order.Length; i++)
 			{
-				col = this.Columns[order[i]];
+				col = Columns[order[i]];
 				if (col.Index == SubItem)
 					break;
 				subItemX += col.Width;
 			}
- 
-			subItemRect	= new Rectangle(subItemX, lviBounds.Top, this.Columns[order[i]].Width, lviBounds.Height);
+
+			subItemRect = new Rectangle(subItemX, lviBounds.Top, Columns[order[i]].Width, lviBounds.Height);
 
 			return subItemRect;
 		}
@@ -112,7 +112,7 @@ namespace Sdl.Community.XliffToLegacyConverter
 		/// <param name="row">Index of row</param>
 		public void AddEmbeddedControl(Control c, int col, int row)
 		{
-			AddEmbeddedControl(c,col,row,DockStyle.Fill);
+			AddEmbeddedControl(c, col, row, DockStyle.Fill);
 		}
 		/// <summary>
 		/// Add a control to the ListView
@@ -123,9 +123,9 @@ namespace Sdl.Community.XliffToLegacyConverter
 		/// <param name="dock">Location and resize behavior of embedded control</param>
 		public void AddEmbeddedControl(Control c, int col, int row, DockStyle dock)
 		{
-			if (c==null)
+			if (c == null)
 				throw new ArgumentNullException();
-			if (col>=Columns.Count || row>=Items.Count)
+			if (col >= Columns.Count || row >= Items.Count)
 				throw new ArgumentOutOfRangeException();
 
 			EmbeddedControl ec;
@@ -139,10 +139,10 @@ namespace Sdl.Community.XliffToLegacyConverter
 
 			// Add a Click event handler to select the ListView row when an embedded control is clicked
 			c.Click += new EventHandler(_embeddedControl_Click);
-			
-			this.Controls.Add(c);
+
+			Controls.Add(c);
 		}
-		
+
 		/// <summary>
 		/// Remove a control from the ListView
 		/// </summary>
@@ -152,20 +152,20 @@ namespace Sdl.Community.XliffToLegacyConverter
 			if (c == null)
 				throw new ArgumentNullException();
 
-			for (var i=0; i<_embeddedControls.Count; i++)
+			for (var i = 0; i < _embeddedControls.Count; i++)
 			{
 				var ec = (EmbeddedControl)_embeddedControls[i];
 				if (ec.Control == c)
 				{
 					c.Click -= new EventHandler(_embeddedControl_Click);
-					this.Controls.Remove(c);
+					Controls.Remove(c);
 					_embeddedControls.RemoveAt(i);
 					return;
 				}
 			}
 			throw new Exception("Control not found!");
 		}
-		
+
 		/// <summary>
 		/// Retrieve the control embedded at a given location
 		/// </summary>
@@ -184,7 +184,7 @@ namespace Sdl.Community.XliffToLegacyConverter
 		[DefaultValue(View.LargeIcon)]
 		public new View View
 		{
-			get 
+			get
 			{
 				return base.View;
 			}
@@ -209,10 +209,10 @@ namespace Sdl.Community.XliffToLegacyConverter
 					// Calculate the position of all embedded controls
 					foreach (EmbeddedControl ec in _embeddedControls)
 					{
-						var rc = this.GetSubItemBounds(ec.Item, ec.Column);
+						var rc = GetSubItemBounds(ec.Item, ec.Column);
 
-						if ((this.HeaderStyle != ColumnHeaderStyle.None) &&
-							(rc.Top<this.Font.Height)) // Control overlaps ColumnHeader
+						if ((HeaderStyle != ColumnHeaderStyle.None) &&
+							(rc.Top < Font.Height)) // Control overlaps ColumnHeader
 						{
 							ec.Control.Visible = false;
 							continue;
@@ -233,11 +233,11 @@ namespace Sdl.Community.XliffToLegacyConverter
 								rc.Width = ec.Control.Width;
 								break;
 							case DockStyle.Bottom:
-								rc.Offset(0, rc.Height-ec.Control.Height);
+								rc.Offset(0, rc.Height - ec.Control.Height);
 								rc.Height = ec.Control.Height;
 								break;
 							case DockStyle.Right:
-								rc.Offset(rc.Width-ec.Control.Width, 0);
+								rc.Offset(rc.Width - ec.Control.Width, 0);
 								rc.Width = ec.Control.Width;
 								break;
 							case DockStyle.None:
@@ -250,7 +250,7 @@ namespace Sdl.Community.XliffToLegacyConverter
 					}
 					break;
 			}
-			base.WndProc (ref m);
+			base.WndProc(ref m);
 		}
 
 		private void _embeddedControl_Click(object sender, EventArgs e)
@@ -260,7 +260,7 @@ namespace Sdl.Community.XliffToLegacyConverter
 			{
 				if (ec.Control == (Control)sender)
 				{
-					this.SelectedItems.Clear();
+					SelectedItems.Clear();
 					ec.Item.Selected = true;
 				}
 			}
