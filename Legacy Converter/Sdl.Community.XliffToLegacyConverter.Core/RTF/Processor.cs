@@ -349,24 +349,24 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.RTF
         private static bool ImportTranslation(SegmentPair segmentPair)
         {
             var importTranslation = true;
-            if (segmentPair.IsLocked && Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotImportLocked)
+            if (segmentPair.IsLocked && XliffReadWrite.Processor.ProcessorSettings.DoNotImportLocked)
                 importTranslation = false;
-            else if (!segmentPair.IsLocked && Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotImportUnLocked)
+            else if (!segmentPair.IsLocked && XliffReadWrite.Processor.ProcessorSettings.DoNotImportUnLocked)
                 importTranslation = false;
             else if (string.Compare(segmentPair.MatchTypeId, "Perfect Match", StringComparison.OrdinalIgnoreCase) == 0 &&
-                     Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotImportPerfectMatch)
+                     XliffReadWrite.Processor.ProcessorSettings.DoNotImportPerfectMatch)
                 importTranslation = false;
             else if (string.Compare(segmentPair.MatchTypeId, "Context Match", StringComparison.OrdinalIgnoreCase) == 0 &&
-                     Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotImportContextMatch)
+                     XliffReadWrite.Processor.ProcessorSettings.DoNotImportContextMatch)
                 importTranslation = false;
             else if (string.Compare(segmentPair.MatchTypeId, "Exact Match", StringComparison.OrdinalIgnoreCase) == 0 &&
-                     Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotImportExactMatch)
+                     XliffReadWrite.Processor.ProcessorSettings.DoNotImportExactMatch)
                 importTranslation = false;
             else if (string.Compare(segmentPair.MatchTypeId, "Fuzzy Match", StringComparison.OrdinalIgnoreCase) == 0 &&
-                     Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotImportFuzzyMatch)
+                     XliffReadWrite.Processor.ProcessorSettings.DoNotImportFuzzyMatch)
                 importTranslation = false;
             else if (string.Compare(segmentPair.MatchTypeId, "No Match", StringComparison.OrdinalIgnoreCase) == 0 &&
-                     Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotImportNoMatch)
+                     XliffReadWrite.Processor.ProcessorSettings.DoNotImportNoMatch)
                 importTranslation = false;
             return importTranslation;
         }
@@ -378,7 +378,7 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.RTF
                 sections.Add(new SegmentSection(SegmentSection.ContentType.Text, string.Empty, stringColorType.Black));
             }
 
-            var tags = Core.Processor.SeperateTags(stringColorType.Red,string.Empty);
+            var tags = Core.Processor.SeperateTags(stringColorType.Red);
             foreach (var tag in tags)
             {
                 switch (tag.Type)
@@ -492,27 +492,27 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.RTF
                             {
                                 case "Perfect Match":
                                     {
-                                        doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportPerfectMatch;
+                                        doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportPerfectMatch;
                                         break;
                                     }
                                 case "Context Match":
                                     {
-                                        doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportContextMatch;
+                                        doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportContextMatch;
                                         break;
                                     }
                                 case "Exact Match":
                                     {
-                                        doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportExactMatch;
+                                        doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportExactMatch;
                                         break;
                                     }
                                 case "Fuzzy Match":
                                     {
-                                        doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportFuzzyMatch;
+                                        doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportFuzzyMatch;
                                         break;
                                     }
                                 case "No Match":
                                     {
-                                        doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportNoMatch;
+                                        doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportNoMatch;
                                         break;
                                     }
                             }
@@ -524,37 +524,37 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.RTF
                                 case "Unspecified":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportNotTranslated;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportNotTranslated;
                                     } break;
                                 case "Draft":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportDraft;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportDraft;
                                     } break;
                                 case "Translated":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslated;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslated;
                                     } break;
                                 case "RejectedTranslation":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslationRejected;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslationRejected;
                                     } break;
                                 case "ApprovedTranslation":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslationApproved;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslationApproved;
                                     } break;
                                 case "RejectedSignOff":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportSignOffRejected;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportSignOffRejected;
                                     } break;
                                 case "ApprovedSignOff":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportSignOff;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportSignOff;
                                     } break;
                             }
 
@@ -562,15 +562,15 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.RTF
 
                             if (!doNotExportSegment)
                             {
-                                if (segmentPair.IsLocked && Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportLocked)
+                                if (segmentPair.IsLocked && XliffReadWrite.Processor.ProcessorSettings.DoNotExportLocked)
                                     doNotExportSegment = true;
-                                else if (!segmentPair.IsLocked && Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportUnLocked)
+                                else if (!segmentPair.IsLocked && XliffReadWrite.Processor.ProcessorSettings.DoNotExportUnLocked)
                                     doNotExportSegment = true;
                             }
 
                             if (!doNotExportSegment)
                             {
-                                if (segmentPair.Target.Trim() == string.Empty && Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.IgnoreEmptyTranslations)
+                                if (segmentPair.Target.Trim() == string.Empty && XliffReadWrite.Processor.ProcessorSettings.IgnoreEmptyTranslations)
                                     doNotExportSegment = true;
                             }
 
@@ -655,9 +655,9 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.RTF
 
                             #region  |  write segment  |
 
-                            if (segmentPair.IsLocked && Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportLocked)
+                            if (segmentPair.IsLocked && XliffReadWrite.Processor.ProcessorSettings.DoNotExportLocked)
                                 doNotExportSegment = true;
-                            else if (!segmentPair.IsLocked && Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportUnLocked)
+                            else if (!segmentPair.IsLocked && XliffReadWrite.Processor.ProcessorSettings.DoNotExportUnLocked)
                                 doNotExportSegment = true;
 
 

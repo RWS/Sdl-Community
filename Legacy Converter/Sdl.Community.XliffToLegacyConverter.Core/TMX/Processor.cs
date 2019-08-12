@@ -144,27 +144,27 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.TMX
                             {
                                 case "Perfect Match":
                                     {
-                                        doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportPerfectMatch;
+                                        doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportPerfectMatch;
                                         break;
                                     }
                                 case "Context Match":
                                     {
-                                        doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportContextMatch;
+                                        doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportContextMatch;
                                         break;
                                     }
                                 case "Exact Match":
                                     {
-                                        doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportExactMatch;
+                                        doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportExactMatch;
                                         break;
                                     }
                                 case "Fuzzy Match":
                                     {
-                                        doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportFuzzyMatch;
+                                        doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportFuzzyMatch;
                                         break;
                                     }
                                 case "No Match":
                                     {
-                                        doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportNoMatch;
+                                        doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportNoMatch;
                                         break;
                                     }
                             }
@@ -176,37 +176,37 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.TMX
                                 case "Unspecified":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportNotTranslated;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportNotTranslated;
                                     } break;
                                 case "Draft":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportDraft;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportDraft;
                                     } break;
                                 case "Translated":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslated;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslated;
                                     } break;
                                 case "RejectedTranslation":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslationApproved;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslationApproved;
                                     } break;
                                 case "ApprovedTranslation":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslationRejected;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslationRejected;
                                     } break;
                                 case "RejectedSignOff":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportSignOffRejected;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportSignOffRejected;
                                     } break;
                                 case "ApprovedSignOff":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportSignOff;
+                                            doNotExportSegment = XliffReadWrite.Processor.ProcessorSettings.DoNotExportSignOff;
                                     } break;
                             }
 
@@ -214,9 +214,9 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.TMX
 
                             if (!doNotExportSegment)
                             {
-                                if (segmentPair.IsLocked && Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportLocked)
+                                if (segmentPair.IsLocked && XliffReadWrite.Processor.ProcessorSettings.DoNotExportLocked)
                                     doNotExportSegment = true;
-                                else if (!segmentPair.IsLocked && Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportUnLocked)
+                                else if (!segmentPair.IsLocked && XliffReadWrite.Processor.ProcessorSettings.DoNotExportUnLocked)
                                     doNotExportSegment = true;
                             }
 
