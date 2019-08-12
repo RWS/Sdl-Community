@@ -18,13 +18,14 @@ namespace ExcelTerminology
 
         public ProviderSettings ProviderSettings { get; }
         public List<ExcelEntry> Terms { get; private set; }
+		public static readonly Log Log = Log.Instance;
 
 		public override bool IsReadOnly => false;
 		public override string Name => Path.GetFileName(ProviderSettings.TermFilePath);
 		public override string Description => PluginResources.ExcelTerminologyProviderDescription;
 		public override Uri Uri => new Uri((ExcelUriTemplate + Path.GetFileName(ProviderSettings.TermFilePath)).RemoveUriForbiddenCharacters());
 		public override IDefinition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
-		
+
 		public event Action<List<ExcelEntry>> TermsLoaded;
 
 		public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService)
@@ -54,6 +55,7 @@ namespace ExcelTerminology
 			}
 			catch (Exception ex)
 			{
+				Log.Logger.Error($"LoadEntries method: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
 		}
@@ -76,14 +78,13 @@ namespace ExcelTerminology
 				PickListValues = new List<string> { "Approved", "Not Approved" },
 				Type = FieldType.String
 			};
-			result.Add(approvedField);
 
+			result.Add(approvedField);
 			return result;
 		}
 		public IList<IDefinitionLanguage> GetDefinitionLanguages()
 		{
 			var result = new List<IDefinitionLanguage>();
-
 			var sourceLanguage = new DefinitionLanguage
 			{
 				IsBidirectional = true,
@@ -109,12 +110,12 @@ namespace ExcelTerminology
 
 		public override IEntry GetEntry(int id)
 		{
-			return Terms.FirstOrDefault(termEntry => termEntry.Id == id);
+			return Terms?.FirstOrDefault(termEntry => termEntry.Id == id);
 		}
 
 		public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
 		{
-			return Terms.FirstOrDefault(termEntry => termEntry.Id == id);
+			return Terms?.FirstOrDefault(termEntry => termEntry.Id == id);
 		}
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination,
@@ -124,12 +125,11 @@ namespace ExcelTerminology
 			var results = new List<ISearchResult>();
 			try
 			{
-				results.AddRange(
-					_termSearchService
-						.Search(text, Terms, maxResultsCount));
+				results.AddRange(_termSearchService.Search(text, Terms, maxResultsCount));
 			}
 			catch (Exception ex)
 			{
+				Log.Logger.Error($"LoadEntries Search: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
 			return results;

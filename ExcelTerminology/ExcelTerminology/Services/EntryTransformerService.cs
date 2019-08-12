@@ -8,12 +8,15 @@ namespace ExcelTerminology.Services
 {
 	public class EntryTransformerService: IEntryTransformerService
     {
-        public const string ApprovedFieldName = "Approved";
         private readonly IParser _parser;
-        public EntryTransformerService(IParser parser)
+
+		public const string ApprovedFieldName = "Approved";
+
+		public EntryTransformerService(IParser parser)
         {
             _parser = parser;
         }
+
         public IList<IEntryLanguage> CreateEntryLanguages(ExcelTerm excelTerm)
         {
             var result = new List<IEntryLanguage>();
@@ -26,8 +29,8 @@ namespace ExcelTerminology.Services
                 Fields = new List<IEntryField>(),
                 IsSource = true
             };
-
             result.Add(sourceEntryLanguage);
+
             if (excelTerm.Target != null)
             {
                 var targetEntryLanguage = new ExcelEntryLanguage
@@ -40,8 +43,6 @@ namespace ExcelTerminology.Services
                 };
                 result.Add(targetEntryLanguage);
             }
-
-
             return result;
         }
 
@@ -49,7 +50,6 @@ namespace ExcelTerminology.Services
         {
             var terms = _parser.Parse(term);
             var approvals = _parser.Parse(approved);
-
 
             return terms.Select((t, i) => new EntryTerm
             {

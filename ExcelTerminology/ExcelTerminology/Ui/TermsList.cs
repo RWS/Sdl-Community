@@ -18,6 +18,8 @@ namespace ExcelTerminology.Ui
 		private List<ExcelEntry> _terms = new List<ExcelEntry>();
 		private readonly TerminologyProviderExcel _terminologyProviderExcel;
 
+		public static readonly Log Log = Log.Instance;
+
 		public TermsList()
 		{
 			InitializeComponent();
@@ -39,8 +41,7 @@ namespace ExcelTerminology.Ui
 			var parser = new Parser(_providerSettings);
 			_transformerService = new EntryTransformerService(parser);
 
-			_excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService,
-				_transformerService);
+			_excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService, _transformerService);
 		}
 
 		public void SetTerms(List<ExcelEntry> terms)
@@ -53,19 +54,15 @@ namespace ExcelTerminology.Ui
 
 		protected override void OnLoad(EventArgs e)
 		{
-
 			ObjectListView.EditorRegistry.Register(typeof(string), typeof(CustomTabTextBox));
 			sourceListView.ShowGroups = false;
 			sourceListView.FullRowSelect = true;
 			sourceListView.HeaderStyle = ColumnHeaderStyle.None;
 			sourceListView.HideSelection = false;
-
-
 			sourceListView.SetObjects(_terms);
 			sourceListView.SelectedIndex = 0;
 			targetGridView.ColumnHeadersVisible = false;
 			SetReadOnlyControls();
-
 		}
 
 		private void SetReadOnlyControls()
@@ -74,7 +71,6 @@ namespace ExcelTerminology.Ui
 			{
 				targetGridView.EditMode = DataGridViewEditMode.EditOnEnter;
 				targetGridView.AllowUserToAddRows = true;
-
 				sourceColumn.IsEditable = true;
 				sourceListView.CellEditActivation = ObjectListView.CellEditActivateMode.DoubleClick;
 				sourceListView.CellEditUseWholeCell = true;
@@ -84,17 +80,13 @@ namespace ExcelTerminology.Ui
 				addBtn.Enabled = false;
 				deleteBtn.Enabled = false;
 				confirmBtn.Enabled = false;
-
 				sourceColumn.IsEditable = false;
 				sourceListView.CellEditActivation = ObjectListView.CellEditActivateMode.None;
-
-
 				targetGridView.AllowUserToAddRows = false;
 				targetGridView.AllowUserToDeleteRows = false;
 				targetGridView.ReadOnly = true;
 			}
 		}
-
 
 		public void JumpToTerm(IEntry entry)
 		{
@@ -112,9 +104,9 @@ namespace ExcelTerminology.Ui
 			}
 			catch (Exception ex)
 			{
+				Log.Logger.Error($"JumpToTerm method: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
-
 		}
 
 		public void AddTerm(string source, string target)
@@ -189,6 +181,7 @@ namespace ExcelTerminology.Ui
 			}
 			catch (Exception ex)
 			{
+				Log.Logger.Error($"AddTermInternal method: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
 		}
@@ -261,6 +254,7 @@ namespace ExcelTerminology.Ui
 			}
 			catch (Exception ex)
 			{
+				Log.Logger.Error($"AddAndEdit method: {ex.Message}\n {ex.StackTrace}");
 				Console.Write(ex);
 			}
 		}
@@ -321,9 +315,6 @@ namespace ExcelTerminology.Ui
 					entry.Target = termValue;
 					entry.Approved = approvedValue;
 				}
-
-
-
 				var entryLanguage = _transformerService.CreateEntryLanguages(entry);
 				var entryToUpdate = terms.Find(item => item.Id == entryId);
 
@@ -338,6 +329,7 @@ namespace ExcelTerminology.Ui
 			}
 			catch (Exception ex)
 			{
+				Log.Logger.Error($"Save method: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
 		}
@@ -375,6 +367,7 @@ namespace ExcelTerminology.Ui
 			}
 			catch (Exception ex)
 			{
+				Log.Logger.Error($"sourceListView_ItemSelectionChanged method: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
 		}
@@ -405,15 +398,13 @@ namespace ExcelTerminology.Ui
 				sourceListView.Focus();
 				sourceListView.EnsureModelVisible(sourceListView.SelectedItem);
 
-
 				await _excelTermProviderService.DeleteEntry(source.Id);
 			}
 			catch (Exception ex)
 			{
-
+				Log.Logger.Error($"deleteBtn_Click method: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
-
 		}
 
 		private void addBtn_Click(object sender, EventArgs e)
@@ -441,7 +432,7 @@ namespace ExcelTerminology.Ui
 			}
 			catch (Exception ex)
 			{
-
+				Log.Logger.Error($"addBtn_Click method: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
 		}
@@ -515,9 +506,9 @@ namespace ExcelTerminology.Ui
 									newTargetLanguage.Terms.Where(newTargetTerm =>
 									{
 										return existingTargetLanguage != null && !existingTargetLanguage.Terms.Any(
-											       x =>
-												       x.Value.Equals(newTargetTerm.Value,
-													       StringComparison.InvariantCultureIgnoreCase));
+												   x =>
+													   x.Value.Equals(newTargetTerm.Value,
+														   StringComparison.InvariantCultureIgnoreCase));
 									}))
 								{
 									existingTargetLanguage?.Terms.Add(newTargetTerm);
@@ -542,6 +533,7 @@ namespace ExcelTerminology.Ui
 			}
 			catch (Exception ex)
 			{
+				Log.Logger.Error($"btnSync_Click method: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
 		}
@@ -576,7 +568,6 @@ namespace ExcelTerminology.Ui
 			{
 				sourceEntryLanguage.Terms = sourceEntryTerms;
 			}
-
 		}
 
 		private void bsTarget_CurrentItemChanged(object sender, EventArgs e)
@@ -613,7 +604,7 @@ namespace ExcelTerminology.Ui
 				var approvedField =
 					targetTerm.Fields.FirstOrDefault(x => x.Name.Equals(EntryTransformerService.ApprovedFieldName));
 				if (approvedField == null ||
-				    approvedField.Value.Equals(currentSynonimEntry.Approved, StringComparison.InvariantCultureIgnoreCase))
+					approvedField.Value.Equals(currentSynonimEntry.Approved, StringComparison.InvariantCultureIgnoreCase))
 					return;
 				targetTerm.Fields.Clear();
 				targetTerm.Fields.Add(new EntryField
@@ -629,7 +620,7 @@ namespace ExcelTerminology.Ui
 		{
 			var dataGridViewColumn = targetGridView.Columns["Approved"];
 			if (dataGridViewColumn != null && ((e.ColumnIndex == dataGridViewColumn.Index)
-			                                   && e.Value != null))
+											   && e.Value != null))
 			{
 				var cell = targetGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
@@ -657,6 +648,5 @@ namespace ExcelTerminology.Ui
 			bsTarget.Position = bsTarget.Count - 1;
 			e.Handled = true;
 		}
-
 	}
 }

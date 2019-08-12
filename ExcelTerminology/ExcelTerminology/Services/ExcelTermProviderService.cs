@@ -17,26 +17,24 @@ namespace ExcelTerminology.Services
             _excelTermLoaderService = excelTermLoaderService;
             _transformerService = transformerService;
         }
-		
-        public async Task<List<ExcelEntry>> LoadEntries()
-        {
-            var excelTerms = await _excelTermLoaderService.LoadTerms();
 
-            return excelTerms
-                .Where(et => !string.IsNullOrEmpty(et.Value.Source))
-                .Select(excelTerm => new ExcelEntry
-                {
-                    Id = excelTerm.Key,
-                    Fields = new List<IEntryField>(),
-                    Languages = _transformerService.CreateEntryLanguages(excelTerm.Value),
-                    SearchText = excelTerm.Value.Source
+		public async Task<List<ExcelEntry>> LoadEntries()
+		{
+			var excelTerms = await _excelTermLoaderService.LoadTerms();
 
-                }).ToList();
-        }
+			return excelTerms
+				.Where(et => !string.IsNullOrEmpty(et.Value.Source))
+				.Select(excelTerm => new ExcelEntry
+				{
+					Id = excelTerm.Key,
+					Fields = new List<IEntryField>(),
+					Languages = _transformerService.CreateEntryLanguages(excelTerm.Value),
+					SearchText = excelTerm.Value.Source
+				}).ToList();
+		}
 
         public async Task AddOrUpdateEntry(int entryId, ExcelTerm excelEntry)
         {
-
             if (!string.IsNullOrWhiteSpace(excelEntry.Source) && !string.IsNullOrWhiteSpace(excelEntry.Target))
             {
                 await _excelTermLoaderService.AddOrUpdateTerm(entryId, excelEntry);

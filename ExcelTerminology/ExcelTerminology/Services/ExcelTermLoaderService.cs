@@ -13,7 +13,9 @@ namespace ExcelTerminology.Services
     {
         private readonly ProviderSettings _providerSettings;
 
-        public ExcelTermLoaderService(ProviderSettings providerSettings)
+		public static readonly Log Log = Log.Instance;
+
+		public ExcelTermLoaderService(ProviderSettings providerSettings)
         {
 	        _providerSettings = providerSettings ?? throw new ArgumentNullException(nameof(providerSettings));
         }
@@ -21,9 +23,9 @@ namespace ExcelTerminology.Services
         public async Task<Dictionary<int, ExcelTerm>> LoadTerms()
         {
             var result = new Dictionary<int, ExcelTerm>();
-            try {
-                using (var excelPackage =
-                    new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
+            try
+			{
+                using (var excelPackage = new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
                 {
                     var workSheet = await GetTerminologyWorksheet(excelPackage);
                     result = await GetTermsFromExcel(workSheet);
@@ -31,15 +33,15 @@ namespace ExcelTerminology.Services
             }
 			catch (Exception ex)
             {
-                throw ex;
+				Log.Logger.Error($"LoadTerms method: {ex.Message}\n {ex.StackTrace}");
+				throw ex;
             }
             return result;
         }
 
         public async Task AddOrUpdateTerm(int entryId,ExcelTerm excelTerm)
         {
-            using (var excelPackage =
-               new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
+            using (var excelPackage = new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
             {
                 var workSheet = await GetTerminologyWorksheet(excelPackage);
                 if (workSheet == null) return;
@@ -73,16 +75,13 @@ namespace ExcelTerminology.Services
                 {
                     AddTermToWorksheet(excelTerm.Key, excelTerm.Value, workSheet);
                 }
-
-
                 excelPackage.Save();
             }
         }
 
         public async Task DeleteTerm(int id)
         {
-            using (var excelPackage =
-               new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
+            using (var excelPackage = new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
             {
                 var workSheet = await GetTerminologyWorksheet(excelPackage);
                 if (workSheet == null) return;
@@ -97,14 +96,13 @@ namespace ExcelTerminology.Services
             if (excelPackage.Workbook.Worksheets == null) return null;
             if (excelPackage.Workbook.Worksheets.Count == 0) return null;
             
-
             if (string.IsNullOrEmpty(_providerSettings.WorksheetName))
             {
                 return Task.FromResult(excelPackage.Workbook.Worksheets.FirstOrDefault());
             }
 
-            return Task.FromResult(excelPackage.Workbook.Worksheets.FirstOrDefault(
-                x => x.Name.Equals(_providerSettings.WorksheetName, StringComparison.InvariantCultureIgnoreCase)));
+            return Task.FromResult(excelPackage.Workbook.Worksheets
+				.FirstOrDefault(x => x.Name.Equals(_providerSettings.WorksheetName, StringComparison.InvariantCultureIgnoreCase)));
         }
 
         public async Task<Dictionary<int, ExcelTerm>> GetTermsFromExcel(ExcelWorksheet worksheet)
@@ -127,14 +125,14 @@ namespace ExcelTerminology.Services
                         {
                             result[id] = new ExcelTerm();
                         }
-
                         SetCellValue(result[id], cell, excellCellAddress.Column);
-
                     }
                 });
-            }catch(Exception ex)
+            }
+			catch (Exception ex)
             {
-                throw ex;
+				Log.Logger.Error($"GetTermsFromExcel method: {ex.Message}\n {ex.StackTrace}");
+				throw ex;
             }
             return result;
         }
@@ -147,13 +145,11 @@ namespace ExcelTerminology.Services
                 excelTerm.Source = cell.Text;
                 excelTerm.SourceCulture = _providerSettings.SourceLanguage;
             }
-
             if (columnLetter == _providerSettings.TargetColumn.ToUpper())
             {
                 excelTerm.Target = cell.Text;
                 excelTerm.TargetCulture = _providerSettings.TargetLanguage;
             }
-
             if (columnLetter == _providerSettings.ApprovedColumn?.ToUpper())
             {
                 excelTerm.Approved = cell.Text;

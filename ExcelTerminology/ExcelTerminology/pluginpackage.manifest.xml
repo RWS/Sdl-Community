@@ -14,5 +14,6 @@
     <File>Microsoft.AI.PerfCounterCollector.dll</File>
     <File>Microsoft.AI.ServerTelemetryChannel.dll</File>
     <File>Microsoft.AI.WindowsServer.dll</File>
-  </Include>
+		<File>NLog.dll</File>
+	</Include>
 </PluginPackage>

@@ -13,6 +13,7 @@ namespace ExcelTerminology
 		public string TypeName => PluginResources.ExcelTerminologyProviderName;
 		public string TypeDescription => PluginResources.ExcelTerminologyProviderDescription;
 		public bool SupportsEditing => true;
+		public static readonly Log Log = Log.Instance;
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
@@ -28,7 +29,7 @@ namespace ExcelTerminology
 				var dialogResult = settingsDialog.ShowDialog();
 
 				if (dialogResult == DialogResult.OK ||
-				    dialogResult == DialogResult.Yes)
+					dialogResult == DialogResult.Yes)
 				{
 					var settings = settingsDialog.GetSettings();
 
@@ -47,6 +48,7 @@ namespace ExcelTerminology
 			}
 			catch (Exception ex)
 			{
+				Log.Logger.Error($"Browse method: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
 			return result.ToArray();

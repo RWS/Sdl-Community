@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ExcelTerminology.Services;
+﻿using ExcelTerminology.Services;
 using ExcelTerminology.Tests.Helper;
 using Xunit;
 
 namespace ExcelTerminology.Tests
 {
-    public class ExcelTermProviderServiceTests
+	public class ExcelTermProviderServiceTests
     {
         [Fact]
         public async void Load_Entries()
@@ -22,14 +16,8 @@ namespace ExcelTerminology.Tests
             var actualTerms = await excelTermLoaderService.LoadTerms();
             var excelTermProviderService =
                 new ExcelTermProviderService(excelTermLoaderService, transformerService);
-            var sw = Stopwatch.StartNew();
             var expected = await excelTermProviderService.LoadEntries();
-            sw.Stop();
-            var el = sw.Elapsed;
             Assert.Equal(expected.Count, actualTerms.Count);
-
-        }
-
-       
+        }       
     }
 }
