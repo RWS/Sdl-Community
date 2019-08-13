@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.ExcelTerminology.Model;
-using Sdl.Community. ExcelTerminology.Services;
+﻿using System.Linq;
+using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Community.ExcelTerminology.Tests.Helper;
-using Sdl.Terminology.TerminologyProvider.Core;
 using Xunit;
 
 namespace Sdl.Community.ExcelTerminology.Tests
 {
-    public class NormalTermSearchServiceTest
+	public class NormalTermSearchServiceTest
     {
         [Theory]
         [InlineData("unaccountable", 22)]
@@ -91,8 +85,6 @@ namespace Sdl.Community.ExcelTerminology.Tests
 
             //assert
             Assert.Equal(results.Count, expectedNumberResults);
-
-
         }
     }
 }

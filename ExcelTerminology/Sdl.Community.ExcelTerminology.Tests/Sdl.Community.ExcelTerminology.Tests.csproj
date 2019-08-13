@@ -9,8 +9,8 @@
     <ProjectGuid>{330EB275-FF6A-4A45-841B-C9E86B2D449B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExcelTerminology.Tests</RootNamespace>
-    <AssemblyName>ExcelTerminology.Tests</AssemblyName>
+    <RootNamespace>Sdl.Community.ExcelTerminology.Tests</RootNamespace>
+    <AssemblyName>Sdl.Community.ExcelTerminology.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
