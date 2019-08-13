@@ -26,7 +26,7 @@ namespace Sdl.Community.ExcelTerminology.Services
 			}
 			var target = new FileTarget
 			{
-				FileName = Path.Combine(logDirectoryPath, "AppStoreIntegration.txt"),
+				FileName = Path.Combine(logDirectoryPath, "ExcelTerminologyProvider.txt"),
 				// Roll over the log every 10 MB
 				ArchiveAboveSize = 10000000,
 				ArchiveNumbering = ArchiveNumberingMode.Date,
