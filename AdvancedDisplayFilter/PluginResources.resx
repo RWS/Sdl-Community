@@ -117,12 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="AdvancedDisplayFiltersIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\filter.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="AdvancedDisplayFilterViewPart_Description" xml:space="preserve">
-    <value>Community Advanced Display Filter</value>
+    <value>Advanced display filter that allows more options in filtering the rows visible from the editor</value>
   </data>
   <data name="AdvancedDisplayFilterViewPart_Name" xml:space="preserve">
     <value>Community Advanced Display Filter</value>
@@ -130,6 +126,7 @@
   <data name="Plugin_Name" xml:space="preserve">
     <value>Community Advanced Display Filter</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="File" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\File.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -147,5 +144,8 @@
   </data>
   <data name="AddComment" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\AddComment.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AdvancedDisplayFilter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\advanceddisplayfilter.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
