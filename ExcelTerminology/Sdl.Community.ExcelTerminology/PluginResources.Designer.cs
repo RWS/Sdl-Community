@@ -61,6 +61,16 @@ namespace Sdl.Community.ExcelTerminology {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terminology provider based on excel files..
         /// </summary>
         internal static string ExcelTerminologyProviderDescription {
@@ -75,6 +85,16 @@ namespace Sdl.Community.ExcelTerminology {
         internal static string ExcelTerminologyProviderName {
             get {
                 return ResourceManager.GetString("ExcelTerminologyProviderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

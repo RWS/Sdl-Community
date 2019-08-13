@@ -102,6 +102,10 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.Terminology.TerminologyProvider.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
@@ -159,6 +163,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExcelTerminologyTellMe\ExcelTermCommunityForumAction.cs" />
+    <Compile Include="ExcelTerminologyTellMe\ExcelTermCommunityWikiAction.cs" />
+    <Compile Include="ExcelTerminologyTellMe\ExcelTermStoreAction.cs" />
+    <Compile Include="ExcelTerminologyTellMe\ExcelTermTellMeProvider.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Insights\TelemetryService.cs" />
     <Compile Include="Insights\UserSessionInitializer.cs" />
@@ -210,6 +218,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ForumIcon.ico" />
+    <None Include="Resources\Download.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
