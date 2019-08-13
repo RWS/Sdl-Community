@@ -28,7 +28,6 @@ namespace IATETerminologyProvider.Helpers
 			//we accept only application/json because it is the only encoding we can handle at the moment
 			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			httpClient.DefaultRequestHeaders.Connection.Add("Keep-Alive");
-			httpClient.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
 			httpClient.DefaultRequestHeaders.Add("Pragma", "no-cache");
 			httpClient.DefaultRequestHeaders.Add("Origin", "https://iate.europa.eu");
 			httpClient.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");

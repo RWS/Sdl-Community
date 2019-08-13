@@ -27,7 +27,6 @@ namespace IATETerminologyProvider.Service
 			};
 
 			Utils.AddDefaultParameters(httpClient);
-
 			var httpRequest = new HttpRequestMessage
 			{
 				Method = HttpMethod.Get
@@ -37,7 +36,7 @@ namespace IATETerminologyProvider.Service
 			{
 				var httpResponseAsString = httpClient.SendAsync(httpRequest).Result.Content.ReadAsStringAsync().Result;
 				var jsonTermTypesModel = JsonConvert.DeserializeObject<TermTypeResponseModel>(httpResponseAsString);
-
+			
 				if (jsonTermTypesModel?.Items != null)
 				{
 					int result;
@@ -53,14 +52,12 @@ namespace IATETerminologyProvider.Service
 						termTypes.Add(termType);
 					}
 				}
-
 				return termTypes;
 			}
 			catch (Exception e)
 			{
 				Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
 			}
-
 			return null;
 		}
 	}
