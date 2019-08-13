@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Formatting;
 
@@ -44,14 +45,14 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 			var tag = _tagPairStack.Pop();
 
-			if (_segmentOpen)
+			if (_segmentOpen && tag.StartTagProperties.Formatting != null)
 			{
 				foreach (var formatting in tag.StartTagProperties.Formatting)
 				{
 					AddHexColor(formatting);
 				}
 			}
-		}	
+		}
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
@@ -95,8 +96,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				}
 
 				var hexCode = GetHexCode(formatting);
-
-				if (!_colors.Contains(hexCode))
+				if (hexCode != null && !_colors.Contains(hexCode))
 				{
 					_colors.Add(hexCode);
 				}
@@ -134,30 +134,33 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		private static string GetHexCode(KeyValuePair<string, IFormattingItem> formatingProperty)
 		{
-			var color = formatingProperty.Value.StringValue;
-			var colors = color.Split(',');
-			var red = string.Empty;
-			var green = string.Empty;
-			var blue = string.Empty;
-
-			//for files which color code is like this "0,12,12,12"
-			if (colors.Length.Equals(4))
+			try
 			{
-				red = colors[1];
-				green = colors[2];
-				blue = colors[3];
+				var color = formatingProperty.Value.StringValue;
+				var colors = color.Split(',');
+			
+				if (colors.Length.Equals(1))
+				{
+					var htmlColor = ColorTranslator.FromHtml(color);
+					return ColorPickerHelper.GetHexCode(htmlColor.R, htmlColor.G, htmlColor.B);
+				}
+
+				if (colors.Length.Equals(4))
+				{					
+					return ColorPickerHelper.GetHexCode(byte.Parse(colors[1]), byte.Parse(colors[2]), byte.Parse(colors[3]));
+				}
+
+				if (colors.Length.Equals(3))
+				{					
+					return ColorPickerHelper.GetHexCode(byte.Parse(colors[0]), byte.Parse(colors[1]), byte.Parse(colors[2]));
+				}
+			}
+			catch
+			{
+				// catch all; ignore
 			}
 
-			//"0,12,12,12"
-			if (colors.Length.Equals(3))
-			{
-				red = colors[0];
-				green = colors[1];
-				blue = colors[2];
-			}
-
-			var hexCode = ColorPickerHelper.GetHexCode(byte.Parse(red), byte.Parse(green), byte.Parse(blue));
-			return hexCode;
+			return null;
 		}
 
 		private void VisitChildren(IAbstractMarkupDataContainer container)
