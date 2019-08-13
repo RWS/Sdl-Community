@@ -79,7 +79,7 @@ namespace IATETerminologyProvider.ViewModel
 		#region Actions
 		private void SaveSettingsAction()
 		{
-			if (Domains.Count > 0)
+			if (Domains?.Count > 0)
 			{
 				ProviderSettings = new ProviderSettings
 				{
@@ -88,14 +88,14 @@ namespace IATETerminologyProvider.ViewModel
 				};
 
 				// Add selected domains to provider settings
-				var selectedDomains = Domains.Where(d => d.IsSelected).ToList();
+				var selectedDomains = Domains?.Where(d => d.IsSelected).ToList();
 				foreach (var selectedDomain in selectedDomains)
 				{
 					ProviderSettings.Domains.Add(selectedDomain.Code);
 				}
 
 				// Add selected term types to provider settings
-				var selectedTermTypes = TermTypes.Where(d => d.IsSelected).ToList();
+				var selectedTermTypes = TermTypes?.Where(d => d.IsSelected).ToList();
 				foreach (var selectedTermType in selectedTermTypes)
 				{
 					ProviderSettings.TermTypes.Add(selectedTermType.Code);
@@ -119,15 +119,18 @@ namespace IATETerminologyProvider.ViewModel
 			var domains = DomainService.GetDomains();
 			foreach (var domain in domains)
 			{
-				if (!domain.Name.Equals(Constants.NotSpecifiedCode))
+				if (domain != null)
 				{
-					var selectedDomainName = Utils.UppercaseFirstLetter(domain.Name.ToLower());
-					var domainModel = new DomainModel
+					if (!domain.Name.Equals(Constants.NotSpecifiedCode))
 					{
-						Code = domain.Code,
-						Name = selectedDomainName
-					};
-					Domains.Add(domainModel);
+						var selectedDomainName = Utils.UppercaseFirstLetter(domain.Name.ToLower());
+						var domainModel = new DomainModel
+						{
+							Code = domain.Code,
+							Name = selectedDomainName
+						};
+						Domains.Add(domainModel);
+					}
 				}
 			}
 		}
@@ -145,7 +148,7 @@ namespace IATETerminologyProvider.ViewModel
 			{
 				foreach (var domainCode in providerSettings.Domains)
 				{
-					var domain = Domains.FirstOrDefault(d => d.Code.Equals(domainCode));
+					var domain = Domains?.FirstOrDefault(d => d.Code.Equals(domainCode));
 					if (domain != null)
 					{
 						domain.IsSelected = true;
@@ -154,7 +157,7 @@ namespace IATETerminologyProvider.ViewModel
 
 				foreach (var termTypeCode in providerSettings.TermTypes)
 				{
-					var termType = TermTypes.FirstOrDefault(t => t.Code.Equals(termTypeCode));
+					var termType = TermTypes?.FirstOrDefault(t => t.Code.Equals(termTypeCode));
 					if (termType != null)
 					{
 						termType.IsSelected = true;
