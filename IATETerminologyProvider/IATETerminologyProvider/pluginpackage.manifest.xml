@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>IATETerminologyProvider</PlugInName>
+  <PlugInName>IATE Terminology Provider</PlugInName>
   <Version>2.6.4.0</Version>
   <Description>Integration with IATE European Union terminology</Description>
   <Author>SDL Community Developers</Author>
