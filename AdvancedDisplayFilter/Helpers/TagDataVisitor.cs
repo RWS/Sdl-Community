@@ -75,6 +75,11 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 				foreach (var tag in _tagPairStack)
 				{
+					if (tag.StartTagProperties.Formatting == null)
+					{
+						continue;						
+					}
+
 					foreach (var formatting in tag.StartTagProperties.Formatting)
 					{
 						AddHexColor(formatting);
