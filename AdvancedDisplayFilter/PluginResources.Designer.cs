@@ -63,15 +63,25 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon AdvancedDisplayFiltersIcon {
+        internal static System.Drawing.Icon AddComment {
             get {
-                object obj = ResourceManager.GetObject("AdvancedDisplayFiltersIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("AddComment", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Community Advanced Display Filter.
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon AdvancedDisplayFilter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("AdvancedDisplayFilter_Icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Advanced display filter that allows more options in filtering the rows visible from the editor.
         /// </summary>
         internal static string AdvancedDisplayFilterViewPart_Description {
             get {

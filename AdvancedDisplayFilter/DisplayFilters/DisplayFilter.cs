@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers;
-using Sdl.Community.Toolkit.FileType;
 using Sdl.Community.Toolkit.Integration;
 using Sdl.Community.Toolkit.Integration.DisplayFilter;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
