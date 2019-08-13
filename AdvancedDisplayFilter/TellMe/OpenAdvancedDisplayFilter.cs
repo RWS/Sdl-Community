@@ -14,7 +14,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.TellMe
 
 		public override string Category => "Community Advanced Display Filter results";
 
-		public override Icon Icon => PluginResources.AdvancedDisplayFiltersIcon;
+		public override Icon Icon => PluginResources.AdvancedDisplayFilter_Icon;
 
 		public override bool IsAvailable => true;
 
