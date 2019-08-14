@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>TuToTm</PlugInName>
-  <Version>1.0.0.2</Version>
-  <Description>TuToTm</Description>
+  <Version>1.0.0.3</Version>
+  <Description>This plugin provides a mechanism for adding a single TU to a TM without having to use a file for translation.</Description>
   <Author>SDL Community Developers</Author>
 	<Include>
 		<File>Sdl.Community.Toolkit.Core.dll</File>
