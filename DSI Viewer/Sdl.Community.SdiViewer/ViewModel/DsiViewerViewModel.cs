@@ -20,6 +20,8 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		public DsiViewerViewModel()
 		{
 			_segmentVisitor = new SegmentVisitor(false);
+			_comments = new List<IComment>();
+			_documentStructureInformation = new List<DsiModel>();
 
 			_editorController = GetEditorController();
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
@@ -65,7 +67,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 
 		public bool HasDocumentStructureInformation => DocumentStructureInformation.Any();
 
-		public bool HasComments => Comments.Any();	
+		public bool HasComments => Comments.Any();
 
 		private void UpdateDocumentStructureInformation()
 		{
@@ -83,6 +85,11 @@ namespace Sdl.Community.DsiViewer.ViewModel
 
 			foreach (var context in contexts.Contexts)
 			{
+				if (context.DisplayName == null)
+				{
+					continue;
+				}
+
 				var color = context.DisplayColor;
 
 				var model = new DsiModel
