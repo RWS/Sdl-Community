@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>DSI Viewer</PlugInName>
-  <Version>1.0.0.0</Version>
-  <Description>DSI Viewer</Description>
+  <Version>1.0.1.0</Version>
+  <Description>This plugin adds preview capability for Document Structure Information and Comments so they can be viewed in real-time as you work on a document.</Description>
   <Author>SDL Community </Author>
   <RequiredProduct name="SDLTradosStudio" minversion="14.0" maxversion="15.0" />
 </PluginPackage>
