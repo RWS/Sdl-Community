@@ -6,14 +6,14 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace Sdl.Community.DsiViewer
 {
 	[ViewPart(
-		Id = "DSi Viewer",
-		Name = "DSi Viewer",
-		Description = "DSi Viewer",
+		Id = "DSI Viewer",
+		Name = "DSI Viewer",
+		Description = "DSI Viewer",
 		Icon = "ds")]
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
 	public class DsiViewerController : AbstractViewPartController
 	{
-		private readonly SdiControl _control = new SdiControl(); 
+		private readonly DsiViewerControl _control = new DsiViewerControl(); 
 		protected override Control GetContentControl()
 		{
 			return _control;

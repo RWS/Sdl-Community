@@ -1,13 +1,13 @@
 ﻿using System.Windows.Controls;
 
-namespace Sdl.Community.DsiViewer
+namespace Sdl.Community.DsiViewer.View
 {
 	/// <summary>
 	/// Interaction logic for SdiWpfControl.xaml
 	/// </summary>
-	public partial class SdiWpfControl : UserControl
+	public partial class DsiViewerView : UserControl
 	{
-		public SdiWpfControl()
+		public DsiViewerView()
 		{
 			InitializeComponent();
 		}

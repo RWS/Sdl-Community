@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Sdl.Community.DsiViewer
+﻿namespace Sdl.Community.DsiViewer.Model
 {
 	public class DsiModel: ModelBase
 	{
@@ -47,6 +45,7 @@ namespace Sdl.Community.DsiViewer
 				OnPropertyChanged(nameof(Description));
 			}
 		}
+
 		public string RowColor
 		{
 			get => _rowColor;
