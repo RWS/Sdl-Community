@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Resources;
-using System.Text;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Sdl.Community.Jobs.Model;

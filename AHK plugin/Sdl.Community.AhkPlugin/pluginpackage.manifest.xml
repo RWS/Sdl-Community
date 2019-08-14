@@ -1,16 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-	<PlugInName>Sdl.Community.AhkPlugin</PlugInName>
-	<Version>3.0.3</Version>
-	<Description>AhkPlugin</Description>
+	<PlugInName>AutoHotKey Manager</PlugInName>
+	<Version>3.0.3.1</Version>
+	<Description>This plugin can be used to manage AutoHotKey scripts so they can be easily imported/exported and shared with others.</Description>
 	<Author>SDL Community Developers</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 	<Include>
 		<File>Sdl.Community.AhkPlugin.Model.dll</File>
 		<File>Sdl.Community.AhkPlugin.Repository.dll</File>
-		<File>Raven.Abstractions.dll</File>
-		<File>Raven.Client.Lightweight.dll</File>
-		<File>Raven.Database.dll</File>
 		<File>NLog.dll</File>
 		<File>LiteDB.dll</File>
 	</Include>
