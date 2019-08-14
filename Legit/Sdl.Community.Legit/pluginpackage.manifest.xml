@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-	<PlugInName>Sdl.Community.Legit</PlugInName>
-	<Version>2.0.1</Version>
-	<Description>Sdl.Community.Legit</Description>
+	<PlugInName>SDL Legit!</PlugInName>
+	<Version>2.0.1.1</Version>
+	<Description>This application supports the batch conversion of source files to TTX or Bilingual Doc. so they can be used in a legacy workflow.</Description>
 	<Author>SDL Community Developers</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>
