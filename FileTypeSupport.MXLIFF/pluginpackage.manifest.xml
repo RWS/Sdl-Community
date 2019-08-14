@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>Sdl.Community.FileTypeSupport.MXLIFF</PlugInName>
-  <Version>2.6</Version>
-  <Description>FileTypeSupport.MXLIFF</Description>
+  <PlugInName>MXLIFF File Type</PlugInName>
+  <Version>2.6.0.1</Version>
+  <Description>This plugin provides support for handling MXLIFF files created from memsource.</Description>
   <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>

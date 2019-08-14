@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>Sdl.Community.InvoiceAndQuotes.Integration</PlugInName>
-  <Version>2.0</Version>
-  <Description>Sdl.Community.InvoiceAndQuotes.Integration</Description>
-  <Author></Author>
+  <PlugInName>SDL Studio InQuote</PlugInName>
+  <Version>2.0.0.1</Version>
+  <Description>This plugin takes an analysis from any SDL Trados Studio Project and creates a quote which can be created in MS Word, MS Excel or copied to your clipboard.</Description>
+  <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
   <Include>
     <File>Sdl.Community.StudioInQuote.dll</File>
