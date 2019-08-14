@@ -1,17 +1,20 @@
 ﻿using System.Windows.Forms;
+using Sdl.Community.DsiViewer.ViewModel;
 
 namespace Sdl.Community.DsiViewer
 {
-	public partial class SdiControl : UserControl
+	public partial class DsiViewerControl : UserControl
 	{
-		public SdiControl()
+		public DsiViewerControl()
 		{
 			InitializeComponent();
-			var viewModel = new DsiControlViewModel();
-			var sdiControl = new SdiWpfControl
+
+			var viewModel = new DsiViewerViewModel();
+			var sdiControl = new View.DsiViewerView
 			{
 				DataContext = viewModel
 			};
+
 			sdiControl.InitializeComponent();
 			elementHost.Child = sdiControl;
 		}

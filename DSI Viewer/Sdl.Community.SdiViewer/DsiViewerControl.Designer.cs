@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.DsiViewer
 {
-	partial class SdiControl
+	partial class DsiViewerControl
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -46,7 +46,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.elementHost);
-			this.Name = "SdiControl";
+			this.Name = "DsiViewerControl";
 			this.ResumeLayout(false);
 
 		}
