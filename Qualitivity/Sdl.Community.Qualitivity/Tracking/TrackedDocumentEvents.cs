@@ -218,11 +218,13 @@ namespace Sdl.Community.Qualitivity.Tracking
 				{
 					case ComparisonUnit.ComparisonType.Removed:
 						{
-							if (!string.IsNullOrEmpty(text))
+							// Include content recognized as identical between the content recognized as 
+							// removed, when identifying the selected content that was replaced.
+							if (!string.IsNullOrEmpty(text) && !string.IsNullOrEmpty(tempIdentical))
 							{
-								text += tempIdentical;
-								tempIdentical = string.Empty;
+								text += tempIdentical;								
 							}
+							tempIdentical = string.Empty;
 
 							foreach (var section in comparisonUnit.Section)
 							{
