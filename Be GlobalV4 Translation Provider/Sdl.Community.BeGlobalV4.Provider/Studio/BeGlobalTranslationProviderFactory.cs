@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Windows;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -29,6 +31,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				var accountId = options.BeGlobalService.GetUserInformation();
 				var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
+
 				options.SubscriptionInfo = subscriptionInfo;
 			}
 			catch (Exception e)
