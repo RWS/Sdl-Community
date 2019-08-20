@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Cache;
 using System.Text;
 using System.Windows;
 using Newtonsoft.Json;
@@ -15,23 +16,28 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 	{
 		private readonly IRestClient _client;
 		private readonly string _flavor;
-		private readonly string _url = "https://translate-api.sdlbeglobal.com";
+		private const string Url = "https://translate-api.sdlbeglobal.com";
 		public static readonly Log Log = Log.Instance;
+		private readonly StudioCredentials _studioCredentials;
+		private const string PluginName = "SDL BeGlobal (NMT) Translation Provider";
 
 		public BeGlobalV4Translator(string flavor)
 		{
 			_flavor = flavor;
-			var studioCredentials = new StudioCredentials();
+			 _studioCredentials = new StudioCredentials();
 			var accessToken = string.Empty;
 
 			Application.Current?.Dispatcher?.Invoke(() =>
 			{
-				accessToken = studioCredentials.GetToken();
+				accessToken = _studioCredentials.GetToken();
 			});
-			accessToken = studioCredentials.GetToken();
+			accessToken = _studioCredentials.GetToken();
 
 
-			_client = new RestClient($"{_url}/v4");
+			_client = new RestClient($"{Url}/v4")
+			{
+				CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore)
+			};
 
 			if (!string.IsNullOrEmpty(accessToken))
 			{
@@ -47,7 +53,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				{
 					RequestFormat = DataFormat.Json
 				};
-				AddTraceId(request);
+				var traceId = GetTraceId(request);
 
 				string[] texts = { text };
 				request.AddBody(new
@@ -59,16 +65,35 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					inputFormat = "xliff"
 				});
 				var response = _client.Execute(request);
-				if (!response.IsSuccessful || response.StatusCode != HttpStatusCode.OK)
+
+				if (response.StatusCode == HttpStatusCode.Unauthorized)
+				{
+					// Get refresh token
+					var token = _studioCredentials.EnsureValidConnection();
+					if (!string.IsNullOrEmpty(token))
+					{
+						UpdateRequestHeadersForRefreshToken(request, token);
+
+						var translationAsyncResponse = _client.Execute(request);
+
+						if (translationAsyncResponse.StatusCode == HttpStatusCode.Unauthorized)
+						{
+							MessageBox.Show("Unauthorized: Please check your credentials", PluginName, MessageBoxButton.OK);
+
+							Log.Logger.Error($"Unauthorized: Translate text with Refresh Token: \n {token} \n Trace-Id: {traceId}");
+						}
+						else if (!translationAsyncResponse.IsSuccessful && translationAsyncResponse.StatusCode != HttpStatusCode.Unauthorized)
+						{
+							ShowErrors(translationAsyncResponse);
+						}
+						return ReturnTranslation(translationAsyncResponse);
+					}
+				}
+				else if (!response.IsSuccessful && response.StatusCode != HttpStatusCode.Unauthorized)
 				{
 					ShowErrors(response);
 				}
-				dynamic json = JsonConvert.DeserializeObject(response.Content);
-
-				var rawData = WaitForTranslation(json?.requestId?.Value);
-
-				json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
-				return json != null ? json.translation[0] : string.Empty;
+				return ReturnTranslation(response);
 			}
 			catch (Exception e)
 			{
@@ -77,31 +102,67 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			return string.Empty;
 		}
 
-		public int GetUserInformation()
+		private string ReturnTranslation(IRestResponse response)
 		{
-			try
-			{
-				var request = new RestRequest("/accounts/users/self")
-				{
-					RequestFormat = DataFormat.Json
-				};
-				AddTraceId(request);
+			dynamic json = JsonConvert.DeserializeObject(response.Content);
 
-				var response = _client.Execute(request);
-				var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
-				if (!response.IsSuccessful || response.StatusCode != HttpStatusCode.OK)
-				{
-					ShowErrors(response);
-				}
-				return user?.AccountId ?? 0;
-			}
-			catch (Exception e)
-			{
-				Log.Logger.Error($"Get user information method: {e.Message}\n {e.StackTrace}");
-			}
-			return 0;
+			var rawData = WaitForTranslation(json?.requestId?.Value);
+
+			json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
+			return json != null ? json.translation[0] : string.Empty;
 		}
 
+		public int GetUserInformation()
+		{
+			var request = new RestRequest("/accounts/users/self")
+			{
+				RequestFormat = DataFormat.Json
+			};
+			var traceId = GetTraceId(request);
+
+			var response = _client.Execute(request);
+			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
+			if (response.StatusCode == HttpStatusCode.Unauthorized)
+			{
+				// Get refresh token
+				var token = _studioCredentials.EnsureValidConnection();
+				if (!string.IsNullOrEmpty(token))
+				{
+					// Update authorization parameters
+					UpdateRequestHeadersForRefreshToken(request, token);
+
+					var userInfoResponse = _client.Execute(request);
+					if (userInfoResponse.StatusCode == HttpStatusCode.OK)
+					{
+						return JsonConvert.DeserializeObject<UserDetails>(userInfoResponse.Content).AccountId;
+					}
+					if (userInfoResponse.StatusCode == HttpStatusCode.Unauthorized)
+					{
+						MessageBox.Show("Unauthorized: Please check your credentials", PluginName, MessageBoxButton.OK);
+
+						Log.Logger.Error($"Unauthorized: Get UserInfo with Refresh Token: \n {token} \n Trace-Id: {traceId}");
+					}
+					else if (userInfoResponse.StatusCode != HttpStatusCode.OK && userInfoResponse.StatusCode != HttpStatusCode.Unauthorized)
+					{
+						ShowErrors(userInfoResponse);
+					}
+				}
+			}
+			else if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Unauthorized)
+			{
+				ShowErrors(response);
+			}
+
+			return user?.AccountId ?? 0;
+		}
+
+		private void UpdateRequestHeadersForRefreshToken(IRestRequest request, string token)
+		{
+			// Update authorization parameters
+			_client.RemoveDefaultParameter("Authorization");
+			_client.AddDefaultHeader("Authorization", $"Bearer {token}");
+			request.AddOrUpdateParameter("Authorization", $"Bearer {token}");
+		}
 		public SubscriptionInfo GetLanguagePairs(string accountId)
 		{
 			try
@@ -110,10 +171,36 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				{
 					RequestFormat = DataFormat.Json
 				};
-				AddTraceId(request);
+				var traceId =GetTraceId(request);
 
 				var response = _client.Execute(request);
-				if (!response.IsSuccessful || response.StatusCode != HttpStatusCode.OK)
+				if (response.StatusCode == HttpStatusCode.Unauthorized)
+				{
+					// Get refresh token
+					var token = _studioCredentials.EnsureValidConnection();
+					if (!string.IsNullOrEmpty(token))
+					{
+						// Update authorization parameters
+						UpdateRequestHeadersForRefreshToken(request, token);
+						var languagePairsResponse = _client.Execute(request);
+
+						if (languagePairsResponse.StatusCode == HttpStatusCode.OK)
+						{
+							return JsonConvert.DeserializeObject<SubscriptionInfo>(languagePairsResponse.Content); 
+						}
+						if (languagePairsResponse.StatusCode == HttpStatusCode.Unauthorized)
+						{
+							MessageBox.Show("Unauthorized: Please check your credentials", PluginName, MessageBoxButton.OK);
+
+							Log.Logger.Error($"Unauthorized: Get Language Pairs with Refresh Token: \n {token} \n Trace-Id: {traceId}");
+						}
+						else if (languagePairsResponse.StatusCode != HttpStatusCode.OK && languagePairsResponse.StatusCode != HttpStatusCode.Unauthorized)
+						{
+							ShowErrors(languagePairsResponse);
+						}
+					}
+				}
+				else if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Unauthorized)
 				{
 					ShowErrors(response);
 				}
@@ -126,7 +213,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			return new SubscriptionInfo();
 		}
-
 		private byte[] WaitForTranslation(string id)
 		{
 			try
@@ -153,7 +239,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 						ShowErrors(response);
 					}
 				} while (status.Equals("INIT", StringComparison.CurrentCultureIgnoreCase) ||
-						 status.Equals("TRANSLATING", StringComparison.CurrentCultureIgnoreCase));
+				         status.Equals("TRANSLATING", StringComparison.CurrentCultureIgnoreCase));
 
 				response = RestGet($"/mt/translations/async/{id}/content");
 				if (!response.IsSuccessful || response.StatusCode != HttpStatusCode.OK)
@@ -175,32 +261,35 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				RequestFormat = DataFormat.Json
 			};
-			AddTraceId(request);
+			GetTraceId(request);
 
 			var response = _client.Execute(request);
 			return response;
 		}
-		private void AddTraceId(IRestRequest request)
+		private string GetTraceId(IRestRequest request)
 		{
 			var pluginVersion = VersionHelper.GetPluginVersion();
 			var studioVersion = VersionHelper.GetStudioVersion();
-			request.AddHeader("Trace-ID", $"BeGlobal {pluginVersion} - {studioVersion}.{Guid.NewGuid().ToString()}");
+			var traceId = $"BeGlobal {pluginVersion} - {studioVersion} - {Guid.NewGuid().ToString()}";
+			request.AddHeader("Trace-ID", traceId);
+			return traceId;
 		}
 
 		private void ShowErrors(IRestResponse response)
 		{
 			var responseContent = JsonConvert.DeserializeObject<ResponseError>(response.Content);
+
+			if (response.StatusCode == HttpStatusCode.Forbidden)
+			{
+				MessageBox.Show("Forbidden: Please check your license", "BeGlobal translation provider", MessageBoxButton.OK);
+				throw new Exception("Forbidden: Please check your license");
+			}
 			if (responseContent?.Errors != null)
 			{
 				foreach (var error in responseContent.Errors)
 				{
 					throw new Exception($"Error code: {error.Code}, {error.Description}");
 				}
-			}
-			if (response.StatusCode == HttpStatusCode.Forbidden)
-			{
-				MessageBox.Show("Forbidden: Please check your license", string.Empty, MessageBoxButton.OK);
-				throw new Exception("Forbidden: Please check your license");
 			}
 		}
 	}
