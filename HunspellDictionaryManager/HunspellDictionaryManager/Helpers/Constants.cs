@@ -35,5 +35,17 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 		public static readonly string GreenAccentStylePath = "pack://application:,,,/MahApps.Metro;component/Styles/Accents/Green.xaml";
 		public static readonly string BaseLightAccentStylePath = "pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml";
 		public static readonly string FlatButtonStylePath = "pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml";
+
+		// Logging messages
+		public static readonly string GetInstalledStudioPath = "GetInstalledStudioPath method";
+		public static readonly string CopyFiles = "CopyFiles method";
+		public static readonly string CopyLanguageDictionary = "CopyLanguageDictionary method";
+		public static readonly string UndoAction = "UndoAction method";
+		public static readonly string UpdateConfigFile = "UpdateConfigFile method";
+		public static readonly string RemoveConfigLanguageNode = "RemoveConfigLanguageNode method";
+		public static readonly string SetDisplayLanguageName = "SetDisplayLanguageName method";
+		public static readonly string BackupHunspellDictionaries = "BackupHunspellDictionaries method";
+		public static readonly string AddUndoDictionaries = "AddUndoDictionaries method";
+		public static readonly string RemoveDictFromDeleteFolder = "RemoveDictFromDeleteFolder method";		
 	}
 }
