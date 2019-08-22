@@ -54,16 +54,23 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
         /// <returns></returns>
         public static string GetInstalledStudioPath()
         {
-            var studio = new Toolkit.Core.Studio().GetInstalledStudioVersion().Where(v => v.Version.Equals("Studio5")).FirstOrDefault();
-            if (studio != null)
-            {
-                return studio.InstallPath;
-            }
-            else
-            {
-                MessageBox.Show(Constants.Studio2017ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
-            }
-        }
+			try
+			{
+				var studio = new Toolkit.Core.Studio().GetInstalledStudioVersion()?.Where(v => v.Version.Equals("Studio5")).FirstOrDefault();
+				if (studio != null)
+				{
+					return studio.InstallPath;
+				}
+				else
+				{
+					MessageBox.Show(Constants.Studio2017ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.GetInstalledStudioPath}: {ex.Message}\n {ex.StackTrace}");
+			}
+			return string.Empty;
+		}
 	}
 }

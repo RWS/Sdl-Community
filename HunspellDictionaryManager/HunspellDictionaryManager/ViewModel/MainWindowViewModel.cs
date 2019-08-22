@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -42,7 +43,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private ICommand _deleteCommand;
 		private ICommand _refreshCommand;
 		private ICommand _helpCommand;
-		private ICommand _undoCommand;	
+		private ICommand _undoCommand;
 		#endregion
 
 		#region Constructors
@@ -58,6 +59,8 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		#endregion
 
 		#region Public Properties
+		public static readonly Log Log = Log.Instance;
+
 		public HunspellLangDictionaryModel SelectedDictionaryLanguage
 		{
 			get => _selectedDictionaryLanguage;
@@ -275,7 +278,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			LoadStudioLanguages();
 			LoadUndoDictionaries();
 			LabelVisibility = Constants.Hidden;
-			if(!UndoDictionaries.Any())
+			if (!UndoDictionaries.Any())
 			{
 				UndoLabelVisibility = Constants.Hidden;
 				UndoDictVisibility = Constants.Hidden;
@@ -287,36 +290,38 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void UndoAction()
 		{
-			if (SelectedUndoDictionary != null && !string.IsNullOrEmpty(SelectedUndoDictionary.DictionaryFile))
+			try
 			{
-				// Selected dictionary and .aff files for Undo action
-				var dictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, Path.GetFileName(SelectedUndoDictionary.DictionaryFile));
-				var affFilePath = Path.Combine(_hunspellDictionariesFolderPath, Path.GetFileName(SelectedUndoDictionary.AffFile));
-
-				var undoHunspellDictionaryModel = new HunspellLangDictionaryModel
+				if (SelectedUndoDictionary != null && !string.IsNullOrEmpty(SelectedUndoDictionary.DictionaryFile))
 				{
-					DictionaryFile = SelectedUndoDictionary.DictionaryFile,
-					AffFile = SelectedUndoDictionary.AffFile
-				};
+					// Selected dictionary and .aff files for Undo action
+					var dictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, Path.GetFileName(SelectedUndoDictionary.DictionaryFile));
+					var affFilePath = Path.Combine(_hunspellDictionariesFolderPath, Path.GetFileName(SelectedUndoDictionary.AffFile));
 
-				// Copy files in the original Studio HunspellDictionaries folder
-				var isoCode = Path.GetFileNameWithoutExtension(SelectedUndoDictionary.AffFile).Replace('_', '-');
-				CopyLanguageDictionary(undoHunspellDictionaryModel, dictionaryFilePath, affFilePath, isoCode);
+					var undoHunspellDictionaryModel = new HunspellLangDictionaryModel
+					{
+						DictionaryFile = SelectedUndoDictionary.DictionaryFile,
+						AffFile = SelectedUndoDictionary.AffFile
+					};
 
-				RemoveDictFromDeleteFolder();
-				RefreshAction();
-				ResultMessage = Constants.RestoreSuccessMessage;
-				LabelVisibility = Constants.Visible;
+					// Copy files in the original Studio HunspellDictionaries folder
+					var isoCode = Path.GetFileNameWithoutExtension(SelectedUndoDictionary.AffFile).Replace('_', '-');
+					CopyLanguageDictionary(undoHunspellDictionaryModel, dictionaryFilePath, affFilePath, isoCode);
+
+					RemoveDictFromDeleteFolder();
+					RefreshAction();
+					ResultMessage = Constants.RestoreSuccessMessage;
+					LabelVisibility = Constants.Visible;
+				}
+				else
+				{
+					IsRestoreEnabled = false;
+				}
 			}
-			else
+			catch (Exception ex)
 			{
-				IsRestoreEnabled = false;
+				Log.Logger.Error($"{Constants.UndoAction}: {ex.Message}\n {ex.StackTrace}");
 			}
-		}
-
-		private void HelpAction()
-		{
-			System.Diagnostics.Process.Start(Constants.HelpLink);
 		}
 		#endregion
 
@@ -330,8 +335,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		{
 			if (!string.IsNullOrEmpty(_hunspellDictionariesFolderPath))
 			{
-				DictionaryLanguages = new ObservableCollection<HunspellLangDictionaryModel>();
-				DictionaryLanguages = FormatDictionaryFiles(_hunspellDictionariesFolderPath, DictionaryLanguages);
+				DictionaryLanguages = FormatDictionaryFiles(_hunspellDictionariesFolderPath, new ObservableCollection<HunspellLangDictionaryModel>());
 			}
 			else
 			{
@@ -345,20 +349,27 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void CopyFiles()
 		{
-			var newDictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode.Replace('-', '_')}.dic");
-			var newAffFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode.Replace('-', '_')}.aff");
-
-			if (DictionaryLanguages.Any(d => d.DictionaryFile.Equals(newDictionaryFilePath)))
+			try
 			{
-				var result = MessageBox.Show(Constants.DictionaryAlreadyExists, Constants.InformativeMessage, MessageBoxButton.YesNo, MessageBoxImage.Warning);
-				if (result.Equals(MessageBoxResult.Yes))
+				var newDictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode.Replace('-', '_')}.dic");
+				var newAffFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode.Replace('-', '_')}.aff");
+
+				if (DictionaryLanguages.Any(d => d.DictionaryFile.Equals(newDictionaryFilePath)))
+				{
+					var result = MessageBox.Show(Constants.DictionaryAlreadyExists, Constants.InformativeMessage, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+					if (result.Equals(MessageBoxResult.Yes))
+					{
+						CopyLanguageDictionary(SelectedDictionaryLanguage, newDictionaryFilePath, newAffFilePath, NewDictionaryLanguage.IsoCode);
+					}
+				}
+				else
 				{
 					CopyLanguageDictionary(SelectedDictionaryLanguage, newDictionaryFilePath, newAffFilePath, NewDictionaryLanguage.IsoCode);
 				}
 			}
-			else
+			catch (Exception ex)
 			{
-				CopyLanguageDictionary(SelectedDictionaryLanguage, newDictionaryFilePath, newAffFilePath, NewDictionaryLanguage.IsoCode);
+				Log.Logger.Error($"{Constants.CopyFiles}: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -367,24 +378,30 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void UpdateConfigFile(string isoCode)
 		{
-			// load xml config file
-			var configFilePath = Path.Combine(_hunspellDictionariesFolderPath, Constants.ConfigFileName);
-			var xmlDoc = XDocument.Load(configFilePath);
-
-			// add new language dictionary if doesn't already exists in the config file
-			var languageElem = (string)xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("isoCode") == isoCode);
-			if (string.IsNullOrEmpty(languageElem))
+			try
 			{
-				var node = new XElement("language",
-					new XElement("isoCode", isoCode), new XElement("dict", isoCode.Replace('-', '_')));
+				// load xml config file
+				var configFilePath = Path.Combine(_hunspellDictionariesFolderPath, Constants.ConfigFileName);
+				var xmlDoc = XDocument.Load(configFilePath);
 
-				xmlDoc.Element("config").Add(node);
-				xmlDoc.Save(configFilePath);
+				// add new language dictionary if doesn't already exists in the config file
+				var languageElem = (string)xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("isoCode") == isoCode);
+				if (string.IsNullOrEmpty(languageElem))
+				{
+					var node = new XElement("language", new XElement("isoCode", isoCode), new XElement("dict", isoCode.Replace('-', '_')));
 
-				LoadDictionariesLanguages();
+					xmlDoc.Element("config").Add(node);
+					xmlDoc.Save(configFilePath);
+
+					LoadDictionariesLanguages();
+				}
+				LabelVisibility = Constants.Visible;
+				SetGridSettings(Constants.SuccessfullCreateMessage, Constants.GreenColor);
 			}
-			LabelVisibility = Constants.Visible;
-			SetGridSettings(Constants.SuccessfullCreateMessage, Constants.GreenColor);
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.UpdateConfigFile}: {ex.Message}\n {ex.StackTrace}");
+			}
 		}
 
 		/// <summary>
@@ -407,26 +424,33 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void RemoveConfigLanguageNode()
 		{
-			// load xml config file
-			var configFilePath = Path.Combine(_hunspellDictionariesFolderPath, Constants.ConfigFileName);
-			var xmlDoc = XDocument.Load(configFilePath);
-			var dictionaryLanguage = Path.GetFileNameWithoutExtension(DeletedDictionaryLanguage.DictionaryFile);
-
-			// remove the language dictionary from the config
-			var languageElem = xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("dict") == dictionaryLanguage);
-
-			if (languageElem != null)
+			try
 			{
-				languageElem.Remove();
-				xmlDoc.Save(configFilePath);
-				SetGridSettings(Constants.SuccessfullDeleteMessage, Constants.GreenColor);
+				// load xml config file
+				var configFilePath = Path.Combine(_hunspellDictionariesFolderPath, Constants.ConfigFileName);
+				var xmlDoc = XDocument.Load(configFilePath);
+				var dictionaryLanguage = Path.GetFileNameWithoutExtension(DeletedDictionaryLanguage.DictionaryFile);
+
+				// remove the language dictionary from the config
+				var languageElem = xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("dict") == dictionaryLanguage);
+
+				if (languageElem != null)
+				{
+					languageElem.Remove();
+					xmlDoc.Save(configFilePath);
+					SetGridSettings(Constants.SuccessfullDeleteMessage, Constants.GreenColor);
+				}
+				else
+				{
+					SetGridSettings(Constants.NoLanguageDictionaryFound, Constants.RedColor);
+				}
+				RefreshAction();
+				LabelVisibility = Constants.Visible;
 			}
-			else
+			catch (Exception ex)
 			{
-				SetGridSettings(Constants.NoLanguageDictionaryFound, Constants.RedColor);
+				Log.Logger.Error($"{Constants.RemoveConfigLanguageNode}: {ex.Message}\n {ex.StackTrace}");
 			}
-			RefreshAction();
-			LabelVisibility = Constants.Visible;
 		}
 
 		private void SetGridSettings(string resultMessage, string resultMessageColor)
@@ -443,21 +467,28 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// <returns>Dictionary display language name</returns>
 		private string SetDisplayLanguageName(string hunspellDictionaryName)
 		{
-			hunspellDictionaryName = hunspellDictionaryName.Replace('_', '-');
-			//search for Language based on IsoAbbreviation
-			var displayLanguageName = _studioLanguages.Where(a => a.IsoAbbreviation.Equals(hunspellDictionaryName)).FirstOrDefault();
-			if (displayLanguageName != null)
+			try
 			{
-				return displayLanguageName.DisplayName;
-			}
-			else
-			{
-				// search for Language based on TwoLetterISOLanguageName
-				displayLanguageName = _studioLanguages.Where(a => a.CultureInfo.TwoLetterISOLanguageName.Equals(hunspellDictionaryName)).FirstOrDefault();
+				hunspellDictionaryName = hunspellDictionaryName.Replace('_', '-');
+				//search for Language based on IsoAbbreviation
+				var displayLanguageName = _studioLanguages.Where(a => a.IsoAbbreviation.Equals(hunspellDictionaryName)).FirstOrDefault();
 				if (displayLanguageName != null)
 				{
 					return displayLanguageName.DisplayName;
 				}
+				else
+				{
+					// search for Language based on TwoLetterISOLanguageName
+					displayLanguageName = _studioLanguages.Where(a => a.CultureInfo.TwoLetterISOLanguageName.Equals(hunspellDictionaryName)).FirstOrDefault();
+					if (displayLanguageName != null)
+					{
+						return displayLanguageName.DisplayName;
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.SetDisplayLanguageName}: {ex.Message}\n {ex.StackTrace}");
 			}
 			return string.Empty;
 		}
@@ -484,9 +515,16 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void CopyLanguageDictionary(HunspellLangDictionaryModel selectedDictionaryLanguage, string newDictionaryFilePath, string newAffFilePath, string isoCode)
 		{
-			File.Copy(selectedDictionaryLanguage.DictionaryFile, newDictionaryFilePath, true);
-			File.Copy(selectedDictionaryLanguage.AffFile, newAffFilePath, true);
-			UpdateConfigFile(isoCode);
+			try
+			{
+				File.Copy(selectedDictionaryLanguage.DictionaryFile, newDictionaryFilePath, true);
+				File.Copy(selectedDictionaryLanguage.AffFile, newAffFilePath, true);
+				UpdateConfigFile(isoCode);
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.CopyLanguageDictionary}: {ex.Message}\n {ex.StackTrace}");
+			}
 		}
 
 		/// <summary>
@@ -494,31 +532,38 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void BackupHunspellDictionaries()
 		{
-			var studioPath = Utils.GetInstalledStudioPath();
-			if(!Directory.Exists(Constants.BackupFolderPath))
+			try
 			{
-				Directory.CreateDirectory(Constants.BackupFolderPath);
+				var studioPath = Utils.GetInstalledStudioPath();
+				if (!Directory.Exists(Constants.BackupFolderPath))
+				{
+					Directory.CreateDirectory(Constants.BackupFolderPath);
+				}
+				_backupFolderPath = Path.Combine(Constants.BackupFolderPath, Constants.Backup2017HunspellDicFolderPath);
+
+				var task = System.Threading.Tasks.Task.Factory.StartNew(() =>
+				{
+					if (Directory.Exists(_backupFolderPath))
+					{
+						Directory.Delete(_backupFolderPath, true);
+					}
+				});
+				task.Wait();
+
+				Directory.CreateDirectory(_backupFolderPath);
+				if (!string.IsNullOrEmpty(studioPath))
+				{
+					_hunspellDictionariesFolderPath = Path.Combine(Path.GetDirectoryName(studioPath), Constants.HunspellDictionaries);
+					_backupFiles = Directory.EnumerateFiles(_hunspellDictionariesFolderPath).ToList();
+					foreach (var file in _backupFiles)
+					{
+						File.Copy(file, Path.Combine(_backupFolderPath, Path.GetFileName(file)));
+					}
+				}
 			}
-			_backupFolderPath = Path.Combine(Constants.BackupFolderPath, Constants.Backup2017HunspellDicFolderPath);
-
-			var task = System.Threading.Tasks.Task.Factory.StartNew(() =>
+			catch (Exception ex)
 			{
-				if (Directory.Exists(_backupFolderPath))
-				{
-					Directory.Delete(_backupFolderPath, true);
-				}
-			});
-			task.Wait();
-
-			Directory.CreateDirectory(_backupFolderPath);
-			if (!string.IsNullOrEmpty(studioPath))
-			{
-				_hunspellDictionariesFolderPath = Path.Combine(Path.GetDirectoryName(studioPath), Constants.HunspellDictionaries);
-				_backupFiles = Directory.EnumerateFiles(_hunspellDictionariesFolderPath).ToList();
-				foreach (var file in _backupFiles)
-				{
-					File.Copy(file, Path.Combine(_backupFolderPath, Path.GetFileName(file)));
-				}
+				Log.Logger.Error($"{Constants.BackupHunspellDictionaries}: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -527,16 +572,23 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void AddUndoDictionaries()
 		{
-			if (!Directory.Exists(_undoDictFolderPath))
+			try
 			{
-				Directory.CreateDirectory(_undoDictFolderPath);
-			}
-			UndoDictionaries.Add(DeletedDictionaryLanguage);
-			var dictFileName = Path.GetFileName(DeletedDictionaryLanguage.DictionaryFile);
-			var affFileName = Path.GetFileName(DeletedDictionaryLanguage.AffFile);
+				if (!Directory.Exists(_undoDictFolderPath))
+				{
+					Directory.CreateDirectory(_undoDictFolderPath);
+				}
+				UndoDictionaries.Add(DeletedDictionaryLanguage);
+				var dictFileName = Path.GetFileName(DeletedDictionaryLanguage.DictionaryFile);
+				var affFileName = Path.GetFileName(DeletedDictionaryLanguage.AffFile);
 
-			File.Copy(DeletedDictionaryLanguage.DictionaryFile, Path.Combine(_undoDictFolderPath, dictFileName), true);
-			File.Copy(DeletedDictionaryLanguage.AffFile, Path.Combine(_undoDictFolderPath, affFileName), true);
+				File.Copy(DeletedDictionaryLanguage.DictionaryFile, Path.Combine(_undoDictFolderPath, dictFileName), true);
+				File.Copy(DeletedDictionaryLanguage.AffFile, Path.Combine(_undoDictFolderPath, affFileName), true);
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.AddUndoDictionaries}: {ex.Message}\n {ex.StackTrace}");
+			}
 		}
 
 		/// <summary>
@@ -565,20 +617,27 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void RemoveDictFromDeleteFolder()
 		{
-			if(SelectedUndoDictionary != null)
+			try
 			{
-				var deletedFiles = Directory.GetFiles(_undoDictFolderPath);
-				var recoveredDictFile = deletedFiles.Where(a => Path.GetFileName(a).Equals(Path.GetFileName(SelectedUndoDictionary.DictionaryFile))).FirstOrDefault();
-				var recoveredAffFile = deletedFiles.Where(a => Path.GetFileName(a).Equals(Path.GetFileName(SelectedUndoDictionary.AffFile))).FirstOrDefault();
+				if (SelectedUndoDictionary != null)
+				{
+					var deletedFiles = Directory.GetFiles(_undoDictFolderPath);
+					var recoveredDictFile = deletedFiles.Where(a => Path.GetFileName(a).Equals(Path.GetFileName(SelectedUndoDictionary.DictionaryFile))).FirstOrDefault();
+					var recoveredAffFile = deletedFiles.Where(a => Path.GetFileName(a).Equals(Path.GetFileName(SelectedUndoDictionary.AffFile))).FirstOrDefault();
 
-				if(!string.IsNullOrEmpty(recoveredDictFile))
-				{
-					File.Delete(recoveredDictFile);
+					if (!string.IsNullOrEmpty(recoveredDictFile))
+					{
+						File.Delete(recoveredDictFile);
+					}
+					if (!string.IsNullOrEmpty(recoveredAffFile))
+					{
+						File.Delete(recoveredAffFile);
+					}
 				}
-				if (!string.IsNullOrEmpty(recoveredAffFile))
-				{
-					File.Delete(recoveredAffFile);
-				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.RemoveDictFromDeleteFolder}: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -591,37 +650,48 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// <returns></returns>
 		private ObservableCollection<HunspellLangDictionaryModel> FormatDictionaryFiles(string dictionaryFolderPath, ObservableCollection<HunspellLangDictionaryModel> dictionaries)
 		{
-			// get .dic files from Studio HunspellDictionaries folder
-			var dictionaryFiles = Directory.GetFiles(dictionaryFolderPath, "*.dic").ToList();
-			foreach (var hunspellDictionary in dictionaryFiles)
+			try
 			{
-				var hunspellLangDictionaryModel = new HunspellLangDictionaryModel()
+				// get .dic files from Studio HunspellDictionaries folder
+				var dictionaryFiles = Directory.GetFiles(dictionaryFolderPath, "*.dic").ToList();
+				foreach (var hunspellDictionary in dictionaryFiles)
 				{
-					DictionaryFile = hunspellDictionary,
-					ShortLanguageName = Path.GetFileNameWithoutExtension(hunspellDictionary),
-					DisplayLanguageName = SetDisplayLanguageName(Path.GetFileNameWithoutExtension(hunspellDictionary))
-				};
-				// add to dropdown list only dictionaries that has language correspondence in Studio
-				if (!string.IsNullOrEmpty(hunspellLangDictionaryModel.DisplayLanguageName))
-				{
-					dictionaries.Add(hunspellLangDictionaryModel);
+					var hunspellLangDictionaryModel = new HunspellLangDictionaryModel()
+					{
+						DictionaryFile = hunspellDictionary,
+						ShortLanguageName = Path.GetFileNameWithoutExtension(hunspellDictionary),
+						DisplayLanguageName = SetDisplayLanguageName(Path.GetFileNameWithoutExtension(hunspellDictionary))
+					};
+					// add to dropdown list only dictionaries that has language correspondence in Studio
+					if (!string.IsNullOrEmpty(hunspellLangDictionaryModel.DisplayLanguageName))
+					{
+						dictionaries.Add(hunspellLangDictionaryModel);
+					}
 				}
-			}
 
-			// get .aff files from Studio HunspellDictionaries folder
-			var affFiles = Directory.GetFiles(dictionaryFolderPath, "*.aff").ToList();
-			foreach (var dicFile in dictionaries)
-			{
-				var affFile = affFiles.Where(d => d.Contains($"{dicFile.ShortLanguageName}.aff")).FirstOrDefault();
-				if (affFile != null)
+				// get .aff files from Studio HunspellDictionaries folder
+				var affFiles = Directory.GetFiles(dictionaryFolderPath, "*.aff").ToList();
+				foreach (var dicFile in dictionaries)
 				{
-					dicFile.AffFile = affFile;
+					var affFile = affFiles.Where(d => d.Contains($"{dicFile.ShortLanguageName}.aff")).FirstOrDefault();
+					if (affFile != null)
+					{
+						dicFile.AffFile = affFile;
+					}
 				}
+				return new ObservableCollection<HunspellLangDictionaryModel>(dictionaries.OrderBy(d => d.DisplayLanguageName).ToList());
 			}
-			
-			return new ObservableCollection<HunspellLangDictionaryModel>(dictionaries.OrderBy(d => d.DisplayLanguageName).ToList());
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.CopyFiles}: {ex.Message}\n {ex.StackTrace}");
+			}
+			return new ObservableCollection<HunspellLangDictionaryModel>();
 		}
 
+		private void HelpAction()
+		{
+			System.Diagnostics.Process.Start(Constants.HelpLink);
+		}
 		#endregion
 	}
 }
