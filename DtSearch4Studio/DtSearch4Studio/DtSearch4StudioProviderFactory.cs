@@ -8,8 +8,8 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace DtSearch4Studio
 {
-	[TranslationProviderFactory(Id = "DtSearch4StudioId", Name = "DtSearch4Studio", Description = "DtSearch4Studio")]
-	class DtSearch4StudioProviderFactory : ITranslationProviderFactory
+	[TranslationProviderFactory(Id = "DtSearch4StudioFactoryId", Name = "DtSearch4StudioFactory", Description = "DtSearch4Studio Translation Provider Factory")]
+	public class DtSearch4StudioProviderFactory : ITranslationProviderFactory
 	{
 		#region ITranslationProviderFactory Members
 		// To be implemented all the methods /properties bellow

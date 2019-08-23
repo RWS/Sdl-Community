@@ -5,4 +5,8 @@
   <Description>Integration of dtSearch with Studio (provider which searches through different types of files in a faster way)</Description>
   <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+	<Include>
+		<File>dtSearchNetStdApi.dll</File>
+		<File>MahApps.Metro.dll</File>
+	</Include>
 </PluginPackage>

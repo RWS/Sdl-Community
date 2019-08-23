@@ -9,12 +9,13 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace DtSearch4Studio
 {
-	[TranslationProviderWinFormsUi(Id = "Translation_Provider_Plug_inWinFormsUI",
-								   Name = "Translation_Provider_Plug_inWinFormsUI",
-								   Description = "Translation_Provider_Plug_inWinFormsUI")]
+	[TranslationProviderWinFormsUi(Id = "DtSearch4StudioUiId",
+								   Name = "DtSearch4StudioTranslationProviderUi",
+								   Description = "DtSearch4Studio Translation Provider")]
 	public class DtSearch4StudioWinFormsUI : ITranslationProviderWinFormsUI
 	{
-		#region ITranslationProviderWinFormsUI Members
+		public string TypeName => "DtSearch4Studio Translation Provider";
+		public string TypeDescription => "DtSearch4Studio Translation Provider";
 
 		// To be implemented all the methods /properties bellow
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
@@ -45,18 +46,6 @@ namespace DtSearch4Studio
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
 			return true;
-		}
-
-		public string TypeDescription
-		{
-			get => string.Empty;
-		}
-
-		public string TypeName
-		{
-			get => string.Empty;
-		}
-
-		#endregion
+		}		
 	}
 }
