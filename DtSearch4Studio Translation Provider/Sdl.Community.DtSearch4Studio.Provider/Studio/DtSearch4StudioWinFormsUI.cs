@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Sdl.Community.DtSearch4Studio.Provider.Helpers;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -16,10 +17,20 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 	{
 		public string TypeName => "DtSearch4Studio Translation Provider";
 		public string TypeDescription => "DtSearch4Studio Translation Provider";
+		public static readonly Log Log = Log.Instance;
 
 		// To be implemented all the methods /properties bellow
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
+			try
+			{
+
+			}
+			catch(Exception e)
+			{
+				Log.Logger.Error($"{Constants.Browse}: {e.Message}\n {e.StackTrace}");
+			}
+			// to be implemented
 			return null;
 		}
 

@@ -8,5 +8,6 @@
 	<Include>
 		<File>dtSearchNetStdApi.dll</File>
 		<File>MahApps.Metro.dll</File>
+		<File>NLog.dll</File>
 	</Include>
 </PluginPackage>
