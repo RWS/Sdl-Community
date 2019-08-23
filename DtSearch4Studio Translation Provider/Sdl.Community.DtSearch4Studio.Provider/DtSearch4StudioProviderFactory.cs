@@ -6,7 +6,7 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace DtSearch4Studio
+namespace Sdl.Community.DtSearch4Studio.Provider
 {
 	[TranslationProviderFactory(Id = "DtSearch4StudioFactoryId", Name = "DtSearch4StudioFactory", Description = "DtSearch4Studio Translation Provider Factory")]
 	public class DtSearch4StudioProviderFactory : ITranslationProviderFactory

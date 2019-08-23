@@ -6,7 +6,7 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace DtSearch4Studio
+namespace Sdl.Community.DtSearch4Studio.Provider
 {
 	class DtSearch4StudioProvider : ITranslationProvider
 	{
