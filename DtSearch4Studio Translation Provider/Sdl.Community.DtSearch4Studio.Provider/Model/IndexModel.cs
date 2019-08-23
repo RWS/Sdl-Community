@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sdl.Community.DtSearch4Studio.Provider.Model
 {
-	public class SettingsModel
+	public class IndexModel
 	{
 	}
 }
