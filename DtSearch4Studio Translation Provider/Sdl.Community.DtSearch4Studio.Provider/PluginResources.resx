@@ -120,4 +120,19 @@
   <data name="Plugin_Name" xml:space="preserve">
     <value>Sdl.Community.DtSearch4Studio.Provider</value>
   </data>
+  <data name="WindowsControl_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WindowsControl_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="WindowsControl_Maximize" xml:space="preserve">
+    <value>Maximize</value>
+  </data>
+  <data name="WindowsControl_Minimize" xml:space="preserve">
+    <value>Minimize</value>
+  </data>
+  <data name="WindowsControl_Restore" xml:space="preserve">
+    <value>Restore</value>
+  </data>
 </root>

@@ -1,6 +1,9 @@
-﻿using System.Configuration;
+﻿using System.Linq;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.DtSearch4Studio.Provider.Commands;
+using Sdl.Community.DtSearch4Studio.Provider.Helpers;
+using Sdl.Community.DtSearch4Studio.Provider.Model;
 using Sdl.Community.DtSearch4Studio.Provider.Service;
 
 namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
@@ -8,7 +11,10 @@ namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
 	public class SettingsViewModel : BaseViewModel
 	{
 		#region Private Fields
-		private ICommand _saveSettingsCommand;
+		private ICommand _okCommand;
+		private ICommand _browseCommand;
+		private string _indexLocation;
+
 		#endregion
 
 		#region Public Constructors
@@ -18,31 +24,59 @@ namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
 		}
 		#endregion
 
-		#region Public Properties		
-		
-
+		#region Public Properties				
 		public ProviderSettings ProviderSettings { get; set; }
+
+		public string IndexLocation
+		{
+			get => _indexLocation;
+			set
+			{
+				_indexLocation = value;
+				OnPropertyChanged(nameof(IndexLocation));
+			}
+		}
+
 		#endregion
 
 		#region Commands
-		public ICommand SaveSettingsCommand => _saveSettingsCommand ?? (_saveSettingsCommand = new CommandHandler(SaveSettingsAction, true));
+		public ICommand OkCommand => _okCommand ?? (_okCommand = new CommandHandler(OkAction, true));
+		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(BrowseAction, true));
+
 		#endregion
 
-		#region Actions
-		private void SaveSettingsAction()
+		#region Actions		
+		private void OkAction()
 		{
-			// save
 			ProviderSettings = new ProviderSettings
 			{
-
+				IndexPath = IndexLocation
 			};
-			//To do: add the index to provider settings
 
 			var persistenceService = new PersistenceService();
 			persistenceService.AddSettings(ProviderSettings);
 
 			OnSaveSettingsCommandRaised?.Invoke();
+		}
 
+		/// <summary>
+		/// Select index from the local machine
+		/// </summary>
+		private void BrowseAction()
+		{
+			var fbd = new FolderSelectDialog();
+			if (fbd.ShowDialog())
+			{
+				if (!string.IsNullOrEmpty(fbd.FileName))
+				{
+					// user can select only one index
+					IndexLocation = fbd.FileName;
+				}
+				else
+				{
+					MessageBox.Show(Constants.NoIndexSelected, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+			}
 		}
 		#endregion
 

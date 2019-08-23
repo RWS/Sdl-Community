@@ -1,148 +1,71 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Sdl.Community.DtSearch4Studio.Provider.Model;
 using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 {
 	class DtSearch4StudioProvider : ITranslationProvider
 	{
-		#region ITranslationProvider Members
+		#region Private fields
+		private ProviderSettings _providerSettings;
+		#endregion
+
+		#region Constructors
+		public DtSearch4StudioProvider(ProviderSettings providerSettings)
+		{
+			UpdateSettings(providerSettings);
+		}
+		#endregion
 
 		// To be implemented all the methods /properties bellow. 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			return null;
+			return new DtSearch4StudioLanguageDirection(this, languageDirection);
 		}
 
-		public bool IsReadOnly
-		{
-			get => true;
-		}
+		public bool IsReadOnly => true;
+		public string Name => "DtSearch4Studio Translation Provider";
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, "SDL DtSearch4Studio");
+		public bool SupportsConcordanceSearch => true;
+		public bool SupportsDocumentSearches => true;
+		public bool SupportsFilters => true;
+		public bool SupportsFuzzySearch => true;
+		public bool SupportsLanguageDirection(LanguagePair languageDirection) => true;
+		public bool SupportsMultipleResults => true;
+		public bool SupportsPenalties => true;
+		public bool SupportsPlaceables => true;
+		public bool SupportsScoring => true;
+		public bool SupportsSearchForTranslationUnits => true;
+		public bool SupportsSourceConcordanceSearch => true;
+		public bool SupportsStructureContext => true;
+		public bool SupportsTaggedInput => true;
+		public bool SupportsTargetConcordanceSearch => true;
+		public bool SupportsTranslation => true;
+		public bool SupportsUpdate => true;
+		public bool SupportsWordCounts => true;
+		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
+		public Uri Uri => new Uri("https://DtSearch4Studio.com");
 
 		public void LoadState(string translationProviderState)
 		{
 		}
 
-		public string Name
-		{
-			get => string.Empty;
-		}
-
 		public void RefreshStatusInfo()
-		{
-			
+		{			
 		}
 
 		public string SerializeState()
 		{
-			throw new NotImplementedException();
+			return null;
 		}
 
-		public ProviderStatusInfo StatusInfo
+
+		#region Private Methods
+		public void UpdateSettings(ProviderSettings providerSettings)
 		{
-			get => null;
+			_providerSettings = providerSettings;
 		}
-
-		public bool SupportsConcordanceSearch
-		{
-			get => true;
-		}
-
-		public bool SupportsDocumentSearches
-		{
-			get => true;
-		}
-
-		public bool SupportsFilters
-		{
-			get => true;
-		}
-
-		public bool SupportsFuzzySearch
-		{
-			get => true;
-		}
-
-		public bool SupportsLanguageDirection(LanguagePair languageDirection)
-		{
-			return true;
-		}
-
-		public bool SupportsMultipleResults
-		{
-			get => true;
-		}
-
-		public bool SupportsPenalties
-		{
-			get => true;
-		}
-
-		public bool SupportsPlaceables
-		{
-			get => true;
-		}
-
-		public bool SupportsScoring
-		{
-			get => true;
-		}
-
-		public bool SupportsSearchForTranslationUnits
-		{
-			get => true;
-		}
-
-		public bool SupportsSourceConcordanceSearch
-		{
-			get => true;
-		}
-
-		public bool SupportsStructureContext
-		{
-			get => true;
-		}
-
-		public bool SupportsTaggedInput
-		{
-			get => true;
-		}
-
-		public bool SupportsTargetConcordanceSearch
-		{
-			get => true;
-		}
-
-		public bool SupportsTranslation
-		{
-			get => true;
-		}
-
-		public bool SupportsUpdate
-		{
-			get => true;
-		}
-
-		public bool SupportsWordCounts
-		{
-			get => true;
-		}
-
-		public TranslationMethod TranslationMethod
-		{
-			get => TranslationMethod.Mixed;
-		}
-
-		public Uri Uri
-		{
-			get => new Uri(string.Empty);
-		}
-
 		#endregion
 	}
 }
-

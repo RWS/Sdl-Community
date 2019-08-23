@@ -79,6 +79,28 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 			{
 				_settingsViewModel.OnSaveSettingsCommandRaised -= GetProviderSettings;
 			}
+			_settingsViewModel = new SettingsViewModel(providerSettings);
+			_settingsWindow = new SettingsWindow(_settingsViewModel);
+			
+			if (_settingsViewModel != null)
+			{
+				_settingsViewModel.OnSaveSettingsCommandRaised += GetProviderSettings;
+			}
+			_settingsWindow.ShowDialog();
+
+			providerSettings = _settingsViewModel.ProviderSettings;
+
+			if (provider == null)
+			{
+				provider = new DtSearch4StudioProvider(providerSettings);
+			}
+			else
+			{
+				provider.UpdateSettings(providerSettings);
+			}
+			result.Add(provider);
+
+			return result.ToArray();
 		}
 	}
 }

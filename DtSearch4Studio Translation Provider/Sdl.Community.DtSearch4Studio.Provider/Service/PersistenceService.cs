@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.DtSearch4Studio.Provider.Helpers;
+using Sdl.Community.DtSearch4Studio.Provider.Model;
 
 namespace Sdl.Community.DtSearch4Studio.Provider.Service
 {

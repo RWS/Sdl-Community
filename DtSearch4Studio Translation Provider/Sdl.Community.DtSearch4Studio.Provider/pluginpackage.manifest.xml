@@ -10,5 +10,6 @@
 		<File>MahApps.Metro.dll</File>
 		<File>NLog.dll</File>
 		<File>Newtonsoft.Json.dll</File>
+		<File>ControlzEx.dll</File>
 	</Include>
 </PluginPackage>

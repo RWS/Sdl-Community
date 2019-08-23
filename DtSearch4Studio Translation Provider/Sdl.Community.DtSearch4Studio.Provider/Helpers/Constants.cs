@@ -5,5 +5,6 @@
 		// Logging messages
 		public static readonly string Browse = "Browse method";
 		public static readonly string WriteToFile = "WriteToFile method";
+		public static readonly string NoIndexSelected = "No index was selected";
 	}
 }

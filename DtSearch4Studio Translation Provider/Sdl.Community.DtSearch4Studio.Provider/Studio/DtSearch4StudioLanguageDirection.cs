@@ -10,6 +10,10 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 {
 	class DtSearch4StudioLanguageDirection : ITranslationProviderLanguageDirection
 	{
+		public DtSearch4StudioLanguageDirection(DtSearch4StudioProvider dtSearch4StudioProvider, LanguagePair languageDirection)
+		{
+
+		}
 		#region ITranslationProviderLanguageDirection Members
 		// To be implemented all the methods /properties bellow
 		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)

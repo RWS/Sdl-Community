@@ -89,15 +89,15 @@
 		/>
 		
 
-		<!--<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Flease drop a File" FontSize="15" Margin="10,5,0,5"/>-->
+		<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Flease drop a File" FontSize="15" Margin="10,5,0,5"/>
 
-		<!--<Border BorderThickness="1" BorderBrush="#0096D6"  Margin="10">
+		<Border BorderThickness="1" BorderBrush="#0096D6"  Margin="10">
 			<Grid Height="100" Background="GhostWhite" AllowDrop="True" behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"/>
-		</Border>-->
+		</Border>
 
-		<!--<WebBrowser behaviours:WebBrowserBindableSourceBehavior.BindableSource ="{Binding Uri, UpdateSourceTrigger=PropertyChanged}" Width="auto" Height="200"/>-->
-		<!--<TextBox behaviours:TextBlockAutoToolTipBehavior.AutoTooltip="True" ToolTip="This is a tooltip" Text="Studio 2019" Width="100"/>
-	    <WebBrowser behaviours:WebBrowserContentSource.Html ="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Width="auto" Height="200"/>-->
+		<WebBrowser behaviours:WebBrowserBindableSourceBehavior.BindableSource ="{Binding Uri, UpdateSourceTrigger=PropertyChanged}" Width="auto" Height="200"/>
+		<TextBox behaviours:TextBlockAutoToolTipBehavior.AutoTooltip="True" ToolTip="This is a tooltip" Text="Studio 2019" Width="100"/>
+	    <WebBrowser behaviours:WebBrowserContentSource.Html ="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Width="auto" Height="200"/>
 
 	</StackPanel>
 </Window>
