@@ -50,9 +50,9 @@
             this.separatorTextBox = new System.Windows.Forms.TextBox();
             this.pathLbl = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.browseBtn = new System.Windows.Forms.Button();
             this.pathTextBox = new System.Windows.Forms.TextBox();
             this.submitBtn = new System.Windows.Forms.Button();
+            this.browseBtn = new System.Windows.Forms.Button();
             this.chkIsReadOnly = new System.Windows.Forms.CheckBox();
             this.providerSettingsBindingSource6 = new System.Windows.Forms.BindingSource(this.components);
             this.providerSettingsBindingSource2 = new System.Windows.Forms.BindingSource(this.components);
@@ -340,38 +340,38 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(539, 71);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
+            // pathTextBox
+            // 
+            this.pathTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.providerSettingsBindingSource8, "TermFilePath", true));
+            this.pathTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pathTextBox.Location = new System.Drawing.Point(3, 3);
+            this.pathTextBox.Multiline = true;
+            this.pathTextBox.Name = "pathTextBox";
+            this.pathTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.pathTextBox.Size = new System.Drawing.Size(371, 65);
+            this.pathTextBox.TabIndex = 1;
+            // 
+            // submitBtn
+            // 
+            this.submitBtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.submitBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.submitBtn.Location = new System.Drawing.Point(464, 45);
+            this.submitBtn.Name = "submitBtn";
+            this.submitBtn.Size = new System.Drawing.Size(67, 23);
+            this.submitBtn.TabIndex = 1;
+            this.submitBtn.Text = "Submit";
+            this.submitBtn.UseVisualStyleBackColor = true;
+            // 
             // browseBtn
             // 
-            this.browseBtn.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.browseBtn.Location = new System.Drawing.Point(384, 34);
+            this.browseBtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.browseBtn.Location = new System.Drawing.Point(384, 45);
             this.browseBtn.Name = "browseBtn";
             this.browseBtn.Size = new System.Drawing.Size(66, 23);
             this.browseBtn.TabIndex = 1;
             this.browseBtn.Text = "Browse";
             this.browseBtn.UseVisualStyleBackColor = true;
             this.browseBtn.Click += new System.EventHandler(this.browseBtn_Click);
-            // 
-            // pathTextBox
-            // 
-            this.pathTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.providerSettingsBindingSource8, "TermFilePath", true));
-            this.pathTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pathTextBox.Location = new System.Drawing.Point(0, 3);
-            this.pathTextBox.Multiline = true;
-            this.pathTextBox.Name = "pathTextBox";
-            this.pathTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.pathTextBox.Size = new System.Drawing.Size(374, 54);
-            this.pathTextBox.TabIndex = 1;
-            // 
-            // submitBtn
-            // 
-            this.submitBtn.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.submitBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.submitBtn.Location = new System.Drawing.Point(464, 34);
-            this.submitBtn.Name = "submitBtn";
-            this.submitBtn.Size = new System.Drawing.Size(67, 23);
-            this.submitBtn.TabIndex = 1;
-            this.submitBtn.Text = "Submit";
-            this.submitBtn.UseVisualStyleBackColor = true;
             // 
             // chkIsReadOnly
             // 
