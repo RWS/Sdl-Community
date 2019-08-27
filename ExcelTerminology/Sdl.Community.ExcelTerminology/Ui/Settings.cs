@@ -63,8 +63,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
 		protected override void OnClosing(CancelEventArgs e)
 		{
 			if (DialogResult == DialogResult.Cancel ||
-			    DialogResult == DialogResult.No ||
-			    DialogResult == DialogResult.Abort) return;
+				DialogResult == DialogResult.No ||
+				DialogResult == DialogResult.Abort) return;
 			if (string.IsNullOrWhiteSpace(separatorTextBox.Text) || string.IsNullOrWhiteSpace(pathTextBox.Text))
 			{
 				MessageBox.Show(@"Please complete all fields", string.Empty, MessageBoxButtons.OK);
