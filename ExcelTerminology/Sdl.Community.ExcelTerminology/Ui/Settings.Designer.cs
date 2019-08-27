@@ -94,7 +94,7 @@
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.mainTableLayout.Size = new System.Drawing.Size(654, 357);
+            this.mainTableLayout.Size = new System.Drawing.Size(659, 357);
             this.mainTableLayout.TabIndex = 0;
             // 
             // headerLayoutPanel
@@ -110,7 +110,7 @@
             this.headerLayoutPanel.RowCount = 1;
             this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 64F));
-            this.headerLayoutPanel.Size = new System.Drawing.Size(648, 64);
+            this.headerLayoutPanel.Size = new System.Drawing.Size(653, 64);
             this.headerLayoutPanel.TabIndex = 0;
             // 
             // descriptionLbl
@@ -120,7 +120,7 @@
             this.descriptionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.descriptionLbl.Location = new System.Drawing.Point(3, 0);
             this.descriptionLbl.Name = "descriptionLbl";
-            this.descriptionLbl.Size = new System.Drawing.Size(642, 64);
+            this.descriptionLbl.Size = new System.Drawing.Size(647, 64);
             this.descriptionLbl.TabIndex = 0;
             this.descriptionLbl.Text = "label1";
             this.descriptionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -137,7 +137,7 @@
             this.settingsLayoutPanel.Name = "settingsLayoutPanel";
             this.settingsLayoutPanel.RowCount = 1;
             this.settingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.settingsLayoutPanel.Size = new System.Drawing.Size(648, 283);
+            this.settingsLayoutPanel.Size = new System.Drawing.Size(653, 283);
             this.settingsLayoutPanel.TabIndex = 1;
             // 
             // customSettingsGroupBox
@@ -148,7 +148,7 @@
             this.customSettingsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.customSettingsGroupBox.Location = new System.Drawing.Point(3, 3);
             this.customSettingsGroupBox.Name = "customSettingsGroupBox";
-            this.customSettingsGroupBox.Size = new System.Drawing.Size(642, 277);
+            this.customSettingsGroupBox.Size = new System.Drawing.Size(647, 277);
             this.customSettingsGroupBox.TabIndex = 1;
             this.customSettingsGroupBox.TabStop = false;
             this.customSettingsGroupBox.Text = "Settings";
@@ -188,7 +188,7 @@
             this.customSettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.customSettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.customSettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.customSettingsLayoutPanel.Size = new System.Drawing.Size(636, 258);
+            this.customSettingsLayoutPanel.Size = new System.Drawing.Size(641, 258);
             this.customSettingsLayoutPanel.TabIndex = 0;
             // 
             // targetLanguageComboBox
@@ -344,18 +344,20 @@
             // 
             this.pathTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.providerSettingsBindingSource8, "TermFilePath", true));
             this.pathTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pathTextBox.Location = new System.Drawing.Point(3, 3);
+            this.pathTextBox.Location = new System.Drawing.Point(0, 0);
+            this.pathTextBox.Margin = new System.Windows.Forms.Padding(0);
             this.pathTextBox.Multiline = true;
             this.pathTextBox.Name = "pathTextBox";
             this.pathTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.pathTextBox.Size = new System.Drawing.Size(371, 65);
+            this.pathTextBox.Size = new System.Drawing.Size(377, 71);
             this.pathTextBox.TabIndex = 1;
             // 
             // submitBtn
             // 
             this.submitBtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.submitBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.submitBtn.Location = new System.Drawing.Point(464, 45);
+            this.submitBtn.Location = new System.Drawing.Point(464, 48);
+            this.submitBtn.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.submitBtn.Name = "submitBtn";
             this.submitBtn.Size = new System.Drawing.Size(67, 23);
             this.submitBtn.TabIndex = 1;
@@ -365,7 +367,8 @@
             // browseBtn
             // 
             this.browseBtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.browseBtn.Location = new System.Drawing.Point(384, 45);
+            this.browseBtn.Location = new System.Drawing.Point(384, 48);
+            this.browseBtn.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.browseBtn.Name = "browseBtn";
             this.browseBtn.Size = new System.Drawing.Size(66, 23);
             this.browseBtn.TabIndex = 1;
@@ -425,9 +428,9 @@
             this.AcceptButton = this.submitBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(654, 357);
+            this.ClientSize = new System.Drawing.Size(659, 357);
             this.Controls.Add(this.mainTableLayout);
-            this.MinimumSize = new System.Drawing.Size(670, 396);
+            this.MinimumSize = new System.Drawing.Size(675, 396);
             this.Name = "Settings";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
