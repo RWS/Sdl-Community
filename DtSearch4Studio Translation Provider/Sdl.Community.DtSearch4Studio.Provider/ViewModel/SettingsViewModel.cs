@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.DtSearch4Studio.Provider.Commands;
 using Sdl.Community.DtSearch4Studio.Provider.Helpers;
@@ -84,26 +83,13 @@ namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
 		#endregion
 
 		#region Private Methods
-		private void LoadIndexes()
-		{
-			//To do: Load the indexes from dtSearch Desktop app 
-			
-		}
 
 		// Set UI Settings fields selection based on the provider settings file (for indexes).
 		private void SetFieldsSelection(ProviderSettings providerSettings)
 		{
 			if (providerSettings != null)
 			{
-				// to do: set the selection of index
-				//foreach (var domainCode in providerSettings.Domains)
-				//{
-				//	var domain = Domains?.FirstOrDefault(d => d.Code.Equals(domainCode));
-				//	if (domain != null)
-				//	{
-				//		domain.IsSelected = true;
-				//	}
-				//}
+				IndexLocation = providerSettings.IndexPath;
 			}
 		}
 		#endregion

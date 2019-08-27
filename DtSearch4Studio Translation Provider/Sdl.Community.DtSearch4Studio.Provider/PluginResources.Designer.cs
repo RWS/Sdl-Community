@@ -61,6 +61,16 @@ namespace Sdl.Community.DtSearch4Studio.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap dtSearch_logo {
+            get {
+                object obj = ResourceManager.GetObject("dtSearch_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sdl.Community.DtSearch4Studio.Provider.
         /// </summary>
         internal static string Plugin_Name {

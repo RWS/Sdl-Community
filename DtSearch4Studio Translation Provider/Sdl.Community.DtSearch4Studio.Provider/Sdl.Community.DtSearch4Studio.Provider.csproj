@@ -71,6 +71,7 @@
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
       <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
@@ -134,6 +135,7 @@
     <Compile Include="ViewModel\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\dtSearch_logo.png" />
     <Content Include="ThirdParty\dtSearchNetStdApi.dll" />
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>

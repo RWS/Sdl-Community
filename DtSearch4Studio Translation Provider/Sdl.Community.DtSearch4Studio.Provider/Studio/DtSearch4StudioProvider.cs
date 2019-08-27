@@ -25,7 +25,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 		}
 
 		public bool IsReadOnly => true;
-		public string Name => "DtSearch4Studio Translation Provider";
+		public string Name => "DtSearch4StudioTranslationProvider";
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, "SDL DtSearch4Studio");
 		public bool SupportsConcordanceSearch => true;
 		public bool SupportsDocumentSearches => true;
@@ -44,8 +44,8 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 		public bool SupportsTranslation => true;
 		public bool SupportsUpdate => true;
 		public bool SupportsWordCounts => true;
-		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
-		public Uri Uri => new Uri("https://DtSearch4Studio.com");
+		public TranslationMethod TranslationMethod => TranslationMethod.Other;
+		public Uri Uri => new Uri("dtsearch://dtSearch4StudioTranslationProvider");
 
 		public void LoadState(string translationProviderState)
 		{

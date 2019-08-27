@@ -30,7 +30,7 @@
 		</ResourceDictionary>
 	</Window.Resources>
     <StackPanel>
-		<!--<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Buttons styles example" FontSize="15" Margin="10,5,0,10"/>
+		<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Buttons styles example" FontSize="15" Margin="10,5,0,10"/>
 		<StackPanel Orientation="Horizontal">
 			<Button Style="{DynamicResource Sdl.Button.PrimaryStyle}" Content="Primary Style" Margin="10,0,10,10"/>
 			<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" Content="Secondary Style" Margin="10,0,10,10"/>
@@ -59,20 +59,20 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
-		<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Groupbox and RadioButtons example" FontSize="15" Margin="10,5,0,10"/>-->
+		<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Groupbox and RadioButtons example" FontSize="15" Margin="10,5,0,10"/>
 
-		<!--<GroupBox Style="{DynamicResource Sdl.GroupBox.SingleLineStyle}" Header="Studio versions" Width="300" HorizontalAlignment="Left" Margin="10">
+		<GroupBox Style="{DynamicResource Sdl.GroupBox.SingleLineStyle}" Header="Studio versions" Width="300" HorizontalAlignment="Left" Margin="10">
 			<StackPanel >
 				<RadioButton Style="{DynamicResource Sdl.RadioButton.GenericStyle}" GroupName="Studio" Content="Studio 2015" Margin="5"/>
 				<RadioButton Style="{DynamicResource Sdl.RadioButton.GenericStyle}" GroupName="Studio" Content="Studio 2017" Margin="5"/>
 				<RadioButton Style="{DynamicResource Sdl.RadioButton.GenericStyle}" GroupName="Studio" Content="Studio 2019" Margin="5"/>
 			</StackPanel>
-		</GroupBox>-->
-		<!--<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" Height="50">
+		</GroupBox>
+		<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" Height="50">
 			
-		</mah:ProgressRing>-->
-		<!--<controls:NumericUpDown Style="{DynamicResource Sdl.NumericUpDown.Generic}" Width="150" HorizontalAlignment="Left" Margin="10"/>-->
-		<!--<TextBox Style="{DynamicResource WatermarkTextBox}"></TextBox>-->
+		</mah:ProgressRing>
+		<controls:NumericUpDown Style="{DynamicResource Sdl.NumericUpDown.Generic}" Width="150" HorizontalAlignment="Left" Margin="10"/>
+		<TextBox Style="{DynamicResource WatermarkTextBox}"></TextBox>
 		
 		<TextBox Style="{DynamicResource WatermarkTextBox}" 
 				 Margin="20"

@@ -6,7 +6,7 @@
 			 WindowStartupLocation="CenterScreen"  ResizeMode="NoResize"			 
 			 Title="SDL DtSearch4Studio Translation provider"
              mc:Ignorable="d"
-			 Height="300" Width="580">
+			 Height="250" Width="565">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -26,19 +26,22 @@
 			<RowDefinition Height="80" />
 			<RowDefinition Height="30"/>
 			<RowDefinition Height="50"/>
-			<RowDefinition Height="40" />
 			<RowDefinition Height="auto" />
 		</Grid.RowDefinitions>
-		<!-- to be added the icon of DtSearch4Studio provider (in the top right of the window)-->
-		<TextBlock Margin="15,45,0,0" Grid.Row="0" Grid.Column="0" Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" FontSize="14" Text="Welcome to the DtSearch4Studio Translation Provider."></TextBlock>
-		<TextBlock Margin="15,0,0,0" Grid.Row="1" Grid.Column="0" Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" FontSize="13" Text="SDL DtSearch4Studio represents an integration of the dtSearch engine with Studio"></TextBlock>
+		<DockPanel Grid.Row="0" Grid.Column="0">
+			<TextBlock Style="{DynamicResource Sdl.TextBlock.TitleStyle}" FontWeight="Bold" Margin="6,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Text="Welcome to the DtSearch4Studio Translation Provider."></TextBlock>
+			<Image Source="../Resources/dtSearch_logo.png" Width="150" Height="50" Margin="11,0,0,0" HorizontalAlignment="Right" />
+		</DockPanel>
+	    <TextBlock Margin="8,0,0,0" Grid.Row="1" Grid.Column="0" Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" FontWeight="Normal" FontSize="13" Text="SDL DtSearch4Studio represents an integration of the dtSearch engine with Studio"></TextBlock>
 
-		<TextBlock Margin="15,0,0,0" Text="Please select index:" Grid.Row="2" Grid.Column="0" Height="20" ></TextBlock>
-		<Button Margin="15,0,0,0" Style="{DynamicResource Sdl.Button.SecondaryStyle}" Grid.Row="3"  Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"
+		<DockPanel LastChildFill="True" Grid.Row="2">
+			<TextBlock Margin="15,0,0,0" Style="{DynamicResource Sdl.TextBlock.SubtitleStyle}" FontSize="11" Text="Please select index:" Grid.Row="2" Grid.Column="0" Height="20" DockPanel.Dock="Left" VerticalAlignment="Center"></TextBlock>
+		<TextBox Height="30" Margin="5,0,0,0" Grid.Row="3" Text="{Binding IndexLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" 
+				 VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+		<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" Grid.Row="3"  Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"
 				Content="Browse" Width="50" Command="{Binding BrowseCommand}"></Button>
-		<TextBlock Margin="120,8,0,0" FontSize="14" Grid.Row="3" Style="{DynamicResource Sdl.TextBlock.SubtitleStyle}" Text="{Binding IndexLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" />
-
-		<Button Grid.Row="4" Margin="20,20,0,0" Style="{DynamicResource Sdl.Button.PrimaryStyle}" Width="125" Content="OK" Command="{Binding OkCommand}"/>
-		<Button Grid.Row="4" Margin="0,20,0,0"  HorizontalAlignment="Right" Style="{DynamicResource Sdl.Button.SecondaryStyle }" Content="Cancel" Width="125" IsCancel="True" />
+		</DockPanel>
+		<Button Grid.Row="3" HorizontalAlignment="Center" Margin="165,20,0,0" Style="{DynamicResource Sdl.Button.PrimaryStyle}" Width="100" Content="OK" Command="{Binding OkCommand}"/>
+		<Button Grid.Row="3" Margin="0,20,0,0"  HorizontalAlignment="Right" Style="{DynamicResource Sdl.Button.SecondaryStyle }" Content="Cancel" Width="100" IsCancel="True" />
 	</Grid>
 </Window>

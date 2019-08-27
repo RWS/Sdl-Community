@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using Sdl.Community.DtSearch4Studio.Provider.Helpers;
 using Sdl.Community.DtSearch4Studio.Provider.Model;
+using Sdl.Community.DtSearch4Studio.Provider.Service;
 using Sdl.Community.DtSearch4Studio.Provider.Ui;
 using Sdl.Community.DtSearch4Studio.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
@@ -36,13 +37,16 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 			catch(Exception e)
 			{
 				Log.Logger.Error($"{Constants.Browse}: {e.Message}\n {e.StackTrace}");
-			}
-			// to be implemented
+			}			
 			return null;
 		}
 
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
+			var persistenceService = new PersistenceService();
+			var settings = persistenceService.GetProviderSettings();
+			SetTranslationProvider((DtSearch4StudioProvider)translationProvider, settings);
+
 			return true;
 		}
 
@@ -53,7 +57,11 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			return null;
+			return new TranslationProviderDisplayInfo
+			{
+				Name = Constants.AppUpperName,
+				TooltipText = Constants.AppLowerName
+			};
 		}
 
 		public bool SupportsEditing
@@ -63,7 +71,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
-			return true;
+			return translationProviderUri.Scheme == Constants.ProviderScheme;
 		}
 
 		private ProviderSettings GetProviderSettings()
@@ -81,7 +89,6 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 			}
 			_settingsViewModel = new SettingsViewModel(providerSettings);
 			_settingsWindow = new SettingsWindow(_settingsViewModel);
-			
 			if (_settingsViewModel != null)
 			{
 				_settingsViewModel.OnSaveSettingsCommandRaised += GetProviderSettings;
@@ -89,7 +96,6 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 			_settingsWindow.ShowDialog();
 
 			providerSettings = _settingsViewModel.ProviderSettings;
-
 			if (provider == null)
 			{
 				provider = new DtSearch4StudioProvider(providerSettings);
@@ -99,7 +105,6 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 				provider.UpdateSettings(providerSettings);
 			}
 			result.Add(provider);
-
 			return result.ToArray();
 		}
 	}

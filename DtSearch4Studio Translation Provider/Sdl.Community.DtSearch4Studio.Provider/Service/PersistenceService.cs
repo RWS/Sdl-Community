@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.DtSearch4Studio.Provider.Helpers;
 using Sdl.Community.DtSearch4Studio.Provider.Model;
@@ -12,7 +10,6 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Service
 	{
 		#region Private Fields
 		private readonly string _persistancePath;
-		private List<ProviderSettings> _providerSettingList = new List<ProviderSettings>();
 		#endregion
 
 		#region Public properties
@@ -22,8 +19,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Service
 		#region Constructors
 		public PersistenceService()
 		{
-			_persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				@"SDL Community\DtSearch4Studio\DtSearch4Studio.json");
+			_persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.JsonPath);
 		}
 		#endregion
 
@@ -32,63 +28,39 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Service
 		{
 			if (providerSettings == null)
 			{
-				throw new NullReferenceException("Provider settings cannot be null");
+				throw new NullReferenceException(Constants.NoSettingsMessage);
 			}
-
-			GetProviderSettingsList();
-
-			if (providerSettings != null)
-			{
-				var result = _providerSettingList.FirstOrDefault();
-
-				if (result != null)
-				{
-					//To Do: set the index in result
-					//result.Domains = providerSettings.Domains;
-					//result.TermTypes = providerSettings.TermTypes;
-				}
-				else
-				{
-					_providerSettingList.Add(providerSettings);
-				}
-			}
-			WriteToFile();
+			WriteToFile(providerSettings);
 		}
 
-		public void GetProviderSettingsList()
+		public ProviderSettings GetProviderSettings()
 		{
-			if (!File.Exists(_persistancePath)) return;
 			var json = File.ReadAllText(_persistancePath);
 			if (!string.IsNullOrEmpty(json))
 			{
-				_providerSettingList = JsonConvert.DeserializeObject<List<ProviderSettings>>(json);
+				return JsonConvert.DeserializeObject<ProviderSettings>(json);
 			}
-		}
-
-		public ProviderSettings Load()
-		{
-			GetProviderSettingsList();
-			var providerSettings = _providerSettingList.FirstOrDefault();
-
-			return providerSettings;
+			return new ProviderSettings();
 		}
 		#endregion
 
 		#region Internal methods
-		internal void WriteToFile()
+		internal void WriteToFile(ProviderSettings providerSettings)
 		{
 			try
 			{
-				if (!File.Exists(_persistancePath))
+				var directoryPath = Path.GetDirectoryName(_persistancePath);
+				if (!Directory.Exists(directoryPath))
 				{
-					var directory = Path.GetDirectoryName(_persistancePath);
-					if (directory != null && !Directory.Exists(directory))
-					{
-						Directory.CreateDirectory(directory);
-					}
+					Directory.CreateDirectory(directoryPath);
+				}					
+				if(File.Exists(_persistancePath))
+				{
+					File.Delete(_persistancePath);
 				}
+				File.Create(_persistancePath).Dispose();
 
-				var json = JsonConvert.SerializeObject(_providerSettingList);
+				var json = JsonConvert.SerializeObject(providerSettings);
 				File.WriteAllText(_persistancePath, json);
 			}
 			catch (Exception e)
