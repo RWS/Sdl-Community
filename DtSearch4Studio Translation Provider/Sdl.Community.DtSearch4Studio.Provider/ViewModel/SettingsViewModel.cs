@@ -13,6 +13,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
 		private ICommand _okCommand;
 		private ICommand _browseCommand;
 		private string _indexLocation;
+		private bool _isIndexSelected;
 
 		#endregion
 
@@ -26,12 +27,24 @@ namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
 		#region Public Properties				
 		public ProviderSettings ProviderSettings { get; set; }
 
+		public bool IsIndexSelected
+		{
+			get => _isIndexSelected;
+			set
+			{
+				_isIndexSelected = value;
+				OnPropertyChanged(nameof(IsIndexSelected));
+			}
+		}
+
 		public string IndexLocation
 		{
 			get => _indexLocation;
 			set
 			{
 				_indexLocation = value;
+				IsIndexSelected = false;
+
 				OnPropertyChanged(nameof(IndexLocation));
 			}
 		}
@@ -47,15 +60,23 @@ namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
 		#region Actions		
 		private void OkAction()
 		{
-			ProviderSettings = new ProviderSettings
+			if (!string.IsNullOrEmpty(IndexLocation))
 			{
-				IndexPath = IndexLocation
-			};
+				IsIndexSelected = false;
+				ProviderSettings = new ProviderSettings
+				{
+					IndexPath = IndexLocation
+				};
 
-			var persistenceService = new PersistenceService();
-			persistenceService.AddSettings(ProviderSettings);
+				var persistenceService = new PersistenceService();
+				persistenceService.AddSettings(ProviderSettings);
 
-			OnSaveSettingsCommandRaised?.Invoke();
+				OnSaveSettingsCommandRaised?.Invoke();
+			}
+			else
+			{
+				IsIndexSelected = true;
+			}
 		}
 
 		/// <summary>

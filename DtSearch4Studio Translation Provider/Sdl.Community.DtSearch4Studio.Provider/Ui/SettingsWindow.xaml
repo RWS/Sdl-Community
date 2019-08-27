@@ -3,16 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 WindowStartupLocation="CenterScreen" ResizeMode="NoResize"			 
+			 WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None"		 	 
 			 Title="SDL DtSearch4Studio Translation Provider"
              mc:Ignorable="d"
-			 Height="250" Width="570">
+			 Height="270" Width="570">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+				<ResourceDictionary x:Uid="ResourceDictionary_1"><BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+		</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
@@ -24,11 +26,12 @@
 			<RowDefinition Height="80" />
 			<RowDefinition Height="30"/>
 			<RowDefinition Height="50"/>
+			<RowDefinition Height="15"/>
 			<RowDefinition Height="auto" />
 		</Grid.RowDefinitions>
-		<DockPanel Grid.Row="0">
+		<DockPanel Grid.Row="0">		
 			<TextBlock Style="{DynamicResource Sdl.TextBlock.TitleStyle}" FontWeight="Bold" Margin="6,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Text="Welcome to the DtSearch4Studio Translation Provider."></TextBlock>
-			<Image Source="../Resources/dtSearch_logo.png" Width="150" Height="50" Margin="11,0,0,0" HorizontalAlignment="Right" />
+			<Image Source="../Resources/dtSearch4Studio.ico" Width="150" Height="50" Margin="11,0,0,0" HorizontalAlignment="Right" />
 		</DockPanel>
 		
 	    <TextBlock Margin="8,0,0,0" Grid.Row="1" Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" FontWeight="Normal" FontSize="13" Text="SDL DtSearch4Studio represents an integration of the dtSearch engine with Trados Studio."></TextBlock>
@@ -40,8 +43,10 @@
 			<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" Grid.Row="3" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Center" 
 				Margin="10,0,0,0" Width="50" Command="{Binding BrowseCommand}"></Button>
 		</DockPanel>
-		
-		<Button Grid.Row="3" Margin="165,20,0,0" Content="OK" Command="{Binding OkCommand}" Style="{DynamicResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Center" Width="100"/>
-		<Button Grid.Row="3" Margin="0,20,0,0" Style="{DynamicResource Sdl.Button.SecondaryStyle }" Content="Cancel" IsCancel="True" Width="100" HorizontalAlignment="Right"  />
+		<TextBlock Grid.Row="3" Text="Provider couldn't be set up, because no index was selected!" Height="20" Foreground="Red" 
+					Margin="15,0,0,0" Visibility="{Binding IsIndexSelected,Converter={StaticResource BoolToVisibilityConverter}}">			
+		</TextBlock>
+		<Button Grid.Row="4" Margin="165,20,0,0" Content="OK" Command="{Binding OkCommand}" Style="{DynamicResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Center" Width="100"/>
+		<Button Grid.Row="4" Margin="0,20,0,0" Style="{DynamicResource Sdl.Button.SecondaryStyle }" Content="Cancel" IsCancel="True" Width="100" HorizontalAlignment="Right"  />
 	</Grid>
 </Window>

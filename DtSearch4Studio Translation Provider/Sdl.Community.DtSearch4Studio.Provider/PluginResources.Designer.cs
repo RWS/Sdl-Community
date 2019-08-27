@@ -61,12 +61,12 @@ namespace Sdl.Community.DtSearch4Studio.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Bitmap dtSearch_logo {
+        internal static System.Drawing.Icon dtSearch4Studio {
             get {
-                object obj = ResourceManager.GetObject("dtSearch_logo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                object obj = ResourceManager.GetObject("dtSearch4Studio", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

@@ -8,8 +8,8 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 	class DtSearch4StudioProvider : ITranslationProvider
 	{
 		#region Private fields
-		private ProviderSettings _providerSettings;
 		#endregion
+		
 
 		#region Constructors
 		public DtSearch4StudioProvider(ProviderSettings providerSettings)
@@ -18,12 +18,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 		}
 		#endregion
 
-		// To be implemented all the methods /properties bellow. 
-		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
-		{
-			return new DtSearch4StudioLanguageDirection(this, languageDirection);
-		}
-
+		#region Public properties
 		public bool IsReadOnly => true;
 		public string Name => "DtSearch4StudioTranslationProvider";
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, "SDL DtSearch4Studio");
@@ -47,7 +42,16 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 		public TranslationMethod TranslationMethod => TranslationMethod.Other;
 		public Uri Uri => new Uri("dtsearch://dtSearch4StudioTranslationProvider");
 
-		public void LoadState(string translationProviderState)
+		public ProviderSettings ProviderSettings { get; set; }
+		#endregion
+
+		#region Public methods
+		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
+		{
+			return new DtSearch4StudioLanguageDirection(this, languageDirection);
+		}		
+
+        public void LoadState(string translationProviderState)
 		{
 		}
 
@@ -59,12 +63,10 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 		{
 			return null;
 		}
-
-
-		#region Private Methods
+		
 		public void UpdateSettings(ProviderSettings providerSettings)
 		{
-			_providerSettings = providerSettings;
+			ProviderSettings = providerSettings;
 		}
 		#endregion
 	}

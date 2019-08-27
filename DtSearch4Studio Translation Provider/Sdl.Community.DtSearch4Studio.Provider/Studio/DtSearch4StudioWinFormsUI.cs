@@ -60,7 +60,8 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 			return new TranslationProviderDisplayInfo
 			{
 				Name = Constants.AppUpperName,
-				TooltipText = Constants.AppLowerName
+				TooltipText = Constants.AppLowerName,
+				TranslationProviderIcon = PluginResources.dtSearch4Studio
 			};
 		}
 

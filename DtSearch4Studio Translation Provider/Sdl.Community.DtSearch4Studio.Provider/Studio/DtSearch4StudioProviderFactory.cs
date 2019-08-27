@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using Sdl.Community.DtSearch4Studio.Provider.Helpers;
 using Sdl.Community.DtSearch4Studio.Provider.Service;
-using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DtSearch4Studio.Provider.Studio
@@ -26,9 +21,10 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 
 				var providerSettings = persistenceService.GetProviderSettings();
 
-				//in case we didn't any settings stored there is no need to load the provider
+				// in case we didn't have any settings stored there is no need to load the provider
 				if (providerSettings == null)
 				{
+					MessageBox.Show(Constants.EmptyProvider, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return null;
 				}
 

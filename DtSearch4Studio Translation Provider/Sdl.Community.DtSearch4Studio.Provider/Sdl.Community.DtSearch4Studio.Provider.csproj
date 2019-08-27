@@ -135,7 +135,7 @@
     <Compile Include="ViewModel\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\dtSearch_logo.png" />
+    <Resource Include="Resources\dtSearch4Studio.ico" />
     <Content Include="ThirdParty\dtSearchNetStdApi.dll" />
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>
