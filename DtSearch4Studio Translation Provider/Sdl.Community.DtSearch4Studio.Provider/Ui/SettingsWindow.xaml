@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None"		 	 
+			 WindowStartupLocation="CenterScreen" ResizeMode="NoResize"		 	 
 			 Title="SDL DtSearch4Studio Translation Provider"
              mc:Ignorable="d"
-			 Height="270" Width="570">
+			 Height="270" Width="570" Icon="/Sdl.Community.DtSearch4Studio.Provider;component/Resources/dtSearch4Studio.ico">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
