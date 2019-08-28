@@ -6,11 +6,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 {
 	class DtSearch4StudioProvider : ITranslationProvider
-	{
-		#region Private fields
-		#endregion
-		
-
+	{		
 		#region Constructors
 		public DtSearch4StudioProvider(ProviderSettings providerSettings)
 		{

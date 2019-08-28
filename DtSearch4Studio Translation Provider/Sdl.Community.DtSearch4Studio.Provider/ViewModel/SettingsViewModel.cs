@@ -50,7 +50,6 @@ namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
 				OnPropertyChanged(nameof(IndexLocation));
 			}
 		}
-
 		#endregion
 
 		#region Commands

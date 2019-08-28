@@ -112,8 +112,6 @@
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Reflector.cs" />
-    <Compile Include="Helpers\WindowCloser.cs" />
-    <Compile Include="Helpers\WindowsControlUtils.cs" />
     <Compile Include="Model\ProviderSettings.cs" />
     <Compile Include="Model\ViewModelBase.cs" />
     <Compile Include="PluginResources.Designer.cs">
