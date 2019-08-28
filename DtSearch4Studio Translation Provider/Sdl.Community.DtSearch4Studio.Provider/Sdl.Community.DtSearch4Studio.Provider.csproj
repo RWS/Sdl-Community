@@ -38,7 +38,7 @@
     <Reference Include="ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.4.0.1\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
-    <Reference Include="dtSearchNetStdApi, Version=7.94.8620.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="dtSearchNetStdApi, Version=7.94.8620.0, Culture=neutral, PublicKeyToken=b8bf3fa2840d4a46, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>ThirdParty\dtSearchNetStdApi.dll</HintPath>
     </Reference>

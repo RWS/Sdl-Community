@@ -1,5 +1,8 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using System.Linq;
 using Sdl.Community.DtSearch4Studio.Provider.Model;
+using Sdl.Community.DtSearch4Studio.Provider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -24,42 +27,67 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 		#endregion
 
 		#region Public Properties
-		public CultureInfo SourceLanguage { get; }
-		public CultureInfo TargetLanguage { get; }
+		public CultureInfo SourceLanguage => _languagePair?.SourceCulture;
+		public CultureInfo TargetLanguage => _languagePair?.TargetCulture;
 		public bool CanReverseLanguageDirection { get; }
 		public ITranslationProvider TranslationProvider => _dtSearch4StudioProvider;
 		#endregion
 
 		#region Public Methods
 
-		// To be implemented
-		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
+		// To be implemented: the method from where the search begins
+		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
+			var searchResult = new SearchService();
+			foreach (var segment in segments)
+			{ 
+			searchResult.GetResults(_providerSettings.IndexPath, segment.ToPlain());
+			}
 			return null;
 		}
 
-		// To be implemented
+		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
+		{
+			// Need this vs having mask parameter default to null as inheritence doesn't allow default values to
+			// count as the same thing as having no parameter at all. IE, you can't have
+			// public string foo(string s = null) override public string foo().
+			return SearchSegments(settings, segments, null);
+		}
+
 		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
 		{
 			return SearchSegment(settings, translationUnit.SourceSegment);
 		}
 
-		// To be implemented
 		public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
 		{
-			return null;
+			return SearchSegments(settings, translationUnits.Select(tu => tu.SourceSegment).ToArray());
 		}
 
-		// To be implemented
 		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
 		{
-			return null;
+			if (translationUnits == null)
+			{
+				throw new ArgumentNullException("translationUnits", "TranslationUnits in SearchSegmentsMasked");
+			}
+			if (mask == null || mask.Length != translationUnits.Length)
+			{
+				throw new ArgumentException("Mask in SearchSegmentsMasked");
+			}
+			return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
 		}
 
-		// To be implemented
 		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
-			return null;
+			if (segments == null)
+			{
+				throw new ArgumentNullException("segments", "Segments in SearchSegmentsMasked");
+			}
+			if (mask == null || mask.Length != segments.Length)
+			{
+				throw new ArgumentException("Mask in SearchSegmentsMasked");
+			}
+			return SearchSegments(settings, segments, mask);
 		}
 		
 		#region Methods which doesn't need to be implemented in this app

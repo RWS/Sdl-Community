@@ -15,5 +15,7 @@
 		public static readonly string Browse = "Browse method";
 		public static readonly string WriteToFile = "WriteToFile method";
 		public static readonly string CreateTranslationProvider = "CreateTranslationProvider method";
+		public static readonly string GetResults = "GetResults method. Error ";
+
 	}
 }
