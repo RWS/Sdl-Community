@@ -6,7 +6,7 @@
 			 WindowStartupLocation="CenterScreen" ResizeMode="NoResize"		 	 
 			 Title="SDL DtSearch4Studio Translation Provider"
              mc:Ignorable="d"
-			 Height="270" Width="570" Icon="/Sdl.Community.DtSearch4Studio.Provider;component/Resources/dtSearch4Studio.ico">
+			 Height="250" Width="570" Icon="/Sdl.Community.DtSearch4Studio.Provider;component/Resources/dtSearch4Studio.ico">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -23,7 +23,7 @@
 			<ColumnDefinition Width="auto" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="80" />
+			<RowDefinition Height="60" />
 			<RowDefinition Height="30"/>
 			<RowDefinition Height="50"/>
 			<RowDefinition Height="15"/>
@@ -31,7 +31,7 @@
 		</Grid.RowDefinitions>
 		<DockPanel Grid.Row="0">		
 			<TextBlock Style="{DynamicResource Sdl.TextBlock.TitleStyle}" FontWeight="Bold" Margin="6,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Text="Welcome to the DtSearch4Studio Translation Provider."></TextBlock>
-			<Image Source="../Resources/dtSearch4Studio.ico" Width="150" Height="50" Margin="11,0,0,0" HorizontalAlignment="Right" />
+			<Image Source="../Resources/dtSearch4Studio.ico" Width="150" Height="50" Margin="10,0,0,0" HorizontalAlignment="Right" />
 		</DockPanel>
 		
 	    <TextBlock Margin="8,0,0,0" Grid.Row="1" Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" FontWeight="Normal" FontSize="13" Text="SDL DtSearch4Studio represents an integration of the dtSearch engine with Trados Studio."></TextBlock>
@@ -47,6 +47,6 @@
 					Margin="15,0,0,0" Visibility="{Binding IsIndexSelected,Converter={StaticResource BoolToVisibilityConverter}}">			
 		</TextBlock>
 		<Button Grid.Row="4" Margin="165,20,0,0" Content="OK" Command="{Binding OkCommand}" Style="{DynamicResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Center" Width="100"/>
-		<Button Grid.Row="4" Margin="0,20,0,0" Style="{DynamicResource Sdl.Button.SecondaryStyle }" Content="Cancel" IsCancel="True" Width="100" HorizontalAlignment="Right"  />
+		<Button Grid.Row="4" Margin="0,20,5,0" Style="{DynamicResource Sdl.Button.SecondaryStyle }" Content="Cancel" Command="{Binding CancelCommand}" Width="100" HorizontalAlignment="Right"  />
 	</Grid>
 </Window>

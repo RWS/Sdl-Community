@@ -1,4 +1,5 @@
-﻿using Sdl.Community.DtSearch4Studio.Provider.ViewModel;
+﻿using System;
+using Sdl.Community.DtSearch4Studio.Provider.ViewModel;
 
 namespace Sdl.Community.DtSearch4Studio.Provider.Ui
 {
@@ -19,6 +20,10 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Ui
 		{
 			Loaded -= SettingsWindow_Loaded;
 			DataContext = _model;
+			if (_model.CloseAction == null)
+			{
+				_model.CloseAction = new Action(this.Close);
+			}
 		}
 	}
 }

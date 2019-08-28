@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.DtSearch4Studio.Provider.Commands;
 using Sdl.Community.DtSearch4Studio.Provider.Helpers;
@@ -12,6 +13,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
 		#region Private Fields
 		private ICommand _okCommand;
 		private ICommand _browseCommand;
+		private ICommand _cancelCommand;
 		private string _indexLocation;
 		private bool _isIndexSelected;
 
@@ -54,10 +56,17 @@ namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
 		#region Commands
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new CommandHandler(OkAction, true));
 		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(BrowseAction, true));
-
+		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true));
+		public Action CloseAction { get; set; }
 		#endregion
 
 		#region Actions		
+		private void CancelAction()
+		{
+			MessageBox.Show(Constants.CancelProviderMessage, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			CloseAction();
+		}
+
 		private void OkAction()
 		{
 			if (!string.IsNullOrEmpty(IndexLocation))
