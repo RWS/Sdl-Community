@@ -6,7 +6,7 @@
 			 WindowStartupLocation="CenterScreen" ResizeMode="NoResize"		 	 
 			 Title="SDL DtSearch4Studio Translation Provider"
              mc:Ignorable="d"
-			 Height="250" Width="570" Icon="/Sdl.Community.DtSearch4Studio.Provider;component/Resources/dtSearch4Studio.ico">
+			 Height="230" Width="570" Icon="/Sdl.Community.DtSearch4Studio.Provider;component/Resources/dtSearch4Studio.ico">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -23,30 +23,28 @@
 			<ColumnDefinition Width="auto" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="60" />
-			<RowDefinition Height="30"/>
-			<RowDefinition Height="50"/>
-			<RowDefinition Height="15"/>
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto" />
 		</Grid.RowDefinitions>
-		<DockPanel Grid.Row="0">		
-			<TextBlock Style="{DynamicResource Sdl.TextBlock.TitleStyle}" FontWeight="Bold" Margin="6,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Text="Welcome to the DtSearch4Studio Translation Provider."></TextBlock>
+		<DockPanel Grid.Row="0">
+			<TextBlock Style="{DynamicResource Sdl.TextBlock.TitleStyle}" FontWeight="Bold" Margin="6,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Text="Welcome to the DtSearch4Studio Translation Provider."/>
 			<Image Source="../Resources/dtSearch4Studio.ico" Width="150" Height="50" Margin="10,0,0,0" HorizontalAlignment="Right" />
-		</DockPanel>
-		
-	    <TextBlock Margin="8,0,0,0" Grid.Row="1" Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" FontWeight="Normal" FontSize="13" Text="SDL DtSearch4Studio represents an integration of the dtSearch engine with Trados Studio."></TextBlock>
+		</DockPanel>		
+	    <TextBlock Margin="8,10,0,0" Grid.Row="1" Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" FontWeight="Normal" FontSize="13" Text="SDL DtSearch4Studio represents an integration of the dtSearch engine with Trados Studio."></TextBlock>
 
-		<DockPanel LastChildFill="True" Grid.Row="2">
-			<TextBlock Margin="15,0,0,0" Style="{DynamicResource Sdl.TextBlock.SubtitleStyle}" Text="Please select index:" FontSize="12" Grid.Row="2" Height="20" DockPanel.Dock="Left" VerticalAlignment="Center"></TextBlock>
-		    <TextBox Grid.Row="3" Text="{Binding IndexLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
+		<DockPanel Margin="0,10,0,0" LastChildFill="True" Grid.Row="2">
+			<TextBlock Margin="8,0,0,0" Style="{DynamicResource Sdl.TextBlock.SubtitleStyle}" Text="Please select index:" FontSize="12" Grid.Row="2" Height="20" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+			<TextBox Grid.Row="3" Text="{Binding IndexLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"
 				 Margin="5,0,0,0" Height="22" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
 			<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" Grid.Row="3" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Center" 
-				Margin="10,0,0,0" Width="50" Command="{Binding BrowseCommand}"></Button>
+				Margin="10,0,0,0" Width="50" Command="{Binding BrowseCommand}"/>
 		</DockPanel>
 		<TextBlock Grid.Row="3" Text="Provider couldn't be set up, because no index was selected!" Height="20" Foreground="Red" 
-					Margin="15,0,0,0" Visibility="{Binding IsIndexSelected,Converter={StaticResource BoolToVisibilityConverter}}">			
-		</TextBlock>
+					Margin="8,5,0,0" Visibility="{Binding IsIndexSelected,Converter={StaticResource BoolToVisibilityConverter}}"/>
 		<Button Grid.Row="4" Margin="165,20,0,0" Content="OK" Command="{Binding OkCommand}" Style="{DynamicResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Center" Width="100"/>
-		<Button Grid.Row="4" Margin="0,20,5,0" Style="{DynamicResource Sdl.Button.SecondaryStyle }" Content="Cancel" Command="{Binding CancelCommand}" Width="100" HorizontalAlignment="Right"  />
+		<Button Grid.Row="4" Margin="0,20,5,0" Style="{DynamicResource Sdl.Button.SecondaryStyle }" Content="Cancel" Command="{Binding CancelCommand}" Width="100" HorizontalAlignment="Right"/>
 	</Grid>
 </Window>
