@@ -121,6 +121,7 @@
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Service\PersistenceService.cs" />
+    <Compile Include="Service\SearchService.cs" />
     <Compile Include="Studio\DtSearch4StudioWinFormsUI.cs" />
     <Compile Include="Studio\DtSearch4StudioLanguageDirection.cs" />
     <Compile Include="Studio\DtSearch4StudioProvider.cs" />
