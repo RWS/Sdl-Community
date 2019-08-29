@@ -42,6 +42,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>ThirdParty\dtSearchNetStdApi.dll</HintPath>
     </Reference>
+    <Reference Include="Interop.dtengine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>ThirdParty\Interop.dtengine.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -135,7 +140,9 @@
     <Compile Include="ViewModel\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ThirdParty\Interop.dtengine.dll" />
     <Resource Include="Resources\dtSearch4Studio.ico" />
+    <EmbeddedResource Include="ThirdParty\dtSearchEngine.dll" />
     <Content Include="ThirdParty\dtSearchNetStdApi.dll" />
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>

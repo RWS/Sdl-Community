@@ -10,5 +10,7 @@
 		<File>MahApps.Metro.dll</File>
 		<File>NLog.dll</File>
 		<File>ControlzEx.dll</File>
+		<File>Interop.dtengine.dll</File>
+		<File>dtSearchEngine.dll</File>
 	</Include>
 </PluginPackage>
