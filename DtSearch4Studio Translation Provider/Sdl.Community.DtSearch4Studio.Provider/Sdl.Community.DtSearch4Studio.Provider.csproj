@@ -113,6 +113,7 @@
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Reflector.cs" />
+    <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Model\ProviderSettings.cs" />
     <Compile Include="Model\ViewModelBase.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -120,6 +121,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Service\PersistenceService.cs" />
     <Compile Include="Service\SearchService.cs" />
     <Compile Include="Studio\DtSearch4StudioWinFormsUI.cs" />

@@ -83,12 +83,13 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 
 		private ITranslationProvider[] SetTranslationProvider(DtSearch4StudioProvider provider, ProviderSettings providerSettings)
 		{
+			var messageBoxService = new MessageBoxService();
 			var result = new List<ITranslationProvider>();
 			if (_settingsViewModel != null)
 			{
 				_settingsViewModel.OnSaveSettingsCommandRaised -= GetProviderSettings;
 			}
-			_settingsViewModel = new SettingsViewModel(providerSettings);
+			_settingsViewModel = new SettingsViewModel(providerSettings, messageBoxService);
 			_settingsWindow = new SettingsWindow(_settingsViewModel);
 			if (_settingsViewModel != null)
 			{
