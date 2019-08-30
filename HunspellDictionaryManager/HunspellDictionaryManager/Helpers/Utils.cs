@@ -6,6 +6,8 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 {
 	public static class Utils
 	{
+		public static readonly Log Log = Log.Instance;
+
 		public static void InitializeWpfApplicationSettings()
 		{
 			if (Application.Current == null)
@@ -54,16 +56,23 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
         /// <returns></returns>
         public static string GetInstalledStudioPath()
         {
-            var studio = new Toolkit.Core.Studio().GetInstalledStudioVersion().Where(v => v.Version.Equals("Studio15")).FirstOrDefault();
-            if (studio != null)
-            {
-                return studio.InstallPath;
-            }
-            else
-            {
-                MessageBox.Show(Constants.Studio2019ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
-            }
-        }
+			try
+			{
+				var studio = new Toolkit.Core.Studio().GetInstalledStudioVersion()?.Where(v => v.Version.Equals("Studio15")).FirstOrDefault();
+				if (studio != null)
+				{
+					return studio.InstallPath;
+				}
+				else
+				{
+					MessageBox.Show(Constants.Studio2019ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);					
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.GetInstalledStudioPath}: {ex.Message}\n {ex.StackTrace}");
+			}
+			return string.Empty;
+		}
 	}
 }

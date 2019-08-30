@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="Hunspell Dictionary Manager 2019" Language="1033" Version="2.0.0.0" Manufacturer="Sdl Community" UpgradeCode="97aec717-1fa7-4ebf-b1b1-893b9a45be61">
+  <Product Id="*" Name="Hunspell Dictionary Manager 2019" Language="1033" Version="2.0.1.0" Manufacturer="Sdl Community" UpgradeCode="97aec717-1fa7-4ebf-b1b1-893b9a45be61">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
@@ -94,6 +94,9 @@
 
 			<Component Id="FontAwesome.WPF.dll" Guid="*">
 				<File Id="FontAwesome.WPF.dll" KeyPath="yes" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\FontAwesome.WPF.dll"></File>
+			</Component>
+			<Component Id="NLog.dll" Guid="*">
+				<File Id="NLog.dll" KeyPath="yes" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\NLog.dll"></File>
 			</Component>
     </ComponentGroup>
   </Fragment>

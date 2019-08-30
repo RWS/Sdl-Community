@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>DtSearch4Studio Translation Provider</PlugInName>
+  <Version>2.0.0.0</Version>
+  <Description>Integration of dtSearch with Studio (provider which searches through different types of files in a faster way)</Description>
+  <Author>SDL Community Developers</Author>
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+	<Include>
+		<File>dtSearchNetStdApi.dll</File>
+		<File>MahApps.Metro.dll</File>
+		<File>NLog.dll</File>
+		<File>ControlzEx.dll</File>
+	</Include>
+</PluginPackage>
