@@ -72,6 +72,7 @@ namespace ETSTranslationProvider
         {
             var settings = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
             var configString = JsonConvert.SerializeObject(this, Formatting.Indented, settings);
+			System.IO.Directory.CreateDirectory(Directory);
             File.WriteAllText(Path.Combine(Directory, "config.json"), configString);
         }
     }
