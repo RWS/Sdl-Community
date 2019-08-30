@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Windows.Forms;
 using Sdl.Community.DtSearch4Studio.Provider.Helpers;
 using Sdl.Community.DtSearch4Studio.Provider.Model;
@@ -9,7 +8,6 @@ using Sdl.Community.DtSearch4Studio.Provider.Service;
 using Sdl.Community.DtSearch4Studio.Provider.Ui;
 using Sdl.Community.DtSearch4Studio.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DtSearch4Studio.Provider.Studio
@@ -21,6 +19,8 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 	{
 		private SettingsViewModel _settingsViewModel;
 		private SettingsWindow _settingsWindow;
+		private Dictionary<string, Assembly> _assemblies = new Dictionary<string, Assembly>();
+
 
 		public string TypeName => "DtSearch4Studio Translation Provider";
 		public string TypeDescription => "DtSearch4Studio Translation Provider";

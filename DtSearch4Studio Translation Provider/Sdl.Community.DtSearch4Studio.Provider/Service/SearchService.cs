@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using dtSearch.Engine;
+﻿using dtSearch.Engine;
 using Sdl.Community.DtSearch4Studio.Provider.Helpers;
-using Sdl.Community.DtSearch4Studio.Provider.Model;
 
 namespace Sdl.Community.DtSearch4Studio.Provider.Service
 {
@@ -19,7 +13,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Service
 		}
 		#endregion
 
-		#region Public Methods
+		#region Public Methods		
 		public void GetResults(string indexPath, string segment)
 		{
 			using (var searchJob = new SearchJob())
@@ -46,7 +40,6 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Service
 				}
 			}
 		}
-		
 		#endregion
 	}
 }
