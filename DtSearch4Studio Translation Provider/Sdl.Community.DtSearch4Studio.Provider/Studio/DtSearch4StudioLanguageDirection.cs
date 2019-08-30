@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Sdl.Community.DtSearch4Studio.Provider.Model;
@@ -37,13 +38,26 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 
 		// To be implemented: the method from where the search begins
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
-		{
-			var searchResult = new SearchService();
-			foreach (var segment in segments)
-			{ 
-			searchResult.GetResults(_providerSettings.IndexPath, segment.ToPlain());
+		{			
+			var results = new List<SearchResult>();
+			var searchService = new SearchService(SourceLanguage, TargetLanguage);
+			for (int i = 0; i < segments.Length; i++)
+			{
+				var words = searchService.GetResults(_providerSettings.IndexPath, segments[i].ToPlain());
+				foreach (var word in words)
+				{
+					var searchRes = searchService.CreateSearchResult(word, segments[i].ToPlain());
+					results.Add(searchRes);
+				}
 			}
-			return null;
+			// process all the results returned from each segment + each word returned per segment:eg: 2 segments, 3 words per each segment => total of search results=2*3=6
+			var searchResults = new SearchResults[results.Count];
+			for (int i = 0; i < results.Count; i++)
+			{
+				searchResults[i] = new SearchResults();
+				searchResults[i].Add(results[i]);
+			}
+			return searchResults;
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)

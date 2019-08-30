@@ -115,7 +115,9 @@
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Model\ProviderSettings.cs" />
+    <Compile Include="Model\ResultsItem.cs" />
     <Compile Include="Model\ViewModelBase.cs" />
+    <Compile Include="Model\WordItem.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
