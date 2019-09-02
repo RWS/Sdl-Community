@@ -1,4 +1,5 @@
-﻿using Sdl.CommunityWpfHelpers.Services;
+﻿using System;
+using Sdl.CommunityWpfHelpers.Services;
 
 namespace Sdl.CommunityWpfHelpers.SampleApp
 {
