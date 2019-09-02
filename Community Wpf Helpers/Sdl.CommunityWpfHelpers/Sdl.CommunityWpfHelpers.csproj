@@ -53,9 +53,11 @@
     <Compile Include="Converters\RatioConverter.cs" />
     <Compile Include="Converters\StringToBoolConverter.cs" />
     <Compile Include="Interfaces\IAsyncCommand.cs" />
+    <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Interfaces\IRaiseCanExecuteChanged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BaseModel.cs" />
+    <Compile Include="Services\MessageBoxService.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

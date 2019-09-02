@@ -26,7 +26,7 @@
 			<TextBlock Name="SampleBox" Text="AppStore team rocks"/>
 			<DockPanel>
 				<Button Content="Command with parameter"  Margin="10" Width="auto" Command="{Binding ParameterCommand}" CommandParameter="{Binding Text,ElementName=SampleBox}"/>
-				<Button Content="Sample command" Margin="10" Width="auto" Command="{Binding SampleCommand}"/>
+				<Button Content="Show warning message" Margin="10" Width="auto" Command="{Binding SampleCommand}"/>
 				<Button Content="Awaitable Command" Margin="10" Command="{Binding AwaitableCommand}"/>
 			</DockPanel>
 			<GroupBox Header="String to bool converter">

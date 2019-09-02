@@ -1,4 +1,6 @@
-﻿namespace Sdl.CommunityWpfHelpers.SampleApp
+﻿using Sdl.CommunityWpfHelpers.Services;
+
+namespace Sdl.CommunityWpfHelpers.SampleApp
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
@@ -8,7 +10,8 @@
 		public MainWindow()
 		{
 			InitializeComponent();
-			DataContext = new MainWindowViewModel();
+			var messageBoxService = new MessageBoxService();
+			DataContext = new MainWindowViewModel(messageBoxService);
 		}
 	}
 }
