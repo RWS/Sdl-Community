@@ -7,7 +7,7 @@ namespace Sdl.CommunityWpfHelpers.Commands
 	/// <summary>
 	/// USED FOR AWAITABLE COMMAND
 	/// </summary>
-	public class DelegateCommand : DelegateCommand<object>
+	internal class DelegateCommand : DelegateCommand<object>
 	{
 		public DelegateCommand(Action executeMethod)
 			: base(o => executeMethod())
@@ -24,7 +24,7 @@ namespace Sdl.CommunityWpfHelpers.Commands
 	/// A command that calls the specified delegate when the command is executed.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public class DelegateCommand<T> : ICommand, IRaiseCanExecuteChanged
+	internal class DelegateCommand<T> : ICommand, IRaiseCanExecuteChanged
 	{
 		private readonly Func<T, bool> _canExecuteMethod;
 		private readonly Action<T> _executeMethod;

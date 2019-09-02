@@ -50,6 +50,8 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\RatioConverter.cs" />
+    <Compile Include="Converters\StringToBoolConverter.cs" />
     <Compile Include="Interfaces\IAsyncCommand.cs" />
     <Compile Include="Interfaces\IRaiseCanExecuteChanged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

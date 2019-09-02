@@ -11,7 +11,22 @@ namespace Sdl.CommunityWpfHelpers.SampleApp
 		private ICommand _sampleCommand;
 		private ICommand _awaitableCommand;
 		private ICommand _windowClosingCommand;
+		private string _text;
 
+		public MainWindowViewModel()
+		{
+			_text = "Source";
+		}
+
+		public string Text
+		{
+			get => _text;
+			set
+			{
+				_text = value;
+				OnPropertyChanged(nameof(Text));
+			}
+		}
 
 		public ICommand ParameterCommand =>_parameterCommand ?? (_parameterCommand = new RelayCommand(ParameterCommandAction));
 		public ICommand SampleCommand => _sampleCommand ?? (_sampleCommand = new CommandHandler(SampleAction, true));

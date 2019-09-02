@@ -5,14 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sdl.CommunityWpfHelpers.SampleApp"
 		xmlns:behaviours="clr-namespace:Sdl.CommunityWpfHelpers.Behaviours;assembly=Sdl.CommunityWpfHelpers"
+		xmlns:converters ="clr-namespace:Sdl.CommunityWpfHelpers.Converters;assembly=Sdl.CommunityWpfHelpers"
 		d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
         behaviours:WindowCloseCommandBehaviour.Closing="{Binding WindowClosingCommand}"
+        Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.48'}" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450">
 	<Window.Resources>
 		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-			</ResourceDictionary.MergedDictionaries>
+				<converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
 		</ResourceDictionary>
 	</Window.Resources>
     <Grid>
@@ -28,6 +29,17 @@
 				<Button Content="Sample command" Margin="10" Width="auto" Command="{Binding SampleCommand}"/>
 				<Button Content="Awaitable Command" Margin="10" Command="{Binding AwaitableCommand}"/>
 			</DockPanel>
+			<GroupBox Header="String to bool converter">
+				<StackPanel>
+					<RadioButton Content="Source text" 
+								 IsChecked="{Binding Text,Mode=TwoWay, Converter={StaticResource ResourceKey=StringToBoolConverter},
+								 ConverterParameter=Source}" />
+					<RadioButton Content="Target text" 
+								 IsChecked="{Binding Text,Mode=TwoWay, Converter={StaticResource ResourceKey=StringToBoolConverter},
+								 ConverterParameter=Target}"/>
+				</StackPanel>
+			</GroupBox>
+
 		</StackPanel>
     </Grid>
 </Window>
