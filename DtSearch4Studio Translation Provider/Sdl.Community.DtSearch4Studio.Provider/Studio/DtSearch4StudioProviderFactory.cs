@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.DtSearch4Studio.Provider.Helpers;
 using Sdl.Community.DtSearch4Studio.Provider.Service;
@@ -18,7 +19,6 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 			try
 			{
 				var persistenceService = new PersistenceService();
-
 				var providerSettings = persistenceService.GetProviderSettings();
 
 				// in case we didn't have any settings stored there is no need to load the provider
@@ -26,15 +26,9 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 				{
 					MessageBox.Show(Constants.EmptyProvider, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return null;
-				}
-
-				// the below line will be removed once the SearchService will be implemented
+				}				
+				//var searchService = new SearchService();
 				dtSearch4StudioProvider = new DtSearch4StudioProvider(providerSettings);
-			
-				// the below SearchService and method needs to be implemented in order to get the results from dtSearch desktop app
-				//var searchService = new SearchService(providerSettings);
-				//dtSearch4StudioProvider = new DtSearch4StudioProvider(providerSettings);
-				//Task.Run(dtSearch4StudioProvider.GetResults);
 			}
 			catch (Exception ex)
 			{
@@ -49,7 +43,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 			return new TranslationProviderInfo
 			{
 				Name = "DtSearch4Studio",
-				TranslationMethod =  TranslationMethod.Other
+				TranslationMethod =  TranslationMethod.MachineTranslation
 			};
 		}
 
