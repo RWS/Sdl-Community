@@ -7,6 +7,13 @@
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.CommunityWpfHelpers/bin/Debug/Sdl.CommunityWpfHelpers;component=../UiComponents/CommunityWindow.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
 	        <RowDefinition Height="auto"/>
