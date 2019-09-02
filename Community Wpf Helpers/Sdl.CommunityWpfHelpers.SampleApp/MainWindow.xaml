@@ -10,7 +10,6 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Sdl.CommunityWpfHelpers/bin/Debug/Sdl.CommunityWpfHelpers;component=../UiComponents/CommunityWindow.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
