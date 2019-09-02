@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Sdl.Community.DtSearch4Studio.Provider.Helpers;
 using Sdl.Community.DtSearch4Studio.Provider.Model;
 using Sdl.Community.DtSearch4Studio.Provider.Service;
 using Sdl.LanguagePlatform.Core;
@@ -32,32 +33,41 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 		public CultureInfo TargetLanguage => _languagePair?.TargetCulture;
 		public bool CanReverseLanguageDirection { get; }
 		public ITranslationProvider TranslationProvider => _dtSearch4StudioProvider;
+		public static readonly Log Log = Log.Instance;
 		#endregion
 
 		#region Public Methods
 
 		// To be implemented: the method from where the search begins
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
-		{			
-			var results = new List<SearchResult>();
-			var searchService = new SearchService(SourceLanguage, TargetLanguage);
-			for (int i = 0; i < segments.Length; i++)
+		{
+			try
 			{
-				var words = searchService.GetResults(_providerSettings.IndexPath, segments[i].ToPlain());
-				foreach (var word in words)
+				var results = new List<SearchResult>();
+				var searchService = new SearchService(SourceLanguage, TargetLanguage);
+				for (int i = 0; i < segments.Length; i++)
 				{
-					var searchRes = searchService.CreateSearchResult(word, segments[i].ToPlain());
-					results.Add(searchRes);
+					var words = searchService.GetResults(_providerSettings.IndexPath, segments[i].ToPlain());
+					foreach (var word in words)
+					{
+						var searchRes = searchService.CreateSearchResult(word, segments[i].ToPlain());
+						results.Add(searchRes);
+					}
 				}
+				// process all the results returned from each segment + each word returned per segment:eg: 2 segments, 3 words per each segment => total of search results=2*3=6
+				var searchResults = new SearchResults[results.Count];
+				for (int i = 0; i < results.Count; i++)
+				{
+					searchResults[i] = new SearchResults();
+					searchResults[i].Add(results[i]);
+				}
+				return searchResults;
 			}
-			// process all the results returned from each segment + each word returned per segment:eg: 2 segments, 3 words per each segment => total of search results=2*3=6
-			var searchResults = new SearchResults[results.Count];
-			for (int i = 0; i < results.Count; i++)
+			catch (Exception ex)
 			{
-				searchResults[i] = new SearchResults();
-				searchResults[i].Add(results[i]);
+				Log.Logger.Error($"{Constants.SearchSegments}: {ex.Message}\n {ex.StackTrace}");
 			}
-			return searchResults;
+			return new SearchResults[segments.Length];
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
@@ -103,14 +113,35 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 			}
 			return SearchSegments(settings, segments, mask);
 		}
-		
+
+		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
+		{
+			try
+			{
+				var results = new SearchResults();
+				var searchService = new SearchService(SourceLanguage, TargetLanguage);
+
+				var words = searchService.GetResults(_providerSettings.IndexPath, segment.ToPlain());
+				foreach (var word in words)
+				{
+					var searchRes = searchService.CreateSearchResult(word, segment.ToPlain());
+					results.Add(searchRes);
+				}
+				return results;
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.SearchSegment}: {ex.Message}\n {ex.StackTrace}");
+			}
+			return new SearchResults();
+		}
+
 		#region Methods which doesn't need to be implemented in this app
 		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings) => null;
 		public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask) => null;
 		public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings) => null;
 		public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings) => null;
 		public ImportResult[] AddTranslationUnitsMasked(TranslationUnit[] translationUnits, ImportSettings settings, bool[] mask) => null;
-		public SearchResults SearchSegment(SearchSettings settings, Segment segment) => null;
 		public SearchResults SearchText(SearchSettings settings, string segment) => null;
 		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit) => null;
 		public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits) => null;

@@ -19,8 +19,6 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 	{
 		private SettingsViewModel _settingsViewModel;
 		private SettingsWindow _settingsWindow;
-		private Dictionary<string, Assembly> _assemblies = new Dictionary<string, Assembly>();
-
 
 		public string TypeName => "DtSearch4Studio Translation Provider";
 		public string TypeDescription => "DtSearch4Studio Translation Provider";
