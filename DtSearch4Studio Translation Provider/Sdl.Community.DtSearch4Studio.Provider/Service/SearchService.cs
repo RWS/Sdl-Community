@@ -31,46 +31,6 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Service
 		#endregion
 
 		#region Public Methods		
-		//public void GetResults(string indexPath, string segment)
-		//{
-		//	using (var searchJob = new SearchJob())
-		//	{
-		//		using (var searchResults = new SearchResults())
-		//		{
-		//			searchJob.Request = segment;
-		//			searchJob.IndexesToSearch.Add(indexPath);
-		//			searchJob.MaxFilesToRetrieve = 100;
-		//			searchJob.SearchFlags = SearchFlags.dtsSearchTypeAnyWords;
-		//			searchJob.Execute(searchResults);
-
-		//			if (searchJob.Errors.Count > 0)
-		//			{
-		//				for (int i = 0; i <= searchJob.Errors.Count; i++)
-		//				{
-		//					Log.Logger.Error($"{Constants.GetResults}{i}: {searchJob.Errors.Message(i)}");
-		//				}
-		//			}
-		//			else
-		//			{
-		//				var res = GetResultsList(searchResults);					
-		//			}
-		//		}
-		//	}
-		//}
-
-		//public List<ResultsItem> GetResultsList(SearchResults searchResults)
-		//{
-		//	var items = new List<ResultsItem>();
-		//	for (int i = 0; i < searchResults.Count; ++i)
-		//	{
-		//		searchResults.GetNthDoc(i);
-		//		var item = new ResultsItem(searchResults.CurrentItem);
-		//		item.OrdinalInSearchResults = i;
-		//		items.Add(item);
-		//	}
-		//	return items;
-		//}
-		
 		public List<WordItem> GetResults(string indexPath, string segment)
 		{
 			var wordListBuilder = new WordListBuilder();

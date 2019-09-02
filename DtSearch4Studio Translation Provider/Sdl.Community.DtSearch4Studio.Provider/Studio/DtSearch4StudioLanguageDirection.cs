@@ -59,8 +59,10 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 						var searchRes = searchService.CreateSearchResult(word, segments[i].ToPlain());
 						wordResults.Add(searchRes);
 					}
-					results[i] = new SearchResults();
-					results[i].SourceSegment = segments[i].Duplicate();
+					results[i] = new SearchResults
+					{
+						SourceSegment = segments[i].Duplicate()
+					};
 					results[i].Results.AddRange(wordResults);
 				}
 			}
