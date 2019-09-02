@@ -43,7 +43,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 			return new TranslationProviderInfo
 			{
 				Name = "DtSearch4Studio",
-				TranslationMethod =  TranslationMethod.Other
+				TranslationMethod =  TranslationMethod.MachineTranslation
 			};
 		}
 

@@ -38,36 +38,37 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 
 		#region Public Methods
 
-		// To be implemented: the method from where the search begins
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
+			var results = new SearchResults[segments.Length];
 			try
 			{
-				var results = new List<SearchResult>();
 				var searchService = new SearchService(SourceLanguage, TargetLanguage);
 				for (int i = 0; i < segments.Length; i++)
 				{
+					if (mask != null && !mask[i])
+					{
+						results[i] = null;
+						continue;
+					}
+
+					var wordResults = new List<SearchResult>();
 					var words = searchService.GetResults(_providerSettings.IndexPath, segments[i].ToPlain());
 					foreach (var word in words)
 					{
 						var searchRes = searchService.CreateSearchResult(word, segments[i].ToPlain());
-						results.Add(searchRes);
+						wordResults.Add(searchRes);
 					}
+					results[i] = new SearchResults();
+					results[i].SourceSegment = segments[i].Duplicate();
+					results[i].Results.AddRange(wordResults);
 				}
-				// process all the results returned from each segment + each word returned per segment:eg: 2 segments, 3 words per each segment => total of search results=2*3=6
-				var searchResults = new SearchResults[results.Count];
-				for (int i = 0; i < results.Count; i++)
-				{
-					searchResults[i] = new SearchResults();
-					searchResults[i].Add(results[i]);
-				}
-				return searchResults;
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"{Constants.SearchSegments}: {ex.Message}\n {ex.StackTrace}");
 			}
-			return new SearchResults[segments.Length];
+			return results;
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
@@ -98,6 +99,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 			{
 				throw new ArgumentException("Mask in SearchSegmentsMasked");
 			}
+			var translationUnit = translationUnits.Where((seg, i) => mask == null || mask[i]).ToArray();
 			return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
 		}
 
@@ -116,24 +118,25 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
+			var searchResults = new SearchResults();
 			try
 			{
-				var results = new SearchResults();
 				var searchService = new SearchService(SourceLanguage, TargetLanguage);
-
+				var wordResults = new List<SearchResult>();
 				var words = searchService.GetResults(_providerSettings.IndexPath, segment.ToPlain());
 				foreach (var word in words)
 				{
 					var searchRes = searchService.CreateSearchResult(word, segment.ToPlain());
-					results.Add(searchRes);
+					wordResults.Add(searchRes);
 				}
-				return results;
+				searchResults.SourceSegment = segment.Duplicate();
+				searchResults.Results.AddRange(wordResults);
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"{Constants.SearchSegment}: {ex.Message}\n {ex.StackTrace}");
 			}
-			return new SearchResults();
+			return searchResults;
 		}
 
 		#region Methods which doesn't need to be implemented in this app
