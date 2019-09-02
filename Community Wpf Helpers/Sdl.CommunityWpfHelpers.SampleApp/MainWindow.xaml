@@ -4,7 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sdl.CommunityWpfHelpers.SampleApp"
-        d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
+		xmlns:behaviours="clr-namespace:Sdl.CommunityWpfHelpers.Behaviours;assembly=Sdl.CommunityWpfHelpers"
+		d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
+        behaviours:WindowCloseCommandBehaviour.Closing="{Binding WindowClosingCommand}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 	<Window.Resources>
