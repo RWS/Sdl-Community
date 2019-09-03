@@ -35,7 +35,7 @@ namespace ETSTranslationProvider
 			var assembly = Assembly.GetExecutingAssembly();
 			var assemblyName = assembly.GetName().Name;
 
-			var pluginDataDirectory = Environment.ExpandEnvironmentVariables(string.Format(@"%ProgramData%/SDL/SDL Trados Studio/{0}", assemblyName));
+			var pluginDataDirectory = Environment.ExpandEnvironmentVariables($"%AppData%\\SDL Community\\{assemblyName}");
 			CurrentInstance = ParseConfiguration(pluginDataDirectory);
 			if (CurrentInstance == null)
 			{
