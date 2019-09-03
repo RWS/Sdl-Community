@@ -26,6 +26,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private bool _editedFuzzy;
 		private bool _unEditedFuzzy;
 		private bool _reverseFilter;
+		private bool _MT;
 
 		private static EditorController GetEditorController()
 		{
@@ -72,7 +73,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					UnEditedFuzzy = _unEditedFuzzy,
 					ContextInfoStringId = stringId_textbox.Text,
                     UseTagContent = checkBox_TagContent.Checked,
-                    AndOrTagContent = alsoTags_radioButton.Checked
+                    AndOrTagContent = alsoTags_radioButton.Checked,
+					MT = _MT
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -428,6 +430,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			createdByCheck.Checked = false;
 			_unEditedFuzzy = false;
 			_editedFuzzy = false;
+			_MT = false;
 			stringId_textbox.Text = string.Empty;
 			#endregion
 
@@ -472,6 +475,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				var unique = listView_available.Items.Add("Unique Occurrences");
 				unique.Group = GroupRepetitionTypesAvailable;
 				unique.Tag = "Unique";
+
+				var mt = listView_available.Items.Add("Machine Translated");
+				mt.Group = GroupGeneralAvailable;
+				mt.Tag = "MT";
 
 				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.SegmentReviewType)))
 				{
@@ -886,6 +893,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					}
 				}
 
+				//if (CustomFilter.MT)
+				//{
+				//	filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MT + ":\"" +
+				//									CustomFilter.MT + "\"");
+				//}
 				if (CustomFilter.SplitSegments)
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SplitSegments + ":\"" +
@@ -1550,6 +1562,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			{
 				_unEditedFuzzy = true;
 			}
+			if(IsMTSelected())
+			{
+				_MT = true;
+			}
 			MoveSelectedListViewItem(listView_available, listView_selected);
 			InvalidateIconsFilterEdited(tabPage_filters);
 		}
@@ -1560,6 +1576,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			{
 
 				if (selectedItem.Tag.Equals("EditedF"))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		private bool IsMTSelected()
+		{
+			foreach (ListViewItem selectedItem in listView_available.SelectedItems)
+			{
+
+				if (selectedItem.Tag.Equals("MT"))
 				{
 					return true;
 				}
@@ -1605,6 +1633,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			if (IsUnEditedFuzzySelected())
 			{
 				_unEditedFuzzy = false;
+			}
+			if (IsMTSelected())
+			{
+				_MT = false;
 			}
 			MoveSelectedListViewItem(listView_selected, listView_available);
 			InvalidateIconsFilterEdited(tabPage_filters);
@@ -1855,6 +1887,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			if (IsUnEditedFuzzySelected())
 			{
 				_unEditedFuzzy = true;
+			}
+			if (IsMTSelected())
+			{
+				_MT = true;
 			}
 			MoveSelectedListViewItem(listView_available, listView_selected);
 			InvalidateIconsFilterEdited(tabPage_filters);

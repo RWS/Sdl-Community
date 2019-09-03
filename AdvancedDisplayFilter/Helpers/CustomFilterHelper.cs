@@ -44,7 +44,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				success = SegmentNumbersHelper.IdInRange(rowId, customSettings.GroupedList);
 			}
 			if (success && customSettings.UseRegexCommentSearch &&
-			    !string.IsNullOrWhiteSpace(customSettings.CommentRegex))
+				!string.IsNullOrWhiteSpace(customSettings.CommentRegex))
 			{
 				//create a list with source and target comments
 				var commentsList = rowInfo.SegmentPair.Source.GetComments();
@@ -65,7 +65,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 			//fuzzy
 			if (success && !string.IsNullOrWhiteSpace(customSettings.FuzzyMin) &&
-			    !string.IsNullOrWhiteSpace(customSettings.FuzzyMax))
+				!string.IsNullOrWhiteSpace(customSettings.FuzzyMax))
 			{
 				success = FuzzyHelper.IsInFuzzyRange(rowInfo, customSettings.FuzzyMin, customSettings.FuzzyMax);
 
@@ -74,6 +74,13 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			{
 				var containsTagVisitor = new TagVisitor();
 				success = containsTagVisitor.ContainsTag(rowInfo.SegmentPair.Source);
+			}
+			if (success && customSettings.MT)
+			{
+				if (rowInfo.SegmentPair.Properties.TranslationOrigin != null)
+					success = rowInfo.SegmentPair.Properties.TranslationOrigin.OriginType == "mt";
+				if (rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation != null)
+					success = success || rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.OriginType == "mt";
 			}
 			//unique 
 			if (success && customSettings.Unique)
@@ -116,12 +123,12 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			if (success && customSettings.EditedFuzzy)
 			{
 				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
-				          FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+						  FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
 			}
 			if (success && customSettings.UnEditedFuzzy)
 			{
 				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
-				          !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+						  !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
 			}
 
 			//String id search
@@ -146,7 +153,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			return success;
 		}
 
-		private static bool StringIdRegexSearch(DisplayFilterRowInfo rowInfo,string regexExpression,RegexOptions options)
+		private static bool StringIdRegexSearch(DisplayFilterRowInfo rowInfo, string regexExpression, RegexOptions options)
 		{
 			var regex = new Regex(regexExpression, options);
 			foreach (var contextInfo in rowInfo.ContextInfo)
@@ -162,7 +169,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			return false;
 		}
 
-		public static  bool Reverse(DisplayFilterSettings settings,bool success, DisplayFilterRowInfo rowInfo, CustomFilterSettings customSettings, Document activeDocument)
+		public static bool Reverse(DisplayFilterSettings settings, bool success, DisplayFilterRowInfo rowInfo, CustomFilterSettings customSettings, Document activeDocument)
 		{
 			success = false;
 			if (!success && settings.SegmentReviewTypes != null && settings.SegmentReviewTypes.Any())
@@ -243,7 +250,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				success = SegmentNumbersHelper.IdInRange(rowId, customSettings.GroupedList);
 			}
 			if (!success && customSettings.UseRegexCommentSearch &&
-			    !string.IsNullOrWhiteSpace(customSettings.CommentRegex))
+				!string.IsNullOrWhiteSpace(customSettings.CommentRegex))
 			{
 				//create a list with source and target comments
 				var commentsList = rowInfo.SegmentPair.Source.GetComments();
@@ -262,7 +269,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 			//fuzzy
 			if (!success && !string.IsNullOrWhiteSpace(customSettings.FuzzyMin) &&
-			    !string.IsNullOrWhiteSpace(customSettings.FuzzyMax))
+				!string.IsNullOrWhiteSpace(customSettings.FuzzyMax))
 			{
 				success = FuzzyHelper.IsInFuzzyRange(rowInfo, customSettings.FuzzyMin, customSettings.FuzzyMax);
 

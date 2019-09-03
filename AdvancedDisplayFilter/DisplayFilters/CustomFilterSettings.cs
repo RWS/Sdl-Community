@@ -35,5 +35,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		/// Set this to false to search ONLY inside tags
 		/// </summary>
 		public bool AndOrTagContent { get; set; }
+		public bool MT { get; set; }
 	}
 }

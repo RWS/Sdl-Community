@@ -53,7 +53,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 			{
 				if (ReverseSearch)
 				{
-					return CustomFilterHelper.Reverse(Settings,success, rowInfo,CustomSettings,ActiveDocument);
+					return CustomFilterHelper.Reverse(Settings, success, rowInfo, CustomSettings, ActiveDocument);
 				}
 
 				if (success && Settings.SegmentReviewTypes != null && Settings.SegmentReviewTypes.Any())
@@ -116,7 +116,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				// check custom settings
 				if (success)
 				{
-					success = CustomFilterHelper.Filter(CustomSettings,Settings,rowInfo, true, ActiveDocument);
+					success = CustomFilterHelper.Filter(CustomSettings, Settings, rowInfo, true, ActiveDocument);
 				}
 			}
 			return success;
