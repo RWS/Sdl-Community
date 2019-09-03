@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Jobs</PlugInName>
-  <Version>2.3.0.2</Version>
+  <Version>2.3.1.0</Version>
   <Description>Retrieve job postings from ProZ.</Description>
   <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0"/>
   <Include>
-    <File>Newtonsoft.Json.dll</File>
     <File>RestSharp.dll</File>
     <File>PresentationCore.dll</File>
     <File>PresentationFramework.dll</File>

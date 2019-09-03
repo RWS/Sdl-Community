@@ -1,12 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>SDL.Community.BetaAPIs</PlugInName>
-	<Version>2.1.1</Version>
+	<Version>2.1.2.0</Version>
 	<Description>SDL Community BetaAPIs</Description>
 	<Author>SDL Community Developers</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 	<Include>
-		<File>Newtonsoft.Json.dll</File>
 		<File>Markdown.Xaml.dll</File>
 	</Include>
 </PluginPackage>

@@ -29,6 +29,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			return true;
 		}
+
+		public string EnsureValidConnection()
+		{
+			var instance = LanguageCloudIdentityApi.Instance;
+			instance.EnsureValidConnection();
+
+			return instance.AccessToken;
+		}
 		public  bool IsLoggedIn()
 		{
 			if (!IsLoggedIn(out var message))

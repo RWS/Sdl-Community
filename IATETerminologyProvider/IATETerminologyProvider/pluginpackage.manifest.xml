@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>IATE Real-time Terminology</PlugInName>
-  <Version>2.6.4.1</Version>
+  <Version>2.6.5.0</Version>
   <Description>Integration with IATE European Union terminology</Description>
   <Author>SDL Community Developers</Author>
 	<Include>
-		<File>Newtonsoft.Json.dll</File>
 		<File>RestSharp.dll</File>
 		<File>NLog.dll</File>
 	</Include>

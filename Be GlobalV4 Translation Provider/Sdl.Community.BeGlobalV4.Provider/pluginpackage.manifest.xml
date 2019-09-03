@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SDL BeGlobal (NMT)</PlugInName>
-  <Version>2.2.6.1</Version>
+  <Version>2.2.8.0</Version>
   <Description>SDL BeGlobal (NMT) translation provider</Description>
   <Author>SDL Community Developers</Author>
   <Include>
-		<File>Newtonsoft.Json.dll</File>
 		<File>RestSharp.dll</File>
 		<File>MahApps.Metro.dll</File>
 		<File>System.Windows.Interactivity.dll</File>
