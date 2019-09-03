@@ -35,7 +35,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 		public bool SupportsTranslation => true;
 		public bool SupportsUpdate => true;
 		public bool SupportsWordCounts => true;
-		public TranslationMethod TranslationMethod => TranslationMethod.Other;
+		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
 		public Uri Uri => new Uri("dtsearch://dtSearch4StudioTranslationProvider");
 
 		public ProviderSettings ProviderSettings { get; set; }

@@ -44,7 +44,7 @@
 		</DockPanel>
 		<TextBlock Grid.Row="3" Text="Provider couldn't be set up, because no index was selected!" Height="20" Foreground="Red" 
 					Margin="8,5,0,0" Visibility="{Binding IsIndexSelected,Converter={StaticResource BoolToVisibilityConverter}}"/>
-		<Button Grid.Row="4" Margin="165,20,0,0" Content="OK" Command="{Binding OkCommand}" Style="{DynamicResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Center" Width="100"/>
+		<Button Grid.Row="4" Margin="185,20,0,0" Content="OK" Command="{Binding OkCommand}" Style="{DynamicResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Center" Width="100"/>
 		<Button Grid.Row="4" Margin="0,20,5,0" Style="{DynamicResource Sdl.Button.SecondaryStyle }" Content="Cancel" Command="{Binding CancelCommand}" Width="100" HorizontalAlignment="Right"/>
 	</Grid>
 </Window>

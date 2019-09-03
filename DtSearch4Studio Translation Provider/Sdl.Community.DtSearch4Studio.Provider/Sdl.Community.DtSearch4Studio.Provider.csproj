@@ -38,7 +38,7 @@
     <Reference Include="ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.4.0.1\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
-    <Reference Include="dtSearchNetStdApi, Version=7.94.8620.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="dtSearchNetStdApi, Version=7.94.8620.0, Culture=neutral, PublicKeyToken=b8bf3fa2840d4a46, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>ThirdParty\dtSearchNetStdApi.dll</HintPath>
     </Reference>
@@ -72,6 +72,10 @@
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
@@ -113,14 +117,19 @@
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Reflector.cs" />
+    <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Model\ProviderSettings.cs" />
+    <Compile Include="Model\ResultsItem.cs" />
     <Compile Include="Model\ViewModelBase.cs" />
+    <Compile Include="Model\WordItem.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Service\PersistenceService.cs" />
+    <Compile Include="Service\SearchService.cs" />
     <Compile Include="Studio\DtSearch4StudioWinFormsUI.cs" />
     <Compile Include="Studio\DtSearch4StudioLanguageDirection.cs" />
     <Compile Include="Studio\DtSearch4StudioProvider.cs" />
@@ -134,8 +143,11 @@
     <Compile Include="ViewModel\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\dtSearch4Studio.ico" />
+    <Content Include="dtSearchEngine.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ThirdParty\dtSearchNetStdApi.dll" />
+    <Resource Include="Resources\dtSearch4Studio.ico" />
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +172,9 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
@@ -168,6 +183,24 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Sdl.Core.PluginFramework.Build.15.1.0\build\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.15.1.0\build\Sdl.Core.PluginFramework.Build.targets')" />

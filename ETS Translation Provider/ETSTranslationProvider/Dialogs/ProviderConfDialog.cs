@@ -79,7 +79,7 @@ namespace ETSTranslationProvider
 			}
 
 			// Populate the login field if they've opted to persist the credentials
-			var credentials = credentialStore.GetCredential(uri);
+			var credentials = credentialStore.GetCredential(Options.Uri);
 			if (credentials != null && credentials.Persist)
 			{
 				// Keep credentials persisting checked

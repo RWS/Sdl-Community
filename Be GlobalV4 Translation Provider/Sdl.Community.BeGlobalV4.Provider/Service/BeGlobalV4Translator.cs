@@ -80,7 +80,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 						{
 							MessageBox.Show("Unauthorized: Please check your credentials", PluginName, MessageBoxButton.OK);
 
-							Log.Logger.Error($"Unauthorized: Translate text with Refresh Token: \n {token} \n Trace-Id: {traceId}");
+							Log.Logger.Error($"Unauthorized: Translate text using refresh token \nTrace-Id: {traceId}");
 						}
 						else if (!translationAsyncResponse.IsSuccessful && translationAsyncResponse.StatusCode != HttpStatusCode.Unauthorized)
 						{
@@ -140,7 +140,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					{
 						MessageBox.Show("Unauthorized: Please check your credentials", PluginName, MessageBoxButton.OK);
 
-						Log.Logger.Error($"Unauthorized: Get UserInfo with Refresh Token: \n {token} \n Trace-Id: {traceId}");
+						Log.Logger.Error($"Unauthorized: Get UserInfo using refresh token\nTrace-Id: {traceId}");
 					}
 					else if (userInfoResponse.StatusCode != HttpStatusCode.OK && userInfoResponse.StatusCode != HttpStatusCode.Unauthorized)
 					{
@@ -192,7 +192,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 						{
 							MessageBox.Show("Unauthorized: Please check your credentials", PluginName, MessageBoxButton.OK);
 
-							Log.Logger.Error($"Unauthorized: Get Language Pairs with Refresh Token: \n {token} \n Trace-Id: {traceId}");
+							Log.Logger.Error($"Unauthorized: Get Language Pairs using refresh token \nTrace-Id: {traceId}");
 						}
 						else if (languagePairsResponse.StatusCode != HttpStatusCode.OK && languagePairsResponse.StatusCode != HttpStatusCode.Unauthorized)
 						{

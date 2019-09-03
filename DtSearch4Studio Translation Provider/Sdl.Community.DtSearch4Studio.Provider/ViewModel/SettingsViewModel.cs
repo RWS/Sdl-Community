@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.DtSearch4Studio.Provider.Commands;
 using Sdl.Community.DtSearch4Studio.Provider.Helpers;
+using Sdl.Community.DtSearch4Studio.Provider.Interfaces;
 using Sdl.Community.DtSearch4Studio.Provider.Model;
 using Sdl.Community.DtSearch4Studio.Provider.Service;
 
@@ -16,12 +16,14 @@ namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
 		private ICommand _cancelCommand;
 		private string _indexLocation;
 		private bool _isIndexSelected;
+		private readonly IMessageBoxService _messageBoxService;
 
 		#endregion
 
 		#region Public Constructors
-		public SettingsViewModel(ProviderSettings providerSettings)
+		public SettingsViewModel(ProviderSettings providerSettings, MessageBoxService messageBoxService)
 		{
+			_messageBoxService = messageBoxService;
 			SetFieldsSelection(providerSettings);
 		}
 		#endregion
@@ -62,7 +64,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
 		#region Actions		
 		private void CancelAction()
 		{
-			MessageBox.Show(Constants.CancelProviderMessage, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			_messageBoxService.ShowInformationMessage(Constants.CancelProviderMessage, string.Empty);
 			CloseAction();
 		}
 
@@ -102,7 +104,7 @@ namespace Sdl.Community.DtSearch4Studio.Provider.ViewModel
 				}
 				else
 				{
-					MessageBox.Show(Constants.NoIndexSelected, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
+					_messageBoxService.ShowWarningMessage(Constants.NoIndexSelected, string.Empty);
 				}
 			}
 		}

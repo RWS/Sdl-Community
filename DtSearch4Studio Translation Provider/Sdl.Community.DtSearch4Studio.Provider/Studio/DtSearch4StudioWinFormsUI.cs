@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Windows.Forms;
 using Sdl.Community.DtSearch4Studio.Provider.Helpers;
 using Sdl.Community.DtSearch4Studio.Provider.Model;
@@ -9,7 +8,6 @@ using Sdl.Community.DtSearch4Studio.Provider.Service;
 using Sdl.Community.DtSearch4Studio.Provider.Ui;
 using Sdl.Community.DtSearch4Studio.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DtSearch4Studio.Provider.Studio
@@ -83,12 +81,13 @@ namespace Sdl.Community.DtSearch4Studio.Provider.Studio
 
 		private ITranslationProvider[] SetTranslationProvider(DtSearch4StudioProvider provider, ProviderSettings providerSettings)
 		{
+			var messageBoxService = new MessageBoxService();
 			var result = new List<ITranslationProvider>();
 			if (_settingsViewModel != null)
 			{
 				_settingsViewModel.OnSaveSettingsCommandRaised -= GetProviderSettings;
 			}
-			_settingsViewModel = new SettingsViewModel(providerSettings);
+			_settingsViewModel = new SettingsViewModel(providerSettings, messageBoxService);
 			_settingsWindow = new SettingsWindow(_settingsViewModel);
 			if (_settingsViewModel != null)
 			{
