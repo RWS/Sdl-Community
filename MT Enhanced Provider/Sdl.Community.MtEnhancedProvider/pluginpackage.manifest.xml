@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>MT Enhanced Trados Plugin</PlugInName>
-  <Version>3.0.3</Version>
+  <Version>3.0.4.0</Version>
   <Description>MT Enhanced Trados Plugin</Description>
   <Author>SDL Community Developers</Author>
 	<Include>
-		<File>Newtonsoft.Json.dll</File>
 		<File>RestSharp.dll</File>
 	</Include>
   <RequiredProduct name="SDLTradosStudio" maxversion="15.0" minversion="12.0" />
