@@ -346,4 +346,7 @@
   <data name="DisplayFilter_OnlyTags_Tooltip" xml:space="preserve">
     <value>Using this option will filter the results based on matches that are ONLY found within the content of any tags in your file(s). It will not filter on the translatable text.</value>
   </data>
+	<data name="Tooltip_Document_Structure_Information_Location" xml:space="preserve">
+    <value>Document Structure Information Location</value>
+  </data>
 </root>

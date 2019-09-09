@@ -4,6 +4,13 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 {
 	public class CustomFilterSettings
 	{
+		public enum FilterLogicalOperators
+		{			
+			And = 0,
+			Or = 1
+		}
+		public FilterLogicalOperators SourceTargetFilterLogicalOperator { get; set; }
+		public bool UseBackReferences { get; set; }
 		public bool OddsNo { get; set; }
 		public bool EvenNo { get; set; }
 		public bool Grouped { get; set; }
@@ -30,6 +37,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public bool UnEditedFuzzy { get; set; }
 		public string ContextInfoStringId { get; set; }
 		public bool UseTagContent { get; set; }
+
 		/// <summary>
 		/// Set this to true to ALSO search inside tags and
 		/// Set this to false to search ONLY inside tags

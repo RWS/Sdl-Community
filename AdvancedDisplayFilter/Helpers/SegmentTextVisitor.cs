@@ -18,6 +18,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		public string GetText(ISegment segment)
 		{
 			_textBuilder.Clear();
+			_detailLevel = DetailLevel.JustText;
 			VisitChildren(segment);
 
 			return _textBuilder.ToString();
@@ -57,8 +58,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		/// <summary>
 		/// Check if tag pair contains specified property
 		/// </summary>
-		/// <param name="tagPair"></param>
-		/// <param name="name"></param>
 		/// <returns></returns>
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
@@ -83,7 +82,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			{
 				VisitChildren(tagPair);
 			}
-			if (_detailLevel == DetailLevel.JustTagContent)
+			else if (_detailLevel == DetailLevel.JustTagContent)
 			{
 				_textBuilder.Append(tagPair.TagProperties.TagContent);
 				VisitChildren(tagPair);
