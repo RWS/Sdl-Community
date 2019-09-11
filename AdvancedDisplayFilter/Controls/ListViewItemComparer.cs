@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
-using Sdl.Community.Toolkit.Integration.DisplayFilter;
+using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.Toolkit.FileType;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
@@ -84,15 +84,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
                 if (item.Tag.GetType() == typeof(DisplayFilterSettings.ConfirmationLevel))
                     return (int)(DisplayFilterSettings.ConfirmationLevel)item.Tag;
-                else if (item.Tag.GetType() == typeof(OriginType))
+                if (item.Tag.GetType() == typeof(OriginType))
                     return (int)(OriginType)item.Tag;
-                else if (item.Tag.GetType() == typeof(DisplayFilterSettings.RepetitionType))
+                if (item.Tag.GetType() == typeof(DisplayFilterSettings.RepetitionType))
                     return (int)(DisplayFilterSettings.RepetitionType)item.Tag;
-                else if (item.Tag.GetType() == typeof(DisplayFilterSettings.SegmentReviewType))
+                if (item.Tag.GetType() == typeof(DisplayFilterSettings.SegmentReviewType))
                     return (int)(DisplayFilterSettings.SegmentReviewType)item.Tag;
-                else if (item.Tag.GetType() == typeof(DisplayFilterSettings.SegmentLockingType))
+                if (item.Tag.GetType() == typeof(DisplayFilterSettings.SegmentLockingType))
                     return (int)(DisplayFilterSettings.SegmentLockingType)item.Tag;
-                else if (item.Tag.GetType() == typeof(DisplayFilterSettings.SegmentContentType))
+                if (item.Tag.GetType() == typeof(DisplayFilterSettings.SegmentContentType))
                     return (int)(DisplayFilterSettings.SegmentContentType)item.Tag;
             }
             catch (Exception ex)

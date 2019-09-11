@@ -346,7 +346,7 @@
     <value>0, 2, 0, 0</value>
   </data>
   <data name="label_tab_content_filter_message.Size" type="System.Drawing.Size, System.Drawing">
-    <value>207, 32</value>
+    <value>277, 32</value>
   </data>
   <data name="label_tab_content_filter_message.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -589,10 +589,10 @@
     <value>OR</value>
   </data>
   <data name="comboBox_SourceTargetFilterLogicalOperator.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 12</value>
+    <value>2, 12</value>
   </data>
   <data name="comboBox_SourceTargetFilterLogicalOperator.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 21</value>
+    <value>53, 21</value>
   </data>
   <data name="comboBox_SourceTargetFilterLogicalOperator.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -616,7 +616,7 @@
     <value>12, 0</value>
   </data>
   <data name="panel6.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 12, 0, 0</value>
+    <value>2, 12, 0, 0</value>
   </data>
   <data name="panel6.Size" type="System.Drawing.Size, System.Drawing">
     <value>55, 46</value>
@@ -643,7 +643,7 @@
     <value>
         /9j/4AAQSkZJRgABAQEAAAAAAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
         AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
-        AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAA3ABEDAREAAhEBAxEB/8QA
+        AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCACQABQDAREAAhEBAxEB/8QA
         HwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIh
         MUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVW
         V1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXG
@@ -651,40 +651,51 @@
         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
-        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
+        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
 </value>
   </data>
   <data name="pictureBox1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 5</value>
+    <value>0, 3</value>
+  </data>
+  <data name="pictureBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="pictureBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>12, 36</value>
+    <value>12, 40</value>
   </data>
   <data name="pictureBox1.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>Zoom</value>
+    <value>StretchImage</value>
   </data>
   <data name="pictureBox1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -707,8 +718,11 @@
   <data name="panel3.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
+  <data name="panel3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
   <data name="panel3.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 5, 0, 5</value>
+    <value>0, 3, 0, 3</value>
   </data>
   <data name="panel3.Size" type="System.Drawing.Size, System.Drawing">
     <value>12, 46</value>
@@ -768,13 +782,13 @@
     <value>25, 3, 2, 1</value>
   </data>
   <data name="checkBox_useBackReferences.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 17</value>
+    <value>123, 17</value>
   </data>
   <data name="checkBox_useBackReferences.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
   </data>
   <data name="checkBox_useBackReferences.Text" xml:space="preserve">
-    <value>Use Back References</value>
+    <value>Use Backreferences</value>
   </data>
   <data name="&gt;&gt;checkBox_useBackReferences.Name" xml:space="preserve">
     <value>checkBox_useBackReferences</value>
@@ -822,7 +836,7 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label_source" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_source" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_caseSensitive" Row="6" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;Control Name="label_target" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="target_textbox" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_regularExpression" Row="4" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;Control Name="label_tab_content_filter_message" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="label_dsiLocation" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="stringId_textbox" Row="3" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="panel1" Row="7" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;Control Name="panel2" Row="1" RowSpan="2" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_useBackReferences" Row="5" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,90,Percent,100,Absolute,70" /&gt;&lt;Rows Styles="Absolute,32,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label_source" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_source" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_caseSensitive" Row="6" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;Control Name="label_target" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="target_textbox" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_regularExpression" Row="4" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;Control Name="label_tab_content_filter_message" Row="0" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;Control Name="label_dsiLocation" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="stringId_textbox" Row="3" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="panel1" Row="7" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;Control Name="panel2" Row="1" RowSpan="2" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_useBackReferences" Row="5" RowSpan="1" Column="0" ColumnSpan="3" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,90,Percent,100,Absolute,70" /&gt;&lt;Rows Styles="Absolute,32,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tabPage_content.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 27</value>
@@ -1035,7 +1049,7 @@
     <value>listView_selected</value>
   </data>
   <data name="&gt;&gt;listView_selected.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.3.10.1, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.4.1.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;listView_selected.Parent" xml:space="preserve">
     <value>panel10</value>
@@ -1158,7 +1172,7 @@
     <value>listView_available</value>
   </data>
   <data name="&gt;&gt;listView_available.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.3.10.1, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.4.1.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;listView_available.Parent" xml:space="preserve">
     <value>panel11</value>
@@ -2523,13 +2537,13 @@
     <value>0, 2, 0, 0</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 15</value>
+    <value>164, 15</value>
   </data>
   <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="label1.Text" xml:space="preserve">
-    <value>Example of grouped list: 1-2, 17-45, 56, 100-150</value>
+    <value>Example: 1-2, 17-45, 56, 100-150</value>
   </data>
   <data name="&gt;&gt;label1.Name" xml:space="preserve">
     <value>label1</value>
@@ -2893,7 +2907,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAXQBBwF0AQcBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAVwBCAFcAQgBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ
@@ -3248,7 +3262,7 @@
     <value>filterExpressionControl</value>
   </data>
   <data name="&gt;&gt;filterExpressionControl.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression, Sdl.Community.AdvancedDisplayFilter, Version=4.3.10.1, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression, Sdl.Community.AdvancedDisplayFilter, Version=4.4.1.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;filterExpressionControl.Parent" xml:space="preserve">
     <value>panel_filterExpression</value>

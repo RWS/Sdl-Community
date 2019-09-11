@@ -10,7 +10,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 {
 	public static class FuzzyHelper
 	{
-		public static bool IsInFuzzyRange(DisplayFilterRowInfo row,string fuzzyMin,string fuzzyMax)
+		public static bool IsInFuzzyRange(DisplayFilterRowInfo row, string fuzzyMin, string fuzzyMax)
 		{
 			try
 			{

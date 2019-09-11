@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
@@ -11,7 +7,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 	{
 		private string _createdBy=string.Empty;
 		private string _modifiedBy = string.Empty;
-
 
 		public bool ModifiedBy(ISegment segment, string modifiedBy)
 		{
@@ -52,18 +47,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		}
 
 		public void VisitTagPair(ITagPair tagPair)
-		{
-			
+		{			
 		}
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
-		{
-			
+		{			
 		}
 
 		public void VisitText(IText text)
-		{
-			
+		{			
 		}
 
 		public void VisitSegment(ISegment segment)
@@ -88,29 +80,25 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		}
 
 		public void VisitLocationMarker(ILocationMarker location)
-		{
-			
+		{			
 		}
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
-		{
-		
+		{		
 		}
 
 		public void VisitOtherMarker(IOtherMarker marker)
-		{
-			
+		{			
 		}
 
 		public void VisitLockedContent(ILockedContent lockedContent)
-		{
-		
+		{		
 		}
 
 		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
-		{
-			
+		{			
 		}
+
 		private void VisitChildren(IAbstractMarkupDataContainer container)
 		{
 			if (container == null)

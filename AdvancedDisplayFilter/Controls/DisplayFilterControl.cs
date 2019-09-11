@@ -10,7 +10,6 @@ using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
 using Sdl.Community.Toolkit.FileType;
-using Sdl.Community.Toolkit.Integration.DisplayFilter;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -49,10 +48,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			{
 				_customFilterSettings = new CustomFilterSettings
 				{
-					SourceTargetFilterLogicalOperator =
+					SourceAndTargetLogicalOperator =
 						comboBox_SourceTargetFilterLogicalOperator.SelectedIndex == 0
-							? CustomFilterSettings.FilterLogicalOperators.And
-							: CustomFilterSettings.FilterLogicalOperators.Or,
+							? CustomFilterSettings.LogicalOperators.And
+							: CustomFilterSettings.LogicalOperators.Or,
 					UseBackReferences = checkBox_useBackReferences.Checked,
 					OddsNo = oddBtn.Checked,
 					EvenNo = evenBtn.Checked,
@@ -111,7 +110,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 				//segments settings 
 				comboBox_SourceTargetFilterLogicalOperator.SelectedIndex =
-					value.SourceTargetFilterLogicalOperator == CustomFilterSettings.FilterLogicalOperators.And ? 0 : 1;
+					value.SourceAndTargetLogicalOperator == CustomFilterSettings.LogicalOperators.And ? 0 : 1;
 				checkBox_useBackReferences.Checked = value.UseBackReferences;
 				oddBtn.Checked = value.OddsNo;
 				evenBtn.Checked = value.EvenNo;

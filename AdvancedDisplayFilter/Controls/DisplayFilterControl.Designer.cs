@@ -286,7 +286,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// label_tab_content_filter_message
 			// 
 			resources.ApplyResources(this.label_tab_content_filter_message, "label_tab_content_filter_message");
-			this.tableLayoutPanel1.SetColumnSpan(this.label_tab_content_filter_message, 2);
+			this.tableLayoutPanel1.SetColumnSpan(this.label_tab_content_filter_message, 3);
 			this.label_tab_content_filter_message.Name = "label_tab_content_filter_message";
 			// 
 			// label_dsiLocation

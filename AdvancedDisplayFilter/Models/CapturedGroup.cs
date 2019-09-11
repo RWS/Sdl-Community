@@ -2,8 +2,8 @@
 {
 	public class CapturedGroup
 	{
-		private int Number { get; set; }
-		private string Name { get; set; }
-		private string Content { get; set; }
+		public BackReference BackReference { get; set; }		
+		public string Value { get; set; }
+		public int Index { get; set; }
 	}
 }

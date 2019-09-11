@@ -4,17 +4,19 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 {
 	public static class ContentHelper
 	{
-		public static Match SearchContentRegularExpression(string text, string regexRule, RegexOptions regexOptions)
+		public static Match SearchContentRegularExpression(string text, string searchString, RegexOptions regexOptions, out Regex regex)
 		{
 			try
 			{
-				var regex = new Regex(regexRule, regexOptions);
+				regex = new Regex(searchString, regexOptions);
 				return regex.Match(text);
 			}
 			catch
 			{
 				// catch all; ignore
 			}
+
+			regex = null;
 			return null;
 		}
 	}

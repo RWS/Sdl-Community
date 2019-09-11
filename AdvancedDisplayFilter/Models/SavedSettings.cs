@@ -1,5 +1,4 @@
 ﻿using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
-using Sdl.Community.Toolkit.Integration.DisplayFilter;
 
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Models
 {

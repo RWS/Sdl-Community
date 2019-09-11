@@ -4,12 +4,13 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 {
 	public class CustomFilterSettings
 	{
-		public enum FilterLogicalOperators
+		public enum LogicalOperators
 		{			
 			And = 0,
 			Or = 1
 		}
-		public FilterLogicalOperators SourceTargetFilterLogicalOperator { get; set; }
+
+		public LogicalOperators SourceAndTargetLogicalOperator { get; set; }
 		public bool UseBackReferences { get; set; }
 		public bool OddsNo { get; set; }
 		public bool EvenNo { get; set; }
