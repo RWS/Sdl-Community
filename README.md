@@ -158,6 +158,8 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Stylesheet Verifier](https://appstore.sdl.com/language/app/stylesheet-verifier/870/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/StyleSheetVerifier)|
 | [Time Tracker](https://appstore.sdl.com/language/app/studio-time-tracker/361/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Time%20Tracker)|
 | [Variables Manager](https://appstore.sdl.com/language/app/variables-manager-for-sdl-trados-studio/297/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/VariablesManager)|
+| [#YourProductivity](https://appstore.sdl.com/language/app/yourproductivity/491/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourProductivity)|
+
 
 ## FileType Support API
 
