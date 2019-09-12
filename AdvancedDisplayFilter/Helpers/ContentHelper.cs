@@ -1,28 +1,23 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 {
 	public static class ContentHelper
 	{
-		public static bool SearchContentRegularExpression(string text, string regexRule, RegexOptions regexOptions)
+		public static Match SearchContentRegularExpression(string text, string searchString, RegexOptions regexOptions, out Regex regex)
 		{
 			try
 			{
-				var regex = new Regex(regexRule, regexOptions);
-				var match = regex.Match(text);
-
-				//if the words matching the rule is not found return the segment
-				if (match.Success)
-				{
-					return true;
-				}
+				regex = new Regex(searchString, regexOptions);
+				return regex.Match(text);
 			}
-			catch (Exception e)
+			catch
 			{
-				// ignored
+				// catch all; ignore
 			}
-			return false;
+
+			regex = null;
+			return null;
 		}
 	}
 }

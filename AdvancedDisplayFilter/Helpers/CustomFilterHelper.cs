@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
+using Sdl.Community.Plugins.AdvancedDisplayFilter.Extensions;
 using Sdl.Community.Toolkit.FileType;
-using Sdl.Community.Toolkit.Integration;
-using Sdl.Community.Toolkit.Integration.DisplayFilter;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
@@ -44,7 +43,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				success = SegmentNumbersHelper.IdInRange(rowId, customSettings.GroupedList);
 			}
 			if (success && customSettings.UseRegexCommentSearch &&
-			    !string.IsNullOrWhiteSpace(customSettings.CommentRegex))
+				!string.IsNullOrWhiteSpace(customSettings.CommentRegex))
 			{
 				//create a list with source and target comments
 				var commentsList = rowInfo.SegmentPair.Source.GetComments();
@@ -65,7 +64,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 			//fuzzy
 			if (success && !string.IsNullOrWhiteSpace(customSettings.FuzzyMin) &&
-			    !string.IsNullOrWhiteSpace(customSettings.FuzzyMax))
+				!string.IsNullOrWhiteSpace(customSettings.FuzzyMax))
 			{
 				success = FuzzyHelper.IsInFuzzyRange(rowInfo, customSettings.FuzzyMin, customSettings.FuzzyMax);
 
@@ -116,12 +115,12 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			if (success && customSettings.EditedFuzzy)
 			{
 				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
-				          FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+						  FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
 			}
 			if (success && customSettings.UnEditedFuzzy)
 			{
 				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
-				          !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+						  !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
 			}
 
 			//String id search
@@ -146,7 +145,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			return success;
 		}
 
-		private static bool StringIdRegexSearch(DisplayFilterRowInfo rowInfo,string regexExpression,RegexOptions options)
+		private static bool StringIdRegexSearch(DisplayFilterRowInfo rowInfo, string regexExpression, RegexOptions options)
 		{
 			var regex = new Regex(regexExpression, options);
 			foreach (var contextInfo in rowInfo.ContextInfo)
@@ -162,15 +161,20 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			return false;
 		}
 
-		public static  bool Reverse(DisplayFilterSettings settings,bool success, DisplayFilterRowInfo rowInfo, CustomFilterSettings customSettings, Document activeDocument)
+		public static bool Reverse(DisplayFilterSettings settings, bool success, DisplayFilterRowInfo rowInfo,
+			CustomFilterSettings customSettings, Document activeDocument)
 		{
 			success = false;
 			if (!success && settings.SegmentReviewTypes != null && settings.SegmentReviewTypes.Any())
+			{
 				success = rowInfo.IsSegmentReviewTypes(settings);
+			}
 
 
 			if (!success && settings.ConfirmationLevels != null && settings.ConfirmationLevels.Any())
+			{
 				success = rowInfo.IsConfirmationLevelFound(settings);
+			}
 
 
 			if (!success && settings.OriginTypes != null && settings.OriginTypes.Any())
@@ -178,43 +182,63 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 
 			if (!success && settings.PreviousOriginTypes != null && settings.PreviousOriginTypes.Any())
+			{
 				success = rowInfo.IsPreviousOriginTypeFound(settings);
+			}
 
 
 			if (!success && settings.RepetitionTypes != null && settings.RepetitionTypes.Any())
+			{
 				success = rowInfo.IsRepetitionTypes(settings);
+			}
 
 
 			if (!success && settings.SegmentLockingTypes != null && settings.SegmentLockingTypes.Any())
+			{
 				success = rowInfo.IsSegmentLockingTypes(settings);
+			}
 
 
 			if (!success && settings.SegmentContentTypes != null && settings.SegmentContentTypes.Any())
+			{
 				success = rowInfo.IsSegmentContentTypes(settings);
+			}
 
 
 			if (!success && !string.IsNullOrEmpty(settings.SourceText))
+			{
 				success = rowInfo.IsTextFoundInSource(settings);
+			}
 
 
 			if (!success && !string.IsNullOrEmpty(settings.TargetText))
+			{
 				success = rowInfo.IsTextFoundInTarget(settings);
+			}
 
 
 			if (!success && !customSettings.UseRegexCommentSearch && !string.IsNullOrEmpty(settings.CommentText))
+			{
 				success = rowInfo.IsTextFoundInComment(settings);
+			}
 
 
 			if (!success && !string.IsNullOrEmpty(settings.CommentAuthor))
+			{
 				success = rowInfo.IsAuthorFoundInComment(settings);
+			}
 
 
 			if (!success && settings.CommentSeverity > 0)
+			{
 				success = rowInfo.IsSeverityFoundInComment(settings);
+			}
 
 
 			if (!success && settings.ContextInfoTypes.Any())
+			{
 				success = rowInfo.IsContextInfoTypes(settings);
+			}
 
 			// check custom settings
 			var rowId = rowInfo.SegmentPair.Properties.Id.Id;
@@ -222,28 +246,34 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			{
 				success = SegmentNumbersHelper.IsEven(rowId);
 			}
+
 			if (!success && customSettings.OddsNo)
 			{
 				success = SegmentNumbersHelper.IsOdd(rowId);
 			}
+
 			if (!success && customSettings.SplitSegments)
 			{
 				success = SegmentNumbersHelper.IsSplitSegment(rowId, activeDocument);
 			}
+
 			if (!success && (customSettings.MergedSegments || customSettings.MergedAcross))
 			{
 				success = SegmentNumbersHelper.IsMergedSegment(rowId, activeDocument, customSettings.MergedAcross);
 			}
+
 			if (!success && customSettings.SourceEqualsTarget)
 			{
 				success = SegmentNumbersHelper.IsSourceEqualsToTarget(rowInfo.SegmentPair, customSettings.IsEqualsCaseSensitive);
 			}
+
 			if (!success && customSettings.Grouped && !string.IsNullOrWhiteSpace(customSettings.GroupedList))
 			{
 				success = SegmentNumbersHelper.IdInRange(rowId, customSettings.GroupedList);
 			}
+
 			if (!success && customSettings.UseRegexCommentSearch &&
-			    !string.IsNullOrWhiteSpace(customSettings.CommentRegex))
+				!string.IsNullOrWhiteSpace(customSettings.CommentRegex))
 			{
 				//create a list with source and target comments
 				var commentsList = rowInfo.SegmentPair.Source.GetComments();
@@ -251,39 +281,47 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 				success = CommentsHelper.IsCommentTextFoundWithRegex(commentsList, customSettings.CommentRegex);
 			}
+
 			if (!success && customSettings.Colors.Count > 0)
 			{
 				try
 				{
 					success = ColorPickerHelper.ContainsColor(rowInfo, customSettings.Colors);
 				}
-				catch (Exception e) { }
+				catch
+				{
+					// ignored
+				}
 			}
 
 			//fuzzy
 			if (!success && !string.IsNullOrWhiteSpace(customSettings.FuzzyMin) &&
-			    !string.IsNullOrWhiteSpace(customSettings.FuzzyMax))
+				!string.IsNullOrWhiteSpace(customSettings.FuzzyMax))
 			{
 				success = FuzzyHelper.IsInFuzzyRange(rowInfo, customSettings.FuzzyMin, customSettings.FuzzyMax);
 
 			}
+
 			//tags
 			if (!success && customSettings.ContainsTags)
 			{
 				var containsTagVisitor = new TagVisitor();
 				success = containsTagVisitor.ContainsTag(rowInfo.SegmentPair.Source);
 			}
+
 			if (!success && customSettings.CreatedByChecked && !string.IsNullOrWhiteSpace(customSettings.CreatedBy))
 			{
 				var userVisitor = new UserVisitor();
 				success = userVisitor.CreatedBy(rowInfo.SegmentPair.Source, customSettings.CreatedBy);
 			}
+
 			//modify by
 			if (!success && customSettings.ModifiedByChecked && !string.IsNullOrWhiteSpace(customSettings.ModifiedBy))
 			{
 				var userVisitor = new UserVisitor();
 				success = userVisitor.ModifiedBy(rowInfo.SegmentPair.Source, customSettings.ModifiedBy);
 			}
+
 			if (!success && customSettings.EditedFuzzy)
 			{
 				if (FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target))
@@ -295,6 +333,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					return false;
 				}
 			}
+
 			if (!success && customSettings.UnEditedFuzzy)
 			{
 				if (FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target))
@@ -306,6 +345,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					return false;
 				}
 			}
+
 			//String id seach
 			if (!success && !string.IsNullOrEmpty(customSettings.ContextInfoStringId))
 			{
@@ -324,6 +364,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					}
 				}
 			}
+
 			return !success;
 		}
 	}
