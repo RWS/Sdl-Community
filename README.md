@@ -145,6 +145,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [AutoHotKey Manager](https://appstore.sdl.com/language/app/autohotkey-manager/893/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AHK%20plugin)|
 | [DSI Viewer](https://appstore.sdl.com/language/app/dsi-viewer/995/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/DSI%20Viewer)|
 | [GrpupShare Version Fetch](https://appstore.sdl.com/language/app/groupshare-version-fetch/993/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/GroupShare%20VersionFetch)|
+| [SDL Studio InQuote](https://appstore.sdl.com/language/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/InvoiceAndQuotes)|
 
 
 ## FileType Support API
