@@ -127,6 +127,9 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Amazon Translate](https://appstore.sdl.com/language/app/amazon-translate-mt-provider/925/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AmazonTranslateTradosPlugin)|
 | [ETS Translation Provider](https://appstore.sdl.com/language/app/sdl-ets/843/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ETS%20Translation%20Provider)|
 | [ApplyTM Template](https://appstore.sdl.com/language/app/applytm-template/966/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ApplyTMTemplate)|
+| [SDLTM Repair](https://appstore.sdl.com/language/app/sdltm-repair/298/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLTMRepair)|
+| [TAUS Search](https://appstore.sdl.com/language/app/taus-search/164/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TAUS%20Data%20Search)|
+
 
 ## Integration Api
 
@@ -146,7 +149,11 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [DSI Viewer](https://appstore.sdl.com/language/app/dsi-viewer/995/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/DSI%20Viewer)|
 | [GrpupShare Version Fetch](https://appstore.sdl.com/language/app/groupshare-version-fetch/993/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/GroupShare%20VersionFetch)|
 | [SDL Studio InQuote](https://appstore.sdl.com/language/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/InvoiceAndQuotes)|
-
+| [Jobs](https://appstore.sdl.com/language/app/jobs/463/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Jobs)|
+| [Legit](https://appstore.sdl.com/language/app/sdl-legit/299/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legit)|
+| [SDL Data Protection Suite](https://appstore.sdl.com/language/app/sdl-data-protection-suite/936/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLDataProtectionSuite)|
+| [SDL Fresh Start](https://appstore.sdl.com/language/app/sdl-freshstart/876/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SdlFreshstart)|
+| [Stylesheet Verifier](https://appstore.sdl.com/language/app/stylesheet-verifier/870/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/StyleSheetVerifier)|
 
 ## FileType Support API
 
