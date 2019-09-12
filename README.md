@@ -64,6 +64,11 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | --- | --- |
 | [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
 | [Project Anonymizer](https://appstore.sdl.com/language/app/projectanonymizer/895/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Anonymizer)|
+| [CleanUp Tasks](https://appstore.sdl.com/language/app/cleanup-tasks/963/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/CleanUpTasks)|
+| [Fail Safe Task](https://appstore.sdl.com/language/app/fail-safe-task/964/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/FailSafeTask)|
+| [Target Word Count](https://appstore.sdl.com/language/app/target-word-count/965/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TargetWordCount)|
+
+
 
 ## Core Api
 
