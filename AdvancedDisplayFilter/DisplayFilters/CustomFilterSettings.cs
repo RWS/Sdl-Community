@@ -11,7 +11,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		}
 
 		public LogicalOperators SourceAndTargetLogicalOperator { get; set; }
-		public bool UseBackReferences { get; set; }
+		public bool UseBackreferences { get; set; }
 		public bool OddsNo { get; set; }
 		public bool EvenNo { get; set; }
 		public bool Grouped { get; set; }

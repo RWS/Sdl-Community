@@ -52,7 +52,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 						comboBox_SourceTargetFilterLogicalOperator.SelectedIndex == 0
 							? CustomFilterSettings.LogicalOperators.And
 							: CustomFilterSettings.LogicalOperators.Or,
-					UseBackReferences = checkBox_useBackReferences.Checked,
+					UseBackreferences = checkBox_useBackReferences.Checked,
 					OddsNo = oddBtn.Checked,
 					EvenNo = evenBtn.Checked,
 					Grouped = groupedBtn.Checked,
@@ -111,7 +111,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				//segments settings 
 				comboBox_SourceTargetFilterLogicalOperator.SelectedIndex =
 					value.SourceAndTargetLogicalOperator == CustomFilterSettings.LogicalOperators.And ? 0 : 1;
-				checkBox_useBackReferences.Checked = value.UseBackReferences;
+				checkBox_useBackReferences.Checked = value.UseBackreferences;
 				oddBtn.Checked = value.OddsNo;
 				evenBtn.Checked = value.EvenNo;
 				noneBtn.Checked = value.None;
@@ -818,30 +818,54 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			filterExpressionControl.ClearItems();
 
-			if (DisplayFilterSettings.SourceText != string.Empty
-				|| DisplayFilterSettings.TargetText != string.Empty)
+			if (!string.IsNullOrEmpty(DisplayFilterSettings.SourceText)
+				|| string.IsNullOrEmpty(DisplayFilterSettings.TargetText))
 			{
-				if (DisplayFilterSettings.SourceText != string.Empty)
+				if (!string.IsNullOrEmpty(DisplayFilterSettings.SourceText))
+				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Source + ":\"" + DisplayFilterSettings.SourceText + "\"");
-				if (DisplayFilterSettings.TargetText != string.Empty)
+				}
+
+				if (!string.IsNullOrEmpty(DisplayFilterSettings.SourceText) && !string.IsNullOrEmpty(DisplayFilterSettings.TargetText))
+				{
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Operator + ":\"" + CustomFilterFilterSettings.SourceAndTargetLogicalOperator + "\"");
+				}
+
+				if (!string.IsNullOrEmpty(DisplayFilterSettings.TargetText))
+				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Target + ":\"" + DisplayFilterSettings.TargetText + "\"");
+				}
 
 				if (DisplayFilterSettings.IsRegularExpression)
+				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Regular_Expression + ":\"" + DisplayFilterSettings.IsRegularExpression + "\"");
+				}
+
+				if (CustomFilterFilterSettings.UseBackreferences)
+				{
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Use_Backreferences + ":\"" + CustomFilterFilterSettings.UseBackreferences + "\"");
+				}
+
 				if (DisplayFilterSettings.IsCaseSensitive)
+				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Case_Sensitive + ":\"" + DisplayFilterSettings.IsCaseSensitive + "\"");
+				}
 			}
 
 			if (DisplayFilterSettings.ShowAllContent)
+			{
 				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Show_All_Content
 					+ ":\"" + DisplayFilterSettings.ShowAllContent + "\"");
+			}
 
 			if (DisplayFilterSettings.ConfirmationLevels.Any())
+			{
 				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Status + ":"
 					+ "(" + DisplayFilterSettings.ConfirmationLevels.Aggregate(string.Empty, (current, item) => current
 					+ (current != string.Empty ? " " + "|" + " " : string.Empty)
 					+ Helper.GetTypeName((DisplayFilterSettings.ConfirmationLevel)Enum.Parse(
 						typeof(DisplayFilterSettings.ConfirmationLevel), item, true))) + ")");
+			}
 
 			try
 			{
@@ -855,9 +879,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 																				   typeof(OriginType), item, true))) + ")");
 				}
 			}
-			catch (Exception e)
+			catch
 			{
-
+				// ignore; catch all
 			}
 
 			if (DisplayFilterSettings.PreviousOriginTypes.Any())
@@ -872,6 +896,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Reverse + ":\"" +
 												_reverseFilter + "\"");
 			}
+
 			if (DisplayFilterSettings.SegmentReviewTypes.Any())
 				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Segment_Review + ":"
 					+ "(" + DisplayFilterSettings.SegmentReviewTypes.Aggregate(string.Empty, (current, item) => current
@@ -880,48 +905,59 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 						typeof(DisplayFilterSettings.SegmentReviewType), item, true))) + ")");
 
 			if (DisplayFilterSettings.SegmentLockingTypes.Any())
+			{
 				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Segment_Locking + ":"
 					+ "(" + DisplayFilterSettings.SegmentLockingTypes.Aggregate(string.Empty, (current, item) => current
 					+ (current != string.Empty ? " " + "|" + " " : string.Empty)
 					+ Helper.GetTypeName((DisplayFilterSettings.SegmentLockingType)Enum.Parse(
 						typeof(DisplayFilterSettings.SegmentLockingType), item, true))) + ")");
+			}
 
 			if (DisplayFilterSettings.SegmentContentTypes.Any())
+			{
 				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Segment_Content + ":"
 					+ "(" + DisplayFilterSettings.SegmentContentTypes.Aggregate(string.Empty, (current, item) => current
 					+ (current != string.Empty ? " " + "|" + " " : string.Empty)
 					+ Helper.GetTypeName((DisplayFilterSettings.SegmentContentType)Enum.Parse(
 						typeof(DisplayFilterSettings.SegmentContentType), item, true))) + ")");
+			}
 
 			if (DisplayFilterSettings.CommentText != string.Empty)
+			{
 				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Comment_text + ":\"" + DisplayFilterSettings.CommentText + "\"");
+			}
+
 			if (DisplayFilterSettings.CommentAuthor != string.Empty)
+			{
 				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Comment_author + ":\"" + DisplayFilterSettings.CommentAuthor + "\"");
+			}
+
 			if (DisplayFilterSettings.CommentSeverity > 0)
+			{
 				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Comment_severity + ":\"" + (DisplayFilterSettings.CommentSeverityType)DisplayFilterSettings.CommentSeverity + "\"");
+			}
 
 			if (DisplayFilterSettings.ContextInfoTypes.Any())
+			{
 				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Document_structure + ":"
 					+ "(" + DisplayFilterSettings.ContextInfoTypes.Aggregate(string.Empty, (current, item) => current
 					+ (current != string.Empty ? " " + "|" + " " : string.Empty)
-					+ ContextInfoList.FirstOrDefault(a => a.ContextType == item).DisplayCode) + ")");
+					+ ContextInfoList.FirstOrDefault(a => a.ContextType == item)?.DisplayCode) + ")");
+			}
 
 			if (CustomFilterFilterSettings != null)
 			{
 				//filter color
-				if (CustomFilterFilterSettings.Colors != null)
+				if (CustomFilterFilterSettings.Colors?.Count > 0)
 				{
-					if (CustomFilterFilterSettings.Colors.Count > 0)
-					{
-						filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Colors + ":"
-														+ "(" + CustomFilterFilterSettings.Colors.Aggregate(string.Empty,
-															(current, item) => current
-																			   + (current != string.Empty
-																				   ? " " + "|" + " "
-																				   : string.Empty)
-																			   + CustomFilterFilterSettings.Colors.FirstOrDefault(a => a == item)) +
-														")");
-					}
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Colors + ":"
+								+ "(" + CustomFilterFilterSettings.Colors.Aggregate(string.Empty,
+									(current, item) => current
+														+ (current != string.Empty
+															? " " + "|" + " "
+															: string.Empty)
+														+ CustomFilterFilterSettings.Colors.FirstOrDefault(a => a == item)) +
+								")");
 				}
 
 				if (CustomFilterFilterSettings.SplitSegments)
@@ -929,14 +965,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SplitSegments + ":\"" +
 													CustomFilterFilterSettings.SplitSegments + "\"");
 				}
+
 				if (CustomFilterFilterSettings.MergedSegments)
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MergedSegments + ":\"" + CustomFilterFilterSettings.MergedSegments + "\"");
 				}
+
 				if (CustomFilterFilterSettings.MergedAcross)
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MergedAcross + ":\"" + CustomFilterFilterSettings.MergedAcross + "\"");
 				}
+
 				if (CustomFilterFilterSettings.EvenNo)
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_EvenSegments + ":\"" +
@@ -1028,6 +1067,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			tabPage_comments.ImageIndex = -1;
 			tabPage_contextInfo.ImageIndex = -1;
 		}
+
 		private void CheckEnabledFilterIcons()
 		{
 			if (ActiveDocument != null)
@@ -1106,10 +1146,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			tabPage.ImageIndex = -1;
 		}
+
 		private void InvalidateIconsFilterApplied_contentTab(DisplayFilterSettings settings)
 		{
-			if (!string.IsNullOrEmpty(settings.SourceText)
-				|| !string.IsNullOrEmpty(settings.TargetText) || !string.IsNullOrEmpty(CustomFilterFilterSettings.ContextInfoStringId))
+			if (!string.IsNullOrEmpty(settings.SourceText) ||
+				!string.IsNullOrEmpty(settings.TargetText) ||
+				!string.IsNullOrEmpty(CustomFilterFilterSettings.ContextInfoStringId))
 			{
 				tabPage_content.ImageIndex = 0;
 			}
@@ -1118,6 +1160,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				tabPage_content.ImageIndex = -1;
 			}
 		}
+
 		private void InvalidateIconsFilterApplied_filtersTab(DisplayFilterSettings settings)
 		{
 			if (settings.SegmentReviewTypes.Any()
@@ -1137,6 +1180,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				tabPage_filters.ImageIndex = -1;
 			}
 		}
+
 		private void InvalidateIconsFilterApplied_commentsTab(DisplayFilterSettings settings)
 		{
 			if (!string.IsNullOrEmpty(settings.CommentText)
@@ -1150,6 +1194,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				tabPage_comments.ImageIndex = -1;
 			}
 		}
+
 		private void InvalidateIconsFilterApplied_contextInfoTab(DisplayFilterSettings settings)
 		{
 			if (settings.ContextInfoTypes.Any())
@@ -1183,8 +1228,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void InvalidateIconsFilterEdited(TabPage tabPage)
 		{
-			if (ActiveDocument != null && ActiveDocument.DisplayFilter != null
-				&& ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
+			if (ActiveDocument?.DisplayFilter != null && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
 			{
 				var settings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings;
 
@@ -1193,18 +1237,27 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					if (!string.IsNullOrEmpty(settings.SourceText)
 						|| !string.IsNullOrEmpty(settings.TargetText))
 					{
-
 						var andOrTagContent = alsoTags_radioButton.Checked
 							? alsoTags_radioButton.Checked
 							: onlyTags_radioButton.Checked;
 
-						var item1 = textBox_source.Text + ", " + target_textbox.Text + ", " +
-									checkBox_regularExpression.Checked + ", " + checkBox_caseSensitive.Checked + ',' +
-									checkBox_TagContent.Checked + ',' + ',' + andOrTagContent;
+						var item1 = textBox_source.Text + ", " + 
+						            target_textbox.Text + ", " +
+									checkBox_regularExpression.Checked + ", " + 
+						            checkBox_caseSensitive.Checked + ',' +
+									checkBox_TagContent.Checked + ',' + 
+						            andOrTagContent + ',' +
+									comboBox_SourceTargetFilterLogicalOperator.Text + ',' + 
+						            checkBox_useBackReferences.Checked;
 
-						var item2 = settings.SourceText + ", " + settings.TargetText + ", " +
-									settings.IsRegularExpression + ", " + settings.IsCaseSensitive + ',' +
-									_customFilterSettings.UseTagContent + ',' + _customFilterSettings.AndOrTagContent;
+						var item2 = settings.SourceText + ", " + 
+						            settings.TargetText + ", " +
+									settings.IsRegularExpression + ", " + 
+						            settings.IsCaseSensitive + ',' +
+									_customFilterSettings.UseTagContent + ',' + 
+						            _customFilterSettings.AndOrTagContent + ',' +
+									_customFilterSettings.SourceAndTargetLogicalOperator + ',' + 
+						            CustomFilterFilterSettings.UseBackreferences;
 
 						tabPage.ImageIndex = string.CompareOrdinal(item1, item2) == 0 ? 0 : 1;
 					}
@@ -1571,6 +1624,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void checkBox_useBackReferences_CheckedChanged(object sender, EventArgs e)
 		{
+			InvalidateIconsFilterEdited(tabPage_content);
+
 			var value = ((CheckBox)sender).Checked;
 			if (value)
 			{
@@ -1585,7 +1640,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void comboBox_SourceTargetFilterLogicalOperator_SelectedIndexChanged(object sender, EventArgs e)
 		{
-
+			InvalidateIconsFilterEdited(tabPage_content);
 		}
 
 		private void comboBox_SourceTargetFilterLogicalOperator_KeyPress(object sender, KeyPressEventArgs e)

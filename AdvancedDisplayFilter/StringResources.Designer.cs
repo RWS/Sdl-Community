@@ -385,6 +385,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Operator.
+        /// </summary>
+        internal static string DisplayFilterControl_Operator {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Operator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OR.
         /// </summary>
         internal static string DisplayFilterControl_OR {
@@ -670,6 +679,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Unlocked {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Unlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Backreferences.
+        /// </summary>
+        internal static string DisplayFilterControl_Use_Backreferences {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Use_Backreferences", resourceCulture);
             }
         }
         

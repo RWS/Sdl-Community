@@ -105,7 +105,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 						else
 						{
 							var appliedFilter = false;
-							if (CustomSettings.UseBackReferences && Settings.IsRegularExpression)
+							if (CustomSettings.UseBackreferences && Settings.IsRegularExpression)
 							{
 								success = FilterOnSourceAndTargetWithBackreferences(rowInfo, out appliedFilter);
 							}
