@@ -2051,15 +2051,66 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			InvalidateIconsFilterEdited(tabPage_content);
 		}
-
-		private void applyHighlightingToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			_highlightService.HighlightSegments(_activeDocument, Color.Yellow);
-		}		
+		
 
 		private void clearHighlightingToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			_highlightService.ClearHighlighting(_activeDocument);
+			_highlightService.ClearHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered);
+		}																
+
+		private void toolStripMenuItem_yellow_Click(object sender, EventArgs e)
+		{
+			_highlightService.ApplyHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered, Color.Yellow);
+		}
+
+		private void toolStripMenuItem_brightGreen_Click(object sender, EventArgs e)
+		{						
+			_highlightService.ApplyHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered, Color.FromArgb(0, 102, 255, 0));
+		}
+
+		private void toolStripMenuItem_turquoise_Click(object sender, EventArgs e)
+		{
+			_highlightService.ApplyHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered, Color.Turquoise);
+		}
+
+		private void toolStripMenuItem_pink_Click(object sender, EventArgs e)
+		{
+			_highlightService.ApplyHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered, Color.Pink);
+		}
+
+		private void toolStripMenuItem_blue_Click(object sender, EventArgs e)
+		{
+			_highlightService.ApplyHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered, Color.Blue);
+		}
+
+		private void toolStripMenuItem_red_Click(object sender, EventArgs e)
+		{
+			_highlightService.ApplyHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered, Color.Red);
+		}
+
+		private void toolStripMenuItem_darkBlue_Click(object sender, EventArgs e)
+		{
+			_highlightService.ApplyHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered, Color.DarkBlue);
+		}
+
+		private void toolStripMenuItem_teal_Click(object sender, EventArgs e)
+		{
+			_highlightService.ApplyHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered, Color.Teal);
+		}
+
+		private void toolStripMenuItem_green_Click(object sender, EventArgs e)
+		{
+			_highlightService.ApplyHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered, Color.Green);
+		}
+
+		private void toolStripMenuItem_violet_Click(object sender, EventArgs e)
+		{
+			_highlightService.ApplyHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered, Color.Violet);
+		}
+
+		private void toolStripMenuItem_darkRed_Click(object sender, EventArgs e)
+		{
+			_highlightService.ApplyHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered, Color.DarkRed);
 		}
 	}
 }

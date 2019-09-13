@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using Sdl.Community.AdvancedDisplayFilter.Helpers;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Formatting;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -13,16 +14,27 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 	{
 		private const string CadfBackgroundColorKey = "CADFBackgroundColorKey";
 
-		public void HighlightSegments(Document document, Color color)
+		public enum HighlightScrope
 		{
-			var segments = document?.FilteredSegmentPairs?.ToList();
+			Filtered,
+			Active
+		}
+
+		public void ApplyHighlighting(Document document, HighlightScrope highlightScrope, Color color)
+		{
+			var segments = highlightScrope == HighlightScrope.Filtered
+				? document?.FilteredSegmentPairs?.ToList()
+				: new List<ISegmentPair> { document.GetActiveSegmentPair() };
+
 			if (segments == null)
 			{
 				return;
 			}
 
+		
+
 			var allTagIds = GetAllTagIds(document);
-			var seed = 1;
+			var seed = GetLargestSeedValue(allTagIds);
 
 			var colorName = GetColorName(color);
 			var colorRgb = GetColorRgb(color);
@@ -38,14 +50,14 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				if (item is ITagPair tagPair)
 				{
 					if (tagPair.StartTagProperties?.Formatting == null ||
-					    tagPair.StartTagProperties.Formatting.ContainsKey(CadfBackgroundColorKey))
+						tagPair.StartTagProperties.Formatting.ContainsKey(CadfBackgroundColorKey))
 					{
 						continue;
-					}					
+					}
 				}
 
 				var tagId = GetNextTagId(allTagIds, seed);
-				seed = tagId++;
+				seed = tagId + 1;
 
 				var startTagProperties = CreateStartTagProperties(propertyFactory, formattingFactory, formattingItem, tagId, colorName);
 				var endTagProperties = CreateEndTagProperties(propertyFactory);
@@ -56,25 +68,14 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 				document.UpdateSegmentPair(segmentPair);
 			}
-		}
+		}	
 
-		private static string GetColorRgb(Color color)
+		public void ClearHighlighting(Document document, HighlightScrope highlightScrope)
 		{
-			var colorRgb = "0, " + color.R + ", " + color.G + ", " + color.B;
-			return colorRgb;
-		}
+			var segments = highlightScrope == HighlightScrope.Filtered
+				? document?.FilteredSegmentPairs?.ToList()
+				: new List<ISegmentPair> { document.GetActiveSegmentPair() };
 
-		private static string GetColorName(Color color)
-		{
-			var colorName = color.Name.Substring(0, 1);
-			colorName = colorName.ToLower(CultureInfo.InvariantCulture);
-			colorName += color.Name.Substring(1);
-			return colorName;
-		}
-
-		public void ClearHighlighting(Document document)
-		{
-			var segments = document?.FilteredSegmentPairs?.ToList();
 			if (segments == null)
 			{
 				return;
@@ -101,6 +102,44 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 					document.UpdateSegmentPair(segmentPair);
 				}
 			}
+		}
+
+		private static int GetLargestSeedValue(IEnumerable<string> allTagIds)
+		{
+			var seed = 1;
+			foreach (var id in allTagIds)
+			{
+				var success = int.TryParse(id, out var value);
+				if (success)
+				{
+					if (value > seed)
+					{
+						seed = value;
+					}
+				}
+			}
+
+			return seed;
+		}
+
+		private static string GetColorRgb(Color color)
+		{
+			var colorRgb = "0, " + color.R + ", " + color.G + ", " + color.B;
+			return colorRgb;
+		}
+
+		private static string GetColorName(Color color)
+		{
+			var name = color.Name;
+			if (color.R == 102 && color.G == 255 && color.B == 0)
+			{
+				name = "brightGreen";
+			}
+
+			var colorName = name.Substring(0, 1);
+			colorName = colorName.ToLower(CultureInfo.InvariantCulture);
+			colorName += name.Substring(1);
+			return colorName;
 		}
 
 		private static IEndTagProperties CreateEndTagProperties(IPropertiesFactory propertyFactory)
@@ -141,7 +180,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				i++;
 			}
 
-			allTagIds.Add(i.ToString());			
+			allTagIds.Add(i.ToString());
 			return i;
 		}
 
@@ -150,6 +189,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			var allTagIds = new List<string>();
 			foreach (var segmentPair in document.SegmentPairs)
 			{
+				var paragraphUnit = ColorPickerHelper.GetParagraphUnit(segmentPair);
+				if (paragraphUnit != null)
+				{
+					AddTagIds(paragraphUnit.Source, ref allTagIds);
+					AddTagIds(paragraphUnit.Target, ref allTagIds);
+				}
+
 				AddTagIds(segmentPair.Source, ref allTagIds);
 				AddTagIds(segmentPair.Target, ref allTagIds);
 			}
@@ -157,9 +203,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			return allTagIds;
 		}
 
-		private static void AddTagIds(IAbstractMarkupDataContainer segment, ref List<string> allTagIds)
+		private static void AddTagIds(IAbstractMarkupDataContainer container, ref List<string> allTagIds)
 		{
-			foreach (var markupData in segment.AllSubItems)
+			foreach (var markupData in container.AllSubItems)
 			{
 				if (markupData is ITagPair tagPair)
 				{
