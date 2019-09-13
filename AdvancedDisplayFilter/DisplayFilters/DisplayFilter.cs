@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Sdl.Community.Plugins.AdvancedDisplayFilter.Extensions;
-using Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers;
-using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
+using Sdl.Community.AdvancedDisplayFilter.Extensions;
+using Sdl.Community.AdvancedDisplayFilter.Helpers;
+using Sdl.Community.AdvancedDisplayFilter.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
+namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 {
 	public class DisplayFilter : IDisplayFilter
 	{	

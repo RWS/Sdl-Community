@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
+namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 {
 	public class CustomFilterSettings
 	{

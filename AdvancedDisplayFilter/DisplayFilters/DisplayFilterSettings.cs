@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Sdl.Community.Toolkit.FileType;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
+namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 {
 	public class DisplayFilterSettings
 	{

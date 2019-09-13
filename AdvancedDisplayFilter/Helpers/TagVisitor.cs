@@ -1,6 +1,6 @@
 ﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
+namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public class TagVisitor : IMarkupDataVisitor
 	{

@@ -1,6 +1,6 @@
-﻿using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
+﻿using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Models
+namespace Sdl.Community.AdvancedDisplayFilter.Models
 {
 	public class SavedSettings
 	{
