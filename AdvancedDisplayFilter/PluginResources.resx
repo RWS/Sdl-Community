@@ -148,4 +148,37 @@
   <data name="AdvancedDisplayFilter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\advanceddisplayfilter.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="square_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\square-blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="square_brightGreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\square-brightGreen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="square_darkBlue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\square-darkBlue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="square_darkRed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\square-darkRed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="square_green" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\square-green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="square_pink" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\square-pink.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="square_red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\square-red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="square_teal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\square-teal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="square_turquoise" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\square-turquoise.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="square_violet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\square-violet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="square_yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\square-yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

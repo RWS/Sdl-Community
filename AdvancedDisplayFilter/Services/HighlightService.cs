@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using Sdl.Community.AdvancedDisplayFilter.Helpers;
+using Sdl.Community.AdvancedDisplayFilter.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Formatting;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -20,7 +20,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			Active
 		}
 
-		public void ApplyHighlighting(Document document, HighlightScrope highlightScrope, Color color)
+		public void ApplyHighlighting(Document document, HighlightScrope highlightScrope, HighlightColor highlightColor)
 		{
 			var segments = highlightScrope == HighlightScrope.Filtered
 				? document?.FilteredSegmentPairs?.ToList()
@@ -30,19 +30,14 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			{
 				return;
 			}
-
 		
-
 			var allTagIds = GetAllTagIds(document);
 			var seed = GetLargestSeedValue(allTagIds);
-
-			var colorName = GetColorName(color);
-			var colorRgb = GetColorRgb(color);
-
+						
 			var itemFactory = document.ItemFactory;
 			var propertyFactory = itemFactory.PropertiesFactory;
 			var formattingFactory = propertyFactory.FormattingItemFactory;
-			var formattingItem = formattingFactory.CreateFormattingItem("BackgroundColor", colorRgb);
+			var formattingItem = formattingFactory.CreateFormattingItem("BackgroundColor", highlightColor.GetArgb());
 
 			foreach (var segmentPair in segments)
 			{
@@ -59,7 +54,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				var tagId = GetNextTagId(allTagIds, seed);
 				seed = tagId + 1;
 
-				var startTagProperties = CreateStartTagProperties(propertyFactory, formattingFactory, formattingItem, tagId, colorName);
+				var startTagProperties = CreateStartTagProperties(propertyFactory, formattingFactory, formattingItem, tagId, highlightColor.Name);
 				var endTagProperties = CreateEndTagProperties(propertyFactory);
 
 				var tagPairNew = document.ItemFactory.CreateTagPair(startTagProperties, endTagProperties);
@@ -104,6 +99,26 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			}
 		}
 
+		public List<HighlightColor> GetDefaultHighlightColors()
+		{
+			var colors = new List<HighlightColor>
+			{
+				new HighlightColor(Color.Yellow, "Yellow", PluginResources.square_yellow),
+				new HighlightColor(Color.FromArgb(0, 102, 255, 0), "Bright Green", PluginResources.square_brightGreen),
+				new HighlightColor(Color.Turquoise, "Turquoise", PluginResources.square_turquoise),
+				new HighlightColor(Color.Pink, "Pink", PluginResources.square_pink),
+				new HighlightColor(Color.Blue, "Blue", PluginResources.square_blue),
+				new HighlightColor(Color.Red, "Red", PluginResources.square_red),
+				new HighlightColor(Color.DarkBlue, "Dark Blue", PluginResources.square_darkBlue),
+				new HighlightColor(Color.Teal, "Teal", PluginResources.square_teal),
+				new HighlightColor(Color.Green, "Green", PluginResources.square_green),
+				new HighlightColor(Color.Violet, "Violet", PluginResources.square_violet),
+				new HighlightColor(Color.DarkRed, "Dark Red", PluginResources.square_darkRed)
+			};
+
+			return colors;
+		}
+
 		private static int GetLargestSeedValue(IEnumerable<string> allTagIds)
 		{
 			var seed = 1;
@@ -120,27 +135,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			}
 
 			return seed;
-		}
-
-		private static string GetColorRgb(Color color)
-		{
-			var colorRgb = "0, " + color.R + ", " + color.G + ", " + color.B;
-			return colorRgb;
-		}
-
-		private static string GetColorName(Color color)
-		{
-			var name = color.Name;
-			if (color.R == 102 && color.G == 255 && color.B == 0)
-			{
-				name = "brightGreen";
-			}
-
-			var colorName = name.Substring(0, 1);
-			colorName = colorName.ToLower(CultureInfo.InvariantCulture);
-			colorName += name.Substring(1);
-			return colorName;
-		}
+		}				
 
 		private static IEndTagProperties CreateEndTagProperties(IPropertiesFactory propertyFactory)
 		{

@@ -161,6 +161,7 @@
     <Compile Include="Models\CapturedGroup.cs" />
     <Compile Include="Models\DisplayFilterSerializer.cs" />
     <Compile Include="Controls\Helper.cs" />
+    <Compile Include="Models\HighlightColor.cs" />
     <Compile Include="Models\SavedSettings.cs" />
     <Compile Include="Models\SegmentRange.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -208,6 +209,17 @@
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Content Include="Images\Parenthesis.jpg" />
+    <None Include="Images\square-yellow.png" />
+    <None Include="Images\square-blue.png" />
+    <None Include="Images\square-brightGreen.png" />
+    <None Include="Images\square-darkBlue.png" />
+    <None Include="Images\square-darkRed.png" />
+    <None Include="Images\square-green.png" />
+    <None Include="Images\square-pink.png" />
+    <None Include="Images\square-red.png" />
+    <None Include="Images\square-teal.png" />
+    <None Include="Images\square-turquoise.png" />
+    <None Include="Images\square-violet.png" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
