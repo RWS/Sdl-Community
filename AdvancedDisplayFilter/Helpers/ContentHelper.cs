@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
+namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public static class ContentHelper
 	{

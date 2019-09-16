@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
+namespace Sdl.Community.AdvancedDisplayFilter {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.Plugins.AdvancedDisplayFilter.StringResources", typeof(StringResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.AdvancedDisplayFilter.StringResources", typeof(StringResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Models
+﻿namespace Sdl.Community.AdvancedDisplayFilter.Models
 {
 	public class BackReference
 	{

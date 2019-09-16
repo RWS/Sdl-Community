@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Controls
+﻿namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
 	partial class AddCommentWindow
 	{

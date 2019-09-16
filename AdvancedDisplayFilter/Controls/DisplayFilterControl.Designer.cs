@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
-using Sdl.Community.Plugins.AdvancedDisplayFilter;
+﻿using System.Windows.Forms;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
@@ -46,7 +44,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.checkBox_regularExpression = new System.Windows.Forms.CheckBox();
 			this.label_tab_content_filter_message = new System.Windows.Forms.Label();
 			this.label_dsiLocation = new System.Windows.Forms.Label();
-			this.stringId_textbox = new System.Windows.Forms.TextBox();
+			this.dsiLocation_textbox = new System.Windows.Forms.TextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.checkBox_TagContent = new System.Windows.Forms.CheckBox();
 			this.content_groupBox = new System.Windows.Forms.GroupBox();
@@ -134,12 +132,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_buffer = new System.Windows.Forms.Panel();
 			this.toolStrip_filter = new System.Windows.Forms.ToolStrip();
 			this.toolStripButton_applyFilter = new System.Windows.Forms.ToolStripButton();
+			this.reverseBtn = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_clearFilter = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+			this.highlightColorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.clearHighlightingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.generateXliff = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_saveFilter = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_loadFilter = new System.Windows.Forms.ToolStripButton();
-			this.reverseBtn = new System.Windows.Forms.ToolStripButton();
-			this.generateXliff = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.helpButton = new System.Windows.Forms.ToolStripButton();
 			this.panel_filterExpression = new System.Windows.Forms.Panel();
 			this.filterExpressionControl = new Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression();
@@ -149,6 +152,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.label_filterStatusBarMessage = new System.Windows.Forms.Label();
 			this.panel_filterStatusBarImage = new System.Windows.Forms.Panel();
 			this.pictureBox_filterStatusBarImage = new System.Windows.Forms.PictureBox();
+			this.toolStripMenuItem_yellow = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_brightGreen = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_turquoise = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_pink = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_blue = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_red = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_darkBlue = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_teal = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_green = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_violet = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_darkRed = new System.Windows.Forms.ToolStripMenuItem();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -237,7 +251,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel1.Controls.Add(this.checkBox_regularExpression, 0, 4);
 			this.tableLayoutPanel1.Controls.Add(this.label_tab_content_filter_message, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label_dsiLocation, 0, 3);
-			this.tableLayoutPanel1.Controls.Add(this.stringId_textbox, 1, 3);
+			this.tableLayoutPanel1.Controls.Add(this.dsiLocation_textbox, 1, 3);
 			this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 7);
 			this.tableLayoutPanel1.Controls.Add(this.panel2, 2, 1);
 			this.tableLayoutPanel1.Controls.Add(this.checkBox_useBackReferences, 0, 5);
@@ -252,8 +266,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.textBox_source, "textBox_source");
 			this.textBox_source.Name = "textBox_source";
-			this.textBox_source.TextChanged += new System.EventHandler(this.textBox_source_TextChanged);
-			this.textBox_source.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_source_KeyUp);
+			this.textBox_source.TextChanged += new System.EventHandler(this.TextBox_source_TextChanged);
+			this.textBox_source.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_source_KeyUp);
 			// 
 			// checkBox_caseSensitive
 			// 
@@ -261,7 +275,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel1.SetColumnSpan(this.checkBox_caseSensitive, 3);
 			this.checkBox_caseSensitive.Name = "checkBox_caseSensitive";
 			this.checkBox_caseSensitive.UseVisualStyleBackColor = true;
-			this.checkBox_caseSensitive.CheckedChanged += new System.EventHandler(this.checkBox_caseSensitive_CheckedChanged);
+			this.checkBox_caseSensitive.CheckedChanged += new System.EventHandler(this.CheckBox_caseSensitive_CheckedChanged);
 			// 
 			// label_target
 			// 
@@ -272,8 +286,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.target_textbox, "target_textbox");
 			this.target_textbox.Name = "target_textbox";
-			this.target_textbox.TextChanged += new System.EventHandler(this.textBox_target_TextChanged);
-			this.target_textbox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_target_KeyUp);
+			this.target_textbox.TextChanged += new System.EventHandler(this.TextBox_target_TextChanged);
+			this.target_textbox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_target_KeyUp);
 			// 
 			// checkBox_regularExpression
 			// 
@@ -281,7 +295,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel1.SetColumnSpan(this.checkBox_regularExpression, 3);
 			this.checkBox_regularExpression.Name = "checkBox_regularExpression";
 			this.checkBox_regularExpression.UseVisualStyleBackColor = true;
-			this.checkBox_regularExpression.CheckedChanged += new System.EventHandler(this.checkBox_regularExpression_CheckedChanged);
+			this.checkBox_regularExpression.CheckedChanged += new System.EventHandler(this.CheckBox_regularExpression_CheckedChanged);
 			// 
 			// label_tab_content_filter_message
 			// 
@@ -294,12 +308,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.label_dsiLocation, "label_dsiLocation");
 			this.label_dsiLocation.Name = "label_dsiLocation";
 			// 
-			// stringId_textbox
+			// dsiLocation_textbox
 			// 
-			resources.ApplyResources(this.stringId_textbox, "stringId_textbox");
-			this.tableLayoutPanel1.SetColumnSpan(this.stringId_textbox, 2);
-			this.stringId_textbox.Name = "stringId_textbox";
-			this.stringId_textbox.TextChanged += new System.EventHandler(this.stringId_textbox_TextChanged);
+			resources.ApplyResources(this.dsiLocation_textbox, "dsiLocation_textbox");
+			this.tableLayoutPanel1.SetColumnSpan(this.dsiLocation_textbox, 2);
+			this.dsiLocation_textbox.Name = "dsiLocation_textbox";
+			this.dsiLocation_textbox.TextChanged += new System.EventHandler(this.DsiLocation_textbox_TextChanged);
 			// 
 			// panel1
 			// 
@@ -330,17 +344,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.alsoTags_radioButton.Checked = true;
 			this.alsoTags_radioButton.Name = "alsoTags_radioButton";
 			this.alsoTags_radioButton.TabStop = true;
-			this.tags_tooltip.SetToolTip(this.alsoTags_radioButton, global::Sdl.Community.Plugins.AdvancedDisplayFilter.StringResources.DisplayFilter_IncludeTags_Tooltip);
+			this.tags_tooltip.SetToolTip(this.alsoTags_radioButton, global::Sdl.Community.AdvancedDisplayFilter.StringResources.DisplayFilter_IncludeTags_Tooltip);
 			this.alsoTags_radioButton.UseVisualStyleBackColor = true;
-			this.alsoTags_radioButton.CheckedChanged += new System.EventHandler(this.alsoTags_radioButton_CheckedChanged);
+			this.alsoTags_radioButton.CheckedChanged += new System.EventHandler(this.AlsoTags_radioButton_CheckedChanged);
 			// 
 			// onlyTags_radioButton
 			// 
 			resources.ApplyResources(this.onlyTags_radioButton, "onlyTags_radioButton");
 			this.onlyTags_radioButton.Name = "onlyTags_radioButton";
-			this.tags_tooltip.SetToolTip(this.onlyTags_radioButton, global::Sdl.Community.Plugins.AdvancedDisplayFilter.StringResources.DisplayFilter_OnlyTags_Tooltip);
+			this.tags_tooltip.SetToolTip(this.onlyTags_radioButton, global::Sdl.Community.AdvancedDisplayFilter.StringResources.DisplayFilter_OnlyTags_Tooltip);
 			this.onlyTags_radioButton.UseVisualStyleBackColor = true;
-			this.onlyTags_radioButton.CheckedChanged += new System.EventHandler(this.onlyTags_radioButton_CheckedChanged);
+			this.onlyTags_radioButton.CheckedChanged += new System.EventHandler(this.OnlyTags_radioButton_CheckedChanged);
 			// 
 			// panel2
 			// 
@@ -365,8 +379,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             resources.GetString("comboBox_SourceTargetFilterLogicalOperator.Items"),
             resources.GetString("comboBox_SourceTargetFilterLogicalOperator.Items1")});
 			this.comboBox_SourceTargetFilterLogicalOperator.Name = "comboBox_SourceTargetFilterLogicalOperator";
-			this.comboBox_SourceTargetFilterLogicalOperator.SelectedIndexChanged += new System.EventHandler(this.comboBox_SourceTargetFilterLogicalOperator_SelectedIndexChanged);
-			this.comboBox_SourceTargetFilterLogicalOperator.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.comboBox_SourceTargetFilterLogicalOperator_KeyPress);
+			this.comboBox_SourceTargetFilterLogicalOperator.SelectedIndexChanged += new System.EventHandler(this.ComboBox_SourceTargetFilterLogicalOperator_SelectedIndexChanged);
+			this.comboBox_SourceTargetFilterLogicalOperator.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ComboBox_SourceTargetFilterLogicalOperator_KeyPress);
 			// 
 			// panel3
 			// 
@@ -386,7 +400,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel1.SetColumnSpan(this.checkBox_useBackReferences, 3);
 			this.checkBox_useBackReferences.Name = "checkBox_useBackReferences";
 			this.checkBox_useBackReferences.UseVisualStyleBackColor = true;
-			this.checkBox_useBackReferences.CheckedChanged += new System.EventHandler(this.checkBox_useBackReferences_CheckedChanged);
+			this.checkBox_useBackReferences.CheckedChanged += new System.EventHandler(this.CheckBox_useBackReferences_CheckedChanged);
 			// 
 			// tabPage_filters
 			// 
@@ -430,21 +444,21 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.button_removeAll, "button_removeAll");
 			this.button_removeAll.Name = "button_removeAll";
 			this.button_removeAll.UseVisualStyleBackColor = true;
-			this.button_removeAll.Click += new System.EventHandler(this.button_removeAll_Click);
+			this.button_removeAll.Click += new System.EventHandler(this.Button_removeAll_Click);
 			// 
 			// button_remove
 			// 
 			resources.ApplyResources(this.button_remove, "button_remove");
 			this.button_remove.Name = "button_remove";
 			this.button_remove.UseVisualStyleBackColor = true;
-			this.button_remove.Click += new System.EventHandler(this.button_remove_Click);
+			this.button_remove.Click += new System.EventHandler(this.Button_remove_Click);
 			// 
 			// button_add
 			// 
 			resources.ApplyResources(this.button_add, "button_add");
 			this.button_add.Name = "button_add";
 			this.button_add.UseVisualStyleBackColor = true;
-			this.button_add.Click += new System.EventHandler(this.button_add_Click);
+			this.button_add.Click += new System.EventHandler(this.Button_add_Click);
 			// 
 			// panel10
 			// 
@@ -464,8 +478,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.listView_selected.Name = "listView_selected";
 			this.listView_selected.UseCompatibleStateImageBehavior = false;
 			this.listView_selected.View = System.Windows.Forms.View.Details;
-			this.listView_selected.SelectedIndexChanged += new System.EventHandler(this.listView_selected_SelectedIndexChanged);
-			this.listView_selected.Resize += new System.EventHandler(this.listView_selected_Resize);
+			this.listView_selected.SelectedIndexChanged += new System.EventHandler(this.ListView_selected_SelectedIndexChanged);
+			this.listView_selected.Resize += new System.EventHandler(this.ListView_selected_Resize);
 			// 
 			// columnHeader_filtersSelected_name
 			// 
@@ -500,9 +514,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.listView_available.Name = "listView_available";
 			this.listView_available.UseCompatibleStateImageBehavior = false;
 			this.listView_available.View = System.Windows.Forms.View.Details;
-			this.listView_available.SelectedIndexChanged += new System.EventHandler(this.listView_available_SelectedIndexChanged);
-			this.listView_available.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView_available_MouseDoubleClick);
-			this.listView_available.Resize += new System.EventHandler(this.listView_available_Resize);
+			this.listView_available.SelectedIndexChanged += new System.EventHandler(this.ListView_available_SelectedIndexChanged);
+			this.listView_available.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListView_available_MouseDoubleClick);
+			this.listView_available.Resize += new System.EventHandler(this.ListView_available_Resize);
 			// 
 			// columnHeader_filtersAvailable_name
 			// 
@@ -545,7 +559,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.comboBox_commentSeverity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_commentSeverity.FormattingEnabled = true;
 			this.comboBox_commentSeverity.Name = "comboBox_commentSeverity";
-			this.comboBox_commentSeverity.SelectedIndexChanged += new System.EventHandler(this.comboBox_commentSeverity_SelectedIndexChanged);
+			this.comboBox_commentSeverity.SelectedIndexChanged += new System.EventHandler(this.ComboBox_commentSeverity_SelectedIndexChanged);
 			// 
 			// label_commentText
 			// 
@@ -561,15 +575,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.textBox_commentText, "textBox_commentText");
 			this.textBox_commentText.Name = "textBox_commentText";
-			this.textBox_commentText.TextChanged += new System.EventHandler(this.textBox_commentText_TextChanged);
-			this.textBox_commentText.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_commentText_KeyUp);
+			this.textBox_commentText.TextChanged += new System.EventHandler(this.TextBox_commentText_TextChanged);
+			this.textBox_commentText.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_commentText_KeyUp);
 			// 
 			// textBox_commentAuthor
 			// 
 			resources.ApplyResources(this.textBox_commentAuthor, "textBox_commentAuthor");
 			this.textBox_commentAuthor.Name = "textBox_commentAuthor";
-			this.textBox_commentAuthor.TextChanged += new System.EventHandler(this.textBox_commentAuthor_TextChanged);
-			this.textBox_commentAuthor.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox_commentAuthor_KeyUp);
+			this.textBox_commentAuthor.TextChanged += new System.EventHandler(this.TextBox_commentAuthor_TextChanged);
+			this.textBox_commentAuthor.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_commentAuthor_KeyUp);
 			// 
 			// label_commentAuthor
 			// 
@@ -588,7 +602,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel3.SetColumnSpan(this.commentRegexBox, 2);
 			this.commentRegexBox.Name = "commentRegexBox";
 			this.commentRegexBox.UseVisualStyleBackColor = true;
-			this.commentRegexBox.CheckedChanged += new System.EventHandler(this.commentRegexBox_CheckedChanged);
+			this.commentRegexBox.CheckedChanged += new System.EventHandler(this.CommentRegexBox_CheckedChanged);
 			// 
 			// tabPage_contextInfo
 			// 
@@ -626,8 +640,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.listView_contextInfo.Name = "listView_contextInfo";
 			this.listView_contextInfo.UseCompatibleStateImageBehavior = false;
 			this.listView_contextInfo.View = System.Windows.Forms.View.Details;
-			this.listView_contextInfo.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listView_contextInfo_ItemSelectionChanged);
-			this.listView_contextInfo.Resize += new System.EventHandler(this.listView_contextInfo_Resize);
+			this.listView_contextInfo.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListView_contextInfo_ItemSelectionChanged);
+			this.listView_contextInfo.Resize += new System.EventHandler(this.ListView_contextInfo_Resize);
 			// 
 			// columnHeader_code
 			// 
@@ -646,7 +660,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.linkLabel_contextInfoClearSelection, "linkLabel_contextInfoClearSelection");
 			this.linkLabel_contextInfoClearSelection.Name = "linkLabel_contextInfoClearSelection";
 			this.linkLabel_contextInfoClearSelection.TabStop = true;
-			this.linkLabel_contextInfoClearSelection.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_contextInfoClearSelection_LinkClicked);
+			this.linkLabel_contextInfoClearSelection.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel_contextInfoClearSelection_LinkClicked);
 			// 
 			// label_contextInfoSelected
 			// 
@@ -680,13 +694,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.fuzzyMin, "fuzzyMin");
 			this.fuzzyMin.Name = "fuzzyMin";
-			this.fuzzyMin.TextChanged += new System.EventHandler(this.fuzzyMin_TextChanged);
+			this.fuzzyMin.TextChanged += new System.EventHandler(this.FuzzyMin_TextChanged);
 			// 
 			// fuzzyMax
 			// 
 			resources.ApplyResources(this.fuzzyMax, "fuzzyMax");
 			this.fuzzyMax.Name = "fuzzyMax";
-			this.fuzzyMax.TextChanged += new System.EventHandler(this.fuzzyMax_TextChanged);
+			this.fuzzyMax.TextChanged += new System.EventHandler(this.FuzzyMax_TextChanged);
 			// 
 			// label5
 			// 
@@ -719,7 +733,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.createdByCheck, "createdByCheck");
 			this.createdByCheck.Name = "createdByCheck";
 			this.createdByCheck.UseVisualStyleBackColor = true;
-			this.createdByCheck.CheckedChanged += new System.EventHandler(this.createdByCheck_CheckedChanged);
+			this.createdByCheck.CheckedChanged += new System.EventHandler(this.CreatedByCheck_CheckedChanged);
 			// 
 			// modifiedByBox
 			// 
@@ -731,7 +745,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.modifiedByCheck, "modifiedByCheck");
 			this.modifiedByCheck.Name = "modifiedByCheck";
 			this.modifiedByCheck.UseVisualStyleBackColor = true;
-			this.modifiedByCheck.CheckedChanged += new System.EventHandler(this.modifiedByCheck_CheckedChanged);
+			this.modifiedByCheck.CheckedChanged += new System.EventHandler(this.ModifiedByCheck_CheckedChanged);
 			// 
 			// userLabel
 			// 
@@ -760,42 +774,42 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.containsTagsCheckBox, "containsTagsCheckBox");
 			this.containsTagsCheckBox.Name = "containsTagsCheckBox";
 			this.containsTagsCheckBox.UseVisualStyleBackColor = true;
-			this.containsTagsCheckBox.CheckedChanged += new System.EventHandler(this.containsTagsCheckBox_CheckedChanged);
+			this.containsTagsCheckBox.CheckedChanged += new System.EventHandler(this.ContainsTagsCheckBox_CheckedChanged);
 			// 
 			// mergedAcross
 			// 
 			resources.ApplyResources(this.mergedAcross, "mergedAcross");
 			this.mergedAcross.Name = "mergedAcross";
 			this.mergedAcross.UseVisualStyleBackColor = true;
-			this.mergedAcross.CheckedChanged += new System.EventHandler(this.mergedAcross_CheckedChanged);
+			this.mergedAcross.CheckedChanged += new System.EventHandler(this.MergedAcross_CheckedChanged);
 			// 
 			// mergedCheckbox
 			// 
 			resources.ApplyResources(this.mergedCheckbox, "mergedCheckbox");
 			this.mergedCheckbox.Name = "mergedCheckbox";
 			this.mergedCheckbox.UseVisualStyleBackColor = true;
-			this.mergedCheckbox.CheckedChanged += new System.EventHandler(this.mergedCheckbox_CheckedChanged);
+			this.mergedCheckbox.CheckedChanged += new System.EventHandler(this.MergedCheckbox_CheckedChanged);
 			// 
 			// splitCheckBox
 			// 
 			resources.ApplyResources(this.splitCheckBox, "splitCheckBox");
 			this.splitCheckBox.Name = "splitCheckBox";
 			this.splitCheckBox.UseVisualStyleBackColor = true;
-			this.splitCheckBox.CheckedChanged += new System.EventHandler(this.splitCheckBox_CheckedChanged);
+			this.splitCheckBox.CheckedChanged += new System.EventHandler(this.SplitCheckBox_CheckedChanged);
 			// 
 			// sourceSameBox
 			// 
 			resources.ApplyResources(this.sourceSameBox, "sourceSameBox");
 			this.sourceSameBox.Name = "sourceSameBox";
 			this.sourceSameBox.UseVisualStyleBackColor = true;
-			this.sourceSameBox.CheckedChanged += new System.EventHandler(this.sourceSameBox_CheckedChanged);
+			this.sourceSameBox.CheckedChanged += new System.EventHandler(this.SourceSameBox_CheckedChanged);
 			// 
 			// equalsCaseSensitive
 			// 
 			resources.ApplyResources(this.equalsCaseSensitive, "equalsCaseSensitive");
 			this.equalsCaseSensitive.Name = "equalsCaseSensitive";
 			this.equalsCaseSensitive.UseVisualStyleBackColor = true;
-			this.equalsCaseSensitive.CheckedChanged += new System.EventHandler(this.equalsCaseSensitive_CheckedChanged);
+			this.equalsCaseSensitive.CheckedChanged += new System.EventHandler(this.EqualsCaseSensitive_CheckedChanged);
 			// 
 			// panel_spacer_03
 			// 
@@ -834,34 +848,32 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// noneBtn
 			// 
 			resources.ApplyResources(this.noneBtn, "noneBtn");
+			this.noneBtn.Checked = true;
 			this.noneBtn.Name = "noneBtn";
 			this.noneBtn.TabStop = true;
 			this.noneBtn.UseVisualStyleBackColor = true;
-			this.noneBtn.CheckedChanged += new System.EventHandler(this.noneBtn_CheckedChanged);
+			this.noneBtn.CheckedChanged += new System.EventHandler(this.NoneBtn_CheckedChanged);
 			// 
 			// groupedBtn
 			// 
 			resources.ApplyResources(this.groupedBtn, "groupedBtn");
 			this.groupedBtn.Name = "groupedBtn";
-			this.groupedBtn.TabStop = true;
 			this.groupedBtn.UseVisualStyleBackColor = true;
-			this.groupedBtn.CheckedChanged += new System.EventHandler(this.groupedBtn_CheckedChanged);
+			this.groupedBtn.CheckedChanged += new System.EventHandler(this.GroupedBtn_CheckedChanged);
 			// 
 			// oddBtn
 			// 
 			resources.ApplyResources(this.oddBtn, "oddBtn");
 			this.oddBtn.Name = "oddBtn";
-			this.oddBtn.TabStop = true;
 			this.oddBtn.UseVisualStyleBackColor = true;
-			this.oddBtn.CheckedChanged += new System.EventHandler(this.oddBtn_CheckedChanged);
+			this.oddBtn.CheckedChanged += new System.EventHandler(this.OddBtn_CheckedChanged);
 			// 
 			// evenBtn
 			// 
 			resources.ApplyResources(this.evenBtn, "evenBtn");
 			this.evenBtn.Name = "evenBtn";
-			this.evenBtn.TabStop = true;
 			this.evenBtn.UseVisualStyleBackColor = true;
-			this.evenBtn.CheckedChanged += new System.EventHandler(this.evenBtn_CheckedChanged);
+			this.evenBtn.CheckedChanged += new System.EventHandler(this.EvenBtn_CheckedChanged);
 			// 
 			// panel_spacer_05
 			// 
@@ -893,7 +905,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.colorsListView, "colorsListView");
 			this.colorsListView.Name = "colorsListView";
 			this.colorsListView.UseCompatibleStateImageBehavior = false;
-			this.colorsListView.SelectedIndexChanged += new System.EventHandler(this.colorsListView_SelectedIndexChanged);
+			this.colorsListView.SelectedIndexChanged += new System.EventHandler(this.ColorsListView_SelectedIndexChanged);
 			// 
 			// imageList_filter
 			// 
@@ -921,12 +933,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.toolStrip_filter.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.toolStrip_filter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton_applyFilter,
+            this.reverseBtn,
             this.toolStripButton_clearFilter,
             this.toolStripSeparator1,
+            this.toolStripDropDownButton1,
+            this.generateXliff,
+            this.toolStripSeparator3,
             this.toolStripButton_saveFilter,
             this.toolStripButton_loadFilter,
-            this.reverseBtn,
-            this.generateXliff,
+            this.toolStripSeparator2,
             this.helpButton});
 			resources.ApplyResources(this.toolStrip_filter, "toolStrip_filter");
 			this.toolStrip_filter.Name = "toolStrip_filter";
@@ -935,48 +950,78 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.toolStripButton_applyFilter, "toolStripButton_applyFilter");
 			this.toolStripButton_applyFilter.Name = "toolStripButton_applyFilter";
-			this.toolStripButton_applyFilter.Click += new System.EventHandler(this.toolStripButton_applyFilter_Click);
+			this.toolStripButton_applyFilter.Click += new System.EventHandler(this.ToolStripButton_applyFilter_Click);
+			// 
+			// reverseBtn
+			// 
+			resources.ApplyResources(this.reverseBtn, "reverseBtn");
+			this.reverseBtn.Name = "reverseBtn";
+			this.reverseBtn.Click += new System.EventHandler(this.ReverseBtn_Click);
 			// 
 			// toolStripButton_clearFilter
 			// 
 			resources.ApplyResources(this.toolStripButton_clearFilter, "toolStripButton_clearFilter");
 			this.toolStripButton_clearFilter.Name = "toolStripButton_clearFilter";
-			this.toolStripButton_clearFilter.Click += new System.EventHandler(this.toolStripButton_clearFilter_Click);
+			this.toolStripButton_clearFilter.Click += new System.EventHandler(this.ToolStripButton_clearFilter_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
 			// 
-			// toolStripButton_saveFilter
+			// toolStripDropDownButton1
 			// 
-			resources.ApplyResources(this.toolStripButton_saveFilter, "toolStripButton_saveFilter");
-			this.toolStripButton_saveFilter.Name = "toolStripButton_saveFilter";
-			this.toolStripButton_saveFilter.Click += new System.EventHandler(this.toolStripButton_saveFilter_Click);
+			this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.highlightColorsToolStripMenuItem,
+            this.clearHighlightingToolStripMenuItem});
+			resources.ApplyResources(this.toolStripDropDownButton1, "toolStripDropDownButton1");
+			this.toolStripDropDownButton1.Margin = new System.Windows.Forms.Padding(0, 1, 2, 2);
+			this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
 			// 
-			// toolStripButton_loadFilter
+			// highlightColorsToolStripMenuItem
 			// 
-			resources.ApplyResources(this.toolStripButton_loadFilter, "toolStripButton_loadFilter");
-			this.toolStripButton_loadFilter.Name = "toolStripButton_loadFilter";
-			this.toolStripButton_loadFilter.Click += new System.EventHandler(this.toolStripButton_loadFilter_Click);
+			resources.ApplyResources(this.highlightColorsToolStripMenuItem, "highlightColorsToolStripMenuItem");
+			this.highlightColorsToolStripMenuItem.Name = "highlightColorsToolStripMenuItem";
 			// 
-			// reverseBtn
+			// clearHighlightingToolStripMenuItem
 			// 
-			resources.ApplyResources(this.reverseBtn, "reverseBtn");
-			this.reverseBtn.Name = "reverseBtn";
-			this.reverseBtn.Click += new System.EventHandler(this.reverseBtn_Click);
+			resources.ApplyResources(this.clearHighlightingToolStripMenuItem, "clearHighlightingToolStripMenuItem");
+			this.clearHighlightingToolStripMenuItem.Name = "clearHighlightingToolStripMenuItem";
+			this.clearHighlightingToolStripMenuItem.Click += new System.EventHandler(this.ClearHighlightingToolStripMenuItem_Click);
 			// 
 			// generateXliff
 			// 
 			resources.ApplyResources(this.generateXliff, "generateXliff");
 			this.generateXliff.Name = "generateXliff";
-			this.generateXliff.Click += new System.EventHandler(this.generateXliff_Click);
+			this.generateXliff.Click += new System.EventHandler(this.GenerateXliff_Click);
+			// 
+			// toolStripSeparator3
+			// 
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
+			// 
+			// toolStripButton_saveFilter
+			// 
+			resources.ApplyResources(this.toolStripButton_saveFilter, "toolStripButton_saveFilter");
+			this.toolStripButton_saveFilter.Name = "toolStripButton_saveFilter";
+			this.toolStripButton_saveFilter.Click += new System.EventHandler(this.ToolStripButton_saveFilter_Click);
+			// 
+			// toolStripButton_loadFilter
+			// 
+			resources.ApplyResources(this.toolStripButton_loadFilter, "toolStripButton_loadFilter");
+			this.toolStripButton_loadFilter.Name = "toolStripButton_loadFilter";
+			this.toolStripButton_loadFilter.Click += new System.EventHandler(this.ToolStripButton_loadFilter_Click);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
 			// 
 			// helpButton
 			// 
 			resources.ApplyResources(this.helpButton, "helpButton");
 			this.helpButton.Name = "helpButton";
-			this.helpButton.Click += new System.EventHandler(this.helpButton_Click);
+			this.helpButton.Click += new System.EventHandler(this.HelpButton_Click);
 			// 
 			// panel_filterExpression
 			// 
@@ -1030,6 +1075,61 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.pictureBox_filterStatusBarImage, "pictureBox_filterStatusBarImage");
 			this.pictureBox_filterStatusBarImage.Name = "pictureBox_filterStatusBarImage";
 			this.pictureBox_filterStatusBarImage.TabStop = false;
+			// 
+			// toolStripMenuItem_yellow
+			// 
+			this.toolStripMenuItem_yellow.Name = "toolStripMenuItem_yellow";
+			resources.ApplyResources(this.toolStripMenuItem_yellow, "toolStripMenuItem_yellow");
+			// 
+			// toolStripMenuItem_brightGreen
+			// 
+			this.toolStripMenuItem_brightGreen.Name = "toolStripMenuItem_brightGreen";
+			resources.ApplyResources(this.toolStripMenuItem_brightGreen, "toolStripMenuItem_brightGreen");
+			// 
+			// toolStripMenuItem_turquoise
+			// 
+			this.toolStripMenuItem_turquoise.Name = "toolStripMenuItem_turquoise";
+			resources.ApplyResources(this.toolStripMenuItem_turquoise, "toolStripMenuItem_turquoise");
+			// 
+			// toolStripMenuItem_pink
+			// 
+			this.toolStripMenuItem_pink.Name = "toolStripMenuItem_pink";
+			resources.ApplyResources(this.toolStripMenuItem_pink, "toolStripMenuItem_pink");
+			// 
+			// toolStripMenuItem_blue
+			// 
+			this.toolStripMenuItem_blue.Name = "toolStripMenuItem_blue";
+			resources.ApplyResources(this.toolStripMenuItem_blue, "toolStripMenuItem_blue");
+			// 
+			// toolStripMenuItem_red
+			// 
+			this.toolStripMenuItem_red.Name = "toolStripMenuItem_red";
+			resources.ApplyResources(this.toolStripMenuItem_red, "toolStripMenuItem_red");
+			// 
+			// toolStripMenuItem_darkBlue
+			// 
+			this.toolStripMenuItem_darkBlue.Name = "toolStripMenuItem_darkBlue";
+			resources.ApplyResources(this.toolStripMenuItem_darkBlue, "toolStripMenuItem_darkBlue");
+			// 
+			// toolStripMenuItem_teal
+			// 
+			this.toolStripMenuItem_teal.Name = "toolStripMenuItem_teal";
+			resources.ApplyResources(this.toolStripMenuItem_teal, "toolStripMenuItem_teal");
+			// 
+			// toolStripMenuItem_green
+			// 
+			this.toolStripMenuItem_green.Name = "toolStripMenuItem_green";
+			resources.ApplyResources(this.toolStripMenuItem_green, "toolStripMenuItem_green");
+			// 
+			// toolStripMenuItem_violet
+			// 
+			this.toolStripMenuItem_violet.Name = "toolStripMenuItem_violet";
+			resources.ApplyResources(this.toolStripMenuItem_violet, "toolStripMenuItem_violet");
+			// 
+			// toolStripMenuItem_darkRed
+			// 
+			this.toolStripMenuItem_darkRed.Name = "toolStripMenuItem_darkRed";
+			resources.ApplyResources(this.toolStripMenuItem_darkRed, "toolStripMenuItem_darkRed");
 			// 
 			// columnHeader1
 			// 
@@ -1093,7 +1193,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel7.PerformLayout();
 			this.tabPage_Colors.ResumeLayout(false);
 			this.colorLayoutPanel.ResumeLayout(false);
-			this.colorLayoutPanel.PerformLayout();
 			this.toolStrip_filter.ResumeLayout(false);
 			this.toolStrip_filter.PerformLayout();
 			this.panel_filterExpression.ResumeLayout(false);
@@ -1111,124 +1210,140 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         private System.Windows.Forms.Panel panel_body;
         private System.Windows.Forms.Panel panel_filterStatus;
         private System.Windows.Forms.ToolStrip toolStrip_filter;
-        private System.Windows.Forms.TabControl tabControl_filter;
-        private System.Windows.Forms.TabPage tabPage_content;
-        private System.Windows.Forms.CheckBox checkBox_regularExpression;
-        public System.Windows.Forms.TextBox target_textbox;
-        private System.Windows.Forms.Label label_source;
-        private System.Windows.Forms.Label label_target;
-        public System.Windows.Forms.TextBox textBox_source;
-        private System.Windows.Forms.TabPage tabPage_filters;
-        private System.Windows.Forms.Panel panel8;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.Panel panel9;
-        private System.Windows.Forms.Panel panel10;
         private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.Panel panel11;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.Label label_filterStatusBarMessage;
-        private System.Windows.Forms.TabPage tabPage_comments;
-        private System.Windows.Forms.Label label_commentText;
-        public System.Windows.Forms.TextBox textBox_commentText;
-        private System.Windows.Forms.Label label_commentSeverity;
-        private System.Windows.Forms.Label label_commentAuthor;
-        public System.Windows.Forms.TextBox textBox_commentAuthor;
-        private System.Windows.Forms.ComboBox comboBox_commentSeverity;
         private System.Windows.Forms.ToolStripButton toolStripButton_applyFilter;
         private System.Windows.Forms.ToolStripButton toolStripButton_clearFilter;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Label label_filters_selected;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Label label_fitlers_available;
-        private System.Windows.Forms.Button button_remove;
-        private System.Windows.Forms.Button button_add;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.CheckBox checkBox_caseSensitive;
         private System.Windows.Forms.Panel panel_filterStatusBar;
         private System.Windows.Forms.Panel panel_filterStatusBarImage;
         private System.Windows.Forms.PictureBox pictureBox_filterStatusBarImage;
         private System.Windows.Forms.ImageList imageList_filter;
-        private System.Windows.Forms.Label label_tab_content_filter_message;
-        private System.Windows.Forms.Label label_tab_comments_filter_message;
-        private System.Windows.Forms.Button button_removeAll;
         private System.Windows.Forms.Panel panel_buffer;
-        private System.Windows.Forms.Label label_tab_filter_message;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton toolStripButton_saveFilter;
         private System.Windows.Forms.ToolStripButton toolStripButton_loadFilter;
         private System.Windows.Forms.Panel panel_filterExpression;
         private System.Windows.Forms.Splitter splitter_filterExpression;
         private System.Windows.Forms.Panel panel_filterStatusBarMessage;
-        private System.Windows.Forms.TabPage tabPage_contextInfo;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private System.Windows.Forms.Label label_documentStructure_message;
-        private System.Windows.Forms.ListView listView_contextInfo;
-        private System.Windows.Forms.ColumnHeader columnHeader_code;
-        private System.Windows.Forms.ColumnHeader columnHeader_name;
-        private System.Windows.Forms.ColumnHeader columnHeader_description;
-        private ListViewExtended listView_selected;
-        private ListViewExtended listView_available;
-        private ColumnHeader columnHeader_filtersSelected_name;
-        private ColumnHeader columnHeader_filtersAvailable_name;
         private FilterExpression filterExpressionControl;
-        private LinkLabel linkLabel_contextInfoClearSelection;
-        private Label label_contextInfoSelected;
-		private TabPage tabPage_segmentNumbers;
-		private GroupBox groupBox1;
-		private RadioButton evenBtn;
-		private RadioButton oddBtn;
-		private RadioButton groupedBtn;
-		private TextBox segmentsBox;
 		private ContextMenuStrip contextMenuStrip1;
-		private Label label1;
+		private System.ComponentModel.BackgroundWorker backgroundWorker1;
+		private ToolStripButton reverseBtn;
+		private ToolStripButton helpButton;
+		private ToolStripButton generateXliff;
+		private System.ComponentModel.BackgroundWorker backgroundWorker2;
+		private ToolTip tags_tooltip;
+		private ToolTip content_toolTips;
+		private ToolStripDropDownButton toolStripDropDownButton1;
+		private ToolStripMenuItem clearHighlightingToolStripMenuItem;
+		private ToolStripSeparator toolStripSeparator3;
+		private ToolStripSeparator toolStripSeparator2;
+		private TabControl tabControl_filter;
+		private TabPage tabPage_content;
+		private TableLayoutPanel tableLayoutPanel1;
+		private Label label_source;
+		public TextBox textBox_source;
+		private CheckBox checkBox_caseSensitive;
+		private Label label_target;
+		public TextBox target_textbox;
+		private CheckBox checkBox_regularExpression;
+		private Label label_tab_content_filter_message;
+		private Label label_dsiLocation;
+		private TextBox dsiLocation_textbox;
+		private Panel panel1;
+		private CheckBox checkBox_TagContent;
+		private GroupBox content_groupBox;
+		private RadioButton alsoTags_radioButton;
+		private RadioButton onlyTags_radioButton;
+		private Panel panel2;
+		private Panel panel6;
+		private ComboBox comboBox_SourceTargetFilterLogicalOperator;
+		private Panel panel3;
+		private PictureBox pictureBox1;
+		private CheckBox checkBox_useBackReferences;
+		private TabPage tabPage_filters;
+		private Panel panel8;
+		private TableLayoutPanel tableLayoutPanel2;
+		private Label label_tab_filter_message;
+		private Panel panel9;
+		private Button button_removeAll;
+		private Button button_remove;
+		private Button button_add;
+		private Panel panel10;
+		private ListViewExtended listView_selected;
+		private ColumnHeader columnHeader_filtersSelected_name;
+		private Panel panel5;
+		private Label label_filters_selected;
+		private Panel panel11;
+		private ListViewExtended listView_available;
+		private ColumnHeader columnHeader_filtersAvailable_name;
+		private Panel panel4;
+		private Label label_fitlers_available;
+		private TabPage tabPage_comments;
+		private TableLayoutPanel tableLayoutPanel3;
+		private ComboBox comboBox_commentSeverity;
+		private Label label_commentText;
+		private Label label_commentSeverity;
+		public TextBox textBox_commentText;
+		public TextBox textBox_commentAuthor;
+		private Label label_commentAuthor;
+		private Label label_tab_comments_filter_message;
 		private CheckBox commentRegexBox;
+		private TabPage tabPage_contextInfo;
+		private TableLayoutPanel tableLayoutPanel4;
+		private Label label_documentStructure_message;
+		private ListView listView_contextInfo;
+		private ColumnHeader columnHeader_code;
+		private ColumnHeader columnHeader_name;
+		private ColumnHeader columnHeader_description;
+		private LinkLabel linkLabel_contextInfoClearSelection;
+		private Label label_contextInfoSelected;
+		private TabPage tabPage_segmentNumbers;
+		private GroupBox groupBox2;
+		private TextBox fuzzyMin;
+		private TextBox fuzzyMax;
+		private Label label5;
+		private Panel panel_spacer_01;
+		private GroupBox userBox;
+		private TextBox createdByBox;
+		private CheckBox createdByCheck;
+		private TextBox modifiedByBox;
+		private CheckBox modifiedByCheck;
+		private Label userLabel;
+		private Panel panel_spacer_02;
+		private GroupBox segmentsGroupBox;
+		private CheckBox containsTagsCheckBox;
+		private CheckBox mergedAcross;
+		private CheckBox mergedCheckbox;
+		private CheckBox splitCheckBox;
+		private CheckBox sourceSameBox;
+		private CheckBox equalsCaseSensitive;
+		private Panel panel_spacer_03;
+		private GroupBox groupBox1;
+		private Panel panel7;
+		private TextBox segmentsBox;
+		private Label label1;
+		private RadioButton noneBtn;
+		private RadioButton groupedBtn;
+		private RadioButton oddBtn;
+		private RadioButton evenBtn;
+		private Panel panel_spacer_05;
 		private TabPage tabPage_Colors;
 		private TableLayoutPanel colorLayoutPanel;
 		private Label label6;
 		private ListView colorsListView;
-		private GroupBox segmentsGroupBox;
-		private System.ComponentModel.BackgroundWorker backgroundWorker1;
-		private CheckBox sourceSameBox;
-		private CheckBox equalsCaseSensitive;
-		private TextBox fuzzyMax;
-		private Label label5;
-		private TextBox fuzzyMin;
-		private ToolStripButton reverseBtn;
-		private CheckBox mergedAcross;
-		private CheckBox splitCheckBox;
-		private CheckBox mergedCheckbox;
-		private GroupBox groupBox2;
-		private CheckBox containsTagsCheckBox;
-		private GroupBox userBox;
-		private Label userLabel;
-		private TextBox modifiedByBox;
-		private CheckBox modifiedByCheck;
-		private TextBox createdByBox;
-		private CheckBox createdByCheck;
-		private ToolStripButton helpButton;
-		private ToolStripButton generateXliff;
-		private RadioButton noneBtn;
-		private Label label_dsiLocation;
-		private TextBox stringId_textbox;
-		private GroupBox content_groupBox;
-		private System.ComponentModel.BackgroundWorker backgroundWorker2;
-		private RadioButton alsoTags_radioButton;
-		private RadioButton onlyTags_radioButton;
-		private CheckBox checkBox_TagContent;
-		private ToolTip tags_tooltip;
-		private Panel panel1;
-		private Panel panel2;
-		private Panel panel3;
-		private PictureBox pictureBox1;
-		private Panel panel6;
-		private ComboBox comboBox_SourceTargetFilterLogicalOperator;
-		private Panel panel_spacer_05;
-		private Panel panel_spacer_03;
-		private Panel panel_spacer_02;
-		private Panel panel_spacer_01;
-		private CheckBox checkBox_useBackReferences;
-		private ToolTip content_toolTips;
-		private Panel panel7;
+		private ToolStripMenuItem highlightColorsToolStripMenuItem;
+		private ToolStripMenuItem toolStripMenuItem_yellow;
+		private ToolStripMenuItem toolStripMenuItem_brightGreen;
+		private ToolStripMenuItem toolStripMenuItem_turquoise;
+		private ToolStripMenuItem toolStripMenuItem_pink;
+		private ToolStripMenuItem toolStripMenuItem_blue;
+		private ToolStripMenuItem toolStripMenuItem_red;
+		private ToolStripMenuItem toolStripMenuItem_darkBlue;
+		private ToolStripMenuItem toolStripMenuItem_teal;
+		private ToolStripMenuItem toolStripMenuItem_green;
+		private ToolStripMenuItem toolStripMenuItem_violet;
+		private ToolStripMenuItem toolStripMenuItem_darkRed;
 	}
 }

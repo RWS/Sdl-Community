@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
+using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.Toolkit.FileType;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Extensions
+namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 {
 	public static class DisplayFilterRowInfoExtension
 	{

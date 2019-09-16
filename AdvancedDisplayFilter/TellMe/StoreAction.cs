@@ -2,7 +2,7 @@
 using System.Drawing;
 using Sdl.TellMe.ProviderApi;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.TellMe
+namespace Sdl.Community.AdvancedDisplayFilter.TellMe
 {
 	public class StoreAction : AbstractTellMeAction
 	{

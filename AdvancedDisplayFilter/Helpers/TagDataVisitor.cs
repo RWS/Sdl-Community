@@ -3,7 +3,7 @@ using System.Drawing;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Formatting;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
+namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public class TagDataVisitor : IMarkupDataVisitor
 	{
@@ -95,7 +95,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			try
 			{
 				var key = formatting.Key;
-				if (!key.Equals("TextColor"))
+				if (!key.Equals("TextColor") && !key.Equals("BackgroundColor"))
 				{
 					return;
 				}

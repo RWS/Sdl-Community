@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
-using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
+using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.Toolkit.FileType;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls

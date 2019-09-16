@@ -3,7 +3,7 @@ using Sdl.Community.AdvancedDisplayFilter.Controls;
 using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.TellMe
+namespace Sdl.Community.AdvancedDisplayFilter.TellMe
 {
 	public class OpenAdvancedDisplayFilter : AbstractTellMeAction
 	{

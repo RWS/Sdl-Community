@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
-using Sdl.Community.Plugins.AdvancedDisplayFilter.Extensions;
+using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
+using Sdl.Community.AdvancedDisplayFilter.Extensions;
 using Sdl.Community.Toolkit.FileType;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
+namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public static class CustomFilterHelper
 	{
