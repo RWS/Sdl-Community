@@ -848,6 +848,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// noneBtn
 			// 
 			resources.ApplyResources(this.noneBtn, "noneBtn");
+			this.noneBtn.Checked = true;
 			this.noneBtn.Name = "noneBtn";
 			this.noneBtn.TabStop = true;
 			this.noneBtn.UseVisualStyleBackColor = true;
@@ -857,7 +858,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.groupedBtn, "groupedBtn");
 			this.groupedBtn.Name = "groupedBtn";
-			this.groupedBtn.TabStop = true;
 			this.groupedBtn.UseVisualStyleBackColor = true;
 			this.groupedBtn.CheckedChanged += new System.EventHandler(this.GroupedBtn_CheckedChanged);
 			// 
@@ -865,7 +865,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.oddBtn, "oddBtn");
 			this.oddBtn.Name = "oddBtn";
-			this.oddBtn.TabStop = true;
 			this.oddBtn.UseVisualStyleBackColor = true;
 			this.oddBtn.CheckedChanged += new System.EventHandler(this.OddBtn_CheckedChanged);
 			// 
@@ -873,7 +872,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.evenBtn, "evenBtn");
 			this.evenBtn.Name = "evenBtn";
-			this.evenBtn.TabStop = true;
 			this.evenBtn.UseVisualStyleBackColor = true;
 			this.evenBtn.CheckedChanged += new System.EventHandler(this.EvenBtn_CheckedChanged);
 			// 

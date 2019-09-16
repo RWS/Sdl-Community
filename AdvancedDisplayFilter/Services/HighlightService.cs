@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Sdl.Community.AdvancedDisplayFilter.Helpers;
@@ -13,11 +14,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 	public class HighlightService
 	{
 		private const string CadfBackgroundColorKey = "CADFBackgroundColorKey";
+		private readonly List<HighlightColor> _highlightColors;
 
 		public enum HighlightScrope
 		{
 			Filtered,
 			Active
+		}
+
+		public HighlightService()
+		{
+			_highlightColors = GetHighlightColors();
 		}
 
 		public void ApplyHighlighting(Document document, HighlightScrope highlightScrope, HighlightColor highlightColor)
@@ -30,10 +37,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			{
 				return;
 			}
-		
+
 			var allTagIds = GetAllTagIds(document);
 			var seed = GetLargestSeedValue(allTagIds);
-						
+
 			var itemFactory = document.ItemFactory;
 			var propertyFactory = itemFactory.PropertiesFactory;
 			var formattingFactory = propertyFactory.FormattingItemFactory;
@@ -41,14 +48,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 			foreach (var segmentPair in segments)
 			{
-				var item = segmentPair.Target.AllSubItems.FirstOrDefault();
-				if (item is ITagPair tagPair)
+				var hashighlightColor = HasHighlightColor(segmentPair, out var existingHighlightColor);
+				if (hashighlightColor)
 				{
-					if (tagPair.StartTagProperties?.Formatting == null ||
-						tagPair.StartTagProperties.Formatting.ContainsKey(CadfBackgroundColorKey))
+					if (existingHighlightColor != null &&
+					    string.Equals(existingHighlightColor.Name, highlightColor.Name, StringComparison.InvariantCultureIgnoreCase))
 					{
-						continue;
+						continue;										
 					}
+
+					// remove the existing hightlight color if different to existing	
+					RemoveHighlightColor(segmentPair);
 				}
 
 				var tagId = GetNextTagId(allTagIds, seed);
@@ -63,7 +73,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 				document.UpdateSegmentPair(segmentPair);
 			}
-		}	
+		}
 
 		public void ClearHighlighting(Document document, HighlightScrope highlightScrope)
 		{
@@ -99,21 +109,25 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			}
 		}
 
-		public List<HighlightColor> GetDefaultHighlightColors()
+		public List<HighlightColor> GetHighlightColors()
 		{
 			var colors = new List<HighlightColor>
 			{
-				new HighlightColor(Color.Yellow, "Yellow", PluginResources.square_yellow),
-				new HighlightColor(Color.FromArgb(0, 102, 255, 0), "Bright Green", PluginResources.square_brightGreen),
-				new HighlightColor(Color.Turquoise, "Turquoise", PluginResources.square_turquoise),
-				new HighlightColor(Color.Pink, "Pink", PluginResources.square_pink),
-				new HighlightColor(Color.Blue, "Blue", PluginResources.square_blue),
-				new HighlightColor(Color.Red, "Red", PluginResources.square_red),
-				new HighlightColor(Color.DarkBlue, "Dark Blue", PluginResources.square_darkBlue),
-				new HighlightColor(Color.Teal, "Teal", PluginResources.square_teal),
-				new HighlightColor(Color.Green, "Green", PluginResources.square_green),
-				new HighlightColor(Color.Violet, "Violet", PluginResources.square_violet),
-				new HighlightColor(Color.DarkRed, "Dark Red", PluginResources.square_darkRed)
+				new HighlightColor(Color.FromArgb(0, 255, 255, 0), "Yellow", "yellow", PluginResources.rounded_yellow),
+				new HighlightColor(Color.FromArgb(0, 0, 255, 0), "Green", "green", PluginResources.rounded_green),
+				new HighlightColor(Color.FromArgb(0, 0, 255, 255), "Cyan", "cyan", PluginResources.rounded_cyan),
+				new HighlightColor(Color.FromArgb(0, 255, 0, 255), "Magenta", "magenta", PluginResources.rounded_magenta),
+				new HighlightColor(Color.FromArgb(0, 0, 0, 255), "Blue", "blue", PluginResources.rounded_blue),
+				new HighlightColor(Color.FromArgb(0, 255, 0, 0), "Red", "red", PluginResources.rounded_red),
+				new HighlightColor(Color.FromArgb(0, 0, 0, 128), "Dark Blue", "darkBlue", PluginResources.rounded_darkBlue),
+				new HighlightColor(Color.FromArgb(0, 0, 128, 128), "Dark Cyan", "darkCyan", PluginResources.rounded_darkCyan),
+				new HighlightColor(Color.FromArgb(0, 0, 128, 0), "Dark Green", "darkGreen", PluginResources.rounded_darkGreen),
+				new HighlightColor(Color.FromArgb(0, 128, 0, 128), "Dark Magenta", "darkMagenta", PluginResources.rounded_darkMagenta),
+				new HighlightColor(Color.FromArgb(0, 128, 0, 0), "Dark Red", "darkRed", PluginResources.rounded_darkRed),
+				new HighlightColor(Color.FromArgb(0, 128, 128, 0), "Dark Yellow", "darkYellow", PluginResources.rounded_darkYellow),
+				new HighlightColor(Color.FromArgb(0, 128, 128, 128), "Dark Gray", "darkGray", PluginResources.rounded_darkGray),
+				new HighlightColor(Color.FromArgb(0, 192, 192, 192), "Light Gray", "lightGray", PluginResources.rounded_lightGray),
+				new HighlightColor(Color.FromArgb(0, 0, 0, 0), "Black", "black", PluginResources.rounded_black)
 			};
 
 			return colors;
@@ -135,7 +149,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			}
 
 			return seed;
-		}				
+		}
 
 		private static IEndTagProperties CreateEndTagProperties(IPropertiesFactory propertyFactory)
 		{
@@ -253,6 +267,56 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			};
 
 			return dictionary;
+		}
+
+		private bool HasHighlightColor(ISegmentPair segmentPair, out HighlightColor highlightColor)
+		{
+			highlightColor = null;
+
+			var item = segmentPair.Target.AllSubItems.FirstOrDefault();
+			if (item is ITagPair tagPair)
+			{
+				if (tagPair.StartTagProperties.Formatting != null &&
+					tagPair.StartTagProperties.Formatting.ContainsKey("BackgroundColor") &&
+					tagPair.StartTagProperties != null &&
+					tagPair.StartTagProperties.MetaDataContainsKey(CadfBackgroundColorKey))
+				{
+					var argbValue = tagPair.StartTagProperties.Formatting.FirstOrDefault(a => a.Key == "BackgroundColor").Value;
+					highlightColor = GetHighlightColorFromArgb(argbValue.StringValue);
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private static void RemoveHighlightColor(ISegmentPair segmentPair)
+		{
+			var item = segmentPair.Target.AllSubItems.FirstOrDefault();
+			if (item is ITagPair tagPair)
+			{
+				if (tagPair.StartTagProperties?.Formatting != null &&
+					tagPair.StartTagProperties.MetaDataContainsKey(CadfBackgroundColorKey))
+				{
+					segmentPair.Target.Clear();
+					tagPair.MoveAllItemsTo(segmentPair.Target);					
+				}
+			}
+		}
+
+		private HighlightColor GetHighlightColorFromArgb(string argbValue)
+		{
+			foreach (var highlightColor in _highlightColors)
+			{
+				var argb = highlightColor.GetArgb();
+				if (string.Compare(argb, argbValue, StringComparison.InvariantCultureIgnoreCase) == 0)
+				{
+					return highlightColor;
+				}
+			}
+
+			return null;
 		}
 	}
 }

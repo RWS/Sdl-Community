@@ -148,37 +148,49 @@
   <data name="AdvancedDisplayFilter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\advanceddisplayfilter.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="square_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\square-blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rounded_black" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-black.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="square_brightGreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\square-brightGreen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rounded_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="square_darkBlue" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\square-darkBlue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rounded_cyan" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-cyan.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="square_darkRed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\square-darkRed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rounded_darkBlue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-darkBlue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="square_green" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\square-green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rounded_darkCyan" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-darkCyan.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="square_pink" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\square-pink.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rounded_darkGray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-darkGray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="square_red" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\square-red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rounded_darkGreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-darkGreen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="square_teal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\square-teal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rounded_darkMagenta" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-darkMagenta.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="square_turquoise" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\square-turquoise.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rounded_darkRed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-darkRed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="square_violet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\square-violet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rounded_darkYellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-darkYellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="square_yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\square-yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="rounded_green" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="rounded_lightGray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-lightGray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="rounded_magenta" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-magenta.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="rounded_red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="rounded_yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\rounded-yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

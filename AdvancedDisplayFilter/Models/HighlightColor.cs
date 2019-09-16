@@ -4,9 +4,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Models
 {
 	public class HighlightColor
 	{		
-		public HighlightColor(Color color, string name, Image image)
+		public HighlightColor(Color color, string displayName, string name, Image image)
 		{
 			Color = color;
+			DisplayName = displayName;
 			Name = name;
 			Image = image;
 		}
@@ -14,6 +15,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Models
 		public Color Color { get; set; }
 
 		public string Name { get; set; }
+
+		public string DisplayName { get; set; }
 
 		public Image Image { get; set; }
 

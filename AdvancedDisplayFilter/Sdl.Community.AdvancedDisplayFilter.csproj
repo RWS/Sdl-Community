@@ -209,17 +209,21 @@
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Content Include="Images\Parenthesis.jpg" />
-    <None Include="Images\square-yellow.png" />
-    <None Include="Images\square-blue.png" />
-    <None Include="Images\square-brightGreen.png" />
-    <None Include="Images\square-darkBlue.png" />
-    <None Include="Images\square-darkRed.png" />
-    <None Include="Images\square-green.png" />
-    <None Include="Images\square-pink.png" />
-    <None Include="Images\square-red.png" />
-    <None Include="Images\square-teal.png" />
-    <None Include="Images\square-turquoise.png" />
-    <None Include="Images\square-violet.png" />
+    <None Include="Images\rounded-yellow.png" />
+    <None Include="Images\rounded-black.png" />
+    <None Include="Images\rounded-blue.png" />
+    <None Include="Images\rounded-cyan.png" />
+    <None Include="Images\rounded-darkBlue.png" />
+    <None Include="Images\rounded-darkCyan.png" />
+    <None Include="Images\rounded-darkGray.png" />
+    <None Include="Images\rounded-darkGreen.png" />
+    <None Include="Images\rounded-darkMagenta.png" />
+    <None Include="Images\rounded-darkRed.png" />
+    <None Include="Images\rounded-darkYellow.png" />
+    <None Include="Images\rounded-green.png" />
+    <None Include="Images\rounded-lightGray.png" />
+    <None Include="Images\rounded-magenta.png" />
+    <None Include="Images\rounded-red.png" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>

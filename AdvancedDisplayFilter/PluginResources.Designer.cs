@@ -160,9 +160,9 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap square_blue {
+        internal static System.Drawing.Bitmap rounded_black {
             get {
-                object obj = ResourceManager.GetObject("square_blue", resourceCulture);
+                object obj = ResourceManager.GetObject("rounded_black", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -170,9 +170,9 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap square_brightGreen {
+        internal static System.Drawing.Bitmap rounded_blue {
             get {
-                object obj = ResourceManager.GetObject("square_brightGreen", resourceCulture);
+                object obj = ResourceManager.GetObject("rounded_blue", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -180,9 +180,9 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap square_darkBlue {
+        internal static System.Drawing.Bitmap rounded_cyan {
             get {
-                object obj = ResourceManager.GetObject("square_darkBlue", resourceCulture);
+                object obj = ResourceManager.GetObject("rounded_cyan", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -190,9 +190,9 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap square_darkRed {
+        internal static System.Drawing.Bitmap rounded_darkBlue {
             get {
-                object obj = ResourceManager.GetObject("square_darkRed", resourceCulture);
+                object obj = ResourceManager.GetObject("rounded_darkBlue", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -200,9 +200,9 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap square_green {
+        internal static System.Drawing.Bitmap rounded_darkCyan {
             get {
-                object obj = ResourceManager.GetObject("square_green", resourceCulture);
+                object obj = ResourceManager.GetObject("rounded_darkCyan", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -210,9 +210,9 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap square_pink {
+        internal static System.Drawing.Bitmap rounded_darkGray {
             get {
-                object obj = ResourceManager.GetObject("square_pink", resourceCulture);
+                object obj = ResourceManager.GetObject("rounded_darkGray", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -220,9 +220,9 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap square_red {
+        internal static System.Drawing.Bitmap rounded_darkGreen {
             get {
-                object obj = ResourceManager.GetObject("square_red", resourceCulture);
+                object obj = ResourceManager.GetObject("rounded_darkGreen", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -230,9 +230,9 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap square_teal {
+        internal static System.Drawing.Bitmap rounded_darkMagenta {
             get {
-                object obj = ResourceManager.GetObject("square_teal", resourceCulture);
+                object obj = ResourceManager.GetObject("rounded_darkMagenta", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -240,9 +240,9 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap square_turquoise {
+        internal static System.Drawing.Bitmap rounded_darkRed {
             get {
-                object obj = ResourceManager.GetObject("square_turquoise", resourceCulture);
+                object obj = ResourceManager.GetObject("rounded_darkRed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -250,9 +250,9 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap square_violet {
+        internal static System.Drawing.Bitmap rounded_darkYellow {
             get {
-                object obj = ResourceManager.GetObject("square_violet", resourceCulture);
+                object obj = ResourceManager.GetObject("rounded_darkYellow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -260,9 +260,49 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap square_yellow {
+        internal static System.Drawing.Bitmap rounded_green {
             get {
-                object obj = ResourceManager.GetObject("square_yellow", resourceCulture);
+                object obj = ResourceManager.GetObject("rounded_green", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap rounded_lightGray {
+            get {
+                object obj = ResourceManager.GetObject("rounded_lightGray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap rounded_magenta {
+            get {
+                object obj = ResourceManager.GetObject("rounded_magenta", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap rounded_red {
+            get {
+                object obj = ResourceManager.GetObject("rounded_red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap rounded_yellow {
+            get {
+                object obj = ResourceManager.GetObject("rounded_yellow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

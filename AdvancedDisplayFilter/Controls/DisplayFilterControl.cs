@@ -1421,11 +1421,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 			highlightColorsToolStripMenuItem.DropDownItems.Clear();
 
-			foreach (var highlightColor in _highlightService.GetDefaultHighlightColors())
+			foreach (var highlightColor in _highlightService.GetHighlightColors())
 			{
 				var toolStripItem = new ToolStripMenuItem
 				{
-					Text = highlightColor.Name,
+					Text = highlightColor.DisplayName,
 					Image = highlightColor.Image,
 					Tag = highlightColor
 				};
