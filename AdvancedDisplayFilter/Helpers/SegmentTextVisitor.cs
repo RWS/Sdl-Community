@@ -5,49 +5,46 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public class SegmentTextVisitor : IMarkupDataVisitor
 	{
-		private enum DetailLevel
+		public enum DetailLevel
 		{
 			JustText,
 			Raw,
 			JustTagContent
 		}
 
-		private readonly StringBuilder _textBuilder = new StringBuilder();
+		private readonly StringBuilder _textBuilder;
 		private DetailLevel _detailLevel;
 
-		public string GetText(ISegment segment)
+		public SegmentTextVisitor()
+		{
+			_textBuilder = new StringBuilder();
+			_detailLevel = DetailLevel.JustText;
+		}
+
+		public string GetText(ISegment segment, DetailLevel detailLevel = DetailLevel.JustText)
 		{
 			_textBuilder.Clear();
-			_detailLevel = DetailLevel.JustText;
+			_detailLevel = detailLevel;
+
 			VisitChildren(segment);
 
 			return _textBuilder.ToString();
 		}
 
-		public string GetRawText(ISegment segment)
-		{
-			_textBuilder.Clear();
-			_detailLevel = DetailLevel.Raw;
-			return GetText(segment);
-		}
-
-		public string GetJustTagContent(ISegment segment)
-		{
-			_textBuilder.Clear();
-			_detailLevel = DetailLevel.JustTagContent;
-			return GetText(segment);
-		}
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
 		{
+			// ignore; not used in this implementation
 		}
 
 		public void VisitLocationMarker(ILocationMarker location)
 		{
+			// ignore; not used in this implementation
 		}
 
 		public void VisitLockedContent(ILockedContent lockedContent)
 		{
+			// ignore; not used in this implementation
 		}
 
 		public void VisitOtherMarker(IOtherMarker marker)
@@ -69,6 +66,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
 		{
+			// ignore; not used in this implementation
 		}
 
 		public void VisitSegment(ISegment segment)
@@ -78,14 +76,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 		public void VisitTagPair(ITagPair tagPair)
 		{
-			if (_detailLevel == DetailLevel.JustText)
+			switch (_detailLevel)
 			{
-				VisitChildren(tagPair);
-			}
-			else if (_detailLevel == DetailLevel.JustTagContent)
-			{
-				_textBuilder.Append(tagPair.TagProperties.TagContent);
-				VisitChildren(tagPair);
+				case DetailLevel.JustText:
+					{
+						VisitChildren(tagPair);
+					}
+					break;
+				case DetailLevel.JustTagContent:
+					{
+						_textBuilder.Append(tagPair.TagProperties.TagContent);
+
+						VisitChildren(tagPair);
+					}
+					break;
 			}
 		}
 
@@ -100,7 +104,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 		private void VisitChildren(IAbstractMarkupDataContainer container)
 		{
 			if (container == null)
+			{
 				return;
+			}
+
 			if (_detailLevel == DetailLevel.Raw)
 			{
 				_textBuilder.Append(container);

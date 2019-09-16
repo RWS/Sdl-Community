@@ -293,8 +293,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			if (CustomSettings.UseTagContent)
 			{
 				text = CustomSettings.AndOrTagContent
-					? textVisitor.GetRawText(segment)
-					: textVisitor.GetJustTagContent(segment);
+					? textVisitor.GetText(segment, SegmentTextVisitor.DetailLevel.Raw)
+					: textVisitor.GetText(segment, SegmentTextVisitor.DetailLevel.JustTagContent);
 			}
 			else
 			{
