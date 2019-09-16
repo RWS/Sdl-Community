@@ -1439,13 +1439,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			if (sender is ToolStripMenuItem toolStripButton && toolStripButton.Tag is HighlightColor highlightColor)
 			{
-				_highlightService.ApplyHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered, highlightColor);
+				_highlightService.ApplyHighlightColor(_activeDocument, HighlightService.HighlightScope.Filtered, highlightColor);
 			}
 		}
 
 		private void ClearHighlightingToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			_highlightService.ClearHighlighting(_activeDocument, HighlightService.HighlightScrope.Filtered);
+			_highlightService.ClearHighlightColors(_activeDocument, HighlightService.HighlightScope.Filtered);
 		}
 
 		#endregion

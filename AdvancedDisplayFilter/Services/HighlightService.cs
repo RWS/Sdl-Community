@@ -16,7 +16,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 		private const string CadfBackgroundColorKey = "CADFBackgroundColorKey";
 		private readonly List<HighlightColor> _highlightColors;
 
-		public enum HighlightScrope
+		public enum HighlightScope
 		{
 			Filtered,
 			Active
@@ -27,9 +27,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			_highlightColors = GetHighlightColors();
 		}
 
-		public void ApplyHighlighting(Document document, HighlightScrope highlightScrope, HighlightColor highlightColor)
+		public void ApplyHighlightColor(Document document, HighlightScope highlightScope, HighlightColor highlightColor)
 		{
-			var segments = highlightScrope == HighlightScrope.Filtered
+			var segments = highlightScope == HighlightScope.Filtered
 				? document?.FilteredSegmentPairs?.ToList()
 				: new List<ISegmentPair> { document.GetActiveSegmentPair() };
 
@@ -57,7 +57,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 						continue;										
 					}
 
-					// remove the existing hightlight color if different to existing	
 					RemoveHighlightColor(segmentPair);
 				}
 
@@ -75,9 +74,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			}
 		}
 
-		public void ClearHighlighting(Document document, HighlightScrope highlightScrope)
+		public void ClearHighlightColors(Document document, HighlightScope highlightScope)
 		{
-			var segments = highlightScrope == HighlightScrope.Filtered
+			var segments = highlightScope == HighlightScope.Filtered
 				? document?.FilteredSegmentPairs?.ToList()
 				: new List<ISegmentPair> { document.GetActiveSegmentPair() };
 
