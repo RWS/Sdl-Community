@@ -127,6 +127,11 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Amazon Translate](https://appstore.sdl.com/language/app/amazon-translate-mt-provider/925/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AmazonTranslateTradosPlugin)|
 | [ETS Translation Provider](https://appstore.sdl.com/language/app/sdl-ets/843/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ETS%20Translation%20Provider)|
 | [ApplyTM Template](https://appstore.sdl.com/language/app/applytm-template/966/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ApplyTMTemplate)|
+| [SDLTM Repair](https://appstore.sdl.com/language/app/sdltm-repair/298/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLTMRepair)|
+| [TAUS Search](https://appstore.sdl.com/language/app/taus-search/164/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TAUS%20Data%20Search)|
+| [SDL TMBackup](https://appstore.sdl.com/language/app/sdl-tmbackup/869/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMBackup)|
+| [SDL Translation Memory Management Utility](https://appstore.sdl.com/language/app/sdl-translation-memory-management-utility/131/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TranslationMemoryManagementUtility)|
+| [TuToTm](https://appstore.sdl.com/language/app/tutotm/998/) |  [Documentation](https://github.com/sdl/Sdl-Community)|
 
 ## Integration Api
 
@@ -144,6 +149,16 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Qualitivity](http://appstore.sdl.com/app/qualitivity/612/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Qualitivity)|
 | [AutoHotKey Manager](https://appstore.sdl.com/language/app/autohotkey-manager/893/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AHK%20plugin)|
 | [DSI Viewer](https://appstore.sdl.com/language/app/dsi-viewer/995/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/DSI%20Viewer)|
+| [GrpupShare Version Fetch](https://appstore.sdl.com/language/app/groupshare-version-fetch/993/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/GroupShare%20VersionFetch)|
+| [SDL Studio InQuote](https://appstore.sdl.com/language/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/InvoiceAndQuotes)|
+| [Jobs](https://appstore.sdl.com/language/app/jobs/463/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Jobs)|
+| [Legit](https://appstore.sdl.com/language/app/sdl-legit/299/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legit)|
+| [SDL Data Protection Suite](https://appstore.sdl.com/language/app/sdl-data-protection-suite/936/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLDataProtectionSuite)|
+| [SDL Fresh Start](https://appstore.sdl.com/language/app/sdl-freshstart/876/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SdlFreshstart)|
+| [Stylesheet Verifier](https://appstore.sdl.com/language/app/stylesheet-verifier/870/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/StyleSheetVerifier)|
+| [Time Tracker](https://appstore.sdl.com/language/app/studio-time-tracker/361/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Time%20Tracker)|
+| [Variables Manager](https://appstore.sdl.com/language/app/variables-manager-for-sdl-trados-studio/297/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/VariablesManager)|
+| [#YourProductivity](https://appstore.sdl.com/language/app/yourproductivity/491/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourProductivity)|
 
 
 ## FileType Support API
@@ -166,7 +181,9 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Toolkit](http://appstore.sdl.com/app/sdlxliff-toolkit/296/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Toolkit)|
 | [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
 | [Word Cloud](http://appstore.sdl.com/app/sdl-trados-studio-word-cloud/402/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Word%20Cloud)|
-  
+| [MXLIFF File Type](https://appstore.sdl.com/language/app/mxliff-file-type/962/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/FileTypeSupport.MXLIFF)|
+| [XML Reader](https://appstore.sdl.com/language/app/xml-reader/845/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/XML%20Reader)|
+		
 ## Other plugins
 
 | Plugin Name | Description |
