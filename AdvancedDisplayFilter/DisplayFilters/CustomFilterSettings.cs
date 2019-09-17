@@ -12,6 +12,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 
 		public LogicalOperators SourceAndTargetLogicalOperator { get; set; }
 		public bool UseBackreferences { get; set; }
+
+		public bool QualitySamplingSegmentSelection { get; set; }
+		public bool QualitySamplingMinMaxCharacters { get; set; }
+		public bool QualitySamplingRandomlySelect { get; set; }
+		public bool QualitySamplingSelectOneInEvery { get; set; }
+		public int QualitySamplingRandomlySelectValue { get; set; }
+		public int QualitySamplingSelectOneInEveryValue { get; set; }
+		public int QualitySamplingMinCharsValue { get; set; }
+		public int QualitySamplingMaxCharsValue { get; set; }
+		
+		public List<string> QualitySamplingSegmentsIds { get; set; }
+
 		public bool OddsNo { get; set; }
 		public bool EvenNo { get; set; }
 		public bool Grouped { get; set; }
@@ -36,7 +48,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 		public string CreatedBy { get; set; }
 		public bool EditedFuzzy { get; set; }
 		public bool UnEditedFuzzy { get; set; }
-		public string ContextInfoStringId { get; set; }
+		public string DocumentStructureInfoLocation { get; set; }
 		public bool UseTagContent { get; set; }
 
 		/// <summary>

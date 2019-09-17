@@ -355,4 +355,16 @@
 	<data name="DisplayFilterControl_Use_Backreferences" xml:space="preserve">
     <value>Use Backreferences</value>
   </data>
+	<data name="DisplayFilterControl_RandomlySelect" xml:space="preserve">
+    <value>Randomly select</value>
+  </data>
+	<data name="DisplayFilterControl_Select1InEvery" xml:space="preserve">
+    <value>Select 1 in every</value>
+  </data>
+	<data name="DisplayFilterControl_MaxChars" xml:space="preserve">
+    <value>Max chars</value>
+  </data>
+	<data name="DisplayFilterControl_MinChars" xml:space="preserve">
+    <value>Min chars</value>
+  </data>
 </root>

@@ -322,6 +322,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Max chars.
+        /// </summary>
+        internal static string DisplayFilterControl_MaxChars {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_MaxChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Merged segments across paragraphs.
         /// </summary>
         internal static string DisplayFilterControl_MergedAcross {
@@ -345,6 +354,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_MidifiedBy {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_MidifiedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Min chars.
+        /// </summary>
+        internal static string DisplayFilterControl_MinChars {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_MinChars", resourceCulture);
             }
         }
         
@@ -430,6 +448,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Randomly select.
+        /// </summary>
+        internal static string DisplayFilterControl_RandomlySelect {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_RandomlySelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Regular Expression.
         /// </summary>
         internal static string DisplayFilterControl_Regular_Expression {
@@ -507,6 +534,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Segments_With_tags {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Segments_With_tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select 1 in every.
+        /// </summary>
+        internal static string DisplayFilterControl_Select1InEvery {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Select1InEvery", resourceCulture);
             }
         }
         
