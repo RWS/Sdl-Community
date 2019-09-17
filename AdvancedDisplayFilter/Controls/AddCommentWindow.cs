@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Controls
+namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
 	public partial class AddCommentWindow : Form
 	{

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
-using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
+using Sdl.Community.AdvancedDisplayFilter.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 using static System.Int32;
 
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
+namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public static class FuzzyHelper
 	{
-		public static bool IsInFuzzyRange(DisplayFilterRowInfo row,string fuzzyMin,string fuzzyMax)
+		public static bool IsInFuzzyRange(DisplayFilterRowInfo row, string fuzzyMin, string fuzzyMax)
 		{
 			try
 			{

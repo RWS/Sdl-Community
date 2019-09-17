@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
+namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public class XliffParser
 	{
@@ -34,7 +34,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					{
 						RemoveInternalFileInfo(fileElement);
 
-						var bodyElement = (XmlElement) fileElement.GetElementsByTagName("body")[0];
+						var bodyElement = (XmlElement)fileElement.GetElementsByTagName("body")[0];
 						var groupElements = bodyElement.GetElementsByTagName("group");
 
 						var removedGroups = new List<XmlNode>();
@@ -53,7 +53,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 						}
 						else
 						{
-							SliceInBody(bodyElement, removedGroups, true);	
+							SliceInBody(bodyElement, removedGroups, true);
 						}
 					}
 
@@ -100,8 +100,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			}
 			else
 			{
-				transUnits = groupElement.ChildNodes.OfType<XmlElement>().Where(node => node.Name == "trans-unit")
-					.ToList();
+				transUnits = groupElement.ChildNodes.OfType<XmlElement>().Where(node => node.Name == "trans-unit").ToList();
 			}
 
 			foreach (var transUnit in transUnits.ToList())
@@ -185,7 +184,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				var mrks = firstSeg.GetElementsByTagName("mrk");
 				var removedMrks = new List<XmlNode>();
 				foreach (var mrk in mrks.OfType<XmlElement>())
-				{  
+				{
 					if (!mrk.HasAttribute("mtype") || mrk.Attributes["mtype"].Value != "seg")
 						continue;
 
@@ -203,11 +202,13 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 						}
 					}
 				}
+
 				//remove mrk element from translation unit
 				foreach (var xmlNode in removedMrks.OfType<XmlElement>())
 				{
 					xmlNode.ParentNode?.RemoveChild(xmlNode);
 				}
+
 				removedMrks.Clear();
 			}
 		}

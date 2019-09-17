@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>MT Enhanced Plugin for Trados Studio</PlugInName>
-  <Version>4.3.3.1</Version>
+  <Version>4.3.4.0</Version>
   <Description>This plugin provides machine translation results from Microsoft Translator or Google Translate.</Description>
   <Author>SDL Community Developers</Author>
 	<Include>
-		<File>Newtonsoft.Json.dll</File>
 		<File>RestSharp.dll</File>
 	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
