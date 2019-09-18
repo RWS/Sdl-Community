@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Qualitivity</PlugInName>
-	<Version>3.1.1.0</Version>
+	<Version>3.1.2.0</Version>
 	<Description>Qualitivity </Description>
-	<Author>Sdl Community</Author>
+	<Author>SDL Community Developers</Author>
 	<Include>
 		<File>Sdl.Community.Qualitivity.Comparison.dll</File>
 		<File>Sdl.Community.Qualitivity.Hooks.dll</File>
