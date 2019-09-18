@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.InvoiceAndQuotes.Integration</PlugInName>
-  <Version>1.1</Version>
+  <Version>1.1.1.0</Version>
   <Description>Sdl.Community.InvoiceAndQuotes.Integration</Description>
   <Author></Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" maxversion="15.0"/>
   <Include>
     <File>Sdl.Community.StudioInQuote.dll</File>
-     <File>Sdl.Community.System.IO.Packaging.dll</File>
-    <File>Sdl.Community.DocumentFormat.OpenXml.dll</File>
+    <File>Sdl.Community.System.IO.Packaging.dll</File>
     <File>InvoiceAndQuotes.de-DE.resx</File>
     <File>InvoiceAndQuotes.en-US.resx</File>
     <File>InvoiceAndQuotes.fr-FR.resx</File>

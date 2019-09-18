@@ -53,9 +53,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sdl.Community.DocumentFormat.OpenXml, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rd party\Sdl.Community.DocumentFormat.OpenXml.dll</HintPath>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Community.System.IO.Packaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
