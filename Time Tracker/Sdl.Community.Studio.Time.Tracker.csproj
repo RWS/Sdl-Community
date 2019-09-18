@@ -63,6 +63,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework">
       <HintPath>packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
       <Private>False</Private>
@@ -95,9 +99,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="Studio.Time.Tracker.DocumentFormat.OpenXml">
-      <HintPath>ThirdParty\Open XML SDK\V2.5\lib\Studio.Time.Tracker.DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="Studio.Time.Tracker.ObjectListView, Version=2.7.0.33772, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
