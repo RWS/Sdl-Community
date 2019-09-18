@@ -8,7 +8,7 @@
     <ProjectGuid>{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.Plugins.AdvancedDisplayFilter</RootNamespace>
+    <RootNamespace>Sdl.Community.AdvancedDisplayFilter</RootNamespace>
     <AssemblyName>Sdl.Community.AdvancedDisplayFilter</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileUpgradeFlags>
@@ -55,9 +55,6 @@
     </Reference>
     <Reference Include="Sdl.Community.Toolkit.FileType, Version=1.6.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
       <HintPath>packages\Sdl.Community.Toolkit.FileType.1.6.0\lib\net45\Sdl.Community.Toolkit.FileType.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Community.Toolkit.Integration, Version=1.6.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>packages\Sdl.Community.Toolkit.Integration.1.6.0\lib\net45\Sdl.Community.Toolkit.Integration.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -147,10 +144,11 @@
     <Compile Include="Controls\ListViewItemComparer.cs" />
     <Compile Include="DisplayFilters\CustomFilterSettings.cs" />
     <Compile Include="DisplayFilters\DisplayFilter.cs" />
+    <Compile Include="DisplayFilters\DisplayFilterSettings.cs" />
+    <Compile Include="Extensions\DisplayFilterRowInfoExtension.cs" />
     <Compile Include="Helpers\ColorPickerHelper.cs" />
     <Compile Include="Helpers\CommentsHelper.cs" />
-    <Compile Include="Helpers\ContentHelper.cs" />
-    <Compile Include="Helpers\CustomFilterHelper.cs" />
+    <Compile Include="Services\CustomFilterService.cs" />
     <Compile Include="Helpers\FuzzyHelper.cs" />
     <Compile Include="Helpers\SegmentTextVisitor.cs" />
     <Compile Include="Helpers\TagDataVisitor.cs" />
@@ -158,8 +156,11 @@
     <Compile Include="Helpers\TagVisitor.cs" />
     <Compile Include="Helpers\UserVisitor.cs" />
     <Compile Include="Helpers\XliffParser.cs" />
+    <Compile Include="Models\BackReference.cs" />
+    <Compile Include="Models\CapturedGroup.cs" />
     <Compile Include="Models\DisplayFilterSerializer.cs" />
     <Compile Include="Controls\Helper.cs" />
+    <Compile Include="Models\HighlightColor.cs" />
     <Compile Include="Models\SavedSettings.cs" />
     <Compile Include="Models\SegmentRange.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -169,6 +170,9 @@
     </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ContentMatchingService.cs" />
+    <Compile Include="Services\HighlightService.cs" />
+    <Compile Include="Services\QualitySamplingService.cs" />
     <Compile Include="StringResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -205,10 +209,28 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Content Include="Images\Parenthesis.jpg" />
+    <None Include="Images\rounded-yellow.png" />
+    <None Include="Images\rounded-black.png" />
+    <None Include="Images\rounded-blue.png" />
+    <None Include="Images\rounded-cyan.png" />
+    <None Include="Images\rounded-darkBlue.png" />
+    <None Include="Images\rounded-darkCyan.png" />
+    <None Include="Images\rounded-darkGray.png" />
+    <None Include="Images\rounded-darkGreen.png" />
+    <None Include="Images\rounded-darkMagenta.png" />
+    <None Include="Images\rounded-darkRed.png" />
+    <None Include="Images\rounded-darkYellow.png" />
+    <None Include="Images\rounded-green.png" />
+    <None Include="Images\rounded-lightGray.png" />
+    <None Include="Images\rounded-magenta.png" />
+    <None Include="Images\rounded-red.png" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\DisplayFilterControl.resx">
@@ -227,6 +249,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

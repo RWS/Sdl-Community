@@ -4,7 +4,7 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Controls
+namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
 	[Action("CommunityADFComment", Name = "CADF - Add comment to all filtered segments", Icon = "AddComment")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 10, DisplayType.Large)]

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
+namespace Sdl.Community.AdvancedDisplayFilter {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class StringResources {
@@ -39,7 +39,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.Plugins.AdvancedDisplayFilter.StringResources", typeof(StringResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.AdvancedDisplayFilter.StringResources", typeof(StringResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -322,6 +322,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Max chars.
+        /// </summary>
+        internal static string DisplayFilterControl_MaxChars {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_MaxChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Merged segments across paragraphs.
         /// </summary>
         internal static string DisplayFilterControl_MergedAcross {
@@ -345,6 +354,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_MidifiedBy {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_MidifiedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Min chars.
+        /// </summary>
+        internal static string DisplayFilterControl_MinChars {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_MinChars", resourceCulture);
             }
         }
         
@@ -385,6 +403,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Operator.
+        /// </summary>
+        internal static string DisplayFilterControl_Operator {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Operator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OR.
         /// </summary>
         internal static string DisplayFilterControl_OR {
@@ -417,6 +444,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Previous_Origin {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Previous_Origin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Randomly select.
+        /// </summary>
+        internal static string DisplayFilterControl_RandomlySelect {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_RandomlySelect", resourceCulture);
             }
         }
         
@@ -498,6 +534,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Segments_With_tags {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Segments_With_tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select 1 in every.
+        /// </summary>
+        internal static string DisplayFilterControl_Select1InEvery {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Select1InEvery", resourceCulture);
             }
         }
         
@@ -674,6 +719,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Backreferences.
+        /// </summary>
+        internal static string DisplayFilterControl_Use_Backreferences {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Use_Backreferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use regex for comment text.
         /// </summary>
         internal static string DisplayFilterControl_UseRegexComments {
@@ -743,6 +797,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
             get {
                 object obj = ResourceManager.GetObject("ok.32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Document Structure Information Location.
+        /// </summary>
+        internal static string Tooltip_Document_Structure_Information_Location {
+            get {
+                return ResourceManager.GetString("Tooltip_Document_Structure_Information_Location", resourceCulture);
             }
         }
     }
