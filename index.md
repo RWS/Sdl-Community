@@ -46,8 +46,8 @@ Once you have installed the tools, follow the steps below:
 #### Visual Studio SDL templates extensions
 
 Starting with Visual Studio 2017, the Trados Studio plugin templates are provided through Visual Studio extension:
-1. For **Visual Studio 2017**, the SDL plugins templates extension can be downloaded from here: https://marketplace.visualstudio.com/items?itemName=sdl.project-templates-for-trados-studio-2019.
-2. For **Visual Studio 2019**, the SDL plugins templates extension can be downloaded from here:(link to be added after publication was done).
+1. For **Visual Studio 2017 and 2019**, the SDL plugins templates extension can be downloaded from here: https://marketplace.visualstudio.com/items?itemName=sdl.project-templates-for-trados-studio-2019.
+
 
 The Github source code for Visual Studio 2019 templates extension, can be downloaded from: https://github.com/sdl/trados-studio-vs-extension
 
