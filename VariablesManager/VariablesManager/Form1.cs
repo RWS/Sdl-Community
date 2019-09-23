@@ -330,7 +330,7 @@ namespace VariablesManager
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
             }
         }
