@@ -324,10 +324,10 @@ namespace VariablesManager
 	                    else
 	                    {
 							command.CommandText = "update resources set data = @data where type = 1";
-		                    command.Parameters.Add("@data", DbType.Binary).Value = variablesAsBytes;
-		                    command.ExecuteNonQuery();
 						}
-                    }
+	                    command.Parameters.Add("@data", DbType.Binary).Value = variablesAsBytes;
+	                    command.ExecuteNonQuery();
+					}
                 }
             }
             catch (Exception e)
