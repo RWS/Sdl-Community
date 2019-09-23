@@ -1,6 +1,6 @@
 ﻿using Sdl.TellMe.ProviderApi;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.TellMe
+namespace Sdl.Community.AdvancedDisplayFilter.TellMe
 {
 	[TellMeProvider]
 	public class AdvancedDisplayFilterTellMeProvider : ITellMeProvider

@@ -1,5 +1,4 @@
-﻿using Sdl.Community.Plugins.AdvancedDisplayFilter;
-using Sdl.Community.Toolkit.Integration.DisplayFilter;
+﻿using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.Toolkit.FileType;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
