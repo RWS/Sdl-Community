@@ -14,6 +14,9 @@ namespace Sdl.Community.TargetWordCount
 {
 	public static class ReportGenerator
 	{
+		private const string Characters = "Characters";
+		private const string Words = "Words";
+
 		/// <summary>
 		/// Get project controller
 		/// </summary>
@@ -31,7 +34,7 @@ namespace Sdl.Community.TargetWordCount
 			CollectFileData(counters, settings, grandTotal, fileData);
 
 			grandTotal.CountMethod = fileData.First().CountMethod;
-			grandTotal.FileName = Constants.Total;
+			grandTotal.FileName = "Total";
 
 			return CreateReport(grandTotal, fileData, settings);
 		}
@@ -39,29 +42,31 @@ namespace Sdl.Community.TargetWordCount
 		/// <summary>
 		/// Generate new .xml reports( the reports will be imported manually in Helix).
 		/// The already reports which are generated through TargetWordCount app are not compatible in Helix
+		/// The app should support reports name like this: Target Word Count sv-SE_en-us.xml and Target Word Count sv-SE_en-US.xml
 		/// </summary>
 		/// <param name="languageDirection">language direction</param>
 		/// <param name="projectFiles">project files for the language direction on which the batch task is running</param>
 		public static void GenerateHelixReport(LanguageDirection languageDirection, List<ProjectFile> projectFiles)
 		{
-			var currentProject = GetProjectController() != null ? GetProjectController().CurrentProject : null;
-			if (currentProject != null)
+			var currentProject = GetProjectController()?.CurrentProject;
+			var projectInfo = currentProject?.GetProjectInfo();
+			if (projectInfo != null)
 			{
-				var projectInfo = currentProject.GetProjectInfo();
-				if (projectInfo != null)
+				var directoryFolder = $@"{projectInfo.LocalProjectFolder}{Constants.ReportFolder}";
+				if (!Directory.Exists(directoryFolder))
 				{
-					var directoryFolder = $@"{projectInfo.LocalProjectFolder}{Constants.ReportFolder}";
-					if (!Directory.Exists(directoryFolder))
-					{
-						Directory.CreateDirectory(directoryFolder);
-					}
+					Directory.CreateDirectory(directoryFolder);
+				}
 
-					var directoryInfo = new DirectoryInfo($@"{projectInfo.LocalProjectFolder}{Constants.Reports}");
-					var fileInfo = directoryInfo
-						.GetFiles()
-						.OrderByDescending(f => f.LastWriteTime)
-						.FirstOrDefault(n => n.Name.StartsWith($@"{Constants.TargetWordCount} {languageDirection.SourceLanguage.CultureInfo.Name}_{languageDirection.TargetLanguage.CultureInfo.Name}"));
+				var directoryInfo = new DirectoryInfo($@"{projectInfo.LocalProjectFolder}{Constants.Reports}");
 
+				var fileInfo = directoryInfo
+					.GetFiles()
+					.OrderByDescending(f => f.LastWriteTime)
+					.FirstOrDefault(n => n.Name.ToLower().StartsWith($@"{Constants.TargetWordCount.ToLower()} {languageDirection.SourceLanguage.CultureInfo.Name.ToLower()}_{languageDirection.TargetLanguage.CultureInfo.Name.ToLower()}"));
+
+				if (fileInfo != null)
+				{
 					var helixReportPath = Path.Combine(directoryFolder, Path.GetFileName(fileInfo.FullName));
 					if (File.Exists(helixReportPath))
 					{
@@ -72,6 +77,7 @@ namespace Sdl.Community.TargetWordCount
 					// Create the new helix report xml report structure as the one from the Studio WordCount.xml report
 					CreateReportDocument(projectInfo, languageDirection, helixReportPath, fileInfo, projectFiles);
 				}
+
 			}
 		}
 
@@ -93,9 +99,8 @@ namespace Sdl.Community.TargetWordCount
 			List<ProjectFile> projectFiles)
 		{
 			var doc = new XmlDocument();
-			int totalSegments = 0;
-			int totalWords = 0;
-			int number;
+			var totalSegments = 0;
+			var totalWords = 0;
 
 			var taskElement = doc.CreateElement(string.Empty, Constants.Task, string.Empty);
 			taskElement.SetAttribute(Constants.Name, Constants.WordCount);
@@ -128,7 +133,7 @@ namespace Sdl.Community.TargetWordCount
 				if (fileNode != null)
 				{
 					var totalNodeAttributes = fileNode.SelectSingleNode(Constants.Total) != null ? fileNode.SelectSingleNode(Constants.Total).Attributes : null;
-					if (totalNodeAttributes.Count > 0)
+					if (totalNodeAttributes?.Count > 0)
 					{
 						var fileElement = doc.CreateElement(string.Empty, Constants.File, string.Empty);
 						fileElement.SetAttribute(Constants.Name, projectFile.Name);
@@ -143,8 +148,8 @@ namespace Sdl.Community.TargetWordCount
 						SetAnalyseElement(doc, Constants.Repeated, Constants.Zero, Constants.Zero, analyseElement);
 						SetAnalyseElement(doc, Constants.LowTotal, totalNodeAttributes[Constants.Segments].Value, totalNodeAttributes[Constants.Count].Value, analyseElement);
 						SetAnalyseElement(doc, Constants.New, totalNodeAttributes[Constants.Segments].Value, totalNodeAttributes[Constants.Count].Value, analyseElement);
-						totalSegments += int.TryParse(totalNodeAttributes[Constants.Segments].Value, out number) != false ? int.Parse(totalNodeAttributes[Constants.Segments].Value) : 0;
-						totalWords += int.TryParse(totalNodeAttributes[Constants.Count].Value, out number) != false ? int.Parse(totalNodeAttributes[Constants.Count].Value) : 0;
+						totalSegments += int.TryParse(totalNodeAttributes[Constants.Segments].Value, out _) ? int.Parse(totalNodeAttributes[Constants.Segments].Value) : 0;
+						totalWords += int.TryParse(totalNodeAttributes[Constants.Count].Value, out _) ? int.Parse(totalNodeAttributes[Constants.Count].Value) : 0;
 					}
 				}
 			}
@@ -202,7 +207,7 @@ namespace Sdl.Community.TargetWordCount
 					}
 					else if (origin.MatchPercent == 100)
 					{
-						if (origin.TextContextMatchLevel == Sdl.FileTypeSupport.Framework.NativeApi.TextContextMatchLevel.SourceAndTarget)
+						if (origin.TextContextMatchLevel == FileTypeSupport.Framework.NativeApi.TextContextMatchLevel.SourceAndTarget)
 						{
 							info.Increment(CountTotal.ContextMatch, segInfo.CountData);
 						}
@@ -282,25 +287,11 @@ namespace Sdl.Community.TargetWordCount
 
 		private static void SetCountMethod(IWordCountBatchTaskSettings settings, ISegmentWordCounter counter, CountTotal info)
 		{
-			Language language = null;
+			Language language;
 
-			if (settings.UseSource)
-			{
-				language = counter.FileCountInfo.SourceInfo;
-			}
-			else
-			{
-				language = counter.FileCountInfo.TargetInfo;
-			}
+			language = settings.UseSource ? counter.FileCountInfo.SourceInfo : counter.FileCountInfo.TargetInfo;
 
-			if (language.UsesCharacterCounts)
-			{
-				info.CountMethod = CountUnit.Character;
-			}
-			else
-			{
-				info.CountMethod = CountUnit.Word;
-			}
+			info.CountMethod = language.UsesCharacterCounts ? CountUnit.Character : CountUnit.Word;
 		}
 	}
 }
