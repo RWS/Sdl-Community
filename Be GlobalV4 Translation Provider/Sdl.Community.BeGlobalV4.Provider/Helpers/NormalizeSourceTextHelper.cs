@@ -32,6 +32,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 				{
 					return "slo";
 				}
+				//Language code for Romanian in BeGlobal is rum
+				if (cultureInfo.ThreeLetterISOLanguageName.Equals("ron"))
+				{
+					return "rum";
+				}
 				return cultureInfo.ThreeLetterISOLanguageName;
 			}
 			return string.Empty;
