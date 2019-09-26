@@ -50,8 +50,8 @@ namespace ETSTranslationProvider
             this.TradosLPs = new System.Windows.Forms.DataGridView();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.CredentialTab = new System.Windows.Forms.TabPage();
-            this.LPTab = new System.Windows.Forms.TabPage();
             this.setDefaultTM = new System.Windows.Forms.CheckBox();
+            this.LPTab = new System.Windows.Forms.TabPage();
             this.AuthenticationGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TradosLPs)).BeginInit();
             this.tabControl.SuspendLayout();
@@ -214,6 +214,7 @@ namespace ETSTranslationProvider
             // FinishButton
             // 
             this.FinishButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.FinishButton.Enabled = false;
             this.FinishButton.Location = new System.Drawing.Point(314, 316);
             this.FinishButton.Name = "FinishButton";
             this.FinishButton.Size = new System.Drawing.Size(75, 23);
@@ -263,6 +264,16 @@ namespace ETSTranslationProvider
             this.CredentialTab.TabIndex = 0;
             this.CredentialTab.Text = "General";
             // 
+            // setDefaultTM
+            // 
+            this.setDefaultTM.AutoSize = true;
+            this.setDefaultTM.Location = new System.Drawing.Point(69, 59);
+            this.setDefaultTM.Name = "setDefaultTM";
+            this.setDefaultTM.Size = new System.Drawing.Size(161, 17);
+            this.setDefaultTM.TabIndex = 13;
+            this.setDefaultTM.Text = "Set as Default Host and Port";
+            this.setDefaultTM.UseVisualStyleBackColor = true;
+            // 
             // LPTab
             // 
             this.LPTab.BackColor = System.Drawing.SystemColors.Control;
@@ -273,16 +284,6 @@ namespace ETSTranslationProvider
             this.LPTab.Size = new System.Drawing.Size(476, 291);
             this.LPTab.TabIndex = 1;
             this.LPTab.Text = "Language Pair Mappings";
-            // 
-            // setDefaultTM
-            // 
-            this.setDefaultTM.AutoSize = true;
-            this.setDefaultTM.Location = new System.Drawing.Point(69, 59);
-            this.setDefaultTM.Name = "setDefaultTM";
-            this.setDefaultTM.Size = new System.Drawing.Size(161, 17);
-            this.setDefaultTM.TabIndex = 13;
-            this.setDefaultTM.Text = "Set as Default Host and Port";
-            this.setDefaultTM.UseVisualStyleBackColor = true;
             // 
             // ProviderConfDialog
             // 
