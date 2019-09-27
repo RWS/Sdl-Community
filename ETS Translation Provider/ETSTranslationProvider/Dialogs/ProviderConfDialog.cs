@@ -191,6 +191,7 @@ namespace ETSTranslationProvider
 							}
 						}
 					}
+					FinishButton.Enabled = true;
 				}
 				catch (Exception e)
 				{
