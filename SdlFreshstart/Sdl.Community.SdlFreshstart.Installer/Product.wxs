@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="SDL Freshstart" Language="1033" Version="1.0.0.3" Manufacturer="Sdl Community" UpgradeCode="bcee5a2b-8710-4d13-8ba8-2f7faa5d9407">
+	<Product Id="*" Name="SDL Freshstart" Language="1033" Version="1.0.0.4" Manufacturer="Sdl Community" UpgradeCode="bcee5a2b-8710-4d13-8ba8-2f7faa5d9407">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)Icon.ico" />
