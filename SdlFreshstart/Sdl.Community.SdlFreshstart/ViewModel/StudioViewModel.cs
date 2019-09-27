@@ -14,7 +14,7 @@ using Sdl.Community.SdlFreshstart.Properties;
 
 namespace Sdl.Community.SdlFreshstart.ViewModel
 {
-    public class StudioViewModel:INotifyPropertyChanged
+	public class StudioViewModel:INotifyPropertyChanged
 	{
 	    private ObservableCollection<StudioVersionListItem> _studioVersionsCollection;
 	    private ObservableCollection<StudioLocationListItem> _foldersLocations;
@@ -57,7 +57,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			_restoreForeground = "Gray";
 			FillStudioVersionList();
 		    FillFoldersLocationList();
-	    }
+		}
 		
 		public StudioLocationListItem SelectedLocation
 		{
@@ -68,6 +68,192 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				OnPropertyChanged();
 			}
 		}
+
+		public ObservableCollection<StudioVersionListItem> StudioVersionsCollection
+		{
+			get => _studioVersionsCollection;
+
+			set
+			{
+				if (Equals(value, _studioVersionsCollection))
+				{
+					return;
+				}
+				_studioVersionsCollection = value;
+				OnPropertyChanged(nameof(StudioVersionsCollection));
+			}
+		}
+
+		public ObservableCollection<StudioLocationListItem> FoldersLocationsCollection
+		{
+			get => _foldersLocations;
+
+			set
+			{
+				if (Equals(value, _foldersLocations))
+				{
+					return;
+				}
+				_foldersLocations = value;
+				OnPropertyChanged(nameof(FoldersLocationsCollection));
+			}
+		}
+
+		public string FolderDescription
+		{
+			get => _folderDescription;
+
+			set
+			{
+				if (Equals(value, _folderDescription))
+				{
+					return;
+				}
+				_folderDescription = value;
+				OnPropertyChanged(nameof(FolderDescription));
+			}
+		}
+
+		public string RemoveForeground
+		{
+			get => _removeForeground;
+
+			set
+			{
+				if (Equals(value, _removeForeground))
+				{
+					return;
+				}
+				_removeForeground = value;
+				OnPropertyChanged(nameof(RemoveForeground));
+			}
+		}
+
+		public string RemoveBtnColor
+		{
+			get => _removeBtnColor;
+
+			set
+			{
+				if (Equals(value, _removeBtnColor))
+				{
+					return;
+				}
+				_removeBtnColor = value;
+				OnPropertyChanged(nameof(RemoveBtnColor));
+			}
+		}
+
+		public string RestoreForeground
+		{
+			get => _restoreForeground;
+
+			set
+			{
+				if (Equals(value, _restoreForeground))
+				{
+					return;
+				}
+				_restoreForeground = value;
+				OnPropertyChanged(nameof(RestoreForeground));
+			}
+		}
+
+		public string RestoreBtnColor
+		{
+			get => _restoreBtnColor;
+
+			set
+			{
+				if (Equals(value, _restoreBtnColor))
+				{
+					return;
+				}
+				_restoreBtnColor = value;
+				OnPropertyChanged(nameof(RestoreBtnColor));
+			}
+		}
+
+		public string RepairForeground
+		{
+			get => _repairForeground;
+
+			set
+			{
+				if (Equals(value, _repairForeground))
+				{
+					return;
+				}
+				_repairForeground = value;
+				OnPropertyChanged(nameof(RepairForeground));
+			}
+		}
+
+		public string RepairBtnColor
+		{
+			get => _repairBtnColor;
+
+			set
+			{
+				if (Equals(value, _repairBtnColor))
+				{
+					return;
+				}
+				_repairBtnColor = value;
+				OnPropertyChanged(nameof(RepairBtnColor));
+			}
+		}
+
+		public bool IsRemoveEnabled
+		{
+			get => _isRemoveEnabled;
+
+			set
+			{
+				if (Equals(value, _isRemoveEnabled))
+				{
+					return;
+				}
+				_isRemoveEnabled = value;
+				OnPropertyChanged(nameof(IsRemoveEnabled));
+			}
+		}
+
+		public bool CheckAll
+		{
+			get => _checkAll;
+
+			set
+			{
+				if (Equals(value, _checkAll))
+				{
+					return;
+				}
+				_checkAll = value;
+				OnPropertyChanged(nameof(CheckAll));
+				CheckAllLocations(value);
+			}
+		}
+
+		public bool IsRepairEnabled
+		{
+			get => _isRepairEnabled;
+
+			set
+			{
+				if (Equals(value, _isRepairEnabled))
+				{
+					return;
+				}
+				_isRepairEnabled = value;
+				OnPropertyChanged(nameof(IsRepairEnabled));
+			}
+		}
+
+		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
+		public ICommand RepairCommand => _repairCommand ?? (_repairCommand = new CommandHandler(RepairStudio, true));
+		public ICommand RestoreCommand => _restoreCommand ?? (_restoreCommand = new CommandHandler(RestoreFolders, true));
+
 		private void FillFoldersLocationList()
 		{
 			_foldersLocations = new ObservableCollection<StudioLocationListItem>
@@ -138,7 +324,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users[USERNAME]\AppData\Roaming\SDL\ProjectApi\15.0.0.0",
+					DisplayName = $@"C:\Users[USERNAME]\AppData\Roaming\SDL\ProjectApi\",
 					IsSelected = false,
 					Description = FoldersDescriptionText.ProjectApi(),
 					Alias = "roamingProjectApi"
@@ -177,8 +363,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 			SetButtonColors();
 		}
-
-
+		
 		private void SetButtonColors()
 		{
 			if (AnyLocationSelected()&&AnyVersionSelected())
@@ -258,27 +443,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private void StudioVersion_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			SetButtonColors();
-		}
-
-		public ObservableCollection<StudioVersionListItem> StudioVersionsCollection
-	    {
-			get => _studioVersionsCollection;
-
-			set
-		    {
-			    if (Equals(value, _studioVersionsCollection))
-			    {
-				    return;
-			    }
-			    _studioVersionsCollection = value;
-			    OnPropertyChanged(nameof(StudioVersionsCollection));
-		    }
-	    }
-
-
-		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
-		public ICommand RepairCommand => _repairCommand ?? (_repairCommand = new CommandHandler(RepairStudio, true));
-		public ICommand RestoreCommand => _restoreCommand ?? (_restoreCommand = new CommandHandler(RestoreFolders, true));
+		}		
 
 		private async void RestoreFolders()
 		{
@@ -388,178 +553,12 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			var msiName = string.Format("TranslationStudio{0}.msi", version.MinorVersionNumber);
 			return msiName;
 		}
-
-		public ObservableCollection<StudioLocationListItem> FoldersLocationsCollection
-	    {
-		    get => _foldersLocations;
-
-		    set
-		    {
-			    if (Equals(value, _foldersLocations))
-			    {
-				    return;
-			    }
-			    _foldersLocations = value;
-			    OnPropertyChanged(nameof(FoldersLocationsCollection));
-		    }
-	    }
 		
-		public string FolderDescription
-		{
-			get => _folderDescription;
-
-			set
-			{
-				if (Equals(value, _folderDescription))
-				{
-					return;
-				}
-				_folderDescription = value;
-				OnPropertyChanged(nameof(FolderDescription));
-			}
-		}
-
-		public string RemoveForeground
-		{
-			get => _removeForeground;
-
-			set
-			{
-				if (Equals(value, _removeForeground))
-				{
-					return;
-				}
-				_removeForeground = value;
-				OnPropertyChanged(nameof(RemoveForeground));
-			}
-		}
-
-		public string RemoveBtnColor
-		{
-			get => _removeBtnColor;
-
-			set
-			{
-				if (Equals(value, _removeBtnColor))
-				{
-					return;
-				}
-				_removeBtnColor = value;
-				OnPropertyChanged(nameof(RemoveBtnColor));
-			}
-		}
-
-
-		public string RestoreForeground
-		{
-			get => _restoreForeground;
-
-			set
-			{
-				if (Equals(value, _restoreForeground))
-				{
-					return;
-				}
-				_restoreForeground = value;
-				OnPropertyChanged(nameof(RestoreForeground));
-			}
-		}
-
-		public string RestoreBtnColor
-		{
-			get => _restoreBtnColor;
-
-			set
-			{
-				if (Equals(value, _restoreBtnColor))
-				{
-					return;
-				}
-				_restoreBtnColor = value;
-				OnPropertyChanged(nameof(RestoreBtnColor));
-			}
-		}
-		public string RepairForeground
-		{
-			get => _repairForeground;
-
-			set
-			{
-				if (Equals(value, _repairForeground))
-				{
-					return;
-				}
-				_repairForeground = value;
-				OnPropertyChanged(nameof(RepairForeground));
-			}
-		}
-
-		public string RepairBtnColor
-		{
-			get => _repairBtnColor;
-
-			set
-			{
-				if (Equals(value, _repairBtnColor))
-				{
-					return;
-				}
-				_repairBtnColor = value;
-				OnPropertyChanged(nameof(RepairBtnColor));
-			}
-		}
-
-		public bool IsRemoveEnabled
-		{
-			get => _isRemoveEnabled;
-
-			set
-			{
-				if (Equals(value, _isRemoveEnabled))
-				{
-					return;
-				}
-				_isRemoveEnabled = value;
-				OnPropertyChanged(nameof(IsRemoveEnabled));
-			}
-		}
-
-		public bool CheckAll
-		{
-			get => _checkAll;
-
-			set
-			{
-				if (Equals(value, _checkAll))
-				{
-					return;
-				}
-				_checkAll = value;
-				OnPropertyChanged(nameof(CheckAll));
-				CheckAllLocations(value);
-			}
-		}
-
 		private void CheckAllLocations(bool check)
 		{
 			foreach (var location in FoldersLocationsCollection)
 			{
 				location.IsSelected = check;
-			}
-		}
-
-		public bool IsRepairEnabled
-		{
-			get => _isRepairEnabled;
-
-			set
-			{
-				if (Equals(value, _isRepairEnabled))
-				{
-					return;
-				}
-				_isRepairEnabled = value;
-				OnPropertyChanged(nameof(IsRepairEnabled));
 			}
 		}
 
@@ -630,6 +629,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 			CheckAll = false;
 		}
+
 		private bool IsStudioRunning()
 		{
 			var processList = Process.GetProcesses();

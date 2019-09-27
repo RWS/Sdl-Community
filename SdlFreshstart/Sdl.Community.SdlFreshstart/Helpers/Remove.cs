@@ -57,7 +57,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 		}
 
-	public static async Task FromSelectedLocations(List<LocationDetails> foldersToRemove)
+		public static async Task FromSelectedLocations(List<LocationDetails> foldersToRemove)
 	    {
 		    try
 		    {
@@ -100,31 +100,18 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 					    {
 						    Directory.CreateDirectory(directoryInfo.Parent.FullName);
 					    }
-					    File.Copy(folder.OriginalFilePath, folder.BackupFilePath, true);
-					
-				    }
-			    }
+						File.Copy(folder.OriginalFilePath, folder.BackupFilePath, true);
+					}
+					CopyFiles(folder);
+				}
 			    else
 			    {
 				    try
 				    {
 					    if (Directory.Exists(folder.OriginalFilePath))
 					    {
-						    //Get files 
-						    var files = Directory.GetFiles(folder.OriginalFilePath);
-						    if (files.Length > 0)
-						    {
-							    MoveToBackUp(files, folder.BackupFilePath);
-						    }
-
-						    //check for subdirectories
-						    var subdirectories = Directory.GetDirectories(folder.OriginalFilePath);
-						    foreach (var subdirectory in subdirectories)
-						    {
-							    var currentDirInfo = new DirectoryInfo(subdirectory);
-							    CheckForSubfolders(currentDirInfo, folder.BackupFilePath);
-						    }
-					    }
+							CopyFiles(folder);
+						}
 				    }
 				    catch (Exception e)
 				    {
@@ -132,6 +119,28 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			    }
 		    }
 	    }
+
+		/// <summary>
+		/// Copy files from the original folder to the backup folder
+		/// </summary>
+		/// <param name="folder">folder details</param>
+		private static void CopyFiles(LocationDetails folder)
+		{
+			// Get files 
+			var files = Directory.GetFiles(folder.OriginalFilePath);
+			if (files.Length > 0)
+			{
+				MoveToBackUp(files, folder.BackupFilePath);
+			}
+
+			// Check for subdirectories
+			var subdirectories = Directory.GetDirectories(folder.OriginalFilePath);
+			foreach (var subdirectory in subdirectories)
+			{
+				var currentDirInfo = new DirectoryInfo(subdirectory);
+				CheckForSubfolders(currentDirInfo, folder.BackupFilePath);
+			}
+		}
 
 	    private static void CheckForSubfolders(DirectoryInfo currentDirInfo, string backupFolderRoot)
 	    {
@@ -175,6 +184,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			    }
 		    }
 	    }
+
 	    private static void Empty(DirectoryInfo directoryInfo)
 	    {
 		    if (directoryInfo.Exists)
@@ -200,7 +210,5 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 		    var attributes = File.GetAttributes(path);
 		    return attributes.HasFlag(FileAttributes.Directory);
 	    }
-
-	   
     }
 }
