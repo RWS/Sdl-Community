@@ -20,11 +20,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 			_paragraph = paragraph;
 			_segment = segment;
 
+			AddHexColorFromParagraphContext(paragraph);
+
 			VisitChildren(paragraph);
 
 			return _colors;
 		}
-
+	
 		public List<string> GetTagsColorCode(ISegment segment)
 		{
 			_tagPairStack = new Stack<ITagPair>();
@@ -67,7 +69,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 		public void VisitSegment(ISegment segment)
 		{
 			_segmentOpen = true;
-
+			
 			var processSegment = !(_paragraph != null && segment?.Properties.Id.Id != _segment?.Properties.Id.Id);
 			if (processSegment)
 			{
@@ -109,6 +111,28 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 			catch
 			{
 				// catch all; ignore
+			}
+		}
+
+		private void AddHexColorFromParagraphContext(IParagraph paragraph)
+		{
+			var contextInfoList = paragraph?.Parent?.Properties?.Contexts?.Contexts;
+			if (contextInfoList == null)
+			{
+				return;
+			}
+
+			foreach (var contextInfo in contextInfoList)
+			{
+				if (contextInfo.DefaultFormatting == null)
+				{
+					continue;
+				}
+
+				foreach (var formattingItem in contextInfo.DefaultFormatting)
+				{
+					AddHexColor(formattingItem);
+				}
 			}
 		}
 
