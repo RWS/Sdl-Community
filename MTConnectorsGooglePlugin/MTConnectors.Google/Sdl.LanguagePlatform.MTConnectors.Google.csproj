@@ -163,6 +163,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>XCOPY  "C:\Users\atodica\Desktop\MTConnectorsGooglePlugin\Resources" "C:\Users\atodica\Desktop\MTConnectorsGooglePlugin\bin\" /S /Y</PostBuildEvent>
+    <PostBuildEvent>XCOPY  "..\..\Resources" "." /S /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
