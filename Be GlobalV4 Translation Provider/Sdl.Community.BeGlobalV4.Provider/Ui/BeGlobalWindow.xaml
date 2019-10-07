@@ -61,7 +61,7 @@
 			</Border>
 			<StackPanel Grid.Row="2" Margin="0,5,0,0" MinHeight="250">
 				<Button Style="{DynamicResource LightBlueButtonsStyle}" Width="75" Content="Login" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
-				<ComboBox 
+				<ComboBox
 					HorizontalAlignment="Left"
 					Width="400"
 					FontFamily="Calibri"

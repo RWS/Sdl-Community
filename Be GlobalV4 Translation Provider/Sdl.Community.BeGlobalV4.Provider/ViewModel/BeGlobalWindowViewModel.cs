@@ -107,7 +107,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				_selectedLoginOption = value;
 				LoginMethod = _selectedLoginOption.LoginOption;
-				OnPropertyChanged(nameof(BeGlobalLoginOptions));
+				OnPropertyChanged(nameof(SelectedLoginOption));
 			}
 		}
 
