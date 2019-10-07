@@ -13,7 +13,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public BeGlobalTranslationOptions()
 		{
-			_uriBuilder = new TranslationProviderUriBuilder("beglobaltranslationprovider");
+			_uriBuilder = new TranslationProviderUriBuilder("machinetranslationcloudprovider");
 		}
 
 		public BeGlobalTranslationOptions(Uri uri)

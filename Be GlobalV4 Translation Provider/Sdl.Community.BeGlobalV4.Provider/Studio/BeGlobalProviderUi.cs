@@ -12,13 +12,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
 	
 	[TranslationProviderWinFormsUi(
-		Id = "SDLBeGlobal(NMT)ProviderUi",
-		Name = "SDLBeGlobal(NMT)ProviderUi",
-		Description = "SDL BeGlobal (NMT) Translation Provider")]
+		Id = "MachineTranslationCloudProviderUi",
+		Name = "MachineTranslationCloudProviderUi",
+		Description = "Machine Translation Cloud Provider")]
 	public class BeGlobalProviderUi  : ITranslationProviderWinFormsUI
 	{
-		public string TypeName => "SDL BeGlobal (NMT) Translation Provider"; 
-		public string TypeDescription => "SDL BeGlobal (NMT) Translation Provider";
+		public string TypeName => "Machine Translation Cloud Provider"; 
+		public string TypeDescription => "Machine Translation Cloud Provider";
 		public bool SupportsEditing => true;
 		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
 		public static readonly Log Log = Log.Instance;
@@ -118,8 +118,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var info = new TranslationProviderDisplayInfo
 			{
-				Name = "SDL BeGlobal (NMT) Translation provider",
-				TooltipText = "SDL BeGlobal (NMT) Translation provider",
+				Name = "Machine Translation Cloud provider",
+				TooltipText = "Machine Translation Cloud provider",
 				SearchResultImage = PluginResources.logoRes,
 				TranslationProviderIcon = PluginResources.global
 			};

@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
-	[TranslationProviderFactory(Id = "BeGlobalTranslationProviderFactory",
-		Name = "BeGlobalTranslationProviderFactory",
-		Description = "BeGlobal4 Translation Provider")]
+	[TranslationProviderFactory(Id = "MachineTranslationCloudProviderFactory",
+		Name = "MachineTranslationCloudProviderFactory",
+		Description = "Machine Translation Cloud Provider")]
 	public class BeGlobalTranslationProviderFactory : ITranslationProviderFactory
 	{
 		public static readonly Log Log = Log.Instance;	
