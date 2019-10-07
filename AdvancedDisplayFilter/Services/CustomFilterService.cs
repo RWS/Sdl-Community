@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
@@ -13,7 +14,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 	public class CustomFilterService
 	{
 		private readonly DisplayFilterSettings _settings;
-		private readonly CustomFilterSettings _customSettings;	
+		private readonly CustomFilterSettings _customSettings;
 		private readonly Document _document;
 		private readonly QualitySamplingService _qualitySamplingService;
 		private readonly ContentMatchingService _contentMatchingService;
@@ -146,33 +147,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
 						  !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
 			}
-
-			// Document Structure Info Location search
-			if (success && !string.IsNullOrEmpty(_customSettings.DocumentStructureInfoLocation))
+			
+			if (success && !string.IsNullOrEmpty(_customSettings.DocumentStructureInformation))
 			{
-				if (_settings.IsRegularExpression)
-				{
-					success = DocumentStructureInfoLocationRegexSearch(rowInfo, _customSettings.DocumentStructureInfoLocation, 
-						_settings.IsCaseSensitive 
-							? RegexOptions.None 
-							: RegexOptions.IgnoreCase);
-				}
-				else
-				{
-					foreach (var contextInfo in rowInfo.ContextInfo)
-					{
-						if (contextInfo?.DisplayName == _customSettings.DocumentStructureInfoLocation)
-						{
-							return true;
-						}
-					}
-
-					return false;
-				}
+				success = _settings.IsRegularExpression
+					? DocumentStructureInfoRegexSearch(rowInfo, _customSettings.DocumentStructureInformation,
+						_settings.IsCaseSensitive
+							? RegexOptions.None
+							: RegexOptions.IgnoreCase)
+					: DocumentStructureInfoSearch(rowInfo, _customSettings);
 			}
 
 			return success;
-		}		
+		}
 
 		public bool Reverse(DisplayFilterRowInfo rowInfo)
 		{
@@ -382,37 +369,66 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 					return false;
 				}
 			}
-
-			//String id seach
-			if (!success && !string.IsNullOrEmpty(_customSettings.DocumentStructureInfoLocation))
+			
+			if (!success && !string.IsNullOrEmpty(_customSettings.DocumentStructureInformation))
 			{
-				if (_settings.IsRegularExpression)
-				{
-					success = DocumentStructureInfoLocationRegexSearch(rowInfo, _customSettings.DocumentStructureInfoLocation, _settings.IsCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
-				}
-				else
-				{
-					foreach (var contextInfo in rowInfo.ContextInfo)
-					{
-						if (contextInfo?.DisplayName == _customSettings.DocumentStructureInfoLocation)
-						{
-							success = true;
-						}
-					}
-				}
+				success = _settings.IsRegularExpression
+					? DocumentStructureInfoRegexSearch(rowInfo, _customSettings.DocumentStructureInformation, _settings.IsCaseSensitive
+						? RegexOptions.None
+						: RegexOptions.IgnoreCase)
+					: DocumentStructureInfoSearch(rowInfo, _customSettings);
 			}
 
 			return !success;
 		}
 
-		private static bool DocumentStructureInfoLocationRegexSearch(DisplayFilterRowInfo rowInfo, string regexExpression, RegexOptions options)
+		private static bool DocumentStructureInfoSearch(DisplayFilterRowInfo rowInfo, CustomFilterSettings customSettings)
+		{
+			foreach (var contextInfo in rowInfo.ContextInfo)
+			{
+				if (contextInfo != null)
+				{
+					if (contextInfo.DisplayName?.IndexOf(customSettings.DocumentStructureInformation,
+							StringComparison.InvariantCultureIgnoreCase) > -1)
+					{
+						return true;
+					}
+
+					if (contextInfo.DisplayCode?.IndexOf(customSettings.DocumentStructureInformation,
+							StringComparison.InvariantCultureIgnoreCase) > -1)
+					{
+						return true;
+					}
+
+					if (contextInfo.Description?.IndexOf(customSettings.DocumentStructureInformation,
+							StringComparison.InvariantCultureIgnoreCase) > -1)
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		private static bool DocumentStructureInfoRegexSearch(DisplayFilterRowInfo rowInfo, string regexExpression, RegexOptions options)
 		{
 			var regex = new Regex(regexExpression, options);
 			foreach (var contextInfo in rowInfo.ContextInfo)
 			{
 				if (contextInfo != null)
 				{
-					if (regex.Match(contextInfo.DisplayName).Success)
+					if (regex.Match(contextInfo.DisplayName ?? string.Empty).Success)
+					{
+						return true;
+					}
+
+					if (regex.Match(contextInfo.DisplayCode ?? string.Empty).Success)
+					{
+						return true;
+					}
+
+					if (regex.Match(contextInfo.Description ?? string.Empty).Success)
 					{
 						return true;
 					}

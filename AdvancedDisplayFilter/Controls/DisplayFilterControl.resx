@@ -382,7 +382,7 @@
     <value>9</value>
   </data>
   <data name="label_dsiLocation.Text" xml:space="preserve">
-    <value>DSI Location:</value>
+    <value>DSI Information:</value>
   </data>
   <data name="label_dsiLocation.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>

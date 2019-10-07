@@ -205,6 +205,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DSI.
+        /// </summary>
+        internal static string DisplayFilterControl_DSI {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_DSI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edited Fuzzy.
         /// </summary>
         internal static string DisplayFilterControl_Edited_Fuzzy {
@@ -665,15 +674,6 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Document structure String id.
-        /// </summary>
-        internal static string DisplayFilterControl_StringId {
-            get {
-                return ResourceManager.GetString("DisplayFilterControl_StringId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Target.
         /// </summary>
         internal static string DisplayFilterControl_Target {
@@ -837,7 +837,7 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Document Structure Information Location.
+        ///   Looks up a localized string similar to Document Structure Information.
         /// </summary>
         internal static string Tooltip_Document_Structure_Information_Location {
             get {

@@ -141,7 +141,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					CreatedByChecked = createdByCheck.Checked,
 					EditedFuzzy = _editedFuzzy,
 					UnEditedFuzzy = _unEditedFuzzy,
-					DocumentStructureInfoLocation = dsiLocation_textbox.Text,
+					DocumentStructureInformation = dsiLocation_textbox.Text,
 					UseTagContent = checkBox_TagContent.Checked,
 					AndOrTagContent = alsoTags_radioButton.Checked
 				};
@@ -208,7 +208,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				modifiedByCheck.Checked = value.ModifiedByChecked;
 				createdByBox.Text = value.CreatedBy;
 				createdByCheck.Checked = value.CreatedByChecked;
-				dsiLocation_textbox.Text = value.DocumentStructureInfoLocation;
+				dsiLocation_textbox.Text = value.DocumentStructureInformation;
 
 				foreach (var color in value.Colors)
 				{
@@ -1107,9 +1107,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_UnEdited + ":\"" +
 													CustomFilterSettings.UnEditedFuzzy + "\"");
 				}
-				if (!string.IsNullOrEmpty(CustomFilterSettings.DocumentStructureInfoLocation))
+				if (!string.IsNullOrEmpty(CustomFilterSettings.DocumentStructureInformation))
 				{
-					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_StringId + ":\"" + CustomFilterSettings.DocumentStructureInfoLocation + "\"");
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_DSI + ":\"" + CustomFilterSettings.DocumentStructureInformation + "\"");
 				}
 
 				if (CustomFilterSettings.UseTagContent)
@@ -1237,7 +1237,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			if (!string.IsNullOrEmpty(settings.SourceText) ||
 				!string.IsNullOrEmpty(settings.TargetText) ||
-				!string.IsNullOrEmpty(CustomFilterSettings.DocumentStructureInfoLocation))
+				!string.IsNullOrEmpty(CustomFilterSettings.DocumentStructureInformation))
 			{
 				tabPage_content.ImageIndex = 0;
 			}
