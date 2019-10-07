@@ -201,6 +201,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				var beGlobalLoginOption = new BeGlobalLoginOptions { LoginOption = displayName };
 				LoginOptions.Add(beGlobalLoginOption);
 			}
+			SelectedLoginOption = new BeGlobalLoginOptions { LoginOption = (Enums.GetDisplayName(Enums.LoginOptions.APICredentials)) };
 		}
 
 		private void SetOptions(TranslationModel translationModel)
