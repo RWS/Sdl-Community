@@ -83,14 +83,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+		<Reference Include="Sdl.LanguagePlatform.Core">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
+		</Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\0.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>..\..\..\bin\Debug\Sdl.LanguagePlatform.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
