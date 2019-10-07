@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
@@ -7,6 +9,7 @@ using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.LanguagePlatform.Core;
+using static Sdl.Community.BeGlobalV4.Provider.Helpers.Enums;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
@@ -18,6 +21,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private ICommand _okCommand;
 		private bool _reSendChecked;
 		private TranslationModel _selectedModel;
+		private BeGlobalLoginOptions _selectedLoginOption;
+		private string _clientIdValue;
+		private string _clientSecretValue;
+		private string _loginMethod;
 
 		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options, LanguagePair[] languagePairs)
 		{
@@ -26,6 +33,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			_languagePairs = languagePairs;
 			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			TranslationOptions = new ObservableCollection<TranslationModel>();
+			_loginMethod = Enums.LoginOptions.APICredentials.ToString();
 
 			var beGlobalTranslator = new BeGlobalV4Translator(Options?.Model);
 			var accountId = beGlobalTranslator.GetUserInformation();
@@ -35,6 +43,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				ReSendChecked = options.ResendDrafts;
 			}
+			SetLoginOptions();
 			GetEngineModels(subscriptionInfo);
 			SetEngineModel();
 		}
@@ -67,6 +76,53 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					SetOptions(value);
 				}
 				OnPropertyChanged(nameof(SelectedModelOption));
+			}
+		}
+
+		public string ClientIdValue
+		{
+			get => _clientIdValue;
+			set
+			{
+				_clientIdValue = value;			
+				OnPropertyChanged(nameof(ClientIdValue));
+			}
+		}
+
+		public string ClientSecretValue
+		{
+			get => _clientSecretValue;
+			set
+			{
+				_clientSecretValue = value;
+				OnPropertyChanged(nameof(ClientSecretValue));
+			}
+		}
+
+		public ObservableCollection<BeGlobalLoginOptions> LoginOptions { get; set; }
+	    public BeGlobalLoginOptions SelectedLoginOption
+		{
+			get => _selectedLoginOption;
+			set
+			{
+				_selectedLoginOption = value;
+				LoginMethod = _selectedLoginOption.LoginOption;
+				OnPropertyChanged(nameof(BeGlobalLoginOptions));
+			}
+		}
+
+		// LoginMethod is used to display/hide the ClientId,ClientSecret fields based on which authentication mode is selected
+		public string LoginMethod
+		{
+			get => _loginMethod;
+			set
+			{
+				if (_loginMethod == value)
+				{
+					return;
+				}
+				_loginMethod = value;
+				OnPropertyChanged(nameof(LoginMethod));
 			}
 		}
 
@@ -131,6 +187,19 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					var selectedModelIndex = TranslationOptions.IndexOf(mtModel);
 					SelectedModelOption = TranslationOptions[selectedModelIndex];
 				}
+			}
+		}
+
+		private void SetLoginOptions()
+		{
+			LoginOptions = new ObservableCollection<BeGlobalLoginOptions>();
+			foreach (LoginOptions enumVal in Enum.GetValues(typeof(LoginOptions)))
+			{
+				var displayName = Enums.GetDisplayName(enumVal);
+				displayName = !string.IsNullOrEmpty(displayName) ? displayName : enumVal.ToString();
+
+				var beGlobalLoginOption = new BeGlobalLoginOptions { LoginOption = displayName };
+				LoginOptions.Add(beGlobalLoginOption);
 			}
 		}
 

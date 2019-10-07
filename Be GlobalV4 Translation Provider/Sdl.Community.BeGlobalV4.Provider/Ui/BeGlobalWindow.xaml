@@ -6,14 +6,15 @@
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
              xmlns:uiHelpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.UiHelpers"
+			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
              helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			 WindowStartupLocation="CenterScreen"
 			 WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResizeWithGrip"
-			 Title="SDL BeGlobal (NMT) Translation provider"
+			 Title="SDL Machine Translation Cloud"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="950">
 	<Window.Resources>
-		<ResourceDictionary>
+		<ResourceDictionary>			
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
@@ -25,6 +26,9 @@
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
+				<ResourceDictionary x:Uid="ResourceKeyId1">
+					<converters:BeGlobalLoginConverter x:Key="LoginConverter"/>
+				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 			<!--set red background to X button on hover-->
 		</ResourceDictionary>
@@ -46,16 +50,53 @@
 			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
 			<Border Background="White" Grid.Column="0" Grid.Row="1"  MaxWidth="950">
 				<StackPanel  Orientation="Horizontal">
-					<TextBlock Margin="15,0,20,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" FontSize="14" MaxWidth="780" FontWeight="Bold"
-					           Style="{DynamicResource TextBlockColor}">
-						Welcome to the SDL BeGlobal (NMT) translation provider for Studio. <LineBreak/><LineBreak/>
-						SDL BeGlobal (NMT) is SDL's state-of-the-art secure machine translation cloud product for enterprises with various paid subscription models.
+					<TextBlock Margin="15,0,2,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" MaxWidth="650">
+						Welcome to the SDL Machine Translation Cloud (formerly BeGlobal) translation provider for Studio. <LineBreak/><LineBreak/>
+						SDL Machine Translation Cloud is SDL's neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
+						Using SDL's proprietary technology, customers can have the assurance of content privacy.
+						SDL Machine Translation is powered by SDL's state-of-the-art machine learning algorithms and supports a large number of languages.
 					</TextBlock>
-					<Image Source="../Resources/logoRe.png" Width="auto" Height="auto" HorizontalAlignment="Center" />
+					<Image Source="../Resources/MTCloud_logo.png" Width="290" Height="auto" HorizontalAlignment="Center"/>
 				</StackPanel>
 			</Border>
-			<StackPanel Grid.Row="2" MinHeight="250">
-				<TextBlock  Margin="15,15,0,10"  TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select the settings you want to apply to the Translation Provider."/>
+			<StackPanel Grid.Row="2" Margin="0,5,0,0" MinHeight="250">
+				<Button Style="{DynamicResource LightBlueButtonsStyle}" Width="75" Content="Login" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
+				<ComboBox 
+					HorizontalAlignment="Left"
+					Width="400"
+					FontFamily="Calibri"
+					ItemsSource="{Binding LoginOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					SelectedItem="{Binding SelectedLoginOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					Margin="15,5,0,10" BorderThickness="1"
+					controls:TextBoxHelper.Watermark="Please select the authentication method"
+					controls:TextBoxHelper.ClearTextButton="True">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding LoginOption}" FontFamily="Calibri" VerticalAlignment="Center"/>
+							</StackPanel>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+					<ComboBox.ItemContainerStyle>
+						<Style TargetType="{x:Type ComboBoxItem}">
+							<Setter Property="BorderThickness" Value="0"/>
+						</Style>
+					</ComboBox.ItemContainerStyle>
+				</ComboBox>
+				<StackPanel Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=APICredentials}">
+				<TextBox  controls:TextBoxHelper.ClearTextButton="True"
+						  controls:TextBoxHelper.Watermark="Client Id"
+						  controls:TextBoxHelper.AutoWatermark="True"
+						  controls:TextBoxHelper.UseFloatingWatermark="True" 
+					      Margin="15,0,0,10" Width="400" HorizontalAlignment="Left" IsEnabled="True" 						  
+						  Text="{Binding ClientIdValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBox  controls:TextBoxHelper.ClearTextButton="True"
+						  controls:TextBoxHelper.Watermark="Client Secret"
+						  controls:TextBoxHelper.AutoWatermark="True"
+						  controls:TextBoxHelper.UseFloatingWatermark="True" 
+						  Margin="15,0,0,10" Width="400" HorizontalAlignment="Left" IsEnabled="True"
+						  Text="{Binding ClientSecretValue , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				</StackPanel>
 				<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments"/>
 				<TextBlock  Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select engine model :"/>
 				<ComboBox 

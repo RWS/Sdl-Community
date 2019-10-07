@@ -131,6 +131,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -159,7 +160,9 @@
     <Compile Include="BeGlobalTellMe\BeGlobalSettingsAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalStoreAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalTellMeProvider.cs" />
+    <Compile Include="Converters\BeGlobalLoginConverter.cs" />
     <Compile Include="Helpers\AppItializer.cs" />
+    <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\NormalizeSourceTextHelper.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
@@ -183,6 +186,7 @@
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Service\BeGlobalV4Translator.cs" />
     <Compile Include="Studio\BeGlobalLanguageDirection.cs" />
+    <Compile Include="Studio\BeGlobalLoginOptions.cs" />
     <Compile Include="Studio\BeGlobalProviderUi.cs" />
     <Compile Include="Studio\BeGlobalTranslationOptions.cs" />
     <Compile Include="Studio\BeGlobalTranslationProvider.cs" />
@@ -198,6 +202,7 @@
     <Compile Include="ViewModel\BeGlobalWindowViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\MTCloud_logo.png" />
     <Resource Include="Resources\logoRes.png" />
     <Resource Include="Resources\AdaptiveEngine.ico" />
     <EmbeddedResource Include="Resources\TellMe1.ico" />
@@ -210,8 +215,8 @@
     <Resource Include="Resources\sdl.png" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
