@@ -205,6 +205,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edited Fuzzy.
+        /// </summary>
+        internal static string DisplayFilterControl_Edited_Fuzzy {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Edited_Fuzzy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edited fuzzy.
         /// </summary>
         internal static string DisplayFilterControl_EditedFuzzy {
@@ -273,6 +282,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Fuzzy {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Fuzzy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fuzzy Match Repair.
+        /// </summary>
+        internal static string DisplayFilterControl_Fuzzy_Match_Repair {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Fuzzy_Match_Repair", resourceCulture);
             }
         }
         
@@ -697,6 +715,24 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_UnEdited {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_UnEdited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unedited Fuzzy.
+        /// </summary>
+        internal static string DisplayFilterControl_Unedited_Fuzzy {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Unedited_Fuzzy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unique Occurrences.
+        /// </summary>
+        internal static string DisplayFilterControl_Unique_Occurrences {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Unique_Occurrences", resourceCulture);
             }
         }
         

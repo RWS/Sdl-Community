@@ -30,20 +30,23 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 		public bool Filter(DisplayFilterRowInfo rowInfo, bool success)
 		{
-
 			var rowId = rowInfo.SegmentPair.Properties.Id.Id;
+
 			if (success && _customSettings.EvenNo)
 			{
 				success = SegmentNumbersHelper.IsEven(rowId);
 			}
+
 			if (success && _customSettings.OddsNo)
 			{
 				success = SegmentNumbersHelper.IsOdd(rowId);
 			}
+
 			if (success && _customSettings.SplitSegments)
 			{
 				success = SegmentNumbersHelper.IsSplitSegment(rowId, _document);
 			}
+
 			if (success && (_customSettings.MergedSegments || _customSettings.MergedAcross))
 			{
 				success = SegmentNumbersHelper.IsMergedSegment(rowId, _document, _customSettings.MergedAcross);
@@ -53,12 +56,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			{
 				success = SegmentNumbersHelper.IsSourceEqualsToTarget(rowInfo.SegmentPair, _customSettings.IsEqualsCaseSensitive);
 			}
+
 			if (success && _customSettings.Grouped && !string.IsNullOrWhiteSpace(_customSettings.GroupedList))
 			{
 				success = SegmentNumbersHelper.IdInRange(rowId, _customSettings.GroupedList);
 			}
-			if (success && _customSettings.UseRegexCommentSearch &&
-				!string.IsNullOrWhiteSpace(_customSettings.CommentRegex))
+
+			if (success && _customSettings.UseRegexCommentSearch && !string.IsNullOrWhiteSpace(_customSettings.CommentRegex))
 			{
 				//create a list with source and target comments
 				var commentsList = rowInfo.SegmentPair.Source.GetComments();
@@ -66,6 +70,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 				success = CommentsHelper.IsCommentTextFoundWithRegex(commentsList, _customSettings.CommentRegex);
 			}
+
 			if (success && _customSettings.Colors.Count > 0)
 			{
 				try
@@ -79,21 +84,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			}
 
 			//fuzzy
-			if (success && !string.IsNullOrWhiteSpace(_customSettings.FuzzyMin) &&
-				!string.IsNullOrWhiteSpace(_customSettings.FuzzyMax))
+			if (success && !string.IsNullOrWhiteSpace(_customSettings.FuzzyMin) && !string.IsNullOrWhiteSpace(_customSettings.FuzzyMax))
 			{
 				success = FuzzyHelper.IsInFuzzyRange(rowInfo, _customSettings.FuzzyMin, _customSettings.FuzzyMax);
-
 			}
+
 			if (success && _customSettings.ContainsTags)
 			{
 				var containsTagVisitor = new TagVisitor();
 				success = containsTagVisitor.ContainsTag(rowInfo.SegmentPair.Source);
 			}
+
 			//unique 
 			if (success && _customSettings.Unique)
 			{
-
 				var settings = new DisplayFilterSettings
 				{
 					RepetitionTypes = new List<string>
@@ -116,35 +120,42 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 				return false;
 			}
+
 			//created by
 			if (success && _customSettings.CreatedByChecked && !string.IsNullOrWhiteSpace(_customSettings.CreatedBy))
 			{
 				var userVisitor = new UserVisitor();
 				success = userVisitor.CreatedBy(rowInfo.SegmentPair.Source, _customSettings.CreatedBy);
 			}
+
 			//modify by
 			if (success && _customSettings.ModifiedByChecked && !string.IsNullOrWhiteSpace(_customSettings.ModifiedBy))
 			{
 				var userVisitor = new UserVisitor();
 				success = userVisitor.ModifiedBy(rowInfo.SegmentPair.Source, _customSettings.ModifiedBy);
 			}
+
 			if (success && _customSettings.EditedFuzzy)
 			{
 				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
 						  FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
 			}
+
 			if (success && _customSettings.UnEditedFuzzy)
 			{
 				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
 						  !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
 			}
 
-			//String id search
+			// Document Structure Info Location search
 			if (success && !string.IsNullOrEmpty(_customSettings.DocumentStructureInfoLocation))
 			{
 				if (_settings.IsRegularExpression)
 				{
-					success = StringIdRegexSearch(rowInfo, _customSettings.DocumentStructureInfoLocation, _settings.IsCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
+					success = DocumentStructureInfoLocationRegexSearch(rowInfo, _customSettings.DocumentStructureInfoLocation, 
+						_settings.IsCaseSensitive 
+							? RegexOptions.None 
+							: RegexOptions.IgnoreCase);
 				}
 				else
 				{
@@ -155,9 +166,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 							return true;
 						}
 					}
+
 					return false;
 				}
 			}
+
 			return success;
 		}		
 
@@ -185,7 +198,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				success = rowInfo.IsConfirmationLevelFound(_settings);
 			}
 
-
 			if (!success && _settings.OriginTypes != null && _settings.OriginTypes.Any())
 				success = rowInfo.IsOriginTypeFound(_settings);
 
@@ -195,24 +207,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				success = rowInfo.IsPreviousOriginTypeFound(_settings);
 			}
 
-
 			if (!success && _settings.RepetitionTypes != null && _settings.RepetitionTypes.Any())
 			{
 				success = rowInfo.IsRepetitionTypes(_settings);
 			}
-
 
 			if (!success && _settings.SegmentLockingTypes != null && _settings.SegmentLockingTypes.Any())
 			{
 				success = rowInfo.IsSegmentLockingTypes(_settings);
 			}
 
-
 			if (!success && _settings.SegmentContentTypes != null && _settings.SegmentContentTypes.Any())
 			{
 				success = rowInfo.IsSegmentContentTypes(_settings);
 			}
-
 
 			if (!success && (!string.IsNullOrEmpty(_settings.SourceText) || !string.IsNullOrEmpty(_settings.TargetText)))
 			{
@@ -250,24 +258,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				}
 			}
 
-
 			if (!success && !_customSettings.UseRegexCommentSearch && !string.IsNullOrEmpty(_settings.CommentText))
 			{
 				success = rowInfo.IsTextFoundInComment(_settings);
 			}
-
 
 			if (!success && !string.IsNullOrEmpty(_settings.CommentAuthor))
 			{
 				success = rowInfo.IsAuthorFoundInComment(_settings);
 			}
 
-
 			if (!success && _settings.CommentSeverity > 0)
 			{
 				success = rowInfo.IsSeverityFoundInComment(_settings);
 			}
-
 
 			if (!success && _settings.ContextInfoTypes.Any())
 			{
@@ -306,8 +310,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				success = SegmentNumbersHelper.IdInRange(rowId, _customSettings.GroupedList);
 			}
 
-			if (!success && _customSettings.UseRegexCommentSearch &&
-				!string.IsNullOrWhiteSpace(_customSettings.CommentRegex))
+			if (!success && _customSettings.UseRegexCommentSearch && !string.IsNullOrWhiteSpace(_customSettings.CommentRegex))
 			{
 				//create a list with source and target comments
 				var commentsList = rowInfo.SegmentPair.Source.GetComments();
@@ -385,7 +388,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			{
 				if (_settings.IsRegularExpression)
 				{
-					success = StringIdRegexSearch(rowInfo, _customSettings.DocumentStructureInfoLocation, _settings.IsCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
+					success = DocumentStructureInfoLocationRegexSearch(rowInfo, _customSettings.DocumentStructureInfoLocation, _settings.IsCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
 				}
 				else
 				{
@@ -402,7 +405,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			return !success;
 		}
 
-		private static bool StringIdRegexSearch(DisplayFilterRowInfo rowInfo, string regexExpression, RegexOptions options)
+		private static bool DocumentStructureInfoLocationRegexSearch(DisplayFilterRowInfo rowInfo, string regexExpression, RegexOptions options)
 		{
 			var regex = new Regex(regexExpression, options);
 			foreach (var contextInfo in rowInfo.ContextInfo)
@@ -415,6 +418,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 					}
 				}
 			}
+
 			return false;
 		}
 	}

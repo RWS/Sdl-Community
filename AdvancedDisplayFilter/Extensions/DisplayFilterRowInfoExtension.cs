@@ -134,18 +134,35 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsOriginTypeFound(this DisplayFilterRowInfo rowInfo,
-			DisplayFilterSettings settings)
+		public static bool IsOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
-			var translationType =
-				rowInfo.SegmentPair.GetOriginType();
+			var translationType = rowInfo.SegmentPair.GetOriginType();
 
 			var success = settings.OriginTypes.ToList()
 				.Any(status => string.Compare(status, translationType.ToString()
-					               , StringComparison.OrdinalIgnoreCase) == 0);
+								   , StringComparison.OrdinalIgnoreCase) == 0);
+
+			if (!success)
+			{
+				success = IsFuzzyMatchRepairOriginTypeFound(rowInfo, settings);
+			}
 
 			return success;
 		}
+
+		public static bool IsFuzzyMatchRepairOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			if (settings.OriginTypes.Any(a => a == "FuzzyMatchRepair") &&
+				rowInfo.SegmentPair.Properties.TranslationOrigin.OriginType == "tm" &&
+				rowInfo.SegmentPair.Properties.TranslationOrigin.MetaDataContainsKey("FuzzyMatchRepair"))
+			{
+				var value = rowInfo.SegmentPair.Properties.TranslationOrigin.GetMetaData("FuzzyMatchRepair");
+				return Convert.ToBoolean(value);
+			}
+
+			return false;
+		}
+
 		public static bool IsPreviousOriginTypeFound(this DisplayFilterRowInfo rowInfo,
 			DisplayFilterSettings settings)
 		{
@@ -153,12 +170,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			if (rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation != null)
 			{
-				var previousTranslationType =
-					rowInfo.SegmentPair.GetPreviousTranslationOriginType();
+				var previousTranslationType = rowInfo.SegmentPair.GetPreviousTranslationOriginType();
 				if (settings.PreviousOriginTypes.ToList()
 					.Any(status => string.Compare(status,
-						               previousTranslationType.ToString()
-						               , StringComparison.OrdinalIgnoreCase) == 0))
+									   previousTranslationType.ToString()
+									   , StringComparison.OrdinalIgnoreCase) == 0))
 				{
 					success = true;
 				}
@@ -166,7 +182,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			return success;
 		}
-
 
 		public static bool IsRepetitionTypes(this DisplayFilterRowInfo rowInfo,
 			DisplayFilterSettings settings)
@@ -177,6 +192,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			return success;
 		}
+
 		public static bool IsRepetitionsAll(this DisplayFilterRowInfo rowInfo,
 			DisplayFilterSettings settings)
 		{
@@ -191,6 +207,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			return success;
 		}
+
 		public static bool IsRepetitionsFirstOccurrences(this DisplayFilterRowInfo rowInfo,
 			DisplayFilterSettings settings)
 		{
@@ -205,6 +222,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			return success;
 		}
+
 		public static bool IsRepetitionsExcludingFirstOccurrences(this DisplayFilterRowInfo rowInfo,
 			DisplayFilterSettings settings)
 		{
@@ -220,7 +238,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-
 		public static bool IsSegmentLockingTypes(this DisplayFilterRowInfo rowInfo,
 			DisplayFilterSettings settings)
 		{
@@ -229,6 +246,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			return success;
 		}
+
 		public static bool IsSegmentLockingTypeLocked(this DisplayFilterRowInfo rowInfo,
 			DisplayFilterSettings settings)
 		{
@@ -243,6 +261,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			return success;
 		}
+
 		public static bool IsSegmentLockingTypeUnLocked(this DisplayFilterRowInfo rowInfo,
 			DisplayFilterSettings settings)
 		{
@@ -257,7 +276,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			return success;
 		}
-
 
 		public static bool IsSegmentContentTypes(this DisplayFilterRowInfo rowInfo,
 			DisplayFilterSettings settings)
@@ -274,6 +292,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			return true;
 		}
+
 		public static bool IsSegmentContentTypeNumbersOnly(this DisplayFilterRowInfo rowInfo,
 			DisplayFilterSettings settings)
 		{
@@ -364,6 +383,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			return match.Success;
 		}
+
 		private static bool StringMatch(string searchFor, string searchIn, bool isCaseSensitive)
 		{
 			if (isCaseSensitive)

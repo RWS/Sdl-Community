@@ -37,7 +37,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 		public static bool IsEditedFuzzy(ISegment segment)
 		{
 			//for 100% edited
-			if ((bool)segment.Properties?.TranslationOrigin?.OriginType.Equals("auto-propagated"))
+			if (segment.Properties?.TranslationOrigin?.OriginType != null &&
+				(bool)segment.Properties?.TranslationOrigin?.OriginType.Equals("auto-propagated"))
 			{
 				return true;
 			}
@@ -55,6 +56,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 					return true;
 				}
 			}
+
 			return false;
 		}
 
@@ -62,7 +64,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 		{
 			if (segment.Properties?.TranslationOrigin?.OriginBeforeAdaptation == null)
 			{
-				if ((bool)segment.Properties?.TranslationOrigin.MatchPercent.Equals(0))
+				if (segment.Properties?.TranslationOrigin?.MatchPercent != null &&
+					(bool)segment.Properties?.TranslationOrigin?.MatchPercent.Equals(0))
 				{
 					return false;
 				}
@@ -80,8 +83,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 				{
 					if (segment.Properties?.TranslationOrigin?.OriginBeforeAdaptation?.OriginBeforeAdaptation?.OriginType != null)
 					{
-						if ((bool)segment.Properties?.TranslationOrigin?.OriginBeforeAdaptation?.OriginBeforeAdaptation?.OriginType
-							.Equals("source"))
+						if ((bool)segment.Properties?.TranslationOrigin?.OriginBeforeAdaptation?.OriginBeforeAdaptation?.OriginType.Equals("source"))
 						{
 							return false;
 						}
@@ -92,6 +94,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 					}
 				}
 			}
+
 			return true;
 		}
 	}

@@ -367,4 +367,16 @@
 	<data name="DisplayFilterControl_MinChars" xml:space="preserve">
     <value>Min chars</value>
   </data>
+	<data name="DisplayFilterControl_Unique_Occurrences" xml:space="preserve">
+    <value>Unique Occurrences</value>
+  </data>
+	<data name="DisplayFilterControl_Edited_Fuzzy" xml:space="preserve">
+    <value>Edited Fuzzy</value>
+  </data>
+	<data name="DisplayFilterControl_Unedited_Fuzzy" xml:space="preserve">
+    <value>Unedited Fuzzy</value>
+  </data>
+	<data name="DisplayFilterControl_Fuzzy_Match_Repair" xml:space="preserve">
+    <value>Fuzzy Match Repair</value>
+  </data>
 </root>

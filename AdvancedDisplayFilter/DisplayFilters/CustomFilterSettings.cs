@@ -10,6 +10,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			Or = 1
 		}
 
+		public enum OriginTypeExtended
+		{
+			FuzzyMatchRepair,
+			EditedFuzzy,
+			UneditedFuzzy
+		}
+
+		public enum RepetitionTypeExtended
+		{
+			UniqueOccurrences
+		}
+
 		public LogicalOperators SourceAndTargetLogicalOperator { get; set; }
 		public bool UseBackreferences { get; set; }
 
