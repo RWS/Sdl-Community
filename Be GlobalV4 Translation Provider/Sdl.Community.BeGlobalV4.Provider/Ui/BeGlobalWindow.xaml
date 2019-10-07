@@ -14,7 +14,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="950">
 	<Window.Resources>
-		<ResourceDictionary>			
+		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
@@ -84,13 +84,13 @@
 					</ComboBox.ItemContainerStyle>
 				</ComboBox>
 				<StackPanel Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=APICredentials}">
-				<TextBox  controls:TextBoxHelper.ClearTextButton="True"
+					<TextBox  controls:TextBoxHelper.ClearTextButton="True"
 						  controls:TextBoxHelper.Watermark="Client Id"
 						  controls:TextBoxHelper.AutoWatermark="True"
 						  controls:TextBoxHelper.UseFloatingWatermark="True" 
 					      Margin="15,0,0,10" Width="400" HorizontalAlignment="Left" IsEnabled="True" 						  
 						  Text="{Binding ClientIdValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-				<TextBox  controls:TextBoxHelper.ClearTextButton="True"
+					<TextBox  controls:TextBoxHelper.ClearTextButton="True"
 						  controls:TextBoxHelper.Watermark="Client Secret"
 						  controls:TextBoxHelper.AutoWatermark="True"
 						  controls:TextBoxHelper.UseFloatingWatermark="True" 
@@ -128,9 +128,6 @@
 					<Button  Style="{DynamicResource SdlSecondaryButtonStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="15,0,30,0" />
 				</StackPanel>
 			</StackPanel>
-
 		</Grid>
 	</Border>
-
 </Window>
-
