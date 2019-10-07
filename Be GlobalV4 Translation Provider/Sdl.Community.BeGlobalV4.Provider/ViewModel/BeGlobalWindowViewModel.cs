@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
@@ -13,14 +12,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
 	public class BeGlobalWindowViewModel : BaseViewModel
 	{
-		private ICommand _okCommand;
-		private  bool _reSendChecked;
+		private readonly LanguagePair[] _languagePairs;
 		private readonly BeGlobalWindow _mainWindow;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
-		private readonly LanguagePair[] _languagePairs;
+		private ICommand _okCommand;
+		private bool _reSendChecked;
 		private TranslationModel _selectedModel;
-		public BeGlobalTranslationOptions Options { get; set; }
-		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }
 
 		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options, LanguagePair[] languagePairs)
 		{
@@ -38,11 +35,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				ReSendChecked = options.ResendDrafts;
 			}
-			GetEngineModels(subscriptionInfo.LanguagePairs);
+			GetEngineModels(subscriptionInfo);
 			SetEngineModel();
 		}
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
+		public BeGlobalTranslationOptions Options { get; set; }
+
 		public bool ReSendChecked
 		{
 			get => _reSendChecked;
@@ -56,6 +55,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				OnPropertyChanged(nameof(ReSendChecked));
 			}
 		}
+
 		public TranslationModel SelectedModelOption
 		{
 			get => _selectedModel;
@@ -64,42 +64,44 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				_selectedModel = value;
 				if (Options?.Model != null)
 				{
-					Options.Model = value.Model;
+					SetOptions(value);
 				}
 				OnPropertyChanged(nameof(SelectedModelOption));
 			}
 		}
 
-		private void GetEngineModels(List<BeGlobalLanguagePair> beGlobalLanguagePairs)
+		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }
+
+		private void GetEngineModels(SubscriptionInfo subscriptionInfo)
 		{
 			var sourceLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(_languagePairs?[0].SourceCulture);
-			var pairsWithSameSource = beGlobalLanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
+			var pairsWithSameSource = subscriptionInfo.LanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
 			if (_languagePairs?.Count() > 0)
 			{
 				foreach (var languagePair in _languagePairs)
 				{
-					var targetLanguage =
-						_normalizeSourceTextHelper.GetCorespondingLangCode(languagePair.TargetCulture);
+					var targetLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(languagePair.TargetCulture);
 
 					var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
 
 					foreach (var serviceLanguagePair in serviceLanguagePairs)
 					{
-						if (TranslationOptions != null)
+						var existingTranslationModel = TranslationOptions.FirstOrDefault(e => e.Model.Equals(serviceLanguagePair.Model));
+						TranslationModel newTranslationModel = null;
+						if (existingTranslationModel == null)
 						{
-							var engineExists = TranslationOptions.Any(e => e.Model.Equals(serviceLanguagePair.Model));
-							if (!engineExists)
+							newTranslationModel = new TranslationModel
 							{
-								TranslationOptions.Add(new TranslationModel
-								{
-									Model = serviceLanguagePair.Model,
-									DisplayName = serviceLanguagePair.DisplayName
-								});
-							}
+								Model = serviceLanguagePair.Model,
+								DisplayName = serviceLanguagePair.DisplayName,
+							};
+							TranslationOptions.Add(newTranslationModel);
 						}
+
+						(existingTranslationModel ?? newTranslationModel).LanguagesSupported.Add(languagePair.TargetCulture.Name, serviceLanguagePair.Name);
 					}
 				}
-			} 
+			}
 		}
 
 		private void Ok(object parameter)
@@ -117,7 +119,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					SelectedModelOption = TranslationOptions?[0];
 					if (Options != null)
 					{
-						Options.Model = TranslationOptions?[0].Model;
+						SetOptions(TranslationOptions?[0]);
 					}
 				}
 			}
@@ -132,5 +134,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
+		private void SetOptions(TranslationModel translationModel)
+		{
+			Options.Model = translationModel.Model;
+			Options.DisplayName = translationModel.DisplayName;
+			Options.LanguagesSupported = translationModel.LanguagesSupported;
+		}
 	}
 }

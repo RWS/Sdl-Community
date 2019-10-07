@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -78,11 +80,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public string SerializeState()
 		{
-			return null;
+			return JsonConvert.SerializeObject(Options);
 		}
 
 		public void LoadState(string translationProviderState)
 		{
+			Options = JsonConvert.DeserializeObject<BeGlobalTranslationOptions>(translationProviderState);
 		}
 
 
