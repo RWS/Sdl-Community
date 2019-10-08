@@ -6,25 +6,6 @@
   <Author>SDL</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="15.2" />
   <Include>    
-    <!--<File>Sdl.LanguagePlatform.MTConnectors.Google.dll</File>
-    <File>NLog.dll</File>-->
-
-    <!--Localization-->
-    <File>de\Sdl.LanguagePlatform.MTConnectors.Google.resources.dll</File>
-    <File>es\Sdl.LanguagePlatform.MTConnectors.Google.resources.dll</File>
-    <File>fr\Sdl.LanguagePlatform.MTConnectors.Google.resources.dll</File>
-    <File>it-IT\Sdl.LanguagePlatform.MTConnectors.Google.resources.dll</File>
-    <File>ja\Sdl.LanguagePlatform.MTConnectors.Google.resources.dll</File>
-    <File>ko-KR\Sdl.LanguagePlatform.MTConnectors.Google.resources.dll</File>
-    <File>ru-RU\Sdl.LanguagePlatform.MTConnectors.Google.resources.dll</File>
-    <File>zh-CN\Sdl.LanguagePlatform.MTConnectors.Google.resources.dll</File>
-    <File>Plugins\Sdl.LanguagePlatform.MTConnectors.Google.plugin.de.resources</File>
-    <File>Plugins\Sdl.LanguagePlatform.MTConnectors.Google.plugin.es.resources</File>
-    <File>Plugins\Sdl.LanguagePlatform.MTConnectors.Google.plugin.it-IT.resources</File>
-    <File>Plugins\Sdl.LanguagePlatform.MTConnectors.Google.plugin.ja.resources</File>
-    <File>Plugins\Sdl.LanguagePlatform.MTConnectors.Google.plugin.ko-KR.resources</File>
-    <File>Plugins\Sdl.LanguagePlatform.MTConnectors.Google.plugin.ru-RU.resources</File>
-    <File>Plugins\Sdl.LanguagePlatform.MTConnectors.Google.plugin.fr.resources</File>
-    <File>Plugins\Sdl.LanguagePlatform.MTConnectors.Google.plugin.zh-CN.resources</File>
+    <File>NLog.dll</File>
   </Include>
 </PluginPackage>
