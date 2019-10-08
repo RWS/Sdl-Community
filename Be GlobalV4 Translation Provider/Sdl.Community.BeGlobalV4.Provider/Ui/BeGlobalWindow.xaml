@@ -67,6 +67,7 @@
 					FontFamily="Calibri"
 					ItemsSource="{Binding LoginOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 					SelectedItem="{Binding SelectedLoginOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					SelectedIndex="0"
 					Margin="15,5,0,10" BorderThickness="1"
 					controls:TextBoxHelper.Watermark="Please select the authentication method"
 					controls:TextBoxHelper.ClearTextButton="True">
