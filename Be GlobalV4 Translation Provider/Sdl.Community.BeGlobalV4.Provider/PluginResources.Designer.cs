@@ -131,6 +131,16 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap MTCloud_logo_small {
+            get {
+                object obj = ResourceManager.GetObject("MTCloud_logo_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sdl.Community.BeGlobalV4.Provider.
         /// </summary>
         public static string Plugin_Name {

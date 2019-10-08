@@ -139,7 +139,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				Name = "Machine Translation Cloud provider",
 				TooltipText = "Machine Translation Cloud provider",
-				SearchResultImage = PluginResources.logoRes,
+				SearchResultImage = PluginResources.MTCloud_logo_small,
 				TranslationProviderIcon = PluginResources.global
 			};
 			return info;

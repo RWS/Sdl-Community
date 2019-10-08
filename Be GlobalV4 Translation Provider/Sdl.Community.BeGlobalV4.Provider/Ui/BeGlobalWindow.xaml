@@ -8,11 +8,9 @@
              xmlns:uiHelpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.UiHelpers"
 			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
              helpers:WindowCloser.DialogResult="{Binding DialogResult}"
-			 WindowStartupLocation="CenterScreen"
-			 WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResizeWithGrip"
-			 Title="SDL Machine Translation Cloud"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="950">
+			 WindowStartupLocation="CenterScreen" mc:Ignorable="d" 
+			 WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResizeWithGrip"	 
+             d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="800">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -48,27 +46,23 @@
 
 			<!-- BORDER CONTROL -->
 			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
-			<Border Background="White" Grid.Column="0" Grid.Row="1"  MaxWidth="950">
+			<Border Background="White" Grid.Column="0" Grid.Row="1"  MaxWidth="800">
 				<StackPanel  Orientation="Horizontal">
-					<TextBlock Margin="15,0,2,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" MaxWidth="650">
+					<TextBlock Margin="15,10,2,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" MaxWidth="800">
 						Welcome to the SDL Machine Translation Cloud (formerly BeGlobal) translation provider for Studio. <LineBreak/><LineBreak/>
 						SDL Machine Translation Cloud is SDL's neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
 						Using SDL's proprietary technology, customers can have the assurance of content privacy.
 						SDL Machine Translation is powered by SDL's state-of-the-art machine learning algorithms and supports a large number of languages.
 					</TextBlock>
-					<Image Source="../Resources/MTCloud_logo.png" Width="290" Height="auto" HorizontalAlignment="Center"/>
 				</StackPanel>
 			</Border>
-			<StackPanel Grid.Row="2" Margin="0,5,0,0" MinHeight="250">
+			<StackPanel Grid.Row="2" Margin="0,10,0,0" MinHeight="250">
 				<Button Style="{DynamicResource LightBlueButtonsStyle}" Width="75" Content="Login" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
 				<ComboBox
-					HorizontalAlignment="Left"
-					Width="400"
-					FontFamily="Calibri"
+					HorizontalAlignment="Left" Width="400" FontFamily="Calibri" Margin="15,5,0,10" BorderThickness="1"
 					ItemsSource="{Binding LoginOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 					SelectedItem="{Binding SelectedLoginOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					Margin="15,5,0,10" BorderThickness="1"
+					SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"					
 					controls:TextBoxHelper.Watermark="Please select the authentication method"
 					controls:TextBoxHelper.ClearTextButton="True">
 					<ComboBox.ItemTemplate>
@@ -86,49 +80,29 @@
 				</ComboBox>
 				<StackPanel Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=APICredentials}">
 					<PasswordBox  
-						HorizontalAlignment="Left"
-						Name="ClientIdBox"
+						HorizontalAlignment="Left" Name="ClientIdBox"
 						controls:TextBoxHelper.UseFloatingWatermark="True"  
 						controls:TextBoxHelper.Watermark="Client Id"
 						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 						controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-						Width="300"
-						Margin="15,0,0,10"	  
-						IsEnabled="True">
+						Width="300"	Margin="15,0,0,10" IsEnabled="True">
 					</PasswordBox>
 					<PasswordBox  
-						HorizontalAlignment="Left"
-						Name="ClientSecretBox"
+						HorizontalAlignment="Left" Name="ClientSecretBox"
 						controls:TextBoxHelper.UseFloatingWatermark="True"  
 						controls:TextBoxHelper.Watermark="Client Secret"
 						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 						controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-						Width="300"
-						Margin="15,0,0,0"	  
-						IsEnabled="True">
-					</PasswordBox>
-					<!--<TextBox controls:TextBoxHelper.ClearTextButton="True"
-						  controls:TextBoxHelper.Watermark="Client Id"
-						  controls:TextBoxHelper.AutoWatermark="True"
-						  controls:TextBoxHelper.UseFloatingWatermark="True" 
-					      Margin="15,0,0,10" Width="400" HorizontalAlignment="Left" IsEnabled="True" 						  
-						  Text="{Binding ClientId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-					<TextBox controls:TextBoxHelper.ClearTextButton="True"
-						  controls:TextBoxHelper.Watermark="Client Secret"
-						  controls:TextBoxHelper.AutoWatermark="True"
-						  controls:TextBoxHelper.UseFloatingWatermark="True" 
-						  Margin="15,0,0,10" Width="400" HorizontalAlignment="Left" IsEnabled="True"
-						  Text="{Binding ClientSecret, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
+						Width="300"	Margin="15,0,0,0" IsEnabled="True">
+					</PasswordBox>					
 				</StackPanel>
+				
 				<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments"/>
 				<TextBlock  Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select engine model :"/>
 				<ComboBox 
-					HorizontalAlignment="Left"
-					Width="240"
-					FontFamily="Calibri"
+					HorizontalAlignment="Left" Width="240" FontFamily="Calibri" Margin="15,5,0,10" BorderThickness="1"
 					ItemsSource="{Binding TranslationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					SelectedItem="{Binding SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					Margin="15,5,0,10" BorderThickness="1"
+					SelectedItem="{Binding SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"					
 					controls:TextBoxHelper.Watermark="Please select engine model">
 					<ComboBox.ItemTemplate>
 						<DataTemplate>

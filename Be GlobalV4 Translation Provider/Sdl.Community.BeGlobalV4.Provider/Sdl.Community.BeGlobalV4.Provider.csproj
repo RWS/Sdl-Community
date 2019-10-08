@@ -202,6 +202,7 @@
     <Compile Include="ViewModel\BeGlobalWindowViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\MTCloud_logo_small.png" />
     <Resource Include="Resources\MTCloud_logo.png" />
     <Resource Include="Resources\logoRes.png" />
     <Resource Include="Resources\AdaptiveEngine.ico" />
