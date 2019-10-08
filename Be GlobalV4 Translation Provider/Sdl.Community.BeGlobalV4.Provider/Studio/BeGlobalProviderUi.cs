@@ -10,14 +10,14 @@ using Application = System.Windows.Application;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
-	
+
 	[TranslationProviderWinFormsUi(
 		Id = "MachineTranslationCloudProviderUi",
 		Name = "MachineTranslationCloudProviderUi",
 		Description = "Machine Translation Cloud Provider")]
-	public class BeGlobalProviderUi  : ITranslationProviderWinFormsUI
+	public class BeGlobalProviderUi : ITranslationProviderWinFormsUI
 	{
-		public string TypeName => "Machine Translation Cloud Provider"; 
+		public string TypeName => "Machine Translation Cloud Provider";
 		public string TypeDescription => "Machine Translation Cloud Provider";
 		public bool SupportsEditing => true;
 		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
@@ -31,6 +31,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				AppItializer.EnsureInitializer();
 				var options = new BeGlobalTranslationOptions();
 				var token = string.Empty;
+				var credentials = GetCredentials(credentialStore, "machinetranslationcloudprovider:///");
 
 				Application.Current?.Dispatcher?.Invoke(() =>
 				{
@@ -39,18 +40,23 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				if (!string.IsNullOrEmpty(token))
 				{
 					var beGlobalWindow = new BeGlobalWindow();
-					var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, languagePairs);
+					var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, languagePairs, credentials);
 					beGlobalWindow.DataContext = beGlobalVm;
 
 					beGlobalWindow.ShowDialog();
 					if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
-					{
-						var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options.Model);
+					{				
+						beGlobalVm.Options.ClientId = beGlobalWindow.ClientIdBox?.Password;
+						beGlobalVm.Options.ClientSecret = beGlobalWindow.ClientSecretBox?.Password;
+						var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options);
 						beGlobalVm.Options.BeGlobalService = beGlobalService;
+
 						var provider = new BeGlobalTranslationProvider(options)
 						{
 							Options = beGlobalVm.Options
 						};
+
+						SetCredentials(credentialStore, beGlobalVm.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
 						return new ITranslationProvider[] { provider };
 					}
 				}
@@ -74,6 +80,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				{
 					return false;
 				}
+
+				//get saved key if there is one and put it into options
+				var credentials = GetCredentials(credentialStore, "machinetranslationcloudprovider:///");
+				if (credentials != null)
+				{
+					var splitedCredentials = credentials.Credential.Split('#');
+					editProvider.Options.ClientId = splitedCredentials[0];
+					editProvider.Options.ClientSecret = splitedCredentials[1];
+				}
+
 				var token = string.Empty;
 				AppItializer.EnsureInitializer();
 				Application.Current?.Dispatcher?.Invoke(() =>
@@ -84,13 +100,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				if (!string.IsNullOrEmpty(token))
 				{
 					var beGlobalWindow = new BeGlobalWindow();
-					var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, editProvider.Options, languagePairs);
+					var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, editProvider.Options, languagePairs, credentials);
 					beGlobalWindow.DataContext = beGlobalVm;
 
 					beGlobalWindow.ShowDialog();
 					if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 					{
 						editProvider.Options = beGlobalVm.Options;
+						editProvider.Options.ClientId = beGlobalWindow.ClientIdBox.Password;
+						editProvider.Options.ClientSecret = beGlobalWindow.ClientSecretBox.Password;
+						SetCredentials(credentialStore, editProvider.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
 						return true;
 					}
 				}
@@ -130,6 +149,28 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			ITranslationProviderCredentialStore credentialStore)
 		{
 			throw new NotImplementedException();
-		} 
+		}
+
+		private TranslationProviderCredential GetCredentials(ITranslationProviderCredentialStore credentialStore, string uri)
+		{
+			var providerUri = new Uri(uri);
+			TranslationProviderCredential cred = null;
+
+			if (credentialStore.GetCredential(providerUri) != null)
+			{
+				//get the credential to return
+				cred = new TranslationProviderCredential(credentialStore.GetCredential(providerUri).Credential, credentialStore.GetCredential(providerUri).Persist);
+			}
+			return cred;
+		}
+
+		private void SetCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool persistKey)
+		{
+			var uri = new Uri("machinetranslationcloudprovider:///");
+			var credential = $"{clientId}#{clientSecret}";
+			var credentials = new TranslationProviderCredential(credential, persistKey);
+			credentialStore.RemoveCredential(uri);
+			credentialStore.AddCredential(uri, credentials);
+		}
 	}
 }

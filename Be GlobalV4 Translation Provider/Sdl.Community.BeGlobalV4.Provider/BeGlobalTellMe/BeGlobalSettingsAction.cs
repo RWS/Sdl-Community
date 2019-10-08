@@ -23,21 +23,21 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 			var currentProject = SdlTradosStudio.Application?.GetController<ProjectsController>().CurrentProject;
 			var settings = currentProject?.GetTranslationProviderConfiguration();
 			var translationProvider = settings?.Entries?.FirstOrDefault(entry =>
-				entry.MainTranslationProvider.Uri.OriginalString.Contains("beglobaltranslationprovider"));
+				entry.MainTranslationProvider.Uri.OriginalString.Contains("machinetranslationcloudprovider"));
 			if (translationProvider != null)
 			{
 				var uri = translationProvider.MainTranslationProvider?.Uri;
 				var languagePairs = GetProjectLanguagePairs(currentProject);
 				var options = new BeGlobalTranslationOptions(uri);
 				var beGlobalWindow = new BeGlobalWindow();
-				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, languagePairs);
+				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, languagePairs, null);
 				beGlobalWindow.DataContext = beGlobalVm;
 				beGlobalWindow.ShowDialog();
 				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 				{
 					settings.Entries
 						.Find(entry =>
-							entry.MainTranslationProvider.Uri.OriginalString.Contains("beglobaltranslationprovider"))
+							entry.MainTranslationProvider.Uri.OriginalString.Contains("machinetranslationcloudprovider"))
 						.MainTranslationProvider.Uri = options.Uri;
 
 					currentProject.UpdateTranslationProviderConfiguration(settings);
@@ -64,7 +64,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 
 
 		public override bool IsAvailable => true;
-		public override string Category => "BeGlobal results";
+		public override string Category => "Machine Translation Cloud results";
 
 		public override Icon Icon => PluginResources.Settings;
 	}

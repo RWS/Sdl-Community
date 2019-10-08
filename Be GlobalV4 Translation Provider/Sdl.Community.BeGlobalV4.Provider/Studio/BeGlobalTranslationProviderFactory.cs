@@ -17,24 +17,44 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			AppItializer.EnsureInitializer();
 
+			var originalUri = new Uri("machinetranslationcloudprovider:///");
 			var options = new BeGlobalTranslationOptions(translationProviderUri);
-			if (options.BeGlobalService == null)
+			if (credentialStore.GetCredential(originalUri) != null)
 			{
-				options.BeGlobalService = new BeGlobalV4Translator(options.Model);
+				var credentials = credentialStore.GetCredential(originalUri);
+				var splitedCredentials = credentials.Credential.Split('#');
+				options.ClientId = splitedCredentials[0];
+				options.ClientSecret = splitedCredentials[1];
+				if (options.BeGlobalService == null)
+				{
+					options.BeGlobalService = new BeGlobalV4Translator(options);
+				}
 			}
-			try
+			else
 			{
-				var accountId = options.BeGlobalService.GetUserInformation();
-				var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
-
-				options.SubscriptionInfo = subscriptionInfo;
+				credentialStore.AddCredential(originalUri, new TranslationProviderCredential(originalUri.ToString(), true));
 			}
-			catch (Exception e)
-			{
-				Log.Logger.Error(e, "Error on CreateTranslationProvider");
-			}
-
+			var accountId = options.BeGlobalService.GetUserInformation();		
+			var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
+			options.SubscriptionInfo = subscriptionInfo;
 			return new BeGlobalTranslationProvider(options);
+
+			//if (options.BeGlobalService == null)
+			//{
+			//	options.BeGlobalService = new BeGlobalV4Translator(options);
+			//}
+			//try
+			//{
+			//	var accountId = options.BeGlobalService.GetUserInformation();
+			//	var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
+			//	options.SubscriptionInfo = subscriptionInfo;
+			//}
+			//catch (Exception e)
+			//{
+			//	Log.Logger.Error(e, "Error on CreateTranslationProvider");
+			//}
+
+			//return new BeGlobalTranslationProvider(options);
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

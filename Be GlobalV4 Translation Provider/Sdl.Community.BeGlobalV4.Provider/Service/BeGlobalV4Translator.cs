@@ -19,29 +19,52 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		private const string Url = "https://translate-api.sdlbeglobal.com";
 		public static readonly Log Log = Log.Instance;
 		private readonly StudioCredentials _studioCredentials;
-		private const string PluginName = "SDL BeGlobal (NMT) Translation Provider";
+		private string _authenticationMethod = string.Empty;
+		private const string PluginName = "Machine Translation Cloud Provider";
 
-		public BeGlobalV4Translator(string flavor)
+		public BeGlobalV4Translator(BeGlobalTranslationOptions beGlobalTranslationOptions)
 		{
-			_flavor = flavor;
-			 _studioCredentials = new StudioCredentials();
-			var accessToken = string.Empty;
-
-			Application.Current?.Dispatcher?.Invoke(() =>
-			{
-				accessToken = _studioCredentials.GetToken();
-			});
-			accessToken = _studioCredentials.GetToken();
-
-
+			_flavor = beGlobalTranslationOptions.Model;
+			_authenticationMethod = beGlobalTranslationOptions.AuthenticationMethod;
+			_studioCredentials = new StudioCredentials();
 			_client = new RestClient($"{Url}/v4")
 			{
 				CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore)
 			};
 
-			if (!string.IsNullOrEmpty(accessToken))
+			if (!string.IsNullOrEmpty(_authenticationMethod))
 			{
-				_client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
+				if (_authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
+				{
+					var request = new RestRequest("/token", Method.POST)
+					{
+						RequestFormat = DataFormat.Json
+					};
+					request.AddBody(new { clientId = beGlobalTranslationOptions.ClientId, clientSecret = beGlobalTranslationOptions.ClientSecret });
+					request.RequestFormat = DataFormat.Json;
+					var response = _client.Execute(request);
+					if (response.StatusCode != HttpStatusCode.OK)
+					{
+						throw new Exception("Acquiring token failed: " + response.Content);
+					}
+					dynamic json = JsonConvert.DeserializeObject(response.Content);
+					_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
+				}
+				else
+				{
+					var accessToken = string.Empty;
+
+					Application.Current?.Dispatcher?.Invoke(() =>
+					{
+						accessToken = _studioCredentials.GetToken();
+					});
+					accessToken = _studioCredentials.GetToken();
+
+					if (!string.IsNullOrEmpty(accessToken))
+					{
+						_client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
+					}
+				}
 			}
 		}
 
@@ -114,12 +137,22 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 		public int GetUserInformation()
 		{
-			var request = new RestRequest("/accounts/users/self")
+			RestRequest request;
+			if (_authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
 			{
-				RequestFormat = DataFormat.Json
-			};
+				request = new RestRequest("/accounts/api-credentials/self")
+				{
+					RequestFormat = DataFormat.Json
+				};
+			}
+			else
+			{
+				request = new RestRequest("/accounts/users/self")
+				{
+					RequestFormat = DataFormat.Json
+				};
+			}
 			var traceId = GetTraceId(request);
-
 			var response = _client.Execute(request);
 			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
 			if (response.StatusCode == HttpStatusCode.Unauthorized)

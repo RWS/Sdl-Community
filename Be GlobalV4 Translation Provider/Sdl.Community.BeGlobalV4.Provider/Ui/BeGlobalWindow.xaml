@@ -67,7 +67,7 @@
 					FontFamily="Calibri"
 					ItemsSource="{Binding LoginOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 					SelectedItem="{Binding SelectedLoginOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					SelectedIndex="0"
+					SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 					Margin="15,5,0,10" BorderThickness="1"
 					controls:TextBoxHelper.Watermark="Please select the authentication method"
 					controls:TextBoxHelper.ClearTextButton="True">
@@ -85,18 +85,40 @@
 					</ComboBox.ItemContainerStyle>
 				</ComboBox>
 				<StackPanel Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=APICredentials}">
-					<TextBox  controls:TextBoxHelper.ClearTextButton="True"
+					<PasswordBox  
+						HorizontalAlignment="Left"
+						Name="ClientIdBox"
+						controls:TextBoxHelper.UseFloatingWatermark="True"  
+						controls:TextBoxHelper.Watermark="Client Id"
+						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+						controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+						Width="300"
+						Margin="15,0,0,10"	  
+						IsEnabled="True">
+					</PasswordBox>
+					<PasswordBox  
+						HorizontalAlignment="Left"
+						Name="ClientSecretBox"
+						controls:TextBoxHelper.UseFloatingWatermark="True"  
+						controls:TextBoxHelper.Watermark="Client Secret"
+						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+						controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+						Width="300"
+						Margin="15,0,0,0"	  
+						IsEnabled="True">
+					</PasswordBox>
+					<!--<TextBox controls:TextBoxHelper.ClearTextButton="True"
 						  controls:TextBoxHelper.Watermark="Client Id"
 						  controls:TextBoxHelper.AutoWatermark="True"
 						  controls:TextBoxHelper.UseFloatingWatermark="True" 
 					      Margin="15,0,0,10" Width="400" HorizontalAlignment="Left" IsEnabled="True" 						  
-						  Text="{Binding ClientIdValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-					<TextBox  controls:TextBoxHelper.ClearTextButton="True"
+						  Text="{Binding ClientId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+					<TextBox controls:TextBoxHelper.ClearTextButton="True"
 						  controls:TextBoxHelper.Watermark="Client Secret"
 						  controls:TextBoxHelper.AutoWatermark="True"
 						  controls:TextBoxHelper.UseFloatingWatermark="True" 
 						  Margin="15,0,0,10" Width="400" HorizontalAlignment="Left" IsEnabled="True"
-						  Text="{Binding ClientSecretValue , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+						  Text="{Binding ClientSecret, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
 				</StackPanel>
 				<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments"/>
 				<TextBlock  Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select engine model :"/>

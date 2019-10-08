@@ -10,10 +10,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 		public enum LoginOptions
 		{
 			[Display(Name ="API Credentials")]
-			APICredentials = 1,
+			APICredentials = 0,
 
 			[Display(Name = "Studio Authentication (via SDL ID)")]
-			StudioAuthentication = 2
+			StudioAuthentication = 1
 		}
 
 		public static string GetDisplayName(this Enum enumValue)
