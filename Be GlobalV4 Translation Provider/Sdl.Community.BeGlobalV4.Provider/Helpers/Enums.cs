@@ -12,7 +12,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 			[Display(Name ="API Credentials")]
 			APICredentials = 1,
 
-			[Display(Name = "Studio Authentication")]
+			[Display(Name = "Studio Authentication (via SDL ID)")]
 			StudioAuthentication = 2
 		}
 
