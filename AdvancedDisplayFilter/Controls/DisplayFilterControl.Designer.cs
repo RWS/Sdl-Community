@@ -503,6 +503,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.listView_selected.UseCompatibleStateImageBehavior = false;
 			this.listView_selected.View = System.Windows.Forms.View.Details;
 			this.listView_selected.SelectedIndexChanged += new System.EventHandler(this.ListView_selected_SelectedIndexChanged);
+			this.listView_selected.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListView_selected_MouseDoubleClick);
 			this.listView_selected.Resize += new System.EventHandler(this.ListView_selected_Resize);
 			// 
 			// columnHeader_filtersSelected_name

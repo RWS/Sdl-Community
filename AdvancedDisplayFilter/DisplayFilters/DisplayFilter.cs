@@ -64,7 +64,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 
 				if (success && Settings.OriginTypes != null && Settings.OriginTypes.Any())
 				{
-					if (!Settings.OriginTypes.Contains("EditedF") && !Settings.OriginTypes.Contains("UneditedF"))
+					if (!Settings.OriginTypes.Contains(CustomFilterSettings.OriginTypeExtended.EditedFuzzy.ToString()) && 
+					    !Settings.OriginTypes.Contains(CustomFilterSettings.OriginTypeExtended.UneditedFuzzy.ToString()))
 					{
 						success = rowInfo.IsOriginTypeFound(Settings);
 					}
@@ -77,7 +78,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 
 				if (success && Settings.RepetitionTypes != null && Settings.RepetitionTypes.Any())
 				{
-					if (!Settings.RepetitionTypes.Contains("Unique"))
+					if (!Settings.RepetitionTypes.Contains(CustomFilterSettings.RepetitionTypeExtended.UniqueOccurrences.ToString()))
 					{
 						success = rowInfo.IsRepetitionTypes(Settings);
 					}
