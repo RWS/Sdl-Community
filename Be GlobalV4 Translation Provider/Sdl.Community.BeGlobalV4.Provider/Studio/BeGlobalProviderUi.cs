@@ -142,7 +142,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (credentialStore.GetCredential(providerUri) != null)
 			{
 				//get the credential to return
-				//credentialStore.RemoveCredential(providerUri);
 				cred = new TranslationProviderCredential(credentialStore.GetCredential(providerUri)?.Credential, credentialStore.GetCredential(providerUri).Persist);
 			}
 			return cred;
