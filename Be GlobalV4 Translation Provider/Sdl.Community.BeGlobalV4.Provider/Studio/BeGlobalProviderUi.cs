@@ -5,7 +5,6 @@ using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Application = System.Windows.Application;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
@@ -26,7 +25,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			try
 			{
-				AppItializer.EnsureInitializer();
 				var options = new BeGlobalTranslationOptions();
 				var token = string.Empty;
 				var credentials = GetCredentials(credentialStore, "machinetranslationcloudprovider:///");
