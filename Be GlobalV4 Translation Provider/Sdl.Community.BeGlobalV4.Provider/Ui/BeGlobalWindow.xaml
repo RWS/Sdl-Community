@@ -86,7 +86,7 @@
 						controls:TextBoxHelper.Watermark="Client Id"
 						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 						controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-						Width="300"	Margin="15,0,0,10" IsEnabled="True">
+						Width="400"	Margin="15,0,0,10" IsEnabled="True">
 					</PasswordBox>
 					<PasswordBox  
 						HorizontalAlignment="Left" Name="ClientSecretBox"
@@ -94,14 +94,14 @@
 						controls:TextBoxHelper.Watermark="Client Secret"
 						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 						controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-						Width="300"	Margin="15,0,0,0" IsEnabled="True">
+						Width="400"	Margin="15,0,0,0" IsEnabled="True">
 					</PasswordBox>					
 				</StackPanel>
 				
 				<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments"/>
 				<TextBlock  Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select engine model :"/>
 				<ComboBox 
-					HorizontalAlignment="Left" Width="240" FontFamily="Calibri" Margin="15,5,0,10" BorderThickness="1"
+					HorizontalAlignment="Left" Width="400" FontFamily="Calibri" Margin="15,5,0,10" BorderThickness="1"
 					ItemsSource="{Binding TranslationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 					SelectedItem="{Binding SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"					
 					controls:TextBoxHelper.Watermark="Please select engine model">
