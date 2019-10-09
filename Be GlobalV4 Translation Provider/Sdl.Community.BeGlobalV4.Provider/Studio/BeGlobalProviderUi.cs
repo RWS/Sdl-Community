@@ -31,33 +31,26 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				var token = string.Empty;
 				var credentials = GetCredentials(credentialStore, "machinetranslationcloudprovider:///");
 
-				//Application.Current?.Dispatcher?.Invoke(() =>
-				//{
-				//	token = _studioCredentials.GetToken();
-				//});
-				//if (!string.IsNullOrEmpty(token))
-				//{					
-					var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, credentials);
-					beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
+				var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, credentials);
+				beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
 
-					beGlobalVm.BeGlobalWindow.ShowDialog();
-					if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
+				beGlobalVm.BeGlobalWindow.ShowDialog();
+				if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
+				{
+					var messageBoxService = new MessageBoxService();
+					beGlobalVm.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox?.Password;
+					beGlobalVm.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox?.Password;
+					var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options, messageBoxService);
+					beGlobalVm.Options.BeGlobalService = beGlobalService;
+
+					var provider = new BeGlobalTranslationProvider(options)
 					{
-						var messageBoxService = new MessageBoxService();
-						beGlobalVm.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox?.Password;
-						beGlobalVm.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox?.Password;
-						var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options, messageBoxService);
-						beGlobalVm.Options.BeGlobalService = beGlobalService;
+						Options = beGlobalVm.Options
+					};
 
-						var provider = new BeGlobalTranslationProvider(options)
-						{
-							Options = beGlobalVm.Options
-						};
-
-						SetCredentials(credentialStore, beGlobalVm.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
-						return new ITranslationProvider[] { provider };
-					}
-				//}
+					SetCredentials(credentialStore, beGlobalVm.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
+					return new ITranslationProvider[] { provider };
+				}
 			}
 			catch (Exception e)
 			{
@@ -90,26 +83,19 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 				var token = string.Empty;
 				AppItializer.EnsureInitializer();
-				//Application.Current?.Dispatcher?.Invoke(() =>
-				//{
-				//	token = _studioCredentials.GetToken();
-				//});
 
-				//if (!string.IsNullOrEmpty(token))
-				//{
-					var beGlobalVm = new BeGlobalWindowViewModel(editProvider.Options, languagePairs, credentials);
-					beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
+				var beGlobalVm = new BeGlobalWindowViewModel(editProvider.Options, languagePairs, credentials);
+				beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
 
-					beGlobalVm.BeGlobalWindow.ShowDialog();
-					if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
-					{
-						editProvider.Options = beGlobalVm.Options;
-						editProvider.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox.Password;
-						editProvider.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox.Password;
-						SetCredentials(credentialStore, editProvider.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
-						return true;
-					}
-				//}
+				beGlobalVm.BeGlobalWindow.ShowDialog();
+				if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
+				{
+					editProvider.Options = beGlobalVm.Options;
+					editProvider.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox.Password;
+					editProvider.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox.Password;
+					SetCredentials(credentialStore, editProvider.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
+					return true;
+				}
 			}
 			catch (Exception e)
 			{

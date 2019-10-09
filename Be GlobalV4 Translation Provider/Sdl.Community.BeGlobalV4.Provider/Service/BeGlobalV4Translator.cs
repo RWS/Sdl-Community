@@ -90,7 +90,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				});
 				var response = _client.Execute(request);
 
-				if (response.StatusCode == HttpStatusCode.Unauthorized)
+				if (response.StatusCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(_authenticationMethod)
+					&& _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
 				{
 					// Get refresh token
 					var token = _studioCredentials.EnsureValidConnection();
@@ -155,7 +156,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			var traceId = GetTraceId(request);
 			var response = _client.Execute(request);
 			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
-			if (response.StatusCode == HttpStatusCode.Unauthorized)
+			if (response.StatusCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(_authenticationMethod)
+				&& _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
 			{
 				// Get refresh token
 				var token = _studioCredentials.EnsureValidConnection();
@@ -206,7 +208,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				var traceId =GetTraceId(request);
 
 				var response = _client.Execute(request);
-				if (response.StatusCode == HttpStatusCode.Unauthorized)
+				if (response.StatusCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(_authenticationMethod)
+				&& _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
 				{
 					// Get refresh token
 					var token = _studioCredentials.EnsureValidConnection();
@@ -244,6 +247,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			return new SubscriptionInfo();
 		}
+
 		private byte[] WaitForTranslation(string id)
 		{
 			try

@@ -103,15 +103,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				_selectedLoginOption = value;
 				OnPropertyChanged(nameof(SelectedLoginOption));
 
-				LoginMethod = _selectedLoginOption?.LoginOption;
-				//if(LoginMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
-				//{
-				//	AppItializer.EnsureInitializer();
-				//	Application.Current?.Dispatcher?.Invoke(() =>
-				//	{
-				//		token = _studioCredentials.GetToken();
-				//	});
-				//}
+				CheckLoginMethod();
 				SetClientOptions();
 			}
 		}
@@ -263,6 +255,23 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			Options.Model = translationModel.Model;
 			Options.DisplayName = translationModel.DisplayName;
 			Options.LanguagesSupported = translationModel.LanguagesSupported;
+		}
+
+		/// <summary>
+		///  Set the LoginMethod based on user selection.
+		///  If LoginMethod is Studio Authentication, check if user is logged-in in Studio
+		/// </summary>
+		private void CheckLoginMethod()
+		{
+			LoginMethod = _selectedLoginOption?.LoginOption;
+			if (LoginMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
+			{
+				AppItializer.EnsureInitializer();
+				Application.Current?.Dispatcher?.Invoke(() =>
+				{
+					_studioCredentials.GetToken();
+				});
+			}
 		}
 	}
 }
