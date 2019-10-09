@@ -44,14 +44,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				ReSendChecked = options.ResendDrafts;
 			}
 			SetLoginOptions();
-
-			if (_credentials == null) return;
-			var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
-			var accountId = beGlobalTranslator.GetUserInformation();
-			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
-			GetEngineModels(subscriptionInfo);
-			SetEngineModel();
-			SetAuthenticationOptions();
+			if (credentials == null) return;
+			var credential = _credentials.Credential.Replace("machinetranslationcloudprovider:///", string.Empty);
+			if (credential.Contains("#"))
+			{
+				var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
+				var accountId = beGlobalTranslator.GetUserInformation();
+				var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+				GetEngineModels(subscriptionInfo);
+				SetEngineModel();
+				SetAuthenticationOptions();
+			}
 		}
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
