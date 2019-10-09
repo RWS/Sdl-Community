@@ -40,7 +40,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					var messageBoxService = new MessageBoxService();
 					beGlobalVm.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox?.Password;
 					beGlobalVm.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox?.Password;
-					var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options, messageBoxService);
+					var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options, messageBoxService, credentials);
 					beGlobalVm.Options.BeGlobalService = beGlobalService;
 
 					var provider = new BeGlobalTranslationProvider(options)

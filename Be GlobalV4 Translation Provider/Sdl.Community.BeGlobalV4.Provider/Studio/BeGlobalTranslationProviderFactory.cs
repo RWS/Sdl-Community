@@ -28,7 +28,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				if (options.BeGlobalService == null)
 				{
 					var messageBoxService = new MessageBoxService();
-					options.BeGlobalService = new BeGlobalV4Translator(options, messageBoxService);
+					options.BeGlobalService = new BeGlobalV4Translator(options, messageBoxService, credentials);
 				}
 			}
 			else
@@ -39,23 +39,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
 			options.SubscriptionInfo = subscriptionInfo;
 			return new BeGlobalTranslationProvider(options);
-
-			//if (options.BeGlobalService == null)
-			//{
-			//	options.BeGlobalService = new BeGlobalV4Translator(options);
-			//}
-			//try
-			//{
-			//	var accountId = options.BeGlobalService.GetUserInformation();
-			//	var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
-			//	options.SubscriptionInfo = subscriptionInfo;
-			//}
-			//catch (Exception e)
-			//{
-			//	Log.Logger.Error(e, "Error on CreateTranslationProvider");
-			//}
-
-			//return new BeGlobalTranslationProvider(options);
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

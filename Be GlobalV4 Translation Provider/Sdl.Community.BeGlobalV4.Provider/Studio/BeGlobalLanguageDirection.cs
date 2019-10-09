@@ -11,6 +11,7 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
+using Application = System.Windows.Application;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
@@ -43,14 +44,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		private Segment[] TranslateSegments(Segment[] sourceSegments)
 		{
-			//maybe the user logged out since the provider was added or the token expired
-
-			//Application.Current?.Dispatcher?.Invoke(() =>
-			//{
-			//	_studioCredentials.GetToken();
-			//});
-			_studioCredentials.GetToken();
-
+			if (_options.AuthenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
+			{
+				AppItializer.EnsureInitializer();
+				Application.Current?.Dispatcher?.Invoke(() =>
+				{
+					_studioCredentials.GetToken();
+				});
+			}
 
 			var xliffDocument = CreateXliffFile(sourceSegments);
 

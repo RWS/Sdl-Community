@@ -25,6 +25,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private string _loginMethod;
 		private int _selectedIndex;
 		private MessageBoxService _messageBoxService;
+		private TranslationProviderCredential _credentials;
 		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
 
 		public BeGlobalWindowViewModel(BeGlobalTranslationOptions options, LanguagePair[] languagePairs, TranslationProviderCredential credentials)
@@ -34,6 +35,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			_languagePairs = languagePairs;
 			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			_loginMethod = Enums.LoginOptions.APICredentials.ToString();
+			_credentials = credentials;
 			TranslationOptions = new ObservableCollection<TranslationModel>();
 			SelectedIndex = (int)Enums.LoginOptions.APICredentials;
 			_messageBoxService = new MessageBoxService();
@@ -43,13 +45,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 			SetLoginOptions();
 
-			if (credentials == null) return;
-			var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService);
+			if (_credentials == null) return;
+			var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
 			var accountId = beGlobalTranslator.GetUserInformation();
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
 			GetEngineModels(subscriptionInfo);
 			SetEngineModel();
-			SetAuthenticationOptions(credentials);
+			SetAuthenticationOptions();
 		}
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
@@ -165,7 +167,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				Options.ClientId = BeGlobalWindow.ClientIdBox.Password;
 				Options.ClientSecret = BeGlobalWindow.ClientSecretBox.Password;
-				var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService);
+				var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
 				var accountId = beGlobalTranslator.GetUserInformation();
 				var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
 				GetEngineModels(subscriptionInfo);
@@ -226,7 +228,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			Options.AuthenticationMethod = SelectedLoginOption?.LoginOption;
 		}
 
-		private void SetAuthenticationOptions(TranslationProviderCredential credentials)
+		private void SetAuthenticationOptions()
 		{
 			if (string.IsNullOrEmpty(Options.AuthenticationMethod)) return;
 			if (Options.AuthenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
@@ -238,7 +240,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				}
 				else
 				{
-					var splitedCredentials = credentials?.Credential.Split('#');
+					var splitedCredentials = _credentials?.Credential.Split('#');
 					BeGlobalWindow.ClientIdBox.Password = splitedCredentials.Length > 0 ? splitedCredentials[0] : string.Empty;
 					BeGlobalWindow.ClientSecretBox.Password = splitedCredentials.Length > 0 ? splitedCredentials[1] : string.Empty;
 				}

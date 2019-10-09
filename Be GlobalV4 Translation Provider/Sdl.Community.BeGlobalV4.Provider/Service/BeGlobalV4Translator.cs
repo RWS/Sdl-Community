@@ -9,6 +9,7 @@ using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Interfaces;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 using DataFormat = RestSharp.DataFormat;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Service
@@ -23,7 +24,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		private string _authenticationMethod = string.Empty;
 		private readonly IMessageBoxService _messageBoxService;
 
-		public BeGlobalV4Translator(BeGlobalTranslationOptions beGlobalTranslationOptions, MessageBoxService messageBoxService)
+		public BeGlobalV4Translator(BeGlobalTranslationOptions beGlobalTranslationOptions, MessageBoxService messageBoxService, TranslationProviderCredential credentials)
 		{
 			_messageBoxService = messageBoxService;
 			_flavor = beGlobalTranslationOptions.Model;
@@ -38,6 +39,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				if (_authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
 				{
+					if(string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId))
+					{
+						var splitedCredentials = credentials.Credential.Split('#');
+						beGlobalTranslationOptions.ClientId = splitedCredentials[0];
+						beGlobalTranslationOptions.ClientSecret = splitedCredentials[1];
+					}
 					var request = new RestRequest("/token", Method.POST)
 					{
 						RequestFormat = DataFormat.Json
