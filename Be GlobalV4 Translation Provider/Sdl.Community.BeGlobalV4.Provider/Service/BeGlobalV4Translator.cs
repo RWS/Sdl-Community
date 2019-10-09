@@ -50,7 +50,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 						throw new Exception(Constants.TokenFailed + response.Content);
 					}
 					dynamic json = JsonConvert.DeserializeObject(response.Content);
-					_client.AddDefaultHeader(Constants.Authorization, $"Bearer {json.accessToken}");
+					_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
 				}
 				else
 				{
@@ -63,7 +63,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 					if (!string.IsNullOrEmpty(accessToken))
 					{
-						_client.AddDefaultHeader(Constants.Authorization, $"Bearer {accessToken}");
+						_client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
 					}
 				}
 			}
@@ -191,9 +191,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		private void UpdateRequestHeadersForRefreshToken(IRestRequest request, string token)
 		{
 			// Update authorization parameters
-			_client.RemoveDefaultParameter(Constants.Authorization);
-			_client.AddDefaultHeader(Constants.Authorization, $"Bearer {token}");
-			request.AddOrUpdateParameter(Constants.Authorization, $"Bearer {token}");
+			_client.RemoveDefaultParameter("Authorization");
+			_client.AddDefaultHeader("Authorization", $"Bearer {token}");
+			request.AddOrUpdateParameter("Authorization", $"Bearer {token}");
 		}
 		public SubscriptionInfo GetLanguagePairs(string accountId)
 		{

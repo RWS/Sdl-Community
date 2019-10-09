@@ -10,6 +10,7 @@ using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using static Sdl.Community.BeGlobalV4.Provider.Helpers.Enums;
+using Application = System.Windows.Application;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
@@ -23,6 +24,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private BeGlobalLoginOptions _selectedLoginOption;
 		private string _loginMethod;
 		private int _selectedIndex;
+		private MessageBoxService _messageBoxService;
+		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
 
 		public BeGlobalWindowViewModel(BeGlobalTranslationOptions options, LanguagePair[] languagePairs, TranslationProviderCredential credentials)
 		{
@@ -33,16 +36,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			_loginMethod = Enums.LoginOptions.APICredentials.ToString();
 			TranslationOptions = new ObservableCollection<TranslationModel>();
 			SelectedIndex = (int)Enums.LoginOptions.APICredentials;
-			var messageBoxService = new MessageBoxService();
-			var beGlobalTranslator = new BeGlobalV4Translator(Options, messageBoxService);
-			var accountId = beGlobalTranslator.GetUserInformation();
-
-			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+			_messageBoxService = new MessageBoxService();
 			if (Options != null)
 			{
 				ReSendChecked = options.ResendDrafts;
-			}		
+			}
 			SetLoginOptions();
+
+			if (credentials == null) return;
+			var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService);
+			var accountId = beGlobalTranslator.GetUserInformation();
+			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
 			GetEngineModels(subscriptionInfo);
 			SetEngineModel();
 			SetAuthenticationOptions(credentials);
@@ -100,6 +104,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				OnPropertyChanged(nameof(SelectedLoginOption));
 
 				LoginMethod = _selectedLoginOption?.LoginOption;
+				//if(LoginMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
+				//{
+				//	AppItializer.EnsureInitializer();
+				//	Application.Current?.Dispatcher?.Invoke(() =>
+				//	{
+				//		token = _studioCredentials.GetToken();
+				//	});
+				//}
 				SetClientOptions();
 			}
 		}
@@ -157,6 +169,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		{
 			WindowCloser.SetDialogResult(BeGlobalWindow, true);
 			BeGlobalWindow.Close();
+			if (Options?.Model == null)
+			{
+				Options.ClientId = BeGlobalWindow.ClientIdBox.Password;
+				Options.ClientSecret = BeGlobalWindow.ClientSecretBox.Password;
+				var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService);
+				var accountId = beGlobalTranslator.GetUserInformation();
+				var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+				GetEngineModels(subscriptionInfo);
+				SetEngineModel();
+			}
 		}
 
 		private void SetEngineModel()

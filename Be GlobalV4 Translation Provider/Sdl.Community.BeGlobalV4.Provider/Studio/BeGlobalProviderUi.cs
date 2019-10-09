@@ -31,12 +31,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				var token = string.Empty;
 				var credentials = GetCredentials(credentialStore, "machinetranslationcloudprovider:///");
 
-				Application.Current?.Dispatcher?.Invoke(() =>
-				{
-					token = _studioCredentials.GetToken();
-				});
-				if (!string.IsNullOrEmpty(token))
-				{					
+				//Application.Current?.Dispatcher?.Invoke(() =>
+				//{
+				//	token = _studioCredentials.GetToken();
+				//});
+				//if (!string.IsNullOrEmpty(token))
+				//{					
 					var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, credentials);
 					beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
 
@@ -57,7 +57,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						SetCredentials(credentialStore, beGlobalVm.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
 						return new ITranslationProvider[] { provider };
 					}
-				}
+				//}
 			}
 			catch (Exception e)
 			{
@@ -90,13 +90,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 				var token = string.Empty;
 				AppItializer.EnsureInitializer();
-				Application.Current?.Dispatcher?.Invoke(() =>
-				{
-					token = _studioCredentials.GetToken();
-				});
+				//Application.Current?.Dispatcher?.Invoke(() =>
+				//{
+				//	token = _studioCredentials.GetToken();
+				//});
 
-				if (!string.IsNullOrEmpty(token))
-				{
+				//if (!string.IsNullOrEmpty(token))
+				//{
 					var beGlobalVm = new BeGlobalWindowViewModel(editProvider.Options, languagePairs, credentials);
 					beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
 
@@ -109,7 +109,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						SetCredentials(credentialStore, editProvider.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
 						return true;
 					}
-				}
+				//}
 			}
 			catch (Exception e)
 			{
@@ -156,7 +156,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (credentialStore.GetCredential(providerUri) != null)
 			{
 				//get the credential to return
-				cred = new TranslationProviderCredential(credentialStore.GetCredential(providerUri).Credential, credentialStore.GetCredential(providerUri).Persist);
+				//credentialStore.RemoveCredential(providerUri);
+				cred = new TranslationProviderCredential(credentialStore.GetCredential(providerUri)?.Credential, credentialStore.GetCredential(providerUri).Persist);
 			}
 			return cred;
 		}
