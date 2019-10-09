@@ -18,7 +18,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 	{
 		private readonly LanguagePair[] _languagePairs;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
-		private ICommand _okCommand;
 		private bool _reSendChecked;
 		private TranslationModel _selectedModel;
 		private BeGlobalLoginOptions _selectedLoginOption;
@@ -27,6 +26,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private MessageBoxService _messageBoxService;
 		private TranslationProviderCredential _credentials;
 		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
+
+		private ICommand _okCommand;
+		private ICommand _loginCommand;
 
 		public BeGlobalWindowViewModel(BeGlobalTranslationOptions options, LanguagePair[] languagePairs, TranslationProviderCredential credentials)
 		{
@@ -56,8 +58,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				SetAuthenticationOptions();
 			}
 		}
-
-		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
+		
 		public BeGlobalTranslationOptions Options { get; set; }
 		public BeGlobalWindow BeGlobalWindow { get; set; }
 		public ObservableCollection<BeGlobalLoginOptions> LoginOptions { get; set; }
@@ -129,6 +130,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		}
 
 		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }
+
+		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
+		public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new RelayCommand(LoginAction));
+
+		private void LoginAction(object parameter)
+		{
+
+		}
 
 		private void GetEngineModels(SubscriptionInfo subscriptionInfo)
 		{

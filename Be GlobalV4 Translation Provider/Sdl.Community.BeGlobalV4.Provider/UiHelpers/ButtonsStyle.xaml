@@ -211,9 +211,6 @@
 		<Setter Property="Foreground" Value="#FF19A9EC"/>
 		<Setter Property="FontFamily" Value="Calibri Light"/>
 		<Setter Property="FontSize" Value="20px"/>
-		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="HorizontalAlignment" Value="Left"/>
 		<Setter Property="Height" Value="30"/>
 		<Setter Property="Width" Value="20"/>
 		<Setter Property="Margin" Value="0,0,0,0"></Setter>
@@ -234,7 +231,8 @@
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsMouseOver" Value="True">
 							<Setter Property="TextBlock.TextDecorations" Value="Underline" />
-						</Trigger>			
+							<Setter Property="Cursor" Value="Hand"/>
+						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
 			</Setter.Value>
