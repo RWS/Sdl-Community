@@ -5,28 +5,28 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 	[TellMeProvider]
 	public class BeGlobalTellMeProvider : ITellMeProvider
 	{
-		public string Name => "BeGlobal tell me provider";
+		public string Name => "MachineTranslationCloud tell me provider";
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
 			new BeGlobalCommunitySupportAction
 			{
-				Keywords = new []{ "beglobal", "beglobal community", "beglobal support" }
+				Keywords = new []{ "machinetranslationcloud", "machinetranslationcloud community", "machinetranslationcloud support" }
 			},
 			new BeGlobalContactAction
 			{
-				Keywords = new []{ "beglobal", "beglobal contact", "beglobal trial" }
+				Keywords = new []{ "machinetranslationcloud", "machinetranslationcloud contact", "machinetranslationcloud trial" }
 			},
 			new BeGlobalHelpAction
 			{
-				Keywords = new []{ "beglobal", "beglobal help", "beglobal guide" }
+				Keywords = new []{ "machinetranslationcloud", "machinetranslationcloud help", "machinetranslationcloud guide" }
 			},
 			new BeGlobalStoreAction
 			{
-				Keywords = new []{ "beglobal", "beglobal store", "beglobal download" }
+				Keywords = new []{ "machinetranslationcloud", "machinetranslationcloud store", "machinetranslationcloud download" }
 			},
 			new BeGlobalSettingsAction
 			{
-				Keywords = new []{ "beglobal", "beglobal settings ","settings" }
+				Keywords = new []{ "machinetranslationcloud", "machinetranslationcloud settings ", "settings" }
 			}
 		};
 	}

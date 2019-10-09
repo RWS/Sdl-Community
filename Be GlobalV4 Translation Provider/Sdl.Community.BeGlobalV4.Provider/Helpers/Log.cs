@@ -18,14 +18,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 			var config = new LoggingConfiguration();
 			var assembly = Assembly.GetExecutingAssembly();
 			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL",
-				"BeGlobalLogs");
+				"MachineTranslationCloudLogs");
 			if (!Directory.Exists(logDirectoryPath))
 			{
 				Directory.CreateDirectory(logDirectoryPath);
 			}
 			var target = new FileTarget
 			{
-				FileName = Path.Combine(logDirectoryPath, "BeGlobalLogs.txt"),
+				FileName = Path.Combine(logDirectoryPath, "MachineTranslationCloudLogs.txt"),
 				// Roll over the log every 10 MB
 				ArchiveAboveSize = 10000000,
 				ArchiveNumbering = ArchiveNumberingMode.Date,

@@ -16,7 +16,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 	public class BeGlobalWindowViewModel : BaseViewModel
 	{
 		private readonly LanguagePair[] _languagePairs;
-		private readonly BeGlobalWindow _mainWindow;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
 		private ICommand _okCommand;
 		private bool _reSendChecked;
@@ -25,17 +24,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private string _loginMethod;
 		private int _selectedIndex;
 
-		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options, LanguagePair[] languagePairs, TranslationProviderCredential credentials)
+		public BeGlobalWindowViewModel(BeGlobalTranslationOptions options, LanguagePair[] languagePairs, TranslationProviderCredential credentials)
 		{
 			Options = options;
-			_mainWindow = mainWindow;
+			BeGlobalWindow = new BeGlobalWindow();
 			_languagePairs = languagePairs;
 			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			_loginMethod = Enums.LoginOptions.APICredentials.ToString();
 			TranslationOptions = new ObservableCollection<TranslationModel>();
 			SelectedIndex = (int)Enums.LoginOptions.APICredentials;
-
-			var beGlobalTranslator = new BeGlobalV4Translator(Options);
+			var messageBoxService = new MessageBoxService();
+			var beGlobalTranslator = new BeGlobalV4Translator(Options, messageBoxService);
 			var accountId = beGlobalTranslator.GetUserInformation();
 
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
@@ -51,6 +50,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 		public BeGlobalTranslationOptions Options { get; set; }
+		public BeGlobalWindow BeGlobalWindow { get; set; }
+		public ObservableCollection<BeGlobalLoginOptions> LoginOptions { get; set; }
 
 		public bool ReSendChecked
 		{
@@ -90,7 +91,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		public ObservableCollection<BeGlobalLoginOptions> LoginOptions { get; set; }
 	    public BeGlobalLoginOptions SelectedLoginOption
 		{
 			get => _selectedLoginOption;
@@ -155,8 +155,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void Ok(object parameter)
 		{
-			WindowCloser.SetDialogResult(_mainWindow, true);
-			_mainWindow.Close();
+			WindowCloser.SetDialogResult(BeGlobalWindow, true);
+			BeGlobalWindow.Close();
 		}
 
 		private void SetEngineModel()
@@ -194,7 +194,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				var beGlobalLoginOption = new BeGlobalLoginOptions { LoginOption = displayName };
 				LoginOptions.Add(beGlobalLoginOption);
 			}
-			//set by default the APICredentials method in case it was not setup yet
+			//set by default the APICredentials method in case it wasn't setup yet
 			if (string.IsNullOrEmpty(Options.AuthenticationMethod)
 				|| Options.AuthenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
 			{
@@ -206,8 +206,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		{
 			if(!string.IsNullOrEmpty(Options.ClientId) && !string.IsNullOrEmpty(Options.ClientSecret))
 			{
-				_mainWindow.ClientIdBox.Password = Options.ClientId;
-				_mainWindow.ClientSecretBox.Password = Options.ClientSecret;
+				BeGlobalWindow.ClientIdBox.Password = Options.ClientId;
+				BeGlobalWindow.ClientSecretBox.Password = Options.ClientSecret;
 			}
 			Options.AuthenticationMethod = SelectedLoginOption?.LoginOption;
 		}
@@ -219,14 +219,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				if (!string.IsNullOrEmpty(Options.ClientId) && !string.IsNullOrEmpty(Options.ClientSecret))
 				{
-					_mainWindow.ClientIdBox.Password = Options.ClientId;
-					_mainWindow.ClientSecretBox.Password = Options.ClientSecret;
+					BeGlobalWindow.ClientIdBox.Password = Options.ClientId;
+					BeGlobalWindow.ClientSecretBox.Password = Options.ClientSecret;
 				}
 				else
 				{
 					var splitedCredentials = credentials?.Credential.Split('#');
-					_mainWindow.ClientIdBox.Password = splitedCredentials.Length > 0 ? splitedCredentials[0] : string.Empty;
-					_mainWindow.ClientSecretBox.Password = splitedCredentials.Length > 0 ? splitedCredentials[1] : string.Empty;
+					BeGlobalWindow.ClientIdBox.Password = splitedCredentials.Length > 0 ? splitedCredentials[0] : string.Empty;
+					BeGlobalWindow.ClientSecretBox.Password = splitedCredentials.Length > 0 ? splitedCredentials[1] : string.Empty;
 				}
 			}
 			else

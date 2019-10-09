@@ -162,6 +162,7 @@
     <Compile Include="BeGlobalTellMe\BeGlobalTellMeProvider.cs" />
     <Compile Include="Converters\BeGlobalLoginConverter.cs" />
     <Compile Include="Helpers\AppItializer.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\NormalizeSourceTextHelper.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Helpers\VersionHelper.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Helpers\WindowsControlUtils.cs" />
+    <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Model\BeGlobalLanguagePair.cs" />
     <Compile Include="Model\BeGlobalSegment.cs" />
     <Compile Include="Model\ResponseError.cs" />
@@ -185,6 +187,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Service\BeGlobalV4Translator.cs" />
+    <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Studio\BeGlobalLanguageDirection.cs" />
     <Compile Include="Studio\BeGlobalLoginOptions.cs" />
     <Compile Include="Studio\BeGlobalProviderUi.cs" />

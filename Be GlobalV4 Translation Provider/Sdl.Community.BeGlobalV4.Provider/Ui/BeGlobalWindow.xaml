@@ -9,7 +9,7 @@
 			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
              helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			 WindowStartupLocation="CenterScreen" mc:Ignorable="d" 
-			 WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResizeWithGrip"	 
+			 WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"	 
              d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="800">
 	<Window.Resources>
 		<ResourceDictionary>

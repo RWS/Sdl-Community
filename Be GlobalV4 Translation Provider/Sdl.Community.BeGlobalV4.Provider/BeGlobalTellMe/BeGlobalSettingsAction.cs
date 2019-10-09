@@ -15,7 +15,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 	{
 		public BeGlobalSettingsAction()
 		{
-			Name = "BeGlobal options";
+			Name = "MachineTranslationCloud options";
 		}
 
 		public override void Execute()
@@ -29,11 +29,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 				var uri = translationProvider.MainTranslationProvider?.Uri;
 				var languagePairs = GetProjectLanguagePairs(currentProject);
 				var options = new BeGlobalTranslationOptions(uri);
-				var beGlobalWindow = new BeGlobalWindow();
-				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, languagePairs, null);
-				beGlobalWindow.DataContext = beGlobalVm;
-				beGlobalWindow.ShowDialog();
-				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+				var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, null);
+				beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
+				beGlobalVm.BeGlobalWindow.ShowDialog();
+				if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
 				{
 					settings.Entries
 						.Find(entry =>

@@ -1,23 +1,23 @@
 ﻿using System;
-using System.Windows.Forms;
+using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguageCloud.IdentityApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
 	public class StudioCredentials
 	{
-		public  string GetToken()
+		public string GetToken()
 		{
 			if (IsLoggedIn())
 			{
-				var instance = LanguageCloudIdentityApi.Instance;
-			
+				var instance = LanguageCloudIdentityApi.Instance;			
 				return instance.AccessToken;
 			}
 			return string.Empty;
 		}
 		[STAThread]
-		public  bool IsLoggedIn(out string message)
+		public bool IsLoggedIn(out string message)
 		{
 			message = string.Empty;
 			var instance = LanguageCloudIdentityApi.Instance;
@@ -41,7 +41,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			if (!IsLoggedIn(out var message))
 			{
-				MessageBox.Show(message, @"Authentication", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				var _messageBoxService = new MessageBoxService();
+				_messageBoxService.ShowInformationMessage(message, Constants.Authentication);
 				return false;
 			}
 			return true;

@@ -27,7 +27,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				options.ClientSecret = splitedCredentials[1];
 				if (options.BeGlobalService == null)
 				{
-					options.BeGlobalService = new BeGlobalV4Translator(options);
+					var messageBoxService = new MessageBoxService();
+					options.BeGlobalService = new BeGlobalV4Translator(options, messageBoxService);
 				}
 			}
 			else
