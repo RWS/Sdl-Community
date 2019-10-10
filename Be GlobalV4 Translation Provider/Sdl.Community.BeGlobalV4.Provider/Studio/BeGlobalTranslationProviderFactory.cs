@@ -5,9 +5,9 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
-	[TranslationProviderFactory(Id = "MachineTranslationCloudProviderFactory",
-		Name = "MachineTranslationCloudProviderFactory",
-		Description = "Machine Translation Cloud Provider")]
+	[TranslationProviderFactory(Id = "SDLMachineTranslationCloudProviderFactory",
+		Name = "SDLMachineTranslationCloudProviderFactory",
+		Description = "SDL Machine Translation Cloud Provider")]
 	public class BeGlobalTranslationProviderFactory : ITranslationProviderFactory
 	{
 		public static readonly Log Log = Log.Instance;	
@@ -17,7 +17,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			AppItializer.EnsureInitializer();
 
-			var originalUri = new Uri("machinetranslationcloudprovider:///");
+			var originalUri = new Uri("sdlmachinetranslationcloudprovider:///");
 			var options = new BeGlobalTranslationOptions(translationProviderUri);
 			if (credentialStore.GetCredential(originalUri) != null)
 			{

@@ -9,15 +9,14 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
 	[TranslationProviderWinFormsUi(
-		Id = "MachineTranslationCloudProviderUi",
-		Name = "MachineTranslationCloudProviderUi",
-		Description = "Machine Translation Cloud Provider")]
+		Id = "SDLMachineTranslationCloudProviderUi",
+		Name = "SDLMachineTranslationCloudProviderUi",
+		Description = "SDL Machine Translation Cloud Provider")]
 	public class BeGlobalProviderUi : ITranslationProviderWinFormsUI
 	{
-		public string TypeName => "Machine Translation Cloud Provider";
-		public string TypeDescription => "Machine Translation Cloud Provider";
+		public string TypeName => Constants.PluginName;
+		public string TypeDescription => Constants.PluginName;
 		public bool SupportsEditing => true;
-		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
 		public static readonly Log Log = Log.Instance;
 
 		[STAThread]
@@ -27,7 +26,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				var options = new BeGlobalTranslationOptions();
 				var token = string.Empty;
-				var credentials = GetCredentials(credentialStore, "machinetranslationcloudprovider:///");
+				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
 
 				var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, credentials);
 				beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
@@ -52,7 +51,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"Browse: {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{Constants.Browse} {e.Message}\n {e.StackTrace}");
 			}
 			return null;
 		}
@@ -71,7 +70,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				}
 
 				//get saved key if there is one and put it into options
-				var credentials = GetCredentials(credentialStore, "machinetranslationcloudprovider:///");
+				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
 				if (credentials != null)
 				{
 					var splitedCredentials = credentials.Credential.Split('#');
@@ -97,7 +96,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"Edit window: {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{Constants.EditWindow} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}
@@ -118,9 +117,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var info = new TranslationProviderDisplayInfo
 			{
-				Name = "Machine Translation Cloud provider",
-				TooltipText = "Machine Translation Cloud provider",
-				SearchResultImage = PluginResources.MTCloud_logo_small,
+				Name = Constants.PluginName,
+				TooltipText = Constants.PluginName,				
 				TranslationProviderIcon = PluginResources.global
 			};
 			return info;
@@ -147,7 +145,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		private void SetCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool persistKey)
 		{
-			var uri = new Uri("machinetranslationcloudprovider:///");
+			var uri = new Uri("sdlmachinetranslationcloudprovider:///");
 			var credential = $"{clientId}#{clientSecret}";
 			var credentials = new TranslationProviderCredential(credential, persistKey);
 			credentialStore.RemoveCredential(uri);

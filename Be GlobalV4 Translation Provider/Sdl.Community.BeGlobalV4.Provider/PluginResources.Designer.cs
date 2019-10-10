@@ -141,7 +141,7 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MachineTranslationCloudProvider.
+        ///   Looks up a localized string similar to SDLMachineTranslationCloudProvider.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -150,7 +150,7 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Machine Translation Cloud Provider.
+        ///   Looks up a localized string similar to SDL Machine Translation Cloud Provider.
         /// </summary>
         public static string Plugin_NiceName {
             get {

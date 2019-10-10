@@ -23,7 +23,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 			var currentProject = SdlTradosStudio.Application?.GetController<ProjectsController>().CurrentProject;
 			var settings = currentProject?.GetTranslationProviderConfiguration();
 			var translationProvider = settings?.Entries?.FirstOrDefault(entry =>
-				entry.MainTranslationProvider.Uri.OriginalString.Contains("machinetranslationcloudprovider"));
+				entry.MainTranslationProvider.Uri.OriginalString.Contains("sdlmachinetranslationcloudprovider"));
 			if (translationProvider != null)
 			{
 				var uri = translationProvider.MainTranslationProvider?.Uri;
@@ -36,7 +36,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 				{
 					settings.Entries
 						.Find(entry =>
-							entry.MainTranslationProvider.Uri.OriginalString.Contains("machinetranslationcloudprovider"))
+							entry.MainTranslationProvider.Uri.OriginalString.Contains("sdlmachinetranslationcloudprovider"))
 						.MainTranslationProvider.Uri = options.Uri;
 
 					currentProject.UpdateTranslationProviderConfiguration(settings);

@@ -47,7 +47,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 			SetLoginOptions();
 			if (credentials == null) return;
-			var credential = _credentials.Credential.Replace("machinetranslationcloudprovider:///", string.Empty);
+			var credential = _credentials.Credential.Replace("sdlmachinetranslationcloudprovider:///", string.Empty);
 			if (credential.Contains("#"))
 			{
 				var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);

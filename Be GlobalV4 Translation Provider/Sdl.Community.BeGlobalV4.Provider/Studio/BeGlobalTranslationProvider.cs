@@ -2,7 +2,6 @@
 using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -10,10 +9,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
 	public class BeGlobalTranslationProvider: ITranslationProvider
 	{
-		public static readonly string ListTranslationProviderScheme = "machinetranslationcloudprovider";
-		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, "Machine Translation Cloud");
+		public static readonly string ListTranslationProviderScheme = "sdlmachinetranslationcloudprovider";
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, Constants.PluginName);
 		public Uri Uri => Options.Uri;
-		public string Name => "Machine Translation Cloud Provider";
+		public string Name => Constants.PluginName;
 		public bool SupportsTaggedInput => true;  
 		public bool SupportsScoring => false;	  
 		public bool SupportsSearchForTranslationUnits => true; 
@@ -63,7 +62,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"SupportsLanguageDirection: {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{Constants.SupportsLanguageDirection} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}
@@ -87,7 +86,5 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			Options = JsonConvert.DeserializeObject<BeGlobalTranslationOptions>(translationProviderState);
 		}
-
-
 	}
 }

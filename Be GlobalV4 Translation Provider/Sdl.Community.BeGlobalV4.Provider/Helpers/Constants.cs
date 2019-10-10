@@ -3,7 +3,7 @@
 	public static class Constants
 	{
 		public static readonly string Authentication = @"Authentication";
-		public static readonly string PluginName = "Machine Translation Cloud Provider";
+		public static readonly string PluginName = "SDL Machine Translation Cloud provider";
 		public static readonly string MachineTranslationCloud = "MachineTranslationCloud";
 		public static readonly string TraceId = "Trace-ID";
 		public static readonly string FAILED = "FAILED";
@@ -18,6 +18,9 @@
 		public static readonly string SubscriptionInfoMethod = "Subscription info method:";
 		public static readonly string WaitTranslationMethod = "Wait for translation method:";
 		public static readonly string ErrorCode = "Error code:";
+		public static readonly string EditWindow = "Edit window:";
+		public static readonly string Browse = "Browse:";
+		public static readonly string SupportsLanguageDirection = "SupportsLanguageDirection:";
 
 		// Messages
 		public static readonly string UnauthorizedCredentials = "Unauthorized: Please check your credentials.";
