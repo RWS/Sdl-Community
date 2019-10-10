@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
@@ -30,6 +31,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private ICommand _okCommand;
 		private ICommand _loginCommand;
+		private ICommand _passwordChangedCommand;
 
 		public BeGlobalWindowViewModel(BeGlobalTranslationOptions options, LanguagePair[] languagePairs, TranslationProviderCredential credentials)
 		{
@@ -152,6 +154,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 		public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new RelayCommand(LoginAction));
+		public ICommand PasswordChangedCommand => _passwordChangedCommand ?? (_passwordChangedCommand = new RelayCommand(ChangePasswordAction));
+
+		private void ChangePasswordAction(object parameter)
+		{
+			var passwordBox = (PasswordBox)parameter;
+			if(passwordBox.Password.Length > 0)
+			{
+				Message = string.Empty;
+			}
+		}
 
 		private void LoginAction(object parameter)
 		{

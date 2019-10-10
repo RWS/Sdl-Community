@@ -7,7 +7,8 @@
              xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
              xmlns:uiHelpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.UiHelpers"
 			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
-             helpers:WindowCloser.DialogResult="{Binding DialogResult}"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			 WindowStartupLocation="CenterScreen" mc:Ignorable="d" 
 			 WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"	 
              d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="800">
@@ -19,7 +20,7 @@
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>	
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
@@ -27,7 +28,6 @@
 				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
 				<ResourceDictionary x:Uid="ResourceKeyId1">
 					<converters:BeGlobalLoginConverter x:Key="LoginConverter"/>
-					<converters:StringNullOrEmptyToVisibilityConverter x:Key="StringVisibilityConverter"/>
 				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 			<!--set red background to X button on hover-->
@@ -82,21 +82,29 @@
 					</ComboBox.ItemContainerStyle>
 				</ComboBox>
 				<StackPanel Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=APICredentials}">
-					<PasswordBox  
+					<PasswordBox
 						HorizontalAlignment="Left" Name="ClientIdBox"
 						controls:TextBoxHelper.UseFloatingWatermark="True"  
 						controls:TextBoxHelper.Watermark="Client Id"
 						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
-						controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
 						Width="400"	Margin="15,0,0,10" IsEnabled="True">
+						<i:Interaction.Triggers>
+							<i:EventTrigger EventName="PasswordChanged" >
+								<i:InvokeCommandAction Command="{Binding PasswordChangedCommand }" CommandParameter="{Binding ElementName=ClientIdBox}"/>
+							</i:EventTrigger>
+						</i:Interaction.Triggers>
 					</PasswordBox>
-					<PasswordBox  
+					<PasswordBox
 						HorizontalAlignment="Left" Name="ClientSecretBox"
 						controls:TextBoxHelper.UseFloatingWatermark="True"  
 						controls:TextBoxHelper.Watermark="Client Secret"
-						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
-						controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay }"
 						Width="400"	Margin="15,0,0,0" IsEnabled="True">
+						<i:Interaction.Triggers>
+							<i:EventTrigger EventName="PasswordChanged" >
+								<i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=ClientSecretBox}"/>
+							</i:EventTrigger>
+						</i:Interaction.Triggers>
 					</PasswordBox>					
 				</StackPanel>
 				
@@ -122,7 +130,7 @@
 					</ComboBox.ItemContainerStyle>
 				</ComboBox>
 				<TextBlock Margin="15,0,15,0" Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" FontWeight="Normal" FontSize="14" Foreground="Red"
-			           Visibility="{Binding Message, Converter={StaticResource ResourceKey=StringVisibilityConverter}}" Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
+					   Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 			</StackPanel>
 			<StackPanel Grid.Row="3"  Orientation="Vertical"  VerticalAlignment="Bottom" Margin="0,0,0,10">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
