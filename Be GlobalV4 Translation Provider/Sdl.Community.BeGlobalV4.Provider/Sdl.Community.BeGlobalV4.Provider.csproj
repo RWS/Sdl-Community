@@ -209,7 +209,7 @@
     <Compile Include="ViewModel\BeGlobalWindowViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\global1.png" />
+    <None Include="Resources\global1.png" />
     <Resource Include="Resources\MTCloud_logo_small.png" />
     <Resource Include="Resources\MTCloud_logo.png" />
     <Resource Include="Resources\logoRes.png" />
