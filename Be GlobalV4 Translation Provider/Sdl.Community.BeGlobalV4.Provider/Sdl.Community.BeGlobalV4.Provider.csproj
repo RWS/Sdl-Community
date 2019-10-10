@@ -76,6 +76,10 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
@@ -161,6 +165,7 @@
     <Compile Include="BeGlobalTellMe\BeGlobalStoreAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalTellMeProvider.cs" />
     <Compile Include="Converters\BeGlobalLoginConverter.cs" />
+    <Compile Include="Converters\StringNullOrEmptyToVisibilityConverter.cs" />
     <Compile Include="Helpers\AppItializer.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Enums.cs" />
@@ -205,6 +210,7 @@
     <Compile Include="ViewModel\BeGlobalWindowViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\global1.png" />
     <Resource Include="Resources\MTCloud_logo_small.png" />
     <Resource Include="Resources\MTCloud_logo.png" />
     <Resource Include="Resources\logoRes.png" />

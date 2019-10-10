@@ -35,8 +35,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
 				{
 					var messageBoxService = new MessageBoxService();
-					beGlobalVm.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox?.Password;
-					beGlobalVm.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox?.Password;
+					beGlobalVm.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox?.Password.TrimEnd();
+					beGlobalVm.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox?.Password.TrimEnd();
 					var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options, messageBoxService, credentials);
 					beGlobalVm.Options.BeGlobalService = beGlobalService;
 
@@ -88,8 +88,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
 				{
 					editProvider.Options = beGlobalVm.Options;
-					editProvider.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox.Password;
-					editProvider.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox.Password;
+					editProvider.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox.Password.TrimEnd();
+					editProvider.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox.Password.TrimEnd();
 					SetCredentials(credentialStore, editProvider.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
 					return true;
 				}
@@ -119,7 +119,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				Name = Constants.PluginName,
 				TooltipText = Constants.PluginName,				
-				TranslationProviderIcon = PluginResources.global
+				TranslationProviderIcon = PluginResources.global,
+				SearchResultImage = PluginResources.global1,
 			};
 			return info;
 		}

@@ -19,6 +19,7 @@
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
@@ -26,6 +27,7 @@
 				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
 				<ResourceDictionary x:Uid="ResourceKeyId1">
 					<converters:BeGlobalLoginConverter x:Key="LoginConverter"/>
+					<converters:StringNullOrEmptyToVisibilityConverter x:Key="StringVisibilityConverter"/>
 				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 			<!--set red background to X button on hover-->
@@ -119,6 +121,8 @@
 						</Style>
 					</ComboBox.ItemContainerStyle>
 				</ComboBox>
+				<TextBlock Margin="15,0,15,0" Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" FontWeight="Normal" FontSize="14" Foreground="Red"
+			           Visibility="{Binding Message, Converter={StaticResource ResourceKey=StringVisibilityConverter}}" Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
 			</StackPanel>
 			<StackPanel Grid.Row="3"  Orientation="Vertical"  VerticalAlignment="Bottom" Margin="0,0,0,10">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">

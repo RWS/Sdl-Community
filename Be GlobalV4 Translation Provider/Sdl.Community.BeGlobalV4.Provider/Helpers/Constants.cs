@@ -29,6 +29,6 @@
 		public static readonly string UnauthorizedLanguagePairs = "Unauthorized: Get Language Pairs using refresh token \nTrace-Id:";
 		public static readonly string ForbiddenLicense = "Forbidden: Please check your license";
 		public static readonly string TokenFailed = "Acquiring token failed: ";
-
+		public static readonly string CredentialsValidation = "Please fill the Client Id and Client Secret!";
 	}
 }

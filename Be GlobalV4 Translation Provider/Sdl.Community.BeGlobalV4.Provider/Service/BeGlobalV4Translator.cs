@@ -39,9 +39,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				if (_authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
 				{
-					if(string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId))
+					var splitedCredentials = credentials.Credential.Split('#');
+					// the below condition is needed in case the ClientId is not set and credentials exists
+					if (string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId)
+						&& splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
 					{
-						var splitedCredentials = credentials.Credential.Split('#');
 						beGlobalTranslationOptions.ClientId = splitedCredentials[0];
 						beGlobalTranslationOptions.ClientSecret = splitedCredentials[1];
 					}
