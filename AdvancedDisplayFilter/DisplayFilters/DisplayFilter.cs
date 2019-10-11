@@ -6,7 +6,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 {
 	public class DisplayFilter : IDisplayFilter
-	{		
+	{
 		private readonly QualitySamplingService _qualitySamplingService;
 		private readonly bool _reverseSearch;
 		private readonly ContentMatchingService _contentMatchingService;
@@ -15,7 +15,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 		public DisplayFilter(DisplayFilterSettings settings, CustomFilterSettings customSettings, bool reverseSearch,
 			QualitySamplingService qualitySamplingService, ContentMatchingService contentMatchingService,
 			CustomFilterService customFilterService)
-		{			
+		{
 			Settings = settings;
 			CustomSettings = customSettings;
 
@@ -37,7 +37,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			var success = Settings.ShowAllContent || rowInfo.IsSegment;
 
 			if (rowInfo.IsSegment)
-			{				
+			{
 				if (_reverseSearch)
 				{
 					return _customFilterService.Reverse(rowInfo);
@@ -52,53 +52,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 					}
 				}
 
-				if (success && Settings.SegmentReviewTypes != null && Settings.SegmentReviewTypes.Any())
-				{
-					success = rowInfo.IsSegmentReviewTypes(Settings);
-				}
 
-				if (success && Settings.ConfirmationLevels != null && Settings.ConfirmationLevels.Any())
+				if (success)
 				{
-					success = rowInfo.IsConfirmationLevelFound(Settings);
-				}
-
-				if (success && Settings.OriginTypes != null && Settings.OriginTypes.Any())
-				{
-					if (!Settings.OriginTypes.Contains(CustomFilterSettings.OriginTypeExtended.EditedFuzzy.ToString()) && 
-					    !Settings.OriginTypes.Contains(CustomFilterSettings.OriginTypeExtended.UneditedFuzzy.ToString()))
-					{
-						success = rowInfo.IsOriginTypeFound(Settings);
-					}
-				}
-
-				if (success && Settings.PreviousOriginTypes != null && Settings.PreviousOriginTypes.Any())
-				{
-					success = rowInfo.IsPreviousOriginTypeFound(Settings);
-				}
-
-				if (success && Settings.RepetitionTypes != null && Settings.RepetitionTypes.Any())
-				{
-					if (!Settings.RepetitionTypes.Contains(CustomFilterSettings.RepetitionTypeExtended.UniqueOccurrences.ToString()))
-					{
-						success = rowInfo.IsRepetitionTypes(Settings);
-					}
-				}
-
-				if (success && Settings.SegmentLockingTypes != null && Settings.SegmentLockingTypes.Any())
-				{
-					success = rowInfo.IsSegmentLockingTypes(Settings);
-				}
-
-				if (success && Settings.SegmentContentTypes != null && Settings.SegmentContentTypes.Any())
-				{
-					success = rowInfo.IsSegmentContentTypes(Settings);
+					success = _customFilterService.FilterAttributeSuccess(rowInfo);
 				}
 
 				if (success && (!string.IsNullOrEmpty(Settings.SourceText) || !string.IsNullOrEmpty(Settings.TargetText)))
 				{
 					if (!string.IsNullOrEmpty(Settings.SourceText) && !string.IsNullOrEmpty(Settings.TargetText))
 					{
-						if (CustomSettings.SourceAndTargetLogicalOperator == CustomFilterSettings.LogicalOperators.Or)
+						if (CustomSettings.SourceTargetLogicalOperator == DisplayFilterSettings.LogicalOperators.OR)
 						{
 							var successSearchOnSource = _contentMatchingService.IsExpressionFound(Settings.SourceText, rowInfo.SegmentPair.Source, out var _);
 
@@ -157,6 +121,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 				}
 			}
 			return success;
-		}
+		}	
 	}
 }

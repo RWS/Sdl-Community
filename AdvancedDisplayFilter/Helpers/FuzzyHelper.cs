@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Sdl.Community.AdvancedDisplayFilter.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
@@ -26,9 +25,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 					return true;
 				}
 			}
-			catch (Exception e)
+			catch
 			{
-				// ignored
+				// catch all; ignore
 			}
 
 			return false;

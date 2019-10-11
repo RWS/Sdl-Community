@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
+using Sdl.Community.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.Toolkit.FileType;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
@@ -144,19 +146,43 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			if (!success)
 			{
-				success = IsFuzzyMatchRepairOriginTypeFound(rowInfo, settings);
+				success = rowInfo.IsFuzzyMatchRepairOriginTypeFound(settings);
+			}
+
+			if (!success)
+			{
+				success = rowInfo.IsEditedFuzzyOriginTypeFound(settings);
+			}
+
+			if (!success)
+			{
+				success = rowInfo.IsUnEditedFuzzyOriginTypeFound(settings);
 			}
 
 			return success;
 		}
 
+		public static bool IsEditedFuzzyOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			return settings.OriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.EditedFuzzy.ToString()) &&
+				   FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
+				   FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+		}
+
+		public static bool IsUnEditedFuzzyOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			return settings.OriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.UneditedFuzzy.ToString()) &&
+				   FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
+				   !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+		}
+
 		public static bool IsFuzzyMatchRepairOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
-			if (settings.OriginTypes.Any(a => a == "FuzzyMatchRepair") &&
+			if (settings.OriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString()) &&
 				rowInfo.SegmentPair.Properties.TranslationOrigin.OriginType == "tm" &&
-				rowInfo.SegmentPair.Properties.TranslationOrigin.MetaDataContainsKey("FuzzyMatchRepair"))
+				rowInfo.SegmentPair.Properties.TranslationOrigin.MetaDataContainsKey(DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString()))
 			{
-				var value = rowInfo.SegmentPair.Properties.TranslationOrigin.GetMetaData("FuzzyMatchRepair");
+				var value = rowInfo.SegmentPair.Properties.TranslationOrigin.GetMetaData(DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString());
 				return Convert.ToBoolean(value);
 			}
 
@@ -178,19 +204,70 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				{
 					success = true;
 				}
+
+				if (!success)
+				{
+					success = rowInfo.IsFuzzyMatchRepairPreviousOriginTypeFound(settings);
+				}				
 			}
 
 			return success;
 		}
 
-		public static bool IsRepetitionTypes(this DisplayFilterRowInfo rowInfo,
-			DisplayFilterSettings settings)
+		public static bool IsFuzzyMatchRepairPreviousOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			if (rowInfo.SegmentPair.Properties?.TranslationOrigin?.OriginBeforeAdaptation?.OriginType == null)
+			{
+				return false;
+			}
+
+			if (settings.PreviousOriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString()) &&
+			    rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.OriginType == "tm" &&
+			    rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.MetaDataContainsKey(DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString()))
+			{
+				var value = rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.GetMetaData(DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString());
+				return Convert.ToBoolean(value);
+			}
+
+			return false;
+		}
+
+		public static bool IsRepetitionTypes(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			var success = rowInfo.IsRepetitionsAll(settings)
 				|| rowInfo.IsRepetitionsFirstOccurrences(settings)
 				|| rowInfo.IsRepetitionsExcludingFirstOccurrences(settings);
 
+			if (!success)
+			{
+				success = rowInfo.IsUniqueRepetition(settings);
+			}
+
 			return success;
+		}
+
+		public static bool IsUniqueRepetition(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			if (settings.RepetitionTypes.Any(a => a == DisplayFilterSettings.RepetitionType.UniqueOccurrences.ToString()))
+			{				
+				var isFirst = rowInfo.IsRepetitionsFirstOccurrences(new DisplayFilterSettings
+				{
+					RepetitionTypes = new List<string> { DisplayFilterSettings.RepetitionType.FirstOccurrences.ToString() }
+				});
+
+				if (isFirst)
+				{
+					return true;
+				}
+
+				if (rowInfo.SegmentPair.Properties.TranslationOrigin != null)
+				{
+					var isRepeated = rowInfo.SegmentPair.Properties.TranslationOrigin.IsRepeated;
+					return !isRepeated;
+				}
+			}
+
+			return false;
 		}
 
 		public static bool IsRepetitionsAll(this DisplayFilterRowInfo rowInfo,

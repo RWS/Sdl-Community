@@ -24,9 +24,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private readonly QualitySamplingService _qualitySamplingService;
 		private CustomFilterSettings _customFilterSettings;
 		private Document _activeDocument;
-		private bool _uniqueSegments;
-		private bool _editedFuzzy;
-		private bool _unEditedFuzzy;
 		private bool _reverseFilter;
 		private List<string> _qualitySamplingSegmentsIds;
 
@@ -104,10 +101,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			{
 				_customFilterSettings = new CustomFilterSettings
 				{
-					SourceAndTargetLogicalOperator =
+					SourceTargetLogicalOperator =
 						comboBox_SourceTargetFilterLogicalOperator.SelectedIndex == 0
-							? CustomFilterSettings.LogicalOperators.And
-							: CustomFilterSettings.LogicalOperators.Or,
+							? DisplayFilterSettings.LogicalOperators.AND
+							: DisplayFilterSettings.LogicalOperators.OR,
+
+					FilterAttributesLogicalOperator =
+						filterAttributes_comboBox.SelectedIndex == 0
+						? DisplayFilterSettings.LogicalOperators.AND
+						: DisplayFilterSettings.LogicalOperators.OR,
 
 					QualitySamplingSegmentSelection = checkBox_segmentSelection.Checked,
 					QualitySamplingMinMaxCharacters = checkBox_minMaxCharsPerSegment.Checked,
@@ -132,18 +134,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					MergedSegments = mergedCheckbox.Checked,
 					SourceEqualsTarget = sourceSameBox.Checked,
 					IsEqualsCaseSensitive = equalsCaseSensitive.Checked,
-					Unique = _uniqueSegments,
 					MergedAcross = mergedAcross.Checked,
 					ContainsTags = containsTagsCheckBox.Checked,
 					ModifiedBy = modifiedByBox.Text,
 					ModifiedByChecked = modifiedByCheck.Checked,
 					CreatedBy = createdByBox.Text,
 					CreatedByChecked = createdByCheck.Checked,
-					EditedFuzzy = _editedFuzzy,
-					UnEditedFuzzy = _unEditedFuzzy,
 					DocumentStructureInformation = dsiLocation_textbox.Text,
-					UseTagContent = checkBox_TagContent.Checked,
-					AndOrTagContent = alsoTags_radioButton.Checked
+					SearchInTagContent = checkBox_TagContent.Checked,
+					SearchInTagContentAndText = alsoTags_radioButton.Checked
 				};
 
 				foreach (ListViewItem color in colorsListView.SelectedItems)
@@ -177,7 +176,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 				//segments settings 
 				comboBox_SourceTargetFilterLogicalOperator.SelectedIndex =
-					value.SourceAndTargetLogicalOperator == CustomFilterSettings.LogicalOperators.And ? 0 : 1;
+					value.SourceTargetLogicalOperator == DisplayFilterSettings.LogicalOperators.AND ? 0 : 1;
+
+				filterAttributes_comboBox.SelectedIndex =
+					value.FilterAttributesLogicalOperator == DisplayFilterSettings.LogicalOperators.AND ? 0 : 1;
 
 				checkBox_segmentSelection.Checked = value.QualitySamplingSegmentSelection;
 				checkBox_minMaxCharsPerSegment.Checked = value.QualitySamplingMinMaxCharacters;
@@ -199,7 +201,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				fuzzyMax.Text = value.FuzzyMax;
 				sourceSameBox.Checked = value.SourceEqualsTarget;
 				equalsCaseSensitive.Checked = value.IsEqualsCaseSensitive;
-				_uniqueSegments = value.Unique;
 				commentRegexBox.Checked = value.UseRegexCommentSearch;
 				_customFilterSettings.Colors = value.Colors;
 				mergedAcross.Checked = value.MergedAcross;
@@ -458,6 +459,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 			comboBox_SourceTargetFilterLogicalOperator.SelectedIndex = 0;
 
+			filterAttributes_comboBox.SelectedIndex = 0;
+
 			CheckBox_regularExpression_CheckedChanged(checkBox_regularExpression, null);
 			CheckBox_useBackReferences_CheckedChanged(checkBox_useBackReferences, null);
 
@@ -477,19 +480,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				viewItem.Group = GroupGeneralAvailable;
 				viewItem.Tag = StringResources.DisplayFilterControl_ShowAllContent;
 
-				foreach (var type in Enum.GetValues(typeof(CustomFilterSettings.RepetitionTypeExtended)))
-				{
-					var item = listView_available.Items.Add(Helper.GetTypeName((CustomFilterSettings.RepetitionTypeExtended)type));
-					item.Group = GroupRepetitionTypesAvailable;
-					item.Tag = type;
-				}
-
 				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.RepetitionType)))
 				{
 					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.RepetitionType)type));
 					item.Group = GroupRepetitionTypesAvailable;
 					item.Tag = type;
-				}							
+				}
 
 				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.SegmentReviewType)))
 				{
@@ -531,9 +527,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					item.Tag = type;
 				}
 
-				foreach (var type in Enum.GetValues(typeof(CustomFilterSettings.OriginTypeExtended)))
+				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginTypeExtended)))
 				{
-					var item = listView_available.Items.Add(Helper.GetTypeName((CustomFilterSettings.OriginTypeExtended)type));
+					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginTypeExtended)type));
 					item.Group = GroupOriginAvailable;
 					item.Tag = type;
 				}
@@ -546,6 +542,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					}
 
 					var item = listView_available.Items.Add(Helper.GetTypeName((OriginType)type));
+					item.Group = GroupPreviousOriginAvailable;
+					item.Tag = type;
+				}
+
+				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginTypeExtended)))
+				{
+					if ((DisplayFilterSettings.OriginTypeExtended) type == DisplayFilterSettings.OriginTypeExtended.EditedFuzzy ||
+					    (DisplayFilterSettings.OriginTypeExtended) type == DisplayFilterSettings.OriginTypeExtended.UneditedFuzzy)
+					{
+						continue;
+					}
+
+					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginTypeExtended)type));
 					item.Group = GroupPreviousOriginAvailable;
 					item.Tag = type;
 				}
@@ -567,7 +576,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 			comboBox_commentSeverity.Items.Clear();
 			foreach (var severity in Enum.GetValues(typeof(DisplayFilterSettings.CommentSeverityType)))
+			{
 				comboBox_commentSeverity.Items.Add(severity.ToString());
+			}
 
 			comboBox_commentSeverity.SelectedIndex = 0;
 			#endregion
@@ -593,7 +604,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			commentRegexBox.Checked = false;
 			sourceSameBox.Checked = false;
 			equalsCaseSensitive.Checked = false;
-			_uniqueSegments = false;
 			colorsListView.SelectedItems.Clear();
 			_reverseFilter = false;
 			containsTagsCheckBox.Checked = false;
@@ -601,8 +611,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			modifiedByCheck.Checked = false;
 			createdByBox.Text = string.Empty;
 			createdByCheck.Checked = false;
-			_unEditedFuzzy = false;
-			_editedFuzzy = false;
 			dsiLocation_textbox.Text = string.Empty;
 
 			checkBox_segmentSelection.Checked = false;
@@ -859,7 +867,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 				if (!string.IsNullOrEmpty(DisplayFilterSettings.SourceText) && !string.IsNullOrEmpty(DisplayFilterSettings.TargetText))
 				{
-					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Operator + ":\"" + CustomFilterSettings.SourceAndTargetLogicalOperator + "\"");
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Operator + ":\"" + CustomFilterSettings.SourceTargetLogicalOperator + "\"");
 				}
 
 				if (!string.IsNullOrEmpty(DisplayFilterSettings.TargetText))
@@ -889,6 +897,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					+ ":\"" + DisplayFilterSettings.ShowAllContent + "\"");
 			}
 
+
+			if (DisplayFilterSettings.ConfirmationLevels.Any()
+				|| DisplayFilterSettings.OriginTypes.Any()
+				|| DisplayFilterSettings.PreviousOriginTypes.Any()
+				|| DisplayFilterSettings.SegmentReviewTypes.Any()
+				|| DisplayFilterSettings.SegmentLockingTypes.Any()
+				|| DisplayFilterSettings.SegmentContentTypes.Any())
+			{
+				filterExpressionControl.AddItem("Relationship Operator" + ":\"" + CustomFilterSettings.FilterAttributesLogicalOperator + "\"");
+			}
+
 			if (DisplayFilterSettings.ConfirmationLevels.Any())
 			{
 				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Status + ":"
@@ -898,32 +917,24 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 						typeof(DisplayFilterSettings.ConfirmationLevel), item, true))) + ")");
 			}
 
-			try
+
+			if (DisplayFilterSettings.OriginTypes.Any())
 			{
-				if (!CustomFilterSettings.EditedFuzzy && !CustomFilterSettings.UnEditedFuzzy)
+				var value = AggregateOriginTypes(DisplayFilterSettings.OriginTypes);
+				if (!string.IsNullOrEmpty(value))
 				{
-					if (DisplayFilterSettings.OriginTypes.Any())
-					{
-						var value = AggregateOriginTypes(DisplayFilterSettings.OriginTypes);
-						if (!string.IsNullOrEmpty(value))
-						{
-							filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Origin + ":" + "(" + value + ")");
-						}
-					}
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Origin + ":" + "(" + value + ")");
 				}
 			}
-			catch
-			{
-				// ignore; catch all
-			}
+
 
 			if (DisplayFilterSettings.PreviousOriginTypes.Any())
 			{
-				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Previous_Origin + ":"
-					+ "(" + DisplayFilterSettings.PreviousOriginTypes.Aggregate(string.Empty, (current, item) => current
-					+ (current != string.Empty ? " | " : string.Empty)
-					+ Helper.GetTypeName((OriginType)Enum.Parse(
-						typeof(OriginType), item, true))) + ")");
+				var value = AggregateOriginTypes(DisplayFilterSettings.PreviousOriginTypes);
+				if (!string.IsNullOrEmpty(value))
+				{
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Previous_Origin + ":" + "(" + value + ")");
+				}
 			}
 
 			if (_reverseFilter)
@@ -1097,24 +1108,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MidifiedBy + ":\"" +
 													CustomFilterSettings.ModifiedBy + "\"");
 				}
-				if (CustomFilterSettings.EditedFuzzy)
-				{
-					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_EditedFuzzy + ":\"" +
-													CustomFilterSettings.EditedFuzzy + "\"");
-				}
-				if (CustomFilterSettings.UnEditedFuzzy)
-				{
-					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_UnEdited + ":\"" +
-													CustomFilterSettings.UnEditedFuzzy + "\"");
-				}
+
 				if (!string.IsNullOrEmpty(CustomFilterSettings.DocumentStructureInformation))
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_DSI + ":\"" + CustomFilterSettings.DocumentStructureInformation + "\"");
 				}
 
-				if (CustomFilterSettings.UseTagContent)
+				if (CustomFilterSettings.SearchInTagContent)
 				{
-					filterExpressionControl.AddItem(CustomFilterSettings.AndOrTagContent ? StringResources.DisplayFilterControl_UseTagsAlso : StringResources.DisplayFilterControl_UseTagsOnly);
+					filterExpressionControl.AddItem(CustomFilterSettings.SearchInTagContentAndText ? StringResources.DisplayFilterControl_UseTagsAlso : StringResources.DisplayFilterControl_UseTagsOnly);
 				}
 			}
 		}
@@ -1131,7 +1133,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				}
 				else
 				{
-					success = Enum.TryParse(type, false, out CustomFilterSettings.OriginTypeExtended originTypeExtended);
+					success = Enum.TryParse(type, false, out DisplayFilterSettings.OriginTypeExtended originTypeExtended);
 					if (success)
 					{
 						value += (string.IsNullOrEmpty(value) ? string.Empty : " | ") + Helper.GetTypeName(originTypeExtended);
@@ -1340,16 +1342,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 									checkBox_caseSensitive.Checked + ',' +
 									checkBox_TagContent.Checked + ',' +
 									andOrTagContent + ',' +
-									comboBox_SourceTargetFilterLogicalOperator.Text + ',' +
+									comboBox_SourceTargetFilterLogicalOperator.SelectedItem + ',' +
 									checkBox_useBackReferences.Checked;
 
 						var item2 = settings.SourceText + ", " +
 									settings.TargetText + ", " +
 									settings.IsRegularExpression + ", " +
 									settings.IsCaseSensitive + ',' +
-									_customFilterSettings.UseTagContent + ',' +
-									_customFilterSettings.AndOrTagContent + ',' +
-									_customFilterSettings.SourceAndTargetLogicalOperator + ',' +
+									_customFilterSettings.SearchInTagContent + ',' +
+									_customFilterSettings.SearchInTagContentAndText + ',' +
+									_customFilterSettings.SourceTargetLogicalOperator + ',' +
 									_customFilterSettings.UseBackreferences;
 
 						tabPage.ImageIndex = string.CompareOrdinal(item1, item2) == 0 ? 0 : 1;
@@ -1374,6 +1376,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					list1.AddRange(DisplayFilterSettings.SegmentReviewTypes);
 					list1.AddRange(DisplayFilterSettings.SegmentLockingTypes);
 					list1.AddRange(DisplayFilterSettings.SegmentContentTypes);
+					list1.Add(_customFilterSettings.FilterAttributesLogicalOperator.ToString());
 
 					var list2 = new List<string> { settings.ShowAllContent.ToString() };
 					list2.AddRange(settings.OriginTypes);
@@ -1383,6 +1386,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					list2.AddRange(settings.SegmentReviewTypes);
 					list2.AddRange(settings.SegmentLockingTypes);
 					list2.AddRange(settings.SegmentContentTypes);
+					list2.Add(filterAttributes_comboBox.SelectedItem.ToString());
 
 					tabPage.ImageIndex = string.Join(", ", list1) == string.Join(", ", list2)
 						? 0
@@ -1430,7 +1434,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		#region  |  ToolbarStrip  |
 
 		private void ToolStripButton_applyFilter_Click(object sender, EventArgs e)
-		{			
+		{
 			ApplyFilter(false);
 		}
 
@@ -1450,7 +1454,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		}
 
 		private void ReverseBtn_Click(object sender, EventArgs e)
-		{			
+		{
 			ApplyFilter(true);
 		}
 
@@ -1828,78 +1832,61 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void AddSelectedItem()
 		{
-			var isSelected = IsUniqueSelected();
-			if (isSelected)
-			{
-				_uniqueSegments = true;
-			}
-
-			var isEditedSelected = IsEditedFuzzySelected();
-			if (isEditedSelected)
-			{
-				_editedFuzzy = true;
-			}
-
-			var isUnEditedSelected = IsUnEditedFuzzySelected();
-			if (isUnEditedSelected)
-			{
-				_unEditedFuzzy = true;
-			}
 
 			MoveSelectedListViewItem(listView_available, listView_selected);
 			InvalidateIconsFilterEdited(tabPage_filters);
 		}
 
-		private bool IsEditedFuzzySelected()
-		{
-			foreach (ListViewItem selectedItem in listView_available.SelectedItems)
-			{
-				var success = Enum.TryParse(selectedItem.Tag.ToString(), false, out CustomFilterSettings.OriginTypeExtended originType);
-				if (success)
-				{
-					if (originType == CustomFilterSettings.OriginTypeExtended.EditedFuzzy)
-					{
-						return true;
-					}
-				}
-			}
+		//private bool IsEditedFuzzySelected()
+		//{
+		//	foreach (ListViewItem selectedItem in listView_available.SelectedItems)
+		//	{
+		//		var success = Enum.TryParse(selectedItem.Tag.ToString(), false, out DisplayFilterSettings.OriginTypeExtended originType);
+		//		if (success)
+		//		{
+		//			if (originType == DisplayFilterSettings.OriginTypeExtended.EditedFuzzy)
+		//			{
+		//				return true;
+		//			}
+		//		}
+		//	}
 
-			return false;
-		}
+		//	return false;
+		//}
 
-		private bool IsUnEditedFuzzySelected()
-		{
-			foreach (ListViewItem selectedItem in listView_available.SelectedItems)
-			{
-				var success = Enum.TryParse(selectedItem.Tag.ToString(), false, out CustomFilterSettings.OriginTypeExtended originType);
-				if (success)
-				{
-					if (originType == CustomFilterSettings.OriginTypeExtended.UneditedFuzzy)
-					{
-						return true;
-					}
-				}
-			}
+		//private bool IsUnEditedFuzzySelected()
+		//{
+		//	foreach (ListViewItem selectedItem in listView_available.SelectedItems)
+		//	{
+		//		var success = Enum.TryParse(selectedItem.Tag.ToString(), false, out DisplayFilterSettings.OriginTypeExtended originType);
+		//		if (success)
+		//		{
+		//			if (originType == DisplayFilterSettings.OriginTypeExtended.UneditedFuzzy)
+		//			{
+		//				return true;
+		//			}
+		//		}
+		//	}
 
-			return false;
-		}
+		//	return false;
+		//}
 
-		private bool IsUniqueSelected()
-		{
-			foreach (ListViewItem selectedItem in listView_available.SelectedItems)
-			{
-				var success = Enum.TryParse(selectedItem.Tag.ToString(), false, out CustomFilterSettings.RepetitionTypeExtended originType);
-				if (success)
-				{
-					if (originType == CustomFilterSettings.RepetitionTypeExtended.UniqueOccurrences)
-					{
-						return true;
-					}
-				}
-			}
+		//private bool IsUniqueSelected()
+		//{
+		//	foreach (ListViewItem selectedItem in listView_available.SelectedItems)
+		//	{
+		//		var success = Enum.TryParse(selectedItem.Tag.ToString(), false, out DisplayFilterSettings.RepetitionType originType);
+		//		if (success)
+		//		{
+		//			if (originType == DisplayFilterSettings.RepetitionType.UniqueOccurrences)
+		//			{
+		//				return true;
+		//			}
+		//		}
+		//	}
 
-			return false;
-		}
+		//	return false;
+		//}
 
 		private void Button_remove_Click(object sender, EventArgs e)
 		{
@@ -1908,20 +1895,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void RemoveSelectedItem()
 		{
-			if (IsUniqueSelected())
-			{
-				_uniqueSegments = false;
-			}
+			//if (IsUniqueSelected())
+			//{
+			//	_uniqueSegments = false;
+			//}
 
-			if (IsEditedFuzzySelected())
-			{
-				_editedFuzzy = false;
-			}
+			//if (IsEditedFuzzySelected())
+			//{
+			//	_editedFuzzy = false;
+			//}
 
-			if (IsUnEditedFuzzySelected())
-			{
-				_unEditedFuzzy = false;
-			}
+			//if (IsUnEditedFuzzySelected())
+			//{
+			//	_unEditedFuzzy = false;
+			//}
 
 			MoveSelectedListViewItem(listView_selected, listView_available);
 			InvalidateIconsFilterEdited(tabPage_filters);
@@ -1963,6 +1950,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private void ListView_selected_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			RemoveSelectedItem();
+		}
+
+		private void filterAttributes_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_filters);
 		}
 
 		#endregion
@@ -2261,8 +2253,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		}
 
 
+
 		#endregion
 
-		
+
 	}
 }
