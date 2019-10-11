@@ -10,7 +10,7 @@
 		 	helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			 WindowStartupLocation="CenterScreen" mc:Ignorable="d" 
 			 WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"	 
-             d:DesignHeight="450" d:DesignWidth="900"  Height="670" Width="820">
+             d:DesignHeight="450" d:DesignWidth="900"  Height="550" Width="820">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -68,29 +68,7 @@
 						<controls:MetroTabItem Header="Settings" Margin="25,0,0,0" Width="150">
 							<views:Settings DataContext="{Binding SettingsViewModel}" Height="300"></views:Settings>
 						</controls:MetroTabItem>
-				</TabControl>
-
-				<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments"/>
-				<TextBlock  Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select engine model :"/>
-				<ComboBox 
-					HorizontalAlignment="Left" Width="400" FontFamily="Calibri" Margin="15,5,0,10" BorderThickness="1"
-					ItemsSource="{Binding TranslationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					SelectedItem="{Binding SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"					
-					controls:TextBoxHelper.Watermark="Please select engine model">
-					<ComboBox.ItemTemplate>
-						<DataTemplate>
-							<StackPanel Orientation="Horizontal">
-								<Image Source="../Resources/AdaptiveEngine.ico" Width="20" Height="20" />
-								<TextBlock Text="{Binding DisplayName}" Margin="10,0,0,0" FontFamily="Calibri" VerticalAlignment="Center"/>
-							</StackPanel>
-						</DataTemplate>
-					</ComboBox.ItemTemplate>
-					<ComboBox.ItemContainerStyle>
-						<Style TargetType="{x:Type ComboBoxItem}">
-							<Setter Property="BorderThickness" Value="0"/>
-						</Style>
-					</ComboBox.ItemContainerStyle>
-				</ComboBox>			
+				</TabControl>	
 			</StackPanel>
 			<StackPanel Grid.Row="3"  Orientation="Vertical"  VerticalAlignment="Bottom" Margin="0,0,0,10">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
