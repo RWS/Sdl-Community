@@ -8,7 +8,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 	{
 		public BeGlobalHelpAction()
 		{
-			Name = "BeGlobal wiki in the SDL Community";
+			Name = "SDL MachineTranslationCloud wiki in the SDL Community";
 		}
 
 		public override void Execute()
@@ -17,7 +17,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "BeGlobal results";
+		public override string Category => "SDLMachineTranslationCloud results";
 		public override Icon Icon => PluginResources.Question;
 	}
 }

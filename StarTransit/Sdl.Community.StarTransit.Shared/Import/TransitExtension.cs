@@ -24,7 +24,7 @@
 				case "GLE":
 					return "GAE,GLA,GDH";
 				case "ELL":
-					return "GRC, ELL";
+					return "GRC,ELL";
 				case "ITA":
 				case "ITS":
 					return "ITS,ITA";

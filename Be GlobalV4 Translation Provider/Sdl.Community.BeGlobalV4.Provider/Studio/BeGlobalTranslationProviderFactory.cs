@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
-	[TranslationProviderFactory(Id = "BeGlobalTranslationProviderFactory",
-		Name = "BeGlobalTranslationProviderFactory",
-		Description = "BeGlobal4 Translation Provider")]
+	[TranslationProviderFactory(Id = "SDLMachineTranslationCloudProviderFactory",
+		Name = "SDLMachineTranslationCloudProviderFactory",
+		Description = "SDL Machine Translation Cloud Provider")]
 	public class BeGlobalTranslationProviderFactory : ITranslationProviderFactory
 	{
 		public static readonly Log Log = Log.Instance;	
@@ -22,23 +17,24 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			AppItializer.EnsureInitializer();
 
+			var originalUri = new Uri("sdlmachinetranslationcloudprovider:///");
 			var options = new BeGlobalTranslationOptions(translationProviderUri);
-			if (options.BeGlobalService == null)
+			if (credentialStore.GetCredential(originalUri) != null)
 			{
-				options.BeGlobalService = new BeGlobalV4Translator(options.Model);
+				var credentials = credentialStore.GetCredential(originalUri);
+				if (options.BeGlobalService == null)
+				{
+					var messageBoxService = new MessageBoxService();
+					options.BeGlobalService = new BeGlobalV4Translator(options, messageBoxService, credentials);
+				}
 			}
-			try
+			else
 			{
-				var accountId = options.BeGlobalService.GetUserInformation();
-				var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
-
-				options.SubscriptionInfo = subscriptionInfo;
+				credentialStore.AddCredential(originalUri, new TranslationProviderCredential(originalUri.ToString(), true));
 			}
-			catch (Exception e)
-			{
-				Log.Logger.Error(e, "Error on CreateTranslationProvider");
-			}
-
+			var accountId = options.BeGlobalService?.GetUserInformation();		
+			var subscriptionInfo = options.BeGlobalService?.GetLanguagePairs(accountId.ToString());
+			options.SubscriptionInfo = subscriptionInfo;
 			return new BeGlobalTranslationProvider(options);
 		}
 

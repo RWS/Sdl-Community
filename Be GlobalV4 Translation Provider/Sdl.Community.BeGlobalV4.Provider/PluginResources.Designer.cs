@@ -19,7 +19,7 @@ namespace Sdl.Community.BeGlobalV4.Provider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -93,6 +93,16 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap global1 {
+            get {
+                object obj = ResourceManager.GetObject("global1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap logoB {
             get {
                 object obj = ResourceManager.GetObject("logoB", resourceCulture);
@@ -121,7 +131,27 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sdl.Community.BeGlobalV4.Provider.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap MTCloud_logo {
+            get {
+                object obj = ResourceManager.GetObject("MTCloud_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap MTCloud_logo_small {
+            get {
+                object obj = ResourceManager.GetObject("MTCloud_logo_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SDLMachineTranslationCloudProvider.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -130,7 +160,7 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BeGlobal4 MT Provider.
+        ///   Looks up a localized string similar to SDL Machine Translation Cloud Provider.
         /// </summary>
         public static string Plugin_NiceName {
             get {

@@ -13,7 +13,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public BeGlobalTranslationOptions()
 		{
-			_uriBuilder = new TranslationProviderUriBuilder("beglobaltranslationprovider");
+			_uriBuilder = new TranslationProviderUriBuilder("sdlmachinetranslationcloudprovider");
 		}
 
 		public BeGlobalTranslationOptions(Uri uri)
@@ -21,12 +21,23 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			_uriBuilder = new TranslationProviderUriBuilder(uri);
 		}
 
-		[JsonIgnore]
-		public BeGlobalV4Translator BeGlobalService { get; set; }
-
 		public string DisplayName { get; set; }
 
+		public string ClientId { get; set; }
+
+		public string ClientSecret { get; set; }
+
+		[JsonIgnore]
+		public string AuthenticationMethod
+		{
+			get => GetStringParameter("authenticationMethod");
+			set => SetStringParameter("authenticationMethod", value);
+		}
+
 		public Dictionary<string, string> LanguagesSupported { get; set; }
+
+		[JsonIgnore]
+		public BeGlobalV4Translator BeGlobalService { get; set; }
 
 		[JsonIgnore]
 		public string Model
