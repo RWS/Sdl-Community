@@ -4,7 +4,7 @@
 	{
 		public static readonly string Authentication = @"Authentication";
 		public static readonly string PluginName = "SDL Machine Translation Cloud provider";
-		public static readonly string MachineTranslationCloud = "MachineTranslationCloud";
+		public static readonly string SDLMachineTranslationCloud = "SDLMachineTranslationCloud";
 		public static readonly string TraceId = "Trace-ID";
 		public static readonly string FAILED = "FAILED";
 		public static readonly string INIT = "INIT";

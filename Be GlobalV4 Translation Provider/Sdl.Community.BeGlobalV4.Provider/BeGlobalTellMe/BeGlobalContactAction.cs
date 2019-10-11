@@ -16,7 +16,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "MachineTranslationCloud results";
+		public override string Category => "SDLMachineTranslationCloud results";
 		public override Icon Icon => PluginResources.global;
 	}
 }

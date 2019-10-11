@@ -317,7 +317,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		{
 			var pluginVersion = VersionHelper.GetPluginVersion();
 			var studioVersion = VersionHelper.GetStudioVersion();
-			var traceId = $"{Constants.MachineTranslationCloud} {pluginVersion} - {studioVersion} - {Guid.NewGuid().ToString()}";
+			var traceId = $"{Constants.SDLMachineTranslationCloud} {pluginVersion} - {studioVersion} - {Guid.NewGuid().ToString()}";
 			request.AddHeader(Constants.TraceId, traceId);
 			return traceId;
 		}

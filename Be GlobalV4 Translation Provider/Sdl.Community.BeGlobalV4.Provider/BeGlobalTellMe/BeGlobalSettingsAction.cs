@@ -15,7 +15,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 	{
 		public BeGlobalSettingsAction()
 		{
-			Name = "MachineTranslationCloud options";
+			Name = "SDLMachineTranslationCloud options";
 		}
 
 		public override void Execute()
