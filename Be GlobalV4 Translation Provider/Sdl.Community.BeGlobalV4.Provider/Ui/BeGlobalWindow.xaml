@@ -6,12 +6,12 @@
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
              xmlns:uiHelpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.UiHelpers"
-             helpers:WindowCloser.DialogResult="{Binding DialogResult}"
-			 WindowStartupLocation="CenterScreen"
-			 WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResizeWithGrip"
-			 Title="SDL BeGlobal (NMT) Translation provider"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="950">
+			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 helpers:WindowCloser.DialogResult="{Binding DialogResult}"
+			 WindowStartupLocation="CenterScreen" mc:Ignorable="d" 
+			 WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"	 
+             d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="800">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -20,11 +20,15 @@
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>	
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
+				<ResourceDictionary x:Uid="ResourceKeyId1">
+					<converters:BeGlobalLoginConverter x:Key="LoginConverter"/>
+				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 			<!--set red background to X button on hover-->
 		</ResourceDictionary>
@@ -44,27 +48,72 @@
 
 			<!-- BORDER CONTROL -->
 			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
-			<Border Background="White" Grid.Column="0" Grid.Row="1"  MaxWidth="950">
+			<Border Background="White" Grid.Column="0" Grid.Row="1"  MaxWidth="800">
 				<StackPanel  Orientation="Horizontal">
-					<TextBlock Margin="15,0,20,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" FontSize="14" MaxWidth="780" FontWeight="Bold"
-					           Style="{DynamicResource TextBlockColor}">
-						Welcome to the SDL BeGlobal (NMT) translation provider for Studio. <LineBreak/><LineBreak/>
-						SDL BeGlobal (NMT) is SDL's state-of-the-art secure machine translation cloud product for enterprises with various paid subscription models.
+					<TextBlock Margin="15,10,2,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" MaxWidth="800">
+						Welcome to the SDL Machine Translation Cloud (formerly BeGlobal) translation provider for Studio. <LineBreak/><LineBreak/>
+						SDL Machine Translation Cloud is SDL's neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
+						Using SDL's proprietary technology, customers can have the assurance of content privacy.
+						SDL Machine Translation is powered by SDL's state-of-the-art machine learning algorithms and supports a large number of languages.
 					</TextBlock>
-					<Image Source="../Resources/logoRe.png" Width="auto" Height="auto" HorizontalAlignment="Center" />
 				</StackPanel>
 			</Border>
-			<StackPanel Grid.Row="2" MinHeight="250">
-				<TextBlock  Margin="15,15,0,10"  TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select the settings you want to apply to the Translation Provider."/>
+			<StackPanel Grid.Row="2" Margin="0,10,0,0" MinHeight="250">
+				<Button Style="{DynamicResource LightBlueButtonsStyle}" Width="75" HorizontalAlignment="Left"
+						Content="Login" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
+				<ComboBox
+					HorizontalAlignment="Left" Width="400" FontFamily="Calibri" Margin="15,5,0,10" BorderThickness="1"
+					ItemsSource="{Binding LoginOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					SelectedItem="{Binding SelectedLoginOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"					
+					controls:TextBoxHelper.Watermark="Please select the authentication method"
+					controls:TextBoxHelper.ClearTextButton="True">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding LoginOption}" FontFamily="Calibri" VerticalAlignment="Center"/>
+							</StackPanel>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+					<ComboBox.ItemContainerStyle>
+						<Style TargetType="{x:Type ComboBoxItem}">
+							<Setter Property="BorderThickness" Value="0"/>
+						</Style>
+					</ComboBox.ItemContainerStyle>
+				</ComboBox>
+				<StackPanel Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=APICredentials}">
+					<PasswordBox
+						HorizontalAlignment="Left" Name="ClientIdBox"
+						controls:TextBoxHelper.UseFloatingWatermark="True"  
+						controls:TextBoxHelper.Watermark="Client Id"
+						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+						Width="400"	Margin="15,0,0,10" IsEnabled="True">
+						<i:Interaction.Triggers>
+							<i:EventTrigger EventName="PasswordChanged" >
+								<i:InvokeCommandAction Command="{Binding PasswordChangedCommand }" CommandParameter="{Binding ElementName=ClientIdBox}"/>
+							</i:EventTrigger>
+						</i:Interaction.Triggers>
+					</PasswordBox>
+					<PasswordBox
+						HorizontalAlignment="Left" Name="ClientSecretBox"
+						controls:TextBoxHelper.UseFloatingWatermark="True"  
+						controls:TextBoxHelper.Watermark="Client Secret"
+						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay }"
+						Width="400"	Margin="15,0,0,0" IsEnabled="True">
+						<i:Interaction.Triggers>
+							<i:EventTrigger EventName="PasswordChanged" >
+								<i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=ClientSecretBox}"/>
+							</i:EventTrigger>
+						</i:Interaction.Triggers>
+					</PasswordBox>					
+				</StackPanel>
+				
 				<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments"/>
 				<TextBlock  Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select engine model :"/>
 				<ComboBox 
-					HorizontalAlignment="Left"
-					Width="240"
-					FontFamily="Calibri"
+					HorizontalAlignment="Left" Width="400" FontFamily="Calibri" Margin="15,5,0,10" BorderThickness="1"
 					ItemsSource="{Binding TranslationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					SelectedItem="{Binding SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					Margin="15,5,0,10" BorderThickness="1"
+					SelectedItem="{Binding SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"					
 					controls:TextBoxHelper.Watermark="Please select engine model">
 					<ComboBox.ItemTemplate>
 						<DataTemplate>
@@ -80,6 +129,8 @@
 						</Style>
 					</ComboBox.ItemContainerStyle>
 				</ComboBox>
+				<TextBlock Margin="15,0,15,0" Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" FontWeight="Normal" FontSize="14" Foreground="Red"
+					   Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 			</StackPanel>
 			<StackPanel Grid.Row="3"  Orientation="Vertical"  VerticalAlignment="Bottom" Margin="0,0,0,10">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
@@ -87,9 +138,6 @@
 					<Button  Style="{DynamicResource SdlSecondaryButtonStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="15,0,30,0" />
 				</StackPanel>
 			</StackPanel>
-
 		</Grid>
 	</Border>
-
 </Window>
-

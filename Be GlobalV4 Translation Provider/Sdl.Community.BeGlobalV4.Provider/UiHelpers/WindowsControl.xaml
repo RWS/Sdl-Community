@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.BeGlobalV4.Provider.UiHelpers"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" 			 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -20,7 +20,10 @@
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
-
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
 			<!-- ICON AND TITLE -->
 			<Grid Grid.Column="0">
 				<Grid.ColumnDefinitions>
@@ -28,12 +31,12 @@
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
-
+				
 				<!-- ICON TBD -->
-				<Image Grid.Column="1" DockPanel.Dock="Left" Width="32" Height="32" Margin="10 0 0 0" Source="{Binding Path=Icon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+				<Image Grid.Row="0" Width="780" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Source="../Resources/MTCloud_logo.png" />
 
 				<!-- TITLE -->
-				<Grid Grid.Column="2">
+				<Grid Grid.Row="1" Grid.Column="2">
 					<TextBlock TextTrimming="CharacterEllipsis" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center"
                            Margin="0,0,0,1" FontSize="14" Text="{Binding Path=Title, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
 						<TextBlock.Style>
@@ -51,7 +54,7 @@
 			</Grid>
 
 			<!-- WINDOW COMMAND BUTTONS -->
-			<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+			<StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">
 
 				<Button Style="{StaticResource WindowControlButtonStyle}" x:Name="MinimizeButton" Width="34" Height="26"
                             ToolTip="{Binding Path=ControlMinimize, ElementName=WizardWindowControl}" IsEnabled="True" Click="MinButton_Click">

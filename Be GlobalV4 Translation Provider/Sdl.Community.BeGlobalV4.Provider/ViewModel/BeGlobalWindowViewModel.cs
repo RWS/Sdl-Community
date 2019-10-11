@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
@@ -7,40 +9,66 @@ using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
+using static Sdl.Community.BeGlobalV4.Provider.Helpers.Enums;
+using Application = System.Windows.Application;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
 	public class BeGlobalWindowViewModel : BaseViewModel
 	{
 		private readonly LanguagePair[] _languagePairs;
-		private readonly BeGlobalWindow _mainWindow;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
-		private ICommand _okCommand;
 		private bool _reSendChecked;
 		private TranslationModel _selectedModel;
+		private BeGlobalLoginOptions _selectedLoginOption;
+		private string _loginMethod;
+		private int _selectedIndex;
+		private MessageBoxService _messageBoxService;
+		private TranslationProviderCredential _credentials;
+		private string _message;
+		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
 
-		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options, LanguagePair[] languagePairs)
+		private ICommand _okCommand;
+		private ICommand _loginCommand;
+		private ICommand _passwordChangedCommand;
+
+		public BeGlobalWindowViewModel(BeGlobalTranslationOptions options, LanguagePair[] languagePairs, TranslationProviderCredential credentials)
 		{
 			Options = options;
-			_mainWindow = mainWindow;
+			BeGlobalWindow = new BeGlobalWindow();
 			_languagePairs = languagePairs;
 			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
+			_loginMethod = Enums.LoginOptions.APICredentials.ToString();
+			_credentials = credentials;
 			TranslationOptions = new ObservableCollection<TranslationModel>();
-
-			var beGlobalTranslator = new BeGlobalV4Translator(Options?.Model);
-			var accountId = beGlobalTranslator.GetUserInformation();
-
-			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+			SelectedIndex = (int)Enums.LoginOptions.APICredentials;
+			_messageBoxService = new MessageBoxService();
 			if (Options != null)
 			{
 				ReSendChecked = options.ResendDrafts;
 			}
-			GetEngineModels(subscriptionInfo);
-			SetEngineModel();
+			SetLoginOptions();
+			if (credentials == null) return;
+			var credential = _credentials.Credential.Replace("sdlmachinetranslationcloudprovider:///", string.Empty);
+			if (credential.Contains("#"))
+			{
+				var splitedCredentials = credentials.Credential.Split('#');
+				if (splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
+				{
+					var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
+					var accountId = beGlobalTranslator.GetUserInformation();
+					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+					GetEngineModels(subscriptionInfo);
+					SetEngineModel();
+					SetAuthenticationOptions();
+				}
+			}
 		}
-
-		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
+		
 		public BeGlobalTranslationOptions Options { get; set; }
+		public BeGlobalWindow BeGlobalWindow { get; set; }
+		public ObservableCollection<BeGlobalLoginOptions> LoginOptions { get; set; }
 
 		public bool ReSendChecked
 		{
@@ -70,7 +98,77 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
+		public int SelectedIndex
+		{
+			get => _selectedIndex;
+			set
+			{
+				_selectedIndex = value;				
+				OnPropertyChanged(nameof(SelectedIndex));
+			}
+		}
+
+	    public BeGlobalLoginOptions SelectedLoginOption
+		{
+			get => _selectedLoginOption;
+			set
+			{
+				_selectedLoginOption = value;
+				OnPropertyChanged(nameof(SelectedLoginOption));
+
+				CheckLoginMethod();
+				SetClientOptions();
+			}
+		}
+
+		// LoginMethod is used to display/hide the ClientId,ClientSecret fields based on which authentication mode is selected
+		public string LoginMethod
+		{
+			get => _loginMethod;
+			set
+			{
+				if (_loginMethod == value)
+				{
+					return;
+				}
+				_loginMethod = value;
+				OnPropertyChanged(nameof(LoginMethod));
+			}
+		}
+
+		public string Message
+		{
+			get => _message;
+			set
+			{
+				if (_message == value)
+				{
+					return;
+				}
+				_message = value;
+				OnPropertyChanged(nameof(Message));
+			}
+		}
+
 		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }
+
+		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
+		public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new RelayCommand(LoginAction));
+		public ICommand PasswordChangedCommand => _passwordChangedCommand ?? (_passwordChangedCommand = new RelayCommand(ChangePasswordAction));
+
+		private void ChangePasswordAction(object parameter)
+		{
+			var passwordBox = (PasswordBox)parameter;
+			if(passwordBox.Password.Length > 0)
+			{
+				Message = string.Empty;
+			}
+		}
+
+		private void LoginAction(object parameter)
+		{
+
+		}
 
 		private void GetEngineModels(SubscriptionInfo subscriptionInfo)
 		{
@@ -106,8 +204,24 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void Ok(object parameter)
 		{
-			WindowCloser.SetDialogResult(_mainWindow, true);
-			_mainWindow.Close();
+			if (LoginMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials))
+				&& (string.IsNullOrEmpty(BeGlobalWindow.ClientIdBox.Password) || string.IsNullOrEmpty(BeGlobalWindow.ClientSecretBox.Password)))
+			{
+				Message = Constants.CredentialsValidation;
+				return;
+			}
+			if (Options?.Model == null)
+			{
+				Options.ClientId = BeGlobalWindow.ClientIdBox.Password.TrimEnd();
+				Options.ClientSecret = BeGlobalWindow.ClientSecretBox.Password.TrimEnd();
+				var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
+				var accountId = beGlobalTranslator.GetUserInformation();
+				var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+				GetEngineModels(subscriptionInfo);
+				SetEngineModel();
+			}			
+			WindowCloser.SetDialogResult(BeGlobalWindow, true);
+			BeGlobalWindow.Close();
 		}
 
 		private void SetEngineModel()
@@ -134,11 +248,82 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
+		private void SetLoginOptions()
+		{
+			LoginOptions = new ObservableCollection<BeGlobalLoginOptions>();
+			foreach (LoginOptions enumVal in Enum.GetValues(typeof(LoginOptions)))
+			{
+				var displayName = Enums.GetDisplayName(enumVal);
+				displayName = !string.IsNullOrEmpty(displayName) ? displayName : enumVal.ToString();
+
+				var beGlobalLoginOption = new BeGlobalLoginOptions { LoginOption = displayName };
+				LoginOptions.Add(beGlobalLoginOption);
+			}
+			//set by default the APICredentials method in case it wasn't setup yet
+			if (string.IsNullOrEmpty(Options.AuthenticationMethod)
+				|| Options.AuthenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
+			{
+				SelectedLoginOption = new BeGlobalLoginOptions { LoginOption = Enums.GetDisplayName(Enums.LoginOptions.APICredentials) };
+			}
+		}
+
+		private void SetClientOptions()
+		{
+			if(!string.IsNullOrEmpty(Options.ClientId) && !string.IsNullOrEmpty(Options.ClientSecret))
+			{
+				BeGlobalWindow.ClientIdBox.Password = Options.ClientId;
+				BeGlobalWindow.ClientSecretBox.Password = Options.ClientSecret;
+			}
+			Options.AuthenticationMethod = SelectedLoginOption?.LoginOption;
+		}
+
+		private void SetAuthenticationOptions()
+		{
+			if (string.IsNullOrEmpty(Options.AuthenticationMethod)) return;
+			if (Options.AuthenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
+			{
+				if (!string.IsNullOrEmpty(Options.ClientId) && !string.IsNullOrEmpty(Options.ClientSecret))
+				{
+					BeGlobalWindow.ClientIdBox.Password = Options.ClientId;
+					BeGlobalWindow.ClientSecretBox.Password = Options.ClientSecret;
+				}
+				else
+				{
+					var splitedCredentials = _credentials?.Credential.Split('#');
+					BeGlobalWindow.ClientIdBox.Password = splitedCredentials.Length > 0 ? splitedCredentials[0] : string.Empty;
+					BeGlobalWindow.ClientSecretBox.Password = splitedCredentials.Length > 0 ? splitedCredentials[1] : string.Empty;
+				}
+			}
+			else
+			{
+				SelectedIndex = (int)Enums.LoginOptions.StudioAuthentication;
+				SelectedLoginOption = new BeGlobalLoginOptions { LoginOption = Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication) };
+			}
+		}
+
 		private void SetOptions(TranslationModel translationModel)
 		{
 			Options.Model = translationModel.Model;
 			Options.DisplayName = translationModel.DisplayName;
 			Options.LanguagesSupported = translationModel.LanguagesSupported;
+		}
+
+		/// <summary>
+		///  Set the LoginMethod based on user selection.
+		///  If LoginMethod is Studio Authentication, check if user is logged-in in Studio
+		/// </summary>
+		private void CheckLoginMethod()
+		{
+			LoginMethod = _selectedLoginOption?.LoginOption;
+			if (LoginMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
+			{
+				Message = string.Empty;
+				AppItializer.EnsureInitializer();
+				Application.Current?.Dispatcher?.Invoke(() =>
+				{
+					_studioCredentials.GetToken();
+				});
+			}
 		}
 	}
 }

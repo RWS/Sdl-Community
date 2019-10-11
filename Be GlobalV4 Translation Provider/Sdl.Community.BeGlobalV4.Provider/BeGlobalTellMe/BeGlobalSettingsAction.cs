@@ -15,7 +15,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 	{
 		public BeGlobalSettingsAction()
 		{
-			Name = "BeGlobal options";
+			Name = "SDLMachineTranslationCloud options";
 		}
 
 		public override void Execute()
@@ -23,21 +23,20 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 			var currentProject = SdlTradosStudio.Application?.GetController<ProjectsController>().CurrentProject;
 			var settings = currentProject?.GetTranslationProviderConfiguration();
 			var translationProvider = settings?.Entries?.FirstOrDefault(entry =>
-				entry.MainTranslationProvider.Uri.OriginalString.Contains("beglobaltranslationprovider"));
+				entry.MainTranslationProvider.Uri.OriginalString.Contains("sdlmachinetranslationcloudprovider"));
 			if (translationProvider != null)
 			{
 				var uri = translationProvider.MainTranslationProvider?.Uri;
 				var languagePairs = GetProjectLanguagePairs(currentProject);
 				var options = new BeGlobalTranslationOptions(uri);
-				var beGlobalWindow = new BeGlobalWindow();
-				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, languagePairs);
-				beGlobalWindow.DataContext = beGlobalVm;
-				beGlobalWindow.ShowDialog();
-				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+				var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, null);
+				beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
+				beGlobalVm.BeGlobalWindow.ShowDialog();
+				if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
 				{
 					settings.Entries
 						.Find(entry =>
-							entry.MainTranslationProvider.Uri.OriginalString.Contains("beglobaltranslationprovider"))
+							entry.MainTranslationProvider.Uri.OriginalString.Contains("sdlmachinetranslationcloudprovider"))
 						.MainTranslationProvider.Uri = options.Uri;
 
 					currentProject.UpdateTranslationProviderConfiguration(settings);
@@ -64,7 +63,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 
 
 		public override bool IsAvailable => true;
-		public override string Category => "BeGlobal results";
+		public override string Category => "Machine Translation Cloud results";
 
 		public override Icon Icon => PluginResources.Settings;
 	}

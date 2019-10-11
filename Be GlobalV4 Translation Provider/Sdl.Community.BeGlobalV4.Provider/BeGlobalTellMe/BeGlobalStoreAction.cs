@@ -8,7 +8,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 	{
 		public BeGlobalStoreAction()
 		{
-			Name = "Download BeGlobal from AppStore";
+			Name = "Download SDLMachineTranslationCloud from AppStore";
 		}
 
 		public override void Execute()
@@ -17,7 +17,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "BeGlobal results";
+		public override string Category => "SDLMachineTranslationCloud results";
 		public override Icon Icon => PluginResources.TellMe1;
 	}
 }

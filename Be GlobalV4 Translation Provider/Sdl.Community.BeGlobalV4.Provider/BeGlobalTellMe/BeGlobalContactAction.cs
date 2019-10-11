@@ -12,11 +12,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 		}
 		public BeGlobalContactAction()
 		{
-			Name = "SDL BeGlobal (NMT) user interface";
+			Name = "SDL Machine Translation Cloud user interface";
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "BeGlobal results";
+		public override string Category => "SDLMachineTranslationCloud results";
 		public override Icon Icon => PluginResources.global;
 	}
 }
