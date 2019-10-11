@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>Sdl.Community.BeGlobalV4.Provider</value>
+    <value>SDLMachineTranslationCloudProvider</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="sdl" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -128,7 +128,7 @@
     <value>[segment already translated...source not re-sent]</value>
   </data>
   <data name="Plugin_NiceName" xml:space="preserve">
-    <value>BeGlobal4 MT Provider</value>
+    <value>SDL Machine Translation Cloud Provider</value>
   </data>
   <data name="global" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\global.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
