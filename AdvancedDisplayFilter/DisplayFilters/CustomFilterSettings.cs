@@ -10,6 +10,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			Or = 1
 		}
 
+		public enum OriginTypeExtended
+		{
+			FuzzyMatchRepair,
+			EditedFuzzy,
+			UneditedFuzzy
+		}
+
+		public enum RepetitionTypeExtended
+		{
+			UniqueOccurrences
+		}
+
 		public LogicalOperators SourceAndTargetLogicalOperator { get; set; }
 		public bool UseBackreferences { get; set; }
 
@@ -48,7 +60,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 		public string CreatedBy { get; set; }
 		public bool EditedFuzzy { get; set; }
 		public bool UnEditedFuzzy { get; set; }
-		public string DocumentStructureInfoLocation { get; set; }
+		public string DocumentStructureInformation { get; set; }
 		public bool UseTagContent { get; set; }
 
 		/// <summary>

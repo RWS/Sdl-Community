@@ -37,13 +37,28 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 case OriginType.CM:
                     return StringResources.DisplayFilterControl_Context_matches;
                 case OriginType.AT:
-                    return StringResources.DisplayFilterControl_Automated_translations;
+                    return StringResources.DisplayFilterControl_Automated_translations;				
                 default:
                     return type.ToString();
             }
         }
 
-        public static string GetTypeName(DisplayFilterSettings.RepetitionType type)
+	    public static string GetTypeName(CustomFilterSettings.OriginTypeExtended type)
+	    {
+		    switch (type)
+		    {
+			    case CustomFilterSettings.OriginTypeExtended.EditedFuzzy:
+				    return StringResources.DisplayFilterControl_Edited_Fuzzy;
+				case CustomFilterSettings.OriginTypeExtended.UneditedFuzzy:
+					return StringResources.DisplayFilterControl_Unedited_Fuzzy;
+				case CustomFilterSettings.OriginTypeExtended.FuzzyMatchRepair:
+					return StringResources.DisplayFilterControl_Fuzzy_Match_Repair;			   
+			    default:
+				    return type.ToString();
+		    }
+	    }
+
+		public static string GetTypeName(DisplayFilterSettings.RepetitionType type)
         {
             switch (type)
             {
@@ -58,7 +73,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             }
         }
 
-        public static string GetTypeName(DisplayFilterSettings.SegmentReviewType type)
+	    public static string GetTypeName(CustomFilterSettings.RepetitionTypeExtended type)
+	    {
+		    switch (type)
+		    {
+			    case CustomFilterSettings.RepetitionTypeExtended.UniqueOccurrences:
+				    return StringResources.DisplayFilterControl_Unique_Occurrences;			    
+			    default:
+				    return StringResources.DisplayFilterControl_None;
+		    }
+	    }
+
+		public static string GetTypeName(DisplayFilterSettings.SegmentReviewType type)
         {
             switch (type)
             {

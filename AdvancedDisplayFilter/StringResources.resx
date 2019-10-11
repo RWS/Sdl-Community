@@ -331,8 +331,8 @@
   <data name="DisplayFilterControl_UnEdited" xml:space="preserve">
     <value>Unedited fuzzy</value>
   </data>
-  <data name="DisplayFilterControl_StringId" xml:space="preserve">
-    <value>Document structure String id</value>
+  <data name="DisplayFilterControl_DSI" xml:space="preserve">
+    <value>DSI</value>
   </data>
   <data name="DisplayFilterControl_UseTagsAlso" xml:space="preserve">
     <value>Also use tag content</value>
@@ -346,25 +346,37 @@
   <data name="DisplayFilter_OnlyTags_Tooltip" xml:space="preserve">
     <value>Using this option will filter the results based on matches that are ONLY found within the content of any tags in your file(s). It will not filter on the translatable text.</value>
   </data>
-	<data name="Tooltip_Document_Structure_Information_Location" xml:space="preserve">
-    <value>Document Structure Information Location</value>
+  <data name="Tooltip_Document_Structure_Information_Location" xml:space="preserve">
+    <value>Document Structure Information</value>
   </data>
-	<data name="DisplayFilterControl_Operator" xml:space="preserve">
+  <data name="DisplayFilterControl_Operator" xml:space="preserve">
     <value>Operator</value>
   </data>
-	<data name="DisplayFilterControl_Use_Backreferences" xml:space="preserve">
+  <data name="DisplayFilterControl_Use_Backreferences" xml:space="preserve">
     <value>Use Backreferences</value>
   </data>
-	<data name="DisplayFilterControl_RandomlySelect" xml:space="preserve">
+  <data name="DisplayFilterControl_RandomlySelect" xml:space="preserve">
     <value>Randomly select</value>
   </data>
-	<data name="DisplayFilterControl_Select1InEvery" xml:space="preserve">
+  <data name="DisplayFilterControl_Select1InEvery" xml:space="preserve">
     <value>Select 1 in every</value>
   </data>
-	<data name="DisplayFilterControl_MaxChars" xml:space="preserve">
+  <data name="DisplayFilterControl_MaxChars" xml:space="preserve">
     <value>Max chars</value>
   </data>
-	<data name="DisplayFilterControl_MinChars" xml:space="preserve">
+  <data name="DisplayFilterControl_MinChars" xml:space="preserve">
     <value>Min chars</value>
+  </data>
+  <data name="DisplayFilterControl_Unique_Occurrences" xml:space="preserve">
+    <value>Unique Occurrences</value>
+  </data>
+  <data name="DisplayFilterControl_Edited_Fuzzy" xml:space="preserve">
+    <value>Edited Fuzzy</value>
+  </data>
+  <data name="DisplayFilterControl_Unedited_Fuzzy" xml:space="preserve">
+    <value>Unedited Fuzzy</value>
+  </data>
+  <data name="DisplayFilterControl_Fuzzy_Match_Repair" xml:space="preserve">
+    <value>Fuzzy Match Repair</value>
   </data>
 </root>

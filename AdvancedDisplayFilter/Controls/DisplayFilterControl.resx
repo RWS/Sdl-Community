@@ -382,7 +382,7 @@
     <value>9</value>
   </data>
   <data name="label_dsiLocation.Text" xml:space="preserve">
-    <value>DSI Location:</value>
+    <value>DSI Information:</value>
   </data>
   <data name="label_dsiLocation.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -1049,7 +1049,7 @@
     <value>listView_selected</value>
   </data>
   <data name="&gt;&gt;listView_selected.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.4.1.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.4.2.1, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;listView_selected.Parent" xml:space="preserve">
     <value>panel10</value>
@@ -1172,7 +1172,7 @@
     <value>listView_available</value>
   </data>
   <data name="&gt;&gt;listView_available.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.4.1.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.4.2.1, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;listView_available.Parent" xml:space="preserve">
     <value>panel11</value>
@@ -3450,7 +3450,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAASwBDAEsAQwBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAUQBDAFEAQwBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ
@@ -3886,7 +3886,7 @@
     <value>filterExpressionControl</value>
   </data>
   <data name="&gt;&gt;filterExpressionControl.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression, Sdl.Community.AdvancedDisplayFilter, Version=4.4.1.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression, Sdl.Community.AdvancedDisplayFilter, Version=4.4.2.1, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;filterExpressionControl.Parent" xml:space="preserve">
     <value>panel_filterExpression</value>
