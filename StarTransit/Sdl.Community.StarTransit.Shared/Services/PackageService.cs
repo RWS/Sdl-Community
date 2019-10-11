@@ -251,7 +251,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			var multiLanguageExtensions = extension.Split(',');
 			foreach (var multiLangExtension in multiLanguageExtensions)
 			{
-				var files = Directory.GetFiles(pathToTempFolder, "*." + multiLangExtension, SearchOption.TopDirectoryOnly).ToList();
+				var langExtension = multiLangExtension.TrimEnd().TrimStart();
+				var files = Directory.GetFiles(pathToTempFolder, "*." + langExtension, SearchOption.TopDirectoryOnly).ToList();
 				filesAndTms.AddRange(files);
 			}
 			return filesAndTms;
