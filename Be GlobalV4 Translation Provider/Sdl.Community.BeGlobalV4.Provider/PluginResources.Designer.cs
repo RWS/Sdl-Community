@@ -73,6 +73,16 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap global1 {
+            get {
+                object obj = ResourceManager.GetObject("global1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap logoB {
             get {
                 object obj = ResourceManager.GetObject("logoB", resourceCulture);
@@ -96,6 +106,26 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         public static System.Drawing.Bitmap logoRes {
             get {
                 object obj = ResourceManager.GetObject("logoRes", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap MTCloud_logo {
+            get {
+                object obj = ResourceManager.GetObject("MTCloud_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap MTCloud_logo_small {
+            get {
+                object obj = ResourceManager.GetObject("MTCloud_logo_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -134,6 +164,51 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         public static string TranslationLookupDraftNotResentMessage {
             get {
                 return ResourceManager.GetString("TranslationLookupDraftNotResentMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string WindowsControl_Close {
+            get {
+                return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        public static string WindowsControl_Help {
+            get {
+                return ResourceManager.GetString("WindowsControl_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximize.
+        /// </summary>
+        public static string WindowsControl_Maximize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Maximize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        public static string WindowsControl_Minimize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore.
+        /// </summary>
+        public static string WindowsControl_Restore {
+            get {
+                return ResourceManager.GetString("WindowsControl_Restore", resourceCulture);
             }
         }
     }

@@ -8,10 +8,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
 	public class BeGlobalTranslationProvider : ITranslationProvider
 	{
-		public static readonly string ListTranslationProviderScheme = "beglobaltranslationprovider";
-		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, "SDL BeGlobal (NMT)");
+		public static readonly string ListTranslationProviderScheme = "sdlmachinetranslationcloudprovider";
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, "SDL Machine Translation Cloud");
 		public Uri Uri => Options.Uri;
-		public string Name => "BeGlobal4 Translation Provider";
+		public string Name => "SDL Machine Translation Cloud provider";
 		public bool SupportsTaggedInput => true;
 		public bool SupportsScoring => false;
 		public bool SupportsSearchForTranslationUnits => true;

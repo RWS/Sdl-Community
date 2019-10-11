@@ -9,13 +9,13 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
 	[TranslationProviderWinFormsUi(
-		Id = "SDLBeGlobal(NMT)ProviderUi",
-		Name = "SDLBeGlobal(NMT)ProviderUi",
-		Description = "SDL BeGlobal (NMT) Translation Provider")]
+		Id = "SDLMachineTranslationCloudProviderUi",
+		Name = "SDLMachineTranslationCloudProviderUi",
+		Description = "SDL Machine Translation Cloud Provider")]
 	public class BeGlobalProviderUi : ITranslationProviderWinFormsUI
 	{
-		public string TypeName => "SDL BeGlobal (NMT) Translation Provider";
-		public string TypeDescription => "SDL BeGlobal (NMT) Translation Provider";
+		public string TypeName => "SDL Machine Translation Cloud Provider";
+		public string TypeDescription => "SDL Machine Translation Cloud Provider";
 		public bool SupportsEditing => true;
 		private readonly string _url = "https://translate-api.sdlbeglobal.com";
 
@@ -23,7 +23,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var options = new BeGlobalTranslationOptions();
 
-			var credentials = GetCredentials(credentialStore, "beglobaltranslationprovider:///");
+			var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
 
 			var beGlobalWindow = new BeGlobalWindow();
 			var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, credentials, languagePairs);
@@ -61,7 +61,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 
 			//get saved key if there is one and put it into options
-			var savedCredentials = GetCredentials(credentialStore, "beglobaltranslationprovider:///");
+			var savedCredentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
 			if (savedCredentials != null)
 			{
 				var splitedCredentials = savedCredentials.Credential.Split('#');
@@ -89,7 +89,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		private void SetBeGlobalCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool persistKey)
 		{
-			var uri = new Uri("beglobaltranslationprovider:///");
+			var uri = new Uri("sdlmachinetranslationcloudprovider:///");
 
 			var credential = $"{clientId}#{clientSecret}";
 			var credentials = new TranslationProviderCredential(credential, persistKey);
@@ -127,9 +127,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var info = new TranslationProviderDisplayInfo
 			{
-				Name = "SDL BeGlobal (NMT) Translation provider",
-				TooltipText = "SDL BeGlobal (NMT) Translation provider",
-				SearchResultImage = PluginResources.logoRes,
+				Name = "SDL Machine Translation Cloud provider",
+				TooltipText = "SDL Machine Translation Cloud provider",
+				SearchResultImage = PluginResources.global1,
 				TranslationProviderIcon = PluginResources.global
 			};
 			return info;

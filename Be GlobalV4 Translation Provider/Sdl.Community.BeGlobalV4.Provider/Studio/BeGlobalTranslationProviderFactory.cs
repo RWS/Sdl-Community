@@ -4,16 +4,16 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
-	[TranslationProviderFactory(Id = "BeGlobalTranslationProviderFactory",
-		Name = "BeGlobalTranslationProviderFactory",
-		Description = "BeGlobal4 Translation Provider")]
+	[TranslationProviderFactory(Id = "SDLMachineTranslationCloudProviderFactory",
+		Name = "SDLMachineTranslationCloudProviderFactory",
+		Description = "SDL Machine Translation Cloud Provider")]
 	public class BeGlobalTranslationProviderFactory : ITranslationProviderFactory
 	{
 		private string _url = "https://translate-api.sdlbeglobal.com";
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
-			var originalUri = new Uri("beglobaltranslationprovider:///");
+			var originalUri = new Uri("sdlmachinetranslationcloudprovider:///");
 			var options = new BeGlobalTranslationOptions(translationProviderUri);
 
 			if (credentialStore.GetCredential(originalUri) != null)

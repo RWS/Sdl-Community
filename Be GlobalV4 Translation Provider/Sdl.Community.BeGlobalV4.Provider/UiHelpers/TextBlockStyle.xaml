@@ -2,11 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 	<Style x:Key="TextBlockColor" TargetType="{x:Type TextBlock}">
-		<Setter Property="Foreground" Value="#0C2D47"/>
-		<Setter Property="FontFamily" Value="Segoe UI"></Setter>
-		<Setter Property="Margin" Value="10,0,0,0"></Setter>
+		<Setter Property="Foreground" Value="#FF5F5C5C"/>
+		<Setter Property="FontFamily" Value="Segoe UI"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="Margin" Value="0,0,0,0"/>
 	</Style>
 	<Style x:Key="TextBlockAlignCenter" TargetType="{x:Type TextBlock}">
 		<Setter Property="VerticalAlignment" Value="Center" />
+		<Setter Property="FontFamily" Value="Segoe UI"/>
 	</Style>
 </ResourceDictionary>
