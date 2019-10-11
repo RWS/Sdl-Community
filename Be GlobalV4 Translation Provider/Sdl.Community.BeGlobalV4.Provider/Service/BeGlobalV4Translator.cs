@@ -39,7 +39,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				if (_authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
 				{
-					var splitedCredentials = credentials.Credential.Split('#');
+					var splitedCredentials = credentials?.Credential.Split('#');
 					// the below condition is needed in case the ClientId is not set and credentials exists
 					if (string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId)
 						&& splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
@@ -47,19 +47,22 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 						beGlobalTranslationOptions.ClientId = splitedCredentials[0];
 						beGlobalTranslationOptions.ClientSecret = splitedCredentials[1];
 					}
-					var request = new RestRequest("/token", Method.POST)
+					if (!string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId) && !string.IsNullOrEmpty(beGlobalTranslationOptions.ClientSecret))
 					{
-						RequestFormat = DataFormat.Json
-					};
-					request.AddBody(new { clientId = beGlobalTranslationOptions.ClientId, clientSecret = beGlobalTranslationOptions.ClientSecret });
-					request.RequestFormat = DataFormat.Json;
-					var response = _client.Execute(request);
-					if (response.StatusCode != HttpStatusCode.OK)
-					{
-						throw new Exception(Constants.TokenFailed + response.Content);
+						var request = new RestRequest("/token", Method.POST)
+						{
+							RequestFormat = DataFormat.Json
+						};
+						request.AddBody(new { clientId = beGlobalTranslationOptions.ClientId, clientSecret = beGlobalTranslationOptions.ClientSecret });
+						request.RequestFormat = DataFormat.Json;
+						var response = _client.Execute(request);
+						if (response.StatusCode != HttpStatusCode.OK)
+						{
+							throw new Exception(Constants.TokenFailed + response.Content);
+						}
+						dynamic json = JsonConvert.DeserializeObject(response.Content);
+						_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
 					}
-					dynamic json = JsonConvert.DeserializeObject(response.Content);
-					_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
 				}
 				else
 				{

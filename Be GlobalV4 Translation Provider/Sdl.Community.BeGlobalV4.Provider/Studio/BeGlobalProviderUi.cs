@@ -74,8 +74,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				if (credentials != null)
 				{
 					var splitedCredentials = credentials.Credential.Split('#');
-					editProvider.Options.ClientId = splitedCredentials[0];
-					editProvider.Options.ClientSecret = splitedCredentials[1];
+					if (splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
+					{
+						editProvider.Options.ClientId = splitedCredentials[0];
+						editProvider.Options.ClientSecret = splitedCredentials[1];
+					}
 				}
 
 				var token = string.Empty;
@@ -135,10 +138,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var providerUri = new Uri(uri);
 			TranslationProviderCredential cred = null;
-
 			if (credentialStore.GetCredential(providerUri) != null)
 			{
-				//get the credential to return
+				//get the credential to return				
 				cred = new TranslationProviderCredential(credentialStore.GetCredential(providerUri)?.Credential, credentialStore.GetCredential(providerUri).Persist);
 			}
 			return cred;

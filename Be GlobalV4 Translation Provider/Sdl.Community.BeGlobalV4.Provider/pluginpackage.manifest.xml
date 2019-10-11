@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SDL Machine Translation Cloud</PlugInName>
-  <Version>2.3.0.0</Version>
+  <Version>2.3.0.1</Version>
   <Description>SDL Machine Translation Cloud provider</Description>
   <Author>SDL Community Developers</Author>
   <Include>
