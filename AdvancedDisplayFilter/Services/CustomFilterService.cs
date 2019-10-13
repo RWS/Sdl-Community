@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
@@ -97,33 +96,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				success = containsTagVisitor.ContainsTag(rowInfo.SegmentPair.Source);
 			}
 
-			//unique 
-			// TODO Unique
-			//if (success && _customSettings.Unique)
-			//{
-			//	var settings = new DisplayFilterSettings
-			//	{
-			//		RepetitionTypes = new List<string>
-			//		{
-			//			"FirstOccurrences"
-			//		}
-			//	};
-
-			//	var isFirst = rowInfo.IsRepetitionsFirstOccurrences(settings);
-			//	if (isFirst)
-			//	{
-			//		return true;
-			//	}
-
-			//	if (rowInfo.SegmentPair.Properties.TranslationOrigin != null)
-			//	{
-			//		var isRepeated = rowInfo.SegmentPair.Properties.TranslationOrigin.IsRepeated;
-			//		return !isRepeated;
-			//	}
-
-			//	return false;
-			//}
-
 			//created by
 			if (success && _customSettings.CreatedByChecked && !string.IsNullOrWhiteSpace(_customSettings.CreatedBy))
 			{
@@ -138,18 +110,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				success = userVisitor.ModifiedBy(rowInfo.SegmentPair.Source, _customSettings.ModifiedBy);
 			}
 
-			//TODO IsEditedFuzzy
-			//if (success && _customSettings.IsEditedFuzzy)
-			//{
-			//	success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
-			//			  FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
-			//}
-
-			//if (success && _customSettings.IsUnEditedFuzzy)
-			//{
-			//	success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
-			//			  !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
-			//}
 
 			if (success && !string.IsNullOrEmpty(_customSettings.DocumentStructureInformation))
 			{
@@ -176,7 +136,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 					return false;
 				}
 			}
-
 
 			if (!success)
 			{
@@ -320,31 +279,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				var visitor = new TranslationOriginMetaDataVisitor();
 				success = visitor.ModifiedBy(rowInfo.SegmentPair.Source, _customSettings.ModifiedBy);
 			}
-
-			//TODO IsEditedFuzzy
-			//if (!success && _customSettings.IsEditedFuzzy)
-			//{
-			//	if (FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target))
-			//	{
-			//		success = FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
-			//	}
-			//	else
-			//	{
-			//		return false;
-			//	}
-			//}
-
-			//if (!success && _customSettings.IsUnEditedFuzzy)
-			//{
-			//	if (FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target))
-			//	{
-			//		success = !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
-			//	}
-			//	else
-			//	{
-			//		return false;
-			//	}
-			//}
 
 			if (!success && !string.IsNullOrEmpty(_customSettings.DocumentStructureInformation))
 			{

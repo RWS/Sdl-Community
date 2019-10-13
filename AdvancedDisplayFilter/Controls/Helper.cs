@@ -46,14 +46,14 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	    public static string GetTypeName(DisplayFilterSettings.OriginTypeExtended type)
 	    {
 		    switch (type)
-		    {			
+		    {						  
+			    case DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair:
+				    return StringResources.DisplayFilterControl_Fuzzy_Match_Repair;
 			    case DisplayFilterSettings.OriginTypeExtended.EditedFuzzy:
 				    return StringResources.DisplayFilterControl_Edited_Fuzzy;
 			    case DisplayFilterSettings.OriginTypeExtended.UneditedFuzzy:
 				    return StringResources.DisplayFilterControl_Unedited_Fuzzy;
-			    case DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair:
-				    return StringResources.DisplayFilterControl_Fuzzy_Match_Repair;
-			    default:
+				default:
 				    return type.ToString();
 		    }
 	    }
@@ -88,8 +88,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 case DisplayFilterSettings.SegmentReviewType.WithTrackedChanges:
                     return StringResources.DisplayFilterControl_With_tracked_changes;
                 case DisplayFilterSettings.SegmentReviewType.WithTQA:
-                    return StringResources.DisplayFilterControl_With_TQA;
-                default:
+                    return StringResources.DisplayFilterControl_With_TQA;	           
+				default:
                     return StringResources.DisplayFilterControl_None;
             }
         }
@@ -114,8 +114,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 case DisplayFilterSettings.SegmentContentType.NumbersOnly:
                     return StringResources.DisplayFilterControl_Number_Only;
                 case DisplayFilterSettings.SegmentContentType.ExcludeNumberOnly:
-                    return StringResources.DisplayFilterControl_Exclude_number_only;
-                default:
+                    return StringResources.DisplayFilterControl_Exclude_number_only;	           
+				default:
                     return StringResources.DisplayFilterControl_None;
             }
         }

@@ -547,13 +547,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				}
 
 				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginTypeExtended)))
-				{
-					if ((DisplayFilterSettings.OriginTypeExtended) type == DisplayFilterSettings.OriginTypeExtended.EditedFuzzy ||
-					    (DisplayFilterSettings.OriginTypeExtended) type == DisplayFilterSettings.OriginTypeExtended.UneditedFuzzy)
-					{
-						continue;
-					}
-
+				{		
 					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginTypeExtended)type));
 					item.Group = GroupPreviousOriginAvailable;
 					item.Tag = type;

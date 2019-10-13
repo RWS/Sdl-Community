@@ -13,7 +13,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 		}
 
 		public enum OriginTypeExtended
-		{	
+		{
 			FuzzyMatchRepair = 9,
 			EditedFuzzy = 10,
 			UneditedFuzzy = 11,

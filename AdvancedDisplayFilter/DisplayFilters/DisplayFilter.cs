@@ -117,7 +117,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 				// check custom settings
 				if (success)
 				{
-					success = _customFilterService.Filter(rowInfo, true);
+					success = _customFilterService.Filter(rowInfo, true);					
 				}
 			}
 			return success;
