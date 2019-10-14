@@ -193,7 +193,7 @@
     <Compile Include="Service\BeGlobalV4Translator.cs" />
     <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Studio\BeGlobalLanguageDirection.cs" />
-    <Compile Include="Studio\BeGlobalLoginOptions.cs" />
+    <Compile Include="Model\BeGlobalLoginOptions.cs" />
     <Compile Include="Studio\BeGlobalProviderUi.cs" />
     <Compile Include="Studio\BeGlobalTranslationOptions.cs" />
     <Compile Include="Studio\BeGlobalTranslationProvider.cs" />
