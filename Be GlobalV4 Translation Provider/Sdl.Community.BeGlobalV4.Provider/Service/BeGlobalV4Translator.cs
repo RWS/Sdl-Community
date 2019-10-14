@@ -20,34 +20,41 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			string flavor,
 			bool useClientAuthentication)
 		{
-			_flavor = flavor;
-			_client = new RestClient(string.Format($"{server}/v4"));
-			IRestRequest request;
-			if (useClientAuthentication)
+			try
 			{
-				request = new RestRequest("/token", Method.POST)
+				_flavor = flavor;
+				_client = new RestClient(string.Format($"{server}/v4"));
+				IRestRequest request;
+				if (useClientAuthentication)
 				{
-					RequestFormat = DataFormat.Json
-				};
-				request.AddBody(new { clientId = user, clientSecret = password });
-			}
-			else
-			{
-				request = new RestRequest("/token/user", Method.POST)
+					request = new RestRequest("/token", Method.POST)
+					{
+						RequestFormat = DataFormat.Json
+					};
+					request.AddBody(new { clientId = user, clientSecret = password });
+				}
+				else
 				{
-					RequestFormat = DataFormat.Json
-				};
-				request.AddBody(new { username = user, password = password });
+					request = new RestRequest("/token/user", Method.POST)
+					{
+						RequestFormat = DataFormat.Json
+					};
+					request.AddBody(new { username = user, password = password });
+				}
+				AddTraceId(request);
+				request.RequestFormat = DataFormat.Json;
+				var response = _client.Execute(request);
+				if (response.StatusCode != System.Net.HttpStatusCode.OK)
+				{
+					throw new Exception("Acquiring token failed: " + response.Content);
+				}
+				dynamic json = JsonConvert.DeserializeObject(response.Content);
+				_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
 			}
-			AddTraceId(request);
-			request.RequestFormat = DataFormat.Json;
-			var response = _client.Execute(request);
-			if (response.StatusCode != System.Net.HttpStatusCode.OK)
+			catch(Exception ex)
 			{
-				throw new Exception("Acquiring token failed: " + response.Content);
+				Log.Logger.Error($"BeGlobalV4Translator constructor: {ex.Message}\n {ex.StackTrace}");
 			}
-			dynamic json = JsonConvert.DeserializeObject(response.Content);
-			_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
 		}
 
 		public int GetClientInformation()
