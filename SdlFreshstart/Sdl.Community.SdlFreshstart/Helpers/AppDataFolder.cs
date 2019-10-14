@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Reflection;
 using Sdl.Community.SdlFreshstart.Model;
 using Sdl.Community.Toolkit.Core;
 
 namespace Sdl.Community.SdlFreshstart.Helpers
 {
-    public static class AppDataFolder
+	public static class AppDataFolder
 	{
 		private static string _backupFolderPath =
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
@@ -50,7 +50,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 		private static string GetApplicationVersion(string studioInstallationPath)
 		{
 			var assemblyFile = Path.Combine(studioInstallationPath, "Sdl.ProjectApi.dll");
-			return File.Exists(assemblyFile) ? System.Reflection.AssemblyName.GetAssemblyName(assemblyFile).Version.ToString() : null;
+			return File.Exists(assemblyFile) ? AssemblyName.GetAssemblyName(assemblyFile).Version.ToString() : null;
 		}
 
 		public static List<LocationDetails> GetRoamingMajorFullFolderPath(string userName,
