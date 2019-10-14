@@ -493,6 +493,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Relationship Operator.
+        /// </summary>
+        internal static string DisplayFilterControl_Relationship_Operator {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Relationship_Operator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Repetitions.
         /// </summary>
         internal static string DisplayFilterControl_Repetitions {

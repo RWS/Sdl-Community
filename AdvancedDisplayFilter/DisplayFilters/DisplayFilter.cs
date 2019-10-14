@@ -37,12 +37,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			var success = Settings.ShowAllContent || rowInfo.IsSegment;
 
 			if (rowInfo.IsSegment)
-			{
-				if (_reverseSearch)
-				{
-					return _customFilterService.Reverse(rowInfo);
-				}
-
+			{			
 				if (CustomSettings.QualitySamplingSegmentsIds != null)
 				{
 					var segmentPairId = _qualitySamplingService.GetSegmentPairId(rowInfo.SegmentPair);
@@ -52,10 +47,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 					}
 				}
 
-
 				if (success)
 				{
-					success = _customFilterService.FilterAttributeSuccess(rowInfo);
+					success = _customFilterService.FilterAttributeSuccess(rowInfo, true);
 				}
 
 				if (success && (!string.IsNullOrEmpty(Settings.SourceText) || !string.IsNullOrEmpty(Settings.TargetText)))
@@ -120,7 +114,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 					success = _customFilterService.Filter(rowInfo, true);					
 				}
 			}
-			return success;
+
+			return _reverseSearch ? !success : success;
 		}	
 	}
 }
