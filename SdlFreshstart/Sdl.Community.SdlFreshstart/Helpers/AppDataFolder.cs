@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Sdl.Community.SdlFreshstart.Model;
+using Sdl.Community.Toolkit.Core;
 
 namespace Sdl.Community.SdlFreshstart.Helpers
 {
@@ -32,18 +33,24 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			return studioDetails;
 		}
 
-		// Get the last ProjectApi folder version (it might be the case when user has 2 folders for Studio 2019: 15.1.0.0 and 15.2.0.0)
-		public static string GetProjectApiPath(string studioMajVersion)
+		private static string GetProjectApiFilePath(string studioInstallationPath)
 		{
-			var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			var projectApiPath = $@"{appDataPath}\SDL\ProjectApi";
+			var applicationVersion = GetApplicationVersion(studioInstallationPath);
+			if (applicationVersion == null)
+			{
+				return null;
+			}
+			var applicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+			var projectApiFolder = Path.Combine(applicationDataFolder, Path.Combine("SDL", "ProjectApi"));
+			var projectApiFile = Path.Combine(projectApiFolder, applicationVersion, "Sdl.ProjectApi.xml");
 
-			var directoryInfo = new DirectoryInfo(projectApiPath)
-				.GetDirectories("*", SearchOption.AllDirectories)
-				.Where(d => d.Name.StartsWith(studioMajVersion))
-				.OrderByDescending(d => d.LastWriteTimeUtc)?.FirstOrDefault();
+			return File.Exists(projectApiFile) ? projectApiFile : null;
+		}
 
-			return directoryInfo?.Name;
+		private static string GetApplicationVersion(string studioInstallationPath)
+		{
+			var assemblyFile = Path.Combine(studioInstallationPath, "Sdl.ProjectApi.dll");
+			return File.Exists(assemblyFile) ? System.Reflection.AssemblyName.GetAssemblyName(assemblyFile).Version.ToString() : null;
 		}
 
 		public static List<LocationDetails> GetRoamingMajorFullFolderPath(string userName,
@@ -71,21 +78,28 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
 		{
 			var studioDetails = new List<LocationDetails>();
+			var studioInstalledPaths = new Studio()?.GetInstalledStudioVersion();
 			foreach (var studioVersion in studioVersions)
 			{
-				var projApiFolder = GetProjectApiPath(studioVersion.MajorVersionNumber);
-				if (projApiFolder != null)
+				foreach (var studioPath in studioInstalledPaths)
 				{
-					var projApiPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\SDL\ProjectApi\{projApiFolder}";
-					var directoryInfo = new DirectoryInfo(projApiPath);
-					var details = new LocationDetails
+					if (studioPath.Version.Equals(studioVersion.FolderName))
 					{
-						OriginalFilePath = projApiPath,
-						BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "ProjectApi", directoryInfo.Name),
-						Alias = selectedLocation.Alias,
-						Version = studioVersion.DisplayName
-					};
-					studioDetails.Add(details);
+						var projApiFullPath = GetProjectApiFilePath(studioPath.InstallPath);
+						var projApiFolderPath = Path.GetDirectoryName(projApiFullPath);
+						if (!string.IsNullOrEmpty(projApiFolderPath))
+						{
+							var directoryInfo = new DirectoryInfo(projApiFolderPath);
+							var details = new LocationDetails
+							{
+								OriginalFilePath = projApiFolderPath,
+								BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "ProjectApi", directoryInfo.Name),
+								Alias = selectedLocation.Alias,
+								Version = studioVersion.DisplayName
+							};
+							studioDetails.Add(details);
+						}
+					}
 				}
 			}
 			return studioDetails;
