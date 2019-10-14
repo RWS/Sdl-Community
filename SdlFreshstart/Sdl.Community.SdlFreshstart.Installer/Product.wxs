@@ -61,6 +61,10 @@
 			<Component Id="System.Windows.Interactivity.dll" Guid="*">
 				<File Id="System.Windows.Interactivity.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\System.Windows.Interactivity.dll"></File>
 			</Component>
+
+			<Component Id="Sdl.Community.Toolkit.Core.dll" Guid="*">
+				<File Id="Sdl.Community.Toolkit.Core.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\Sdl.Community.Toolkit.Core.dll"></File>
+			</Component>
 		</ComponentGroup>
 	
 	</Fragment>
