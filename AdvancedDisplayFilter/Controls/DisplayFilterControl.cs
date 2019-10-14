@@ -827,8 +827,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			_reverseFilter = reverse;
 
 			var contentMatchingService = new ContentMatchingService(DisplayFilterSettings, CustomFilterSettings);
-			var customFilterService = new CustomFilterService(DisplayFilterSettings, CustomFilterSettings, _activeDocument,
-				_qualitySamplingService, contentMatchingService);
+			var customFilterService = new CustomFilterService(DisplayFilterSettings, CustomFilterSettings, _activeDocument);
 
 			DisplayFilter = new DisplayFilter(displayFilterSettings, customFilterSettings, reverse, _qualitySamplingService, contentMatchingService, customFilterService);
 
@@ -899,7 +898,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				|| DisplayFilterSettings.SegmentLockingTypes.Any()
 				|| DisplayFilterSettings.SegmentContentTypes.Any())
 			{
-				filterExpressionControl.AddItem("Relationship Operator" + ":\"" + CustomFilterSettings.FilterAttributesLogicalOperator + "\"");
+				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Relationship_Operator + ":\"" + CustomFilterSettings.FilterAttributesLogicalOperator + "\"");
 			}
 
 			if (DisplayFilterSettings.ConfirmationLevels.Any())
@@ -1831,57 +1830,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			InvalidateIconsFilterEdited(tabPage_filters);
 		}
 
-		//private bool IsEditedFuzzySelected()
-		//{
-		//	foreach (ListViewItem selectedItem in listView_available.SelectedItems)
-		//	{
-		//		var success = Enum.TryParse(selectedItem.Tag.ToString(), false, out DisplayFilterSettings.OriginTypeExtended originType);
-		//		if (success)
-		//		{
-		//			if (originType == DisplayFilterSettings.OriginTypeExtended.EditedFuzzy)
-		//			{
-		//				return true;
-		//			}
-		//		}
-		//	}
-
-		//	return false;
-		//}
-
-		//private bool IsUnEditedFuzzySelected()
-		//{
-		//	foreach (ListViewItem selectedItem in listView_available.SelectedItems)
-		//	{
-		//		var success = Enum.TryParse(selectedItem.Tag.ToString(), false, out DisplayFilterSettings.OriginTypeExtended originType);
-		//		if (success)
-		//		{
-		//			if (originType == DisplayFilterSettings.OriginTypeExtended.UneditedFuzzy)
-		//			{
-		//				return true;
-		//			}
-		//		}
-		//	}
-
-		//	return false;
-		//}
-
-		//private bool IsUniqueSelected()
-		//{
-		//	foreach (ListViewItem selectedItem in listView_available.SelectedItems)
-		//	{
-		//		var success = Enum.TryParse(selectedItem.Tag.ToString(), false, out DisplayFilterSettings.RepetitionType originType);
-		//		if (success)
-		//		{
-		//			if (originType == DisplayFilterSettings.RepetitionType.UniqueOccurrences)
-		//			{
-		//				return true;
-		//			}
-		//		}
-		//	}
-
-		//	return false;
-		//}
-
 		private void Button_remove_Click(object sender, EventArgs e)
 		{
 			RemoveSelectedItem();
@@ -1889,21 +1837,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void RemoveSelectedItem()
 		{
-			//if (IsUniqueSelected())
-			//{
-			//	_uniqueSegments = false;
-			//}
-
-			//if (IsEditedFuzzySelected())
-			//{
-			//	_editedFuzzy = false;
-			//}
-
-			//if (IsUnEditedFuzzySelected())
-			//{
-			//	_unEditedFuzzy = false;
-			//}
-
 			MoveSelectedListViewItem(listView_selected, listView_available);
 			InvalidateIconsFilterEdited(tabPage_filters);
 		}
