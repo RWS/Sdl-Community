@@ -3,9 +3,9 @@ using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
-	public class UserVisitor: IMarkupDataVisitor
+	public class TranslationOriginMetaDataVisitor : IMarkupDataVisitor
 	{
-		private string _createdBy=string.Empty;
+		private string _createdBy = string.Empty;
 		private string _modifiedBy = string.Empty;
 
 		public bool ModifiedBy(ISegment segment, string modifiedBy)
@@ -22,7 +22,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 		private bool CheckCreatedBy(string userName)
 		{
-			var usersNameList = userName.Replace(" ","").Split('|').ToList();
+			var usersNameList = userName.Replace(" ", "").Split('|').ToList();
 			foreach (var name in usersNameList)
 			{
 				if (_createdBy.Contains(name))
@@ -47,15 +47,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 		}
 
 		public void VisitTagPair(ITagPair tagPair)
-		{			
+		{
 		}
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
-		{			
+		{
 		}
 
 		public void VisitText(IText text)
-		{			
+		{
 		}
 
 		public void VisitSegment(ISegment segment)
@@ -80,23 +80,23 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 		}
 
 		public void VisitLocationMarker(ILocationMarker location)
-		{			
+		{
 		}
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
-		{		
+		{
 		}
 
 		public void VisitOtherMarker(IOtherMarker marker)
-		{			
+		{
 		}
 
 		public void VisitLockedContent(ILockedContent lockedContent)
-		{		
+		{
 		}
 
 		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
-		{			
+		{
 		}
 
 		private void VisitChildren(IAbstractMarkupDataContainer container)

@@ -67,6 +67,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel10 = new System.Windows.Forms.Panel();
 			this.listView_selected = new Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended();
 			this.columnHeader_filtersSelected_name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.panel12 = new System.Windows.Forms.Panel();
+			this.filterRelationship_group = new System.Windows.Forms.GroupBox();
+			this.panel13 = new System.Windows.Forms.Panel();
+			this.filterAttributes_comboBox = new System.Windows.Forms.ComboBox();
+			this.filterAttributes_label = new System.Windows.Forms.Label();
 			this.panel5 = new System.Windows.Forms.Panel();
 			this.label_filters_selected = new System.Windows.Forms.Label();
 			this.panel11 = new System.Windows.Forms.Panel();
@@ -201,6 +206,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel2.SuspendLayout();
 			this.panel9.SuspendLayout();
 			this.panel10.SuspendLayout();
+			this.panel12.SuspendLayout();
+			this.filterRelationship_group.SuspendLayout();
+			this.panel13.SuspendLayout();
 			this.panel5.SuspendLayout();
 			this.panel11.SuspendLayout();
 			this.panel4.SuspendLayout();
@@ -341,10 +349,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			// panel1
 			// 
+			resources.ApplyResources(this.panel1, "panel1");
 			this.tableLayoutPanel1.SetColumnSpan(this.panel1, 3);
 			this.panel1.Controls.Add(this.checkBox_TagContent);
 			this.panel1.Controls.Add(this.content_groupBox);
-			resources.ApplyResources(this.panel1, "panel1");
 			this.panel1.Name = "panel1";
 			// 
 			// checkBox_TagContent
@@ -356,9 +364,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			// content_groupBox
 			// 
+			resources.ApplyResources(this.content_groupBox, "content_groupBox");
 			this.content_groupBox.Controls.Add(this.alsoTags_radioButton);
 			this.content_groupBox.Controls.Add(this.onlyTags_radioButton);
-			resources.ApplyResources(this.content_groupBox, "content_groupBox");
 			this.content_groupBox.Name = "content_groupBox";
 			this.content_groupBox.TabStop = false;
 			// 
@@ -398,6 +406,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			this.comboBox_SourceTargetFilterLogicalOperator.BackColor = System.Drawing.SystemColors.Window;
 			resources.ApplyResources(this.comboBox_SourceTargetFilterLogicalOperator, "comboBox_SourceTargetFilterLogicalOperator");
+			this.comboBox_SourceTargetFilterLogicalOperator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_SourceTargetFilterLogicalOperator.FormattingEnabled = true;
 			this.comboBox_SourceTargetFilterLogicalOperator.Items.AddRange(new object[] {
             resources.GetString("comboBox_SourceTargetFilterLogicalOperator.Items"),
@@ -487,6 +496,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// panel10
 			// 
 			this.panel10.Controls.Add(this.listView_selected);
+			this.panel10.Controls.Add(this.panel12);
 			this.panel10.Controls.Add(this.panel5);
 			resources.ApplyResources(this.panel10, "panel10");
 			this.panel10.Name = "panel10";
@@ -509,6 +519,43 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// columnHeader_filtersSelected_name
 			// 
 			resources.ApplyResources(this.columnHeader_filtersSelected_name, "columnHeader_filtersSelected_name");
+			// 
+			// panel12
+			// 
+			this.panel12.Controls.Add(this.filterRelationship_group);
+			resources.ApplyResources(this.panel12, "panel12");
+			this.panel12.Name = "panel12";
+			// 
+			// filterRelationship_group
+			// 
+			this.filterRelationship_group.Controls.Add(this.panel13);
+			resources.ApplyResources(this.filterRelationship_group, "filterRelationship_group");
+			this.filterRelationship_group.Name = "filterRelationship_group";
+			this.filterRelationship_group.TabStop = false;
+			// 
+			// panel13
+			// 
+			this.panel13.Controls.Add(this.filterAttributes_comboBox);
+			this.panel13.Controls.Add(this.filterAttributes_label);
+			resources.ApplyResources(this.panel13, "panel13");
+			this.panel13.Name = "panel13";
+			// 
+			// filterAttributes_comboBox
+			// 
+			this.filterAttributes_comboBox.BackColor = System.Drawing.SystemColors.Window;
+			resources.ApplyResources(this.filterAttributes_comboBox, "filterAttributes_comboBox");
+			this.filterAttributes_comboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.filterAttributes_comboBox.FormattingEnabled = true;
+			this.filterAttributes_comboBox.Items.AddRange(new object[] {
+            resources.GetString("filterAttributes_comboBox.Items"),
+            resources.GetString("filterAttributes_comboBox.Items1")});
+			this.filterAttributes_comboBox.Name = "filterAttributes_comboBox";
+			this.filterAttributes_comboBox.SelectedIndexChanged += new System.EventHandler(this.filterAttributes_comboBox_SelectedIndexChanged);
+			// 
+			// filterAttributes_label
+			// 
+			resources.ApplyResources(this.filterAttributes_label, "filterAttributes_label");
+			this.filterAttributes_label.Name = "filterAttributes_label";
 			// 
 			// panel5
 			// 
@@ -1358,6 +1405,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.panel9.ResumeLayout(false);
 			this.panel10.ResumeLayout(false);
+			this.panel12.ResumeLayout(false);
+			this.filterRelationship_group.ResumeLayout(false);
+			this.panel13.ResumeLayout(false);
+			this.panel13.PerformLayout();
 			this.panel5.ResumeLayout(false);
 			this.panel5.PerformLayout();
 			this.panel11.ResumeLayout(false);
@@ -1559,5 +1610,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private NumericUpDown numericUpDown_maxCharsPerSegment;
 		private Label label3;
 		private Label label4;
+		private Panel panel12;
+		private GroupBox filterRelationship_group;
+		private Panel panel13;
+		private ComboBox filterAttributes_comboBox;
+		private Label filterAttributes_label;
 	}
 }

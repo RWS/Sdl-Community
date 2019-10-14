@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
@@ -13,6 +12,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 {
 	public class CustomFilterService
 	{
+		
 		private readonly DisplayFilterSettings _settings;
 		private readonly CustomFilterSettings _customSettings;
 		private readonly Document _document;
@@ -96,58 +96,21 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				success = containsTagVisitor.ContainsTag(rowInfo.SegmentPair.Source);
 			}
 
-			//unique 
-			if (success && _customSettings.Unique)
-			{
-				var settings = new DisplayFilterSettings
-				{
-					RepetitionTypes = new List<string>
-					{
-						"FirstOccurrences"
-					}
-				};
-
-				var isFirst = rowInfo.IsRepetitionsFirstOccurrences(settings);
-				if (isFirst)
-				{
-					return true;
-				}
-
-				if (rowInfo.SegmentPair.Properties.TranslationOrigin != null)
-				{
-					var isRepeated = rowInfo.SegmentPair.Properties.TranslationOrigin.IsRepeated;
-					return !isRepeated;
-				}
-
-				return false;
-			}
-
 			//created by
 			if (success && _customSettings.CreatedByChecked && !string.IsNullOrWhiteSpace(_customSettings.CreatedBy))
 			{
-				var userVisitor = new UserVisitor();
+				var userVisitor = new TranslationOriginMetaDataVisitor();
 				success = userVisitor.CreatedBy(rowInfo.SegmentPair.Source, _customSettings.CreatedBy);
 			}
 
 			//modify by
 			if (success && _customSettings.ModifiedByChecked && !string.IsNullOrWhiteSpace(_customSettings.ModifiedBy))
 			{
-				var userVisitor = new UserVisitor();
+				var userVisitor = new TranslationOriginMetaDataVisitor();
 				success = userVisitor.ModifiedBy(rowInfo.SegmentPair.Source, _customSettings.ModifiedBy);
 			}
 
-			if (success && _customSettings.EditedFuzzy)
-			{
-				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
-						  FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
-			}
 
-			if (success && _customSettings.UnEditedFuzzy)
-			{
-				success = FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target) &&
-						  !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
-			}
-			
 			if (success && !string.IsNullOrEmpty(_customSettings.DocumentStructureInformation))
 			{
 				success = _settings.IsRegularExpression
@@ -174,46 +137,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				}
 			}
 
-			if (!success && _settings.SegmentReviewTypes != null && _settings.SegmentReviewTypes.Any())
+			if (!success)
 			{
-				success = rowInfo.IsSegmentReviewTypes(_settings);
-			}
-
-
-			if (!success && _settings.ConfirmationLevels != null && _settings.ConfirmationLevels.Any())
-			{
-				success = rowInfo.IsConfirmationLevelFound(_settings);
-			}
-
-			if (!success && _settings.OriginTypes != null && _settings.OriginTypes.Any())
-				success = rowInfo.IsOriginTypeFound(_settings);
-
-
-			if (!success && _settings.PreviousOriginTypes != null && _settings.PreviousOriginTypes.Any())
-			{
-				success = rowInfo.IsPreviousOriginTypeFound(_settings);
-			}
-
-			if (!success && _settings.RepetitionTypes != null && _settings.RepetitionTypes.Any())
-			{
-				success = rowInfo.IsRepetitionTypes(_settings);
-			}
-
-			if (!success && _settings.SegmentLockingTypes != null && _settings.SegmentLockingTypes.Any())
-			{
-				success = rowInfo.IsSegmentLockingTypes(_settings);
-			}
-
-			if (!success && _settings.SegmentContentTypes != null && _settings.SegmentContentTypes.Any())
-			{
-				success = rowInfo.IsSegmentContentTypes(_settings);
+				success = FilterAttributeSuccess(rowInfo);
 			}
 
 			if (!success && (!string.IsNullOrEmpty(_settings.SourceText) || !string.IsNullOrEmpty(_settings.TargetText)))
 			{
 				if (!string.IsNullOrEmpty(_settings.SourceText) && !string.IsNullOrEmpty(_settings.TargetText))
 				{
-					if (_customSettings.SourceAndTargetLogicalOperator == CustomFilterSettings.LogicalOperators.Or)
+					if (_customSettings.SourceTargetLogicalOperator == DisplayFilterSettings.LogicalOperators.OR)
 					{
 						var successSearchOnSource = _contentMatchingService.IsExpressionFound(_settings.SourceText, rowInfo.SegmentPair.Source, out var _);
 
@@ -318,7 +251,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				}
 			}
 
-			//fuzzy
+			// fuzzy
 			if (!success && !string.IsNullOrWhiteSpace(_customSettings.FuzzyMin) &&
 				!string.IsNullOrWhiteSpace(_customSettings.FuzzyMax))
 			{
@@ -326,50 +259,27 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 			}
 
-			//tags
+			// tags
 			if (!success && _customSettings.ContainsTags)
 			{
 				var containsTagVisitor = new TagVisitor();
 				success = containsTagVisitor.ContainsTag(rowInfo.SegmentPair.Source);
 			}
 
+			// created by
 			if (!success && _customSettings.CreatedByChecked && !string.IsNullOrWhiteSpace(_customSettings.CreatedBy))
 			{
-				var userVisitor = new UserVisitor();
-				success = userVisitor.CreatedBy(rowInfo.SegmentPair.Source, _customSettings.CreatedBy);
+				var visitor = new TranslationOriginMetaDataVisitor();
+				success = visitor.CreatedBy(rowInfo.SegmentPair.Source, _customSettings.CreatedBy);
 			}
 
-			//modify by
+			// modified by
 			if (!success && _customSettings.ModifiedByChecked && !string.IsNullOrWhiteSpace(_customSettings.ModifiedBy))
 			{
-				var userVisitor = new UserVisitor();
-				success = userVisitor.ModifiedBy(rowInfo.SegmentPair.Source, _customSettings.ModifiedBy);
+				var visitor = new TranslationOriginMetaDataVisitor();
+				success = visitor.ModifiedBy(rowInfo.SegmentPair.Source, _customSettings.ModifiedBy);
 			}
 
-			if (!success && _customSettings.EditedFuzzy)
-			{
-				if (FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target))
-				{
-					success = FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
-				}
-				else
-				{
-					return false;
-				}
-			}
-
-			if (!success && _customSettings.UnEditedFuzzy)
-			{
-				if (FuzzyHelper.ContainsFuzzy(rowInfo.SegmentPair.Target))
-				{
-					success = !FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
-				}
-				else
-				{
-					return false;
-				}
-			}
-			
 			if (!success && !string.IsNullOrEmpty(_customSettings.DocumentStructureInformation))
 			{
 				success = _settings.IsRegularExpression
@@ -382,6 +292,58 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			return !success;
 		}
 
+		public bool FilterAttributeSuccess(DisplayFilterRowInfo rowInfo)
+		{
+			var isAnd = _customSettings.FilterAttributesLogicalOperator == DisplayFilterSettings.LogicalOperators.AND;
+			var success = isAnd;
+
+			if (_settings.SegmentReviewTypes != null && _settings.SegmentReviewTypes.Any())
+			{
+				success = rowInfo.IsSegmentReviewTypes(_settings);
+			}
+
+			if (LogicalSuccess(success) && _settings.ConfirmationLevels != null && _settings.ConfirmationLevels.Any())
+			{
+				success = rowInfo.IsConfirmationLevelFound(_settings);
+			}
+
+			if (LogicalSuccess(success) && _settings.OriginTypes != null && _settings.OriginTypes.Any())
+			{
+				success = rowInfo.IsOriginTypeFound(_settings);
+			}
+
+			if (LogicalSuccess(success) && _settings.PreviousOriginTypes != null && _settings.PreviousOriginTypes.Any())
+			{
+				success = rowInfo.IsPreviousOriginTypeFound(_settings);
+			}
+
+			if (LogicalSuccess(success) && _settings.RepetitionTypes != null && _settings.RepetitionTypes.Any())
+			{
+				success = rowInfo.IsRepetitionTypes(_settings);
+			}
+
+			if (LogicalSuccess(success) && _settings.SegmentLockingTypes != null && _settings.SegmentLockingTypes.Any())
+			{
+				success = rowInfo.IsSegmentLockingTypes(_settings);
+			}
+
+			if (LogicalSuccess(success) && _settings.SegmentContentTypes != null && _settings.SegmentContentTypes.Any())
+			{
+				success = rowInfo.IsSegmentContentTypes(_settings);
+			}
+			
+			return success;
+		}
+
+		private bool LogicalSuccess(bool success)
+		{
+			if (_customSettings.FilterAttributesLogicalOperator == DisplayFilterSettings.LogicalOperators.AND)
+			{
+				return success;
+			}
+
+			return !success;
+		}
 		private static bool DocumentStructureInfoSearch(DisplayFilterRowInfo rowInfo, CustomFilterSettings customSettings)
 		{
 			foreach (var contextInfo in rowInfo.ContextInfo)

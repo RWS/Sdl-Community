@@ -6,11 +6,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 {
 	public class DisplayFilterSettings
 	{
-		public string Version { get; set; }
+		public enum LogicalOperators
+		{
+			AND = 0,
+			OR = 1
+		}
 
-		public DateTime Created { get; set; }
-
-		public OriginType OriginType { get; set; }
+		public enum OriginTypeExtended
+		{
+			FuzzyMatchRepair = 9,
+			EditedFuzzy = 10,
+			UneditedFuzzy = 11,
+		}
 
 		public enum ConfirmationLevel
 		{
@@ -35,7 +42,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 		{
 			All,
 			FirstOccurrences,
-			ExcludeFirstOccurrences
+			ExcludeFirstOccurrences,
+			UniqueOccurrences
 		}
 
 		public enum SegmentReviewType
@@ -67,13 +75,24 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			TargetFirst = 4
 		}
 
+		public string Version { get; set; }
+
+		public DateTime Created { get; set; }
+
+		public OriginType Origin { get; set; }
+
 		public bool IsRegularExpression { get; set; }
+
 		public bool IsCaseSensitive { get; set; }
+
 		public string SourceText { get; set; }
+
 		public string TargetText { get; set; }
 
 		public string CommentText { get; set; }
+
 		public string CommentAuthor { get; set; }
+
 		public int CommentSeverity { get; set; }
 
 		public List<string> ContextInfoTypes { get; set; }
@@ -87,9 +106,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 		public List<string> SegmentLockingTypes { get; set; }
 
 		public List<string> SegmentContentTypes { get; set; }
+
 		public List<string> ConfirmationLevels { get; set; }
 
 		public List<string> OriginTypes { get; set; }
+
 		public List<string> PreviousOriginTypes { get; set; }
 
 		public DisplayFilterSettings()

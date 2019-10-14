@@ -176,9 +176,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 		{
 			var textVisitor = new SegmentTextVisitor();
 			string text;
-			if (_customSettings.UseTagContent)
+			if (_customSettings.SearchInTagContent)
 			{
-				text = _customSettings.AndOrTagContent
+				text = _customSettings.SearchInTagContentAndText
 					? textVisitor.GetText(segment, SegmentTextVisitor.DetailLevel.Raw)
 					: textVisitor.GetText(segment, SegmentTextVisitor.DetailLevel.JustTagContent);
 			}
