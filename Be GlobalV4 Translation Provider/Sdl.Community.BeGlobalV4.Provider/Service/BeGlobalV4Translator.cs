@@ -26,58 +26,65 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 		public BeGlobalV4Translator(BeGlobalTranslationOptions beGlobalTranslationOptions, MessageBoxService messageBoxService, TranslationProviderCredential credentials)
 		{
-			_messageBoxService = messageBoxService;
-			_flavor = beGlobalTranslationOptions.Model;
-			_authenticationMethod = beGlobalTranslationOptions.AuthenticationMethod;
-			_studioCredentials = new StudioCredentials();
-			_client = new RestClient($"{Url}/v4")
+			try
 			{
-				CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore)
-			};
-
-			if (!string.IsNullOrEmpty(_authenticationMethod))
-			{
-				if (_authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
+				_messageBoxService = messageBoxService;
+				_flavor = beGlobalTranslationOptions.Model;
+				_authenticationMethod = beGlobalTranslationOptions.AuthenticationMethod;
+				_studioCredentials = new StudioCredentials();
+				_client = new RestClient($"{Url}/v4")
 				{
-					var splitedCredentials = credentials?.Credential.Split('#');
-					// the below condition is needed in case the ClientId is not set and credentials exists
-					if (string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId)
-						&& splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
+					CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore)
+				};
+
+				if (!string.IsNullOrEmpty(_authenticationMethod))
+				{
+					if (_authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
 					{
-						beGlobalTranslationOptions.ClientId = splitedCredentials[0];
-						beGlobalTranslationOptions.ClientSecret = splitedCredentials[1];
-					}
-					if (!string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId) && !string.IsNullOrEmpty(beGlobalTranslationOptions.ClientSecret))
-					{
-						var request = new RestRequest("/token", Method.POST)
+						var splitedCredentials = credentials?.Credential.Split('#');
+						// the below condition is needed in case the ClientId is not set and credentials exists
+						if (string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId)
+							&& splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
 						{
-							RequestFormat = DataFormat.Json
-						};
-						request.AddBody(new { clientId = beGlobalTranslationOptions.ClientId, clientSecret = beGlobalTranslationOptions.ClientSecret });
-						request.RequestFormat = DataFormat.Json;
-						var response = _client.Execute(request);
-						if (response.StatusCode != HttpStatusCode.OK)
-						{
-							throw new Exception(Constants.TokenFailed + response.Content);
+							beGlobalTranslationOptions.ClientId = splitedCredentials[0];
+							beGlobalTranslationOptions.ClientSecret = splitedCredentials[1];
 						}
-						dynamic json = JsonConvert.DeserializeObject(response.Content);
-						_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
+						if (!string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId) && !string.IsNullOrEmpty(beGlobalTranslationOptions.ClientSecret))
+						{
+							var request = new RestRequest("/token", Method.POST)
+							{
+								RequestFormat = DataFormat.Json
+							};
+							request.AddBody(new { clientId = beGlobalTranslationOptions.ClientId, clientSecret = beGlobalTranslationOptions.ClientSecret });
+							request.RequestFormat = DataFormat.Json;
+							var response = _client.Execute(request);
+							if (response.StatusCode != HttpStatusCode.OK)
+							{
+								throw new Exception(Constants.TokenFailed + response.Content);
+							}
+							dynamic json = JsonConvert.DeserializeObject(response.Content);
+							_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
+						}
 					}
-				}
-				else
-				{
-					var accessToken = string.Empty;
-					Application.Current?.Dispatcher?.Invoke(() =>
+					else
 					{
+						var accessToken = string.Empty;
+						Application.Current?.Dispatcher?.Invoke(() =>
+						{
+							accessToken = _studioCredentials.GetToken();
+						});
 						accessToken = _studioCredentials.GetToken();
-					});
-					accessToken = _studioCredentials.GetToken();
 
-					if (!string.IsNullOrEmpty(accessToken))
-					{
-						_client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
+						if (!string.IsNullOrEmpty(accessToken))
+						{
+							_client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
+						}
 					}
 				}
+			}
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"{Constants.BeGlobalV4Translator} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -150,56 +157,64 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 		public int GetUserInformation()
 		{
-			RestRequest request;
-			if(!string.IsNullOrEmpty(_authenticationMethod) && _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
+			try
 			{
-				request = new RestRequest("/accounts/api-credentials/self")
+				RestRequest request;
+				if (!string.IsNullOrEmpty(_authenticationMethod) && _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
 				{
-					RequestFormat = DataFormat.Json
-				};
-			}
-			else
-			{
-				request = new RestRequest("/accounts/users/self")
+					request = new RestRequest("/accounts/api-credentials/self")
+					{
+						RequestFormat = DataFormat.Json
+					};
+				}
+				else
 				{
-					RequestFormat = DataFormat.Json
-				};
-			}
-			var traceId = GetTraceId(request);
-			var response = _client.Execute(request);
-			var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
-			if (response.StatusCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(_authenticationMethod)
-				&& _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
-			{
-				// Get refresh token
-				var token = _studioCredentials.EnsureValidConnection();
-				if (!string.IsNullOrEmpty(token))
+					request = new RestRequest("/accounts/users/self")
+					{
+						RequestFormat = DataFormat.Json
+					};
+				}
+				var traceId = GetTraceId(request);
+				var response = _client.Execute(request);
+				var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
+				if (response.StatusCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(_authenticationMethod)
+					&& _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
 				{
-					// Update authorization parameters
-					UpdateRequestHeadersForRefreshToken(request, token);
+					// Get refresh token
+					var token = _studioCredentials.EnsureValidConnection();
+					if (!string.IsNullOrEmpty(token))
+					{
+						// Update authorization parameters
+						UpdateRequestHeadersForRefreshToken(request, token);
 
-					var userInfoResponse = _client.Execute(request);
-					if (userInfoResponse.StatusCode == HttpStatusCode.OK)
-					{
-						return JsonConvert.DeserializeObject<UserDetails>(userInfoResponse.Content).AccountId;
-					}
-					if (userInfoResponse.StatusCode == HttpStatusCode.Unauthorized)
-					{
-						_messageBoxService.ShowMessage(Constants.UnauthorizedCredentials, Constants.PluginName);
-						Log.Logger.Error($"{Constants.UnauthorizedUserInfo} {traceId}");
-					}
-					else if (userInfoResponse.StatusCode != HttpStatusCode.OK && userInfoResponse.StatusCode != HttpStatusCode.Unauthorized)
-					{
-						ShowErrors(userInfoResponse);
+						var userInfoResponse = _client.Execute(request);
+						if (userInfoResponse.StatusCode == HttpStatusCode.OK)
+						{
+							return JsonConvert.DeserializeObject<UserDetails>(userInfoResponse.Content).AccountId;
+						}
+						if (userInfoResponse.StatusCode == HttpStatusCode.Unauthorized)
+						{
+							_messageBoxService.ShowMessage(Constants.UnauthorizedCredentials, Constants.PluginName);
+							Log.Logger.Error($"{Constants.UnauthorizedUserInfo} {traceId}");
+						}
+						else if (userInfoResponse.StatusCode != HttpStatusCode.OK && userInfoResponse.StatusCode != HttpStatusCode.Unauthorized)
+						{
+							ShowErrors(userInfoResponse);
+						}
 					}
 				}
-			}
-			else if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Unauthorized)
-			{
-				ShowErrors(response);
-			}
+				else if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Unauthorized)
+				{
+					ShowErrors(response);
+				}
 
-			return user?.AccountId ?? 0;
+				return user?.AccountId ?? 0;
+			}
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"{Constants.GetUserInformation} {ex.Message}\n {ex.StackTrace}");
+			}
+			return 0;
 		}
 
 		private void UpdateRequestHeadersForRefreshToken(IRestRequest request, string token)
@@ -313,6 +328,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			var response = _client.Execute(request);
 			return response;
 		}
+
 		private string GetTraceId(IRestRequest request)
 		{
 			var pluginVersion = VersionHelper.GetPluginVersion();

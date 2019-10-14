@@ -21,6 +21,8 @@
 		public static readonly string EditWindow = "Edit window:";
 		public static readonly string Browse = "Browse:";
 		public static readonly string SupportsLanguageDirection = "SupportsLanguageDirection:";
+		public static readonly string BeGlobalV4Translator = "BeGlobalV4Translator constructor: ";
+		public static readonly string GetUserInformation = "GetUserInformation method: ";		
 
 		// Messages
 		public static readonly string UnauthorizedCredentials = "Unauthorized: Please check your credentials.";
