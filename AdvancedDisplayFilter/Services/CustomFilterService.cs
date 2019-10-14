@@ -60,9 +60,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 			if (success && _customSettings.UseRegexCommentSearch && !string.IsNullOrWhiteSpace(_customSettings.CommentRegex))
 			{
-				//create a list with source and target comments
-				var commentsList = rowInfo.SegmentPair.Source.GetComments();
-				commentsList.AddRange(rowInfo.SegmentPair.Target.GetComments());
+				var visitor = new CommentDataVisitor();
+
+				var commentsList = visitor.GetComments(rowInfo.SegmentPair.Source);
+				commentsList.AddRange(visitor.GetComments(rowInfo.SegmentPair.Target));
 
 				success = CommentsHelper.IsCommentTextFoundWithRegex(commentsList, _customSettings.CommentRegex);
 			}
@@ -118,12 +119,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 			return success;
 		}
-		
+
 		public bool FilterAttributeSuccess(DisplayFilterRowInfo rowInfo, bool success)
 		{
-
-			var isAttributeFilter = IsAttributeFilter();
-			if (!isAttributeFilter)
+			if (GetAttributeFilterGroupsCount() == 0)
 			{
 				return success;
 			}
@@ -169,16 +168,45 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			return success;
 		}
 
-		private bool IsAttributeFilter()
+		public int GetAttributeFilterGroupsCount()
 		{
-			var isAttributeFilter = (_settings.SegmentReviewTypes != null && _settings.SegmentReviewTypes.Any()) ||
-									(_settings.ConfirmationLevels != null && _settings.ConfirmationLevels.Any()) ||
-									(_settings.OriginTypes != null && _settings.OriginTypes.Any()) ||
-									(_settings.PreviousOriginTypes != null && _settings.PreviousOriginTypes.Any()) ||
-									(_settings.RepetitionTypes != null && _settings.RepetitionTypes.Any()) ||
-									(_settings.SegmentLockingTypes != null && _settings.SegmentLockingTypes.Any()) ||
-									(_settings.SegmentContentTypes != null && _settings.SegmentContentTypes.Any());
-			return isAttributeFilter;
+			var count = 0;
+			if (_settings.SegmentReviewTypes != null && _settings.SegmentReviewTypes.Any())
+			{
+				count++;
+			}
+
+			if (_settings.ConfirmationLevels != null && _settings.ConfirmationLevels.Any())
+			{
+				count++;
+			}
+
+			if (_settings.OriginTypes != null && _settings.OriginTypes.Any())
+			{
+				count++;
+			}
+
+			if (_settings.PreviousOriginTypes != null && _settings.PreviousOriginTypes.Any())
+			{
+				count++;
+			}
+
+			if (_settings.RepetitionTypes != null && _settings.RepetitionTypes.Any())
+			{
+				count++;
+			}
+
+			if (_settings.SegmentLockingTypes != null && _settings.SegmentLockingTypes.Any())
+			{
+				count++;
+			}
+
+			if (_settings.SegmentContentTypes != null && _settings.SegmentContentTypes.Any())
+			{
+				count++;
+			}
+
+			return count;
 		}
 
 		private bool LogicalSuccess(bool success)

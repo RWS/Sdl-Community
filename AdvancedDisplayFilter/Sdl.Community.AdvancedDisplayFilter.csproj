@@ -148,6 +148,7 @@
     <Compile Include="Extensions\DisplayFilterRowInfoExtension.cs" />
     <Compile Include="Helpers\ColorPickerHelper.cs" />
     <Compile Include="Helpers\CommentsHelper.cs" />
+    <Compile Include="Helpers\CommentVisitor.cs" />
     <Compile Include="Services\CustomFilterService.cs" />
     <Compile Include="Helpers\FuzzyHelper.cs" />
     <Compile Include="Helpers\SegmentTextVisitor.cs" />

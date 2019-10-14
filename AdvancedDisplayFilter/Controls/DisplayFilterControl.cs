@@ -91,6 +91,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		public DisplayFilter DisplayFilter { get; set; }
 
+		public CustomFilterService CustomFilterService { get; private set; }
+
 		public IList<IContextInfo> ContextInfoList { get; set; }
 
 		public List<string> AvailableColorsList { get; set; }
@@ -547,7 +549,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				}
 
 				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginTypeExtended)))
-				{		
+				{
 					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginTypeExtended)type));
 					item.Group = GroupPreviousOriginAvailable;
 					item.Tag = type;
@@ -827,9 +829,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			_reverseFilter = reverse;
 
 			var contentMatchingService = new ContentMatchingService(DisplayFilterSettings, CustomFilterSettings);
-			var customFilterService = new CustomFilterService(DisplayFilterSettings, CustomFilterSettings, _activeDocument);
+			CustomFilterService = new CustomFilterService(DisplayFilterSettings, CustomFilterSettings, _activeDocument);
 
-			DisplayFilter = new DisplayFilter(displayFilterSettings, customFilterSettings, reverse, _qualitySamplingService, contentMatchingService, customFilterService);
+			DisplayFilter = new DisplayFilter(displayFilterSettings, customFilterSettings, reverse, _qualitySamplingService, contentMatchingService, CustomFilterService);
 
 			_activeDocument.ApplyFilterOnSegments(DisplayFilter);
 
@@ -851,7 +853,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			filterExpressionControl.ClearItems();
 
 			if (!string.IsNullOrEmpty(DisplayFilterSettings.SourceText)
-				|| string.IsNullOrEmpty(DisplayFilterSettings.TargetText))
+				|| !string.IsNullOrEmpty(DisplayFilterSettings.TargetText))
 			{
 				if (!string.IsNullOrEmpty(DisplayFilterSettings.SourceText))
 				{
@@ -882,6 +884,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Case_Sensitive + ":\"" + DisplayFilterSettings.IsCaseSensitive + "\"");
 				}
+
+				if (CustomFilterSettings.SearchInTagContent)
+				{
+					filterExpressionControl.AddItem(CustomFilterSettings.SearchInTagContentAndText
+						? StringResources.DisplayFilterControl_UseTagsAlso
+						: StringResources.DisplayFilterControl_UseTagsOnly);
+				}
 			}
 
 			if (DisplayFilterSettings.ShowAllContent)
@@ -891,14 +900,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			}
 
 
-			if (DisplayFilterSettings.ConfirmationLevels.Any()
-				|| DisplayFilterSettings.OriginTypes.Any()
-				|| DisplayFilterSettings.PreviousOriginTypes.Any()
-				|| DisplayFilterSettings.SegmentReviewTypes.Any()
-				|| DisplayFilterSettings.SegmentLockingTypes.Any()
-				|| DisplayFilterSettings.SegmentContentTypes.Any())
+			if (CustomFilterService?.GetAttributeFilterGroupsCount() > 1)
 			{
-				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Relationship_Operator + ":\"" + CustomFilterSettings.FilterAttributesLogicalOperator + "\"");
+				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Relationship_Operator + ":\"" +
+												CustomFilterSettings.FilterAttributesLogicalOperator + "\"");
 			}
 
 			if (DisplayFilterSettings.ConfirmationLevels.Any())
@@ -1089,8 +1094,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Segments_With_tags + ":\"" +
 													CustomFilterSettings.ContainsTags + "\"");
-
 				}
+
 				if (CustomFilterSettings.CreatedByChecked)
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_CreatedBy + ":\"" +
@@ -1105,11 +1110,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				if (!string.IsNullOrEmpty(CustomFilterSettings.DocumentStructureInformation))
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_DSI + ":\"" + CustomFilterSettings.DocumentStructureInformation + "\"");
-				}
-
-				if (CustomFilterSettings.SearchInTagContent)
-				{
-					filterExpressionControl.AddItem(CustomFilterSettings.SearchInTagContentAndText ? StringResources.DisplayFilterControl_UseTagsAlso : StringResources.DisplayFilterControl_UseTagsOnly);
 				}
 			}
 		}

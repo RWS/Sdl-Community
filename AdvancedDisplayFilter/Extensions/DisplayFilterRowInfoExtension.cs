@@ -55,11 +55,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				.Any(status => string.Compare(status, DisplayFilterSettings.SegmentReviewType.WithComments.ToString()
 					, StringComparison.OrdinalIgnoreCase) == 0);
 
+			var visitor = new CommentDataVisitor();
+
 			// check if comments exist in the target segment
-			if (success && !rowInfo.SegmentPair.Target.GetComments().Any())
+			if (success && !visitor.GetComments(rowInfo.SegmentPair.Target).Any())
 			{
 				// check if comments exit in the source segment
-				if (!rowInfo.SegmentPair.Source.GetComments().Any())
+				if (!visitor.GetComments(rowInfo.SegmentPair.Source).Any())
 				{
 					success = false;
 				}
@@ -84,11 +86,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsSeverityFoundInComment(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
-			var success = rowInfo.SegmentPair.Target.GetComments()
+			var visitor = new CommentDataVisitor();
+
+			var success = visitor.GetComments(rowInfo.SegmentPair.Target)
 				.Any(comment => settings.CommentSeverity == (int)comment.Severity);
 			if (!success)
 			{
-				success = rowInfo.SegmentPair.Source.GetComments()
+				success = visitor.GetComments(rowInfo.SegmentPair.Source)
 				.Any(comment => settings.CommentSeverity == (int)comment.Severity);
 			}
 
@@ -97,11 +101,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsAuthorFoundInComment(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
-			var success = rowInfo.SegmentPair.Target.GetComments()
+			var visitor = new CommentDataVisitor();
+
+			var success = visitor.GetComments(rowInfo.SegmentPair.Target)
 				.Any(comment => StringMatch(settings.CommentAuthor, comment.Author, false));
 			if (!success)
 			{
-				success = rowInfo.SegmentPair.Source.GetComments()
+				success = visitor.GetComments(rowInfo.SegmentPair.Source)
 				.Any(comment => StringMatch(settings.CommentAuthor, comment.Author, false));
 			}
 
@@ -110,11 +116,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsTextFoundInComment(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
-			var success = rowInfo.SegmentPair.Target.GetComments()
+			var visitor = new CommentDataVisitor();
+			
+			var success = visitor.GetComments(rowInfo.SegmentPair.Target)
 				.Any(comment => StringMatch(settings.CommentText, comment.Text, false));
+
+
 			if (!success)
 			{
-				success = rowInfo.SegmentPair.Source.GetComments()
+				success = visitor.GetComments(rowInfo.SegmentPair.Source)
 				.Any(comment => StringMatch(settings.CommentText, comment.Text, false));
 			}
 

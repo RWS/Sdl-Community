@@ -493,7 +493,7 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Relationship Operator.
+        ///   Looks up a localized string similar to Attribute Relationship.
         /// </summary>
         internal static string DisplayFilterControl_Relationship_Operator {
             get {
@@ -782,7 +782,7 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Also use tag content.
+        ///   Looks up a localized string similar to Search in text and tag content.
         /// </summary>
         internal static string DisplayFilterControl_UseTagsAlso {
             get {
@@ -791,7 +791,7 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use only tag content.
+        ///   Looks up a localized string similar to Search only in tag content.
         /// </summary>
         internal static string DisplayFilterControl_UseTagsOnly {
             get {
