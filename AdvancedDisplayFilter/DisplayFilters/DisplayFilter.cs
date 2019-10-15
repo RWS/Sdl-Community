@@ -112,10 +112,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 				if (success)
 				{
 					success = _customFilterService.Filter(rowInfo, true);					
-				}
+				}				
 			}
 
-			return _reverseSearch ? !success : success;
+			if (_reverseSearch)
+			{
+				if (!Settings.ShowAllContent && !rowInfo.IsSegment)
+				{
+					return false;
+				}
+
+				return !success;
+			}			
+
+			return success;
 		}	
 	}
 }

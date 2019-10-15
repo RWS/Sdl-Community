@@ -24,6 +24,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 		public bool IsExpressionFound(string searchString, ISegment segment, out List<CapturedGroup> capturedGroups)
 		{
 			capturedGroups = new List<CapturedGroup>();
+
+			if (segment == null)
+			{
+				return false;
+			}
+
 			var text = GetSegmentText(segment);
 
 			var regexOptions = _settings.IsCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase;
@@ -60,6 +66,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 	
 		public bool FilterOnSourceAndTarget(DisplayFilterRowInfo rowInfo, bool success)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			if (success && !string.IsNullOrEmpty(_settings.SourceText))
 			{
 				success = IsExpressionFound(_settings.SourceText, rowInfo.SegmentPair.Source, out var _);
@@ -74,9 +85,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 		}
 
 		public bool FilterOnSourceAndTargetWithBackreferences(DisplayFilterRowInfo rowInfo, out bool appliedFilter)
-		{
-			var success = true;
+		{					
 			appliedFilter = false;
+
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
+			var success = true;
 
 			var backReferencesInTarget = GetBackReferences(_settings.SourceText, _settings.TargetText);
 			var backReferencesInSource = GetBackReferences(_settings.TargetText, _settings.SourceText);
@@ -114,6 +131,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 		private bool IsExpressionFoundWithBackreferences(string searchText, ISegment segment, IEnumerable<CapturedGroup> capturedGroups,
 			IReadOnlyCollection<BackReference> backReferences)
 		{
+			if (segment == null)
+			{
+				return false;
+			}
+
 			foreach (var capturedGroup in capturedGroups)
 			{
 				var backReference = backReferences.FirstOrDefault(a => a.Number == capturedGroup.BackReference.Number);
@@ -174,6 +196,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 		private string GetSegmentText(ISegment segment)
 		{
+			if (segment == null)
+			{
+				return string.Empty;
+			}
+
 			var textVisitor = new SegmentTextVisitor();
 			string text;
 			if (_customSettings.SearchInTagContent)
