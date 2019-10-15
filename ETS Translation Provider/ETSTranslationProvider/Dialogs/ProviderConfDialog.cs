@@ -401,7 +401,18 @@ namespace ETSTranslationProvider
 
 		private void lpPopulationTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			PopulateLanguagePairs();
+			if (Options.UseBasicAuthentication)
+			{
+				if (!string.IsNullOrEmpty(UsernameField.Text) && !string.IsNullOrEmpty(PasswordField.Text) &&
+					!string.IsNullOrEmpty(HostNameField.Text))
+				{
+					PopulateLanguagePairs();
+				}
+			}
+			else
+			{
+				PopulateLanguagePairs();
+			}
 		}
 
 		private void UsernameChanged(object sender, EventArgs e)
