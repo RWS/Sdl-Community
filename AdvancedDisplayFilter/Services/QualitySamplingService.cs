@@ -107,6 +107,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 		public string GetSegmentPairId(ISegmentPair segmentPair)
 		{
+			if (segmentPair == null)
+			{
+				return null;
+			}
+
 			var paragraphId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
 			var segmentId = segmentPair.Properties.Id.Id;
 			var segmentPairId = paragraphId + ";" + segmentId;

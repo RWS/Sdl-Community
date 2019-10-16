@@ -177,6 +177,7 @@ namespace ETSTranslationProvider
 				{
 					if (Options?.LPPreferences != null)
 					{
+						RemoveIncorrectLanguageSet();
 						if (Options.LPPreferences.Count > 0)
 						{
 							SetPreferedLanguageFlavours();
@@ -195,12 +196,26 @@ namespace ETSTranslationProvider
 				}
 				catch (Exception e)
 				{
+					FinishButton.Enabled = true;
 					Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
 				}
 			}));
 		}
 
-		/// <summary>
+	    private void RemoveIncorrectLanguageSet()
+	    {
+		    foreach (var lpKey in Options.LPPreferences.ToList())
+		    {
+			    var languagePair = LanguagePairs.FirstOrDefault(lp =>
+				    lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals(lpKey.Key.ThreeLetterWindowsLanguageName));
+			    if (languagePair == null)
+			    {
+				    Options.LPPreferences.Remove(lpKey.Key);
+			    }
+		    }
+	    }
+
+	    /// <summary>
 		/// This errror handle is for DataGridViewCombobox cell value is not valid error
 		/// </summary>
 		/// <param name="sender"></param>
@@ -371,13 +386,19 @@ namespace ETSTranslationProvider
 			}
 			Options.ApiToken = token;
 
-			tabControl.Controls.RemoveByKey("LPTab");
-			if (Options.ApiVersion == ETSApi.APIVersion.v2)
+			if (tabControl != null)
 			{
-				tabControl.Invoke(new Action(() =>
+				tabControl.Controls.RemoveByKey("LPTab");
+				if (Options?.ApiVersion == ETSApi.APIVersion.v2)
 				{
-					tabControl.Controls.Add(LPTab);
-				}));
+					tabControl.Invoke(new Action(() =>
+					{
+						if (LPTab != null)
+						{
+							tabControl.Controls.Add(LPTab);
+						}
+					}));
+				}
 			}
 
 			return true;
@@ -401,17 +422,18 @@ namespace ETSTranslationProvider
 
 		private void lpPopulationTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			PopulateLanguagePairs();
-		}
-
-		private void UsernameChanged(object sender, EventArgs e)
-		{
-			DelayedLPPopulation();
-		}
-
-		private void PasswordChanged(object sender, EventArgs e)
-		{
-			DelayedLPPopulation();
+			if (Options.UseBasicAuthentication)
+			{
+				if (!string.IsNullOrEmpty(UsernameField.Text) && !string.IsNullOrEmpty(PasswordField.Text) &&
+				    !string.IsNullOrEmpty(HostNameField.Text))
+				{
+					PopulateLanguagePairs();
+				}
+			}
+			else
+			{
+				PopulateLanguagePairs();
+			}
 		}
 
 		private void HostNameChanged(object sender, EventArgs e)
@@ -464,6 +486,34 @@ namespace ETSTranslationProvider
 
 			// Enable API keys if we're using basic authentication
 			APIKeyField.Enabled = !Options.UseBasicAuthentication;
+		}
+
+		private void PasswordField_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				TryToAuthenticate();
+			}
+		}
+
+	    private void TryToAuthenticate()
+	    {
+			if (Options.UseBasicAuthentication)
+			{
+				if (!string.IsNullOrEmpty(UsernameField.Text) && !string.IsNullOrEmpty(PasswordField.Text) &&
+				    !string.IsNullOrEmpty(HostNameField.Text))
+				{
+					PopulateLanguagePairs();
+				}
+			}
+		}
+
+		private void UsernameField_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				TryToAuthenticate();
+			}
 		}
 	}
 }
