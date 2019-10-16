@@ -453,12 +453,12 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 			};
 			var result =
-				await _mainWindow.ShowMessageAsync("Please confirm", "Are you sure you want to restore removed folders?", MessageDialogStyle.AffirmativeAndNegative, dialog);
+				await _mainWindow.ShowMessageAsync(Constants.Confirmation, Constants.RestoreRemovedFoldersMessage, MessageDialogStyle.AffirmativeAndNegative, dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{
 				if (!IsStudioRunning())
 				{
-					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are restoring selected folders");
+					var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RestoringMessage);
 					controller.SetIndeterminate();
 
 					//load saved folders path
@@ -471,8 +471,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				}
 				else
 				{
-					await _mainWindow.ShowMessageAsync("Studio is running",
-						"Please close Trados Studio in order to restore selected folders.", MessageDialogStyle.Affirmative, dialog);
+					await _mainWindow.ShowMessageAsync(Constants.StudioRunMessage,	Constants.CloseStudioRestoreMessage, MessageDialogStyle.Affirmative, dialog);
 				}
 			}
 		}
@@ -514,8 +513,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 					AffirmativeButtonText = "OK"
 
 				};
-				await _mainWindow.ShowMessageAsync("Studio is running",
-					"Please close Trados Studio in order to repair it.", MessageDialogStyle.Affirmative, dialog);
+				await _mainWindow.ShowMessageAsync(Constants.StudioRunMessage,Constants.CloseStudioRepairMessage, MessageDialogStyle.Affirmative, dialog);
 			}
 		
 		}
@@ -570,13 +568,13 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 			};
 			var result =
-				await _mainWindow.ShowMessageAsync("Please confirm","Are you sure you want to remove this files?",MessageDialogStyle.AffirmativeAndNegative,dialog);
+				await _mainWindow.ShowMessageAsync(Constants.Confirmation, Constants.RemoveMessage, MessageDialogStyle.AffirmativeAndNegative,dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{
 				if (!IsStudioRunning())
 				{
 					var foldersToClearOrRestore = new List<LocationDetails>();
-					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
+					var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RemoveFilesMessage);
 					controller.SetIndeterminate();
 
 					var selectedStudioVersions = StudioVersionsCollection.Where(s => s.IsSelected).ToList();
@@ -598,7 +596,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 					}
 					catch(Exception e)
 					{
-						await _dialogCoordinator.ShowMessageAsync(this, "Warning", @"Not all files/folder have been deleted");
+						await _dialogCoordinator.ShowMessageAsync(this, Constants.Warning, Constants.FilesNotDeletedMessage);
 					}
 
 					UnselectGrids();
@@ -607,8 +605,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				}
 				else
 				{
-					await _mainWindow.ShowMessageAsync("Studio is running",
-						"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
+					await _mainWindow.ShowMessageAsync(Constants.StudioRunMessage, Constants.CloseStudioRemoveMessage, MessageDialogStyle.Affirmative, dialog);
 				}
 
 			}
@@ -633,7 +630,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private bool IsStudioRunning()
 		{
 			var processList = Process.GetProcesses();
-			var studioProcesses = processList.Where(p => p.ProcessName.Contains("SDLTradosStudio")).ToList();
+			var studioProcesses = processList.Where(p => p.ProcessName.Contains(Constants.SDLTradosStudio)).ToList();
 			return studioProcesses.Any();
 		}
 
