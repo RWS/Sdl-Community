@@ -23,7 +23,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		public LoginViewModel(BeGlobalTranslationOptions options)
 		{
 			Options = options;
-			_loginMethod = Constants.APICredentials;
+
+			_loginMethod =!string.IsNullOrEmpty(Options.AuthenticationMethod)? Options.AuthenticationMethod : Constants.APICredentials;
 			SetAuthentications();
 		}
 
@@ -81,6 +82,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private void ChangePasswordAction(object parameter)
 		{
 			var passwordBox = (PasswordBox)parameter;
+			if (passwordBox.Name.Equals("ClientIdBox"))
+			{
+				Options.ClientId = passwordBox.Password.TrimEnd().TrimStart();
+			}
+			if (passwordBox.Name.Equals("ClientSecretBox"))
+			{
+				Options.ClientSecret = passwordBox.Password.TrimEnd().TrimStart();
+			}
 			if (passwordBox.Password.Length > 0)
 			{
 				Message = string.Empty;
@@ -123,11 +132,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				new Authentication
 				{
 					DisplayName = Constants.APICredentials,
-					Type = Constants.APICredentialsType
+					Type = Constants.APICredentialsType,
+					Index = 0
 				},
 				new Authentication
 				{   DisplayName = Constants.StudioAuthentication,
-					Type = Constants.StudioAuthenticationType
+					Type = Constants.StudioAuthenticationType,
+					Index = 1
 				}
 			};
 			if (!string.IsNullOrEmpty(Options.AuthenticationMethod))

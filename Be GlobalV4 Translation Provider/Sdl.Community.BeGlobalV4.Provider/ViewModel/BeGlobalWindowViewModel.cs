@@ -214,37 +214,30 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private bool IsWindowValid()
 		{
-			var currentWindow = WindowsControlUtils.GetCurrentWindow() as BeGlobalWindow;
-			var loginTab = currentWindow?.LoginTab;			
 			try
 			{
 				if (LoginViewModel.LoginMethod.Equals(Constants.APICredentials))
 				{
-					var clientIdPass = loginTab?.ClientIdBox.Password;
-					var clientSecretPass = loginTab?.ClientSecretBox.Password;
+					var clientIdPass = Options?.ClientId;
+					var clientSecretPass = Options?.ClientSecret;
 					if (string.IsNullOrEmpty(clientIdPass) || string.IsNullOrEmpty(clientSecretPass))
 					{
 						LoginViewModel.Message = Constants.CredentialsValidation;
 						return false;
 					}
-					else
-					{
-						Options.ClientId = clientIdPass;
-						Options.ClientSecret = clientSecretPass;
-						if (Options?.Model == null)
-						{
-							var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
-							var accountId = beGlobalTranslator.GetUserInformation();
-							var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
-							GetEngineModels(subscriptionInfo);
-							SetEngineModel();
-						}
-						return true;
-					}
-				}				
+				}
+				if (Options?.Model == null)
+				{
+					var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
+					var accountId = beGlobalTranslator.GetUserInformation();
+					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+					GetEngineModels(subscriptionInfo);
+					SetEngineModel();
+				}
+				return true;
 			}
 			catch (Exception ex)
-			{								
+			{
 				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
 			}
 			return false;

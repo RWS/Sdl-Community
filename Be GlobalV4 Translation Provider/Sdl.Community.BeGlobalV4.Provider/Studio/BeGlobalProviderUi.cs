@@ -6,7 +6,6 @@ using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.Community.BeGlobalV4.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Application = System.Windows.Application;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
@@ -28,8 +27,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				var options = new BeGlobalTranslationOptions();
 				var token = string.Empty;
+				//remove credentials if users removed the provider and tries to add it back
 				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
-
+				if(credentials?.Credential!=null)
+				{
+					var providerUri = new Uri("sdlmachinetranslationcloudprovider:///");
+					credentialStore.RemoveCredential(providerUri);
+				}
+				credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
 				AppItializer.EnsureInitializer();
 
 				var beGlobalWindow = new BeGlobalWindow();
