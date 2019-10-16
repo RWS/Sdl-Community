@@ -82,14 +82,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private void ChangePasswordAction(object parameter)
 		{
 			var passwordBox = (PasswordBox)parameter;
-			if (passwordBox.Name.Equals("ClientIdBox"))
+			switch(passwordBox.Name)
 			{
-				Options.ClientId = passwordBox.Password.TrimEnd().TrimStart();
-			}
-			if (passwordBox.Name.Equals("ClientSecretBox"))
-			{
-				Options.ClientSecret = passwordBox.Password.TrimEnd().TrimStart();
-			}
+				case "ClientIdBox":
+					Options.ClientId = passwordBox.Password.TrimEnd().TrimStart();
+					break;
+				case "ClientSecretBox":
+					Options.ClientSecret = passwordBox.Password.TrimEnd().TrimStart();
+					break;
+			}			
 			if (passwordBox.Password.Length > 0)
 			{
 				Message = string.Empty;
