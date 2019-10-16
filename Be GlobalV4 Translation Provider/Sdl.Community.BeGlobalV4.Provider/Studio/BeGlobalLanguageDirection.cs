@@ -44,7 +44,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		private Segment[] TranslateSegments(Segment[] sourceSegments)
 		{
-			if (_options.AuthenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
+			if (_options.AuthenticationMethod.Equals(Constants.StudioAuthentication))
 			{
 				AppItializer.EnsureInitializer();
 				Application.Current?.Dispatcher?.Invoke(() =>
