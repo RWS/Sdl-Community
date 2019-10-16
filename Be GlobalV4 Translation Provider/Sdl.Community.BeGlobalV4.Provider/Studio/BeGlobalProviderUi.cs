@@ -27,14 +27,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				var options = new BeGlobalTranslationOptions();
 				var token = string.Empty;
-				//remove credentials if users removed the provider and tries to add it back
-				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
-				if(credentials?.Credential!=null)
-				{
-					var providerUri = new Uri("sdlmachinetranslationcloudprovider:///");
-					credentialStore.RemoveCredential(providerUri);
-				}
-				credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
+				
+				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");				
 				AppItializer.EnsureInitializer();
 
 				var beGlobalWindow = new BeGlobalWindow();
