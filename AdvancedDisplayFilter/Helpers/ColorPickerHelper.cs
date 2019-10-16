@@ -9,33 +9,42 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public static class ColorPickerHelper
-	{		
+	{
 		public static bool ContainsColor(DisplayFilterRowInfo rowInfo, List<string> colorsCodes)
-		{						
-			var visitor = new TagDataVisitor();
-			
-			var paragraphUnit = GetParagraphUnit(rowInfo.SegmentPair);
-			var colors = paragraphUnit != null 
-				? visitor.GetTagsColorCode(paragraphUnit.Source, rowInfo.SegmentPair.Source) 
-				: visitor.GetTagsColorCode(rowInfo.SegmentPair.Source);
-			
-			foreach (var selectedColor in colors)
+		{
+			try
 			{
-				var colorCodeA = selectedColor.TrimStart('#');
-				foreach (var color in colorsCodes)
+				var visitor = new TagDataVisitor();
+
+				var paragraphUnit = GetParagraphUnit(rowInfo.SegmentPair);
+				var colors = paragraphUnit != null
+					? visitor.GetTagsColorCode(paragraphUnit.Source, rowInfo.SegmentPair.Source)
+					: visitor.GetTagsColorCode(rowInfo.SegmentPair.Source);
+
+				foreach (var selectedColor in colors)
 				{
-					var colorCodeB = color.TrimStart('#');
-					if (string.Compare(colorCodeA, colorCodeB, StringComparison.InvariantCultureIgnoreCase) == 0)
+					var colorCodeA = selectedColor.TrimStart('#');
+					foreach (var color in colorsCodes)
 					{
-						return true;
+						var colorCodeB = color.TrimStart('#');
+						if (string.Compare(colorCodeA, colorCodeB, StringComparison.InvariantCultureIgnoreCase) == 0)
+						{
+							return true;
+						}
 					}
-				}				
+				}
+
+				var colorTextWithoutTag = DefaultFormatingColorCode(rowInfo.ContextInfo);
+				var containsColor = colorsCodes.Contains("#" + colorTextWithoutTag);
+
+				return containsColor;
+			}
+			catch
+			{
+				// ignore; catch all
 			}
 
-			var colorTextWithoutTag = DefaultFormatingColorCode(rowInfo.ContextInfo);
-			var containsColor = colorsCodes.Contains("#" + colorTextWithoutTag);
-			
-			return containsColor;
+			return false;
 		}
 
 		public static string DefaultFormatingColorCode(IList<IContextInfo> contextInfo)
@@ -43,7 +52,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 			if (contextInfo != null && contextInfo.Count > 0)
 			{
 				var defaultFormatting = contextInfo[0].DefaultFormatting;
-				if (defaultFormatting != null )
+				if (defaultFormatting != null)
 				{
 					if (contextInfo[0].DefaultFormatting["TextColor"] != null)
 					{
@@ -87,9 +96,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 							}
 						}
 					}
-					
+
 				}
-				var colorCode = GetColorFromMetadata(contextInfo[0]);				
+				var colorCode = GetColorFromMetadata(contextInfo[0]);
 				return colorCode;
 			}
 
@@ -98,26 +107,23 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 		private static string GetColorFromMetadata(IContextInfo contextInfo)
 		{
-			if (contextInfo.HasMetaData)
+			if (contextInfo.HasMetaData && contextInfo.MetaDataContainsKey("ParagraphFormatting"))
 			{
-				if (contextInfo.MetaDataContainsKey("ParagraphFormatting"))
+				var paragraphValue = contextInfo.GetMetaData("ParagraphFormatting");
+				if (paragraphValue.Contains("color"))
 				{
-					var paragraphValue = contextInfo.GetMetaData("ParagraphFormatting");
-					if (paragraphValue.Contains("color"))
+					var regex = new Regex("(w:val=\"[0-9a-fA-F]*\")");
+					var matches = regex.Matches(paragraphValue);
+					foreach (Match match in matches)
 					{
-						var regex = new Regex("(w:val=\"[0-9a-fA-F]*\")");
-						var matches = regex.Matches(paragraphValue);
-						foreach (Match match in matches)
-						{
-							var value = match.Value;
-							//color string is like this "code" - we need to remove the "" characters
-							var color = value.Substring(value.IndexOf('"') + 1).TrimEnd('"');
-							return color;
-						}
+						var value = match.Value;
+						//color string is like this "code" - we need to remove the "" characters
+						var color = value.Substring(value.IndexOf('"') + 1).TrimEnd('"');
+						return color;
 					}
-
 				}
 			}
+
 			return string.Empty;
 		}
 
@@ -129,12 +135,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 			if (redSuccess && greenSuccess && blueSuccess)
 			{
-				return  GetHexCode(redByteCode,greenByteCode,blueByteCode);
+				return GetHexCode(redByteCode, greenByteCode, blueByteCode);
 			}
+
 			return string.Empty;
 		}
-
-	
 
 		public static string GetHexCode(byte red, byte green, byte blue)
 		{
@@ -175,6 +180,5 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 			return colorCodes;
 		}
-		
 	}
 }

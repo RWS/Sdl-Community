@@ -852,6 +852,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			filterExpressionControl.ClearItems();
 
+			if (_reverseFilter)
+			{
+				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Reverse + ":\"" + _reverseFilter + "\"");
+			}
+
 			if (!string.IsNullOrEmpty(DisplayFilterSettings.SourceText)
 				|| !string.IsNullOrEmpty(DisplayFilterSettings.TargetText))
 			{
@@ -903,7 +908,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			if (CustomFilterService?.GetAttributeFilterGroupsCount() > 1)
 			{
 				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Relationship_Operator + ":\"" +
-												CustomFilterSettings.FilterAttributesLogicalOperator + "\"");
+				                                CustomFilterSettings.FilterAttributesLogicalOperator + "\"");
 			}
 
 			if (DisplayFilterSettings.ConfirmationLevels.Any())
@@ -935,11 +940,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				}
 			}
 
-			if (_reverseFilter)
-			{
-				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Reverse + ":\"" +
-												_reverseFilter + "\"");
-			}
+			
 
 			if (DisplayFilterSettings.SegmentReviewTypes.Any())
 			{
