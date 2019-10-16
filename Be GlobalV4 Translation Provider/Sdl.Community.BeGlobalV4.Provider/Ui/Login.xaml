@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="Sdl.Community.BeGlobalV4.Provider.Ui.Login"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+ 			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+ 			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
+             mc:Ignorable="d" 
+             FontFamily="Segoe UI"
+             d:DesignHeight="350" d:DesignWidth="800">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary x:Uid="ResourceKeyId1">
+					<converters:BeGlobalLoginConverter x:Key="LoginConverter"/>
+				</ResourceDictionary>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+		<StackPanel Margin="0,10,0,0" MinHeight="250">
+			<ComboBox Grid.Row="2"  HorizontalAlignment="Left" Width="400" Margin="15,5,0,10" BorderThickness="1"
+				      ItemsSource="{Binding Authentications, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				      SelectedItem="{Binding SelectedAuthentication, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+    				  SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"					
+					  DisplayMemberPath ="DisplayName" IsSynchronizedWithCurrentItem="True"			
+				      controls:TextBoxHelper.ClearTextButton="True"
+				      controls:TextBoxHelper.Watermark="Please select the authentication method"/>
+			<StackPanel Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=APICredentials}">
+				<PasswordBox
+						HorizontalAlignment="Left" Name="ClientIdBox"
+						controls:TextBoxHelper.UseFloatingWatermark="True"  
+						controls:TextBoxHelper.Watermark="Client Id"
+					    controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+						Width="400"	Margin="15,0,0,10" IsEnabled="True">
+					<i:Interaction.Triggers>
+						<i:EventTrigger EventName="PasswordChanged" >
+							<i:InvokeCommandAction Command="{Binding PasswordChangedCommand }" CommandParameter="{Binding ElementName=ClientIdBox}"/>
+						</i:EventTrigger>
+					</i:Interaction.Triggers>
+				</PasswordBox>
+				<PasswordBox
+						HorizontalAlignment="Left" Name="ClientSecretBox"
+						controls:TextBoxHelper.UseFloatingWatermark="True"  
+						controls:TextBoxHelper.Watermark="Client Secret"
+					    controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"	
+					    controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay }"
+						Width="400"	Margin="15,0,0,0" IsEnabled="True">
+					<i:Interaction.Triggers>
+						<i:EventTrigger EventName="PasswordChanged" >
+							<i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=ClientSecretBox}"/>
+						</i:EventTrigger>
+					</i:Interaction.Triggers>
+				</PasswordBox>
+			<TextBlock Margin="15,30,15,0" Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" FontWeight="Normal" FontSize="14" Foreground="Red"
+					   Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+		</StackPanel>
+		</StackPanel>
+</UserControl>

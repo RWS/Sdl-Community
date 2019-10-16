@@ -30,7 +30,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				_messageBoxService = messageBoxService;
 				_flavor = beGlobalTranslationOptions.Model;
-				_authenticationMethod = beGlobalTranslationOptions.AuthenticationMethod;
+				_authenticationMethod = !string.IsNullOrEmpty(beGlobalTranslationOptions.AuthenticationMethod)
+					? beGlobalTranslationOptions.AuthenticationMethod
+					: Constants.APICredentials;
 				_studioCredentials = new StudioCredentials();
 				_client = new RestClient($"{Url}/v4")
 				{
@@ -39,7 +41,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 				if (!string.IsNullOrEmpty(_authenticationMethod))
 				{
-					if (_authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
+					if (_authenticationMethod.Equals(Constants.APICredentials))
 					{
 						var splitedCredentials = credentials?.Credential.Split('#');
 						// the below condition is needed in case the ClientId is not set and credentials exists
@@ -48,6 +50,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 						{
 							beGlobalTranslationOptions.ClientId = splitedCredentials[0];
 							beGlobalTranslationOptions.ClientSecret = splitedCredentials[1];
+							beGlobalTranslationOptions.AuthenticationMethod = _authenticationMethod;
 						}
 						if (!string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId) && !string.IsNullOrEmpty(beGlobalTranslationOptions.ClientSecret))
 						{
@@ -110,7 +113,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				var response = _client.Execute(request);
 
 				if (response.StatusCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(_authenticationMethod)
-					&& _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
+					&& _authenticationMethod.Equals(Constants.StudioAuthentication))
 				{
 					// Get refresh token
 					var token = _studioCredentials.EnsureValidConnection();
@@ -160,7 +163,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			try
 			{
 				RestRequest request;
-				if (!string.IsNullOrEmpty(_authenticationMethod) && _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
+				if (!string.IsNullOrEmpty(_authenticationMethod) && _authenticationMethod.Equals(Constants.APICredentials))
 				{
 					request = new RestRequest("/accounts/api-credentials/self")
 					{
@@ -178,7 +181,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				var response = _client.Execute(request);
 				var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
 				if (response.StatusCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(_authenticationMethod)
-					&& _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
+					&& _authenticationMethod.Equals(Constants.StudioAuthentication))
 				{
 					// Get refresh token
 					var token = _studioCredentials.EnsureValidConnection();
@@ -202,6 +205,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 							ShowErrors(userInfoResponse);
 						}
 					}
+				}
+				if (response.StatusCode == HttpStatusCode.Unauthorized)
+				{
+					_messageBoxService.ShowMessage(Constants.UnauthorizedCredentials, Constants.PluginName);
+					Log.Logger.Error($"{Constants.UnauthorizedUserInfo} {traceId}");
 				}
 				else if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Unauthorized)
 				{
@@ -236,7 +244,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 				var response = _client.Execute(request);
 				if (response.StatusCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(_authenticationMethod)
-				&& _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
+				&& _authenticationMethod.Equals(Constants.StudioAuthentication))
 				{
 					// Get refresh token
 					var token = _studioCredentials.EnsureValidConnection();
@@ -260,6 +268,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 							ShowErrors(languagePairsResponse);
 						}
 					}
+				}
+				if (response.StatusCode == HttpStatusCode.Unauthorized)
+				{
+					_messageBoxService.ShowMessage(Constants.UnauthorizedCredentials, Constants.PluginName);
+					Log.Logger.Error($"{Constants.UnauthorizedUserInfo} {traceId}");
 				}
 				else if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Unauthorized)
 				{
@@ -354,6 +367,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					throw new Exception($"{Constants.ErrorCode} {error.Code}, {error.Description}");
 				}
 			}
-		}
+		}		
 	}
 }

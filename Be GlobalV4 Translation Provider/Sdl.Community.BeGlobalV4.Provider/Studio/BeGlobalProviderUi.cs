@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
+using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.Community.BeGlobalV4.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -26,17 +27,18 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				var options = new BeGlobalTranslationOptions();
 				var token = string.Empty;
-				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
+				
+				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");				
+				AppItializer.EnsureInitializer();
 
+				var beGlobalWindow = new BeGlobalWindow();
 				var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, credentials);
-				beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
+				beGlobalWindow.DataContext = beGlobalVm;
 
-				beGlobalVm.BeGlobalWindow.ShowDialog();
-				if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
+				beGlobalWindow.ShowDialog();
+				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 				{
 					var messageBoxService = new MessageBoxService();
-					beGlobalVm.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox?.Password.TrimEnd();
-					beGlobalVm.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox?.Password.TrimEnd();
 					var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options, messageBoxService, credentials);
 					beGlobalVm.Options.BeGlobalService = beGlobalService;
 
@@ -80,19 +82,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						editProvider.Options.ClientSecret = splitedCredentials[1];
 					}
 				}
-
-				var token = string.Empty;
-				AppItializer.EnsureInitializer();
-
+				var beGlobalWindow = new BeGlobalWindow();
 				var beGlobalVm = new BeGlobalWindowViewModel(editProvider.Options, languagePairs, credentials);
-				beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
+				beGlobalWindow.DataContext = beGlobalVm;
 
-				beGlobalVm.BeGlobalWindow.ShowDialog();
-				if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
+				beGlobalWindow.ShowDialog();
+				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 				{
 					editProvider.Options = beGlobalVm.Options;
-					editProvider.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox.Password.TrimEnd();
-					editProvider.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox.Password.TrimEnd();
+					editProvider.Options.ClientId = beGlobalWindow.LoginTab.ClientIdBox.Password.TrimEnd();
+					editProvider.Options.ClientSecret = beGlobalWindow.LoginTab.ClientSecretBox.Password.TrimEnd();
 					SetCredentials(credentialStore, editProvider.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
 					return true;
 				}

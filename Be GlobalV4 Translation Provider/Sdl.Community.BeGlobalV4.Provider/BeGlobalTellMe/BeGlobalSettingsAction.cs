@@ -30,9 +30,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 				var languagePairs = GetProjectLanguagePairs(currentProject);
 				var options = new BeGlobalTranslationOptions(uri);
 				var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, null);
-				beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
-				beGlobalVm.BeGlobalWindow.ShowDialog();
-				if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
+				var beGlobalWindow = new BeGlobalWindow();
+				beGlobalWindow.DataContext = beGlobalVm;
+				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 				{
 					settings.Entries
 						.Find(entry =>
