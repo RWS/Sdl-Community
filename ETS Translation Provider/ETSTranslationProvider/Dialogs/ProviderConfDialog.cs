@@ -177,6 +177,7 @@ namespace ETSTranslationProvider
 				{
 					if (Options?.LPPreferences != null)
 					{
+						RemoveIncorrectLanguageSet();
 						if (Options.LPPreferences.Count > 0)
 						{
 							SetPreferedLanguageFlavours();
@@ -195,12 +196,26 @@ namespace ETSTranslationProvider
 				}
 				catch (Exception e)
 				{
+					FinishButton.Enabled = true;
 					Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
 				}
 			}));
 		}
 
-		/// <summary>
+	    private void RemoveIncorrectLanguageSet()
+	    {
+		    foreach (var lpKey in Options.LPPreferences.ToList())
+		    {
+			    var languagePair = LanguagePairs.FirstOrDefault(lp =>
+				    lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals(lpKey.Key.ThreeLetterWindowsLanguageName));
+			    if (languagePair == null)
+			    {
+				    Options.LPPreferences.Remove(lpKey.Key);
+			    }
+		    }
+	    }
+
+	    /// <summary>
 		/// This errror handle is for DataGridViewCombobox cell value is not valid error
 		/// </summary>
 		/// <param name="sender"></param>
