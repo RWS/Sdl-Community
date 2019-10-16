@@ -8,154 +8,99 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 namespace ETSTranslationProvider
 {
 	public class TranslationProvider : ITranslationProvider
-    {
-		public static readonly Log Log = Log.Instance;
+	{
 		public const string TranslationProviderScheme = "ets";
 
-        public TranslationOptions Options { get; set; }
+		public TranslationOptions Options { get; set; }
+		public static readonly Log Log = Log.Instance;
 
-        public TranslationProvider(TranslationOptions options)
-        {
-            Log.Logger.Trace("");
-            Options = options;
-        }
+		public TranslationProvider(TranslationOptions options)
+		{
+			Log.Logger.Trace("");
+			Options = options;
+		}
 
-        #region ITranslationProvider Properties
-        public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
-        {
-            Log.Logger.Trace("");
-            return new TranslationProviderLanguageDirection(this, languageDirection);
-        }
+		#region ITranslationProvider Properties
+		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
+		{
+			Log.Logger.Trace("");
+			return new TranslationProviderLanguageDirection(this, languageDirection);
+		}
 
-        public bool IsReadOnly
-        {
-            get { return true; }
-        }
+		public bool IsReadOnly => true;
 
-        public void LoadState(string translationProviderState)
-        {
-            Log.Logger.Trace("");
-            Options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
-        }
+		public void LoadState(string translationProviderState)
+		{
+			Log.Logger.Trace("");
+			Options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+		}
 
-        public string Name
-        {
-            get { return PluginResources.Plugin_NiceName; }
-        }
+		public string Name => PluginResources.Plugin_NiceName;
 
-        public void RefreshStatusInfo()
-        {
-            Log.Logger.Trace("");
-        }
+		public void RefreshStatusInfo()
+		{
+			Log.Logger.Trace("");
+		}
 
-        public string SerializeState()
-        {
-            Log.Logger.Trace("");
-            return JsonConvert.SerializeObject(Options);
-        }
+		public string SerializeState()
+		{
+			Log.Logger.Trace("");
+			return JsonConvert.SerializeObject(Options);
+		}
 
-        public ProviderStatusInfo StatusInfo
-        {
-            get { return new ProviderStatusInfo(true, PluginResources.Plugin_NiceName); }
-        }
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
 
-        public bool SupportsConcordanceSearch
-        {
-            get { return false; }
-        }
+		public bool SupportsConcordanceSearch => false;
 
-        public bool SupportsDocumentSearches
-        {
-            get { return false; }
-        }
+		public bool SupportsDocumentSearches => false;
 
-        public bool SupportsFilters
-        {
-            get { return false; }
-        }
+		public bool SupportsFilters => false;
 
-        public bool SupportsFuzzySearch
-        {
-            get { return false; }
-        }
+		public bool SupportsFuzzySearch => false;
 
-        public bool SupportsLanguageDirection(LanguagePair languageDirection)
-        {
-            Log.Logger.Trace("");
-            return ETSApi.ETSTranslatorHelper.GetLanguagePairs(Options).Any(lp =>
-                languageDirection.SourceCulture.ToETSCode().Equals(lp.SourceLanguageId) &&
-                languageDirection.TargetCulture.ToETSCode().Equals(lp.TargetLanguageId));
-        }
+		public bool SupportsLanguageDirection(LanguagePair languageDirection)
+		{
+			//ETS doesn't have ptb as source language, we need to map it to por
+			if (languageDirection.SourceCulture.ToETSCode().Equals("ptb"))
+			{
+				return ETSApi.ETSTranslatorHelper.GetLanguagePairs(Options).Any(lp =>
+					lp.SourceLanguageId == "por" &&
+					languageDirection.TargetCulture.ToETSCode().Equals(lp.TargetLanguageId));
+			}
 
-        public bool SupportsMultipleResults
-        {
-            get { return false; }
-        }
+			return ETSApi.ETSTranslatorHelper.GetLanguagePairs(Options).Any(lp =>
+				languageDirection.SourceCulture.ToETSCode().Equals(lp.SourceLanguageId) &&
+				languageDirection.TargetCulture.ToETSCode().Equals(lp.TargetLanguageId));
+		}
 
-        public bool SupportsPenalties
-        {
-            get { return false; }
-        }
+		public bool SupportsMultipleResults => false;
 
-        public bool SupportsPlaceables
-        {
-            get { return false; }
-        }
+		public bool SupportsPenalties => false;
 
-        public bool SupportsScoring
-        {
-            get { return true; }
-        }
+		public bool SupportsPlaceables => false;
 
-        public bool SupportsSearchForTranslationUnits
-        {
-            get { return true; }
-        }
+		public bool SupportsScoring => true;
 
-        public bool SupportsSourceConcordanceSearch
-        {
-            get { return false; }
-        }
+		public bool SupportsSearchForTranslationUnits => true;
 
-        public bool SupportsTargetConcordanceSearch
-        {
-            get { return false; }
-        }
+		public bool SupportsSourceConcordanceSearch => false;
 
-        public bool SupportsStructureContext
-        {
-            get { return false; }
-        }
+		public bool SupportsTargetConcordanceSearch => false;
 
-        public bool SupportsTaggedInput
-        {
-            get { return true; }
-        }
+		public bool SupportsStructureContext => false;
 
-        public bool SupportsTranslation
-        {
-            get { return true; }
-        }
+		public bool SupportsTaggedInput => true;
 
-        public bool SupportsUpdate
-        {
-            get { return false; }
-        }
+		public bool SupportsTranslation => true;
 
-        public bool SupportsWordCounts
-        {
-            get { return false; }
-        }
+		public bool SupportsUpdate => false;
 
-        public TranslationMethod TranslationMethod
-        {
-            get { return TranslationMethod.MachineTranslation; }
-        }
+		public bool SupportsWordCounts => false;
 
-        public Uri Uri
-        {
-            get { return Options.Uri; }
-        }
-        #endregion
-    }
+		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
+
+		public Uri Uri => Options.Uri;
+
+		#endregion
+	}
 }
