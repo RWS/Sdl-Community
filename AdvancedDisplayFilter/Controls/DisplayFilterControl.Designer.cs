@@ -65,8 +65,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.button_remove = new System.Windows.Forms.Button();
 			this.button_add = new System.Windows.Forms.Button();
 			this.panel10 = new System.Windows.Forms.Panel();
-			this.listView_selected = new Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended();
-			this.columnHeader_filtersSelected_name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.panel12 = new System.Windows.Forms.Panel();
 			this.filterRelationship_group = new System.Windows.Forms.GroupBox();
 			this.panel13 = new System.Windows.Forms.Panel();
@@ -75,8 +73,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel5 = new System.Windows.Forms.Panel();
 			this.label_filters_selected = new System.Windows.Forms.Label();
 			this.panel11 = new System.Windows.Forms.Panel();
-			this.listView_available = new Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended();
-			this.columnHeader_filtersAvailable_name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.panel4 = new System.Windows.Forms.Panel();
 			this.label_fitlers_available = new System.Windows.Forms.Label();
 			this.tabPage_comments = new System.Windows.Forms.TabPage();
@@ -146,8 +142,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_spacer_05 = new System.Windows.Forms.Panel();
 			this.tabPage_colors = new System.Windows.Forms.TabPage();
 			this.colorLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.label6 = new System.Windows.Forms.Label();
+			this.label_colorsSelected = new System.Windows.Forms.Label();
+			this.linkLabel_colorsClearSelection = new System.Windows.Forms.LinkLabel();
 			this.colorsListView = new System.Windows.Forms.ListView();
+			this.imageList_colors = new System.Windows.Forms.ImageList(this.components);
+			this.panel16 = new System.Windows.Forms.Panel();
+			this.panel18 = new System.Windows.Forms.Panel();
+			this.label6 = new System.Windows.Forms.Label();
+			this.panel17 = new System.Windows.Forms.Panel();
+			this.comboBox_colorsFoundIn = new System.Windows.Forms.ComboBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.imageList_filter = new System.Windows.Forms.ImageList(this.components);
 			this.splitter_filterExpression = new System.Windows.Forms.Splitter();
 			this.panel_buffer = new System.Windows.Forms.Panel();
@@ -166,7 +170,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.helpButton = new System.Windows.Forms.ToolStripButton();
 			this.panel_filterExpression = new System.Windows.Forms.Panel();
-			this.filterExpressionControl = new Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression();
+			this.panel14 = new System.Windows.Forms.Panel();
 			this.panel_filterStatus = new System.Windows.Forms.Panel();
 			this.panel_filterStatusBar = new System.Windows.Forms.Panel();
 			this.panel_filterStatusBarMessage = new System.Windows.Forms.Panel();
@@ -191,6 +195,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
 			this.tags_tooltip = new System.Windows.Forms.ToolTip(this.components);
 			this.content_toolTips = new System.Windows.Forms.ToolTip(this.components);
+			this.tabPage_sampling = new System.Windows.Forms.TabPage();
+			this.listView_selected = new Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended();
+			this.columnHeader_filtersSelected_name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.listView_available = new Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended();
+			this.columnHeader_filtersAvailable_name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.filterExpressionControl = new Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -232,6 +242,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel7.SuspendLayout();
 			this.tabPage_colors.SuspendLayout();
 			this.colorLayoutPanel.SuspendLayout();
+			this.panel16.SuspendLayout();
+			this.panel18.SuspendLayout();
+			this.panel17.SuspendLayout();
 			this.toolStrip_filter.SuspendLayout();
 			this.panel_filterExpression.SuspendLayout();
 			this.panel_filterStatus.SuspendLayout();
@@ -239,6 +252,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.SuspendLayout();
 			this.panel_filterStatusBarImage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).BeginInit();
+			this.tabPage_sampling.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel_body
@@ -260,6 +274,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabControl_filter.Controls.Add(this.tabPage_contextInfo);
 			this.tabControl_filter.Controls.Add(this.tabPage_segmentNumbers);
 			this.tabControl_filter.Controls.Add(this.tabPage_colors);
+			this.tabControl_filter.Controls.Add(this.tabPage_sampling);
 			resources.ApplyResources(this.tabControl_filter, "tabControl_filter");
 			this.tabControl_filter.ImageList = this.imageList_filter;
 			this.tabControl_filter.Name = "tabControl_filter";
@@ -501,25 +516,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.panel10, "panel10");
 			this.panel10.Name = "panel10";
 			// 
-			// listView_selected
-			// 
-			this.listView_selected.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader_filtersSelected_name});
-			resources.ApplyResources(this.listView_selected, "listView_selected");
-			this.listView_selected.FullRowSelect = true;
-			this.listView_selected.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.listView_selected.HideSelection = false;
-			this.listView_selected.Name = "listView_selected";
-			this.listView_selected.UseCompatibleStateImageBehavior = false;
-			this.listView_selected.View = System.Windows.Forms.View.Details;
-			this.listView_selected.SelectedIndexChanged += new System.EventHandler(this.ListView_selected_SelectedIndexChanged);
-			this.listView_selected.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListView_selected_MouseDoubleClick);
-			this.listView_selected.Resize += new System.EventHandler(this.ListView_selected_Resize);
-			// 
-			// columnHeader_filtersSelected_name
-			// 
-			resources.ApplyResources(this.columnHeader_filtersSelected_name, "columnHeader_filtersSelected_name");
-			// 
 			// panel12
 			// 
 			this.panel12.Controls.Add(this.filterRelationship_group);
@@ -550,7 +546,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             resources.GetString("filterAttributes_comboBox.Items"),
             resources.GetString("filterAttributes_comboBox.Items1")});
 			this.filterAttributes_comboBox.Name = "filterAttributes_comboBox";
-			this.filterAttributes_comboBox.SelectedIndexChanged += new System.EventHandler(this.filterAttributes_comboBox_SelectedIndexChanged);
+			this.filterAttributes_comboBox.SelectedIndexChanged += new System.EventHandler(this.FilterAttributes_comboBox_SelectedIndexChanged);
 			// 
 			// filterAttributes_label
 			// 
@@ -574,25 +570,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel11.Controls.Add(this.panel4);
 			resources.ApplyResources(this.panel11, "panel11");
 			this.panel11.Name = "panel11";
-			// 
-			// listView_available
-			// 
-			this.listView_available.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader_filtersAvailable_name});
-			resources.ApplyResources(this.listView_available, "listView_available");
-			this.listView_available.FullRowSelect = true;
-			this.listView_available.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.listView_available.HideSelection = false;
-			this.listView_available.Name = "listView_available";
-			this.listView_available.UseCompatibleStateImageBehavior = false;
-			this.listView_available.View = System.Windows.Forms.View.Details;
-			this.listView_available.SelectedIndexChanged += new System.EventHandler(this.ListView_available_SelectedIndexChanged);
-			this.listView_available.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListView_available_MouseDoubleClick);
-			this.listView_available.Resize += new System.EventHandler(this.ListView_available_Resize);
-			// 
-			// columnHeader_filtersAvailable_name
-			// 
-			resources.ApplyResources(this.columnHeader_filtersAvailable_name, "columnHeader_filtersAvailable_name");
 			// 
 			// panel4
 			// 
@@ -742,8 +719,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// tabPage_segmentNumbers
 			// 
 			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
-			this.tabPage_segmentNumbers.Controls.Add(this.sampleOptionsPanel);
-			this.tabPage_segmentNumbers.Controls.Add(this.panel_spacer_00);
 			this.tabPage_segmentNumbers.Controls.Add(this.fuzzyValuesBetweenGroupBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.panel_spacer_01);
 			this.tabPage_segmentNumbers.Controls.Add(this.userBoxGroupBox);
@@ -1126,22 +1101,80 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// colorLayoutPanel
 			// 
 			resources.ApplyResources(this.colorLayoutPanel, "colorLayoutPanel");
-			this.colorLayoutPanel.Controls.Add(this.label6, 0, 0);
+			this.colorLayoutPanel.Controls.Add(this.label_colorsSelected, 1, 2);
+			this.colorLayoutPanel.Controls.Add(this.linkLabel_colorsClearSelection, 0, 2);
 			this.colorLayoutPanel.Controls.Add(this.colorsListView, 0, 1);
+			this.colorLayoutPanel.Controls.Add(this.panel16, 0, 0);
 			this.colorLayoutPanel.Name = "colorLayoutPanel";
+			// 
+			// label_colorsSelected
+			// 
+			resources.ApplyResources(this.label_colorsSelected, "label_colorsSelected");
+			this.label_colorsSelected.Name = "label_colorsSelected";
+			// 
+			// linkLabel_colorsClearSelection
+			// 
+			resources.ApplyResources(this.linkLabel_colorsClearSelection, "linkLabel_colorsClearSelection");
+			this.linkLabel_colorsClearSelection.Name = "linkLabel_colorsClearSelection";
+			this.linkLabel_colorsClearSelection.TabStop = true;
+			this.linkLabel_colorsClearSelection.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel_colorsClearSelection_LinkClicked);
+			// 
+			// colorsListView
+			// 
+			this.colorLayoutPanel.SetColumnSpan(this.colorsListView, 2);
+			resources.ApplyResources(this.colorsListView, "colorsListView");
+			this.colorsListView.HideSelection = false;
+			this.colorsListView.Name = "colorsListView";
+			this.colorsListView.SmallImageList = this.imageList_colors;
+			this.colorsListView.UseCompatibleStateImageBehavior = false;
+			this.colorsListView.View = System.Windows.Forms.View.List;
+			this.colorsListView.SelectedIndexChanged += new System.EventHandler(this.ColorsListView_SelectedIndexChanged);
+			// 
+			// imageList_colors
+			// 
+			this.imageList_colors.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+			resources.ApplyResources(this.imageList_colors, "imageList_colors");
+			this.imageList_colors.TransparentColor = System.Drawing.Color.Transparent;
+			// 
+			// panel16
+			// 
+			this.colorLayoutPanel.SetColumnSpan(this.panel16, 2);
+			this.panel16.Controls.Add(this.panel18);
+			this.panel16.Controls.Add(this.panel17);
+			resources.ApplyResources(this.panel16, "panel16");
+			this.panel16.Name = "panel16";
+			// 
+			// panel18
+			// 
+			this.panel18.Controls.Add(this.label6);
+			resources.ApplyResources(this.panel18, "panel18");
+			this.panel18.Name = "panel18";
 			// 
 			// label6
 			// 
 			resources.ApplyResources(this.label6, "label6");
 			this.label6.Name = "label6";
 			// 
-			// colorsListView
+			// panel17
 			// 
-			this.colorsListView.CheckBoxes = true;
-			resources.ApplyResources(this.colorsListView, "colorsListView");
-			this.colorsListView.Name = "colorsListView";
-			this.colorsListView.UseCompatibleStateImageBehavior = false;
-			this.colorsListView.SelectedIndexChanged += new System.EventHandler(this.ColorsListView_SelectedIndexChanged);
+			this.panel17.Controls.Add(this.comboBox_colorsFoundIn);
+			this.panel17.Controls.Add(this.label7);
+			resources.ApplyResources(this.panel17, "panel17");
+			this.panel17.Name = "panel17";
+			// 
+			// comboBox_colorsFoundIn
+			// 
+			this.comboBox_colorsFoundIn.BackColor = System.Drawing.SystemColors.Window;
+			resources.ApplyResources(this.comboBox_colorsFoundIn, "comboBox_colorsFoundIn");
+			this.comboBox_colorsFoundIn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_colorsFoundIn.FormattingEnabled = true;
+			this.comboBox_colorsFoundIn.Name = "comboBox_colorsFoundIn";
+			this.comboBox_colorsFoundIn.SelectedIndexChanged += new System.EventHandler(this.ComboBox_colorsFoundIn_SelectedIndexChanged);
+			// 
+			// label7
+			// 
+			resources.ApplyResources(this.label7, "label7");
+			this.label7.Name = "label7";
 			// 
 			// imageList_filter
 			// 
@@ -1262,14 +1295,14 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// panel_filterExpression
 			// 
 			this.panel_filterExpression.Controls.Add(this.filterExpressionControl);
+			this.panel_filterExpression.Controls.Add(this.panel14);
 			resources.ApplyResources(this.panel_filterExpression, "panel_filterExpression");
 			this.panel_filterExpression.Name = "panel_filterExpression";
 			// 
-			// filterExpressionControl
+			// panel14
 			// 
-			this.filterExpressionControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			resources.ApplyResources(this.filterExpressionControl, "filterExpressionControl");
-			this.filterExpressionControl.Name = "filterExpressionControl";
+			resources.ApplyResources(this.panel14, "panel14");
+			this.panel14.Name = "panel14";
 			// 
 			// panel_filterStatus
 			// 
@@ -1380,6 +1413,58 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
+			// tabPage_sampling
+			// 
+			this.tabPage_sampling.Controls.Add(this.sampleOptionsPanel);
+			this.tabPage_sampling.Controls.Add(this.panel_spacer_00);
+			resources.ApplyResources(this.tabPage_sampling, "tabPage_sampling");
+			this.tabPage_sampling.Name = "tabPage_sampling";
+			this.tabPage_sampling.UseVisualStyleBackColor = true;
+			// 
+			// listView_selected
+			// 
+			this.listView_selected.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader_filtersSelected_name});
+			resources.ApplyResources(this.listView_selected, "listView_selected");
+			this.listView_selected.FullRowSelect = true;
+			this.listView_selected.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+			this.listView_selected.HideSelection = false;
+			this.listView_selected.Name = "listView_selected";
+			this.listView_selected.UseCompatibleStateImageBehavior = false;
+			this.listView_selected.View = System.Windows.Forms.View.Details;
+			this.listView_selected.SelectedIndexChanged += new System.EventHandler(this.ListView_selected_SelectedIndexChanged);
+			this.listView_selected.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListView_selected_MouseDoubleClick);
+			this.listView_selected.Resize += new System.EventHandler(this.ListView_selected_Resize);
+			// 
+			// columnHeader_filtersSelected_name
+			// 
+			resources.ApplyResources(this.columnHeader_filtersSelected_name, "columnHeader_filtersSelected_name");
+			// 
+			// listView_available
+			// 
+			this.listView_available.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader_filtersAvailable_name});
+			resources.ApplyResources(this.listView_available, "listView_available");
+			this.listView_available.FullRowSelect = true;
+			this.listView_available.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+			this.listView_available.HideSelection = false;
+			this.listView_available.Name = "listView_available";
+			this.listView_available.UseCompatibleStateImageBehavior = false;
+			this.listView_available.View = System.Windows.Forms.View.Details;
+			this.listView_available.SelectedIndexChanged += new System.EventHandler(this.ListView_available_SelectedIndexChanged);
+			this.listView_available.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListView_available_MouseDoubleClick);
+			this.listView_available.Resize += new System.EventHandler(this.ListView_available_Resize);
+			// 
+			// columnHeader_filtersAvailable_name
+			// 
+			resources.ApplyResources(this.columnHeader_filtersAvailable_name, "columnHeader_filtersAvailable_name");
+			// 
+			// filterExpressionControl
+			// 
+			this.filterExpressionControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			resources.ApplyResources(this.filterExpressionControl, "filterExpressionControl");
+			this.filterExpressionControl.Name = "filterExpressionControl";
+			// 
 			// DisplayFilterControl
 			// 
 			resources.ApplyResources(this, "$this");
@@ -1442,6 +1527,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel7.PerformLayout();
 			this.tabPage_colors.ResumeLayout(false);
 			this.colorLayoutPanel.ResumeLayout(false);
+			this.colorLayoutPanel.PerformLayout();
+			this.panel16.ResumeLayout(false);
+			this.panel18.ResumeLayout(false);
+			this.panel17.ResumeLayout(false);
+			this.panel17.PerformLayout();
 			this.toolStrip_filter.ResumeLayout(false);
 			this.toolStrip_filter.PerformLayout();
 			this.panel_filterExpression.ResumeLayout(false);
@@ -1450,6 +1540,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.ResumeLayout(false);
 			this.panel_filterStatusBarImage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).EndInit();
+			this.tabPage_sampling.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }
@@ -1574,7 +1665,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private Panel panel_spacer_05;
 		private TabPage tabPage_colors;
 		private TableLayoutPanel colorLayoutPanel;
-		private Label label6;
 		private ListView colorsListView;
 		private ToolStripMenuItem highlightColorsToolStripMenuItem;
 		private ToolStripMenuItem toolStripMenuItem_yellow;
@@ -1615,5 +1705,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private Panel panel13;
 		private ComboBox filterAttributes_comboBox;
 		private Label filterAttributes_label;
+		private Panel panel16;
+		private Panel panel18;
+		private Label label6;
+		private Panel panel17;
+		private ComboBox comboBox_colorsFoundIn;
+		private Label label7;
+		private Label label_colorsSelected;
+		private LinkLabel linkLabel_colorsClearSelection;
+		private Panel panel14;
+		private ImageList imageList_colors;
+		private TabPage tabPage_sampling;
 	}
 }

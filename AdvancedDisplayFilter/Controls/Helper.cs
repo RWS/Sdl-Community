@@ -119,5 +119,22 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     return StringResources.DisplayFilterControl_None;
             }
         }
-    }
+
+	    public static string GetTypeName(DisplayFilterSettings.ContentLocation type)
+	    {
+			switch (type)
+			{
+				case DisplayFilterSettings.ContentLocation.SourceAndTarget:
+					return "Source and Target Segment";
+				case DisplayFilterSettings.ContentLocation.SourceOrTarget:
+					return "Source or Target Segment";
+				case DisplayFilterSettings.ContentLocation.Source:
+					return "Source Segment";
+				case DisplayFilterSettings.ContentLocation.Target:
+					return "Target Segment";
+				default:
+					return StringResources.DisplayFilterControl_None;
+			}
+		}
+	}
 }

@@ -3,10 +3,12 @@
 namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 {
 	public class CustomFilterSettings
-	{						
+	{										
 		public DisplayFilterSettings.LogicalOperators FilterAttributesLogicalOperator { get; set; }
 
 		public DisplayFilterSettings.LogicalOperators SourceTargetLogicalOperator { get; set; }
+
+		public DisplayFilterSettings.ContentLocation ColorsFoundIn { get; set; }
 
 		public bool UseBackreferences { get; set; }
 

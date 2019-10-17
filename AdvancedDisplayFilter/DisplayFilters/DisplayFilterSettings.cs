@@ -12,6 +12,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			OR = 1
 		}
 
+		public enum ContentLocation
+		{
+			None = 0,
+			SourceOrTarget = 1,
+			SourceAndTarget = 2,
+			Source = 3,
+			Target = 4
+		}
+
 		public enum OriginTypeExtended
 		{
 			FuzzyMatchRepair,
@@ -66,15 +75,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			ExcludeNumberOnly
 		}
 
-		public enum SegmentContentFilterOrder
-		{
-			None = 0,
-			Or = 1,
-			And = 2,
-			SourceFirst = 3,
-			TargetFirst = 4
-		}
-
 		public string Version { get; set; }
 
 		public DateTime Created { get; set; }
@@ -96,7 +96,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 		public int CommentSeverity { get; set; }
 
 		public List<string> ContextInfoTypes { get; set; }
-		
+
 		public bool ShowAllContent { get; set; }
 
 		public List<string> RepetitionTypes { get; set; }

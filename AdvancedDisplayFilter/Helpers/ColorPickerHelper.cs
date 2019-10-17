@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
@@ -10,17 +11,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public static class ColorPickerHelper
 	{
-		public static bool ContainsColor(DisplayFilterRowInfo rowInfo, List<string> colorsCodes)
+		public static bool ContainsColor(DisplayFilterRowInfo rowInfo, List<string> colorsCodes, DisplayFilterSettings.ContentLocation colorsFoundIn)
 		{
 			try
-			{
-				var visitor = new TagDataVisitor();
-
-				var paragraphUnit = GetParagraphUnit(rowInfo.SegmentPair);
-				var colors = paragraphUnit != null
-					? visitor.GetTagsColorCode(paragraphUnit.Source, rowInfo.SegmentPair.Source)
-					: visitor.GetTagsColorCode(rowInfo.SegmentPair.Source);
-
+			{				
+				var colors = GetColors(rowInfo.SegmentPair, colorsFoundIn);
+				
 				foreach (var selectedColor in colors)
 				{
 					var colorCodeA = selectedColor.TrimStart('#');
@@ -46,6 +42,66 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 			return false;
 		}
+
+		public static List<string> GetColors(ISegmentPair segmentPair, DisplayFilterSettings.ContentLocation foundIn)
+		{
+			var paragraphUnit = ColorPickerHelper.GetParagraphUnit(segmentPair);
+
+			var colors = new List<string>();
+			if (foundIn == DisplayFilterSettings.ContentLocation.SourceAndTarget)
+			{
+				var sourceColors = paragraphUnit != null
+					? GetColorsList(paragraphUnit.Source, segmentPair.Source)
+					: GetColorsList(segmentPair.Source);
+
+				var targetColors = paragraphUnit != null
+					? GetColorsList(paragraphUnit.Target, segmentPair.Target)
+					: GetColorsList(segmentPair.Target);
+
+				foreach (var color in sourceColors)
+				{
+					if (targetColors.Contains(color))
+					{
+						colors.Add(color);
+					}
+				}
+			}
+			else if (foundIn == DisplayFilterSettings.ContentLocation.SourceOrTarget)
+			{
+				var sourceColors = paragraphUnit != null
+					? GetColorsList(paragraphUnit.Source, segmentPair.Source)
+					: GetColorsList(segmentPair.Source);
+
+				var targetColors = paragraphUnit != null
+					? GetColorsList(paragraphUnit.Target, segmentPair.Target)
+					: GetColorsList(segmentPair.Target);
+
+				colors = sourceColors;
+
+				foreach (var color in targetColors)
+				{
+					if (!colors.Contains(color))
+					{
+						colors.Add(color);
+					}
+				}
+			}
+			else if (foundIn == DisplayFilterSettings.ContentLocation.Source)
+			{
+				colors = paragraphUnit != null
+					? GetColorsList(paragraphUnit.Source, segmentPair.Source)
+					: GetColorsList(segmentPair.Source);
+			}
+			else if (foundIn == DisplayFilterSettings.ContentLocation.Target)
+			{
+				colors = paragraphUnit != null
+					? GetColorsList(paragraphUnit.Target, segmentPair.Target)
+					: GetColorsList(segmentPair.Target);
+			}
+
+			return colors;
+		}
+
 
 		public static string DefaultFormatingColorCode(IList<IContextInfo> contextInfo)
 		{
