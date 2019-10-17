@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.Community.BeGlobalV4.Provider.ViewModel;
@@ -20,6 +21,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 
 		public override void Execute()
 		{
+			AppItializer.EnsureInitializer();
+
 			var currentProject = SdlTradosStudio.Application?.GetController<ProjectsController>().CurrentProject;
 			var settings = currentProject?.GetTranslationProviderConfiguration();
 			var translationProvider = settings?.Entries?.FirstOrDefault(entry =>
@@ -28,17 +31,18 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 			{
 				var uri = translationProvider.MainTranslationProvider?.Uri;
 				var languagePairs = GetProjectLanguagePairs(currentProject);
-				var options = new BeGlobalTranslationOptions(uri);
+				var options = new BeGlobalTranslationOptions(uri);			
+
+				var beGlobalWindow = new BeGlobalWindow();
 				var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, null);
-				beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
-				beGlobalVm.BeGlobalWindow.ShowDialog();
-				if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
+				beGlobalWindow.DataContext = beGlobalVm;
+				beGlobalWindow.ShowDialog();
+
+				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 				{
 					settings.Entries
-						.Find(entry =>
-							entry.MainTranslationProvider.Uri.OriginalString.Contains("sdlmachinetranslationcloudprovider"))
+						.Find(entry => entry.MainTranslationProvider.Uri.OriginalString.Contains("sdlmachinetranslationcloudprovider"))
 						.MainTranslationProvider.Uri = options.Uri;
-
 					currentProject.UpdateTranslationProviderConfiguration(settings);
 				}
 			}
