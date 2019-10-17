@@ -1160,6 +1160,13 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 				trackedDocuments.ActiveSegment.CurrentSegmentContentHasChanged = false;
 				trackedDocuments.ActiveSegment.CurrentSegmentSelected = Tracked.ActiveDocument.GetActiveSegmentPair();
+#if DEBUG
+				Debug.WriteLine("Initializing active segment");
+				if (trackedDocuments.ActiveSegment.CurrentSegmentSelected == null)
+					Debug.WriteLine("Current segment is null");
+				else
+					Debug.WriteLine("Current segment source " + trackedDocuments.ActiveSegment.CurrentSegmentSelected.Source.ToString());
+#endif
 
 				try
 				{
@@ -1182,6 +1189,9 @@ namespace Sdl.Community.Qualitivity.Tracking
 					trackedDocuments.ActiveSegment.CurrentSegmentId = trackedDocuments.ActiveSegment.CurrentSegmentSelected.Properties.Id.Id;
 					trackedDocuments.ActiveSegment.CurrentParagraphId = trackedDocuments.ActiveSegment.CurrentSegmentSelected.GetParagraphUnitProperties().ParagraphUnitId.Id;
 					trackedDocuments.ActiveSegment.CurrentSegmentUniqueId = trackedDocuments.ActiveSegment.CurrentParagraphId + "." + trackedDocuments.ActiveSegment.CurrentSegmentId;
+#if DEBUG
+					Debug.WriteLine("Confirmation level: " + trackedDocuments.ActiveSegment.CurrentSegmentSelected.Properties.ConfirmationLevel);
+#endif
 
 					// check if there has been a change in the record structure; if yes, then add it to the container
 					if (!Tracked.DocumentSegmentPairs.ContainsKey(trackedDocuments.ActiveSegment.CurrentSegmentUniqueId))

@@ -22,67 +22,41 @@ namespace Sdl.Community.Comparison
 			return _getComparisonTextUnits(targetOriginal, targetUpdated, groupChanges);
 		}
 
+		static public List<ContentSection> ConcatenateComparableContentSections(IEnumerable<ContentSection> original)
+		{
+			var result = new List<ContentSection>();
+
+			foreach (var tcrs in original)
+			{
+				var tcrsClone = (ContentSection)tcrs.Clone();
+
+				if (tcrsClone.RevisionMarker != null && tcrsClone.RevisionMarker.RevType == RevisionMarker.RevisionType.Delete)
+					continue;
+
+				if (tcrsClone.CntType != ContentSection.ContentType.Text)
+				{
+					result.Add(tcrsClone);
+					continue;
+				}
+
+				if (result.Count > 0 && result[result.Count - 1].CntType == ContentSection.ContentType.Text)
+				{
+					result[result.Count - 1].Content += tcrsClone.Content;
+					continue;
+				}
+				result.Add(tcrsClone);
+
+			}
+
+			return result;
+		}
+
 		private List<ComparisonUnit> _getComparisonTextUnits(IEnumerable<ContentSection> targetOriginal, IEnumerable<ContentSection> targetUpdated, bool groupChanges)
 		{
 			TextParser.ComparisonType = Type;
-			var targetOriginal1 = new List<ContentSection>();
+			var targetOriginal1 = ConcatenateComparableContentSections(targetOriginal);
 
-			foreach (var tcrs in targetOriginal)
-			{
-				var tcrsClone = (ContentSection)tcrs.Clone();
-
-				if (tcrsClone.RevisionMarker != null && tcrsClone.RevisionMarker.RevType == RevisionMarker.RevisionType.Delete)
-				{
-					//ignore
-				}
-				else
-				{
-					if (tcrsClone.CntType == ContentSection.ContentType.Text)
-					{
-						if (targetOriginal1.Count > 0 && targetOriginal1[targetOriginal1.Count - 1].CntType == ContentSection.ContentType.Text)
-						{
-							targetOriginal1[targetOriginal1.Count - 1].Content += tcrsClone.Content;
-						}
-						else
-						{
-							targetOriginal1.Add(tcrsClone);
-						}
-					}
-					else
-					{
-						targetOriginal1.Add(tcrsClone);
-					}
-				}
-			}
-
-			var targetContentSectionsUpdated = new List<ContentSection>();
-			foreach (var tcrs in targetUpdated)
-			{
-				var tcrsClone = (ContentSection)tcrs.Clone();
-
-				if (tcrsClone.RevisionMarker != null && tcrsClone.RevisionMarker.RevType == RevisionMarker.RevisionType.Delete)
-				{
-					//ignore
-				}
-				else
-				{
-					if (tcrsClone.CntType == ContentSection.ContentType.Text)
-					{
-						if (targetContentSectionsUpdated.Count > 0 && targetContentSectionsUpdated[targetContentSectionsUpdated.Count - 1].CntType == ContentSection.ContentType.Text)
-						{
-							targetContentSectionsUpdated[targetContentSectionsUpdated.Count - 1].Content += tcrsClone.Content;
-						}
-						else
-						{
-							targetContentSectionsUpdated.Add(tcrsClone);
-						}
-					}
-					else
-					{
-						targetContentSectionsUpdated.Add(tcrsClone);
-					}
-				}
-			}
+			var targetContentSectionsUpdated = ConcatenateComparableContentSections(targetUpdated);
 
 			var merger = new Merger(targetOriginal1, targetContentSectionsUpdated);
 			var comparisonTextUnits = merger.Merge();
