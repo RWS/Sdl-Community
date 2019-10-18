@@ -48,11 +48,11 @@
     <Reference Include="RestSharp, Version=106.5.4.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.106.5.4\lib\net452\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Community.Toolkit.Core, Version=1.3.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.Core.1.3.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
+    <Reference Include="Sdl.Community.Toolkit.Core, Version=1.8.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.Core.1.8.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=1.7.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.1.7.0\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=1.8.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.1.8.1\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -167,7 +167,6 @@
     <Compile Include="Converters\BeGlobalLoginConverter.cs" />
     <Compile Include="Helpers\AppItializer.cs" />
     <Compile Include="Helpers\Constants.cs" />
-    <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\NormalizeSourceTextHelper.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
@@ -176,6 +175,7 @@
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Helpers\WindowsControlUtils.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />
+    <Compile Include="Model\Authentication.cs" />
     <Compile Include="Model\BeGlobalLanguagePair.cs" />
     <Compile Include="Model\BeGlobalSegment.cs" />
     <Compile Include="Model\ResponseError.cs" />
@@ -193,7 +193,6 @@
     <Compile Include="Service\BeGlobalV4Translator.cs" />
     <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Studio\BeGlobalLanguageDirection.cs" />
-    <Compile Include="Model\BeGlobalLoginOptions.cs" />
     <Compile Include="Studio\BeGlobalProviderUi.cs" />
     <Compile Include="Studio\BeGlobalTranslationOptions.cs" />
     <Compile Include="Studio\BeGlobalTranslationProvider.cs" />
@@ -205,8 +204,16 @@
     <Compile Include="Ui\BeGlobalWindow.xaml.cs">
       <DependentUpon>BeGlobalWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ui\LanguageMappings.xaml.cs">
+      <DependentUpon>LanguageMappings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\BeGlobalWindowViewModel.cs" />
+    <Compile Include="ViewModel\LanguageMappingsViewModel.cs" />
+    <Compile Include="ViewModel\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\global1.png" />
@@ -274,6 +281,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ui\BeGlobalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\LanguageMappings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

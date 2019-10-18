@@ -484,7 +484,7 @@
     <value>Search in text and tag content</value>
   </data>
   <metadata name="tags_tooltip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>706, 16</value>
+    <value>181, 56</value>
   </metadata>
   <data name="&gt;&gt;alsoTags_radioButton.Name" xml:space="preserve">
     <value>alsoTags_radioButton</value>
@@ -1049,7 +1049,7 @@
     <value>listView_selected</value>
   </data>
   <data name="&gt;&gt;listView_selected.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.4.2.8, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.4.2.12, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;listView_selected.Parent" xml:space="preserve">
     <value>panel10</value>
@@ -1319,7 +1319,7 @@
     <value>listView_available</value>
   </data>
   <data name="&gt;&gt;listView_available.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.4.2.8, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.ListViewExtended, Sdl.Community.AdvancedDisplayFilter, Version=4.4.2.12, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;listView_available.Parent" xml:space="preserve">
     <value>panel11</value>
@@ -2086,495 +2086,6 @@
   <data name="tabPage_segmentNumbers.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="tableLayoutPanel6.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="radioButton_randomlySelect.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="radioButton_randomlySelect.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="radioButton_randomlySelect.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="radioButton_randomlySelect.Location" type="System.Drawing.Point, System.Drawing">
-    <value>28, 31</value>
-  </data>
-  <data name="radioButton_randomlySelect.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 0, 3</value>
-  </data>
-  <data name="radioButton_randomlySelect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>106, 17</value>
-  </data>
-  <data name="radioButton_randomlySelect.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="radioButton_randomlySelect.Text" xml:space="preserve">
-    <value>Randomly select:</value>
-  </data>
-  <data name="&gt;&gt;radioButton_randomlySelect.Name" xml:space="preserve">
-    <value>radioButton_randomlySelect</value>
-  </data>
-  <data name="&gt;&gt;radioButton_randomlySelect.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;radioButton_randomlySelect.Parent" xml:space="preserve">
-    <value>tableLayoutPanel6</value>
-  </data>
-  <data name="&gt;&gt;radioButton_randomlySelect.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="radioButton_selectOneInEvery.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="radioButton_selectOneInEvery.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="radioButton_selectOneInEvery.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="radioButton_selectOneInEvery.Location" type="System.Drawing.Point, System.Drawing">
-    <value>28, 57</value>
-  </data>
-  <data name="radioButton_selectOneInEvery.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 0, 3</value>
-  </data>
-  <data name="radioButton_selectOneInEvery.Size" type="System.Drawing.Size, System.Drawing">
-    <value>110, 17</value>
-  </data>
-  <data name="radioButton_selectOneInEvery.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="radioButton_selectOneInEvery.Text" xml:space="preserve">
-    <value>Select 1 in every: </value>
-  </data>
-  <data name="&gt;&gt;radioButton_selectOneInEvery.Name" xml:space="preserve">
-    <value>radioButton_selectOneInEvery</value>
-  </data>
-  <data name="&gt;&gt;radioButton_selectOneInEvery.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;radioButton_selectOneInEvery.Parent" xml:space="preserve">
-    <value>tableLayoutPanel6</value>
-  </data>
-  <data name="&gt;&gt;radioButton_selectOneInEvery.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="checkBox_segmentSelection.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="checkBox_segmentSelection.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="checkBox_segmentSelection.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 8</value>
-  </data>
-  <data name="checkBox_segmentSelection.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 3, 3, 3</value>
-  </data>
-  <data name="checkBox_segmentSelection.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 17</value>
-  </data>
-  <data name="checkBox_segmentSelection.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="checkBox_segmentSelection.Text" xml:space="preserve">
-    <value>Segment selection</value>
-  </data>
-  <data name="&gt;&gt;checkBox_segmentSelection.Name" xml:space="preserve">
-    <value>checkBox_segmentSelection</value>
-  </data>
-  <data name="&gt;&gt;checkBox_segmentSelection.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;checkBox_segmentSelection.Parent" xml:space="preserve">
-    <value>tableLayoutPanel6</value>
-  </data>
-  <data name="&gt;&gt;checkBox_segmentSelection.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="numericUpDown_randomSelect.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="numericUpDown_randomSelect.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="numericUpDown_randomSelect.Location" type="System.Drawing.Point, System.Drawing">
-    <value>138, 31</value>
-  </data>
-  <data name="numericUpDown_randomSelect.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 3, 0, 3</value>
-  </data>
-  <data name="numericUpDown_randomSelect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 20</value>
-  </data>
-  <data name="numericUpDown_randomSelect.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_randomSelect.Name" xml:space="preserve">
-    <value>numericUpDown_randomSelect</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_randomSelect.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_randomSelect.Parent" xml:space="preserve">
-    <value>tableLayoutPanel6</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_randomSelect.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="label2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>188, 28</value>
-  </data>
-  <data name="label2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
-  </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 26</value>
-  </data>
-  <data name="label2.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="label2.Text" xml:space="preserve">
-    <value>%</value>
-  </data>
-  <data name="label2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;label2.Name" xml:space="preserve">
-    <value>label2</value>
-  </data>
-  <data name="&gt;&gt;label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
-    <value>tableLayoutPanel6</value>
-  </data>
-  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="checkBox_minMaxCharsPerSegment.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="checkBox_minMaxCharsPerSegment.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="checkBox_minMaxCharsPerSegment.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 83</value>
-  </data>
-  <data name="checkBox_minMaxCharsPerSegment.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 3, 3, 3</value>
-  </data>
-  <data name="checkBox_minMaxCharsPerSegment.Size" type="System.Drawing.Size, System.Drawing">
-    <value>182, 17</value>
-  </data>
-  <data name="checkBox_minMaxCharsPerSegment.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="checkBox_minMaxCharsPerSegment.Text" xml:space="preserve">
-    <value>Min/Max characters per segment</value>
-  </data>
-  <data name="&gt;&gt;checkBox_minMaxCharsPerSegment.Name" xml:space="preserve">
-    <value>checkBox_minMaxCharsPerSegment</value>
-  </data>
-  <data name="&gt;&gt;checkBox_minMaxCharsPerSegment.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;checkBox_minMaxCharsPerSegment.Parent" xml:space="preserve">
-    <value>tableLayoutPanel6</value>
-  </data>
-  <data name="&gt;&gt;checkBox_minMaxCharsPerSegment.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="numericUpDown_maxCharsPerSegment.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="numericUpDown_maxCharsPerSegment.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="numericUpDown_maxCharsPerSegment.Location" type="System.Drawing.Point, System.Drawing">
-    <value>138, 132</value>
-  </data>
-  <data name="numericUpDown_maxCharsPerSegment.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 3, 0, 3</value>
-  </data>
-  <data name="numericUpDown_maxCharsPerSegment.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 20</value>
-  </data>
-  <data name="numericUpDown_maxCharsPerSegment.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_maxCharsPerSegment.Name" xml:space="preserve">
-    <value>numericUpDown_maxCharsPerSegment</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_maxCharsPerSegment.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_maxCharsPerSegment.Parent" xml:space="preserve">
-    <value>tableLayoutPanel6</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_maxCharsPerSegment.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="numericUpDown_selectOneInEvery.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="numericUpDown_selectOneInEvery.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="numericUpDown_selectOneInEvery.Location" type="System.Drawing.Point, System.Drawing">
-    <value>138, 57</value>
-  </data>
-  <data name="numericUpDown_selectOneInEvery.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 3, 0, 3</value>
-  </data>
-  <data name="numericUpDown_selectOneInEvery.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 20</value>
-  </data>
-  <data name="numericUpDown_selectOneInEvery.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_selectOneInEvery.Name" xml:space="preserve">
-    <value>numericUpDown_selectOneInEvery</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_selectOneInEvery.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_selectOneInEvery.Parent" xml:space="preserve">
-    <value>tableLayoutPanel6</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_selectOneInEvery.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="numericUpDown_minCharsPerSegment.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="numericUpDown_minCharsPerSegment.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="numericUpDown_minCharsPerSegment.Location" type="System.Drawing.Point, System.Drawing">
-    <value>138, 106</value>
-  </data>
-  <data name="numericUpDown_minCharsPerSegment.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 3, 0, 3</value>
-  </data>
-  <data name="numericUpDown_minCharsPerSegment.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 20</value>
-  </data>
-  <data name="numericUpDown_minCharsPerSegment.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_minCharsPerSegment.Name" xml:space="preserve">
-    <value>numericUpDown_minCharsPerSegment</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_minCharsPerSegment.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_minCharsPerSegment.Parent" xml:space="preserve">
-    <value>tableLayoutPanel6</value>
-  </data>
-  <data name="&gt;&gt;numericUpDown_minCharsPerSegment.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="label3.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label3.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="label3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>28, 103</value>
-  </data>
-  <data name="label3.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 2</value>
-  </data>
-  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>107, 26</value>
-  </data>
-  <data name="label3.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="label3.Text" xml:space="preserve">
-    <value>Minimum Chars:</value>
-  </data>
-  <data name="label3.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
-  </data>
-  <data name="&gt;&gt;label3.Name" xml:space="preserve">
-    <value>label3</value>
-  </data>
-  <data name="&gt;&gt;label3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
-    <value>tableLayoutPanel6</value>
-  </data>
-  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="label4.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label4.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="label4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>28, 129</value>
-  </data>
-  <data name="label4.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 2</value>
-  </data>
-  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>107, 26</value>
-  </data>
-  <data name="label4.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="label4.Text" xml:space="preserve">
-    <value>Maximum Chars:</value>
-  </data>
-  <data name="label4.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
-  </data>
-  <data name="&gt;&gt;label4.Name" xml:space="preserve">
-    <value>label4</value>
-  </data>
-  <data name="&gt;&gt;label4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
-    <value>tableLayoutPanel6</value>
-  </data>
-  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="tableLayoutPanel6.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tableLayoutPanel6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 18</value>
-  </data>
-  <data name="tableLayoutPanel6.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
-  </data>
-  <data name="tableLayoutPanel6.RowCount" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="tableLayoutPanel6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>205, 170</value>
-  </data>
-  <data name="tableLayoutPanel6.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel6.Name" xml:space="preserve">
-    <value>tableLayoutPanel6</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel6.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel6.Parent" xml:space="preserve">
-    <value>samplingOptions</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel6.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tableLayoutPanel6.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="radioButton_randomlySelect" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="radioButton_selectOneInEvery" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_segmentSelection" Row="0" RowSpan="1" Column="0" ColumnSpan="4" /&gt;&lt;Control Name="numericUpDown_randomSelect" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="label2" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_minMaxCharsPerSegment" Row="3" RowSpan="1" Column="0" ColumnSpan="4" /&gt;&lt;Control Name="numericUpDown_maxCharsPerSegment" Row="5" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="numericUpDown_selectOneInEvery" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="numericUpDown_minCharsPerSegment" Row="4" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="label3" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label4" Row="5" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,20,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="samplingOptions.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="samplingOptions.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="samplingOptions.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
-  </data>
-  <data name="samplingOptions.Size" type="System.Drawing.Size, System.Drawing">
-    <value>215, 193</value>
-  </data>
-  <data name="samplingOptions.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
-  <data name="samplingOptions.Text" xml:space="preserve">
-    <value>Quality Sampling</value>
-  </data>
-  <data name="&gt;&gt;samplingOptions.Name" xml:space="preserve">
-    <value>samplingOptions</value>
-  </data>
-  <data name="&gt;&gt;samplingOptions.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;samplingOptions.Parent" xml:space="preserve">
-    <value>sampleOptionsPanel</value>
-  </data>
-  <data name="&gt;&gt;samplingOptions.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="sampleOptionsPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="sampleOptionsPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 508</value>
-  </data>
-  <data name="sampleOptionsPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>215, 193</value>
-  </data>
-  <data name="sampleOptionsPanel.TabIndex" type="System.Int32, mscorlib">
-    <value>21</value>
-  </data>
-  <data name="&gt;&gt;sampleOptionsPanel.Name" xml:space="preserve">
-    <value>sampleOptionsPanel</value>
-  </data>
-  <data name="&gt;&gt;sampleOptionsPanel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;sampleOptionsPanel.Parent" xml:space="preserve">
-    <value>tabPage_segmentNumbers</value>
-  </data>
-  <data name="&gt;&gt;sampleOptionsPanel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="panel_spacer_00.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="panel_spacer_00.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 500</value>
-  </data>
-  <data name="panel_spacer_00.Size" type="System.Drawing.Size, System.Drawing">
-    <value>215, 8</value>
-  </data>
-  <data name="panel_spacer_00.TabIndex" type="System.Int32, mscorlib">
-    <value>20</value>
-  </data>
-  <data name="&gt;&gt;panel_spacer_00.Name" xml:space="preserve">
-    <value>panel_spacer_00</value>
-  </data>
-  <data name="&gt;&gt;panel_spacer_00.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panel_spacer_00.Parent" xml:space="preserve">
-    <value>tabPage_segmentNumbers</value>
-  </data>
-  <data name="&gt;&gt;panel_spacer_00.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="fuzzyMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>13, 20</value>
   </data>
@@ -2675,7 +2186,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;fuzzyValuesBetweenGroupBox.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>0</value>
   </data>
   <data name="panel_spacer_01.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
@@ -2699,7 +2210,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;panel_spacer_01.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>1</value>
   </data>
   <data name="tableLayoutPanel5.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2915,7 +2426,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;userBoxGroupBox.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>2</value>
   </data>
   <data name="panel_spacer_02.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
@@ -2939,7 +2450,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;panel_spacer_02.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>3</value>
   </data>
   <data name="containsTagsCheckBox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2981,13 +2492,13 @@
     <value>13, 62</value>
   </data>
   <data name="mergedAcross.Size" type="System.Drawing.Size, System.Drawing">
-    <value>238, 17</value>
+    <value>158, 17</value>
   </data>
   <data name="mergedAcross.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
   </data>
   <data name="mergedAcross.Text" xml:space="preserve">
-    <value>Merged segments including paragraph merge</value>
+    <value>Merged accross paragraphs</value>
   </data>
   <data name="&gt;&gt;mergedAcross.Name" xml:space="preserve">
     <value>mergedAcross</value>
@@ -3094,11 +2605,14 @@
   <data name="equalsCaseSensitive.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="equalsCaseSensitive.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="equalsCaseSensitive.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="equalsCaseSensitive.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 104</value>
+    <value>33, 104</value>
   </data>
   <data name="equalsCaseSensitive.Size" type="System.Drawing.Size, System.Drawing">
     <value>104, 17</value>
@@ -3152,7 +2666,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;segmentsGroupBox.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>4</value>
   </data>
   <data name="panel_spacer_03.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
@@ -3176,7 +2690,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;panel_spacer_03.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>5</value>
   </data>
   <data name="segmentsBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -3413,7 +2927,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;numberOptionsGroupBox.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>6</value>
   </data>
   <data name="panel_spacer_05.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
@@ -3437,7 +2951,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;panel_spacer_05.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>7</value>
   </data>
   <data name="tabPage_segmentNumbers.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 27</value>
@@ -3467,55 +2981,94 @@
     <value>4</value>
   </data>
   <data name="colorLayoutPanel.ColumnCount" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>2</value>
   </data>
-  <data name="label6.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
+  <data name="label_colorsSelected.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
   </data>
-  <data name="label6.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="label_colorsSelected.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label_colorsSelected.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 4</value>
+  <data name="label_colorsSelected.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 264</value>
   </data>
-  <data name="label6.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 0</value>
+  <data name="label_colorsSelected.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
   </data>
-  <data name="label6.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 4, 0</value>
+  <data name="label_colorsSelected.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 13</value>
   </data>
-  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>226, 24</value>
+  <data name="label_colorsSelected.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
   </data>
-  <data name="label6.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="label_colorsSelected.Text" xml:space="preserve">
+    <value>Selected: 0</value>
   </data>
-  <data name="label6.Text" xml:space="preserve">
-    <value>Display segments with the following colors</value>
+  <data name="&gt;&gt;label_colorsSelected.Name" xml:space="preserve">
+    <value>label_colorsSelected</value>
   </data>
-  <data name="&gt;&gt;label6.Name" xml:space="preserve">
-    <value>label6</value>
-  </data>
-  <data name="&gt;&gt;label6.Type" xml:space="preserve">
+  <data name="&gt;&gt;label_colorsSelected.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;label6.Parent" xml:space="preserve">
+  <data name="&gt;&gt;label_colorsSelected.Parent" xml:space="preserve">
     <value>colorLayoutPanel</value>
   </data>
-  <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;label_colorsSelected.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="linkLabel_colorsClearSelection.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="linkLabel_colorsClearSelection.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="linkLabel_colorsClearSelection.Location" type="System.Drawing.Point, System.Drawing">
+    <value>2, 264</value>
+  </data>
+  <data name="linkLabel_colorsClearSelection.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="linkLabel_colorsClearSelection.Size" type="System.Drawing.Size, System.Drawing">
+    <value>76, 13</value>
+  </data>
+  <data name="linkLabel_colorsClearSelection.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="linkLabel_colorsClearSelection.Text" xml:space="preserve">
+    <value>Clear selection</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_colorsClearSelection.Name" xml:space="preserve">
+    <value>linkLabel_colorsClearSelection</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_colorsClearSelection.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_colorsClearSelection.Parent" xml:space="preserve">
+    <value>colorLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;linkLabel_colorsClearSelection.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="colorsListView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="colorsListView.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 31</value>
+    <value>3, 63</value>
   </data>
   <data name="colorsListView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>226, 224</value>
+    <value>226, 198</value>
+  </data>
+  <metadata name="imageList_colors.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>429, 17</value>
+  </metadata>
+  <data name="imageList_colors.ImageSize" type="System.Drawing.Size, System.Drawing">
+    <value>18, 18</value>
   </data>
   <data name="colorsListView.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="&gt;&gt;colorsListView.Name" xml:space="preserve">
     <value>colorsListView</value>
@@ -3527,7 +3080,178 @@
     <value>colorLayoutPanel</value>
   </data>
   <data name="&gt;&gt;colorsListView.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="label6.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="label6.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="label6.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 4, 3, 0</value>
+  </data>
+  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>226, 27</value>
+  </data>
+  <data name="label6.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="label6.Text" xml:space="preserve">
+    <value>Display segments with the following colors:</value>
+  </data>
+  <data name="&gt;&gt;label6.Name" xml:space="preserve">
+    <value>label6</value>
+  </data>
+  <data name="&gt;&gt;label6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label6.Parent" xml:space="preserve">
+    <value>panel18</value>
+  </data>
+  <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="panel18.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="panel18.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 4</value>
+  </data>
+  <data name="panel18.Size" type="System.Drawing.Size, System.Drawing">
+    <value>226, 27</value>
+  </data>
+  <data name="panel18.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;panel18.Name" xml:space="preserve">
+    <value>panel18</value>
+  </data>
+  <data name="&gt;&gt;panel18.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel18.Parent" xml:space="preserve">
+    <value>panel16</value>
+  </data>
+  <data name="&gt;&gt;panel18.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="comboBox_colorsFoundIn.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="comboBox_colorsFoundIn.Location" type="System.Drawing.Point, System.Drawing">
+    <value>52, 0</value>
+  </data>
+  <data name="comboBox_colorsFoundIn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 21</value>
+  </data>
+  <data name="comboBox_colorsFoundIn.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;comboBox_colorsFoundIn.Name" xml:space="preserve">
+    <value>comboBox_colorsFoundIn</value>
+  </data>
+  <data name="&gt;&gt;comboBox_colorsFoundIn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;comboBox_colorsFoundIn.Parent" xml:space="preserve">
+    <value>panel17</value>
+  </data>
+  <data name="&gt;&gt;comboBox_colorsFoundIn.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="label7.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label7.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="label7.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label7.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="label7.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 4, 0, 0</value>
+  </data>
+  <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>52, 17</value>
+  </data>
+  <data name="label7.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="label7.Text" xml:space="preserve">
+    <value>Found In:</value>
+  </data>
+  <data name="label7.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;label7.Name" xml:space="preserve">
+    <value>label7</value>
+  </data>
+  <data name="&gt;&gt;label7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label7.Parent" xml:space="preserve">
+    <value>panel17</value>
+  </data>
+  <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="panel17.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="panel17.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 31</value>
+  </data>
+  <data name="panel17.Size" type="System.Drawing.Size, System.Drawing">
+    <value>226, 23</value>
+  </data>
+  <data name="panel17.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;panel17.Name" xml:space="preserve">
+    <value>panel17</value>
+  </data>
+  <data name="&gt;&gt;panel17.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel17.Parent" xml:space="preserve">
+    <value>panel16</value>
+  </data>
+  <data name="&gt;&gt;panel17.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="panel16.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="panel16.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="panel16.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 4, 0, 0</value>
+  </data>
+  <data name="panel16.Size" type="System.Drawing.Size, System.Drawing">
+    <value>226, 54</value>
+  </data>
+  <data name="panel16.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;panel16.Name" xml:space="preserve">
+    <value>panel16</value>
+  </data>
+  <data name="&gt;&gt;panel16.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel16.Parent" xml:space="preserve">
+    <value>colorLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;panel16.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
   <data name="colorLayoutPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -3557,7 +3281,7 @@
     <value>0</value>
   </data>
   <data name="colorLayoutPanel.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label6" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="colorsListView" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,10,Percent,80,Percent,10" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label_colorsSelected" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="linkLabel_colorsClearSelection" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="colorsListView" Row="1" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="panel16" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,Absolute,24" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tabPage_colors.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 27</value>
@@ -3586,6 +3310,522 @@
   <data name="&gt;&gt;tabPage_colors.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
+  <data name="tableLayoutPanel6.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="radioButton_randomlySelect.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="radioButton_randomlySelect.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="radioButton_randomlySelect.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="radioButton_randomlySelect.Location" type="System.Drawing.Point, System.Drawing">
+    <value>28, 31</value>
+  </data>
+  <data name="radioButton_randomlySelect.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 0, 3</value>
+  </data>
+  <data name="radioButton_randomlySelect.Size" type="System.Drawing.Size, System.Drawing">
+    <value>106, 17</value>
+  </data>
+  <data name="radioButton_randomlySelect.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="radioButton_randomlySelect.Text" xml:space="preserve">
+    <value>Randomly select:</value>
+  </data>
+  <data name="&gt;&gt;radioButton_randomlySelect.Name" xml:space="preserve">
+    <value>radioButton_randomlySelect</value>
+  </data>
+  <data name="&gt;&gt;radioButton_randomlySelect.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioButton_randomlySelect.Parent" xml:space="preserve">
+    <value>tableLayoutPanel6</value>
+  </data>
+  <data name="&gt;&gt;radioButton_randomlySelect.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="radioButton_selectOneInEvery.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="radioButton_selectOneInEvery.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="radioButton_selectOneInEvery.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="radioButton_selectOneInEvery.Location" type="System.Drawing.Point, System.Drawing">
+    <value>28, 57</value>
+  </data>
+  <data name="radioButton_selectOneInEvery.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 0, 3</value>
+  </data>
+  <data name="radioButton_selectOneInEvery.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 17</value>
+  </data>
+  <data name="radioButton_selectOneInEvery.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="radioButton_selectOneInEvery.Text" xml:space="preserve">
+    <value>Select 1 in every: </value>
+  </data>
+  <data name="&gt;&gt;radioButton_selectOneInEvery.Name" xml:space="preserve">
+    <value>radioButton_selectOneInEvery</value>
+  </data>
+  <data name="&gt;&gt;radioButton_selectOneInEvery.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioButton_selectOneInEvery.Parent" xml:space="preserve">
+    <value>tableLayoutPanel6</value>
+  </data>
+  <data name="&gt;&gt;radioButton_selectOneInEvery.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="checkBox_segmentSelection.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="checkBox_segmentSelection.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="checkBox_segmentSelection.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 8</value>
+  </data>
+  <data name="checkBox_segmentSelection.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 3, 3, 3</value>
+  </data>
+  <data name="checkBox_segmentSelection.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 17</value>
+  </data>
+  <data name="checkBox_segmentSelection.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="checkBox_segmentSelection.Text" xml:space="preserve">
+    <value>Segment selection</value>
+  </data>
+  <data name="&gt;&gt;checkBox_segmentSelection.Name" xml:space="preserve">
+    <value>checkBox_segmentSelection</value>
+  </data>
+  <data name="&gt;&gt;checkBox_segmentSelection.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox_segmentSelection.Parent" xml:space="preserve">
+    <value>tableLayoutPanel6</value>
+  </data>
+  <data name="&gt;&gt;checkBox_segmentSelection.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="numericUpDown_randomSelect.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="numericUpDown_randomSelect.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="numericUpDown_randomSelect.Location" type="System.Drawing.Point, System.Drawing">
+    <value>138, 31</value>
+  </data>
+  <data name="numericUpDown_randomSelect.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 3, 0, 3</value>
+  </data>
+  <data name="numericUpDown_randomSelect.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 20</value>
+  </data>
+  <data name="numericUpDown_randomSelect.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_randomSelect.Name" xml:space="preserve">
+    <value>numericUpDown_randomSelect</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_randomSelect.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_randomSelect.Parent" xml:space="preserve">
+    <value>tableLayoutPanel6</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_randomSelect.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="label2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>188, 28</value>
+  </data>
+  <data name="label2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 3, 0</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>26, 26</value>
+  </data>
+  <data name="label2.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>%</value>
+  </data>
+  <data name="label2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;label2.Name" xml:space="preserve">
+    <value>label2</value>
+  </data>
+  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+    <value>tableLayoutPanel6</value>
+  </data>
+  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="checkBox_minMaxCharsPerSegment.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="checkBox_minMaxCharsPerSegment.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="checkBox_minMaxCharsPerSegment.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 83</value>
+  </data>
+  <data name="checkBox_minMaxCharsPerSegment.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 3, 3, 3</value>
+  </data>
+  <data name="checkBox_minMaxCharsPerSegment.Size" type="System.Drawing.Size, System.Drawing">
+    <value>182, 17</value>
+  </data>
+  <data name="checkBox_minMaxCharsPerSegment.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="checkBox_minMaxCharsPerSegment.Text" xml:space="preserve">
+    <value>Min/Max characters per segment</value>
+  </data>
+  <data name="&gt;&gt;checkBox_minMaxCharsPerSegment.Name" xml:space="preserve">
+    <value>checkBox_minMaxCharsPerSegment</value>
+  </data>
+  <data name="&gt;&gt;checkBox_minMaxCharsPerSegment.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox_minMaxCharsPerSegment.Parent" xml:space="preserve">
+    <value>tableLayoutPanel6</value>
+  </data>
+  <data name="&gt;&gt;checkBox_minMaxCharsPerSegment.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="numericUpDown_maxCharsPerSegment.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="numericUpDown_maxCharsPerSegment.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="numericUpDown_maxCharsPerSegment.Location" type="System.Drawing.Point, System.Drawing">
+    <value>138, 132</value>
+  </data>
+  <data name="numericUpDown_maxCharsPerSegment.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 3, 0, 3</value>
+  </data>
+  <data name="numericUpDown_maxCharsPerSegment.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 20</value>
+  </data>
+  <data name="numericUpDown_maxCharsPerSegment.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_maxCharsPerSegment.Name" xml:space="preserve">
+    <value>numericUpDown_maxCharsPerSegment</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_maxCharsPerSegment.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_maxCharsPerSegment.Parent" xml:space="preserve">
+    <value>tableLayoutPanel6</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_maxCharsPerSegment.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="numericUpDown_selectOneInEvery.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="numericUpDown_selectOneInEvery.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="numericUpDown_selectOneInEvery.Location" type="System.Drawing.Point, System.Drawing">
+    <value>138, 57</value>
+  </data>
+  <data name="numericUpDown_selectOneInEvery.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 3, 0, 3</value>
+  </data>
+  <data name="numericUpDown_selectOneInEvery.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 20</value>
+  </data>
+  <data name="numericUpDown_selectOneInEvery.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_selectOneInEvery.Name" xml:space="preserve">
+    <value>numericUpDown_selectOneInEvery</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_selectOneInEvery.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_selectOneInEvery.Parent" xml:space="preserve">
+    <value>tableLayoutPanel6</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_selectOneInEvery.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="numericUpDown_minCharsPerSegment.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="numericUpDown_minCharsPerSegment.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="numericUpDown_minCharsPerSegment.Location" type="System.Drawing.Point, System.Drawing">
+    <value>138, 106</value>
+  </data>
+  <data name="numericUpDown_minCharsPerSegment.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 3, 0, 3</value>
+  </data>
+  <data name="numericUpDown_minCharsPerSegment.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 20</value>
+  </data>
+  <data name="numericUpDown_minCharsPerSegment.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_minCharsPerSegment.Name" xml:space="preserve">
+    <value>numericUpDown_minCharsPerSegment</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_minCharsPerSegment.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_minCharsPerSegment.Parent" xml:space="preserve">
+    <value>tableLayoutPanel6</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown_minCharsPerSegment.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="label3.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label3.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="label3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>28, 103</value>
+  </data>
+  <data name="label3.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 2</value>
+  </data>
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>107, 26</value>
+  </data>
+  <data name="label3.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="label3.Text" xml:space="preserve">
+    <value>Minimum Chars:</value>
+  </data>
+  <data name="label3.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="&gt;&gt;label3.Name" xml:space="preserve">
+    <value>label3</value>
+  </data>
+  <data name="&gt;&gt;label3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
+    <value>tableLayoutPanel6</value>
+  </data>
+  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="label4.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label4.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="label4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>28, 129</value>
+  </data>
+  <data name="label4.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 2</value>
+  </data>
+  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>107, 26</value>
+  </data>
+  <data name="label4.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="label4.Text" xml:space="preserve">
+    <value>Maximum Chars:</value>
+  </data>
+  <data name="label4.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="&gt;&gt;label4.Name" xml:space="preserve">
+    <value>label4</value>
+  </data>
+  <data name="&gt;&gt;label4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
+    <value>tableLayoutPanel6</value>
+  </data>
+  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="tableLayoutPanel6.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanel6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 18</value>
+  </data>
+  <data name="tableLayoutPanel6.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="tableLayoutPanel6.RowCount" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="tableLayoutPanel6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>222, 170</value>
+  </data>
+  <data name="tableLayoutPanel6.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel6.Name" xml:space="preserve">
+    <value>tableLayoutPanel6</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel6.Parent" xml:space="preserve">
+    <value>samplingOptions</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel6.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanel6.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="radioButton_randomlySelect" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="radioButton_selectOneInEvery" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_segmentSelection" Row="0" RowSpan="1" Column="0" ColumnSpan="4" /&gt;&lt;Control Name="numericUpDown_randomSelect" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="label2" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_minMaxCharsPerSegment" Row="3" RowSpan="1" Column="0" ColumnSpan="4" /&gt;&lt;Control Name="numericUpDown_maxCharsPerSegment" Row="5" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="numericUpDown_selectOneInEvery" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="numericUpDown_minCharsPerSegment" Row="4" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="label3" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label4" Row="5" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,20,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="samplingOptions.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="samplingOptions.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="samplingOptions.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="samplingOptions.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 193</value>
+  </data>
+  <data name="samplingOptions.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="samplingOptions.Text" xml:space="preserve">
+    <value>Quality Sampling</value>
+  </data>
+  <data name="&gt;&gt;samplingOptions.Name" xml:space="preserve">
+    <value>samplingOptions</value>
+  </data>
+  <data name="&gt;&gt;samplingOptions.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;samplingOptions.Parent" xml:space="preserve">
+    <value>sampleOptionsPanel</value>
+  </data>
+  <data name="&gt;&gt;samplingOptions.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="sampleOptionsPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="sampleOptionsPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 9</value>
+  </data>
+  <data name="sampleOptionsPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 193</value>
+  </data>
+  <data name="sampleOptionsPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>21</value>
+  </data>
+  <data name="&gt;&gt;sampleOptionsPanel.Name" xml:space="preserve">
+    <value>sampleOptionsPanel</value>
+  </data>
+  <data name="&gt;&gt;sampleOptionsPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;sampleOptionsPanel.Parent" xml:space="preserve">
+    <value>tabPage_sampling</value>
+  </data>
+  <data name="&gt;&gt;sampleOptionsPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="panel_spacer_00.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="panel_spacer_00.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 5</value>
+  </data>
+  <data name="panel_spacer_00.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 4</value>
+  </data>
+  <data name="panel_spacer_00.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="&gt;&gt;panel_spacer_00.Name" xml:space="preserve">
+    <value>panel_spacer_00</value>
+  </data>
+  <data name="&gt;&gt;panel_spacer_00.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel_spacer_00.Parent" xml:space="preserve">
+    <value>tabPage_sampling</value>
+  </data>
+  <data name="&gt;&gt;panel_spacer_00.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabPage_sampling.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 27</value>
+  </data>
+  <data name="tabPage_sampling.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 5, 3, 3</value>
+  </data>
+  <data name="tabPage_sampling.Size" type="System.Drawing.Size, System.Drawing">
+    <value>238, 294</value>
+  </data>
+  <data name="tabPage_sampling.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="tabPage_sampling.Text" xml:space="preserve">
+    <value>Sampling </value>
+  </data>
+  <data name="&gt;&gt;tabPage_sampling.Name" xml:space="preserve">
+    <value>tabPage_sampling</value>
+  </data>
+  <data name="&gt;&gt;tabPage_sampling.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_sampling.Parent" xml:space="preserve">
+    <value>tabControl_filter</value>
+  </data>
+  <data name="&gt;&gt;tabPage_sampling.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
   <data name="tabControl_filter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -3597,7 +3837,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAdwBDAHcAQwBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAXwBDgF8AQ4BEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ
@@ -4033,13 +4273,34 @@
     <value>filterExpressionControl</value>
   </data>
   <data name="&gt;&gt;filterExpressionControl.Type" xml:space="preserve">
-    <value>Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression, Sdl.Community.AdvancedDisplayFilter, Version=4.4.2.8, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
+    <value>Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression, Sdl.Community.AdvancedDisplayFilter, Version=4.4.2.12, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed</value>
   </data>
   <data name="&gt;&gt;filterExpressionControl.Parent" xml:space="preserve">
     <value>panel_filterExpression</value>
   </data>
   <data name="&gt;&gt;filterExpressionControl.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="panel14.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 0</value>
+  </data>
+  <data name="panel14.Size" type="System.Drawing.Size, System.Drawing">
+    <value>229, 37</value>
+  </data>
+  <data name="panel14.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;panel14.Name" xml:space="preserve">
+    <value>panel14</value>
+  </data>
+  <data name="&gt;&gt;panel14.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel14.Parent" xml:space="preserve">
+    <value>panel_filterExpression</value>
+  </data>
+  <data name="&gt;&gt;panel14.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="panel_filterExpression.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Bottom</value>
@@ -4364,13 +4625,13 @@
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <metadata name="backgroundWorker1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>428, 20</value>
+    <value>570, 17</value>
   </metadata>
   <metadata name="backgroundWorker2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>556, 19</value>
+    <value>17, 56</value>
   </metadata>
   <metadata name="content_toolTips.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>822, 16</value>
+    <value>297, 56</value>
   </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -4386,18 +4647,6 @@
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
     <value>247, 425</value>
-  </data>
-  <data name="&gt;&gt;columnHeader_filtersSelected_name.Name" xml:space="preserve">
-    <value>columnHeader_filtersSelected_name</value>
-  </data>
-  <data name="&gt;&gt;columnHeader_filtersSelected_name.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;columnHeader_filtersAvailable_name.Name" xml:space="preserve">
-    <value>columnHeader_filtersAvailable_name</value>
-  </data>
-  <data name="&gt;&gt;columnHeader_filtersAvailable_name.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeader_code.Name" xml:space="preserve">
     <value>columnHeader_code</value>
@@ -4416,6 +4665,12 @@
   </data>
   <data name="&gt;&gt;columnHeader_description.Type" xml:space="preserve">
     <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;imageList_colors.Name" xml:space="preserve">
+    <value>imageList_colors</value>
+  </data>
+  <data name="&gt;&gt;imageList_colors.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;imageList_filter.Name" xml:space="preserve">
     <value>imageList_filter</value>
@@ -4602,6 +4857,18 @@
   </data>
   <data name="&gt;&gt;content_toolTips.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;columnHeader_filtersSelected_name.Name" xml:space="preserve">
+    <value>columnHeader_filtersSelected_name</value>
+  </data>
+  <data name="&gt;&gt;columnHeader_filtersSelected_name.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;columnHeader_filtersAvailable_name.Name" xml:space="preserve">
+    <value>columnHeader_filtersAvailable_name</value>
+  </data>
+  <data name="&gt;&gt;columnHeader_filtersAvailable_name.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>DisplayFilterControl</value>

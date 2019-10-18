@@ -11,18 +11,23 @@
 		public static readonly string DONE = "DONE";
 		public static readonly string TRANSLATING = "TRANSLATING";
 		public static readonly string Authorization = "Authorization";
-		
+		public static readonly string StudioAuthentication = "Studio Authentication (via SDL ID)";
+		public static readonly string StudioAuthenticationType = "StudioAuthentication";
+		public static readonly string APICredentials = "API Credentials";
+		public static readonly string APICredentialsType = "APICredentials";
+		public static readonly string SDLMachineTranslationCloudProvider = "SDLMachineTranslationCloudProvider";		
 
 		// Logging
-		public static readonly string TranslateTextMethod = "Translate text method:";
-		public static readonly string SubscriptionInfoMethod = "Subscription info method:";
-		public static readonly string WaitTranslationMethod = "Wait for translation method:";
+		public static readonly string TranslateTextMethod = "Translate text method: ";
+		public static readonly string SubscriptionInfoMethod = "Subscription info method: ";
+		public static readonly string WaitTranslationMethod = "Wait for translation method: ";
 		public static readonly string ErrorCode = "Error code:";
 		public static readonly string EditWindow = "Edit window:";
 		public static readonly string Browse = "Browse:";
-		public static readonly string SupportsLanguageDirection = "SupportsLanguageDirection:";
+		public static readonly string SupportsLanguageDirection = "SupportsLanguageDirection: ";
 		public static readonly string BeGlobalV4Translator = "BeGlobalV4Translator constructor: ";
-		public static readonly string GetUserInformation = "GetUserInformation method: ";		
+		public static readonly string GetUserInformation = "GetUserInformation method: ";
+		public static readonly string IsWindowValid = "Is window valid method: ";
 
 		// Messages
 		public static readonly string UnauthorizedCredentials = "Unauthorized: Please check your credentials.";

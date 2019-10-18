@@ -286,6 +286,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found In.
+        /// </summary>
+        internal static string DisplayFilterControl_Found_In {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Found_In", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fuzzy values between.
         /// </summary>
         internal static string DisplayFilterControl_Fuzzy {
@@ -588,6 +597,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Selected {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected: {0}.
+        /// </summary>
+        internal static string DisplayFilterControl_Selected_0_ {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Selected_0_", resourceCulture);
             }
         }
         

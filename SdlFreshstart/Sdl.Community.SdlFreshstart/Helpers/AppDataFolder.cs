@@ -9,119 +9,159 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 {
 	public static class AppDataFolder
 	{
-		private static string _backupFolderPath =
-			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
+		private static string _backupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
+		public static readonly Log Log = Log.Instance;
 
-		public static List<LocationDetails> GetRoamingMajorFolderPath(string userName, StudioLocationListItem selectedLocation,
-			List<StudioVersionListItem> studioVersions)
+		public static List<LocationDetails> GetRoamingMajorFolderPath(string userName, StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
 		{
 			var studioDetails = new List<LocationDetails>();
-			foreach (var studioVersion in studioVersions)
+			try
 			{
-				var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL\SDL Trados Studio\{1}", userName,
-					studioVersion.MajorVersionNumber);
-				var directoryInfo = new DirectoryInfo(majorFolderPath);
-				var details = new LocationDetails
+				foreach (var studioVersion in studioVersions)
 				{
-					OriginalFilePath = majorFolderPath,
-					BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
-					Alias = selectedLocation.Alias,
-					Version = studioVersion.DisplayName
-				};
-				studioDetails.Add(details);
+					var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL\SDL Trados Studio\{1}", userName,
+						studioVersion.MajorVersionNumber);
+					var directoryInfo = new DirectoryInfo(majorFolderPath);
+					var details = new LocationDetails
+					{
+						OriginalFilePath = majorFolderPath,
+						BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
+						Alias = selectedLocation.Alias,
+						Version = studioVersion.DisplayName
+					};
+					studioDetails.Add(details);
+				}				
+			}
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"{Constants.GetRoamingMajorFolderPath} {ex.Message}\n {ex.StackTrace}");
 			}
 			return studioDetails;
 		}
 
 		private static string GetProjectApiFilePath(string studioInstallationPath)
 		{
-			var applicationVersion = GetApplicationVersion(studioInstallationPath);
-			if (applicationVersion == null)
+			try
 			{
-				return null;
-			}
-			var applicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			var projectApiFolder = Path.Combine(applicationDataFolder, Path.Combine("SDL", "ProjectApi"));
-			var projectApiFile = Path.Combine(projectApiFolder, applicationVersion, "Sdl.ProjectApi.xml");
+				var applicationVersion = GetApplicationVersion(studioInstallationPath);
+				if (applicationVersion == null)
+				{
+					return string.Empty;
+				}
+				var applicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+				var projectApiFolder = Path.Combine(applicationDataFolder, Path.Combine("SDL", "ProjectApi"));
+				var projectApiFile = Path.Combine(projectApiFolder, applicationVersion, "Sdl.ProjectApi.xml");
 
-			return File.Exists(projectApiFile) ? projectApiFile : null;
+				return File.Exists(projectApiFile) ? projectApiFile : string.Empty;
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.GetProjectApiFilePath} {ex.Message}\n {ex.StackTrace}");
+			}
+			return string.Empty;
 		}
 
 		private static string GetApplicationVersion(string studioInstallationPath)
 		{
-			var assemblyFile = Path.Combine(studioInstallationPath, "Sdl.ProjectApi.dll");
-			return File.Exists(assemblyFile) ? AssemblyName.GetAssemblyName(assemblyFile).Version.ToString() : null;
+			try
+			{
+				var assemblyFile = Path.Combine(studioInstallationPath, "Sdl.ProjectApi.dll");
+				return File.Exists(assemblyFile) ? AssemblyName.GetAssemblyName(assemblyFile).Version.ToString() : string.Empty;
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.GetApplicationVersion} {ex.Message}\n {ex.StackTrace}");
+			}
+			return string.Empty;
 		}
 
-		public static List<LocationDetails> GetRoamingMajorFullFolderPath(string userName,
-			StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
+		public static List<LocationDetails> GetRoamingMajorFullFolderPath(string userName, StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
 		{
 			var studioDetails = new List<LocationDetails>();
-			foreach (var studioVersion in studioVersions)
+			try
 			{
-				var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL\SDL Trados Studio\{1}.0.0.0", userName,
-					studioVersion.MajorVersionNumber);
-				var directoryInfo = new DirectoryInfo(majorFolderPath);
-				var details = new LocationDetails
+				foreach (var studioVersion in studioVersions)
 				{
-					OriginalFilePath = majorFolderPath,
-					BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
-					Alias = selectedLocation.Alias,
-					Version = studioVersion.DisplayName
-				};
-				studioDetails.Add(details);
+					var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL\SDL Trados Studio\{1}.0.0.0", userName,
+						studioVersion.MajorVersionNumber);
+					var directoryInfo = new DirectoryInfo(majorFolderPath);
+					var details = new LocationDetails
+					{
+						OriginalFilePath = majorFolderPath,
+						BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
+						Alias = selectedLocation?.Alias,
+						Version = studioVersion?.DisplayName
+					};
+					studioDetails.Add(details);
+				}
+			}
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"{Constants.GetRoamingMajorFullFolderPath} {ex.Message}\n {ex.StackTrace}");
 			}
 			return studioDetails;
 		}
 
-		public static List<LocationDetails> GetRoamingProjectApiFolderPath(string userName,
-			StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
-		{
+		public static List<LocationDetails> GetRoamingProjectApiFolderPath(StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
+		{			
 			var studioDetails = new List<LocationDetails>();
-			var studioInstalledPaths = new Studio()?.GetInstalledStudioVersion();
-			foreach (var studioVersion in studioVersions)
+			try
 			{
-				foreach (var studioPath in studioInstalledPaths)
+				var studioInstalledPaths = new Studio()?.GetInstalledStudioVersion();
+				foreach (var studioVersion in studioVersions)
 				{
-					if (studioPath.Version.Equals(studioVersion.FolderName))
+					foreach (var studioPath in studioInstalledPaths)
 					{
-						var projApiFullPath = GetProjectApiFilePath(studioPath.InstallPath);
-						var projApiFolderPath = Path.GetDirectoryName(projApiFullPath);
-						if (!string.IsNullOrEmpty(projApiFolderPath))
+						if (studioPath.Version.Equals(studioVersion.FolderName))
 						{
-							var directoryInfo = new DirectoryInfo(projApiFolderPath);
-							var details = new LocationDetails
+							var projApiFullPath = GetProjectApiFilePath(studioPath.InstallPath);
+							var projApiFolderPath = Path.GetDirectoryName(projApiFullPath);
+							if (!string.IsNullOrEmpty(projApiFolderPath))
 							{
-								OriginalFilePath = projApiFolderPath,
-								BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "ProjectApi", directoryInfo.Name),
-								Alias = selectedLocation.Alias,
-								Version = studioVersion.DisplayName
-							};
-							studioDetails.Add(details);
+								var directoryInfo = new DirectoryInfo(projApiFolderPath);
+								var details = new LocationDetails
+								{
+									OriginalFilePath = projApiFolderPath,
+									BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "ProjectApi", directoryInfo.Name),
+									Alias = selectedLocation?.Alias,
+									Version = studioVersion?.DisplayName
+								};
+								studioDetails.Add(details);
+							}
 						}
 					}
 				}
 			}
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"{Constants.GetRoamingProjectApiFolderPath} {ex.Message}\n {ex.StackTrace}");
+			}
 			return studioDetails;
 		}
 
-		public static List<LocationDetails> GetLocalMajorFullFolderPath(string userName,
-			StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
+		public static List<LocationDetails> GetLocalMajorFullFolderPath(string userName, StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
 		{
 			var studioDetails = new List<LocationDetails>();
-			foreach (var studioVersion in studioVersions)
+			try
 			{
-				var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Local\SDL\SDL Trados Studio\{1}.0.0.0", userName,
-					studioVersion.MajorVersionNumber);
-				var directoryInfo = new DirectoryInfo(majorFolderPath);
-				var details = new LocationDetails
+				foreach (var studioVersion in studioVersions)
 				{
-					OriginalFilePath = majorFolderPath,
-					BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "SDL Trados Studio", directoryInfo.Name),
-					Alias = selectedLocation.Alias,
-					Version = studioVersion.DisplayName
-				};
-				studioDetails.Add(details);
+					var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Local\SDL\SDL Trados Studio\{1}.0.0.0", userName,
+						studioVersion.MajorVersionNumber);
+					var directoryInfo = new DirectoryInfo(majorFolderPath);
+					var details = new LocationDetails
+					{
+						OriginalFilePath = majorFolderPath,
+						BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "SDL Trados Studio", directoryInfo.Name),
+						Alias = selectedLocation?.Alias,
+						Version = studioVersion?.DisplayName
+					};
+					studioDetails.Add(details);
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.GetLocalMajorFullFolderPath} {ex.Message}\n {ex.StackTrace}");
 			}
 			return studioDetails;
 		}
@@ -129,21 +169,28 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 		public static List<LocationDetails> GetLocalMajorFolderPath(string userName, StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
 	    {
 		    var studioDetails = new List<LocationDetails>();
-			foreach (var studioVersion in studioVersions)
-		    {
-			    var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Local\SDL\SDL Trados Studio\{1}", userName,
-				    studioVersion.MajorVersionNumber);
-				var directoryInfo = new DirectoryInfo(majorFolderPath);
-			    var details = new LocationDetails
-			    {
-				    OriginalFilePath = majorFolderPath,
-				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "SDL Trados Studio", directoryInfo.Name),
-				    Alias = selectedLocation.Alias,
-				    Version = studioVersion.DisplayName
-				};
-			    studioDetails.Add(details);
+			try
+			{
+				foreach (var studioVersion in studioVersions)
+				{
+					var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Local\SDL\SDL Trados Studio\{1}", userName,
+						studioVersion.MajorVersionNumber);
+					var directoryInfo = new DirectoryInfo(majorFolderPath);
+					var details = new LocationDetails
+					{
+						OriginalFilePath = majorFolderPath,
+						BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "SDL Trados Studio", directoryInfo.Name),
+						Alias = selectedLocation?.Alias,
+						Version = studioVersion?.DisplayName
+					};
+					studioDetails.Add(details);
+				}
 			}
-		    return studioDetails;
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"{Constants.GetLocalMajorFolderPath} {ex.Message}\n {ex.StackTrace}");
+			}
+			return studioDetails;
 		}
     }
 }

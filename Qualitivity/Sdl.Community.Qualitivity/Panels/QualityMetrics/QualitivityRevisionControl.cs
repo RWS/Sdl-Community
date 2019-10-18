@@ -55,7 +55,7 @@ namespace Sdl.Community.Qualitivity.Panels.QualityMetrics
             {
                 if (editorController != null && editorController.ActiveDocument != null && editorController.ActiveDocument.ActiveFile != null)
                 {
-                    button_insert.Enabled = comboBox_qm.SelectedItem.ToString().Trim() != string.Empty;
+                    button_insert.Enabled = comboBox_qm.SelectedItem != null && comboBox_qm.SelectedItem.ToString().Trim() != string.Empty;
                     toolStripButton_add.Enabled = true;
                 }
                 else

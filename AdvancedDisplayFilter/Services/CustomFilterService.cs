@@ -73,7 +73,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 			if (success && _customSettings.Colors?.Count > 0)
 			{
-				success = ColorPickerHelper.ContainsColor(rowInfo, _customSettings.Colors);
+				success = ColorPickerHelper.ContainsColor(rowInfo, _customSettings.Colors, _customSettings.ColorsFoundIn);
 			}
 		
 			if (success && !string.IsNullOrWhiteSpace(_customSettings.FuzzyMin) && !string.IsNullOrWhiteSpace(_customSettings.FuzzyMax))
