@@ -294,13 +294,14 @@ namespace ETSTranslationProvider
 
 		void TradosLPs_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
 		{
-			for (int i = 0; i < TradosLPs.Rows.Count; i++)
+			for (int i = 0; i < TradosLPs?.Rows.Count; i++)
 			{
 				var comboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL ETS Language Pair"];
 				var entry = TradosLPs.Rows[i].DataBoundItem as ETSApi.TradosToETSLP;
-
+				if (entry == null) continue;
 				comboCell.Tag = entry;
 				comboCell.DataSource = entry.ETSLPs.Select(lp => lp.LanguagePairId).ToList();
+				if (Options?.LPPreferences == null) continue;
 				if (Options.LPPreferences.ContainsKey(entry.TradosCulture))
 					comboCell.Value = Options.LPPreferences[entry.TradosCulture].LanguagePairId;
 			}
