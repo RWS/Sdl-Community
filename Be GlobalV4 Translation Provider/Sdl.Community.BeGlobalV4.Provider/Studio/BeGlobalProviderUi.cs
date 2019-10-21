@@ -27,7 +27,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				var options = new BeGlobalTranslationOptions();
 				var token = string.Empty;
-				
+
 				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");				
 				AppItializer.EnsureInitializer();
 

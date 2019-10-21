@@ -37,5 +37,6 @@
 		public static readonly string ForbiddenLicense = "Forbidden: Please check your license";
 		public static readonly string TokenFailed = "Acquiring token failed: ";
 		public static readonly string CredentialsValidation = "Please fill the Client Id and Client Secret!";
+		public static readonly string CredentialsNotValid = "Please check the credentials.";
 	}
 }
