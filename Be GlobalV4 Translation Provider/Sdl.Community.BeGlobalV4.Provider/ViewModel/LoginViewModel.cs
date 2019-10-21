@@ -224,8 +224,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 								DisplayName = serviceLanguagePair.DisplayName,
 							};
 							LanguageMappingsViewModel.TranslationOptions.Add(newTranslationModel);
-						}
-						(existingTranslationModel ?? newTranslationModel).LanguagesSupported.Add(languagePair.TargetCulture.Name, serviceLanguagePair.Name);
+							(existingTranslationModel ?? newTranslationModel).LanguagesSupported.Add(languagePair.TargetCulture.Name, serviceLanguagePair.Name);
+						}												
 					}
 				}
 			}
