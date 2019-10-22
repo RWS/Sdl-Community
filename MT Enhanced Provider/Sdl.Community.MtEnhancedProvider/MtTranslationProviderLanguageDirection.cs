@@ -254,7 +254,7 @@ namespace Sdl.Community.MtEnhancedProvider
             tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
 
             var score = 0; //score to 0...change if needed to support scoring
-            tu.Origin = TranslationUnitOrigin.MachineTranslation;
+            tu.Origin = TranslationUnitOrigin.Nmt;
             var searchResult = new SearchResult(tu);
             searchResult.ScoringResult = new ScoringResult();
             searchResult.ScoringResult.BaseScore = score;
