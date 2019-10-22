@@ -54,8 +54,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="Sdl.Community.Toolkit.FileType, Version=1.7.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>packages\Sdl.Community.Toolkit.FileType.1.7.0\lib\net45\Sdl.Community.Toolkit.FileType.dll</HintPath>
+    <Reference Include="Sdl.Community.Toolkit.FileType, Version=1.8.2.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>packages\Sdl.Community.Toolkit.FileType.1.8.2\lib\net45\Sdl.Community.Toolkit.FileType.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

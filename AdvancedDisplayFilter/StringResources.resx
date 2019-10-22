@@ -388,4 +388,7 @@
 	<data name="DisplayFilterControl_Selected_0_" xml:space="preserve">
     <value>Selected: {0}</value>
   </data>
+	<data name="DisplayFilterControl_Neural_Machine_Translation" xml:space="preserve">
+    <value>Neural Machine Translation</value>
+  </data>
 </root>

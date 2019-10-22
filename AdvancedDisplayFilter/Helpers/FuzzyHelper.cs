@@ -57,7 +57,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 		private static bool IsFuzzyMatch(ITranslationOrigin translationOrigin)
 		{
 			var originType = translationOrigin?.OriginType;
-			if (string.Compare(originType, "mt", StringComparison.InvariantCultureIgnoreCase) == 0)
+			if (string.Compare(originType, "mt", StringComparison.InvariantCultureIgnoreCase) == 0 
+			    || string.Compare(originType, "nmt", StringComparison.InvariantCultureIgnoreCase) == 0)
 			{
 				return false;
 			}

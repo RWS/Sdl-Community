@@ -544,12 +544,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					item.Tag = type;
 				}
 
-				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginTypeExtended)))
-				{
-					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginTypeExtended)type));
-					item.Group = GroupOriginAvailable;
-					item.Tag = type;
-				}
 
 				foreach (var type in Enum.GetValues(typeof(OriginType)))
 				{
@@ -563,12 +557,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					item.Tag = type;
 				}
 
-				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginTypeExtended)))
-				{
-					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginTypeExtended)type));
-					item.Group = GroupPreviousOriginAvailable;
-					item.Tag = type;
-				}
 
 				listView_available.Items[0].Selected = true;
 			}
@@ -1882,15 +1870,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				if (success)
 				{
 					value += (string.IsNullOrEmpty(value) ? string.Empty : " | ") + Helper.GetTypeName(originType);
-				}
-				else
-				{
-					success = Enum.TryParse(type, false, out DisplayFilterSettings.OriginTypeExtended originTypeExtended);
-					if (success)
-					{
-						value += (string.IsNullOrEmpty(value) ? string.Empty : " | ") + Helper.GetTypeName(originTypeExtended);
-					}
-				}
+				}			
 			}
 
 			return value;

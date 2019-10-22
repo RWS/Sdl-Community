@@ -21,13 +21,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			Target = 4
 		}
 
-		public enum OriginTypeExtended
-		{
-			FuzzyMatchRepair,
-			EditedFuzzy,
-			UneditedFuzzy
-		}
-
 		public enum ConfirmationLevel
 		{
 			Unspecified,

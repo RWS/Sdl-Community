@@ -403,6 +403,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Neural Machine Translation.
+        /// </summary>
+        internal static string DisplayFilterControl_Neural_Machine_Translation {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Neural_Machine_Translation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
         internal static string DisplayFilterControl_None {

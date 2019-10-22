@@ -192,11 +192,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				return false;
 			}
 
+			var success = false;
+
 			var translationType = rowInfo.SegmentPair.GetOriginType();
 
-			var success = settings.OriginTypes.ToList()
-				.Any(status => string.Compare(status, translationType.ToString()
-								   , StringComparison.OrdinalIgnoreCase) == 0);
+			if (!IsCompoundOriginType(translationType) && settings.OriginTypes.ToList().Any(status
+					=> string.Compare(status, translationType.ToString(), StringComparison.OrdinalIgnoreCase) == 0))
+			{
+				success = true;
+			}
 
 			if (!success)
 			{
@@ -223,11 +227,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				return false;
 			}
 
-			if (settings.OriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString()) &&
+			if (settings.OriginTypes.Any(a => a == OriginType.FuzzyMatchRepair.ToString()) &&
 				rowInfo.SegmentPair.Properties.TranslationOrigin.OriginType == "tm" &&
-				rowInfo.SegmentPair.Properties.TranslationOrigin.MetaDataContainsKey(DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString()))
+				rowInfo.SegmentPair.Properties.TranslationOrigin.MetaDataContainsKey(OriginType.FuzzyMatchRepair.ToString()))
 			{
-				var value = rowInfo.SegmentPair.Properties.TranslationOrigin.GetMetaData(DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString());
+				var value = rowInfo.SegmentPair.Properties.TranslationOrigin.GetMetaData(OriginType.FuzzyMatchRepair.ToString());
 				return Convert.ToBoolean(value);
 			}
 
@@ -246,10 +250,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			if (rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation != null)
 			{
 				var previousTranslationType = rowInfo.SegmentPair.GetPreviousTranslationOriginType();
-				if (settings.PreviousOriginTypes.ToList()
-					.Any(status => string.Compare(status,
-									   previousTranslationType.ToString()
-									   , StringComparison.OrdinalIgnoreCase) == 0))
+
+				if (!IsCompoundOriginType(previousTranslationType) && settings.PreviousOriginTypes.ToList().Any(status
+						=> string.Compare(status, previousTranslationType.ToString(), StringComparison.OrdinalIgnoreCase) == 0))
 				{
 					success = true;
 				}
@@ -273,6 +276,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
+		private static bool IsCompoundOriginType(OriginType originType)
+		{
+			return originType == OriginType.FuzzyMatchRepair || 
+			       originType == OriginType.EditedFuzzy ||
+				   originType == OriginType.UneditedFuzzy;
+		}
+
 		public static bool IsFuzzyMatchRepairPreviousOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
 			if (!rowInfo.IsSegment)
@@ -285,11 +295,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				return false;
 			}
 
-			if (settings.PreviousOriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString()) &&
+			if (settings.PreviousOriginTypes.Any(a => a == OriginType.FuzzyMatchRepair.ToString()) &&
 				rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.OriginType == "tm" &&
-				rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.MetaDataContainsKey(DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString()))
+				rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.MetaDataContainsKey(OriginType.FuzzyMatchRepair.ToString()))
 			{
-				var value = rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.GetMetaData(DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString());
+				var value = rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.GetMetaData(OriginType.FuzzyMatchRepair.ToString());
 				return Convert.ToBoolean(value);
 			}
 
@@ -604,7 +614,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				return false;
 			}
 
-			return settings.OriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.EditedFuzzy.ToString()) &&
+			return settings.OriginTypes.Any(a => a == OriginType.EditedFuzzy.ToString()) &&
 				   FuzzyHelper.ContainsFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin) &&
 				   FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin);
 		}
@@ -616,7 +626,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				return false;
 			}
 
-			return settings.OriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.UneditedFuzzy.ToString()) &&
+			return settings.OriginTypes.Any(a => a == OriginType.UneditedFuzzy.ToString()) &&
 				   FuzzyHelper.ContainsFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin) &&
 				   !FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin);
 		}
@@ -628,7 +638,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				return false;
 			}
 
-			return settings.PreviousOriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.EditedFuzzy.ToString()) &&
+			return settings.PreviousOriginTypes.Any(a => a == OriginType.EditedFuzzy.ToString()) &&
 				   FuzzyHelper.ContainsFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation) &&
 				   FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation);
 		}
@@ -640,7 +650,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				return false;
 			}
 
-			return settings.PreviousOriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.UneditedFuzzy.ToString()) &&
+			return settings.PreviousOriginTypes.Any(a => a == OriginType.UneditedFuzzy.ToString()) &&
 				   FuzzyHelper.ContainsFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation) &&
 				   !FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation);
 		}

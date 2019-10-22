@@ -37,26 +37,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 case OriginType.CM:
                     return StringResources.DisplayFilterControl_Context_matches;
                 case OriginType.AT:
-                    return StringResources.DisplayFilterControl_Automated_translations;				
+                    return StringResources.DisplayFilterControl_Automated_translations;
+				case OriginType.FuzzyMatchRepair:
+		            return StringResources.DisplayFilterControl_Fuzzy_Match_Repair;
+	            case OriginType.EditedFuzzy:
+		            return StringResources.DisplayFilterControl_Edited_Fuzzy;
+	            case OriginType.UneditedFuzzy:
+		            return StringResources.DisplayFilterControl_Unedited_Fuzzy;
+				case OriginType.NMT:
+					return StringResources.DisplayFilterControl_Neural_Machine_Translation;
 				default:
                     return type.ToString();
             }
         }
-
-	    public static string GetTypeName(DisplayFilterSettings.OriginTypeExtended type)
-	    {
-		    switch (type)
-		    {						  
-			    case DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair:
-				    return StringResources.DisplayFilterControl_Fuzzy_Match_Repair;
-			    case DisplayFilterSettings.OriginTypeExtended.EditedFuzzy:
-				    return StringResources.DisplayFilterControl_Edited_Fuzzy;
-			    case DisplayFilterSettings.OriginTypeExtended.UneditedFuzzy:
-				    return StringResources.DisplayFilterControl_Unedited_Fuzzy;
-				default:
-				    return type.ToString();
-		    }
-	    }
 
 
 		public static string GetTypeName(DisplayFilterSettings.RepetitionType type)
