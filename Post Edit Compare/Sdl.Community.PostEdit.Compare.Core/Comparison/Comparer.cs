@@ -382,7 +382,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
 
         private static string GetTranslationStatus(SegmentPair segmentPair)
         {
-
             var match = string.Empty;
             if (segmentPair.TranslationOrigin == null) return match;
             if (segmentPair.TranslationOrigin.MatchPercentage >= 100)
@@ -396,21 +395,24 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
                     match = "CM";
                 }
                 else if (string.Compare(segmentPair.TranslationOrigin.OriginType, "mt", StringComparison.OrdinalIgnoreCase) == 0
-                    || string.Compare(segmentPair.TranslationOrigin.OriginType, "amt", StringComparison.OrdinalIgnoreCase) == 0)
+					|| string.Compare(segmentPair.TranslationOrigin.OriginType, "nmt", StringComparison.OrdinalIgnoreCase) == 0
+					|| string.Compare(segmentPair.TranslationOrigin.OriginType, "amt", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     match = "AT";
                 }
-                else
+              
+				else
                 {
                     match = segmentPair.TranslationOrigin.MatchPercentage + "%";
                 }
             }
             else if (string.Compare(segmentPair.TranslationOrigin.OriginType, "mt", StringComparison.OrdinalIgnoreCase) == 0
-                || string.Compare(segmentPair.TranslationOrigin.OriginType, "amt", StringComparison.OrdinalIgnoreCase) == 0)
+				|| string.Compare(segmentPair.TranslationOrigin.OriginType, "nmt", StringComparison.OrdinalIgnoreCase) == 0
+				|| string.Compare(segmentPair.TranslationOrigin.OriginType, "amt", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 match = "AT";
-            }
-            else if (segmentPair.TranslationOrigin.MatchPercentage > 0)
+            }            
+			else if (segmentPair.TranslationOrigin.MatchPercentage > 0)
             {
                 match = segmentPair.TranslationOrigin.MatchPercentage + "%";
             }
