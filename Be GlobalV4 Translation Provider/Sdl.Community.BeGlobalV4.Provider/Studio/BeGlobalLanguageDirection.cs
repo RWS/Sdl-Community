@@ -97,7 +97,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
 
 			const int score = 0; //score to 0...change if needed to support scoring
-			tu.Origin = TranslationUnitOrigin.MachineTranslation;
+			tu.Origin = TranslationUnitOrigin.Nmt;
 			var searchResult = new SearchResult(tu)
 			{
 				ScoringResult = new ScoringResult
