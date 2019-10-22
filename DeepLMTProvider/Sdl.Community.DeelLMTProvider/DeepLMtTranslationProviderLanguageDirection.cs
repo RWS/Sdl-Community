@@ -138,7 +138,7 @@ namespace Sdl.Community.DeepLMTProvider
 			//maybe this we need to add the score which Christine  requested
 			//
 			var score = 0; //score to 0...change if needed to support scoring
-			tu.Origin = TranslationUnitOrigin.MachineTranslation;
+			tu.Origin = TranslationUnitOrigin.Nmt;
 			var searchResult = new SearchResult(tu)
 			{
 				TranslationProposal = new TranslationUnit(tu),
