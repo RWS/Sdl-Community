@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Sdl.Community.Comparison;
 using Sdl.Community.Hooks;
@@ -40,7 +42,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			{
 				return;
 			}
-
+			Debug.WriteLine("TranslationOriginChanged");
 			var trackedDocuments = Tracked.DictCacheDocumentItems[projectFile.Id.ToString()];
 			trackedDocuments.ActiveSegment.CurrentISegmentPairProperties = Tracked.ActiveDocument.ActiveSegmentPair.Target.Properties.Clone() as ISegmentPairProperties;
 		}
@@ -62,8 +64,46 @@ namespace Sdl.Community.Qualitivity.Tracking
 			{
 				return;
 			}
+			Debug.WriteLine("Confirmation level changed");
 
 			var trackedDocuments = Tracked.DictCacheDocumentItems[projectFile.Id.ToString()];
+
+			// With Studio 2019 SR2 at least, this event can get fired *after* ActiveSegmentChanged, e.g. if you confirm a segment,
+			// this event appears to apply to the wrong segment, because it's fired too late.
+			// Check whether that has happened.
+
+			var props = sender.GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+			var prop = props.Where(x => string.CompareOrdinal("Item", x.Name) == 0 && !x.GetMethod.GetParameters().Any()).FirstOrDefault();
+
+			if (prop != null)
+			{
+				var segment = prop.GetValue(sender) as Sdl.FileTypeSupport.Framework.BilingualApi.ISegment;
+				if (segment != null)
+				{
+					// Is the segment whose confirmation level changed different from the one we're tracking?
+					if (segment.Properties.Id != trackedDocuments.ActiveSegment.CurrentISegmentPairProperties.Id)
+					{
+						// Yes - so we probably already received the ActiveSegmentChanged event, and have already
+						// logged the confirmation level etc. for the segment we were leaving, but incorrectly, 
+						// because the confirmation level hadn't been updated.
+						var lastRec = trackedDocuments.ActiveDocument.TrackedRecords.LastOrDefault();
+						// Was the last record we logged for the segment whose confirmation level we now know to have changed?
+						if (lastRec != null && lastRec.SegmentId == segment.Properties.Id.Id)
+						{
+							// Yes - amend details
+							lastRec.TranslationOrigins.Updated.ConfirmationLevel = segment.Properties.ConfirmationLevel.ToString();
+							lastRec.TranslationOrigins.Updated.TranslationStatus = Helper.GetTranslationStatus(segment.Properties.TranslationOrigin);
+							lastRec.TranslationOrigins.Updated.OriginType = segment.Properties.TranslationOrigin.OriginType;
+						}
+
+
+						return;
+					}
+
+				}
+			}
+
+
 			trackedDocuments.ActiveSegment.CurrentISegmentPairProperties = Tracked.ActiveDocument.ActiveSegmentPair.Target.Properties.Clone() as ISegmentPairProperties;
 		}
 
@@ -98,6 +138,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 				if (trackedDocuments.ActiveSegment.CurrentSegmentSelected != null)
 				{
+					Debug.WriteLine("ActiveSegmentChanged - about to track changes");
 					TrackedController.TrackActiveChanges(trackedDocuments);
 				}
 
@@ -107,6 +148,89 @@ namespace Sdl.Community.Qualitivity.Tracking
 			{
 				MessageBox.Show(ex.Message);
 			}
+		}
+
+		private const string MarkupTag = "sdlXliffCompareMarkupTag";
+		internal static string SimpleParse(List<ContentSection> xSegmentSections, bool includeMarkup)
+		{
+
+			var result = new StringBuilder();
+			foreach (var xSegmentSection in xSegmentSections)
+			{
+				if (xSegmentSection.CntType != ContentSection.ContentType.Text)
+				{
+					if (includeMarkup)
+						result.Append("<" + MarkupTag + ">" + xSegmentSection.Content + "</" + MarkupTag + ">");
+				}
+				else
+				{
+					result.Append(xSegmentSection.Content);
+				}
+			}
+			return result.ToString();
+
+		}
+
+		static int CommonPrefixLength(string s1, string s2)
+		{
+			int length = 0;
+			for (int i = 0; i < s1.Length && i < s2.Length && s1[i] == s2[i]; i++)
+				length++;
+			return length;
+		}
+		static int CommonSuffixLength(string s1, string s2, int prefixLength)
+		{
+			// need to deal with cases like this:
+			// s1: "Cat dog"
+			// s2: "Cat  dog"
+			// A naive check could find a shared prefix length 4 "Cat " and a shared suffix length 4 " dog"
+			// But that's wrong, because it counts the space in s1 as part of the prefix and suffix
+			// So we need a max length
+			int maxLength = Math.Min(s1.Length - prefixLength, s2.Length - prefixLength);
+
+			int length = 0;
+			if (s1.Length > 0 && s2.Length > 0)
+			{
+				int s1Ix = s1.Length - 1;
+				int s2Ix = s2.Length - 1;
+				while (s1Ix >= 0 && s2Ix >= 0 && s1[s1Ix] == s2[s2Ix] && length < maxLength)
+				{
+					length++;
+					s1Ix--;
+					s2Ix--;
+				}
+			}
+			return length;
+		}
+
+		// Extract text that was added to the string by a single user operation
+		static string TypedText(string before, string after, int prefix, int suffix)
+		{
+			if (prefix + suffix == after.Length)
+				return string.Empty;
+			if (prefix + suffix > after.Length)
+			{
+				Debug.Assert(false);
+				return string.Empty;
+			}
+			string result = after.Substring(prefix);
+			result = result.Substring(0, result.Length - suffix);
+			return result;
+		}
+
+		// Extract text that was deleted/replaced by a single user operation
+		static string RemovedText(string before, string after, int prefix, int suffix)
+		{
+			if (prefix + suffix == before.Length)
+				return string.Empty;
+			if (prefix + suffix > before.Length)
+			{
+				Debug.Assert(false);
+				return string.Empty;
+			}
+			string result = before.Substring(prefix);
+			result = result.Substring(0, result.Length - suffix);
+			return result;
 		}
 
 		public static void ContentChanged(object sender, DocumentContentEventArgs e)
@@ -166,12 +290,64 @@ namespace Sdl.Community.Qualitivity.Tracking
 				contentSection.RevisionMarker = null;
 			}
 
-			var comparisonUnits = ComparisonUnitDifferences(trackedDocument, targetSectionsCurrent, keyStroke);
 
 			try
 			{
+#if DEBUG
+				var temp1 = new List<ContentSection>();
+				var temp2 = new List<ContentSection>();
+				trackedDocument.ActiveSegment.CurrentTargetSections.ForEach(x => temp1.Add(x.Clone() as ContentSection));
+				targetSectionsCurrent.ForEach(x => temp2.Add(x.Clone() as ContentSection));
+#endif
+				// Compare the before/after text, to work out (as much as we can) what was typed/pasted/etc. and
+				// what selection (if any) was replaced as a result.
+				// We can assume that the change will affect a contiguous span of text, because this event fires in response
+				// to whatever change, and the target segment can't have multiple selected spans.
+				// Even if we have a segment with the same word repeated in different places, and we perform 'replace all'
+				// in Studio, the two replacements fire separately here.
+				var newSections = TextComparer.ConcatenateComparableContentSections(trackedDocument.ActiveSegment.CurrentTargetSections);
+				var previousSections = TextComparer.ConcatenateComparableContentSections(targetSectionsCurrent);
+				var newTextWithMarkup = SimpleParse(newSections, true);
+				var oldTextWithMarkup = SimpleParse(previousSections, true);
+				var newText = SimpleParse(newSections, false);
+				var oldText = SimpleParse(previousSections, false);
+
+				// Find the shared prefix and suffix to identify the affected span
+				int prefixLength = CommonPrefixLength(newTextWithMarkup, oldTextWithMarkup);
+				int suffixLength = 0;
+				if (prefixLength < Math.Min(newTextWithMarkup.Length, oldTextWithMarkup.Length))
+				{
+					suffixLength = CommonSuffixLength(newTextWithMarkup, oldTextWithMarkup, prefixLength);
+				}
+				// Extract typed/pasted and removed (selected) text
+				string typedText = TypedText(newTextWithMarkup, oldTextWithMarkup, prefixLength, suffixLength);
+				string removedText = RemovedText(newTextWithMarkup, oldTextWithMarkup, prefixLength, suffixLength);
+
+				// For logging, report the position in the text without tags, because that's a value that's
+				// most likely to be usable when analysing
+				int prefixLengthPlain = CommonPrefixLength(newText, oldText);
+				Debug.WriteLine("Got typed text of <" + typedText + ">");
+				Debug.WriteLine("Got removed text of <" + removedText + ">");
+				Debug.WriteLine("newTextWithMarkup: " + newTextWithMarkup);
+				Debug.WriteLine("c2: " + oldTextWithMarkup);
+
+				// Try to detect case where (say) 'Parliament' was selected in the text, then the user typed 'P';
+				// at this point, text comparison will have left typedText empty, and selection one character short ('P')
+				if (!string.IsNullOrEmpty(keyStroke.Key) && typedText.Length == 0 && prefixLength > 0 && !keyStroke.Ctrl && !keyStroke.Alt)
+				{
+					string altTypedText = TypedText(newTextWithMarkup, oldTextWithMarkup, prefixLength - 1, suffixLength);
+					if (altTypedText.Length > 0 && altTypedText.ToLower()[0] == keyStroke.Key.ToLower()[0])
+					{
+						typedText = altTypedText;
+						removedText = RemovedText(newTextWithMarkup, oldTextWithMarkup, prefixLength - 1, suffixLength);
+						Debug.WriteLine("Detected overtype of selected text");
+						Debug.WriteLine("Got typed text of <" + typedText + ">");
+						Debug.WriteLine("Got removed text of <" + removedText + ">");
+					}
+				}
+
 				// add the key stroke data  |
-				AddKeyStrokeData(keyStroke, comparisonUnits, trackedDocument);
+				AddKeyStrokeData(keyStroke, typedText, removedText, prefixLengthPlain, trackedDocument);
 			}
 			catch (Exception ex)
 			{
@@ -191,66 +367,10 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 		}
 
-		private static string GetTypedText(IEnumerable<ComparisonUnit> comparisonUnits)
+		private static void AddKeyStrokeData(KeyStroke keyStroke, string typedText, string removedText, int position, TrackedDocuments trackedDocuments)
 		{
-			var result = string.Empty;
-			foreach (var comparisonUnit in comparisonUnits)
-			{
-				if (comparisonUnit.Type == ComparisonUnit.ComparisonType.New)
-				{
-					foreach (var section in comparisonUnit.Section)
-					{
-						result += section.Content;
-					}
-				}
-			}
-
-			return result;
-		}
-
-		private static string GetSelectedText(IEnumerable<ComparisonUnit> comparisonUnits)
-		{
-			var text = string.Empty;
-			var tempIdentical = string.Empty;
-			foreach (var comparisonUnit in comparisonUnits)
-			{
-				switch (comparisonUnit.Type)
-				{
-					case ComparisonUnit.ComparisonType.Removed:
-						{
-							// Include content recognized as identical between the content recognized as 
-							// removed, when identifying the selected content that was replaced.
-							if (!string.IsNullOrEmpty(text) && !string.IsNullOrEmpty(tempIdentical))
-							{
-								text += tempIdentical;								
-							}
-							tempIdentical = string.Empty;
-
-							foreach (var section in comparisonUnit.Section)
-							{
-								text += section.Content;
-							}
-							break;
-						}
-					case ComparisonUnit.ComparisonType.Identical:
-						{
-							tempIdentical = string.Empty;
-							foreach (var section in comparisonUnit.Section)
-							{
-								tempIdentical += section.Content;
-							}
-							break;
-						}
-				}
-			}
-			return text;
-		}
-
-		private static void AddKeyStrokeData(KeyStroke keyStroke, IEnumerable<ComparisonUnit> comparisonUnits, TrackedDocuments trackedDocuments)
-		{
-			// identify the starting position of content, added, removed or replaced.				
-			keyStroke.Text = GetTypedText(comparisonUnits);
-			keyStroke.Position = Convert.ToInt32(GetTargetCursorPosition());
+			keyStroke.Text = typedText;
+			keyStroke.Position = position;
 			keyStroke.X = Cursor.Position.X;
 			keyStroke.Y = Cursor.Position.Y;
 
@@ -265,11 +385,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 				keyStroke.OriginType = @"auto-suggest";
 			}
 
-			//if the user hit the back key then attempt to get the selection from the comparison if it is not already present
-			if (string.IsNullOrEmpty(keyStroke.Selection))
-			{
-				keyStroke.Selection = GetSelectedText(comparisonUnits);
-			}			
+			keyStroke.Selection = removedText;
 
 			if (string.IsNullOrEmpty(keyStroke.Text) && string.IsNullOrEmpty(keyStroke.Selection))
 			{

@@ -1,29 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
 	public class LanguageMappingsViewModel : BaseViewModel
 	{
-		private string _messageVisibility;
+		private TranslationModel _selectedModel;
+		private bool _reSendChecked;
 
 		public LanguageMappingsViewModel(BeGlobalTranslationOptions options)
 		{
-			MessageVisibility = "Collapsed";
+			Options = options;
+			TranslationOptions = new ObservableCollection<TranslationModel>();
+
+			if (Options != null)
+			{
+				ReSendChecked = options.ResendDrafts;
+			}
 		}
 
-		public string MessageVisibility
+		public BeGlobalTranslationOptions Options { get; set; }
+		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }
+		
+		public TranslationModel SelectedModelOption
 		{
-			get => _messageVisibility;
+			get => _selectedModel;
 			set
 			{
-				_messageVisibility = value;
-				OnPropertyChanged();
+				_selectedModel = value;
+				if (Options?.Model != null)
+				{
+					SetOptions(value);
+				}
+				OnPropertyChanged(nameof(SelectedModelOption));
 			}
+		}
+
+		public bool ReSendChecked
+		{
+			get => _reSendChecked;
+			set
+			{
+				_reSendChecked = value;
+				if (Options?.Model != null)
+				{
+					Options.ResendDrafts = value;
+				}
+				OnPropertyChanged(nameof(ReSendChecked));
+			}
+		}
+
+		public void SetOptions(TranslationModel translationModel)
+		{
+			Options.Model = translationModel?.Model;
+			Options.DisplayName = translationModel?.DisplayName;
+			Options.LanguagesSupported = translationModel?.LanguagesSupported;
 		}
 	}
 }

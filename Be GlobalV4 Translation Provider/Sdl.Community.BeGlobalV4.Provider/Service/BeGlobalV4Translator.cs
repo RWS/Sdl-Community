@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Cache;
 using System.Text;
@@ -130,14 +131,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 						}
 						else if (!translationAsyncResponse.IsSuccessful && translationAsyncResponse.StatusCode != HttpStatusCode.Unauthorized)
 						{
-							ShowErrors(translationAsyncResponse);
+							ShowErrors(translationAsyncResponse, true);
 						}
 						return ReturnTranslation(translationAsyncResponse);
 					}
 				}
 				else if (!response.IsSuccessful && response.StatusCode != HttpStatusCode.Unauthorized)
 				{
-					ShowErrors(response);
+					ShowErrors(response, true);
 				}
 				return ReturnTranslation(response);
 			}
@@ -158,8 +159,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			return json != null ? json.translation[0] : string.Empty;
 		}
 
-		public int GetUserInformation()
+		public ResponseError GetUserInformation(bool showErrorMessage)
 		{
+			var responseErrors = new ResponseError();
+			responseErrors.Errors = new List<ErrorDetails>();
 			try
 			{
 				RestRequest request;
@@ -193,36 +196,52 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 						var userInfoResponse = _client.Execute(request);
 						if (userInfoResponse.StatusCode == HttpStatusCode.OK)
 						{
-							return JsonConvert.DeserializeObject<UserDetails>(userInfoResponse.Content).AccountId;
+							responseErrors.AccountId = JsonConvert.DeserializeObject<UserDetails>(userInfoResponse.Content).AccountId;
+							return responseErrors;
 						}
 						if (userInfoResponse.StatusCode == HttpStatusCode.Unauthorized)
 						{
-							_messageBoxService.ShowMessage(Constants.UnauthorizedCredentials, Constants.PluginName);
+							if (showErrorMessage)
+							{
+								_messageBoxService.ShowMessage(Constants.UnauthorizedCredentials, Constants.PluginName);
+							}
+							responseErrors.Errors.Add(new ErrorDetails { Code = (int)HttpStatusCode.Unauthorized, Description = Constants.CredentialsNotValid });
 							Log.Logger.Error($"{Constants.UnauthorizedUserInfo} {traceId}");
 						}
 						else if (userInfoResponse.StatusCode != HttpStatusCode.OK && userInfoResponse.StatusCode != HttpStatusCode.Unauthorized)
 						{
-							ShowErrors(userInfoResponse);
+						 responseErrors = ShowErrors(userInfoResponse, showErrorMessage);
 						}
 					}
 				}
 				if (response.StatusCode == HttpStatusCode.Unauthorized)
 				{
-					_messageBoxService.ShowMessage(Constants.UnauthorizedCredentials, Constants.PluginName);
+					if (showErrorMessage)
+					{
+						_messageBoxService.ShowMessage(Constants.UnauthorizedCredentials, Constants.PluginName);
+					}
+					var responseContent = JsonConvert.DeserializeObject<ResponseError>(response.Content);
+					var errorDecription = string.Empty;
+					foreach (var error in responseContent.Errors)
+					{
+						errorDecription += $"{error.Description} {Environment.NewLine}"; 
+					}
+					responseErrors.Errors.Add(new ErrorDetails { Code = (int)HttpStatusCode.Unauthorized, Description = errorDecription });
 					Log.Logger.Error($"{Constants.UnauthorizedUserInfo} {traceId}");
 				}
 				else if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Unauthorized)
 				{
-					ShowErrors(response);
+					responseErrors = ShowErrors(response, showErrorMessage);
 				}
-
-				return user?.AccountId ?? 0;
+				responseErrors.AccountId = user?.AccountId ?? 0;
+				return responseErrors;
 			}
 			catch(Exception ex)
 			{
 				Log.Logger.Error($"{Constants.GetUserInformation} {ex.Message}\n {ex.StackTrace}");
 			}
-			return 0;
+			responseErrors.AccountId = 0;
+			return responseErrors;
 		}
 
 		private void UpdateRequestHeadersForRefreshToken(IRestRequest request, string token)
@@ -265,7 +284,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 						}
 						else if (languagePairsResponse.StatusCode != HttpStatusCode.OK && languagePairsResponse.StatusCode != HttpStatusCode.Unauthorized)
 						{
-							ShowErrors(languagePairsResponse);
+							ShowErrors(languagePairsResponse, true);
 						}
 					}
 				}
@@ -276,7 +295,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				}
 				else if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Unauthorized)
 				{
-					ShowErrors(response);
+					ShowErrors(response, true);
 				}
 				var subscriptionInfo = JsonConvert.DeserializeObject<SubscriptionInfo>(response.Content);
 				return subscriptionInfo;
@@ -299,7 +318,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					response = RestGet($"/mt/translations/async/{id}");
 					if (!response.IsSuccessful || response.StatusCode != HttpStatusCode.OK)
 					{
-						ShowErrors(response);
+						ShowErrors(response, true);
 					}
 
 					dynamic json = JsonConvert.DeserializeObject(response.Content);
@@ -311,7 +330,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					}
 					if (status.Equals(Constants.FAILED))
 					{
-						ShowErrors(response);
+						ShowErrors(response, true);
 					}
 				} while (status.Equals(Constants.INIT, StringComparison.CurrentCultureIgnoreCase) ||
 				         status.Equals(Constants.TRANSLATING, StringComparison.CurrentCultureIgnoreCase));
@@ -319,7 +338,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				response = RestGet($"/mt/translations/async/{id}/content");
 				if (!response.IsSuccessful || response.StatusCode != HttpStatusCode.OK)
 				{
-					ShowErrors(response);
+					ShowErrors(response, true);
 				}
 				return response.RawBytes;
 			}
@@ -351,13 +370,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			return traceId;
 		}
 
-		private void ShowErrors(IRestResponse response)
+		private ResponseError ShowErrors(IRestResponse response, bool showErrorMessage)
 		{
 			var responseContent = JsonConvert.DeserializeObject<ResponseError>(response.Content);
-
+		
 			if (response.StatusCode == HttpStatusCode.Forbidden)
 			{
-				_messageBoxService.ShowMessage(Constants.ForbiddenLicense, Constants.PluginName);
+				if (showErrorMessage)
+				{
+					_messageBoxService.ShowMessage(Constants.ForbiddenLicense, Constants.PluginName);
+				}
 				throw new Exception(Constants.ForbiddenLicense);
 			}
 			if (responseContent?.Errors != null)
@@ -367,6 +389,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					throw new Exception($"{Constants.ErrorCode} {error.Code}, {error.Description}");
 				}
 			}
+			return responseContent;
 		}		
 	}
 }

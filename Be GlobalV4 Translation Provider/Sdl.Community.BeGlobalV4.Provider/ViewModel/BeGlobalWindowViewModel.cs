@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
@@ -15,9 +12,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 	public class BeGlobalWindowViewModel : BaseViewModel
 	{
 		private readonly LanguagePair[] _languagePairs;
-		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
-		private bool _reSendChecked;
-		private TranslationModel _selectedModel;
 		private MessageBoxService _messageBoxService;
 		private TranslationProviderCredential _credentials;
 		private int _selectedTabIndex;
@@ -28,20 +22,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		{
 			SelectedTabIndex = 0;
 			Options = options;
-			LoginViewModel = new LoginViewModel(options);
-			LanguageMappingsViewModel = new LanguageMappingsViewModel(options);
 			_languagePairs = languagePairs;
-			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			_credentials = credentials;
-
-			TranslationOptions = new ObservableCollection<TranslationModel>();
 			_messageBoxService = new MessageBoxService();
-			if (Options != null)
-			{
-				ReSendChecked = options.ResendDrafts;
-			}
+			LanguageMappingsViewModel = new LanguageMappingsViewModel(options);
+			LoginViewModel = new LoginViewModel(options, _credentials, _languagePairs, LanguageMappingsViewModel);
 
-			if (credentials == null) return;
+			if (_credentials == null) return;
 			var credential = _credentials.Credential.Replace("sdlmachinetranslationcloudprovider:///", string.Empty);
 			if (credential.Contains("#"))
 			{
@@ -49,10 +36,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				if (splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
 				{
 					var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
-					var accountId = beGlobalTranslator.GetUserInformation();
-					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
-					GetEngineModels(subscriptionInfo);
-					SetEngineModel();
+					var userInfo = beGlobalTranslator.GetUserInformation(true);
+					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.AccountId.ToString());
+					LoginViewModel.GetEngineModels(subscriptionInfo);
+					LoginViewModel.SetEngineModel();
 					SetAuthenticationOptions();
 				}
 			}
@@ -60,87 +47,20 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		public LoginViewModel LoginViewModel { get; set; }
 		public LanguageMappingsViewModel LanguageMappingsViewModel { get; set; }
-		public BeGlobalTranslationOptions Options { get; set; }
-
-		public bool ReSendChecked
-		{
-			get => _reSendChecked;
-			set
-			{
-				_reSendChecked = value;
-				if (Options?.Model != null)
-				{
-					Options.ResendDrafts = value;
-				}
-				OnPropertyChanged(nameof(ReSendChecked));
-			}
-		}
-
-		public TranslationModel SelectedModelOption
-		{
-			get => _selectedModel;
-			set
-			{
-				_selectedModel = value;
-				if (Options?.Model != null)
-				{
-					SetOptions(value);
-				}
-				OnPropertyChanged(nameof(SelectedModelOption));
-			}
-		}
+		public BeGlobalTranslationOptions Options { get; set; }			
 
 		public int SelectedTabIndex
 		{
 			get => _selectedTabIndex;
 			set
 			{
-				_selectedTabIndex = value;
-
-				if (value.Equals(1) && IsWindowValid())
-				{
-					LanguageMappingsViewModel.MessageVisibility = "Collapsed";
-				}
+				_selectedTabIndex = value;				
 				OnPropertyChanged();
 			}
 		}
-
-		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }
-
+		
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
-			
-		private void GetEngineModels(SubscriptionInfo subscriptionInfo)
-		{
-			var sourceLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(_languagePairs?[0].SourceCulture);
-			var pairsWithSameSource = subscriptionInfo.LanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
-			if (_languagePairs?.Count() > 0)
-			{
-				foreach (var languagePair in _languagePairs)
-				{
-					var targetLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(languagePair.TargetCulture);
-
-					var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
-
-					foreach (var serviceLanguagePair in serviceLanguagePairs)
-					{
-						var existingTranslationModel = TranslationOptions.FirstOrDefault(e => e.Model.Equals(serviceLanguagePair.Model));
-						TranslationModel newTranslationModel = null;
-						if (existingTranslationModel == null)
-						{
-							newTranslationModel = new TranslationModel
-							{
-								Model = serviceLanguagePair.Model,
-								DisplayName = serviceLanguagePair.DisplayName,
-							};
-							TranslationOptions.Add(newTranslationModel);
-						}
-
-						(existingTranslationModel ?? newTranslationModel).LanguagesSupported.Add(languagePair.TargetCulture.Name, serviceLanguagePair.Name);
-					}
-				}
-			}
-		}
-
+		
 		private void Ok(object parameter)
 		{
 			var currentWindow = WindowsControlUtils.GetCurrentWindow() as BeGlobalWindow;
@@ -155,31 +75,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				}
 			}				
 		}
-
-		private void SetEngineModel()
-		{
-			if (Options?.Model == null)
-			{
-				if (TranslationOptions?.Count > 0)
-				{
-					SelectedModelOption = TranslationOptions?[0];
-					if (Options != null)
-					{
-						SetOptions(TranslationOptions?[0]);
-					}
-				}
-			}
-			else
-			{
-				var mtModel = TranslationOptions?.FirstOrDefault(m => m.Model.Equals(Options.Model));
-				if (mtModel != null)
-				{
-					var selectedModelIndex = TranslationOptions.IndexOf(mtModel);
-					SelectedModelOption = TranslationOptions[selectedModelIndex];
-				}
-			}
-		}
-
+				
 		private void SetAuthenticationOptions()
 		{
 			var currentWindow = WindowsControlUtils.GetCurrentWindow() as BeGlobalWindow;
@@ -205,17 +101,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		private void SetOptions(TranslationModel translationModel)
-		{
-			Options.Model = translationModel.Model;
-			Options.DisplayName = translationModel.DisplayName;
-			Options.LanguagesSupported = translationModel.LanguagesSupported;
-		}
-
 		private bool IsWindowValid()
 		{
 			try
 			{
+				Options.ResendDrafts = LanguageMappingsViewModel.ReSendChecked;
 				if (LoginViewModel.LoginMethod.Equals(Constants.APICredentials))
 				{
 					var clientIdPass = Options?.ClientId;
@@ -226,21 +116,36 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						return false;
 					}
 				}
-				if (Options?.Model == null)
+
+				var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
+				var userInfo = beGlobalTranslator.GetUserInformation(false);
+				if (userInfo.AccountId != 0)
 				{
-					var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
-					var accountId = beGlobalTranslator.GetUserInformation();
-					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
-					GetEngineModels(subscriptionInfo);
-					SetEngineModel();
+					if (Options?.Model == null)
+					{
+						var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.AccountId.ToString());
+						LoginViewModel.GetEngineModels(subscriptionInfo);
+						LoginViewModel.SetEngineModel();
+					}
+					return true;
 				}
-				return true;
+				else
+				{
+					if (userInfo.Errors.Count > 0)
+					{
+						foreach (var error in userInfo.Errors)
+						{
+							LoginViewModel.Message += $@"{error.Code}: {error.Description}";
+						}
+						return false;
+					}
+				}
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
 			}
 			return false;
-		}	
+		}		
 	}
 }
