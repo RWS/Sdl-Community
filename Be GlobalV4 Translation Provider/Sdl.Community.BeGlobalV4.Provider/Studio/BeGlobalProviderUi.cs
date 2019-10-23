@@ -92,6 +92,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var uri = new Uri("sdlmachinetranslationcloudprovider:///");
 
+			// Encode client credentials to Base64 (it is usefull when user credentials contains # char and the authentication is failing,
+			// because the # char is used to differentiate the clientId by ClientSecret.
 			clientId = StringExtensions.Base64Encode(clientId);
 			clientSecret = StringExtensions.Base64Encode(clientSecret);
 
