@@ -52,9 +52,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				_selectedAuthentication = value;
 				OnPropertyChanged(nameof(SelectedAuthentication));
-				CheckLoginMethod();
-				SetClientOptions();
-				GetEngines();
+				if (!string.IsNullOrEmpty(SelectedAuthentication .DisplayName))
+				{
+					CheckLoginMethod();
+					SetClientOptions();
+					GetEngines();
+				}
 			}
 		}
 
@@ -148,6 +151,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void SetAuthentications()
 		{
+			SelectedAuthentication = new Authentication();
 			Authentications = new List<Authentication>
 			{
 				new Authentication
@@ -164,21 +168,21 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			};
 			if (!string.IsNullOrEmpty(Options.AuthenticationMethod))
 			{
-				_selectedAuthentication = Authentications.FirstOrDefault(a => a.DisplayName.Equals(Options.AuthenticationMethod));
-				SelectedIndex = _selectedAuthentication != null ? _selectedAuthentication.Index : 0;
+				SelectedAuthentication = Authentications.FirstOrDefault(a => a.DisplayName.Equals(Options.AuthenticationMethod));
+				SelectedIndex = SelectedAuthentication != null ? SelectedAuthentication.Index : 0;
 			}
 			else
 			{
 				// set by default APICredentials login method
-				_selectedAuthentication = Authentications[0];
+				SelectedAuthentication = Authentications[0];
 				SelectedIndex = Authentications[0].Index;
-				Options.AuthenticationMethod = _selectedAuthentication.DisplayName;
+				Options.AuthenticationMethod = SelectedAuthentication.DisplayName;
 			}
 		}
 
 		private void GetEngines()
 		{
-			if (_credentials == null && Options.AuthenticationMethod.Equals(Constants.APICredentials))
+			if (Options.AuthenticationMethod.Equals(Constants.APICredentials) && (_credentials == null || _credentials.Credential.Equals("#" )))
 			{
 				RestoreEngines();
 			}
@@ -191,7 +195,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			var userInfo = beGlobalTranslator.GetUserInformation(false);
 			if (userInfo.AccountId != 0)
 			{
-				if (Options?.Model == null)
+				if (Options?.Model == null || LanguageMappingsViewModel?.TranslationOptions.Count == 0)
 				{
 					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.AccountId.ToString());
 					GetEngineModels(subscriptionInfo);

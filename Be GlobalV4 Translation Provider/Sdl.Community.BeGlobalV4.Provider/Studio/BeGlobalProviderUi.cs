@@ -46,8 +46,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					{
 						Options = beGlobalVm.Options
 					};
-
-					SetCredentials(credentialStore, beGlobalVm.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
+					if (beGlobalVm?.Options?.AuthenticationMethod == Constants.APICredentials)
+					{
+						SetCredentials(credentialStore, beGlobalVm.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
+					}
 					return new ITranslationProvider[] { provider };
 				}
 			}
@@ -78,8 +80,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					var splitedCredentials = credentials.Credential.Split('#');
 					if (splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
 					{
-						editProvider.Options.ClientId = splitedCredentials[0];
-						editProvider.Options.ClientSecret = splitedCredentials[1];
+						var clientId = StringExtensions.Base64Decode(splitedCredentials[0]);
+						var clientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
+
+						editProvider.Options.ClientId = clientId;
+						editProvider.Options.ClientSecret = clientSecret;
 					}
 				}
 				var beGlobalWindow = new BeGlobalWindow();
@@ -90,9 +95,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 				{
 					editProvider.Options = beGlobalVm.Options;
-					editProvider.Options.ClientId = beGlobalWindow.LoginTab.ClientIdBox.Password.TrimEnd();
-					editProvider.Options.ClientSecret = beGlobalWindow.LoginTab.ClientSecretBox.Password.TrimEnd();
-					SetCredentials(credentialStore, editProvider.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
+					if (beGlobalVm.Options?.AuthenticationMethod == Constants.APICredentials)
+					{
+						editProvider.Options.ClientId = beGlobalWindow.LoginTab.ClientIdBox.Password.TrimEnd();
+						editProvider.Options.ClientSecret = beGlobalWindow.LoginTab.ClientSecretBox.Password.TrimEnd();
+						SetCredentials(credentialStore, editProvider.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
+					}
 					return true;
 				}
 			}
@@ -148,6 +156,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private void SetCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool persistKey)
 		{
 			var uri = new Uri("sdlmachinetranslationcloudprovider:///");
+
+			// Encode client credentials to Base64 (it is usefull when user credentials contains # char and the authentication is failing,
+			// because the # char is used to differentiate the clientId by ClientSecret.
+			clientId = StringExtensions.Base64Encode(clientId);
+			clientSecret = StringExtensions.Base64Encode(clientSecret);
+
 			var credential = $"{clientId}#{clientSecret}";
 			var credentials = new TranslationProviderCredential(credential, persistKey);
 			credentialStore.RemoveCredential(uri);
