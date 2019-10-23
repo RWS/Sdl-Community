@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.Community.BeGlobalV4.Provider.ViewModel;
@@ -65,8 +66,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (savedCredentials != null)
 			{
 				var splitedCredentials = savedCredentials.Credential.Split('#');
-				var clientId = splitedCredentials[0];
-				var clientSecret = splitedCredentials[1];
+				var clientId = StringExtensions.Base64Decode(splitedCredentials[0]);
+				var clientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
 
 				editProvider.Options.ClientId = clientId;
 				editProvider.Options.ClientSecret = clientSecret;
@@ -90,6 +91,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private void SetBeGlobalCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool persistKey)
 		{
 			var uri = new Uri("sdlmachinetranslationcloudprovider:///");
+
+			clientId = StringExtensions.Base64Encode(clientId);
+			clientSecret = StringExtensions.Base64Encode(clientSecret);
 
 			var credential = $"{clientId}#{clientSecret}";
 			var credentials = new TranslationProviderCredential(credential, persistKey);

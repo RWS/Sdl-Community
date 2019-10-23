@@ -1,4 +1,5 @@
 ﻿using System;
+using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -20,8 +21,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				var credentials = credentialStore.GetCredential(originalUri);
 				var splitedCredentials = credentials.Credential.Split('#');
-				options.ClientId = splitedCredentials[0];
-				options.ClientSecret = splitedCredentials[1];
+				options.ClientId = StringExtensions.Base64Decode(splitedCredentials[0]);
+				options.ClientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
 				if (options.BeGlobalService == null)
 				{
 					options.BeGlobalService = new BeGlobalV4Translator(_url, options.ClientId, options.ClientSecret, options.Model, options.UseClientAuthentication);
