@@ -38,7 +38,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			_languagePairs = languagePairs;
 			LanguageMappingsViewModel = languageMappingsViewModel;
 			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
-			_loginMethod = !string.IsNullOrEmpty(Options.AuthenticationMethod)? Options.AuthenticationMethod : Constants.APICredentials;
+			_loginMethod = !string.IsNullOrEmpty(Options.AuthenticationMethod) ? Options.AuthenticationMethod : Constants.APICredentials;
 			SetAuthentications();
 		}
 
@@ -52,7 +52,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				_selectedAuthentication = value;
 				OnPropertyChanged(nameof(SelectedAuthentication));
-				if (!string.IsNullOrEmpty(SelectedAuthentication .DisplayName))
+				if (!string.IsNullOrEmpty(SelectedAuthentication.DisplayName))
 				{
 					CheckLoginMethod();
 					SetClientOptions();
@@ -72,7 +72,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					return;
 				}
 				_loginMethod = value;
-				OnPropertyChanged(nameof(LoginMethod));				
+				OnPropertyChanged(nameof(LoginMethod));
 			}
 		}
 
@@ -101,7 +101,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private void ChangePasswordAction(object parameter)
 		{
 			var passwordBox = (PasswordBox)parameter;
-			switch(passwordBox.Name)
+			switch (passwordBox.Name)
 			{
 				case "ClientIdBox":
 					Options.ClientId = passwordBox.Password.TrimEnd().TrimStart();
@@ -109,12 +109,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				case "ClientSecretBox":
 					Options.ClientSecret = passwordBox.Password.TrimEnd().TrimStart();
 					break;
-			}			
+			}
 			if (passwordBox.Password.Length > 0)
 			{
 				Message = string.Empty;
 			}
-			if(Options.Model ==null && !string.IsNullOrEmpty(Options.ClientId) && !string.IsNullOrEmpty(Options.ClientSecret))
+			if (Options.Model == null && !string.IsNullOrEmpty(Options.ClientId) && !string.IsNullOrEmpty(Options.ClientSecret))
 			{
 				GetEngines();
 			}
@@ -131,10 +131,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				Message = string.Empty;
 				AppItializer.EnsureInitializer();
-				Application.Current?.Dispatcher?.Invoke(() =>
-				{
-					_studioCredentials.GetToken();
-				});
+				Application.Current?.Dispatcher?.Invoke(() => { _studioCredentials.GetToken(); });
 			}
 		}
 
@@ -182,11 +179,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void GetEngines()
 		{
-			if (Options.AuthenticationMethod.Equals(Constants.APICredentials) && (_credentials == null || _credentials.Credential.Equals("#" )))
+			if (Options.AuthenticationMethod.Equals(Constants.APICredentials) && (_credentials == null || _credentials.Credential.Equals("#")))
 			{
 				RestoreEngines();
 			}
-			if(_credentials != null && !_credentials.Credential.Contains("#") && Options.AuthenticationMethod.Equals(Constants.APICredentials))
+			if (_credentials != null && !_credentials.Credential.Contains("#") && Options.AuthenticationMethod.Equals(Constants.APICredentials))
 			{
 				RestoreEngines();
 			}
@@ -207,18 +204,22 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		public void GetEngineModels(SubscriptionInfo subscriptionInfo)
 		{
 			var sourceLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(_languagePairs?[0].SourceCulture);
-			var pairsWithSameSource = subscriptionInfo.LanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
+			var pairsWithSameSource = subscriptionInfo.LanguagePairs
+				.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
 			if (_languagePairs?.Count() > 0)
 			{
 				foreach (var languagePair in _languagePairs)
 				{
 					var targetLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(languagePair.TargetCulture);
 
-					var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
+					var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage))
+						.ToList();
 
 					foreach (var serviceLanguagePair in serviceLanguagePairs)
 					{
-						var existingTranslationModel = LanguageMappingsViewModel.TranslationOptions.FirstOrDefault(e => e.Model.Equals(serviceLanguagePair.Model));
+						var existingTranslationModel =
+							LanguageMappingsViewModel.TranslationOptions.FirstOrDefault(e =>
+								e.Model.Equals(serviceLanguagePair.Model));
 						TranslationModel newTranslationModel = null;
 						if (existingTranslationModel == null)
 						{
@@ -228,8 +229,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 								DisplayName = serviceLanguagePair.DisplayName,
 							};
 							LanguageMappingsViewModel.TranslationOptions.Add(newTranslationModel);
-							(existingTranslationModel ?? newTranslationModel).LanguagesSupported.Add(languagePair.TargetCulture.Name, serviceLanguagePair.Name);
-						}												
+						}
+
+						var currentTranslationModel = existingTranslationModel ?? newTranslationModel;
+						if (!currentTranslationModel.LanguagesSupported.ContainsKey(languagePair.TargetCulture.Name))
+						{
+							currentTranslationModel.LanguagesSupported.Add(languagePair.TargetCulture.Name,
+								serviceLanguagePair.Name);
+						}
 					}
 				}
 			}
