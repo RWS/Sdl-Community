@@ -49,8 +49,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 						if (string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId)
 							&& splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
 						{
-							beGlobalTranslationOptions.ClientId = splitedCredentials[0];
-							beGlobalTranslationOptions.ClientSecret = splitedCredentials[1];
+							var clientId = StringExtensions.Base64Decode(splitedCredentials[0]);
+							var clientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
+							beGlobalTranslationOptions.ClientId = clientId;
+							beGlobalTranslationOptions.ClientSecret = clientSecret;
 							beGlobalTranslationOptions.AuthenticationMethod = _authenticationMethod;
 						}
 						if (!string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId) && !string.IsNullOrEmpty(beGlobalTranslationOptions.ClientSecret))
@@ -77,7 +79,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 						{
 							accessToken = _studioCredentials.GetToken();
 						});
-						accessToken = _studioCredentials.GetToken();
 
 						if (!string.IsNullOrEmpty(accessToken))
 						{
