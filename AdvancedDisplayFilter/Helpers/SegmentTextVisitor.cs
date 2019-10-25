@@ -33,8 +33,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
-		{
-			// ignore; not used in this implementation
+		{			
+			VisitChildren(commentMarker);
 		}
 
 		public void VisitLocationMarker(ILocationMarker location)

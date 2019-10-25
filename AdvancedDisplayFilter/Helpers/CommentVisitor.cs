@@ -18,6 +18,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 			{
 				_comments.Add(commentProperty);
 			}
+
 			VisitChildren(commentMarker);
 		}
 
@@ -52,8 +53,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 		}
 
 		public void VisitTagPair(ITagPair tagPair)
-		{
-			// Not required for this implementation
+		{			
 			VisitChildren(tagPair);
 		}
 
@@ -72,7 +72,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 		private void VisitChildren(IAbstractMarkupDataContainer container)
 		{
 			if (container == null)
+			{
 				return;
+			}
+
 			foreach (var item in container)
 			{
 				item.AcceptVisitor(this);
