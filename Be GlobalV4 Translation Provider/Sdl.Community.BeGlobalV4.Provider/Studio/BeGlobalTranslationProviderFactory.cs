@@ -32,6 +32,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				credentialStore.AddCredential(originalUri, new TranslationProviderCredential(originalUri.ToString(), true));
 			}
+
+			if (options.AuthenticationMethod.Equals(Constants.APICredentials) && string.IsNullOrEmpty(options.ClientId))
+			{
+				return new BeGlobalTranslationProvider(options);
+			}
 			var userInfo = options.BeGlobalService?.GetUserInformation(true);		
 			var subscriptionInfo = options.BeGlobalService?.GetLanguagePairs(userInfo.AccountId.ToString());
 			options.SubscriptionInfo = subscriptionInfo;

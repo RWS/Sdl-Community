@@ -90,8 +90,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				else
 				{
 					var splitedCredentials = _credentials?.Credential.Split('#');
-					currentWindow.LoginTab.ClientIdBox.Password = splitedCredentials.Length > 0 ? splitedCredentials[0] : string.Empty;
-					currentWindow.LoginTab.ClientSecretBox.Password = splitedCredentials.Length > 0 ? splitedCredentials[1] : string.Empty;
+					var clientId = StringExtensions.Base64Decode(splitedCredentials[0]);
+					var clientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
+
+					currentWindow.LoginTab.ClientIdBox.Password = splitedCredentials.Length > 0 ? clientId : string.Empty;
+					currentWindow.LoginTab.ClientSecretBox.Password = splitedCredentials.Length > 0 ? clientSecret : string.Empty;
 				}
 			}
 			else
