@@ -13,6 +13,7 @@
    limitations under the License.*/
 
 using System;
+using Newtonsoft.Json;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -56,6 +57,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
         public void LoadState(string translationProviderState)
         {
+	        Options = JsonConvert.DeserializeObject<MtTranslationOptions>(translationProviderState);
         }
 
         public string Name
@@ -79,7 +81,7 @@ namespace Sdl.Community.MtEnhancedProvider
         public string SerializeState()
         {
             // Save settings
-            return null;
+            return JsonConvert.SerializeObject(Options);
         }
 
         public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);

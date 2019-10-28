@@ -13,6 +13,8 @@
    limitations under the License.*/
 
 using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider
@@ -52,20 +54,23 @@ namespace Sdl.Community.MtEnhancedProvider
         }
         #endregion
 
+		public Dictionary<string,string> LanguagesSupported { get; set; }
         
-
+		[JsonIgnore]
         private string sendPlainTextOnly
         {
             get { return GetStringParameter("sendplaintextonly"); }
             set { SetStringParameter("sendplaintextonly", value); }
         }
 
+        [JsonIgnore]
         private string UseCatId
         {
             get { return GetStringParameter("usecatid"); }
             set { SetStringParameter("usecatid", value); }
         }
 
+        [JsonIgnore]
         public string resendDrafts
         {
             get { return GetStringParameter("resenddrafts"); }
@@ -74,37 +79,37 @@ namespace Sdl.Community.MtEnhancedProvider
         
 
         #region "EditFiles"
-
+        [JsonIgnore]
         public bool UsePreEdit
         {
             get { return Convert.ToBoolean(usePreEdit); }
             set { usePreEdit = value.ToString(); }
         }
-
+        [JsonIgnore]
         public bool UsePostEdit
         {
             get { return Convert.ToBoolean(usePostEdit); }
             set { usePostEdit = value.ToString(); }
         }
-
+        [JsonIgnore]
         private string usePreEdit
         {
             get { return GetStringParameter("usepreedit"); }
             set { SetStringParameter("usepreedit", value); }
         }
-
+        [JsonIgnore]
         private string usePostEdit
         {
             get { return GetStringParameter("usepostedit"); }
             set { SetStringParameter("usepostedit", value); }
         }
-
+        [JsonIgnore]
         public string PreLookupFilename
         {
             get { return GetStringParameter("prelookupfilename"); }
             set { SetStringParameter("prelookupfilename", value); }
         }
-
+        [JsonIgnore]
         public string PostLookupFilename
         {
             get { return GetStringParameter("postlookupfilename"); }
@@ -141,7 +146,7 @@ namespace Sdl.Community.MtEnhancedProvider
             else
                 return ProviderType.None;
         }
-        
+        [JsonIgnore]
         public ProviderType SelectedProvider
         {
             get 
@@ -160,55 +165,55 @@ namespace Sdl.Community.MtEnhancedProvider
 
 
 
-
+        [JsonIgnore]
         public string ApiKey
         {
             get { return _apiKey; } //the apiKey is going to be held in a static variable so we don't have to get it from credential store all the time
             set { _apiKey = value; }
         }
-
+        [JsonIgnore]
         public string ClientId
         {
             get { return _clientid; } //the creds are going to be held in a static variable so we don't have to get it from credential store all the time
             set { _clientid = value; }
         }
-
+        [JsonIgnore]
         public string ClientSecret
         {
             get { return _clientsecret; } //the creds are going to be held in a static variable so we don't have to get it from credential store all the time
             set { _clientsecret = value; }
         }
-
+        [JsonIgnore]
         public bool PersistGoogleKey
         {
             get;
             set;
         }
-
+        [JsonIgnore]
         public bool PersistMicrosoftCreds
         {
             get;
             set;
         }
-
+        [JsonIgnore]
         public bool ResendDrafts //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
         {
             get { return Convert.ToBoolean(resendDrafts); }
             set { resendDrafts = value.ToString(); }
         }
-
+        [JsonIgnore]
         public bool SendPlainTextOnly //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
         {
             get { return Convert.ToBoolean(sendPlainTextOnly); }
             set { sendPlainTextOnly = value.ToString(); }
         }
-
+        [JsonIgnore]
         public bool UseCatID //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
         {
             get { return Convert.ToBoolean(UseCatId); }
             set { UseCatId = value.ToString(); }
         }
-
+        [JsonIgnore]
         public string CatId
         {
             get { return GetStringParameter("catid"); }
@@ -233,6 +238,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
 
         #region "Uri"
+        [JsonIgnore]
         public Uri Uri
         {
             get

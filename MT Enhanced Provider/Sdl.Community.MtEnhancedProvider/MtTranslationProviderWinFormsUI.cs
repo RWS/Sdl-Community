@@ -13,7 +13,10 @@
    limitations under the License.*/
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
+using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -102,8 +105,13 @@ namespace Sdl.Community.MtEnhancedProvider
                 catch { } //swallow b/c it will just fail to fill in instead of crashing the whole program 
             }
 
+			var apiConnecter = new ApiConnecter(loadOptions);
+			var allSupportedLanguages = ApiConnecter.SupportedLangs;
+			var correspLanguages = languagePairs.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0,2))).ToList();
+
+			//loadOptions.LanguagesSupported = correspLanguages.ToDictionary(lp => lp.TargetCultureName, lp=>"MS Translator");
             //construct form
-            var dialog = new MtProviderConfDialog(loadOptions, credentialStore);
+            var dialog = new MtProviderConfDialog(loadOptions, credentialStore, correspLanguages);
             //we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
