@@ -1,6 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Community.DeepLMTProvider;
 
 namespace Sdl.Community.DeepLMTProvider.WPF
 {
@@ -9,10 +13,13 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 	/// </summary>
 	public partial class DeepLWindow
 	{
+		private static readonly List<string> TargetSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL", "ES", "PT", "RU"};
 		private bool _tellMeAction;
+		private LanguagePair[] _languagePairs;
 		public DeepLTranslationOptions Options { get; set; }
-		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore)
+		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
 		{
+			_languagePairs = languagePairs;
 			InitializeComponent();
 			Options = options;
 			if (credentialStore != null)
@@ -23,7 +30,22 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			{
 				SettingsTab.Resend.IsChecked = options.ResendDrafts;
 			}
+
+			GetSupportedTargetLanguages();
 		}
+
+		private void GetSupportedTargetLanguages()
+		{
+			foreach (var languagePair in _languagePairs)
+			{
+				var targetLanguage = languagePair.TargetCultureName.Substring(0, 2).ToUpper();
+				if (TargetSupportedLanguages.Contains(targetLanguage) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
+				{
+                    Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
+				}
+			}
+		}
+
 		public DeepLWindow(DeepLTranslationOptions options, bool tellMeAction)
 		{
 			InitializeComponent();
