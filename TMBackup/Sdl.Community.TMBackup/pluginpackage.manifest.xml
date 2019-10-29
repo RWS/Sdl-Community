@@ -7,8 +7,9 @@
   <Include>
     <File>Sdl.Community.BackupService.dll</File>
     <File>Microsoft.Win32.TaskScheduler.dll</File>
-	<File>Sdl.Community.Toolkit.Core.dll</File>
-	<File>Sdl.Community.BackupFiles.exe</File>
+		<File>NLog.dll</File>
+		<File>Sdl.Community.Toolkit.Core.dll</File>
+		<File>Sdl.Community.BackupFiles.exe</File>
   </Include>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0"/>
 </PluginPackage>

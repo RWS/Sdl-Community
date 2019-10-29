@@ -44,6 +44,7 @@ namespace Sdl.Community.BackupService.Helpers
 		public static readonly string MoveFilesToAcceptedFolder = "MoveFilesToAcceptedFolder method:";
 		public static readonly string AddInfoIntoJson = "AddInfoIntoJson method:";
 		public static readonly string RunManuallyTasks = "RunManuallyTasks method:";
-		public static readonly string RunDisabledTasks = "RunDisabledTasks method:";		
+		public static readonly string RunDisabledTasks = "RunDisabledTasks method:";
+		public static readonly string GetBackupTasks = "GetBackupTasks method:";		
 	}
 }

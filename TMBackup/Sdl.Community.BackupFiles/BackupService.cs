@@ -9,6 +9,8 @@ namespace Sdl.Community.BackupFiles
 {
 	public class BackupService
 	{
+		public static readonly Log Log = Log.Instance;
+
 		#region Private methods
 		private string GetAcceptedRequestsFolder(string path)
 		{
@@ -91,7 +93,7 @@ namespace Sdl.Community.BackupFiles
 			}
 			catch (Exception ex)
 			{
-				MessageLogger.LogFileMessage($"{Constants.BackupFilesRecursive} {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{Constants.BackupFilesRecursive} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -141,7 +143,7 @@ namespace Sdl.Community.BackupFiles
 				}
 				catch (Exception ex)
 				{
-					MessageLogger.LogFileMessage($"{Constants.MoveFilesToAcceptedFolder} {ex.Message} \n {ex.StackTrace}");
+					Log.Logger.Error($"{Constants.MoveFilesToAcceptedFolder} {ex.Message} \n {ex.StackTrace}");
 				}
 			}
 		}

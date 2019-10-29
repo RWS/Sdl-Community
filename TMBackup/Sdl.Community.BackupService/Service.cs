@@ -11,6 +11,8 @@ namespace Sdl.Community.BackupService
 {
 	public class Service
 	{
+		public static readonly Log Log = Log.Instance;
+
 		public JsonRequestModel GetJsonInformation()
 		{
 			var persistence = new Persistence();
@@ -71,7 +73,7 @@ namespace Sdl.Community.BackupService
 				}
 				catch (Exception ex)
 				{
-					MessageLogger.LogFileMessage($"{ Constants.AddTrigger} {ex.Message} \n {ex.StackTrace}");
+					Log.Logger.Error($"{ Constants.AddTrigger} {ex.Message} \n {ex.StackTrace}");
 				}
 			}
 		}

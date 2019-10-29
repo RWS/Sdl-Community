@@ -12,6 +12,8 @@ namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupTasksForm : Form
 	{
+		public static readonly Log Log = Log.Instance;
+
 		#region Private fields
 		private JsonRequestModel _jsonRquestModel = new JsonRequestModel();
 		private string _taskRunType = string.Empty;
@@ -106,7 +108,7 @@ namespace Sdl.Community.TMBackup
 			}
 			catch(Exception ex)
 			{
-				MessageLogger.LogFileMessage(ex.Message);
+				Log.Logger.Error($"{Constants.GetBackupTasks} {ex.Message} \n {ex.StackTrace}");
 			}
 			return backupTasks;
 		}
@@ -169,7 +171,7 @@ namespace Sdl.Community.TMBackup
 			}
 			catch(Exception ex)
 			{
-				MessageLogger.LogFileMessage($"{Constants.AddInfoIntoJson} {ex.Message} \n {ex.StackTrace}");
+				Log.Logger.Error($"{Constants.AddInfoIntoJson} {ex.Message} \n {ex.StackTrace}");
 			}
 		}
 
@@ -217,7 +219,7 @@ namespace Sdl.Community.TMBackup
 			}
 			catch(Exception ex)
 			{
-				MessageLogger.LogFileMessage($"{Constants.RunManuallyTasks} {ex.Message} \n {ex.StackTrace}");
+				Log.Logger.Error($"{Constants.RunManuallyTasks} {ex.Message} \n {ex.StackTrace}");
 			}
 		}
 
@@ -290,7 +292,7 @@ namespace Sdl.Community.TMBackup
 			}
 			catch(Exception ex)
 			{
-				MessageLogger.LogFileMessage($"{Constants.RunDisabledTasks} {ex.Message} \n {ex.StackTrace}");
+				Log.Logger.Error($"{Constants.RunDisabledTasks} {ex.Message} \n {ex.StackTrace}");
 			}
 		}
 
