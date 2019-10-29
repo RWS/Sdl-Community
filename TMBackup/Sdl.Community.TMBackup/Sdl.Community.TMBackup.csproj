@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.TMBackup</RootNamespace>
-    <AssemblyName>Sdl.Community.TMBackup</AssemblyName>
+    <AssemblyName>SDL TMBackup</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -55,6 +55,10 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <Private>False</Private>
@@ -126,8 +130,14 @@
     <Compile Include="TMBackupTasksForm.Designer.cs">
       <DependentUpon>TMBackupTasksForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TMBackupTellMe\SDLTMBackupHelpAction.cs" />
+    <Compile Include="TMBackupTellMe\SDLTMBackupStoreAction.cs" />
+    <Compile Include="TMBackupTellMe\SDLTMBackupSupportAction.cs" />
+    <Compile Include="TMBackupTellMe\TMBackupTellMeProvider.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Download.ico" />
+    <None Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\windows_scheduler.png" />
     <Content Include="Resources\createbackup.png" />
     <Content Include="Resources\enable.png" />

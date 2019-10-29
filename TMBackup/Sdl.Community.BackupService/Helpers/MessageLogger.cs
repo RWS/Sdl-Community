@@ -8,7 +8,7 @@ namespace Sdl.Community.BackupService.Helpers
 	{
 		public static void LogFileMessage(string exceptionMessage)
 		{
-			var path = Path.Combine(Constants.DeployPath, "Log.txt");
+			var path = Path.Combine(Constants.DeployPath, "SDLTMBackupLogs.txt");
 
 			if (!File.Exists(path))
 			{
@@ -29,6 +29,6 @@ namespace Sdl.Community.BackupService.Helpers
 				var info = new UTF8Encoding(true).GetBytes(string.Concat(Constants.InformativeErrorMessage, Environment.NewLine, exceptionMessage));
 				fs.Write(info, 0, info.Length);
 			}
-		}		
+		}
 	}
 }

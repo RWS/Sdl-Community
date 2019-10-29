@@ -91,7 +91,7 @@ namespace Sdl.Community.BackupFiles
 			}
 			catch (Exception ex)
 			{
-				MessageLogger.LogFileMessage(ex.Message);
+				MessageLogger.LogFileMessage($"{Constants.BackupFilesRecursive} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -141,7 +141,7 @@ namespace Sdl.Community.BackupFiles
 				}
 				catch (Exception ex)
 				{
-					MessageLogger.LogFileMessage(ex.Message);
+					MessageLogger.LogFileMessage($"{Constants.MoveFilesToAcceptedFolder} {ex.Message} \n {ex.StackTrace}");
 				}
 			}
 		}

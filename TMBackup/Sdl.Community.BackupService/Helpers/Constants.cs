@@ -29,7 +29,7 @@ namespace Sdl.Community.BackupService.Helpers
 
 		public const string UpdateActionMessage = "Please ensure that all fields are filled in order to update the action!";
 		
-		public static readonly string DeployPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL Community\TMBackup");
+		public static readonly string DeployPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL Community\SDLTMBackup");
 		public static readonly string SdlCommunityPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL Community");
 
 		public static readonly string TaskDetailValue = "TMBackupTask ";
@@ -37,5 +37,13 @@ namespace Sdl.Community.BackupService.Helpers
 		public static readonly string RegistryParam = " / WindowsInitialize";
 
 		public static readonly string TimeFormat = "HH:mm:ss";
+
+		// Logging messages
+		public static readonly string BackupFilesRecursive = "BackupFilesRecursive method:";
+		public static readonly string AddTrigger = "AddTrigger method:";
+		public static readonly string MoveFilesToAcceptedFolder = "MoveFilesToAcceptedFolder method:";
+		public static readonly string AddInfoIntoJson = "AddInfoIntoJson method:";
+		public static readonly string RunManuallyTasks = "RunManuallyTasks method:";
+		public static readonly string RunDisabledTasks = "RunDisabledTasks method:";		
 	}
 }

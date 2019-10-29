@@ -1,26 +1,23 @@
-﻿using Sdl.Community.BackupService;
-using Sdl.Community.BackupService.Helpers;
-using Sdl.Community.BackupService.Models;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using System.Collections.Generic;
+using Sdl.Community.BackupService;
+using Sdl.Community.BackupService.Helpers;
+using Sdl.Community.BackupService.Models;
 
 namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupForm : Form
 	{
-		private string _taskName;
 		private bool _isNewTask;
 		private string _oldTaskName;
-
 		private List<BackupModel> _backupModelList = new List<BackupModel>();
 
 		public TMBackupForm(bool isNewTask, string taskName)
 		{
 			InitializeComponent();
 
-			_taskName = taskName;
 			_isNewTask = isNewTask;
 
 			if (!isNewTask)
@@ -29,7 +26,7 @@ namespace Sdl.Community.TMBackup
 				GetBackupFormInfo(taskName);
 			}
 		}
-		
+
 		private void btn_BackupFrom_Click(object sender, EventArgs e)
 		{
 			var fromFolderDialog = new FolderSelectDialog();
@@ -62,7 +59,7 @@ namespace Sdl.Community.TMBackup
 		{
 			var changeForm = new TMBackupChangeForm(_isNewTask, txt_BackupName.Text);
 			changeForm.ShowDialog();
-			
+
 			txt_BackupTime.Text = changeForm.GetBackupTimeInfo();
 		}
 
@@ -135,7 +132,7 @@ namespace Sdl.Community.TMBackup
 					var backupModel = new BackupModel();
 					backupModel.BackupName = (txt_BackupName.Text);
 					backupModel.TrimmedBackupName = string.Concat(txt_BackupName.Text.Where(c => !char.IsWhiteSpace(c)));
-										
+
 					SetBackupModelInfo(backupModel, persistence, service);
 				}
 			}
@@ -183,17 +180,17 @@ namespace Sdl.Community.TMBackup
 					res = res + backupDetail.BackupAction + ", " + backupDetail.BackupType + ", " + backupDetail.BackupPattern + ";  ";
 				}
 				txt_BackupDetails.Text = res;
-			}			
+			}
 		}
 
 		private bool CheckTask(string taskName)
 		{
 			var persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
-			var backupModel = result?.BackupModelList?.Count > 0 
+			var backupModel = result?.BackupModelList?.Count > 0
 				? result.BackupModelList[0] != null
 					? result.BackupModelList.FirstOrDefault(b => b.BackupName.Equals(taskName))
-					: null :null;
+					: null : null;
 
 			if (backupModel != null && backupModel.BackupName.Contains(taskName))
 			{
@@ -201,7 +198,7 @@ namespace Sdl.Community.TMBackup
 			}
 			return false;
 		}
-		
+
 		private void SetBackupModelInfo(BackupModel backupModel, Persistence persistence, Service service)
 		{
 			backupModel.BackupFrom = txt_BackupFrom.Text;
