@@ -74,8 +74,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\NLog.dll" />
     <EmbeddedResource Include="Resources\Sdl.Community.BackupService.dll" />
+    <EmbeddedResource Include="Resources\NLog.dll" />
     <None Include="App.config" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

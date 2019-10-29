@@ -70,7 +70,6 @@
     <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Log.cs" />
-    <Compile Include="Helpers\MessageLogger.cs" />
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Models\BackupDetailsModel.cs" />
     <Compile Include="Models\BackupModel.cs" />
