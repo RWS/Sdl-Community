@@ -62,50 +62,57 @@ namespace Sdl.Community.DeepLMTProvider
         {
             throw new NotImplementedException();
         }
-		
-        public SearchResults SearchSegment(SearchSettings settings, Segment segment)
-        {
-			var translation = new Segment(_languageDirection.TargetCulture);
-			var results = new SearchResults
-			{
-				SourceSegment = segment.Duplicate()
-			};
 
-			// if there are match in tm the provider will not search the segment
-			#region "Confirmation Level"
-			if ( !_options.ResendDrafts &&_inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified) 
-			{
-				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-				//later get these strings from resource file
-				results.Add(CreateSearchResult(segment, translation));
-				return results;
-			}
-	        var newseg = segment.Duplicate();
-	        if (newseg.HasTags)
-	        {
-		        var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
-		        var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
-		         translation = tagPlacer.GetTaggedSegment(translatedText);
+	    public SearchResults SearchSegment(SearchSettings settings, Segment segment)
+	    {
+		    var translation = new Segment(_languageDirection.TargetCulture);
+		    var results = new SearchResults
+		    {
+			    SourceSegment = segment.Duplicate()
+		    };
 
-		        results.Add(CreateSearchResult(newseg, translation));
-		        return results;
-			}
-	        else
-	        {
+		    // if there are match in tm the provider will not search the segment
+		    #region "Confirmation Level"
 
-		        var sourcetext = newseg.ToPlain();
+		    if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
+		    {
+			    translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
+			    //later get these strings from resource file
+			    results.Add(CreateSearchResult(segment, translation));
+			    return results;
+		    }
+		    var newseg = segment.Duplicate();
+		    if (newseg.HasTags)
+		    {
+			    var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
+			    var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
+			    if (!string.IsNullOrEmpty(translatedText))
+			    {
+				    translation = tagPlacer.GetTaggedSegment(translatedText);
 
-		        var translatedText = LookupDeepl(sourcetext);
-		        translation.Add(translatedText);
+				    results.Add(CreateSearchResult(newseg, translation));
+				    return results;
+			    }
+		    }
+		    else
+		    {
+			    var sourcetext = newseg.ToPlain();
+			    var translatedText = LookupDeepl(sourcetext);
+			    if (!string.IsNullOrEmpty(translatedText))
+			    {
+				    translation.Add(translatedText);
 
-		        results.Add(CreateSearchResult(newseg, translation));
-		        return results;
-	        }
+				    results.Add(CreateSearchResult(newseg, translation));
+				    return results;
+			    }
 
-	        #endregion
-		}
+		    }
+		    #endregion
 
-		private string LookupDeepl(string sourcetext)
+		    return results;
+	    }
+
+	    private string LookupDeepl(string sourcetext)
 		{
 			if (_deeplConnect == null)
 			{
