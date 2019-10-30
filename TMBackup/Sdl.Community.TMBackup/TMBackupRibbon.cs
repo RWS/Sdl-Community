@@ -38,21 +38,21 @@ namespace Sdl.Community.TMBackup
 		private static void MoveBackupFilesAppToDirectory()
 		{
 			var pluginExePath = GetUnpackedFolder();
-			if(!string.IsNullOrEmpty(pluginExePath))
-			{ 
-			var path = Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe");
-
-			if (!Directory.Exists(Constants.SdlCommunityPath))
+			if (!string.IsNullOrEmpty(pluginExePath))
 			{
-				Directory.CreateDirectory(Constants.SdlCommunityPath);
-			}
+				var path = Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe");
 
-			if (!Directory.Exists(Constants.DeployPath))
-			{
-				Directory.CreateDirectory(Constants.DeployPath);
-			}
+				if (!Directory.Exists(Constants.SdlCommunityPath))
+				{
+					Directory.CreateDirectory(Constants.SdlCommunityPath);
+				}
 
-			var directoryFiles = new List<string>(Directory.GetFiles(Constants.DeployPath));
+				if (!Directory.Exists(Constants.DeployPath))
+				{
+					Directory.CreateDirectory(Constants.DeployPath);
+				}
+
+				var directoryFiles = new List<string>(Directory.GetFiles(Constants.DeployPath));
 
 				if (!directoryFiles.Contains(path))
 				{
@@ -74,7 +74,7 @@ namespace Sdl.Community.TMBackup
 		// Get the Sdl.Community.TMBackup.exe path from the Unpacked folder when plugin is loaded in Studio
 		private static string GetUnpackedFolder()
 		{
-			var executableVersion = new Studio().GetStudioVersion().ExecutableVersion.Major;			
+			var executableVersion = new Studio().GetStudioVersion().ExecutableVersion.Major;
 			foreach (var pluginFolderLocation in _pluginFolderLocations)
 			{
 				var unpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\{PluginResources.Plugin_Name}";

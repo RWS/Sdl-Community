@@ -1,31 +1,27 @@
-﻿using Sdl.Community.BackupService;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Windows.Forms;
+using Sdl.Community.BackupService;
 using Sdl.Community.BackupService.Helpers;
 using Sdl.Community.BackupService.Models;
-using System;
-using System.Globalization;
-using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Sdl.Community.TMBackup
 {
 	public partial class PeriodicBackupForm : Form
 	{
-		private string _taskName { get; set; }
+		private string _taskName;
 		private List<PeriodicBackupModel> _periodicBackupModelList = new List<PeriodicBackupModel>();
 		private bool _isNowPressed = false;
 
 		public PeriodicBackupForm(string taskName)
 		{
 			InitializeComponent();
-
-			_taskName = taskName;
-
 			SetDateTimeFormat();
-
 			InitializeFormData();
-
 			SetDateTimeValue();
+			_taskName = taskName;
 		}
 
 		private void SetDateTimeFormat()
@@ -55,9 +51,9 @@ namespace Sdl.Community.TMBackup
 				}
 				else
 				{
-					DateTime atScheduleTime = DateTime.Parse(timePicker_At.Text, CultureInfo.InvariantCulture);
+					var atScheduleTime = DateTime.Parse(timePicker_At.Text, CultureInfo.InvariantCulture);
 					//set isNowPressed to false in case user pressed Now button and after that he has changed the 'At' time manually
-					if (dateTimePicker_FirstBackup.Value.Day.Equals(DateTime.Now.Day) && dateTimePicker_FirstBackup.Value.Month.Equals(DateTime.Now.Month) && dateTimePicker_FirstBackup.Value.Year.Equals(DateTime.Now.Year) 
+					if (dateTimePicker_FirstBackup.Value.Day.Equals(DateTime.Now.Day) && dateTimePicker_FirstBackup.Value.Month.Equals(DateTime.Now.Month) && dateTimePicker_FirstBackup.Value.Year.Equals(DateTime.Now.Year)
 						&& (atScheduleTime.Hour != DateTime.Now.Hour || atScheduleTime.Minute != DateTime.Now.Minute && _isNowPressed))
 					{
 						_isNowPressed = false;
@@ -70,19 +66,19 @@ namespace Sdl.Community.TMBackup
 						_isNowPressed = false;
 					}
 
-					PeriodicBackupModel periodicBackupModel = new PeriodicBackupModel();
+					var periodicBackupModel = new PeriodicBackupModel();
 					periodicBackupModel.BackupInterval = int.Parse(txtBox_TimeInterval.Text);
 					periodicBackupModel.TimeType = cmbBox_Interval.SelectedItem.ToString();
 					periodicBackupModel.FirstBackup = new DateTime(dateTimePicker_FirstBackup.Value.Year,
-						                                  dateTimePicker_FirstBackup.Value.Month,
-						                                  dateTimePicker_FirstBackup.Value.Day) + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
+														  dateTimePicker_FirstBackup.Value.Month,
+														  dateTimePicker_FirstBackup.Value.Day) + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
 					periodicBackupModel.BackupAt = timePicker_At.Text;
 					periodicBackupModel.BackupName = _taskName;
 					periodicBackupModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
 					periodicBackupModel.IsNowPressed = _isNowPressed;
 					_periodicBackupModelList.Add(periodicBackupModel);
 
-					Persistence persistence = new Persistence();
+					var persistence = new Persistence();
 					persistence.SavePeriodicBackupInfo(_periodicBackupModelList, _taskName);
 
 					Close();

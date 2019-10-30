@@ -1,17 +1,16 @@
-﻿using Sdl.Community.BackupService;
-using Sdl.Community.BackupService.Helpers;
-using Sdl.Community.BackupService.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Sdl.Community.BackupService;
+using Sdl.Community.BackupService.Helpers;
+using Sdl.Community.BackupService.Models;
 
 namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupDetailsForm : Form
 	{
 		#region Private fields
-		private BindingSource _source = new BindingSource();
 		private List<BackupDetailsModel> _backupDetailsModelList = new List<BackupDetailsModel>();
 		private string _taskName;
 		#endregion
@@ -25,8 +24,8 @@ namespace Sdl.Community.TMBackup
 		public TMBackupDetailsForm(string taskName)
 		{
 			InitializeComponent();
-			_taskName = taskName;
 			InitializeBackupDetails();
+			_taskName = taskName;
 		}
 
 		#endregion
@@ -54,7 +53,7 @@ namespace Sdl.Community.TMBackup
 						});
 						var persistence = new Persistence();
 						persistence.DeleteDetailsFromInfo(removedActionsList, _taskName);
-					}					
+					}
 				}
 				InitializeBackupDetails();
 			}
@@ -64,15 +63,15 @@ namespace Sdl.Community.TMBackup
 		{
 			var persistence = new Persistence();
 			var jsonModel = persistence.ReadFormInformation();
-		
-			if (jsonModel!= null && jsonModel.BackupDetailsModelList!= null && jsonModel.BackupDetailsModelList.Count > 0)
+
+			if (jsonModel != null && jsonModel.BackupDetailsModelList != null && jsonModel.BackupDetailsModelList.Count > 0)
 			{
 				foreach (var backupDetailModel in jsonModel.BackupDetailsModelList)
 				{
 					BackupDetailsInfo = BackupDetailsInfo + backupDetailModel.BackupAction + ", " + backupDetailModel.BackupType + ", " + backupDetailModel.BackupPattern + "; ";
 				}
 				Close();
-			}		
+			}
 		}
 
 		private void btn_Cancel_Click(object sender, EventArgs e)
@@ -150,8 +149,8 @@ namespace Sdl.Community.TMBackup
 			if (dataGridView1.Rows.Count > 0)
 			{
 				var persistence = new Persistence();
-				var jsonRequestModel = persistence.ReadFormInformation();						
-				
+				var jsonRequestModel = persistence.ReadFormInformation();
+
 				if (jsonRequestModel != null && jsonRequestModel.BackupDetailsModelList != null && jsonRequestModel.BackupDetailsModelList.Count > 0)
 				{
 					var backupDetailsList = jsonRequestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(_taskName)).ToList();
@@ -276,8 +275,8 @@ namespace Sdl.Community.TMBackup
 					dataGridView1.Rows[e.RowIndex].ReadOnly = true;
 
 					if (e.ColumnIndex != -1 && dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null
-					    || e.ColumnIndex != -1 &&
-					    string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()))
+						|| e.ColumnIndex != -1 &&
+						string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()))
 					{
 						dataGridView1.Rows[e.RowIndex].ReadOnly = false;
 					}

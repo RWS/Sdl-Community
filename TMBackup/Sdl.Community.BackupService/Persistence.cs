@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using Sdl.Community.BackupService.Helpers;
-using Sdl.Community.BackupService.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using Sdl.Community.BackupService.Helpers;
+using Sdl.Community.BackupService.Models;
 
 namespace Sdl.Community.BackupService
 {
@@ -16,7 +16,8 @@ namespace Sdl.Community.BackupService
 		public Persistence()
 		{
 			_persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				@"SDL Community\TMBackup\TMBackup.json");
+				@"SDL Community\SDLTMBackup\TMBackup.json");
+			CheckIfJsonFileExist();
 		}
 
 		public void SaveBackupFormInfo(List<BackupModel> backupModelList, bool isNewTask)
@@ -101,7 +102,7 @@ namespace Sdl.Community.BackupService
 							var existingBackupItem = request.BackupDetailsModelList.FirstOrDefault(b => b.BackupName.Equals(taskName)
 																						  && b.BackupAction.Equals(backupItem.BackupAction)
 																						  && b.BackupPattern.Equals(backupItem.BackupPattern)
-																						  && b.BackupType.Equals(backupItem.BackupType));															
+																						  && b.BackupType.Equals(backupItem.BackupType));
 							if (existingBackupItem == null)
 							{
 								request.BackupDetailsModelList.Add(backupItem);
@@ -133,9 +134,9 @@ namespace Sdl.Community.BackupService
 				foreach (var item in removedBackupDetailsList)
 				{
 					var requestItem = request.BackupDetailsModelList.FirstOrDefault(r => r.BackupAction == item.BackupAction
-					                                                                     && r.BackupType == item.BackupType 
-					                                                                     && r.BackupPattern == item.BackupPattern
-					                                                                     && r.BackupName.Equals(taskName));
+																						 && r.BackupType == item.BackupType
+																						 && r.BackupPattern == item.BackupPattern
+																						 && r.BackupName.Equals(taskName));
 
 					if (requestItem != null)
 					{
@@ -260,7 +261,7 @@ namespace Sdl.Community.BackupService
 			{
 				var jsonText = File.ReadAllText(_persistancePath);
 				var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
-				
+
 				if (request != null)
 				{
 					if (request.BackupDetailsModelList != null)
@@ -308,7 +309,7 @@ namespace Sdl.Community.BackupService
 						}
 					}
 					WriteJsonRequestModel(request);
-				}				
+				}
 			}
 		}
 
@@ -326,7 +327,7 @@ namespace Sdl.Community.BackupService
 						request.BackupModelList.Remove(item);
 						break;
 					}
-				}			
+				}
 				request.BackupModelList.Add(backupModel);
 				WriteJsonRequestModel(request);
 			}
@@ -365,7 +366,7 @@ namespace Sdl.Community.BackupService
 						request.PeriodicBackupModelList.Remove(item);
 						break;
 					}
-				}				
+				}
 				request.PeriodicBackupModelList.Add(periodicModel);
 				WriteJsonRequestModel(request);
 			}

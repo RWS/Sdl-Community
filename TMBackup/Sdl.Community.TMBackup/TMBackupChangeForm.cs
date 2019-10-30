@@ -11,10 +11,8 @@ namespace Sdl.Community.TMBackup
 	public partial class TMBackupChangeForm : Form
 	{
 		#region Private fields
-		private bool _isNewTask;
 		private string _taskName;
 		private List<ChangeSettingsModel> _changeSettingsModelList = new List<ChangeSettingsModel>();
-		private List<PeriodicBackupModel> _periodicBackupModelList = new List<PeriodicBackupModel>();
 		#endregion
 
 		#region Constructors
@@ -27,9 +25,7 @@ namespace Sdl.Community.TMBackup
 		{
 			InitializeComponent();
 
-			_isNewTask = isNewTask;
 			_taskName = taskName;
-
 			if (!isNewTask)
 			{
 				InitializeFormInfo();
@@ -43,7 +39,7 @@ namespace Sdl.Community.TMBackup
 			var periodicBackupForm = new PeriodicBackupForm(_taskName);
 			periodicBackupForm.ShowDialog();
 		}
-		
+
 		private void btn_Ok_Click(object sender, EventArgs e)
 		{
 			var changeSettingModel = new ChangeSettingsModel();
@@ -85,7 +81,7 @@ namespace Sdl.Community.TMBackup
 			var persistence = new Persistence();
 			var jsonResult = persistence.ReadFormInformation();
 
-			if (jsonResult != null && jsonResult.ChangeSettingsModelList != null 
+			if (jsonResult != null && jsonResult.ChangeSettingsModelList != null
 				&& jsonResult.ChangeSettingsModelList.Count > 0 && jsonResult.ChangeSettingsModelList[0] != null)
 			{
 				var changeSettingsModel = jsonResult.ChangeSettingsModelList.FirstOrDefault(c => c.BackupName.Equals(_taskName));
@@ -108,10 +104,10 @@ namespace Sdl.Community.TMBackup
 
 			if (periodicBackupModel != null && radioBtn_TimeChange.Checked)
 			{
-				var firstBackupDate = string.Concat(periodicBackupModel.FirstBackup.Year, "/", periodicBackupModel.FirstBackup.Month,"/",periodicBackupModel.FirstBackup.Day);
+				var firstBackupDate = string.Concat(periodicBackupModel.FirstBackup.Year, "/", periodicBackupModel.FirstBackup.Month, "/", periodicBackupModel.FirstBackup.Day);
 				backupTimeInfo = backupTimeInfo + "Backup interval: " + periodicBackupModel.BackupInterval + " " +
 					periodicBackupModel.TimeType + ", " + "First backup on: " +
-				    firstBackupDate + ", " + "at " +
+					firstBackupDate + ", " + "at " +
 					periodicBackupModel.BackupAt + ". ";
 			}
 			else if (radioBtn_Manually.Checked)
@@ -120,6 +116,6 @@ namespace Sdl.Community.TMBackup
 			}
 			return backupTimeInfo;
 		}
-		#endregion		
+		#endregion
 	}
 }

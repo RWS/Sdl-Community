@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>Sdl.Community.TMBackup</PlugInName>
-  <Version>1.0.2.0</Version>
+  <PlugInName>SDL TMBackup</PlugInName>
+  <Version>1.0.3.0</Version>
   <Description>Backup translation memory/termbase files</Description>>
   <Author>SDL Community Developers</Author>
   <Include>
@@ -9,6 +9,7 @@
     <File>Microsoft.Win32.TaskScheduler.dll</File>
     <File>Sdl.Community.Toolkit.Core.dll</File>
     <File>Sdl.Community.BackupFiles.exe</File>
-  </Include>
+		<File>NLog.dll</File>
+	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" maxversion="15.0" />
 </PluginPackage>

@@ -11,10 +11,10 @@ namespace Sdl.Community.BackupFiles
 		static void Main(string[] args)
 		{
 			LoadAssemblies();
-					
+
 			if (args.Any())
 			{
-				BackupService service = new BackupService();
+				var service = new BackupService();
 				service.BackupFilesRecursive(args[0]);
 			}
 		}
