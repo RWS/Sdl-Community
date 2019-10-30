@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.Community.DeepLMTProvider;
 
 namespace Sdl.Community.DeepLMTProvider.WPF
 {
-	/// <summary>
-	/// Interaction logic for DeepLWindow.xaml
-	/// </summary>
 	public partial class DeepLWindow
 	{
 		private static readonly List<string> TargetSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL", "ES", "PT", "RU"};
-		private bool _tellMeAction;
-		private LanguagePair[] _languagePairs;
+		private readonly bool _tellMeAction;
+		private readonly LanguagePair[] _languagePairs;
 		public DeepLTranslationOptions Options { get; set; }
+
 		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
 		{
 			_languagePairs = languagePairs;
@@ -32,18 +28,6 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			}
 
 			GetSupportedTargetLanguages();
-		}
-
-		private void GetSupportedTargetLanguages()
-		{
-			foreach (var languagePair in _languagePairs)
-			{
-				var targetLanguage = languagePair.TargetCultureName.Substring(0, 2).ToUpper();
-				if (TargetSupportedLanguages.Contains(targetLanguage) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
-				{
-                    Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
-				}
-			}
 		}
 
 		public DeepLWindow(DeepLTranslationOptions options, bool tellMeAction)
@@ -87,7 +71,17 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			{
 				LoginTab.ValidationBlock.Visibility = Visibility.Visible;
 			}
-			
+		}
+		private void GetSupportedTargetLanguages()
+		{
+			foreach (var languagePair in _languagePairs)
+			{
+				var targetLanguage = languagePair.TargetCultureName.Substring(0, 2).ToUpper();
+				if (TargetSupportedLanguages.Contains(targetLanguage) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
+				{
+					Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
+				}
+			}
 		}
 
 		private void Cancel_Click(object sender, RoutedEventArgs e)
