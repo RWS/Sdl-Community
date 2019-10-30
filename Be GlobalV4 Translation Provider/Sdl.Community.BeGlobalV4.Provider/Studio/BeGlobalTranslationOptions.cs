@@ -23,8 +23,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public string DisplayName { get; set; }
 
+		[JsonIgnore]
 		public string ClientId { get; set; }
 
+		[JsonIgnore]
 		public string ClientSecret { get; set; }
 
 		[JsonIgnore]
