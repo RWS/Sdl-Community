@@ -14,7 +14,7 @@ namespace Sdl.Community.BackupFiles
 					
 			if (args.Any())
 			{
-				BackupService service = new BackupService();
+				var service = new BackupService();
 				service.BackupFilesRecursive(args[0]);
 			}
 		}
