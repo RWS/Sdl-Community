@@ -34,7 +34,7 @@ namespace Sdl.Community.DeepLMTProvider
 			//get credentials
 			var credentials = GetCredentials(credentialStore, "deeplprovider:///");
 
-			var dialog = new DeepLWindow(options, credentials);
+			var dialog = new DeepLWindow(options, credentials, languagePairs);
 			ElementHost.EnableModelessKeyboardInterop(dialog);
 			dialog.ShowDialog();
 			if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
@@ -90,7 +90,7 @@ namespace Sdl.Community.DeepLMTProvider
 				editProvider.Options.ApiKey = savedCredentials.Credential;
 			}
 
-			var dialog = new DeepLWindow(editProvider.Options, savedCredentials);
+			var dialog = new DeepLWindow(editProvider.Options, savedCredentials, languagePairs);
 			ElementHost.EnableModelessKeyboardInterop(dialog);
 			dialog.ShowDialog();
 			if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)

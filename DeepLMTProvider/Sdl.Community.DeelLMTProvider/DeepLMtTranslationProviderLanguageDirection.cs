@@ -84,20 +84,26 @@ namespace Sdl.Community.DeepLMTProvider
 				{
 					var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
 					var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
-					translation = tagPlacer.GetTaggedSegment(translatedText);
+					if (!string.IsNullOrEmpty(translatedText))
+					{
+						translation = tagPlacer.GetTaggedSegment(translatedText);
 
-					results.Add(CreateSearchResult(newseg, translation));
-					return results;
+						results.Add(CreateSearchResult(newseg, translation));
+						return results;
+					}
 				}
 				else
 				{
 					var sourcetext = newseg.ToPlain();
-
 					var translatedText = LookupDeepl(sourcetext);
-					translation.Add(translatedText);
+					if (!string.IsNullOrEmpty(translatedText))
+					{
+						translation.Add(translatedText);
 
-					results.Add(CreateSearchResult(newseg, translation));
-					return results;
+						results.Add(CreateSearchResult(newseg, translation));
+						return results;
+					}
+
 				}
 				#endregion
 			}
@@ -202,7 +208,7 @@ namespace Sdl.Community.DeepLMTProvider
 				var i = 0;
 				foreach (var tu in translationUnits)
 				{
-					if (mask == null || mask[i])
+					if (mask[i])
 					{
 						var preTranslate = new PreTranslateSegment
 						{
@@ -236,7 +242,7 @@ namespace Sdl.Community.DeepLMTProvider
 				var i = 0;
 				foreach (var tu in translationUnits)
 				{
-					if (mask == null || mask[i])
+					if (mask[i])
 					{
 						var result = SearchTranslationUnit(settings, tu);
 						results.RemoveAt(i);
