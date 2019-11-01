@@ -10,8 +10,9 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Application = System.Windows.Application;
+using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
@@ -22,11 +23,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private readonly LanguagePair _languageDirection;
 		private readonly List<TranslationUnit> _translationUnits;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
+		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
+		private readonly EditorController _editorController;
+
 		public ITranslationProvider TranslationProvider => _beGlobalTranslationProvider;
 		public CultureInfo SourceLanguage { get; }
 		public CultureInfo TargetLanguage { get; }
 		public bool CanReverseLanguageDirection { get; }
-		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
 
 		public BeGlobalLanguageDirection(BeGlobalTranslationProvider beGlobalTranslationProvider, LanguagePair languageDirection)
 		{
@@ -35,6 +38,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			_options = beGlobalTranslationProvider.Options;
 			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			_translationUnits = new List<TranslationUnit>();
+			_editorController = GetEditorController();
+		}
+
+		public EditorController GetEditorController()
+		{
+			return SdlTradosStudio.Application.GetController<EditorController>();
 		}
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
@@ -136,22 +145,20 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						continue;
 					}
 
+					// Get the corresponding translation unit based on the current source segment.
 					var corespondingTu = _translationUnits.FirstOrDefault(tu => tu.SourceSegment.Equals(segments[i]));
 
-					//locked segments should not be translated
-					if (corespondingTu != null && (corespondingTu.ConfirmationLevel != ConfirmationLevel.Unspecified || corespondingTu.DocumentSegmentPair.Properties.IsLocked))
+					// if activeSegmentPair is not null, it means the user translates segments through Editor
+					// if activeSegmentPair is null, it means the user executes Pre-Translate Batch task, so he does not navigate through segments in editor
+					var activeSegmentPair = _editorController?.ActiveDocument?.ActiveSegmentPair;
+					if (activeSegmentPair != null && (activeSegmentPair.Target.Count > 0 || activeSegmentPair.Properties.IsLocked))
 					{
-						var translation = new Segment(_languageDirection.TargetCulture);
-						translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-
-						var alreadyTranslatedSegment = new BeGlobalSegment
-						{
-							Translation = translation,
-							Segment = segments[i],
-							Index = i,
-							SearchResult = CreateSearchResult(segments[i], translation)
-						};
-						alreadyTranslatedSegments.Add(alreadyTranslatedSegment);
+						CreateTranslatedSegment(segments, i, alreadyTranslatedSegments);
+					}
+					// If is already translated or is locked, then the request to server should not be done and it should not be translated
+					else if (activeSegmentPair == null && corespondingTu != null && (corespondingTu.DocumentSegmentPair.Target.Count > 0 || corespondingTu.DocumentSegmentPair.Properties.IsLocked))
+					{
+						CreateTranslatedSegment(segments, i, alreadyTranslatedSegments);
 					}
 					else
 					{
@@ -203,6 +210,22 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				}
 			}
 			return results;
+		}
+
+		// Create the already translated segments in case the translation was already received from the server
+		private void CreateTranslatedSegment(Segment[] segments, int segmentIndex, List<BeGlobalSegment> alreadyTranslatedSegments)
+		{
+			var translation = new Segment(_languageDirection.TargetCulture);
+			translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
+
+			var alreadyTranslatedSegment = new BeGlobalSegment
+			{
+				Translation = translation,
+				Segment = segments[segmentIndex],
+				Index = segmentIndex,
+				SearchResult = CreateSearchResult(segments[segmentIndex], translation)
+			};
+			alreadyTranslatedSegments.Add(alreadyTranslatedSegment);
 		}
 
 		private void SetSearchResults(SearchResults[]results,List<BeGlobalSegment> translatedSegments)
