@@ -81,7 +81,7 @@ namespace Sdl.Community.TMBackup {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL TMBackup.
+        ///   Looks up a localized string similar to Sdl.Community.TMBackup.
         /// </summary>
         internal static string Plugin_Name {
             get {
