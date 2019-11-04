@@ -134,44 +134,55 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 			var beGlobalSegments = new List<BeGlobalSegment>();
 			var alreadyTranslatedSegments = new List<BeGlobalSegment>();
+
 			if (!_options.ResendDrafts)
 			{
 				// Re-send draft segment logic
-				for (var i = 0; i < segments.Length; i++)
+				for (var segmentIndex = 0; segmentIndex < segments.Length; segmentIndex++)
 				{
-					if (mask != null && !mask[i])
+					if (mask != null && !mask[segmentIndex])
 					{
-						results[i] = null;
+						results[segmentIndex] = null;
 						continue;
 					}
 
 					// Get the corresponding translation unit based on the current source segment.
-					var corespondingTu = _translationUnits.FirstOrDefault(tu => tu.SourceSegment.Equals(segments[i]));
+					TranslationUnit correspondingTu = null;
+					var tuIndex = 0;
+					foreach (var tu in _translationUnits)
+					{
+						if (tu.SourceSegment.Equals(segments[segmentIndex]) && tuIndex == segmentIndex)
+						{
+							correspondingTu = tu;
+							break;
+						}
+						tuIndex++;
+					}
 
 					// If activeSegmentPair is not null, it means the user translates segments through Editor
 					// If activeSegmentPair is null, it means the user executes Pre-Translate Batch task, so he does not navigate through segments in editor
 					var activeSegmentPair = _editorController?.ActiveDocument?.ActiveSegmentPair;
 					if (activeSegmentPair != null && (activeSegmentPair.Target.Count > 0 || activeSegmentPair.Properties.IsLocked))
 					{
-						CreateTranslatedSegment(segments, i, alreadyTranslatedSegments);
+						CreateTranslatedSegment(segments, segmentIndex, alreadyTranslatedSegments);
 					}
 					// In case user copies the source to target and run the pre-translation, do nothing and continue the flow.
-					if (corespondingTu != null && IsSameSourceTarget(corespondingTu))
+					if (correspondingTu != null && IsSameSourceTarget(correspondingTu, tuIndex, segmentIndex))
 					{
 						continue;
 					}
 					// If is already translated or is locked, then the request to server should not be done and it should not be translated
-					else if (activeSegmentPair == null && corespondingTu != null && (corespondingTu.DocumentSegmentPair.Target.Count > 0 || corespondingTu.DocumentSegmentPair.Properties.IsLocked))
+					else if (activeSegmentPair == null && correspondingTu != null && (correspondingTu.DocumentSegmentPair.Target.Count > 0 || correspondingTu.DocumentSegmentPair.Properties.IsLocked))
 					{
-						CreateTranslatedSegment(segments, i, alreadyTranslatedSegments);
+						CreateTranslatedSegment(segments, segmentIndex, alreadyTranslatedSegments);
 					}
 					else
 					{
 						// Set the segments used to receive the translations from server
 						var segmentToBeTranslated = new BeGlobalSegment
 						{
-							Segment = segments[i],
-							Index = i
+							Segment = segments[segmentIndex],
+							Index = segmentIndex
 						};
 						beGlobalSegments.Add(segmentToBeTranslated);
 					}
@@ -370,9 +381,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			throw new NotImplementedException();
 		}
 
-		private bool IsSameSourceTarget(TranslationUnit corespondingTu)
+		private bool IsSameSourceTarget(TranslationUnit corespondingTu, int tuIndex, int segmentIndex)
 		{
-			if (corespondingTu.TargetSegment == null || corespondingTu.SourceSegment == null)
+			if (corespondingTu.TargetSegment == null || corespondingTu.SourceSegment == null && tuIndex == segmentIndex)
 			{
 				return false;
 			}
