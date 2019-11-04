@@ -148,12 +148,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					// Get the corresponding translation unit based on the current source segment.
 					var corespondingTu = _translationUnits.FirstOrDefault(tu => tu.SourceSegment.Equals(segments[i]));
 
-					// if activeSegmentPair is not null, it means the user translates segments through Editor
-					// if activeSegmentPair is null, it means the user executes Pre-Translate Batch task, so he does not navigate through segments in editor
+					// If activeSegmentPair is not null, it means the user translates segments through Editor
+					// If activeSegmentPair is null, it means the user executes Pre-Translate Batch task, so he does not navigate through segments in editor
 					var activeSegmentPair = _editorController?.ActiveDocument?.ActiveSegmentPair;
 					if (activeSegmentPair != null && (activeSegmentPair.Target.Count > 0 || activeSegmentPair.Properties.IsLocked))
 					{
 						CreateTranslatedSegment(segments, i, alreadyTranslatedSegments);
+					}
+					// In case user copies the source to target and run the pre-translation, do nothing and continue the flow.
+					if (corespondingTu != null && IsSameSourceTarget(corespondingTu))
+					{
+						continue;
 					}
 					// If is already translated or is locked, then the request to server should not be done and it should not be translated
 					else if (activeSegmentPair == null && corespondingTu != null && (corespondingTu.DocumentSegmentPair.Target.Count > 0 || corespondingTu.DocumentSegmentPair.Properties.IsLocked))
@@ -162,6 +167,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					}
 					else
 					{
+						// Set the segments used to receive the translations from server
 						var segmentToBeTranslated = new BeGlobalSegment
 						{
 							Segment = segments[i],
@@ -362,6 +368,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
 		{
 			throw new NotImplementedException();
+		}
+
+		private bool IsSameSourceTarget(TranslationUnit corespondingTu)
+		{
+			if (corespondingTu.TargetSegment == null || corespondingTu.SourceSegment == null)
+			{
+				return false;
+			}
+			return corespondingTu.SourceSegment.ToString().Equals(corespondingTu.TargetSegment.ToString());
 		}
 	}
 }
