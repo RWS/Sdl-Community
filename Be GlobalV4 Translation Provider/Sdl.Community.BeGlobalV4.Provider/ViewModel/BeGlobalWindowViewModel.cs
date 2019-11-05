@@ -29,7 +29,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			LoginViewModel = new LoginViewModel(options, _credentials, _languagePairs, LanguageMappingsViewModel);
 
 			if (_credentials == null) return;
-			var credential = _credentials.Credential.Replace("sdlmachinetranslationcloudprovider:///", string.Empty);
+			var credential = !string.IsNullOrEmpty(_credentials.Credential) ? _credentials.Credential.Replace("sdlmachinetranslationcloudprovider:///", string.Empty) : string.Empty;
 			if (credential.Contains("#"))
 			{
 				var splitedCredentials = credentials.Credential.Split('#');

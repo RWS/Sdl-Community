@@ -131,12 +131,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
 			var results = new SearchResults[segments.Length];
-
 			var beGlobalSegments = new List<BeGlobalSegment>();
 			var alreadyTranslatedSegments = new List<BeGlobalSegment>();
 
 			if (!_options.ResendDrafts)
-			{
+			{				
 				// Re-send draft segment logic
 				for (var segmentIndex = 0; segmentIndex < segments.Length; segmentIndex++)
 				{
@@ -146,17 +145,18 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						continue;
 					}
 
-					// Get the corresponding translation unit based on the current source segment.
 					TranslationUnit correspondingTu = null;
-					var tuIndex = 0;
-					foreach (var tu in _translationUnits)
+					if (segments.Length > _translationUnits.Count)
 					{
-						if (tu.SourceSegment.Equals(segments[segmentIndex]) && tuIndex == segmentIndex)
-						{
-							correspondingTu = tu;
-							break;
-						}
-						tuIndex++;
+						// Set translation unit based on the correct segment index: when 11 segments are sent as bulk,the first segment is ignored, 
+						// because it was translated previewsly and the translation mask is false
+						correspondingTu = _translationUnits[segmentIndex - 1];
+					}
+					else
+					{
+						// Set translation unit based on segment index: when the first 10 segments are translated for the first time,
+						// then the TU index is the same as segment index
+						correspondingTu = _translationUnits[segmentIndex];
 					}
 
 					// If activeSegmentPair is not null, it means the user translates segments through Editor
@@ -167,7 +167,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						CreateTranslatedSegment(segments, segmentIndex, alreadyTranslatedSegments);
 					}
 					// In case user copies the source to target and run the pre-translation, do nothing and continue the flow.
-					if (correspondingTu != null && IsSameSourceTarget(correspondingTu, tuIndex, segmentIndex))
+					if (correspondingTu != null && IsSameSourceTarget(correspondingTu))
 					{
 						continue;
 					}
@@ -381,9 +381,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			throw new NotImplementedException();
 		}
 
-		private bool IsSameSourceTarget(TranslationUnit corespondingTu, int tuIndex, int segmentIndex)
+		private bool IsSameSourceTarget(TranslationUnit corespondingTu)
 		{
-			if (corespondingTu.TargetSegment == null || corespondingTu.SourceSegment == null && tuIndex == segmentIndex)
+			if (corespondingTu.TargetSegment == null || corespondingTu.SourceSegment == null)
 			{
 				return false;
 			}
