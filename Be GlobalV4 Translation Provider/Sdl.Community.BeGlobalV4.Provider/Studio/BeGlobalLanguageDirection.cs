@@ -167,7 +167,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						CreateTranslatedSegment(segments, segmentIndex, alreadyTranslatedSegments);
 					}
 					// In case user copies the source to target and run the pre-translation, do nothing and continue the flow.
-					if (correspondingTu != null && IsSameSourceTarget(correspondingTu))
+					else if (correspondingTu != null && IsSameSourceTarget(correspondingTu))
 					{
 						continue;
 					}
