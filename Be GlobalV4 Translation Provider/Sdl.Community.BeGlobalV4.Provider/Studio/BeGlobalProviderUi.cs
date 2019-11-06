@@ -77,8 +77,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
 				if (credentials != null)
 				{
-					var splitedCredentials = credentials.Credential.Split('#');
-					if (splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
+					var splitedCredentials = !string.IsNullOrEmpty(credentials.Credential) ? credentials.Credential.Split('#') : null;
+					if (splitedCredentials != null && splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
 					{
 						var clientId = StringExtensions.Base64Decode(splitedCredentials[0]);
 						var clientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
@@ -97,8 +97,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					editProvider.Options = beGlobalVm.Options;
 					if (beGlobalVm.Options?.AuthenticationMethod == Constants.APICredentials)
 					{
-						editProvider.Options.ClientId = beGlobalWindow.LoginTab.ClientIdBox.Password.TrimEnd();
-						editProvider.Options.ClientSecret = beGlobalWindow.LoginTab.ClientSecretBox.Password.TrimEnd();
+						editProvider.Options.ClientId = beGlobalWindow.LoginTab.ClientIdBox.Password.TrimEnd().TrimStart();
+						editProvider.Options.ClientSecret = beGlobalWindow.LoginTab.ClientSecretBox.Password.TrimEnd().TrimStart();
 						SetCredentials(credentialStore, editProvider.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
 					}
 					return true;
