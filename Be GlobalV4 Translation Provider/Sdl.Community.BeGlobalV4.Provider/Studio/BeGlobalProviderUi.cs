@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Windows.Threading;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
@@ -29,30 +28,30 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				var options = new BeGlobalTranslationOptions();
 				var token = string.Empty;
 
-				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");				
+				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
 				AppItializer.EnsureInitializer();
-				var provider = new BeGlobalTranslationProvider(options);
-				System.Windows.Application.Current.Dispatcher.Invoke(() =>
+
+				var beGlobalWindow = new BeGlobalWindow();
+				var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, credentials);
+				beGlobalWindow.DataContext = beGlobalVm;
+
+				beGlobalWindow.ShowDialog();
+				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 				{
-					var beGlobalWindow = new BeGlobalWindow();
-					var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, credentials);
-					beGlobalWindow.DataContext = beGlobalVm;
+					var messageBoxService = new MessageBoxService();
+					var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options, messageBoxService, credentials);
+					beGlobalVm.Options.BeGlobalService = beGlobalService;
 
-					beGlobalWindow.ShowDialog();
-					if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+					var provider = new BeGlobalTranslationProvider(options)
 					{
-						var messageBoxService = new MessageBoxService();
-						var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options, messageBoxService, credentials);
-						beGlobalVm.Options.BeGlobalService = beGlobalService;
-
-						provider.Options = beGlobalVm.Options;
-						if (beGlobalVm?.Options?.AuthenticationMethod == Constants.APICredentials)
-						{
-							SetCredentials(credentialStore, beGlobalVm.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
-						}
+						Options = beGlobalVm.Options
+					};
+					if (beGlobalVm?.Options?.AuthenticationMethod == Constants.APICredentials)
+					{
+						SetCredentials(credentialStore, beGlobalVm.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
 					}
-				});
-				return new ITranslationProvider[] { provider };
+					return new ITranslationProvider[] { provider };
+				}
 			}
 			catch (Exception e)
 			{
@@ -129,7 +128,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var info = new TranslationProviderDisplayInfo
 			{
 				Name = Constants.PluginName,
-				TooltipText = Constants.PluginName,				
+				TooltipText = Constants.PluginName,
 				TranslationProviderIcon = PluginResources.global,
 				SearchResultImage = PluginResources.global1,
 			};
