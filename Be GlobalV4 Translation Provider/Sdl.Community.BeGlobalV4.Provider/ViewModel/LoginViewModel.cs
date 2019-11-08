@@ -174,26 +174,29 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void GetEngines()
 		{
-			if (Options.AuthenticationMethod.Equals(Constants.APICredentials) && (_credentials == null || _credentials.Credential.Equals("#")))
-			{
-				RestoreEngines();
-			}
-			if (_credentials != null && !_credentials.Credential.Contains("#") && Options.AuthenticationMethod.Equals(Constants.APICredentials))
-			{
-				RestoreEngines();
-			}
+            if (_credentials != null && !string.IsNullOrEmpty(_credentials.Credential))
+            {
+                if (Options.AuthenticationMethod.Equals(Constants.APICredentials) && (_credentials == null || _credentials.Credential.Equals("#")))
+                {
+                    RestoreEngines();
+                }
+                if (_credentials != null && !_credentials.Credential.Contains("#") && Options.AuthenticationMethod.Equals(Constants.APICredentials))
+                {
+                    RestoreEngines();
+                }
 
-			var beGlobalTranslator = new BeGlobalV4Translator(Options, new MessageBoxService(), _credentials);
-			var userInfo = beGlobalTranslator.GetUserInformation(false);
-			if (userInfo.AccountId != 0)
-			{
-				if (Options?.Model == null || LanguageMappingsViewModel?.TranslationOptions.Count == 0)
-				{
-					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.AccountId.ToString());
-					GetEngineModels(subscriptionInfo);
-					SetEngineModel();
-				}
-			}
+                var beGlobalTranslator = new BeGlobalV4Translator(Options, new MessageBoxService(), _credentials);
+                var userInfo = beGlobalTranslator.GetUserInformation(false);
+                if (userInfo.AccountId != 0)
+                {
+                    if (Options?.Model == null || LanguageMappingsViewModel?.TranslationOptions.Count == 0)
+                    {
+                        var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.AccountId.ToString());
+                        GetEngineModels(subscriptionInfo);
+                        SetEngineModel();
+                    }
+                }
+            }
 		}
 
 		public void GetEngineModels(SubscriptionInfo subscriptionInfo)
