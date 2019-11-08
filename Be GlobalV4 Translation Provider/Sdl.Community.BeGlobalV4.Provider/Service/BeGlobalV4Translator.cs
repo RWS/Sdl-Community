@@ -44,7 +44,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				{
 					if (_authenticationMethod.Equals(Constants.APICredentials))
 					{
-						var splitedCredentials = credentials?.Credential.Split('#');
+						var splitedCredentials = credentials?.Credential?.Split('#');
 						// the below condition is needed in case the ClientId is not set and credentials exists
 						if (string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId)
 							&& splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))

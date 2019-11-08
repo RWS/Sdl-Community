@@ -1,34 +1,33 @@
-﻿using System;
-using System.Windows.Input;
-using Sdl.Community.BeGlobalV4.Provider.Helpers;
+﻿using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
-using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System;
+using System.Windows.Input;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
-	public class BeGlobalWindowViewModel : BaseViewModel
+    public class BeGlobalWindowViewModel : BaseViewModel
 	{
-		private readonly LanguagePair[] _languagePairs;
 		private MessageBoxService _messageBoxService;
 		private TranslationProviderCredential _credentials;
 		private int _selectedTabIndex;
 
 		private ICommand _okCommand;
 
-		public BeGlobalWindowViewModel(BeGlobalTranslationOptions options, LanguagePair[] languagePairs, TranslationProviderCredential credentials)
+        public event EventHandler OkSelected;
+
+        public BeGlobalWindowViewModel(BeGlobalTranslationOptions options, TranslationProviderCredential credentials, LoginViewModel loginViewModel, LanguageMappingsViewModel languageMappingsViewModel)
 		{
 			SelectedTabIndex = 0;
 			Options = options;
-			_languagePairs = languagePairs;
 			_credentials = credentials;
 			_messageBoxService = new MessageBoxService();
-			LanguageMappingsViewModel = new LanguageMappingsViewModel(options);
-			LoginViewModel = new LoginViewModel(options, _credentials, _languagePairs, LanguageMappingsViewModel);
+            LanguageMappingsViewModel = languageMappingsViewModel;
+			LoginViewModel = loginViewModel;
 
-			if (_credentials == null) return;
+            if (_credentials == null) return;
 			var credential = !string.IsNullOrEmpty(_credentials.Credential) ? _credentials.Credential.Replace("sdlmachinetranslationcloudprovider:///", string.Empty) : string.Empty;
 			if (credential.Contains("#"))
 			{
@@ -40,12 +39,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.AccountId.ToString());
 					LoginViewModel.GetEngineModels(subscriptionInfo);
 					LoginViewModel.SetEngineModel();
-					SetAuthenticationOptions();
-				}
+                }
 			}
-		}
+		}	
+		
+        protected virtual void OnOkSelected(EventArgs e)
+        {
+            EventHandler handler = OkSelected;
+            handler?.Invoke(this, e);
+        }
 
-		public LoginViewModel LoginViewModel { get; set; }
+        public LoginViewModel LoginViewModel { get; set; }
 		public LanguageMappingsViewModel LanguageMappingsViewModel { get; set; }
 		public BeGlobalTranslationOptions Options { get; set; }			
 
@@ -62,47 +66,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 		
 		private void Ok(object parameter)
-		{
-			var currentWindow = WindowsControlUtils.GetCurrentWindow() as BeGlobalWindow;
-			var loginTab = parameter as Login;
-			if (loginTab != null)
-			{
-				var isValid = IsWindowValid();
-				if (isValid)
-				{
-					WindowCloser.SetDialogResult(currentWindow, true);
-					currentWindow?.Close();
-				}
-			}				
-		}
-				
-		private void SetAuthenticationOptions()
-		{
-			var currentWindow = WindowsControlUtils.GetCurrentWindow() as BeGlobalWindow;
-			if (string.IsNullOrEmpty(Options.AuthenticationMethod)) return;
-			if (Options.AuthenticationMethod.Equals(Constants.APICredentials))
-			{
-				if (!string.IsNullOrEmpty(Options.ClientId) && !string.IsNullOrEmpty(Options.ClientSecret))
-				{
-					currentWindow.LoginTab.ClientIdBox.Password = Options.ClientId;
-					currentWindow.LoginTab.ClientSecretBox.Password = Options.ClientSecret;
-				}
-				else
-				{
-					var splitedCredentials = _credentials?.Credential.Split('#');
-					var clientId = StringExtensions.Base64Decode(splitedCredentials[0]);
-					var clientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
-
-					currentWindow.LoginTab.ClientIdBox.Password = splitedCredentials.Length > 0 ? clientId : string.Empty;
-					currentWindow.LoginTab.ClientSecretBox.Password = splitedCredentials.Length > 0 ? clientSecret : string.Empty;
-				}
-			}
-			else
-			{
-				LoginViewModel.SelectedAuthentication = LoginViewModel.Authentications[1];
-				LoginViewModel.SelectedIndex = LoginViewModel.SelectedAuthentication.Index;
-			}
-		}
+		{            
+            var loginTab = parameter as Login;
+            if (loginTab != null)
+            {
+                var isValid = IsWindowValid();
+                if (isValid)
+                {
+                    OnOkSelected(EventArgs.Empty);
+                }
+            }
+        }
 
 		private bool IsWindowValid()
 		{
@@ -149,6 +123,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
 			}
 			return false;
-		}		
-	}
+		}
+    }
 }
