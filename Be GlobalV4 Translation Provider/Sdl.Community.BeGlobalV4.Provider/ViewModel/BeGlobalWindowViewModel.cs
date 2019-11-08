@@ -1,16 +1,15 @@
-﻿using System;
-using System.Windows.Forms;
-using System.Windows.Input;
-using Sdl.Community.BeGlobalV4.Provider.Helpers;
+﻿using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
-using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
-	public class BeGlobalWindowViewModel : BaseViewModel
+    public class BeGlobalWindowViewModel : BaseViewModel
 	{
 		private MessageBoxService _messageBoxService;
 		private TranslationProviderCredential _credentials;
@@ -18,7 +17,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private ICommand _okCommand;
 
-        // public event EventHandler AuthenticationSelectedOptions = new EventHandler((e,a)=> { });
         public event EventHandler AuthenticationSelectedOptions;
         public event EventHandler OkSelected;
 
@@ -31,7 +29,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
             LanguageMappingsViewModel = languageMappingsViewModel;
 			LoginViewModel = loginViewModel;
 
-			if (_credentials == null) return;
+            if (_credentials == null) return;
 			var credential = !string.IsNullOrEmpty(_credentials.Credential) ? _credentials.Credential.Replace("sdlmachinetranslationcloudprovider:///", string.Empty) : string.Empty;
 			if (credential.Contains("#"))
 			{
@@ -43,15 +41,18 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.AccountId.ToString());
 					LoginViewModel.GetEngineModels(subscriptionInfo);
 					LoginViewModel.SetEngineModel();
-                    OnAuthenticationSelectedOptions(EventArgs.Empty);
+
+                    DelayAuthenticationOptionsSelection(1000);
                 }
 			}
-		}
+		}		            
 
         protected virtual void OnAuthenticationSelectedOptions(EventArgs e)
         {
+
             EventHandler handler = AuthenticationSelectedOptions;
             handler?.Invoke(this, e);
+
         }
 		
         protected virtual void OnOkSelected(EventArgs e)
@@ -77,9 +78,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 		
 		private void Ok(object parameter)
-		{
-            //var currentWindow = WindowsControlUtils.GetCurrentWindow() as BeGlobalWindow;
-            
+		{            
             var loginTab = parameter as Login;
             if (loginTab != null)
             {
@@ -87,39 +86,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
                 if (isValid)
                 {
                     OnOkSelected(EventArgs.Empty);
-                    //WindowCloser.SetDialogResult(currentWindow, true);
-                    //currentWindow?.Close();
                 }
             }
         }
-				
-		//private void SetAuthenticationOptions()
-		//{
-		//	var currentWindow = WindowsControlUtils.GetCurrentWindow() as BeGlobalWindow;
-		//	if (string.IsNullOrEmpty(Options.AuthenticationMethod)) return;
-		//	if (Options.AuthenticationMethod.Equals(Constants.APICredentials))
-		//	{
-		//		if (!string.IsNullOrEmpty(Options.ClientId) && !string.IsNullOrEmpty(Options.ClientSecret))
-		//		{
-		//			currentWindow.LoginTab.ClientIdBox.Password = Options.ClientId;
-		//			currentWindow.LoginTab.ClientSecretBox.Password = Options.ClientSecret;
-		//		}
-		//		else
-		//		{
-		//			var splitedCredentials = _credentials?.Credential.Split('#');
-		//			var clientId = StringExtensions.Base64Decode(splitedCredentials[0]);
-		//			var clientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
-
-		//			currentWindow.LoginTab.ClientIdBox.Password = splitedCredentials.Length > 0 ? clientId : string.Empty;
-		//			currentWindow.LoginTab.ClientSecretBox.Password = splitedCredentials.Length > 0 ? clientSecret : string.Empty;
-		//		}
-		//	}
-		//	else
-		//	{
-		//		LoginViewModel.SelectedAuthentication = LoginViewModel.Authentications[1];
-		//		LoginViewModel.SelectedIndex = LoginViewModel.SelectedAuthentication.Index;
-		//	}
-		//}
 
 		private bool IsWindowValid()
 		{
@@ -166,6 +135,22 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
 			}
 			return false;
-		}		
-	}
+		}
+
+        private void DelayAuthenticationOptionsSelection(int millisecondsToDelay)
+        {
+            var timer = new Timer();
+            timer.Interval = millisecondsToDelay;
+            timer.Tick += delegate
+            {
+                if (timer.Enabled)
+                {
+                    timer.Stop();
+                    OnAuthenticationSelectedOptions(EventArgs.Empty);
+                    timer.Dispose();
+                }
+            };
+            timer.Start();
+        }
+    }
 }

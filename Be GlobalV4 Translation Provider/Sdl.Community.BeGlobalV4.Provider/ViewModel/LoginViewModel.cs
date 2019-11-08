@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Input;
-using Sdl.Community.BeGlobalV4.Provider.Helpers;
+﻿using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
-using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Input;
 using Application = System.Windows.Application;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
-	public class LoginViewModel : BaseViewModel
+    public class LoginViewModel : BaseViewModel
 	{
 		private Authentication _selectedAuthentication;
 		private string _loginMethod;
@@ -60,12 +60,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				_selectedAuthentication = value;
 				OnPropertyChanged(nameof(SelectedAuthentication));
-				if (!string.IsNullOrEmpty(SelectedAuthentication.DisplayName))
-				{
-					CheckLoginMethod();
-                    OnAuthenticationSelected(EventArgs.Empty);
-					GetEngines();
-				}
+                if (!string.IsNullOrEmpty(SelectedAuthentication.DisplayName))
+                {
+                    CheckLoginMethod();
+                    DelayAuthenticationSelection(1000);
+                    GetEngines();
+                }
 			}
 		}
 
@@ -231,8 +231,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						var currentTranslationModel = existingTranslationModel ?? newTranslationModel;
 						if (!currentTranslationModel.LanguagesSupported.ContainsKey(languagePair.TargetCulture.Name))
 						{
-							currentTranslationModel.LanguagesSupported.Add(languagePair.TargetCulture.Name,
-								serviceLanguagePair.Name);
+							currentTranslationModel.LanguagesSupported.Add(languagePair.TargetCulture.Name,	serviceLanguagePair.Name);
 						}
 					}
 				}
@@ -274,5 +273,21 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				return;
 			}
 		}
-	}
+
+        private void DelayAuthenticationSelection(int millisecondsToDelay)
+        {
+            var timer = new Timer();
+            timer.Interval = millisecondsToDelay;
+            timer.Tick += delegate
+            {
+                if (timer.Enabled)
+                {
+                    timer.Stop();
+                    OnAuthenticationSelected(EventArgs.Empty);
+                    timer.Dispose();
+                }
+            };
+            timer.Start();
+        }
+    }
 }
