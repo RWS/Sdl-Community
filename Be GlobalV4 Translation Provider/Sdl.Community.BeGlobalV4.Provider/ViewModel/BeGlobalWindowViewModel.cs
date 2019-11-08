@@ -16,7 +16,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private ICommand _okCommand;
 
-        public event EventHandler AuthenticationSelectedOptions;
         public event EventHandler OkSelected;
 
         public BeGlobalWindowViewModel(BeGlobalTranslationOptions options, TranslationProviderCredential credentials, LoginViewModel loginViewModel, LanguageMappingsViewModel languageMappingsViewModel)
@@ -40,16 +39,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.AccountId.ToString());
 					LoginViewModel.GetEngineModels(subscriptionInfo);
 					LoginViewModel.SetEngineModel();
-                    OnAuthenticationSelectedOptions(EventArgs.Empty);
                 }
 			}
-		}		            
-
-        protected virtual void OnAuthenticationSelectedOptions(EventArgs e)
-        {
-            EventHandler handler = AuthenticationSelectedOptions;
-            handler?.Invoke(this, e);
-        }
+		}	
 		
         protected virtual void OnOkSelected(EventArgs e)
         {
