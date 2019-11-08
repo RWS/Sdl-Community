@@ -34,10 +34,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				var beGlobalWindow = new BeGlobalWindow();
 				var languageMappingsViewModel = new LanguageMappingsViewModel(options);
                 var loginViewModel = new LoginViewModel(options, credentials, languagePairs, languageMappingsViewModel);
-                loginViewModel.AuthenticationSelected += (o, e) => { SetClientOptions(beGlobalWindow, loginViewModel); };
-				
+                loginViewModel.AuthenticationSelected += (o, e) => { SetClientOptions(beGlobalWindow, loginViewModel);};
+                loginViewModel.SetAuthentications();
+
                 var beGlobalVm = new BeGlobalWindowViewModel(options, credentials, loginViewModel, languageMappingsViewModel);
-                beGlobalVm.AuthenticationSelectedOptions += (o, e) => { SetAuthenticationOptions(beGlobalWindow, loginViewModel, credentials); };
+                SetAuthenticationOptions(beGlobalWindow, loginViewModel, credentials);
                 beGlobalVm.OkSelected += (o, e) => { CloseWindow(beGlobalWindow); };
             
 				beGlobalWindow.DataContext = beGlobalVm;
@@ -97,9 +98,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
                 var languageMappingsViewModel = new LanguageMappingsViewModel(editProvider.Options);
                 var loginViewModel = new LoginViewModel(editProvider.Options, credentials, languagePairs, languageMappingsViewModel);
                 loginViewModel.AuthenticationSelected += (e, a) => { SetClientOptions(beGlobalWindow, loginViewModel); };
-                
+                loginViewModel.SetAuthentications();
+
 				var beGlobalVm = new BeGlobalWindowViewModel(editProvider.Options, credentials, loginViewModel, languageMappingsViewModel);
-                beGlobalVm.AuthenticationSelectedOptions += (r, s) => { SetAuthenticationOptions(beGlobalWindow, loginViewModel, credentials); };
+                SetAuthenticationOptions(beGlobalWindow, loginViewModel, credentials);
                 beGlobalVm.OkSelected += (o, e) => { CloseWindow(beGlobalWindow); };
 
                 beGlobalWindow.DataContext = beGlobalVm;
@@ -203,12 +205,23 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
                 }
                 else
                 {
-                    var splitedCredentials = credentials?.Credential.Split('#');
-                    var clientId = StringExtensions.Base64Decode(splitedCredentials[0]);
-                    var clientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
+                    var allCredentials = !string.IsNullOrEmpty(credentials.Credential) ? credentials.Credential.Replace("sdlmachinetranslationcloudprovider:///", string.Empty) : string.Empty;
+                    if (allCredentials.Contains("#"))
+                    {
+                        var splitedCredentials = allCredentials.Split('#');
+                        if (splitedCredentials.Length != 2 || string.IsNullOrEmpty(splitedCredentials[0]) || string.IsNullOrEmpty(splitedCredentials[1]))
+                        { 
+							return;
+						}
+                        else
+                        {
+                            var clientId = StringExtensions.Base64Decode(splitedCredentials[0]);
+                            var clientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
 
-                    beGlobalWindow.LoginTab.ClientIdBox.Password = splitedCredentials.Length > 0 ? clientId : string.Empty;
-                    beGlobalWindow.LoginTab.ClientSecretBox.Password = splitedCredentials.Length > 0 ? clientSecret : string.Empty;
+                            beGlobalWindow.LoginTab.ClientIdBox.Password = splitedCredentials.Length > 0 ? clientId : string.Empty;
+                            beGlobalWindow.LoginTab.ClientSecretBox.Password = splitedCredentials.Length > 0 ? clientSecret : string.Empty;
+                        }
+                    }
                 }
             }
             else

@@ -4,7 +4,6 @@ using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
@@ -41,18 +40,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.AccountId.ToString());
 					LoginViewModel.GetEngineModels(subscriptionInfo);
 					LoginViewModel.SetEngineModel();
-
-                    DelayAuthenticationOptionsSelection(1000);
+                    OnAuthenticationSelectedOptions(EventArgs.Empty);
                 }
 			}
 		}		            
 
         protected virtual void OnAuthenticationSelectedOptions(EventArgs e)
         {
-
             EventHandler handler = AuthenticationSelectedOptions;
             handler?.Invoke(this, e);
-
         }
 		
         protected virtual void OnOkSelected(EventArgs e)
@@ -136,21 +132,5 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 			return false;
 		}
-
-        private void DelayAuthenticationOptionsSelection(int millisecondsToDelay)
-        {
-            var timer = new Timer();
-            timer.Interval = millisecondsToDelay;
-            timer.Tick += delegate
-            {
-                if (timer.Enabled)
-                {
-                    timer.Stop();
-                    OnAuthenticationSelectedOptions(EventArgs.Empty);
-                    timer.Dispose();
-                }
-            };
-            timer.Start();
-        }
     }
 }

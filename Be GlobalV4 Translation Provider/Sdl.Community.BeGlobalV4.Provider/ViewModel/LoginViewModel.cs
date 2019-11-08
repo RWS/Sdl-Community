@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using Application = System.Windows.Application;
 
@@ -41,7 +40,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			LanguageMappingsViewModel = languageMappingsViewModel;
 			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			_loginMethod = !string.IsNullOrEmpty(Options.AuthenticationMethod) ? Options.AuthenticationMethod : Constants.APICredentials;
-			SetAuthentications();
 		}
 
         protected virtual void OnAuthenticationSelected(EventArgs e)
@@ -63,7 +61,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
                 if (!string.IsNullOrEmpty(SelectedAuthentication.DisplayName))
                 {
                     CheckLoginMethod();
-                    DelayAuthenticationSelection(1000);
+                    OnAuthenticationSelected(EventArgs.Empty);
                     GetEngines();
                 }
 			}
@@ -106,7 +104,38 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		public ICommand PasswordChangedCommand => _passwordChangedCommand ?? (_passwordChangedCommand = new RelayCommand(ChangePasswordAction));
 
-		private void ChangePasswordAction(object parameter)
+        public void SetAuthentications()
+        {
+            SelectedAuthentication = new Authentication();
+            Authentications = new List<Authentication>
+            {
+                new Authentication
+                {
+                    DisplayName = Constants.APICredentials,
+                    Type = Constants.APICredentialsType,
+                    Index = 0
+                },
+                new Authentication
+                {   DisplayName = Constants.StudioAuthentication,
+                    Type = Constants.StudioAuthenticationType,
+                    Index = 1
+                }
+            };
+            if (!string.IsNullOrEmpty(Options.AuthenticationMethod))
+            {
+                SelectedAuthentication = Authentications.FirstOrDefault(a => a.DisplayName.Equals(Options.AuthenticationMethod));
+                SelectedIndex = SelectedAuthentication != null ? SelectedAuthentication.Index : 0;
+            }
+            else
+            {
+                // set by default APICredentials login method
+                Options.AuthenticationMethod = Authentications[0].DisplayName;
+                SelectedIndex = Authentications[0].Index;
+                SelectedAuthentication = Authentications[0];
+            }
+        }
+
+        private void ChangePasswordAction(object parameter)
 		{
 			var passwordBox = (PasswordBox)parameter;
 			switch (passwordBox.Name)
@@ -142,37 +171,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				Application.Current?.Dispatcher?.Invoke(() => { _studioCredentials.GetToken(); });
 			}
 		}
-
-		private void SetAuthentications()
-		{
-			SelectedAuthentication = new Authentication();
-			Authentications = new List<Authentication>
-			{
-				new Authentication
-				{
-					DisplayName = Constants.APICredentials,
-					Type = Constants.APICredentialsType,
-					Index = 0
-				},
-				new Authentication
-				{   DisplayName = Constants.StudioAuthentication,
-					Type = Constants.StudioAuthenticationType,
-					Index = 1
-				}
-			};
-			if (!string.IsNullOrEmpty(Options.AuthenticationMethod))
-			{
-				SelectedAuthentication = Authentications.FirstOrDefault(a => a.DisplayName.Equals(Options.AuthenticationMethod));
-				SelectedIndex = SelectedAuthentication != null ? SelectedAuthentication.Index : 0;
-			}
-			else
-			{
-                // set by default APICredentials login method
-                Options.AuthenticationMethod = Authentications[0].DisplayName;
-				SelectedIndex = Authentications[0].Index;
-                SelectedAuthentication = Authentications[0];
-            }
-        }
 
 		private void GetEngines()
 		{
@@ -273,21 +271,5 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				return;
 			}
 		}
-
-        private void DelayAuthenticationSelection(int millisecondsToDelay)
-        {
-            var timer = new Timer();
-            timer.Interval = millisecondsToDelay;
-            timer.Tick += delegate
-            {
-                if (timer.Enabled)
-                {
-                    timer.Stop();
-                    OnAuthenticationSelected(EventArgs.Empty);
-                    timer.Dispose();
-                }
-            };
-            timer.Start();
-        }
     }
 }
