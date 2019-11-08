@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -26,7 +27,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private ICommand _passwordChangedCommand;
 
-		public LoginViewModel(
+        public event EventHandler AuthenticationSelected;
+
+        public LoginViewModel(
 			BeGlobalTranslationOptions options,
 			TranslationProviderCredential credentials,
 			LanguagePair[] languagePairs,
@@ -41,7 +44,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			SetAuthentications();
 		}
 
-		public BeGlobalTranslationOptions Options { get; set; }
+        protected virtual void OnAuthenticationSelected(EventArgs e)
+        {
+            EventHandler handler = AuthenticationSelected;
+            handler?.Invoke(this, e);
+        }
+
+        public BeGlobalTranslationOptions Options { get; set; }
 		public LanguageMappingsViewModel LanguageMappingsViewModel { get; set; }
 		public List<Authentication> Authentications { get; set; }
 		public Authentication SelectedAuthentication
@@ -54,14 +63,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				if (!string.IsNullOrEmpty(SelectedAuthentication.DisplayName))
 				{
 					CheckLoginMethod();
-					SetClientOptions();
+                    OnAuthenticationSelected(EventArgs.Empty);
 					GetEngines();
 				}
 			}
 		}
 
-		// LoginMethod is used to display/hide the ClientId,ClientSecret fields based on which authentication mode is selected
-		public string LoginMethod
+        // LoginMethod is used to display/hide the ClientId,ClientSecret fields based on which authentication mode is selected
+        public string LoginMethod
 		{
 			get => _loginMethod;
 			set
@@ -134,17 +143,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		private void SetClientOptions()
-		{
-			var currentWindow = WindowsControlUtils.GetCurrentWindow() as BeGlobalWindow;
-			if (!string.IsNullOrEmpty(Options.ClientId) && !string.IsNullOrEmpty(Options.ClientSecret))
-			{
-				currentWindow.LoginTab.ClientIdBox.Password = Options.ClientId;
-				currentWindow.LoginTab.ClientSecretBox.Password = Options.ClientSecret;
-			}
-			Options.AuthenticationMethod = SelectedAuthentication?.DisplayName;
-		}
-
 		private void SetAuthentications()
 		{
 			SelectedAuthentication = new Authentication();
@@ -169,12 +167,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 			else
 			{
-				// set by default APICredentials login method
-				SelectedAuthentication = Authentications[0];
+                // set by default APICredentials login method
+                Options.AuthenticationMethod = Authentications[0].DisplayName;
 				SelectedIndex = Authentications[0].Index;
-				Options.AuthenticationMethod = SelectedAuthentication.DisplayName;
-			}
-		}
+                SelectedAuthentication = Authentications[0];
+            }
+        }
 
 		private void GetEngines()
 		{

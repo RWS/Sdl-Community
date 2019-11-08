@@ -34,7 +34,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 				var options = new BeGlobalTranslationOptions(uri);			
 
 				var beGlobalWindow = new BeGlobalWindow();
-				var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, null);
+                var languageMappingsViewModel = new LanguageMappingsViewModel(options);
+                var loginViewModel = new LoginViewModel(options, null, languagePairs, languageMappingsViewModel);
+                var beGlobalVm = new BeGlobalWindowViewModel(options, null, loginViewModel, languageMappingsViewModel);
 				beGlobalWindow.DataContext = beGlobalVm;
 				beGlobalWindow.ShowDialog();
 

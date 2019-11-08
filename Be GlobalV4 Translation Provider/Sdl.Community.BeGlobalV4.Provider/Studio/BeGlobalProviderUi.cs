@@ -32,9 +32,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				AppItializer.EnsureInitializer();
 
 				var beGlobalWindow = new BeGlobalWindow();
-				var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, credentials);
+				var languageMappingsViewModel = new LanguageMappingsViewModel(options);
+                var loginViewModel = new LoginViewModel(options, credentials, languagePairs, languageMappingsViewModel);
+                loginViewModel.AuthenticationSelected += (o, e) => { SetClientOptions(beGlobalWindow, loginViewModel); };
+				
+                var beGlobalVm = new BeGlobalWindowViewModel(options, credentials, loginViewModel, languageMappingsViewModel);
+                beGlobalVm.AuthenticationSelectedOptions += (o, e) => { SetAuthenticationOptions(beGlobalWindow, loginViewModel, credentials); };
+                beGlobalVm.OkSelected += (o, e) => { CloseWindow(beGlobalWindow); };
+            
 				beGlobalWindow.DataContext = beGlobalVm;
-
 				beGlobalWindow.ShowDialog();
 				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 				{
@@ -59,8 +65,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			return null;
 		}
-
-		[STAThread]
+		
+        [STAThread]
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs,
 			ITranslationProviderCredentialStore credentialStore)
 		{
@@ -88,8 +94,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					}
 				}
 				var beGlobalWindow = new BeGlobalWindow();
-				var beGlobalVm = new BeGlobalWindowViewModel(editProvider.Options, languagePairs, credentials);
-				beGlobalWindow.DataContext = beGlobalVm;
+                var languageMappingsViewModel = new LanguageMappingsViewModel(editProvider.Options);
+                var loginViewModel = new LoginViewModel(editProvider.Options, credentials, languagePairs, languageMappingsViewModel);
+                loginViewModel.AuthenticationSelected += (e, a) => { SetClientOptions(beGlobalWindow, loginViewModel); };
+                
+				var beGlobalVm = new BeGlobalWindowViewModel(editProvider.Options, credentials, loginViewModel, languageMappingsViewModel);
+                beGlobalVm.AuthenticationSelectedOptions += (r, s) => { SetAuthenticationOptions(beGlobalWindow, loginViewModel, credentials); };
+                beGlobalVm.OkSelected += (o, e) => { CloseWindow(beGlobalWindow); };
+
+                beGlobalWindow.DataContext = beGlobalVm;
 
 				beGlobalWindow.ShowDialog();
 				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
@@ -167,5 +180,48 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			credentialStore.RemoveCredential(uri);
 			credentialStore.AddCredential(uri, credentials);
 		}
-	}
+
+        private void SetClientOptions(BeGlobalWindow beGlobalWindow, LoginViewModel loginViewModel)
+        {
+            if (!string.IsNullOrEmpty(loginViewModel.Options.ClientId) && !string.IsNullOrEmpty(loginViewModel.Options.ClientSecret))
+            {
+                beGlobalWindow.LoginTab.ClientIdBox.Password = loginViewModel.Options.ClientId;
+                beGlobalWindow.LoginTab.ClientSecretBox.Password = loginViewModel.Options.ClientSecret;
+            }
+            loginViewModel.Options.AuthenticationMethod = loginViewModel.SelectedAuthentication?.DisplayName;
+        }
+
+        private void SetAuthenticationOptions(BeGlobalWindow beGlobalWindow, LoginViewModel loginViewModel, TranslationProviderCredential credentials)
+        {
+            if (string.IsNullOrEmpty(loginViewModel.Options.AuthenticationMethod)) return;
+            if (loginViewModel.Options.AuthenticationMethod.Equals(Constants.APICredentials))
+            {
+                if (!string.IsNullOrEmpty(loginViewModel.Options.ClientId) && !string.IsNullOrEmpty(loginViewModel.Options.ClientSecret))
+                {
+                    beGlobalWindow.LoginTab.ClientIdBox.Password = loginViewModel.Options.ClientId;
+                    beGlobalWindow.LoginTab.ClientSecretBox.Password = loginViewModel.Options.ClientSecret;
+                }
+                else
+                {
+                    var splitedCredentials = credentials?.Credential.Split('#');
+                    var clientId = StringExtensions.Base64Decode(splitedCredentials[0]);
+                    var clientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
+
+                    beGlobalWindow.LoginTab.ClientIdBox.Password = splitedCredentials.Length > 0 ? clientId : string.Empty;
+                    beGlobalWindow.LoginTab.ClientSecretBox.Password = splitedCredentials.Length > 0 ? clientSecret : string.Empty;
+                }
+            }
+            else
+            {
+                loginViewModel.SelectedAuthentication = loginViewModel.Authentications[1];
+                loginViewModel.SelectedIndex = loginViewModel.SelectedAuthentication.Index;
+            }
+        }
+
+        private void CloseWindow(BeGlobalWindow beGlobalWindow)
+        {
+            WindowCloser.SetDialogResult(beGlobalWindow, true);
+            beGlobalWindow?.Close();
+        }
+    }
 }

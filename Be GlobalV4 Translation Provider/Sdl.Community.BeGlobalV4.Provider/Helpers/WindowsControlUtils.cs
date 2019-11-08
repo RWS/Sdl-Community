@@ -5,29 +5,23 @@ using Application = System.Windows.Application;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 {
-	public static class WindowsControlUtils
-	{
-		public static void ForWindowFromFrameworkElement(this object frameworkElement, Action<Window> action)
-		{
-			var element = frameworkElement as FrameworkElement;
+    public static class WindowsControlUtils
+    {
+        public static void ForWindowFromFrameworkElement(this object frameworkElement, Action<Window> action)
+        {
+            var element = frameworkElement as FrameworkElement;
 
-			while (!(element is Window))
-			{
-				if (element == null)
-				{
-					break;
-				}
+            while (!(element is Window))
+            {
+                if (element == null)
+                {
+                    break;
+                }
 
-				element = element.Parent as FrameworkElement;
-			}
+                element = element.Parent as FrameworkElement;
+            }
 
-			action(element as Window);
-		}
-
-		public static Window GetCurrentWindow()
-		{			
-			var windows = Application.Current?.Windows.OfType<Window>();
-			return windows?.FirstOrDefault(w => w.Name.Equals(Constants.SDLMachineTranslationCloudProvider));
-		}
-	}
+            action(element as Window);
+        }
+    }
 }
