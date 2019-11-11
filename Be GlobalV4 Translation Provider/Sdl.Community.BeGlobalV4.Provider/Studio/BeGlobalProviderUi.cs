@@ -196,6 +196,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
         private void SetAuthenticationOptions(BeGlobalWindow beGlobalWindow, LoginViewModel loginViewModel, TranslationProviderCredential credentials)
         {
             if (string.IsNullOrEmpty(loginViewModel.Options.AuthenticationMethod)) return;
+            if (credentials == null) return;
+
             if (loginViewModel.Options.AuthenticationMethod.Equals(Constants.APICredentials))
             {
                 if (!string.IsNullOrEmpty(loginViewModel.Options.ClientId) && !string.IsNullOrEmpty(loginViewModel.Options.ClientSecret))
