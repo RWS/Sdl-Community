@@ -33,20 +33,7 @@ namespace AnalyzeFilesTestApp
 			var projectFiles = fileBasedProject.AddFiles(new[] { "" });
 
 			fileBasedProject.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
-
-			var taskSequence = fileBasedProject.RunAutomaticTasks(projectFiles.GetIds(), new[]
-			{
-				AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
-				AutomaticTaskTemplateIds.CopyToTargetLanguages,
-				AutomaticTaskTemplateIds.PerfectMatch,
-				AutomaticTaskTemplateIds.PreTranslateFiles,
-				AutomaticTaskTemplateIds.AnalyzeFiles,
-				AutomaticTaskTemplateIds.UpdateMainTranslationMemories,
-			});
-
-			if (taskSequence.Status != TaskStatus.Completed)
-			{
-			}
+			fileBasedProject.RunDefaultTaskSequence(projectFiles.GetIds());
 
 			fileBasedProject.Save();
 		}
