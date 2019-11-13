@@ -11,6 +11,7 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Application = System.Windows.Application;
 using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
@@ -50,7 +51,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		}
 
 		private Segment[] TranslateSegments(Segment[] sourceSegments)
-		{
+		{		
 			var xliffDocument = CreateXliffFile(sourceSegments);
 
 			var sourceLanguage =
@@ -58,7 +59,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var targetLanguage =
 				_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.TargetCulture);
 
-			var translatedXliffText = WebUtility.UrlDecode(_options.BeGlobalService.TranslateText(xliffDocument.ToString(), sourceLanguage, targetLanguage));
+			var translatedXliffText =
+				WebUtility.UrlDecode(
+					_options.BeGlobalService.TranslateText(xliffDocument.ToString(), sourceLanguage, targetLanguage));
 
 			var translatedXliff = Converter.ParseXliffString(translatedXliffText);
 			if (translatedXliff != null)
@@ -100,7 +103,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				{
 					BaseScore = score
 				},
-                TranslationProposal = tu
+				TranslationProposal = tu
 			};
 			tu.ConfirmationLevel = ConfirmationLevel.Draft;
 
@@ -261,38 +264,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				beGlobalSegments[i].SearchResult = CreateSearchResult(beGlobalSegments[i].Segment, translations[i]);
 			}
 		}
-		private void AddTranslationToResults(Segment[] translations, Segment[] segments, SearchResults[] results, int translationIndex, bool[] mask)
-		{
-			if (translations.Any(translation => translation != null))
-			{
-				for (var i = 0; i < segments.Length; i++)
-				{
-					if (mask != null && !mask[i])
-					{
-						results[i] = null;
-						continue;
-					}
-					results[i] = new SearchResults();
-					if (segments[i] != null)
-					{
-						results[i].SourceSegment = segments[i].Duplicate();
-						results[i].Add(CreateSearchResult(segments[i], translations[translationIndex]));
-						translationIndex++;
-					}
-					else
-					{
-						results[i].SourceSegment = new Segment();
-						results[i].Add(CreateSearchResult(new Segment(), new Segment()));
-					}
-				}
-			}
-		}
+
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
 		{
 			// Need this vs having mask parameter default to null as inheritence doesn't allow default values to
 			// count as the same thing as having no parameter at all. IE, you can't have
 			// public string foo(string s = null) override public string foo().
-
 			return SearchSegments(settings, segments, null);
 		}
 
@@ -300,7 +277,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var results = new SearchResults[segments.Length];
 			var translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
-			if (translations.Any(translation => translation != null))
+			if (!translations.All(translation => translation == null))
 			{
 				int translationIndex = 0;
 				for (int i = 0; i < segments.Length; i++)
