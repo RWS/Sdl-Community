@@ -10,23 +10,19 @@ namespace Sdl.Community.BeGlobalV4.Provider.BeGlobalTellMe
 		{
 			new BeGlobalCommunitySupportAction
 			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdlmachinetranslationcloud community", "sdlmachinetranslationcloud support" }
+				Keywords = new []{ "sdlmachinetranslationcloud", "sdl machine translation cloud", "sdlmachinetranslationcloud community", "sdlmachinetranslationcloud support" }
 			},
 			new BeGlobalContactAction
 			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdlmachinetranslationcloud contact", "sdlmachinetranslationcloud trial" }
+				Keywords = new []{ "sdlmachinetranslationcloud", "sdl machine translation cloud", "sdlmachinetranslationcloud contact", "sdlmachinetranslationcloud trial" }
 			},
 			new BeGlobalHelpAction
 			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdlmachinetranslationcloud help", "sdlmachinetranslationcloud guide" }
+				Keywords = new []{ "sdlmachinetranslationcloud", "sdl machine translation cloud", "sdlmachinetranslationcloud help", "sdlmachinetranslationcloud guide" }
 			},
 			new BeGlobalStoreAction
 			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdlmachinetranslationcloud store", "sdlmachinetranslationcloud download" }
-			},
-			new BeGlobalSettingsAction
-			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdlmachinetranslationcloud settings ", "settings" }
+				Keywords = new []{ "sdlmachinetranslationcloud", "sdl machine translation cloud", "sdlmachinetranslationcloud store", "sdlmachinetranslationcloud download" }
 			}
 		};
 	}
