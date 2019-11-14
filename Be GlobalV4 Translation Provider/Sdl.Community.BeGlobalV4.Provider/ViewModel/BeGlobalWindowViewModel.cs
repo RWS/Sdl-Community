@@ -45,7 +45,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		
         protected virtual void OnOkSelected(EventArgs e)
         {
-            EventHandler handler = OkSelected;
+            var handler = OkSelected;
             handler?.Invoke(this, e);
         }
 
