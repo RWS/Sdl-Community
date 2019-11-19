@@ -37,6 +37,26 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 				{
 					return "rum";
 				}
+				//Language code for Czech in BeGlobal is cze
+				if (cultureInfo.ThreeLetterISOLanguageName.Equals("ces"))
+				{
+					return "cze";
+				}
+				//Language code for Greek in BeGlobal is gre
+				if (cultureInfo.ThreeLetterISOLanguageName.Equals("ell"))
+				{
+					return "gre";
+				}
+				//Language code for Malay in BeGlobal is may
+				if (cultureInfo.ThreeLetterISOLanguageName.Equals("msa"))
+				{
+					return "may";
+				}
+				//Language code for Norwegian (Bokmal) or Norwegian (Nynorsk) in BeGlobal is nor
+				if (cultureInfo.ThreeLetterISOLanguageName.Equals("nno") || cultureInfo.ThreeLetterISOLanguageName.Equals("nob"))
+				{
+					return "nor";
+				}				
 				return cultureInfo.ThreeLetterISOLanguageName;
 			}
 			return string.Empty;
