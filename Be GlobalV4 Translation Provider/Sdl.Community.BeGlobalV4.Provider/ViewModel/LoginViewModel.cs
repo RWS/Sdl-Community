@@ -201,14 +201,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		public void GetEngineModels(SubscriptionInfo subscriptionInfo)
 		{
-			var sourceLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(_languagePairs?[0].SourceCulture);
+			var sourceLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(_languagePairs?[0].SourceCulture);
 			var pairsWithSameSource = subscriptionInfo.LanguagePairs
 				.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
 			if (_languagePairs?.Count() > 0)
 			{
 				foreach (var languagePair in _languagePairs)
 				{
-					var targetLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(languagePair.TargetCulture);
+					var targetLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(languagePair.TargetCulture);
 
 					var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage))
 						.ToList();
