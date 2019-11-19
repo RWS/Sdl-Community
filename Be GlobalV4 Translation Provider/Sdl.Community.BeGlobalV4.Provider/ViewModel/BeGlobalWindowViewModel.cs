@@ -98,14 +98,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void GetEngineModels(List<BeGlobalLanguagePair> beGlobalLanguagePairs)
 		{
-			var sourceLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(_languagePairs?[0].SourceCulture);
+			var sourceLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(_languagePairs?[0].SourceCulture);
 			var pairsWithSameSource = beGlobalLanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
 			if (_languagePairs?.Count() > 0)
 			{
 				foreach (var languagePair in _languagePairs)
 				{
 					var targetLanguage =
-						_normalizeSourceTextHelper.GetCorespondingLangCode(languagePair.TargetCulture);
+						_normalizeSourceTextHelper.GetCorrespondingLangCode(languagePair.TargetCulture);
 
 					var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
 

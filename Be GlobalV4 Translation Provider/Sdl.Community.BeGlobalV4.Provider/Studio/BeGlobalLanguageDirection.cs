@@ -54,9 +54,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var xliffDocument = CreateXliffFile(sourceSegments);
 
 			var sourceLanguage =
-				_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.SourceCulture);
+				_normalizeSourceTextHelper.GetCorrespondingLangCode(_languageDirection.SourceCulture);
 			var targetLanguage =
-				_normalizeSourceTextHelper.GetCorespondingLangCode(_languageDirection.TargetCulture);
+				_normalizeSourceTextHelper.GetCorrespondingLangCode(_languageDirection.TargetCulture);
 
 			var translatedXliffText =
 				WebUtility.UrlDecode(

@@ -42,9 +42,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
 			var sourceLanguage =
-				_normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.SourceCulture);
+				_normalizeSourceTextHelper.GetCorrespondingLangCode(languageDirection.SourceCulture);
 			var targetLanguage =
-				_normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.TargetCulture);
+				_normalizeSourceTextHelper.GetCorrespondingLangCode(languageDirection.TargetCulture);
 
 			if (Options?.SubscriptionInfo?.LanguagePairs?.Count > 0)
 			{
