@@ -55,7 +55,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			if (_options.AuthenticationMethod.Equals(Constants.StudioAuthentication))
 			{
-				AppItializer.EnsureInitializer();
 				Application.Current?.Dispatcher?.Invoke(() =>
 				{
 					_studioCredentials.GetToken();
