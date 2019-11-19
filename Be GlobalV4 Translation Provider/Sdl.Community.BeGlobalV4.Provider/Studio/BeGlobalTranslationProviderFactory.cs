@@ -15,8 +15,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
-			AppItializer.EnsureInitializer();
-
 			var originalUri = new Uri("sdlmachinetranslationcloudprovider:///");
 			var options = new BeGlobalTranslationOptions(translationProviderUri);
 			if (credentialStore.GetCredential(originalUri) != null)

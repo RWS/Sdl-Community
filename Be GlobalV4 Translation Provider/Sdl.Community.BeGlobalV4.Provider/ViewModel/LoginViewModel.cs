@@ -167,7 +167,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			if (LoginMethod.Equals(Constants.StudioAuthentication))
 			{
 				Message = string.Empty;
-				AppItializer.EnsureInitializer();
 				Application.Current?.Dispatcher?.Invoke(() => { _studioCredentials.GetToken(); });
 			}
 		}
