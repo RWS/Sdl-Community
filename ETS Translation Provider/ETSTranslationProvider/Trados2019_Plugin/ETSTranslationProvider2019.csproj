@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Trados2019_Plugin</AppDesignerFolder>
     <RootNamespace>ETSTranslationProvider</RootNamespace>
-    <AssemblyName>ETSTranslationProvider</AssemblyName>
+    <AssemblyName>SDLMachineTranslationEdgeProvider</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>

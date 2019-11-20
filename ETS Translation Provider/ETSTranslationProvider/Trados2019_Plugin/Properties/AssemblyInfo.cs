@@ -6,10 +6,10 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ETSPlugin")]
-[assembly: AssemblyDescription("SDL Plugin for enabling Trados Studio to use SDL's ETS.")]
+[assembly: AssemblyDescription("SDL Plugin for enabling Trados Studio to use SDL's Machine Translation Edge.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SDL")]
-[assembly: AssemblyProduct("ETSPlugin")]
+[assembly: AssemblyProduct("SDLMTEdgePlugin")]
 [assembly: AssemblyCopyright("Copyright © SDL 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

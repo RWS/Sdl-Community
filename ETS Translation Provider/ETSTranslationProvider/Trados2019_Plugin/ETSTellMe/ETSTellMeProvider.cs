@@ -5,33 +5,33 @@ namespace ETSTranslationProvider.ETSTellMe
 	[TellMeProvider]
 	public class ETSTellMeProvider : ITellMeProvider
 	{
-		public string Name => "ETS tell me provider";
+		public string Name => "SDL MT Edge tell me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
 			new ETSMTAction
 			{
-				Keywords = new[] {"ets", "ets mt", "ets mt documentation" }
+				Keywords = new[] { "sdlmtedge", "sdl mt edge", "sdl mt edge documentation" }
 			},
 			new ETSStoreAction
 			{
-				Keywords = new[] { "ets", "ets store", "ets download" }
+				Keywords = new[] { "sdlmtedge", "sdl mt edge store", "sdl mt edge download" }
 			},
 			new ETSTranslationServerAction
 			{
-				Keywords = new[] { "ets", "enterprise translation server", "enterprise translation server documentation", "enterprise translation server website" }
+				Keywords = new[] { "sdlmtedge", "sdl mt edge", "enterprise translation server", "enterprise translation server documentation", "enterprise translation server website" }
 			},
 			new ETSOfficialWebAction
 			{
-				Keywords = new[] { "ets", "ets official", "ets official web site", "ets official documentation" }
+				Keywords = new[] { "sdlmtedge", "sdl mt edge official", "sdl mt edge official web site", "sdl mt edge official documentation" }
 			},
 			new ETSLanguagePairsAction
 			{
-				Keywords = new[] { "ets", "ets language pairs" }
+				Keywords = new[] { "sdlmtedge", "sdl mt edge language pairs" }
 			},
 			new ETSCommunitySupportAction
 			{
-				Keywords = new[] {"ets", "ets community", "ets support" }
+				Keywords = new[] { "sdlmtedge", "sdl mt edge community", "sdl mt edge support" }
 			}
 		};
 	}

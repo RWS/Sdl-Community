@@ -35,7 +35,7 @@ namespace ETSTranslationProvider
 				&& PluginConfiguration.CurrentInstance.DefaultConnection.Value.Port == Options.Port;
 
 			UpdateDialog();
-			Text = @"SDL ETS Translation";
+			Text = @"SDL Machine Translation Edge";
 
 			// .5 seconds after certain events, run the populate command. This prevents us from authenticating each
 			// keypress (as that was causing massive lag).
@@ -160,7 +160,7 @@ namespace ETSTranslationProvider
 					ReadOnly = true
 				};
 
-				lpChoicesColumn.Name = "SDL ETS Language Pair";
+				lpChoicesColumn.Name = "SDL MT Edge Language Pair";
 				lpChoicesColumn.FlatStyle = FlatStyle.Flat;
 
 				TradosLPs.Columns.AddRange(targetColumn, lpChoicesColumn);
@@ -296,7 +296,7 @@ namespace ETSTranslationProvider
 		{
 			for (int i = 0; i < TradosLPs?.Rows.Count; i++)
 			{
-				var comboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL ETS Language Pair"];
+				var comboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL MT Edge Language Pair"];
 				var entry = TradosLPs.Rows[i].DataBoundItem as ETSApi.TradosToETSLP;
 				if (entry == null) continue;
 				comboCell.Tag = entry;
