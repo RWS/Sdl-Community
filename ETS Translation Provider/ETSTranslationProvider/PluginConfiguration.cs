@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ETSTranslationProvider
@@ -15,7 +14,6 @@ namespace ETSTranslationProvider
 
         public string Host { get; set; }
         public int Port { get; set; }
-
     }
 
     public class PluginConfiguration
@@ -53,7 +51,7 @@ namespace ETSTranslationProvider
                 return null;
             }
 
-            using (StreamReader r = new StreamReader(file))
+            using (var r = new StreamReader(file))
             {
                 var config = JsonConvert.DeserializeObject<PluginConfiguration>(r.ReadToEnd());
 				if (config == null)
