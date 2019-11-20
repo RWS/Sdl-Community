@@ -32,10 +32,7 @@ namespace ETSTranslationProvider
 
 		static PluginConfiguration()
 		{
-			var assembly = Assembly.GetExecutingAssembly();
-			var assemblyName = assembly.GetName().Name;
-
-			var pluginDataDirectory = Environment.ExpandEnvironmentVariables($"%AppData%\\SDL Community\\{assemblyName}");
+			var pluginDataDirectory = Environment.ExpandEnvironmentVariables($"%AppData%\\SDL Community\\SDLMachineTranslationEdge");
 			CurrentInstance = ParseConfiguration(pluginDataDirectory);
 			if (CurrentInstance == null)
 			{
