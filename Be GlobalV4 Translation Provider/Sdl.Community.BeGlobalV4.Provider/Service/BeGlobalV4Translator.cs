@@ -74,12 +74,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					}
 					else
 					{
-						var accessToken = string.Empty;
-						Application.Current?.Dispatcher?.Invoke(() =>
+						var accessToken = string.Empty;		
+						if (string.IsNullOrEmpty(accessToken))
 						{
-							accessToken = _studioCredentials.GetToken();
-						});
-
+							Application.Current?.Dispatcher?.Invoke(() => {	accessToken = _studioCredentials.GetToken(); });
+						}
 						if (!string.IsNullOrEmpty(accessToken))
 						{
 							_client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
