@@ -46,19 +46,19 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 				var applicationVersion = GetApplicationVersion(studioInstallationPath);
 				if (applicationVersion == null)
 				{
-					return string.Empty;
+					return null;
 				}
 				var applicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 				var projectApiFolder = Path.Combine(applicationDataFolder, Path.Combine("SDL", "ProjectApi"));
 				var projectApiFile = Path.Combine(projectApiFolder, applicationVersion, "Sdl.ProjectApi.xml");
 
-				return File.Exists(projectApiFile) ? projectApiFile : string.Empty;
+				return File.Exists(projectApiFile) ? projectApiFile : null;
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"{Constants.GetProjectApiFilePath} {ex.Message}\n {ex.StackTrace}");
 			}
-			return string.Empty;
+			return null;
 		}
 
 		private static string GetApplicationVersion(string studioInstallationPath)
@@ -66,13 +66,13 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			try
 			{
 				var assemblyFile = Path.Combine(studioInstallationPath, "Sdl.ProjectApi.dll");
-				return File.Exists(assemblyFile) ? AssemblyName.GetAssemblyName(assemblyFile).Version.ToString() : string.Empty;
+				return File.Exists(assemblyFile) ? AssemblyName.GetAssemblyName(assemblyFile).Version.ToString() : null;
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"{Constants.GetApplicationVersion} {ex.Message}\n {ex.StackTrace}");
 			}
-			return string.Empty;
+			return null;
 		}
 
 		public static List<LocationDetails> GetRoamingMajorFullFolderPath(string userName, StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)

@@ -161,11 +161,10 @@
     <Compile Include="BeGlobalTellMe\BeGlobalCommunitySupportAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalContactAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalHelpAction.cs" />
-    <Compile Include="BeGlobalTellMe\BeGlobalSettingsAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalStoreAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalTellMeProvider.cs" />
     <Compile Include="Converters\BeGlobalLoginConverter.cs" />
-    <Compile Include="Helpers\AppItializer.cs" />
+    <Compile Include="Helpers\AppInitializer.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\NormalizeSourceTextHelper.cs" />

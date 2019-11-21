@@ -44,7 +44,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				{
 					if (_authenticationMethod.Equals(Constants.APICredentials))
 					{
-						var splitedCredentials = credentials?.Credential.Split('#');
+						var splitedCredentials = credentials?.Credential?.Split('#');
 						// the below condition is needed in case the ClientId is not set and credentials exists
 						if (string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId)
 							&& splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
@@ -74,12 +74,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					}
 					else
 					{
-						var accessToken = string.Empty;
-						Application.Current?.Dispatcher?.Invoke(() =>
+						var accessToken = string.Empty;		
+						if (string.IsNullOrEmpty(accessToken))
 						{
-							accessToken = _studioCredentials.GetToken();
-						});
-
+							Application.Current?.Dispatcher?.Invoke(() => {	accessToken = _studioCredentials.GetToken(); });
+						}
 						if (!string.IsNullOrEmpty(accessToken))
 						{
 							_client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
