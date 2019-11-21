@@ -120,7 +120,7 @@ namespace ETSTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL ETS translation provider.
+        ///   Looks up a localized string similar to SDL Machine Translation Edge.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -129,7 +129,7 @@ namespace ETSTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL ETS translation provider.
+        ///   Looks up a localized string similar to SDL Machine Translation Edge.
         /// </summary>
         public static string Plugin_NiceName {
             get {

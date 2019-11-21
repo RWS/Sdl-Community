@@ -1,6 +1,3 @@
 using Sdl.Core.PluginFramework;
 
-[assembly: Plugin("ETSPlugin")]
-
-
-
+[assembly: Plugin("SDLMachineTranslationEdgePlugin")]

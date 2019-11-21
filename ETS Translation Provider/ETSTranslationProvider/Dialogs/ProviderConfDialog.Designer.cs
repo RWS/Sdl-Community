@@ -300,7 +300,7 @@ namespace ETSTranslationProvider
 			this.Name = "ProviderConfDialog";
 			this.Padding = new System.Windows.Forms.Padding(10);
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "SDL ETS Translation Options";
+			this.Text = "SDL MT Edge Options";
 			this.AuthenticationGroup.ResumeLayout(false);
 			this.AuthenticationGroup.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.TradosLPs)).EndInit();

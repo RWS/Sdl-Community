@@ -128,10 +128,10 @@
     <value>A translation provider plug-in for performing searches.</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>SDL ETS translation provider</value>
+    <value>SDL Machine Translation Edge</value>
   </data>
   <data name="Plugin_NiceName" xml:space="preserve">
-    <value>SDL ETS translation provider</value>
+    <value>SDL Machine Translation Edge</value>
   </data>
   <data name="Plugin_Tooltip" xml:space="preserve">
     <value>Enterprise Translation Services translation provider</value>
