@@ -31,16 +31,10 @@ namespace Sdl.Community.MtEnhancedProvider
         private static string _clientid;
         const string msTranslatorString = "Microsoft Translator"; //these strings should not be localized or changed and are therefore hard-coded as constants
         const string gTranslateString = "Google Translate"; //these strings should not be localized or changed and are therefore hard-coded as constants
-        
-        #region "TranslationMethod"
+
         //The translation method affects when/if the plugin gets called by Studio
         public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
-        #endregion
 
-
-
-
-        #region "TranslationProviderUriBuilder"
         TranslationProviderUriBuilder _uriBuilder;
 
         public MtTranslationOptions()
@@ -52,7 +46,6 @@ namespace Sdl.Community.MtEnhancedProvider
         {
             _uriBuilder = new TranslationProviderUriBuilder(uri);
         }
-        #endregion
 
 		public Dictionary<string,string> LanguagesSupported { get; set; }
         
@@ -76,9 +69,7 @@ namespace Sdl.Community.MtEnhancedProvider
             get { return GetStringParameter("resenddrafts"); }
             set { SetStringParameter("resenddrafts", value); }
         }
-        
 
-        #region "EditFiles"
         [JsonIgnore]
         public bool UsePreEdit
         {
@@ -160,11 +151,6 @@ namespace Sdl.Community.MtEnhancedProvider
             }
         }
 
-        #endregion
-
-
-
-
         [JsonIgnore]
         public string ApiKey
         {
@@ -220,24 +206,17 @@ namespace Sdl.Community.MtEnhancedProvider
             set { SetStringParameter("catid", value); }
         }
 
-
-        #region "SetStringParameter"
         private void SetStringParameter(string p, string value)
         {
             _uriBuilder[p] = value;
         }
-        #endregion
 
-        #region "GetStringParameter"
         private string GetStringParameter(string p)
         {
             string paramString = _uriBuilder[p];
             return paramString;
         }
-        #endregion
 
-
-        #region "Uri"
         [JsonIgnore]
         public Uri Uri
         {
@@ -246,7 +225,7 @@ namespace Sdl.Community.MtEnhancedProvider
                 return _uriBuilder.Uri;
             }
         }
-        #endregion
+
     }
 
     
