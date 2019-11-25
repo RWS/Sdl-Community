@@ -20,7 +20,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		public SettingsViewModel SettingsViewModel { get; set; }
 		private ICommand _okCommand;
 		private int _selectedIndex;
-		private readonly bool _tellMeAction;
 		private readonly BeGlobalWindow _mainWindow;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
 		private readonly LanguagePair[] _languagePairs;
@@ -47,35 +46,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				LoginViewModel.Email = options.ClientId;
 				_mainWindow.LoginTab.PasswordBox.Password = options.ClientSecret;
 			}
-		}
-
-		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options, bool tellMeAction)
-		{
-			LoginViewModel = new LoginViewModel(options);
-			SettingsViewModel = new SettingsViewModel(options);
-			Options = options;
-			if (options != null)
-			{
-				var mtModel = SettingsViewModel.TranslationOptions.FirstOrDefault(m => m.Model.Equals(options.Model));
-				if (mtModel != null)
-				{
-					var selectedModelIndex = SettingsViewModel.TranslationOptions.IndexOf(mtModel);
-					SettingsViewModel.SelectedModelOption = SettingsViewModel.TranslationOptions[selectedModelIndex];
-				}
-				else if (SettingsViewModel.TranslationOptions.Count.Equals(0))
-				{
-					var translationModel = new TranslationModel
-					{
-						Model = options.Model,
-						DisplayName = options.Model
-					};
-					SettingsViewModel.TranslationOptions.Add(translationModel);
-					SettingsViewModel.SelectedModelOption = translationModel;
-				}
-			}
-			_mainWindow = mainWindow;
-			_tellMeAction = tellMeAction;
-			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 		}
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
@@ -131,12 +101,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private void Ok(object parameter)
 		{
 			var loginTab = parameter as Login;
-
-			if (_tellMeAction)
-			{
-				WindowCloser.SetDialogResult(_mainWindow, true);
-				_mainWindow.Close();
-			}
 			if (loginTab != null)
 			{
 				var isValid = IsWindowValid();
@@ -148,7 +112,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		private void SetEngineModel()
+		public void SetEngineModel()
 		{
 			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options.ClientId, Options.ClientSecret, Options.Model, Options.UseClientAuthentication);
 			int accountId;
@@ -161,6 +125,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				accountId = beGlobalTranslator.GetUserInformation();
 			}
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+			Options.SubscriptionInfo = subscriptionInfo;
 
 			GetEngineModels(subscriptionInfo.LanguagePairs);
 			if (Options?.Model == null)

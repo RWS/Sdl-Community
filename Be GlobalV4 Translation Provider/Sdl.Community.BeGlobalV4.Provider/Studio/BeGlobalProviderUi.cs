@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.Community.BeGlobalV4.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
@@ -18,7 +17,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public string TypeName => "SDL Machine Translation Cloud Provider";
 		public string TypeDescription => "SDL Machine Translation Cloud Provider";
 		public bool SupportsEditing => true;
-		private readonly string _url = "https://translate-api.sdlbeglobal.com";
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
@@ -34,11 +32,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 			{
 				var clientId = beGlobalVm.Options.ClientId;
-				var clientSecret = beGlobalVm.Options.ClientSecret;
+				var clientSecret = beGlobalVm.Options.ClientSecret;			
 
-				var beGlobalService = new BeGlobalV4Translator(_url, clientId,
-					clientSecret, beGlobalVm.Options.Model, beGlobalVm.Options.UseClientAuthentication);
-				beGlobalVm.Options.BeGlobalService = beGlobalService;
 				var provider = new BeGlobalTranslationProvider(options)
 				{
 					Options = beGlobalVm.Options
@@ -46,7 +41,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 				SetBeGlobalCredentials(credentialStore, clientId, clientSecret, true);
 
-				return new ITranslationProvider[] { provider };
+				return new ITranslationProvider[] { provider };	
 			}
 			return null;
 		}
