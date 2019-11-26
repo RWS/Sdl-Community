@@ -18,7 +18,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 	{
 		private static string _authToken;
 		private static DateTime _tokenExpiresAt; //to keep track of when token expires
-		private static List<string> _supportedLangs;
+		public static List<string> SupportedLangs { get; set; }
 		private MtTranslationOptions _options;
 		private string _subscriptionKey = string.Empty;
 		private static readonly string TranslatorUri = @"https://api.cognitive.microsofttranslator.com/";
@@ -38,9 +38,9 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			{
 				_authToken = GetAuthToken(); //if the class variable has not been set
 			}
-			if (_supportedLangs == null)
+			if (SupportedLangs == null)
 			{
-				_supportedLangs = GetSupportedLanguages(); //if the class variable has not been set
+				SupportedLangs = GetSupportedLanguages(); //if the class variable has not been set
 			}
 		}
 
@@ -200,7 +200,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			var targetSupported = false;
 
 			//check to see if both the source and target languages are supported
-			foreach (string lang in _supportedLangs)
+			foreach (string lang in SupportedLangs)
 			{
 				if (lang.Equals(source)) sourceSupported = true;
 				if (lang.Equals(target)) targetSupported = true;
