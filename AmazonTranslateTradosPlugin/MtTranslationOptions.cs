@@ -13,6 +13,8 @@
    limitations under the License.*/
 
 using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using Sdl.Community.AmazonTranslateProvider;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -29,15 +31,9 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         private static string _secretkey;
         private static string _accesskey;
 
-        #region "TranslationMethod"
         //The translation method affects when/if the plugin gets called by Studio
         public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
-        #endregion
 
-
-
-
-        #region "TranslationProviderUriBuilder"
         TranslationProviderUriBuilder _uriBuilder;
 
         public MtTranslationOptions()
@@ -49,56 +45,59 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         {
             _uriBuilder = new TranslationProviderUriBuilder(uri);
         }
-        #endregion
 
-
-
+        [JsonIgnore]
         private string sendPlainTextOnly
         {
             get { return GetStringParameter("sendplaintextonly"); }
             set { SetStringParameter("sendplaintextonly", value); }
         }
 
+        public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
 
+        [JsonIgnore]
         public string resendDrafts
         {
             get { return GetStringParameter("resenddrafts"); }
             set { SetStringParameter("resenddrafts", value); }
         }
 
-
-        #region "EditFiles"
-
+        [JsonIgnore]
         public bool UsePreEdit
         {
             get { return Convert.ToBoolean(usePreEdit); }
             set { usePreEdit = value.ToString(); }
         }
 
+        [JsonIgnore]
         public bool UsePostEdit
         {
             get { return Convert.ToBoolean(usePostEdit); }
             set { usePostEdit = value.ToString(); }
         }
 
+        [JsonIgnore]
         private string usePreEdit
         {
             get { return GetStringParameter("usepreedit"); }
             set { SetStringParameter("usepreedit", value); }
         }
 
+        [JsonIgnore]
         private string usePostEdit
         {
             get { return GetStringParameter("usepostedit"); }
             set { SetStringParameter("usepostedit", value); }
         }
 
+        [JsonIgnore]
         public string PreLookupFilename
         {
             get { return GetStringParameter("prelookupfilename"); }
             set { SetStringParameter("prelookupfilename", value); }
         }
 
+        [JsonIgnore]
         public string PostLookupFilename
         {
             get { return GetStringParameter("postlookupfilename"); }
@@ -134,6 +133,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
                 return AWSAuthType.None;
         }
 
+        [JsonIgnore]
         public AWSAuthType SelectedAuthType
         {
             get
@@ -147,71 +147,67 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             }
         }
 
-        #endregion
-
-
-
+        [JsonIgnore]
         public string AccessKey
         {
             get { return _accesskey; } //the creds are going to be held in a static variable so we don't have to get it from credential store all the time
             set { _accesskey = value; }
         }
 
+        [JsonIgnore]
         public string SecretKey
         {
             get { return _secretkey; } //the creds are going to be held in a static variable so we don't have to get it from credential store all the time
             set { _secretkey = value; }
         }
 
+        [JsonIgnore]
         public string ProfileName
         {
             get { return GetStringParameter("profilename"); }
             set { SetStringParameter("profilename", value); }
         }
 
+        [JsonIgnore]
         public string RegionName
         {
             get { return GetStringParameter("regionname"); }
             set { SetStringParameter("regionname", value); }
         }
 
+        [JsonIgnore]
         public bool PersistAWSCreds
         {
             get;
             set;
         }
 
+        [JsonIgnore]
         public bool ResendDrafts //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
         {
             get { return Convert.ToBoolean(resendDrafts); }
             set { resendDrafts = value.ToString(); }
         }
 
+        [JsonIgnore]
         public bool SendPlainTextOnly //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
         {
             get { return Convert.ToBoolean(sendPlainTextOnly); }
             set { sendPlainTextOnly = value.ToString(); }
         }
 
-
-
-        #region "SetStringParameter"
         private void SetStringParameter(string p, string value)
         {
             _uriBuilder[p] = value;
         }
-        #endregion
 
-        #region "GetStringParameter"
         private string GetStringParameter(string p)
         {
             string paramString = _uriBuilder[p];
             return paramString;
         }
-        #endregion
 
-
-        #region "Uri"
+        [JsonIgnore]
         public Uri Uri
         {
             get
@@ -219,7 +215,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
                 return _uriBuilder.Uri;
             }
         }
-        #endregion
+
     }
 
 
