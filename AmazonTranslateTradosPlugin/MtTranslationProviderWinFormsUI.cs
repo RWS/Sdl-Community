@@ -229,7 +229,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
             var info = new TranslationProviderDisplayInfo();
             var options = new MtTranslationOptions(translationProviderUri);
-            info.TranslationProviderIcon = PluginResources.my_icon;
+            info.TranslationProviderIcon = PluginResources.AmazonTranslate;
 
             info.Name = PluginResources.Plugin_NiceName;
             info.TooltipText = PluginResources.Plugin_Tooltip;

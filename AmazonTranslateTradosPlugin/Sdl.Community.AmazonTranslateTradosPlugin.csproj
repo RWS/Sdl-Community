@@ -154,7 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\%24this.Icon.ico" />
-    <Content Include="Resources\my_icon.ico" />
+    <Content Include="Resources\AmazonTranslate.ico" />
     <Resource Include="Resources\question.ico" />
     <None Include="Resources\amazon-aws-small.jpg" />
     <None Include="Resources\amazon-aws-main.jpg" />
