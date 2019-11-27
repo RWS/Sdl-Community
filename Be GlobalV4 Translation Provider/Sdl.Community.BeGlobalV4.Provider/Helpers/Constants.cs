@@ -38,5 +38,6 @@
 		public static readonly string TokenFailed = "Acquiring token failed: ";
 		public static readonly string CredentialsValidation = "Please fill the Client Id and Client Secret!";
 		public static readonly string CredentialsNotValid = "Please check the credentials.";
+		public static readonly string CheckInternetConnection = "Please check your internet connection!";
 	}
 }

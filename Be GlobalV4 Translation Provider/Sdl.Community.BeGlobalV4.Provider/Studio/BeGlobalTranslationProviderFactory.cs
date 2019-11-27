@@ -10,7 +10,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		Description = "SDL Machine Translation Cloud Provider")]
 	public class BeGlobalTranslationProviderFactory : ITranslationProviderFactory
 	{
-		public static readonly Log Log = Log.Instance;	
+		public static readonly Log Log = Log.Instance;
 		[STAThread]
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
@@ -35,9 +35,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				return new BeGlobalTranslationProvider(options);
 			}
-			var userInfo = options.BeGlobalService?.GetUserInformation(true);		
-			var subscriptionInfo = options.BeGlobalService?.GetLanguagePairs(userInfo.AccountId.ToString());
-			options.SubscriptionInfo = subscriptionInfo;
+			var userInfo = options.BeGlobalService?.GetUserInformation(true);
+			if (userInfo != null)
+			{
+				var subscriptionInfo = options.BeGlobalService?.GetLanguagePairs(userInfo.AccountId.ToString());
+				options.SubscriptionInfo = subscriptionInfo;
+			}
 			return new BeGlobalTranslationProvider(options);
 		}
 

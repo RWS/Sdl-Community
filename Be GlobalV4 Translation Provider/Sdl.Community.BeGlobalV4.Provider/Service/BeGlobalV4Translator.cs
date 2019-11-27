@@ -240,7 +240,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				Log.Logger.Error($"{Constants.GetUserInformation} {ex.Message}\n {ex.StackTrace}");
 			}
-			responseErrors.AccountId = 0;
+			if (responseErrors != null)
+			{
+				responseErrors.AccountId = 0;
+			}
 			return responseErrors;
 		}
 
@@ -374,6 +377,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		{
 			var responseContent = JsonConvert.DeserializeObject<ResponseError>(response.Content);
 		
+			if(response.StatusCode == 0)
+			{
+				_messageBoxService.ShowWarningMessage($"{response.ErrorMessage}\n {Constants.CheckInternetConnection}", Constants.PluginName);
+			}
 			if (response.StatusCode == HttpStatusCode.Forbidden)
 			{
 				if (showErrorMessage)
