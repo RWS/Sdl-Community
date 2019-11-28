@@ -109,7 +109,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.AmzConnect
             return true;  
         }
 
-        private List<string> GetSupportedLanguages()
+        public List<string> GetSupportedLanguages()
         {
             List<string> languageCodeList = new List<string> {
                 "en",

@@ -71,8 +71,6 @@ namespace Sdl.Community.ControlledMTProviders.Provider
             return _mtProviders.Select(mtProvider => mtProvider.Uri).ToList();
         }
 
-        #region ITranslationProvider Members
-
         public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
         {
             return new CascadeLanguageDirection(this, languageDirection);
@@ -227,9 +225,6 @@ namespace Sdl.Community.ControlledMTProviders.Provider
             get { return new Uri(ProviderUri); }
         }
 
-        #endregion
-
-       
     }
 
     internal class ProviderUriInfo

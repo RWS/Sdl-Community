@@ -13,7 +13,10 @@
    limitations under the License.*/
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
+using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -102,8 +105,13 @@ namespace Sdl.Community.MtEnhancedProvider
                 catch { } //swallow b/c it will just fail to fill in instead of crashing the whole program 
             }
 
+			var apiConnecter = new ApiConnecter(loadOptions);
+			var allSupportedLanguages = ApiConnecter.SupportedLangs;
+			var correspondingLanguages = languagePairs.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0,2))).ToList();
+
+			//loadOptions.LanguagesSupported = correspLanguages.ToDictionary(lp => lp.TargetCultureName, lp=>"MS Translator");
             //construct form
-            var dialog = new MtProviderConfDialog(loadOptions, credentialStore);
+            var dialog = new MtProviderConfDialog(loadOptions, credentialStore, correspondingLanguages);
             //we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
@@ -155,6 +163,8 @@ namespace Sdl.Community.MtEnhancedProvider
         #region "Edit"
         public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
+	        
+
             var editProvider = translationProvider as MtTranslationProvider;
             if (editProvider == null)
             {
@@ -184,7 +194,11 @@ namespace Sdl.Community.MtEnhancedProvider
                 catch { }//swallow b/c it will just fail to fill in instead of crashing the whole program 
             }
 
-            var dialog = new MtProviderConfDialog(editProvider.Options, credentialStore);
+            var apiConnecter = new ApiConnecter(editProvider.Options);
+            var allSupportedLanguages = ApiConnecter.SupportedLangs;
+            var correspondingLanguages = languagePairs.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0,2))).ToList();
+
+            var dialog = new MtProviderConfDialog(editProvider.Options, credentialStore, correspondingLanguages);
             //we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
@@ -201,8 +215,8 @@ namespace Sdl.Community.MtEnhancedProvider
                 else if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
                 {
                     //set mst cred
-                    var creds2 = new GenericCredentials(dialog.Options.ClientId, dialog.Options.ClientSecret);
-                    SetMstCredentials(credentialStore, creds2, dialog.Options.PersistMicrosoftCreds);
+                    var credentials = new GenericCredentials(dialog.Options.ClientId, dialog.Options.ClientSecret);
+                    SetMstCredentials(credentialStore, credentials, dialog.Options.PersistMicrosoftCreds);
                 }
                 return true;
             }

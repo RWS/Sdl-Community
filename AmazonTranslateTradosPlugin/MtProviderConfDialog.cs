@@ -29,8 +29,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         Uri uriAmz;
         TranslationProviderCredential amzCred;
 
-
-        #region "ProviderConfDialog"
         public MtProviderConfDialog(MtTranslationOptions options, ITranslationProviderCredentialStore credentialStore)
         {
             this.credstore = credentialStore;
@@ -73,9 +71,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             get;
             set;
         }
-        #endregion
 
-        #region "UpdateDialog"
         private void UpdateDialog()
         {
             showcredsloc = groupBoxAuth.Location; //holds our location of where to place the group box we are showing
@@ -106,8 +102,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             }
             catch { }
         }
-        #endregion
-
 
         /// <summary>
         /// Loads strings to the form from our resources file....defaults have been set in the designer so this can be called in a try block
@@ -115,7 +109,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         private void LoadResources()
         {
             //FUTURE: localization of UI strings
-            #region "Debug Localization"
+
             //the code in this region can be used to test localization...do not leave it in in production
             //change the culture of the current thread to test loading of resource file
             //CultureInfo newCulture = new CultureInfo("es-ES");
@@ -124,7 +118,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             //CultureInfo originalUiCulture = Thread.CurrentThread.CurrentUICulture;
             //Thread.CurrentThread.CurrentCulture = newCulture;
             //Thread.CurrentThread.CurrentUICulture = newCulture;
-            #endregion
 
             this.Text = MtProviderConfDialogResources.form_Text;
             this.btn_OK.Text = MtProviderConfDialogResources.btn_OK_Text;
@@ -192,8 +185,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
         }
 
-        #region "OK"
-
         private void btn_OK_Click(object sender, EventArgs e)
         {
             if (!ValidateForm()) return;
@@ -215,8 +206,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             this.Close(); //dispose????
         }
 
-        #endregion
-
         private void btn_Cancel_Click(object sender, EventArgs e)
         {
 
@@ -229,15 +218,13 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         /// <param name="boxToConsult">The checkbox whose Checked value will be consulted.</param>
         private void editControlsSetEnabled(Control[] enableSet, CheckBox boxToConsult)
         {
-            #region "enable/disable"
+
             for (int i = 0; i < enableSet.Length; i++)
             {
                 if (boxToConsult.Checked) enableSet[i].Enabled = true;
                 else enableSet[i].Enabled = false;
             }
 
-
-            #endregion
         }
 
         private void comboProvider_SelectedIndexChanged(object sender, EventArgs e)
