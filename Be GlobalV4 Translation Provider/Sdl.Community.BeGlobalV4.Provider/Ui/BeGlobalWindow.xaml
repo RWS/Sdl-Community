@@ -6,8 +6,8 @@
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
              xmlns:uiHelpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.UiHelpers"
-		 	xmlns:views="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
-		 	helpers:WindowCloser.DialogResult="{Binding DialogResult}"
+		 	 xmlns:views="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
+		 	 helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			 WindowStartupLocation="CenterScreen" mc:Ignorable="d" 
 			 WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"	 
              d:DesignHeight="450" d:DesignWidth="900"  Height="550" Width="820">

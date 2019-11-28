@@ -161,8 +161,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					var password = loginTab?.PasswordBox.Password;
 					if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(LoginViewModel.Email))
 					{
-						Options.ClientId = LoginViewModel.Email;
-						Options.ClientSecret = password;
+						Options.ClientId = LoginViewModel.Email.TrimEnd().TrimStart();
+						Options.ClientSecret = password.TrimEnd().TrimStart();
 						Options.UseClientAuthentication = false;
 						LoginViewModel.Message = string.Empty;
 						if (Options.Model == null)
@@ -176,10 +176,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				{
 					var clientId = loginTab?.ClientKeyBox.Password;
 					var clientSecret = loginTab?.ClientSecretBox.Password;
-					if (!string.IsNullOrEmpty(clientId?.TrimEnd()) && !string.IsNullOrEmpty(clientSecret.TrimEnd()))
+					if (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret))
 					{
-						Options.ClientId = clientId;
-						Options.ClientSecret = clientSecret;
+						Options.ClientId = clientId.TrimEnd().TrimStart();
+						Options.ClientSecret = clientSecret.TrimEnd().TrimStart();
 						Options.UseClientAuthentication = true;
 						if (Options.Model == null)
 						{
@@ -199,7 +199,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				SettingsViewModel.MessageVisibility = "Visible";
 				if (loginTab != null)
 				{
-					LoginViewModel.Message = e.Message.Contains("Acquiring token failed") ? "Please verify your credentials." : e.Message;
+					LoginViewModel.Message = (e.Message.Contains("Acquiring token failed") || e.Message.Contains("Value cannot be null."))
+						? "Please verify your credentials!"
+						: e.Message;
 				}
 				Log.Logger.Error($"Is window valid method: {e.Message}\n {e.StackTrace}");
 			}
