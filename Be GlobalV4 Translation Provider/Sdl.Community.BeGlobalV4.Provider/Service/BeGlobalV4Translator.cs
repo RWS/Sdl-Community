@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.BeGlobalV4.Provider.Studio;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Service
 {
@@ -13,25 +14,20 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		private readonly string _flavor;
 		public static readonly Log Log = Log.Instance;
 
-		public BeGlobalV4Translator(
-			string server,
-			string user,
-			string password,
-			string flavor,
-			bool useClientAuthentication)
+		public BeGlobalV4Translator(string server, BeGlobalTranslationOptions options)
 		{
 			try
 			{
-				_flavor = flavor;
+				_flavor = options.Model;
 				_client = new RestClient(string.Format($"{server}/v4"));
 				IRestRequest request;
-				if (useClientAuthentication)
+				if (options.UseClientAuthentication)
 				{
 					request = new RestRequest("/token", Method.POST)
 					{
 						RequestFormat = DataFormat.Json
 					};
-					request.AddBody(new { clientId = user, clientSecret = password });
+					request.AddBody(new { clientId = options.ClientId, clientSecret = options.ClientSecret });
 				}
 				else
 				{
@@ -39,21 +35,21 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					{
 						RequestFormat = DataFormat.Json
 					};
-					request.AddBody(new { username = user, password = password });
+					request.AddBody(new { username = options.ClientId, password = options.ClientSecret });
 				}
 				AddTraceId(request);
 				request.RequestFormat = DataFormat.Json;
 				var response = _client.Execute(request);
 				if (response.StatusCode != System.Net.HttpStatusCode.OK)
 				{
-					throw new Exception("Acquiring token failed: " + response.Content);
+					throw new Exception(Constants.TokenFailed + response.Content);
 				}
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
 				_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"BeGlobalV4Translator constructor: {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{Constants.BeGlobalV4Translator} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -80,7 +76,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"Get client information method: {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{Constants.GetClientInformation} {e.Message}\n {e.StackTrace}");
 			}
 			return 0;
 		}
@@ -118,7 +114,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"Translate text method: {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{Constants.TranslateTextMethod} {e.Message}\n {e.StackTrace}");
 			}
 			return string.Empty;
 		}
@@ -143,7 +139,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"Get user information method: {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{ Constants.GetUserInformation} { e.Message}\n {e.StackTrace}");
 			}
 			return 0;
 		}
@@ -168,7 +164,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"Subscription info method: {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{Constants.SubscriptionInfoMethod} {e.Message}\n {e.StackTrace}");
 			}
 			return new SubscriptionInfo();
 		}
@@ -190,17 +186,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					dynamic json = JsonConvert.DeserializeObject(response.Content);
 					status = json.translationStatus;
 
-					if (!status.Equals("DONE", StringComparison.CurrentCultureIgnoreCase))
+					if (!status.Equals(Constants.DONE, StringComparison.CurrentCultureIgnoreCase))
 					{
 						System.Threading.Thread.Sleep(300);
 					}
-					if (status.Equals("FAILED"))
+					if (status.Equals(Constants.FAILED))
 					{
 						ShowErrors(response);
 
 					}
-				} while (status.Equals("INIT", StringComparison.CurrentCultureIgnoreCase) ||
-						 status.Equals("TRANSLATING", StringComparison.CurrentCultureIgnoreCase));
+				} while (status.Equals(Constants.INIT, StringComparison.CurrentCultureIgnoreCase) ||
+						 status.Equals(Constants.TRANSLATING, StringComparison.CurrentCultureIgnoreCase));
 
 				response = RestGet($"/mt/translations/async/{id}/content");
 				if (!response.IsSuccessful)
@@ -211,7 +207,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"Wait for translation method: {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{Constants.WaitTranslationMethod} {e.Message}\n {e.StackTrace}");
 			}
 			return new byte[1];
 		}
@@ -232,7 +228,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		{
 			var pluginVersion = VersionHelper.GetPluginVersion();
 			var studioVersion = VersionHelper.GetStudioVersion();
-			request.AddHeader("Trace-ID", $"SDLMachineTranslationCloudProvider {pluginVersion} - {studioVersion}.{Guid.NewGuid().ToString()}");
+			request.AddHeader(Constants.TraceId, $"{Constants.SDLMachineTranslationCloudProvider} {pluginVersion} - {studioVersion}.{Guid.NewGuid().ToString()}");
 		}
 
 		private void ShowErrors(IRestResponse response)
@@ -242,7 +238,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				foreach (var error in responseContent.Errors)
 				{
-					throw new Exception($"Error code: {error.Code}, {error.Description}");
+					throw new Exception($"{Constants.ErrorCode} {error.Code}, {error.Description}");
 				}
 			}
 		}

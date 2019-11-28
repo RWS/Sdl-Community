@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
@@ -13,6 +14,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private string _email;
 		private ICommand _navigateCommand;
 		private string _loginMethod;
+		private string _message;
+
+		private ICommand _passwordChangedCommand;
 
 		public LoginViewModel(BeGlobalTranslationOptions options)
 		{
@@ -20,12 +24,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				new Authentication
 				{
-					DisplayName = "Client Authentication",
-					Type = "Client"
+					DisplayName = Constants.ClientAuthentication,
+					Type = Constants.Client
 				},
 				new Authentication
-				{   DisplayName = "User Authentication",
-					Type = "User"
+				{   DisplayName = Constants.UserAuthentication,
+					Type = Constants.User
 				}
 			};
 			SelectedOption = options.UseClientAuthentication ? AuthenticationOptions[0] : AuthenticationOptions[1];
@@ -46,12 +50,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				OnPropertyChanged(nameof(LoginMethod));
 			}
 		}
-		public ICommand NavigateCommand => _navigateCommand ?? (_navigateCommand = new RelayCommand(Navigate));
-
-		private void Navigate(object obj)
-		{
-			Process.Start("https://translate.sdlbeglobal.com/");
-		}
 
 		public List<Authentication> AuthenticationOptions { get; set; }
 
@@ -63,16 +61,23 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				_selectedOption = value;
 				if (_selectedOption != null)
 				{
-					if (_selectedOption.Type.Equals("User"))
-					{
-						LoginMethod = "User";
-					}
-					else
-					{
-						LoginMethod = "Client";
-					}
+					LoginMethod = _selectedOption.Type.Equals(Constants.User) ? Constants.User : Constants.Client; 					
 				}
 				OnPropertyChanged();
+			}
+		}
+
+		public string Message
+		{
+			get => _message;
+			set
+			{
+				if (_message == value)
+				{
+					return;
+				}
+				_message = value;
+				OnPropertyChanged(nameof(Message));
 			}
 		}
 
@@ -84,6 +89,34 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				_email = value;
 				OnPropertyChanged();
 			}
+		}
+
+		public ICommand NavigateCommand => _navigateCommand ?? (_navigateCommand = new RelayCommand(Navigate));
+		public ICommand PasswordChangedCommand => _passwordChangedCommand ?? (_passwordChangedCommand = new RelayCommand(ChangePasswordAction));
+
+		private void ChangePasswordAction(object parameter)
+		{
+			if (parameter.GetType().Name.Equals(Constants.PasswordBox))
+			{
+				var passwordBox = (PasswordBox)parameter;				
+				if (passwordBox.Password.Length > 0)
+				{
+					Message = string.Empty;
+				}
+			}
+			else
+			{
+				var textBox = (TextBox)parameter;
+				if (textBox.Text.Length > 0)
+				{
+					Message = string.Empty;
+				}
+			}
+		}
+
+		private void Navigate(object obj)
+		{
+			Process.Start("https://translate.sdlbeglobal.com/");
 		}
 	}
 }

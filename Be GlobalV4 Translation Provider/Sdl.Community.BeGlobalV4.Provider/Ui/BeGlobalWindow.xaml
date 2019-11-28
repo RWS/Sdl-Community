@@ -6,7 +6,6 @@
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
              xmlns:uiHelpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.UiHelpers"
-			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
     	     xmlns:views="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
 			 helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			 WindowStartupLocation="CenterScreen" mc:Ignorable="d"
@@ -27,9 +26,6 @@
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
-				<ResourceDictionary x:Uid="ResourceKeyId1">
-					<converters:BeGlobalLoginConverter x:Key="LoginConverter"/>
-				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 			<!--set red background to X button on hover-->
 		</ResourceDictionary>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
@@ -56,12 +55,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			set
 			{
 				_selectedTabIndex = value;
-
-				if (value.Equals(1) && IsWindowValid())
-				{
-					LanguageMappingsViewModel.MessageVisibility = "Collapsed";
-					SetEngineModel();
-				}
+				IsWindowValid();
 				OnPropertyChanged();
 			}
 		}
@@ -114,16 +108,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		public void SetEngineModel()
 		{
-			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options.ClientId, Options.ClientSecret, Options.Model, Options.UseClientAuthentication);
-			int accountId;
-			if (Options.UseClientAuthentication)
-			{
-				accountId = beGlobalTranslator.GetClientInformation();
-			}
-			else
-			{
-				accountId = beGlobalTranslator.GetUserInformation();
-			}
+			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options);
+			var accountId = Options.UseClientAuthentication ? beGlobalTranslator.GetClientInformation() : beGlobalTranslator.GetUserInformation();
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
 			Options.SubscriptionInfo = subscriptionInfo;
 
@@ -157,7 +143,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			Options.Model = LanguageMappingsViewModel.SelectedModelOption?.Model;
 			try
 			{
-				if (LoginViewModel.SelectedOption.Type.Equals("User"))
+				if (LoginViewModel.SelectedOption.Type.Equals(Constants.User))
 				{
 					var password = loginTab?.PasswordBox.Password;
 					if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(LoginViewModel.Email))
@@ -165,7 +151,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						Options.ClientId = LoginViewModel.Email.TrimEnd().TrimStart();
 						Options.ClientSecret = password.TrimEnd().TrimStart();
 						Options.UseClientAuthentication = false;
-						loginTab.ValidationBlock.Visibility = Visibility.Collapsed;
+						LoginViewModel.Message = string.Empty;
 						if (Options.Model == null)
 						{
 							SetEngineModel();
@@ -186,24 +172,22 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						{
 							SetEngineModel();
 						}
-						loginTab.ValidationBlock.Visibility = Visibility.Collapsed;
+						LoginViewModel.Message = string.Empty;
 						return true;
 					}
 				}
 				if (loginTab != null)
 				{
-					loginTab.ValidationBlock.Visibility = Visibility.Visible;
+					LoginViewModel.Message = Constants.CredentialsValidation;
 				}
 			}
 			catch (Exception e)
 			{
-				LanguageMappingsViewModel.MessageVisibility = "Visible";
 				if (loginTab != null)
 				{
-					loginTab.ValidationBlock.Visibility = Visibility.Visible;
-					loginTab.ValidationBlock.Text = e.Message.Contains("Acquiring token failed") ? "Please verify your credentials." : e.Message;
+					LoginViewModel.Message = e.Message.Contains(Constants.TokenFailed) ? Constants.CredentialsNotValid : e.Message;
 				}
-				Log.Logger.Error($"Is window valid method: {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{Constants.IsWindowValid} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
              mc:Ignorable="d" 
              FontFamily="Segoe UI"
@@ -23,27 +24,20 @@
 				<ResourceDictionary x:Uid="ResourceKeyId1">
 					<converters:BeGlobalLoginConverter x:Key="LoginConverter"/>
 				</ResourceDictionary>
+				<ResourceDictionary x:Uid="ResourceKeyId2">
+					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>
+				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
-		<TextBlock Margin="15,20,10,15" Width="780" Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please enter your valid SDL Machine Translation Cloud provider information. The Client ID and Secret can be retrieved by a Machine Translation Cloud admin user from the 
+	<StackPanel>
+		<TextBlock Margin="15,20,10,15" Width="780" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please enter your valid SDL Machine Translation Cloud provider information. The Client ID and Secret can be retrieved by a Machine Translation Cloud admin user from the 
 			<Hyperlink NavigateUri="https://translate.sdlbeglobal.com/" Command="{Binding NavigateCommand}">
 				Machine Translation Cloud user interface.<LineBreak/>
 			</Hyperlink>The Username and Password are the same as the logins you use for the SDL Machine Translation Cloud Provider user interface.
 		</TextBlock>
-		<ComboBox 
-			Grid.Row="2"  HorizontalAlignment="Left"
+		<ComboBox  HorizontalAlignment="Left"
 			Width="400"
 			ItemsSource="{Binding AuthenticationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding SelectedOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -51,21 +45,23 @@
 			Margin="15,5,0,10" BorderThickness="1"
 			controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Please select the authentication type"/>
-		<TextBlock Grid.Row="3" Style="{DynamicResource TextBlockColor}" Margin="15,0,10,15">
+		<TextBlock Style="{DynamicResource TextBlockColor}" Margin="15,0,10,15">
 			Please enter your Credentials below:
 		</TextBlock>
-		<StackPanel Grid.Row="4">
+		<StackPanel>
 			<StackPanel x:Name="ClientId" Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=Client}">
-				<PasswordBox  
-					HorizontalAlignment="Left"
-					Name="ClientIdBox"
+				<PasswordBox Name="ClientIdBox"
 					controls:TextBoxHelper.UseFloatingWatermark="True"  
 					controls:TextBoxHelper.Watermark="Client Id"
 					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 					controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-					Width="400"
-					Margin="15,0,0,10"	  
-					IsEnabled="True">
+					Width="400" HorizontalAlignment="Left" Margin="15,0,0,10"
+				    IsEnabled="True">
+					<i:Interaction.Triggers>
+						<i:EventTrigger EventName="PasswordChanged" >
+							<i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=ClientIdBox}"/>
+						</i:EventTrigger>
+					</i:Interaction.Triggers>
 				</PasswordBox>
 				<PasswordBox  
 					HorizontalAlignment="Left"
@@ -74,38 +70,47 @@
 					controls:TextBoxHelper.Watermark="Client Secret"
 					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 					controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-					Width="400"
-					Margin="15,0,0,0"	  
+					Width="400"	Margin="15,0,0,0"	  
 					IsEnabled="True">
+					<i:Interaction.Triggers>
+						<i:EventTrigger EventName="PasswordChanged" >
+							<i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=ClientSecretBox}"/>
+						</i:EventTrigger>
+					</i:Interaction.Triggers>
 				</PasswordBox>
 			</StackPanel>
-
 			<StackPanel x:Name="UserCredentials" Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=User}">
-				<TextBox  
+				<TextBox Name="EmailBox"
 					HorizontalAlignment="Left"
-					Name="EmailBox"
 					controls:TextBoxHelper.UseFloatingWatermark="True"  
 					controls:TextBoxHelper.Watermark="Email"
 					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 					Text="{Binding Email,UpdateSourceTrigger=PropertyChanged}"
-					Width="400"
-					Margin="15,0,0,10"	  
+					Width="400"	Margin="15,0,0,10"	  
 					IsEnabled="True">
+					<i:Interaction.Triggers>
+						<i:EventTrigger EventName="TextChanged" >
+							<i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=EmailBox}"/>
+						</i:EventTrigger>
+					</i:Interaction.Triggers>
 				</TextBox>
-				<PasswordBox  
-					HorizontalAlignment="Left"
-					Name="PasswordBox"
+				<PasswordBox Name="PasswordBox"
+					HorizontalAlignment="Left"					
 					controls:TextBoxHelper.UseFloatingWatermark="True"  
 					controls:TextBoxHelper.Watermark="Password"
 					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 					controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-					Width="400"
-					Margin="15,0,0,0"	  
+					Width="400"	Margin="15,0,0,0"	  
 					IsEnabled="True">
+					<i:Interaction.Triggers>
+						<i:EventTrigger EventName="PasswordChanged" >
+							<i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=EmailBox}"/>
+						</i:EventTrigger>
+					</i:Interaction.Triggers>
 				</PasswordBox>
 			</StackPanel>
 		</StackPanel>
-
-		<TextBlock Name="ValidationBlock" Grid.Row="6" Grid.Column="0" Foreground="DarkRed" Margin="15,0,0,0" Visibility="Collapsed"> Both fields are required</TextBlock>
-	</Grid>
+		<TextBlock Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
+				   FontWeight="Normal" FontSize="14" Foreground="Red" Margin="15,15,15,0"/>
+	</StackPanel>
 </UserControl>
