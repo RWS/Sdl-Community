@@ -148,7 +148,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					var password = loginTab?.PasswordBox.Password;
 					if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(LoginViewModel.Email))
 					{
-						Options.ClientId = LoginViewModel.Email.TrimEnd().TrimStart();
+						Options.ClientId = LoginViewModel?.Email.TrimEnd().TrimStart();
 						Options.ClientSecret = password.TrimEnd().TrimStart();
 						Options.UseClientAuthentication = false;
 						LoginViewModel.Message = string.Empty;
@@ -163,10 +163,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				{
 					var clientId = loginTab?.ClientIdBox.Password;
 					var clientSecret = loginTab?.ClientSecretBox.Password;
-					if (!string.IsNullOrEmpty(clientId?.TrimEnd().TrimStart()) && !string.IsNullOrEmpty(clientSecret.TrimEnd().TrimStart()))
+					if (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret))
 					{
-						Options.ClientId = clientId;
-						Options.ClientSecret = clientSecret;
+						Options.ClientId = clientId.TrimEnd().TrimStart();
+						Options.ClientSecret = clientSecret.TrimEnd().TrimStart();
 						Options.UseClientAuthentication = true;
 						if (Options.Model == null)
 						{
