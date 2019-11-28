@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
@@ -13,7 +14,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private string _clientAuthVisibility;
 		private string _userAuthVisibility;
 		private string _email;
+		private string _message;
+
 		private ICommand _navigateCommand;
+		private ICommand _passwordChangedCommand;
 
 		public LoginViewModel(BeGlobalTranslationOptions options)
 		{
@@ -64,6 +68,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				OnPropertyChanged();  
 			}
 		}
+
 		public string ClientAuthVisibility
 		{
 			get => _clientAuthVisibility;
@@ -91,6 +96,42 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				_email = value;
 				OnPropertyChanged();
+			}
+		}
+
+		public string Message
+		{
+			get => _message;
+			set
+			{
+				if (_message == value)
+				{
+					return;
+				}
+				_message = value;
+				OnPropertyChanged(nameof(Message));
+			}
+		}
+
+		public ICommand PasswordChangedCommand => _passwordChangedCommand ?? (_passwordChangedCommand = new RelayCommand(ChangePasswordAction));
+
+		private void ChangePasswordAction(object parameter)
+		{
+			if (parameter.GetType().Name.Equals("PasswordBox"))
+			{
+				var passwordBox = (PasswordBox)parameter;
+				if (passwordBox.Password.Length > 0)
+				{
+					Message = string.Empty;
+				}
+			}
+			else
+			{
+				var textBox = (TextBox)parameter;
+				if (textBox.Text.Length > 0)
+				{
+					Message = string.Empty;
+				}
 			}
 		}
 	}

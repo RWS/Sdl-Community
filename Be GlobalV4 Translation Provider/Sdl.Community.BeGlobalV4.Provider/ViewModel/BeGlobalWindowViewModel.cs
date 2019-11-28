@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
@@ -165,7 +164,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						Options.ClientId = LoginViewModel.Email;
 						Options.ClientSecret = password;
 						Options.UseClientAuthentication = false;
-						loginTab.ValidationBlock.Visibility = Visibility.Collapsed;
+						LoginViewModel.Message = string.Empty;
 						if (Options.Model == null)
 						{
 							SetEngineModel();
@@ -186,13 +185,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						{
 							SetEngineModel();
 						}
-						loginTab.ValidationBlock.Visibility = Visibility.Collapsed;
+						LoginViewModel.Message = string.Empty;
 						return true;
 					}
 				}
 				if (loginTab != null)
 				{
-					loginTab.ValidationBlock.Visibility = Visibility.Visible;
+					LoginViewModel.Message = "Please fill the credentials fields!";
 				}
 			}
 			catch (Exception e)
@@ -200,8 +199,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				SettingsViewModel.MessageVisibility = "Visible";
 				if (loginTab != null)
 				{
-					loginTab.ValidationBlock.Visibility = Visibility.Visible;
-					loginTab.ValidationBlock.Text = e.Message.Contains("Acquiring token failed") ? "Please verify your credentials." : e.Message;
+					LoginViewModel.Message = e.Message.Contains("Acquiring token failed") ? "Please verify your credentials." : e.Message;
 				}
 				Log.Logger.Error($"Is window valid method: {e.Message}\n {e.StackTrace}");
 			}
