@@ -6,13 +6,12 @@
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
              xmlns:uiHelpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.UiHelpers"
-			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
     	     xmlns:views="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
 			 helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			 WindowStartupLocation="CenterScreen" mc:Ignorable="d"
 		     Name="SDLMachineTranslationCloudProvider"
 			 WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"	 
-             d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="800">
+             d:DesignHeight="450" d:DesignWidth="900"  Height="550" Width="820">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -27,9 +26,6 @@
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
-				<ResourceDictionary x:Uid="ResourceKeyId1">
-					<converters:BeGlobalLoginConverter x:Key="LoginConverter"/>
-				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 			<!--set red background to X button on hover-->
 		</ResourceDictionary>
@@ -67,10 +63,10 @@
 					Height="auto"
 		            controls:TabControlHelper.Underlined="SelectedTabItem"
 		            controls:TabControlHelper.UnderlineMouseOverBrush="#0E202B" Foreground="#0E202B">
-					<controls:MetroTabItem Header="Login" Margin="10,0,0,0" Width="100">
+					<controls:MetroTabItem Header="Login" Margin="20,0,0,0" Width="100">
 						<views:Login x:Name="LoginTab" DataContext="{Binding LoginViewModel}" ></views:Login>
 					</controls:MetroTabItem>
-					<controls:MetroTabItem Header="Settings" Margin="25,0,0,0" Width="132">
+					<controls:MetroTabItem Header="Settings" Margin="35,0,0,0" Width="140">
 						<views:LanguageMappings DataContext="{Binding LanguageMappingsViewModel}" Height="300"></views:LanguageMappings>
 					</controls:MetroTabItem>
 				</TabControl>

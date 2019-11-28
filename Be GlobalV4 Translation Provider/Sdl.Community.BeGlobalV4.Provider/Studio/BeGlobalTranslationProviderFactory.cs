@@ -10,7 +10,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		Description = "SDL Machine Translation Cloud Provider")]
 	public class BeGlobalTranslationProviderFactory : ITranslationProviderFactory
 	{
-		public static readonly Log Log = Log.Instance;	
+		private string _url = "https://translate-api.sdlbeglobal.com";
+		public static readonly Log Log = Log.Instance;
+
 		[STAThread]
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
@@ -20,10 +22,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (credentialStore.GetCredential(originalUri) != null)
 			{
 				var credentials = credentialStore.GetCredential(originalUri);
+				var splitedCredentials = credentials.Credential.Split('#');
+				options.ClientId = StringExtensions.Base64Decode(splitedCredentials[0]);
+				options.ClientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
 				if (options.BeGlobalService == null)
 				{
-					var messageBoxService = new MessageBoxService();
-					options.BeGlobalService = new BeGlobalV4Translator(options, messageBoxService, credentials);
+					options.BeGlobalService = new BeGlobalV4Translator(_url, options);
 				}
 			}
 			else
@@ -31,12 +35,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				credentialStore.AddCredential(originalUri, new TranslationProviderCredential(originalUri.ToString(), true));
 			}
 
-			if (options.AuthenticationMethod.Equals(Constants.APICredentials) && string.IsNullOrEmpty(options.ClientId))
+			int accountId;
+			if (options.UseClientAuthentication)
 			{
-				return new BeGlobalTranslationProvider(options);
+				accountId = options.BeGlobalService.GetClientInformation();
 			}
-			var userInfo = options.BeGlobalService?.GetUserInformation(true);		
-			var subscriptionInfo = options.BeGlobalService?.GetLanguagePairs(userInfo.AccountId.ToString());
+			else
+			{
+				accountId = options.BeGlobalService.GetUserInformation();
+			}
+
+			var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
 			options.SubscriptionInfo = subscriptionInfo;
 			return new BeGlobalTranslationProvider(options);
 		}

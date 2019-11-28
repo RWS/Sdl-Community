@@ -11,7 +11,6 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Application = System.Windows.Application;
 using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
@@ -23,7 +22,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private readonly LanguagePair _languageDirection;
 		private readonly List<TranslationUnit> _translationUnits;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
-		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
 		private readonly EditorController _editorController;
 
 		public ITranslationProvider TranslationProvider => _beGlobalTranslationProvider;
@@ -53,14 +51,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		private Segment[] TranslateSegments(Segment[] sourceSegments)
 		{
-			if (_options.AuthenticationMethod.Equals(Constants.StudioAuthentication))
-			{
-				Application.Current?.Dispatcher?.Invoke(() =>
-				{
-					_studioCredentials.GetToken();
-				});
-			}
-
 			var xliffDocument = CreateXliffFile(sourceSegments);
 
 			var sourceLanguage =
@@ -161,29 +151,31 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					// If activeSegmentPair is not null, it means the user translates segments through Editor
 					// If activeSegmentPair is null, it means the user executes Pre-Translate Batch task, so he does not navigate through segments in editor
 					var activeSegmentPair = _editorController?.ActiveDocument?.ActiveSegmentPair;
-					if (activeSegmentPair != null && (activeSegmentPair.Target.Count > 0 || activeSegmentPair.Properties.IsLocked))
+					var documentLastOpenPath = _translationUnits[0]?.DocumentProperties?.LastOpenedAsPath;
+					if (documentLastOpenPath == null || (documentLastOpenPath != null && documentLastOpenPath.Equals(_editorController?.ActiveDocument?.ActiveFile?.LocalFilePath)))
 					{
-						CreateTranslatedSegment(segments, segmentIndex, alreadyTranslatedSegments);
-					}
-					// In case user copies the source to target and run the pre-translation, do nothing and continue the flow.
-					else if (correspondingTu != null && IsSameSourceTarget(correspondingTu))
-					{
-						continue;
-					}
-					// If is already translated or is locked, then the request to server should not be done and it should not be translated
-					else if (activeSegmentPair == null && correspondingTu != null && (correspondingTu.DocumentSegmentPair.Target.Count > 0 || correspondingTu.DocumentSegmentPair.Properties.IsLocked))
-					{
-						CreateTranslatedSegment(segments, segmentIndex, alreadyTranslatedSegments);
+						if (activeSegmentPair != null && (activeSegmentPair.Target.Count > 0 || activeSegmentPair.Properties.IsLocked))
+						{
+							CreateTranslatedSegment(segments, segmentIndex, alreadyTranslatedSegments);
+						}
+						// In case user copies the source to target and run the pre-translation, do nothing and continue the flow.
+						else if (correspondingTu != null && IsSameSourceTarget(correspondingTu))
+						{
+							continue;
+						}
+						// If is already translated or is locked, then the request to server should not be done and it should not be translated
+						else if (activeSegmentPair == null && correspondingTu != null && (correspondingTu.DocumentSegmentPair.Target.Count > 0 || correspondingTu.DocumentSegmentPair.Properties.IsLocked))
+						{
+							CreateTranslatedSegment(segments, segmentIndex, alreadyTranslatedSegments);
+						}
+						else
+						{
+							CreateBeGlobalSegments(beGlobalSegments, segments, segmentIndex);
+						}
 					}
 					else
 					{
-						// Set the segments used to receive the translations from server
-						var segmentToBeTranslated = new BeGlobalSegment
-						{
-							Segment = segments[segmentIndex],
-							Index = segmentIndex
-						};
-						beGlobalSegments.Add(segmentToBeTranslated);
+						CreateBeGlobalSegments(beGlobalSegments, segments, segmentIndex);
 					}
 				}
 				if (beGlobalSegments.Count > 0)
@@ -226,6 +218,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				}
 			}
 			return results;
+		}
+
+		// Set the segments used to receive the translations from server
+		private void CreateBeGlobalSegments(List<BeGlobalSegment> beGlobalSegments, Segment[] segments, int segmentIndex)
+		{
+			var segmentToBeTranslated = new BeGlobalSegment
+			{
+				Segment = segments[segmentIndex],
+				Index = segmentIndex
+			};
+			beGlobalSegments.Add(segmentToBeTranslated);
 		}
 
 		// Create the already translated segments in case the translation was already received from the server

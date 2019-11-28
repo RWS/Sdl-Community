@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 
@@ -17,22 +18,27 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			if (Options != null)
 			{
 				ReSendChecked = options.ResendDrafts;
+				if (options.Model != null)
+				{
+					var model = TranslationOptions.FirstOrDefault(m => m.Model.Equals(options.Model));
+					if (model != null)
+					{
+						var selectedModelIndex = TranslationOptions.IndexOf(model);
+						SelectedModelOption = TranslationOptions[selectedModelIndex];
+					}
+				}
 			}
 		}
 
 		public BeGlobalTranslationOptions Options { get; set; }
-		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }
-		
+		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }			
+
 		public TranslationModel SelectedModelOption
 		{
 			get => _selectedModel;
 			set
 			{
-				_selectedModel = value;
-				if (Options?.Model != null)
-				{
-					SetOptions(value);
-				}
+				_selectedModel = value;				
 				OnPropertyChanged(nameof(SelectedModelOption));
 			}
 		}
@@ -49,13 +55,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				}
 				OnPropertyChanged(nameof(ReSendChecked));
 			}
-		}
-
-		public void SetOptions(TranslationModel translationModel)
-		{
-			Options.Model = translationModel?.Model;
-			Options.DisplayName = translationModel?.DisplayName;
-			Options.LanguagesSupported = translationModel?.LanguagesSupported;
-		}
+		}		
 	}
 }
