@@ -17,6 +17,8 @@
 		public static readonly string Client = "Client";
 		public static readonly string User = "User";
 		public static readonly string PasswordBox = "PasswordBox";
+		public static readonly string NullValue = "Value cannot be null.";
+
 
 		// Logging
 		public static readonly string TranslateTextMethod = "Translate text method: ";
@@ -35,7 +37,7 @@
 		public static readonly string ForbiddenLicense = "Forbidden: Please check your license";
 		public static readonly string TokenFailed = "Acquiring token failed";
 		public static readonly string CredentialsValidation = "Please fill the credentials fields!";
-		public static readonly string CredentialsNotValid = "Please verify your credentials.";
+		public static readonly string CredentialsNotValid = "Please verify your credentials!";
 		public static readonly string CheckInternetConnection = "Please check your internet connection!";
 	}
 }

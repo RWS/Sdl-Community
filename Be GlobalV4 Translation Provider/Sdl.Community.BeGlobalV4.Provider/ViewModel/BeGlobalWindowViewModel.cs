@@ -185,7 +185,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				if (loginTab != null)
 				{
-					LoginViewModel.Message = e.Message.Contains(Constants.TokenFailed) ? Constants.CredentialsNotValid : e.Message;
+					LoginViewModel.Message = (e.Message.Contains(Constants.TokenFailed) || e.Message.Contains(Constants.NullValue)) ? Constants.CredentialsNotValid : e.Message;
 				}
 				Log.Logger.Error($"{Constants.IsWindowValid} {e.Message}\n {e.StackTrace}");
 			}
