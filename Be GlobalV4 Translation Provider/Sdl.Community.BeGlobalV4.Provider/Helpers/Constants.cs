@@ -11,10 +11,6 @@
 		public static readonly string DONE = "DONE";
 		public static readonly string TRANSLATING = "TRANSLATING";
 		public static readonly string Authorization = "Authorization";
-		public static readonly string StudioAuthentication = "Studio Authentication (via SDL ID)";
-		public static readonly string StudioAuthenticationType = "StudioAuthentication";
-		public static readonly string APICredentials = "API Credentials";
-		public static readonly string APICredentialsType = "APICredentials";
 		public static readonly string SDLMachineTranslationCloudProvider = "SDLMachineTranslationCloudProvider";		
 
 		// Logging

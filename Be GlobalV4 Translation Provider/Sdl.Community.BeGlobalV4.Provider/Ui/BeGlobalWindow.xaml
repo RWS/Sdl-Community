@@ -12,7 +12,7 @@
 			 WindowStartupLocation="CenterScreen" mc:Ignorable="d"
 		     Name="SDLMachineTranslationCloudProvider"
 			 WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"	 
-             d:DesignHeight="450" d:DesignWidth="800"  Height="500" Width="800">
+             d:DesignHeight="450" d:DesignWidth="900"  Height="550" Width="820">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>

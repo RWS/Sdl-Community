@@ -4,11 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
- 			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
- 			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
+			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
              mc:Ignorable="d" 
              FontFamily="Segoe UI"
-             d:DesignHeight="350" d:DesignWidth="800">
+             d:DesignHeight="350" d:DesignWidth="900">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -27,43 +26,86 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-		<StackPanel Margin="0,10,0,0" MinHeight="250">
-			<ComboBox Grid.Row="2"  HorizontalAlignment="Left" Width="400" Margin="15,5,0,10" BorderThickness="1"
-				      ItemsSource="{Binding Authentications, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-				      SelectedItem="{Binding SelectedAuthentication, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-    				  SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"					
-					  DisplayMemberPath ="DisplayName" IsSynchronizedWithCurrentItem="True"			
-				      controls:TextBoxHelper.ClearTextButton="True"
-				      controls:TextBoxHelper.Watermark="Please select the authentication method"/>
-			<StackPanel Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=APICredentials}">
-				<PasswordBox
-						HorizontalAlignment="Left" Name="ClientIdBox"
-						controls:TextBoxHelper.UseFloatingWatermark="True"  
-						controls:TextBoxHelper.Watermark="Client Id"
-					    controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-						controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
-						Width="400"	Margin="15,0,0,10" IsEnabled="True">
-					<i:Interaction.Triggers>
-						<i:EventTrigger EventName="PasswordChanged" >
-							<i:InvokeCommandAction Command="{Binding PasswordChangedCommand }" CommandParameter="{Binding ElementName=ClientIdBox}"/>
-						</i:EventTrigger>
-					</i:Interaction.Triggers>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<TextBlock Margin="15,20,10,15" Width="780" Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please enter your valid SDL Machine Translation Cloud provider information. The Client ID and Secret can be retrieved by a Machine Translation Cloud admin user from the 
+			<Hyperlink NavigateUri="https://translate.sdlbeglobal.com/" Command="{Binding NavigateCommand}">
+				Machine Translation Cloud user interface.<LineBreak/>
+			</Hyperlink>The Username and Password are the same as the logins you use for the SDL Machine Translation Cloud Provider user interface.
+		</TextBlock>
+		<ComboBox 
+			Grid.Row="2"  HorizontalAlignment="Left"
+			Width="400"
+			ItemsSource="{Binding AuthenticationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			SelectedItem="{Binding SelectedOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			DisplayMemberPath ="DisplayName" IsSynchronizedWithCurrentItem="True"
+			Margin="15,5,0,10" BorderThickness="1"
+			controls:TextBoxHelper.ClearTextButton="True"
+			controls:TextBoxHelper.Watermark="Please select the authentication type"/>
+		<TextBlock Grid.Row="3" Style="{DynamicResource TextBlockColor}" Margin="15,0,10,15">
+			Please enter your Credentials below:
+		</TextBlock>
+		<StackPanel Grid.Row="4">
+			<StackPanel x:Name="ClientId" Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=Client}">
+				<PasswordBox  
+					HorizontalAlignment="Left"
+					Name="ClientIdBox"
+					controls:TextBoxHelper.UseFloatingWatermark="True"  
+					controls:TextBoxHelper.Watermark="Client Id"
+					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+					controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+					Width="400"
+					Margin="15,0,0,10"	  
+					IsEnabled="True">
 				</PasswordBox>
-				<PasswordBox
-						HorizontalAlignment="Left" Name="ClientSecretBox"
-						controls:TextBoxHelper.UseFloatingWatermark="True"  
-						controls:TextBoxHelper.Watermark="Client Secret"
-					    controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"	
-					    controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay }"
-						Width="400"	Margin="15,0,0,0" IsEnabled="True">
-					<i:Interaction.Triggers>
-						<i:EventTrigger EventName="PasswordChanged" >
-							<i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=ClientSecretBox}"/>
-						</i:EventTrigger>
-					</i:Interaction.Triggers>
+				<PasswordBox  
+					HorizontalAlignment="Left"
+					Name="ClientSecretBox"
+					controls:TextBoxHelper.UseFloatingWatermark="True"  
+					controls:TextBoxHelper.Watermark="Client Secret"
+					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+					controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+					Width="400"
+					Margin="15,0,0,0"	  
+					IsEnabled="True">
 				</PasswordBox>
-			<TextBlock Margin="15,30,15,0" Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" FontWeight="Normal" FontSize="14" Foreground="Red"
-					   Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+			</StackPanel>
+
+			<StackPanel x:Name="UserCredentials" Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=User}">
+				<TextBox  
+					HorizontalAlignment="Left"
+					Name="EmailBox"
+					controls:TextBoxHelper.UseFloatingWatermark="True"  
+					controls:TextBoxHelper.Watermark="Email"
+					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+					Text="{Binding Email,UpdateSourceTrigger=PropertyChanged}"
+					Width="400"
+					Margin="15,0,0,10"	  
+					IsEnabled="True">
+				</TextBox>
+				<PasswordBox  
+					HorizontalAlignment="Left"
+					Name="PasswordBox"
+					controls:TextBoxHelper.UseFloatingWatermark="True"  
+					controls:TextBoxHelper.Watermark="Password"
+					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+					controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+					Width="400"
+					Margin="15,0,0,0"	  
+					IsEnabled="True">
+				</PasswordBox>
+			</StackPanel>
 		</StackPanel>
-		</StackPanel>
+
+		<TextBlock Name="ValidationBlock" Grid.Row="6" Grid.Column="0" Foreground="DarkRed" Margin="15,0,0,0" Visibility="Collapsed"> Both fields are required</TextBlock>
+	</Grid>
 </UserControl>

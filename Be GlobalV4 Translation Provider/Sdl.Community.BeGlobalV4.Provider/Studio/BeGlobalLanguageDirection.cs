@@ -11,7 +11,6 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Application = System.Windows.Application;
 using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
@@ -23,7 +22,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private readonly LanguagePair _languageDirection;
 		private readonly List<TranslationUnit> _translationUnits;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
-		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
 		private readonly EditorController _editorController;
 
 		public ITranslationProvider TranslationProvider => _beGlobalTranslationProvider;
@@ -53,14 +51,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		private Segment[] TranslateSegments(Segment[] sourceSegments)
 		{
-			if (_options.AuthenticationMethod.Equals(Constants.StudioAuthentication))
-			{
-				Application.Current?.Dispatcher?.Invoke(() =>
-				{
-					_studioCredentials.GetToken();
-				});
-			}
-
 			var xliffDocument = CreateXliffFile(sourceSegments);
 
 			var sourceLanguage =

@@ -1,128 +1,211 @@
-﻿using Sdl.Community.BeGlobalV4.Provider.Helpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
+using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
-using System.Windows.Input;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
-    public class BeGlobalWindowViewModel : BaseViewModel
+	public class BeGlobalWindowViewModel : BaseViewModel
 	{
-		private MessageBoxService _messageBoxService;
-		private TranslationProviderCredential _credentials;
-		private int _selectedTabIndex;
-
-		private ICommand _okCommand;
-
-        public event EventHandler OkSelected;
-
-        public BeGlobalWindowViewModel(BeGlobalTranslationOptions options, TranslationProviderCredential credentials, LoginViewModel loginViewModel, LanguageMappingsViewModel languageMappingsViewModel)
-		{
-			SelectedTabIndex = 0;
-			Options = options;
-			_credentials = credentials;
-			_messageBoxService = new MessageBoxService();
-            LanguageMappingsViewModel = languageMappingsViewModel;
-			LoginViewModel = loginViewModel;
-
-            if (_credentials == null) return;
-			var credential = !string.IsNullOrEmpty(_credentials.Credential) ? _credentials.Credential.Replace("sdlmachinetranslationcloudprovider:///", string.Empty) : string.Empty;
-			if (credential.Contains("#"))
-			{
-				var splitedCredentials = credentials.Credential.Split('#');
-				if (splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
-				{
-					var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
-					var userInfo = beGlobalTranslator.GetUserInformation(true);
-					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.AccountId.ToString());
-					LoginViewModel.GetEngineModels(subscriptionInfo);
-					LoginViewModel.SetEngineModel();
-                }
-			}
-		}	
-		
-        protected virtual void OnOkSelected(EventArgs e)
-        {
-            var handler = OkSelected;
-            handler?.Invoke(this, e);
-        }
-
-        public LoginViewModel LoginViewModel { get; set; }
+		public BeGlobalTranslationOptions Options { get; set; }
+		public LoginViewModel LoginViewModel { get; set; }
 		public LanguageMappingsViewModel LanguageMappingsViewModel { get; set; }
-		public BeGlobalTranslationOptions Options { get; set; }			
+		private ICommand _okCommand;
+		private int _selectedTabIndex;
+		private readonly BeGlobalWindow _mainWindow;
+		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
+		private readonly LanguagePair[] _languagePairs;
+		public static readonly Log Log = Log.Instance;
+
+		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options,
+			TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
+		{
+			LoginViewModel = new LoginViewModel(options);
+			LanguageMappingsViewModel = new LanguageMappingsViewModel(options);
+			Options = options;
+			_mainWindow = mainWindow;
+			_languagePairs = languagePairs;
+			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
+
+			if (credentialStore == null) return;
+			if (options.UseClientAuthentication)
+			{
+				_mainWindow.LoginTab.ClientIdBox.Password = options.ClientId;
+				_mainWindow.LoginTab.ClientSecretBox.Password = options.ClientSecret;
+			}
+			else
+			{
+				LoginViewModel.Email = options.ClientId;
+				_mainWindow.LoginTab.PasswordBox.Password = options.ClientSecret;
+			}
+		}
+
+		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 
 		public int SelectedTabIndex
 		{
 			get => _selectedTabIndex;
 			set
 			{
-				_selectedTabIndex = value;				
+				_selectedTabIndex = value;
+
+				if (value.Equals(1) && IsWindowValid())
+				{
+					LanguageMappingsViewModel.MessageVisibility = "Collapsed";
+					SetEngineModel();
+				}
 				OnPropertyChanged();
 			}
 		}
-		
-		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
-		
+
+		private void GetEngineModels(List<BeGlobalLanguagePair> beGlobalLanguagePairs)
+		{
+			var sourceLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(_languagePairs?[0].SourceCulture);
+			var pairsWithSameSource = beGlobalLanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
+			if (_languagePairs?.Count() > 0)
+			{
+				foreach (var languagePair in _languagePairs)
+				{
+					var targetLanguage =
+						_normalizeSourceTextHelper.GetCorrespondingLangCode(languagePair.TargetCulture);
+
+					var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
+
+					foreach (var serviceLanguagePair in serviceLanguagePairs)
+					{
+						if (LanguageMappingsViewModel?.TranslationOptions != null)
+						{
+							var engineExists = LanguageMappingsViewModel.TranslationOptions.Any(e => e.Model.Equals(serviceLanguagePair.Model));
+							if (!engineExists)
+							{
+								LanguageMappingsViewModel.TranslationOptions.Add(new TranslationModel
+								{
+									Model = serviceLanguagePair.Model,
+									DisplayName = serviceLanguagePair.DisplayName
+								});
+							}
+						}
+					}
+				}
+			}
+		}
+
 		private void Ok(object parameter)
-		{            
-            var loginTab = parameter as Login;
-            if (loginTab != null)
-            {
-                var isValid = IsWindowValid();
-                if (isValid)
-                {
-                    OnOkSelected(EventArgs.Empty);
-                }
-            }
-        }
+		{
+			var loginTab = parameter as Login;
+			if (loginTab != null)
+			{
+				var isValid = IsWindowValid();
+				if (isValid)
+				{
+					WindowCloser.SetDialogResult(_mainWindow, true);
+					_mainWindow.Close();
+				}
+			}
+		}
+
+		public void SetEngineModel()
+		{
+			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options.ClientId, Options.ClientSecret, Options.Model, Options.UseClientAuthentication);
+			int accountId;
+			if (Options.UseClientAuthentication)
+			{
+				accountId = beGlobalTranslator.GetClientInformation();
+			}
+			else
+			{
+				accountId = beGlobalTranslator.GetUserInformation();
+			}
+			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+			Options.SubscriptionInfo = subscriptionInfo;
+
+			GetEngineModels(subscriptionInfo.LanguagePairs);
+			if (Options?.Model == null)
+			{
+				if (LanguageMappingsViewModel.TranslationOptions?.Count > 0)
+				{
+					LanguageMappingsViewModel.SelectedModelOption = LanguageMappingsViewModel.TranslationOptions?[0];
+					if (Options != null)
+					{
+						Options.Model = LanguageMappingsViewModel.TranslationOptions?[0].Model;
+					}
+				}
+			}
+			else
+			{
+				var mtModel = LanguageMappingsViewModel.TranslationOptions.FirstOrDefault(m => m.Model.Equals(Options.Model));
+				if (mtModel != null)
+				{
+					var selectedModelIndex = LanguageMappingsViewModel.TranslationOptions.IndexOf(mtModel);
+					LanguageMappingsViewModel.SelectedModelOption = LanguageMappingsViewModel.TranslationOptions[selectedModelIndex];
+				}
+			}
+		}
 
 		private bool IsWindowValid()
 		{
+			var loginTab = _mainWindow?.LoginTab;
+			Options.ResendDrafts = LanguageMappingsViewModel.ReSendChecked;
+			Options.Model = LanguageMappingsViewModel.SelectedModelOption?.Model;
 			try
 			{
-				Options.ResendDrafts = LanguageMappingsViewModel.ReSendChecked;
-				if (LoginViewModel.LoginMethod.Equals(Constants.APICredentials))
+				if (LoginViewModel.SelectedOption.Type.Equals("User"))
 				{
-					var clientIdPass = Options?.ClientId;
-					var clientSecretPass = Options?.ClientSecret;
-					if (string.IsNullOrEmpty(clientIdPass) || string.IsNullOrEmpty(clientSecretPass))
+					var password = loginTab?.PasswordBox.Password;
+					if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(LoginViewModel.Email))
 					{
-						LoginViewModel.Message = Constants.CredentialsValidation;
-						return false;
+						Options.ClientId = LoginViewModel.Email.TrimEnd().TrimStart();
+						Options.ClientSecret = password.TrimEnd().TrimStart();
+						Options.UseClientAuthentication = false;
+						loginTab.ValidationBlock.Visibility = Visibility.Collapsed;
+						if (Options.Model == null)
+						{
+							SetEngineModel();
+						}
+						return true;
 					}
-				}
-
-				var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
-				var userInfo = beGlobalTranslator.GetUserInformation(false);
-				if (userInfo.AccountId != 0)
-				{
-					if (Options?.Model == null)
-					{
-						var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.AccountId.ToString());
-						LoginViewModel.GetEngineModels(subscriptionInfo);
-						LoginViewModel.SetEngineModel();
-					}
-					return true;
 				}
 				else
 				{
-					if (userInfo.Errors.Count > 0)
+					var clientId = loginTab?.ClientIdBox.Password;
+					var clientSecret = loginTab?.ClientSecretBox.Password;
+					if (!string.IsNullOrEmpty(clientId?.TrimEnd().TrimStart()) && !string.IsNullOrEmpty(clientSecret.TrimEnd().TrimStart()))
 					{
-						foreach (var error in userInfo.Errors)
+						Options.ClientId = clientId;
+						Options.ClientSecret = clientSecret;
+						Options.UseClientAuthentication = true;
+						if (Options.Model == null)
 						{
-							LoginViewModel.Message += $@"{error.Code}: {error.Description}";
+							SetEngineModel();
 						}
-						return false;
+						loginTab.ValidationBlock.Visibility = Visibility.Collapsed;
+						return true;
 					}
 				}
+				if (loginTab != null)
+				{
+					loginTab.ValidationBlock.Visibility = Visibility.Visible;
+				}
 			}
-			catch (Exception ex)
+			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
+				LanguageMappingsViewModel.MessageVisibility = "Visible";
+				if (loginTab != null)
+				{
+					loginTab.ValidationBlock.Visibility = Visibility.Visible;
+					loginTab.ValidationBlock.Text = e.Message.Contains("Acquiring token failed") ? "Please verify your credentials." : e.Message;
+				}
+				Log.Logger.Error($"Is window valid method: {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}
-    }
+	}
 }
