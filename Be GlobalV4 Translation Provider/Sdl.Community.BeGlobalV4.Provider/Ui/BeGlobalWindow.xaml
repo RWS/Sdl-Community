@@ -79,26 +79,3 @@
 		</Grid>
 	</Border>
 </Window>
-
-<!--<TabControl Grid.Column="0" Grid.Row="1" 
-		            Margin="0,0,0,15"
-					SelectedIndex="{Binding SelectedIndex}"
-		            HorizontalAlignment="Left"
-					Height="auto"
-		            controls:TabControlHelper.Underlined="SelectedTabItem"
-		            controls:TabControlHelper.UnderlineMouseOverBrush="#0E202B" Foreground="#0E202B"
-		             >
-	<controls:MetroTabItem Header="Login" Margin="10,0,0,0" Width="100">
-		<views:Login x:Name="LoginTab" DataContext="{Binding LoginViewModel}" ></views:Login>
-	</controls:MetroTabItem>
-	<controls:MetroTabItem Header="Settings" Margin="25,0,0,0" Width="150">
-		<views:Settings DataContext="{Binding SettingsViewModel}" Height="300"></views:Settings>
-	</controls:MetroTabItem>
-</TabControl>
-
-<StackPanel Grid.Row="2"  Orientation="Vertical"  VerticalAlignment="Bottom">
-	<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-		<Button  Style="{DynamicResource BeGlobalBlueButtonsStyle}" Width="125" Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
-		<Button  Style="{DynamicResource BeGlobalBlueButtonsStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="0,0,30,0" />
-	</StackPanel>
-</StackPanel>-->

@@ -21,38 +21,26 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
-		<TextBlock Margin="15,20,10,15" Width="780" Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please enter your valid SDL Machine Translation Cloud provider information. The Client ID and Secret can be retrieved by a Machine Translation Cloud admin user from the 
+
+	<StackPanel>
+		<TextBlock Margin="15,20,10,15" Width="780" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please enter your valid SDL Machine Translation Cloud provider information. The Client ID and Secret can be retrieved by a Machine Translation Cloud admin user from the 
 			<Hyperlink NavigateUri="https://translate.sdlbeglobal.com/" Command="{Binding NavigateCommand}">
 				Machine Translation Cloud user interface.<LineBreak/>
 			</Hyperlink>The Username and Password are the same as the logins you use for the SDL Machine Translation Cloud Provider user interface.
 			</TextBlock>
-		<TextBlock Grid.Row="1" Style="{DynamicResource TextBlockColor}" Margin="15,0,10,5">
-			Please chose what authentication type you want to use:
-		</TextBlock>
-		<ComboBox 
-			Grid.Row="2"  HorizontalAlignment="Left"
-			Width="200"
+		<ComboBox
+			HorizontalAlignment="Left"
+			Width="400"
 			ItemsSource="{Binding AuthenticationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding SelectedOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			DisplayMemberPath ="DisplayName" IsSynchronizedWithCurrentItem="True"
 			Margin="15,5,0,10" BorderThickness="1"
 			controls:TextBoxHelper.ClearTextButton="True"
-			controls:TextBoxHelper.Watermark="Type"/>
+			controls:TextBoxHelper.Watermark="Please select the authentication type"/>
 		<TextBlock Grid.Row="3" Style="{DynamicResource TextBlockColor}" Margin="15,0,10,15">
 			Please enter your Credentials below:
 		</TextBlock>
-		<StackPanel Grid.Row="4">
+		<StackPanel>
 			<StackPanel x:Name="ClientId" Visibility="{Binding ClientAuthVisibility}">
 				<PasswordBox  
 					HorizontalAlignment="Left"
@@ -61,7 +49,7 @@
 					controls:TextBoxHelper.Watermark="Client Id"
 					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 					controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-					Width="300"
+					Width="400"
 					Margin="15,0,0,10"	  
 					IsEnabled="True">
 				</PasswordBox>
@@ -72,7 +60,7 @@
 					controls:TextBoxHelper.Watermark="Client Secret"
 					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 					controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-					Width="300"
+					Width="400"
 					Margin="15,0,0,0"	  
 					IsEnabled="True">
 				</PasswordBox>
@@ -86,7 +74,7 @@
 					controls:TextBoxHelper.Watermark="Email"
 					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 					Text="{Binding Email,UpdateSourceTrigger=PropertyChanged}"
-					Width="300"
+					Width="400"
 					Margin="15,0,0,10"	  
 					IsEnabled="True">
 				</TextBox>
@@ -97,13 +85,12 @@
 					controls:TextBoxHelper.Watermark="Password"
 					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 					controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-					Width="300"
+					Width="400"
 					Margin="15,0,0,0"	  
 					IsEnabled="True">
 				</PasswordBox>
 			</StackPanel>
 		</StackPanel>
-	
-		<TextBlock Name="ValidationBlock" Grid.Row="6" Grid.Column="0" Foreground="DarkRed" Margin="15,0,0,0" Visibility="Collapsed"> Both fields are required</TextBlock>
-	</Grid>
+		<TextBlock Name="ValidationBlock" FontWeight="Normal" FontSize="14" Margin="15,15,15,0" Foreground="Red" Visibility="Collapsed">Please fill the credentials fields!</TextBlock>
+	</StackPanel>
 </UserControl>
