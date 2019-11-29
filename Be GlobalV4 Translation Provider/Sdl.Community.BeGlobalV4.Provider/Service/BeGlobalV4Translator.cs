@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Interfaces;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 
@@ -12,12 +14,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 	{
 		private readonly IRestClient _client;
 		private readonly string _flavor;
+		private readonly IMessageBoxService _messageBoxService;
+
 		public static readonly Log Log = Log.Instance;
 
 		public BeGlobalV4Translator(string server, BeGlobalTranslationOptions options)
 		{
 			try
 			{
+				_messageBoxService = new MessageBoxService();
 				_flavor = options.Model;
 				_client = new RestClient(string.Format($"{server}/v4"));
 				IRestRequest request;
@@ -40,7 +45,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				AddTraceId(request);
 				request.RequestFormat = DataFormat.Json;
 				var response = _client.Execute(request);
-				if (response.StatusCode != System.Net.HttpStatusCode.OK)
+				if (response.StatusCode != HttpStatusCode.OK)
 				{
 					throw new Exception(Constants.TokenFailed + response.Content);
 				}
@@ -104,6 +109,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				if (!response.IsSuccessful)
 				{
 					ShowErrors(response);
+					return string.Empty;
 				}
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
 
@@ -181,9 +187,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					if (!response.IsSuccessful)
 					{
 						ShowErrors(response);
+						return new byte[1];
 					}
 
 					dynamic json = JsonConvert.DeserializeObject(response.Content);
+					if (json == null)
+					{
+						return new byte[1];
+					}
 					status = json.translationStatus;
 
 					if (!status.Equals(Constants.DONE, StringComparison.CurrentCultureIgnoreCase))
@@ -193,7 +204,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					if (status.Equals(Constants.FAILED))
 					{
 						ShowErrors(response);
-
 					}
 				} while (status.Equals(Constants.INIT, StringComparison.CurrentCultureIgnoreCase) ||
 						 status.Equals(Constants.TRANSLATING, StringComparison.CurrentCultureIgnoreCase));
@@ -233,7 +243,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 		private void ShowErrors(IRestResponse response)
 		{
-			var responseContent = JsonConvert.DeserializeObject<ResponseError>(response.Content);
+			if(response.StatusCode == 0)
+			{
+				_messageBoxService.ShowWarningMessage(Constants.CheckInternetConnection, Constants.SDLMTCloud);
+			}
+			var responseContent = JsonConvert.DeserializeObject<ResponseError>(response?.Content);
 			if (responseContent?.Errors != null)
 			{
 				foreach (var error in responseContent.Errors)
