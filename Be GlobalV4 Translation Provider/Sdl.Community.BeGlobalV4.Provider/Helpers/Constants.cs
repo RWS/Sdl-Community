@@ -4,6 +4,7 @@
 	{
 		public static readonly string PluginName = "SDL Machine Translation Cloud provider";
 		public static readonly string SDLMachineTranslationCloud = "SDLMachineTranslationCloud";
+		public static readonly string SDLMTCloud = "SDL Machine Translation Cloud";
 		public static readonly string SDLCommunity = "SDL Community";
 		public static readonly string TraceId = "Trace-ID";
 		public static readonly string FAILED = "FAILED";
@@ -38,6 +39,6 @@
 		public static readonly string TokenFailed = "Acquiring token failed";
 		public static readonly string CredentialsValidation = "Please fill the credentials fields!";
 		public static readonly string CredentialsNotValid = "Please verify your credentials!";
-		public static readonly string CheckInternetConnection = "Please check your internet connection!";
+		public static readonly string CheckInternetConnection = "The host was unable to be reached. Please check your internet connection and ensure you are able to connect to the server from this computer.";
 	}
 }
