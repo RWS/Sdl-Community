@@ -3,6 +3,7 @@ using System.Text;
 using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Interfaces;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Service
@@ -11,6 +12,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 	{
 		private readonly IRestClient _client;
 		private readonly string _flavor;
+		private readonly IMessageBoxService _messageBoxService;
 		public static readonly Log Log = Log.Instance;
 
 		public BeGlobalV4Translator(
@@ -22,6 +24,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		{
 			try
 			{
+				_messageBoxService = new MessageBoxService();
 				_flavor = flavor;
 				_client = new RestClient(string.Format($"{server}/v4"));
 				IRestRequest request;
@@ -51,7 +54,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
 				_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"BeGlobalV4Translator constructor: {ex.Message}\n {ex.StackTrace}");
 			}
@@ -108,6 +111,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				if (!response.IsSuccessful)
 				{
 					ShowErrors(response);
+					return string.Empty;
 				}
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
 
@@ -116,7 +120,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
 				return json != null ? json.translation[0] : string.Empty;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				Log.Logger.Error($"Translate text method: {e.Message}\n {e.StackTrace}");
 			}
@@ -166,7 +170,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				var subscriptionInfo = JsonConvert.DeserializeObject<SubscriptionInfo>(response.Content);
 				return subscriptionInfo;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				Log.Logger.Error($"Subscription info method: {e.Message}\n {e.StackTrace}");
 			}
@@ -185,9 +189,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					if (!response.IsSuccessful)
 					{
 						ShowErrors(response);
+						return new byte[1];
 					}
 
 					dynamic json = JsonConvert.DeserializeObject(response.Content);
+					if (json == null)
+					{
+						return new byte[1];
+					}
 					status = json.translationStatus;
 
 					if (!status.Equals("DONE", StringComparison.CurrentCultureIgnoreCase))
@@ -197,7 +206,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					if (status.Equals("FAILED"))
 					{
 						ShowErrors(response);
-
 					}
 				} while (status.Equals("INIT", StringComparison.CurrentCultureIgnoreCase) ||
 						 status.Equals("TRANSLATING", StringComparison.CurrentCultureIgnoreCase));
@@ -237,6 +245,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 		private void ShowErrors(IRestResponse response)
 		{
+			if (response.StatusCode == 0)
+			{
+				_messageBoxService.ShowWarningMessage("The host was unable to be reached. Please check your internet connection and ensure you are able to connect to the server from this computer.",
+					 "SDL Machine Translation Cloud");
+			}
 			var responseContent = JsonConvert.DeserializeObject<ResponseError>(response.Content);
 			if (responseContent?.Errors != null)
 			{

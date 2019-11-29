@@ -89,7 +89,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var tu = new TranslationUnit
 			{
 				SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
-				TargetSegment = translation
+				TargetSegment = translation == null ? new Segment() : translation
 			};
 
 			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
@@ -180,8 +180,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				}
 				if (beGlobalSegments.Count > 0)
 				{
-					GetTranslations(beGlobalSegments);
-					SetSearchResults(results, beGlobalSegments);
+					var hasTranslations = GetTranslations(beGlobalSegments);
+					if (hasTranslations)
+					{
+						SetSearchResults(results, beGlobalSegments);
+					}
 				}
 				if (alreadyTranslatedSegments.Count > 0)
 				{
@@ -262,7 +265,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 		}
 
-		private void GetTranslations(List<BeGlobalSegment> beGlobalSegments)
+		private bool GetTranslations(List<BeGlobalSegment> beGlobalSegments)
 		{
 			var segmentsToBeTranslated = new List<Segment>();
 			foreach (var segment in beGlobalSegments)
@@ -270,11 +273,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				segmentsToBeTranslated.Add(segment.Segment);
 			}
 			var translations = TranslateSegments(segmentsToBeTranslated.ToArray());
-			for (var i = 0; i < beGlobalSegments.Count; i++)
+			if (translations.Any() && translations[0] != null)
 			{
-				beGlobalSegments[i].Translation = translations[i];
-				beGlobalSegments[i].SearchResult = CreateSearchResult(beGlobalSegments[i].Segment, translations[i]);
+				for (var i = 0; i < beGlobalSegments.Count; i++)
+				{
+					beGlobalSegments[i].Translation = translations[i];
+					beGlobalSegments[i].SearchResult = CreateSearchResult(beGlobalSegments[i].Segment, translations[i]);
+				}
+				return true;
 			}
+			return false;
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)

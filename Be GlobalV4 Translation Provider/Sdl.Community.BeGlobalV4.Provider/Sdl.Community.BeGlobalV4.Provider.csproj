@@ -154,6 +154,7 @@
     <Compile Include="Helpers\VersionHelper.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Helpers\WindowsControlUtils.cs" />
+    <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Model\BeGlobalLanguagePair.cs" />
     <Compile Include="Model\BeGlobalSegment.cs" />
     <Compile Include="Model\ErrorDetails.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Service\BeGlobalV4Translator.cs" />
+    <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Studio\BeGlobalLanguageDirection.cs" />
     <Compile Include="Studio\BeGlobalProviderUi.cs" />
     <Compile Include="Studio\BeGlobalTranslationOptions.cs" />
