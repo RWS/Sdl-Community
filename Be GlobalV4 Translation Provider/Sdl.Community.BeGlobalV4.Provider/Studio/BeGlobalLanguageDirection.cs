@@ -230,8 +230,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			return results;
 		}
 
-		// ignore when translations exists and segments are merged.
-		// when segments are merged, always the last one becomes empty and is removed. Eg: when merging segment 4 and 5, the text is added inside segment 4,
+		// Ignore when translations exists and segments are merged.
+		// When segments are merged, always the last one becomes empty and is removed. Eg: when merging segment 4 and 5, the text is added inside segment 4,
 		// and segment 5 becomes empty and hidden from Editor
 		private bool CheckMergedSegments(SearchResults[] results, ISegmentPair activeSegmentPair, int segmentIndex)
 		{
