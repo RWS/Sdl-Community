@@ -7,6 +7,7 @@ using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.Core.Globalization;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -134,6 +135,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						continue;
 					}
 
+					var activeSegmentPair = _editorController?.ActiveDocument?.ActiveSegmentPair;
+					var existsMergedSegments = CheckMergedSegments(results, activeSegmentPair, segmentIndex);
+					if (existsMergedSegments)
+					{
+						continue;
+					}
+
 					TranslationUnit correspondingTu = null;
 					if (segments.Length > _translationUnits.Count)
 					{
@@ -150,7 +158,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 					// If activeSegmentPair is not null, it means the user translates segments through Editor
 					// If activeSegmentPair is null, it means the user executes Pre-Translate Batch task, so he does not navigate through segments in editor
-					var activeSegmentPair = _editorController?.ActiveDocument?.ActiveSegmentPair;
 					var documentLastOpenPath = _translationUnits[0]?.DocumentProperties?.LastOpenedAsPath;
 					if (documentLastOpenPath == null || (documentLastOpenPath != null && documentLastOpenPath.Equals(_editorController?.ActiveDocument?.ActiveFile?.LocalFilePath)))
 					{
@@ -221,6 +228,24 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				}
 			}
 			return results;
+		}
+
+		// ignore when translations exists and segments are merged.
+		// when segments are merged, always the last one becomes empty and is removed. Eg: when merging segment 4 and 5, the text is added inside segment 4,
+		// and segment 5 becomes empty and hidden from Editor
+		private bool CheckMergedSegments(SearchResults[] results, ISegmentPair activeSegmentPair, int segmentIndex)
+		{
+			if (activeSegmentPair != null)
+			{
+				var activeSegmentPairId = int.TryParse(activeSegmentPair.Target.Properties.Id.Id, out _) ? int.Parse(activeSegmentPair.Target.Properties.Id.Id) : 0;
+				var nextSegmentPair = _editorController?.ActiveDocument?.SegmentPairs?.SkipWhile(s => s.Properties.Id.Id != activeSegmentPairId.ToString()).Skip(1)?.FirstOrDefault();
+				if (activeSegmentPair.Target.Count > 0 && (nextSegmentPair == null || nextSegmentPair.Source.Count() == 0))
+				{
+					results[segmentIndex] = null;
+					return true;
+				}
+			}
+			return false;
 		}
 
 		// Set the segments used to receive the translations from server
