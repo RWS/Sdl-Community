@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SDL Machine Translation Cloud</PlugInName>
-  <Version>2.3.2.2</Version>
+  <Version>2.3.2.3</Version>
   <Description>SDL Machine Translation Cloud provider</Description>
   <Author>SDL Community Developers</Author>
   <Include>
@@ -11,5 +11,5 @@
 		<File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>
 		<File>Sdl.Community.Toolkit.Core.dll</File>
   </Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="15.2" />
 </PluginPackage>
