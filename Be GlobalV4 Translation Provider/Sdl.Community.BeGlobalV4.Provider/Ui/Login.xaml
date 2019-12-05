@@ -112,6 +112,6 @@
 				</PasswordBox>
 			</StackPanel>
 		</StackPanel>
-		<TextBlock Name="ValidationBlock" Text="{Binding Message}"  FontWeight="Normal" FontSize="14" Margin="15,15,15,0" Foreground="Red"/>
+		<TextBlock Name="ValidationBlock" Text="{Binding Message}"  FontWeight="Normal" FontSize="14" Margin="15,15,15,0" Foreground="Red" TextWrapping="WrapWithOverflow"/>
 	</StackPanel>
 </UserControl>

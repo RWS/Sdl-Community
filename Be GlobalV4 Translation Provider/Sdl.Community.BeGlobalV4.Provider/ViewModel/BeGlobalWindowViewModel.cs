@@ -65,36 +65,41 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		private void GetEngineModels(List<BeGlobalLanguagePair> beGlobalLanguagePairs)
+		private bool GetEngineModels(List<BeGlobalLanguagePair> beGlobalLanguagePairs)
 		{
-			var sourceLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(_languagePairs?[0].SourceCulture);
-			var pairsWithSameSource = beGlobalLanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
-			if (_languagePairs?.Count() > 0)
+			if (beGlobalLanguagePairs != null)
 			{
-				foreach (var languagePair in _languagePairs)
+				var sourceLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(_languagePairs?[0].SourceCulture);
+				var pairsWithSameSource = beGlobalLanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
+				if (_languagePairs?.Count() > 0)
 				{
-					var targetLanguage =
-						_normalizeSourceTextHelper.GetCorrespondingLangCode(languagePair.TargetCulture);
-
-					var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
-
-					foreach (var serviceLanguagePair in serviceLanguagePairs)
+					foreach (var languagePair in _languagePairs)
 					{
-						if (SettingsViewModel?.TranslationOptions != null)
+						var targetLanguage =
+							_normalizeSourceTextHelper.GetCorrespondingLangCode(languagePair.TargetCulture);
+
+						var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
+
+						foreach (var serviceLanguagePair in serviceLanguagePairs)
 						{
-							var engineExists = SettingsViewModel.TranslationOptions.Any(e => e.Model.Equals(serviceLanguagePair.Model));
-							if (!engineExists)
+							if (SettingsViewModel?.TranslationOptions != null)
 							{
-								SettingsViewModel.TranslationOptions.Add(new TranslationModel
+								var engineExists = SettingsViewModel.TranslationOptions.Any(e => e.Model.Equals(serviceLanguagePair.Model));
+								if (!engineExists)
 								{
-									Model = serviceLanguagePair.Model,
-									DisplayName = serviceLanguagePair.DisplayName
-								});
+									SettingsViewModel.TranslationOptions.Add(new TranslationModel
+									{
+										Model = serviceLanguagePair.Model,
+										DisplayName = serviceLanguagePair.DisplayName
+									});
+								}
 							}
 						}
 					}
 				}
+				return true;
 			}
+			return false;
 		}
 
 		private void Ok(object parameter)
@@ -111,42 +116,35 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		public void SetEngineModel()
+		public bool SetEngineModel()
 		{
 			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options.ClientId, Options.ClientSecret, Options.Model, Options.UseClientAuthentication);
-			int accountId;
-			if (Options.UseClientAuthentication)
-			{
-				accountId = beGlobalTranslator.GetClientInformation();
-			}
-			else
-			{
-				accountId = beGlobalTranslator.GetUserInformation();
-			}
+			var accountId = Options.UseClientAuthentication ? beGlobalTranslator.GetClientInformation() : beGlobalTranslator.GetUserInformation();
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
 			Options.SubscriptionInfo = subscriptionInfo;
 
-			GetEngineModels(subscriptionInfo.LanguagePairs);
+			var areEngiesRetrieved = GetEngineModels(subscriptionInfo?.LanguagePairs);
 			if (Options?.Model == null)
 			{
-				if (SettingsViewModel.TranslationOptions?.Count > 0)
+				if (SettingsViewModel?.TranslationOptions?.Count > 0)
 				{
-					SettingsViewModel.SelectedModelOption = SettingsViewModel.TranslationOptions?[0];
+					SettingsViewModel.SelectedModelOption = SettingsViewModel?.TranslationOptions?[0];
 					if (Options != null)
 					{
-						Options.Model = SettingsViewModel.TranslationOptions?[0].Model;
+						Options.Model = SettingsViewModel?.TranslationOptions?[0].Model;
 					}
 				}
 			}
 			else
 			{
-				var mtModel = SettingsViewModel.TranslationOptions.FirstOrDefault(m => m.Model.Equals(Options.Model));
+				var mtModel = SettingsViewModel?.TranslationOptions?.FirstOrDefault(m => m.Model.Equals(Options.Model));
 				if (mtModel != null)
 				{
 					var selectedModelIndex = SettingsViewModel.TranslationOptions.IndexOf(mtModel);
 					SettingsViewModel.SelectedModelOption = SettingsViewModel.TranslationOptions[selectedModelIndex];
 				}
 			}
+			return areEngiesRetrieved;
 		}
 
 		private bool IsWindowValid()
@@ -167,7 +165,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						LoginViewModel.Message = string.Empty;
 						if (Options.Model == null)
 						{
-							SetEngineModel();
+							return ValidateEnginesSetup();
 						}
 						return true;
 					}
@@ -181,11 +179,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						Options.ClientId = clientId.TrimEnd().TrimStart();
 						Options.ClientSecret = clientSecret.TrimEnd().TrimStart();
 						Options.UseClientAuthentication = true;
+						LoginViewModel.Message = string.Empty;
 						if (Options.Model == null)
 						{
-							SetEngineModel();
+							return ValidateEnginesSetup();
 						}
-						LoginViewModel.Message = string.Empty;
 						return true;
 					}
 				}
@@ -206,6 +204,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				Log.Logger.Error($"Is window valid method: {e.Message}\n {e.StackTrace}");
 			}
 			return false;
+		}
+
+		private bool ValidateEnginesSetup()
+		{
+			var isEngineSet = SetEngineModel();
+			if (!isEngineSet)
+			{
+				LoginViewModel.Message = "The MTCloud host was unable to be reached and setups cannot be saved. Please verify your credentials and internet connection. Please ensure you are able to connect to the server from this computer.";
+				return false;
+			}
+			return true;
 		}
 	}
 }

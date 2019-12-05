@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 using RestSharp;
@@ -111,7 +112,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				if (!response.IsSuccessful)
 				{
 					ShowErrors(response);
-					return string.Empty;
+					if (response.StatusCode == 0)
+					{
+						throw new WebException("The MTCloud host was unable to be reached. Please check the internet connection and ensure you are able to connect to the server from this computer.");
+					}
 				}
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
 
@@ -123,8 +127,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			catch (Exception e)
 			{
 				Log.Logger.Error($"Translate text method: {e.Message}\n {e.StackTrace}");
+				throw;
 			}
-			return string.Empty;
 		}
 
 		public int GetUserInformation()
@@ -189,7 +193,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					if (!response.IsSuccessful)
 					{
 						ShowErrors(response);
-						return new byte[1];
+						if (response.StatusCode == 0)
+						{
+							throw new WebException("The MTCloud host was unable to be reached. Please check the internet connection and ensure you are able to connect to the server from this computer.");
+						}
 					}
 
 					dynamic json = JsonConvert.DeserializeObject(response.Content);
@@ -214,14 +221,19 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				if (!response.IsSuccessful)
 				{
 					ShowErrors(response);
+					if (response.StatusCode == 0)
+					{
+
+						throw new WebException("The MTCloud host was unable to be reached. Please check the internet connection and ensure you are able to connect to the server from this computer.");
+					}
 				}
 				return response.RawBytes;
 			}
 			catch (Exception e)
 			{
 				Log.Logger.Error($"Wait for translation method: {e.Message}\n {e.StackTrace}");
+				throw;
 			}
-			return new byte[1];
 		}
 
 		private IRestResponse RestGet(string command)
@@ -245,11 +257,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 		private void ShowErrors(IRestResponse response)
 		{
-			if (response.StatusCode == 0)
-			{
-				_messageBoxService.ShowWarningMessage("The host was unable to be reached. Please check your internet connection and ensure you are able to connect to the server from this computer.",
-					 "SDL Machine Translation Cloud");
-			}
 			var responseContent = JsonConvert.DeserializeObject<ResponseError>(response.Content);
 			if (responseContent?.Errors != null)
 			{
