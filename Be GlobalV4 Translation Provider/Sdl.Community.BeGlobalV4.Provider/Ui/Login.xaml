@@ -111,6 +111,6 @@
 			</StackPanel>
 		</StackPanel>
 		<TextBlock Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
-				   FontWeight="Normal" FontSize="14" Foreground="Red" Margin="15,15,15,0"/>
+				   FontWeight="Normal" FontSize="14" Foreground="Red" TextWrapping="WrapWithOverflow"  Margin="15,15,15,0"/>
 	</StackPanel>
 </UserControl>

@@ -39,6 +39,8 @@
 		public static readonly string TokenFailed = "Acquiring token failed";
 		public static readonly string CredentialsValidation = "Please fill the credentials fields!";
 		public static readonly string CredentialsNotValid = "Please verify your credentials!";
-		public static readonly string CheckInternetConnection = "The host was unable to be reached. Please check your internet connection and ensure you are able to connect to the server from this computer.";
+		public static readonly string CredentialsAndInternetValidation = "The MTCloud host was unable to be reached and setups cannot be saved. Please verify your credentials and internet connection. Please ensure you are able to connect to the server from this computer.";
+		public static readonly string InternetConnection = "The MTCloud host was unable to be reached. Please check the internet connection and ensure you are able to connect to the server from this computer.";
+
 	}
 }

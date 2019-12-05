@@ -109,7 +109,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				if (!response.IsSuccessful)
 				{
 					ShowErrors(response);
-					return string.Empty;
+
+					if (response.StatusCode == 0)
+					{
+						throw new WebException(Constants.InternetConnection);
+					}
 				}
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
 
@@ -121,8 +125,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			catch (Exception e)
 			{
 				Log.Logger.Error($"{Constants.TranslateTextMethod} {e.Message}\n {e.StackTrace}");
+				throw;
 			}
-			return string.Empty;
 		}
 
 		public int GetUserInformation()
@@ -187,7 +191,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					if (!response.IsSuccessful)
 					{
 						ShowErrors(response);
-						return new byte[1];
+
+						if (response.StatusCode == 0)
+						{
+							throw new WebException(Constants.InternetConnection);
+						}
 					}
 
 					dynamic json = JsonConvert.DeserializeObject(response.Content);
@@ -218,8 +226,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			catch (Exception e)
 			{
 				Log.Logger.Error($"{Constants.WaitTranslationMethod} {e.Message}\n {e.StackTrace}");
+				throw;
 			}
-			return new byte[1];
 		}
 
 		private IRestResponse RestGet(string command)
@@ -243,10 +251,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 		private void ShowErrors(IRestResponse response)
 		{
-			if(response.StatusCode == 0)
-			{
-				_messageBoxService.ShowWarningMessage(Constants.CheckInternetConnection, Constants.SDLMTCloud);
-			}
 			var responseContent = JsonConvert.DeserializeObject<ResponseError>(response?.Content);
 			if (responseContent?.Errors != null)
 			{
