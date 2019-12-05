@@ -157,16 +157,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						Options.ClientId = LoginViewModel?.Email.TrimEnd().TrimStart();
 						Options.ClientSecret = password.TrimEnd().TrimStart();
 						Options.UseClientAuthentication = false;
+						LoginViewModel.Message = string.Empty;
 						if (Options.Model == null)
 						{
-							var isEngineSet = SetEngineModel();
-							if(!isEngineSet)
-							{
-								LoginViewModel.Message = Constants.CredentialsAndInternetValidation;
-								return false;
-							}
+							return ValidateEnginesSetup();
 						}
-						LoginViewModel.Message = string.Empty;
 						return true;
 					}
 				}
@@ -179,16 +174,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						Options.ClientId = clientId.TrimEnd().TrimStart();
 						Options.ClientSecret = clientSecret.TrimEnd().TrimStart();
 						Options.UseClientAuthentication = true;
+						LoginViewModel.Message = string.Empty;
 						if (Options.Model == null)
 						{
-							var isEngineSet = SetEngineModel();
-							if (!isEngineSet)
-							{
-								LoginViewModel.Message = Constants.CredentialsAndInternetValidation;
-								return false;
-							}
+							return ValidateEnginesSetup();
 						}
-						LoginViewModel.Message = string.Empty;
 						return true;
 					}
 				}
@@ -206,6 +196,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				Log.Logger.Error($"{Constants.IsWindowValid} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
+		}
+
+		private bool ValidateEnginesSetup()
+		{
+			var isEngineSet = SetEngineModel();
+			if (!isEngineSet)
+			{
+				LoginViewModel.Message = Constants.CredentialsAndInternetValidation;
+				return false;
+			}
+			return true;
 		}
 	}
 }

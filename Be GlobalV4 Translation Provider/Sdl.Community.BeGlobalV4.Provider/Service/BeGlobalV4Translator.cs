@@ -220,6 +220,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				if (!response.IsSuccessful)
 				{
 					ShowErrors(response);
+					if (response.StatusCode == 0)
+					{
+						throw new WebException(Constants.InternetConnection);
+					}
 				}
 				return response.RawBytes;
 			}
