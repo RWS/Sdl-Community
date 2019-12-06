@@ -22,10 +22,7 @@
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary x:Uid="ResourceKeyId1">
-					<converters:BeGlobalLoginConverter x:Key="LoginConverter"/>
-				</ResourceDictionary>
-				<ResourceDictionary x:Uid="ResourceKeyId2">
-					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>
+					<converters:BeGlobalVisibilityConverter x:Key="VisibilityConverter"/>
 				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
@@ -49,7 +46,7 @@
 			Please enter your Credentials below:
 		</TextBlock>
 		<StackPanel>
-			<StackPanel x:Name="ClientId" Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=Client}">
+			<StackPanel x:Name="ClientId" Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=VisibilityConverter}, ConverterParameter=Client}">
 				<PasswordBox Name="ClientIdBox"
 					controls:TextBoxHelper.UseFloatingWatermark="True"  
 					controls:TextBoxHelper.Watermark="Client Id"
@@ -79,7 +76,7 @@
 					</i:Interaction.Triggers>
 				</PasswordBox>
 			</StackPanel>
-			<StackPanel x:Name="UserCredentials" Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=LoginConverter}, ConverterParameter=User}">
+			<StackPanel x:Name="UserCredentials" Visibility="{Binding LoginMethod, Mode=TwoWay, Converter={StaticResource ResourceKey=VisibilityConverter}, ConverterParameter=User}">
 				<TextBox Name="EmailBox"
 					HorizontalAlignment="Left"
 					controls:TextBoxHelper.UseFloatingWatermark="True"  
@@ -94,7 +91,7 @@
 						</i:EventTrigger>
 					</i:Interaction.Triggers>
 				</TextBox>
-				<PasswordBox Name="PasswordBox"
+				<PasswordBox Name="UserPasswordBox"
 					HorizontalAlignment="Left"					
 					controls:TextBoxHelper.UseFloatingWatermark="True"  
 					controls:TextBoxHelper.Watermark="Password"
@@ -104,13 +101,11 @@
 					IsEnabled="True">
 					<i:Interaction.Triggers>
 						<i:EventTrigger EventName="PasswordChanged" >
-							<i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=EmailBox}"/>
+							<i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=UserPasswordBox}"/>
 						</i:EventTrigger>
 					</i:Interaction.Triggers>
 				</PasswordBox>
 			</StackPanel>
 		</StackPanel>
-		<TextBlock Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
-				   FontWeight="Normal" FontSize="14" Foreground="Red" TextWrapping="WrapWithOverflow"  Margin="15,15,15,0"/>
 	</StackPanel>
 </UserControl>

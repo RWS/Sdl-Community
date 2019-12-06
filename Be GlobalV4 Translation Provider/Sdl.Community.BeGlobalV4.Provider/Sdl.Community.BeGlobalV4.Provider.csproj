@@ -165,7 +165,7 @@
     <Compile Include="BeGlobalTellMe\BeGlobalHelpAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalStoreAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalTellMeProvider.cs" />
-    <Compile Include="Converters\BeGlobalLoginConverter.cs" />
+    <Compile Include="Converters\BeGlobalVisibilityConverter.cs" />
     <Compile Include="Converters\StringIsNullOrEmptyVisibilityConverter.cs" />
     <Compile Include="Helpers\AppInitializer.cs" />
     <Compile Include="Helpers\Constants.cs" />

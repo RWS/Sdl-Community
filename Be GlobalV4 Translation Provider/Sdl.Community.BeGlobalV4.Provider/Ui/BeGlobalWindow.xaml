@@ -5,13 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
+			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
              xmlns:uiHelpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.UiHelpers"
     	     xmlns:views="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
 			 helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			 WindowStartupLocation="CenterScreen" mc:Ignorable="d"
 		     Name="SDLMachineTranslationCloudProvider"
 			 WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"	 
-             d:DesignHeight="450" d:DesignWidth="900"  Height="550" Width="820">
+             d:DesignHeight="450" d:DesignWidth="900"  Height="570" Width="820">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -26,11 +27,16 @@
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
+				<ResourceDictionary x:Uid="ResourceKeyId1">
+					<converters:BeGlobalVisibilityConverter x:Key="VisibilityConverter"/>
+				</ResourceDictionary>
+				<ResourceDictionary x:Uid="ResourceKeyId2">
+					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>
+				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 			<!--set red background to X button on hover-->
 		</ResourceDictionary>
 	</Window.Resources>
-
 	<Border Style="{StaticResource WindowControlBorderStyle}" >
 		<Grid Margin="1,0,0,0">
 			<Grid.ColumnDefinitions>
@@ -40,11 +46,12 @@
 				<RowDefinition Height="35" />
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="*"/>
+				<RowDefinition Height="auto"/>
 				<RowDefinition Height="auto" />
 			</Grid.RowDefinitions>
 
 			<!-- BORDER CONTROL -->
-			<uiHelpers:WindowsControl  Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
+			<uiHelpers:WindowsControl Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
 			<Border Background="White" Grid.Column="0" Grid.Row="1"  MaxWidth="800">
 				<StackPanel  Orientation="Horizontal">
 					<TextBlock Margin="15,10,2,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" MaxWidth="800">
@@ -57,7 +64,7 @@
 			</Border>
 			<StackPanel Grid.Row="2" Margin="0,10,0,0" MinHeight="250">
 				<TabControl Grid.Column="0" Grid.Row="1" 
-		            Margin="0,0,0,15"
+		            Margin="0,0,0,5"
 					SelectedIndex="{Binding SelectedTabIndex}"
 		            HorizontalAlignment="Left"
 					Height="auto"
@@ -71,7 +78,9 @@
 					</controls:MetroTabItem>
 				</TabControl>
 			</StackPanel>
-			<StackPanel Grid.Row="3"  Orientation="Vertical"  VerticalAlignment="Bottom" Margin="0,0,0,10">
+			<TextBlock Grid.Row="3" Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
+				   FontWeight="Normal" FontSize="13" Foreground="Red" TextWrapping="WrapWithOverflow"  Margin="15,0,10,0"/>
+			<StackPanel Grid.Row="4" Orientation="Vertical"  VerticalAlignment="Bottom" Margin="0,0,0,10">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
 					<Button  Style="{DynamicResource SdlPrimaryButtonStyle}" Width="125" Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
 					<Button  Style="{DynamicResource SdlSecondaryButtonStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="15,0,30,0" />
