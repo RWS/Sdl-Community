@@ -210,7 +210,6 @@
     <Resource Include="Resources\MTCloud_logo.png" />
     <Resource Include="Resources\logoRes.png" />
     <Resource Include="Resources\AdaptiveEngine.ico" />
-    <EmbeddedResource Include="Resources\TellMe1.ico" />
     <EmbeddedResource Include="Resources\Settings.ico" />
     <EmbeddedResource Include="Resources\Question.ico" />
     <EmbeddedResource Include="Resources\ForumIcon.ico" />
