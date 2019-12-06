@@ -11,12 +11,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 	public class BeGlobalTranslationProviderFactory : ITranslationProviderFactory
 	{
 		private string _url = "https://translate-api.sdlbeglobal.com";
+		public static readonly Log Log = Log.Instance;
+
+		[STAThread]
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
 			var originalUri = new Uri("sdlmachinetranslationcloudprovider:///");
 			var options = new BeGlobalTranslationOptions(translationProviderUri);
-
 			if (credentialStore.GetCredential(originalUri) != null)
 			{
 				var credentials = credentialStore.GetCredential(originalUri);
@@ -25,7 +27,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				options.ClientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
 				if (options.BeGlobalService == null)
 				{
-					options.BeGlobalService = new BeGlobalV4Translator(_url, options.ClientId, options.ClientSecret, options.Model, options.UseClientAuthentication);
+					options.BeGlobalService = new BeGlobalV4Translator(_url, options);
 				}
 			}
 			else

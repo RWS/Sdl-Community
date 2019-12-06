@@ -13,23 +13,29 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 		/// <returns>plugin version</returns>
 		public static string GetPluginVersion()
 		{
-			var executingAsseblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly()?.Location);
-			executingAsseblyPath = Path.Combine(executingAsseblyPath, "pluginpackage.manifest.xml");
-			var doc = new XmlDocument();
-			doc.Load(executingAsseblyPath);
-
-			foreach (XmlNode n in doc?.DocumentElement?.ChildNodes)
+			var executingAsseblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			if (executingAsseblyPath != null)
 			{
-				if (n.Name.Equals("Version"))
+				executingAsseblyPath = Path.Combine(executingAsseblyPath, "pluginpackage.manifest.xml");
+				var doc = new XmlDocument();
+				doc.Load(executingAsseblyPath);
+
+				if (doc.DocumentElement?.ChildNodes != null)
 				{
-					return n.InnerText;
+					foreach (XmlNode n in doc.DocumentElement?.ChildNodes)
+					{
+						if (n.Name.Equals("Version"))
+						{
+							return n.InnerText;
+						}
+					}
 				}
-			}			
+			}
 			return string.Empty;
 		}
 
 		/// <summary>
-		/// Get installed version for Studio 2019
+		/// Get installed version for Studio 2017
 		/// </summary>
 		/// <returns>studio version</returns>
 		public static string GetStudioVersion()

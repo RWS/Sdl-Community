@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>SDL Machine Translation Cloud</PlugInName>
-  <Version>1.9.10.5</Version>
-  <Description>SDL Machine Translation Cloud provider</Description>
-  <Author>SDL Community Developers</Author>
-  <Include>
+	<PlugInName>SDL Machine Translation Cloud</PlugInName>
+	<Version>1.9.10.6</Version>
+	<Description>SDL Machine Translation Cloud provider</Description>
+	<Author>SDL Community Developers</Author>
+	<Include>
 		<File>RestSharp.dll</File>
 		<File>MahApps.Metro.dll</File>
 		<File>System.Windows.Interactivity.dll</File>
 		<File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>
 		<File>Sdl.Community.Toolkit.Core.dll</File>
 		<File>NLog.dll</File>
-  </Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="14.1.10018.54792" maxversion="15.0" />
+	</Include>
+	<RequiredProduct name="SDLTradosStudio" minversion="14.1.10018.54792" maxversion="15.0" />
 </PluginPackage>

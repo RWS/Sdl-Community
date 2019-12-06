@@ -26,7 +26,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 			output[index.Length] = source.Substring(pos);
 			return output;
 		}
-		
+
 		public static string Base64Encode(string plainText)
 		{
 			var plainTextBytes = Encoding.UTF8.GetBytes(plainText);

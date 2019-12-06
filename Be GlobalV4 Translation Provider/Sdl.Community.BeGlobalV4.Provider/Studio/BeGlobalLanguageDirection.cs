@@ -103,7 +103,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				{
 					BaseScore = score
 				},
-				TranslationProposal = tu
+                TranslationProposal = tu
 			};
 			tu.ConfirmationLevel = ConfirmationLevel.Draft;
 
@@ -125,7 +125,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var alreadyTranslatedSegments = new List<BeGlobalSegment>();
 
 			if (!_options.ResendDrafts)
-			{
+			{				
 				// Re-send draft segment logic
 				for (var segmentIndex = 0; segmentIndex < segments.Length; segmentIndex++)
 				{
@@ -275,7 +275,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			alreadyTranslatedSegments.Add(alreadyTranslatedSegment);
 		}
 
-		private void SetSearchResults(SearchResults[] results, List<BeGlobalSegment> translatedSegments)
+		private void SetSearchResults(SearchResults[]results,List<BeGlobalSegment> translatedSegments)
 		{
 			foreach (var segment in translatedSegments)
 			{
@@ -290,7 +290,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 		}
 
-		private bool GetTranslations(List<BeGlobalSegment> beGlobalSegments)
+		private bool GetTranslations(List<BeGlobalSegment>beGlobalSegments)
 		{
 			var segmentsToBeTranslated = new List<Segment>();
 			foreach (var segment in beGlobalSegments)
