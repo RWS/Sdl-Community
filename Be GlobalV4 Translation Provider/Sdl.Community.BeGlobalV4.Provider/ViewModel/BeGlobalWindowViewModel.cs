@@ -50,6 +50,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			get => _selectedTabIndex;
 			set
 			{
+				Mouse.OverrideCursor = Cursors.Wait;
 				_selectedTabIndex = value;
 				var isWindowValid = IsWindowValid(false);
 				if(!isWindowValid)
@@ -57,9 +58,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					Message = Constants.CredentialsAndInternetValidation;
 				}
 				OnPropertyChanged();
+				Mouse.OverrideCursor = Cursors.Arrow;
 			}
 		}
-
+		
 		public string Message
 		{
 			get => _message;
