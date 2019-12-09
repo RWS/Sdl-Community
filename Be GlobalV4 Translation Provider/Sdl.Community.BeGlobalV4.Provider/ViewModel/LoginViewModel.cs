@@ -48,7 +48,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			};
 			SelectedOption = options.UseClientAuthentication ? AuthenticationOptions[0] : AuthenticationOptions[1];
 			LoginMethod = SelectedOption.Type;
-			GetEngines();
 		}
 
 		public BeGlobalWindowViewModel BeGlobalWindowViewModel { get; set; }
