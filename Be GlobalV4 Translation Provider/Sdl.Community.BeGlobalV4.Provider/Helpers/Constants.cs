@@ -33,6 +33,8 @@
 		public static readonly string GetClientInformation = "GetClientInformation method: ";
 		public static readonly string GetUserInformation = "GetUserInformation method: ";
 		public static readonly string IsWindowValid = "Is window valid method: ";
+		public static readonly string IsEmailValid = "IsEmailValid method:";
+
 
 		// Messages
 		public static readonly string ForbiddenLicense = "Forbidden: Please check your license";

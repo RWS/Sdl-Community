@@ -18,6 +18,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public string ClientId { get; set; }
 		public string ClientSecret { get; set; }
+		public string AuthenticationMethod { get; set; }
 		public SubscriptionInfo SubscriptionInfo { get; set; }
 		public BeGlobalV4Translator BeGlobalService { get; set; }
 
