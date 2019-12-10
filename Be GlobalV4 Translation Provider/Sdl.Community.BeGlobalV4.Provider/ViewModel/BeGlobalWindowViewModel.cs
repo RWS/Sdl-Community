@@ -78,6 +78,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void Ok(object parameter)
 		{
+			Mouse.OverrideCursor = Cursors.Wait;
 			var loginTab = parameter as Login;
 			if (loginTab != null)
 			{
@@ -88,6 +89,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					_mainWindow.Close();
 				}
 			}
+			Mouse.OverrideCursor = Cursors.Arrow;
 		}
 
 		private bool IsWindowValid(bool isOkPressed)
