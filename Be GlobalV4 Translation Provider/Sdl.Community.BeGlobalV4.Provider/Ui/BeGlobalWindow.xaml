@@ -1,0 +1,90 @@
+﻿<Window x:Class="Sdl.Community.BeGlobalV4.Provider.Ui.BeGlobalWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:helpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Helpers"
+			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
+             xmlns:uiHelpers="clr-namespace:Sdl.Community.BeGlobalV4.Provider.UiHelpers"
+    	     xmlns:views="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
+			 helpers:WindowCloser.DialogResult="{Binding DialogResult}"
+			 WindowStartupLocation="CenterScreen" mc:Ignorable="d"
+		     Name="SDLMachineTranslationCloudProvider"
+			 WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"	 
+             d:DesignHeight="450" d:DesignWidth="900"  Height="570" Width="820">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
+				<ResourceDictionary x:Uid="ResourceKeyId1">
+					<converters:BeGlobalVisibilityConverter x:Key="VisibilityConverter"/>
+				</ResourceDictionary>
+				<ResourceDictionary x:Uid="ResourceKeyId2">
+					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>
+				</ResourceDictionary>
+			</ResourceDictionary.MergedDictionaries>
+			<!--set red background to X button on hover-->
+		</ResourceDictionary>
+	</Window.Resources>
+	<Border Style="{StaticResource WindowControlBorderStyle}" >
+		<Grid Margin="1,0,0,0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="35" />
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto" />
+			</Grid.RowDefinitions>
+
+			<!-- BORDER CONTROL -->
+			<uiHelpers:WindowsControl Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
+			<Border Background="White" Grid.Column="0" Grid.Row="1"  MaxWidth="800">
+				<StackPanel  Orientation="Horizontal">
+					<TextBlock Margin="15,10,2,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" MaxWidth="800">
+						Welcome to the SDL Machine Translation Cloud (formerly BeGlobal) translation provider for Studio. <LineBreak/><LineBreak/>
+						SDL Machine Translation Cloud is SDL's neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
+						Using SDL's proprietary technology, customers can have the assurance of content privacy.
+						SDL Machine Translation is powered by SDL's state-of-the-art machine learning algorithms and supports a large number of languages.
+					</TextBlock>
+				</StackPanel>
+			</Border>
+			<StackPanel Grid.Row="2" Margin="0,10,0,0" MinHeight="250">
+				<TabControl Grid.Column="0" Grid.Row="1" 
+		            Margin="0,0,0,5"
+					SelectedIndex="{Binding SelectedTabIndex}"
+		            HorizontalAlignment="Left"
+					Height="auto"
+		            controls:TabControlHelper.Underlined="SelectedTabItem"
+		            controls:TabControlHelper.UnderlineMouseOverBrush="#0E202B" Foreground="#0E202B">
+					<controls:MetroTabItem Header="Login" Margin="20,0,0,0" Width="100">
+						<views:Login x:Name="LoginTab" DataContext="{Binding LoginViewModel}" ></views:Login>
+					</controls:MetroTabItem>
+					<controls:MetroTabItem Header="Settings" Margin="35,0,0,0" Width="140">
+						<views:LanguageMappings DataContext="{Binding LanguageMappingsViewModel}" Height="300"></views:LanguageMappings>
+					</controls:MetroTabItem>
+				</TabControl>
+			</StackPanel>
+			<TextBlock Grid.Row="3" Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
+				   FontWeight="Normal" FontSize="13" Foreground="Red" TextWrapping="WrapWithOverflow"  Margin="15,0,10,0"/>
+			<StackPanel Grid.Row="4" Orientation="Vertical"  VerticalAlignment="Bottom" Margin="0,0,0,10">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+					<Button  Style="{DynamicResource SdlPrimaryButtonStyle}" Width="125" Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
+					<Button  Style="{DynamicResource SdlSecondaryButtonStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="15,0,30,0" />
+				</StackPanel>
+			</StackPanel>
+		</Grid>
+	</Border>
+</Window>
