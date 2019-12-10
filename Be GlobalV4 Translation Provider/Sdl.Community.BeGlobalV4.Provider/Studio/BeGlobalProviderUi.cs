@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Forms;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
@@ -25,8 +26,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			try
 			{
 				var options = new BeGlobalTranslationOptions();
-
-				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
+				var credentials = SplitCredentials(credentialStore, options);
 
 				var beGlobalWindow = new BeGlobalWindow();
 				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, credentials, languagePairs);
@@ -68,18 +68,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				}
 
 				//get saved key if there is one and put it into options
-				var savedCredentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
-				if (savedCredentials != null)
-				{
-					var splitedCredentials = savedCredentials.Credential.Split('#');
-					var clientId = StringExtensions.Base64Decode(splitedCredentials[0]);
-					var clientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
-
-					editProvider.Options.ClientId = clientId;
-					editProvider.Options.ClientSecret = clientSecret;
-				}
+				var credentials = SplitCredentials(credentialStore, editProvider.Options);
 				var beGlobalWindow = new BeGlobalWindow();
-				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, editProvider.Options, savedCredentials, languagePairs);
+				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, editProvider.Options, credentials, languagePairs);
 				beGlobalWindow.DataContext = beGlobalVm;
 
 				beGlobalWindow.ShowDialog();
@@ -144,16 +135,60 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private void SetCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool persistKey)
 		{
 			var uri = new Uri("sdlmachinetranslationcloudprovider:///");
+			string credential;
+			
+			// Validate if the entered clientId is an email address.
+			// If corresponds to email standards, it means that authentication is done through User email and User password.		
+			var isEmailValid = IsEmailValid(clientId);
 
 			// Encode client credentials to Base64 (it is usefull when user credentials contains # char and the authentication is failing,
 			// because the # char is used to differentiate the clientId by ClientSecret.
 			clientId = StringExtensions.Base64Encode(clientId);
 			clientSecret = StringExtensions.Base64Encode(clientSecret);
 
-			var credential = $"{clientId}#{clientSecret}";
+			if (isEmailValid)
+			{
+				credential = $"{clientId}#{clientSecret}#UserLogin";
+			}
+			else
+			{
+				credential = $"{clientId}#{clientSecret}#ClientLogin";
+			}
 			var credentials = new TranslationProviderCredential(credential, persistKey);
 			credentialStore.RemoveCredential(uri);
 			credentialStore.AddCredential(uri, credentials);
+		}
+
+		/// <summary>
+		/// Validate the user input: it might be Email or ClientId.
+		/// Based on this validation the authentication method is saved in the CredentialStore.
+		/// </summary>
+		/// <param name="input">Email or ClientId</param>
+		/// <returns></returns>
+		private bool IsEmailValid(string input)
+		{
+			try
+			{
+				return new EmailAddressAttribute().IsValid(input);
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{Constants.IsEmailValid} {ex.Message}\n {ex.StackTrace}");
+				return false;
+			}
+		}
+
+		private TranslationProviderCredential SplitCredentials(ITranslationProviderCredentialStore credentialStore, BeGlobalTranslationOptions options)
+		{
+			var savedCredentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
+			if (savedCredentials != null)
+			{
+				var splitedCredentials = savedCredentials.Credential.Split('#');
+				options.ClientId = StringExtensions.Base64Decode(splitedCredentials[0]);
+				options.ClientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
+				options.AuthenticationMethod = splitedCredentials.Length == 3 ? splitedCredentials[2] : string.Empty;
+			}
+			return savedCredentials;
 		}
     }
 }

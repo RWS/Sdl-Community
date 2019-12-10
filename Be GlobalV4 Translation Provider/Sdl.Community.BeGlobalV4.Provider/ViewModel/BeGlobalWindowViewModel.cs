@@ -29,15 +29,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			_mainWindow = mainWindow;
 
 			if (credentialStore == null) return;
-			if (options.UseClientAuthentication)
+			if (options.UseClientAuthentication || options.AuthenticationMethod.Equals("ClientLogin"))
 			{
 				_mainWindow.LoginTab.ClientIdBox.Password = options.ClientId;
 				_mainWindow.LoginTab.ClientSecretBox.Password = options.ClientSecret;
+				LoginViewModel.SelectedOption = LoginViewModel.AuthenticationOptions[0];
 			}
 			else
 			{
 				LoginViewModel.Email = options.ClientId;
 				_mainWindow.LoginTab.UserPasswordBox.Password = options.ClientSecret;
+				LoginViewModel.SelectedOption = LoginViewModel.AuthenticationOptions[1];
 			}
 		}
 
@@ -48,6 +50,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			get => _selectedTabIndex;
 			set
 			{
+				Mouse.OverrideCursor = Cursors.Wait;
 				_selectedTabIndex = value;
 				var isWindowValid = IsWindowValid(false);
 				if(!isWindowValid)
@@ -55,9 +58,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					Message = Constants.CredentialsAndInternetValidation;
 				}
 				OnPropertyChanged();
+				Mouse.OverrideCursor = Cursors.Arrow;
 			}
 		}
-
+		
 		public string Message
 		{
 			get => _message;
@@ -74,6 +78,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void Ok(object parameter)
 		{
+			Mouse.OverrideCursor = Cursors.Wait;
 			var loginTab = parameter as Login;
 			if (loginTab != null)
 			{
@@ -84,6 +89,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					_mainWindow.Close();
 				}
 			}
+			Mouse.OverrideCursor = Cursors.Arrow;
 		}
 
 		private bool IsWindowValid(bool isOkPressed)
