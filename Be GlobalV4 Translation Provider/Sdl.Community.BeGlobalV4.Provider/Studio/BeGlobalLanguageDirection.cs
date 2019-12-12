@@ -103,7 +103,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				{
 					BaseScore = score
 				},
-                TranslationProposal = tu
+				TranslationProposal = tu
 			};
 			tu.ConfirmationLevel = ConfirmationLevel.Draft;
 
@@ -125,7 +125,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var alreadyTranslatedSegments = new List<BeGlobalSegment>();
 
 			if (!_options.ResendDrafts)
-			{				
+			{
 				// Re-send draft segment logic
 				for (var segmentIndex = 0; segmentIndex < segments.Length; segmentIndex++)
 				{
@@ -142,19 +142,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						continue;
 					}
 
-					TranslationUnit correspondingTu = null;
-					if (segments.Length > _translationUnits.Count)
-					{
-						// Set translation unit based on the correct segment index: when 11 segments are sent as bulk,the first segment is ignored, 
-						// because it was translated previewsly and the translation mask is false
-						correspondingTu = _translationUnits[segmentIndex - 1];
-					}
-					else
-					{
-						// Set translation unit based on segment index: when the first 10 segments are translated for the first time,
-						// then the TU index is the same as segment index
-						correspondingTu = _translationUnits[segmentIndex];
-					}
+					// Set translation unit based on segment index: when the first 10 segments are translated for the first time,
+					// then the TU index is the same as segment index
+					var correspondingTu = _translationUnits[segmentIndex];
 
 					// If activeSegmentPair is not null, it means the user translates segments through Editor
 					// If activeSegmentPair is null, it means the user executes Pre-Translate Batch task, so he does not navigate through segments in editor
@@ -275,7 +265,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			alreadyTranslatedSegments.Add(alreadyTranslatedSegment);
 		}
 
-		private void SetSearchResults(SearchResults[]results,List<BeGlobalSegment> translatedSegments)
+		private void SetSearchResults(SearchResults[] results, List<BeGlobalSegment> translatedSegments)
 		{
 			foreach (var segment in translatedSegments)
 			{
@@ -290,7 +280,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 		}
 
-		private bool GetTranslations(List<BeGlobalSegment>beGlobalSegments)
+		private bool GetTranslations(List<BeGlobalSegment> beGlobalSegments)
 		{
 			var segmentsToBeTranslated = new List<Segment>();
 			foreach (var segment in beGlobalSegments)
@@ -374,9 +364,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (mask == null || mask.Length != translationUnits.Length)
 				throw new ArgumentException("Mask in SearchSegmentsMasked");
 
-			var translationUnit = translationUnits.Where((seg, i) => mask == null || mask[i]).ToArray();
 			_translationUnits.Clear();
-			_translationUnits.AddRange(translationUnit);
+			_translationUnits.AddRange(translationUnits);
 			return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
 		}
 
