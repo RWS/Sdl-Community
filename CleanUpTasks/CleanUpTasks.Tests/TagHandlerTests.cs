@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using NSubstitute;
-using Sdl.Community.CleanUpTasks.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Formatting;
+using SDLCommunityCleanUpTasks;
+using SDLCommunityCleanUpTasks.Utilities;
 using Xunit;
 
 namespace Sdl.Community.CleanUpTasks.Tests

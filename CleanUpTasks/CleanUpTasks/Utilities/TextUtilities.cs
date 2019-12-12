@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
-using Sdl.Community.CleanUpTasks.Models;
+using SDLCommunityCleanUpTasks.Models;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public static class TextUtilities
     {

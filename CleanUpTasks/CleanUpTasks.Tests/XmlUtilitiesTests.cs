@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Sdl.Community.CleanUpTasks.Models;
-using Sdl.Community.CleanUpTasks.Utilities;
+using SDLCommunityCleanUpTasks.Models;
+using SDLCommunityCleanUpTasks.Utilities;
 using Xunit;
 
 namespace Sdl.Community.CleanUpTasks.Tests

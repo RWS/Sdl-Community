@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using Sdl.Community.CleanUpTasks.Models;
 using Sdl.Core.Settings;
+using SDLCommunityCleanUpTasks.Models;
 
-namespace Sdl.Community.CleanUpTasks.Contracts
+namespace SDLCommunityCleanUpTasks.Contracts
 {
     internal abstract class ICleanUpSourceSettingsContract : ICleanUpSourceSettings
     {

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Sdl.Community.CleanUpTasks.Models;
-using Sdl.Community.CleanUpTasks.Utilities;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.ProjectAutomation.Core;
+using SDLCommunityCleanUpTasks.Models;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class SegmentContentHandler : AbstractBilingualContentHandler
     {

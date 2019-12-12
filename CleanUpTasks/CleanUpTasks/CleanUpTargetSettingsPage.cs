@@ -1,6 +1,7 @@
-﻿using Sdl.Desktop.IntegrationApi;
+﻿using Sdl.Community.CleanUpTasks;
+using Sdl.Desktop.IntegrationApi;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class CleanUpTargetSettingsPage : DefaultSettingsPage<CleanUpTargetSettingsControl, CleanUpTargetSettings>
     {

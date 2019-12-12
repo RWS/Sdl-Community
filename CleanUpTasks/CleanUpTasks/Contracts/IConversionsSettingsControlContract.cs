@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Sdl.Community.CleanUpTasks.Contracts
+namespace SDLCommunityCleanUpTasks.Contracts
 {
     internal abstract class IConversionsSettingsControlContract : IConversionsSettingsControl
     {

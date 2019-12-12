@@ -1,7 +1,8 @@
 ﻿using System;
-using Sdl.Community.CleanUpTasks.Dialogs;
+using Sdl.Community.CleanUpTasks;
+using SDLCommunityCleanUpTasks.Dialogs;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public static class ViewFactory
     {

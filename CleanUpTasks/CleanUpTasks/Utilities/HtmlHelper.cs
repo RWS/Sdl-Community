@@ -2,7 +2,7 @@
 using System.Text;
 using HtmlAgilityPack;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public class HtmlHelper
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public static class StringExtensions
 	{

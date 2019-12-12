@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	/// <summary>
     /// Credit goes to http://stackoverflow.com/a/1564727/906773

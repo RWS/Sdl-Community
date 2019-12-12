@@ -1,6 +1,7 @@
 ﻿using System;
 using NSubstitute;
-using Sdl.Community.CleanUpTasks.Utilities;
+using SDLCommunityCleanUpTasks;
+using SDLCommunityCleanUpTasks.Utilities;
 using Xunit;
 
 namespace Sdl.Community.CleanUpTasks.Tests

@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
-using Sdl.Community.CleanUpTasks.Models;
-using Sdl.Community.CleanUpTasks.Utilities;
+using SDLCommunityCleanUpTasks.Models;
+using SDLCommunityCleanUpTasks.Utilities;
 using Xunit;
 
 namespace Sdl.Community.CleanUpTasks.Tests

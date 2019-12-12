@@ -7,10 +7,11 @@ using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using NSubstitute;
-using Sdl.Community.CleanUpTasks.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Formatting;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using SDLCommunityCleanUpTasks;
+using SDLCommunityCleanUpTasks.Models;
 
 
 namespace Sdl.Community.CleanUpTasks.Tests

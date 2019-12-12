@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Sdl.Community.CleanUpTasks.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Formatting;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class SegmentHandlerBase
     {

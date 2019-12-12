@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.CleanUpTasks.Contracts
+﻿namespace SDLCommunityCleanUpTasks.Contracts
 {
     internal abstract class IConversionsSettingsPresenterContract : IConversionsSettingsPresenter
     {

@@ -5,11 +5,11 @@ using System.Linq;
 using System.Windows.Forms;
 using Equin.ApplicationFramework;
 using Microsoft.VisualBasic;
-using Sdl.Community.CleanUpTasks.Dialogs;
-using Sdl.Community.CleanUpTasks.Models;
-using Sdl.Community.CleanUpTasks.Utilities;
+using SDLCommunityCleanUpTasks.Dialogs;
+using SDLCommunityCleanUpTasks.Models;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class ConversionFileViewPresenter : IConversionFileViewPresenter
 	{

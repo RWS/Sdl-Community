@@ -1,6 +1,6 @@
-﻿using Sdl.Community.CleanUpTasks.Utilities;
+﻿using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks.Contracts
+namespace SDLCommunityCleanUpTasks.Contracts
 {
     internal abstract class IXmlReportGeneratorContract : IXmlReportGenerator
     {

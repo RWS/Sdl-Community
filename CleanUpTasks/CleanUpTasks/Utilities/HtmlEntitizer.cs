@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public class HtmlEntitizer 
 	{	 

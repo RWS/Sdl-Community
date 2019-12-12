@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Sdl.Community.CleanUpTasks.Contracts
+namespace SDLCommunityCleanUpTasks.Contracts
 {
     internal abstract class IConversionFileViewContract : IConversionFileView
     {
@@ -49,7 +49,7 @@ namespace Sdl.Community.CleanUpTasks.Contracts
 
 	    public CheckBox ToUpper => default(CheckBox);
 
-	    public CheckBoxComboBox.CheckBoxComboBox VbStrConv => default(CheckBoxComboBox.CheckBoxComboBox);
+	    public Sdl.Community.CheckBoxComboBox.CheckBoxComboBox VbStrConv => default(Sdl.Community.CheckBoxComboBox.CheckBoxComboBox);
 
 	    public CheckBox WholeWord => default(CheckBox);
 

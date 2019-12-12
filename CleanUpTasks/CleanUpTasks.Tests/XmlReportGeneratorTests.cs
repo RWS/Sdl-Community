@@ -1,4 +1,4 @@
-﻿using Sdl.Community.CleanUpTasks.Utilities;
+﻿using SDLCommunityCleanUpTasks.Utilities;
 using Xunit;
 using Xunit.Abstractions;
 

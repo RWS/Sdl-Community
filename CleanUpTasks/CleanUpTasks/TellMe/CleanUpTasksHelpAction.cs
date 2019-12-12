@@ -2,7 +2,7 @@
 using System.Drawing;
 using Sdl.TellMe.ProviderApi;
 
-namespace Sdl.Community.CleanUpTasks.TellMe
+namespace SDLCommunityCleanUpTasks.TellMe
 {
 	public class CleanUpTasksHelpAction		:AbstractTellMeAction
 	{

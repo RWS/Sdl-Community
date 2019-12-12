@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Sdl.Community.CleanUpTasks.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class TagHandler : SegmentHandlerBase, ISegmentHandler
     {

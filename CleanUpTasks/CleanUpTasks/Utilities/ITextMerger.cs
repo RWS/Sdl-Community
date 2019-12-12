@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	internal class ITextMerger : ISegmentHandler
     {

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Sdl.Community.CleanUpTasks.Models;
 using Sdl.Core.Settings;
+using SDLCommunityCleanUpTasks.Models;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class CleanUpSourceSettings : SettingsGroup, ICleanUpSourceSettings
     {

@@ -1,8 +1,9 @@
 ﻿using System;
 using NSubstitute;
-using Sdl.Community.CleanUpTasks.Models;
-using Sdl.Community.CleanUpTasks.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using SDLCommunityCleanUpTasks;
+using SDLCommunityCleanUpTasks.Models;
+using SDLCommunityCleanUpTasks.Utilities;
 using Xunit;
 
 namespace Sdl.Community.CleanUpTasks.Tests

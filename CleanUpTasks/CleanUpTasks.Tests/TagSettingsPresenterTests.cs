@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Sdl.Community.CleanUpTasks.Models;
+using SDLCommunityCleanUpTasks;
+using SDLCommunityCleanUpTasks.Models;
 using Xunit;
 
 namespace Sdl.Community.CleanUpTasks.Tests

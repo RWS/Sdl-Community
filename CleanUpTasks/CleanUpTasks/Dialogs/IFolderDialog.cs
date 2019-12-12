@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.CleanUpTasks.Dialogs
+﻿namespace SDLCommunityCleanUpTasks.Dialogs
 {
     public interface IFolderDialog
     {

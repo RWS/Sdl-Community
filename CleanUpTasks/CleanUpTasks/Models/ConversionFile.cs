@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.CleanUpTasks.Models
+﻿namespace SDLCommunityCleanUpTasks.Models
 {
     public class ConversionFile
     {

@@ -1,7 +1,6 @@
 ﻿using Sdl.TellMe.ProviderApi;
 
-
-namespace Sdl.Community.CleanUpTasks.TellMe
+namespace SDLCommunityCleanUpTasks.TellMe
 {
 	[TellMeProvider]
 	public class CleanUpTasksTellMeProvider	  : ITellMeProvider

@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using Sdl.Core.Settings;
 
-namespace Sdl.Community.CleanUpTasks.Contracts
+namespace SDLCommunityCleanUpTasks.Contracts
 {
     internal abstract class ISettingsContract : ISettings
     {

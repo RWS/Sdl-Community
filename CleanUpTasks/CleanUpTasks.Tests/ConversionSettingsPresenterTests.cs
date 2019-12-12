@@ -4,8 +4,9 @@ using System.IO;
 using System.Windows.Forms;
 using Equin.ApplicationFramework;
 using NSubstitute;
-using Sdl.Community.CleanUpTasks.Dialogs;
-using Sdl.Community.CleanUpTasks.Models;
+using SDLCommunityCleanUpTasks;
+using SDLCommunityCleanUpTasks.Dialogs;
+using SDLCommunityCleanUpTasks.Models;
 using Xunit;
 
 namespace Sdl.Community.CleanUpTasks.Tests

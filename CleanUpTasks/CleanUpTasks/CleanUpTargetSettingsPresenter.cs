@@ -1,8 +1,8 @@
 ﻿using System;
-using Sdl.Community.CleanUpTasks.Dialogs;
-using Sdl.Community.CleanUpTasks.Utilities;
+using SDLCommunityCleanUpTasks.Dialogs;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class CleanUpTargetSettingsPresenter : ICleanUpTargetSettingsPresenter
     {

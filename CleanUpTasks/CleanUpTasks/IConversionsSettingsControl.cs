@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	//[ContractClass(typeof(IConversionsSettingsControlContract))]
     public interface IConversionsSettingsControl

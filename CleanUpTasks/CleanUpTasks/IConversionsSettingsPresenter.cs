@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.Contracts;
-using Sdl.Community.CleanUpTasks.Contracts;
+using SDLCommunityCleanUpTasks.Contracts;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	[ContractClass(typeof(IConversionsSettingsPresenterContract))]
     public interface IConversionsSettingsPresenter

@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using UIToolbox;
 
-namespace Sdl.Community.CleanUpTasks.Contracts
+namespace SDLCommunityCleanUpTasks.Contracts
 {
     internal abstract class ISegmentLockerControlContract : ISegmentLockerControl
     {

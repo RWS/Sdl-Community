@@ -1,4 +1,5 @@
 ﻿using System;
+using SDLCommunityCleanUpTasks;
 using Xunit;
 
 namespace Sdl.Community.CleanUpTasks.Tests

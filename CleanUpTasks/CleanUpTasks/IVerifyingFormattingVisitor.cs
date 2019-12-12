@@ -1,6 +1,6 @@
 ﻿using Sdl.FileTypeSupport.Framework.Formatting;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public interface IVerifyingFormattingVisitor : IFormattingVisitor
     {

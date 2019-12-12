@@ -1,7 +1,7 @@
 ﻿using System;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.CleanUpTasks.Models
+namespace SDLCommunityCleanUpTasks.Models
 {
 	/// <summary>
     /// Models cxt-def tag in sdlxliff file

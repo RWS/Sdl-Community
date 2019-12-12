@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public class HtmlTag
 	{

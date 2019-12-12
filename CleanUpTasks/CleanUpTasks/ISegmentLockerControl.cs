@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.Contracts;
 using System.Windows.Forms;
-using Sdl.Community.CleanUpTasks.Contracts;
+using SDLCommunityCleanUpTasks.Contracts;
 using UIToolbox;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	[ContractClass(typeof(ISegmentLockerControlContract))]
     public interface ISegmentLockerControl

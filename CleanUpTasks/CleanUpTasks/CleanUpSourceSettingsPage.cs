@@ -1,7 +1,7 @@
-﻿using Sdl.Core.Settings;
+﻿using Sdl.Community.CleanUpTasks;
 using Sdl.Desktop.IntegrationApi;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class CleanUpSourceSettingsPage : DefaultSettingsPage<CleanUpSourceSettingsControl, CleanUpSourceSettings>
 	{

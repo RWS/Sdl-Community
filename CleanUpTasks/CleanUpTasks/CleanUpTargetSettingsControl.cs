@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using Sdl.Community.CleanUpTasks.Dialogs;
 using Sdl.Desktop.IntegrationApi;
+using SDLCommunityCleanUpTasks;
+using SDLCommunityCleanUpTasks.Dialogs;
+using FileDialog = SDLCommunityCleanUpTasks.Dialogs.FileDialog;
 
 namespace Sdl.Community.CleanUpTasks
 {
@@ -49,7 +51,7 @@ namespace Sdl.Community.CleanUpTasks
 
             // ConversionSettingsControl
             conversionsSettingsControl.SetSettings(Settings, BatchTaskMode.Target);
-            conversionsSettingsControl.SetPresenter(new ConversionSettingsPresenter(conversionsSettingsControl, new Dialogs.FileDialog()));
+            conversionsSettingsControl.SetPresenter(new ConversionSettingsPresenter(conversionsSettingsControl, new FileDialog()));
             conversionsSettingsControl.InitializeUI();
         }
 
