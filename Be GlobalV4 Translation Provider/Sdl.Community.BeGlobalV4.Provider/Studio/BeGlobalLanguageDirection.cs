@@ -142,20 +142,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						continue;
 					}
 
-					TranslationUnit correspondingTu = null;
-					if (segments.Length > _translationUnits.Count)
-					{
-						// Set translation unit based on the correct segment index: when 11 segments are sent as bulk,the first segment is ignored, 
-						// because it was translated previewsly and the translation mask is false
-						correspondingTu = _translationUnits[segmentIndex - 1];
-					}
-					else
-					{
-						// Set translation unit based on segment index: when the first 10 segments are translated for the first time,
-						// then the TU index is the same as segment index
-						correspondingTu = _translationUnits[segmentIndex];
-					}
-
+					// get translationUnit based on the source segment from segments received from Studio
+					var correspondingTu = _translationUnits.FirstOrDefault(t => segments.Any(s => s == t.SourceSegment));
+				
 					// If activeSegmentPair is not null, it means the user translates segments through Editor
 					// If activeSegmentPair is null, it means the user executes Pre-Translate Batch task, so he does not navigate through segments in editor
 					var documentLastOpenPath = _translationUnits[0]?.DocumentProperties?.LastOpenedAsPath;
