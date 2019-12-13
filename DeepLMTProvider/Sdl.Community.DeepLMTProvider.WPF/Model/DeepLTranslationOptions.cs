@@ -28,6 +28,8 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 			var paramString = _uriBuilder[p];
 			return paramString;
 		}
+		public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
+
 
 		private void SetStringParameter(string p, string value)
 		{
