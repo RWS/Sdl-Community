@@ -106,12 +106,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Ui\Login.xaml.cs">
-      <DependentUpon>Login.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Ui\Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
@@ -146,14 +140,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UiHelpers\TextBoxStyle.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Ui\Login.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Ui\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
