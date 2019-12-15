@@ -53,15 +53,8 @@ namespace Sdl.Community.CleanUpTasks
         public void VisitSegment(ISegment segment)
         {
             if (ShouldSkip(segment)) { return; }
-
             VisitChildren(segment);
-
             ProcessTags();
-
-            // Merge all adjacent IText
-            ITextMerger merger = new ITextMerger();
-            merger.VisitSegment(segment);
-            merger.Merge();
         }
 
         public void VisitTagPair(ITagPair tagPair)
