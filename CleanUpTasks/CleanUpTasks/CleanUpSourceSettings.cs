@@ -104,8 +104,7 @@ namespace Sdl.Community.CleanUpTasks
             set { GetSetting<List<Placeholder>>(nameof(Placeholders)).Value = value; }
         }
 
-
-		[SuppressMessage("Microsoft.Contracts", "TestAlwaysEvaluatingToAConstant")]
+        [SuppressMessage("Microsoft.Contracts", "TestAlwaysEvaluatingToAConstant")]
         protected override object GetDefaultValue(string settingId)
         {
             switch (settingId)

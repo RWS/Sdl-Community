@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.CleanUpTasks.Contracts
 {
-    internal abstract class IConversionsSettingsPresenterContract : IConversionsSettingsPresenter
+	internal abstract class IConversionsSettingsPresenterContract : IConversionsSettingsPresenter
     {
         public void AddFile()
         {

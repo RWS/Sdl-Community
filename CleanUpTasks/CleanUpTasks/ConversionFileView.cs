@@ -4,114 +4,114 @@ using System.Windows.Forms;
 namespace Sdl.Community.CleanUpTasks
 {
 	public partial class ConversionFileView : Form, IConversionFileView
-    {
-        private readonly ICleanUpConversionSettings settings = null;
-        private IConversionFileViewPresenter presenter = null;
+	{
+		private readonly ICleanUpConversionSettings settings = null;
+		private IConversionFileViewPresenter presenter = null;
 
-        public ConversionFileView(ICleanUpConversionSettings settings)
-        {
-            this.settings = settings;
+		public ConversionFileView(ICleanUpConversionSettings settings)
+		{
+			this.settings = settings;
 
-            InitializeComponent();
+			InitializeComponent();
 
-            saveAsButton.Click += SaveAsButton_Click;
-            saveButton.Click += SaveButton_Click;
-            dataGridView.RowsAdded += DataGridView_RowsAdded;
-            dataGridView.RowsRemoved += DataGridView_RowsRemoved;
-            searchTextBox.KeyUp += SearchTextBox_KeyUp;
-            replaceTextBox.KeyUp += ReplaceTextBox_KeyUp;
-            descriptionTextBox.KeyUp += DescriptionTextBox_KeyUp;
-        }
+			saveAsButton.Click += SaveAsButton_Click;
+			saveButton.Click += SaveButton_Click;
+			dataGridView.RowsAdded += DataGridView_RowsAdded;
+			dataGridView.RowsRemoved += DataGridView_RowsRemoved;
+			searchTextBox.KeyUp += SearchTextBox_KeyUp;
+			replaceTextBox.KeyUp += ReplaceTextBox_KeyUp;
+			descriptionTextBox.KeyUp += DescriptionTextBox_KeyUp;
+		}
 
-        private void DescriptionTextBox_KeyUp(object sender, KeyEventArgs e)
-        {
-            bindingSource.ResetBindings(false);
-        }
+		private void DescriptionTextBox_KeyUp(object sender, KeyEventArgs e)
+		{
+			bindingSource.ResetBindings(false);
+		}
 
-        public BindingSource BindingSource { get { return bindingSource; } }
+		public BindingSource BindingSource { get { return bindingSource; } }
 
-        public CheckBox CaseSensitive { get { return caseSensitiveCheckBox; } }
+		public CheckBox CaseSensitive { get { return caseSensitiveCheckBox; } }
 
-        public Button ClearFilter { get { return clearButton; } }
+		public Button ClearFilter { get { return clearButton; } }
 
-        public GroupBox ColumnFilter { get { return groupBox; } }
+		public GroupBox ColumnFilter { get { return groupBox; } }
 
-        public TextBox Description { get { return descriptionTextBox; } }
+		public TextBox Description { get { return descriptionTextBox; } }
 
-        public ErrorProvider ErrorProvider { get { return errorProvider; } }
+		public ErrorProvider ErrorProvider { get { return errorProvider; } }
 
-        public TextBox Filter { get { return filterTextBox; } }
+		public TextBox Filter { get { return filterTextBox; } }
 
-        public Form Form { get { return this; } }
+		public Form Form { get { return this; } }
 
-        public DataGridView Grid { get { return dataGridView; } }
+		public DataGridView Grid { get { return dataGridView; } }
 
-        public CheckBox Placeholder { get { return placeHolderCheckBox; } }
+		public CheckBox Placeholder { get { return placeHolderCheckBox; } }
 
-        public CheckBox Regex { get { return regexCheckBox; } }
+		public CheckBox Regex { get { return regexCheckBox; } }
 
-        public TextBox Replace { get { return replaceTextBox; } }
+		public TextBox Replace { get { return replaceTextBox; } }
 
-        public Button SaveAsButton { get { return saveAsButton; } }
+		public Button SaveAsButton { get { return saveAsButton; } }
 
-        public Button SaveButton { get { return saveButton; } }
+		public Button SaveButton { get { return saveButton; } }
 
-        public string SavedFilePath { get; set; }
+		public string SavedFilePath { get; set; }
 
-        public TextBox Search { get { return searchTextBox; } }
+		public TextBox Search { get { return searchTextBox; } }
 
-        public CheckBox EmbeddedTags { get { return embeddedTagsCheckBox; } }
+		public CheckBox EmbeddedTags { get { return embeddedTagsCheckBox; } }
 
-        public CheckBox StrConv { get { return strConvCheckBox; } }
+		public CheckBox StrConv { get { return strConvCheckBox; } }
 
-        public CheckBox TagPair { get { return tagPairCheckBox; } }
+		public CheckBox TagPair { get { return tagPairCheckBox; } }
 
-        public CheckBox ToLower { get { return toLowerCheckBox; } }
+		public CheckBox ToLower { get { return toLowerCheckBox; } }
 
-        public CheckBox ToUpper { get { return toUpperCheckBox; } }
+		public CheckBox ToUpper { get { return toUpperCheckBox; } }
 
-        public CheckBoxComboBox.CheckBoxComboBox VbStrConv { get { return checkBoxComboBox; } }
+		public CheckBoxComboBox.CheckBoxComboBox VbStrConv { get { return checkBoxComboBox; } }
 
-        public CheckBox WholeWord { get { return wholeWordCheckBox; } }
+		public CheckBox WholeWord { get { return wholeWordCheckBox; } }
 
-        public void InitializeUI()
-        {
-            presenter.Initialize();
-        }
+		public void InitializeUI()
+		{
+			presenter.Initialize();
+		}
 
-        public void SetPresenter(IConversionFileViewPresenter presenter)
-        {
-            this.presenter = presenter;
-        }
+		public void SetPresenter(IConversionFileViewPresenter presenter)
+		{
+			this.presenter = presenter;
+		}
 
-        private void DataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
-        {
-            presenter.CheckSaveButton();
-        }
+		private void DataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+		{
+			presenter.CheckSaveButton();
+		}
 
-        private void DataGridView_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
-        {
-            presenter.CheckSaveButton();
-        }
+		private void DataGridView_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+		{
+			presenter.CheckSaveButton();
+		}
 
-        private void ReplaceTextBox_KeyUp(object sender, KeyEventArgs e)
-        {
-            bindingSource.ResetBindings(false);
-        }
+		private void ReplaceTextBox_KeyUp(object sender, KeyEventArgs e)
+		{
+			bindingSource.ResetBindings(false);
+		}
 
-        private void SaveAsButton_Click(object sender, EventArgs e)
-        {
-            presenter.SaveFile(settings.LastFileDirectory, true);
-        }
+		private void SaveAsButton_Click(object sender, EventArgs e)
+		{
+			presenter.SaveFile(settings.LastFileDirectory, true);
+		}
 
-        private void SaveButton_Click(object sender, EventArgs e)
-        {
-            presenter.SaveFile(settings.LastFileDirectory, false);
-        }
+		private void SaveButton_Click(object sender, EventArgs e)
+		{
+			presenter.SaveFile(settings.LastFileDirectory, false);
+		}
 
-        private void SearchTextBox_KeyUp(object sender, KeyEventArgs e)
-        {
-            bindingSource.ResetBindings(false);
-        }
-    }
+		private void SearchTextBox_KeyUp(object sender, KeyEventArgs e)
+		{
+			bindingSource.ResetBindings(false);
+		}
+	}
 }

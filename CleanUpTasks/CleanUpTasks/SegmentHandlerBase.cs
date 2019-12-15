@@ -20,7 +20,7 @@ namespace Sdl.Community.CleanUpTasks
         protected ICleanUpMessageReporter Reporter { get; }
 
         protected static bool ShouldSkip(ISegment segment)
-        {  
+        {
             var props = segment.Properties;
 
             if (props != null)
@@ -52,14 +52,14 @@ namespace Sdl.Community.CleanUpTasks
 
         protected IAbstractMarkupData CreateIText(string text)
         {
-			   var props = ItemFactory.PropertiesFactory.CreateTextProperties(text);
+            var props = ItemFactory.PropertiesFactory.CreateTextProperties(text);
             var itext = ItemFactory.CreateText(props);
 
             return itext;
         }
 
         protected IPlaceholderTag CreatePlaceHolderTag(Match match)
-        {	   
+        {
             var placeHolderTagProps = ItemFactory.PropertiesFactory.CreatePlaceholderTagProperties(match.Value);
             placeHolderTagProps.TagContent = match.Value;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.CleanUpTasks.Models;
@@ -59,7 +58,7 @@ namespace Sdl.Community.CleanUpTasks
 		{
 			// Removes all spacing and single and double quotations before doing a comparison
 			return Regex.Replace(p.Content, @"\s", "").Replace("\"", "").Replace("'", "")
-			       == Regex.Replace(tagContent, @"\s", "").Replace("\"", "").Replace("'", "");
+				   == Regex.Replace(tagContent, @"\s", "").Replace("\"", "").Replace("'", "");
 		}
 
 		private bool IsTag(string text)
@@ -120,7 +119,6 @@ namespace Sdl.Community.CleanUpTasks
 				}
 			}
 
-
 			return text;
 		}
 
@@ -177,7 +175,6 @@ namespace Sdl.Community.CleanUpTasks
 
 		private void VisitChildren(IAbstractMarkupDataContainer container)
 		{
-
 			foreach (var item in container)
 			{
 				item.AcceptVisitor(this);

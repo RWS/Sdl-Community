@@ -2,27 +2,27 @@
 
 namespace Sdl.Community.CleanUpTasks.Contracts
 {
-    internal abstract class IConversionsSettingsControlContract : IConversionsSettingsControl
+	internal abstract class IConversionsSettingsControlContract : IConversionsSettingsControl
     {
         public Button Add => default(Button);
 
-	    public Button Down => default(Button);
+        public Button Down => default(Button);
 
-	    public Button Edit => default(Button);
+        public Button Edit => default(Button);
 
-	    CheckedListBox IConversionsSettingsControl.FileList => default(CheckedListBox);
+        CheckedListBox IConversionsSettingsControl.FileList => default(CheckedListBox);
 
-	    public Button New => default(Button);
+        public Button New => default(Button);
 
-	    public Button Remove => default(Button);
+        public Button Remove => default(Button);
 
-	    public ICleanUpConversionSettings Settings { get; set; }
+        public ICleanUpConversionSettings Settings { get; set; }
 
-		public Button Up => default(Button);
+        public Button Up => default(Button);
 
-	    public CheckBox ApplyToNonTranslatables => default(CheckBox);
+        public CheckBox ApplyToNonTranslatables => default(CheckBox);
 
-	    public void InitializeUI()
+        public void InitializeUI()
         {
         }
 

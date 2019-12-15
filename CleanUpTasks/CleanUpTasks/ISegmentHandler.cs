@@ -5,7 +5,7 @@ using Sdl.FileTypeSupport.Framework.BilingualApi;
 namespace Sdl.Community.CleanUpTasks
 {
 	[ContractClass(typeof(ISegmentHandlerContract))]
-    public interface ISegmentHandler : IMarkupDataVisitor
-    {
-    }
+	public interface ISegmentHandler : IMarkupDataVisitor
+	{
+	}
 }

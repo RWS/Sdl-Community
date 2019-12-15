@@ -19,9 +19,9 @@ namespace Sdl.Community.CleanUpTasks
         private BindingListView<ConversionItem> bindingListView = null;
         private bool isInputFormDisabled = false;
         private ConversionFileViewMode viewMode;
+
         public ConversionFileViewPresenter(IConversionFileView view, IFileDialog dialog, ConversionFileViewMode viewMode, BatchTaskMode taskMode)
         {
-
             this.view = view;
             this.dialog = dialog;
             this.viewMode = viewMode;
@@ -110,7 +110,7 @@ namespace Sdl.Community.CleanUpTasks
             {
                 PersistData(view.SavedFilePath);
             }
-			view.Form.Close();
+            view.Form.Close();
         }
 
         private void AddColumnsToGrid()
@@ -294,6 +294,7 @@ namespace Sdl.Community.CleanUpTasks
             SetUIStatus();
             SetCheckBoxComboBoxBinding();
         }
+
         private bool IsGridEmpty()
         {
             var bindingSource = view.BindingSource;

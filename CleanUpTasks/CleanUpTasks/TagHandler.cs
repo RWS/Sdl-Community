@@ -14,6 +14,7 @@ namespace Sdl.Community.CleanUpTasks
         private readonly Stack<IPlaceholderTag> phTagsToRemove = new Stack<IPlaceholderTag>();
         private readonly IXmlReportGenerator reportGenerator = null;
         private readonly ICleanUpSourceSettings settings = null;
+
         public TagHandler(ICleanUpSourceSettings settings,
                           IVerifyingFormattingVisitor fmtVisitor,
                           IDocumentItemFactory itemFactory,

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Sdl.Community.CleanUpTasks.Models;
 using Sdl.Community.CleanUpTasks.Utilities;

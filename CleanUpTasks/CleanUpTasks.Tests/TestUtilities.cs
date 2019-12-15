@@ -12,7 +12,6 @@ using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Formatting;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-
 namespace Sdl.Community.CleanUpTasks.Tests
 {
 	public class TestUtilities
