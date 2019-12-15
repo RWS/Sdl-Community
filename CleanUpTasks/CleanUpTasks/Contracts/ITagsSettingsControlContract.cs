@@ -2,15 +2,15 @@
 
 namespace SDLCommunityCleanUpTasks.Contracts
 {
-    internal abstract class ITagsSettingsControlContract : ITagsSettingsControl
+	internal abstract class ITagsSettingsControlContract : ITagsSettingsControl
     {
         public CheckedListBox FormatTagList => default(CheckedListBox);
 
-	    public CheckedListBox PlaceholderTagList => default(CheckedListBox);
+        public CheckedListBox PlaceholderTagList => default(CheckedListBox);
 
-	    public ICleanUpSourceSettings Settings { get; set; }
+        public ICleanUpSourceSettings Settings { get; set; }
 
-		public void InitializeUI()
+        public void InitializeUI()
         {
         }
 

@@ -1,8 +1,8 @@
 namespace SDLCommunityCleanUpTasks
 {
 	public enum ConversionFileViewMode
-	{
-		New,
-		Existing
-	}
+    {
+        New,
+        Existing
+    }
 }

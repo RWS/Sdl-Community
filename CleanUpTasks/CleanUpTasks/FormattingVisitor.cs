@@ -26,7 +26,6 @@ namespace SDLCommunityCleanUpTasks
 
         public FormattingVisitor(ICleanUpSourceSettings settings)
         {
-
             this.settings = settings;
         }
 

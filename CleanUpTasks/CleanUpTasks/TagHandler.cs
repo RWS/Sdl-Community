@@ -6,190 +6,191 @@ using SDLCommunityCleanUpTasks.Utilities;
 namespace SDLCommunityCleanUpTasks
 {
 	public class TagHandler : SegmentHandlerBase, ISegmentHandler
-    {
-        private readonly bool fmtAllUnchecked = false;
-        private readonly Stack<ITagPair> fmtTagsToRemove = new Stack<ITagPair>();
-        private readonly IVerifyingFormattingVisitor fmtVisitor = null;
-        private readonly bool phAllUnchecked = false;
-        private readonly Stack<IPlaceholderTag> phTagsToRemove = new Stack<IPlaceholderTag>();
-        private readonly IXmlReportGenerator reportGenerator = null;
-        private readonly ICleanUpSourceSettings settings = null;
-        public TagHandler(ICleanUpSourceSettings settings,
-                          IVerifyingFormattingVisitor fmtVisitor,
-                          IDocumentItemFactory itemFactory,
-                          ICleanUpMessageReporter reporter,
-                          IXmlReportGenerator reportGenerator)
-            : base(itemFactory, reporter)
-        {
-            this.settings = settings;
-            this.fmtVisitor = fmtVisitor;
-            this.reportGenerator = reportGenerator;
+	{
+		private readonly bool fmtAllUnchecked = false;
+		private readonly Stack<ITagPair> fmtTagsToRemove = new Stack<ITagPair>();
+		private readonly IVerifyingFormattingVisitor fmtVisitor = null;
+		private readonly bool phAllUnchecked = false;
+		private readonly Stack<IPlaceholderTag> phTagsToRemove = new Stack<IPlaceholderTag>();
+		private readonly IXmlReportGenerator reportGenerator = null;
+		private readonly ICleanUpSourceSettings settings = null;
 
-            // Check whether all checkboxes are unchecked and cache the result
-            fmtAllUnchecked = settings.FormatTagList.Values.All(isChecked => isChecked == false);
-            phAllUnchecked = settings.PlaceholderTagList.Values.All(isChecked => isChecked == false);
-        }
+		public TagHandler(ICleanUpSourceSettings settings,
+						  IVerifyingFormattingVisitor fmtVisitor,
+						  IDocumentItemFactory itemFactory,
+						  ICleanUpMessageReporter reporter,
+						  IXmlReportGenerator reportGenerator)
+			: base(itemFactory, reporter)
+		{
+			this.settings = settings;
+			this.fmtVisitor = fmtVisitor;
+			this.reportGenerator = reportGenerator;
 
-        public void VisitPlaceholderTag(IPlaceholderTag tag)
-        {
-            if (!phAllUnchecked)
-            {
-                var content = tag.Properties.TagContent;
-
-                if (!string.IsNullOrEmpty(content))
-                {
-                    bool isChecked;
-                    if (settings.PlaceholderTagList.TryGetValue(content, out isChecked))
-                    {
-                        if (isChecked)
-                        {
-                            phTagsToRemove.Push(tag);
-                        }
-                    }
-                }
-            }
-        }
-
-        public void VisitSegment(ISegment segment)
-        {
-            if (ShouldSkip(segment)) { return; }
-            VisitChildren(segment);
-            ProcessTags();
+			// Check whether all checkboxes are unchecked and cache the result
+			fmtAllUnchecked = settings.FormatTagList.Values.All(isChecked => isChecked == false);
+			phAllUnchecked = settings.PlaceholderTagList.Values.All(isChecked => isChecked == false);
 		}
 
-        public void VisitTagPair(ITagPair tagPair)
-        {
-            if (!fmtAllUnchecked)
-            {
-                var formatting = tagPair.StartTagProperties?.Formatting;
+		public void VisitPlaceholderTag(IPlaceholderTag tag)
+		{
+			if (!phAllUnchecked)
+			{
+				var content = tag.Properties.TagContent;
 
-                if (formatting != null)
-                {
-                    foreach (var fmtItem in formatting.Values)
-                    {
-                        fmtItem.AcceptVisitor(fmtVisitor);
-                    }
+				if (!string.IsNullOrEmpty(content))
+				{
+					bool isChecked;
+					if (settings.PlaceholderTagList.TryGetValue(content, out isChecked))
+					{
+						if (isChecked)
+						{
+							phTagsToRemove.Push(tag);
+						}
+					}
+				}
+			}
+		}
 
-                    if (fmtVisitor.ShouldRemoveTag())
-                    {
-                        fmtTagsToRemove.Push(tagPair);
-                    }
+		public void VisitSegment(ISegment segment)
+		{
+			if (ShouldSkip(segment)) { return; }
+			VisitChildren(segment);
+			ProcessTags();
+		}
 
-                    // Reset the verifier for each TagPair!!
-                    // Otherwise, the verifier keeps the settings from the
-                    // previous one
-                    fmtVisitor.ResetVerifier();
-                }
-            }
+		public void VisitTagPair(ITagPair tagPair)
+		{
+			if (!fmtAllUnchecked)
+			{
+				var formatting = tagPair.StartTagProperties?.Formatting;
 
-            VisitChildren(tagPair);
-        }
+				if (formatting != null)
+				{
+					foreach (var fmtItem in formatting.Values)
+					{
+						fmtItem.AcceptVisitor(fmtVisitor);
+					}
 
-        private static void ReAddSubItemsToParent(List<IAbstractMarkupData> subItemList, IAbstractMarkupDataContainer parent, int index)
-        {
-            if (subItemList != null)
-            {
-                // Reinsert at same index if not at end of container
-                if (parent.Count > index)
-                {
-                    foreach (var subItem in subItemList)
-                    {
-                        subItem.RemoveFromParent();
-                        parent.Insert(index, subItem);
-                        index++;
-                    }
-                }
-                else
-                {
-                    foreach (var subItem in subItemList)
-                    {
-                        subItem.RemoveFromParent();
-                        parent.Add(subItem);
-                    }
-                }
-            }
-        }
+					if (fmtVisitor.ShouldRemoveTag())
+					{
+						fmtTagsToRemove.Push(tagPair);
+					}
 
-        private void Log(IAbstractMarkupData data, string tagContent)
-        {
-            IAbstractMarkupDataContainer parent = data.Parent;
-            while (!(parent is ISegment))
-            {
-                parent = ((IAbstractMarkupData)parent).Parent;
-            }
+					// Reset the verifier for each TagPair!!
+					// Otherwise, the verifier keeps the settings from the
+					// previous one
+					fmtVisitor.ResetVerifier();
+				}
+			}
 
-            var segment = (ISegment)parent;
-            reportGenerator.AddTagItem(segment.Properties.Id.Id, tagContent);
-        }
+			VisitChildren(tagPair);
+		}
 
-        private void ProcessTags()
-        {
-            // Formatting tags
-            while (fmtTagsToRemove.Count > 0)
-            {
-                var tagPair = fmtTagsToRemove.Pop();
+		private static void ReAddSubItemsToParent(List<IAbstractMarkupData> subItemList, IAbstractMarkupDataContainer parent, int index)
+		{
+			if (subItemList != null)
+			{
+				// Reinsert at same index if not at end of container
+				if (parent.Count > index)
+				{
+					foreach (var subItem in subItemList)
+					{
+						subItem.RemoveFromParent();
+						parent.Insert(index, subItem);
+						index++;
+					}
+				}
+				else
+				{
+					foreach (var subItem in subItemList)
+					{
+						subItem.RemoveFromParent();
+						parent.Add(subItem);
+					}
+				}
+			}
+		}
 
-                List<IAbstractMarkupData> subItemList = null;
-                if (tagPair.AllSubItems != null)
-                {
-                    subItemList = tagPair.AllSubItems.ToList();
-                }
+		private void Log(IAbstractMarkupData data, string tagContent)
+		{
+			IAbstractMarkupDataContainer parent = data.Parent;
+			while (!(parent is ISegment))
+			{
+				parent = ((IAbstractMarkupData)parent).Parent;
+			}
 
-                var parent = tagPair.Parent;
-                var index = tagPair.IndexInParent;
+			var segment = (ISegment)parent;
+			reportGenerator.AddTagItem(segment.Properties.Id.Id, tagContent);
+		}
 
-                Log(tagPair, tagPair.TagProperties.TagContent);
+		private void ProcessTags()
+		{
+			// Formatting tags
+			while (fmtTagsToRemove.Count > 0)
+			{
+				var tagPair = fmtTagsToRemove.Pop();
 
-                tagPair.RemoveFromParent();
+				List<IAbstractMarkupData> subItemList = null;
+				if (tagPair.AllSubItems != null)
+				{
+					subItemList = tagPair.AllSubItems.ToList();
+				}
 
-                ReAddSubItemsToParent(subItemList, parent, index);
-            }
+				var parent = tagPair.Parent;
+				var index = tagPair.IndexInParent;
 
-            // Placeholder tags
-            while (phTagsToRemove.Count > 0)
-            {
-                var phTag = phTagsToRemove.Pop();
+				Log(tagPair, tagPair.TagProperties.TagContent);
 
-                Log(phTag, phTag.Properties.TagContent);
+				tagPair.RemoveFromParent();
 
-                phTag.RemoveFromParent();
-            }
-        }
+				ReAddSubItemsToParent(subItemList, parent, index);
+			}
 
-        private void VisitChildren(IAbstractMarkupDataContainer container)
-        {
-            foreach (var item in container)
-            {
-                item.AcceptVisitor(this);
-            }
-        }
+			// Placeholder tags
+			while (phTagsToRemove.Count > 0)
+			{
+				var phTag = phTagsToRemove.Pop();
 
-        #region Not Used
+				Log(phTag, phTag.Properties.TagContent);
 
-        public void VisitCommentMarker(ICommentMarker commentMarker)
-        {
-        }
+				phTag.RemoveFromParent();
+			}
+		}
 
-        public void VisitLocationMarker(ILocationMarker location)
-        {
-        }
+		private void VisitChildren(IAbstractMarkupDataContainer container)
+		{
+			foreach (var item in container)
+			{
+				item.AcceptVisitor(this);
+			}
+		}
 
-        public void VisitLockedContent(ILockedContent lockedContent)
-        {
-        }
+		#region Not Used
 
-        public void VisitOtherMarker(IOtherMarker marker)
-        {
-        }
+		public void VisitCommentMarker(ICommentMarker commentMarker)
+		{
+		}
 
-        public void VisitRevisionMarker(IRevisionMarker revisionMarker)
-        {
-        }
+		public void VisitLocationMarker(ILocationMarker location)
+		{
+		}
 
-        public void VisitText(IText text)
-        {
-        }
+		public void VisitLockedContent(ILockedContent lockedContent)
+		{
+		}
 
-        #endregion Not Used
-    }
+		public void VisitOtherMarker(IOtherMarker marker)
+		{
+		}
+
+		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
+		{
+		}
+
+		public void VisitText(IText text)
+		{
+		}
+
+		#endregion Not Used
+	}
 }

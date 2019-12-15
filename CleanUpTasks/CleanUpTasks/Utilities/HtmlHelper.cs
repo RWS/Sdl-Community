@@ -28,10 +28,11 @@ namespace SDLCommunityCleanUpTasks.Utilities
 
         public IEnumerable<HtmlParseError> ParseErrors => document.ParseErrors;
 
-	    public IEnumerable<HtmlNode> Descendants()
+        public IEnumerable<HtmlNode> Descendants()
         {
             return document.DocumentNode.Descendants();
         }
+
         public string GetRawEndTag(HtmlNode node)
         {
             return "</" + node.OriginalName + ">";
@@ -39,7 +40,6 @@ namespace SDLCommunityCleanUpTasks.Utilities
 
         public string GetRawStartTag(HtmlNode node)
         {
-
             var builder = new StringBuilder();
             builder.Append("<");
             builder.Append(node.OriginalName);

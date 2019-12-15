@@ -9,6 +9,7 @@ namespace SDLCommunityCleanUpTasks.Utilities
     public interface ICleanUpMessageReporter
     {
         void Report(ISegmentHandler handler, ErrorLevel errorLevel, string message, string locationDescription);
+
         void Report(ISegmentHandler handler, ErrorLevel errorLevel, string message, TextLocation from, TextLocation to);
     }
 }

@@ -7,6 +7,7 @@ namespace SDLCommunityCleanUpTasks
     public interface ISegmentLockerPresenter
     {
         void Initialize();
+
         void SaveSettings();
     }
 }

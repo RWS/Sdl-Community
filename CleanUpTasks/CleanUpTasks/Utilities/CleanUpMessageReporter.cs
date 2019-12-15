@@ -9,7 +9,6 @@ namespace SDLCommunityCleanUpTasks.Utilities
 
         public CleanUpMessageReporter(IBilingualContentMessageReporter reporter)
         {
-
             this.reporter = reporter;
         }
 

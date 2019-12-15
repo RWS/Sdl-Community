@@ -1,21 +1,21 @@
 using System;
-using System.ComponentModel;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace Equin.ApplicationFramework
 {
-    /// <summary>
-    /// Serves a wrapper for items being viewed in a <see cref="BindingListView&lt;T&gt;"/>.
-    /// This class implements <see cref="INotifyEditableObject"/> so will raise the necessary events during 
-    /// the item edit life-cycle.
-    /// </summary>
-    /// <remarks>
-    /// If <typeparamref name="T"/> implements <see cref="System.ComponentModel.IEditableObject"/> this class will call BeginEdit/CancelEdit/EndEdit on the <typeparamref name="T"/> object as well.
-    /// If <typeparamref name="T"/> implements <see cref="System.ComponentModel.IDataErrorInfo"/> this class will use that implementation as its own.
-    /// </remarks>
-    /// <typeparam name="T">The type of object being viewed.</typeparam>
-    [Serializable]
+	/// <summary>
+	/// Serves a wrapper for items being viewed in a <see cref="BindingListView&lt;T&gt;"/>.
+	/// This class implements <see cref="INotifyEditableObject"/> so will raise the necessary events during
+	/// the item edit life-cycle.
+	/// </summary>
+	/// <remarks>
+	/// If <typeparamref name="T"/> implements <see cref="System.ComponentModel.IEditableObject"/> this class will call BeginEdit/CancelEdit/EndEdit on the <typeparamref name="T"/> object as well.
+	/// If <typeparamref name="T"/> implements <see cref="System.ComponentModel.IDataErrorInfo"/> this class will use that implementation as its own.
+	/// </remarks>
+	/// <typeparam name="T">The type of object being viewed.</typeparam>
+	[Serializable]
     public class ObjectView<T> : INotifyingEditableObject, IDataErrorInfo, INotifyPropertyChanged, ICustomTypeDescriptor
     {
         /// <summary>
@@ -47,22 +47,27 @@ namespace Equin.ApplicationFramework
         /// The view containing this ObjectView.
         /// </summary>
         private AggregateBindingListView<T> _parent;
+
         /// <summary>
         /// Flag that signals if we are currently editing the object.
         /// </summary>
         private bool _editing;
+
         /// <summary>
         /// The actual object being edited.
         /// </summary>
         private T _object;
+
         /// <summary>
         /// Flag set to true if type of T implements ICustomTypeDescriptor
         /// </summary>
         private bool _isCustomTypeDescriptor;
+
         /// <summary>
         /// Holds the Object pre-casted ICustomTypeDescriptor (if supported).
         /// </summary>
         private ICustomTypeDescriptor _customTypeDescriptor;
+
         /// <summary>
         /// A collection of BindingListView objects, indexed by name, for views auto-provided for any generic IList members.
         /// </summary>
@@ -129,7 +134,7 @@ namespace Equin.ApplicationFramework
         {
             return Object.ToString();
         }
-        
+
         private void ObjectPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // Raise our own event
@@ -203,7 +208,7 @@ namespace Equin.ApplicationFramework
             }
         }
 
-        #endregion
+        #endregion INotifyEditableObject Members
 
         #region IEditableObject Members
 
@@ -221,7 +226,7 @@ namespace Equin.ApplicationFramework
                 {
                     ((IEditableObject)Object).BeginEdit();
                 }
-                // Raise the EditBegun event.                
+                // Raise the EditBegun event.
                 OnEditBegun();
             }
         }
@@ -262,7 +267,7 @@ namespace Equin.ApplicationFramework
             }
         }
 
-        #endregion
+        #endregion IEditableObject Members
 
         #region IDataErrorInfo Members
 
@@ -293,7 +298,7 @@ namespace Equin.ApplicationFramework
             }
         }
 
-        #endregion
+        #endregion IDataErrorInfo Members
 
         #region INotifyPropertyChanged Members
 
@@ -308,7 +313,7 @@ namespace Equin.ApplicationFramework
             }
         }
 
-        #endregion
+        #endregion INotifyPropertyChanged Members
 
         #region ICustomTypeDescriptor Members
 
@@ -456,6 +461,6 @@ namespace Equin.ApplicationFramework
             }
         }
 
-        #endregion
+        #endregion ICustomTypeDescriptor Members
     }
 }

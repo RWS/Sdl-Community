@@ -2,23 +2,22 @@
 
 namespace SDLCommunityCleanUpTasks.Contracts
 {
-    internal abstract class ICleanUpTargetSettingsControlContract : ICleanUpTargetSettingsControl
+	internal abstract class ICleanUpTargetSettingsControlContract : ICleanUpTargetSettingsControl
     {
         public Button BackupButton => default(Button);
 
-	    public TextBox BackupFolder => default(TextBox);
+        public TextBox BackupFolder => default(TextBox);
 
-	    public CheckBox GenerateTarget => default(CheckBox);
+        public CheckBox GenerateTarget => default(CheckBox);
 
-	    public CheckBox MakeBackups => default(CheckBox);
+        public CheckBox MakeBackups => default(CheckBox);
 
-	    public CheckBox OverwriteSdlXliff => default(CheckBox);
+        public CheckBox OverwriteSdlXliff => default(CheckBox);
 
-	    public Button SaveButton => default(Button);
+        public Button SaveButton => default(Button);
 
-	    public TextBox SaveFolder => default(TextBox);
+        public TextBox SaveFolder => default(TextBox);
 
-	    public CleanUpTargetSettings Settings { get; set; }
-
-	}
+        public CleanUpTargetSettings Settings { get; set; }
+    }
 }

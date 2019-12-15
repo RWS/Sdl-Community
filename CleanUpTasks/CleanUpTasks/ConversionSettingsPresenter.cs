@@ -11,13 +11,13 @@ namespace SDLCommunityCleanUpTasks
 {
 	public class ConversionSettingsPresenter : IConversionsSettingsPresenter
     {
-        private readonly IConversionsSettingsControl _control ;
+        private readonly IConversionsSettingsControl _control;
         private readonly Dictionary<string, bool> _convFiles = new Dictionary<string, bool>();
-        private readonly IFileDialog _dialog ;
-        private bool _isDisabled ;
+        private readonly IFileDialog _dialog;
+        private bool _isDisabled;
 
         public ConversionSettingsPresenter(IConversionsSettingsControl control, IFileDialog dialog)
-        {			  
+        {
             _control = control;
             _dialog = dialog;
 
@@ -36,7 +36,7 @@ namespace SDLCommunityCleanUpTasks
                     XmlUtilities.Deserialize(file);
                     AddFileInternal(file);
                 }
-            }			
+            }
             UpdateLastFileDirectory();
         }
 
@@ -125,17 +125,17 @@ namespace SDLCommunityCleanUpTasks
 
                 if (checkState == CheckState.Checked)
                 {
-	                if (item != null)
-	                {
-		                dict.Add(item.FullPath, true);
-	                }
+                    if (item != null)
+                    {
+                        dict.Add(item.FullPath, true);
+                    }
                 }
                 else
                 {
-	                if (item != null)
-	                {
-		                dict.Add(item.FullPath, false);
-	                }
+                    if (item != null)
+                    {
+                        dict.Add(item.FullPath, false);
+                    }
                 }
             }
 
@@ -178,9 +178,9 @@ namespace SDLCommunityCleanUpTasks
             {
                 fileList.Add(convFile, true);
                 _convFiles.Add(file, true);
-				_control.Settings.ConversionFiles = _convFiles;
+                _control.Settings.ConversionFiles = _convFiles;
 
-				UpdateButtons();
+                UpdateButtons();
             }
         }
 

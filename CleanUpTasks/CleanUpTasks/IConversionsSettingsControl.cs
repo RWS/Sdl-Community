@@ -3,7 +3,7 @@
 namespace SDLCommunityCleanUpTasks
 {
 	//[ContractClass(typeof(IConversionsSettingsControlContract))]
-    public interface IConversionsSettingsControl
+	public interface IConversionsSettingsControl
     {
         Button Add { get; }
         Button Down { get; }
@@ -14,9 +14,13 @@ namespace SDLCommunityCleanUpTasks
         ICleanUpConversionSettings Settings { get; set; }
         Button Up { get; }
         CheckBox ApplyToNonTranslatables { get; }
+
         void InitializeUI();
+
         void SaveSettings();
+
         void SetPresenter(IConversionsSettingsPresenter presenter);
+
         void SetSettings(ICleanUpConversionSettings settings, BatchTaskMode taskMode);
     }
 }

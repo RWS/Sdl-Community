@@ -11,163 +11,163 @@ using Xunit.Abstractions;
 namespace Sdl.Community.CleanUpTasks.Tests
 {
 	public class HtmlParserTests : IClassFixture<TestUtilities>
-    {
-        [Fact]
-        public void ConstructorThrowsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new HtmlHelper(null, null));
-        }
+	{
+		[Fact]
+		public void ConstructorThrowsNull()
+		{
+			Assert.Throws<ArgumentNullException>(() => new HtmlHelper(null, null));
+		}
 
-        [Theory]
-        [InlineData("<hello>Some text <1 and other text</hello>")]
-        [InlineData("1 < 0.5")]
-        public void ParseHtmlLessThanSymbol(string html)
-        {
-           // StringBuilder builder = new StringBuilder();
-           // HtmlEntitizer entitizer = new HtmlEntitizer();
-           //// string input = entitizer.Entitize(html);
-           // HtmlTagTable tagTable = new HtmlTagTable(input);
+		[Theory]
+		[InlineData("<hello>Some text <1 and other text</hello>")]
+		[InlineData("1 < 0.5")]
+		public void ParseHtmlLessThanSymbol(string html)
+		{
+			// StringBuilder builder = new StringBuilder();
+			// HtmlEntitizer entitizer = new HtmlEntitizer();
+			//// string input = entitizer.Entitize(html);
+			// HtmlTagTable tagTable = new HtmlTagTable(input);
 
-           // Build(builder, input, tagTable);
+			// Build(builder, input, tagTable);
 
-           // output.WriteLine(html);
-           // var processed = entitizer.DeEntitize(builder.ToString());
-           // output.WriteLine(processed);
+			// output.WriteLine(html);
+			// var processed = entitizer.DeEntitize(builder.ToString());
+			// output.WriteLine(processed);
 
-           // Assert.Equal(html, processed);
-        }
+			// Assert.Equal(html, processed);
+		}
 
-        [Fact]
-        public void ParseBrokenHtmlEndTagOnly()
-        {
-            var html = "</body>";
+		[Fact]
+		public void ParseBrokenHtmlEndTagOnly()
+		{
+			var html = "</body>";
 
-            StringBuilder builder = new StringBuilder();
-            HtmlTagTable tagTable = new HtmlTagTable(html);
+			StringBuilder builder = new StringBuilder();
+			HtmlTagTable tagTable = new HtmlTagTable(html);
 
-            Build(builder, html, tagTable);
+			Build(builder, html, tagTable);
 
-            Assert.Equal(html, builder.ToString());
-        }
+			Assert.Equal(html, builder.ToString());
+		}
 
-        [Fact]
-        public void ParseBrokenHtmlNoStartTag()
-        {
-            var html = "Some text with broken html</p>";
+		[Fact]
+		public void ParseBrokenHtmlNoStartTag()
+		{
+			var html = "Some text with broken html</p>";
 
-            StringBuilder builder = new StringBuilder();
-            HtmlTagTable tagTable = new HtmlTagTable(html);
+			StringBuilder builder = new StringBuilder();
+			HtmlTagTable tagTable = new HtmlTagTable(html);
 
-            Build(builder, html, tagTable);
+			Build(builder, html, tagTable);
 
-            Assert.Equal(html, builder.ToString());
-        }
+			Assert.Equal(html, builder.ToString());
+		}
 
-        [Theory]
-        [InlineData("html.html")]
-        [InlineData("htmlform.html")]
-        [InlineData("htmlcomments.html")]
-        public void ParsedHtmlSameAsOriginal(string file)
-        {
-            var html = GetHtml(file);
+		[Theory]
+		[InlineData("html.html")]
+		[InlineData("htmlform.html")]
+		[InlineData("htmlcomments.html")]
+		public void ParsedHtmlSameAsOriginal(string file)
+		{
+			var html = GetHtml(file);
 
-            StringBuilder builder = new StringBuilder();
-            HtmlTagTable tagTable = new HtmlTagTable(html);
+			StringBuilder builder = new StringBuilder();
+			HtmlTagTable tagTable = new HtmlTagTable(html);
 
-            Build(builder, html, tagTable);
+			Build(builder, html, tagTable);
 
-            output.WriteLine(html);
-            output.WriteLine(builder.ToString());
+			output.WriteLine(html);
+			output.WriteLine(builder.ToString());
 
-            Assert.Equal(html, builder.ToString());
-        }
+			Assert.Equal(html, builder.ToString());
+		}
 
-        #region Fixture
+		#region Fixture
 
-        public HtmlParserTests(TestUtilities utility, ITestOutputHelper output)
-        {
-            Utility = utility;
-            this.output = output;
-        }
+		public HtmlParserTests(TestUtilities utility, ITestOutputHelper output)
+		{
+			Utility = utility;
+			this.output = output;
+		}
 
-        public TestUtilities Utility { get; }
+		public TestUtilities Utility { get; }
 
-        private readonly ITestOutputHelper output;
+		private readonly ITestOutputHelper output;
 
-        private string GetHtml(string fileName)
-        {
-            var path = Path.Combine(Utility.SaveFolder, fileName);
+		private string GetHtml(string fileName)
+		{
+			var path = Path.Combine(Utility.SaveFolder, fileName);
 
-            return File.ReadAllText(path);
-        }
+			return File.ReadAllText(path);
+		}
 
-        #endregion Fixture
+		#endregion Fixture
 
-        #region HTML
+		#region HTML
 
-        private static void Build(StringBuilder builder, string html, HtmlTagTable tagTable)
-        {
-            if (string.IsNullOrEmpty(html))
-            {
-                return;
-            }
+		private static void Build(StringBuilder builder, string html, HtmlTagTable tagTable)
+		{
+			if (string.IsNullOrEmpty(html))
+			{
+				return;
+			}
 
-            var parser = new HtmlHelper(html, tagTable);
+			var parser = new HtmlHelper(html, tagTable);
 
-            if (parser.ParseErrors.Count() > 0)
-            {
-                // Fall back on regex parsing
-                foreach (var chunk in Regex.Split(html, "(<.+?>)"))
-                {
-                    if (Regex.IsMatch(chunk, "<.+?>"))
-                    {
-                        builder.Append(chunk);
-                    }
-                    else
-                    {
-                        builder.Append(chunk);
-                    }
-                }
+			if (parser.ParseErrors.Count() > 0)
+			{
+				// Fall back on regex parsing
+				foreach (var chunk in Regex.Split(html, "(<.+?>)"))
+				{
+					if (Regex.IsMatch(chunk, "<.+?>"))
+					{
+						builder.Append(chunk);
+					}
+					else
+					{
+						builder.Append(chunk);
+					}
+				}
 
-                return;
-            }
+				return;
+			}
 
-            foreach (var node in parser.Descendants())
-            {
-                if (node.NodeType == HtmlNodeType.Element)
-                {
-                    if (!tagTable.Table[node.Name].HasEndTag)
-                    {
-                        builder.Append(parser.GetRawStartTag(node));
-                    }
-                    else if (tagTable.Table[node.Name].IsEndGhostTag)
-                    {
-                        builder.Append(parser.GetRawEndTag(node));
-                    }
-                    else
-                    {
-                        builder.Append(parser.GetRawStartTag(node));
-                        Build(builder, node.InnerHtml, tagTable);
+			foreach (var node in parser.Descendants())
+			{
+				if (node.NodeType == HtmlNodeType.Element)
+				{
+					if (!tagTable.Table[node.Name].HasEndTag)
+					{
+						builder.Append(parser.GetRawStartTag(node));
+					}
+					else if (tagTable.Table[node.Name].IsEndGhostTag)
+					{
+						builder.Append(parser.GetRawEndTag(node));
+					}
+					else
+					{
+						builder.Append(parser.GetRawStartTag(node));
+						Build(builder, node.InnerHtml, tagTable);
 
-                        if (node.Closed)
-                        {
-                            builder.Append(parser.GetRawEndTag(node));
-                        }
+						if (node.Closed)
+						{
+							builder.Append(parser.GetRawEndTag(node));
+						}
 
-                        node.RemoveAllChildren();
-                    }
-                }
-                else if (node.NodeType == HtmlNodeType.Text)
-                {
-                    builder.Append(node.InnerText);
-                }
-                else
-                {
-                    builder.Append(node.InnerHtml);
-                }
-            }
-        }
+						node.RemoveAllChildren();
+					}
+				}
+				else if (node.NodeType == HtmlNodeType.Text)
+				{
+					builder.Append(node.InnerText);
+				}
+				else
+				{
+					builder.Append(node.InnerHtml);
+				}
+			}
+		}
 
-        #endregion HTML
-    }
+		#endregion HTML
+	}
 }

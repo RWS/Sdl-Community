@@ -4,8 +4,7 @@ using Sdl.Core.Settings;
 
 namespace SDLCommunityCleanUpTasks.Contracts
 {
-
-    internal abstract class ICleanUpConversionSettingsContract : ICleanUpConversionSettings
+	internal abstract class ICleanUpConversionSettingsContract : ICleanUpConversionSettings
     {
         public bool ApplyToNonTranslatables { get; set; }
 

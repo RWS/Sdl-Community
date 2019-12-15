@@ -6,18 +6,18 @@ using SDLCommunityCleanUpTasks.Utilities;
 namespace SDLCommunityCleanUpTasks
 {
 	public class SegmentProcessor
-    {
-        private readonly ICleanUpSourceSettings _settings ;
+	{
+		private readonly ICleanUpSourceSettings _settings;
 
-        public SegmentProcessor(ICleanUpSourceSettings settings)
-        {
-            _settings = settings;
-        }
+		public SegmentProcessor(ICleanUpSourceSettings settings)
+		{
+			_settings = settings;
+		}
 
-        public void Run(IMultiFileConverter multiFileConverter, IProject project, ProjectFile projectFile, IXmlReportGenerator reportGenerator)
-        {
-            reportGenerator.AddFile(projectFile.LocalFilePath);
-            multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new SegmentContentHandler(_settings, project, reportGenerator)));
-        }
-    }
+		public void Run(IMultiFileConverter multiFileConverter, IProject project, ProjectFile projectFile, IXmlReportGenerator reportGenerator)
+		{
+			reportGenerator.AddFile(projectFile.LocalFilePath);
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new SegmentContentHandler(_settings, project, reportGenerator)));
+		}
+	}
 }

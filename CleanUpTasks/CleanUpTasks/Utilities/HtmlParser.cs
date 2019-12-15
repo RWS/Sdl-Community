@@ -357,7 +357,7 @@ namespace SDLCommunityCleanUpTasks.Utilities
 
                 // Move past opening quote
                 Move();
-                
+
                 // Parse quoted value
                 start = _pos;
                 _pos = _html.IndexOfAny(new char[] { c, '\r', '\n' }, start);

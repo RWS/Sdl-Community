@@ -67,7 +67,6 @@ namespace SDLCommunityCleanUpTasks
 
         public override void SetFileProperties(IFileProperties fileInfo)
         {
-
             CultureInfo cultureInfo = null;
 
             try

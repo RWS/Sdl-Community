@@ -18,13 +18,11 @@ namespace SDLCommunityCleanUpTasks.Utilities
 
         public XmlReportGenerator(string logFolder)
         {
-
             this.logFolder = logFolder;
         }
 
         public void AddConversionItem(string segmentNumber, string before, string after, string searchText, string replaceText = "")
         {
-
             SimpleLog.Info(string.Join(Environment.NewLine,
                            $"{ Environment.NewLine }\tCHANGED TEXT",
                            $"\tId: { segmentNumber }",
@@ -48,7 +46,6 @@ namespace SDLCommunityCleanUpTasks.Utilities
 
         public void AddLockItem(string segmentNumber, string lockedContent, string lockReason)
         {
-
             SimpleLog.Info(string.Join(Environment.NewLine,
                            $"{ Environment.NewLine }\tLOCKED SEGMENT",
                            $"\tId: { segmentNumber }",
@@ -60,7 +57,6 @@ namespace SDLCommunityCleanUpTasks.Utilities
 
         public void AddTagItem(string segmentNumber, string removedTag)
         {
-
             SimpleLog.Info(string.Join(Environment.NewLine,
                            $"{ Environment.NewLine }\tREMOVED TAG",
                            $"\tId: { segmentNumber }",

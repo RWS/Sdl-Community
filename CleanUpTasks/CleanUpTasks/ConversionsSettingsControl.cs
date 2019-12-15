@@ -26,24 +26,24 @@ namespace Sdl.Community.CleanUpTasks
 
         public Button Add => addButton;
 
-	    public Button Down => downButton;
+        public Button Down => downButton;
 
-	    public Button Edit => editButton;
+        public Button Edit => editButton;
 
-	    public CheckedListBox FileList => checkedListBox;
+        public CheckedListBox FileList => checkedListBox;
 
-	    public Button New => generateButton;
+        public Button New => generateButton;
 
-	    public Button Remove => removeButton;
+        public Button Remove => removeButton;
 
-	    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ICleanUpConversionSettings Settings { get; set; } = new CleanUpSourceSettings();
 
         public Button Up => upButton;
 
-	    public CheckBox ApplyToNonTranslatables => useOnTranslatableCheckBox;
+        public CheckBox ApplyToNonTranslatables => useOnTranslatableCheckBox;
 
-	    public void SaveSettings()
+        public void SaveSettings()
         {
             _presenter.SaveSettings();
         }

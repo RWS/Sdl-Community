@@ -4,7 +4,7 @@ namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public class HtmlTagTable
     {
-	    public readonly Dictionary<string, HtmlTag> _tagTable = new Dictionary<string, HtmlTag>();
+        public readonly Dictionary<string, HtmlTag> _tagTable = new Dictionary<string, HtmlTag>();
 
         public HtmlTagTable(string html)
         {
@@ -13,7 +13,7 @@ namespace SDLCommunityCleanUpTasks.Utilities
 
         public Dictionary<string, HtmlTag> Table => _tagTable;
 
-	    private void BuildTagTable(string html)
+        private void BuildTagTable(string html)
         {
             HtmlTag tag;
             var parse = new HtmlParser(html);

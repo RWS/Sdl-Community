@@ -12,7 +12,7 @@ namespace SDLCommunityCleanUpTasks.Utilities
             {
                 IConversionFileView view = new ConversionFileView(settings);
                 view.SetPresenter(new ConversionFileViewPresenter(view, new FileDialog(), viewMode, taskMode));
-                
+
                 return (T)view;
             }
             else

@@ -220,10 +220,9 @@ namespace SDLCommunityCleanUpTasks
 
         private IEnumerable<ContextDef> ReadStructInfo(ProjectFile file)
         {
-
             var contextDefs = new List<ContextDef>();
 
-            if (file.LocalFileState == LocalFileState.None && 
+            if (file.LocalFileState == LocalFileState.None &&
                 File.Exists(file.LocalFilePath) &&
                 Path.GetExtension(file.LocalFilePath) == ".sdlxliff")
             {
@@ -274,6 +273,7 @@ namespace SDLCommunityCleanUpTasks
                 cell2.Style.ForeColor = control.ContentGrid.DefaultCellStyle.ForeColor;
             }
         }
+
         private void ValidateRegex(int rowIndex, string value, DataGridViewCellValidatingEventArgs e = null)
         {
             var checkBoxCell = control.ContentGrid.Rows[rowIndex].Cells[1] as DataGridViewCheckBoxCell;
