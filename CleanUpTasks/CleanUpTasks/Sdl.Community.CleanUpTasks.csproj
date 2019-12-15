@@ -342,7 +342,6 @@
     <Compile Include="Utilities\HtmlHelper.cs" />
     <Compile Include="Utilities\HtmlParser.cs" />
     <Compile Include="Utilities\HtmlTag.cs" />
-    <Compile Include="Utilities\ITextMerger.cs" />
     <Compile Include="Utilities\HtmlTagTable.cs" />
     <Compile Include="Utilities\StringExtensions.cs" />
     <Compile Include="Utilities\TextListUpdater.cs" />

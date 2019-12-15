@@ -34,15 +34,8 @@ namespace SDLCommunityCleanUpTasks
         public void VisitSegment(ISegment segment)
         {
             VisitChildren(segment);
-
             ProcessPlaceholderTags();
-
             ProcessTagPairs();
-
-            // Merge all adjacent IText
-            ITextMerger merger = new ITextMerger();
-            merger.VisitSegment(segment);
-            merger.Merge();
         }
 
         public void VisitTagPair(ITagPair tagPair)
