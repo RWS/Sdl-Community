@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
+using SDLCommunityCleanUpTasks;
 
 namespace Sdl.Community.CleanUpTasks
 {

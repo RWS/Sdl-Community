@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using Sdl.Community.CleanUpTasks.Contracts;
+using SDLCommunityCleanUpTasks.Contracts;
 
-namespace Sdl.Community.CleanUpTasks.Dialogs
+namespace SDLCommunityCleanUpTasks.Dialogs
 {
 	[ContractClass(typeof(IFileDialogContract))]
     public interface IFileDialog

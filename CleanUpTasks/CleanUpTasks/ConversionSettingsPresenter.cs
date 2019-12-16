@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Sdl.Community.CleanUpTasks.Dialogs;
-using Sdl.Community.CleanUpTasks.Models;
-using Sdl.Community.CleanUpTasks.Utilities;
+using SDLCommunityCleanUpTasks.Dialogs;
+using SDLCommunityCleanUpTasks.Models;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class ConversionSettingsPresenter : IConversionsSettingsPresenter
     {
-        private readonly IConversionsSettingsControl _control ;
+        private readonly IConversionsSettingsControl _control;
         private readonly Dictionary<string, bool> _convFiles = new Dictionary<string, bool>();
-        private readonly IFileDialog _dialog ;
-        private bool _isDisabled ;
+        private readonly IFileDialog _dialog;
+        private bool _isDisabled;
 
         public ConversionSettingsPresenter(IConversionsSettingsControl control, IFileDialog dialog)
-        {			  
+        {
             _control = control;
             _dialog = dialog;
 
@@ -36,7 +36,7 @@ namespace Sdl.Community.CleanUpTasks
                     XmlUtilities.Deserialize(file);
                     AddFileInternal(file);
                 }
-            }			
+            }
             UpdateLastFileDirectory();
         }
 
@@ -125,17 +125,17 @@ namespace Sdl.Community.CleanUpTasks
 
                 if (checkState == CheckState.Checked)
                 {
-	                if (item != null)
-	                {
-		                dict.Add(item.FullPath, true);
-	                }
+                    if (item != null)
+                    {
+                        dict.Add(item.FullPath, true);
+                    }
                 }
                 else
                 {
-	                if (item != null)
-	                {
-		                dict.Add(item.FullPath, false);
-	                }
+                    if (item != null)
+                    {
+                        dict.Add(item.FullPath, false);
+                    }
                 }
             }
 
@@ -178,9 +178,9 @@ namespace Sdl.Community.CleanUpTasks
             {
                 fileList.Add(convFile, true);
                 _convFiles.Add(file, true);
-				_control.Settings.ConversionFiles = _convFiles;
+                _control.Settings.ConversionFiles = _convFiles;
 
-				UpdateButtons();
+                UpdateButtons();
             }
         }
 

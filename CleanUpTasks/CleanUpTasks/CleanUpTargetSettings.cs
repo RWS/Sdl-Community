@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Sdl.Core.Settings;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class CleanUpTargetSettings : SettingsGroup, ICleanUpTargetSettings
     {

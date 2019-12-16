@@ -1,6 +1,6 @@
-﻿namespace Sdl.Community.CleanUpTasks.Dialogs
+﻿namespace SDLCommunityCleanUpTasks.Dialogs
 {
-    public interface IFolderDialog
+	public interface IFolderDialog
     {
         string GetFolder(string saveDirectory, string description);
     }

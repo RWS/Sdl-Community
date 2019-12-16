@@ -2,10 +2,9 @@
 using System.Globalization;
 using Sdl.Core.Settings;
 
-namespace Sdl.Community.CleanUpTasks.Contracts
+namespace SDLCommunityCleanUpTasks.Contracts
 {
-
-    internal abstract class ICleanUpConversionSettingsContract : ICleanUpConversionSettings
+	internal abstract class ICleanUpConversionSettingsContract : ICleanUpConversionSettings
     {
         public bool ApplyToNonTranslatables { get; set; }
 

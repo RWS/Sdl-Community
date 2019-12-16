@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.Contracts;
-using Sdl.Community.CleanUpTasks.Contracts;
+using SDLCommunityCleanUpTasks.Contracts;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	[ContractClass(typeof(IXmlReportGeneratorContract))]
     public interface IXmlReportGenerator

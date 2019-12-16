@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.Contracts;
 using System.Globalization;
-using Sdl.Community.CleanUpTasks.Contracts;
 using Sdl.Core.Settings;
+using SDLCommunityCleanUpTasks.Contracts;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	[ContractClass(typeof(ISettingsContract))]
     public interface ISettings

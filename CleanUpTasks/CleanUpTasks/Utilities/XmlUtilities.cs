@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
-using Sdl.Community.CleanUpTasks.Models;
+using SDLCommunityCleanUpTasks.Models;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public static class XmlUtilities
     {

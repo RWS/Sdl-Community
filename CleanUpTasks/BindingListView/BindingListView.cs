@@ -5,11 +5,11 @@ using System.ComponentModel;
 
 namespace Equin.ApplicationFramework
 {
-    /// <summary>
-    /// A searchable, sortable, filterable, data bindable view of a list of objects.
-    /// </summary>
-    /// <typeparam name="T">The type of object in the list.</typeparam>
-    public class BindingListView<T> : AggregateBindingListView<T>
+	/// <summary>
+	/// A searchable, sortable, filterable, data bindable view of a list of objects.
+	/// </summary>
+	/// <typeparam name="T">The type of object in the list.</typeparam>
+	public class BindingListView<T> : AggregateBindingListView<T>
     {
         /// <summary>
         /// Creates a new <see cref="BindingListView&lt;T&gt;"/> of a given IBindingList.

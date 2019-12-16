@@ -1,13 +1,15 @@
 ﻿using System.Diagnostics.Contracts;
-using Sdl.Community.CleanUpTasks.Contracts;
+using SDLCommunityCleanUpTasks.Contracts;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	[ContractClass(typeof(IConversionFileViewPresenterContract))]
     public interface IConversionFileViewPresenter
     {
         void SaveFile(string lastUsedDirectory, bool isSaveAs);
+
         void CheckSaveButton();
+
         void Initialize();
     }
 }

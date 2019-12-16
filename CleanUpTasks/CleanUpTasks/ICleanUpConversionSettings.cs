@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using Sdl.Community.CleanUpTasks.Contracts;
+using SDLCommunityCleanUpTasks.Contracts;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	[ContractClass(typeof(ICleanUpConversionSettingsContract))]
     public interface ICleanUpConversionSettings : ISettings

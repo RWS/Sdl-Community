@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 using Microsoft.VisualBasic;
-using Sdl.Community.CleanUpTasks.Utilities;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks.Models
+namespace SDLCommunityCleanUpTasks.Models
 {
 	public class SearchText : BindableBase
     {

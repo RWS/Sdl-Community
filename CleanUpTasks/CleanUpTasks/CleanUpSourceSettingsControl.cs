@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
+using SDLCommunityCleanUpTasks;
+using FileDialog = SDLCommunityCleanUpTasks.Dialogs.FileDialog;
 
 namespace Sdl.Community.CleanUpTasks
 {
@@ -29,21 +31,21 @@ namespace Sdl.Community.CleanUpTasks
 
         protected override void OnLeave(EventArgs e)
         {
-	        SaveSettings();
+            SaveSettings();
         }
 
         public void SaveSettings()
         {
-	        segmentLockerControl.SaveSettings();
-	        tagsSettingsControl.SaveSettings();
-	        conversionsSettingsControl.SaveSettings();
+            segmentLockerControl.SaveSettings();
+            tagsSettingsControl.SaveSettings();
+            conversionsSettingsControl.SaveSettings();
         }
 
         protected override void OnLoad(EventArgs e)
         {
             // Set Settings Here!!
             Settings.Settings = Settings;
-            
+
             // Make sure to set the settings first!
             // SegmentLockerControl
             segmentLockerControl.SetSettings(Settings);
@@ -52,7 +54,7 @@ namespace Sdl.Community.CleanUpTasks
 
             // ConversionSettingsControl
             conversionsSettingsControl.SetSettings(Settings, BatchTaskMode.Source);
-            conversionsSettingsControl.SetPresenter(new ConversionSettingsPresenter(conversionsSettingsControl, new Dialogs.FileDialog()));
+            conversionsSettingsControl.SetPresenter(new ConversionSettingsPresenter(conversionsSettingsControl, new FileDialog()));
             conversionsSettingsControl.InitializeUI();
 
             // TagSettingsControl

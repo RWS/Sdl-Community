@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 
-namespace Sdl.Community.CleanUpTasks.Contracts
+namespace SDLCommunityCleanUpTasks.Contracts
 {
 	[ContractClassFor(typeof(ISegmentLockerPresenter))]
     internal abstract class ISegmentLockerPresenterContract : ISegmentLockerPresenter
