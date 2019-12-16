@@ -1,18 +1,15 @@
-﻿<mah:MetroWindow x:Class="Sdl.Community.DeepLMTProvider.WPF.DeepLWindow"
+﻿<Window x:Class="Sdl.Community.DeepLMTProvider.WPF.DeepLWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Sdl.Community.DeepLMTProvider.WPF"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:ui="clr-namespace:Sdl.Community.DeepLMTProvider.WPF.Ui"
+        xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.WPF.UiHelpers"
         mc:Ignorable="d"
-        GlowBrush="#0C2D47"
-        FontFamily="Segoe UI"
-        ResizeMode="NoResize"
+        FontFamily="Calibri"
+        WindowStyle="None" AllowsTransparency="False" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        WindowTitleBrush="#0C2D47"
-        Title="DeepL Translation Provider" Height="450" Width="600">
+        Title="DeepL Translation Provider" Height="350" Width="600">
 
 	<Window.Resources>
 		<ResourceDictionary>
@@ -25,49 +22,44 @@
 				<ResourceDictionary Source="UiHelpers/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="UiHelpers/TextBoxStyle.xaml"/>
 				<ResourceDictionary Source="UiHelpers/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="UiHelpers/WindowsBorder.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
-
-	<Grid Name="MainGrid">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
-		<StackPanel Grid.Row="0" Orientation="Horizontal">
-			<Label Margin="0,15,20,0" HorizontalAlignment="Center" HorizontalContentAlignment="Center">Welcome to the DeepL Translation Provider. Please add your account and provider settings.</Label>
-			<Image Source="Logo/deepLResized.png" Width="50" Height="50" Margin="0,10,0,0"/>
-		</StackPanel>
-		
-		<TabControl mah:TabControlHelper.Underlined="SelectedTabItem"
-					Grid.Row="1"
-					Margin="0,0,0,15"
-					Name="DeepLTabControl"
-		            mah:ControlsHelper.HeaderFontSize="15"
-		            mah:TabControlHelper.UnderlineMouseOverBrush="#3C92C0" Foreground="#0C2D47">
-			<mah:MetroTabItem Header="Login" IsSelected="True" Margin="10,0,40,0" Width="120">
-				<ui:Login x:Name="LoginTab"></ui:Login>
-			</mah:MetroTabItem>
-			<mah:MetroTabItem Header="Settings" Height="42" VerticalAlignment="Top" Foreground="#0C2D47">
-				<ui:Settings x:Name="SettingsTab"/>
-			</mah:MetroTabItem>
-		</TabControl>
-		
-		<StackPanel Grid.Row="2"  Orientation="Vertical"  Margin="10,20,10,10" VerticalAlignment="Bottom">
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button  Style="{DynamicResource DarkBlueButtonsStyle}" Width="125" Click="Ok_Click">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>OK</TextBlock>
-					</StackPanel>
-				</Button>
-				<Button  Style="{DynamicResource DarkBlueButtonsStyle}" Width="125" Click="Cancel_Click" IsCancel="True" >
-					<StackPanel Orientation="Horizontal">
-						<TextBlock>Cancel</TextBlock>
-					</StackPanel>
-				</Button>
+	<Border Style="{DynamicResource WindowControlBorderStyle}">
+		<DockPanel>
+			<uiHelpers:WindowsControl  DockPanel.Dock="Top"/>
+			<DockPanel DockPanel.Dock="Top" Margin="5,10,10,0" LastChildFill="False">
+				<Label VerticalAlignment="Center" Content="Welcome to the DeepL Translation Provider. Please add your account and provider settings." FontFamily="Calibri" FontSize="14"/>
+				<Image Source="Logo/deepLResized.png" Width="50" Height="50" DockPanel.Dock="Right"/>
+			</DockPanel>
+			<StackPanel>
+				<TextBlock Margin="10,20,10,15" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" FontSize="12">The DeepL API is a paid machine translation service. 
+					Please purchase a DeepL Pro Subscription in order to get an API Key and use this service.</TextBlock>
+				<TextBlock Text="Please enter your API Key below:"  Margin="10,0,10,10" FontSize="12"/>
+				<PasswordBox   
+					Name="ApiKeyBox"
+					FontFamily="Calibri"
+					mah:TextBoxHelper.UseFloatingWatermark="True"  
+					mah:TextBoxHelper.Watermark="API Key"
+					mah:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(mah:TextBoxHelper.HasText), Mode=OneWay}"
+					mah:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+					Margin="10,0,20,0"
+					IsEnabled="True">
+				</PasswordBox>
+				<TextBlock Name="ValidationBlock" Foreground="DarkRed" Margin="10,0,0,0" Visibility="Hidden" FontFamily="Calibri" Text="API Key is required" FontSize="14"/>
+				<TextBlock Style="{DynamicResource TextBlockColor}" Margin="10,0,0,10" FontSize="12"> This API Key will then be used in all projects where you will be using the DeepL Pro Translation plug-in.</TextBlock>
+				<TextBlock  Margin="10,0,0,10" >
+					<Hyperlink NavigateUri="https://www.deepl.com/api-contact.html" RequestNavigate="Hyperlink_OnRequestNavigate" FontFamily="Calibri">
+						Click here to obtain your API Key from DeepL
+					</Hyperlink>
+				</TextBlock>
+				<DockPanel LastChildFill="False" >
+					<Button Click="Cancel_Click" IsCancel="True" Content="Cancel" DockPanel.Dock="Right" Width="100" Margin="10,0,10,0" Cursor="Hand" FontFamily="Calibri" />
+					<Button Style="{StaticResource DarkBlueButtonsStyle}" Content="OK" Click="Ok_Click" DockPanel.Dock="Right" Cursor="Hand" FontFamily="Calibri"/>
+				</DockPanel>
 			</StackPanel>
-		</StackPanel>
-	</Grid>
-</mah:MetroWindow>
+		</DockPanel>
+	</Border>
+</Window>
 

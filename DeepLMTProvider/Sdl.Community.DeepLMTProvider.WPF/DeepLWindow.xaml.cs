@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Navigation;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -20,11 +22,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			Options = options;
 			if (credentialStore != null)
 			{
-				LoginTab.ApiKeyBox.Password = credentialStore.Credential;
-			}
-			if (options != null)
-			{
-				SettingsTab.Resend.IsChecked = options.ResendDrafts;
+				ApiKeyBox.Password = credentialStore.Credential;
 			}
 
 			GetSupportedTargetLanguages();
@@ -35,13 +33,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			InitializeComponent();
 			_tellMeAction = tellMeAction;
 			Options = options;
-			if (options != null)
-			{
-				SettingsTab.Resend.IsChecked = options.ResendDrafts;
-			}
-
-			DeepLTabControl.SelectedIndex = 1;
-			LoginTab.IsEnabled = false;
+			IsEnabled = false;
 		}
 
 		public DeepLWindow()
@@ -51,11 +43,8 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 		private void Ok_Click(object sender, RoutedEventArgs e)
 		{
-			Options.ApiKey = LoginTab.ApiKeyBox.Password.TrimEnd();
-			if (SettingsTab.Resend.IsChecked != null)
-			{
-				Options.ResendDrafts = SettingsTab.Resend.IsChecked.Value;
-			}
+			Options.ApiKey = ApiKeyBox.Password.TrimEnd();
+
 			if (_tellMeAction)
 			{
 				DialogResult = true;
@@ -63,25 +52,32 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			}
 			if (!string.IsNullOrEmpty(Options.ApiKey))
 			{
-				LoginTab.ValidationBlock.Visibility = Visibility.Hidden;
+				ValidationBlock.Visibility = Visibility.Hidden;
 				DialogResult = true;
 				Close();
 			}
 			else
 			{
-				LoginTab.ValidationBlock.Visibility = Visibility.Visible;
+				ValidationBlock.Visibility = Visibility.Visible;
 			}
 		}
 		private void GetSupportedTargetLanguages()
 		{
 			foreach (var languagePair in _languagePairs)
 			{
-				var targetLanguage = languagePair.TargetCultureName.Substring(0, 2).ToUpper();
+				var targetLanguage = languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper();
 				if (TargetSupportedLanguages.Contains(targetLanguage) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
 				{
-					Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
+					if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
+					{
+						Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
+					}
 				}
 			}
+		}
+		private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+		{
+			Process.Start("https://www.deepl.com/api-contact.html");
 		}
 
 		private void Cancel_Click(object sender, RoutedEventArgs e)
