@@ -89,7 +89,6 @@ namespace Sdl.Community.CleanUpTasks.Utilities
         public static string RegexReplace(this string original, string search, ReplacementText replacement, bool isCaseSensitive,
                                           MatchEvaluator strConv = null)
         {
-
             var result = string.Empty;
 
             // Regex uses current culture by default

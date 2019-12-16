@@ -6,24 +6,25 @@ using System.Reflection;
 
 namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
 {
-    /// <summary>
-    /// Maintains an additional "Selected" & "Count" value for each item in a List.
-    /// Useful in the CheckBoxComboBox. It holds a reference to the List[Index] Item and 
-    /// whether it is selected or not.
-    /// It also caters for a Count, if needed.
-    /// </summary>
-    /// <typeparam name="TSelectionWrapper"></typeparam>
-    public class ListSelectionWrapper<T> : List<ObjectSelectionWrapper<T>>
+	/// <summary>
+	/// Maintains an additional "Selected" & "Count" value for each item in a List.
+	/// Useful in the CheckBoxComboBox. It holds a reference to the List[Index] Item and
+	/// whether it is selected or not.
+	/// It also caters for a Count, if needed.
+	/// </summary>
+	/// <typeparam name="TSelectionWrapper"></typeparam>
+	public class ListSelectionWrapper<T> : List<ObjectSelectionWrapper<T>>
     {
         #region CONSTRUCTOR
 
         /// <summary>
-        /// No property on the object is specified for display purposes, so simple ToString() operation 
+        /// No property on the object is specified for display purposes, so simple ToString() operation
         /// will be performed. And no Counts will be displayed
         /// </summary>
         public ListSelectionWrapper(IEnumerable source) : this(source, false) { }
+
         /// <summary>
-        /// No property on the object is specified for display purposes, so simple ToString() operation 
+        /// No property on the object is specified for display purposes, so simple ToString() operation
         /// will be performed.
         /// </summary>
         public ListSelectionWrapper(IEnumerable source, bool showCounts)
@@ -35,12 +36,14 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
                 ((IBindingList)_Source).ListChanged += new ListChangedEventHandler(ListSelectionWrapper_ListChanged);
             Populate();
         }
+
         /// <summary>
         /// A Display "Name" property is specified. ToString() will not be performed on items.
         /// This is specifically useful on DataTable implementations, or where PropertyDescriptors are used to read the values.
         /// If a PropertyDescriptor is not found, a Property will be used.
         /// </summary>
         public ListSelectionWrapper(IEnumerable source, string usePropertyAsDisplayName) : this(source, false, usePropertyAsDisplayName) { }
+
         /// <summary>
         /// A Display "Name" property is specified. ToString() will not be performed on items.
         /// This is specifically useful on DataTable implementations, or where PropertyDescriptors are used to read the values.
@@ -52,7 +55,7 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
             _DisplayNameProperty = usePropertyAsDisplayName;
         }
 
-        #endregion
+        #endregion CONSTRUCTOR
 
         #region PRIVATE PROPERTIES
 
@@ -60,22 +63,24 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
         /// Is a Count indicator used.
         /// </summary>
         private bool _ShowCounts;
+
         /// <summary>
         /// The original List of values wrapped. A "Selected" and possibly "Count" functionality is added.
         /// </summary>
         private IEnumerable _Source;
+
         /// <summary>
         /// Used to indicate NOT to use ToString(), but read this property instead as a display value.
         /// </summary>
         private string _DisplayNameProperty = null;
 
-        #endregion
+        #endregion PRIVATE PROPERTIES
 
         #region PUBLIC PROPERTIES
 
         /// <summary>
-        /// When specified, indicates that ToString() should not be performed on the items. 
-        /// This property will be read instead. 
+        /// When specified, indicates that ToString() should not be performed on the items.
+        /// This property will be read instead.
         /// This is specifically useful on DataTable implementations, where PropertyDescriptors are used to read the values.
         /// </summary>
         public string DisplayNameProperty
@@ -83,6 +88,7 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
             get { return _DisplayNameProperty; }
             set { _DisplayNameProperty = value; }
         }
+
         /// <summary>
         /// Builds a concatenation list of selected items in the list.
         /// </summary>
@@ -100,6 +106,7 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
                 return Text;
             }
         }
+
         /// <summary>
         /// Indicates whether the Item display value (Name) should include a count.
         /// </summary>
@@ -109,7 +116,7 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
             set { _ShowCounts = value; }
         }
 
-        #endregion
+        #endregion PUBLIC PROPERTIES
 
         #region HELPER MEMBERS
 
@@ -121,6 +128,7 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
             foreach (ObjectSelectionWrapper<T> Item in this)
                 Item.Count = 0;
         }
+
         /// <summary>
         /// Creates a ObjectSelectionWrapper item.
         /// Note that the constructor signature of sub classes classes are important.
@@ -145,7 +153,7 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
         public ObjectSelectionWrapper<T> FindObjectWithItem(T Object)
         {
             return Find(new Predicate<ObjectSelectionWrapper<T>>(
-                            delegate(ObjectSelectionWrapper<T> target)
+                            delegate (ObjectSelectionWrapper<T> target)
                             {
                                 return target.Item.Equals(Object);
                             }));
@@ -198,6 +206,7 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
             return List.ToArray();
         }
         */
+
         private void Populate()
         {
             Clear();
@@ -211,7 +220,7 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
                     Add(CreateSelectionWrapper(Enumerator));
         }
 
-        #endregion
+        #endregion HELPER MEMBERS
 
         #region EVENT HANDLERS
 
@@ -222,15 +231,17 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
                 case ListChangedType.ItemAdded:
                     Add(CreateSelectionWrapper((IEnumerator)((IBindingList)_Source)[e.NewIndex]));
                     break;
+
                 case ListChangedType.ItemDeleted:
                     Remove(FindObjectWithItem((T)((IBindingList)_Source)[e.OldIndex]));
                     break;
+
                 case ListChangedType.Reset:
                     Populate();
                     break;
             }
         }
 
-        #endregion
+        #endregion EVENT HANDLERS
     }
 }

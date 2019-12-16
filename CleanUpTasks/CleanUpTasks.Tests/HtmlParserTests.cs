@@ -16,7 +16,8 @@ namespace Sdl.Community.CleanUpTasks.Tests
         public void ConstructorThrowsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new HtmlHelper(null, null));
-        }	 
+        }
+
         [Fact]
         public void ParseBrokenHtmlEndTagOnly()
         {

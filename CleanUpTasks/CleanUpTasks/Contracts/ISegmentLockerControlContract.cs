@@ -3,18 +3,17 @@ using UIToolbox;
 
 namespace Sdl.Community.CleanUpTasks.Contracts
 {
-    internal abstract class ISegmentLockerControlContract : ISegmentLockerControl
+	internal abstract class ISegmentLockerControlContract : ISegmentLockerControl
     {
         public DataGridView ContentGrid => default(DataGridView);
 
-	    public ICleanUpSourceSettings Settings { get; set; }
+        public ICleanUpSourceSettings Settings { get; set; }
 
+        public CheckGroupBox StructureGroupBox => default(CheckGroupBox);
 
-		public CheckGroupBox StructureGroupBox => default(CheckGroupBox);
+        public CheckedListBox StructureList => default(CheckedListBox);
 
-	    public CheckedListBox StructureList => default(CheckedListBox);
-
-	    public void InitializeUI()
+        public void InitializeUI()
         {
         }
 

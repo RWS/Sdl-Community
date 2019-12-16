@@ -56,7 +56,7 @@ namespace Sdl.Community.CleanUpTasks.Tests
             Assert.True(1 == count, $"Actual: {count}");
         }
 
-        [Fact (Skip = "Shows AddFile throws on invalid file")]
+        [Fact(Skip = "Shows AddFile throws on invalid file")]
         public void AddFileThrowsOnInvalidFile()
         {
             // Arrange

@@ -1,8 +1,9 @@
 ﻿namespace Sdl.Community.CleanUpTasks
 {
-    public interface ITagSettingsPresenter
+	public interface ITagSettingsPresenter
     {
         void Initialize();
+
         void SaveSettings();
     }
 }

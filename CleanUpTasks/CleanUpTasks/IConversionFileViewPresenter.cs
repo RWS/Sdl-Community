@@ -7,7 +7,9 @@ namespace Sdl.Community.CleanUpTasks
     public interface IConversionFileViewPresenter
     {
         void SaveFile(string lastUsedDirectory, bool isSaveAs);
+
         void CheckSaveButton();
+
         void Initialize();
     }
 }

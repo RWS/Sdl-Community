@@ -921,6 +921,7 @@ namespace Sdl.Community.CleanUpTasks.Tests
             var result = text.Properties.Text;
             Assert.Equal("SOME TEXT MAKE ME UPPERCASE", result);
         }
+
         [Fact]
         public void VisitSegmentUpdatesMetaDataOfFormattingTag()
         {
