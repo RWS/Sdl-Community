@@ -184,8 +184,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (savedCredentials != null)
 			{
 				var splitedCredentials = savedCredentials.Credential.Split('#');
-				options.ClientId = StringExtensions.Base64Decode(splitedCredentials[0]);
-				options.ClientSecret = StringExtensions.Base64Decode(splitedCredentials[1]);
+				options.ClientId = splitedCredentials.Length > 2 ? StringExtensions.Base64Decode(splitedCredentials[0]) : string.Empty;
+				options.ClientSecret = splitedCredentials.Length > 2 ? StringExtensions.Base64Decode(splitedCredentials[1]) : string.Empty;
 				options.AuthenticationMethod = splitedCredentials.Length == 3 ? splitedCredentials[2] : string.Empty;
 			}
 			return savedCredentials;
