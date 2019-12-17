@@ -2,10 +2,10 @@
 
 namespace Sdl.Community.CheckBoxComboBox
 {
-    /// <summary>
-    /// CodeProject.com "Simple pop-up control" "http://www.codeproject.com/cs/miscctrl/simplepopup.asp".
-    /// </summary>
-    internal struct GripBounds
+	/// <summary>
+	/// CodeProject.com "Simple pop-up control" "http://www.codeproject.com/cs/miscctrl/simplepopup.asp".
+	/// </summary>
+	internal struct GripBounds
     {
         private const int GripSize = 6;
         private const int CornerGripSize = GripSize << 1;
@@ -16,6 +16,7 @@ namespace Sdl.Community.CheckBoxComboBox
         }
 
         private Rectangle clientRectangle;
+
         public Rectangle ClientRectangle
         {
             get { return clientRectangle; }

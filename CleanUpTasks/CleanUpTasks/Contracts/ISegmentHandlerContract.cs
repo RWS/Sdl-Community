@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.Contracts;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace Sdl.Community.CleanUpTasks.Contracts
+namespace SDLCommunityCleanUpTasks.Contracts
 {
 	[ContractClassFor(typeof(ISegmentHandler))]
     internal abstract class ISegmentHandlerContract : ISegmentHandler

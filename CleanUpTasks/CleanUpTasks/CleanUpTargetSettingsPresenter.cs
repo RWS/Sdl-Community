@@ -1,21 +1,21 @@
 ﻿using System;
-using Sdl.Community.CleanUpTasks.Dialogs;
-using Sdl.Community.CleanUpTasks.Utilities;
+using SDLCommunityCleanUpTasks.Dialogs;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class CleanUpTargetSettingsPresenter : ICleanUpTargetSettingsPresenter
     {
         private readonly ICleanUpTargetSettingsControl control = null;
         private readonly IFolderDialog dialog = null;
 
-	    public CleanUpTargetSettingsPresenter(ICleanUpTargetSettingsControl control, IFolderDialog dialog)
-	    {
-		    this.control = control;
-		    this.dialog = dialog;
-	    }
+        public CleanUpTargetSettingsPresenter(ICleanUpTargetSettingsControl control, IFolderDialog dialog)
+        {
+            this.control = control;
+            this.dialog = dialog;
+        }
 
-	    public void Initialize()
+        public void Initialize()
         {
             AttachEventHandlers();
 

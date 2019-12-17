@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Sdl.Community.CleanUpTasks.Dialogs
+namespace SDLCommunityCleanUpTasks.Dialogs
 {
 	public class FileDialog : IFileDialog
     {

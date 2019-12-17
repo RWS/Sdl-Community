@@ -1,7 +1,7 @@
 ﻿using System.Xml.Serialization;
-using Sdl.Community.CleanUpTasks.Utilities;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks.Models
+namespace SDLCommunityCleanUpTasks.Models
 {
 	public class ConversionItem : BindableBase
     {

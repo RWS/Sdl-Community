@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	internal class TextListUpdater : ISegmentHandler
     {

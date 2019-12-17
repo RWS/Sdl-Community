@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Sdl.Community.CleanUpTasks.Dialogs
+namespace SDLCommunityCleanUpTasks.Dialogs
 {
 	public class FolderDialog : IFolderDialog
     {

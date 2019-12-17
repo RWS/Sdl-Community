@@ -2,7 +2,7 @@
 using Sdl.FileTypeSupport.Framework.Core.Utilities.Formatting;
 using Sdl.FileTypeSupport.Framework.Formatting;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public static class FormattingFactory
     {

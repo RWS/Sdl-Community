@@ -3,10 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Sdl.Community.CleanUpTasks.Utilities;
 using Sdl.ProjectAutomation.Core;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class TagSettingsPresenter : ITagSettingsPresenter
     {

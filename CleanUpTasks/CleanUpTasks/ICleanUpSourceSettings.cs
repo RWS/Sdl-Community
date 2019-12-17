@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
-using Sdl.Community.CleanUpTasks.Contracts;
-using Sdl.Community.CleanUpTasks.Models;
+using SDLCommunityCleanUpTasks.Contracts;
+using SDLCommunityCleanUpTasks.Models;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	[ContractClass(typeof(ICleanUpSourceSettingsContract))]
     public interface ICleanUpSourceSettings : ICleanUpConversionSettings

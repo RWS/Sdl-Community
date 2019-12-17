@@ -4,10 +4,10 @@ using System.Runtime.InteropServices;
 
 namespace Sdl.Community.CheckBoxComboBox
 {
-    /// <summary>
-    /// CodeProject.com "Simple pop-up control" "http://www.codeproject.com/cs/miscctrl/simplepopup.asp".
-    /// </summary>
-    internal static class NativeMethods
+	/// <summary>
+	/// CodeProject.com "Simple pop-up control" "http://www.codeproject.com/cs/miscctrl/simplepopup.asp".
+	/// </summary>
+	internal static class NativeMethods
     {
         internal const int WM_NCHITTEST = 0x0084,
                            WM_NCACTIVATE = 0x0086,
