@@ -124,7 +124,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					LanguageMappingsViewModel.SelectedModelOption = LanguageMappingsViewModel?.TranslationOptions?[0];
 					if (string.IsNullOrEmpty(Options?.Model))
 					{
-						Options.Model = LanguageMappingsViewModel?.TranslationOptions?[0].Model;
+						SetOptions(LanguageMappingsViewModel?.TranslationOptions[0]);
 					}
 				}
 			}
@@ -150,24 +150,23 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				{
 					foreach (var languagePair in _languagePairs)
 					{
-						var targetLanguage =
-							_normalizeSourceTextHelper.GetCorrespondingLangCode(languagePair.TargetCulture);
+						var targetLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(languagePair.TargetCulture);
 
 						var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
 
 						foreach (var serviceLanguagePair in serviceLanguagePairs)
 						{
-							if (LanguageMappingsViewModel?.TranslationOptions != null)
+							var existingTranslationModel = LanguageMappingsViewModel.TranslationOptions.FirstOrDefault(e => e.Model.Equals(serviceLanguagePair.Model));
+							TranslationModel newTranslationModel = null;
+							if (existingTranslationModel == null)
 							{
-								var engineExists = LanguageMappingsViewModel.TranslationOptions.Any(e => e.Model.Equals(serviceLanguagePair.Model));
-								if (!engineExists)
+								newTranslationModel = new TranslationModel
 								{
-									LanguageMappingsViewModel.TranslationOptions.Add(new TranslationModel
-									{
-										Model = serviceLanguagePair.Model,
-										DisplayName = serviceLanguagePair.DisplayName
-									});
-								}
+									Model = serviceLanguagePair.Model,
+									DisplayName = serviceLanguagePair.DisplayName,
+								};
+								LanguageMappingsViewModel.TranslationOptions.Add(newTranslationModel);
+								(existingTranslationModel ?? newTranslationModel).LanguagesSupported.Add(languagePair.TargetCulture.Name, serviceLanguagePair.Name);
 							}
 						}
 					}
@@ -176,36 +175,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 			return false;
 		}
-
-		private void GetEngines()
-		{
-			if (string.IsNullOrEmpty(Options.ClientId) && string.IsNullOrEmpty(Options.ClientSecret))
-			{
-				Options.Model = string.Empty;
-				LanguageMappingsViewModel.TranslationOptions.Clear();
-				LanguageMappingsViewModel.SelectedModelOption = new TranslationModel();
-				return;
-			}
-
-			else
-			{
-				if (string.IsNullOrEmpty(Options?.Model))
-				{
-					var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options);
-					var userInfo = beGlobalTranslator.GetUserInformation();
-					if (userInfo != 0)
-					{
-						if (string.IsNullOrEmpty(Options?.Model))
-						{
-							var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.ToString());
-							GetEngineModels(subscriptionInfo.LanguagePairs);
-							SetEngineModel();
-						}
-					}
-				}
-			}
-		}
-
 
 		private void ChangePasswordAction(object parameter)
 		{
@@ -243,6 +212,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private void Navigate(object obj)
 		{
 			Process.Start("https://translate.sdlbeglobal.com/");
+		}
+
+		private void SetOptions(TranslationModel translationModel)
+		{
+			Options.Model = translationModel.Model;
+			Options.DisplayName = translationModel.DisplayName;
+			Options.LanguagesSupported = translationModel.LanguagesSupported;
 		}
 	}
 }
