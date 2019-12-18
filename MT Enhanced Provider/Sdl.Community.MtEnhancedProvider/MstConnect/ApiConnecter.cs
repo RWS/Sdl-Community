@@ -290,7 +290,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 		public async Task<string> GetAccessTokenAsync()
 		{
-			if (_subscriptionKey == string.Empty) return string.Empty;
+			if (string.IsNullOrEmpty(_subscriptionKey)) return string.Empty;
 
 			using (var client = new HttpClient())
 			using (var request = new HttpRequestMessage())
@@ -299,7 +299,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 				request.RequestUri = ServiceUrl;
 				request.Content = new StringContent(string.Empty);
 				request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
-				client.Timeout = TimeSpan.FromSeconds(2);
 				var response = await client.SendAsync(request);
 				response.EnsureSuccessStatusCode();
 				var token = await response.Content.ReadAsStringAsync();
