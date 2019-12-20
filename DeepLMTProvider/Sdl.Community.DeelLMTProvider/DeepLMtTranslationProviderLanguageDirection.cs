@@ -71,16 +71,6 @@ namespace Sdl.Community.DeepLMTProvider
 			    SourceSegment = segment.Duplicate()
 		    };
 
-		    // if there are match in tm the provider will not search the segment
-		    #region "Confirmation Level"
-
-		    if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
-		    {
-			    translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-			    //later get these strings from resource file
-			    results.Add(CreateSearchResult(segment, translation));
-			    return results;
-		    }
 		    var newseg = segment.Duplicate();
 		    if (newseg.HasTags)
 		    {
@@ -107,8 +97,6 @@ namespace Sdl.Community.DeepLMTProvider
 			    }
 
 		    }
-		    #endregion
-
 		    return results;
 	    }
 
