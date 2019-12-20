@@ -174,6 +174,7 @@
     <Compile Include="Helpers\NormalizeSourceTextHelper.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
+    <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\VersionHelper.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Helpers\WindowsControlUtils.cs" />

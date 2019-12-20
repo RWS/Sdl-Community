@@ -8,6 +8,7 @@ using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.Toolkit.LanguagePlatform.ExcelParser;
 using Sdl.Community.Toolkit.LanguagePlatform.Models;
+using Sdl.Core.Globalization;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
@@ -18,6 +19,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private string _message;
 		private string _messageColor;
 		private readonly string _excelFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.SDLCommunity, Constants.SDLMachineTranslationCloud, "MTLanguageCodes.xlsx");
+		private int _lastExcelRowNumber;
 
 		private ICommand _addMTCodeCommand;
 		private ICommand _removeMTCodeCommand;
@@ -141,7 +143,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		/// Create MTCodeExcel model with the needed values to update the Excel file 
 		/// </summary>
 		/// <param name="mtCodeLocaleValue">MTCodeLocale value</param>
-		/// <returns></returns>
+		/// <returns>MTCodeExcel object</returns>
 		private MTCodeExcel CreateMTCodeExcelModel(string mtCodeLocaleValue)
 		{
 			return new MTCodeExcel
@@ -155,15 +157,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		}
 
 		/// <summary>
-		/// Map values from Excel to MTCodes collection used to display the values inside the grid
+		/// Map values from Excel to MTCodes collection based on avaialble Languages from Studio
 		/// </summary>
 		/// <param name="excelSheetResults">results from excel's sheet</param>
-		/// <returns></returns>
+		/// <returns>MTCodes collection</returns>
 		private ObservableCollection<MTCodeModel> MapExcelCodes(List<ExcelSheet> excelSheetResults)
 		{
 			// Remove the first row which corresponds to columns name
 			excelSheetResults.RemoveRange(0, 1);
-			
+			var excelValues = new List<MTCodeModel>();
+
 			// The row numbering starts with 1, because the first row in Excel corresponds to column names
 			var rowNumber = 1; 
 			foreach (var excelSheetRow in excelSheetResults)
@@ -179,7 +182,35 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					MTCodeLocaleColumnNo = 5,
 					RowNumber = rowNumber
 				};
-				MTCodes.Add(mtCodeModel);
+				excelValues.Add(mtCodeModel);
+			}
+			_lastExcelRowNumber = excelValues.Count + 1;
+			var studioLanguages = Language.GetAllLanguages();
+
+			foreach (var item in studioLanguages)
+			{
+				var languageInfo = Utils.FormatLanguageName(item.DisplayName);
+				
+				// If the language information already exists in Excel, add it to the MTCodes collection, otherwise add the specific MTCode info as new model
+				var mtCodeModel = excelValues.FirstOrDefault(e => e.Language.Equals(languageInfo[0]) && e.TradosCode.Equals(item.IsoAbbreviation));
+				if(mtCodeModel != null)
+				{
+					MTCodes.Add(mtCodeModel);
+				}
+				else
+				{
+					MTCodes.Add(new MTCodeModel
+					{
+						Language = languageInfo[0],
+						Region = languageInfo[1],
+						TradosCode = item.IsoAbbreviation,
+						MTCodeMain = string.Empty,
+						MTCodeLocale = string.Empty,
+						MTCodeLocaleColumnNo = 5,
+						RowNumber = _lastExcelRowNumber// use a new number based on the last existing RowNumber in Excel (the new MTCodeModel will be added inside excel as new rows)
+					});
+					_lastExcelRowNumber++;
+				}
 			}
 			return MTCodes;
 		}

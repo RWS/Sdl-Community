@@ -42,7 +42,7 @@
 		public static readonly string WriteExcelLocally = "WriteExcelLocally method: ";
 		public static readonly string AddMTCode = "AddMTCode method: ";
 		public static readonly string RemoveMTCode = "RemoveMTCode method: ";
-
+		public static readonly string FormatLanguageName = "FormatLanguageName method: ";
 
 		// Messages
 		public static readonly string ForbiddenLicense = "Forbidden: Please check your license";
