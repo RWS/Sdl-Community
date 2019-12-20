@@ -73,6 +73,16 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon AddNewTerm {
+            get {
+                object obj = ResourceManager.GetObject("AddNewTerm", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon ForumIcon {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
@@ -147,6 +157,16 @@ namespace Sdl.Community.BeGlobalV4.Provider {
             get {
                 object obj = ResourceManager.GetObject("MTCloud_logo_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] MTLanguageCodes {
+            get {
+                object obj = ResourceManager.GetObject("MTLanguageCodes", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

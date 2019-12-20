@@ -54,7 +54,8 @@
       <HintPath>..\packages\Sdl.Community.Toolkit.Core.1.8.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=1.8.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.1.8.1\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SDLCommunityToolkit_Repo\Sdl.Community.Toolkit.LanguagePlatform\bin\Debug\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -180,6 +181,7 @@
     <Compile Include="Model\Authentication.cs" />
     <Compile Include="Model\BeGlobalLanguagePair.cs" />
     <Compile Include="Model\BeGlobalSegment.cs" />
+    <Compile Include="Model\MTCodeModel.cs" />
     <Compile Include="Model\ResponseError.cs" />
     <Compile Include="Model\ErrorDetails.cs" />
     <Compile Include="Model\SubscriptionInfo.cs" />
@@ -194,6 +196,7 @@
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Service\BeGlobalV4Translator.cs" />
     <Compile Include="Service\MessageBoxService.cs" />
+    <Compile Include="Studio\BeGlobalExcelRibbon.cs" />
     <Compile Include="Studio\BeGlobalLanguageDirection.cs" />
     <Compile Include="Studio\BeGlobalProviderUi.cs" />
     <Compile Include="Studio\BeGlobalTranslationOptions.cs" />
@@ -211,13 +214,19 @@
     <Compile Include="Ui\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ui\MTCodesWindow.xaml.cs">
+      <DependentUpon>MTCodesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\BeGlobalWindowViewModel.cs" />
     <Compile Include="ViewModel\LanguageMappingsViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\MTCodesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\AddNewTerm.ico" />
     <None Include="Resources\global1.png" />
+    <None Include="Resources\MTLanguageCodes.xlsx" />
     <Resource Include="Resources\MTCloud_logo_small.png" />
     <Resource Include="Resources\MTCloud_logo.png" />
     <Resource Include="Resources\logoRes.png" />
@@ -284,6 +293,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ui\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\MTCodesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

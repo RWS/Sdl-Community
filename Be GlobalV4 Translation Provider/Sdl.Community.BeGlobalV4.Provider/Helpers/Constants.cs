@@ -19,7 +19,11 @@
 		public static readonly string User = "User";
 		public static readonly string PasswordBox = "PasswordBox";
 		public static readonly string NullValue = "Value cannot be null.";
+		public static readonly string Red = "Red";
+		public static readonly string Green = "Green";
 
+		// Excel MTCodes values
+		public static readonly string ExcelSheet = "Sheet1";
 
 		// Logging
 		public static readonly string TranslateTextMethod = "Translate text method: ";
@@ -33,7 +37,11 @@
 		public static readonly string GetClientInformation = "GetClientInformation method: ";
 		public static readonly string GetUserInformation = "GetUserInformation method: ";
 		public static readonly string IsWindowValid = "Is window valid method: ";
-		public static readonly string IsEmailValid = "IsEmailValid method:";
+		public static readonly string IsEmailValid = "IsEmailValid method: ";
+		public static readonly string ExcelExecuteAction = "BeGlobalExcelAction Execute method: ";
+		public static readonly string WriteExcelLocally = "WriteExcelLocally method: ";
+		public static readonly string AddMTCode = "AddMTCode method: ";
+		public static readonly string RemoveMTCode = "RemoveMTCode method: ";
 
 
 		// Messages
@@ -43,6 +51,8 @@
 		public static readonly string CredentialsNotValid = "Please verify your credentials!";
 		public static readonly string CredentialsAndInternetValidation = "The MTCloud host could not be reached and setups cannot be saved. Please verify your credentials and internet connection, and ensure you are able to connect to the server from this computer.";
 		public static readonly string InternetConnection = "The MTCloud host could not be reached. Please check the internet connection and ensure you are able to connect to the server from this computer.";
-
+		public static readonly string MTCodeEmptyValidation = "MTCode (locale) cannot be emtpy! Please fill the value in order to be added to MTLanguageCodes.xlsx file.";
+		public static readonly string SuccessfullyAddedMessage = "MT Code (locale) was successfully added to MTLanguageCodes.xlsx file.";
+		public static readonly string SuccessfullyRemovedMessage = "MT Code (locale) was successfully removed from MTLanguageCodes.xlsx file.";		
 	}
 }
