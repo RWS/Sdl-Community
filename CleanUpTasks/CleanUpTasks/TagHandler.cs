@@ -14,6 +14,7 @@ namespace Sdl.Community.CleanUpTasks
         private readonly Stack<IPlaceholderTag> phTagsToRemove = new Stack<IPlaceholderTag>();
         private readonly IXmlReportGenerator reportGenerator = null;
         private readonly ICleanUpSourceSettings settings = null;
+
         public TagHandler(ICleanUpSourceSettings settings,
                           IVerifyingFormattingVisitor fmtVisitor,
                           IDocumentItemFactory itemFactory,
@@ -53,15 +54,8 @@ namespace Sdl.Community.CleanUpTasks
         public void VisitSegment(ISegment segment)
         {
             if (ShouldSkip(segment)) { return; }
-
             VisitChildren(segment);
-
             ProcessTags();
-
-            // Merge all adjacent IText
-            ITextMerger merger = new ITextMerger();
-            merger.VisitSegment(segment);
-            merger.Merge();
         }
 
         public void VisitTagPair(ITagPair tagPair)

@@ -14,6 +14,7 @@ namespace Sdl.Community.CleanUpTasks
         CheckGroupBox StructureGroupBox { get; }
 
         CheckedListBox StructureList { get; }
+
         void InitializeUI();
 
         void SaveSettings();

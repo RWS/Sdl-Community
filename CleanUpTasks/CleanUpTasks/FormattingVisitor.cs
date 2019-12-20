@@ -1,8 +1,7 @@
-﻿using Sdl.FileTypeSupport.Framework.Formatting;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Sdl.Community.CleanUpTasks.Models;
-
+using Sdl.FileTypeSupport.Framework.Formatting;
 
 namespace Sdl.Community.CleanUpTasks
 {
@@ -27,7 +26,6 @@ namespace Sdl.Community.CleanUpTasks
 
         public FormattingVisitor(ICleanUpSourceSettings settings)
         {
-
             this.settings = settings;
         }
 

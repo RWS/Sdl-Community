@@ -7,22 +7,22 @@ using System.Windows.Forms;
 
 namespace Sdl.Community.CheckBoxComboBox
 {
-    /// <summary>
-    /// Martin Lottering : 2007-10-27
-    /// --------------------------------
-    /// This is a usefull control in Filters. Allows you to save space and can replace a Grouped Box of CheckBoxes.
-    /// Currently used on the TasksFilter for TaskStatusses, which means the user can select which Statusses to include
-    /// in the "Search".
-    /// This control does not implement a CheckBoxListBox, instead it adds a wrapper for the normal ComboBox and Items. 
-    /// See the CheckBoxItems property.
-    /// ----------------
-    /// ALSO IMPORTANT: In Data Binding when setting the DataSource. The ValueMember must be a bool type property, because it will 
-    /// be binded to the Checked property of the displayed CheckBox. Also see the DisplayMemberSingleItem for more information.
-    /// ----------------
-    /// Extends the CodeProject PopupComboBox "Simple pop-up control" "http://www.codeproject.com/cs/miscctrl/simplepopup.asp"
-    /// by Lukasz Swiatkowski.
-    /// </summary>
-    public partial class CheckBoxComboBox : PopupComboBox
+	/// <summary>
+	/// Martin Lottering : 2007-10-27
+	/// --------------------------------
+	/// This is a usefull control in Filters. Allows you to save space and can replace a Grouped Box of CheckBoxes.
+	/// Currently used on the TasksFilter for TaskStatusses, which means the user can select which Statusses to include
+	/// in the "Search".
+	/// This control does not implement a CheckBoxListBox, instead it adds a wrapper for the normal ComboBox and Items.
+	/// See the CheckBoxItems property.
+	/// ----------------
+	/// ALSO IMPORTANT: In Data Binding when setting the DataSource. The ValueMember must be a bool type property, because it will
+	/// be binded to the Checked property of the displayed CheckBox. Also see the DisplayMemberSingleItem for more information.
+	/// ----------------
+	/// Extends the CodeProject PopupComboBox "Simple pop-up control" "http://www.codeproject.com/cs/miscctrl/simplepopup.asp"
+	/// by Lukasz Swiatkowski.
+	/// </summary>
+	public partial class CheckBoxComboBox : PopupComboBox
     {
         #region CONSTRUCTOR
 
@@ -50,7 +50,7 @@ namespace Sdl.Community.CheckBoxComboBox
             dropDown.Resizable = true;
         }
 
-        #endregion
+        #endregion CONSTRUCTOR
 
         #region PRIVATE FIELDS
 
@@ -58,16 +58,18 @@ namespace Sdl.Community.CheckBoxComboBox
         /// The checkbox list control. The public CheckBoxItems property provides a direct reference to its Items.
         /// </summary>
         internal CheckBoxComboBoxListControl _CheckBoxComboBoxListControl;
+
         /// <summary>
         /// In DataBinding operations, this property will be used as the DisplayMember in the CheckBoxComboBoxListBox.
-        /// The normal/existing "DisplayMember" property is used by the TextBox of the ComboBox to display 
-        /// a concatenated Text of the items selected. This concatenation and its formatting however is controlled 
+        /// The normal/existing "DisplayMember" property is used by the TextBox of the ComboBox to display
+        /// a concatenated Text of the items selected. This concatenation and its formatting however is controlled
         /// by the Binded object, since it owns that property.
         /// </summary>
         private string _DisplayMemberSingleItem = null;
+
         internal bool _MustAddHiddenItem = false;
 
-        #endregion
+        #endregion PRIVATE FIELDS
 
         #region PRIVATE OPERATIONS
 
@@ -78,7 +80,7 @@ namespace Sdl.Community.CheckBoxComboBox
         {
             string ListText = String.Empty;
             int StartIndex =
-                DropDownStyle == ComboBoxStyle.DropDownList 
+                DropDownStyle == ComboBoxStyle.DropDownList
                 && DataSource == null
                 && skipFirstItem
                     ? 1
@@ -92,29 +94,30 @@ namespace Sdl.Community.CheckBoxComboBox
             return ListText;
         }
 
-        #endregion
+        #endregion PRIVATE OPERATIONS
 
         #region PUBLIC PROPERTIES
 
         /// <summary>
         /// A direct reference to the Items of CheckBoxComboBoxListControl.
         /// You can use it to Get or Set the Checked status of items manually if you want.
-        /// But do not manipulate the List itself directly, e.g. Adding and Removing, 
-        /// since the list is synchronised when shown with the ComboBox.Items. So for changing 
+        /// But do not manipulate the List itself directly, e.g. Adding and Removing,
+        /// since the list is synchronised when shown with the ComboBox.Items. So for changing
         /// the list contents, use Items instead.
         /// </summary>
         [Browsable(false)]
         public CheckBoxComboBoxItemList CheckBoxItems
         {
-            get 
-            { 
+            get
+            {
                 // Added to ensure the CheckBoxItems are ALWAYS
                 // available for modification via code.
                 if (_CheckBoxComboBoxListControl.Items.Count != Items.Count)
                     _CheckBoxComboBoxListControl.SynchroniseControlsWithComboBoxItems();
-                return _CheckBoxComboBoxListControl.Items; 
+                return _CheckBoxComboBoxListControl.Items;
             }
         }
+
         /// <summary>
         /// The DataSource of the combobox. Refreshes the CheckBox wrappers when this is set.
         /// </summary>
@@ -129,6 +132,7 @@ namespace Sdl.Community.CheckBoxComboBox
                     _CheckBoxComboBoxListControl.SynchroniseControlsWithComboBoxItems();
             }
         }
+
         /// <summary>
         /// The ValueMember of the combobox. Refreshes the CheckBox wrappers when this is set.
         /// </summary>
@@ -143,10 +147,11 @@ namespace Sdl.Community.CheckBoxComboBox
                     _CheckBoxComboBoxListControl.SynchroniseControlsWithComboBoxItems();
             }
         }
+
         /// <summary>
         /// In DataBinding operations, this property will be used as the DisplayMember in the CheckBoxComboBoxListBox.
-        /// The normal/existing "DisplayMember" property is used by the TextBox of the ComboBox to display 
-        /// a concatenated Text of the items selected. This concatenation however is controlled by the Binded 
+        /// The normal/existing "DisplayMember" property is used by the TextBox of the ComboBox to display
+        /// a concatenated Text of the items selected. This concatenation however is controlled by the Binded
         /// object, since it owns that property.
         /// </summary>
         public string DisplayMemberSingleItem
@@ -154,12 +159,13 @@ namespace Sdl.Community.CheckBoxComboBox
             get { if (string.IsNullOrEmpty(_DisplayMemberSingleItem)) return DisplayMember; else return _DisplayMemberSingleItem; }
             set { _DisplayMemberSingleItem = value; }
         }
+
         /// <summary>
         /// Made this property Browsable again, since the Base Popup hides it. This class uses it again.
-        /// Gets an object representing the collection of the items contained in this 
+        /// Gets an object representing the collection of the items contained in this
         /// System.Windows.Forms.ComboBox.
         /// </summary>
-        /// <returns>A System.Windows.Forms.ComboBox.ObjectCollection representing the items in 
+        /// <returns>A System.Windows.Forms.ComboBox.ObjectCollection representing the items in
         /// the System.Windows.Forms.ComboBox.
         /// </returns>
         [Browsable(true)]
@@ -169,7 +175,7 @@ namespace Sdl.Community.CheckBoxComboBox
             get { return base.Items; }
         }
 
-        #endregion
+        #endregion PUBLIC PROPERTIES
 
         #region EVENTS & EVENT HANDLERS
 
@@ -180,7 +186,7 @@ namespace Sdl.Community.CheckBoxComboBox
             OnCheckBoxCheckedChanged(sender, e);
         }
 
-        #endregion
+        #endregion EVENTS & EVENT HANDLERS
 
         #region EVENT CALLERS and OVERRIDES e.g. OnResize()
 
@@ -201,7 +207,7 @@ namespace Sdl.Community.CheckBoxComboBox
             else if (DataSource == null)
             {
                 Items[0] = ListText;
-                // Keep the hidden item and first checkbox item in 
+                // Keep the hidden item and first checkbox item in
                 // sync in order to ensure the Synchronise process
                 // can match the items.
                 CheckBoxItems[0].ComboBoxItem = ListText;
@@ -229,14 +235,14 @@ namespace Sdl.Community.CheckBoxComboBox
 
         protected override void OnResize(EventArgs e)
         {
-            // When the ComboBox is resized, the width of the dropdown 
+            // When the ComboBox is resized, the width of the dropdown
             // is also resized to match the width of the ComboBox. I think it looks better.
             Size Size = new Size(Width, DropDownControl.Height);
             dropDown.Size = Size;
             base.OnResize(e);
         }
 
-        #endregion
+        #endregion EVENT CALLERS and OVERRIDES e.g. OnResize()
 
         #region PUBLIC OPERATIONS
 
@@ -248,10 +254,11 @@ namespace Sdl.Community.CheckBoxComboBox
         {
             this.Items.Clear();
             if (DropDownStyle == ComboBoxStyle.DropDownList && DataSource == null)
-                _MustAddHiddenItem = true;                
+                _MustAddHiddenItem = true;
         }        /// <summary>
-        /// Uncheck all items.
-        /// </summary>
+
+                 /// Uncheck all items.
+                 /// </summary>
         public void ClearSelection()
         {
             foreach (CheckBoxComboBoxItem Item in CheckBoxItems)
@@ -259,7 +266,7 @@ namespace Sdl.Community.CheckBoxComboBox
                     Item.Checked = false;
         }
 
-        #endregion
+        #endregion PUBLIC OPERATIONS
 
         #region CHECKBOX PROPERTIES (DEFAULTS)
 
@@ -282,7 +289,7 @@ namespace Sdl.Community.CheckBoxComboBox
                 Item.ApplyProperties(CheckBoxProperties);
         }
 
-        #endregion
+        #endregion CHECKBOX PROPERTIES (DEFAULTS)
 
         protected override void WndProc(ref Message m)
         {
@@ -294,7 +301,7 @@ namespace Sdl.Community.CheckBoxComboBox
             {
                 _MustAddHiddenItem = true;
             }
-            
+
             base.WndProc(ref m);
         }
     }
@@ -320,7 +327,8 @@ namespace Sdl.Community.CheckBoxComboBox
             MinimumSize = new Size(1, 1);
             MaximumSize = new Size(500, 500);
         }
-        #endregion
+
+        #endregion CONSTRUCTOR
 
         #region RESIZE OVERRIDE REQUIRED BY THE POPUP CONTROL
 
@@ -336,11 +344,12 @@ namespace Sdl.Community.CheckBoxComboBox
             }
             base.WndProc(ref m);
         }
-        #endregion
+
+        #endregion RESIZE OVERRIDE REQUIRED BY THE POPUP CONTROL
     }
 
     /// <summary>
-    /// This ListControl that pops up to the User. It contains the CheckBoxComboBoxItems. 
+    /// This ListControl that pops up to the User. It contains the CheckBoxComboBoxItems.
     /// The items are docked DockStyle.Top in this control.
     /// </summary>
     [ToolboxItem(false)]
@@ -363,7 +372,7 @@ namespace Sdl.Community.CheckBoxComboBox
             MaximumSize = new Size(500, 500);
         }
 
-        #endregion
+        #endregion CONSTRUCTOR
 
         #region PRIVATE PROPERTIES
 
@@ -371,12 +380,13 @@ namespace Sdl.Community.CheckBoxComboBox
         /// Simply a reference to the CheckBoxComboBox.
         /// </summary>
         private CheckBoxComboBox _CheckBoxComboBox;
+
         /// <summary>
         /// A Typed list of ComboBoxCheckBoxItems.
         /// </summary>
         private CheckBoxComboBoxItemList _Items;
 
-        #endregion
+        #endregion PRIVATE PROPERTIES
 
         public CheckBoxComboBoxItemList Items { get { return _Items; } }
 
@@ -395,7 +405,7 @@ namespace Sdl.Community.CheckBoxComboBox
             base.WndProc(ref m);
         }
 
-        #endregion
+        #endregion RESIZE OVERRIDE REQUIRED BY THE POPUP CONTROL
 
         #region PROTECTED MEMBERS
 
@@ -405,8 +415,9 @@ namespace Sdl.Community.CheckBoxComboBox
             SynchroniseControlsWithComboBoxItems();
             base.OnVisibleChanged(e);
         }
+
         /// <summary>
-        /// Maintains the controls displayed in the list by keeping them in sync with the actual 
+        /// Maintains the controls displayed in the list by keeping them in sync with the actual
         /// items in the combobox. (e.g. removing and adding as well as ordering)
         /// </summary>
         public void SynchroniseControlsWithComboBoxItems()
@@ -420,6 +431,7 @@ namespace Sdl.Community.CheckBoxComboBox
                 _CheckBoxComboBox._MustAddHiddenItem = false;
             }
             Controls.Clear();
+
             #region Disposes all items that are no longer in the combo box list
 
             for (int Index = _Items.Count - 1; Index >= 0; Index--)
@@ -434,16 +446,17 @@ namespace Sdl.Community.CheckBoxComboBox
                 }
             }
 
-            #endregion
+            #endregion Disposes all items that are no longer in the combo box list
+
             #region Recreate the list in the same order of the combo box items
 
-            bool HasHiddenItem = 
+            bool HasHiddenItem =
                 _CheckBoxComboBox.DropDownStyle == ComboBoxStyle.DropDownList
                 && _CheckBoxComboBox.DataSource == null
                 && !DesignMode;
 
             CheckBoxComboBoxItemList NewList = new CheckBoxComboBoxItemList(_CheckBoxComboBox);
-            for(int Index0 = 0; Index0 <= _CheckBoxComboBox.Items.Count - 1; Index0 ++)
+            for (int Index0 = 0; Index0 <= _CheckBoxComboBox.Items.Count - 1; Index0++)
             {
                 object Object = _CheckBoxComboBox.Items[Index0];
                 CheckBoxComboBoxItem Item = null;
@@ -454,7 +467,7 @@ namespace Sdl.Community.CheckBoxComboBox
                 else
                 {
                     int StartIndex = HasHiddenItem
-                        ? 1 // Skip the hidden item, it could match 
+                        ? 1 // Skip the hidden item, it could match
                         : 0;
                     for (int Index1 = StartIndex; Index1 <= _Items.Count - 1; Index1++)
                     {
@@ -478,32 +491,33 @@ namespace Sdl.Community.CheckBoxComboBox
             _Items.Clear();
             _Items.AddRange(NewList);
 
-            #endregion
+            #endregion Recreate the list in the same order of the combo box items
+
             #region Add the items to the controls in reversed order to maintain correct docking order
 
             if (NewList.Count > 0)
             {
                 // This reverse helps to maintain correct docking order.
                 NewList.Reverse();
-                // If you get an error here that "Cannot convert to the desired 
+                // If you get an error here that "Cannot convert to the desired
                 // type, it probably means the controls are not binding correctly.
-                // The Checked property is binded to the ValueMember property. 
+                // The Checked property is binded to the ValueMember property.
                 // It must be a bool for example.
                 Controls.AddRange(NewList.ToArray());
             }
 
-            #endregion
+            #endregion Add the items to the controls in reversed order to maintain correct docking order
 
             // Keep the first item invisible
             if (_CheckBoxComboBox.DropDownStyle == ComboBoxStyle.DropDownList
                 && _CheckBoxComboBox.DataSource == null
                 && !DesignMode)
-                _CheckBoxComboBox.CheckBoxItems[0].Visible = false; 
-            
+                _CheckBoxComboBox.CheckBoxItems[0].Visible = false;
+
             ResumeLayout();
         }
 
-        #endregion
+        #endregion PROTECTED MEMBERS
     }
 
     /// <summary>
@@ -515,7 +529,7 @@ namespace Sdl.Community.CheckBoxComboBox
         #region CONSTRUCTOR
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="owner">A reference to the CheckBoxComboBox.</param>
         /// <param name="comboBoxItem">A reference to the item in the ComboBox.Items that this object is extending.</param>
@@ -530,7 +544,8 @@ namespace Sdl.Community.CheckBoxComboBox
             else
                 Text = comboBoxItem.ToString();
         }
-        #endregion
+
+        #endregion CONSTRUCTOR
 
         #region PRIVATE PROPERTIES
 
@@ -538,12 +553,13 @@ namespace Sdl.Community.CheckBoxComboBox
         /// A reference to the CheckBoxComboBox.
         /// </summary>
         private CheckBoxComboBox _CheckBoxComboBox;
+
         /// <summary>
         /// A reference to the Item in ComboBox.Items that this object is extending.
         /// </summary>
         private object _ComboBoxItem;
 
-        #endregion
+        #endregion PRIVATE PROPERTIES
 
         #region PUBLIC PROPERTIES
 
@@ -556,7 +572,7 @@ namespace Sdl.Community.CheckBoxComboBox
             internal set { _ComboBoxItem = value; }
         }
 
-        #endregion
+        #endregion PUBLIC PROPERTIES
 
         #region BINDING HELPER
 
@@ -585,12 +601,12 @@ namespace Sdl.Community.CheckBoxComboBox
             // Helps to maintain the Checked status of this
             // checkbox before the control is visible
             if (_ComboBoxItem is INotifyPropertyChanged)
-                ((INotifyPropertyChanged)_ComboBoxItem).PropertyChanged += 
+                ((INotifyPropertyChanged)_ComboBoxItem).PropertyChanged +=
                     new PropertyChangedEventHandler(
                         CheckBoxComboBoxItem_PropertyChanged);
         }
 
-        #endregion
+        #endregion BINDING HELPER
 
         #region PROTECTED MEMBERS
 
@@ -614,7 +630,7 @@ namespace Sdl.Community.CheckBoxComboBox
             }
         }
 
-        #endregion
+        #endregion PROTECTED MEMBERS
 
         #region HELPER MEMBERS
 
@@ -637,12 +653,12 @@ namespace Sdl.Community.CheckBoxComboBox
             this.ThreeState = properties.ThreeState;
         }
 
-        #endregion
+        #endregion HELPER MEMBERS
 
         #region EVENT HANDLERS - ComboBoxItem (DataSource)
 
         /// <summary>
-        /// Added this handler because the control doesn't seem 
+        /// Added this handler because the control doesn't seem
         /// to initialize correctly until shown for the first
         /// time, which also means the summary text value
         /// of the combo is out of sync initially.
@@ -650,21 +666,21 @@ namespace Sdl.Community.CheckBoxComboBox
         private void CheckBoxComboBoxItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == _CheckBoxComboBox.ValueMember)
-                Checked = 
+                Checked =
                     (bool)_ComboBoxItem
                         .GetType()
                         .GetProperty(_CheckBoxComboBox.ValueMember)
                         .GetValue(_ComboBoxItem, null);
         }
 
-        #endregion
+        #endregion EVENT HANDLERS - ComboBoxItem (DataSource)
     }
 
     /// <summary>
     /// A Typed List of the CheckBox items.
     /// Simply a wrapper for the CheckBoxComboBox.Items. A list of CheckBoxComboBoxItem objects.
     /// This List is automatically synchronised with the Items of the ComboBox and extended to
-    /// handle the additional boolean value. That said, do not Add or Remove using this List, 
+    /// handle the additional boolean value. That said, do not Add or Remove using this List,
     /// it will be lost or regenerated from the ComboBox.Items.
     /// </summary>
     [ToolboxItem(false)]
@@ -677,13 +693,13 @@ namespace Sdl.Community.CheckBoxComboBox
             _CheckBoxComboBox = checkBoxComboBox;
         }
 
-        #endregion
+        #endregion CONSTRUCTORS
 
         #region PRIVATE FIELDS
 
         private CheckBoxComboBox _CheckBoxComboBox;
 
-        #endregion
+        #endregion PRIVATE FIELDS
 
         #region EVENTS, This could be moved to the list control if needed
 
@@ -695,12 +711,13 @@ namespace Sdl.Community.CheckBoxComboBox
             if (handler != null)
                 handler(sender, e);
         }
+
         private void item_CheckedChanged(object sender, EventArgs e)
         {
             OnCheckBoxCheckedChanged(sender, e);
         }
 
-        #endregion
+        #endregion EVENTS, This could be moved to the list control if needed
 
         #region LIST MEMBERS & OBSOLETE INDICATORS
 
@@ -732,7 +749,7 @@ namespace Sdl.Community.CheckBoxComboBox
             return base.Remove(item);
         }
 
-        #endregion
+        #endregion LIST MEMBERS & OBSOLETE INDICATORS
 
         #region DEFAULT PROPERTIES
 
@@ -744,13 +761,13 @@ namespace Sdl.Community.CheckBoxComboBox
             get
             {
                 int StartIndex =
-                    // An invisible item exists in this scenario to help 
+                    // An invisible item exists in this scenario to help
                     // with the Text displayed in the TextBox of the Combo
-                    _CheckBoxComboBox.DropDownStyle == ComboBoxStyle.DropDownList 
+                    _CheckBoxComboBox.DropDownStyle == ComboBoxStyle.DropDownList
                     && _CheckBoxComboBox.DataSource == null
                         ? 1 // Ubiklou : 2008-04-28 : Ignore first item. (http://www.codeproject.com/KB/combobox/extending_combobox.aspx?fid=476622&df=90&mpp=25&noise=3&sort=Position&view=Quick&select=2526813&fr=1#xx2526813xx)
                         : 0;
-                for(int Index = StartIndex; Index <= Count - 1; Index ++)
+                for (int Index = StartIndex; Index <= Count - 1; Index++)
                 {
                     CheckBoxComboBoxItem Item = this[Index];
 
@@ -758,7 +775,7 @@ namespace Sdl.Community.CheckBoxComboBox
                     // The binding might not be active yet
                     if (string.IsNullOrEmpty(Item.Text)
                         // Ubiklou : 2008-04-28 : No databinding
-                        && Item.DataBindings != null 
+                        && Item.DataBindings != null
                         && Item.DataBindings["Text"] != null
                         )
                     {
@@ -775,18 +792,20 @@ namespace Sdl.Community.CheckBoxComboBox
                 throw new ArgumentOutOfRangeException(String.Format("\"{0}\" does not exist in this combo box.", displayName));
             }
         }
-        
-        #endregion
+
+        #endregion DEFAULT PROPERTIES
     }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class CheckBoxProperties
     {
-        public CheckBoxProperties() { }
+		public CheckBoxProperties()
+		{
+		}
 
-        #region PRIVATE PROPERTIES
+		#region PRIVATE PROPERTIES
 
-        private Appearance _Appearance = Appearance.Normal;
+		private Appearance _Appearance = Appearance.Normal;
         private bool _AutoSize = false;
         private bool _AutoCheck = true;
         private bool _AutoEllipsis = false;
@@ -802,7 +821,7 @@ namespace Sdl.Community.CheckBoxComboBox
         private ContentAlignment _TextAlign = ContentAlignment.MiddleLeft;
         private bool _ThreeState = false;
 
-        #endregion
+        #endregion PRIVATE PROPERTIES
 
         #region PUBLIC PROPERTIES
 
@@ -812,84 +831,98 @@ namespace Sdl.Community.CheckBoxComboBox
             get { return _Appearance; }
             set { _Appearance = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(true)]
         public bool AutoCheck
         {
             get { return _AutoCheck; }
             set { _AutoCheck = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(false)]
         public bool AutoEllipsis
         {
             get { return _AutoEllipsis; }
             set { _AutoEllipsis = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(false)]
         public bool AutoSize
         {
             get { return _AutoSize; }
             set { _AutoSize = true; OnPropertyChanged(); }
         }
+
         [DefaultValue(ContentAlignment.MiddleLeft)]
         public ContentAlignment CheckAlign
         {
             get { return _CheckAlign; }
             set { _CheckAlign = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(typeof(Color), "")]
         public Color FlatAppearanceBorderColor
         {
             get { return _FlatAppearanceBorderColor; }
             set { _FlatAppearanceBorderColor = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(1)]
         public int FlatAppearanceBorderSize
         {
             get { return _FlatAppearanceBorderSize; }
             set { _FlatAppearanceBorderSize = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(typeof(Color), "")]
         public Color FlatAppearanceCheckedBackColor
         {
             get { return _FlatAppearanceCheckedBackColor; }
             set { _FlatAppearanceCheckedBackColor = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(typeof(Color), "")]
         public Color FlatAppearanceMouseDownBackColor
         {
             get { return _FlatAppearanceMouseDownBackColor; }
             set { _FlatAppearanceMouseDownBackColor = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(typeof(Color), "")]
         public Color FlatAppearanceMouseOverBackColor
         {
             get { return _FlatAppearanceMouseOverBackColor; }
             set { _FlatAppearanceMouseOverBackColor = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(FlatStyle.Standard)]
         public FlatStyle FlatStyle
         {
             get { return _FlatStyle; }
             set { _FlatStyle = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(typeof(SystemColors), "ControlText")]
         public Color ForeColor
         {
             get { return _ForeColor; }
             set { _ForeColor = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(RightToLeft.No)]
         public RightToLeft RightToLeft
         {
             get { return _RightToLeft; }
             set { _RightToLeft = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(ContentAlignment.MiddleLeft)]
         public ContentAlignment TextAlign
         {
             get { return _TextAlign; }
             set { _TextAlign = value; OnPropertyChanged(); }
         }
+
         [DefaultValue(false)]
         public bool ThreeState
         {
@@ -897,7 +930,7 @@ namespace Sdl.Community.CheckBoxComboBox
             set { _ThreeState = value; OnPropertyChanged(); }
         }
 
-        #endregion
+        #endregion PUBLIC PROPERTIES
 
         #region EVENTS AND EVENT CALLERS
 
@@ -913,6 +946,6 @@ namespace Sdl.Community.CheckBoxComboBox
                 handler(this, EventArgs.Empty);
         }
 
-        #endregion
+        #endregion EVENTS AND EVENT CALLERS
     }
 }

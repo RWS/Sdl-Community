@@ -152,6 +152,7 @@ namespace Sdl.Community.CleanUpTasks
                 }
             }
         }
+
         private string GetProjectFolder()
         {
             var first = TaskFiles.FirstOrDefault();

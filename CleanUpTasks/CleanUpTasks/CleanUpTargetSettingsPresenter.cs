@@ -9,13 +9,13 @@ namespace Sdl.Community.CleanUpTasks
         private readonly ICleanUpTargetSettingsControl control = null;
         private readonly IFolderDialog dialog = null;
 
-	    public CleanUpTargetSettingsPresenter(ICleanUpTargetSettingsControl control, IFolderDialog dialog)
-	    {
-		    this.control = control;
-		    this.dialog = dialog;
-	    }
+        public CleanUpTargetSettingsPresenter(ICleanUpTargetSettingsControl control, IFolderDialog dialog)
+        {
+            this.control = control;
+            this.dialog = dialog;
+        }
 
-	    public void Initialize()
+        public void Initialize()
         {
             AttachEventHandlers();
 

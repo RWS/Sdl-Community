@@ -13,7 +13,6 @@ namespace Sdl.Community.CleanUpTasks.Utilities
         /// <returns></returns>
         public static string ToStringWithDeclaration(this XDocument doc)
         {
-
             StringBuilder builder = new StringBuilder();
             using (TextWriter writer = new Utf8StringWriter(builder))
             {

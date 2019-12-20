@@ -32,6 +32,7 @@ namespace Sdl.Community.CleanUpTasks.Utilities
         {
             return document.DocumentNode.Descendants();
         }
+
         public string GetRawEndTag(HtmlNode node)
         {
             return "</" + node.OriginalName + ">";
@@ -39,7 +40,6 @@ namespace Sdl.Community.CleanUpTasks.Utilities
 
         public string GetRawStartTag(HtmlNode node)
         {
-
             var builder = new StringBuilder();
             builder.Append("<");
             builder.Append(node.OriginalName);

@@ -7,7 +7,7 @@ namespace Sdl.Community.CleanUpTasks.Utilities
     {
         private readonly PropertyDescriptor parentDescriptor = null;
         private readonly PropertyDescriptor childDescriptor = null;
-         
+
         public ConversionItemPropertyDescriptor(PropertyDescriptor parent,
                                                 PropertyDescriptor child,
                                                 string pdName)
@@ -23,18 +23,30 @@ namespace Sdl.Community.CleanUpTasks.Utilities
 
         public override Type PropertyType { get { return childDescriptor.PropertyType; } }
 
-        public override bool CanResetValue(object component) { return childDescriptor.CanResetValue(component); }
+		public override bool CanResetValue(object component)
+		{
+			return childDescriptor.CanResetValue(component);
+		}
 
-        public override object GetValue(object component) { return childDescriptor.GetValue(parentDescriptor.GetValue(component)); }
+		public override object GetValue(object component)
+		{
+			return childDescriptor.GetValue(parentDescriptor.GetValue(component));
+		}
 
-        public override void ResetValue(object component) { childDescriptor.ResetValue(parentDescriptor.GetValue(component)); }
+		public override void ResetValue(object component)
+		{
+			childDescriptor.ResetValue(parentDescriptor.GetValue(component));
+		}
 
-        public override void SetValue(object component, object value)
+		public override void SetValue(object component, object value)
         {
             childDescriptor.SetValue(parentDescriptor.GetValue(component), value);
             OnValueChanged(component, EventArgs.Empty);
         }
 
-        public override bool ShouldSerializeValue(object component) { return true; }
-    }
+		public override bool ShouldSerializeValue(object component)
+		{
+			return true;
+		}
+	}
 }

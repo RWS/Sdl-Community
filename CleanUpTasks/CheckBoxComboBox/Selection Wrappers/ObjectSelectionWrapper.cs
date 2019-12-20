@@ -5,11 +5,11 @@ using System.Reflection;
 
 namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
 {
-    /// <summary>
-    /// Used together with the ListSelectionWrapper in order to wrap data sources for a CheckBoxComboBox.
-    /// It helps to ensure you don't add an extra "Selected" property to a class that don't really need or want that information.
-    /// </summary>
-    public class ObjectSelectionWrapper<T> : INotifyPropertyChanged
+	/// <summary>
+	/// Used together with the ListSelectionWrapper in order to wrap data sources for a CheckBoxComboBox.
+	/// It helps to ensure you don't add an extra "Selected" property to a class that don't really need or want that information.
+	/// </summary>
+	public class ObjectSelectionWrapper<T> : INotifyPropertyChanged
     {
         public ObjectSelectionWrapper(T item, ListSelectionWrapper<T> container)
             : base()
@@ -18,27 +18,29 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
             _Item = item;
         }
 
-
         #region PRIVATE PROPERTIES
 
         /// <summary>
         /// Used as a count indicator for the item. Not necessarily displayed.
         /// </summary>
         private int _Count = 0;
+
         /// <summary>
         /// Is this item selected.
         /// </summary>
         private bool _Selected = false;
+
         /// <summary>
         /// A reference to the wrapped item.
         /// </summary>
         private T _Item;
+
         /// <summary>
         /// The containing list for these selections.
         /// </summary>
         private ListSelectionWrapper<T> _Container;
 
-        #endregion
+        #endregion PRIVATE PROPERTIES
 
         #region PUBLIC PROPERTIES
 
@@ -52,6 +54,7 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
             get { return _Count; }
             set { _Count = value; }
         }
+
         /// <summary>
         /// A reference to the item wrapped.
         /// </summary>
@@ -60,12 +63,13 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
             get { return _Item; }
             set { _Item = value; }
         }
+
         /// <summary>
         /// The item display value. If ShowCount is true, it displays the "Name [Count]".
         /// </summary>
         public string Name
         {
-            get 
+            get
             {
                 string Name = null;
                 if (string.IsNullOrEmpty(_Container.DisplayNameProperty))
@@ -95,6 +99,7 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
                 return _Container.ShowCounts ? String.Format("{0} [{1}]", Name, Count) : Name;
             }
         }
+
         /// <summary>
         /// The textbox display value. The names concatenated.
         /// </summary>
@@ -102,13 +107,14 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
         {
             get { return _Container.SelectedNames; }
         }
+
         /// <summary>
         /// Indicates whether the item is selected.
         /// </summary>
         public bool Selected
         {
             get { return _Selected; }
-            set 
+            set
             {
                 if (_Selected != value)
                 {
@@ -119,7 +125,7 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
             }
         }
 
-        #endregion
+        #endregion PUBLIC PROPERTIES
 
         #region INotifyPropertyChanged
 
@@ -132,6 +138,6 @@ namespace Sdl.Community.CheckBoxComboBox.Selection_Wrappers
                 handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
+        #endregion INotifyPropertyChanged
     }
 }

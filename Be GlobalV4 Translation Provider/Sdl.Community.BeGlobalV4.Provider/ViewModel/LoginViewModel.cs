@@ -176,37 +176,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 			return false;
 		}
-
-		private void GetEngines()
-		{
-			if (string.IsNullOrEmpty(Options.ClientId) && string.IsNullOrEmpty(Options.ClientSecret))
-			{
-				Options.Model = string.Empty;
-				LanguageMappingsViewModel.TranslationOptions.Clear();
-				LanguageMappingsViewModel.SelectedModelOption = new TranslationModel();
-				return;
-			}
-
-			else
-			{
-				if (string.IsNullOrEmpty(Options?.Model))
-				{
-					var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options);
-					var userInfo = beGlobalTranslator.GetUserInformation();
-					if (userInfo != 0)
-					{
-						if (string.IsNullOrEmpty(Options?.Model))
-						{
-							var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(userInfo.ToString());
-							GetEngineModels(subscriptionInfo.LanguagePairs);
-							SetEngineModel();
-						}
-					}
-				}
-			}
-		}
-
-
+		
 		private void ChangePasswordAction(object parameter)
 		{
 			if (parameter.GetType().Name.Equals(Constants.PasswordBox))

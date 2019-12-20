@@ -1,5 +1,4 @@
-﻿using System;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
+﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.CleanUpTasks.Utilities
@@ -10,7 +9,6 @@ namespace Sdl.Community.CleanUpTasks.Utilities
 
         public CleanUpMessageReporter(IBilingualContentMessageReporter reporter)
         {
-
             this.reporter = reporter;
         }
 
