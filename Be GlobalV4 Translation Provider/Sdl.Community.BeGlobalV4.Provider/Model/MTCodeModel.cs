@@ -62,5 +62,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 		public int RowNumber { get; set; }
 		public int MTCodeLocaleColumnNo { get; set; }
 		public int MTCodeMainColumnNo { get; set; }
+		public int LanguageColumnNo { get; set; }
+		public int RegionColumnNo { get; set; }
+		public int TradosCodeColumnNo { get; set; }
 	}
 }

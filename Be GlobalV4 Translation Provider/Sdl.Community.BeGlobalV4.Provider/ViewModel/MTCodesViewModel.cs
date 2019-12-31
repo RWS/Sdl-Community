@@ -84,7 +84,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				if (SelectedMTCode != null)
 				{
-					var mtCodeExcel = CreateMTCodeExcelModel(SelectedMTCode);
+					var mtCodeExcel = CreateMTCodeExcelModel();
 					ExcelParser.UpdateMTCodeExcel(mtCodeExcel);
 
 					SetMessage(Constants.Green, Constants.SuccessfullyUpdatedMessage);
@@ -109,26 +109,32 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		}
 
 		/// <summary>
-		/// Create MTCodeExcel model with the needed values to update the Excel file 
+		/// Create MTCodeExcel model with the needed values to update the Excel file.
+		/// Region,Language,TradosCode and column numbers are used to add/update the row inside the Excel local file, in case the information for the selected Studio Language does not exists.
 		/// </summary>
-		/// <param name="mtCodeLocaleValue">MTCodeLocale value</param>
 		/// <returns>MTCodeExcel object</returns>
-		private MTCodeExcel CreateMTCodeExcelModel(MTCodeModel mtCodeModel)
+		private MTCodeExcel CreateMTCodeExcelModel()
 		{
 			return new MTCodeExcel
 			{
 				ExcelPath = _excelFilePath,
 				ExcelSheet = Constants.ExcelSheet,
-				LocaleValue = mtCodeModel.MTCodeLocale,
+				LocaleValue = SelectedMTCode.MTCodeLocale,
 				LocaleColumnNumber = SelectedMTCode.MTCodeLocaleColumnNo,
-				MainValue = mtCodeModel.MTCodeMain,
+				MainValue = SelectedMTCode.MTCodeMain,
 				MainColumnNumber = SelectedMTCode.MTCodeMainColumnNo,
+				Language = SelectedMTCode.Language,
+				LanguageColumnNumber = SelectedMTCode.LanguageColumnNo,
+				Region = SelectedMTCode.Region,
+				RegionColumnNumber = SelectedMTCode.RegionColumnNo,
+				TradosCode = SelectedMTCode.TradosCode,
+				TradosCodeColumnNumber = SelectedMTCode.TradosCodeColumnNo,
 				SheetRowNumber = SelectedMTCode.RowNumber
 			};
 		}
 
 		/// <summary>
-		/// Map values from Excel to MTCodes collection based on avaialble Languages from Studio
+		/// Map values from Excel to MTCodes collection based on the avaialble Languages from Studio
 		/// </summary>
 		/// <param name="excelSheetResults">results from excel's sheet</param>
 		/// <returns>MTCodes collection</returns>
@@ -150,8 +156,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					TradosCode = excelSheetRow.RowValues[2]?.ToString(),
 					MTCodeMain = excelSheetRow.RowValues[3]?.ToString(),
 					MTCodeLocale = excelSheetRow.RowValues[4]?.ToString(),
-					MTCodeLocaleColumnNo = 5,
+					LanguageColumnNo = 1,
+					RegionColumnNo = 2,
+					TradosCodeColumnNo = 3,
 					MTCodeMainColumnNo = 4,
+					MTCodeLocaleColumnNo = 5,					
 					RowNumber = rowNumber
 				};
 				excelValues.Add(mtCodeModel);
@@ -178,8 +187,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						TradosCode = item.IsoAbbreviation,
 						MTCodeMain = "X",
 						MTCodeLocale = string.Empty,
-						MTCodeLocaleColumnNo = 5,
+						LanguageColumnNo = 1,
+						RegionColumnNo = 2,
+						TradosCodeColumnNo = 3,
 						MTCodeMainColumnNo = 4,
+						MTCodeLocaleColumnNo = 5,						
 						RowNumber = _lastExcelRowNumber// use a new number based on the last existing RowNumber in Excel (the new MTCodeModel will be added inside excel as new rows)
 					});
 					_lastExcelRowNumber++;
