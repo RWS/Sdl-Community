@@ -176,7 +176,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						Language = languageInfo[0],
 						Region = languageInfo[1],
 						TradosCode = item.IsoAbbreviation,
-						MTCodeMain = string.Empty,
+						MTCodeMain = "X",
 						MTCodeLocale = string.Empty,
 						MTCodeLocaleColumnNo = 5,
 						MTCodeMainColumnNo = 4,
