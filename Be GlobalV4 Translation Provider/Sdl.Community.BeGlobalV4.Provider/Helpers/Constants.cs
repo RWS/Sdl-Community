@@ -52,7 +52,6 @@
 		public static readonly string CredentialsAndInternetValidation = "The MTCloud host could not be reached and setups cannot be saved. Please verify your credentials and internet connection, and ensure you are able to connect to the server from this computer.";
 		public static readonly string InternetConnection = "The MTCloud host could not be reached. Please check the internet connection and ensure you are able to connect to the server from this computer.";
 		public static readonly string MTCodeEmptyValidation = "MTCode (locale) cannot be emtpy! Please fill the value in order to be added to MTLanguageCodes.xlsx file.";
-		public static readonly string SuccessfullyAddedMessage = "MT Code (locale) was successfully added to MTLanguageCodes.xlsx file.";
-		public static readonly string SuccessfullyRemovedMessage = "MT Code (locale) was successfully removed from MTLanguageCodes.xlsx file.";		
+		public static readonly string SuccessfullyUpdatedMessage = "MT Code was successfully updated within MTLanguageCodes.xlsx file.";
 	}
 }

@@ -21,8 +21,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private readonly string _excelFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.SDLCommunity, Constants.SDLMachineTranslationCloud, "MTLanguageCodes.xlsx");
 		private int _lastExcelRowNumber;
 
-		private ICommand _addMTCodeCommand;
-		private ICommand _removeMTCodeCommand;
+		private ICommand _updateCellCommand;
 
 		public static readonly Log Log = Log.Instance;
 
@@ -72,67 +71,37 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		public ICommand AddMTCodeCommand => _addMTCodeCommand ?? (_addMTCodeCommand = new RelayCommand(AddMTCode));
-		public ICommand RemoveMTCodeCommand => _removeMTCodeCommand ?? (_removeMTCodeCommand = new RelayCommand(RemoveMTCode));
+		public ICommand UpdateCellCommand => _updateCellCommand ?? (_updateCellCommand = new RelayCommand(UpdateMTCode));
 
 		/// <summary>
-		/// Add the MTCodeLocale to the MTLanguageCodes.xlsx Excel file
+		/// Update the MTCode (main) / MTCode (locale) inside the local excel file after datagrid cell was edited
 		/// </summary>
 		/// <param name="parameter">parameter</param>
-		public void AddMTCode(object parameter)
+		public void UpdateMTCode(object parameter)
 		{
 			Message = string.Empty;
 			try
 			{
-				if (SelectedMTCode != null && !string.IsNullOrEmpty(SelectedMTCode.MTCodeLocale))
+				if (SelectedMTCode != null)
 				{
-					var mtCodeExcel = CreateMTCodeExcelModel(SelectedMTCode.MTCodeLocale);
+					var mtCodeExcel = CreateMTCodeExcelModel(SelectedMTCode);
 					ExcelParser.UpdateMTCodeExcel(mtCodeExcel);
 
-					SetMessage(Constants.Green, Constants.SuccessfullyAddedMessage);
-				}
-				else
-				{
-					SetMessage(Constants.Red, Constants.MTCodeEmptyValidation);
-				}
+					SetMessage(Constants.Green, Constants.SuccessfullyUpdatedMessage);
+				}				
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"{Constants.AddMTCode} {ex.Message}\n {ex.StackTrace}");
 				SetMessage(Constants.Red, ex.Message);
 			}
 		}
-
+	
 		/// <summary>
-		/// Delete the selected MTCodeLocale from  the MTLanguageCodes.xlsx Excel file
+		/// Set the message text and color
 		/// </summary>
-		/// <param name="paramter">paramter</param>
-		public void RemoveMTCode(object paramter)
-		{
-			Message = string.Empty;
-			try
-			{
-				if (SelectedMTCode != null && !string.IsNullOrEmpty(SelectedMTCode.MTCodeLocale))
-				{
-					var mtCodeExcel = CreateMTCodeExcelModel(string.Empty);
-					ExcelParser.UpdateMTCodeExcel(mtCodeExcel);
-
-					// Refresh the grid value after removing it from Excel file
-					var mtCodeUpdated = MTCodes.FirstOrDefault(m => m.Language.Equals(SelectedMTCode.Language) && m.Region.Equals(SelectedMTCode.Region));
-					if (mtCodeUpdated != null)
-					{
-						mtCodeUpdated.MTCodeLocale = string.Empty;
-					}
-					SetMessage(Constants.Green, Constants.SuccessfullyRemovedMessage);
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"{Constants.RemoveMTCode} {ex.Message}\n {ex.StackTrace}");
-				SetMessage(Constants.Red, ex.Message);			
-			}				
-		}
-
+		/// <param name="messageColor">message color</param>
+		/// <param name="message">message text</param>
 		private void SetMessage(string messageColor, string message)
 		{
 			MessageColor = messageColor;
@@ -144,14 +113,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		/// </summary>
 		/// <param name="mtCodeLocaleValue">MTCodeLocale value</param>
 		/// <returns>MTCodeExcel object</returns>
-		private MTCodeExcel CreateMTCodeExcelModel(string mtCodeLocaleValue)
+		private MTCodeExcel CreateMTCodeExcelModel(MTCodeModel mtCodeModel)
 		{
 			return new MTCodeExcel
 			{
 				ExcelPath = _excelFilePath,
 				ExcelSheet = Constants.ExcelSheet,
-				LocaleValue = mtCodeLocaleValue,
+				LocaleValue = mtCodeModel.MTCodeLocale,
 				LocaleColumnNumber = SelectedMTCode.MTCodeLocaleColumnNo,
+				MainValue = mtCodeModel.MTCodeMain,
+				MainColumnNumber = SelectedMTCode.MTCodeMainColumnNo,
 				SheetRowNumber = SelectedMTCode.RowNumber
 			};
 		}
@@ -180,6 +151,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					MTCodeMain = excelSheetRow.RowValues[3]?.ToString(),
 					MTCodeLocale = excelSheetRow.RowValues[4]?.ToString(),
 					MTCodeLocaleColumnNo = 5,
+					MTCodeMainColumnNo = 4,
 					RowNumber = rowNumber
 				};
 				excelValues.Add(mtCodeModel);
@@ -207,6 +179,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						MTCodeMain = string.Empty,
 						MTCodeLocale = string.Empty,
 						MTCodeLocaleColumnNo = 5,
+						MTCodeMainColumnNo = 4,
 						RowNumber = _lastExcelRowNumber// use a new number based on the last existing RowNumber in Excel (the new MTCodeModel will be added inside excel as new rows)
 					});
 					_lastExcelRowNumber++;
