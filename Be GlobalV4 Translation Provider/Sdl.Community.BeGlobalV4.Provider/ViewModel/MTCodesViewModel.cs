@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.Community.Toolkit.LanguagePlatform.ExcelParser;
 using Sdl.Community.Toolkit.LanguagePlatform.Models;
 using Sdl.Core.Globalization;
@@ -20,15 +22,18 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private string _messageColor;
 		private readonly string _excelFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.SDLCommunity, Constants.SDLMachineTranslationCloud, "MTLanguageCodes.xlsx");
 		private int _lastExcelRowNumber;
+		private MTCodesWindow _mtCodesWindow;
 
 		private ICommand _updateCellCommand;
+		private ICommand _printCommand;
 
 		public static readonly Log Log = Log.Instance;
 
-		public MTCodesViewModel(List<ExcelSheet> excelSheetResults)
+		public MTCodesViewModel(List<ExcelSheet> excelSheetResults, MTCodesWindow mtCodesWindow)
 		{
 			MTCodes = new ObservableCollection<MTCodeModel>();
 			MTCodes = MapExcelCodes(excelSheetResults);
+			_mtCodesWindow = mtCodesWindow;
 		}
 
 		public ObservableCollection<MTCodeModel> MTCodes
@@ -72,6 +77,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		}
 
 		public ICommand UpdateCellCommand => _updateCellCommand ?? (_updateCellCommand = new RelayCommand(UpdateMTCode));
+		public ICommand PrintCommand => _printCommand ?? (_printCommand = new RelayCommand(Print));
+
+		public void Print(object parameter)
+		{
+			var printDlg = new PrintDialog();
+			printDlg.PrintVisual(_mtCodesWindow, Constants.PrintMTCodes);
+			printDlg.ShowDialog();
+		}
 
 		/// <summary>
 		/// Update the MTCode (main) / MTCode (locale) inside the local excel file after datagrid cell was edited
@@ -185,7 +198,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						Language = languageInfo[0],
 						Region = languageInfo[1],
 						TradosCode = item.IsoAbbreviation,
-						MTCodeMain = "X",
+						MTCodeMain = string.Empty,
 						MTCodeLocale = string.Empty,
 						LanguageColumnNo = 1,
 						RegionColumnNo = 2,

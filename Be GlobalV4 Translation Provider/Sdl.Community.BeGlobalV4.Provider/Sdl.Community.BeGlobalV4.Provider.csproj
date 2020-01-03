@@ -225,9 +225,10 @@
     <Compile Include="ViewModel\MTCodesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\MTLanguageCodes.xlsx" />
+    <Resource Include="Resources\Print.png" />
     <None Include="Resources\AddNewTerm.ico" />
     <None Include="Resources\global1.png" />
-    <None Include="Resources\MTLanguageCodes.xlsx" />
     <Resource Include="Resources\MTCloud_logo_small.png" />
     <Resource Include="Resources\MTCloud_logo.png" />
     <Resource Include="Resources\logoRes.png" />

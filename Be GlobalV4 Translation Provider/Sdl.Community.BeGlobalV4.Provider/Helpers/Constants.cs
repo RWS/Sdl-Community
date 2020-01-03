@@ -21,6 +21,7 @@
 		public static readonly string NullValue = "Value cannot be null.";
 		public static readonly string Red = "Red";
 		public static readonly string Green = "Green";
+		public static readonly string PrintMTCodes = "Printing MT Codes.";
 
 		// Excel MTCodes values
 		public static readonly string ExcelSheet = "Sheet1";

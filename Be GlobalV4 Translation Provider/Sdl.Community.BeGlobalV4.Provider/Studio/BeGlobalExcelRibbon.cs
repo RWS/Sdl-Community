@@ -37,7 +37,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					var excelResults = ExcelParser.ReadExcel(excelFilePath, 0);
 
 					var mtCodesWindow = new MTCodesWindow();
-					var mtCodesViewModel = new MTCodesViewModel(excelResults);
+					var mtCodesViewModel = new MTCodesViewModel(excelResults, mtCodesWindow);
 					mtCodesWindow.DataContext = mtCodesViewModel;
 					mtCodesWindow.ShowDialog();
 				}
