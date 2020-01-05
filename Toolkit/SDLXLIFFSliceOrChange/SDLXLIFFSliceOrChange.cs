@@ -241,6 +241,7 @@ namespace SDLXLIFFSliceOrChange
 			ckNotTranslated.Text = resources.NotTranslated;
 			groupTranslationOrigin.Text = resources.TranslationOrigin;
 			ckAutoPropagated.Text = resources.AutoPropagated;
+			ckNeuralMachineTranslation.Text = resources.NeuralMT;
 			ckAutomatedTranslation.Text = resources.AutomatedTranslation;
 			ckInteractive.Text = resources.Interactive;
 			ckTranslationMemory.Text = resources.TranslationMemory;
