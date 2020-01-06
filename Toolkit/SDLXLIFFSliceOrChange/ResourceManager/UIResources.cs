@@ -38,6 +38,7 @@ namespace SDLXLIFFSliceOrChange.ResourceManager
         public string SystemMachineTranslation { get { return GetString("SystemMachineTranslation"); } }
         public string TranslationOrigin { get { return GetString("TranslationOrigin"); } }
         public string AutoPropagated { get { return GetString("AutoPropagated"); } }
+        public string NeuralMT { get { return GetString("NeuralMT"); } }
         public string AutomatedTranslation { get { return GetString("AutomatedTranslation"); } }
         public string Interactive { get { return GetString("Interactive"); } }
         public string TranslationMemory { get { return GetString("TranslationMemory"); } }
@@ -150,6 +151,7 @@ namespace SDLXLIFFSliceOrChange.ResourceManager
             _defaultValues.Add("SystemMachineTranslation", "Machine Translation");
             _defaultValues.Add("TranslationOrigin", "Translation Origin");
             _defaultValues.Add("AutoPropagated", "Auto-Propagated");
+            _defaultValues.Add("NeuralMT", "Neural MT");
             _defaultValues.Add("AutomatedTranslation", "Automated Translation");
             _defaultValues.Add("Interactive", "Interactive");
             _defaultValues.Add("TranslationMemory", "Translation Memory");

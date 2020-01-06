@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>SdlXliffToolkit</PlugInName>
-  <Version>4.1.2</Version>
+  <PlugInName>SDLXLIFF Toolkit</PlugInName>
+  <Version>4.1.3.0</Version>
   <Description>SdlXliffToolkit</Description>
-  <Author>Sdl Community</Author>
+	<Author>SDL Community Developers</Author>
   <Include>
     <File>SdlXliff.Toolkit.Integration.dll</File>
     <File>log4net.dll</File>
