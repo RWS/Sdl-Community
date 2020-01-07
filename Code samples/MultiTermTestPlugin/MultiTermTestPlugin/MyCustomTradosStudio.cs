@@ -116,9 +116,9 @@ namespace MultiTermTestPlugin
 
 		private Entries GetTermbaseEntries(string termbasePath)
 		{
-			var oMt = new Application();
-			var localRep = oMt.LocalRepository;
-			localRep.Connect("", "");
+			var multiTermApplication = new Application();
+			var localRep = multiTermApplication.LocalRepository;
+			localRep.Connect("", "");	
 
 			var termbases = localRep.Termbases;
 			var path = termbasePath;
