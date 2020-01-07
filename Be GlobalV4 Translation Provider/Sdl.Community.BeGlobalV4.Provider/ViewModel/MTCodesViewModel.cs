@@ -6,7 +6,7 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows.Controls;
+using Controls = System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -32,10 +32,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			_constants.SDLMachineTranslationCloud,
 			"MTLanguageCodes.xlsx");
 
+		private readonly string _filteredExcelFilePath = Path.Combine(Environment.GetFolderPath(
+			Environment.SpecialFolder.ApplicationData),
+			_constants.SDLCommunity,
+			_constants.SDLMachineTranslationCloud,
+			"FilteredMTLanguageCodes.xlsx");
 		private int _lastExcelRowNumber;
 		private ExcelParser _excelParser = new ExcelParser();
+		private List<MTCodeModel> _filteredMTCodes;
 		private string _query;
-
+		private int _queriedCodesNumber;
 		private ICommand _updateCellCommand;
 		private ICommand _printCommand;
 
@@ -101,7 +107,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		}
 
 		public ICommand UpdateCellCommand => _updateCellCommand ?? (_updateCellCommand = new RelayCommand(UpdateMTCode));
-		public ICommand PrintCommand => _printCommand ?? (_printCommand = new RelayCommand<System.Windows.Forms.DataGrid>(Print));
+		public ICommand PrintCommand => _printCommand ?? (_printCommand = new RelayCommand<Controls.DataGrid>(Print));
 
 		public void SearchLanguages(string languageName)
 		{
@@ -120,42 +126,74 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				collectionViewSource.Filter = null;
 			}
+			_queriedCodesNumber = collectionViewSource.Cast<object>().Count();
+			_filteredMTCodes = collectionViewSource.Cast<MTCodeModel>().ToList();
+		}
+		
+		public void Print(Controls.DataGrid dataGrid)
+		{
+			var printDlg = new Controls.PrintDialog();
+			if (printDlg.ShowDialog() == true)
+			{
+				if (_queriedCodesNumber < 300)
+				{
+					if (File.Exists(_filteredExcelFilePath))
+					{
+						File.Delete(_filteredExcelFilePath);
+					}
+						var app = new Excel.Application();
+						var wb = app.Workbooks.Add("Workbook");
+						var ws = (Excel.Worksheet)wb.Worksheets.get_Item(1);
+
+						ws.Cells[1, 1] = "Language";
+						ws.Cells[1, 2] = "Region";
+						ws.Cells[1, 3] = "Trados Code";
+						ws.Cells[1, 4] = "MTCode (main)";
+						ws.Cells[1, 5] = "MT Code (if locale is available)";
+
+						ws.SaveAs(_filteredExcelFilePath, Excel.XlFileFormat.xlOpenXMLWorkbook, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+							Excel.XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing);
+						wb.Close(true, _filteredExcelFilePath, Type.Missing);
+						app.Quit();
+						Marshal.ReleaseComObject(ws);
+						Marshal.ReleaseComObject(wb);
+						Marshal.ReleaseComObject(app);
+					
+					var excelRow = 2;
+					foreach (var item in _filteredMTCodes)
+					{						
+						var excelModel = new MTCodeExcel
+						{
+							ExcelPath = _filteredExcelFilePath,
+							ExcelSheet = _constants.ExcelSheet,
+							LocaleValue = item.MTCodeLocale,
+							LocaleColumnNumber = item.MTCodeLocaleColumnNo,
+							MainValue = item.MTCodeMain,
+							MainColumnNumber = item.MTCodeMainColumnNo,
+							Language = item.Language,
+							LanguageColumnNumber = item.LanguageColumnNo,
+							Region = item.Region,
+							RegionColumnNumber = item.RegionColumnNo,
+							TradosCode = item.TradosCode,
+							TradosCodeColumnNumber = item.TradosCodeColumnNo,
+							SheetRowNumber = excelRow++
+						};
+						_excelParser.UpdateMTCodeExcel(excelModel);
+					}
+					PrintFile(_filteredExcelFilePath, printDlg);
+				}
+				else
+				{
+					PrintFile(_excelFilePath, printDlg);
+				}
+			}
 		}
 
-		public void Print(System.Windows.Forms.DataGrid dataGrid)
+		private void PrintFile(string filePath, Controls.PrintDialog printDlg)
 		{
-			// update solution to identify if the records are searched (maybe based on MTCodes number if it's < total MTCodes number from excel).
-			//If only a few records are returned after search, then use the below print logic, otherwise use the Interop logic to print entire local excel file.
-			//var printDlg = new PrintDialog();
-			//if (printDlg.ShowDialog() == true)
-			//{
-			//	var capabilities = printDlg.PrintQueue.GetPrintCapabilities(printDlg.PrintTicket);
-
-			//	double scale = Math.Min(capabilities.PageImageableArea.ExtentWidth / dataGrid.ActualWidth,
-			//							capabilities.PageImageableArea.ExtentHeight / dataGrid.ActualHeight);
-
-			//	var oldTransform = dataGrid.LayoutTransform;
-
-			//	dataGrid.LayoutTransform = new ScaleTransform(scale, scale);
-
-			//	var oldSize = new Size(dataGrid.ActualWidth, dataGrid.ActualHeight);
-			//	var sz = new Size(capabilities.PageImageableArea.ExtentWidth, capabilities.PageImageableArea.ExtentHeight);
-			//	dataGrid.Measure(sz);
-			//	((UIElement)dataGrid).Arrange(new Rect(new Point(capabilities.PageImageableArea.OriginWidth, capabilities.PageImageableArea.OriginHeight),
-			//		sz));
-
-			//	printDlg.PrintVisual(dataGrid, _constants.PrintMTCodes);
-			//	dataGrid.LayoutTransform = oldTransform;
-			//	dataGrid.Measure(oldSize);
-
-			//	((UIElement)dataGrid).Arrange(new Rect(new Point(0, 0),
-			//		oldSize));
-			//}
-
 			var printers = PrinterSettings.InstalledPrinters;
 			int printerIndex = 0;
 
-			var printDlg = new System.Windows.Controls.PrintDialog();
 			if (printDlg.ShowDialog() == true)
 
 			{
@@ -163,7 +201,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 				// Open the Workbook
 				var wb = excelApp.Workbooks.Open(
-					_excelFilePath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+					filePath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
 					Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
 					Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
 
@@ -194,7 +232,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 				Marshal.FinalReleaseComObject(ws);
 
-				wb.Close(false, _excelFilePath, Type.Missing);
+				wb.Close(false, filePath, Type.Missing);
 				Marshal.FinalReleaseComObject(wb);
 
 				excelApp.Quit();
