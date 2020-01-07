@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
-using MultiTermIX;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.MultiTerm.TMO.Interop;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
@@ -17,7 +17,7 @@ namespace MultiTermTestPlugin
 	{
 		protected override void Execute()
 		{
-			Application oMt = new ApplicationClass();
+			var oMt = new Application();
 			var localRep = oMt.LocalRepository;
 			localRep.Connect("", "");
 			var termbases = localRep.Termbases;
@@ -116,7 +116,7 @@ namespace MultiTermTestPlugin
 
 		private Entries GetTermbaseEntries(string termbasePath)
 		{
-			Application oMt = new ApplicationClass();
+			var oMt = new Application();
 			var localRep = oMt.LocalRepository;
 			localRep.Connect("", "");
 
