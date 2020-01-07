@@ -19,14 +19,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
 		public class BeGlobalExcelAction : AbstractAction
 		{
+			private Constants _constants = new Constants();		
 			public static readonly Log Log = Log.Instance;
 
 			protected override void Execute()
 			{
 				try
 				{
-					var mtCloudFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.SDLCommunity, Constants.SDLMachineTranslationCloud);
+					var mtCloudFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), _constants.SDLCommunity, _constants.SDLMachineTranslationCloud);
 					var excelFilePath = Path.Combine(mtCloudFolderPath, "MTLanguageCodes.xlsx");
+					var excelParser = new ExcelParser();
 
 					if (!Directory.Exists(mtCloudFolderPath))
 					{
@@ -34,17 +36,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					}
 
 					WriteExcelLocally(excelFilePath, mtCloudFolderPath);
-					var excelResults = ExcelParser.ReadExcel(excelFilePath, 0);
+					var excelResults = excelParser.ReadExcel(excelFilePath, 0);
 
 					var mtCodesWindow = new MTCodesWindow();
-					var mtCodesViewModel = new MTCodesViewModel(excelResults, mtCodesWindow);
+					var mtCodesViewModel = new MTCodesViewModel(excelResults);
 					mtCodesWindow.DataContext = mtCodesViewModel;
 					mtCodesWindow.ShowDialog();
 				}
 
 				catch (Exception ex)
 				{
-					Log.Logger.Error($"{Constants.ExcelExecuteAction} {ex.Message}\n {ex.StackTrace}");
+					Log.Logger.Error($"{_constants.ExcelExecuteAction} {ex.Message}\n {ex.StackTrace}");
 					throw;
 				}
 			}
@@ -62,7 +64,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				}
 				catch(Exception ex)
 				{
-					Log.Logger.Error($"{Constants.WriteExcelLocally} {ex.Message}\n {ex.StackTrace}");
+					Log.Logger.Error($"{_constants.WriteExcelLocally} {ex.Message}\n {ex.StackTrace}");
 					throw;
 				}
 			}

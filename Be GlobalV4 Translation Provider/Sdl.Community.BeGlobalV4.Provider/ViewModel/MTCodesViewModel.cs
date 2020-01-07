@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
-using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.Community.Toolkit.LanguagePlatform.ExcelParser;
 using Sdl.Community.Toolkit.LanguagePlatform.Models;
 using Sdl.Core.Globalization;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
@@ -20,20 +22,23 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private ObservableCollection<MTCodeModel> _mtCodes;
 		private string _message;
 		private string _messageColor;
-		private readonly string _excelFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.SDLCommunity, Constants.SDLMachineTranslationCloud, "MTLanguageCodes.xlsx");
+		private static Constants _constants = new Constants();
+		private readonly string _excelFilePath = Path.Combine(Environment.GetFolderPath(
+			Environment.SpecialFolder.ApplicationData),
+			_constants.SDLCommunity,
+			_constants.SDLMachineTranslationCloud,
+			"MTLanguageCodes.xlsx");
+
 		private int _lastExcelRowNumber;
-		private MTCodesWindow _mtCodesWindow;
+		private ExcelParser _excelParser = new ExcelParser();
 
 		private ICommand _updateCellCommand;
 		private ICommand _printCommand;
 
-		public static readonly Log Log = Log.Instance;
-
-		public MTCodesViewModel(List<ExcelSheet> excelSheetResults, MTCodesWindow mtCodesWindow)
+		public MTCodesViewModel(List<ExcelSheet> excelSheetResults)
 		{
 			MTCodes = new ObservableCollection<MTCodeModel>();
 			MTCodes = MapExcelCodes(excelSheetResults);
-			_mtCodesWindow = mtCodesWindow;
 		}
 
 		public ObservableCollection<MTCodeModel> MTCodes
@@ -77,13 +82,86 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		}
 
 		public ICommand UpdateCellCommand => _updateCellCommand ?? (_updateCellCommand = new RelayCommand(UpdateMTCode));
-		public ICommand PrintCommand => _printCommand ?? (_printCommand = new RelayCommand(Print));
+		public ICommand PrintCommand => _printCommand ?? (_printCommand = new RelayCommand<DataGrid>(Print));
 
-		public void Print(object parameter)
+		public void Print(DataGrid dataGrid)
 		{
+			// update solution to identify if the records are searched (maybe based on MTCodes number if it's < total MTCodes number from excel).
+			//If only a few records are returned after search, then use the below print logic, otherwise use the Interop logic to print entire local excel file.
+			//var printDlg = new PrintDialog();
+			//if (printDlg.ShowDialog() == true)
+			//{
+			//	var capabilities = printDlg.PrintQueue.GetPrintCapabilities(printDlg.PrintTicket);
+
+			//	double scale = Math.Min(capabilities.PageImageableArea.ExtentWidth / dataGrid.ActualWidth,
+			//							capabilities.PageImageableArea.ExtentHeight / dataGrid.ActualHeight);
+
+			//	var oldTransform = dataGrid.LayoutTransform;
+
+			//	dataGrid.LayoutTransform = new ScaleTransform(scale, scale);
+
+			//	var oldSize = new Size(dataGrid.ActualWidth, dataGrid.ActualHeight);
+			//	var sz = new Size(capabilities.PageImageableArea.ExtentWidth, capabilities.PageImageableArea.ExtentHeight);
+			//	dataGrid.Measure(sz);
+			//	((UIElement)dataGrid).Arrange(new Rect(new Point(capabilities.PageImageableArea.OriginWidth, capabilities.PageImageableArea.OriginHeight),
+			//		sz));
+
+			//	printDlg.PrintVisual(dataGrid, _constants.PrintMTCodes);
+			//	dataGrid.LayoutTransform = oldTransform;
+			//	dataGrid.Measure(oldSize);
+
+			//	((UIElement)dataGrid).Arrange(new Rect(new Point(0, 0),
+			//		oldSize));
+			//}
+
+			var printers = PrinterSettings.InstalledPrinters;
+			int printerIndex = 0;
+
 			var printDlg = new PrintDialog();
-			printDlg.PrintVisual(_mtCodesWindow, Constants.PrintMTCodes);
-			printDlg.ShowDialog();
+			if (printDlg.ShowDialog() == true)
+
+			{
+				var excelApp = new Excel.Application();
+
+				// Open the Workbook
+				var wb = excelApp.Workbooks.Open(
+					_excelFilePath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+					Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+					Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+
+				// Get the first worksheet which corresponds to MTCodes. (Excel uses base 1 indexing, not base 0.)
+				var ws = (Excel.Worksheet)wb.Worksheets[1];
+				ws.PageSetup.FitToPagesWide = 1;
+				ws.PageSetup.FitToPagesTall = false;
+				ws.PageSetup.Zoom = false;
+				wb.Save();
+
+				// Identify the printer index based on the selected printer's name
+				foreach (var printer in printers)
+				{
+					if (printer.Equals(printDlg.PrintQueue.FullName))
+					{
+						break;
+					}
+					printerIndex++;
+				}
+
+				// Print out 1 copy to the default printer:
+				ws.PrintOut(Type.Missing, Type.Missing, 1, Type.Missing,
+							printers[printerIndex], Type.Missing, Type.Missing, Type.Missing);
+
+				// Cleanup
+				GC.Collect();
+				GC.WaitForPendingFinalizers();
+
+				Marshal.FinalReleaseComObject(ws);
+
+				wb.Close(false, _excelFilePath, Type.Missing);
+				Marshal.FinalReleaseComObject(wb);
+
+				excelApp.Quit();
+				Marshal.FinalReleaseComObject(excelApp);
+			}
 		}
 
 		/// <summary>
@@ -98,15 +176,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				if (SelectedMTCode != null)
 				{
 					var mtCodeExcel = CreateMTCodeExcelModel();
-					ExcelParser.UpdateMTCodeExcel(mtCodeExcel);
+					_excelParser.UpdateMTCodeExcel(mtCodeExcel);
 
-					SetMessage(Constants.Green, Constants.SuccessfullyUpdatedMessage);
+					SetMessage(_constants.Green, _constants.SuccessfullyUpdatedMessage);
 				}				
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{Constants.AddMTCode} {ex.Message}\n {ex.StackTrace}");
-				SetMessage(Constants.Red, ex.Message);
+				Log.Logger.Error($"{_constants.AddMTCode} {ex.Message}\n {ex.StackTrace}");
+				SetMessage(_constants.Red, ex.Message);
 			}
 		}
 	
@@ -131,7 +209,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			return new MTCodeExcel
 			{
 				ExcelPath = _excelFilePath,
-				ExcelSheet = Constants.ExcelSheet,
+				ExcelSheet = _constants.ExcelSheet,
 				LocaleValue = SelectedMTCode.MTCodeLocale,
 				LocaleColumnNumber = SelectedMTCode.MTCodeLocaleColumnNo,
 				MainValue = SelectedMTCode.MTCodeMain,

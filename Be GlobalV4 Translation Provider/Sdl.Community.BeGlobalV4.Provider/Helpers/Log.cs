@@ -12,12 +12,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 		public static Logger Logger;
 		private static readonly Lazy<Log> _instance = new Lazy<Log>(() => new Log());
 		public static Log Instance { get { return _instance.Value; } }
+		private Constants _constants = new Constants();
 
 		private Log()
 		{
 			var config = new LoggingConfiguration();
 			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.SDLCommunity, Constants.SDLMachineTranslationCloud);
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), _constants.SDLCommunity, _constants.SDLMachineTranslationCloud);
 			if (!Directory.Exists(logDirectoryPath))
 			{
 				Directory.CreateDirectory(logDirectoryPath);

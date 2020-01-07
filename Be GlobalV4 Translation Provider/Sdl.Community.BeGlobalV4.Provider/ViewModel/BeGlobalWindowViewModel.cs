@@ -17,6 +17,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private int _selectedTabIndex;
 		private string _message;
 		private readonly BeGlobalWindow _mainWindow;
+		private Constants _constants = new Constants();
 
 		public static readonly Log Log = Log.Instance;
 
@@ -55,7 +56,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				var isWindowValid = IsWindowValid(false);
 				if(!isWindowValid)
 				{
-					Message = Constants.CredentialsAndInternetValidation;
+					Message = _constants.CredentialsAndInternetValidation;
 				}
 				OnPropertyChanged();
 				Mouse.OverrideCursor = Cursors.Arrow;
@@ -99,7 +100,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			Options.Model = LanguageMappingsViewModel.SelectedModelOption?.Model;
 			try
 			{
-				if (LoginViewModel.SelectedOption.Type.Equals(Constants.User))
+				if (LoginViewModel.SelectedOption.Type.Equals(_constants.User))
 				{
 					var password = loginTab?.UserPasswordBox.Password;
 					if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(LoginViewModel.Email))
@@ -135,16 +136,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				}
 				if (loginTab != null)
 				{
-					Message = Constants.CredentialsValidation;
+					Message = _constants.CredentialsValidation;
 				}				
 			}
 			catch (Exception e)
 			{
 				if (loginTab != null)
 				{
-					Message = (e.Message.Contains(Constants.TokenFailed) || e.Message.Contains(Constants.NullValue)) ? Constants.CredentialsNotValid : e.Message;
+					Message = (e.Message.Contains(_constants.TokenFailed) || e.Message.Contains(_constants.NullValue)) ? _constants.CredentialsNotValid : e.Message;
 				}
-				Log.Logger.Error($"{Constants.IsWindowValid} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.IsWindowValid} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}

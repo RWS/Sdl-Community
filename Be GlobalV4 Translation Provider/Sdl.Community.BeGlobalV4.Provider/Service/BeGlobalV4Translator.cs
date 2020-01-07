@@ -15,6 +15,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		private readonly IRestClient _client;
 		private readonly string _flavor;
 		private readonly IMessageBoxService _messageBoxService;
+		private Constants _constants = new Constants();
 
 		public static readonly Log Log = Log.Instance;
 
@@ -47,14 +48,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				var response = _client.Execute(request);
 				if (response.StatusCode != HttpStatusCode.OK)
 				{
-					throw new Exception(Constants.TokenFailed + response.Content);
+					throw new Exception(_constants.TokenFailed + response.Content);
 				}
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
 				_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{Constants.BeGlobalV4Translator} {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{_constants.BeGlobalV4Translator} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -81,7 +82,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.GetClientInformation} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.GetClientInformation} {e.Message}\n {e.StackTrace}");
 			}
 			return 0;
 		}
@@ -112,7 +113,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 					if (response.StatusCode == 0)
 					{
-						throw new WebException(Constants.InternetConnection);
+						throw new WebException(_constants.InternetConnection);
 					}
 				}
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
@@ -124,7 +125,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.TranslateTextMethod} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.TranslateTextMethod} {e.Message}\n {e.StackTrace}");
 				throw;
 			}
 		}
@@ -149,7 +150,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{ Constants.GetUserInformation} { e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.GetUserInformation} { e.Message}\n {e.StackTrace}");
 			}
 			return 0;
 		}
@@ -174,7 +175,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.SubscriptionInfoMethod} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.SubscriptionInfoMethod} {e.Message}\n {e.StackTrace}");
 			}
 			return new SubscriptionInfo();
 		}
@@ -194,7 +195,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 						if (response.StatusCode == 0)
 						{
-							throw new WebException(Constants.InternetConnection);
+							throw new WebException(_constants.InternetConnection);
 						}
 					}
 
@@ -205,16 +206,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					}
 					status = json.translationStatus;
 
-					if (!status.Equals(Constants.DONE, StringComparison.CurrentCultureIgnoreCase))
+					if (!status.Equals(_constants.DONE, StringComparison.CurrentCultureIgnoreCase))
 					{
 						System.Threading.Thread.Sleep(300);
 					}
-					if (status.Equals(Constants.FAILED))
+					if (status.Equals(_constants.FAILED))
 					{
 						ShowErrors(response);
 					}
-				} while (status.Equals(Constants.INIT, StringComparison.CurrentCultureIgnoreCase) ||
-						 status.Equals(Constants.TRANSLATING, StringComparison.CurrentCultureIgnoreCase));
+				} while (status.Equals(_constants.INIT, StringComparison.CurrentCultureIgnoreCase) ||
+						 status.Equals(_constants.TRANSLATING, StringComparison.CurrentCultureIgnoreCase));
 
 				response = RestGet($"/mt/translations/async/{id}/content");
 				if (!response.IsSuccessful)
@@ -222,14 +223,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					ShowErrors(response);
 					if (response.StatusCode == 0)
 					{
-						throw new WebException(Constants.InternetConnection);
+						throw new WebException(_constants.InternetConnection);
 					}
 				}
 				return response.RawBytes;
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.WaitTranslationMethod} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.WaitTranslationMethod} {e.Message}\n {e.StackTrace}");
 				throw;
 			}
 		}
@@ -250,7 +251,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		{
 			var pluginVersion = VersionHelper.GetPluginVersion();
 			var studioVersion = VersionHelper.GetStudioVersion();
-			request.AddHeader(Constants.TraceId, $"{Constants.SDLMachineTranslationCloudProvider} {pluginVersion} - {studioVersion}.{Guid.NewGuid().ToString()}");
+			request.AddHeader(_constants.TraceId, $"{_constants.SDLMachineTranslationCloudProvider} {pluginVersion} - {studioVersion}.{Guid.NewGuid().ToString()}");
 		}
 
 		private void ShowErrors(IRestResponse response)
@@ -260,7 +261,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				foreach (var error in responseContent.Errors)
 				{
-					throw new Exception($"{Constants.ErrorCode} {error.Code}, {error.Description}");
+					throw new Exception($"{_constants.ErrorCode} {error.Code}, {error.Description}");
 				}
 			}
 		}

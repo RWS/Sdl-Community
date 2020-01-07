@@ -15,8 +15,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		Description = "SDL Machine Translation Cloud Provider")]
 	public class BeGlobalProviderUi : ITranslationProviderWinFormsUI
 	{
-		public string TypeName => Constants.PluginName;
-		public string TypeDescription => Constants.PluginName;
+		private Constants _constants = new Constants();
+
+		public string TypeName => _constants.PluginName;
+		public string TypeDescription => _constants.PluginName;
 		public bool SupportsEditing => true;
 		public static readonly Log Log = Log.Instance;
 
@@ -49,7 +51,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.Browse} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.Browse} {e.Message}\n {e.StackTrace}");
 			}
 			return null;
 		}
@@ -85,7 +87,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.EditWindow} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.EditWindow} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}
@@ -106,8 +108,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var info = new TranslationProviderDisplayInfo
 			{
-				Name = Constants.PluginName,
-				TooltipText = Constants.PluginName,
+				Name = _constants.PluginName,
+				TooltipText = _constants.PluginName,
 				TranslationProviderIcon = PluginResources.global,
 				SearchResultImage = PluginResources.global1,
 			};
@@ -173,7 +175,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{Constants.IsEmailValid} {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{_constants.IsEmailValid} {ex.Message}\n {ex.StackTrace}");
 				return false;
 			}
 		}

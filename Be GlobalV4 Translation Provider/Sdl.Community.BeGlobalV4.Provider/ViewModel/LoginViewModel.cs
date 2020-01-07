@@ -18,6 +18,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private string _loginMethod;
 		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
 		private readonly LanguagePair[] _languagePairs;
+		private Constants _constants = new Constants();
 
 		private ICommand _passwordChangedCommand;
 		private ICommand _navigateCommand;
@@ -38,12 +39,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				new Authentication
 				{
-					DisplayName = Constants.ClientAuthentication,
-					Type = Constants.Client
+					DisplayName = _constants.ClientAuthentication,
+					Type = _constants.Client
 				},
 				new Authentication
-				{   DisplayName = Constants.UserAuthentication,
-					Type = Constants.User
+				{   DisplayName = _constants.UserAuthentication,
+					Type = _constants.User
 				}
 			};
 			SelectedOption = options.UseClientAuthentication ? AuthenticationOptions[0] : AuthenticationOptions[1];
@@ -79,7 +80,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				_selectedOption = value;
 				if (_selectedOption != null)
 				{
-					LoginMethod = _selectedOption.Type.Equals(Constants.User) ? Constants.User : Constants.Client; 					
+					LoginMethod = _selectedOption.Type.Equals(_constants.User) ? _constants.User : _constants.Client; 					
 				}
 				OnPropertyChanged();
 			}
@@ -103,7 +104,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			var isEngineSet = SetEngineModel();
 			if (!isEngineSet)
 			{
-				BeGlobalWindowViewModel.Message = Constants.CredentialsAndInternetValidation;
+				BeGlobalWindowViewModel.Message = _constants.CredentialsAndInternetValidation;
 				return false;
 			}
 			return true;
@@ -178,7 +179,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void ChangePasswordAction(object parameter)
 		{
-			if (parameter.GetType().Name.Equals(Constants.PasswordBox))
+			if (parameter.GetType().Name.Equals(_constants.PasswordBox))
 			{
 				var passwordBox = (PasswordBox)parameter;
 				if (passwordBox.Password.Length > 0)

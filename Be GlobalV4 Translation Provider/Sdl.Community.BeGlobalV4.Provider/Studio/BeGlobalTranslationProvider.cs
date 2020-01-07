@@ -14,11 +14,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private string _sourceLanguage;
 		private string _targetLanguage;
 		private LanguagePair _languageDirection;
+		private Constants _constants = new Constants();
 
 		public static readonly string ListTranslationProviderScheme = "sdlmachinetranslationcloudprovider";
-		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, Constants.PluginName);
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, _constants.PluginName);
 		public Uri Uri => Options.Uri;
-		public string Name => Constants.PluginName;
+		public string Name => _constants.PluginName;
 		public bool SupportsTaggedInput => true;  
 		public bool SupportsScoring => false;	  
 		public bool SupportsSearchForTranslationUnits => true; 
@@ -59,7 +60,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.SupportsLanguageDirection} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.SupportsLanguageDirection} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}

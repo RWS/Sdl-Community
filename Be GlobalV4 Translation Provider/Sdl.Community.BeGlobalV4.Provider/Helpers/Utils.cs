@@ -5,6 +5,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 {
 	public static class Utils
 	{
+		private static Constants _constants = new Constants();
+
 		public static List<string> FormatLanguageName(string language)
 		{
 			try
@@ -20,7 +22,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{Constants.FormatLanguageName}: {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{_constants.FormatLanguageName}: {ex.Message}\n {ex.StackTrace}");
 				throw new Exception(ex.Message);
 			}
 			return new List<string>();
