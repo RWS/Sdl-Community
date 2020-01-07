@@ -14,4 +14,14 @@
 		<Setter Property="FontFamily" Value="Segoe UI"></Setter>
 		<Setter Property="Foreground" Value="Black"></Setter>
 	</Style>
+	<Style x:Key="SearchTextBoxStyle" TargetType="TextBox">
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="220"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="FontFamily" Value="Calibri"/>
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="Padding" Value="5"/>
+		<Setter Property="Height" Value="25"/>
+	</Style>	
 </ResourceDictionary>

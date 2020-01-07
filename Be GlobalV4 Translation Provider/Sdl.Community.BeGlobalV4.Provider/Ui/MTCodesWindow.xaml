@@ -15,6 +15,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
 				<ResourceDictionary x:Uid="ResourceKeyId2">
 					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>
 				</ResourceDictionary>
@@ -30,7 +31,13 @@
 			<RowDefinition Height="40"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<TextBlock Grid.Row="0" Grid.ColumnSpan="2" Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
+		<Border Grid.Column="1" Width="240" Height="30" Margin="0,5,145,0" BorderThickness="1" BorderBrush="#FFAEDCA1" >
+		<DockPanel Background="White" Height="30" DockPanel.Dock="Top" Grid.Column="1" >
+			<TextBox Text="{Binding Query, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Query,UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource SearchTextBoxStyle}"/>
+			<Image Source="../Resources/Search (1).png" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,0,0"/>
+		</DockPanel>
+		</Border>
+		<TextBlock Grid.Row="0" Grid.Column="0" Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
 				   FontWeight="Medium" FontSize="14" Foreground="{Binding MessageColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow"  Margin="13,10,10,0"/>
 		<Button Grid.Row="0" Grid.Column="1" Command="{Binding PrintCommand}" CommandParameter="{Binding ElementName=MTCodesGrid}" HorizontalAlignment="Right" Margin="0,10,120,5" ToolTip="Print MT Codes"  BorderBrush="White">
 			<Image Source="../Resources/Print.png"/>

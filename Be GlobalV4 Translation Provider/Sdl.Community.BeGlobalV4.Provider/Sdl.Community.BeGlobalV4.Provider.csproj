@@ -231,6 +231,7 @@
     <Compile Include="ViewModel\MTCodesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Search %281%29.png" />
     <None Include="Resources\MTLanguageCodes.xlsx" />
     <Resource Include="Resources\Print.png" />
     <None Include="Resources\AddNewTerm.ico" />

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
@@ -31,6 +34,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private int _lastExcelRowNumber;
 		private ExcelParser _excelParser = new ExcelParser();
+		private string _query;
 
 		private ICommand _updateCellCommand;
 		private ICommand _printCommand;
@@ -39,7 +43,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		{
 			MTCodes = new ObservableCollection<MTCodeModel>();
 			MTCodes = MapExcelCodes(excelSheetResults);
+
+			Timer.Tick += StartSearch;
+			PropertyChanged += StartSearchTimer;
 		}
+
+		public Timer Timer { get; } = new Timer { Interval = 500 };
 
 		public ObservableCollection<MTCodeModel> MTCodes
 		{
@@ -81,10 +90,39 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		public ICommand UpdateCellCommand => _updateCellCommand ?? (_updateCellCommand = new RelayCommand(UpdateMTCode));
-		public ICommand PrintCommand => _printCommand ?? (_printCommand = new RelayCommand<DataGrid>(Print));
+		public string Query
+		{
+			get => _query;
+			set
+			{
+				_query = value;
+				OnPropertyChanged(nameof(Query));
+			}
+		}
 
-		public void Print(DataGrid dataGrid)
+		public ICommand UpdateCellCommand => _updateCellCommand ?? (_updateCellCommand = new RelayCommand(UpdateMTCode));
+		public ICommand PrintCommand => _printCommand ?? (_printCommand = new RelayCommand<System.Windows.Forms.DataGrid>(Print));
+
+		public void SearchLanguages(string languageName)
+		{
+			var collectionViewSource = CollectionViewSource.GetDefaultView(MTCodes);
+
+			if (!string.IsNullOrEmpty(languageName))
+			{
+				collectionViewSource.Filter = p =>
+				{
+					var mtCodeModel = p as MTCodeModel;
+					return mtCodeModel != null && mtCodeModel.Language.ToLower().Contains(languageName.ToLower());
+				};
+				SelectedMTCode = collectionViewSource.CurrentItem as MTCodeModel;
+			}
+			else
+			{
+				collectionViewSource.Filter = null;
+			}
+		}
+
+		public void Print(System.Windows.Forms.DataGrid dataGrid)
 		{
 			// update solution to identify if the records are searched (maybe based on MTCodes number if it's < total MTCodes number from excel).
 			//If only a few records are returned after search, then use the below print logic, otherwise use the Interop logic to print entire local excel file.
@@ -117,7 +155,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			var printers = PrinterSettings.InstalledPrinters;
 			int printerIndex = 0;
 
-			var printDlg = new PrintDialog();
+			var printDlg = new System.Windows.Controls.PrintDialog();
 			if (printDlg.ShowDialog() == true)
 
 			{
@@ -187,7 +225,21 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				SetMessage(_constants.Red, ex.Message);
 			}
 		}
-	
+
+		private void StartSearchTimer(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName.Equals(nameof(Query)))
+			{
+				Timer.Stop();
+				Timer.Start();
+			}
+		}
+		private void StartSearch(object sender, EventArgs e)
+		{
+			Timer.Stop();
+			SearchLanguages(Query);
+		}
+
 		/// <summary>
 		/// Set the message text and color
 		/// </summary>
