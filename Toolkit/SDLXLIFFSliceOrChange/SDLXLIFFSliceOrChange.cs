@@ -527,6 +527,14 @@ namespace SDLXLIFFSliceOrChange
 
 		private void btnSliceit_Click(object sender, EventArgs e)
 		{
+			var resources = new UIResources(Settings.GetSavedCulture());
+			if (gridXLIFFFiles.SelectedRows.Count == 0)
+			{
+				MessageBox.Show(resources.ErrorNoFilesSelected, resources.ErrorTitleNoFilesSelected,
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
 			var studioFolder = GetStudioVersion();
 			var folder = new FolderSelectDialog
 			{
@@ -541,7 +549,11 @@ namespace SDLXLIFFSliceOrChange
 				var files =
 					(from DataGridViewRow row in gridXLIFFFiles.SelectedRows select row.Cells[0].Value.ToString())
 						.ToList();
-				if (files.Count == 0) return;
+				if (files.Count == 0)
+				{
+					
+					return;
+				}
 				ShowProcess();
 				StepProcess("Sliceing files ...", false);
 
@@ -738,6 +750,13 @@ namespace SDLXLIFFSliceOrChange
 
 		private void btnChangeit_Click(object sender, EventArgs e)
 		{
+			var resources = new UIResources(Settings.GetSavedCulture());
+			if (gridXLIFFFiles.SelectedRows.Count == 0)
+			{
+				MessageBox.Show(resources.ErrorNoFilesSelected, resources.ErrorTitleNoFilesSelected, 
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
 			ShowProcess();
 			var selectedTabIndex = tabControl1.SelectedIndex;
 			var indexes = listDocumentStructure.SelectedIndices.Cast<int>().ToList();
@@ -750,8 +769,7 @@ namespace SDLXLIFFSliceOrChange
 
 		private void DoChangeNow(int selectedTabIndex, IEnumerable<int> indexes, bool doCopySourceToTarget, bool doOR)
 		{
-			if (gridXLIFFFiles.SelectedRows.Count == 0)
-				return;
+			
 			if (selectedTabIndex == 1)
 			{
 				StartFind(true, doOR);
@@ -1169,6 +1187,7 @@ namespace SDLXLIFFSliceOrChange
 		private void SetDetailGridView(DataGridView grView)
 		{
 			var resources = new UIResources(Settings.GetSavedCulture());
+
 
 			grView.Columns[0].HeaderText = resources.Seg;
 			grView.Columns[1].HeaderText = resources.Status;
@@ -1722,6 +1741,13 @@ namespace SDLXLIFFSliceOrChange
 
 		private void btnClearit_Click(object sender, EventArgs e)
 		{
+			var resources = new UIResources(Settings.GetSavedCulture());
+			if (gridXLIFFFiles.SelectedRows.Count == 0)
+			{
+				MessageBox.Show(resources.ErrorNoFilesSelected, resources.ErrorTitleNoFilesSelected, 
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
 			ShowProcess();
 			StepProcess("Clearing target segments from selected files ...");
 			var selectedTabIndex = tabControl1.SelectedIndex;
@@ -1733,6 +1759,7 @@ namespace SDLXLIFFSliceOrChange
 
 		private void DoClearDow(int selectedTabIndex, List<int> selectedDSIndexes, bool doOR)
 		{
+			
 			StepProcess("Processing files ...");
 			if (selectedTabIndex == 1)
 			{
