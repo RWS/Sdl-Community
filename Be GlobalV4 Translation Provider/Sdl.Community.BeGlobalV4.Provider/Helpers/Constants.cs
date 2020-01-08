@@ -51,8 +51,7 @@
 		public readonly string CredentialsValidation = "Please fill the credentials fields!";
 		public readonly string CredentialsNotValid = "Please verify your credentials!";
 		public readonly string CredentialsAndInternetValidation = "The MTCloud host could not be reached and setups cannot be saved. Please verify your credentials and internet connection, and ensure you are able to connect to the server from this computer.";
-		public readonly string InternetConnection = "The MTCloud host could not be reached. Please check the internet connection and ensure you are able to connect to the server from this computer.";
-		public readonly string MTCodeEmptyValidation = "MTCode (locale) cannot be emtpy! Please fill the value in order to be added to MTLanguageCodes.xlsx file.";
-		public readonly string SuccessfullyUpdatedMessage = "MT Code was successfully updated within MTLanguageCodes.xlsx file.";
+		public readonly string InternetConnection = "The The MTCloud host could not be reached. Please check the internet connection and ensure you are able to connect to the server from this computer.";
+		public readonly string SuccessfullyUpdatedMessage = "The MT Code was successfully updated within the MTLanguageCodes.xlsx file.";
 	}
 }
