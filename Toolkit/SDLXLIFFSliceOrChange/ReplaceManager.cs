@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Xml;
 using log4net;
 //using Sdl.Utilities.BatchSearchReplace.Lib;
@@ -175,7 +177,7 @@ namespace SDLXLIFFSliceOrChange
 
         private static void ReplaceTheVaue(ReplaceSettings settings, bool inSource, XmlElement child)
         {
-            var segmentHtml = child.InnerXml;
+			var segmentHtml = child.InnerXml;
             
             if (settings.UseRegEx)
             {
