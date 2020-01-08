@@ -16,7 +16,6 @@ namespace Sdl.Community.RapidAddTerm
 		{
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			var activeDocument = editorController?.ActiveDocument;
-			activeDocument.ActiveFile?.Language
 			if (activeDocument != null)
 			{
 				var sourceSelection = activeDocument.Selection?.Source?.ToString().TrimStart().TrimEnd();
