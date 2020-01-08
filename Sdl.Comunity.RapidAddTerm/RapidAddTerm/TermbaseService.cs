@@ -16,26 +16,29 @@ namespace Sdl.Community.RapidAddTerm
 		{
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			var activeDocument = editorController?.ActiveDocument;
-
+			activeDocument.ActiveFile?.Language
 			if (activeDocument != null)
 			{
 				var sourceSelection = activeDocument.Selection?.Source?.ToString().TrimStart().TrimEnd();
 				var targetSelection = activeDocument.Selection?.Target?.ToString().TrimStart().TrimEnd();
 				if (!string.IsNullOrEmpty(sourceSelection) && !string.IsNullOrEmpty(targetSelection))
 				{
-					var sourceLanguageCode = activeDocument.ActiveFile?.SourceFile.Language.CultureInfo.Name;
-					var targetLanguageCode = activeDocument.ActiveFile?.Language.CultureInfo.Name;
+					var sourceLanguage = activeDocument.ActiveFile?.SourceFile.Language;
+					var targetLanguage = activeDocument.ActiveFile?.Language;
+
 					// Add concept to default termbase for source and target language of active file
 					var defaultTermbasePath = GetTermbasePath();
 					var languageIndexes = GetDefaultTermbaseConfiguration().LanguageIndexes;
 					if (!string.IsNullOrEmpty(defaultTermbasePath))
 					{
 						var entries = GetTermbaseEntries(defaultTermbasePath);
-						var sourceIndexName = GetTermbaseIndex(languageIndexes, activeDocument.ActiveFile?.SourceFile.Language);
-						var targetIndexName = GetTermbaseIndex(languageIndexes, activeDocument.ActiveFile?.Language);
+						var sourceIndexName = GetTermbaseIndex(languageIndexes, sourceLanguage);
+						var targetIndexName = GetTermbaseIndex(languageIndexes, targetLanguage);
+						var sourceLanguageCode = GetLanguageCode(sourceIndexName,sourceLanguage);
+						var targetLanguageCode = GetLanguageCode(targetIndexName,targetLanguage);
 						var entryText =
 							$"<conceptGrp><languageGrp><language type=\"{sourceIndexName}\" lang=\"{sourceLanguageCode}\"></language><termGrp><term>{sourceSelection}</term></termGrp></languageGrp><languageGrp><language type=\"{targetIndexName}\" lang=\"{targetLanguageCode}\"></language><termGrp><term>{targetSelection}</term></termGrp></languageGrp></conceptGrp>";
-						entries.New(entryText, true);
+						entries.New(entryText, false);
 					}
 				}
 				else
@@ -57,6 +60,20 @@ namespace Sdl.Community.RapidAddTerm
 				}
 			}
 			return string.Empty;
+		}
+
+		private bool IsSubLanguage(string languageName)
+		{
+			return languageName.IndexOf('(') >0;
+		}
+
+		private string GetLanguageCode(string termbaseIndex,Language language)
+		{
+			if (IsSubLanguage(termbaseIndex))
+			{
+				return language.CultureInfo.Name.ToUpper();
+			}
+			return language.CultureInfo.TwoLetterISOLanguageName.ToUpper();
 		}
 		private TermbaseConfiguration GetDefaultTermbaseConfiguration()
 		{
