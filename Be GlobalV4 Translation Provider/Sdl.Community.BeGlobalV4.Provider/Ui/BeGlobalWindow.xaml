@@ -26,10 +26,7 @@
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
-				<ResourceDictionary x:Uid="ResourceKeyId1">
-					<converters:BeGlobalVisibilityConverter x:Key="VisibilityConverter"/>
-				</ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />		
 				<ResourceDictionary x:Uid="ResourceKeyId2">
 					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>
 				</ResourceDictionary>

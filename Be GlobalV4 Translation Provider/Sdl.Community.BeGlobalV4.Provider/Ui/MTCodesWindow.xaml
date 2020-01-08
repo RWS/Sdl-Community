@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
 			 xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+   	         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
    		 	 WindowStyle="SingleBorderWindow" ResizeMode="CanResize"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -16,10 +17,12 @@
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
 				<ResourceDictionary x:Uid="ResourceKeyId2">
-					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>
+					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>		
 				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 		</ResourceDictionary>
 	</Window.Resources>
     <Grid>
@@ -29,23 +32,28 @@
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="40"/>
+			<RowDefinition Height="auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<Border Grid.Column="1" Width="200" Height="25" Margin="0,5,30,0" BorderThickness="1" BorderBrush="#FFAEDCA1" >
-		<DockPanel Background="White" Height="25" Grid.Column="1" >
+		<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="50"
+						    Visibility="{Binding IsWaiting, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+		<Border Grid.Column="1" Width="200" Height="25" Margin="0,7,145,0" BorderThickness="1" BorderBrush="#FFAEDCA1" HorizontalAlignment="Right" >
+		<DockPanel Background="White" Height="25" Grid.Column="1"  >
 			<TextBox Text="{Binding Query, UpdateSourceTrigger=PropertyChanged}" ToolTip="Search by Language" Style="{DynamicResource SearchTextBoxStyle}"/>
 			<Image Source="../Resources/Search (1).png" VerticalAlignment="Center" Height="25" HorizontalAlignment="Right"/>
 		</DockPanel>
 		</Border>
 		<TextBlock Grid.Row="0" Grid.Column="0" Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
 				   FontWeight="Medium" FontSize="14" Foreground="{Binding MessageColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow"  Margin="13,10,10,0"/>
-		<Button Grid.Row="0" Grid.Column="1" Command="{Binding PrintCommand}" CommandParameter="{Binding ElementName=MTCodesGrid}" HorizontalAlignment="Right" Margin="0,10,120,5" ToolTip="Print MT Codes"  BorderBrush="White">
+		<Button Grid.Row="0" Grid.Column="1" Command="{Binding PrintCommand}" CommandParameter="{Binding ElementName=MTCodesGrid}" 
+				HorizontalAlignment="Right" Margin="0,11,115,5" ToolTip="Print MT Codes"  BorderBrush="White">
 			<Image Source="../Resources/Print.png"/>
 		</Button>
-		<Button Grid.Row="0" Grid.Column="1" Width="100" HorizontalAlignment="Right" Style="{DynamicResource Sdl.Button.PrimaryStyle}" Content="Add MTCode" Margin="0,10,10,5"
+		<Button Grid.Row="0" Grid.Column="1" Width="100" HorizontalAlignment="Right" Height="25" Style="{DynamicResource Sdl.Button.PrimaryStyle}" Content="Add MTCode" Margin="0,5,10,5"
 				Command="{Binding UpdateCellCommand}" />
 
-		<DataGrid x:Name="MTCodesGrid" Style="{DynamicResource Sdl.DataGrid.GenericStyle}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="5, 0, 5, 5" AutoGenerateColumns="False" 
+		<DataGrid x:Name="MTCodesGrid" Style="{DynamicResource Sdl.DataGrid.GenericStyle}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="5, 0, 5, 5" AutoGenerateColumns="False" 
                   ItemsSource="{Binding MTCodes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                
                   SelectedValue="{Binding SelectedMTCode, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 				  FontSize="12"
@@ -55,7 +63,8 @@
                   VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Auto"
                   CanUserSortColumns="True"
-                  RowHeaderWidth="0">
+                  RowHeaderWidth="0"
+				  IsReadOnly="{Binding IsWaiting}">
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="Language" Binding="{Binding Language, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="2*"/>
 				<DataGridTextColumn Header="Region" Binding="{Binding Region, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="2*"/>

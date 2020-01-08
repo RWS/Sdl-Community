@@ -2,6 +2,8 @@
 using System.Drawing.Printing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 using Controls = System.Windows.Controls;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -45,12 +47,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		/// <param name="printDlg"></param>
 		public void PrintFile(string filePath)
 		{
-			var printDlg = new Controls.PrintDialog();
 			var printers = PrinterSettings.InstalledPrinters;
 			int printerIndex = 0;
+			var printDlg = new Controls.PrintDialog();
 
 			if (printDlg.ShowDialog() == true)
-
 			{
 				var excelApp = new Excel.Application();
 

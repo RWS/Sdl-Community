@@ -4,9 +4,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
@@ -42,7 +44,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private List<MTCodeModel> _filteredMTCodes;
 		private string _query;
 		private int _queriedCodesNumber;
-		private PrintService _printService;
+		private bool _isWaiting;
+	    private PrintService _printService;
+
 		private ICommand _updateCellCommand;
 		private ICommand _printCommand;
 
@@ -108,6 +112,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
+		public bool IsWaiting
+		{
+			get => _isWaiting;
+			set
+			{
+				_isWaiting = value;
+				OnPropertyChanged(nameof(IsWaiting));
+			}
+		}
+
 		public ICommand UpdateCellCommand => _updateCellCommand ?? (_updateCellCommand = new RelayCommand(UpdateMTCode));
 		public ICommand PrintCommand => _printCommand ?? (_printCommand = new RelayCommand<Controls.DataGrid>(Print));
 
@@ -140,26 +154,34 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		/// Print the searched MTCodes records which are exported to new Excel file/entire MTCodes from the original Excel file
 		/// </summary>
 		/// <param name="dataGrid">MTCodes dataGrid</param>
-		public void Print(Controls.DataGrid dataGrid)
+		public async void Print(Controls.DataGrid dataGrid)
 		{
+			IsWaiting = true;
+
 			// If the number of queries are less than 500 (aprox number of Studio languages), it means that user searched for a specific language
 			// and those searched records will be printed
-			if (_queriedCodesNumber < 500)
+			if (_queriedCodesNumber < 500 && _filteredMTCodes != null)
 			{
-				_printService.CreateExcelFile(_filteredExcelFilePath);
-
-				// Excel indexing starts with 1, we are starting row numbering to add values with 2, because index 1 corresponds to column names
-				var excelRow = 2;
-				foreach (var item in _filteredMTCodes)
+				await Task.Run(async () =>
 				{
-					var excelModel = CreateMTCodeExcelModel(item, excelRow++, _filteredExcelFilePath);
-					_excelParser.UpdateMTCodeExcel(excelModel);
-				}
+					_printService.CreateExcelFile(_filteredExcelFilePath);
+
+					// Excel indexing starts with 1, we are starting row numbering to add values with 2, because index 1 corresponds to column names
+					var excelRow = 2;
+					foreach (var item in _filteredMTCodes)
+					{
+						var excelModel = CreateMTCodeExcelModel(item, excelRow++, _filteredExcelFilePath);
+						await _excelParser.UpdateMTCodeExcel(excelModel);
+					}
+					IsWaiting = false;
+				}).ConfigureAwait(true);
+
+				IsWaiting = false;
 				_printService.PrintFile(_filteredExcelFilePath);
 			}
 			else
 			{
-				// Print all records which exists in original excel file
+				IsWaiting = false;
 				_printService.PrintFile(_excelFilePath);
 			}
 		}
