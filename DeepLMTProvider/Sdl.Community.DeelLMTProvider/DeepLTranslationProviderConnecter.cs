@@ -86,6 +86,8 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 					else
 					{
+						Log.Logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+						                 $"Response content: {response.Content?.ReadAsStringAsync().Result}.");
 						MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					}
 				}
