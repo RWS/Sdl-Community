@@ -3,7 +3,7 @@ using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace RapidAddTerm
+namespace Sdl.Community.RapidAddTerm
 {
 	[RibbonGroup("Sdl.Community.RapidAddTermRibbonGroup", Name = "Rapid Add Term", Description = "", ContextByType = typeof(EditorController))]
 	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]

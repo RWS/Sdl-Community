@@ -2,7 +2,7 @@
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
-namespace RapidAddTerm
+namespace Sdl.Community.RapidAddTerm
 {
 	[Action("Rapid Add Term", Name = "Rapid Add Term", Icon = "RAT1")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 10, DisplayType.Large)]

@@ -8,8 +8,8 @@
     <ProjectGuid>{9D695151-FEB9-4F90-93D3-CA3574DF485A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RapidAddTerm</RootNamespace>
-    <AssemblyName>RapidAddTerm</AssemblyName>
+    <RootNamespace>Sdl.Community.RapidAddTerm</RootNamespace>
+    <AssemblyName>Sdl.Community.RapidAddTerm</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>

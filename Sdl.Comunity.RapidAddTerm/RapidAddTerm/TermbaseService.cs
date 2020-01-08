@@ -8,7 +8,7 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Application = Sdl.MultiTerm.TMO.Interop.Application;
 
-namespace RapidAddTerm
+namespace Sdl.Community.RapidAddTerm
 {
 	public class TermbaseService
 	{
