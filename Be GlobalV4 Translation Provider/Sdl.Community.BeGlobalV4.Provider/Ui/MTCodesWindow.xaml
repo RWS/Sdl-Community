@@ -40,12 +40,12 @@
 
 		<Border Grid.Column="1" Width="200" Height="25" Margin="0,7,145,0" BorderThickness="1" BorderBrush="#FFAEDCA1" HorizontalAlignment="Right" >
 		<DockPanel Background="White" Height="25" Grid.Column="1"  >
-			<TextBox Text="{Binding Query, UpdateSourceTrigger=PropertyChanged}" ToolTip="Search by Language" Style="{DynamicResource SearchTextBoxStyle}"/>
+				<TextBox Text="{Binding Query, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Query, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource SearchTextBoxStyle}"/>
 			<Image Source="../Resources/Search (1).png" VerticalAlignment="Center" Height="25" HorizontalAlignment="Right"/>
 		</DockPanel>
 		</Border>
 		<TextBlock Grid.Row="0" Grid.Column="0" Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
-				   FontWeight="Medium" FontSize="14" Foreground="{Binding MessageColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow"  Margin="13,10,10,0"/>
+				   FontWeight="Medium" FontSize="14" Foreground="{Binding MessageColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow"  Margin="5,10,10,0"/>
 		<Button Grid.Row="0" Grid.Column="1" Command="{Binding PrintCommand}" CommandParameter="{Binding ElementName=MTCodesGrid}" 
 				HorizontalAlignment="Right" Margin="0,11,115,5" ToolTip="Print MT Codes"  BorderBrush="White">
 			<Image Source="../Resources/Print.png"/>

@@ -138,7 +138,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				collectionViewSource.Filter = p =>
 				{
 					var mtCodeModel = p as MTCodeModel;
-					return mtCodeModel != null && mtCodeModel.Language.ToLower().Contains(languageName.ToLower());
+					return (mtCodeModel != null && mtCodeModel.Language.ToLower().Contains(languageName.ToLower()))
+					|| (mtCodeModel != null && mtCodeModel.TradosCode.ToLower().Contains(languageName.ToLower()))
+					|| (mtCodeModel != null && mtCodeModel.Region.ToLower().Contains(languageName.ToLower()))
+					|| (mtCodeModel != null && mtCodeModel.MTCodeMain.ToLower().Contains(languageName.ToLower()))
+					|| (mtCodeModel != null && mtCodeModel.MTCodeLocale.ToLower().Contains(languageName.ToLower()));
 				};
 				SelectedMTCode = collectionViewSource.CurrentItem as MTCodeModel;
 			}
