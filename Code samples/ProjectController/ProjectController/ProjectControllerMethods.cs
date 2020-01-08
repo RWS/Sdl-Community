@@ -1,4 +1,6 @@
-﻿using Sdl.Desktop.IntegrationApi;
+﻿using System.IO;
+using System.Linq;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.ProjectAutomation.Settings;
@@ -35,21 +37,25 @@ namespace ProjectController
 			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			var activeProject = projectsController?.CurrentProject;
 
+			var termbConfig = activeProject?.GetTermbaseConfiguration();
+			var tembaseSettings = termbConfig?.Termbases.FirstOrDefault()?.SettingsXML;
+			var tembase = termbConfig?.Termbases.FirstOrDefault();
+
 			// Adapting translate task settings
-			var settings = activeProject?.GetSettings();
+			//var settings = activeProject?.GetSettings();
 
-			// Injecting custom type and icon for the project
-			var projectSettings = settings?.GetSettingsGroup<ProjectSettings>();
-			if (projectSettings != null)
-			{
-				projectSettings.ProjectOrigin = "Example project type";
-				projectSettings.ProjectIconPath =
-					"icon path"; //@"C:\Repository\AppStoreApplications\LingotekTMS\LingotekTMS\Resources\icon.ico";
-			}
+			//// Injecting custom type and icon for the project
+			//var projectSettings = settings?.GetSettingsGroup<ProjectSettings>();
+			//if (projectSettings != null)
+			//{
+			//	projectSettings.ProjectOrigin = "Example project type";
+			//	projectSettings.ProjectIconPath =
+			//		"icon path"; //@"C:\Repository\AppStoreApplications\LingotekTMS\LingotekTMS\Resources\icon.ico";
+			//}
 
-			activeProject?.UpdateSettings(settings);
-			activeProject?.Save();
-			projectsController?.RefreshProjects();
+			//activeProject?.UpdateSettings(settings);
+			//activeProject?.Save();
+			//projectsController?.RefreshProjects();
 		}
 	}
 }
