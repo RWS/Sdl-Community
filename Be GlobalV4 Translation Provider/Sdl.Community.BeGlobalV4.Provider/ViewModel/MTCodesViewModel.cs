@@ -2,20 +2,18 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using Controls = System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.Toolkit.LanguagePlatform.ExcelParser;
 using Sdl.Community.Toolkit.LanguagePlatform.Models;
 using Sdl.Core.Globalization;
-using Excel = Microsoft.Office.Interop.Excel;
+using Controls = System.Windows.Controls;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
@@ -26,6 +24,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private string _message;
 		private string _messageColor;
 		private static Constants _constants = new Constants();
+
 		private readonly string _excelFilePath = Path.Combine(Environment.GetFolderPath(
 			Environment.SpecialFolder.ApplicationData),
 			_constants.SDLCommunity,
@@ -37,11 +36,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			_constants.SDLCommunity,
 			_constants.SDLMachineTranslationCloud,
 			"FilteredMTLanguageCodes.xlsx");
+
 		private int _lastExcelRowNumber;
 		private ExcelParser _excelParser = new ExcelParser();
 		private List<MTCodeModel> _filteredMTCodes;
 		private string _query;
 		private int _queriedCodesNumber;
+		private PrintService _printService;
 		private ICommand _updateCellCommand;
 		private ICommand _printCommand;
 
@@ -49,6 +50,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		{
 			MTCodes = new ObservableCollection<MTCodeModel>();
 			MTCodes = MapExcelCodes(excelSheetResults);
+			_printService = new PrintService();
 
 			Timer.Tick += StartSearch;
 			PropertyChanged += StartSearchTimer;
@@ -109,6 +111,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		public ICommand UpdateCellCommand => _updateCellCommand ?? (_updateCellCommand = new RelayCommand(UpdateMTCode));
 		public ICommand PrintCommand => _printCommand ?? (_printCommand = new RelayCommand<Controls.DataGrid>(Print));
 
+		/// <summary>
+		/// Search records from grid using languageName as query input
+		/// </summary>
+		/// <param name="languageName">languageName</param>
 		public void SearchLanguages(string languageName)
 		{
 			var collectionViewSource = CollectionViewSource.GetDefaultView(MTCodes);
@@ -129,114 +135,32 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			_queriedCodesNumber = collectionViewSource.Cast<object>().Count();
 			_filteredMTCodes = collectionViewSource.Cast<MTCodeModel>().ToList();
 		}
-		
+
+		/// <summary>
+		/// Print the searched MTCodes records which are exported to new Excel file/entire MTCodes from the original Excel file
+		/// </summary>
+		/// <param name="dataGrid">MTCodes dataGrid</param>
 		public void Print(Controls.DataGrid dataGrid)
 		{
-			var printDlg = new Controls.PrintDialog();
-			if (printDlg.ShowDialog() == true)
+			// If the number of queries are less than 500 (aprox number of Studio languages), it means that user searched for a specific language
+			// and those searched records will be printed
+			if (_queriedCodesNumber < 500)
 			{
-				if (_queriedCodesNumber < 300)
-				{
-					if (File.Exists(_filteredExcelFilePath))
-					{
-						File.Delete(_filteredExcelFilePath);
-					}
-						var app = new Excel.Application();
-						var wb = app.Workbooks.Add("Workbook");
-						var ws = (Excel.Worksheet)wb.Worksheets.get_Item(1);
+				_printService.CreateExcelFile(_filteredExcelFilePath);
 
-						ws.Cells[1, 1] = "Language";
-						ws.Cells[1, 2] = "Region";
-						ws.Cells[1, 3] = "Trados Code";
-						ws.Cells[1, 4] = "MTCode (main)";
-						ws.Cells[1, 5] = "MT Code (if locale is available)";
-
-						ws.SaveAs(_filteredExcelFilePath, Excel.XlFileFormat.xlOpenXMLWorkbook, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-							Excel.XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing);
-						wb.Close(true, _filteredExcelFilePath, Type.Missing);
-						app.Quit();
-						Marshal.ReleaseComObject(ws);
-						Marshal.ReleaseComObject(wb);
-						Marshal.ReleaseComObject(app);
-					
-					var excelRow = 2;
-					foreach (var item in _filteredMTCodes)
-					{						
-						var excelModel = new MTCodeExcel
-						{
-							ExcelPath = _filteredExcelFilePath,
-							ExcelSheet = _constants.ExcelSheet,
-							LocaleValue = item.MTCodeLocale,
-							LocaleColumnNumber = item.MTCodeLocaleColumnNo,
-							MainValue = item.MTCodeMain,
-							MainColumnNumber = item.MTCodeMainColumnNo,
-							Language = item.Language,
-							LanguageColumnNumber = item.LanguageColumnNo,
-							Region = item.Region,
-							RegionColumnNumber = item.RegionColumnNo,
-							TradosCode = item.TradosCode,
-							TradosCodeColumnNumber = item.TradosCodeColumnNo,
-							SheetRowNumber = excelRow++
-						};
-						_excelParser.UpdateMTCodeExcel(excelModel);
-					}
-					PrintFile(_filteredExcelFilePath, printDlg);
-				}
-				else
+				// Excel indexing starts with 1, we are starting row numbering to add values with 2, because index 1 corresponds to column names
+				var excelRow = 2;
+				foreach (var item in _filteredMTCodes)
 				{
-					PrintFile(_excelFilePath, printDlg);
+					var excelModel = CreateMTCodeExcelModel(item, excelRow++, _filteredExcelFilePath);
+					_excelParser.UpdateMTCodeExcel(excelModel);
 				}
+				_printService.PrintFile(_filteredExcelFilePath);
 			}
-		}
-
-		private void PrintFile(string filePath, Controls.PrintDialog printDlg)
-		{
-			var printers = PrinterSettings.InstalledPrinters;
-			int printerIndex = 0;
-
-			if (printDlg.ShowDialog() == true)
-
+			else
 			{
-				var excelApp = new Excel.Application();
-
-				// Open the Workbook
-				var wb = excelApp.Workbooks.Open(
-					filePath, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-					Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-					Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-
-				// Get the first worksheet which corresponds to MTCodes. (Excel uses base 1 indexing, not base 0.)
-				var ws = (Excel.Worksheet)wb.Worksheets[1];
-				ws.PageSetup.FitToPagesWide = 1;
-				ws.PageSetup.FitToPagesTall = false;
-				ws.PageSetup.Zoom = false;
-				wb.Save();
-
-				// Identify the printer index based on the selected printer's name
-				foreach (var printer in printers)
-				{
-					if (printer.Equals(printDlg.PrintQueue.FullName))
-					{
-						break;
-					}
-					printerIndex++;
-				}
-
-				// Print out 1 copy to the default printer:
-				ws.PrintOut(Type.Missing, Type.Missing, 1, Type.Missing,
-							printers[printerIndex], Type.Missing, Type.Missing, Type.Missing);
-
-				// Cleanup
-				GC.Collect();
-				GC.WaitForPendingFinalizers();
-
-				Marshal.FinalReleaseComObject(ws);
-
-				wb.Close(false, filePath, Type.Missing);
-				Marshal.FinalReleaseComObject(wb);
-
-				excelApp.Quit();
-				Marshal.FinalReleaseComObject(excelApp);
+				// Print all records which exists in original excel file
+				_printService.PrintFile(_excelFilePath);
 			}
 		}
 
@@ -251,11 +175,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				if (SelectedMTCode != null)
 				{
-					var mtCodeExcel = CreateMTCodeExcelModel();
+					var mtCodeExcel = CreateMTCodeExcelModel(SelectedMTCode, SelectedMTCode.RowNumber, _excelFilePath);
 					_excelParser.UpdateMTCodeExcel(mtCodeExcel);
 
 					SetMessage(_constants.Green, _constants.SuccessfullyUpdatedMessage);
-				}				
+				}
 			}
 			catch (Exception ex)
 			{
@@ -294,23 +218,23 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		/// Region,Language,TradosCode and column numbers are used to add/update the row inside the Excel local file, in case the information for the selected Studio Language does not exists.
 		/// </summary>
 		/// <returns>MTCodeExcel object</returns>
-		private MTCodeExcel CreateMTCodeExcelModel()
+		private MTCodeExcel CreateMTCodeExcelModel(MTCodeModel mtCodeModel, int sheetRowNumber, string filePath)
 		{
 			return new MTCodeExcel
 			{
-				ExcelPath = _excelFilePath,
+				ExcelPath = filePath,
 				ExcelSheet = _constants.ExcelSheet,
-				LocaleValue = SelectedMTCode.MTCodeLocale,
-				LocaleColumnNumber = SelectedMTCode.MTCodeLocaleColumnNo,
-				MainValue = SelectedMTCode.MTCodeMain,
-				MainColumnNumber = SelectedMTCode.MTCodeMainColumnNo,
-				Language = SelectedMTCode.Language,
-				LanguageColumnNumber = SelectedMTCode.LanguageColumnNo,
-				Region = SelectedMTCode.Region,
-				RegionColumnNumber = SelectedMTCode.RegionColumnNo,
-				TradosCode = SelectedMTCode.TradosCode,
-				TradosCodeColumnNumber = SelectedMTCode.TradosCodeColumnNo,
-				SheetRowNumber = SelectedMTCode.RowNumber
+				LocaleValue = mtCodeModel.MTCodeLocale,
+				LocaleColumnNumber = mtCodeModel.MTCodeLocaleColumnNo,
+				MainValue = mtCodeModel.MTCodeMain,
+				MainColumnNumber = mtCodeModel.MTCodeMainColumnNo,
+				Language = mtCodeModel.Language,
+				LanguageColumnNumber = mtCodeModel.LanguageColumnNo,
+				Region = mtCodeModel.Region,
+				RegionColumnNumber = mtCodeModel.RegionColumnNo,
+				TradosCode = mtCodeModel.TradosCode,
+				TradosCodeColumnNumber = mtCodeModel.TradosCodeColumnNo,
+				SheetRowNumber = sheetRowNumber
 			};
 		}
 
@@ -326,7 +250,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			var excelValues = new List<MTCodeModel>();
 
 			// The row numbering starts with 1, because the first row in Excel corresponds to column names
-			var rowNumber = 1; 
+			var rowNumber = 1;
 			foreach (var excelSheetRow in excelSheetResults)
 			{
 				rowNumber++;
@@ -341,7 +265,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					RegionColumnNo = 2,
 					TradosCodeColumnNo = 3,
 					MTCodeMainColumnNo = 4,
-					MTCodeLocaleColumnNo = 5,					
+					MTCodeLocaleColumnNo = 5,
 					RowNumber = rowNumber
 				};
 				excelValues.Add(mtCodeModel);
@@ -352,10 +276,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			foreach (var item in studioLanguages)
 			{
 				var languageInfo = Utils.FormatLanguageName(item.DisplayName);
-				
+
 				// If the language information already exists in Excel, add it to the MTCodes collection, otherwise add the specific MTCode info as new model
 				var mtCodeModel = excelValues.FirstOrDefault(e => e.Language.Equals(languageInfo[0]) && e.TradosCode.Equals(item.IsoAbbreviation));
-				if(mtCodeModel != null)
+				if (mtCodeModel != null)
 				{
 					MTCodes.Add(mtCodeModel);
 				}
@@ -372,7 +296,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						RegionColumnNo = 2,
 						TradosCodeColumnNo = 3,
 						MTCodeMainColumnNo = 4,
-						MTCodeLocaleColumnNo = 5,						
+						MTCodeLocaleColumnNo = 5,
 						RowNumber = _lastExcelRowNumber// use a new number based on the last existing RowNumber in Excel (the new MTCodeModel will be added inside excel as new rows)
 					});
 					_lastExcelRowNumber++;

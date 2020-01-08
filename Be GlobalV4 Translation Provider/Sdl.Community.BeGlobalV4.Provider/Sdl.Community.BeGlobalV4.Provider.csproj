@@ -203,6 +203,7 @@
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Service\BeGlobalV4Translator.cs" />
     <Compile Include="Service\MessageBoxService.cs" />
+    <Compile Include="Service\PrintService.cs" />
     <Compile Include="Studio\BeGlobalExcelRibbon.cs" />
     <Compile Include="Studio\BeGlobalLanguageDirection.cs" />
     <Compile Include="Studio\BeGlobalProviderUi.cs" />
