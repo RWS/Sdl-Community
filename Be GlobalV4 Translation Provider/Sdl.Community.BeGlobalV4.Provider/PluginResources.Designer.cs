@@ -73,9 +73,9 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon AddNewTerm {
+        public static System.Drawing.Icon add_langcode {
             get {
-                object obj = ResourceManager.GetObject("AddNewTerm", resourceCulture);
+                object obj = ResourceManager.GetObject("add_langcode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
