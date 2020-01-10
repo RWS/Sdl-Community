@@ -197,6 +197,7 @@
     <Compile Include="Model\Authentication.cs" />
     <Compile Include="Model\BeGlobalLanguagePair.cs" />
     <Compile Include="Model\BeGlobalSegment.cs" />
+    <Compile Include="Model\LanguageMappingModel.cs" />
     <Compile Include="Model\MTCodeModel.cs" />
     <Compile Include="Model\ResponseError.cs" />
     <Compile Include="Model\ErrorDetails.cs" />

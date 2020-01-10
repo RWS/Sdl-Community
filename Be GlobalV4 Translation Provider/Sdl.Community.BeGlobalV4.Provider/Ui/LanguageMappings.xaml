@@ -15,6 +15,7 @@
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"></ResourceDictionary>
@@ -22,6 +23,57 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<StackPanel>
+		<DataGrid x:Name="LanguageMappingsGrid" Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
+				  ItemsSource="{Binding LanguageMappings, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                
+                  SelectedValue="{Binding SelectedLanguageMapping, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+				  Margin="15,10,15,10"
+				  CanUserResizeColumns="True"
+				  CanUserDeleteRows="False">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Project Language Pair" Binding="{Binding ProjectLanguagePair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True">
+					<DataGridTextColumn.ElementStyle>
+						<Style>
+							<Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+						</Style>
+					</DataGridTextColumn.ElementStyle>
+				</DataGridTextColumn>
+				
+				<DataGridComboBoxColumn Header="MTCode Source">
+					<DataGridComboBoxColumn.ElementStyle>
+						<Style TargetType="{x:Type ComboBox}">
+							<Setter Property="ItemsSource" Value="{Binding Path=MTCodeSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<Setter Property="SelectedItem" Value="{Binding Path=SelectedMTCodeSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+						</Style>
+					</DataGridComboBoxColumn.ElementStyle>
+					<DataGridComboBoxColumn.EditingElementStyle>
+						<Style TargetType="{x:Type ComboBox}">
+							<Setter Property="ItemsSource" Value="{Binding Path=MTCodeSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<Setter Property="SelectedItem" Value="{Binding Path=SelectedMTCodeSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+						</Style>
+					</DataGridComboBoxColumn.EditingElementStyle>
+				</DataGridComboBoxColumn>
+				
+				<DataGridComboBoxColumn Header="MTCode Target">
+					<DataGridComboBoxColumn.ElementStyle>
+						<Style TargetType="{x:Type ComboBox}">
+							<Setter Property="ItemsSource" Value="{Binding Path=MTCodeTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<Setter Property="SelectedItem" Value="{Binding Path=SelectedMTCodeTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+						</Style>
+					</DataGridComboBoxColumn.ElementStyle>
+					<DataGridComboBoxColumn.EditingElementStyle>
+						<Style TargetType="{x:Type ComboBox}">
+							<Setter Property="ItemsSource" Value="{Binding Path=MTCodeTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<Setter Property="SelectedItem" Value="{Binding Path=SelectedMTCodeTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+						</Style>
+					</DataGridComboBoxColumn.EditingElementStyle>
+				</DataGridComboBoxColumn>
+				
+
+				<DataGridComboBoxColumn Header="Engine" SelectedValueBinding="{Binding Engines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				<DataGridTextColumn Header="Dictionary" IsReadOnly="True"/>
+			</DataGrid.Columns>			
+		</DataGrid>
+		
 		<TextBlock Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select engine model :"/>
 		<ComboBox HorizontalAlignment="Left" Width="400" FontFamily="Calibri" Margin="15,5,0,10" BorderThickness="1"
 					ItemsSource="{Binding TranslationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

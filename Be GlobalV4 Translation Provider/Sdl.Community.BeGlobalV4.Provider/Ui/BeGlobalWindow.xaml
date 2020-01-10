@@ -69,8 +69,8 @@
 		            controls:TabControlHelper.UnderlineMouseOverBrush="#0E202B" Foreground="#0E202B">
 					<controls:MetroTabItem Header="Login" Margin="20,0,0,0" Width="100">
 						<views:Login x:Name="LoginTab" DataContext="{Binding LoginViewModel}" ></views:Login>
-					</controls:MetroTabItem>
-					<controls:MetroTabItem Header="Settings" Margin="35,0,0,0" Width="140">
+					</controls:MetroTabItem>				
+					<controls:MetroTabItem Header="Language Mappings" Margin="35,0,0,0" Width="290">
 						<views:LanguageMappings DataContext="{Binding LanguageMappingsViewModel}" Height="300"></views:LanguageMappings>
 					</controls:MetroTabItem>
 				</TabControl>
