@@ -77,6 +77,9 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
       <Private>False</Private>
@@ -156,6 +159,7 @@
     <Compile Include="DeepLTellMe\DeepLTellMeProvider.cs" />
     <Compile Include="DeepLTranslationProviderConnecter.cs" />
     <Compile Include="DeepLTranslationProviderTagPlacer.cs" />
+    <Compile Include="ElementVisitor.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Model\DeepLTag.cs" />
