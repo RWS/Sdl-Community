@@ -20,6 +20,16 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 			get => ResendDraftsParameter != null && Convert.ToBoolean(ResendDraftsParameter);
 			set => ResendDraftsParameter = value.ToString();
 		}
+		public bool SendPlainText
+		{
+			get => SendPlainTextParameter != null && Convert.ToBoolean(SendPlainTextParameter);
+			set => SendPlainTextParameter = value.ToString();
+		}
+		public string SendPlainTextParameter
+		{
+			get => GetStringParameter("sendPlain");
+			set => SetStringParameter("sendPlain", value);
+		}
 
 		public string Identifier { get; set; }
 

@@ -1,46 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using Sdl.LanguagePlatform.Core;
-
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
-using Sdl.Community.DeepLMTProvider.WPF.Ui;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DeepLMTProvider.WPF
 {
-	/// <summary>
-	/// Interaction logic for DeepLWindow.xaml
-	/// </summary>
-	public partial class DeepLWindow 
+	public partial class DeepLWindow
 	{
 		private static readonly List<string> TargetSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL", "ES", "PT", "RU" };
+		private readonly bool _tellMeAction;
 		private readonly LanguagePair[] _languagePairs;
-
 		public DeepLTranslationOptions Options { get; set; }
+
 		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
 		{
+			_languagePairs = languagePairs;
 			InitializeComponent();
 			Options = options;
-			_languagePairs = languagePairs;
 			if (credentialStore != null)
 			{
 				ApiKeyBox.Password = credentialStore.Credential;
 			}
+			PlainText.IsChecked = Options.SendPlainText;
+
 			GetSupportedTargetLanguages();
 		}
+
+		public DeepLWindow(DeepLTranslationOptions options, bool tellMeAction)
+		{
+			InitializeComponent();
+			_tellMeAction = tellMeAction;
+			Options = options;
+			IsEnabled = false;
+		}
+
 		public DeepLWindow()
 		{
 			InitializeComponent();
@@ -49,6 +45,16 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 		private void Ok_Click(object sender, RoutedEventArgs e)
 		{
 			Options.ApiKey = ApiKeyBox.Password.TrimEnd();
+			if (PlainText.IsChecked != null)
+			{
+				Options.SendPlainText = (bool)PlainText.IsChecked;
+			}
+
+			if (_tellMeAction)
+			{
+				DialogResult = true;
+				Close();
+			}
 			if (!string.IsNullOrEmpty(Options.ApiKey))
 			{
 				ValidationBlock.Visibility = Visibility.Hidden;
@@ -78,9 +84,10 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 		{
 			Process.Start("https://www.deepl.com/api-contact.html");
 		}
+
 		private void Cancel_Click(object sender, RoutedEventArgs e)
 		{
-			
+
 		}
 	}
 }

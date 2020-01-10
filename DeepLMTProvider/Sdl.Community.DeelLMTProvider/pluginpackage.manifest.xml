@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.DeepLMTProvider</PlugInName>
-  <Version>3.8.10.5</Version>
+  <Version>3.8.11.0</Version>
   <Description>DeepL translation provider</Description>
   <Author>SDL Community Developers</Author>
   <Include>
