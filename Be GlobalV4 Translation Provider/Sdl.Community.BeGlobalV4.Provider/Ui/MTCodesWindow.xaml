@@ -9,6 +9,7 @@
    		 	 WindowStyle="SingleBorderWindow" ResizeMode="CanResize"
              mc:Ignorable="d" 
 		     Icon="../Resources/add_langcode.ico"
+			 Title="SDL Machine Translation Language Codes Mapping Table"
              d:DesignHeight="450" d:DesignWidth="800">
 	<Window.Resources>
 		<ResourceDictionary>
