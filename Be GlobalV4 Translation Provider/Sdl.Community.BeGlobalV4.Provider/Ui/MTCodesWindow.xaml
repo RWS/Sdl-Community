@@ -64,6 +64,7 @@
                   VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Auto"
                   CanUserSortColumns="True"
+				  CanUserDeleteRows="False"
                   RowHeaderWidth="0"
 				  IsReadOnly="{Binding IsWaiting}">
 			<DataGrid.Columns>
