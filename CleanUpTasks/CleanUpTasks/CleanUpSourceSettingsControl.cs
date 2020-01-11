@@ -1,31 +1,20 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.CleanUpTasks
 {
 	public partial class CleanUpSourceSettingsControl : UserControl, ISettingsAware<CleanUpSourceSettings>
     {
-        private CleanUpSourceSettings settings = null;
-
-        public CleanUpSourceSettingsControl()
+	    public CleanUpSourceSettingsControl()
         {
             InitializeComponent();
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public CleanUpSourceSettings Settings
-        {
-            get
-            {
-                return settings;
-            }
-            set
-            {
-                settings = value;
-            }
-        }
+        public CleanUpSourceSettings Settings { get; set; }
 
         protected override void OnLeave(EventArgs e)
         {
@@ -41,6 +30,7 @@ namespace Sdl.Community.CleanUpTasks
 
         protected override void OnLoad(EventArgs e)
         {
+			base.OnLoad(e);
             // Set Settings Here!!
             Settings.Settings = Settings;
 

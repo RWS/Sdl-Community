@@ -6,87 +6,81 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace Sdl.Community.CleanUpTasks.Utilities
 {
 	public static class ProjectFileManager
-    {
-        public static IEnumerable<ProjectFile> GetProjectFiles()
-        {
-            List<ProjectFile> files = new List<ProjectFile>();
+	{
+		public static IEnumerable<ProjectFile> GetProjectFiles()
+		{
+			var files = new List<ProjectFile>();
+			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			
+			if (projectsController != null)
+			{
+				var currentProject =
+					projectsController.SelectedProjects != null
+						? projectsController.SelectedProjects.ToList()[0]
+						: projectsController.CurrentProject;
+				files.AddRange(currentProject.GetTargetLanguageFiles().Where(f => f.Role == FileRole.Translatable));
+			}
 
-            var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-            var filesController = SdlTradosStudio.Application.GetController<FilesController>();
+			return files;
+		}
 
-            if (projectsController != null)
-            {
-                foreach (var project in projectsController.SelectedProjects)
-                {
-                    files.AddRange(project.GetTargetLanguageFiles().Where(f => f.Role == FileRole.Translatable));
-                }
-            }
+		public static string GetProjectFolder()
+		{
+			var folder = string.Empty;
+			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			var filesController = SdlTradosStudio.Application.GetController<FilesController>();
 
-            if (files.Count == 0 && filesController != null)
-            {
-                files.AddRange(filesController.SelectedFiles.Where(f => f.Role == FileRole.Translatable));
-            }
+			if (projectsController != null)
+			{
+				if (projectsController.SelectedProjects.Count() == 1)
+				{
+					var project = projectsController.SelectedProjects.FirstOrDefault();
+					folder = project.FilePath;
+				}
+			}
 
-            return files;
-        }
+			if (string.IsNullOrEmpty(folder) && filesController != null)
+			{
+				folder = filesController.CurrentProject.FilePath;
+			}
 
-        public static string GetProjectFolder()
-        {
-            var folder = string.Empty;
-            var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-            var filesController = SdlTradosStudio.Application.GetController<FilesController>();
+			return folder;
+		}
 
-            if (projectsController != null)
-            {
-                if (projectsController.SelectedProjects.Count() == 1)
-                {
-                    var project = projectsController.SelectedProjects.FirstOrDefault();
-                    folder = project.FilePath;
-                }
-            }
+		public static string GetTargetLanguageFolder()
+		{
+			var folder = string.Empty;
+			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			var filesController = SdlTradosStudio.Application.GetController<FilesController>();
 
-            if (string.IsNullOrEmpty(folder) && filesController != null)
-            {
-                folder = filesController.CurrentProject.FilePath;
-            }
+			if (projectsController != null)
+			{
+				if (projectsController.SelectedProjects.Count() == 1)
+				{
+					var project = projectsController.SelectedProjects.FirstOrDefault();
 
-            return folder;
-        }
+					if (project != null)
+					{
+						var firstFile = project.GetTargetLanguageFiles().FirstOrDefault();
+						if (firstFile != null)
+						{
+							folder = firstFile.Folder;
+						}
+					}
+				}
+			}
 
-        public static string GetTargetLanguageFolder()
-        {
-            var folder = string.Empty;
-            var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-            var filesController = SdlTradosStudio.Application.GetController<FilesController>();
+			if (string.IsNullOrEmpty(folder) && filesController != null)
+			{
+				var firstFile = filesController.SelectedFiles.FirstOrDefault();
 
-            if (projectsController != null)
-            {
-                if (projectsController.SelectedProjects.Count() == 1)
-                {
-                    var project = projectsController.SelectedProjects.FirstOrDefault();
+				if (firstFile != null)
+				{
+					folder = firstFile.Folder;
+				}
+			}
 
-                    if (project != null)
-                    {
-                        var firstFile = project.GetTargetLanguageFiles().FirstOrDefault();
-                        if (firstFile != null)
-                        {
-                            folder = firstFile.Folder;
-                        }
-                    }
-                }
-            }
-
-            if (string.IsNullOrEmpty(folder) && filesController != null)
-            {
-                var firstFile = filesController.SelectedFiles.FirstOrDefault();
-
-                if (firstFile != null)
-                {
-                    folder = firstFile.Folder;
-                }
-            }
-
-            return folder;
-        }
-    }
+			return folder;
+		}
+	}
 }
