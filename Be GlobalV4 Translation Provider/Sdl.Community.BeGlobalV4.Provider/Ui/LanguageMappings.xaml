@@ -67,14 +67,28 @@
 						</Style>
 					</DataGridComboBoxColumn.EditingElementStyle>
 				</DataGridComboBoxColumn>
-				
 
-				<DataGridComboBoxColumn Header="Engine" SelectedValueBinding="{Binding Engines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+				<DataGridComboBoxColumn Header="Engine" DisplayMemberPath="DisplayName" SelectedItemBinding="{Binding Path=SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+					<DataGridComboBoxColumn.ElementStyle>
+						<Style TargetType="{x:Type ComboBox}">
+							<Setter Property="ItemsSource" Value="{Binding Path=Engines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<Setter Property="SelectedItem" Value="{Binding Path=SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+						</Style>
+					</DataGridComboBoxColumn.ElementStyle>
+					<DataGridComboBoxColumn.EditingElementStyle>
+						<Style TargetType="{x:Type ComboBox}">
+							<Setter Property="ItemsSource" Value="{Binding Path=Engines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<Setter Property="SelectedItem" Value="{Binding Path=SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+						</Style>
+					</DataGridComboBoxColumn.EditingElementStyle>
+				</DataGridComboBoxColumn>
+
 				<DataGridTextColumn Header="Dictionary" IsReadOnly="True"/>
 			</DataGrid.Columns>			
 		</DataGrid>
 		
-		<TextBlock Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select engine model :"/>
+		<!--<TextBlock Margin="15,10,0,10" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockAlignCenter}" Text="Please select engine model :"/>
 		<ComboBox HorizontalAlignment="Left" Width="400" FontFamily="Calibri" Margin="15,5,0,10" BorderThickness="1"
 					ItemsSource="{Binding TranslationOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 					SelectedItem="{Binding SelectedModelOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"					
@@ -92,7 +106,8 @@
 					<Setter Property="BorderThickness" Value="0"/>
 				</Style>
 			</ComboBox.ItemContainerStyle>
-		</ComboBox>
+		</ComboBox>-->
+		
 		<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments"/>
 	</StackPanel>
 </UserControl>

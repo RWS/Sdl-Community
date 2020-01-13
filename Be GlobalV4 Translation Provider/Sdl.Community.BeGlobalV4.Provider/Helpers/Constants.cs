@@ -44,6 +44,7 @@
 		public readonly string AddMTCode = "AddMTCode method: ";
 		public readonly string RemoveMTCode = "RemoveMTCode method: ";
 		public readonly string FormatLanguageName = "FormatLanguageName method: ";
+		public readonly string SplitLanguagePair= "SplitLanguagePair method: ";
 
 		// Messages
 		public readonly string ForbiddenLicense = "Forbidden: Please check your license";

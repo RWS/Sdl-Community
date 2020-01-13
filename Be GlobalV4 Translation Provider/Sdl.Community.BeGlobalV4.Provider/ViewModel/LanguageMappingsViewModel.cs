@@ -104,29 +104,28 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				var languagePair = $"{sourceLanguage.DisplayName} - {targetLanguage.DisplayName}";
 
-				var mtCodeTarget = AppInitializer.MTCodes.FirstOrDefault(s => s.TradosCode.Equals(targetLanguage?.CultureInfo?.Name) 
+				var mtCodeTarget = AppInitializer.MTCodes.FirstOrDefault(s => s.TradosCode.Equals(targetLanguage?.CultureInfo?.Name)
 				|| s.TradosCode.Equals(targetLanguage?.IsoAbbreviation));
 				if (mtCodeTarget != null)
 				{
 					MTCodeTargetList.Add(mtCodeTarget.MTCodeMain);
 					if (!string.IsNullOrEmpty(mtCodeTarget.MTCodeLocale))
-					{ 
+					{
 						MTCodeTargetList.Add(mtCodeTarget.MTCodeLocale);
 					}
+
+					var languageMappingModel = new LanguageMappingModel
+					{
+						ProjectLanguagePair = languagePair,
+						MTCodeSource = new ObservableCollection<string>(MTCodeSourceList),
+						SelectedMTCodeSource = MTCodeSourceList[0],
+						MTCodeTarget = new ObservableCollection<string>(MTCodeTargetList),
+						SelectedMTCodeTarget = MTCodeTargetList[0],
+						Engines = new ObservableCollection<TranslationModel>()
+					};
+					LanguageMappings.Add(languageMappingModel);
+					MTCodeTargetList.Clear();
 				}
-
-				var languageMappingModel = new LanguageMappingModel
-				{
-					ProjectLanguagePair = languagePair,
-					MTCodeSource = new ObservableCollection<string>(MTCodeSourceList),
-					SelectedMTCodeSource = MTCodeSourceList[0],
-					MTCodeTarget = new ObservableCollection<string>(MTCodeTargetList),
-					SelectedMTCodeTarget = MTCodeTargetList[0],
-				};
-				LanguageMappings.Add(languageMappingModel);
-				MTCodeTargetList.Clear();
-
-				// To Do: After user select the MT Code combination, load the engines (n a different method)
 			}
 		}
 	}

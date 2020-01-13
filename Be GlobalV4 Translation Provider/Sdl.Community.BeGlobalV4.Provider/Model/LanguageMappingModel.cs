@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Sdl.Community.BeGlobalV4.Provider.ViewModel;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Model
@@ -9,7 +8,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 		private string _projectLanguagePair;
 		private string _selectedMTCodeSource;
 		private string _selectedMTCodeTarget;
-		private ObservableCollection<string> _engines;
+		private TranslationModel _selectedModel;
+		private ObservableCollection<TranslationModel> _engines;
 		private ObservableCollection<string> _mtCodeSource;
 		private ObservableCollection<string> _mtCodeTarget;
 
@@ -23,13 +23,23 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 			}
 		}
 
-		public ObservableCollection<string> Engines
+		public ObservableCollection<TranslationModel> Engines
 		{
 			get => _engines;
 			set
 			{
 				_engines = value;
 				OnPropertyChanged(nameof(Engines));
+			}
+		}
+
+		public TranslationModel SelectedModelOption
+		{
+			get => _selectedModel;
+			set
+			{
+				_selectedModel = value;
+				OnPropertyChanged(nameof(SelectedModelOption));
 			}
 		}
 

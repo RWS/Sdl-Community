@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Controls;
@@ -145,30 +146,31 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		{
 			if (beGlobalLanguagePairs != null)
 			{
-				var sourceLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(_languagePairs?[0].SourceCulture);
-				var pairsWithSameSource = beGlobalLanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
-				if (_languagePairs?.Count() > 0)
+				foreach (var languageMapping in LanguageMappingsViewModel?.LanguageMappings)
 				{
-					foreach (var languagePair in _languagePairs)
+					//get beGlobalLanguagePairs for the specific source language MTSourceCodes
+					var sourcePairs = beGlobalLanguagePairs.Where(b => languageMapping.MTCodeSource.All(m => m.Equals(b.SourceLanguageId)));
+
+					//get beGlobalLanguagePairs for the specific target MTTargetCodes and exiting sourcePairs
+					var serviceLanguagePairs = sourcePairs.Where(t => languageMapping.MTCodeTarget.All(l => l.Equals(t.TargetLanguageId))).ToList();
+					var splittedLangPair = Utils.SplitLanguagePair(languageMapping.ProjectLanguagePair);
+					var sourceCultureName = _languagePairs?.FirstOrDefault(n => n.SourceCulture.EnglishName.Equals(splittedLangPair[0]))?.SourceCulture.Name;
+					var targetCultureName = _languagePairs?.FirstOrDefault(n => n.TargetCulture.EnglishName.Equals(splittedLangPair[1]))?.TargetCulture.Name;
+
+					foreach (var serviceLanguagePair in serviceLanguagePairs)
 					{
-						var targetLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(languagePair.TargetCulture);
-
-						var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
-
-						foreach (var serviceLanguagePair in serviceLanguagePairs)
+						var existingTranslationModel = LanguageMappingsViewModel.TranslationOptions.FirstOrDefault(e => e.Model.Equals(serviceLanguagePair.Model));
+						TranslationModel newTranslationModel = null;
+						if (existingTranslationModel == null)
 						{
-							var existingTranslationModel = LanguageMappingsViewModel.TranslationOptions.FirstOrDefault(e => e.Model.Equals(serviceLanguagePair.Model));
-							TranslationModel newTranslationModel = null;
-							if (existingTranslationModel == null)
+							newTranslationModel = new TranslationModel
 							{
-								newTranslationModel = new TranslationModel
-								{
-									Model = serviceLanguagePair.Model,
-									DisplayName = serviceLanguagePair.DisplayName,
-								};
-								LanguageMappingsViewModel.TranslationOptions.Add(newTranslationModel);
-								(existingTranslationModel ?? newTranslationModel).LanguagesSupported.Add(languagePair.TargetCulture.Name, serviceLanguagePair.Name);
-							}
+								Model = serviceLanguagePair.Model,
+								DisplayName = serviceLanguagePair.DisplayName
+							};
+							languageMapping.Engines.Add(newTranslationModel);
+							languageMapping.SelectedModelOption = languageMapping?.Engines?[0];
+							(existingTranslationModel ?? newTranslationModel).LanguagesSupported.Add(sourceCultureName, targetCultureName);
 						}
 					}
 				}
@@ -219,7 +221,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		{
 			Options.Model = translationModel.Model;
 			Options.DisplayName = translationModel.DisplayName;
-			Options.LanguagesSupported = translationModel.LanguagesSupported;
+			//Options.LanguagesSupported = translationModel.LanguagesSupported;
 		}
 	}
 }
