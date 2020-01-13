@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
@@ -35,9 +37,27 @@ namespace Sdl.Community.RapidAddTerm
 						var targetIndexName = GetTermbaseIndex(languageIndexes, targetLanguage);
 						var sourceLanguageCode = GetLanguageCode(sourceIndexName,sourceLanguage);
 						var targetLanguageCode = GetLanguageCode(targetIndexName,targetLanguage);
-						var entryText =
+						
+						var sourceSearchedEntry = SearchEntry(defaultTermbasePath, sourceSelection, sourceIndexName);
+						var targetSearchedEntry = SearchEntry(defaultTermbasePath, targetSelection, targetIndexName);
+
+						if (sourceSearchedEntry != null && targetSearchedEntry != null)
+						{
+							MessageBox.Show(@"Term you are trying to add already exists",@"Duplicate", MessageBoxButtons.OK,
+								MessageBoxIcon.Warning);
+							return;
+						}
+
+						if (sourceSearchedEntry != null) // Entry already exist add term as synonym
+						{
+							AddTermToExistingEntry(sourceSearchedEntry, targetSelection, targetLanguageCode);
+						}
+						else
+						{
+							var entryText =
 							$"<conceptGrp><languageGrp><language type=\"{sourceIndexName}\" lang=\"{sourceLanguageCode}\"></language><termGrp><term>{sourceSelection}</term></termGrp></languageGrp><languageGrp><language type=\"{targetIndexName}\" lang=\"{targetLanguageCode}\"></language><termGrp><term>{targetSelection}</term></termGrp></languageGrp></conceptGrp>";
-						entries.New(entryText, false);
+							entries.New(entryText, false);
+						}
 					}
 				}
 				else
@@ -51,11 +71,14 @@ namespace Sdl.Community.RapidAddTerm
 		{
 			if (termbaseIndexes.Any())
 			{
-				var termbaseIndex =
-					termbaseIndexes.FirstOrDefault(t => t.ProjectLanguage.CultureInfo.Name.Equals(currentLanguage.CultureInfo.Name));
-				if (termbaseIndex != null)
+				if (currentLanguage != null)
 				{
-					return termbaseIndex.TermbaseIndex;
+					var termbaseIndex =
+						termbaseIndexes.FirstOrDefault(t => t.ProjectLanguage.CultureInfo.Name.Equals(currentLanguage.CultureInfo.Name));
+					if (termbaseIndex != null)
+					{
+						return termbaseIndex.TermbaseIndex;
+					}
 				}
 			}
 			return string.Empty;
@@ -99,6 +122,87 @@ namespace Sdl.Community.RapidAddTerm
 				}
 			}
 			return string.Empty;
+		}
+
+		/// <summary>
+		/// Search a entru
+		/// </summary>
+		/// <param name="termbasePath">Local path of the default termbase</param>
+		/// <param name="searchText">Searched text</param>
+		/// <param name="languageCode">Language code for searched entry</param>
+		/// <returns>First entry content or NULL if there is no entry which matches the criteria</returns>
+		private Entry SearchEntry(string termbasePath,string searchText, string languageCode)
+		{
+			var multiTermApplication = new Application();
+			var localRep = multiTermApplication.LocalRepository;
+			localRep.Connect("", "");
+
+			var termbases = localRep.Termbases;
+			var path = termbasePath;
+			termbases.Add(path, "", "");
+			var termbase = termbases[path];
+			var entries = termbase.Entries;
+			//set search parameters
+			var search = termbase.Search;
+			search.Direction = MtSearchDirection.mtSearchDown;
+			search.MaximumHits = 10;
+			search.FuzzySearch = false;
+			search.SearchExpression = searchText;
+			search.SourceIndex = languageCode; 
+			var oHits = search.Execute();
+
+			foreach (HitTerm oHit in oHits)
+			{
+				//Debug.WriteLine(oHit.Text);
+				if (!string.IsNullOrEmpty(oHit.ParentEntryID))
+				{
+					var entryId = Convert.ToInt32(oHit.ParentEntryID);
+					var entry = entries.Item(entryId);
+					return entry;
+				}
+			}
+			return null;
+		}
+
+		private void AddTermToExistingEntry(Entry entry, string term, string languageCode)
+		{
+			var xml = new XmlDocument();
+			xml.LoadXml(entry.Content.Content);
+			var languageGrNodes = xml.SelectNodes("/conceptGrp/languageGrp");
+			if (languageGrNodes != null)
+			{
+				foreach (XmlNode node in languageGrNodes)
+				{
+					foreach (XmlNode childNode in node.ChildNodes)
+					{
+						if (childNode.Name.Equals("language"))
+						{
+							var attributes = childNode.Attributes;
+							if (attributes != null)
+							{
+								foreach (XmlAttribute attribute in attributes)
+								{
+									if (attribute.Name.Equals("lang"))
+									{
+										if (attribute.Value.Equals(languageCode))
+										{
+											var termGrNode = xml.CreateNode(XmlNodeType.Element, "termGrp", string.Empty);
+											var termNode = xml.CreateNode(XmlNodeType.Element, "term", string.Empty);
+											termNode.InnerText = term;
+											termGrNode.AppendChild(termNode);
+											node.AppendChild(termGrNode);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			var content = xml.InnerXml;
+			entry.LockEntry(MtLockingState.mtLock);
+			entry.Content.Content = content;
+			entry.Save();
 		}
 
 		private Entries GetTermbaseEntries(string termbasePath)
