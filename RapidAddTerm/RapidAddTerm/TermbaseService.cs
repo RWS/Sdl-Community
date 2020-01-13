@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
@@ -38,19 +37,18 @@ namespace Sdl.Community.RapidAddTerm
 						var sourceLanguageCode = GetLanguageCode(sourceIndexName,sourceLanguage);
 						var targetLanguageCode = GetLanguageCode(targetIndexName,targetLanguage);
 						
-						var sourceSearchedEntry = SearchEntry(defaultTermbasePath, sourceSelection, sourceIndexName);
-						var targetSearchedEntry = SearchEntry(defaultTermbasePath, targetSelection, targetIndexName);
-
-						if (sourceSearchedEntry != null && targetSearchedEntry != null)
+						var sourceEntry = SearchEntries(defaultTermbasePath, sourceSelection, sourceIndexName);
+						var targetEntry = SearchEntries(defaultTermbasePath, targetSelection, targetIndexName);
+						if (sourceEntry!=null & targetEntry!=null && sourceEntry.ID.Equals(targetEntry.ID))
 						{
-							MessageBox.Show(@"Term you are trying to add already exists",@"Duplicate", MessageBoxButtons.OK,
-								MessageBoxIcon.Warning);
+							MessageBox.Show(@"The term you are trying to add already exists", @"Duplicate", MessageBoxButtons.OK,
+									MessageBoxIcon.Warning);
 							return;
 						}
 
-						if (sourceSearchedEntry != null) // Entry already exist add term as synonym
+						if (sourceEntry != null) // Entry already exist add term as synonym
 						{
-							AddTermToExistingEntry(sourceSearchedEntry, targetSelection, targetLanguageCode);
+							AddTermToExistingEntry(sourceEntry, targetSelection, targetLanguageCode);
 						}
 						else
 						{
@@ -131,17 +129,13 @@ namespace Sdl.Community.RapidAddTerm
 		/// <param name="searchText">Searched text</param>
 		/// <param name="languageCode">Language code for searched entry</param>
 		/// <returns>First entry content or NULL if there is no entry which matches the criteria</returns>
-		private Entry SearchEntry(string termbasePath,string searchText, string languageCode)
+		private Entry SearchEntries(string termbasePath,string searchText, string languageCode)
 		{
-			var multiTermApplication = new Application();
-			var localRep = multiTermApplication.LocalRepository;
-			localRep.Connect("", "");
-
-			var termbases = localRep.Termbases;
-			var path = termbasePath;
-			termbases.Add(path, "", "");
-			var termbase = termbases[path];
+			var termbases = GetTermbases();
+			termbases.Add(termbasePath, "", "");
+			var termbase = termbases[termbasePath];
 			var entries = termbase.Entries;
+
 			//set search parameters
 			var search = termbase.Search;
 			search.Direction = MtSearchDirection.mtSearchDown;
@@ -153,12 +147,15 @@ namespace Sdl.Community.RapidAddTerm
 
 			foreach (HitTerm oHit in oHits)
 			{
-				//Debug.WriteLine(oHit.Text);
 				if (!string.IsNullOrEmpty(oHit.ParentEntryID))
 				{
-					var entryId = Convert.ToInt32(oHit.ParentEntryID);
-					var entry = entries.Item(entryId);
-					return entry;
+					var hitText = oHit.Text;
+					if (hitText.Equals(searchText))
+					{
+						var entryId = Convert.ToInt32(oHit.ParentEntryID);
+						var entry = entries.Item(entryId);
+						return entry;
+					}
 				}
 			}
 			return null;
@@ -207,15 +204,20 @@ namespace Sdl.Community.RapidAddTerm
 
 		private Entries GetTermbaseEntries(string termbasePath)
 		{
+			var termbases = GetTermbases();
+			termbases.Add(termbasePath, "", "");
+			var termbase = termbases[termbasePath];
+			return termbase.Entries;
+		}
+
+		private Termbases GetTermbases()
+		{
 			var multiTermApplication = new Application();
 			var localRep = multiTermApplication.LocalRepository;
 			localRep.Connect("", "");
 
 			var termbases = localRep.Termbases;
-			var path = termbasePath;
-			termbases.Add(path, "", "");
-			var termbase = termbases[path];
-			return termbase.Entries;
+			return termbases;
 		}
 	}
 }
