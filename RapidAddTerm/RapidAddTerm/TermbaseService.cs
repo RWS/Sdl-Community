@@ -8,6 +8,7 @@ using Sdl.MultiTerm.TMO.Interop;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Application = Sdl.MultiTerm.TMO.Interop.Application;
+using Termbase = Sdl.MultiTerm.TMO.Interop.Termbase;
 
 namespace Sdl.Community.RapidAddTerm
 {
@@ -132,9 +133,8 @@ namespace Sdl.Community.RapidAddTerm
 		/// <returns>First entry content or NULL if there is no entry which matches the criteria</returns>
 		private Entry SearchEntries(string termbasePath,string searchText, string languageCode)
 		{
-			var termbases = GetTermbases();
-			termbases.Add(termbasePath, "", "");
-			var termbase = termbases[termbasePath];
+			var termbase = GetTermbase(termbasePath);
+
 			var entries = termbase.Entries;
 
 			//set search parameters
@@ -164,9 +164,7 @@ namespace Sdl.Community.RapidAddTerm
 
 		private List<Entry> SearchTargetEntries(string termbasePath, string searchText, string languageCode)
 		{
-			var termbases = GetTermbases();
-			termbases.Add(termbasePath, "", "");
-			var termbase = termbases[termbasePath];
+			var termbase = GetTermbase(termbasePath);
 			var entries = termbase.Entries;
 
 			//set search parameters
@@ -248,9 +246,7 @@ namespace Sdl.Community.RapidAddTerm
 
 		private Entries GetTermbaseEntries(string termbasePath)
 		{
-			var termbases = GetTermbases();
-			termbases.Add(termbasePath, "", "");
-			var termbase = termbases[termbasePath];
+			var termbase = GetTermbase(termbasePath);
 			return termbase.Entries;
 		}
 
@@ -262,6 +258,14 @@ namespace Sdl.Community.RapidAddTerm
 
 			var termbases = localRep.Termbases;
 			return termbases;
+		}
+
+		private Termbase GetTermbase(string termbasePath)
+		{
+			var termbases = GetTermbases();
+			termbases.Add(termbasePath, "", "");
+			var termbase = termbases[termbasePath];
+			return termbase;
 		}
 	}
 }
