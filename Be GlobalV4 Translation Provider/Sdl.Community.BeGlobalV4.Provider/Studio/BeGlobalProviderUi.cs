@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Forms;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.Community.BeGlobalV4.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
@@ -29,7 +31,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				var options = new BeGlobalTranslationOptions();
 				var credentials = SplitCredentials(credentialStore, options);
-
+				if(options.LanguageMappings == null)
+				{
+					options.LanguageMappings = new ObservableCollection<LanguageMappingModel>();
+				}
 				var beGlobalWindow = new BeGlobalWindow();
 				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, credentials, languagePairs);
 				beGlobalWindow.DataContext = beGlobalVm;

@@ -166,7 +166,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 							newTranslationModel = new TranslationModel
 							{
 								Model = serviceLanguagePair.Model,
-								DisplayName = serviceLanguagePair.DisplayName
+								DisplayName = $"{serviceLanguagePair.SourceLanguageId}-{serviceLanguagePair.TargetLanguageId} {serviceLanguagePair.DisplayName}"
 							};
 							languageMapping.Engines.Add(newTranslationModel);
 							languageMapping.SelectedModelOption = languageMapping?.Engines?[0];
@@ -221,7 +221,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		{
 			Options.Model = translationModel.Model;
 			Options.DisplayName = translationModel.DisplayName;
-			//Options.LanguagesSupported = translationModel.LanguagesSupported;
+			Options.LanguagesSupported = translationModel.LanguagesSupported;
 		}
 	}
 }

@@ -19,7 +19,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		{
 			Options = options;
 			TranslationOptions = new ObservableCollection<TranslationModel>();
-			LanguageMappings = new ObservableCollection<LanguageMappingModel>();
+			LanguageMappings = options.LanguageMappings;
 			_projectController = GetProjectController();
 			LoadProjectLanguagePairs();
 
@@ -86,45 +86,48 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void LoadProjectLanguagePairs()
 		{
-			var currentProjectInfo = _projectController?.CurrentProject?.GetProjectInfo();
-			var sourceLanguage = currentProjectInfo?.SourceLanguage;
-			var targetLanguages = currentProjectInfo?.TargetLanguages;
-			var mtCodeSource = AppInitializer.MTCodes.FirstOrDefault(s => s.TradosCode.Equals(sourceLanguage?.CultureInfo?.Name)
-			|| s.TradosCode.Equals(sourceLanguage?.IsoAbbreviation));
-			if(mtCodeSource != null)
+			if (!Options.LanguageMappings.Any())
 			{
-				MTCodeSourceList.Add(mtCodeSource.MTCodeMain);
-				if (!string.IsNullOrEmpty(mtCodeSource.MTCodeLocale))
+				var currentProjectInfo = _projectController?.CurrentProject?.GetProjectInfo();
+				var sourceLanguage = currentProjectInfo?.SourceLanguage;
+				var targetLanguages = currentProjectInfo?.TargetLanguages;
+				var mtCodeSource = AppInitializer.MTCodes.FirstOrDefault(s => s.TradosCode.Equals(sourceLanguage?.CultureInfo?.Name)
+				|| s.TradosCode.Equals(sourceLanguage?.IsoAbbreviation));
+				if (mtCodeSource != null)
 				{
-					MTCodeSourceList.Add(mtCodeSource.MTCodeLocale);
-				}
-			}
-
-			foreach (var targetLanguage in targetLanguages)
-			{
-				var languagePair = $"{sourceLanguage.DisplayName} - {targetLanguage.DisplayName}";
-
-				var mtCodeTarget = AppInitializer.MTCodes.FirstOrDefault(s => s.TradosCode.Equals(targetLanguage?.CultureInfo?.Name)
-				|| s.TradosCode.Equals(targetLanguage?.IsoAbbreviation));
-				if (mtCodeTarget != null)
-				{
-					MTCodeTargetList.Add(mtCodeTarget.MTCodeMain);
-					if (!string.IsNullOrEmpty(mtCodeTarget.MTCodeLocale))
+					MTCodeSourceList.Add(mtCodeSource.MTCodeMain);
+					if (!string.IsNullOrEmpty(mtCodeSource.MTCodeLocale))
 					{
-						MTCodeTargetList.Add(mtCodeTarget.MTCodeLocale);
+						MTCodeSourceList.Add(mtCodeSource.MTCodeLocale);
 					}
+				}
 
-					var languageMappingModel = new LanguageMappingModel
+				foreach (var targetLanguage in targetLanguages)
+				{
+					var languagePair = $"{sourceLanguage.DisplayName} - {targetLanguage.DisplayName}";
+
+					var mtCodeTarget = AppInitializer.MTCodes.FirstOrDefault(s => s.TradosCode.Equals(targetLanguage?.CultureInfo?.Name)
+					|| s.TradosCode.Equals(targetLanguage?.IsoAbbreviation));
+					if (mtCodeTarget != null)
 					{
-						ProjectLanguagePair = languagePair,
-						MTCodeSource = new ObservableCollection<string>(MTCodeSourceList),
-						SelectedMTCodeSource = MTCodeSourceList[0],
-						MTCodeTarget = new ObservableCollection<string>(MTCodeTargetList),
-						SelectedMTCodeTarget = MTCodeTargetList[0],
-						Engines = new ObservableCollection<TranslationModel>()
-					};
-					LanguageMappings.Add(languageMappingModel);
-					MTCodeTargetList.Clear();
+						MTCodeTargetList.Add(mtCodeTarget.MTCodeMain);
+						if (!string.IsNullOrEmpty(mtCodeTarget.MTCodeLocale))
+						{
+							MTCodeTargetList.Add(mtCodeTarget.MTCodeLocale);
+						}
+
+						var languageMappingModel = new LanguageMappingModel
+						{
+							ProjectLanguagePair = languagePair,
+							MTCodeSource = new ObservableCollection<string>(MTCodeSourceList),
+							SelectedMTCodeSource = MTCodeSourceList[0],
+							MTCodeTarget = new ObservableCollection<string>(MTCodeTargetList),
+							SelectedMTCodeTarget = MTCodeTargetList[0],
+							Engines = new ObservableCollection<TranslationModel>()
+						};
+						Options.LanguageMappings.Add(languageMappingModel);
+						MTCodeTargetList.Clear();
+					}
 				}
 			}
 		}

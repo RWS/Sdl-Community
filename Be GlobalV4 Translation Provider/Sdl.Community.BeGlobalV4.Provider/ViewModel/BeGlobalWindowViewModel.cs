@@ -24,9 +24,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options,
 			TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
 		{
+			Options = options;
 			LanguageMappingsViewModel = new LanguageMappingsViewModel(options);
 			LoginViewModel = new LoginViewModel(options, languagePairs, LanguageMappingsViewModel, this);
-			Options = options;
 			_mainWindow = mainWindow;
 
 			if (credentialStore == null) return;

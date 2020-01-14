@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -25,6 +27,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				var splitedCredentials = credentials.Credential.Split('#');
 				options.ClientId = splitedCredentials.Length >2 ? StringExtensions.Base64Decode(splitedCredentials[0]) : string.Empty;
 				options.ClientSecret = splitedCredentials.Length > 2 ? StringExtensions.Base64Decode(splitedCredentials[1]) : string.Empty;
+				if(options.LanguageMappings == null)
+				{
+					options.LanguageMappings = new ObservableCollection<LanguageMappingModel>();
+				}
 				options.AuthenticationMethod = splitedCredentials.Length == 3 ? splitedCredentials[2] : string.Empty;
 				if (options.BeGlobalService == null)
 				{

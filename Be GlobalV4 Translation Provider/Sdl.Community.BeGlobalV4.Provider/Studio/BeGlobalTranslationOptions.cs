@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
@@ -29,6 +30,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public BeGlobalV4Translator BeGlobalService { get; set; }
 
 		public string DisplayName { get; set; }
+
+		public ObservableCollection<LanguageMappingModel> LanguageMappings { get; set; }
 
 		public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
 
