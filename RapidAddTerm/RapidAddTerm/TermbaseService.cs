@@ -31,29 +31,30 @@ namespace Sdl.Community.RapidAddTerm
 					var languageIndexes = GetDefaultTermbaseConfiguration().LanguageIndexes;
 					if (!string.IsNullOrEmpty(defaultTermbasePath))
 					{
-						var entries = GetTermbaseEntries(defaultTermbasePath);
 						var sourceIndexName = GetTermbaseIndex(languageIndexes, sourceLanguage);
+						var sourceLanguageCode = GetLanguageCode(sourceIndexName, sourceLanguage);
+
 						var targetIndexName = GetTermbaseIndex(languageIndexes, targetLanguage);
-						var sourceLanguageCode = GetLanguageCode(sourceIndexName,sourceLanguage);
 						var targetLanguageCode = GetLanguageCode(targetIndexName,targetLanguage);
 						
 						var sourceEntry = SearchEntries(defaultTermbasePath, sourceSelection, sourceIndexName);
-						var targetEntry = SearchEntries(defaultTermbasePath, targetSelection, targetIndexName);
-						if (sourceEntry!=null & targetEntry!=null && sourceEntry.ID.Equals(targetEntry.ID))
+						var targetEntries = SearchTargetEntries(defaultTermbasePath, targetSelection, targetIndexName);
+						if (sourceEntry != null)
 						{
-							MessageBox.Show(@"The term you are trying to add already exists", @"Duplicate", MessageBoxButtons.OK,
+							var targetAlreadyExists = TargetAlreadyAdded(targetEntries, sourceEntry.ID);
+							if (targetAlreadyExists)
+							{
+								MessageBox.Show(@"The term you are trying to add already exists", @"Duplicate", MessageBoxButtons.OK,
 									MessageBoxIcon.Warning);
-							return;
-						}
-
-						if (sourceEntry != null) // Entry already exist add term as synonym
-						{
+								return;
+							}
 							AddTermToExistingEntry(sourceEntry, targetSelection, targetLanguageCode);
 						}
 						else
 						{
+							var entries = GetTermbaseEntries(defaultTermbasePath);
 							var entryText =
-							$"<conceptGrp><languageGrp><language type=\"{sourceIndexName}\" lang=\"{sourceLanguageCode}\"></language><termGrp><term>{sourceSelection}</term></termGrp></languageGrp><languageGrp><language type=\"{targetIndexName}\" lang=\"{targetLanguageCode}\"></language><termGrp><term>{targetSelection}</term></termGrp></languageGrp></conceptGrp>";
+								$"<conceptGrp><languageGrp><language type=\"{sourceIndexName}\" lang=\"{sourceLanguageCode}\"></language><termGrp><term>{sourceSelection}</term></termGrp></languageGrp><languageGrp><language type=\"{targetIndexName}\" lang=\"{targetLanguageCode}\"></language><termGrp><term>{targetSelection}</term></termGrp></languageGrp></conceptGrp>";
 							entries.New(entryText, false);
 						}
 					}
@@ -161,6 +162,43 @@ namespace Sdl.Community.RapidAddTerm
 			return null;
 		}
 
+		private List<Entry> SearchTargetEntries(string termbasePath, string searchText, string languageCode)
+		{
+			var termbases = GetTermbases();
+			termbases.Add(termbasePath, "", "");
+			var termbase = termbases[termbasePath];
+			var entries = termbase.Entries;
+
+			//set search parameters
+			var search = termbase.Search;
+			search.Direction = MtSearchDirection.mtSearchDown;
+			search.MaximumHits = 10;
+			search.FuzzySearch = false;
+			search.SearchExpression = searchText;
+			search.SourceIndex = languageCode;
+			var oHits = search.Execute();
+
+			var targetEntriesList= new List<Entry>();
+			foreach (HitTerm oHit in oHits)
+			{
+				if (!string.IsNullOrEmpty(oHit.ParentEntryID))
+				{
+					var hitText = oHit.Text;
+					if (hitText.Equals(searchText))
+					{
+						var entryId = Convert.ToInt32(oHit.ParentEntryID);
+						var entry = entries.Item(entryId);
+						var entryExists = targetEntriesList.Exists(e => e.ID.Equals(entryId));
+						if (!entryExists)
+						{
+							targetEntriesList.Add(entry);
+						}
+					}
+				}
+			}
+			return targetEntriesList;
+		}
+
 		private void AddTermToExistingEntry(Entry entry, string term, string languageCode)
 		{
 			var xml = new XmlDocument();
@@ -200,6 +238,12 @@ namespace Sdl.Community.RapidAddTerm
 			entry.LockEntry(MtLockingState.mtLock);
 			entry.Content.Content = content;
 			entry.Save();
+		}
+
+		private bool TargetAlreadyAdded(List<Entry> targetEntries, int parentId)
+		{
+			var exists = targetEntries.Exists(e => e.ID.Equals(parentId));
+			return exists;
 		}
 
 		private Entries GetTermbaseEntries(string termbasePath)
