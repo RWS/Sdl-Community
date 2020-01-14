@@ -195,7 +195,7 @@ namespace SDLXLIFFSliceOrChange
                         var replacedText = sourceRg.Replace(segmentHtml, settings.SourceReplaceText);
                         child.InnerXml = replacedText;               
                     }
-                    if (!inSource && settings.TargetSearchText != string.Empty && settings.TargetReplaceText != string.Empty)
+                    if (!inSource && settings.TargetSearchText != string.Empty)
                     {
                         var targetRg = new Regex(settings.TargetSearchText, options);
                         var replacedText = targetRg.Replace(segmentHtml, settings.TargetReplaceText);

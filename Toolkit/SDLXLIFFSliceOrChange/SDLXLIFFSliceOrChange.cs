@@ -2354,9 +2354,6 @@ namespace SDLXLIFFSliceOrChange
 
 		private string ReplaceSegmentTextForPreview(string segmentText, string pattern, string replaceString)
 		{
-			if (string.IsNullOrEmpty(pattern) || string.IsNullOrEmpty(replaceString))
-				return segmentText;
-
 			var text = segmentText;
 			if (ckReplaceUseRegEx.Checked)
 			{

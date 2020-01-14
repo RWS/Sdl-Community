@@ -138,6 +138,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="NLog">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
@@ -268,6 +271,7 @@
     <Compile Include="ITagSettingsPresenter.cs" />
     <Compile Include="IVerifyingFormattingVisitor.cs" />
     <Compile Include="LockHandler.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Models\ContextDef.cs" />
     <Compile Include="Models\ConversionFile.cs" />
     <Compile Include="ConversionFileView.cs">
