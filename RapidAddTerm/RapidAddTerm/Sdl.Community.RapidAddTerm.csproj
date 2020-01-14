@@ -75,6 +75,9 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -101,13 +104,21 @@
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="RapidAddTermAction.cs" />
     <Compile Include="RapidAddTermRibbonAction.cs" />
+    <Compile Include="TellMe\RapidAddTermCommunitySupportAction.cs" />
+    <Compile Include="TellMe\RapidAddTermHelpAction.cs" />
+    <Compile Include="TellMe\RapidAddTermStoreAction.cs" />
+    <Compile Include="TellMe\RapidAddTermTellMeProvider.cs" />
     <Compile Include="TermbaseService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\TellMe1.ico" />
+    <EmbeddedResource Include="Resources\Question.ico" />
+    <EmbeddedResource Include="Resources\ForumIcon.ico" />
     <EmbeddedResource Include="Resources\RAT1.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>
@@ -115,6 +126,7 @@
     <None Include="packages.config" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
