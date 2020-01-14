@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Controls;
@@ -17,7 +16,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private Authentication _selectedOption;
 		private string _email;
 		private string _loginMethod;
-		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
 		private readonly LanguagePair[] _languagePairs;
 		private Constants _constants = new Constants();
 
@@ -30,7 +28,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			LanguageMappingsViewModel languageMappingsViewModel,
 			BeGlobalWindowViewModel beGlobalWindowViewModel)
 		{
-			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			_languagePairs = languagePairs;
 			LanguageMappingsViewModel = languageMappingsViewModel;
 			BeGlobalWindowViewModel = beGlobalWindowViewModel;
@@ -143,16 +140,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		}
 
 		private bool GetEngineModels(List<BeGlobalLanguagePair> beGlobalLanguagePairs)
-		{
+		{			
 			if (beGlobalLanguagePairs != null)
 			{
 				foreach (var languageMapping in LanguageMappingsViewModel?.LanguageMappings)
 				{
 					//get beGlobalLanguagePairs for the specific source language MTSourceCodes
-					var sourcePairs = beGlobalLanguagePairs.Where(b => languageMapping.MTCodeSource.Any(l => b.SourceLanguageId.Equals(l)));
+					var sourcePairs = beGlobalLanguagePairs.Where(b => languageMapping.MTCodesSource.Any(l => b.SourceLanguageId.Equals(l)));
 
 					//get beGlobalLanguagePairs for the specific target MTTargetCodes and exiting sourcePairs
-					var serviceLanguagePairs = sourcePairs.Where(s => languageMapping.MTCodeTarget.Any(l => s.TargetLanguageId.Equals(l)));
+					var serviceLanguagePairs = sourcePairs.Where(s => languageMapping.MTCodesTarget.Any(l => s.TargetLanguageId.Equals(l)));
 					var splittedLangPair = Utils.SplitLanguagePair(languageMapping.ProjectLanguagePair);
 					var sourceCultureName = _languagePairs?.FirstOrDefault(n => n.SourceCulture.EnglishName.Equals(splittedLangPair[0]))?.SourceCulture.Name;
 					var targetCultureName = _languagePairs?.FirstOrDefault(n => n.TargetCulture.EnglishName.Equals(splittedLangPair[1]))?.TargetCulture.Name;
@@ -168,9 +165,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 								Model = serviceLanguagePair.Model,
 								DisplayName = $"{serviceLanguagePair.SourceLanguageId}-{serviceLanguagePair.TargetLanguageId} {serviceLanguagePair.DisplayName}"
 							};
-							languageMapping.Engines.Add(newTranslationModel);
-							languageMapping.SelectedModelOption = languageMapping?.Engines?[0];
 							(existingTranslationModel ?? newTranslationModel).LanguagesSupported.Add(sourceCultureName, targetCultureName);
+
+							if (!languageMapping.Engines.Any(e=>e.DisplayName.Equals(newTranslationModel.DisplayName)))
+							{
+								languageMapping.Engines.Add(newTranslationModel);
+								languageMapping.SelectedModelOption = languageMapping?.SelectedModelOption != null ? languageMapping?.SelectedModelOption : languageMapping?.Engines?[0];
+							}
 						}
 					}
 				}

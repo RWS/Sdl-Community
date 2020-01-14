@@ -119,9 +119,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						var languageMappingModel = new LanguageMappingModel
 						{
 							ProjectLanguagePair = languagePair,
-							MTCodeSource = new ObservableCollection<string>(MTCodeSourceList),
+							MTCodesSource = new ObservableCollection<string>(MTCodeSourceList),
 							SelectedMTCodeSource = MTCodeSourceList[0],
-							MTCodeTarget = new ObservableCollection<string>(MTCodeTargetList),
+							MTCodesTarget = new ObservableCollection<string>(MTCodeTargetList),
 							SelectedMTCodeTarget = MTCodeTargetList[0],
 							Engines = new ObservableCollection<TranslationModel>()
 						};

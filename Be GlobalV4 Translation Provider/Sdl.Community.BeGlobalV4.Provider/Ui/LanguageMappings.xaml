@@ -29,25 +29,30 @@
 				  Margin="15,10,15,10"
 				  CanUserResizeColumns="True"
 				  CanUserDeleteRows="False">
-			<DataGrid.Columns>
+			<DataGrid.Columns>				
 				<DataGridTextColumn Header="Project Language Pair" Binding="{Binding ProjectLanguagePair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True">
 					<DataGridTextColumn.ElementStyle>
 						<Style>
 							<Setter Property="TextBlock.TextWrapping" Value="Wrap" />
 						</Style>
 					</DataGridTextColumn.ElementStyle>
+					<!--<DataGridTextColumn.HeaderStyle>
+						<Style TargetType="DataGridColumnHeader">
+							<Setter Property="HorizontalAlignment" Value="Center"/>
+						</Style>
+					</DataGridTextColumn.HeaderStyle>-->
 				</DataGridTextColumn>
 				
 				<DataGridComboBoxColumn Header="MTCode Source">
 					<DataGridComboBoxColumn.ElementStyle>
 						<Style TargetType="{x:Type ComboBox}">
-							<Setter Property="ItemsSource" Value="{Binding Path=MTCodeSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<Setter Property="ItemsSource" Value="{Binding Path=MTCodesSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 							<Setter Property="SelectedItem" Value="{Binding Path=SelectedMTCodeSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 						</Style>
 					</DataGridComboBoxColumn.ElementStyle>
 					<DataGridComboBoxColumn.EditingElementStyle>
 						<Style TargetType="{x:Type ComboBox}">
-							<Setter Property="ItemsSource" Value="{Binding Path=MTCodeSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<Setter Property="ItemsSource" Value="{Binding Path=MTCodesSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 							<Setter Property="SelectedItem" Value="{Binding Path=SelectedMTCodeSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 						</Style>
 					</DataGridComboBoxColumn.EditingElementStyle>
@@ -56,13 +61,13 @@
 				<DataGridComboBoxColumn Header="MTCode Target">
 					<DataGridComboBoxColumn.ElementStyle>
 						<Style TargetType="{x:Type ComboBox}">
-							<Setter Property="ItemsSource" Value="{Binding Path=MTCodeTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<Setter Property="ItemsSource" Value="{Binding Path=MTCodesTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 							<Setter Property="SelectedItem" Value="{Binding Path=SelectedMTCodeTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 						</Style>
 					</DataGridComboBoxColumn.ElementStyle>
 					<DataGridComboBoxColumn.EditingElementStyle>
 						<Style TargetType="{x:Type ComboBox}">
-							<Setter Property="ItemsSource" Value="{Binding Path=MTCodeTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<Setter Property="ItemsSource" Value="{Binding Path=MTCodesTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 							<Setter Property="SelectedItem" Value="{Binding Path=SelectedMTCodeTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 						</Style>
 					</DataGridComboBoxColumn.EditingElementStyle>

@@ -10,8 +10,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 		private string _selectedMTCodeTarget;
 		private TranslationModel _selectedModel;
 		private ObservableCollection<TranslationModel> _engines;
-		private ObservableCollection<string> _mtCodeSource;
-		private ObservableCollection<string> _mtCodeTarget;
+		private ObservableCollection<string> _mtCodesSource;
+		private ObservableCollection<string> _mtCodesTarget;
 
 		public string ProjectLanguagePair
 		{
@@ -43,23 +43,23 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 			}
 		}
 
-		public ObservableCollection<string> MTCodeSource
+		public ObservableCollection<string> MTCodesSource
 		{
-			get => _mtCodeSource;
+			get => _mtCodesSource;
 			set
 			{
-				_mtCodeSource = value;
-				OnPropertyChanged(nameof(MTCodeSource));
+				_mtCodesSource = value;
+				OnPropertyChanged(nameof(MTCodesSource));
 			}
 		}
 
-		public ObservableCollection<string> MTCodeTarget
+		public ObservableCollection<string> MTCodesTarget
 		{
-			get => _mtCodeTarget;
+			get => _mtCodesTarget;
 			set
 			{
-				_mtCodeTarget = value;
-				OnPropertyChanged(nameof(MTCodeTarget));
+				_mtCodesTarget = value;
+				OnPropertyChanged(nameof(MTCodesTarget));
 			}
 		}
 
