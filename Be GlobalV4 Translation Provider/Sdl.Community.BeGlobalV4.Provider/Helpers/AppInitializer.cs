@@ -9,6 +9,7 @@ using Sdl.Community.Toolkit.LanguagePlatform.ExcelParser;
 using Sdl.Community.Toolkit.LanguagePlatform.Models;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 {
@@ -47,6 +48,21 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 			}
 			WriteExcelLocally(excelFilePath, mtCloudFolderPath);
 			return excelParser.ReadExcel(excelFilePath, 0);
+		}
+
+		public static ProjectsController GetProjectController()
+		{
+			return SdlTradosStudio.Application.GetController<ProjectsController>();
+		}
+
+		public static FilesController GetFileController()
+		{
+			return SdlTradosStudio.Application.GetController<FilesController>();
+		}
+
+		public static EditorController GetEditorController()
+		{
+			return SdlTradosStudio.Application.GetController<EditorController>();
 		}
 
 		private static void WriteExcelLocally(string excelFilePath, string mtCloudFolderPath)

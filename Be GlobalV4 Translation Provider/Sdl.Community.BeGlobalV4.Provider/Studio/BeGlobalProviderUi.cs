@@ -31,10 +31,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				var options = new BeGlobalTranslationOptions();
 				var credentials = SplitCredentials(credentialStore, options);
-				if(options.LanguageMappings == null)
-				{
-					options.LanguageMappings = new ObservableCollection<LanguageMappingModel>();
-				}
 				var beGlobalWindow = new BeGlobalWindow();
 				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, credentials, languagePairs);
 				beGlobalWindow.DataContext = beGlobalVm;

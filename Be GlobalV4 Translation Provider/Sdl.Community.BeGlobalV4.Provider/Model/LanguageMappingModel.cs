@@ -8,11 +8,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 		private string _projectLanguagePair;
 		private string _selectedMTCodeSource;
 		private string _selectedMTCodeTarget;
-		private TranslationModel _selectedModel;
+		private TranslationModel _selectedModelOption;
 		private ObservableCollection<TranslationModel> _engines;
 		private ObservableCollection<string> _mtCodesSource;
 		private ObservableCollection<string> _mtCodesTarget;
-
+				
 		public string ProjectLanguagePair
 		{
 			get => _projectLanguagePair;
@@ -35,10 +35,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 
 		public TranslationModel SelectedModelOption
 		{
-			get => _selectedModel;
+			get => _selectedModelOption;
 			set
 			{
-				_selectedModel = value;
+				_selectedModelOption = value;
 				OnPropertyChanged(nameof(SelectedModelOption));
 			}
 		}

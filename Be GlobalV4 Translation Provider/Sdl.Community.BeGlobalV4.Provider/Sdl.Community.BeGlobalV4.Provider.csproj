@@ -83,6 +83,11 @@
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.Core.Settings, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
       <Private>False</Private>
@@ -193,6 +198,7 @@
     <Compile Include="Helpers\VersionHelper.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Helpers\WindowsControlUtils.cs" />
+    <Compile Include="Interfaces\ILanguageMappingSettings.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Model\Authentication.cs" />
     <Compile Include="Model\BeGlobalLanguagePair.cs" />
@@ -212,6 +218,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Service\BeGlobalV4Translator.cs" />
+    <Compile Include="Service\LanguageMappingsService.cs" />
     <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Service\PrintService.cs" />
     <Compile Include="Studio\BeGlobalExcelRibbon.cs" />
@@ -220,6 +227,7 @@
     <Compile Include="Studio\BeGlobalTranslationOptions.cs" />
     <Compile Include="Studio\BeGlobalTranslationProvider.cs" />
     <Compile Include="Studio\BeGlobalTranslationProviderFactory.cs" />
+    <Compile Include="Studio\LanguageMappingSettings.cs" />
     <Compile Include="UiHelpers\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -10,50 +11,40 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
 	public class LanguageMappingsViewModel : BaseViewModel
 	{
-		private TranslationModel _selectedModel;
 		private bool _reSendChecked;
-		private readonly ProjectsController _projectController;
+		private ProjectsController _projectController;
 		private LanguageMappingModel _selectedLanguageMapping;
+		private LanguageMappingsService _languageMappingService;
+		private ObservableCollection<LanguageMappingModel> _languageMappings;
+		private LanguageMappingSettings _savedMappingSettings;
 
 		public LanguageMappingsViewModel(BeGlobalTranslationOptions options)
 		{
 			Options = options;
-			TranslationOptions = new ObservableCollection<TranslationModel>();
-			LanguageMappings = options.LanguageMappings;
-			_projectController = GetProjectController();
-			LoadProjectLanguagePairs();
-
+			_languageMappings = new ObservableCollection<LanguageMappingModel>();
+			_languageMappingService = new LanguageMappingsService();
+			_savedMappingSettings = _languageMappingService.GetLanguageMappingSettings();
 
 			if (Options != null)
 			{
-				ReSendChecked = options.ResendDrafts;
-				if (options.Model != null)
-				{
-					var model = TranslationOptions.FirstOrDefault(m => m.Model.Equals(options.Model));
-					if (model != null)
-					{
-						var selectedModelIndex = TranslationOptions.IndexOf(model);
-						SelectedModelOption = TranslationOptions[selectedModelIndex];
-					}
-				}
+				ReSendChecked = options.ResendDrafts;				
 			}
 		}
-
+		
 		public BeGlobalTranslationOptions Options { get; set; }
-		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }			
-		public ObservableCollection<LanguageMappingModel> LanguageMappings { get; set; }
-		public List<string> MTCodeSourceList = new List<string>();
-		public List<string> MTCodeTargetList = new List<string>();
 
-		public TranslationModel SelectedModelOption
+		public ObservableCollection<LanguageMappingModel> LanguageMappings
 		{
-			get => _selectedModel;
+			get => _languageMappings;
 			set
 			{
-				_selectedModel = value;				
-				OnPropertyChanged(nameof(SelectedModelOption));
+				_languageMappings = value;
+				OnPropertyChanged(nameof(LanguageMappings));
 			}
 		}
+
+		public List<string> MTCodeSourceList = new List<string>();
+		public List<string> MTCodeTargetList = new List<string>();
 
 		public LanguageMappingModel SelectedLanguageMapping
 		{
@@ -71,7 +62,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			set
 			{
 				_reSendChecked = value;
-				if (Options?.Model != null)
+				if (LanguageMappings.Any())
 				{
 					Options.ResendDrafts = value;
 				}
@@ -79,15 +70,37 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		private ProjectsController GetProjectController()
+		public void LoadLanguageMappings()
 		{
-			return SdlTradosStudio.Application.GetController<ProjectsController>();
+			_projectController = AppInitializer.GetProjectController();
+			//_savedMappingSettings = _languageMappingService.GetLanguageMappingSettings();
+
+			foreach (var languageMapping in _savedMappingSettings?.LanguageMappings)
+			{
+				LanguageMappings.Add(languageMapping);
+
+				// set the SelectedModelOption of the current LanguageMappings collection (otherwise it will not shown in the grid)
+				var selectedLangModel = LanguageMappings.FirstOrDefault(l => l.ProjectLanguagePair.Equals(languageMapping.ProjectLanguagePair));
+				var langMappingIndex = LanguageMappings.IndexOf(selectedLangModel);
+				var selectedModelOption = LanguageMappings[langMappingIndex].Engines.FirstOrDefault(e => e.DisplayName.Equals(selectedLangModel.SelectedModelOption.DisplayName));
+				LanguageMappings[langMappingIndex].SelectedModelOption = selectedModelOption;
+			}
+			LoadProjectLanguagePairs();
+		}
+
+		public void SaveLanguageMappingSettings(ObservableCollection<LanguageMappingModel> languageMappings)
+		{
+			//_savedMappingSettings.LanguageMappings.Clear();
+			//_languageMappingService.RemoveLanguageMappingSettings();
+			
+			_savedMappingSettings.LanguageMappings = languageMappings;
+			_languageMappingService.SaveLanguageMappingSettings(_savedMappingSettings);
 		}
 
 		private void LoadProjectLanguagePairs()
 		{
-			if (!Options.LanguageMappings.Any())
-			{
+			if (LanguageMappings == null || !LanguageMappings.Any())
+			{				
 				var currentProjectInfo = _projectController?.CurrentProject?.GetProjectInfo();
 				var sourceLanguage = currentProjectInfo?.SourceLanguage;
 				var targetLanguages = currentProjectInfo?.TargetLanguages;
@@ -125,7 +138,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 							SelectedMTCodeTarget = MTCodeTargetList[0],
 							Engines = new ObservableCollection<TranslationModel>()
 						};
-						Options.LanguageMappings.Add(languageMappingModel);
+						LanguageMappings.Add(languageMappingModel);						
 						MTCodeTargetList.Clear();
 					}
 				}

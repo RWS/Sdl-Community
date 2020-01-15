@@ -22,6 +22,7 @@
 		public readonly string Red = "Red";
 		public readonly string Green = "Green";
 		public readonly string PrintMTCodes = "Printing MT Codes";
+		public readonly string SettingsGrId = "SDLMTCloudLanguageMapping";
 
 		// Excel MTCodes values
 		public readonly string ExcelSheet = "Sheet1";

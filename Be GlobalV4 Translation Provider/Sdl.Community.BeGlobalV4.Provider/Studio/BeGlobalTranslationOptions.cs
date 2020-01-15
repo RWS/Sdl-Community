@@ -31,16 +31,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public string DisplayName { get; set; }
 
-		public ObservableCollection<LanguageMappingModel> LanguageMappings { get; set; }
-
 		public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
-
-		[JsonIgnore]
-		public string Model
-		{
-			get => GetStringParameter("model");
-			set => SetStringParameter("model", value);
-		}
 
 		[JsonIgnore]
 		public bool ResendDrafts
@@ -67,7 +58,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			get => GetStringParameter("resenddrafts");
 			set => SetStringParameter("resenddrafts", value);
 		}
-
+		
 		[JsonIgnore]
 		public SubscriptionInfo SubscriptionInfo { get; set; }
 

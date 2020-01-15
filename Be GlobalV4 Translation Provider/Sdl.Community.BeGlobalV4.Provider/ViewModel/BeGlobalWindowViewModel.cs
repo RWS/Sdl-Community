@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
@@ -16,16 +17,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private ICommand _okCommand;
 		private int _selectedTabIndex;
 		private string _message;
-		private readonly BeGlobalWindow _mainWindow;
 		private Constants _constants = new Constants();
-
+		private readonly BeGlobalWindow _mainWindow;
 		public static readonly Log Log = Log.Instance;
 
 		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options,
 			TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
 		{
-			Options = options;
-			LanguageMappingsViewModel = new LanguageMappingsViewModel(options);
+			Options = options;	
+			LanguageMappingsViewModel = new LanguageMappingsViewModel(options);	
+
 			LoginViewModel = new LoginViewModel(options, languagePairs, LanguageMappingsViewModel, this);
 			_mainWindow = mainWindow;
 
@@ -53,11 +54,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				Mouse.OverrideCursor = Cursors.Wait;
 				_selectedTabIndex = value;
+				LanguageMappingsViewModel.LoadLanguageMappings();
 				var isWindowValid = IsWindowValid(false);
 				if(!isWindowValid)
 				{
 					Message = _constants.CredentialsAndInternetValidation;
-				}
+				}			
 				OnPropertyChanged();
 				Mouse.OverrideCursor = Cursors.Arrow;
 			}
@@ -86,6 +88,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				var isValid = IsWindowValid(true);
 				if (isValid)
 				{
+					// Remove and add the settings back to SettingsGroup of .sdlproj when user presses on Ok
+					LanguageMappingsViewModel.SaveLanguageMappingSettings(LanguageMappingsViewModel.LanguageMappings);
+
 					WindowCloser.SetDialogResult(_mainWindow, true);
 					_mainWindow.Close();
 				}
@@ -97,9 +102,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		{
 			var loginTab = _mainWindow?.LoginTab;
 			Options.ResendDrafts = LanguageMappingsViewModel.ReSendChecked;
-			Options.Model = LanguageMappingsViewModel.SelectedModelOption?.Model;
 			try
 			{
+				var areEnginesLoaded = LanguageMappingsViewModel.LanguageMappings[0].Engines.Any();
 				if (LoginViewModel.SelectedOption.Type.Equals(_constants.User))
 				{
 					var password = loginTab?.UserPasswordBox.Password;
@@ -109,7 +114,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						Options.ClientSecret = password.TrimEnd().TrimStart();
 						Options.UseClientAuthentication = false;
 						Message = string.Empty;
-						if (isOkPressed || string.IsNullOrEmpty(Options?.Model))
+						if (isOkPressed || !areEnginesLoaded)
 						{
 							return LoginViewModel.ValidateEnginesSetup();
 						}
@@ -126,8 +131,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						Options.ClientSecret = clientSecret.TrimEnd().TrimStart();
 						Options.UseClientAuthentication = true;
 						Message = string.Empty;
-
-						if (isOkPressed || string.IsNullOrEmpty(Options?.Model))
+						
+						if (isOkPressed || !areEnginesLoaded)
 						{
 							return LoginViewModel.ValidateEnginesSetup();
 						}

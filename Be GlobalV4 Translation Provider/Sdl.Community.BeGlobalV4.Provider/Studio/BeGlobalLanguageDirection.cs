@@ -37,13 +37,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			_options = beGlobalTranslationProvider.Options;
 			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			_translationUnits = new List<TranslationUnit>();
-			_editorController = GetEditorController();
-		}
-
-		public EditorController GetEditorController()
-		{
-			return SdlTradosStudio.Application.GetController<EditorController>();
-		}
+			_editorController = AppInitializer.GetEditorController();
+		}		
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{

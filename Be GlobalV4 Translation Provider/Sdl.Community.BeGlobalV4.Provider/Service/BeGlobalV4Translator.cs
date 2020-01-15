@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
@@ -13,9 +15,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 	public class BeGlobalV4Translator
 	{
 		private readonly IRestClient _client;
-		private readonly string _flavor;
 		private readonly IMessageBoxService _messageBoxService;
 		private Constants _constants = new Constants();
+		private LanguageMappingsService _languageMappingService;
+		private List<LanguageMappingModel> _languageMappings = new List<LanguageMappingModel>();
 
 		public static readonly Log Log = Log.Instance;
 
@@ -24,7 +27,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			try
 			{
 				_messageBoxService = new MessageBoxService();
-				_flavor = options.Model;
+				_languageMappingService = new LanguageMappingsService();
+				_languageMappings = _languageMappingService.GetLanguageMappingSettings()?.LanguageMappings?.ToList();
+
 				_client = new RestClient(string.Format($"{server}/v4"));
 				IRestRequest request;
 				if (options.UseClientAuthentication)
@@ -91,6 +96,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		{
 			try
 			{
+				var projectLanguagePair = $"{sourceLanguage} - {targetLanguage}";
+				var selectedModel = _languageMappings?.FirstOrDefault(l => l.ProjectLanguagePair.Contains(sourceLanguage) && l.ProjectLanguagePair.Contains(targetLanguage));
+
 				var request = new RestRequest("/mt/translations/async", Method.POST)
 				{
 					RequestFormat = DataFormat.Json
@@ -103,7 +111,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					input = texts,
 					sourceLanguageId = sourceLanguage,
 					targetLanguageId = targetLanguage,
-					model = _flavor,
+					model = selectedModel?.SelectedModelOption?.Model,
 					inputFormat = "xliff"
 				});
 				var response = _client.Execute(request);
