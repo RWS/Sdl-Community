@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-	<PlugInName>SDL Community CleanUp Tasks</PlugInName>
-	<Version>1.9.7.1</Version>
+	<PlugInName>CleanUp Tasks</PlugInName>
+	<Version>1.9.7.2</Version>
 	<Description>A pair of cleanup tasks that allows running batch tasks on source and target</Description>
 	<Author>SDL Community Developers</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="15.0" />
