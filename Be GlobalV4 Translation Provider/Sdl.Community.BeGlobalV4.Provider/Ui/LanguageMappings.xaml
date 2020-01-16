@@ -34,7 +34,6 @@
 					<DataGridTemplateColumn.HeaderStyle>						
 						<Style TargetType="DataGridColumnHeader">
 							<Setter Property="FontSize" Value="13"/>
-							<Setter Property="HorizontalAlignment" Value="Center"/>
 						</Style>
 					</DataGridTemplateColumn.HeaderStyle>
 					<DataGridTemplateColumn.CellTemplate>
