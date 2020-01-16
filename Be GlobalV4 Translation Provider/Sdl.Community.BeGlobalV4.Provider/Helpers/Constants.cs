@@ -55,5 +55,7 @@
 		public readonly string CredentialsAndInternetValidation = "The MTCloud host could not be reached and setups cannot be saved. Please verify your credentials and internet connection, and ensure you are able to connect to the server from this computer.";
 		public readonly string InternetConnection = "The The MTCloud host could not be reached. Please check the internet connection and ensure you are able to connect to the server from this computer.";
 		public readonly string SuccessfullyUpdatedMessage = "The MT Code was successfully updated within the MTLanguageCodes.xlsx file.";
+		public readonly string NoEnginesLoaded = "No MT engines were received from MTCloud for the current project's Language Pairs";
+		public readonly string EnginesSelectionMessage = "Settings not saved! Please select the corresponding engine from the Language Mappings tab.";
 	}
 }

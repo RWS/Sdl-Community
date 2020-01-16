@@ -56,11 +56,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				Mouse.OverrideCursor = Cursors.Wait;
 				_selectedTabIndex = value;
 				LanguageMappingsViewModel.LoadLanguageMappings();
-				var isWindowValid = IsWindowValid(false);
-				if(!isWindowValid)
-				{
-					Message = _constants.CredentialsAndInternetValidation;
-				}			
+				ValidateWindow(true);				
+				
 				OnPropertyChanged();
 				Mouse.OverrideCursor = Cursors.Arrow;
 			}
@@ -86,8 +83,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			var loginTab = parameter as Login;
 			if (loginTab != null)
 			{
-				var isValid = IsWindowValid(true);
-				if (isValid)
+				var validateWindow = ValidateWindow(true);
+				if (string.IsNullOrEmpty(validateWindow))
 				{
 					// Remove and add the new settings back to SettingsGroup of .sdlproj when user presses on Ok				
 					LanguageMappingsViewModel.SaveLanguageMappingSettings();
@@ -99,27 +96,25 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			Mouse.OverrideCursor = Cursors.Arrow;
 		}
 
-		private bool IsWindowValid(bool isOkPressed)
+		private string ValidateWindow(bool isOkPressed)
 		{
 			var loginTab = _mainWindow?.LoginTab;
 			Options.ResendDrafts = LanguageMappingsViewModel.ReSendChecked;
 			try
 			{
-				var areEnginesLoaded = LanguageMappingsViewModel.LanguageMappings[0].Engines.Any();
+				if(!LanguageMappingsViewModel.LanguageMappings.Any())
+				{
+					Message = _constants.EnginesSelectionMessage;
+					return Message;
+				}
+
+				var areEnginesLoaded = LanguageMappingsViewModel.LanguageMappings.Any(l=>l.Engines.Any());
 				if (LoginViewModel.SelectedOption.Type.Equals(_constants.User))
 				{
 					var password = loginTab?.UserPasswordBox.Password;
 					if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(LoginViewModel.Email))
 					{
-						Options.ClientId = LoginViewModel?.Email.TrimEnd().TrimStart();
-						Options.ClientSecret = password.TrimEnd().TrimStart();
-						Options.UseClientAuthentication = false;
-						Message = string.Empty;
-						if (isOkPressed || !areEnginesLoaded)
-						{
-							return LoginViewModel.ValidateEnginesSetup();
-						}
-						return true;
+						return GetEngineValidation(LoginViewModel?.Email, password, false, areEnginesLoaded, isOkPressed);
 					}
 				}
 				else
@@ -128,16 +123,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					var clientSecret = loginTab?.ClientSecretBox.Password;
 					if (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret))
 					{
-						Options.ClientId = clientId.TrimEnd().TrimStart();
-						Options.ClientSecret = clientSecret.TrimEnd().TrimStart();
-						Options.UseClientAuthentication = true;
-						Message = string.Empty;
-						
-						if (isOkPressed || !areEnginesLoaded)
-						{
-							return LoginViewModel.ValidateEnginesSetup();
-						}
-						return true;
+						return GetEngineValidation(clientId, clientSecret, true, areEnginesLoaded, isOkPressed);
 					}
 				}
 				if (loginTab != null)
@@ -153,7 +139,31 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				}
 				Log.Logger.Error($"{_constants.IsWindowValid} {e.Message}\n {e.StackTrace}");
 			}
-			return false;
+			return Message;
+		}
+
+		private string GetEngineValidation(string clientId, string clientSecret, bool useClientAuthentication, bool areEnginesLoaded, bool isOkPressed)
+		{
+			Options.ClientId = clientId.TrimEnd().TrimStart();
+			Options.ClientSecret = clientSecret.TrimEnd().TrimStart();
+			Options.UseClientAuthentication = useClientAuthentication;
+			Message = string.Empty;
+
+			if (!areEnginesLoaded)
+			{
+				Message = _constants.NoEnginesLoaded;
+				return Message;
+			}
+			if (isOkPressed)
+			{
+				var isEngineSetup = LoginViewModel.ValidateEnginesSetup();
+				if (!isEngineSetup)
+				{
+					Message = _constants.CredentialsAndInternetValidation;
+				}
+				return Message;
+			}
+			return Message;
 		}
 	}
 }
