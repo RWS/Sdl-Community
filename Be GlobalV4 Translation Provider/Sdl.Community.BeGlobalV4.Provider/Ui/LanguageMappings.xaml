@@ -29,8 +29,14 @@
 				  Margin="15,10,15,10"
 				  CanUserResizeColumns="True"
 				  CanUserDeleteRows="False">
-			<DataGrid.Columns>		
+			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Project Language Pair" IsReadOnly="True">
+					<DataGridTemplateColumn.HeaderStyle>						
+						<Style TargetType="DataGridColumnHeader">
+							<Setter Property="FontSize" Value="13"/>
+							<Setter Property="HorizontalAlignment" Value="Center"/>
+						</Style>
+					</DataGridTemplateColumn.HeaderStyle>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<StackPanel Orientation="Horizontal">
@@ -42,28 +48,59 @@
 				</DataGridTemplateColumn>
 
 				<DataGridTemplateColumn Header="MTCode Source">
+					<DataGridTemplateColumn.HeaderStyle>
+						<Style TargetType="DataGridColumnHeader">
+							<Setter Property="FontSize" Value="13"/>
+						</Style>
+					</DataGridTemplateColumn.HeaderStyle>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding MTCodesSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
 								      SelectedItem="{Binding SelectedMTCodeSource, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
 								Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Text="{Binding}" Margin="20,0,0,0"/>
+											<Image Source="../Resources/add_langcode.ico" Width="20" Height="20" Margin="5,0,5,0" />
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
 							</ComboBox>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
 				<DataGridTemplateColumn Header="MTCode Target">
+					<DataGridTemplateColumn.HeaderStyle>
+						<Style TargetType="DataGridColumnHeader">
+							<Setter Property="FontSize" Value="13"/>
+						</Style>
+					</DataGridTemplateColumn.HeaderStyle>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding MTCodesTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
 								      SelectedItem="{Binding SelectedMTCodeTarget, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
-								Style="{DynamicResource Sdl.ComboBox.Generic.Style}">								
+								Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Text="{Binding}" Margin="20,0,0,0"/>
+											<Image Source="../Resources/add_langcode.ico" Width="20" Height="20" Margin="5,0,5,0" />
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
 							</ComboBox>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
 				<DataGridTemplateColumn Header="Engine">
+					<DataGridTemplateColumn.HeaderStyle>
+						<Style TargetType="DataGridColumnHeader">
+							<Setter Property="FontSize" Value="13"/>
+						</Style>
+					</DataGridTemplateColumn.HeaderStyle>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding Engines,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
@@ -81,7 +118,13 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTextColumn Header="Dictionary" IsReadOnly="True" />
+				<DataGridTemplateColumn Header="Dictionary" IsReadOnly="True" >
+					<DataGridTemplateColumn.HeaderStyle>
+						<Style TargetType="DataGridColumnHeader">
+							<Setter Property="FontSize" Value="13"/>
+						</Style>
+					</DataGridTemplateColumn.HeaderStyle>
+				</DataGridTemplateColumn>
 			</DataGrid.Columns>			
 		</DataGrid>
 

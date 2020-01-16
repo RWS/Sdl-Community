@@ -77,6 +77,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			var currentSettings = _languageMappingService.GetLanguageMappingSettings();
 			if (currentSettings != null && currentSettings.LanguageMappings.Any())
 			{
+				// clear current LanguageMappings list to avoid duplications inside the grid
 				LanguageMappings.Clear();
 
 				foreach (var languageMapping in currentSettings.LanguageMappings)
