@@ -108,13 +108,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					return Message;
 				}
 
-				var areEnginesLoaded = LanguageMappingsViewModel.LanguageMappings.Any(l=>l.Engines.Any());
+				//var areEnginesLoaded = LanguageMappingsViewModel.LanguageMappings.Any(l=>l.Engines.Any());
 				if (LoginViewModel.SelectedOption.Type.Equals(_constants.User))
 				{
 					var password = loginTab?.UserPasswordBox.Password;
 					if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(LoginViewModel.Email))
 					{
-						return GetEngineValidation(LoginViewModel?.Email, password, false, areEnginesLoaded, isOkPressed);
+						return GetEngineValidation(LoginViewModel?.Email, password, false, isOkPressed);
 					}
 				}
 				else
@@ -123,7 +123,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					var clientSecret = loginTab?.ClientSecretBox.Password;
 					if (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret))
 					{
-						return GetEngineValidation(clientId, clientSecret, true, areEnginesLoaded, isOkPressed);
+						return GetEngineValidation(clientId, clientSecret, true, isOkPressed);
 					}
 				}
 				if (loginTab != null)
@@ -142,24 +142,24 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			return Message;
 		}
 
-		private string GetEngineValidation(string clientId, string clientSecret, bool useClientAuthentication, bool areEnginesLoaded, bool isOkPressed)
+		private string GetEngineValidation(string clientId, string clientSecret, bool useClientAuthentication, bool isOkPressed)
 		{
 			Options.ClientId = clientId.TrimEnd().TrimStart();
 			Options.ClientSecret = clientSecret.TrimEnd().TrimStart();
 			Options.UseClientAuthentication = useClientAuthentication;
 			Message = string.Empty;
 
-			if (!areEnginesLoaded)
-			{
-				Message = _constants.NoEnginesLoaded;
-				return Message;
-			}
-			if (isOkPressed)
+			if (isOkPressed || LanguageMappingsViewModel.LanguageMappings.Any())
 			{
 				var isEngineSetup = LoginViewModel.ValidateEnginesSetup();
 				if (!isEngineSetup)
 				{
 					Message = _constants.CredentialsAndInternetValidation;
+				}
+				else if (!LanguageMappingsViewModel.LanguageMappings.Any(l => l.Engines.Any()))
+				{
+					Message = _constants.NoEnginesLoaded;
+					return Message;
 				}
 				return Message;
 			}
