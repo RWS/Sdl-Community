@@ -92,12 +92,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			return 0;
 		}
 
-		public string TranslateText(string text, string sourceLanguage, string targetLanguage)
+		public string TranslateText(string text, string sourceDisplayName, string targetDisplayName)
 		{
 			try
 			{
-				var projectLanguagePair = $"{sourceLanguage} - {targetLanguage}";
-				var selectedModel = _languageMappings?.FirstOrDefault(l => l.ProjectLanguagePair.Contains(sourceLanguage) && l.ProjectLanguagePair.Contains(targetLanguage));
+				var selectedModel = _languageMappings?.FirstOrDefault(l => l.ProjectLanguagePair.Contains(sourceDisplayName) && l.ProjectLanguagePair.Contains(targetDisplayName));
 
 				var request = new RestRequest("/mt/translations/async", Method.POST)
 				{
@@ -109,8 +108,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				request.AddBody(new
 				{
 					input = texts,
-					sourceLanguageId = sourceLanguage,
-					targetLanguageId = targetLanguage,
+					sourceLanguageId = selectedModel?.SelectedMTCodeSource,
+					targetLanguageId = selectedModel?.SelectedMTCodeTarget,
 					model = selectedModel?.SelectedModelOption?.Model,
 					inputFormat = "xliff"
 				});

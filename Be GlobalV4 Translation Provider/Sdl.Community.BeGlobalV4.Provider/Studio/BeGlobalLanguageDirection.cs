@@ -22,7 +22,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private readonly BeGlobalTranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
 		private readonly List<TranslationUnit> _translationUnits;
-		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
 		private readonly EditorController _editorController;
 
 		public ITranslationProvider TranslationProvider => _beGlobalTranslationProvider;
@@ -35,7 +34,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			_beGlobalTranslationProvider = beGlobalTranslationProvider;
 			_languageDirection = languageDirection;
 			_options = beGlobalTranslationProvider.Options;
-			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			_translationUnits = new List<TranslationUnit>();
 			_editorController = AppInitializer.GetEditorController();
 		}		
@@ -49,14 +47,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var xliffDocument = CreateXliffFile(sourceSegments);
 
-			var sourceLanguage =
-				_normalizeSourceTextHelper.GetCorrespondingLangCode(_languageDirection.SourceCulture);
-			var targetLanguage =
-				_normalizeSourceTextHelper.GetCorrespondingLangCode(_languageDirection.TargetCulture);
-
 			var translatedXliffText =
 				WebUtility.UrlDecode(
-					_options.BeGlobalService.TranslateText(xliffDocument.ToString(), sourceLanguage, targetLanguage));
+					_options.BeGlobalService.TranslateText(
+						xliffDocument.ToString(),
+						_languageDirection?.SourceCulture?.DisplayName,
+						_languageDirection?.TargetCulture?.DisplayName));
 
 			var translatedXliff = Converter.ParseXliffString(translatedXliffText);
 			if (translatedXliff != null)
