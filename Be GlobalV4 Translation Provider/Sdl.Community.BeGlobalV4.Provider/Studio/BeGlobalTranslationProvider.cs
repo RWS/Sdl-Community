@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -11,8 +12,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
 	public class BeGlobalTranslationProvider: ITranslationProvider
 	{
-		private string _sourceLanguage;
-		private string _targetLanguage;
 		private LanguagePair _languageDirection;
 		private Constants _constants = new Constants();
 
@@ -39,12 +38,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;	 
 		public bool IsReadOnly => true;
 		public BeGlobalTranslationOptions Options { get; set; }
-		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
+		private LanguageMappingsService _languageMappingsService;
 
 		public BeGlobalTranslationProvider(BeGlobalTranslationOptions options)
 		{
 			Options = options;
-			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
+			_languageMappingsService = new LanguageMappingsService();
 		}
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
@@ -90,14 +89,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			if (languageDirection != null)
 			{
-				_sourceLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(languageDirection.SourceCulture);
-				_targetLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(languageDirection.TargetCulture);
-
-				if (Options?.SubscriptionInfo?.LanguagePairs?.Count > 0)
+				var languageMappings = _languageMappingsService.GetLanguageMappingSettings()?.LanguageMappings;
+				if (Options?.SubscriptionInfo?.LanguagePairs?.Count > 0 && (languageMappings != null || languageMappings.Any()))
 				{
 					var languagePair = Options.SubscriptionInfo.LanguagePairs
-						.FirstOrDefault(l => l.SourceLanguageId.Equals(_sourceLanguage) && l.TargetLanguageId
-						.Equals(_targetLanguage));
+						.FirstOrDefault(o => languageMappings
+									   .Any(l => l.SelectedMTCodeSource.Equals(o.SourceLanguageId) && l.SelectedMTCodeTarget.Equals(o.TargetLanguageId)));
 					if (languagePair != null)
 					{
 						Options.LanguagesSupported = new Dictionary<string, string>() { { languageDirection.TargetCulture.Name, languagePair.Name } };

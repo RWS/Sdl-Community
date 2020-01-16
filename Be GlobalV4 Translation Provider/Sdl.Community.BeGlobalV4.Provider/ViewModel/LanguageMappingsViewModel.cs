@@ -75,15 +75,20 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		{
 			_projectController = AppInitializer.GetProjectController();
 			var currentSettings = _languageMappingService.GetLanguageMappingSettings();
-			foreach (var languageMapping in currentSettings?.LanguageMappings)
+			if (currentSettings != null && currentSettings.LanguageMappings.Any())
 			{
-				LanguageMappings.Add(languageMapping);
+				LanguageMappings.Clear();
 
-				// set the SelectedModelOption of the current LanguageMappings collection (otherwise it will not shown in the grid)
-				var selectedLangModel = LanguageMappings.FirstOrDefault(l => l.ProjectLanguagePair.Equals(languageMapping.ProjectLanguagePair));
-				var langMappingIndex = LanguageMappings.IndexOf(selectedLangModel);
-				var selectedModelOption = LanguageMappings[langMappingIndex].Engines.FirstOrDefault(e => e.DisplayName.Equals(selectedLangModel.SelectedModelOption.DisplayName));
-				LanguageMappings[langMappingIndex].SelectedModelOption = selectedModelOption;
+				foreach (var languageMapping in currentSettings.LanguageMappings)
+				{
+					LanguageMappings.Add(languageMapping);
+
+					// set the SelectedModelOption of the current LanguageMappings collection (otherwise it will not shown in the grid)
+					var selectedLangModel = LanguageMappings.FirstOrDefault(l => l.ProjectLanguagePair.Equals(languageMapping.ProjectLanguagePair));
+					var langMappingIndex = LanguageMappings.IndexOf(selectedLangModel);
+					var selectedModelOption = LanguageMappings[langMappingIndex].Engines.FirstOrDefault(e => e.DisplayName.Equals(selectedLangModel.SelectedModelOption.DisplayName));
+					LanguageMappings[langMappingIndex].SelectedModelOption = selectedModelOption;
+				}
 			}
 			LoadProjectLanguagePairs();
 		}
