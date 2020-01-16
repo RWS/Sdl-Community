@@ -16,14 +16,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private LanguageMappingModel _selectedLanguageMapping;
 		private LanguageMappingsService _languageMappingService;
 		private ObservableCollection<LanguageMappingModel> _languageMappings;
-		private LanguageMappingSettings _savedMappingSettings;
 
 		public LanguageMappingsViewModel(BeGlobalTranslationOptions options)
 		{
 			Options = options;
 			_languageMappings = new ObservableCollection<LanguageMappingModel>();
 			_languageMappingService = new LanguageMappingsService();
-			_savedMappingSettings = _languageMappingService.GetLanguageMappingSettings();
 
 			if (Options != null)
 			{
@@ -32,7 +30,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		}
 		
 		public BeGlobalTranslationOptions Options { get; set; }
-
+	
 		public ObservableCollection<LanguageMappingModel> LanguageMappings
 		{
 			get => _languageMappings;
@@ -70,12 +68,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
+		/// <summary>
+		/// Load the language mapping settings from .sdlproj settings group
+		/// </summary>
 		public void LoadLanguageMappings()
 		{
 			_projectController = AppInitializer.GetProjectController();
-			//_savedMappingSettings = _languageMappingService.GetLanguageMappingSettings();
-
-			foreach (var languageMapping in _savedMappingSettings?.LanguageMappings)
+			var currentSettings = _languageMappingService.GetLanguageMappingSettings();
+			foreach (var languageMapping in currentSettings?.LanguageMappings)
 			{
 				LanguageMappings.Add(languageMapping);
 
@@ -88,15 +88,21 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			LoadProjectLanguagePairs();
 		}
 
-		public void SaveLanguageMappingSettings(ObservableCollection<LanguageMappingModel> languageMappings)
+		/// <summary>
+		/// Save the language mapping settings inside the .sdlproj settings group
+		/// </summary>
+		public void SaveLanguageMappingSettings()
 		{
-			//_savedMappingSettings.LanguageMappings.Clear();
-			//_languageMappingService.RemoveLanguageMappingSettings();
-			
-			_savedMappingSettings.LanguageMappings = languageMappings;
-			_languageMappingService.SaveLanguageMappingSettings(_savedMappingSettings);
+			var savedSettings = _languageMappingService.GetLanguageMappingSettings();
+			_languageMappingService.RemoveLanguageMappingSettings();
+			savedSettings.LanguageMappings = LanguageMappings;
+			_languageMappingService.SaveLanguageMappingSettings(savedSettings);
 		}
 
+		/// <summary>
+		/// Load project language pairs and the default details
+		/// (the information is loaded only when no other LanguageMappings settings were already made and saved inside the .sdlproj settings group)
+		/// </summary>
 		private void LoadProjectLanguagePairs()
 		{
 			if (LanguageMappings == null || !LanguageMappings.Any())

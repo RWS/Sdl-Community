@@ -43,7 +43,7 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding MTCodesSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-								          SelectedItem="{Binding SelectedMTCodeSource, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+								      SelectedItem="{Binding SelectedMTCodeSource, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 								Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
 							</ComboBox>
 						</DataTemplate>
@@ -54,7 +54,7 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding MTCodesTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-								          SelectedItem="{Binding SelectedMTCodeTarget, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+								      SelectedItem="{Binding SelectedMTCodeTarget, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 								Style="{DynamicResource Sdl.ComboBox.Generic.Style}">								
 							</ComboBox>
 						</DataTemplate>
@@ -70,7 +70,7 @@
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
-											<TextBlock Text="{Binding DisplayName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,5,10,0" FontFamily="Calibri" VerticalAlignment="Center"/>
+											<TextBlock Text="{Binding DisplayName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0" FontFamily="Calibri" VerticalAlignment="Center"/>
 											<Image Source="../Resources/AdaptiveEngine.ico" Width="15" Height="15" />
 										</StackPanel>
 									</DataTemplate>

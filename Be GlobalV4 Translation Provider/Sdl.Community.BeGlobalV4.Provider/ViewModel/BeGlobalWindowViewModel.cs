@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.LanguagePlatform.Core;
@@ -25,7 +26,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
 		{
 			Options = options;	
-			LanguageMappingsViewModel = new LanguageMappingsViewModel(options);	
+			LanguageMappingsViewModel = new LanguageMappingsViewModel(options);
 
 			LoginViewModel = new LoginViewModel(options, languagePairs, LanguageMappingsViewModel, this);
 			_mainWindow = mainWindow;
@@ -88,8 +89,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				var isValid = IsWindowValid(true);
 				if (isValid)
 				{
-					// Remove and add the settings back to SettingsGroup of .sdlproj when user presses on Ok
-					LanguageMappingsViewModel.SaveLanguageMappingSettings(LanguageMappingsViewModel.LanguageMappings);
+					// Remove and add the new settings back to SettingsGroup of .sdlproj when user presses on Ok				
+					LanguageMappingsViewModel.SaveLanguageMappingSettings();
 
 					WindowCloser.SetDialogResult(_mainWindow, true);
 					_mainWindow.Close();
