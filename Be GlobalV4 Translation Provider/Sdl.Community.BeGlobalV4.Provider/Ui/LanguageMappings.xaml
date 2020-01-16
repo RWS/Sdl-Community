@@ -29,21 +29,23 @@
 				  Margin="15,10,15,10"
 				  CanUserResizeColumns="True"
 				  CanUserDeleteRows="False">
-			<DataGrid.Columns>				
-				<DataGridTextColumn Header="Project Language Pair" Binding="{Binding ProjectLanguagePair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True">
-					<DataGridTextColumn.ElementStyle>
-						<Style>
-							<Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-						</Style>
-					</DataGridTextColumn.ElementStyle>
-					
-				</DataGridTextColumn>
+			<DataGrid.Columns>		
+				<DataGridTemplateColumn Header="Project Language Pair" IsReadOnly="True">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding ProjectLanguagePair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+										   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,10,0" TextWrapping="Wrap" />
+							</StackPanel>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 
 				<DataGridTemplateColumn Header="MTCode Source">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ComboBox ItemsSource="{Binding MTCodesSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-								      SelectedItem="{Binding SelectedMTCodeSource, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+							<ComboBox ItemsSource="{Binding MTCodesSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
+								      SelectedItem="{Binding SelectedMTCodeSource, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
 								Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
 							</ComboBox>
 						</DataTemplate>
@@ -53,8 +55,8 @@
 				<DataGridTemplateColumn Header="MTCode Target">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ComboBox ItemsSource="{Binding MTCodesTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-								      SelectedItem="{Binding SelectedMTCodeTarget, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+							<ComboBox ItemsSource="{Binding MTCodesTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
+								      SelectedItem="{Binding SelectedMTCodeTarget, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
 								Style="{DynamicResource Sdl.ComboBox.Generic.Style}">								
 							</ComboBox>
 						</DataTemplate>
@@ -64,8 +66,8 @@
 				<DataGridTemplateColumn Header="Engine">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ComboBox ItemsSource="{Binding Engines,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-								      SelectedItem="{Binding SelectedModelOption, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+							<ComboBox ItemsSource="{Binding Engines,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+								      SelectedItem="{Binding SelectedModelOption, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
 									  Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
@@ -79,10 +81,11 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTextColumn Header="Dictionary" IsReadOnly="True"/>
+				<DataGridTextColumn Header="Dictionary" IsReadOnly="True" />
 			</DataGrid.Columns>			
 		</DataGrid>
-		
-		<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments"/>
+
+		<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments" DockPanel.Dock="Bottom" />
+	
 	</StackPanel>
 </UserControl>
