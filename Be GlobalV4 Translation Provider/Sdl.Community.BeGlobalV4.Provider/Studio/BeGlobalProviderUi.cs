@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Forms;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.Community.BeGlobalV4.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
@@ -144,10 +142,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			// If corresponds to email standards, it means that authentication is done through User email and User password.		
 			var isEmailValid = IsEmailValid(clientId);
 
-			// Encode client credentials to Base64 (it is usefull when user credentials contains # char and the authentication is failing,
+			// Encrypt client credentials to Base64 (it is usefull when user credentials contains # char and the authentication is failing,
 			// because the # char is used to differentiate the clientId by ClientSecret.
-			clientId = StringExtensions.Base64Encode(clientId);
-			clientSecret = StringExtensions.Base64Encode(clientSecret);
+			clientId = StringExtensions.EncryptData(clientId);
+			clientSecret = StringExtensions.EncryptData(clientSecret);
 
 			if (isEmailValid)
 			{
@@ -187,8 +185,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (savedCredentials != null)
 			{
 				var splitedCredentials = savedCredentials.Credential.Split('#');
-				options.ClientId = splitedCredentials.Length> 2? StringExtensions.Base64Decode(splitedCredentials[0]) : string.Empty;
-				options.ClientSecret = splitedCredentials.Length > 2 ? StringExtensions.Base64Decode(splitedCredentials[1]) : string.Empty;
+				options.ClientId = splitedCredentials.Length> 2? StringExtensions.Decrypt(splitedCredentials[0]) : string.Empty;
+				options.ClientSecret = splitedCredentials.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[1]) : string.Empty;
 				options.AuthenticationMethod = splitedCredentials.Length == 3 ? splitedCredentials[2] : string.Empty;
 			}
 			return savedCredentials;

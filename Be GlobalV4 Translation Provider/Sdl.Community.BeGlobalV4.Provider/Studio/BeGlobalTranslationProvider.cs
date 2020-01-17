@@ -77,6 +77,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public string SerializeState()
 		{
 			SetSupportedLanguages(_languageDirection);
+			Options.ClientId = StringExtensions.EncryptData(Options.ClientId);
+			Options.ClientSecret = StringExtensions.EncryptData(Options.ClientSecret);
 			return JsonConvert.SerializeObject(Options);
 		}
 

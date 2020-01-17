@@ -24,9 +24,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (credentialStore.GetCredential(originalUri) != null)
 			{
 				var credentials = credentialStore.GetCredential(originalUri);
-				var splitedCredentials = credentials.Credential.Split('#');
-				options.ClientId = splitedCredentials.Length >2 ? StringExtensions.Base64Decode(splitedCredentials[0]) : string.Empty;
-				options.ClientSecret = splitedCredentials.Length > 2 ? StringExtensions.Base64Decode(splitedCredentials[1]) : string.Empty;
+				var splitedCredentials = credentials.Credential.Split('#');				
+				options.ClientId = splitedCredentials.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[0]) : string.Empty;
+				options.ClientSecret = splitedCredentials.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[1]) : string.Empty;
 				options.AuthenticationMethod = splitedCredentials.Length == 3 ? splitedCredentials[2] : string.Empty;
 				if (options.BeGlobalService == null)
 				{

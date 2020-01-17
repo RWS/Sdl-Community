@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Helpers
@@ -26,17 +27,41 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 			output[index.Length] = source.Substring(pos);
 			return output;
 		}
-
-		public static string Base64Encode(string plainText)
+		
+		/// <summary>
+		/// Algorythm to encrypt data
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		public static string EncryptData(string input)
 		{
-			var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-			return Convert.ToBase64String(plainTextBytes);
+			byte[] inputArray = Encoding.UTF8.GetBytes(input);
+			var tripleDES = new TripleDESCryptoServiceProvider();
+			tripleDES.Key = Encoding.UTF8.GetBytes("gtlw-5ur7-amoqp3");
+			tripleDES.Mode = CipherMode.ECB;
+			tripleDES.Padding = PaddingMode.PKCS7;
+			var cTransform = tripleDES.CreateEncryptor();
+			byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
+			tripleDES.Clear();
+			return Convert.ToBase64String(resultArray, 0, resultArray.Length);
 		}
 
-		public static string Base64Decode(string base64EncodedData)
+		/// <summary>
+		/// Algorithm to decrypt data
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		public static string Decrypt(string input)
 		{
-			var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
-			return Encoding.UTF8.GetString(base64EncodedBytes);
+			byte[] inputArray = Convert.FromBase64String(input);
+			var tripleDES = new TripleDESCryptoServiceProvider();
+			tripleDES.Key = Encoding.UTF8.GetBytes("gtlw-5ur7-amoqp3");
+			tripleDES.Mode = CipherMode.ECB;
+			tripleDES.Padding = PaddingMode.PKCS7;
+			var cTransform = tripleDES.CreateDecryptor();
+			byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
+			tripleDES.Clear();
+			return Encoding.UTF8.GetString(resultArray);
 		}
 	}
 }
