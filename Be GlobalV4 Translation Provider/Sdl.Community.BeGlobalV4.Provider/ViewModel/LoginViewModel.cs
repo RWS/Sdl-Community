@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
@@ -101,8 +100,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		public bool ValidateEnginesSetup()
 		{
-			//var address = Dns.GetHostAddresses(_serverAddress);
-			//Log.Logger.Info($"The MTCloud IP Address is: { address}");
+			Utils.LogServerIPAddresses();
 
 			var beGlobalTranslator = new BeGlobalV4Translator(_serverAddress, Options);
 			var accountId = Options.UseClientAuthentication ? beGlobalTranslator.GetClientInformation() : beGlobalTranslator.GetUserInformation();

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 {
 	public static class Utils
 	{
 		private static Constants _constants = new Constants();
+		public static readonly Log Log = Log.Instance;
 
 		public static List<string> FormatLanguageName(string language)
 		{
@@ -48,6 +50,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 				throw new Exception(ex.Message);
 			}
 			return new List<string>();
+		}
+
+		public static void LogServerIPAddresses()
+		{
+			var ipAddresses = Dns.GetHostAddresses(_constants.HostAddress);
+			foreach (var ipAddress in ipAddresses)
+			{
+				Log.Logger.Info($"{_constants.MTCloudServerIPMessage} {ipAddress}");
+			}
 		}
 	}
 }

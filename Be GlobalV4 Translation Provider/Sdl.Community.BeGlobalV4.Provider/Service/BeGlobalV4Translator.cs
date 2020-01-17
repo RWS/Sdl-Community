@@ -29,8 +29,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				_messageBoxService = new MessageBoxService();
 				_languageMappingService = new LanguageMappingsService();
 				_languageMappings = _languageMappingService.GetLanguageMappingSettings()?.LanguageMappings?.ToList();
-
 				_client = new RestClient(string.Format($"{server}/v4"));
+
+				Utils.LogServerIPAddresses();
+
 				IRestRequest request;
 				if (options.UseClientAuthentication)
 				{
@@ -50,8 +52,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				}
 				AddTraceId(request);
 				request.RequestFormat = DataFormat.Json;
-				//var address = Dns.GetHostAddresses(server);
-				//Log.Logger.Info($"The MTCloud IP Address is: {address}");
+
 				var response = _client.Execute(request);
 				if (response.StatusCode != HttpStatusCode.OK)
 				{

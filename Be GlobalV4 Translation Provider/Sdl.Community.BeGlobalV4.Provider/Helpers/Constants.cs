@@ -23,6 +23,7 @@
 		public readonly string Green = "Green";
 		public readonly string PrintMTCodes = "Printing MT Codes";
 		public readonly string SettingsGrId = "SDLMTCloudLanguageMapping";
+		public readonly string HostAddress = "translate-api.sdlbeglobal.com";
 
 		// Excel MTCodes values
 		public readonly string ExcelSheet = "Sheet1";
@@ -45,7 +46,9 @@
 		public readonly string AddMTCode = "AddMTCode method: ";
 		public readonly string RemoveMTCode = "RemoveMTCode method: ";
 		public readonly string FormatLanguageName = "FormatLanguageName method: ";
-		public readonly string SplitLanguagePair= "SplitLanguagePair method: ";
+		public readonly string SplitLanguagePair = "SplitLanguagePair method: ";
+		public readonly string MTCloudServerIPMessage = "The MTCloud IP Address is: ";
+
 
 		// Messages
 		public readonly string ForbiddenLicense = "Forbidden: Please check your license";
