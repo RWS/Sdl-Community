@@ -50,6 +50,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				}
 				AddTraceId(request);
 				request.RequestFormat = DataFormat.Json;
+				//var address = Dns.GetHostAddresses(server);
+				//Log.Logger.Info($"The MTCloud IP Address is: {address}");
 				var response = _client.Execute(request);
 				if (response.StatusCode != HttpStatusCode.OK)
 				{

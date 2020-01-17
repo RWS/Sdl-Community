@@ -33,7 +33,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
 
-		[JsonIgnore]
 		public bool ResendDrafts
 		{
 			get => ResendDraftsParameter != null && Convert.ToBoolean(ResendDraftsParameter);

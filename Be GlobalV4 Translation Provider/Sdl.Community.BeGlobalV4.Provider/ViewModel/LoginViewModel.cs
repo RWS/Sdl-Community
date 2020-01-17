@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
@@ -17,6 +18,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private string _email;
 		private string _loginMethod;
 		private readonly LanguagePair[] _languagePairs;
+		private readonly string _serverAddress = "https://translate-api.sdlbeglobal.com";
 		private Constants _constants = new Constants();
 
 		private ICommand _passwordChangedCommand;
@@ -99,7 +101,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		public bool ValidateEnginesSetup()
 		{
-			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options);
+			//var address = Dns.GetHostAddresses(_serverAddress);
+			//Log.Logger.Info($"The MTCloud IP Address is: { address}");
+
+			var beGlobalTranslator = new BeGlobalV4Translator(_serverAddress, Options);
 			var accountId = Options.UseClientAuthentication ? beGlobalTranslator.GetClientInformation() : beGlobalTranslator.GetUserInformation();
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
 			Options.SubscriptionInfo = subscriptionInfo;

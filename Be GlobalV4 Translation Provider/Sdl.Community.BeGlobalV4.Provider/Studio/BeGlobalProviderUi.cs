@@ -38,13 +38,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				{
 					var clientId = beGlobalVm.Options.ClientId;
 					var clientSecret = beGlobalVm.Options.ClientSecret;
+					var resendDraft = beGlobalVm.Options.ResendDrafts;
 
 					var provider = new BeGlobalTranslationProvider(options)
 					{
 						Options = beGlobalVm.Options
 					};
 
-					SetCredentials(credentialStore, clientId, clientSecret, true);
+					SetCredentials(credentialStore, clientId, clientSecret, resendDraft, true);
 					return new ITranslationProvider[] { provider };
 				}
 			}
@@ -80,7 +81,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					editProvider.Options = beGlobalVm.Options;
 					var clientId = editProvider.Options.ClientId;
 					var clientSecret = beGlobalVm.Options.ClientSecret;
-					SetCredentials(credentialStore, clientId, clientSecret, true);
+					var resendDraft = beGlobalVm.Options.ResendDrafts;
+					SetCredentials(credentialStore, clientId, clientSecret, resendDraft, true);
 					return true;
 				}
 			}
@@ -133,7 +135,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			return cred;
 		}
 
-		private void SetCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool persistKey)
+		private void SetCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool resendDraft, bool persistKey)
 		{
 			var uri = new Uri("sdlmachinetranslationcloudprovider:///");
 			string credential;
@@ -155,6 +157,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				credential = $"{clientId}#{clientSecret}#ClientLogin";
 			}
+			credential = $"{credential}#{resendDraft}";
+
 			var credentials = new TranslationProviderCredential(credential, persistKey);
 			credentialStore.RemoveCredential(uri);
 			credentialStore.AddCredential(uri, credentials);
@@ -185,9 +189,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (savedCredentials != null)
 			{
 				var splitedCredentials = savedCredentials.Credential.Split('#');
-				options.ClientId = splitedCredentials.Length> 2? StringExtensions.Decrypt(splitedCredentials[0]) : string.Empty;
+				options.ClientId = splitedCredentials.Length > 2? StringExtensions.Decrypt(splitedCredentials[0]) : string.Empty;
 				options.ClientSecret = splitedCredentials.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[1]) : string.Empty;
-				options.AuthenticationMethod = splitedCredentials.Length == 3 ? splitedCredentials[2] : string.Empty;
+				options.AuthenticationMethod = splitedCredentials.Length == 4 ? splitedCredentials[2] : string.Empty;
+				var resendDraft = splitedCredentials.Length == 4 ? splitedCredentials[3] : string.Empty;
+				options.ResendDrafts = resendDraft.Equals("True") ? true : false;
 			}
 			return savedCredentials;
 		}

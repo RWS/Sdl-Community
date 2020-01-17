@@ -27,7 +27,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				var splitedCredentials = credentials.Credential.Split('#');				
 				options.ClientId = splitedCredentials.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[0]) : string.Empty;
 				options.ClientSecret = splitedCredentials.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[1]) : string.Empty;
-				options.AuthenticationMethod = splitedCredentials.Length == 3 ? splitedCredentials[2] : string.Empty;
+				options.AuthenticationMethod = splitedCredentials.Length == 4 ? splitedCredentials[2] : string.Empty;
+				var resendDraft = splitedCredentials.Length == 4 ? splitedCredentials[3] : string.Empty;
+				options.ResendDrafts = resendDraft.Equals("True") ? true : false;
+
 				if (options.BeGlobalService == null)
 				{
 					options.BeGlobalService = new BeGlobalV4Translator(_url, options);
@@ -48,7 +51,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				accountId = options.BeGlobalService == null ? 0: options.BeGlobalService.GetUserInformation();
 			}
 
-			var subscriptionInfo = options.BeGlobalService.GetLanguagePairs(accountId.ToString());
+			var subscriptionInfo = options.BeGlobalService?.GetLanguagePairs(accountId.ToString());
 			options.SubscriptionInfo = subscriptionInfo;
 
 			return new BeGlobalTranslationProvider(options);
