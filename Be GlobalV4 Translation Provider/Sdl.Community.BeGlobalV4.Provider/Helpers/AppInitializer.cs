@@ -17,7 +17,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 	public sealed class AppInitializer : IApplicationInitializer
 	{
 		private static Constants _constants = new Constants();
-		public static List<MTCodeModel> MTCodes = new List<MTCodeModel>();
 
 		public void Execute()
 		{
@@ -30,10 +29,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 			{
 				Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 			}
-
-			//Load the MTCodes from the local excel when initialize the app
-			// The codes are used inside Language Mappings tab
-			MTCodes = GetMTCodes();
 		}
 		
 		public static List<ExcelSheet> WriteMTCodesLocally()
@@ -65,6 +60,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 			return SdlTradosStudio.Application.GetController<EditorController>();
 		}
 
+		public static List<MTCodeModel> GetMTCodes()
+		{
+			return new MTCodesViewModel(WriteMTCodesLocally())?.MTCodes?.ToList();
+		}
+
 		private static void WriteExcelLocally(string excelFilePath, string mtCloudFolderPath)
 		{
 			try
@@ -81,11 +81,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 				Log.Logger.Error($"{_constants.WriteExcelLocally} {ex.Message}\n {ex.StackTrace}");
 				throw;
 			}
-		}
-
-		private List<MTCodeModel> GetMTCodes()
-		{
-			return new MTCodesViewModel(WriteMTCodesLocally())?.MTCodes?.ToList();
 		}
 	}
 }

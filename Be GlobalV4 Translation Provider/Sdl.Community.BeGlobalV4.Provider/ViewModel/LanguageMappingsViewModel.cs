@@ -112,11 +112,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private void LoadProjectLanguagePairs()
 		{
 			if (LanguageMappings == null || !LanguageMappings.Any())
-			{				
+			{
+				// load the MTCode (the load is needed, because user might add/remove codes from MTCodes grid
+				var mtCodes = AppInitializer.GetMTCodes();
+
 				var currentProjectInfo = _projectController?.CurrentProject?.GetProjectInfo();
 				var sourceLanguage = currentProjectInfo?.SourceLanguage;
 				var targetLanguages = currentProjectInfo?.TargetLanguages;
-				var mtCodeSource = AppInitializer.MTCodes.FirstOrDefault(s => s.TradosCode.Equals(sourceLanguage?.CultureInfo?.Name)
+				var mtCodeSource = mtCodes?.FirstOrDefault(s => s.TradosCode.Equals(sourceLanguage?.CultureInfo?.Name)
 				|| s.TradosCode.Equals(sourceLanguage?.IsoAbbreviation));
 				if (mtCodeSource != null)
 				{
@@ -131,7 +134,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				{
 					var languagePair = $"{sourceLanguage.DisplayName} - {targetLanguage.DisplayName}";
 
-					var mtCodeTarget = AppInitializer.MTCodes.FirstOrDefault(s => s.TradosCode.Equals(targetLanguage?.CultureInfo?.Name)
+					var mtCodeTarget = mtCodes?.FirstOrDefault(s => s.TradosCode.Equals(targetLanguage?.CultureInfo?.Name)
 					|| s.TradosCode.Equals(targetLanguage?.IsoAbbreviation));
 					if (mtCodeTarget != null)
 					{

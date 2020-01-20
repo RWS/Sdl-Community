@@ -51,8 +51,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				WebUtility.UrlDecode(
 					_options.BeGlobalService.TranslateText(
 						xliffDocument.ToString(),
-						_languageDirection?.SourceCulture?.DisplayName,
-						_languageDirection?.TargetCulture?.DisplayName));
+						_languageDirection?.SourceCulture?.EnglishName,
+						_languageDirection?.TargetCulture?.EnglishName));
 
 			var translatedXliff = Converter.ParseXliffString(translatedXliffText);
 			if (translatedXliff != null)
