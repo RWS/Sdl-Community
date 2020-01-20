@@ -53,15 +53,24 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 		/// <returns></returns>
 		public static string Decrypt(string input)
 		{
-			byte[] inputArray = Convert.FromBase64String(input);
-			var tripleDES = new TripleDESCryptoServiceProvider();
-			tripleDES.Key = Encoding.UTF8.GetBytes("gtlw-5ur7-amoqp3");
-			tripleDES.Mode = CipherMode.ECB;
-			tripleDES.Padding = PaddingMode.PKCS7;
-			var cTransform = tripleDES.CreateDecryptor();
-			byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
-			tripleDES.Clear();
-			return Encoding.UTF8.GetString(resultArray);
+			try
+			{
+				byte[] inputArray = Convert.FromBase64String(input);
+				var tripleDES = new TripleDESCryptoServiceProvider();
+				tripleDES.Key = Encoding.UTF8.GetBytes("gtlw-5ur7-amoqp3");
+				tripleDES.Mode = CipherMode.ECB;
+				tripleDES.Padding = PaddingMode.PKCS7;
+				var cTransform = tripleDES.CreateDecryptor();
+				byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
+				tripleDES.Clear();
+				return Encoding.UTF8.GetString(resultArray);
+			}
+			catch
+			{
+				// return string.Empty in case the data coulnd't be decrypted,
+				// so user can enter back the credentials through the Login tab.
+				return string.Empty;
+			}
 		}
 	}
 }
