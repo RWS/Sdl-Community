@@ -74,25 +74,31 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		public void LoadLanguageMappings()
 		{
 			_projectController = AppInitializer.GetProjectController();
-			var currentSettings = _languageMappingService.GetLanguageMappingSettings();
+			var currentSettings = _languageMappingService.GetLanguageMappingSettings();			
+
 			if (currentSettings != null && currentSettings.LanguageMappings.Any())
 			{
 				// clear current LanguageMappings list to avoid duplications inside the grid
 				LanguageMappings.Clear();
-
+				var mtCodes = AppInitializer.GetMTCodes();
 				foreach (var languageMapping in currentSettings.LanguageMappings)
 				{
 					LanguageMappings.Add(languageMapping);
+
+					var missingCodes = LoadNewCodes(languageMapping, mtCodes);
 
 					// set the SelectedModelOption of the current LanguageMappings collection (otherwise it will not shown in the grid)
 					var selectedLangModel = LanguageMappings.FirstOrDefault(l => l.ProjectLanguagePair.Equals(languageMapping.ProjectLanguagePair));
 					var langMappingIndex = LanguageMappings.IndexOf(selectedLangModel);
 					var selectedModelOption = LanguageMappings[langMappingIndex].Engines.FirstOrDefault(e => e.DisplayName.Equals(selectedLangModel.SelectedModelOption.DisplayName));
 					LanguageMappings[langMappingIndex].SelectedModelOption = selectedModelOption;
+				
+					AddMissingCode(missingCodes.Keys.First(), LanguageMappings[langMappingIndex].MTCodesSource);
+					AddMissingCode(missingCodes.Values.First(), LanguageMappings[langMappingIndex].MTCodesTarget);
 				}
 			}
 			LoadProjectLanguagePairs();
-		}
+		}		
 
 		/// <summary>
 		/// Save the language mapping settings inside the .sdlproj settings group
@@ -103,6 +109,49 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			_languageMappingService.RemoveLanguageMappingSettings();
 			savedSettings.LanguageMappings = LanguageMappings;
 			_languageMappingService.SaveLanguageMappingSettings(savedSettings);
+		}
+
+		/// <summary>
+		/// Load to the existing language mappings settings, the new codes which were added using the MTCodes window
+		/// </summary>
+		/// <param name="languageMapping">language mapping</param>
+		/// <param name="mtCodes">mtcodes collection</param>
+		/// <returns>dictionary of lists with missing source and target codes</returns>
+		private Dictionary<List<string>, List<string>> LoadNewCodes(LanguageMappingModel languageMapping, List<MTCodeModel> mtCodes)
+		{
+			var sourceModel = mtCodes.FirstOrDefault(s => s.TradosCode.Equals(languageMapping.SourceTradosCode));
+			var targetModel = mtCodes.FirstOrDefault(s => s.TradosCode.Equals(languageMapping.TargetTradosCode));
+
+			var sCodes = new List<string>();
+			sCodes.Add(sourceModel?.MTCodeMain);
+			sCodes.Add(sourceModel?.MTCodeLocale);
+
+			var tCodes = new List<string>();
+			tCodes.Add(targetModel?.MTCodeMain);
+			tCodes.Add(targetModel?.MTCodeLocale);
+
+			var missingSourceCodes = sCodes.Where(s => languageMapping.MTCodesSource.All(m => m != s)).ToList();
+			var missingTargetCodes = tCodes.Where(t => languageMapping.MTCodesTarget.All(m => m != t)).ToList();
+
+			var result = new Dictionary<List<string>, List<string>>();
+			result.Add(missingSourceCodes, missingTargetCodes);
+			return result;
+		}
+
+		/// <summary>
+		/// Add missing code to existing LanguageMappings configurations
+		/// </summary>
+		/// <param name="missingCodes"></param>
+		/// <param name="langMappingIndex"></param>
+		private void AddMissingCode(List<string> missingCodes, ObservableCollection<string> languageMappingCodes)
+		{
+			foreach (var code in missingCodes)
+			{
+				if (!string.IsNullOrEmpty(code))
+				{
+					languageMappingCodes.Add(code);
+				}
+			}
 		}
 
 		/// <summary>
@@ -151,13 +200,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 							SelectedMTCodeSource = MTCodeSourceList[0],
 							MTCodesTarget = new ObservableCollection<string>(MTCodeTargetList),
 							SelectedMTCodeTarget = MTCodeTargetList[0],
-							Engines = new ObservableCollection<TranslationModel>()
+							Engines = new ObservableCollection<TranslationModel>(),
+							TargetTradosCode = mtCodeTarget.TradosCode,
+							SourceTradosCode = mtCodeSource.TradosCode
 						};
-						LanguageMappings.Add(languageMappingModel);						
+						LanguageMappings.Add(languageMappingModel);
 						MTCodeTargetList.Clear();
 					}
 				}
 			}
-		}
+		}		
 	}
 }

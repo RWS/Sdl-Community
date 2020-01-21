@@ -82,5 +82,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 				OnPropertyChanged(nameof(SelectedMTCodeSource));
 			}
 		}
+
+		public string SourceTradosCode { get; set; }
+		public string TargetTradosCode { get; set; }
 	}
 }
