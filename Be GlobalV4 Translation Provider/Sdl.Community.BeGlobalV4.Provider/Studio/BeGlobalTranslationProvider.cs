@@ -39,11 +39,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public bool IsReadOnly => true;
 		public BeGlobalTranslationOptions Options { get; set; }
 		private LanguageMappingsService _languageMappingsService;
+		private string _encryptedClientId;
+		private string _encryptedClientSecret;
 
 		public BeGlobalTranslationProvider(BeGlobalTranslationOptions options)
 		{
 			Options = options;
 			_languageMappingsService = new LanguageMappingsService();
+			_encryptedClientId = StringExtensions.EncryptData(Options.ClientId);
+			_encryptedClientSecret = StringExtensions.EncryptData(Options.ClientSecret);
 		}
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
@@ -77,8 +81,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public string SerializeState()
 		{
 			SetSupportedLanguages(_languageDirection);
-			Options.ClientId = StringExtensions.EncryptData(Options.ClientId);
-			Options.ClientSecret = StringExtensions.EncryptData(Options.ClientSecret);
+			Options.ClientId = _encryptedClientId;
+			Options.ClientSecret = _encryptedClientSecret;
 			return JsonConvert.SerializeObject(Options);
 		}
 
