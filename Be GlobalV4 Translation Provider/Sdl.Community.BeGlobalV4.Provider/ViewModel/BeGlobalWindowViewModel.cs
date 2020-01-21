@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.LanguagePlatform.Core;
@@ -26,7 +25,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
 		{
 			Options = options;	
-			LanguageMappingsViewModel = new LanguageMappingsViewModel(options);
+			LanguageMappingsViewModel = new LanguageMappingsViewModel(options, this);
 
 			LoginViewModel = new LoginViewModel(options, languagePairs, LanguageMappingsViewModel, this);
 			_mainWindow = mainWindow;
@@ -96,7 +95,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			Mouse.OverrideCursor = Cursors.Arrow;
 		}
 
-		private string ValidateWindow(bool isOkPressed)
+		public string ValidateWindow(bool isOkPressed)
 		{
 			var loginTab = _mainWindow?.LoginTab;
 			Options.ResendDrafts = LanguageMappingsViewModel.ReSendChecked;
@@ -108,7 +107,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					return Message;
 				}
 
-				//var areEnginesLoaded = LanguageMappingsViewModel.LanguageMappings.Any(l=>l.Engines.Any());
 				if (LoginViewModel.SelectedOption.Type.Equals(_constants.User))
 				{
 					var password = loginTab?.UserPasswordBox.Password;

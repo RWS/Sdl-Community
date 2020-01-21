@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
@@ -16,11 +17,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private LanguageMappingModel _selectedLanguageMapping;
 		private LanguageMappingsService _languageMappingService;
 		private ObservableCollection<LanguageMappingModel> _languageMappings;
+		private BeGlobalWindowViewModel _beGlobalWindowViewModel;
 
-		public LanguageMappingsViewModel(BeGlobalTranslationOptions options)
+		private ICommand _resetLanguageMappingsCommand;
+
+
+		public LanguageMappingsViewModel(BeGlobalTranslationOptions options, BeGlobalWindowViewModel beGlobalWindowViewModel)
 		{
 			Options = options;
 			_languageMappings = new ObservableCollection<LanguageMappingModel>();
+			_beGlobalWindowViewModel = beGlobalWindowViewModel;
+
 			_languageMappingService = new LanguageMappingsService();
 
 			if (Options != null)
@@ -68,6 +75,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
+		public ICommand ResetLanguageMappingsCommand => _resetLanguageMappingsCommand ?? (_resetLanguageMappingsCommand = new RelayCommand(ResetLanguageMappings));
+
+
 		/// <summary>
 		/// Load the language mapping settings from .sdlproj settings group
 		/// </summary>
@@ -109,6 +119,24 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			_languageMappingService.RemoveLanguageMappingSettings();
 			savedSettings.LanguageMappings = LanguageMappings;
 			_languageMappingService.SaveLanguageMappingSettings(savedSettings);
+		}
+
+		/// <summary>
+		/// Reset the language mappings to the default values
+		/// </summary>
+		/// <param name="parameter"></param>
+		private void ResetLanguageMappings(object parameter)
+		{
+			if(LanguageMappings != null)
+			{
+				_languageMappingService.RemoveLanguageMappingSettings();
+
+				var savedSettings = _languageMappingService.GetLanguageMappingSettings();
+				_languageMappingService.SaveLanguageMappingSettings(savedSettings);
+				LanguageMappings.Clear();
+				LoadProjectLanguagePairs();
+				_beGlobalWindowViewModel?.ValidateWindow(false);
+			}
 		}
 
 		/// <summary>
@@ -172,6 +200,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				|| s.TradosCode.Equals(sourceLanguage?.IsoAbbreviation));
 				if (mtCodeSource != null)
 				{
+					MTCodeSourceList.Clear();
 					MTCodeSourceList.Add(mtCodeSource.MTCodeMain);
 					if (!string.IsNullOrEmpty(mtCodeSource.MTCodeLocale))
 					{
@@ -179,6 +208,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					}
 				}
 
+				MTCodeTargetList.Clear();
 				foreach (var targetLanguage in targetLanguages)
 				{
 					var languagePair = $"{sourceLanguage.DisplayName} - {targetLanguage.DisplayName}";

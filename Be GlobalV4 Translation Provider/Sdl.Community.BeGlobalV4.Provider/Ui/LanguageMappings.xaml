@@ -17,13 +17,17 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
-				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<StackPanel>
+		<Button Style="{DynamicResource SdlSecondaryButtonStyle}" Width="220" HorizontalAlignment="Right" Margin="0,20,15,5" Content="Reset Language Mappings to default" Command="{Binding ResetLanguageMappingsCommand}"/>
+
 		<DataGrid x:Name="LanguageMappingsGrid" Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
 				  ItemsSource="{Binding LanguageMappings, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"             
 				  Margin="15,10,15,10"
@@ -125,10 +129,10 @@
 						</Style>
 					</DataGridTemplateColumn.HeaderStyle>
 				</DataGridTemplateColumn>
-			</DataGrid.Columns>			
-		</DataGrid>
+			</DataGrid.Columns>
+			</DataGrid>
 
 		<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments" DockPanel.Dock="Bottom" />
-	
+
 	</StackPanel>
 </UserControl>
