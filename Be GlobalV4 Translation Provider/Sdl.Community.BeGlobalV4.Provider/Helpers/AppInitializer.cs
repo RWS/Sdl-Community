@@ -47,17 +47,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 
 		public static ProjectsController GetProjectController()
 		{
-			return SdlTradosStudio.Application.GetController<ProjectsController>();
+			return SdlTradosStudio.Application?.GetController<ProjectsController>();
 		}
 
 		public static FilesController GetFileController()
 		{
-			return SdlTradosStudio.Application.GetController<FilesController>();
+			return SdlTradosStudio.Application?.GetController<FilesController>();
 		}
 
 		public static EditorController GetEditorController()
 		{
-			return SdlTradosStudio.Application.GetController<EditorController>();
+			return SdlTradosStudio.Application?.GetController<EditorController>();
 		}
 
 		public static List<MTCodeModel> GetMTCodes()

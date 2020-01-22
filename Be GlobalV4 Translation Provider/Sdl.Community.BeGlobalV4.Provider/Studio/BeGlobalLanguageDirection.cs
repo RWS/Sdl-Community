@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
@@ -43,16 +42,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			return null;
 		}
 
-		private Segment[] TranslateSegments(Segment[] sourceSegments)
+		public Segment[] TranslateSegments(Segment[] sourceSegments)
 		{
 			var xliffDocument = CreateXliffFile(sourceSegments);
-
-			//var translatedXliffText =
-			//	WebUtility.UrlDecode(
-			//		_options.BeGlobalService.TranslateText(
-			//			xliffDocument.ToString(),
-			//			_languageDirection?.SourceCulture?.EnglishName,
-			//			_languageDirection?.TargetCulture?.EnglishName));
 
 			var translatedXliffText = _options.BeGlobalService.TranslateText(
 						xliffDocument.ToString(),
