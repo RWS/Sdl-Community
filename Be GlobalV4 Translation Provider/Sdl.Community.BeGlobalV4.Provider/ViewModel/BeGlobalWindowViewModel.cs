@@ -54,7 +54,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				Mouse.OverrideCursor = Cursors.Wait;
 				_selectedTabIndex = value;
-				LanguageMappingsViewModel.LoadLanguageMappings();
+				if (_selectedTabIndex == 1)
+				{
+					LanguageMappingsViewModel.LoadLanguageMappings();
+				}			
 				ValidateWindow(true);				
 				
 				OnPropertyChanged();
