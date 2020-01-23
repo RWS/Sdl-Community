@@ -1,4 +1,6 @@
-﻿using Sdl.Community.BeGlobalV4.Provider.Helpers;
+﻿using System.Collections.ObjectModel;
+using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Core.Settings;
 using Sdl.ProjectAutomation.FileBased;
@@ -15,7 +17,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		/// </summary>
 		public LanguageMappingSettings GetLanguageMappingSettings()
 		{
-			var savedMappingSettings = new LanguageMappingSettings();
 			var currentProject = GetCurrentProject() ?? AppInitializer.GetFileController()?.CurrentProject;
 			var projectSettings = currentProject?.GetSettings();
 
@@ -29,9 +30,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				{
 					projectSettings.AddSettingsGroup(_sdlMTCloudSettingsGroup);
 				}
-				savedMappingSettings = projectSettings.GetSettingsGroup<LanguageMappingSettings>(_constants.SettingsGrId);
+				var savedMappingSettings = projectSettings.GetSettingsGroup<LanguageMappingSettings>(_constants.SettingsGrId);
+				return savedMappingSettings;
 			}
-			return savedMappingSettings;
+			return null;
 		}
 
 		/// <summary>

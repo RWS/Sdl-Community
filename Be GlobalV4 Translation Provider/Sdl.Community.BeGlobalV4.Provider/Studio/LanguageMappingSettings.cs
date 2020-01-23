@@ -6,7 +6,7 @@ using Sdl.Core.Settings;
 namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
 	public class LanguageMappingSettings : SettingsGroup, ILanguageMappingSettings
-	{
+	{		
 		private readonly ObservableCollection<LanguageMappingModel> _languageMappings = new ObservableCollection<LanguageMappingModel>();
 
 		public ObservableCollection<LanguageMappingModel> LanguageMappings

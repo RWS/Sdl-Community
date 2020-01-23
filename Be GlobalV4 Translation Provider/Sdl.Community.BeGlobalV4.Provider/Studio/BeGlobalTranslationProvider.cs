@@ -93,9 +93,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		private BeGlobalLanguagePair SetSupportedLanguages(LanguagePair languageDirection)
 		{
-			if (languageDirection != null)
-			{
-				var languageMappings = _languageMappingsService.GetLanguageMappingSettings()?.LanguageMappings;
+			var languageMappings = _languageMappingsService.GetLanguageMappingSettings()?.LanguageMappings;
+			if (languageDirection != null && languageMappings != null)
+			{				
 				if (Options?.SubscriptionInfo?.LanguagePairs?.Count > 0 && (languageMappings != null || languageMappings.Any()))
 				{
 					var languagePair = Options.SubscriptionInfo.LanguagePairs
