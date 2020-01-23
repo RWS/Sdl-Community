@@ -100,7 +100,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			try
 			{
 				var selectedModel = _languageMappings?.FirstOrDefault(l => l.ProjectLanguagePair.Contains(sourceDisplayName) && l.ProjectLanguagePair.Contains(targetDisplayName));
-				if(selectedModel.SelectedModelOption == null || string.IsNullOrEmpty(selectedModel.SelectedModelOption.Model))
+				if(selectedModel?.SelectedModelOption == null || string.IsNullOrEmpty(selectedModel?.SelectedModelOption?.Model))
 				{
 					throw new Exception(_constants.NoTranslationMessage);
 				}

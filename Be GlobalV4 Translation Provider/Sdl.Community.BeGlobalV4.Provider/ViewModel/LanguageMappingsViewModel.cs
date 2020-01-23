@@ -6,6 +6,7 @@ using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
+using Sdl.LanguagePlatform.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
@@ -18,13 +19,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private LanguageMappingsService _languageMappingService;
 		private ObservableCollection<LanguageMappingModel> _languageMappings;
 		private BeGlobalWindowViewModel _beGlobalWindowViewModel;
+		private readonly LanguagePair[] _languagePairs;
 
 		private ICommand _resetLanguageMappingsCommand;
 
 
-		public LanguageMappingsViewModel(BeGlobalTranslationOptions options, BeGlobalWindowViewModel beGlobalWindowViewModel)
+		public LanguageMappingsViewModel(BeGlobalTranslationOptions options, BeGlobalWindowViewModel beGlobalWindowViewModel, LanguagePair[] languagePairs)
 		{
 			Options = options;
+			_languagePairs = languagePairs;
 			_languageMappings = new ObservableCollection<LanguageMappingModel>();
 			_beGlobalWindowViewModel = beGlobalWindowViewModel;
 
@@ -83,28 +86,32 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		/// </summary>
 		public void LoadLanguageMappings()
 		{
-			_projectController = AppInitializer.GetProjectController();
-			var currentSettings = _languageMappingService.GetLanguageMappingSettings();			
-
-			if (currentSettings != null && currentSettings.LanguageMappings.Any())
+			var currentSettings = _languageMappingService.GetLanguageMappingSettings()?.LanguageMappings?.ToList();			
+		
+			if (currentSettings.Any() && _languagePairs.Length.Equals(currentSettings.Count()))
 			{
-				// clear current LanguageMappings list to avoid duplications inside the grid
-				LanguageMappings.Clear();
-				var mtCodes = AppInitializer.GetMTCodes();
-				foreach (var languageMapping in currentSettings.LanguageMappings)
+				var areLanguagesEquals = currentSettings.All(c=>_languagePairs.ToList().Any(l=>l.SourceCulture.Name.Equals(c.SourceTradosCode)
+				&&(l.TargetCulture.Name.Equals(c.TargetTradosCode))));
+				if (areLanguagesEquals)
 				{
-					LanguageMappings.Add(languageMapping);
+					// clear the current LanguageMappings list to avoid duplications inside the grid and load them from ProjectGroup configuration
+					LanguageMappings.Clear();
+					var mtCodes = AppInitializer.GetMTCodes();
+					foreach (var languageMapping in currentSettings)
+					{
+						LanguageMappings.Add(languageMapping);
 
-					var missingCodes = LoadNewCodes(languageMapping, mtCodes);
+						var missingCodes = LoadNewCodes(languageMapping, mtCodes);
 
-					// set the SelectedModelOption of the current LanguageMappings collection (otherwise it will not shown in the grid)
-					var selectedLangModel = LanguageMappings.FirstOrDefault(l => l.ProjectLanguagePair.Equals(languageMapping.ProjectLanguagePair));
-					var langMappingIndex = LanguageMappings.IndexOf(selectedLangModel);
-					var selectedModelOption = LanguageMappings[langMappingIndex].Engines.FirstOrDefault(e => e.DisplayName.Equals(selectedLangModel.SelectedModelOption.DisplayName));
-					LanguageMappings[langMappingIndex].SelectedModelOption = selectedModelOption;
-				
-					AddMissingCode(missingCodes.Keys.First(), LanguageMappings[langMappingIndex].MTCodesSource);
-					AddMissingCode(missingCodes.Values.First(), LanguageMappings[langMappingIndex].MTCodesTarget);
+						// set the SelectedModelOption of the current LanguageMappings collection (otherwise it will not shown in the grid)
+						var selectedLangModel = LanguageMappings.FirstOrDefault(l => l.ProjectLanguagePair.Equals(languageMapping.ProjectLanguagePair));
+						var langMappingIndex = LanguageMappings.IndexOf(selectedLangModel);
+						var selectedModelOption = LanguageMappings[langMappingIndex].Engines.FirstOrDefault(e => e.DisplayName.Equals(selectedLangModel.SelectedModelOption.DisplayName));
+						LanguageMappings[langMappingIndex].SelectedModelOption = selectedModelOption;
+
+						AddMissingCode(missingCodes.Keys.First(), LanguageMappings[langMappingIndex].MTCodesSource);
+						AddMissingCode(missingCodes.Values.First(), LanguageMappings[langMappingIndex].MTCodesTarget);
+					}
 				}
 			}
 			LoadProjectLanguagePairs();
@@ -193,11 +200,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				// load the MTCode (the load is needed, because user might add/remove codes from MTCodes grid
 				var mtCodes = AppInitializer.GetMTCodes();
 
-				var currentProjectInfo = _projectController?.CurrentProject?.GetProjectInfo();
-				var sourceLanguage = currentProjectInfo?.SourceLanguage;
-				var targetLanguages = currentProjectInfo?.TargetLanguages;
-				var mtCodeSource = mtCodes?.FirstOrDefault(s => s.TradosCode.Equals(sourceLanguage?.CultureInfo?.Name)
-				|| s.TradosCode.Equals(sourceLanguage?.IsoAbbreviation));
+				var sourceLanguage = _languagePairs?[0].SourceCulture;
+				var mtCodeSource = mtCodes?.FirstOrDefault(s => s.TradosCode.Equals(sourceLanguage?.Name)
+				|| s.TradosCode.Equals(sourceLanguage?.ThreeLetterISOLanguageName));
 				if (mtCodeSource != null)
 				{
 					MTCodeSourceList.Clear();
@@ -209,12 +214,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				}
 
 				MTCodeTargetList.Clear();
-				foreach (var targetLanguage in targetLanguages)
+				foreach (var langPair in _languagePairs)
 				{
-					var languagePair = $"{sourceLanguage.DisplayName} - {targetLanguage.DisplayName}";
+					var languagePair = $"{sourceLanguage.DisplayName} - {langPair.TargetCulture?.DisplayName}";
 
-					var mtCodeTarget = mtCodes?.FirstOrDefault(s => s.TradosCode.Equals(targetLanguage?.CultureInfo?.Name)
-					|| s.TradosCode.Equals(targetLanguage?.IsoAbbreviation));
+					var mtCodeTarget = mtCodes?.FirstOrDefault(s => s.TradosCode.Equals(langPair.TargetCulture?.Name)
+					|| s.TradosCode.Equals(langPair?.TargetCulture.ThreeLetterISOLanguageName));
 					if (mtCodeTarget != null)
 					{
 						MTCodeTargetList.Add(mtCodeTarget.MTCodeMain);

@@ -48,8 +48,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 			var translatedXliffText = _options.BeGlobalService.TranslateText(
 						xliffDocument.ToString(),
-						_languageDirection?.SourceCulture?.EnglishName,
-						_languageDirection?.TargetCulture?.EnglishName);
+						_languageDirection?.SourceCulture?.DisplayName,
+						_languageDirection?.TargetCulture?.DisplayName);
 
 			var translatedXliff = Converter.ParseXliffString(translatedXliffText);
 			if (translatedXliff != null)
