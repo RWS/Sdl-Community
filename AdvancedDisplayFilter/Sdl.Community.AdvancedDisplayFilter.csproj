@@ -140,10 +140,12 @@
     <Compile Include="Controls\FilterExpression.Designer.cs">
       <DependentUpon>FilterExpression.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FilterSelectionAction.cs" />
     <Compile Include="Controls\ListViewExtended.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\ListViewItemComparer.cs" />
+    <Compile Include="DisplayFilters\ContentDisplayFilter.cs" />
     <Compile Include="DisplayFilters\CustomFilterSettings.cs" />
     <Compile Include="DisplayFilters\DisplayFilter.cs" />
     <Compile Include="DisplayFilters\DisplayFilterSettings.cs" />
@@ -151,6 +153,7 @@
     <Compile Include="Helpers\ColorPickerHelper.cs" />
     <Compile Include="Helpers\CommentsHelper.cs" />
     <Compile Include="Helpers\CommentVisitor.cs" />
+    <Compile Include="Models\ContentFilterSettings.cs" />
     <Compile Include="Services\CustomFilterService.cs" />
     <Compile Include="Helpers\FuzzyHelper.cs" />
     <Compile Include="Helpers\SegmentTextVisitor.cs" />
