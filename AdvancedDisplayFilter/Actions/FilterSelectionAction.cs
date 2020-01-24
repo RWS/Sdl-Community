@@ -1,11 +1,12 @@
-﻿using Sdl.Desktop.IntegrationApi;
+﻿using Sdl.Community.AdvancedDisplayFilter.Controls;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
-namespace Sdl.Community.AdvancedDisplayFilter.Controls
+namespace Sdl.Community.AdvancedDisplayFilter.Actions
 {
-	[Action("CommunityADFFilter", Name = "CADF - Filter", Icon = "")]
+	[Action("CommunityADFFilter", Name = "CADF - Selection Filter", Icon = "")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 10, DisplayType.Large)]
 	public class FilterSelectionAction: AbstractAction
 	{

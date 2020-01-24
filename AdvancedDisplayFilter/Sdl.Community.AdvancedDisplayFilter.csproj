@@ -119,6 +119,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\FilterSourceAction.cs" />
+    <Compile Include="Actions\FilterTargetAction.cs" />
     <Compile Include="Controls\AddCommentAction.cs" />
     <Compile Include="Controls\AddCommentWindow.cs">
       <SubType>Form</SubType>
@@ -141,7 +143,7 @@
     <Compile Include="Controls\FilterExpression.Designer.cs">
       <DependentUpon>FilterExpression.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\FilterSelectionAction.cs" />
+    <Compile Include="Actions\FilterSelectionAction.cs" />
     <Compile Include="Controls\ListViewExtended.cs">
       <SubType>Component</SubType>
     </Compile>
