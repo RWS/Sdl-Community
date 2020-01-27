@@ -2,34 +2,34 @@
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
-    partial class DisplayFilterControl
-    {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class DisplayFilterControl
+	{
+		/// <summary> 
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary> 
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Component Designer generated code
+		#region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary> 
+		/// Required method for Designer support - do not modify 
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DisplayFilterControl));
 			this.panel_body = new System.Windows.Forms.Panel();
@@ -1462,7 +1462,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			// contextMenuStrip1
 			// 
-			this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
@@ -1544,30 +1543,30 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).EndInit();
 			this.ResumeLayout(false);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        private System.Windows.Forms.Panel panel_body;
-        private System.Windows.Forms.Panel panel_filterStatus;
-        private System.Windows.Forms.ToolStrip toolStrip_filter;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.Label label_filterStatusBarMessage;
-        private System.Windows.Forms.ToolStripButton toolStripButton_applyFilter;
-        private System.Windows.Forms.ToolStripButton toolStripButton_clearFilter;
-        private System.Windows.Forms.Panel panel_filterStatusBar;
-        private System.Windows.Forms.Panel panel_filterStatusBarImage;
-        private System.Windows.Forms.PictureBox pictureBox_filterStatusBarImage;
-        private System.Windows.Forms.ImageList imageList_filter;
-        private System.Windows.Forms.Panel panel_buffer;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton toolStripButton_saveFilter;
-        private System.Windows.Forms.ToolStripButton toolStripButton_loadFilter;
-        private System.Windows.Forms.Panel panel_filterExpression;
-        private System.Windows.Forms.Splitter splitter_filterExpression;
-        private System.Windows.Forms.Panel panel_filterStatusBarMessage;
-        private FilterExpression filterExpressionControl;
+		private System.Windows.Forms.Panel panel_body;
+		private System.Windows.Forms.Panel panel_filterStatus;
+		private System.Windows.Forms.ToolStrip toolStrip_filter;
+		private System.Windows.Forms.ColumnHeader columnHeader1;
+		private System.Windows.Forms.ColumnHeader columnHeader2;
+		private System.Windows.Forms.Label label_filterStatusBarMessage;
+		private System.Windows.Forms.ToolStripButton toolStripButton_applyFilter;
+		private System.Windows.Forms.ToolStripButton toolStripButton_clearFilter;
+		private System.Windows.Forms.Panel panel_filterStatusBar;
+		private System.Windows.Forms.Panel panel_filterStatusBarImage;
+		private System.Windows.Forms.PictureBox pictureBox_filterStatusBarImage;
+		private System.Windows.Forms.ImageList imageList_filter;
+		private System.Windows.Forms.Panel panel_buffer;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripButton toolStripButton_saveFilter;
+		private System.Windows.Forms.ToolStripButton toolStripButton_loadFilter;
+		private System.Windows.Forms.Panel panel_filterExpression;
+		private System.Windows.Forms.Splitter splitter_filterExpression;
+		private System.Windows.Forms.Panel panel_filterStatusBarMessage;
+		private FilterExpression filterExpressionControl;
 		private ContextMenuStrip contextMenuStrip1;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 		private ToolStripButton reverseBtn;

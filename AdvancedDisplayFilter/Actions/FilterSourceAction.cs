@@ -7,7 +7,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.AdvancedDisplayFilter.Actions
 {
-	[Action("CommunityADFSourceFilter", Name = "CADF - Source Filter", Icon = "")]
+	[Action("CommunityADFSourceFilter", Name = "CADF - Source Filter", Icon = "filter_source")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 10, DisplayType.Large)]
 	public class FilterSourceAction:AbstractAction
 	{

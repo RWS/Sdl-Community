@@ -6,7 +6,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.AdvancedDisplayFilter.Actions
 {
-	[Action("CommunityADFFilter", Name = "CADF - Selection Filter", Icon = "")]
+	[Action("CommunityADFFilter", Name = "CADF - Selection Filter", Icon = "filter_selection")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 10, DisplayType.Large)]
 	public class FilterSelectionAction: AbstractAction
 	{
