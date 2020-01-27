@@ -23,8 +23,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
         private int tmpTotalTagCount;
         private int srcSegmentTagCount;
 
-        private ISegment thisSrcSegment;
-        private ISegment thisTrgSegment;
+        private ISegment _srcSegment;
+        private ISegment _trgSegment;
 
 
         public void SetFileProperties(IFileProperties properties)
@@ -55,7 +55,6 @@ namespace Sdl.Community.StarTransit.Shared.Import
    
                 }
             }
-
         }
         
 
@@ -232,7 +231,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
             if (source)
             {
-                thisSrcSegment = segment;
+                _srcSegment = segment;
 
 
                 srcSegmentTagCount = 0;
@@ -243,7 +242,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
             }
             else
             {
-                thisTrgSegment = segment;
+                _trgSegment = segment;
                 totalTagCount = totalTagCount - srcSegmentTagCount;
             }            
 			if(segNode !=null)
