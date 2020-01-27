@@ -1,9 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StarTransit.Shared.Models;
-using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.ViewModels;
 
@@ -12,13 +10,13 @@ namespace Sdl.Community.StarTransit.UI
 	/// <summary>
 	/// Interaction logic for StarTransitMainWindow.xaml
 	/// </summary>
-	public partial class StarTransitMainWindow : MetroWindow
+	public partial class StarTransitMainWindow
 	{
-		private PackageDetails _packageDetails;
-		private TranslationMemories _translationMemories;
+		private readonly PackageDetails _packageDetails;
+		private readonly TranslationMemories _translationMemories;
 		private TranslationMemoriesPenaltiesWindow _translationMemoriesPenalties;
 		private FinishViewModel finishViewModel;
-		private Finish _finish;
+		private readonly Finish _finish;
 		private PackageModel _package;
 
 		public StarTransitMainWindow(PackageModel package)
@@ -56,7 +54,7 @@ namespace Sdl.Community.StarTransit.UI
 			if (packageDetailsViewModel.ShowWindowsMessage == null)
 			{
 				packageDetailsViewModel.ShowWindowsMessage = ShowWindowsMessage;
-			}			
+			}
 		}
 
 		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
@@ -106,11 +104,6 @@ namespace Sdl.Community.StarTransit.UI
 				AffirmativeButtonText = "OK"
 			};
 			await this.ShowMessageAsync(title, message, MessageDialogStyle.Affirmative, dialog);
-
-			if (dialog.AffirmativeButtonText.Equals("OK"))
-			{
-				Close();
-			}
 		}
 
 		private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -118,7 +111,6 @@ namespace Sdl.Community.StarTransit.UI
 			var starTransitViewModel = DataContext as StarTransitMainWindowViewModel;
 
 			e.Cancel = starTransitViewModel.Active;
-			TelemetryService.Instance.SendCrashes(false);
 		}
 	}
 }
