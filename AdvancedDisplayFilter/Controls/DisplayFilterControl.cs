@@ -657,22 +657,40 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			return SdlTradosStudio.Application.GetController<EditorController>();
 		}
 
-		private void ApplyFilter(bool reverseSearch)
+		public void ApplyFilter(bool reverseSearch)
 		{
 			if (OnApplyDisplayFilter != null)
 			{
+				//if (CommunityApplicationInitializer.ContentFilterSettings != null)
+				//{
+				//	var filterContentSettings = CommunityApplicationInitializer.ContentFilterSettings;
+				//	if (filterContentSettings.WasContentFilterApplied && !string.IsNullOrEmpty(filterContentSettings.SelectedText))
+				//	{
+				//		if (filterContentSettings.SearchInSource)
+				//		{
+				//			DisplayFilterSettings.SourceText = filterContentSettings.SelectedText;
+				//			textBox_source.Text = filterContentSettings.SelectedText;
+				//		}
+				//		if (!filterContentSettings.SearchInSource)
+				//		{
+				//			DisplayFilterSettings.TargetText = filterContentSettings.SelectedText;
+				//			target_textbox.Text = filterContentSettings.SelectedText;
+				//		}
+				//	}
+				//}
 				_qualitySamplingSegmentsIds = _qualitySamplingService.GetSamplingSegmentPairsIds(_activeDocument, CustomFilterSettings);
 
 				var result = new FilteredCountsCallback(UpdateFilteredCountDisplay);
 
 				OnApplyDisplayFilter?.Invoke(DisplayFilterSettings, CustomFilterSettings, reverseSearch, result);
 			}
+			//if (CommunityApplicationInitializer.ContentFilterSettings != null)
+			//	CommunityApplicationInitializer.ContentFilterSettings.WasContentFilterApplied = false;
 		}
 
 		private void ClearFilter()
 		{
 			InitializeSettings();
-
 			ApplyFilter(false);
 		}
 
