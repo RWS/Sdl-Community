@@ -37,7 +37,9 @@ namespace Sdl.Community.StarTransit.Shared.Import
         {
             OnProgress(0);
             _document = new XmlDocument();
+			_document.PreserveWhitespace = true;
             _srcDocument = new XmlDocument();
+			_srcDocument.PreserveWhitespace = true;
             string trgFilePath = _fileProperties.FileConversionProperties.OriginalFilePath;
             _document.Load(trgFilePath);
 
@@ -256,6 +258,11 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					if (item.NodeType == XmlNodeType.Element)
 					{
 						segment.Add(CreatePhTag(item.Name, item, source));
+					}
+
+					if (item.NodeType == XmlNodeType.Whitespace)
+					{
+						segment.Add(CreateText(" "));
 					}
 				}
 			}
