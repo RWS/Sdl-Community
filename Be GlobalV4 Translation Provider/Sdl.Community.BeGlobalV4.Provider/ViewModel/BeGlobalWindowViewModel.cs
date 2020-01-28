@@ -6,6 +6,7 @@ using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
@@ -43,8 +44,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				_mainWindow.LoginTab.UserPasswordBox.Password = options.ClientSecret;
 				LoginViewModel.SelectedOption = LoginViewModel.AuthenticationOptions[1];
 			}
-		}
 
+			var projectController = AppInitializer.GetProjectController();
+			projectController.ProjectsChanged += ProjectController_ProjectsChanged;
+		}
+		
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 
 		public int SelectedTabIndex
@@ -98,6 +102,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			Mouse.OverrideCursor = Cursors.Arrow;
 		}
 
+		/// <summary>
+		/// Validate window
+		/// </summary>
+		/// <param name="isOkPressed">isOkPressed</param>
+		/// <returns>message in case validation is not fine, otherwise, returns string.Empty</returns>
 		public string ValidateWindow(bool isOkPressed)
 		{
 			var loginTab = _mainWindow?.LoginTab;
@@ -143,6 +152,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			return Message;
 		}
 
+		/// <summary>
+		/// Validate the engines setup
+		/// </summary>
+		/// <param name="clientId">clientId</param>
+		/// <param name="clientSecret">clientSecret</param>
+		/// <param name="useClientAuthentication">useClientAuthentication</param>
+		/// <param name="isOkPressed">isOkPressed</param>
+		/// <returns>Return message if the engines is not validated correctly, otherwise, returns string.Empty</returns>
 		private string GetEngineValidation(string clientId, string clientSecret, bool useClientAuthentication, bool isOkPressed)
 		{
 			Options.ClientId = clientId.TrimEnd().TrimStart();
@@ -165,6 +182,20 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				return Message;
 			}
 			return Message;
+		}
+
+		private void ProjectController_ProjectsChanged(object sender, EventArgs e)
+		{
+			var projectsController = (ProjectsController)sender;
+			var lastCreatedProj = projectsController?.GetAllProjects()?.LastOrDefault();
+			var currentProj = projectsController?.CurrentProject;
+
+			// Save language mappings configuration for the last created project
+			// (used when user adds the provider through Project creation wizard)
+			if (currentProj != null && currentProj.FilePath.Equals(lastCreatedProj?.FilePath))
+			{
+				LanguageMappingsViewModel.SaveLanguageMappingSettings();
+			}
 		}
 	}
 }

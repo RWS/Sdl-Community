@@ -122,7 +122,7 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="Dictionary" IsReadOnly="True" >
+				<DataGridTemplateColumn Header="MT Cloud Dictionary" IsReadOnly="True" >
 					<DataGridTemplateColumn.HeaderStyle>
 						<Style TargetType="DataGridColumnHeader">
 							<Setter Property="FontSize" Value="13"/>
