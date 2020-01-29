@@ -67,6 +67,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 		}
 
+		/// <summary>
+		/// Get client information from the MTCloud server
+		/// </summary>
+		/// <returns>accountId</returns>
 		public int GetClientInformation()
 		{
 			try
@@ -95,6 +99,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			return 0;
 		}
 
+		/// <summary>
+		/// Get translation for the current source text
+		/// </summary>
+		/// <param name="text">source text</param>
+		/// <param name="sourceDisplayName">source language display name</param>
+		/// <param name="targetDisplayName">target language display name</param>
+		/// <returns>translated text</returns>
 		public string TranslateText(string text, string sourceDisplayName, string targetDisplayName)
 		{
 			try
@@ -144,6 +155,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 		}
 
+		/// <summary>
+		/// Get user information from the MTCloud server
+		/// </summary>
+		/// <returns>accountId</returns>
 		public int GetUserInformation()
 		{
 			try
@@ -169,6 +184,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			return 0;
 		}
 
+		/// <summary>
+		/// Get language pairs for the current accountId
+		/// </summary>
+		/// <param name="accountId">accountId</param>
+		/// <returns></returns>
 		public SubscriptionInfo GetLanguagePairs(string accountId)
 		{
 			try
@@ -194,6 +214,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			return new SubscriptionInfo();
 		}
 
+		/// <summary>
+		/// Get all the dictionaries for the specified accountId
+		/// </summary>
+		/// <param name="accountId">accountId for the current user</param>
+		/// <returns>available dictionaries for current user</returns>
 		public MTCloudDictionaryInfo GetDictionaries(int accountId)
 		{
 			try

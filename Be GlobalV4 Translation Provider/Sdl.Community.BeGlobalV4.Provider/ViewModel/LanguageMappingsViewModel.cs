@@ -137,6 +137,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
+		/// <summary>
+		/// Load MT Cloud dictionaries for the current user
+		/// </summary>
 		public void LoadDictionaries()
 		{
 			var beGlobalTranslator = new BeGlobalV4Translator(_serverAddress, Options);
