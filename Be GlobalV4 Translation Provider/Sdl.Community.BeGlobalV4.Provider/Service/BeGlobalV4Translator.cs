@@ -130,7 +130,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					targetLanguageId = selectedModel?.SelectedMTCodeTarget,
 					model = selectedModel?.SelectedModelOption?.Model,
 					inputFormat = "xliff",
-					dictionaries = new string[] { selectedModel.SelectedMTCloudDictionary?.DictionaryId?.ToString() }
+					dictionaries = new string[] { selectedModel?.SelectedMTCloudDictionary?.DictionaryId?.ToString() }
 				});
 				var response = _client.Execute(request);
 				if (!response.IsSuccessful)
