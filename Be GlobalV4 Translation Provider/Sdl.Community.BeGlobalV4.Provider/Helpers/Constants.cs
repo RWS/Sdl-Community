@@ -48,6 +48,7 @@
 		public readonly string FormatLanguageName = "FormatLanguageName method: ";
 		public readonly string SplitLanguagePair = "SplitLanguagePair method: ";
 		public readonly string MTCloudServerIPMessage = "The MTCloud IP Address is: ";
+		public readonly string GetDictionaries = "GetDictionaries method: ";
 
 
 		// Messages

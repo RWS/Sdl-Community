@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
@@ -113,8 +112,8 @@
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
 											<TextBlock Text="{Binding DisplayName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding DisplayName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-													   Margin="10,0,10,0" FontFamily="Calibri" VerticalAlignment="Center"/>
-											<Image Source="../Resources/AdaptiveEngine.ico" Width="15" Height="15" />
+													   Margin="12,2,10,0" FontFamily="Calibri" VerticalAlignment="Center"/>
+											<Image Source="../Resources/AdaptiveEngine.ico" Width="15" Height="15" Margin="0,0,10,0" />
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
@@ -128,6 +127,23 @@
 							<Setter Property="FontSize" Value="13"/>
 						</Style>
 					</DataGridTemplateColumn.HeaderStyle>
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ComboBox ItemsSource="{Binding MTCloudDictionaries,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+								      SelectedItem="{Binding SelectedMTCloudDictionary, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
+									  Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Text="{Binding Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+													  Margin="18,2,0,0" FontFamily="Calibri" VerticalAlignment="Center"/>
+											<Image Source="../Resources/dictionaryIcon.ico" Width="15" Height="15" Margin="8,3,5,0" />
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 			</DataGrid.Columns>
 			</DataGrid>

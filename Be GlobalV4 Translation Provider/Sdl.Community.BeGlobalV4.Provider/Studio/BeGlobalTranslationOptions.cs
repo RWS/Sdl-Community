@@ -39,18 +39,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			set => ResendDraftsParameter = value.ToString();
 		}
 
-		public string UseClientAuthenticationParameter
-		{
-			get => GetStringParameter("useClient");
-			set => SetStringParameter("useClient", value);
-		}
-
-		public bool UseClientAuthentication
-		{
-			get => UseClientAuthenticationParameter != null && Convert.ToBoolean(UseClientAuthenticationParameter);
-			set => UseClientAuthenticationParameter = value.ToString();
-		}
-
 		[JsonIgnore]
 		public string ResendDraftsParameter
 		{

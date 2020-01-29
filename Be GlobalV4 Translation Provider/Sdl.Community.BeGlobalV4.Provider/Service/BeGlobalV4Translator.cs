@@ -34,7 +34,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				Utils.LogServerIPAddresses();
 
 				IRestRequest request;
-				if (options.UseClientAuthentication)
+				if (options.AuthenticationMethod.Equals("ClientLogin"))
 				{
 					request = new RestRequest("/token", Method.POST)
 					{
@@ -192,6 +192,31 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				Log.Logger.Error($"{_constants.SubscriptionInfoMethod} {e.Message}\n {e.StackTrace}");
 			}
 			return new SubscriptionInfo();
+		}
+
+		public MTCloudDictionaryInfo GetDictionaries(int accountId)
+		{
+			try
+			{
+				var request = new RestRequest($"/accounts/{accountId}/dictionaries")
+				{
+					RequestFormat = DataFormat.Json
+				};
+				AddTraceId(request);
+
+				var response = _client.Execute(request);
+				if (!response.IsSuccessful)
+				{
+					ShowErrors(response);
+				}
+				var dictionaries = JsonConvert.DeserializeObject<MTCloudDictionaryInfo>(response.Content);
+				return dictionaries;
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"{_constants.GetDictionaries} {e.Message}\n {e.StackTrace}");
+			}
+			return new MTCloudDictionaryInfo();
 		}
 
 		private byte[] WaitForTranslation(string id)

@@ -12,7 +12,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 		private ObservableCollection<TranslationModel> _engines;
 		private ObservableCollection<string> _mtCodesSource;
 		private ObservableCollection<string> _mtCodesTarget;
-				
+		private ObservableCollection<MTCloudDictionary> _mtCloudDictionaries;
+		private MTCloudDictionary _selectedMTCloudDictionary;
+
 		public string ProjectLanguagePair
 		{
 			get => _projectLanguagePair;
@@ -80,6 +82,26 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 			{
 				_selectedMTCodeSource = value;
 				OnPropertyChanged(nameof(SelectedMTCodeSource));
+			}
+		}
+
+		public ObservableCollection<MTCloudDictionary> MTCloudDictionaries
+		{
+			get => _mtCloudDictionaries;
+			set
+			{
+				_mtCloudDictionaries = value;
+				OnPropertyChanged(nameof(MTCloudDictionaries));
+			}
+		}
+
+		public MTCloudDictionary SelectedMTCloudDictionary
+		{
+			get => _selectedMTCloudDictionary;
+			set
+			{
+				_selectedMTCloudDictionary = value;
+				OnPropertyChanged(nameof(SelectedMTCloudDictionary));
 			}
 		}
 

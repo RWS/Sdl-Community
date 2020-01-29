@@ -32,7 +32,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			_mainWindow = mainWindow;
 
 			if (credentialStore == null) return;
-			if (options.UseClientAuthentication || options.AuthenticationMethod.Equals("ClientLogin"))
+			if (options.AuthenticationMethod.Equals("ClientLogin"))
 			{
 				_mainWindow.LoginTab.ClientIdBox.Password = options.ClientId;
 				_mainWindow.LoginTab.ClientSecretBox.Password = options.ClientSecret;
@@ -124,7 +124,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					var password = loginTab?.UserPasswordBox.Password;
 					if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(LoginViewModel.Email))
 					{
-						return GetEngineValidation(LoginViewModel?.Email, password, false, isOkPressed);
+						return GetEngineValidation(LoginViewModel?.Email, password, "UserLogin", isOkPressed);
 					}
 				}
 				else
@@ -133,7 +133,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					var clientSecret = loginTab?.ClientSecretBox.Password;
 					if (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret))
 					{
-						return GetEngineValidation(clientId, clientSecret, true, isOkPressed);
+						return GetEngineValidation(clientId, clientSecret, "ClientLogin", isOkPressed);
 					}
 				}
 				if (loginTab != null)
@@ -151,7 +151,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 			return Message;
 		}
-
+		
 		/// <summary>
 		/// Validate the engines setup
 		/// </summary>
@@ -160,11 +160,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		/// <param name="useClientAuthentication">useClientAuthentication</param>
 		/// <param name="isOkPressed">isOkPressed</param>
 		/// <returns>Return message if the engines is not validated correctly, otherwise, returns string.Empty</returns>
-		private string GetEngineValidation(string clientId, string clientSecret, bool useClientAuthentication, bool isOkPressed)
+		private string GetEngineValidation(string clientId, string clientSecret, string authenticationMethod, bool isOkPressed)
 		{
 			Options.ClientId = clientId.TrimEnd().TrimStart();
 			Options.ClientSecret = clientSecret.TrimEnd().TrimStart();
-			Options.UseClientAuthentication = useClientAuthentication;
+			Options.AuthenticationMethod = authenticationMethod;
 			Message = string.Empty;
 
 			if (isOkPressed || LanguageMappingsViewModel.LanguageMappings.Any())

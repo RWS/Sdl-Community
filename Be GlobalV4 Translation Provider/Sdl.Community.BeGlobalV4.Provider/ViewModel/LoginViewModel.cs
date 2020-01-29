@@ -46,7 +46,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					Type = _constants.User
 				}
 			};
-			SelectedOption = options.UseClientAuthentication ? AuthenticationOptions[0] : AuthenticationOptions[1];
+			SelectedOption = options.AuthenticationMethod.Equals("ClientLogin") ? AuthenticationOptions[0] : AuthenticationOptions[1];
 			LoginMethod = SelectedOption.Type;
 		}
 
@@ -103,7 +103,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			Utils.LogServerIPAddresses();
 
 			var beGlobalTranslator = new BeGlobalV4Translator(_serverAddress, Options);
-			var accountId = Options.UseClientAuthentication ? beGlobalTranslator.GetClientInformation() : beGlobalTranslator.GetUserInformation();
+			var accountId = Options.AuthenticationMethod.Equals("ClientLogin") ? beGlobalTranslator.GetClientInformation() : beGlobalTranslator.GetUserInformation();
 			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
 			Options.SubscriptionInfo = subscriptionInfo;
 			
@@ -173,9 +173,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					{
 						case "ClientIdBox":
 							Options.ClientId = passwordBox.Password;
+							Options.AuthenticationMethod = "ClientLogin";
 							break;
 						case "ClientSecretBox":
 							Options.ClientSecret = passwordBox.Password;
+							Options.AuthenticationMethod = "ClientLogin";
 							break;
 						case "UserPasswordBox":
 							Options.ClientSecret = passwordBox.Password;
@@ -190,7 +192,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				if (textBox.Text.Length > 0)
 				{
 					BeGlobalWindowViewModel.Message = string.Empty;
-					Options.ClientSecret = textBox.Text;
+					Options.ClientId = textBox.Text;
+					Options.AuthenticationMethod = "UserLogin";
 				}
 			}
 		}

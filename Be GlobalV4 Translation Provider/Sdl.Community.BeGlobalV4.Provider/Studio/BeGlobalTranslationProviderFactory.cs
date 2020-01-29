@@ -42,7 +42,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 
 			int accountId;
-			if (options.UseClientAuthentication)
+			if (options.AuthenticationMethod.Equals("ClientLogin"))
 			{
 				accountId = options.BeGlobalService== null ? 0 : options.BeGlobalService.GetClientInformation();
 			}

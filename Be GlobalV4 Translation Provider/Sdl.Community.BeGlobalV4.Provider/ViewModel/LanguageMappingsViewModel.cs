@@ -18,7 +18,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private ObservableCollection<LanguageMappingModel> _languageMappings;
 		private BeGlobalWindowViewModel _beGlobalWindowViewModel;
 		private readonly LanguagePair[] _languagePairs;
-
+		private readonly string _serverAddress = "https://translate-api.sdlbeglobal.com";
+		private List<MTCloudDictionary> _mtCloudDictionaries = new List<MTCloudDictionary>();
+  
 		private ICommand _resetLanguageMappingsCommand;
 		
 		public LanguageMappingsViewModel(BeGlobalTranslationOptions options, BeGlobalWindowViewModel beGlobalWindowViewModel, LanguagePair[] languagePairs)
@@ -46,7 +48,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				_languageMappings = value;
 				OnPropertyChanged(nameof(LanguageMappings));
 			}
-		}
+		}			
 
 		public List<string> MTCodeSourceList = new List<string>();
 		public List<string> MTCodeTargetList = new List<string>();
@@ -60,7 +62,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				OnPropertyChanged(nameof(SelectedLanguageMapping));
 			}
 		}
-
+				
 		public bool ReSendChecked
 		{
 			get => _reSendChecked;
@@ -106,8 +108,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 							// set the SelectedModelOption of the current LanguageMappings collection (otherwise it will not shown in the grid)
 							var selectedLangModel = LanguageMappings.FirstOrDefault(l => l.ProjectLanguagePair.Equals(languageMapping.ProjectLanguagePair));
 							var langMappingIndex = LanguageMappings.IndexOf(selectedLangModel);
-							var selectedModelOption = LanguageMappings[langMappingIndex].Engines.FirstOrDefault(e => e.DisplayName.Equals(selectedLangModel.SelectedModelOption.DisplayName));
+							var selectedModelOption = LanguageMappings[langMappingIndex].Engines?.FirstOrDefault(e => e.DisplayName.Equals(selectedLangModel?.SelectedModelOption?.DisplayName));
 							LanguageMappings[langMappingIndex].SelectedModelOption = selectedModelOption;
+
+							var selectedDictionary = LanguageMappings[langMappingIndex].MTCloudDictionaries?.FirstOrDefault(e => e.Name.Equals(selectedLangModel?.SelectedMTCloudDictionary?.Name));
+							LanguageMappings[langMappingIndex].SelectedMTCloudDictionary = selectedDictionary;
 
 							AddMissingCode(missingCodes.Keys.First(), LanguageMappings[langMappingIndex].MTCodesSource);
 							AddMissingCode(missingCodes.Values.First(), LanguageMappings[langMappingIndex].MTCodesTarget);
@@ -132,6 +137,33 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
+		public void LoadDictionaries()
+		{
+			var beGlobalTranslator = new BeGlobalV4Translator(_serverAddress, Options);
+			var accountId = Options.AuthenticationMethod.Equals("ClientLogin") ? beGlobalTranslator.GetClientInformation() : beGlobalTranslator.GetUserInformation();
+
+			var dictionaries = beGlobalTranslator.GetDictionaries(accountId);
+			if (dictionaries != null)
+			{
+				foreach (var item in dictionaries?.Dictionaries)
+				{
+					var dictionary = new MTCloudDictionary
+					{
+						Description = item.Description,
+						DictionaryId = item.DictionaryId,
+						Name = item.Name,
+						Source = item.Source,
+						Target = item.Target
+					};
+					_mtCloudDictionaries.Add(dictionary);
+				}
+				foreach(var languageMapping in LanguageMappings)
+				{
+					languageMapping.MTCloudDictionaries = new ObservableCollection<MTCloudDictionary>(_mtCloudDictionaries);
+					languageMapping.SelectedMTCloudDictionary = _mtCloudDictionaries[0];
+				}
+			}
+		}
 		/// <summary>
 		/// Reset the language mappings to the default values
 		/// </summary>
@@ -241,12 +273,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 							SelectedMTCodeTarget = MTCodeTargetList[0],
 							Engines = new ObservableCollection<TranslationModel>(),
 							TargetTradosCode = mtCodeTarget.TradosCode,
-							SourceTradosCode = mtCodeSource.TradosCode
+							SourceTradosCode = mtCodeSource.TradosCode,
+							MTCloudDictionaries = new ObservableCollection<MTCloudDictionary>()
 						};
 						LanguageMappings.Add(languageMappingModel);
 						MTCodeTargetList.Clear();
 					}
 				}
+
+				LoadDictionaries();
 			}
 		}		
 	}

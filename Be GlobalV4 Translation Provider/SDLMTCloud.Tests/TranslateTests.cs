@@ -11,7 +11,7 @@ namespace SDLMTCloud.Tests
     {
 		private static BeGlobalTranslationOptions _options = new BeGlobalTranslationOptions
 		{
-			UseClientAuthentication = true,
+			AuthenticationMethod = "ClientLogin",
 			ClientId = "QuUhDMikefBAOrpVT194f9wpHy5xFfAH",
 			ClientSecret = "hnazS4WpwiPWVhvlHRUgSy_134XbM8kVWul8LUOs8nSot-1Iw-FnDX9yp48oWKU9"			
 		};

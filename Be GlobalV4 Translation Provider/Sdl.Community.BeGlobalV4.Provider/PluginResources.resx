@@ -193,4 +193,7 @@
   <data name="MTLanguageCodes" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\MTLanguageCodes.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="dictionaryIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\dictionaryIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
