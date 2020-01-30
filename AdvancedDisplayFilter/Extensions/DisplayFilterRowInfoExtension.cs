@@ -41,7 +41,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			{
 				success = false;
 			}
-
+			
 			return success;
 		}
 
@@ -51,12 +51,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			{
 				return false;
 			}
+			var revisionVisitor = new SegmentTextVisitor();
+			var sourceContainsTrackChanges = revisionVisitor.ContainsTrackChanges(rowInfo.SegmentPair.Source);
+			var targetContainsTrackChanges = revisionVisitor.ContainsTrackChanges(rowInfo.SegmentPair.Target);
 
 			var success = settings.SegmentReviewTypes.ToList()
 				.Any(status => string.Compare(status, DisplayFilterSettings.SegmentReviewType.WithTrackedChanges.ToString()
 					, StringComparison.OrdinalIgnoreCase) == 0);
+			var containsTrackChanges = sourceContainsTrackChanges || targetContainsTrackChanges;
 
-			if (success && !rowInfo.ContainsTrackChanges)
+			if (success && !containsTrackChanges)
 			{
 				success = false;
 			}
