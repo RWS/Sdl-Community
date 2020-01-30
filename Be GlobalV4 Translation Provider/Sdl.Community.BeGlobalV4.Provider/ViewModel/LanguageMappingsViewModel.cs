@@ -20,7 +20,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private readonly LanguagePair[] _languagePairs;
 		private readonly string _serverAddress = "https://translate-api.sdlbeglobal.com";
 		private List<MTCloudDictionary> _mtCloudDictionaries = new List<MTCloudDictionary>();
-  
+		private Constants _constants = new Constants();
+
 		private ICommand _resetLanguageMappingsCommand;
 		
 		public LanguageMappingsViewModel(BeGlobalTranslationOptions options, BeGlobalWindowViewModel beGlobalWindowViewModel, LanguagePair[] languagePairs)
@@ -144,7 +145,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		{
 			var beGlobalTranslator = new BeGlobalV4Translator(_serverAddress, Options);
 			var accountId = Options.AuthenticationMethod.Equals("ClientLogin") ? beGlobalTranslator.GetClientInformation() : beGlobalTranslator.GetUserInformation();
-
+		
 			var dictionaries = beGlobalTranslator.GetDictionaries(accountId);
 			if (dictionaries != null)
 			{
@@ -160,10 +161,30 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					};
 					_mtCloudDictionaries.Add(dictionary);
 				}
-				foreach(var languageMapping in LanguageMappings)
+				foreach (var languageMapping in LanguageMappings)
 				{
-					languageMapping.MTCloudDictionaries = new ObservableCollection<MTCloudDictionary>(_mtCloudDictionaries);
-					languageMapping.SelectedMTCloudDictionary = _mtCloudDictionaries[0];
+
+					var languageDictionaries = _mtCloudDictionaries
+						.Where(d => languageMapping.MTCodesSource.Any(s => s.Equals(d.Source)))
+						.Where(d => languageMapping.MTCodesTarget.Any(t => t.Equals(d.Target))).ToList();
+
+					if (languageDictionaries.Count == 0)
+					{
+						var dictionary = new MTCloudDictionary
+						{
+							Name = _constants.NoAvailableDictionary,
+							DictionaryId = string.Empty
+						};
+						languageMapping.MTCloudDictionaries = new ObservableCollection<MTCloudDictionary>();
+						languageMapping.MTCloudDictionaries.Add(dictionary);
+						languageMapping.SelectedMTCloudDictionary = dictionary;
+					}
+					else
+					{
+
+						languageMapping.MTCloudDictionaries = new ObservableCollection<MTCloudDictionary>(languageDictionaries);
+						languageMapping.SelectedMTCloudDictionary = languageDictionaries[0];
+					}
 				}
 			}
 		}
@@ -252,9 +273,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					}
 				}
 
-				MTCodeTargetList.Clear();
+				//MTCodeTargetList.Clear();
 				foreach (var langPair in _languagePairs)
 				{
+					MTCodeTargetList.Clear();
 					var languagePair = $"{sourceLanguage.DisplayName} - {langPair.TargetCulture?.DisplayName}";
 
 					var mtCodeTarget = mtCodes?.FirstOrDefault(s => s.TradosCode.Equals(langPair.TargetCulture?.Name)
@@ -280,7 +302,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 							MTCloudDictionaries = new ObservableCollection<MTCloudDictionary>()
 						};
 						LanguageMappings.Add(languageMappingModel);
-						MTCodeTargetList.Clear();
 					}
 				}
 

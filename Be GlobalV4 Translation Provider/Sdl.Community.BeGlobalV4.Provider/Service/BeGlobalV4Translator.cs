@@ -123,15 +123,30 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				AddTraceId(request);
 
 				string[] texts = { text };
-				request.AddBody(new
+				// set dictionaries parameter in case user has been selected an available dictionary
+				if (!selectedModel.SelectedMTCloudDictionary.Name.Equals(_constants.NoAvailableDictionary))
 				{
-					input = texts,
-					sourceLanguageId = selectedModel?.SelectedMTCodeSource,
-					targetLanguageId = selectedModel?.SelectedMTCodeTarget,
-					model = selectedModel?.SelectedModelOption?.Model,
-					inputFormat = "xliff",
-					dictionaries = new string[] { selectedModel?.SelectedMTCloudDictionary?.DictionaryId?.ToString() }
-				});
+					request.AddBody(new
+					{
+						input = texts,
+						sourceLanguageId = selectedModel?.SelectedMTCodeSource,
+						targetLanguageId = selectedModel?.SelectedMTCodeTarget,
+						model = selectedModel?.SelectedModelOption?.Model,
+						inputFormat = "xliff",
+						dictionaries = new string[] { selectedModel?.SelectedMTCloudDictionary?.DictionaryId?.ToString() }
+					});
+				}
+				else
+				{
+					request.AddBody(new
+					{
+						input = texts,
+						sourceLanguageId = selectedModel?.SelectedMTCodeSource,
+						targetLanguageId = selectedModel?.SelectedMTCodeTarget,
+						model = selectedModel?.SelectedModelOption?.Model,
+						inputFormat = "xliff"
+					});
+				}
 				var response = _client.Execute(request);
 				if (!response.IsSuccessful)
 				{

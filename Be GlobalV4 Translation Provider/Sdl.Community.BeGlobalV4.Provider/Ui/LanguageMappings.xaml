@@ -136,8 +136,8 @@
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
 											<TextBlock Text="{Binding Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-													  Margin="18,2,0,0" FontFamily="Calibri" VerticalAlignment="Center"/>
-											<Image Source="../Resources/dictionaryIcon.ico" Width="15" Height="15" Margin="8,3,5,0" />
+													  Margin="15,2,0,0" FontFamily="Calibri" VerticalAlignment="Center"/>
+											<Image Source="../Resources/dictionaryIcon.ico" Width="15" Height="15" Margin="6,3,5,0" />
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>

@@ -62,5 +62,6 @@
 		public readonly string NoEnginesLoaded = "No MT engines were received from MTCloud for the current project's Language Pairs";
 		public readonly string EnginesSelectionMessage = "Settings not saved! Please select the corresponding engine from the Language Mappings tab.";
 		public readonly string NoTranslationMessage = "Translation cannot be received because MT Cloud engine is not set for the current Language Pair";
+		public readonly string NoAvailableDictionary = "No dictionary available";
 	}
 }
