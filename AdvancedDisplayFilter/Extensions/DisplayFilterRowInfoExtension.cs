@@ -23,6 +23,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			              || rowInfo.IsSegmentWithTrackedChanges(settings)
 			              || rowInfo.IsSegmentWithSourceTrackedChanges(settings)
 			              || rowInfo.IsSegmentWithTargetTrackedChanges(settings)
+						  ||rowInfo.IsSegmentWithSourceAndTargetTrackedChanges(settings)
 			              || rowInfo.IsSegmentWithComments(settings)
 			              || rowInfo.IsSegmentWithMessages(settings);
 
@@ -106,6 +107,27 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
+		public static bool IsSegmentWithSourceAndTargetTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
+			var sourceContainsTrackChanges = SegmentContainsTrackedChanges(rowInfo.SegmentPair.Source);
+			var targetContainsTrackChanges = SegmentContainsTrackedChanges(rowInfo.SegmentPair.Target);
+
+			var success = HasReviewTypeSelected(DisplayFilterSettings.SegmentReviewType.WithSourceAndTargetTrackedChanges.ToString(), settings.SegmentReviewTypes);
+
+			var containsTrackChanges = sourceContainsTrackChanges && targetContainsTrackChanges;
+
+			if (success && !containsTrackChanges)
+			{
+				success = false;
+			}
+
+			return success;
+		}
 
 
 		public static bool IsSegmentWithComments(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)

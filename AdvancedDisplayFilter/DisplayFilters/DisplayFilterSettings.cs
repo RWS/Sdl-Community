@@ -55,6 +55,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			WithTrackedChanges,
 			WithSourceTrackedChanges,
 			WithTargetTrackedChanges,
+			WithSourceAndTargetTrackedChanges,
 			WithTQA
 		}
 

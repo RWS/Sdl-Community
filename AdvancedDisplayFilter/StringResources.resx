@@ -391,6 +391,9 @@
   <data name="DisplayFilterControl_Neural_Machine_Translation" xml:space="preserve">
     <value>Neural Machine Translation</value>
   </data>
+  <data name="DisplayFilterControl_With_SourceAndTarget_Tracked_changes" xml:space="preserve">
+    <value>With source and target tracked changes</value>
+  </data>
   <data name="DisplayFilterControl_With_Source_Tracked_changes" xml:space="preserve">
     <value>With source tracked changes</value>
   </data>
