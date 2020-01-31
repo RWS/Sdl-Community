@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
@@ -21,6 +23,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private readonly string _serverAddress = "https://translate-api.sdlbeglobal.com";
 		private List<MTCloudDictionary> _mtCloudDictionaries = new List<MTCloudDictionary>();
 		private Constants _constants = new Constants();
+		private bool _isWaiting;
 
 		private ICommand _resetLanguageMappingsCommand;
 		
@@ -37,8 +40,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				ReSendChecked = options.ResendDrafts;				
 			}
+
+			BindingOperations.EnableCollectionSynchronization(LanguageMappings, _languageMappings);
 		}
-		
+
 		public BeGlobalTranslationOptions Options { get; set; }
 	
 		public ObservableCollection<LanguageMappingModel> LanguageMappings
@@ -78,9 +83,18 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
+		public bool IsWaiting
+		{
+			get => _isWaiting;
+			set
+			{
+				_isWaiting = value;
+				OnPropertyChanged(nameof(IsWaiting));
+			}
+		}
+
 		public ICommand ResetLanguageMappingsCommand => _resetLanguageMappingsCommand ?? (_resetLanguageMappingsCommand = new RelayCommand(ResetLanguageMappings));
-
-
+		
 		/// <summary>
 		/// Load the language mapping settings from .sdlproj settings group
 		/// </summary>
@@ -143,6 +157,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		/// </summary>
 		public void LoadDictionaries()
 		{
+			_mtCloudDictionaries.Clear();
 			var beGlobalTranslator = new BeGlobalV4Translator(_serverAddress, Options);
 			var accountId = Options.AuthenticationMethod.Equals("ClientLogin") ? beGlobalTranslator.GetClientInformation() : beGlobalTranslator.GetUserInformation();
 		
@@ -181,31 +196,37 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					}
 					else
 					{
-
 						languageMapping.MTCloudDictionaries = new ObservableCollection<MTCloudDictionary>(languageDictionaries);
 						languageMapping.SelectedMTCloudDictionary = languageDictionaries[0];
 					}
 				}
 			}
 		}
+
 		/// <summary>
 		/// Reset the language mappings to the default values
 		/// </summary>
 		/// <param name="parameter"></param>
-		private void ResetLanguageMappings(object parameter)
+		private async void ResetLanguageMappings(object parameter)
 		{
-			if(LanguageMappings != null)
+			IsWaiting = true;
+			if (LanguageMappings != null)
 			{
-				_languageMappingService.RemoveLanguageMappingSettings();
+				await Task.Run(async () =>
+				{
+					_languageMappingService.RemoveLanguageMappingSettings();
 
-				var savedSettings = _languageMappingService.GetLanguageMappingSettings();
-				_languageMappingService.SaveLanguageMappingSettings(savedSettings);
-				LanguageMappings.Clear();
-				LoadProjectLanguagePairs();
-				_beGlobalWindowViewModel?.ValidateWindow(false);
-			}
+					var savedSettings = _languageMappingService.GetLanguageMappingSettings();
+					_languageMappingService.SaveLanguageMappingSettings(savedSettings);
+
+					LanguageMappings.Clear();
+					LoadProjectLanguagePairs();
+					_beGlobalWindowViewModel?.ValidateWindow(false);
+				}).ConfigureAwait(true);
+				IsWaiting = false;
+			}	
 		}
-
+		
 		/// <summary>
 		/// Load to the existing language mappings settings, the new codes which were added using the MTCodes window
 		/// </summary>
@@ -273,7 +294,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					}
 				}
 
-				//MTCodeTargetList.Clear();
 				foreach (var langPair in _languagePairs)
 				{
 					MTCodeTargetList.Clear();
@@ -304,7 +324,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 						LanguageMappings.Add(languageMappingModel);
 					}
 				}
-
 				LoadDictionaries();
 			}
 		}		

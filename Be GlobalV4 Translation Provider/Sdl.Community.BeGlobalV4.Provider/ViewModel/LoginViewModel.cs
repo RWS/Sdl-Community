@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Controls;
@@ -151,6 +152,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 							if (!languageMapping.Engines.Any(e=>e.DisplayName.Equals(newTranslationModel.DisplayName)))
 							{
+								// the initialization is needed to display the progress ring while loading the engines
+								// after user presses on the "Reset Langauge Mappings to default" button
+								var currentEnginesCollection = languageMapping.Engines;
+								languageMapping.Engines = new ObservableCollection<TranslationModel>(currentEnginesCollection);
 								languageMapping.Engines.Add(newTranslationModel);
 								languageMapping.SelectedModelOption = languageMapping?.SelectedModelOption != null ? languageMapping?.SelectedModelOption : languageMapping?.Engines?[0];
 							}
