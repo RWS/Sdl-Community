@@ -22,10 +22,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 		private bool CheckCreatedBy(string userName)
 		{
-			var usersNameList = userName.Replace(" ", "").Split('|').ToList();
+			var usersNameList = userName.Split('|').ToList();
+
 			foreach (var name in usersNameList)
 			{
-				if (_createdBy.Contains(name))
+				if (_createdBy.Contains(name.TrimStart().TrimEnd()))
 				{
 					return true;
 				}
@@ -35,10 +36,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 		private bool CheckModifiedBy(string userName)
 		{
-			var usersNameList = userName.Replace(" ", "").Split('|').ToList();
+			var usersNameList = userName.Split('|').ToList();
+
 			foreach (var name in usersNameList)
 			{
-				if (_modifiedBy.Contains(name))
+				if (_modifiedBy.Contains(name.TrimStart().TrimEnd()))
 				{
 					return true;
 				}
