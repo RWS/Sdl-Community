@@ -53,6 +53,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			WithFeedbackMessages,
 			WithComments,
 			WithTrackedChanges,
+			WithSourceTrackedChanges,
+			WithTargetTrackedChanges,
 			WithTQA
 		}
 

@@ -845,6 +845,24 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to With source tracked changes.
+        /// </summary>
+        internal static string DisplayFilterControl_With_Source_Tracked_changes {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_With_Source_Tracked_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With target tracked changes.
+        /// </summary>
+        internal static string DisplayFilterControl_With_Target_Tracked_changes {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_With_Target_Tracked_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to With TQA.
         /// </summary>
         internal static string DisplayFilterControl_With_TQA {

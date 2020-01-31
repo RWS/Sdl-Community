@@ -80,7 +80,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     return StringResources.DisplayFilterControl_With_comments;
                 case DisplayFilterSettings.SegmentReviewType.WithTrackedChanges:
                     return StringResources.DisplayFilterControl_With_tracked_changes;
-                case DisplayFilterSettings.SegmentReviewType.WithTQA:
+				case DisplayFilterSettings.SegmentReviewType.WithSourceTrackedChanges:
+					return StringResources.DisplayFilterControl_With_Source_Tracked_changes;
+	            case DisplayFilterSettings.SegmentReviewType.WithTargetTrackedChanges:
+		            return StringResources.DisplayFilterControl_With_Target_Tracked_changes;
+				case DisplayFilterSettings.SegmentReviewType.WithTQA:
                     return StringResources.DisplayFilterControl_With_TQA;	           
 				default:
                     return StringResources.DisplayFilterControl_None;

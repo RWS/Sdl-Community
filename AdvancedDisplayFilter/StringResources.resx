@@ -382,13 +382,19 @@
   <data name="DisplayFilterControl_Relationship_Operator" xml:space="preserve">
     <value>Attribute Relationship</value>
   </data>
-	<data name="DisplayFilterControl_Found_In" xml:space="preserve">
+  <data name="DisplayFilterControl_Found_In" xml:space="preserve">
     <value>Found In</value>
   </data>
-	<data name="DisplayFilterControl_Selected_0_" xml:space="preserve">
+  <data name="DisplayFilterControl_Selected_0_" xml:space="preserve">
     <value>Selected: {0}</value>
   </data>
-	<data name="DisplayFilterControl_Neural_Machine_Translation" xml:space="preserve">
+  <data name="DisplayFilterControl_Neural_Machine_Translation" xml:space="preserve">
     <value>Neural Machine Translation</value>
+  </data>
+  <data name="DisplayFilterControl_With_Source_Tracked_changes" xml:space="preserve">
+    <value>With source tracked changes</value>
+  </data>
+  <data name="DisplayFilterControl_With_Target_Tracked_changes" xml:space="preserve">
+    <value>With target tracked changes</value>
   </data>
 </root>
