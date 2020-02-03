@@ -64,9 +64,6 @@ namespace Sdl.Community.MtEnhancedProvider
         {
             //_plainText += tag.Duplicate(); this will send tag text to _visitor.PlainTextGT in Language Direction -- useful for debugging
             _plainText += tag.TextEquivalent;
-
-
-
         }
 
         public void VisitTagToken(Sdl.LanguagePlatform.Core.Tokenization.TagToken token)
