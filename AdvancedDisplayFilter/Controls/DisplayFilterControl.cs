@@ -532,27 +532,27 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					item.Tag = type;
 				}
 
-				foreach (var type in Enum.GetValues(typeof(OriginType)))
+				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginType)))
 				{
 					if (type.ToString() == "None")
 					{
 						continue;
 					}
 
-					var item = listView_available.Items.Add(Helper.GetTypeName((OriginType)type));
+					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginType)type));
 					item.Group = GroupOriginAvailable;
 					item.Tag = type;
 				}
 
 
-				foreach (var type in Enum.GetValues(typeof(OriginType)))
+				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginType)))
 				{
 					if (type.ToString() == "None")
 					{
 						continue;
 					}
 
-					var item = listView_available.Items.Add(Helper.GetTypeName((OriginType)type));
+					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginType)type));
 					item.Group = GroupPreviousOriginAvailable;
 					item.Tag = type;
 				}
@@ -1884,7 +1884,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			var value = string.Empty;
 			foreach (var type in items)
 			{
-				var success = Enum.TryParse(type, false, out OriginType originType);
+				var success = Enum.TryParse(type, false, out DisplayFilterSettings.OriginType originType);
 				if (success)
 				{
 					value += (string.IsNullOrEmpty(value) ? string.Empty : " | ") + Helper.GetTypeName(originType);

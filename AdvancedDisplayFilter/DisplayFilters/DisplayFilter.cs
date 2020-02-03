@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Sdl.Community.AdvancedDisplayFilter.Extensions;
+using Sdl.Community.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.AdvancedDisplayFilter.Services;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 

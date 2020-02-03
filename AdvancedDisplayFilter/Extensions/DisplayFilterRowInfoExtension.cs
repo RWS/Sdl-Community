@@ -283,6 +283,14 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				success = rowInfo.IsUnEditedFuzzyMatchFound(settings);
 			}
 
+			var isNewContentOptionSelected = settings.OriginTypes.ToList().Any(origin =>
+				string.Compare(origin, DisplayFilterSettings.OriginType.NewTranslated.ToString(), StringComparison.OrdinalIgnoreCase) == 0);
+
+			if (isNewContentOptionSelected)
+			{
+				success = SegmentTypesHelper.IsNewContent(rowInfo);
+			}
+
 			return success;
 		}
 

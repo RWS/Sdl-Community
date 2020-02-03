@@ -70,12 +70,27 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			NumbersOnly,
 			ExcludeNumberOnly
 		}
+		public enum OriginType
+		{
+			None = 0,
+			PM = 1,
+			CM = 2,
+			NMT = 3,
+			AT = 4,
+			Exact = 5,
+			Fuzzy = 6,
+			Interactive = 7,
+			Source = 8,
+			AutoPropagated = 9,
+			FuzzyMatchRepair = 10,
+			EditedFuzzy = 11,
+			UneditedFuzzy = 12,
+			NewTranslated = 13
+		}
 
 		public string Version { get; set; }
 
 		public DateTime Created { get; set; }
-
-		public OriginType Origin { get; set; }
 
 		public bool IsRegularExpression { get; set; }
 
