@@ -123,6 +123,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 		public List<string> OriginTypes { get; set; }
 
 		public List<string> PreviousOriginTypes { get; set; }
+		public bool IsAndOperator { get; set; }
 
 		public DisplayFilterSettings()
 		{

@@ -20,12 +20,21 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			}
 
 			var success = rowInfo.IsSegmentWithTQAs(settings)
-			              || rowInfo.IsSegmentWithTrackedChanges(settings)
-			              || rowInfo.IsSegmentWithSourceTrackedChanges(settings)
-			              || rowInfo.IsSegmentWithTargetTrackedChanges(settings)
-						  ||rowInfo.IsSegmentWithSourceAndTargetTrackedChanges(settings)
 			              || rowInfo.IsSegmentWithComments(settings)
 			              || rowInfo.IsSegmentWithMessages(settings);
+
+			//track changes
+			if (settings.IsAndOperator && AreBothSourceAndTargetTrackedSelected(rowInfo, settings))
+			{
+				success = rowInfo.IsSegmentWithSourceAndTargetTrackedChanges(settings,true);
+			}
+			else
+			{
+				success = rowInfo.IsSegmentWithSourceTrackedChanges(settings)
+				          || rowInfo.IsSegmentWithTargetTrackedChanges(settings)
+				          || rowInfo.IsSegmentWithTrackedChanges(settings)
+				          || rowInfo.IsSegmentWithSourceAndTargetTrackedChanges(settings,false);
+			}
 
 			return success;
 		}
@@ -107,7 +116,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
-		public static bool IsSegmentWithSourceAndTargetTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+
+		public static bool IsSegmentWithSourceAndTargetTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings,bool bothOptionsSelected)
 		{
 			if (!rowInfo.IsSegment)
 			{
@@ -117,7 +127,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			var sourceContainsTrackChanges = SegmentContainsTrackedChanges(rowInfo.SegmentPair.Source);
 			var targetContainsTrackChanges = SegmentContainsTrackedChanges(rowInfo.SegmentPair.Target);
 
-			var success = HasReviewTypeSelected(DisplayFilterSettings.SegmentReviewType.WithSourceAndTargetTrackedChanges.ToString(), settings.SegmentReviewTypes);
+			var hasSourceAndTargetOptionSelected = HasReviewTypeSelected(DisplayFilterSettings.SegmentReviewType.WithSourceAndTargetTrackedChanges.ToString(), settings.SegmentReviewTypes);
+
+			var success = hasSourceAndTargetOptionSelected || bothOptionsSelected;
 
 			var containsTrackChanges = sourceContainsTrackChanges && targetContainsTrackChanges;
 
@@ -731,6 +743,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 		private static bool HasReviewTypeSelected(string selectedOption, List<string> segmentReviewTyes)
 		{
 			return segmentReviewTyes.Any(status => string.Compare(status, selectedOption, StringComparison.OrdinalIgnoreCase) == 0);
+		}
+		private static bool AreBothSourceAndTargetTrackedSelected(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+			var hasSourceTrackedChangesSelected = HasReviewTypeSelected(DisplayFilterSettings.SegmentReviewType.WithSourceTrackedChanges.ToString(), settings.SegmentReviewTypes);
+			var hasTargetTrackedChangesSelected = HasReviewTypeSelected(DisplayFilterSettings.SegmentReviewType.WithTargetTrackedChanges.ToString(), settings.SegmentReviewTypes);
+
+			return hasSourceTrackedChangesSelected && hasTargetTrackedChangesSelected;
 		}
 
 		private static bool SegmentContainsTrackedChanges(ISegment segment)
