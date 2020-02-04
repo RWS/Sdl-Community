@@ -61,6 +61,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New translated content.
+        /// </summary>
+        internal static string DisplayFilter_Control_New_Translated {
+            get {
+                return ResourceManager.GetString("DisplayFilter_Control_New_Translated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Using this option will filter the results based on matches found within the translatable text AND within the content of any tags in your file(s)..
         /// </summary>
         internal static string DisplayFilter_IncludeTags_Tooltip {

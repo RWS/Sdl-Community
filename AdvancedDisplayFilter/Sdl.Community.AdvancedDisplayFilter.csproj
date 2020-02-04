@@ -155,6 +155,7 @@
     <Compile Include="Helpers\ColorPickerHelper.cs" />
     <Compile Include="Helpers\CommentsHelper.cs" />
     <Compile Include="Helpers\CommentVisitor.cs" />
+    <Compile Include="Helpers\SegmentTypesHelper.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

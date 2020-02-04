@@ -400,4 +400,7 @@
   <data name="DisplayFilterControl_With_Target_Tracked_changes" xml:space="preserve">
     <value>With target tracked changes</value>
   </data>
+  <data name="DisplayFilter_Control_New_Translated" xml:space="preserve">
+    <value>New translated content</value>
+  </data>
 </root>
