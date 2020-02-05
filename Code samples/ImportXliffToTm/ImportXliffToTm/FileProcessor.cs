@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -25,9 +26,10 @@ namespace ImportXliffToTm
 			{
 				var tu = new TranslationUnit
 				{
-					SourceSegment = new Sdl.LanguagePlatform.Core.Segment(_tm.LanguageDirection.SourceLanguage),
-					TargetSegment = new Sdl.LanguagePlatform.Core.Segment(_tm.LanguageDirection.TargetLanguage)
+					SourceSegment = new Segment(_tm.LanguageDirection.SourceLanguage),
+					TargetSegment = new Segment(_tm.LanguageDirection.TargetLanguage)
 				};
+
 				tu.SourceSegment.Add(segmentPair.Source.ToString());
 				tu.TargetSegment.Add(segmentPair.Target.ToString());
 				var fields = _tm.FieldDefinitions;
