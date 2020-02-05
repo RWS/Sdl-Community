@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
-using Sdl.FileTypeSupport.Framework.Integration;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi.Extensions;
 
 namespace ImportXliffToTm
 {
@@ -59,9 +55,6 @@ namespace ImportXliffToTm
 			//var importSettings = tmImporter.ImportSettings;
 			//importSettings.ExistingFieldsUpdateMode = ImportSettings.FieldUpdateMode.Merge;
 			//var fields = tm.FieldDefinitions;
-
-
-
 		
 			//tm.Save();
 			//ImportFiles(tmImporter);

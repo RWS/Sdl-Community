@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.FileTypeSupport.Framework.Bilingual;
+﻿using System.Linq;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -32,42 +26,43 @@ namespace ImportXliffToTm
 				var tu = new TranslationUnit
 				{
 					SourceSegment = new Sdl.LanguagePlatform.Core.Segment(_tm.LanguageDirection.SourceLanguage),
-					TargetSegment = new Sdl.LanguagePlatform.Core.Segment(_tm.LanguageDirection.TargetLanguage),
+					TargetSegment = new Sdl.LanguagePlatform.Core.Segment(_tm.LanguageDirection.TargetLanguage)
 				};
 				tu.SourceSegment.Add(segmentPair.Source.ToString());
 				tu.TargetSegment.Add(segmentPair.Target.ToString());
 				var fields = _tm.FieldDefinitions;
 
-				foreach (var field in fields)
+				var fileNameField = fields.FirstOrDefault(f => f.Name.Equals("FileName"));
+				if (fileNameField != null)
 				{
-					if (field.Name.Equals("FileName"))
-					{
-						var value = field.CreateValue();
-						value.Add(_fileName);
-						tu.FieldValues.Add(value);
-					}
+					var value = fileNameField.CreateValue();
+					value.Add(_fileName);
+					tu.FieldValues.Add(value);
 				}
 
-				//var fileNameField = fields.FirstOrDefault(f => f.Name.Equals("FileName"));
-				//if (fileNameField != null)
-				//{
-				//	var value = fileNameField.CreateValue();
-				//	value.Add(_fileName);
-				//	tu.FieldValues.Add(value);
-				//}
-
-				//var containsSegIdField = fields.FirstOrDefault(f => f.Name.Equals("SegmentId"));
-				//if (containsSegIdField == null)
-				//{
-				//	var segmentIdFieldDefinition = new FieldDefinition("SegmentId", FieldValueType.MultipleString);
-				//	var segmentIdValue = segmentIdFieldDefinition.CreateValue();
-				//	segmentIdValue.Add(segmentPair.Properties.Id.Id);
-
-				//	tu.FieldValues.Add(segmentIdValue);
-				//}
+				var containsSegIdField = fields.FirstOrDefault(f => f.Name.Equals("SegmentId"));
+				if (containsSegIdField == null)
+				{
+					// Create field in tm
+					var segmentIdFieldDefinition = new FieldDefinition("SegmentId", FieldValueType.MultipleString);
+					_tm.FieldDefinitions.Add(segmentIdFieldDefinition);
+					AddFieldToTu(tu, segmentPair.Properties.Id.Id);
+				}
+				else
+				{
+					AddFieldToTu(tu, segmentPair.Properties.Id.Id);
+				}
 				_tm.LanguageDirection.AddTranslationUnit(tu, GetImportSettings());
 			}
 			_tm.Save();
+		}
+
+		private void AddFieldToTu(TranslationUnit tu,string segmentId)
+		{
+			var segmentIdFieldDefinition = new FieldDefinition("SegmentId", FieldValueType.MultipleString);
+			var segmentIdValue = segmentIdFieldDefinition.CreateValue();
+			segmentIdValue.Add(segmentId);
+			tu.FieldValues.Add(segmentIdValue);
 		}
 
 		private ImportSettings GetImportSettings()
@@ -75,7 +70,9 @@ namespace ImportXliffToTm
 			var settings = new ImportSettings
 			{
 				CheckMatchingSublanguages = true,
-				ExistingFieldsUpdateMode = ImportSettings.FieldUpdateMode.Merge
+				ExistingFieldsUpdateMode = ImportSettings.FieldUpdateMode.Merge,
+				IncrementUsageCount =  true,
+				NewFields = ImportSettings.NewFieldsOption.AddToSetup
 			};
 
 			return settings;
