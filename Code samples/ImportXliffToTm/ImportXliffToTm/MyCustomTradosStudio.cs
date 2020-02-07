@@ -14,9 +14,7 @@ namespace ImportXliffToTm
 	{
 		public void Execute()
 		{
-			//ImportInTmWithoutFields(
-			//	@"C:\Users\aghisa\Documents\Studio 2019\Translation Memories\SDLTMPortTestWithoutFields.sdltm");
-			ImportInTmWithNameField(@"C:\Users\aghisa\Documents\Studio 2019\Translation Memories\SDLImportFields.sdltm");
+			ImportInTmWithNameField(@"tm path");
 		}
 
 		private void ImportInTmWithoutFields(string tmPath)
@@ -34,9 +32,8 @@ namespace ImportXliffToTm
 		{
 			var tm = new FileBasedTranslationMemory(tmPath);
 			var files = new List<string>
-			{
-				@"C:\Users\aghisa\Documents\Studio 2019\Projects\SDLTMImportEn-DE\de-de\first.txt.sdlxliff",
-				@"C:\Users\aghisa\Documents\Studio 2019\Projects\SDLTMImportEn-DE\de-de\second.txt.sdlxliff"
+			{@"files path",
+				@""
 			};
 
 			foreach (var file in files)
@@ -47,23 +44,12 @@ namespace ImportXliffToTm
 				converter.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
 				converter.Parse();
 			}
-		
-
-			//var tmImporter = new TranslationMemoryImporter(tm.LanguageDirection);
-			//tmImporter.BatchImported += TmImporter_BatchImported;
-			//tmImporter.ChunkSize = 20;
-			//var importSettings = tmImporter.ImportSettings;
-			//importSettings.ExistingFieldsUpdateMode = ImportSettings.FieldUpdateMode.Merge;
-			//var fields = tm.FieldDefinitions;
-		
-			//tm.Save();
-			//ImportFiles(tmImporter);
 		}
 
 		private void ImportFiles(TranslationMemoryImporter tmImporter)
 		{
-			tmImporter.Import(@"C:\Users\aghisa\Documents\Studio 2019\Projects\SDLTMImportEn-DE\de-de\first.txt.sdlxliff");
-			tmImporter.Import(@"C:\Users\aghisa\Documents\Studio 2019\Projects\SDLTMImportEn-DE\de-de\second.txt.sdlxliff");
+			tmImporter.Import(@"");
+			tmImporter.Import(@"");
 		}
 
 		private void TmImporter_BatchImported(object sender, BatchImportedEventArgs e)
