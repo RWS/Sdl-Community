@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
    	         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" MinWidth="880">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -32,8 +32,8 @@
 
 		<DataGrid x:Name="LanguageMappingsGrid" Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
 				  ItemsSource="{Binding LanguageMappings, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"             
-				  Margin="15,10,15,10"
-				  CanUserResizeColumns="True"
+				  Margin="15,10,10,10"
+				  CanUserResizeColumns="True" MinWidth="850"
 				  CanUserDeleteRows="False">
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Project Language Pair" IsReadOnly="True">
@@ -124,7 +124,7 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="MT Cloud Dictionary" IsReadOnly="True" >
+				<DataGridTemplateColumn Header="SDL MT Cloud Dictionary" IsReadOnly="True" Width="*" >
 					<DataGridTemplateColumn.HeaderStyle>
 						<Style TargetType="DataGridColumnHeader">
 							<Setter Property="FontSize" Value="13"/>

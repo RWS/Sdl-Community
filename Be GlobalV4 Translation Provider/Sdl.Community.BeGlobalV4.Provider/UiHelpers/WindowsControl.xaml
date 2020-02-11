@@ -3,13 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Sdl.Community.BeGlobalV4.Provider.UiHelpers"
              mc:Ignorable="d" 			 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" MinWidth="880">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="Buttons.xaml" />
+				<!--<ResourceDictionary Source="Buttons.xaml" />-->
 				<ResourceDictionary Source="General.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
@@ -54,9 +53,9 @@
 			</Grid>
 
 			<!-- WINDOW COMMAND BUTTONS -->
-			<StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">
+			<!--<StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top">-->
 
-				<Button Style="{StaticResource WindowControlButtonStyle}" x:Name="MinimizeButton" Width="34" Height="26"
+				<!--<Button Style="{StaticResource WindowControlButtonStyle}" x:Name="MinimizeButton" Width="34" Height="26"
                             ToolTip="{Binding Path=ControlMinimize, ElementName=WizardWindowControl}" IsEnabled="True" Click="MinButton_Click">
 					<Path SnapsToDevicePixels="True" Data="F1M0,6L0,9 9,9 9,6 0,6z" 
                               Fill="{Binding Foreground, ElementName=MinimizeButton}" />
@@ -92,8 +91,8 @@
 					<Path SnapsToDevicePixels="True"
                             Data="M 10.009,1.704 L 8.331,0.026 5.03,3.327 1.703,0 0,1.704 3.326,5.031 0.025,8.332 1.703,10.009 5.004,6.708 8.305,10.009 10.009,8.305 6.708,5.005"
                             Fill="{Binding Foreground, ElementName=CloseButton}" />
-				</Button>
-			</StackPanel>
+				</Button>-->
+			<!--</StackPanel>-->
 		</Grid>
 	</DockPanel>
 </UserControl>

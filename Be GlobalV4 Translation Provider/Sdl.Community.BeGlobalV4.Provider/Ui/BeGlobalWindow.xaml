@@ -11,8 +11,8 @@
 			 helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			 WindowStartupLocation="CenterScreen" mc:Ignorable="d"
 		     Name="SDLMachineTranslationCloudProvider"
-			 WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"	 
-             d:DesignHeight="450" d:DesignWidth="900"  Height="570" Width="820">
+			 ResizeMode="CanResize" SizeToContent="Manual"
+             d:DesignHeight="450" Height="570" Width="920">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -49,9 +49,9 @@
 
 			<!-- BORDER CONTROL -->
 			<uiHelpers:WindowsControl Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
-			<Border Background="White" Grid.Column="0" Grid.Row="1"  MaxWidth="800">
+			<Border Background="White" Grid.Column="0" Grid.Row="1" MinWidth="880" >
 				<StackPanel  Orientation="Horizontal">
-					<TextBlock Margin="15,10,2,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" MaxWidth="800">
+					<TextBlock Margin="15,10,2,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" MaxWidth="880">
 						Welcome to the SDL Machine Translation Cloud (formerly BeGlobal) translation provider for Studio. <LineBreak/><LineBreak/>
 						SDL Machine Translation Cloud is SDL's neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
 						Using SDL's proprietary technology, customers can have the assurance of content privacy.
@@ -60,18 +60,17 @@
 				</StackPanel>
 			</Border>
 			<StackPanel Grid.Row="2" Margin="0,10,0,0" MinHeight="250">
-				<TabControl Grid.Column="0" Grid.Row="1" 
+				<TabControl Grid.Column="0" Grid.Row="1"
 		            Margin="0,0,0,5"
 					SelectedIndex="{Binding SelectedTabIndex}"
-		            HorizontalAlignment="Left"
-					Height="auto"
+		            HorizontalAlignment="Left"					
 		            controls:TabControlHelper.Underlined="SelectedTabItem"
 		            controls:TabControlHelper.UnderlineMouseOverBrush="#0E202B" Foreground="#0E202B">
 					<controls:MetroTabItem Header="Login" Margin="20,0,0,0" Width="100">
 						<views:Login x:Name="LoginTab" DataContext="{Binding LoginViewModel}" ></views:Login>
 					</controls:MetroTabItem>				
 					<controls:MetroTabItem Header="Language Mappings" Margin="35,0,0,0" Width="290">
-						<views:LanguageMappings DataContext="{Binding LanguageMappingsViewModel}" Height="300"></views:LanguageMappings>
+						<views:LanguageMappings DataContext="{Binding LanguageMappingsViewModel}"></views:LanguageMappings>
 					</controls:MetroTabItem>
 				</TabControl>
 			</StackPanel>
