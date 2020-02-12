@@ -6,12 +6,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 	public class LanguageMappingModel : BaseViewModel
 	{
 		private string _projectLanguagePair;
-		private string _selectedMTCodeSource;
-		private string _selectedMTCodeTarget;
+		private LangMappingMTCode _selectedMTCodeSource;
+		private LangMappingMTCode _selectedMTCodeTarget;
 		private TranslationModel _selectedModelOption;
 		private ObservableCollection<TranslationModel> _engines;
-		private ObservableCollection<string> _mtCodesSource;
-		private ObservableCollection<string> _mtCodesTarget;
+		private ObservableCollection<LangMappingMTCode> _mtCodesSource;
+		private ObservableCollection<LangMappingMTCode> _mtCodesTarget;
 		private ObservableCollection<MTCloudDictionary> _mtCloudDictionaries;
 		private MTCloudDictionary _selectedMTCloudDictionary;
 
@@ -45,7 +45,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 			}
 		}
 
-		public ObservableCollection<string> MTCodesSource
+		public ObservableCollection<LangMappingMTCode> MTCodesSource
 		{
 			get => _mtCodesSource;
 			set
@@ -55,7 +55,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 			}
 		}
 
-		public ObservableCollection<string> MTCodesTarget
+		public ObservableCollection<LangMappingMTCode> MTCodesTarget
 		{
 			get => _mtCodesTarget;
 			set
@@ -65,7 +65,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 			}
 		}
 
-		public string SelectedMTCodeTarget
+		public LangMappingMTCode SelectedMTCodeTarget
 		{
 			get => _selectedMTCodeTarget;
 			set
@@ -75,7 +75,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Model
 			}
 		}
 
-		public string SelectedMTCodeSource
+		public LangMappingMTCode SelectedMTCodeSource
 		{
 			get => _selectedMTCodeSource;
 			set

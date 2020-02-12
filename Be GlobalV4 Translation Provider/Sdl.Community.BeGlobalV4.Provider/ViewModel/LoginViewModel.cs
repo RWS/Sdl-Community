@@ -124,10 +124,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				foreach (var languageMapping in LanguageMappingsViewModel?.LanguageMappings)
 				{
 					//get beGlobalLanguagePairs for the specific source language MTSourceCodes
-					var sourcePairs = beGlobalLanguagePairs.Where(b => languageMapping.MTCodesSource.Any(l => b.SourceLanguageId.Equals(l)));
+					var sourcePairs = beGlobalLanguagePairs.Where(b => languageMapping.MTCodesSource.Any(l => b.SourceLanguageId.Equals(l.CodeName)));
 
 					//get beGlobalLanguagePairs for the specific target MTTargetCodes and exiting sourcePairs
-					var serviceLanguagePairs = sourcePairs.Where(s => languageMapping.MTCodesTarget.Any(l => s.TargetLanguageId.Equals(l)));
+					var serviceLanguagePairs = sourcePairs.Where(s => languageMapping.MTCodesTarget.Any(l => s.TargetLanguageId.Equals(l.CodeName)));
 					var splittedLangPair = Utils.SplitLanguagePair(languageMapping.ProjectLanguagePair);
 					var sourceCultureName = _languagePairs?.FirstOrDefault(n => n.SourceCulture.DisplayName.Equals(splittedLangPair[0]))?.SourceCulture.Name;
 					var targetCultureName = _languagePairs?.FirstOrDefault(n => n.TargetCulture.DisplayName.Equals(splittedLangPair[1]))?.TargetCulture.Name;

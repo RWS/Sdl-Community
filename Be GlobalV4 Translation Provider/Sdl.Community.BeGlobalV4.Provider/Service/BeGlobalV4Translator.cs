@@ -130,8 +130,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					request.AddBody(new
 					{
 						input = texts,
-						sourceLanguageId = selectedModel?.SelectedMTCodeSource,
-						targetLanguageId = selectedModel?.SelectedMTCodeTarget,
+						sourceLanguageId = selectedModel?.SelectedMTCodeSource.CodeName,
+						targetLanguageId = selectedModel?.SelectedMTCodeTarget.CodeName,
 						model = selectedModel?.SelectedModelOption?.Model,
 						inputFormat = "xliff",
 						dictionaries = new string[] { selectedModel?.SelectedMTCloudDictionary?.DictionaryId?.ToString() }
@@ -142,8 +142,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					request.AddBody(new
 					{
 						input = texts,
-						sourceLanguageId = selectedModel?.SelectedMTCodeSource,
-						targetLanguageId = selectedModel?.SelectedMTCodeTarget,
+						sourceLanguageId = selectedModel?.SelectedMTCodeSource.CodeName,
+						targetLanguageId = selectedModel?.SelectedMTCodeTarget.CodeName,
 						model = selectedModel?.SelectedModelOption?.Model,
 						inputFormat = "xliff"
 					});

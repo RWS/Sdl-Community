@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
@@ -8,6 +10,7 @@ using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
+using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
@@ -56,8 +59,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}			
 
-		public List<string> MTCodeSourceList = new List<string>();
-		public List<string> MTCodeTargetList = new List<string>();
+		public List<LangMappingMTCode> MTCodeSourceList = new List<LangMappingMTCode>();
+		public List<LangMappingMTCode> MTCodeTargetList = new List<LangMappingMTCode>();
 
 		public LanguageMappingModel SelectedLanguageMapping
 		{
@@ -128,9 +131,18 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 							var selectedDictionary = LanguageMappings[langMappingIndex].MTCloudDictionaries?.FirstOrDefault(e => e.Name.Equals(selectedLangModel?.SelectedMTCloudDictionary?.Name));
 							LanguageMappings[langMappingIndex].SelectedMTCloudDictionary = selectedDictionary;
-
+													   
 							AddMissingCode(missingCodes.Keys.First(), LanguageMappings[langMappingIndex].MTCodesSource);
 							AddMissingCode(missingCodes.Values.First(), LanguageMappings[langMappingIndex].MTCodesTarget);
+
+							var selectedMTCodeSource = LanguageMappings[langMappingIndex].MTCodesSource?.FirstOrDefault(e => e.CodeName.Equals(selectedLangModel?.SelectedMTCodeSource?.CodeName));
+							selectedMTCodeSource.Flag = SetLanguageFlag(new CultureInfo(languageMapping.SourceTradosCode));
+							var selectedMTCodeTarget = LanguageMappings[langMappingIndex].MTCodesTarget?.FirstOrDefault(e => e.CodeName.Equals(selectedLangModel?.SelectedMTCodeTarget?.CodeName));
+							selectedMTCodeTarget.Flag = SetLanguageFlag(new CultureInfo(languageMapping.TargetTradosCode));
+							LanguageMappings[langMappingIndex].SelectedMTCodeSource = selectedMTCodeSource;
+							LanguageMappings[langMappingIndex].SelectedMTCodeTarget = selectedMTCodeTarget;
+
+							SetMTFlag(LanguageMappings[langMappingIndex]);
 						}
 					}
 				}
@@ -180,8 +192,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				{
 
 					var languageDictionaries = _mtCloudDictionaries
-						.Where(d => languageMapping.MTCodesSource.Any(s => s.Equals(d.Source)))
-						.Where(d => languageMapping.MTCodesTarget.Any(t => t.Equals(d.Target))).ToList();
+						.Where(d => languageMapping.MTCodesSource.Any(s => s.CodeName.Equals(d.Source)))
+						.Where(d => languageMapping.MTCodesTarget.Any(t => t.CodeName.Equals(d.Target))).ToList();
 
 					if (languageDictionaries.Count == 0)
 					{
@@ -237,7 +249,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		/// <param name="languageMapping">language mapping</param>
 		/// <param name="mtCodes">mtcodes collection</param>
 		/// <returns>dictionary of lists with missing source and target codes</returns>
-		private Dictionary<List<string>, List<string>> LoadNewCodes(LanguageMappingModel languageMapping, List<MTCodeModel> mtCodes)
+		private Dictionary<List<LangMappingMTCode>, List<LangMappingMTCode>> LoadNewCodes(LanguageMappingModel languageMapping, List<MTCodeModel> mtCodes)
 		{
 			var sourceModel = mtCodes.FirstOrDefault(s => s.TradosCode.Equals(languageMapping.SourceTradosCode));
 			var targetModel = mtCodes.FirstOrDefault(s => s.TradosCode.Equals(languageMapping.TargetTradosCode));
@@ -250,11 +262,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			tCodes.Add(targetModel?.MTCodeMain);
 			tCodes.Add(targetModel?.MTCodeLocale);
 
-			var missingSourceCodes = sCodes.Where(s => languageMapping.MTCodesSource.All(m => m != s)).ToList();
-			var missingTargetCodes = tCodes.Where(t => languageMapping.MTCodesTarget.All(m => m != t)).ToList();
+			var missingSourceCodes = sCodes.Where(s => languageMapping.MTCodesSource.All(m => m.CodeName != s)).ToList();
+			var langMappingMTSource = SetNewCodes(missingSourceCodes, languageMapping.SourceTradosCode);
 
-			var result = new Dictionary<List<string>, List<string>>();
-			result.Add(missingSourceCodes, missingTargetCodes);
+			var missingTargetCodes = tCodes.Where(t => languageMapping.MTCodesTarget.All(m => m.CodeName != t)).ToList();
+			var langMappingMTTarget = SetNewCodes(missingTargetCodes, languageMapping.TargetTradosCode);
+
+			var result = new Dictionary<List<LangMappingMTCode>, List<LangMappingMTCode>>();
+			result.Add(langMappingMTSource, langMappingMTTarget);
 			return result;
 		}
 
@@ -263,15 +278,32 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		/// </summary>
 		/// <param name="missingCodes"></param>
 		/// <param name="langMappingIndex"></param>
-		private void AddMissingCode(List<string> missingCodes, ObservableCollection<string> languageMappingCodes)
+		private void AddMissingCode(List<LangMappingMTCode> missingCodes, ObservableCollection<LangMappingMTCode> languageMappingCodes)
 		{
 			foreach (var code in missingCodes)
 			{
-				if (!string.IsNullOrEmpty(code))
+				if (!string.IsNullOrEmpty(code.CodeName))
 				{
 					languageMappingCodes.Add(code);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Set the missing codes which were new added withing the SDL MT Codes window.
+		/// </summary>
+		/// <param name="missingCodes">missing codes</param>
+		/// <param name="tradosCode">corresponding tradosCode for source and target languages</param>
+		/// <returns></returns>
+		private List<LangMappingMTCode> SetNewCodes(List<string> missingCodes, string tradosCode )
+		{
+			var langMappingMT = new List<LangMappingMTCode>();
+			foreach (var item in missingCodes)
+			{
+				var cultureInfo = new CultureInfo(tradosCode);
+				langMappingMT.Add(new LangMappingMTCode { CodeName = item, Flag = SetLanguageFlag(cultureInfo) });
+			}
+			return langMappingMT;
 		}
 
 		/// <summary>
@@ -291,10 +323,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				if (mtCodeSource != null)
 				{
 					MTCodeSourceList.Clear();
-					MTCodeSourceList.Add(mtCodeSource.MTCodeMain);
+					MTCodeSourceList.Add(new LangMappingMTCode { CodeName = mtCodeSource.MTCodeMain, Flag = SetLanguageFlag(sourceLanguage) });
 					if (!string.IsNullOrEmpty(mtCodeSource.MTCodeLocale))
 					{
-						MTCodeSourceList.Add(mtCodeSource.MTCodeLocale);
+						MTCodeSourceList.Add(new LangMappingMTCode { CodeName = mtCodeSource.MTCodeLocale, Flag = SetLanguageFlag(sourceLanguage) });
 					}
 				}
 
@@ -307,18 +339,18 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					|| s.TradosCode.Equals(langPair?.TargetCulture.ThreeLetterISOLanguageName));
 					if (mtCodeTarget != null)
 					{
-						MTCodeTargetList.Add(mtCodeTarget.MTCodeMain);
+						MTCodeTargetList.Add(new LangMappingMTCode { CodeName = mtCodeTarget.MTCodeMain, Flag = SetLanguageFlag(langPair.TargetCulture)});
 						if (!string.IsNullOrEmpty(mtCodeTarget.MTCodeLocale))
 						{
-							MTCodeTargetList.Add(mtCodeTarget.MTCodeLocale);
+							MTCodeTargetList.Add(new LangMappingMTCode { CodeName = mtCodeTarget.MTCodeLocale, Flag = SetLanguageFlag(langPair.TargetCulture) });
 						}
 
 						var languageMappingModel = new LanguageMappingModel
 						{
 							ProjectLanguagePair = languagePair,
-							MTCodesSource = new ObservableCollection<string>(MTCodeSourceList),
+							MTCodesSource = new ObservableCollection<LangMappingMTCode>(MTCodeSourceList),
 							SelectedMTCodeSource = MTCodeSourceList[0],
-							MTCodesTarget = new ObservableCollection<string>(MTCodeTargetList),
+							MTCodesTarget = new ObservableCollection<LangMappingMTCode>(MTCodeTargetList),
 							SelectedMTCodeTarget = MTCodeTargetList[0],
 							Engines = new ObservableCollection<TranslationModel>(),
 							TargetTradosCode = mtCodeTarget.TradosCode,
@@ -330,6 +362,33 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				}
 				LoadDictionaries();
 			}
-		}		
+		}
+
+		/// <summary>
+		/// Set Language Flag for Source MTCode and Target MTCode
+		/// </summary>
+		/// <param name="cultureInfo">cultureInfo</param>
+		/// <returns>image</returns>
+		private Image SetLanguageFlag(CultureInfo cultureInfo)
+		{
+			return new Language(cultureInfo).GetFlagImage();
+		}
+
+		/// <summary>
+		/// Set the flag for each Source MTCode and Target MTCode when the Language Mappings grid is showing
+		/// </summary>
+		/// <param name="languageMapping">languageMapping</param>
+		private void SetMTFlag(LanguageMappingModel languageMapping)
+		{
+			foreach(var item in languageMapping.MTCodesSource)
+			{
+				item.Flag = SetLanguageFlag(new CultureInfo(languageMapping.SourceTradosCode));
+			}
+
+			foreach (var item in languageMapping.MTCodesTarget)
+			{
+				item.Flag = SetLanguageFlag(new CultureInfo(languageMapping.TargetTradosCode));
+			}
+		}
 	}
 }

@@ -100,7 +100,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				{
 					var languagePair = Options.SubscriptionInfo.LanguagePairs
 						.FirstOrDefault(o => languageMappings
-									   .Any(l => l.SelectedMTCodeSource.Equals(o.SourceLanguageId) && l.SelectedMTCodeTarget.Equals(o.TargetLanguageId)));
+									   .Any(l => l.SelectedMTCodeSource.CodeName.Equals(o.SourceLanguageId) && l.SelectedMTCodeTarget.CodeName.Equals(o.TargetLanguageId)));
 					if (languagePair != null)
 					{
 						Options.LanguagesSupported = new Dictionary<string, string>() { { languageDirection.TargetCulture.Name, languagePair.Name } };

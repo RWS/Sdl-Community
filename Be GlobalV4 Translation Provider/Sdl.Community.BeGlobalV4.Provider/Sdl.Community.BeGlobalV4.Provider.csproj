@@ -187,6 +187,7 @@
     <Compile Include="BeGlobalTellMe\BeGlobalStoreAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalTellMeProvider.cs" />
     <Compile Include="Converters\BeGlobalVisibilityConverter.cs" />
+    <Compile Include="Converters\ImageToBitmapImageConverter.cs" />
     <Compile Include="Converters\StringIsNullOrEmptyVisibilityConverter.cs" />
     <Compile Include="Helpers\AppInitializer.cs" />
     <Compile Include="Helpers\Constants.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Interfaces\ILanguageMappingSettings.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Model\Authentication.cs" />
+    <Compile Include="Model\LangMappingMTCode.cs" />
     <Compile Include="Model\MTCloudDictionary.cs" />
     <Compile Include="Model\MTCloudDictionaryInfo.cs" />
     <Compile Include="Model\BeGlobalLanguagePair.cs" />

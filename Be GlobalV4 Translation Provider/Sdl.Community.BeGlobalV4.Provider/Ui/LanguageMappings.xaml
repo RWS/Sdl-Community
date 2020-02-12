@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
    	         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-             mc:Ignorable="d" 
+			 xmlns:converters="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Converters"
+			 mc:Ignorable="d" 
              d:DesignHeight="450" MinWidth="880">
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -26,6 +27,7 @@
 				<ResourceDictionary Source="../UiHelpers/DataGridColumnStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<StackPanel>
@@ -41,7 +43,7 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<StackPanel Orientation="Horizontal">
-								<TextBlock Text="{Binding ProjectLanguagePair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding ProjectLanguagePair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								<TextBlock Text="{Binding ProjectLanguagePair}" ToolTip="{Binding ProjectLanguagePair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 										  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,10,0" TextWrapping="Wrap" />
 							</StackPanel>
 						</DataTemplate>
@@ -57,8 +59,8 @@
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
-											<Image Source="../Resources/add_langcode.ico" Width="20" Height="20" Margin="5,0,5,0" />
-											<TextBlock Text="{Binding}" ToolTip="{Binding}" Margin="10,0,0,0"/>
+											<Image Source="{Binding Flag, Converter={StaticResource ImageConverter}}" Width="20" Height="20" Margin="5,0,5,0" />
+											<TextBlock Text="{Binding CodeName}" ToolTip="{Binding CodeName}" Margin="10,0,0,0"/>
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
@@ -71,13 +73,13 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding MTCodesTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
-								      SelectedItem="{Binding SelectedMTCodeTarget, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
+								      SelectedItem="{Binding SelectedMTCodeTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
 								Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
-											<Image Source="../Resources/add_langcode.ico" Width="20" Height="20" Margin="5,0,5,0" />
-											<TextBlock Text="{Binding}" Margin="10,0,0,0" ToolTip="{Binding}"/>
+											<Image Source="{Binding Flag, Converter={StaticResource ImageConverter}}" Width="20" Height="20" Margin="5,0,5,0" />
+											<TextBlock Text="{Binding CodeName}" Margin="10,0,0,0" ToolTip="{Binding CodeName}"/>
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
@@ -95,9 +97,9 @@
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
-											<Image Source="../Resources/AdaptiveEngine.ico" Width="15" Height="15" Margin="0,0,10,0" />
-											<TextBlock Text="{Binding DisplayName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding DisplayName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-													   Margin="12,2,10,0" FontFamily="Calibri" VerticalAlignment="Center"/>
+											<Image Source="../Resources/AdaptiveEngine.ico" Width="15" Height="15" Margin="5,0,10,0" />
+											<TextBlock Text="{Binding DisplayName}" ToolTip="{Binding DisplayName}"
+													   Margin="10,2,10,0" FontFamily="Calibri" VerticalAlignment="Center"/>
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
@@ -115,7 +117,7 @@
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
 											<Image Source="../Resources/dictionaryIcon.ico" Width="15" Height="15" Margin="6,3,5,0" />
-											<TextBlock Text="{Binding Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+											<TextBlock Text="{Binding Name}" ToolTip="{Binding Name}"
 													  Margin="15,2,0,0" FontFamily="Calibri" VerticalAlignment="Center"/>
 										</StackPanel>
 									</DataTemplate>
