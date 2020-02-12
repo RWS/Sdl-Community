@@ -10,8 +10,8 @@
     	     xmlns:views="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
 			 helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			 WindowStartupLocation="CenterScreen" mc:Ignorable="d"
-		     Name="SDLMachineTranslationCloudProvider"
-			 ResizeMode="CanResize" SizeToContent="Manual"
+		     Name="SDLMachineTranslationCloudProvider" WindowStyle="None" AllowsTransparency="True"
+			 ResizeMode="CanResizeWithGrip"
              d:DesignHeight="450" Height="570" Width="920">
 	<Window.Resources>
 		<ResourceDictionary>

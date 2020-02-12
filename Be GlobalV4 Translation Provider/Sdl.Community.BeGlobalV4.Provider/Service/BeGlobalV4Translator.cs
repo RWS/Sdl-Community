@@ -124,7 +124,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 				string[] texts = { text };
 				// set dictionaries parameter in case user has been selected an available dictionary
-				if (!selectedModel.SelectedMTCloudDictionary.Name.Equals(_constants.NoAvailableDictionary))
+				if (!selectedModel.SelectedMTCloudDictionary.Name.Equals(_constants.NoAvailableDictionary)
+					&& !selectedModel.SelectedMTCloudDictionary.Name.Equals(_constants.NoDictionary))
 				{
 					request.AddBody(new
 					{

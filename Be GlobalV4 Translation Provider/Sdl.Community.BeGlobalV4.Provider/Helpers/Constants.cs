@@ -24,6 +24,7 @@
 		public readonly string PrintMTCodes = "Printing MT Codes";
 		public readonly string SettingsGrId = "SDLMTCloudLanguageMapping";
 		public readonly string HostAddress = "translate-api.sdlbeglobal.com";
+		public readonly string NoDictionary = "No dictionary";
 
 		// Excel MTCodes values
 		public readonly string ExcelSheet = "Sheet1";

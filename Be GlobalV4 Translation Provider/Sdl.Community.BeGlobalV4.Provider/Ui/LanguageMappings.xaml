@@ -23,6 +23,7 @@
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/DataGridColumnStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 		</ResourceDictionary>
@@ -36,12 +37,7 @@
 				  CanUserResizeColumns="True" MinWidth="850"
 				  CanUserDeleteRows="False">
 			<DataGrid.Columns>
-				<DataGridTemplateColumn Header="Project Language Pair" IsReadOnly="True">
-					<DataGridTemplateColumn.HeaderStyle>						
-						<Style TargetType="DataGridColumnHeader">
-							<Setter Property="FontSize" Value="13"/>
-						</Style>
-					</DataGridTemplateColumn.HeaderStyle>
+				<DataGridTemplateColumn Header="Project Language Pair" IsReadOnly="True" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">					
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<StackPanel Orientation="Horizontal">
@@ -52,12 +48,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Header="MTCode Source">
-					<DataGridTemplateColumn.HeaderStyle>
-						<Style TargetType="DataGridColumnHeader">
-							<Setter Property="FontSize" Value="13"/>
-						</Style>
-					</DataGridTemplateColumn.HeaderStyle>
+				<DataGridTemplateColumn Header="Source MTCode" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">					
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding MTCodesSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
@@ -66,8 +57,8 @@
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
-											<TextBlock Text="{Binding}" ToolTip="{Binding}" Margin="20,0,0,0"/>
 											<Image Source="../Resources/add_langcode.ico" Width="20" Height="20" Margin="5,0,5,0" />
+											<TextBlock Text="{Binding}" ToolTip="{Binding}" Margin="20,0,0,0"/>
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
@@ -76,12 +67,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Header="MTCode Target">
-					<DataGridTemplateColumn.HeaderStyle>
-						<Style TargetType="DataGridColumnHeader">
-							<Setter Property="FontSize" Value="13"/>
-						</Style>
-					</DataGridTemplateColumn.HeaderStyle>
+				<DataGridTemplateColumn Header="Target MTCode" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">					
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding MTCodesTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
@@ -90,8 +76,8 @@
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
-											<TextBlock Text="{Binding}" Margin="20,0,0,0" ToolTip="{Binding}"/>
 											<Image Source="../Resources/add_langcode.ico" Width="20" Height="20" Margin="5,0,5,0" />
+											<TextBlock Text="{Binding}" Margin="20,0,0,0" ToolTip="{Binding}"/>
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
@@ -100,12 +86,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Header="Engine">
-					<DataGridTemplateColumn.HeaderStyle>
-						<Style TargetType="DataGridColumnHeader">
-							<Setter Property="FontSize" Value="13"/>
-						</Style>
-					</DataGridTemplateColumn.HeaderStyle>
+				<DataGridTemplateColumn Header="Model" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">					
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding Engines,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
@@ -114,9 +95,9 @@
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
+											<Image Source="../Resources/AdaptiveEngine.ico" Width="15" Height="15" Margin="0,0,10,0" />
 											<TextBlock Text="{Binding DisplayName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding DisplayName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 													   Margin="12,2,10,0" FontFamily="Calibri" VerticalAlignment="Center"/>
-											<Image Source="../Resources/AdaptiveEngine.ico" Width="15" Height="15" Margin="0,0,10,0" />
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
@@ -124,12 +105,7 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="SDL MT Cloud Dictionary" IsReadOnly="True" Width="*" >
-					<DataGridTemplateColumn.HeaderStyle>
-						<Style TargetType="DataGridColumnHeader">
-							<Setter Property="FontSize" Value="13"/>
-						</Style>
-					</DataGridTemplateColumn.HeaderStyle>
+				<DataGridTemplateColumn Header="SDL MT Cloud Dictionary" IsReadOnly="True" Width="*" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" >					
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding MTCloudDictionaries,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
@@ -138,9 +114,9 @@
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
+											<Image Source="../Resources/dictionaryIcon.ico" Width="15" Height="15" Margin="6,3,5,0" />
 											<TextBlock Text="{Binding Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 													  Margin="15,2,0,0" FontFamily="Calibri" VerticalAlignment="Center"/>
-											<Image Source="../Resources/dictionaryIcon.ico" Width="15" Height="15" Margin="6,3,5,0" />
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
@@ -153,6 +129,6 @@
 		<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="50"
 						    Visibility="{Binding IsWaiting, Converter={StaticResource BooleanToVisibilityConverter}}" />
 		<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments" DockPanel.Dock="Bottom" />
-
+		
 	</StackPanel>
 </UserControl>

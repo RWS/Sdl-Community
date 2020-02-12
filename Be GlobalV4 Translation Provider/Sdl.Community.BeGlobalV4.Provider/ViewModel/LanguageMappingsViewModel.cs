@@ -197,6 +197,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					else
 					{
 						languageMapping.MTCloudDictionaries = new ObservableCollection<MTCloudDictionary>(languageDictionaries);
+						if (!languageMapping.MTCloudDictionaries.Any(d => d.Name.Equals(_constants.NoDictionary)))
+						{
+							languageMapping.MTCloudDictionaries.Insert(0, new MTCloudDictionary { Name = _constants.NoDictionary, DictionaryId = string.Empty });
+						}
 						languageMapping.SelectedMTCloudDictionary = languageDictionaries[0];
 					}
 				}
