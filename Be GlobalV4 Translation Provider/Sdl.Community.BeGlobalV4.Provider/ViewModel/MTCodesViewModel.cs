@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
@@ -45,13 +44,17 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private string _query;
 		private int _queriedCodesNumber;
 		private bool _isWaiting;
-	    private PrintService _printService;
+		private bool _isMTCodeIconVisible;
+		private bool _isProviderIconVisible;
+		private PrintService _printService;
 
 		private ICommand _updateCellCommand;
 		private ICommand _printCommand;
 
 		public MTCodesViewModel(List<ExcelSheet> excelSheetResults)
 		{
+			IsMTCodeIconVisible = true;
+			IsProviderIconVisible = false;
 			MTCodes = new ObservableCollection<MTCodeModel>();
 			MTCodes = MapExcelCodes(excelSheetResults);
 			_printService = new PrintService();
@@ -119,6 +122,26 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				_isWaiting = value;
 				OnPropertyChanged(nameof(IsWaiting));
+			}
+		}
+
+		public bool IsMTCodeIconVisible
+		{
+			get => _isMTCodeIconVisible;
+			set
+			{
+				_isMTCodeIconVisible = value;
+				OnPropertyChanged(nameof(IsMTCodeIconVisible));
+			}
+		}
+
+		public bool IsProviderIconVisible
+		{
+			get => _isProviderIconVisible;
+			set
+			{
+				_isProviderIconVisible = value;
+				OnPropertyChanged(nameof(IsProviderIconVisible));
 			}
 		}
 

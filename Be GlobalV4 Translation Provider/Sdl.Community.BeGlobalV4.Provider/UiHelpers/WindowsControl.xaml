@@ -11,6 +11,7 @@
 				<ResourceDictionary Source="Buttons.xaml" />
 				<ResourceDictionary Source="General.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<DockPanel>
@@ -32,7 +33,10 @@
 				</Grid.ColumnDefinitions>
 				
 				<!-- ICON TBD -->
-				<Image Grid.Row="0" Width="850" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Source="../Resources/MTCloud_logo.png" />
+				<Image Grid.Row="0" Width="850" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Source="../Resources/MTCloud_logo.png" 
+					   Visibility="{Binding IsProviderIconVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+				<Image Grid.Row="0" Height="40" HorizontalAlignment="Center" Margin="400,0,0,0" VerticalAlignment="Top" Source="../Resources/MTCodesLogo.png"
+					   Visibility="{Binding IsMTCodeIconVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
 				<!-- TITLE -->
 				<Grid Grid.Row="1" Grid.Column="2">

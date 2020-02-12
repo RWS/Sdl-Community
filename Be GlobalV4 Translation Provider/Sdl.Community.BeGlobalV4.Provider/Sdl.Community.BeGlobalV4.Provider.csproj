@@ -229,9 +229,6 @@
     <Compile Include="Studio\BeGlobalTranslationProvider.cs" />
     <Compile Include="Studio\BeGlobalTranslationProviderFactory.cs" />
     <Compile Include="Studio\LanguageMappingSettings.cs" />
-    <Compile Include="UiHelpers\MTCodesWindowsControl.xaml.cs">
-      <DependentUpon>MTCodesWindowsControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UiHelpers\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
@@ -303,10 +300,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UiHelpers\General.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UiHelpers\MTCodesWindowsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

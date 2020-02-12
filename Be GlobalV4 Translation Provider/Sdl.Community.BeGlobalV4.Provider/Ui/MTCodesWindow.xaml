@@ -41,7 +41,7 @@
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-			<uiHelpers:MTCodesWindowsControl Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top"/>
+			<uiHelpers:WindowsControl Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top"/>
 
 			<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="50"
 						    Visibility="{Binding IsWaiting, Converter={StaticResource BooleanToVisibilityConverter}}" />

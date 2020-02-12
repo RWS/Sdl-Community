@@ -18,6 +18,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private ICommand _okCommand;
 		private int _selectedTabIndex;
 		private string _message;
+		private bool _isMTCodeIconVisible;
+		private bool _isProviderIconVisible;
 		private Constants _constants = new Constants();
 		private readonly BeGlobalWindow _mainWindow;
 		public static readonly Log Log = Log.Instance;
@@ -25,6 +27,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options,
 			TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
 		{
+			IsMTCodeIconVisible = false;
+			IsProviderIconVisible = true;
+
 			Options = options;
 			LanguageMappingsViewModel = new LanguageMappingsViewModel(options, this, languagePairs);
 
@@ -49,8 +54,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			projectController.ProjectsChanged += ProjectController_ProjectsChanged;
 		}
 		
-		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
-
 		public int SelectedTabIndex
 		{
 			get => _selectedTabIndex;
@@ -82,6 +85,28 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				OnPropertyChanged(nameof(Message));
 			}
 		}
+
+		public bool IsMTCodeIconVisible
+		{
+			get => _isMTCodeIconVisible;
+			set
+			{
+				_isMTCodeIconVisible = value;
+				OnPropertyChanged(nameof(IsMTCodeIconVisible));
+			}
+		}
+
+		public bool IsProviderIconVisible
+		{
+			get => _isProviderIconVisible;
+			set
+			{
+				_isProviderIconVisible = value;
+				OnPropertyChanged(nameof(IsProviderIconVisible));
+			}
+		}
+
+		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 
 		private void Ok(object parameter)
 		{
