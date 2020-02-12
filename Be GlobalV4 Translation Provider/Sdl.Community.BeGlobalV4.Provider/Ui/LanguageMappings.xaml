@@ -58,7 +58,7 @@
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
 											<Image Source="../Resources/add_langcode.ico" Width="20" Height="20" Margin="5,0,5,0" />
-											<TextBlock Text="{Binding}" ToolTip="{Binding}" Margin="20,0,0,0"/>
+											<TextBlock Text="{Binding}" ToolTip="{Binding}" Margin="10,0,0,0"/>
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
@@ -77,7 +77,7 @@
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
 											<Image Source="../Resources/add_langcode.ico" Width="20" Height="20" Margin="5,0,5,0" />
-											<TextBlock Text="{Binding}" Margin="20,0,0,0" ToolTip="{Binding}"/>
+											<TextBlock Text="{Binding}" Margin="10,0,0,0" ToolTip="{Binding}"/>
 										</StackPanel>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
