@@ -309,37 +309,48 @@ namespace ETSTranslationProvider
 
 		private void OKClicked(object sender, EventArgs e)
 		{
-			int? port = GetPort();
-			if (!port.HasValue)
+			if (!Options.LPPreferences.Any(lp => lp.Value == null))
 			{
-				DialogResult = DialogResult.None;
-				var error = $"The port must be a valid port between {IPEndPoint.MinPort} and {IPEndPoint.MaxPort}.";
-				MessageBox.Show(error, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return;
+				int? port = GetPort();
+				if (!port.HasValue)
+				{
+					DialogResult = DialogResult.None;
+					var error = $"The port must be a valid port between {IPEndPoint.MinPort} and {IPEndPoint.MaxPort}.";
+					MessageBox.Show(error, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				var credentials = GetCredentials();
+				if (!AuthenticateCredentials(credentials))
+					return;
+
+				var creds = new TranslationProviderCredential(credentials.ToCredentialString(), Options.PersistCredentials);
+				credentialStore.AddCredential(Options.Uri, creds);
+
+				if (setDefaultTM.Checked)
+				{
+					PluginConfiguration.CurrentInstance.DefaultConnection = new Connection(
+						host: Options.Host,
+						port: Options.Port
+					);
+					PluginConfiguration.CurrentInstance.SaveToFile();
+				}
+				else if (!setDefaultTM.Checked
+				  && PluginConfiguration.CurrentInstance.DefaultConnection.HasValue
+				  && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Host == Options.Host
+				  && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Port == Options.Port)
+				{
+					PluginConfiguration.CurrentInstance.DefaultConnection = null;
+					PluginConfiguration.CurrentInstance.SaveToFile();
+				}
 			}
-
-			var credentials = GetCredentials();
-			if (!AuthenticateCredentials(credentials))
-				return;
-
-			var creds = new TranslationProviderCredential(credentials.ToCredentialString(), Options.PersistCredentials);
-			credentialStore.AddCredential(Options.Uri, creds);
-
-			if (setDefaultTM.Checked)
+			else
 			{
-				PluginConfiguration.CurrentInstance.DefaultConnection = new Connection(
-					host: Options.Host,
-					port: Options.Port
-				);
-				PluginConfiguration.CurrentInstance.SaveToFile();
-			}
-			else if (!setDefaultTM.Checked
-			  && PluginConfiguration.CurrentInstance.DefaultConnection.HasValue
-			  && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Host == Options.Host
-			  && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Port == Options.Port)
-			{
-				PluginConfiguration.CurrentInstance.DefaultConnection = null;
-				PluginConfiguration.CurrentInstance.SaveToFile();
+				MessageBox.Show(
+					"The provider cannot be setup because the language flavor was not received from the MT Edge server.",
+					string.Empty,
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
 			}
 		}
 
