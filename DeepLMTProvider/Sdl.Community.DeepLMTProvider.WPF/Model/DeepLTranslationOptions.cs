@@ -28,17 +28,17 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 		public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
 
 		[JsonIgnore]
-		public bool ResendDrafts
+		public bool SendPlainText
 		{
-			get => ResendDraftsParameter != null && Convert.ToBoolean(ResendDraftsParameter);
-			set => ResendDraftsParameter = value.ToString();
+			get => SendPlainTextParameter != null && Convert.ToBoolean(SendPlainTextParameter);
+			set => SendPlainTextParameter = value.ToString();
 		}
 
 		[JsonIgnore]
-		public string ResendDraftsParameter
+		public string SendPlainTextParameter
 		{
-			get => GetStringParameter("resenddrafts");
-			set => SetStringParameter("resenddrafts", value);
+			get => GetStringParameter("sendPlain");
+			set => SetStringParameter("sendPlain", value);
 		}
 
 		[JsonIgnore]

@@ -127,8 +127,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			var isAndOperator = _customSettings.FilterAttributesLogicalOperator == DisplayFilterSettings.LogicalOperators.AND;
 			success = isAndOperator;
 
-			if (_settings.SegmentReviewTypes != null && _settings.SegmentReviewTypes.Any())
+			if (LogicalSuccess(success) && _settings.SegmentReviewTypes != null && _settings.SegmentReviewTypes.Any())
 			{
+				_settings.IsAndOperator = isAndOperator;
 				success = rowInfo.IsSegmentReviewTypes(_settings);
 			}
 
