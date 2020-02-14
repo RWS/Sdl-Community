@@ -15,8 +15,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		Description = "SDL Machine Translation Cloud Provider")]
 	public class BeGlobalProviderUi : ITranslationProviderWinFormsUI
 	{
-		public string TypeName => Constants.PluginName;
-		public string TypeDescription => Constants.PluginName;
+		private Constants _constants = new Constants();
+
+		public string TypeName => _constants.PluginName;
+		public string TypeDescription => _constants.PluginName;
 		public bool SupportsEditing => true;
 		public static readonly Log Log = Log.Instance;
 
@@ -27,7 +29,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				var options = new BeGlobalTranslationOptions();
 				var credentials = SplitCredentials(credentialStore, options);
-
 				var beGlobalWindow = new BeGlobalWindow();
 				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, credentials, languagePairs);
 				beGlobalWindow.DataContext = beGlobalVm;
@@ -37,19 +38,20 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				{
 					var clientId = beGlobalVm.Options.ClientId;
 					var clientSecret = beGlobalVm.Options.ClientSecret;
+					var resendDraft = beGlobalVm.Options.ResendDrafts;
 
 					var provider = new BeGlobalTranslationProvider(options)
 					{
 						Options = beGlobalVm.Options
 					};
 
-					SetCredentials(credentialStore, clientId, clientSecret, true);
+					SetCredentials(credentialStore, clientId, clientSecret, resendDraft, true);
 					return new ITranslationProvider[] { provider };
 				}
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.Browse} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.Browse} {e.Message}\n {e.StackTrace}");
 			}
 			return null;
 		}
@@ -79,13 +81,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					editProvider.Options = beGlobalVm.Options;
 					var clientId = editProvider.Options.ClientId;
 					var clientSecret = beGlobalVm.Options.ClientSecret;
-					SetCredentials(credentialStore, clientId, clientSecret, true);
+					var resendDraft = beGlobalVm.Options.ResendDrafts;
+					SetCredentials(credentialStore, clientId, clientSecret, resendDraft, true);
 					return true;
 				}
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.EditWindow} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.EditWindow} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}
@@ -106,8 +109,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var info = new TranslationProviderDisplayInfo
 			{
-				Name = Constants.PluginName,
-				TooltipText = Constants.PluginName,
+				Name = _constants.PluginName,
+				TooltipText = _constants.PluginName,
 				TranslationProviderIcon = PluginResources.global,
 				SearchResultImage = PluginResources.global1,
 			};
@@ -132,7 +135,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			return cred;
 		}
 
-		private void SetCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool persistKey)
+		private void SetCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool resendDraft, bool persistKey)
 		{
 			var uri = new Uri("sdlmachinetranslationcloudprovider:///");
 			string credential;
@@ -141,10 +144,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			// If corresponds to email standards, it means that authentication is done through User email and User password.		
 			var isEmailValid = IsEmailValid(clientId);
 
-			// Encode client credentials to Base64 (it is usefull when user credentials contains # char and the authentication is failing,
+			// Encrypt client credentials to Base64 (it is usefull when user credentials contains # char and the authentication is failing,
 			// because the # char is used to differentiate the clientId by ClientSecret.
-			clientId = StringExtensions.Base64Encode(clientId);
-			clientSecret = StringExtensions.Base64Encode(clientSecret);
+			clientId = StringExtensions.EncryptData(clientId);
+			clientSecret = StringExtensions.EncryptData(clientSecret);
 
 			if (isEmailValid)
 			{
@@ -154,6 +157,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				credential = $"{clientId}#{clientSecret}#ClientLogin";
 			}
+			credential = $"{credential}#{resendDraft}";
+
 			var credentials = new TranslationProviderCredential(credential, persistKey);
 			credentialStore.RemoveCredential(uri);
 			credentialStore.AddCredential(uri, credentials);
@@ -173,7 +178,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{Constants.IsEmailValid} {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{_constants.IsEmailValid} {ex.Message}\n {ex.StackTrace}");
 				return false;
 			}
 		}
@@ -184,9 +189,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			if (savedCredentials != null)
 			{
 				var splitedCredentials = savedCredentials.Credential.Split('#');
-				options.ClientId = splitedCredentials.Length> 2? StringExtensions.Base64Decode(splitedCredentials[0]) : string.Empty;
-				options.ClientSecret = splitedCredentials.Length > 2 ? StringExtensions.Base64Decode(splitedCredentials[1]) : string.Empty;
-				options.AuthenticationMethod = splitedCredentials.Length == 3 ? splitedCredentials[2] : string.Empty;
+				options.ClientId = splitedCredentials.Length > 2? StringExtensions.Decrypt(splitedCredentials[0]) : string.Empty;
+				options.ClientSecret = splitedCredentials.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[1]) : string.Empty;
+				options.AuthenticationMethod = splitedCredentials.Length == 4 ? splitedCredentials[2] : string.Empty;
+				var resendDraft = splitedCredentials.Length == 4 ? splitedCredentials[3] : string.Empty;
+				options.ResendDrafts = resendDraft.Equals("True") ? true : false;
 			}
 			return savedCredentials;
 		}

@@ -10,9 +10,9 @@
     	     xmlns:views="clr-namespace:Sdl.Community.BeGlobalV4.Provider.Ui"
 			 helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			 WindowStartupLocation="CenterScreen" mc:Ignorable="d"
-		     Name="SDLMachineTranslationCloudProvider"
-			 WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"	 
-             d:DesignHeight="450" d:DesignWidth="900"  Height="570" Width="820">
+		     Name="SDLMachineTranslationCloudProvider" WindowStyle="None" AllowsTransparency="True"
+			 ResizeMode="CanResizeWithGrip"
+             d:DesignHeight="450" Height="570" Width="920">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -26,15 +26,12 @@
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
-				<ResourceDictionary x:Uid="ResourceKeyId1">
-					<converters:BeGlobalVisibilityConverter x:Key="VisibilityConverter"/>
-				</ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />		
 				<ResourceDictionary x:Uid="ResourceKeyId2">
 					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>
 				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
-			<!--set red background to X button on hover-->
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 		</ResourceDictionary>
 	</Window.Resources>
 	<Border Style="{StaticResource WindowControlBorderStyle}" >
@@ -52,9 +49,9 @@
 
 			<!-- BORDER CONTROL -->
 			<uiHelpers:WindowsControl Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
-			<Border Background="White" Grid.Column="0" Grid.Row="1"  MaxWidth="800">
+			<Border Background="White" Grid.Column="0" Grid.Row="1" MinWidth="880" >
 				<StackPanel  Orientation="Horizontal">
-					<TextBlock Margin="15,10,2,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" MaxWidth="800">
+					<TextBlock Margin="15,10,2,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" MaxWidth="880">
 						Welcome to the SDL Machine Translation Cloud (formerly BeGlobal) translation provider for Studio. <LineBreak/><LineBreak/>
 						SDL Machine Translation Cloud is SDL's neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
 						Using SDL's proprietary technology, customers can have the assurance of content privacy.
@@ -63,23 +60,22 @@
 				</StackPanel>
 			</Border>
 			<StackPanel Grid.Row="2" Margin="0,10,0,0" MinHeight="250">
-				<TabControl Grid.Column="0" Grid.Row="1" 
+				<TabControl Grid.Column="0" Grid.Row="1"
 		            Margin="0,0,0,5"
 					SelectedIndex="{Binding SelectedTabIndex}"
-		            HorizontalAlignment="Left"
-					Height="auto"
+		            HorizontalAlignment="Left"					
 		            controls:TabControlHelper.Underlined="SelectedTabItem"
 		            controls:TabControlHelper.UnderlineMouseOverBrush="#0E202B" Foreground="#0E202B">
 					<controls:MetroTabItem Header="Login" Margin="20,0,0,0" Width="100">
 						<views:Login x:Name="LoginTab" DataContext="{Binding LoginViewModel}" ></views:Login>
-					</controls:MetroTabItem>
-					<controls:MetroTabItem Header="Settings" Margin="35,0,0,0" Width="140">
-						<views:LanguageMappings DataContext="{Binding LanguageMappingsViewModel}" Height="300"></views:LanguageMappings>
+					</controls:MetroTabItem>				
+					<controls:MetroTabItem Header="Language Mappings" Margin="35,0,0,0" Width="290">
+						<views:LanguageMappings DataContext="{Binding LanguageMappingsViewModel}"></views:LanguageMappings>
 					</controls:MetroTabItem>
 				</TabControl>
 			</StackPanel>
 			<TextBlock Grid.Row="3" Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
-				   FontWeight="Normal" FontSize="13" Foreground="Red" TextWrapping="WrapWithOverflow"  Margin="15,0,10,0"/>
+				   FontWeight="Normal" FontSize="13" Foreground="Red" TextWrapping="WrapWithOverflow"  Margin="15,0,10,5"/>
 			<StackPanel Grid.Row="4" Orientation="Vertical"  VerticalAlignment="Bottom" Margin="0,0,0,10">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
 					<Button  Style="{DynamicResource SdlPrimaryButtonStyle}" Width="125" Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>

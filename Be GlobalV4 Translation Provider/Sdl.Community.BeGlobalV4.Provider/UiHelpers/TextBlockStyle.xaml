@@ -11,4 +11,8 @@
 		<Setter Property="VerticalAlignment" Value="Center" />
 		<Setter Property="FontFamily" Value="Segoe UI"/>
 	</Style>
+	<Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}">
+		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="FontSize" Value="12" />
+	</Style>
 </ResourceDictionary>
