@@ -24,7 +24,7 @@ namespace Sdl.Community.SDLXLIFFSplitMerge
 			}
 		}
 
-		[Action("SDLXLIFFSplitMergeHelpAction", Icon = "Informative_Icon", Name = "Help", Description = "An wikie page will be opened in browser uith user documentation")]
+		[Action("SDLXLIFFSplitMergeHelpAction", Icon = "Informative_Icon", Name = "Help", Description = "A Wiki page will be opened in the browser, containing user's documentation")]
 		[ActionLayout(typeof(SDLXLIFFSplitMergeRibbon), 10, DisplayType.Large)]
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.FilesContextMenuLocation), 10, DisplayType.Large)]
 		public class SDLXLIFFSplitMergeHelpAction : AbstractViewControllerAction<FilesController>
