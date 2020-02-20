@@ -70,8 +70,8 @@
       <HintPath>..\packages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sdl.Community.Toolkit.Core, Version=0.7.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.Core.Studio2017.0.7.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
+    <Reference Include="Sdl.Community.Toolkit.Core, Version=0.7.7.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.Core.Studio2017.0.7.7\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.dll</HintPath>
