@@ -236,7 +236,7 @@ namespace ETSTranslationProvider
 			this.TradosLPs.Location = new System.Drawing.Point(3, 3);
 			this.TradosLPs.Name = "TradosLPs";
 			this.TradosLPs.RowHeadersVisible = false;
-			this.TradosLPs.Size = new System.Drawing.Size(470, 238);
+			this.TradosLPs.Size = new System.Drawing.Size(600, 238);
 			this.TradosLPs.TabIndex = 13;
 			// 
 			// tabControl

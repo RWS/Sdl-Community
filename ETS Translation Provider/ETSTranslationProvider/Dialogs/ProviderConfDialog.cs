@@ -145,8 +145,12 @@ namespace ETSTranslationProvider
 			}
 			var languagePairChoices = Options.SetPreferredLanguages(LanguagePairs);
 
+			Options.SetDictionaries(languagePairChoices);
+
 			// Since this is run on a separate thread, use invoke to communicate with the master thread.
 			var lpChoicesColumn = new DataGridViewComboBoxColumn();
+			var lpDictionariesColumn = new DataGridViewComboBoxColumn();
+
 			TradosLPs.Invoke(new Action(() =>
 			{
 				// This gets called multiple times, so let's clear out the old contents
@@ -163,7 +167,11 @@ namespace ETSTranslationProvider
 				lpChoicesColumn.Name = "SDL MT Edge Language Pair";
 				lpChoicesColumn.FlatStyle = FlatStyle.Flat;
 
-				TradosLPs.Columns.AddRange(targetColumn, lpChoicesColumn);
+				lpDictionariesColumn.Name = "SDL MT Edge Dictionaries";
+				lpDictionariesColumn.FlatStyle = FlatStyle.Flat;
+
+				TradosLPs.Columns.AddRange(targetColumn, lpChoicesColumn, lpDictionariesColumn);
+				
 				// Handler for populating combobox
 				TradosLPs.DataBindingComplete += TradosLPs_DataBindingComplete;
 
@@ -297,13 +305,19 @@ namespace ETSTranslationProvider
 			for (int i = 0; i < TradosLPs?.Rows.Count; i++)
 			{
 				var comboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL MT Edge Language Pair"];
+				var dictionariesCombo = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL MT Edge Dictionaries"];
 				var entry = TradosLPs.Rows[i].DataBoundItem as ETSApi.TradosToETSLP;
 				if (entry == null) continue;
 				comboCell.Tag = entry;
 				comboCell.DataSource = entry.ETSLPs.Select(lp => lp.LanguagePairId).ToList();
+				dictionariesCombo.DataSource = entry.Dictionaries.Select(d => d.DictionaryId).ToList();
 				if (Options?.LPPreferences == null) continue;
 				if (Options.LPPreferences.ContainsKey(entry.TradosCulture))
+				{
 					comboCell.Value = Options.LPPreferences[entry.TradosCulture].LanguagePairId;
+				}
+				var firstDictionary = entry.Dictionaries[0];
+				dictionariesCombo.Value = entry.Dictionaries[0].DictionaryId;
 			}
 		}
 
