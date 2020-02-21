@@ -85,6 +85,10 @@ namespace ETSTranslationProvider.ETSApi
 					}
 				}
 				queryString["languagePairId"] = options.LPPreferences[languageDirection.TargetCulture].LanguagePairId;
+				if (!options.LPPreferences[languageDirection.TargetCulture].DictionaryId.Equals(Constants.NoDictionary))
+				{
+					queryString["dictionaryIds"] = options.LPPreferences[languageDirection.TargetCulture].DictionaryId;
+				}
 				queryString["input"] = encodedInput;
 			}
 			queryString["inputFormat"] = "application/x-xliff";
@@ -171,6 +175,12 @@ namespace ETSTranslationProvider.ETSApi
 
 				var result = JsonConvert.DeserializeObject<DictionaryInfo>(jsonResult);
 				tradosToETSLP.Dictionaries = new List<DictionaryModel>(result.Dictionaries);
+				tradosToETSLP.Dictionaries.Insert(0, new DictionaryModel
+				{
+					DictionaryId = Constants.NoDictionary,
+					SourceLanguageId = string.Empty,
+					TargetLanguageId = string.Empty
+				});
 			}
 		}
 

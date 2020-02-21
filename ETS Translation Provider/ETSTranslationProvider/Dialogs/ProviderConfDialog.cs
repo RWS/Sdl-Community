@@ -129,6 +129,7 @@ namespace ETSTranslationProvider
 
 		private void PopulateLanguagePairs()
 		{
+			Cursor = Cursors.WaitCursor;
 			if (LanguagePairs == null || LanguagePairs.Length == 0)
 			{
 				return;
@@ -147,10 +148,25 @@ namespace ETSTranslationProvider
 
 			Options.SetDictionaries(languagePairChoices);
 
-			// Since this is run on a separate thread, use invoke to communicate with the master thread.
+			// Since this is run on a separate thread, use invoke inside SetTradosLPs() to communicate with the master thread.
 			var lpChoicesColumn = new DataGridViewComboBoxColumn();
 			var lpDictionariesColumn = new DataGridViewComboBoxColumn();
 
+			SetTradosLPs(lpChoicesColumn, lpDictionariesColumn, languagePairChoices);
+			Cursor = Cursors.Default;
+		}
+
+		/// <summary>
+		/// Set the TradosLPs grid values
+		/// </summary>
+		/// <param name="lpChoicesColumn">lpChoicesColumn</param>
+		/// <param name="lpDictionariesColumn">lpDictionariesColumn</param>
+		/// <param name="languagePairChoices">languagePairChoicess</param>
+		private void SetTradosLPs(
+			DataGridViewComboBoxColumn lpChoicesColumn,
+			DataGridViewComboBoxColumn lpDictionariesColumn,
+			ETSApi.TradosToETSLP[] languagePairChoices)
+		{
 			TradosLPs.Invoke(new Action(() =>
 			{
 				// This gets called multiple times, so let's clear out the old contents
@@ -171,10 +187,9 @@ namespace ETSTranslationProvider
 				lpDictionariesColumn.FlatStyle = FlatStyle.Flat;
 
 				TradosLPs.Columns.AddRange(targetColumn, lpChoicesColumn, lpDictionariesColumn);
-				
+
 				// Handler for populating combobox
 				TradosLPs.DataBindingComplete += TradosLPs_DataBindingComplete;
-
 				TradosLPs.DataSource = languagePairChoices;
 
 				// Handlers for when the combobox changes
@@ -291,11 +306,18 @@ namespace ETSTranslationProvider
 			if (comboBox.Value != null)
 			{
 				var newLp = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
-
 				var lpPairing = TradosLPs[e.ColumnIndex, e.RowIndex].Tag as ETSApi.TradosToETSLP;
+
 				if (lpPairing != null)
 				{
 					Options.LPPreferences[lpPairing.TradosCulture] = lpPairing.ETSLPs.First(lp => lp.LanguagePairId == newLp);
+				}
+				if(TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries"))
+				{
+					lpPairing = TradosLPs[1, e.RowIndex].Tag as ETSApi.TradosToETSLP;
+					newLp = TradosLPs[1, e.RowIndex].Value as string;
+					Options.LPPreferences[lpPairing.TradosCulture] = lpPairing.ETSLPs.First(lp => lp.LanguagePairId == newLp);
+					Options.LPPreferences[lpPairing.TradosCulture].DictionaryId = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
 				}
 			}
 		}
@@ -308,16 +330,39 @@ namespace ETSTranslationProvider
 				var dictionariesCombo = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL MT Edge Dictionaries"];
 				var entry = TradosLPs.Rows[i].DataBoundItem as ETSApi.TradosToETSLP;
 				if (entry == null) continue;
+
 				comboCell.Tag = entry;
 				comboCell.DataSource = entry.ETSLPs.Select(lp => lp.LanguagePairId).ToList();
 				dictionariesCombo.DataSource = entry.Dictionaries.Select(d => d.DictionaryId).ToList();
-				if (Options?.LPPreferences == null) continue;
+				if (Options?.LPPreferences == null)
+				{
+					continue;
+				}				
 				if (Options.LPPreferences.ContainsKey(entry.TradosCulture))
 				{
+					var currentDictionaryId = Options.LPPreferences[entry.TradosCulture].DictionaryId;
 					comboCell.Value = Options.LPPreferences[entry.TradosCulture].LanguagePairId;
+
+					ConfigureDictionary(currentDictionaryId, dictionariesCombo, entry);
 				}
-				var firstDictionary = entry.Dictionaries[0];
+				else
+				{
+					dictionariesCombo.Value = Constants.NoDictionary;
+				}
+			}
+		}
+
+		private void ConfigureDictionary(string currentDictionaryId, DataGridViewComboBoxCell dictionariesCombo, ETSApi.TradosToETSLP entry)
+		{
+			if (string.IsNullOrEmpty(currentDictionaryId))
+			{
+				Options.LPPreferences[entry.TradosCulture].DictionaryId = entry.Dictionaries[0].DictionaryId;
 				dictionariesCombo.Value = entry.Dictionaries[0].DictionaryId;
+			}
+			else
+			{
+				dictionariesCombo.Value = currentDictionaryId;
+				Options.LPPreferences[entry.TradosCulture].DictionaryId = currentDictionaryId;
 			}
 		}
 
