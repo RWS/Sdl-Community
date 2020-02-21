@@ -116,6 +116,18 @@ namespace ETSTranslationProvider
 			return languagePairChoices.ToArray();
 		}
 
+		/// <summary>
+		/// Set dictionaries for each languagePairChoices 
+		/// </summary>
+		/// <param name="languagePairChoices"></param>
+		public void SetDictionaries(TradosToETSLP[] languagePairChoices)
+		{
+			foreach (var languagePair in languagePairChoices)
+			{
+				ETSTranslatorHelper.GetDictionaries(languagePair, this);
+			}
+		}
+
 
 		private void CheckForPtbSource(LanguagePair[] languagePairs, List<TradosToETSLP> languagePairChoices, ETSLanguagePair[] etsLanguagePairs)
 		{

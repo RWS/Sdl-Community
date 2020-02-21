@@ -9,5 +9,7 @@
         public string Platform { get; set; }
         public string Version { get; set; }
         public string Technology { get; set; }
-    }
+
+		public string DictionaryId { get; set; }
+	}
 }

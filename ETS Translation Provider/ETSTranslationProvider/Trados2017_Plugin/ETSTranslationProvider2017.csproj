@@ -133,6 +133,8 @@
     <Compile Include="..\PluginConfiguration.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Model\CustomEngines.cs" />
+    <Compile Include="Model\DictionaryInfo.cs" />
+    <Compile Include="Model\DictionaryModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
