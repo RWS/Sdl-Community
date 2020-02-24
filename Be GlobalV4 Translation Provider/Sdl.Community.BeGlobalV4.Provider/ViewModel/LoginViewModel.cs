@@ -47,7 +47,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					Type = _constants.User
 				}
 			};
-			SelectedOption = options.AuthenticationMethod.Equals("ClientLogin") ? AuthenticationOptions[0] : AuthenticationOptions[1];
+			if (!string.IsNullOrEmpty(options.AuthenticationMethod))
+			{
+				SelectedOption = options.AuthenticationMethod.Equals("ClientLogin") ? AuthenticationOptions[0] : AuthenticationOptions[1];
+			}
+			else
+			{
+				SelectedOption = AuthenticationOptions[1];
+			}
 			LoginMethod = SelectedOption.Type;
 		}
 

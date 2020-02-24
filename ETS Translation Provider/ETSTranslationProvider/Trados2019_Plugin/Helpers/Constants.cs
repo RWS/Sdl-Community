@@ -18,5 +18,7 @@
 		public readonly static string ETSApiVersion = "SetETSApiVersion method";
 		public readonly static string TranslateAggregateException = "TranslateAggregateException method";
 		public readonly static string NoProviderSetup = "The provider cannot be setup because the language flavor was not received from the MT Edge server.";
+
+		public readonly static string NoDictionary = "No dictionary";
 	}
 }

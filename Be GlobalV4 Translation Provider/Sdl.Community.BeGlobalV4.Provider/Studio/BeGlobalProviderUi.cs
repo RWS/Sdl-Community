@@ -127,10 +127,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var providerUri = new Uri(uri);
 			TranslationProviderCredential cred = null;
-			if (credentialStore.GetCredential(providerUri) != null)
+			var credential = credentialStore.GetCredential(providerUri);
+			if (credential != null)
 			{
 				//get the credential to return				
-				cred = new TranslationProviderCredential(credentialStore.GetCredential(providerUri)?.Credential, credentialStore.GetCredential(providerUri).Persist);
+				cred = new TranslationProviderCredential(credential?.Credential, credential.Persist);
 			}
 			return cred;
 		}
@@ -188,12 +189,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			var savedCredentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
 			if (savedCredentials != null)
 			{
-				var splitedCredentials = savedCredentials.Credential.Split('#');
-				options.ClientId = splitedCredentials.Length > 2? StringExtensions.Decrypt(splitedCredentials[0]) : string.Empty;
-				options.ClientSecret = splitedCredentials.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[1]) : string.Empty;
-				options.AuthenticationMethod = splitedCredentials.Length == 4 ? splitedCredentials[2] : string.Empty;
-				var resendDraft = splitedCredentials.Length == 4 ? splitedCredentials[3] : string.Empty;
-				options.ResendDrafts = resendDraft.Equals("True") ? true : false;
+				var splitedCredentials = savedCredentials?.Credential?.Split('#');
+				options.ClientId = splitedCredentials?.Length > 2? StringExtensions.Decrypt(splitedCredentials[0]) : string.Empty;
+				options.ClientSecret = splitedCredentials?.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[1]) : string.Empty;
+				options.AuthenticationMethod = splitedCredentials?.Length == 4 ? splitedCredentials[2] : string.Empty;
+				var resendDraft = splitedCredentials?.Length == 4 ? splitedCredentials[3] : string.Empty;
+				if (!string.IsNullOrEmpty(resendDraft))
+				{
+					options.ResendDrafts = resendDraft.Equals("True") ? true : false;
+				}
 			}
 			return savedCredentials;
 		}

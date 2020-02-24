@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="SDLXLIFF Split and Merge 2019" Language="1033" Version="2.0.0.4" Manufacturer="SDL Community Developers" UpgradeCode="9242c6b1-3ff5-45cb-a7d5-7cbc02b170a0">
+	<Product Id="*" Name="SDLXLIFF Split and Merge 2019" Language="1033" Version="2.0.0.4" Manufacturer="SDL Community Developers" UpgradeCode="48a1c47f-b3be-4580-ae01-30f4114217ce">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
@@ -27,7 +27,7 @@
 	.dll dependecies will be installed. Studio15 is the location provided by user when running .msi file -->
 	<Fragment>
 		<DirectoryRef Id="DesktopFolder">
-			<Component Id="ApplicationShortcutDesktop" Guid="247952a2-ba7b-48a7-9ed8-6e38c5535897">
+			<Component Id="ApplicationShortcutDesktop" Guid="df2360f0-5a5c-4446-927f-c55ff3b8078c">
 				<Shortcut Id="ApplicationDesktopShortcut" Name="SDLXLIFF Split and Merge 2019" Icon="icon.ico" Description="SDLXLIFF Split and Merge 2019" Target="[Studio15]Sdl.Community.SplitMergeUIWix.exe" WorkingDirectory="Studio15" />
 				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.SplitMergeUIWix" Name="installed" Type="integer" Value="1" KeyPath="yes" />
@@ -39,7 +39,7 @@
 	.dll dependecies will be installed. Studio15 is the location provided by user when running .msi file -->
 	<Fragment>
 		<DirectoryRef Id="SDLTradosStudio2019Apps">
-			<Component Id="ApplicationProgramDataShortcut" Guid="b993a102-f7c3-4e21-8dbf-90396113c899">
+			<Component Id="ApplicationProgramDataShortcut" Guid="4c2c7cb3-0b11-4b52-bca4-d4218b3b5c87">
 				<Shortcut Id="ApplicationProgDataShortcut" Name="SDLXLIFF Split and Merge 2019" Icon="icon.ico" Description="SDLXLIFF Split and Merge 2019" Target="[Studio15]Sdl.Community.SplitMergeUIWix.exe" WorkingDirectory="Studio15" />
 				<RemoveFolder Id="RemoveSDLTradosStudio2019Apps" Directory="SDLTradosStudio2019Apps" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.SplitMergeUIWix" Name="installed" Type="integer" Value="1" KeyPath="yes" />
@@ -76,7 +76,7 @@
 				<File Id="Sdl.Community.SplitMergeUIWix.exe" Name="Sdl.Community.SplitMergeUIWix.exe" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetPath)" KeyPath="yes" />
 			</Component>
 
-			<Component Id="Sdl.Community.SplitMergeUIWix.exe.config" Guid="93c5703b-c489-4ce2-af26-4d0a73536d02">
+			<Component Id="Sdl.Community.SplitMergeUIWix.exe.config" Guid="4a3b5f4c-0d1e-4aee-947a-953dcaf2d95e">
 				<File Id="Sdl.Community.SplitMergeUIWix.exe.config" Name="Sdl.Community.SplitMergeUIWix.exe.config" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.SplitMergeUIWix.exe.config" />
 			</Component>
 
