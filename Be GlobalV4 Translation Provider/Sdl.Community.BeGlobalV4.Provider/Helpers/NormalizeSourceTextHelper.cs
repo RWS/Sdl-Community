@@ -35,6 +35,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 					case "nno":
 					case "nob":
 						return "nor";
+					case "por":
+						// Portuguese (Brazil)
+						if (cultureInfo.Name.Equals("pt-BR"))
+						{
+							return "ptb";
+						}						
+						return "por";
 				}
 				return cultureInfo.ThreeLetterISOLanguageName;
 			}
