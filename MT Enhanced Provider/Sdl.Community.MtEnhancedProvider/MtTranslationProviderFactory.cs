@@ -17,26 +17,22 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
-    #region "Declaration"
+
     [TranslationProviderFactory(
         Id = "MtTranslationProviderFactory",
         Name = "MtTranslationProviderFactory",
         Description = "MT Enhanced Trados Plugin")]
-    #endregion
 
     public class MtTranslationProviderFactory : ITranslationProviderFactory
     {
-        #region ITranslationProviderFactory Members
 
-        #region "CreateTranslationProvider"
         public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
-            #region "CheckHandlesUri"
+
             if (!SupportsTranslationProviderUri(translationProviderUri))
             {
                 throw new Exception(PluginResources.UriNotSupportedMessage);
             }
-            #endregion
 
             //create options class based on URI passed to the method
             var loadOptions = new MtTranslationOptions(translationProviderUri);
@@ -87,9 +83,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
             return tp;
         }
-        #endregion
 
-        #region "SupportsTranslationProviderUri"
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
 
@@ -97,27 +91,19 @@ namespace Sdl.Community.MtEnhancedProvider
             {
                 throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
             }
-            return String.Equals(translationProviderUri.Scheme, MtTranslationProvider.ListTranslationProviderScheme, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(translationProviderUri.Scheme, MtTranslationProvider.ListTranslationProviderScheme, StringComparison.OrdinalIgnoreCase);
         }
-        #endregion
 
-        #region "GetTranslationProviderInfo"
         public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
         {
             var info = new TranslationProviderInfo();
 
-            #region "TranslationMethod"
             info.TranslationMethod = MtTranslationOptions.ProviderTranslationMethod;
-            #endregion
 
-            #region "Name"
             info.Name = PluginResources.Plugin_NiceName;
-            #endregion
 
             return info;
         }
-        #endregion
 
-        #endregion
     }
 }

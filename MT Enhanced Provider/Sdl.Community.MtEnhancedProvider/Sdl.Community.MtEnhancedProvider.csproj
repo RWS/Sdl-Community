@@ -130,6 +130,10 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\NLog.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -187,6 +191,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EditCollection.cs" />
+    <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Helpers\Log.cs" />
     <Compile Include="Model\Error.cs" />
     <Compile Include="Model\LanguageDetails.cs" />
     <Compile Include="Model\LanguageResponse.cs" />

@@ -149,15 +149,14 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <param name="translation"></param>
 		/// <param name="sourceSegment"></param>
 		/// <returns></returns>
-		private SearchResult CreateSearchResult(Segment searchSegment, Segment translation,
-			string sourceSegment)
+		private SearchResult CreateSearchResult(Segment searchSegment, Segment translation)
 		{
 			var tu = new TranslationUnit { SourceSegment = searchSegment.Duplicate(), TargetSegment = translation };
 			//this makes the original source segment, with tags, appear in the search window
 			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
 
 			var score = 0; //score to 0...change if needed to support scoring
-			tu.Origin = TranslationUnitOrigin.MachineTranslation;
+			tu.Origin = TranslationUnitOrigin.Nmt;
 			var searchResult = new SearchResult(tu) { ScoringResult = new ScoringResult { BaseScore = score } };
 			tu.ConfirmationLevel = ConfirmationLevel.Draft;
 			searchResult.TranslationProposal = new TranslationUnit(tu);
@@ -205,7 +204,7 @@ namespace Sdl.Community.MtEnhancedProvider
 		}
 
 		private string LookupGt(string sourcetext, MtTranslationOptions options, string format)
-		{
+		{		
 			//instantiate GtApiConnecter if necessary
 			if (_gtConnect == null)
 			{
@@ -272,7 +271,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			{ //don't do the lookup, b/c we don't need to pay google to translate text already translated if we edit a segment
 				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
 				//later get these strings from resource file
-				results.Add(CreateSearchResult(segment, translation, segment.ToString()));
+				results.Add(CreateSearchResult(segment, translation));
 				return results;
 			}
 
@@ -348,14 +347,11 @@ namespace Sdl.Community.MtEnhancedProvider
 				translation.Add(translatedText);
 			}
 
-			results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
-
+			results.Add(CreateSearchResult(newseg, translation));
 			#endregion "SegmentLookup"
 
 			#region "Close"
-
 			return results;
-
 			#endregion "Close"
 		}
 

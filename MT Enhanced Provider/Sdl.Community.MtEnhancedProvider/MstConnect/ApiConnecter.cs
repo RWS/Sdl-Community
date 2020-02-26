@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestSharp;
+using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
@@ -18,13 +19,16 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 	{
 		private static string _authToken;
 		private static DateTime _tokenExpiresAt; //to keep track of when token expires
-		private static List<string> _supportedLangs;
 		private MtTranslationOptions _options;
 		private string _subscriptionKey = string.Empty;
 		private static readonly string TranslatorUri = @"https://api.cognitive.microsofttranslator.com/";
 
 		private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
 		private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
+		private Constants _constants = new Constants();
+
+		public static List<string> SupportedLangs { get; set; }
+		public Log Log = Log.Instance;
 
 		/// <summary>
 		/// This class allows connection to the Microsoft Translation API
@@ -38,9 +42,9 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			{
 				_authToken = GetAuthToken(); //if the class variable has not been set
 			}
-			if (_supportedLangs == null)
+			if (SupportedLangs == null)
 			{
-				_supportedLangs = GetSupportedLanguages(); //if the class variable has not been set
+				SupportedLangs = GetSupportedLanguages(); //if the class variable has not been set
 			}
 		}
 
@@ -53,7 +57,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		{
 			_subscriptionKey = cid;
 		}
-
 
 		/// <summary>
 		/// translates the text input
@@ -119,7 +122,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 						else
 						{
 							var responseMessage = JsonConvert.DeserializeObject<ResponseMessage>(responseBody);
-							throw new Exception(responseMessage.Error.Message);
+							throw  new Exception(responseMessage.Error.Message);
 						}
 					}
 				}
@@ -127,6 +130,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (WebException exception)
 			{
 				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
+				Log.Logger.Error($"{_constants.Translate} {exception.Message}\n { exception.StackTrace}");
 				throw new Exception(mesg);
 			}
 			return translatedText;
@@ -180,7 +184,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			{
 				finalText += text;
 			}
-
 			return finalText;
 		}
 
@@ -200,7 +203,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			var targetSupported = false;
 
 			//check to see if both the source and target languages are supported
-			foreach (string lang in _supportedLangs)
+			foreach (string lang in SupportedLangs)
 			{
 				if (lang.Equals(source)) sourceSupported = true;
 				if (lang.Equals(target)) targetSupported = true;
@@ -241,6 +244,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (WebException exception)
 			{
 				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
+				Log.Logger.Error($"{_constants.GetSupportedLanguages} {exception.Message}\n { exception.StackTrace}");
 				throw new Exception(mesg);
 			}
 			return languageCodeList;
@@ -290,7 +294,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 		public async Task<string> GetAccessTokenAsync()
 		{
-			if (_subscriptionKey == string.Empty) return string.Empty;
+			if (string.IsNullOrEmpty(_subscriptionKey)) return string.Empty;
 
 			using (var client = new HttpClient())
 			using (var request = new HttpRequestMessage())
@@ -299,7 +303,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 				request.RequestUri = ServiceUrl;
 				request.Content = new StringContent(string.Empty);
 				request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
-				client.Timeout = TimeSpan.FromSeconds(2);
 				var response = await client.SendAsync(request);
 				response.EnsureSuccessStatusCode();
 				var token = await response.Content.ReadAsStringAsync();
@@ -363,9 +366,9 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			{
 				response = httpWebRequest.GetResponse();
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-
+				Log.Logger.Error($"{_constants.AddTranslationMethod} {ex.Message}\n { ex.StackTrace}");
 			}
 			finally
 			{
