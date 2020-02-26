@@ -91,7 +91,7 @@ namespace Sdl.Community.MtEnhancedProvider
             {
                 throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
             }
-            return String.Equals(translationProviderUri.Scheme, MtTranslationProvider.ListTranslationProviderScheme, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(translationProviderUri.Scheme, MtTranslationProvider.ListTranslationProviderScheme, StringComparison.OrdinalIgnoreCase);
         }
 
         public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
