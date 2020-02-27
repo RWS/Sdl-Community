@@ -17,5 +17,6 @@ namespace Sdl.Community.StarTransit.Shared.Models
         public List<LanguagePair> LanguagePairs { get; set; }
         public string PathToPrjFile { get; set; }
 		public Dictionary<string,int> TMPenalties { get; set; }
+		public List<string> MachineTransMem { get; set; }
 	}
 }

@@ -21,6 +21,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		public MessageModel CreateProject(PackageModel package)
 		{
 			var penaltiesTmsList = new List<StarTranslationMemoryMetadata>();
+
+			var machineTransList = new List<StarTranslationMemoryMetadata>();
+
 			var target = GetTargetLanguages(package.LanguagePairs);
 
 			var projectInfo = new ProjectInfo
@@ -50,6 +53,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 
 			var targetProjectFiles = new List<ProjectFile>();
+
 			foreach (var pair in package.LanguagePairs)
 			{
 				// Separate all items from package.TMPenalties(files that are having penalties set)
@@ -64,16 +68,27 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							penaltiesTmsList.Add(starTMMetadata);
 						}
 					}
+					//Separate all items from package.MachineTransMem (files that contain Machine Translation)
+					if (package.MachineTransMem != null)
+					{
+						if(package.MachineTransMem.Any(t => t.Equals(starTMMetadata.TargetFile)))
+						{
+							machineTransList.Add(starTMMetadata);
+						}
+					}
 				}
 
-				// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which does not have penalties set on them)
+				// Remove Machine Translation memories from pair.StarTranslationMemoryMetadatas, if the user requests them, they will be imported separately, but never in the main TM
+				pair.StarTranslationMemoryMetadatas.RemoveAll(item => Path.GetFileName(item.TargetFile).Contains("_MT_"));
+
+				// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which do not have penalties set on them)
 				foreach (var item in penaltiesTmsList)
 				{
 					pair.StarTranslationMemoryMetadatas.Remove(item);
 				}
 
 				// Create one TM (that has the name equals with the project name) 
-				// with the TM files from pair.StarTranslationMemoryMetadatas (the onew without penalties set by the user)
+				// with the TM files from pair.StarTranslationMemoryMetadatas (the one without penalties set by the user)
 				targetProjectFiles.Clear();
 
 				// Import language pair TM if any
@@ -116,6 +131,27 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							true,
 							true,
 							item.TMPenalty));
+					}
+
+					//If the user requests it, create a separate TM for the Machine Translation coming from Transit.
+					foreach (var item in machineTransList)
+					{
+						var MachineTranslationImporter = new TransitTmImporter(
+							Path.GetDirectoryName(newProject.FilePath),
+							pair.SourceLanguage,
+							pair.TargetLanguage,
+							Path.GetFileName(item.TargetFile),
+							fileTypeManager);
+
+						MachineTranslationImporter.ImportStarTransitTm(item.TargetFile);
+
+						//It should have a penalty set by default, otherwise it will be used for pretranslation and later added to the main TM when updating main TM.
+						tmConfig.Entries.Add(new TranslationProviderCascadeEntry(
+							new TranslationProviderReference(MachineTranslationImporter.TMFilePath),
+							true,
+							true,
+							true,
+							1));
 					}
 				}
 				if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)

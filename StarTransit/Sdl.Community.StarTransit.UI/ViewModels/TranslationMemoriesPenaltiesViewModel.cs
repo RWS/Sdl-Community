@@ -125,17 +125,19 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					{
 						foreach (var filePath in langPair.StarTranslationMemoryMetadatas)
 						{
-							TranslationMemoryName = Path.GetFileName(filePath.TargetFile);
-							TranslationMemoryPath = filePath.TargetFile;
+							if (!filePath.TargetFile.Contains("_MT_")){
+								TranslationMemoryName = Path.GetFileName(filePath.TargetFile);
+								TranslationMemoryPath = filePath.TargetFile;
 
-							var translationMemoriesPenaltiesModel = new TranslationMemoriesPenaltiesModel()
-							{
-								TranslationMemoryName = TranslationMemoryName,
-								TranslationMemoryPath = TranslationMemoryPath,
-								TMPenalty = TMPenalty
-							};
-							
-							TranslationMemoriesPenaltiesModelList.Add(translationMemoriesPenaltiesModel);
+								var translationMemoriesPenaltiesModel = new TranslationMemoriesPenaltiesModel()
+								{
+									TranslationMemoryName = TranslationMemoryName,
+									TranslationMemoryPath = TranslationMemoryPath,
+									TMPenalty = TMPenalty
+								};
+
+								TranslationMemoriesPenaltiesModelList.Add(translationMemoriesPenaltiesModel);
+							}
 						}
 					}
 				}
