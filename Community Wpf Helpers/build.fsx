@@ -51,7 +51,6 @@ let setParams defaults = {
                 "Configuration", buildMode
                 "OutputPath" , "./../build"
             ]
-        
     }
 
 Target "BuildApp" (fun _ ->
@@ -61,7 +60,7 @@ Target "BuildApp" (fun _ ->
 //Publishing is not working from build script because of an issue in FAKE with 
 //latest nuget versions - https://github.com/fsharp/FAKE/issues/1241
 Target "CreateWpfHelperPackage" (fun _ ->
-    let portableDir = packagingDir @@ "lib/net47/"
+    let portableDir = packagingDir @@ "lib/net45/"
     CleanDirs [portableDir]
 
     CopyFile portableDir (buildDir @@ "Sdl.CommunityWpfHelpers.dll")
@@ -83,17 +82,19 @@ Target "CreateWpfHelperPackage" (fun _ ->
             Publish = hasBuildParam "nugetkey" }) "Sdl.CommunityWpfHelpers.nuspec"
 )
 
+// DoNothing means create an empty target
 Target "CreatePackages" DoNothing
 
 Target "BuildAndCreatePackages" DoNothing
 
+// The below sytnax ==> means "ensure that BuildApp runs before CreateWpfHelperPackage"
 "BuildApp"
     ==> "CreateWpfHelperPackage"   
     ==> "CreatePackages"
     ==> "BuildAndCreatePackages"
 
-"CreateWpfHelperPackage"
-    ==> "CreatePackages"
+//"CreateWpfHelperPackage"
+//    ==> "CreatePackages"
 
 "Clean"
    ==> "AssemblyInfo"
