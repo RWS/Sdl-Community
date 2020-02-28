@@ -181,4 +181,22 @@
   <data name="global1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\global1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Print" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Print.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Search__1_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Search (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="add_langcode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\add_langcode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MTLanguageCodes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\MTLanguageCodes.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="dictionaryIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\dictionaryIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MTCodesLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\MTCodesLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

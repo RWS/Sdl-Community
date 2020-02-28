@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
@@ -13,8 +15,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 	public class BeGlobalV4Translator
 	{
 		private readonly IRestClient _client;
-		private readonly string _flavor;
 		private readonly IMessageBoxService _messageBoxService;
+		private Constants _constants = new Constants();
+		private LanguageMappingsService _languageMappingService;
+		private List<LanguageMappingModel> _languageMappings = new List<LanguageMappingModel>();
 
 		public static readonly Log Log = Log.Instance;
 
@@ -23,10 +27,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			try
 			{
 				_messageBoxService = new MessageBoxService();
-				_flavor = options.Model;
+				_languageMappingService = new LanguageMappingsService();
+				_languageMappings = _languageMappingService.GetLanguageMappingSettings()?.LanguageMappings?.ToList();
 				_client = new RestClient(string.Format($"{server}/v4"));
+
+				Utils.LogServerIPAddresses();
+
 				IRestRequest request;
-				if (options.UseClientAuthentication)
+				if (options.AuthenticationMethod.Equals("ClientLogin"))
 				{
 					request = new RestRequest("/token", Method.POST)
 					{
@@ -44,20 +52,25 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				}
 				AddTraceId(request);
 				request.RequestFormat = DataFormat.Json;
+
 				var response = _client.Execute(request);
 				if (response.StatusCode != HttpStatusCode.OK)
 				{
-					throw new Exception(Constants.TokenFailed + response.Content);
+					throw new Exception(_constants.TokenFailed + response.Content);
 				}
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
 				_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{Constants.BeGlobalV4Translator} {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{_constants.BeGlobalV4Translator} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
+		/// <summary>
+		/// Get client information from the MTCloud server
+		/// </summary>
+		/// <returns>accountId</returns>
 		public int GetClientInformation()
 		{
 			try
@@ -81,15 +94,28 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.GetClientInformation} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.GetClientInformation} {e.Message}\n {e.StackTrace}");
 			}
 			return 0;
 		}
 
-		public string TranslateText(string text, string sourceLanguage, string targetLanguage)
+		/// <summary>
+		/// Get translation for the current source text
+		/// </summary>
+		/// <param name="text">source text</param>
+		/// <param name="sourceDisplayName">source language display name</param>
+		/// <param name="targetDisplayName">target language display name</param>
+		/// <returns>translated text</returns>
+		public string TranslateText(string text, string sourceDisplayName, string targetDisplayName)
 		{
 			try
 			{
+				var selectedModel = _languageMappings?.FirstOrDefault(l => l.ProjectLanguagePair.Contains(sourceDisplayName) && l.ProjectLanguagePair.Contains(targetDisplayName));
+				if(selectedModel?.SelectedModelOption == null || string.IsNullOrEmpty(selectedModel?.SelectedModelOption?.Model))
+				{
+					throw new Exception(_constants.NoTranslationMessage);
+				}
+
 				var request = new RestRequest("/mt/translations/async", Method.POST)
 				{
 					RequestFormat = DataFormat.Json
@@ -97,14 +123,31 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				AddTraceId(request);
 
 				string[] texts = { text };
-				request.AddBody(new
+				// set dictionaries parameter in case user has been selected an available dictionary
+				if (!selectedModel.SelectedMTCloudDictionary.Name.Equals(_constants.NoAvailableDictionary)
+					&& !selectedModel.SelectedMTCloudDictionary.Name.Equals(_constants.NoDictionary))
 				{
-					input = texts,
-					sourceLanguageId = sourceLanguage,
-					targetLanguageId = targetLanguage,
-					model = _flavor,
-					inputFormat = "xliff"
-				});
+					request.AddBody(new
+					{
+						input = texts,
+						sourceLanguageId = selectedModel?.SelectedMTCodeSource.CodeName,
+						targetLanguageId = selectedModel?.SelectedMTCodeTarget.CodeName,
+						model = selectedModel?.SelectedModelOption?.Model,
+						inputFormat = "xliff",
+						dictionaries = new string[] { selectedModel?.SelectedMTCloudDictionary?.DictionaryId?.ToString() }
+					});
+				}
+				else
+				{
+					request.AddBody(new
+					{
+						input = texts,
+						sourceLanguageId = selectedModel?.SelectedMTCodeSource.CodeName,
+						targetLanguageId = selectedModel?.SelectedMTCodeTarget.CodeName,
+						model = selectedModel?.SelectedModelOption?.Model,
+						inputFormat = "xliff"
+					});
+				}
 				var response = _client.Execute(request);
 				if (!response.IsSuccessful)
 				{
@@ -112,7 +155,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 					if (response.StatusCode == 0)
 					{
-						throw new WebException(Constants.InternetConnection);
+						throw new WebException(_constants.InternetConnection);
 					}
 				}
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
@@ -124,11 +167,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.TranslateTextMethod} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.TranslateTextMethod} {e.Message}\n {e.StackTrace}");
 				throw;
 			}
 		}
 
+		/// <summary>
+		/// Get user information from the MTCloud server
+		/// </summary>
+		/// <returns>accountId</returns>
 		public int GetUserInformation()
 		{
 			try
@@ -149,11 +196,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{ Constants.GetUserInformation} { e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.GetUserInformation} { e.Message}\n {e.StackTrace}");
 			}
 			return 0;
 		}
 
+		/// <summary>
+		/// Get language pairs for the current accountId
+		/// </summary>
+		/// <param name="accountId">accountId</param>
+		/// <returns></returns>
 		public SubscriptionInfo GetLanguagePairs(string accountId)
 		{
 			try
@@ -174,9 +226,39 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.SubscriptionInfoMethod} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.SubscriptionInfoMethod} {e.Message}\n {e.StackTrace}");
 			}
 			return new SubscriptionInfo();
+		}
+
+		/// <summary>
+		/// Get all the dictionaries for the specified accountId
+		/// </summary>
+		/// <param name="accountId">accountId for the current user</param>
+		/// <returns>available dictionaries for current user</returns>
+		public MTCloudDictionaryInfo GetDictionaries(int accountId)
+		{
+			try
+			{
+				var request = new RestRequest($"/accounts/{accountId}/dictionaries")
+				{
+					RequestFormat = DataFormat.Json
+				};
+				AddTraceId(request);
+
+				var response = _client.Execute(request);
+				if (!response.IsSuccessful)
+				{
+					ShowErrors(response);
+				}
+				var dictionaries = JsonConvert.DeserializeObject<MTCloudDictionaryInfo>(response.Content);
+				return dictionaries;
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"{_constants.GetDictionaries} {e.Message}\n {e.StackTrace}");
+			}
+			return new MTCloudDictionaryInfo();
 		}
 
 		private byte[] WaitForTranslation(string id)
@@ -194,7 +276,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 						if (response.StatusCode == 0)
 						{
-							throw new WebException(Constants.InternetConnection);
+							throw new WebException(_constants.InternetConnection);
 						}
 					}
 
@@ -205,16 +287,16 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					}
 					status = json.translationStatus;
 
-					if (!status.Equals(Constants.DONE, StringComparison.CurrentCultureIgnoreCase))
+					if (!status.Equals(_constants.DONE, StringComparison.CurrentCultureIgnoreCase))
 					{
 						System.Threading.Thread.Sleep(300);
 					}
-					if (status.Equals(Constants.FAILED))
+					if (status.Equals(_constants.FAILED))
 					{
 						ShowErrors(response);
 					}
-				} while (status.Equals(Constants.INIT, StringComparison.CurrentCultureIgnoreCase) ||
-						 status.Equals(Constants.TRANSLATING, StringComparison.CurrentCultureIgnoreCase));
+				} while (status.Equals(_constants.INIT, StringComparison.CurrentCultureIgnoreCase) ||
+						 status.Equals(_constants.TRANSLATING, StringComparison.CurrentCultureIgnoreCase));
 
 				response = RestGet($"/mt/translations/async/{id}/content");
 				if (!response.IsSuccessful)
@@ -222,14 +304,14 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 					ShowErrors(response);
 					if (response.StatusCode == 0)
 					{
-						throw new WebException(Constants.InternetConnection);
+						throw new WebException(_constants.InternetConnection);
 					}
 				}
 				return response.RawBytes;
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.WaitTranslationMethod} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.WaitTranslationMethod} {e.Message}\n {e.StackTrace}");
 				throw;
 			}
 		}
@@ -250,7 +332,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 		{
 			var pluginVersion = VersionHelper.GetPluginVersion();
 			var studioVersion = VersionHelper.GetStudioVersion();
-			request.AddHeader(Constants.TraceId, $"{Constants.SDLMachineTranslationCloudProvider} {pluginVersion} - {studioVersion}.{Guid.NewGuid().ToString()}");
+			request.AddHeader(_constants.TraceId, $"{_constants.SDLMachineTranslationCloudProvider} {pluginVersion} - {studioVersion}.{Guid.NewGuid().ToString()}");
 		}
 
 		private void ShowErrors(IRestResponse response)
@@ -260,7 +342,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				foreach (var error in responseContent.Errors)
 				{
-					throw new Exception($"{Constants.ErrorCode} {error.Code}, {error.Description}");
+					throw new Exception($"{_constants.ErrorCode} {error.Code}, {error.Description}");
 				}
 			}
 		}

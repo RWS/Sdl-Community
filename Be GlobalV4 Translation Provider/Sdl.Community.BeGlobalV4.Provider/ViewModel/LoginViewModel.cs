@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Controls;
@@ -16,8 +17,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private Authentication _selectedOption;
 		private string _email;
 		private string _loginMethod;
-		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
 		private readonly LanguagePair[] _languagePairs;
+		private readonly string _serverAddress = "https://translate-api.sdlbeglobal.com";
+		private Constants _constants = new Constants();
 
 		private ICommand _passwordChangedCommand;
 		private ICommand _navigateCommand;
@@ -28,7 +30,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			LanguageMappingsViewModel languageMappingsViewModel,
 			BeGlobalWindowViewModel beGlobalWindowViewModel)
 		{
-			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
 			_languagePairs = languagePairs;
 			LanguageMappingsViewModel = languageMappingsViewModel;
 			BeGlobalWindowViewModel = beGlobalWindowViewModel;
@@ -38,15 +39,22 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			{
 				new Authentication
 				{
-					DisplayName = Constants.ClientAuthentication,
-					Type = Constants.Client
+					DisplayName = _constants.ClientAuthentication,
+					Type = _constants.Client
 				},
 				new Authentication
-				{   DisplayName = Constants.UserAuthentication,
-					Type = Constants.User
+				{   DisplayName = _constants.UserAuthentication,
+					Type = _constants.User
 				}
 			};
-			SelectedOption = options.UseClientAuthentication ? AuthenticationOptions[0] : AuthenticationOptions[1];
+			if (!string.IsNullOrEmpty(options.AuthenticationMethod))
+			{
+				SelectedOption = options.AuthenticationMethod.Equals("ClientLogin") ? AuthenticationOptions[0] : AuthenticationOptions[1];
+			}
+			else
+			{
+				SelectedOption = AuthenticationOptions[1];
+			}
 			LoginMethod = SelectedOption.Type;
 		}
 
@@ -79,7 +87,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				_selectedOption = value;
 				if (_selectedOption != null)
 				{
-					LoginMethod = _selectedOption.Type.Equals(Constants.User) ? Constants.User : Constants.Client; 					
+					LoginMethod = _selectedOption.Type.Equals(_constants.User) ? _constants.User : _constants.Client; 					
 				}
 				OnPropertyChanged();
 			}
@@ -100,73 +108,63 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		public bool ValidateEnginesSetup()
 		{
-			var isEngineSet = SetEngineModel();
+			Utils.LogServerIPAddresses();
+
+			var beGlobalTranslator = new BeGlobalV4Translator(_serverAddress, Options);
+			var accountId = Options.AuthenticationMethod.Equals("ClientLogin") ? beGlobalTranslator.GetClientInformation() : beGlobalTranslator.GetUserInformation();
+			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
+			Options.SubscriptionInfo = subscriptionInfo;
+			
+			var isEngineSet = GetEngineModels(subscriptionInfo?.LanguagePairs);
 			if (!isEngineSet)
 			{
-				BeGlobalWindowViewModel.Message = Constants.CredentialsAndInternetValidation;
+				BeGlobalWindowViewModel.Message = _constants.CredentialsAndInternetValidation;
 				return false;
 			}
 			return true;
 		}
-
-		private bool SetEngineModel()
-		{
-			var beGlobalTranslator = new BeGlobalV4Translator("https://translate-api.sdlbeglobal.com", Options);
-			var accountId = Options.UseClientAuthentication ? beGlobalTranslator.GetClientInformation() : beGlobalTranslator.GetUserInformation();
-			var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
-			Options.SubscriptionInfo = subscriptionInfo;
-
-			var areEngiesRetrieved = GetEngineModels(subscriptionInfo?.LanguagePairs);
-			if (string.IsNullOrEmpty(Options?.Model))
-			{
-				if (LanguageMappingsViewModel?.TranslationOptions?.Count > 0)
-				{
-					LanguageMappingsViewModel.SelectedModelOption = LanguageMappingsViewModel?.TranslationOptions?[0];
-					if (string.IsNullOrEmpty(Options?.Model))
-					{
-						SetOptions(LanguageMappingsViewModel?.TranslationOptions[0]);
-					}
-				}
-			}
-			else
-			{
-				var mtModel = LanguageMappingsViewModel?.TranslationOptions?.FirstOrDefault(m => m.Model.Equals(Options.Model));
-				if (mtModel != null)
-				{
-					var selectedModelIndex = LanguageMappingsViewModel.TranslationOptions.IndexOf(mtModel);
-					LanguageMappingsViewModel.SelectedModelOption = LanguageMappingsViewModel.TranslationOptions[selectedModelIndex];
-				}
-			}
-			return areEngiesRetrieved;
-		}
-
+			
 		private bool GetEngineModels(List<BeGlobalLanguagePair> beGlobalLanguagePairs)
-		{
+		{			
 			if (beGlobalLanguagePairs != null)
 			{
-				var sourceLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(_languagePairs?[0].SourceCulture);
-				var pairsWithSameSource = beGlobalLanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
-				if (_languagePairs?.Count() > 0)
+				foreach (var languageMapping in LanguageMappingsViewModel?.LanguageMappings)
 				{
-					foreach (var languagePair in _languagePairs)
+					//get beGlobalLanguagePairs for the specific source language MTSourceCodes
+					var sourcePairs = beGlobalLanguagePairs.Where(b => languageMapping.MTCodesSource.Any(l => b.SourceLanguageId.Equals(l.CodeName)));
+
+					//get beGlobalLanguagePairs for the specific target MTTargetCodes and exiting sourcePairs
+					var serviceLanguagePairs = sourcePairs.Where(s => languageMapping.MTCodesTarget.Any(l => s.TargetLanguageId.Equals(l.CodeName)));
+					var splittedLangPair = Utils.SplitLanguagePair(languageMapping.ProjectLanguagePair);
+					var sourceCultureName = _languagePairs?.FirstOrDefault(n => n.SourceCulture.DisplayName.Equals(splittedLangPair[0]))?.SourceCulture.Name;
+					var targetCultureName = _languagePairs?.FirstOrDefault(n => n.TargetCulture.DisplayName.Equals(splittedLangPair[1]))?.TargetCulture.Name;
+
+					if(string.IsNullOrEmpty(sourceCultureName) || string.IsNullOrEmpty(targetCultureName))
 					{
-						var targetLanguage = _normalizeSourceTextHelper.GetCorrespondingLangCode(languagePair.TargetCulture);
-
-						var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
-
-						foreach (var serviceLanguagePair in serviceLanguagePairs)
+						return false;
+					}
+					foreach (var serviceLanguagePair in serviceLanguagePairs)
+					{
+						var existingTranslationModel = languageMapping.Engines.FirstOrDefault(e => e.Model.Equals(serviceLanguagePair.Model) 
+																			&& e.DisplayName.Contains(serviceLanguagePair.TargetLanguageId));
+						TranslationModel newTranslationModel = null;
+						if (existingTranslationModel == null)
 						{
-							var existingTranslationModel = LanguageMappingsViewModel.TranslationOptions.FirstOrDefault(e => e.Model.Equals(serviceLanguagePair.Model));
-							TranslationModel newTranslationModel = null;
-							if (existingTranslationModel == null)
+							newTranslationModel = new TranslationModel
 							{
-								newTranslationModel = new TranslationModel
-								{
-									Model = serviceLanguagePair.Model,
-									DisplayName = serviceLanguagePair.DisplayName,
-								};
-								LanguageMappingsViewModel.TranslationOptions.Add(newTranslationModel);
-								(existingTranslationModel ?? newTranslationModel).LanguagesSupported.Add(languagePair.TargetCulture.Name, serviceLanguagePair.Name);
+								Model = serviceLanguagePair.Model,
+								DisplayName = $"{serviceLanguagePair.SourceLanguageId}-{serviceLanguagePair.TargetLanguageId} {serviceLanguagePair.DisplayName}"
+							};
+							(existingTranslationModel ?? newTranslationModel).LanguagesSupported.Add(sourceCultureName, targetCultureName);
+
+							if (!languageMapping.Engines.Any(e=>e.DisplayName.Equals(newTranslationModel.DisplayName)))
+							{
+								// the initialization is needed to display the progress ring while loading the engines
+								// after user presses on the "Reset Langauge Mappings to default" button
+								var currentEnginesCollection = languageMapping.Engines;
+								languageMapping.Engines = new ObservableCollection<TranslationModel>(currentEnginesCollection);
+								languageMapping.Engines.Add(newTranslationModel);
+								languageMapping.SelectedModelOption = languageMapping?.SelectedModelOption != null ? languageMapping?.SelectedModelOption : languageMapping?.Engines?[0];
 							}
 						}
 					}
@@ -178,7 +176,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 
 		private void ChangePasswordAction(object parameter)
 		{
-			if (parameter.GetType().Name.Equals(Constants.PasswordBox))
+			if (parameter.GetType().Name.Equals(_constants.PasswordBox))
 			{
 				var passwordBox = (PasswordBox)parameter;
 				if (passwordBox.Password.Length > 0)
@@ -187,9 +185,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 					{
 						case "ClientIdBox":
 							Options.ClientId = passwordBox.Password;
+							Options.AuthenticationMethod = "ClientLogin";
 							break;
 						case "ClientSecretBox":
 							Options.ClientSecret = passwordBox.Password;
+							Options.AuthenticationMethod = "ClientLogin";
 							break;
 						case "UserPasswordBox":
 							Options.ClientSecret = passwordBox.Password;
@@ -204,7 +204,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 				if (textBox.Text.Length > 0)
 				{
 					BeGlobalWindowViewModel.Message = string.Empty;
-					Options.ClientSecret = textBox.Text;
+					Options.ClientId = textBox.Text;
+					Options.AuthenticationMethod = "UserLogin";
 				}
 			}
 		}
@@ -212,13 +213,6 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 		private void Navigate(object obj)
 		{
 			Process.Start("https://translate.sdlbeglobal.com/");
-		}
-
-		private void SetOptions(TranslationModel translationModel)
-		{
-			Options.Model = translationModel.Model;
-			Options.DisplayName = translationModel.DisplayName;
-			Options.LanguagesSupported = translationModel.LanguagesSupported;
 		}
 	}
 }

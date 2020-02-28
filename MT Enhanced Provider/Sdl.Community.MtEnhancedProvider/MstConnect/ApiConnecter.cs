@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestSharp;
+using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
@@ -25,6 +26,9 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 		private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
 		private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
+		private Constants _constants = new Constants();
+
+		public Log Log = Log.Instance;
 
 		/// <summary>
 		/// This class allows connection to the Microsoft Translation API
@@ -53,7 +57,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		{
 			_subscriptionKey = cid;
 		}
-
 
 		/// <summary>
 		/// translates the text input
@@ -127,6 +130,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (WebException exception)
 			{
 				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
+				Log.Logger.Error($"{_constants.Translate} {exception.Message}\n { exception.StackTrace}");
 				throw new Exception(mesg);
 			}
 			return translatedText;
@@ -180,7 +184,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			{
 				finalText += text;
 			}
-
 			return finalText;
 		}
 
@@ -241,6 +244,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (WebException exception)
 			{
 				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
+				Log.Logger.Error($"{_constants.GetSupportedLanguages} {exception.Message}\n { exception.StackTrace}");
 				throw new Exception(mesg);
 			}
 			return languageCodeList;
@@ -362,9 +366,9 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			{
 				response = httpWebRequest.GetResponse();
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-
+				Log.Logger.Error($"{_constants.AddTranslationMethod} {ex.Message}\n { ex.StackTrace}");
 			}
 			finally
 			{

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Service;
@@ -32,30 +33,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
 
-		[JsonIgnore]
-		public string Model
-		{
-			get => GetStringParameter("model");
-			set => SetStringParameter("model", value);
-		}
-
-		[JsonIgnore]
 		public bool ResendDrafts
 		{
 			get => ResendDraftsParameter != null && Convert.ToBoolean(ResendDraftsParameter);
 			set => ResendDraftsParameter = value.ToString();
-		}
-
-		public string UseClientAuthenticationParameter
-		{
-			get => GetStringParameter("useClient");
-			set => SetStringParameter("useClient", value);
-		}
-
-		public bool UseClientAuthentication
-		{
-			get => UseClientAuthenticationParameter != null && Convert.ToBoolean(UseClientAuthenticationParameter);
-			set => UseClientAuthenticationParameter = value.ToString();
 		}
 
 		[JsonIgnore]
@@ -64,7 +45,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			get => GetStringParameter("resenddrafts");
 			set => SetStringParameter("resenddrafts", value);
 		}
-
+		
 		[JsonIgnore]
 		public SubscriptionInfo SubscriptionInfo { get; set; }
 

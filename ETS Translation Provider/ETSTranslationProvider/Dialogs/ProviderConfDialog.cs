@@ -129,6 +129,7 @@ namespace ETSTranslationProvider
 
 		private void PopulateLanguagePairs()
 		{
+			Cursor = Cursors.WaitCursor;
 			if (LanguagePairs == null || LanguagePairs.Length == 0)
 			{
 				return;
@@ -145,8 +146,27 @@ namespace ETSTranslationProvider
 			}
 			var languagePairChoices = Options.SetPreferredLanguages(LanguagePairs);
 
-			// Since this is run on a separate thread, use invoke to communicate with the master thread.
+			Options.SetDictionaries(languagePairChoices);
+
+			// Since this is run on a separate thread, use invoke inside SetTradosLPs() to communicate with the master thread.
 			var lpChoicesColumn = new DataGridViewComboBoxColumn();
+			var lpDictionariesColumn = new DataGridViewComboBoxColumn();
+
+			SetTradosLPs(lpChoicesColumn, lpDictionariesColumn, languagePairChoices);
+			Cursor = Cursors.Default;
+		}
+
+		/// <summary>
+		/// Set the TradosLPs grid values
+		/// </summary>
+		/// <param name="lpChoicesColumn">lpChoicesColumn</param>
+		/// <param name="lpDictionariesColumn">lpDictionariesColumn</param>
+		/// <param name="languagePairChoices">languagePairChoicess</param>
+		private void SetTradosLPs(
+			DataGridViewComboBoxColumn lpChoicesColumn,
+			DataGridViewComboBoxColumn lpDictionariesColumn,
+			ETSApi.TradosToETSLP[] languagePairChoices)
+		{
 			TradosLPs.Invoke(new Action(() =>
 			{
 				// This gets called multiple times, so let's clear out the old contents
@@ -163,10 +183,13 @@ namespace ETSTranslationProvider
 				lpChoicesColumn.Name = "SDL MT Edge Language Pair";
 				lpChoicesColumn.FlatStyle = FlatStyle.Flat;
 
-				TradosLPs.Columns.AddRange(targetColumn, lpChoicesColumn);
+				lpDictionariesColumn.Name = "SDL MT Edge Dictionaries";
+				lpDictionariesColumn.FlatStyle = FlatStyle.Flat;
+
+				TradosLPs.Columns.AddRange(targetColumn, lpChoicesColumn, lpDictionariesColumn);
+
 				// Handler for populating combobox
 				TradosLPs.DataBindingComplete += TradosLPs_DataBindingComplete;
-
 				TradosLPs.DataSource = languagePairChoices;
 
 				// Handlers for when the combobox changes
@@ -283,11 +306,18 @@ namespace ETSTranslationProvider
 			if (comboBox.Value != null)
 			{
 				var newLp = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
-
 				var lpPairing = TradosLPs[e.ColumnIndex, e.RowIndex].Tag as ETSApi.TradosToETSLP;
+
 				if (lpPairing != null)
 				{
 					Options.LPPreferences[lpPairing.TradosCulture] = lpPairing.ETSLPs.First(lp => lp.LanguagePairId == newLp);
+				}
+				if(TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries"))
+				{
+					lpPairing = TradosLPs[1, e.RowIndex].Tag as ETSApi.TradosToETSLP;
+					newLp = TradosLPs[1, e.RowIndex].Value as string;
+					Options.LPPreferences[lpPairing.TradosCulture] = lpPairing.ETSLPs.First(lp => lp.LanguagePairId == newLp);
+					Options.LPPreferences[lpPairing.TradosCulture].DictionaryId = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
 				}
 			}
 		}
@@ -297,49 +327,85 @@ namespace ETSTranslationProvider
 			for (int i = 0; i < TradosLPs?.Rows.Count; i++)
 			{
 				var comboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL MT Edge Language Pair"];
+				var dictionariesCombo = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL MT Edge Dictionaries"];
 				var entry = TradosLPs.Rows[i].DataBoundItem as ETSApi.TradosToETSLP;
 				if (entry == null) continue;
+
 				comboCell.Tag = entry;
 				comboCell.DataSource = entry.ETSLPs.Select(lp => lp.LanguagePairId).ToList();
-				if (Options?.LPPreferences == null) continue;
+				dictionariesCombo.DataSource = entry.Dictionaries.Select(d => d.DictionaryId).ToList();
+				if (Options?.LPPreferences == null)
+				{
+					continue;
+				}				
 				if (Options.LPPreferences.ContainsKey(entry.TradosCulture))
+				{
+					var currentDictionaryId = Options.LPPreferences[entry.TradosCulture].DictionaryId;
 					comboCell.Value = Options.LPPreferences[entry.TradosCulture].LanguagePairId;
+
+					ConfigureDictionary(currentDictionaryId, dictionariesCombo, entry);
+				}
+				else
+				{
+					dictionariesCombo.Value = Constants.NoDictionary;
+				}
+			}
+		}
+
+		private void ConfigureDictionary(string currentDictionaryId, DataGridViewComboBoxCell dictionariesCombo, ETSApi.TradosToETSLP entry)
+		{
+			if (string.IsNullOrEmpty(currentDictionaryId))
+			{
+				Options.LPPreferences[entry.TradosCulture].DictionaryId = entry.Dictionaries[0].DictionaryId;
+				dictionariesCombo.Value = entry.Dictionaries[0].DictionaryId;
+			}
+			else
+			{
+				dictionariesCombo.Value = currentDictionaryId;
+				Options.LPPreferences[entry.TradosCulture].DictionaryId = currentDictionaryId;
 			}
 		}
 
 		private void OKClicked(object sender, EventArgs e)
 		{
-			int? port = GetPort();
-			if (!port.HasValue)
+			if (!Options.LPPreferences.Any(lp => lp.Value == null))
 			{
-				DialogResult = DialogResult.None;
-				var error = $"The port must be a valid port between {IPEndPoint.MinPort} and {IPEndPoint.MaxPort}.";
-				MessageBox.Show(error, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return;
+				int? port = GetPort();
+				if (!port.HasValue)
+				{
+					DialogResult = DialogResult.None;
+					var error = $"The port must be a valid port between {IPEndPoint.MinPort} and {IPEndPoint.MaxPort}.";
+					MessageBox.Show(error, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				var credentials = GetCredentials();
+				if (!AuthenticateCredentials(credentials))
+					return;
+
+				var creds = new TranslationProviderCredential(credentials.ToCredentialString(), Options.PersistCredentials);
+				credentialStore.AddCredential(Options.Uri, creds);
+
+				if (setDefaultTM.Checked)
+				{
+					PluginConfiguration.CurrentInstance.DefaultConnection = new Connection(
+						host: Options.Host,
+						port: Options.Port
+					);
+					PluginConfiguration.CurrentInstance.SaveToFile();
+				}
+				else if (!setDefaultTM.Checked
+				  && PluginConfiguration.CurrentInstance.DefaultConnection.HasValue
+				  && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Host == Options.Host
+				  && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Port == Options.Port)
+				{
+					PluginConfiguration.CurrentInstance.DefaultConnection = null;
+					PluginConfiguration.CurrentInstance.SaveToFile();
+				}
 			}
-
-			var credentials = GetCredentials();
-			if (!AuthenticateCredentials(credentials))
-				return;
-
-			var creds = new TranslationProviderCredential(credentials.ToCredentialString(), Options.PersistCredentials);
-			credentialStore.AddCredential(Options.Uri, creds);
-
-			if (setDefaultTM.Checked)
+			else
 			{
-				PluginConfiguration.CurrentInstance.DefaultConnection = new Connection(
-					host: Options.Host,
-					port: Options.Port
-				);
-				PluginConfiguration.CurrentInstance.SaveToFile();
-			}
-			else if (!setDefaultTM.Checked
-			  && PluginConfiguration.CurrentInstance.DefaultConnection.HasValue
-			  && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Host == Options.Host
-			  && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Port == Options.Port)
-			{
-				PluginConfiguration.CurrentInstance.DefaultConnection = null;
-				PluginConfiguration.CurrentInstance.SaveToFile();
+				MessageBox.Show(Constants.NoProviderSetup, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 		}
 
