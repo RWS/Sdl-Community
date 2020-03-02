@@ -12,7 +12,7 @@ The SDL Community WPF Helpers is a collection of helper functions. It simplifies
 
 This libraries are build on top of SDL Studio APIs and thus using them also requires having SDL Studio installed.
 
-1. Install Visual Studio 2019. The community edition is available for free [here](https://www.visualstudio.com/).
+1. Install Visual Studio 2017 or later. The community edition is available for free [here](https://www.visualstudio.com/).
 
 2. Open the solution for an existing SDL Studio plugin or create a new one.
 
