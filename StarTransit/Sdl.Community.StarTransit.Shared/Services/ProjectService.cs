@@ -79,7 +79,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				}
 
 				// Remove Machine Translation memories from pair.StarTranslationMemoryMetadatas, if the user requests them, they will be imported separately, but never in the main TM
-				pair.StarTranslationMemoryMetadatas.RemoveAll(item => Path.GetFileName(item.TargetFile).Contains("_MT_"));
+				pair.StarTranslationMemoryMetadatas.RemoveAll(item => Path.GetFileName(item.TargetFile).Contains("_AEXTR_MT_"));
 
 				// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which do not have penalties set on them)
 				foreach (var item in penaltiesTmsList)

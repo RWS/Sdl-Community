@@ -125,7 +125,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					{
 						foreach (var filePath in langPair.StarTranslationMemoryMetadatas)
 						{
-							if (!filePath.TargetFile.Contains("_MT_")){
+							if (!filePath.TargetFile.Contains("_AEXTR_MT_")){
 								TranslationMemoryName = Path.GetFileName(filePath.TargetFile);
 								TranslationMemoryPath = filePath.TargetFile;
 

@@ -298,7 +298,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 				foreach (var filePath in SelectedItem.StarTranslationMemoryMetadatas)
 				{
-					if (Path.GetFileName(filePath.TargetFile).Contains("_MT_"))
+					if (Path.GetFileName(filePath.TargetFile).Contains("_AEXTR_MT_"))
 						_package.MachineTransMem.Add(filePath.TargetFile);
 				}
 			}
