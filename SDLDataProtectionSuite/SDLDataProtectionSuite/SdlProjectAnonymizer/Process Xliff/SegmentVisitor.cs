@@ -16,7 +16,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 		private readonly IDocumentItemFactory _documentItemFactory;
 		private readonly IPropertiesFactory _propertiesFactory;
 
-		public SegmentVisitor(IDocumentItemFactory documentItemDocumentItemFactory, IPropertiesFactory propertiesFactory, 
+		public SegmentVisitor(IDocumentItemFactory documentItemDocumentItemFactory, IPropertiesFactory propertiesFactory,
 			List<RegexPattern> patterns, string encryptionKey, bool arePatternsEcnrypted)
 		{
 			_documentItemFactory = documentItemDocumentItemFactory;
@@ -28,7 +28,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 		}
 
 		public void ReplaceText(ISegment segment)
-		{			
+		{
 			VisitChildren(segment);
 		}
 
@@ -250,14 +250,14 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 		private void GetSubsegmentPi(IText segmentText, List<IAbstractMarkupData> segmentContent, List<AnonymizedData> anonymizedDataList)
 		{
 			//this means we have PI data + text
-			if (segmentText.Properties.Text.Length > anonymizedDataList[0].MatchText.Length)
+			if (anonymizedDataList.Count > 0 && segmentText.Properties.Text.Length > anonymizedDataList[0].MatchText.Length)
 			{
 				//check if PI data is on first position split the segment after the PI
 				if (anonymizedDataList[0].PositionInOriginalText.Equals(0))
 				{
 					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].MatchText.Length);
 
-					AddPlaceholderTag(segmentContent, segmentText);
+					AddPlaceholderTag(segmentContent, segmentText, anonymizedDataList);
 					AnonymizeContent(remainingSegmentText, segmentContent);
 				}
 				else
@@ -265,23 +265,36 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].PositionInOriginalText);
 					AnonymizeContent(segmentText, segmentContent);
 
-					var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
+					var remainingData = GetEveryMatchAfterIndex(anonymizedDataList,
+						anonymizedDataList[0].PositionInOriginalText);
 					GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
 				}
 			}
 			else
 			{
-				AddPlaceholderTag(segmentContent, segmentText);
+				AddPlaceholderTag(segmentContent, segmentText, anonymizedDataList);
 			}
 		}
 
-		private void AddPlaceholderTag(ICollection<IAbstractMarkupData> segmentContent, IText text)
+		private List<AnonymizedData> GetEveryMatchAfterIndex(List<AnonymizedData> anonymizedData, int index)
 		{
-			var processedData = Anonymizer(text.Properties.Text, false);
-			var tag = _documentItemFactory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(processedData));
-			tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
+			var newAnonymizedDataList = anonymizedData.Where(ad => ad.PositionInOriginalText >= index).ToList();
+			newAnonymizedDataList.ForEach(ad => ad.PositionInOriginalText -= index);
 
-			segmentContent.Add(tag);
+			return newAnonymizedDataList;
+		}
+
+		private void AddPlaceholderTag(ICollection<IAbstractMarkupData> segmentContent, IText text, List<AnonymizedData> anonymizedDataList)
+		{
+			var processedData = anonymizedDataList?.FirstOrDefault(ad => ad.MatchText == text.Properties.Text)?.EncryptedText;
+			if (processedData != null)
+			{
+				var tag = _documentItemFactory.CreatePlaceholderTag(
+					_propertiesFactory.CreatePlaceholderTagProperties(processedData));
+				tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
+
+				segmentContent.Add(tag);
+			}
 		}
 
 		private void AnonymizeContent(IText text, List<IAbstractMarkupData> segmentContent)
@@ -312,8 +325,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 
 		private Regex DecryptIfEncrypted(RegexPattern pattern)
 		{
-			return new Regex(!_arePatternsEcrypted 
-				? pattern.Pattern 
+			return new Regex(!_arePatternsEcrypted
+				? pattern.Pattern
 				: AnonymizeData.DecryptData(pattern.Pattern, _encryptionKey), RegexOptions.IgnoreCase);
 		}
 	}
