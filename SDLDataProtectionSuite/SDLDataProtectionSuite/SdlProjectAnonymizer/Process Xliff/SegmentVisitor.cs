@@ -236,7 +236,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 						{
 							MatchText = match.Value,
 							PositionInOriginalText = match.Index,
-							EncryptedText = AnonymizeData.EncryptData(match.ToString(), _encryptionKey)
+							EncryptedText = pattern.ShouldEncrypt ? AnonymizeData.EncryptData(match.ToString(), _encryptionKey) : null
 						};
 
 						anonymizedData.Add(data);
@@ -286,15 +286,21 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xlif
 
 		private void AddPlaceholderTag(ICollection<IAbstractMarkupData> segmentContent, IText text, List<AnonymizedData> anonymizedDataList)
 		{
-			var processedData = anonymizedDataList?.FirstOrDefault(ad => ad.MatchText == text.Properties.Text)?.EncryptedText;
-			if (processedData != null)
-			{
-				var tag = _documentItemFactory.CreatePlaceholderTag(
-					_propertiesFactory.CreatePlaceholderTagProperties(processedData));
-				tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
+			var currentData = anonymizedDataList?.FirstOrDefault(ad => ad.MatchText == text.Properties.Text);
 
-				segmentContent.Add(tag);
+			var processedData = text.Properties.Text;
+			if (currentData?.EncryptedText != null)
+			{
+				processedData = currentData.EncryptedText;
 			}
+
+			if (processedData == null) return;
+
+			var tag = _documentItemFactory.CreatePlaceholderTag(
+				_propertiesFactory.CreatePlaceholderTagProperties(processedData));
+			tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
+
+			segmentContent.Add(tag);
 		}
 
 		private void AnonymizeContent(IText text, List<IAbstractMarkupData> segmentContent)

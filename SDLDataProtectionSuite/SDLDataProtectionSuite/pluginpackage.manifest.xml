@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SDL Data Protection Suite</PlugInName>
-  <Version>1.0.10.1</Version>
+  <Version>1.0.10.2</Version>
   <Description>The SDL Data Protection Suite combines two existing applications - project Anonymizer and SDLTM Anonymizer, giving you control over how sensitive data is managed. Using plain text, or regular expressions, you can pseudonomize, or anonymize the data in your translation projects and translation memories.</Description>
   <Author>SDL Community Developers</Author>
 	<Include>
