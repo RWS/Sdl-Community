@@ -253,9 +253,9 @@
     <Compile Include="ViewModel\MTCodesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\MTLanguageCodes.xlsx" />
     <Resource Include="Resources\MTCodesLogo.png" />
     <Resource Include="Resources\dictionaryIcon.ico" />
-    <None Include="Resources\MTLanguageCodes.xlsx" />
     <Resource Include="Resources\add_langcode.ico" />
     <Resource Include="Resources\Search %281%29.png" />
     <Resource Include="Resources\Print.png" />
