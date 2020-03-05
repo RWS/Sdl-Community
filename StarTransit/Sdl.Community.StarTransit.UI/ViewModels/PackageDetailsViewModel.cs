@@ -295,7 +295,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 if (columnName == "Template" && Template==null)
                 {
                     
-                        return "Template is rquired";
+                        return "Template is required";
                    
                 }
                 if (columnName == "SelectedHour" && SelectedHour == -1)

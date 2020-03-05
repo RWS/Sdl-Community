@@ -1,17 +1,16 @@
-﻿using Sdl.Community.BackupService;
-using Sdl.Community.BackupService.Helpers;
-using Sdl.Community.BackupService.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Sdl.Community.BackupService;
+using Sdl.Community.BackupService.Helpers;
+using Sdl.Community.BackupService.Models;
 
 namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupDetailsForm : Form
 	{
 		#region Private fields
-		private BindingSource _source = new BindingSource();
 		private List<BackupDetailsModel> _backupDetailsModelList = new List<BackupDetailsModel>();
 		private string _taskName;
 		#endregion
@@ -25,8 +24,8 @@ namespace Sdl.Community.TMBackup
 		public TMBackupDetailsForm(string taskName)
 		{
 			InitializeComponent();
-			_taskName = taskName;
 			InitializeBackupDetails();
+			_taskName = taskName;
 		}
 
 		#endregion

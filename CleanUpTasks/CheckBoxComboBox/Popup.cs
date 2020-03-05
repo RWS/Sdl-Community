@@ -10,18 +10,20 @@ using VS = System.Windows.Forms.VisualStyles;
 <li>Base class for custom tooltips.</li>
 <li>Office-2007-like tooltip class.</li>
 */
+
 namespace Sdl.Community.CheckBoxComboBox
 {
-    /// <summary>
-    /// CodeProject.com "Simple pop-up control" "http://www.codeproject.com/cs/miscctrl/simplepopup.asp".
-    /// Represents a pop-up window.
-    /// </summary>
-    [ToolboxItem(false)]
+	/// <summary>
+	/// CodeProject.com "Simple pop-up control" "http://www.codeproject.com/cs/miscctrl/simplepopup.asp".
+	/// Represents a pop-up window.
+	/// </summary>
+	[ToolboxItem(false)]
     public partial class Popup : ToolStripDropDown
     {
         #region " Fields & Properties "
 
         private Control content;
+
         /// <summary>
         /// Gets the content of the pop-up.
         /// </summary>
@@ -31,6 +33,7 @@ namespace Sdl.Community.CheckBoxComboBox
         }
 
         private bool fade;
+
         /// <summary>
         /// Gets a value indicating whether the <see cref="PopupControl.Popup"/> uses the fade effect.
         /// </summary>
@@ -47,6 +50,7 @@ namespace Sdl.Community.CheckBoxComboBox
         }
 
         private bool focusOnOpen = true;
+
         /// <summary>
         /// Gets or sets a value indicating whether to focus the content after the pop-up has been opened.
         /// </summary>
@@ -59,6 +63,7 @@ namespace Sdl.Community.CheckBoxComboBox
         }
 
         private bool acceptAlt = true;
+
         /// <summary>
         /// Gets or sets a value indicating whether presing the alt key should close the pop-up.
         /// </summary>
@@ -74,6 +79,7 @@ namespace Sdl.Community.CheckBoxComboBox
 
         private bool _resizable;
         private bool resizable;
+
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="PopupControl.Popup" /> is resizable.
         /// </summary>
@@ -87,6 +93,7 @@ namespace Sdl.Community.CheckBoxComboBox
         private ToolStripControlHost host;
 
         private Size minSize;
+
         /// <summary>
         /// Gets or sets the size that is the lower limit that <see cref="M:System.Windows.Forms.Control.GetPreferredSize(System.Drawing.Size)" /> can specify.
         /// </summary>
@@ -98,6 +105,7 @@ namespace Sdl.Community.CheckBoxComboBox
         }
 
         private Size maxSize;
+
         /// <summary>
         /// Gets or sets the size that is the upper limit that <see cref="M:System.Windows.Forms.Control.GetPreferredSize(System.Drawing.Size)" /> can specify.
         /// </summary>
@@ -123,7 +131,7 @@ namespace Sdl.Community.CheckBoxComboBox
             }
         }
 
-        #endregion
+        #endregion " Fields & Properties "
 
         #region " Constructors "
 
@@ -157,23 +165,23 @@ namespace Sdl.Community.CheckBoxComboBox
             Size = content.Size;
             content.Location = Point.Empty;
             Items.Add(host);
-            content.Disposed += delegate(object sender, EventArgs e)
+            content.Disposed += delegate (object sender, EventArgs e)
             {
                 content = null;
                 Dispose(true);
             };
-            content.RegionChanged += delegate(object sender, EventArgs e)
+            content.RegionChanged += delegate (object sender, EventArgs e)
             {
                 UpdateRegion();
             };
-            content.Paint += delegate(object sender, PaintEventArgs e)
+            content.Paint += delegate (object sender, PaintEventArgs e)
             {
                 PaintSizeGrip(e);
             };
             UpdateRegion();
         }
 
-        #endregion
+        #endregion " Constructors "
 
         #region " Methods "
 
@@ -260,6 +268,7 @@ namespace Sdl.Community.CheckBoxComboBox
         private const int frames = 1;
         private const int totalduration = 0; // ML : 2007-11-05 : was 100 but caused a flicker.
         private const int frameduration = totalduration / frames;
+
         /// <summary>
         /// Adjusts the size of the owner <see cref="T:System.Windows.Forms.ToolStrip" /> to accommodate the <see cref="T:System.Windows.Forms.ToolStripDropDown" /> if the owner <see cref="T:System.Windows.Forms.ToolStrip" /> is currently displayed, or clears and resets active <see cref="T:System.Windows.Forms.ToolStripDropDown" /> child controls of the <see cref="T:System.Windows.Forms.ToolStrip" /> if the <see cref="T:System.Windows.Forms.ToolStrip" /> is not currently displayed.
         /// </summary>
@@ -367,7 +376,7 @@ namespace Sdl.Community.CheckBoxComboBox
             base.OnVisibleChanged(e);
         }
 
-        #endregion
+        #endregion " Methods "
 
         #region " Resizing Support "
 
@@ -487,6 +496,7 @@ namespace Sdl.Community.CheckBoxComboBox
         }
 
         private VS.VisualStyleRenderer sizeGripRenderer;
+
         /// <summary>
         /// Paints the size grip.
         /// </summary>
@@ -512,6 +522,6 @@ namespace Sdl.Community.CheckBoxComboBox
             }
         }
 
-        #endregion
+        #endregion " Resizing Support "
     }
 }

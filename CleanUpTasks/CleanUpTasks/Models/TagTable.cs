@@ -1,6 +1,6 @@
-﻿namespace Sdl.Community.CleanUpTasks.Models
+﻿namespace SDLCommunityCleanUpTasks.Models
 {
-    public static class TagTable
+	public static class TagTable
     {
         public const string BackgroundColor = "Background Color";
         public const string Bold = "Bold Text";

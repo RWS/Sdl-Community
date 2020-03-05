@@ -1,15 +1,15 @@
-﻿using Sdl.Core.Settings;
+﻿using Sdl.Community.CleanUpTasks;
 using Sdl.Desktop.IntegrationApi;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class CleanUpSourceSettingsPage : DefaultSettingsPage<CleanUpSourceSettingsControl, CleanUpSourceSettings>
-	{
-		public override void Save()
-		{
-			base.Save();
-			var control = GetControl() as CleanUpSourceSettingsControl;
-			control?.SaveSettings();
-		}
-	}
+    {
+        public override void Save()
+        {
+            base.Save();
+            var control = GetControl() as CleanUpSourceSettingsControl;
+            control?.SaveSettings();
+        }
+    }
 }

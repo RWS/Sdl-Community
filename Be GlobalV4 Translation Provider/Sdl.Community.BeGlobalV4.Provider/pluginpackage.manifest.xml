@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SDL Machine Translation Cloud</PlugInName>
-  <Version>2.3.0.2</Version>
+  <Version>3.0.4.1</Version>
   <Description>SDL Machine Translation Cloud provider</Description>
   <Author>SDL Community Developers</Author>
   <Include>
@@ -10,7 +10,10 @@
 		<File>System.Windows.Interactivity.dll</File>
 		<File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>
 		<File>Sdl.Community.Toolkit.Core.dll</File>
-		<File>NLog.dll</File>
-  </Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+		<File>Microsoft.Office.Interop.Excel.dll</File>
+		<File>ExcelDataReader.dll</File>
+		<File>ExcelDataReader.DataSet.dll</File>
+		<File>EPPlus.dll</File>
+	</Include>
+  <RequiredProduct name="SDLTradosStudio" minversion="15.2" />
 </PluginPackage>

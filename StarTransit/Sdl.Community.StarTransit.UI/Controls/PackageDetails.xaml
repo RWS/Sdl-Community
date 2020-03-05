@@ -21,15 +21,7 @@
 				<Setter Property="Padding" Value="0,0,0,10"/>
 				<Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
 			</Style>
-			<Style TargetType="{x:Type TextBlock}">
-				<Setter Property="Foreground" Value="#3EA691"/>
-			</Style>
-			<Style TargetType="{x:Type ComboBoxItem}">
-				<Setter Property="Foreground" Value="Black" />
-			</Style>
-			<Style TargetType="{x:Type ComboBox}">
-				<Setter Property="Foreground" Value="Black" />
-			</Style>
+
 		</Grid.Resources>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -48,14 +40,14 @@
 			<ColumnDefinition Width="1*"/>
 			<ColumnDefinition Width="3*"/>
 		</Grid.ColumnDefinitions>
-		<TextBlock x:Name="name" TextWrapping="Wrap" Text="Name"/>
-		<TextBlock x:Name="description" TextWrapping="Wrap" Text="Description" Grid.Row="1"/>
-		<TextBlock x:Name="location" TextWrapping="Wrap" Text="Location" Grid.Row="2"/>
-		<TextBlock x:Name="customer" TextWrapping="Wrap" Text="Customer" Grid.Row="4"/>
-		<TextBlock x:Name="Template" TextWrapping="Wrap" Text="Template" Grid.Row="5"/>
-		<TextBlock  x:Name="dueDate" TextWrapping="Wrap" Text="Due Date / Time" Grid.Row="6"/>
-		<TextBlock  x:Name="sourceLanguage" TextWrapping="Wrap" Text="Source language" Grid.Row="8"/>
-		<TextBlock  x:Name="targetLanguage" TextWrapping="Wrap" Text="Target language" Grid.Row="9" Grid.RowSpan="2"/>
+		<TextBlock x:Name="name" TextWrapping="Wrap" Text="Name" FontWeight="Bold"/>
+		<TextBlock x:Name="description" TextWrapping="Wrap" Text="Description" Grid.Row="1" FontWeight="Bold"/>
+		<TextBlock x:Name="location" TextWrapping="Wrap" Text="Location" Grid.Row="2" FontWeight="Bold"/>
+		<TextBlock x:Name="customer" TextWrapping="Wrap" Text="Customer" Grid.Row="4" FontWeight="Bold"/>
+		<TextBlock x:Name="Template" TextWrapping="Wrap" Text="Template" Grid.Row="5" FontWeight="Bold"/>
+		<TextBlock  x:Name="dueDate" TextWrapping="Wrap" Text="Due Date / Time" Grid.Row="6" FontWeight="Bold"/>
+		<TextBlock  x:Name="sourceLanguage" TextWrapping="Wrap" Text="Source language" Grid.Row="8" FontWeight="Bold"/>
+		<TextBlock  x:Name="targetLanguage" TextWrapping="Wrap" Text="Target language" Grid.Row="9" Grid.RowSpan="2" FontWeight="Bold"/>
 		<TextBox Style="{DynamicResource MetroTextBox}" IsReadOnly="True"
                 Controls:TextBoxHelper.ClearTextButton="True"                
                 Controls:TextBoxHelper.IsWaitingForData="True"

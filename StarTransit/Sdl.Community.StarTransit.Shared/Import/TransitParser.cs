@@ -23,8 +23,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
         private int tmpTotalTagCount;
         private int srcSegmentTagCount;
 
-        private ISegment thisSrcSegment;
-        private ISegment thisTrgSegment;
+        private ISegment _srcSegment;
+        private ISegment _trgSegment;
 
 
         public void SetFileProperties(IFileProperties properties)
@@ -37,7 +37,9 @@ namespace Sdl.Community.StarTransit.Shared.Import
         {
             OnProgress(0);
             _document = new XmlDocument();
+			_document.PreserveWhitespace = true;
             _srcDocument = new XmlDocument();
+			_srcDocument.PreserveWhitespace = true;
             string trgFilePath = _fileProperties.FileConversionProperties.OriginalFilePath;
             _document.Load(trgFilePath);
 
@@ -53,7 +55,6 @@ namespace Sdl.Community.StarTransit.Shared.Import
    
                 }
             }
-
         }
         
 
@@ -230,7 +231,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
             if (source)
             {
-                thisSrcSegment = segment;
+                _srcSegment = segment;
 
 
                 srcSegmentTagCount = 0;
@@ -241,7 +242,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
             }
             else
             {
-                thisTrgSegment = segment;
+                _trgSegment = segment;
                 totalTagCount = totalTagCount - srcSegmentTagCount;
             }            
 			if(segNode !=null)
@@ -256,6 +257,11 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					if (item.NodeType == XmlNodeType.Element)
 					{
 						segment.Add(CreatePhTag(item.Name, item, source));
+					}
+
+					if (item.NodeType == XmlNodeType.Whitespace)
+					{
+						segment.Add(CreateText(" "));
 					}
 				}
 			}

@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.Contracts;
-using Sdl.Community.CleanUpTasks.Contracts;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using SDLCommunityCleanUpTasks.Contracts;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	[ContractClass(typeof(ISegmentHandlerContract))]
     public interface ISegmentHandler : IMarkupDataVisitor

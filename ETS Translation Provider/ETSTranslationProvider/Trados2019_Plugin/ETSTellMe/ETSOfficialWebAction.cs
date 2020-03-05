@@ -7,12 +7,12 @@ namespace ETSTranslationProvider.ETSTellMe
 	public class ETSOfficialWebAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => "ETS results";
+		public override string Category => "SDL MT Edge results";
 		public override Icon Icon => PluginResources.ForumIcon;
 
 		public ETSOfficialWebAction()
 		{
-			Name = "Official SDL ETS documentation";
+			Name = "Official SDL Machine Translation Edge documentation";
 		}
 
 		public override void Execute()

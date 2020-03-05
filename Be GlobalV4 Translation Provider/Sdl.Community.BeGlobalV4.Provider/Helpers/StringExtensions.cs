@@ -1,5 +1,7 @@
 ﻿using System;
-using System.Linq;	
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 {
@@ -24,6 +26,51 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 
 			output[index.Length] = source.Substring(pos);
 			return output;
+		}
+		
+		/// <summary>
+		/// Algorythm to encrypt data
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		public static string EncryptData(string input)
+		{
+			byte[] inputArray = Encoding.UTF8.GetBytes(input);
+			var tripleDES = new TripleDESCryptoServiceProvider();
+			tripleDES.Key = Encoding.UTF8.GetBytes("gtlw-5ur7-amoqp3");
+			tripleDES.Mode = CipherMode.ECB;
+			tripleDES.Padding = PaddingMode.PKCS7;
+			var cTransform = tripleDES.CreateEncryptor();
+			byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
+			tripleDES.Clear();
+			return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+		}
+
+		/// <summary>
+		/// Algorithm to decrypt data
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		public static string Decrypt(string input)
+		{
+			try
+			{
+				byte[] inputArray = Convert.FromBase64String(input);
+				var tripleDES = new TripleDESCryptoServiceProvider();
+				tripleDES.Key = Encoding.UTF8.GetBytes("gtlw-5ur7-amoqp3");
+				tripleDES.Mode = CipherMode.ECB;
+				tripleDES.Padding = PaddingMode.PKCS7;
+				var cTransform = tripleDES.CreateDecryptor();
+				byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
+				tripleDES.Clear();
+				return Encoding.UTF8.GetString(resultArray);
+			}
+			catch
+			{
+				// return string.Empty in case the data coulnd't be decrypted,
+				// so user can enter back the credentials through the Login tab.
+				return string.Empty;
+			}
 		}
 	}
 }

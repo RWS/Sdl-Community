@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Sdl.Community.CleanUpTasks.Models;
 using Sdl.Core.Settings;
+using SDLCommunityCleanUpTasks.Models;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class CleanUpSourceSettings : SettingsGroup, ICleanUpSourceSettings
     {
@@ -104,8 +104,7 @@ namespace Sdl.Community.CleanUpTasks
             set { GetSetting<List<Placeholder>>(nameof(Placeholders)).Value = value; }
         }
 
-
-		[SuppressMessage("Microsoft.Contracts", "TestAlwaysEvaluatingToAConstant")]
+        [SuppressMessage("Microsoft.Contracts", "TestAlwaysEvaluatingToAConstant")]
         protected override object GetDefaultValue(string settingId)
         {
             switch (settingId)

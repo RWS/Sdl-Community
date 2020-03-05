@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 
-namespace Sdl.Community.CleanUpTasks.Models
+namespace SDLCommunityCleanUpTasks.Models
 {
 	public class VbStrConvHolder
     {

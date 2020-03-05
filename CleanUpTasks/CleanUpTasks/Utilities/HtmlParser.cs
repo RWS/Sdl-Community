@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public class HtmlParser
     {
@@ -357,7 +357,7 @@ namespace Sdl.Community.CleanUpTasks.Utilities
 
                 // Move past opening quote
                 Move();
-                
+
                 // Parse quoted value
                 start = _pos;
                 _pos = _html.IndexOfAny(new char[] { c, '\r', '\n' }, start);

@@ -1,7 +1,8 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Forms;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Service;
+using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.Community.BeGlobalV4.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -14,8 +15,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		Description = "SDL Machine Translation Cloud Provider")]
 	public class BeGlobalProviderUi : ITranslationProviderWinFormsUI
 	{
-		public string TypeName => Constants.PluginName;
-		public string TypeDescription => Constants.PluginName;
+		private Constants _constants = new Constants();
+
+		public string TypeName => _constants.PluginName;
+		public string TypeDescription => _constants.PluginName;
 		public bool SupportsEditing => true;
 		public static readonly Log Log = Log.Instance;
 
@@ -25,38 +28,35 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			try
 			{
 				var options = new BeGlobalTranslationOptions();
-				var token = string.Empty;
-				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
+				var credentials = SplitCredentials(credentialStore, options);
+				var beGlobalWindow = new BeGlobalWindow();
+				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, credentials, languagePairs);
+				beGlobalWindow.DataContext = beGlobalVm;
 
-				var beGlobalVm = new BeGlobalWindowViewModel(options, languagePairs, credentials);
-				beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
-
-				beGlobalVm.BeGlobalWindow.ShowDialog();
-				if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
+				beGlobalWindow.ShowDialog();
+				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 				{
-					var messageBoxService = new MessageBoxService();
-					beGlobalVm.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox?.Password.TrimEnd();
-					beGlobalVm.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox?.Password.TrimEnd();
-					var beGlobalService = new BeGlobalV4Translator(beGlobalVm.Options, messageBoxService, credentials);
-					beGlobalVm.Options.BeGlobalService = beGlobalService;
+					var clientId = beGlobalVm.Options.ClientId;
+					var clientSecret = beGlobalVm.Options.ClientSecret;
+					var resendDraft = beGlobalVm.Options.ResendDrafts;
 
 					var provider = new BeGlobalTranslationProvider(options)
 					{
 						Options = beGlobalVm.Options
 					};
 
-					SetCredentials(credentialStore, beGlobalVm.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
+					SetCredentials(credentialStore, clientId, clientSecret, resendDraft, true);
 					return new ITranslationProvider[] { provider };
 				}
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.Browse} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.Browse} {e.Message}\n {e.StackTrace}");
 			}
 			return null;
 		}
-
-		[STAThread]
+		
+        [STAThread]
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs,
 			ITranslationProviderCredentialStore credentialStore)
 		{
@@ -70,36 +70,25 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				}
 
 				//get saved key if there is one and put it into options
-				var credentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
-				if (credentials != null)
-				{
-					var splitedCredentials = credentials.Credential.Split('#');
-					if (splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
-					{
-						editProvider.Options.ClientId = splitedCredentials[0];
-						editProvider.Options.ClientSecret = splitedCredentials[1];
-					}
-				}
+				var credentials = SplitCredentials(credentialStore, editProvider.Options);
+				var beGlobalWindow = new BeGlobalWindow();
+				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, editProvider.Options, credentials, languagePairs);
+				beGlobalWindow.DataContext = beGlobalVm;
 
-				var token = string.Empty;
-				AppItializer.EnsureInitializer();
-
-				var beGlobalVm = new BeGlobalWindowViewModel(editProvider.Options, languagePairs, credentials);
-				beGlobalVm.BeGlobalWindow.DataContext = beGlobalVm;
-
-				beGlobalVm.BeGlobalWindow.ShowDialog();
-				if (beGlobalVm.BeGlobalWindow.DialogResult.HasValue && beGlobalVm.BeGlobalWindow.DialogResult.Value)
+				beGlobalWindow.ShowDialog();
+				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
 				{
 					editProvider.Options = beGlobalVm.Options;
-					editProvider.Options.ClientId = beGlobalVm.BeGlobalWindow.ClientIdBox.Password.TrimEnd();
-					editProvider.Options.ClientSecret = beGlobalVm.BeGlobalWindow.ClientSecretBox.Password.TrimEnd();
-					SetCredentials(credentialStore, editProvider.Options.ClientId, beGlobalVm.Options.ClientSecret, true);
+					var clientId = editProvider.Options.ClientId;
+					var clientSecret = beGlobalVm.Options.ClientSecret;
+					var resendDraft = beGlobalVm.Options.ResendDrafts;
+					SetCredentials(credentialStore, clientId, clientSecret, resendDraft, true);
 					return true;
 				}
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.EditWindow} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.EditWindow} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}
@@ -120,8 +109,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var info = new TranslationProviderDisplayInfo
 			{
-				Name = Constants.PluginName,
-				TooltipText = Constants.PluginName,				
+				Name = _constants.PluginName,
+				TooltipText = _constants.PluginName,
 				TranslationProviderIcon = PluginResources.global,
 				SearchResultImage = PluginResources.global1,
 			};
@@ -138,21 +127,79 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var providerUri = new Uri(uri);
 			TranslationProviderCredential cred = null;
-			if (credentialStore.GetCredential(providerUri) != null)
+			var credential = credentialStore.GetCredential(providerUri);
+			if (credential != null)
 			{
 				//get the credential to return				
-				cred = new TranslationProviderCredential(credentialStore.GetCredential(providerUri)?.Credential, credentialStore.GetCredential(providerUri).Persist);
+				cred = new TranslationProviderCredential(credential?.Credential, credential.Persist);
 			}
 			return cred;
 		}
 
-		private void SetCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool persistKey)
+		private void SetCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool resendDraft, bool persistKey)
 		{
 			var uri = new Uri("sdlmachinetranslationcloudprovider:///");
-			var credential = $"{clientId}#{clientSecret}";
+			string credential;
+			
+			// Validate if the entered clientId is an email address.
+			// If corresponds to email standards, it means that authentication is done through User email and User password.		
+			var isEmailValid = IsEmailValid(clientId);
+
+			// Encrypt client credentials to Base64 (it is usefull when user credentials contains # char and the authentication is failing,
+			// because the # char is used to differentiate the clientId by ClientSecret.
+			clientId = StringExtensions.EncryptData(clientId);
+			clientSecret = StringExtensions.EncryptData(clientSecret);
+
+			if (isEmailValid)
+			{
+				credential = $"{clientId}#{clientSecret}#UserLogin";
+			}
+			else
+			{
+				credential = $"{clientId}#{clientSecret}#ClientLogin";
+			}
+			credential = $"{credential}#{resendDraft}";
+
 			var credentials = new TranslationProviderCredential(credential, persistKey);
 			credentialStore.RemoveCredential(uri);
 			credentialStore.AddCredential(uri, credentials);
 		}
-	}
+
+		/// <summary>
+		/// Validate the user input: it might be Email or ClientId.
+		/// Based on this validation the authentication method is saved in the CredentialStore.
+		/// </summary>
+		/// <param name="input">Email or ClientId</param>
+		/// <returns></returns>
+		private bool IsEmailValid(string input)
+		{
+			try
+			{
+				return new EmailAddressAttribute().IsValid(input);
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{_constants.IsEmailValid} {ex.Message}\n {ex.StackTrace}");
+				return false;
+			}
+		}
+
+		private TranslationProviderCredential SplitCredentials(ITranslationProviderCredentialStore credentialStore, BeGlobalTranslationOptions options)
+		{
+			var savedCredentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
+			if (savedCredentials != null)
+			{
+				var splitedCredentials = savedCredentials?.Credential?.Split('#');
+				options.ClientId = splitedCredentials?.Length > 2? StringExtensions.Decrypt(splitedCredentials[0]) : string.Empty;
+				options.ClientSecret = splitedCredentials?.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[1]) : string.Empty;
+				options.AuthenticationMethod = splitedCredentials?.Length == 4 ? splitedCredentials[2] : string.Empty;
+				var resendDraft = splitedCredentials?.Length == 4 ? splitedCredentials[3] : string.Empty;
+				if (!string.IsNullOrEmpty(resendDraft))
+				{
+					options.ResendDrafts = resendDraft.Equals("True") ? true : false;
+				}
+			}
+			return savedCredentials;
+		}
+    }
 }

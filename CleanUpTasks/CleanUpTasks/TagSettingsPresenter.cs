@@ -3,13 +3,14 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Sdl.Community.CleanUpTasks.Utilities;
 using Sdl.ProjectAutomation.Core;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class TagSettingsPresenter : ITagSettingsPresenter
     {
+	    public static readonly Log Log = Log.Instance;
         private readonly ITagsSettingsControl control = null;
         private readonly XNamespace sdl = @"http://sdl.com/FileTypes/SdlXliff/1.0";
 
@@ -41,7 +42,7 @@ namespace Sdl.Community.CleanUpTasks
             foreach (var item in tagList)
             {
                 // Ensure we are not adding a placeholder the plug-in made
-                if (!control.Settings.Placeholders.Any(ph => ph.Content == item.Key))
+                if (control.Settings.Placeholders.All(ph => ph.Content != item.Key))
                 {
                     if (listBox.FindStringExact(item.Key) == ListBox.NoMatches)
                     {
@@ -108,8 +109,10 @@ namespace Sdl.Community.CleanUpTasks
             {
                 foreach (var pair in ReadPlaceholderTagInfo(file))
                 {
+	                Log.Logger.Info($"Loaded file: {file.LocalFilePath}\r\n\r\n");
                     if (!placeholderTagList.ContainsKey(pair.Key))
                     {
+						Log.Logger.Info($"{pair.Key}\r\n");
                         placeholderTagList.Add(pair.Key, pair.Value);
                     }
                 }

@@ -61,6 +61,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New translated content.
+        /// </summary>
+        internal static string DisplayFilter_Control_New_Translated {
+            get {
+                return ResourceManager.GetString("DisplayFilter_Control_New_Translated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Using this option will filter the results based on matches found within the translatable text AND within the content of any tags in your file(s)..
         /// </summary>
         internal static string DisplayFilter_IncludeTags_Tooltip {
@@ -286,6 +295,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found In.
+        /// </summary>
+        internal static string DisplayFilterControl_Found_In {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Found_In", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fuzzy values between.
         /// </summary>
         internal static string DisplayFilterControl_Fuzzy {
@@ -394,6 +412,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Neural Machine Translation.
+        /// </summary>
+        internal static string DisplayFilterControl_Neural_Machine_Translation {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Neural_Machine_Translation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
         internal static string DisplayFilterControl_None {
@@ -493,7 +520,7 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Relationship Operator.
+        ///   Looks up a localized string similar to Attribute Relationship.
         /// </summary>
         internal static string DisplayFilterControl_Relationship_Operator {
             get {
@@ -588,6 +615,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Selected {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected: {0}.
+        /// </summary>
+        internal static string DisplayFilterControl_Selected_0_ {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Selected_0_", resourceCulture);
             }
         }
         
@@ -782,7 +818,7 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Also use tag content.
+        ///   Looks up a localized string similar to Search in text and tag content.
         /// </summary>
         internal static string DisplayFilterControl_UseTagsAlso {
             get {
@@ -791,7 +827,7 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use only tag content.
+        ///   Looks up a localized string similar to Search only in tag content.
         /// </summary>
         internal static string DisplayFilterControl_UseTagsOnly {
             get {
@@ -814,6 +850,33 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_With_messages {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_With_messages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With source tracked changes.
+        /// </summary>
+        internal static string DisplayFilterControl_With_Source_Tracked_changes {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_With_Source_Tracked_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With source and target tracked changes.
+        /// </summary>
+        internal static string DisplayFilterControl_With_SourceAndTarget_Tracked_changes {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_With_SourceAndTarget_Tracked_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With target tracked changes.
+        /// </summary>
+        internal static string DisplayFilterControl_With_Target_Tracked_changes {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_With_Target_Tracked_changes", resourceCulture);
             }
         }
         

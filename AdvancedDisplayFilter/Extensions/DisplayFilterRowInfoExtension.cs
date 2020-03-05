@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.Toolkit.FileType;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Extensions
@@ -13,16 +14,26 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 	{
 		public static bool IsSegmentReviewTypes(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = rowInfo.IsSegmentWithTQAs(settings)
-				|| rowInfo.IsSegmentWithTrackedChanges(settings)
-				|| rowInfo.IsSegmentWithComments(settings)
-				|| rowInfo.IsSegmentWithMessages(settings);
+			              || rowInfo.IsSegmentWithComments(settings)
+						  || rowInfo.SegmentContainsTrackedChanges(settings)
+			              || rowInfo.IsSegmentWithMessages(settings);
 
 			return success;
 		}
 
 		public static bool IsSegmentWithTQAs(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = settings.SegmentReviewTypes.ToList()
 				.Any(status => string.Compare(status, DisplayFilterSettings.SegmentReviewType.WithTQA.ToString()
 					, StringComparison.OrdinalIgnoreCase) == 0);
@@ -31,17 +42,25 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			{
 				success = false;
 			}
-
+			
 			return success;
 		}
 
 		public static bool IsSegmentWithTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
-			var success = settings.SegmentReviewTypes.ToList()
-				.Any(status => string.Compare(status, DisplayFilterSettings.SegmentReviewType.WithTrackedChanges.ToString()
-					, StringComparison.OrdinalIgnoreCase) == 0);
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
 
-			if (success && !rowInfo.ContainsTrackChanges)
+			var sourceContainsTrackChanges = SegmentContainsTrackedChanges(rowInfo.SegmentPair.Source);
+			var targetContainsTrackChanges = SegmentContainsTrackedChanges(rowInfo.SegmentPair.Target);
+
+			var success = HasReviewTypeSelected(DisplayFilterSettings.SegmentReviewType.WithTrackedChanges.ToString(), settings.SegmentReviewTypes);
+
+			var containsTrackChanges = sourceContainsTrackChanges || targetContainsTrackChanges;
+
+			if (success && !containsTrackChanges)
 			{
 				success = false;
 			}
@@ -49,17 +68,99 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
+		public static bool IsSegmentWithSourceTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
+			var sourceContainsTrackChanges = SegmentContainsTrackedChanges(rowInfo.SegmentPair.Source);
+
+			var success = HasReviewTypeSelected(DisplayFilterSettings.SegmentReviewType.WithSourceTrackedChanges.ToString(), settings.SegmentReviewTypes);
+
+			if (success && !sourceContainsTrackChanges)
+			{
+				success = false;
+			}
+
+			return success;
+		}
+		public static bool IsSegmentWithTargetTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+			var targetContainsTrackChanges = SegmentContainsTrackedChanges(rowInfo.SegmentPair.Target);
+
+			var success = HasReviewTypeSelected(DisplayFilterSettings.SegmentReviewType.WithTargetTrackedChanges.ToString(),settings.SegmentReviewTypes);
+
+			if (success && !targetContainsTrackChanges)
+			{
+				success = false;
+			}
+
+			return success;
+		}
+
+		public static bool SegmentContainsTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			// If both options and the "And" relationship operator is selected
+			if (settings.IsAndOperator && AreBothSourceAndTargetTrackedSelected(settings))
+			{
+				return rowInfo.IsSegmentWithSourceAndTargetTrackedChanges(settings);
+			}
+
+			return rowInfo.IsSegmentWithSourceTrackedChanges(settings)
+			       || rowInfo.IsSegmentWithTargetTrackedChanges(settings)
+			       || rowInfo.IsSegmentWithTrackedChanges(settings)
+			       || rowInfo.IsSegmentWithSourceAndTargetTrackedChanges(settings);
+		}
+
+		public static bool IsSegmentWithSourceAndTargetTrackedChanges(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
+			var sourceContainsTrackChanges = SegmentContainsTrackedChanges(rowInfo.SegmentPair.Source);
+			var targetContainsTrackChanges = SegmentContainsTrackedChanges(rowInfo.SegmentPair.Target);
+
+			var hasSourceAndTargetOptionSelected = HasReviewTypeSelected(DisplayFilterSettings.SegmentReviewType.WithSourceAndTargetTrackedChanges.ToString(), settings.SegmentReviewTypes);
+
+			var success = hasSourceAndTargetOptionSelected || AreBothSourceAndTargetTrackedSelected(settings);
+
+			var containsTrackChanges = sourceContainsTrackChanges && targetContainsTrackChanges;
+
+			if (success && !containsTrackChanges)
+			{
+				success = false;
+			}
+
+			return success;
+		}
+
+
 		public static bool IsSegmentWithComments(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = settings.SegmentReviewTypes.ToList()
 				.Any(status => string.Compare(status, DisplayFilterSettings.SegmentReviewType.WithComments.ToString()
 					, StringComparison.OrdinalIgnoreCase) == 0);
 
+			var visitor = new CommentDataVisitor();
+
 			// check if comments exist in the target segment
-			if (success && !rowInfo.SegmentPair.Target.GetComments().Any())
+			if (success && !visitor.GetComments(rowInfo.SegmentPair.Target).Any())
 			{
 				// check if comments exit in the source segment
-				if (!rowInfo.SegmentPair.Source.GetComments().Any())
+				if (!visitor.GetComments(rowInfo.SegmentPair.Source).Any())
 				{
 					success = false;
 				}
@@ -70,6 +171,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsSegmentWithMessages(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = settings.SegmentReviewTypes.ToList()
 			   .Any(status => string.Compare(status, DisplayFilterSettings.SegmentReviewType.WithFeedbackMessages.ToString()
 				   , StringComparison.OrdinalIgnoreCase) == 0);
@@ -84,11 +190,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsSeverityFoundInComment(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
-			var success = rowInfo.SegmentPair.Target.GetComments()
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
+			var visitor = new CommentDataVisitor();
+
+			var success = visitor.GetComments(rowInfo.SegmentPair.Target)
 				.Any(comment => settings.CommentSeverity == (int)comment.Severity);
 			if (!success)
 			{
-				success = rowInfo.SegmentPair.Source.GetComments()
+				success = visitor.GetComments(rowInfo.SegmentPair.Source)
 				.Any(comment => settings.CommentSeverity == (int)comment.Severity);
 			}
 
@@ -97,11 +210,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsAuthorFoundInComment(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
-			var success = rowInfo.SegmentPair.Target.GetComments()
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
+			var visitor = new CommentDataVisitor();
+
+			var success = visitor.GetComments(rowInfo.SegmentPair.Target)
 				.Any(comment => StringMatch(settings.CommentAuthor, comment.Author, false));
 			if (!success)
 			{
-				success = rowInfo.SegmentPair.Source.GetComments()
+				success = visitor.GetComments(rowInfo.SegmentPair.Source)
 				.Any(comment => StringMatch(settings.CommentAuthor, comment.Author, false));
 			}
 
@@ -110,11 +230,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsTextFoundInComment(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
-			var success = rowInfo.SegmentPair.Target.GetComments()
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
+			var visitor = new CommentDataVisitor();
+
+			var success = visitor.GetComments(rowInfo.SegmentPair.Target)
 				.Any(comment => StringMatch(settings.CommentText, comment.Text, false));
+
+
 			if (!success)
 			{
-				success = rowInfo.SegmentPair.Source.GetComments()
+				success = visitor.GetComments(rowInfo.SegmentPair.Source)
 				.Any(comment => StringMatch(settings.CommentText, comment.Text, false));
 			}
 
@@ -123,6 +252,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsConfirmationLevelFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = settings.ConfirmationLevels.ToList().Any(status => string.Compare(status
 				, rowInfo.SegmentPair.Properties.ConfirmationLevel.ToString()
 				, StringComparison.OrdinalIgnoreCase) == 0);
@@ -132,11 +266,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
+			var success = false;
+
 			var translationType = rowInfo.SegmentPair.GetOriginType();
 
-			var success = settings.OriginTypes.ToList()
-				.Any(status => string.Compare(status, translationType.ToString()
-								   , StringComparison.OrdinalIgnoreCase) == 0);
+			if (!IsCompoundOriginType(translationType) && settings.OriginTypes.ToList().Any(status
+					=> string.Compare(status, translationType.ToString(), StringComparison.OrdinalIgnoreCase) == 0))
+			{
+				success = true;
+			}
 
 			if (!success)
 			{
@@ -153,16 +296,29 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 				success = rowInfo.IsUnEditedFuzzyMatchFound(settings);
 			}
 
+			var isNewContentOptionSelected = settings.OriginTypes.ToList().Any(origin =>
+				string.Compare(origin, DisplayFilterSettings.OriginType.NewTranslated.ToString(), StringComparison.OrdinalIgnoreCase) == 0);
+
+			if (isNewContentOptionSelected)
+			{
+				success = SegmentTypesHelper.IsNewContent(rowInfo);
+			}
+
 			return success;
 		}
 
 		public static bool IsFuzzyMatchRepairOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
-			if (settings.OriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString()) &&
-				rowInfo.SegmentPair.Properties.TranslationOrigin.OriginType == "tm" &&
-				rowInfo.SegmentPair.Properties.TranslationOrigin.MetaDataContainsKey(DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString()))
+			if (!rowInfo.IsSegment)
 			{
-				var value = rowInfo.SegmentPair.Properties.TranslationOrigin.GetMetaData(DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString());
+				return false;
+			}
+
+			if (settings.OriginTypes.Any(a => a == OriginType.FuzzyMatchRepair.ToString()) &&
+				rowInfo.SegmentPair.Properties.TranslationOrigin.OriginType == "tm" &&
+				rowInfo.SegmentPair.Properties.TranslationOrigin.MetaDataContainsKey(OriginType.FuzzyMatchRepair.ToString()))
+			{
+				var value = rowInfo.SegmentPair.Properties.TranslationOrigin.GetMetaData(OriginType.FuzzyMatchRepair.ToString());
 				return Convert.ToBoolean(value);
 			}
 
@@ -171,15 +327,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsPreviousOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = false;
 
 			if (rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation != null)
 			{
 				var previousTranslationType = rowInfo.SegmentPair.GetPreviousTranslationOriginType();
-				if (settings.PreviousOriginTypes.ToList()
-					.Any(status => string.Compare(status,
-									   previousTranslationType.ToString()
-									   , StringComparison.OrdinalIgnoreCase) == 0))
+
+				if (!IsCompoundOriginType(previousTranslationType) && settings.PreviousOriginTypes.ToList().Any(status
+						=> string.Compare(status, previousTranslationType.ToString(), StringComparison.OrdinalIgnoreCase) == 0))
 				{
 					success = true;
 				}
@@ -203,18 +363,30 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 			return success;
 		}
 
+		private static bool IsCompoundOriginType(OriginType originType)
+		{
+			return originType == OriginType.FuzzyMatchRepair || 
+			       originType == OriginType.EditedFuzzy ||
+				   originType == OriginType.UneditedFuzzy;
+		}
+
 		public static bool IsFuzzyMatchRepairPreviousOriginTypeFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			if (rowInfo.SegmentPair.Properties?.TranslationOrigin?.OriginBeforeAdaptation?.OriginType == null)
 			{
 				return false;
 			}
 
-			if (settings.PreviousOriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString()) &&
-			    rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.OriginType == "tm" &&
-			    rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.MetaDataContainsKey(DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString()))
+			if (settings.PreviousOriginTypes.Any(a => a == OriginType.FuzzyMatchRepair.ToString()) &&
+				rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.OriginType == "tm" &&
+				rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.MetaDataContainsKey(OriginType.FuzzyMatchRepair.ToString()))
 			{
-				var value = rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.GetMetaData(DisplayFilterSettings.OriginTypeExtended.FuzzyMatchRepair.ToString());
+				var value = rowInfo.SegmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation.GetMetaData(OriginType.FuzzyMatchRepair.ToString());
 				return Convert.ToBoolean(value);
 			}
 
@@ -223,6 +395,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsRepetitionTypes(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = rowInfo.IsRepetitionsAll(settings)
 				|| rowInfo.IsRepetitionsFirstOccurrences(settings)
 				|| rowInfo.IsRepetitionsExcludingFirstOccurrences(settings);
@@ -237,8 +414,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsUniqueRepetition(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			if (settings.RepetitionTypes.Any(a => a == DisplayFilterSettings.RepetitionType.UniqueOccurrences.ToString()))
-			{				
+			{
 				var isFirst = rowInfo.IsRepetitionsFirstOccurrences(new DisplayFilterSettings
 				{
 					RepetitionTypes = new List<string> { DisplayFilterSettings.RepetitionType.FirstOccurrences.ToString() }
@@ -261,6 +443,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsRepetitionsAll(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = settings.RepetitionTypes.ToList()
 				.Any(status => string.Compare(status, DisplayFilterSettings.RepetitionType.All.ToString()
 					, StringComparison.OrdinalIgnoreCase) == 0);
@@ -275,6 +462,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsRepetitionsFirstOccurrences(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = settings.RepetitionTypes.ToList()
 				.Any(status => string.Compare(status, DisplayFilterSettings.RepetitionType.FirstOccurrences.ToString()
 					, StringComparison.OrdinalIgnoreCase) == 0);
@@ -289,6 +481,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsRepetitionsExcludingFirstOccurrences(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = settings.RepetitionTypes.ToList()
 				.Any(status => string.Compare(status, DisplayFilterSettings.RepetitionType.ExcludeFirstOccurrences.ToString()
 					, StringComparison.OrdinalIgnoreCase) == 0);
@@ -303,6 +500,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsSegmentLockingTypes(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = rowInfo.IsSegmentLockingTypeLocked(settings)
 				|| rowInfo.IsSegmentLockingTypeUnLocked(settings);
 
@@ -311,6 +513,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsSegmentLockingTypeLocked(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = settings.SegmentLockingTypes.ToList()
 				.Any(status => string.Compare(status, DisplayFilterSettings.SegmentLockingType.Locked.ToString()
 					, StringComparison.OrdinalIgnoreCase) == 0);
@@ -325,6 +532,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsSegmentLockingTypeUnLocked(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = settings.SegmentLockingTypes.ToList()
 				.Any(status => string.Compare(status, DisplayFilterSettings.SegmentLockingType.Unlocked.ToString()
 					, StringComparison.OrdinalIgnoreCase) == 0);
@@ -339,20 +551,30 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsSegmentContentTypes(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = settings.SegmentContentTypes?[0] == DisplayFilterSettings.SegmentContentType.NumbersOnly.ToString() &&
-			    rowInfo.IsSegmentContentTypeNumbersOnly(settings);
+				rowInfo.IsSegmentContentTypeNumbersOnly(settings);
 
 			if (!success && settings.SegmentContentTypes?[0] == DisplayFilterSettings.SegmentContentType.ExcludeNumberOnly.ToString() &&
-			    rowInfo.IsSegmentContentTypeExcludingNumberOnly(settings))
+				rowInfo.IsSegmentContentTypeExcludingNumberOnly(settings))
 			{
 				success = true;
 			}
-		
+
 			return success;
 		}
 
 		public static bool IsSegmentContentTypeNumbersOnly(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = settings.SegmentContentTypes.ToList()
 				.Any(status => string.Compare(status, DisplayFilterSettings.SegmentContentType.NumbersOnly.ToString()
 					, StringComparison.OrdinalIgnoreCase) == 0);
@@ -371,6 +593,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsSegmentContentTypeExcludingNumberOnly(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = settings.SegmentContentTypes.ToList()
 				.Any(status => string.Compare(status, DisplayFilterSettings.SegmentContentType.ExcludeNumberOnly.ToString()
 					, StringComparison.OrdinalIgnoreCase) == 0);
@@ -391,6 +618,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsTextFoundInSource(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var text = rowInfo.SegmentPair.Source.GetString(true);
 
 			var success = settings.IsRegularExpression
@@ -402,6 +634,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsTextFoundInTarget(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var text = rowInfo.SegmentPair.Target.GetString(true);
 
 			var success = settings.IsRegularExpression
@@ -413,6 +650,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		public static bool IsContextInfoTypes(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var success = false;
 
 			if (rowInfo.ContextInfo.Count <= 0)
@@ -427,6 +669,53 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 			return success;
 		}
+		public static bool IsEditedFuzzyMatchFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
+			return settings.OriginTypes.Any(a => a == OriginType.EditedFuzzy.ToString()) &&
+				   FuzzyHelper.ContainsFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin) &&
+				   FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin);
+		}
+
+		public static bool IsUnEditedFuzzyMatchFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
+			return settings.OriginTypes.Any(a => a == OriginType.UneditedFuzzy.ToString()) &&
+				   FuzzyHelper.ContainsFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin) &&
+				   !FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin);
+		}
+
+		public static bool IsPreviousEditedFuzzyMatchFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
+			return settings.PreviousOriginTypes.Any(a => a == OriginType.EditedFuzzy.ToString()) &&
+				   FuzzyHelper.ContainsFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation) &&
+				   FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation);
+		}
+
+		public static bool IsPreviousUnEditedFuzzyMatchFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
+			return settings.PreviousOriginTypes.Any(a => a == OriginType.UneditedFuzzy.ToString()) &&
+				   FuzzyHelper.ContainsFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation) &&
+				   !FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation);
+		}
 
 		private static bool RegularExpressionMatch(string searchFor, string searchIn, bool isCaseSensitive)
 		{
@@ -439,40 +728,37 @@ namespace Sdl.Community.AdvancedDisplayFilter.Extensions
 
 		private static bool StringMatch(string searchFor, string searchIn, bool isCaseSensitive)
 		{
-			if (isCaseSensitive)
+			if (searchIn == null || searchFor == null)
 			{
-				return searchIn.IndexOf(searchFor, StringComparison.Ordinal) > -1 ? true : false;
+				return false;
 			}
 
-			return searchIn.IndexOf(searchFor, StringComparison.OrdinalIgnoreCase) > -1 ? true : false;
+			if (isCaseSensitive)
+			{
+				return searchIn.IndexOf(searchFor, StringComparison.Ordinal) > -1;
+			}
+
+			return searchIn.IndexOf(searchFor, StringComparison.OrdinalIgnoreCase) > -1;
 		}
 
-		public static bool IsEditedFuzzyMatchFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		private static bool HasReviewTypeSelected(string selectedOption, List<string> segmentReviewTyes)
 		{
-			return settings.OriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.EditedFuzzy.ToString()) &&
-			       FuzzyHelper.ContainsFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin) &&
-			       FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin);
+			return segmentReviewTyes.Any(status => string.Compare(status, selectedOption, StringComparison.OrdinalIgnoreCase) == 0);
+		}
+		private static bool AreBothSourceAndTargetTrackedSelected(DisplayFilterSettings settings)
+		{
+			var hasSourceTrackedChangesSelected = HasReviewTypeSelected(DisplayFilterSettings.SegmentReviewType.WithSourceTrackedChanges.ToString(), settings.SegmentReviewTypes);
+			var hasTargetTrackedChangesSelected = HasReviewTypeSelected(DisplayFilterSettings.SegmentReviewType.WithTargetTrackedChanges.ToString(), settings.SegmentReviewTypes);
+
+			return hasSourceTrackedChangesSelected && hasTargetTrackedChangesSelected;
 		}
 
-		public static bool IsUnEditedFuzzyMatchFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
+		private static bool SegmentContainsTrackedChanges(ISegment segment)
 		{
-			return settings.OriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.UneditedFuzzy.ToString()) &&
-			       FuzzyHelper.ContainsFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin) &&
-			       !FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin);
-		}
+			var segmentVisitor = new SegmentTextVisitor();
 
-		public static bool IsPreviousEditedFuzzyMatchFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
-		{
-			return settings.PreviousOriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.EditedFuzzy.ToString()) &&
-			       FuzzyHelper.ContainsFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation) &&
-			       FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation);
+			return segmentVisitor.ContainsTrackChanges(segment);
 		}
-
-		public static bool IsPreviousUnEditedFuzzyMatchFound(this DisplayFilterRowInfo rowInfo, DisplayFilterSettings settings)
-		{
-			return settings.PreviousOriginTypes.Any(a => a == DisplayFilterSettings.OriginTypeExtended.UneditedFuzzy.ToString()) &&
-			       FuzzyHelper.ContainsFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation) &&
-			       !FuzzyHelper.IsEditedFuzzyMatch(rowInfo.SegmentPair.Target?.Properties?.TranslationOrigin?.OriginBeforeAdaptation);
-		}
+		
 	}
 }

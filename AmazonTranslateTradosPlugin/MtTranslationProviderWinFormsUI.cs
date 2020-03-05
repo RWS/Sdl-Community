@@ -17,6 +17,7 @@ using System.IO;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Sdl.Community.AmazonTranslateProvider;
+using Sdl.Community.AmazonTranslateTradosPlugin.AmzConnect;
 using Sdl.Community.AmazonTranslateTradosPlugin.Helpers;
 using Sdl.Community.AmazonTranslateTradosPlugin.Model;
 using Sdl.LanguagePlatform.Core;
@@ -24,16 +25,14 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.AmazonTranslateTradosPlugin
 {
-    #region "Declaration"
+
     [TranslationProviderWinFormsUi(
         Id = "MtTranslationProviderWinFormsUI",
         Name = "MtTranslationProviderWinFormsUI",
         Description = "MtTranslationProviderWinFormsUI")]
-    #endregion
+
     public class MtTranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
     {
-        #region ITranslationProviderWinFormsUI Members
-
 
         /// <summary>
         /// Show the plug-in settings form when the user is adding the translation provider plug-in
@@ -70,9 +69,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             credentialStore.AddCredential(myUri, cred);
         }
 
-
-
-        #region "Browse"
         public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
             //construct options to send to form
@@ -88,6 +84,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
                     var creds = new GenericCredentials(getCredAmz.Credential); //parse credential into username and password
                     loadOptions.AccessKey = creds.UserName;
                     loadOptions.SecretKey = creds.Password;
+
                     loadOptions.PersistAWSCreds = getCredAmz.Persist;
 					loadOptions.RegionName = GetRegionName();
                 }
@@ -106,22 +103,35 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
                 SetCredentials(credentialStore, creds2, dialog.Options.PersistAWSCreds);
 				SetRegionName(dialog.Options.RegionName);
 
-                return new ITranslationProvider[] { testProvider };
+				SetSupportedLanguages(languagePairs, loadOptions);
+				return new ITranslationProvider[] { testProvider };
             }
             return null;
         }
-        #endregion
+
+        private static void SetSupportedLanguages(LanguagePair[] languagePairs, MtTranslationOptions loadOptions)
+        {
+	        var apiConnecter = new ApiConnecter(loadOptions);
+	        foreach (var languagePair in languagePairs)
+	        {
+		        var supportedLanguages = apiConnecter.GetSupportedLanguages();
+		        var targetLanguage = languagePair.TargetCultureName.Substring(0, 2).ToLower();
+		        if (supportedLanguages.Contains(targetLanguage) && !loadOptions.LanguagesSupported.ContainsKey(targetLanguage))
+		        {
+			        loadOptions.LanguagesSupported.Add(languagePair.TargetCultureName, "Amazon Translate");
+		        }
+	        }
+        }
 
         /// <summary>
         /// Determines whether the plug-in settings can be changed
         /// by displaying the Settings button in SDL Trados Studio.
         /// </summary>
-        #region "SupportsEditing"
+
         public bool SupportsEditing
         {
             get { return true; }
         }
-        #endregion
 
         /// <summary>
         /// If the plug-in settings can be changed by the user,
@@ -135,7 +145,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         /// <param name="languagePairs"></param>
         /// <param name="credentialStore"></param>
         /// <returns></returns>
-        #region "Edit"
+
         public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
             var editProvider = translationProvider as MtTranslationProvider;
@@ -163,7 +173,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
                 editProvider.Options = dialog.Options;
-
+                SetSupportedLanguages(languagePairs, editProvider.Options);
                 //set mst cred
                 var creds2 = new GenericCredentials(dialog.Options.AccessKey, dialog.Options.SecretKey);
                 SetCredentials(credentialStore, creds2, dialog.Options.PersistAWSCreds);
@@ -172,8 +182,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
             return false;
         }
-        #endregion
-
 
         /// <summary>
         /// This gets called when a TranslationProviderAuthenticationException is thrown
@@ -186,7 +194,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         /// <param name="translationProviderState"></param>
         /// <param name="credentialStore"></param>
         /// <returns></returns>
-        #region "GetCredentialsFromUser"
+
         public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
 
@@ -207,7 +215,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             }
             return false;
         }
-        #endregion
 
         /// <summary>
         /// Used for displaying the plug-in info such as the plug-in name,
@@ -216,13 +223,13 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         /// <param name="translationProviderUri"></param>
         /// <param name="translationProviderState"></param>
         /// <returns></returns>
-        #region "GetDisplayInfo"
+
         public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
         {
 
             var info = new TranslationProviderDisplayInfo();
             var options = new MtTranslationOptions(translationProviderUri);
-            info.TranslationProviderIcon = PluginResources.my_icon;
+            info.TranslationProviderIcon = PluginResources.AmazonTranslate;
 
             info.Name = PluginResources.Plugin_NiceName;
             info.TooltipText = PluginResources.Plugin_Tooltip;
@@ -230,7 +237,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             //TODO: update icon
             return info;
         }
-        #endregion
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
@@ -245,9 +251,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
         public string TypeName => PluginResources.Plugin_NiceName;
 
-		#endregion
-
-		#region Private Methods
 		/// <summary>
 		/// Set Region name in the .json settings file when user is adding the provider
 		/// </summary>
@@ -296,6 +299,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 			}
 			return string.Empty;
 		}
-		#endregion
+
 	}
 }

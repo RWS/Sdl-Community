@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
+using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -9,10 +12,13 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 {
 	public class BeGlobalTranslationProvider: ITranslationProvider
 	{
+		private LanguagePair _languageDirection;
+		private Constants _constants = new Constants();
+
 		public static readonly string ListTranslationProviderScheme = "sdlmachinetranslationcloudprovider";
-		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, Constants.PluginName);
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, _constants.PluginName);
 		public Uri Uri => Options.Uri;
-		public string Name => Constants.PluginName;
+		public string Name => _constants.PluginName;
 		public bool SupportsTaggedInput => true;  
 		public bool SupportsScoring => false;	  
 		public bool SupportsSearchForTranslationUnits => true; 
@@ -32,37 +38,32 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;	 
 		public bool IsReadOnly => true;
 		public BeGlobalTranslationOptions Options { get; set; }
-		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
+		private LanguageMappingsService _languageMappingsService;
+		private string _encryptedClientId;
+		private string _encryptedClientSecret;
 
 		public BeGlobalTranslationProvider(BeGlobalTranslationOptions options)
 		{
 			Options = options;
-			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
+			_languageMappingsService = new LanguageMappingsService();
+			_encryptedClientId = StringExtensions.EncryptData(Options.ClientId);
+			_encryptedClientSecret = StringExtensions.EncryptData(Options.ClientSecret);
 		}
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
 			try
 			{
-				var sourceLanguage =
-					_normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.SourceCulture);
-				var targetLanguage =
-					_normalizeSourceTextHelper.GetCorespondingLangCode(languageDirection.TargetCulture);
-
-				if (Options?.SubscriptionInfo?.LanguagePairs?.Count > 0)
+				_languageDirection = languageDirection;
+				var languagePair = SetSupportedLanguages(_languageDirection);
+				if (languagePair != null)
 				{
-					var languagePair =
-						Options.SubscriptionInfo.LanguagePairs.FirstOrDefault(
-							l => l.SourceLanguageId.Equals(sourceLanguage) && l.TargetLanguageId.Equals(targetLanguage));
-					if (languagePair != null)
-					{
-						return true;
-					}
-				}
+					return true;
+				}				
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.SupportsLanguageDirection} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.SupportsLanguageDirection} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}
@@ -79,12 +80,35 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 
 		public string SerializeState()
 		{
+			SetSupportedLanguages(_languageDirection);
+			Options.ClientId = _encryptedClientId;
+			Options.ClientSecret = _encryptedClientSecret;
 			return JsonConvert.SerializeObject(Options);
 		}
 
 		public void LoadState(string translationProviderState)
 		{
 			Options = JsonConvert.DeserializeObject<BeGlobalTranslationOptions>(translationProviderState);
+		}
+
+		private BeGlobalLanguagePair SetSupportedLanguages(LanguagePair languageDirection)
+		{
+			var languageMappings = _languageMappingsService.GetLanguageMappingSettings()?.LanguageMappings;
+			if (languageDirection != null && languageMappings != null)
+			{				
+				if (Options?.SubscriptionInfo?.LanguagePairs?.Count > 0 && (languageMappings != null || languageMappings.Any()))
+				{
+					var languagePair = Options.SubscriptionInfo.LanguagePairs
+						.FirstOrDefault(o => languageMappings
+									   .Any(l => l.SelectedMTCodeSource.CodeName.Equals(o.SourceLanguageId) && l.SelectedMTCodeTarget.CodeName.Equals(o.TargetLanguageId)));
+					if (languagePair != null)
+					{
+						Options.LanguagesSupported = new Dictionary<string, string>() { { languageDirection.TargetCulture.Name, languagePair.Name } };
+					}
+					return languagePair;
+				}
+			}
+			return new BeGlobalLanguagePair();
 		}
 	}
 }

@@ -143,7 +143,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
 		{
-			// ignore; not used for this implementation
+			VisitChildren(commentMarker);
 		}
 
 		public void VisitOtherMarker(IOtherMarker marker)

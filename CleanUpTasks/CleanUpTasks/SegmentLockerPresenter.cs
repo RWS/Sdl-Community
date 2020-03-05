@@ -5,12 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Sdl.Community.CleanUpTasks.Models;
-using Sdl.Community.CleanUpTasks.Utilities;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.ProjectAutomation.Core;
+using SDLCommunityCleanUpTasks.Models;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class SegmentLockerPresenter : ISegmentLockerPresenter
     {
@@ -220,10 +220,9 @@ namespace Sdl.Community.CleanUpTasks
 
         private IEnumerable<ContextDef> ReadStructInfo(ProjectFile file)
         {
-
             var contextDefs = new List<ContextDef>();
 
-            if (file.LocalFileState == LocalFileState.None && 
+            if (file.LocalFileState == LocalFileState.None &&
                 File.Exists(file.LocalFilePath) &&
                 Path.GetExtension(file.LocalFilePath) == ".sdlxliff")
             {
@@ -274,6 +273,7 @@ namespace Sdl.Community.CleanUpTasks
                 cell2.Style.ForeColor = control.ContentGrid.DefaultCellStyle.ForeColor;
             }
         }
+
         private void ValidateRegex(int rowIndex, string value, DataGridViewCellValidatingEventArgs e = null)
         {
             var checkBoxCell = control.ContentGrid.Rows[rowIndex].Cells[1] as DataGridViewCheckBoxCell;

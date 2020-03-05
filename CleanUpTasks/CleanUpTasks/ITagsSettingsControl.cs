@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.Contracts;
 using System.Windows.Forms;
-using Sdl.Community.CleanUpTasks.Contracts;
+using SDLCommunityCleanUpTasks.Contracts;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	[ContractClass(typeof(ITagsSettingsControlContract))]
     public interface ITagsSettingsControl

@@ -2,7 +2,7 @@
 using System.Text;
 using HtmlAgilityPack;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public class HtmlHelper
     {
@@ -28,10 +28,11 @@ namespace Sdl.Community.CleanUpTasks.Utilities
 
         public IEnumerable<HtmlParseError> ParseErrors => document.ParseErrors;
 
-	    public IEnumerable<HtmlNode> Descendants()
+        public IEnumerable<HtmlNode> Descendants()
         {
             return document.DocumentNode.Descendants();
         }
+
         public string GetRawEndTag(HtmlNode node)
         {
             return "</" + node.OriginalName + ">";
@@ -39,7 +40,6 @@ namespace Sdl.Community.CleanUpTasks.Utilities
 
         public string GetRawStartTag(HtmlNode node)
         {
-
             var builder = new StringBuilder();
             builder.Append("<");
             builder.Append(node.OriginalName);

@@ -2,34 +2,34 @@
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
-    partial class DisplayFilterControl
-    {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class DisplayFilterControl
+	{
+		/// <summary> 
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary> 
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Component Designer generated code
+		#region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary> 
+		/// Required method for Designer support - do not modify 
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DisplayFilterControl));
 			this.panel_body = new System.Windows.Forms.Panel();
@@ -99,21 +99,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.linkLabel_contextInfoClearSelection = new System.Windows.Forms.LinkLabel();
 			this.label_contextInfoSelected = new System.Windows.Forms.Label();
 			this.tabPage_segmentNumbers = new System.Windows.Forms.TabPage();
-			this.sampleOptionsPanel = new System.Windows.Forms.Panel();
-			this.samplingOptions = new System.Windows.Forms.GroupBox();
-			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-			this.radioButton_randomlySelect = new System.Windows.Forms.RadioButton();
-			this.radioButton_selectOneInEvery = new System.Windows.Forms.RadioButton();
-			this.checkBox_segmentSelection = new System.Windows.Forms.CheckBox();
-			this.numericUpDown_randomSelect = new System.Windows.Forms.NumericUpDown();
-			this.label2 = new System.Windows.Forms.Label();
-			this.checkBox_minMaxCharsPerSegment = new System.Windows.Forms.CheckBox();
-			this.numericUpDown_maxCharsPerSegment = new System.Windows.Forms.NumericUpDown();
-			this.numericUpDown_selectOneInEvery = new System.Windows.Forms.NumericUpDown();
-			this.numericUpDown_minCharsPerSegment = new System.Windows.Forms.NumericUpDown();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
-			this.panel_spacer_00 = new System.Windows.Forms.Panel();
 			this.fuzzyValuesBetweenGroupBox = new System.Windows.Forms.GroupBox();
 			this.fuzzyMin = new System.Windows.Forms.TextBox();
 			this.fuzzyMax = new System.Windows.Forms.TextBox();
@@ -146,8 +131,32 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_spacer_05 = new System.Windows.Forms.Panel();
 			this.tabPage_colors = new System.Windows.Forms.TabPage();
 			this.colorLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.label6 = new System.Windows.Forms.Label();
+			this.label_colorsSelected = new System.Windows.Forms.Label();
+			this.linkLabel_colorsClearSelection = new System.Windows.Forms.LinkLabel();
 			this.colorsListView = new System.Windows.Forms.ListView();
+			this.imageList_colors = new System.Windows.Forms.ImageList(this.components);
+			this.panel16 = new System.Windows.Forms.Panel();
+			this.panel18 = new System.Windows.Forms.Panel();
+			this.label6 = new System.Windows.Forms.Label();
+			this.panel17 = new System.Windows.Forms.Panel();
+			this.comboBox_colorsFoundIn = new System.Windows.Forms.ComboBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.tabPage_sampling = new System.Windows.Forms.TabPage();
+			this.sampleOptionsPanel = new System.Windows.Forms.Panel();
+			this.samplingOptions = new System.Windows.Forms.GroupBox();
+			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+			this.radioButton_randomlySelect = new System.Windows.Forms.RadioButton();
+			this.radioButton_selectOneInEvery = new System.Windows.Forms.RadioButton();
+			this.checkBox_segmentSelection = new System.Windows.Forms.CheckBox();
+			this.numericUpDown_randomSelect = new System.Windows.Forms.NumericUpDown();
+			this.label2 = new System.Windows.Forms.Label();
+			this.checkBox_minMaxCharsPerSegment = new System.Windows.Forms.CheckBox();
+			this.numericUpDown_maxCharsPerSegment = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown_selectOneInEvery = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown_minCharsPerSegment = new System.Windows.Forms.NumericUpDown();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.panel_spacer_00 = new System.Windows.Forms.Panel();
 			this.imageList_filter = new System.Windows.Forms.ImageList(this.components);
 			this.splitter_filterExpression = new System.Windows.Forms.Splitter();
 			this.panel_buffer = new System.Windows.Forms.Panel();
@@ -167,6 +176,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.helpButton = new System.Windows.Forms.ToolStripButton();
 			this.panel_filterExpression = new System.Windows.Forms.Panel();
 			this.filterExpressionControl = new Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression();
+			this.panel14 = new System.Windows.Forms.Panel();
 			this.panel_filterStatus = new System.Windows.Forms.Panel();
 			this.panel_filterStatusBar = new System.Windows.Forms.Panel();
 			this.panel_filterStatusBarMessage = new System.Windows.Forms.Panel();
@@ -217,13 +227,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_contextInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.tabPage_segmentNumbers.SuspendLayout();
-			this.sampleOptionsPanel.SuspendLayout();
-			this.samplingOptions.SuspendLayout();
-			this.tableLayoutPanel6.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_randomSelect)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_maxCharsPerSegment)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_selectOneInEvery)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_minCharsPerSegment)).BeginInit();
 			this.fuzzyValuesBetweenGroupBox.SuspendLayout();
 			this.userBoxGroupBox.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
@@ -232,6 +235,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel7.SuspendLayout();
 			this.tabPage_colors.SuspendLayout();
 			this.colorLayoutPanel.SuspendLayout();
+			this.panel16.SuspendLayout();
+			this.panel18.SuspendLayout();
+			this.panel17.SuspendLayout();
+			this.tabPage_sampling.SuspendLayout();
+			this.sampleOptionsPanel.SuspendLayout();
+			this.samplingOptions.SuspendLayout();
+			this.tableLayoutPanel6.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_randomSelect)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_maxCharsPerSegment)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_selectOneInEvery)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_minCharsPerSegment)).BeginInit();
 			this.toolStrip_filter.SuspendLayout();
 			this.panel_filterExpression.SuspendLayout();
 			this.panel_filterStatus.SuspendLayout();
@@ -260,6 +274,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabControl_filter.Controls.Add(this.tabPage_contextInfo);
 			this.tabControl_filter.Controls.Add(this.tabPage_segmentNumbers);
 			this.tabControl_filter.Controls.Add(this.tabPage_colors);
+			this.tabControl_filter.Controls.Add(this.tabPage_sampling);
 			resources.ApplyResources(this.tabControl_filter, "tabControl_filter");
 			this.tabControl_filter.ImageList = this.imageList_filter;
 			this.tabControl_filter.Name = "tabControl_filter";
@@ -550,7 +565,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             resources.GetString("filterAttributes_comboBox.Items"),
             resources.GetString("filterAttributes_comboBox.Items1")});
 			this.filterAttributes_comboBox.Name = "filterAttributes_comboBox";
-			this.filterAttributes_comboBox.SelectedIndexChanged += new System.EventHandler(this.filterAttributes_comboBox_SelectedIndexChanged);
+			this.filterAttributes_comboBox.SelectedIndexChanged += new System.EventHandler(this.FilterAttributes_comboBox_SelectedIndexChanged);
 			// 
 			// filterAttributes_label
 			// 
@@ -742,8 +757,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// tabPage_segmentNumbers
 			// 
 			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
-			this.tabPage_segmentNumbers.Controls.Add(this.sampleOptionsPanel);
-			this.tabPage_segmentNumbers.Controls.Add(this.panel_spacer_00);
 			this.tabPage_segmentNumbers.Controls.Add(this.fuzzyValuesBetweenGroupBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.panel_spacer_01);
 			this.tabPage_segmentNumbers.Controls.Add(this.userBoxGroupBox);
@@ -754,161 +767,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_segmentNumbers.Controls.Add(this.panel_spacer_05);
 			this.tabPage_segmentNumbers.Name = "tabPage_segmentNumbers";
 			this.tabPage_segmentNumbers.UseVisualStyleBackColor = true;
-			// 
-			// sampleOptionsPanel
-			// 
-			this.sampleOptionsPanel.Controls.Add(this.samplingOptions);
-			resources.ApplyResources(this.sampleOptionsPanel, "sampleOptionsPanel");
-			this.sampleOptionsPanel.Name = "sampleOptionsPanel";
-			// 
-			// samplingOptions
-			// 
-			this.samplingOptions.Controls.Add(this.tableLayoutPanel6);
-			resources.ApplyResources(this.samplingOptions, "samplingOptions");
-			this.samplingOptions.Name = "samplingOptions";
-			this.samplingOptions.TabStop = false;
-			// 
-			// tableLayoutPanel6
-			// 
-			resources.ApplyResources(this.tableLayoutPanel6, "tableLayoutPanel6");
-			this.tableLayoutPanel6.Controls.Add(this.radioButton_randomlySelect, 1, 1);
-			this.tableLayoutPanel6.Controls.Add(this.radioButton_selectOneInEvery, 1, 2);
-			this.tableLayoutPanel6.Controls.Add(this.checkBox_segmentSelection, 0, 0);
-			this.tableLayoutPanel6.Controls.Add(this.numericUpDown_randomSelect, 2, 1);
-			this.tableLayoutPanel6.Controls.Add(this.label2, 3, 1);
-			this.tableLayoutPanel6.Controls.Add(this.checkBox_minMaxCharsPerSegment, 0, 3);
-			this.tableLayoutPanel6.Controls.Add(this.numericUpDown_maxCharsPerSegment, 2, 5);
-			this.tableLayoutPanel6.Controls.Add(this.numericUpDown_selectOneInEvery, 2, 2);
-			this.tableLayoutPanel6.Controls.Add(this.numericUpDown_minCharsPerSegment, 2, 4);
-			this.tableLayoutPanel6.Controls.Add(this.label3, 1, 4);
-			this.tableLayoutPanel6.Controls.Add(this.label4, 1, 5);
-			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-			// 
-			// radioButton_randomlySelect
-			// 
-			resources.ApplyResources(this.radioButton_randomlySelect, "radioButton_randomlySelect");
-			this.radioButton_randomlySelect.Checked = true;
-			this.radioButton_randomlySelect.Name = "radioButton_randomlySelect";
-			this.radioButton_randomlySelect.TabStop = true;
-			this.radioButton_randomlySelect.UseVisualStyleBackColor = true;
-			this.radioButton_randomlySelect.CheckedChanged += new System.EventHandler(this.RadioButton_randomlySelect_CheckedChanged);
-			// 
-			// radioButton_selectOneInEvery
-			// 
-			resources.ApplyResources(this.radioButton_selectOneInEvery, "radioButton_selectOneInEvery");
-			this.radioButton_selectOneInEvery.Name = "radioButton_selectOneInEvery";
-			this.radioButton_selectOneInEvery.UseVisualStyleBackColor = true;
-			this.radioButton_selectOneInEvery.CheckedChanged += new System.EventHandler(this.RadioButton_selectOneInEvery_CheckedChanged);
-			// 
-			// checkBox_segmentSelection
-			// 
-			resources.ApplyResources(this.checkBox_segmentSelection, "checkBox_segmentSelection");
-			this.tableLayoutPanel6.SetColumnSpan(this.checkBox_segmentSelection, 4);
-			this.checkBox_segmentSelection.Name = "checkBox_segmentSelection";
-			this.checkBox_segmentSelection.UseVisualStyleBackColor = true;
-			this.checkBox_segmentSelection.CheckedChanged += new System.EventHandler(this.CheckBox_segmentSelection_CheckedChanged);
-			// 
-			// numericUpDown_randomSelect
-			// 
-			resources.ApplyResources(this.numericUpDown_randomSelect, "numericUpDown_randomSelect");
-			this.numericUpDown_randomSelect.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.numericUpDown_randomSelect.Name = "numericUpDown_randomSelect";
-			this.numericUpDown_randomSelect.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-			this.numericUpDown_randomSelect.ValueChanged += new System.EventHandler(this.NumericUpDown_randomSelect_ValueChanged);
-			// 
-			// label2
-			// 
-			resources.ApplyResources(this.label2, "label2");
-			this.label2.Name = "label2";
-			// 
-			// checkBox_minMaxCharsPerSegment
-			// 
-			resources.ApplyResources(this.checkBox_minMaxCharsPerSegment, "checkBox_minMaxCharsPerSegment");
-			this.tableLayoutPanel6.SetColumnSpan(this.checkBox_minMaxCharsPerSegment, 4);
-			this.checkBox_minMaxCharsPerSegment.Name = "checkBox_minMaxCharsPerSegment";
-			this.checkBox_minMaxCharsPerSegment.UseVisualStyleBackColor = true;
-			this.checkBox_minMaxCharsPerSegment.CheckedChanged += new System.EventHandler(this.CheckBox_minMaxCharsPerSegment_CheckedChanged);
-			// 
-			// numericUpDown_maxCharsPerSegment
-			// 
-			resources.ApplyResources(this.numericUpDown_maxCharsPerSegment, "numericUpDown_maxCharsPerSegment");
-			this.numericUpDown_maxCharsPerSegment.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-			this.numericUpDown_maxCharsPerSegment.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.numericUpDown_maxCharsPerSegment.Name = "numericUpDown_maxCharsPerSegment";
-			this.numericUpDown_maxCharsPerSegment.Value = new decimal(new int[] {
-            75,
-            0,
-            0,
-            0});
-			this.numericUpDown_maxCharsPerSegment.ValueChanged += new System.EventHandler(this.NumericUpDown_maxCharsPerSegment_ValueChanged);
-			// 
-			// numericUpDown_selectOneInEvery
-			// 
-			resources.ApplyResources(this.numericUpDown_selectOneInEvery, "numericUpDown_selectOneInEvery");
-			this.numericUpDown_selectOneInEvery.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.numericUpDown_selectOneInEvery.Name = "numericUpDown_selectOneInEvery";
-			this.numericUpDown_selectOneInEvery.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-			this.numericUpDown_selectOneInEvery.ValueChanged += new System.EventHandler(this.NumericUpDown_selectOneInEvery_ValueChanged);
-			// 
-			// numericUpDown_minCharsPerSegment
-			// 
-			resources.ApplyResources(this.numericUpDown_minCharsPerSegment, "numericUpDown_minCharsPerSegment");
-			this.numericUpDown_minCharsPerSegment.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-			this.numericUpDown_minCharsPerSegment.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.numericUpDown_minCharsPerSegment.Name = "numericUpDown_minCharsPerSegment";
-			this.numericUpDown_minCharsPerSegment.Value = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-			this.numericUpDown_minCharsPerSegment.ValueChanged += new System.EventHandler(this.NumericUpDown_minCharsPerSegment_ValueChanged);
-			// 
-			// label3
-			// 
-			resources.ApplyResources(this.label3, "label3");
-			this.label3.Name = "label3";
-			// 
-			// label4
-			// 
-			resources.ApplyResources(this.label4, "label4");
-			this.label4.Name = "label4";
-			// 
-			// panel_spacer_00
-			// 
-			resources.ApplyResources(this.panel_spacer_00, "panel_spacer_00");
-			this.panel_spacer_00.Name = "panel_spacer_00";
 			// 
 			// fuzzyValuesBetweenGroupBox
 			// 
@@ -1126,22 +984,243 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// colorLayoutPanel
 			// 
 			resources.ApplyResources(this.colorLayoutPanel, "colorLayoutPanel");
-			this.colorLayoutPanel.Controls.Add(this.label6, 0, 0);
+			this.colorLayoutPanel.Controls.Add(this.label_colorsSelected, 1, 2);
+			this.colorLayoutPanel.Controls.Add(this.linkLabel_colorsClearSelection, 0, 2);
 			this.colorLayoutPanel.Controls.Add(this.colorsListView, 0, 1);
+			this.colorLayoutPanel.Controls.Add(this.panel16, 0, 0);
 			this.colorLayoutPanel.Name = "colorLayoutPanel";
+			// 
+			// label_colorsSelected
+			// 
+			resources.ApplyResources(this.label_colorsSelected, "label_colorsSelected");
+			this.label_colorsSelected.Name = "label_colorsSelected";
+			// 
+			// linkLabel_colorsClearSelection
+			// 
+			resources.ApplyResources(this.linkLabel_colorsClearSelection, "linkLabel_colorsClearSelection");
+			this.linkLabel_colorsClearSelection.Name = "linkLabel_colorsClearSelection";
+			this.linkLabel_colorsClearSelection.TabStop = true;
+			this.linkLabel_colorsClearSelection.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel_colorsClearSelection_LinkClicked);
+			// 
+			// colorsListView
+			// 
+			this.colorLayoutPanel.SetColumnSpan(this.colorsListView, 2);
+			resources.ApplyResources(this.colorsListView, "colorsListView");
+			this.colorsListView.HideSelection = false;
+			this.colorsListView.Name = "colorsListView";
+			this.colorsListView.SmallImageList = this.imageList_colors;
+			this.colorsListView.UseCompatibleStateImageBehavior = false;
+			this.colorsListView.View = System.Windows.Forms.View.List;
+			this.colorsListView.SelectedIndexChanged += new System.EventHandler(this.ColorsListView_SelectedIndexChanged);
+			// 
+			// imageList_colors
+			// 
+			this.imageList_colors.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+			resources.ApplyResources(this.imageList_colors, "imageList_colors");
+			this.imageList_colors.TransparentColor = System.Drawing.Color.Transparent;
+			// 
+			// panel16
+			// 
+			this.colorLayoutPanel.SetColumnSpan(this.panel16, 2);
+			this.panel16.Controls.Add(this.panel18);
+			this.panel16.Controls.Add(this.panel17);
+			resources.ApplyResources(this.panel16, "panel16");
+			this.panel16.Name = "panel16";
+			// 
+			// panel18
+			// 
+			this.panel18.Controls.Add(this.label6);
+			resources.ApplyResources(this.panel18, "panel18");
+			this.panel18.Name = "panel18";
 			// 
 			// label6
 			// 
 			resources.ApplyResources(this.label6, "label6");
 			this.label6.Name = "label6";
 			// 
-			// colorsListView
+			// panel17
 			// 
-			this.colorsListView.CheckBoxes = true;
-			resources.ApplyResources(this.colorsListView, "colorsListView");
-			this.colorsListView.Name = "colorsListView";
-			this.colorsListView.UseCompatibleStateImageBehavior = false;
-			this.colorsListView.SelectedIndexChanged += new System.EventHandler(this.ColorsListView_SelectedIndexChanged);
+			this.panel17.Controls.Add(this.comboBox_colorsFoundIn);
+			this.panel17.Controls.Add(this.label7);
+			resources.ApplyResources(this.panel17, "panel17");
+			this.panel17.Name = "panel17";
+			// 
+			// comboBox_colorsFoundIn
+			// 
+			this.comboBox_colorsFoundIn.BackColor = System.Drawing.SystemColors.Window;
+			resources.ApplyResources(this.comboBox_colorsFoundIn, "comboBox_colorsFoundIn");
+			this.comboBox_colorsFoundIn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_colorsFoundIn.FormattingEnabled = true;
+			this.comboBox_colorsFoundIn.Name = "comboBox_colorsFoundIn";
+			this.comboBox_colorsFoundIn.SelectedIndexChanged += new System.EventHandler(this.ComboBox_colorsFoundIn_SelectedIndexChanged);
+			// 
+			// label7
+			// 
+			resources.ApplyResources(this.label7, "label7");
+			this.label7.Name = "label7";
+			// 
+			// tabPage_sampling
+			// 
+			this.tabPage_sampling.Controls.Add(this.sampleOptionsPanel);
+			this.tabPage_sampling.Controls.Add(this.panel_spacer_00);
+			resources.ApplyResources(this.tabPage_sampling, "tabPage_sampling");
+			this.tabPage_sampling.Name = "tabPage_sampling";
+			this.tabPage_sampling.UseVisualStyleBackColor = true;
+			// 
+			// sampleOptionsPanel
+			// 
+			this.sampleOptionsPanel.Controls.Add(this.samplingOptions);
+			resources.ApplyResources(this.sampleOptionsPanel, "sampleOptionsPanel");
+			this.sampleOptionsPanel.Name = "sampleOptionsPanel";
+			// 
+			// samplingOptions
+			// 
+			this.samplingOptions.Controls.Add(this.tableLayoutPanel6);
+			resources.ApplyResources(this.samplingOptions, "samplingOptions");
+			this.samplingOptions.Name = "samplingOptions";
+			this.samplingOptions.TabStop = false;
+			// 
+			// tableLayoutPanel6
+			// 
+			resources.ApplyResources(this.tableLayoutPanel6, "tableLayoutPanel6");
+			this.tableLayoutPanel6.Controls.Add(this.radioButton_randomlySelect, 1, 1);
+			this.tableLayoutPanel6.Controls.Add(this.radioButton_selectOneInEvery, 1, 2);
+			this.tableLayoutPanel6.Controls.Add(this.checkBox_segmentSelection, 0, 0);
+			this.tableLayoutPanel6.Controls.Add(this.numericUpDown_randomSelect, 2, 1);
+			this.tableLayoutPanel6.Controls.Add(this.label2, 3, 1);
+			this.tableLayoutPanel6.Controls.Add(this.checkBox_minMaxCharsPerSegment, 0, 3);
+			this.tableLayoutPanel6.Controls.Add(this.numericUpDown_maxCharsPerSegment, 2, 5);
+			this.tableLayoutPanel6.Controls.Add(this.numericUpDown_selectOneInEvery, 2, 2);
+			this.tableLayoutPanel6.Controls.Add(this.numericUpDown_minCharsPerSegment, 2, 4);
+			this.tableLayoutPanel6.Controls.Add(this.label3, 1, 4);
+			this.tableLayoutPanel6.Controls.Add(this.label4, 1, 5);
+			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+			// 
+			// radioButton_randomlySelect
+			// 
+			resources.ApplyResources(this.radioButton_randomlySelect, "radioButton_randomlySelect");
+			this.radioButton_randomlySelect.Checked = true;
+			this.radioButton_randomlySelect.Name = "radioButton_randomlySelect";
+			this.radioButton_randomlySelect.TabStop = true;
+			this.radioButton_randomlySelect.UseVisualStyleBackColor = true;
+			this.radioButton_randomlySelect.CheckedChanged += new System.EventHandler(this.RadioButton_randomlySelect_CheckedChanged);
+			// 
+			// radioButton_selectOneInEvery
+			// 
+			resources.ApplyResources(this.radioButton_selectOneInEvery, "radioButton_selectOneInEvery");
+			this.radioButton_selectOneInEvery.Name = "radioButton_selectOneInEvery";
+			this.radioButton_selectOneInEvery.UseVisualStyleBackColor = true;
+			this.radioButton_selectOneInEvery.CheckedChanged += new System.EventHandler(this.RadioButton_selectOneInEvery_CheckedChanged);
+			// 
+			// checkBox_segmentSelection
+			// 
+			resources.ApplyResources(this.checkBox_segmentSelection, "checkBox_segmentSelection");
+			this.tableLayoutPanel6.SetColumnSpan(this.checkBox_segmentSelection, 4);
+			this.checkBox_segmentSelection.Name = "checkBox_segmentSelection";
+			this.checkBox_segmentSelection.UseVisualStyleBackColor = true;
+			this.checkBox_segmentSelection.CheckedChanged += new System.EventHandler(this.CheckBox_segmentSelection_CheckedChanged);
+			// 
+			// numericUpDown_randomSelect
+			// 
+			resources.ApplyResources(this.numericUpDown_randomSelect, "numericUpDown_randomSelect");
+			this.numericUpDown_randomSelect.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDown_randomSelect.Name = "numericUpDown_randomSelect";
+			this.numericUpDown_randomSelect.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			this.numericUpDown_randomSelect.ValueChanged += new System.EventHandler(this.NumericUpDown_randomSelect_ValueChanged);
+			// 
+			// label2
+			// 
+			resources.ApplyResources(this.label2, "label2");
+			this.label2.Name = "label2";
+			// 
+			// checkBox_minMaxCharsPerSegment
+			// 
+			resources.ApplyResources(this.checkBox_minMaxCharsPerSegment, "checkBox_minMaxCharsPerSegment");
+			this.tableLayoutPanel6.SetColumnSpan(this.checkBox_minMaxCharsPerSegment, 4);
+			this.checkBox_minMaxCharsPerSegment.Name = "checkBox_minMaxCharsPerSegment";
+			this.checkBox_minMaxCharsPerSegment.UseVisualStyleBackColor = true;
+			this.checkBox_minMaxCharsPerSegment.CheckedChanged += new System.EventHandler(this.CheckBox_minMaxCharsPerSegment_CheckedChanged);
+			// 
+			// numericUpDown_maxCharsPerSegment
+			// 
+			resources.ApplyResources(this.numericUpDown_maxCharsPerSegment, "numericUpDown_maxCharsPerSegment");
+			this.numericUpDown_maxCharsPerSegment.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+			this.numericUpDown_maxCharsPerSegment.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDown_maxCharsPerSegment.Name = "numericUpDown_maxCharsPerSegment";
+			this.numericUpDown_maxCharsPerSegment.Value = new decimal(new int[] {
+            75,
+            0,
+            0,
+            0});
+			this.numericUpDown_maxCharsPerSegment.ValueChanged += new System.EventHandler(this.NumericUpDown_maxCharsPerSegment_ValueChanged);
+			// 
+			// numericUpDown_selectOneInEvery
+			// 
+			resources.ApplyResources(this.numericUpDown_selectOneInEvery, "numericUpDown_selectOneInEvery");
+			this.numericUpDown_selectOneInEvery.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDown_selectOneInEvery.Name = "numericUpDown_selectOneInEvery";
+			this.numericUpDown_selectOneInEvery.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+			this.numericUpDown_selectOneInEvery.ValueChanged += new System.EventHandler(this.NumericUpDown_selectOneInEvery_ValueChanged);
+			// 
+			// numericUpDown_minCharsPerSegment
+			// 
+			resources.ApplyResources(this.numericUpDown_minCharsPerSegment, "numericUpDown_minCharsPerSegment");
+			this.numericUpDown_minCharsPerSegment.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+			this.numericUpDown_minCharsPerSegment.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDown_minCharsPerSegment.Name = "numericUpDown_minCharsPerSegment";
+			this.numericUpDown_minCharsPerSegment.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+			this.numericUpDown_minCharsPerSegment.ValueChanged += new System.EventHandler(this.NumericUpDown_minCharsPerSegment_ValueChanged);
+			// 
+			// label3
+			// 
+			resources.ApplyResources(this.label3, "label3");
+			this.label3.Name = "label3";
+			// 
+			// label4
+			// 
+			resources.ApplyResources(this.label4, "label4");
+			this.label4.Name = "label4";
+			// 
+			// panel_spacer_00
+			// 
+			resources.ApplyResources(this.panel_spacer_00, "panel_spacer_00");
+			this.panel_spacer_00.Name = "panel_spacer_00";
 			// 
 			// imageList_filter
 			// 
@@ -1262,6 +1341,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// panel_filterExpression
 			// 
 			this.panel_filterExpression.Controls.Add(this.filterExpressionControl);
+			this.panel_filterExpression.Controls.Add(this.panel14);
 			resources.ApplyResources(this.panel_filterExpression, "panel_filterExpression");
 			this.panel_filterExpression.Name = "panel_filterExpression";
 			// 
@@ -1270,6 +1350,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.filterExpressionControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			resources.ApplyResources(this.filterExpressionControl, "filterExpressionControl");
 			this.filterExpressionControl.Name = "filterExpressionControl";
+			// 
+			// panel14
+			// 
+			resources.ApplyResources(this.panel14, "panel14");
+			this.panel14.Name = "panel14";
 			// 
 			// panel_filterStatus
 			// 
@@ -1421,14 +1506,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			this.tabPage_segmentNumbers.ResumeLayout(false);
-			this.sampleOptionsPanel.ResumeLayout(false);
-			this.samplingOptions.ResumeLayout(false);
-			this.tableLayoutPanel6.ResumeLayout(false);
-			this.tableLayoutPanel6.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_randomSelect)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_maxCharsPerSegment)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_selectOneInEvery)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_minCharsPerSegment)).EndInit();
 			this.fuzzyValuesBetweenGroupBox.ResumeLayout(false);
 			this.fuzzyValuesBetweenGroupBox.PerformLayout();
 			this.userBoxGroupBox.ResumeLayout(false);
@@ -1442,6 +1519,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel7.PerformLayout();
 			this.tabPage_colors.ResumeLayout(false);
 			this.colorLayoutPanel.ResumeLayout(false);
+			this.colorLayoutPanel.PerformLayout();
+			this.panel16.ResumeLayout(false);
+			this.panel18.ResumeLayout(false);
+			this.panel17.ResumeLayout(false);
+			this.panel17.PerformLayout();
+			this.tabPage_sampling.ResumeLayout(false);
+			this.sampleOptionsPanel.ResumeLayout(false);
+			this.samplingOptions.ResumeLayout(false);
+			this.tableLayoutPanel6.ResumeLayout(false);
+			this.tableLayoutPanel6.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_randomSelect)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_maxCharsPerSegment)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_selectOneInEvery)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown_minCharsPerSegment)).EndInit();
 			this.toolStrip_filter.ResumeLayout(false);
 			this.toolStrip_filter.PerformLayout();
 			this.panel_filterExpression.ResumeLayout(false);
@@ -1452,30 +1543,30 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).EndInit();
 			this.ResumeLayout(false);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        private System.Windows.Forms.Panel panel_body;
-        private System.Windows.Forms.Panel panel_filterStatus;
-        private System.Windows.Forms.ToolStrip toolStrip_filter;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.Label label_filterStatusBarMessage;
-        private System.Windows.Forms.ToolStripButton toolStripButton_applyFilter;
-        private System.Windows.Forms.ToolStripButton toolStripButton_clearFilter;
-        private System.Windows.Forms.Panel panel_filterStatusBar;
-        private System.Windows.Forms.Panel panel_filterStatusBarImage;
-        private System.Windows.Forms.PictureBox pictureBox_filterStatusBarImage;
-        private System.Windows.Forms.ImageList imageList_filter;
-        private System.Windows.Forms.Panel panel_buffer;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton toolStripButton_saveFilter;
-        private System.Windows.Forms.ToolStripButton toolStripButton_loadFilter;
-        private System.Windows.Forms.Panel panel_filterExpression;
-        private System.Windows.Forms.Splitter splitter_filterExpression;
-        private System.Windows.Forms.Panel panel_filterStatusBarMessage;
-        private FilterExpression filterExpressionControl;
+		private System.Windows.Forms.Panel panel_body;
+		private System.Windows.Forms.Panel panel_filterStatus;
+		private System.Windows.Forms.ToolStrip toolStrip_filter;
+		private System.Windows.Forms.ColumnHeader columnHeader1;
+		private System.Windows.Forms.ColumnHeader columnHeader2;
+		private System.Windows.Forms.Label label_filterStatusBarMessage;
+		private System.Windows.Forms.ToolStripButton toolStripButton_applyFilter;
+		private System.Windows.Forms.ToolStripButton toolStripButton_clearFilter;
+		private System.Windows.Forms.Panel panel_filterStatusBar;
+		private System.Windows.Forms.Panel panel_filterStatusBarImage;
+		private System.Windows.Forms.PictureBox pictureBox_filterStatusBarImage;
+		private System.Windows.Forms.ImageList imageList_filter;
+		private System.Windows.Forms.Panel panel_buffer;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripButton toolStripButton_saveFilter;
+		private System.Windows.Forms.ToolStripButton toolStripButton_loadFilter;
+		private System.Windows.Forms.Panel panel_filterExpression;
+		private System.Windows.Forms.Splitter splitter_filterExpression;
+		private System.Windows.Forms.Panel panel_filterStatusBarMessage;
+		private FilterExpression filterExpressionControl;
 		private ContextMenuStrip contextMenuStrip1;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 		private ToolStripButton reverseBtn;
@@ -1574,7 +1665,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private Panel panel_spacer_05;
 		private TabPage tabPage_colors;
 		private TableLayoutPanel colorLayoutPanel;
-		private Label label6;
 		private ListView colorsListView;
 		private ToolStripMenuItem highlightColorsToolStripMenuItem;
 		private ToolStripMenuItem toolStripMenuItem_yellow;
@@ -1615,5 +1705,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private Panel panel13;
 		private ComboBox filterAttributes_comboBox;
 		private Label filterAttributes_label;
+		private Panel panel16;
+		private Panel panel18;
+		private Label label6;
+		private Panel panel17;
+		private ComboBox comboBox_colorsFoundIn;
+		private Label label7;
+		private Label label_colorsSelected;
+		private LinkLabel linkLabel_colorsClearSelection;
+		private Panel panel14;
+		private ImageList imageList_colors;
+		private TabPage tabPage_sampling;
 	}
 }

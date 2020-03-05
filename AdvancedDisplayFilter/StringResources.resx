@@ -335,10 +335,10 @@
     <value>DSI</value>
   </data>
   <data name="DisplayFilterControl_UseTagsAlso" xml:space="preserve">
-    <value>Also use tag content</value>
+    <value>Search in text and tag content</value>
   </data>
   <data name="DisplayFilterControl_UseTagsOnly" xml:space="preserve">
-    <value>Use only tag content</value>
+    <value>Search only in tag content</value>
   </data>
   <data name="DisplayFilter_IncludeTags_Tooltip" xml:space="preserve">
     <value>Using this option will filter the results based on matches found within the translatable text AND within the content of any tags in your file(s).</value>
@@ -379,7 +379,28 @@
   <data name="DisplayFilterControl_Fuzzy_Match_Repair" xml:space="preserve">
     <value>Fuzzy Match Repair</value>
   </data>
-	<data name="DisplayFilterControl_Relationship_Operator" xml:space="preserve">
-    <value>Relationship Operator</value>
+  <data name="DisplayFilterControl_Relationship_Operator" xml:space="preserve">
+    <value>Attribute Relationship</value>
+  </data>
+  <data name="DisplayFilterControl_Found_In" xml:space="preserve">
+    <value>Found In</value>
+  </data>
+  <data name="DisplayFilterControl_Selected_0_" xml:space="preserve">
+    <value>Selected: {0}</value>
+  </data>
+  <data name="DisplayFilterControl_Neural_Machine_Translation" xml:space="preserve">
+    <value>Neural Machine Translation</value>
+  </data>
+  <data name="DisplayFilterControl_With_SourceAndTarget_Tracked_changes" xml:space="preserve">
+    <value>With source and target tracked changes</value>
+  </data>
+  <data name="DisplayFilterControl_With_Source_Tracked_changes" xml:space="preserve">
+    <value>With source tracked changes</value>
+  </data>
+  <data name="DisplayFilterControl_With_Target_Tracked_changes" xml:space="preserve">
+    <value>With target tracked changes</value>
+  </data>
+  <data name="DisplayFilter_Control_New_Translated" xml:space="preserve">
+    <value>New translated content</value>
   </data>
 </root>

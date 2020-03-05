@@ -12,11 +12,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			OR = 1
 		}
 
-		public enum OriginTypeExtended
+		public enum ContentLocation
 		{
-			FuzzyMatchRepair,
-			EditedFuzzy,
-			UneditedFuzzy
+			None = 0,
+			SourceOrTarget = 1,
+			SourceAndTarget = 2,
+			Source = 3,
+			Target = 4
 		}
 
 		public enum ConfirmationLevel
@@ -51,6 +53,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			WithFeedbackMessages,
 			WithComments,
 			WithTrackedChanges,
+			WithSourceTrackedChanges,
+			WithTargetTrackedChanges,
+			WithSourceAndTargetTrackedChanges,
 			WithTQA
 		}
 
@@ -65,21 +70,27 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 			NumbersOnly,
 			ExcludeNumberOnly
 		}
-
-		public enum SegmentContentFilterOrder
+		public enum OriginType
 		{
 			None = 0,
-			Or = 1,
-			And = 2,
-			SourceFirst = 3,
-			TargetFirst = 4
+			PM = 1,
+			CM = 2,
+			NMT = 3,
+			AT = 4,
+			Exact = 5,
+			Fuzzy = 6,
+			Interactive = 7,
+			Source = 8,
+			AutoPropagated = 9,
+			FuzzyMatchRepair = 10,
+			EditedFuzzy = 11,
+			UneditedFuzzy = 12,
+			NewTranslated = 13
 		}
 
 		public string Version { get; set; }
 
 		public DateTime Created { get; set; }
-
-		public OriginType Origin { get; set; }
 
 		public bool IsRegularExpression { get; set; }
 
@@ -96,7 +107,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 		public int CommentSeverity { get; set; }
 
 		public List<string> ContextInfoTypes { get; set; }
-		
+
 		public bool ShowAllContent { get; set; }
 
 		public List<string> RepetitionTypes { get; set; }
@@ -112,6 +123,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 		public List<string> OriginTypes { get; set; }
 
 		public List<string> PreviousOriginTypes { get; set; }
+		public bool IsAndOperator { get; set; }
 
 		public DisplayFilterSettings()
 		{

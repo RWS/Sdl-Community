@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>CleanUp Tasks</PlugInName>
-  <Version>1.9.6.1</Version>
-  <Description>A pair of cleanup tasks that allows running batch tasks on source and target</Description>
-  <Author>SDL Community Developers</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
-  <Include>
-    <File>UIToolbox.CheckGroupBox.dll</File>
-    <File>Equin.ApplicationFramework.BindingListView.dll</File>
-    <File>Sdl.Community.CheckBoxComboBox.dll</File>
+	<PlugInName>CleanUp Tasks</PlugInName>
+	<Version>1.9.8.0</Version>
+	<Description>A pair of cleanup tasks that allows running batch tasks on source and target</Description>
+	<Author>SDL Community Developers</Author>
+	<RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+	<Include>
+		<File>UIToolbox.CheckGroupBox.dll</File>
+		<File>Equin.ApplicationFramework.BindingListView.dll</File>
+		<File>Sdl.Community.CheckBoxComboBox.dll</File>
 		<File>Sdl.Community.UIToolbox.CheckGroupBox.dll</File>
-    <File>HtmlAgilityPack.dll</File>
-  </Include>
+		<File>HtmlAgilityPack.dll</File>
+	</Include>
 </PluginPackage>

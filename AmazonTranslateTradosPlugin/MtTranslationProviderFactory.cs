@@ -18,26 +18,23 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.AmazonTranslateTradosPlugin
 {
-    #region "Declaration"
+
     [TranslationProviderFactory(
         Id = "MtTranslationProviderFactory",
         Name = "MtTranslationProviderFactory",
         Description = "Amazon Translate Trados Plugin")]
-    #endregion
 
     public class MtTranslationProviderFactory : ITranslationProviderFactory
     {
-        #region ITranslationProviderFactory Members
 
-        #region "CreateTranslationProvider"
         public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
-            #region "CheckHandlesUri"
+
             if (!SupportsTranslationProviderUri(translationProviderUri))
             {
                 throw new Exception(PluginResources.UriNotSupportedMessage);
             }
-            #endregion
+
             //create options class based on URI passed to the method
             var loadOptions = new MtTranslationOptions(translationProviderUri);
 
@@ -63,9 +60,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
             return tp;
         }
-        #endregion
 
-        #region "SupportsTranslationProviderUri"
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
 
@@ -75,25 +70,17 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             }
             return String.Equals(translationProviderUri.Scheme, MtTranslationProvider.TranslationProviderScheme, StringComparison.OrdinalIgnoreCase);
         }
-        #endregion
 
-        #region "GetTranslationProviderInfo"
         public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
         {
             var info = new TranslationProviderInfo();
 
-            #region "TranslationMethod"
             info.TranslationMethod = MtTranslationOptions.ProviderTranslationMethod;
-            #endregion
 
-            #region "Name"
             info.Name = PluginResources.Plugin_NiceName;
-            #endregion
 
             return info;
         }
-        #endregion
 
-        #endregion
     }
 }

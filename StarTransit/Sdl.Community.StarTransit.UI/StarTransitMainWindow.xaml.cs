@@ -105,10 +105,6 @@ namespace Sdl.Community.StarTransit.UI
 			};
 			await this.ShowMessageAsync(title, message, MessageDialogStyle.Affirmative, dialog);
 
-			if (dialog.AffirmativeButtonText.Equals("OK"))
-			{
-				Close();
-			}
 		}
 
 		private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

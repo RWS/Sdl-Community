@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
@@ -11,6 +12,7 @@ using System.Web;
 using System.Windows.Forms;
 using ETSLPConverter;
 using ETSTranslationProvider.Helpers;
+using ETSTranslationProvider.Model;
 using Newtonsoft.Json;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.LanguagePlatform.Core;
@@ -83,6 +85,10 @@ namespace ETSTranslationProvider.ETSApi
 					}
 				}
 				queryString["languagePairId"] = options.LPPreferences[languageDirection.TargetCulture].LanguagePairId;
+				if (!options.LPPreferences[languageDirection.TargetCulture].DictionaryId.Equals(Constants.NoDictionary))
+				{
+					queryString["dictionaryIds"] = options.LPPreferences[languageDirection.TargetCulture].DictionaryId;
+				}
 				queryString["input"] = encodedInput;
 			}
 			queryString["inputFormat"] = "application/x-xliff";
@@ -150,6 +156,32 @@ namespace ETSTranslationProvider.ETSApi
 				}
 			}
 			return LanguagePairsOnServer;
+		}
+
+		/// <summary>
+		/// Get dictionaries from the MT Edge server 
+		/// </summary>
+		/// <param name="tradosToETSLP"></param>
+		/// <param name="options"></param>
+		public static void GetDictionaries(TradosToETSLP tradosToETSLP, TranslationOptions options)
+		{
+			var queryString = HttpUtility.ParseQueryString(string.Empty);
+			foreach (var item in tradosToETSLP.ETSLPs)
+			{
+				queryString["sourceLanguageId"] = item.SourceLanguageId;
+				queryString["targetLanguageId"] = item.TargetLanguageId;
+				queryString["perPage"] = "1000"; // set to 1000 to avoid the missing dictionaries
+				var jsonResult = ContactETSServer(ETSGet, options, "dictionaries", queryString);
+
+				var result = JsonConvert.DeserializeObject<DictionaryInfo>(jsonResult);
+				tradosToETSLP.Dictionaries = new List<DictionaryModel>(result.Dictionaries);
+				tradosToETSLP.Dictionaries.Insert(0, new DictionaryModel
+				{
+					DictionaryId = Constants.NoDictionary,
+					SourceLanguageId = string.Empty,
+					TargetLanguageId = string.Empty
+				});
+			}
 		}
 
 		public static void ExpireLanguagePairs()

@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public class XmlReportGenerator : IXmlReportGenerator
     {
@@ -18,13 +18,11 @@ namespace Sdl.Community.CleanUpTasks.Utilities
 
         public XmlReportGenerator(string logFolder)
         {
-
             this.logFolder = logFolder;
         }
 
         public void AddConversionItem(string segmentNumber, string before, string after, string searchText, string replaceText = "")
         {
-
             SimpleLog.Info(string.Join(Environment.NewLine,
                            $"{ Environment.NewLine }\tCHANGED TEXT",
                            $"\tId: { segmentNumber }",
@@ -48,7 +46,6 @@ namespace Sdl.Community.CleanUpTasks.Utilities
 
         public void AddLockItem(string segmentNumber, string lockedContent, string lockReason)
         {
-
             SimpleLog.Info(string.Join(Environment.NewLine,
                            $"{ Environment.NewLine }\tLOCKED SEGMENT",
                            $"\tId: { segmentNumber }",
@@ -60,7 +57,6 @@ namespace Sdl.Community.CleanUpTasks.Utilities
 
         public void AddTagItem(string segmentNumber, string removedTag)
         {
-
             SimpleLog.Info(string.Join(Environment.NewLine,
                            $"{ Environment.NewLine }\tREMOVED TAG",
                            $"\tId: { segmentNumber }",

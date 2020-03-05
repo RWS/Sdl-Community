@@ -38,6 +38,7 @@ namespace SDLXLIFFSliceOrChange.ResourceManager
         public string SystemMachineTranslation { get { return GetString("SystemMachineTranslation"); } }
         public string TranslationOrigin { get { return GetString("TranslationOrigin"); } }
         public string AutoPropagated { get { return GetString("AutoPropagated"); } }
+        public string NeuralMT { get { return GetString("NeuralMT"); } }
         public string AutomatedTranslation { get { return GetString("AutomatedTranslation"); } }
         public string Interactive { get { return GetString("Interactive"); } }
         public string TranslationMemory { get { return GetString("TranslationMemory"); } }
@@ -86,7 +87,9 @@ namespace SDLXLIFFSliceOrChange.ResourceManager
         public string Clear { get { return GetString("Clear"); } }
         public string Clearit { get { return GetString("Clearit"); } }
         public string ClearitDescription { get { return GetString("ClearitDescription"); } }
-
+        public string ErrorNoFilesSelected { get { return GetString("Error_NoFilesSelected"); } }
+        public string ErrorTitleNoFilesSelected { get { return GetString("Error_TitleNoFilesSelected"); } }
+        
         public string ReplaceWith { get { return GetString("ReplaceWith"); } }
         public string Preview { get { return GetString("Preview"); } }
         public string Replace { get { return GetString("Replace"); } }
@@ -142,6 +145,7 @@ namespace SDLXLIFFSliceOrChange.ResourceManager
             _defaultValues.Add("Changeit", "Changeit!");
             _defaultValues.Add("Statuses", "Statuses");
             _defaultValues.Add("ReverseSelection", "Reverse selection");
+            _defaultValues.Add("Error_NoFilesSelected", "No files selected");
             _defaultValues.Add("DocumentStructure", "Document Structure");
             _defaultValues.Add("GenerateDSI", "Generate DSI");
             _defaultValues.Add("System", "System");
@@ -150,6 +154,7 @@ namespace SDLXLIFFSliceOrChange.ResourceManager
             _defaultValues.Add("SystemMachineTranslation", "Machine Translation");
             _defaultValues.Add("TranslationOrigin", "Translation Origin");
             _defaultValues.Add("AutoPropagated", "Auto-Propagated");
+            _defaultValues.Add("NeuralMT", "Neural MT");
             _defaultValues.Add("AutomatedTranslation", "Automated Translation");
             _defaultValues.Add("Interactive", "Interactive");
             _defaultValues.Add("TranslationMemory", "Translation Memory");
@@ -165,6 +170,7 @@ namespace SDLXLIFFSliceOrChange.ResourceManager
             _defaultValues.Add("RejectedSignOff", "Sign-off Rejected");
             _defaultValues.Add("ApprovedTranslation", "Translation Approved");
             _defaultValues.Add("RejectedTranslation", "Translation Rejected");
+            _defaultValues.Add("Error_TitleNoFilesSelected", "Error");
             _defaultValues.Add("Translated", "Translated");
             _defaultValues.Add("Draft", "Draft");
             _defaultValues.Add("NotTranslated", "Not translated");

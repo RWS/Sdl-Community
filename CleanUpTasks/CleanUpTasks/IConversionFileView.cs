@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Windows.Forms;
-using Sdl.Community.CleanUpTasks.Contracts;
+using SDLCommunityCleanUpTasks.Contracts;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	[ContractClass(typeof(IConversionFileViewContract))]
     public interface IConversionFileView : IDisposable
@@ -30,7 +30,7 @@ namespace Sdl.Community.CleanUpTasks
         CheckBox TagPair { get; }
         CheckBox ToLower { get; }
         CheckBox ToUpper { get; }
-        CheckBoxComboBox.CheckBoxComboBox VbStrConv { get; }
+        Sdl.Community.CheckBoxComboBox.CheckBoxComboBox VbStrConv { get; }
         CheckBox WholeWord { get; }
 
         void InitializeUI();

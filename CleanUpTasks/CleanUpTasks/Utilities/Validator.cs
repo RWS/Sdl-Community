@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public static class Validator
     {
@@ -17,42 +16,42 @@ namespace Sdl.Community.CleanUpTasks.Utilities
 
             try
             {
-				// Pattern could contain $
-				// We replace $ for verifying well-formed xml
-				   pattern = pattern.Replace("$", "A");		
+                // Pattern could contain $
+                // We replace $ for verifying well-formed xml
+                pattern = pattern.Replace("$", "A");
 
-				var elem = XElement.Parse(pattern);
+                var elem = XElement.Parse(pattern);
 
                 return true;
             }
             catch (XmlException ex)
             {
-	            return false;
-	            //        if (pattern.Contains("=\"<") && pattern.Contains(">\""))
-	            //        {
-	            //         var tagFirstQuotesPosition = pattern.IndexOf("=\"<", StringComparison.Ordinal);
+                return false;
+                //        if (pattern.Contains("=\"<") && pattern.Contains(">\""))
+                //        {
+                //         var tagFirstQuotesPosition = pattern.IndexOf("=\"<", StringComparison.Ordinal);
 
-	            //         var tagCharacterFirstPosition = tagFirstQuotesPosition + 2;
-	            //         var builder = new StringBuilder(pattern);
-	            //         builder.Remove(tagCharacterFirstPosition, 1);
-	            //         builder.Insert(tagCharacterFirstPosition, "&lt;");
+                //         var tagCharacterFirstPosition = tagFirstQuotesPosition + 2;
+                //         var builder = new StringBuilder(pattern);
+                //         builder.Remove(tagCharacterFirstPosition, 1);
+                //         builder.Insert(tagCharacterFirstPosition, "&lt;");
 
-	            //         var tagLastQuotesPosition = builder.ToString().IndexOf(">\"", StringComparison.Ordinal);
+                //         var tagLastQuotesPosition = builder.ToString().IndexOf(">\"", StringComparison.Ordinal);
 
-	            //         builder.Remove(tagLastQuotesPosition, 1);
-	            //         builder.Insert(tagLastQuotesPosition, "&gt;");		
+                //         builder.Remove(tagLastQuotesPosition, 1);
+                //         builder.Insert(tagLastQuotesPosition, "&gt;");
 
-	            //var encodedPattern = builder.ToString();
-	            //         try
-	            //         {
-	            //          XElement.Parse(encodedPattern);
-	            //          return true;
-	            //         }
-	            //         catch (Exception e)
-	            //         {
-	            //          return false;
-	            //         }	 
-	            //        }	  
+                //var encodedPattern = builder.ToString();
+                //         try
+                //         {
+                //          XElement.Parse(encodedPattern);
+                //          return true;
+                //         }
+                //         catch (Exception e)
+                //         {
+                //          return false;
+                //         }
+                //        }
             }
         }
 

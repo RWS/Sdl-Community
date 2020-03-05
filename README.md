@@ -135,6 +135,8 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 
 | Plugin Name | Description |
 | --- | --- |
+|[DSI Viewer](https://appstore.sdl.com/language/app/dsi-viewer/995/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/RapidAddTerm)
+|[RapidAddTerm](https://appstore.sdl.com/language/app/rapid-add-term/1050/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/DSI%20Viewer)
 | [Apply Studio Project Template](http://appstore.sdl.com/app/apply-studio-project-template/391/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ApplyStudioProjectTemplate)|
 | [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
 | [Post Edit Compare](https://appstore.sdl.com/language/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Post%20Edit%20Compare)|

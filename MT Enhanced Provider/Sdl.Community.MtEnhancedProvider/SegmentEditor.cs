@@ -18,6 +18,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using Sdl.Community.MtEnhancedProvider.Helpers;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
@@ -26,8 +27,11 @@ namespace Sdl.Community.MtEnhancedProvider
         string filename;
         EditCollection edcoll;
         DateTime lastversion;
+		private Constants _constants = new Constants();
 
-        public SegmentEditor(string editCollectionFilename)
+		public Log Log = Log.Instance;
+
+		public SegmentEditor(string editCollectionFilename)
         {
             filename = editCollectionFilename;
             lastversion = File.GetLastWriteTime(filename);
@@ -44,22 +48,23 @@ namespace Sdl.Community.MtEnhancedProvider
                     edcoll = (EditCollection)serializer.Deserialize(reader);
                 }
             }
-            catch (InvalidOperationException) //invalid operation is what happens when the xml can't be parsed into the objects correctly
+            catch (InvalidOperationException ex) //invalid operation is what happens when the xml can't be parsed into the objects correctly
             {
-                //FUTURE: do we want a message box here or just throw the exception up to studio????
-                var caption = PluginResources.EditSettingsErrorCaption;
+				Log.Logger.Error($"{_constants.LoadCollection} {ex.Message}\n { ex.StackTrace}");
+
+				var caption = PluginResources.EditSettingsErrorCaption;
                 var message = string.Format(PluginResources.EditSettingsXmlErrorMessage, Path.GetFileName(filename));
                 MessageBox.Show(new MtWindowWrapper(GetHandle()), message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 throw new Exception(message);
             }
             catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
             {
-                //FUTURE: do we want a message box here or just throw the exception up to studio????
-                var caption = PluginResources.EditSettingsErrorCaption;
+				Log.Logger.Error($"{_constants.LoadCollection} {exp.Message}\n { exp.StackTrace}");
+
+				var caption = PluginResources.EditSettingsErrorCaption;
                 var message = PluginResources.EditSettingsGenericErrorMessage + " " + exp.Message;
                 MessageBox.Show(new MtWindowWrapper(GetHandle()), message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 throw new Exception(message); //throwing exception aborts the segment lookup
-
             }
         }
 

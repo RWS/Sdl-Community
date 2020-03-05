@@ -16,7 +16,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		{
 			StudioViewModel = new StudioViewModel(mainWindow, dialogCoordinator);
 			MultiTermViewModel = new MultiTermViewModel(mainWindow);
-
 		}
 		
 		[NotifyPropertyChangedInvocator]

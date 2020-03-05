@@ -2,11 +2,11 @@ using System;
 
 namespace Equin.ApplicationFramework
 {
-    /// <summary>
-    /// Defines a general method to test it an item should be included in a <see cref="BindingListView&lt;T&gt;"/>.
-    /// </summary>
-    /// <typeparam name="T">The type of item to be filtered.</typeparam>
-    public interface IItemFilter<T>
+	/// <summary>
+	/// Defines a general method to test it an item should be included in a <see cref="BindingListView&lt;T&gt;"/>.
+	/// </summary>
+	/// <typeparam name="T">The type of item to be filtered.</typeparam>
+	public interface IItemFilter<T>
     {
         /// <summary>
         /// Tests if the item should be included.
@@ -53,7 +53,7 @@ namespace Equin.ApplicationFramework
             }
         }
 
-        #endregion
+        #endregion Singleton Accessor
     }
 
     /// <summary>
@@ -128,7 +128,6 @@ namespace Equin.ApplicationFramework
     {
         public CSharpItemFilter(string filterSourceCode)
         {
-            
         }
 
         public bool Include(T item)
