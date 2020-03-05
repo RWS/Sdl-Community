@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using ETSTranslationProvider.Model;
 
 namespace ETSTranslationProvider.ETSApi
 {
@@ -13,5 +14,6 @@ namespace ETSTranslationProvider.ETSApi
 
         public CultureInfo TradosCulture { get; }
         public List<ETSLanguagePair> ETSLPs { get; }
+		public List<DictionaryModel> Dictionaries { get; set; }
     }
 }

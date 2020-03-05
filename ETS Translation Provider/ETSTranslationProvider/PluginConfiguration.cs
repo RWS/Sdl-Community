@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ETSTranslationProvider
@@ -15,7 +14,6 @@ namespace ETSTranslationProvider
 
         public string Host { get; set; }
         public int Port { get; set; }
-
     }
 
     public class PluginConfiguration
@@ -32,10 +30,7 @@ namespace ETSTranslationProvider
 
 		static PluginConfiguration()
 		{
-			var assembly = Assembly.GetExecutingAssembly();
-			var assemblyName = assembly.GetName().Name;
-
-			var pluginDataDirectory = Environment.ExpandEnvironmentVariables($"%AppData%\\SDL Community\\{assemblyName}");
+			var pluginDataDirectory = Environment.ExpandEnvironmentVariables($"%AppData%\\SDL Community\\SDLMachineTranslationEdge");
 			CurrentInstance = ParseConfiguration(pluginDataDirectory);
 			if (CurrentInstance == null)
 			{
@@ -56,7 +51,7 @@ namespace ETSTranslationProvider
                 return null;
             }
 
-            using (StreamReader r = new StreamReader(file))
+            using (var r = new StreamReader(file))
             {
                 var config = JsonConvert.DeserializeObject<PluginConfiguration>(r.ReadToEnd());
 				if (config == null)

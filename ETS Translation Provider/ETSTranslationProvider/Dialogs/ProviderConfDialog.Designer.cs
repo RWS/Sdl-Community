@@ -62,7 +62,7 @@ namespace ETSTranslationProvider
             // CancelBtn
             // 
             this.CancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.CancelBtn.Location = new System.Drawing.Point(395, 316);
+            this.CancelBtn.Location = new System.Drawing.Point(497, 316);
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(75, 23);
             this.CancelBtn.TabIndex = 12;
@@ -73,18 +73,18 @@ namespace ETSTranslationProvider
             // 
             this.UsernameField.Location = new System.Drawing.Point(103, 43);
             this.UsernameField.Name = "UsernameField";
-            this.UsernameField.Size = new System.Drawing.Size(335, 20);
+            this.UsernameField.Size = new System.Drawing.Size(434, 20);
             this.UsernameField.TabIndex = 6;
-            this.UsernameField.TextChanged += new System.EventHandler(this.UsernameChanged);
+            this.UsernameField.KeyUp += new System.Windows.Forms.KeyEventHandler(this.UsernameField_KeyUp);
             // 
             // PasswordField
             // 
             this.PasswordField.Location = new System.Drawing.Point(103, 69);
             this.PasswordField.Name = "PasswordField";
             this.PasswordField.PasswordChar = '*';
-            this.PasswordField.Size = new System.Drawing.Size(335, 20);
+            this.PasswordField.Size = new System.Drawing.Size(434, 20);
             this.PasswordField.TabIndex = 7;
-            this.PasswordField.TextChanged += new System.EventHandler(this.PasswordChanged);
+            this.PasswordField.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PasswordField_KeyUp);
             // 
             // UsernameLabel
             // 
@@ -138,7 +138,7 @@ namespace ETSTranslationProvider
             // 
             this.HostNameField.Location = new System.Drawing.Point(69, 6);
             this.HostNameField.Name = "HostNameField";
-            this.HostNameField.Size = new System.Drawing.Size(381, 20);
+            this.HostNameField.Size = new System.Drawing.Size(474, 20);
             this.HostNameField.TabIndex = 0;
             this.HostNameField.TextChanged += new System.EventHandler(this.HostNameChanged);
             // 
@@ -146,7 +146,7 @@ namespace ETSTranslationProvider
             // 
             this.PortField.Location = new System.Drawing.Point(69, 33);
             this.PortField.Name = "PortField";
-            this.PortField.Size = new System.Drawing.Size(381, 20);
+            this.PortField.Size = new System.Drawing.Size(474, 20);
             this.PortField.TabIndex = 1;
             this.PortField.TextChanged += new System.EventHandler(this.PortChanged);
             this.PortField.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PortKeyPressed);
@@ -164,7 +164,7 @@ namespace ETSTranslationProvider
             this.AuthenticationGroup.Controls.Add(this.PasswordLabel);
             this.AuthenticationGroup.Location = new System.Drawing.Point(6, 88);
             this.AuthenticationGroup.Name = "AuthenticationGroup";
-            this.AuthenticationGroup.Size = new System.Drawing.Size(444, 180);
+            this.AuthenticationGroup.Size = new System.Drawing.Size(543, 180);
             this.AuthenticationGroup.TabIndex = 2;
             this.AuthenticationGroup.TabStop = false;
             this.AuthenticationGroup.Text = "Authentication";
@@ -183,7 +183,7 @@ namespace ETSTranslationProvider
             this.APIKeyField.Location = new System.Drawing.Point(103, 131);
             this.APIKeyField.Name = "APIKeyField";
             this.APIKeyField.PasswordChar = '*';
-            this.APIKeyField.Size = new System.Drawing.Size(335, 20);
+            this.APIKeyField.Size = new System.Drawing.Size(434, 20);
             this.APIKeyField.TabIndex = 9;
             this.APIKeyField.TextChanged += new System.EventHandler(this.APIKeyChanged);
             // 
@@ -215,7 +215,7 @@ namespace ETSTranslationProvider
             // 
             this.FinishButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.FinishButton.Enabled = false;
-            this.FinishButton.Location = new System.Drawing.Point(314, 316);
+            this.FinishButton.Location = new System.Drawing.Point(413, 316);
             this.FinishButton.Name = "FinishButton";
             this.FinishButton.Size = new System.Drawing.Size(75, 23);
             this.FinishButton.TabIndex = 11;
@@ -236,16 +236,16 @@ namespace ETSTranslationProvider
             this.TradosLPs.Location = new System.Drawing.Point(3, 3);
             this.TradosLPs.Name = "TradosLPs";
             this.TradosLPs.RowHeadersVisible = false;
-            this.TradosLPs.Size = new System.Drawing.Size(470, 238);
+            this.TradosLPs.Size = new System.Drawing.Size(584, 238);
             this.TradosLPs.TabIndex = 13;
             // 
             // tabControl
             // 
             this.tabControl.Controls.Add(this.CredentialTab);
-            this.tabControl.Location = new System.Drawing.Point(10, 10);
+            this.tabControl.Location = new System.Drawing.Point(13, 10);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(464, 300);
+            this.tabControl.Size = new System.Drawing.Size(563, 300);
             this.tabControl.TabIndex = 13;
             // 
             // CredentialTab
@@ -260,7 +260,7 @@ namespace ETSTranslationProvider
             this.CredentialTab.Location = new System.Drawing.Point(4, 22);
             this.CredentialTab.Name = "CredentialTab";
             this.CredentialTab.Padding = new System.Windows.Forms.Padding(3);
-            this.CredentialTab.Size = new System.Drawing.Size(456, 274);
+            this.CredentialTab.Size = new System.Drawing.Size(555, 274);
             this.CredentialTab.TabIndex = 0;
             this.CredentialTab.Text = "General";
             // 
@@ -281,7 +281,7 @@ namespace ETSTranslationProvider
             this.LPTab.Location = new System.Drawing.Point(4, 22);
             this.LPTab.Name = "LPTab";
             this.LPTab.Padding = new System.Windows.Forms.Padding(3);
-            this.LPTab.Size = new System.Drawing.Size(476, 291);
+            this.LPTab.Size = new System.Drawing.Size(590, 291);
             this.LPTab.TabIndex = 1;
             this.LPTab.Text = "Language Pair Mappings";
             // 
@@ -291,7 +291,7 @@ namespace ETSTranslationProvider
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.CancelBtn;
-            this.ClientSize = new System.Drawing.Size(484, 352);
+            this.ClientSize = new System.Drawing.Size(580, 352);
             this.Controls.Add(this.CancelBtn);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.FinishButton);
@@ -300,7 +300,7 @@ namespace ETSTranslationProvider
             this.Name = "ProviderConfDialog";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SDL ETS Translation Options";
+            this.Text = "SDL MT Edge Options";
             this.AuthenticationGroup.ResumeLayout(false);
             this.AuthenticationGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TradosLPs)).EndInit();

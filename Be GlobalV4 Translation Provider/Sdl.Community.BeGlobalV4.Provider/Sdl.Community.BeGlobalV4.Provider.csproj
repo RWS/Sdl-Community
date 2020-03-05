@@ -33,26 +33,42 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=4.5.3.2, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.2\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.6.2\lib\net45\NLog.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="ReachFramework" />
     <Reference Include="RestSharp, Version=106.5.4.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.106.5.4\lib\net452\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Community.Toolkit.Core, Version=1.3.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.Core.1.3.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
+    <Reference Include="Sdl.Community.Toolkit.Core, Version=1.8.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.Core.1.8.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=1.7.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.1.7.0\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=1.8.6.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.1.8.6\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -65,6 +81,11 @@
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework.PackageSupport">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.Core.Settings, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
@@ -134,6 +155,8 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -161,23 +184,30 @@
     <Compile Include="BeGlobalTellMe\BeGlobalCommunitySupportAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalContactAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalHelpAction.cs" />
-    <Compile Include="BeGlobalTellMe\BeGlobalSettingsAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalStoreAction.cs" />
     <Compile Include="BeGlobalTellMe\BeGlobalTellMeProvider.cs" />
-    <Compile Include="Converters\BeGlobalLoginConverter.cs" />
-    <Compile Include="Helpers\AppItializer.cs" />
+    <Compile Include="Converters\BeGlobalVisibilityConverter.cs" />
+    <Compile Include="Converters\ImageToBitmapImageConverter.cs" />
+    <Compile Include="Converters\StringIsNullOrEmptyVisibilityConverter.cs" />
+    <Compile Include="Helpers\AppInitializer.cs" />
     <Compile Include="Helpers\Constants.cs" />
-    <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Helpers\Log.cs" />
-    <Compile Include="Helpers\NormalizeSourceTextHelper.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
+    <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\VersionHelper.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Helpers\WindowsControlUtils.cs" />
+    <Compile Include="Interfaces\ILanguageMappingSettings.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />
+    <Compile Include="Model\Authentication.cs" />
+    <Compile Include="Model\LangMappingMTCode.cs" />
+    <Compile Include="Model\MTCloudDictionary.cs" />
+    <Compile Include="Model\MTCloudDictionaryInfo.cs" />
     <Compile Include="Model\BeGlobalLanguagePair.cs" />
     <Compile Include="Model\BeGlobalSegment.cs" />
+    <Compile Include="Model\LanguageMappingModel.cs" />
+    <Compile Include="Model\MTCodeModel.cs" />
     <Compile Include="Model\ResponseError.cs" />
     <Compile Include="Model\ErrorDetails.cs" />
     <Compile Include="Model\SubscriptionInfo.cs" />
@@ -191,24 +221,44 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Service\BeGlobalV4Translator.cs" />
+    <Compile Include="Service\LanguageMappingsService.cs" />
     <Compile Include="Service\MessageBoxService.cs" />
+    <Compile Include="Service\PrintService.cs" />
+    <Compile Include="Studio\BeGlobalExcelRibbon.cs" />
     <Compile Include="Studio\BeGlobalLanguageDirection.cs" />
-    <Compile Include="Model\BeGlobalLoginOptions.cs" />
     <Compile Include="Studio\BeGlobalProviderUi.cs" />
     <Compile Include="Studio\BeGlobalTranslationOptions.cs" />
     <Compile Include="Studio\BeGlobalTranslationProvider.cs" />
     <Compile Include="Studio\BeGlobalTranslationProviderFactory.cs" />
-    <Compile Include="Studio\StudioCredentials.cs" />
+    <Compile Include="Studio\LanguageMappingSettings.cs" />
     <Compile Include="UiHelpers\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Ui\BeGlobalWindow.xaml.cs">
       <DependentUpon>BeGlobalWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ui\LanguageMappings.xaml.cs">
+      <DependentUpon>LanguageMappings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\MTCodesWindow.xaml.cs">
+      <DependentUpon>MTCodesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\BeGlobalWindowViewModel.cs" />
+    <Compile Include="ViewModel\LanguageMappingsViewModel.cs" />
+    <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\MTCodesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\MTLanguageCodes.xlsx" />
+    <Resource Include="Resources\MTCodesLogo.png" />
+    <Resource Include="Resources\dictionaryIcon.ico" />
+    <Resource Include="Resources\add_langcode.ico" />
+    <Resource Include="Resources\Search %281%29.png" />
+    <Resource Include="Resources\Print.png" />
     <None Include="Resources\global1.png" />
     <Resource Include="Resources\MTCloud_logo_small.png" />
     <Resource Include="Resources\MTCloud_logo.png" />
@@ -236,12 +286,6 @@
       <Link>SdlCommunity.snk</Link>
     </None>
     <None Include="app.config" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +294,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UiHelpers\ButtonsStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\DataGridColumnStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -274,6 +322,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ui\BeGlobalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\LanguageMappings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\MTCodesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

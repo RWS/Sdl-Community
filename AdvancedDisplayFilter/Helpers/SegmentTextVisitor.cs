@@ -14,6 +14,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 		private readonly StringBuilder _textBuilder;
 		private DetailLevel _detailLevel;
+		private bool _containsTrackChanges;
+
+		public bool ContainsTrackChanges(ISegment segment)
+		{
+			VisitChildren(segment);
+			return _containsTrackChanges;
+		}
 
 		public SegmentTextVisitor()
 		{
@@ -33,8 +40,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
-		{
-			// ignore; not used in this implementation
+		{			
+			VisitChildren(commentMarker);
 		}
 
 		public void VisitLocationMarker(ILocationMarker location)
@@ -66,7 +73,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 
 		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
 		{
-			// ignore; not used in this implementation
+			_containsTrackChanges = true;
 		}
 
 		public void VisitSegment(ISegment segment)

@@ -1,7 +1,8 @@
 ﻿using System;
-using Sdl.Community.CleanUpTasks.Dialogs;
+using Sdl.Community.CleanUpTasks;
+using SDLCommunityCleanUpTasks.Dialogs;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public static class ViewFactory
     {
@@ -11,7 +12,7 @@ namespace Sdl.Community.CleanUpTasks.Utilities
             {
                 IConversionFileView view = new ConversionFileView(settings);
                 view.SetPresenter(new ConversionFileViewPresenter(view, new FileDialog(), viewMode, taskMode));
-                
+
                 return (T)view;
             }
             else

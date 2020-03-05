@@ -1,12 +1,12 @@
 ﻿using System;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.CleanUpTasks.Models
+namespace SDLCommunityCleanUpTasks.Models
 {
 	/// <summary>
-    /// Models cxt-def tag in sdlxliff file
-    /// </summary>
-    public class ContextDef : IEquatable<ContextDef>, IComparable<ContextDef>
+	/// Models cxt-def tag in sdlxliff file
+	/// </summary>
+	public class ContextDef : IEquatable<ContextDef>, IComparable<ContextDef>
     {
         public bool IsChecked { get; set; }
         public ContextPurpose Purpose { get; set; }

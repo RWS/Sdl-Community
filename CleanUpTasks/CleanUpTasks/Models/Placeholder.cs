@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sdl.Community.CleanUpTasks.Models
+namespace SDLCommunityCleanUpTasks.Models
 {
 	public class Placeholder : IEquatable<Placeholder>
     {

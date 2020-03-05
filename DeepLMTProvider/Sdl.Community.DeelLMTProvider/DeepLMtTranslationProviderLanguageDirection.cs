@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.DeepLMTProvider
 {
@@ -19,12 +20,16 @@ namespace Sdl.Community.DeepLMTProvider
 		private TranslationUnit _inputTu;
 		private DeepLTranslationProviderConnecter _deeplConnect;
 		public static readonly Log Log = Log.Instance;
+		private readonly ProjectsController _projectsController;
 
 		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection)
 		{
 			_deepLMtTranslationProvider = deepLMtTranslationProvider;
 			_languageDirection = languageDirection;
 			_options = deepLMtTranslationProvider.Options;
+			_projectsController= SdlTradosStudio.Application.GetController<ProjectsController>();
+			var activeFile = _projectsController.CurrentProject.GetSourceLanguageFiles();
+
 		}
 
 		public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
@@ -70,36 +75,32 @@ namespace Sdl.Community.DeepLMTProvider
 
 			try
 			{
-				// if there are match in tm the provider will not search the segment
-				#region "Confirmation Level"
-				if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
-				{
-					translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-					//later get these strings from resource file
-					results.Add(CreateSearchResult(segment, translation));
-					return results;
-				}
 				var newseg = segment.Duplicate();
-				if (newseg.HasTags)
+				if (newseg.HasTags && !_options.SendPlainText)
 				{
 					var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
 					var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
-					translation = tagPlacer.GetTaggedSegment(translatedText);
+					if (!string.IsNullOrEmpty(translatedText))
+					{
+						translation = tagPlacer.GetTaggedSegment(translatedText);
 
-					results.Add(CreateSearchResult(newseg, translation));
-					return results;
+						results.Add(CreateSearchResult(newseg, translation));
+						return results;
+					}
 				}
 				else
 				{
 					var sourcetext = newseg.ToPlain();
 
 					var translatedText = LookupDeepl(sourcetext);
-					translation.Add(translatedText);
+					if (!string.IsNullOrEmpty(translatedText))
+					{
+						translation.Add(translatedText);
 
-					results.Add(CreateSearchResult(newseg, translation));
-					return results;
+						results.Add(CreateSearchResult(newseg, translation));
+						return results;
+					}
 				}
-				#endregion
 			}
 			catch (Exception e)
 			{
@@ -138,7 +139,7 @@ namespace Sdl.Community.DeepLMTProvider
 			//maybe this we need to add the score which Christine  requested
 			//
 			var score = 0; //score to 0...change if needed to support scoring
-			tu.Origin = TranslationUnitOrigin.MachineTranslation;
+			tu.Origin = TranslationUnitOrigin.Nmt;
 			var searchResult = new SearchResult(tu)
 			{
 				TranslationProposal = new TranslationUnit(tu),
@@ -202,7 +203,7 @@ namespace Sdl.Community.DeepLMTProvider
 				var i = 0;
 				foreach (var tu in translationUnits)
 				{
-					if (mask == null || mask[i])
+					if (mask[i])
 					{
 						var preTranslate = new PreTranslateSegment
 						{
@@ -236,7 +237,7 @@ namespace Sdl.Community.DeepLMTProvider
 				var i = 0;
 				foreach (var tu in translationUnits)
 				{
-					if (mask == null || mask[i])
+					if (mask[i])
 					{
 						var result = SearchTranslationUnit(settings, tu);
 						results.RemoveAt(i);

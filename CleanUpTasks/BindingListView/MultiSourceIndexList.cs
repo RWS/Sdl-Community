@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Equin.ApplicationFramework
 {
-    internal class MultiSourceIndexList<T> : List<KeyValuePair<ListItemPair<T>, int>>
+	internal class MultiSourceIndexList<T> : List<KeyValuePair<ListItemPair<T>, int>>
     {
         public void Add(IList sourceList, ObjectView<T> item, int index)
         {
@@ -90,7 +90,7 @@ namespace Equin.ApplicationFramework
             get
             {
                 return ConvertAll<ObjectView<T>>(new Converter<KeyValuePair<ListItemPair<T>, int>, ObjectView<T>>(
-                    delegate(KeyValuePair<ListItemPair<T>, int> kvp)
+                    delegate (KeyValuePair<ListItemPair<T>, int> kvp)
                     { return kvp.Key.Item; }
                 )).ToArray();
             }

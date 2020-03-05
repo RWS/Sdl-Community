@@ -101,7 +101,7 @@ namespace ETSTranslationProvider
 				SourceSegment = searchSegment,
 				TargetSegment = translation,
 				ConfirmationLevel = ConfirmationLevel.Translated,
-				Origin = TranslationUnitOrigin.MachineTranslation
+				Origin = TranslationUnitOrigin.Nmt
 			};
 			unit.ResourceId = new PersistentObjectToken(unit.GetHashCode(), Guid.Empty);
             var searchResult = new SearchResult(unit);

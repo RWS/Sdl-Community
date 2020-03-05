@@ -1,229 +1,211 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
-using System.Net.Cache;
 using System.Text;
-using System.Windows;
 using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
 using Sdl.Community.BeGlobalV4.Provider.Interfaces;
 using Sdl.Community.BeGlobalV4.Provider.Model;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
-using DataFormat = RestSharp.DataFormat;
 
 namespace Sdl.Community.BeGlobalV4.Provider.Service
 {
 	public class BeGlobalV4Translator
 	{
 		private readonly IRestClient _client;
-		private readonly string _flavor;
-		private const string Url = "https://translate-api.sdlbeglobal.com";
-		public static readonly Log Log = Log.Instance;
-		private readonly StudioCredentials _studioCredentials;
-		private string _authenticationMethod = string.Empty;
 		private readonly IMessageBoxService _messageBoxService;
+		private Constants _constants = new Constants();
+		private LanguageMappingsService _languageMappingService;
+		private List<LanguageMappingModel> _languageMappings = new List<LanguageMappingModel>();
 
-		public BeGlobalV4Translator(BeGlobalTranslationOptions beGlobalTranslationOptions, MessageBoxService messageBoxService, TranslationProviderCredential credentials)
+		public static readonly Log Log = Log.Instance;
+
+		public BeGlobalV4Translator(string server, BeGlobalTranslationOptions options)
 		{
 			try
 			{
-				_messageBoxService = messageBoxService;
-				_flavor = beGlobalTranslationOptions.Model;
-				_authenticationMethod = beGlobalTranslationOptions.AuthenticationMethod;
-				_studioCredentials = new StudioCredentials();
-				_client = new RestClient($"{Url}/v4")
+				_messageBoxService = new MessageBoxService();
+				_languageMappingService = new LanguageMappingsService();
+				_languageMappings = _languageMappingService.GetLanguageMappingSettings()?.LanguageMappings?.ToList();
+				_client = new RestClient(string.Format($"{server}/v4"));
+
+				Utils.LogServerIPAddresses();
+
+				IRestRequest request;
+				if (options.AuthenticationMethod.Equals("ClientLogin"))
 				{
-					CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore)
-				};
-
-				if (!string.IsNullOrEmpty(_authenticationMethod))
-				{
-					if (_authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
-					{
-						var splitedCredentials = credentials?.Credential.Split('#');
-						// the below condition is needed in case the ClientId is not set and credentials exists
-						if (string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId)
-							&& splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
-						{
-							beGlobalTranslationOptions.ClientId = splitedCredentials[0];
-							beGlobalTranslationOptions.ClientSecret = splitedCredentials[1];
-						}
-						if (!string.IsNullOrEmpty(beGlobalTranslationOptions.ClientId) && !string.IsNullOrEmpty(beGlobalTranslationOptions.ClientSecret))
-						{
-							var request = new RestRequest("/token", Method.POST)
-							{
-								RequestFormat = DataFormat.Json
-							};
-							request.AddBody(new { clientId = beGlobalTranslationOptions.ClientId, clientSecret = beGlobalTranslationOptions.ClientSecret });
-							request.RequestFormat = DataFormat.Json;
-							var response = _client.Execute(request);
-							if (response.StatusCode != HttpStatusCode.OK)
-							{
-								throw new Exception(Constants.TokenFailed + response.Content);
-							}
-							dynamic json = JsonConvert.DeserializeObject(response.Content);
-							_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
-						}
-					}
-					else
-					{
-						var accessToken = string.Empty;
-						Application.Current?.Dispatcher?.Invoke(() =>
-						{
-							accessToken = _studioCredentials.GetToken();
-						});
-						accessToken = _studioCredentials.GetToken();
-
-						if (!string.IsNullOrEmpty(accessToken))
-						{
-							_client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
-						}
-					}
-				}
-			}
-			catch(Exception ex)
-			{
-				Log.Logger.Error($"{Constants.BeGlobalV4Translator} {ex.Message}\n {ex.StackTrace}");
-			}
-		}
-
-		public string TranslateText(string text, string sourceLanguage, string targetLanguage)
-		{
-			try
-			{
-				var request = new RestRequest("/mt/translations/async", Method.POST)
-				{
-					RequestFormat = DataFormat.Json
-				};
-				var traceId = GetTraceId(request);
-
-				string[] texts = { text };
-				request.AddBody(new
-				{
-					input = texts,
-					sourceLanguageId = sourceLanguage,
-					targetLanguageId = targetLanguage,
-					model = _flavor,
-					inputFormat = "xliff"
-				});
-				var response = _client.Execute(request);
-
-				if (response.StatusCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(_authenticationMethod)
-					&& _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
-				{
-					// Get refresh token
-					var token = _studioCredentials.EnsureValidConnection();
-					if (!string.IsNullOrEmpty(token))
-					{
-						UpdateRequestHeadersForRefreshToken(request, token);
-
-						var translationAsyncResponse = _client.Execute(request);
-
-						if (translationAsyncResponse.StatusCode == HttpStatusCode.Unauthorized)
-						{
-							_messageBoxService.ShowMessage(Constants.UnauthorizedCredentials, Constants.PluginName);							
-							Log.Logger.Error($"{Constants.UnauthorizedToken} {traceId}");
-						}
-						else if (!translationAsyncResponse.IsSuccessful && translationAsyncResponse.StatusCode != HttpStatusCode.Unauthorized)
-						{
-							ShowErrors(translationAsyncResponse);
-						}
-						return ReturnTranslation(translationAsyncResponse);
-					}
-				}
-				else if (!response.IsSuccessful && response.StatusCode != HttpStatusCode.Unauthorized)
-				{
-					ShowErrors(response);
-				}
-				return ReturnTranslation(response);
-			}
-			catch (Exception e)
-			{
-				Log.Logger.Error($"{Constants.TranslateTextMethod} {e.Message}\n {e.StackTrace}");
-			}
-			return string.Empty;
-		}
-
-		private string ReturnTranslation(IRestResponse response)
-		{
-			dynamic json = JsonConvert.DeserializeObject(response.Content);
-
-			var rawData = WaitForTranslation(json?.requestId?.Value);
-
-			json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
-			return json != null ? json.translation[0] : string.Empty;
-		}
-
-		public int GetUserInformation()
-		{
-			try
-			{
-				RestRequest request;
-				if (!string.IsNullOrEmpty(_authenticationMethod) && _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
-				{
-					request = new RestRequest("/accounts/api-credentials/self")
+					request = new RestRequest("/token", Method.POST)
 					{
 						RequestFormat = DataFormat.Json
 					};
+					request.AddBody(new { clientId = options.ClientId, clientSecret = options.ClientSecret });
 				}
 				else
 				{
-					request = new RestRequest("/accounts/users/self")
+					request = new RestRequest("/token/user", Method.POST)
 					{
 						RequestFormat = DataFormat.Json
 					};
+					request.AddBody(new { username = options.ClientId, password = options.ClientSecret });
 				}
-				var traceId = GetTraceId(request);
+				AddTraceId(request);
+				request.RequestFormat = DataFormat.Json;
+
+				var response = _client.Execute(request);
+				if (response.StatusCode != HttpStatusCode.OK)
+				{
+					throw new Exception(_constants.TokenFailed + response.Content);
+				}
+				dynamic json = JsonConvert.DeserializeObject(response.Content);
+				_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{_constants.BeGlobalV4Translator} {ex.Message}\n {ex.StackTrace}");
+			}
+		}
+
+		/// <summary>
+		/// Get client information from the MTCloud server
+		/// </summary>
+		/// <returns>accountId</returns>
+		public int GetClientInformation()
+		{
+			try
+			{
+				var request = new RestRequest("/accounts/api-credentials/self")
+				{
+					RequestFormat = DataFormat.Json
+				};
+				AddTraceId(request);
 				var response = _client.Execute(request);
 				var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
-				if (response.StatusCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(_authenticationMethod)
-					&& _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
-				{
-					// Get refresh token
-					var token = _studioCredentials.EnsureValidConnection();
-					if (!string.IsNullOrEmpty(token))
-					{
-						// Update authorization parameters
-						UpdateRequestHeadersForRefreshToken(request, token);
-
-						var userInfoResponse = _client.Execute(request);
-						if (userInfoResponse.StatusCode == HttpStatusCode.OK)
-						{
-							return JsonConvert.DeserializeObject<UserDetails>(userInfoResponse.Content).AccountId;
-						}
-						if (userInfoResponse.StatusCode == HttpStatusCode.Unauthorized)
-						{
-							_messageBoxService.ShowMessage(Constants.UnauthorizedCredentials, Constants.PluginName);
-							Log.Logger.Error($"{Constants.UnauthorizedUserInfo} {traceId}");
-						}
-						else if (userInfoResponse.StatusCode != HttpStatusCode.OK && userInfoResponse.StatusCode != HttpStatusCode.Unauthorized)
-						{
-							ShowErrors(userInfoResponse);
-						}
-					}
-				}
-				else if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Unauthorized)
+				if (!response.IsSuccessful)
 				{
 					ShowErrors(response);
 				}
-
-				return user?.AccountId ?? 0;
+				if (user != null)
+				{
+					return user.AccountId;
+				}
+				return 0;
 			}
-			catch(Exception ex)
+			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.GetUserInformation} {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{_constants.GetClientInformation} {e.Message}\n {e.StackTrace}");
 			}
 			return 0;
 		}
 
-		private void UpdateRequestHeadersForRefreshToken(IRestRequest request, string token)
+		/// <summary>
+		/// Get translation for the current source text
+		/// </summary>
+		/// <param name="text">source text</param>
+		/// <param name="sourceDisplayName">source language display name</param>
+		/// <param name="targetDisplayName">target language display name</param>
+		/// <returns>translated text</returns>
+		public string TranslateText(string text, string sourceDisplayName, string targetDisplayName)
 		{
-			// Update authorization parameters
-			_client.RemoveDefaultParameter("Authorization");
-			_client.AddDefaultHeader("Authorization", $"Bearer {token}");
-			request.AddOrUpdateParameter("Authorization", $"Bearer {token}");
+			try
+			{
+				var selectedModel = _languageMappings?.FirstOrDefault(l => l.ProjectLanguagePair.Contains(sourceDisplayName) && l.ProjectLanguagePair.Contains(targetDisplayName));
+				if(selectedModel?.SelectedModelOption == null || string.IsNullOrEmpty(selectedModel?.SelectedModelOption?.Model))
+				{
+					throw new Exception(_constants.NoTranslationMessage);
+				}
+
+				var request = new RestRequest("/mt/translations/async", Method.POST)
+				{
+					RequestFormat = DataFormat.Json
+				};
+				AddTraceId(request);
+
+				string[] texts = { text };
+				// set dictionaries parameter in case user has been selected an available dictionary
+				if (!selectedModel.SelectedMTCloudDictionary.Name.Equals(_constants.NoAvailableDictionary)
+					&& !selectedModel.SelectedMTCloudDictionary.Name.Equals(_constants.NoDictionary))
+				{
+					request.AddBody(new
+					{
+						input = texts,
+						sourceLanguageId = selectedModel?.SelectedMTCodeSource.CodeName,
+						targetLanguageId = selectedModel?.SelectedMTCodeTarget.CodeName,
+						model = selectedModel?.SelectedModelOption?.Model,
+						inputFormat = "xliff",
+						dictionaries = new string[] { selectedModel?.SelectedMTCloudDictionary?.DictionaryId?.ToString() }
+					});
+				}
+				else
+				{
+					request.AddBody(new
+					{
+						input = texts,
+						sourceLanguageId = selectedModel?.SelectedMTCodeSource.CodeName,
+						targetLanguageId = selectedModel?.SelectedMTCodeTarget.CodeName,
+						model = selectedModel?.SelectedModelOption?.Model,
+						inputFormat = "xliff"
+					});
+				}
+				var response = _client.Execute(request);
+				if (!response.IsSuccessful)
+				{
+					ShowErrors(response);
+
+					if (response.StatusCode == 0)
+					{
+						throw new WebException(_constants.InternetConnection);
+					}
+				}
+				dynamic json = JsonConvert.DeserializeObject(response.Content);
+
+				var rawData = WaitForTranslation(json?.requestId?.Value);
+
+				json = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(rawData));
+				return json != null ? json.translation[0] : string.Empty;
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"{_constants.TranslateTextMethod} {e.Message}\n {e.StackTrace}");
+				throw;
+			}
 		}
+
+		/// <summary>
+		/// Get user information from the MTCloud server
+		/// </summary>
+		/// <returns>accountId</returns>
+		public int GetUserInformation()
+		{
+			try
+			{
+				var request = new RestRequest("/accounts/users/self")
+				{
+					RequestFormat = DataFormat.Json
+				};
+				AddTraceId(request);
+
+				var response = _client.Execute(request);
+				var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
+				if (!response.IsSuccessful)
+				{
+					ShowErrors(response);
+				}
+				return user != null ? user.AccountId : 0;
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"{_constants.GetUserInformation} { e.Message}\n {e.StackTrace}");
+			}
+			return 0;
+		}
+
+		/// <summary>
+		/// Get language pairs for the current accountId
+		/// </summary>
+		/// <param name="accountId">accountId</param>
+		/// <returns></returns>
 		public SubscriptionInfo GetLanguagePairs(string accountId)
 		{
 			try
@@ -232,36 +214,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				{
 					RequestFormat = DataFormat.Json
 				};
-				var traceId =GetTraceId(request);
+				AddTraceId(request);
 
 				var response = _client.Execute(request);
-				if (response.StatusCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(_authenticationMethod)
-				&& _authenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
-				{
-					// Get refresh token
-					var token = _studioCredentials.EnsureValidConnection();
-					if (!string.IsNullOrEmpty(token))
-					{
-						// Update authorization parameters
-						UpdateRequestHeadersForRefreshToken(request, token);
-						var languagePairsResponse = _client.Execute(request);
-
-						if (languagePairsResponse.StatusCode == HttpStatusCode.OK)
-						{
-							return JsonConvert.DeserializeObject<SubscriptionInfo>(languagePairsResponse.Content); 
-						}
-						if (languagePairsResponse.StatusCode == HttpStatusCode.Unauthorized)
-						{
-							_messageBoxService.ShowMessage(Constants.UnauthorizedCredentials, Constants.PluginName);
-							Log.Logger.Error($"{Constants.UnauthorizedLanguagePairs} {traceId}");
-						}
-						else if (languagePairsResponse.StatusCode != HttpStatusCode.OK && languagePairsResponse.StatusCode != HttpStatusCode.Unauthorized)
-						{
-							ShowErrors(languagePairsResponse);
-						}
-					}
-				}
-				else if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Unauthorized)
+				if (!response.IsSuccessful)
 				{
 					ShowErrors(response);
 				}
@@ -270,9 +226,39 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.SubscriptionInfoMethod} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.SubscriptionInfoMethod} {e.Message}\n {e.StackTrace}");
 			}
 			return new SubscriptionInfo();
+		}
+
+		/// <summary>
+		/// Get all the dictionaries for the specified accountId
+		/// </summary>
+		/// <param name="accountId">accountId for the current user</param>
+		/// <returns>available dictionaries for current user</returns>
+		public MTCloudDictionaryInfo GetDictionaries(int accountId)
+		{
+			try
+			{
+				var request = new RestRequest($"/accounts/{accountId}/dictionaries")
+				{
+					RequestFormat = DataFormat.Json
+				};
+				AddTraceId(request);
+
+				var response = _client.Execute(request);
+				if (!response.IsSuccessful)
+				{
+					ShowErrors(response);
+				}
+				var dictionaries = JsonConvert.DeserializeObject<MTCloudDictionaryInfo>(response.Content);
+				return dictionaries;
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"{_constants.GetDictionaries} {e.Message}\n {e.StackTrace}");
+			}
+			return new MTCloudDictionaryInfo();
 		}
 
 		private byte[] WaitForTranslation(string id)
@@ -284,37 +270,50 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 				do
 				{
 					response = RestGet($"/mt/translations/async/{id}");
-					if (!response.IsSuccessful || response.StatusCode != HttpStatusCode.OK)
+					if (!response.IsSuccessful)
 					{
 						ShowErrors(response);
+
+						if (response.StatusCode == 0)
+						{
+							throw new WebException(_constants.InternetConnection);
+						}
 					}
 
 					dynamic json = JsonConvert.DeserializeObject(response.Content);
+					if (json == null)
+					{
+						return new byte[1];
+					}
 					status = json.translationStatus;
 
-					if (!status.Equals(Constants.DONE, StringComparison.CurrentCultureIgnoreCase))
+					if (!status.Equals(_constants.DONE, StringComparison.CurrentCultureIgnoreCase))
 					{
 						System.Threading.Thread.Sleep(300);
 					}
-					if (status.Equals(Constants.FAILED))
+					if (status.Equals(_constants.FAILED))
 					{
 						ShowErrors(response);
 					}
-				} while (status.Equals(Constants.INIT, StringComparison.CurrentCultureIgnoreCase) ||
-				         status.Equals(Constants.TRANSLATING, StringComparison.CurrentCultureIgnoreCase));
+				} while (status.Equals(_constants.INIT, StringComparison.CurrentCultureIgnoreCase) ||
+						 status.Equals(_constants.TRANSLATING, StringComparison.CurrentCultureIgnoreCase));
 
 				response = RestGet($"/mt/translations/async/{id}/content");
-				if (!response.IsSuccessful || response.StatusCode != HttpStatusCode.OK)
+				if (!response.IsSuccessful)
 				{
 					ShowErrors(response);
+					if (response.StatusCode == 0)
+					{
+						throw new WebException(_constants.InternetConnection);
+					}
 				}
 				return response.RawBytes;
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.WaitTranslationMethod} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{_constants.WaitTranslationMethod} {e.Message}\n {e.StackTrace}");
+				throw;
 			}
-			return new byte[1];
 		}
 
 		private IRestResponse RestGet(string command)
@@ -323,35 +322,27 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 			{
 				RequestFormat = DataFormat.Json
 			};
-			GetTraceId(request);
+			AddTraceId(request);
 
 			var response = _client.Execute(request);
 			return response;
 		}
 
-		private string GetTraceId(IRestRequest request)
+		private void AddTraceId(IRestRequest request)
 		{
 			var pluginVersion = VersionHelper.GetPluginVersion();
 			var studioVersion = VersionHelper.GetStudioVersion();
-			var traceId = $"{Constants.SDLMachineTranslationCloud} {pluginVersion} - {studioVersion} - {Guid.NewGuid().ToString()}";
-			request.AddHeader(Constants.TraceId, traceId);
-			return traceId;
+			request.AddHeader(_constants.TraceId, $"{_constants.SDLMachineTranslationCloudProvider} {pluginVersion} - {studioVersion}.{Guid.NewGuid().ToString()}");
 		}
 
 		private void ShowErrors(IRestResponse response)
 		{
-			var responseContent = JsonConvert.DeserializeObject<ResponseError>(response.Content);
-
-			if (response.StatusCode == HttpStatusCode.Forbidden)
-			{
-				_messageBoxService.ShowMessage(Constants.ForbiddenLicense, Constants.PluginName);
-				throw new Exception(Constants.ForbiddenLicense);
-			}
+			var responseContent = JsonConvert.DeserializeObject<ResponseError>(response?.Content);
 			if (responseContent?.Errors != null)
 			{
 				foreach (var error in responseContent.Errors)
 				{
-					throw new Exception($"{Constants.ErrorCode} {error.Code}, {error.Description}");
+					throw new Exception($"{_constants.ErrorCode} {error.Code}, {error.Description}");
 				}
 			}
 		}

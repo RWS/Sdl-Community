@@ -1,12 +1,13 @@
 ﻿using System.Diagnostics.Contracts;
-using Sdl.Community.CleanUpTasks.Contracts;
+using SDLCommunityCleanUpTasks.Contracts;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	[ContractClass(typeof(ISegmentLockerPresenterContract))]
     public interface ISegmentLockerPresenter
     {
         void Initialize();
+
         void SaveSettings();
     }
 }

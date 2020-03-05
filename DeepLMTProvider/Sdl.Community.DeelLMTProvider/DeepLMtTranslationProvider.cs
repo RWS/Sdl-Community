@@ -1,5 +1,7 @@
 ﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.Community.DeelLMTProvider;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
@@ -71,7 +73,7 @@ namespace Sdl.Community.DeepLMTProvider
 
         public void LoadState(string translationProviderState)
         {
-            
+	        Options = JsonConvert.DeserializeObject<DeepLTranslationOptions>(translationProviderState);
         }
 
         public void RefreshStatusInfo()
@@ -81,7 +83,7 @@ namespace Sdl.Community.DeepLMTProvider
 
         public string SerializeState()
         {
-            return null;
+            return JsonConvert.SerializeObject(Options);
         }
 
         public bool SupportsLanguageDirection(LanguagePair languageDirection)

@@ -1,8 +1,8 @@
-﻿using Sdl.Community.CleanUpTasks.Utilities;
+﻿using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks.Contracts
+namespace SDLCommunityCleanUpTasks.Contracts
 {
-    internal abstract class IXmlReportGeneratorContract : IXmlReportGenerator
+	internal abstract class IXmlReportGeneratorContract : IXmlReportGenerator
     {
         public void AddConversionItem(string segmentNumber, string before, string after, string searchText, string replaceText)
         {
@@ -14,7 +14,6 @@ namespace Sdl.Community.CleanUpTasks.Contracts
 
         public void AddLockItem(string segmentNumber, string lockedContent, string lockReason)
         {
-
         }
 
         public void AddTagItem(string segmentNumber, string removedTag)

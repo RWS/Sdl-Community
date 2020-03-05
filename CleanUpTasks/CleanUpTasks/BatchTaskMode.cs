@@ -1,8 +1,8 @@
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public enum BatchTaskMode
-	{
-		Source,
-		Target
-	}
+    {
+        Source,
+        Target
+    }
 }

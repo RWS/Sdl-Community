@@ -1,6 +1,6 @@
-﻿namespace Sdl.Community.CleanUpTasks
+﻿namespace SDLCommunityCleanUpTasks
 {
-    public interface ICleanUpTargetSettingsPresenter
+	public interface ICleanUpTargetSettingsPresenter
     {
         void Initialize();
     }

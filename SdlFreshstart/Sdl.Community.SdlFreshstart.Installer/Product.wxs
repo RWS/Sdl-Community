@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="SDL Freshstart" Language="1033" Version="1.0.0.4" Manufacturer="Sdl Community" UpgradeCode="bcee5a2b-8710-4d13-8ba8-2f7faa5d9407">
+	<Product Id="*" Name="SDL Freshstart" Language="1033" Version="1.0.0.7" Manufacturer="Sdl Community" UpgradeCode="bcee5a2b-8710-4d13-8ba8-2f7faa5d9407">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)Icon.ico" />
@@ -49,7 +49,7 @@
 			<Component Id="Sdl.Community.SdlFreshstart.exe.config" Guid="749595ae-e1ec-4afa-93ef-3a9ae3b938f7">
 				<File Id="Sdl.Community.SdlFreshstart.exe.config" Name="Sdl.Community.SdlFreshstart.exe.config" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\Sdl.Community.SdlFreshstart.exe.config" />
 			</Component>
-			
+
 			<Component Id="MahApps.Metro.dll" Guid="*">
 				<File Id="MahApps.Metro.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\MahApps.Metro.dll"></File>
 			</Component>
@@ -57,13 +57,18 @@
 			<Component Id="Newtonsoft.Json.dll" Guid="*">
 				<File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\Newtonsoft.Json.dll"></File>
 			</Component>
-			
+
 			<Component Id="System.Windows.Interactivity.dll" Guid="*">
 				<File Id="System.Windows.Interactivity.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\System.Windows.Interactivity.dll"></File>
 			</Component>
-		</ComponentGroup>
-	
-	</Fragment>
-	
-</Wix>
 
+			<Component Id="Sdl.Community.Toolkit.Core.dll" Guid="*">
+				<File Id="Sdl.Community.Toolkit.Core.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\Sdl.Community.Toolkit.Core.dll"></File>
+			</Component>
+
+			<Component Id="NLog.dll" Guid="*">
+				<File Id="NLog.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\NLog.dll"></File>
+			</Component>
+		</ComponentGroup>
+	</Fragment>	
+</Wix>

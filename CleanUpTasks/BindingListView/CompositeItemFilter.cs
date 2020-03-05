@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Equin.ApplicationFramework
 {
-    public class CompositeItemFilter<T> : IItemFilter<T>
+	public class CompositeItemFilter<T> : IItemFilter<T>
     {
         private List<IItemFilter<T>> _filters;
 
@@ -32,6 +32,5 @@ namespace Equin.ApplicationFramework
             }
             return true;
         }
-
     }
 }

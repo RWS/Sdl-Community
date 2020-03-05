@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Sdl.Community.AdvancedDisplayFilter.Extensions;
+using Sdl.Community.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.AdvancedDisplayFilter.Services;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
@@ -112,10 +113,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 				if (success)
 				{
 					success = _customFilterService.Filter(rowInfo, true);					
-				}
+				}				
 			}
 
-			return _reverseSearch ? !success : success;
+			if (_reverseSearch)
+			{
+				if (!Settings.ShowAllContent && !rowInfo.IsSegment)
+				{
+					return false;
+				}
+
+				return !success;
+			}			
+
+			return success;
 		}	
 	}
 }

@@ -1,141 +1,77 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Model;
-using Sdl.Community.BeGlobalV4.Provider.Service;
 using Sdl.Community.BeGlobalV4.Provider.Studio;
 using Sdl.Community.BeGlobalV4.Provider.Ui;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using static Sdl.Community.BeGlobalV4.Provider.Helpers.Enums;
-using Application = System.Windows.Application;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 {
 	public class BeGlobalWindowViewModel : BaseViewModel
 	{
-		private readonly LanguagePair[] _languagePairs;
-		private readonly NormalizeSourceTextHelper _normalizeSourceTextHelper;
-		private bool _reSendChecked;
-		private TranslationModel _selectedModel;
-		private BeGlobalLoginOptions _selectedLoginOption;
-		private string _loginMethod;
-		private int _selectedIndex;
-		private MessageBoxService _messageBoxService;
-		private TranslationProviderCredential _credentials;
-		private string _message;
-		private readonly StudioCredentials _studioCredentials = new StudioCredentials();
-
+		public BeGlobalTranslationOptions Options { get; set; }
+		public LoginViewModel LoginViewModel { get; set; }
+		public LanguageMappingsViewModel LanguageMappingsViewModel { get; set; }
 		private ICommand _okCommand;
-		private ICommand _loginCommand;
-		private ICommand _passwordChangedCommand;
+		private int _selectedTabIndex;
+		private string _message;
+		private bool _isMTCodeIconVisible;
+		private bool _isProviderIconVisible;
+		private Constants _constants = new Constants();
+		private readonly BeGlobalWindow _mainWindow;
+		public static readonly Log Log = Log.Instance;
 
-		public BeGlobalWindowViewModel(BeGlobalTranslationOptions options, LanguagePair[] languagePairs, TranslationProviderCredential credentials)
+		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options,
+			TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
 		{
+			IsMTCodeIconVisible = false;
+			IsProviderIconVisible = true;
+
 			Options = options;
-			BeGlobalWindow = new BeGlobalWindow();
-			_languagePairs = languagePairs;
-			_normalizeSourceTextHelper = new NormalizeSourceTextHelper();
-			_loginMethod = Enums.LoginOptions.APICredentials.ToString();
-			_credentials = credentials;
-			TranslationOptions = new ObservableCollection<TranslationModel>();
-			SelectedIndex = (int)Enums.LoginOptions.APICredentials;
-			_messageBoxService = new MessageBoxService();
-			if (Options != null)
+			LanguageMappingsViewModel = new LanguageMappingsViewModel(options, this, languagePairs);
+
+			LoginViewModel = new LoginViewModel(options, languagePairs, LanguageMappingsViewModel, this);
+			_mainWindow = mainWindow;
+
+			if (credentialStore == null) return;
+			if (options.AuthenticationMethod.Equals("ClientLogin"))
 			{
-				ReSendChecked = options.ResendDrafts;
+				_mainWindow.LoginTab.ClientIdBox.Password = options.ClientId;
+				_mainWindow.LoginTab.ClientSecretBox.Password = options.ClientSecret;
+				LoginViewModel.SelectedOption = LoginViewModel.AuthenticationOptions[0];
 			}
-			SetLoginOptions();
-			if (credentials == null) return;
-			var credential = _credentials.Credential.Replace("sdlmachinetranslationcloudprovider:///", string.Empty);
-			if (credential.Contains("#"))
+			else
 			{
-				var splitedCredentials = credentials.Credential.Split('#');
-				if (splitedCredentials.Length == 2 && !string.IsNullOrEmpty(splitedCredentials[0]) && !string.IsNullOrEmpty(splitedCredentials[1]))
+				LoginViewModel.Email = options.ClientId;
+				_mainWindow.LoginTab.UserPasswordBox.Password = options.ClientSecret;
+				LoginViewModel.SelectedOption = LoginViewModel.AuthenticationOptions[1];
+			}
+
+			var projectController = AppInitializer.GetProjectController();
+			projectController.ProjectsChanged += ProjectController_ProjectsChanged;
+		}
+		
+		public int SelectedTabIndex
+		{
+			get => _selectedTabIndex;
+			set
+			{
+				Mouse.OverrideCursor = Cursors.Wait;
+				_selectedTabIndex = value;
+				if (_selectedTabIndex == 1)
 				{
-					var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
-					var accountId = beGlobalTranslator.GetUserInformation();
-					var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
-					GetEngineModels(subscriptionInfo);
-					SetEngineModel();
-					SetAuthenticationOptions();
-				}
+					LanguageMappingsViewModel.LoadLanguageMappings();
+				}			
+				ValidateWindow(true);				
+				
+				OnPropertyChanged();
+				Mouse.OverrideCursor = Cursors.Arrow;
 			}
 		}
 		
-		public BeGlobalTranslationOptions Options { get; set; }
-		public BeGlobalWindow BeGlobalWindow { get; set; }
-		public ObservableCollection<BeGlobalLoginOptions> LoginOptions { get; set; }
-
-		public bool ReSendChecked
-		{
-			get => _reSendChecked;
-			set
-			{
-				_reSendChecked = value;
-				if (Options?.Model != null)
-				{
-					Options.ResendDrafts = value;
-				}
-				OnPropertyChanged(nameof(ReSendChecked));
-			}
-		}
-
-		public TranslationModel SelectedModelOption
-		{
-			get => _selectedModel;
-			set
-			{
-				_selectedModel = value;
-				if (Options?.Model != null)
-				{
-					SetOptions(value);
-				}
-				OnPropertyChanged(nameof(SelectedModelOption));
-			}
-		}
-
-		public int SelectedIndex
-		{
-			get => _selectedIndex;
-			set
-			{
-				_selectedIndex = value;				
-				OnPropertyChanged(nameof(SelectedIndex));
-			}
-		}
-
-	    public BeGlobalLoginOptions SelectedLoginOption
-		{
-			get => _selectedLoginOption;
-			set
-			{
-				_selectedLoginOption = value;
-				OnPropertyChanged(nameof(SelectedLoginOption));
-
-				CheckLoginMethod();
-				SetClientOptions();
-			}
-		}
-
-		// LoginMethod is used to display/hide the ClientId,ClientSecret fields based on which authentication mode is selected
-		public string LoginMethod
-		{
-			get => _loginMethod;
-			set
-			{
-				if (_loginMethod == value)
-				{
-					return;
-				}
-				_loginMethod = value;
-				OnPropertyChanged(nameof(LoginMethod));
-			}
-		}
-
 		public string Message
 		{
 			get => _message;
@@ -150,179 +86,140 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		public ObservableCollection<TranslationModel> TranslationOptions { get; set; }
+		public bool IsMTCodeIconVisible
+		{
+			get => _isMTCodeIconVisible;
+			set
+			{
+				_isMTCodeIconVisible = value;
+				OnPropertyChanged(nameof(IsMTCodeIconVisible));
+			}
+		}
+
+		public bool IsProviderIconVisible
+		{
+			get => _isProviderIconVisible;
+			set
+			{
+				_isProviderIconVisible = value;
+				OnPropertyChanged(nameof(IsProviderIconVisible));
+			}
+		}
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
-		public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new RelayCommand(LoginAction));
-		public ICommand PasswordChangedCommand => _passwordChangedCommand ?? (_passwordChangedCommand = new RelayCommand(ChangePasswordAction));
-
-		private void ChangePasswordAction(object parameter)
-		{
-			var passwordBox = (PasswordBox)parameter;
-			if(passwordBox.Password.Length > 0)
-			{
-				Message = string.Empty;
-			}
-		}
-
-		private void LoginAction(object parameter)
-		{
-
-		}
-
-		private void GetEngineModels(SubscriptionInfo subscriptionInfo)
-		{
-			var sourceLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(_languagePairs?[0].SourceCulture);
-			var pairsWithSameSource = subscriptionInfo.LanguagePairs.Where(l => l.SourceLanguageId.Equals(sourceLanguage)).ToList();
-			if (_languagePairs?.Count() > 0)
-			{
-				foreach (var languagePair in _languagePairs)
-				{
-					var targetLanguage = _normalizeSourceTextHelper.GetCorespondingLangCode(languagePair.TargetCulture);
-
-					var serviceLanguagePairs = pairsWithSameSource.Where(t => t.TargetLanguageId.Equals(targetLanguage)).ToList();
-
-					foreach (var serviceLanguagePair in serviceLanguagePairs)
-					{
-						var existingTranslationModel = TranslationOptions.FirstOrDefault(e => e.Model.Equals(serviceLanguagePair.Model));
-						TranslationModel newTranslationModel = null;
-						if (existingTranslationModel == null)
-						{
-							newTranslationModel = new TranslationModel
-							{
-								Model = serviceLanguagePair.Model,
-								DisplayName = serviceLanguagePair.DisplayName,
-							};
-							TranslationOptions.Add(newTranslationModel);
-						}
-
-						(existingTranslationModel ?? newTranslationModel).LanguagesSupported.Add(languagePair.TargetCulture.Name, serviceLanguagePair.Name);
-					}
-				}
-			}
-		}
 
 		private void Ok(object parameter)
 		{
-			if (LoginMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials))
-				&& (string.IsNullOrEmpty(BeGlobalWindow.ClientIdBox.Password) || string.IsNullOrEmpty(BeGlobalWindow.ClientSecretBox.Password)))
+			Mouse.OverrideCursor = Cursors.Wait;
+			var loginTab = parameter as Login;
+			if (loginTab != null)
 			{
-				Message = Constants.CredentialsValidation;
-				return;
-			}
-			if (Options?.Model == null)
-			{
-				Options.ClientId = BeGlobalWindow.ClientIdBox.Password.TrimEnd();
-				Options.ClientSecret = BeGlobalWindow.ClientSecretBox.Password.TrimEnd();
-				var beGlobalTranslator = new BeGlobalV4Translator(Options, _messageBoxService, _credentials);
-				var accountId = beGlobalTranslator.GetUserInformation();
-				var subscriptionInfo = beGlobalTranslator.GetLanguagePairs(accountId.ToString());
-				GetEngineModels(subscriptionInfo);
-				SetEngineModel();
-			}			
-			WindowCloser.SetDialogResult(BeGlobalWindow, true);
-			BeGlobalWindow.Close();
-		}
-
-		private void SetEngineModel()
-		{
-			if (Options?.Model == null)
-			{
-				if (TranslationOptions?.Count > 0)
+				var validateWindow = ValidateWindow(true);
+				if (string.IsNullOrEmpty(validateWindow))
 				{
-					SelectedModelOption = TranslationOptions?[0];
-					if (Options != null)
-					{
-						SetOptions(TranslationOptions?[0]);
-					}
+					// Remove and add the new settings back to SettingsGroup of .sdlproj when user presses on Ok				
+					LanguageMappingsViewModel.SaveLanguageMappingSettings();
+
+					WindowCloser.SetDialogResult(_mainWindow, true);
+					_mainWindow.Close();
 				}
 			}
-			else
-			{
-				var mtModel = TranslationOptions?.FirstOrDefault(m => m.Model.Equals(Options.Model));
-				if (mtModel != null)
-				{
-					var selectedModelIndex = TranslationOptions.IndexOf(mtModel);
-					SelectedModelOption = TranslationOptions[selectedModelIndex];
-				}
-			}
-		}
-
-		private void SetLoginOptions()
-		{
-			LoginOptions = new ObservableCollection<BeGlobalLoginOptions>();
-			foreach (LoginOptions enumVal in Enum.GetValues(typeof(LoginOptions)))
-			{
-				var displayName = Enums.GetDisplayName(enumVal);
-				displayName = !string.IsNullOrEmpty(displayName) ? displayName : enumVal.ToString();
-
-				var beGlobalLoginOption = new BeGlobalLoginOptions { LoginOption = displayName };
-				LoginOptions.Add(beGlobalLoginOption);
-			}
-			//set by default the APICredentials method in case it wasn't setup yet
-			if (string.IsNullOrEmpty(Options.AuthenticationMethod)
-				|| Options.AuthenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
-			{
-				SelectedLoginOption = new BeGlobalLoginOptions { LoginOption = Enums.GetDisplayName(Enums.LoginOptions.APICredentials) };
-			}
-		}
-
-		private void SetClientOptions()
-		{
-			if(!string.IsNullOrEmpty(Options.ClientId) && !string.IsNullOrEmpty(Options.ClientSecret))
-			{
-				BeGlobalWindow.ClientIdBox.Password = Options.ClientId;
-				BeGlobalWindow.ClientSecretBox.Password = Options.ClientSecret;
-			}
-			Options.AuthenticationMethod = SelectedLoginOption?.LoginOption;
-		}
-
-		private void SetAuthenticationOptions()
-		{
-			if (string.IsNullOrEmpty(Options.AuthenticationMethod)) return;
-			if (Options.AuthenticationMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.APICredentials)))
-			{
-				if (!string.IsNullOrEmpty(Options.ClientId) && !string.IsNullOrEmpty(Options.ClientSecret))
-				{
-					BeGlobalWindow.ClientIdBox.Password = Options.ClientId;
-					BeGlobalWindow.ClientSecretBox.Password = Options.ClientSecret;
-				}
-				else
-				{
-					var splitedCredentials = _credentials?.Credential.Split('#');
-					BeGlobalWindow.ClientIdBox.Password = splitedCredentials.Length > 0 ? splitedCredentials[0] : string.Empty;
-					BeGlobalWindow.ClientSecretBox.Password = splitedCredentials.Length > 0 ? splitedCredentials[1] : string.Empty;
-				}
-			}
-			else
-			{
-				SelectedIndex = (int)Enums.LoginOptions.StudioAuthentication;
-				SelectedLoginOption = new BeGlobalLoginOptions { LoginOption = Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication) };
-			}
-		}
-
-		private void SetOptions(TranslationModel translationModel)
-		{
-			Options.Model = translationModel.Model;
-			Options.DisplayName = translationModel.DisplayName;
-			Options.LanguagesSupported = translationModel.LanguagesSupported;
+			Mouse.OverrideCursor = Cursors.Arrow;
 		}
 
 		/// <summary>
-		///  Set the LoginMethod based on user selection.
-		///  If LoginMethod is Studio Authentication, check if user is logged-in in Studio
+		/// Validate window
 		/// </summary>
-		private void CheckLoginMethod()
+		/// <param name="isOkPressed">isOkPressed</param>
+		/// <returns>message in case validation is not fine, otherwise, returns string.Empty</returns>
+		public string ValidateWindow(bool isOkPressed)
 		{
-			LoginMethod = _selectedLoginOption?.LoginOption;
-			if (LoginMethod.Equals(Enums.GetDisplayName(Enums.LoginOptions.StudioAuthentication)))
+			var loginTab = _mainWindow?.LoginTab;
+			Options.ResendDrafts = LanguageMappingsViewModel.ReSendChecked;
+			try
 			{
-				Message = string.Empty;
-				AppItializer.EnsureInitializer();
-				Application.Current?.Dispatcher?.Invoke(() =>
+				if(!LanguageMappingsViewModel.LanguageMappings.Any())
 				{
-					_studioCredentials.GetToken();
-				});
+					Message = _constants.EnginesSelectionMessage;
+					return Message;
+				}
+
+				if (LoginViewModel.SelectedOption.Type.Equals(_constants.User))
+				{
+					var password = loginTab?.UserPasswordBox.Password;
+					if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(LoginViewModel.Email))
+					{
+						return GetEngineValidation(LoginViewModel?.Email, password, "UserLogin", isOkPressed);
+					}
+				}
+				else
+				{
+					var clientId = loginTab?.ClientIdBox.Password;
+					var clientSecret = loginTab?.ClientSecretBox.Password;
+					if (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret))
+					{
+						return GetEngineValidation(clientId, clientSecret, "ClientLogin", isOkPressed);
+					}
+				}
+				if (loginTab != null)
+				{
+					Message = _constants.CredentialsValidation;
+				}				
+			}
+			catch (Exception e)
+			{
+				if (loginTab != null)
+				{
+					Message = (e.Message.Contains(_constants.TokenFailed) || e.Message.Contains(_constants.NullValue)) ? _constants.CredentialsNotValid : e.Message;
+				}
+				Log.Logger.Error($"{_constants.IsWindowValid} {e.Message}\n {e.StackTrace}");
+			}
+			return Message;
+		}
+		
+		/// <summary>
+		/// Validate the engines setup
+		/// </summary>
+		/// <param name="clientId">clientId</param>
+		/// <param name="clientSecret">clientSecret</param>
+		/// <param name="useClientAuthentication">useClientAuthentication</param>
+		/// <param name="isOkPressed">isOkPressed</param>
+		/// <returns>Return message if the engines is not validated correctly, otherwise, returns string.Empty</returns>
+		private string GetEngineValidation(string clientId, string clientSecret, string authenticationMethod, bool isOkPressed)
+		{
+			Options.ClientId = clientId.TrimEnd().TrimStart();
+			Options.ClientSecret = clientSecret.TrimEnd().TrimStart();
+			Options.AuthenticationMethod = authenticationMethod;
+			Message = string.Empty;
+
+			if (isOkPressed || LanguageMappingsViewModel.LanguageMappings.Any())
+			{
+				var isEngineSetup = LoginViewModel.ValidateEnginesSetup();
+				if (!isEngineSetup)
+				{
+					Message = _constants.CredentialsAndInternetValidation;
+				}
+				else if (!LanguageMappingsViewModel.LanguageMappings.Any(l => l.Engines.Any()))
+				{
+					Message = _constants.NoEnginesLoaded;
+					return Message;
+				}
+				return Message;
+			}
+			return Message;
+		}
+
+		private void ProjectController_ProjectsChanged(object sender, EventArgs e)
+		{
+			var projectsController = (ProjectsController)sender;
+			var lastCreatedProj = projectsController?.GetAllProjects()?.LastOrDefault();
+			var currentProj = projectsController?.CurrentProject;
+
+			// Save language mappings configuration for the last created project
+			// (used when user adds the provider through Project creation wizard)
+			if (currentProj != null && currentProj.FilePath.Equals(lastCreatedProj?.FilePath))
+			{
+				LanguageMappingsViewModel.SaveLanguageMappingSettings();
 			}
 		}
 	}

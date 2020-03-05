@@ -10,8 +10,12 @@ using Sdl.Community.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.AdvancedDisplayFilter.Models;
 using Sdl.Community.AdvancedDisplayFilter.Services;
 using Sdl.Community.Toolkit.FileType;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Brushes = System.Drawing.Brushes;
+using Color = System.Drawing.Color;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
@@ -37,11 +41,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 			_highlightService = new HighlightService();
 			_qualitySamplingService = new QualitySamplingService();
-
-			// colorsListView.View = View.List;
-			colorsListView.CheckBoxes = false;
-			colorsListView.View = View.Tile;
-			colorsListView.TileSize = new Size(70, 20);
 
 			listView_available.ListViewItemSorter = new ListViewItemComparer();
 			listView_selected.ListViewItemSorter = new ListViewItemComparer();
@@ -91,9 +90,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		public DisplayFilter DisplayFilter { get; set; }
 
-		public IList<IContextInfo> ContextInfoList { get; set; }
+		public CustomFilterService CustomFilterService { get; private set; }
 
-		public List<string> AvailableColorsList { get; set; }
+		public IList<IContextInfo> ContextInfoList { get; set; }
 
 		private CustomFilterSettings CustomFilterSettings
 		{
@@ -128,6 +127,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					None = noneBtn.Checked,
 					UseRegexCommentSearch = commentRegexBox.Checked,
 					Colors = new List<string>(),
+					ColorsFoundIn = DisplayFilterSettings.ContentLocation.SourceOrTarget,
 					FuzzyMin = fuzzyMin.Text,
 					FuzzyMax = fuzzyMax.Text,
 					SplitSegments = splitCheckBox.Checked,
@@ -154,6 +154,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 						_customFilterSettings.Colors.Add(colorCode);
 					}
 				}
+
+				var selectedColorsFoundIn = (ComboBoxItem)comboBox_colorsFoundIn.SelectedItem;
+				_customFilterSettings.ColorsFoundIn = (DisplayFilterSettings.ContentLocation)selectedColorsFoundIn.Type;
+
 
 				if (groupedBtn.Checked)
 				{
@@ -221,6 +225,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 						}
 					}
 				}
+
+				var selectedColorsFoundInIndex = 0;
+				for (var index = 0; index < comboBox_colorsFoundIn.Items.Count; index++)
+				{
+					var item = (ComboBoxItem)comboBox_colorsFoundIn.Items[index];
+					var success = Enum.TryParse(item.Type.ToString(), out DisplayFilterSettings.ContentLocation foundIn);
+					if (success && foundIn == value.ColorsFoundIn)
+					{
+						selectedColorsFoundInIndex = index;
+						break;
+					}
+				}
+				comboBox_colorsFoundIn.SelectedIndex = selectedColorsFoundInIndex;
 
 				if (groupedBtn.Checked)
 				{
@@ -515,43 +532,31 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					item.Tag = type;
 				}
 
-				foreach (var type in Enum.GetValues(typeof(OriginType)))
+				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginType)))
 				{
 					if (type.ToString() == "None")
 					{
 						continue;
 					}
 
-					var item = listView_available.Items.Add(Helper.GetTypeName((OriginType)type));
+					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginType)type));
 					item.Group = GroupOriginAvailable;
 					item.Tag = type;
 				}
 
-				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginTypeExtended)))
-				{
-					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginTypeExtended)type));
-					item.Group = GroupOriginAvailable;
-					item.Tag = type;
-				}
 
-				foreach (var type in Enum.GetValues(typeof(OriginType)))
+				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginType)))
 				{
 					if (type.ToString() == "None")
 					{
 						continue;
 					}
 
-					var item = listView_available.Items.Add(Helper.GetTypeName((OriginType)type));
+					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginType)type));
 					item.Group = GroupPreviousOriginAvailable;
 					item.Tag = type;
 				}
 
-				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginTypeExtended)))
-				{		
-					var item = listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginTypeExtended)type));
-					item.Group = GroupPreviousOriginAvailable;
-					item.Tag = type;
-				}
 
 				listView_available.Items[0].Selected = true;
 			}
@@ -598,7 +603,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			commentRegexBox.Checked = false;
 			sourceSameBox.Checked = false;
 			equalsCaseSensitive.Checked = false;
-			colorsListView.SelectedItems.Clear();
 			_reverseFilter = false;
 			containsTagsCheckBox.Checked = false;
 			modifiedByBox.Text = string.Empty;
@@ -612,6 +616,32 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 			#endregion
 
+			#region  |  colors panel  |
+
+			colorsListView.SelectedItems.Clear();
+
+			comboBox_colorsFoundIn.BeginUpdate();
+			comboBox_colorsFoundIn.Items.Clear();
+
+			foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.ContentLocation)))
+			{
+				if (type.ToString() == "None")
+				{
+					continue;
+				}
+
+				comboBox_colorsFoundIn.Items.Add(new ComboBoxItem
+				{
+					Name = Helper.GetTypeName((DisplayFilterSettings.ContentLocation)type),
+					Type = type
+				});
+			}
+
+			comboBox_colorsFoundIn.EndUpdate();
+			comboBox_colorsFoundIn.SelectedIndex = 0;
+
+			#endregion
+
 			#region  |  filter status counter  |
 
 			// initialize the filter status counter
@@ -620,7 +650,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			#endregion
 
 			InitializeTabPageIcons();
-			AvailableColorsList = new List<string>();
 		}
 
 		private static EditorController GetEditorController()
@@ -628,87 +657,40 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			return SdlTradosStudio.Application.GetController<EditorController>();
 		}
 
-		private void AddColor(string color)
-		{
-			if (!string.IsNullOrEmpty(color) && !AvailableColorsList.Contains(color))
-			{
-				AvailableColorsList.Add(color);
-			}
-		}
-
-		private void PopulateColorList()
-		{
-			try
-			{
-				AvailableColorsList.Clear();
-
-				foreach (var segmentPair in _activeDocument.SegmentPairs)
-				{
-					var paragraphUnit = ColorPickerHelper.GetParagraphUnit(segmentPair);
-					var colors = paragraphUnit != null
-						? ColorPickerHelper.GetColorsList(paragraphUnit.Source, segmentPair.Source)
-						: ColorPickerHelper.GetColorsList(segmentPair.Source);
-
-					foreach (var color in colors)
-					{
-						AddColor(color);
-					}
-
-					if (colors.Count > 0)
-					{
-						continue;
-					}
-
-					var contextInfoList = segmentPair.GetParagraphUnitProperties().Contexts.Contexts;
-					var colorCode = ColorPickerHelper.DefaultFormatingColorCode(contextInfoList);
-
-					AddColor(colorCode);
-				}
-
-				SetAddColorsToListView();
-			}
-			catch
-			{
-				// catch all; ignore
-			}
-
-		}
-
-		private void SetAddColorsToListView()
-		{
-			colorsListView.Items.Clear();
-
-			if (AvailableColorsList != null)
-			{
-				foreach (var color in AvailableColorsList)
-				{
-					var hexaCode = string.Concat("#", color);
-					var colorItem = new ListViewItem(hexaCode)
-					{
-						BackColor = ColorTranslator.FromHtml(hexaCode),
-						ForeColor = Color.White
-					};
-					colorsListView.Items.Add(colorItem);
-				}
-			}
-		}
-
-		private void ApplyFilter(bool reverseSearch)
+		public void ApplyFilter(bool reverseSearch)
 		{
 			if (OnApplyDisplayFilter != null)
 			{
+				//if (CommunityApplicationInitializer.ContentFilterSettings != null)
+				//{
+				//	var filterContentSettings = CommunityApplicationInitializer.ContentFilterSettings;
+				//	if (filterContentSettings.WasContentFilterApplied && !string.IsNullOrEmpty(filterContentSettings.SelectedText))
+				//	{
+				//		if (filterContentSettings.SearchInSource)
+				//		{
+				//			DisplayFilterSettings.SourceText = filterContentSettings.SelectedText;
+				//			textBox_source.Text = filterContentSettings.SelectedText;
+				//		}
+				//		if (!filterContentSettings.SearchInSource)
+				//		{
+				//			DisplayFilterSettings.TargetText = filterContentSettings.SelectedText;
+				//			target_textbox.Text = filterContentSettings.SelectedText;
+				//		}
+				//	}
+				//}
 				_qualitySamplingSegmentsIds = _qualitySamplingService.GetSamplingSegmentPairsIds(_activeDocument, CustomFilterSettings);
 
 				var result = new FilteredCountsCallback(UpdateFilteredCountDisplay);
 
 				OnApplyDisplayFilter?.Invoke(DisplayFilterSettings, CustomFilterSettings, reverseSearch, result);
 			}
+			//if (CommunityApplicationInitializer.ContentFilterSettings != null)
+			//	CommunityApplicationInitializer.ContentFilterSettings.WasContentFilterApplied = false;
 		}
 
 		private void ClearFilter()
 		{
 			InitializeSettings();
-
 			ApplyFilter(false);
 		}
 
@@ -758,6 +740,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				}
 
 				var savedSettings = DisplayFilterSerializer.DeserializeSettings<SavedSettings>(settingsXml);
+
 				// deserialize the to the settings xml
 				DisplayFilterSettings = savedSettings.DisplayFilterSettings;
 				CustomFilterSettings = savedSettings.CustomFilterSettings;
@@ -792,6 +775,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			if (_activeDocument != null)
 			{
 				_activeDocument.DocumentFilterChanged -= ActiveDocument_DocumentFilterChanged;
+				_activeDocument.ContentChanged -= ActiveDocument_ContentChanged;
+				_activeDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
 			}
 
 			// get a reference to the active document            
@@ -800,20 +785,60 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			if (_activeDocument != null)
 			{
 				_activeDocument.DocumentFilterChanged += ActiveDocument_DocumentFilterChanged;
+				_activeDocument.ContentChanged += ActiveDocument_ContentChanged;
+				_activeDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
 
 				SetContextInfoList();
 				PopulateContextInfoList();
+
+
+				PopulateColorList();
 
 				if (_activeDocument.DisplayFilter != null &&
 					_activeDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
 				{
 					//invalidate UI with display settings recovered from the active document
 					DisplayFilterSettings = ((DisplayFilter)_activeDocument.DisplayFilter).Settings;
+					CustomFilterSettings = ((DisplayFilter)_activeDocument.DisplayFilter).CustomSettings;
 				}
 
-				PopulateColorList();
-
 				UpdateFilteredCountDisplay(_activeDocument.FilteredSegmentPairsCount, _activeDocument.TotalSegmentPairsCount);
+			}
+		}
+
+		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
+		{
+			var segmentPair = _activeDocument?.ActiveSegmentPair;
+			if (segmentPair == null)
+			{
+				return;
+			}
+
+			AddNewColorCodes(segmentPair);
+		}
+
+		private void ActiveDocument_ContentChanged(object sender, DocumentContentEventArgs e)
+		{
+			var segmentPair = _activeDocument?.ActiveSegmentPair;
+			if (segmentPair == null)
+			{
+				return;
+			}
+
+			AddNewColorCodes(segmentPair);
+		}
+
+		private void AddNewColorCodes(ISegmentPair segmentPair)
+		{
+			if (segmentPair == null)
+			{
+				return;
+			}
+
+			var colors = ColorPickerHelper.GetColors(segmentPair, DisplayFilterSettings.ContentLocation.SourceOrTarget);
+			foreach (var color in colors)
+			{
+				AddColorItem(color);
 			}
 		}
 
@@ -827,9 +852,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			_reverseFilter = reverse;
 
 			var contentMatchingService = new ContentMatchingService(DisplayFilterSettings, CustomFilterSettings);
-			var customFilterService = new CustomFilterService(DisplayFilterSettings, CustomFilterSettings, _activeDocument);
+			CustomFilterService = new CustomFilterService(DisplayFilterSettings, CustomFilterSettings, _activeDocument);
 
-			DisplayFilter = new DisplayFilter(displayFilterSettings, customFilterSettings, reverse, _qualitySamplingService, contentMatchingService, customFilterService);
+			DisplayFilter = new DisplayFilter(displayFilterSettings, customFilterSettings, reverse, _qualitySamplingService, contentMatchingService, CustomFilterService);
 
 			_activeDocument.ApplyFilterOnSegments(DisplayFilter);
 
@@ -850,8 +875,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			filterExpressionControl.ClearItems();
 
+			if (_reverseFilter)
+			{
+				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Reverse + ":\"" + _reverseFilter + "\"");
+			}
+
 			if (!string.IsNullOrEmpty(DisplayFilterSettings.SourceText)
-				|| string.IsNullOrEmpty(DisplayFilterSettings.TargetText))
+				|| !string.IsNullOrEmpty(DisplayFilterSettings.TargetText))
 			{
 				if (!string.IsNullOrEmpty(DisplayFilterSettings.SourceText))
 				{
@@ -882,6 +912,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Case_Sensitive + ":\"" + DisplayFilterSettings.IsCaseSensitive + "\"");
 				}
+
+				if (CustomFilterSettings.SearchInTagContent)
+				{
+					filterExpressionControl.AddItem(CustomFilterSettings.SearchInTagContentAndText
+						? StringResources.DisplayFilterControl_UseTagsAlso
+						: StringResources.DisplayFilterControl_UseTagsOnly);
+				}
 			}
 
 			if (DisplayFilterSettings.ShowAllContent)
@@ -891,14 +928,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			}
 
 
-			if (DisplayFilterSettings.ConfirmationLevels.Any()
-				|| DisplayFilterSettings.OriginTypes.Any()
-				|| DisplayFilterSettings.PreviousOriginTypes.Any()
-				|| DisplayFilterSettings.SegmentReviewTypes.Any()
-				|| DisplayFilterSettings.SegmentLockingTypes.Any()
-				|| DisplayFilterSettings.SegmentContentTypes.Any())
+			if (CustomFilterService?.GetAttributeFilterGroupsCount() > 1)
 			{
-				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Relationship_Operator + ":\"" + CustomFilterSettings.FilterAttributesLogicalOperator + "\"");
+				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Relationship_Operator + ":\"" +
+												CustomFilterSettings.FilterAttributesLogicalOperator + "\"");
 			}
 
 			if (DisplayFilterSettings.ConfirmationLevels.Any())
@@ -928,12 +961,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Previous_Origin + ":" + "(" + value + ")");
 				}
-			}
-
-			if (_reverseFilter)
-			{
-				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Reverse + ":\"" +
-												_reverseFilter + "\"");
 			}
 
 			if (DisplayFilterSettings.SegmentReviewTypes.Any())
@@ -997,8 +1024,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 														+ (current != string.Empty
 															? " | "
 															: string.Empty)
-														+ CustomFilterSettings.Colors.FirstOrDefault(a => a == item)) +
-								")");
+														+ CustomFilterSettings.Colors.FirstOrDefault(a => a == item))
+						+ "; " + StringResources.DisplayFilterControl_Found_In + ":" + Helper.GetTypeName(CustomFilterSettings.ColorsFoundIn) + ")");
 				}
 
 
@@ -1089,8 +1116,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Segments_With_tags + ":\"" +
 													CustomFilterSettings.ContainsTags + "\"");
-
 				}
+
 				if (CustomFilterSettings.CreatedByChecked)
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_CreatedBy + ":\"" +
@@ -1106,35 +1133,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				{
 					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_DSI + ":\"" + CustomFilterSettings.DocumentStructureInformation + "\"");
 				}
-
-				if (CustomFilterSettings.SearchInTagContent)
-				{
-					filterExpressionControl.AddItem(CustomFilterSettings.SearchInTagContentAndText ? StringResources.DisplayFilterControl_UseTagsAlso : StringResources.DisplayFilterControl_UseTagsOnly);
-				}
 			}
-		}
-
-		private static string AggregateOriginTypes(IEnumerable<string> items)
-		{
-			var value = string.Empty;
-			foreach (var type in items)
-			{
-				var success = Enum.TryParse(type, false, out OriginType originType);
-				if (success)
-				{
-					value += (string.IsNullOrEmpty(value) ? string.Empty : " | ") + Helper.GetTypeName(originType);
-				}
-				else
-				{
-					success = Enum.TryParse(type, false, out DisplayFilterSettings.OriginTypeExtended originTypeExtended);
-					if (success)
-					{
-						value += (string.IsNullOrEmpty(value) ? string.Empty : " | ") + Helper.GetTypeName(originTypeExtended);
-					}
-				}
-			}
-
-			return value;
 		}
 
 
@@ -1165,6 +1164,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					InvalidateIconsFilterApplied_contextInfoTab(settings);
 					InvalidateIconsFilterApplied_segmentNumbers(CustomFilterSettings);
 					InvalidateIconsFilterApplied_colorPicker(CustomFilterSettings);
+					InvalidateIconsFilterApplied_sampling(CustomFilterSettings);
 
 					SetStatusBackgroundColorCode(IsFilterApplied(settings));
 				}
@@ -1178,6 +1178,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					InvalidateIconsFilterApplied(tabPage_contextInfo);
 					InvalidateIconsFilterApplied(tabPage_segmentNumbers);
 					InvalidateIconsFilterApplied(tabPage_colors);
+					InvalidateIconsFilterApplied(tabPage_sampling);
 				}
 			}
 		}
@@ -1302,9 +1303,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				customFilterSettings.MergedAcross ||
 				customFilterSettings.ContainsTags ||
 				customFilterSettings.CreatedByChecked ||
-				customFilterSettings.ModifiedByChecked ||
-				customFilterSettings.QualitySamplingSegmentSelection ||
-				customFilterSettings.QualitySamplingMinMaxCharacters)
+				customFilterSettings.ModifiedByChecked)
 			{
 				tabPage_segmentNumbers.ImageIndex = 0;
 			}
@@ -1314,11 +1313,25 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			}
 		}
 
+		private void InvalidateIconsFilterApplied_sampling(CustomFilterSettings customFilterSettings)
+		{
+			if (customFilterSettings.QualitySamplingSegmentSelection ||
+				customFilterSettings.QualitySamplingMinMaxCharacters)
+			{
+				tabPage_sampling.ImageIndex = 0;
+			}
+			else
+			{
+				tabPage_sampling.ImageIndex = -1;
+			}
+		}
+
 		private void InvalidateIconsFilterEdited(TabPage tabPage)
 		{
 			if (_activeDocument?.DisplayFilter != null && _activeDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
 			{
 				var settings = ((DisplayFilter)_activeDocument.DisplayFilter).Settings;
+				var customSettings = ((DisplayFilter)_activeDocument.DisplayFilter).CustomSettings;
 
 				if (tabPage == tabPage_content)
 				{
@@ -1413,8 +1426,33 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 						? 0
 						: 1;
 				}
+				else if (tabPage == tabPage_sampling)
+			{
+
+					var item1 = checkBox_segmentSelection.Checked + ", " +
+								radioButton_randomlySelect.Checked + ", " +
+								(int)numericUpDown_randomSelect.Value + ", " +
+								radioButton_selectOneInEvery.Checked + ", " +
+								(int)numericUpDown_selectOneInEvery.Value + ", " +
+								checkBox_minMaxCharsPerSegment.Checked + ", " +
+								(int)numericUpDown_minCharsPerSegment.Value + ", " +
+								(int)numericUpDown_maxCharsPerSegment.Value;
+
+					var item2 = customSettings.QualitySamplingSegmentSelection + ", " +
+								customSettings.QualitySamplingRandomlySelect + ", " +
+								customSettings.QualitySamplingRandomlySelectValue + ", " +
+								customSettings.QualitySamplingSelectOneInEvery + ", " +
+								customSettings.QualitySamplingSelectOneInEveryValue + ", " +
+								customSettings.QualitySamplingMinMaxCharacters + ", " +
+								customSettings.QualitySamplingMinCharsValue + ", " +
+								customSettings.QualitySamplingMaxCharsValue;
+
+					tabPage.ImageIndex = string.CompareOrdinal(item1, item2) == 0 ? 0 : 1;
+				}
 				else
+				{
 					tabPage.ImageIndex = 1;
+				}
 			}
 			else
 			{
@@ -1841,6 +1879,21 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			InvalidateIconsFilterEdited(tabPage_filters);
 		}
 
+		private static string AggregateOriginTypes(IEnumerable<string> items)
+		{
+			var value = string.Empty;
+			foreach (var type in items)
+			{
+				var success = Enum.TryParse(type, false, out DisplayFilterSettings.OriginType originType);
+				if (success)
+				{
+					value += (string.IsNullOrEmpty(value) ? string.Empty : " | ") + Helper.GetTypeName(originType);
+				}			
+			}
+
+			return value;
+		}
+
 		private void Button_removeAll_Click(object sender, EventArgs e)
 		{
 			MoveAllListViewItems(listView_selected, listView_available);
@@ -1879,10 +1932,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			RemoveSelectedItem();
 		}
 
-		private void filterAttributes_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+		private void FilterAttributes_comboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_filters);
 		}
+
 
 		#endregion
 
@@ -1970,11 +2024,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			listView_contextInfo.BeginUpdate();
 			foreach (ListViewItem item in listView_contextInfo.Items)
+			{
 				item.Selected = false;
+			}
+
 			listView_contextInfo.EndUpdate();
 
-			if (_activeDocument != null && _activeDocument.DisplayFilter != null
-				&& _activeDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
+			if (_activeDocument?.DisplayFilter != null && _activeDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
 			{
 				var settings = ((DisplayFilter)_activeDocument.DisplayFilter).Settings;
 
@@ -2003,7 +2059,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void UpdatedContextInfoSelectedStatusCount()
 		{
-			label_contextInfoSelected.Text = string.Format("Selected: {0}", listView_contextInfo.SelectedItems.Count);
+			label_contextInfoSelected.Text = string.Format(StringResources.DisplayFilterControl_Selected_0_, listView_contextInfo.SelectedItems.Count);
 		}
 
 		private void ListView_contextInfo_Resize(object sender, EventArgs e)
@@ -2067,6 +2123,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void SourceSameBox_CheckedChanged(object sender, EventArgs e)
 		{
+			var checkBox = (CheckBox)sender;
+			if (checkBox.Checked)
+			{
+				equalsCaseSensitive.Enabled = true;
+			}
+			else
+			{
+				equalsCaseSensitive.Enabled = false;
+				equalsCaseSensitive.Checked = false;
+			}
+
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
 
@@ -2107,6 +2174,145 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
 
+
+		#endregion
+
+		#region  |  Color tab |
+
+		private void PopulateColorList()
+		{
+			try
+			{
+
+				colorsListView.Items.Clear();
+
+				foreach (var segmentPair in _activeDocument.SegmentPairs)
+				{
+					var colors = ColorPickerHelper.GetColors(segmentPair, DisplayFilterSettings.ContentLocation.SourceOrTarget);
+					foreach (var color in colors)
+					{
+						AddColorItem(color);
+					}
+
+					if (colors.Count > 0)
+					{
+						continue;
+					}
+
+					var contextInfoList = segmentPair.GetParagraphUnitProperties().Contexts.Contexts;
+					var colorCode = ColorPickerHelper.DefaultFormatingColorCode(contextInfoList);
+
+					AddColorItem(colorCode);
+				}
+			}
+			catch
+			{
+				// catch all; ignore
+			}
+
+			UpdatedColorsSelectedStatusCount();
+		}
+
+		private void AddColorItem(string color)
+		{
+			if (string.IsNullOrEmpty(color))
+			{
+				return;
+			}
+
+			var hexaCode = string.Concat("#", color);
+
+			if (!ColorExistsInListView(hexaCode))
+			{
+				var background = ColorTranslator.FromHtml(hexaCode);
+
+				if (!imageList_colors.Images.ContainsKey(hexaCode))
+				{
+					var image = CreateColorImage(background, imageList_colors.ImageSize.Height);
+					imageList_colors.Images.Add(hexaCode, image);
+				}
+
+				var colorItem = new ListViewItem(hexaCode, hexaCode);
+				colorsListView.Items.Add(colorItem);
+			}
+		}
+
+		private static Image CreateColorImage(Color color, int size)
+		{
+			var brush = new SolidBrush(color);
+
+			var bmp = new Bitmap(size, size, PixelFormat.Format32bppRgb);
+			using (var g = Graphics.FromImage(bmp))
+			{
+				g.FillRectangle(Brushes.White, 0, 0, size, size);
+				g.FillRectangle(brush, 2, 2, size - 4, size - 4);
+			}
+			return bmp;
+		}
+
+		private void ColorsListView_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_colors);
+
+			UpdatedColorsSelectedStatusCount();
+		}
+
+		private bool ColorExistsInListView(string color)
+		{
+			foreach (ListViewItem item in colorsListView.Items)
+			{
+				if (item.Text == color)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private void LinkLabel_colorsClearSelection_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			colorsListView.BeginUpdate();
+			foreach (ListViewItem item in colorsListView.Items)
+			{
+				item.Selected = false;
+			}
+
+			colorsListView.EndUpdate();
+
+			if (_activeDocument?.DisplayFilter != null && _activeDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
+			{
+				if (_customFilterSettings.Colors.Any())
+				{
+					tabPage_colors.ImageIndex = 1;
+				}
+				else
+				{
+					tabPage_colors.ImageIndex = -1;
+				}
+			}
+			else
+			{
+				tabPage_colors.ImageIndex = -1;
+			}
+
+			UpdatedColorsSelectedStatusCount();
+		}
+
+		private void ComboBox_colorsFoundIn_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_colors);
+		}
+
+		private void UpdatedColorsSelectedStatusCount()
+		{
+			label_colorsSelected.Text = string.Format(StringResources.DisplayFilterControl_Selected_0_, colorsListView.SelectedItems.Count);
+		}
+
+		#endregion
+
+		#region  |  Sampling tab  |
+
 		private void CheckBox_segmentSelection_CheckedChanged(object sender, EventArgs e)
 		{
 			radioButton_randomlySelect.Enabled = ((CheckBox)sender).Checked;
@@ -2114,27 +2320,27 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			numericUpDown_randomSelect.Enabled = ((CheckBox)sender).Checked;
 			numericUpDown_selectOneInEvery.Enabled = ((CheckBox)sender).Checked;
 
-			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+			InvalidateIconsFilterEdited(tabPage_sampling);
 		}
 
 		private void RadioButton_randomlySelect_CheckedChanged(object sender, EventArgs e)
 		{
-			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+			InvalidateIconsFilterEdited(tabPage_sampling);
 		}
 
 		private void RadioButton_selectOneInEvery_CheckedChanged(object sender, EventArgs e)
 		{
-			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+			InvalidateIconsFilterEdited(tabPage_sampling);
 		}
 
 		private void NumericUpDown_randomSelect_ValueChanged(object sender, EventArgs e)
 		{
-			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+			InvalidateIconsFilterEdited(tabPage_sampling);
 		}
 
 		private void NumericUpDown_selectOneInEvery_ValueChanged(object sender, EventArgs e)
 		{
-			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+			InvalidateIconsFilterEdited(tabPage_sampling);
 		}
 
 		private void CheckBox_minMaxCharsPerSegment_CheckedChanged(object sender, EventArgs e)
@@ -2142,47 +2348,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			numericUpDown_minCharsPerSegment.Enabled = ((CheckBox)sender).Checked;
 			numericUpDown_maxCharsPerSegment.Enabled = ((CheckBox)sender).Checked;
 
-			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+			InvalidateIconsFilterEdited(tabPage_sampling);
 		}
 
 		private void NumericUpDown_minCharsPerSegment_ValueChanged(object sender, EventArgs e)
 		{
-			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+			InvalidateIconsFilterEdited(tabPage_sampling);
 		}
 
 		private void NumericUpDown_maxCharsPerSegment_ValueChanged(object sender, EventArgs e)
 		{
-			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+			InvalidateIconsFilterEdited(tabPage_sampling);
 		}
 
 		#endregion
-
-		#region  |  Color tab |
-
-		private void ColorsListView_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			var selectedColors = colorsListView.SelectedItems;
-
-			if (AvailableColorsList != null)
-			{
-				AvailableColorsList.Clear();
-				foreach (ListViewItem color in selectedColors)
-				{
-					var colorCode = color.Text;
-
-					if (!AvailableColorsList.Contains(colorCode))
-					{
-						AvailableColorsList.Add(colorCode);
-					}
-				}
-			}
-			InvalidateIconsFilterEdited(tabPage_colors);
-		}
-
-
-
-		#endregion
-
-
 	}
 }

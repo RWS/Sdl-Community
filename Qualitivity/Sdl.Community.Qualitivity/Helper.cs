@@ -518,6 +518,7 @@ namespace Sdl.Community.Qualitivity
 						match = "CM";
 					}
 					else if (string.Compare(translationOrigin.OriginType, "mt", StringComparison.OrdinalIgnoreCase) == 0
+					      || string.Compare(translationOrigin.OriginType, "nmt", StringComparison.OrdinalIgnoreCase) == 0
 						  || string.Compare(translationOrigin.OriginType, "amt", StringComparison.OrdinalIgnoreCase) == 0)
 					{
 						match = "AT";
@@ -528,6 +529,7 @@ namespace Sdl.Community.Qualitivity
 					}
 				}
 				else if (string.Compare(translationOrigin.OriginType, "mt", StringComparison.OrdinalIgnoreCase) == 0
+				         || string.Compare(translationOrigin.OriginType, "nmt", StringComparison.OrdinalIgnoreCase) == 0
 						 || string.Compare(translationOrigin.OriginType, "amt", StringComparison.OrdinalIgnoreCase) == 0)
 				{
 					match = "AT";
@@ -635,6 +637,7 @@ namespace Sdl.Community.Qualitivity
 							match = "CM";
 						}
 						else if (string.Compare(translationOrigin.OriginType, "mt", StringComparison.OrdinalIgnoreCase) == 0
+						   || string.Compare(translationOrigin.OriginType, "nmt", StringComparison.OrdinalIgnoreCase) == 0
 						   || string.Compare(translationOrigin.OriginType, "amt", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							match = "AT";
@@ -645,6 +648,7 @@ namespace Sdl.Community.Qualitivity
 						}
 					}
 					else if (string.Compare(translationOrigin.OriginType, "mt", StringComparison.OrdinalIgnoreCase) == 0
+					    || string.Compare(translationOrigin.OriginType, "nmt", StringComparison.OrdinalIgnoreCase) == 0
 						|| string.Compare(translationOrigin.OriginType, "amt", StringComparison.OrdinalIgnoreCase) == 0)
 					{
 						match = "AT";

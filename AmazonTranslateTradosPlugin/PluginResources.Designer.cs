@@ -19,7 +19,7 @@ namespace Sdl.Community.AmazonTranslateProvider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -67,6 +67,16 @@ namespace Sdl.Community.AmazonTranslateProvider {
             get {
                 object obj = ResourceManager.GetObject("amazon_aws_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon AmazonTranslate {
+            get {
+                object obj = ResourceManager.GetObject("AmazonTranslate", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -121,16 +131,6 @@ namespace Sdl.Community.AmazonTranslateProvider {
         public static string EditSettingsXmlErrorMessage {
             get {
                 return ResourceManager.GetString("EditSettingsXmlErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon my_icon {
-            get {
-                object obj = ResourceManager.GetObject("my_icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

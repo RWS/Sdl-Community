@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>TransitPackage Handler</PlugInName>
-  <Version>2.3.3.2</Version>
+  <Version>2.3.4.0</Version>
   <Description>This app supports opening a Star Transit package (PPF file) and the creation of a Star Transit return package (TPF file).</Description>
   <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />

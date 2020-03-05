@@ -7,12 +7,12 @@ namespace ETSTranslationProvider.ETSTellMe
 	public class ETSLanguagePairsAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => "ETS results";
+		public override string Category => "SDL MT Edge results";
 		public override Icon Icon => PluginResources.LanguagePairsIcon;
 
 		public ETSLanguagePairsAction()
 		{
-			Name = "ETS language pairs";
+			Name = "SDL MT Edge Language Pairs";
 		}
 
 		public override void Execute()

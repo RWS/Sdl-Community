@@ -11,10 +11,8 @@ namespace Sdl.Community.TMBackup
 	public partial class TMBackupChangeForm : Form
 	{
 		#region Private fields
-		private bool _isNewTask;
 		private string _taskName;
 		private List<ChangeSettingsModel> _changeSettingsModelList = new List<ChangeSettingsModel>();
-		private List<PeriodicBackupModel> _periodicBackupModelList = new List<PeriodicBackupModel>();
 		#endregion
 
 		#region Constructors
@@ -27,9 +25,7 @@ namespace Sdl.Community.TMBackup
 		{
 			InitializeComponent();
 
-			_isNewTask = isNewTask;
 			_taskName = taskName;
-
 			if (!isNewTask)
 			{
 				InitializeFormInfo();

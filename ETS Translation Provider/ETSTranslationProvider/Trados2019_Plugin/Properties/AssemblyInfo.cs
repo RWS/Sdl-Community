@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ETSPlugin")]
-[assembly: AssemblyDescription("SDL Plugin for enabling Trados Studio to use SDL's ETS.")]
+[assembly: AssemblyTitle("SDLMTEdgePlugin")]
+[assembly: AssemblyDescription("SDL Plugin for enabling Trados Studio to use SDL's Machine Translation Edge.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SDL")]
-[assembly: AssemblyProduct("ETSPlugin")]
+[assembly: AssemblyProduct("SDLMTEdgePlugin")]
 [assembly: AssemblyCopyright("Copyright © SDL 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

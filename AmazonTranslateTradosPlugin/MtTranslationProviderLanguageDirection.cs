@@ -12,7 +12,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 {
     public class MtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
     {
-        #region "PrivateMembers"
+
         private readonly MtTranslationProvider _provider;
         private readonly LanguagePair _languageDirection;
         private readonly MtTranslationOptions _options;
@@ -20,9 +20,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         private AmzConnect.ApiConnecter _amzConnect;
         private SegmentEditor _postLookupSegmentEditor;
         private SegmentEditor _preLookupSegmentEditor;
-        #endregion
-
-        #region "ITranslationProviderLanguageDirection Members"
 
         /// <summary>
         /// Instantiates the variables and fills the list file content into
@@ -30,16 +27,15 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         /// </summary>
         /// <param name="provider"></param>
         /// <param name="languages"></param>
-        #region "ListTranslationProviderLanguageDirection"
+
         public MtTranslationProviderLanguageDirection(MtTranslationProvider provider, LanguagePair languages)
         {
-            #region "Instantiate"
+
             _provider = provider;
             _languageDirection = languages;
             _options = _provider.Options;
-            #endregion
+
         }
-        #endregion
 
         public System.Globalization.CultureInfo SourceLanguage => _languageDirection.SourceCulture;
 
@@ -78,17 +74,14 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         /// <param name="settings"></param>
         /// <param name="segment"></param>
         /// <returns></returns>
-        #region "SearchSegment"
+
         public SearchResults SearchSegment(SearchSettings settings, Segment segment)
         {
             var translation = new Segment(_languageDirection.TargetCulture);//this will be the target segment
 
-            #region "SearchResultsObject"
             var results = new SearchResults();
             results.SourceSegment = segment.Duplicate();
-            #endregion
 
-            #region "Confirmation Level"
             if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified) //i.e. if it's status is other than untranslated
             { //don't do the lookup, b/c we don't need to pay google to translate text already translated if we edit a segment
                 translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
@@ -96,9 +89,9 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
                 results.Add(CreateSearchResult(segment, translation, segment.ToString()));
                 return results;
             }
-            #endregion
+
             // Look up the currently selected segment in the collection (normal segment lookup).
-            #region "SegmentLookup"
+
             var translatedText = "";
             //a new seg avoids modifying the current segment object
             var newseg = segment.Duplicate();
@@ -155,13 +148,9 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
             results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
 
-            #endregion
-
-            #region "Close"
             return results;
-            #endregion
+
         }
-        #endregion
 
         /// <summary>
         /// Used to do batch find-replace on a segment with tags.
@@ -212,15 +201,14 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         /// <param name="translation"></param>
         /// <param name="sourceSegment"></param>
         /// <returns></returns>
-        #region "CreateSearchResult"
+
         private SearchResult CreateSearchResult(Segment searchSegment, Segment translation,
             string sourceSegment)
         {
-            #region "TranslationUnit"
+
             var tu = new TranslationUnit();
             tu.SourceSegment = searchSegment.Duplicate();//this makes the original source segment, with tags, appear in the search window
             tu.TargetSegment = translation;
-            #endregion
 
             tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
 
@@ -233,7 +221,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
             return searchResult;
         }
-        #endregion
 
         public bool CanReverseLanguageDirection { get; } = false;
 
@@ -320,7 +307,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 	        return results.ToArray();
 		}
 
-        #region "NotForThisImplementation"
         /// <summary>
         /// Not required for this implementation.
         /// </summary>
@@ -401,8 +387,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         {
             throw new NotImplementedException();
         }
-        #endregion
 
-        #endregion
     }
 }

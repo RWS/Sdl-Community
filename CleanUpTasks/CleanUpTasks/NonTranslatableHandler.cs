@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Sdl.Community.CleanUpTasks.Models;
-using Sdl.Community.CleanUpTasks.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using SDLCommunityCleanUpTasks.Models;
+using SDLCommunityCleanUpTasks.Utilities;
 
-namespace Sdl.Community.CleanUpTasks
+namespace SDLCommunityCleanUpTasks
 {
 	public class NonTranslatableHandler : ISegmentHandler
     {

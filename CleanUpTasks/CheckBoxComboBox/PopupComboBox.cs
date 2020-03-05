@@ -6,11 +6,11 @@ using System.Windows.Forms;
 
 namespace Sdl.Community.CheckBoxComboBox
 {
-    /// <summary>
-    /// CodeProject.com "Simple pop-up control" "http://www.codeproject.com/cs/miscctrl/simplepopup.asp".
-    /// Represents a Windows combo box control with a custom popup control attached.
-    /// </summary>
-    [ToolboxBitmap(typeof(System.Windows.Forms.ComboBox)), ToolboxItem(true), ToolboxItemFilter("System.Windows.Forms"), Description("Displays an editable text box with a drop-down list of permitted values.")]
+	/// <summary>
+	/// CodeProject.com "Simple pop-up control" "http://www.codeproject.com/cs/miscctrl/simplepopup.asp".
+	/// Represents a Windows combo box control with a custom popup control attached.
+	/// </summary>
+	[ToolboxBitmap(typeof(System.Windows.Forms.ComboBox)), ToolboxItem(true), ToolboxItemFilter("System.Windows.Forms"), Description("Displays an editable text box with a drop-down list of permitted values.")]
     public partial class PopupComboBox : ComboBox
     {
         /// <summary>
@@ -24,14 +24,15 @@ namespace Sdl.Community.CheckBoxComboBox
         }
 
         /// <summary>
-        /// The pop-up wrapper for the dropDownControl. 
+        /// The pop-up wrapper for the dropDownControl.
         /// Made PROTECTED instead of PRIVATE so descendent classes can set its Resizable property.
-        /// Note however the pop-up properties must be set after the dropDownControl is assigned, since this 
+        /// Note however the pop-up properties must be set after the dropDownControl is assigned, since this
         /// popup wrapper is recreated when the dropDownControl is assigned.
         /// </summary>
         protected Popup dropDown;
 
         private Control dropDownControl;
+
         /// <summary>
         /// Gets or sets the drop down control.
         /// </summary>
@@ -84,7 +85,7 @@ namespace Sdl.Community.CheckBoxComboBox
             {
                 if (NativeMethods.HIWORD(m.WParam) == NativeMethods.CBN_DROPDOWN)
                 {
-                    // Blocks a redisplay when the user closes the control by clicking 
+                    // Blocks a redisplay when the user closes the control by clicking
                     // on the combobox.
                     TimeSpan TimeSpan = DateTime.Now.Subtract(dropDown.LastClosedTimeStamp);
                     if (TimeSpan.TotalMilliseconds > 500)
@@ -145,6 +146,6 @@ namespace Sdl.Community.CheckBoxComboBox
             set { base.ItemHeight = value; }
         }
 
-        #endregion
+        #endregion " Unused Properties "
     }
 }

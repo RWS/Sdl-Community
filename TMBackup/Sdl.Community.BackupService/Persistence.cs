@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using Sdl.Community.BackupService.Helpers;
-using Sdl.Community.BackupService.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using Sdl.Community.BackupService.Helpers;
+using Sdl.Community.BackupService.Models;
 
 namespace Sdl.Community.BackupService
 {
@@ -16,7 +16,8 @@ namespace Sdl.Community.BackupService
 		public Persistence()
 		{
 			_persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				@"SDL Community\TMBackup\TMBackup.json");
+				@"SDL Community\SDLTMBackup\TMBackup.json");
+			CheckIfJsonFileExist();
 		}
 
 		public void SaveBackupFormInfo(List<BackupModel> backupModelList, bool isNewTask)

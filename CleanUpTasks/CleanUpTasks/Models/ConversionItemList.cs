@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Sdl.Community.CleanUpTasks.Models
+namespace SDLCommunityCleanUpTasks.Models
 {
 	[XmlRoot("ConversionItems")]
     public class ConversionItemList

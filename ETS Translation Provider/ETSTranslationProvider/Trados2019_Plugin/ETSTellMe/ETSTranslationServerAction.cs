@@ -7,7 +7,7 @@ namespace ETSTranslationProvider.ETSTellMe
 	public class ETSTranslationServerAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => "ETS results";
+		public override string Category => "SDL MT Edge results";
 		public override Icon Icon => PluginResources.ForumIcon;
 
 		public ETSTranslationServerAction()

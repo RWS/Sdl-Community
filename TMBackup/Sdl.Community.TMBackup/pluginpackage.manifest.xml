@@ -1,14 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SDL TMBackup</PlugInName>
-  <Version>2.0.1.0</Version>
+  <Version>2.0.2.1</Version>
   <Description>This application provides a simple way to back up your Translation Memories and Termbases on a regular basis.</Description>>
   <Author>SDL Community Developers</Author>
   <Include>
     <File>Sdl.Community.BackupService.dll</File>
     <File>Microsoft.Win32.TaskScheduler.dll</File>
-	<File>Sdl.Community.Toolkit.Core.dll</File>
-	<File>Sdl.Community.BackupFiles.exe</File>
+		<File>NLog.dll</File>
+		<File>Sdl.Community.Toolkit.Core.dll</File>
+		<File>Sdl.Community.BackupFiles.exe</File>
   </Include>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0"/>
 </PluginPackage>

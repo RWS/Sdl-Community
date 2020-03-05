@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
-using Sdl.Community.CleanUpTasks.Models;
+using SDLCommunityCleanUpTasks.Models;
 
-namespace Sdl.Community.CleanUpTasks.Utilities
+namespace SDLCommunityCleanUpTasks.Utilities
 {
 	public static class TextUtilities
     {
@@ -89,7 +89,6 @@ namespace Sdl.Community.CleanUpTasks.Utilities
         public static string RegexReplace(this string original, string search, ReplacementText replacement, bool isCaseSensitive,
                                           MatchEvaluator strConv = null)
         {
-
             var result = string.Empty;
 
             // Regex uses current culture by default

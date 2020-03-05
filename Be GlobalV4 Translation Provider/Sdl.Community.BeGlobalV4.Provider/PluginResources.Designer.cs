@@ -73,6 +73,26 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon add_langcode {
+            get {
+                object obj = ResourceManager.GetObject("add_langcode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon dictionaryIcon {
+            get {
+                object obj = ResourceManager.GetObject("dictionaryIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon ForumIcon {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
@@ -151,6 +171,26 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap MTCodesLogo {
+            get {
+                object obj = ResourceManager.GetObject("MTCodesLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] MTLanguageCodes {
+            get {
+                object obj = ResourceManager.GetObject("MTLanguageCodes", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SDLMachineTranslationCloudProvider.
         /// </summary>
         public static string Plugin_Name {
@@ -165,6 +205,16 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         public static string Plugin_NiceName {
             get {
                 return ResourceManager.GetString("Plugin_NiceName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Print {
+            get {
+                object obj = ResourceManager.GetObject("Print", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -184,6 +234,16 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         public static System.Drawing.Bitmap sdl {
             get {
                 object obj = ResourceManager.GetObject("sdl", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Search__1_ {
+            get {
+                object obj = ResourceManager.GetObject("Search__1_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

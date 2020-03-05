@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows;
 using Newtonsoft.Json;
 using Sdl.Community.DeelLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -61,6 +62,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 				using (var httpClient = new HttpClient())
 				{
+					httpClient.Timeout = TimeSpan.FromMinutes(5);
 					var content = new StringContent($"text={sourceText}" +
 					                                $"&source_lang={sourceLanguage}" +
 					                                $"&target_lang={targetLanguage}" +
@@ -68,14 +70,25 @@ namespace Sdl.Community.DeepLMTProvider
 					                                $"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
 
 					var studioVersion = new Toolkit.Core.Studio().GetStudioVersion().ExecutableVersion;
-					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 {studioVersion}/plugin 4.8.9.1");
-					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result.Content.ReadAsStringAsync().Result;
-					var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(response);
+					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 {studioVersion}/plugin {_pluginVersion}");
 
-					if (translatedObject != null && translatedObject.Translations.Any())
+					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result;
+					if (response.IsSuccessStatusCode)
 					{
-						translatedText = translatedObject.Translations[0].Text;
-						translatedText = DecodeWhenNeeded(translatedText);
+						var translationResponse = response.Content?.ReadAsStringAsync().Result;
+						var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(translationResponse);
+
+						if (translatedObject != null && translatedObject.Translations.Any())
+						{
+							translatedText = translatedObject.Translations[0].Text;
+							translatedText = DecodeWhenNeeded(translatedText);
+						}
+					}
+					else
+					{
+                        Log.Logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+                            $"Response content: {response.Content?.ReadAsStringAsync().Result}.");
+                        MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					}
 				}
 			}

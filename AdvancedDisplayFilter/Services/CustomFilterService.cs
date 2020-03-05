@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using Sdl.Community.AdvancedDisplayFilter.DisplayFilters;
 using Sdl.Community.AdvancedDisplayFilter.Extensions;
 using Sdl.Community.AdvancedDisplayFilter.Helpers;
-using Sdl.Community.Toolkit.FileType;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
@@ -12,7 +11,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 {
 	public class CustomFilterService
 	{
-
 		private readonly DisplayFilterSettings _settings;
 		private readonly CustomFilterSettings _customSettings;
 		private readonly Document _document;
@@ -26,6 +24,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 		public bool Filter(DisplayFilterRowInfo rowInfo, bool success)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return !HasCustomSettings();
+			}
+
 			var rowId = rowInfo.SegmentPair.Properties.Id.Id;
 
 			if (success && _customSettings.EvenNo)
@@ -60,26 +63,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 			if (success && _customSettings.UseRegexCommentSearch && !string.IsNullOrWhiteSpace(_customSettings.CommentRegex))
 			{
-				//create a list with source and target comments
-				var commentsList = rowInfo.SegmentPair.Source.GetComments();
-				commentsList.AddRange(rowInfo.SegmentPair.Target.GetComments());
+				var visitor = new CommentDataVisitor();
+
+				var commentsList = visitor.GetComments(rowInfo.SegmentPair.Source);
+				commentsList.AddRange(visitor.GetComments(rowInfo.SegmentPair.Target));
 
 				success = CommentsHelper.IsCommentTextFoundWithRegex(commentsList, _customSettings.CommentRegex);
 			}
 
-			if (success && _customSettings.Colors.Count > 0)
+			if (success && _customSettings.Colors?.Count > 0)
 			{
-				try
-				{
-					success = ColorPickerHelper.ContainsColor(rowInfo, _customSettings.Colors);
-				}
-				catch
-				{
-					// catch all; ignore
-				}
+				success = ColorPickerHelper.ContainsColor(rowInfo, _customSettings.Colors, _customSettings.ColorsFoundIn);
 			}
-
-			//fuzzy
+		
 			if (success && !string.IsNullOrWhiteSpace(_customSettings.FuzzyMin) && !string.IsNullOrWhiteSpace(_customSettings.FuzzyMax))
 			{
 				success = FuzzyHelper.IsInFuzzyRange(rowInfo, _customSettings.FuzzyMin, _customSettings.FuzzyMax);
@@ -90,21 +86,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 				var containsTagVisitor = new TagVisitor();
 				success = containsTagVisitor.ContainsTag(rowInfo.SegmentPair.Source);
 			}
-
-			//created by
+			
 			if (success && _customSettings.CreatedByChecked && !string.IsNullOrWhiteSpace(_customSettings.CreatedBy))
 			{
 				var userVisitor = new TranslationOriginMetaDataVisitor();
 				success = userVisitor.CreatedBy(rowInfo.SegmentPair.Source, _customSettings.CreatedBy);
 			}
-
-			//modify by
+			
 			if (success && _customSettings.ModifiedByChecked && !string.IsNullOrWhiteSpace(_customSettings.ModifiedBy))
 			{
 				var userVisitor = new TranslationOriginMetaDataVisitor();
 				success = userVisitor.ModifiedBy(rowInfo.SegmentPair.Source, _customSettings.ModifiedBy);
 			}
-
 
 			if (success && !string.IsNullOrEmpty(_customSettings.DocumentStructureInformation))
 			{
@@ -118,21 +111,25 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 			return success;
 		}
-		
+
 		public bool FilterAttributeSuccess(DisplayFilterRowInfo rowInfo, bool success)
 		{
-
-			var isAttributeFilter = IsAttributeFilter();
-			if (!isAttributeFilter)
+			if (GetAttributeFilterGroupsCount() == 0)
 			{
 				return success;
+			}
+
+			if (!rowInfo.IsSegment)
+			{
+				return false;
 			}
 
 			var isAndOperator = _customSettings.FilterAttributesLogicalOperator == DisplayFilterSettings.LogicalOperators.AND;
 			success = isAndOperator;
 
-			if (_settings.SegmentReviewTypes != null && _settings.SegmentReviewTypes.Any())
+			if (LogicalSuccess(success) && _settings.SegmentReviewTypes != null && _settings.SegmentReviewTypes.Any())
 			{
+				_settings.IsAndOperator = isAndOperator;
 				success = rowInfo.IsSegmentReviewTypes(_settings);
 			}
 
@@ -169,16 +166,64 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 			return success;
 		}
 
-		private bool IsAttributeFilter()
+		public int GetAttributeFilterGroupsCount()
 		{
-			var isAttributeFilter = (_settings.SegmentReviewTypes != null && _settings.SegmentReviewTypes.Any()) ||
-									(_settings.ConfirmationLevels != null && _settings.ConfirmationLevels.Any()) ||
-									(_settings.OriginTypes != null && _settings.OriginTypes.Any()) ||
-									(_settings.PreviousOriginTypes != null && _settings.PreviousOriginTypes.Any()) ||
-									(_settings.RepetitionTypes != null && _settings.RepetitionTypes.Any()) ||
-									(_settings.SegmentLockingTypes != null && _settings.SegmentLockingTypes.Any()) ||
-									(_settings.SegmentContentTypes != null && _settings.SegmentContentTypes.Any());
-			return isAttributeFilter;
+			var count = 0;
+			if (_settings.SegmentReviewTypes != null && _settings.SegmentReviewTypes.Any())
+			{
+				count++;
+			}
+
+			if (_settings.ConfirmationLevels != null && _settings.ConfirmationLevels.Any())
+			{
+				count++;
+			}
+
+			if (_settings.OriginTypes != null && _settings.OriginTypes.Any())
+			{
+				count++;
+			}
+
+			if (_settings.PreviousOriginTypes != null && _settings.PreviousOriginTypes.Any())
+			{
+				count++;
+			}
+
+			if (_settings.RepetitionTypes != null && _settings.RepetitionTypes.Any())
+			{
+				count++;
+			}
+
+			if (_settings.SegmentLockingTypes != null && _settings.SegmentLockingTypes.Any())
+			{
+				count++;
+			}
+
+			if (_settings.SegmentContentTypes != null && _settings.SegmentContentTypes.Any())
+			{
+				count++;
+			}
+
+			return count;
+		}
+
+		public bool HasCustomSettings()
+		{
+			return _customSettings.EvenNo ||
+				   _customSettings.OddsNo ||
+				   _customSettings.SplitSegments ||
+				   _customSettings.MergedSegments ||
+				   _customSettings.MergedAcross ||
+				   _customSettings.SourceEqualsTarget ||
+				   (_customSettings.Grouped && !string.IsNullOrWhiteSpace(_customSettings.GroupedList)) ||
+				   (_customSettings.UseRegexCommentSearch && !string.IsNullOrWhiteSpace(_customSettings.CommentRegex)) ||
+				   _customSettings.Colors.Count > 0 ||
+				   !string.IsNullOrWhiteSpace(_customSettings.FuzzyMin) &&
+				   !string.IsNullOrWhiteSpace(_customSettings.FuzzyMax) ||
+				   _customSettings.ContainsTags ||
+				   (_customSettings.CreatedByChecked && !string.IsNullOrWhiteSpace(_customSettings.CreatedBy)) ||
+				   (_customSettings.ModifiedByChecked && !string.IsNullOrWhiteSpace(_customSettings.ModifiedBy)) ||
+				   !string.IsNullOrEmpty(_customSettings.DocumentStructureInformation);
 		}
 
 		private bool LogicalSuccess(bool success)
@@ -193,6 +238,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 		private static bool DocumentStructureInfoSearch(DisplayFilterRowInfo rowInfo, CustomFilterSettings customSettings)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			foreach (var contextInfo in rowInfo.ContextInfo)
 			{
 				if (contextInfo != null)
@@ -222,6 +272,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Services
 
 		private static bool DocumentStructureInfoRegexSearch(DisplayFilterRowInfo rowInfo, string regexExpression, RegexOptions options)
 		{
+			if (!rowInfo.IsSegment)
+			{
+				return false;
+			}
+
 			var regex = new Regex(regexExpression, options);
 			foreach (var contextInfo in rowInfo.ContextInfo)
 			{
