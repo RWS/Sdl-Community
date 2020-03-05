@@ -11,16 +11,19 @@ namespace SDLCommunityCleanUpTasks.Utilities
 		{
 			var files = new List<ProjectFile>();
 			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			
+
 			if (projectsController != null)
 			{
-				var currentProject =
-					projectsController.SelectedProjects != null
+				var currentProject = projectsController.SelectedProjects != null
 						? projectsController.SelectedProjects.ToList()[0]
 						: projectsController.CurrentProject;
-				files.AddRange(currentProject.GetTargetLanguageFiles().Where(f => f.Role == FileRole.Translatable));
-			}
 
+				var targetFiles = currentProject.GetTargetLanguageFiles().Where(f => f.Role == FileRole.Translatable);
+				if (targetFiles.Count() > 0)
+				{
+					files.AddRange(targetFiles);
+				}
+			}
 			return files;
 		}
 
