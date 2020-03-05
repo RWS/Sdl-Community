@@ -480,6 +480,19 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 						Tracked.TrackingTimer.Stop();
 						Tracked.TrackingState = Tracked.TimerState.Paused;
 
+						if (Tracked.ActiveDocument != null)
+						{
+							var firstOrDefault = Tracked.ActiveDocument.Files.FirstOrDefault();
+							if (firstOrDefault != null)
+							{
+								var trackedDocuments = Tracked.DictCacheDocumentItems[firstOrDefault.Id.ToString()];
+
+								trackedDocuments.ActiveDocument.DocumentTimer.Stop();
+								if (trackedDocuments.ActiveSegment.CurrentSegmentSelected != null)
+									trackedDocuments.ActiveSegment.CurrentSegmentTimer.Stop();
+							}
+						}
+
 						MessageBox.Show(string.Format(PluginResources.Paused_the_activity_timer_at_0, DateTime.Now), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 					}
 				}
