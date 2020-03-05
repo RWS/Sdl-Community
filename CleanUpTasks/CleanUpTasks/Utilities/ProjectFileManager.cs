@@ -14,7 +14,7 @@ namespace SDLCommunityCleanUpTasks.Utilities
 
 			if (projectsController != null)
 			{
-				var currentProject = projectsController.SelectedProjects != null
+				var currentProject = projectsController.SelectedProjects != null && projectsController.SelectedProjects.Count() > 0
 						? projectsController.SelectedProjects.ToList()[0]
 						: projectsController.CurrentProject;
 
