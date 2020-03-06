@@ -41,6 +41,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
@@ -131,6 +135,7 @@
     </Compile>
     <Compile Include="GUI\NumberVerifierHelpPage.cs" />
     <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Helpers\Log.cs" />
     <Compile Include="Interfaces\IErrorMessageProcessor.cs" />
     <Compile Include="Interfaces\IExtractProcessor.cs" />
     <Compile Include="Interfaces\IExtractSpecification.cs" />
