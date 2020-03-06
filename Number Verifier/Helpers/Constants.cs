@@ -7,5 +7,6 @@
 		public static readonly string HindiIssue = "Hindi_Issue";
 		public static readonly string NumberIssue = "Number_Issue";
 		public static readonly string HindiLanguage = "Hindi (India)";
+		public static readonly string ChineseSimplifiedLanguage = "Chinese (Simplified China)";
 	}
 }

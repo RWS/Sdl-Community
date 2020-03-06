@@ -291,7 +291,6 @@ namespace Sdl.Community.NumberVerifier
 		/// <param name="paragraphUnit"></param>
 		public void CheckParagraphUnit(IParagraphUnit paragraphUnit)
 		{
-
 			// loop through the whole paragraph unit
 			foreach (var segmentPair in paragraphUnit.SegmentPairs.Where(FilterSegmentPairs))
 			{
@@ -861,10 +860,14 @@ namespace Sdl.Community.NumberVerifier
 			else
 			{
 				_omitLeadingZero = false;
-				if (separators != string.Empty)
+				if (!string.IsNullOrEmpty(separators))
 				{
-					expresion = string.Format(@"-?\u2013?\u2212?\u2013?\d+([{0}]\d+)*", separators);
-
+					var separatorsBuilder = new StringBuilder();
+					for (int i = 0; i < separators.Length; i++)
+					{
+						separatorsBuilder.Append($"{separators[i]}?");
+					}		
+					expresion = $@"{separatorsBuilder}-?\u2013?\u2212?\u2013?\d+(\d+)*";
 				}
 				else
 				{
@@ -874,14 +877,19 @@ namespace Sdl.Community.NumberVerifier
 			#endregion
 			foreach (Match match in Regex.Matches(text, expresion))
 			{
-				var normalizedNumber = NormalizedNumber(match.Value, thousandSeparators, decimalSeparators,
-					noSeparator);
+				var normalizedNumber = NormalizedNumber(new SeparatorModel
+				{
+					MatchValue = match.Value,
+					ThousandSeparators = thousandSeparators,
+					DecimalSeparators = decimalSeparators,
+					NoSeparator = noSeparator,
+					CustomSeparators = separators
+				});
 
 				numeberCollection.Add(match.Value);
 				normalizedNumberCollection.Add(normalizedNumber);
 
 			}
-
 		}
 
 		public string OmitZero(string number)
@@ -917,7 +925,6 @@ namespace Sdl.Community.NumberVerifier
 			char[] space = { ' ', '\u00a0', '\u2009', '\u202F' };
 			var spacePosition = number.IndexOfAny(space);
 
-
 			//if it has space is not a negative number
 			if (positionOfNormalMinus == 0 && spacePosition != 1)
 			{
@@ -930,12 +937,27 @@ namespace Sdl.Community.NumberVerifier
 			if (positionOfDash == 0 && spacePosition != 1)
 			{
 				number = number.Replace("\u2013", "m");
+			}			
+			return number.Normalize(NormalizationForm.FormKC);
+		}
+
+		public string NormalizeSpecialCharNumber(string number, string separators)
+		{
+			for(int i=0; i < separators.Length; i++)
+			{
+				if(number.Contains(separators[i]))
+				{
+					var positionOfChar = number.IndexOf(separators[i]);
+					if(positionOfChar== 0)
+					{
+						number = number.Replace(separators[i], 'm');
+					}
+				}
 			}
 			return number.Normalize(NormalizationForm.FormKC);
 		}
 
-		public string NormalizedNumber(string number, string thousandSeparators, string decimalSeparators,
-			bool noSeparator)
+		public string NormalizedNumber(SeparatorModel separatorModel)
 		{
 			var normalizedNumber = string.Empty;
 			try
@@ -945,74 +967,70 @@ namespace Sdl.Community.NumberVerifier
 
 				if (_omitLeadingZero)
 				{
-					number = OmitZero(number);
+					separatorModel.MatchValue = OmitZero(separatorModel.MatchValue);
 				}
 
-				number = NormalizeNumberWithMinusSign(number);
+				separatorModel.MatchValue = NormalizeNumberWithMinusSign(separatorModel.MatchValue);
+				separatorModel.MatchValue = NormalizeSpecialCharNumber(separatorModel.MatchValue, separatorModel.CustomSeparators);
 
-				if (thousandSeparators != String.Empty &&
-					Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
+				if (separatorModel.ThousandSeparators != string.Empty &&
+					Regex.IsMatch(separatorModel.MatchValue, @"^m?[1-9]\d{0,2}([" + separatorModel.ThousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
 				// e.g 1,000,000
 				{
-					normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");
+					normalizedNumber = Regex.Replace(separatorModel.MatchValue, @"[" + separatorModel.ThousandSeparators + @"]", "t");
 				}
-				else if (thousandSeparators != String.Empty && decimalSeparators != String.Empty &&
-						 Regex.IsMatch(number,
-							 @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)*[" + decimalSeparators +
+				else if (!string.IsNullOrEmpty(separatorModel.ThousandSeparators) && !string.IsNullOrEmpty(separatorModel.DecimalSeparators) &&
+						 Regex.IsMatch(separatorModel.MatchValue,
+							 @"^m?[1-9]\d{0,2}([" + separatorModel.ThousandSeparators + @"])\d\d\d(\1\d\d\d)*[" + separatorModel.DecimalSeparators +
 							 @"]\d+$")) // e.g. 1,000.5
 				{
-					var usedThousandSeparator =
-						Regex.Match(number, @"[" + thousandSeparators + @"]").Value;
+					var usedThousandSeparator =	Regex.Match(separatorModel.MatchValue, @"[" + separatorModel.ThousandSeparators + @"]").Value;
 
 					//for ex if we have 1.45.67, we need to replace only first aparition of the thousand separator
 					var reg = new Regex(Regex.Escape(usedThousandSeparator));
-					normalizedNumber = reg.Replace(number, "t", 1);
+					normalizedNumber = reg.Replace(separatorModel.MatchValue, "t", 1);
 
-					var usedDecimalSeparator =
-						Regex.Match(normalizedNumber, @"[" + decimalSeparators + @"]").Value;
-					normalizedNumber = usedDecimalSeparator != String.Empty
+					var usedDecimalSeparator = Regex.Match(normalizedNumber, @"[" + separatorModel.DecimalSeparators + @"]").Value;
+					normalizedNumber = !string.IsNullOrEmpty(usedDecimalSeparator)
 						? Regex.Replace(normalizedNumber, @"[" + usedDecimalSeparator + @"]", "d")
 						: normalizedNumber;
 				}
-				else if (thousandSeparators != String.Empty &&
-						 Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d$"))
+				else if (!string.IsNullOrEmpty(separatorModel.ThousandSeparators)
+						&& Regex.IsMatch(separatorModel.MatchValue, @"^m?[1-9]\d{0,2}([" + separatorModel.ThousandSeparators + @"])\d\d\d$"))
 				// e.g. 1,000
 				{
-					if (_sourceMatchingDecimalSeparators != String.Empty &&
-						Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + decimalSeparators + @"])\d\d\d$"))
+					if (!string.IsNullOrEmpty(_sourceMatchingDecimalSeparators)
+						&& Regex.IsMatch(separatorModel.MatchValue, @"^m?[1-9]\d{0,2}([" + separatorModel.DecimalSeparators + @"])\d\d\d$"))
 					{
-						normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "u");
+						normalizedNumber = Regex.Replace(separatorModel.MatchValue, @"[" + separatorModel.ThousandSeparators + @"]", "u");
 					}
 					else
 					{
-						normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");
+						normalizedNumber = Regex.Replace(separatorModel.MatchValue, @"[" + separatorModel.ThousandSeparators + @"]", "t");
 					}
 				}
 				else
 				{
-					if (_sourceMatchingDecimalSeparators != String.Empty &&
-						Regex.IsMatch(number, @"^m?\d+[" + decimalSeparators + @"]\d+$")) // e.g. 0,100
+					if (!string.IsNullOrEmpty(_sourceMatchingDecimalSeparators)
+						&& Regex.IsMatch(separatorModel.MatchValue, @"^m?\d+[" + separatorModel.DecimalSeparators + @"]\d+$")) // e.g. 0,100
 					{
-						normalizedNumber = Regex.Replace(number, @"[" + decimalSeparators + @"]", "d");
+						normalizedNumber = Regex.Replace(separatorModel.MatchValue, @"[" + separatorModel.DecimalSeparators + @"]", "d");
 					}
 					else
 					{
-						normalizedNumber = number;
+						normalizedNumber = separatorModel.MatchValue;
 					}
 
-					if (noSeparator)
+					if (separatorModel.NoSeparator)
 					{
 						if (_isSource)
 						{
-							normalizedNumber = NormalizeNumberNoSeparator(_sourceDecimalSeparators,
-								_sourceThousandSeparators, normalizedNumber);
+							normalizedNumber = NormalizeNumberNoSeparator(_sourceDecimalSeparators,	_sourceThousandSeparators, normalizedNumber);
 						}
 						else
 						{
-							normalizedNumber = NormalizeNumberNoSeparator(_targetDecimalSeparators,
-								_targetThousandSeparators, normalizedNumber);
+							normalizedNumber = NormalizeNumberNoSeparator(_targetDecimalSeparators,	_targetThousandSeparators, normalizedNumber);
 						}
-
 					}
 					return normalizedNumber.Normalize(NormalizationForm.FormKC);
 				}
@@ -1115,9 +1133,14 @@ namespace Sdl.Community.NumberVerifier
 						}
 						var temNormalizedWithoutSpaces = tempNormalized.ToString().Normalize(NormalizationForm.FormKC);
 
-						normalizedNumber = NormalizedNumber(temNormalizedWithoutSpaces, thousandSeparators,
-							decimalSeparators,
-							false);
+						normalizedNumber = NormalizedNumber(new SeparatorModel
+						{
+							MatchValue = temNormalizedWithoutSpaces,
+							ThousandSeparators = thousandSeparators,
+							DecimalSeparators = decimalSeparators,
+							NoSeparator = false,
+							CustomSeparators = string.Empty
+						});
 					}
 				}
 			}

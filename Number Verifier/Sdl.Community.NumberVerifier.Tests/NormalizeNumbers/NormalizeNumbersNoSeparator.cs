@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using Sdl.Community.NumberVerifier.Interfaces;
+using Sdl.Community.NumberVerifier.Model;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
@@ -29,7 +30,14 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierMain.Initialize(docPropMock.Object);
 
 
-            var normalizedNumber = numberVerifierMain.NormalizedNumber(text, thousandSep, decimalSep, noSeparator);
+            var normalizedNumber = numberVerifierMain.NormalizedNumber(new SeparatorModel
+				{
+					MatchValue = text,
+					ThousandSeparators = thousandSep,
+					DecimalSeparators = decimalSep,
+					NoSeparator = noSeparator,
+					CustomSeparators = string.Empty
+				});
 
             var methodsMock = new Mock<INumberVerifierMethods>(MockBehavior.Strict);
             methodsMock.Verify(s => s.NormalizeNumberNoSeparator(thousandSep, decimalSep, normalizedNumber), Times.Never);
@@ -51,7 +59,14 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierMain.Initialize(docPropMock.Object);
 
 
-            var normalizedNumber = numberVerifierMain.NormalizedNumber(text, thousandSep, decimalSep, noSeparator);
+            var normalizedNumber = numberVerifierMain.NormalizedNumber(new SeparatorModel
+			{
+				MatchValue = text,
+				ThousandSeparators = thousandSep,
+				DecimalSeparators = decimalSep,
+				NoSeparator = noSeparator,
+				CustomSeparators = string.Empty
+			});
 
             return normalizedNumber;
 

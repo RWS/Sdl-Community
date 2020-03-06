@@ -153,6 +153,7 @@
     <Compile Include="Model\ErrorReporting.cs" />
     <Compile Include="Model\ExtractData.cs" />
     <Compile Include="Model\HindiNumberModel.cs" />
+    <Compile Include="Model\SeparatorModel.cs" />
     <Compile Include="Model\NumberModel.cs" />
     <Compile Include="Model\NumberResults.cs" />
     <Compile Include="Model\MessageDataModel.cs" />
