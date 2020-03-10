@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.BeGlobalV4.Provider", "Sdl.Community.BeGlobalV4.Provider\Sdl.Community.BeGlobalV4.Provider.csproj", "{C5C7E441-7416-47F3-A4B0-C20AEEC12ABF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDLMTCloud.Tests", "SDLMTCloud.Tests\SDLMTCloud.Tests.csproj", "{427FAE4B-B4FD-49EA-BD5B-0ABE201FA8D2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{C5C7E441-7416-47F3-A4B0-C20AEEC12ABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5C7E441-7416-47F3-A4B0-C20AEEC12ABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5C7E441-7416-47F3-A4B0-C20AEEC12ABF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{427FAE4B-B4FD-49EA-BD5B-0ABE201FA8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{427FAE4B-B4FD-49EA-BD5B-0ABE201FA8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{427FAE4B-B4FD-49EA-BD5B-0ABE201FA8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{427FAE4B-B4FD-49EA-BD5B-0ABE201FA8D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
