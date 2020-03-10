@@ -12,7 +12,6 @@ namespace SDLCopyTags
 {
     [Action("CopyTagAction", Icon = "CopyTags_appstore", Name = "Copy Tags to Target")]
     [ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 1, DisplayType.Large)]
-    [Shortcut(Keys.Alt | Keys.T)]
     public class CopyTagAction : AbstractViewControllerAction<EditorController>
     {
 		public static readonly Log Log = Log.Instance;
