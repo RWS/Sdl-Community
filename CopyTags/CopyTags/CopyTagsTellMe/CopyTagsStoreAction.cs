@@ -13,7 +13,7 @@ namespace SDLCopyTags.CopyTagsTellMe
 
 		public override void Execute()
 		{
-			Process.Start("");
+			Process.Start("https://appstore.sdl.com/language/app/sdl-copy-tags/1070/");
 		}
 
 		public override bool IsAvailable => true;
