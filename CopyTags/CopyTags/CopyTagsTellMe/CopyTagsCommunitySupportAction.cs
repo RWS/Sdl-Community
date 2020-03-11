@@ -17,7 +17,6 @@ namespace SDLCopyTags.CopyTagsTellMe
 
 		public override bool IsAvailable => true;
 		public override string Category => "CopyTags results";
-
 		public override Icon Icon => PluginResources.ForumIcon;
 	}
 }
