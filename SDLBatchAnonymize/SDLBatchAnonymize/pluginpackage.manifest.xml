@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>SDL batchAnonymize</PlugInName>
+  <PlugInName>SDL Batch Anonymizer</PlugInName>
   <Version>1.0.0.1</Version>
   <Description>Supports the anonymization of Machine Translation use by removing the MT or NMT markers.</Description>
   <Author>SDL Community Developers</Author>

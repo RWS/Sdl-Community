@@ -24,7 +24,8 @@ namespace Sdl.Community.SDLBatchAnonymize
 		private void Anonymize(ITranslationOrigin translationOrigin)
 		{
 			var originType = translationOrigin?.OriginType;
-			if (!string.IsNullOrEmpty(originType) && (originType.Equals(DefaultTranslationOrigin.MachineTranslation) || originType.Equals(DefaultTranslationOrigin.NeuralMachineTranslation)))
+			if (!string.IsNullOrEmpty(originType) && (originType.Equals(DefaultTranslationOrigin.MachineTranslation) 
+				|| originType.Equals(DefaultTranslationOrigin.NeuralMachineTranslation) || originType.Equals(DefaultTranslationOrigin.AdaptiveMachineTranslation)))
 			{
 				translationOrigin.OriginType = DefaultTranslationOrigin.Interactive;
 				translationOrigin.OriginSystem = string.Empty;

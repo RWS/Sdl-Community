@@ -17,7 +17,7 @@ namespace Sdl.Community.SDLBatchAnonymize.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("");
+			Process.Start("https://appstore.sdl.com/language/app/sdl-batch-anonymizer/1072/");
 		}
 	}
 }
