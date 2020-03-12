@@ -3,14 +3,14 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyProductAttribute("Sdl Community WPF Helpers")]
-[assembly: AssemblyVersionAttribute("0.1.0")]
-[assembly: AssemblyFileVersionAttribute("0.1.0")]
+[assembly: AssemblyVersionAttribute("1.0.0")]
+[assembly: AssemblyFileVersionAttribute("1.0.0")]
 [assembly: ComVisibleAttribute(false)]
 namespace System {
     internal static class AssemblyVersionInformation {
         internal const System.String AssemblyProduct = "Sdl Community WPF Helpers";
-        internal const System.String AssemblyVersion = "0.1.0";
-        internal const System.String AssemblyFileVersion = "0.1.0";
+        internal const System.String AssemblyVersion = "1.0.0";
+        internal const System.String AssemblyFileVersion = "1.0.0";
         internal const System.Boolean ComVisible = false;
     }
 }

@@ -1,4 +1,5 @@
 using BrightIdeasSoftware;
+using Microsoft.Win32;
 using Sdl.Community.Hooks;
 using Sdl.Community.Parser;
 using Sdl.Community.Qualitivity.Dialogs;
@@ -234,11 +235,13 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 		}
 
 
+
 		private bool IsActive { get; set; }
 		protected override void Initialize(IViewContext context)
 		{
 			ActivationChanged += StudioTimeTrackerViewController_ActivationChanged;
 
+			SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
 
 			IsLoading = true;
 
@@ -383,6 +386,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 		}
 
+	
 		private void projectsController_SelectedProjectsChanged(object sender, EventArgs e)
 		{
 
@@ -463,6 +467,53 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 			}
 		}
 
+		private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+		{
+			Debug.WriteLine("PowerModeChanged " + e.Mode.ToString());
+			if (e.Mode != PowerModes.Suspend)
+				return;
+
+			// If idle timeout configured, assume they want to omit sleep/hibernate time as well
+			if (!Convert.ToBoolean(Tracked.Settings.GetTrackingProperty("idleTimeOut").Value))
+			{
+				Debug.WriteLine("No idle timeout - ignoring");
+				return;
+			}
+
+			if ((Tracked.TrackingState != Tracked.TimerState.Started) || Tracked.ActiveDocument == null)
+			{
+				Debug.WriteLine("Conditions not met - ignoring");
+				return;
+			}
+
+			EnterPause();
+		}
+
+		private void EnterPause()
+		{
+			Tracked.TrackingIsDirtyC1 = true;
+			Tracked.TrackingIsDirtyC2 = true;
+
+			Tracked.TrackingTimer.Stop();
+			Tracked.TrackingState = Tracked.TimerState.Paused;
+
+			if (Tracked.ActiveDocument != null)
+			{
+				var firstOrDefault = Tracked.ActiveDocument.Files.FirstOrDefault();
+				if (firstOrDefault != null)
+				{
+					var trackedDocuments = Tracked.DictCacheDocumentItems[firstOrDefault.Id.ToString()];
+
+					trackedDocuments.ActiveDocument.DocumentTimer.Stop();
+					if (trackedDocuments.ActiveSegment.CurrentSegmentSelected != null)
+						trackedDocuments.ActiveSegment.CurrentSegmentTimer.Stop();
+				}
+			}
+
+			MessageBox.Show(string.Format(PluginResources.Paused_the_activity_timer_at_0, DateTime.Now), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+		}
+
 		private void Timer4ProjectArea_Tick(object sender, EventArgs e)
 		{
 
@@ -474,13 +525,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 					var ts = DateTime.Now.Subtract(Tracked.TrackerLastActivity);
 					if (ts.TotalMinutes > Convert.ToInt32(Tracked.Settings.GetTrackingProperty("idleTimeOutMinutes").Value))
 					{
-						Tracked.TrackingIsDirtyC1 = true;
-						Tracked.TrackingIsDirtyC2 = true;
-
-						Tracked.TrackingTimer.Stop();
-						Tracked.TrackingState = Tracked.TimerState.Paused;
-
-						MessageBox.Show(string.Format(PluginResources.Paused_the_activity_timer_at_0, DateTime.Now), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+						EnterPause();
 					}
 				}
 				else
