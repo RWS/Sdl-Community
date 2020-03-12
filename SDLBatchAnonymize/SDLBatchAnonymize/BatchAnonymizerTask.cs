@@ -5,9 +5,9 @@ using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.SDLBatchAnonymize
 {
-	[AutomaticTask("SDL BatchAnonymizer",
-		"SDL BatchAnonymizer",
-		"Remove MT status code",
+	[AutomaticTask("SDL BatchAnonymize",
+		"SDL BatchAnonymize",
+		"Supports the anonymization of Machine Translation use by removing the MT or NMT markers.",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	public class BatchAnonymizerTask: AbstractFileContentProcessingAutomaticTask
