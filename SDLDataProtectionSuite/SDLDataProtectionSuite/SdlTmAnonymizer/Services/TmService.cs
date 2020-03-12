@@ -575,7 +575,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			var trimStart = fieldValue.TrimStart('(');
 			var trimEnd = trimStart.TrimEnd(')');
 			var listValues = new List<string> { trimEnd };
-			if (!fieldValueType.Equals(FieldValueType.DateTime))
+			if (!fieldValueType.Equals(FieldValueType.DateTime) && !fieldValueType.Equals(FieldValueType.SingleString))
 			{
 				listValues = trimEnd.Split(',').ToList();
 			}

@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -141,11 +143,36 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 
 		public T Deserialize<T>(string content, XmlSerializer serializer) where T : new()
 		{
+			content = DiscardIllegalXmlCharacters(content);
 			var reader = new StringReader(content);
 			var obj = serializer.Deserialize(XmlReader.Create(reader));
 			var result = (T)obj;
 
 			return result;
+		}
+
+		private string DiscardIllegalXmlCharacters(string content)
+		{
+			var illegalCharsRegex = new Regex("(?!&#x09;|&#x0a;|&#x0d;)(&#[xX]([0-9a-fA-F]){2};)");
+			var illegalMatches = illegalCharsRegex.Matches(content);
+			if (illegalMatches.Count > 0)
+			{
+				foreach (var match in illegalMatches.Cast<Match>().Reverse())
+				{
+					content = Replace(content, match.Index, match.Length, "");
+				}
+			}
+
+			return content;
+		}
+
+		private string Replace(string input, int index, int length, string replacement)
+		{
+			var builder = new StringBuilder();
+			builder.Append(input.Substring(0,index));
+			builder.Append(replacement);
+			builder.Append(input.Substring(index + length));
+			return builder.ToString();
 		}
 	}
 }
