@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using Sdl.Community.SDLBatchAnonymize.BatchTask;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -7,6 +11,11 @@ namespace Sdl.Community.SDLBatchAnonymize
 {
 	public class AnonymizerProcessor : AbstractBilingualContentProcessor
 	{
+		private readonly BatchAnonymizerSettings _settings;
+		public AnonymizerProcessor(BatchAnonymizerSettings settings)
+		{
+			_settings = settings;
+		}
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
 			base.ProcessParagraphUnit(paragraphUnit);
@@ -24,12 +33,37 @@ namespace Sdl.Community.SDLBatchAnonymize
 		private void Anonymize(ITranslationOrigin translationOrigin)
 		{
 			var originType = translationOrigin?.OriginType;
-			if (!string.IsNullOrEmpty(originType) && (originType.Equals(DefaultTranslationOrigin.MachineTranslation) 
-				|| originType.Equals(DefaultTranslationOrigin.NeuralMachineTranslation) || originType.Equals(DefaultTranslationOrigin.AdaptiveMachineTranslation)))
+			if (!string.IsNullOrEmpty(originType) &&
+			    (originType.Equals(DefaultTranslationOrigin.MachineTranslation) ||
+			     originType.Equals(DefaultTranslationOrigin.NeuralMachineTranslation) ||
+			     originType.Equals(DefaultTranslationOrigin.AdaptiveMachineTranslation)))
 			{
-				translationOrigin.OriginType = DefaultTranslationOrigin.Interactive;
-				translationOrigin.OriginSystem = string.Empty;
+				if (_settings.AnonymizeComplete)
+				{
+					AnonymizeComplete(translationOrigin);
+				}
+				else
+				{
+					AnonymizeTmMatch(translationOrigin);
+				}
 			}
+		}
+
+		private void AnonymizeComplete(ITranslationOrigin translationOrigin)
+		{
+			translationOrigin.OriginType = DefaultTranslationOrigin.Interactive;
+			translationOrigin.OriginSystem = string.Empty;
+		}
+
+		private void AnonymizeTmMatch(ITranslationOrigin translationOrigin)
+		{
+			translationOrigin.OriginType = DefaultTranslationOrigin.TranslationMemory;
+			if (!string.IsNullOrEmpty(_settings.TmName))
+			{
+				translationOrigin.OriginSystem = Path.GetFileNameWithoutExtension(_settings.TmName);
+			}
+			var fuzzy = _settings.FuzzyScore.ToString(CultureInfo.InvariantCulture);
+			translationOrigin.MatchPercent= byte.Parse(fuzzy);
 		}
 	}
 }

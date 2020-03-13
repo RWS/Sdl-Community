@@ -18,5 +18,14 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 			}
 			return _control;
 		}
+
+		public override void Save()
+		{
+			base.Save();
+			_settings.AnonymizeComplete = _control.AnonymizeComplete;
+			_settings.AnonymizeTmMatch = _control.AnonymizeTmMatch;
+			_settings.FuzzyScore = _control.Score;
+			_settings.TmName = _control.TmName;
+		}
 	}
 }

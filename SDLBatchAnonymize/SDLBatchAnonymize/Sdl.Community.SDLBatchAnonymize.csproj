@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="TellMe\SdlBatchAnonymizerWikiAction.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizeStoreAction.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizeCommunitySupportAction.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizeTellMeProvider.cs" />

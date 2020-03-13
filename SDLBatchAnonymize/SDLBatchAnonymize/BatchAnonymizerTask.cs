@@ -23,7 +23,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 		}
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerProcessor()));
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerProcessor(_settings)));
 		}
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{

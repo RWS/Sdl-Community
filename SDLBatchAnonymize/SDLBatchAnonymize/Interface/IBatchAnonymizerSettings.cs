@@ -4,7 +4,7 @@
 	{
 		bool AnonymizeComplete { get; set; }
 		bool AnonymizeTmMatch { get; set; }
-		string FuzzyScore { get; set; }
+		decimal FuzzyScore { get; set; }
 		string TmName { get; set; }
 	}
 }

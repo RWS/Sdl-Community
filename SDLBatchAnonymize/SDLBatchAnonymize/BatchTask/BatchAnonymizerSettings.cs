@@ -14,9 +14,9 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 			get => GetSetting<bool>(nameof(AnonymizeTmMatch));
 			set => GetSetting<bool>(nameof(AnonymizeTmMatch)).Value = value;
 		}
-		public string FuzzyScore {
-			get => GetSetting<string>(nameof(FuzzyScore));
-			set => GetSetting<string>(nameof(FuzzyScore)).Value = value;
+		public decimal FuzzyScore {
+			get => GetSetting<decimal>(nameof(FuzzyScore));
+			set => GetSetting<decimal>(nameof(FuzzyScore)).Value = value;
 		}
 		public string TmName
 		{

@@ -10,11 +10,15 @@ namespace Sdl.Community.SDLBatchAnonymize.TellMe
 		{
 			new SdlBatchAnonymizeCommunitySupportAction
 			{
-				Keywords = new []{ "sdl batch anonymize", "sdlbatchanonymize", "sdl batch anonymize community", "sdl batch anonymize support" }
+				Keywords = new []{ "sdl batch anonymizer", "sdlbatchanonymizer", "sdl batch anonymizer community", "sdl batch anonymizer support" }
 			},
 			new SdlBatchAnonymizeStoreAction
 			{
-				Keywords = new []{ "sdl batch anonymize", "sdl batch anonymize store", "sdlbatchanonymize store", "sdl batch anonymize store download" }
+				Keywords = new []{ "sdl batch anonymizer", "sdl batch anonymizer store", "sdlbatchanonymizer store", "sdl batch anonymizer store download" }
+			},
+			new SdlBatchAnonymizerWikiAction
+			{
+				Keywords = new []{ "sdl batch anonymizer", "sdl batch anonymizer wiki"}
 			}
 		};
 	}
