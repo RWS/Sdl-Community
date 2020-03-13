@@ -153,6 +153,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 
 		private string DiscardIllegalXmlCharacters(string content)
 		{
+			//all characters in range x01-x1f without CR/LF/Tab
 			var illegalCharsRegex = new Regex("(?!&#x09;|&#x0a;|&#x0d;)(&#[xX]([0-9a-fA-F]){2};)");
 			var illegalMatches = illegalCharsRegex.Matches(content);
 			if (illegalMatches.Count > 0)
