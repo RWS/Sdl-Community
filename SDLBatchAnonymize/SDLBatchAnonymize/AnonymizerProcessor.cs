@@ -12,10 +12,12 @@ namespace Sdl.Community.SDLBatchAnonymize
 	public class AnonymizerProcessor : AbstractBilingualContentProcessor
 	{
 		private readonly BatchAnonymizerSettings _settings;
+
 		public AnonymizerProcessor(BatchAnonymizerSettings settings)
 		{
 			_settings = settings;
 		}
+
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
 			base.ProcessParagraphUnit(paragraphUnit);
@@ -25,34 +27,39 @@ namespace Sdl.Community.SDLBatchAnonymize
 			}
 			foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
 			{
-				Anonymize(segmentPair?.Properties?.TranslationOrigin);
-				Anonymize(segmentPair?.Properties?.TranslationOrigin?.OriginBeforeAdaptation);
+				var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
+
+				if (IsAutomatedTranslated(translationOrigin))
+				{
+					AnonymizeComplete(translationOrigin);
+					var translationOriginBeforeAdaptation = segmentPair?.Properties?.TranslationOrigin?.OriginBeforeAdaptation;
+					if (_settings.AnonymizeComplete)
+					{
+						AnonymizeComplete(translationOriginBeforeAdaptation);
+					}
+					else
+					{
+						AnonymizeTmMatch(translationOriginBeforeAdaptation);
+					}
+				}
 			}
 		}
 
-		private void Anonymize(ITranslationOrigin translationOrigin)
+		private bool IsAutomatedTranslated(ITranslationOrigin translationOrigin)
 		{
 			var originType = translationOrigin?.OriginType;
-			if (!string.IsNullOrEmpty(originType) &&
-			    (originType.Equals(DefaultTranslationOrigin.MachineTranslation) ||
-			     originType.Equals(DefaultTranslationOrigin.NeuralMachineTranslation) ||
-			     originType.Equals(DefaultTranslationOrigin.AdaptiveMachineTranslation)))
-			{
-				if (_settings.AnonymizeComplete)
-				{
-					AnonymizeComplete(translationOrigin);
-				}
-				else
-				{
-					AnonymizeTmMatch(translationOrigin);
-				}
-			}
+
+			return !string.IsNullOrEmpty(originType) &&
+			       (originType.Equals(DefaultTranslationOrigin.MachineTranslation) ||
+			        originType.Equals(DefaultTranslationOrigin.NeuralMachineTranslation) ||
+			        originType.Equals(DefaultTranslationOrigin.AdaptiveMachineTranslation));
 		}
 
 		private void AnonymizeComplete(ITranslationOrigin translationOrigin)
 		{
 			translationOrigin.OriginType = DefaultTranslationOrigin.Interactive;
 			translationOrigin.OriginSystem = string.Empty;
+			translationOrigin.MatchPercent = byte.Parse("0");
 		}
 
 		private void AnonymizeTmMatch(ITranslationOrigin translationOrigin)

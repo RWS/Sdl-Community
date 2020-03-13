@@ -41,10 +41,10 @@ namespace Sdl.Community.SDLBatchAnonymize.Ui
 		{
 			//create tooltips for buttons
 			var completeBtnTooltip = new ToolTip();
-			completeBtnTooltip.SetToolTip(completeBtn, "Origin will be set to Interactive");
+			completeBtnTooltip.SetToolTip(completeBtn, "Simple anonymization");
 
 			var tmMatchTooltip = new ToolTip();
-			tmMatchTooltip.SetToolTip(tmMatchBtn,"Origin will be set to TM, with the score and TM name selected");
+			tmMatchTooltip.SetToolTip(tmMatchBtn,"Set an edited translation score and TM name");
 			SetSettings(Settings);
 
 			base.OnLoad(e);
