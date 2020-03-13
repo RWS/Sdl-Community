@@ -81,14 +81,19 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymizerProcessor.cs" />
     <Compile Include="BatchAnonymizerTask.cs" />
+    <Compile Include="BatchTask\BatchAnonymizerSettings.cs" />
+    <Compile Include="BatchTask\BatchAnonymizerSettingsPage.cs" />
+    <Compile Include="Interface\IBatchAnonymizerSettings.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -99,8 +104,17 @@
     <Compile Include="TellMe\SdlBatchAnonymizeStoreAction.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizeCommunitySupportAction.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizeTellMeProvider.cs" />
+    <Compile Include="Ui\BatchAnonymizerSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ui\BatchAnonymizerSettingsControl.Designer.cs">
+      <DependentUpon>BatchAnonymizerSettingsControl.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Ui\BatchAnonymizerSettingsControl.resx">
+      <DependentUpon>BatchAnonymizerSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <Resource Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\Question.ico" />
