@@ -160,7 +160,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			{
 				foreach (var match in illegalMatches.Cast<Match>().Reverse())
 				{
-					content = Replace(content, match.Index, match.Length, "");
+					content = Replace(content, match.Index, match.Length, string.Empty);
 				}
 			}
 
