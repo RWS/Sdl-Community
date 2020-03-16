@@ -114,9 +114,7 @@
     <Compile Include="TellMe\SdlBatchAnonymizeStoreAction.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizeCommunitySupportAction.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizeTellMeProvider.cs" />
-    <Compile Include="Ui\BatchAnonymizerSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Ui\BatchAnonymizerSettingsControl.cs" />
     <Compile Include="Ui\BatchAnonymizerSettingsControl.Designer.cs">
       <DependentUpon>BatchAnonymizerSettingsControl.cs</DependentUpon>
     </Compile>
