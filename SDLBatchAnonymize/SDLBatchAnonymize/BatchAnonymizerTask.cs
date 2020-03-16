@@ -6,6 +6,7 @@ using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.SDLBatchAnonymize
 {
+
 	[AutomaticTask("SDL Batch Anonymizer",
 		"SDL Batch Anonymizer",
 		"Supports the anonymization of Machine Translation use by removing the MT or NMT markers.",
@@ -13,7 +14,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	[RequiresSettings(typeof(BatchAnonymizerSettings), typeof(BatchAnonymizerSettingsPage))]
 
-	public class BatchAnonymizerTask: AbstractFileContentProcessingAutomaticTask
+	public class BatchAnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
 		private BatchAnonymizerSettings _settings;
 
@@ -21,10 +22,12 @@ namespace Sdl.Community.SDLBatchAnonymize
 		{
 			_settings = GetSetting<BatchAnonymizerSettings>();
 		}
+
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerProcessor(_settings)));
 		}
+
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			return true;

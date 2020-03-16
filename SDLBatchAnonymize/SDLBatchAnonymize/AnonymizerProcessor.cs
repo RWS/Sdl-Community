@@ -11,6 +11,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 {
 	public class AnonymizerProcessor : AbstractBilingualContentProcessor
 	{
+		public static readonly Log Log = Log.Instance;
 		private readonly BatchAnonymizerSettings _settings;
 
 		public AnonymizerProcessor(BatchAnonymizerSettings settings)
@@ -25,23 +26,31 @@ namespace Sdl.Community.SDLBatchAnonymize
 			{
 				return;
 			}
-			foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
+			try
 			{
-				var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
-
-				if (IsAutomatedTranslated(translationOrigin))
+				foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
 				{
-					AnonymizeComplete(translationOrigin);
-					var translationOriginBeforeAdaptation = segmentPair?.Properties?.TranslationOrigin?.OriginBeforeAdaptation;
-					if (_settings.AnonymizeComplete)
+					var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
+					if (translationOrigin != null && IsAutomatedTranslated(translationOrigin))
 					{
-						AnonymizeComplete(translationOriginBeforeAdaptation);
-					}
-					else
-					{
-						AnonymizeTmMatch(translationOriginBeforeAdaptation);
+						AnonymizeComplete(translationOrigin);
+
+						if (_settings.AnonymizeTmMatch)
+						{
+							if (segmentPair.Properties?.TranslationOrigin.OriginBeforeAdaptation == null)
+							{
+								var originClone = (ITranslationOrigin) translationOrigin.Clone();
+								originClone.OriginBeforeAdaptation = null;
+								segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation = originClone;
+							}
+							AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation);
+						}
 					}
 				}
+			}
+			catch (Exception exception)
+			{
+				Log.Logger.Error($"{exception.Message}\n {exception.StackTrace}");
 			}
 		}
 
