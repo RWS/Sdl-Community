@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Threading;
@@ -577,8 +578,18 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			var listValues = new List<string> { trimEnd };
 			if (!fieldValueType.Equals(FieldValueType.DateTime) && !fieldValueType.Equals(FieldValueType.SingleString))
 			{
-				listValues = trimEnd.Split(',').ToList();
+				if (fieldValueType.Equals(FieldValueType.MultipleString))
+				{
+					var matches = Regex.Matches(trimEnd, "([\"'])(?:(?=(\\\\?))\\2.)*?\\1");
+					listValues = matches.Cast<Match>().Select(m => m.Value).ToList();
+				}
+				else
+				{
+					listValues = trimEnd.Split(',').ToList();
+				}
 			}
+
+
 
 			foreach (var value in listValues)
 			{
