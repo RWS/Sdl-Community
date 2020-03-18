@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.DeepLMTProvider
 {
@@ -17,19 +16,14 @@ namespace Sdl.Community.DeepLMTProvider
 		private readonly DeepLMtTranslationProvider _deepLMtTranslationProvider;
 		private readonly DeepLTranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
-		private TranslationUnit _inputTu;
 		private DeepLTranslationProviderConnecter _deeplConnect;
 		public static readonly Log Log = Log.Instance;
-		private readonly ProjectsController _projectsController;
 
 		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection)
 		{
 			_deepLMtTranslationProvider = deepLMtTranslationProvider;
 			_languageDirection = languageDirection;
 			_options = deepLMtTranslationProvider.Options;
-			_projectsController= SdlTradosStudio.Application.GetController<ProjectsController>();
-			var activeFile = _projectsController.CurrentProject.GetSourceLanguageFiles();
-
 		}
 
 		public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
@@ -171,7 +165,6 @@ namespace Sdl.Community.DeepLMTProvider
 		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
 		{
 			//need to use the tu confirmation level in searchsegment method
-			_inputTu = translationUnit;
 			return SearchSegment(settings, translationUnit.SourceSegment);
 		}
 
