@@ -12,7 +12,8 @@
 		<Setter Property="FontFamily" Value="Segoe UI"/>
 	</Style>
 	<Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}">
-		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="HorizontalAlignment" Value="Left" />
 		<Setter Property="FontSize" Value="12" />
+		<Setter Property="Margin" Value="3,0,3,0"></Setter>
 	</Style>
 </ResourceDictionary>

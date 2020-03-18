@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Converters
+namespace Sdl.Community.MTCloud.Provider.Converters
 {
 	[ValueConversion(typeof(bool), typeof(Visibility))]
 	public class BeGlobalVisibilityConverter : IValueConverter

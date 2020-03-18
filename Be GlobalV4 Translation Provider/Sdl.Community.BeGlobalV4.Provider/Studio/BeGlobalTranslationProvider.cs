@@ -2,23 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Model;
-using Sdl.Community.BeGlobalV4.Provider.Service;
+using Sdl.Community.MTCloud.Provider.Helpers;
+using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Studio
+namespace Sdl.Community.MTCloud.Provider.Studio
 {
 	public class BeGlobalTranslationProvider: ITranslationProvider
 	{
 		private LanguagePair _languageDirection;
-		private Constants _constants = new Constants();
 
 		public static readonly string ListTranslationProviderScheme = "sdlmachinetranslationcloudprovider";
-		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, _constants.PluginName);
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, Constants.PluginName);
 		public Uri Uri => Options.Uri;
-		public string Name => _constants.PluginName;
+		public string Name => Constants.PluginName;
 		public bool SupportsTaggedInput => true;  
 		public bool SupportsScoring => false;	  
 		public bool SupportsSearchForTranslationUnits => true; 
@@ -63,7 +62,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{_constants.SupportsLanguageDirection} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{Constants.SupportsLanguageDirection} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}

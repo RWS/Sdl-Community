@@ -1,13 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Forms;
-using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Ui;
-using Sdl.Community.BeGlobalV4.Provider.ViewModel;
+using Sdl.Community.MTCloud.Provider.Helpers;
+using Sdl.Community.MTCloud.Provider.View;
+using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Studio
+namespace Sdl.Community.MTCloud.Provider.Studio
 {
 	[TranslationProviderWinFormsUi(
 		Id = "SDLMachineTranslationCloudProviderUi",
@@ -15,10 +15,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		Description = "SDL Machine Translation Cloud Provider")]
 	public class BeGlobalProviderUi : ITranslationProviderWinFormsUI
 	{
-		private Constants _constants = new Constants();
-
-		public string TypeName => _constants.PluginName;
-		public string TypeDescription => _constants.PluginName;
+		
+		public string TypeName => Constants.PluginName;
+		public string TypeDescription => Constants.PluginName;
 		public bool SupportsEditing => true;
 		public static readonly Log Log = Log.Instance;
 
@@ -30,7 +29,12 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				var options = new BeGlobalTranslationOptions();
 				var credentials = SplitCredentials(credentialStore, options);
 				var beGlobalWindow = new BeGlobalWindow();
-				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, credentials, languagePairs);
+				var languages = new Languages.Provider.Languages();
+
+
+				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, credentials, languagePairs, languages);
+
+
 				beGlobalWindow.DataContext = beGlobalVm;
 
 				beGlobalWindow.ShowDialog();
@@ -51,7 +55,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{_constants.Browse} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{Constants.Browse} {e.Message}\n {e.StackTrace}");
 			}
 			return null;
 		}
@@ -62,9 +66,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			try
 			{
-				var editProvider = translationProvider as BeGlobalTranslationProvider;
-
-				if (editProvider == null)
+				if (!(translationProvider is BeGlobalTranslationProvider editProvider))
 				{
 					return false;
 				}
@@ -72,7 +74,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				//get saved key if there is one and put it into options
 				var credentials = SplitCredentials(credentialStore, editProvider.Options);
 				var beGlobalWindow = new BeGlobalWindow();
-				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, editProvider.Options, credentials, languagePairs);
+				var languages = new Languages.Provider.Languages();
+
+				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, editProvider.Options, credentials, languagePairs, languages);
+
+
 				beGlobalWindow.DataContext = beGlobalVm;
 
 				beGlobalWindow.ShowDialog();
@@ -88,7 +94,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{_constants.EditWindow} {e.Message}\n {e.StackTrace}");
+				Log.Logger.Error($"{Constants.EditWindow} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}
@@ -109,8 +115,8 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		{
 			var info = new TranslationProviderDisplayInfo
 			{
-				Name = _constants.PluginName,
-				TooltipText = _constants.PluginName,
+				Name = Constants.PluginName,
+				TooltipText = Constants.PluginName,
 				TranslationProviderIcon = PluginResources.global,
 				SearchResultImage = PluginResources.global1,
 			};
@@ -179,7 +185,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{_constants.IsEmailValid} {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{Constants.IsEmailValid} {ex.Message}\n {ex.StackTrace}");
 				return false;
 			}
 		}

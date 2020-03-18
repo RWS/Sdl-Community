@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.BeGlobalV4.Provider {
+namespace Sdl.Community.MTCloud.Provider {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace Sdl.Community.BeGlobalV4.Provider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -39,7 +39,7 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.BeGlobalV4.Provider.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.MTCloud.Provider.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -121,6 +121,15 @@ namespace Sdl.Community.BeGlobalV4.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Languages: {0}.
+        /// </summary>
+        public static string LanguageCountLabel {
+            get {
+                return ResourceManager.GetString("LanguageCountLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap logoB {
@@ -177,16 +186,6 @@ namespace Sdl.Community.BeGlobalV4.Provider {
             get {
                 object obj = ResourceManager.GetObject("MTCodesLogo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] MTLanguageCodes {
-            get {
-                object obj = ResourceManager.GetObject("MTLanguageCodes", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
@@ -265,6 +264,24 @@ namespace Sdl.Community.BeGlobalV4.Provider {
             get {
                 object obj = ResourceManager.GetObject("TellMe1", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Languages: {0}, Filtered: {1}.
+        /// </summary>
+        public static string Total_And_Filtered_Languages {
+            get {
+                return ResourceManager.GetString("Total_And_Filtered_Languages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Languages: {0}.
+        /// </summary>
+        public static string Total_Languages {
+            get {
+                return ResourceManager.GetString("Total_Languages", resourceCulture);
             }
         }
         

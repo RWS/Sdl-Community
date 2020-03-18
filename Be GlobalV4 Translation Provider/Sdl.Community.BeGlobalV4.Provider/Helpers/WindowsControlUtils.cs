@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
-using Application = System.Windows.Application;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Helpers
+namespace Sdl.Community.MTCloud.Provider.Helpers
 {
     public static class WindowsControlUtils
     {

@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.BeGlobalV4.Provider.Interfaces
+﻿namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
 	public interface IMessageBoxService
 	{

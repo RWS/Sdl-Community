@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Converters
+namespace Sdl.Community.MTCloud.Provider.Converters
 {
 	[ValueConversion(typeof(System.Drawing.Image), typeof(System.Windows.Media.ImageSource))]
 	public class ImageToBitmapImageConverter : IValueConverter

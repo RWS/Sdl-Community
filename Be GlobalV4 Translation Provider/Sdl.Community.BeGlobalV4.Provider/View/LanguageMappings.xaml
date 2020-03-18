@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="Sdl.Community.MTCloud.Provider.View.LanguageMappings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+   	         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+   	         xmlns:converters="clr-namespace:Sdl.Community.MTCloud.Provider.Converters"
+   	         mc:Ignorable="d" 
+             d:DesignHeight="450" MinWidth="880">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/DataGridColumnStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<StackPanel>
+		<Button Style="{DynamicResource SdlSecondaryButtonStyle}" Width="220" HorizontalAlignment="Right" Margin="0,10,15,5" Content="Reset Language Mappings to default" Command="{Binding ResetLanguageMappingsCommand}"/>
+
+		<DataGrid x:Name="LanguageMappingsGrid" Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
+				  ItemsSource="{Binding LanguageMappings, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"             
+				  Margin="15,10,10,10"
+				  CanUserResizeColumns="True" MinWidth="850"
+				  CanUserDeleteRows="False">
+			<DataGrid.Columns>
+				<DataGridTemplateColumn Header="Project Language Pair" IsReadOnly="True" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">					
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding ProjectLanguagePair}" ToolTip="{Binding ProjectLanguagePair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+										  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,10,0" TextWrapping="Wrap" />
+							</StackPanel>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTemplateColumn Header="Source MTCode" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">					
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ComboBox ItemsSource="{Binding MTCodesSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
+								      SelectedItem="{Binding SelectedMTCodeSource, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
+								Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<Image Source="{Binding Flag, Converter={StaticResource ImageConverter}}" Width="20" Height="20" Margin="5,0,5,0" />
+											<TextBlock Text="{Binding CodeName}" ToolTip="{Binding CodeName}" Margin="10,0,0,0"/>
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTemplateColumn Header="Target MTCode" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">					
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ComboBox ItemsSource="{Binding MTCodesTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
+								      SelectedItem="{Binding SelectedMTCodeTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
+								Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<Image Source="{Binding Flag, Converter={StaticResource ImageConverter}}" Width="20" Height="20" Margin="5,0,5,0" />
+											<TextBlock Text="{Binding CodeName}" Margin="10,0,0,0" ToolTip="{Binding CodeName}"/>
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTemplateColumn Header="Model" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">					
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ComboBox ItemsSource="{Binding Engines,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+								      SelectedItem="{Binding SelectedModelOption, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
+									  Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<Image Source="../Resources/AdaptiveEngine.ico" Width="15" Height="15" Margin="5,0,10,0" />
+											<TextBlock Text="{Binding DisplayName}" ToolTip="{Binding DisplayName}"
+													   Margin="10,2,10,0" FontFamily="Calibri" VerticalAlignment="Center"/>
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="SDL MT Cloud Dictionary" IsReadOnly="True" Width="*" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" >					
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ComboBox ItemsSource="{Binding MTCloudDictionaries,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+								      SelectedItem="{Binding SelectedMTCloudDictionary, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
+									  Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<Image Source="../Resources/dictionaryIcon.ico" Width="15" Height="15" Margin="6,3,5,0" />
+											<TextBlock Text="{Binding Name}" ToolTip="{Binding Name}"
+													  Margin="15,2,0,0" FontFamily="Calibri" VerticalAlignment="Center"/>
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+			</DataGrid>
+		<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="50"
+						    Visibility="{Binding IsWaiting, Converter={StaticResource BooleanToVisibilityConverter}}" />
+		<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments" DockPanel.Dock="Bottom" />
+		
+	</StackPanel>
+</UserControl>

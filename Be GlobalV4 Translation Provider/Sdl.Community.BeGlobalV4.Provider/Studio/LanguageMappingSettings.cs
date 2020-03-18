@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
-using Sdl.Community.BeGlobalV4.Provider.Interfaces;
-using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Interfaces;
+using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Core.Settings;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Studio
+namespace Sdl.Community.MTCloud.Provider.Studio
 {
 	public class LanguageMappingSettings : SettingsGroup, ILanguageMappingSettings
 	{		

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Model
+namespace Sdl.Community.MTCloud.Provider.Model
 {
 	public class ResponseError
 	{

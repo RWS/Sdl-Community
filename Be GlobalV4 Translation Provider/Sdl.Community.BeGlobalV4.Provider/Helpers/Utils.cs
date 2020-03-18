@@ -3,39 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Helpers
+namespace Sdl.Community.MTCloud.Provider.Helpers
 {
 	public static class Utils
 	{
-		private static Constants _constants = new Constants();
 		public static readonly Log Log = Log.Instance;
 
-		public static List<string> FormatLanguageName(string language)
-		{
-			try
-			{
-				if (!string.IsNullOrEmpty(language))
-				{
-					var splitedLanguage = language.Split('(');
-					var languageName = splitedLanguage?[0].TrimEnd().TrimStart();
-					var region = splitedLanguage.Length > 1 ? splitedLanguage[1].Replace(')', ' ').TrimEnd().TrimStart() : string.Empty;
-
-					return new List<string> { languageName, region };
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"{_constants.FormatLanguageName}: {ex.Message}\n {ex.StackTrace}");
-				throw new Exception(ex.Message);
-			}
-			return new List<string>();
-		}
-
+	
 		public static List<string> SplitLanguagePair(string languagePair)
 		{
 			try
 			{
-				if(!string.IsNullOrEmpty(languagePair))
+				if (!string.IsNullOrEmpty(languagePair))
 				{
 					var splittedLanguagePair = languagePair.Split('-');
 					var sourceLangPair = splittedLanguagePair?.Count() > 1 ? splittedLanguagePair[0].TrimStart().TrimEnd() : string.Empty;
@@ -44,9 +23,9 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 					return new List<string> { sourceLangPair, targetLangPair };
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
-				Log.Logger.Error($"{_constants.SplitLanguagePair}: {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{Constants.SplitLanguagePair}: {ex.Message}\n {ex.StackTrace}");
 				throw new Exception(ex.Message);
 			}
 			return new List<string>();
@@ -54,10 +33,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 
 		public static void LogServerIPAddresses()
 		{
-			var ipAddresses = Dns.GetHostAddresses(_constants.HostAddress);
+			var ipAddresses = Dns.GetHostAddresses(Constants.HostAddress);
 			foreach (var ipAddress in ipAddresses)
 			{
-				Log.Logger.Info($"{_constants.MTCloudServerIPMessage} {ipAddress}");
+				Log.Logger.Info($"{Constants.MTCloudServerIPMessage} {ipAddress}");
 			}
 		}
 	}

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -13,7 +12,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Studio
+namespace Sdl.Community.MTCloud.Provider.Studio
 {
 	public class BeGlobalLanguageDirection : ITranslationProviderLanguageDirection
 	{
@@ -21,12 +20,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 		private readonly BeGlobalTranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
 		private readonly List<TranslationUnit> _translationUnits;
-		private readonly EditorController _editorController;
-
-		public ITranslationProvider TranslationProvider => _beGlobalTranslationProvider;
-		public CultureInfo SourceLanguage { get; }
-		public CultureInfo TargetLanguage { get; }
-		public bool CanReverseLanguageDirection { get; }
+		private readonly EditorController _editorController;	
 
 		public BeGlobalLanguageDirection(BeGlobalTranslationProvider beGlobalTranslationProvider, LanguagePair languageDirection)
 		{
@@ -35,7 +29,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			_options = beGlobalTranslationProvider.Options;
 			_translationUnits = new List<TranslationUnit>();
 			_editorController = AppInitializer.GetEditorController();
-		}		
+		}
+
+		public ITranslationProvider TranslationProvider => _beGlobalTranslationProvider;
+
+		public CultureInfo SourceLanguage { get; }
+
+		public CultureInfo TargetLanguage { get; }
+
+		public bool CanReverseLanguageDirection { get; }
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
@@ -70,6 +72,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					xliffDocument.AddSourceSegment(seg);
 				}
 			}
+
 			return xliffDocument;
 		}
 
@@ -137,7 +140,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					// If activeSegmentPair is not null, it means the user translates segments through Editor
 					// If activeSegmentPair is null, it means the user executes Pre-Translate Batch task, so he does not navigate through segments in editor
 					var documentLastOpenPath = _translationUnits[0]?.DocumentProperties?.LastOpenedAsPath;
-					if (documentLastOpenPath == null || (documentLastOpenPath != null && documentLastOpenPath.Equals(_editorController?.ActiveDocument?.ActiveFile?.LocalFilePath)))
+					if (documentLastOpenPath == null || documentLastOpenPath.Equals(_editorController?.ActiveDocument?.ActiveFile?.LocalFilePath))
 					{
 						if (activeSegmentPair != null && (activeSegmentPair.Target.Count > 0 || activeSegmentPair.Properties.IsLocked))
 						{
@@ -146,7 +149,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						// In case user copies the source to target and run the pre-translation, do nothing and continue the flow.
 						else if (correspondingTu != null && IsSameSourceTarget(correspondingTu))
 						{
-							continue;
+							// do nothing
 						}
 						// If is already translated or is locked, then the request to server should not be done and it should not be translated
 						else if (activeSegmentPair == null && correspondingTu != null && (correspondingTu.DocumentSegmentPair.Target.Count > 0 || correspondingTu.DocumentSegmentPair.Properties.IsLocked))
@@ -163,6 +166,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						CreateBeGlobalSegments(beGlobalSegments, segments, segmentIndex);
 					}
 				}
+
 				if (beGlobalSegments.Count > 0)
 				{
 					var hasTranslations = GetTranslations(beGlobalSegments);
@@ -171,6 +175,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 						SetSearchResults(results, beGlobalSegments);
 					}
 				}
+
 				if (alreadyTranslatedSegments.Count > 0)
 				{
 					SetSearchResults(results, alreadyTranslatedSegments);
@@ -190,6 +195,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 							results[i] = null;
 							continue;
 						}
+
 						results[i] = new SearchResults();
 						if (segments[i] != null)
 						{
@@ -223,6 +229,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					return true;
 				}
 			}
+
 			return false;
 		}
 
@@ -234,6 +241,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				Segment = segments[segmentIndex],
 				Index = segmentIndex
 			};
+
 			beGlobalSegments.Add(segmentToBeTranslated);
 		}
 
@@ -250,6 +258,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 				Index = segmentIndex,
 				SearchResult = CreateSearchResult(segments[segmentIndex], translation)
 			};
+
 			alreadyTranslatedSegments.Add(alreadyTranslatedSegment);
 		}
 
@@ -263,6 +272,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					{
 						SourceSegment = segment.Segment.Duplicate()
 					};
+
 					results[segment.Index].Add(segment.SearchResult);
 				}
 			}
@@ -275,6 +285,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				segmentsToBeTranslated.Add(segment.Segment);
 			}
+
 			var translations = TranslateSegments(segmentsToBeTranslated.ToArray());
 			if (translations.Any() && translations[0] != null)
 			{
@@ -283,8 +294,10 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 					beGlobalSegments[i].Translation = translations[i];
 					beGlobalSegments[i].SearchResult = CreateSearchResult(beGlobalSegments[i].Segment, translations[i]);
 				}
+
 				return true;
 			}
+
 			return false;
 		}
 
@@ -348,12 +361,18 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			bool[] mask)
 		{
 			if (translationUnits == null)
+			{
 				throw new ArgumentNullException(nameof(translationUnits), @"TranslationUnits in SearchSegmentsMasked");
+			}
+
 			if (mask == null || mask.Length != translationUnits.Length)
+			{
 				throw new ArgumentException("Mask in SearchSegmentsMasked");
+			}
 
 			_translationUnits.Clear();
 			_translationUnits.AddRange(translationUnits);
+
 			return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
 		}
 
@@ -399,6 +418,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Studio
 			{
 				return false;
 			}
+
 			return corespondingTu.SourceSegment.ToString().Equals(corespondingTu.TargetSegment.ToString());
 		}
 	}

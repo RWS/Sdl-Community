@@ -1,86 +1,66 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows.Data;
-using System.Windows.Forms;
 using System.Windows.Input;
-using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Model;
-using Sdl.Community.BeGlobalV4.Provider.Service;
-using Sdl.Community.Toolkit.LanguagePlatform.ExcelParser;
-using Sdl.Community.Toolkit.LanguagePlatform.Models;
+using Sdl.Community.MTCloud.Languages.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Helpers;
+using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Core.Globalization;
 using Controls = System.Windows.Controls;
 
-namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
+namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
 	public class MTCodesViewModel : BaseViewModel
 	{
-		private MTCodeModel _selectedMTCode;
-		private ObservableCollection<MTCodeModel> _mtCodes;
+		private readonly PrintService _printService;
+		private readonly Languages.Provider.Languages _languages;
+
+		private MTCloudLanguage _selectedMtCode;
+		private ObservableCollection<MTCloudLanguage> _mtCodes;
 		private string _message;
 		private string _messageColor;
-		private static Constants _constants = new Constants();
-
-		private readonly string _excelFilePath = Path.Combine(Environment.GetFolderPath(
-			Environment.SpecialFolder.ApplicationData),
-			_constants.SDLCommunity,
-			_constants.SDLMachineTranslationCloud,
-			"MTLanguageCodes.xlsx");
-
-		private readonly string _filteredExcelFilePath = Path.Combine(Environment.GetFolderPath(
-			Environment.SpecialFolder.ApplicationData),
-			_constants.SDLCommunity,
-			_constants.SDLMachineTranslationCloud,
-			"FilteredMTLanguageCodes.xlsx");
-
-		private int _lastExcelRowNumber;
-		private ExcelParser _excelParser = new ExcelParser();
-		private List<MTCodeModel> _filteredMTCodes;
 		private string _query;
-		private int _queriedCodesNumber;
 		private bool _isWaiting;
-		private bool _isMTCodeIconVisible;
+		private bool _isMtCodeIconVisible;
 		private bool _isProviderIconVisible;
-		private PrintService _printService;
+		private string _itemsCountLabel;
 
-		private ICommand _updateCellCommand;
+		private ICommand _updateLanguagePropertyCommand;
 		private ICommand _printCommand;
 
-		public MTCodesViewModel(List<ExcelSheet> excelSheetResults)
+		public MTCodesViewModel(Languages.Provider.Languages languages)
 		{
+			_languages = languages;
+
 			IsMTCodeIconVisible = true;
 			IsProviderIconVisible = false;
-			MTCodes = new ObservableCollection<MTCodeModel>();
-			MTCodes = MapExcelCodes(excelSheetResults);
+
+			MTCodes = new ObservableCollection<MTCloudLanguage>(GetAllLanguages());
+
 			_printService = new PrintService();
-
-			Timer.Tick += StartSearch;
-			PropertyChanged += StartSearchTimer;
 		}
-
-		public Timer Timer { get; } = new Timer { Interval = 500 };
-
-		public ObservableCollection<MTCodeModel> MTCodes
+		
+		public ObservableCollection<MTCloudLanguage> MTCodes
 		{
 			get => _mtCodes;
 			set
 			{
 				_mtCodes = value;
 				OnPropertyChanged(nameof(MTCodes));
+
+				ItemsCountLabel = string.Format(PluginResources.Total_Languages, _mtCodes.Count);
 			}
 		}
 
-		public MTCodeModel SelectedMTCode
+		public MTCloudLanguage SelectedMTCode
 		{
-			get => _selectedMTCode;
+			get => _selectedMtCode;
 			set
 			{
-				_selectedMTCode = value;
+				_selectedMtCode = value;
 				OnPropertyChanged(nameof(SelectedMTCode));
 			}
 		}
@@ -110,8 +90,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			get => _query;
 			set
 			{
-				_query = value;
+				if (_query == value)
+				{
+					return;
+				}
+
+				_query = value;				
 				OnPropertyChanged(nameof(Query));
+
+				SearchLanguages(_query);
 			}
 		}
 
@@ -125,12 +112,27 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		public bool IsMTCodeIconVisible
+		public string ItemsCountLabel
 		{
-			get => _isMTCodeIconVisible;
+			get => _itemsCountLabel;
 			set
 			{
-				_isMTCodeIconVisible = value;
+				if (_itemsCountLabel == value)
+				{
+					return;
+				}
+
+				_itemsCountLabel = value;
+				OnPropertyChanged(nameof(ItemsCountLabel));
+			}
+		}
+
+		public bool IsMTCodeIconVisible
+		{
+			get => _isMtCodeIconVisible;
+			set
+			{
+				_isMtCodeIconVisible = value;
 				OnPropertyChanged(nameof(IsMTCodeIconVisible));
 			}
 		}
@@ -145,213 +147,143 @@ namespace Sdl.Community.BeGlobalV4.Provider.ViewModel
 			}
 		}
 
-		public ICommand UpdateCellCommand => _updateCellCommand ?? (_updateCellCommand = new RelayCommand(UpdateMTCode));
-		public ICommand PrintCommand => _printCommand ?? (_printCommand = new RelayCommand<Controls.DataGrid>(Print));
+		public ICommand UpdateLanguagePropertyCommand => 
+			_updateLanguagePropertyCommand ?? (_updateLanguagePropertyCommand = new RelayCommand(UpdateLanguageProperty));
 
-		/// <summary>
-		/// Search records from grid using languageName as query input
-		/// </summary>
-		/// <param name="languageName">languageName</param>
-		public void SearchLanguages(string languageName)
+		public ICommand PrintCommand 
+			=> _printCommand ?? (_printCommand = new RelayCommand<Controls.DataGrid>(Print));
+
+		public void SearchLanguages(string query)
 		{
 			var collectionViewSource = CollectionViewSource.GetDefaultView(MTCodes);
 
-			if (!string.IsNullOrEmpty(languageName))
+			if (!string.IsNullOrEmpty(query))
 			{
-				collectionViewSource.Filter = p =>
+				collectionViewSource.Filter = language =>
 				{
-					var mtCodeModel = p as MTCodeModel;
-					return (mtCodeModel != null && mtCodeModel.Language.ToLower().Contains(languageName.ToLower()))
-					|| (mtCodeModel != null && mtCodeModel.TradosCode.ToLower().Contains(languageName.ToLower()))
-					|| (mtCodeModel != null && mtCodeModel.Region.ToLower().Contains(languageName.ToLower()))
-					|| (mtCodeModel != null && mtCodeModel.MTCodeMain.ToLower().Contains(languageName.ToLower()))
-					|| (mtCodeModel != null && mtCodeModel.MTCodeLocale.ToLower().Contains(languageName.ToLower()));
+					var model = language as MTCloudLanguage;
+
+					return (model != null && model.Language.ToLower().Contains(query.ToLower()))
+						|| (model != null && model.TradosCode.ToLower().Contains(query.ToLower()))
+						|| (model != null && model.Region.ToLower().Contains(query.ToLower()))
+						|| (model != null && model.MTCode.ToLower().Contains(query.ToLower()))
+						|| (model != null && model.MTCodeLocale.ToLower().Contains(query.ToLower()));
 				};
-				SelectedMTCode = collectionViewSource.CurrentItem as MTCodeModel;
+
+				SelectedMTCode = collectionViewSource.CurrentItem as MTCloudLanguage;
 			}
 			else
 			{
 				collectionViewSource.Filter = null;
 			}
-			_queriedCodesNumber = collectionViewSource.Cast<object>().Count();
-			_filteredMTCodes = collectionViewSource.Cast<MTCodeModel>().ToList();
+		
+			var filtered = collectionViewSource.Cast<MTCloudLanguage>().ToList();
+			var filteredCount = filtered.Count;
+			var totalCount = MTCodes.Count;
+			ItemsCountLabel = filteredCount < totalCount 
+				? string.Format(PluginResources.Total_And_Filtered_Languages, totalCount, filteredCount) 
+				: string.Format(PluginResources.Total_Languages, totalCount);
 		}
-
-		/// <summary>
-		/// Print the searched MTCodes records which are exported to new Excel file/entire MTCodes from the original Excel file
-		/// </summary>
-		/// <param name="dataGrid">MTCodes dataGrid</param>
-		public async void Print(Controls.DataGrid dataGrid)
+	
+		public void Print(Controls.DataGrid dataGrid)
 		{
 			IsWaiting = true;
 
-			// If the number of queries are less than 500 (aprox number of Studio languages), it means that user searched for a specific language
-			// and those searched records will be printed
-			if (_queriedCodesNumber < 500 && _filteredMTCodes != null)
-			{
-				await Task.Run(async () =>
-				{
-					_printService.CreateExcelFile(_filteredExcelFilePath);
-
-					// Excel indexing starts with 1, we are starting row numbering to add values with 2, because index 1 corresponds to column names
-					var excelRow = 2;
-					foreach (var item in _filteredMTCodes)
-					{
-						var excelModel = CreateMTCodeExcelModel(item, excelRow++, _filteredExcelFilePath);
-						await _excelParser.UpdateMTCodeExcel(excelModel);
-					}
-					IsWaiting = false;
-				}).ConfigureAwait(true);
-
+			var collectionViewSource = CollectionViewSource.GetDefaultView(MTCodes);
+			var filtered = collectionViewSource.Cast<MTCloudLanguage>().ToList();
+			var filteredCount = filtered.Count;
+			var totalCount = MTCodes.Count;
+		
+			if (filteredCount < totalCount)
+			{				
+				var filteredFilePath = Path.Combine(Community.MTCloud.Languages.Provider.Constants.MTCloudFolderPath, "FilteredMTLanguageCodes.xlsx");
+				_languages.SaveLanguages(filtered, filteredFilePath);
+				
+				
 				IsWaiting = false;
-				_printService.PrintFile(_filteredExcelFilePath);
+				_printService.PrintFile(filteredFilePath);
 			}
 			else
 			{
 				IsWaiting = false;
-				_printService.PrintFile(_excelFilePath);
+				_printService.PrintFile(Community.MTCloud.Languages.Provider.Constants.MTLanguageCodesFilePath);
 			}
 		}
 
-		/// <summary>
-		/// Update the MTCode (main) / MTCode (locale) inside the local excel file after datagrid cell was edited
-		/// </summary>
-		/// <param name="parameter">parameter</param>
-		public void UpdateMTCode(object parameter)
+		public void UpdateLanguageProperty(object parameter)
 		{
-			Message = string.Empty;
-			try
+			if (SelectedMTCode != null)
 			{
-				if (SelectedMTCode != null)
-				{
-					var mtCodeExcel = CreateMTCodeExcelModel(SelectedMTCode, SelectedMTCode.RowNumber, _excelFilePath);
-					_excelParser.UpdateMTCodeExcel(mtCodeExcel);
-
-					SetMessage(_constants.Green, _constants.SuccessfullyUpdatedMessage);
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"{_constants.AddMTCode} {ex.Message}\n {ex.StackTrace}");
-				SetMessage(_constants.Red, ex.Message);
+				_languages.SaveLanguages(MTCodes.ToList());
 			}
 		}
 
-		private void StartSearchTimer(object sender, PropertyChangedEventArgs e)
+		private List<MTCloudLanguage> GetAllLanguages()
 		{
-			if (e.PropertyName.Equals(nameof(Query)))
+			var mtCloudLanguages = _languages.GetLanguages();
+			if (AddStudioLanguages(mtCloudLanguages))
 			{
-				Timer.Stop();
-				Timer.Start();
+				_languages.SaveLanguages(mtCloudLanguages);
 			}
-		}
-		private void StartSearch(object sender, EventArgs e)
-		{
-			Timer.Stop();
-			SearchLanguages(Query);
+
+			return mtCloudLanguages;
 		}
 
-		/// <summary>
-		/// Set the message text and color
-		/// </summary>
-		/// <param name="messageColor">message color</param>
-		/// <param name="message">message text</param>
-		private void SetMessage(string messageColor, string message)
+		private bool AddStudioLanguages(ICollection<MTCloudLanguage> mtCloudLanguages)
 		{
-			MessageColor = messageColor;
-			Message = message;
-		}
+			var updated = false;
 
-		/// <summary>
-		/// Create MTCodeExcel model with the needed values to update the Excel file.
-		/// Region,Language,TradosCode and column numbers are used to add/update the row inside the Excel local file, in case the information for the selected Studio Language does not exists.
-		/// </summary>
-		/// <returns>MTCodeExcel object</returns>
-		private MTCodeExcel CreateMTCodeExcelModel(MTCodeModel mtCodeModel, int sheetRowNumber, string filePath)
-		{
-			return new MTCodeExcel
-			{
-				ExcelPath = filePath,
-				ExcelSheet = _constants.ExcelSheet,
-				LocaleValue = mtCodeModel.MTCodeLocale,
-				LocaleColumnNumber = mtCodeModel.MTCodeLocaleColumnNo,
-				MainValue = mtCodeModel.MTCodeMain,
-				MainColumnNumber = mtCodeModel.MTCodeMainColumnNo,
-				Language = mtCodeModel.Language,
-				LanguageColumnNumber = mtCodeModel.LanguageColumnNo,
-				Region = mtCodeModel.Region,
-				RegionColumnNumber = mtCodeModel.RegionColumnNo,
-				TradosCode = mtCodeModel.TradosCode,
-				TradosCodeColumnNumber = mtCodeModel.TradosCodeColumnNo,
-				SheetRowNumber = sheetRowNumber
-			};
-		}
-
-		/// <summary>
-		/// Map values from Excel to MTCodes collection based on the avaialble Languages from Studio
-		/// </summary>
-		/// <param name="excelSheetResults">results from excel's sheet</param>
-		/// <returns>MTCodes collection</returns>
-		private ObservableCollection<MTCodeModel> MapExcelCodes(List<ExcelSheet> excelSheetResults)
-		{
-			// Remove the first row which corresponds to columns name
-			excelSheetResults.RemoveRange(0, 1);
-			var excelValues = new List<MTCodeModel>();
-
-			// The row numbering starts with 1, because the first row in Excel corresponds to column names
-			var rowNumber = 1;
-			foreach (var excelSheetRow in excelSheetResults)
-			{
-				rowNumber++;
-				var mtCodeModel = new MTCodeModel
-				{
-					Language = excelSheetRow.RowValues[0]?.ToString(),
-					Region = excelSheetRow.RowValues[1]?.ToString(),
-					TradosCode = excelSheetRow.RowValues[2]?.ToString(),
-					MTCodeMain = excelSheetRow.RowValues[3]?.ToString(),
-					MTCodeLocale = excelSheetRow.RowValues[4]?.ToString(),
-					LanguageColumnNo = 1,
-					RegionColumnNo = 2,
-					TradosCodeColumnNo = 3,
-					MTCodeMainColumnNo = 4,
-					MTCodeLocaleColumnNo = 5,
-					RowNumber = rowNumber
-				};
-				excelValues.Add(mtCodeModel);
-			}
-			_lastExcelRowNumber = excelValues.Count + 1;
 			var studioLanguages = Language.GetAllLanguages();
 
-			foreach (var item in studioLanguages)
+			foreach (var studioLanguage in studioLanguages)
 			{
-				var languageInfo = Utils.FormatLanguageName(item.DisplayName);
+				var mtCloudLanguage = mtCloudLanguages.FirstOrDefault(e => e.TradosCode.Equals(studioLanguage.CultureInfo.Name));
+				if (mtCloudLanguage == null)
+				{							
+					var languageName = GetLanguageName(studioLanguage, out var region);
 
-				// If the language information already exists in Excel, add it to the MTCodes collection, otherwise add the specific MTCode info as new model
-				var mtCodeModel = excelValues.FirstOrDefault(e => e.Language.Equals(languageInfo[0]) && e.TradosCode.Equals(item.IsoAbbreviation));
-				if (mtCodeModel != null)
-				{
-					MTCodes.Add(mtCodeModel);
-				}
-				else
-				{
-					MTCodes.Add(new MTCodeModel
+					updated = true;
+					var language = new MTCloudLanguage
 					{
-						Language = languageInfo[0],
-						Region = languageInfo[1],
-						TradosCode = item.IsoAbbreviation,
-						MTCodeMain = string.Empty,
-						MTCodeLocale = string.Empty,
-						LanguageColumnNo = 1,
-						RegionColumnNo = 2,
-						TradosCodeColumnNo = 3,
-						MTCodeMainColumnNo = 4,
-						MTCodeLocaleColumnNo = 5,
-						RowNumber = _lastExcelRowNumber// use a new number based on the last existing RowNumber in Excel (the new MTCodeModel will be added inside excel as new rows)
-					});
-					_lastExcelRowNumber++;
+						Index = mtCloudLanguages.Count,
+						Language = languageName,
+						Region = region,
+						TradosCode = studioLanguage.CultureInfo.Name,
+						MTCode = string.Empty,
+						MTCodeLocale = string.Empty
+					};
+
+					mtCloudLanguages.Add(language);
 				}
 			}
-			return MTCodes;
+
+			return updated;
+		}
+
+		private string GetLanguageName(Language language, out string region)
+		{
+			region = string.Empty;
+			if (language == null)
+			{
+				return null;
+			}
+
+			var languageName = language.DisplayName;			
+			if (!string.IsNullOrEmpty(languageName))
+			{
+				var regexSplit = new Regex(@"(?<language>[^\(]*)\((?<region>[^\)]*)", RegexOptions.IgnoreCase);
+				if (languageName.Contains("(") && languageName.Contains(")"))
+				{
+					var match = regexSplit.Match(languageName);
+					if (match.Success)
+					{
+						languageName = match.Groups["language"].Value.Trim();
+						region = match.Groups["region"].Value.Trim();
+					}
+				}
+			}
+
+			return languageName;
 		}
 	}
 }
