@@ -1,7 +1,7 @@
 ﻿using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Model
+namespace Sdl.Community.MTCloud.Provider.Model
 {
     public class BeGlobalSegment
     {

@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 using System.Runtime.Serialization;
-using Sdl.Community.BeGlobalV4.Provider.ViewModel;
+using Sdl.Community.MTCloud.Provider.ViewModel;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Model
+namespace Sdl.Community.MTCloud.Provider.Model
 {
 	[DataContract]
 	public class LangMappingMTCode : BaseViewModel

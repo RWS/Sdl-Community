@@ -3,6 +3,6 @@
 
 	<Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
 		<Setter Property="FontSize" Value="13"/>
-		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
 	</Style>	
 </ResourceDictionary>

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Model;
-using Sdl.Community.BeGlobalV4.Provider.Service;
+using Sdl.Community.MTCloud.Provider.Helpers;
+using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Studio
+namespace Sdl.Community.MTCloud.Provider.Studio
 {
 	[TranslationProviderFactory(Id = "SDLMachineTranslationCloudProviderFactory",
 		Name = "SDLMachineTranslationCloudProviderFactory",

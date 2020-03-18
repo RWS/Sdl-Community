@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using Sdl.Community.BeGlobalV4.Provider.ViewModel;
+using Sdl.Community.MTCloud.Provider.ViewModel;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Model
+namespace Sdl.Community.MTCloud.Provider.Model
 {
 	public class LanguageMappingModel : BaseViewModel
 	{

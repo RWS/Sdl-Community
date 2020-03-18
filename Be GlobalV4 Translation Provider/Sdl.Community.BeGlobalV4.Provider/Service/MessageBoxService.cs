@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using Sdl.Community.BeGlobalV4.Provider.Interfaces;
+using Sdl.Community.MTCloud.Provider.Interfaces;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Service
+namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class MessageBoxService : IMessageBoxService
 	{

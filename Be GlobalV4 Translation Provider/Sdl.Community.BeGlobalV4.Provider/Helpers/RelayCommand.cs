@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Helpers
+namespace Sdl.Community.MTCloud.Provider.Helpers
 {
 	public class RelayCommand : ICommand
 	{

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Helpers
+namespace Sdl.Community.MTCloud.Provider.Helpers
 {
 	public static class StringExtensions
 	{

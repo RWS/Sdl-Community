@@ -1,50 +1,17 @@
 ﻿using System;
 using System.Drawing.Printing;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using System.Windows.Threading;
 using Controls = System.Windows.Controls;
 using Excel = Microsoft.Office.Interop.Excel;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Service
+namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class PrintService
 	{
 		/// <summary>
-		/// Create a new Excel file
-		/// </summary>
-		/// <param name="filePath">filePath</param>
-		public void CreateExcelFile(string filePath)
-		{
-			if (File.Exists(filePath))
-			{
-				File.Delete(filePath);
-			}
-			var app = new Excel.Application();
-			var wb = app.Workbooks.Add("Workbook");
-			var ws = (Excel.Worksheet)wb.Worksheets[1];
-
-			ws.Cells[1, 1] = "Language";
-			ws.Cells[1, 2] = "Region";
-			ws.Cells[1, 3] = "Trados Code";
-			ws.Cells[1, 4] = "MTCode (main)";
-			ws.Cells[1, 5] = "MT Code (if locale is available)";
-
-			ws.SaveAs(filePath, Excel.XlFileFormat.xlOpenXMLWorkbook, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-				Excel.XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing);
-			wb.Close(true, filePath, Type.Missing);
-			app.Quit();
-			Marshal.ReleaseComObject(ws);
-			Marshal.ReleaseComObject(wb);
-			Marshal.ReleaseComObject(app);
-		}
-
-		/// <summary>
 		/// Print Excel file
 		/// </summary>
 		/// <param name="filePath"></param>
-		/// <param name="printDlg"></param>
 		public void PrintFile(string filePath)
 		{
 			var printers = PrinterSettings.InstalledPrinters;

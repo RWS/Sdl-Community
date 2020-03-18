@@ -1,15 +1,11 @@
-﻿using System.Collections.ObjectModel;
-using Sdl.Community.BeGlobalV4.Provider.Helpers;
-using Sdl.Community.BeGlobalV4.Provider.Model;
-using Sdl.Community.BeGlobalV4.Provider.Studio;
+﻿using Sdl.Community.MTCloud.Provider.Studio;
 using Sdl.Core.Settings;
 using Sdl.ProjectAutomation.FileBased;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Service
+namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class LanguageMappingsService
-	{
-		private Constants _constants = new Constants();
+	{		
 		private static ISettingsGroup _sdlMTCloudSettingsGroup;
 
 		/// <summary>
@@ -22,15 +18,15 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 			if (projectSettings != null)
 			{
-				var containsSettingsGroup = projectSettings.ContainsSettingsGroup(_constants.SettingsGrId);
+				var containsSettingsGroup = projectSettings.ContainsSettingsGroup(Constants.SettingsGrId);
 
-				_sdlMTCloudSettingsGroup = projectSettings.GetSettingsGroup(_constants.SettingsGrId);
+				_sdlMTCloudSettingsGroup = projectSettings.GetSettingsGroup(Constants.SettingsGrId);
 
 				if (!containsSettingsGroup)
 				{
 					projectSettings.AddSettingsGroup(_sdlMTCloudSettingsGroup);
 				}
-				var savedMappingSettings = projectSettings.GetSettingsGroup<LanguageMappingSettings>(_constants.SettingsGrId);
+				var savedMappingSettings = projectSettings.GetSettingsGroup<LanguageMappingSettings>(Constants.SettingsGrId);
 				return savedMappingSettings;
 			}
 			return null;
@@ -46,11 +42,11 @@ namespace Sdl.Community.BeGlobalV4.Provider.Service
 
 			if (projectSettings != null)
 			{
-				var containsSettingsGroup = projectSettings.ContainsSettingsGroup(_constants.SettingsGrId);
+				var containsSettingsGroup = projectSettings.ContainsSettingsGroup(Constants.SettingsGrId);
 
 				if (containsSettingsGroup)
 				{
-					projectSettings.RemoveSettingsGroup(_constants.SettingsGrId);
+					projectSettings.RemoveSettingsGroup(Constants.SettingsGrId);
 					currentProject.UpdateSettings(projectSettings);
 				}
 			}

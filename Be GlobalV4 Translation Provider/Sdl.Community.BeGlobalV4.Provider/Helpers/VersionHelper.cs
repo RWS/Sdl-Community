@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Helpers
+namespace Sdl.Community.MTCloud.Provider.Helpers
 {
 	public static class VersionHelper
 	{
@@ -40,7 +40,7 @@ namespace Sdl.Community.BeGlobalV4.Provider.Helpers
 		/// <returns>studio version</returns>
 		public static string GetStudioVersion()
 		{
-			var studioVersion = new Toolkit.Core.Studio().GetInstalledStudioVersion()?.FirstOrDefault(v => v.Version.Equals("Studio15"));
+			var studioVersion = new Community.Toolkit.Core.Studio().GetInstalledStudioVersion()?.FirstOrDefault(v => v.Version.Equals("Studio15"));
 			if (studioVersion != null)
 			{
 				return $"{studioVersion.PublicVersion}-{studioVersion.ExecutableVersion}";

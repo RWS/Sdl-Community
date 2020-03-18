@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using Sdl.Community.BeGlobalV4.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Model;
 
-namespace Sdl.Community.BeGlobalV4.Provider.Interfaces
+namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
 	interface ILanguageMappingSettings
 	{

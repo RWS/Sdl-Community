@@ -196,7 +196,13 @@
   <data name="MTCodesLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\MTCodesLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="MTLanguageCodes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\MTLanguageCodes.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	<data name="LanguageCountLabel" xml:space="preserve">
+    <value>Languages: {0}</value>
+  </data>
+	<data name="Total_Languages" xml:space="preserve">
+    <value>Total Languages: {0}</value>
+  </data>
+	<data name="Total_And_Filtered_Languages" xml:space="preserve">
+    <value>Total Languages: {0}, Filtered: {1}</value>
   </data>
 </root>
