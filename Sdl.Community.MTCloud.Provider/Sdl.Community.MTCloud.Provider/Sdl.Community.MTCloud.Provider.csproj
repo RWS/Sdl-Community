@@ -307,7 +307,7 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Sdl.MTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj">
+    <ProjectReference Include="..\..\Sdl.Community.MTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj">
       <Project>{9d257236-08a9-4b23-9249-aca78139172e}</Project>
       <Name>Sdl.Community.MTCloud.Languages.Provider</Name>
     </ProjectReference>

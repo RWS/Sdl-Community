@@ -5,13 +5,13 @@ VisualStudioVersion = 15.0.28307.960
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTCloud.Provider", "Sdl.Community.MTCloud.Provider\Sdl.Community.MTCloud.Provider.csproj", "{C5C7E441-7416-47F3-A4B0-C20AEEC12ABF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTCloud.Languages.Provider", "..\Sdl.MTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj", "{9D257236-08A9-4B23-9249-ACA78139172E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTCloud.Languages.Provider", "..\Sdl.Community.MTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj", "{9D257236-08A9-4B23-9249-ACA78139172E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9BA60C05-6844-4B2C-B3EC-73C1DAF9A769}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{9DCAD356-3AF1-49CB-B84A-A17D7C9E7B2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTCloud.Languages.Provider.IntegrationTests", "..\Sdl.MTCloud.Languages.Provider\Tests\IntegrationTests\Sdl.MTCloud.Languages.Provider.IntegrationTests\Sdl.Community.MTCloud.Languages.Provider.IntegrationTests.csproj", "{EA39EB5D-0E7E-4EFF-B77A-3A15AD1DE50A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTCloud.Languages.Provider.IntegrationTests", "..\Sdl.Community.MTCloud.Languages.Provider\Tests\IntegrationTests\Sdl.Community.MTCloud.Languages.Provider.IntegrationTests\Sdl.Community.MTCloud.Languages.Provider.IntegrationTests.csproj", "{EA39EB5D-0E7E-4EFF-B77A-3A15AD1DE50A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
