@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.960
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTCloud.Provider", "Sdl.Community.BeGlobalV4.Provider\Sdl.Community.MTCloud.Provider.csproj", "{C5C7E441-7416-47F3-A4B0-C20AEEC12ABF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTCloud.Provider", "Sdl.Community.MTCloud.Provider\Sdl.Community.MTCloud.Provider.csproj", "{C5C7E441-7416-47F3-A4B0-C20AEEC12ABF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTCloud.Languages.Provider", "..\Sdl.MTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj", "{9D257236-08A9-4B23-9249-ACA78139172E}"
 EndProject
