@@ -10,11 +10,9 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
-	public class BeGlobalTranslationProvider: ITranslationProvider
+	public class SdlMTCloudTranslationProvider: ITranslationProvider
 	{
-		private LanguagePair _languageDirection;
-
-		public static readonly string ListTranslationProviderScheme = "sdlmachinetranslationcloudprovider";
+		private LanguagePair _languageDirection;		
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, Constants.PluginName);
 		public Uri Uri => Options.Uri;
 		public string Name => Constants.PluginName;
@@ -36,12 +34,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public bool SupportsWordCounts => false;
 		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;	 
 		public bool IsReadOnly => true;
-		public BeGlobalTranslationOptions Options { get; set; }
+		public SdlMTCloudTranslationOptions Options { get; set; }
 		private LanguageMappingsService _languageMappingsService;
 		private string _encryptedClientId;
 		private string _encryptedClientSecret;
 
-		public BeGlobalTranslationProvider(BeGlobalTranslationOptions options)
+		public SdlMTCloudTranslationProvider(SdlMTCloudTranslationOptions options)
 		{
 			Options = options;
 			_languageMappingsService = new LanguageMappingsService();
@@ -70,7 +68,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			return  new BeGlobalLanguageDirection(this,languageDirection);
+			return  new SdlMTCloudLanguageDirection(this,languageDirection);
 		}
 
 		public void RefreshStatusInfo()
@@ -87,7 +85,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public void LoadState(string translationProviderState)
 		{
-			Options = JsonConvert.DeserializeObject<BeGlobalTranslationOptions>(translationProviderState);
+			Options = JsonConvert.DeserializeObject<SdlMTCloudTranslationOptions>(translationProviderState);
 		}
 
 		private BeGlobalLanguagePair SetSupportedLanguages(LanguagePair languageDirection)

@@ -4,25 +4,25 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-             xmlns:uiHelpers="clr-namespace:Sdl.Community.MTCloud.Provider.UiHelpers"
    	         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
    	         xmlns:converters="clr-namespace:Sdl.Community.MTCloud.Provider.Converters"
    	         xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
+   	         xmlns:styles="clr-namespace:Sdl.Community.MTCloud.Provider.Styles"
    	         mc:Ignorable="d" 
 			 Title="SDL MT Clound Language Codes"
    		 	 ResizeMode="CanResizeWithGrip" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen"
              d:DesignHeight="500" d:DesignWidth="800"  MinWidth="600" MinHeight="400" Width="800" Height="500"
-			d:DataContext="{d:DesignInstance viewModel:MTCodesViewModel}">
+			d:DataContext="{d:DesignInstance viewModel:MTCodesWindowModel}">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
-				<ResourceDictionary Source="../UiHelpers/DataGridColumnStyle.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="../Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="../Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="../Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="../Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
 				<ResourceDictionary x:Uid="ResourceKeyId2">
 					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>
@@ -44,7 +44,7 @@
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
-			<uiHelpers:WindowsControl Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top" Width="Auto"/>
+			<styles:WindowsControl Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top" Width="Auto"/>
 
 			<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="50"
 						    Visibility="{Binding IsWaiting, Converter={StaticResource BooleanToVisibilityConverter}}" />

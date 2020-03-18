@@ -1,12 +1,14 @@
-﻿<UserControl x:Class="Sdl.Community.MTCloud.Provider.View.LanguageMappings"
+﻿<UserControl x:Class="Sdl.Community.MTCloud.Provider.View.LanguageMappingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
    	         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
    	         xmlns:converters="clr-namespace:Sdl.Community.MTCloud.Provider.Converters"
+   	         xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
    	         mc:Ignorable="d" 
-             d:DesignHeight="450" MinWidth="880">
+             d:DesignHeight="450" MinWidth="880"
+			 d:DataContext="{d:DesignInstance viewModel:LanguageMappingsViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -20,11 +22,11 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
-				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
-				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="../Styles/TextBlockStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../Styles/TextBoxStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="../Styles/DataGridColumnStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>

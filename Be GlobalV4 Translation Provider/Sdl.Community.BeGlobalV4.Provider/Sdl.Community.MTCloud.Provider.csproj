@@ -152,7 +152,7 @@
     <Compile Include="TellMe\HelpAction.cs" />
     <Compile Include="TellMe\StoreAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
-    <Compile Include="Converters\BeGlobalVisibilityConverter.cs" />
+    <Compile Include="Converters\VisibilityConverter.cs" />
     <Compile Include="Converters\ImageToBitmapImageConverter.cs" />
     <Compile Include="Converters\StringIsNullOrEmptyVisibilityConverter.cs" />
     <Compile Include="AppInitializer.cs" />
@@ -185,37 +185,37 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Service\BeGlobalV4Translator.cs" />
+    <Compile Include="Service\SdlMTCloudTranslator.cs" />
     <Compile Include="Service\LanguageMappingsService.cs" />
     <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Service\PrintService.cs" />
-    <Compile Include="Studio\BeGlobalExcelRibbon.cs" />
-    <Compile Include="Studio\BeGlobalLanguageDirection.cs" />
-    <Compile Include="Studio\BeGlobalProviderUi.cs" />
-    <Compile Include="Studio\BeGlobalTranslationOptions.cs" />
-    <Compile Include="Studio\BeGlobalTranslationProvider.cs" />
-    <Compile Include="Studio\BeGlobalTranslationProviderFactory.cs" />
+    <Compile Include="Studio\SdlMTCloudExcelRibbon.cs" />
+    <Compile Include="Studio\SdlMTCloudLanguageDirection.cs" />
+    <Compile Include="Studio\SdlMTCloudProviderUi.cs" />
+    <Compile Include="Studio\SdlMTCloudTranslationOptions.cs" />
+    <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
+    <Compile Include="Studio\SdlMTCloudTranslationProviderFactory.cs" />
     <Compile Include="Studio\LanguageMappingSettings.cs" />
-    <Compile Include="UiHelpers\WindowsControl.xaml.cs">
+    <Compile Include="Styles\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\BeGlobalWindow.xaml.cs">
-      <DependentUpon>BeGlobalWindow.xaml</DependentUpon>
+    <Compile Include="View\OptionsWindow.xaml.cs">
+      <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\LanguageMappings.xaml.cs">
-      <DependentUpon>LanguageMappings.xaml</DependentUpon>
+    <Compile Include="View\LanguageMappingsView.xaml.cs">
+      <DependentUpon>LanguageMappingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Login.xaml.cs">
-      <DependentUpon>Login.xaml</DependentUpon>
+    <Compile Include="View\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MTCodesWindow.xaml.cs">
       <DependentUpon>MTCodesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\BaseViewModel.cs" />
-    <Compile Include="ViewModel\BeGlobalWindowViewModel.cs" />
+    <Compile Include="ViewModel\OptionsWindowModel.cs" />
     <Compile Include="ViewModel\LanguageMappingsViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
-    <Compile Include="ViewModel\MTCodesViewModel.cs" />
+    <Compile Include="ViewModel\MTCodesWindowModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\MTCodesLogo.png" />
@@ -254,47 +254,47 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UiHelpers\Buttons.xaml">
+    <Page Include="Styles\Buttons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\ButtonsStyle.xaml">
+    <Page Include="Styles\ButtonsStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\DataGridColumnStyle.xaml">
+    <Page Include="Styles\DataGridColumnStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\General.xaml">
+    <Page Include="Styles\General.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\TextBlockStyle.xaml">
+    <Page Include="Styles\TextBlockStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\TextBoxStyle.xaml">
+    <Page Include="Styles\TextBoxStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\WindowsBorder.xaml">
+    <Page Include="Styles\WindowsBorder.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\WindowsControl.xaml">
+    <Page Include="Styles\WindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\BeGlobalWindow.xaml">
+    <Page Include="View\OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\LanguageMappings.xaml">
+    <Page Include="View\LanguageMappingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Login.xaml">
+    <Page Include="View\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

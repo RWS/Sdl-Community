@@ -13,7 +13,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		Id = "SDLMachineTranslationCloudProviderUi",
 		Name = "SDLMachineTranslationCloudProviderUi",
 		Description = "SDL Machine Translation Cloud Provider")]
-	public class BeGlobalProviderUi : ITranslationProviderWinFormsUI
+	public class SdlMTCloudProviderUi : ITranslationProviderWinFormsUI
 	{
 		
 		public string TypeName => Constants.PluginName;
@@ -26,27 +26,25 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			try
 			{
-				var options = new BeGlobalTranslationOptions();
+				var options = new SdlMTCloudTranslationOptions();
 				var credentials = SplitCredentials(credentialStore, options);
-				var beGlobalWindow = new BeGlobalWindow();
+				var window = new OptionsWindow();
 				var languages = new Languages.Provider.Languages();
 
+				var model = new OptionsWindowModel(window, options, credentials, languagePairs, languages);
 
-				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, options, credentials, languagePairs, languages);
+				window.DataContext = model;
 
-
-				beGlobalWindow.DataContext = beGlobalVm;
-
-				beGlobalWindow.ShowDialog();
-				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+				window.ShowDialog();
+				if (window.DialogResult.HasValue && window.DialogResult.Value)
 				{
-					var clientId = beGlobalVm.Options.ClientId;
-					var clientSecret = beGlobalVm.Options.ClientSecret;
-					var resendDraft = beGlobalVm.Options.ResendDrafts;
+					var clientId = model.Options.ClientId;
+					var clientSecret = model.Options.ClientSecret;
+					var resendDraft = model.Options.ResendDrafts;
 
-					var provider = new BeGlobalTranslationProvider(options)
+					var provider = new SdlMTCloudTranslationProvider(options)
 					{
-						Options = beGlobalVm.Options
+						Options = model.Options
 					};
 
 					SetCredentials(credentialStore, clientId, clientSecret, resendDraft, true);
@@ -66,28 +64,27 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			try
 			{
-				if (!(translationProvider is BeGlobalTranslationProvider editProvider))
+				if (!(translationProvider is SdlMTCloudTranslationProvider editProvider))
 				{
 					return false;
 				}
 
 				//get saved key if there is one and put it into options
 				var credentials = SplitCredentials(credentialStore, editProvider.Options);
-				var beGlobalWindow = new BeGlobalWindow();
+				var window = new OptionsWindow();
 				var languages = new Languages.Provider.Languages();
 
-				var beGlobalVm = new BeGlobalWindowViewModel(beGlobalWindow, editProvider.Options, credentials, languagePairs, languages);
+				var model = new OptionsWindowModel(window, editProvider.Options, credentials, languagePairs, languages);
 
+				window.DataContext = model;
 
-				beGlobalWindow.DataContext = beGlobalVm;
-
-				beGlobalWindow.ShowDialog();
-				if (beGlobalWindow.DialogResult.HasValue && beGlobalWindow.DialogResult.Value)
+				window.ShowDialog();
+				if (window.DialogResult.HasValue && window.DialogResult.Value)
 				{
-					editProvider.Options = beGlobalVm.Options;
+					editProvider.Options = model.Options;
 					var clientId = editProvider.Options.ClientId;
-					var clientSecret = beGlobalVm.Options.ClientSecret;
-					var resendDraft = beGlobalVm.Options.ResendDrafts;
+					var clientSecret = model.Options.ClientSecret;
+					var resendDraft = model.Options.ResendDrafts;
 					SetCredentials(credentialStore, clientId, clientSecret, resendDraft, true);
 					return true;
 				}
@@ -106,7 +103,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				throw new ArgumentNullException(nameof(translationProviderUri));
 			}
 
-			var supportsProvider = string.Equals(translationProviderUri.Scheme, BeGlobalTranslationProvider.ListTranslationProviderScheme,
+			var supportsProvider = string.Equals(translationProviderUri.Scheme, Constants.MTCloudUriScheme,
 				StringComparison.OrdinalIgnoreCase);
 			return supportsProvider;
 		}
@@ -132,19 +129,22 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private TranslationProviderCredential GetCredentials(ITranslationProviderCredentialStore credentialStore, string uri)
 		{
 			var providerUri = new Uri(uri);
-			TranslationProviderCredential cred = null;
-			var credential = credentialStore.GetCredential(providerUri);
-			if (credential != null)
-			{
-				//get the credential to return				
-				cred = new TranslationProviderCredential(credential?.Credential, credential.Persist);
-			}
-			return cred;
+
+			//TranslationProviderCredential cred = null;
+
+			return credentialStore.GetCredential(providerUri);
+			//if (credential != null)
+			//{
+			//	//get the credential to return				
+			//	cred = new TranslationProviderCredential(credential.Credential, credential.Persist);
+			//}
+
+			//return cred;
 		}
 
 		private void SetCredentials(ITranslationProviderCredentialStore credentialStore, string clientId, string clientSecret, bool resendDraft, bool persistKey)
 		{
-			var uri = new Uri("sdlmachinetranslationcloudprovider:///");
+			var uri = new Uri(Constants.MTCloudUriScheme + ":///");
 			string credential;
 			
 			// Validate if the entered clientId is an email address.
@@ -164,6 +164,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				credential = $"{clientId}#{clientSecret}#ClientLogin";
 			}
+
 			credential = $"{credential}#{resendDraft}";
 
 			var credentials = new TranslationProviderCredential(credential, persistKey);
@@ -190,19 +191,21 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 		}
 
-		private TranslationProviderCredential SplitCredentials(ITranslationProviderCredentialStore credentialStore, BeGlobalTranslationOptions options)
+		private TranslationProviderCredential SplitCredentials(ITranslationProviderCredentialStore credentialStore, SdlMTCloudTranslationOptions options)
 		{
-			var savedCredentials = GetCredentials(credentialStore, "sdlmachinetranslationcloudprovider:///");
+			var savedCredentials = GetCredentials(credentialStore, Constants.MTCloudUriScheme + ":///");
+
 			if (savedCredentials != null)
 			{
-				var splitedCredentials = savedCredentials?.Credential?.Split('#');
+				var splitedCredentials = savedCredentials.Credential?.Split('#');
+
 				options.ClientId = splitedCredentials?.Length > 2? StringExtensions.Decrypt(splitedCredentials[0]) : string.Empty;
 				options.ClientSecret = splitedCredentials?.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[1]) : string.Empty;
 				options.AuthenticationMethod = splitedCredentials?.Length == 4 ? splitedCredentials[2] : string.Empty;
 				var resendDraft = splitedCredentials?.Length == 4 ? splitedCredentials[3] : string.Empty;
 				if (!string.IsNullOrEmpty(resendDraft))
 				{
-					options.ResendDrafts = resendDraft.Equals("True") ? true : false;
+					options.ResendDrafts = resendDraft.Equals("True");
 				}
 			}
 			return savedCredentials;

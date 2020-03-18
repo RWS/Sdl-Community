@@ -12,16 +12,16 @@ using Sdl.Community.MTCloud.Provider.Studio;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
-	public class BeGlobalV4Translator
+	public class SdlMTCloudTranslator
 	{
 		private readonly IRestClient _client;
 		private readonly IMessageBoxService _messageBoxService;
-		private LanguageMappingsService _languageMappingService;
-		private List<LanguageMappingModel> _languageMappings = new List<LanguageMappingModel>();
+		private readonly LanguageMappingsService _languageMappingService;
+		private readonly List<LanguageMappingModel> _languageMappings = new List<LanguageMappingModel>();
 
 		public static readonly Log Log = Log.Instance;
 
-		public BeGlobalV4Translator(string server, BeGlobalTranslationOptions options)
+		public SdlMTCloudTranslator(string server, SdlMTCloudTranslationOptions options)
 		{
 			try
 			{
@@ -129,11 +129,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					request.AddBody(new
 					{
 						input = texts,
-						sourceLanguageId = selectedModel?.SelectedMTCodeSource.CodeName,
-						targetLanguageId = selectedModel?.SelectedMTCodeTarget.CodeName,
+						sourceLanguageId = selectedModel.SelectedMTCodeSource.CodeName,
+						targetLanguageId = selectedModel.SelectedMTCodeTarget.CodeName,
 						model = selectedModel?.SelectedModelOption?.Model,
 						inputFormat = "xliff",
-						dictionaries = new string[] { selectedModel?.SelectedMTCloudDictionary?.DictionaryId?.ToString() }
+						dictionaries = new[] { selectedModel?.SelectedMTCloudDictionary?.DictionaryId?.ToString() }
 					});
 				}
 				else
@@ -141,9 +141,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					request.AddBody(new
 					{
 						input = texts,
-						sourceLanguageId = selectedModel?.SelectedMTCodeSource.CodeName,
-						targetLanguageId = selectedModel?.SelectedMTCodeTarget.CodeName,
-						model = selectedModel?.SelectedModelOption?.Model,
+						sourceLanguageId = selectedModel.SelectedMTCodeSource.CodeName,
+						targetLanguageId = selectedModel.SelectedMTCodeTarget.CodeName,
+						model = selectedModel.SelectedModelOption?.Model,
 						inputFormat = "xliff"
 					});
 				}
@@ -191,7 +191,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				{
 					ShowErrors(response);
 				}
-				return user != null ? user.AccountId : 0;
+				return user?.AccountId ?? 0;
 			}
 			catch (Exception e)
 			{

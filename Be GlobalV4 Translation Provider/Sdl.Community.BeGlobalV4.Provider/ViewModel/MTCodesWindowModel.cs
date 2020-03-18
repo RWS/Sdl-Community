@@ -13,7 +13,7 @@ using Controls = System.Windows.Controls;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
-	public class MTCodesViewModel : BaseViewModel
+	public class MTCodesWindowModel : BaseViewModel
 	{
 		private readonly PrintService _printService;
 		private readonly Languages.Provider.Languages _languages;
@@ -31,7 +31,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _updateLanguagePropertyCommand;
 		private ICommand _printCommand;
 
-		public MTCodesViewModel(Languages.Provider.Languages languages)
+		public MTCodesWindowModel(Languages.Provider.Languages languages)
 		{
 			_languages = languages;
 
@@ -196,7 +196,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		
 			if (filteredCount < totalCount)
 			{				
-				var filteredFilePath = Path.Combine(Community.MTCloud.Languages.Provider.Constants.MTCloudFolderPath, "FilteredMTLanguageCodes.xlsx");
+				var filteredFilePath = Path.Combine(Languages.Provider.Constants.MTCloudFolderPath, "FilteredMTLanguageCodes.xlsx");
 				_languages.SaveLanguages(filtered, filteredFilePath);
 				
 				
@@ -206,7 +206,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			else
 			{
 				IsWaiting = false;
-				_printService.PrintFile(Community.MTCloud.Languages.Provider.Constants.MTLanguageCodesFilePath);
+				_printService.PrintFile(Languages.Provider.Constants.MTLanguageCodesFilePath);
 			}
 		}
 

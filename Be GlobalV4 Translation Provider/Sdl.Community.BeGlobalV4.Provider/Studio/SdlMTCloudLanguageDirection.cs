@@ -13,15 +13,15 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
-	public class BeGlobalLanguageDirection : ITranslationProviderLanguageDirection
+	public class SdlMTCloudLanguageDirection : ITranslationProviderLanguageDirection
 	{
-		private readonly BeGlobalTranslationProvider _beGlobalTranslationProvider;
-		private readonly BeGlobalTranslationOptions _options;
+		private readonly SdlMTCloudTranslationProvider _beGlobalTranslationProvider;
+		private readonly SdlMTCloudTranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
 		private readonly List<TranslationUnit> _translationUnits;
 		private readonly EditorController _editorController;	
 
-		public BeGlobalLanguageDirection(BeGlobalTranslationProvider beGlobalTranslationProvider, LanguagePair languageDirection)
+		public SdlMTCloudLanguageDirection(SdlMTCloudTranslationProvider beGlobalTranslationProvider, LanguagePair languageDirection)
 		{
 			_beGlobalTranslationProvider = beGlobalTranslationProvider;
 			_languageDirection = languageDirection;

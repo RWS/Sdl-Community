@@ -8,33 +8,36 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	[TranslationProviderFactory(Id = "SDLMachineTranslationCloudProviderFactory",
 		Name = "SDLMachineTranslationCloudProviderFactory",
 		Description = "SDL Machine Translation Cloud Provider")]
-	public class BeGlobalTranslationProviderFactory : ITranslationProviderFactory
-	{
-		private string _url = "https://translate-api.sdlbeglobal.com";
+	public class SdlMTCloudTranslationProviderFactory : ITranslationProviderFactory
+	{		
 		public static readonly Log Log = Log.Instance;
 
 		[STAThread]
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
-			var originalUri = new Uri("sdlmachinetranslationcloudprovider:///");
-			var options = new BeGlobalTranslationOptions(translationProviderUri);
+			var originalUri = new Uri(Constants.MTCloudUriScheme + ":///");
+			var options = new SdlMTCloudTranslationOptions(translationProviderUri);
+
 			var credentials = credentialStore.GetCredential(originalUri);
 			if (credentials != null)
 			{				
-				var splitedCredentials = credentials?.Credential?.Split('#');				
+				var splitedCredentials = credentials.Credential?.Split('#');
+
 				options.ClientId = splitedCredentials?.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[0]) : string.Empty;
 				options.ClientSecret = splitedCredentials?.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[1]) : string.Empty;
 				options.AuthenticationMethod = splitedCredentials?.Length == 4 ? splitedCredentials[2] : string.Empty;
+
 				var resendDraft = splitedCredentials?.Length == 4 ? splitedCredentials[3] : string.Empty;
+
 				if (!string.IsNullOrEmpty(resendDraft))
 				{
-					options.ResendDrafts = resendDraft.Equals("True") ? true : false;
+					options.ResendDrafts = resendDraft.Equals("True");
 				}
 
 				if (options.BeGlobalService == null)
 				{
-					options.BeGlobalService = new BeGlobalV4Translator(_url, options);
+					options.BeGlobalService = new SdlMTCloudTranslator(Constants.MTCloudTranslateAPIUri, options);
 				}
 			}
 			else
@@ -45,17 +48,17 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			int accountId;
 			if (options.AuthenticationMethod.Equals("ClientLogin"))
 			{
-				accountId = options.BeGlobalService == null ? 0 : options.BeGlobalService.GetClientInformation();
+				accountId = options.BeGlobalService?.GetClientInformation() ?? 0;
 			}
 			else
 			{
-				accountId = options.BeGlobalService == null ? 0: options.BeGlobalService.GetUserInformation();
+				accountId = options.BeGlobalService?.GetUserInformation() ?? 0;
 			}
 
 			var subscriptionInfo = options.BeGlobalService?.GetLanguagePairs(accountId.ToString());
 			options.SubscriptionInfo = subscriptionInfo;
 
-			return new BeGlobalTranslationProvider(options);
+			return new SdlMTCloudTranslationProvider(options);
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
@@ -65,8 +68,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				throw new ArgumentNullException(nameof(translationProviderUri));
 			}
 
-			var supportsProvider = string.Equals(translationProviderUri.Scheme, BeGlobalTranslationProvider.ListTranslationProviderScheme,
-				StringComparison.OrdinalIgnoreCase);
+			var supportsProvider = string.Equals(translationProviderUri.Scheme, Constants.MTCloudUriScheme, StringComparison.OrdinalIgnoreCase);
 			return supportsProvider;
 		}
 
@@ -77,6 +79,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				TranslationMethod = TranslationMethod.MachineTranslation,
 				Name = PluginResources.Plugin_NiceName
 			};
+
 			return info;
 		}
 	}

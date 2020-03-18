@@ -22,9 +22,12 @@ namespace Sdl.Community.MTCloud.Provider.Helpers
 			var pos = 0;
 
 			for (var i = 0; i < index.Length; pos = index[i++])
+			{
 				output[i] = source.Substring(pos, index[i] - pos);
+			}
 
 			output[index.Length] = source.Substring(pos);
+
 			return output;
 		}
 		
@@ -35,14 +38,19 @@ namespace Sdl.Community.MTCloud.Provider.Helpers
 		/// <returns></returns>
 		public static string EncryptData(string input)
 		{
-			byte[] inputArray = Encoding.UTF8.GetBytes(input);
-			var tripleDES = new TripleDESCryptoServiceProvider();
-			tripleDES.Key = Encoding.UTF8.GetBytes("gtlw-5ur7-amoqp3");
-			tripleDES.Mode = CipherMode.ECB;
-			tripleDES.Padding = PaddingMode.PKCS7;
-			var cTransform = tripleDES.CreateEncryptor();
-			byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
-			tripleDES.Clear();
+			var inputArray = Encoding.UTF8.GetBytes(input);
+			var tripleDes = new TripleDESCryptoServiceProvider
+			{
+				Key = Encoding.UTF8.GetBytes("gtlw-5ur7-amoqp3"),
+				Mode = CipherMode.ECB,
+				Padding = PaddingMode.PKCS7
+			};
+
+			var cTransform = tripleDes.CreateEncryptor();
+			var resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
+
+			tripleDes.Clear();
+
 			return Convert.ToBase64String(resultArray, 0, resultArray.Length);
 		}
 
@@ -55,14 +63,18 @@ namespace Sdl.Community.MTCloud.Provider.Helpers
 		{
 			try
 			{
-				byte[] inputArray = Convert.FromBase64String(input);
-				var tripleDES = new TripleDESCryptoServiceProvider();
-				tripleDES.Key = Encoding.UTF8.GetBytes("gtlw-5ur7-amoqp3");
-				tripleDES.Mode = CipherMode.ECB;
-				tripleDES.Padding = PaddingMode.PKCS7;
-				var cTransform = tripleDES.CreateDecryptor();
-				byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
-				tripleDES.Clear();
+				var inputArray = Convert.FromBase64String(input);
+				var tripleDes = new TripleDESCryptoServiceProvider
+				{
+					Key = Encoding.UTF8.GetBytes("gtlw-5ur7-amoqp3"),
+					Mode = CipherMode.ECB,
+					Padding = PaddingMode.PKCS7
+				};
+
+				var cTransform = tripleDes.CreateDecryptor();
+				var resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
+				tripleDes.Clear();
+
 				return Encoding.UTF8.GetString(resultArray);
 			}
 			catch

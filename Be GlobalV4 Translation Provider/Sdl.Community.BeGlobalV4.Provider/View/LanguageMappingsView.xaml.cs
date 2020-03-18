@@ -5,9 +5,9 @@ namespace Sdl.Community.MTCloud.Provider.View
 	/// <summary>
 	/// Interaction logic for LanguageMappings.xaml
 	/// </summary>
-	public partial class LanguageMappings : UserControl
+	public partial class LanguageMappingsView : UserControl
 	{
-		public LanguageMappings()
+		public LanguageMappingsView()
 		{
 			InitializeComponent();
 		}

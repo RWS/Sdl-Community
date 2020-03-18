@@ -3,9 +3,9 @@
 	/// <summary>
 	/// Interaction logic for BeGlobalWindow.xaml
 	/// </summary>
-	public partial class BeGlobalWindow 
+	public partial class OptionsWindow 
 	{
-		public BeGlobalWindow()
+		public OptionsWindow()
 		{
 			InitializeComponent();
 		}

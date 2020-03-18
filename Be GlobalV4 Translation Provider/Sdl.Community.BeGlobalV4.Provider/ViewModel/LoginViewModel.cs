@@ -14,7 +14,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
 	public class LoginViewModel : BaseViewModel
 	{
-		private const string ServerAddress = "https://translate-api.sdlbeglobal.com";
 		private readonly LanguagePair[] _languagePairs;	
 		private Authentication _selectedOption;
 		private string _email;
@@ -24,12 +23,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _navigateCommand;
 
 		public LoginViewModel(
-			BeGlobalTranslationOptions options,
+			SdlMTCloudTranslationOptions options,
 			LanguagePair[] languagePairs,
 			LanguageMappingsViewModel languageMappingsViewModel,
-			BeGlobalWindowViewModel beGlobalWindowViewModel)
+			OptionsWindowModel beGlobalWindowViewModel)
 		{
 			_languagePairs = languagePairs;
+
 			LanguageMappingsViewModel = languageMappingsViewModel;
 			BeGlobalWindowViewModel = beGlobalWindowViewModel;
 			Options = options;
@@ -49,7 +49,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			if (!string.IsNullOrEmpty(options.AuthenticationMethod))
 			{
-				SelectedOption = options.AuthenticationMethod.Equals("ClientLogin") ? AuthenticationOptions[0] : AuthenticationOptions[1];
+				SelectedOption = options.AuthenticationMethod.Equals("ClientLogin") 
+					? AuthenticationOptions[0] 
+					: AuthenticationOptions[1];
 			}
 			else
 			{
@@ -59,8 +61,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			LoginMethod = SelectedOption.Type;
 		}
 
-		public BeGlobalWindowViewModel BeGlobalWindowViewModel { get; set; }
-		public BeGlobalTranslationOptions Options { get; set; }
+		public OptionsWindowModel BeGlobalWindowViewModel { get; set; }
+
+		public SdlMTCloudTranslationOptions Options { get; set; }
+
 		public LanguageMappingsViewModel LanguageMappingsViewModel { get; set; }
 
 		// LoginMethod is used to display/hide the ClientId,ClientSecret fields based on which authentication mode is selected
@@ -90,6 +94,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					LoginMethod = _selectedOption.Type.Equals(Constants.User) ? Constants.User : Constants.Client;
 				}
+
 				OnPropertyChanged();
 			}
 		}
@@ -112,7 +117,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			Utils.LogServerIPAddresses();
 
-			var beGlobalTranslator = new BeGlobalV4Translator(ServerAddress, Options);
+			var beGlobalTranslator = new SdlMTCloudTranslator(Constants.MTCloudTranslateAPIUri, Options);
 			var accountId = Options.AuthenticationMethod.Equals("ClientLogin")
 				? beGlobalTranslator.GetClientInformation()
 				: beGlobalTranslator.GetUserInformation();
@@ -235,8 +240,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		private void Navigate(object obj)
-		{
-			Process.Start("https://translate.sdlbeglobal.com/");
+		{			
+			Process.Start(Constants.MTCloudTranslateUri);
 		}
 	}
 }

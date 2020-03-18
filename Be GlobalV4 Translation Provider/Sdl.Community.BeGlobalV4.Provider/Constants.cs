@@ -2,6 +2,11 @@
 {
 	public class Constants
 	{
+		public static string MTCloudTranslateAPIUri = "https://translate-api.sdlbeglobal.com";
+		public static string MTCloudTranslateUri = "https://translate.sdlbeglobal.com";
+		public static string MTCloudUriScheme = "sdlmachinetranslationcloudprovider";
+
+
 		// TODO confirm if some or all of these should be managed in a resource file
 		public static string PluginName = "SDL Machine Translation Cloud provider";
 		public static string SDLMachineTranslationCloud = "SDLMachineTranslationCloud";

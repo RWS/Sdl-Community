@@ -6,7 +6,7 @@ using System.Windows.Data;
 namespace Sdl.Community.MTCloud.Provider.Converters
 {
 	[ValueConversion(typeof(bool), typeof(Visibility))]
-	public class BeGlobalVisibilityConverter : IValueConverter
+	public class VisibilityConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{

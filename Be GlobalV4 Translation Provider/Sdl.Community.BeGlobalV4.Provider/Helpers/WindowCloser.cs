@@ -15,9 +15,10 @@ namespace Sdl.Community.MTCloud.Provider.Helpers
 			DependencyObject d,
 			DependencyPropertyChangedEventArgs e)
 		{
-			var window = d as Window;
-			if (window != null)
+			if (d is Window window)
+			{
 				window.DialogResult = e.NewValue as bool?;
+			}
 		}
 		public static void SetDialogResult(Window target, bool? value)
 		{

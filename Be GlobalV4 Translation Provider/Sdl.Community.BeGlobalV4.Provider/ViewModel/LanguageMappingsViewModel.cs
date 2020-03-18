@@ -19,28 +19,27 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 	public class LanguageMappingsViewModel : BaseViewModel
 	{
 
-		private readonly Languages.Provider.Languages _languages;
+		private readonly Languages.Provider.Languages _languages;	
+		private readonly LanguageMappingsService _languageMappingService;		
+		private readonly OptionsWindowModel _beGlobalWindowViewModel;
+		private readonly LanguagePair[] _languagePairs;
+		private readonly List<MTCloudDictionary> _mtCloudDictionaries;
 
 		private bool _reSendChecked;
 		private LanguageMappingModel _selectedLanguageMapping;
-		private LanguageMappingsService _languageMappingService;
 		private ObservableCollection<LanguageMappingModel> _languageMappings;
-		private BeGlobalWindowViewModel _beGlobalWindowViewModel;
-		private readonly LanguagePair[] _languagePairs;
-		private readonly string _serverAddress = "https://translate-api.sdlbeglobal.com";
-		private List<MTCloudDictionary> _mtCloudDictionaries = new List<MTCloudDictionary>();	
 		private bool _isWaiting;
 
 		private ICommand _resetLanguageMappingsCommand;
 		
-		public LanguageMappingsViewModel(BeGlobalTranslationOptions options, BeGlobalWindowViewModel beGlobalWindowViewModel, 
+		public LanguageMappingsViewModel(SdlMTCloudTranslationOptions options, OptionsWindowModel beGlobalWindowViewModel, 
 			LanguagePair[] languagePairs, Languages.Provider.Languages languages)
 		{
+			_mtCloudDictionaries = new List<MTCloudDictionary>();
 			_languages = languages;
-
-			Options = options;
 			_languagePairs = languagePairs;
 
+			Options = options;			
 			_languageMappings = new ObservableCollection<LanguageMappingModel>();
 			_beGlobalWindowViewModel = beGlobalWindowViewModel;
 
@@ -54,7 +53,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			BindingOperations.EnableCollectionSynchronization(LanguageMappings, _languageMappings);
 		}
 
-		public BeGlobalTranslationOptions Options { get; set; }
+		public SdlMTCloudTranslationOptions Options { get; set; }
 	
 		public ObservableCollection<LanguageMappingModel> LanguageMappings
 		{
@@ -67,6 +66,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}			
 
 		public List<LangMappingMTCode> MTCodeSourceList = new List<LangMappingMTCode>();
+
 		public List<LangMappingMTCode> MTCodeTargetList = new List<LangMappingMTCode>();
 
 		public LanguageMappingModel SelectedLanguageMapping
@@ -180,7 +180,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public void LoadDictionaries()
 		{
 			_mtCloudDictionaries.Clear();
-			var beGlobalTranslator = new BeGlobalV4Translator(_serverAddress, Options);
+			var beGlobalTranslator = new SdlMTCloudTranslator(Constants.MTCloudTranslateAPIUri, Options);
 			var accountId = Options.AuthenticationMethod.Equals("ClientLogin") ? beGlobalTranslator.GetClientInformation() : beGlobalTranslator.GetUserInformation();
 		
 			var dictionaries = beGlobalTranslator.GetDictionaries(accountId);

@@ -1,21 +1,22 @@
-﻿<Window x:Class="Sdl.Community.MTCloud.Provider.View.BeGlobalWindow"
+﻿<Window x:Class="Sdl.Community.MTCloud.Provider.View.OptionsWindow"
 			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-			xmlns:uiHelpers="clr-namespace:Sdl.Community.MTCloud.Provider.UiHelpers"
 			xmlns:view="clr-namespace:Sdl.Community.MTCloud.Provider.View"
 			xmlns:helpers="clr-namespace:Sdl.Community.MTCloud.Provider.Helpers"
-			xmlns:converters="clr-namespace:Sdl.Community.MTCloud.Provider.Converters"
-			xmlns:view1="clr-namespace:Sdl.Community.MTCloud.Provider.View"
+			xmlns:converters="clr-namespace:Sdl.Community.MTCloud.Provider.Converters"		
+			xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
+			xmlns:styles="clr-namespace:Sdl.Community.MTCloud.Provider.Styles"
 			helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			WindowStartupLocation="CenterScreen" 
 			mc:Ignorable="d"
 			Name="SDLMachineTranslationCloudProvider" 
 			WindowStyle="None" AllowsTransparency="True"
 			ResizeMode="CanResizeWithGrip"
-			d:DesignHeight="450" Height="570" Width="920">
+			d:DesignHeight="450" Height="570" Width="920"
+			d:DataContext="{d:DesignInstance viewModel:OptionsWindowModel}">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -24,12 +25,12 @@
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>	
-				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/Buttons.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />		
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+				<ResourceDictionary Source="../Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="../Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="../Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />		
 				<ResourceDictionary x:Uid="ResourceKeyId2">
 					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>
 				</ResourceDictionary>
@@ -51,7 +52,7 @@
 			</Grid.RowDefinitions>
 
 			<!-- BORDER CONTROL -->
-			<uiHelpers:WindowsControl Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
+			<styles:WindowsControl Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
 			<Border Background="White" Grid.Column="0" Grid.Row="1" MinWidth="880" >
 				<StackPanel  Orientation="Horizontal">
 					<TextBlock Margin="15,10,2,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" MaxWidth="880">
@@ -70,10 +71,10 @@
 		            controls:TabControlHelper.Underlined="SelectedTabItem"
 		            controls:TabControlHelper.UnderlineMouseOverBrush="#0E202B" Foreground="#0E202B">
 					<controls:MetroTabItem Header="Login" Margin="20,0,0,0" Width="100">
-						<view1:Login x:Name="LoginTab" DataContext="{Binding LoginViewModel}" ></view1:Login>
+						<view:LoginView x:Name="LoginTab" DataContext="{Binding LoginViewModel}"/>
 					</controls:MetroTabItem>				
 					<controls:MetroTabItem Header="Language Mappings" Margin="35,0,0,0" Width="290">
-						<view1:LanguageMappings DataContext="{Binding LanguageMappingsViewModel}"></view1:LanguageMappings>
+						<view:LanguageMappingsView DataContext="{Binding LanguageMappingsViewModel}"/>
 					</controls:MetroTabItem>
 				</TabControl>
 			</StackPanel>

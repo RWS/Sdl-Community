@@ -11,10 +11,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 {
 	[RibbonGroup("SDLMTCloud", Name = "SDLMTCloud")]
 	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
-	public class BeGlobalExcelRibbon : AbstractRibbonGroup
+	public class SdlMTCloudExcelRibbon : AbstractRibbonGroup
 	{
 		[Action("Sdl.MTCloud.Provider.Studio", Name = "MT Cloud Codes", Icon = "add_langcode", Description = "Import MT Codes from MTCloud excel sheet")]
-		[ActionLayout(typeof(BeGlobalExcelRibbon), 20, DisplayType.Large)]
+		[ActionLayout(typeof(SdlMTCloudExcelRibbon), 20, DisplayType.Large)]
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
 		public class BeGlobalExcelAction : AbstractAction
 		{			
@@ -27,7 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					var mtCodesWindow = new MTCodesWindow();
 					var languages = new Languages.Provider.Languages();
 					
-					var mtCodesViewModel = new MTCodesViewModel(languages);
+					var mtCodesViewModel = new MTCodesWindowModel(languages);
 					mtCodesWindow.DataContext = mtCodesViewModel;
 					mtCodesWindow.ShowDialog();
 				}

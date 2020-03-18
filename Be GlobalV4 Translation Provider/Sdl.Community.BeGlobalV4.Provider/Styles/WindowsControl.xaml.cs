@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Sdl.Community.MTCloud.Provider.Helpers;
 
-namespace Sdl.Community.MTCloud.Provider.UiHelpers
+namespace Sdl.Community.MTCloud.Provider.Styles
 {
 	/// <summary>
 	/// Interaction logic for WindowsControl.xaml

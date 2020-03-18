@@ -10,18 +10,20 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
-	public class BeGlobalWindowViewModel : BaseViewModel
-	{		
-		private readonly BeGlobalWindow _mainWindow;
+	public class OptionsWindowModel : BaseViewModel
+	{
 		public static readonly Log Log = Log.Instance;
+
+		private readonly OptionsWindow _window;		
 		private readonly Languages.Provider.Languages _languages;
+
 		private ICommand _okCommand;
 		private int _selectedTabIndex;
 		private string _message;
 		private bool _isMtCodeIconVisible;
 		private bool _isProviderIconVisible;
 		
-		public BeGlobalWindowViewModel(BeGlobalWindow mainWindow, BeGlobalTranslationOptions options,
+		public OptionsWindowModel(OptionsWindow window, SdlMTCloudTranslationOptions options,
 			TranslationProviderCredential credentialStore, LanguagePair[] languagePairs, Languages.Provider.Languages languages)
 		{
 			_languages = languages;
@@ -33,7 +35,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			LanguageMappingsViewModel = new LanguageMappingsViewModel(options, this, languagePairs, _languages);
 
 			LoginViewModel = new LoginViewModel(options, languagePairs, LanguageMappingsViewModel, this);
-			_mainWindow = mainWindow;
+			_window = window;
 
 			if (credentialStore == null)
 			{
@@ -42,14 +44,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			if (options.AuthenticationMethod.Equals("ClientLogin"))
 			{
-				_mainWindow.LoginTab.ClientIdBox.Password = options.ClientId;
-				_mainWindow.LoginTab.ClientSecretBox.Password = options.ClientSecret;
+				_window.LoginTab.ClientIdBox.Password = options.ClientId;
+				_window.LoginTab.ClientSecretBox.Password = options.ClientSecret;
 				LoginViewModel.SelectedOption = LoginViewModel.AuthenticationOptions[0];
 			}
 			else
 			{
 				LoginViewModel.Email = options.ClientId;
-				_mainWindow.LoginTab.UserPasswordBox.Password = options.ClientSecret;
+				_window.LoginTab.UserPasswordBox.Password = options.ClientSecret;
 				LoginViewModel.SelectedOption = LoginViewModel.AuthenticationOptions[1];
 			}
 
@@ -57,7 +59,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			projectController.ProjectsChanged += ProjectController_ProjectsChanged;
 		}
 
-		public BeGlobalTranslationOptions Options { get; set; }
+		public SdlMTCloudTranslationOptions Options { get; set; }
 
 		public LoginViewModel LoginViewModel { get; set; }
 
@@ -130,7 +132,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				Mouse.OverrideCursor = Cursors.Wait;
 
-				if (parameter is Login loginTab)
+				if (parameter is LoginView loginTab)
 				{
 					var validateWindow = ValidateWindow(true);
 					if (string.IsNullOrEmpty(validateWindow))
@@ -138,8 +140,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 						// Remove and add the new settings back to SettingsGroup of .sdlproj when user presses on Ok				
 						LanguageMappingsViewModel.SaveLanguageMappingSettings();
 
-						WindowCloser.SetDialogResult(_mainWindow, true);
-						_mainWindow.Close();
+						WindowCloser.SetDialogResult(_window, true);
+						_window.Close();
 					}
 				}
 			}
@@ -156,7 +158,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		/// <returns>message in case validation is not fine, otherwise, returns string.Empty</returns>
 		public string ValidateWindow(bool isOkPressed)
 		{
-			var loginTab = _mainWindow?.LoginTab;
+			var loginTab = _window?.LoginTab;
 			Options.ResendDrafts = LanguageMappingsViewModel.ReSendChecked;
 			try
 			{

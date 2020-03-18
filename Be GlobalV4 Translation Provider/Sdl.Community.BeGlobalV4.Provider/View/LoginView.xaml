@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Sdl.Community.MTCloud.Provider.View.Login"
+﻿<UserControl x:Class="Sdl.Community.MTCloud.Provider.View.LoginView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -18,11 +18,11 @@
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
-				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
-				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../Styles/TextBlockStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../Styles/TextBoxStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="../Styles/ButtonsStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary x:Uid="ResourceKeyId1">
-					<converters:BeGlobalVisibilityConverter x:Key="VisibilityConverter"/>
+					<converters:VisibilityConverter x:Key="VisibilityConverter"/>
 				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

@@ -7,26 +7,28 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
-	public class BeGlobalTranslationOptions
+	public class SdlMTCloudTranslationOptions
 	{
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 
-		public BeGlobalTranslationOptions()
+		public SdlMTCloudTranslationOptions()
 		{
-			_uriBuilder = new TranslationProviderUriBuilder("sdlmachinetranslationcloudprovider");
+			_uriBuilder = new TranslationProviderUriBuilder(Constants.MTCloudUriScheme);
 		}
 
-		public BeGlobalTranslationOptions(Uri uri)
+		public SdlMTCloudTranslationOptions(Uri uri)
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(uri);
 		}
 
 		public string ClientId { get; set; }
+
 		public string ClientSecret { get; set; }
+
 		public string AuthenticationMethod { get; set; }
 
 		[JsonIgnore]
-		public BeGlobalV4Translator BeGlobalService { get; set; }
+		public SdlMTCloudTranslator BeGlobalService { get; set; }
 
 		public string DisplayName { get; set; }
 
