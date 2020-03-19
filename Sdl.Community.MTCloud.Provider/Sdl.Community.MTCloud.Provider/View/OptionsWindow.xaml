@@ -12,8 +12,9 @@
 			helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			WindowStartupLocation="CenterScreen" 
 			mc:Ignorable="d"
-			Name="SDLMachineTranslationCloudProvider" 
-			WindowStyle="None" AllowsTransparency="True"
+			Title="SDL MT Cloud Provider" 
+			WindowStyle="None" 
+			AllowsTransparency="True"
 			ResizeMode="CanResizeWithGrip"
 			d:DesignHeight="450" Height="570" Width="920"
 			d:DataContext="{d:DesignInstance viewModel:OptionsWindowModel}">
@@ -53,6 +54,7 @@
 
 			<!-- BORDER CONTROL -->
 			<styles:WindowsControl Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
+
 			<Border Background="White" Grid.Column="0" Grid.Row="1" MinWidth="880" >
 				<StackPanel  Orientation="Horizontal">
 					<TextBlock Margin="15,10,2,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" MaxWidth="880">

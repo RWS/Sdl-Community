@@ -7,13 +7,14 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Helpers;
+using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Core.Globalization;
 using Controls = System.Windows.Controls;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
-	public class MTCodesWindowModel : BaseViewModel
+	public class MTCodesWindowModel : BaseViewModel, IWindowContext
 	{
 		private readonly PrintService _printService;
 		private readonly Languages.Provider.Languages _languages;
@@ -24,8 +25,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private string _messageColor;
 		private string _query;
 		private bool _isWaiting;
-		private bool _isMtCodeIconVisible;
-		private bool _isProviderIconVisible;
 		private string _itemsCountLabel;
 
 		private ICommand _updateLanguagePropertyCommand;
@@ -34,10 +33,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public MTCodesWindowModel(Languages.Provider.Languages languages)
 		{
 			_languages = languages;
-
-			IsMTCodeIconVisible = true;
-			IsProviderIconVisible = false;
-
+						
 			MTCodes = new ObservableCollection<MTCloudLanguage>(GetAllLanguages());
 
 			_printService = new PrintService();
@@ -127,25 +123,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public bool IsMTCodeIconVisible
-		{
-			get => _isMtCodeIconVisible;
-			set
-			{
-				_isMtCodeIconVisible = value;
-				OnPropertyChanged(nameof(IsMTCodeIconVisible));
-			}
-		}
-
-		public bool IsProviderIconVisible
-		{
-			get => _isProviderIconVisible;
-			set
-			{
-				_isProviderIconVisible = value;
-				OnPropertyChanged(nameof(IsProviderIconVisible));
-			}
-		}
+		public bool IsProviderWindow => false;
 
 		public ICommand UpdateLanguagePropertyCommand => 
 			_updateLanguagePropertyCommand ?? (_updateLanguagePropertyCommand = new RelayCommand(UpdateLanguageProperty));

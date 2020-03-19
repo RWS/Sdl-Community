@@ -147,6 +147,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IWindowContext.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\ContactAction.cs" />
     <Compile Include="TellMe\HelpAction.cs" />

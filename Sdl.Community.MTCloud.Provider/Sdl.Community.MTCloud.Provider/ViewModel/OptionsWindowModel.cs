@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Provider.Helpers;
+using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Studio;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.LanguagePlatform.Core;
@@ -10,7 +11,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
-	public class OptionsWindowModel : BaseViewModel
+	public class OptionsWindowModel : BaseViewModel, IWindowContext
 	{
 		public static readonly Log Log = Log.Instance;
 
@@ -20,16 +21,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _okCommand;
 		private int _selectedTabIndex;
 		private string _message;
-		private bool _isMtCodeIconVisible;
-		private bool _isProviderIconVisible;
 		
 		public OptionsWindowModel(OptionsWindow window, SdlMTCloudTranslationOptions options,
 			TranslationProviderCredential credentialStore, LanguagePair[] languagePairs, Languages.Provider.Languages languages)
 		{
 			_languages = languages;
-
-			IsMtCodeIconVisible = false;
-			IsProviderIconVisible = true;
+						
 
 			Options = options;
 			LanguageMappingsViewModel = new LanguageMappingsViewModel(options, this, languagePairs, _languages);
@@ -104,25 +101,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public bool IsMtCodeIconVisible
-		{
-			get => _isMtCodeIconVisible;
-			set
-			{
-				_isMtCodeIconVisible = value;
-				OnPropertyChanged(nameof(IsMtCodeIconVisible));
-			}
-		}
-
-		public bool IsProviderIconVisible
-		{
-			get => _isProviderIconVisible;
-			set
-			{
-				_isProviderIconVisible = value;
-				OnPropertyChanged(nameof(IsProviderIconVisible));
-			}
-		}
+		public bool IsProviderWindow => true;
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 
