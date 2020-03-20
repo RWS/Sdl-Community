@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sdl.Community.ReportExporter.Model
 {
@@ -34,10 +31,15 @@ namespace Sdl.Community.ReportExporter.Model
 		public string ProjectFolderPath => ProjectPath.Substring(0, ProjectPath.LastIndexOf("\\", StringComparison.Ordinal));
 
 		public Dictionary<string, bool> LanguagesForPoject { get; set; }
+
+		public Dictionary<string, string> LanguageAnalysisReportPaths {get; set;}
+
 		public bool ShouldBeExported { get; set; }
+
 		public string ReportPath { get; set; }
 
 		public string PathToAnalyseResult { get; set; }
+
 		public override string ToString()
 		{
 			return ProjectName;
