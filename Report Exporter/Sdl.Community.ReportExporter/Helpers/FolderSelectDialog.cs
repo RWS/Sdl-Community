@@ -9,12 +9,14 @@ namespace Sdl.Community.ReportExporter.Helpers
 
 		public FolderSelectDialog()
 		{
-			ofd = new OpenFileDialog();
-			ofd.Filter = "Folders|\n";
-			ofd.AddExtension = false;
-			ofd.CheckFileExists = false;
-			ofd.DereferenceLinks = true;
-			ofd.Multiselect = false;
+			ofd = new OpenFileDialog
+			{
+				Filter = "Folders|\n",
+				AddExtension = false,
+				CheckFileExists = false,
+				DereferenceLinks = true,
+				Multiselect = false
+			};
 		}
 
 		public string FileName
@@ -57,7 +59,7 @@ namespace Sdl.Community.ReportExporter.Helpers
 
 			var reflector = new Reflector("System.Windows.Forms");
 			uint num = 0;
-			Type type = reflector.GetType("FileDialogNative.IFileDialog");
+			var type = reflector.GetType("FileDialogNative.IFileDialog");
 			object obj = reflector.Call(this.ofd, "CreateVistaDialog", new object[0]);
 			object[] objArray = new object[] { obj };
 			reflector.Call(this.ofd, "OnBeforeVistaDialog", objArray);
@@ -83,7 +85,6 @@ namespace Sdl.Community.ReportExporter.Helpers
 				reflector.CallAs(type, obj, "Unadvise", objArray6);
 				GC.KeepAlive(obj1);
 			}
-
 			return flag;
 		}
 
