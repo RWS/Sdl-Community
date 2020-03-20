@@ -163,10 +163,9 @@ namespace Sdl.Community.ReportExporter.Helpers
 		private static bool ReportsFolderExists(string projectFolderPath)
 		{
 			var projectPath = new Uri(projectFolderPath).LocalPath;
-			var reportFolderPath =Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)), "Reports");
+			var reportFolderPath = Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)), "Reports");
 
 			return ReportFileExist(reportFolderPath);
 		}
-
 	}
 }

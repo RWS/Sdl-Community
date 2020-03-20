@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Sdl.Community.ReportExporter.Helpers
@@ -10,44 +6,6 @@ namespace Sdl.Community.ReportExporter.Helpers
 	public class FolderSelectDialog : IDisposable
 	{
 		private OpenFileDialog ofd;
-
-		public string FileName
-		{
-			get
-			{
-				return this.ofd.FileName;
-			}
-		}
-
-		public string InitialDirectory
-		{
-			get
-			{
-				return this.ofd.InitialDirectory;
-			}
-			set
-			{
-				string str;
-				OpenFileDialog openFileDialog = this.ofd;
-				str = (value == null || value.Length == 0 ? Environment.CurrentDirectory : value);
-				openFileDialog.InitialDirectory = str;
-			}
-		}
-
-		public string Title
-		{
-			get
-			{
-				return this.ofd.Title;
-			}
-			set
-			{
-				string str;
-				OpenFileDialog openFileDialog = this.ofd;
-				str = (value == null ? "Select a folder" : value);
-				openFileDialog.Title = str;
-			}
-		}
 
 		public FolderSelectDialog()
 		{
@@ -59,6 +17,35 @@ namespace Sdl.Community.ReportExporter.Helpers
 			ofd.Multiselect = false;
 		}
 
+		public string FileName
+		{
+			get => ofd.FileName;
+		}
+
+		public string InitialDirectory
+		{
+			get => ofd.InitialDirectory;
+			set
+			{
+				string str;
+				var openFileDialog = ofd;
+				str = value == null || value.Length == 0 ? Environment.CurrentDirectory : value;
+				openFileDialog.InitialDirectory = str;
+			}
+		}
+
+		public string Title
+		{
+			get => ofd.Title;
+			set
+			{
+				string str;
+				var openFileDialog = this.ofd;
+				str = value == null ? "Select a folder" : value;
+				openFileDialog.Title = str;
+			}
+		}
+		
 		public bool ShowDialog()
 		{
 			return this.ShowDialog(IntPtr.Zero);
@@ -68,7 +55,7 @@ namespace Sdl.Community.ReportExporter.Helpers
 		{
 			bool flag = false;
 
-			Reflector reflector = new Reflector("System.Windows.Forms");
+			var reflector = new Reflector("System.Windows.Forms");
 			uint num = 0;
 			Type type = reflector.GetType("FileDialogNative.IFileDialog");
 			object obj = reflector.Call(this.ofd, "CreateVistaDialog", new object[0]);
@@ -99,6 +86,7 @@ namespace Sdl.Community.ReportExporter.Helpers
 
 			return flag;
 		}
+
 		public void Dispose()
 		{
 

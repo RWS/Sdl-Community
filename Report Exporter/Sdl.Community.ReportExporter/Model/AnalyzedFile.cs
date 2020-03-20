@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sdl.Community.ReportExporter.Model
 {
@@ -82,7 +80,6 @@ namespace Sdl.Community.ReportExporter.Model
 		public BandResult InternalFuzzy(int min, int max)
 		{
 			return Results.SingleOrDefault(r => r.BandName.ToLower() == "internalfuzzy" && r.Min == min && r.Max == max);
-		}
-	
+		}	
 	}
 }
