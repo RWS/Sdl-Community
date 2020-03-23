@@ -66,12 +66,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						}
 					}
 					//Separate all items from package.MachineTransMem (files that contain Machine Translation)
-					if (package.MachineTransMem != null)
+					bool hasMTMemories = package.MTMemories.Any(t => t.Equals(starTMMetadata.TargetFile));
+					if (package.MTMemories != null && hasMTMemories == true)
 					{
-						if (package.MachineTransMem.Any(t => t.Equals(starTMMetadata.TargetFile)))
-						{
-							machineTransList.Add(starTMMetadata);
-						}
+						machineTransList.Add(starTMMetadata);
 					}
 				}
 
@@ -82,7 +80,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				}
 
 				// Remove Machine Translation memories from pair.StarTranslationMemoryMetadatas, if the user requests them, they will be imported separately, but never in the main TM
-				pair.StarTranslationMemoryMetadatas.RemoveAll(item => Path.GetFileName(item.TargetFile).Contains("_AEXTR_MT_"));
+				pair.StarTranslationMemoryMetadatas.RemoveAll(item => Path.GetFileName(item?.TargetFile ?? "").Contains("_AEXTR_MT_"));
 
 				// Create one TM (that has the name equals with the project name) 
 				// with the TM files from pair.StarTranslationMemoryMetadatas (the ones without penalties set by the user)
@@ -133,18 +131,18 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					//If the user requests it, create a separate TM for the Machine Translation coming from Transit.
 					foreach (var item in machineTransList)
 					{
-						var MachineTranslationImporter = new TransitTmImporter(
+						var machineTranslationImporter = new TransitTmImporter(
 							Path.GetDirectoryName(newProject.FilePath),
 							pair.SourceLanguage,
 							pair.TargetLanguage,
 							Path.GetFileName(item.TargetFile),
 							fileTypeManager);
 
-						MachineTranslationImporter.ImportStarTransitTm(item.TargetFile);
+						machineTranslationImporter.ImportStarTransitTm(item.TargetFile);
 
 						//It should have a penalty set by default, otherwise it will be used for pretranslation and later added to the main TM when updating main TM, and we want to avoid that.
 						tmConfig.Entries.Add(new TranslationProviderCascadeEntry(
-							new TranslationProviderReference(MachineTranslationImporter.TMFilePath),
+							new TranslationProviderReference(machineTranslationImporter.TMFilePath),
 							true,
 							true,
 							true,

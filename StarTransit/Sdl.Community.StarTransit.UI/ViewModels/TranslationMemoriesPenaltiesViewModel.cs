@@ -136,7 +136,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 									TranslationMemoryPath = TranslationMemoryPath,
 									TMPenalty = TMPenalty
 								};
-
 								TranslationMemoriesPenaltiesModelList.Add(translationMemoriesPenaltiesModel);
 							}
 						}

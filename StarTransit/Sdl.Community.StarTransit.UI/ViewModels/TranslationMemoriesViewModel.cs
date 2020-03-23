@@ -56,7 +56,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             _visibility = "Hidden";
 			_isTmErrorMessageVisible = "Hidden";
             _isNoneChecked = true;
-            _title = "Please select Translation memory for pair " + pairs[0].PairName;
+			_title = $"Please select Translation memory for pair {pairs[0].PairName}";
 			_importMTVisible = "Hidden";
 
 			var studioVersion = new Studio().GetStudioVersion();
@@ -293,16 +293,16 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		{
 			if (IsImportMTChecked)
 			{
-				_package.MachineTransMem = new List<string>();
+				_package.MTMemories = new List<string>();
 
 				foreach (var filePath in SelectedItem.StarTranslationMemoryMetadatas)
 				{
-					if (Path.GetFileName(filePath.TargetFile).Contains("_AEXTR_MT_"))
-						_package.MachineTransMem.Add(filePath.TargetFile);
+					if (Path.GetFileName(filePath.TargetFile ?? "").Contains("_AEXTR_MT_"))
+						_package.MTMemories.Add(filePath.TargetFile);
 				}
 			}
 			else
-				_package.MachineTransMem.Clear();
+				_package.MTMemories.Clear();
 		}
 
 		public ICommand Command
