@@ -18,30 +18,32 @@ namespace Sdl.Community.ReportExporter.Helpers
 		public static int GetInstalledStudioMajorVersion()
 		{
 			var studioService = new StudioVersionService();
-			return studioService.GetStudioVersion().ExecutableVersion.Major;
+			if (studioService != null)
+			{
+				var publicVersion = studioService.GetStudioVersion().PublicVersion?.Split(' ')?.LastOrDefault();
+				return int.TryParse(publicVersion, out _) ? int.Parse(publicVersion) : 0;
+			}
+			return 0;
 		}
 
 		public static string GetStudioProjectsPath()
 		{
-			var installedStudioVersion = GetInstalledStudioMajorVersion();
-			var projectsPath = string.Empty;
+			try
+			{
+				var installedStudioVersion = GetInstalledStudioMajorVersion();
+				if (installedStudioVersion == 0)
+				{
+					return string.Empty;
+				}
 
-			if (installedStudioVersion.Equals(14))
-			{
-				projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-					@"Studio 2017\Projects\projects.xml");
+				var projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), $@"Studio {installedStudioVersion}\Projects\projects.xml");
+				return projectsPath;
 			}
-			if (installedStudioVersion.Equals(12))
+			catch(Exception ex)
 			{
-				projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-					@"Studio 2015\Projects\projects.xml");
+				Log.Logger.Error($"GetStudioProjectsPath method: {ex.Message}\n {ex.StackTrace}");
 			}
-			if (installedStudioVersion.Equals(15))
-			{
-				projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-					@"Studio 2019\Projects\projects.xml");
-			}
-			return projectsPath;
+			return string.Empty;
 		}
 
 		public static Dictionary<string, LanguageDirection> LoadLanguageDirections(XmlDocument doc)
@@ -138,8 +140,7 @@ namespace Sdl.Community.ReportExporter.Helpers
 				if (Directory.Exists(reportFolderPath))
 				{
 					var files = Directory.GetFiles(reportFolderPath);
-					var exist = files.Any(file => file.Contains("Analyze Files"));
-					if (exist)
+					if (files.Any(file => file.Contains("Analyze Files")))
 					{
 						return true;
 					}
@@ -155,7 +156,7 @@ namespace Sdl.Community.ReportExporter.Helpers
 		private static ProjectInfo GetProjectInfo(string projectPath)
 		{
 			var fileBasedProject = new FileBasedProject(projectPath);
-			var projectInfo = fileBasedProject.GetProjectInfo();
+			var projectInfo = fileBasedProject?.GetProjectInfo();
 
 			return projectInfo;
 		}

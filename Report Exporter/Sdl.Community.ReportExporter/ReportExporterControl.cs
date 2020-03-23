@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -94,11 +93,16 @@ namespace Sdl.Community.ReportExporter
 								LanguageName = language.Key,
 								IsChecked = false
 							};
-							_languages.Add(newLanguage);
+							_languages.Add(newLanguage);							
 						}
 
 					}
 				}
+				_languages.Insert(0, new LanguageDetails
+				{
+					LanguageName = "All languages",
+					IsChecked = false
+				});
 				languagesListBox.DataSource = _languages;
 				languagesListBox.DisplayMember = "LanguageName";
 				languagesListBox.ValueMember = "IsChecked";
@@ -411,20 +415,17 @@ namespace Sdl.Community.ReportExporter
 				if (selectedLanguage != null)
 				{
 					var index = languagesListBox.SelectedIndex;
-					var shouldExportLanguage = languagesListBox.GetItemChecked(index);
-
-					var projectsWithSelectedLaguage = _projectsDataSource
-						.Where(p => p.ShouldBeExported && p.LanguagesForPoject.ContainsKey(selectedLanguage.LanguageName)).ToList();
-					foreach (var project in projectsWithSelectedLaguage)
+					var shouldExportLang = languagesListBox.GetItemChecked(index);
+					if (selectedLanguage.LanguageName.Equals("All languages"))
 					{
-						var language = project.LanguagesForPoject.FirstOrDefault(l => l.Key.Equals(selectedLanguage.LanguageName));
-						project.LanguagesForPoject[language.Key] = shouldExportLanguage;
+						for (int i = 0; i < languagesListBox.Items.Count; i++)
+						{
+							SetLanguageCheckedState(i, shouldExportLang);
+						}
 					}
-
-					var languageToUpdate = _languages.FirstOrDefault(n => n.LanguageName.Equals(selectedLanguage.LanguageName));
-					if (languageToUpdate != null)
+					else
 					{
-						languageToUpdate.IsChecked = shouldExportLanguage;
+						SetLanguageCheckedState(index, shouldExportLang);
 					}
 				}
 
@@ -435,6 +436,37 @@ namespace Sdl.Community.ReportExporter
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"languagesListBox_SelectedIndexChanged_1 method: {ex.Message}\n {ex.StackTrace}");
+			}
+		}
+
+		// Set the language checkbox value based on user's selection: checked/not checked and the index of the checkbox
+		private void SetLanguageCheckedState(int index, bool isChecked)
+		{
+			try
+			{
+				var selectedLanguage = (LanguageDetails)languagesListBox.Items[index];
+
+				languagesListBox.SetItemChecked(index, true);
+				var lang = (LanguageDetails)languagesListBox.Items[index];
+				var projectsWithSelectedLaguage = _projectsDataSource.Where(p => p.ShouldBeExported).ToList();
+				foreach (var project in projectsWithSelectedLaguage)
+				{
+					var language = project.LanguagesForPoject.FirstOrDefault(l => l.Key.Equals(selectedLanguage.LanguageName));
+					if (language.Key != null)
+					{
+						project.LanguagesForPoject[language.Key] = isChecked;
+					}
+				}
+
+				var languageToUpdate = _languages.FirstOrDefault(n => n.LanguageName.Equals(lang.LanguageName));
+				if (languageToUpdate != null)
+				{
+					languageToUpdate.IsChecked = isChecked;
+				}
+			}
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"SetLanguageCheckedState method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -465,21 +497,28 @@ namespace Sdl.Community.ReportExporter
 					if (selectedProject?.LanguagesForPoject.Count(c => c.Value) > 0)
 					{
 						var selectedLanguages = selectedProject.LanguagesForPoject.Where(l => l.Value == true);
-						foreach (var selectedLanguage in selectedLanguages)
+						if (selectedProject.LanguageAnalysisReportPaths != null)
 						{
-							var languageAnalysisReportPath = selectedProject.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(selectedLanguage.Key));
-							var copyReport = new StudioAnalysisReport(languageAnalysisReportPath.Value);
-							var csvTextResult = copyReport.ToCsv(includeHeaderCheck.Checked, _optionalInformation);
-							var reportFileName = Path.GetFileName(languageAnalysisReportPath.Value);
-							var csvText = $"{reportFileName}: {csvTextResult}";
-							csvTextBuilder.Append(csvText);
+							foreach (var selectedLanguage in selectedLanguages)
+							{
+								var languageAnalysisReportPath = selectedProject.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(selectedLanguage.Key));
+								var copyReport = new StudioAnalysisReport(languageAnalysisReportPath.Value);
+								var csvTextResult = copyReport.ToCsv(includeHeaderCheck.Checked, _optionalInformation);
+								var reportFileName = Path.GetFileName(languageAnalysisReportPath.Value);
+								var csvText = $"{reportFileName}: {csvTextResult}";
+								csvTextBuilder.Append(csvText);
+							}
+							_messageBoxService.ShowOwnerInformationMessage(this, "Copy to clipboard was performed with successful.", "Copy result");
+							Clipboard.SetText(csvTextBuilder.ToString());
 						}
-						_messageBoxService.ShowOwnerInformationMessage(this, "Copy to clipboard successful.", "Copy result");
-						Clipboard.SetText(csvTextBuilder.ToString());
+						else
+						{
+							_messageBoxService.ShowOwnerInformationMessage(this, "No Analysis report was found for the selected language.", "Copy result");
+						}
 					}
 					else
 					{
-						_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language for export", "Copy result");
+						_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language to export the corresponding analysis file", "Copy result");
 					}
 				}
 			}
@@ -545,9 +584,12 @@ namespace Sdl.Community.ReportExporter
 							using (var sw = new StreamWriter(project.ReportPath + Path.DirectorySeparatorChar + project.ProjectName + "_" +
 															 languageReport.Key + ".csv"))
 							{
-								var analyseReportPath = project.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(languageReport.Key));
-								var report = new StudioAnalysisReport(analyseReportPath.Value);
-								sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
+								if (project.LanguageAnalysisReportPaths != null)
+								{
+									var analyseReportPath = project.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(languageReport.Key));
+									var report = new StudioAnalysisReport(analyseReportPath.Value);
+									sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
+								}
 							}
 						}
 					}
@@ -556,11 +598,11 @@ namespace Sdl.Community.ReportExporter
 					UncheckAllProjects();
 					_languages.Clear();
 					selectAll.Checked = false;
-					_messageBoxService.ShowOwnerInformationMessage(this, "Export successful.", "Export result");
+					_messageBoxService.ShowOwnerInformationMessage(this, "The analysis files were exported successfully.", "Export result");
 				}
 				else
 				{
-					_messageBoxService.ShowOwnerInformationMessage(this, "Please select output path to export reports", string.Empty);
+					_messageBoxService.ShowOwnerInformationMessage(this, "Please select the output path to export the reports", string.Empty);
 				}
 
 			}

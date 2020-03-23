@@ -4,12 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using Sdl.Community.ReportExporter.Interfaces;
 using Sdl.Community.ReportExporter.Model;
+using Sdl.Community.ReportExporter.Service;
 
 namespace Sdl.Community.ReportExporter.Helpers
 {
 	public class StudioAnalysisReport
 	{
+		private readonly IMessageBoxService _messageBoxService;
+
 		public static readonly Log Log = Log.Instance;
 
 		public string ReportFile { get; }
@@ -19,6 +23,8 @@ namespace Sdl.Community.ReportExporter.Helpers
 		{
 			try
 			{
+				_messageBoxService = new MessageBoxService();
+
 				var reportsPath = Path.GetDirectoryName(pathToXmlReport);
 				var reportName = Path.GetFileName(pathToXmlReport);
 				var directoryInfo = new DirectoryInfo(reportsPath);
@@ -32,7 +38,7 @@ namespace Sdl.Community.ReportExporter.Helpers
 
 					if (!File.Exists(ReportFile))
 					{
-						throw new FileNotFoundException("Analysis report not found", ReportFile);
+						_messageBoxService.ShowWarningMessage($"Analysis report not found for file {ReportFile}", string.Empty);
 					}
 
 					var xDoc = XDocument.Load(ReportFile);
@@ -55,7 +61,7 @@ namespace Sdl.Community.ReportExporter.Helpers
 
 					if (!AnalyzedFiles.Any())
 					{
-						throw new InvalidOperationException("No analyzed files in the report");
+						_messageBoxService.ShowWarningMessage($"No analyzed files in the report!", string.Empty);
 					}
 				}
 			}
