@@ -511,7 +511,7 @@ namespace Sdl.Community.ExportAnalysisReports
 								var csvText = $"{reportFileName}: {csvTextResult}";
 								csvTextBuilder.Append(csvText);
 							}
-							_messageBoxService.ShowOwnerInformationMessage(this, "Copy to clipboard was performed with successful.", "Copy result");
+							_messageBoxService.ShowOwnerInformationMessage(this, "Copy to clipboard was performed with success.", "Copy result");
 							Clipboard.SetText(csvTextBuilder.ToString());
 						}
 						else
@@ -601,7 +601,7 @@ namespace Sdl.Community.ExportAnalysisReports
 					UncheckAllProjects();
 					_languages.Clear();
 					selectAll.Checked = false;
-					_messageBoxService.ShowOwnerInformationMessage(this, "The analysis files were exported successfully.", "Export result");
+					_messageBoxService.ShowOwnerInformationMessage(this, "The analysis files were exported with success.", "Export result");
 				}
 				else
 				{
