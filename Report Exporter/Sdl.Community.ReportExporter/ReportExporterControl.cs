@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using Sdl.Community.ReportExporter.Helpers;
@@ -456,23 +458,29 @@ namespace Sdl.Community.ReportExporter
 		{
 			try
 			{
-				var selectedProject = _projectsDataSource.FirstOrDefault(p => p.ShouldBeExported);
-
-				if (selectedProject?.LanguagesForPoject.Count(c => c.Value) > 0)
+				var projectsToBeExported = _projectsDataSource.Where(p => p.ShouldBeExported).ToList();
+				foreach (var selectedProject in projectsToBeExported)
 				{
-					var selectedLanguages = selectedProject.LanguagesForPoject.Where(l => l.Value == true);
-					foreach (var selectedLanguage in selectedLanguages)
+					var csvTextBuilder = new StringBuilder();
+					if (selectedProject?.LanguagesForPoject.Count(c => c.Value) > 0)
 					{
-						var languageAnalysisReportPath = selectedProject.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(selectedLanguage.Key));
-						var copyReport = new StudioAnalysisReport(languageAnalysisReportPath.Value);
-
-						Clipboard.SetText(copyReport.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
+						var selectedLanguages = selectedProject.LanguagesForPoject.Where(l => l.Value == true);
+						foreach (var selectedLanguage in selectedLanguages)
+						{
+							var languageAnalysisReportPath = selectedProject.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(selectedLanguage.Key));
+							var copyReport = new StudioAnalysisReport(languageAnalysisReportPath.Value);
+							var csvTextResult = copyReport.ToCsv(includeHeaderCheck.Checked, _optionalInformation);
+							var reportFileName = Path.GetFileName(languageAnalysisReportPath.Value);
+							var csvText = $"{reportFileName}: {csvTextResult}";
+							csvTextBuilder.Append(csvText);
+						}
+						_messageBoxService.ShowOwnerInformationMessage(this, "Copy to clipboard successful.", "Copy result");
+						Clipboard.SetText(csvTextBuilder.ToString());
 					}
-					_messageBoxService.ShowOwnerInformationMessage(this, "Copy to clipboard successful.", "Copy result");
-				}
-				else
-				{
-					_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language for export", "Copy result");
+					else
+					{
+						_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language for export", "Copy result");
+					}
 				}
 			}
 			catch (Exception exception)
