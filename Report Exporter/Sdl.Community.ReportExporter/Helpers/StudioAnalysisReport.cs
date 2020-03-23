@@ -19,37 +19,47 @@ namespace Sdl.Community.ReportExporter.Helpers
 		{
 			try
 			{
-				ReportFile = pathToXmlReport;
-
-				if (!File.Exists(ReportFile))
+				var reportsPath = Path.GetDirectoryName(pathToXmlReport);
+				var reportName = Path.GetFileName(pathToXmlReport);
+				var directoryInfo = new DirectoryInfo(reportsPath);
+				if (directoryInfo != null)
 				{
-					throw new FileNotFoundException("Analysis report not found", ReportFile);
-				}
+					var fileInfo = directoryInfo
+						.GetFiles()
+						.OrderByDescending(f => f.LastWriteTime)
+						.FirstOrDefault(n => n.Name.StartsWith(Path.GetFileNameWithoutExtension(reportName)));
+					ReportFile = fileInfo != null ? fileInfo.FullName : pathToXmlReport;
 
-				var xDoc = XDocument.Load(ReportFile);
-				AnalyzedFiles = from f in xDoc.Root.Descendants("file")
-								select new AnalyzedFile(f.Attribute("name").Value, f.Attribute("guid").Value)
-								{
-									Results = from r in f.Element("analyse").Elements()
-											  select new BandResult(r.Name.LocalName)
-											  {
-												  Segments = r.Attribute("segments") != null ? int.Parse(r.Attribute("segments").Value) : 0,
-												  Words = r.Attribute("words") != null ? int.Parse(r.Attribute("words").Value) : 0,
-												  Characters = r.Attribute("characters") != null ? int.Parse(r.Attribute("characters").Value) : 0,
-												  Placeables = r.Attribute("placeables") != null ? int.Parse(r.Attribute("placeables").Value) : 0,
-												  Tags = r.Attribute("tags") != null ? int.Parse(r.Attribute("tags").Value) : 0,
-												  Min = r.Attribute("min") != null ? int.Parse(r.Attribute("min").Value) : 0,
-												  Max = r.Attribute("max") != null ? int.Parse(r.Attribute("max").Value) : 0,
-												  FullRecallWords = r.Attribute("fullRecallWords") != null ? int.Parse(r.Attribute("fullRecallWords").Value) : 0,
-											  }
-								};
+					if (!File.Exists(ReportFile))
+					{
+						throw new FileNotFoundException("Analysis report not found", ReportFile);
+					}
 
-				if (!AnalyzedFiles.Any())
-				{
-					throw new InvalidOperationException("No analyzed files in the report");
+					var xDoc = XDocument.Load(ReportFile);
+					AnalyzedFiles = from f in xDoc.Root.Descendants("file")
+									select new AnalyzedFile(f.Attribute("name").Value, f.Attribute("guid").Value)
+									{
+										Results = from r in f.Element("analyse").Elements()
+												  select new BandResult(r.Name.LocalName)
+												  {
+													  Segments = r.Attribute("segments") != null ? int.Parse(r.Attribute("segments").Value) : 0,
+													  Words = r.Attribute("words") != null ? int.Parse(r.Attribute("words").Value) : 0,
+													  Characters = r.Attribute("characters") != null ? int.Parse(r.Attribute("characters").Value) : 0,
+													  Placeables = r.Attribute("placeables") != null ? int.Parse(r.Attribute("placeables").Value) : 0,
+													  Tags = r.Attribute("tags") != null ? int.Parse(r.Attribute("tags").Value) : 0,
+													  Min = r.Attribute("min") != null ? int.Parse(r.Attribute("min").Value) : 0,
+													  Max = r.Attribute("max") != null ? int.Parse(r.Attribute("max").Value) : 0,
+													  FullRecallWords = r.Attribute("fullRecallWords") != null ? int.Parse(r.Attribute("fullRecallWords").Value) : 0,
+												  }
+									};
+
+					if (!AnalyzedFiles.Any())
+					{
+						throw new InvalidOperationException("No analyzed files in the report");
+					}
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"StudioAnalysisReport: {ex.Message}\n {ex.StackTrace}");
 				throw;
