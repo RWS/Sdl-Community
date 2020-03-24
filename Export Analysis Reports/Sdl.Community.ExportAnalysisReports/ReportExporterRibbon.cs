@@ -8,7 +8,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.ExportAnalysisReports
 {
-	[RibbonGroup("Sdl.Community.ExportAnalysisReports", Name = "Export Analysis Reports")]
+	[RibbonGroup("Sdl.Community.ExportAnalysisReports", Name = "")]
 	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 
 	public class ReportExporterRibbon : AbstractRibbonGroup
@@ -27,7 +27,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		}
 	}
 
-	[Action("Sdl.Community.ExportAnalysisReports.Button", Name = "Report Exporter", Description = "Studio Export Analysis Reports", Icon = "folder2_blue")]
+	[Action("Sdl.Community.ExportAnalysisReports.Button", Name = "Export Analysis Reports", Description = "Studio Export Analysis Reports", Icon = "folder2_blue")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "", true)]
 	public class ReportExporter : AbstractAction
 	{
