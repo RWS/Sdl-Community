@@ -67,7 +67,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					}
 					//Separate all items from package.MachineTransMem (files that contain Machine Translation)
 					bool hasMTMemories = package.MTMemories.Any(t => t.Equals(starTMMetadata.TargetFile));
-					if (package.MTMemories != null && hasMTMemories == true)
+					if (package.MTMemories != null && hasMTMemories)
 					{
 						machineTransList.Add(starTMMetadata);
 					}
