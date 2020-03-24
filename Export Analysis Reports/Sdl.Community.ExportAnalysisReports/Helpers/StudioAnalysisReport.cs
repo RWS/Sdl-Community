@@ -30,10 +30,11 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 				var directoryInfo = new DirectoryInfo(reportsPath);
 				if (directoryInfo != null)
 				{
+					var fileName = Path.GetFileNameWithoutExtension(reportName);
 					var fileInfo = directoryInfo
 						.GetFiles()
 						.OrderByDescending(f => f.LastWriteTime)
-						.FirstOrDefault(n => n.Name.StartsWith(Path.GetFileNameWithoutExtension(reportName)));
+						.FirstOrDefault(n => n.Name.StartsWith(fileName));
 					ReportFile = fileInfo != null ? fileInfo.FullName : pathToXmlReport;
 
 					if (!File.Exists(ReportFile))
@@ -41,9 +42,11 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 						_messageBoxService.ShowWarningMessage($"Analysis report not found for file {ReportFile}", string.Empty);
 					}
 
+					var langPairCode = GetLanguagePairCode(fileName);
+
 					var xDoc = XDocument.Load(ReportFile);
 					AnalyzedFiles = from f in xDoc.Root.Descendants("file")
-									select new AnalyzedFile(f.Attribute("name").Value, f.Attribute("guid").Value)
+									select new AnalyzedFile($"{langPairCode}_{f.Attribute("name").Value}", f.Attribute("guid").Value)
 									{
 										Results = from r in f.Element("analyse").Elements()
 												  select new BandResult(r.Name.LocalName)
@@ -144,6 +147,12 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 				Log.Logger.Error($"ToCsv method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return string.Empty;
+		}
+
+		private string GetLanguagePairCode(string fileName)
+		{
+			var langPairCodes = !string.IsNullOrEmpty(fileName) ? fileName.Split(' ') : new string[3];
+			return langPairCodes.Count() == 3 ? langPairCodes[2] : string.Empty;
 		}
 
 		private string GetCsvHeaderRow(string separator, IEnumerable<BandResult> fuzzies, OptionalInformation aditionalHeaders)

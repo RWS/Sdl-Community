@@ -499,9 +499,7 @@ namespace Sdl.Community.ExportAnalysisReports
 							{
 								var languageAnalysisReportPath = selectedProject.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(selectedLanguage.Key));
 								var copyReport = new StudioAnalysisReport(languageAnalysisReportPath.Value);
-								var csvTextResult = copyReport.ToCsv(includeHeaderCheck.Checked, _optionalInformation);
-								var reportFileName = Path.GetFileName(languageAnalysisReportPath.Value);
-								var csvText = $"{reportFileName}: {csvTextResult}";
+								var csvText = copyReport.ToCsv(includeHeaderCheck.Checked, _optionalInformation);
 								csvTextBuilder.Append(csvText);
 							}
 							_messageBoxService.ShowOwnerInformationMessage(this, "Copy to clipboard was performed with success.", "Copy result");
