@@ -447,25 +447,18 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			try
 			{
-				var selectedLanguage = (LanguageDetails)languagesListBox.Items[index];
+				var languageToUpdate = (LanguageDetails)languagesListBox.Items[index];
 
-				languagesListBox.SetItemChecked(index, true);
-				var lang = (LanguageDetails)languagesListBox.Items[index];
 				var projectsWithSelectedLaguage = _projectsDataSource.Where(p => p.ShouldBeExported).ToList();
 				foreach (var project in projectsWithSelectedLaguage)
 				{
-					var language = project.LanguagesForPoject.FirstOrDefault(l => l.Key.Equals(selectedLanguage.LanguageName));
+					var language = project.LanguagesForPoject.FirstOrDefault(l => l.Key.Equals(languageToUpdate.LanguageName));
 					if (language.Key != null)
 					{
 						project.LanguagesForPoject[language.Key] = isChecked;
 					}
 				}
-
-				var languageToUpdate = _languages.FirstOrDefault(n => n.LanguageName.Equals(lang.LanguageName));
-				if (languageToUpdate != null)
-				{
-					languageToUpdate.IsChecked = isChecked;
-				}
+				languageToUpdate.IsChecked = isChecked;
 			}
 			catch(Exception ex)
 			{
