@@ -21,6 +21,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		public MessageModel CreateProject(PackageModel package)
 		{
 			var penaltiesTmsList = new List<StarTranslationMemoryMetadata>();
+			var machineTransList = new List<StarTranslationMemoryMetadata>();
 			var target = GetTargetLanguages(package.LanguagePairs);
 
 			var projectInfo = new ProjectInfo
@@ -64,6 +65,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							penaltiesTmsList.Add(starTMMetadata);
 						}
 					}
+					//Separate all items from package.MachineTransMem (files that contain Machine Translation)
+					bool hasMTMemories = package.MTMemories.Any(t => t.Equals(starTMMetadata.TargetFile));
+					if (package.MTMemories != null && hasMTMemories)
+					{
+						machineTransList.Add(starTMMetadata);
+					}
 				}
 
 				// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which does not have penalties set on them)
@@ -72,8 +79,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					pair.StarTranslationMemoryMetadatas.Remove(item);
 				}
 
+				// Remove Machine Translation memories from pair.StarTranslationMemoryMetadatas, if the user requests them, they will be imported separately, but never in the main TM
+				pair.StarTranslationMemoryMetadatas.RemoveAll(item => Path.GetFileName(item?.TargetFile ?? "").Contains("_AEXTR_MT_"));
+
 				// Create one TM (that has the name equals with the project name) 
-				// with the TM files from pair.StarTranslationMemoryMetadatas (the onew without penalties set by the user)
+				// with the TM files from pair.StarTranslationMemoryMetadatas (the ones without penalties set by the user)
 				targetProjectFiles.Clear();
 
 				// Import language pair TM if any
@@ -116,6 +126,27 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							true,
 							true,
 							item.TMPenalty));
+					}
+
+					//If the user requests it, create a separate TM for the Machine Translation coming from Transit.
+					foreach (var item in machineTransList)
+					{
+						var machineTranslationImporter = new TransitTmImporter(
+							Path.GetDirectoryName(newProject.FilePath),
+							pair.SourceLanguage,
+							pair.TargetLanguage,
+							Path.GetFileName(item.TargetFile),
+							fileTypeManager);
+
+						machineTranslationImporter.ImportStarTransitTm(item.TargetFile);
+
+						//It should have a penalty set by default, otherwise it will be used for pretranslation and later added to the main TM when updating main TM, and we want to avoid that.
+						tmConfig.Entries.Add(new TranslationProviderCascadeEntry(
+							new TranslationProviderReference(machineTranslationImporter.TMFilePath),
+							true,
+							true,
+							true,
+							1));
 					}
 				}
 				if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
