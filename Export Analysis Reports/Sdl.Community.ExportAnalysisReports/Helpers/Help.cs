@@ -15,28 +15,17 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 	{
 		public static readonly Log Log = Log.Instance;
 
-		public static int GetInstalledStudioMajorVersion()
-		{
-			var studioService = new StudioVersionService();
-			if (studioService != null)
-			{
-				var publicVersion = studioService.GetStudioVersion().PublicVersion?.Split(' ')?.LastOrDefault();
-				return int.TryParse(publicVersion, out _) ? int.Parse(publicVersion) : 0;
-			}
-			return 0;
-		}
-
 		public static string GetStudioProjectsPath()
 		{
 			try
 			{
-				var installedStudioVersion = GetInstalledStudioMajorVersion();
-				if (installedStudioVersion == 0)
+				var shortStudioVersion = GetInstalledStudioShortVersion();
+				if (string.IsNullOrEmpty(shortStudioVersion))
 				{
 					return string.Empty;
 				}
 
-				var projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), $@"Studio {installedStudioVersion}\Projects\projects.xml");
+				var projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), $@"Studio {shortStudioVersion}\Projects\projects.xml");
 				return projectsPath;
 			}
 			catch(Exception ex)
@@ -151,6 +140,12 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 				Log.Logger.Error($"ReportFileExist method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return false;
+		}
+
+		private static string GetInstalledStudioShortVersion()
+		{
+			var studioService = new StudioVersionService();
+			return studioService?.GetStudioVersion()?.ShortVersion;			
 		}
 
 		private static ProjectInfo GetProjectInfo(string projectPath)
