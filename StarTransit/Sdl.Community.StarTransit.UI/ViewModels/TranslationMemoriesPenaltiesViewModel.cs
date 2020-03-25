@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Shared.Annotations;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.UI.Commands;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
@@ -34,6 +35,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		#endregion
 
 		#region Public Properties
+
 		public string Error { get; }
 
 		public ObservableCollection<TranslationMemoriesPenaltiesModel> TranslationMemoriesPenaltiesModelList
