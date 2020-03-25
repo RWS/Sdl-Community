@@ -124,7 +124,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             get { return _selectedCustomer; }
             set
             {
-                if (Equals(_selectedCustomer, value)) return;
+				if (Equals(_selectedCustomer, value))
+				{
+					return;
+				}
                 _selectedCustomer = value;
                 OnPropertyChanged();
             }
@@ -198,10 +201,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public List<ProjectTemplateInfo> StudioTemplates
         {
-            get
-            {
-                return _studioTemplates;
-            }
+            get  { return _studioTemplates; }
             set
             {
                 if (Equals(value, _studioTemplates))

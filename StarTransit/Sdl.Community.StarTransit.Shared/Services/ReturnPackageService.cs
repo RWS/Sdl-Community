@@ -108,8 +108,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			{
 				var taskSequence = package.FileBasedProject.RunAutomaticTasks(package.TargetFiles.GetIds(), new string[]
 				{
-			   AutomaticTaskTemplateIds.GenerateTargetTranslations
-
+				 AutomaticTaskTemplateIds.GenerateTargetTranslations
 				});
 
 				var outputFiles = taskSequence.OutputFiles.ToList();
@@ -247,7 +246,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						//the prj has been edited before so we don't need to add this line anymore, just update
 						MedatataBuilder(pathToPrjFile, metadata, true);
 					}
-
 				}
 			}
 			catch (Exception ex)
