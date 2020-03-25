@@ -4,12 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
-             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    
-    <Grid Margin="10">
-        
+             d:DesignHeight="300" d:DesignWidth="300">    
+    <Grid Margin="10">        
         <Grid.Resources>
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="Margin" Value="0,0,0,5"/>

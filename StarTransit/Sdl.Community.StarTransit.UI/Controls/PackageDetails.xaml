@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+			 xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	<UserControl.Resources>
@@ -21,7 +21,6 @@
 				<Setter Property="Padding" Value="0,0,0,10"/>
 				<Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
 			</Style>
-
 		</Grid.Resources>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -58,7 +57,6 @@
                  Padding="0,0,0,10"
                  Text="{Binding Name}"
                  x:Name="txtName" Grid.Column="1" TextWrapping="Wrap" />
-
 		<TextBox Style="{DynamicResource MetroTextBox}" IsReadOnly="True"
                 Controls:TextBoxHelper.ClearTextButton="True"               
                 Controls:TextBoxHelper.IsWaitingForData="True"
