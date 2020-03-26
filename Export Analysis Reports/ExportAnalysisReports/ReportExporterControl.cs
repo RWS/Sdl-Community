@@ -579,6 +579,11 @@ namespace ExportAnalysisReports
 					{
 						// check which languages to export
 						var checkedLanguages = project.LanguagesForPoject.Where(l => l.Value).ToList();
+						if (checkedLanguages.Count == 0)
+						{
+							_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language!", "Export result");
+							return;
+						}
 						foreach (var languageReport in checkedLanguages)
 						{
 
