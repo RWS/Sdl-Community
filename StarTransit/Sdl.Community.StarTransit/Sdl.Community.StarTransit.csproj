@@ -82,7 +82,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <SpecificVersion>False</SpecificVersion>
