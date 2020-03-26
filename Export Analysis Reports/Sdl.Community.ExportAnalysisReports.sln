@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportAnalysisReports", "ExportAnalysisReports\ExportAnalysisReports.csproj", "{1367B500-D398-4085-BD50-79C2D49B6C3E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.ExportAnalysisReports", "Sdl.Community.ExportAnalysisReports\Sdl.Community.ExportAnalysisReports.csproj", "{1367B500-D398-4085-BD50-79C2D49B6C3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

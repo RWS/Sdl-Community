@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ExportAnalysisReports {
+namespace Sdl.Community.ExportAnalysisReports {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ExportAnalysisReports {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExportAnalysisReports.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.ExportAnalysisReports.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -5,12 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using Newtonsoft.Json;
-using ExportAnalysisReports.Model;
+using Sdl.Community.ExportAnalysisReports.Model;
 using Sdl.Community.Toolkit.Core.Services;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 
-namespace ExportAnalysisReports.Helpers
+namespace Sdl.Community.ExportAnalysisReports.Helpers
 {
 	public static class Help
 	{

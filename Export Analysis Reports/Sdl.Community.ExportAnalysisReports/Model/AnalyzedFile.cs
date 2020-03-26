@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ExportAnalysisReports.Model
+namespace Sdl.Community.ExportAnalysisReports.Model
 {
 	public class AnalyzedFile
 	{

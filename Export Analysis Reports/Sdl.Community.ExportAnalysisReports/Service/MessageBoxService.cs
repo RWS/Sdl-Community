@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
-using ExportAnalysisReports.Interfaces;
+using Sdl.Community.ExportAnalysisReports.Interfaces;
 
-namespace ExportAnalysisReports.Service
+namespace Sdl.Community.ExportAnalysisReports.Service
 {
 	public class MessageBoxService : IMessageBoxService
 	{

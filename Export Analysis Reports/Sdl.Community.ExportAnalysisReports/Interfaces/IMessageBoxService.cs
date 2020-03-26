@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace ExportAnalysisReports.Interfaces
+namespace Sdl.Community.ExportAnalysisReports.Interfaces
 {
 	public interface IMessageBoxService
 	{

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ExportAnalysisReports.Model;
+using Sdl.Community.ExportAnalysisReports.Model;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace ExportAnalysisReports.Helpers
+namespace Sdl.Community.ExportAnalysisReports.Helpers
 {
 	public static class ProjectInformation
 	{

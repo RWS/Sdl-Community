@@ -1,4 +1,4 @@
-﻿namespace ExportAnalysisReports
+﻿namespace Sdl.Community.ExportAnalysisReports
 {
 	partial class ReportExporterControl
 	{

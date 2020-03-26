@@ -1,4 +1,4 @@
-﻿namespace ExportAnalysisReports.Model
+﻿namespace Sdl.Community.ExportAnalysisReports.Model
 {
 	public class OptionalInformation
 	{

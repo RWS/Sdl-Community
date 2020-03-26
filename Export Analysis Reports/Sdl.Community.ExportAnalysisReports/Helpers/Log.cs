@@ -5,7 +5,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 
-namespace ExportAnalysisReports.Helpers
+namespace Sdl.Community.ExportAnalysisReports.Helpers
 {
 	public sealed class Log
 	{

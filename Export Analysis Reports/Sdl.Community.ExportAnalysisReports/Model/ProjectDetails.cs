@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ExportAnalysisReports.Model
+namespace Sdl.Community.ExportAnalysisReports.Model
 {
 	public class ProjectDetails
 	{

@@ -8,8 +8,8 @@
     <ProjectGuid>{1367B500-D398-4085-BD50-79C2D49B6C3E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExportAnalysisReports</RootNamespace>
-    <AssemblyName>ExportAnalysisReports</AssemblyName>
+    <RootNamespace>Sdl.Community.ExportAnalysisReports</RootNamespace>
+    <AssemblyName>Sdl.Community.ExportAnalysisReports</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>

@@ -6,7 +6,7 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
-namespace ExportAnalysisReports
+namespace Sdl.Community.ExportAnalysisReports
 {
 	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	[RibbonGroup("ExportAnalysisReports", Name = "", Description = "Export Analysis Reports")]

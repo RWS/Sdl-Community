@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using ExportAnalysisReports.Interfaces;
-using ExportAnalysisReports.Model;
-using ExportAnalysisReports.Service;
+using Sdl.Community.ExportAnalysisReports.Interfaces;
+using Sdl.Community.ExportAnalysisReports.Model;
+using Sdl.Community.ExportAnalysisReports.Service;
 
-namespace ExportAnalysisReports.Helpers
+namespace Sdl.Community.ExportAnalysisReports.Helpers
 {
 	public class StudioAnalysisReport
 	{

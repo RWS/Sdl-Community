@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace ExportAnalysisReports.Helpers
+namespace Sdl.Community.ExportAnalysisReports.Helpers
 {
 	public class Reflector
 	{

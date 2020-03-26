@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using ExportAnalysisReports.Helpers;
-using ExportAnalysisReports.Interfaces;
-using ExportAnalysisReports.Model;
-using ExportAnalysisReports.Service;
+using Sdl.Community.ExportAnalysisReports.Helpers;
+using Sdl.Community.ExportAnalysisReports.Interfaces;
+using Sdl.Community.ExportAnalysisReports.Model;
+using Sdl.Community.ExportAnalysisReports.Service;
 using static System.String;
-using Help = ExportAnalysisReports.Helpers.Help;
+using Help = Sdl.Community.ExportAnalysisReports.Helpers.Help;
 
-namespace ExportAnalysisReports
+namespace Sdl.Community.ExportAnalysisReports
 {
 	public partial class ReportExporterControl : Form
 	{
@@ -508,7 +508,7 @@ namespace ExportAnalysisReports
 					}
 					else
 					{
-						_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language to export the corresponding analysis file", "Copy result");
+						_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language to copy the corresponding analysis file", "Copy result");
 					}
 				}
 			}
@@ -581,7 +581,7 @@ namespace ExportAnalysisReports
 						var checkedLanguages = project.LanguagesForPoject.Where(l => l.Value).ToList();
 						if (checkedLanguages.Count == 0)
 						{
-							_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language!", "Export result");
+							_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language to export the report!", "Export result");
 							return;
 						}
 						foreach (var languageReport in checkedLanguages)
