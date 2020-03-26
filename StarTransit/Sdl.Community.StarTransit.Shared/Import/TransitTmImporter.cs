@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.LanguagePlatform.Core.Tokenization;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
+
 namespace Sdl.Community.StarTransit.Shared.Import
 {
 	public class TransitTmImporter
@@ -17,6 +19,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		private readonly bool _createTm;
 		private FileBasedTranslationMemory _fileBasedTM;
 		#endregion
+
+		public static readonly Log Log = Log.Instance;
 
 		#region Constructors
 		public TransitTmImporter(CultureInfo sourceCulture,
@@ -81,12 +85,18 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		#region Public Methods
 		public void ImportStarTransitTm(string starTransitTm)
 		{
-			string sdlXliffFullPath = CreateTemporarySdlXliff(starTransitTm);
-
-			ImportSdlXliffIntoTm(sdlXliffFullPath);
+			try
+			{
+				var sdlXliffFullPath = CreateTemporarySdlXliff(starTransitTm);
+				ImportSdlXliffIntoTm(sdlXliffFullPath);
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"ImportStarTransitTm method: {ex.Message}\n {ex.StackTrace}");
+			}
 		}
-		
-		public TranslationProviderReference GetTranslationProviderReference()
+
+	    public TranslationProviderReference GetTranslationProviderReference()
 		{
 			return new TranslationProviderReference(_fileBasedTM.FilePath, true);
 		}
@@ -95,19 +105,25 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		#region Private Methods
 		private void ImportSdlXliffIntoTm(string sdlXliffFullPath)
 		{
-			var tmImporter = new TranslationMemoryImporter(_fileBasedTM.LanguageDirection);
-			var importSettings = new ImportSettings()
+			try
 			{
-				IsDocumentImport = false,
-				CheckMatchingSublanguages = false,
-				IncrementUsageCount = false,
-				NewFields = ImportSettings.NewFieldsOption.Ignore,
-				PlainText = false,
-				ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew
-			};
-			tmImporter.ImportSettings = importSettings;
-
-			tmImporter.Import(sdlXliffFullPath);
+				var tmImporter = new TranslationMemoryImporter(_fileBasedTM.LanguageDirection);
+				var importSettings = new ImportSettings()
+				{
+					IsDocumentImport = false,
+					CheckMatchingSublanguages = false,
+					IncrementUsageCount = false,
+					NewFields = ImportSettings.NewFieldsOption.Ignore,
+					PlainText = false,
+					ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew
+				};
+				tmImporter.ImportSettings = importSettings;
+				tmImporter.Import(sdlXliffFullPath);
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"ImportSdlXliffIntoTm method: {ex.Message}\n {ex.StackTrace}");
+			}
 		}
 
 		/// <summary>
@@ -119,19 +135,22 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		/// <returns></returns>
 		private string CreateTemporarySdlXliff(string starTransitTM)
 		{
-			var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(starTransitTM));
+			try
+			{
+				var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(starTransitTM));
+				var generatedXliffName = string.Format("{0}{1}", Path.GetFileNameWithoutExtension(starTransitTM), ".sdlxliff");
 
-			var generatedXliffName = string.Format("{0}{1}",
-				Path.GetFileNameWithoutExtension(starTransitTM), ".sdlxliff");
+				var sdlXliffFullPath = Path.Combine(pathToExtractFolder, generatedXliffName);
+				var converter = _fileTypeManager.GetConverterToDefaultBilingual(starTransitTM, sdlXliffFullPath, null);
 
-			var sdlXliffFullPath = Path.Combine(pathToExtractFolder, generatedXliffName);
-
-			var converter = _fileTypeManager.GetConverterToDefaultBilingual(starTransitTM,
-				sdlXliffFullPath,
-				null);
-
-			converter.Parse();
-			return sdlXliffFullPath;
+				converter.Parse();
+				return sdlXliffFullPath;
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"CreateTemporarySdlXliff method: {ex.Message}\n {ex.StackTrace}");
+			}
+			return string.Empty;
 		}
 
 		/// <summary>
@@ -146,18 +165,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			{
 				Directory.CreateDirectory(pathToExtractFolder);
 			}
-
 			return pathToExtractFolder;
-		}
-
-		private string GetTemporarySdlXliffPath(string tmFilePath)
-		{
-			var intermediateName =
-			   tmFilePath.Substring(tmFilePath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
-
-			var tmName = intermediateName.Substring(0, intermediateName.LastIndexOf(".", StringComparison.Ordinal));
-
-			return tmName;
 		}
 		
 		private static FuzzyIndexes GetFuzzyIndexes()

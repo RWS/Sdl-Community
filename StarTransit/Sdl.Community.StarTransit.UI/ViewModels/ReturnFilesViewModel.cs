@@ -7,8 +7,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.Annotations;
+using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.ProjectAutomation.Core;
@@ -24,9 +27,12 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private string _returnPackageLocation;
         private ReturnPackageMainWindow _window;
         private ObservableCollection<CellViewModel> _listView = new ObservableCollection<CellViewModel>();
+        private CellViewModel _selectedItem;
+		private readonly IMessageBoxService _messageBoxService;
 
 		public ReturnFilesViewModel(ReturnPackage returnPackage, ReturnPackageMainWindow window)
 		{
+			_messageBoxService = new MessageBoxService();
 			_returnPackage = returnPackage;
 			_window = window;
 			_title = "Please select files for the return package";
@@ -53,14 +59,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				{
 					ProjectFiles = new List<ProjectFile>();
 				}
-
 				Title = _title;
 			}
 			else
 			{
-				MessageBox.Show("Please select target files!", "InformativeMessage", MessageBoxButton.OK, MessageBoxImage.Warning);
+				_messageBoxService.ShowWarningMessage("Please select target files!", "Warning");
 			}
-        }
+		}
 
         public string Title { get; set; }
 
@@ -75,7 +80,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
             }
         }
-
 
         public List<ProjectFile> ProjectFiles
         {
@@ -95,8 +99,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             get { return _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true)); }
         }
-
-  
 
         public string ReturnPackageLocation
         {
@@ -160,7 +162,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         }
         public event PropertyChangedEventHandler PropertyChanged;
 
-		[NotifyPropertyChangedInvocator]
+        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

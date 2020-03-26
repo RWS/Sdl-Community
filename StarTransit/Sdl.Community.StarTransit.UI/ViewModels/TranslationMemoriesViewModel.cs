@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.UI.Annotations;
+using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.Toolkit.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -33,8 +34,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private StarTranslationMemoryMetadata _tmMetadata;
         private  readonly string _initialFolderPath;
 		private string _isTmErrorMessageVisible;
+		private bool _importMTChecked = false;
+		private string _importMTVisible;
+		private ICommand _importMTCommand;
 
-        public TranslationMemoriesViewModel(PackageDetailsViewModel packageDetailsViewModel)
+		public TranslationMemoriesViewModel(PackageDetailsViewModel packageDetailsViewModel)
         {
              _package = packageDetailsViewModel.GetPackageModel();
             var pairs = _package.LanguagePairs;
@@ -53,9 +57,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             _visibility = "Hidden";
 			_isTmErrorMessageVisible = "Hidden";
             _isNoneChecked = true;
-            _title = "Please select Translation memory  for pair " + pairs[0].PairName;
+			_title = $"Please select Translation memory for pair {pairs[0].PairName}";
+			_importMTVisible = "Hidden";
 
-            var studioVersion = new Studio().GetStudioVersion();
+			var studioVersion = new Studio().GetStudioVersion();
             _initialFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                     studioVersion.PublicVersion.Replace("SDL","").Trim(),
                     "Translation Memories");
@@ -158,7 +163,35 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
         }
 
-        public bool IsBrowseChecked
+		public string ImportMTVisible
+		{
+			get { return _importMTVisible; }
+			set
+			{
+				if (Equals(value, _importMTVisible))
+				{
+					return;
+				}
+				_importMTVisible = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool IsImportMTChecked
+		{
+			get { return _importMTChecked; }
+			set
+			{
+				if (Equals(value, _importMTChecked))
+				{
+					return;
+				}
+				_importMTChecked = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool IsBrowseChecked
         {
             get { return _browseChecked; }
             set
@@ -205,7 +238,12 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             get { return _setBtnNameCommand ?? (_setBtnNameCommand = new CommandHandler(SetBtnName, true)); }
         }
 
-        private void SetBtnName()
+		public ICommand ImportMTCommand
+		{
+			get { return _importMTCommand ?? (_importMTCommand = new CommandHandler(ImportMT, true)); }
+		}
+
+		private void SetBtnName()
         {
            
             if (IsCreateChecked)
@@ -222,6 +260,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 SelectedItem.HasTm = true;
                 IsEnabled = true;
 				TmMessage = "Hidden";
+				ImportMTVisible = "Visible";
 
 				var tmPenaltiesWindow = new TranslationMemoriesPenaltiesWindow(new TranslationMemoriesPenaltiesViewModel(_package));
 				tmPenaltiesWindow.Show();
@@ -233,6 +272,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 Visibility = "Visible";
                 IsEnabled = false;
 				TmMessage = "Hidden";
+				ImportMTVisible = "Hidden";
 			}
             if (IsNoneChecked)
             {
@@ -245,12 +285,28 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                     SelectedItem.HasTm = false;
                 }
 				TmMessage = "Hidden";
+				ImportMTVisible = "Hidden";
 			}
            
         }
 
+		private void ImportMT()
+		{
+			if (IsImportMTChecked)
+			{
+				_package.MTMemories = new List<string>();
 
-        public ICommand Command
+				foreach (var filePath in SelectedItem.StarTranslationMemoryMetadatas)
+				{
+					if (Path.GetFileName(filePath.TargetFile ?? "").Contains("_AEXTR_MT_"))
+						_package.MTMemories.Add(filePath.TargetFile);
+				}
+			}
+			else
+				_package.MTMemories.Clear();
+		}
+
+		public ICommand Command
         {
             get { return _command ?? (_command = new CommandHandler(CommandBtn, true)); }
         }
@@ -285,12 +341,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					{
 						TmMessage = "Visible";
 					}
-					
-					
-					
 				}
             }
-      
         }
 
 		private bool TmLanguageMatchesProjectLanguage()
@@ -302,6 +354,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			}
 			return false;
 		}
+
 		private StarTranslationMemoryMetadata GetTmLanguageDirection(string tmPath)
 		{
 			var tmInfo = new FileBasedTranslationMemory(tmPath);

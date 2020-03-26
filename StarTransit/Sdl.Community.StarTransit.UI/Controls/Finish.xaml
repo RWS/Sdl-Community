@@ -4,48 +4,45 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
-             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-
-	<Grid Margin="10">
-
-		<Grid.Resources>
-			<Style TargetType="{x:Type TextBlock}">
-				<Setter Property="Margin" Value="0,0,0,5"/>
-				<Setter Property="Padding" Value="0,0,0,5"/>
-				<Setter Property="FontSize" Value="13"/>
+             d:DesignHeight="300" d:DesignWidth="300">    
+    <Grid Margin="10">        
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Margin" Value="0,0,0,5"/>
+                <Setter Property="Padding" Value="0,0,0,5"/>
+                <Setter Property="FontSize" Value="13"/>
 				<Setter Property="FontWeight" Value="Bold"/>
-				<Setter Property="TextWrapping" Value="Wrap"/>
-			</Style>
-		</Grid.Resources>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="46*"/>
-			<ColumnDefinition Width="100*"/>
-		</Grid.ColumnDefinitions>
-		<TextBlock x:Name="Summary"  Text="Summary" Grid.Row="0"  Grid.ColumnSpan="2" TextAlignment="Center" Margin ="0,0,0,20" FontSize="20" FontWeight="Bold"/>
-		<TextBlock x:Name="Name"  Text="Project name" Grid.Row="1" />
-		<TextBlock x:Name="Description"  Text="Project description" Grid.Row="2" />
-		<TextBlock x:Name="Location"  Text="Project location" Grid.Row="3" />
-		<TextBlock x:Name="Customer"  Text="Customer" Grid.Row="4" />
-		<TextBlock x:Name="DueDate"  Text="Due date" Grid.Row="5" />
-		<TextBlock x:Name="Source"  Text="Source language" Grid.Row="6" />
-		<TextBlock x:Name="Target"  Text="Target language/TM name" Grid.Row="7" />
-		<TextBlock x:Name="Template"  Text="Project template" Grid.Row="8" />
+                <Setter Property="TextWrapping" Value="Wrap"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="46*"/>
+            <ColumnDefinition Width="100*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="Summary"  Text="Summary" Grid.Row="0"  Grid.ColumnSpan="2" TextAlignment="Center" Margin ="0,0,0,20" FontSize="20" FontWeight="Bold"/>
+        <TextBlock x:Name="Name"  Text="Project name" Grid.Row="1" />
+        <TextBlock x:Name="Description"  Text="Project description" Grid.Row="2" />
+        <TextBlock x:Name="Location"  Text="Project location" Grid.Row="3" />
+        <TextBlock x:Name="Customer"  Text="Customer" Grid.Row="4" />
+        <TextBlock x:Name="DueDate"  Text="Due date" Grid.Row="5" />
+        <TextBlock x:Name="Source"  Text="Source language" Grid.Row="6" />
+        <TextBlock x:Name="Target"  Text="Target language/TM name" Grid.Row="7" />
+        <TextBlock x:Name="Template"  Text="Project template" Grid.Row="8" />
 		<TextBlock x:Name="PackageName"  Text="{Binding Name}" Grid.Row="1" Grid.Column="1" FontWeight="Normal"/>
-		<TextBlock x:Name="PackageDescription"  Text="{Binding Description}" Grid.Row="2" Grid.Column="1" FontWeight="Normal"/>
+        <TextBlock x:Name="PackageDescription"  Text="{Binding Description}" Grid.Row="2" Grid.Column="1" FontWeight="Normal"/>
 		<TextBlock x:Name="PackageLocation"  Text="{Binding Location}" Grid.Row="3" Grid.Column="1" FontWeight="Normal"/>
 		<TextBlock x:Name="PackageCustomer"  Text="{Binding Customer}" Grid.Row="4" Grid.Column="1" FontWeight="Normal"/>
 		<TextBlock x:Name="PackageDueDate"  Text="{Binding DueDate}" Grid.Row="5" Grid.Column="1" FontWeight="Normal"/>
@@ -55,8 +52,8 @@
                 BorderBrush="{x:Null}"
                 IsEnabled="True"
 				Width="auto"
-                BorderThickness="0">
-		</ListView>
+                BorderThickness="0">           
+        </ListView>
 		<TextBlock x:Name="PackageTemplate"  Text="{Binding TemplateName}" Grid.Row="8" Grid.Column="1" FontWeight="Normal" />
-	</Grid>
+    </Grid>
 </UserControl>

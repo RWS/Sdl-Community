@@ -9,10 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.StarTransit.UI</RootNamespace>
     <AssemblyName>Sdl.Community.StarTransit.UI</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\14\Plugins</PluginDeploymentPath>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,11 +58,13 @@
     <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Community.Toolkit.Core, Version=0.5.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.Core.0.5.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="NLog">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.Community.Toolkit.Core, Version=0.7.8.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.Core.Studio2017.0.7.8\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.PluginFramework.dll</HintPath>
       <Private>False</Private>
@@ -122,6 +126,7 @@
     <Compile Include="..\Sdl.Community.StarTransit\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Controls\Finish.xaml.cs">
       <DependentUpon>Finish.xaml</DependentUpon>
     </Compile>
@@ -188,7 +193,9 @@
       <LastGenOutput>StarTransitUIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="key.snk" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

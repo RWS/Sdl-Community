@@ -9,9 +9,12 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Xml.Linq;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Annotations;
+using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.Community.StarTransit.UI.Interfaces;
+using Sdl.Community.Toolkit.Core.Services;
 using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
@@ -35,11 +38,14 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private  int _selectedHour;
         private  int _selectedMinute;
         private  string _selectedMoment;
+		private StarTransitMainWindow _window;
 
-        public List<int> HourList { get; set; }
+		public static readonly Log Log = Log.Instance;
+
+		public List<int> HourList { get; set; }
         public List<int> MinutesList { get; set; }
         public List<string> MomentsList { get; set; }
-        private StarTransitMainWindow _window;
+
         public PackageDetailsViewModel(PackageModel package, StarTransitMainWindow window)
         {
             _window = window;
@@ -58,14 +64,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 var targetLanguage = string.Concat(" ", pair.TargetLanguage.DisplayName);
                 _targetLanguage =string.Concat(_targetLanguage,targetLanguage);
             }
-
-
             _canExecute = true;
-
             _selectedHour = -1;
             _selectedMinute = -1;
             _selectedMoment = string.Empty;
-            AssemblyVersion();
+			GetCustomers();
             SetHours();
             SetMinutes();
             MomentsList = new List<string>
@@ -73,8 +76,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 "AM","PM"
             };
         }
-
-      
+		      
         public int SelectedHour
         {
             get { return _selectedHour; }
@@ -116,14 +118,16 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 OnPropertyChanged();
             }
         }
-
        
         public Customer SelectedCustomer
         {
             get { return _selectedCustomer; }
             set
             {
-                if (Equals(_selectedCustomer, value)) return;
+				if (Equals(_selectedCustomer, value))
+				{
+					return;
+				}
                 _selectedCustomer = value;
                 OnPropertyChanged();
             }
@@ -131,14 +135,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public ICommand BrowseCommand
         {
-            get { return _browseCommand ?? (_browseCommand = new CommandHandler(Browse, _canExecute)); }
-           
+            get { return _browseCommand ?? (_browseCommand = new CommandHandler(Browse, _canExecute)); }           
         }
 
 
         public List<Customer> Customers { get; set; }
-
-       
 
         public ObservableCollection<ProjectTemplateInfo> Templates
         {
@@ -200,10 +201,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public List<ProjectTemplateInfo> StudioTemplates
         {
-            get
-            {
-                return _studioTemplates;
-            }
+            get  { return _studioTemplates; }
             set
             {
                 if (Equals(value, _studioTemplates))
@@ -287,16 +285,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             get
             {
-                if (columnName == "TextLocation")
-                {if(string.IsNullOrEmpty(TextLocation))
-                        
+                if (columnName == "TextLocation" && string.IsNullOrEmpty(TextLocation))
+				{       
                     return "Location is required";
                 }
                 if (columnName == "Template" && Template==null)
                 {
-                    
-                        return "Template is rquired";
-                   
+					return "Template is required";                   
                 }
                 if (columnName == "SelectedHour" && SelectedHour == -1)
                 {
@@ -307,8 +302,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                     return "Please select minutes.";
                 }
                 return null;
-            }
-           
+            }           
         }
 
         public string Error { get; }
@@ -316,25 +310,30 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         public Action CloseAction { get; set; }
 
         public Action<string, string> ShowWindowsMessage { get; set; }
-       
 
-        public  PackageModel GetPackageModel()
-        {
-           
-                _packageModel.Name = _txtName;
-                _packageModel.Description = _txtDescription;
-                _packageModel.Location = _textLocation;
-                if (_hasDueDate)
-                {
-                    _packageModel.DueDate = TimeHelper.SetDateTime(DueDate, SelectedHour, SelectedMinute, SelectedMoment);
-                }
 
-                _packageModel.ProjectTemplate = _template;
-                _packageModel.HasDueDate = _hasDueDate;
-                _packageModel.Customer = _selectedCustomer;
-          
-            return _packageModel;
-        }
+		public PackageModel GetPackageModel()
+		{
+			try
+			{
+				_packageModel.Name = _txtName;
+				_packageModel.Description = _txtDescription;
+				_packageModel.Location = _textLocation;
+				if (_hasDueDate)
+				{
+					_packageModel.DueDate = TimeHelper.SetDateTime(DueDate, SelectedHour, SelectedMinute, SelectedMoment);
+				}
+
+				_packageModel.ProjectTemplate = _template;
+				_packageModel.HasDueDate = _hasDueDate;
+				_packageModel.Customer = _selectedCustomer;
+			}
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"GetPackageModel method: {ex.Message}\n {ex.StackTrace}");
+			}
+			return _packageModel;
+		}
 
         public void Browse()
         {
@@ -364,93 +363,74 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             MinutesList = minutesList;
         }
 
-        private void AssemblyVersion()
+        private void GetCustomers()
         {
-            var assembly = Assembly.GetExecutingAssembly().GetName().CodeBase;
-            var myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var projectsPath = string.Empty;
-            if(assembly.Contains("14"))
-            {
-                projectsPath = Path.Combine(myDocumentsPath, @"Studio 2017\Projects\projects.xml");
-
-            } else if (assembly.Contains("12"))
-            {
-                projectsPath = Path.Combine(myDocumentsPath, @"Studio 2015\Projects\projects.xml");
-            }
-            else if (assembly.Contains("11"))
-            {
-                projectsPath = Path.Combine(myDocumentsPath, @"Studio 2014\Projects\projects.xml");
-            }
-
-            ReadCustomers(projectsPath);
+			try
+			{
+				var shortStudioVersion = GetInstalledStudioShortVersion();
+				if (!string.IsNullOrEmpty(shortStudioVersion))
+				{
+					var projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), $@"Studio {shortStudioVersion}\Projects\projects.xml");
+					ReadCustomers(projectsPath);
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"GetCustomers method: {ex.Message}\n {ex.StackTrace}");
+			}
         }
 
-        private void ReadCustomers(string projectsPath)
+		private string GetInstalledStudioShortVersion()
+		{
+			var studioService = new StudioVersionService();
+			return studioService?.GetStudioVersion()?.ShortVersion;
+		}
+
+		private void ReadCustomers(string projectsPath)
         {
-            var sourceProjectsXml = XElement.Load(projectsPath);
-            if (!sourceProjectsXml.Element("Customers").HasElements) return;
+			try
+			{
+				var sourceProjectsXml = XElement.Load(projectsPath);
+				if (!sourceProjectsXml.Element("Customers").HasElements) return;
 
-            var customers = (from customer in sourceProjectsXml.Descendants("Customer")
-                             select new Customer
-                             {
-                                 Guid = new Guid(customer.Attribute("Guid").Value),
-                                 Name = customer.Attribute("Name").Value,
-                                 Email = customer.Attribute("Email").Value
-                             }).OrderBy(c=>c.Name).ToList();
+				var customers = (from customer in sourceProjectsXml.Descendants("Customer")
+								 select new Customer
+								 {
+									 Guid = new Guid(customer.Attribute("Guid").Value),
+									 Name = customer.Attribute("Name").Value,
+									 Email = customer.Attribute("Email").Value
+								 }).OrderBy(c => c.Name).ToList();
 
-            Customers = customers;
-
-        }
+				Customers = customers;
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"ReadCustomers method: {ex.Message}\n {ex.StackTrace}");
+			}
+		}
 
         private void SetHours()
         {
-            var hoursList = new List<int>();
-            for (var i = 1; i <= 12; i++)
-            {
-                hoursList.Add(i);
-            }
-
-            HourList = hoursList;
-        }
+			try
+			{
+				var hoursList = new List<int>();
+				for (var i = 1; i <= 12; i++)
+				{
+					hoursList.Add(i);
+				}
+				HourList = hoursList;
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"SetHours method: {ex.Message}\n {ex.StackTrace}");
+			}
+		}
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-     
-    }
-    public class CommandHandler : ICommand,INotifyPropertyChanged
-    {
-        private Action _action;
-        private bool _canExecute;
-        public CommandHandler(Action action, bool canExecute)
-        {
-            _action = action;
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute;
-        }
-
-       public event EventHandler CanExecuteChanged;
-
-        public void Execute(object parameter)
-        {
-            _action();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        }     
     }
 }

@@ -10,7 +10,7 @@ namespace Sdl.Community.StarTransit.UI
 	/// <summary>
 	/// Interaction logic for StarTransitMainWindow.xaml
 	/// </summary>
-	public partial class StarTransitMainWindow
+	public partial class StarTransitMainWindow 
 	{
 		private readonly PackageDetails _packageDetails;
 		private readonly TranslationMemories _translationMemories;
@@ -54,7 +54,7 @@ namespace Sdl.Community.StarTransit.UI
 			if (packageDetailsViewModel.ShowWindowsMessage == null)
 			{
 				packageDetailsViewModel.ShowWindowsMessage = ShowWindowsMessage;
-			}
+			}			
 		}
 
 		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
@@ -104,6 +104,7 @@ namespace Sdl.Community.StarTransit.UI
 				AffirmativeButtonText = "OK"
 			};
 			await this.ShowMessageAsync(title, message, MessageDialogStyle.Affirmative, dialog);
+
 		}
 
 		private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

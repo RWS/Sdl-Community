@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Windows;
 using System.Windows.Forms;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
+using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Helpers;
@@ -11,7 +12,6 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-using Application = System.Windows.Application;
 
 namespace Sdl.Community.StarTransit
 {
@@ -25,16 +25,14 @@ namespace Sdl.Community.StarTransit
 	[ActionLayout(typeof(StarTransitRibbon), 20, DisplayType.Large)]
 	public class StarTransitOpenPackageAction : AbstractAction
 	{
+		private IMessageBoxService _messageBoxService;
+		private static readonly Log Log = Log.Instance;
+
 		protected override async void Execute()
 		{
+			_messageBoxService = new MessageBoxService();
 			Utils.EnsureApplicationResources();
-#if !DEBUG
-									            TelemetryService.Instance.Init();
 
-									            // check for new version
-									            await TelemetryService.Instance.CheckForUpdates(true);
-									            TelemetryService.Instance.SendCrashes(false);
-#endif
 			var pathToTempFolder = CreateTempPackageFolder();
 			try
 			{
@@ -45,8 +43,7 @@ namespace Sdl.Community.StarTransit
 				var dialogResult = fileDialog.ShowDialog();
 				if (dialogResult == DialogResult.OK)
 				{
-					var path = fileDialog.FileName;
-
+					var path = fileDialog.FileName;	
 					var packageService = new PackageService();
 					var package = await packageService.OpenPackage(path, pathToTempFolder);
 
@@ -68,10 +65,11 @@ namespace Sdl.Community.StarTransit
 			}
 			catch (PathTooLongException ptle)
 			{
-				System.Windows.Forms.MessageBox.Show(ptle.Message);
+				_messageBoxService.ShowMessage(ptle.Message, string.Empty);
+				Log.Logger.Error($"OpenPackage method: {ptle.Message}\n {ptle.StackTrace}");
 			}
-		}
-
+		}  
+		
 		private string CreateTempPackageFolder()
 		{
 			var tempFolder = $@"C:\Users\{Environment.UserName}\StarTransit";
@@ -91,21 +89,23 @@ namespace Sdl.Community.StarTransit
 
 	public class ReturnPackageAction : AbstractAction
 	{
+		private IMessageBoxService _messageBoxService;
+
 		protected override void Execute()
 		{
+			_messageBoxService = new MessageBoxService();
 			Utils.EnsureApplicationResources();
 
 			var returnService = new ReturnPackageService();
 			var returnPackage = returnService.GetReturnPackage();
 
-			if (returnPackage.Item2 != string.Empty)
+			if (!string.IsNullOrEmpty(returnPackage?.Item2))
 			{
-				System.Windows.Forms.MessageBox.Show(returnPackage.Item2, @"Warning",
-					MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				_messageBoxService.ShowWarningMessage(returnPackage.Item2, "Warning");
 			}
 			else
 			{
-				ReturnPackageMainWindow window = new ReturnPackageMainWindow(returnPackage.Item1);
+				var window = new ReturnPackageMainWindow(returnPackage?.Item1);
 				window.ShowDialog();
 			}
 		}

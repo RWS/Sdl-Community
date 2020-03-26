@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Shared.Annotations;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.UI.Commands;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
@@ -34,6 +35,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		#endregion
 
 		#region Public Properties
+
 		public string Error { get; }
 
 		public ObservableCollection<TranslationMemoriesPenaltiesModel> TranslationMemoriesPenaltiesModelList
@@ -125,17 +127,19 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					{
 						foreach (var filePath in langPair.StarTranslationMemoryMetadatas)
 						{
-							TranslationMemoryName = Path.GetFileName(filePath.TargetFile);
-							TranslationMemoryPath = filePath.TargetFile;
-
-							var translationMemoriesPenaltiesModel = new TranslationMemoriesPenaltiesModel()
+							if (!filePath.TargetFile.Contains("_AEXTR_MT_"))
 							{
-								TranslationMemoryName = TranslationMemoryName,
-								TranslationMemoryPath = TranslationMemoryPath,
-								TMPenalty = TMPenalty
-							};
-							
-							TranslationMemoriesPenaltiesModelList.Add(translationMemoriesPenaltiesModel);
+								TranslationMemoryName = Path.GetFileName(filePath.TargetFile);
+								TranslationMemoryPath = filePath.TargetFile;
+
+								var translationMemoriesPenaltiesModel = new TranslationMemoriesPenaltiesModel()
+								{
+									TranslationMemoryName = TranslationMemoryName,
+									TranslationMemoryPath = TranslationMemoryPath,
+									TMPenalty = TMPenalty
+								};
+								TranslationMemoriesPenaltiesModelList.Add(translationMemoriesPenaltiesModel);
+							}
 						}
 					}
 				}
