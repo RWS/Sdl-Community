@@ -508,7 +508,7 @@ namespace ExportAnalysisReports
 					}
 					else
 					{
-						_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language to export the corresponding analysis file", "Copy result");
+						_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language to copy the corresponding analysis file", "Copy result");
 					}
 				}
 			}
@@ -581,7 +581,7 @@ namespace ExportAnalysisReports
 						var checkedLanguages = project.LanguagesForPoject.Where(l => l.Value).ToList();
 						if (checkedLanguages.Count == 0)
 						{
-							_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language!", "Export result");
+							_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language to export the report!", "Export result");
 							return;
 						}
 						foreach (var languageReport in checkedLanguages)
