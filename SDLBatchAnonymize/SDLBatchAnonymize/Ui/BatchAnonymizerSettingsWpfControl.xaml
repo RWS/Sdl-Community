@@ -4,9 +4,33 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.SDLBatchAnonymize.Ui"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            <Label> bla</Label>
-    </Grid>
+             mc:Ignorable="d"
+			 xmlns:viewModel ="clr-namespace:Sdl.Community.SDLBatchAnonymize.ViewModel"
+			 d:DataContext="{d:DesignInstance viewModel:BatchAnonymizerSettingsViewModel}"
+			 d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/GroupboxResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Grid.Row="0" Margin="0">
+			<TextBlock Style="{StaticResource Sdl.TextBlock.TitleStyle}" LineHeight="18" LineStackingStrategy="BlockLineHeight" 
+					   Text="Anonymizer settings"  HorizontalAlignment="Left"  FontSize="20" Padding="0" Margin="0,0,0,10"/>
+			<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Anonymize all values" IsChecked="{Binding AnonymizeAllSettings}"/>
+			<GroupBox Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Header="Username"  HorizontalAlignment="Left" Margin="10">
+			</GroupBox>
+		</StackPanel>
+	</Grid>
 </UserControl>

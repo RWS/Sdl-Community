@@ -62,6 +62,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Styles.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
@@ -108,7 +111,9 @@
     <Compile Include="BatchTask\BatchAnonymizerSettings.cs" />
     <Compile Include="BatchTask\BatchAnonymizerSettingsPage.cs" />
     <Compile Include="Interface\IBatchAnonymizerSettings.cs" />
+    <Compile Include="Interface\IUserNameService.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Model\ModelBase.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -116,6 +121,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Service\UserNameService.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizerWikiAction.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizeStoreAction.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizeCommunitySupportAction.cs" />
@@ -126,13 +132,16 @@
     <Compile Include="Ui\BatchAnonymizerHostControl.Designer.cs">
       <DependentUpon>BatchAnonymizerHostControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ui\BatchAnonymizerSettingsControl.cs" />
+    <Compile Include="Ui\BatchAnonymizerSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Ui\BatchAnonymizerSettingsControl.Designer.cs">
       <DependentUpon>BatchAnonymizerSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Ui\BatchAnonymizerSettingsWpfControl.xaml.cs">
       <DependentUpon>BatchAnonymizerSettingsWpfControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\BatchAnonymizerSettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Ui\BatchAnonymizerHostControl.resx">
@@ -159,6 +168,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Converters\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
