@@ -60,10 +60,8 @@ namespace Sdl.Community.ExportAnalysisReports
 			_allStudioProjectsDetails = new List<ProjectDetails>();
 			LoadProjectsList(_projectXmlPath);
 			reportOutputPath.Text = Help.GetJsonReportPath(Help.JsonPath);
-			if(string.IsNullOrEmpty(reportOutputPath.Text))
-			{
-				targetBtn.Enabled = false;
-			}
+			targetBtn.Enabled = !string.IsNullOrEmpty(reportOutputPath.Text) ? true : false;
+
 			_optionalInformation = new OptionalInformation
 			{
 				IncludeAdaptiveBaseline = adaptiveMT.Checked,
