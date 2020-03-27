@@ -851,7 +851,10 @@ namespace Sdl.Community.ExportAnalysisReports
 				reportOutputPath.Text = selectedOutputPath;
 				targetBtn.Enabled = true;
 			}
-			targetBtn.Enabled = false;
+			else
+			{
+				targetBtn.Enabled = false;
+			}
 		}
 	}
 }
