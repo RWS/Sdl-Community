@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
              xmlns:local="clr-namespace:Sdl.Community.SDLBatchAnonymize.Ui"
              mc:Ignorable="d"
 			 xmlns:viewModel ="clr-namespace:Sdl.Community.SDLBatchAnonymize.ViewModel"
@@ -15,6 +16,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Textboxresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/NumericUpDown.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -24,39 +26,62 @@
 					  Text="Anonymizer settings"  HorizontalAlignment="Left"  FontSize="20" Padding="0" Margin="0,0,0,10"/>
 		<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Anonymize all values" IsChecked="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged}"/>
 		<GroupBox Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Name="UsernameBox" Header="Username"  HorizontalAlignment="Left" Margin="10" MinWidth="500">
-			<StackPanel>
-				<DockPanel Margin="0,10,0,0">
-					<CheckBox DockPanel.Dock="Left" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Created by" VerticalContentAlignment="Center" MinWidth="250" 
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition/>
+						<RowDefinition/>
+						<RowDefinition/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
+					<CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Name="CreatedByCheckbox" Content="Created by" VerticalContentAlignment="Center"
 					          IsChecked="{Binding CreatedByChecked,UpdateSourceTrigger=PropertyChanged}"/>
-					<TextBox  DockPanel.Dock="Right" MinWidth="250" Text="{Binding CreatedByName,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
-				</DockPanel>
-				<DockPanel Margin="0,5,0,0">
-					<CheckBox DockPanel.Dock="Left" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Last modified by" VerticalContentAlignment="Center" MinWidth="250" 
+					<TextBox  Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" Text="{Binding CreatedByName,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
+
+					<CheckBox Grid.Row="1" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Last modified by" VerticalContentAlignment="Center"
 					          IsChecked="{Binding ModifyByChecked,UpdateSourceTrigger=PropertyChanged}"/>
-					<TextBox  DockPanel.Dock="Right" MinWidth="250" Text="{Binding ModifyByName,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
-				</DockPanel>
-				<DockPanel Margin="0,5,0,0">
-					<CheckBox DockPanel.Dock="Left" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Comment author" VerticalContentAlignment="Center" MinWidth="250" 
+					<TextBox  Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Text="{Binding ModifyByName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" VerticalContentAlignment="Center"/>
+
+					<CheckBox Grid.Row="2" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Comment author" VerticalContentAlignment="Center" 
 					          IsChecked="{Binding CommentChecked,UpdateSourceTrigger=PropertyChanged}"/>
-					<TextBox  DockPanel.Dock="Right" MinWidth="250" Text="{Binding CommentAuthorName,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
-				</DockPanel>
-				<DockPanel Margin="0,5,0,10">
-					<CheckBox DockPanel.Dock="Left" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Tracked changes" VerticalContentAlignment="Center" MinWidth="250" 
+					<TextBox  Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" Text="{Binding CommentAuthorName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" VerticalContentAlignment="Center"/>
+
+					<CheckBox Grid.Row="3" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Tracked changes" VerticalContentAlignment="Center" 
 					          IsChecked="{Binding TrackedChecked,UpdateSourceTrigger=PropertyChanged}"/>
-					<TextBox  DockPanel.Dock="Right" MinWidth="250" Text="{Binding TrackedName,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
-				</DockPanel>
-			</StackPanel>
+				<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding TrackedName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" VerticalContentAlignment="Center"/>
+				</Grid>
 		</GroupBox>
+		
 		<GroupBox Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Header="Resource origins"  HorizontalAlignment="Left" Margin="10" 
 		          Width="{Binding Path=ActualWidth,ElementName=UsernameBox}">
-			<StackPanel Margin="0,10,0,0">
-				<DockPanel LastChildFill="False">
-					<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}" MinWidth="250" IsChecked="{Binding ChangeMtChecked,UpdateSourceTrigger=PropertyChanged}"
-							  Content="Remove/change MT" VerticalContentAlignment="Center"/>
-					<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}" IsChecked="{Binding ChangeTmChecked,UpdateSourceTrigger=PropertyChanged}"
-					          Content="Remove/change TM resources" VerticalContentAlignment="Center" Margin="0"/>
-				</DockPanel>
-			</StackPanel>
+			<Grid Margin="0,10">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+					<RowDefinition/>
+					<RowDefinition/>
+
+				</Grid.RowDefinitions>
+				<CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
+						  IsChecked="{Binding ChangeMtChecked,UpdateSourceTrigger=PropertyChanged}"
+				          Content="Remove/change MT" VerticalContentAlignment="Center"/>
+				<CheckBox  Grid.Row="0" Grid.Column="1" Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
+						   IsChecked="{Binding ChangeTmChecked,UpdateSourceTrigger=PropertyChanged}"
+				           Content="Remove/change TM resources" VerticalContentAlignment="Center" Margin="0"/>
+				<CheckBox Grid.Row="1" Grid.Column="0" Margin="10,10,0,0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Set the specific resources user"
+						  IsChecked="{Binding SetSpecificResChecked,UpdateSourceTrigger=PropertyChanged}" />
+				<TextBlock Grid.Row="2" Grid.Column="0" Margin="30,5,0,0" Text="Set a TM score"/>
+				<controls:NumericUpDown Name="NumericUpDown" Style="{DynamicResource Sdl.NumericUpDown.Generic}" Grid.Row="2" Grid.Column="1"/>
+				<TextBlock Grid.Row="3" Grid.Column="0" Margin="30,5,0,0" Text="Set the resource name"/>
+				<TextBox  Grid.Row="3" Grid.Column="1" Margin="0,5,0,5" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" Text="{Binding TmName,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
+			</Grid>
 		</GroupBox>
 	</StackPanel>
 </UserControl>
