@@ -169,6 +169,7 @@
             this.reportOutputPath.Name = "reportOutputPath";
             this.reportOutputPath.Size = new System.Drawing.Size(366, 20);
             this.reportOutputPath.TabIndex = 21;
+            this.reportOutputPath.TextChanged += new System.EventHandler(this.reportOutputPath_TextChanged);
             this.reportOutputPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.reportOutputPath_KeyUp);
             // 
             // crossRep
