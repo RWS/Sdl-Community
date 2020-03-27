@@ -55,12 +55,13 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			copyBtn.Enabled = false;
 			csvBtn.Enabled = false;
-			targetBtn.Enabled = false;
 			includeHeaderCheck.Checked = true;
 			_projectXmlPath = Help.GetStudioProjectsPath();
 			_allStudioProjectsDetails = new List<ProjectDetails>();
 			LoadProjectsList(_projectXmlPath);
 			reportOutputPath.Text = Help.GetJsonReportPath(Help.JsonPath);
+			targetBtn.Enabled = !string.IsNullOrEmpty(reportOutputPath.Text) ? true : false;
+
 			_optionalInformation = new OptionalInformation
 			{
 				IncludeAdaptiveBaseline = adaptiveMT.Checked,
@@ -603,7 +604,7 @@ namespace Sdl.Community.ExportAnalysisReports
 									sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
 								}
 							}
-						}						
+						}
 					}
 
 					//Clear all lists
@@ -840,6 +841,20 @@ namespace Sdl.Community.ExportAnalysisReports
 				_languages.Clear();
 			}
 			RefreshLanguageListbox();
+		}
+
+		private void reportOutputPath_TextChanged(object sender, EventArgs e)
+		{
+			var selectedOutputPath = ((TextBox)sender).Text;
+			if (!string.IsNullOrEmpty(selectedOutputPath))
+			{
+				reportOutputPath.Text = selectedOutputPath;
+				targetBtn.Enabled = true;
+			}
+			else
+			{
+				targetBtn.Enabled = false;
+			}
 		}
 	}
 }
