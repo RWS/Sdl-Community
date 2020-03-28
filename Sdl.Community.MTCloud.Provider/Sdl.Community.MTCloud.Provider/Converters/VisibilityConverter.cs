@@ -12,10 +12,12 @@ namespace Sdl.Community.MTCloud.Provider.Converters
 		{
 			try
 			{
-				var valResult = value?.ToString().Replace(" ", string.Empty);
-				string inputParameter = parameter?.ToString() ?? "";
+				var valueString = value?.ToString();
+				var parameterString = parameter?.ToString() ?? string.Empty;
 
-				return inputParameter.Equals(valResult) ? Visibility.Visible : Visibility.Collapsed;
+				return string.Compare(parameterString, valueString, StringComparison.InvariantCultureIgnoreCase) == 0 
+					? Visibility.Visible 
+					: Visibility.Collapsed;
 			}
 			catch
 			{

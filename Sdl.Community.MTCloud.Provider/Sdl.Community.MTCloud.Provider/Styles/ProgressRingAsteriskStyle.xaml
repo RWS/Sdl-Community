@@ -1,0 +1,167 @@
+﻿<ResourceDictionary x:Uid="ResourceDictionary_1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mahControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
+
+	<Style x:Uid="Style_9" TargetType="{x:Type mahControls:ProgressRing}" x:Key="ProgressRingAsterisk">
+		<Setter x:Uid="Setter_30" Property="HorizontalAlignment" Value="Center" />
+		<Setter x:Uid="Setter_31" Property="VerticalAlignment" Value="Center" />
+		<Setter x:Uid="Setter_32" Property="Width" Value="128.3035" />
+    <Setter x:Uid="Setter_33" Property="Height" Value="128.3035" />
+    <Setter x:Uid="Setter_29" Property="Template">
+			<Setter.Value>
+				<ControlTemplate x:Uid="ControlTemplate_1" TargetType="mahControls:ProgressRing">
+          <Border x:Uid="Border_1" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+            <Border.Resources>
+							<Style x:Uid="Style_10" x:Key="ProgressRingEllipseStyle" TargetType="Ellipse">
+								<Setter x:Uid="Setter_34" Property="HorizontalAlignment" Value="Left" />
+								<Setter x:Uid="Setter_35" Property="Opacity" Value="0" />
+								<Setter x:Uid="Setter_36" Property="VerticalAlignment" Value="Top" />
+							</Style>
+						</Border.Resources>
+						<Grid x:Uid="Grid_1">
+							<Grid.RowDefinitions>
+								<RowDefinition x:Uid="RowDefinition_1" Height="30"/>
+								<RowDefinition x:Uid="RowDefinition_2" Height="*" />
+							</Grid.RowDefinitions>
+							<Grid x:Uid="Ring" x:Name="Ring"
+                              Margin="{TemplateBinding Padding}"
+                              Background="Transparent"
+                              FlowDirection="LeftToRight"
+                              Visibility="Collapsed"
+                              Grid.Row="0" HorizontalAlignment="Center">
+								<Canvas x:Uid="Canvas_1" Width="30" Height="30" RenderTransformOrigin=".5,.5">
+									<Canvas.RenderTransform>
+										<RotateTransform x:Uid="E1R" x:Name="E1R" />
+									</Canvas.RenderTransform>
+									<Canvas x:Uid="E1" x:Name="E1">
+										<Canvas.RenderTransform>
+											<TranslateTransform x:Uid="TranslateTransform_1" X="0" Y="0"/>
+										</Canvas.RenderTransform>
+										<Canvas.Resources>
+											<LinearGradientBrush x:Uid="LinearGradientBrush_1" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="linearGradient918" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1">
+												<LinearGradientBrush.GradientStops>
+													<GradientStopCollection x:Uid="GradientStopCollection_1">
+														<GradientStop x:Uid="GradientStop_1" Color="#FF25BD59" Offset="0"/>
+													</GradientStopCollection>
+												</LinearGradientBrush.GradientStops>
+											</LinearGradientBrush>
+										</Canvas.Resources>
+										<!--Unknown tag: sodipodi:namedview-->
+										<!--Unknown tag: metadata-->
+										<Canvas x:Uid="layer1" Name="layer1">
+											<Canvas.RenderTransform>
+												<TranslateTransform x:Uid="TranslateTransform_2" X="-94.842231" Y="-67.793382"/>
+											</Canvas.RenderTransform>
+											<Canvas x:Uid="g836" Name="g836">
+												<Canvas.RenderTransform>
+													<MatrixTransform x:Uid="MatrixTransform_1" Matrix="0.23382 0 0 0.23382 84.249579 63.434624"/>
+												</Canvas.RenderTransform>
+												<Path x:Uid="rect815" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="rect815" Fill="{StaticResource linearGradient918}" StrokeThickness="10" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="1">
+													<Path.Data>
+														<PathGeometry x:Uid="PathGeometry_1" Figures="m 81.094063 43.346703 h 15.267 c 1.939 0 3.5 1.561 3.5 3.5 V 104.7927 c 0 1.939 -1.561 3.5 -3.5 3.5 h -15.267 c -1.939 0 -3.5 -1.561 -3.5 -3.5 V 46.846703 c 0 -1.939 1.561 -3.5 3.5 -3.5 z" FillRule="NonZero"/>
+													</Path.Data>
+													<Path.RenderTransform>
+														<RotateTransform x:Uid="RotateTransform_1" Angle="-14"/>
+													</Path.RenderTransform>
+												</Path>
+												<Path x:Uid="rect832" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="rect832" Fill="{StaticResource linearGradient918}" StrokeThickness="10" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="1">
+													<Path.Data>
+														<PathGeometry x:Uid="PathGeometry_2" Figures="m -83.207664 52.902721 h 15.267 c 1.939 0 3.5 1.561 3.5 3.5 v 57.946499 c 0 1.939 -1.561 3.5 -3.5 3.5 h -15.267 c -1.939 0 -3.5 -1.561 -3.5 -3.5 V 56.402721 c 0 -1.939 1.561 -3.5 3.5 -3.5 z" FillRule="NonZero"/>
+													</Path.Data>
+													<Path.RenderTransform>
+														<RotateTransform x:Uid="RotateTransform_2" Angle="-86"/>
+													</Path.RenderTransform>
+												</Path>
+												<Path x:Uid="rect834" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="rect834" Fill="{StaticResource linearGradient918}" StrokeThickness="10" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="1">
+													<Path.Data>
+														<PathGeometry x:Uid="PathGeometry_3" Figures="m -143.06847 -100.4044 h 15.267 c 1.939 0 3.5 1.560996 3.5 3.499996 v 57.946495 c 0 1.939 -1.561 3.5 -3.5 3.5 h -15.267 c -1.939 0 -3.5 -1.561 -3.5 -3.5 v -57.946495 c 0 -1.939 1.561 -3.499996 3.5 -3.499996 z" FillRule="NonZero"/>
+													</Path.Data>
+													<Path.RenderTransform>
+														<RotateTransform x:Uid="RotateTransform_3" Angle="-158"/>
+													</Path.RenderTransform>
+												</Path>
+												<Path x:Uid="rect836" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="rect836" Fill="{StaticResource linearGradient918}" StrokeThickness="10" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="1">
+													<Path.Data>
+														<PathGeometry x:Uid="PathGeometry_4" Figures="m -15.762751 -204.70988 h 15.26700057 c 1.93900003 0 3.50000003 1.561 3.50000003 3.5 v 57.94649 c 0 1.939 -1.561 3.5 -3.50000003 3.5 H -15.762751 c -1.939 0 -3.5 -1.561 -3.5 -3.5 v -57.94649 c 0 -1.939 1.561 -3.5 3.5 -3.5 z" FillRule="NonZero"/>
+													</Path.Data>
+													<Path.RenderTransform>
+														<RotateTransform x:Uid="RotateTransform_4" Angle="130"/>
+													</Path.RenderTransform>
+												</Path>
+												<Path x:Uid="rect838" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="rect838" Fill="{StaticResource linearGradient918}" StrokeThickness="10" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="1">
+													<Path.Data>
+														<PathGeometry x:Uid="PathGeometry_5" Figures="m 122.77731 -115.86713 h 15.267 c 1.939 0 3.5 1.561 3.5 3.5 v 57.946499 c 0 1.939 -1.561 3.5 -3.5 3.5 h -15.267 c -1.939 0 -3.5 -1.561 -3.5 -3.5 v -57.946499 c 0 -1.939 1.561 -3.5 3.5 -3.5 z" FillRule="NonZero"/>
+													</Path.Data>
+													<Path.RenderTransform>
+														<RotateTransform x:Uid="RotateTransform_5" Angle="58"/>
+													</Path.RenderTransform>
+												</Path>
+											</Canvas>
+										</Canvas>
+									</Canvas>
+								</Canvas>
+							</Grid>
+							<!--<TextBlock x:Uid="TextBlock_1" Text="One moment" 
+                                       HorizontalAlignment="Center"
+                                       Grid.Row="1"
+                                       Foreground="#636463"/>-->
+              
+              <!--<Grid.Background>
+                <SolidColorBrush Opacity="0.5" Color="White"/>
+              </Grid.Background>-->
+						</Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Uid="SizeStates" x:Name="SizeStates">
+								<VisualState x:Uid="Small" x:Name="Small" />
+							</VisualStateGroup>
+							<VisualStateGroup x:Uid="ActiveStates" x:Name="ActiveStates">
+								<VisualState x:Uid="Inactive" x:Name="Inactive" />
+								<VisualState x:Uid="Active" x:Name="Active">
+									<Storyboard x:Uid="Storyboard_1" RepeatBehavior="Forever">
+										<ObjectAnimationUsingKeyFrames x:Uid="ObjectAnimationUsingKeyFrames_1" Storyboard.TargetName="Ring"
+                                                                       Storyboard.TargetProperty="Visibility"
+                                                                       Duration="0">
+											<DiscreteObjectKeyFrame x:Uid="DiscreteObjectKeyFrame_1" KeyTime="0">
+												<DiscreteObjectKeyFrame.Value>
+													<Visibility x:Uid="Visibility_1">Visible</Visibility>
+												</DiscreteObjectKeyFrame.Value>
+											</DiscreteObjectKeyFrame>
+										</ObjectAnimationUsingKeyFrames>
+										<DoubleAnimationUsingKeyFrames x:Uid="DoubleAnimationUsingKeyFrames_1" BeginTime="0"
+                                                                       Storyboard.TargetName="E1R"
+                                                                       Storyboard.TargetProperty="Angle">
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_1" KeyTime="0:0:0.2" Value="-14" />
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_2" KeyTime="0:0:0.9" Value="216" />
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_3" KeyTime="0:0:1" Value="216" />
+
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_4" KeyTime="0:0:1.2" Value="202" />
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_5" KeyTime="0:0:1.9" Value="432" />
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_6" KeyTime="0:0:2" Value="432" />
+
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_7" KeyTime="0:0:2.2" Value="418" />
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_8" KeyTime="0:0:2.9" Value="648" />
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_9" KeyTime="0:0:3" Value="648" />
+
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_10" KeyTime="0:0:3.2" Value="632" />
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_11" KeyTime="0:0:3.9" Value="864" />
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_12" KeyTime="0:0:4" Value="864" />
+
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_13" KeyTime="0:0:4.2" Value="850" />
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_14" KeyTime="0:0:4.9" Value="1080" />
+											<SplineDoubleKeyFrame x:Uid="SplineDoubleKeyFrame_15" KeyTime="0:0:5" Value="1080" />
+										</DoubleAnimationUsingKeyFrames>
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+					</Border>
+
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+
+</ResourceDictionary>

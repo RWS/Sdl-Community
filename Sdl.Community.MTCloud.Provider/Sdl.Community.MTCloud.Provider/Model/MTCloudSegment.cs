@@ -3,9 +3,9 @@ using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.MTCloud.Provider.Model
 {
-    public class BeGlobalSegment
+    public class MTCloudSegment
     {
-	    public int Index { get; set; }
+	    public long Index { get; set; }
 	    public Segment Segment { get; set; }
 	    public Segment Translation { get; set; }
 	    public SearchResult SearchResult { get; set; }

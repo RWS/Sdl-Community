@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using RestSharp;
+using Newtonsoft.Json;
 
 namespace Sdl.Community.MTCloud.Provider.Model
 {
 	public class SubscriptionInfo
 	{
-		public List<BeGlobalLanguagePair> LanguagePairs { get; set; }
-		public RestResponse RestResponse { get; set; }
+		[JsonProperty("languagePairs")]
+		public List<MTCloudLanguagePair> LanguagePairs { get; set; }		
 	}
 }

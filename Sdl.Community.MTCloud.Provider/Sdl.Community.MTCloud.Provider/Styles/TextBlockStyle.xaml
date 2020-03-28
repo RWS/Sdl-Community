@@ -4,7 +4,7 @@
 	<Style x:Key="TextBlockColor" TargetType="{x:Type TextBlock}">
 		<Setter Property="Foreground" Value="#FF5F5C5C"/>
 		<Setter Property="FontFamily" Value="Segoe UI"/>
-		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontSize" Value="13"/>
 		<Setter Property="Margin" Value="0,0,0,0"/>
 	</Style>
 	<Style x:Key="TextBlockAlignCenter" TargetType="{x:Type TextBlock}">
@@ -16,4 +16,12 @@
 		<Setter Property="FontSize" Value="12" />
 		<Setter Property="Margin" Value="3,0,3,0"></Setter>
 	</Style>
+
+  <Style TargetType="{x:Type TextBlock}" x:Key="AccountsStyle">
+    <Setter Property="FontSize" Value="22"/>
+    <Setter Property="FontFamily" Value="Segoe UI"/>
+    <Setter Property="Foreground" Value="#636463"/>
+    <Setter Property="FontWeight" Value="Normal"/>
+    <Setter Property="HorizontalAlignment" Value="Left"/>
+  </Style>
 </ResourceDictionary>

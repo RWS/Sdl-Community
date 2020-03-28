@@ -1,21 +1,21 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="General.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
-   
-    <Style TargetType="{x:Type Border}" x:Key="WindowControlBorderStyle">
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{StaticResource WindowsControl.Active.Border}"/>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Maximized">
-                <Setter Property="BorderThickness" Value="5"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=IsActive}" Value="False">
-                <Setter Property="BorderBrush" Value="{DynamicResource WindowsControl.Inactive.Border}" />
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="General.xaml"></ResourceDictionary>
+	</ResourceDictionary.MergedDictionaries>
+
+	<Style TargetType="{x:Type Border}" x:Key="WindowControlBorderStyle">
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="BorderBrush" Value="{StaticResource WindowsControl.Active.Border}"/>
+		<Style.Triggers>
+			<DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Maximized">
+				<Setter Property="BorderThickness" Value="5"/>
+			</DataTrigger>
+			<DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=IsActive}" Value="False">
+				<Setter Property="BorderBrush" Value="{DynamicResource WindowsControl.Inactive.Border}" />
+			</DataTrigger>
+		</Style.Triggers>
+	</Style>
 
 </ResourceDictionary>

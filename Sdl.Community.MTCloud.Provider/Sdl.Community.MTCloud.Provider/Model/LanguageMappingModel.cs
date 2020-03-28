@@ -106,6 +106,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		}
 
 		public string SourceTradosCode { get; set; }
+
 		public string TargetTradosCode { get; set; }
 	}
 }

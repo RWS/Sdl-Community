@@ -7,8 +7,8 @@ namespace Sdl.Community.MTCloud.Provider.Model
 	[DataContract]
 	public class LangMappingMTCode : BaseViewModel
 	{
-		private string _codeName { get; set; }
-		private Image _flag { get; set; }
+		private string _codeName;
+		private Image _flag;
 		
 		[DataMember]
 		public string CodeName

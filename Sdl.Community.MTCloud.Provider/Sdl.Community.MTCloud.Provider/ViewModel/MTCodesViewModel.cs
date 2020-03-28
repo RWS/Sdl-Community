@@ -3,18 +3,17 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Helpers;
-using Sdl.Community.MTCloud.Provider.Interfaces;
+using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Core.Globalization;
-using Controls = System.Windows.Controls;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
-	public class MTCodesWindowModel : BaseViewModel, IWindowContext
+	public class MTCodesViewModel : BaseViewModel
 	{
 		private readonly PrintService _printService;
 		private readonly Languages.Provider.Languages _languages;
@@ -30,7 +29,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _updateLanguagePropertyCommand;
 		private ICommand _printCommand;
 
-		public MTCodesWindowModel(Languages.Provider.Languages languages)
+		public MTCodesViewModel(Languages.Provider.Languages languages)
 		{
 			_languages = languages;
 						
@@ -38,7 +37,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			_printService = new PrintService();
 		}
-		
+
+		public ICommand UpdateLanguagePropertyCommand =>
+			_updateLanguagePropertyCommand ?? (_updateLanguagePropertyCommand = new RelayCommand(UpdateLanguageProperty));
+
+		public ICommand PrintCommand
+			=> _printCommand ?? (_printCommand = new RelayCommand<DataGrid>(Print));
+
 		public ObservableCollection<MTCloudLanguage> MTCodes
 		{
 			get => _mtCodes;
@@ -121,15 +126,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				_itemsCountLabel = value;
 				OnPropertyChanged(nameof(ItemsCountLabel));
 			}
-		}
-
-		public bool IsProviderWindow => false;
-
-		public ICommand UpdateLanguagePropertyCommand => 
-			_updateLanguagePropertyCommand ?? (_updateLanguagePropertyCommand = new RelayCommand(UpdateLanguageProperty));
-
-		public ICommand PrintCommand 
-			=> _printCommand ?? (_printCommand = new RelayCommand<Controls.DataGrid>(Print));
+		}		
 
 		public void SearchLanguages(string query)
 		{
@@ -163,7 +160,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				: string.Format(PluginResources.Total_Languages, totalCount);
 		}
 	
-		public void Print(Controls.DataGrid dataGrid)
+		public void Print(DataGrid dataGrid)
 		{
 			IsWaiting = true;
 

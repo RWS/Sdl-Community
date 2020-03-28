@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 using RestSharp;
+using Sdl.Community.MTCloud.Provider.Extensions;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
@@ -16,29 +17,45 @@ namespace Sdl.Community.MTCloud.Provider.Service
 	{
 		private readonly IRestClient _client;
 		private readonly IMessageBoxService _messageBoxService;
-		private readonly LanguageMappingsService _languageMappingService;
-		private readonly List<LanguageMappingModel> _languageMappings = new List<LanguageMappingModel>();
+		private readonly List<LanguageMappingModel> _languageMappings;
+		private readonly LanguageMappingsService _languageMappingsService;
 
 		public static readonly Log Log = Log.Instance;
 
-		public SdlMTCloudTranslator(string server, SdlMTCloudTranslationOptions options)
+		public SdlMTCloudTranslator(string server, SdlMTCloudTranslationOptions options, LanguageMappingsService languageMappingsService)
 		{
 			try
 			{
+				if (string.IsNullOrEmpty(options.ClientId) || string.IsNullOrEmpty(options.ClientSecret))
+				{
+					throw new NullReferenceException("The Client Id and/or Password cannot be null!");
+				}
+
 				_messageBoxService = new MessageBoxService();
-				_languageMappingService = new LanguageMappingsService();
-				_languageMappings = _languageMappingService.GetLanguageMappingSettings()?.LanguageMappings?.ToList();
+				_languageMappingsService = languageMappingsService;
+
+				var settings = _languageMappingsService.GetLanguageMappingSettings();
+				if (settings.LanguageMappings != null)
+				{
+					_languageMappings = settings?.LanguageMappings?.ToList();
+				}
+
+				
+				
+
+
 				_client = new RestClient(string.Format($"{server}/v4"));
 
-				Utils.LogServerIPAddresses();
+				//Utils.LogServerIPAddresses();
 
 				IRestRequest request;
-				if (options.AuthenticationMethod.Equals("ClientLogin"))
+				if (options.AuthenticationMethod.Equals(Constants.ClientLoginAuthentication))
 				{
 					request = new RestRequest("/token", Method.POST)
 					{
 						RequestFormat = DataFormat.Json
 					};
+
 					request.AddBody(new { clientId = options.ClientId, clientSecret = options.ClientSecret });
 				}
 				else
@@ -47,8 +64,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					{
 						RequestFormat = DataFormat.Json
 					};
+
 					request.AddBody(new { username = options.ClientId, password = options.ClientSecret });
 				}
+
 				AddTraceId(request);
 				request.RequestFormat = DataFormat.Json;
 
@@ -57,13 +76,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				{
 					throw new Exception(Constants.TokenFailed + response.Content);
 				}
+
 				dynamic json = JsonConvert.DeserializeObject(response.Content);
-				_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");
+				_client.AddDefaultHeader("Authorization", $"Bearer {json.accessToken}");				
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"{Constants.BeGlobalV4Translator} {ex.Message}\n {ex.StackTrace}");
-			}
+			}			
 		}
 
 		/// <summary>
@@ -78,6 +98,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				{
 					RequestFormat = DataFormat.Json
 				};
+
 				AddTraceId(request);
 				var response = _client.Execute(request);
 				var user = JsonConvert.DeserializeObject<UserDetails>(response.Content);
@@ -110,7 +131,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			try
 			{
 				var selectedModel = _languageMappings?.FirstOrDefault(l => l.ProjectLanguagePair.Contains(sourceDisplayName) && l.ProjectLanguagePair.Contains(targetDisplayName));
-				if(selectedModel?.SelectedModelOption == null || string.IsNullOrEmpty(selectedModel?.SelectedModelOption?.Model))
+
+				if (selectedModel?.SelectedModelOption == null || string.IsNullOrEmpty(selectedModel?.SelectedModelOption?.Model))
 				{
 					throw new Exception(Constants.NoTranslationMessage);
 				}
@@ -119,9 +141,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				{
 					RequestFormat = DataFormat.Json
 				};
+
 				AddTraceId(request);
 
 				string[] texts = { text };
+				
 				// set dictionaries parameter in case user has been selected an available dictionary
 				if (!selectedModel.SelectedMTCloudDictionary.Name.Equals(Constants.NoAvailableDictionary)
 					&& !selectedModel.SelectedMTCloudDictionary.Name.Equals(Constants.NoDictionary))
@@ -131,9 +155,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						input = texts,
 						sourceLanguageId = selectedModel.SelectedMTCodeSource.CodeName,
 						targetLanguageId = selectedModel.SelectedMTCodeTarget.CodeName,
-						model = selectedModel?.SelectedModelOption?.Model,
+						model = selectedModel.SelectedModelOption?.Model,
 						inputFormat = "xliff",
-						dictionaries = new[] { selectedModel?.SelectedMTCloudDictionary?.DictionaryId?.ToString() }
+						dictionaries = new[] { selectedModel.SelectedMTCloudDictionary.DictionaryId }
 					});
 				}
 				else
@@ -147,6 +171,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						inputFormat = "xliff"
 					});
 				}
+
 				var response = _client.Execute(request);
 				if (!response.IsSuccessful)
 				{
@@ -178,7 +203,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public int GetUserInformation()
 		{
 			try
-			{
+			{				
 				var request = new RestRequest("/accounts/users/self")
 				{
 					RequestFormat = DataFormat.Json
@@ -191,6 +216,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				{
 					ShowErrors(response);
 				}
+
 				return user?.AccountId ?? 0;
 			}
 			catch (Exception e)
@@ -243,6 +269,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				{
 					RequestFormat = DataFormat.Json
 				};
+
 				AddTraceId(request);
 
 				var response = _client.Execute(request);
@@ -257,6 +284,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			{
 				Log.Logger.Error($"{Constants.GetDictionaries} {e.Message}\n {e.StackTrace}");
 			}
+
 			return new MTCloudDictionaryInfo();
 		}
 
@@ -321,6 +349,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			{
 				RequestFormat = DataFormat.Json
 			};
+
 			AddTraceId(request);
 
 			var response = _client.Execute(request);

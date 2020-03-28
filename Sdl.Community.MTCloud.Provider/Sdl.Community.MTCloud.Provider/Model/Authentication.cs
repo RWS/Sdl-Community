@@ -2,8 +2,17 @@
 {
 	public class Authentication
 	{
-		public string Type { get; set; }
+		public enum AuthenticationType
+		{
+			Studio = 0,
+			User = 1,
+			Client
+		}
+
+		public AuthenticationType Type { get; set; }
+
 		public string DisplayName { get; set; }
-		public int Index { get; set; }
+
+		public long Index { get; set; }
 	}
 }

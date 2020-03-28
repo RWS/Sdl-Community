@@ -4,7 +4,14 @@
 	{
 		public static string MTCloudTranslateAPIUri = "https://translate-api.sdlbeglobal.com";
 		public static string MTCloudTranslateUri = "https://translate.sdlbeglobal.com";
-		public static string MTCloudUriScheme = "sdlmachinetranslationcloudprovider";
+		public static string MTCloudUriScheme = "sdlmtcloud";
+
+		public static string ClientLoginAuthentication = "ClientLogin";
+		public static string UserLoginAuthentication= "UserLogin";
+
+		public static string StudioAuthentication = "Studio credentials - SDL Language Cloud";
+		public static string UserAuthentication = "User credentials - SDL Machine Translation Cloud";
+		public static string ClientAuthentication = "Client credentials - SDL Machine Translation Cloud";
 
 
 		// TODO confirm if some or all of these should be managed in a resource file
@@ -19,8 +26,7 @@
 		public static string TRANSLATING = "TRANSLATING";
 		public static string Authorization = "Authorization";
 		public static string SDLMachineTranslationCloudProvider = "SDLMachineTranslationCloudProvider";
-		public static string ClientAuthentication = "Client Authentication";
-		public static string UserAuthentication = "User Authentication";
+	
 		public static string Client = "Client";
 		public static string User = "User";
 		public static string PasswordBox = "PasswordBox";
@@ -28,7 +34,7 @@
 		public static string Red = "Red";
 		public static string Green = "Green";
 		public static string PrintMTCodes = "Printing MT Codes";
-		public static string SettingsGrId = "SDLMTCloudLanguageMapping";
+		public static string SettingsGroupId = "SDLMTCloudLanguageMappings";
 		public static string HostAddress = "translate-api.sdlbeglobal.com";
 		public static string NoDictionary = "No dictionary";
 

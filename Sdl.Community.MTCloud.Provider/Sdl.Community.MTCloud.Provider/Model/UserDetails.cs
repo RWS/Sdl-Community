@@ -1,8 +1,16 @@
-﻿namespace Sdl.Community.MTCloud.Provider.Model
+﻿using Newtonsoft.Json;
+
+namespace Sdl.Community.MTCloud.Provider.Model
 {
 	public class UserDetails
 	{
-		public int AccountId { get; set; }
+		[JsonProperty("accountId")]
+		public long AccountId { get; set; }
+
+		[JsonProperty("clientId")]
 		public string ClientId { get; set; }
+
+		[JsonProperty("userId")]
+		public string UserId { get; set; }
 	}
 }

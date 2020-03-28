@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Windows.Forms;
 using Sdl.Community.MTCloud.Provider.Helpers;
+using Sdl.Community.MTCloud.Provider.Interfaces;
+using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -9,56 +12,35 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		Name = "SDLMachineTranslationCloudProviderFactory",
 		Description = "SDL Machine Translation Cloud Provider")]
 	public class SdlMTCloudTranslationProviderFactory : ITranslationProviderFactory
-	{		
+	{
 		public static readonly Log Log = Log.Instance;
 
-		[STAThread]
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
-		{
-			var originalUri = new Uri(Constants.MTCloudUriScheme + ":///");
-			var options = new SdlMTCloudTranslationOptions(translationProviderUri);
+		{			
+			var allForms = Application.OpenForms;
+			var activeForm = allForms[allForms.Count - 1];
+			var connectionService = new ConnectionService(activeForm?.Owner);
+						
+			var credential = connectionService.GetCredential(credentialStore);
+			var connectionResult = connectionService.EnsureSignedIn(credential);
 
-			var credentials = credentialStore.GetCredential(originalUri);
-			if (credentials != null)
-			{				
-				var splitedCredentials = credentials.Credential?.Split('#');
-
-				options.ClientId = splitedCredentials?.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[0]) : string.Empty;
-				options.ClientSecret = splitedCredentials?.Length > 2 ? StringExtensions.Decrypt(splitedCredentials[1]) : string.Empty;
-				options.AuthenticationMethod = splitedCredentials?.Length == 4 ? splitedCredentials[2] : string.Empty;
-
-				var resendDraft = splitedCredentials?.Length == 4 ? splitedCredentials[3] : string.Empty;
-
-				if (!string.IsNullOrEmpty(resendDraft))
-				{
-					options.ResendDrafts = resendDraft.Equals("True");
-				}
-
-				if (options.BeGlobalService == null)
-				{
-					options.BeGlobalService = new SdlMTCloudTranslator(Constants.MTCloudTranslateAPIUri, options);
-				}
-			}
-			else
+			if (!connectionResult.Item1)
 			{
-				credentialStore.AddCredential(originalUri, new TranslationProviderCredential(originalUri.ToString(), true));
+				throw new TranslationProviderAuthenticationException("Invalid credentials!");
 			}
 
-			int accountId;
-			if (options.AuthenticationMethod.Equals("ClientLogin"))
-			{
-				accountId = options.BeGlobalService?.GetClientInformation() ?? 0;
-			}
-			else
-			{
-				accountId = options.BeGlobalService?.GetUserInformation() ?? 0;
-			}
+			connectionService.SaveCredential(credentialStore);
 
-			var subscriptionInfo = options.BeGlobalService?.GetLanguagePairs(accountId.ToString());
-			options.SubscriptionInfo = subscriptionInfo;
+			var languageMappingsService = new LanguageMappingsService();
+			var translationService = new TranslationService(connectionService, languageMappingsService);
 
-			return new SdlMTCloudTranslationProvider(options);
+			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, connectionService, translationService, translationProviderState);
+			
+
+			return provider;
+
+			//throw new TranslationProviderAuthenticationException("Invalid credentials!");
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
@@ -81,6 +63,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			};
 
 			return info;
-		}
+		}			
 	}
 }

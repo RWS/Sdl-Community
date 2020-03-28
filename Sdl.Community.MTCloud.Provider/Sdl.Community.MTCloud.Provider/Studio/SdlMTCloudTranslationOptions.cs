@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
-using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
@@ -11,44 +8,26 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	{
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 
-		public SdlMTCloudTranslationOptions()
-		{
-			_uriBuilder = new TranslationProviderUriBuilder(Constants.MTCloudUriScheme);
-		}
+		public SdlMTCloudTranslationOptions(): this(new Uri($"{Constants.MTCloudUriScheme}://")) { }
 
 		public SdlMTCloudTranslationOptions(Uri uri)
 		{
-			_uriBuilder = new TranslationProviderUriBuilder(uri);
+			_uriBuilder = new TranslationProviderUriBuilder(uri);			
 		}
 
-		public string ClientId { get; set; }
-
-		public string ClientSecret { get; set; }
-
-		public string AuthenticationMethod { get; set; }
-
-		[JsonIgnore]
-		public SdlMTCloudTranslator BeGlobalService { get; set; }
-
-		public string DisplayName { get; set; }
-
-		public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
-
-		public bool ResendDrafts
+		public bool ResendDraft
 		{
 			get => ResendDraftsParameter != null && Convert.ToBoolean(ResendDraftsParameter);
 			set => ResendDraftsParameter = value.ToString();
 		}
 
+
 		[JsonIgnore]
 		public string ResendDraftsParameter
 		{
-			get => GetStringParameter("resenddrafts");
-			set => SetStringParameter("resenddrafts", value);
+			get => GetStringParameter("ResendDraft");
+			set => SetStringParameter("ResendDraft", value);
 		}
-		
-		[JsonIgnore]
-		public SubscriptionInfo SubscriptionInfo { get; set; }
 
 		[JsonIgnore]
 		public Uri Uri => _uriBuilder.Uri;

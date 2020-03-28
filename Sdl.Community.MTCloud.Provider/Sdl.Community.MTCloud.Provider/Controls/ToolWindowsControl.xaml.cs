@@ -3,48 +3,48 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Sdl.Community.MTCloud.Provider.Helpers;
+using Sdl.Community.MTCloud.Provider.Extensions;
 
-namespace Sdl.Community.MTCloud.Provider.Styles
+namespace Sdl.Community.MTCloud.Provider.Controls
 {
 	/// <summary>
 	/// Interaction logic for WindowsControl.xaml
 	/// </summary>
-	public partial class WindowsControl : UserControl
+	public partial class ToolWindowsControl : UserControl
 	{
 		/// <summary>
 		///     Identifies the <see cref="ControlHelp" /> property.
 		/// </summary>
 		public static readonly DependencyProperty HelpProperty =
-			DependencyProperty.Register("ControlHelp", typeof(string), typeof(WindowsControl),
+			DependencyProperty.Register("ControlHelp", typeof(string), typeof(ToolWindowsControl),
 				new PropertyMetadata(string.Empty));
 
 		/// <summary>
 		///     Identifies the <see cref="ControlClose" /> property.
 		/// </summary>
 		public static readonly DependencyProperty CloseProperty =
-			DependencyProperty.Register("ControlClose", typeof(string), typeof(WindowsControl),
+			DependencyProperty.Register("ControlClose", typeof(string), typeof(ToolWindowsControl),
 				new PropertyMetadata(string.Empty));
 
 		/// <summary>
 		///     Identifies the <see cref="ControlMaximize" /> property.
 		/// </summary>
 		public static readonly DependencyProperty MaximizeProperty =
-			DependencyProperty.Register("ControlMaximize", typeof(string), typeof(WindowsControl),
+			DependencyProperty.Register("ControlMaximize", typeof(string), typeof(ToolWindowsControl),
 				new PropertyMetadata(string.Empty));
 
 		/// <summary>
 		///     Identifies the <see cref="ControlMinimize" /> property.
 		/// </summary>
 		public static readonly DependencyProperty MinimizeProperty =
-			DependencyProperty.Register("ControlMinimize", typeof(string), typeof(WindowsControl),
+			DependencyProperty.Register("ControlMinimize", typeof(string), typeof(ToolWindowsControl),
 				new PropertyMetadata(string.Empty));
 
 		/// <summary>
 		///     Identifies the <see cref="ControlRestore" /> property.
 		/// </summary>
 		public static readonly DependencyProperty RestoreProperty =
-			DependencyProperty.Register("ControlRestore", typeof(string), typeof(WindowsControl),
+			DependencyProperty.Register("ControlRestore", typeof(string), typeof(ToolWindowsControl),
 				new PropertyMetadata(string.Empty));
 
 
@@ -93,22 +93,22 @@ namespace Sdl.Community.MTCloud.Provider.Styles
 			set => SetValue(RestoreProperty, value);
 		}
 
-		public WindowsControl()
+		public ToolWindowsControl()
 		{
 			InitializeComponent();
 
 			Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
 			{
 				if (string.IsNullOrWhiteSpace(ControlMinimize))
-					ControlMinimize = PluginResources.WindowsControl_Minimize;
+					ControlMinimize = "Minimize";
 				if (string.IsNullOrWhiteSpace(ControlMaximize))
-					ControlMaximize = PluginResources.WindowsControl_Maximize;
+					ControlMaximize = "Maximize";
 				if (string.IsNullOrWhiteSpace(ControlClose))
-					ControlClose = PluginResources.WindowsControl_Close;
+					ControlClose = "Close";
 				if (string.IsNullOrWhiteSpace(ControlRestore))
-					ControlRestore = PluginResources.WindowsControl_Restore;
+					ControlRestore = "Restore";
 				if (string.IsNullOrWhiteSpace(ControlHelp))
-					ControlHelp = PluginResources.WindowsControl_Help;
+					ControlHelp = "Help";
 			}));
 		}
 

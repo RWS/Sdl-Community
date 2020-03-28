@@ -6,7 +6,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class LanguageMappingsService
 	{		
-		private static ISettingsGroup _sdlMTCloudSettingsGroup;
+		private static ISettingsGroup _settingsGroup;
+
+		public LanguageMappingsService()
+		{
+			
+		}
 
 		/// <summary>
 		/// Get the saved language mapping settings from current project
@@ -18,17 +23,19 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			if (projectSettings != null)
 			{
-				var containsSettingsGroup = projectSettings.ContainsSettingsGroup(Constants.SettingsGrId);
-
-				_sdlMTCloudSettingsGroup = projectSettings.GetSettingsGroup(Constants.SettingsGrId);
-
+				var containsSettingsGroup = projectSettings.ContainsSettingsGroup(Constants.SettingsGroupId);
+				_settingsGroup = projectSettings.GetSettingsGroup(Constants.SettingsGroupId);
 				if (!containsSettingsGroup)
 				{
-					projectSettings.AddSettingsGroup(_sdlMTCloudSettingsGroup);
+					projectSettings.AddSettingsGroup(_settingsGroup);					
 				}
-				var savedMappingSettings = projectSettings.GetSettingsGroup<LanguageMappingSettings>(Constants.SettingsGrId);
-				return savedMappingSettings;
+
+				_settingsGroup = projectSettings.GetSettingsGroup(Constants.SettingsGroupId);
+				var settings = projectSettings.GetSettingsGroup<LanguageMappingSettings>(Constants.SettingsGroupId);
+				
+				return settings;
 			}
+
 			return null;
 		}
 
@@ -42,11 +49,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			if (projectSettings != null)
 			{
-				var containsSettingsGroup = projectSettings.ContainsSettingsGroup(Constants.SettingsGrId);
+				var containsSettingsGroup = projectSettings.ContainsSettingsGroup(Constants.SettingsGroupId);
 
 				if (containsSettingsGroup)
 				{
-					projectSettings.RemoveSettingsGroup(Constants.SettingsGrId);
+					projectSettings.RemoveSettingsGroup(Constants.SettingsGroupId);
 					currentProject.UpdateSettings(projectSettings);
 				}
 			}
@@ -57,7 +64,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		/// </summary>
 		public void SaveLanguageMappingSettings(LanguageMappingSettings settings)
 		{
-			GetCurrentProject()?.UpdateSettings(_sdlMTCloudSettingsGroup.SettingsBundle);
+			GetCurrentProject()?.UpdateSettings(_settingsGroup.SettingsBundle);
 		}
 
 		/// <summary>

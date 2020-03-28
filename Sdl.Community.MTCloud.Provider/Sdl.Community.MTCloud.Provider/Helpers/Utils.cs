@@ -8,7 +8,6 @@ namespace Sdl.Community.MTCloud.Provider.Helpers
 	public static class Utils
 	{
 		public static readonly Log Log = Log.Instance;
-
 	
 		public static List<string> SplitLanguagePair(string languagePair)
 		{

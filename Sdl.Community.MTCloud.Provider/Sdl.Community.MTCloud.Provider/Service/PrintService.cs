@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
-using Controls = System.Windows.Controls;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Sdl.Community.MTCloud.Provider.Service
@@ -16,7 +15,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			var printers = PrinterSettings.InstalledPrinters;
 			int printerIndex = 0;
-			var printDlg = new Controls.PrintDialog();
+			var printDlg = new System.Windows.Controls.PrintDialog();
 
 			if (printDlg.ShowDialog() == true)
 			{

@@ -27,7 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					var mtCodesWindow = new MTCodesWindow();
 					var languages = new Languages.Provider.Languages();
 					
-					var mtCodesViewModel = new MTCodesWindowModel(languages);
+					var mtCodesViewModel = new MTCodesViewModel(languages);
 					mtCodesWindow.DataContext = mtCodesViewModel;
 					mtCodesWindow.ShowDialog();
 				}
