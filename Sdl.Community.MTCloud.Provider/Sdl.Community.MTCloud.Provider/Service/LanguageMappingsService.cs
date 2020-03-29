@@ -1,26 +1,28 @@
-﻿using Sdl.Community.MTCloud.Provider.Studio;
+﻿using System.Linq;
+using Sdl.Community.MTCloud.Provider.Studio;
 using Sdl.Core.Settings;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.ProjectAutomation.FileBased;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class LanguageMappingsService
 	{		
 		private static ISettingsGroup _settingsGroup;
+		private readonly FileBasedProject _currentProject;
 
 		public LanguageMappingsService()
 		{
-			
+			var app = ApplicationHost<SdlTradosStudioApplication>.Application;
+			var projectsController = app.GetController<ProjectsController>();
+			_currentProject = projectsController.CurrentProject ?? projectsController.SelectedProjects.FirstOrDefault();
 		}
 
-		/// <summary>
-		/// Get the saved language mapping settings from current project
-		/// </summary>
 		public LanguageMappingSettings GetLanguageMappingSettings()
-		{
-			var currentProject = GetCurrentProject() ?? AppInitializer.GetFileController()?.CurrentProject;
-			var projectSettings = currentProject?.GetSettings();
-
+		{			
+			var projectSettings = _currentProject?.GetSettings();
 			if (projectSettings != null)
 			{
 				var containsSettingsGroup = projectSettings.ContainsSettingsGroup(Constants.SettingsGroupId);
@@ -38,42 +40,26 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			return null;
 		}
-
-		/// <summary>
-		/// Remove the settings from .sdlproj's SettingsGroup 
-		/// </summary>
+	
 		public void RemoveLanguageMappingSettings()
-		{
-			var currentProject = GetCurrentProject();
-			var projectSettings = currentProject?.GetSettings();
-
+		{			
+			var projectSettings = _currentProject?.GetSettings();
 			if (projectSettings != null)
 			{
 				var containsSettingsGroup = projectSettings.ContainsSettingsGroup(Constants.SettingsGroupId);
-
 				if (containsSettingsGroup)
 				{
 					projectSettings.RemoveSettingsGroup(Constants.SettingsGroupId);
-					currentProject.UpdateSettings(projectSettings);
+					_currentProject.UpdateSettings(projectSettings);
 				}
 			}
 		}
 
-		/// <summary>
-		/// Update the current project with the settings for Language Mappings options
-		/// </summary>
 		public void SaveLanguageMappingSettings(LanguageMappingSettings settings)
 		{
-			GetCurrentProject()?.UpdateSettings(_settingsGroup.SettingsBundle);
-		}
-
-		/// <summary>
-		/// Get the current project
-		/// </summary>
-		/// <returns>Current project</returns>
-		private static FileBasedProject GetCurrentProject()
-		{
-			return AppInitializer.GetProjectController()?.CurrentProject;
-		}
+			_currentProject?.UpdateSettings(settings.SettingsBundle);
+			_currentProject?.Save();
+			
+		}		
 	}
 }

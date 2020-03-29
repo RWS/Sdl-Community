@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using Sdl.Community.MTCloud.Provider.Helpers;
-using Sdl.Community.MTCloud.Provider.Interfaces;
-using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -35,12 +33,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			var languageMappingsService = new LanguageMappingsService();
 			var translationService = new TranslationService(connectionService, languageMappingsService);
 
-			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, connectionService, translationService, translationProviderState);
-			
-
-			return provider;
-
-			//throw new TranslationProviderAuthenticationException("Invalid credentials!");
+			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationService, translationProviderState);			
+			return provider;		
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

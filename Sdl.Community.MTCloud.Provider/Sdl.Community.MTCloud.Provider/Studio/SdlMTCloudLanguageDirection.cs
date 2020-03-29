@@ -17,7 +17,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	public class SdlMTCloudLanguageDirection : ITranslationProviderLanguageDirection
 	{
 		private readonly SdlMTCloudTranslationProvider _translationProvider;
-		//private readonly SdlMTCloudTranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
 		private readonly List<TranslationUnit> _translationUnits;
 		private readonly EditorController _editorController;
@@ -26,7 +25,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			_translationProvider = translationProvider;
 			_languageDirection = languageDirection;
-			//_options = translationProvider.Options;
 			_translationUnits = new List<TranslationUnit>();
 			_editorController = AppInitializer.GetEditorController();
 		}

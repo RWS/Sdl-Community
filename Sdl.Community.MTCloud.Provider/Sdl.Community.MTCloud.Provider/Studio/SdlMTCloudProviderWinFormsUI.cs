@@ -41,12 +41,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				var languageMappingsService = new LanguageMappingsService();
 				var translationService = new TranslationService(connectionService, languageMappingsService);
 
-				var provider = new SdlMTCloudTranslationProvider(uri, connectionService, translationService, string.Empty);				
-
-				var optionsWindow = GetOptionsWindow(owner);
-				var languages = new Languages.Provider.Languages();
-				var optionsViewModel = new OptionsViewModel(optionsWindow, provider, languagePairs, languages);
-				optionsWindow.DataContext = optionsViewModel;
+				var provider = new SdlMTCloudTranslationProvider(uri, translationService, string.Empty);				
+				
+				var optionsViewModel = new OptionsViewModel(null, provider, languagePairs);				
 				optionsViewModel.SaveLanguageMappingSettings();
 
 				return new ITranslationProvider[] { provider };
@@ -69,19 +66,18 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					return false;
 				}
 				
-				provider.ConnectionService.Owner = owner;
-				var connectionResult = provider.ConnectionService.EnsureSignedIn(provider.ConnectionService.Credential);
+				provider.TranslationService.ConnectionService.Owner = owner;
+				var connectionResult = provider.TranslationService.ConnectionService.EnsureSignedIn(provider.TranslationService.ConnectionService.Credential);
 
 				if (!connectionResult.Item1)
 				{
 					throw new TranslationProviderAuthenticationException("Invalid credentials!");
 				}
 
-				provider.ConnectionService.SaveCredential(credentialStore);
+				provider.TranslationService.ConnectionService.SaveCredential(credentialStore);
 
 				var optionsWindow = GetOptionsWindow(owner);
-				var languages = new Languages.Provider.Languages();
-				var optionsViewModel = new OptionsViewModel(optionsWindow, provider, languagePairs, languages);
+				var optionsViewModel = new OptionsViewModel(optionsWindow, provider, languagePairs);
 				optionsWindow.DataContext = optionsViewModel;
 
 				optionsWindow.ShowDialog();

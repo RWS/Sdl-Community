@@ -16,17 +16,14 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private LanguagePair _languageDirection;
 		private SdlMTCloudLanguageDirection _languageDirectionProvider;
 
-
-		public SdlMTCloudTranslationProvider(Uri uri, ConnectionService connectionService, TranslationService translationService, string translationProviderState)
+		public SdlMTCloudTranslationProvider(Uri uri, TranslationService translationService, string translationProviderState)
 		{
-			ConnectionService = connectionService;
-			TranslationService = translationService;
-
-			LoadState(translationProviderState);
 			Uri = uri;
-
-			var connectionResult = Task.Run(async () => await TranslationService.GetLanguagePairs(ConnectionService.Credential.AccountId)).Result;
-			SubscriptionInfo = connectionResult;
+			LanguagesProvider = new Languages.Provider.Languages();
+			TranslationService = translationService;
+			LoadState(translationProviderState);
+			SubscriptionInfo = Task.Run(async () => 
+				await TranslationService.GetLanguagePairs(translationService.ConnectionService.Credential.AccountId)).Result;			
 		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, Constants.PluginName);
@@ -54,11 +51,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public bool IsReadOnly => true;
 
 		public Options Options { get; set; }
-
-
-		public ConnectionService ConnectionService { get; }
-
+		
 		public TranslationService TranslationService { get; }
+
+		public Languages.Provider.Languages LanguagesProvider { get; }
 
 		public SubscriptionInfo SubscriptionInfo { get; }
 
@@ -123,7 +119,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				// ignore any casting errors and simply create a new options instance
 				Options = new Options();
 			}
-
 		}
 
 		private MTCloudLanguagePair SetSupportedLanguages(LanguagePair languageDirection)

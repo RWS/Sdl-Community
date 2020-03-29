@@ -178,7 +178,6 @@
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\VersionHelper.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Interfaces\ILanguageMappingSettings.cs" />

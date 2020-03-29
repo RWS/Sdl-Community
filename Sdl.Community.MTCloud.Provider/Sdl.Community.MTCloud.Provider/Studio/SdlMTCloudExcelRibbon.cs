@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Windows.Forms;
+using System.Windows.Interop;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
@@ -24,12 +26,21 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				try
 				{
-					var mtCodesWindow = new MTCodesWindow();
+					var allForms = Application.OpenForms;
+					var activeForm = allForms[allForms.Count - 1];
+
+					var window = new MTCodesWindow();
+					var helper = new WindowInteropHelper(window)
+					{
+						Owner = activeForm.Handle
+					};
+
+
 					var languages = new Languages.Provider.Languages();
 					
 					var mtCodesViewModel = new MTCodesViewModel(languages);
-					mtCodesWindow.DataContext = mtCodesViewModel;
-					mtCodesWindow.ShowDialog();
+					window.DataContext = mtCodesViewModel;
+					window.ShowDialog();
 				}
 
 				catch (Exception ex)

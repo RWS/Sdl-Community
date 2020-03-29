@@ -20,7 +20,7 @@
 			d:DataContext="{d:DesignInstance viewModel:OptionsViewModel}">
 	<Window.Resources>
 		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries> 
+			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
@@ -42,10 +42,13 @@
 				<ResourceDictionary x:Uid="ResourceKeyId2">
 					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>
 				</ResourceDictionary>
+
+
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
 		</ResourceDictionary>
 	</Window.Resources>
 	<Border Style="{StaticResource WindowControlBorderStyle}" >
@@ -68,7 +71,7 @@
 			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/MTCloud_logo.png"/>
 
 			<Border Background="White" Grid.Column="0" Grid.Row="1"  >
-				<TextBlock Margin="10,10,10,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" >
+				<TextBlock Margin="15,10,15,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" >
 						Welcome to the SDL Machine Translation Cloud (formerly BeGlobal) translation provider for Studio. <LineBreak/><LineBreak/>
 						SDL Machine Translation Cloud is SDL's neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
 						Using SDL's proprietary technology, customers can have the assurance of content privacy.
@@ -76,17 +79,23 @@
 				</TextBlock>
 			</Border>
 
-			<StackPanel Grid.Row="2" Margin="0,10,0,0">
-				<Button Style="{DynamicResource SdlSecondaryButtonStyle}" Width="220" HorizontalAlignment="Right" Margin="0,10,15,5" Content="Reset Language Mappings to default" Command="{Binding ResetLanguageMappingsCommand}"/>
+			<Grid Grid.Row="2" Margin="0,10,0,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
 
-				<controls:SortAwareDataGrid x:Name="LanguageMappingsGrid" 
+				<controls:SortAwareDataGrid x:Name="LanguageMappingsGrid" Grid.Row="0"
 				  DefaultColumnName="[none]"
 				  DefaultSortDirection="Ascending"
 				  BorderBrush="#BEBEBE"
 				  BorderThickness="1"
 		          Style="{StaticResource FilesGridStyle}"
 				  ItemsSource="{Binding LanguageMappings, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"             
-				  Margin="15,10,10,10"
+				  Margin="15,10,15,5"
 				  CanUserSortColumns="True"
 				  CanUserResizeColumns="True" 
 				  MinWidth="850"
@@ -107,8 +116,14 @@
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
 									<ComboBox ItemsSource="{Binding MTCodesSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
-								      SelectedItem="{Binding SelectedMTCodeSource, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
-										Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
+								        SelectedItem="{Binding SelectedMTCodeSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
+									    Background="Transparent" BorderThickness="1" BorderBrush="Transparent">
+										<ComboBox.ItemContainerStyle>
+											<Style TargetType="ComboBoxItem">
+												<Setter Property="Background" Value="Transparent"/>
+												<Setter Property="BorderBrush" Value="Transparent"/>
+											</Style>
+										</ComboBox.ItemContainerStyle>
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
 												<StackPanel Orientation="Horizontal">
@@ -126,7 +141,13 @@
 								<DataTemplate>
 									<ComboBox ItemsSource="{Binding MTCodesTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
 								      SelectedItem="{Binding SelectedMTCodeTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
-										Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
+									    Background="Transparent" BorderThickness="1" BorderBrush="Transparent">
+										<ComboBox.ItemContainerStyle>
+											<Style TargetType="ComboBoxItem">
+												<Setter Property="Background" Value="Transparent"/>
+												<Setter Property="BorderBrush" Value="Transparent"/>
+											</Style>
+										</ComboBox.ItemContainerStyle>
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
 												<StackPanel Orientation="Horizontal">
@@ -144,7 +165,13 @@
 								<DataTemplate>
 									<ComboBox ItemsSource="{Binding Engines, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 								      SelectedItem="{Binding SelectedModelOption, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
-									  Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
+									    Background="Transparent" BorderThickness="1" BorderBrush="Transparent">
+										<ComboBox.ItemContainerStyle>
+											<Style TargetType="ComboBoxItem">
+												<Setter Property="Background" Value="Transparent"/>
+												<Setter Property="BorderBrush" Value="Transparent"/>
+											</Style>
+										</ComboBox.ItemContainerStyle>
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
 												<StackPanel Orientation="Horizontal">
@@ -161,9 +188,15 @@
 						<DataGridTemplateColumn Header="SDL MT Cloud Dictionary" CanUserSort="True" SortMemberPath="SelectedMTCloudDictionary.Name" IsReadOnly="True" Width="*" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" >
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
-									<ComboBox ItemsSource="{Binding MTCloudDictionaries,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
-								      SelectedItem="{Binding SelectedMTCloudDictionary, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
-									  Style="{DynamicResource Sdl.ComboBox.Generic.Style}">
+									<ComboBox  ItemsSource="{Binding MTCloudDictionaries,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+								         SelectedItem="{Binding SelectedMTCloudDictionary, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
+									      Background="Transparent" BorderThickness="1" BorderBrush="Transparent">
+										<ComboBox.ItemContainerStyle>
+											<Style TargetType="ComboBoxItem">
+												<Setter Property="Background" Value="Transparent"/>
+												<Setter Property="BorderBrush" Value="Transparent"/>
+											</Style>
+										</ComboBox.ItemContainerStyle>
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
 												<StackPanel Orientation="Horizontal">
@@ -180,20 +213,26 @@
 					</DataGrid.Columns>
 				</controls:SortAwareDataGrid>
 
+				<CheckBox Grid.Row="1" Margin="15" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments" DockPanel.Dock="Bottom" />
+			</Grid >
+			<!--<StackPanel Grid.Row="2" Margin="0,10,0,0">				
 				<metroControls:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="50"
-						    Visibility="{Binding IsWaiting, Converter={StaticResource BooleanToVisibilityConverter}}" />
-				<CheckBox Margin="15,10,0,10" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments" DockPanel.Dock="Bottom" />
+						    Visibility="{Binding IsWaiting, Converter={StaticResource BooleanToVisibilityConverter}}" />				
+			</StackPanel>-->
 
-			</StackPanel>
+			<!--<TextBlock Grid.Row="3" Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
+				   FontWeight="Normal" FontSize="13" Foreground="Red" TextWrapping="WrapWithOverflow"  Margin="15,0,10,10"/>-->
+			<Grid Grid.Row="4" VerticalAlignment="Bottom" Margin="15,0,0,20">
 
-			<TextBlock Grid.Row="3" Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
-				   FontWeight="Normal" FontSize="13" Foreground="Red" TextWrapping="WrapWithOverflow"  Margin="15,0,10,10"/>
-			<StackPanel Grid.Row="4" Orientation="Vertical"  VerticalAlignment="Bottom" Margin="0,0,0,20">
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+				<Button Style="{StaticResource LinkButton}" 
+						HorizontalAlignment="Left"
+				        VerticalAlignment="Bottom" Margin="0,10,15,5" Content="Reset default values" Command="{Binding ResetLanguageMappingsCommand}"/>
+
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  VerticalAlignment="Bottom">
 					<Button  Style="{DynamicResource SdlPrimaryButtonStyle}" Width="125" Content="OK" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
-					<Button  Style="{DynamicResource SdlSecondaryButtonStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="15,0,30,0" />
+					<Button  Style="{DynamicResource SdlSecondaryButtonStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="15,0,15,0" />
 				</StackPanel>
-			</StackPanel>
+			</Grid>
 		</Grid>
 	</Border>
 </Window>
