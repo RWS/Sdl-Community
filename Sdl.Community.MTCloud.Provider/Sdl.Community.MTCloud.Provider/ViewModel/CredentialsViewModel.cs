@@ -320,13 +320,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		private void Signin(object obj)
-		{		
-			if (SelectedAuthentication.Type == Authentication.AuthenticationType.Studio && StudioSignedIn)
-			{				
-				_parentWindow.DialogResult = true;
-				_parentWindow.Close();
-				return;
-			}
+		{			
 
 			CanSignIn = IsValidParameters(true);
 			if (CanSignIn)
@@ -338,7 +332,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					var message = string.Empty;
 
-					if (SelectedAuthentication.Type == Authentication.AuthenticationType.Studio && !StudioSignedIn)
+					if (SelectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 					{
 						// Studio SSO will use the studio credentials						
 						var result = Task.Run(async () => await _connectionService.Connect(

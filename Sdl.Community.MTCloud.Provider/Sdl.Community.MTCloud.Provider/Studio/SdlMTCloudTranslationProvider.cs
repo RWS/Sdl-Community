@@ -22,8 +22,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			LanguagesProvider = new Languages.Provider.Languages();
 			TranslationService = translationService;
 			LoadState(translationProviderState);
-			SubscriptionInfo = Task.Run(async () => 
-				await TranslationService.GetLanguagePairs(translationService.ConnectionService.Credential.AccountId)).Result;			
+			SubscriptionInfo = Task.Run(async () =>
+				await TranslationService.GetLanguagePairs(translationService.ConnectionService.Credential.AccountId)).Result;
 		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, Constants.PluginName);
@@ -51,7 +51,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public bool IsReadOnly => true;
 
 		public Options Options { get; set; }
-		
+
 		public TranslationService TranslationService { get; }
 
 		public Languages.Provider.Languages LanguagesProvider { get; }
@@ -130,8 +130,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				{
 					var languagePair = SubscriptionInfo.LanguagePairs
 						.FirstOrDefault(o => languageMappings
-									   .Any(l => l.SelectedMTCodeSource.CodeName.Equals(o.SourceLanguageId)
-												 && l.SelectedMTCodeTarget.CodeName.Equals(o.TargetLanguageId)));
+								.Any(l => l.MTCodesSource.Any(a => string.Compare(a.CodeName, o.SourceLanguageId, StringComparison.InvariantCultureIgnoreCase) == 0)
+										&& l.MTCodesTarget.Any(a => string.Compare(a.CodeName, o.TargetLanguageId, StringComparison.InvariantCultureIgnoreCase) == 0)));
 
 					if (languagePair != null)
 					{
