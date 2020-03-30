@@ -607,8 +607,11 @@ namespace Sdl.Community.ExportAnalysisReports
 									if (project?.LanguageAnalysisReportPaths != null)
 									{
 										var analyseReportPath = project.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(languageReport.Key));
-										var report = new StudioAnalysisReport(analyseReportPath.Value);
-										sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
+										if (analyseReportPath.Value != null)
+										{
+											var report = new StudioAnalysisReport(analyseReportPath.Value);
+											sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
+										}
 									}
 								}
 							}
