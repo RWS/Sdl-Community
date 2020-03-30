@@ -26,7 +26,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			_translationProvider = translationProvider;
 			_languageDirection = languageDirection;
 			_translationUnits = new List<TranslationUnit>();
-			_editorController = AppInitializer.GetEditorController();
+			_editorController = StudioInstance.GetEditorController();
 		}
 
 		public ITranslationProvider TranslationProvider => _translationProvider;

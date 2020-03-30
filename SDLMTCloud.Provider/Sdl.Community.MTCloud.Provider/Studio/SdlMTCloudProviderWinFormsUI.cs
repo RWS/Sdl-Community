@@ -21,10 +21,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public string TypeDescription => Constants.PluginName;
 		public bool SupportsEditing => true;		
 		
+		[STAThread]
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			try
-			{
+			{				
 				var uri = new Uri($"{Constants.MTCloudUriScheme}://");
 				var connectionService = new ConnectionService(owner);
 
@@ -33,7 +34,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 				if (!connectionResult.Item1)
 				{
-					throw new TranslationProviderAuthenticationException("Invalid credentials!");
+					throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 				}
 
 				connectionService.SaveCredential(credentialStore);
@@ -55,8 +56,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 
 			return null;
-		}	
-		
+		}
+
+		[STAThread]
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			try
@@ -71,7 +73,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 				if (!connectionResult.Item1)
 				{
-					throw new TranslationProviderAuthenticationException("Invalid credentials!");
+					throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 				}
 
 				provider.TranslationService.ConnectionService.SaveCredential(credentialStore);
@@ -117,11 +119,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			};
 			return info;
 		}
-
+		
 		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
-			throw new NotImplementedException();
+			return false;
 		}
 
 		private static OptionsWindow GetOptionsWindow(IWin32Window owner)

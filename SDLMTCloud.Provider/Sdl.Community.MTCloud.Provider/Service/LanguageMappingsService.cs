@@ -58,8 +58,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public void SaveLanguageMappingSettings(LanguageMappingSettings settings)
 		{
 			_currentProject?.UpdateSettings(settings.SettingsBundle);
-			_currentProject?.Save();
-			
+			_currentProject?.Save();			
 		}		
 	}
 }
