@@ -416,6 +416,10 @@ namespace Sdl.Community.ExportAnalysisReports
 				{
 					var index = languagesListBox.SelectedIndex;
 					var shouldExportLang = languagesListBox.GetItemChecked(index);
+					if(selectedLanguage.LanguageName.Equals("All languages") && selectAll.Checked)
+					{
+						return;
+					}
 					if (selectedLanguage.LanguageName.Equals("All languages"))
 					{
 						for (int i = 0; i < languagesListBox.Items.Count; i++)
@@ -573,14 +577,14 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			try
 			{
-				if (!IsNullOrEmpty(reportOutputPath.Text))
+				if (!IsNullOrEmpty(reportOutputPath.Text) && Directory.Exists(reportOutputPath.Text))
 				{
 					var projectsToBeExported = _projectsDataSource.Where(p => p.ShouldBeExported).ToList();
 					foreach (var project in projectsToBeExported)
 					{
 						// check which languages to export
-						var checkedLanguages = project.LanguagesForPoject.Where(l => l.Value).ToList();
-						if (checkedLanguages.Count == 0)
+						var checkedLanguages = project.LanguagesForPoject.Where(l => l.Value).ToList();						
+						if(checkedLanguages.Count == 0 && projectsToBeExported.Count == 1)
 						{
 							_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language to export the report!", "Export result");
 							return;
@@ -615,7 +619,7 @@ namespace Sdl.Community.ExportAnalysisReports
 				}
 				else
 				{
-					_messageBoxService.ShowOwnerInformationMessage(this, "Please select the output path to export the reports", string.Empty);
+					_messageBoxService.ShowOwnerInformationMessage(this, "Please select an existing folder to export the reports!", string.Empty);
 				}
 
 			}
