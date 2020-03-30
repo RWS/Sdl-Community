@@ -577,45 +577,49 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			try
 			{
-				if (!IsNullOrEmpty(reportOutputPath.Text) && Directory.Exists(reportOutputPath.Text))
+				if (!IsNullOrEmpty(reportOutputPath.Text))
 				{
+					Help.CreateDirectory(reportOutputPath.Text);
 					var projectsToBeExported = _projectsDataSource.Where(p => p.ShouldBeExported).ToList();
-					foreach (var project in projectsToBeExported)
+					var areCheckedLanguages = projectsToBeExported.Any(p => p.LanguagesForPoject.Any(l => l.Value));
+					if (!areCheckedLanguages && projectsToBeExported.Count >= 1)
 					{
-						// check which languages to export
-						var checkedLanguages = project.LanguagesForPoject.Where(l => l.Value).ToList();						
-						if(checkedLanguages.Count == 0 && projectsToBeExported.Count == 1)
+						_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language to export the report!", "Export result");
+					}
+					else
+					{
+						foreach (var project in projectsToBeExported)
 						{
-							_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language to export the report!", "Export result");
-							return;
-						}
-						foreach (var languageReport in checkedLanguages)
-						{
+							// check which languages to export
+							var checkedLanguages = project.LanguagesForPoject.Where(l => l.Value).ToList();
 
-							if (project.ReportPath == null)
+							foreach (var languageReport in checkedLanguages)
 							{
-								project.ReportPath = reportOutputPath.Text;
-							}
 
-							//write report to Reports folder
-							using (var sw = new StreamWriter(project.ReportPath + Path.DirectorySeparatorChar + project.ProjectName + "_" +
-															 languageReport.Key + ".csv"))
-							{
-								if (project.LanguageAnalysisReportPaths != null)
+								if (project.ReportPath == null)
 								{
-									var analyseReportPath = project.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(languageReport.Key));
-									var report = new StudioAnalysisReport(analyseReportPath.Value);
-									sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
+									project.ReportPath = reportOutputPath.Text;
+								}
+
+								//write report to Reports folder
+								var streamPath = Path.Combine($@"{project.ReportPath}{Path.DirectorySeparatorChar}", $@"{project.ProjectName}_{languageReport.Key}.csv");
+								using (var sw = new StreamWriter(streamPath))
+								{
+									if (project.LanguageAnalysisReportPaths != null)
+									{
+										var analyseReportPath = project.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(languageReport.Key));
+										var report = new StudioAnalysisReport(analyseReportPath.Value);
+										sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
+									}
 								}
 							}
 						}
+						//Clear all lists
+						UncheckAllProjects();
+						_languages.Clear();
+						selectAll.Checked = false;
+						_messageBoxService.ShowOwnerInformationMessage(this, "The analysis files were exported with success.", "Export result");
 					}
-
-					//Clear all lists
-					UncheckAllProjects();
-					_languages.Clear();
-					selectAll.Checked = false;
-					_messageBoxService.ShowOwnerInformationMessage(this, "The analysis files were exported with success.", "Export result");
 				}
 				else
 				{

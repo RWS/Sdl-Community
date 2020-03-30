@@ -188,6 +188,14 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			return string.Empty;
 		}
 
+		public static void CreateDirectory(string path)
+		{
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
+		}
+
 		private static string GetInstalledStudioShortVersion()
 		{
 			var studioService = new StudioVersionService();
