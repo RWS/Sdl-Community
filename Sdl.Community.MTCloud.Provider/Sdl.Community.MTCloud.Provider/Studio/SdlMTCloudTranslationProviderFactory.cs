@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -16,16 +15,14 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{			
-			var allForms = Application.OpenForms;
-			var activeForm = allForms[allForms.Count - 1];
-			var connectionService = new ConnectionService(activeForm?.Owner);
+			var connectionService = new ConnectionService(StudioInstance.GetActiveForm());
 						
 			var credential = connectionService.GetCredential(credentialStore);
 			var connectionResult = connectionService.EnsureSignedIn(credential);
 
 			if (!connectionResult.Item1)
 			{
-				throw new TranslationProviderAuthenticationException("Invalid credentials!");
+				throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 			}
 
 			connectionService.SaveCredential(credentialStore);
@@ -35,7 +32,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationService, translationProviderState);			
 			return provider;		
-		}
+		}		
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{

@@ -173,7 +173,7 @@
     <Compile Include="Converters\VisibilityConverter.cs" />
     <Compile Include="Converters\ImageToBitmapImageConverter.cs" />
     <Compile Include="Converters\StringIsNullOrEmptyVisibilityConverter.cs" />
-    <Compile Include="AppInitializer.cs" />
+    <Compile Include="StudioInstance.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Commands\RelayCommand.cs" />

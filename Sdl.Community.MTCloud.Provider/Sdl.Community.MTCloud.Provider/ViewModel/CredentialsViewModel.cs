@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Provider.Commands;
@@ -24,7 +23,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private bool _studioSignedIn;
 		private string _studioSignedInAs;
 		private string _signInLabel;
-		private bool _canSignIn;
 		private string _exceptionMessage;
 		private List<Authentication> _authenticationOptions;
 		private Authentication _selectedAuthentication;
@@ -239,31 +237,16 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					StudioSignedIn = _connectionService.IsSignedInStudioAuthentication(out var user);
 					StudioSignedInAs = user;
-					SignInLabel = StudioSignedIn ? "OK" : "Sign In";
+					SignInLabel = StudioSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
 				}
 				else
 				{
-					SignInLabel = "Sign In";
+					SignInLabel = PluginResources.Label_Sign_In;
 				}
 			}
-		}
+		}	
 
-		public bool CanSignIn
-		{
-			get => _canSignIn;
-			set
-			{
-				if (_canSignIn == value)
-				{
-					return;
-				}
-
-				_canSignIn = value;
-				OnPropertyChanged(nameof(CanSignIn));
-			}
-		}
-
-		private bool IsValidParameters(bool showMessage)
+		private bool CanAttemptSignIn(bool showMessage = true)
 		{
 			ExceptionMessage = string.Empty;
 
@@ -277,7 +260,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 							ExceptionMessage = "User is signed out!";
 						}
 
-						return false;
+						return true;
 					}
 					else
 					{
@@ -320,76 +303,75 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		private void Signin(object obj)
-		{			
-
-			CanSignIn = IsValidParameters(true);
-			if (CanSignIn)
+		{
+			if (!CanAttemptSignIn())
 			{
-				IsInProgress = true;
-				Mouse.OverrideCursor = Cursors.Wait;
+				return;
+			}
 
-				try
+			IsInProgress = true;
+			Mouse.OverrideCursor = Cursors.Wait;
+
+			try
+			{
+				var message = string.Empty;
+
+				if (SelectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
-					var message = string.Empty;
+					// Studio SSO will use the studio credentials											
+					var result = _connectionService.Connect(
+						new Credential
+						{
+							Type = Authentication.AuthenticationType.Studio
+						});
 
-					if (SelectedAuthentication.Type == Authentication.AuthenticationType.Studio)
-					{
-						// Studio SSO will use the studio credentials						
-						var result = Task.Run(async () => await _connectionService.Connect(
-							new Credential
-							{
-								Type = Authentication.AuthenticationType.Studio
-
-							})).Result;
-
-						StudioSignedIn = result.Item1;
-						message = result.Item2;
-						StudioSignedInAs = _connectionService.Credential.Name;
-						SignInLabel = StudioSignedIn ? "OK" : "Sign In";
-					}
-					else if (SelectedAuthentication.Type == Authentication.AuthenticationType.User)
-					{
-						var result = Task.Run(async () => await _connectionService.Connect(
-							new Credential
-							{
-								Type = Authentication.AuthenticationType.User,
-								Name = UserName,
-								Password = UserPassword
-							})).Result;
-
-						StudioSignedIn = result.Item1;
-						message = result.Item2;
-					}
-					else if (SelectedAuthentication.Type == Authentication.AuthenticationType.Client)
-					{						
-						var result = Task.Run(async () => await _connectionService.Connect(
-							new Credential
-							{
-								Type = Authentication.AuthenticationType.Client,
-								Name = ClientId,
-								Password = ClientSecret
-							})).Result;
-
-						StudioSignedIn = result.Item1;
-						message = result.Item2;
-					}
-
-					ExceptionMessage = StudioSignedIn ? string.Empty : message;
+					StudioSignedIn = result.Item1;
+					message = result.Item2;
+					StudioSignedInAs = _connectionService.Credential.Name;
+					SignInLabel = StudioSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
 				}
-				catch (Exception ex)
-				{
-					ExceptionMessage = ex.Message;
-				}
-				finally
-				{
-					IsInProgress = false;
-					Mouse.OverrideCursor = Cursors.Arrow;
+				else if (SelectedAuthentication.Type == Authentication.AuthenticationType.User)
+				{				
+					var result = _connectionService.Connect(
+						new Credential
+						{
+							Type = Authentication.AuthenticationType.User,
+							Name = UserName,
+							Password = UserPassword
+						});
 
-					if (StudioSignedIn)
-					{
-						_parentWindow.DialogResult = true;
-						_parentWindow.Close();
-					}
+					StudioSignedIn = result.Item1;
+					message = result.Item2;
+				}
+				else if (SelectedAuthentication.Type == Authentication.AuthenticationType.Client)
+				{											
+					var result = _connectionService.Connect(
+						new Credential
+						{
+							Type = Authentication.AuthenticationType.Client,
+							Name = ClientId,
+							Password = ClientSecret
+						});
+
+					StudioSignedIn = result.Item1;
+					message = result.Item2;
+				}
+
+				ExceptionMessage = StudioSignedIn ? string.Empty : message;
+			}
+			catch (Exception ex)
+			{
+				ExceptionMessage = ex.Message;
+			}
+			finally
+			{
+				IsInProgress = false;
+				Mouse.OverrideCursor = Cursors.Arrow;
+
+				if (StudioSignedIn)
+				{
+					_parentWindow.DialogResult = true;
+					_parentWindow.Close();
 				}
 			}
 		}		

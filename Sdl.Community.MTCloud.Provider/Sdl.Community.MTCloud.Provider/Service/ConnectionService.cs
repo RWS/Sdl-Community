@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Interop;
 using Newtonsoft.Json;
 using Sdl.Community.MTCloud.Provider.Helpers;
@@ -11,20 +12,16 @@ using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
-using Sdl.LanguageCloud.IdentityApi;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class ConnectionService
-	{
-		private readonly LanguageCloudIdentityApi _languageCloudIdentityApi;
-
+	{		
 		public ConnectionService(IWin32Window owner)
 		{
 			Owner = owner;
-			_languageCloudIdentityApi = LanguageCloudIdentityApi.Instance;
 
 			IsSignedIn = false;
 			PluginVersion = VersionHelper.GetPluginVersion();
@@ -124,29 +121,45 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return null;
 		}
 
-		public async Task<Tuple<bool, string>> Connect(ICredential credential)
+		public Tuple<bool, string> Connect(ICredential credential)
 		{
 			Credential = credential;
 
 			var message = string.Empty;
 			if (Credential.Type == Authentication.AuthenticationType.Studio)
 			{
-				var isSignedIn = IsSignedInStudioAuthentication(out var user);
+				IsSignedIn = IsSignedInStudioAuthentication(out var user);
 				if (!IsSignedIn || Credential.Created == DateTime.MinValue)
 				{
 					Credential.Created = DateTime.Now;
 				}
-
-				IsSignedIn = isSignedIn || _languageCloudIdentityApi.TryLogin(out message);
-				Credential.Token = _languageCloudIdentityApi.AccessToken;
-				Credential.Name = _languageCloudIdentityApi.LanguageCloudCredential?.Email;
+		
+				if (!IsSignedIn)
+				{
+					var currentCursor = Mouse.OverrideCursor;
+					try
+					{
+						Mouse.OverrideCursor = Cursors.Arrow;
+						IsSignedIn = StudioInstance.GetLanguageCloudIdentityApi.TryLogin(out message);
+					}
+					finally
+					{
+						Mouse.OverrideCursor = currentCursor;
+					}													
+				}
+				
+				Credential.Token = StudioInstance.GetLanguageCloudIdentityApi.AccessToken;
+				Credential.Name = StudioInstance.GetLanguageCloudIdentityApi.LanguageCloudCredential?.Email;
 				Credential.Password = null;
 
-				var resource = "/accounts/users/self";
-				var userDetailsResult = await GetUserDetails(Credential.Token, resource);
-				IsSignedIn = userDetailsResult.Item1 != null;
-				Credential.AccountId = userDetailsResult.Item1?.AccountId.ToString();
-				message = userDetailsResult.Item2;
+				if (IsSignedIn)
+				{					
+					var resource = "/accounts/users/self";
+					var userDetailsResult = Task.Run(async () => await GetUserDetails(Credential.Token, resource)).Result;					
+					IsSignedIn = userDetailsResult.Item1 != null;
+					Credential.AccountId = userDetailsResult.Item1?.AccountId.ToString();
+					message = userDetailsResult.Item2;
+				}
 			}
 			else
 			{
@@ -164,7 +177,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						var content = JsonConvert.SerializeObject(credentials);
 						var resource = "/token/user";
 
-						var signInResult = await SignIn(Credential.Name, Credential.Password, resource, content);
+						var signInResult = Task.Run(async () => await SignIn(Credential.Name, Credential.Password, resource, content)).Result;						
 						IsSignedIn = signInResult.Item1 != null;
 						Credential.Token = signInResult.Item1?.AccessToken;
 						Credential.Created = DateTime.Now;
@@ -173,7 +186,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						if (IsSignedIn)
 						{
 							resource = "/accounts/users/self";
-							var userDetailsResult = await GetUserDetails(Credential.Token, resource);
+							var userDetailsResult = Task.Run(async () => await GetUserDetails(Credential.Token, resource)).Result;						
 							IsSignedIn = userDetailsResult.Item1 != null;
 							Credential.AccountId = userDetailsResult.Item1?.AccountId.ToString();
 							message = userDetailsResult.Item2;
@@ -190,7 +203,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						var content = JsonConvert.SerializeObject(credentials);
 						var resource = "/token";
 
-						var signInResult = await SignIn(Credential.Name, Credential.Password, resource, content);
+						var signInResult = Task.Run(async () => await SignIn(Credential.Name, Credential.Password, resource, content)).Result;					
 						IsSignedIn = signInResult.Item1 != null;
 						Credential.Token = signInResult.Item1?.AccessToken;
 						Credential.Created = DateTime.Now;
@@ -199,7 +212,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						if (IsSignedIn)
 						{
 							resource = "/accounts/api-credentials/self";
-							var userDetailsResult = await GetUserDetails(Credential.Token, resource);
+							var userDetailsResult = Task.Run(async () => await GetUserDetails(Credential.Token, resource)).Result;
+							//var userDetailsResult = await GetUserDetails(Credential.Token, resource);
 							IsSignedIn = userDetailsResult.Item1 != null;
 							Credential.AccountId = userDetailsResult.Item1?.AccountId.ToString();
 							message = userDetailsResult.Item2;
@@ -221,12 +235,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				return new Tuple<bool, string>(IsSignedIn, "Credentials cannot be null!");
 			}
 
-			var result = Task.Run(async () => await Connect(Credential)).Result;
+			var result = Connect(Credential);
 			if (result.Item1 && !alwaysShowWindow)
 			{
 				return result;
 			}
 
+			Mouse.OverrideCursor = Cursors.Arrow;
 			var credentialsWindow = GetCredentialsWindow(Owner);
 			var viewModel = new CredentialsViewModel(credentialsWindow, this);
 			credentialsWindow.DataContext = viewModel;
@@ -336,12 +351,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public bool IsSignedInStudioAuthentication(out string user)
 		{
-			var languageCloudCredential = _languageCloudIdentityApi.LanguageCloudCredential;
+			var languageCloudCredential = StudioInstance.GetLanguageCloudIdentityApi.LanguageCloudCredential;
 
 			user = languageCloudCredential?.Email;
 
 			var success = !string.IsNullOrEmpty(languageCloudCredential?.Email)
-				   && !string.IsNullOrEmpty(_languageCloudIdentityApi?.AccessToken);
+				   && !string.IsNullOrEmpty(StudioInstance.GetLanguageCloudIdentityApi?.AccessToken);
 
 			return success;
 		}

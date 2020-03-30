@@ -121,6 +121,24 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string Label_OK {
+            get {
+                return ResourceManager.GetString("Label_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign In.
+        /// </summary>
+        public static string Label_Sign_In {
+            get {
+                return ResourceManager.GetString("Label_Sign_In", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Languages: {0}.
         /// </summary>
         public static string LanguageCountLabel {
@@ -156,6 +174,15 @@ namespace Sdl.Community.MTCloud.Provider {
             get {
                 object obj = ResourceManager.GetObject("logoRes", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid credentials!.
+        /// </summary>
+        public static string Message_Invalid_credentials {
+            get {
+                return ResourceManager.GetString("Message_Invalid_credentials", resourceCulture);
             }
         }
         

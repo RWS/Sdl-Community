@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Windows.Interop;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.View;
@@ -25,22 +24,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			protected override void Execute()
 			{
 				try
-				{
-					var allForms = Application.OpenForms;
-					var activeForm = allForms[allForms.Count - 1];
-					foreach (Form form in allForms)
-					{
-						if (form.GetType().Name == "StudioWindowForm")
-						{
-							activeForm = form;
-							break;
-						}
-					}
-					
+				{										
 					var window = new MTCodesWindow();
 					var helper = new WindowInteropHelper(window)
 					{
-						Owner = activeForm.Handle
+						Owner = StudioInstance.GetActiveForm().Handle
 					};
 
 
