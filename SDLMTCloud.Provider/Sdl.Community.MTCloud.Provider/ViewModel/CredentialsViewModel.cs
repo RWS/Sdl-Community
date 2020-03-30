@@ -257,7 +257,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					{
 						if (showMessage)
 						{
-							ExceptionMessage = "User is signed out!";
+							ExceptionMessage = PluginResources.Message_User_is_signed_out;
 						}
 
 						return true;
@@ -271,7 +271,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					{
 						if (showMessage)
 						{
-							ExceptionMessage = "Please verify your credentials!";
+							ExceptionMessage = PluginResources.Message_Please_verify_your_credentials;
 						}
 
 						return false;
@@ -286,7 +286,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					{
 						if (showMessage)
 						{
-							ExceptionMessage = "Please verify your credentials!";
+							ExceptionMessage = PluginResources.Message_Please_verify_your_credentials;
 						}
 
 						return false;

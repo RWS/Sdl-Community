@@ -187,6 +187,24 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please verify your credentials!.
+        /// </summary>
+        public static string Message_Please_verify_your_credentials {
+            get {
+                return ResourceManager.GetString("Message_Please_verify_your_credentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User is signed out!.
+        /// </summary>
+        public static string Message_User_is_signed_out {
+            get {
+                return ResourceManager.GetString("Message_User_is_signed_out", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap MTCloud_logo {

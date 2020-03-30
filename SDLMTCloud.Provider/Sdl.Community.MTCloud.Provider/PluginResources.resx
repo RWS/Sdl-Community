@@ -214,4 +214,10 @@
 	<data name="Message_Invalid_credentials" xml:space="preserve">
     <value>Invalid credentials!</value>
   </data>
+	<data name="Message_User_is_signed_out" xml:space="preserve">
+    <value>User is signed out!</value>
+  </data>
+	<data name="Message_Please_verify_your_credentials" xml:space="preserve">
+    <value>Please verify your credentials!</value>
+  </data>
 </root>
