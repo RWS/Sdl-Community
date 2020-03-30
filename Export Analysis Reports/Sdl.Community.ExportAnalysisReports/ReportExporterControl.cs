@@ -595,17 +595,16 @@ namespace Sdl.Community.ExportAnalysisReports
 
 							foreach (var languageReport in checkedLanguages)
 							{
-
-								if (project.ReportPath == null)
+								if (string.IsNullOrEmpty(project.ReportPath))
 								{
 									project.ReportPath = reportOutputPath.Text;
 								}
 
 								//write report to Reports folder
-								var streamPath = Path.Combine($@"{project.ReportPath}{Path.DirectorySeparatorChar}", $@"{project.ProjectName}_{languageReport.Key}.csv");
+								var streamPath = Path.Combine($"{project.ReportPath}{Path.DirectorySeparatorChar}", $"{project.ProjectName}_{languageReport.Key}.csv");
 								using (var sw = new StreamWriter(streamPath))
 								{
-									if (project.LanguageAnalysisReportPaths != null)
+									if (project?.LanguageAnalysisReportPaths != null)
 									{
 										var analyseReportPath = project.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(languageReport.Key));
 										var report = new StudioAnalysisReport(analyseReportPath.Value);
