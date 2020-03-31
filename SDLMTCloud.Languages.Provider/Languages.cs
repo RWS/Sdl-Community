@@ -30,23 +30,32 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 		}
 
 		/// <summary>
-		/// Reads the MT Cloud Languages from the default excel file from the users
-		/// roaming directory.
+		/// Reads the MT Cloud Languages from the excel file in the users roaming directory.
+		/// If the Excel file is empty, the default languages are recovered automatically.
 		/// </summary>
+		/// <param name="reset">Resets the default languages</param>
 		/// <returns>Returns a list of MT Cloud Languages</returns>
-		public List<MTCloudLanguage> GetLanguages()
+		public List<MTCloudLanguage> GetLanguages(bool reset = false)
 		{
-			return GetLanguages(Constants.MTLanguageCodesFilePath);
+			return GetLanguages(Constants.MTLanguageCodesFilePath, reset);
 		}
+
 
 		/// <summary>
 		/// Reads the MT Cloud Languages from the <param name="path">file path</param>
 		/// </summary>
 		/// <param name="path">The full path to the excel file where the languages are located</param>
+		/// <param name="reset">Resets the default languages</param>
 		/// <returns>Returns a list of MT Cloud Languages</returns>
-		public List<MTCloudLanguage> GetLanguages(string path)
+		public List<MTCloudLanguage> GetLanguages(string path, bool reset = false)
 		{
-			var reader = new Reader();
+			var common = new Common();
+			if (reset)
+			{
+				common.SaveDefaultLanguagesDocument(path);
+			}
+
+			var reader = new Reader(common);
 			var languages = GetLanguages(reader.ReadLanguages(path));
 			return languages;
 		}

@@ -220,4 +220,10 @@
 	<data name="Message_Please_verify_your_credentials" xml:space="preserve">
     <value>Please verify your credentials!</value>
   </data>
+	<data name="Message_Successfully_reset_language_mappings" xml:space="preserve">
+    <value>Successfully reset language mappings</value>
+  </data>
+	<data name="Message_Successfully_reset_to_defaults" xml:space="preserve">
+    <value>Successfully reset to defaults</value>
+  </data>
 </root>

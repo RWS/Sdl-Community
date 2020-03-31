@@ -344,9 +344,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 								|| string.IsNullOrEmpty(Credential.Name)
 								|| string.IsNullOrEmpty(Credential.Password);
 
-			var isValidDate = Credential.Created.AddHours(6) > DateTime.Now;
+			// Identify if the life expectancy of the credential has expired
+			var isValidDuration = Credential.Created.AddHours(12) > DateTime.Now;
 
-			return !isNullOrEmpty && isValidDate;
+			return !isNullOrEmpty && isValidDuration;
 		}
 
 		public bool IsSignedInStudioAuthentication(out string user)
@@ -357,6 +358,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			var success = !string.IsNullOrEmpty(languageCloudCredential?.Email)
 				   && !string.IsNullOrEmpty(StudioInstance.GetLanguageCloudIdentityApi?.AccessToken);
+
+			// Identify if the life expectancy of the credential has expired
+			//var isValidDuration = Credential.Created.AddHours(12) > DateTime.Now;
 
 			return success;
 		}
