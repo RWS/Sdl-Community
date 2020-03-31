@@ -90,7 +90,7 @@ namespace Sdl.Community.ExportAnalysisReports
 							var newLanguage = new LanguageDetails
 							{
 								LanguageName = language.Key,
-								IsChecked = false
+								IsChecked = true
 							};
 							_languages.Add(newLanguage);
 						}
@@ -102,7 +102,7 @@ namespace Sdl.Community.ExportAnalysisReports
 					_languages.Insert(0, new LanguageDetails
 					{
 						LanguageName = "All languages",
-						IsChecked = false
+						IsChecked = true
 					});
 				}
 				languagesListBox.DataSource = _languages;
@@ -275,7 +275,8 @@ namespace Sdl.Community.ExportAnalysisReports
 					if (shouldExportProject)
 					{
 						PrepareProjectToExport(selectedProject);
-					}//that means user deselected a project
+					}
+					//that means user deselected a project
 					else
 					{
 						if (selectedProject != null)
@@ -298,46 +299,67 @@ namespace Sdl.Community.ExportAnalysisReports
 			try
 			{
 				var selectedLanguagesFromProject = selectedProject.LanguagesForPoject.Where(n => n.Value).Select(n => n.Key).ToList();
-				var count = 0;
-				foreach (var languageName in selectedLanguagesFromProject)
+				if (!selectedLanguagesFromProject.Any() && !selectedProject.ShouldBeExported)
 				{
-					// reset count for each language
-					count = 0;
-					//unselect language for project in data source list
-					selectedProject.LanguagesForPoject[languageName] = false;
-
-					var projectsToBeExported = _projectsDataSource.Where(n => n.LanguagesForPoject.ContainsKey(languageName)
-																			  && n.ShouldBeExported).ToList();
-					foreach (var project in projectsToBeExported)
-					{
-						var languageShouldBeExported = project.LanguagesForPoject[languageName];
-						if (languageShouldBeExported)
-						{
-							count++;
-						}
-					}
-
-					// that means no other project has this language selected so we can uncheck the language from the "Select language(s) for export:" box
-					if (count.Equals(0))
-					{
-						var languageToBeDeleted = _languages.FirstOrDefault(l => l.LanguageName.Equals(languageName));
-						if (languageToBeDeleted != null)
-						{
-							_languages.Remove(languageToBeDeleted);
-						}
-					}
+					RemoveLanguageFromProject(selectedProject);
 				}
+				else
+				{					
+					foreach (var languageName in selectedLanguagesFromProject)
+					{
+						// reset count for each language
+						var count = 0;
+						//unselect language for project in data source list
+						selectedProject.LanguagesForPoject[languageName] = false;
 
-				// if the are any projects selected clear language list
-				if (_projectsDataSource.Count(p => p.ShouldBeExported).Equals(0))
-				{
-					_languages.Clear();
+						var projectsToBeExported = _projectsDataSource.Where(n => n.LanguagesForPoject.ContainsKey(languageName)
+																				  && n.ShouldBeExported).ToList();
+						foreach (var project in projectsToBeExported)
+						{
+							var languageShouldBeExported = project.LanguagesForPoject[languageName];
+							if (languageShouldBeExported)
+							{
+								count++;
+							}
+						}
+
+						// that means no other project has this language selected so we can uncheck the language from the "Select language(s) for export:" box
+						if (count.Equals(0))
+						{
+							var languageToBeDeleted = _languages.FirstOrDefault(l => l.LanguageName.Equals(languageName));
+							if (languageToBeDeleted != null)
+							{
+								_languages.Remove(languageToBeDeleted);
+							}
+						}
+					}
+
+					// if the are any projects selected clear language list
+					if (_projectsDataSource.Count(p => p.ShouldBeExported).Equals(0))
+					{
+						_languages.Clear();
+					}
 				}
 				RefreshLanguageListbox();
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"ShouldUnselectLanguages method: {ex.Message}\n {ex.StackTrace}");
+			}
+		}
+
+		private void RemoveLanguageFromProject(ProjectDetails selectedProject)
+		{
+			foreach (var language in selectedProject.LanguagesForPoject)
+			{
+				if (!language.Equals(new KeyValuePair<string, bool>()))
+				{
+					var languageToBeDeleted = _languages.FirstOrDefault(l => l.LanguageName.Equals(language.Key));
+					if (languageToBeDeleted != null)
+					{
+						_languages.Remove(languageToBeDeleted);
+					}
+				}
 			}
 		}
 
@@ -409,45 +431,6 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 		}
 
-		private void languagesListBox_SelectedIndexChanged_1(object sender, EventArgs e)
-		{
-			try
-			{
-				var selectedLanguage = (LanguageDetails)languagesListBox.SelectedItem;
-				if (selectedLanguage != null)
-				{
-					var index = languagesListBox.SelectedIndex;
-					var shouldExportLang = languagesListBox.GetItemChecked(index);
-					var numberOfAllLanguages = languagesListBox.Items?.Count;
-					var numberOfCheckedItems = languagesListBox.CheckedItems?.Count;
-
-					// don't set the languages checked state when user selects all the projects, otherqise the values will be overwritten with wrong value.
-					// (all languages are automatically checked when user clicks on "Select all projects" option)
-					if (selectedLanguage.LanguageName.Equals("All languages") && selectAll.Checked && numberOfCheckedItems.Equals(numberOfAllLanguages))
-					{
-						return;
-					}
-					if (selectedLanguage.LanguageName.Equals("All languages"))
-					{
-						for (int i = 0; i < languagesListBox.Items.Count; i++)
-						{
-							SetLanguageCheckedState(i, shouldExportLang);
-						}
-					}
-					else
-					{
-						SetLanguageCheckedState(index, shouldExportLang);
-					}
-				}
-				IsClipboardEnabled();
-				IsCsvBtnEnabled();
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"languagesListBox_SelectedIndexChanged_1 method: {ex.Message}\n {ex.StackTrace}");
-			}
-		}
-
 		// Set the language checkbox value based on user's selection: checked/not checked and the index of the checkbox
 		private void SetLanguageCheckedState(int index, bool isChecked)
 		{
@@ -463,8 +446,6 @@ namespace Sdl.Community.ExportAnalysisReports
 						project.LanguagesForPoject[language.Key] = isChecked;
 					}
 				}
-				languageToUpdate.IsChecked = isChecked;
-				languagesListBox.SetItemChecked(index, isChecked);
 				_languages.FirstOrDefault(n => n.LanguageName.Equals(languageToUpdate.LanguageName)).IsChecked = isChecked;
 			}
 			catch (Exception ex)
@@ -863,6 +844,38 @@ namespace Sdl.Community.ExportAnalysisReports
 				projectsBindingList.Add(project);
 			}
 			return projectsBindingList;
+		}
+
+		private void languagesListBox_ItemCheck(object sender, ItemCheckEventArgs e)
+		{
+			var checkBoxValue = e.NewValue == CheckState.Checked ? true : false;
+			if (e.Index == 0)
+			{
+				ChangeLanguagesCheckbox(checkBoxValue);
+			}
+			else
+			{
+				SetLanguageCheckedState(e.Index, checkBoxValue);
+			}
+			IsClipboardEnabled();
+			IsCsvBtnEnabled();
+		}
+
+		private void ChangeLanguagesCheckbox(bool isLanguageChecked)
+		{
+			try
+			{
+				// starting with index 1, which corresponds to the first language
+				for (int i = 1; i < languagesListBox.Items.Count; i++)
+				{
+					SetLanguageCheckedState(i, isLanguageChecked);
+					languagesListBox.SetItemChecked(i, isLanguageChecked);
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"languagesListBox_SelectedIndexChanged_1 method: {ex.Message}\n {ex.StackTrace}");
+			}
 		}
 	}
 }
