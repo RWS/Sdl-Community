@@ -14,9 +14,9 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 	{
 		private readonly Common _common;
 
-		internal Reader()
+		internal Reader(Common common)
 		{
-			_common = new Common();
+			_common = common;
 		}
 
 		/// <summary>
