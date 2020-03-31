@@ -226,4 +226,7 @@
 	<data name="Message_Successfully_reset_to_defaults" xml:space="preserve">
     <value>Successfully reset to defaults</value>
   </data>
+	<data name="Message_Second_Attempt" xml:space="preserve">
+    <value>Second Attempt</value>
+  </data>
 </root>

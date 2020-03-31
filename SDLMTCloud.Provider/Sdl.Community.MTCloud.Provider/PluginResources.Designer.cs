@@ -196,6 +196,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Second Attempt.
+        /// </summary>
+        public static string Message_Second_Attempt {
+            get {
+                return ResourceManager.GetString("Message_Second_Attempt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Successfully reset language mappings.
         /// </summary>
         public static string Message_Successfully_reset_language_mappings {
