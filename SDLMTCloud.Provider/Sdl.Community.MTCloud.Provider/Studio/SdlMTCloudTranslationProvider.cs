@@ -14,7 +14,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	public class SdlMTCloudTranslationProvider : ITranslationProvider
 	{
 		private LanguagePair _languageDirection;
-		private SdlMTCloudLanguageDirection _languageDirectionProvider;
 
 		public SdlMTCloudTranslationProvider(Uri uri, TranslationService translationService, string translationProviderState)
 		{
@@ -28,26 +27,46 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, Constants.PluginName);
 
+		public ITranslationProviderLanguageDirection LanguageDirectionProvider { get; private set; }
+
 		public Uri Uri { get; internal set; }
 
 		public string Name => Constants.PluginName;
+
 		public bool SupportsTaggedInput => true;
+
 		public bool SupportsScoring => false;
+
 		public bool SupportsSearchForTranslationUnits => true;
+
 		public bool SupportsMultipleResults => false;
+
 		public bool SupportsFilters => false;
+
 		public bool SupportsPenalties => true;
+
 		public bool SupportsStructureContext => false;
+
 		public bool SupportsDocumentSearches => false;
+
 		public bool SupportsUpdate => false;
+
 		public bool SupportsPlaceables => false;
+
 		public bool SupportsTranslation => true;
+
 		public bool SupportsFuzzySearch => false;
+
 		public bool SupportsConcordanceSearch => false;
+
 		public bool SupportsSourceConcordanceSearch => false;
+
 		public bool SupportsTargetConcordanceSearch => false;
+
 		public bool SupportsWordCounts => false;
+
 		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
+
 		public bool IsReadOnly => true;
 
 		public Options Options { get; set; }
@@ -57,6 +76,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public Languages.Provider.Languages LanguagesProvider { get; }
 
 		public SubscriptionInfo SubscriptionInfo { get; }
+
+		public Dictionary<string, string> SupportedLanguages { get; set; }
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
@@ -74,22 +95,20 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				Log.Logger.Error($"{Constants.SupportsLanguageDirection} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
-		}
-
-		public Dictionary<string, string> SupportedLanguages { get; set; }
+		}		
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			if (_languageDirectionProvider != null &&
-				_languageDirectionProvider.SourceLanguage?.Name == languageDirection.SourceCulture.Name &&
-				_languageDirectionProvider.TargetLanguage?.Name == languageDirection.TargetCulture.Name)
+			if (LanguageDirectionProvider != null &&
+			    LanguageDirectionProvider.SourceLanguage?.Name == languageDirection.SourceCulture.Name &&
+			    LanguageDirectionProvider.TargetLanguage?.Name == languageDirection.TargetCulture.Name)
 			{
-				return _languageDirectionProvider;
+				return LanguageDirectionProvider;
 			}
 
-			_languageDirectionProvider = new SdlMTCloudLanguageDirection(this, languageDirection);
+			LanguageDirectionProvider = new SdlMTCloudLanguageDirection(this, languageDirection);
 
-			return _languageDirectionProvider;
+			return LanguageDirectionProvider;
 		}
 
 		public void RefreshStatusInfo()

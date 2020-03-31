@@ -84,7 +84,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 				optionsWindow.ShowDialog();
 				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
-				{					
+				{
+					provider.TranslationService.UpdateLanguageMappings();									
 					return true;
 				}							
 			}
