@@ -20,14 +20,19 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			ConnectionService = connectionService;
 			LanguageMappingsService = languageMappingsService;
-			LanguageMappings = LanguageMappingsService?.GetLanguageMappingSettings()?.LanguageMappings?.ToList();
+			UpdateLanguageMappings();
 		}
 
 		public ConnectionService ConnectionService { get; }
 
 		public LanguageMappingsService LanguageMappingsService { get; }
 
-		public List<LanguageMappingModel> LanguageMappings { get; }
+		public List<LanguageMappingModel> LanguageMappings { get; private set; }
+
+		public void UpdateLanguageMappings()
+		{
+			LanguageMappings = LanguageMappingsService?.GetLanguageMappingSettings()?.LanguageMappings?.ToList();
+		}
 
 		public async Task<Segment[]> TranslateText(string text, string source, string target)
 		{

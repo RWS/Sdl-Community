@@ -8,7 +8,7 @@
 		xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
 		xmlns:controls="clr-namespace:Sdl.Community.MTCloud.Provider.Controls"
 		mc:Ignorable="d" 
-		Title="SDL MT Cloud Language Code"
+		Title="SDL MT Cloud Language Codes"
 		ResizeMode="CanResizeWithGrip" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen"
 		d:DesignHeight="500" d:DesignWidth="800" MinWidth="600" MinHeight="400" Width="850" Height="600"
 		d:DataContext="{d:DesignInstance viewModel:MTCodesViewModel}">
