@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
-             xmlns:local="clr-namespace:Sdl.Community.SDLBatchAnonymize.Ui"
              mc:Ignorable="d"
 			 xmlns:viewModel ="clr-namespace:Sdl.Community.SDLBatchAnonymize.ViewModel"
 			 d:DataContext="{d:DesignInstance viewModel:BatchAnonymizerSettingsViewModel}"
@@ -21,42 +20,17 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<StackPanel  Margin="0">
-		<TextBlock Style="{StaticResource Sdl.TextBlock.TitleStyle}" LineHeight="18" LineStackingStrategy="BlockLineHeight" 
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<TextBlock Grid.Row="0" Style="{StaticResource Sdl.TextBlock.TitleStyle}" LineHeight="18" LineStackingStrategy="BlockLineHeight" 
 					  Text="Anonymizer settings"  HorizontalAlignment="Left"  FontSize="20" Padding="0" Margin="0,0,0,10"/>
-		<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Anonymize all values" IsChecked="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged}"/>
-		<GroupBox Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Name="UsernameBox" Header="Username"  HorizontalAlignment="Left" Margin="10" MinWidth="500">
-				<Grid>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*"/>
-						<ColumnDefinition Width="*"/>
-					</Grid.ColumnDefinitions>
-					<Grid.RowDefinitions>
-						<RowDefinition/>
-						<RowDefinition/>
-						<RowDefinition/>
-						<RowDefinition/>
-					</Grid.RowDefinitions>
-					<CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Name="CreatedByCheckbox" Content="Created by" VerticalContentAlignment="Center"
-					          IsChecked="{Binding CreatedByChecked,UpdateSourceTrigger=PropertyChanged}"/>
-					<TextBox  Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" Text="{Binding CreatedByName,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
-
-					<CheckBox Grid.Row="1" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Last modified by" VerticalContentAlignment="Center"
-					          IsChecked="{Binding ModifyByChecked,UpdateSourceTrigger=PropertyChanged}"/>
-					<TextBox  Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Text="{Binding ModifyByName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" VerticalContentAlignment="Center"/>
-
-					<CheckBox Grid.Row="2" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Comment author" VerticalContentAlignment="Center" 
-					          IsChecked="{Binding CommentChecked,UpdateSourceTrigger=PropertyChanged}"/>
-					<TextBox  Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" Text="{Binding CommentAuthorName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" VerticalContentAlignment="Center"/>
-
-					<CheckBox Grid.Row="3" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Tracked changes" VerticalContentAlignment="Center" 
-					          IsChecked="{Binding TrackedChecked,UpdateSourceTrigger=PropertyChanged}"/>
-				<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding TrackedName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" VerticalContentAlignment="Center"/>
-				</Grid>
-		</GroupBox>
-		
-		<GroupBox Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Header="Resource origins"  HorizontalAlignment="Left" Margin="10" 
-		          Width="{Binding Path=ActualWidth,ElementName=UsernameBox}">
+		<CheckBox Grid.Row="1" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Anonymize all values" IsChecked="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged}"/>
+		<GroupBox Grid.Row="2" Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Header="Username"  Margin="10">
 			<Grid Margin="0,10">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
@@ -67,7 +41,37 @@
 					<RowDefinition/>
 					<RowDefinition/>
 					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Name="CreatedByCheckbox" Content="Created by" VerticalContentAlignment="Center"
+					          IsChecked="{Binding CreatedByChecked,UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBox  Grid.Row="0" Grid.Column="1" Margin="0,5,0,5" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" 
+							  Text="{Binding CreatedByName,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
 
+				<CheckBox Grid.Row="1" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Last modified by" VerticalContentAlignment="Center"
+					          IsChecked="{Binding ModifyByChecked,UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBox  Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Text="{Binding ModifyByName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" VerticalContentAlignment="Center"/>
+
+				<CheckBox Grid.Row="2" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Comment author" VerticalContentAlignment="Center" 
+					          IsChecked="{Binding CommentChecked,UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBox  Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" Text="{Binding CommentAuthorName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" VerticalContentAlignment="Center"/>
+
+				<CheckBox Grid.Row="3" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Tracked changes" VerticalContentAlignment="Center" 
+					          IsChecked="{Binding TrackedChecked,UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding TrackedName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" VerticalContentAlignment="Center"/>
+			</Grid>
+		</GroupBox>
+
+		<GroupBox Grid.Row="3" Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Header="Resource origins" Margin="10" >
+			<Grid Margin="0,10">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+					<RowDefinition/>
+					<RowDefinition/>
 				</Grid.RowDefinitions>
 				<CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
 						  IsChecked="{Binding ChangeMtChecked,UpdateSourceTrigger=PropertyChanged}"
@@ -83,5 +87,5 @@
 				<TextBox  Grid.Row="3" Grid.Column="1" Margin="0,5,0,5" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" Text="{Binding TmName,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
 			</Grid>
 		</GroupBox>
-	</StackPanel>
+	</Grid>
 </UserControl>
