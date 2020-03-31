@@ -196,6 +196,24 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Successfully reset language mappings.
+        /// </summary>
+        public static string Message_Successfully_reset_language_mappings {
+            get {
+                return ResourceManager.GetString("Message_Successfully_reset_language_mappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully reset to defaults.
+        /// </summary>
+        public static string Message_Successfully_reset_to_defaults {
+            get {
+                return ResourceManager.GetString("Message_Successfully_reset_to_defaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User is signed out!.
         /// </summary>
         public static string Message_User_is_signed_out {

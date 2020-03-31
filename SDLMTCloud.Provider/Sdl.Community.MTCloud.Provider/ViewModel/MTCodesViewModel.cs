@@ -3,13 +3,16 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Commands;
+using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Core.Globalization;
+using Application = System.Windows.Forms.Application;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
@@ -18,6 +21,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private readonly PrintService _printService;
 		private readonly Languages.Provider.Languages _languages;
 
+		private ICommand _saveCommand;
+		private ICommand _printCommand;
+		private ICommand _resetToDefaultsCommand;
+
 		private MTCloudLanguage _selectedMtCode;
 		private ObservableCollection<MTCloudLanguage> _mtCodes;
 		private string _message;
@@ -25,24 +32,26 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private string _query;
 		private bool _isWaiting;
 		private string _itemsCountLabel;
-
-		private ICommand _updateLanguagePropertyCommand;
-		private ICommand _printCommand;
-
-		public MTCodesViewModel(Languages.Provider.Languages languages)
+		
+		public MTCodesViewModel(Window window, Languages.Provider.Languages languages)
 		{
+			Window = window;
 			_languages = languages;
 						
-			MTCodes = new ObservableCollection<MTCloudLanguage>(GetAllLanguages());
+			MTCodes = new ObservableCollection<MTCloudLanguage>(GetAllLanguages(false));
 
 			_printService = new PrintService();
 		}
 
-		public ICommand UpdateLanguagePropertyCommand =>
-			_updateLanguagePropertyCommand ?? (_updateLanguagePropertyCommand = new RelayCommand(UpdateLanguageProperty));
-
+		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(Save));
+			
 		public ICommand PrintCommand
 			=> _printCommand ?? (_printCommand = new RelayCommand<DataGrid>(Print));
+
+		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand
+		                                                ?? (_resetToDefaultsCommand = new RelayCommand(ResetToDefaults));
+
+		public Window Window { get; }
 
 		public ObservableCollection<MTCloudLanguage> MTCodes
 		{
@@ -50,8 +59,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			set
 			{
 				_mtCodes = value;
-				OnPropertyChanged(nameof(MTCodes));
 
+				OnPropertyChanged(nameof(MTCodes));
 				ItemsCountLabel = string.Format(PluginResources.Total_Languages, _mtCodes.Count);
 			}
 		}
@@ -184,18 +193,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				_printService.PrintFile(Languages.Provider.Constants.MTLanguageCodesFilePath);
 			}
 		}
-
-		public void UpdateLanguageProperty(object parameter)
+	
+		private List<MTCloudLanguage> GetAllLanguages(bool reset)
 		{
-			if (SelectedMTCode != null)
-			{
-				_languages.SaveLanguages(MTCodes.ToList());
-			}
-		}
-
-		private List<MTCloudLanguage> GetAllLanguages()
-		{
-			var mtCloudLanguages = _languages.GetLanguages();
+			var mtCloudLanguages = _languages.GetLanguages(reset);
 			if (AddStudioLanguages(mtCloudLanguages))
 			{
 				_languages.SaveLanguages(mtCloudLanguages);
@@ -259,6 +260,23 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 
 			return languageName;
+		}
+
+		private void ResetToDefaults(object obj)
+		{
+			MTCodes.Clear();			
+			MTCodes = new ObservableCollection<MTCloudLanguage>(GetAllLanguages(true));
+
+			MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults, 
+				Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
+		}
+
+		private void Save(object obj)
+		{			
+			_languages.SaveLanguages(MTCodes.ToList());
+
+			WindowCloser.SetDialogResult(Window, true);
+			Window.Close();
 		}
 	}
 }

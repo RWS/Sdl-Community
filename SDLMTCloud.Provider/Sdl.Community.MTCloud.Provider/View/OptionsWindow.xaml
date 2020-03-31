@@ -67,11 +67,13 @@
 			<!-- BORDER CONTROL -->
 			<controls:WindowsControl Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
 			<Image Grid.Row="0" Grid.Column="0" Height="40" Stretch="Uniform" HorizontalAlignment="Center" 
+			       RenderOptions.BitmapScalingMode="HighQuality"
+			       RenderOptions.EdgeMode="Aliased"
 			       Margin="0" VerticalAlignment="Top"  IsHitTestVisible="False"
 			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/MTCloud_logo.png"/>
 
 			<Border Background="White" Grid.Column="0" Grid.Row="1"  >
-				<TextBlock Margin="10,10,15,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" >
+				<TextBlock Margin="10,15,15,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" >
 						Welcome to the SDL Machine Translation Cloud (formerly BeGlobal) translation provider for Studio. <LineBreak/><LineBreak/>
 						SDL Machine Translation Cloud is SDL's neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
 						Using SDL's proprietary technology, customers can have the assurance of content privacy.
@@ -112,7 +114,7 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTemplateColumn Header="Source MTCode" CanUserSort="True" SortMemberPath="SelectedMTCodeSource.CodeName" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+						<DataGridTemplateColumn Header="Source" CanUserSort="True" SortMemberPath="SelectedMTCodeSource.CodeName" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
 									<ComboBox ItemsSource="{Binding MTCodesSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
@@ -136,7 +138,7 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTemplateColumn Header="Target MTCode" CanUserSort="True" SortMemberPath="SelectedMTCodeTarget.CodeName" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+						<DataGridTemplateColumn Header="Target" CanUserSort="True" SortMemberPath="SelectedMTCodeTarget.CodeName" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
 									<ComboBox ItemsSource="{Binding MTCodesTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
@@ -185,7 +187,7 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTemplateColumn Header="SDL MT Cloud Dictionary" CanUserSort="True" SortMemberPath="SelectedMTCloudDictionary.Name" IsReadOnly="True" Width="*" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" >
+						<DataGridTemplateColumn Header="MT Cloud Dictionary" CanUserSort="True" SortMemberPath="SelectedMTCloudDictionary.Name" IsReadOnly="True" Width="*" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" >
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
 									<ComboBox  ItemsSource="{Binding MTCloudDictionaries,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
@@ -213,26 +215,32 @@
 					</DataGrid.Columns>
 				</controls:SortAwareDataGrid>
 
-				<CheckBox Grid.Row="1" Margin="15" FontFamily="Calibri" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments" DockPanel.Dock="Bottom" />
+				<CheckBox Grid.Row="1" Margin="15,5,15,15" FontFamily="Segoe UI" Foreground="#333232" FontSize="13" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments" DockPanel.Dock="Bottom" />
 			</Grid >
-			<!--<StackPanel Grid.Row="2" Margin="0,10,0,0">				
-				<metroControls:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="50"
-						    Visibility="{Binding IsWaiting, Converter={StaticResource BooleanToVisibilityConverter}}" />				
-			</StackPanel>-->
 
-			<!--<TextBlock Grid.Row="3" Visibility="{Binding Message, Mode=TwoWay, Converter= {StaticResource ResourceKey=MessageVisibilityConverter}}" Text="{Binding Message}"
-				   FontWeight="Normal" FontSize="13" Foreground="Red" TextWrapping="WrapWithOverflow"  Margin="15,0,10,10"/>-->
-			<Grid Grid.Row="4" VerticalAlignment="Bottom" Margin="15,0,0,20">
+			<Border Grid.Row="4" Grid.Column="0"  Margin="0" BorderThickness="0,1,0,0" BorderBrush="#ABB0B3" 
+			        >
 
-				<Button Style="{StaticResource LinkButton}" 
-						HorizontalAlignment="Left"
-				        VerticalAlignment="Bottom" Margin="0,10,15,5" Content="Reset default values" Command="{Binding ResetLanguageMappingsCommand}"/>
+				<Grid VerticalAlignment="Center" Margin="15,15,0,15">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+						<Button Style="{StaticResource ButtonStyleShadowless}" 
+							HorizontalAlignment="Left"	MinWidth="110"					
+							VerticalAlignment="Bottom" Margin="0,0,15,0" 
+							Content="Reset to Defaults" Command="{Binding ResetToDefaultsCommand}"/>
 
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  VerticalAlignment="Bottom">
-					<Button  Style="{DynamicResource SdlPrimaryButtonStyle}" Width="125" Content="OK" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
-					<Button  Style="{DynamicResource SdlSecondaryButtonStyle }" Content="Cancel" Width="125" IsCancel="True"  Margin="15,0,15,0" />
-				</StackPanel>
-			</Grid>
+						<Button Style="{StaticResource ButtonStyleShadowless}" 
+							HorizontalAlignment="Left" MinWidth="110"					
+							VerticalAlignment="Bottom" Margin="0,0,15,0" 
+							Content="View Language Mapping" Command="{Binding ViewLanguageMappingsCommand}"/>
+					</StackPanel>
+
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  VerticalAlignment="Bottom">
+						<Button Style="{StaticResource ButtonStyleShadowless}" MinWidth="110" Content="OK" Command="{Binding SaveCommand}"/>
+						<Button Style="{StaticResource ButtonStyleShadowless}" Content="Cancel" MinWidth="110" IsCancel="True" Margin="15,0,15,0" />
+					</StackPanel>
+				</Grid>
+
+			</Border>
 		</Grid>
 	</Border>
 </Window>
