@@ -305,12 +305,11 @@ namespace Sdl.Community.ExportAnalysisReports
 					RemoveLanguageFromProject(selectedProject);
 				}
 				else
-				{
-					var count = 0;
+				{					
 					foreach (var languageName in selectedLanguagesFromProject)
 					{
 						// reset count for each language
-						count = 0;
+						var count = 0;             
 						//unselect language for project in data source list
 						selectedProject.LanguagesForPoject[languageName] = false;
 
