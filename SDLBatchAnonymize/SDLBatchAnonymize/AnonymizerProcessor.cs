@@ -35,16 +35,16 @@ namespace Sdl.Community.SDLBatchAnonymize
 					{
 						AnonymizeComplete(translationOrigin);
 
-						if (_settings.AnonymizeTmMatch)
-						{
-							if (segmentPair.Properties?.TranslationOrigin.OriginBeforeAdaptation == null)
-							{
-								var originClone = (ITranslationOrigin) translationOrigin.Clone();
-								originClone.OriginBeforeAdaptation = null;
-								segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation = originClone;
-							}
-							AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation);
-						}
+						//if (_settings.AnonymizeTmMatch)
+						//{
+						//	if (segmentPair.Properties?.TranslationOrigin.OriginBeforeAdaptation == null)
+						//	{
+						//		var originClone = (ITranslationOrigin) translationOrigin.Clone();
+						//		originClone.OriginBeforeAdaptation = null;
+						//		segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation = originClone;
+						//	}
+						//	AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation);
+						//}
 					}
 				}
 			}

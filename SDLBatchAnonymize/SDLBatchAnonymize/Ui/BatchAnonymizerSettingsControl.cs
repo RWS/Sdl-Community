@@ -53,7 +53,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Ui
 		private void SetSettings(BatchAnonymizerSettings settings)
 		{
 			completeBtn.Checked = settings.AnonymizeComplete;
-			tmMatchBtn.Checked = settings.AnonymizeTmMatch;
+			//tmMatchBtn.Checked = settings.AnonymizeTmMatch;
 			scoreBox.Value = settings.FuzzyScore;
 			tmNameBox.Text = settings.TmName;
 		}

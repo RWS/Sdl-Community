@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
+			 xmlns:behavior="clr-namespace:Sdl.Community.SDLBatchAnonymize.Behavior"
+			 behavior:WindowLoadedBehaviour.LoadedCommand="{Binding LoadWindowAction}"
              mc:Ignorable="d"
 			 xmlns:viewModel ="clr-namespace:Sdl.Community.SDLBatchAnonymize.ViewModel"
 			 d:DataContext="{d:DesignInstance viewModel:BatchAnonymizerSettingsViewModel}"
@@ -16,6 +18,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Textboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/NumericUpDown.xaml"/>
+				<ResourceDictionary Source="../UiHelper/General.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -42,22 +45,23 @@
 					<RowDefinition/>
 					<RowDefinition/>
 				</Grid.RowDefinitions>
-				<CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Name="CreatedByCheckbox" Content="Created by" VerticalContentAlignment="Center"
-					          IsChecked="{Binding CreatedByChecked,UpdateSourceTrigger=PropertyChanged}"/>
-				<TextBox  Grid.Row="0" Grid.Column="1" Margin="0,5,0,5" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" 
-							  Text="{Binding CreatedByName,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
+				<CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Created by" VerticalContentAlignment="Center"
+					      IsChecked="{Binding CreatedByChecked,UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBox  Grid.Row="0" Grid.Column="1" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" Style="{StaticResource AnonymizeValueBox}" Text="{Binding CreatedByName,UpdateSourceTrigger=PropertyChanged}"/>
 
 				<CheckBox Grid.Row="1" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Last modified by" VerticalContentAlignment="Center"
-					          IsChecked="{Binding ModifyByChecked,UpdateSourceTrigger=PropertyChanged}"/>
-				<TextBox  Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Text="{Binding ModifyByName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" VerticalContentAlignment="Center"/>
+					      IsChecked="{Binding ModifyByChecked,UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBox  Grid.Row="1" Grid.Column="1" Style="{StaticResource AnonymizeValueBox}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}"
+						  Text="{Binding ModifyByName,UpdateSourceTrigger=PropertyChanged}" />
 
 				<CheckBox Grid.Row="2" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Comment author" VerticalContentAlignment="Center" 
 					          IsChecked="{Binding CommentChecked,UpdateSourceTrigger=PropertyChanged}"/>
-				<TextBox  Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" Text="{Binding CommentAuthorName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" VerticalContentAlignment="Center"/>
+				<TextBox  Grid.Row="2" Grid.Column="1" Style="{StaticResource AnonymizeValueBox}" 
+						  Text="{Binding CommentAuthorName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}"/>
 
 				<CheckBox Grid.Row="3" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Tracked changes" VerticalContentAlignment="Center" 
 					          IsChecked="{Binding TrackedChecked,UpdateSourceTrigger=PropertyChanged}"/>
-				<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding TrackedName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" VerticalContentAlignment="Center"/>
+				<TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource AnonymizeValueBox}" Text="{Binding TrackedName,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" />
 			</Grid>
 		</GroupBox>
 
@@ -82,7 +86,7 @@
 				<CheckBox Grid.Row="1" Grid.Column="0" Margin="10,10,0,0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Set the specific resources user"
 						  IsChecked="{Binding SetSpecificResChecked,UpdateSourceTrigger=PropertyChanged}" />
 				<TextBlock Grid.Row="2" Grid.Column="0" Margin="30,5,0,0" Text="Set a TM score"/>
-				<controls:NumericUpDown Name="NumericUpDown" Style="{DynamicResource Sdl.NumericUpDown.Generic}" Grid.Row="2" Grid.Column="1"/>
+				<controls:NumericUpDown Name="NumericUpDown" Style="{DynamicResource Sdl.NumericUpDown.Generic}" Grid.Row="2" Grid.Column="1" Value="{Binding FuzzyScore}"/>
 				<TextBlock Grid.Row="3" Grid.Column="0" Margin="30,5,0,0" Text="Set the resource name"/>
 				<TextBox  Grid.Row="3" Grid.Column="1" Margin="0,5,0,5" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" Text="{Binding TmName,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
 			</Grid>

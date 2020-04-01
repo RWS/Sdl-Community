@@ -1,6 +1,5 @@
 ﻿using System.Windows.Forms;
 using Sdl.Community.SDLBatchAnonymize.BatchTask;
-using Sdl.Community.SDLBatchAnonymize.Service;
 using Sdl.Community.SDLBatchAnonymize.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 
@@ -12,15 +11,16 @@ namespace Sdl.Community.SDLBatchAnonymize.Ui
 		{
 			InitializeComponent();
 
-			var userNameService = new UserNameService();
+			BatchAnonymizerSettingsViewModel = new BatchAnonymizerSettingsViewModel();
 			var batchAnonymizerControl = new BatchAnonymizerSettingsWpfControl
 			{
-				DataContext = new BatchAnonymizerSettingsViewModel(userNameService)
+				DataContext = BatchAnonymizerSettingsViewModel
 			};
 			batchAnonymizerControl.InitializeComponent();
 			batchAnonymizerHost.Child = batchAnonymizerControl;
 		}
 
+		public BatchAnonymizerSettingsViewModel BatchAnonymizerSettingsViewModel { get; set; }
 		public BatchAnonymizerSettings Settings { get; set; }
 	}
 }

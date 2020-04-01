@@ -113,6 +113,8 @@
     <Compile Include="BatchAnonymizerTask.cs" />
     <Compile Include="BatchTask\BatchAnonymizerSettings.cs" />
     <Compile Include="BatchTask\BatchAnonymizerSettingsPage.cs" />
+    <Compile Include="Behavior\WindowLoadedBehaviour.cs" />
+    <Compile Include="Command\CommandHandler.cs" />
     <Compile Include="Interface\IBatchAnonymizerSettings.cs" />
     <Compile Include="Interface\IUserNameService.cs" />
     <Compile Include="Log.cs" />
@@ -167,6 +169,10 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="UiHelper\General.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Ui\BatchAnonymizerSettingsWpfControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
