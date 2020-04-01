@@ -108,7 +108,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
 			var results = new SearchResults[segments.Length];
-			var beGlobalSegments = new List<MTCloudSegment>();
+			var mtCloudSegments = new List<MTCloudSegment>();
 			var alreadyTranslatedSegments = new List<MTCloudSegment>();
 
 			if (!_translationProvider.Options.ResendDraft)
@@ -140,7 +140,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					{
 						if (activeSegmentPair != null && (activeSegmentPair.Target.Count > 0 || activeSegmentPair.Properties.IsLocked))
 						{
-							CreateTranslatedSegment(segments, segmentIndex, alreadyTranslatedSegments);
+							alreadyTranslatedSegments.Add(CreateTranslatedSegment(segments, segmentIndex));
 						}
 						// In case user copies the source to target and run the pre-translation, do nothing and continue the flow.
 						else if (correspondingTu != null && IsSameSourceTarget(correspondingTu))
@@ -150,25 +150,25 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 						// If is already translated or is locked, then the request to server should not be done and it should not be translated
 						else if (activeSegmentPair == null && correspondingTu != null && (correspondingTu.DocumentSegmentPair.Target.Count > 0 || correspondingTu.DocumentSegmentPair.Properties.IsLocked))
 						{
-							CreateTranslatedSegment(segments, segmentIndex, alreadyTranslatedSegments);
+							alreadyTranslatedSegments.Add(CreateTranslatedSegment(segments, segmentIndex));
 						}
 						else
 						{
-							CreateMTCloudSegments(beGlobalSegments, segments, segmentIndex);
+							mtCloudSegments.Add(CreateMTCloudSegments(segments, segmentIndex));
 						}
 					}
 					else
 					{
-						CreateMTCloudSegments(beGlobalSegments, segments, segmentIndex);
+						mtCloudSegments.Add(CreateMTCloudSegments(segments, segmentIndex));
 					}
 				}
 
-				if (beGlobalSegments.Count > 0)
+				if (mtCloudSegments.Count > 0)
 				{
-					var hasTranslations = GetTranslations(beGlobalSegments);
+					var hasTranslations = GetTranslations(mtCloudSegments);
 					if (hasTranslations)
 					{
-						SetSearchResults(results, beGlobalSegments);
+						SetSearchResults(results, mtCloudSegments);
 					}
 				}
 
@@ -236,7 +236,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		}
 
 		// Set the segments used to receive the translations from server
-		private void CreateMTCloudSegments(ICollection<MTCloudSegment> beGlobalSegments, Segment[] segments, int segmentIndex)
+		private MTCloudSegment CreateMTCloudSegments(Segment[] segments, int segmentIndex)
 		{
 			var segmentToBeTranslated = new MTCloudSegment
 			{
@@ -244,11 +244,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				Index = segmentIndex
 			};
 
-			beGlobalSegments.Add(segmentToBeTranslated);
+			return segmentToBeTranslated;
 		}
 
 		// Create the already translated segments in case the translation was already received from the server
-		private void CreateTranslatedSegment(Segment[] segments, int segmentIndex, ICollection<MTCloudSegment> alreadyTranslatedSegments)
+		private MTCloudSegment CreateTranslatedSegment(Segment[] segments, int segmentIndex)
 		{
 			var translation = new Segment(_languageDirection.TargetCulture);
 			translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
@@ -261,7 +261,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				SearchResult = CreateSearchResult(segments[segmentIndex], translation)
 			};
 
-			alreadyTranslatedSegments.Add(alreadyTranslatedSegment);
+			return alreadyTranslatedSegment;
 		}
 
 		private void SetSearchResults(SearchResults[] results, IEnumerable<MTCloudSegment> translatedSegments)
@@ -282,13 +282,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		private bool GetTranslations(IReadOnlyList<MTCloudSegment> mtCloudSegments)
 		{
-			var segmentsToBeTranslated = new List<Segment>();
-			foreach (var segment in mtCloudSegments)
-			{
-				segmentsToBeTranslated.Add(segment.Segment);
-			}
+			var translations = TranslateSegments(mtCloudSegments.Select(segment => segment.Segment).ToArray());
 
-			var translations = TranslateSegments(segmentsToBeTranslated.ToArray());
 			if (translations.Any() && translations[0] != null)
 			{
 				for (var i = 0; i < mtCloudSegments.Count; i++)

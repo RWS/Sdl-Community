@@ -4,7 +4,8 @@
 	{
 		public Options()
 		{
-			ResendDraft = false;
+			// default == true
+			ResendDraft = true;
 		}
 
 		public bool ResendDraft { get; set; }

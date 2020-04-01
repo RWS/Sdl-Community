@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.LanguagePlatform.Core;
 
@@ -15,19 +16,25 @@ namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class TranslationService
 	{
-		
+		public static readonly Log Log = Log.Instance;
+
 		public TranslationService(ConnectionService connectionService, LanguageMappingsService languageMappingsService)
 		{
 			ConnectionService = connectionService;
 			LanguageMappingsService = languageMappingsService;
-			LanguageMappings = LanguageMappingsService?.GetLanguageMappingSettings()?.LanguageMappings?.ToList();
+			UpdateLanguageMappings();
 		}
 
 		public ConnectionService ConnectionService { get; }
 
 		public LanguageMappingsService LanguageMappingsService { get; }
 
-		public List<LanguageMappingModel> LanguageMappings { get; }
+		public List<LanguageMappingModel> LanguageMappings { get; private set; }
+
+		public void UpdateLanguageMappings()
+		{
+			LanguageMappings = LanguageMappingsService?.GetLanguageMappingSettings()?.LanguageMappings?.ToList();
+		}
 
 		public async Task<Segment[]> TranslateText(string text, string source, string target)
 		{
@@ -42,7 +49,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			using (var httpClient = new HttpClient())
 			{
-				httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));				
+				httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 				httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + ConnectionService.Credential.Token);
 
 				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + "/mt/translations/async");
@@ -103,7 +110,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private async Task<string> GetTranslations(HttpClient httpClient, string id)
 		{
 			var translationStatus = string.Empty;
-			
+
 			do
 			{
 				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/mt/translations/async/{id}");
@@ -173,23 +180,31 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public async Task<SubscriptionInfo> GetLanguagePairs(string accountId)
 		{
-			using (var httpClient = new HttpClient())
+			try
 			{
-				httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));				
-				httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + ConnectionService.Credential.Token);
-
-				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/accounts/{accountId}/subscriptions/language-pairs");
-				var request = new HttpRequestMessage(HttpMethod.Get, uri);
-				ConnectionService.AddTraceHeader(request);
-
-				var responseMessage = await httpClient.SendAsync(request);
-				var response = await responseMessage.Content.ReadAsStringAsync();
-
-				if (responseMessage.StatusCode == HttpStatusCode.OK) // 200
+				using (var httpClient = new HttpClient())
 				{
-					var result = JsonConvert.DeserializeObject<SubscriptionInfo>(response);
-					return result;
+					httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+					httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + ConnectionService.Credential.Token);
+
+					var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/accounts/{accountId}/subscriptions/language-pairs");
+					var request = new HttpRequestMessage(HttpMethod.Get, uri);
+					ConnectionService.AddTraceHeader(request);
+
+					var responseMessage = await httpClient.SendAsync(request);
+					var response = await responseMessage.Content.ReadAsStringAsync();
+
+					if (responseMessage.StatusCode == HttpStatusCode.OK) // 200
+					{
+						var result = JsonConvert.DeserializeObject<SubscriptionInfo>(response);
+						return result;
+					}
 				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
+				throw;
 			}
 
 			return null;
@@ -197,23 +212,31 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public async Task<MTCloudDictionaryInfo> GetDictionaries(string accountId)
 		{
-			using (var httpClient = new HttpClient())
+			try
 			{
-				httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));				
-				httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + ConnectionService.Credential.Token);
-
-				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/accounts/{accountId}/dictionaries");
-				var request = new HttpRequestMessage(HttpMethod.Get, uri);
-				ConnectionService.AddTraceHeader(request);
-
-				var responseMessage = await httpClient.SendAsync(request);
-				var response = await responseMessage.Content.ReadAsStringAsync();
-
-				if (responseMessage.StatusCode == HttpStatusCode.OK) // 200
+				using (var httpClient = new HttpClient())
 				{
-					var result = JsonConvert.DeserializeObject<MTCloudDictionaryInfo>(response);
-					return result;
+					httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+					httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + ConnectionService.Credential.Token);
+
+					var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/accounts/{accountId}/dictionaries");
+					var request = new HttpRequestMessage(HttpMethod.Get, uri);
+					ConnectionService.AddTraceHeader(request);
+
+					var responseMessage = await httpClient.SendAsync(request);
+					var response = await responseMessage.Content.ReadAsStringAsync();
+
+					if (responseMessage.StatusCode == HttpStatusCode.OK) // 200
+					{
+						var result = JsonConvert.DeserializeObject<MTCloudDictionaryInfo>(response);
+						return result;
+					}
 				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
+				throw;
 			}
 
 			return null;

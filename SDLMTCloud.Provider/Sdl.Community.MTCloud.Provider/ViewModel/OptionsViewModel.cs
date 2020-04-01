@@ -49,7 +49,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			_languageMappings = new ObservableCollection<LanguageMappingModel>();
 
-			ReSendChecked = provider.Options?.ResendDraft ?? false;
+			ReSendChecked = provider.Options?.ResendDraft ?? true;
 
 			LoadLanguageMappings();
 
@@ -247,7 +247,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			try
 			{
-				ReSendChecked = false;
+				ReSendChecked = true;
 
 				var savedSettings = _provider.TranslationService.LanguageMappingsService.GetLanguageMappingSettings();
 				if (savedSettings != null)
