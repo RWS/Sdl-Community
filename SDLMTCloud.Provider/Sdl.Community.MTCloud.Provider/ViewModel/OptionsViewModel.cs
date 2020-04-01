@@ -58,34 +58,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public ICommand ViewLanguageMappingsCommand => _viewLanguageMappingsCommand
 														?? (_viewLanguageMappingsCommand = new RelayCommand(ViewLanguageMappings));
 
-		public Window Window { get; }
-
-		public bool IsValidData(bool savePressed)
-		{
-			_provider.Options.ResendDraft = ReSendChecked;
-
-			try
-			{
-				if (!LanguageMappings.Any())
-				{
-					MessageBox.Show(Constants.EnginesSelectionMessage, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-					return false;
-				}
-
-				return IsEngineValid(savePressed);
-			}
-			catch (Exception ex)
-			{
-				var message = ex.Message.Contains(Constants.TokenFailed) || ex.Message.Contains(Constants.NullValue)
-					? Constants.CredentialsNotValid
-					: ex.Message;
-
-				MessageBox.Show(message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
-			}
-
-			return false;
-		}
+		public Window Window { get; }	
 
 		public List<MTCloudDictionary> MTCloudDictionaries
 		{
@@ -149,9 +122,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					return;
 				}
 
-				_reSendChecked = value;
-				_provider.Options.ResendDraft = value;
-
+				_reSendChecked = value;				
 				OnPropertyChanged(nameof(ReSendChecked));
 			}
 		}
@@ -166,7 +137,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public void SaveLanguageMappingSettings()
+		public void SaveLanguageMappings()
 		{
 			var savedSettings = _provider.TranslationService.LanguageMappingsService.GetLanguageMappingSettings();
 
@@ -176,14 +147,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				savedSettings.LanguageMappings = LanguageMappings.ToList();
 				_provider.TranslationService.LanguageMappingsService.SaveLanguageMappingSettings(savedSettings);
 			}
-		}
+		}	
 
-		public void LoadLanguageMappings()
-		{
-			LoadProjectLanguagePairs();
-		}
-
-		private List<LanguageMappingModel> GetSavedLanguageMappingModel()
+		private List<LanguageMappingModel> GetSavedLanguageMappings()
 		{
 			try
 			{
@@ -195,14 +161,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		private void LoadProjectLanguagePairs()
+		private void LoadLanguageMappings()
 		{
 			if (LanguageMappings != null && LanguageMappings.Any())
 			{
 				return;
 			}
 
-			var savedSettings = GetSavedLanguageMappingModel();
+			var savedSettings = GetSavedLanguageMappings();
 
 			var mtCodes = _provider.LanguagesProvider.GetLanguages();
 
@@ -427,9 +393,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (LanguageMappings != null)
 				{
 					LanguageMappings.Clear();
-
-					LoadProjectLanguagePairs();
-					IsValidData(false);
+					LoadLanguageMappings();					
 
 					System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
 						Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
@@ -459,10 +423,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (LanguageMappings != null)
 				{
 					LanguageMappings.Clear();
-
-					LoadProjectLanguagePairs();
-
-					IsValidData(false);
+					LoadLanguageMappings();					
 				}
 			}
 			catch (Exception ex)
@@ -503,7 +464,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (canSave)
 				{
-					SaveLanguageMappingSettings();
+					_provider.Options.ResendDraft = ReSendChecked;
+
+					SaveLanguageMappings();
 					Dispose();
 
 					WindowCloser.SetDialogResult(Window, true);
@@ -515,22 +478,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				Mouse.OverrideCursor = Cursors.Arrow;
 			}
 		}
-
-		private bool IsEngineValid(bool savePressed)
-		{
-			if (savePressed || LanguageMappings.Any())
-			{
-				if (!LanguageMappings.Any(l => l.Engines.Any()))
-				{
-					throw new Exception(Constants.NoEnginesLoaded);
-				}
-
-				return true;
-			}
-
-			return true;
-		}
-
+	
 		private void ViewLanguageMappings(object obj)
 		{
 			var window = new MTCodesWindow
