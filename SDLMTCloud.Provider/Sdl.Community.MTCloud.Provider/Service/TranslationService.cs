@@ -33,7 +33,15 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public void UpdateLanguageMappings()
 		{
-			LanguageMappings = LanguageMappingsService?.GetLanguageMappingSettings()?.LanguageMappings?.ToList();
+			try
+			{
+				LanguageMappings = LanguageMappingsService?.GetLanguageMappingSettings()?.LanguageMappings?.ToList();
+			}
+			catch
+			{
+				LanguageMappingsService?.RemoveLanguageMappingSettings();
+				LanguageMappings = new List<LanguageMappingModel>();				
+			}			
 		}
 
 		public async Task<Segment[]> TranslateText(string text, string source, string target)

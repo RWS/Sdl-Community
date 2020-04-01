@@ -77,5 +77,6 @@
 		public static string EnginesSelectionMessage = "Settings not saved! Please select the corresponding engine from the Language Mappings tab.";
 		public static string NoTranslationMessage = "Translation cannot be received because MT Cloud engine is not set for the current Language Pair";
 		public static string NoAvailableDictionary = "No dictionary available";
+		public static string NoAvailableModel = "No model available";
 	}
 }

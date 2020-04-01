@@ -229,4 +229,16 @@
 	<data name="Message_Second_Attempt" xml:space="preserve">
     <value>Second Attempt</value>
   </data>
+	<data name="Message_The_model_cannot_be_null_for_language_direction" xml:space="preserve">
+    <value>The model cannot be null for language direction {0}-&gt;{1}</value>
+  </data>
+	<data name="Message_Unable_to_save_settings" xml:space="preserve">
+    <value>Unable to save settings.</value>
+  </data>
+	<data name="Message_SelectLanguageDirectionForMTModel" xml:space="preserve">
+    <value>A model should be selected for the language pair '{0}-&gt;{1}' in order to retrieve translations</value>
+  </data>
+	<data name="Message_DoYouWantToProceed" xml:space="preserve">
+    <value>Do you want to proceed without assigning a model?</value>
+  </data>
 </root>
