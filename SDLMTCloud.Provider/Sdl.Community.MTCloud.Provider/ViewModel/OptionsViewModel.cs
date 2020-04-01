@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
@@ -23,37 +22,32 @@ using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
-	public class OptionsViewModel : BaseViewModel
+	public class OptionsViewModel : BaseViewModel, IDisposable
 	{
 		public static readonly Log Log = Log.Instance;
 
 		private readonly SdlMTCloudTranslationProvider _provider;
-		private readonly LanguagePair[] _languagePairs;
+		private readonly LanguagePair[] _projectLanguagePairs;
 
 		private ICommand _saveCommand;
 		private ICommand _resetToDefaultsCommand;
 		private ICommand _viewLanguageMappingsCommand;
 
 		private bool _reSendChecked;
+		private List<MTCloudDictionary> _mtCloudDictionaries;
 		private LanguageMappingModel _selectedLanguageMapping;
 		private ObservableCollection<LanguageMappingModel> _languageMappings;
 		private bool _isWaiting;
 
-		public OptionsViewModel(Window window, SdlMTCloudTranslationProvider provider, LanguagePair[] languagePairs)
+		public OptionsViewModel(Window window, SdlMTCloudTranslationProvider provider, LanguagePair[] projectLanguagePairs)
 		{
-			_provider = provider;
-
 			Window = window;
 
-			_languagePairs = languagePairs;
-
-			_languageMappings = new ObservableCollection<LanguageMappingModel>();
+			_provider = provider;
+			_projectLanguagePairs = projectLanguagePairs;
 
 			ReSendChecked = provider.Options?.ResendDraft ?? true;
-
 			LoadLanguageMappings();
-
-			BindingOperations.EnableCollectionSynchronization(LanguageMappings, _languageMappings);
 		}
 
 		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(Save));
@@ -91,14 +85,46 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 
 			return false;
-		}		
+		}
+
+		public List<MTCloudDictionary> MTCloudDictionaries
+		{
+			get
+			{
+				if (_mtCloudDictionaries == null)
+				{
+					var accountId = _provider.TranslationService.ConnectionService.Credential.AccountId;
+					var result = Task.Run(async () => await _provider.TranslationService.GetDictionaries(accountId)).Result;
+					_mtCloudDictionaries = result?.Dictionaries;
+				}
+
+				return _mtCloudDictionaries;
+			}
+		}
 
 		public ObservableCollection<LanguageMappingModel> LanguageMappings
 		{
 			get => _languageMappings;
 			set
 			{
+				if (_languageMappings != null)
+				{
+					foreach (var languageMappingModel in _languageMappings)
+					{
+						languageMappingModel.PropertyChanged -= LanguageMappingModel_PropertyChanged;
+					}
+				}
+
 				_languageMappings = value;
+
+				if (_languageMappings != null)
+				{
+					foreach (var languageMappingModel in _languageMappings)
+					{
+						languageMappingModel.PropertyChanged += LanguageMappingModel_PropertyChanged;
+					}
+				}
+
 				OnPropertyChanged(nameof(LanguageMappings));
 			}
 		}
@@ -140,29 +166,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public bool ValidateEnginesSetup()
-		{
-			var isEngineSet = GetEngineModels(_provider.SubscriptionInfo?.LanguagePairs);
-			return isEngineSet;
-		}
-		
-		/// <summary>
-		/// Load the language mapping settings from .sdlproj settings group
-		/// </summary>
-		public void LoadLanguageMappings()
-		{
-			LoadSavedLanguageMappings();
-			LoadProjectLanguagePairs();
-			GetEngineModels(_provider.SubscriptionInfo?.LanguagePairs);
-			LoadDictionaries();
-		}		
-
-		/// <summary>
-		/// Save the language mapping settings inside the .sdlproj settings group
-		/// </summary>
 		public void SaveLanguageMappingSettings()
 		{
 			var savedSettings = _provider.TranslationService.LanguageMappingsService.GetLanguageMappingSettings();
+
 			if (savedSettings != null)
 			{
 				_provider.TranslationService.LanguageMappingsService.RemoveLanguageMappingSettings();
@@ -171,76 +178,233 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		/// <summary>
-		/// Load MT Cloud dictionaries for the current user
-		/// </summary>
-		public void LoadDictionaries()
+		public void LoadLanguageMappings()
 		{
+			LoadProjectLanguagePairs();
+		}
 
-			var cloudDictionaries = new List<MTCloudDictionary>();
-
-			var accountId = _provider.TranslationService.ConnectionService.Credential.AccountId;
-			var dictionariesResult = Task.Run(async () => await _provider.TranslationService.GetDictionaries(accountId)).Result;
-			if (dictionariesResult != null)
+		private List<LanguageMappingModel> GetSavedLanguageMappingModel()
+		{
+			try
 			{
-				foreach (var item in dictionariesResult.Dictionaries)
+				return _provider.TranslationService.LanguageMappingsService.GetLanguageMappingSettings()?.LanguageMappings;
+			}
+			catch
+			{
+				return new List<LanguageMappingModel>();
+			}
+		}
+
+		private void LoadProjectLanguagePairs()
+		{
+			if (LanguageMappings != null && LanguageMappings.Any())
+			{
+				return;
+			}
+
+			var savedSettings = GetSavedLanguageMappingModel();
+
+			var mtCodes = _provider.LanguagesProvider.GetLanguages();
+
+			var sourceLanguage = _projectLanguagePairs?[0].SourceCulture;
+			var sourceLanguageCode = mtCodes?.FirstOrDefault(s => s.TradosCode.Equals(sourceLanguage?.Name));
+
+			var sourceLanguageMappings = GetLanguageMapping(sourceLanguageCode, sourceLanguage);
+			var sourceLanguageMappingSelected = sourceLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? sourceLanguageMappings[0];
+
+			if (_projectLanguagePairs == null || sourceLanguageCode == null)
+			{
+				return;
+			}
+
+			var languageMappingModels = new List<LanguageMappingModel>();
+
+			foreach (var languagePair in _projectLanguagePairs)
+			{
+				var targetLanguage = languagePair.TargetCulture;
+				var targetLanguageCode = mtCodes.FirstOrDefault(s => s.TradosCode.Equals(languagePair.TargetCulture?.Name));
+
+				if (targetLanguageCode != null)
 				{
-					var dictionary = new MTCloudDictionary
+					var languagePairName = $"{sourceLanguage?.DisplayName} - {languagePair.TargetCulture?.DisplayName}";
+					var savedLanguageMappingModel = savedSettings.FirstOrDefault(a => a.ProjectLanguagePair.Equals(languagePairName));
+
+					var targetLanguageMappings = GetLanguageMapping(targetLanguageCode, targetLanguage);
+					var targetLanguageMappingSelected = targetLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? targetLanguageMappings[0];
+
+					// assign the selected target langauge
+					targetLanguageMappingSelected = targetLanguageMappings.FirstOrDefault(a =>
+														a.CodeName.Equals(savedLanguageMappingModel?.SelectedMTCodeTarget?.CodeName))
+													?? targetLanguageMappingSelected;
+
+					var engineModels = GetEngineModels(sourceLanguageCode.TradosCode, targetLanguageCode.TradosCode, sourceLanguageMappingSelected, targetLanguageMappingSelected);
+
+					// attempt to recover the language model from the secondary language code if it exists!
+					if (engineModels.Count == 1 && engineModels[0].DisplayName == Constants.NoAvailableModel && targetLanguageMappings.Count > 1
+							&& savedLanguageMappingModel?.SelectedModelOption.DisplayName != Constants.NoAvailableModel)
 					{
-						Description = item.Description,
-						DictionaryId = item.DictionaryId,
-						Name = item.Name,
-						Source = item.Source,
-						Target = item.Target
-					};
+						var secondaryLanguageCode = GetSecondaryLangMappingCode(targetLanguageMappings, targetLanguageMappingSelected);
 
-					cloudDictionaries.Add(dictionary);
-				}
+						var secondaryEngineModels = GetEngineModels(sourceLanguageCode.TradosCode, targetLanguageCode.TradosCode,
+							sourceLanguageMappingSelected, secondaryLanguageCode);
 
-				foreach (var languageMapping in LanguageMappings)
-				{
-					var languageDictionaries = cloudDictionaries
-						.Where(d => languageMapping.MTCodesSource.Any(s => s.CodeName.Equals(d.Source)))
-						.Where(d => languageMapping.MTCodesTarget.Any(t => t.CodeName.Equals(d.Target))).ToList();
-
-					if (languageDictionaries.Count == 0)
-					{
-
-						languageMapping.MTCloudDictionaries = new ObservableCollection<MTCloudDictionary>();
-
-						if (!languageMapping.MTCloudDictionaries.Any(d => d.Name.Equals(Constants.NoAvailableDictionary)))
+						if (secondaryEngineModels.Any())
 						{
-							languageMapping.MTCloudDictionaries.Insert(0, new MTCloudDictionary { Name = Constants.NoAvailableDictionary, DictionaryId = string.Empty });
+							engineModels = secondaryEngineModels;
+							targetLanguageMappingSelected = secondaryLanguageCode;
 						}
-
-						languageMapping.SelectedMTCloudDictionary = languageMapping.MTCloudDictionaries[0];
 					}
-					else
+
+					if (engineModels.Any())
 					{
-						if (!languageMapping.MTCloudDictionaries.Any())
-						{
-							languageMapping.MTCloudDictionaries = new ObservableCollection<MTCloudDictionary>(languageDictionaries);
-						}
-						else
-						{
-							foreach (var languageDictionary in languageDictionaries)
-							{
-								if (!languageMapping.MTCloudDictionaries.Any(d => d.Name.Equals(languageDictionary.Name)))
-								{
-									languageMapping.MTCloudDictionaries.Add(languageDictionary);
-								}
-							}
-						}
+						// assign the selected model
+						var selectedModel =
+							engineModels.FirstOrDefault(a => string.Compare(a.DisplayName,
+									  savedLanguageMappingModel?.SelectedModelOption?.DisplayName, StringComparison.InvariantCultureIgnoreCase) == 0)
+							?? engineModels.FirstOrDefault(a => string.Compare(a.Model, "generic", StringComparison.InvariantCultureIgnoreCase) == 0)
+							?? engineModels[0];
 
-						if (!languageMapping.MTCloudDictionaries.Any(d => d.Name.Equals(Constants.NoDictionary)))
-						{
-							languageMapping.MTCloudDictionaries.Insert(0, new MTCloudDictionary { Name = Constants.NoDictionary, DictionaryId = string.Empty });
-						}
+						var dictionaries = GetDictionaries(sourceLanguageMappingSelected, targetLanguageMappingSelected);
 
-						languageMapping.SelectedMTCloudDictionary = languageMapping.SelectedMTCloudDictionary ?? languageDictionaries[0];
+						// assign the selected dictionary
+						var selectedDictionary =
+							dictionaries.FirstOrDefault(a => a.Name.Equals(savedLanguageMappingModel?.SelectedMTCloudDictionary?.Name))
+							?? dictionaries[0];
+
+						var languageMappingModel = new LanguageMappingModel
+						{
+							ProjectLanguagePair = languagePairName,
+							MTCodesSource = sourceLanguageMappings,
+							MTCodesTarget = targetLanguageMappings,
+							SelectedMTCodeSource = sourceLanguageMappingSelected,
+							SelectedMTCodeTarget = targetLanguageMappingSelected,
+							SourceTradosCode = sourceLanguageCode.TradosCode,
+							TargetTradosCode = targetLanguageCode.TradosCode,
+							Engines = engineModels,
+							SelectedModelOption = selectedModel,
+							MTCloudDictionaries = dictionaries,
+							SelectedMTCloudDictionary = selectedDictionary
+						};
+
+						languageMappingModels.Add(languageMappingModel);
 					}
 				}
 			}
+
+			LanguageMappings = new ObservableCollection<LanguageMappingModel>(languageMappingModels);
+		}
+
+		private static LangMappingMTCode GetSecondaryLangMappingCode(List<LangMappingMTCode> targetLanguageMappings,
+			LangMappingMTCode targetLanguageMappingSelected)
+		{
+			LangMappingMTCode tmpCode = null;
+			foreach (var targetLanguageMapping in targetLanguageMappings)
+			{
+				if (targetLanguageMapping.CodeName != targetLanguageMappingSelected.CodeName)
+				{
+					tmpCode = targetLanguageMapping;
+					break;
+				}
+			}
+
+			return tmpCode;
+		}
+
+		private List<TranslationModel> GetEngineModels(string source, string target, LangMappingMTCode sourceCode, LangMappingMTCode targetCode)
+		{
+			var translationModels = new List<TranslationModel>();
+
+			var mtCloudlanguagePairs = _provider.SubscriptionInfo?.LanguagePairs;
+
+			if (mtCloudlanguagePairs == null)
+			{
+				return null;
+			}
+
+			var models = mtCloudlanguagePairs.Where(a => string.Compare(sourceCode.CodeName, a.SourceLanguageId, StringComparison.InvariantCultureIgnoreCase) == 0
+													 && string.Compare(targetCode.CodeName, a.TargetLanguageId, StringComparison.InvariantCultureIgnoreCase) == 0);
+
+			foreach (var model in models)
+			{
+				translationModels.Add(new TranslationModel
+				{
+					Model = model.Model,
+					MTCloudLanguagePair = model,
+					DisplayName =
+						$"{model.SourceLanguageId}-{model.TargetLanguageId} {model.DisplayName}",
+					Source = source,
+					Target = target
+				});
+			}
+
+			if (translationModels.Count == 0)
+			{
+				translationModels.Add(new TranslationModel
+				{
+					Model = null,
+					MTCloudLanguagePair = null,
+					DisplayName = Constants.NoAvailableModel,
+					Source = source,
+					Target = target
+				});
+			}
+
+			return translationModels;
+		}
+
+		private static List<LangMappingMTCode> GetLanguageMapping(MTCloudLanguage mtCloudLanguage, CultureInfo language)
+		{
+			var languageMappings = new List<LangMappingMTCode>();
+
+			if (mtCloudLanguage != null)
+			{
+				languageMappings.Add(new LangMappingMTCode
+				{
+					CodeName = mtCloudLanguage.MTCode,
+					IsLocale = false,
+					Flag = SetLanguageFlag(language)
+				});
+
+				if (!string.IsNullOrEmpty(mtCloudLanguage.MTCodeLocale))
+				{
+					languageMappings.Add(new LangMappingMTCode
+					{
+						CodeName = mtCloudLanguage.MTCodeLocale,
+						IsLocale = true,
+						Flag = SetLanguageFlag(language)
+					});
+				}
+			}
+
+			return languageMappings;
+		}
+
+		private List<MTCloudDictionary> GetDictionaries(LangMappingMTCode sourceCode, LangMappingMTCode targetCode)
+		{
+			var cloudDictionaries = new List<MTCloudDictionary>();
+
+			if (MTCloudDictionaries != null)
+			{
+				var dictionaries = MTCloudDictionaries.Where(a =>
+					string.Compare(a.Source, sourceCode.CodeName, StringComparison.InvariantCultureIgnoreCase) == 0
+					&& string.Compare(a.Target, targetCode.CodeName, StringComparison.InvariantCultureIgnoreCase) == 0).ToList();
+
+				if (dictionaries.Any())
+				{
+					cloudDictionaries.AddRange(dictionaries);
+				}
+
+				if (cloudDictionaries.Count == 0)
+				{
+					cloudDictionaries.Add(new MTCloudDictionary { Name = Constants.NoAvailableDictionary, DictionaryId = string.Empty });
+				}
+				else if (!cloudDictionaries.Exists(a => a.Name == Constants.NoDictionary))
+				{
+					cloudDictionaries.Insert(0, new MTCloudDictionary { Name = Constants.NoDictionary, DictionaryId = string.Empty });
+				}
+			}
+
+			return cloudDictionaries;
 		}
 
 		private void ResetToDefaults(object parameter)
@@ -263,11 +427,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (LanguageMappings != null)
 				{
 					LanguageMappings.Clear();
-					LoadSavedLanguageMappings();
-					LoadProjectLanguagePairs();
-					GetEngineModels(_provider.SubscriptionInfo?.LanguagePairs);
-					LoadDictionaries();
 
+					LoadProjectLanguagePairs();
 					IsValidData(false);
 
 					System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
@@ -286,8 +447,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				IsWaiting = false;
 				Mouse.OverrideCursor = Cursors.Arrow;
 			}
-
-
 		}
 
 		private void Reload()
@@ -300,10 +459,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (LanguageMappings != null)
 				{
 					LanguageMappings.Clear();
-					LoadSavedLanguageMappings();
+
 					LoadProjectLanguagePairs();
-					GetEngineModels(_provider.SubscriptionInfo?.LanguagePairs);
-					LoadDictionaries();
 
 					IsValidData(false);
 				}
@@ -321,17 +478,37 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				Mouse.OverrideCursor = Cursors.Arrow;
 			}
 		}
-
+		
 		private void Save(object parameter)
 		{
 			try
 			{
 				Mouse.OverrideCursor = Cursors.Wait;
 
-				SaveLanguageMappingSettings();
+				var canSave = true;
+				var invalidModel = LanguageMappings.FirstOrDefault(a => a.SelectedModelOption.DisplayName == Constants.NoAvailableModel);
+				if (invalidModel != null)
+				{
+					var message = string.Format(PluginResources.Message_SelectLanguageDirectionForMTModel,
+							invalidModel.SelectedMTCodeSource.CodeName, invalidModel.SelectedMTCodeTarget.CodeName);
+					var question = PluginResources.Message_DoYouWantToProceed;
+					
+					var response = MessageBox.Show(message + Environment.NewLine + Environment.NewLine + question, 
+						Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+					if (response == DialogResult.No)
+					{
+						canSave = false;
+					}
+				}
 
-				WindowCloser.SetDialogResult(Window, true);
-				Window.Close();
+				if (canSave)
+				{
+					SaveLanguageMappingSettings();
+					Dispose();
+
+					WindowCloser.SetDialogResult(Window, true);
+					Window.Close();
+				}
 			}
 			finally
 			{
@@ -343,12 +520,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			if (savePressed || LanguageMappings.Any())
 			{
-				var isEngineSetup = ValidateEnginesSetup();
-				if (!isEngineSetup)
-				{
-					throw new Exception(Constants.CredentialsAndInternetValidation);
-				}
-
 				if (!LanguageMappings.Any(l => l.Engines.Any()))
 				{
 					throw new Exception(Constants.NoEnginesLoaded);
@@ -377,305 +548,55 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		private void LoadSavedLanguageMappings()
-		{
-			var languageMappings = _provider.TranslationService.LanguageMappingsService.GetLanguageMappingSettings();
-			var currentSettings = languageMappings?.LanguageMappings?.ToList();
-
-			if (currentSettings != null && currentSettings.Any() && _languagePairs.Length.Equals(currentSettings.Count))
-			{
-				var areLanguagesEquals = currentSettings.All(
-					c => _languagePairs.ToList().Any(l => l.SourceCulture.Name.Equals(c.SourceTradosCode)
-														&& (l.TargetCulture.Name.Equals(c.TargetTradosCode))));
-
-				if (areLanguagesEquals)
-				{
-					// clear the current LanguageMappings list to avoid duplications inside the grid and load them from ProjectGroup configuration
-					LanguageMappings.Clear();
-
-					var mtCodes = _provider.LanguagesProvider.GetLanguages();
-
-					foreach (var languageMapping in currentSettings)
-					{
-						LanguageMappings.Add(languageMapping);
-
-						var missingCodes = LoadNewCodes(languageMapping, mtCodes);
-
-						// set the SelectedModelOption of the current LanguageMappings collection (otherwise it will not shown in the grid)
-						var selectedLangModel = LanguageMappings.FirstOrDefault(l => l.ProjectLanguagePair.Equals(languageMapping.ProjectLanguagePair));
-						var langMappingIndex = LanguageMappings.IndexOf(selectedLangModel);
-						var selectedModelOption = LanguageMappings[langMappingIndex].Engines?.FirstOrDefault(e => e.DisplayName.Equals(selectedLangModel?.SelectedModelOption?.DisplayName));
-						LanguageMappings[langMappingIndex].SelectedModelOption = selectedModelOption;
-
-						var selectedDictionary = LanguageMappings[langMappingIndex].MTCloudDictionaries?.FirstOrDefault(e => e.Name.Equals(selectedLangModel?.SelectedMTCloudDictionary?.Name));
-						LanguageMappings[langMappingIndex].SelectedMTCloudDictionary = selectedDictionary;
-
-						AddMissingCode(missingCodes.Keys.First(), LanguageMappings[langMappingIndex].MTCodesSource);
-						AddMissingCode(missingCodes.Values.First(), LanguageMappings[langMappingIndex].MTCodesTarget);
-
-						var selectedMTCodeSource = LanguageMappings[langMappingIndex].MTCodesSource?.FirstOrDefault(e => e.CodeName.Equals(selectedLangModel?.SelectedMTCodeSource?.CodeName));
-						selectedMTCodeSource.Flag = SetLanguageFlag(new CultureInfo(languageMapping.SourceTradosCode));
-
-						var selectedMTCodeTarget = LanguageMappings[langMappingIndex].MTCodesTarget?.FirstOrDefault(e => e.CodeName.Equals(selectedLangModel?.SelectedMTCodeTarget?.CodeName));
-						selectedMTCodeTarget.Flag = SetLanguageFlag(new CultureInfo(languageMapping.TargetTradosCode));
-
-						LanguageMappings[langMappingIndex].SelectedMTCodeSource = selectedMTCodeSource;
-						LanguageMappings[langMappingIndex].SelectedMTCodeTarget = selectedMTCodeTarget;
-
-						SetMTFlag(LanguageMappings[langMappingIndex]);
-					}
-				}
-			}
-		}
-
-		private bool GetEngineModels(IReadOnlyCollection<MTCloudLanguagePair> mtCloudlanguagePairs)
-		{
-			if (mtCloudlanguagePairs != null && LanguageMappings != null)
-			{
-				foreach (var languageMapping in LanguageMappings)
-				{
-					//get beGlobalLanguagePairs for the specific source language MTSourceCodes
-					var sourcePairs = mtCloudlanguagePairs.Where(b =>
-						languageMapping.MTCodesSource.Any(l => b.SourceLanguageId.Equals(l.CodeName)));
-
-					//get beGlobalLanguagePairs for the specific target MTTargetCodes and exiting sourcePairs
-					var serviceLanguagePairs =
-						sourcePairs.Where(s => languageMapping.MTCodesTarget.Any(l => s.TargetLanguageId.Equals(l.CodeName)));
-
-					//var splittedLangPair = Utils.SplitLanguagePair(languageMapping.ProjectLanguagePair);
-
-					var sourceCultureName = _languagePairs
-						?.FirstOrDefault(n => string.Compare(n.SourceCulture.Name, languageMapping.SourceTradosCode,
-												  StringComparison.InvariantCultureIgnoreCase) == 0)?.SourceCultureName;
-
-					var targetCultureName = _languagePairs
-						?.FirstOrDefault(n => string.Compare(n.TargetCulture.Name, languageMapping.TargetTradosCode,
-												  StringComparison.InvariantCultureIgnoreCase) == 0)?.TargetCultureName;
-
-					if (string.IsNullOrEmpty(sourceCultureName) || string.IsNullOrEmpty(targetCultureName))
-					{
-						return false;
-					}
-
-					foreach (var serviceLanguagePair in serviceLanguagePairs)
-					{
-						var existingTranslationModel = languageMapping.Engines.FirstOrDefault(e =>
-							e.Model.Equals(serviceLanguagePair.Model)
-							&& e.DisplayName.Contains(serviceLanguagePair.TargetLanguageId));
-
-						TranslationModel newTranslationModel;
-						if (existingTranslationModel == null)
-						{
-							newTranslationModel = new TranslationModel
-							{
-								Model = serviceLanguagePair.Model,
-								DisplayName =
-									$"{serviceLanguagePair.SourceLanguageId}-{serviceLanguagePair.TargetLanguageId} {serviceLanguagePair.DisplayName}"
-							};
-
-							newTranslationModel.LanguagesSupported.Add(sourceCultureName, targetCultureName);
-
-							if (!languageMapping.Engines.Any(e => e.DisplayName.Equals(newTranslationModel.DisplayName)))
-							{
-								// the initialization is needed to display the progress ring while loading the engines
-								// after user presses on the "Reset Langauge Mappings to default" button
-								var currentEnginesCollection = languageMapping.Engines;
-								languageMapping.Engines = new ObservableCollection<TranslationModel>(currentEnginesCollection)
-								{
-									newTranslationModel
-
-								};
-
-								languageMapping.SelectedModelOption = languageMapping.SelectedModelOption ?? languageMapping.Engines?[0];
-							}
-						}
-					}
-				}
-
-				return true;
-			}
-
-			return false;
-		}
-
-		/// <summary>
-		/// Load to the existing language mappings settings, the new codes which were added using the MTCodes window
-		/// </summary>
-		/// <param name="languageMapping">language mapping</param>
-		/// <param name="mtCodes">mtcodes collection</param>
-		/// <returns>dictionary of lists with missing source and target codes</returns>
-		private Dictionary<List<LangMappingMTCode>, List<LangMappingMTCode>> LoadNewCodes(
-			LanguageMappingModel languageMapping,
-			IReadOnlyCollection<MTCloudLanguage> mtCodes)
-		{
-			var sourceModel = mtCodes.FirstOrDefault(s => s.TradosCode.Equals(languageMapping.SourceTradosCode));
-			var targetModel = mtCodes.FirstOrDefault(s => s.TradosCode.Equals(languageMapping.TargetTradosCode));
-
-			var sCodes = new List<string>
-			{
-				sourceModel?.MTCode,
-				sourceModel?.MTCodeLocale
-			};
-
-			var tCodes = new List<string>
-			{
-				targetModel?.MTCode,
-				targetModel?.MTCodeLocale
-			};
-
-			var missingSourceCodes = sCodes.Where(s => languageMapping.MTCodesSource.All(m => m.CodeName != s)).ToList();
-			var langMappingMTSource = SetNewCodes(missingSourceCodes, languageMapping.SourceTradosCode);
-
-			var missingTargetCodes = tCodes.Where(t => languageMapping.MTCodesTarget.All(m => m.CodeName != t)).ToList();
-			var langMappingMTTarget = SetNewCodes(missingTargetCodes, languageMapping.TargetTradosCode);
-
-			var result = new Dictionary<List<LangMappingMTCode>, List<LangMappingMTCode>>();
-			result.Add(langMappingMTSource, langMappingMTTarget);
-
-			return result;
-		}
-
-		/// <summary>
-		/// Add missing code to existing LanguageMappings configurations
-		/// </summary>
-		/// <param name="missingCodes"></param>
-		/// <param name="languageMappingCodes"></param>
-		private void AddMissingCode(IEnumerable<LangMappingMTCode> missingCodes, ICollection<LangMappingMTCode> languageMappingCodes)
-		{
-			foreach (var code in missingCodes)
-			{
-				if (!string.IsNullOrEmpty(code.CodeName))
-				{
-					languageMappingCodes.Add(code);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Set the missing codes which were new added withing the SDL MT Codes window.
-		/// </summary>
-		/// <param name="missingCodes">missing codes</param>
-		/// <param name="tradosCode">corresponding tradosCode for source and target languages</param>
-		/// <returns></returns>
-		private List<LangMappingMTCode> SetNewCodes(IEnumerable<string> missingCodes, string tradosCode)
-		{
-			var mtCodes = new List<LangMappingMTCode>();
-			foreach (var item in missingCodes)
-			{
-				var cultureInfo = new CultureInfo(tradosCode);
-				mtCodes.Add(new LangMappingMTCode { CodeName = item, Flag = SetLanguageFlag(cultureInfo) });
-			}
-
-			return mtCodes;
-		}
-
-		/// <summary>
-		/// Load project language pairs and the default details
-		/// (the information is loaded only when no other LanguageMappings settings were already made and saved inside the .sdlproj settings group)
-		/// </summary>
-		private void LoadProjectLanguagePairs()
-		{
-			if (LanguageMappings != null && LanguageMappings.Any())
-			{
-				return;
-			}
-
-			// load the MTCode (the load is needed, because user might add/remove codes from MTCodes grid
-			var mtCodes = _provider.LanguagesProvider.GetLanguages();
-
-			var sourceLanguage = _languagePairs?[0].SourceCulture;
-			var mtCodeSource = mtCodes?.FirstOrDefault(s => s.TradosCode.Equals(sourceLanguage?.Name));
-
-			var mtCodeSourceList = new List<LangMappingMTCode>();
-			if (mtCodeSource != null)
-			{
-				mtCodeSourceList.Add(new LangMappingMTCode
-				{
-					CodeName = mtCodeSource.MTCode,
-					Flag = SetLanguageFlag(sourceLanguage)
-				});
-
-				if (!string.IsNullOrEmpty(mtCodeSource.MTCodeLocale))
-				{
-					mtCodeSourceList.Add(new LangMappingMTCode
-					{
-						CodeName = mtCodeSource.MTCodeLocale,
-						Flag = SetLanguageFlag(sourceLanguage)
-					});
-				}
-			}
-
-			if (_languagePairs == null || mtCodeSource == null)
-			{
-				return;
-			}
-
-			foreach (var langPair in _languagePairs)
-			{
-				var mtCodeTargetList = new List<LangMappingMTCode>();
-
-				var languagePair = $"{sourceLanguage?.DisplayName} - {langPair.TargetCulture?.DisplayName}";
-
-				var mtCodeTarget = mtCodes?.FirstOrDefault(s => s.TradosCode.Equals(langPair.TargetCulture?.Name));
-				if (mtCodeTarget != null)
-				{
-					mtCodeTargetList.Add(new LangMappingMTCode
-					{
-						CodeName = mtCodeTarget.MTCode,
-						Flag = SetLanguageFlag(langPair.TargetCulture)
-					});
-
-					if (!string.IsNullOrEmpty(mtCodeTarget.MTCodeLocale))
-					{
-						mtCodeTargetList.Add(new LangMappingMTCode
-						{
-							CodeName = mtCodeTarget.MTCodeLocale,
-							Flag = SetLanguageFlag(langPair.TargetCulture)
-						});
-					}
-
-					var languageMappingModel = new LanguageMappingModel
-					{
-						ProjectLanguagePair = languagePair,
-						MTCodesSource = new ObservableCollection<LangMappingMTCode>(mtCodeSourceList),
-						SelectedMTCodeSource = mtCodeSourceList[0],
-						MTCodesTarget = new ObservableCollection<LangMappingMTCode>(mtCodeTargetList),
-						SelectedMTCodeTarget = mtCodeTargetList[0],
-						Engines = new ObservableCollection<TranslationModel>(),
-						TargetTradosCode = mtCodeTarget.TradosCode,
-						SourceTradosCode = mtCodeSource.TradosCode,
-						MTCloudDictionaries = new ObservableCollection<MTCloudDictionary>()
-					};
-
-					LanguageMappings.Add(languageMappingModel);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Set Language Flag for Source MTCode and Target MTCode
-		/// </summary>
-		/// <param name="cultureInfo">cultureInfo</param>
-		/// <returns>image</returns>
 		private static Image SetLanguageFlag(CultureInfo cultureInfo)
 		{
 			return new Language(cultureInfo).GetFlagImage();
 		}
 
-		/// <summary>
-		/// Set the flag for each Source MTCode and Target MTCode when the Language Mappings grid is showing
-		/// </summary>
-		/// <param name="languageMapping">languageMapping</param>
-		private static void SetMTFlag(LanguageMappingModel languageMapping)
+		private void LanguageMappingModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			foreach (var item in languageMapping.MTCodesSource)
+			if (sender is LanguageMappingModel languageModel)
 			{
-				item.Flag = SetLanguageFlag(new CultureInfo(languageMapping.SourceTradosCode));
-			}
+				if (e.PropertyName == nameof(LanguageMappingModel.SelectedMTCodeSource) ||
+					e.PropertyName == nameof(LanguageMappingModel.SelectedMTCodeTarget))
+				{
+					var engineModels = GetEngineModels(languageModel.SourceTradosCode, languageModel.TargetTradosCode,
+						languageModel.SelectedMTCodeSource, languageModel.SelectedMTCodeTarget);
 
-			foreach (var item in languageMapping.MTCodesTarget)
+					if (engineModels.Any())
+					{
+						// assign the selected model
+						var selectedModel =
+							engineModels.FirstOrDefault(a => string.Compare(a.DisplayName,
+										 languageModel.SelectedModelOption?.DisplayName, StringComparison.InvariantCultureIgnoreCase) == 0)
+							?? engineModels.FirstOrDefault(a => string.Compare(a.Model, "generic", StringComparison.InvariantCultureIgnoreCase) == 0)
+							?? engineModels[0];
+
+						languageModel.Engines = engineModels;
+						languageModel.SelectedModelOption = selectedModel;
+					}
+
+					var dictionaries = GetDictionaries(languageModel.SelectedMTCodeSource, languageModel.SelectedMTCodeTarget);
+
+					// assign the selected dictionary
+					var selectedDictionary =
+						dictionaries.FirstOrDefault(a => a.Name.Equals(languageModel.SelectedMTCloudDictionary?.Name))
+						?? dictionaries[0];
+
+					languageModel.MTCloudDictionaries = dictionaries;
+					languageModel.SelectedMTCloudDictionary = selectedDictionary;
+				}
+			}
+		}
+
+		public void Dispose()
+		{
+			if (_languageMappings != null)
 			{
-				item.Flag = SetLanguageFlag(new CultureInfo(languageMapping.TargetTradosCode));
+				foreach (var languageMappingModel in _languageMappings)
+				{
+					languageMappingModel.PropertyChanged -= LanguageMappingModel_PropertyChanged;
+				}
 			}
 		}
 	}

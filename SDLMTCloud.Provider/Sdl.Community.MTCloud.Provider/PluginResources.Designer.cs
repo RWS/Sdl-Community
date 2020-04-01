@@ -178,6 +178,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to proceed without assigning a model?.
+        /// </summary>
+        public static string Message_DoYouWantToProceed {
+            get {
+                return ResourceManager.GetString("Message_DoYouWantToProceed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid credentials!.
         /// </summary>
         public static string Message_Invalid_credentials {
@@ -205,6 +214,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A model should be selected for the language pair &apos;{0}-&gt;{1}&apos; in order to retrieve translations.
+        /// </summary>
+        public static string Message_SelectLanguageDirectionForMTModel {
+            get {
+                return ResourceManager.GetString("Message_SelectLanguageDirectionForMTModel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Successfully reset language mappings.
         /// </summary>
         public static string Message_Successfully_reset_language_mappings {
@@ -219,6 +237,24 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string Message_Successfully_reset_to_defaults {
             get {
                 return ResourceManager.GetString("Message_Successfully_reset_to_defaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The model cannot be null for language direction {0}-&gt;{1}.
+        /// </summary>
+        public static string Message_The_model_cannot_be_null_for_language_direction {
+            get {
+                return ResourceManager.GetString("Message_The_model_cannot_be_null_for_language_direction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to save settings..
+        /// </summary>
+        public static string Message_Unable_to_save_settings {
+            get {
+                return ResourceManager.GetString("Message_Unable_to_save_settings", resourceCulture);
             }
         }
         

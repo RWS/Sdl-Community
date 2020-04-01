@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 
 namespace Sdl.Community.MTCloud.Provider.Model
@@ -9,10 +9,10 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		private LangMappingMTCode _selectedMTCodeSource;
 		private LangMappingMTCode _selectedMTCodeTarget;
 		private TranslationModel _selectedModelOption;
-		private ObservableCollection<TranslationModel> _engines;
-		private ObservableCollection<LangMappingMTCode> _mtCodesSource;
-		private ObservableCollection<LangMappingMTCode> _mtCodesTarget;
-		private ObservableCollection<MTCloudDictionary> _mtCloudDictionaries;
+		private List<TranslationModel> _engines;
+		private List<LangMappingMTCode> _mtCodesSource;
+		private List<LangMappingMTCode> _mtCodesTarget;
+		private List<MTCloudDictionary> _mtCloudDictionaries;
 		private MTCloudDictionary _selectedMTCloudDictionary;
 
 		public string ProjectLanguagePair
@@ -25,13 +25,13 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			}
 		}
 
-		public ObservableCollection<TranslationModel> Engines
+		public List<TranslationModel> Engines
 		{
 			get => _engines;
 			set
 			{
 				_engines = value;
-				OnPropertyChanged(nameof(Engines));
+				OnPropertyChanged(nameof(Engines));				
 			}
 		}
 
@@ -41,11 +41,13 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			set
 			{
 				_selectedModelOption = value;
-				OnPropertyChanged(nameof(SelectedModelOption));
+				OnPropertyChanged(nameof(SelectedModelOption));		
+				OnPropertyChanged();
+
 			}
 		}
 
-		public ObservableCollection<LangMappingMTCode> MTCodesSource
+		public List<LangMappingMTCode> MTCodesSource
 		{
 			get => _mtCodesSource;
 			set
@@ -55,7 +57,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			}
 		}
 
-		public ObservableCollection<LangMappingMTCode> MTCodesTarget
+		public List<LangMappingMTCode> MTCodesTarget
 		{
 			get => _mtCodesTarget;
 			set
@@ -85,7 +87,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			}
 		}
 
-		public ObservableCollection<MTCloudDictionary> MTCloudDictionaries
+		public List<MTCloudDictionary> MTCloudDictionaries
 		{
 			get => _mtCloudDictionaries;
 			set
