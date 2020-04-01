@@ -122,9 +122,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					return;
 				}
 
-				_reSendChecked = value;
-				_provider.Options.ResendDraft = value;
-
+				_reSendChecked = value;				
 				OnPropertyChanged(nameof(ReSendChecked));
 			}
 		}
@@ -139,7 +137,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public void SaveLanguageMappingSettings()
+		public void SaveLanguageMappings()
 		{
 			var savedSettings = _provider.TranslationService.LanguageMappingsService.GetLanguageMappingSettings();
 
@@ -149,14 +147,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				savedSettings.LanguageMappings = LanguageMappings.ToList();
 				_provider.TranslationService.LanguageMappingsService.SaveLanguageMappingSettings(savedSettings);
 			}
-		}
+		}	
 
-		public void LoadLanguageMappings()
-		{
-			LoadProjectLanguagePairs();
-		}
-
-		private List<LanguageMappingModel> GetSavedLanguageMappingModel()
+		private List<LanguageMappingModel> GetSavedLanguageMappings()
 		{
 			try
 			{
@@ -168,14 +161,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		private void LoadProjectLanguagePairs()
+		private void LoadLanguageMappings()
 		{
 			if (LanguageMappings != null && LanguageMappings.Any())
 			{
 				return;
 			}
 
-			var savedSettings = GetSavedLanguageMappingModel();
+			var savedSettings = GetSavedLanguageMappings();
 
 			var mtCodes = _provider.LanguagesProvider.GetLanguages();
 
@@ -400,8 +393,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (LanguageMappings != null)
 				{
 					LanguageMappings.Clear();
-
-					LoadProjectLanguagePairs();					
+					LoadLanguageMappings();					
 
 					System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
 						Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
@@ -431,8 +423,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (LanguageMappings != null)
 				{
 					LanguageMappings.Clear();
-
-					LoadProjectLanguagePairs();					
+					LoadLanguageMappings();					
 				}
 			}
 			catch (Exception ex)
@@ -473,7 +464,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (canSave)
 				{
-					SaveLanguageMappingSettings();
+					_provider.Options.ResendDraft = ReSendChecked;
+
+					SaveLanguageMappings();
 					Dispose();
 
 					WindowCloser.SetDialogResult(Window, true);
