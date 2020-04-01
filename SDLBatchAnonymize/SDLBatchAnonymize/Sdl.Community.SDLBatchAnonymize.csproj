@@ -115,6 +115,7 @@
     <Compile Include="BatchTask\BatchAnonymizerSettingsPage.cs" />
     <Compile Include="Behavior\WindowLoadedBehaviour.cs" />
     <Compile Include="Command\CommandHandler.cs" />
+    <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
     <Compile Include="Interface\IBatchAnonymizerSettings.cs" />
     <Compile Include="Interface\IUserNameService.cs" />
     <Compile Include="Log.cs" />
@@ -178,9 +179,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
