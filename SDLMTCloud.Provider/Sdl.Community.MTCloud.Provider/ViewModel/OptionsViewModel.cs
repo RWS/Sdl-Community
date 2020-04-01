@@ -58,34 +58,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public ICommand ViewLanguageMappingsCommand => _viewLanguageMappingsCommand
 														?? (_viewLanguageMappingsCommand = new RelayCommand(ViewLanguageMappings));
 
-		public Window Window { get; }
-
-		public bool IsValidData(bool savePressed)
-		{
-			_provider.Options.ResendDraft = ReSendChecked;
-
-			try
-			{
-				if (!LanguageMappings.Any())
-				{
-					MessageBox.Show(Constants.EnginesSelectionMessage, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-					return false;
-				}
-
-				return IsEngineValid(savePressed);
-			}
-			catch (Exception ex)
-			{
-				var message = ex.Message.Contains(Constants.TokenFailed) || ex.Message.Contains(Constants.NullValue)
-					? Constants.CredentialsNotValid
-					: ex.Message;
-
-				MessageBox.Show(message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
-			}
-
-			return false;
-		}
+		public Window Window { get; }	
 
 		public List<MTCloudDictionary> MTCloudDictionaries
 		{
@@ -428,8 +401,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					LanguageMappings.Clear();
 
-					LoadProjectLanguagePairs();
-					IsValidData(false);
+					LoadProjectLanguagePairs();					
 
 					System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
 						Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
@@ -460,9 +432,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					LanguageMappings.Clear();
 
-					LoadProjectLanguagePairs();
-
-					IsValidData(false);
+					LoadProjectLanguagePairs();					
 				}
 			}
 			catch (Exception ex)
@@ -515,22 +485,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				Mouse.OverrideCursor = Cursors.Arrow;
 			}
 		}
-
-		private bool IsEngineValid(bool savePressed)
-		{
-			if (savePressed || LanguageMappings.Any())
-			{
-				if (!LanguageMappings.Any(l => l.Engines.Any()))
-				{
-					throw new Exception(Constants.NoEnginesLoaded);
-				}
-
-				return true;
-			}
-
-			return true;
-		}
-
+	
 		private void ViewLanguageMappings(object obj)
 		{
 			var window = new MTCodesWindow
