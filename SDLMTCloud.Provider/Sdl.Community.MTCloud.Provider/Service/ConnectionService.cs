@@ -17,10 +17,8 @@ using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
-	public class ConnectionService
-	{
-		public static readonly Log Log = Log.Instance;
-
+	public class ConnectionService: ICredentialService
+	{		
 		public ConnectionService(IWin32Window owner)
 		{
 			Owner = owner;
@@ -31,7 +29,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			Credential = new Credential();
 		}
 
-		public IWin32Window Owner { get; internal set; }
+		public IWin32Window Owner { get; set; }
 
 		public bool IsSignedIn { get; private set; }
 
@@ -99,7 +97,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 				if (string.Compare(itemName, "Created", StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
-					var success = int.TryParse(itemValue, out var value);
+					var success = long.TryParse(itemValue, out var value);
 					if (success)
 					{
 						created = DateTime.FromBinary(value);
@@ -116,7 +114,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					Password = password,
 					Token = token,
 					AccountId = accountId,
-					Created = created == DateTime.MinValue ? DateTime.Now : created
+					Created = (created == DateTime.MinValue) ? DateTime.Now : created
 				};
 			}
 
@@ -274,6 +272,63 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			return signIn;
+		}		
+
+		public void AddTraceHeader(HttpRequestMessage request)
+		{
+			request.Headers.Add(Constants.TraceId,
+				$"{Constants.SDLMachineTranslationCloudProvider} {PluginVersion} - {StudioVersion}.{Guid.NewGuid().ToString()}");
+		}
+
+		public void SaveCredential(ITranslationProviderCredentialStore credentialStore, bool persist = true)
+		{
+			var uri = new Uri($"{Constants.MTCloudUriScheme}://");
+
+			var credentials = new TranslationProviderCredential(CredentialToString(), persist);
+			credentialStore.RemoveCredential(uri);
+			credentialStore.AddCredential(uri, credentials);
+		}
+
+		public ICredential GetCredential(ITranslationProviderCredentialStore credentialStore)
+		{
+			var uri = new Uri($"{Constants.MTCloudUriScheme}://");
+
+			ICredential credential = null;
+			var credentials = credentialStore.GetCredential(uri);
+			if (!string.IsNullOrEmpty(credentials?.Credential))
+			{
+				credential = GetCredential(credentials.Credential);
+			}
+
+			return credential ?? new Credential();
+		}
+
+		public bool IsSignedInStudioAuthentication(out string name)
+		{
+			var languageCloudCredential = StudioInstance.GetLanguageCloudIdentityApi.LanguageCloudCredential;
+
+			name = languageCloudCredential?.Email;
+
+			var success = !string.IsNullOrEmpty(languageCloudCredential?.Email)
+			              && !string.IsNullOrEmpty(StudioInstance.GetLanguageCloudIdentityApi?.AccessToken);
+
+			// Identify if the life expectancy of the credential has expired
+			//var isValidDuration = Credential.Created.AddHours(12) > DateTime.Now;
+
+			return success;
+		}
+
+		private bool IsSignedInCredentialsAuthentication()
+		{
+			var isNullOrEmpty = string.IsNullOrEmpty(Credential.AccountId)
+			                    || string.IsNullOrEmpty(Credential.Token)
+			                    || string.IsNullOrEmpty(Credential.Name)
+			                    || string.IsNullOrEmpty(Credential.Password);
+
+			// Identify if the life expectancy of the credential has expired
+			var isValidDuration = Credential.Created.AddHours(12) > DateTime.Now;
+
+			return !isNullOrEmpty && isValidDuration;
 		}
 
 		private async Task<Tuple<AuthorizationResponse, string>> SignInAttempt(string resource, string content)
@@ -323,7 +378,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return userDetails;
 		}
 
-		public async Task<Tuple<UserDetails, string>> GetUserDetailsAttempt(string token, string resource)
+		private async Task<Tuple<UserDetails, string>> GetUserDetailsAttempt(string token, string resource)
 		{
 			try
 			{
@@ -356,7 +411,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		public CredentialsWindow GetCredentialsWindow(IWin32Window owner)
+		private CredentialsWindow GetCredentialsWindow(IWin32Window owner)
 		{
 			var credentialsWindow = new CredentialsWindow();
 			var helper = new WindowInteropHelper(credentialsWindow);
@@ -366,63 +421,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			return credentialsWindow;
-		}
-
-		public bool IsSignedInCredentialsAuthentication()
-		{
-			var isNullOrEmpty = string.IsNullOrEmpty(Credential.AccountId)
-								|| string.IsNullOrEmpty(Credential.Token)
-								|| string.IsNullOrEmpty(Credential.Name)
-								|| string.IsNullOrEmpty(Credential.Password);
-
-			// Identify if the life expectancy of the credential has expired
-			var isValidDuration = Credential.Created.AddHours(12) > DateTime.Now;
-
-			return !isNullOrEmpty && isValidDuration;
-		}
-
-		public bool IsSignedInStudioAuthentication(out string user)
-		{
-			var languageCloudCredential = StudioInstance.GetLanguageCloudIdentityApi.LanguageCloudCredential;
-
-			user = languageCloudCredential?.Email;
-
-			var success = !string.IsNullOrEmpty(languageCloudCredential?.Email)
-				   && !string.IsNullOrEmpty(StudioInstance.GetLanguageCloudIdentityApi?.AccessToken);
-
-			// Identify if the life expectancy of the credential has expired
-			//var isValidDuration = Credential.Created.AddHours(12) > DateTime.Now;
-
-			return success;
-		}
-
-		public void AddTraceHeader(HttpRequestMessage request)
-		{
-			request.Headers.Add(Constants.TraceId,
-				$"{Constants.SDLMachineTranslationCloudProvider} {PluginVersion} - {StudioVersion}.{Guid.NewGuid().ToString()}");
-		}
-
-		public void SaveCredential(ITranslationProviderCredentialStore credentialStore, bool persist = true)
-		{
-			var uri = new Uri($"{Constants.MTCloudUriScheme}://");
-
-			var credentials = new TranslationProviderCredential(CredentialToString(), persist);
-			credentialStore.RemoveCredential(uri);
-			credentialStore.AddCredential(uri, credentials);
-		}
-
-		public ICredential GetCredential(ITranslationProviderCredentialStore credentialStore)
-		{
-			var uri = new Uri($"{Constants.MTCloudUriScheme}://");
-
-			ICredential credential = null;
-			var credentials = credentialStore.GetCredential(uri);
-			if (!string.IsNullOrEmpty(credentials?.Credential))
-			{
-				credential = GetCredential(credentials.Credential);
-			}
-
-			return credential ?? new Credential();
 		}
 	}
 }

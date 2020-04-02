@@ -23,9 +23,7 @@ using MessageBox = System.Windows.Forms.MessageBox;
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
 	public class OptionsViewModel : BaseViewModel, IDisposable
-	{
-		public static readonly Log Log = Log.Instance;
-
+	{		
 		private readonly SdlMTCloudTranslationProvider _provider;
 		private readonly LanguagePair[] _projectLanguagePairs;
 
@@ -208,8 +206,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					// attempt to recover the language model from the secondary language code if it exists!
 					if (engineModels.Count == 1 && engineModels[0].DisplayName == Constants.NoAvailableModel && targetLanguageMappings.Count > 1
 							&& savedLanguageMappingModel?.SelectedModelOption.DisplayName != Constants.NoAvailableModel)
-					{
-						var secondaryLanguageCode = GetSecondaryLangMappingCode(targetLanguageMappings, targetLanguageMappingSelected);
+					{						
+						var secondaryLanguageCode = targetLanguageMappings.FirstOrDefault(a => a.CodeName != targetLanguageMappingSelected.CodeName);
 
 						var secondaryEngineModels = GetEngineModels(sourceLanguageCode.TradosCode, targetLanguageCode.TradosCode,
 							sourceLanguageMappingSelected, secondaryLanguageCode);
@@ -259,23 +257,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			LanguageMappings = new ObservableCollection<LanguageMappingModel>(languageMappingModels);
 		}
-
-		private static LangMappingMTCode GetSecondaryLangMappingCode(List<LangMappingMTCode> targetLanguageMappings,
-			LangMappingMTCode targetLanguageMappingSelected)
-		{
-			LangMappingMTCode tmpCode = null;
-			foreach (var targetLanguageMapping in targetLanguageMappings)
-			{
-				if (targetLanguageMapping.CodeName != targetLanguageMappingSelected.CodeName)
-				{
-					tmpCode = targetLanguageMapping;
-					break;
-				}
-			}
-
-			return tmpCode;
-		}
-
+		
 		private List<TranslationModel> GetEngineModels(string source, string target, LangMappingMTCode sourceCode, LangMappingMTCode targetCode)
 		{
 			var translationModels = new List<TranslationModel>();

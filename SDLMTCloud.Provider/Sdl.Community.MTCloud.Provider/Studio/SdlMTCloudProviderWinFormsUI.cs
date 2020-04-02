@@ -15,8 +15,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		Name = "SDLMachineTranslationCloudProviderUi",
 		Description = "SDL Machine Translation Cloud Provider")]
 	public class SdlMTCloudProviderWinFormsUI : ITranslationProviderWinFormsUI
-	{
-		public static readonly Log Log = Log.Instance;
+	{		
 		public string TypeName => Constants.PluginName;
 		public string TypeDescription => Constants.PluginName;
 		public bool SupportsEditing => true;		
@@ -28,7 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{				
 				var uri = new Uri($"{Constants.MTCloudUriScheme}://");
 				var connectionService = new ConnectionService(owner);
-
+				
 				var credential = connectionService.GetCredential(credentialStore);								
 				var connectionResult = connectionService.EnsureSignedIn(credential, true);
 
@@ -36,7 +35,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				{
 					throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 				}
-
+				
 				connectionService.SaveCredential(credentialStore);
 
 				var languageMappingsService = new LanguageMappingsService();

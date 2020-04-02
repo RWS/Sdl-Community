@@ -9,6 +9,7 @@
 			xmlns:converters="clr-namespace:Sdl.Community.MTCloud.Provider.Converters"		
 			xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
 			xmlns:controls="clr-namespace:Sdl.Community.MTCloud.Provider.Controls"
+			xmlns:model="clr-namespace:Sdl.Community.MTCloud.Provider.Model"
 			helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			WindowStartupLocation="CenterScreen" 
 			mc:Ignorable="d"
@@ -107,7 +108,7 @@
 					<DataGrid.Columns>
 						<DataGridTemplateColumn Header="Project Language Pair" CanUserSort="True" IsReadOnly="True" SortMemberPath="ProjectLanguagePair" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
+								<DataTemplate DataType="model:LanguageMappingModel">
 									<StackPanel Orientation="Horizontal">
 										<TextBlock Text="{Binding ProjectLanguagePair}" ToolTip="{Binding ProjectLanguagePair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 										  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,10,0" TextWrapping="Wrap" />
@@ -117,7 +118,7 @@
 						</DataGridTemplateColumn>
 						<DataGridTemplateColumn Header="Source" CanUserSort="True" SortMemberPath="SelectedMTCodeSource.CodeName" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
+								<DataTemplate DataType="model:LanguageMappingModel">
 									<ComboBox ItemsSource="{Binding MTCodesSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
 								        SelectedItem="{Binding SelectedMTCodeSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
 									    Background="Transparent" BorderThickness="1" BorderBrush="Transparent">
@@ -141,7 +142,7 @@
 						</DataGridTemplateColumn>
 						<DataGridTemplateColumn Header="Target" CanUserSort="True" SortMemberPath="SelectedMTCodeTarget.CodeName" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
+								<DataTemplate DataType="model:LanguageMappingModel">
 									<ComboBox ItemsSource="{Binding MTCodesTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,0" IsReadOnly="True"
 								      SelectedItem="{Binding SelectedMTCodeTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
 									    Background="Transparent" BorderThickness="1" BorderBrush="Transparent">
@@ -165,7 +166,7 @@
 						</DataGridTemplateColumn>
 						<DataGridTemplateColumn Header="Model" CanUserSort="True" SortMemberPath="SelectedModelOption.DisplayName" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
+								<DataTemplate DataType="model:LanguageMappingModel">
 									<ComboBox ItemsSource="{Binding Engines, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 								      SelectedItem="{Binding SelectedModelOption, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
 									    Background="Transparent" BorderThickness="1" BorderBrush="Transparent">
@@ -190,7 +191,7 @@
 						</DataGridTemplateColumn>
 						<DataGridTemplateColumn Header="MT Cloud Dictionary" CanUserSort="True" SortMemberPath="SelectedMTCloudDictionary.Name" IsReadOnly="True" Width="*" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" >
 							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
+								<DataTemplate DataType="model:LanguageMappingModel">
 									<ComboBox  ItemsSource="{Binding MTCloudDictionaries,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 								         SelectedItem="{Binding SelectedMTCloudDictionary, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Cursor="Hand"
 									      Background="Transparent" BorderThickness="1" BorderBrush="Transparent">
