@@ -5,15 +5,15 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Provider.Commands;
+using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Service;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
 	public class CredentialsViewModel : BaseViewModel
 	{
-		private readonly Window _parentWindow;
-		private readonly ConnectionService _connectionService;
+		private readonly Window _window;
+		private readonly ICredentialService _connectionService;
 
 		private bool _isInProgress;
 		private string _clientId;
@@ -27,9 +27,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private List<Authentication> _authenticationOptions;
 		private Authentication _selectedAuthentication;
 
-		public CredentialsViewModel(Window parentWindow, ConnectionService connectionService)
+		public CredentialsViewModel(Window window, ICredentialService connectionService)
 		{
-			_parentWindow = parentWindow;
+			_window = window;
 			_connectionService = connectionService;
 
 			SignInCommand = new CommandHandler(Signin);
@@ -235,8 +235,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (_selectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
-					StudioSignedIn = _connectionService.IsSignedInStudioAuthentication(out var user);
-					StudioSignedInAs = user;
+					StudioSignedIn = _connectionService.IsSignedInStudioAuthentication(out var name);
+					StudioSignedInAs = name;
 					SignInLabel = StudioSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
 				}
 				else
@@ -370,8 +370,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (StudioSignedIn)
 				{
-					_parentWindow.DialogResult = true;
-					_parentWindow.Close();
+					_window.DialogResult = true;
+					_window.Close();
 				}
 			}
 		}		

@@ -1,5 +1,4 @@
 ﻿using System;
-using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -9,9 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		Name = "SDLMachineTranslationCloudProviderFactory",
 		Description = "SDL Machine Translation Cloud Provider")]
 	public class SdlMTCloudTranslationProviderFactory : ITranslationProviderFactory
-	{
-		public static readonly Log Log = Log.Instance;
-
+	{		
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{			

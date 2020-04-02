@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sdl.Community.MTCloud.Provider.Helpers;
+using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -15,7 +15,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	{
 		private LanguagePair _languageDirection;
 
-		public SdlMTCloudTranslationProvider(Uri uri, TranslationService translationService, string translationProviderState)
+		public SdlMTCloudTranslationProvider(Uri uri, ITranslationService translationService, string translationProviderState)
 		{
 			Uri = uri;
 			LanguagesProvider = new Languages.Provider.Languages();
@@ -71,7 +71,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public Options Options { get; set; }
 
-		public TranslationService TranslationService { get; }
+		public ITranslationService TranslationService { get; }
 
 		public Languages.Provider.Languages LanguagesProvider { get; }
 

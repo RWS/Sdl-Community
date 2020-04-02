@@ -154,6 +154,9 @@
     </Compile>
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="Interfaces\ICredential.cs" />
+    <Compile Include="Interfaces\ICredentialService.cs" />
+    <Compile Include="Interfaces\ILanguageMappingsService.cs" />
+    <Compile Include="Interfaces\ITranslationService.cs" />
     <Compile Include="Model\AuthorizationResponse.cs" />
     <Compile Include="Model\ClientCredential.cs" />
     <Compile Include="Model\Credential.cs" />

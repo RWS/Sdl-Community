@@ -9,11 +9,11 @@ namespace Sdl.Community.MTCloud.Provider.Helpers
 {
 	public sealed class Log
 	{
-		public static Logger Logger;
-		private static readonly Lazy<Log> _instance = new Lazy<Log>(() => new Log());
-		public static Log Instance { get { return _instance.Value; } }
+		private static Logger _logger;
 
-		private Log()
+		public static Logger Logger => _logger ?? (_logger = GetLogger());
+
+		private static Logger GetLogger()
 		{
 			var config = new LoggingConfiguration();
 			var assembly = Assembly.GetExecutingAssembly();
@@ -38,8 +38,9 @@ namespace Sdl.Community.MTCloud.Provider.Helpers
 			var rule = new LoggingRule("*", LogLevel.Debug, target);
 			config.LoggingRules.Add(rule);
 			LogManager.Configuration = config;
+
 			//NLog object
-			Logger = LogManager.GetCurrentClassLogger();
+			return LogManager.GetCurrentClassLogger();
 		}
 	}
 }

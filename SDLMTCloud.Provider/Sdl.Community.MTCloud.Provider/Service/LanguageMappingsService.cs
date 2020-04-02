@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Studio;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
@@ -8,7 +9,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
-	public class LanguageMappingsService
+	public class LanguageMappingsService: ILanguageMappingsService
 	{		
 		private static ISettingsGroup _settingsGroup;
 		private readonly FileBasedProject _currentProject;

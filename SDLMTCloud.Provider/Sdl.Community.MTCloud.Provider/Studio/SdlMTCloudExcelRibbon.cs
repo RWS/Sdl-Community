@@ -18,9 +18,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		[ActionLayout(typeof(SdlMTCloudExcelRibbon), 20, DisplayType.Large)]
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
 		public class BeGlobalExcelAction : AbstractAction
-		{
-			public static readonly Log Log = Log.Instance;
-
+		{			
 			protected override void Execute()
 			{
 				try
