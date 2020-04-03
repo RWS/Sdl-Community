@@ -2,9 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Sdl.Community.SDLBatchAnonymize.BatchTask;
 using Sdl.Community.SDLBatchAnonymize.Interface;
-using Sdl.Community.SDLBatchAnonymize.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -38,22 +36,6 @@ namespace Sdl.Community.SDLBatchAnonymize
 					{
 						_usernameService.AnonymizeCreatedByAndEdited(segmentPair, _settings);
 					}
-					
-					//var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
-					//if (translationOrigin != null && IsAutomatedTranslated(translationOrigin))
-					//{
-					//	AnonymizeComplete(translationOrigin);
-					//	if (_settings.AnonymizeTmMatch)
-					//	{
-					//		if (segmentPair.Properties?.TranslationOrigin.OriginBeforeAdaptation == null)
-					//		{
-					//			var originClone = (ITranslationOrigin)translationOrigin.Clone();
-					//			originClone.OriginBeforeAdaptation = null;
-					//			segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation = originClone;
-					//		}
-					//		AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation);
-					//	}
-					//}
 				}
 			}
 			catch (Exception exception)
