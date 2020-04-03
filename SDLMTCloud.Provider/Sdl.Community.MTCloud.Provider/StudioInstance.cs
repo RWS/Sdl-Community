@@ -42,7 +42,7 @@ namespace Sdl.Community.MTCloud.Provider
 		}
 
 		public static Form GetActiveForm()
-		{
+		{			
 			var allForms = System.Windows.Forms.Application.OpenForms;
 			var activeForm = allForms[allForms.Count - 1];
 			foreach (Form form in allForms)

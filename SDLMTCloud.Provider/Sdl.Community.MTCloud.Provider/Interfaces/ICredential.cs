@@ -13,8 +13,8 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		string Token { get; set; }
 
-		string AccountId { get; set; }
+		string AccountId { get; set; }		
 
-		DateTime Created { get; set; }
+		DateTime ValidTo { get; set; }
 	}
 }

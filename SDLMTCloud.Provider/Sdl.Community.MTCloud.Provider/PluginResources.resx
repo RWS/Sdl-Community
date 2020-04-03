@@ -241,4 +241,10 @@
 	<data name="Message_DoYouWantToProceed" xml:space="preserve">
     <value>Do you want to proceed without assigning a model?</value>
   </data>
+	<data name="Message_Connection_token_has_expired" xml:space="preserve">
+    <value>Connection token has expired!</value>
+  </data>
+	<data name="Message_No_model_selected" xml:space="preserve">
+    <value>No model selected for the current language pair!</value>
+  </data>
 </root>

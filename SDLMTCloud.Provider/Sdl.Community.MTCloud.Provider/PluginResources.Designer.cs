@@ -178,6 +178,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection token has expired!.
+        /// </summary>
+        public static string Message_Connection_token_has_expired {
+            get {
+                return ResourceManager.GetString("Message_Connection_token_has_expired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to proceed without assigning a model?.
         /// </summary>
         public static string Message_DoYouWantToProceed {
@@ -192,6 +201,15 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string Message_Invalid_credentials {
             get {
                 return ResourceManager.GetString("Message_Invalid_credentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No model selected for the current language pair!.
+        /// </summary>
+        public static string Message_No_model_selected {
+            get {
+                return ResourceManager.GetString("Message_No_model_selected", resourceCulture);
             }
         }
         

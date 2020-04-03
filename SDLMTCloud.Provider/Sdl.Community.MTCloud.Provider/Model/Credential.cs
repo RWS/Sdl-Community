@@ -8,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		public Credential()
 		{
 			Type = Authentication.AuthenticationType.Studio;
-			Created = DateTime.MinValue;
+			ValidTo = DateTime.MinValue;			
 		}
 
 		public Authentication.AuthenticationType Type { get; set; }
@@ -19,8 +19,8 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		public string Token { get; set; }
 
-		public string AccountId { get; set; }
+		public string AccountId { get; set; }		
 
-		public DateTime Created { get; set; }
+		public DateTime ValidTo { get; set; }
 	}
 }
