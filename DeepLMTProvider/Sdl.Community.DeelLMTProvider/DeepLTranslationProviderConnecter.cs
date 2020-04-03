@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -62,6 +63,8 @@ namespace Sdl.Community.DeepLMTProvider
 
 				using (var httpClient = new HttpClient())
 				{
+					ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+
 					httpClient.Timeout = TimeSpan.FromMinutes(5);
 					var content = new StringContent($"text={sourceText}" +
 													$"&source_lang={sourceLanguage}" +
