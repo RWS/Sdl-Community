@@ -65,8 +65,9 @@ namespace MultiTermTestPlugin
 						var entries = GetTermbaseEntries(defaultTermbasePath);
 						var sourceIndexName = GetTermbaseIndex(languageIndexes, activeDocument.ActiveFile?.SourceFile.Language);
 						var targetIndexName = GetTermbaseIndex(languageIndexes, activeDocument.ActiveFile?.Language);
-						var entryText =
-							$"<conceptGrp><languageGrp><language type=\"{sourceIndexName}\" lang=\"{sourceLanguageCode}\"></language><termGrp><term>{sourceSelection}</term></termGrp></languageGrp><languageGrp><language type=\"{targetIndexName}\" lang=\"{targetLanguageCode}\"></language><termGrp><term>{targetSelection}</term></termGrp></languageGrp></conceptGrp>";
+						// get the number of term entries for a specific language, using the languageIndex
+						//var numberOfLanguageEntries  = termbase.Information.NumberOfEntriesInIndex["sourceIndexName"];
+						var entryText =	$"<conceptGrp><languageGrp><language type=\"{sourceIndexName}\" lang=\"{sourceLanguageCode}\"></language><termGrp><term>{sourceSelection}</term></termGrp></languageGrp><languageGrp><language type=\"{targetIndexName}\" lang=\"{targetLanguageCode}\"></language><termGrp><term>{targetSelection}</term></termGrp></languageGrp></conceptGrp>";
 						entries.New(entryText, true);
 					}
 				}

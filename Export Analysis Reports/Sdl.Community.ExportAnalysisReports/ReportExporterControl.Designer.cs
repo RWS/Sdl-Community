@@ -169,6 +169,7 @@
             this.reportOutputPath.Name = "reportOutputPath";
             this.reportOutputPath.Size = new System.Drawing.Size(366, 20);
             this.reportOutputPath.TabIndex = 21;
+            this.reportOutputPath.TextChanged += new System.EventHandler(this.reportOutputPath_TextChanged);
             this.reportOutputPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.reportOutputPath_KeyUp);
             // 
             // crossRep
@@ -305,7 +306,7 @@
             this.languagesListBox.Name = "languagesListBox";
             this.languagesListBox.Size = new System.Drawing.Size(177, 394);
             this.languagesListBox.TabIndex = 7;
-            this.languagesListBox.SelectedIndexChanged += new System.EventHandler(this.languagesListBox_SelectedIndexChanged_1);
+            this.languagesListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.languagesListBox_ItemCheck);
             // 
             // label1
             // 

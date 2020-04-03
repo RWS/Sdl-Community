@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.UI.Annotations;
+using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.Toolkit.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -340,12 +341,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					{
 						TmMessage = "Visible";
 					}
-					
-					
-					
 				}
             }
-      
         }
 
 		private bool TmLanguageMatchesProjectLanguage()
@@ -357,6 +354,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			}
 			return false;
 		}
+
 		private StarTranslationMemoryMetadata GetTmLanguageDirection(string tmPath)
 		{
 			var tmInfo = new FileBasedTranslationMemory(tmPath);

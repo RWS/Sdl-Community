@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using Newtonsoft.Json;
 using Sdl.Community.ExportAnalysisReports.Model;
 using Sdl.Community.Toolkit.Core.Services;
 using Sdl.ProjectAutomation.Core;
@@ -14,6 +15,8 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 	public static class Help
 	{
 		public static readonly Log Log = Log.Instance;
+		public static readonly string CommunityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "ExportAnalysisReports");
+		public static readonly string JsonPath = Path.Combine(CommunityFolderPath, "ExportAnalysisReportSettings.json");
 
 		public static string GetStudioProjectsPath()
 		{
@@ -28,7 +31,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 				var projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), $@"Studio {shortStudioVersion}\Projects\projects.xml");
 				return projectsPath;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"GetStudioProjectsPath method: {ex.Message}\n {ex.StackTrace}");
 			}
@@ -142,10 +145,61 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			return false;
 		}
 
+		public static void SaveExportPath(string reportOutputPath)
+		{
+			if (!string.IsNullOrEmpty(reportOutputPath))
+			{
+				if (!Directory.Exists(CommunityFolderPath))
+				{
+					Directory.CreateDirectory(CommunityFolderPath);
+				}
+
+				var jsonExportPath = new JsonSettings { ExportPath = reportOutputPath };
+				var jsonResult = JsonConvert.SerializeObject(jsonExportPath);
+
+				if (File.Exists(JsonPath))
+				{
+					File.Delete(JsonPath);
+				};
+				File.Create(JsonPath).Dispose();
+
+				using (var tw = new StreamWriter(JsonPath, true))
+				{
+					tw.WriteLine(jsonResult);
+					tw.Close();
+				}
+			}
+		}
+
+		public static string GetJsonReportPath(string jsonPath)
+		{
+			if (File.Exists(jsonPath))
+			{
+				using (var r = new StreamReader(jsonPath))
+				{
+					var json = r.ReadToEnd();
+					var item = JsonConvert.DeserializeObject<JsonSettings>(json);
+					if (!string.IsNullOrEmpty(item.ExportPath))
+					{
+						return item.ExportPath;
+					}
+				}
+			}
+			return string.Empty;
+		}
+
+		public static void CreateDirectory(string path)
+		{
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
+		}
+
 		private static string GetInstalledStudioShortVersion()
 		{
 			var studioService = new StudioVersionService();
-			return studioService?.GetStudioVersion()?.ShortVersion;			
+			return studioService?.GetStudioVersion()?.ShortVersion;
 		}
 
 		private static ProjectInfo GetProjectInfo(string projectPath)

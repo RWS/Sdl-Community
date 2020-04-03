@@ -4,114 +4,100 @@ using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.StarTransit.Shared.Import
 {
-   public class TransitTextExtractor : IMarkupDataVisitor
-    {
+	public class TransitTextExtractor : IMarkupDataVisitor
+	{
+		private List<string> _Comments = new List<string>();
 
-        private List<string> _Comments = new List<string>();
+		public List<string> GetSegmentComment(ISegment segment)
+		{
+			_Comments.Clear();
+			VisitChildren(segment);
 
-        public List<string> GetSegmentComment(ISegment segment)
-        {
-            _Comments.Clear();
-            VisitChildren(segment);
-        
-            return _Comments;
-        }
+			return _Comments;
+		}
 
-        public void VisitCommentMarker(ICommentMarker commentMarker)
-        {
-            for (int i = 0; i < commentMarker.Comments.Count; i++)
-            {
-                string commentInfo = commentMarker.Comments.GetItem(i).Text + ";" +
-                    commentMarker.Comments.GetItem(i).Date.ToString() + ";" +
-                    commentMarker.Comments.GetItem(i).Author + ";" +
-                    commentMarker.Comments.GetItem(i).Severity.ToString();
+		public void VisitCommentMarker(ICommentMarker commentMarker)
+		{
+			for (int i = 0; i < commentMarker.Comments.Count; i++)
+			{
+				string commentInfo = commentMarker.Comments.GetItem(i).Text + ";" +
+					commentMarker.Comments.GetItem(i).Date.ToString() + ";" +
+					commentMarker.Comments.GetItem(i).Author + ";" +
+					commentMarker.Comments.GetItem(i).Severity.ToString();
 
-                _Comments.Add(commentInfo);
+				_Comments.Add(commentInfo);
 
-            }
-            VisitChildren(commentMarker);
-        }
+			}
+			VisitChildren(commentMarker);
+		}
 
+		internal StringBuilder PlainText { get; set; }
 
+		public string GetPlainText(ISegment segment)
+		{
+			PlainText = new StringBuilder("");
+			VisitChildren(segment);
 
-        internal StringBuilder PlainText
-        {
-            get;
-            set;
-        }
+			var segContent = PlainText.ToString();
+			return segContent;
+		}
 
-        public string GetPlainText(ISegment segment)
-        {
-            PlainText = new StringBuilder("");
-            VisitChildren(segment);
-            
-            string segContent = PlainText.ToString();
+		// loops through all sub items of the container (IMarkupDataContainer)
+		private void VisitChildren(IAbstractMarkupDataContainer container)
+		{
+			foreach (var item in container)
+			{
+				item.AcceptVisitor(this);
+			}
+		}
 
-            return segContent;
-        }
+		public void VisitText(IText text)
+		{
+			var segContent = text.Properties.Text;
+			segContent = segContent.Replace("&", "&amp;");
+			segContent = segContent.Replace("<", "&lt;");
+			segContent = segContent.Replace(">", "&gt;");
+			segContent = segContent.Replace("'", "&apos;");
+			PlainText.Append(segContent);
+		}
 
+		public void VisitTagPair(ITagPair tagPair)
+		{
+			PlainText.Append("<" + tagPair.StartTagProperties.TagContent + ">");
+			VisitChildren(tagPair);
+			PlainText.Append("</" + tagPair.EndTagProperties.TagContent + ">");
+		}
 
-        // loops through all sub items of the container (IMarkupDataContainer)
-        private void VisitChildren(IAbstractMarkupDataContainer container)
-        {
-            foreach (var item in container)
-            {
-                item.AcceptVisitor(this);
-            }
-        }
+		#region "left empty"
+		public void VisitSegment(ISegment segment)
+		{
+			VisitChildren(segment);
+		}
 
+		public void VisitLocationMarker(ILocationMarker location)
+		{
 
-        public void VisitText(IText text)
-        {
-            string segContent = text.Properties.Text;
-            segContent = segContent.Replace("&", "&amp;");
-            segContent = segContent.Replace("<", "&lt;");
-            segContent = segContent.Replace(">", "&gt;");
-            segContent = segContent.Replace("'", "&apos;");
-            PlainText.Append(segContent);
-        }
+		}
 
+		public void VisitLockedContent(ILockedContent lockedContent)
+		{
 
+		}
 
-        public void VisitTagPair(ITagPair tagPair)
-        {
-            PlainText.Append("<" + tagPair.StartTagProperties.TagContent + ">");
-            VisitChildren(tagPair);
-            PlainText.Append("</" + tagPair.EndTagProperties.TagContent + ">");
-        }  
+		public void VisitOtherMarker(IOtherMarker marker)
+		{
 
-        #region "left empty"
-        public void VisitSegment(ISegment segment)
-        {
-            VisitChildren(segment);
-        }
+		}
 
-        public void VisitLocationMarker(ILocationMarker location)
-        {
+		public void VisitPlaceholderTag(IPlaceholderTag tag)
+		{
+			PlainText.Append(tag.TagProperties.TagContent);
+		}
 
-        }
+		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
+		{
 
-        public void VisitLockedContent(ILockedContent lockedContent)
-        {
-
-        }
-
-        public void VisitOtherMarker(IOtherMarker marker)
-        {
-
-        }
-
-        public void VisitPlaceholderTag(IPlaceholderTag tag)
-        {
-            PlainText.Append(tag.TagProperties.TagContent);
-        }
-
-        public void VisitRevisionMarker(IRevisionMarker revisionMarker)
-        {
-
-        }
-        #endregion
-
-
-    }
+		}
+		#endregion
+	}
 }

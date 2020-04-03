@@ -7,7 +7,9 @@ using System.Windows.Input;
 using MahApps.Metro.Controls;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
+using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Annotations;
+using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.Community.StarTransit.UI.Interfaces;
@@ -66,6 +68,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		#endregion
 
 		#region Public Properties
+		public static readonly Log Log = Log.Instance;
+
 		public bool DetailsSelected
         {
             get { return _isDetailsSelected; }
@@ -233,124 +237,145 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		#region Public Methods
 		public void Next()
         {
-            var model = _packageDetailsViewModel.GetPackageModel();
-            _hasTm = false;
-            var isEmpty = IsFolderEmpty(_packageDetailsViewModel.TextLocation);
-
-			if (isEmpty)
+			try
 			{
-				foreach (var pair in model.LanguagePairs)
-				{
-					if (pair.StarTranslationMemoryMetadatas.Count != 0)
-					{
-						_hasTm = true;
-					}
-				}//tm page is disabled
-				if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm == false)
-				{
+				var model = _packageDetailsViewModel.GetPackageModel();
+				_hasTm = false;
+				var isEmpty = IsFolderEmpty(_packageDetailsViewModel.TextLocation);
 
-					DetailsSelected = false;
+				if (isEmpty)
+				{
+					foreach (var pair in model.LanguagePairs)
+					{
+						if (pair.StarTranslationMemoryMetadatas.Count != 0)
+						{
+							_hasTm = true;
+						}
+					}//tm page is disabled
+					if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm == false)
+					{
+
+						DetailsSelected = false;
+						TmSelected = false;
+						FinishSelected = true;
+						CanExecuteBack = true;
+						CanExecuteNext = false;
+						_finishViewModel.Refresh();
+						CanExecuteCreate = true;
+						IsEnabled = false;
+						Color = "Gray";
+					}//tm page
+					else if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm)
+					{
+						DetailsSelected = false;
+						TmSelected = true;
+						FinishSelected = false;
+						CanExecuteBack = true;
+						CanExecuteNext = true;
+						CanExecuteCreate = false;
+						IsEnabled = true;
+						Color = "#FF66290B";
+					}//finish page
+					else if (_packageDetails.FieldsAreCompleted() && TmSelected && _translationMemories.TmFieldIsCompleted())
+					{
+						DetailsSelected = false;
+						CanExecuteNext = false;
+						CanExecuteCreate = true;
+						CanExecuteBack = true;
+						TmSelected = false;
+						IsEnabled = true;
+						FinishSelected = true;
+						_finishViewModel.Refresh();
+						Color = "#FFB69476";
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"Next method: {ex.Message}\n {ex.StackTrace}");
+			}
+		}
+
+		public void Back()
+		{
+			try
+			{
+				if (DetailsSelected)
+				{
+					CanExecuteBack = false;
+				}
+				else if (FinishSelected && _hasTm == false)
+				{
+					CanExecuteBack = false;
+					DetailsSelected = true;
 					TmSelected = false;
-					FinishSelected = true;
-					CanExecuteBack = true;
-					CanExecuteNext = false;
-					_finishViewModel.Refresh();
-					CanExecuteCreate = true;
-					IsEnabled = false;
-					Color = "Gray";
-				}//tm page
-				else if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm)
+					CanExecuteNext = true;
+					FinishSelected = false;
+					CanExecuteCreate = false;
+				}
+				else if (FinishSelected && _hasTm)
 				{
 					DetailsSelected = false;
 					TmSelected = true;
 					FinishSelected = false;
 					CanExecuteBack = true;
-					CanExecuteNext = true;
 					CanExecuteCreate = false;
-					IsEnabled = true;
+					CanExecuteNext = true;
 					Color = "#FF66290B";
-				}//finish page
-				else if (_packageDetails.FieldsAreCompleted() && TmSelected && _translationMemories.TmFieldIsCompleted())
+				}
+				else if (TmSelected)
 				{
-					DetailsSelected = false;
-					CanExecuteNext = false;
-					CanExecuteCreate = true;
-					CanExecuteBack = true;
+					DetailsSelected = true;
 					TmSelected = false;
-					IsEnabled = true;
-					FinishSelected = true;
-					_finishViewModel.Refresh();
+					FinishSelected = false;
+					CanExecuteBack = false;
+					CanExecuteCreate = false;
+					CanExecuteNext = true;
 					Color = "#FFB69476";
 				}
 			}
-        }
-
-		public void Back()
-		{
-			if (DetailsSelected)
+			catch (Exception ex)
 			{
-				CanExecuteBack = false;
-			}
-			else if (FinishSelected && _hasTm == false)
-			{
-				CanExecuteBack = false;
-				DetailsSelected = true;
-				TmSelected = false;
-				CanExecuteNext = true;
-				FinishSelected = false;
-				CanExecuteCreate = false;
-			}
-			else if (FinishSelected && _hasTm)
-			{
-				DetailsSelected = false;
-				TmSelected = true;
-				FinishSelected = false;
-				CanExecuteBack = true;
-				CanExecuteCreate = false;
-				CanExecuteNext = true;
-				Color = "#FF66290B";
-			}
-			else if (TmSelected)
-			{
-				DetailsSelected = true;
-				TmSelected = false;
-				FinishSelected = false;
-				CanExecuteBack = false;
-				CanExecuteCreate = false;
-				CanExecuteNext = true;
-				Color = "#FFB69476";
+				Log.Logger.Error($"Back method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
 		public async void Create()
 		{
-			Active = true;
-			CanExecuteBack = CanExecuteCreate = false;
-			var packageModel = _translationMemoriesViewModel.GetPackageModel();
-			var isEmpty = IsFolderEmpty(packageModel.Location);
-			var messageModel = new MessageModel();
-
-			CloseAction();
-
-			if (isEmpty)
+			try
 			{
-				await Task.Run(() => messageModel = _projectService.CreateProject(packageModel));
-			}
-			if(messageModel == null)
-			{
+				Active = true;
 				CanExecuteBack = CanExecuteCreate = false;
-				Active = false;
+				var packageModel = _translationMemoriesViewModel.GetPackageModel();
+				var isEmpty = IsFolderEmpty(packageModel.Location);
+				var messageModel = new MessageModel();
+
 				CloseAction();
-				if (Directory.Exists(Path.GetDirectoryName(packageModel.PathToPrjFile)))
+
+				if (isEmpty)
 				{
-					Directory.Delete(Path.GetDirectoryName(Path.GetDirectoryName(packageModel.PathToPrjFile)), true);
+					await Task.Run(() => messageModel = _projectService.CreateProject(packageModel));
+				}
+				if (messageModel == null)
+				{
+					CanExecuteBack = CanExecuteCreate = false;
+					Active = false;
+					CloseAction();
+					if (Directory.Exists(Path.GetDirectoryName(packageModel.PathToPrjFile)))
+					{
+						Directory.Delete(Path.GetDirectoryName(Path.GetDirectoryName(packageModel.PathToPrjFile)), true);
+					}
+				}
+				else if (messageModel != null && !messageModel.IsProjectCreated)
+				{
+					ShowWindowsMessage(messageModel.Title, messageModel.Message);
+					Active = false;
+					CanExecuteBack = CanExecuteCreate = false;
 				}
 			}
-			else if (messageModel != null && !messageModel.IsProjectCreated)
+			catch (Exception ex)
 			{
-				ShowWindowsMessage(messageModel.Title, messageModel.Message);
-				Active = false;
-				CanExecuteBack = CanExecuteCreate = false;
+				Log.Logger.Error($"Create method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 		#endregion

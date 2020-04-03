@@ -7,11 +7,11 @@
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
   <Include>
     <File>Sdl.Community.StarTransit.UI.dll</File>
-    <File>MahApps.Metro.dll</File>
-    <File>Sdl.Community.StarTransit.Shared.dll</File>
+		<File>MahApps.Metro.dll</File>
+		<File>Sdl.Community.StarTransit.Shared.dll</File>
     <File>HockeyApp.dll</File>
     <File>HockeyAppPCL.dll</File>
-    <File>System.Windows.Interactivity.dll</File>
-    <File>Sdl.Community.Toolkit.Core.dll</File>
+		<File>System.Windows.Interactivity.dll</File>
+		<File>Sdl.Community.Toolkit.Core.dll</File>
     </Include>
 </PluginPackage>
