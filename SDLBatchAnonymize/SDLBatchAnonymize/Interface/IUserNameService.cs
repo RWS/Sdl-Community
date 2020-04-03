@@ -4,8 +4,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Interface
 {
 	public interface IUserNameService
 	{
-		void AnonymizeModifiedBy(ISegment segment, string value);
-		void AnonymizeLastEditedBy(ISegment segment, string value);
+		void AnonymizeCreatedByAndEdited(ISegmentPair segment, IBatchAnonymizerSettings anonymizerSettings);
 		void AnonymizeCommentAuthor(ISegmentPair segmentPair, string value);
 		//TODO: value for tracked changes.
 	}

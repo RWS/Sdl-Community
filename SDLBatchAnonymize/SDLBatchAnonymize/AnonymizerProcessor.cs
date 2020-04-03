@@ -3,6 +3,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Sdl.Community.SDLBatchAnonymize.BatchTask;
+using Sdl.Community.SDLBatchAnonymize.Interface;
+using Sdl.Community.SDLBatchAnonymize.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -12,11 +14,13 @@ namespace Sdl.Community.SDLBatchAnonymize
 	public class AnonymizerProcessor : AbstractBilingualContentProcessor
 	{
 		public static readonly Log Log = Log.Instance;
-		private readonly BatchAnonymizerSettings _settings;
+		private readonly IBatchAnonymizerSettings _settings;
+		private readonly IUserNameService _usernameService;
 
-		public AnonymizerProcessor(BatchAnonymizerSettings settings)
+		public AnonymizerProcessor(IBatchAnonymizerSettings settings, IUserNameService usernameService)
 		{
 			_settings = settings;
+			_usernameService = usernameService;
 		}
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
@@ -30,22 +34,26 @@ namespace Sdl.Community.SDLBatchAnonymize
 			{
 				foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
 				{
-					var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
-					if (translationOrigin != null && IsAutomatedTranslated(translationOrigin))
+					if (_settings.CreatedByChecked || _settings.ModifyByChecked)
 					{
-						AnonymizeComplete(translationOrigin);
-
-						//if (_settings.AnonymizeTmMatch)
-						//{
-						//	if (segmentPair.Properties?.TranslationOrigin.OriginBeforeAdaptation == null)
-						//	{
-						//		var originClone = (ITranslationOrigin) translationOrigin.Clone();
-						//		originClone.OriginBeforeAdaptation = null;
-						//		segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation = originClone;
-						//	}
-						//	AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation);
-						//}
+						_usernameService.AnonymizeCreatedByAndEdited(segmentPair, _settings);
 					}
+					
+					//var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
+					//if (translationOrigin != null && IsAutomatedTranslated(translationOrigin))
+					//{
+					//	AnonymizeComplete(translationOrigin);
+					//	if (_settings.AnonymizeTmMatch)
+					//	{
+					//		if (segmentPair.Properties?.TranslationOrigin.OriginBeforeAdaptation == null)
+					//		{
+					//			var originClone = (ITranslationOrigin)translationOrigin.Clone();
+					//			originClone.OriginBeforeAdaptation = null;
+					//			segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation = originClone;
+					//		}
+					//		AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation);
+					//	}
+					//}
 				}
 			}
 			catch (Exception exception)
