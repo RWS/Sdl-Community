@@ -204,11 +204,16 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			ModifyByChecked = value;
 			CommentChecked = value;
 			TrackedChecked = value;
+			ChangeMtChecked = value;
 			if (!value) return;
 			CreatedByName = string.Empty;
 			ModifyByName = string.Empty;
 			CommentAuthorName = string.Empty;
 			TrackedName = string.Empty;
+			TmName = string.Empty;
+			ChangeTmChecked = false;
+			SetSpecificResChecked = false;
+			FuzzyScore = 0;
 		}
 	}
 }

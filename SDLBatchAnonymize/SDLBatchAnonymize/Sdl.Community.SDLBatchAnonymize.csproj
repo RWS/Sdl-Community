@@ -160,7 +160,7 @@
     <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\Question.ico" />
     <EmbeddedResource Include="PluginResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />

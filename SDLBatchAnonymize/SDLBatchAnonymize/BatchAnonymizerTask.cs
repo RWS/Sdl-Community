@@ -9,7 +9,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 
 	[AutomaticTask("SDL Batch Anonymizer",
 		"SDL Batch Anonymizer",
-		"Supports the anonymization of Machine Translation use by removing the MT or NMT markers.",
+		"Provides various options for anonymizing the files in a Studio project.",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	[RequiresSettings(typeof(BatchAnonymizerSettings), typeof(BatchAnonymizerSettingsPage))]
