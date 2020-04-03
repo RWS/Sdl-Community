@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.SDLBatchAnonymize.BatchTask;
+using Sdl.Community.SDLBatchAnonymize.Service;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
@@ -25,7 +26,8 @@ namespace Sdl.Community.SDLBatchAnonymize
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerProcessor(_settings)));
+			var usernameService = new UserNameService();
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerProcessor(_settings,usernameService)));
 		}
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)

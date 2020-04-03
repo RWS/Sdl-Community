@@ -1,28 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.SDLBatchAnonymize.Interface;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.SDLBatchAnonymize.Service
 {
-	public class UserNameService:IUserNameService
+	public class UserNameService : IUserNameService
 	{
-		public void AnonymizeModifiedBy(ISegment segment, string value)
+		public void AnonymizeCreatedByAndEdited(ISegmentPair segmentPair, IBatchAnonymizerSettings anonymizerSettings)
 		{
-			throw new NotImplementedException();
-		}
+			var translationOrigin = segmentPair.Properties.TranslationOrigin;
 
-		public void AnonymizeLastEditedBy(ISegment segment, string value)
-		{
-			throw new NotImplementedException();
+			if (anonymizerSettings.CreatedByChecked)
+			{
+				EditUserMetadata(translationOrigin, "created_by", anonymizerSettings.CreatedByName);
+			}
+			if (anonymizerSettings.ModifyByChecked)
+			{
+				EditUserMetadata(translationOrigin, "last_modified_by", anonymizerSettings.ModifyByName);
+			}
 		}
-
+		
 		public void AnonymizeCommentAuthor(ISegmentPair segmentPair, string value)
 		{
-			throw new NotImplementedException();
+			
+		}
+
+		private void EditUserMetadata(ITranslationOrigin translationOrigin, string metadataKey, string metadataValue)
+		{
+			var containsKey = translationOrigin.MetaDataContainsKey(metadataKey);
+			if (!containsKey) return;
+			translationOrigin.RemoveMetaData(metadataKey);
+			translationOrigin.SetMetaData(metadataKey, metadataValue);
 		}
 	}
 }
