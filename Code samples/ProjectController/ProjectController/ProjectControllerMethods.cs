@@ -1,14 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Xml;
+﻿using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
-using Sdl.ProjectAutomation.Settings;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace ProjectController
@@ -20,7 +13,7 @@ namespace ProjectController
 		{
 			//files controller
 			var filesController = SdlTradosStudio.Application.GetController<FilesController>();
-			var activeProjectFromFiles = filesController.CurrentProject;
+			var activeProjectFromFiles = filesController?.CurrentProject;
 		}
 	}
 
@@ -31,7 +24,7 @@ namespace ProjectController
 	{
 	}
 
-	[Action("TestProjIconAction", Icon = "", Name = "Test icon",
+	[Action("TestProjIconAction", Icon = "", Name = "Subscribe to content changed event",
 		Description = "")]
 	[ActionLayout(typeof(ProjectTemplateRibbonGroup), 10, DisplayType.Large)]
 	public class ProjectAction : AbstractAction
@@ -39,14 +32,29 @@ namespace ProjectController
 		protected override void Execute()
 		{
 
-			var file = @"filepath";
-			var converter = DefaultFileTypeManager.CreateInstance(true)
-				.GetConverterToDefaultBilingual(file, file, null);
-			converter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new FileProcessor()));
-			converter.Parse();
-			//projects controler
-			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			var activeProject = projectsController?.CurrentProject;
+			//var file = @"filepath";
+			//var converter = DefaultFileTypeManager.CreateInstance(true)
+			//	.GetConverterToDefaultBilingual(file, file, null);
+			//converter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new FileProcessor()));
+			//converter.Parse();
+			////projects controler
+			//var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			//var activeProject = projectsController?.CurrentProject;
+			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+			var doc = editorController?.ActiveDocument;
+			if (doc != null)
+			{
+				doc.ContentChanged += Doc_ContentChanged;
+				MessageBox.Show("Subscribed to Content Changed Event",string.Empty , MessageBoxButtons.OK);
+			}
+		}
+
+		private void Doc_ContentChanged(object sender, DocumentContentEventArgs e)
+		{
+			foreach (var segment in e.Segments)
+			{
+				MessageBox.Show($"fired for seg id:{segment.Properties.Id}", string.Empty, MessageBoxButtons.OK);
+			}
 		}
 	}
 }
