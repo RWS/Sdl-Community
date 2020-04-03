@@ -235,7 +235,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (_selectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
-					StudioSignedIn = _connectionService.IsSignedInStudioAuthentication(out var name);
+					StudioSignedIn = _connectionService.IsSignedInCredentialsAuthentication(_selectedAuthentication.Type, out var name);
 					StudioSignedInAs = name;
 					SignInLabel = StudioSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
 				}

@@ -15,8 +15,8 @@ using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
-	public class TranslationService: ITranslationService
-	{		
+	public class TranslationService : ITranslationService
+	{
 		public TranslationService(ICredentialService connectionService, ILanguageMappingsService languageMappingsService)
 		{
 			ConnectionService = connectionService;
@@ -41,8 +41,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				// catch all;
 				// reset the setttings to default in the event that the lanauge model structure has changed (for whatever reason); 
 				LanguageMappingsService?.RemoveLanguageMappingSettings();
-				LanguageMappings = new List<LanguageMappingModel>();				
-			}			
+				LanguageMappings = new List<LanguageMappingModel>();
+			}
 		}
 
 		public async Task<Segment[]> TranslateText(string text, string source, string target)
@@ -53,7 +53,18 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			if (string.IsNullOrEmpty(languageModel?.SelectedModelOption?.Model))
 			{
-				throw new Exception(Constants.NoTranslationMessage);
+				throw new Exception(PluginResources.Message_No_model_selected);
+			}
+
+			if (ConnectionService.Credential.ValidTo < DateTime.UtcNow)
+			{
+				// attempt one connection
+				var success = ConnectionService.Connect(ConnectionService.Credential);
+				if (!success.Item1)
+				{
+					Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
+					throw new Exception(PluginResources.Message_Connection_token_has_expired);
+				}
 			}
 
 			using (var httpClient = new HttpClient())
@@ -120,6 +131,17 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			try
 			{
+				if (ConnectionService.Credential.ValidTo < DateTime.UtcNow)
+				{
+					// attempt one connection
+					var success = ConnectionService.Connect(ConnectionService.Credential);
+					if (!success.Item1)
+					{
+						Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
+						throw new Exception(PluginResources.Message_Connection_token_has_expired);
+					}
+				}
+
 				using (var httpClient = new HttpClient())
 				{
 					httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -154,6 +176,17 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			try
 			{
+				if (ConnectionService.Credential.ValidTo < DateTime.UtcNow)
+				{
+					// attempt one connection
+					var success = ConnectionService.Connect(ConnectionService.Credential);
+					if (!success.Item1)
+					{
+						Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
+						throw new Exception(PluginResources.Message_Connection_token_has_expired);
+					}
+				}
+
 				using (var httpClient = new HttpClient())
 				{
 					httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -253,6 +286,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			return string.Empty;
-		}		
+		}
 	}
 }

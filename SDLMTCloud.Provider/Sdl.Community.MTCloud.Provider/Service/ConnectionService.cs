@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -17,8 +18,8 @@ using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
-	public class ConnectionService: ICredentialService
-	{		
+	public class ConnectionService : ICredentialService
+	{
 		public ConnectionService(IWin32Window owner)
 		{
 			Owner = owner;
@@ -41,7 +42,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public string CredentialToString()
 		{
-			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; Created=" + Credential.Created.ToBinary();
+			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; ValidTo=" + Credential.ValidTo.ToBinary();
 		}
 
 		public ICredential GetCredential(string credentialString)
@@ -56,7 +57,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var password = string.Empty;
 			var token = string.Empty;
 			var accountId = string.Empty;
-			var created = DateTime.MinValue;
+			var validTo = DateTime.MinValue;
 
 			var regex = new Regex(@";\s+");
 			var items = regex.Split(credentialString);
@@ -93,29 +94,36 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				if (string.Compare(itemName, "AccountId", StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
 					accountId = itemValue;
-				}
+				}				
 
-				if (string.Compare(itemName, "Created", StringComparison.InvariantCultureIgnoreCase) == 0)
+				if (string.Compare(itemName, "ValidTo", StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
 					var success = long.TryParse(itemValue, out var value);
 					if (success)
 					{
-						created = DateTime.FromBinary(value);
+						validTo = DateTime.FromBinary(value);
 					}
 				}
 			}
 
 			if (!string.IsNullOrEmpty(type) && !string.IsNullOrEmpty(name))
 			{
-				return new Credential
+				var credential = new Credential
 				{
 					Type = (Authentication.AuthenticationType)Enum.Parse(typeof(Authentication.AuthenticationType), type, true),
 					Name = name,
 					Password = password,
 					Token = token,
 					AccountId = accountId,
-					Created = (created == DateTime.MinValue) ? DateTime.Now : created
+					ValidTo = validTo
 				};
+
+				if (!string.IsNullOrEmpty(token) && credential.ValidTo == DateTime.MinValue)
+				{
+					credential.ValidTo = GetTokenValidTo(token);
+				}
+
+				return credential;
 			}
 
 			return null;
@@ -129,11 +137,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (Credential.Type == Authentication.AuthenticationType.Studio)
 			{
 				IsSignedIn = IsSignedInStudioAuthentication(out var user);
-				if (!IsSignedIn || Credential.Created == DateTime.MinValue)
-				{
-					Credential.Created = DateTime.Now;
-				}
-
 				if (!IsSignedIn)
 				{
 					var currentCursor = Mouse.OverrideCursor;
@@ -148,7 +151,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					}
 				}
 
-				Credential.Token = StudioInstance.GetLanguageCloudIdentityApi.AccessToken;
+				Credential.Token = StudioInstance.GetLanguageCloudIdentityApi.AccessToken;				
+				Credential.ValidTo = GetTokenValidTo(Credential.Token);
 				Credential.Name = StudioInstance.GetLanguageCloudIdentityApi.LanguageCloudCredential?.Email;
 				Credential.Password = null;
 
@@ -180,7 +184,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						var signInResult = Task.Run(async () => await SignIn(resource, content)).Result;
 						IsSignedIn = signInResult.Item1 != null;
 						Credential.Token = signInResult.Item1?.AccessToken;
-						Credential.Created = DateTime.Now;
+						Credential.ValidTo = GetTokenValidTo(Credential.Token);
 						message = signInResult.Item2;
 
 						if (IsSignedIn)
@@ -206,7 +210,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						var signInResult = Task.Run(async () => await SignIn(resource, content)).Result;
 						IsSignedIn = signInResult.Item1 != null;
 						Credential.Token = signInResult.Item1?.AccessToken;
-						Credential.Created = DateTime.Now;
+						Credential.ValidTo = GetTokenValidTo(Credential.Token);
+						
 						message = signInResult.Item2;
 
 						if (IsSignedIn)
@@ -244,10 +249,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var credentialsWindow = GetCredentialsWindow(Owner);
 			var viewModel = new CredentialsViewModel(credentialsWindow, this);
 			credentialsWindow.DataContext = viewModel;
-
+			var message = string.Empty;
 			var result1 = credentialsWindow.ShowDialog();
 			if (result1.HasValue && result1.Value)
 			{
+				message = viewModel.ExceptionMessage;
 				IsSignedIn = viewModel.StudioSignedIn;
 			}
 			else
@@ -257,7 +263,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				Credential.AccountId = string.Empty;
 			}
 
-			return new Tuple<bool, string>(IsSignedIn, viewModel.ExceptionMessage);
+			return new Tuple<bool, string>(IsSignedIn, message);
 		}
 
 		public async Task<Tuple<AuthorizationResponse, string>> SignIn(string resource, string content)
@@ -272,7 +278,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			return signIn;
-		}		
+		}
 
 		public void AddTraceHeader(HttpRequestMessage request)
 		{
@@ -303,32 +309,82 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return credential ?? new Credential();
 		}
 
-		public bool IsSignedInStudioAuthentication(out string name)
+		private static JwtSecurityToken ReadToken(string token)
+		{
+			if (string.IsNullOrEmpty(token))
+			{
+				return null;
+			}
+
+			try
+			{
+				var jwtHandler = new JwtSecurityTokenHandler();
+
+				//Check if readable token (string is in a JWT format)
+				var readableToken = jwtHandler.CanReadToken(token);
+				if (!readableToken)
+				{
+					return null;
+				}
+
+				return jwtHandler.ReadJwtToken(token);
+			}
+			catch
+			{
+				// catch all; ignore
+			}
+
+			return null;
+		}
+
+		private static DateTime GetTokenValidTo(string token)
+		{
+			var tokenModel = ReadToken(token);
+
+			return tokenModel?.ValidTo ?? DateTime.MinValue;
+		}	
+
+		public bool IsSignedInCredentialsAuthentication(Authentication.AuthenticationType type, out string name)
+		{
+			if (type == Authentication.AuthenticationType.Studio || Credential.Type == Authentication.AuthenticationType.Studio)
+			{
+				return IsSignedInStudioAuthentication(out name);
+			}
+
+			name = Credential.Name;
+			return IsSignedInCredentialsAuthentication();
+		}
+
+		private bool IsSignedInStudioAuthentication(out string name)
 		{
 			var languageCloudCredential = StudioInstance.GetLanguageCloudIdentityApi.LanguageCloudCredential;
-
 			name = languageCloudCredential?.Email;
 
-			var success = !string.IsNullOrEmpty(languageCloudCredential?.Email)
-			              && !string.IsNullOrEmpty(StudioInstance.GetLanguageCloudIdentityApi?.AccessToken);
+			var validTo = GetTokenValidTo(StudioInstance.GetLanguageCloudIdentityApi?.AccessToken);
+			if (validTo < DateTime.UtcNow)
+			{
+				return false;
+			}
 
-			// Identify if the life expectancy of the credential has expired
-			//var isValidDuration = Credential.Created.AddHours(12) > DateTime.Now;
-
-			return success;
+			return !string.IsNullOrEmpty(languageCloudCredential?.Email)
+				   && !string.IsNullOrEmpty(StudioInstance.GetLanguageCloudIdentityApi?.AccessToken);
 		}
+	
 
 		private bool IsSignedInCredentialsAuthentication()
 		{
+			// if the ValidTo value is available, then validate against the current date/time
+			if (Credential.ValidTo < DateTime.UtcNow)
+			{
+				return false;
+			}
+
 			var isNullOrEmpty = string.IsNullOrEmpty(Credential.AccountId)
-			                    || string.IsNullOrEmpty(Credential.Token)
-			                    || string.IsNullOrEmpty(Credential.Name)
-			                    || string.IsNullOrEmpty(Credential.Password);
-
-			// Identify if the life expectancy of the credential has expired
-			var isValidDuration = Credential.Created.AddHours(12) > DateTime.Now;
-
-			return !isNullOrEmpty && isValidDuration;
+								|| string.IsNullOrEmpty(Credential.Token)
+								|| string.IsNullOrEmpty(Credential.Name)
+								|| string.IsNullOrEmpty(Credential.Password);
+		
+			return !isNullOrEmpty;
 		}
 
 		private async Task<Tuple<AuthorizationResponse, string>> SignInAttempt(string resource, string content)
