@@ -1,19 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	
-	<Style TargetType="{x:Type ToolTip}" x:Key="ToolTipStyle">
-		<Setter Property="Background" Value="White"/>
-		<Setter Property="BorderThickness" Value="0.5"/>
-		<Setter Property="BorderBrush" Value="#298FC2"/>
-		<Setter Property="FontFamily" Value="Calibri"/>
-		<Setter Property="FontSize" Value="12"/>
-		<Setter Property="Foreground" Value="#414141"/>
-	</Style>
-	<Style TargetType="{x:Type TextBox}" x:Key="AnonymizeValueBox">
-		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="Margin" Value="0,5,0,5"/>
-	</Style>
-
 	<SolidColorBrush x:Key="SdlPrimaryButton.Background" Color="#FF25BD59"/>
 	<SolidColorBrush x:Key="SdlPrimaryButton.Border" Color="#FF2CA754"/>
 	<SolidColorBrush x:Key="SdlPrimaryButton.Foreground" Color="White"/>
@@ -62,7 +48,25 @@
 	<SolidColorBrush x:Key="ProjectStatus.Label.InProgress" Color="#E4784C" />
 	<SolidColorBrush x:Key="ProjectStatus.Label.Archived" Color="#B5B5B5" />
 	<SolidColorBrush x:Key="ProjectStatus.Label.Completed" Color="#329264" />
-
+	<SolidColorBrush x:Key="Disabled.Background" Color="#E1E7EB"/>
+	
+	<Style TargetType="{x:Type ToolTip}" x:Key="ToolTipStyle">
+		<Setter Property="Background" Value="White"/>
+		<Setter Property="BorderThickness" Value="0.5"/>
+		<Setter Property="BorderBrush" Value="#298FC2"/>
+		<Setter Property="FontFamily" Value="Calibri"/>
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="Foreground" Value="#414141"/>
+	</Style>
+	<Style TargetType="{x:Type TextBox}" x:Key="AnonymizeValueBox">
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="0,5,0,5"/>
+		<Style.Triggers>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Background" Value="{StaticResource Disabled.Background}" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
 
 	<Style x:Uid="SdlHyperlink" x:Key="SdlHyperlinkStyle" TargetType="Hyperlink">
 		<Setter x:Uid="Setter_21" Property="FontFamily" Value="Segoe UI" />

@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
 			 xmlns:behavior="clr-namespace:Sdl.Community.SDLBatchAnonymize.Behavior"
 			 xmlns:converters ="clr-namespace:Sdl.Community.SDLBatchAnonymize.Converters"
+			 xmlns:resx="clr-namespace:Sdl.Community.SDLBatchAnonymize"
 			 behavior:WindowLoadedBehaviour.LoadedCommand="{Binding LoadWindowAction}"
              d:DataContext="{d:DesignInstance viewModel:BatchAnonymizerSettingsViewModel}"
 			 xmlns:viewModel ="clr-namespace:Sdl.Community.SDLBatchAnonymize.ViewModel" mc:Ignorable="d"
@@ -32,9 +33,10 @@
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<TextBlock Grid.Row="0" Style="{StaticResource Sdl.TextBlock.TitleStyle}" LineHeight="18" LineStackingStrategy="BlockLineHeight" 
-					  Text="Anonymizer settings"  HorizontalAlignment="Left"  FontSize="20" Padding="0" Margin="0,0,0,10"/>
-		<CheckBox Grid.Row="1" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Anonymize all values" IsChecked="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged}"/>
-		<GroupBox Grid.Row="2" Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Header="Username"  Margin="10">
+				   Text="{x:Static resx:PluginResources.PageTitle}"  HorizontalAlignment="Left"  FontSize="20" Padding="0" Margin="0,0,0,10"/>
+		<CheckBox Grid.Row="1" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="{x:Static resx:PluginResources.AnonymizeAll}" 
+				  IsChecked="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged}"/>
+		<GroupBox Grid.Row="2" Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Header="{x:Static resx:PluginResources.UsernameHeader}"  Margin="10">
 			<Grid Margin="0,10">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
@@ -46,21 +48,24 @@
 					<RowDefinition/>
 					<RowDefinition/>
 				</Grid.RowDefinitions>
-				<CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Created by" VerticalContentAlignment="Center"
+				<CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
+						  Content="{x:Static resx:PluginResources.CreatedBy}" VerticalContentAlignment="Center"
 					      IsChecked="{Binding CreatedByChecked,UpdateSourceTrigger=PropertyChanged}"
 						  IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"/>
 				<TextBox  Grid.Row="0" Grid.Column="1" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" Style="{StaticResource AnonymizeValueBox}" 
 				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
 						  Text="{Binding CreatedByName,UpdateSourceTrigger=PropertyChanged}"/>
 
-				<CheckBox Grid.Row="1" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Last modified by" VerticalContentAlignment="Center"
+				<CheckBox Grid.Row="1" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="{x:Static resx:PluginResources.LastModified}" 
+						  VerticalContentAlignment="Center"
 				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
 					      IsChecked="{Binding ModifyByChecked,UpdateSourceTrigger=PropertyChanged}"/>
 				<TextBox  Grid.Row="1" Grid.Column="1" Style="{StaticResource AnonymizeValueBox}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}"
 				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
 						  Text="{Binding ModifyByName,UpdateSourceTrigger=PropertyChanged}" />
 
-				<CheckBox Grid.Row="2" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Comment author" VerticalContentAlignment="Center"
+				<CheckBox Grid.Row="2" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="{x:Static resx:PluginResources.CommentAuthor}" 
+						  VerticalContentAlignment="Center"
 				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
 					      IsChecked="{Binding CommentChecked,UpdateSourceTrigger=PropertyChanged}"/>
 				<TextBox  Grid.Row="2" Grid.Column="1" Style="{StaticResource AnonymizeValueBox}"
@@ -68,7 +73,8 @@
 						  Text="{Binding CommentAuthorName,UpdateSourceTrigger=PropertyChanged}"
 				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"/>
 
-				<CheckBox Grid.Row="3" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Tracked changes" VerticalContentAlignment="Center"
+				<CheckBox Grid.Row="3" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="{x:Static resx:PluginResources.TrackedChanges}" 
+						  VerticalContentAlignment="Center"
 				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
 					      IsChecked="{Binding TrackedChecked,UpdateSourceTrigger=PropertyChanged}"/>
 				<TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource AnonymizeValueBox}" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}"
@@ -77,7 +83,7 @@
 			</Grid>
 		</GroupBox>
 
-		<GroupBox Grid.Row="3" Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Header="Resource origins" Margin="10" >
+		<GroupBox Grid.Row="3" Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Header="{x:Static resx:PluginResources.ResourceOriginsHeader}" Margin="10" >
 			<Grid Margin="0,10">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
@@ -91,17 +97,35 @@
 				</Grid.RowDefinitions>
 				<CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
 						  IsChecked="{Binding ChangeMtChecked,UpdateSourceTrigger=PropertyChanged}"
-				          Content="Remove/change MT" VerticalContentAlignment="Center"/>
+				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
+				          Content="{x:Static resx:PluginResources.RemoveMT}" VerticalContentAlignment="Center"/>
 				<CheckBox  Grid.Row="0" Grid.Column="1" Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
 						   IsChecked="{Binding ChangeTmChecked,UpdateSourceTrigger=PropertyChanged}"
-				           Content="Remove/change TM resources" VerticalContentAlignment="Center" Margin="0"/>
-				<CheckBox Grid.Row="1" Grid.Column="0" Margin="10,10,0,0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="Set the specific resources user"
+				           IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
+				           Content="{x:Static resx:PluginResources.RemoveTm}" VerticalContentAlignment="Center" Margin="0"/>
+				<CheckBox Grid.Row="1" Grid.Column="0" Margin="10,10,0,0" Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
+						  Content="{x:Static resx:PluginResources.SetResource}"
+				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
 						  IsChecked="{Binding SetSpecificResChecked,UpdateSourceTrigger=PropertyChanged}" />
-				<TextBlock Grid.Row="2" Grid.Column="0" Margin="30,5,0,0" Text="Set a TM score"/>
-				<controls:NumericUpDown Name="NumericUpDown" Style="{DynamicResource Sdl.NumericUpDown.Generic}" Grid.Row="2" Grid.Column="1" 
-										Value="{Binding FuzzyScore}" Minimum="0" Maximum="100"/>
-				<TextBlock Grid.Row="3" Grid.Column="0" Margin="30,5,0,0" Text="Set the resource name"/>
-				<TextBox  Grid.Row="3" Grid.Column="1" Margin="0,5,0,5" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" Text="{Binding TmName,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
+				<TextBlock Grid.Row="2" Grid.Column="0" Margin="30,5,0,0" Text="{x:Static resx:PluginResources.TmScore}"/>
+				<controls:NumericUpDown Name="NumericUpDown" Grid.Row="2" Grid.Column="1" 
+										Value="{Binding FuzzyScore}"
+				                        IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
+										Minimum="0" Maximum="100">
+					<controls:NumericUpDown.Resources>
+						<Style TargetType="controls:NumericUpDown" BasedOn="{StaticResource Sdl.NumericUpDown.Generic}">
+							<Style.Triggers>
+								<Trigger Property="IsEnabled" Value="False">
+									<Setter Property="Background" Value="{StaticResource Disabled.Background}" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</controls:NumericUpDown.Resources>
+				</controls:NumericUpDown>
+				<TextBlock Grid.Row="3" Grid.Column="0" Margin="30,5,0,0" Text="{x:Static resx:PluginResources.ResourceName}"/>
+				<TextBox  Grid.Row="3" Grid.Column="1" Height="{Binding Path=ActualHeight,ElementName=NumericUpDown}" Style="{StaticResource AnonymizeValueBox}"
+						  Text="{Binding TmName,UpdateSourceTrigger=PropertyChanged}"
+				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"/>
 			</Grid>
 		</GroupBox>
 	</Grid>
