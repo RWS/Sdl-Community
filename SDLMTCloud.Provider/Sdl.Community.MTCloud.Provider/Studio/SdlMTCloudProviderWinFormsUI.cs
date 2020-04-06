@@ -6,6 +6,7 @@ using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
@@ -26,7 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			try
 			{				
 				var uri = new Uri($"{Constants.MTCloudUriScheme}://");
-				var connectionService = new ConnectionService(owner);
+				var connectionService = new ConnectionService(owner, new VersionService());
 				
 				var credential = connectionService.GetCredential(credentialStore);								
 				var connectionResult = connectionService.EnsureSignedIn(credential, true);
@@ -40,8 +41,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 				var languageMappingsService = new LanguageMappingsService();
 				var translationService = new TranslationService(connectionService, languageMappingsService);
+				var editorController = SdlTradosStudio.Application?.GetController<EditorController>();
 
-				var provider = new SdlMTCloudTranslationProvider(uri, translationService, string.Empty);				
+				var provider = new SdlMTCloudTranslationProvider(uri, translationService, string.Empty, editorController);				
 				
 				var optionsViewModel = new OptionsViewModel(null, provider, languagePairs);				
 				optionsViewModel.SaveLanguageMappings();

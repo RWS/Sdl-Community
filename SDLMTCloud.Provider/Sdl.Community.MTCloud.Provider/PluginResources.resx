@@ -247,4 +247,10 @@
 	<data name="Message_No_model_selected" xml:space="preserve">
     <value>No model selected for the current language pair!</value>
   </data>
+	<data name="Message_Credential_criteria_is_not_valid" xml:space="preserve">
+    <value>Credential criteria is not valid</value>
+  </data>
+	<data name="Message_Credential_has_expired" xml:space="preserve">
+    <value>Credential has expired</value>
+  </data>
 </root>

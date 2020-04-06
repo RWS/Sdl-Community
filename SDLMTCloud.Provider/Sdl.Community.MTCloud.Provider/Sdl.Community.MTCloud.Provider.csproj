@@ -122,7 +122,7 @@
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
-    <Reference Include="System.IdentityModel.Tokens.Jwt">      
+    <Reference Include="System.IdentityModel.Tokens.Jwt">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
     <Reference Include="System.Printing" />
@@ -160,12 +160,13 @@
     </Compile>
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="Interfaces\ICredential.cs" />
-    <Compile Include="Interfaces\ICredentialService.cs" />
+    <Compile Include="Interfaces\IConnectionService.cs" />
     <Compile Include="Interfaces\ILanguageMappingsService.cs" />
     <Compile Include="Interfaces\ITranslationService.cs" />
     <Compile Include="Model\AuthorizationResponse.cs" />
     <Compile Include="Model\ClientCredential.cs" />
     <Compile Include="Model\Credential.cs" />
+    <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\TranslationRequest.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
@@ -188,7 +189,7 @@
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Helpers\VersionHelper.cs" />
+    <Compile Include="Service\VersionService.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Interfaces\ILanguageMappingSettings.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />

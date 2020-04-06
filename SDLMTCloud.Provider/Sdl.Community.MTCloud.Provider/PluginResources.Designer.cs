@@ -187,6 +187,24 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Credential criteria is not valid.
+        /// </summary>
+        public static string Message_Credential_criteria_is_not_valid {
+            get {
+                return ResourceManager.GetString("Message_Credential_criteria_is_not_valid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credential has expired.
+        /// </summary>
+        public static string Message_Credential_has_expired {
+            get {
+                return ResourceManager.GetString("Message_Credential_has_expired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to proceed without assigning a model?.
         /// </summary>
         public static string Message_DoYouWantToProceed {
