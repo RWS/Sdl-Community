@@ -21,12 +21,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private readonly List<TranslationUnit> _translationUnits;
 		private readonly EditorController _editorController;
 
-		public SdlMTCloudLanguageDirection(SdlMTCloudTranslationProvider translationProvider, LanguagePair languageDirection)
+		public SdlMTCloudLanguageDirection(SdlMTCloudTranslationProvider translationProvider, LanguagePair languageDirection, EditorController editorController)
 		{
 			_translationProvider = translationProvider;
 			_languageDirection = languageDirection;
 			_translationUnits = new List<TranslationUnit>();
-			_editorController = StudioInstance.GetEditorController();
+			_editorController = editorController;
 		}
 
 		public ITranslationProvider TranslationProvider => _translationProvider;

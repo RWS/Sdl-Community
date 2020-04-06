@@ -8,21 +8,26 @@ using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
 	public class SdlMTCloudTranslationProvider : ITranslationProvider
 	{
+		private readonly EditorController _editorController;
 		private LanguagePair _languageDirection;
-
-		public SdlMTCloudTranslationProvider(Uri uri, ITranslationService translationService, string translationProviderState)
+	
+		public SdlMTCloudTranslationProvider(Uri uri, ITranslationService translationService, string translationProviderState, EditorController editorController)
 		{
 			Uri = uri;
 			LanguagesProvider = new Languages.Provider.Languages();
 			TranslationService = translationService;
 			LoadState(translationProviderState);
+
+			_editorController = editorController;
+
 			SubscriptionInfo = Task.Run(async () =>
-				await TranslationService.GetLanguagePairs(translationService.ConnectionService.Credential.AccountId)).Result;
+				await TranslationService.GetLanguagePairs(translationService.ConnectionService.Credential.AccountId)).Result;			
 		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, Constants.PluginName);
@@ -95,18 +100,18 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				Log.Logger.Error($"{Constants.SupportsLanguageDirection} {e.Message}\n {e.StackTrace}");
 			}
 			return false;
-		}		
+		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
 			if (LanguageDirectionProvider != null &&
-			    LanguageDirectionProvider.SourceLanguage?.Name == languageDirection.SourceCulture.Name &&
-			    LanguageDirectionProvider.TargetLanguage?.Name == languageDirection.TargetCulture.Name)
+				LanguageDirectionProvider.SourceLanguage?.Name == languageDirection.SourceCulture.Name &&
+				LanguageDirectionProvider.TargetLanguage?.Name == languageDirection.TargetCulture.Name)
 			{
 				return LanguageDirectionProvider;
 			}
 
-			LanguageDirectionProvider = new SdlMTCloudLanguageDirection(this, languageDirection);
+			LanguageDirectionProvider = new SdlMTCloudLanguageDirection(this, languageDirection, _editorController);
 
 			return LanguageDirectionProvider;
 		}

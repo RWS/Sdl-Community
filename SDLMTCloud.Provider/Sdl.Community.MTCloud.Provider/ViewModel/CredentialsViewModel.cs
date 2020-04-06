@@ -13,7 +13,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 	public class CredentialsViewModel : BaseViewModel
 	{
 		private readonly Window _window;
-		private readonly ICredentialService _connectionService;
+		private readonly IConnectionService _connectionService;
 
 		private bool _isInProgress;
 		private string _clientId;
@@ -27,7 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private List<Authentication> _authenticationOptions;
 		private Authentication _selectedAuthentication;
 
-		public CredentialsViewModel(Window window, ICredentialService connectionService)
+		public CredentialsViewModel(Window window, IConnectionService connectionService)
 		{
 			_window = window;
 			_connectionService = connectionService;
@@ -235,9 +235,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (_selectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
-					StudioSignedIn = _connectionService.IsSignedInCredentialsAuthentication(_selectedAuthentication.Type, out var name);
-					StudioSignedInAs = name;
+					StudioSignedIn = _connectionService.IsValidCredential(_selectedAuthentication.Type, out var message);
+					StudioSignedInAs = StudioSignedIn ? _connectionService.Credential?.Name : string.Empty;
 					SignInLabel = StudioSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
+					ExceptionMessage = message;
 				}
 				else
 				{
