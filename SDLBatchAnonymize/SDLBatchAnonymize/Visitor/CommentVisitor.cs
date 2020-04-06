@@ -6,7 +6,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Visitor
 	{
 		private string _commentAuthor;
 
-		public void AnonymizeCommentAuthod(ISegment segment,string commentAuthor)
+		public void AnonymizeCommentAuthor(ISegment segment,string commentAuthor)
 		{
 			_commentAuthor = commentAuthor;
 			VisitChildren(segment);

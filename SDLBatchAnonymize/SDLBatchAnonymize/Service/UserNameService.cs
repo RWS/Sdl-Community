@@ -27,8 +27,8 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 		
 		public void AnonymizeCommentAuthor(ISegmentPair segmentPair, string commentAuthor)
 		{
-			_commentVisitor.AnonymizeCommentAuthod(segmentPair.Source, commentAuthor);
-			_commentVisitor.AnonymizeCommentAuthod(segmentPair.Target, commentAuthor);
+			_commentVisitor.AnonymizeCommentAuthor(segmentPair.Source, commentAuthor);
+			_commentVisitor.AnonymizeCommentAuthor(segmentPair.Target, commentAuthor);
 		}
 
 		public void AnonymizeCommentAuthor(IFileProperties fileProperties, string commentAuthor)
