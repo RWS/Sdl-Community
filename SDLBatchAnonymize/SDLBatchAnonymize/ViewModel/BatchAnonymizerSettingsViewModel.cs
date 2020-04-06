@@ -25,24 +25,6 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 		private ICommand _loadWindowAction;
 		public BatchAnonymizerSettings Settings { get; set; }
 
-		private void WindowLoaded(object obj)
-		{
-			AnonymizeAllSettings = Settings.AnonymizeComplete;
-			CreatedByChecked = Settings.CreatedByChecked;
-			CreatedByName = Settings.CreatedByName;
-			ModifyByChecked = Settings.ModifyByChecked;
-			ModifyByName = Settings.ModifyByName;
-			CommentChecked = Settings.CommentChecked;
-			CommentAuthorName = Settings.CommentAuthorName;
-			TrackedChecked = Settings.TrackedChecked;
-			TrackedName = Settings.TrackedName;
-			ChangeMtChecked = Settings.ChangeMtChecked;
-			ChangeTmChecked = Settings.ChangeTmChecked;
-			SetSpecificResChecked = Settings.SetSpecificResChecked;
-			TmName = Settings.TmName;
-			FuzzyScore = Settings.FuzzyScore;
-		}
-
 		public bool AnonymizeAllSettings
 		{
 			get => _anonymizeAllSettings;
@@ -50,7 +32,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			{
 				if (_anonymizeAllSettings == value)return;
 				_anonymizeAllSettings = value;
-				ClearOptions(value);
+				SetOptions(value);
 				OnPropertyChanged(nameof(AnonymizeAllSettings));
 			}
 		}
@@ -196,9 +178,27 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 		}
 
 		public ICommand LoadWindowAction => _loadWindowAction ?? (_loadWindowAction = new CommandHandler(WindowLoaded));
+		private void WindowLoaded(object obj)
+		{
+			if (Settings == null) return;
+			AnonymizeAllSettings = Settings.AnonymizeComplete;
+			CreatedByChecked = Settings.CreatedByChecked;
+			CreatedByName = Settings.CreatedByName;
+			ModifyByChecked = Settings.ModifyByChecked;
+			ModifyByName = Settings.ModifyByName;
+			CommentChecked = Settings.CommentChecked;
+			CommentAuthorName = Settings.CommentAuthorName;
+			TrackedChecked = Settings.TrackedChecked;
+			TrackedName = Settings.TrackedName;
+			ChangeMtChecked = Settings.ChangeMtChecked;
+			ChangeTmChecked = Settings.ChangeTmChecked;
+			SetSpecificResChecked = Settings.SetSpecificResChecked;
+			TmName = Settings.TmName;
+			FuzzyScore = Settings.FuzzyScore;
+		}
 
 
-		private void ClearOptions(bool value)
+		private void SetOptions(bool value)
 		{
 			CreatedByChecked = value;
 			ModifyByChecked = value;
