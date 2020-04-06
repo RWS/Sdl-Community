@@ -40,6 +40,10 @@ namespace Sdl.Community.SDLBatchAnonymize
 					{
 						_usernameService.AnonymizeCommentAuthor(segmentPair,_settings.CommentAuthorName);
 					}
+					if (_settings.TrackedChecked)
+					{
+						_usernameService.AnonymizeRevisionMarker(segmentPair,_settings.TrackedName);
+					}
 				}
 			}
 			catch (Exception exception)

@@ -16,5 +16,10 @@ namespace Sdl.Community.SDLBatchAnonymize.Interface
 		/// Anonymize file comments
 		/// </summary>
 		void AnonymizeCommentAuthor(IFileProperties fileProperties, string commentAuthor);
+
+		/// <summary>
+		/// Anonymize segment tracked changes
+		/// </summary>
+		void AnonymizeRevisionMarker(ISegmentPair segmentPair, string revisionAuthor);
 	}
 }

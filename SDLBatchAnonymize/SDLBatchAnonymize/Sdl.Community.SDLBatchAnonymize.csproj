@@ -143,6 +143,7 @@
     </Compile>
     <Compile Include="ViewModel\BatchAnonymizerSettingsViewModel.cs" />
     <Compile Include="Visitor\CommentVisitor.cs" />
+    <Compile Include="Visitor\RevisionMarkerVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Control\BatchAnonymizerHostControl.resx">

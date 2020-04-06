@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Sdl.Community.SDLBatchAnonymize.Interface;
 using Sdl.Community.SDLBatchAnonymize.Visitor;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -10,6 +9,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 	public class UserNameService : IUserNameService
 	{
 		private readonly CommentVisitor _commentVisitor = new CommentVisitor();
+		private  readonly  RevisionMarkerVisitor _revisionMarkerVisitor = new RevisionMarkerVisitor();
 
 		public void AnonymizeCreatedByAndEdited(ISegmentPair segmentPair, IBatchAnonymizerSettings anonymizerSettings)
 		{
@@ -39,6 +39,12 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 			{
 				fileComment.Author = commentAuthor;
 			}
+		}
+
+		public void AnonymizeRevisionMarker(ISegmentPair segmentPair, string revisionAuthor)
+		{
+			_revisionMarkerVisitor.AnonymizeRevisionMarker(segmentPair.Source,revisionAuthor);
+			_revisionMarkerVisitor.AnonymizeRevisionMarker(segmentPair.Target, revisionAuthor);
 		}
 
 		private void EditUserMetadata(ITranslationOrigin translationOrigin, string metadataKey, string metadataValue)
