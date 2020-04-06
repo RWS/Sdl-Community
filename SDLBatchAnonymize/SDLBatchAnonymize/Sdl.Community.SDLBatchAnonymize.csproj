@@ -142,6 +142,7 @@
       <DependentUpon>BatchAnonymizerSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\BatchAnonymizerSettingsViewModel.cs" />
+    <Compile Include="Visitor\CommentVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Control\BatchAnonymizerHostControl.resx">
@@ -170,9 +171,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Visitor\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
