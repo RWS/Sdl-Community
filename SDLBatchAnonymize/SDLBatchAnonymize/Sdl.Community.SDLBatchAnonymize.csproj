@@ -117,6 +117,7 @@
     <Compile Include="Command\CommandHandler.cs" />
     <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
     <Compile Include="Interface\IBatchAnonymizerSettings.cs" />
+    <Compile Include="Interface\IResourceOriginsService.cs" />
     <Compile Include="Interface\IUserNameService.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Model\ModelBase.cs" />
@@ -127,6 +128,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Service\ResourceOriginsService.cs" />
     <Compile Include="Service\UserNameService.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizerWikiAction.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizeStoreAction.cs" />

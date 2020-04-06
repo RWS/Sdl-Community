@@ -14,11 +14,13 @@ namespace Sdl.Community.SDLBatchAnonymize
 		public static readonly Log Log = Log.Instance;
 		private readonly IBatchAnonymizerSettings _settings;
 		private readonly IUserNameService _usernameService;
+		private IResourceOriginsService _resourceOriginsService;
 
-		public AnonymizerProcessor(IBatchAnonymizerSettings settings, IUserNameService usernameService)
+		public AnonymizerProcessor(IBatchAnonymizerSettings settings, IUserNameService usernameService,IResourceOriginsService resourceOriginsService)
 		{
 			_settings = settings;
 			_usernameService = usernameService;
+			_resourceOriginsService = resourceOriginsService;
 		}
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
@@ -44,6 +46,15 @@ namespace Sdl.Community.SDLBatchAnonymize
 					{
 						_usernameService.AnonymizeRevisionMarker(segmentPair,_settings.TrackedName);
 					}
+					if (_settings.ChangeMtChecked)
+					{
+						_resourceOriginsService.RemoveMt(segmentPair,_settings);
+					}
+					if (_settings.ChangeTmChecked)
+					{
+						_resourceOriginsService.RemoveTm(segmentPair, _settings);
+					}
+
 				}
 			}
 			catch (Exception exception)
