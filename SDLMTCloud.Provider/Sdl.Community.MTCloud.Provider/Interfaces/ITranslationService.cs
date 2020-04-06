@@ -7,7 +7,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
 	public interface ITranslationService
 	{
-		ICredentialService ConnectionService { get; }
+		IConnectionService ConnectionService { get; }
 
 		ILanguageMappingsService LanguageMappingsService { get; }
 

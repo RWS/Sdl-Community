@@ -13,28 +13,41 @@ using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
+using Sdl.LanguageCloud.IdentityApi;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
-	public class ConnectionService : ICredentialService
+	public class ConnectionService : IConnectionService
 	{
-		public ConnectionService(IWin32Window owner)
+		public ConnectionService(IWin32Window owner, VersionService versionService)
 		{
-			Owner = owner;
+			Owner = owner;			
+			VersionService = versionService;
 
 			IsSignedIn = false;
-			PluginVersion = VersionHelper.GetPluginVersion();
-			StudioVersion = VersionHelper.GetStudioVersion();
+
+			PluginVersion = VersionService?.GetPluginVersion();
+			StudioVersion = VersionService?.GetStudioVersion();
+
+			if (LanguageCloudIdentityApi != null)
+			{
+				LanguageCloudIdentityApi = LanguageCloudIdentityApi.Instance;
+			}
+
 			Credential = new Credential();
 		}
 
 		public IWin32Window Owner { get; set; }
 
+		public LanguageCloudIdentityApi LanguageCloudIdentityApi { get; }
+
+		public VersionService VersionService { get; }
+
 		public bool IsSignedIn { get; private set; }
 
-		public ICredential Credential { get; private set; }
+		public virtual ICredential Credential { get; private set; }
 
 		public string PluginVersion { get; }
 
@@ -94,7 +107,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				if (string.Compare(itemName, "AccountId", StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
 					accountId = itemValue;
-				}				
+				}
 
 				if (string.Compare(itemName, "ValidTo", StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
@@ -133,28 +146,22 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			Credential = credential;
 
-			var message = string.Empty;
+			string message;
 			if (Credential.Type == Authentication.AuthenticationType.Studio)
 			{
-				IsSignedIn = IsSignedInStudioAuthentication(out var user);
+
+				IsSignedIn = IsValidCredential(Credential.Type, out message);
 				if (!IsSignedIn)
 				{
-					var currentCursor = Mouse.OverrideCursor;
-					try
-					{
-						Mouse.OverrideCursor = Cursors.Arrow;
-						IsSignedIn = StudioInstance.GetLanguageCloudIdentityApi.TryLogin(out message);
-					}
-					finally
-					{
-						Mouse.OverrideCursor = currentCursor;
-					}
-				}
+					var signInResult = StudioSignIn();
 
-				Credential.Token = StudioInstance.GetLanguageCloudIdentityApi.AccessToken;				
-				Credential.ValidTo = GetTokenValidTo(Credential.Token);
-				Credential.Name = StudioInstance.GetLanguageCloudIdentityApi.LanguageCloudCredential?.Email;
-				Credential.Password = null;
+					IsSignedIn = !string.IsNullOrEmpty(signInResult.Item1?.AccessToken);
+					Credential.Token = signInResult.Item1?.AccessToken;
+					Credential.ValidTo = GetTokenValidTo(Credential.Token);
+					Credential.Name = signInResult.Item1?.Email;
+					Credential.Password = null;
+					message = signInResult.Item2;
+				}
 
 				if (IsSignedIn)
 				{
@@ -167,7 +174,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 			else
 			{
-				IsSignedIn = IsSignedInCredentialsAuthentication();
+				IsSignedIn = IsValidCredential(Credential.Type, out message);
 				if (!IsSignedIn)
 				{
 					if (Credential.Type == Authentication.AuthenticationType.User)
@@ -182,7 +189,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						var resource = "/token/user";
 
 						var signInResult = Task.Run(async () => await SignIn(resource, content)).Result;
-						IsSignedIn = signInResult.Item1 != null;
+						IsSignedIn = !string.IsNullOrEmpty(signInResult.Item1?.AccessToken);
 						Credential.Token = signInResult.Item1?.AccessToken;
 						Credential.ValidTo = GetTokenValidTo(Credential.Token);
 						message = signInResult.Item2;
@@ -208,10 +215,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						var resource = "/token";
 
 						var signInResult = Task.Run(async () => await SignIn(resource, content)).Result;
-						IsSignedIn = signInResult.Item1 != null;
+						IsSignedIn = !string.IsNullOrEmpty(signInResult.Item1?.AccessToken);
 						Credential.Token = signInResult.Item1?.AccessToken;
 						Credential.ValidTo = GetTokenValidTo(Credential.Token);
-						
+
 						message = signInResult.Item2;
 
 						if (IsSignedIn)
@@ -266,6 +273,43 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return new Tuple<bool, string>(IsSignedIn, message);
 		}
 
+		public Tuple<LanguageCloudIdentityApiModel, string> StudioSignIn()
+		{
+			string message;
+			bool success;
+
+			var currentCursor = Mouse.OverrideCursor;
+			try
+			{
+				Mouse.OverrideCursor = Cursors.Arrow;
+				success = LanguageCloudIdentityApi.TryLogin(out message);
+			}
+			finally
+			{
+				Mouse.OverrideCursor = currentCursor;
+			}
+			
+			if (success)
+			{
+				var model = new LanguageCloudIdentityApiModel
+				{
+					AccessToken = LanguageCloudIdentityApi.AccessToken,
+					ActiveAccountId = LanguageCloudIdentityApi.ActiveAccountId,
+					ActiveUserId = LanguageCloudIdentityApi.ActiveUserId,
+					ActiveTenantId = LanguageCloudIdentityApi.ActiveTenantId,
+					ApiKey = LanguageCloudIdentityApi.ApiKey,
+					StudioApplicationKey = LanguageCloudIdentityApi.StudioApplicationKey,
+					StudioClientId = LanguageCloudIdentityApi.StudioClientId,
+					AccountName = LanguageCloudIdentityApi.LanguageCloudCredential?.AccountName,
+					Email = LanguageCloudIdentityApi.LanguageCloudCredential?.Email,
+				};
+
+				return new Tuple<LanguageCloudIdentityApiModel, string>(model, message);
+			}
+
+			return new Tuple<LanguageCloudIdentityApiModel, string>(null, message);
+		}
+
 		public async Task<Tuple<AuthorizationResponse, string>> SignIn(string resource, string content)
 		{
 			// there is a known issues with a timeout interfering with the credential authentication from the server side.W
@@ -278,6 +322,20 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			return signIn;
+		}
+
+		public async Task<Tuple<UserDetails, string>> GetUserDetails(string token, string resource)
+		{
+			// there is a known issues with a timeout interfering with the credential authentication from the server side.W
+			// make two attempts to signin to mitiate this issue.
+			var userDetails = await GetUserDetailsAttempt(token, resource);
+			if (userDetails.Item1?.AccountId <= 0)
+			{
+				Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + PluginResources.Message_Second_Attempt + $" {resource}");
+				userDetails = await GetUserDetailsAttempt(token, resource);
+			}
+
+			return userDetails;
 		}
 
 		public void AddTraceHeader(HttpRequestMessage request)
@@ -309,7 +367,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return credential ?? new Credential();
 		}
 
-		private static JwtSecurityToken ReadToken(string token)
+		private JwtSecurityToken ReadToken(string token)
 		{
 			if (string.IsNullOrEmpty(token))
 			{
@@ -337,54 +395,69 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return null;
 		}
 
-		private static DateTime GetTokenValidTo(string token)
+		private DateTime GetTokenValidTo(string token)
 		{
 			var tokenModel = ReadToken(token);
 
 			return tokenModel?.ValidTo ?? DateTime.MinValue;
-		}	
-
-		public bool IsSignedInCredentialsAuthentication(Authentication.AuthenticationType type, out string name)
-		{
-			if (type == Authentication.AuthenticationType.Studio || Credential.Type == Authentication.AuthenticationType.Studio)
-			{
-				return IsSignedInStudioAuthentication(out name);
-			}
-
-			name = Credential.Name;
-			return IsSignedInCredentialsAuthentication();
 		}
 
-		private bool IsSignedInStudioAuthentication(out string name)
-		{
-			var languageCloudCredential = StudioInstance.GetLanguageCloudIdentityApi.LanguageCloudCredential;
-			name = languageCloudCredential?.Email;
+		public bool IsValidCredential(Authentication.AuthenticationType type, out string message)
+		{			
+			return type == Authentication.AuthenticationType.Studio
+				? IsValidStudioCredential(out message)
+				: IsValidCredential(out message);
+		}
 
-			var validTo = GetTokenValidTo(StudioInstance.GetLanguageCloudIdentityApi?.AccessToken);
+		private bool IsValidStudioCredential(out string message)
+		{
+			var languageCloudCredential = LanguageCloudIdentityApi?.LanguageCloudCredential;
+
+			message = string.Empty;
+			
+			var isNullOrEmpty = string.IsNullOrEmpty(languageCloudCredential?.Email)
+			       || string.IsNullOrEmpty(LanguageCloudIdentityApi?.AccessToken);
+
+			if (isNullOrEmpty)
+			{
+				message = PluginResources.Message_Credential_criteria_is_not_valid;
+				return false;
+			}
+			
+
+			var validTo = GetTokenValidTo(LanguageCloudIdentityApi?.AccessToken);
 			if (validTo < DateTime.UtcNow)
 			{
+				message = PluginResources.Message_Credential_has_expired;
+				return false;
+			}
+			
+			return true;
+		}
+
+		private bool IsValidCredential(out string message)
+		{
+			message = string.Empty;
+
+			var isNullOrEmpty = string.IsNullOrEmpty(Credential.AccountId)
+			                    || string.IsNullOrEmpty(Credential.Token)
+			                    || string.IsNullOrEmpty(Credential.Name)
+			                    || string.IsNullOrEmpty(Credential.Password);
+
+			if (isNullOrEmpty)
+			{
+				message = PluginResources.Message_Credential_criteria_is_not_valid;
 				return false;
 			}
 
-			return !string.IsNullOrEmpty(languageCloudCredential?.Email)
-				   && !string.IsNullOrEmpty(StudioInstance.GetLanguageCloudIdentityApi?.AccessToken);
-		}
-	
-
-		private bool IsSignedInCredentialsAuthentication()
-		{
 			// if the ValidTo value is available, then validate against the current date/time
 			if (Credential.ValidTo < DateTime.UtcNow)
 			{
+				message = PluginResources.Message_Credential_has_expired;
 				return false;
-			}
+			}			
 
-			var isNullOrEmpty = string.IsNullOrEmpty(Credential.AccountId)
-								|| string.IsNullOrEmpty(Credential.Token)
-								|| string.IsNullOrEmpty(Credential.Name)
-								|| string.IsNullOrEmpty(Credential.Password);
-		
-			return !isNullOrEmpty;
+			return true;
 		}
 
 		private async Task<Tuple<AuthorizationResponse, string>> SignInAttempt(string resource, string content)
@@ -418,21 +491,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
 				return new Tuple<AuthorizationResponse, string>(null, ex.Message);
 			}
-		}
-
-		public async Task<Tuple<UserDetails, string>> GetUserDetails(string token, string resource)
-		{
-			// there is a known issues with a timeout interfering with the credential authentication from the server side.W
-			// make two attempts to signin to mitiate this issue.
-			var userDetails = await GetUserDetailsAttempt(token, resource);
-			if (userDetails.Item1?.AccountId <= 0)
-			{
-				Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + PluginResources.Message_Second_Attempt + $" {resource}");
-				userDetails = await GetUserDetailsAttempt(token, resource);
-			}
-
-			return userDetails;
-		}
+		}		
 
 		private async Task<Tuple<UserDetails, string>> GetUserDetailsAttempt(string token, string resource)
 		{

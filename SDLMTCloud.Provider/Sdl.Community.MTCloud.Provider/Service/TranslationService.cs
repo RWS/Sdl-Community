@@ -17,14 +17,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class TranslationService : ITranslationService
 	{
-		public TranslationService(ICredentialService connectionService, ILanguageMappingsService languageMappingsService)
+		public TranslationService(IConnectionService connectionService, ILanguageMappingsService languageMappingsService)
 		{
 			ConnectionService = connectionService;
 			LanguageMappingsService = languageMappingsService;
 			UpdateLanguageMappings();
 		}
 
-		public ICredentialService ConnectionService { get; }
+		public IConnectionService ConnectionService { get; }
 
 		public ILanguageMappingsService LanguageMappingsService { get; }
 
