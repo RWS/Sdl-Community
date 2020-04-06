@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.SDLBatchAnonymize.Ui
+﻿namespace Sdl.Community.SDLBatchAnonymize.Control
 {
 	partial class BatchAnonymizerHostControl
 	{

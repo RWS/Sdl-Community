@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Sdl.Community.SDLBatchAnonymize.Ui.BatchAnonymizerSettingsWpfControl"
+﻿<UserControl x:Class="Sdl.Community.SDLBatchAnonymize.View.BatchAnonymizerSettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -19,7 +19,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Textboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/NumericUpDown.xaml"/>
-				<ResourceDictionary Source="../UiHelper/General.xaml"/>
+				<ResourceDictionary Source="../Styles/General.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
 		</ResourceDictionary>

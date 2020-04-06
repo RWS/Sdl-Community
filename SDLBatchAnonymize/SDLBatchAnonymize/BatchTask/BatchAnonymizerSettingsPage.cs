@@ -1,4 +1,4 @@
-﻿using Sdl.Community.SDLBatchAnonymize.Ui;
+﻿using Sdl.Community.SDLBatchAnonymize.Control;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 

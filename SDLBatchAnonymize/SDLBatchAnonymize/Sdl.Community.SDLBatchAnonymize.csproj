@@ -132,29 +132,20 @@
     <Compile Include="TellMe\SdlBatchAnonymizeStoreAction.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizeCommunitySupportAction.cs" />
     <Compile Include="TellMe\SdlBatchAnonymizeTellMeProvider.cs" />
-    <Compile Include="Ui\BatchAnonymizerHostControl.cs">
+    <Compile Include="Control\BatchAnonymizerHostControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Ui\BatchAnonymizerHostControl.Designer.cs">
+    <Compile Include="Control\BatchAnonymizerHostControl.Designer.cs">
       <DependentUpon>BatchAnonymizerHostControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ui\BatchAnonymizerSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ui\BatchAnonymizerSettingsControl.Designer.cs">
-      <DependentUpon>BatchAnonymizerSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Ui\BatchAnonymizerSettingsWpfControl.xaml.cs">
-      <DependentUpon>BatchAnonymizerSettingsWpfControl.xaml</DependentUpon>
+    <Compile Include="View\BatchAnonymizerSettingsView.xaml.cs">
+      <DependentUpon>BatchAnonymizerSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\BatchAnonymizerSettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Ui\BatchAnonymizerHostControl.resx">
+    <EmbeddedResource Include="Control\BatchAnonymizerHostControl.resx">
       <DependentUpon>BatchAnonymizerHostControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Ui\BatchAnonymizerSettingsControl.resx">
-      <DependentUpon>BatchAnonymizerSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <Resource Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\Download.ico" />
@@ -170,11 +161,11 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UiHelper\General.xaml">
+    <Page Include="Styles\General.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Ui\BatchAnonymizerSettingsWpfControl.xaml">
+    <Page Include="View\BatchAnonymizerSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
