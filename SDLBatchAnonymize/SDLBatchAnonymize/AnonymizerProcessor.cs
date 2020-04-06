@@ -36,11 +36,28 @@ namespace Sdl.Community.SDLBatchAnonymize
 					{
 						_usernameService.AnonymizeCreatedByAndEdited(segmentPair, _settings);
 					}
+					if (_settings.CommentChecked)
+					{
+						_usernameService.AnonymizeCommentAuthor(segmentPair,_settings.CommentAuthorName);
+					}
+					if (_settings.TrackedChecked)
+					{
+						_usernameService.AnonymizeRevisionMarker(segmentPair,_settings.TrackedName);
+					}
 				}
 			}
 			catch (Exception exception)
 			{
 				Log.Logger.Error($"{exception.Message}\n {exception.StackTrace}");
+			}
+		}
+		
+
+		public override void SetFileProperties(IFileProperties fileInfo)
+		{
+			if (_settings.CommentChecked)
+			{
+				_usernameService.AnonymizeCommentAuthor(fileInfo, _settings.CommentAuthorName);
 			}
 		}
 
