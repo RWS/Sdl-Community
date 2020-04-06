@@ -14,19 +14,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 			var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
 			if (translationOrigin != null && IsAutomatedTranslated(translationOrigin))
 			{
-				var anonymizeCustomResources = ShouldAnonymizeWithCustomResources(anonymizerSettings);
-				AnonymizeToDefaultValues(translationOrigin);
-
-				if (anonymizeCustomResources)
-				{
-					if (segmentPair.Properties?.TranslationOrigin.OriginBeforeAdaptation == null)
-					{
-						var originClone = (ITranslationOrigin) translationOrigin.Clone();
-						originClone.OriginBeforeAdaptation = null;
-						segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation = originClone;
-					}
-					AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation, anonymizerSettings);
-				}
+				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, translationOrigin);
 			}
 		}
 
@@ -35,19 +23,25 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 			var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
 			if (translationOrigin != null && IsTmTransaltion(translationOrigin))
 			{
-				var anonymizeCustomResources = ShouldAnonymizeWithCustomResources(anonymizerSettings);
-				AnonymizeToDefaultValues(translationOrigin);
+				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, translationOrigin);
+			}
+		}
 
-				if (anonymizeCustomResources)
+		private void AnonymizeTranslationOrigin(ISegmentPair segmentPair, IBatchAnonymizerSettings anonymizerSettings,
+			ITranslationOrigin translationOrigin)
+		{
+			var anonymizeCustomResources = ShouldAnonymizeWithCustomResources(anonymizerSettings);
+			AnonymizeToDefaultValues(translationOrigin); // we need to set the origin to be interactive in order to have edied fuzzy
+
+			if (anonymizeCustomResources)
+			{
+				if (segmentPair.Properties?.TranslationOrigin.OriginBeforeAdaptation == null)
 				{
-					if (segmentPair.Properties?.TranslationOrigin.OriginBeforeAdaptation == null)
-					{
-						var originClone = (ITranslationOrigin)translationOrigin.Clone();
-						originClone.OriginBeforeAdaptation = null;
-						segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation = originClone;
-					}
-					AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation, anonymizerSettings);
+					var originClone = (ITranslationOrigin) translationOrigin.Clone();
+					originClone.OriginBeforeAdaptation = null;
+					segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation = originClone;
 				}
+				AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation, anonymizerSettings);
 			}
 		}
 
