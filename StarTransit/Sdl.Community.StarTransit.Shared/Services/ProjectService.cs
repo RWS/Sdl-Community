@@ -9,6 +9,7 @@ using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
+using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.Settings;
@@ -23,6 +24,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		#region Public Methods
 		public MessageModel CreateProject(PackageModel package)
 		{
+			var messageModel = new MessageModel();
 			try
 			{
 				var penaltiesTmsList = new List<StarTranslationMemoryMetadata>();
@@ -69,11 +71,15 @@ namespace Sdl.Community.StarTransit.Shared.Services
 								penaltiesTmsList.Add(starTMMetadata);
 							}
 						}
+
 						//Separate all items from package.MachineTransMem (files that contain Machine Translation)
-						bool hasMTMemories = package.MTMemories.Any(t => t.Equals(starTMMetadata.TargetFile));
-						if (package.MTMemories != null && hasMTMemories)
+						if (package.MTMemories != null)
 						{
-							machineTransList.Add(starTMMetadata);
+							var hasMTMemories = package.MTMemories.Any(t => t.Equals(starTMMetadata.TargetFile));
+							if (hasMTMemories)
+							{
+								machineTransList.Add(starTMMetadata);
+							}
 						}
 					}
 
@@ -95,11 +101,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					{
 						if (pair.StarTranslationMemoryMetadatas.Count > 0)
 						{
-							var importer = new TransitTmImporter(pair.SourceLanguage,
-								pair.TargetLanguage,
-								pair.CreateNewTm,
-								fileTypeManager,
-								Path.Combine(Path.GetDirectoryName(newProject.FilePath), Path.GetFileName(pair.TmPath)));
+							var newTmPath = Path.Combine(Path.GetDirectoryName(newProject.FilePath), Path.GetFileName(pair.TmPath));
+							var importer = new TransitTmImporter(pair, fileTypeManager, newTmPath);
+
 							foreach (var tm in pair.StarTranslationMemoryMetadatas)
 							{
 								importer.ImportStarTransitTm(tm.TargetFile);
@@ -111,17 +115,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 								true));
 						}
 
-						// Create separate TM for each TM file on which user set penalty
+						// Create separate TM for each TM file on which user set penalty. The penalty is applied on top of any penalty that might be applied by the translation provider itself.
 						// (the name of the new TM will be the same with the one from StarTransit package)
 						foreach (var item in penaltiesTmsList)
 						{
-							var tmWithPenaltyImporter = new TransitTmImporter(
-								Path.GetDirectoryName(newProject.FilePath),
-								pair.SourceLanguage,
-								pair.TargetLanguage,
-								Path.GetFileName(item.TargetFile),
-								fileTypeManager);
-
+							var tmWithPenaltyImporter = new TransitTmImporter(fileTypeManager, pair, Path.GetDirectoryName(newProject.FilePath), Path.GetFileName(item.TargetFile));
 							tmWithPenaltyImporter.ImportStarTransitTm(item.TargetFile);
 
 							tmConfig.Entries.Add(new TranslationProviderCascadeEntry(
@@ -135,13 +133,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						//If the user requests it, create a separate TM for the Machine Translation coming from Transit.
 						foreach (var item in machineTransList)
 						{
-							var machineTranslationImporter = new TransitTmImporter(
-								Path.GetDirectoryName(newProject.FilePath),
-								pair.SourceLanguage,
-								pair.TargetLanguage,
-								Path.GetFileName(item.TargetFile),
-								fileTypeManager);
-
+							var machineTranslationImporter = new TransitTmImporter(fileTypeManager, pair, Path.GetDirectoryName(newProject.FilePath), Path.GetFileName(item.TargetFile));
 							machineTranslationImporter.ImportStarTransitTm(item.TargetFile);
 
 							//It should have a penalty set by default, otherwise it will be used for pretranslation and later added to the main TM when updating main TM, and we want to avoid that.
@@ -155,12 +147,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					}
 					if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
 					{
-						var messageModel = new MessageModel
-						{
-							IsProjectCreated = false,
-							Message = "Project was not created correctly because no target files were found in the package!",
-							Title = "Informative message"
-						};
+						messageModel.IsProjectCreated = false;
+						messageModel.Message = "Project was not created correctly because no target files were found in the package!";
+						messageModel.Title = "Informative message";
 						return messageModel;
 					}
 					targetProjectFiles.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
@@ -183,12 +172,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 					if (taskSequence.Status.Equals(TaskStatus.Failed))
 					{
-						var messageModel = new MessageModel
-						{
-							IsProjectCreated = false,
-							Message = "Project could not be created.Error occured while running automatic tasks!",
-							Title = "Informative message"
-						};
+						messageModel.IsProjectCreated = false;
+						messageModel.Message = "Project could not be created.Error occured while running automatic tasks!";
+						messageModel.Title = "Informative message";
 						return messageModel;
 					}
 					newProject.Save();
@@ -200,16 +186,21 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 					Controller.RefreshProjects();
 				}
+				messageModel.IsProjectCreated = true;
+				messageModel.Message = "Project was successfully created!";
+				messageModel.Title = "Informative message";
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"CreateModel method: {ex.Message}\n {ex.StackTrace}");
+				return null;
 			}
-			return null;
+			return messageModel;
 		}
 		#endregion
 
 		#region Private Methods
+
 		private Language[] GetTargetLanguages(List<LanguagePair> languagePairs)
 		{
 			try

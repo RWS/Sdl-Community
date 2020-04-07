@@ -60,6 +60,7 @@
     <Reference Include="NLog">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Sdl.Community.Toolkit.Core, Version=1.8.9.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Community.Toolkit.Core.1.8.9\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
@@ -128,9 +129,6 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Controls\Finish.xaml.cs">
       <DependentUpon>Finish.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Footer.xaml.cs">
-      <DependentUpon>Footer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\PackageDetails.xaml.cs">
       <DependentUpon>PackageDetails.xaml</DependentUpon>
@@ -206,10 +204,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Footer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\PackageDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -237,6 +231,14 @@
     <Page Include="UIHelpers\ButtonsStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UIHelpers\DataGridStyle2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UIHelpers\GeneralStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIHelpers\MetroStyle.xaml">
       <Generator>MSBuild:Compile</Generator>

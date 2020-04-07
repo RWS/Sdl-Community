@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Sdl.Community.StarTransit.UI.Annotations;
+using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.UI.Commands;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-    public class CellViewModel:INotifyPropertyChanged
-    {
+	public class CellViewModel : BaseViewModel
+	{
         private string _name;
         private bool _isChecked;
         private Guid _id;
         private ICommand _selectCommand;
-        public event PropertyChangedEventHandler PropertyChanged;
         private  static List<Guid> _selectedProjectIds = new List<Guid>();
 
         public CellViewModel()
@@ -95,11 +89,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         public void ClearSelectedProjectsList()
         {
             _selectedProjectIds.Clear();
-        }
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

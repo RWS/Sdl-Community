@@ -1,40 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
-using Sdl.Community.StarTransit.UI.Annotations;
 using Sdl.Community.StarTransit.UI.Commands;
-using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-	public class ReturnFilesViewModel :INotifyPropertyChanged
+	public class ReturnFilesViewModel : BaseViewModel
     {
         private ReturnPackage _returnPackage;
         private string _title;
         private List<ProjectFile> _projectFiles;
         private ICommand _browseCommand;
         private string _returnPackageLocation;
-        private ReturnPackageMainWindow _window;
         private ObservableCollection<CellViewModel> _listView = new ObservableCollection<CellViewModel>();
-        private CellViewModel _selectedItem;
 		private readonly IMessageBoxService _messageBoxService;
 
-		public ReturnFilesViewModel(ReturnPackage returnPackage, ReturnPackageMainWindow window)
+		public ReturnFilesViewModel(ReturnPackage returnPackage)
 		{
 			_messageBoxService = new MessageBoxService();
 			_returnPackage = returnPackage;
-			_window = window;
 			_title = "Please select files for the return package";
 
 			if(returnPackage?.TargetFiles != null && returnPackage.TargetFiles.Count > 0)
@@ -63,7 +55,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			}
 			else
 			{
-				_messageBoxService.ShowWarningMessage("Please select target files!", "Warning");
+				_messageBoxService.ShowWarningMessage("Please select a StarTransit project!", "Warning");
 			}
 		}
 
@@ -74,10 +66,12 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             get { return _listView; }
             set
             {
-                if (Equals(value, _listView)){ return;}
+                if (Equals(value, _listView))
+				{
+					return;
+				}
                 _listView = value;
                 OnPropertyChanged();
-
             }
         }
 
@@ -118,15 +112,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             var folderDialog = new FolderSelectDialog();
             if (folderDialog.ShowDialog())
             {
-
                 ReturnPackageLocation = folderDialog.FileName;
                 _returnPackage.FolderLocation = folderDialog.FileName;
             }
         }
 
         public ReturnPackage GetReturnPackage()
-        {
-          
+        {          
             var selectedProjectsIds = CellViewModel.ReturnSelectedProjectIds();
             var selectedFiles = new List<ProjectFile>();
 
@@ -138,8 +130,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 selectedFiles.Add(selectedFile);
             }
             _returnPackage.TargetFiles = selectedFiles;
-           
-
+			
             return _returnPackage;
         }
 
@@ -159,13 +150,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 return prj;
             }
             return string.Empty;
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

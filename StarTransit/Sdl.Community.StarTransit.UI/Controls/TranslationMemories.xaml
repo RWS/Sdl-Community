@@ -8,29 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.Resources>
 	    <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-	            <ResourceDictionary>
-		            <Style x:Key="NavigationButtonStyle" TargetType="{x:Type ListViewItem}">
-			            <Setter Property="Foreground" Value="#FF0B6266" />
-			            <Setter Property="FontSize" Value="18.667" />
-			            <Setter Property="HorizontalAlignment" Value="Left" />
-			            <Setter Property="Cursor" Value="Hand" />
-			            <Setter Property="Margin" Value="10,10,0,0" />
-			            <Setter Property="Background" Value="Transparent" />
-			            <Setter Property="Template">
-				            <Setter.Value>
-					            <ControlTemplate TargetType="{x:Type ListViewItem}">
-						            <ContentPresenter/>
-					            </ControlTemplate>
-				            </Setter.Value>
-			            </Setter>
-			            <Style.Triggers>
-				            <Trigger Property="IsSelected" Value="true">
-					            <Setter Property="Foreground" Value="#3EA691" />
-				            </Trigger>
-			            </Style.Triggers>
-		            </Style>
-					</ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="..\UIHelpers\MetroStyle.xaml"/>
 	            <ResourceDictionary Source="..\UIHelpers\ButtonsStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -55,10 +33,9 @@
                 BorderBrush="{x:Null}"
                 BorderThickness="0"
                 SelectedItem="{Binding SelectedItem}"
-                ItemContainerStyle="{DynamicResource NavigationButtonStyle}"  
+                ItemContainerStyle="{DynamicResource NavigationButtonStyle2}"  
                 SelectionMode="Single"                
-                ItemsSource ="{Binding LanguagePairs}" 
-                   SelectedIndex="{Binding SelectedIndex}">
+                ItemsSource ="{Binding LanguagePairs}" SelectedIndex="{Binding SelectedIndex}">
             <ListView.ItemTemplate>
                 <ItemContainerTemplate>
                     <TextBlock Text="{Binding PairName }" FontSize="14" Margin="10,10,10,10" />
@@ -87,8 +64,8 @@
 						</StackPanel>
 						<RadioButton Style="{DynamicResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"/>
                     </StackPanel>
-                    <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}" Grid.Row="1" Grid.Column="1"
-							Width="auto" Height="auto" Margin="0,50,123,0" Visibility="{Binding Visibility}" Background="#FF3EA691" BorderBrush="#FF3EA691" Foreground="White">						
+					<Button Style="{DynamicResource ButtonStyleShadowless}" x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}" Grid.Row="1" Grid.Column="1"
+							Width="auto" Height="30" Margin="100,70,5,5" Visibility="{Binding Visibility}" >						
 					</Button>
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="TM name:" Margin="20,15,22,15"/>
                     <TextBox Style="{DynamicResource MetroTextBox}"
@@ -96,7 +73,7 @@
 						Controls:TextBoxHelper.IsWaitingForData="True"
 						Controls:TextBoxHelper.UseFloatingWatermark="True" 
   						Controls:TextBoxHelper.Watermark="TM name" 
-						ToolTip="TM Name" Grid.Row="2" Grid.Column="1" Width="auto" Height="40" Margin="0,0,30,0" 
+						ToolTip="{Binding TmName}" Grid.Row="2" Grid.ColumnSpan="2" Width="auto" Height="40" Margin="85,0,5,0" 
 						    Text="{Binding TmName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" IsEnabled="{Binding IsEnabled}"
 						x:Name="TmName" TextWrapping="Wrap" />
                     <TextBlock Grid.ColumnSpan="2" Margin="20" Foreground="Red" Name="TmLanguageValidation" Visibility="{Binding TmMessage}" Grid.Column="0" Grid.Row="3">Please select a Translation Memory that matches the languages in this project.</TextBlock>
