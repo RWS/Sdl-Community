@@ -1,5 +1,6 @@
 ﻿using System;
 using Sdl.Community.MTCloud.Provider.Service;
+using Sdl.LanguageCloud.IdentityApi;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -13,7 +14,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{			
-			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService());
+			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(), LanguageCloudIdentityApi.Instance);
 						
 			var credential = connectionService.GetCredential(credentialStore);
 			var connectionResult = connectionService.EnsureSignedIn(credential);

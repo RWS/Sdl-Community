@@ -2,6 +2,13 @@
 {
 	public class OptionsModelTests
 	{
+		private readonly Common _common;
+
+		public OptionsModelTests()
+		{
+			_common = new Common();
+		}
+
 		//TODO
 	}
 }
