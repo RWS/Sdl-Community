@@ -52,6 +52,26 @@ namespace Sdl.Community.SDLBatchAnonymizeUT
 		}
 
 		[Theory]
+		[InlineData("jane doe")]
+		public void UnckeckCreatedBy_ClearCreatedBy(string createdBy)
+		{
+			_anonymizerVm.CreatedByChecked = true;
+			_anonymizerVm.CreatedByName = createdBy;
+
+			_anonymizerVm.CreatedByChecked = false;
+			Assert.Equal(string.Empty,_anonymizerVm.CreatedByName);
+
+		}
+		[Theory]
+		[InlineData("jane doe")]
+		public void CheckCreatedBy(string createdBy)
+		{
+			_anonymizerVm.CreatedByName = createdBy;
+
+			Assert.True(_anonymizerVm.CreatedByChecked);
+		}
+
+		[Theory]
 		[InlineData(true, "jane doe")]
 		public void AnonymizeAllSelected_ClearModifyBy(bool anonymizeAll, string userName)
 		{
@@ -77,6 +97,25 @@ namespace Sdl.Community.SDLBatchAnonymizeUT
 			_anonymizerVm.ModifyByName = modifiedBy;
 
 			Assert.Equal(modifiedBy, _anonymizerVm.ModifyByName);
+		}
+		[Theory]
+		[InlineData("jane doe")]
+		public void UncheckModifyBy_ClearModifyBy(string modifiedBy)
+		{
+			_anonymizerVm.ModifyByChecked = true;
+			_anonymizerVm.ModifyByName = modifiedBy;
+
+			_anonymizerVm.ModifyByChecked = false;
+			Assert.Equal(string.Empty, _anonymizerVm.ModifyByName);
+
+		}
+		[Theory]
+		[InlineData("jane doe")]
+		public void CheckModifyBy(string modifiedBy)
+		{
+			_anonymizerVm.ModifyByName = modifiedBy;
+
+			Assert.True(_anonymizerVm.ModifyByChecked);
 		}
 
 		[Theory]
@@ -107,6 +146,25 @@ namespace Sdl.Community.SDLBatchAnonymizeUT
 
 			Assert.Equal(commentAuthor, _anonymizerVm.CommentAuthorName);
 		}
+		[Theory]
+		[InlineData("jane doe")]
+		public void UncheckComment_ClearComment(string commentAuthor)
+		{
+			_anonymizerVm.CommentChecked = true;
+			_anonymizerVm.CommentAuthorName = commentAuthor;
+
+			_anonymizerVm.CommentChecked = false;
+			Assert.Equal(string.Empty, _anonymizerVm.CommentAuthorName);
+
+		}
+		[Theory]
+		[InlineData("jane doe")]
+		public void CheckCommentAuthor(string commentAuthor)
+		{
+			_anonymizerVm.CommentAuthorName = commentAuthor;
+
+			Assert.True(_anonymizerVm.CommentChecked);
+		}
 
 		[Theory]
 		[InlineData(true, "jane doe")]
@@ -136,7 +194,25 @@ namespace Sdl.Community.SDLBatchAnonymizeUT
 
 			Assert.Equal(trackedChangesAuthor, _anonymizerVm.TrackedName);
 		}
+		[Theory]
+		[InlineData("jane doe")]
+		public void UncheckTracked_ClearTracked(string trackedAuthor)
+		{
+			_anonymizerVm.TrackedChecked = true;
+			_anonymizerVm.TrackedName = trackedAuthor;
 
+			_anonymizerVm.TrackedChecked = false;
+			Assert.Equal(string.Empty, _anonymizerVm.TrackedName);
+
+		}
+		[Theory]
+		[InlineData("jane doe")]
+		public void CheckTrackedAuthor(string trackedAuthor)
+		{
+			_anonymizerVm.TrackedName = trackedAuthor;
+
+			Assert.True(_anonymizerVm.TrackedChecked);
+		}
 
 		[Theory]
 		[InlineData(true)]
@@ -224,6 +300,48 @@ namespace Sdl.Community.SDLBatchAnonymizeUT
 			_anonymizerVm.TmName = tmName;
 
 			Assert.Equal(tmName, _anonymizerVm.TmName);
+		}
+
+		[Theory]
+		[InlineData(90)]
+		public void UncheckSpecificRes_ClearTmScore(decimal score)
+		{
+			_anonymizerVm.SetSpecificResChecked = true;
+			_anonymizerVm.FuzzyScore = score;
+
+			_anonymizerVm.SetSpecificResChecked = false;
+			
+			Assert.Equal(0,_anonymizerVm.FuzzyScore);
+		}
+
+		[Theory]
+		[InlineData("RM name")]
+		public void UncheckSpecificRes_ClearTmName(string tmName)
+		{
+			_anonymizerVm.SetSpecificResChecked = true;
+			_anonymizerVm.TmName = tmName;
+
+			_anonymizerVm.SetSpecificResChecked = false;
+
+			Assert.Equal(string.Empty, _anonymizerVm.TmName);
+		}
+
+		[Theory]
+		[InlineData(90)]
+		public void AddTmScore_CheckSpecificRes(decimal score)
+		{
+			_anonymizerVm.FuzzyScore = score;
+
+			Assert.True(_anonymizerVm.SetSpecificResChecked);
+		}
+
+		[Theory]
+		[InlineData("TM name")]
+		public void AddTmName_CheckSpecificRes(string tmName)
+		{
+			_anonymizerVm.TmName = tmName;
+
+			Assert.True(_anonymizerVm.SetSpecificResChecked);
 		}
 	}
 }
