@@ -29,8 +29,10 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		Tuple<bool, string> Connect(ICredential credential);
 
 		Tuple<bool, string> EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false);
-		
-		bool IsValidCredential(Authentication.AuthenticationType type, out string message);
+
+		bool IsValidStudioCredential(out string message);
+
+		bool IsValidCredential(out string message);
 
 		Tuple<LanguageCloudIdentityApiModel, string> StudioSignIn();
 
