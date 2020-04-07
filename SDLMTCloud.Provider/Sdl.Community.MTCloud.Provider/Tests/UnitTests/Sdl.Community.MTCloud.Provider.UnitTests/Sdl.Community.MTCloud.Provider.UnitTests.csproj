@@ -78,11 +78,7 @@
     <Compile Include="Common.cs" />
     <Compile Include="ConnectionServiceTests.cs" />
     <Compile Include="CredentialsViewModelTests.cs" />
-    <Compile Include="LanguageMappingsServiceTests.cs" />
-    <Compile Include="MTCodesViewModelTests.cs" />
-    <Compile Include="OptionsModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TranslationServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
