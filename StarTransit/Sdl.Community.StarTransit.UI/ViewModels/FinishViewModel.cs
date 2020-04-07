@@ -59,7 +59,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 			foreach (var pair in _package.LanguagePairs)
 			{
-				var pairMessage = $"{pair.TargetLanguage.DisplayName} ,translation units will be imported {Environment.NewLine} into Translation Memory named: {pair.TmName}";
+				var pairMessage = $"{pair.TargetLanguage.DisplayName}, translation units will be imported {Environment.NewLine} into Translation Memory named: {pair.TmName}";
 				var tmPair = string.IsNullOrEmpty(pair.TmName) ? $"No TM selected for {pair.PairName} pair." : pairMessage;
 				_targetLanguage.Add(tmPair);
 			}
