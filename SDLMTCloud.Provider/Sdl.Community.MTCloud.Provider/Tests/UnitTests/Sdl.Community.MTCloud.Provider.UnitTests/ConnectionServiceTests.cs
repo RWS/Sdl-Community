@@ -13,7 +13,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		public ConnectionServiceTests()
 		{
 			_common = new Common();
-		}	
+		}
 
 		[Theory]
 		[InlineData(Authentication.AuthenticationType.Studio)]
@@ -23,7 +23,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		{
 			var credential = _common.GetDefaultCredential(type);
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null);
+			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			if (type == Authentication.AuthenticationType.Studio)
@@ -63,7 +63,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		{
 			var credential = _common.GetDefaultCredential(type);
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null);
+			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			if (type == Authentication.AuthenticationType.Studio)
@@ -104,7 +104,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			var credential = _common.GetDefaultCredential(type);
 			credential.ValidTo = DateTime.UtcNow.Subtract(new TimeSpan(0, 1, 0, 0, 0));
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null);
+			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			if (type == Authentication.AuthenticationType.Studio)
@@ -131,7 +131,6 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 				};
 				connectionService.SignIn(Arg.Any<string>(), Arg.Any<string>())
 					.Returns(Task.FromResult(new Tuple<AuthorizationResponse, string>(authorizationResponse, "Invalid Credentials!")));
-
 			}
 
 			var userDetails = new UserDetails
@@ -156,7 +155,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			var credential = _common.GetDefaultCredential(type);
 			credential.ValidTo = DateTime.UtcNow.Subtract(new TimeSpan(0, 1, 0, 0, 0));
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null);
+			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 			if (type == Authentication.AuthenticationType.Studio)
 			{
@@ -204,7 +203,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		{
 			var credential = _common.GetDefaultCredential(type);
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null);
+			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			var result = connectionService.IsValidCredential(out var message);
@@ -216,12 +215,12 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		[InlineData(Authentication.AuthenticationType.Client)]
 		public void Credential_ExpiryDateIsValid_ReturnsFalse(Authentication.AuthenticationType type)
 		{
-			var credential = _common.GetDefaultCredential(type);			
-			credential.ValidTo = DateTime.UtcNow.Subtract(new TimeSpan(0, 1, 0, 0, 0));			
+			var credential = _common.GetDefaultCredential(type);
+			credential.ValidTo = DateTime.UtcNow.Subtract(new TimeSpan(0, 1, 0, 0, 0));
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null);
+			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
-			
+
 			var result = connectionService.IsValidCredential(out var message);
 			Assert.False(result, "Expected value: false; the credential expiry date should be evaluated as 'not valid' (expired)");
 		}
@@ -232,13 +231,13 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		public void Credential_NameIsEmpty_ReturnsFalse(Authentication.AuthenticationType type)
 		{
 			var credential = _common.GetDefaultCredential(type);
-			credential.Name = string.Empty;			
+			credential.Name = string.Empty;
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null);
+			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			var result = connectionService.IsValidCredential(out var message);
-			Assert.False(result, "Expected value: false; the credential Name should be evaluated as 'not valid' (empty)");		
+			Assert.False(result, "Expected value: false; the credential Name should be evaluated as 'not valid' (empty)");
 		}
 
 		[Theory]
@@ -246,10 +245,10 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		[InlineData(Authentication.AuthenticationType.Client)]
 		public void Credential_PasswordIsEmpty_ReturnsFalse(Authentication.AuthenticationType type)
 		{
-			var credential = _common.GetDefaultCredential(type);			
+			var credential = _common.GetDefaultCredential(type);
 			credential.Password = string.Empty;
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null);
+			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			var result = connectionService.IsValidCredential(out var message);
@@ -262,7 +261,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		{
 			var credential = _common.GetDefaultCredential(Authentication.AuthenticationType.Client);
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null);
+			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			var strCredential = connectionService.CredentialToString();

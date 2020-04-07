@@ -7,13 +7,12 @@ using System.Windows.Input;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.FileTypeSupport.Framework.Native;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
 	public class CredentialsViewModel : BaseViewModel
 	{
-		private readonly Window _window;
+		private readonly Window _owner;
 		private readonly IConnectionService _connectionService;
 
 		private bool _isInProgress;
@@ -21,20 +20,21 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private string _clientSecret;
 		private string _userName;
 		private string _userPassword;
-		private bool _studioSignedIn;
+		private bool _isSignedIn;
+		private bool _studioIsSignedIn;
 		private string _studioSignedInAs;
 		private string _signInLabel;
 		private string _exceptionMessage;
 		private List<Authentication> _authenticationOptions;
 		private Authentication _selectedAuthentication;
 
-		public CredentialsViewModel(Window window, IConnectionService connectionService)
+		public CredentialsViewModel(Window owner, IConnectionService connectionService)
 		{
-			_window = window;
+			_owner = owner;
 			_connectionService = connectionService;
 
 			SignInCommand = new CommandHandler(Signin);
-			NavigateToCommand = new CommandHandler(NavigateTo);		
+			NavigateToCommand = new CommandHandler(NavigateTo);
 
 			AuthenticationOptions = new List<Authentication>
 			{
@@ -72,9 +72,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				ClientSecret = connectionService.Credential.Password;
 			}
 
-			SelectedAuthentication = authentication;			
+			SelectedAuthentication = authentication;
 		}
-		
+
 		public ICommand SignInCommand { get; }
 
 		public ICommand NavigateToCommand { get; }
@@ -83,7 +83,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			get => _isInProgress;
 			set
-			{			
+			{
 				_isInProgress = value;
 				OnPropertyChanged(nameof(IsInProgress));
 			}
@@ -149,18 +149,33 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public bool StudioSignedIn
+		public bool IsSignedIn
 		{
-			get => _studioSignedIn;
+			get => _isSignedIn;
 			set
 			{
-				if (_studioSignedIn == value)
+				if (_isSignedIn == value)
 				{
 					return;
 				}
 
-				_studioSignedIn = value;
-				OnPropertyChanged(nameof(StudioSignedIn));
+				_isSignedIn = value;
+				OnPropertyChanged(nameof(IsSignedIn));
+			}
+		}
+
+		public bool StudioIsSignedIn
+		{
+			get => _studioIsSignedIn;
+			set
+			{
+				if (_studioIsSignedIn == value)
+				{
+					return;
+				}
+
+				_studioIsSignedIn = value;
+				OnPropertyChanged(nameof(StudioIsSignedIn));
 			}
 		}
 
@@ -236,9 +251,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (_selectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
-					StudioSignedIn = _connectionService.IsValidStudioCredential(out var message);
-					StudioSignedInAs = StudioSignedIn ? _connectionService.Credential?.Name : string.Empty;
-					SignInLabel = StudioSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
+					StudioIsSignedIn = _connectionService.IsValidStudioCredential(out var message);
+					StudioSignedInAs = StudioIsSignedIn ? _connectionService.Credential?.Name : string.Empty;
+					SignInLabel = StudioIsSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
 					ExceptionMessage = message;
 				}
 				else
@@ -246,7 +261,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					SignInLabel = PluginResources.Label_Sign_In;
 				}
 			}
-		}	
+		}
 
 		private bool CanAttemptSignIn(bool showMessage = true)
 		{
@@ -255,7 +270,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			switch (SelectedAuthentication.Type)
 			{
 				case Authentication.AuthenticationType.Studio:
-					if (!StudioSignedIn)
+					if (!StudioIsSignedIn)
 					{
 						if (showMessage)
 						{
@@ -312,11 +327,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 
 			IsInProgress = true;
-			Mouse.OverrideCursor = Cursors.Wait;
+			if (_owner != null)
+			{
+				Mouse.OverrideCursor = Cursors.Wait;
+			}
 
 			try
 			{
 				var message = string.Empty;
+				IsSignedIn = false;
 
 				if (SelectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
@@ -327,13 +346,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 							Type = Authentication.AuthenticationType.Studio
 						});
 
-					StudioSignedIn = result.Item1;
+					IsSignedIn = result.Item1;
 					message = result.Item2;
 					StudioSignedInAs = _connectionService.Credential.Name;
-					SignInLabel = StudioSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
+					SignInLabel = IsSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
 				}
 				else if (SelectedAuthentication.Type == Authentication.AuthenticationType.User)
-				{				
+				{
 					var result = _connectionService.Connect(
 						new Credential
 						{
@@ -342,11 +361,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 							Password = UserPassword
 						});
 
-					StudioSignedIn = result.Item1;
+					IsSignedIn = result.Item1;
 					message = result.Item2;
 				}
 				else if (SelectedAuthentication.Type == Authentication.AuthenticationType.Client)
-				{											
+				{
 					var result = _connectionService.Connect(
 						new Credential
 						{
@@ -355,11 +374,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 							Password = ClientSecret
 						});
 
-					StudioSignedIn = result.Item1;
+					IsSignedIn = result.Item1;
 					message = result.Item2;
 				}
 
-				ExceptionMessage = StudioSignedIn ? string.Empty : message;
+				ExceptionMessage = IsSignedIn ? string.Empty : message;
 			}
 			catch (Exception ex)
 			{
@@ -368,15 +387,18 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			finally
 			{
 				IsInProgress = false;
-				Mouse.OverrideCursor = Cursors.Arrow;
-
-				if (StudioSignedIn)
+				if (_owner != null)
 				{
-					_window.DialogResult = true;
-					_window.Close();
+					Mouse.OverrideCursor = Cursors.Arrow;
+				}				
+
+				if (IsSignedIn && _owner != null)
+				{
+					_owner.DialogResult = true;
+					_owner.Close();
 				}
 			}
-		}		
+		}
 
 		private void NavigateTo(object obj)
 		{
