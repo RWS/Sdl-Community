@@ -1,11 +1,12 @@
 ﻿using System;
+using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 
 namespace Sdl.Community.MTCloud.Provider.UnitTests
 {
 	public class Common
 	{
-		public Credential GetDefaultCredential(Authentication.AuthenticationType type)
+		public ICredential GetDefaultCredential(Authentication.AuthenticationType type)
 		{
 			var credential = new Credential
 			{
@@ -16,7 +17,8 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 				Password = "Password",
 				AccountId = "0123456789"
 			};
+
 			return credential;
-		}
+		}	
 	}
 }

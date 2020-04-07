@@ -253,4 +253,13 @@
 	<data name="Message_Credential_has_expired" xml:space="preserve">
     <value>Credential has expired</value>
   </data>
+	<data name="Message_The_token_cannot_be_null" xml:space="preserve">
+    <value>The token cannot be null!</value>
+  </data>
+	<data name="Message_The_resource_path_cannot_be_null" xml:space="preserve">
+    <value>The resource path cannot be null!</value>
+  </data>
+	<data name="Message_The_LanguageCloudIdentityApi_is_not_implemented" xml:space="preserve">
+    <value>The LanguageCloudIdentityApi is not implemented!</value>
+  </data>
 </root>

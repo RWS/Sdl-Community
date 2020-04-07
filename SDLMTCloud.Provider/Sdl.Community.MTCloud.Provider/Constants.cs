@@ -4,7 +4,13 @@
 	{
 		public static string MTCloudTranslateAPIUri = "https://translate-api.sdlbeglobal.com";
 		public static string MTCloudTranslateUri = "https://translate.sdlbeglobal.com";
-		public static string MTCloudUriScheme = "sdlmtcloud";
+		public static string MTCloudUriScheme = "sdlmtcloud";		
+		public static string MTCloudUriResourceUserToken = "/token/user";
+		public static string MTCloudUriResourceUserDetails = "/accounts/users/self";
+		public static string MTCloudUriResourceClientToken = "/token";
+		public static string MTCloudUriResourceClientDetails = "/accounts/api-credentials/self";
+
+		public static string MTCloudUriDummyToken = "DUMMY-TOKEN";
 
 		public static string ClientLoginAuthentication = "ClientLogin";
 		public static string UserLoginAuthentication= "UserLogin";

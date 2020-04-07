@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.FileTypeSupport.Framework.Native;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
@@ -235,7 +236,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (_selectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
-					StudioSignedIn = _connectionService.IsValidCredential(_selectedAuthentication.Type, out var message);
+					StudioSignedIn = _connectionService.IsValidStudioCredential(out var message);
 					StudioSignedInAs = StudioSignedIn ? _connectionService.Credential?.Name : string.Empty;
 					SignInLabel = StudioSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
 					ExceptionMessage = message;
