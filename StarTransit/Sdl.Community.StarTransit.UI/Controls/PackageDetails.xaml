@@ -72,13 +72,13 @@
 				<ColumnDefinition Width="1*"/>
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
-			<Button Style="{DynamicResource StudioGreenButtonsStyle}" Content="Browse" ToolTip="Browse for package" Grid.Column="1" Margin ="0,8.157,0,13.763"  Command="{Binding BrowseCommand}" Grid.ColumnSpan="2" />
+			<Button Style="{DynamicResource ButtonStyleShadowless}" Content="Browse" ToolTip="Browse for package" Grid.Column="1" Margin ="0,10,5,10" Height="30" Command="{Binding BrowseCommand}" Grid.ColumnSpan="2" />
 			<TextBox Style="{DynamicResource MetroTextBox}"
                 Controls:TextBoxHelper.ClearTextButton="True"                
                 Controls:TextBoxHelper.IsWaitingForData="True"
                 Controls:TextBoxHelper.UseFloatingWatermark="True" 
   				Controls:TextBoxHelper.Watermark="Location" 
-                ToolTip="Location"
+                ToolTip="StarTransit project location"
 			         x:Name="txtLocation"
                      Margin="0,0,5,10"
                      Padding="0,0,0,15"          
@@ -107,7 +107,7 @@
 				<ComboBox Style="{DynamicResource MetroComboBox}" Text="PM/AM" Margin ="5,0,0,10" IsEnabled="{Binding HasDueDate}" ItemsSource="{Binding MomentsList,Mode=TwoWay}" SelectedValue="{Binding SelectedMoment}" IsEditable="True" IsReadOnly="True"/>
 			</StackPanel>
 		</Grid>
-		<TextBlock Text="{Binding SourceLanguage}" Foreground="Black" Grid.Column="1" Grid.Row="8" Margin="0,0,0,10" />
+		<TextBlock Text="{Binding SourceLanguage}" Foreground="Black" Grid.Column="1" Grid.Row="8" Margin="2,0,0,10" />
 		<TextBlock Text ="{Binding TargetLanguage}" Foreground="Black" Grid.Column="1" Grid.Row="9" Margin="0,0,0,10" />
 	</Grid>
 </UserControl>
