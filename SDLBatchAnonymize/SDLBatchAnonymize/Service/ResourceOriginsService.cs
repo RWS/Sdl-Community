@@ -16,11 +16,11 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 
 			if (translationOrigin != null && IsAutomatedTranslated(translationOrigin))
 			{
-				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, translationOrigin);
+				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, translationOrigin,false);
 			}
 			if (originBefereAdaptation != null && IsAutomatedTranslated(originBefereAdaptation))
 			{
-				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, originBefereAdaptation);
+				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, originBefereAdaptation,false);
 			}
 		}
 
@@ -31,19 +31,19 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 
 			if (translationOrigin != null && IsTmTransaltion(translationOrigin))
 			{
-				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, translationOrigin);
+				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, translationOrigin,true);
 			}
 			if (originBefereAdaptation != null && IsTmTransaltion(originBefereAdaptation))
 			{
-				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, originBefereAdaptation);
+				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, originBefereAdaptation,true);
 			}
 		}
 
 		private void AnonymizeTranslationOrigin(ISegmentPair segmentPair, IBatchAnonymizerSettings anonymizerSettings,
-			ITranslationOrigin translationOrigin)
+			ITranslationOrigin translationOrigin,bool tmAnonymization)
 		{
 			var anonymizeCustomResources = ShouldAnonymizeWithCustomResources(anonymizerSettings);
-			AnonymizeToDefaultValues(translationOrigin); // we need to set the origin to be interactive in order to have edied fuzzy
+			AnonymizeToDefaultValues(translationOrigin, tmAnonymization); // we need to set the origin to be interactive in order to have edied fuzzy
 
 			if (anonymizeCustomResources)
 			{
@@ -53,7 +53,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 					originClone.OriginBeforeAdaptation = null;
 					segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation = originClone;
 				}
-				AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation, anonymizerSettings);
+				AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation, anonymizerSettings, tmAnonymization);
 			}
 		}
 
@@ -82,22 +82,24 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 			return !string.IsNullOrEmpty(originType) && originType.Equals(DefaultTranslationOrigin.TranslationMemory);
 		}
 
-		private void AnonymizeToDefaultValues(ITranslationOrigin translationOrigin)
+		private void AnonymizeToDefaultValues(ITranslationOrigin translationOrigin,bool isTmAnonymization)
 		{
 			translationOrigin.OriginType = DefaultTranslationOrigin.Interactive;
 			translationOrigin.OriginSystem = string.Empty;
-			translationOrigin.MatchPercent = byte.Parse("0");
-			translationOrigin.TextContextMatchLevel = TextContextMatchLevel.None;
+			if (!isTmAnonymization)
+			{
+				translationOrigin.MatchPercent = byte.Parse("0");
+			}
 		}
 
-		private void AnonymizeTmMatch(ITranslationOrigin translationOrigin, IBatchAnonymizerSettings anonymizerSettings)
+		private void AnonymizeTmMatch(ITranslationOrigin translationOrigin, IBatchAnonymizerSettings anonymizerSettings,bool tmAnonymization)
 		{
 			translationOrigin.OriginType = DefaultTranslationOrigin.TranslationMemory;
 			if (!string.IsNullOrEmpty(anonymizerSettings.TmName))
 			{
 				translationOrigin.OriginSystem = Path.GetFileNameWithoutExtension(anonymizerSettings.TmName);
 			}
-			if (anonymizerSettings.FuzzyScore > 0)
+			if (anonymizerSettings.FuzzyScore > 0 && !tmAnonymization)
 			{
 				var fuzzy = anonymizerSettings.FuzzyScore.ToString(CultureInfo.InvariantCulture);
 				translationOrigin.MatchPercent = byte.Parse(fuzzy);

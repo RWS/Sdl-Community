@@ -343,5 +343,51 @@ namespace Sdl.Community.SDLBatchAnonymizeUT
 
 			Assert.True(_anonymizerVm.SetSpecificResChecked);
 		}
+
+		[Theory]
+		[InlineData(true)]
+		public void DisableFuzzy_ForTMAnonymization(bool tmAnonymization)
+		{
+			_anonymizerVm.ChangeTmChecked = tmAnonymization;
+
+			Assert.False(_anonymizerVm.IsFuzzyEnabled);
+		}
+		[Theory]
+		[InlineData(true)]
+		public void EnableFuzzy_TMUnchecked(bool tmAnonymization)
+		{
+			_anonymizerVm.ChangeTmChecked = tmAnonymization;
+			_anonymizerVm.ChangeTmChecked = false;
+
+			Assert.True(_anonymizerVm.IsFuzzyEnabled);
+		}
+
+		[Theory]
+		[InlineData(true,true)]
+		public void FuzzyEnabled_ForTM_AndMT(bool tmAnonymization, bool mtAnonymization)
+		{
+			_anonymizerVm.ChangeTmChecked = tmAnonymization;
+			_anonymizerVm.ChangeMtChecked = mtAnonymization;
+
+			Assert.True(_anonymizerVm.IsFuzzyEnabled);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		public void FuzzyDisabled_AnonymizeAll(bool anonymizeAll)
+		{
+			_anonymizerVm.AnonymizeAllSettings = anonymizeAll;
+			Assert.True(_anonymizerVm.IsFuzzyEnabled);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		public void FuzzyEnabled_AnonymizeAllFalse(bool anonymizeAll)
+		{
+			_anonymizerVm.AnonymizeAllSettings = anonymizeAll;
+			_anonymizerVm.AnonymizeAllSettings = false;
+
+			Assert.True(_anonymizerVm.IsFuzzyEnabled);
+		}
 	}
 }

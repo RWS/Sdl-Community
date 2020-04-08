@@ -111,7 +111,7 @@
 				<TextBlock Grid.Row="2" Grid.Column="0" Margin="30,5,0,0" Text="{x:Static resx:PluginResources.TmScore}" Grid.ColumnSpan="2"/>
 				<controls:NumericUpDown Name="NumericUpDown" Grid.Row="2" Grid.Column="2" 
 										Value="{Binding FuzzyScore}"
-				                        IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
+				                        IsEnabled="{Binding IsFuzzyEnabled,UpdateSourceTrigger=PropertyChanged}"
 										Minimum="0" Maximum="100">
 					<controls:NumericUpDown.Resources>
 						<Style TargetType="controls:NumericUpDown" BasedOn="{StaticResource Sdl.NumericUpDown.Generic}">
