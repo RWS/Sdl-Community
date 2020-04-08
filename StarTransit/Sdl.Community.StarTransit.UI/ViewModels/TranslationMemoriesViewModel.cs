@@ -240,7 +240,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_languagePairs = value;
-				OnPropertyChanged(nameof(SelectedItem));
+				OnPropertyChanged(nameof(LanguagePairs));
 			}
 		}
 
