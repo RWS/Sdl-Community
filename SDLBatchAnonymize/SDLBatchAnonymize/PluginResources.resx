@@ -146,13 +146,13 @@
     <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RemoveMT" xml:space="preserve">
-    <value>Remove/change MT</value>
+    <value>Remove/change MT Provider</value>
   </data>
   <data name="RemoveTm" xml:space="preserve">
-    <value>Remove/change TM resources</value>
+    <value>Remove/change TM Provider</value>
   </data>
   <data name="ResourceName" xml:space="preserve">
-    <value>Set the resource name</value>
+    <value>Set the Provider name</value>
   </data>
   <data name="ResourceOriginsHeader" xml:space="preserve">
     <value>Resource origins</value>
@@ -161,7 +161,7 @@
     <value>Set the specific resources user</value>
   </data>
   <data name="TmScore" xml:space="preserve">
-    <value>Set a TM score</value>
+    <value>Set the Provider score</value>
   </data>
   <data name="TrackedChanges" xml:space="preserve">
     <value>Tracked changes</value>

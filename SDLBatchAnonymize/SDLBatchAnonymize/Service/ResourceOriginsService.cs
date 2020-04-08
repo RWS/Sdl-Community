@@ -12,18 +12,30 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 		public void RemoveMt(ISegmentPair segmentPair, IBatchAnonymizerSettings anonymizerSettings)
 		{
 			var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
+			var originBefereAdaptation = segmentPair?.Properties?.TranslationOrigin.OriginBeforeAdaptation;
+
 			if (translationOrigin != null && IsAutomatedTranslated(translationOrigin))
 			{
 				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, translationOrigin);
+			}
+			if (originBefereAdaptation != null && IsAutomatedTranslated(originBefereAdaptation))
+			{
+				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, originBefereAdaptation);
 			}
 		}
 
 		public void RemoveTm(ISegmentPair segmentPair, IBatchAnonymizerSettings anonymizerSettings)
 		{
 			var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
+			var originBefereAdaptation = segmentPair?.Properties?.TranslationOrigin.OriginBeforeAdaptation;
+
 			if (translationOrigin != null && IsTmTransaltion(translationOrigin))
 			{
 				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, translationOrigin);
+			}
+			if (originBefereAdaptation != null && IsTmTransaltion(originBefereAdaptation))
+			{
+				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, originBefereAdaptation);
 			}
 		}
 
@@ -75,6 +87,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 			translationOrigin.OriginType = DefaultTranslationOrigin.Interactive;
 			translationOrigin.OriginSystem = string.Empty;
 			translationOrigin.MatchPercent = byte.Parse("0");
+			translationOrigin.TextContextMatchLevel = TextContextMatchLevel.None;
 		}
 
 		private void AnonymizeTmMatch(ITranslationOrigin translationOrigin, IBatchAnonymizerSettings anonymizerSettings)

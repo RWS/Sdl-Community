@@ -22,6 +22,7 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 		public override void Save()
 		{
 			base.Save();
+			if (_settings is null) return;
 			_settings.AnonymizeComplete = _control.BatchAnonymizerSettingsViewModel.AnonymizeAllSettings;
 			_settings.CreatedByChecked = _control.BatchAnonymizerSettingsViewModel.CreatedByChecked;
 			_settings.CreatedByName = _control.BatchAnonymizerSettingsViewModel.CreatedByName;
