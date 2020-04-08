@@ -277,11 +277,38 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The LanguageCloudIdentityApi is not implemented!.
+        /// </summary>
+        public static string Message_The_LanguageCloudIdentityApi_is_not_implemented {
+            get {
+                return ResourceManager.GetString("Message_The_LanguageCloudIdentityApi_is_not_implemented", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The model cannot be null for language direction {0}-&gt;{1}.
         /// </summary>
         public static string Message_The_model_cannot_be_null_for_language_direction {
             get {
                 return ResourceManager.GetString("Message_The_model_cannot_be_null_for_language_direction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The resource path cannot be null!.
+        /// </summary>
+        public static string Message_The_resource_path_cannot_be_null {
+            get {
+                return ResourceManager.GetString("Message_The_resource_path_cannot_be_null", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The token cannot be null!.
+        /// </summary>
+        public static string Message_The_token_cannot_be_null {
+            get {
+                return ResourceManager.GetString("Message_The_token_cannot_be_null", resourceCulture);
             }
         }
         

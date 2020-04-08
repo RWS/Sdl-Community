@@ -135,6 +135,7 @@
     <Compile Include="Import\TransitTextExtractor.cs" />
     <Compile Include="Import\TransitWriter.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />
+    <Compile Include="Models\BaseViewModel.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\LanguagePair.cs" />
     <Compile Include="Models\MessageModel.cs" />

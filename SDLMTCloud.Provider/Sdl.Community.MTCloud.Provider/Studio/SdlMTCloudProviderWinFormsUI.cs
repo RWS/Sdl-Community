@@ -4,6 +4,7 @@ using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
+using Sdl.LanguageCloud.IdentityApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -27,7 +28,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			try
 			{				
 				var uri = new Uri($"{Constants.MTCloudUriScheme}://");
-				var connectionService = new ConnectionService(owner, new VersionService());
+				var connectionService = new ConnectionService(owner, new VersionService(), LanguageCloudIdentityApi.Instance);
 				
 				var credential = connectionService.GetCredential(credentialStore);								
 				var connectionResult = connectionService.EnsureSignedIn(credential, true);

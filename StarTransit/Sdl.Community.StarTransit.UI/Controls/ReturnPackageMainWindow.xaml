@@ -4,7 +4,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:Controls="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
 		xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         Title="Return StarTransit package" Height="600" Width="900" BorderThickness="0"
@@ -16,50 +15,18 @@
 		Closing="ReturnPackageMainWindow_OnClosing">
     <controls:MetroWindow.Resources>
 		<ResourceDictionary>
-		    <ResourceDictionary.MergedDictionaries>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UIHelpers\ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="..\UIHelpers\MetroStyle.xaml"/>
-					<ResourceDictionary>
-		            <Style x:Key="NavigationButtonStyle" TargetType="{x:Type ListViewItem}">
-						<Setter Property="Foreground" Value="#FF0B6266" />
-		                <Setter Property="FontSize" Value="18.667" />
-		                <Setter Property="HorizontalAlignment" Value="Left" />
-		                <Setter Property="Cursor" Value="Hand" />
-		                <Setter Property="Margin" Value="10,15,0,15" />
-		                <Setter Property="Background" Value="Transparent" />
-		                <Setter Property="Template">
-		                    <Setter.Value>
-		                        <ControlTemplate TargetType="{x:Type ListViewItem}">
-		                            <ContentPresenter />
-		                        </ControlTemplate>
-		                    </Setter.Value>
-		                </Setter>
-		                <Style.Triggers>
-		                    <Trigger Property="IsSelected" Value="true">
-								<Setter Property="Foreground" Value="#FF0B6266" />
-		                        <Setter Property="FontWeight" Value="Bold" />
-		                    </Trigger>
-		                </Style.Triggers>
-		            </Style>
-
-		        </ResourceDictionary>
-
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</controls:MetroWindow.Resources>
-
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="20" />
-        </Grid.RowDefinitions>
-
-        <Controls:Footer Grid.Row="1" />
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="4*" />
-            </Grid.ColumnDefinitions>
-            <ListView
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="2*" />
+			<ColumnDefinition Width="4*" />
+		</Grid.ColumnDefinitions>
+		<ListView
                 x:Name="listView"
                 Margin="0"
                 Padding="0,20,0,0"
@@ -68,28 +35,22 @@
                 BorderThickness="0"
                 ItemContainerStyle="{DynamicResource NavigationButtonStyle}" 
                 IsEnabled="False">
-
-                <ListViewItem x:Name="ReturnPackageFiles"
+			<ListViewItem x:Name="ReturnPackageFiles"
                               Tag="packageFiles"                          
                               Selected="ListViewItem_Selected" >
-                    <TextBlock x:Name="TbPackageFiles" Text="Return package files" />
-                </ListViewItem>
-
-            </ListView>
-            <Grid  Grid.Column="1"  >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="40" />
-                </Grid.RowDefinitions>
-                <controls:TransitioningContentControl x:Name="tcc"  Transition="Up" />
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Margin="5">
-                    <Button x:Name="Create"  MaxWidth="150" Command="{Binding CreatePackageCommand}"  Margin="0,0,5,0" >Create package</Button>
-                    
-
-                </StackPanel>
-
-            </Grid>
-            <controls:ProgressRing IsActive="{Binding Active}" HorizontalContentAlignment="Center"/>
-        </Grid>
-    </Grid>
+				<TextBlock x:Name="TbPackageFiles" Text="Return package files" />
+			</ListViewItem>
+		</ListView>
+		<Grid  Grid.Column="1"  >
+			<Grid.RowDefinitions>
+				<RowDefinition Height="1*" />
+				<RowDefinition Height="40" />
+			</Grid.RowDefinitions>
+			<controls:TransitioningContentControl x:Name="tcc"  Transition="Up" />
+			<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Margin="5">
+				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="Create" Width="130" Height="30" Command="{Binding CreatePackageCommand}"  Margin="0,0,5,0" >Create package</Button>
+			</StackPanel>
+		</Grid>
+		<controls:ProgressRing IsActive="{Binding Active}" HorizontalContentAlignment="Center"/>
+	</Grid>
 </controls:MetroWindow>

@@ -10,11 +10,10 @@ namespace Sdl.Community.StarTransit.UI
 	/// <summary>
 	/// Interaction logic for StarTransitMainWindow.xaml
 	/// </summary>
-	public partial class StarTransitMainWindow 
+	public partial class StarTransitMainWindow
 	{
 		private readonly PackageDetails _packageDetails;
 		private readonly TranslationMemories _translationMemories;
-		private TranslationMemoriesPenaltiesWindow _translationMemoriesPenalties;
 		private FinishViewModel finishViewModel;
 		private readonly Finish _finish;
 		private PackageModel _package;
@@ -24,7 +23,7 @@ namespace Sdl.Community.StarTransit.UI
 			InitializeComponent();
 			_package = package;
 
-			var packageDetailsViewModel = new PackageDetailsViewModel(package, this);
+			var packageDetailsViewModel = new PackageDetailsViewModel(package);
 			_packageDetails = new PackageDetails(packageDetailsViewModel);
 
 			var tmViewModel = new TranslationMemoriesViewModel(packageDetailsViewModel);
@@ -38,8 +37,7 @@ namespace Sdl.Community.StarTransit.UI
 				_packageDetails,
 				_translationMemories,
 				tmViewModel,
-				finishViewModel,
-				this);
+				finishViewModel);
 
 			DataContext = starTransitViewModel;
 
@@ -54,40 +52,35 @@ namespace Sdl.Community.StarTransit.UI
 			if (packageDetailsViewModel.ShowWindowsMessage == null)
 			{
 				packageDetailsViewModel.ShowWindowsMessage = ShowWindowsMessage;
-			}			
+			}
 		}
 
 		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
 		{
-			string tag = string.Empty;
+			if (sender == null)
+			{
+				return;
+			}
 
-			if (sender == null) return;
 			var li = sender as ListViewItem;
-			if (li == null) return;
-
+			if (li == null)
+			{
+				return;
+			}
 
 			switch (li.Tag.ToString())
 			{
 				case "packageDetails":
-
 					tcc.Content = _packageDetails;
-
 					break;
-
 				case "tm":
-
 					tcc.Content = _translationMemories;
-
 					break;
 				case "finish":
-
 					tcc.Content = _finish;
-
-
 					break;
 				default:
 					tcc.Content = _packageDetails;
-
 					break;
 			}
 		}
@@ -104,13 +97,11 @@ namespace Sdl.Community.StarTransit.UI
 				AffirmativeButtonText = "OK"
 			};
 			await this.ShowMessageAsync(title, message, MessageDialogStyle.Affirmative, dialog);
-
 		}
 
 		private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			var starTransitViewModel = DataContext as StarTransitMainWindowViewModel;
-
 			e.Cancel = starTransitViewModel.Active;
 		}
 	}

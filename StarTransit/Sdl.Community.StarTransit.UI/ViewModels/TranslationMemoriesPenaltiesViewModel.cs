@@ -1,16 +1,13 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using Sdl.Community.StarTransit.Shared.Annotations;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.UI.Commands;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-	public class TranslationMemoriesPenaltiesViewModel : INotifyPropertyChanged
+	public class TranslationMemoriesPenaltiesViewModel : BaseViewModel
 	{
 		#region Private Fields
 		private PackageModel _packageModel;
@@ -31,11 +28,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		}
 		#endregion
 
-		#region Commands
-		#endregion
-
 		#region Public Properties
-
 		public string Error { get; }
 
 		public ObservableCollection<TranslationMemoriesPenaltiesModel> TranslationMemoriesPenaltiesModelList
@@ -51,7 +44,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_translationMemoriesPenaltiesModelList = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TranslationMemoriesPenaltiesModelList));
 			}
 		}
 
@@ -68,7 +61,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_translationMemoryName = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TranslationMemoryName));
 			}
 		}
 
@@ -86,7 +79,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_translationMemoryPath = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TranslationMemoryPath));
 			}
 		}
 
@@ -103,13 +96,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_tmPenalty = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TMPenalty));
 			}
 		}
 
-		#endregion
-
-		#region Public Methods
 		#endregion
 
 		#region Private Methods
@@ -144,14 +134,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					}
 				}
 			}
-		}
-		#endregion
-
-		#region Virtual Methods
-		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 		#endregion
 
@@ -198,10 +180,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				}
 			}
 		}
-		#endregion
-
-		#region Events
-		public event PropertyChangedEventHandler PropertyChanged;		
 		#endregion
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
@@ -103,10 +104,18 @@ namespace Sdl.Community.StarTransit
 			{
 				_messageBoxService.ShowWarningMessage(returnPackage.Item2, "Warning");
 			}
-			else
+			else if (returnPackage?.Item1?.FileBasedProject != null && returnPackage?.Item1?.TargetFiles.Count > 0)
 			{
-				var window = new ReturnPackageMainWindow(returnPackage?.Item1);
-				window.ShowDialog();
+				var xliffFiles = returnPackage?.Item1?.TargetFiles?.Any(file => file.Name.EndsWith(".sdlxliff"));
+				if (xliffFiles.Value)
+				{
+					var window = new ReturnPackageMainWindow(returnPackage?.Item1);
+					window.ShowDialog();
+				}
+				else
+				{
+					_messageBoxService.ShowWarningMessage("The target file(s) has already been returned. In order to repeat the process, you need to revert to .sdlxliff(s) from the Files view.", "Warning");
+				}
 			}
 		}
 	}

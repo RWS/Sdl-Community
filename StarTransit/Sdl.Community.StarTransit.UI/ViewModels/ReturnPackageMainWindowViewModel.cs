@@ -1,19 +1,16 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Utils;
-using Sdl.Community.StarTransit.UI.Annotations;
 using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Controls;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-	public class ReturnPackageMainWindowViewModel : INotifyPropertyChanged
+	public class ReturnPackageMainWindowViewModel : BaseViewModel
 	{
 		private ICommand _createPackageCommand;
 		private readonly ReturnFilesViewModel _returnFilesViewModel;
@@ -24,6 +21,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private ReturnPackageMainWindow _window;
 
 		public static readonly Log Log = Log.Instance;
+		public Action CloseAction { get; set; }
 
 		public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel, CellViewModel cellViewModel, ReturnPackageMainWindow window)
 		{
@@ -60,7 +58,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 						AffirmativeButtonText = "OK"
 
 					};
-					var result = await _window.ShowMessageAsync("No files selected!", "Please select at least one file.",	MessageDialogStyle.Affirmative, dialog);
+					var result = await _window.ShowMessageAsync("No files selected!", "Please select at least one file.", MessageDialogStyle.Affirmative, dialog);
 				}
 				else
 				{
@@ -85,7 +83,17 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					await System.Threading.Tasks.Task.Run(() => _returnService.ExportFiles(_returnPackage));
 					Active = false;
 					_cellViewModel.ClearSelectedProjectsList();
-					CloseAction();
+
+					var dialog = new MetroDialogSettings
+					{
+						AffirmativeButtonText = "OK"
+
+					};
+					var result = await _window.ShowMessageAsync("Informative message", "The target file(s) was successfully returned", MessageDialogStyle.Affirmative, dialog);
+					if (result == MessageDialogResult.Affirmative)
+					{
+						CloseAction();
+					}
 				}
 			}
 			catch (Exception ex)
@@ -106,16 +114,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				Directory.CreateDirectory(returnPackageFolderPath);
 			}
 			return returnPackageFolderPath;
-
-		}
-
-		public Action CloseAction { get; set; }
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

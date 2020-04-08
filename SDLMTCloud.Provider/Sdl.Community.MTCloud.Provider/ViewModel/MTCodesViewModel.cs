@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -26,19 +25,19 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _resetToDefaultsCommand;
 
 		private MTCloudLanguage _selectedMtCode;
-		private ObservableCollection<MTCloudLanguage> _mtCodes;
+		private List<MTCloudLanguage> _mtCodes;
 		private string _message;
 		private string _messageColor;
 		private string _query;
 		private bool _isWaiting;
 		private string _itemsCountLabel;
 		
-		public MTCodesViewModel(Window window, Languages.Provider.Languages languages)
+		public MTCodesViewModel(Window owner, Languages.Provider.Languages languages)
 		{
-			Window = window;
+			Owner = owner;
 			_languages = languages;
 						
-			MTCodes = new ObservableCollection<MTCloudLanguage>(GetAllLanguages(false));
+			MTCodes = new List<MTCloudLanguage>(GetAllLanguages(false));
 
 			_printService = new PrintService();
 		}
@@ -51,9 +50,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand
 		                                                ?? (_resetToDefaultsCommand = new RelayCommand(ResetToDefaults));
 
-		public Window Window { get; }
+		public Window Owner { get; }
 
-		public ObservableCollection<MTCloudLanguage> MTCodes
+		public List<MTCloudLanguage> MTCodes
 		{
 			get => _mtCodes;
 			set
@@ -194,7 +193,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 	
-		private List<MTCloudLanguage> GetAllLanguages(bool reset)
+		private IEnumerable<MTCloudLanguage> GetAllLanguages(bool reset)
 		{
 			var mtCloudLanguages = _languages.GetLanguages(reset);
 			if (AddStudioLanguages(mtCloudLanguages))
@@ -263,9 +262,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		private void ResetToDefaults(object obj)
-		{
-			MTCodes.Clear();			
-			MTCodes = new ObservableCollection<MTCloudLanguage>(GetAllLanguages(true));
+		{			
+			MTCodes = new List<MTCloudLanguage>(GetAllLanguages(true));
 
 			MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults, 
 				Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
@@ -275,8 +273,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{			
 			_languages.SaveLanguages(MTCodes.ToList());
 
-			WindowCloser.SetDialogResult(Window, true);
-			Window.Close();
+			WindowCloser.SetDialogResult(Owner, true);
+			Owner.Close();
 		}
 	}
 }

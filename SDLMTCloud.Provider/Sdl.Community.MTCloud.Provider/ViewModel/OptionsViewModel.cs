@@ -37,9 +37,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ObservableCollection<LanguageMappingModel> _languageMappings;
 		private bool _isWaiting;
 
-		public OptionsViewModel(Window window, SdlMTCloudTranslationProvider provider, LanguagePair[] projectLanguagePairs)
+		public OptionsViewModel(Window owner, SdlMTCloudTranslationProvider provider, LanguagePair[] projectLanguagePairs)
 		{
-			Window = window;
+			Owner = owner;
 
 			_provider = provider;
 			_projectLanguagePairs = projectLanguagePairs;
@@ -56,7 +56,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public ICommand ViewLanguageMappingsCommand => _viewLanguageMappingsCommand
 														?? (_viewLanguageMappingsCommand = new RelayCommand(ViewLanguageMappings));
 
-		public Window Window { get; }	
+		public Window Owner { get; }	
 
 		public List<MTCloudDictionary> MTCloudDictionaries
 		{
@@ -370,28 +370,41 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				}
 
 				IsWaiting = true;
-				Mouse.OverrideCursor = Cursors.Wait;
+				if (Owner != null)
+				{
+					Mouse.OverrideCursor = Cursors.Wait;
+				}
 
 				if (LanguageMappings != null)
 				{
 					LanguageMappings.Clear();
-					LoadLanguageMappings();					
+					LoadLanguageMappings();
 
-					System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
-						Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
+					if (Owner != null)
+					{
+						System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
+							Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
+					}
 				}
 			}
 			catch (Exception ex)
 			{
 				IsWaiting = false;
-				Mouse.OverrideCursor = Cursors.Arrow;
 				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
-				MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+				if (Owner != null)
+				{
+					Mouse.OverrideCursor = Cursors.Arrow;
+					MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}				
 			}
 			finally
 			{
 				IsWaiting = false;
-				Mouse.OverrideCursor = Cursors.Arrow;
+				if (Owner != null)
+				{
+					Mouse.OverrideCursor = Cursors.Arrow;
+				}
 			}
 		}
 
@@ -400,7 +413,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			try
 			{
 				IsWaiting = true;
-				Mouse.OverrideCursor = Cursors.Wait;
+				if (Owner != null)
+				{
+					Mouse.OverrideCursor = Cursors.Wait;
+				}
 
 				if (LanguageMappings != null)
 				{
@@ -411,14 +427,21 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			catch (Exception ex)
 			{
 				IsWaiting = false;
-				Mouse.OverrideCursor = Cursors.Arrow;
 				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
-				MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+				if (Owner != null)
+				{
+					Mouse.OverrideCursor = Cursors.Arrow;
+					MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
 			}
 			finally
 			{
 				IsWaiting = false;
-				Mouse.OverrideCursor = Cursors.Arrow;
+				if (Owner != null)
+				{
+					Mouse.OverrideCursor = Cursors.Arrow;
+				}
 			}
 		}
 		
@@ -426,21 +449,29 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			try
 			{
-				Mouse.OverrideCursor = Cursors.Wait;
+				if (Owner != null)
+				{
+					Mouse.OverrideCursor = Cursors.Wait;
+				}
 
 				var canSave = true;
 				var invalidModel = LanguageMappings.FirstOrDefault(a => a.SelectedModelOption.DisplayName == Constants.NoAvailableModel);
 				if (invalidModel != null)
 				{
-					var message = string.Format(PluginResources.Message_SelectLanguageDirectionForMTModel,
-							invalidModel.SelectedMTCodeSource.CodeName, invalidModel.SelectedMTCodeTarget.CodeName);
-					var question = PluginResources.Message_DoYouWantToProceed;
-					
-					var response = MessageBox.Show(message + Environment.NewLine + Environment.NewLine + question, 
-						Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-					if (response == DialogResult.No)
+					canSave = false;
+
+					if (Owner != null)
 					{
-						canSave = false;
+						var message = string.Format(PluginResources.Message_SelectLanguageDirectionForMTModel,
+							invalidModel.SelectedMTCodeSource.CodeName, invalidModel.SelectedMTCodeTarget.CodeName);
+						var question = PluginResources.Message_DoYouWantToProceed;
+
+						var response = MessageBox.Show(message + Environment.NewLine + Environment.NewLine + question,
+							Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+						if (response == DialogResult.Yes)
+						{
+							canSave = true;
+						}
 					}
 				}
 
@@ -451,26 +482,38 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					SaveLanguageMappings();
 					Dispose();
 
-					WindowCloser.SetDialogResult(Window, true);
-					Window.Close();
+					if (Owner != null)
+					{
+						WindowCloser.SetDialogResult(Owner, true);
+						Owner.Close();
+					}
 				}
 			}
 			finally
 			{
-				Mouse.OverrideCursor = Cursors.Arrow;
+				if (Owner != null)
+				{
+					Mouse.OverrideCursor = Cursors.Arrow;
+				}
 			}
 		}
 	
 		private void ViewLanguageMappings(object obj)
 		{
+			if (Owner == null)
+			{
+				return;
+			}
+
 			var window = new MTCodesWindow
 			{
-				Owner = Window.Owner
+				Owner = Owner.Owner
 			};
 
 			var languages = new Languages.Provider.Languages();
 			var viewModel = new MTCodesViewModel(window, languages);
 			window.DataContext = viewModel;
+
 			var result = window.ShowDialog();
 			if (result.HasValue && result.Value)
 			{
