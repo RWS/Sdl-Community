@@ -44,7 +44,26 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			{
 				if (_createdByChecked == value) return;
 				_createdByChecked = value;
+				if (!value)
+				{
+					CreatedByName = string.Empty;
+				}
 				OnPropertyChanged(nameof(CreatedByChecked));
+			}
+		}
+
+		public string CreatedByName
+		{
+			get => _createdByName;
+			set
+			{
+				if (_createdByName == value) return;
+				_createdByName = value;
+				if (!string.IsNullOrEmpty(value))
+				{
+					CreatedByChecked = true;
+				}
+				OnPropertyChanged(nameof(CreatedByName));
 			}
 		}
 
@@ -55,7 +74,25 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			{
 				if (_modifyByChecked == value) return;
 				_modifyByChecked = value;
+				if (!value)
+				{
+					ModifyByName = string.Empty;
+				}
 				OnPropertyChanged(nameof(ModifyByChecked));
+			}
+		}
+		public string ModifyByName
+		{
+			get => _modifyByName;
+			set
+			{
+				if (_modifyByName == value) return;
+				_modifyByName = value;
+				if (!string.IsNullOrEmpty(value))
+				{
+					ModifyByChecked = true;
+				}
+				OnPropertyChanged(nameof(ModifyByName));
 			}
 		}
 
@@ -66,7 +103,25 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			{
 				if (_commentChecked == value) return;
 				_commentChecked = value;
+				if (!value)
+				{
+					CommentAuthorName = string.Empty;
+				}
 				OnPropertyChanged(nameof(CommentChecked));
+			}
+		}
+		public string CommentAuthorName
+		{
+			get => _commentAuthorName;
+			set
+			{
+				if (_commentAuthorName == value) return;
+				_commentAuthorName = value;
+				if (!string.IsNullOrEmpty(value))
+				{
+					CommentChecked = true;
+				}
+				OnPropertyChanged(nameof(CommentAuthorName));
 			}
 		}
 
@@ -77,7 +132,26 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			{
 				if (_trackedChecked == value) return;
 				_trackedChecked = value;
+				if (!value)
+				{
+					TrackedName = string.Empty;
+				}
 				OnPropertyChanged(nameof(TrackedChecked));
+			}
+		}
+
+		public string TrackedName
+		{
+			get => _trackedName;
+			set
+			{
+				if (_trackedName == value) return;
+				_trackedName = value;
+				if (!string.IsNullOrEmpty(value))
+				{
+					TrackedChecked = true;
+				}
+				OnPropertyChanged(nameof(TrackedName));
 			}
 		}
 
@@ -98,6 +172,11 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			{
 				if (_setSpecificResChecked == value) return;
 				_setSpecificResChecked = value;
+				if (!value)
+				{
+					FuzzyScore = 0;
+					TmName = string.Empty;
+				}
 				OnPropertyChanged(nameof(SetSpecificResChecked));
 			}
 		}
@@ -112,49 +191,6 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			}
 		}
 
-		public string CreatedByName
-		{
-			get => _createdByName;
-			set
-			{
-				if (_createdByName == value) return;
-				_createdByName = value;
-				OnPropertyChanged(nameof(CreatedByName));
-			}
-		}
-
-		public string ModifyByName
-		{
-			get => _modifyByName;
-			set
-			{
-				if (_modifyByName == value) return;
-				_modifyByName = value;
-				OnPropertyChanged(nameof(ModifyByName));
-			}
-		}
-
-		public string CommentAuthorName
-		{
-			get => _commentAuthorName;
-			set
-			{
-				if (_commentAuthorName == value) return;
-				_commentAuthorName = value;
-				OnPropertyChanged(nameof(CommentAuthorName));
-			}
-		}
-
-		public string TrackedName
-		{
-			get => _trackedName;
-			set
-			{
-				if (_trackedName == value) return;
-				_trackedName = value;
-				OnPropertyChanged(nameof(TrackedName));
-			}
-		}
 		public string TmName
 		{
 			get => _tmName;
@@ -162,6 +198,10 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			{
 				if (_tmName == value) return;
 				_tmName = value;
+				if (!string.IsNullOrEmpty(value))
+				{
+					SetSpecificResChecked = true;
+				}
 				OnPropertyChanged(nameof(TmName));
 			}
 		}
@@ -173,6 +213,10 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			{
 				if (_fuzzyScore == value) return;
 				_fuzzyScore = value;
+				if (value > 0)
+				{
+					SetSpecificResChecked = true;
+				}
 				OnPropertyChanged(nameof(FuzzyScore));
 			}
 		}
@@ -196,7 +240,6 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			TmName = Settings.TmName;
 			FuzzyScore = Settings.FuzzyScore;
 		}
-
 
 		private void SetOptions(bool value)
 		{
