@@ -114,7 +114,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				Directory.CreateDirectory(returnPackageFolderPath);
 			}
 			return returnPackageFolderPath;
-
 		}
 	}
 }

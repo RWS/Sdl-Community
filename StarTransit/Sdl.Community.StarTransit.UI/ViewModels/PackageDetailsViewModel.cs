@@ -79,7 +79,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_selectedHour = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedHour));
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_selectedMinute = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedMinute));
 			}
 		}
 
@@ -107,7 +107,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_selectedMoment = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedMoment));
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_selectedCustomer = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedCustomer));
 			}
 		}
 
@@ -145,7 +145,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				{
 					return;
 				}
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Templates));
 			}
 		}
 
@@ -159,7 +159,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_textLocation = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TextLocation));
 			}
 		}
 
@@ -173,7 +173,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_txtName = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Name));
 			}
 		}
 
@@ -187,7 +187,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_txtDescription = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Description));
 			}
 		}
 
@@ -200,7 +200,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				{
 					return;
 				}
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(StudioTemplates));
 			}
 		}
 
@@ -214,7 +214,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_template = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Template));
 			}
 		}
 
@@ -228,7 +228,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_hasDueDate = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(HasDueDate));
 			}
 		}
 
@@ -242,7 +242,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_dueDate = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(DueDate));
 			}
 		}
 
@@ -256,7 +256,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 
 				}
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SourceLanguage));
 			}
 		}
 
@@ -269,7 +269,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				{
 					return;
 				}
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TargetLanguage));
 			}
 		}
 

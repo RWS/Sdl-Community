@@ -71,7 +71,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
                 _listView = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(ProjectListCells));
             }
         }
 
@@ -85,7 +85,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                     return;
                 }
                 _projectFiles = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(ProjectFiles));
             }
         }
 
@@ -103,7 +103,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                     return;
                 }
                 _returnPackageLocation = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(ReturnPackageLocation));
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using Sdl.Community.StarTransit.Shared.Models;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
@@ -11,7 +11,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private string _txtName;
 		private string _txtDescription;
 		private string _sourceLanguage;
-		private ObservableCollection<string> _targetLanguage = new ObservableCollection<string>();
+		private List<string> _targetLanguage;
 		private string _templateName;
 		private string _customer;
 		private string _dueDate;
@@ -20,8 +20,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private readonly PackageDetailsViewModel _packageDetailsViewModel;
 		private readonly TranslationMemoriesViewModel _translationMemoriesViewModel;
 		private PackageModel _package;
-
-
+		
 		public FinishViewModel(TranslationMemoriesViewModel translationMemoriesViewModel, PackageDetailsViewModel packageDetailsViewModel)
 		{
 			_translationMemoriesViewModel = translationMemoriesViewModel;
@@ -33,7 +32,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		public void Refresh()
 		{
 			_package = _translationMemoriesViewModel.GetPackageModel();
-			_targetLanguage.Clear();
+			//_targetLanguage.Clear();
+			var targetLanguage = new List<string>();
 			Name = _package.Name;
 			Location = _package.Location;
 			if (_package.HasDueDate)
@@ -50,19 +50,18 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			if (_package.Customer != null)
 			{
 				Customer = _package.Customer.Name;
-
 			}
 
 			Description = _packageDetailsViewModel.Description;
 			SourceLanguage = _packageDetailsViewModel.SourceLanguage;
-
-
+			
 			foreach (var pair in _package.LanguagePairs)
 			{
 				var pairMessage = $"{pair.TargetLanguage.DisplayName}, translation units will be imported {Environment.NewLine} into Translation Memory named: {pair.TmName}";
 				var tmPair = string.IsNullOrEmpty(pair.TmName) ? $"No TM selected for {pair.PairName} pair." : pairMessage;
-				_targetLanguage.Add(tmPair);
+				targetLanguage.Add(tmPair);
 			}
+			TargetLanguage = targetLanguage;
 		}
 
 		public string Name
@@ -75,7 +74,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_txtName = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Name));
 			}
 		}
 
@@ -89,7 +88,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_txtDescription = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Description));
 			}
 		}
 
@@ -104,13 +103,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 				}
 				_sourceLanguage = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SourceLanguage));
 			}
 		}
 
-		public ObservableCollection<string> TargetLanguage
+		public List<string> TargetLanguage
 		{
-			get { return _targetLanguage; }
+			get { return _targetLanguage ?? (_targetLanguage = new List<string>()); }
 			set
 			{
 				if (Equals(value, _targetLanguage))
@@ -118,8 +117,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_targetLanguage = value;
-				OnPropertyChanged();
-
+				OnPropertyChanged(nameof(TargetLanguage));
 			}
 		}
 
@@ -133,7 +131,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_location = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Location));
 			}
 		}
 
@@ -147,7 +145,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_active = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Active));
 			}
 		}
 
@@ -159,10 +157,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				if (Equals(value, _templateName))
 				{
 					return;
-
 				}
 				_templateName = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TemplateName));
 			}
 		}
 
@@ -174,10 +171,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				if (Equals(value, _customer))
 				{
 					return;
-
 				}
 				_customer = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Customer));
 			}
 		}
 
@@ -191,8 +187,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_dueDate = value;
-				OnPropertyChanged();
-
+				OnPropertyChanged(nameof(DueDate));
 			}
 		}
 
@@ -203,7 +198,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			{
 				if (Equals(value, _tmName)) { return; }
 				_tmName = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TmName));
 			}
 		}
 
@@ -214,7 +209,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			{
 				if (Equals(_tmPath, value)) { return; }
 				_tmPath = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TmPath));
 			}
 		}
 	}

@@ -71,7 +71,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_isDetailsSelected = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(DetailsSelected));
 			}
 		}
 
@@ -85,7 +85,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_isTmSelected = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TmSelected));
 			}
 		}
 
@@ -102,7 +102,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_isFinishSelected = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(FinishSelected));
 			}
 		}
 
@@ -116,7 +116,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_canExecuteNext = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(CanExecuteNext));
 			}
 		}
 
@@ -131,7 +131,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				}
 
 				_canExecuteBack = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(CanExecuteBack));
 			}
 		}
 
@@ -145,7 +145,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_color = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Color));
 			}
 		}
 
@@ -159,7 +159,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_canExecuteCreate = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(CanExecuteCreate));
 			}
 		}
 
@@ -171,10 +171,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				if (Equals(value, _isEnabled))
 				{
 					return;
-
 				}
 				_isEnabled = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsEnabled));
 			}
 		}
 
@@ -188,7 +187,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_active = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Active));
 			}
 		}
 		#endregion

@@ -75,7 +75,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_isTmErrorMessageVisible = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TmMessage));
 			}
 		}
 		public bool IsNoneChecked
@@ -85,7 +85,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			{
 				if (Equals(value, _isNoneChecked)) { return; }
 				_isNoneChecked = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsNoneChecked));
 			}
 		}
 
@@ -99,7 +99,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_selectedIndex = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedIndex));
 			}
 		}
 
@@ -113,7 +113,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_title = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Title));
 			}
 		}
 
@@ -127,7 +127,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_isEnabled = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsEnabled));
 			}
 		}
 
@@ -141,7 +141,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_tmName = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TmName));
 			}
 		}
 
@@ -155,7 +155,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_createChecked = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsCreateChecked));
 			}
 		}
 
@@ -169,7 +169,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_importMTVisible = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(ImportMTVisible));
 			}
 		}
 
@@ -183,7 +183,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_importMTChecked = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsImportMTChecked));
 			}
 		}
 
@@ -197,7 +197,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_browseChecked = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsBrowseChecked));
 			}
 		}
 
@@ -211,7 +211,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_visibility = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Visibility));
 			}
 		}
 
@@ -226,9 +226,58 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			{
 				if (Equals(value, _buttonName)) { return; }
 				_buttonName = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(ButtonName));
 			}
 		}
+
+		public List<LanguagePair> LanguagePairs
+		{
+			get { return _languagePairs; }
+			set
+			{
+				if (Equals(value, _languagePairs))
+				{
+					return;
+				}
+				_languagePairs = value;
+				OnPropertyChanged(nameof(SelectedItem));
+			}
+		}
+
+		public LanguagePair SelectedItem
+		{
+			get { return _selectedItem; }
+			set
+			{
+				if (Equals(value, _selectedItem)) { return; }
+				_selectedItem = value;
+
+				OnPropertyChanged(nameof(SelectedItem));
+				Title = SelectedItem.PairName;
+				IsNoneChecked = true;
+				SetBtnName();
+			}
+		}
+
+		public ObservableCollection<LanguagePair> Pairs { get; set; }
+
+		public string this[string columnName]
+		{
+			get
+			{
+				if (columnName.Equals("TmName"))
+				{
+					if (IsCreateChecked && string.IsNullOrEmpty(TmName) ||
+						IsBrowseChecked && string.IsNullOrEmpty(TmName))
+					{
+						return "Translation memory is required.";
+					}
+				}
+				return null;
+			}
+		}
+
+		public string Error { get; }
 
 		public ICommand SetBtnNameCommand
 		{
@@ -383,55 +432,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		{
 			var name = path.Substring(path.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
 			return name;
-		}
-
-		public List<LanguagePair> LanguagePairs
-		{
-			get { return _languagePairs; }
-			set
-			{
-				if (Equals(value, _languagePairs))
-				{
-					return;
-				}
-				_languagePairs = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public LanguagePair SelectedItem
-		{
-			get { return _selectedItem; }
-			set
-			{
-				if (Equals(value, _selectedItem)) { return; }
-				_selectedItem = value;
-
-				OnPropertyChanged();
-				Title = SelectedItem.PairName;
-				IsNoneChecked = true;
-				SetBtnName();
-			}
-		}
-
-		public ObservableCollection<LanguagePair> Pairs { get; set; }
-
-		public string this[string columnName]
-		{
-			get
-			{
-				if (columnName.Equals("TmName"))
-				{
-					if (IsCreateChecked && string.IsNullOrEmpty(TmName) ||
-						IsBrowseChecked && string.IsNullOrEmpty(TmName))
-					{
-						return "Translation memory is required.";
-					}
-				}
-				return null;
-			}
-		}
-
-		public string Error { get; }
+		}		
 	}
 }

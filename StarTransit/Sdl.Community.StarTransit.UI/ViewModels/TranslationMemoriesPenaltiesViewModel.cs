@@ -44,7 +44,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_translationMemoriesPenaltiesModelList = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TranslationMemoriesPenaltiesModelList));
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_translationMemoryName = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TranslationMemoryName));
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_translationMemoryPath = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TranslationMemoryPath));
 			}
 		}
 
@@ -96,7 +96,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_tmPenalty = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TMPenalty));
 			}
 		}
 
