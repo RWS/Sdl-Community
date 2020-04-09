@@ -11,31 +11,30 @@ namespace IATETerminologyProvider.ViewModel
 {
 	public class SettingsViewModel : ViewModelBase
 	{
-		#region Private Fields
 		private ICommand _saveSettingsCommand;
 		private DomainModel _selectedDomain;		
 		private TermTypeModel _selectedTermType;
 		private ObservableCollection<DomainModel> _domains;
 		private ObservableCollection<TermTypeModel> _termTypes;
-		#endregion
+		public delegate ProviderSettings SaveSettingsEventRaiser();
+		public event SaveSettingsEventRaiser OnSaveSettingsCommandRaised;
 
-		#region Public Constructors
 		public SettingsViewModel(ProviderSettings providerSettings)
 		{			
+			_domains = new ObservableCollection<DomainModel>();
+			_termTypes = new ObservableCollection<TermTypeModel>();
 			LoadDomains();
 			LoadTermTypes();
 			SetFieldsSelection(providerSettings);
 		}
-		#endregion
 
-		#region Public Properties		
 		public DomainModel SelectedDomain
 		{
 			get => _selectedDomain;
 			set
 			{
 				_selectedDomain = value;				
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedDomain));
 			}
 		}
 
@@ -45,7 +44,7 @@ namespace IATETerminologyProvider.ViewModel
 			set
 			{
 				_termTypes = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TermTypes));
 			}
 		}
 
@@ -55,7 +54,7 @@ namespace IATETerminologyProvider.ViewModel
 			set
 			{
 				_selectedTermType = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedTermType));
 			}
 		}
 
@@ -65,18 +64,15 @@ namespace IATETerminologyProvider.ViewModel
 			set
 			{
 				_domains = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Domains));
 			}
 		}
 		
 		public ProviderSettings ProviderSettings { get; set; }
-		#endregion
 
-		#region Commands
 		public ICommand SaveSettingsCommand => _saveSettingsCommand ?? (_saveSettingsCommand = new CommandHandler(SaveSettingsAction, true));
-		#endregion
 
-		#region Actions
+
 		private void SaveSettingsAction()
 		{
 			if (Domains?.Count > 0)
@@ -107,19 +103,13 @@ namespace IATETerminologyProvider.ViewModel
 				OnSaveSettingsCommandRaised?.Invoke();
 			}
 		}
-		#endregion
 
-		#region PublicMethods
-		#endregion
-
-		#region Private Methods
 		private void LoadDomains()
 		{
-			_domains = new ObservableCollection<DomainModel>();
 			var domains = DomainService.GetDomains();
-			foreach (var domain in domains)
+			if (domains?.Count>0)
 			{
-				if (domain != null)
+				foreach (var domain in domains)
 				{
 					if (!domain.Name.Equals(Constants.NotSpecifiedCode))
 					{
@@ -137,7 +127,6 @@ namespace IATETerminologyProvider.ViewModel
 
 		private void LoadTermTypes()
 		{
-			_termTypes = new ObservableCollection<TermTypeModel>();
 			TermTypes = TermTypeService.GetTermTypes();
 		}
 
@@ -165,11 +154,5 @@ namespace IATETerminologyProvider.ViewModel
 				}
 			}
 		}
-		#endregion
-
-		#region Events
-		public delegate ProviderSettings SaveSettingsEventRaiser();
-		public event SaveSettingsEventRaiser OnSaveSettingsCommandRaised;
-		#endregion
 	}
 }
