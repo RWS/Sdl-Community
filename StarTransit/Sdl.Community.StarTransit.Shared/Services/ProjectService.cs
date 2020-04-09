@@ -7,7 +7,6 @@ using Sdl.Community.StarTransit.Shared.Import;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Core.Globalization;
-using Sdl.Desktop.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
@@ -16,22 +15,29 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
-	public class ProjectService : AbstractViewControllerAction<ProjectsController>
+	public class ProjectService
 	{
 		private List<StarTranslationMemoryMetadata> _penaltiesTmsList;
 		private List<StarTranslationMemoryMetadata> _machineTransList;
 		private TranslationProviderConfiguration _tmConfig;
 		private MessageModel _messageModel;
 		private IFileTypeManager _fileTypeManager;
+		private ProjectsController _projectsController;
 
 		public static readonly Log Log = Log.Instance;
 		
 		public ProjectService(IFileTypeManager fileTypeManager)
 		{
 			_fileTypeManager = fileTypeManager;
+			_projectsController = GetProjectController();
 		}
 
 		#region Public Methods
+
+		public virtual ProjectsController GetProjectController()
+		{
+			return SdlTradosStudio.Application.GetController<ProjectsController>();
+		}
 
 		public virtual IProject CreateNewProject(ProjectInfo projectInfo, ProjectTemplateReference projectTemplateReference)
 		{
@@ -79,17 +85,19 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
 
 				_tmConfig = newProject.GetTranslationProviderConfiguration();
-
 				var targetProjectFiles = new List<ProjectFile>();
 
 				_messageModel = SetLanguagePairInformation(newProject, package, targetProjectFiles);
 
-				if (_messageModel is null || !_messageModel.IsProjectCreated)
+				if (_messageModel is null || _messageModel.Message is null)
 				{
-					if (Directory.Exists(Path.GetDirectoryName(newProject.GetProjectInfo()?.LocalProjectFolder)))
+					if (Directory.Exists(newProject?.GetProjectInfo()?.LocalProjectFolder))
 					{
 						CreateMetadataFolder(package.Location, package.PathToPrjFile);
-						Controller.RefreshProjects();
+						if (!(_projectsController is null))
+						{
+							_projectsController.RefreshProjects();
+						}
 					}
 					_messageModel.IsProjectCreated = true;
 					_messageModel.Message = "Project was successfully created!";
@@ -145,23 +153,23 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				}
 
 				targetProjectFiles.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
-				
-				//cannot cast an interface which was substituted.
-				var proj = (FileBasedProject)newProject;
-				_messageModel = UpdateProjectSettings(proj, targetProjectFiles);				
+				_messageModel = UpdateProjectSettings(newProject, targetProjectFiles);				
 			}
-			Controller.RefreshProjects();
-
+			if (!(_projectsController is null))
+			{
+				_projectsController.RefreshProjects();
+			}
 			return _messageModel;
 		}
 
-		private MessageModel UpdateProjectSettings(FileBasedProject project, List<ProjectFile> targetProjectFiles)
+		public virtual MessageModel UpdateProjectSettings(IProject project, List<ProjectFile> targetProjectFiles)
 		{
+			var fileBasedProject = ((FileBasedProject)project);
 			UpdateTmSettings(project);
-			project.UpdateTranslationProviderConfiguration(_tmConfig);
+			fileBasedProject.UpdateTranslationProviderConfiguration(_tmConfig);
 
 			project.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
-			var taskSequence = project.RunAutomaticTasks(targetProjectFiles.GetIds(), new[]
+			var taskSequence = fileBasedProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new[]
 			{
 					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
 					AutomaticTaskTemplateIds.CopyToTargetLanguages,
@@ -178,7 +186,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				_messageModel.Title = "Informative message";
 				return _messageModel;
 			}
-			project.Save();
+			fileBasedProject.Save();
 			return _messageModel;
 		}
 
@@ -188,7 +196,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			{
 				if (pair.StarTranslationMemoryMetadatas.Count > 0)
 				{
-					var newTmPath = Path.Combine(Path.GetDirectoryName(project.GetProjectInfo()?.LocalProjectFolder), Path.GetFileName(pair.TmPath));
+					var newTmPath = Path.Combine(project?.GetProjectInfo()?.LocalProjectFolder, Path.GetFileName(pair.TmPath));
 					var importer = new TransitTmImporter(pair, _fileTypeManager, newTmPath);
 
 					foreach (var tm in pair.StarTranslationMemoryMetadatas)
@@ -228,7 +236,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		// Create the translation memory importer
 		private TransitTmImporter CreateTmImporter(StarTranslationMemoryMetadata item, LanguagePair pair, IProject project)
 		{
-			var importer = new TransitTmImporter(_fileTypeManager, pair, Path.GetDirectoryName(project.GetProjectInfo()?.LocalProjectFolder), Path.GetFileName(item.TargetFile));
+			var importer = new TransitTmImporter(_fileTypeManager, pair, project?.GetProjectInfo()?.LocalProjectFolder, Path.GetFileName(item.TargetFile));
 			importer.ImportStarTransitTm(item.TargetFile);
 			return importer;
 		}
@@ -293,12 +301,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			{
 				var settings = project.GetSettings();
 				var updateTmSettings = settings.GetSettingsGroup<TranslationMemoryUpdateTaskSettings>();
-				updateTmSettings.TmImportOptions.Value = TmImportOption.AlwaysAddNewTranslation;
-				updateTmSettings.UpdateWithApprovedSignOffSegments.Value = true;
-				updateTmSettings.UpdateWithApprovedTranslationSegments.Value = true;
-				updateTmSettings.UpdateWithTranslatedSegments.Value = true;
-
-				project.UpdateSettings(settings);
+				if (updateTmSettings != null)
+				{
+					updateTmSettings.TmImportOptions.Value = TmImportOption.AlwaysAddNewTranslation;
+					updateTmSettings.UpdateWithApprovedSignOffSegments.Value = true;
+					updateTmSettings.UpdateWithApprovedTranslationSegments.Value = true;
+					updateTmSettings.UpdateWithTranslatedSegments.Value = true;
+					project.UpdateSettings(settings);
+				}
 			}
 			catch (Exception ex)
 			{
@@ -333,11 +343,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				Log.Logger.Error($"CreateMetadataFolder method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
-		
-		protected override void Execute()
-		{
 
-		}
 		#endregion
 	}
 }
