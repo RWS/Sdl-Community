@@ -6,11 +6,10 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'windows-latest'
+pool: default
 
 variables:
-  solution: '**/*.sln'
+  solution: '**/MultiTermStandAloneTestApp.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
