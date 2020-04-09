@@ -120,11 +120,20 @@
   <data name="AnonymizeAll" xml:space="preserve">
     <value>Anonymize all values</value>
   </data>
+  <data name="AnonymizeCompleteToolTip" xml:space="preserve">
+    <value>Supports a one-click action to remove usernames and machine translation providers and replace with blanks.</value>
+  </data>
   <data name="CommentAuthor" xml:space="preserve">
     <value>Comment author</value>
   </data>
+  <data name="CommentToolTip" xml:space="preserve">
+    <value>Remove or replace the name of the user who added comments to the file</value>
+  </data>
   <data name="CreatedBy" xml:space="preserve">
     <value>Created by</value>
+  </data>
+  <data name="CreatedToolTip" xml:space="preserve">
+    <value>Remove or replace the name of the user who created the original translation</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -136,11 +145,20 @@
   <data name="LastModified" xml:space="preserve">
     <value>Last modified by</value>
   </data>
+  <data name="ModifiedToolTip" xml:space="preserve">
+    <value>Remove or replace the name of the user who last modified the translation</value>
+  </data>
+  <data name="MtTooltip" xml:space="preserve">
+    <value>Remove all Machine Translation providers from the file and replace with nothing; or replace with the name of a Translation Memory</value>
+  </data>
   <data name="PageTitle" xml:space="preserve">
     <value>Anonymizer settings</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
     <value>SDLBatchAnonymize</value>
+  </data>
+  <data name="ProviderNameToolTip" xml:space="preserve">
+    <value>This allows you to specify the name of the Translation Memory used. It will be applied to Machine Translation or Translation Memory results depending on the options selected in the Anonymizer settings</value>
   </data>
   <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -157,14 +175,26 @@
   <data name="ResourceOriginsHeader" xml:space="preserve">
     <value>Resource origins</value>
   </data>
+  <data name="ScoreToolTip" xml:space="preserve">
+    <value>This is only used when anonymizing Machine Translation. It allows you to set a fuzzy value to be used when you wish to replace the MT with the name of a Translation Memory</value>
+  </data>
   <data name="SetResource" xml:space="preserve">
-    <value>Set the specific resources user</value>
+    <value>Set the specific resources used</value>
+  </data>
+  <data name="SpecificResToolTip" xml:space="preserve">
+    <value>Allows you to be more specific about the level of anonymization</value>
   </data>
   <data name="TmScore" xml:space="preserve">
     <value>Set the Provider score</value>
   </data>
+  <data name="TmToolTip" xml:space="preserve">
+    <value>Remove all Translation Memory providers from the file and replace with nothing; or replace with the name of another Translation Memory</value>
+  </data>
   <data name="TrackedChanges" xml:space="preserve">
     <value>Tracked changes</value>
+  </data>
+  <data name="TrackedToolTip" xml:space="preserve">
+    <value>Remove or replace the name of the user who inserted/deleted text as tracked changes</value>
   </data>
   <data name="UsernameHeader" xml:space="preserve">
     <value>Username</value>
