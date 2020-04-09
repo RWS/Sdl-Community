@@ -4,6 +4,8 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+
 
 namespace Sdl.Community.SDLBatchAnonymize
 {
@@ -18,9 +20,18 @@ namespace Sdl.Community.SDLBatchAnonymize
 	public class BatchAnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
 		private BatchAnonymizerSettings _settings;
-
+		private readonly BackupService _backupService =new BackupService();
+		
 		protected override void OnInitializeTask()
 		{
+			var projectController =SdlTradosStudio.Application.GetController<ProjectsController>();
+			var currentProject = projectController?.CurrentProject;
+			var projectInfo = currentProject?.GetProjectInfo();
+			if (projectInfo != null)
+			{
+				_backupService.BackupProject(projectInfo.LocalProjectFolder, projectInfo.Name);
+
+			}
 			_settings = GetSetting<BatchAnonymizerSettings>();
 		}
 

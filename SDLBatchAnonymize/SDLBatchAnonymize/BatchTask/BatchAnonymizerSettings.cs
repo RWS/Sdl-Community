@@ -80,15 +80,5 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 			get => GetSetting<string>(nameof(TmName));
 			set => GetSetting<string>(nameof(TmName)).Value = value;
 		}
-
-		//protected override object GetDefaultValue(string settingId)
-		//{
-		//	switch (settingId)
-		//	{
-		//		case nameof(AnonymizeComplete):
-		//			return true;
-		//	}
-		//	return base.GetDefaultValue(settingId);
-		//}
 	}
 }

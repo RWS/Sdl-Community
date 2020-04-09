@@ -145,7 +145,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove/change MT.
+        ///   Looks up a localized string similar to Remove/change MT Provider.
         /// </summary>
         public static string RemoveMT {
             get {
@@ -154,7 +154,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove/change TM resources.
+        ///   Looks up a localized string similar to Remove/change TM Provider.
         /// </summary>
         public static string RemoveTm {
             get {
@@ -163,7 +163,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set the resource name.
+        ///   Looks up a localized string similar to Set the Provider name.
         /// </summary>
         public static string ResourceName {
             get {
@@ -190,7 +190,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set a TM score.
+        ///   Looks up a localized string similar to Set the Provider score.
         /// </summary>
         public static string TmScore {
             get {
