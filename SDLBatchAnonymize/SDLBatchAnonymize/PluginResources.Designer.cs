@@ -70,6 +70,15 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supports a one-click action to remove usernames and machine translation providers and replace with blanks..
+        /// </summary>
+        public static string AnonymizeCompleteToolTip {
+            get {
+                return ResourceManager.GetString("AnonymizeCompleteToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment author.
         /// </summary>
         public static string CommentAuthor {
@@ -79,11 +88,29 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove or replace the name of the user who added comments to the file.
+        /// </summary>
+        public static string CommentToolTip {
+            get {
+                return ResourceManager.GetString("CommentToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created by.
         /// </summary>
         public static string CreatedBy {
             get {
                 return ResourceManager.GetString("CreatedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove or replace the name of the user who created the original translation.
+        /// </summary>
+        public static string CreatedToolTip {
+            get {
+                return ResourceManager.GetString("CreatedToolTip", resourceCulture);
             }
         }
         
@@ -117,6 +144,24 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove or replace the name of the user who last modified the translation.
+        /// </summary>
+        public static string ModifiedToolTip {
+            get {
+                return ResourceManager.GetString("ModifiedToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove all Machine Translation providers from the file and replace with nothing; or replace with the name of a Translation Memory.
+        /// </summary>
+        public static string MtTooltip {
+            get {
+                return ResourceManager.GetString("MtTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anonymizer settings.
         /// </summary>
         public static string PageTitle {
@@ -135,6 +180,15 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This allows you to specify the name of the Translation Memory used. It will be applied to Machine Translation or Translation Memory results depending on the options selected in the Anonymizer settings.
+        /// </summary>
+        public static string ProviderNameToolTip {
+            get {
+                return ResourceManager.GetString("ProviderNameToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Question {
@@ -145,7 +199,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove/change MT.
+        ///   Looks up a localized string similar to Remove/change MT Provider.
         /// </summary>
         public static string RemoveMT {
             get {
@@ -154,7 +208,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove/change TM resources.
+        ///   Looks up a localized string similar to Remove/change TM Provider.
         /// </summary>
         public static string RemoveTm {
             get {
@@ -163,7 +217,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set the resource name.
+        ///   Looks up a localized string similar to Set the Provider name.
         /// </summary>
         public static string ResourceName {
             get {
@@ -181,7 +235,16 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set the specific resources user.
+        ///   Looks up a localized string similar to This is only used when anonymizing Machine Translation. It allows you to set a fuzzy value to be used when you wish to replace the MT with the name of a Translation Memory.
+        /// </summary>
+        public static string ScoreToolTip {
+            get {
+                return ResourceManager.GetString("ScoreToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set the specific resources used.
         /// </summary>
         public static string SetResource {
             get {
@@ -190,11 +253,29 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set a TM score.
+        ///   Looks up a localized string similar to Allows you to be more specific about the level of anonymization.
+        /// </summary>
+        public static string SpecificResToolTip {
+            get {
+                return ResourceManager.GetString("SpecificResToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set the Provider score.
         /// </summary>
         public static string TmScore {
             get {
                 return ResourceManager.GetString("TmScore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove all Translation Memory providers from the file and replace with nothing; or replace with the name of another Translation Memory.
+        /// </summary>
+        public static string TmToolTip {
+            get {
+                return ResourceManager.GetString("TmToolTip", resourceCulture);
             }
         }
         
@@ -204,6 +285,15 @@ namespace Sdl.Community.SDLBatchAnonymize {
         public static string TrackedChanges {
             get {
                 return ResourceManager.GetString("TrackedChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove or replace the name of the user who inserted/deleted text as tracked changes.
+        /// </summary>
+        public static string TrackedToolTip {
+            get {
+                return ResourceManager.GetString("TrackedToolTip", resourceCulture);
             }
         }
         

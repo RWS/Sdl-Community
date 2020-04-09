@@ -16,6 +16,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 		private bool _changeMtChecked;
 		private bool _changeTmChecked;
 		private bool _setSpecificResChecked;
+		private bool _isFuzzyEnabled;
 		private string _createdByName;
 		private string _modifyByName;
 		private string _commentAuthorName;
@@ -163,6 +164,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 				if (_changeMtChecked == value) return;
 				_changeMtChecked = value;
 				OnPropertyChanged(nameof(ChangeMtChecked));
+				EnableFuzzy();
 			}
 		}
 		public bool SetSpecificResChecked
@@ -188,6 +190,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 				if (_changeTmChecked == value) return;
 				_changeTmChecked = value;
 				OnPropertyChanged(nameof(ChangeTmChecked));
+				EnableFuzzy();
 			}
 		}
 
@@ -221,6 +224,17 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			}
 		}
 
+		public bool IsFuzzyEnabled
+		{
+			get => _isFuzzyEnabled;
+			set
+			{
+				if (_isFuzzyEnabled == value) return;
+				_isFuzzyEnabled = value;
+				OnPropertyChanged(nameof(IsFuzzyEnabled));
+			}
+		}
+
 		public ICommand LoadWindowAction => _loadWindowAction ?? (_loadWindowAction = new CommandHandler(WindowLoaded));
 		private void WindowLoaded(object obj)
 		{
@@ -241,14 +255,17 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			FuzzyScore = Settings.FuzzyScore;
 		}
 
-		private void SetOptions(bool value)
+		/// <summary>
+		/// Set/Reset values for anonymize all option
+		/// </summary>
+		private void SetOptions(bool anonymizeAll)
 		{
-			CreatedByChecked = value;
-			ModifyByChecked = value;
-			CommentChecked = value;
-			TrackedChecked = value;
-			ChangeMtChecked = value;
-			if (!value) return;
+			CreatedByChecked = anonymizeAll;
+			ModifyByChecked = anonymizeAll;
+			CommentChecked = anonymizeAll;
+			TrackedChecked = anonymizeAll;
+			ChangeMtChecked = anonymizeAll;
+			if (!anonymizeAll) return;
 			CreatedByName = string.Empty;
 			ModifyByName = string.Empty;
 			CommentAuthorName = string.Empty;
@@ -257,6 +274,22 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			ChangeTmChecked = false;
 			SetSpecificResChecked = false;
 			FuzzyScore = 0;
+		}
+
+		private void EnableFuzzy()
+		{
+			if (AnonymizeAllSettings)
+			{
+				IsFuzzyEnabled = false;
+			}
+			else if (ChangeTmChecked && !ChangeMtChecked)
+			{
+				IsFuzzyEnabled = false;
+			}
+			else
+			{
+				IsFuzzyEnabled = true;
+			}
 		}
 	}
 }

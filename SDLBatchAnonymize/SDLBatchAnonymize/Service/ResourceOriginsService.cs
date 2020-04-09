@@ -12,25 +12,50 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 		public void RemoveMt(ISegmentPair segmentPair, IBatchAnonymizerSettings anonymizerSettings)
 		{
 			var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
+			var originBefereAdaptation = segmentPair?.Properties?.TranslationOrigin.OriginBeforeAdaptation;
+
 			if (translationOrigin != null && IsAutomatedTranslated(translationOrigin))
 			{
-				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, translationOrigin);
+				AnonymizeMtTranslationOrigin(segmentPair, anonymizerSettings, translationOrigin);
+			}
+			if (originBefereAdaptation != null && IsAutomatedTranslated(originBefereAdaptation))
+			{
+				AnonymizeMtTranslationOrigin(segmentPair, anonymizerSettings, originBefereAdaptation);
 			}
 		}
 
 		public void RemoveTm(ISegmentPair segmentPair, IBatchAnonymizerSettings anonymizerSettings)
 		{
 			var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
+			var originBefereAdaptation = segmentPair?.Properties?.TranslationOrigin.OriginBeforeAdaptation;
+
 			if (translationOrigin != null && IsTmTransaltion(translationOrigin))
 			{
-				AnonymizeTranslationOrigin(segmentPair, anonymizerSettings, translationOrigin);
+				AnonymizeTmTransaltionOrigin( anonymizerSettings, translationOrigin);
+			}
+			if (originBefereAdaptation != null && IsTmTransaltion(originBefereAdaptation))
+			{
+				AnonymizeTmTransaltionOrigin( anonymizerSettings, originBefereAdaptation);
 			}
 		}
 
-		private void AnonymizeTranslationOrigin(ISegmentPair segmentPair, IBatchAnonymizerSettings anonymizerSettings,
+		private void AnonymizeTmTransaltionOrigin( IBatchAnonymizerSettings anonymizerSettings, ITranslationOrigin translationOrigin)
+		{
+			var anonymizeWithCustomRes = ShouldAnonymizeTmWithCustomResources(anonymizerSettings);
+			if (!anonymizeWithCustomRes)
+			{
+				AnonymizeToDefaultValues(translationOrigin);
+			}
+			else
+			{
+				AnonymizeTmMatch(translationOrigin, anonymizerSettings, true);
+			}
+		}
+
+		private void AnonymizeMtTranslationOrigin(ISegmentPair segmentPair, IBatchAnonymizerSettings anonymizerSettings,
 			ITranslationOrigin translationOrigin)
 		{
-			var anonymizeCustomResources = ShouldAnonymizeWithCustomResources(anonymizerSettings);
+			var anonymizeCustomResources = ShouldAnonymizeAtWithCustomResources(anonymizerSettings);
 			AnonymizeToDefaultValues(translationOrigin); // we need to set the origin to be interactive in order to have edied fuzzy
 
 			if (anonymizeCustomResources)
@@ -41,17 +66,25 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 					originClone.OriginBeforeAdaptation = null;
 					segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation = originClone;
 				}
-				AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation, anonymizerSettings);
+				AnonymizeTmMatch(segmentPair.Properties.TranslationOrigin.OriginBeforeAdaptation, anonymizerSettings, false);
 			}
 		}
 
-		private bool ShouldAnonymizeWithCustomResources(IBatchAnonymizerSettings anonymizerSettings)
+		private bool ShouldAnonymizeAtWithCustomResources(IBatchAnonymizerSettings anonymizerSettings)
 		{
 			var isSpecificResourceChecked = anonymizerSettings.SetSpecificResChecked;
 			var isFuzzyChanged = anonymizerSettings.FuzzyScore > 0; // default value is 0
 			var hasTmAdded = !string.IsNullOrEmpty(anonymizerSettings.TmName);
 
-			return isSpecificResourceChecked && isFuzzyChanged && hasTmAdded;
+			return isSpecificResourceChecked && (isFuzzyChanged || hasTmAdded);
+		}
+
+		private bool ShouldAnonymizeTmWithCustomResources(IBatchAnonymizerSettings anonymizerSettings)
+		{
+			var isSpecificResourceChecked = anonymizerSettings.SetSpecificResChecked;
+			var hasTmAdded = !string.IsNullOrEmpty(anonymizerSettings.TmName);
+
+			return isSpecificResourceChecked && hasTmAdded;
 		}
 
 		private bool IsAutomatedTranslated(ITranslationOrigin translationOrigin)
@@ -77,14 +110,14 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 			translationOrigin.MatchPercent = byte.Parse("0");
 		}
 
-		private void AnonymizeTmMatch(ITranslationOrigin translationOrigin, IBatchAnonymizerSettings anonymizerSettings)
+		private void AnonymizeTmMatch(ITranslationOrigin translationOrigin, IBatchAnonymizerSettings anonymizerSettings, bool tmAnonymization)
 		{
 			translationOrigin.OriginType = DefaultTranslationOrigin.TranslationMemory;
 			if (!string.IsNullOrEmpty(anonymizerSettings.TmName))
 			{
 				translationOrigin.OriginSystem = Path.GetFileNameWithoutExtension(anonymizerSettings.TmName);
 			}
-			if (anonymizerSettings.FuzzyScore > 0)
+			if (anonymizerSettings.FuzzyScore > 0 && !tmAnonymization)
 			{
 				var fuzzy = anonymizerSettings.FuzzyScore.ToString(CultureInfo.InvariantCulture);
 				translationOrigin.MatchPercent = byte.Parse(fuzzy);
