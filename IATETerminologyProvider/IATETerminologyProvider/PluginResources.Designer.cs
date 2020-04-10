@@ -22,7 +22,7 @@ namespace IATETerminologyProvider {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PluginResources {
+    public class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace IATETerminologyProvider {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IATETerminologyProvider.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace IATETerminologyProvider {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,27 @@ namespace IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select domain(s):.
+        /// </summary>
+        public static string Domains_description {
+            get {
+                return ResourceManager.GetString("Domains_description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Domain.
+        /// </summary>
+        public static string Domains_header {
+            get {
+                return ResourceManager.GetString("Domains_header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Download {
+        public static System.Drawing.Icon Download {
             get {
                 object obj = ResourceManager.GetObject("Download", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -73,7 +91,7 @@ namespace IATETerminologyProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ForumIcon {
+        public static System.Drawing.Icon ForumIcon {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -83,7 +101,7 @@ namespace IATETerminologyProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Iate_logo {
+        public static System.Drawing.Icon Iate_logo {
             get {
                 object obj = ResourceManager.GetObject("Iate_logo", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -93,7 +111,7 @@ namespace IATETerminologyProvider {
         /// <summary>
         ///   Looks up a localized string similar to Terminology provider based on the IATE database updated continuously by translators and terminologists..
         /// </summary>
-        internal static string IATETerminologyProviderDescription {
+        public static string IATETerminologyProviderDescription {
             get {
                 return ResourceManager.GetString("IATETerminologyProviderDescription", resourceCulture);
             }
@@ -102,7 +120,7 @@ namespace IATETerminologyProvider {
         /// <summary>
         ///   Looks up a localized string similar to IATE Terminology Provider....
         /// </summary>
-        internal static string IATETerminologyProviderName {
+        public static string IATETerminologyProviderName {
             get {
                 return ResourceManager.GetString("IATETerminologyProviderName", resourceCulture);
             }
@@ -111,16 +129,25 @@ namespace IATETerminologyProvider {
         /// <summary>
         ///   Looks up a localized string similar to Sdl.Community.IATETerminologyProvider.
         /// </summary>
-        internal static string Plugin_Name {
+        public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Term Type.
+        /// </summary>
+        public static string Terms_header {
+            get {
+                return ResourceManager.GetString("Terms_header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error in refreshing the access token.
         /// </summary>
-        internal static string TermSearchService_Error_in_refreshing_access_token {
+        public static string TermSearchService_Error_in_refreshing_access_token {
             get {
                 return ResourceManager.GetString("TermSearchService_Error_in_refreshing_access_token", resourceCulture);
             }
@@ -129,9 +156,18 @@ namespace IATETerminologyProvider {
         /// <summary>
         ///   Looks up a localized string similar to Error in requesting the access token.
         /// </summary>
-        internal static string TermSearchService_Error_in_requesting_access_token {
+        public static string TermSearchService_Error_in_requesting_access_token {
             get {
                 return ResourceManager.GetString("TermSearchService_Error_in_requesting_access_token", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select term type(s):.
+        /// </summary>
+        public static string TermType_Description {
+            get {
+                return ResourceManager.GetString("TermType_Description", resourceCulture);
             }
         }
     }

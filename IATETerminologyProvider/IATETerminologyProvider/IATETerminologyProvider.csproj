@@ -64,6 +64,9 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Styles.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
@@ -232,7 +235,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PluginResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
