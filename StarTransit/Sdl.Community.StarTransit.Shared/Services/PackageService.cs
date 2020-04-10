@@ -31,25 +31,29 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			try
 			{
 				var entryName = string.Empty;
-				using (var archive = ZipFile.OpenRead(packagePath))
+				if (File.Exists(packagePath))
 				{
-					foreach (var entry in archive.Entries)
+					using (var archive = ZipFile.OpenRead(packagePath))
 					{
-						var subdirectoryPath = Path.GetDirectoryName(entry.FullName);
-						if (!Directory.Exists(Path.Combine(pathToTempFolder, subdirectoryPath)))
+						foreach (var entry in archive.Entries)
 						{
-							Directory.CreateDirectory(Path.Combine(pathToTempFolder, subdirectoryPath));
-						}
-						entry.ExtractToFile(Path.Combine(pathToTempFolder, entry.FullName));
+							var subdirectoryPath = Path.GetDirectoryName(entry.FullName);
+							if (!Directory.Exists(Path.Combine(pathToTempFolder, subdirectoryPath)))
+							{
+								Directory.CreateDirectory(Path.Combine(pathToTempFolder, subdirectoryPath));
+							}
 
-						if (entry.FullName.EndsWith(".PRJ", StringComparison.OrdinalIgnoreCase))
-						{
-							entryName = entry.FullName;
+							entry.ExtractToFile(Path.Combine(pathToTempFolder, entry.FullName));
+
+							if (entry.FullName.EndsWith(".PRJ", StringComparison.OrdinalIgnoreCase))
+							{
+								entryName = entry.FullName;
+							}
 						}
 					}
-				}
 
-				return await ReadProjectMetadata(pathToTempFolder, entryName);
+					return await ReadProjectMetadata(pathToTempFolder, entryName);
+				}
 			}
 			catch (Exception ex)
 			{
