@@ -12,10 +12,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private bool _isChecked;
 		private Guid _id;
 		private ICommand _selectCommand;
-		private static List<Guid> _selectedProjectIds = new List<Guid>();
+		private static List<Guid> _selectedProjectIds;
 
 		public CellViewModel()
 		{
+			_selectedProjectIds = new List<Guid>();
 			_name = string.Empty;
 			_isChecked = false;
 			_id = new Guid();
@@ -23,7 +24,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string Name
 		{
-			get { return _name; }
+			get => _name;
 			set
 			{
 				if (Equals(value, _name))
@@ -37,7 +38,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public bool Checked
 		{
-			get { return _isChecked; }
+			get => _isChecked;
 			set
 			{
 				if (Equals(_isChecked, value))
@@ -51,7 +52,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public Guid Id
 		{
-			get { return _id; }
+			get => _id;
 			set
 			{
 				if (Equals(_id, value)) return;
@@ -60,10 +61,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			}
 		}
 
-		public ICommand SelectCommand
-		{
-			get { return _selectCommand ?? (_selectCommand = new CommandHandler(Select, true)); }
-		}
+		public ICommand SelectCommand => _selectCommand ?? (_selectCommand = new CommandHandler(Select, true));
 
 		private void Select()
 		{

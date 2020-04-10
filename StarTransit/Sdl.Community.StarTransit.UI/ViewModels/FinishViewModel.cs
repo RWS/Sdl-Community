@@ -32,7 +32,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		public void Refresh()
 		{
 			_package = _translationMemoriesViewModel.GetPackageModel();
-			//_targetLanguage.Clear();
 			var targetLanguage = new List<string>();
 			Name = _package.Name;
 			Location = _package.Location;
@@ -66,7 +65,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string Name
 		{
-			get { return _packageDetailsViewModel.Name; }
+			get => _packageDetailsViewModel.Name;
 			set
 			{
 				if (Equals(value, _txtName))
@@ -80,7 +79,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string Description
 		{
-			get { return _txtDescription; }
+			get => _txtDescription;
 			set
 			{
 				if (Equals(value, _txtDescription))
@@ -94,7 +93,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string SourceLanguage
 		{
-			get { return _packageDetailsViewModel.SourceLanguage; }
+			get => _packageDetailsViewModel?.SourceLanguage;
 			set
 			{
 				if (Equals(value, _sourceLanguage))
@@ -109,13 +108,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public List<string> TargetLanguage
 		{
-			get { return _targetLanguage ?? (_targetLanguage = new List<string>()); }
+			get => _targetLanguage ?? (_targetLanguage = new List<string>());
 			set
 			{
-				if (Equals(value, _targetLanguage))
-				{
-					return;
-				}
 				_targetLanguage = value;
 				OnPropertyChanged(nameof(TargetLanguage));
 			}
@@ -123,7 +118,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string Location
 		{
-			get { return _packageDetailsViewModel.TextLocation; }
+			get => _packageDetailsViewModel?.TextLocation;
 			set
 			{
 				if (Equals(value, _location))
@@ -137,7 +132,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public bool Active
 		{
-			get { return _active; }
+			get => _active;
 			set
 			{
 				if (Equals(value, _active))
@@ -151,7 +146,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string TemplateName
 		{
-			get { return _templateName; }
+			get => _templateName;
 			set
 			{
 				if (Equals(value, _templateName))
@@ -165,7 +160,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string Customer
 		{
-			get { return _customer; }
+			get => _customer;
 			set
 			{
 				if (Equals(value, _customer))
@@ -179,7 +174,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string DueDate
 		{
-			get { return _dueDate; }
+			get => _dueDate;
 			set
 			{
 				if (Equals(value, _dueDate))
@@ -193,7 +188,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string TmName
 		{
-			get { return _tmName; }
+			get => _tmName;
 			set
 			{
 				if (Equals(value, _tmName)) { return; }
@@ -204,7 +199,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string TmPath
 		{
-			get { return _tmPath; }
+			get => _tmPath;
 			set
 			{
 				if (Equals(_tmPath, value)) { return; }

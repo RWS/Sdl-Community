@@ -15,19 +15,17 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 {
 	public class ReturnFilesViewModel : BaseViewModel
     {
-        private ReturnPackage _returnPackage;
-        private string _title;
+        private readonly ReturnPackage _returnPackage;
         private List<ProjectFile> _projectFiles;
         private ICommand _browseCommand;
         private string _returnPackageLocation;
         private ObservableCollection<CellViewModel> _listView = new ObservableCollection<CellViewModel>();
-		private readonly IMessageBoxService _messageBoxService;
 
-		public ReturnFilesViewModel(ReturnPackage returnPackage)
+        public ReturnFilesViewModel(ReturnPackage returnPackage)
 		{
-			_messageBoxService = new MessageBoxService();
+			IMessageBoxService messageBoxService = new MessageBoxService();
 			_returnPackage = returnPackage;
-			_title = "Please select files for the return package";
+			var title = "Please select files for the return package";
 
 			if(returnPackage?.TargetFiles != null && returnPackage.TargetFiles.Count > 0)
 			{
@@ -51,63 +49,53 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				{
 					ProjectFiles = new List<ProjectFile>();
 				}
-				Title = _title;
+				Title = title;
 			}
 			else
 			{
-				_messageBoxService.ShowWarningMessage("Please select a StarTransit project!", "Warning");
+				messageBoxService.ShowWarningMessage("Please select a StarTransit project!", "Warning");
 			}
 		}
 
         public string Title { get; set; }
 
         public ObservableCollection<CellViewModel> ProjectListCells
-        {
-            get { return _listView; }
-            set
-            {
-                if (Equals(value, _listView))
+		{
+			get => _listView;
+			set
+			{
+				_listView = value;
+				OnPropertyChanged(nameof(ProjectListCells));
+			}
+		}
+
+		public List<ProjectFile> ProjectFiles
+		{
+			get => _projectFiles;
+			set
+			{
+				_projectFiles = value;
+				OnPropertyChanged(nameof(ProjectFiles));
+			}
+		}
+
+		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true));
+
+		public string ReturnPackageLocation
+		{
+			get => _returnPackageLocation;
+			set
+			{
+				if (Equals(value, _returnPackageLocation))
 				{
 					return;
 				}
-                _listView = value;
-                OnPropertyChanged(nameof(ProjectListCells));
-            }
-        }
+				_returnPackageLocation = value;
+				OnPropertyChanged(nameof(ReturnPackageLocation));
+			}
+		}
 
-        public List<ProjectFile> ProjectFiles
-        {
-            get { return _projectFiles; }
-            set
-            {
-                if (Equals(value, _projectFiles))
-                {
-                    return;
-                }
-                _projectFiles = value;
-                OnPropertyChanged(nameof(ProjectFiles));
-            }
-        }
-
-        public ICommand BrowseCommand
-        {
-            get { return _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true)); }
-        }
-
-        public string ReturnPackageLocation
-        {
-            get { return _returnPackageLocation; }
-            set {
-                if (Equals(value, _returnPackageLocation))
-                {
-                    return;
-                }
-                _returnPackageLocation = value;
-                OnPropertyChanged(nameof(ReturnPackageLocation));
-            }
-        }
-
-        private void Browse()
+		private void Browse()
         {
             var folderDialog = new FolderSelectDialog();
             if (folderDialog.ShowDialog())
@@ -136,7 +124,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         /// <summary>
         /// Gets the path to prj file in order to add to return package archive later
-        /// Prj fille is kept in StarTransitMetadata folder
+        /// Prj file is kept in StarTransitMetadata folder
         /// </summary>
         /// <param name="pathToProject"></param>
         /// <returns></returns>

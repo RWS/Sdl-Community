@@ -15,10 +15,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
 	{
 		#region Private Fields
 		private readonly IFileTypeManager _fileTypeManager;
-		private FileBasedTranslationMemory _fileBasedTM;
+		private readonly FileBasedTranslationMemory _fileBasedTM;
 		#endregion
-
-		public static readonly Log Log = Log.Instance;
 
 		#region Constructors
 		public TransitTmImporter(LanguagePair pair,	IFileTypeManager fileTypeManager, string studioTranslationMemory)

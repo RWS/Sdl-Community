@@ -16,12 +16,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 	public class PackageService
 	{
 		private readonly List<KeyValuePair<string, string>> _dictionaryPropetries = new List<KeyValuePair<string, string>>();
-		private Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary = new Dictionary<string, List<KeyValuePair<string, string>>>();
+		private readonly Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary = new Dictionary<string, List<KeyValuePair<string, string>>>();
 
 		private static PackageModel _package = new PackageModel();
 		private const char LanguageTargetSeparator = ' ';
-
-		public static readonly Log Log = Log.Instance;
 
 		/// <summary>
 		/// Opens a ppf package and saves to files to temp folder
@@ -261,7 +259,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				var fileName = Path.GetFileName(file);
 				if (tmFile.Attribute("ExtFileType") != null || fileName.StartsWith("_AEXTR", StringComparison.InvariantCultureIgnoreCase))
 				{
-					var ffdNode = (from ffd in tmFile.Descendants("FFD") select new Guid(ffd.Attribute("GUID").Value)).FirstOrDefault();
 					result = true;
 				}
 			}

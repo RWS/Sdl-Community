@@ -64,7 +64,7 @@
 						</StackPanel>
 						<RadioButton Style="{DynamicResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"/>
                     </StackPanel>
-					<Button Style="{DynamicResource ButtonStyleShadowless}" x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}" Grid.Row="1" Grid.Column="1"
+					<Button Style="{DynamicResource ButtonStyleShadowless}" x:Name="CreateTmButton" Command="{Binding Command}" Content="Browse" Grid.Row="1" Grid.Column="1"
 							Width="auto" Height="30" Margin="100,70,5,5" Visibility="{Binding Visibility}" >						
 					</Button>
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="TM name:" Margin="20,15,22,15"/>
