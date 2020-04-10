@@ -336,7 +336,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				Active = true;
 				CanExecuteBack = CanExecuteCreate = false;
 				var packageModel = _translationMemoriesViewModel.GetPackageModel();
-				var isEmpty = IsFolderEmpty(packageModel.Location);
+				var isEmpty = IsFolderEmpty(packageModel?.Location);
 				var messageModel = new MessageModel();
 
 				CloseAction();
