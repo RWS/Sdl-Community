@@ -1,0 +1,56 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<SolidColorBrush x:Key="SdlPrimaryButton.Background" Color="#0E202B"/>
+	<SolidColorBrush x:Key="SdlPrimaryButton.Border" Color="#3e4d55"/>
+	<SolidColorBrush x:Key="SdlPrimaryButton.Foreground" Color="White"/>
+	<SolidColorBrush x:Key="SdlPrimaryButton.MouseOver.Background" Color="#3e4d55"/>
+	<SolidColorBrush x:Key="SdlPrimaryButton.MouseOver.Border" Color="#3e4d55"/>
+	<SolidColorBrush x:Key="SdlPrimaryButton.Pressed.Background" Color="#3e4d55"/>
+	<SolidColorBrush x:Key="SdlPrimaryButton.Pressed.Border" Color="#3e4d55"/>
+	<SolidColorBrush x:Key="SdlPrimaryButton.Disabled.Background" Color="#8825BD59"/>
+	<SolidColorBrush x:Key="SdlPrimaryButton.Disabled.Border" Color="#882CA754"/>
+	<SolidColorBrush x:Key="SdlPrimaryButton.Disabled.Foreground" Color="White"/>
+
+	<SolidColorBrush x:Key="SdlSecondaryButton.Background" Color="#FFE1E7EB"/>
+	<SolidColorBrush x:Key="SdlSecondaryButton.Border" Color="#CACFD3"/>
+	<SolidColorBrush x:Key="SdlSecondaryButton.Foreground" Color="#2A3B4C"/>
+	<SolidColorBrush x:Key="SdlSecondaryButton.MouseOver.Background" Color="#FFCFD4D7"/>
+	<SolidColorBrush x:Key="SdlSecondaryButton.MouseOver.Border" Color="#CACFD3"/>
+	<SolidColorBrush x:Key="SdlSecondaryButton.Pressed.Background" Color="#FFCFD4D7"/>
+	<SolidColorBrush x:Key="SdlSecondaryButton.Pressed.Border" Color="#CACFD3"/>
+	<SolidColorBrush x:Key="SdlSecondaryButton.Disabled.Background" Color="#88E1E7EB"/>
+	<SolidColorBrush x:Key="SdlSecondaryButton.Disabled.Border" Color="#88CACFD3"/>
+	<SolidColorBrush x:Key="SdlSecondaryButton.Disabled.Foreground" Color="#882A3B4C"/>
+
+	<SolidColorBrush x:Key="WindowsControl.Active.Border" Color="#298FC2" />
+	<SolidColorBrush x:Key="WindowsControl.Active.CaptionIcon" Color="#007acc" />
+	<SolidColorBrush x:Key="WindowsControl.Active.CaptionText" Color="#171717" />
+	<SolidColorBrush x:Key="WindowsControl.Control.Text" Color="#0D1E2D" />
+	<SolidColorBrush x:Key="WindowsControl.Highlight.Text" Color="#0D1E2D" />
+	<SolidColorBrush x:Key="WindowsControl.Inactive.Border" Color="#cbcdda" />
+	<SolidColorBrush x:Key="WindowsControl.Inactive.CaptionIcon" Color="#8f8f91" />
+	<SolidColorBrush x:Key="WindowsControl.Inactive.CaptionText" Color="#949496" />
+	<SolidColorBrush x:Key="WindowsControl.Command.Active" Color="#ffe8a6" />
+	<SolidColorBrush x:Key="WindowsControl.Command.Active.Border" Color="#e5c365" />
+	<SolidColorBrush x:Key="WindowsControl.Command.Active.Text" Color="#0D1E2D" />
+	<SolidColorBrush x:Key="WindowsControl.Command.Highlight.Border" Color="#e5c365" />
+	<SolidColorBrush x:Key="WindowsControl.Command.Highlight" Color="#F2F4FF" />
+	<SolidColorBrush x:Key="WindowsControl.Command.Highlight.Text" Color="#0D1E2D" />
+	<SolidColorBrush x:Key="WindowsControl.Command.Forground" Color="#5D6E7F" />
+	<SolidColorBrush x:Key="WindowsControl.Navigation.Backround" Color="#F6F6F6" />
+
+	<SolidColorBrush x:Key="WizardProgressHeader.Subway.Default" Color="#E1E7EB" />
+	<SolidColorBrush x:Key="WizardProgressHeader.Subway.Active" Color="#25BD59" />
+	<SolidColorBrush x:Key="WizardProgressHeader.Default.Forground" Color="#5D6E7F" />
+	<SolidColorBrush x:Key="WizardProgressHeader.Active.Forground" Color="#0D1E2D" />
+	<SolidColorBrush x:Key="WizardProgressHeader.Label.Forground" Color="#808080" />
+
+
+    <Style x:Uid="SdlHyperlink" x:Key="SdlHyperlinkStyle" TargetType="Hyperlink">
+        <Setter x:Uid="Setter_21" Property="FontFamily" Value="Segoe UI" />
+        <Setter x:Uid="Setter_23" Property="Foreground" Value="#0096D6" />
+        <Setter x:Uid="Setter_24" Property="TextDecorations" Value="" />
+    </Style>
+
+</ResourceDictionary>

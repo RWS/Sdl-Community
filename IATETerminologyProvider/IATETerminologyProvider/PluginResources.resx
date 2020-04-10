@@ -148,10 +148,22 @@
   <data name="Domains_header" xml:space="preserve">
     <value>Domain</value>
   </data>
+  <data name="Settings_Descr" xml:space="preserve">
+    <value>Terminology provider settings</value>
+  </data>
   <data name="Terms_header" xml:space="preserve">
     <value>Term Type</value>
   </data>
   <data name="TermType_Description" xml:space="preserve">
     <value>Select term type(s):</value>
+  </data>
+  <data name="WindowsControl_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WindowsControl_Maximize" xml:space="preserve">
+    <value>Maximize</value>
+  </data>
+  <data name="WindowsControl_Minimize" xml:space="preserve">
+    <value>Minimize</value>
   </data>
 </root>

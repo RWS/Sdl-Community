@@ -136,6 +136,15 @@ namespace IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Terminology provider settings.
+        /// </summary>
+        public static string Settings_Descr {
+            get {
+                return ResourceManager.GetString("Settings_Descr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Term Type.
         /// </summary>
         public static string Terms_header {
@@ -168,6 +177,33 @@ namespace IATETerminologyProvider {
         public static string TermType_Description {
             get {
                 return ResourceManager.GetString("TermType_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string WindowsControl_Close {
+            get {
+                return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximize.
+        /// </summary>
+        public static string WindowsControl_Maximize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Maximize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        public static string WindowsControl_Minimize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
             }
         }
     }

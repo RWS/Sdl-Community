@@ -6,9 +6,10 @@
         mc:Ignorable="d"
 		xmlns:viewModel="clr-namespace:IATETerminologyProvider.ViewModel"
 		xmlns:resx="clr-namespace:IATETerminologyProvider"
+		xmlns:uiHelpers ="clr-namespace:IATETerminologyProvider.UiHelpers"
         d:DataContext="{d:DesignInstance viewModel:SettingsViewModel}"
-		Icon="../Resources/IATE_settings.ico"
-		Title="IATE terminology provider settings"
+		Icon="../Resources/IATE_settings.ico" WindowStyle="None" AllowsTransparency="True"
+		Title="IATE Real-time Terminology"
 		ResizeMode="CanResizeWithGrip"
 		WindowStartupLocation="CenterScreen"
         Height="700" Width="800">
@@ -18,22 +19,29 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition/>
-			<ColumnDefinition/>
-		</Grid.ColumnDefinitions>
+	<Border Style="{DynamicResource WindowControlBorderStyle}">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+			<uiHelpers:WindowsControl  Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top"/>
+			<TextBlock Grid.Row="1" Grid.Column="0" Margin="10" 
+					   Style="{DynamicResource Sdl.TextBlock.TitleStyle}" Text="{x:Static resx:PluginResources.Settings_Descr}" FontSize="15" />
 
-		<TextBlock Style="{StaticResource Sdl.TextBlock.SubtitleStyle}" Grid.Row="0" Grid.Column="0" Margin="10 5 0 0" Text="{x:Static resx:PluginResources.Domains_description}"/>
-		<DataGrid Grid.Row="1" Margin="10,5,10,10" Grid.Column="0" AutoGenerateColumns="False" 
+			<TextBlock Style="{StaticResource Sdl.TextBlock.SubtitleStyle}" Grid.Row="2" Grid.Column="0" Margin="10 5 0 0" Text="{x:Static resx:PluginResources.Domains_description}"/>
+			<DataGrid Grid.Row="3" Margin="10,5,10,10" Grid.Column="0" AutoGenerateColumns="False" 
                   ItemsSource="{Binding Domains,UpdateSourceTrigger=PropertyChanged}"   
 		          Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
                   SelectionMode ="Extended"
@@ -43,20 +51,20 @@
 				  AlternationCount="2"
 				  IsReadOnly="True"
                   CanUserAddRows="False">
-			<DataGrid.Columns>			
-			<DataGridTemplateColumn MaxWidth="50" MinWidth="50">
-				<DataGridTemplateColumn.CellTemplate>
-					<DataTemplate>
-					     <CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-					</DataTemplate>
-				</DataGridTemplateColumn.CellTemplate>
-			</DataGridTemplateColumn>
-				<DataGridTextColumn Header="{x:Static resx:PluginResources.Domains_header}" Width="2*" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}"/>
-			</DataGrid.Columns>
-		</DataGrid>
+				<DataGrid.Columns>
+					<DataGridTemplateColumn MaxWidth="50" MinWidth="50">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTextColumn Header="{x:Static resx:PluginResources.Domains_header}" Width="2*" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}"/>
+				</DataGrid.Columns>
+			</DataGrid>
 
-		<TextBlock Style="{StaticResource Sdl.TextBlock.SubtitleStyle}" Grid.Row="0" Margin="10,5,0,0" Grid.Column="1" Text="{x:Static resx:PluginResources.TermType_Description}"/>
-		<DataGrid Grid.Row="1" Margin="10,5,10,10" Grid.Column="1" AutoGenerateColumns="False" 
+			<TextBlock Style="{StaticResource Sdl.TextBlock.SubtitleStyle}" Grid.Row="2" Margin="10,5,0,0" Grid.Column="1" Text="{x:Static resx:PluginResources.TermType_Description}"/>
+			<DataGrid Grid.Row="3" Margin="10,5,10,10" Grid.Column="1" AutoGenerateColumns="False" 
                   ItemsSource="{Binding TermTypes,UpdateSourceTrigger=PropertyChanged}"
 		          Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
                   SelectionMode ="Extended"
@@ -65,7 +73,7 @@
 				  IsReadOnly="True"
                   CanUserAddRows="False" 
 				  GridLinesVisibility="None">
-			<DataGrid.Columns>
+				<DataGrid.Columns>
 					<DataGridTemplateColumn  MaxWidth="50" MinWidth="50">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
@@ -73,17 +81,19 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-				<DataGridTextColumn Header="{x:Static resx:PluginResources.Terms_header}" Width="2*" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}">
+					<DataGridTextColumn Header="{x:Static resx:PluginResources.Terms_header}" Width="2*" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}">
 					</DataGridTextColumn>
 				</DataGrid.Columns>
-		</DataGrid>
+			</DataGrid>
 
-		<Button Grid.Row="2" Grid.Column="1" Style="{DynamicResource Sdl.Button.PrimaryStyle}" 
+			<Button Grid.Row="4" Grid.Column="1" Style="{DynamicResource Sdl.Button.PrimaryStyle}" 
                 Cursor="Hand"
 				Margin="10"
 	            Command="{Binding SaveSettingsCommand}" 
                 HorizontalAlignment="Right"
 	            Content="OK" >
-		</Button>			
-	</Grid>
+			</Button>
+		</Grid>
+	</Border>
+	
 </Window>
