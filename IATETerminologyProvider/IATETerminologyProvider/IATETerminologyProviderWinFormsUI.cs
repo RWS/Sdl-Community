@@ -65,7 +65,10 @@ namespace IATETerminologyProvider
 			}
 			
 			_settingsViewModel = new SettingsViewModel(providerSettings);
-			_settingsWindow = new SettingsWindow(_settingsViewModel);
+			_settingsWindow = new SettingsWindow
+			{
+				DataContext = _settingsViewModel
+			};
 
 			if (_settingsViewModel != null)
 			{				

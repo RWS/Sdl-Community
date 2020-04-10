@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+		xmlns:viewModel="clr-namespace:IATETerminologyProvider.ViewModel"
+        d:DataContext="{d:DesignInstance viewModel:SettingsViewModel}"
 		Icon="../Resources/IATE_settings.ico"
 		Title="IATE terminology provider settings"
 		WindowStartupLocation="CenterScreen"
@@ -49,8 +51,7 @@
 					</DataTemplate>
 				</DataGridTemplateColumn.CellTemplate>
 			</DataGridTemplateColumn>
-				<DataGridTextColumn Header="Domain" IsReadOnly="True" Width="2*" Binding="{Binding Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-				</DataGridTextColumn>
+				<DataGridTextColumn Header="Domain" IsReadOnly="True" Width="2*" Binding="{Binding Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 			</DataGrid.Columns>
 		</DataGrid>
 
@@ -69,7 +70,7 @@
                   CanUserAddRows="False" 
 				  BorderBrush="LightGray" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGray" Background="White">
 			<DataGrid.RowStyle>
-				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}"></Style>
+				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}"/>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
 					<DataGridTemplateColumn  MaxWidth="50" MinWidth="50">

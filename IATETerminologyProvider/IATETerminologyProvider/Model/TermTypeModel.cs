@@ -2,11 +2,7 @@
 {
 	public class TermTypeModel : ViewModelBase
     {
-		#region Private Fields
 		private bool _isSelected;
-		#endregion
-
-		#region Public Properties
 		public int Code { get; set; }
 		public string Name { get; set; }
 		public bool IsSelected
@@ -15,9 +11,8 @@
 			set
 			{
 				_isSelected = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsSelected));
 			}
 		}
-		#endregion
 	}
 }

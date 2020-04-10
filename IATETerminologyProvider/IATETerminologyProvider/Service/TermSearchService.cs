@@ -19,16 +19,21 @@ namespace IATETerminologyProvider.Service
 		public static readonly Log Log = Log.Instance;
 		private readonly ProviderSettings _providerSettings;
 		private readonly ObservableCollection<ItemsResponseModel> _domains;
+		private readonly TermTypeService _termTypeService;
 		private readonly List<string> _subdomains = new List<string>();
-		private readonly ObservableCollection<TermTypeModel> _termTypes;
 		private readonly AccessTokenService _accessTokenService;
+		public NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>> IateTermTypes { get; set; }
+		public ObservableCollection<TermTypeModel> TermTypes { get; set; }
 		private int _termIndexId;
 
 		public TermSearchService(ProviderSettings providerSettings)
 		{
 			_accessTokenService = new AccessTokenService();
-			_domains = DomainService.GetDomains();
-			_termTypes = TermTypeService.GetTermTypes();
+			TermTypes = new ObservableCollection<TermTypeModel>();
+			_domains = DomainService.Domains;
+			_termTypeService = new TermTypeService();
+
+			LoadTermTypes();
 			_providerSettings = providerSettings;
 		}
 
@@ -50,7 +55,10 @@ namespace IATETerminologyProvider.Service
 			};
 			Utils.AddDefaultParameters(httpClient);
 
-			var httpRequest = new HttpRequestMessage { Method = HttpMethod.Post };
+			var httpRequest = new HttpRequestMessage
+			{
+				Method = HttpMethod.Post
+			};
 
 			if (!string.IsNullOrEmpty(_accessTokenService.AccessToken))
 			{
@@ -71,8 +79,8 @@ namespace IATETerminologyProvider.Service
 		private void SetAccessToken()
 		{
 			if (_accessTokenService.RefreshTokenExpired
-				|| _accessTokenService.RequestedAccessToken == DateTime.MinValue
-				|| string.IsNullOrEmpty(_accessTokenService.AccessToken))
+			    || _accessTokenService.RequestedAccessToken == DateTime.MinValue
+			    || string.IsNullOrEmpty(_accessTokenService.AccessToken))
 			{
 				var success = _accessTokenService.GetAccessToken("SDL_PLUGIN", "E9KWtWahXs4hvE9z");
 				if (!success)
@@ -130,7 +138,7 @@ namespace IATETerminologyProvider.Service
 			if (!string.IsNullOrEmpty(response))
 			{
 				var jObject = JObject.Parse(response);
-				var itemTokens = (JArray)jObject.SelectToken("items");
+				var itemTokens = (JArray) jObject.SelectToken("items");
 				if (itemTokens != null)
 				{
 					foreach (var item in itemTokens)
@@ -151,7 +159,7 @@ namespace IATETerminologyProvider.Service
 							// foreach language token get the terms
 							foreach (var jToken in languageTokens)
 							{
-								var languageToken = (JProperty)jToken;
+								var languageToken = (JProperty) jToken;
 
 								// Multilingual and Latin translations are automatically returned by IATE API response->"la" code
 								// Ignore the "mul" and "la" translations
@@ -306,7 +314,7 @@ namespace IATETerminologyProvider.Service
 			foreach (var subdomain in _subdomains.ToList())
 			{
 				subdomainNo++;
-				result += $"{ subdomainNo}.{subdomain}  ";
+				result += $"{subdomainNo}.{subdomain}  ";
 			}
 			return result.TrimEnd(' ');
 		}
@@ -315,7 +323,41 @@ namespace IATETerminologyProvider.Service
 		private string GetTermTypeByCode(string termTypeCode)
 		{
 			var typeCode = int.TryParse(termTypeCode, out _) ? int.Parse(termTypeCode) : 0;
-			return _termTypes?.Count > 0 ? _termTypes?.FirstOrDefault(t => t.Code == typeCode)?.Name : string.Empty;
+			return TermTypes?.Count > 0 ? TermTypes?.FirstOrDefault(t => t.Code == typeCode)?.Name : string.Empty;
+		}
+
+		private void LoadTermTypes()
+		{
+			if (TermTypeService.IateTermType?.Count > 0)
+			{
+				SetTermTypes(TermTypeService.IateTermType);
+			}
+			else
+			{
+				IateTermTypes = new NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>>(_termTypeService.GetTermTypes());
+				IateTermTypes.PropertyChanged += IateTermTypes_PropertyChanged;
+			}
+		}
+		private void SetTermTypes(ObservableCollection<ItemsResponseModel> termTypesResponse)
+		{
+			foreach (var item in termTypesResponse)
+			{
+				var selectedTermTypeName = Utils.UppercaseFirstLetter(item.Name.ToLower());
+
+				var termType = new TermTypeModel
+				{
+					Code = int.TryParse(item.Code, out _) ? int.Parse(item.Code) : 0,
+					Name = selectedTermTypeName
+				};
+				TermTypes.Add(termType);
+			}
+		}
+
+		private void IateTermTypes_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (!e.PropertyName.Equals("Result")) return;
+			if (!(IateTermTypes.Result?.Count > 0)) return;
+			SetTermTypes(IateTermTypes.Result);
 		}
 	}
 }

@@ -1,26 +1,21 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Net.Http;
+using System.Threading.Tasks;
 using IATETerminologyProvider.Helpers;
-using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
 
 namespace IATETerminologyProvider.Service
 {
-	public static class TermTypeService
+	public class TermTypeService
 	{
 		public static readonly Log Log = Log.Instance;
+		public static ObservableCollection<ItemsResponseModel> IateTermType { get; set; }
 
-		/// <summary>
-		/// Get term types from IATE database.
-		/// </summary>
-		/// <returns>termTypes</returns>
-		public static ObservableCollection<TermTypeModel> GetTermTypes()
+		public async Task<ObservableCollection<ItemsResponseModel>> GetTermTypes()
 		{
-			var termTypes = new ObservableCollection<TermTypeModel>();
-			// the parameters set below to get term types are the same used in IATE environment.
-			//var client = new RestClient(ApiUrls.GetTermTypeUri("true", "en", "100", "0"));
+			var itateTermTypes = new ObservableCollection<ItemsResponseModel>();
 			var httpClient = new HttpClient
 			{
 				BaseAddress = new Uri(ApiUrls.GetTermTypeUri("true", "en", "100", "0"))
@@ -34,30 +29,23 @@ namespace IATETerminologyProvider.Service
 
 			try
 			{
-				var httpResponseAsString = httpClient.SendAsync(httpRequest).Result.Content.ReadAsStringAsync().Result;
+				var httpResponse = await httpClient.SendAsync(httpRequest);
+				var httpResponseAsString = await httpResponse.Content.ReadAsStringAsync();
+
 				var jsonTermTypesModel = JsonConvert.DeserializeObject<TermTypeResponseModel>(httpResponseAsString);
-			
+
 				if (jsonTermTypesModel?.Items != null)
 				{
-					foreach (var item in jsonTermTypesModel.Items)
-					{
-						var selectedTermTypeName = Utils.UppercaseFirstLetter(item.Name.ToLower());
+					IateTermType = new ObservableCollection<ItemsResponseModel>(jsonTermTypesModel.Items);
 
-						var termType = new TermTypeModel
-						{
-							Code = int.TryParse(item.Code, out _) ? int.Parse(item.Code) : 0,
-							Name = selectedTermTypeName
-						};
-						termTypes.Add(termType);
-					}
+					return IateTermType;
 				}
-				return termTypes;
 			}
 			catch (Exception e)
 			{
 				Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
 			}
-			return termTypes;
+			return itateTermTypes;
 		}
 	}
 }

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using IATETerminologyProvider.Commands;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
+using IATETerminologyProvider.Model.ResponseModels;
 using IATETerminologyProvider.Service;
 
 namespace IATETerminologyProvider.ViewModel
@@ -14,6 +16,8 @@ namespace IATETerminologyProvider.ViewModel
 		private ICommand _saveSettingsCommand;
 		private DomainModel _selectedDomain;		
 		private TermTypeModel _selectedTermType;
+		private readonly DomainService _domainService;
+		private readonly TermTypeService _termTypeService;
 		private ObservableCollection<DomainModel> _domains;
 		private ObservableCollection<TermTypeModel> _termTypes;
 		public delegate ProviderSettings SaveSettingsEventRaiser();
@@ -23,6 +27,8 @@ namespace IATETerminologyProvider.ViewModel
 		{			
 			_domains = new ObservableCollection<DomainModel>();
 			_termTypes = new ObservableCollection<TermTypeModel>();
+			_termTypeService = new TermTypeService();
+			_domainService = new DomainService();
 			LoadDomains();
 			LoadTermTypes();
 			SetFieldsSelection(providerSettings);
@@ -67,7 +73,9 @@ namespace IATETerminologyProvider.ViewModel
 				OnPropertyChanged(nameof(Domains));
 			}
 		}
-		
+		public NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>> IateDomains { get; set; }
+		public NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>> IateTermTypes { get; set; }
+
 		public ProviderSettings ProviderSettings { get; set; }
 
 		public ICommand SaveSettingsCommand => _saveSettingsCommand ?? (_saveSettingsCommand = new CommandHandler(SaveSettingsAction, true));
@@ -75,8 +83,9 @@ namespace IATETerminologyProvider.ViewModel
 
 		private void SaveSettingsAction()
 		{
-			if (Domains?.Count > 0)
+			if (Domains.Count > 0)
 			{
+				//TODO: Move initialization in constuctor
 				ProviderSettings = new ProviderSettings
 				{
 					Domains = new List<string>(),
@@ -92,9 +101,12 @@ namespace IATETerminologyProvider.ViewModel
 
 				// Add selected term types to provider settings
 				var selectedTermTypes = TermTypes?.Where(d => d.IsSelected).ToList();
-				foreach (var selectedTermType in selectedTermTypes)
+				if (selectedTermTypes != null)
 				{
-					ProviderSettings.TermTypes.Add(selectedTermType.Code);
+					foreach (var selectedTermType in selectedTermTypes)
+					{
+						ProviderSettings.TermTypes.Add(selectedTermType.Code);
+					}
 				}
 
 				var persistenceService = new PersistenceService();
@@ -106,53 +118,98 @@ namespace IATETerminologyProvider.ViewModel
 
 		private void LoadDomains()
 		{
-			var domains = DomainService.GetDomains();
-			if (domains?.Count>0)
+			if (DomainService.Domains?.Count > 0)
 			{
-				foreach (var domain in domains)
+				SetDomains(DomainService.Domains);
+			}
+			else
+			{
+				IateDomains = new NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>>(_domainService.GetDomains());
+				IateDomains.PropertyChanged += IateDomains_PropertyChanged;
+			}
+		}
+		private void LoadTermTypes()
+		{
+			if (TermTypeService.IateTermType?.Count > 0)
+			{
+				SetTermTypes(TermTypeService.IateTermType);
+			}
+			else
+			{
+				IateTermTypes = new NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>>(_termTypeService.GetTermTypes());
+				IateTermTypes.PropertyChanged += IateTermTypes_PropertyChanged;
+			}
+		}
+
+		private void IateTermTypes_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (!e.PropertyName.Equals("Result")) return;
+			if (!(IateTermTypes.Result?.Count > 0)) return;
+			SetTermTypes(IateTermTypes.Result);
+		}
+
+		private void IateDomains_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (!e.PropertyName.Equals("Result")) return;
+			if (!(IateDomains.Result?.Count > 0)) return;
+			SetDomains(IateDomains.Result);
+		}
+
+		private void SetDomains(ObservableCollection<ItemsResponseModel>iateDomains)
+		{
+			foreach (var domain in iateDomains)
+			{
+				if (!domain.Name.Equals(Constants.NotSpecifiedCode))
 				{
-					if (!domain.Name.Equals(Constants.NotSpecifiedCode))
+					var selectedDomainName = Utils.UppercaseFirstLetter(domain.Name.ToLower());
+					var domainModel = new DomainModel
 					{
-						var selectedDomainName = Utils.UppercaseFirstLetter(domain.Name.ToLower());
-						var domainModel = new DomainModel
-						{
-							Code = domain.Code,
-							Name = selectedDomainName
-						};
-						Domains.Add(domainModel);
-					}
+						Code = domain.Code,
+						Name = selectedDomainName
+					};
+					Domains.Add(domainModel);
 				}
 			}
 		}
 
-		private void LoadTermTypes()
+		private void SetTermTypes(ObservableCollection<ItemsResponseModel> termTypesResponse)
 		{
-			TermTypes = TermTypeService.GetTermTypes();
+			foreach (var item in termTypesResponse)
+			{
+				var selectedTermTypeName = Utils.UppercaseFirstLetter(item.Name.ToLower());
+
+				var termType = new TermTypeModel
+				{
+					Code = int.TryParse(item.Code, out _) ? int.Parse(item.Code) : 0,
+					Name = selectedTermTypeName
+				};
+				TermTypes.Add(termType);
+			}
 		}
 
 		// Set UI Settings fields selection based on the provider settings file (for domains and term types).
 		private void SetFieldsSelection(ProviderSettings providerSettings)
 		{
-			if (providerSettings != null)
-			{
-				foreach (var domainCode in providerSettings.Domains)
-				{
-					var domain = Domains?.FirstOrDefault(d => d.Code.Equals(domainCode));
-					if (domain != null)
-					{
-						domain.IsSelected = true;
-					}
-				}
+			if (providerSettings is null) return;
 
-				foreach (var termTypeCode in providerSettings.TermTypes)
+			foreach (var domainCode in providerSettings.Domains)
+			{
+				var domain = Domains?.FirstOrDefault(d => d.Code.Equals(domainCode));
+				if (domain != null)
 				{
-					var termType = TermTypes?.FirstOrDefault(t => t.Code.Equals(termTypeCode));
-					if (termType != null)
-					{
-						termType.IsSelected = true;
-					}
+					domain.IsSelected = true;
 				}
 			}
+
+			foreach (var termTypeCode in providerSettings.TermTypes)
+			{
+				var termType = TermTypes?.FirstOrDefault(t => t.Code.Equals(termTypeCode));
+				if (termType != null)
+				{
+					termType.IsSelected = true;
+				}
+			}
+
 		}
 	}
 }

@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Net.Http;
+using System.Threading.Tasks;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
 
 namespace IATETerminologyProvider.Service
 {
-	public static class DomainService
+	public class DomainService
 	{
 		public static readonly Log Log = Log.Instance;
+		public static ObservableCollection<ItemsResponseModel> Domains { get; set; }
 
 		/// <summary>
 		/// Get domains from IATE database.
 		/// </summary>
 		/// <returns>domains</returns>
-		public static ObservableCollection<ItemsResponseModel> GetDomains()
+		public async Task<ObservableCollection<ItemsResponseModel>> GetDomains()
 		{
 			var domains = new ObservableCollection<ItemsResponseModel>();
 			var httpClient = new HttpClient { BaseAddress = new Uri(ApiUrls.GetDomainUri()) };
@@ -28,8 +30,8 @@ namespace IATETerminologyProvider.Service
 
 			try
 			{
-				var httpResponse = httpClient.SendAsync(httpRequest);
-				var httpResponseAsString = httpResponse?.Result?.Content?.ReadAsStringAsync().Result;
+				var httpResponse = await httpClient.SendAsync(httpRequest);
+				var httpResponseAsString = await httpResponse.Content.ReadAsStringAsync();
 								
 				var jsonDomainsModel = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseAsString);
 				if (jsonDomainsModel?.Items != null)
@@ -45,6 +47,7 @@ namespace IATETerminologyProvider.Service
 						domains.Add(domain);
 					}
 				}
+				Domains = domains;
 				return domains;
 			}
 			catch (Exception e)
