@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<ProjectTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Guid="10004f3b-4acf-4425-a3e3-38d3b3514276" SettingsBundleGuid="75a81915-1b1f-4a40-8c24-b8728d9e6357" Version="4.0.0.0">
+  <LanguageDirections>
+    <LanguageDirection Guid="76625702-c017-4bb9-b256-2b5cb629db47" SettingsBundleGuid="a0513eb7-46ce-41e6-b7de-eb0f6d870392" TargetLanguageCode="nl-NL" SourceLanguageCode="de-de">
+      <AutoSuggestDictionaries />
+      <CascadeItem OverrideParent="false" StopSearchingWhenResultsFound="false" />
+    </LanguageDirection>
+    <LanguageDirection Guid="309baae7-4b3c-4d0f-a228-41d922d47a49" SettingsBundleGuid="fb8d450c-ba3c-422d-b994-dbd2e3f5e6ff" TargetLanguageCode="en-US" SourceLanguageCode="ja-JP">
+      <AutoSuggestDictionaries />
+      <CascadeItem OverrideParent="false" StopSearchingWhenResultsFound="false" />
+    </LanguageDirection>
+    <LanguageDirection Guid="33163900-30c7-46ed-9d16-353004f15024" SettingsBundleGuid="48aa23b9-d184-40d9-a45f-6c4317ff8a7e" TargetLanguageCode="de-DE" SourceLanguageCode="en-US">
+      <AutoSuggestDictionaries />
+      <CascadeItem OverrideParent="false" StopSearchingWhenResultsFound="false" />
+    </LanguageDirection>
+  </LanguageDirections>
+  <SettingsBundles>
+    <SettingsBundle Guid="75a81915-1b1f-4a40-8c24-b8728d9e6357">
+      <SettingsBundle>
+        <SettingsGroup Id="TerminologyProviderSettings">
+          <Setting Id="TermbasesOrder">
+            <ArrayOfstring xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            </ArrayOfstring>
+          </Setting>
+        </SettingsGroup>
+      </SettingsBundle>
+    </SettingsBundle>
+  </SettingsBundles>
+  <InitialTaskTemplate Description="ComplexTask_Prepare_NoProjectTM_Description" Name="ComplexTask_Prepare_NoProjectTM_Name" Id="Sdl.ProjectApi.AutomaticTask.Prepare.NoProjectTM">
+    <SubTaskTemplates>
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Conversion" />
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Split" />
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.PerfectMatch" />
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Translate" />
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Analysis" />
+    </SubTaskTemplates>
+  </InitialTaskTemplate>
+  <AnalysisBands>
+    <AnalysisBand MinimumMatchValue="50" />
+    <AnalysisBand MinimumMatchValue="75" />
+    <AnalysisBand MinimumMatchValue="85" />
+    <AnalysisBand MinimumMatchValue="95" />
+  </AnalysisBands>
+  <ManualTaskTemplates />
+  <Users>
+    <User UserId="SDL" FullName="SDL" EmailType="None" />
+  </Users>
+  <CascadeItem OverrideParent="true" StopSearchingWhenResultsFound="false" />
+  <GeneralProjectTemplateInfo Description="assembly://SDLTradosStudio/Sdl.TranslationStudio.Application.StringResources/ProjectTemplate_Default_Desc" CreatedAt="2009-01-14T22:32:57.271375Z" CreatedBy="SDL" />
+</ProjectTemplate>

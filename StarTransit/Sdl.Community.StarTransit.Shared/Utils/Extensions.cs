@@ -2,6 +2,7 @@
 using System.Reflection;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.ProjectAutomation.FileBased;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.Shared.Utils
 {
@@ -45,6 +46,11 @@ namespace Sdl.Community.StarTransit.Shared.Utils
 			{
 				Log.Logger.Error($"SetCustomer method: {ex.Message}\n {ex.StackTrace}");
 			}
+		}
+
+		public static ProjectsController GetProjectsController()
+		{
+			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
 	}
 }

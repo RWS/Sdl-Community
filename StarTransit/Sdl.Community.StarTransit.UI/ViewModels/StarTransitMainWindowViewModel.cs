@@ -7,6 +7,7 @@ using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Interfaces;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
@@ -54,7 +55,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			_isFinishSelected = false;
 			_finishViewModel = finishViewModel;
 			Color = "#FFB69476";
-			_projectService = new ProjectService();
+			_projectService = new ProjectService(DefaultFileTypeManager.CreateInstance(true));
 		}
 		#endregion
 
