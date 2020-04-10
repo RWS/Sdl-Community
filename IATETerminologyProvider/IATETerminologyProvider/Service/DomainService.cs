@@ -51,7 +51,7 @@ namespace IATETerminologyProvider.Service
 			{
 				Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
 			}
-			return null;
+			return domains;
 		}
 	}
 }

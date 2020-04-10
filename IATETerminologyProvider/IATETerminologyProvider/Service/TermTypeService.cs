@@ -39,14 +39,13 @@ namespace IATETerminologyProvider.Service
 			
 				if (jsonTermTypesModel?.Items != null)
 				{
-					int result;
 					foreach (var item in jsonTermTypesModel.Items)
 					{
 						var selectedTermTypeName = Utils.UppercaseFirstLetter(item.Name.ToLower());
 
 						var termType = new TermTypeModel
 						{
-							Code = int.TryParse(item.Code, out result) ? int.Parse(item.Code) : 0,
+							Code = int.TryParse(item.Code, out _) ? int.Parse(item.Code) : 0,
 							Name = selectedTermTypeName
 						};
 						termTypes.Add(termType);
@@ -58,7 +57,7 @@ namespace IATETerminologyProvider.Service
 			{
 				Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
 			}
-			return null;
+			return termTypes;
 		}
 	}
 }
