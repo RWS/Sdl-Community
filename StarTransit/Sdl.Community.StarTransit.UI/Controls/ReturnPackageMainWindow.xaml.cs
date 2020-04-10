@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
