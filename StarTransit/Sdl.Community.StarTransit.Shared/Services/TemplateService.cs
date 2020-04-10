@@ -2,28 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sdl.Community.StarTransit.Shared.Utils;
-using Sdl.Desktop.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
-	public class TemplateService : AbstractViewControllerAction<ProjectsController>
+	public class TemplateService
 	{
+		private ProjectsController _projectsController;
+
 		public static readonly Log Log = Log.Instance;
 
-		protected override void Execute()
+		public TemplateService()
 		{
-
+			_projectsController = Extensions.GetProjectsController();
 		}
 
 		public List<ProjectTemplateInfo> LoadProjectTemplates()
 		{
 			try
 			{
-				var controller = Controller;
-				var templateList = controller.GetProjectTemplates().OrderBy(t => t.Name).ToList();
-
+				var templateList = _projectsController?.GetProjectTemplates().OrderBy(t => t.Name).ToList();
 				return templateList;
 			}
 			catch (Exception ex)

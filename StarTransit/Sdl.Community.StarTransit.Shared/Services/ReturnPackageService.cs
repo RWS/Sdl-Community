@@ -7,18 +7,20 @@ using System.Linq;
 using System.Text;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
-using Sdl.Desktop.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
-	public class ReturnPackageService : AbstractViewControllerAction<ProjectsController>
+	public class ReturnPackageService
 	{
+		private ProjectsController _projectsController;
+
 		public static readonly Log Log = Log.Instance;
 
 		public ReturnPackageService()
 		{
+			_projectsController = Extensions.GetProjectsController();
 		}
 
 		/// <summary>
@@ -29,9 +31,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		{
 			try
 			{
-				var projects = Controller.SelectedProjects.ToList();
+				var projects = _projectsController?.SelectedProjects.ToList();
 				var message = string.Empty;
-				if (projects.Count > 1)
+				if (projects?.Count > 1)
 				{
 					message = @"Please select only one project.";
 					return new Tuple<ReturnPackage, string>(null, message);
@@ -95,11 +97,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				}
 			}
 			return true;
-		}
-
-		protected override void Execute()
-		{
-
 		}
 
 		public void ExportFiles(ReturnPackage package)
