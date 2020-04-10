@@ -3,7 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.ViewModels;
 
 namespace Sdl.Community.StarTransit.UI.Controls
@@ -19,7 +21,8 @@ namespace Sdl.Community.StarTransit.UI.Controls
         {
             InitializeComponent();
 
-            var returnFilesViewModel = new ReturnFilesViewModel(returnPackage);
+            IMessageBoxService messageBoxService = new MessageBoxService();
+            var returnFilesViewModel = new ReturnFilesViewModel(returnPackage, messageBoxService);
 			if(returnFilesViewModel?.ProjectFiles == null)
 			{
 				Close();

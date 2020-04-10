@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
-using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.ProjectAutomation.Core;
@@ -21,9 +20,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private string _returnPackageLocation;
         private ObservableCollection<CellViewModel> _listView = new ObservableCollection<CellViewModel>();
 
-        public ReturnFilesViewModel(ReturnPackage returnPackage)
+		public ReturnFilesViewModel(ReturnPackage returnPackage, IMessageBoxService messageBoxService)
 		{
-			IMessageBoxService messageBoxService = new MessageBoxService();
 			_returnPackage = returnPackage;
 			var title = "Please select files for the return package";
 
