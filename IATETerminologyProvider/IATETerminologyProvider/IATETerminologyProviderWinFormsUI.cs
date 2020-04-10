@@ -59,7 +59,7 @@ namespace IATETerminologyProvider
 		{
 			var result = new List<ITerminologyProvider>();
 
-			if (_settingsViewModel != null)
+			if (_settingsViewModel != null) // TODO: Investigate if we actually need this event
 			{
 				_settingsViewModel.OnSaveSettingsCommandRaised -= GetProviderSettings;
 			}

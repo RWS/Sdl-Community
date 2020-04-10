@@ -86,8 +86,11 @@
 				</DataGrid.Columns>
 			</DataGrid>
 
+			<Button Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Margin="10" Cursor="Hand" Command="{Binding ResetToDefault}"
+					Style="{DynamicResource Sdl.Button.SecondaryStyle}" MaxWidth="150" Content="Reset to default"/>
 			<DockPanel Grid.Row="4" Grid.Column="1">
 				<Button  Style="{DynamicResource Sdl.Button.SecondaryStyle}" DockPanel.Dock="Right"
+						 ToolTip="{x:Static resx:PluginResources.Reset_Tooltip}"
 				         IsCancel="True"
 				         Cursor="Hand"
 				         Margin="10"
@@ -102,8 +105,6 @@
 				        Content="OK">
 				</Button>
 			</DockPanel>
-
 		</Grid>
 	</Border>
-	
 </Window>

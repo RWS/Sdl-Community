@@ -166,4 +166,7 @@
   <data name="WindowsControl_Minimize" xml:space="preserve">
     <value>Minimize</value>
   </data>
+  <data name="Reset_Tooltip" xml:space="preserve">
+    <value>Reset all settings to default</value>
+  </data>
 </root>

@@ -31,6 +31,7 @@ namespace IATETerminologyProvider.Service
 			{
 				var httpResponse = await httpClient.SendAsync(httpRequest);
 				var httpResponseAsString = await httpResponse.Content.ReadAsStringAsync();
+				//TODO: Check the status code, if is not 200 log it 
 
 				var jsonTermTypesModel = JsonConvert.DeserializeObject<TermTypeResponseModel>(httpResponseAsString);
 

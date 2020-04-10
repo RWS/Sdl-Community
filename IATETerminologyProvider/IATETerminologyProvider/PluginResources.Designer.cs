@@ -136,6 +136,15 @@ namespace IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset all settings to default.
+        /// </summary>
+        public static string Reset_Tooltip {
+            get {
+                return ResourceManager.GetString("Reset_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terminology provider settings.
         /// </summary>
         public static string Settings_Descr {

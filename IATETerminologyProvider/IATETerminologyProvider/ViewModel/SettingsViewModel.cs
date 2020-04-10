@@ -14,6 +14,7 @@ namespace IATETerminologyProvider.ViewModel
 	public class SettingsViewModel : ViewModelBase
 	{
 		private ICommand _saveSettingsCommand;
+		private ICommand _resetToDefault;
 		private DomainModel _selectedDomain;		
 		private TermTypeModel _selectedTermType;
 		private readonly DomainService _domainService;
@@ -91,7 +92,29 @@ namespace IATETerminologyProvider.ViewModel
 		public ProviderSettings ProviderSettings { get; set; }
 
 		public ICommand SaveSettingsCommand => _saveSettingsCommand ?? (_saveSettingsCommand = new CommandHandler(SaveSettingsAction, true));
+		public ICommand ResetToDefault => _resetToDefault ?? (_resetToDefault = new CommandHandler(Reset, true));
 
+		private void Reset()
+		{
+			ResetDomains();
+			ResetTypes();
+		}
+
+		private void ResetTypes()
+		{
+			foreach (var type in TermTypes)
+			{
+				type.IsSelected = false;
+			}
+		}
+
+		private void ResetDomains()
+		{
+			foreach (var domain in Domains)
+			{
+				domain.IsSelected = false;
+			}
+		}
 
 		private void SaveSettingsAction()
 		{
