@@ -86,13 +86,23 @@
 				</DataGrid.Columns>
 			</DataGrid>
 
-			<Button Grid.Row="4" Grid.Column="1" Style="{DynamicResource Sdl.Button.PrimaryStyle}" 
-                Cursor="Hand"
-				Margin="10"
-	            Command="{Binding SaveSettingsCommand}" 
-                HorizontalAlignment="Right"
-	            Content="OK" >
-			</Button>
+			<DockPanel Grid.Row="4" Grid.Column="1">
+				<Button  Style="{DynamicResource Sdl.Button.SecondaryStyle}" DockPanel.Dock="Right"
+				         IsCancel="True"
+				         Cursor="Hand"
+				         Margin="10"
+				         HorizontalAlignment="Right"
+				         Content="Cancel">
+				</Button>
+				<Button  Style="{DynamicResource Sdl.Button.PrimaryStyle}" 
+				        Cursor="Hand"
+				        Margin="10" DockPanel.Dock="Right"
+				        Command="{Binding SaveSettingsCommand}" 
+				        HorizontalAlignment="Right"
+				        Content="OK">
+				</Button>
+			</DockPanel>
+
 		</Grid>
 	</Border>
 	

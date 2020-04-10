@@ -76,10 +76,10 @@ namespace IATETerminologyProvider
 			}
 			
 			_settingsWindow.ShowDialog();
-
+			if (!_settingsViewModel.DialogResult) return null;
 			providerSettings = _settingsViewModel.ProviderSettings;
 
-			if (provider == null)
+			if (provider is null)
 			{
 				provider = new IATETerminologyProvider(providerSettings);
 			}

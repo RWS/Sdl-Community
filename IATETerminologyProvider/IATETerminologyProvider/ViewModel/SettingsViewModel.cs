@@ -22,6 +22,7 @@ namespace IATETerminologyProvider.ViewModel
 		private ObservableCollection<TermTypeModel> _termTypes;
 		public delegate ProviderSettings SaveSettingsEventRaiser();
 		public event SaveSettingsEventRaiser OnSaveSettingsCommandRaised;
+		private bool _dialogResult;
 
 		public SettingsViewModel(ProviderSettings providerSettings)
 		{			
@@ -61,6 +62,17 @@ namespace IATETerminologyProvider.ViewModel
 			{
 				_selectedTermType = value;
 				OnPropertyChanged(nameof(SelectedTermType));
+			}
+		}
+
+		public bool DialogResult
+		{
+			get => _dialogResult;
+			set
+			{
+				if (_dialogResult == value) return;
+				_dialogResult = value;
+				OnPropertyChanged(nameof(DialogResult));
 			}
 		}
 
@@ -114,6 +126,7 @@ namespace IATETerminologyProvider.ViewModel
 
 				OnSaveSettingsCommandRaised?.Invoke();
 			}
+			DialogResult = true;
 		}
 
 		private void LoadDomains()
