@@ -49,6 +49,34 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return newProject;
 		}
 
+		public virtual MessageModel UpdateProjectSettings(IProject project, List<ProjectFile> targetProjectFiles)
+		{
+			var fileBasedProject = ((FileBasedProject)project);
+			UpdateTmSettings(project);
+			fileBasedProject.UpdateTranslationProviderConfiguration(_tmConfig);
+
+			project.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+			var taskSequence = fileBasedProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new[]
+			{
+					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
+					AutomaticTaskTemplateIds.CopyToTargetLanguages,
+					AutomaticTaskTemplateIds.PerfectMatch,
+					AutomaticTaskTemplateIds.PreTranslateFiles,
+					AutomaticTaskTemplateIds.AnalyzeFiles,
+					AutomaticTaskTemplateIds.UpdateMainTranslationMemories
+			});
+
+			if (taskSequence.Status.Equals(TaskStatus.Failed))
+			{
+				_messageModel.IsProjectCreated = false;
+				_messageModel.Message = "Project could not be created.Error occured while running automatic tasks!";
+				_messageModel.Title = "Informative message";
+				return _messageModel;
+			}
+			fileBasedProject.Save();
+			return _messageModel;
+		}
+
 		public MessageModel CreateProject(PackageModel package)
 		{
 			_messageModel = new MessageModel();
@@ -161,35 +189,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			return _messageModel;
 		}
-
-		public virtual MessageModel UpdateProjectSettings(IProject project, List<ProjectFile> targetProjectFiles)
-		{
-			var fileBasedProject = ((FileBasedProject)project);
-			UpdateTmSettings(project);
-			fileBasedProject.UpdateTranslationProviderConfiguration(_tmConfig);
-
-			project.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
-			var taskSequence = fileBasedProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new[]
-			{
-					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
-					AutomaticTaskTemplateIds.CopyToTargetLanguages,
-					AutomaticTaskTemplateIds.PerfectMatch,
-					AutomaticTaskTemplateIds.PreTranslateFiles,
-					AutomaticTaskTemplateIds.AnalyzeFiles,
-					AutomaticTaskTemplateIds.UpdateMainTranslationMemories
-			});
-
-			if (taskSequence.Status.Equals(TaskStatus.Failed))
-			{
-				_messageModel.IsProjectCreated = false;
-				_messageModel.Message = "Project could not be created.Error occured while running automatic tasks!";
-				_messageModel.Title = "Informative message";
-				return _messageModel;
-			}
-			fileBasedProject.Save();
-			return _messageModel;
-		}
-
+		
 		private void ImportLanguagePairTM(LanguagePair pair, IProject project)
 		{
 			if (pair.HasTm && !string.IsNullOrEmpty(pair.TmPath))
