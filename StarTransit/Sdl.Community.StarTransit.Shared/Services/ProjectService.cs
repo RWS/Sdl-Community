@@ -24,13 +24,15 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private readonly IFileTypeManager _fileTypeManager;
 		private readonly ProjectsController _projectsController;
 		private readonly List<ProjectFile> _targetProjectFiles;
-		
-		public ProjectService(IFileTypeManager fileTypeManager)
+
+		public ProjectService(IFileTypeManager fileTypeManager, Helpers helpers)
 		{
 			_fileTypeManager = fileTypeManager;
 
-			var helpers = new Helpers();
-			_projectsController = helpers.GetProjectsController();
+			if (helpers != null)
+			{
+				_projectsController = helpers.GetProjectsController();
+			}
 
 			_messageModel = new MessageModel();
 			_penaltiesTmsList = new List<StarTranslationMemoryMetadata>();

@@ -4,7 +4,7 @@ namespace Sdl.Community.StarTransit.Shared.Utils
 {
 	public class Helpers
 	{
-		public virtual ProjectsController GetProjectsController()
+		public ProjectsController GetProjectsController()
 		{
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}

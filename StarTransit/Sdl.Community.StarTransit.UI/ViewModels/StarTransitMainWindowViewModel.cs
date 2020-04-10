@@ -55,7 +55,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			_isFinishSelected = false;
 			_finishViewModel = finishViewModel;
 			Color = "#FFB69476";
-			_projectService = new ProjectService(DefaultFileTypeManager.CreateInstance(true));
+			var helpers = new Shared.Utils.Helpers();
+			_projectService = new ProjectService(DefaultFileTypeManager.CreateInstance(true), helpers);
 		}
 		#endregion
 
