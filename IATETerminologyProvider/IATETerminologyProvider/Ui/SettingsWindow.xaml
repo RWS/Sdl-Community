@@ -7,6 +7,7 @@
 		xmlns:viewModel="clr-namespace:IATETerminologyProvider.ViewModel"
 		xmlns:resx="clr-namespace:IATETerminologyProvider"
 		xmlns:uiHelpers ="clr-namespace:IATETerminologyProvider.UiHelpers"
+		xmlns:helpers ="clr-namespace:IATETerminologyProvider.Helpers"
         d:DataContext="{d:DesignInstance viewModel:SettingsViewModel}"
 		Icon="../Resources/IATE_settings.ico" WindowStyle="None" AllowsTransparency="True"
 		Title="IATE Real-time Terminology"
@@ -110,23 +111,27 @@
 
 			<Button Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Margin="10" Cursor="Hand" Command="{Binding ResetToDefault}"
 					Style="{DynamicResource Sdl.Button.SecondaryStyle}" MaxWidth="150" Content="Reset to default"/>
-			<DockPanel Grid.Row="4" Grid.Column="1">
-				<Button  Style="{DynamicResource Sdl.Button.SecondaryStyle}" DockPanel.Dock="Right"
-						 ToolTip="{x:Static resx:PluginResources.Reset_Tooltip}"
-				         IsCancel="True"
-				         Cursor="Hand"
-				         Margin="10"
-				         HorizontalAlignment="Right"
-				         Content="Cancel">
-				</Button>
-				<Button  Style="{DynamicResource Sdl.Button.PrimaryStyle}" 
-				        Cursor="Hand"
-				        Margin="10" DockPanel.Dock="Right"
-				        Command="{Binding SaveSettingsCommand}" 
-				        HorizontalAlignment="Right"
-				        Content="OK">
-				</Button>
-			</DockPanel>
+			<Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0,0.1,0,0" BorderBrush="#ABB0B3">
+				<DockPanel>
+					<Button  Style="{DynamicResource Sdl.Button.SecondaryStyle}" DockPanel.Dock="Right"
+					         ToolTip="{x:Static resx:PluginResources.Reset_Tooltip}"
+					         IsCancel="True"
+					         Cursor="Hand"
+					         Margin="10"
+					         HorizontalAlignment="Right"
+					         Content="Cancel">
+					</Button>
+					<Button  Style="{DynamicResource Sdl.Button.PrimaryStyle}" 
+					         Cursor="Hand" IsDefault="True"
+					         Margin="10" DockPanel.Dock="Right"
+					         Command="{Binding SaveSettingsCommand}"
+							 helpers:CloseOnClickBehaviour.IsEnabled="True"
+					         HorizontalAlignment="Right"
+					         Content="OK">
+					</Button>
+				</DockPanel>
+			</Border>
+			
 		</Grid>
 	</Border>
 </Window>

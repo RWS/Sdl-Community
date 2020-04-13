@@ -49,31 +49,15 @@ namespace IATETerminologyProvider
 			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
 		}
 
-		private ProviderSettings GetProviderSettings()
-		{
-			_settingsWindow?.Close();
-			return _settingsViewModel.ProviderSettings;
-		}
-
 		private ITerminologyProvider[] SetTerminologyProvider(IATETerminologyProvider provider, ProviderSettings providerSettings)
 		{
 			var result = new List<ITerminologyProvider>();
 
-			if (_settingsViewModel != null) // TODO: Investigate if we actually need this event
-			{
-				_settingsViewModel.OnSaveSettingsCommandRaised -= GetProviderSettings;
-			}
-			
 			_settingsViewModel = new SettingsViewModel(providerSettings);
 			_settingsWindow = new SettingsWindow
 			{
 				DataContext = _settingsViewModel
 			};
-
-			if (_settingsViewModel != null)
-			{				
-				_settingsViewModel.OnSaveSettingsCommandRaised += GetProviderSettings;
-			}
 			
 			_settingsWindow.ShowDialog();
 			if (!_settingsViewModel.DialogResult) return null;

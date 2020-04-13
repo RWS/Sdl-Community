@@ -4,6 +4,7 @@ namespace IATETerminologyProvider.Helpers
 {
 	public class ApiUrls
 	{
+		//TODO: Use string interpolation
 		public static string GetAccessTokenUri(string userName, string password)
 		{
 			return @"https://iate.europa.eu/uac-api/auth/login?username=" + userName + "&password=" + password;

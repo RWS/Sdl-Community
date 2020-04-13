@@ -140,6 +140,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
+    <Compile Include="Helpers\CloseOnClickBehaviour.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\LanguageFlags.cs" />
     <Compile Include="Helpers\Log.cs" />

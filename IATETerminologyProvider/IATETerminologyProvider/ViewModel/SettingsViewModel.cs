@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Forms;
 using System.Windows.Input;
 using IATETerminologyProvider.Commands;
 using IATETerminologyProvider.Helpers;
@@ -21,8 +22,6 @@ namespace IATETerminologyProvider.ViewModel
 		private readonly TermTypeService _termTypeService;
 		private ObservableCollection<DomainModel> _domains;
 		private ObservableCollection<TermTypeModel> _termTypes;
-		public delegate ProviderSettings SaveSettingsEventRaiser();
-		public event SaveSettingsEventRaiser OnSaveSettingsCommandRaised;
 		private bool _dialogResult;
 
 		public SettingsViewModel(ProviderSettings providerSettings)
@@ -31,6 +30,11 @@ namespace IATETerminologyProvider.ViewModel
 			_termTypes = new ObservableCollection<TermTypeModel>();
 			_termTypeService = new TermTypeService();
 			_domainService = new DomainService();
+			ProviderSettings = new ProviderSettings
+			{
+				Domains = new List<string>(),
+				TermTypes = new List<int>()
+			};
 			LoadDomains();
 			LoadTermTypes();
 			SetFieldsSelection(providerSettings);
@@ -146,13 +150,6 @@ namespace IATETerminologyProvider.ViewModel
 		{
 			if (Domains.Count > 0)
 			{
-				//TODO: Move initialization in constuctor
-				ProviderSettings = new ProviderSettings
-				{
-					Domains = new List<string>(),
-					TermTypes = new List<int>()
-				};
-
 				// Add selected domains to provider settings
 				var selectedDomains = Domains?.Where(d => d.IsSelected).ToList();
 				foreach (var selectedDomain in selectedDomains)
@@ -173,9 +170,10 @@ namespace IATETerminologyProvider.ViewModel
 				var persistenceService = new PersistenceService();
 				persistenceService.AddSettings(ProviderSettings);
 
-				OnSaveSettingsCommandRaised?.Invoke();
+				//OnSaveSettingsCommandRaised?.Invoke();
 			}
-			DialogResult = true;
+
+				DialogResult = true;
 		}
 
 		private void LoadDomains()
