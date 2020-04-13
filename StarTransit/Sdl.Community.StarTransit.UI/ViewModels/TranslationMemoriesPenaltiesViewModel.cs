@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.UI.Commands;
@@ -20,17 +21,21 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		#endregion
 
 		#region Constructors
+
 		public TranslationMemoriesPenaltiesViewModel(PackageModel packageModel)
 		{
 			_packageModel = packageModel;
-			
-			if(!(_packageModel is null))
+
+			if (!(_packageModel is null) && packageModel.TMPenalties == null)
 			{
-				_packageModel.TMPenalties = new Dictionary<string, int>();
+				{
+					_packageModel.TMPenalties = new Dictionary<string, int>();
+				}
 			}
 			_translationMemoriesPenaltiesModelList = new ObservableCollection<TranslationMemoriesPenaltiesModel>();
 			LoadTranslationMemories();
 		}
+
 		#endregion
 
 		#region Public Properties
@@ -107,8 +112,16 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 							{
 								TranslationMemoryName = Path.GetFileName(filePath.TargetFile);
 								TranslationMemoryPath = filePath.TargetFile;
+								if (_packageModel.TMPenalties.Count > 0)
+								{
+									var existingTMPenalty = _packageModel.TMPenalties
+										.FirstOrDefault(p => Path.GetFileName(p.Key).Equals(TranslationMemoryName));
+									TMPenalty = !existingTMPenalty.Equals(new KeyValuePair<string, int>())
+										? existingTMPenalty.Value
+										: 0;
+								}
 
-								var translationMemoriesPenaltiesModel = new TranslationMemoriesPenaltiesModel()
+								var translationMemoriesPenaltiesModel = new TranslationMemoriesPenaltiesModel
 								{
 									TranslationMemoryName = TranslationMemoryName,
 									TranslationMemoryPath = TranslationMemoryPath,
@@ -130,11 +143,15 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		#region Actions
 		private void OkAction()
 		{
-			foreach (var tm in TranslationMemoriesPenaltiesModelList)
+			_packageModel.TMPenalties.Clear();
+			if (TranslationMemoriesPenaltiesModelList != null)
 			{
-				if (tm.TMPenalty > 0)
+				foreach (var tm in TranslationMemoriesPenaltiesModelList)
 				{
-					_packageModel.TMPenalties.Add(tm.TranslationMemoryPath, tm.TMPenalty);
+					if (tm.TMPenalty > 0)
+					{
+						_packageModel.TMPenalties.Add(tm.TranslationMemoryPath, tm.TMPenalty);
+					}
 				}
 			}
 		}
