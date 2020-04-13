@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using IATETerminologyProvider.Helpers;
@@ -47,6 +48,7 @@ namespace IATETerminologyProvider.Service
 		/// <returns>terms</returns>
 		public List<ISearchResult> GetTerms(string text, ILanguage source, ILanguage target, int maxResultsCount)
 		{
+			var results = new List<ISearchResult>();
 			SetAccessToken();
 
 			var httpClient = new HttpClient
@@ -69,11 +71,17 @@ namespace IATETerminologyProvider.Service
 			httpRequest.Content = new StringContent(JsonConvert.SerializeObject(bodyModel), Encoding.UTF8, "application/json");
 
 			var httpResponse = httpClient.SendAsync(httpRequest)?.Result;
-			var httpResponseString = httpResponse?.Content?.ReadAsStringAsync().Result;
-			var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseString);
+			if (httpResponse != null && httpResponse.StatusCode == HttpStatusCode.OK)
+			{
+				var httpResponseString = httpResponse.Content?.ReadAsStringAsync().Result;
+				var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseString);
 
-			var result = MapResponseValues(httpResponseString, domainsJsonResponse);
-			return result;
+				results= MapResponseValues(httpResponseString, domainsJsonResponse);
+				return results;
+			}
+			Log.Logger.Error($"Get Terms Status code:{httpResponse?.StatusCode}");
+
+			return results;
 		}
 
 		private void SetAccessToken()

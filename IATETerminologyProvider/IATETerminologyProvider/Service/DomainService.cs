@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using IATETerminologyProvider.Helpers;
@@ -31,25 +32,28 @@ namespace IATETerminologyProvider.Service
 			try
 			{
 				var httpResponse = await httpClient.SendAsync(httpRequest);
-				//TODO: Check the status code, if is not 200 log it 
-				var httpResponseAsString = await httpResponse.Content.ReadAsStringAsync();
-								
-				var jsonDomainsModel = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseAsString);
-				if (jsonDomainsModel?.Items != null)
+				if (httpResponse.StatusCode == HttpStatusCode.OK)
 				{
-					foreach (var item in jsonDomainsModel.Items)
+					var httpResponseAsString = await httpResponse.Content.ReadAsStringAsync();
+
+					var jsonDomainsModel = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseAsString);
+					if (jsonDomainsModel?.Items != null)
 					{
-						var domain = new ItemsResponseModel
+						foreach (var item in jsonDomainsModel.Items)
 						{
-							Code = item.Code,
-							Name = item.Name,
-							Subdomains = item.Subdomains
-						};
-						domains.Add(domain);
+							var domain = new ItemsResponseModel
+							{
+								Code = item.Code,
+								Name = item.Name,
+								Subdomains = item.Subdomains
+							};
+							domains.Add(domain);
+						}
 					}
+					Domains = domains;
+					return domains;
 				}
-				Domains = domains;
-				return domains;
+				Log.Logger.Error($"Get Domains status code:{httpResponse.StatusCode}");
 			}
 			catch (Exception e)
 			{

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using IATETerminologyProvider.Helpers;
@@ -30,16 +31,21 @@ namespace IATETerminologyProvider.Service
 			try
 			{
 				var httpResponse = await httpClient.SendAsync(httpRequest);
-				var httpResponseAsString = await httpResponse.Content.ReadAsStringAsync();
-				//TODO: Check the status code, if is not 200 log it 
-
-				var jsonTermTypesModel = JsonConvert.DeserializeObject<TermTypeResponseModel>(httpResponseAsString);
-
-				if (jsonTermTypesModel?.Items != null)
+				if (httpResponse.StatusCode == HttpStatusCode.OK)
 				{
-					IateTermType = new ObservableCollection<ItemsResponseModel>(jsonTermTypesModel.Items);
+					var httpResponseAsString = await httpResponse.Content.ReadAsStringAsync();
+					var jsonTermTypesModel = JsonConvert.DeserializeObject<TermTypeResponseModel>(httpResponseAsString);
 
-					return IateTermType;
+					if (jsonTermTypesModel?.Items != null)
+					{
+						IateTermType = new ObservableCollection<ItemsResponseModel>(jsonTermTypesModel.Items);
+
+						return IateTermType;
+					}
+				}
+				else
+				{
+					Log.Logger.Error($"Get Term Type status code:{httpResponse.StatusCode}");
 				}
 			}
 			catch (Exception e)

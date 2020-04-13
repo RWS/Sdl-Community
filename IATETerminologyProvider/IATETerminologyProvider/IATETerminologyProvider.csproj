@@ -239,6 +239,7 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Resource Include="Resources\Question.ico" />
     <EmbeddedResource Include="Ui\SearchResultsControl.resx">
       <DependentUpon>SearchResultsControl.cs</DependentUpon>
     </EmbeddedResource>
