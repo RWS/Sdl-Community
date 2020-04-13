@@ -271,7 +271,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				ImportMTVisible = "Visible";
 
 				var tmPenaltiesWindow = new TranslationMemoriesPenaltiesWindow(new TranslationMemoriesPenaltiesViewModel(_package));
-				tmPenaltiesWindow.Show();
+				tmPenaltiesWindow.ShowDialog();
 			}
 			if (IsBrowseChecked)
 			{
