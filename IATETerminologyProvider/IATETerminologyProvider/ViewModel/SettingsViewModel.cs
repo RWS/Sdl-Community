@@ -77,6 +77,32 @@ namespace IATETerminologyProvider.ViewModel
 			}
 		}
 
+		public bool AllDomainsChecked
+		{
+			get => AreAllDomainsSelected();
+			set
+			{
+				if (value)
+				{
+					SelectAllDomains(true);
+				}
+				OnPropertyChanged(nameof(AllDomainsChecked));
+			}
+		}
+
+		public bool AllTermTypesChecked
+		{
+			get => AreAllTypesSelected();
+			set
+			{
+				if (value)
+				{
+					SelectAllTermTypes(true);
+				}
+				OnPropertyChanged(nameof(AllTermTypesChecked));
+			}
+		}
+
 		public ObservableCollection<DomainModel> Domains
 		{
 			get => _domains;
@@ -203,6 +229,7 @@ namespace IATETerminologyProvider.ViewModel
 						Code = domain.Code,
 						Name = selectedDomainName
 					};
+					domainModel.PropertyChanged += DomainModel_PropertyChanged;
 					Domains.Add(domainModel);
 				}
 			}
@@ -219,6 +246,7 @@ namespace IATETerminologyProvider.ViewModel
 					Code = int.TryParse(item.Code, out _) ? int.Parse(item.Code) : 0,
 					Name = selectedTermTypeName
 				};
+				termType.PropertyChanged += TermType_PropertyChanged;
 				TermTypes.Add(termType);
 			}
 		}
@@ -246,6 +274,41 @@ namespace IATETerminologyProvider.ViewModel
 				}
 			}
 
+		}
+
+		private bool AreAllDomainsSelected()
+		{
+			return Domains.Count > 0 && Domains.All(d => d.IsSelected);
+		}
+		private bool AreAllTypesSelected()
+		{
+			return TermTypes.Count > 0 && TermTypes.All(t => t.IsSelected);
+		}
+
+		private void SelectAllDomains(bool select)
+		{
+			foreach (var domain in Domains)
+			{
+				domain.IsSelected = select;
+			}
+		}
+
+		private void SelectAllTermTypes(bool select)
+		{
+			foreach (var termType in TermTypes)
+			{
+				termType.IsSelected = select;
+			}
+		}
+		private void TermType_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName != "IsSelected") return;
+			OnPropertyChanged(nameof(AllTermTypesChecked));
+		}
+		private void DomainModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName != "IsSelected") return;
+			OnPropertyChanged(nameof(AllDomainsChecked));
 		}
 	}
 }

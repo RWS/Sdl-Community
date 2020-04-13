@@ -52,14 +52,26 @@
 				  IsReadOnly="True"
                   CanUserAddRows="False">
 				<DataGrid.Columns>
-					<DataGridTemplateColumn MaxWidth="50" MinWidth="50">
+					<DataGridTemplateColumn Width="50">
+						<DataGridTemplateColumn.Header>
+							<CheckBox 
+								IsChecked="{Binding Path=DataContext.AllDomainsChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},UpdateSourceTrigger=PropertyChanged}"
+								Margin ="5,0,0,0"/>
+						</DataGridTemplateColumn.Header>
+						
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+								<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin ="10,0,0,0" />
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTextColumn Header="{x:Static resx:PluginResources.Domains_header}" Width="2*" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}"/>
+					<DataGridTextColumn Header="{x:Static resx:PluginResources.Domains_header}" Width="2*" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}">
+						<DataGridTextColumn.ElementStyle>
+							<Style TargetType="TextBlock">
+								<Setter Property="VerticalAlignment" Value="Center" />
+							</Style>
+						</DataGridTextColumn.ElementStyle>
+					</DataGridTextColumn>
 				</DataGrid.Columns>
 			</DataGrid>
 
@@ -74,14 +86,24 @@
                   CanUserAddRows="False" 
 				  GridLinesVisibility="None">
 				<DataGrid.Columns>
-					<DataGridTemplateColumn  MaxWidth="50" MinWidth="50">
+					<DataGridTemplateColumn Width="50">
+						<DataGridTemplateColumn.Header>
+							<CheckBox 
+								IsChecked="{Binding Path=DataContext.AllTermTypesChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},UpdateSourceTrigger=PropertyChanged}"
+								Margin ="5,0,0,0"/>
+						</DataGridTemplateColumn.Header>
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+								<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Center" Margin ="10,0,0,0"/>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
 					<DataGridTextColumn Header="{x:Static resx:PluginResources.Terms_header}" Width="2*" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}">
+						<DataGridTextColumn.ElementStyle>
+							<Style TargetType="TextBlock">
+								<Setter Property="VerticalAlignment" Value="Center" />
+							</Style>
+						</DataGridTextColumn.ElementStyle>
 					</DataGridTextColumn>
 				</DataGrid.Columns>
 			</DataGrid>
