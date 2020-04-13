@@ -6,6 +6,13 @@
              xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UIHelpers\ButtonsStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
 	<ScrollViewer>
 		<Grid>
 			<Grid.RowDefinitions>
@@ -23,16 +30,27 @@
                   Margin="0"
                   Background="white"
                   BorderBrush="{x:Null}"
-                   BorderThickness="0"
+                  BorderThickness="0"
                ItemsSource="{Binding ProjectListCells}">
 				<ListBox.ItemTemplate >
 					<ItemContainerTemplate>
 						<CheckBox IsChecked="{Binding Checked,Mode=TwoWay}" Content="{Binding Name}" Command="{Binding SelectCommand}"/>
 					</ItemContainerTemplate>
 				</ListBox.ItemTemplate>
+				<ListBox.ItemContainerStyle>
+					<Style TargetType="{x:Type ListBoxItem}">
+						<Style.Triggers>
+							<Trigger Property="IsSelected" Value="True">
+								<Setter Property="Background" Value="Transparent"/>								
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</ListBox.ItemContainerStyle>
 			</ListBox>
-			<TextBox x:Name="ReturnPackagePath" Grid.Row="2" Margin="0,15,0,0" Text="{Binding ReturnPackageLocation}"/>
-			<Button x:Name="BrowseBtn" Grid.Row="2" Grid.Column="1" Margin="10,15,0,0" Width="70" Content="Browse" HorizontalAlignment="Left" Command="{Binding BrowseCommand}"/>
+			
+			<Label Grid.Row="2" Grid.ColumnSpan="2" Margin="0 20 0 0" Content="Please select an output path for the .tpf file"/>
+			<TextBox x:Name="ReturnPackagePath" Grid.Row="2" Margin="5,50,0,0" Text="{Binding ReturnPackageLocation}" ToolTip="Please select an output path for the .tpf file"/>
+			<Button Style="{DynamicResource ButtonStyleShadowless}" x:Name="BrowseBtn" Grid.Row="2" Grid.Column="1" Margin="10,50,0,0" Width="70" Content="Browse" HorizontalAlignment="Left" Command="{Binding BrowseCommand}"/>
 		</Grid>
 	</ScrollViewer>
 </UserControl>

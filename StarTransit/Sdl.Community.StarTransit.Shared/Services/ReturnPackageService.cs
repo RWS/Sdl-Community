@@ -7,18 +7,23 @@ using System.Linq;
 using System.Text;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
-using Sdl.Desktop.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
-	public class ReturnPackageService : AbstractViewControllerAction<ProjectsController>
+	public class ReturnPackageService
 	{
-		public static readonly Log Log = Log.Instance;
+		private readonly ProjectsController _projectsController;
+		private readonly List<bool> _isTransitProject;
+		private readonly ReturnPackage _returnPackage;
 
 		public ReturnPackageService()
 		{
+			_isTransitProject = new List<bool>();
+			_returnPackage = new ReturnPackage();
+			var helpers = new Helpers();
+			_projectsController = helpers.GetProjectsController();
 		}
 
 		/// <summary>
@@ -29,42 +34,48 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		{
 			try
 			{
-				var projects = Controller.SelectedProjects.ToList();
+				_isTransitProject?.Clear();
+				var projects = _projectsController?.SelectedProjects.ToList();
 				var message = string.Empty;
-				if (projects.Count > 1)
+				if (projects?.Count > 1)
 				{
 					message = @"Please select only one project.";
 					return new Tuple<ReturnPackage, string>(null, message);
 				}
-				var isTransitProject = new List<bool>();
-				var returnPackage = new ReturnPackage();
-				foreach (var project in projects)
+
+				if (projects != null)
 				{
-
-					var targetFiles = project.GetTargetLanguageFiles().ToList();
-					var isTransit = IsTransitProject(targetFiles);
-
-					if (isTransit)
+					foreach (var project in projects)
 					{
-						returnPackage.FileBasedProject = project;
-						returnPackage.ProjectLocation = project.FilePath;
-						returnPackage.TargetFiles = targetFiles;
-						//we take only the first file location, because the other files are in the same location
-						returnPackage.LocalFilePath = targetFiles[0].LocalFilePath;
-						isTransitProject.Add(true);
-					}
-					else
-					{
-						isTransitProject.Add(false);
+						var targetFiles = project.GetTargetLanguageFiles().ToList();
+						var isTransit = IsTransitProject(targetFiles);
+
+						if (isTransit)
+						{
+							_returnPackage.FileBasedProject = project;
+							_returnPackage.ProjectLocation = project.FilePath;
+							_returnPackage.TargetFiles = targetFiles;
+							//we take only the first file location, because the other files are in the same location
+							_returnPackage.LocalFilePath = targetFiles[0].LocalFilePath;
+							_isTransitProject?.Add(true);
+						}
+						else
+						{
+							_isTransitProject?.Add(false);
+						}
 					}
 				}
 
-				if (isTransitProject.Contains(false))
+				if (_isTransitProject != null)
 				{
-					message = @"Please select a StarTransit project!";
-					return new Tuple<ReturnPackage, string>(returnPackage, message);
+					if (_isTransitProject.Contains(false))
+					{
+						message = @"Please select a StarTransit project!";
+						return new Tuple<ReturnPackage, string>(_returnPackage, message);
+					}
 				}
-				return new Tuple<ReturnPackage, string>(returnPackage, message);
+
+				return new Tuple<ReturnPackage, string>(_returnPackage, message);
 			}
 			catch (Exception ex)
 			{
@@ -80,26 +91,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		/// <returns></returns>
 		public bool IsTransitProject(List<ProjectFile> filesPath)
 		{
-			var areTranstFiles = new List<bool>();
-			foreach (var file in filesPath)
+			if (filesPath != null)
 			{
-
-				if (file.FileTypeId != null && file.FileTypeId.Equals("Transit File Type 1.0.0.0"))
-				{
-					areTranstFiles.Add(true);
-				}
-				else
-				{
-					areTranstFiles.Add(false);
-					return false;
-				}
+				return filesPath.Any(f => f.FileTypeId != null && f.FileTypeId.Equals("Transit File Type 1.0.0.0"));
 			}
-			return true;
-		}
-
-		protected override void Execute()
-		{
-
+			return false;
 		}
 
 		public void ExportFiles(ReturnPackage package)
@@ -169,12 +165,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		{
 			try
 			{
-				//open the archive and delete old files
-				// archvie in update mode not overrides existing files 
+				// open the archive and delete old files
+				// archive in update mode not overrides existing files 
 				using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
 				{
-					var entriesColection = new ObservableCollection<ZipArchiveEntry>(archive.Entries);
-					foreach (var entry in entriesColection)
+					var entriesCollection = new ObservableCollection<ZipArchiveEntry>(archive.Entries);
+					foreach (var entry in entriesCollection)
 					{
 
 						if (entry.Name.Equals(string.Concat(prjFileName, ".PRJ")))
@@ -184,12 +180,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 						foreach (var project in returnPackagePackage.TargetFiles)
 						{
-							var projectFromArchiveToBeDeleted =
-								archive.Entries.FirstOrDefault(n => n.Name.Equals(Path.GetFileNameWithoutExtension(project.Name)));
-							if (projectFromArchiveToBeDeleted != null)
-							{
-								projectFromArchiveToBeDeleted.Delete();
-							}
+							var projectFromArchiveToBeDeleted = archive.Entries.FirstOrDefault(n => n.Name.Equals(Path.GetFileNameWithoutExtension(project.Name)));
+							projectFromArchiveToBeDeleted?.Delete();
 						}
 					}
 				}
@@ -201,13 +193,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					foreach (var file in returnPackagePackage.TargetFiles)
 					{
 						var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
-						pathToTargetFileFolder = file.LocalFilePath.Substring(0,
-									file.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
-						archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName,
-							CompressionLevel.Optimal);
-
+						pathToTargetFileFolder = file.LocalFilePath.Substring(0, file.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
+						archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName, CompressionLevel.Optimal);
 					}
-
 				}
 			}
 			catch (Exception ex)
@@ -233,19 +221,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 				using (var reader = new StreamReader(pathToPrjFile))
 				{
-					string fileContent = reader.ReadToEnd();
+					var fileContent = reader.ReadToEnd();
 					reader.Close();
 
-					if (fileContent.Contains("PromptForNewWorkingDir"))
-					{
-						//that means we need to add "PromptForNewWorkingDir" line
-						MedatataBuilder(pathToPrjFile, metadata, false);
-					}
-					else
-					{
-						//the prj has been edited before so we don't need to add this line anymore, just update
-						MedatataBuilder(pathToPrjFile, metadata, true);
-					}
+					MetadataBuilder(pathToPrjFile, metadata, !fileContent.Contains("PromptForNewWorkingDir"));
 				}
 			}
 			catch (Exception ex)
@@ -260,7 +239,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		/// <param name="pathToPrjFile"></param>
 		/// <param name="metadata"></param>
 		/// <param name="createNewMetadata"></param>
-		private void MedatataBuilder(string pathToPrjFile, Metadata metadata, bool createNewMetadata)
+		private void MetadataBuilder(string pathToPrjFile, Metadata metadata, bool createNewMetadata)
 		{
 			try
 			{
@@ -311,7 +290,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"MedatataBuilder method: {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"MetadataBuilder method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 	}

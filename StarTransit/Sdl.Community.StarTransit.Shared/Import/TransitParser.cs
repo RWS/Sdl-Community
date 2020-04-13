@@ -19,11 +19,9 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		private XmlDocument _srcDocument;
 		public event EventHandler<ProgressEventArgs> Progress;
 
-		private int totalTagCount;
-		private int tmpTotalTagCount;
-		private int srcSegmentTagCount;
-
-		public static readonly Log Log = Log.Instance;
+		private int _totalTagCount;
+		private int _tmpTotalTagCount;
+		private int _srcSegmentTagCount;
 
 		public void SetFileProperties(IFileProperties properties)
 		{
@@ -39,13 +37,13 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				_document.PreserveWhitespace = true;
 				_srcDocument = new XmlDocument();
 				_srcDocument.PreserveWhitespace = true;
-				string trgFilePath = _fileProperties.FileConversionProperties.OriginalFilePath;
+				var trgFilePath = _fileProperties.FileConversionProperties.OriginalFilePath;
 				_document.Load(trgFilePath);
 
-				int pos = trgFilePath.LastIndexOf("\\");
-				string path = trgFilePath.Substring(0, pos);
+				var pos = trgFilePath.LastIndexOf("\\");
+				var path = trgFilePath.Substring(0, pos);
 
-				foreach (string fileName in Directory.GetFiles(path))
+				foreach (var fileName in Directory.GetFiles(path))
 				{
 					if (fileName.Substring(0, fileName.Length - 4) == trgFilePath.Substring(0, trgFilePath.Length - 4) &&
 						fileName.Substring(fileName.Length - 4, 4) != trgFilePath.Substring(trgFilePath.Length - 4, 4))
@@ -68,10 +66,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 		protected virtual void OnProgress(byte percent)
 		{
-			if (Progress != null)
-			{
-				Progress(this, new ProgressEventArgs(percent));
-			}
+			Progress?.Invoke(this, new ProgressEventArgs(percent));
 		}
 
 		public IDocumentProperties DocumentProperties
@@ -107,15 +102,18 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				Output.SetFileProperties(fileInfo);
 
 				// variables for the progress report
-				int totalUnitCount = _document.SelectNodes("//Seg").Count;
-				int currentUnitCount = 0;
-				foreach (XmlNode item in _document.SelectNodes("//Seg"))
+				if (!(_document is null))
 				{
-					Output.ProcessParagraphUnit(CreateParagraphUnit(item));
+					var totalUnitCount = _document.SelectNodes("//Seg").Count;
+					var currentUnitCount = 0;
+					foreach (XmlNode item in _document.SelectNodes("//Seg"))
+					{
+						Output.ProcessParagraphUnit(CreateParagraphUnit(item));
 
-					// update the progress report   
-					currentUnitCount++;
-					OnProgress(Convert.ToByte(Math.Round(100 * ((decimal)currentUnitCount / totalUnitCount), 0)));
+						// update the progress report   
+						currentUnitCount++;
+						OnProgress(Convert.ToByte(Math.Round(100 * ((decimal) currentUnitCount / totalUnitCount), 0)));
+					}
 				}
 
 				Output.FileComplete();
@@ -137,7 +135,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				var paragraphUnit = ItemFactory.CreateParagraphUnit(LockTypeFlags.Unlocked);
 
 				// create paragraph unit context
-				string id = xmlUnit.SelectSingleNode("./@SegID").InnerText;
+				var id = xmlUnit.SelectSingleNode("./@SegID").InnerText;
 				paragraphUnit.Properties.Contexts = CreateContext("Paragraph", id);
 
 				foreach (XmlNode item in xmlUnit.SelectNodes("."))
@@ -186,15 +184,14 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			var sdlxliffLevel = ConfirmationLevel.Translated;
 			try
 			{
-				string data = segmentXml.SelectSingleNode("./@Data").InnerText;
+				var data = segmentXml.SelectSingleNode("./@Data").InnerText;
 				var stringBytes = Encoding.Unicode.GetBytes(data);
 				var sbBytes = new StringBuilder(stringBytes.Length * 2);
-				foreach (byte b in stringBytes)
+				foreach (var b in stringBytes)
 				{
 					sbBytes.AppendFormat("{0:X2}", b);
 				}
-
-				string statusCode = sbBytes.ToString().Substring(0, 2).ToLower();
+				var statusCode = sbBytes.ToString().Substring(0, 2).ToLower();
 
 				if (statusCode == "02")
 					sdlxliffLevel = ConfirmationLevel.Unspecified;
@@ -216,30 +213,17 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			return sdlxliffLevel;
 		}
 
-
-		private byte[] GetBytes(string str)
+		private byte CreateMatchValue(XmlNode segmentXml)
 		{
-			byte[] bytes = new byte[str.Length * sizeof(char)];
-			try
+			byte matchValue = 0;
+			if (!(segmentXml is null))
 			{
-				System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"GetBytes method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return bytes;
-		}
+				var data = segmentXml.SelectSingleNode("./@Data").InnerText;
 
-
-		private Byte CreateMatchValue(XmlNode segmentXml)
-		{
-			string data = segmentXml.SelectSingleNode("./@Data").InnerText;
-			Byte matchValue = 0;
-
-			if (data.Contains("\\") && segmentXml.SelectSingleNode(".").InnerText != "")
-			{
-				matchValue = 100;
+				if (data.Contains("\\") && segmentXml.SelectSingleNode(".").InnerText != "")
+				{
+					matchValue = 100;
+				}
 			}
 
 			return matchValue;
@@ -253,15 +237,15 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				var segment = ItemFactory.CreateSegment(pair);
 				if (source)
 				{
-					srcSegmentTagCount = 0;
-					if (totalTagCount < tmpTotalTagCount)
+					_srcSegmentTagCount = 0;
+					if (_totalTagCount < _tmpTotalTagCount)
 					{
-						totalTagCount = tmpTotalTagCount;
+						_totalTagCount = _tmpTotalTagCount;
 					}
 				}
 				else
 				{
-					totalTagCount = totalTagCount - srcSegmentTagCount;
+					_totalTagCount = _totalTagCount - _srcSegmentTagCount;
 				}
 				if (segNode != null)
 				{
@@ -318,9 +302,9 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				//determine tag id
 				if (source)
 				{
-					totalTagCount += 1;
-					tmpTotalTagCount += 1;
-					srcSegmentTagCount += 1;
+					_totalTagCount += 1;
+					_tmpTotalTagCount += 1;
+					_srcSegmentTagCount += 1;
 				}
 				return phTag;
 			}

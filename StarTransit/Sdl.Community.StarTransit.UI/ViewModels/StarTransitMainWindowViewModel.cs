@@ -1,44 +1,38 @@
 ﻿using System;
-using System.ComponentModel;
-using System.IO;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MahApps.Metro.Controls;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Utils;
-using Sdl.Community.StarTransit.UI.Annotations;
 using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Controls;
-using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.Community.StarTransit.UI.Interfaces;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-	public class StarTransitMainWindowViewModel:INotifyPropertyChanged, IWindowActions
-    {
+	public class StarTransitMainWindowViewModel : BaseViewModel, IWindowActions
+	{
 		#region Private Fields
 		private ICommand _nextCommand;
-        private ICommand _backCommand;
-        private ICommand _createCommand;
-        private bool _canExecuteNext;
-        private bool _canExecuteBack;
-        private bool _canExecuteCreate;
-        private  readonly PackageDetailsViewModel _packageDetailsViewModel;
-        private readonly PackageDetails _packageDetails;
-        private bool _isDetailsSelected;
-        private bool _isTmSelected;
-        private bool _isFinishSelected;
-        private readonly FinishViewModel _finishViewModel;
-        private readonly ProjectService _projectService;
-        private bool _active;
-        private bool _isEnabled;
-        private string _color;
-        private bool _hasTm;
-        private TranslationMemories _translationMemories;
-        private TranslationMemoriesViewModel _translationMemoriesViewModel;
-        private MetroWindow _window;
+		private ICommand _backCommand;
+		private ICommand _createCommand;
+		private bool _canExecuteNext;
+		private bool _canExecuteBack;
+		private bool _canExecuteCreate;
+		private readonly PackageDetailsViewModel _packageDetailsViewModel;
+		private readonly PackageDetails _packageDetails;
+		private bool _isDetailsSelected;
+		private bool _isTmSelected;
+		private bool _isFinishSelected;
+		private readonly FinishViewModel _finishViewModel;
+		private readonly ProjectService _projectService;
+		private bool _active;
+		private bool _isEnabled;
+		private string _color;
+		private bool _hasTm;
+		private readonly TranslationMemories _translationMemories;
+		private readonly TranslationMemoriesViewModel _translationMemoriesViewModel;
 		#endregion
 
 		#region Constructors
@@ -46,14 +40,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			PackageDetailsViewModel packageDetailsViewModel,
 			PackageDetails packageDetails,
 			TranslationMemories translationMemories,
-			TranslationMemoriesViewModel translationMeloriesMemoriesViewModel,
-			FinishViewModel finishViewModel,
-			MetroWindow window)
+			TranslationMemoriesViewModel translationMemoriesViewModel,
+			FinishViewModel finishViewModel)
 		{
 			_packageDetailsViewModel = packageDetailsViewModel;
 			_packageDetails = packageDetails;
 			_translationMemories = translationMemories;
-			_translationMemoriesViewModel = translationMeloriesMemoriesViewModel;
+			_translationMemoriesViewModel = translationMemoriesViewModel;
 			CanExecuteBack = false;
 			CanExecuteCreate = false;
 			CanExecuteNext = true;
@@ -62,134 +55,129 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			_isFinishSelected = false;
 			_finishViewModel = finishViewModel;
 			Color = "#FFB69476";
-			_window = window;
-			_projectService = new ProjectService();
+			var helpers = new Shared.Utils.Helpers();
+			_projectService = new ProjectService(DefaultFileTypeManager.CreateInstance(true), helpers);
 		}
 		#endregion
 
 		#region Public Properties
-		public static readonly Log Log = Log.Instance;
 
 		public bool DetailsSelected
-        {
-            get { return _isDetailsSelected; }
-            set
-            {
-                if (Equals(value, _isDetailsSelected))
-                {
-                    return;
-                }
-                _isDetailsSelected = value;
-                OnPropertyChanged();
-            }
-        }
+		{
+			get => _isDetailsSelected;
+			set
+			{
+				if (Equals(value, _isDetailsSelected))
+				{
+					return;
+				}
+				_isDetailsSelected = value;
+				OnPropertyChanged(nameof(DetailsSelected));
+			}
+		}
 
-        public bool TmSelected
-        {
-            get { return _isTmSelected; }
-            set
-            {
-                if (Equals(value, _isTmSelected))
-                {
-                    return;
-                }
-                _isTmSelected = value;
-                OnPropertyChanged();
-            }
-        }
+		public bool TmSelected
+		{
+			get => _isTmSelected;
+			set
+			{
+				if (Equals(value, _isTmSelected))
+				{
+					return;
+				}
+				_isTmSelected = value;
+				OnPropertyChanged(nameof(TmSelected));
+			}
+		}
 
-        public bool FinishSelected
-        {
-            get
-            {
-                return _isFinishSelected;
-            }
-            set
-            {
-                if (Equals(value, _isFinishSelected))
-                {
-                    return;
-                }
-                _isFinishSelected = value;
-                OnPropertyChanged();
-            }
-        }
+		public bool FinishSelected
+		{
+			get => _isFinishSelected;
+			set
+			{
+				if (Equals(value, _isFinishSelected))
+				{
+					return;
+				}
+				_isFinishSelected = value;
+				OnPropertyChanged(nameof(FinishSelected));
+			}
+		}
 
-        public bool CanExecuteNext
-        {
-            get { return _canExecuteNext; }
-            set
-            {
-                if (Equals(value, _canExecuteNext))
-                {
-                    return;
-                }
-                _canExecuteNext = value;
-                OnPropertyChanged();
-            }
-        }
+		public bool CanExecuteNext
+		{
+			get => _canExecuteNext;
+			set
+			{
+				if (Equals(value, _canExecuteNext))
+				{
+					return;
+				}
+				_canExecuteNext = value;
+				OnPropertyChanged(nameof(CanExecuteNext));
+			}
+		}
 
-        public bool CanExecuteBack
-        {
-            get { return _canExecuteBack; }
-            set
-            {
-                if (Equals(value, _canExecuteBack))
-                {
-                    return;
-                }
+		public bool CanExecuteBack
+		{
+			get => _canExecuteBack;
+			set
+			{
+				if (Equals(value, _canExecuteBack))
+				{
+					return;
+				}
 
-                _canExecuteBack = value;
-                OnPropertyChanged();
-            }
-        }
+				_canExecuteBack = value;
+				OnPropertyChanged(nameof(CanExecuteBack));
+			}
+		}
 
-        public string Color
-        {
-            get { return _color; }
-            set
-            {
-                if (Equals(value, _color))
-                {
-                    return;
-                }
-                _color = value;
-                OnPropertyChanged();
-            }
-        }
+		public string Color
+		{
+			get => _color;
+			set
+			{
+				if (Equals(value, _color))
+				{
+					return;
+				}
+				_color = value;
+				OnPropertyChanged(nameof(Color));
+			}
+		}
 
-        public bool CanExecuteCreate
-        {
-            get { return _canExecuteCreate; }
-            set
-            {
-                if (Equals(value, _canExecuteCreate))
-                {
-                    return;
-                }
-                _canExecuteCreate = value;
-                OnPropertyChanged();                
-            }            
-        }
+		public bool CanExecuteCreate
+		{
+			get => _canExecuteCreate;
+			set
+			{
+				if (Equals(value, _canExecuteCreate))
+				{
+					return;
+				}
+				_canExecuteCreate = value;
+				OnPropertyChanged(nameof(CanExecuteCreate));
+			}
+		}
 
-        public bool IsEnabled
-        {
-            get { return _isEnabled; }
-            set
-            {
-                if (Equals(value, _isEnabled))
-                {
-                    return;
-                    
-                }
-                _isEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-		
+		public bool IsEnabled
+		{
+			get => _isEnabled;
+			set
+			{
+				if (Equals(value, _isEnabled))
+				{
+					return;
+				}
+				_isEnabled = value;
+				OnPropertyChanged(nameof(IsEnabled));
+			}
+		}
+
 		public bool Active
 		{
-			get { return _active; }
+			get => _active;
 			set
 			{
 				if (Equals(value, _active))
@@ -197,46 +185,39 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_active = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Active));
 			}
 		}
 		#endregion
 
 		#region Actions
 		public Action CloseAction { get; set; }
-
-        public Action<string,string> ShowWindowsMessage { get; set; }
+		public Action<string, string> ShowWindowsMessage { get; set; }
 		#endregion
 
 		#region Commands
-		public ICommand NextCommand
-        {
-            get { return _nextCommand ?? (_nextCommand = new CommandHandler(Next, true)); }
-        }
+		public ICommand NextCommand => _nextCommand ?? (_nextCommand = new CommandHandler(Next, true));
 
-        public ICommand BackCommand
-        {
-            get { return _backCommand ?? (_backCommand = new CommandHandler(Back, true)); }
-            set
-            {
-                if (Equals(value, _backCommand))
-                {
-                    return;
-                }
-                _backCommand = value;
-                OnPropertyChanged();
-            }
-        }
+		public ICommand BackCommand
+		{
+			get => _backCommand ?? (_backCommand = new CommandHandler(Back, true));
+			set
+			{
+				if (Equals(value, _backCommand))
+				{
+					return;
+				}
+				_backCommand = value;
+				OnPropertyChanged();
+			}
+		}
 
-        public ICommand CreateCommand
-        {
-            get { return _createCommand ?? (_createCommand = new CommandHandler(Create, true)); }
-        }
+		public ICommand CreateCommand => _createCommand ?? (_createCommand = new CommandHandler(Create, true));
 		#endregion
 
 		#region Public Methods
 		public void Next()
-        {
+		{
 			try
 			{
 				var model = _packageDetailsViewModel.GetPackageModel();
@@ -254,7 +235,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					}//tm page is disabled
 					if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm == false)
 					{
-
 						DetailsSelected = false;
 						TmSelected = false;
 						FinishSelected = true;
@@ -347,7 +327,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				Active = true;
 				CanExecuteBack = CanExecuteCreate = false;
 				var packageModel = _translationMemoriesViewModel.GetPackageModel();
-				var isEmpty = IsFolderEmpty(packageModel.Location);
+				var isEmpty = IsFolderEmpty(packageModel?.Location);
 				var messageModel = new MessageModel();
 
 				CloseAction();
@@ -361,34 +341,20 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					CanExecuteBack = CanExecuteCreate = false;
 					Active = false;
 					CloseAction();
-					if (Directory.Exists(Path.GetDirectoryName(packageModel.PathToPrjFile)))
-					{
-						Directory.Delete(Path.GetDirectoryName(Path.GetDirectoryName(packageModel.PathToPrjFile)), true);
-					}
+					Helpers.Utils.DeleteFolder(packageModel?.PathToPrjFile);
 				}
-				else if (messageModel != null && !messageModel.IsProjectCreated)
+				else
 				{
 					ShowWindowsMessage(messageModel.Title, messageModel.Message);
 					Active = false;
 					CanExecuteBack = CanExecuteCreate = false;
 				}
+				Helpers.Utils.DeleteFolder(packageModel?.PathToPrjFile);
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"Create method: {ex.Message}\n {ex.StackTrace}");
 			}
-		}
-		#endregion
-
-		#region Events
-		public event PropertyChangedEventHandler PropertyChanged;
-		#endregion
-
-		#region Protected Methods
-		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 		#endregion
 
@@ -400,6 +366,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		/// <returns></returns>
 		private bool IsFolderEmpty(string folderPath)
 		{
+			if(string.IsNullOrEmpty(folderPath))
+			{
+				ShowWindowsMessage("Warning", "All fields are required!");
+				return false;
+			}
 			if (!Helpers.Utils.IsFolderEmpty(folderPath))
 			{
 				ShowWindowsMessage("Folder not empty!", "Please select an empty folder");

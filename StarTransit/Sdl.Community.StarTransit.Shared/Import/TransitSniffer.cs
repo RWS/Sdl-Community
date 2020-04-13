@@ -15,12 +15,10 @@ namespace Sdl.Community.StarTransit.Shared.Import
 	public class TransitSniffer : INativeFileSniffer
 	{
 		static string _BilingualDocument = "Transit";
-		private string srcFileExtension;
-		private string trgFileExtension;
+		private string _srcFileExtension;
+		private string _trgFileExtension;
 		private PackageModel _packageModel;
 		private PackageService _packageService = new PackageService();
-
-		public static readonly Log Log = Log.Instance;
 
 		public SniffInfo Sniff(string nativeFilePath, Language suggestedSourceLanguage,
 			Codepage suggestedCodepage, INativeTextLocationMessageReporter messageReporter,
@@ -59,11 +57,11 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		// root element
 		private bool IsFileSupported(string nativeFilePath, string sourceLanguageExtension)
 		{
-			bool result = false;
+			var result = false;
 			try
 			{
-				bool rootElementMatches = false;
-				bool sourceFileFound = false;
+				var rootElementMatches = false;
+				var sourceFileFound = false;
 
 				// check whether header tag name equals Transit, if not the file cannot be opened in Studio
 				var doc = new XmlDocument();
@@ -87,8 +85,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					if (sourceFile != null)
 					{
 						sourceFileFound = true;
-						srcFileExtension = sourceLanguageExtension;
-						trgFileExtension = Path.GetExtension(nativeFilePath).Replace(".", "");
+						_srcFileExtension = sourceLanguageExtension;
+						_trgFileExtension = Path.GetExtension(nativeFilePath).Replace(".", "");
 					}
 				}
 
@@ -111,8 +109,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				var doc = new XmlDocument();
 				doc.Load(nativeFilePath);
 
-				info.DetectedSourceLanguage = new Pair<Language, DetectionLevel>(new Language(MapLanguage(srcFileExtension)), DetectionLevel.Certain);
-				info.DetectedTargetLanguage = new Pair<Language, DetectionLevel>(new Language(MapLanguage(trgFileExtension)), DetectionLevel.Certain);
+				info.DetectedSourceLanguage = new Pair<Language, DetectionLevel>(new Language(MapLanguage(_srcFileExtension)), DetectionLevel.Certain);
+				info.DetectedTargetLanguage = new Pair<Language, DetectionLevel>(new Language(MapLanguage(_trgFileExtension)), DetectionLevel.Certain);
 			}
 			catch (Exception ex)
 			{

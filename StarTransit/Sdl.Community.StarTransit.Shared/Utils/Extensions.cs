@@ -7,8 +7,6 @@ namespace Sdl.Community.StarTransit.Shared.Utils
 {
 	public static class Extensions
 	{
-		public static readonly Log Log = Log.Instance;
-
 		public static void SetCustomer(this FileBasedProject project, Customer customerModel)
 		{
 			try

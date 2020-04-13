@@ -13,7 +13,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source=".\UIHelpers\ButtonsStyle.xaml"/>
 				<ResourceDictionary Source=".\UIHelpers\MetroStyle.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source=".\UIHelpers\DataGridStyle2.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -24,25 +25,31 @@
             <RowDefinition Height="330"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding TranslationMemoriesPenaltiesModelList,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
+
+		<DataGrid ItemsSource="{Binding TranslationMemoriesPenaltiesModelList,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
                   AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="0" Grid.Row="0"
-				  Style="{DynamicResource MetroDataGrid}" SelectionUnit="Cell" RowHeaderWidth="0" BorderThickness="1" BorderBrush="LightGray"
-				  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGreen" Margin="0,0,0,10">
+				  SelectionUnit="Cell" RowHeaderWidth="0" BorderThickness="1" BorderBrush="LightGray"
+				  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGray" Margin="0,0,0,10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Translation Memory"
                                     Binding="{Binding TranslationMemoryName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
 									IsReadOnly="True" Width="550" />
                 <controls:DataGridNumericUpDownColumn Header="Penalty" Width="80"
                                                       Binding="{Binding TMPenalty,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
-                                                      Minimum="0" 
-													  Maximum="25"/>
+                                                      Minimum="0" Maximum="25"/>
             </DataGrid.Columns>
-        </DataGrid>
-		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0,0,4,0">
+			<DataGrid.RowStyle>
+				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
+			</DataGrid.RowStyle>
+			<DataGrid.CellStyle>
+				<Style TargetType="DataGridCell" BasedOn="{StaticResource DgrCellStyle}" />
+			</DataGrid.CellStyle>
+		</DataGrid>
+		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0,0,5,0">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="OkButton" Command="{Binding OkCommand}" Content="Ok"
-						Width="80" Height="30" Visibility="{Binding Visibility}"/>
-				<Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CancelButton" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=TMPenaltiesWindow}" Content="Cancel"
+				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="OkButton" Command="{Binding OkCommand}" Content="Ok"
+						Width="60" Height="30" Visibility="{Binding Visibility}" Margin="0,0,5,0" />
+				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="CancelButton" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=TMPenaltiesWindow}" Content="Cancel"
 						Width="80" Height="30" Visibility="{Binding Visibility}"/>
             </StackPanel>
         </StackPanel>

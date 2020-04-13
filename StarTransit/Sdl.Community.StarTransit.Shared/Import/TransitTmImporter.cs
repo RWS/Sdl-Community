@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.LanguagePlatform.Core.Tokenization;
@@ -14,33 +15,21 @@ namespace Sdl.Community.StarTransit.Shared.Import
 	{
 		#region Private Fields
 		private readonly IFileTypeManager _fileTypeManager;
-		private readonly CultureInfo _sourceCulture;
-		private readonly CultureInfo _targetCulture;
-		private readonly bool _createTm;
-		private FileBasedTranslationMemory _fileBasedTM;
+		private readonly FileBasedTranslationMemory _fileBasedTM;
 		#endregion
 
-		public static readonly Log Log = Log.Instance;
-
 		#region Constructors
-		public TransitTmImporter(CultureInfo sourceCulture,
-			CultureInfo targetCulture,
-			bool createTm,
-			IFileTypeManager fileTypeManager,
-			string studioTranslationMemory)
+		public TransitTmImporter(LanguagePair pair,	IFileTypeManager fileTypeManager, string studioTranslationMemory)
 		{
-			_sourceCulture = sourceCulture;
-			_targetCulture = targetCulture;
-			_createTm = createTm;
 			_fileTypeManager = fileTypeManager;
 
-			if (_createTm)
+			if (pair.CreateNewTm)
 			{
 				_fileBasedTM = new FileBasedTranslationMemory(
 					studioTranslationMemory,
 					string.Empty,
-					_sourceCulture,
-					_targetCulture,
+					pair.SourceLanguage,
+					pair.TargetLanguage,
 					GetFuzzyIndexes(),
 					GetRecognizers(),
 					TokenizerFlags.DefaultFlags,
@@ -48,24 +37,19 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			}
 			else
 			{
-				_fileBasedTM = new FileBasedTranslationMemory(studioTranslationMemory);
+				_fileBasedTM = new FileBasedTranslationMemory(pair.TmPath);
 			}
 		}
 
-		public TransitTmImporter(
-			string projectPath,
-			CultureInfo sourceLanguage,
-			CultureInfo targetLanguage,
-			string fileName,
-			IFileTypeManager fileTypeManager)
+		public TransitTmImporter(IFileTypeManager fileTypeManager, LanguagePair pair, string projectPath, string fileName)
 		{
 			_fileTypeManager = fileTypeManager;
 
 			_fileBasedTM = new FileBasedTranslationMemory(
 						Path.Combine(projectPath, string.Concat(fileName, ".sdltm")),
 						string.Concat(fileName, " description"),
-						sourceLanguage,
-						targetLanguage,
+						pair.SourceLanguage,
+						pair.TargetLanguage,
 						GetFuzzyIndexes(),
 				 		GetRecognizers(),
 						TokenizerFlags.DefaultFlags,
