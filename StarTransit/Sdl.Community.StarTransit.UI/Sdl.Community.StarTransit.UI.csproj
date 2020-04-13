@@ -155,6 +155,7 @@
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\TimeHelper.cs" />
+    <Compile Include="Helpers\WindowsCloseOnClickBehaviour.cs" />
     <Compile Include="Interfaces\IWindowActions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="StarTransitUIResources.Designer.cs">

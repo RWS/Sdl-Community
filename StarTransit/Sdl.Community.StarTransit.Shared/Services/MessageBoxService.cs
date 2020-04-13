@@ -20,6 +20,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			MessageBox.Show(text, header, MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
+		public DialogResult ShowInformationResultMessage(string text, string header)
+		{
+			return MessageBox.Show(text, header, MessageBoxButtons.OK, MessageBoxIcon.Information);
+		}
+
 		public bool AskForConfirmation(string message)
 		{
 			var result = MessageBox.Show(message, string.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);

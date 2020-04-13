@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
+using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.UI.Commands;
@@ -17,22 +17,25 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private string _translationMemoryPath;
 		private int _tmPenalty;
 		private ICommand _okCommand;
-		private ICommand _cancelCommand;
 
 		#endregion
 
 		#region Constructors
+
 		public TranslationMemoriesPenaltiesViewModel(PackageModel packageModel)
 		{
 			_packageModel = packageModel;
-			
-			if(!(_packageModel is null))
+
+			if (!(_packageModel is null) && packageModel.TMPenalties == null)
 			{
-				_packageModel.TMPenalties = new Dictionary<string, int>();
+				{
+					_packageModel.TMPenalties = new Dictionary<string, int>();
+				}
 			}
 			_translationMemoriesPenaltiesModelList = new ObservableCollection<TranslationMemoriesPenaltiesModel>();
 			LoadTranslationMemories();
 		}
+
 		#endregion
 
 		#region Public Properties
@@ -109,8 +112,16 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 							{
 								TranslationMemoryName = Path.GetFileName(filePath.TargetFile);
 								TranslationMemoryPath = filePath.TargetFile;
+								if (_packageModel.TMPenalties.Count > 0)
+								{
+									var existingTMPenalty = _packageModel.TMPenalties
+										.FirstOrDefault(p => Path.GetFileName(p.Key).Equals(TranslationMemoryName));
+									TMPenalty = !existingTMPenalty.Equals(new KeyValuePair<string, int>())
+										? existingTMPenalty.Value
+										: 0;
+								}
 
-								var translationMemoriesPenaltiesModel = new TranslationMemoriesPenaltiesModel()
+								var translationMemoriesPenaltiesModel = new TranslationMemoriesPenaltiesModel
 								{
 									TranslationMemoryName = TranslationMemoryName,
 									TranslationMemoryPath = TranslationMemoryPath,
@@ -127,36 +138,20 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		#region Commands
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new CommandHandler(OkAction, true));
-
-		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true));
 		#endregion
 
 		#region Actions
 		private void OkAction()
 		{
-			foreach (var tm in TranslationMemoriesPenaltiesModelList)
+			_packageModel.TMPenalties.Clear();
+			if (TranslationMemoriesPenaltiesModelList != null)
 			{
-				if (tm.TMPenalty > 0)
+				foreach (var tm in TranslationMemoriesPenaltiesModelList)
 				{
-					_packageModel.TMPenalties.Add(tm.TranslationMemoryPath, tm.TMPenalty);
-				}
-			}
-			CloseWindow();
-		}
-
-		private void CancelAction()
-		{
-			CloseWindow();
-		}
-
-		private void CloseWindow()
-		{
-			var windows = Application.Current.Windows;
-			foreach (Window window in windows)
-			{
-				if (window.Title.Equals("Translation Memories Penalties"))
-				{
-					window.Close();
+					if (tm.TMPenalty > 0)
+					{
+						_packageModel.TMPenalties.Add(tm.TranslationMemoryPath, tm.TMPenalty);
+					}
 				}
 			}
 		}

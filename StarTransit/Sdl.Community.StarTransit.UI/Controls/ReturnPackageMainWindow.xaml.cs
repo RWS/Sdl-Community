@@ -12,10 +12,11 @@ namespace Sdl.Community.StarTransit.UI.Controls
 	/// <summary>
 	/// Interaction logic for ReturnPackageMainWindow.xaml
 	/// </summary>
-	public partial class ReturnPackageMainWindow : MetroWindow
+	public partial class ReturnPackageMainWindow
     {
         private readonly ReturnFiles _returnPackageFiles;
-        private CellViewModel _cellViewModel;
+        private readonly CellViewModel _cellViewModel;
+
         public ReturnPackageMainWindow(ReturnPackage returnPackage)
         {
             InitializeComponent();
@@ -31,7 +32,7 @@ namespace Sdl.Community.StarTransit.UI.Controls
             _returnPackageFiles = new ReturnFiles(returnFilesViewModel);            
              _cellViewModel = new CellViewModel();
 
-            var returnPackageMainWindowViewModel = new ReturnPackageMainWindowViewModel(returnFilesViewModel, _cellViewModel,this);
+             var returnPackageMainWindowViewModel = new ReturnPackageMainWindowViewModel(returnFilesViewModel, _cellViewModel, messageBoxService);
             DataContext = returnPackageMainWindowViewModel;
             if (returnPackageMainWindowViewModel.CloseAction == null)
             {
