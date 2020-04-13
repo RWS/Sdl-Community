@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.UI.Commands;
@@ -17,7 +16,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private string _translationMemoryPath;
 		private int _tmPenalty;
 		private ICommand _okCommand;
-		private ICommand _cancelCommand;
 
 		#endregion
 
@@ -127,8 +125,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		#region Commands
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new CommandHandler(OkAction, true));
-
-		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true));
 		#endregion
 
 		#region Actions
@@ -139,24 +135,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				if (tm.TMPenalty > 0)
 				{
 					_packageModel.TMPenalties.Add(tm.TranslationMemoryPath, tm.TMPenalty);
-				}
-			}
-			CloseWindow();
-		}
-
-		private void CancelAction()
-		{
-			CloseWindow();
-		}
-
-		private void CloseWindow()
-		{
-			var windows = Application.Current.Windows;
-			foreach (Window window in windows)
-			{
-				if (window.Title.Equals("Translation Memories Penalties"))
-				{
-					window.Close();
 				}
 			}
 		}

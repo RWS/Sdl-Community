@@ -1,12 +1,15 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Remoting.Messaging;
+using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Commands;
-using Sdl.Community.StarTransit.UI.Controls;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
@@ -17,17 +20,18 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private ReturnPackage _returnPackage;
 		private readonly ReturnPackageService _returnService;
 		private readonly CellViewModel _cellViewModel;
+        private readonly IMessageBoxService _messageBoxService;
+
 		private bool _active;
-		private ReturnPackageMainWindow _window;
 		
 		public Action CloseAction { get; set; }
 
-		public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel, CellViewModel cellViewModel, ReturnPackageMainWindow window)
-		{
+		public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel, CellViewModel cellViewModel, IMessageBoxService messageBoxService)
+        {
+            _messageBoxService = messageBoxService;
 			_returnFilesViewModel = returnFilesViewModel;
 			_cellViewModel = cellViewModel;
 			_returnService = new ReturnPackageService();
-			_window = window;
 		}
 
 		public ICommand CreatePackageCommand => _createPackageCommand ?? (_createPackageCommand = new CommandHandler(CreatePackage, true));
@@ -54,8 +58,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 						AffirmativeButtonText = "OK"
 
 					};
-					var result = await _window.ShowMessageAsync("No files selected!", "Please select at least one file.", MessageDialogStyle.Affirmative, dialog);
-				}
+                    _messageBoxService.ShowWarningMessage("Please select at least one file.", "No files selected!");
+                }
 				else
 				{
 					Active = true;
@@ -82,9 +86,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 						Active = false;
 						_cellViewModel.ClearSelectedProjectsList();
 
-						var dialog = new MetroDialogSettings {AffirmativeButtonText = "OK"};
-						var result = await _window.ShowMessageAsync("Informative message", "The target file(s) was successfully returned", MessageDialogStyle.Affirmative, dialog);
-						if (result == MessageDialogResult.Affirmative)
+						var result = _messageBoxService.ShowInformationResultMessage("The target file(s) was successfully returned", "Informative message");
+						if (result == DialogResult.OK)
 						{
 							CloseAction();
 						}

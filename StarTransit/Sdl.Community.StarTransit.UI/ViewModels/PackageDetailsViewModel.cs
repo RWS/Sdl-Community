@@ -6,7 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using System.Xml.Linq;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Helpers;
@@ -18,29 +20,34 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 {
 	public class PackageDetailsViewModel : BaseViewModel, IDataErrorInfo, IWindowActions
 	{
-		private string _textLocation;
-		private string _txtName;
-		private string _txtDescription;
+	
 		private readonly List<ProjectTemplateInfo> _studioTemplates;
+        private readonly ObservableCollection<ProjectTemplateInfo> _templates;
+        private readonly string _sourceLanguage;
+        private readonly string _targetLanguage;
+        private readonly PackageModel _packageModel;
+        private readonly bool _canExecute;
+        private readonly IMessageBoxService _messageBoxService;
+
+		private string _textLocation;
+        private string _txtName;
+        private string _txtDescription;
 		private bool _hasDueDate;
 		private DateTime? _dueDate;
-		private readonly string _sourceLanguage;
-		private readonly string _targetLanguage;
-		private readonly PackageModel _packageModel;
-		private ICommand _browseCommand;
-		private readonly bool _canExecute;
 		private ProjectTemplateInfo _template;
 		private Customer _selectedCustomer;
-		private readonly ObservableCollection<ProjectTemplateInfo> _templates;
+		
 		private int _selectedHour;
 		private int _selectedMinute;
 		private string _selectedMoment;
+
+        private ICommand _browseCommand;
 
 		public List<int> HourList { get; set; }
 		public List<int> MinutesList { get; set; }
 		public List<string> MomentsList { get; set; }
 
-		public PackageDetailsViewModel(PackageModel package)
+		public PackageDetailsViewModel(PackageModel package, IMessageBoxService messageBoxService)
 		{
 			_packageModel = package;
 			_txtName = package.Name;
@@ -51,6 +58,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			_templates = new ObservableCollection<ProjectTemplateInfo>(package.StudioTemplates);
 			_hasDueDate = false;
 			_targetLanguage = string.Empty;
+            _messageBoxService = messageBoxService;
 
 			foreach (var pair in package.LanguagePairs)
 			{
@@ -285,8 +293,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public Action CloseAction { get; set; }
 
-		public Action<string, string> ShowWindowsMessage { get; set; }
-
 		public PackageModel GetPackageModel()
 		{
 			try
@@ -318,7 +324,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			{
 				if (!Utils.IsFolderEmpty(folderDialog.FileName))
 				{
-					ShowWindowsMessage("Folder not empty!", "Please select an empty folder!");
+					_messageBoxService.ShowWarningMessage("Please select an empty folder!","Folder not empty!");
 				}
 				else
 				{

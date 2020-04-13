@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:helpers ="clr-namespace:Sdl.Community.StarTransit.UI.Helpers"
 		mc:Ignorable="d"
 		WindowStartupLocation="CenterScreen"
 		ResizeMode="NoResize"
@@ -47,9 +48,9 @@
 		</DataGrid>
 		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0,0,5,0">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="OkButton" Command="{Binding OkCommand}" Content="Ok"
+				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="OkButton" Command="{Binding OkCommand}" Content="Ok" helpers:WindowCloseOnClickBehaviour.IsEnabled="True"
 						Width="60" Height="30" Visibility="{Binding Visibility}" Margin="0,0,5,0" />
-				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="CancelButton" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=TMPenaltiesWindow}" Content="Cancel"
+				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="CancelButton" IsCancel="True" Content="Cancel" helpers:WindowCloseOnClickBehaviour.IsEnabled="True"
 						Width="80" Height="30" Visibility="{Binding Visibility}"/>
             </StackPanel>
         </StackPanel>

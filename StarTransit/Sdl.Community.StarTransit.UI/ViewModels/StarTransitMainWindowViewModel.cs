@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Utils;
@@ -33,6 +34,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private bool _hasTm;
 		private readonly TranslationMemories _translationMemories;
 		private readonly TranslationMemoriesViewModel _translationMemoriesViewModel;
+        private readonly IMessageBoxService _messageBoxService;
 		#endregion
 
 		#region Constructors
@@ -41,8 +43,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			PackageDetails packageDetails,
 			TranslationMemories translationMemories,
 			TranslationMemoriesViewModel translationMemoriesViewModel,
-			FinishViewModel finishViewModel)
-		{
+			FinishViewModel finishViewModel,
+            IMessageBoxService messageBoxService)
+        {
+            _messageBoxService = messageBoxService;
 			_packageDetailsViewModel = packageDetailsViewModel;
 			_packageDetails = packageDetails;
 			_translationMemories = translationMemories;
@@ -192,7 +196,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		#region Actions
 		public Action CloseAction { get; set; }
-		public Action<string, string> ShowWindowsMessage { get; set; }
 		#endregion
 
 		#region Commands
@@ -345,7 +348,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				}
 				else
 				{
-					ShowWindowsMessage(messageModel.Title, messageModel.Message);
+                    _messageBoxService.ShowInformationMessage(messageModel.Message, messageModel.Title);
 					Active = false;
 					CanExecuteBack = CanExecuteCreate = false;
 				}
@@ -368,12 +371,12 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		{
 			if(string.IsNullOrEmpty(folderPath))
 			{
-				ShowWindowsMessage("Warning", "All fields are required!");
+                _messageBoxService.ShowWarningMessage("All fields are required!", "Warning");
 				return false;
 			}
 			if (!Helpers.Utils.IsFolderEmpty(folderPath))
 			{
-				ShowWindowsMessage("Folder not empty!", "Please select an empty folder");
+                _messageBoxService.ShowWarningMessage("Please select an empty folder", "Folder not empty!");
 				return false;
 			}
 			return true;
