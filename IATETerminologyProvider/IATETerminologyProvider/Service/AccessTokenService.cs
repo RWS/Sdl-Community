@@ -288,7 +288,8 @@ namespace IATETerminologyProvider.Service
 		{
 			var httpClient = new HttpClient
 			{
-				BaseAddress = new Uri(ApiUrls.GetAccessTokenUri(userName, password))
+				BaseAddress = new Uri(ApiUrls.GetAccessTokenUri(userName, password)),
+				Timeout = TimeSpan.FromMinutes(2)
 			};
 			return GetResponse(httpClient);
 		}
@@ -297,7 +298,8 @@ namespace IATETerminologyProvider.Service
 		{
 			var httpClient = new HttpClient
 			{
-				BaseAddress = new Uri(ApiUrls.GetExtendAccessTokenUri(RefreshToken))
+				BaseAddress = new Uri(ApiUrls.GetExtendAccessTokenUri(RefreshToken)),
+				Timeout = TimeSpan.FromMinutes(2)
 			};
 			return GetResponse(httpClient);
 		}

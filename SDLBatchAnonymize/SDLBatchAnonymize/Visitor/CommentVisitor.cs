@@ -21,6 +21,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Visitor
 		}
 		public void VisitTagPair(ITagPair tagPair)
 		{
+			VisitChildren(tagPair);
 		}
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)

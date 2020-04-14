@@ -169,10 +169,7 @@ namespace IATETerminologyProvider.ViewModel
 
 				var persistenceService = new PersistenceService();
 				persistenceService.AddSettings(ProviderSettings);
-
-				//OnSaveSettingsCommandRaised?.Invoke();
 			}
-
 				DialogResult = true;
 		}
 

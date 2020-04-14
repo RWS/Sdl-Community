@@ -53,7 +53,8 @@ namespace IATETerminologyProvider.Service
 
 			var httpClient = new HttpClient
 			{
-				BaseAddress = new Uri(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString()))
+				BaseAddress = new Uri(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString())),
+				Timeout = TimeSpan.FromMinutes(2)
 			};
 			Utils.AddDefaultParameters(httpClient);
 
@@ -76,7 +77,7 @@ namespace IATETerminologyProvider.Service
 				var httpResponseString = httpResponse.Content?.ReadAsStringAsync().Result;
 				var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseString);
 
-				results= MapResponseValues(httpResponseString, domainsJsonResponse);
+				results = MapResponseValues(httpResponseString, domainsJsonResponse);
 				return results;
 			}
 			Log.Logger.Error($"Get Terms Status code:{httpResponse?.StatusCode}");

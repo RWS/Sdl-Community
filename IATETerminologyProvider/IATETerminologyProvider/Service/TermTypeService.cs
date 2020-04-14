@@ -19,7 +19,8 @@ namespace IATETerminologyProvider.Service
 			var itateTermTypes = new ObservableCollection<ItemsResponseModel>();
 			var httpClient = new HttpClient
 			{
-				BaseAddress = new Uri(ApiUrls.GetTermTypeUri("true", "en", "100", "0"))
+				BaseAddress = new Uri(ApiUrls.GetTermTypeUri("true", "en", "100", "0")),
+				Timeout = TimeSpan.FromMinutes(2)
 			};
 
 			Utils.AddDefaultParameters(httpClient);

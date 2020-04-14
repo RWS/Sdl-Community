@@ -21,12 +21,16 @@ namespace IATETerminologyProvider.Service
 		public async Task<ObservableCollection<ItemsResponseModel>> GetDomains()
 		{
 			var domains = new ObservableCollection<ItemsResponseModel>();
-			var httpClient = new HttpClient { BaseAddress = new Uri(ApiUrls.GetDomainUri()) };
+			var httpClient = new HttpClient
+			{
+				BaseAddress = new Uri(ApiUrls.GetDomainUri()),
+				Timeout = TimeSpan.FromMinutes(2)
+			};
 			Utils.AddDefaultParameters(httpClient);
 
 			var httpRequest = new HttpRequestMessage
 			{
-				Method = HttpMethod.Get
+				Method = HttpMethod.Get,
 			};
 
 			try
