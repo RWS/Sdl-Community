@@ -32,10 +32,17 @@
 				  SelectionUnit="Cell" RowHeaderWidth="0" BorderThickness="1" BorderBrush="LightGray"
 				  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGray" Margin="0,0,0,10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Translation Memory"
-                                    Binding="{Binding TranslationMemoryName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
-									IsReadOnly="True" Width="550" />
-                <controls:DataGridNumericUpDownColumn Header="Penalty" Width="80"
+				<DataGridTextColumn Header="Translation Memory"
+				                    Binding="{Binding TranslationMemoryName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
+				                    IsReadOnly="True" Width="550" >
+					<DataGridTextColumn.ElementStyle>
+						<Style TargetType="{x:Type TextBlock}">
+							<Setter Property="TextAlignment" Value="Left" />
+							<Setter Property="Margin" Value="10 0 0 0" />
+						</Style>
+					</DataGridTextColumn.ElementStyle>
+				</DataGridTextColumn>
+				<controls:DataGridNumericUpDownColumn Header="Penalty" Width="80"
                                                       Binding="{Binding TMPenalty,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
                                                       Minimum="0" Maximum="25"/>
             </DataGrid.Columns>
@@ -49,7 +56,7 @@
 		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0,0,5,0">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="OkButton" Command="{Binding OkCommand}" Content="Ok" helpers:WindowCloseOnClickBehaviour.IsEnabled="True"
-						Width="60" Height="30" Visibility="{Binding Visibility}" Margin="0,0,5,0" />
+						Width="80" Height="30" Visibility="{Binding Visibility}" Margin="0,0,5,0" />
 				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="CancelButton" IsCancel="True" Content="Cancel"
 						Width="80" Height="30" Visibility="{Binding Visibility}"/>
             </StackPanel>
