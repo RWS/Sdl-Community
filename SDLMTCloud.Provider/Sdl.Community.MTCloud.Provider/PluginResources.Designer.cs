@@ -409,6 +409,51 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SDL MT Cloud Language Mapping.
+        /// </summary>
+        public static string SDLMTCloud_Action_LanguageMapping_Description {
+            get {
+                return ResourceManager.GetString("SDLMTCloud_Action_LanguageMapping_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Mapping.
+        /// </summary>
+        public static string SDLMTCloud_Action_LanguageMapping_Name {
+            get {
+                return ResourceManager.GetString("SDLMTCloud_Action_LanguageMapping_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SDL MT Cloud Provider.
+        /// </summary>
+        public static string SDLMTCloud_Provider_Description {
+            get {
+                return ResourceManager.GetString("SDLMTCloud_Provider_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SDL MT Cloud Provider.
+        /// </summary>
+        public static string SDLMTCloud_Provider_Name {
+            get {
+                return ResourceManager.GetString("SDLMTCloud_Provider_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SDL MT Cloud.
+        /// </summary>
+        public static string SDLMTCloud_RibbonGroup_Name {
+            get {
+                return ResourceManager.GetString("SDLMTCloud_RibbonGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap Search__1_ {
