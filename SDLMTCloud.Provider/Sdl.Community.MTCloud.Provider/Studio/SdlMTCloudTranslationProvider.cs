@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -16,7 +17,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	{
 		private readonly EditorController _editorController;
 		private LanguagePair _languageDirection;
-	
+
 		public SdlMTCloudTranslationProvider(Uri uri, ITranslationService translationService, string translationProviderState, EditorController editorController)
 		{
 			Uri = uri;
@@ -27,7 +28,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			_editorController = editorController;
 
 			SubscriptionInfo = Task.Run(async () =>
-				await TranslationService.GetLanguagePairs(translationService.ConnectionService.Credential.AccountId)).Result;			
+				await TranslationService.GetLanguagePairs(translationService.ConnectionService.Credential.AccountId)).Result;
 		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, Constants.PluginName);
@@ -89,8 +90,18 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			try
 			{
 				_languageDirection = languageDirection;
-				var languagePair = SetSupportedLanguages(_languageDirection);
-				if (languagePair != null)
+
+				if (TranslationService.LanguageMappings.Count == 0 && languageDirection != null)
+				{
+					// ensure the language mappings are loaded, especially when derived from a template 
+					var optionsViewModel = new OptionsViewModel(null, this,
+						new[] { new LanguagePair(languageDirection.SourceCulture, languageDirection.TargetCulture) });
+					optionsViewModel.SaveLanguageMappings();
+					TranslationService.UpdateLanguageMappings();
+				}
+
+				var supportedLanguage = SetSupportedLanguages(_languageDirection);
+				if (supportedLanguage != null)
 				{
 					return true;
 				}

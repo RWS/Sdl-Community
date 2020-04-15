@@ -22,7 +22,8 @@ namespace Sdl.Community.MTCloud.Provider.Helpers
 			{
 				Directory.CreateDirectory(logDirectoryPath);
 			}
-			var target = new FileTarget
+
+			var target = new FileTarget("SDLMTCloud")
 			{
 				FileName = Path.Combine(logDirectoryPath, "SDLMachineTranslationCloudLogs.txt"),
 				// Roll over the log every 10 MB
