@@ -19,17 +19,14 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
+	<Grid>
+		<Grid.RowDefinitions>
             <RowDefinition Height="330"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
 		<DataGrid ItemsSource="{Binding TranslationMemoriesPenaltiesModelList,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
-                  AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="0" Grid.Row="0"
+                  AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="0"
 				  SelectionUnit="Cell" RowHeaderWidth="0" BorderThickness="1" BorderBrush="LightGray"
 				  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGray" Margin="0,0,0,10">
             <DataGrid.Columns>
@@ -48,7 +45,7 @@
 				<Style TargetType="DataGridCell" BasedOn="{StaticResource DgrCellStyle}" />
 			</DataGrid.CellStyle>
 		</DataGrid>
-		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0,0,5,0">
+		<StackPanel Orientation="Vertical" Grid.Row="1" Margin="0,0,5,0">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="OkButton" Command="{Binding OkCommand}" Content="Ok" helpers:WindowCloseOnClickBehaviour.IsEnabled="True"
 						Width="80" Height="30" Visibility="{Binding Visibility}" Margin="0,0,5,0" />
