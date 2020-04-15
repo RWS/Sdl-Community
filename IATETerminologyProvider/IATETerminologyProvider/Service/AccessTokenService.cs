@@ -315,9 +315,6 @@ namespace IATETerminologyProvider.Service
 
 			_requestedAccessToken = DateTime.MinValue;
 			_extendedRefreshToken = DateTime.MinValue;
-
-			//_userName = string.Empty;
-			//_password = string.Empty;
 		}
 
 		private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
