@@ -15,7 +15,8 @@
                 <ResourceDictionary Source=".\UIHelpers\ButtonsStyle.xaml"/>
 				<ResourceDictionary Source=".\UIHelpers\MetroStyle.xaml"/>
 				<ResourceDictionary Source=".\UIHelpers\DataGridStyle2.xaml"/>
-			</ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source=".\UIHelpers\GeneralStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -32,17 +33,11 @@
 				  SelectionUnit="Cell" RowHeaderWidth="0" BorderThickness="1" BorderBrush="LightGray"
 				  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGray" Margin="0,0,0,10">
             <DataGrid.Columns>
-				<DataGridTextColumn Header="Translation Memory"
+				<DataGridTextColumn Header="Translation Memory" ElementStyle="{StaticResource DataGridTextBlockStyle}"
 				                    Binding="{Binding TranslationMemoryName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
 				                    IsReadOnly="True" Width="550" >
-					<DataGridTextColumn.ElementStyle>
-						<Style TargetType="{x:Type TextBlock}">
-							<Setter Property="TextAlignment" Value="Left" />
-							<Setter Property="Margin" Value="10 0 0 0" />
-						</Style>
-					</DataGridTextColumn.ElementStyle>
 				</DataGridTextColumn>
-				<controls:DataGridNumericUpDownColumn Header="Penalty" Width="80"
+				<controls:DataGridNumericUpDownColumn Header="Penalty" Width="80" CellStyle="{StaticResource MetroDataGridCellStyle}"
                                                       Binding="{Binding TMPenalty,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
                                                       Minimum="0" Maximum="25"/>
             </DataGrid.Columns>
