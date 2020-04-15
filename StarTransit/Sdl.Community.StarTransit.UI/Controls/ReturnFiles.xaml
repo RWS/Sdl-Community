@@ -48,7 +48,7 @@
 				</ListBox.ItemContainerStyle>
 			</ListBox>
 			
-			<Label Grid.Row="2" Grid.ColumnSpan="2" Margin="0 20 0 0" Content="Please select an output path for the .tpf file"/>
+			<Label Grid.Row="2" Grid.ColumnSpan="2" Margin="0 20 0 0" Content="Please select an output path for the .tpf file, otherwise the package will be created within the project's folder."/>
 			<TextBox x:Name="ReturnPackagePath" Grid.Row="2" Margin="5,50,0,0" Text="{Binding ReturnPackageLocation}" ToolTip="Please select an output path for the .tpf file"/>
 			<Button Style="{DynamicResource ButtonStyleShadowless}" x:Name="BrowseBtn" Grid.Row="2" Grid.Column="1" Margin="10,50,0,0" Width="70" Content="Browse" HorizontalAlignment="Left" Command="{Binding BrowseCommand}"/>
 		</Grid>

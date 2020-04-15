@@ -9,13 +9,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
 {
 	public class TemplateService
 	{
-		private ProjectsController _projectsController;
-
-		public static readonly Log Log = Log.Instance;
+		private readonly ProjectsController _projectsController;
 
 		public TemplateService()
 		{
-			_projectsController = Extensions.GetProjectsController();
+			var helpers = new Helpers();
+			_projectsController = helpers.GetProjectsController();
 		}
 
 		public List<ProjectTemplateInfo> LoadProjectTemplates()
