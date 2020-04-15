@@ -142,4 +142,34 @@
   <data name="TermSearchService_Error_in_refreshing_access_token" xml:space="preserve">
     <value>Error in refreshing the access token</value>
   </data>
+  <data name="Domains_description" xml:space="preserve">
+    <value>Select domain(s):</value>
+  </data>
+  <data name="Domains_header" xml:space="preserve">
+    <value>Domain</value>
+  </data>
+  <data name="Settings_Descr" xml:space="preserve">
+    <value>Terminology provider settings</value>
+  </data>
+  <data name="Terms_header" xml:space="preserve">
+    <value>Term Type</value>
+  </data>
+  <data name="TermType_Description" xml:space="preserve">
+    <value>Select term type(s):</value>
+  </data>
+  <data name="WindowsControl_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WindowsControl_Maximize" xml:space="preserve">
+    <value>Maximize</value>
+  </data>
+  <data name="WindowsControl_Minimize" xml:space="preserve">
+    <value>Minimize</value>
+  </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Reset_Tooltip" xml:space="preserve">
+    <value>Reset all settings to default</value>
+  </data>
 </root>

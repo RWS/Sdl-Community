@@ -10,44 +10,37 @@ namespace IATETerminologyProvider.Service
 {
 	public class PersistenceService
 	{
-		#region Private Fields
 		private readonly string _persistancePath;
 		private List<ProviderSettings> _providerSettingList = new List<ProviderSettings>();
         public static readonly Log Log = Log.Instance;
-		#endregion
 
-		#region Constructors
 		public PersistenceService()
 		{
 			_persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 				@"SDL Community\IATETerminologyProvider\IATETerminology.json");
 		}
-		#endregion
 
-		#region Public Methods
 		public void AddSettings(ProviderSettings providerSettings)
 		{
 			if (providerSettings == null)
 			{
 				throw new NullReferenceException("Provider settings cannot be null");
 			}
-			
+
 			GetProviderSettingsList();
 
-			if (providerSettings != null)
-			{
-				var result = _providerSettingList.FirstOrDefault();
+			var result = _providerSettingList.FirstOrDefault();
 
-				if (result != null)
-				{
-					result.Domains = providerSettings.Domains;
-					result.TermTypes = providerSettings.TermTypes;					
-				}
-				else
-				{
-					_providerSettingList.Add(providerSettings);
-				}
+			if (result != null)
+			{
+				result.Domains = providerSettings.Domains;
+				result.TermTypes = providerSettings.TermTypes;
 			}
+			else
+			{
+				_providerSettingList.Add(providerSettings);
+			}
+
 			WriteToFile();
 		}
 
@@ -68,9 +61,7 @@ namespace IATETerminologyProvider.Service
 
 			return providerSettings;
 		}
-		#endregion
 
-		#region Internal methods
 		internal void WriteToFile()
 		{
 			try
@@ -92,6 +83,5 @@ namespace IATETerminologyProvider.Service
                 Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
 			}
 		}
-		#endregion
 	}
 }

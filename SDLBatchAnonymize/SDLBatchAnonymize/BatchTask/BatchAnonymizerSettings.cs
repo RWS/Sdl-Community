@@ -5,10 +5,16 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 {
 	public class BatchAnonymizerSettings:SettingsGroup,IBatchAnonymizerSettings
 	{
+		private bool _useGeneral = true;
 		public bool AnonymizeComplete
 		{
 			get => GetSetting<bool>(nameof(AnonymizeComplete));
 			set => GetSetting<bool>(nameof(AnonymizeComplete)).Value = value;
+		}
+		public bool UseGeneral
+		{
+			get => GetSetting<bool>(nameof(UseGeneral));
+			set => GetSetting<bool>(nameof(UseGeneral)).Value = value;
 		}
 
 		public bool CreatedByChecked
@@ -79,6 +85,16 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 		{
 			get => GetSetting<string>(nameof(TmName));
 			set => GetSetting<string>(nameof(TmName)).Value = value;
+		}
+
+		protected override object GetDefaultValue(string settingId)
+		{
+			switch (settingId)
+			{
+				case nameof(UseGeneral):
+					return _useGeneral;
+			}
+			return base.GetDefaultValue(settingId);
 		}
 	}
 }

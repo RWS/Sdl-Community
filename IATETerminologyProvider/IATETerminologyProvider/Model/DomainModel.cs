@@ -12,7 +12,7 @@
 			set
 			{
 				_isSelected = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsSelected));
 			}
 		}	
 	}

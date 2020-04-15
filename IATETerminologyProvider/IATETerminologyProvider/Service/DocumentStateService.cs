@@ -8,14 +8,14 @@ namespace IATETerminologyProvider.Service
 {
 	public class DocumentStateService
 	{
-		private EditorController _editorController;
+		private readonly EditorController _editorController;
 		private string _activeDocumentId;
 		private readonly List<DocumentEntryState> _documentEntriesState;
 
 		public DocumentStateService()
 		{			
 			_documentEntriesState = new List<DocumentEntryState>();
-			_editorController = GetEditorController();
+			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
 		}		
 
 		public void UpdateDocumentEntriesState(IATETermsControl iateTermsControl)
@@ -24,7 +24,7 @@ namespace IATETerminologyProvider.Service
 			{
 				var activeFile = _editorController.ActiveDocument.Files?.ToList()[0];
 
-				if (activeFile == null)
+				if (activeFile is null)
 				{
 					return;
 				}
@@ -32,12 +32,10 @@ namespace IATETerminologyProvider.Service
 				_activeDocumentId = activeFile.Id.ToString();				
 
 				var documentEntries = _documentEntriesState.FirstOrDefault(a => a.DocumentId == _activeDocumentId);
-				if (documentEntries != null)
-				{
-					var projectInfo = _editorController.ActiveDocument.Project.GetProjectInfo();
-					iateTermsControl.UpdateEntriesInView(documentEntries.Entries,
-						projectInfo.SourceLanguage, activeFile.Language, documentEntries.SelectedEntry);
-				}
+				if (documentEntries is null) return;
+				var projectInfo = _editorController.ActiveDocument.Project.GetProjectInfo();
+				iateTermsControl.UpdateEntriesInView(documentEntries.Entries,
+					projectInfo.SourceLanguage, activeFile.Language, documentEntries.SelectedEntry);
 			}
 		}
 
@@ -65,11 +63,6 @@ namespace IATETerminologyProvider.Service
 					});
 				}
 			}
-		}
-
-		private static EditorController GetEditorController()
-		{
-			return SdlTradosStudio.Application.GetController<EditorController>();
 		}
 	}
 }
