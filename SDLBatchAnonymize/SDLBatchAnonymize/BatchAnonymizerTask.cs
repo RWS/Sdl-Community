@@ -23,26 +23,30 @@ namespace Sdl.Community.SDLBatchAnonymize
 	public class BatchAnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
 		private FileBasedProject _currentProject;
-		
+		private BatchAnonymizerSettings _generalSettings;
+		private UserNameService _userNameService;
+		private ResourceOriginsService _resourceOriginsService;
+
 		protected override void OnInitializeTask()
 		{
+			_generalSettings = GetSetting<BatchAnonymizerSettings>();
+			_resourceOriginsService = new ResourceOriginsService();
+			_userNameService = new UserNameService();
+
 			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			_currentProject = projectsController.CurrentProject ?? projectsController.SelectedProjects.FirstOrDefault();
 			var projectInfo = _currentProject?.GetProjectInfo();
 			if (projectInfo is null) return;
 			var backupService = new BackupService();
-
+			
 			backupService.BackupProject(projectInfo.LocalProjectFolder, projectInfo.Name);
 		}
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			var usernameService = new UserNameService();
-			var resourceOriginsService = new ResourceOriginsService();
-
-			var pojectSettings = GetAnonymizationSettings(projectFile.Language);
-			
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerProcessor(pojectSettings, usernameService,resourceOriginsService)));
+			var settings = _generalSettings.UseGeneral ? _generalSettings : GetAnonymizationSettings(projectFile.Language);
+		
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerProcessor(settings, _userNameService, _resourceOriginsService)));
 		}
 
 		private BatchAnonymizerSettings GetAnonymizationSettings(Language targetLanguage)

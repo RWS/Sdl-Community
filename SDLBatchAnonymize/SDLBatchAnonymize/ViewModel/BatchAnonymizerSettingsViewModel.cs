@@ -9,6 +9,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 	public class BatchAnonymizerSettingsViewModel : ModelBase, ISettingsAware<BatchAnonymizerSettings>
 	{
 		private bool _anonymizeAllSettings;
+		private bool _useGeneral;
 		private bool _createdByChecked;
 		private bool _modifyByChecked;
 		private bool _commentChecked;
@@ -35,6 +36,17 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 				_anonymizeAllSettings = value;
 				SetOptions(value);
 				OnPropertyChanged(nameof(AnonymizeAllSettings));
+			}
+		}
+
+		public bool UseGeneral
+		{
+			get => _useGeneral;
+			set
+			{
+				if (_useGeneral == value) return;
+				_useGeneral = value;
+				OnPropertyChanged(nameof(UseGeneral));
 			}
 		}
 
@@ -240,6 +252,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 		{
 			if (Settings == null) return;
 			AnonymizeAllSettings = Settings.AnonymizeComplete;
+			UseGeneral = Settings.UseGeneral;
 			CreatedByChecked = Settings.CreatedByChecked;
 			CreatedByName = Settings.CreatedByName;
 			ModifyByChecked = Settings.ModifyByChecked;

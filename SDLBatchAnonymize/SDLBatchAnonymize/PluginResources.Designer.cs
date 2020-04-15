@@ -115,6 +115,15 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The default settings will anonymize the project across all language pairs. If you wish to use different values for each language pair uncheck &quot;Apply to all language pairs in the project&quot; and enter the values under each specific language pair in the project..
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Download {
@@ -131,6 +140,15 @@ namespace Sdl.Community.SDLBatchAnonymize {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If this box is checked the values used for anonymization will apply to all the language pairs in the project..
+        /// </summary>
+        public static string GeneralTooltip {
+            get {
+                return ResourceManager.GetString("GeneralTooltip", resourceCulture);
             }
         }
         
@@ -294,6 +312,15 @@ namespace Sdl.Community.SDLBatchAnonymize {
         public static string TrackedToolTip {
             get {
                 return ResourceManager.GetString("TrackedToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply to all language pairs in the project.
+        /// </summary>
+        public static string UseGeneralSettings {
+            get {
+                return ResourceManager.GetString("UseGeneralSettings", resourceCulture);
             }
         }
         
