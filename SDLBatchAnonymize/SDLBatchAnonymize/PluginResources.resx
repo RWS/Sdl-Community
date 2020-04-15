@@ -136,7 +136,7 @@
     <value>Remove or replace the name of the user who created the original translation</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>The default settings will anonymize the project across all language pairs. If you wish to use different values for each language pair uncheck "Apply to all language pairs in the project" and enter the values under each specific language pair in the project.</value>
+    <value>The default settings will anonymize the project across all language pairs. If you wish to use different values for each language pair uncheck "Use settings from All Language Pairs" and enter the values under each specific language pair in the project.</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -146,7 +146,7 @@
     <value>Resources\ForumIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="GeneralTooltip" xml:space="preserve">
-    <value>If this box is checked the values used for anonymization will apply to all the language pairs in the project.</value>
+    <value>If this box is checked, the values for anonymization will be taken from the settings under All Language Pairs</value>
   </data>
   <data name="LastModified" xml:space="preserve">
     <value>Last modified by</value>
@@ -203,7 +203,7 @@
     <value>Remove or replace the name of the user who inserted/deleted text as tracked changes</value>
   </data>
   <data name="UseGeneralSettings" xml:space="preserve">
-    <value>Apply to all language pairs in the project</value>
+    <value>Use settings from All Language Pairs</value>
   </data>
   <data name="UsernameHeader" xml:space="preserve">
     <value>Username</value>

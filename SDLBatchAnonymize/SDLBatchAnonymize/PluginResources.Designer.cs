@@ -115,7 +115,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The default settings will anonymize the project across all language pairs. If you wish to use different values for each language pair uncheck &quot;Apply to all language pairs in the project&quot; and enter the values under each specific language pair in the project..
+        ///   Looks up a localized string similar to The default settings will anonymize the project across all language pairs. If you wish to use different values for each language pair uncheck &quot;Use settings from All Language Pairs&quot; and enter the values under each specific language pair in the project..
         /// </summary>
         public static string Description {
             get {
@@ -144,7 +144,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If this box is checked the values used for anonymization will apply to all the language pairs in the project..
+        ///   Looks up a localized string similar to If this box is checked, the values for anonymization will be taken from the settings under All Language Pairs.
         /// </summary>
         public static string GeneralTooltip {
             get {
@@ -316,7 +316,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply to all language pairs in the project.
+        ///   Looks up a localized string similar to Use settings from All Language Pairs.
         /// </summary>
         public static string UseGeneralSettings {
             get {
