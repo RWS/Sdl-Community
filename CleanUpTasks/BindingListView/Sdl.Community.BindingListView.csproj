@@ -217,7 +217,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
+  <!--<PropertyGroup>
     <PostBuildEvent>xcopy /y /d  "$(ProjectDir)$(OutDir)*.dll" "$(SolutionDir)$(SolutionName)\obj\Debug\"</PostBuildEvent>
-  </PropertyGroup>
+  </PropertyGroup>-->
 </Project>

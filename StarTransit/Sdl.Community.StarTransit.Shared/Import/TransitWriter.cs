@@ -15,8 +15,6 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		private XmlDocument _targetFile;
 		private TransitTextExtractor _textExtractor;
 
-		public static readonly Log Log = Log.Instance;
-
 		public void GetProposedOutputFileInfo(IPersistentFileConversionProperties fileProperties, IOutputFileInfo proposedFileInfo)
 		{
 			_originalFileProperties = fileProperties;

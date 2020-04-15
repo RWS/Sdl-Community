@@ -64,19 +64,19 @@
 						</StackPanel>
 						<RadioButton Style="{DynamicResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"/>
                     </StackPanel>
-					<Button Style="{DynamicResource ButtonStyleShadowless}" x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}" Grid.Row="1" Grid.Column="1"
+					<Button Style="{DynamicResource ButtonStyleShadowless}" x:Name="CreateTmButton" Command="{Binding Command}" Content="Browse" Grid.Row="1" Grid.Column="1"
 							Width="auto" Height="30" Margin="100,70,5,5" Visibility="{Binding Visibility}" >						
 					</Button>
-                    <TextBlock Grid.Column="0" Grid.Row="2" Text="TM name:" Margin="20,15,22,15"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="TM name:" Margin="25,25,22,15"/>
                     <TextBox Style="{DynamicResource MetroTextBox}"
 						Controls:TextBoxHelper.ClearTextButton="True"                
 						Controls:TextBoxHelper.IsWaitingForData="True"
 						Controls:TextBoxHelper.UseFloatingWatermark="True" 
   						Controls:TextBoxHelper.Watermark="TM name" 
-						ToolTip="{Binding TmName}" Grid.Row="2" Grid.ColumnSpan="2" Width="auto" Height="40" Margin="85,0,5,0" 
+						ToolTip="{Binding TmName}" Grid.Row="2" Grid.ColumnSpan="2" Width="auto" Height="40" Margin="90,15,5,0" 
 						    Text="{Binding TmName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" IsEnabled="{Binding IsEnabled}"
 						x:Name="TmName" TextWrapping="Wrap" />
-                    <TextBlock Grid.ColumnSpan="2" Margin="20" Foreground="Red" Name="TmLanguageValidation" Visibility="{Binding TmMessage}" Grid.Column="0" Grid.Row="3">Please select a Translation Memory that matches the languages in this project.</TextBlock>
+                    <TextBlock Grid.ColumnSpan="2" Margin="20" Foreground="Red" Name="TmLanguageValidation" Visibility="{Binding TmMessage}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="3">Please select a Translation Memory that matches the languages in this project.</TextBlock>
                 </Grid>
             </StackPanel>
         </Border>

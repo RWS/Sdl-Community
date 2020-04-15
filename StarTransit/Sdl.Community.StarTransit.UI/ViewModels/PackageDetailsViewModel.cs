@@ -6,7 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using System.Xml.Linq;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Helpers;
@@ -18,31 +20,34 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 {
 	public class PackageDetailsViewModel : BaseViewModel, IDataErrorInfo, IWindowActions
 	{
-		private string _textLocation;
-		private string _txtName;
-		private string _txtDescription;
+	
 		private readonly List<ProjectTemplateInfo> _studioTemplates;
+        private readonly ObservableCollection<ProjectTemplateInfo> _templates;
+        private readonly string _sourceLanguage;
+        private readonly string _targetLanguage;
+        private readonly PackageModel _packageModel;
+        private readonly bool _canExecute;
+        private readonly IMessageBoxService _messageBoxService;
+
+		private string _textLocation;
+        private string _txtName;
+        private string _txtDescription;
 		private bool _hasDueDate;
 		private DateTime? _dueDate;
-		private readonly string _sourceLanguage;
-		private readonly string _targetLanguage;
-		private readonly PackageModel _packageModel;
-		private ICommand _browseCommand;
-		private readonly bool _canExecute;
 		private ProjectTemplateInfo _template;
 		private Customer _selectedCustomer;
-		private readonly ObservableCollection<ProjectTemplateInfo> _templates;
+		
 		private int _selectedHour;
 		private int _selectedMinute;
 		private string _selectedMoment;
 
-		public static readonly Log Log = Log.Instance;
+        private ICommand _browseCommand;
 
 		public List<int> HourList { get; set; }
 		public List<int> MinutesList { get; set; }
 		public List<string> MomentsList { get; set; }
 
-		public PackageDetailsViewModel(PackageModel package)
+		public PackageDetailsViewModel(PackageModel package, IMessageBoxService messageBoxService)
 		{
 			_packageModel = package;
 			_txtName = package.Name;
@@ -53,6 +58,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			_templates = new ObservableCollection<ProjectTemplateInfo>(package.StudioTemplates);
 			_hasDueDate = false;
 			_targetLanguage = string.Empty;
+            _messageBoxService = messageBoxService;
 
 			foreach (var pair in package.LanguagePairs)
 			{
@@ -71,7 +77,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public int SelectedHour
 		{
-			get { return _selectedHour; }
+			get => _selectedHour;
 			set
 			{
 				if (Equals(value, _selectedHour))
@@ -85,7 +91,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public int SelectedMinute
 		{
-			get { return _selectedMinute; }
+			get => _selectedMinute;
 			set
 			{
 				if (Equals(value, _selectedMinute))
@@ -99,7 +105,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string SelectedMoment
 		{
-			get { return _selectedMoment; }
+			get => _selectedMoment;
 			set
 			{
 				if (Equals(value, _selectedMoment))
@@ -113,7 +119,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public Customer SelectedCustomer
 		{
-			get { return _selectedCustomer; }
+			get => _selectedCustomer;
 			set
 			{
 				if (Equals(_selectedCustomer, value))
@@ -125,33 +131,23 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			}
 		}
 
-		public ICommand BrowseCommand
-		{
-			get { return _browseCommand ?? (_browseCommand = new CommandHandler(Browse, _canExecute)); }
-		}
+		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(Browse, _canExecute));
 
 
 		public List<Customer> Customers { get; set; }
 
 		public ObservableCollection<ProjectTemplateInfo> Templates
 		{
-			get
-			{
-				return _templates;
-			}
+			get => _templates;
 			set
 			{
-				if (Equals(value, _templates))
-				{
-					return;
-				}
 				OnPropertyChanged(nameof(Templates));
 			}
 		}
 
 		public string TextLocation
 		{
-			get { return _textLocation; }
+			get => _textLocation;
 			set
 			{
 				if (Equals(value, _textLocation))
@@ -165,7 +161,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string Name
 		{
-			get { return _txtName; }
+			get => _txtName;
 			set
 			{
 				if (Equals(value, _txtName))
@@ -179,7 +175,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string Description
 		{
-			get { return _txtDescription; }
+			get => _txtDescription;
 			set
 			{
 				if (Equals(value, _txtDescription))
@@ -193,20 +189,16 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public List<ProjectTemplateInfo> StudioTemplates
 		{
-			get { return _studioTemplates; }
+			get => _studioTemplates;
 			set
 			{
-				if (Equals(value, _studioTemplates))
-				{
-					return;
-				}
 				OnPropertyChanged(nameof(StudioTemplates));
 			}
 		}
 
 		public ProjectTemplateInfo Template
 		{
-			get { return _template; }
+			get => _template;
 			set
 			{
 				if (Equals(value, _template))
@@ -220,7 +212,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public bool HasDueDate
 		{
-			get { return _hasDueDate; }
+			get => _hasDueDate;
 			set
 			{
 				if (Equals(value, _hasDueDate))
@@ -234,7 +226,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public DateTime? DueDate
 		{
-			get { return _dueDate; }
+			get => _dueDate;
 			set
 			{
 				if (Equals(value, _dueDate))
@@ -248,7 +240,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string SourceLanguage
 		{
-			get { return _sourceLanguage; }
+			get => _sourceLanguage;
 			set
 			{
 				if (Equals(value, _sourceLanguage))
@@ -262,7 +254,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string TargetLanguage
 		{
-			get { return _targetLanguage; }
+			get => _targetLanguage;
 			set
 			{
 				if (Equals(value, _targetLanguage))
@@ -301,8 +293,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public Action CloseAction { get; set; }
 
-		public Action<string, string> ShowWindowsMessage { get; set; }
-
 		public PackageModel GetPackageModel()
 		{
 			try
@@ -334,7 +324,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			{
 				if (!Utils.IsFolderEmpty(folderDialog.FileName))
 				{
-					ShowWindowsMessage("Folder not empty!", "Please select an empty folder!");
+					_messageBoxService.ShowWarningMessage("Please select an empty folder!","Folder not empty!");
 				}
 				else
 				{
@@ -384,13 +374,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				var sourceProjectsXml = XElement.Load(projectsPath);
 				if (!sourceProjectsXml.Element("Customers").HasElements) return;
 
-				var customers = (from customer in sourceProjectsXml.Descendants("Customer")
-								 select new Customer
-								 {
-									 Guid = new Guid(customer.Attribute("Guid").Value),
-									 Name = customer.Attribute("Name").Value,
-									 Email = customer.Attribute("Email").Value
-								 }).OrderBy(c => c.Name).ToList();
+				var customers = (sourceProjectsXml.Descendants("Customer")
+					.Select(customer => new Customer
+					{
+						Guid = new Guid(customer?.Attribute("Guid")?.Value ?? throw new InvalidOperationException()),
+						Name = customer?.Attribute("Name")?.Value,
+						Email = customer?.Attribute("Email")?.Value
+					})).OrderBy(c => c.Name).ToList();
 
 				Customers = customers;
 			}
