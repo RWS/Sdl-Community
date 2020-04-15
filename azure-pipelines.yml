@@ -9,7 +9,7 @@ trigger:
 pool: default
 
 variables:
-  solution: '**/MultiTermStandAloneTestApp.sln'
+  solution: '**/Sdl.Community.AhkPlugin.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -31,3 +31,9 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- powershell: gci env:* | sort-object name | Format-Table -AutoSize | Out-File $env:BUILD_ARTIFACTSTAGINGDIRECTORY/environment-variables.txt
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: 'C:\Users\MariusPC\AppData\Roaming\Sdl\Sdl Trados Studio\15\Plugins\Packages'
+    artifactName: Sdl.Community.AhkPlugin
