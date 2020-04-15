@@ -23,7 +23,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private PackageModel _package;
 		private bool _browseChecked;
 		private bool _createChecked;
-		private string _buttonName;
 		private ICommand _setBtnNameCommand;
 		private string _visibility;
 		private bool _isNoneChecked;
@@ -31,43 +30,34 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private StarTranslationMemoryMetadata _tmMetadata;
 		private readonly string _initialFolderPath;
 		private string _isTmErrorMessageVisible;
-		private bool _importMTChecked = false;
-		private string _importMTVisible;
-		private ICommand _importMTCommand;
+		private bool _importMtChecked;
+		private string _importMtVisible;
+		private ICommand _importMtCommand;
 
 		public TranslationMemoriesViewModel(PackageDetailsViewModel packageDetailsViewModel)
 		{
 			_package = packageDetailsViewModel.GetPackageModel();
-			var pairs = _package.LanguagePairs;
-			foreach (var pair in pairs)
+			if(!(_package is null))
 			{
-				pair.PairNameIso = $"{pair.SourceLanguage.TwoLetterISOLanguageName}-{pair.TargetLanguage.TwoLetterISOLanguageName}";
-				pair.PairName = FormatPairName(pair.SourceLanguage.DisplayName, pair.TargetLanguage.DisplayName);
-				pair.HasTm = false;
-				IsNoneChecked = true;
+				_package.MTMemories = new List<string>();
 			}
+			SetPackageLanguagePairs();
 
 			_selectedIndex = 0;
-			LanguagePairs = pairs;
-			_buttonName = "Browse";
-			_visibility = "Hidden";
-			_isTmErrorMessageVisible = "Hidden";
+			_visibility = "Collapsed";
+			_isTmErrorMessageVisible = "Collapsed";
 			_isNoneChecked = true;
-			_title = $"Please select Translation memory for pair {pairs[0].PairName}";
-			_importMTVisible = "Hidden";
+			_title = $"Please select Translation memory for pair {LanguagePairs?[0]?.PairName}";
+			_importMtVisible = "Collapsed";
 
 			var studioVersion = new Studio().GetStudioVersion();
 			_initialFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-					studioVersion.PublicVersion.Replace("SDL", "").Trim(),
-					"Translation Memories");
+					studioVersion.PublicVersion.Replace("SDL", "").Trim(), "Translation Memories");
 		}
 
 		public string TmMessage
 		{
-			get
-			{
-				return _isTmErrorMessageVisible;
-			}
+			get => _isTmErrorMessageVisible;
 			set
 			{
 				if (Equals(value, _isTmErrorMessageVisible))
@@ -80,7 +70,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		}
 		public bool IsNoneChecked
 		{
-			get { return _isNoneChecked; }
+			get => _isNoneChecked;
 			set
 			{
 				if (Equals(value, _isNoneChecked)) { return; }
@@ -91,7 +81,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public int SelectedIndex
 		{
-			get { return _selectedIndex; }
+			get => _selectedIndex;
 			set
 			{
 				if (Equals(_selectedIndex, value))
@@ -105,7 +95,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string Title
 		{
-			get { return _title; }
+			get => _title;
 			set
 			{
 				if (Equals(value, _title))
@@ -119,7 +109,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public bool IsEnabled
 		{
-			get { return _isEnabled; }
+			get => _isEnabled;
 			set
 			{
 				if (Equals(value, _isEnabled))
@@ -133,7 +123,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string TmName
 		{
-			get { return _tmName; }
+			get => _tmName;
 			set
 			{
 				if (Equals(value, _tmName))
@@ -147,7 +137,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public bool IsCreateChecked
 		{
-			get { return _createChecked; }
+			get => _createChecked;
 			set
 			{
 				if (Equals(value, _createChecked))
@@ -161,35 +151,35 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string ImportMTVisible
 		{
-			get { return _importMTVisible; }
+			get => _importMtVisible;
 			set
 			{
-				if (Equals(value, _importMTVisible))
+				if (Equals(value, _importMtVisible))
 				{
 					return;
 				}
-				_importMTVisible = value;
+				_importMtVisible = value;
 				OnPropertyChanged(nameof(ImportMTVisible));
 			}
 		}
 
 		public bool IsImportMTChecked
 		{
-			get { return _importMTChecked; }
+			get => _importMtChecked;
 			set
 			{
-				if (Equals(value, _importMTChecked))
+				if (Equals(value, _importMtChecked))
 				{
 					return;
 				}
-				_importMTChecked = value;
+				_importMtChecked = value;
 				OnPropertyChanged(nameof(IsImportMTChecked));
 			}
 		}
 
 		public bool IsBrowseChecked
 		{
-			get { return _browseChecked; }
+			get => _browseChecked;
 			set
 			{
 				if (Equals(value, _browseChecked))
@@ -203,7 +193,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string Visibility
 		{
-			get { return _visibility; }
+			get => _visibility;
 			set
 			{
 				if (Equals(value, _visibility))
@@ -215,30 +205,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			}
 		}
 
-		public string ButtonName
-		{
-			get
-			{
-				return _buttonName;
-
-			}
-			set
-			{
-				if (Equals(value, _buttonName)) { return; }
-				_buttonName = value;
-				OnPropertyChanged(nameof(ButtonName));
-			}
-		}
-
 		public List<LanguagePair> LanguagePairs
 		{
-			get { return _languagePairs; }
+			get => _languagePairs;
 			set
 			{
-				if (Equals(value, _languagePairs))
-				{
-					return;
-				}
 				_languagePairs = value;
 				OnPropertyChanged(nameof(LanguagePairs));
 			}
@@ -246,7 +217,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public LanguagePair SelectedItem
 		{
-			get { return _selectedItem; }
+			get => _selectedItem;
 			set
 			{
 				if (Equals(value, _selectedItem)) { return; }
@@ -279,22 +250,16 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string Error { get; }
 
-		public ICommand SetBtnNameCommand
-		{
-			get { return _setBtnNameCommand ?? (_setBtnNameCommand = new CommandHandler(SetBtnName, true)); }
-		}
+		public ICommand SetBtnNameCommand => _setBtnNameCommand ?? (_setBtnNameCommand = new CommandHandler(SetBtnName, true));
 
-		public ICommand ImportMTCommand
-		{
-			get { return _importMTCommand ?? (_importMTCommand = new CommandHandler(ImportMT, true)); }
-		}
+		public ICommand ImportMTCommand => _importMtCommand ?? (_importMtCommand = new CommandHandler(ImportMT, true));
 
 		private void SetBtnName()
 		{
 
 			if (IsCreateChecked)
 			{
-				Visibility = "Hidden";
+				Visibility = "Collapsed";
 				var tmName = $"{_package.Name}.{SelectedItem.PairNameIso}.sdltm";
 				TmName = tmName;
 				SelectedItem.TmName = TmName;
@@ -302,24 +267,23 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				SelectedItem.CreateNewTm = true;
 				SelectedItem.HasTm = true;
 				IsEnabled = true;
-				TmMessage = "Hidden";
+				TmMessage = "Collapsed";
 				ImportMTVisible = "Visible";
 
 				var tmPenaltiesWindow = new TranslationMemoriesPenaltiesWindow(new TranslationMemoriesPenaltiesViewModel(_package));
-				tmPenaltiesWindow.Show();
+				tmPenaltiesWindow.ShowDialog();
 			}
 			if (IsBrowseChecked)
 			{
-				ButtonName = "Browse";
 				TmName = string.Empty;
 				Visibility = "Visible";
 				IsEnabled = false;
-				TmMessage = "Hidden";
-				ImportMTVisible = "Hidden";
+				TmMessage = "Collapsed";
+				ImportMTVisible = "Collapsed";
 			}
 			if (IsNoneChecked)
 			{
-				Visibility = "Hidden";
+				Visibility = "Collapsed";
 				TmName = string.Empty;
 				IsEnabled = false;
 				if (SelectedItem != null)
@@ -327,23 +291,23 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					SelectedItem.TmName = null;
 					SelectedItem.HasTm = false;
 				}
-				TmMessage = "Hidden";
-				ImportMTVisible = "Hidden";
+				TmMessage = "Collapsed";
+				ImportMTVisible = "Collapsed";
 			}
-
 		}
 
 		private void ImportMT()
 		{
 			if (IsImportMTChecked)
 			{
-				_package.MTMemories = new List<string>();
-
-				foreach (var filePath in SelectedItem?.StarTranslationMemoryMetadatas)
+				if (SelectedItem?.StarTranslationMemoryMetadatas?.Count > 0)
 				{
-					if (Path.GetFileName(filePath?.TargetFile ?? "").Contains("_AEXTR_MT_"))
+					foreach (var filePath in SelectedItem?.StarTranslationMemoryMetadatas)
 					{
-						_package.MTMemories.Add(filePath.TargetFile);
+						if (Path.GetFileName(filePath?.TargetFile ?? "").Contains("_AEXTR_MT_"))
+						{
+							_package.MTMemories.Add(filePath.TargetFile);
+						}
 					}
 				}
 			}
@@ -353,10 +317,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			}
 		}
 
-		public ICommand Command
-		{
-			get { return _command ?? (_command = new CommandHandler(CommandBtn, true)); }
-		}
+		public ICommand Command => _command ?? (_command = new CommandHandler(CommandBtn, true));
 
 		private void CommandBtn()
 		{
@@ -380,13 +341,29 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 						SelectedItem.TmName = TmName;
 						SelectedItem.HasTm = true;
 						IsEnabled = false;
-						TmMessage = "Hidden";
+						TmMessage = "Collapsed";
 					}
 					else
 					{
 						TmMessage = "Visible";
 					}
 				}
+			}
+		}
+
+		private void SetPackageLanguagePairs()
+		{
+			var pairs = _package?.LanguagePairs;
+			if (pairs != null)
+			{
+				foreach (var pair in pairs)
+				{
+					pair.PairNameIso = $"{pair.SourceLanguage.TwoLetterISOLanguageName}-{pair.TargetLanguage.TwoLetterISOLanguageName}";
+					pair.PairName = FormatPairName(pair.SourceLanguage.DisplayName, pair.TargetLanguage.DisplayName);
+					pair.HasTm = false;
+					IsNoneChecked = true;
+				}
+				LanguagePairs = pairs;
 			}
 		}
 

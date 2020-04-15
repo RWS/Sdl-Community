@@ -1,12 +1,15 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Remoting.Messaging;
+using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Commands;
-using Sdl.Community.StarTransit.UI.Controls;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
@@ -17,28 +20,25 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private ReturnPackage _returnPackage;
 		private readonly ReturnPackageService _returnService;
 		private readonly CellViewModel _cellViewModel;
-		private bool _active;
-		private ReturnPackageMainWindow _window;
+        private readonly IMessageBoxService _messageBoxService;
 
-		public static readonly Log Log = Log.Instance;
+		private bool _active;
+		
 		public Action CloseAction { get; set; }
 
-		public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel, CellViewModel cellViewModel, ReturnPackageMainWindow window)
-		{
+		public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel, CellViewModel cellViewModel, IMessageBoxService messageBoxService)
+        {
+            _messageBoxService = messageBoxService;
 			_returnFilesViewModel = returnFilesViewModel;
 			_cellViewModel = cellViewModel;
 			_returnService = new ReturnPackageService();
-			_window = window;
 		}
-		
-		public ICommand CreatePackageCommand
-		{
-			get { return _createPackageCommand ?? (_createPackageCommand = new CommandHandler(CreatePackage, true)); }
-		}
+
+		public ICommand CreatePackageCommand => _createPackageCommand ?? (_createPackageCommand = new CommandHandler(CreatePackage, true));
 
 		public bool Active
 		{
-			get { return _active; }
+			get => _active;
 			set
 			{
 				if (Equals(value, _active)) { return; }
@@ -51,49 +51,48 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			try
 			{
 				_returnPackage = _returnFilesViewModel.GetReturnPackage();
-				if (_returnPackage.TargetFiles.Count == 0)
+				if (_returnPackage?.TargetFiles?.Count == 0)
 				{
 					var dialog = new MetroDialogSettings
 					{
 						AffirmativeButtonText = "OK"
 
 					};
-					var result = await _window.ShowMessageAsync("No files selected!", "Please select at least one file.", MessageDialogStyle.Affirmative, dialog);
-				}
+                    _messageBoxService.ShowWarningMessage("Please select at least one file.", "No files selected!");
+                }
 				else
 				{
 					Active = true;
-					string returnPackageFolderPath;
-
-					if (_returnPackage.FolderLocation == null)
+					if (_returnPackage != null)
 					{
-						var projectPath = _returnPackage.ProjectLocation.Substring(0,
-						_returnPackage.ProjectLocation.LastIndexOf(@"\", StringComparison.Ordinal));
+						string returnPackageFolderPath;
 
-						returnPackageFolderPath = CreateReturnPackageFolder(projectPath);
+						if (_returnPackage.FolderLocation == null)
+						{
+							var projectPath = _returnPackage.ProjectLocation?.Substring(0,
+								_returnPackage.ProjectLocation.LastIndexOf(@"\", StringComparison.Ordinal));
+
+							returnPackageFolderPath = CreateReturnPackageFolder(projectPath);
+						}
+						else
+						{
+							returnPackageFolderPath = CreateReturnPackageFolder(_returnPackage.FolderLocation);
+						}
+
+						//location of return package folder
+						_returnPackage.FolderLocation = returnPackageFolderPath;
+
+						await System.Threading.Tasks.Task.Run(() => _returnService.ExportFiles(_returnPackage));
+						Active = false;
+						_cellViewModel.ClearSelectedProjectsList();
+
+						var result = _messageBoxService.ShowInformationResultMessage("The target file(s) was successfully returned", "Informative message");
+						if (result == DialogResult.OK)
+						{
+							CloseAction();
+						}
 					}
-					else
-					{
-						returnPackageFolderPath = CreateReturnPackageFolder(_returnPackage.FolderLocation);
-					}
-
-					//location of return package folder
-					_returnPackage.FolderLocation = returnPackageFolderPath;
-
-					await System.Threading.Tasks.Task.Run(() => _returnService.ExportFiles(_returnPackage));
-					Active = false;
-					_cellViewModel.ClearSelectedProjectsList();
-
-					var dialog = new MetroDialogSettings
-					{
-						AffirmativeButtonText = "OK"
-
-					};
-					var result = await _window.ShowMessageAsync("Informative message", "The target file(s) was successfully returned", MessageDialogStyle.Affirmative, dialog);
-					if (result == MessageDialogResult.Affirmative)
-					{
-						CloseAction();
-					}
+					CloseAction();
 				}
 			}
 			catch (Exception ex)

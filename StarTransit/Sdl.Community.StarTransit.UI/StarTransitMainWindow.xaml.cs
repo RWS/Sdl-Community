@@ -1,7 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using MahApps.Metro.Controls.Dialogs;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.ViewModels;
 
@@ -14,22 +15,20 @@ namespace Sdl.Community.StarTransit.UI
 	{
 		private readonly PackageDetails _packageDetails;
 		private readonly TranslationMemories _translationMemories;
-		private FinishViewModel finishViewModel;
-		private readonly Finish _finish;
-		private PackageModel _package;
+        private readonly Finish _finish;
 
 		public StarTransitMainWindow(PackageModel package)
 		{
-			InitializeComponent();
-			_package = package;
+            InitializeComponent();
 
-			var packageDetailsViewModel = new PackageDetailsViewModel(package);
+            IMessageBoxService messageBoxService = new MessageBoxService();
+			var packageDetailsViewModel = new PackageDetailsViewModel(package, messageBoxService);
 			_packageDetails = new PackageDetails(packageDetailsViewModel);
 
 			var tmViewModel = new TranslationMemoriesViewModel(packageDetailsViewModel);
 			_translationMemories = new TranslationMemories(tmViewModel);
 
-			finishViewModel = new FinishViewModel(tmViewModel, packageDetailsViewModel);
+			var finishViewModel = new FinishViewModel(tmViewModel, packageDetailsViewModel);
 			_finish = new Finish(finishViewModel);
 
 			var starTransitViewModel = new StarTransitMainWindowViewModel(
@@ -37,21 +36,14 @@ namespace Sdl.Community.StarTransit.UI
 				_packageDetails,
 				_translationMemories,
 				tmViewModel,
-				finishViewModel);
+				finishViewModel,
+                messageBoxService);
 
 			DataContext = starTransitViewModel;
 
 			if (starTransitViewModel.CloseAction == null)
 			{
 				starTransitViewModel.CloseAction = Close;
-			}
-			if (starTransitViewModel.ShowWindowsMessage == null)
-			{
-				starTransitViewModel.ShowWindowsMessage = ShowWindowsMessage;
-			}
-			if (packageDetailsViewModel.ShowWindowsMessage == null)
-			{
-				packageDetailsViewModel.ShowWindowsMessage = ShowWindowsMessage;
 			}
 		}
 
@@ -90,19 +82,13 @@ namespace Sdl.Community.StarTransit.UI
 			packageDetailsItem.IsSelected = true;
 		}
 
-		private async void ShowWindowsMessage(string title, string message)
-		{
-			var dialog = new MetroDialogSettings
-			{
-				AffirmativeButtonText = "OK"
-			};
-			await this.ShowMessageAsync(title, message, MessageDialogStyle.Affirmative, dialog);
-		}
-
-		private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			var starTransitViewModel = DataContext as StarTransitMainWindowViewModel;
-			e.Cancel = starTransitViewModel.Active;
-		}
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var starTransitViewModel = DataContext as StarTransitMainWindowViewModel;
+            if (starTransitViewModel != null)
+            {
+                e.Cancel = starTransitViewModel.Active;
+            }
+        }
 	}
 }

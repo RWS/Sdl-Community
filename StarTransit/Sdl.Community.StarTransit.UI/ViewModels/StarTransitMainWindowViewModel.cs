@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Utils;
@@ -31,8 +32,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private bool _isEnabled;
 		private string _color;
 		private bool _hasTm;
-		private TranslationMemories _translationMemories;
-		private TranslationMemoriesViewModel _translationMemoriesViewModel;
+		private readonly TranslationMemories _translationMemories;
+		private readonly TranslationMemoriesViewModel _translationMemoriesViewModel;
+        private readonly IMessageBoxService _messageBoxService;
 		#endregion
 
 		#region Constructors
@@ -40,13 +42,15 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			PackageDetailsViewModel packageDetailsViewModel,
 			PackageDetails packageDetails,
 			TranslationMemories translationMemories,
-			TranslationMemoriesViewModel translationMeloriesMemoriesViewModel,
-			FinishViewModel finishViewModel)
-		{
+			TranslationMemoriesViewModel translationMemoriesViewModel,
+			FinishViewModel finishViewModel,
+            IMessageBoxService messageBoxService)
+        {
+            _messageBoxService = messageBoxService;
 			_packageDetailsViewModel = packageDetailsViewModel;
 			_packageDetails = packageDetails;
 			_translationMemories = translationMemories;
-			_translationMemoriesViewModel = translationMeloriesMemoriesViewModel;
+			_translationMemoriesViewModel = translationMemoriesViewModel;
 			CanExecuteBack = false;
 			CanExecuteCreate = false;
 			CanExecuteNext = true;
@@ -55,16 +59,16 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			_isFinishSelected = false;
 			_finishViewModel = finishViewModel;
 			Color = "#FFB69476";
-			_projectService = new ProjectService(DefaultFileTypeManager.CreateInstance(true));
+			var helpers = new Shared.Utils.Helpers();
+			_projectService = new ProjectService(DefaultFileTypeManager.CreateInstance(true), helpers);
 		}
 		#endregion
 
 		#region Public Properties
-		public static readonly Log Log = Log.Instance;
 
 		public bool DetailsSelected
 		{
-			get { return _isDetailsSelected; }
+			get => _isDetailsSelected;
 			set
 			{
 				if (Equals(value, _isDetailsSelected))
@@ -78,7 +82,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public bool TmSelected
 		{
-			get { return _isTmSelected; }
+			get => _isTmSelected;
 			set
 			{
 				if (Equals(value, _isTmSelected))
@@ -92,10 +96,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public bool FinishSelected
 		{
-			get
-			{
-				return _isFinishSelected;
-			}
+			get => _isFinishSelected;
 			set
 			{
 				if (Equals(value, _isFinishSelected))
@@ -109,7 +110,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public bool CanExecuteNext
 		{
-			get { return _canExecuteNext; }
+			get => _canExecuteNext;
 			set
 			{
 				if (Equals(value, _canExecuteNext))
@@ -123,7 +124,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public bool CanExecuteBack
 		{
-			get { return _canExecuteBack; }
+			get => _canExecuteBack;
 			set
 			{
 				if (Equals(value, _canExecuteBack))
@@ -138,7 +139,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public string Color
 		{
-			get { return _color; }
+			get => _color;
 			set
 			{
 				if (Equals(value, _color))
@@ -152,7 +153,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public bool CanExecuteCreate
 		{
-			get { return _canExecuteCreate; }
+			get => _canExecuteCreate;
 			set
 			{
 				if (Equals(value, _canExecuteCreate))
@@ -166,7 +167,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public bool IsEnabled
 		{
-			get { return _isEnabled; }
+			get => _isEnabled;
 			set
 			{
 				if (Equals(value, _isEnabled))
@@ -180,7 +181,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public bool Active
 		{
-			get { return _active; }
+			get => _active;
 			set
 			{
 				if (Equals(value, _active))
@@ -195,18 +196,14 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		#region Actions
 		public Action CloseAction { get; set; }
-		public Action<string, string> ShowWindowsMessage { get; set; }
 		#endregion
 
 		#region Commands
-		public ICommand NextCommand
-		{
-			get { return _nextCommand ?? (_nextCommand = new CommandHandler(Next, true)); }
-		}
+		public ICommand NextCommand => _nextCommand ?? (_nextCommand = new CommandHandler(Next, true));
 
 		public ICommand BackCommand
 		{
-			get { return _backCommand ?? (_backCommand = new CommandHandler(Back, true)); }
+			get => _backCommand ?? (_backCommand = new CommandHandler(Back, true));
 			set
 			{
 				if (Equals(value, _backCommand))
@@ -218,10 +215,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			}
 		}
 
-		public ICommand CreateCommand
-		{
-			get { return _createCommand ?? (_createCommand = new CommandHandler(Create, true)); }
-		}
+		public ICommand CreateCommand => _createCommand ?? (_createCommand = new CommandHandler(Create, true));
 		#endregion
 
 		#region Public Methods
@@ -350,15 +344,15 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					CanExecuteBack = CanExecuteCreate = false;
 					Active = false;
 					CloseAction();
-					Helpers.Utils.DeleteFolder(packageModel.PathToPrjFile);
+					Helpers.Utils.DeleteFolder(packageModel?.PathToPrjFile);
 				}
 				else
 				{
-					ShowWindowsMessage(messageModel.Title, messageModel.Message);
+                    _messageBoxService.ShowInformationMessage(messageModel.Message, messageModel.Title);
 					Active = false;
 					CanExecuteBack = CanExecuteCreate = false;
 				}
-				Helpers.Utils.DeleteFolder(packageModel.PathToPrjFile);
+				Helpers.Utils.DeleteFolder(packageModel?.PathToPrjFile);
 			}
 			catch (Exception ex)
 			{
@@ -377,12 +371,12 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		{
 			if(string.IsNullOrEmpty(folderPath))
 			{
-				ShowWindowsMessage("Warning", "All fields are required!");
+                _messageBoxService.ShowWarningMessage("All fields are required!", "Warning");
 				return false;
 			}
 			if (!Helpers.Utils.IsFolderEmpty(folderPath))
 			{
-				ShowWindowsMessage("Folder not empty!", "Please select an empty folder");
+                _messageBoxService.ShowWarningMessage("Please select an empty folder", "Folder not empty!");
 				return false;
 			}
 			return true;

@@ -16,12 +16,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 	public class PackageService
 	{
 		private readonly List<KeyValuePair<string, string>> _dictionaryPropetries = new List<KeyValuePair<string, string>>();
-		private Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary = new Dictionary<string, List<KeyValuePair<string, string>>>();
+		private readonly Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary = new Dictionary<string, List<KeyValuePair<string, string>>>();
 
 		private static PackageModel _package = new PackageModel();
 		private const char LanguageTargetSeparator = ' ';
-
-		public static readonly Log Log = Log.Instance;
 
 		/// <summary>
 		/// Opens a ppf package and saves to files to temp folder
@@ -33,25 +31,29 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			try
 			{
 				var entryName = string.Empty;
-				using (var archive = ZipFile.OpenRead(packagePath))
+				if (File.Exists(packagePath))
 				{
-					foreach (var entry in archive.Entries)
+					using (var archive = ZipFile.OpenRead(packagePath))
 					{
-						var subdirectoryPath = Path.GetDirectoryName(entry.FullName);
-						if (!Directory.Exists(Path.Combine(pathToTempFolder, subdirectoryPath)))
+						foreach (var entry in archive.Entries)
 						{
-							Directory.CreateDirectory(Path.Combine(pathToTempFolder, subdirectoryPath));
-						}
-						entry.ExtractToFile(Path.Combine(pathToTempFolder, entry.FullName));
+							var subdirectoryPath = Path.GetDirectoryName(entry.FullName);
+							if (!Directory.Exists(Path.Combine(pathToTempFolder, subdirectoryPath)))
+							{
+								Directory.CreateDirectory(Path.Combine(pathToTempFolder, subdirectoryPath));
+							}
 
-						if (entry.FullName.EndsWith(".PRJ", StringComparison.OrdinalIgnoreCase))
-						{
-							entryName = entry.FullName;
+							entry.ExtractToFile(Path.Combine(pathToTempFolder, entry.FullName));
+
+							if (entry.FullName.EndsWith(".PRJ", StringComparison.OrdinalIgnoreCase))
+							{
+								entryName = entry.FullName;
+							}
 						}
 					}
-				}
 
-				return await ReadProjectMetadata(pathToTempFolder, entryName);
+					return await ReadProjectMetadata(pathToTempFolder, entryName);
+				}
 			}
 			catch (Exception ex)
 			{
@@ -261,7 +263,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				var fileName = Path.GetFileName(file);
 				if (tmFile.Attribute("ExtFileType") != null || fileName.StartsWith("_AEXTR", StringComparison.InvariantCultureIgnoreCase))
 				{
-					var ffdNode = (from ffd in tmFile.Descendants("FFD") select new Guid(ffd.Attribute("GUID").Value)).FirstOrDefault();
 					result = true;
 				}
 			}
