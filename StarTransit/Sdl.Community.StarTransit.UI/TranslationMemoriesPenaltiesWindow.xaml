@@ -15,43 +15,28 @@
 				<ResourceDictionary Source=".\UIHelpers\ButtonsStyle.xaml"/>
 				<ResourceDictionary Source=".\UIHelpers\MetroStyle.xaml"/>
 				<ResourceDictionary Source=".\UIHelpers\DataGridStyle2.xaml"/>
+				<ResourceDictionary Source=".\UIHelpers\GeneralStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
 	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"/>
-		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="330"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
 		<DataGrid ItemsSource="{Binding TranslationMemoriesPenaltiesModelList,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
-                  AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="0" Grid.Row="0"
+                  AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="0"
 				  SelectionUnit="Cell" RowHeaderWidth="0" BorderThickness="1" BorderBrush="LightGray"
 				  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGray" Margin="0,0,0,10">
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="Translation Memory"
-                                    Binding="{Binding TranslationMemoryName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
-									IsReadOnly="True" Width="550" >
-					<DataGridTextColumn.ElementStyle>
-						<Style TargetType="{x:Type TextBlock}">
-							<Setter Property="TextAlignment" Value="Left" />
-							<Setter Property="Margin" Value="10 0 0 0" />
-						</Style>
-					</DataGridTextColumn.ElementStyle>
+				<DataGridTextColumn Header="Translation Memory" ElementStyle="{StaticResource DataGridTextBlockStyle}"
+				                    Binding="{Binding TranslationMemoryName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
+				                    IsReadOnly="True" Width="550" >
 				</DataGridTextColumn>
-				<controls:DataGridNumericUpDownColumn Header="Penalty" Width="80" 
+				<controls:DataGridNumericUpDownColumn Header="Penalty" Width="80" CellStyle="{StaticResource MetroDataGridCellStyle}"
                                                       Binding="{Binding TMPenalty,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
-                                                      Minimum="0" Maximum="25">
-					
-					<!--<controls:DataGridNumericUpDownColumn.CellStyle>
-						<Style>
-							<Setter Property="FrameworkElement.HorizontalAlignment" Value="Center"/>
-						</Style>
-					</controls:DataGridNumericUpDownColumn.CellStyle>-->
-				</controls:DataGridNumericUpDownColumn>
+                                                      Minimum="0" Maximum="25"/>
 			</DataGrid.Columns>
 			<DataGrid.RowStyle>
 				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
@@ -60,7 +45,7 @@
 				<Style TargetType="DataGridCell" BasedOn="{StaticResource DgrCellStyle}" />
 			</DataGrid.CellStyle>
 		</DataGrid>
-		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0,0,5,0">
+		<StackPanel Orientation="Vertical" Grid.Row="1" Margin="0,0,5,0">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="OkButton" Command="{Binding OkCommand}" Content="Ok" helpers:WindowCloseOnClickBehaviour.IsEnabled="True"
 						Width="80" Height="30" Visibility="{Binding Visibility}" Margin="0,0,5,0" />
