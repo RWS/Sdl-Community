@@ -37,7 +37,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		public TranslationMemoriesViewModel(PackageDetailsViewModel packageDetailsViewModel)
 		{
 			_package = packageDetailsViewModel.GetPackageModel();
-			if(!(_package is null))
+			if (!(_package is null))
 			{
 				_package.MTMemories = new List<string>();
 			}
@@ -256,7 +256,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		private void SetBtnName()
 		{
-
 			if (IsCreateChecked)
 			{
 				Visibility = "Collapsed";
@@ -271,7 +270,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				ImportMTVisible = "Visible";
 
 				var tmPenaltiesWindow = new TranslationMemoriesPenaltiesWindow(new TranslationMemoriesPenaltiesViewModel(_package));
-				tmPenaltiesWindow.Show();
+				tmPenaltiesWindow.ShowDialog();
 			}
 			if (IsBrowseChecked)
 			{
@@ -280,6 +279,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				IsEnabled = false;
 				TmMessage = "Collapsed";
 				ImportMTVisible = "Collapsed";
+				if (SelectedItem != null)
+				{
+					SelectedItem.CreateNewTm = false;
+				}
 			}
 			if (IsNoneChecked)
 			{
@@ -409,6 +412,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		{
 			var name = path.Substring(path.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
 			return name;
-		}		
+		}
 	}
 }
