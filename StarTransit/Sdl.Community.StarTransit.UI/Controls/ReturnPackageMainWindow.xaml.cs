@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.ViewModels;
 
 namespace Sdl.Community.StarTransit.UI.Controls
@@ -11,31 +11,33 @@ namespace Sdl.Community.StarTransit.UI.Controls
 	/// <summary>
 	/// Interaction logic for ReturnPackageMainWindow.xaml
 	/// </summary>
-	public partial class ReturnPackageMainWindow : MetroWindow
+	public partial class ReturnPackageMainWindow
     {
         private readonly ReturnFiles _returnPackageFiles;
-        private CellViewModel _cellViewModel;
+        private readonly CellViewModel _cellViewModel;
+
         public ReturnPackageMainWindow(ReturnPackage returnPackage)
         {
             InitializeComponent();
 
-            var returnFilesViewModel = new ReturnFilesViewModel(returnPackage);
-			if(returnFilesViewModel?.ProjectFiles == null)
-			{
-				Close();
-				return;
-			}
+            IMessageBoxService messageBoxService = new MessageBoxService();
+            var returnFilesViewModel = new ReturnFilesViewModel(returnPackage, messageBoxService);
+            if (returnFilesViewModel?.ProjectFiles == null)
+            {
+                Close();
+                return;
+            }
 
-            _returnPackageFiles = new ReturnFiles(returnFilesViewModel);            
-             _cellViewModel = new CellViewModel();
+            _returnPackageFiles = new ReturnFiles(returnFilesViewModel);
+            _cellViewModel = new CellViewModel();
 
-            var returnPackageMainWindowViewModel = new ReturnPackageMainWindowViewModel(returnFilesViewModel, _cellViewModel,this);
+            var returnPackageMainWindowViewModel = new ReturnPackageMainWindowViewModel(returnFilesViewModel, _cellViewModel, messageBoxService);
             DataContext = returnPackageMainWindowViewModel;
             if (returnPackageMainWindowViewModel.CloseAction == null)
             {
                 returnPackageMainWindowViewModel.CloseAction = Close;
             }
-		}
+        }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -44,15 +46,17 @@ namespace Sdl.Community.StarTransit.UI.Controls
 
         private void ListViewItem_Selected(object sender, RoutedEventArgs e)
         {
-			if (sender == null)
-			{
-				return;
-			}
+            if (sender == null)
+            {
+                return;
+            }
+
             var li = sender as ListViewItem;
-			if (li == null)
-			{
-				return;
-			}
+            if (li == null)
+            {
+                return;
+            }
+
             switch (li.Tag.ToString())
             {
                 case "packageFiles":
@@ -68,5 +72,5 @@ namespace Sdl.Community.StarTransit.UI.Controls
         {
             _cellViewModel?.ClearSelectedProjectsList();
         }
-	}
+    }
 }

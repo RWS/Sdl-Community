@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using NSubstitute;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Xunit;
 
 namespace Sdl.Community.StarTransit.UnitTests
@@ -17,14 +15,13 @@ namespace Sdl.Community.StarTransit.UnitTests
 		private readonly string _tempTestFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"StarTransitTest\StarTransitProject");
 
 		private PackageModel _packageModel;
-		private ProjectService _projectService;
-		private StarTransitConfiguration _starTransitConfiguration;
-		private IFileTypeManager _fileTypeManager;
+		private readonly ProjectService _projectService;
+		private readonly StarTransitConfiguration _starTransitConfiguration;
+
 		public ProjectServiceUnitTests()
 		{
-			_fileTypeManager = Substitute.For<IFileTypeManager>();
-			_projectService = Substitute.For<ProjectService>(_fileTypeManager);
-
+			var fileTypeManager = Substitute.For<IFileTypeManager>();
+			_projectService = Substitute.For<ProjectService>(fileTypeManager, null);
 			var packageService = Substitute.For<PackageService>();
 			_starTransitConfiguration = new StarTransitConfiguration(packageService);
 		}
@@ -65,13 +62,12 @@ namespace Sdl.Community.StarTransit.UnitTests
 
 			var projectInfo = _starTransitConfiguration?.SetProjectInfo(_packageModel, _tempTestFolder);
 			var messageModel = _starTransitConfiguration?.SetMessageModel(isCreated, message);
-
+			
 			// substituting the implementation so we can test the CreateProject action
 			var studioProj = Substitute.For<IProject>();
 			studioProj?.GetProjectInfo().Returns(projectInfo);
 			_projectService?.CreateNewProject(Arg.Any<ProjectInfo>(), Arg.Any<ProjectTemplateReference>()).Returns(studioProj);
-			_projectService?.UpdateProjectSettings(Arg.Any<IProject>(), Arg.Any<List<ProjectFile>>()).Returns(messageModel);
-			_projectService?.GetProjectController().Returns(new ProjectsController());
+			_projectService?.UpdateProjectSettings(Arg.Any<IProject>()).Returns(messageModel);
 		}
 	}
 }

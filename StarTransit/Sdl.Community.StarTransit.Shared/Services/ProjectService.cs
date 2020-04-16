@@ -17,27 +17,31 @@ namespace Sdl.Community.StarTransit.Shared.Services
 {
 	public class ProjectService
 	{
-		private List<StarTranslationMemoryMetadata> _penaltiesTmsList;
-		private List<StarTranslationMemoryMetadata> _machineTransList;
+		private readonly List<StarTranslationMemoryMetadata> _penaltiesTmsList;
+		private readonly List<StarTranslationMemoryMetadata> _machineTransList;
 		private TranslationProviderConfiguration _tmConfig;
 		private MessageModel _messageModel;
-		private IFileTypeManager _fileTypeManager;
-		private ProjectsController _projectsController;
+		private readonly IFileTypeManager _fileTypeManager;
+		private readonly ProjectsController _projectsController;
+		private readonly List<ProjectFile> _targetProjectFiles;
 
-		public static readonly Log Log = Log.Instance;
-		
-		public ProjectService(IFileTypeManager fileTypeManager)
+		public ProjectService(IFileTypeManager fileTypeManager, Helpers helpers)
 		{
 			_fileTypeManager = fileTypeManager;
-			_projectsController = GetProjectController();
+
+			if (helpers != null)
+			{
+				_projectsController = helpers.GetProjectsController();
+			}
+
+			_messageModel = new MessageModel();
+			_penaltiesTmsList = new List<StarTranslationMemoryMetadata>();
+			_machineTransList = new List<StarTranslationMemoryMetadata>();
+			_tmConfig = new TranslationProviderConfiguration();
+			_targetProjectFiles = new List<ProjectFile>();
 		}
 
 		#region Public Methods
-
-		public virtual ProjectsController GetProjectController()
-		{
-			return SdlTradosStudio.Application.GetController<ProjectsController>();
-		}
 
 		public virtual IProject CreateNewProject(ProjectInfo projectInfo, ProjectTemplateReference projectTemplateReference)
 		{
@@ -49,14 +53,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return newProject;
 		}
 
-		public virtual MessageModel UpdateProjectSettings(IProject project, List<ProjectFile> targetProjectFiles)
+		public virtual MessageModel UpdateProjectSettings(IProject project)
 		{
 			var fileBasedProject = ((FileBasedProject)project);
 			UpdateTmSettings(project);
 			fileBasedProject.UpdateTranslationProviderConfiguration(_tmConfig);
 
-			project.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
-			var taskSequence = fileBasedProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new[]
+			project.RunAutomaticTask(_targetProjectFiles?.GetIds(), AutomaticTaskTemplateIds.Scan);
+			var taskSequence = fileBasedProject.RunAutomaticTasks(_targetProjectFiles?.GetIds(), new[]
 			{
 					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
 					AutomaticTaskTemplateIds.CopyToTargetLanguages,
@@ -79,14 +83,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 		public MessageModel CreateProject(PackageModel package)
 		{
-			_messageModel = new MessageModel();
-
 			try
 			{
-				_penaltiesTmsList = new List<StarTranslationMemoryMetadata>();
-				_machineTransList = new List<StarTranslationMemoryMetadata>();
-				_tmConfig = new TranslationProviderConfiguration();
-
 				var target = GetTargetLanguages(package.LanguagePairs);
 
 				var projectInfo = new ProjectInfo
@@ -106,30 +104,30 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				}
 
 				//Add StarTransit package source files. The same on all language pairs
-				var sourceProjectFiles = newProject.AddFiles(package.LanguagePairs[0].SourceFile.ToArray());
+				newProject.AddFiles(package.LanguagePairs[0].SourceFile.ToArray());
 
 				//set the file role(user to display project details in Studio view)
 				var sourceFilesIds = newProject.GetSourceLanguageFiles().GetIds();
 				newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
 
 				_tmConfig = newProject.GetTranslationProviderConfiguration();
-				var targetProjectFiles = new List<ProjectFile>();
 
-				_messageModel = SetLanguagePairInformation(newProject, package, targetProjectFiles);
+				_messageModel = SetLanguagePairInformation(newProject, package);
 
 				if (_messageModel is null || _messageModel.Message is null)
 				{
 					if (Directory.Exists(newProject?.GetProjectInfo()?.LocalProjectFolder))
 					{
 						CreateMetadataFolder(package.Location, package.PathToPrjFile);
-						if (!(_projectsController is null))
-						{
-							_projectsController.RefreshProjects();
-						}
+						_projectsController?.RefreshProjects();
 					}
-					_messageModel.IsProjectCreated = true;
-					_messageModel.Message = "Project was successfully created!";
-					_messageModel.Title = "Informative message";
+
+					if (_messageModel != null)
+					{
+						_messageModel.IsProjectCreated = true;
+						_messageModel.Message = "Project was successfully created!";
+						_messageModel.Title = "Informative message";
+					}
 				}
 			}
 			catch (Exception ex)
@@ -145,52 +143,54 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 		private MessageModel SetLanguagePairInformation(
 			IProject newProject,
-			PackageModel package,
-			List<ProjectFile> targetProjectFiles)
+			PackageModel package)
 		{
-			foreach (var pair in package.LanguagePairs)
-			{				
-				foreach (var starTMMetadata in pair.StarTranslationMemoryMetadatas)
-				{
-					AddTMPenalties(package, starTMMetadata);
-					AddMTMemories(package, starTMMetadata);					
-				}
-
-				// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which does not have penalties set on them)
-				foreach (var item in _penaltiesTmsList)
-				{
-					pair.StarTranslationMemoryMetadatas.Remove(item);
-				}
-
-				// Remove Machine Translation memories from pair.StarTranslationMemoryMetadatas, if the user requests them, they will be imported separately, but never in the main TM
-				pair.StarTranslationMemoryMetadatas.RemoveAll(item => Path.GetFileName(item?.TargetFile ?? "").Contains("_AEXTR_MT_"));
-
-				// Create one TM (that has the name equals with the project name) 
-				// with the TM files from pair.StarTranslationMemoryMetadatas (the ones without penalties set by the user)
-				targetProjectFiles.Clear();
-
-				// Import language pair TM if any
-				ImportLanguagePairTM(pair, newProject);
-
-				if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
-				{
-					_messageModel.IsProjectCreated = false;
-					_messageModel.Message = "Project was not created correctly because no target files were found in the package!";
-					_messageModel.Title = "Informative message";
-					return _messageModel;
-				}
-
-				targetProjectFiles.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
-				_messageModel = UpdateProjectSettings(newProject, targetProjectFiles);				
-			}
-			if (!(_projectsController is null))
+			if (package?.LanguagePairs != null)
 			{
-				_projectsController.RefreshProjects();
+				foreach (var pair in package.LanguagePairs)
+				{
+					if (pair.CreateNewTm)
+					{
+						foreach (var starTmMetadata in pair.StarTranslationMemoryMetadatas)
+						{
+							AddTmPenalties(package, starTmMetadata);
+							AddMtMemories(package, starTmMetadata);
+						}
+
+						// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which does not have penalties set on them)
+						foreach (var item in _penaltiesTmsList)
+						{
+							pair.StarTranslationMemoryMetadatas.Remove(item);
+						}
+
+						// Remove Machine Translation memories from pair.StarTranslationMemoryMetadatas, if the user requests them, they will be imported separately, but never in the main TM
+						pair.StarTranslationMemoryMetadatas.RemoveAll(item =>
+							Path.GetFileName(item?.TargetFile ?? "").Contains("_AEXTR_MT_"));
+					}
+
+					_targetProjectFiles?.Clear();
+
+					// Import language pair TM if any
+					ImportLanguagePairTm(pair, newProject);
+
+					if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
+					{
+						_messageModel.IsProjectCreated = false;
+						_messageModel.Message =
+							"Project was not created correctly because no target files were found in the package!";
+						_messageModel.Title = "Informative message";
+						return _messageModel;
+					}
+
+					_targetProjectFiles?.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
+					_messageModel = UpdateProjectSettings(newProject);
+				}
+				_projectsController?.RefreshProjects();
 			}
 			return _messageModel;
 		}
 		
-		private void ImportLanguagePairTM(LanguagePair pair, IProject project)
+		private void ImportLanguagePairTm(LanguagePair pair, IProject project)
 		{
 			if (pair.HasTm && !string.IsNullOrEmpty(pair.TmPath))
 			{
@@ -242,27 +242,27 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		}
 
 		// Separate all items from package.TMPenalties(files that are having penalties set), that are found in pair.StarTranslationMemoryMetadatas
-		private void AddTMPenalties(PackageModel package, StarTranslationMemoryMetadata starTMMetadata)
+		private void AddTmPenalties(PackageModel package, StarTranslationMemoryMetadata starTmMetadata)
 		{
-			if (package.TMPenalties != null)
+			if (package?.TMPenalties != null)
 			{
-				if (package.TMPenalties.Any(t => t.Key.Equals(starTMMetadata.TargetFile)))
+				if (package.TMPenalties.Any(t => t.Key.Equals(starTmMetadata.TargetFile)))
 				{
-					starTMMetadata.TMPenalty = package.TMPenalties.FirstOrDefault(t => t.Key.Equals(starTMMetadata.TargetFile)).Value;
-					_penaltiesTmsList.Add(starTMMetadata);
+					starTmMetadata.TMPenalty = package.TMPenalties.FirstOrDefault(t => t.Key.Equals(starTmMetadata.TargetFile)).Value;
+					_penaltiesTmsList.Add(starTmMetadata);
 				}
 			}
 		}
 
 		//Separate all items from package.MachineTransMem (files that contain Machine Translation)
-		private void AddMTMemories(PackageModel package, StarTranslationMemoryMetadata starTMMetadata)
+		private void AddMtMemories(PackageModel package, StarTranslationMemoryMetadata starTmMetadata)
 		{
-			if (package.MTMemories != null)
+			if (package?.MTMemories != null)
 			{
-				var hasMTMemories = package.MTMemories.Any(t => t.Equals(starTMMetadata.TargetFile));
-				if (hasMTMemories)
+				var hasMtMemories = package.MTMemories.Any(t => t.Equals(starTmMetadata.TargetFile));
+				if (hasMtMemories)
 				{
-					_machineTransList.Add(starTMMetadata);
+					_machineTransList.Add(starTmMetadata);
 				}
 			}
 		}

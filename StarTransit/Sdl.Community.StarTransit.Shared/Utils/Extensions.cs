@@ -2,14 +2,11 @@
 using System.Reflection;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.ProjectAutomation.FileBased;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.Shared.Utils
 {
 	public static class Extensions
 	{
-		public static readonly Log Log = Log.Instance;
-
 		public static void SetCustomer(this FileBasedProject project, Customer customerModel)
 		{
 			try
@@ -46,11 +43,6 @@ namespace Sdl.Community.StarTransit.Shared.Utils
 			{
 				Log.Logger.Error($"SetCustomer method: {ex.Message}\n {ex.StackTrace}");
 			}
-		}
-
-		public static ProjectsController GetProjectsController()
-		{
-			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
 	}
 }

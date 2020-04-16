@@ -150,6 +150,7 @@
     <Compile Include="Controls\TranslationMemories.xaml.cs">
       <DependentUpon>TranslationMemories.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\WindowCloseOnClickBehaviour.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\Reflector.cs" />
