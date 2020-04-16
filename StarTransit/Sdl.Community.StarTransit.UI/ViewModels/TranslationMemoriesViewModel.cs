@@ -256,7 +256,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		private void SetBtnName()
 		{
-
 			if (IsCreateChecked)
 			{
 				Visibility = "Collapsed";
@@ -280,6 +279,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				IsEnabled = false;
 				TmMessage = "Collapsed";
 				ImportMTVisible = "Collapsed";
+				if (SelectedItem != null)
+				{
+					SelectedItem.CreateNewTm = false;
+				}
 			}
 			if (IsNoneChecked)
 			{

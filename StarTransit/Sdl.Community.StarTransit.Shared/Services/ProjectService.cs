@@ -146,21 +146,24 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			PackageModel package)
 		{
 			foreach (var pair in package.LanguagePairs)
-			{				
-				foreach (var starTmMetadata in pair.StarTranslationMemoryMetadatas)
+			{
+				if (pair.CreateNewTm)
 				{
-					AddTmPenalties(package, starTmMetadata);
-					AddMtMemories(package, starTmMetadata);					
-				}
+					foreach (var starTmMetadata in pair.StarTranslationMemoryMetadatas)
+					{
+						AddTmPenalties(package, starTmMetadata);
+						AddMtMemories(package, starTmMetadata);
+					}
 
-				// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which does not have penalties set on them)
-				foreach (var item in _penaltiesTmsList)
-				{
-					pair.StarTranslationMemoryMetadatas.Remove(item);
-				}
+					// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which does not have penalties set on them)
+					foreach (var item in _penaltiesTmsList)
+					{
+						pair.StarTranslationMemoryMetadatas.Remove(item);
+					}
 
-				// Remove Machine Translation memories from pair.StarTranslationMemoryMetadatas, if the user requests them, they will be imported separately, but never in the main TM
-				pair.StarTranslationMemoryMetadatas.RemoveAll(item => Path.GetFileName(item?.TargetFile ?? "").Contains("_AEXTR_MT_"));
+					// Remove Machine Translation memories from pair.StarTranslationMemoryMetadatas, if the user requests them, they will be imported separately, but never in the main TM
+					pair.StarTranslationMemoryMetadatas.RemoveAll(item => Path.GetFileName(item?.TargetFile ?? "").Contains("_AEXTR_MT_"));
+				}
 
 				_targetProjectFiles?.Clear();
 
