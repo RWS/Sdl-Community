@@ -18,7 +18,7 @@ namespace IATETerminologyProvider.Service
 	public class TermSearchService
 	{
 		public static readonly Log Log = Log.Instance;
-		private readonly ProviderSettings _providerSettings;
+		private readonly SettingsModel _providerSettings;
 		private readonly ObservableCollection<ItemsResponseModel> _domains;
 		private readonly TermTypeService _termTypeService;
 		private readonly List<string> _subdomains = new List<string>();
@@ -27,7 +27,7 @@ namespace IATETerminologyProvider.Service
 		public ObservableCollection<TermTypeModel> TermTypes { get; set; }
 		private int _termIndexId;
 
-		public TermSearchService(ProviderSettings providerSettings)
+		public TermSearchService(SettingsModel providerSettings)
 		{
 			_accessTokenService = new AccessTokenService();
 			TermTypes = new ObservableCollection<TermTypeModel>();
@@ -117,8 +117,10 @@ namespace IATETerminologyProvider.Service
 			targetLanguges.Add(destination.Locale.TwoLetterISOLanguageName);
 			if (_providerSettings != null)
 			{
-				filteredDomains = _providerSettings.Domains.Count > 0 ? _providerSettings.Domains : filteredDomains;
-				filteredTermTypes = _providerSettings.TermTypes.Count > 0 ? _providerSettings.TermTypes : filteredTermTypes;
+				var domains = _providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
+				filteredDomains.AddRange(domains);
+				var termTypes = _providerSettings.TermTypes.Where(t => t.IsSelected).Select(t => t.Code).ToList();
+				filteredTermTypes.AddRange(termTypes);
 			}
 
 			var bodyModel = new

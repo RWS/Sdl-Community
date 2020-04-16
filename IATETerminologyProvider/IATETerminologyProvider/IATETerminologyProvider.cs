@@ -16,14 +16,14 @@ namespace IATETerminologyProvider
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
 		private IList<EntryModel> _entryModels;
-		private ProviderSettings _providerSettings;
+		private SettingsModel _providerSettings;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
 		private ProjectsController _projectsController;		
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
-		public IATETerminologyProvider(ProviderSettings providerSettings)
+		public IATETerminologyProvider(SettingsModel providerSettings)
 		{
 			UpdateSettings(providerSettings);			
 		}
@@ -80,7 +80,7 @@ namespace IATETerminologyProvider
 			return results;
 		}
 
-		public void UpdateSettings(ProviderSettings providerSettings)
+		public void UpdateSettings(SettingsModel providerSettings)
 		{
 			_providerSettings = providerSettings;
 			_entryModels = new List<EntryModel>();
