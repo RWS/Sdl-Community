@@ -49,34 +49,21 @@ namespace IATETerminologyProvider
 			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
 		}
 
-		private ProviderSettings GetProviderSettings()
-		{
-			_settingsWindow?.Close();
-			return _settingsViewModel.ProviderSettings;
-		}
-
 		private ITerminologyProvider[] SetTerminologyProvider(IATETerminologyProvider provider, ProviderSettings providerSettings)
 		{
 			var result = new List<ITerminologyProvider>();
 
-			if (_settingsViewModel != null)
-			{
-				_settingsViewModel.OnSaveSettingsCommandRaised -= GetProviderSettings;
-			}
-			
 			_settingsViewModel = new SettingsViewModel(providerSettings);
-			_settingsWindow = new SettingsWindow(_settingsViewModel);
-
-			if (_settingsViewModel != null)
-			{				
-				_settingsViewModel.OnSaveSettingsCommandRaised += GetProviderSettings;
-			}
+			_settingsWindow = new SettingsWindow
+			{
+				DataContext = _settingsViewModel
+			};
 			
 			_settingsWindow.ShowDialog();
-
+			if (!_settingsViewModel.DialogResult) return null;
 			providerSettings = _settingsViewModel.ProviderSettings;
 
-			if (provider == null)
+			if (provider is null)
 			{
 				provider = new IATETerminologyProvider(providerSettings);
 			}

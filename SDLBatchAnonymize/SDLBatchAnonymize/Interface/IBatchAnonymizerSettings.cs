@@ -3,6 +3,7 @@
 	public interface IBatchAnonymizerSettings
 	{
 		bool AnonymizeComplete { get; set; }
+		bool UseGeneral { get; set; }
 		bool CreatedByChecked { get; set; }
 		bool ModifyByChecked { get; set; }
 		bool CommentChecked { get; set; }

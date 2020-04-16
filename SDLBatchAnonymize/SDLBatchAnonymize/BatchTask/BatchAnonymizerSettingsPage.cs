@@ -24,6 +24,7 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 			base.Save();
 			if (_settings is null) return;
 			_settings.AnonymizeComplete = _control.BatchAnonymizerSettingsViewModel.AnonymizeAllSettings;
+			_settings.UseGeneral = _control.BatchAnonymizerSettingsViewModel.UseGeneral;
 			_settings.CreatedByChecked = _control.BatchAnonymizerSettingsViewModel.CreatedByChecked;
 			_settings.CreatedByName = _control.BatchAnonymizerSettingsViewModel.CreatedByName;
 			_settings.ModifyByChecked = _control.BatchAnonymizerSettingsViewModel.ModifyByChecked;

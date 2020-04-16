@@ -14,8 +14,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 {
 	[TranslationProviderWinFormsUi(
 		Id = "SDLMachineTranslationCloudProviderUi",
-		Name = "SDLMachineTranslationCloudProviderUi",
-		Description = "SDL Machine Translation Cloud Provider")]
+		Name = "SDLMTCloud_Provider_Name",
+		Description = "SDLMTCloud_Provider_Description")]
 	public class SdlMTCloudProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{		
 		public string TypeName => Constants.PluginName;

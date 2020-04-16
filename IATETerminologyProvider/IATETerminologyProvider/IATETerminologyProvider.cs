@@ -157,16 +157,6 @@ namespace IATETerminologyProvider
 			return result;
 		}
 
-		public ProjectsController GetProjectController()
-		{
-			return SdlTradosStudio.Application.GetController<ProjectsController>();
-		}
-
-		public EditorController GetEditorController()
-		{
-			return SdlTradosStudio.Application.GetController<EditorController>();
-		}
-
 		public string GetStatusName(int value)
 		{
 			switch (value)
@@ -215,15 +205,13 @@ namespace IATETerminologyProvider
 
 		private void InitializeEditorController()
 		{
-			if (_editorController == null)
-			{
-				_projectsController = GetProjectController();
-				_editorController = GetEditorController();
+			if (!(_editorController is null)) return;
+			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
 				
-				if (_editorController != null)
-				{
-					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;				
-				}
+			if (_editorController != null)
+			{
+				_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;				
 			}
 		}
 

@@ -10,14 +10,14 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
-	[RibbonGroup("SDLMTCloud", Name = "SDLMTCloud")]
+	[RibbonGroup("SDLMTCloud", Name = "SDLMTCloud_RibbonGroup_Name")]
 	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
-	public class SdlMTCloudExcelRibbon : AbstractRibbonGroup
+	public class SdlMTCloudAddInsRibbon : AbstractRibbonGroup
 	{
-		[Action("Sdl.MTCloud.Provider.Studio", Name = "MT Cloud Codes", Icon = "add_langcode", Description = "Import MT Codes from MTCloud excel sheet")]
-		[ActionLayout(typeof(SdlMTCloudExcelRibbon), 20, DisplayType.Large)]
+		[Action("SDLMTCloudLanguageMappingShowAction", Name = "SDLMTCloud_Action_LanguageMapping_Name", Icon = "add_langcode", Description = "SDLMTCloud_Action_LanguageMapping_Description")]
+		[ActionLayout(typeof(SdlMTCloudAddInsRibbon), 20, DisplayType.Large)]
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
-		public class BeGlobalExcelAction : AbstractAction
+		public class SDLMTCloudLanguageMappingShowAction : AbstractAction
 		{			
 			protected override void Execute()
 			{
