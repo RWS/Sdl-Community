@@ -9,7 +9,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 {
 	internal class Writer
 	{	
-		internal bool WriteLanguages(List<MTCloudLanguage> langauges, string path)
+		internal bool WriteLanguages(List<Language> langauges, string path)
 		{
 			if (string.IsNullOrEmpty(path))
 			{
@@ -42,7 +42,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 			{
 				rowIndex++;
 
-				excelDocument.SetCellValue(spreadsheet, worksheet1, 1, rowIndex, langauge.Language);
+				excelDocument.SetCellValue(spreadsheet, worksheet1, 1, rowIndex, langauge.Name);
 				excelDocument.SetCellValue(spreadsheet, worksheet1, 2, rowIndex, langauge.Region);
 				excelDocument.SetCellValue(spreadsheet, worksheet1, 3, rowIndex, langauge.TradosCode);
 				excelDocument.SetCellValue(spreadsheet, worksheet1, 4, rowIndex, langauge.MTCode);

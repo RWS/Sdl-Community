@@ -1,17 +1,18 @@
 ﻿using System.Drawing;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 
 namespace Sdl.Community.MTCloud.Provider.Model
 {
 	[DataContract]
-	public class LangMappingMTCode : BaseViewModel
+	public class MTCloudLanguage : BaseViewModel
 	{
 		private string _codeName;
 		private bool _isLocale;
 		private Image _flag;
 
-		public LangMappingMTCode()
+		public MTCloudLanguage()
 		{
 			IsLocale = false;
 		}
@@ -38,6 +39,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			}
 		}
 
+		[JsonIgnore]
 		public Image Flag
 		{
 			get => _flag;

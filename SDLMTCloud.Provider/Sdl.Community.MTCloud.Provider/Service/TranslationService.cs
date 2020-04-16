@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,41 +16,17 @@ namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class TranslationService : ITranslationService
 	{
-		public TranslationService(IConnectionService connectionService, ILanguageMappingsService languageMappingsService)
+		public TranslationService(IConnectionService connectionService)
 		{
 			ConnectionService = connectionService;
-			LanguageMappingsService = languageMappingsService;
-			UpdateLanguageMappings();
 		}
 
 		public IConnectionService ConnectionService { get; }
 
-		public ILanguageMappingsService LanguageMappingsService { get; }
-
-		public List<LanguageMappingModel> LanguageMappings { get; private set; }
-
-		public void UpdateLanguageMappings()
-		{
-			try
-			{
-				LanguageMappings = LanguageMappingsService?.GetLanguageMappingSettings()?.LanguageMappings?.ToList();
-			}
-			catch
-			{
-				// catch all;
-				// reset the setttings to default in the event that the lanauge model structure has changed (for whatever reason); 
-				LanguageMappingsService?.RemoveLanguageMappingSettings();
-				LanguageMappings = new List<LanguageMappingModel>();
-			}
-		}
-
-		public async Task<Segment[]> TranslateText(string text, string source, string target)
-		{
-			var languageModel = LanguageMappings?.FirstOrDefault(l =>
-			string.Compare(l.SourceTradosCode, source, StringComparison.InvariantCultureIgnoreCase) == 0 &&
-				string.Compare(l.TargetTradosCode, target, StringComparison.InvariantCultureIgnoreCase) == 0);
-
-			if (string.IsNullOrEmpty(languageModel?.SelectedModelOption?.Model))
+		
+		public async Task<Segment[]> TranslateText(string text, LanguageMappingModel model)
+		{			
+			if (string.IsNullOrEmpty(model?.SelectedModel?.Model))
 			{
 				throw new Exception(PluginResources.Message_No_model_selected);
 			}
@@ -79,16 +54,16 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				var translationRequestModel = new TranslationRequest
 				{
 					Input = new[] { text },
-					SourceLanguageId = languageModel.SelectedMTCodeSource.CodeName,
-					TargetLanguageId = languageModel.SelectedMTCodeTarget.CodeName,
-					Model = languageModel.SelectedModelOption.Model,
+					SourceLanguageId = model.SelectedSource.CodeName,
+					TargetLanguageId = model.SelectedTarget.CodeName,
+					Model = model.SelectedModel.Model,
 					InputFormat = "xliff"
 				};
 
-				if (!languageModel.SelectedMTCloudDictionary.Name.Equals(Constants.NoAvailableDictionary)
-					&& !languageModel.SelectedMTCloudDictionary.Name.Equals(Constants.NoDictionary))
+				if (!model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary_available)
+					&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
 				{
-					translationRequestModel.Dictionaries = new[] { languageModel.SelectedMTCloudDictionary?.DictionaryId };
+					translationRequestModel.Dictionaries = new[] { model.SelectedDictionary?.DictionaryId };
 				}
 
 				var content = JsonConvert.SerializeObject(translationRequestModel);

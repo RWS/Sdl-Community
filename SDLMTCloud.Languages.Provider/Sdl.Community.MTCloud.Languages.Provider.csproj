@@ -58,11 +58,12 @@
   <ItemGroup>
     <Compile Include="Implementation\Common.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Languages.cs" />
+    <Compile Include="Interfaces\ILanguageProvider.cs" />
+    <Compile Include="LanguageProvider.cs" />
     <Compile Include="Model\ExcelCell.cs" />
     <Compile Include="Model\ExcelColumn.cs" />
     <Compile Include="Model\ExcelRow.cs" />
-    <Compile Include="Model\MTCloudLanguage.cs" />
+    <Compile Include="Model\Language.cs" />
     <Compile Include="OpenXml\Excel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementation\Reader.cs" />

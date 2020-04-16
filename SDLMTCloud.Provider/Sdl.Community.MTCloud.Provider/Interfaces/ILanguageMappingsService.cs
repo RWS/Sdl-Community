@@ -1,13 +1,21 @@
-﻿using Sdl.Community.MTCloud.Provider.Studio;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using Sdl.Community.MTCloud.Provider.Model;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
 	public interface ILanguageMappingsService
 	{
-		LanguageMappingSettings GetLanguageMappingSettings();
+		SubscriptionInfo SubscriptionInfo { get; }
 
-		void RemoveLanguageMappingSettings();
+		List<MTCloudDictionary> Dictionaries { get; }
 
-		void SaveLanguageMappingSettings(LanguageMappingSettings settings);
+		List<TranslationModel> GetTranslationModels(MTCloudLanguage mtCloudSource, MTCloudLanguage mtCloudTarget,
+			string source, string target);
+
+		List<MTCloudDictionary> GetDictionaries(MTCloudLanguage mtCloudSource, MTCloudLanguage mtCloudTarget);
+
+		List<MTCloudLanguage> GetMTCloudLanguage(Languages.Provider.Model.Language mtCloudLanguage,
+			CultureInfo language);
 	}
 }
