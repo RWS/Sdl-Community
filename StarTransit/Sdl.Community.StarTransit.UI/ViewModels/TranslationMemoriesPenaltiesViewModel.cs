@@ -100,11 +100,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		/// </summary>
 		private void LoadTranslationMemories()
 		{
-			if (_packageModel != null)
+			if (_packageModel?.LanguagePairs != null)
 			{
 				foreach (var langPair in _packageModel.LanguagePairs)
 				{
-					if (langPair.HasTm)
+					if (langPair.HasTm && langPair.CreateNewTm)
 					{
 						foreach (var filePath in langPair.StarTranslationMemoryMetadatas)
 						{
