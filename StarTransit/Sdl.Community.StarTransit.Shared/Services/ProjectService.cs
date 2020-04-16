@@ -145,40 +145,48 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			IProject newProject,
 			PackageModel package)
 		{
-			foreach (var pair in package.LanguagePairs)
-			{				
-				foreach (var starTmMetadata in pair.StarTranslationMemoryMetadatas)
+			if (package?.LanguagePairs != null)
+			{
+				foreach (var pair in package.LanguagePairs)
 				{
-					AddTmPenalties(package, starTmMetadata);
-					AddMtMemories(package, starTmMetadata);					
+					if (pair.CreateNewTm)
+					{
+						foreach (var starTmMetadata in pair.StarTranslationMemoryMetadatas)
+						{
+							AddTmPenalties(package, starTmMetadata);
+							AddMtMemories(package, starTmMetadata);
+						}
+
+						// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which does not have penalties set on them)
+						foreach (var item in _penaltiesTmsList)
+						{
+							pair.StarTranslationMemoryMetadatas.Remove(item);
+						}
+
+						// Remove Machine Translation memories from pair.StarTranslationMemoryMetadatas, if the user requests them, they will be imported separately, but never in the main TM
+						pair.StarTranslationMemoryMetadatas.RemoveAll(item =>
+							Path.GetFileName(item?.TargetFile ?? "").Contains("_AEXTR_MT_"));
+					}
+
+					_targetProjectFiles?.Clear();
+
+					// Import language pair TM if any
+					ImportLanguagePairTm(pair, newProject);
+
+					if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
+					{
+						_messageModel.IsProjectCreated = false;
+						_messageModel.Message =
+							"Project was not created correctly because no target files were found in the package!";
+						_messageModel.Title = "Informative message";
+						return _messageModel;
+					}
+
+					_targetProjectFiles?.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
+					_messageModel = UpdateProjectSettings(newProject);
 				}
-
-				// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which does not have penalties set on them)
-				foreach (var item in _penaltiesTmsList)
-				{
-					pair.StarTranslationMemoryMetadatas.Remove(item);
-				}
-
-				// Remove Machine Translation memories from pair.StarTranslationMemoryMetadatas, if the user requests them, they will be imported separately, but never in the main TM
-				pair.StarTranslationMemoryMetadatas.RemoveAll(item => Path.GetFileName(item?.TargetFile ?? "").Contains("_AEXTR_MT_"));
-
-				_targetProjectFiles?.Clear();
-
-				// Import language pair TM if any
-				ImportLanguagePairTm(pair, newProject);
-
-				if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
-				{
-					_messageModel.IsProjectCreated = false;
-					_messageModel.Message = "Project was not created correctly because no target files were found in the package!";
-					_messageModel.Title = "Informative message";
-					return _messageModel;
-				}
-
-				_targetProjectFiles?.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
-				_messageModel = UpdateProjectSettings(newProject);				
+				_projectsController?.RefreshProjects();
 			}
-			_projectsController?.RefreshProjects();
 			return _messageModel;
 		}
 		
@@ -236,7 +244,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		// Separate all items from package.TMPenalties(files that are having penalties set), that are found in pair.StarTranslationMemoryMetadatas
 		private void AddTmPenalties(PackageModel package, StarTranslationMemoryMetadata starTmMetadata)
 		{
-			if (package.TMPenalties != null)
+			if (package?.TMPenalties != null)
 			{
 				if (package.TMPenalties.Any(t => t.Key.Equals(starTmMetadata.TargetFile)))
 				{
@@ -249,7 +257,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		//Separate all items from package.MachineTransMem (files that contain Machine Translation)
 		private void AddMtMemories(PackageModel package, StarTranslationMemoryMetadata starTmMetadata)
 		{
-			if (package.MTMemories != null)
+			if (package?.MTMemories != null)
 			{
 				var hasMtMemories = package.MTMemories.Any(t => t.Equals(starTmMetadata.TargetFile));
 				if (hasMtMemories)
