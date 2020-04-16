@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Sdl.Community.MTCloud.Languages.Provider.Implementation;
+using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
 
 namespace Sdl.Community.MTCloud.Languages.Provider
 {
-	public class Languages
+	public class LanguageProvider: ILanguageProvider
 	{					
 		/// <summary>
 		/// Saves the MT Clound Languages to the default location in the users
@@ -12,7 +13,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 		/// </summary>
 		/// <param name="languages">list of MT Cloud Languages</param>
 		/// <returns>Returns true if file was saved correctly</returns>
-		public bool SaveLanguages(List<MTCloudLanguage> languages)
+		public bool SaveLanguages(List<Language> languages)
 		{
 			return SaveLanguages(languages, Constants.MTLanguageCodesFilePath);
 		}
@@ -23,7 +24,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 		/// <param name="languages">list of MT Cloud Languages</param>
 		/// <param name="path">The full path to the excel file where the languages are saved</param>
 		/// <returns>Returns true if file was saved correctly</returns>
-		public bool SaveLanguages(List<MTCloudLanguage> languages, string path)
+		public bool SaveLanguages(List<Language> languages, string path)
 		{			
 			var writer = new Writer();			
 			return writer.WriteLanguages(languages, path);
@@ -35,7 +36,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 		/// </summary>
 		/// <param name="reset">Resets the default languages</param>
 		/// <returns>Returns a list of MT Cloud Languages</returns>
-		public List<MTCloudLanguage> GetLanguages(bool reset = false)
+		public List<Language> GetLanguages(bool reset = false)
 		{
 			return GetLanguages(Constants.MTLanguageCodesFilePath, reset);
 		}
@@ -47,7 +48,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 		/// <param name="path">The full path to the excel file where the languages are located</param>
 		/// <param name="reset">Resets the default languages</param>
 		/// <returns>Returns a list of MT Cloud Languages</returns>
-		public List<MTCloudLanguage> GetLanguages(string path, bool reset = false)
+		public List<Language> GetLanguages(string path, bool reset = false)
 		{
 			var common = new Common();
 			if (reset)
@@ -60,12 +61,12 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 			return languages;
 		}
 
-		private static List<MTCloudLanguage> GetLanguages(IEnumerable<ExcelRow> excelRows)
+		private static List<Language> GetLanguages(IEnumerable<ExcelRow> excelRows)
 		{
-			var languages = new List<MTCloudLanguage>();
+			var languages = new List<Language>();
 			foreach (var row in excelRows)
 			{
-				var language = new MTCloudLanguage
+				var language = new Language
 				{
 					Index = row.Index
 				};
@@ -75,7 +76,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 					switch (cell.Column.Index)
 					{
 						case 0:
-							language.Language = cell.Value;
+							language.Name = cell.Value;
 							break;
 						case 1:
 							language.Region = cell.Value;

@@ -223,6 +223,33 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No dictionary.
+        /// </summary>
+        public static string Message_No_dictionary {
+            get {
+                return ResourceManager.GetString("Message_No_dictionary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No dictionary available.
+        /// </summary>
+        public static string Message_No_dictionary_available {
+            get {
+                return ResourceManager.GetString("Message_No_dictionary_available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No model available.
+        /// </summary>
+        public static string Message_No_model_available {
+            get {
+                return ResourceManager.GetString("Message_No_model_available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No model selected for the current language pair!.
         /// </summary>
         public static string Message_No_model_selected {

@@ -194,7 +194,7 @@
     <Compile Include="Interfaces\ILanguageMappingSettings.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Model\Authentication.cs" />
-    <Compile Include="Model\LangMappingMTCode.cs" />
+    <Compile Include="Model\MTCloudLanguage.cs" />
     <Compile Include="Model\MTCloudDictionary.cs" />
     <Compile Include="Model\MTCloudDictionaryInfo.cs" />
     <Compile Include="Model\MTCloudLanguagePair.cs" />
@@ -219,7 +219,6 @@
     <Compile Include="Studio\SdlMTCloudLanguageDirection.cs" />
     <Compile Include="Studio\SdlMTCloudProviderWinFormsUI.cs" />
     <Compile Include="Studio\SdlMTCloudTranslationProviderFactory.cs" />
-    <Compile Include="Studio\LanguageMappingSettings.cs" />
     <Compile Include="Controls\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>

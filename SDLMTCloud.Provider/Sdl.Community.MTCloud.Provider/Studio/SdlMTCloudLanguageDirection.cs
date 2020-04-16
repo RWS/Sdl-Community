@@ -46,17 +46,19 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			var xliffDocument = CreateXliffFile(sourceSegments);
 
+			var model = _translationProvider.Options.LanguageMappings?.FirstOrDefault(l =>
+				l.SourceTradosCode.Equals(_languageDirection?.SourceCulture?.Name, StringComparison.InvariantCultureIgnoreCase) &&
+			 		l.TargetTradosCode.Equals(_languageDirection?.TargetCulture?.Name, StringComparison.InvariantCultureIgnoreCase));
+
 			var targetSegments = Task.Run(async () => await _translationProvider.TranslationService.TranslateText(
-				xliffDocument.ToString(),
-				_languageDirection?.SourceCulture?.Name,
-				_languageDirection?.TargetCulture?.Name)).Result;
+				xliffDocument.ToString(), model)).Result;
 
 			return targetSegments ?? new Segment[0];
 		}
 
 		public Xliff CreateXliffFile(Segment[] segments)
 		{
-			var xliffDocument = new Xliff(SourceLanguage, TargetLanguage);
+			var xliffDocument = new Xliff(_languageDirection.SourceCulture, _languageDirection.TargetCulture);
 
 			foreach (var seg in segments)
 			{

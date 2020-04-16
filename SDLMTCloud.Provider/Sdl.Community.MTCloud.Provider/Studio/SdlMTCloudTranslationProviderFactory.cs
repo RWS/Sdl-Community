@@ -1,4 +1,5 @@
 ﻿using System;
+using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguageCloud.IdentityApi;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -25,12 +26,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 
 			connectionService.SaveCredential(credentialStore);
-
-			var languageMappingsService = new LanguageMappingsService();
-			var translationService = new TranslationService(connectionService, languageMappingsService);
+			
+			var translationService = new TranslationService(connectionService);
+			var languageProvider = new LanguageProvider();
 			var editorController = SdlTradosStudio.Application?.GetController<EditorController>();
 			
-			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationService, translationProviderState, editorController);			
+			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState, translationService, languageProvider, editorController);			
 			return provider;		
 		}		
 

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.ViewModel;
+using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -17,27 +17,28 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	{
 		private readonly EditorController _editorController;
 		private LanguagePair _languageDirection;
+		private LanguageMappingsService _languageMappingsService;
 
-		public SdlMTCloudTranslationProvider(Uri uri, ITranslationService translationService, string translationProviderState, EditorController editorController)
+		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
+		 ILanguageProvider languageProvider, EditorController editorController)
 		{
 			Uri = uri;
-			LanguagesProvider = new Languages.Provider.Languages();
+
+			LanguageProvider = languageProvider;
 			TranslationService = translationService;
-			LoadState(translationProviderState);
 
 			_editorController = editorController;
 
-			SubscriptionInfo = Task.Run(async () =>
-				await TranslationService.GetLanguagePairs(translationService.ConnectionService.Credential.AccountId)).Result;
+			LoadState(translationProviderState);
 		}
 
-		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, Constants.PluginName);
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
 
 		public ITranslationProviderLanguageDirection LanguageDirectionProvider { get; private set; }
 
 		public Uri Uri { get; internal set; }
 
-		public string Name => Constants.PluginName;
+		public string Name => PluginResources.Plugin_NiceName;
 
 		public bool SupportsTaggedInput => true;
 
@@ -79,28 +80,17 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public ITranslationService TranslationService { get; }
 
-		public Languages.Provider.Languages LanguagesProvider { get; }
+		public LanguageMappingsService LanguageMappingsService => _languageMappingsService ??
+																  (_languageMappingsService = new LanguageMappingsService(TranslationService));
 
-		public SubscriptionInfo SubscriptionInfo { get; }
-
-		public Dictionary<string, string> SupportedLanguages { get; set; }
-
+		public ILanguageProvider LanguageProvider { get; }
+		
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
 			try
 			{
 				_languageDirection = languageDirection;
-
-				if (TranslationService.LanguageMappings.Count == 0 && languageDirection != null)
-				{
-					// ensure the language mappings are loaded, especially when derived from a template 
-					var optionsViewModel = new OptionsViewModel(null, this,
-						new[] { new LanguagePair(languageDirection.SourceCulture, languageDirection.TargetCulture) });
-					optionsViewModel.SaveLanguageMappings();
-					TranslationService.UpdateLanguageMappings();
-				}
-
-				var supportedLanguage = SetSupportedLanguages(_languageDirection);
+				var supportedLanguage = GetMTCloudLanguagePair(_languageDirection);
 				if (supportedLanguage != null)
 				{
 					return true;
@@ -110,6 +100,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				Log.Logger.Error($"{Constants.SupportsLanguageDirection} {e.Message}\n {e.StackTrace}");
 			}
+
 			return false;
 		}
 
@@ -121,7 +112,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				return LanguageDirectionProvider;
 			}
-
+		
 			LanguageDirectionProvider = new SdlMTCloudLanguageDirection(this, languageDirection, _editorController);
 
 			return LanguageDirectionProvider;
@@ -133,8 +124,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public string SerializeState()
 		{
-			SetSupportedLanguages(_languageDirection);
-			return JsonConvert.SerializeObject(Options ?? new Options());
+			var json = JsonConvert.SerializeObject(Options ?? new Options());
+			return json;
 		}
 
 		public void LoadState(string translationProviderState)
@@ -156,28 +147,128 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 		}
 
-		private MTCloudLanguagePair SetSupportedLanguages(LanguagePair languageDirection)
+		private MTCloudLanguagePair GetMTCloudLanguagePair(LanguagePair languageDirection)
 		{
-			var languageMappings = TranslationService.LanguageMappings;
-			if (languageDirection != null && languageMappings != null)
+			MTCloudLanguagePair languagePair = null;
+
+			if (languageDirection != null && LanguageMappingsService.SubscriptionInfo.LanguagePairs?.Count > 0)
 			{
-				if (SubscriptionInfo.LanguagePairs?.Count > 0)
+				languagePair = GetMTCloudLanguagePair();
+
+				if (languagePair != null)
 				{
-					var languagePair = SubscriptionInfo.LanguagePairs
-						.FirstOrDefault(o => languageMappings
-								.Any(l => l.MTCodesSource.Any(a => string.Compare(a.CodeName, o.SourceLanguageId, StringComparison.InvariantCultureIgnoreCase) == 0)
-										&& l.MTCodesTarget.Any(a => string.Compare(a.CodeName, o.TargetLanguageId, StringComparison.InvariantCultureIgnoreCase) == 0)));
-
-					if (languagePair != null)
-					{
-						SupportedLanguages = new Dictionary<string, string> { { languageDirection.TargetCulture.Name, languagePair.Name } };
-					}
-
 					return languagePair;
+				}
+
+				var languages = LanguageProvider.GetLanguages();
+				
+				var languageMappingModel = GetLanguageMappingModel(languageDirection, languages);
+				if (languageMappingModel != null)
+				{
+					Options.LanguageMappings.Add(languageMappingModel);
+					languagePair = GetMTCloudLanguagePair();
+				}				
+			}
+
+			return languagePair;
+		}
+	
+		public LanguageMappingModel GetLanguageMappingModel(LanguagePair languageDirection, List<Languages.Provider.Model.Language> languages)
+		{			
+			var sourceLanguage = languageDirection.SourceCulture;
+			var sourceLanguageCode = languages?.FirstOrDefault(s => s.TradosCode.Equals(sourceLanguage?.Name));
+
+			var sourceLanguageMappings = LanguageMappingsService.GetMTCloudLanguage(sourceLanguageCode, sourceLanguage);
+			var sourceLanguageMappingSelected = sourceLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? sourceLanguageMappings[0];
+
+			if (sourceLanguageCode == null)
+			{
+				return null;
+			}
+
+			var targetLanguage = languageDirection.TargetCulture;
+			var targetLanguageCode = languages.FirstOrDefault(s => s.TradosCode.Equals(languageDirection.TargetCulture?.Name));
+
+			if (targetLanguageCode == null)
+			{
+				return null;
+			}
+
+			var name = $"{sourceLanguage?.DisplayName} - {languageDirection.TargetCulture?.DisplayName}";
+			var savedLanguageMappingModel = Options.LanguageMappings.FirstOrDefault(a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+
+			var targetLanguageMappings = LanguageMappingsService.GetMTCloudLanguage(targetLanguageCode, targetLanguage);
+			var targetLanguageMappingSelected = targetLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? targetLanguageMappings[0];
+
+			// assign the selected target langauge
+			targetLanguageMappingSelected = targetLanguageMappings.FirstOrDefault(a =>
+												a.CodeName.Equals(savedLanguageMappingModel?.SelectedTarget?.CodeName))
+											?? targetLanguageMappingSelected;
+
+			var engineModels = LanguageMappingsService.GetTranslationModels(sourceLanguageMappingSelected, targetLanguageMappingSelected,
+				sourceLanguageCode.TradosCode, targetLanguageCode.TradosCode);
+
+			// attempt to recover the language model from the secondary language code if it exists!
+			if (engineModels.Count == 1 && engineModels[0].DisplayName == PluginResources.Message_No_model_available && targetLanguageMappings.Count > 1
+				&& savedLanguageMappingModel?.SelectedModel.DisplayName != PluginResources.Message_No_model_available)
+			{
+				var secondaryLanguageCode = targetLanguageMappings.FirstOrDefault(a => a.CodeName != targetLanguageMappingSelected.CodeName);
+
+				var secondaryEngineModels = LanguageMappingsService.GetTranslationModels(
+					sourceLanguageMappingSelected, secondaryLanguageCode, sourceLanguageCode.TradosCode, targetLanguageCode.TradosCode);
+
+				if (secondaryEngineModels.Any())
+				{
+					engineModels = secondaryEngineModels;
+					targetLanguageMappingSelected = secondaryLanguageCode;
 				}
 			}
 
-			return new MTCloudLanguagePair();
+			if (engineModels.Any())
+			{
+				// assign the selected model
+				var selectedModel =
+					engineModels.FirstOrDefault(a => a.DisplayName.Equals(savedLanguageMappingModel?.SelectedModel?.DisplayName, StringComparison.InvariantCultureIgnoreCase))
+					?? engineModels.FirstOrDefault(a => a.Model.Equals("generic", StringComparison.InvariantCultureIgnoreCase))
+					?? engineModels[0];
+
+				var dictionaries = LanguageMappingsService.GetDictionaries(sourceLanguageMappingSelected, targetLanguageMappingSelected);
+
+				// assign the selected dictionary
+				var selectedDictionary =
+					dictionaries.FirstOrDefault(a => a.Name.Equals(savedLanguageMappingModel?.SelectedDictionary?.Name))
+					?? dictionaries[0];
+
+				var languageMappingModel = new LanguageMappingModel
+				{
+					Name = name,
+					SourceLanguages = sourceLanguageMappings,
+					TargetLanguages = targetLanguageMappings,
+					SelectedSource = sourceLanguageMappingSelected,
+					SelectedTarget = targetLanguageMappingSelected,
+					SourceTradosCode = sourceLanguageCode.TradosCode,
+					TargetTradosCode = targetLanguageCode.TradosCode,
+					Models = engineModels,
+					SelectedModel = selectedModel,
+					Dictionaries = dictionaries,
+					SelectedDictionary = selectedDictionary
+				};
+
+				return languageMappingModel;
+			}
+
+			return null;
+		}
+
+		private MTCloudLanguagePair GetMTCloudLanguagePair()
+		{
+			var languagePair = LanguageMappingsService.SubscriptionInfo.LanguagePairs
+				.FirstOrDefault(o => Options.LanguageMappings
+					.Any(l => l.SourceLanguages.Any(a =>
+						          a.CodeName.Equals(o.SourceLanguageId, StringComparison.InvariantCultureIgnoreCase))
+					          && l.TargetLanguages.Any(a =>
+						          a.CodeName.Equals(o.TargetLanguageId, StringComparison.InvariantCultureIgnoreCase))));
+			return languagePair;
 		}
 	}
 }

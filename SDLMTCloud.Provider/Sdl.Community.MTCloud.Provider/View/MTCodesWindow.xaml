@@ -95,7 +95,7 @@
 					  RowHeaderWidth="0"
 					  IsReadOnly="{Binding IsWaiting}">
 				<DataGrid.Columns>
-					<DataGridTextColumn Header="Language" CanUserSort="True" Binding="{Binding Language, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+					<DataGridTextColumn Header="Language" CanUserSort="True" Binding="{Binding Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 									    ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="2*"/>
 					<DataGridTextColumn Header="Region" CanUserSort="True" Binding="{Binding Region, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="2*"/>
