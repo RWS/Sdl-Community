@@ -35,5 +35,5 @@ steps:
 - powershell: gci env:* | sort-object name | Format-Table -AutoSize | Out-File $env:BUILD_ARTIFACTSTAGINGDIRECTORY/environment-variables.txt
 - task: PublishBuildArtifacts@1
   inputs:
-    pathToPublish: 'C:\Users\MariusPC\AppData\Roaming\Sdl\Sdl Trados Studio\15\Plugins\Packages\Sdl.Community.AhkPlugin'
+    pathToPublish: 'C:\Users\MariusPC\AppData\Roaming\Sdl\Sdl Trados Studio\15\Plugins\Packages\Sdl.Community.AhkPlugin.sdlplugin'
     artifactName: Sdl.Community.AhkPlugin
