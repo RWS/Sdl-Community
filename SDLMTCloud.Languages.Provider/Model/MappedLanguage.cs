@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Sdl.Community.MTCloud.Languages.Provider.Model
 {
-	public class Language: INotifyPropertyChanged
+	public class MappedLanguage: INotifyPropertyChanged
 	{
 		private string _name;
 		private string _region;

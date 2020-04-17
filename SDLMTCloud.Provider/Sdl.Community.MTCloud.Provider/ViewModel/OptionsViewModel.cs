@@ -28,8 +28,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _viewLanguageMappingsCommand;
 
 		private bool _reSendChecked;
-		private LanguageMappingModel _selectedLanguageMapping;
-		private ObservableCollection<LanguageMappingModel> _languageMappings;
+		private LanguageMappingModel _selectedLanguageMappingModel;
+		private ObservableCollection<LanguageMappingModel> _languageMappingModels;
 		private bool _isWaiting;
 
 		public OptionsViewModel(Window owner, SdlMTCloudTranslationProvider provider, List<LanguagePair> languagePairs)
@@ -53,40 +53,40 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public Window Owner { get; }
 
-		public ObservableCollection<LanguageMappingModel> LanguageMappings
+		public ObservableCollection<LanguageMappingModel> LanguageMappingModels
 		{
-			get => _languageMappings;
+			get => _languageMappingModels;
 			set
 			{
-				if (_languageMappings != null)
+				if (_languageMappingModels != null)
 				{
-					foreach (var languageMappingModel in _languageMappings)
+					foreach (var languageMappingModel in _languageMappingModels)
 					{
 						languageMappingModel.PropertyChanged -= LanguageMappingModel_PropertyChanged;
 					}
 				}
 
-				_languageMappings = value;
+				_languageMappingModels = value;
 
-				if (_languageMappings != null)
+				if (_languageMappingModels != null)
 				{
-					foreach (var languageMappingModel in _languageMappings)
+					foreach (var languageMappingModel in _languageMappingModels)
 					{
 						languageMappingModel.PropertyChanged += LanguageMappingModel_PropertyChanged;
 					}
 				}
 
-				OnPropertyChanged(nameof(LanguageMappings));
+				OnPropertyChanged(nameof(LanguageMappingModels));
 			}
 		}
 
-		public LanguageMappingModel SelectedLanguageMapping
+		public LanguageMappingModel SelectedLanguageMappingModel
 		{
-			get => _selectedLanguageMapping;
+			get => _selectedLanguageMappingModel;
 			set
 			{
-				_selectedLanguageMapping = value;
-				OnPropertyChanged(nameof(SelectedLanguageMapping));
+				_selectedLanguageMappingModel = value;
+				OnPropertyChanged(nameof(SelectedLanguageMappingModel));
 			}
 		}
 
@@ -114,14 +114,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				OnPropertyChanged(nameof(IsWaiting));
 			}
 		}
-		
+
 		private void LoadLanguageMappings()
 		{
-			if (LanguageMappings != null && LanguageMappings.Any())
+			if (LanguageMappingModels != null && LanguageMappingModels.Any())
 			{
 				return;
-			}			
-			var languages = _provider.LanguageProvider.GetLanguages();
+			}
+			var languages = _provider.LanguageProvider.GetMappedLanguages();
 			var languageMappingModels = new List<LanguageMappingModel>();
 
 			foreach (var languagePair in _languagePairs)
@@ -131,9 +131,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					languageMappingModels.Add(languageMappingModel);
 				}
-			}		
+			}
 
-			LanguageMappings = new ObservableCollection<LanguageMappingModel>(languageMappingModels);
+			LanguageMappingModels = new ObservableCollection<LanguageMappingModel>(languageMappingModels);
 		}
 
 		private void ResetToDefaults(object parameter)
@@ -142,7 +142,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				ReSendChecked = true;
 
-				_provider.Options = new Options();				
+				_provider.Options = new Options();
 
 				IsWaiting = true;
 				if (Owner != null)
@@ -150,9 +150,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					Mouse.OverrideCursor = Cursors.Wait;
 				}
 
-				if (LanguageMappings != null)
+				if (LanguageMappingModels != null)
 				{
-					LanguageMappings.Clear();
+					LanguageMappingModels.Clear();
 					LoadLanguageMappings();
 
 					if (Owner != null)
@@ -193,9 +193,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					Mouse.OverrideCursor = Cursors.Wait;
 				}
 
-				if (LanguageMappings != null)
+				if (LanguageMappingModels != null)
 				{
-					LanguageMappings.Clear();
+					LanguageMappingModels.Clear();
 					LoadLanguageMappings();
 				}
 			}
@@ -230,7 +230,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				}
 
 				var canSave = true;
-				var invalidModel = LanguageMappings.FirstOrDefault(a => a.SelectedModel.DisplayName == PluginResources.Message_No_model_available);
+				var invalidModel = LanguageMappingModels.FirstOrDefault(a => a.SelectedModel.DisplayName == PluginResources.Message_No_model_available);
 				if (invalidModel != null)
 				{
 					canSave = false;
@@ -253,8 +253,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (canSave)
 				{
 					_provider.Options.ResendDraft = ReSendChecked;
-					
-					_provider.Options.LanguageMappings = LanguageMappings.ToList();
+					_provider.Options.LanguageMappings = LanguageMappingModels.ToList();
 
 					Dispose();
 
@@ -295,7 +294,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				Reload();
 			}
-		}		
+		}
 
 		private void LanguageMappingModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
@@ -304,50 +303,16 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (e.PropertyName == nameof(LanguageMappingModel.SelectedSource) ||
 					e.PropertyName == nameof(LanguageMappingModel.SelectedTarget))
 				{
-					UpdateAvailableSelection(languageModel);
+					_provider.UpdateLanguageMappingModel(languageModel);
 				}
 			}
 		}
 
-		private void UpdateAvailableSelection(LanguageMappingModel languageMappingModel)
-		{
-			var engineModels = _provider.LanguageMappingsService.GetTranslationModels(
-				languageMappingModel.SelectedSource, languageMappingModel.SelectedTarget, languageMappingModel.SourceTradosCode,
-				languageMappingModel.TargetTradosCode);
-
-			if (engineModels.Any())
-			{
-				// assign the selected model
-				var selectedModel =
-					engineModels.FirstOrDefault(a => string.Compare(a.DisplayName,
-						                                 languageMappingModel.SelectedModel?.DisplayName,
-						                                 StringComparison.InvariantCultureIgnoreCase) == 0)
-					?? engineModels.FirstOrDefault(a =>
-						string.Compare(a.Model, "generic", StringComparison.InvariantCultureIgnoreCase) == 0)
-					?? engineModels[0];
-
-				languageMappingModel.Models = engineModels;
-				languageMappingModel.SelectedModel = selectedModel;
-			}
-
-			var dictionaries =
-				_provider.LanguageMappingsService.GetDictionaries(languageMappingModel.SelectedSource,
-					languageMappingModel.SelectedTarget);
-
-			// assign the selected dictionary
-			var selectedDictionary =
-				dictionaries.FirstOrDefault(a => a.Name.Equals(languageMappingModel.SelectedDictionary?.Name))
-				?? dictionaries[0];
-
-			languageMappingModel.Dictionaries = dictionaries;
-			languageMappingModel.SelectedDictionary = selectedDictionary;
-		}
-
 		public void Dispose()
 		{
-			if (_languageMappings != null)
+			if (_languageMappingModels != null)
 			{
-				foreach (var languageMappingModel in _languageMappings)
+				foreach (var languageMappingModel in _languageMappingModels)
 				{
 					languageMappingModel.PropertyChanged -= LanguageMappingModel_PropertyChanged;
 				}

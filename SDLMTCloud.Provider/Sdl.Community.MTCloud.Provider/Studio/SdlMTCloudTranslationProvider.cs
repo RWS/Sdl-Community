@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
+using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
@@ -80,7 +81,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public ITranslationService TranslationService { get; }
 
-		public LanguageMappingsService LanguageMappingsService => _languageMappingsService ??
+		public ILanguageMappingsService LanguageMappingsService => _languageMappingsService ??
 																  (_languageMappingsService = new LanguageMappingsService(TranslationService));
 
 		public ILanguageProvider LanguageProvider { get; }
@@ -119,7 +120,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		}
 
 		public void RefreshStatusInfo()
-		{
+		{			
 		}
 
 		public string SerializeState()
@@ -131,13 +132,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public void LoadState(string translationProviderState)
 		{
 			try
-			{
-				if (string.IsNullOrEmpty(translationProviderState))
-				{
-					Options = new Options();
-					return;
-				}
-
+			{				
 				Options = JsonConvert.DeserializeObject<Options>(translationProviderState);
 			}
 			catch
@@ -147,57 +142,53 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 		}
 
-		private MTCloudLanguagePair GetMTCloudLanguagePair(LanguagePair languageDirection)
+		private MTCloudLanguagePair GetMTCloudLanguagePair(LanguagePair languagePair)
 		{
-			MTCloudLanguagePair languagePair = null;
+			MTCloudLanguagePair mtCloudLanguagePair = null;
 
-			if (languageDirection != null && LanguageMappingsService.SubscriptionInfo.LanguagePairs?.Count > 0)
+			if (languagePair != null && LanguageMappingsService.SubscriptionInfo.LanguagePairs?.Count > 0)
 			{
-				languagePair = GetMTCloudLanguagePair();
+				mtCloudLanguagePair = GetMTCloudLanguagePair();
 
-				if (languagePair != null)
+				if (mtCloudLanguagePair != null)
 				{
-					return languagePair;
+					return mtCloudLanguagePair;
 				}
 
-				var languages = LanguageProvider.GetLanguages();
+				var languages = LanguageProvider.GetMappedLanguages();
 				
-				var languageMappingModel = GetLanguageMappingModel(languageDirection, languages);
+				var languageMappingModel = GetLanguageMappingModel(languagePair, languages);
 				if (languageMappingModel != null)
 				{
 					Options.LanguageMappings.Add(languageMappingModel);
-					languagePair = GetMTCloudLanguagePair();
+					mtCloudLanguagePair = GetMTCloudLanguagePair();
 				}				
 			}
 
-			return languagePair;
+			return mtCloudLanguagePair;
 		}
 	
-		public LanguageMappingModel GetLanguageMappingModel(LanguagePair languageDirection, List<Languages.Provider.Model.Language> languages)
-		{			
-			var sourceLanguage = languageDirection.SourceCulture;
-			var sourceLanguageCode = languages?.FirstOrDefault(s => s.TradosCode.Equals(sourceLanguage?.Name));
-
-			var sourceLanguageMappings = LanguageMappingsService.GetMTCloudLanguage(sourceLanguageCode, sourceLanguage);
-			var sourceLanguageMappingSelected = sourceLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? sourceLanguageMappings[0];
-
+		public LanguageMappingModel GetLanguageMappingModel(LanguagePair languageDirection, List<MappedLanguage> mappedLanguages)
+		{						
+			var sourceLanguageCode = mappedLanguages?.FirstOrDefault(s => s.TradosCode.Equals(languageDirection.SourceCulture?.Name));
 			if (sourceLanguageCode == null)
 			{
 				return null;
 			}
 
-			var targetLanguage = languageDirection.TargetCulture;
-			var targetLanguageCode = languages.FirstOrDefault(s => s.TradosCode.Equals(languageDirection.TargetCulture?.Name));
-
+			var sourceLanguageMappings = LanguageMappingsService.GetMTCloudLanguages(sourceLanguageCode, languageDirection.SourceCulture);
+			var sourceLanguageMappingSelected = sourceLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? sourceLanguageMappings[0];
+						
+			var targetLanguageCode = mappedLanguages.FirstOrDefault(s => s.TradosCode.Equals(languageDirection.TargetCulture?.Name));
 			if (targetLanguageCode == null)
 			{
 				return null;
 			}
 
-			var name = $"{sourceLanguage?.DisplayName} - {languageDirection.TargetCulture?.DisplayName}";
+			var name = $"{languageDirection.SourceCulture?.DisplayName} - {languageDirection.TargetCulture?.DisplayName}";
 			var savedLanguageMappingModel = Options.LanguageMappings.FirstOrDefault(a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
-			var targetLanguageMappings = LanguageMappingsService.GetMTCloudLanguage(targetLanguageCode, targetLanguage);
+			var targetLanguageMappings = LanguageMappingsService.GetMTCloudLanguages(targetLanguageCode, languageDirection.TargetCulture);
 			var targetLanguageMappingSelected = targetLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? targetLanguageMappings[0];
 
 			// assign the selected target langauge
@@ -258,6 +249,40 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 
 			return null;
+		}
+
+		public void UpdateLanguageMappingModel(LanguageMappingModel languageMappingModel)
+		{
+			var translationModels = LanguageMappingsService.GetTranslationModels(
+				languageMappingModel.SelectedSource, languageMappingModel.SelectedTarget, languageMappingModel.SourceTradosCode,
+				languageMappingModel.TargetTradosCode);
+
+			if (translationModels.Any())
+			{
+				// assign the selected model
+				var selectedModel =
+					translationModels.FirstOrDefault(a => string.Compare(a.DisplayName,
+						                                      languageMappingModel.SelectedModel?.DisplayName,
+						                                      StringComparison.InvariantCultureIgnoreCase) == 0)
+					?? translationModels.FirstOrDefault(a =>
+						string.Compare(a.Model, "generic", StringComparison.InvariantCultureIgnoreCase) == 0)
+					?? translationModels[0];
+
+				languageMappingModel.Models = translationModels;
+				languageMappingModel.SelectedModel = selectedModel;
+			}
+
+			var dictionaries =
+				LanguageMappingsService.GetDictionaries(languageMappingModel.SelectedSource,
+					languageMappingModel.SelectedTarget);
+
+			// assign the selected dictionary
+			var selectedDictionary =
+				dictionaries.FirstOrDefault(a => a.Name.Equals(languageMappingModel.SelectedDictionary?.Name))
+				?? dictionaries[0];
+
+			languageMappingModel.Dictionaries = dictionaries;
+			languageMappingModel.SelectedDictionary = selectedDictionary;
 		}
 
 		private MTCloudLanguagePair GetMTCloudLanguagePair()

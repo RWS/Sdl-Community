@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
+using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Service;
@@ -23,8 +24,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _printCommand;
 		private ICommand _resetToDefaultsCommand;
 
-		private Languages.Provider.Model.Language _selectedMtCode;
-		private List<Languages.Provider.Model.Language> _mtCodes;
+		private MappedLanguage _selectedMappedLanguage;
+		private List<MappedLanguage> _mappedLanguages;
 		private string _message;
 		private string _messageColor;
 		private string _query;
@@ -36,7 +37,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			Owner = owner;
 			_languageProvider = languageProvider;
 
-			MTCodes = new List<Languages.Provider.Model.Language>(GetAllLanguages(false));
+			MappedLanguages = new List<MappedLanguage>(GetAllMappedLanguages(false));
 
 			_printService = new PrintService();
 		}
@@ -51,25 +52,25 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public Window Owner { get; }
 
-		public List<Languages.Provider.Model.Language> MTCodes
+		public List<MappedLanguage> MappedLanguages
 		{
-			get => _mtCodes;
+			get => _mappedLanguages;
 			set
 			{
-				_mtCodes = value;
+				_mappedLanguages = value;
 
-				OnPropertyChanged(nameof(MTCodes));
-				ItemsCountLabel = string.Format(PluginResources.Total_Languages, _mtCodes.Count);
+				OnPropertyChanged(nameof(MappedLanguages));
+				ItemsCountLabel = string.Format(PluginResources.Total_Languages, _mappedLanguages.Count);
 			}
 		}
 
-		public Languages.Provider.Model.Language  SelectedMTCode
+		public MappedLanguage  SelectedMappedLanguage
 		{
-			get => _selectedMtCode;
+			get => _selectedMappedLanguage;
 			set
 			{
-				_selectedMtCode = value;
-				OnPropertyChanged(nameof(SelectedMTCode));
+				_selectedMappedLanguage = value;
+				OnPropertyChanged(nameof(SelectedMappedLanguage));
 			}
 		}
 
@@ -137,31 +138,31 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public void SearchLanguages(string query)
 		{
-			var collectionViewSource = CollectionViewSource.GetDefaultView(MTCodes);
+			var collectionViewSource = CollectionViewSource.GetDefaultView(MappedLanguages);
 
 			if (!string.IsNullOrEmpty(query))
 			{
 				collectionViewSource.Filter = language =>
 				{
-					var model = language as Languages.Provider.Model.Language;
+					var mappedLanguage = language as MappedLanguage;
 
-					return (model != null && model.Name.ToLower().Contains(query.ToLower()))
-						|| (model != null && model.TradosCode.ToLower().Contains(query.ToLower()))
-						|| (model != null && model.Region.ToLower().Contains(query.ToLower()))
-						|| (model != null && model.MTCode.ToLower().Contains(query.ToLower()))
-						|| (model != null && model.MTCodeLocale.ToLower().Contains(query.ToLower()));
+					return (mappedLanguage != null && mappedLanguage.Name.ToLower().Contains(query.ToLower()))
+						|| (mappedLanguage != null && mappedLanguage.TradosCode.ToLower().Contains(query.ToLower()))
+						|| (mappedLanguage != null && mappedLanguage.Region.ToLower().Contains(query.ToLower()))
+						|| (mappedLanguage != null && mappedLanguage.MTCode.ToLower().Contains(query.ToLower()))
+						|| (mappedLanguage != null && mappedLanguage.MTCodeLocale.ToLower().Contains(query.ToLower()));
 				};
 
-				SelectedMTCode = collectionViewSource.CurrentItem as Languages.Provider.Model.Language;
+				SelectedMappedLanguage = collectionViewSource.CurrentItem as MappedLanguage;
 			}
 			else
 			{
 				collectionViewSource.Filter = null;
 			}
 		
-			var filtered = collectionViewSource.Cast<Languages.Provider.Model.Language>().ToList();
+			var filtered = collectionViewSource.Cast<MappedLanguage>().ToList();
 			var filteredCount = filtered.Count;
-			var totalCount = MTCodes.Count;
+			var totalCount = MappedLanguages.Count;
 			ItemsCountLabel = filteredCount < totalCount 
 				? string.Format(PluginResources.Total_And_Filtered_Languages, totalCount, filteredCount) 
 				: string.Format(PluginResources.Total_Languages, totalCount);
@@ -171,15 +172,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			IsWaiting = true;
 
-			var collectionViewSource = CollectionViewSource.GetDefaultView(MTCodes);
-			var filtered = collectionViewSource.Cast<Languages.Provider.Model.Language>().ToList();
+			var collectionViewSource = CollectionViewSource.GetDefaultView(MappedLanguages);
+			var filtered = collectionViewSource.Cast<MappedLanguage>().ToList();
 			var filteredCount = filtered.Count;
-			var totalCount = MTCodes.Count;
+			var totalCount = MappedLanguages.Count;
 		
 			if (filteredCount < totalCount)
 			{				
 				var filteredFilePath = Path.Combine(Languages.Provider.Constants.MTCloudFolderPath, "FilteredMTLanguageCodes.xlsx");
-				_languageProvider.SaveLanguages(filtered, filteredFilePath);
+				_languageProvider.SaveMappedLanguages(filtered, filteredFilePath);
 				
 				
 				IsWaiting = false;
@@ -192,18 +193,18 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 	
-		private IEnumerable<Languages.Provider.Model.Language> GetAllLanguages(bool reset)
+		private IEnumerable<MappedLanguage> GetAllMappedLanguages(bool reset)
 		{
-			var mtCloudLanguages = _languageProvider.GetLanguages(reset);
-			if (AddStudioLanguages(mtCloudLanguages))
+			var mappedLanguages = _languageProvider.GetMappedLanguages(reset);
+			if (AddStudioLanguages(mappedLanguages))
 			{
-				_languageProvider.SaveLanguages(mtCloudLanguages);
+				_languageProvider.SaveMappedLanguages(mappedLanguages);
 			}
 
-			return mtCloudLanguages;
+			return mappedLanguages;
 		}
 
-		private bool AddStudioLanguages(ICollection<Languages.Provider.Model.Language> mtCloudLanguages)
+		private bool AddStudioLanguages(ICollection<MappedLanguage> mappedLanguages)
 		{
 			var updated = false;
 
@@ -211,15 +212,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			foreach (var studioLanguage in studioLanguages)
 			{
-				var mtCloudLanguage = mtCloudLanguages.FirstOrDefault(e => e.TradosCode.Equals(studioLanguage.CultureInfo.Name));
-				if (mtCloudLanguage == null)
+				var mappedLanguage = mappedLanguages.FirstOrDefault(e => e.TradosCode.Equals(studioLanguage.CultureInfo.Name));
+				if (mappedLanguage == null)
 				{							
 					var languageName = GetLanguageName(studioLanguage, out var region);
 
 					updated = true;
-					var language = new Languages.Provider.Model.Language
+					var language = new MappedLanguage
 					{
-						Index = mtCloudLanguages.Count,
+						Index = mappedLanguages.Count,
 						Name = languageName,
 						Region = region,
 						TradosCode = studioLanguage.CultureInfo.Name,
@@ -227,7 +228,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 						MTCodeLocale = string.Empty
 					};
 
-					mtCloudLanguages.Add(language);
+					mappedLanguages.Add(language);
 				}
 			}
 
@@ -262,7 +263,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void ResetToDefaults(object obj)
 		{
-			MTCodes = new List<Languages.Provider.Model.Language>(GetAllLanguages(true));
+			MappedLanguages = new List<MappedLanguage>(GetAllMappedLanguages(true));
 
 			MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults, 
 				Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
@@ -270,7 +271,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void Save(object obj)
 		{			
-			_languageProvider.SaveLanguages(MTCodes.ToList());
+			_languageProvider.SaveMappedLanguages(MappedLanguages.ToList());
 
 			WindowCloser.SetDialogResult(Owner, true);
 			Owner.Close();
