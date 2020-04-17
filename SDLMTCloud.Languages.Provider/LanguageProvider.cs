@@ -11,23 +11,23 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 		/// Saves the MT Clound Languages to the default location in the users
 		/// roaming directory.
 		/// </summary>
-		/// <param name="languages">list of MT Cloud Languages</param>
+		/// <param name="mappedLanguages">list of MT Cloud Languages</param>
 		/// <returns>Returns true if file was saved correctly</returns>
-		public bool SaveLanguages(List<Language> languages)
+		public bool SaveMappedLanguages(List<MappedLanguage> mappedLanguages)
 		{
-			return SaveLanguages(languages, Constants.MTLanguageCodesFilePath);
+			return SaveMappedLanguages(mappedLanguages, Constants.MTLanguageCodesFilePath);
 		}
 
 		/// <summary>
 		/// Saves the MT Clound Languages to the <param name="path">file path</param>
 		/// </summary>
-		/// <param name="languages">list of MT Cloud Languages</param>
+		/// <param name="mappedLanguages">list of MT Cloud Languages</param>
 		/// <param name="path">The full path to the excel file where the languages are saved</param>
 		/// <returns>Returns true if file was saved correctly</returns>
-		public bool SaveLanguages(List<Language> languages, string path)
+		public bool SaveMappedLanguages(List<MappedLanguage> mappedLanguages, string path)
 		{			
 			var writer = new Writer();			
-			return writer.WriteLanguages(languages, path);
+			return writer.WriteLanguages(mappedLanguages, path);
 		}
 
 		/// <summary>
@@ -36,9 +36,9 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 		/// </summary>
 		/// <param name="reset">Resets the default languages</param>
 		/// <returns>Returns a list of MT Cloud Languages</returns>
-		public List<Language> GetLanguages(bool reset = false)
+		public List<MappedLanguage> GetMappedLanguages(bool reset = false)
 		{
-			return GetLanguages(Constants.MTLanguageCodesFilePath, reset);
+			return GetMappedLanguages(Constants.MTLanguageCodesFilePath, reset);
 		}
 
 
@@ -48,7 +48,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 		/// <param name="path">The full path to the excel file where the languages are located</param>
 		/// <param name="reset">Resets the default languages</param>
 		/// <returns>Returns a list of MT Cloud Languages</returns>
-		public List<Language> GetLanguages(string path, bool reset = false)
+		public List<MappedLanguage> GetMappedLanguages(string path, bool reset = false)
 		{
 			var common = new Common();
 			if (reset)
@@ -61,12 +61,12 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 			return languages;
 		}
 
-		private static List<Language> GetLanguages(IEnumerable<ExcelRow> excelRows)
+		private static List<MappedLanguage> GetLanguages(IEnumerable<ExcelRow> excelRows)
 		{
-			var languages = new List<Language>();
+			var languages = new List<MappedLanguage>();
 			foreach (var row in excelRows)
 			{
-				var language = new Language
+				var language = new MappedLanguage
 				{
 					Index = row.Index
 				};

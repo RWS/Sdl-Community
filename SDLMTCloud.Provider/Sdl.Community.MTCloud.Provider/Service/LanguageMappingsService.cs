@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Core.Globalization;
@@ -127,26 +128,26 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return cloudDictionaries;
 		}
 
-		public List<MTCloudLanguage> GetMTCloudLanguage(Languages.Provider.Model.Language mtCloudLanguage, CultureInfo language)
+		public List<MTCloudLanguage> GetMTCloudLanguages(MappedLanguage mappedLanguage, CultureInfo cultureInfo)
 		{
 			var languageMappings = new List<MTCloudLanguage>();
 
-			if (mtCloudLanguage != null)
+			if (mappedLanguage != null)
 			{
 				languageMappings.Add(new MTCloudLanguage
 				{
-					CodeName = mtCloudLanguage.MTCode,
+					CodeName = mappedLanguage.MTCode,
 					IsLocale = false,
-					Flag = SetLanguageFlag(language)
+					Flag = SetLanguageFlag(cultureInfo)
 				});
 
-				if (!string.IsNullOrEmpty(mtCloudLanguage.MTCodeLocale))
+				if (!string.IsNullOrEmpty(mappedLanguage.MTCodeLocale))
 				{
 					languageMappings.Add(new MTCloudLanguage
 					{
-						CodeName = mtCloudLanguage.MTCodeLocale,
+						CodeName = mappedLanguage.MTCodeLocale,
 						IsLocale = true,
-						Flag = SetLanguageFlag(language)
+						Flag = SetLanguageFlag(cultureInfo)
 					});
 				}
 			}

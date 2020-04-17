@@ -47,7 +47,7 @@
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 			<controls:WindowsControl Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top" Width="Auto"/>
-			<Image Grid.Row="0" Grid.Column="0" Height="40" Stretch="Uniform" HorizontalAlignment="Center" Grid.ColumnSpan="2"
+			<Image Grid.Row="0" Grid.Column="0" Height="42" Stretch="Uniform" HorizontalAlignment="Center" Grid.ColumnSpan="2"
 			       Margin="0" VerticalAlignment="Top"  IsHitTestVisible="False"
 			       RenderOptions.BitmapScalingMode="HighQuality"
 			       RenderOptions.EdgeMode="Aliased"
@@ -65,14 +65,14 @@
 			</Border>
 
 			<Button Grid.Row="1" Grid.Column="1" Background="Transparent" BorderThickness="1" 
-			        Command="{Binding PrintCommand}" CommandParameter="{Binding ElementName=MTCodesGrid}" 
+			        Command="{Binding PrintCommand}" CommandParameter="{Binding ElementName=MappedLanguagesGrid}" 
 				HorizontalAlignment="Right" Margin="0,15,15,7" ToolTip="Print MT Codes" BorderBrush="#B5B2B2">
 				<Image Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/Print.png" 
 				       RenderOptions.BitmapScalingMode="HighQuality"
 				       RenderOptions.EdgeMode="Aliased" Height="26" Width="26" Stretch="UniformToFill"/>
 			</Button>
 
-			<controls:SortAwareDataGrid x:Name="MTCodesGrid" 
+			<controls:SortAwareDataGrid x:Name="MappedLanguagesGrid" 
 			          DefaultColumnName="[none]"
 			          DefaultSortDirection="Ascending"
 			          Style="{StaticResource FilesGridStyle}" 
@@ -81,8 +81,8 @@
 			          Grid.ColumnSpan="2" 
 			          Margin="15,5,15,5" 
 			          AutoGenerateColumns="False" 			                           
-					  ItemsSource="{Binding MTCodes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                
-					  SelectedValue="{Binding SelectedMTCode, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+					  ItemsSource="{Binding MappedLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                
+					  SelectedValue="{Binding SelectedMappedLanguage, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 					  FontSize="12"
 					  BorderThickness="1"
 					  BorderBrush="#C1C0C0"
