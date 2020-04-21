@@ -22,6 +22,13 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 			get => GetSetting<bool>(nameof(CreatedByChecked));
 			set => GetSetting<bool>(nameof(CreatedByChecked)).Value = value;
 		}
+
+		public bool ClearSettings
+		{
+			get => GetSetting<bool>(nameof(ClearSettings));
+			set => GetSetting<bool>(nameof(ClearSettings)).Value = value;
+		}
+
 		public string CreatedByName
 		{
 			get => GetSetting<string>(nameof(CreatedByName));

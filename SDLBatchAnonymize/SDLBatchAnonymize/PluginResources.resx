@@ -123,6 +123,12 @@
   <data name="AnonymizeCompleteToolTip" xml:space="preserve">
     <value>Supports a one-click action to remove usernames and machine translation providers and replace with blanks.</value>
   </data>
+  <data name="ClearSettings" xml:space="preserve">
+    <value>Delete settings</value>
+  </data>
+  <data name="ClearSettingsTooltip" xml:space="preserve">
+    <value>Delete settings will remove all the stored information used to anonymize the project from the Project settings (*.sdlproj). They will be removed after the task has completed.</value>
+  </data>
   <data name="CommentAuthor" xml:space="preserve">
     <value>Comment author</value>
   </data>

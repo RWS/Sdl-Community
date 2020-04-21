@@ -56,6 +56,10 @@
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.Core.Settings, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
       <Private>False</Private>
@@ -157,7 +161,8 @@
     <Compile Include="IATETerminologyProviderViewerWinFormsUI.cs" />
     <Compile Include="IATETerminologyProvider.cs" />
     <Compile Include="IATETerminologyProviderFactory.cs" />
-    <Compile Include="Interface\ISettingsService.cs" />
+    <Compile Include="Interface\IIateSettingsService.cs" />
+    <Compile Include="Interface\IProviderSettings.cs" />
     <Compile Include="Model\ResponseModels\JsonAccessTokenModel.cs" />
     <Compile Include="Model\DocumentEntryState.cs" />
     <Compile Include="Model\DomainModel.cs" />
@@ -174,6 +179,7 @@
     <Compile Include="Model\ResponseModels\TermsDomainResponseModel.cs" />
     <Compile Include="Model\ResponseModels\TermTypeResponseModel.cs" />
     <Compile Include="Model\SearchResultModel.cs" />
+    <Compile Include="Model\SettingsModel.cs" />
     <Compile Include="Model\TermResultGroup.cs" />
     <Compile Include="Model\TermTypeModel.cs" />
     <Compile Include="Model\ViewModelBase.cs" />
@@ -187,7 +193,7 @@
     <Compile Include="Service\DocumentStateService.cs" />
     <Compile Include="Service\DomainService.cs" />
     <Compile Include="Service\AccessTokenService.cs" />
-    <Compile Include="Service\PersistenceService.cs" />
+    <Compile Include="Service\IateSettingsService.cs" />
     <Compile Include="Service\SegmentVisitor.cs" />
     <Compile Include="Service\TermSearchService.cs" />
     <Compile Include="Service\TermTypeService.cs" />

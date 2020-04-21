@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using IATETerminologyProvider.Helpers;
+using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Service;
 using Sdl.Terminology.TerminologyProvider.Core;
 
@@ -15,9 +17,18 @@ namespace IATETerminologyProvider
 
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
 		{
-			var persistenceService = new PersistenceService();
-			var providerSettings = persistenceService.Load();
-				
+			var settingsService  = new IateSettingsService();
+			var savedSettings = settingsService.GetProviderSettings();
+			var providerSettings = new SettingsModel
+			{
+				Domains = new List<DomainModel>(),
+				TermTypes = new List<TermTypeModel>()
+			};
+			if (savedSettings != null)
+			{
+				providerSettings.Domains.AddRange(savedSettings.Domains);
+				providerSettings.TermTypes.AddRange(savedSettings.TermTypes);
+			}
 			var terminologyProvider = new IATETerminologyProvider(providerSettings);
 			return terminologyProvider;
 		}		
