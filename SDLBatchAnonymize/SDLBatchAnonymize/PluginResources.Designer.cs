@@ -79,6 +79,24 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete settings.
+        /// </summary>
+        public static string ClearSettings {
+            get {
+                return ResourceManager.GetString("ClearSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete settings will remove all the stored information used to anonymize the project from the Project settings (*.sdlproj). They will be removed after the task has completed..
+        /// </summary>
+        public static string ClearSettingsTooltip {
+            get {
+                return ResourceManager.GetString("ClearSettingsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment author.
         /// </summary>
         public static string CommentAuthor {

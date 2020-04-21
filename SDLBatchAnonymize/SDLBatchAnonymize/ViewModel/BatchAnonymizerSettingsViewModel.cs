@@ -18,6 +18,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 		private bool _changeTmChecked;
 		private bool _setSpecificResChecked;
 		private bool _isFuzzyEnabled;
+		private bool _clearSettings;
 		private string _createdByName;
 		private string _modifyByName;
 		private string _commentAuthorName;
@@ -36,6 +37,17 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 				_anonymizeAllSettings = value;
 				SetOptions(value);
 				OnPropertyChanged(nameof(AnonymizeAllSettings));
+			}
+		}
+
+		public bool ClearSettings
+		{
+			get => _clearSettings;
+			set
+			{
+				if (_clearSettings == value) return;
+				_clearSettings = value;
+				OnPropertyChanged(nameof(ClearSettings));
 			}
 		}
 
@@ -253,6 +265,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			if (Settings == null) return;
 			AnonymizeAllSettings = Settings.AnonymizeComplete;
 			UseGeneral = Settings.UseGeneral;
+			ClearSettings = Settings.ClearSettings;
 			CreatedByChecked = Settings.CreatedByChecked;
 			CreatedByName = Settings.CreatedByName;
 			ModifyByChecked = Settings.ModifyByChecked;

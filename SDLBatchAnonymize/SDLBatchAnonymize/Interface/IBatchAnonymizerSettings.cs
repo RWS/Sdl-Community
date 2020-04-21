@@ -11,6 +11,7 @@
 		bool ChangeMtChecked { get; set; }
 		bool ChangeTmChecked { get; set; }
 		bool SetSpecificResChecked { get; set; }
+		bool ClearSettings { get; set; }
 		string CreatedByName { get; set; }
 		string ModifyByName { get; set; }
 		string CommentAuthorName { get; set; }

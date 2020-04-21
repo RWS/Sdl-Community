@@ -38,7 +38,7 @@
 
 		<TextBlock Grid.Row="1" Style="{StaticResource Sdl.TextBlock.SubtitleStyle}" Text="{x:Static resx:PluginResources.Description}" TextWrapping="WrapWithOverflow" 
 				   TextAlignment="Left" Margin="5,5,0,5"/>
-		<DockPanel Grid.Row="2" Margin="0,0,0,5">
+		<DockPanel Grid.Row="2" Margin="0,0,0,5" LastChildFill="False">
 			<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="{x:Static resx:PluginResources.AnonymizeAll}" 
 			          IsChecked="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged}">
 				<CheckBox.ToolTip>
@@ -50,6 +50,12 @@
 			          IsChecked="{Binding UseGeneral,UpdateSourceTrigger=PropertyChanged}">
 				<CheckBox.ToolTip>
 					<ToolTip Content="{x:Static resx:PluginResources.GeneralTooltip}" Style="{StaticResource ToolTipStyle}"/>
+				</CheckBox.ToolTip>
+			</CheckBox>
+			<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}" Content="{x:Static resx:PluginResources.ClearSettings}" 
+			          IsChecked="{Binding ClearSettings,UpdateSourceTrigger=PropertyChanged}">
+				<CheckBox.ToolTip>
+					<ToolTip Content="{x:Static resx:PluginResources.ClearSettingsTooltip}" Style="{StaticResource ToolTipStyle}"/>
 				</CheckBox.ToolTip>
 			</CheckBox>
 		</DockPanel >

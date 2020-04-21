@@ -1,13 +1,11 @@
-﻿using System.Linq;
-using Sdl.Community.SDLBatchAnonymize.BatchTask;
+﻿using Sdl.Community.SDLBatchAnonymize.BatchTask;
 using Sdl.Community.SDLBatchAnonymize.Service;
 using Sdl.Core.Globalization;
+using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
-using Sdl.ProjectAutomation.FileBased;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 
 namespace Sdl.Community.SDLBatchAnonymize
@@ -22,20 +20,16 @@ namespace Sdl.Community.SDLBatchAnonymize
 
 	public class BatchAnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
-		private FileBasedProject _currentProject;
-		private BatchAnonymizerSettings _generalSettings;
+		private BatchAnonymizerSettings _settings;
 		private UserNameService _userNameService;
 		private ResourceOriginsService _resourceOriginsService;
 
 		protected override void OnInitializeTask()
 		{
-			_generalSettings = GetSetting<BatchAnonymizerSettings>();
 			_resourceOriginsService = new ResourceOriginsService();
 			_userNameService = new UserNameService();
-
-			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			_currentProject = projectsController.CurrentProject ?? projectsController.SelectedProjects.FirstOrDefault();
-			var projectInfo = _currentProject?.GetProjectInfo();
+			
+			var projectInfo = Project?.GetProjectInfo();
 			if (projectInfo is null) return;
 			var backupService = new BackupService();
 			
@@ -44,15 +38,48 @@ namespace Sdl.Community.SDLBatchAnonymize
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			var settings = _generalSettings.UseGeneral ? _generalSettings : GetAnonymizationSettings(projectFile.Language);
+			var generalSettings = GetSetting<BatchAnonymizerSettings>();
+
+			_settings = generalSettings.UseGeneral ? generalSettings : GetAnonymizationSettings(projectFile.Language);
 		
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerProcessor(settings, _userNameService, _resourceOriginsService)));
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerProcessor(_settings, _userNameService, _resourceOriginsService)));
 		}
 
 		private BatchAnonymizerSettings GetAnonymizationSettings(Language targetLanguage)
 		{
-			var settingsForLanguageBundle = _currentProject.GetSettings(targetLanguage);
+			var settingsForLanguageBundle = Project.GetSettings(targetLanguage);
 			return settingsForLanguageBundle.GetSettingsGroup<BatchAnonymizerSettings>();
+		}
+
+		public override void TaskComplete()
+		{
+			var generalSettings = GetSetting<BatchAnonymizerSettings>();
+			var targetLanguages = Project.GetProjectInfo().TargetLanguages;
+
+			foreach (var targetLanguage in targetLanguages)
+			{
+				var languageSettings = GetAnonymizationSettings(targetLanguage);
+				if (generalSettings.UseGeneral && generalSettings.ClearSettings)
+				{
+					var projectSettings = Project.GetSettings();
+					RemoveSettings(projectSettings);
+					Project.UpdateSettings(projectSettings);
+
+				}
+				else if (languageSettings.ClearSettings)
+				{
+					var projectSettings = Project.GetSettings(targetLanguage);
+					RemoveSettings(projectSettings);
+					Project.UpdateSettings(targetLanguage, projectSettings);
+				}
+			}
+		}
+
+		private void RemoveSettings(ISettingsBundle projectSettingsBundle)
+		{
+			if (projectSettingsBundle is null) return;
+			if (!projectSettingsBundle.ContainsSettingsGroup(nameof(BatchAnonymizerSettings))) return;
+			projectSettingsBundle.RemoveSettingsGroup(nameof(BatchAnonymizerSettings));
 		}
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)

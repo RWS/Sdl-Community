@@ -57,6 +57,16 @@
 		<Setter Property="FontFamily" Value="Calibri"/>
 		<Setter Property="FontSize" Value="12"/>
 		<Setter Property="Foreground" Value="#414141"/>
+		<Setter Property="MaxWidth" Value="170"/>
+		<Style.Resources>
+			<Style TargetType="ContentPresenter">
+				<Style.Resources>
+					<Style TargetType="TextBlock">
+						<Setter Property="TextWrapping" Value="Wrap" />
+					</Style>
+				</Style.Resources>
+			</Style>
+		</Style.Resources>
 	</Style>
 	<Style TargetType="{x:Type TextBox}" x:Key="AnonymizeValueBox">
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
