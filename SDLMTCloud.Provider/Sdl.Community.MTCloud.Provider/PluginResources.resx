@@ -277,4 +277,13 @@
   <data name="Plugin_NiceName" xml:space="preserve">
     <value>SDL Machine Translation Cloud Provider</value>
   </data>
+  <data name="Message_No_dictionary" xml:space="preserve">
+    <value>No dictionary</value>
+  </data>
+  <data name="Message_No_dictionary_available" xml:space="preserve">
+    <value>No dictionary available</value>
+  </data>
+  <data name="Message_No_model_available" xml:space="preserve">
+    <value>No model available</value>
+  </data>
 </root>

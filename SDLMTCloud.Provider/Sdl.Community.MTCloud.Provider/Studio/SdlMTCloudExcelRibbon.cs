@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Interop;
+using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
@@ -29,7 +30,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 						Owner = StudioInstance.GetActiveForm().Handle
 					};
 
-					var languages = new Languages.Provider.Languages();
+					var languages = new LanguageProvider();
 					var viewModel = new MTCodesViewModel(window, languages);
 					window.DataContext = viewModel;
 					window.ShowDialog();

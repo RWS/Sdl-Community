@@ -20,32 +20,16 @@
 		public static string ClientAuthentication = "Client credentials - SDL Machine Translation Cloud";
 
 
-		// TODO confirm if some or all of these should be managed in a resource file
-		public static string PluginName = "SDL Machine Translation Cloud provider";
+		// TODO confirm if some or all of these should be managed in a resource file		
 		public static string SDLMachineTranslationCloud = "SDLMachineTranslationCloud";
-		public static string SDLMTCloud = "SDL Machine Translation Cloud";
 		public static string SDLCommunity = "SDL Community";
 		public static string TraceId = "Trace-ID";
 		public static string FAILED = "FAILED";
 		public static string INIT = "INIT";
 		public static string DONE = "DONE";
 		public static string TRANSLATING = "TRANSLATING";
-		public static string Authorization = "Authorization";
-		public static string SDLMachineTranslationCloudProvider = "SDLMachineTranslationCloudProvider";
-	
-		public static string Client = "Client";
-		public static string User = "User";
-		public static string PasswordBox = "PasswordBox";
-		public static string NullValue = "Value cannot be null.";
-		public static string Red = "Red";
-		public static string Green = "Green";
-		public static string PrintMTCodes = "Printing MT Codes";
-		public static string SettingsGroupId = "SDLMTCloudLanguageMappings";
-		public static string HostAddress = "translate-api.sdlbeglobal.com";
-		public static string NoDictionary = "No dictionary";
-
-		// Excel MTCodes values
-		public static string ExcelSheet = "Sheet1";
+		public static string SDLMachineTranslationCloudProvider = "SDLMachineTranslationCloudProvider";			
+		public static string SettingsGroupId = "SDLMTCloudLanguageMappings";			
 
 		// Logging
 		// TODO confirm if some or all of these should be managed in a resource file
@@ -81,8 +65,6 @@
 		public static string SuccessfullyUpdatedMessage = "The MT Code was successfully updated within the MTLanguageCodes.xlsx file.";
 		public static string NoEnginesLoaded = "No MT engines were received from MTCloud for the current project's Language Pairs";
 		public static string EnginesSelectionMessage = "Settings not saved! Please select the corresponding engine from the Language Mappings tab.";
-		public static string NoTranslationMessage = "Translation cannot be received because MT Cloud engine is not set for the current Language Pair";
-		public static string NoAvailableDictionary = "No dictionary available";
-		public static string NoAvailableModel = "No model available";
+		public static string NoTranslationMessage = "Translation cannot be received because MT Cloud engine is not set for the current Language Pair";				
 	}
 }

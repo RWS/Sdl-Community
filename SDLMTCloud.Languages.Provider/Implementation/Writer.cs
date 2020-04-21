@@ -9,14 +9,14 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 {
 	internal class Writer
 	{	
-		internal bool WriteLanguages(List<MTCloudLanguage> langauges, string path)
+		internal bool WriteLanguages(List<MappedLanguage> mappedLanguages, string path)
 		{
 			if (string.IsNullOrEmpty(path))
 			{
 				throw new Exception("File path cannot be null!");
 			}
 
-			if (langauges == null || langauges.Count == 0)
+			if (mappedLanguages == null || mappedLanguages.Count == 0)
 			{
 				throw new NullReferenceException("Languages cannot be empty or null!");
 			}			
@@ -38,11 +38,11 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 			excelDocument.SetCellValue(spreadsheet, worksheet1, 5, rowIndex, "MT Code (locale)");
 			
 			// write the language rows
-			foreach (var langauge in langauges)
+			foreach (var langauge in mappedLanguages)
 			{
 				rowIndex++;
 
-				excelDocument.SetCellValue(spreadsheet, worksheet1, 1, rowIndex, langauge.Language);
+				excelDocument.SetCellValue(spreadsheet, worksheet1, 1, rowIndex, langauge.Name);
 				excelDocument.SetCellValue(spreadsheet, worksheet1, 2, rowIndex, langauge.Region);
 				excelDocument.SetCellValue(spreadsheet, worksheet1, 3, rowIndex, langauge.TradosCode);
 				excelDocument.SetCellValue(spreadsheet, worksheet1, 4, rowIndex, langauge.MTCode);
@@ -57,7 +57,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 			excelDocument.SetColumnWidth(worksheet1, 5, 20);
 
 			// add a table filter
-			var autoFilter = new AutoFilter { Reference = "A1:E" + langauges.Count + 1 };
+			var autoFilter = new AutoFilter { Reference = "A1:E" + mappedLanguages.Count + 1 };
 			worksheet1.Append(autoFilter);
 		
 			worksheet1.Save();

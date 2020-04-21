@@ -3,9 +3,9 @@ using System.Runtime.CompilerServices;
 
 namespace Sdl.Community.MTCloud.Languages.Provider.Model
 {
-	public class MTCloudLanguage: INotifyPropertyChanged
+	public class MappedLanguage: INotifyPropertyChanged
 	{
-		private string _language;
+		private string _name;
 		private string _region;
 		private string _tradosCode;
 		private string _mtCode;
@@ -13,18 +13,18 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Model
 
 		public int Index { get; set; }
 
-		public string Language
+		public string Name
 		{
-			get => _language;
+			get => _name;
 			set
 			{
-				if (_language == value)
+				if (_name == value)
 				{
 					return;
 				}
 
-				_language = value;
-				OnPropertyChanged(nameof(Language));
+				_name = value;
+				OnPropertyChanged(nameof(Name));
 			}
 		}
 
@@ -57,6 +57,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Model
 				OnPropertyChanged(nameof(TradosCode));
 			}
 		}
+
 		public string MTCode
 		{
 			get => _mtCode;
@@ -86,6 +87,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Model
 				OnPropertyChanged(nameof(MTCodeLocale));
 			}
 		}
+
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
