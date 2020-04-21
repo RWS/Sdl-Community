@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Interop;
+using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.View;
@@ -17,9 +19,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		Name = "SDLMTCloud_Provider_Name",
 		Description = "SDLMTCloud_Provider_Description")]
 	public class SdlMTCloudProviderWinFormsUI : ITranslationProviderWinFormsUI
-	{		
-		public string TypeName => Constants.PluginName;
-		public string TypeDescription => Constants.PluginName;
+	{
+		public string TypeName => PluginResources.Plugin_NiceName;
+
+		public string TypeDescription => PluginResources.Plugin_NiceName;
+
 		public bool SupportsEditing => true;		
 		
 		[STAThread]
@@ -40,15 +44,13 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				
 				connectionService.SaveCredential(credentialStore);
 
-				var languageMappingsService = new LanguageMappingsService();
-				var translationService = new TranslationService(connectionService, languageMappingsService);
+				
+				var translationService = new TranslationService(connectionService);
+				var langaugeProvider = new LanguageProvider();
 				var editorController = SdlTradosStudio.Application?.GetController<EditorController>();
 
-				var provider = new SdlMTCloudTranslationProvider(uri, translationService, string.Empty, editorController);				
-				
-				var optionsViewModel = new OptionsViewModel(null, provider, languagePairs);				
-				optionsViewModel.SaveLanguageMappings();
-
+				var provider = new SdlMTCloudTranslationProvider(uri, string.Empty, translationService, langaugeProvider, editorController);				
+								
 				return new ITranslationProvider[] { provider };
 
 			}
@@ -59,12 +61,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			return null;
 		}
-
+		
 		[STAThread]
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			try
-			{
+			{				
 				if (!(translationProvider is SdlMTCloudTranslationProvider provider))
 				{
 					return false;
@@ -81,13 +83,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				provider.TranslationService.ConnectionService.SaveCredential(credentialStore);
 
 				var optionsWindow = GetOptionsWindow(owner);
-				var optionsViewModel = new OptionsViewModel(optionsWindow, provider, languagePairs);
+				var optionsViewModel = new OptionsViewModel(optionsWindow, provider, languagePairs.ToList());
 				optionsWindow.DataContext = optionsViewModel;
-
+				
 				optionsWindow.ShowDialog();
 				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
-				{
-					provider.TranslationService.UpdateLanguageMappings();									
+				{														
 					return true;
 				}							
 			}
@@ -115,8 +116,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			var info = new TranslationProviderDisplayInfo
 			{
-				Name = Constants.PluginName,
-				TooltipText = Constants.PluginName,
+				Name = PluginResources.Plugin_NiceName,
+				TooltipText = PluginResources.Plugin_NiceName,
 				TranslationProviderIcon = PluginResources.global,
 				SearchResultImage = PluginResources.global1,
 			};
