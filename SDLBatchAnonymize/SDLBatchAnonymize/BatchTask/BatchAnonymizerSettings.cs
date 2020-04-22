@@ -6,6 +6,8 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 	public class BatchAnonymizerSettings:SettingsGroup,IBatchAnonymizerSettings
 	{
 		private bool _useGeneral = true;
+		private bool _clearSettings = true;
+
 		public bool AnonymizeComplete
 		{
 			get => GetSetting<bool>(nameof(AnonymizeComplete));
@@ -100,6 +102,8 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 			{
 				case nameof(UseGeneral):
 					return _useGeneral;
+				case nameof(ClearSettings):
+					return _clearSettings;
 			}
 			return base.GetDefaultValue(settingId);
 		}

@@ -73,13 +73,13 @@ namespace Sdl.Community.SDLBatchAnonymize
 			foreach (var targetLanguage in targetLanguages)
 			{
 				var languageSettings = GetAnonymizationSettings(targetLanguage);
-				if (generalSettings.UseGeneral && generalSettings.ClearSettings)
+				if (generalSettings.ClearSettings)
 				{
 					var projectSettings = Project.GetSettings();
 					RemoveSettings(projectSettings);
 					Project.UpdateSettings(projectSettings);
 				}
-				else if (languageSettings.ClearSettings)
+				 if (languageSettings.ClearSettings)
 				{
 					var projectSettings = Project.GetSettings(targetLanguage);
 					RemoveSettings(projectSettings);

@@ -1,12 +1,5 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.SDLBatchAnonymize.Interface;
+﻿using Sdl.Community.SDLBatchAnonymize.Interface;
 using Sdl.Community.SDLBatchAnonymize.Service;
-using Sdl.Core.Globalization;
 using Xunit;
 
 namespace Sdl.Community.SDLBatchAnonymizeUT
