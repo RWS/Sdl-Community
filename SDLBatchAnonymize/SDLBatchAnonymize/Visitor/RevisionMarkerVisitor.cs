@@ -39,6 +39,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Visitor
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
 		{
+			VisitChildren(commentMarker);
 		}
 
 		public void VisitOtherMarker(IOtherMarker marker)
