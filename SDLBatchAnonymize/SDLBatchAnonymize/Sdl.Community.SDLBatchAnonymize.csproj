@@ -121,6 +121,7 @@
     <Compile Include="Behavior\WindowLoadedBehaviour.cs" />
     <Compile Include="Command\CommandHandler.cs" />
     <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
+    <Compile Include="Interface\IAnonymizeSdlProj.cs" />
     <Compile Include="Interface\IBatchAnonymizerSettings.cs" />
     <Compile Include="Interface\IResourceOriginsService.cs" />
     <Compile Include="Interface\IUserNameService.cs" />
@@ -133,6 +134,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Service\AnonymizeSdlProjService.cs" />
     <Compile Include="Service\BackupService.cs" />
     <Compile Include="Service\ResourceOriginsService.cs" />
     <Compile Include="Service\UserNameService.cs" />
