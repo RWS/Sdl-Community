@@ -30,7 +30,7 @@
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExporterControl));
             this.mainPanel = new System.Windows.Forms.Panel();
-            this.selectAll = new System.Windows.Forms.CheckBox();
+            this.chkBox_SelectAllProjects = new System.Windows.Forms.CheckBox();
             this.clearBtn = new System.Windows.Forms.Button();
             this.loadBtn = new System.Windows.Forms.Button();
             this.projectStatusComboBox = new System.Windows.Forms.ComboBox();
@@ -55,12 +55,14 @@
             this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
             this.projListbox = new System.Windows.Forms.CheckedListBox();
             this.selectProjLbl = new System.Windows.Forms.Label();
+            this.chkBox_SelectAllLanguages = new System.Windows.Forms.CheckBox();
             this.mainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.selectAll);
+            this.mainPanel.Controls.Add(this.chkBox_SelectAllLanguages);
+            this.mainPanel.Controls.Add(this.chkBox_SelectAllProjects);
             this.mainPanel.Controls.Add(this.clearBtn);
             this.mainPanel.Controls.Add(this.loadBtn);
             this.mainPanel.Controls.Add(this.projectStatusComboBox);
@@ -91,16 +93,16 @@
             this.mainPanel.Size = new System.Drawing.Size(811, 455);
             this.mainPanel.TabIndex = 0;
             // 
-            // selectAll
+            // chkBox_SelectAllProjects
             // 
-            this.selectAll.AutoSize = true;
-            this.selectAll.Location = new System.Drawing.Point(12, 426);
-            this.selectAll.Name = "selectAll";
-            this.selectAll.Size = new System.Drawing.Size(109, 17);
-            this.selectAll.TabIndex = 28;
-            this.selectAll.Text = "Select all projects";
-            this.selectAll.UseVisualStyleBackColor = true;
-            this.selectAll.CheckedChanged += new System.EventHandler(this.selectAll_CheckedChanged);
+            this.chkBox_SelectAllProjects.AutoSize = true;
+            this.chkBox_SelectAllProjects.Location = new System.Drawing.Point(15, 29);
+            this.chkBox_SelectAllProjects.Name = "chkBox_SelectAllProjects";
+            this.chkBox_SelectAllProjects.Size = new System.Drawing.Size(109, 17);
+            this.chkBox_SelectAllProjects.TabIndex = 28;
+            this.chkBox_SelectAllProjects.Text = "Select all projects";
+            this.chkBox_SelectAllProjects.UseVisualStyleBackColor = true;
+            this.chkBox_SelectAllProjects.CheckedChanged += new System.EventHandler(this.selectAllProjects_CheckedChanged);
             // 
             // clearBtn
             // 
@@ -260,7 +262,7 @@
             // 
             // exitBtn
             // 
-            this.exitBtn.Location = new System.Drawing.Point(692, 420);
+            this.exitBtn.Location = new System.Drawing.Point(692, 426);
             this.exitBtn.Name = "exitBtn";
             this.exitBtn.Size = new System.Drawing.Size(107, 23);
             this.exitBtn.TabIndex = 11;
@@ -302,7 +304,7 @@
             // 
             this.languagesListBox.CheckOnClick = true;
             this.languagesListBox.FormattingEnabled = true;
-            this.languagesListBox.Location = new System.Drawing.Point(249, 29);
+            this.languagesListBox.Location = new System.Drawing.Point(246, 49);
             this.languagesListBox.Name = "languagesListBox";
             this.languagesListBox.Size = new System.Drawing.Size(177, 394);
             this.languagesListBox.TabIndex = 7;
@@ -332,7 +334,7 @@
             // 
             this.projListbox.CheckOnClick = true;
             this.projListbox.FormattingEnabled = true;
-            this.projListbox.Location = new System.Drawing.Point(12, 26);
+            this.projListbox.Location = new System.Drawing.Point(12, 49);
             this.projListbox.Name = "projListbox";
             this.projListbox.Size = new System.Drawing.Size(221, 394);
             this.projListbox.TabIndex = 1;
@@ -341,11 +343,22 @@
             // selectProjLbl
             // 
             this.selectProjLbl.AutoSize = true;
-            this.selectProjLbl.Location = new System.Drawing.Point(9, 10);
+            this.selectProjLbl.Location = new System.Drawing.Point(12, 9);
             this.selectProjLbl.Name = "selectProjLbl";
             this.selectProjLbl.Size = new System.Drawing.Size(75, 13);
             this.selectProjLbl.TabIndex = 0;
             this.selectProjLbl.Text = "Select project:";
+            // 
+            // chkBox_SelectAllLanguages
+            // 
+            this.chkBox_SelectAllLanguages.AutoSize = true;
+            this.chkBox_SelectAllLanguages.Location = new System.Drawing.Point(249, 29);
+            this.chkBox_SelectAllLanguages.Name = "chkBox_SelectAllLanguages";
+            this.chkBox_SelectAllLanguages.Size = new System.Drawing.Size(121, 17);
+            this.chkBox_SelectAllLanguages.TabIndex = 29;
+            this.chkBox_SelectAllLanguages.Text = "Select all languages";
+            this.chkBox_SelectAllLanguages.UseVisualStyleBackColor = true;
+            this.chkBox_SelectAllLanguages.CheckedChanged += new System.EventHandler(this.chkBox_SelectAllLanguages_CheckedChanged);
             // 
             // ReportExporterControl
             // 
@@ -392,6 +405,7 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Button loadBtn;
 		private System.Windows.Forms.Button clearBtn;
-		private System.Windows.Forms.CheckBox selectAll;
+		private System.Windows.Forms.CheckBox chkBox_SelectAllProjects;
+		private System.Windows.Forms.CheckBox chkBox_SelectAllLanguages;
 	}
 }
