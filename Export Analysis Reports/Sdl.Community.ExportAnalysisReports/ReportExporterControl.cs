@@ -50,7 +50,7 @@ namespace Sdl.Community.ExportAnalysisReports
 				}
 			}
 
-			RefreshProjectsListBox();
+			ConfigureCheckedItems();
 		}
 
 		private void InitializeSettings()
@@ -92,7 +92,6 @@ namespace Sdl.Community.ExportAnalysisReports
 							var newLanguage = new LanguageDetails {LanguageName = language.Key, IsChecked = true};
 							_languages.Add(newLanguage);
 						}
-
 					}
 				}
 
@@ -439,18 +438,21 @@ namespace Sdl.Community.ExportAnalysisReports
 			try
 			{
 				var languageToUpdate = (LanguageDetails) languagesListBox.Items[index];
-				var projectsWithSelectedLaguage = _projectsDataSource.Where(p => p.ShouldBeExported).ToList();
-				foreach (var project in projectsWithSelectedLaguage)
+				var projectsToExport = _projectsDataSource.Where(p => p.ShouldBeExported).ToList();
+				foreach (var project in projectsToExport)
 				{
-					var language =
-						project.LanguagesForPoject.FirstOrDefault(l => l.Key.Equals(languageToUpdate.LanguageName));
+					var language = project.LanguagesForPoject.FirstOrDefault(l => l.Key.Equals(languageToUpdate.LanguageName));
 					if (language.Key != null)
 					{
 						project.LanguagesForPoject[language.Key] = isChecked;
 					}
 				}
-				
-				_languages.FirstOrDefault(n => n.LanguageName.Equals(languageToUpdate.LanguageName)).IsChecked = isChecked;
+
+				var checkedLanguage = _languages.FirstOrDefault(n => n.LanguageName.Equals(languageToUpdate.LanguageName));
+				if (checkedLanguage != null)
+				{
+					checkedLanguage.IsChecked = isChecked;
+				}
 			}
 			catch (Exception ex)
 			{
@@ -656,6 +658,20 @@ namespace Sdl.Community.ExportAnalysisReports
 				{
 					projListbox.SetSelected(i, true);
 				}
+			}
+		}
+
+		/// <summary>
+		/// Configure the checked items: selected project(s) with "All selected languages" options
+		/// </summary>
+		private void ConfigureCheckedItems()
+		{
+			chkBox_SelectAllLanguages.Checked = true;
+
+			for (var i = 0; i < projListbox.Items.Count; i++)
+			{
+				var project = (ProjectDetails)projListbox.Items[i];
+				projListbox.SetItemChecked(i, project.ShouldBeExported);
 			}
 		}
 
