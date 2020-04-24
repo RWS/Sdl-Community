@@ -26,6 +26,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		private readonly BindingList<LanguageDetails> _languages = new BindingList<LanguageDetails>();
 		private BindingList<ProjectDetails> _projectsDataSource = new BindingList<ProjectDetails>();
 		private readonly IMessageBoxService _messageBoxService;
+		private bool _isAnyLanguageUnchecked;
 
 		public ReportExporterControl()
 		{
@@ -448,7 +449,7 @@ namespace Sdl.Community.ExportAnalysisReports
 						project.LanguagesForPoject[language.Key] = isChecked;
 					}
 				}
-
+				
 				_languages.FirstOrDefault(n => n.LanguageName.Equals(languageToUpdate.LanguageName)).IsChecked = isChecked;
 			}
 			catch (Exception ex)
@@ -840,26 +841,31 @@ namespace Sdl.Community.ExportAnalysisReports
 
 		private void languagesListBox_ItemCheck(object sender, ItemCheckEventArgs e)
 		{
-			var checkBoxValue = e.NewValue == CheckState.Checked ? true : false;
-			if (e.Index == 0)
-			{
-				ChangeLanguagesCheckbox(checkBoxValue);
-			}
-			else
-			{
-				SetLanguageCheckedState(e.Index, checkBoxValue);
-			}
+			var checkBoxValue = e.NewValue == CheckState.Checked;
+
+			SetLanguageCheckedState(e.Index, checkBoxValue);
+			_isAnyLanguageUnchecked = !checkBoxValue && chkBox_SelectAllLanguages.Checked;
+			UncheckAllLanguagesOption(checkBoxValue);
 
 			IsClipboardEnabled();
 			IsCsvBtnEnabled();
 		}
 
+		// Uncheck the "Select all languages" option if one of the languages is unchecked
+		private void UncheckAllLanguagesOption(bool isChecked)
+		{
+			if (!isChecked && _isAnyLanguageUnchecked)
+			{
+				chkBox_SelectAllLanguages.Checked = false;
+			}
+		}
+
+		// Select/deselect all languages
 		private void ChangeLanguagesCheckbox(bool isLanguageChecked)
 		{
 			try
 			{
-				// starting with index 1, which corresponds to the first language
-				for (int i = 1; i < languagesListBox.Items.Count; i++)
+				for (var i = 0; i < languagesListBox.Items.Count; i++)
 				{
 					SetLanguageCheckedState(i, isLanguageChecked);
 					languagesListBox.SetItemChecked(i, isLanguageChecked);
@@ -897,12 +903,19 @@ namespace Sdl.Community.ExportAnalysisReports
 				_languages.Clear();
 			}
 
+			chkBox_SelectAllLanguages.Checked = selectAllProjects;
 			RefreshLanguageListbox();
 		}
 
 		private void chkBox_SelectAllLanguages_CheckedChanged(object sender, EventArgs e)
 		{
-
+			// change all the languages checkbox values only when the "Select all languages" option is checked/unchecked
+			var isChecked = ((CheckBox) sender).Checked;
+			if (!_isAnyLanguageUnchecked)
+			{
+				ChangeLanguagesCheckbox(isChecked);
+			}
+			_isAnyLanguageUnchecked = false;
 		}
 	}
 }
