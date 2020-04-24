@@ -9,20 +9,22 @@ trigger:
 pool: MariusAgent
 
 variables:
-  solution: '**/Sdl.Community.AdvancedDisplayFilter.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  - group: variable-group1
+  - name: buildPlatform
+    value: Any CPU'
+  - name: buildConfiguration
+    value: 'Release'
 
 steps:
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
   inputs:
-    restoreSolution: '$(solution)'
+    restoreSolution: '$(solution2)'
 
 - task: VSBuild@1
   inputs:
-    solution: '$(solution)'
+    solution: '$(solution2)'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
