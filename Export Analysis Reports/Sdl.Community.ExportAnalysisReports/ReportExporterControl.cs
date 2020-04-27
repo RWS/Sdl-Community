@@ -27,6 +27,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		private BindingList<ProjectDetails> _projectsDataSource = new BindingList<ProjectDetails>();
 		private readonly IMessageBoxService _messageBoxService;
 		private bool _isAnyLanguageUnchecked;
+		private bool _isAnyProjectUnchecked;
 
 		public ReportExporterControl()
 		{
@@ -252,42 +253,6 @@ namespace Sdl.Community.ExportAnalysisReports
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"SetLanguagesForProject method: {ex.Message}\n {ex.StackTrace}");
-			}
-		}
-
-		private void projListbox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			try
-			{
-				if (projListbox.SelectedItem == null) return;
-				var projectName = ((CheckedListBox) sender).Text;
-				var selectedProject = _projectsDataSource.FirstOrDefault(n => n.ProjectName.Equals(projectName));
-
-				var selectedProjectIndex = _projectsDataSource.IndexOf(selectedProject);
-				if (selectedProjectIndex > -1)
-				{
-					var shouldExportProject = ((CheckedListBox) sender).GetItemChecked(selectedProjectIndex);
-
-					if (shouldExportProject)
-					{
-						PrepareProjectToExport(selectedProject);
-					}
-					//that means user deselected a project
-					else
-					{
-						if (selectedProject != null)
-						{
-							selectedProject.ShouldBeExported = false;
-							ShouldUnselectLanguages(selectedProject);
-						}
-					}
-				}
-
-				IsClipboardEnabled();
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"projListbox_SelectedIndexChanged method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -895,32 +860,37 @@ namespace Sdl.Community.ExportAnalysisReports
 
 		private void selectAllProjects_CheckedChanged(object sender, EventArgs e)
 		{
-			var selectAllProjects = ((CheckBox) sender).Checked;
-
-			foreach (var project in _projectsDataSource)
+			if (!_isAnyProjectUnchecked)
 			{
-				project.ShouldBeExported = selectAllProjects;
-				foreach (var language in project.LanguagesForPoject.ToList())
+				var selectAllProjects = ((CheckBox) sender).Checked;
+
+				foreach (var project in _projectsDataSource)
 				{
-					project.LanguagesForPoject[language.Key] = selectAllProjects;
+					project.ShouldBeExported = selectAllProjects;
+					foreach (var language in project.LanguagesForPoject.ToList())
+					{
+						project.LanguagesForPoject[language.Key] = selectAllProjects;
+					}
 				}
-			}
 
-			RefreshProjectsListBox();
-			if (selectAllProjects)
-			{
-				foreach (var language in _languages)
+				RefreshProjectsListBox();
+				if (selectAllProjects)
 				{
-					language.IsChecked = true;
+					foreach (var language in _languages)
+					{
+						language.IsChecked = true;
+					}
 				}
-			}
-			else
-			{
-				_languages.Clear();
+				else
+				{
+					_languages.Clear();
+				}
+
+				chkBox_SelectAllLanguages.Checked = selectAllProjects;
+				RefreshLanguageListbox();
 			}
 
-			chkBox_SelectAllLanguages.Checked = selectAllProjects;
-			RefreshLanguageListbox();
+			_isAnyProjectUnchecked = false;
 		}
 
 		private void chkBox_SelectAllLanguages_CheckedChanged(object sender, EventArgs e)
@@ -932,6 +902,52 @@ namespace Sdl.Community.ExportAnalysisReports
 				ChangeLanguagesCheckbox(isChecked);
 			}
 			_isAnyLanguageUnchecked = false;
+		}
+
+		private void projListbox_ItemCheck(object sender, ItemCheckEventArgs e)
+		{
+			try
+			{
+				var shouldExportProject = e.NewValue == CheckState.Checked; 
+				if (projListbox.SelectedItem == null) return;
+				var projectName = ((CheckedListBox)sender).Text;
+				var selectedProject = _projectsDataSource.FirstOrDefault(n => n.ProjectName.Equals(projectName));
+
+				var selectedProjectIndex = _projectsDataSource.IndexOf(selectedProject);
+				if (selectedProjectIndex > -1)
+				{
+					if (shouldExportProject)
+					{
+						PrepareProjectToExport(selectedProject);
+					}
+					//that means user deselected a project
+					else
+					{
+						if (selectedProject != null)
+						{
+							selectedProject.ShouldBeExported = false;
+							ShouldUnselectLanguages(selectedProject);
+						}
+					}
+					_isAnyProjectUnchecked = !shouldExportProject && chkBox_SelectAllProjects.Checked;
+					DisableAllProjectsOption();
+				}
+
+				IsClipboardEnabled();
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"projListbox_ItemCheck method: {ex.Message}\n {ex.StackTrace}");
+			}
+		}
+
+		// Disable the 'Select all projects' option when one of the project is unchecked
+		private void DisableAllProjectsOption()
+		{
+			if (chkBox_SelectAllProjects.Checked && _isAnyProjectUnchecked)
+			{
+				chkBox_SelectAllProjects.Checked = false;
+			}
 		}
 	}
 }
