@@ -320,6 +320,7 @@
             this.languagesListBox.Size = new System.Drawing.Size(177, 394);
             this.languagesListBox.TabIndex = 7;
             this.languagesListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.languagesListBox_ItemCheck);
+            this.languagesListBox.SelectedIndexChanged += new System.EventHandler(this.languagesListBox_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -350,6 +351,7 @@
             this.projListbox.Size = new System.Drawing.Size(221, 394);
             this.projListbox.TabIndex = 1;
             this.projListbox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.projListbox_ItemCheck);
+            this.projListbox.SelectedIndexChanged += new System.EventHandler(this.projListbox_SelectedIndexChanged);
             // 
             // selectProjLbl
             // 
