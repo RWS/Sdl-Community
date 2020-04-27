@@ -28,27 +28,27 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.SuspendLayout();
-            // 
-            // elementHost1
-            // 
-            this.elementHost1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.elementHost1.Location = new System.Drawing.Point(0, 0);
-            this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(533, 303);
-            this.elementHost1.TabIndex = 0;
-            this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = null;
-            // 
-            // XLIFFManagerFilesViewControl
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.elementHost1);
-            this.Name = "XLIFFManagerFilesViewControl";
-            this.Size = new System.Drawing.Size(533, 303);
-            this.ResumeLayout(false);
+			this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+			this.SuspendLayout();
+			// 
+			// elementHost1
+			// 
+			this.elementHost1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.elementHost1.Location = new System.Drawing.Point(0, 0);
+			this.elementHost1.Name = "elementHost1";
+			this.elementHost1.Size = new System.Drawing.Size(533, 303);
+			this.elementHost1.TabIndex = 0;
+			this.elementHost1.Text = "elementHost";
+			this.elementHost1.Child = null;
+			// 
+			// ProjectFilesViewControl
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.elementHost1);
+			this.Name = "ProjectFilesViewControl";
+			this.Size = new System.Drawing.Size(533, 303);
+			this.ResumeLayout(false);
 
 		}
 

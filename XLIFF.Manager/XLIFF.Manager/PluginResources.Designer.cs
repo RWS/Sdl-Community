@@ -80,6 +80,51 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        internal static string WindowsControl_Close {
+            get {
+                return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        internal static string WindowsControl_Help {
+            get {
+                return ResourceManager.GetString("WindowsControl_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximize.
+        /// </summary>
+        internal static string WindowsControl_Maximize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Maximize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        internal static string WindowsControl_Minimize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore.
+        /// </summary>
+        internal static string WindowsControl_Restore {
+            get {
+                return ResourceManager.GetString("WindowsControl_Restore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SDL XLIFF Manager.
         /// </summary>
         internal static string XLIFFManager_Description {
@@ -94,6 +139,24 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string XLIFFManager_Name {
             get {
                 return ResourceManager.GetString("XLIFFManager_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project File Activity.
+        /// </summary>
+        internal static string XLIFFManagerProjectFileActivity_Description {
+            get {
+                return ResourceManager.GetString("XLIFFManagerProjectFileActivity_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project File Activity.
+        /// </summary>
+        internal static string XLIFFManagerProjectFileActivity_Name {
+            get {
+                return ResourceManager.GetString("XLIFFManagerProjectFileActivity_Name", resourceCulture);
             }
         }
     }
