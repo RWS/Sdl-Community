@@ -122,13 +122,13 @@
     <value>resources\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>SDL XLIFF Manager Plugin</value>
+    <value>XLIFF Manager Plugin</value>
   </data>
   <data name="XLIFFManager_Description" xml:space="preserve">
-    <value>SDL XLIFF Manager</value>
+    <value>XLIFF Manager</value>
   </data>
   <data name="XLIFFManager_Name" xml:space="preserve">
-    <value>SDL XLIFF Manager</value>
+    <value>XLIFF Manager</value>
   </data>
   <data name="XLIFFManagerProjectFileActivity_Description" xml:space="preserve">
     <value>Project File Activity</value>

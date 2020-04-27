@@ -1,3 +1,3 @@
 ﻿using Sdl.Core.PluginFramework;
 
-[assembly: Plugin("SDL XLIFF Manager Plugin")]
+[assembly: Plugin("XLIFF Manager Plugin")]

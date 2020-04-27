@@ -111,7 +111,7 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL XLIFF Manager Plugin.
+        ///   Looks up a localized string similar to XLIFF Manager Plugin.
         /// </summary>
         internal static string Plugin_Name {
             get {
@@ -205,7 +205,7 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL XLIFF Manager.
+        ///   Looks up a localized string similar to XLIFF Manager.
         /// </summary>
         internal static string XLIFFManager_Description {
             get {
@@ -214,7 +214,7 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL XLIFF Manager.
+        ///   Looks up a localized string similar to XLIFF Manager.
         /// </summary>
         internal static string XLIFFManager_Name {
             get {

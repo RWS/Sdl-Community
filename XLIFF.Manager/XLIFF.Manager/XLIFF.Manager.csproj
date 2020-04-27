@@ -116,6 +116,7 @@
     </Compile>
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="Model\Enumerators.cs" />
+    <Compile Include="Model\ProjectFileActionModel.cs" />
     <Compile Include="Model\ProjectFileActivityModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>

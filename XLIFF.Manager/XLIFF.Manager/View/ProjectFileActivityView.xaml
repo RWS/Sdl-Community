@@ -7,7 +7,7 @@
              xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.ViewModel"
              xmlns:controls="clr-namespace:Sdl.Community.XLIFF.Manager.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModel:ProjectFileActivityViewModel}">
+             d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:ProjectFileActivityViewModel}">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -39,18 +39,17 @@
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="Status" CanUserSort="True" Binding="{Binding Status, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 				                    ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="0.5*"/>
+				<DataGridTextColumn Header="Action" CanUserSort="True" Binding="{Binding Action, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+				                    ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="0.5*"/>
 				<DataGridTextColumn Header="Name" CanUserSort="True" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 									    ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="2*"/>
 				<DataGridTextColumn Header="Path" CanUserSort="True" Binding="{Binding Path, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="1*"/>
-				<DataGridTextColumn Header="Action" CanUserSort="True" Binding="{Binding Action, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
-										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="0.5*"/>
 				<DataGridTextColumn Header="Date" CanUserSort="True" Binding="{Binding Date, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
 										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="1*"/>
 				<DataGridTextColumn Header="Message" CanUserSort="True" Binding="{Binding Message, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
 										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="2*"/>
 			</DataGrid.Columns>
 		</controls:SortAwareDataGrid>
-
 	</Grid>
 </UserControl>
