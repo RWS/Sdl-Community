@@ -15,7 +15,7 @@ namespace Sdl.Community.XLIFF.Manager
 		Id = "XLIFFManager_View",
 		Name = "XLIFFManager_Name",
 		Description = "XLIFFManager_Description",
-		Icon = "icon",
+		Icon = "Icon",
 		AllowViewParts = true,
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class XLIFFManagerViewController : AbstractViewController
