@@ -636,12 +636,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		private void ConfigureCheckedItems()
 		{
 			chkBox_SelectAllLanguages.Checked = true;
-
-			for (var i = 0; i < projListbox.Items.Count; i++)
-			{
-				var project = (ProjectDetails)projListbox.Items[i];
-				projListbox.SetItemChecked(i, project.ShouldBeExported);
-			}
+			RefreshProjectsListBox();
 		}
 
 		private void targetBtn_Click(object sender, EventArgs e)
