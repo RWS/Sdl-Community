@@ -11,17 +11,9 @@ namespace Sdl.Community.MTCloud.Provider
 	{
 		public void Execute()
 		{
-			if (Application.Current == null)
-			{
-				new Application();
-			}
+			SetApplicationShutdownMode();
+		}		
 
-			if (Application.Current != null)
-			{
-				Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-			}					
-		}
-	
 		public static Form GetActiveForm()
 		{			
 			var allForms = System.Windows.Forms.Application.OpenForms;
@@ -36,6 +28,20 @@ namespace Sdl.Community.MTCloud.Provider
 			}
 
 			return activeForm;
+		}
+
+		private static void SetApplicationShutdownMode()
+		{
+			if (Application.Current == null)
+			{
+				// initialize the enviornments application instance
+				new Application();
+			}
+
+			if (Application.Current != null)
+			{
+				Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+			}
 		}
 	}
 }

@@ -5,24 +5,36 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
 	public class ProjectFileActivityViewModel: INotifyPropertyChanged, IDisposable
-	{		
-		private string _activationAttempt;
+	{
+		private List<ProjectFileActivityModel> _projectFileActivities;
+		private ProjectFileActivityModel _selectedProjectFileActivity;
 
 		public ProjectFileActivityViewModel()
 		{			
 		}
 
-		public string ActivationAttempt
+		public List<ProjectFileActivityModel> ProjectFileActivities
 		{
-			get { return _activationAttempt; }
+			get => _projectFileActivities ?? (_projectFileActivities = new List<ProjectFileActivityModel>());
 			set
 			{
-				_activationAttempt = value;
-				OnPropertyChanged(nameof(ActivationAttempt));
+				_projectFileActivities = value;
+				OnPropertyChanged(nameof(ProjectFileActivities));
+			}
+		}
+
+		public ProjectFileActivityModel SelectedProjectFileActivity
+		{
+			get => _selectedProjectFileActivity;
+			set
+			{
+				_selectedProjectFileActivity = value;
+				OnPropertyChanged(nameof(SelectedProjectFileActivity));
 			}
 		}
 
