@@ -4,9 +4,49 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.XLIFF.Manager.View"
+             xmlns:controls="clr-namespace:Sdl.Community.XLIFF.Manager.Controls"
+             xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-		<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Hello World</TextBlock>
+             d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:ProjectFilesViewModel}">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<controls:SortAwareDataGrid x:Name="MappedLanguagesGrid" 
+			          Style="{StaticResource FilesGridStyle}"
+			          Margin="0" 			                           
+					  ItemsSource="{Binding ProjectFileActions, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                
+					  SelectedValue="{Binding SelectedProjectFileAction, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+					  FontSize="12"
+					  BorderBrush="#C1C0C0"
+					  FontFamily="Segoe UI"
+					  GridLinesVisibility="Horizontal"
+					  VerticalScrollBarVisibility="Auto"
+					  HorizontalScrollBarVisibility="Disabled"
+					  CanUserDeleteRows="False">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Action" CanUserSort="True" Binding="{Binding Action, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+				                    ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="0.5*"/>
+				<DataGridTextColumn Header="Name" CanUserSort="True" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+									    ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="2*"/>
+				<DataGridTextColumn Header="Path" CanUserSort="True" Binding="{Binding Path, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="1*"/>
+				<DataGridTextColumn Header="Date" CanUserSort="True" Binding="{Binding Date, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
+										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="1*"/>
+				<DataGridTextColumn Header="Message" CanUserSort="True" Binding="{Binding Message, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
+										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="2*"/>
+			</DataGrid.Columns>
+		</controls:SortAwareDataGrid>
 	</Grid>
 </UserControl>
