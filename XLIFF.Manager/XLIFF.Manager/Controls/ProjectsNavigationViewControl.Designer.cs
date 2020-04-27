@@ -38,15 +38,15 @@
 			this.elementHost1.Name = "elementHost1";
 			this.elementHost1.Size = new System.Drawing.Size(448, 256);
 			this.elementHost1.TabIndex = 0;
-			this.elementHost1.Text = "elementHost1";
+			this.elementHost1.Text = "elementHost";
 			this.elementHost1.Child = null;
 			// 
-			// ProjectsNavigationControl
+			// ProjectsNavigationViewControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.elementHost1);
-			this.Name = "ProjectsNavigationControl";
+			this.Name = "ProjectsNavigationViewControl";
 			this.Size = new System.Drawing.Size(448, 256);
 			this.ResumeLayout(false);
 

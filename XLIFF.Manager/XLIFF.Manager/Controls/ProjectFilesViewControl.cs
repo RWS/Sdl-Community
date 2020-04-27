@@ -8,13 +8,17 @@ namespace Sdl.Community.XLIFF.Manager.Controls
 	{		
 		public ProjectFilesViewControl(ProjectFilesViewModel viewModel)
 		{
-			InitializeComponent();
-
-			DisposeViewModel();
-			BindViewModel(viewModel);
+			InitializeComponent();			
+			UpdateViewModel(viewModel);
 		}
 
-		private void BindViewModel(ProjectFilesViewModel viewModel)
+		internal void UpdateViewModel(ProjectFilesViewModel viewModel)
+		{
+			DisposeViewModel();
+			AssignView(viewModel);
+		}
+
+		private void AssignView(ProjectFilesViewModel viewModel)
 		{
 			elementHost1.Child = new ProjectFilesView(viewModel);
 		}

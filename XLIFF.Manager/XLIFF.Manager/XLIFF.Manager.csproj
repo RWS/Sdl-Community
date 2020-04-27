@@ -36,8 +36,12 @@
     <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MahApps.Metro">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\MahApps.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
@@ -62,6 +66,10 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Reactive.Core">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\System.Reactive.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -76,6 +84,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationInstance.cs" />
+    <Compile Include="Controls\PasswordHelper.cs" />
+    <Compile Include="Controls\ProjectFileActivityViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProjectFileActivityViewControl.Designer.cs">
+      <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectFileActivityViewController.cs" />
     <Compile Include="Controls\ProjectFilesViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -88,6 +104,14 @@
     <Compile Include="Controls\ProjectsNavigationViewControl.Designer.cs">
       <DependentUpon>ProjectsNavigationViewControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="Controls\ToolWindowsControl.xaml.cs">
+      <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WindowsControl.xaml.cs">
+      <DependentUpon>WindowsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -95,8 +119,12 @@
     </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\ProjectFileActivityViewModel.cs" />
     <Compile Include="ViewModel\ProjectFilesViewModel.cs" />
     <Compile Include="ViewModel\ProjectsNavigationViewModel.cs" />
+    <Compile Include="View\ProjectFileActivityView.xaml.cs">
+      <DependentUpon>ProjectFileActivityView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ProjectFilesView.xaml.cs">
       <DependentUpon>ProjectFilesView.xaml</DependentUpon>
     </Compile>
@@ -113,9 +141,64 @@
     <Folder Include="Interfaces\" />
     <Folder Include="Model\" />
     <Folder Include="Service\" />
-    <Folder Include="Styles\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\ToolWindowsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WindowsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ButtonsStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\DataGridColumnStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\DataGridStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\General.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GroupBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\RadioButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\TextBlockStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\TextBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\WindowsBorder.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ProjectFileActivityView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ProjectFilesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -126,6 +209,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\ProjectFileActivityViewControl.resx">
+      <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProjectFilesViewControl.resx">
       <DependentUpon>ProjectFilesViewControl.cs</DependentUpon>
     </EmbeddedResource>
