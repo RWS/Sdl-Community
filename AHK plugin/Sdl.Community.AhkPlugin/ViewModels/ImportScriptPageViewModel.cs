@@ -37,8 +37,8 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 	    public ImportScriptPageViewModel()
 	    {
-		    _gridVisibility = "Hidden";
-		    _messageVisibility = "Hidden";
+		    _gridVisibility = "Collapsed";
+		    _messageVisibility = "Collapsed";
 		    _dbContext = new DbContext();
 		}
 	    public ICommand BackCommand => _backCommand ?? (_backCommand = new CommandHandler(BackToScriptsList, true));
@@ -161,7 +161,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 					}
 					if (ScriptsCollection.Count.Equals(0))
 					{
-						MessageVisibility = "Hidden";
+						MessageVisibility = "Collapsed";
 
 					}
 				}
@@ -186,7 +186,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				{
 					if (ProcessScript.IsGeneratedByAhkPlugin(path))
 					{
-						MessageVisibility = "Hidden";
+						MessageVisibility = "Collapsed";
 						var pathAlreadyAdded = FilesNameCollection.Any(p => p.FilePath.Equals(path));
 						if (!pathAlreadyAdded)
 						{
@@ -227,7 +227,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 	    private void SetGridVisibility()
 	    {
-			GridVisibility = ScriptsCollection.Count > 0 ? "Visible" : "Hidden";
+			GridVisibility = ScriptsCollection.Count > 0 ? "Visible" : "Collapsed";
 		}
 		private void BackToScriptsList()
 	    {
@@ -258,8 +258,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				    return;
 			    }
 			    _scriptsCollection = value;
-			    OnPropertyChanged(nameof(ScriptsCollection));
-			
+			    OnPropertyChanged(nameof(ScriptsCollection));			
 		    }
 	    }
 	    public string GridVisibility
