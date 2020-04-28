@@ -162,7 +162,7 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
 
             // Try to find the user id by author name
             // If it fails, just leave it blank
-            createdby.Value = _users.ContainsKey(comment.Author) ? _users[comment.Author] : "";
+            createdby.Value = _users.ContainsKey(comment.Author) ? _users[comment.Author] : string.Empty;
 
             xmlUnit.Attributes?.Append(createdat);
             xmlUnit.Attributes?.Append(createdby);
@@ -181,7 +181,7 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
 	        var tuNode = segDoc.CreateNode(XmlNodeType.Element, "trans-unit", _nsmgr.LookupNamespace("x"));
 
 	        var importNode = parent.OwnerDocument?.ImportNode(tuNode, true);
-            parent.InsertAfter(importNode, transUnit);
+            parent.InsertAfter(importNode ?? throw new InvalidOperationException(), transUnit);
 
             return importNode;
         }
@@ -384,7 +384,7 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
                 var nodeContent = transUnit.OuterXml;
                 segDoc.LoadXml(nodeContent);
                 var trgNode = segDoc.CreateNode(XmlNodeType.Element, "target", _nsmgr.LookupNamespace("x"));
-                trgNode.InnerText = "";
+                trgNode.InnerText = string.Empty;
 
 	            if (transUnit.OwnerDocument != null)
 	            {
@@ -418,40 +418,45 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
 
             // Update score value
             var dbl = matchPercent / 100.0;
-            if (transUnit.Attributes["m:score"] != null && transUnit.Attributes["m:gross-score"] != null
-                && transUnit.Attributes["m:trans-origin"] != null)
+            if (transUnit.Attributes?["m:score"] != null && transUnit.Attributes["m:gross-score"] != null && transUnit.Attributes["m:trans-origin"] != null)
             {
                 transUnit.Attributes["m:score"].Value = dbl.ToString(CultureInfo.InvariantCulture);
                 transUnit.Attributes["m:gross-score"].Value = dbl.ToString(CultureInfo.InvariantCulture);
             }
             else
             {
-                transUnit.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:score"));
-                transUnit.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:gross-score"));
-                transUnit.Attributes["m:score"].Value = dbl.ToString(CultureInfo.InvariantCulture);
-                transUnit.Attributes["m:gross-score"].Value = dbl.ToString(CultureInfo.InvariantCulture);
+	            if (transUnit.Attributes != null)
+	            {
+		            if (transUnit.OwnerDocument != null)
+		            {
+			            transUnit.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:score"));
+			            transUnit.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:gross-score"));
+		            }
+		            transUnit.Attributes["m:score"].Value = dbl.ToString(CultureInfo.InvariantCulture);
+		            transUnit.Attributes["m:gross-score"].Value = dbl.ToString(CultureInfo.InvariantCulture);
+	            }
             }
 
             var transOrigin = segmentPair.Target?.Properties?.TranslationOrigin;
             if (transOrigin != null)
             {
-                var memSourceTransOrigin = transUnit.Attributes["m:trans-origin"];
+	            var memSourceTransOrigin = transUnit.Attributes?["m:trans-origin"];
 
-                if (memSourceTransOrigin != null)
-                {
-                    if (transOrigin.OriginType == DefaultTranslationOrigin.TranslationMemory)
-                    {
-                        memSourceTransOrigin.Value = DefaultTranslationOrigin.TranslationMemory;
-                    }
-                    else if (transOrigin.OriginType == DefaultTranslationOrigin.MachineTranslation)
-                    {
-                        memSourceTransOrigin.Value = DefaultTranslationOrigin.MachineTranslation;
-                    }
-                }
+	            if (memSourceTransOrigin != null)
+	            {
+		            if (transOrigin.OriginType == DefaultTranslationOrigin.TranslationMemory)
+		            {
+			            memSourceTransOrigin.Value = DefaultTranslationOrigin.TranslationMemory;
+		            }
+		            else if (transOrigin.OriginType == DefaultTranslationOrigin.MachineTranslation)
+		            {
+			            memSourceTransOrigin.Value = DefaultTranslationOrigin.MachineTranslation;
+		            }
+	            }
             }
 
             // Update m:locked
-            if (transUnit.Attributes["m:locked"] != null)
+            if (transUnit.Attributes != null && transUnit.Attributes["m:locked"] != null)
             {
                 var isLocked = segmentPair.Target?.Properties?.IsLocked.ToString();
                 transUnit.Attributes["m:locked"].Value = isLocked?.ToLower() ?? "false";
