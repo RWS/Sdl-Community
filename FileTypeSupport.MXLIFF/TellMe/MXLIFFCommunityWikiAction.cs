@@ -8,7 +8,7 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF.TellMe
 	{
 		public override bool IsAvailable => true;
 		public override string Category => "MXLIFF results";
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.Question;
 
 		public MXLIFFCommunityWikiAction()
 		{
