@@ -65,7 +65,8 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NLog.4.6.3\lib\net45\NLog.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=1.7.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Sdl.Community.Toolkit.LanguagePlatform.1.7.0\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
@@ -163,12 +164,6 @@
   <ItemGroup>
     <Content Include="..\Resources\icon.ico" />
     <Content Include="..\Resources\icon.png" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Resources\LanguagePairsIcon.ico" />
     <None Include="Resources\ForumIcon.ico" />
     <None Include="Resources\Download.ico" />

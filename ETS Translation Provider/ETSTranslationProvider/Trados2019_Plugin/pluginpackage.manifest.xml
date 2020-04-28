@@ -9,7 +9,6 @@
     <File>ETSLPConverter.dll</File>
     <File>SegmentParser.dll</File>
     <File>XliffConverter.dll</File>
-    <File>NLog.dll</File>
 	<File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>
  </Include>
 </PluginPackage>
