@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 
@@ -33,6 +34,7 @@ namespace IATETerminologyProvider.Helpers
 			httpClient.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
 			httpClient.DefaultRequestHeaders.Add("Host", "iate.europa.eu");
 			httpClient.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
+			httpClient.Timeout = TimeSpan.FromMinutes(2);
 		}
 	}
 }

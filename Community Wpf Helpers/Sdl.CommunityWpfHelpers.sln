@@ -1,11 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+VisualStudioVersion = 15.0.28307.1022
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.CommunityWpfHelpers", "Sdl.CommunityWpfHelpers\Sdl.CommunityWpfHelpers.csproj", "{F5AD8EFB-5CBD-45CC-981C-98FA9BDF6F8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.CommunityWpfHelpers.SampleApp", "Sdl.CommunityWpfHelpers.SampleApp\Sdl.CommunityWpfHelpers.SampleApp.csproj", "{8F64D6BE-F721-445A-BCCA-5C0A7FFBADB8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{102FAC6E-1388-4ADF-AD64-840C626B06C4}"
+	ProjectSection(SolutionItems) = preProject
+		build.cmd = build.cmd
+		build.fsx = build.fsx
+		Sdl.CommunityWpfHelpers.nuspec = Sdl.CommunityWpfHelpers.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meta", "Meta", "{CF11B6B4-522F-476F-A1EF-F4777BD18D46}"
+	ProjectSection(SolutionItems) = preProject
+		contributing.md = contributing.md
+		LICENSE = LICENSE
+		README.md = README.md
+		ReleaseNotes.md = ReleaseNotes.md
+		SolutionInfo.cs = SolutionInfo.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

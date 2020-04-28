@@ -6,6 +6,7 @@ using System.Threading;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using SDLCommunityCleanUpTasks.Utilities;
 using Timer = System.Timers.Timer;
 

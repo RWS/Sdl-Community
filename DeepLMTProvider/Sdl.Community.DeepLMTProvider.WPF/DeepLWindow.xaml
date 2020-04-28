@@ -54,6 +54,7 @@
 						Click here to obtain your API Key from DeepL
 					</Hyperlink>
 				</TextBlock>
+				<CheckBox Name="PlainText" Content="Translate as plain text" FontFamily="Calibri" Margin="10,0,0,0" Foreground="#0C2D47"/>
 				<DockPanel LastChildFill="False" >
 					<Button Click="Cancel_Click" IsCancel="True" Content="Cancel" DockPanel.Dock="Right" Width="100" Margin="10,0,10,0" Cursor="Hand" FontFamily="Calibri" />
 					<Button Style="{StaticResource DarkBlueButtonsStyle}" Content="OK" Click="Ok_Click" DockPanel.Dock="Right" Cursor="Hand" FontFamily="Calibri"/>

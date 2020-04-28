@@ -61,6 +61,15 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New translated content.
+        /// </summary>
+        internal static string DisplayFilter_Control_New_Translated {
+            get {
+                return ResourceManager.GetString("DisplayFilter_Control_New_Translated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Using this option will filter the results based on matches found within the translatable text AND within the content of any tags in your file(s)..
         /// </summary>
         internal static string DisplayFilter_IncludeTags_Tooltip {
@@ -841,6 +850,33 @@ namespace Sdl.Community.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_With_messages {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_With_messages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With source tracked changes.
+        /// </summary>
+        internal static string DisplayFilterControl_With_Source_Tracked_changes {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_With_Source_Tracked_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With source and target tracked changes.
+        /// </summary>
+        internal static string DisplayFilterControl_With_SourceAndTarget_Tracked_changes {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_With_SourceAndTarget_Tracked_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With target tracked changes.
+        /// </summary>
+        internal static string DisplayFilterControl_With_Target_Tracked_changes {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_With_Target_Tracked_changes", resourceCulture);
             }
         }
         

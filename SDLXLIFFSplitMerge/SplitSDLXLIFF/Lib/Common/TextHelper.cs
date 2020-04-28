@@ -573,7 +573,8 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 				var txtProperties = new Common.TextProperties(text);
 				_iTxt.Properties = txtProperties;
 
-				translationMemoryToolsAssembly = Assembly.LoadFrom(Path.Combine(studioInstalledLocationPath, "Sdl.LanguagePlatform.TranslationMemoryTools.dll"));
+				var tmAssembly = AssemblyName.GetAssemblyName(Path.Combine(studioInstalledLocationPath, "Sdl.LanguagePlatform.TranslationMemoryTools.dll"));
+				translationMemoryToolsAssembly = Assembly.Load(tmAssembly);
 
 				//get object type 
 				var linguaSegmentBuilderType =
@@ -590,7 +591,8 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 				builder.VisitText(_iTxt);
 				builder.Result.Elements.Add(_textSDL);
 
-				languageProcessingAssembly = Assembly.LoadFrom(Path.Combine(studioInstalledLocationPath, "Sdl.Core.LanguageProcessing.dll"));
+				var lpAssembly = AssemblyName.GetAssemblyName(Path.Combine(studioInstalledLocationPath, "Sdl.Core.LanguageProcessing.dll"));
+				languageProcessingAssembly = Assembly.Load(lpAssembly);
 
 				//get object type
 				var tokenizationFactoryType = languageProcessingAssembly.GetType("Sdl.Core.LanguageProcessing.Tokenization.TokenizerSetupFactory");

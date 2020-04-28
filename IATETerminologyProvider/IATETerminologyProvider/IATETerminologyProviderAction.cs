@@ -1,8 +1,6 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Ui;
-using Sdl.Core.PluginFramework;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -14,11 +12,6 @@ namespace IATETerminologyProvider
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class IATETerminologyProviderAction: AbstractRibbonGroup
 	{
-        private static EditorController GetEditorController()
-		{
-			return SdlTradosStudio.Application.GetController<EditorController>();
-		}
-
 		private static SearchResultsViewerController GetSearchResultsController()
 		{
 			return SdlTradosStudio.Application.GetController<SearchResultsViewerController>();
@@ -30,7 +23,7 @@ namespace IATETerminologyProvider
 		/// <param name="isSearchAll"></param>
 		public static void NavigateToIATE(bool isSearchAll)
 		{
-			var editorController = GetEditorController();
+			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			var activeDocument = editorController?.ActiveDocument;
 			if (activeDocument != null)
 			{

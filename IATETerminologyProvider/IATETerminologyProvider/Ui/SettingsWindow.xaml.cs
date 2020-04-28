@@ -1,25 +1,13 @@
-﻿using IATETerminologyProvider.ViewModel;
-
-namespace IATETerminologyProvider.Ui
+﻿namespace IATETerminologyProvider.Ui
 {
 	/// <summary>
 	/// Interaction logic for SettingsWindow.xaml
 	/// </summary>
 	public partial class SettingsWindow
 	{
-		private readonly SettingsViewModel _model;
-		public SettingsWindow(SettingsViewModel model)
-        {
-			InitializeComponent();
-
-	        _model = model;
-			Loaded += SettingsWindow_Loaded;			
-		}
-
-		private void SettingsWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
+		public SettingsWindow()
 		{
-			Loaded -= SettingsWindow_Loaded;
-			DataContext = _model;
+			InitializeComponent();
 		}
 	}
 }

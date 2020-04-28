@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -30,26 +31,26 @@ namespace Sdl.Community.MtEnhancedProvider
     #endregion
     public class MtTranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
     {
-        #region ITranslationProviderWinFormsUI Members
+		private Constants _constants = new Constants();
+		public Log Log = Log.Instance;
 
+		#region ITranslationProviderWinFormsUI Members
+		/// <summary>
+		/// Show the plug-in settings form when the user is adding the translation provider plug-in
+		/// through the GUI of SDL Trados Studio
+		/// </summary>
+		/// <param name="owner"></param>
+		/// <param name="languagePairs"></param>
+		/// <param name="credentialStore"></param>
+		/// <returns></returns>
 
-        /// <summary>
-        /// Show the plug-in settings form when the user is adding the translation provider plug-in
-        /// through the GUI of SDL Trados Studio
-        /// </summary>
-        /// <param name="owner"></param>
-        /// <param name="languagePairs"></param>
-        /// <param name="credentialStore"></param>
-        /// <returns></returns>
-
-        private TranslationProviderCredential GetMyCredentials(ITranslationProviderCredentialStore credentialStore, string uri)
+		private TranslationProviderCredential GetMyCredentials(ITranslationProviderCredentialStore credentialStore, string uri)
         {
 			var myUri = new Uri(uri);
             TranslationProviderCredential cred = null;
 
             if (credentialStore.GetCredential(myUri) != null)
             {
-
                 //get the credential to return
                 cred = new TranslationProviderCredential(credentialStore.GetCredential(myUri).Credential, credentialStore.GetCredential(myUri).Persist);
             }
@@ -102,8 +103,12 @@ namespace Sdl.Community.MtEnhancedProvider
                     loadOptions.ClientSecret = creds.Password;
                     loadOptions.PersistMicrosoftCreds = getCredMt.Persist;
                 }
-                catch { } //swallow b/c it will just fail to fill in instead of crashing the whole program 
-            }
+                catch(Exception ex) //swallow b/c it will just fail to fill in instead of crashing the whole program
+				{
+					Log.Logger.Error($"{_constants.Browse} {ex.Message}\n { ex.StackTrace}");
+
+				} 
+			}
 
 			var apiConnecter = new ApiConnecter(loadOptions);
 			var allSupportedLanguages = ApiConnecter.SupportedLangs;
@@ -163,8 +168,6 @@ namespace Sdl.Community.MtEnhancedProvider
         #region "Edit"
         public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
-	        
-
             var editProvider = translationProvider as MtTranslationProvider;
             if (editProvider == null)
             {
@@ -191,8 +194,11 @@ namespace Sdl.Community.MtEnhancedProvider
                     editProvider.Options.ClientSecret = creds.Password;
                     editProvider.Options.PersistMicrosoftCreds = getCredMt.Persist;
                 }
-                catch { }//swallow b/c it will just fail to fill in instead of crashing the whole program 
-            }
+                catch(Exception ex) //swallow b/c it will just fail to fill in instead of crashing the whole program 
+				{
+					Log.Logger.Error($"{_constants.Edit} {ex.Message}\n { ex.StackTrace}");
+				}
+			}
 
             var apiConnecter = new ApiConnecter(editProvider.Options);
             var allSupportedLanguages = ApiConnecter.SupportedLangs;

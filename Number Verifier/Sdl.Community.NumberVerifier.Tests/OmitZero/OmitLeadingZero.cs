@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using Sdl.Community.NumberVerifier.Interfaces;
+using Sdl.Community.NumberVerifier.Model;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Xunit;
 
@@ -23,14 +24,19 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
             numberVerifierMain.NormalizeAlphanumerics(number, new List<string>(), new List<string>(), ".", ".", false, numberVerifierSettings.Object.SourceOmitLeadingZero);
-            var normalizedNumber=numberVerifierMain.NormalizedNumber(number, ".", ".", false);
-
+            var normalizedNumber=numberVerifierMain.NormalizedNumber(new SeparatorModel
+			{
+				MatchValue = number,
+				ThousandSeparators = ".",
+				DecimalSeparators = ".",
+				NoSeparator = false,
+				CustomSeparators = string.Empty
+			});
 
             methodsMock.Setup(x => x.OmitZero(number));
-         //  methodsMock.Verify(x=>x.OmitZero(number));
+			//  methodsMock.Verify(x=>x.OmitZero(number));
 
             return normalizedNumber;
-
         }
 
         [Theory]
@@ -118,28 +124,34 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         }
 
 
-        #region Omit leading zero option is unchecked
+		#region Omit leading zero option is unchecked
 
-        /// <summary>
-        /// If the option is unchecked the method shouldn't be called
-        /// </summary>
-        /// <param name="number"></param>
-        [Theory]
-        [InlineData(".55")]
-        public string OmitZeroUnchecked(string number)
-        {
-            var numberVerifierSettings = OmitZeroSettings.OmitZeroUncheckedAndAllowLocalization();
-            var methodsMock = new Mock<INumberVerifierMethods>(MockBehavior.Strict);
+		/// <summary>
+		/// If the option is unchecked the method shouldn't be called
+		/// </summary>
+		/// <param name="number"></param>
+		[Theory]
+		[InlineData(".55")]
+		public string OmitZeroUnchecked(string number)
+		{
+			var numberVerifierSettings = OmitZeroSettings.OmitZeroUncheckedAndAllowLocalization();
+			var methodsMock = new Mock<INumberVerifierMethods>(MockBehavior.Strict);
 
-            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
-            numberVerifierMain.NormalizeAlphanumerics(number, new List<string>(), new List<string>(), ".", ".", false, numberVerifierSettings.Object.SourceOmitLeadingZero);
-           var normalizedNumber= numberVerifierMain.NormalizedNumber(number, ".", ".", false);
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+			numberVerifierMain.NormalizeAlphanumerics(number, new List<string>(), new List<string>(), ".", ".", false, numberVerifierSettings.Object.SourceOmitLeadingZero);
+			var normalizedNumber = numberVerifierMain.NormalizedNumber(new SeparatorModel
+			{
+				MatchValue = number,
+				ThousandSeparators = ".",
+				DecimalSeparators = ".",
+				NoSeparator = false,
+				CustomSeparators = string.Empty
+			});
 
-            methodsMock.Verify(m => m.OmitZero(number), Times.Never);
-            return normalizedNumber;
-            
-        }
+			methodsMock.Verify(m => m.OmitZero(number), Times.Never);
+			return normalizedNumber;
+		}
 
         [Theory]
         [InlineData(".55")]

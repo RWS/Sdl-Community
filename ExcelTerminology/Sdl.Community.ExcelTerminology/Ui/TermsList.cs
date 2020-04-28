@@ -130,21 +130,14 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
 		private void AddTermInternal(string source, string target)
 		{
-			if (!string.IsNullOrWhiteSpace(target))
+			var excelTerm = new ExcelTerm
 			{
-				var excelTerm = new ExcelTerm
-				{
-					SourceCulture = _providerSettings.SourceLanguage,
-					TargetCulture = _providerSettings.TargetLanguage,
-					Source = source,
-					Target = target
-				};
-				AddTermInternal(excelTerm);
-			}
-			else
-			{
-				MessageBox.Show(@"Taget selection cannot be empty", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			}
+				SourceCulture = _providerSettings.SourceLanguage,
+				TargetCulture = _providerSettings.TargetLanguage,
+				Source = source,
+				Target = target
+			};
+			AddTermInternal(excelTerm);
 		}
 
 		private void AddTermInternal(ExcelTerm excelTerm)

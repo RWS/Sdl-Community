@@ -24,6 +24,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			{
 				ApiKeyBox.Password = credentialStore.Credential;
 			}
+			PlainText.IsChecked = Options.SendPlainText;
 
 			GetSupportedTargetLanguages();
 		}
@@ -44,6 +45,10 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 		private void Ok_Click(object sender, RoutedEventArgs e)
 		{
 			Options.ApiKey = ApiKeyBox.Password.TrimEnd();
+			if (PlainText.IsChecked != null)
+			{
+				Options.SendPlainText = (bool) PlainText.IsChecked;
+			}
 
 			if (_tellMeAction)
 			{

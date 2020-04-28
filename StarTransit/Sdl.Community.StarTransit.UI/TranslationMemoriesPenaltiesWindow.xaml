@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-        mc:Ignorable="d"
+		xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:helpers ="clr-namespace:Sdl.Community.StarTransit.UI.Helpers"
+		mc:Ignorable="d"
 		WindowStartupLocation="CenterScreen"
 		ResizeMode="NoResize"
         Title="Translation Memories Penalties" MinHeight="405" MaxHeight="405" MaxWidth="650">
@@ -13,36 +14,42 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source=".\UIHelpers\ButtonsStyle.xaml"/>
 				<ResourceDictionary Source=".\UIHelpers\MetroStyle.xaml"/>
+				<ResourceDictionary Source=".\UIHelpers\DataGridStyle2.xaml"/>
+                <ResourceDictionary Source=".\UIHelpers\GeneralStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
+	<Grid>
+		<Grid.RowDefinitions>
             <RowDefinition Height="330"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding TranslationMemoriesPenaltiesModelList,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
-                  AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="0" Grid.Row="0"
-				  Style="{DynamicResource MetroDataGrid}" SelectionUnit="Cell" RowHeaderWidth="0" BorderThickness="1" BorderBrush="LightGray"
-				  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGreen" Margin="0,0,0,10">
+
+		<DataGrid ItemsSource="{Binding TranslationMemoriesPenaltiesModelList,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
+                  AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="0"
+				  SelectionUnit="Cell" RowHeaderWidth="0" BorderThickness="1" BorderBrush="LightGray"
+				  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGray" Margin="0,0,0,10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Translation Memory"
-                                    Binding="{Binding TranslationMemoryName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
-									IsReadOnly="True" Width="550" />
-                <controls:DataGridNumericUpDownColumn Header="Penalty" Width="80"
+				<DataGridTextColumn Header="Translation Memory" ElementStyle="{StaticResource DataGridTextBlockStyle}"
+				                    Binding="{Binding TranslationMemoryName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
+				                    IsReadOnly="True" Width="550" >
+				</DataGridTextColumn>
+				<controls:DataGridNumericUpDownColumn Header="Penalty" Width="80" CellStyle="{StaticResource MetroDataGridCellStyle}"
                                                       Binding="{Binding TMPenalty,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
-                                                      Minimum="0" 
-													  Maximum="25"/>
+                                                      Minimum="0" Maximum="25"/>
             </DataGrid.Columns>
-        </DataGrid>
-		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0,0,4,0">
+			<DataGrid.RowStyle>
+				<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
+			</DataGrid.RowStyle>
+			<DataGrid.CellStyle>
+				<Style TargetType="DataGridCell" BasedOn="{StaticResource DgrCellStyle}" />
+			</DataGrid.CellStyle>
+		</DataGrid>
+		<StackPanel Orientation="Vertical" Grid.Row="1" Margin="0,0,5,0">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="OkButton" Command="{Binding OkCommand}" Content="Ok"
-						Width="80" Height="30" Visibility="{Binding Visibility}"/>
-				<Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CancelButton" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=TMPenaltiesWindow}" Content="Cancel"
+				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="OkButton" Command="{Binding OkCommand}" Content="Ok" helpers:WindowCloseOnClickBehaviour.IsEnabled="True"
+						Width="80" Height="30" Visibility="{Binding Visibility}" Margin="0,0,5,0" />
+				<Button Style="{DynamicResource ButtonGreyStyleShadowless}" x:Name="CancelButton" IsCancel="True" Content="Cancel"
 						Width="80" Height="30" Visibility="{Binding Visibility}"/>
             </StackPanel>
         </StackPanel>

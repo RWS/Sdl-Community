@@ -14,7 +14,9 @@ namespace IATETerminologyProvider
 	public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI
 	{	
 		private SettingsViewModel _settingsViewModel;
-		private SettingsWindow _settingsWindow;		
+		private SettingsWindow _settingsWindow;
+		private readonly IateSettingsService _settingsService = new IateSettingsService();
+
 
 		public string TypeName => PluginResources.IATETerminologyProviderName;
 		public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
@@ -27,9 +29,17 @@ namespace IATETerminologyProvider
 		
 		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 		{
-			var persistenceService = new PersistenceService();
-			var providerSettings = persistenceService.Load();	
-
+			var savedSettings = _settingsService.GetProviderSettings();
+			var providerSettings = new SettingsModel
+			{
+				Domains = new List<DomainModel>(),
+				TermTypes = new List<TermTypeModel>()
+			};
+			if (savedSettings != null)
+			{
+				providerSettings.Domains.AddRange(savedSettings.Domains);
+				providerSettings.TermTypes.AddRange(savedSettings.TermTypes);
+			}
 			SetTerminologyProvider(terminologyProvider as IATETerminologyProvider, providerSettings);
 
 			return true;
@@ -49,34 +59,20 @@ namespace IATETerminologyProvider
 			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
 		}
 
-		private ProviderSettings GetProviderSettings()
-		{
-			_settingsWindow?.Close();
-			return _settingsViewModel.ProviderSettings;
-		}
-
-		private ITerminologyProvider[] SetTerminologyProvider(IATETerminologyProvider provider, ProviderSettings providerSettings)
+		private ITerminologyProvider[] SetTerminologyProvider(IATETerminologyProvider provider, SettingsModel providerSettings)
 		{
 			var result = new List<ITerminologyProvider>();
-
-			if (_settingsViewModel != null)
+			_settingsViewModel = new SettingsViewModel(providerSettings, _settingsService);
+			_settingsWindow = new SettingsWindow
 			{
-				_settingsViewModel.OnSaveSettingsCommandRaised -= GetProviderSettings;
-			}
-			
-			_settingsViewModel = new SettingsViewModel(providerSettings);
-			_settingsWindow = new SettingsWindow(_settingsViewModel);
-
-			if (_settingsViewModel != null)
-			{				
-				_settingsViewModel.OnSaveSettingsCommandRaised += GetProviderSettings;
-			}
+				DataContext = _settingsViewModel
+			};
 			
 			_settingsWindow.ShowDialog();
-
+			if (!_settingsViewModel.DialogResult) return null;
 			providerSettings = _settingsViewModel.ProviderSettings;
 
-			if (provider == null)
+			if (provider is null)
 			{
 				provider = new IATETerminologyProvider(providerSettings);
 			}

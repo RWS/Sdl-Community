@@ -16,7 +16,6 @@ namespace Sdl.Community.DeepLMTProvider
 		private readonly DeepLMtTranslationProvider _deepLMtTranslationProvider;
 		private readonly DeepLTranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
-		private TranslationUnit _inputTu;
 		private DeepLTranslationProviderConnecter _deeplConnect;
 		public static readonly Log Log = Log.Instance;
 
@@ -71,7 +70,7 @@ namespace Sdl.Community.DeepLMTProvider
 			try
 			{
 				var newseg = segment.Duplicate();
-				if (newseg.HasTags)
+				if (newseg.HasTags && !_options.SendPlainText)
 				{
 					var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
 					var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
@@ -86,6 +85,7 @@ namespace Sdl.Community.DeepLMTProvider
 				else
 				{
 					var sourcetext = newseg.ToPlain();
+
 					var translatedText = LookupDeepl(sourcetext);
 					if (!string.IsNullOrEmpty(translatedText))
 					{
@@ -94,7 +94,6 @@ namespace Sdl.Community.DeepLMTProvider
 						results.Add(CreateSearchResult(newseg, translation));
 						return results;
 					}
-
 				}
 			}
 			catch (Exception e)
@@ -166,7 +165,6 @@ namespace Sdl.Community.DeepLMTProvider
 		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
 		{
 			//need to use the tu confirmation level in searchsegment method
-			_inputTu = translationUnit;
 			return SearchSegment(settings, translationUnit.SourceSegment);
 		}
 

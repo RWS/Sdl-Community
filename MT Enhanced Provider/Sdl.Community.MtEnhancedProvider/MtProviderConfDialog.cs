@@ -18,6 +18,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -39,6 +40,8 @@ namespace Sdl.Community.MtEnhancedProvider
 		private Point showcredsloc;
 		private Uri uriGt;
 		private Uri uriMs;
+		private Constants _constants = new Constants();
+		public Log Log = Log.Instance;
 
 		public MtProviderConfDialog(MtTranslationOptions options, ITranslationProviderCredentialStore credentialStore, List<LanguagePair> correspondingLanguages)
 		{
@@ -123,16 +126,18 @@ namespace Sdl.Community.MtEnhancedProvider
 			{
 				try //a simple way to check for the proper xml format is to try and deserialize it
 				{
-					using (System.IO.StreamReader reader = new System.IO.StreamReader(openFile.FileName))
+					using (var reader = new System.IO.StreamReader(openFile.FileName))
 					{
-						XmlSerializer serializer = new XmlSerializer(typeof(EditCollection));
-						EditCollection edcoll = (EditCollection)serializer.Deserialize(reader);
+						var serializer = new XmlSerializer(typeof(EditCollection));
+						var edcoll = (EditCollection)serializer.Deserialize(reader);
 						edcoll = null;
 						return openFile.FileName;
 					}
 				}
-				catch (InvalidOperationException) //invalid operation is what happens when the xml can't be parsed into the objects correctly
+				catch (InvalidOperationException ex) //invalid operation is what happens when the xml can't be parsed into the objects correctly
 				{
+					Log.Logger.Error($"{_constants.BrowseEditFile} {ex.Message}\n { ex.StackTrace}");
+
 					string caption = MtProviderConfDialogResources.lookupFileStructureCheckErrorCaption;
 					string message = string.Format(MtProviderConfDialogResources.lookupFileStructureCheckXmlProblemErrorMessage, System.IO.Path.GetFileName(openFile.FileName));
 					MessageBox.Show(this, message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -140,6 +145,8 @@ namespace Sdl.Community.MtEnhancedProvider
 				}
 				catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
 				{
+					Log.Logger.Error($"{_constants.BrowseEditFile} {exp.Message}\n { exp.StackTrace}");
+
 					string caption = MtProviderConfDialogResources.lookupFileStructureCheckErrorCaption;
 					string message = MtProviderConfDialogResources.lookupFileStructureCheckGenericErrorMessage + " " + exp.Message;
 					MessageBox.Show(this, message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -363,7 +370,10 @@ namespace Sdl.Community.MtEnhancedProvider
 			{
 				LoadResources();
 			}
-			catch { }
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"{_constants.UpdateDialog} {ex.Message}\n { ex.StackTrace}");
+			}
 		}
 
 		private bool ValidateForm()

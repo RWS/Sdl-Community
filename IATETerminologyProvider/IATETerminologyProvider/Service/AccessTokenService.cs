@@ -24,8 +24,6 @@ namespace IATETerminologyProvider.Service
 
 		private string _accessToken;
 		private string _refreshToken;
-		private string _userName;
-		private string _password;
 
 		public AccessTokenService(TimeSpan accessTokenLifespan, TimeSpan refreshTokenLifespan)
 		{
@@ -53,7 +51,7 @@ namespace IATETerminologyProvider.Service
 
 		public bool AccessTokenExpired
 		{
-			get { return _accessTokenExpired; }
+			get => _accessTokenExpired;
 			private set
 			{
 				if (_accessTokenExpired == value)
@@ -68,7 +66,7 @@ namespace IATETerminologyProvider.Service
 
 		public bool RefreshTokenExpired
 		{
-			get { return _refreshTokenExpired; }
+			get => _refreshTokenExpired;
 			private set
 			{
 				if (_refreshTokenExpired == value)
@@ -83,7 +81,7 @@ namespace IATETerminologyProvider.Service
 
 		public bool AccessTokenExtended
 		{
-			get { return _accessTokenExtended; }
+			get => _accessTokenExtended;
 			private set
 			{
 				if (_accessTokenExtended == value)
@@ -98,7 +96,7 @@ namespace IATETerminologyProvider.Service
 
 		public string AccessToken
 		{
-			get { return _accessToken; }
+			get => _accessToken;
 			private set
 			{
 				if (_accessToken == value)
@@ -113,7 +111,7 @@ namespace IATETerminologyProvider.Service
 
 		public string RefreshToken
 		{
-			get { return _refreshToken; }
+			get => _refreshToken;
 			private set
 			{
 				if (_refreshToken == value)
@@ -128,7 +126,7 @@ namespace IATETerminologyProvider.Service
 
 		public DateTime RequestedAccessToken
 		{
-			get { return _requestedAccessToken; }
+			get => _requestedAccessToken;
 			private set
 			{
 				if (_requestedAccessToken == value)
@@ -143,7 +141,7 @@ namespace IATETerminologyProvider.Service
 
 		public DateTime ExtendedRefreshToken
 		{
-			get { return _extendedRefreshToken; }
+			get => _extendedRefreshToken;
 			private set
 			{
 				if (_extendedRefreshToken == value)
@@ -158,7 +156,7 @@ namespace IATETerminologyProvider.Service
 
 		public TimeSpan AccessTokenLifespan
 		{
-			get { return _accessTokenLifespan; }
+			get => _accessTokenLifespan;
 			private set
 			{
 				if (_accessTokenLifespan == value)
@@ -173,7 +171,7 @@ namespace IATETerminologyProvider.Service
 
 		public TimeSpan RefreshTokenLifespan
 		{
-			get { return _refreshTokenLifespan; }
+			get => _refreshTokenLifespan;
 			private set
 			{
 				if (_refreshTokenLifespan == value)
@@ -195,9 +193,6 @@ namespace IATETerminologyProvider.Service
 			}
 
 			Reset();
-
-			_userName = userName;
-			_password = password;
 
 			var response = GetAccessTokenResponse(userName, password);
 			if (response != null && response.Tokens.Count > 0)
@@ -253,12 +248,10 @@ namespace IATETerminologyProvider.Service
 
 		public void Dispose()
 		{
-			if (_timer != null)
-			{
-				_timer.Stop();
-				_timer.Elapsed -= Timer_Elapsed;
-				_timer.Close();
-			}
+			if (_timer is null) return;
+			_timer.Stop();
+			_timer.Elapsed -= Timer_Elapsed;
+			_timer.Close();
 		}
 
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -295,7 +288,8 @@ namespace IATETerminologyProvider.Service
 		{
 			var httpClient = new HttpClient
 			{
-				BaseAddress = new Uri(ApiUrls.GetAccessTokenUri(userName, password))
+				BaseAddress = new Uri(ApiUrls.GetAccessTokenUri(userName, password)),
+				Timeout = TimeSpan.FromMinutes(2)
 			};
 			return GetResponse(httpClient);
 		}
@@ -304,7 +298,8 @@ namespace IATETerminologyProvider.Service
 		{
 			var httpClient = new HttpClient
 			{
-				BaseAddress = new Uri(ApiUrls.GetExtendAccessTokenUri(RefreshToken))
+				BaseAddress = new Uri(ApiUrls.GetExtendAccessTokenUri(RefreshToken)),
+				Timeout = TimeSpan.FromMinutes(2)
 			};
 			return GetResponse(httpClient);
 		}
@@ -320,9 +315,6 @@ namespace IATETerminologyProvider.Service
 
 			_requestedAccessToken = DateTime.MinValue;
 			_extendedRefreshToken = DateTime.MinValue;
-
-			_userName = string.Empty;
-			_password = string.Empty;
 		}
 
 		private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)

@@ -14,13 +14,12 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
 {
     internal class MXLIFFWriter : AbstractBilingualFileTypeComponent, IBilingualWriter, INativeOutputSettingsAware
     {
-        private INativeOutputFileProperties nativeFileProperties;
-        private XmlNamespaceManager nsmgr;
-        private IPersistentFileConversionProperties originalFileProperties;
-        private XmlDocument targetFile;
-        private MXLIFFTextExtractor textExtractor;
-        private Dictionary<string, string> users = new Dictionary<string, string>();
-        private int workflowLevel = 0;
+        private INativeOutputFileProperties _nativeFileProperties;
+        private XmlNamespaceManager _nsmgr;
+	    private IDocumentProperties _documentProperties;
+		private XmlDocument _targetFile;
+        private MXLIFFTextExtractor _textExtractor;
+        private readonly Dictionary<string, string> _users = new Dictionary<string, string>();
 
         public void Complete()
         {
@@ -33,109 +32,107 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
 
         public void FileComplete()
         {
-            using (XmlTextWriter wr = new XmlTextWriter(nativeFileProperties.OutputFilePath, Encoding.UTF8))
+            using (var wr = new XmlTextWriter(_nativeFileProperties.OutputFilePath, Encoding.UTF8))
             {
                 wr.Formatting = Formatting.None;
-                targetFile.Save(wr);
-                targetFile = null;
+                _targetFile.Save(wr);
+                _targetFile = null;
             }
         }
 
         public void GetProposedOutputFileInfo(IPersistentFileConversionProperties fileProperties, IOutputFileInfo proposedFileInfo)
         {
-            originalFileProperties = fileProperties;
         }
 
         public void Initialize(IDocumentProperties documentInfo)
         {
-            textExtractor = new MXLIFFTextExtractor();
+	        _documentProperties = documentInfo;
+            _textExtractor = new MXLIFFTextExtractor();
         }
 
         public void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
         {
-            string id = paragraphUnit.Properties.Contexts.Contexts[0].GetMetaData("ID");
-            XmlNode xmlUnit = targetFile.SelectSingleNode("//x:trans-unit[@id='" + id + "']", nsmgr);
+            var id = paragraphUnit.Properties.Contexts.Contexts[0].GetMetaData("ID");
+            var xmlUnit = _targetFile.SelectSingleNode("//x:trans-unit[@id='" + id + "']", _nsmgr);
 
             CreateParagraphUnit(paragraphUnit, xmlUnit);
         }
 
         public void SetFileProperties(IFileProperties fileInfo)
         {
-            targetFile = new XmlDocument();
-            targetFile.PreserveWhitespace = false;
-            targetFile.Load(originalFileProperties.OriginalFilePath);
-            nsmgr = new XmlNamespaceManager(targetFile.NameTable);
-            nsmgr.AddNamespace("x", "urn:oasis:names:tc:xliff:document:1.2");
-            nsmgr.AddNamespace("m", "http://www.memsource.com/mxlf/2.0");
-
-            var level = targetFile.DocumentElement.Attributes["m:level"];
-
-            if (level != null)
-            {
-                workflowLevel = Int32.Parse(level.Value);
-            }
+	        _targetFile = new XmlDocument
+	        {
+		        PreserveWhitespace = false
+	        };
+	        var lastSavedPath = _documentProperties.LastSavedAsPath;
+	        var lastOpenPath = _documentProperties.LastOpenedAsPath;
+	        if (!string.IsNullOrEmpty(lastSavedPath))
+	        {
+				_targetFile.Load(lastSavedPath);
+			}else if (!string.IsNullOrEmpty(lastOpenPath))
+	        {
+				_targetFile.Load(lastOpenPath);
+			}
+			_nsmgr = new XmlNamespaceManager(_targetFile.NameTable);
+            _nsmgr.AddNamespace("x", "urn:oasis:names:tc:xliff:document:1.2");
+            _nsmgr.AddNamespace("m", "http://www.memsource.com/mxlf/2.0");
 
             // Acquire users
-            var memsourceUsers = targetFile.SelectNodes("//m:user", nsmgr);
+            var memsourceUsers = _targetFile.SelectNodes("//m:user", _nsmgr);
 
-            if (memsourceUsers != null)
-            {
-                foreach (XmlElement user in memsourceUsers)
-                {
-                    var id = user.Attributes["id"]?.Value;
-                    var username = user.Attributes["username"]?.Value;
+	        if (memsourceUsers is null) return;
+	        foreach (XmlElement user in memsourceUsers)
+	        {
+		        var id = user.Attributes["id"]?.Value;
+		        var username = user.Attributes["username"]?.Value;
 
-                    if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(id) && users.ContainsKey(username))
-                    {
-                        users.Add(username, id);
-                    }
-                }
-            }
+		        if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(id) && _users.ContainsKey(username))
+		        {
+			        _users.Add(username, id);
+		        }
+	        }
         }
 
         public void SetOutputProperties(INativeOutputFileProperties properties)
         {
-            nativeFileProperties = properties;
+            _nativeFileProperties = properties;
         }
 
         private static void UpdateConfirmedAttribute(XmlNode transUnit, ISegmentPair segmentPair)
         {
-            if (segmentPair.Target != null && segmentPair.Target.Properties != null)
-            {
-                switch (segmentPair.Target.Properties.ConfirmationLevel)
-                {
-                    case ConfirmationLevel.Unspecified:
-                        transUnit.Attributes["m:confirmed"].Value = "0";
-                        break;
+	        if (transUnit is null) return;
+			if(transUnit.Attributes is null) return;
+	        if (segmentPair.Target?.Properties == null) return;
+	        switch (segmentPair.Target.Properties.ConfirmationLevel)
+	        {
+		        case ConfirmationLevel.Unspecified:
+			        transUnit.Attributes["m:confirmed"].Value = "0";
+			        break;
 
-                    case ConfirmationLevel.Draft:
-                        transUnit.Attributes["m:confirmed"].Value = "0";
-                        break;
+		        case ConfirmationLevel.Draft:
+			        transUnit.Attributes["m:confirmed"].Value = "0";
+			        break;
 
-                    case ConfirmationLevel.Translated:
-                        transUnit.Attributes["m:confirmed"].Value = "1";
-                        break;
+		        case ConfirmationLevel.Translated:
+			        transUnit.Attributes["m:confirmed"].Value = "1";
+			        break;
 
-                    case ConfirmationLevel.RejectedTranslation:
-                        transUnit.Attributes["m:confirmed"].Value = "0";
-                        break;
+		        case ConfirmationLevel.RejectedTranslation:
+			        transUnit.Attributes["m:confirmed"].Value = "0";
+			        break;
 
-                    case ConfirmationLevel.ApprovedTranslation:
-                        transUnit.Attributes["m:confirmed"].Value = "1";
-                        break;
+		        case ConfirmationLevel.ApprovedTranslation:
+			        transUnit.Attributes["m:confirmed"].Value = "1";
+			        break;
 
-                    case ConfirmationLevel.RejectedSignOff:
-                        transUnit.Attributes["m:confirmed"].Value = "0";
-                        break;
+		        case ConfirmationLevel.RejectedSignOff:
+			        transUnit.Attributes["m:confirmed"].Value = "0";
+			        break;
 
-                    case ConfirmationLevel.ApprovedSignOff:
-                        transUnit.Attributes["m:confirmed"].Value = "1";
-                        break;
-
-                    default:
-                        break;
-                }
-            }
+		        case ConfirmationLevel.ApprovedSignOff:
+			        transUnit.Attributes["m:confirmed"].Value = "1";
+			        break;
+	        }
         }
 
         private void AddComments(XmlNode xmlUnit, List<IComment> comments)
@@ -149,51 +146,42 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
                 text += c.Text + " ";
             }
 
-            var createdat = targetFile.CreateAttribute("created-at");
-            var createdby = targetFile.CreateAttribute("created-by");
-            var modifiedat = targetFile.CreateAttribute("modified-at");
+            var createdat = _targetFile.CreateAttribute("created-at");
+            var createdby = _targetFile.CreateAttribute("created-by");
+            var modifiedat = _targetFile.CreateAttribute("modified-at");
             modifiedat.Value = "0";
 
-            var modifiedby = targetFile.CreateAttribute("modified-by");
+            var modifiedby = _targetFile.CreateAttribute("modified-by");
 
-            var resolved = targetFile.CreateAttribute("resolved");
+            var resolved = _targetFile.CreateAttribute("resolved");
             resolved.Value = "false";
 
-            string commentDate = this.GetCommentDate();
-
             // Convert DateTime to Unix timestamp in milliseconds
-            long milliseconds = (long)(TimeZoneInfo.ConvertTimeToUtc(comment.Date) - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+            var milliseconds = (long)(TimeZoneInfo.ConvertTimeToUtc(comment.Date) - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
             createdat.Value = milliseconds.ToString();
 
             // Try to find the user id by author name
             // If it fails, just leave it blank
-            if (users.ContainsKey(comment.Author))
-            {
-                createdby.Value = users[comment.Author].ToString();
-            }
-            else
-            {
-                createdby.Value = "";
-            }
+            createdby.Value = _users.ContainsKey(comment.Author) ? _users[comment.Author] : string.Empty;
 
-            xmlUnit.Attributes.Append(createdat);
-            xmlUnit.Attributes.Append(createdby);
-            xmlUnit.Attributes.Append(modifiedat);
-            xmlUnit.Attributes.Append(modifiedby);
-            xmlUnit.Attributes.Append(resolved);
+            xmlUnit.Attributes?.Append(createdat);
+            xmlUnit.Attributes?.Append(createdby);
+            xmlUnit.Attributes?.Append(modifiedat);
+            xmlUnit.Attributes?.Append(modifiedby);
+            xmlUnit.Attributes?.Append(resolved);
 
             xmlUnit.InnerText = text;
         }
 
         private XmlNode CreateNewNode(XmlNode parent, XmlNode transUnit)
         {
-            XmlDocument segDoc = new XmlDocument();
-            string nodeContent = parent.OuterXml;
+            var segDoc = new XmlDocument();
+	        var nodeContent = parent.OuterXml;
             segDoc.LoadXml(nodeContent);
-            XmlNode tuNode = segDoc.CreateNode(XmlNodeType.Element, "trans-unit", nsmgr.LookupNamespace("x"));
+	        var tuNode = segDoc.CreateNode(XmlNodeType.Element, "trans-unit", _nsmgr.LookupNamespace("x"));
 
-            XmlNode importNode = parent.OwnerDocument.ImportNode(tuNode, true);
-            parent.InsertAfter(importNode, transUnit);
+	        var importNode = parent.OwnerDocument?.ImportNode(tuNode, true);
+            parent.InsertAfter(importNode ?? throw new InvalidOperationException(), transUnit);
 
             return importNode;
         }
@@ -213,41 +201,40 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
             {
                 UpdateSegment(transUnit, paragraphUnit.SegmentPairs.First());
 
-                string id = paragraphUnit.Properties.Contexts.Contexts[0].GetMetaData("ID");
+	            if (transUnit.Attributes == null) return;
+	            transUnit.Attributes["id"].Value = UpdateTopId(transUnit.Attributes["id"].Value);
 
-                transUnit.Attributes["id"].Value = UpdateTopId(transUnit.Attributes["id"].Value);
+	            var topId = transUnit.Attributes["id"].Value;
+	            var count = (int) char.GetNumericValue(topId.Last()) + 1;
+	            // Iterate all segment pairs
+	            foreach (var segmentPair in paragraphUnit.SegmentPairs.Skip(1).Reverse())
+	            {
+		            var parent = transUnit.ParentNode;
 
-                var topId = transUnit.Attributes["id"].Value;
-                int count = (int)char.GetNumericValue(topId.Last()) + 1;
-                // Iterate all segment pairs
-                foreach (ISegmentPair segmentPair in paragraphUnit.SegmentPairs.Skip(1).Reverse())
-                {
-                    XmlNode parent = transUnit.ParentNode;
+		            var newNode = CreateNewNode(parent, transUnit);
+		            AddAttributes(transUnit, newNode);
+		            AddElements(transUnit, newNode);
 
-                    XmlNode newNode = CreateNewNode(parent, transUnit);
-                    AddAttributes(transUnit, newNode);
-                    AddElements(transUnit, newNode);
+		            if (newNode.Attributes != null)
+		            {
+			            newNode.Attributes["id"].Value = UpdateId(topId, count);
+		            }
 
-                    newNode.Attributes["id"].Value = UpdateId(topId, count);
+		            UpdateSegment(newNode, segmentPair);
 
-                    UpdateSegment(newNode, segmentPair);
-
-                    count++;
-                }
+		            count++;
+	            }
             }
 
         }
 
         private string UpdateTopId(string value)
         {
-            if (Regex.IsMatch(value, @".*?(:\d+?:\d+)"))
+	        if (Regex.IsMatch(value, @".*?(:\d+?:\d+)"))
             {
                 return value;
             }
-            else
-            {
-                return value + ":0";
-            }
+	        return value + ":0";
         }
 
         private string UpdateId(string id, int count)
@@ -257,131 +244,129 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
 
         private void AddElements(XmlNode transUnit, XmlNode newNode)
         {
-            XmlDocument segDoc = new XmlDocument();
-            string nodeContent = transUnit.OuterXml;
+            var segDoc = new XmlDocument();
+            var nodeContent = transUnit.OuterXml;
             segDoc.LoadXml(nodeContent);
-            XmlNode source = segDoc.CreateNode(XmlNodeType.Element, "source", nsmgr.LookupNamespace("x"));
-            XmlNode target = segDoc.CreateNode(XmlNodeType.Element, "target", nsmgr.LookupNamespace("x"));
-            
-            XmlNode sourceNode = transUnit.OwnerDocument.ImportNode(source, true);
-            XmlNode targetNode = transUnit.OwnerDocument.ImportNode(target, true);
+            var source = segDoc.CreateNode(XmlNodeType.Element, "source", _nsmgr.LookupNamespace("x"));
+            var target = segDoc.CreateNode(XmlNodeType.Element, "target", _nsmgr.LookupNamespace("x"));
 
-            newNode.AppendChild(sourceNode);
-            newNode.AppendChild(targetNode);
+	        if (transUnit.OwnerDocument != null)
+	        {
+		        var sourceNode = transUnit.OwnerDocument.ImportNode(source, true);
+		        var targetNode = transUnit.OwnerDocument.ImportNode(target, true);
 
-            // alt-trans
-            XmlNode altTrans = segDoc.CreateNode(XmlNodeType.Element, "alt-trans", nsmgr.LookupNamespace("x"));
+		        newNode.AppendChild(sourceNode);
+		        newNode.AppendChild(targetNode);
 
-            XmlNode altTransNode = transUnit.OwnerDocument.ImportNode(altTrans, true);
-            altTransNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("origin"));
-            altTransNode.Attributes["origin"].Value = "machine-trans";
-            altTransNode.AppendChild(targetNode.Clone());
+		        // alt-trans
+		        var altTrans = segDoc.CreateNode(XmlNodeType.Element, "alt-trans", _nsmgr.LookupNamespace("x"));
 
-            newNode.AppendChild(altTransNode);
+		        var altTransNode = transUnit.OwnerDocument.ImportNode(altTrans, true);
+		        if (altTransNode.Attributes != null)
+		        {
+			        altTransNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("origin"));
+			        altTransNode.Attributes["origin"].Value = "machine-trans";
+		        }
+		        altTransNode.AppendChild(targetNode.Clone());
 
-            // m:tunit-metadata
+		        newNode.AppendChild(altTransNode);
+	        }
+
+	        // m:tunit-metadata
             // m:tunit-target-metadata
-            XmlNode meta1 = segDoc.CreateNode(XmlNodeType.Element, "m:tunit-metadata", nsmgr.LookupNamespace("m"));
-            XmlNode meta2 = segDoc.CreateNode(XmlNodeType.Element, "m:tunit-target-metadata", nsmgr.LookupNamespace("m"));
+            var meta1 = segDoc.CreateNode(XmlNodeType.Element, "m:tunit-metadata", _nsmgr.LookupNamespace("m"));
+            var meta2 = segDoc.CreateNode(XmlNodeType.Element, "m:tunit-target-metadata", _nsmgr.LookupNamespace("m"));
 
-            XmlNode m1 = transUnit.OwnerDocument.ImportNode(meta1, true);
-            XmlNode m2 = transUnit.OwnerDocument.ImportNode(meta2, true);
+	        if (transUnit.OwnerDocument != null)
+	        {
+		        var m1 = transUnit.OwnerDocument.ImportNode(meta1, true);
+		        var m2 = transUnit.OwnerDocument.ImportNode(meta2, true);
 
-            newNode.AppendChild(m1);
-            newNode.AppendChild(m2);
+		        newNode.AppendChild(m1);
+		        newNode.AppendChild(m2);
+	        }
 
-            // m:editing-stats
-            XmlNode mstats = segDoc.CreateNode(XmlNodeType.Element, "m:editing-stats", nsmgr.LookupNamespace("m"));
-            XmlNode thinkingtime = segDoc.CreateNode(XmlNodeType.Element, "m:thinking-time", nsmgr.LookupNamespace("m"));
+	        // m:editing-stats
+            var mstats = segDoc.CreateNode(XmlNodeType.Element, "m:editing-stats", _nsmgr.LookupNamespace("m"));
+            var thinkingtime = segDoc.CreateNode(XmlNodeType.Element, "m:thinking-time", _nsmgr.LookupNamespace("m"));
             thinkingtime.InnerText = "0";
-            XmlNode editingtime = segDoc.CreateNode(XmlNodeType.Element, "m:editing-time", nsmgr.LookupNamespace("m"));
+            var editingtime = segDoc.CreateNode(XmlNodeType.Element, "m:editing-time", _nsmgr.LookupNamespace("m"));
             editingtime.InnerText = "0";
 
             mstats.AppendChild(thinkingtime);
             mstats.AppendChild(editingtime);
 
-            XmlNode mstatsNode = transUnit.OwnerDocument.ImportNode(mstats, true);
+	        if (transUnit.OwnerDocument == null) return;
+	        var mstatsNode = transUnit.OwnerDocument.ImportNode(mstats, true);
 
-            newNode.AppendChild(mstatsNode);
+	        newNode.AppendChild(mstatsNode);
         }
 
         private void AddAttributes(XmlNode transUnit, XmlNode newNode)
         {
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("id"));
+	        if (newNode.Attributes is null) return;
+	        if (transUnit.OwnerDocument != null)
+	        {
+		        newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("id"));
 
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:para-id", nsmgr.LookupNamespace("m")));
-            newNode.Attributes["m:para-id"].Value = transUnit.Attributes["m:para-id"].Value;
+		        newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:para-id", _nsmgr.LookupNamespace("m")));
+		        if (transUnit.Attributes != null)
+		        {
+			        newNode.Attributes["m:para-id"].Value = transUnit.Attributes["m:para-id"].Value;
 
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("xml:space"));
-            newNode.Attributes["xml:space"].Value = "preserve";
+			        newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("xml:space"));
+			        newNode.Attributes["xml:space"].Value = "preserve";
 
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:trans-origin", nsmgr.LookupNamespace("m")));
-            newNode.Attributes["m:trans-origin"].Value = "null";
+			        newNode.Attributes.Append(
+				        transUnit.OwnerDocument.CreateAttribute("m:trans-origin", _nsmgr.LookupNamespace("m")));
+			        newNode.Attributes["m:trans-origin"].Value = "null";
 
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:score", nsmgr.LookupNamespace("m")));
-            newNode.Attributes["m:score"].Value = "0";
+			        newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:score", _nsmgr.LookupNamespace("m")));
+			        newNode.Attributes["m:score"].Value = "0";
 
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:gross-score", nsmgr.LookupNamespace("m")));
-            newNode.Attributes["m:gross-score"].Value = "0";
+			        newNode.Attributes.Append(
+				        transUnit.OwnerDocument.CreateAttribute("m:gross-score", _nsmgr.LookupNamespace("m")));
+			        newNode.Attributes["m:gross-score"].Value = "0";
 
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:confirmed", nsmgr.LookupNamespace("m")));
-            newNode.Attributes["m:confirmed"].Value = "0";
+			        newNode.Attributes.Append(
+				        transUnit.OwnerDocument.CreateAttribute("m:confirmed", _nsmgr.LookupNamespace("m")));
+			        newNode.Attributes["m:confirmed"].Value = "0";
 
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:locked", nsmgr.LookupNamespace("m")));
-            newNode.Attributes["m:locked"].Value = "false";
+			        newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:locked", _nsmgr.LookupNamespace("m")));
+			        newNode.Attributes["m:locked"].Value = "false";
 
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:level-edited", nsmgr.LookupNamespace("m")));
-            newNode.Attributes["m:level-edited"].Value = "true";
+			        newNode.Attributes.Append(
+				        transUnit.OwnerDocument.CreateAttribute("m:level-edited", _nsmgr.LookupNamespace("m")));
+			        newNode.Attributes["m:level-edited"].Value = "true";
 
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:created-by", nsmgr.LookupNamespace("m")));
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:created-at", nsmgr.LookupNamespace("m")));
-            newNode.Attributes["m:created-at"].Value = "0";
+			        newNode.Attributes.Append(
+				        transUnit.OwnerDocument.CreateAttribute("m:created-by", _nsmgr.LookupNamespace("m")));
+			        newNode.Attributes.Append(
+				        transUnit.OwnerDocument.CreateAttribute("m:created-at", _nsmgr.LookupNamespace("m")));
+			        newNode.Attributes["m:created-at"].Value = "0";
 
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:modified-by", nsmgr.LookupNamespace("m")));
-            newNode.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:modified-at", nsmgr.LookupNamespace("m")));
-            newNode.Attributes["m:modified-at"].Value = "0";
+			        newNode.Attributes.Append(
+				        transUnit.OwnerDocument.CreateAttribute("m:modified-by", _nsmgr.LookupNamespace("m")));
+			        newNode.Attributes.Append(
+				        transUnit.OwnerDocument.CreateAttribute("m:modified-at", _nsmgr.LookupNamespace("m")));
+		        }
+	        }
+	        newNode.Attributes["m:modified-at"].Value = "0";
         }
 
         private void FillSegment(ISegmentPair segmentPair, XmlNode node, bool source)
         {
-            ISegment seg;
-            if (source)
-            {
-                seg = segmentPair.Source;
-            }
-            else
-            {
-                seg = segmentPair.Target;
-            }
+           var seg = source ? segmentPair.Source : segmentPair.Target;
 
-            node.InnerText = textExtractor.GetPlainText(seg);
+            node.InnerText = _textExtractor.GetPlainText(seg);
         }
 
-        private string GetCommentDate()
-        {
-            string day;
-            string month;
-
-            if (DateTime.UtcNow.Month.ToString().Length == 1)
-                month = "0" + DateTime.UtcNow.Month;
-            else
-                month = "0" + DateTime.UtcNow.Month;
-
-            if (DateTime.UtcNow.Day.ToString().Length == 1)
-                day = "0" + DateTime.UtcNow.Day;
-            else
-                day = "0" + DateTime.UtcNow.Day;
-
-            return DateTime.UtcNow.Year + month + day + "T" +
-                DateTime.UtcNow.Hour + DateTime.UtcNow.Minute +
-                DateTime.UtcNow.Second + "Z";
-        }
 
         private void UpdateSegment(XmlNode transUnit, ISegmentPair segmentPair)
         {
-            Byte matchPercent = 0;
+            var matchPercent = 0;
 
-            XmlNode source = transUnit.SelectSingleNode("x:source", nsmgr);
+            var source = transUnit.SelectSingleNode("x:source", _nsmgr);
 
             if (source != null)
             {
@@ -393,80 +378,88 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
                 matchPercent = segmentPair.Properties.TranslationOrigin.MatchPercent;
             }
 
-            if (transUnit.SelectSingleNode("x:target", nsmgr) == null)
+            if (transUnit.SelectSingleNode("x:target", _nsmgr) == null)
             {
-                XmlDocument segDoc = new XmlDocument();
-                string nodeContent = transUnit.OuterXml;
+                var segDoc = new XmlDocument();
+                var nodeContent = transUnit.OuterXml;
                 segDoc.LoadXml(nodeContent);
-                XmlNode trgNode = segDoc.CreateNode(XmlNodeType.Element, "target", nsmgr.LookupNamespace("x"));
-                trgNode.InnerText = "";
+                var trgNode = segDoc.CreateNode(XmlNodeType.Element, "target", _nsmgr.LookupNamespace("x"));
+                trgNode.InnerText = string.Empty;
 
-                XmlNode importNode = transUnit.OwnerDocument.ImportNode(trgNode, true);
-                transUnit.AppendChild(importNode);
+	            if (transUnit.OwnerDocument != null)
+	            {
+		            var importNode = transUnit.OwnerDocument.ImportNode(trgNode, true);
+		            transUnit.AppendChild(importNode);
+	            }
 
-                XmlNode target = transUnit.SelectSingleNode("x:target", nsmgr);
+	            var target = transUnit.SelectSingleNode("x:target", _nsmgr);
 
                 FillSegment(segmentPair, target, false);
             }
             else
             {
-                XmlNode target = transUnit.SelectSingleNode("x:target", nsmgr);
+                var target = transUnit.SelectSingleNode("x:target", _nsmgr);
                 FillSegment(segmentPair, target, false);
             }
 
             // Add comments (if applicable)
-            var comments = textExtractor.GetSegmentComment(segmentPair.Target);
-            if (comments.Count > 0 && transUnit.SelectSingleNode("m:comment", nsmgr) == null)
+            var comments = _textExtractor.GetSegmentComment(segmentPair.Target);
+            if (comments.Count > 0 && transUnit.SelectSingleNode("m:comment", _nsmgr) == null)
             {
-                XmlElement commentElement = targetFile.CreateElement("m:comment", nsmgr.LookupNamespace("m"));
+                var commentElement = _targetFile.CreateElement("m:comment", _nsmgr.LookupNamespace("m"));
 
-                var tunitMetaData = transUnit.SelectSingleNode("m:tunit-metadata", nsmgr);
+                var tunitMetaData = transUnit.SelectSingleNode("m:tunit-metadata", _nsmgr);
                 if (tunitMetaData != null)
                 {
                     transUnit.InsertBefore(commentElement, tunitMetaData);
-                    AddComments(transUnit.SelectSingleNode("m:comment", nsmgr), comments);
+                    AddComments(transUnit.SelectSingleNode("m:comment", _nsmgr), comments);
                 }
             }
 
             // Update score value
             var dbl = matchPercent / 100.0;
-            if (transUnit.Attributes["m:score"] != null && transUnit.Attributes["m:gross-score"] != null
-                && transUnit.Attributes["m:trans-origin"] != null)
+            if (transUnit.Attributes?["m:score"] != null && transUnit.Attributes["m:gross-score"] != null && transUnit.Attributes["m:trans-origin"] != null)
             {
                 transUnit.Attributes["m:score"].Value = dbl.ToString(CultureInfo.InvariantCulture);
                 transUnit.Attributes["m:gross-score"].Value = dbl.ToString(CultureInfo.InvariantCulture);
             }
             else
             {
-                transUnit.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:score"));
-                transUnit.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:gross-score"));
-                transUnit.Attributes["m:score"].Value = dbl.ToString(CultureInfo.InvariantCulture);
-                transUnit.Attributes["m:gross-score"].Value = dbl.ToString(CultureInfo.InvariantCulture);
+	            if (transUnit.Attributes != null)
+	            {
+		            if (transUnit.OwnerDocument != null)
+		            {
+			            transUnit.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:score"));
+			            transUnit.Attributes.Append(transUnit.OwnerDocument.CreateAttribute("m:gross-score"));
+		            }
+		            transUnit.Attributes["m:score"].Value = dbl.ToString(CultureInfo.InvariantCulture);
+		            transUnit.Attributes["m:gross-score"].Value = dbl.ToString(CultureInfo.InvariantCulture);
+	            }
             }
 
-            var transOrigin = segmentPair?.Target?.Properties?.TranslationOrigin;
+            var transOrigin = segmentPair.Target?.Properties?.TranslationOrigin;
             if (transOrigin != null)
             {
-                var memSourceTransOrigin = transUnit.Attributes["m:trans-origin"];
+	            var memSourceTransOrigin = transUnit.Attributes?["m:trans-origin"];
 
-                if (memSourceTransOrigin != null)
-                {
-                    if (transOrigin.OriginType == DefaultTranslationOrigin.TranslationMemory)
-                    {
-                        memSourceTransOrigin.Value = DefaultTranslationOrigin.TranslationMemory;
-                    }
-                    else if (transOrigin.OriginType == DefaultTranslationOrigin.MachineTranslation)
-                    {
-                        memSourceTransOrigin.Value = DefaultTranslationOrigin.MachineTranslation;
-                    }
-                }
+	            if (memSourceTransOrigin != null)
+	            {
+		            if (transOrigin.OriginType == DefaultTranslationOrigin.TranslationMemory)
+		            {
+			            memSourceTransOrigin.Value = DefaultTranslationOrigin.TranslationMemory;
+		            }
+		            else if (transOrigin.OriginType == DefaultTranslationOrigin.MachineTranslation)
+		            {
+			            memSourceTransOrigin.Value = DefaultTranslationOrigin.MachineTranslation;
+		            }
+	            }
             }
 
             // Update m:locked
-            if (transUnit.Attributes["m:locked"] != null)
+            if (transUnit.Attributes != null && transUnit.Attributes["m:locked"] != null)
             {
                 var isLocked = segmentPair.Target?.Properties?.IsLocked.ToString();
-                transUnit.Attributes["m:locked"].Value = isLocked != null ? isLocked.ToLower() : "false";
+                transUnit.Attributes["m:locked"].Value = isLocked?.ToLower() ?? "false";
             }
 
             // Update m:confirmed

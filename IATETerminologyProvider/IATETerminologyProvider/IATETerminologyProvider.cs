@@ -16,14 +16,14 @@ namespace IATETerminologyProvider
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
 		private IList<EntryModel> _entryModels;
-		private ProviderSettings _providerSettings;
+		private SettingsModel _providerSettings;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
 		private ProjectsController _projectsController;		
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
-		public IATETerminologyProvider(ProviderSettings providerSettings)
+		public IATETerminologyProvider(SettingsModel providerSettings)
 		{
 			UpdateSettings(providerSettings);			
 		}
@@ -80,7 +80,7 @@ namespace IATETerminologyProvider
 			return results;
 		}
 
-		public void UpdateSettings(ProviderSettings providerSettings)
+		public void UpdateSettings(SettingsModel providerSettings)
 		{
 			_providerSettings = providerSettings;
 			_entryModels = new List<EntryModel>();
@@ -157,16 +157,6 @@ namespace IATETerminologyProvider
 			return result;
 		}
 
-		public ProjectsController GetProjectController()
-		{
-			return SdlTradosStudio.Application.GetController<ProjectsController>();
-		}
-
-		public EditorController GetEditorController()
-		{
-			return SdlTradosStudio.Application.GetController<EditorController>();
-		}
-
 		public string GetStatusName(int value)
 		{
 			switch (value)
@@ -215,15 +205,13 @@ namespace IATETerminologyProvider
 
 		private void InitializeEditorController()
 		{
-			if (_editorController == null)
-			{
-				_projectsController = GetProjectController();
-				_editorController = GetEditorController();
+			if (!(_editorController is null)) return;
+			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
 				
-				if (_editorController != null)
-				{
-					_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;				
-				}
+			if (_editorController != null)
+			{
+				_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;				
 			}
 		}
 

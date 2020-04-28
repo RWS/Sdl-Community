@@ -28,11 +28,10 @@ namespace ETSTranslationProvider
             var credentials = credentialStore.GetCredential(translationProviderUri);
             if (credentials == null)
             {
-                //Throw TranslationProviderAuthenticationException, which will cause Studio to call GetCredentialsFromUser
-                throw new TranslationProviderAuthenticationException();
-            }
+				return new TranslationProvider(new TranslationOptions());
+			}
 
-            var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
             var genericCredentials = new GenericCredentials(credentials.Credential);
 
             if (options.UseBasicAuthentication)

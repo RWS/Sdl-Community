@@ -1,15 +1,14 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Windows;
+using System.Linq;
 using System.Windows.Input;
-using Sdl.Community.StarTransit.Shared.Annotations;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.UI.Commands;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-	public class TranslationMemoriesPenaltiesViewModel : INotifyPropertyChanged
+	public class TranslationMemoriesPenaltiesViewModel : BaseViewModel
 	{
 		#region Private Fields
 		private PackageModel _packageModel;
@@ -18,47 +17,41 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private string _translationMemoryPath;
 		private int _tmPenalty;
 		private ICommand _okCommand;
-		private ICommand _cancelCommand;
 
 		#endregion
 
 		#region Constructors
+
 		public TranslationMemoriesPenaltiesViewModel(PackageModel packageModel)
 		{
 			_packageModel = packageModel;
+
+			if (!(_packageModel is null) && packageModel.TMPenalties == null)
+			{
+				{
+					_packageModel.TMPenalties = new Dictionary<string, int>();
+				}
+			}
+			_translationMemoriesPenaltiesModelList = new ObservableCollection<TranslationMemoriesPenaltiesModel>();
 			LoadTranslationMemories();
 		}
-		#endregion
 
-		#region Commands
 		#endregion
 
 		#region Public Properties
-		public string Error { get; }
-
 		public ObservableCollection<TranslationMemoriesPenaltiesModel> TranslationMemoriesPenaltiesModelList
 		{
-			get
-			{
-				return _translationMemoriesPenaltiesModelList;
-			}
+			get => _translationMemoriesPenaltiesModelList;
 			set
 			{
-				if (Equals(value, _translationMemoriesPenaltiesModelList))
-				{
-					return;
-				}
 				_translationMemoriesPenaltiesModelList = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TranslationMemoriesPenaltiesModelList));
 			}
 		}
 
 		public string TranslationMemoryName
 		{
-			get
-			{
-				return _translationMemoryName;
-			}
+			get => _translationMemoryName;
 			set
 			{
 				if (Equals(value, _translationMemoryName))
@@ -66,16 +59,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_translationMemoryName = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TranslationMemoryName));
 			}
 		}
 
 		public string TranslationMemoryPath
 		{
-			get
-			{
-				return _translationMemoryPath;
-			}
+			get => _translationMemoryPath;
 			set
 			{
 				if (Equals(value, _translationMemoryPath))
@@ -84,16 +74,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_translationMemoryPath = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TranslationMemoryPath));
 			}
 		}
 
 		public int TMPenalty
 		{
-			get
-			{
-				return _tmPenalty;
-			}
+			get => _tmPenalty;
 			set
 			{
 				if (Equals(value, _tmPenalty))
@@ -101,13 +88,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					return;
 				}
 				_tmPenalty = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TMPenalty));
 			}
 		}
 
-		#endregion
-
-		#region Public Methods
 		#endregion
 
 		#region Private Methods
@@ -116,26 +100,35 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		/// </summary>
 		private void LoadTranslationMemories()
 		{
-			TranslationMemoriesPenaltiesModelList = new ObservableCollection<TranslationMemoriesPenaltiesModel>();
-			if (_packageModel != null)
+			if (_packageModel?.LanguagePairs != null)
 			{
 				foreach (var langPair in _packageModel.LanguagePairs)
 				{
-					if (langPair.HasTm)
+					if (langPair.HasTm && langPair.CreateNewTm)
 					{
 						foreach (var filePath in langPair.StarTranslationMemoryMetadatas)
 						{
-							TranslationMemoryName = Path.GetFileName(filePath.TargetFile);
-							TranslationMemoryPath = filePath.TargetFile;
-
-							var translationMemoriesPenaltiesModel = new TranslationMemoriesPenaltiesModel()
+							if (!filePath.TargetFile.Contains("_AEXTR_MT_"))
 							{
-								TranslationMemoryName = TranslationMemoryName,
-								TranslationMemoryPath = TranslationMemoryPath,
-								TMPenalty = TMPenalty
-							};
-							
-							TranslationMemoriesPenaltiesModelList.Add(translationMemoriesPenaltiesModel);
+								TranslationMemoryName = Path.GetFileName(filePath.TargetFile);
+								TranslationMemoryPath = filePath.TargetFile;
+								if (_packageModel.TMPenalties.Count > 0)
+								{
+									var existingTMPenalty = _packageModel.TMPenalties
+										.FirstOrDefault(p => Path.GetFileName(p.Key).Equals(TranslationMemoryName));
+									TMPenalty = !existingTMPenalty.Equals(new KeyValuePair<string, int>())
+										? existingTMPenalty.Value
+										: 0;
+								}
+
+								var translationMemoriesPenaltiesModel = new TranslationMemoriesPenaltiesModel
+								{
+									TranslationMemoryName = TranslationMemoryName,
+									TranslationMemoryPath = TranslationMemoryPath,
+									TMPenalty = TMPenalty
+								};
+								TranslationMemoriesPenaltiesModelList.Add(translationMemoriesPenaltiesModel);
+							}
 						}
 					}
 				}
@@ -143,61 +136,25 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		}
 		#endregion
 
-		#region Virtual Methods
-		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
-		#endregion
-
 		#region Commands
-		public ICommand OkCommand
-		{
-			get { return _okCommand ?? (_okCommand = new CommandHandler(OkAction, true)); }
-		}
-
-		public ICommand CancelCommand
-		{
-			get { return _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true)); }
-		}
+		public ICommand OkCommand => _okCommand ?? (_okCommand = new CommandHandler(OkAction, true));
 		#endregion
 
 		#region Actions
 		private void OkAction()
 		{
-			_packageModel.TMPenalties = new System.Collections.Generic.Dictionary<string, int>();
-
-			foreach (var tm in TranslationMemoriesPenaltiesModelList)
+			_packageModel.TMPenalties.Clear();
+			if (TranslationMemoriesPenaltiesModelList != null)
 			{
-				if (tm.TMPenalty > 0)
+				foreach (var tm in TranslationMemoriesPenaltiesModelList)
 				{
-					_packageModel.TMPenalties.Add(tm.TranslationMemoryPath, tm.TMPenalty);
-				}
-			}
-			CloseWindow();
-		}
-
-		private void CancelAction()
-		{
-			CloseWindow();
-		}
-
-		private void CloseWindow()
-		{
-			var windows = Application.Current.Windows;
-			foreach (Window window in windows)
-			{
-				if (window.Title.Equals("Translation Memories Penalties"))
-				{
-					window.Close();
+					if (tm.TMPenalty > 0)
+					{
+						_packageModel.TMPenalties.Add(tm.TranslationMemoryPath, tm.TMPenalty);
+					}
 				}
 			}
 		}
-		#endregion
-
-		#region Events
-		public event PropertyChangedEventHandler PropertyChanged;		
 		#endregion
 	}
 }

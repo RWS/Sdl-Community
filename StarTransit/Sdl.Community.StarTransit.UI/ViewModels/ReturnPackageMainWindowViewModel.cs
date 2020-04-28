@@ -1,43 +1,44 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
-using System.Runtime.CompilerServices;
+using System.Runtime.Remoting.Messaging;
+using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
-using Sdl.Community.StarTransit.UI.Annotations;
-using Sdl.Community.StarTransit.UI.Controls;
+using Sdl.Community.StarTransit.Shared.Utils;
+using Sdl.Community.StarTransit.UI.Commands;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-	public class ReturnPackageMainWindowViewModel : INotifyPropertyChanged
+	public class ReturnPackageMainWindowViewModel : BaseViewModel
 	{
 		private ICommand _createPackageCommand;
 		private readonly ReturnFilesViewModel _returnFilesViewModel;
 		private ReturnPackage _returnPackage;
 		private readonly ReturnPackageService _returnService;
 		private readonly CellViewModel _cellViewModel;
-		private bool _active;
-		private ReturnPackageMainWindow _window;
+        private readonly IMessageBoxService _messageBoxService;
 
-		public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel, CellViewModel cellViewModel, ReturnPackageMainWindow window)
-		{
+		private bool _active;
+		
+		public Action CloseAction { get; set; }
+
+		public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel, CellViewModel cellViewModel, IMessageBoxService messageBoxService)
+        {
+            _messageBoxService = messageBoxService;
 			_returnFilesViewModel = returnFilesViewModel;
 			_cellViewModel = cellViewModel;
 			_returnService = new ReturnPackageService();
-			_window = window;
 		}
 
-
-		public ICommand CreatePackageCommand
-		{
-			get { return _createPackageCommand ?? (_createPackageCommand = new CommandHandler(CreatePackage, true)); }
-		}
+		public ICommand CreatePackageCommand => _createPackageCommand ?? (_createPackageCommand = new CommandHandler(CreatePackage, true));
 
 		public bool Active
 		{
-			get { return _active; }
+			get => _active;
 			set
 			{
 				if (Equals(value, _active)) { return; }
@@ -47,43 +48,56 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		private async void CreatePackage()
 		{
-
-			_returnPackage = _returnFilesViewModel.GetReturnPackage();
-			if (_returnPackage.TargetFiles.Count == 0)
+			try
 			{
-				var dialog = new MetroDialogSettings
+				_returnPackage = _returnFilesViewModel.GetReturnPackage();
+				if (_returnPackage?.TargetFiles?.Count == 0)
 				{
-					AffirmativeButtonText = "OK"
+					var dialog = new MetroDialogSettings
+					{
+						AffirmativeButtonText = "OK"
 
-				};
-				MessageDialogResult result =
-					await _window.ShowMessageAsync("No files selected!", "Please select at least one file.",
-						MessageDialogStyle.Affirmative, dialog);
-			}
-			else
-			{
-				Active = true;
-				string returnPackageFolderPath;
-
-				if (_returnPackage.FolderLocation == null)
-				{
-					var projectPath = _returnPackage.ProjectLocation.Substring(0,
-					_returnPackage.ProjectLocation.LastIndexOf(@"\", StringComparison.Ordinal));
-
-					returnPackageFolderPath = CreateReturnPackageFolder(projectPath);
-				}
+					};
+                    _messageBoxService.ShowWarningMessage("Please select at least one file.", "No files selected!");
+                }
 				else
 				{
-					returnPackageFolderPath = CreateReturnPackageFolder(_returnPackage.FolderLocation);
+					Active = true;
+					if (_returnPackage != null)
+					{
+						string returnPackageFolderPath;
+
+						if (_returnPackage.FolderLocation == null)
+						{
+							var projectPath = _returnPackage.ProjectLocation?.Substring(0,
+								_returnPackage.ProjectLocation.LastIndexOf(@"\", StringComparison.Ordinal));
+
+							returnPackageFolderPath = CreateReturnPackageFolder(projectPath);
+						}
+						else
+						{
+							returnPackageFolderPath = CreateReturnPackageFolder(_returnPackage.FolderLocation);
+						}
+
+						//location of return package folder
+						_returnPackage.FolderLocation = returnPackageFolderPath;
+
+						await System.Threading.Tasks.Task.Run(() => _returnService.ExportFiles(_returnPackage));
+						Active = false;
+						_cellViewModel.ClearSelectedProjectsList();
+
+						var result = _messageBoxService.ShowInformationResultMessage("The target file(s) was successfully returned", "Informative message");
+						if (result == DialogResult.OK)
+						{
+							CloseAction();
+						}
+					}
+					CloseAction();
 				}
-
-				//location of return package folder
-				_returnPackage.FolderLocation = returnPackageFolderPath;
-
-				await System.Threading.Tasks.Task.Run(() => _returnService.ExportFiles(_returnPackage));
-				Active = false;
-				_cellViewModel.ClearSelectedProjectsList();
-				CloseAction();
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"CreatePackage method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -94,23 +108,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private string CreateReturnPackageFolder(string projectPath)
 		{
 			var returnPackageFolderPath = Path.Combine(projectPath, "Return package");
-
 			if (!Directory.Exists(returnPackageFolderPath))
 			{
 				Directory.CreateDirectory(returnPackageFolderPath);
-
 			}
 			return returnPackageFolderPath;
-
-		}
-
-		public Action CloseAction { get; set; }
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

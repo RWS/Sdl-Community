@@ -236,7 +236,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
             // lblSplitEqualParts
             // 
             this.lblSplitEqualParts.AutoSize = true;
-            this.lblSplitEqualParts.Location = new System.Drawing.Point(53, 75);
+            this.lblSplitEqualParts.Location = new System.Drawing.Point(44, 75);
             this.lblSplitEqualParts.Name = "lblSplitEqualParts";
             this.lblSplitEqualParts.Size = new System.Drawing.Size(130, 13);
             this.lblSplitEqualParts.TabIndex = 7;

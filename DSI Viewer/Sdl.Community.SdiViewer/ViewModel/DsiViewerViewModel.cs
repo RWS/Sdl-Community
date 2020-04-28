@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Sdl.Community.DsiViewer.Model;
 using Sdl.Community.DsiViewer.Services;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -91,12 +93,13 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				}
 
 				var color = context.DisplayColor;
-
 				var model = new DsiModel
 				{
 					DisplayName = context.DisplayName,
-					Description = context.Description,
 					Code = context.DisplayCode,
+					Description = context.ContextType == TMMatchContextTypes.LengthInformation
+						? GetAdditionalInformation(context)
+						: context.Description
 				};
 
 				if (color.Name == "0") // it doesn't have a color set
@@ -190,6 +193,26 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		private static EditorController GetEditorController()
 		{
 			return SdlTradosStudio.Application.GetController<EditorController>();
+		}
+
+		public string GetAdditionalInformation(IContextInfo context)
+		{
+			var additionalInfo = new StringBuilder();
+			foreach (var metaPair in context.MetaData)
+			{
+				var metaDataInfoDescriptionKey = PluginResources.ResourceManager.GetString("StructureContextInfo_MetaKey_" + metaPair.Key);
+				if (!string.IsNullOrEmpty(metaDataInfoDescriptionKey))
+				{
+					additionalInfo.Append($"{metaDataInfoDescriptionKey}: {GetMetaValue(metaPair.Value)}; ");
+				}
+			}
+			return additionalInfo.ToString();
+		}
+		private static string GetMetaValue(string metaValue)
+		{
+			var containsNumber = int.TryParse(metaValue, out _);
+
+			return containsNumber ? metaValue : PluginResources.ResourceManager.GetString("StructureContextInfo_MetaValue_" + metaValue);
 		}
 
 		public void Dispose()

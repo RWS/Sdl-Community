@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,7 +15,6 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter
 	{
-
 		public string ApiKey { get; set; }
 		private readonly string _pluginVersion = "";
 		private readonly string _identifier;
@@ -62,15 +62,16 @@ namespace Sdl.Community.DeepLMTProvider
 
 				using (var httpClient = new HttpClient())
 				{
-					httpClient.Timeout = TimeSpan.FromMinutes(2);
+					ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+
+					httpClient.Timeout = TimeSpan.FromMinutes(5);
 					var content = new StringContent($"text={sourceText}" +
 					                                $"&source_lang={sourceLanguage}" +
 					                                $"&target_lang={targetLanguage}" +
 					                                "&preserve_formatting=1" +
 					                                $"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
 
-					var studioVersion = new Toolkit.Core.Studio().GetStudioVersion().ExecutableVersion;
-					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 {studioVersion}/plugin {_pluginVersion}");
+					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
 
 					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result;
 					if (response.IsSuccessStatusCode)
@@ -86,7 +87,9 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 					else
 					{
-						MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        Log.Logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+                            $"Response content: {response.Content?.ReadAsStringAsync().Result}.");
+                        MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					}
 				}
 			}

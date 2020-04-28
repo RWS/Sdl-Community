@@ -22,7 +22,7 @@ namespace IATETerminologyProvider.Helpers
 			{
 				Directory.CreateDirectory(logDirectoryPath);
 			}
-			var target = new FileTarget
+			var target = new FileTarget("IATEProvider")
 			{
 				FileName = Path.Combine(logDirectoryPath, "IATEProviderLogs.txt"),
 				// Roll over the log every 10 MB

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditScript", "EditScript.csproj", "{4541E1E4-C687-4BFF-AA34-198507EF0999}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditScript.UnitTest", "..\EditScript.UnitTest\EditScript.UnitTest.csproj", "{AF9E693E-A128-4642-A6BC-595DED777B5A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4541E1E4-C687-4BFF-AA34-198507EF0999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4541E1E4-C687-4BFF-AA34-198507EF0999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4541E1E4-C687-4BFF-AA34-198507EF0999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4541E1E4-C687-4BFF-AA34-198507EF0999}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF9E693E-A128-4642-A6BC-595DED777B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF9E693E-A128-4642-A6BC-595DED777B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF9E693E-A128-4642-A6BC-595DED777B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF9E693E-A128-4642-A6BC-595DED777B5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {165711F3-4421-4072-B6B7-7E9ACD48562D}
+	EndGlobalSection
+EndGlobal

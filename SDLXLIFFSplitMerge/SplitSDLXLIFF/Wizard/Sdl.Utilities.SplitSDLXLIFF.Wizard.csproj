@@ -49,7 +49,7 @@
     <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\..\Program Files %28x86%29\SDL\SDL Trados Studio\Studio15\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
@@ -70,7 +70,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\..\..\Program Files %28x86%29\SDL\SDL Trados Studio\Studio15\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
@@ -108,9 +108,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <!--<Compile Include="..\..\..\..\Utilities\VersionInfo\UtilitiesVersionInfo.cs">
-      <Link>UtilitiesVersionInfo.cs</Link>
-    </Compile>-->
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

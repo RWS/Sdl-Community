@@ -17,7 +17,7 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			var config = new LoggingConfiguration();
 			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL",
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",
 				"DeeplLogs");
 			if (!Directory.Exists(logDirectoryPath))
 			{

@@ -1,41 +1,54 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using IATETerminologyProvider.Commands;
 using IATETerminologyProvider.Helpers;
+using IATETerminologyProvider.Interface;
 using IATETerminologyProvider.Model;
+using IATETerminologyProvider.Model.ResponseModels;
 using IATETerminologyProvider.Service;
 
 namespace IATETerminologyProvider.ViewModel
 {
 	public class SettingsViewModel : ViewModelBase
 	{
-		#region Private Fields
 		private ICommand _saveSettingsCommand;
+		private ICommand _resetToDefault;
 		private DomainModel _selectedDomain;		
 		private TermTypeModel _selectedTermType;
+		private readonly DomainService _domainService;
+		private readonly TermTypeService _termTypeService;
+		private readonly IIateSettingsService _settingsService;
 		private ObservableCollection<DomainModel> _domains;
 		private ObservableCollection<TermTypeModel> _termTypes;
-		#endregion
+		private bool _dialogResult;
 
-		#region Public Constructors
-		public SettingsViewModel(ProviderSettings providerSettings)
+		public SettingsViewModel(SettingsModel providerSettings,IIateSettingsService settingsService)
 		{			
+			_domains = new ObservableCollection<DomainModel>();
+			_termTypes = new ObservableCollection<TermTypeModel>();
+			_termTypeService = new TermTypeService();
+			_domainService = new DomainService();
+			_settingsService = settingsService;
+			ProviderSettings = new SettingsModel
+			{
+				Domains = new List<DomainModel>(),
+				TermTypes = new List<TermTypeModel>()
+			};
 			LoadDomains();
 			LoadTermTypes();
 			SetFieldsSelection(providerSettings);
 		}
-		#endregion
 
-		#region Public Properties		
 		public DomainModel SelectedDomain
 		{
 			get => _selectedDomain;
 			set
 			{
 				_selectedDomain = value;				
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedDomain));
 			}
 		}
 
@@ -45,7 +58,7 @@ namespace IATETerminologyProvider.ViewModel
 			set
 			{
 				_termTypes = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(TermTypes));
 			}
 		}
 
@@ -55,7 +68,44 @@ namespace IATETerminologyProvider.ViewModel
 			set
 			{
 				_selectedTermType = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedTermType));
+			}
+		}
+
+		public bool DialogResult
+		{
+			get => _dialogResult;
+			set
+			{
+				if (_dialogResult == value) return;
+				_dialogResult = value;
+				OnPropertyChanged(nameof(DialogResult));
+			}
+		}
+
+		public bool AllDomainsChecked
+		{
+			get => AreAllDomainsSelected();
+			set
+			{
+				if (value)
+				{
+					SelectAllDomains(true);
+				}
+				OnPropertyChanged(nameof(AllDomainsChecked));
+			}
+		}
+
+		public bool AllTermTypesChecked
+		{
+			get => AreAllTypesSelected();
+			set
+			{
+				if (value)
+				{
+					SelectAllTermTypes(true);
+				}
+				OnPropertyChanged(nameof(AllTermTypesChecked));
 			}
 		}
 
@@ -65,111 +115,193 @@ namespace IATETerminologyProvider.ViewModel
 			set
 			{
 				_domains = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Domains));
 			}
 		}
-		
-		public ProviderSettings ProviderSettings { get; set; }
-		#endregion
+		public NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>> IateDomains { get; set; }
+		public NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>> IateTermTypes { get; set; }
 
-		#region Commands
+		public SettingsModel ProviderSettings { get; set; }
+
 		public ICommand SaveSettingsCommand => _saveSettingsCommand ?? (_saveSettingsCommand = new CommandHandler(SaveSettingsAction, true));
-		#endregion
+		public ICommand ResetToDefault => _resetToDefault ?? (_resetToDefault = new CommandHandler(Reset, true));
 
-		#region Actions
+		private void Reset()
+		{
+			ResetDomains();
+			ResetTypes();
+		}
+
+		private void ResetTypes()
+		{
+			foreach (var type in TermTypes)
+			{
+				type.IsSelected = false;
+			}
+		}
+
+		private void ResetDomains()
+		{
+			foreach (var domain in Domains)
+			{
+				domain.IsSelected = false;
+			}
+		}
+
 		private void SaveSettingsAction()
 		{
-			if (Domains?.Count > 0)
+			if (Domains.Count > 0)
 			{
-				ProviderSettings = new ProviderSettings
+				// Add selected to provider settings
+				var savedSettings = _settingsService.GetProviderSettings();
+				if (savedSettings != null)
 				{
-					Domains = new List<string>(),
-					TermTypes = new List<int>()
-				};
-
-				// Add selected domains to provider settings
-				var selectedDomains = Domains?.Where(d => d.IsSelected).ToList();
-				foreach (var selectedDomain in selectedDomains)
-				{
-					ProviderSettings.Domains.Add(selectedDomain.Code);
+					_settingsService.RemoveProviderSettings();
+					savedSettings.Domains = Domains.ToList();
+					savedSettings.TermTypes = TermTypes.ToList();
+					ProviderSettings.Domains.AddRange(Domains);
+					ProviderSettings.TermTypes.AddRange(TermTypes);
 				}
-
-				// Add selected term types to provider settings
-				var selectedTermTypes = TermTypes?.Where(d => d.IsSelected).ToList();
-				foreach (var selectedTermType in selectedTermTypes)
-				{
-					ProviderSettings.TermTypes.Add(selectedTermType.Code);
-				}
-
-				var persistenceService = new PersistenceService();
-				persistenceService.AddSettings(ProviderSettings);
-
-				OnSaveSettingsCommandRaised?.Invoke();
+				_settingsService.SaveProviderSettings(savedSettings);
 			}
+			DialogResult = true;
+			UnSubscribeToEvents();
 		}
-		#endregion
 
-		#region PublicMethods
-		#endregion
-
-		#region Private Methods
 		private void LoadDomains()
 		{
-			_domains = new ObservableCollection<DomainModel>();
-			var domains = DomainService.GetDomains();
-			foreach (var domain in domains)
+			if (DomainService.Domains?.Count > 0)
 			{
-				if (domain != null)
-				{
-					if (!domain.Name.Equals(Constants.NotSpecifiedCode))
-					{
-						var selectedDomainName = Utils.UppercaseFirstLetter(domain.Name.ToLower());
-						var domainModel = new DomainModel
-						{
-							Code = domain.Code,
-							Name = selectedDomainName
-						};
-						Domains.Add(domainModel);
-					}
-				}
+				SetDomains(DomainService.Domains);
+			}
+			else
+			{
+				IateDomains = new NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>>(_domainService.GetDomains());
+				IateDomains.PropertyChanged += IateDomains_PropertyChanged;
 			}
 		}
-
 		private void LoadTermTypes()
 		{
-			_termTypes = new ObservableCollection<TermTypeModel>();
-			TermTypes = TermTypeService.GetTermTypes();
+			if (TermTypeService.IateTermType?.Count > 0)
+			{
+				SetTermTypes(TermTypeService.IateTermType);
+			}
+			else
+			{
+				IateTermTypes = new NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>>(_termTypeService.GetTermTypes());
+				IateTermTypes.PropertyChanged += IateTermTypes_PropertyChanged;
+			}
 		}
 
-		// Set UI Settings fields selection based on the provider settings file (for domains and term types).
-		private void SetFieldsSelection(ProviderSettings providerSettings)
+		private void IateTermTypes_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (providerSettings != null)
-			{
-				foreach (var domainCode in providerSettings.Domains)
-				{
-					var domain = Domains?.FirstOrDefault(d => d.Code.Equals(domainCode));
-					if (domain != null)
-					{
-						domain.IsSelected = true;
-					}
-				}
+			if (!e.PropertyName.Equals("Result")) return;
+			if (!(IateTermTypes.Result?.Count > 0)) return;
+			SetTermTypes(IateTermTypes.Result);
+		}
 
-				foreach (var termTypeCode in providerSettings.TermTypes)
+		private void IateDomains_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (!e.PropertyName.Equals("Result")) return;
+			if (!(IateDomains.Result?.Count > 0)) return;
+			SetDomains(IateDomains.Result);
+		}
+
+		private void SetDomains(ObservableCollection<ItemsResponseModel>iateDomains)
+		{
+			foreach (var domain in iateDomains)
+			{
+				if (!domain.Name.Equals(Constants.NotSpecifiedCode))
 				{
-					var termType = TermTypes?.FirstOrDefault(t => t.Code.Equals(termTypeCode));
-					if (termType != null)
+					var selectedDomainName = Utils.UppercaseFirstLetter(domain.Name.ToLower());
+					var domainModel = new DomainModel
 					{
-						termType.IsSelected = true;
-					}
+						Code = domain.Code,
+						Name = selectedDomainName
+					};
+					domainModel.PropertyChanged += DomainModel_PropertyChanged;
+					Domains.Add(domainModel);
 				}
 			}
 		}
-		#endregion
 
-		#region Events
-		public delegate ProviderSettings SaveSettingsEventRaiser();
-		public event SaveSettingsEventRaiser OnSaveSettingsCommandRaised;
-		#endregion
+		private void SetTermTypes(ObservableCollection<ItemsResponseModel> termTypesResponse)
+		{
+			foreach (var item in termTypesResponse)
+			{
+				var selectedTermTypeName = Utils.UppercaseFirstLetter(item.Name.ToLower());
+
+				var termType = new TermTypeModel
+				{
+					Code = int.TryParse(item.Code, out _) ? int.Parse(item.Code) : 0,
+					Name = selectedTermTypeName
+				};
+				termType.PropertyChanged += TermType_PropertyChanged;
+				TermTypes.Add(termType);
+			}
+		}
+
+		// Set UI Settings fields selection based on the project settings (for domains and term types).
+		private void SetFieldsSelection(SettingsModel providerSettings)
+		{
+			if (providerSettings is null) return;
+
+			Domains = new ObservableCollection<DomainModel>(providerSettings.Domains);
+			TermTypes = new ObservableCollection<TermTypeModel>(providerSettings.TermTypes);
+		}
+
+		private bool AreAllDomainsSelected()
+		{
+			return Domains.Count > 0 && Domains.All(d => d.IsSelected);
+		}
+		private bool AreAllTypesSelected()
+		{
+			return TermTypes.Count > 0 && TermTypes.All(t => t.IsSelected);
+		}
+
+		private void SelectAllDomains(bool select)
+		{
+			foreach (var domain in Domains)
+			{
+				domain.IsSelected = select;
+			}
+		}
+
+		private void SelectAllTermTypes(bool select)
+		{
+			foreach (var termType in TermTypes)
+			{
+				termType.IsSelected = select;
+			}
+		}
+		private void TermType_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName != "IsSelected") return;
+			OnPropertyChanged(nameof(AllTermTypesChecked));
+		}
+		private void DomainModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName != "IsSelected") return;
+			OnPropertyChanged(nameof(AllDomainsChecked));
+		}
+		private void UnSubscribeToEvents()
+		{
+			foreach (var domain in Domains)
+			{
+				domain.PropertyChanged -= DomainModel_PropertyChanged;
+			}
+			foreach (var termType in TermTypes)
+			{
+				termType.PropertyChanged -= TermType_PropertyChanged;
+			}
+			if (IateDomains != null)
+			{
+				IateDomains.PropertyChanged -= IateDomains_PropertyChanged;
+			}
+			if (IateTermTypes != null)
+			{
+				IateTermTypes.PropertyChanged -= IateTermTypes_PropertyChanged;
+			}
+		}
 	}
 }

@@ -167,6 +167,7 @@
     <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Resources\Question.ico" />
     <None Include="Resources\ForumIcon.ico" />
     <None Include="Resources\Download.ico" />
     <None Include="bil.ico" />
