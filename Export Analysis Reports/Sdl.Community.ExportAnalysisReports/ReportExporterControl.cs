@@ -56,8 +56,7 @@ namespace Sdl.Community.ExportAnalysisReports
 
 		private void InitializeSettings()
 		{
-			copyBtn.Enabled = false;
-			csvBtn.Enabled = false;
+			DisableButtons();
 			includeHeaderCheck.Checked = true;
 			_projectXmlPath = Help.GetStudioProjectsPath();
 			_allStudioProjectsDetails = new List<ProjectDetails>();
@@ -791,8 +790,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 
 			projListbox.DataSource = _projectsDataSource;
-			copyBtn.Enabled = false;
-			csvBtn.Enabled = false;
+			DisableButtons();
 		}
 
 		private void reportOutputPath_TextChanged(object sender, EventArgs e)
@@ -826,9 +824,6 @@ namespace Sdl.Community.ExportAnalysisReports
 			SetLanguageCheckedState(e.Index, checkBoxValue);
 			_isAnyLanguageUnchecked = !checkBoxValue && chkBox_SelectAllLanguages.Checked;
 			UncheckAllLanguagesOption(checkBoxValue);
-
-			IsClipboardEnabled();
-			IsCsvBtnEnabled();
 		}
 
 		// Uncheck the "Select all languages" option if one of the languages is unchecked
@@ -862,7 +857,10 @@ namespace Sdl.Community.ExportAnalysisReports
 			if (!_isAnyProjectUnchecked)
 			{
 				var selectAllProjects = ((CheckBox)sender).Checked;
-
+				if (!selectAllProjects)
+				{
+					DisableButtons();
+				}
 				foreach (var project in _projectsDataSource)
 				{
 					project.ShouldBeExported = selectAllProjects;
@@ -896,6 +894,16 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			// change all the languages checkbox values only when the "Select all languages" option is checked/unchecked
 			var isChecked = ((CheckBox)sender).Checked;
+			if (!isChecked)
+			{
+				DisableButtons();
+			}
+			else
+			{
+				IsClipboardEnabled();
+				IsCsvBtnEnabled();
+			}
+
 			if (!_isAnyLanguageUnchecked)
 			{
 				ChangeLanguagesCheckbox(isChecked);
@@ -967,6 +975,12 @@ namespace Sdl.Community.ExportAnalysisReports
 				chkBox_SelectAllLanguages.Checked = true;
 			}
 
+			if (languagesListBox.Items.Count >= 1)
+			{
+				IsClipboardEnabled();
+				IsCsvBtnEnabled();
+			}
+
 			ConfigureCheckedOptions(languagesListBox);
 		}
 
@@ -990,8 +1004,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			if (listbox.CheckedItems.Count == 0)
 			{
-				copyBtn.Enabled = false;
-				csvBtn.Enabled = false;
+				DisableButtons();
 			}
 
 			if (listbox.CheckedItems.Count == 0 && chkBox_SelectAllLanguages.Checked)
@@ -999,6 +1012,12 @@ namespace Sdl.Community.ExportAnalysisReports
 				// Uncheck 'Select all languages' option when no item is checked
 				chkBox_SelectAllLanguages.Checked = false;
 			}
+		}
+
+		private void DisableButtons()
+		{
+			copyBtn.Enabled = false;
+			csvBtn.Enabled = false;
 		}
 	}
 }
