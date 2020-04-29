@@ -28,6 +28,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		private readonly IMessageBoxService _messageBoxService;
 		private bool _isAnyLanguageUnchecked;
 		private bool _isAnyProjectUnchecked;
+		private bool _isStatusChanged;
 
 		public ReportExporterControl()
 		{
@@ -80,15 +81,15 @@ namespace Sdl.Community.ExportAnalysisReports
 			};
 		}
 
-		private void FillLanguagesList()
+		private void FillLanguagesList(ProjectDetails selectedProject)
 		{
 			try
 			{
-				var selectedProjectsToExport = _projectsDataSource.Where(e => e.ShouldBeExported).ToList();
+				var selectedProjectToExport = _projectsDataSource?.FirstOrDefault(e => e.ShouldBeExported && e.ProjectName.Equals(selectedProject.ProjectName));
 
-				foreach (var selectedProject in selectedProjectsToExport)
+				if (selectedProjectToExport != null)
 				{
-					foreach (var language in selectedProject.LanguagesForPoject.ToList())
+					foreach (var language in selectedProjectToExport.LanguagesForPoject.ToList())
 					{
 						var languageDetails = _languages.FirstOrDefault(n => n.LanguageName.Equals(language.Key));
 						if (languageDetails == null)
@@ -97,11 +98,11 @@ namespace Sdl.Community.ExportAnalysisReports
 							_languages.Add(newLanguage);
 						}
 					}
-				}
 
-				languagesListBox.DataSource = _languages;
-				languagesListBox.DisplayMember = "LanguageName";
-				languagesListBox.ValueMember = "IsChecked";
+					languagesListBox.DataSource = _languages;
+					languagesListBox.DisplayMember = "LanguageName";
+					languagesListBox.ValueMember = "IsChecked";
+				}
 			}
 			catch (Exception ex)
 			{
@@ -382,7 +383,7 @@ namespace Sdl.Community.ExportAnalysisReports
 						}
 
 						//show languages in language list box
-						FillLanguagesList();
+						FillLanguagesList(selectedProject);
 
 						copyBtn.Enabled = projListbox.SelectedItems.Count == 1;
 						if (projListbox.SelectedItems.Count > 0)
@@ -708,30 +709,23 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			try
 			{
-				var selectedStatus = ((ComboBox)sender).SelectedItem;
-				var projectsBindingList = new BindingList<ProjectDetails>();
-				_languages.Clear();
+				var selectedStatus = ((ComboBox)sender).SelectedItem?.ToString();
+				//_languages.Clear();
 
-				var projects = _allStudioProjectsDetails;
-				if (selectedStatus.Equals("InProgress"))
-				{
-					var inProgressProjects = projects.Where(s => s.Status.Equals("InProgress")).ToList();
-					projectsBindingList = BindProjects(inProgressProjects, projectsBindingList);
-				}
-
-				if (selectedStatus.Equals("Completed"))
-				{
-					var completedProjects = projects.Where(s => s.Status.Equals("Completed")).ToList();
-					projectsBindingList = BindProjects(completedProjects, projectsBindingList);
-				}
-
-				if (selectedStatus.Equals("All"))
-				{
-					projectsBindingList = BindProjects(projects, projectsBindingList);
-				}
-
-				_projectsDataSource = projectsBindingList;
+				_projectsDataSource = BindProjectsBasedOnStatus(selectedStatus);
 				projListbox.DataSource = _projectsDataSource;
+
+				if (languagesListBox.Items.Count == 0)
+				{
+					SetNewProjectLanguage();
+				}
+
+				if (chkBox_SelectAllProjects.Checked)
+				{
+					SetProjectsInformation(true);
+				}
+
+				_isStatusChanged = false;
 			}
 			catch (Exception ex)
 			{
@@ -852,39 +846,37 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 		}
 
+		private void SetNewProjectLanguage()
+		{
+			if (_projectsDataSource != null)
+			{
+				foreach (var project in _projectsDataSource)
+				{
+					if (project.ShouldBeExported)
+					{
+						FillLanguagesList(project);
+					}
+				}
+			}
+
+			RefreshLanguageListbox();
+			if (languagesListBox.CheckedItems.Count.Equals(languagesListBox.Items.Count))
+			{
+				chkBox_SelectAllLanguages.Checked = true;
+			}
+		}
+
 		private void selectAllProjects_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!_isAnyProjectUnchecked)
 			{
-				var selectAllProjects = ((CheckBox)sender).Checked;
-				if (!selectAllProjects)
+				var isSelectAllProjects = ((CheckBox)sender).Checked;
+				if (!isSelectAllProjects)
 				{
 					DisableButtons();
 				}
-				foreach (var project in _projectsDataSource)
-				{
-					project.ShouldBeExported = selectAllProjects;
-					foreach (var language in project.LanguagesForPoject.ToList())
-					{
-						project.LanguagesForPoject[language.Key] = selectAllProjects;
-					}
-				}
 
-				RefreshProjectsListBox();
-				if (selectAllProjects)
-				{
-					foreach (var language in _languages)
-					{
-						language.IsChecked = true;
-					}
-				}
-				else
-				{
-					_languages.Clear();
-				}
-
-				chkBox_SelectAllLanguages.Checked = selectAllProjects;
-				RefreshLanguageListbox();
+				SetProjectsInformation(isSelectAllProjects);
 			}
 
 			_isAnyProjectUnchecked = false;
@@ -951,20 +943,23 @@ namespace Sdl.Community.ExportAnalysisReports
 
 		private void projListbox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			// Check the "Select all projects" option when all projects are all checked, one by one.
-			var isAllProjectsChecked = IsSelectAllChecked(projListbox);
-			if (isAllProjectsChecked)
+			if (!_isStatusChanged)
 			{
-				chkBox_SelectAllProjects.Checked = true;
-			}
+				// Check the "Select all projects" option when all projects are all checked, one by one.
+				var isAllProjectsChecked = IsSelectAllChecked(projListbox);
+				if (isAllProjectsChecked)
+				{
+					chkBox_SelectAllProjects.Checked = true;
+				}
 
-			// check the 'Select all languages' option when a single project is selected
-			if (projListbox.CheckedItems.Count == 1 && !chkBox_SelectAllLanguages.Checked)
-			{
-				chkBox_SelectAllLanguages.Checked = true;
-			}
+				// check the 'Select all languages' option when a single project is selected
+				if (projListbox.CheckedItems.Count == 1 && !chkBox_SelectAllLanguages.Checked)
+				{
+					chkBox_SelectAllLanguages.Checked = true;
+				}
 
-			ConfigureCheckedOptions(projListbox);
+				ConfigureCheckedOptions(projListbox);
+			}
 		}
 
 		private void languagesListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -983,6 +978,91 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 
 			ConfigureCheckedOptions(languagesListBox);
+		}
+
+		private BindingList<ProjectDetails> BindProjectsBasedOnStatus(string selectedStatus)
+		{
+			var projectsBindingList = new BindingList<ProjectDetails>();
+			_isStatusChanged = true;
+			try
+			{
+				//_languages.Clear();
+				var projects = _allStudioProjectsDetails;
+
+				switch (selectedStatus)
+				{
+					case "InProgress":
+						var inProgressProjects = projects.Where(s => s.Status.Equals("InProgress")).ToList();
+						projectsBindingList = BindProjects(inProgressProjects, projectsBindingList);
+						break;
+
+					case "Completed":
+						var completedProjects = projects?.Where(s => s.Status.Equals("Completed")).ToList();
+						if (completedProjects != null && completedProjects.Count > 0)
+						{
+							projectsBindingList = BindProjects(completedProjects, projectsBindingList);
+						}
+						else
+						{
+							_languages.Clear();
+							DisableButtons();
+
+							// uncheck the 'Select all projects' and 'Select all languages' when are checked and no projects has 'Completed' status
+							if (chkBox_SelectAllProjects.Checked)
+							{
+								chkBox_SelectAllProjects.Checked = false;
+							}
+
+							if (chkBox_SelectAllLanguages.Checked)
+							{
+								chkBox_SelectAllLanguages.Checked = false;
+							}
+						}
+
+						break;
+
+					case "All":
+						projectsBindingList = BindProjects(projects, projectsBindingList);
+						break;
+
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"BindProjectsBasedOnStatus method: {ex.Message}\n {ex.StackTrace}");
+			}
+
+			return projectsBindingList;
+		}
+
+		private void SetProjectsInformation(bool isSelectAllProjects)
+		{
+			foreach (var project in _projectsDataSource)
+			{
+				project.ShouldBeExported = isSelectAllProjects;
+				foreach (var language in project.LanguagesForPoject.ToList())
+				{
+					project.LanguagesForPoject[language.Key] = isSelectAllProjects;
+				}
+
+				FillLanguagesList(project);
+			}
+
+			RefreshProjectsListBox();
+			if (isSelectAllProjects)
+			{
+				foreach (var language in _languages)
+				{
+					language.IsChecked = true;
+				}
+			}
+			else
+			{
+				_languages.Clear();
+			}
+
+			chkBox_SelectAllLanguages.Checked = isSelectAllProjects;
+			RefreshLanguageListbox();
 		}
 
 		// Disable the 'Select all projects' option when one of the project is unchecked
