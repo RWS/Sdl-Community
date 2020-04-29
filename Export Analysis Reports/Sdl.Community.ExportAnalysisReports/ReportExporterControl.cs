@@ -898,7 +898,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			{
 				DisableButtons();
 			}
-			else
+			else if(languagesListBox.Items.Count > 0)
 			{
 				IsClipboardEnabled();
 				IsCsvBtnEnabled();
@@ -915,21 +915,23 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			try
 			{
+				var selectedItem = (ProjectDetails)projListbox?.Items[e.Index];
 				var shouldExportProject = e.NewValue == CheckState.Checked;
-				if (projListbox.SelectedItem == null) return;
-				var projectName = ((CheckedListBox)sender).Text;
-				var selectedProject = _projectsDataSource.FirstOrDefault(n => n.ProjectName.Equals(projectName));
 
-				var selectedProjectIndex = _projectsDataSource.IndexOf(selectedProject);
-				if (selectedProjectIndex > -1)
+				if (selectedItem != null)
 				{
-					if (shouldExportProject)
+					if (projListbox != null && projListbox.SelectedItem == null) return;
+
+					var selectedProject = _projectsDataSource.FirstOrDefault(n => n.ProjectName.Equals(selectedItem.ProjectName));
+
+					var selectedProjectIndex = _projectsDataSource.IndexOf(selectedProject);
+					if (selectedProjectIndex > -1 &&  shouldExportProject) 
 					{
 						PrepareProjectToExport(selectedProject);
 					}
-					//that means user deselected a project
 					else
 					{
+						// Uncheck the project when user deselects it
 						if (selectedProject != null)
 						{
 							selectedProject.ShouldBeExported = false;
@@ -938,9 +940,8 @@ namespace Sdl.Community.ExportAnalysisReports
 					}
 					_isAnyProjectUnchecked = !shouldExportProject && chkBox_SelectAllProjects.Checked;
 					DisableAllProjectsOption();
+					IsClipboardEnabled();
 				}
-
-				IsClipboardEnabled();
 			}
 			catch (Exception ex)
 			{
