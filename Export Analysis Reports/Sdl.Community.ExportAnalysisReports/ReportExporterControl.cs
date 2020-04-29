@@ -493,7 +493,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		private void IsClipboardEnabled()
 		{
 			var isMultipleProjectsSelected = _projectsDataSource.Count(p => p.ShouldBeExported) > 1;
-			copyBtn.Enabled = !isMultipleProjectsSelected ? true : false;
+			copyBtn.Enabled = !isMultipleProjectsSelected;
 		}
 
 		private void IsCsvBtnEnabled()
@@ -948,6 +948,14 @@ namespace Sdl.Community.ExportAnalysisReports
 			{
 				chkBox_SelectAllProjects.Checked = true;
 			}
+
+			// check the 'Select all languages' option when a single project is selected
+			if (projListbox.CheckedItems.Count == 1 && !chkBox_SelectAllLanguages.Checked)
+			{
+				chkBox_SelectAllLanguages.Checked = true;
+			}
+
+			ConfigureCheckedOptions(projListbox);
 		}
 
 		private void languagesListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -958,6 +966,8 @@ namespace Sdl.Community.ExportAnalysisReports
 			{
 				chkBox_SelectAllLanguages.Checked = true;
 			}
+
+			ConfigureCheckedOptions(languagesListBox);
 		}
 
 		// Disable the 'Select all projects' option when one of the project is unchecked
@@ -973,6 +983,22 @@ namespace Sdl.Community.ExportAnalysisReports
 		private bool IsSelectAllChecked(CheckedListBox listbox)
 		{
 			return listbox.CheckedItems.Count == listbox.Items.Count;
+		}
+
+		// Configure the UI elements display
+		private void ConfigureCheckedOptions(CheckedListBox listbox)
+		{
+			if (listbox.CheckedItems.Count == 0)
+			{
+				copyBtn.Enabled = false;
+				csvBtn.Enabled = false;
+			}
+
+			if (listbox.CheckedItems.Count == 0 && chkBox_SelectAllLanguages.Checked)
+			{
+				// Uncheck 'Select all languages' option when no item is checked
+				chkBox_SelectAllLanguages.Checked = false;
+			}
 		}
 	}
 }
