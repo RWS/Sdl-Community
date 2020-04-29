@@ -1,30 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
+﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
 using static Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.CharacterCountingIterator;
 
 namespace Sdl.Community.AntidoteVerifier.Utils
 {
     public class EndOfItemCharacterCounterNoTagsVisitor : ICharacterCountingVisitor
     {
-        private int _count;
-        public int Count
-        {
-            get
-            {
-                return _count;
-            }
+	    public int Count { get; set; }
 
-            set
-            {
-                _count = value;
-            }
-        }
-
-        public void VisitCommentMarker(ICommentMarker commentMarker)
+	    public void VisitCommentMarker(ICommentMarker commentMarker)
         {
             //Nothing to add
         }

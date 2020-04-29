@@ -1,18 +1,12 @@
 ﻿using Sdl.TranslationStudioAutomation.IntegrationApi;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.AntidoteVerifier.Utils;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
-using System.Reflection;
-using Sdl.DesktopEditor.EditorApi;
 
 namespace Sdl.Community.AntidoteVerifier
 {
-    public struct RangeOfCharacterInfos
+	public struct RangeOfCharacterInfos
     {
 	    public int start;
 	    public int length;
@@ -20,10 +14,10 @@ namespace Sdl.Community.AntidoteVerifier
 
     public class EditorService : IEditorService
     {
-        private Document _document;
-        private Dictionary<int, KeyValuePair<string,string>> _segmentMetadata;
+        private readonly IStudioDocument _document;
+        private readonly Dictionary<int, KeyValuePair<string,string>> _segmentMetadata;
         
-        public EditorService(Document document)
+        public EditorService(IStudioDocument document)
         {
             _document = document;
             _segmentMetadata = new Dictionary<int, KeyValuePair<string,string>>();
@@ -115,12 +109,9 @@ namespace Sdl.Community.AntidoteVerifier
         {
             var segmentPair = GetSegmentPair(segmentId);
 
-            if (segmentPair != null)
-            {
-	            segmentPair.Target.Replace(startPosition, endPosition, replacementText);
-            }
-           
-            _document.UpdateSegmentPair(segmentPair);
+	        segmentPair?.Target.Replace(startPosition, endPosition, replacementText);
+
+	        _document.UpdateSegmentPair(segmentPair);
 
         }
 
@@ -143,7 +134,7 @@ namespace Sdl.Community.AntidoteVerifier
 
         public bool CanReplace(int segmentId, int startPosition, int endPosition, string origString, string displayLanguage, ref string message, ref string explication)
         {
-            bool ret = false;
+            var ret = false;
             var segmentPair = GetSegmentPair(segmentId);
             if (segmentPair != null)
             {

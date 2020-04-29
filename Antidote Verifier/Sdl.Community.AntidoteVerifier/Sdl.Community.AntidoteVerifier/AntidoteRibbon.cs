@@ -5,16 +5,10 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Desktop.IntegrationApi.Extensions.Internal;
 
 namespace Sdl.Community.AntidoteVerifier
 {
-    [RibbonGroup("Sdl.Community.AntidoteVerifier", Name ="Antidote Verifier", ContextByType = typeof(EditorController))]
+	[RibbonGroup("Sdl.Community.AntidoteVerifier", Name ="Antidote Verifier", ContextByType = typeof(EditorController))]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.EditorReviewRibbonTabLocation))]
     public class AntidoteVerifierRibbon: AbstractRibbonGroup
     {
@@ -34,10 +28,10 @@ namespace Sdl.Community.AntidoteVerifier
         protected override void Execute()
         {
             Logger.IntializeLogger();
-            EditorController editorController = SdlTradosStudio.Application.GetController<EditorController>();
-            EditorService editorService = new EditorService(editorController.ActiveDocument);
-            AntidoteClient antidotedClient = new AntidoteClient(editorService,true);
-            AntidoteApiOle antidoteApiOle = new AntidoteApiOle(antidotedClient);
+            var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+            var editorService = new EditorService(editorController.ActiveDocument);
+			var antidotedClient = new AntidoteClient(editorService,true);
+			var antidoteApiOle = new AntidoteApiOle(antidotedClient);
             Log.Information("Starting Antidote for correction!");
             antidoteApiOle.CallAntidote(ConstantsUtils.Corrector);
         }
@@ -57,10 +51,10 @@ namespace Sdl.Community.AntidoteVerifier
         {
             Logger.IntializeLogger();
 
-            EditorController editorController = SdlTradosStudio.Application.GetController<EditorController>();
-            EditorService editorService = new EditorService(editorController.ActiveDocument);
-            AntidoteClient antidotedClient = new AntidoteClient(editorService,false);
-            AntidoteApiOle antidoteApiOle = new AntidoteApiOle(antidotedClient);
+			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+			var editorService = new EditorService(editorController.ActiveDocument);
+            var antidotedClient = new AntidoteClient(editorService,false);
+			var antidoteApiOle = new AntidoteApiOle(antidotedClient);
             Log.Information("Starting Antidote for dictionary!");
 
             antidoteApiOle.CallAntidote(ConstantsUtils.LastSelectedDictionary);
@@ -71,7 +65,6 @@ namespace Sdl.Community.AntidoteVerifier
     [ActionLayout(typeof(AntidoteVerifierRibbon), 10, DisplayType.Normal)]
     [ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation),
         2,
-        DisplayType.Default,
         Name = "Guides",
         IsSeparator = false)]
     public class AntidoteGuideAction : AbstractAction
@@ -80,11 +73,11 @@ namespace Sdl.Community.AntidoteVerifier
         {
             Logger.IntializeLogger();
 
-            EditorController editorController = SdlTradosStudio.Application.GetController<EditorController>();
-            EditorService editorService = new EditorService(editorController.ActiveDocument);
+            var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+            var editorService = new EditorService(editorController.ActiveDocument);
 
-            AntidoteClient antidotedClient = new AntidoteClient(editorService,false);
-            AntidoteApiOle antidoteApiOle = new AntidoteApiOle(antidotedClient);
+            var antidotedClient = new AntidoteClient(editorService,false);
+            var antidoteApiOle = new AntidoteApiOle(antidotedClient);
             Log.Information("Starting Antidote for guide!");
 
             antidoteApiOle.CallAntidote(ConstantsUtils.LastSelectedGuide);
