@@ -1,24 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
+using Sdl.Community.XLIFF.Manager.Common;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
-	public class ProjectFileActivityModel: INotifyPropertyChanged, IDisposable
+	public class ProjectFileActivityModel: BaseModel, IDisposable
 	{
 	
 		public ProjectFileActivityModel()
 		{
-			
+			Status = Enumerators.Status.None;
+			Action = Enumerators.Action.None;
 		}
+
+		public Enumerators.Status Status { get; set; }
 
 		public Enumerators.Action Action { get; set; }
 
-		public Enumerators.Status Status { get; set; }
+		public ProjectInfoModel ProjectInfo { get; set; }		
 
 		public string Id { get; set; }
 
@@ -26,9 +25,12 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string Path { get; set; }
 
-		public DateTime Date { get; set; }
+		public DateTime Date { get; set; }		
+
+		public CultureInfo TargetLanguage { get; set; }
 
 		public string Message { get; set; }
+	
 
 		// Options
 		
@@ -37,16 +39,6 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public void Dispose()
 		{
-		}
-
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
-
-		
+		}		
 	}
 }

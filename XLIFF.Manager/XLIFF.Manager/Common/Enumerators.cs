@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sdl.Community.XLIFF.Manager.Model
+﻿namespace Sdl.Community.XLIFF.Manager.Common
 {
 	public class Enumerators
 	{

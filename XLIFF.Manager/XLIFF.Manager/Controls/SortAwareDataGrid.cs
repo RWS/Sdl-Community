@@ -9,7 +9,7 @@ using System.Windows.Data;
 
 namespace Sdl.Community.XLIFF.Manager.Controls
 {
-	public class SortAwareDataGrid : DataGrid, IDisposable
+	public class SortAwareDataGrid : SelectedItemsAwareDataGrid, IDisposable
 	{
 		public const string EmptyColumnName = "[none]";
 		public const string SelectedItemsListName = "SelectedItemsList";

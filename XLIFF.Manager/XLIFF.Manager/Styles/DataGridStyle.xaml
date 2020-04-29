@@ -43,29 +43,7 @@
 		</Setter>
 	</Style>
 
-	<!--Hides overflow arrow from toolbar-->
-	<Style x:Key="Toolbar" TargetType="{x:Type ToolBar}">
-		<Setter Property="SnapsToDevicePixels" Value="true"/>
-		<Setter Property="OverridesDefaultStyle" Value="true"/>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type ToolBar}">
-					<Border x:Name="Border"  CornerRadius="2" BorderThickness="1" Background="WhiteSmoke" BorderBrush="WhiteSmoke">
-						<DockPanel >
-							<ToggleButton Visibility="Collapsed"  DockPanel.Dock="Right" IsEnabled="False" IsChecked="False" ClickMode="Press">
-								<Popup x:Name="OverflowPopup" AllowsTransparency="true" Placement="Bottom" IsOpen="{Binding Path=IsOverflowOpen,RelativeSource={RelativeSource TemplatedParent}}" StaysOpen="false" Focusable="false" PopupAnimation="Slide">
-									<Border x:Name="DropDownBorder" Background="White" BorderThickness="1" BorderBrush="white">
-										<ToolBarOverflowPanel x:Name="PART_ToolBarOverflowPanel" Margin="2" WrapWidth="200" Focusable="true"  FocusVisualStyle="{x:Null}" KeyboardNavigation.TabNavigation="Cycle" KeyboardNavigation.DirectionalNavigation="Cycle" Visibility="Collapsed"/>
-									</Border>
-								</Popup>
-							</ToggleButton>
-							<ToolBarPanel x:Name="PART_ToolBarPanel" IsItemsHost="true" Margin="0,1,2,2"/>
-						</DockPanel>
-					</Border>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+
 
 	<!--Wrap text of text block-->
 	<Style TargetType="{x:Type TextBlock}" x:Key="WrapText">
@@ -165,7 +143,9 @@
 		<Setter Property="HorizontalContentAlignment" Value="Right" ></Setter>
 	</Style>
 
-	<Style x:Key="FilesGridCellStyle" TargetType="{x:Type DataGridCell}" >
+	<Style x:Key="CustomGridCellStyle" TargetType="{x:Type DataGridCell}" >
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="BorderBrush" Value="Transparent"/>
 		<Setter Property="Foreground" Value="{StaticResource InformationTitleColor}" />
 		<Style.Triggers>
 			<Trigger Property="IsSelected" Value="True">
@@ -174,22 +154,37 @@
 			</Trigger>
 
 		</Style.Triggers>
-
 	</Style>
 
-	<Style x:Key="FilesGridStyle" TargetType="{x:Type DataGrid}">
-		<Setter Property="AutoGenerateColumns" Value="False"></Setter>
-		<Setter Property="CanUserSortColumns" Value="True"></Setter>
-		<Setter Property="CanUserAddRows" Value="False"></Setter>
-		<Setter Property="Background" Value="Transparent"></Setter>
-		<Setter Property="RowHeaderWidth" Value="0"></Setter>
-		<Setter Property="BorderThickness" Value="1"></Setter>
-		<Setter Property="BorderBrush" Value="{StaticResource OutterBorderColor}"></Setter>
-		<Setter Property="Foreground" Value="Black"></Setter>
-		<Setter Property="VerticalGridLinesBrush" Value="{StaticResource InnerBorderColor}"></Setter>
-		<Setter Property="HorizontalGridLinesBrush" Value="{StaticResource InnerBorderColor}"></Setter>
-		<Setter Property="ColumnHeaderStyle" Value="{StaticResource StandardColumnHeaderStyle}"></Setter>
-		<Setter Property="CellStyle" Value="{StaticResource FilesGridCellStyle}"></Setter>
+	<Style x:Key="RowStyle" TargetType="{x:Type DataGridRow}">
+		<Setter Property="BorderThickness" Value="0,0,0,0"/>
+		<Setter Property="BorderBrush" Value="#E4E2E2"/>
+		<Setter Property="Margin" Value="1"/>
+		<Style.Triggers>
+			<Trigger Property="ItemsControl.AlternationIndex" Value="0">
+				<Setter Property="Background" Value="#F3F2F2"></Setter>
+			</Trigger>
+			<Trigger Property="ItemsControl.AlternationIndex" Value="1">
+				<Setter Property="Background" Value="White"></Setter>
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+
+	<Style x:Key="CustomGridStyle" TargetType="{x:Type DataGrid}">
+		<Setter Property="AlternationCount" Value="2"/>
+		<Setter Property="AutoGenerateColumns" Value="False"/>
+		<Setter Property="CanUserSortColumns" Value="True"/>
+		<Setter Property="CanUserAddRows" Value="False"/>
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="RowHeaderWidth" Value="0"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="BorderBrush" Value="{StaticResource OutterBorderColor}"/>
+		<Setter Property="Foreground" Value="Black"/>
+		<Setter Property="VerticalGridLinesBrush" Value="{StaticResource InnerBorderColor}"/>
+		<Setter Property="HorizontalGridLinesBrush" Value="{StaticResource InnerBorderColor}"/>
+		<Setter Property="ColumnHeaderStyle" Value="{StaticResource StandardColumnHeaderStyle}"/>
+		<Setter Property="CellStyle" Value="{StaticResource CustomGridCellStyle}"/>
+		<Setter Property="RowStyle" Value="{StaticResource RowStyle}"/>
 	</Style>
 
 

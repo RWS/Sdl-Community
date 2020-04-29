@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -6,10 +7,10 @@ using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
-	public class ProjectFilesViewModel : INotifyPropertyChanged, IDisposable
+	public class ProjectFilesViewModel : BaseModel, IDisposable
 	{
 		private List<ProjectFileActionModel> _projectFileActions;
-
+		private List<ProjectFileActionModel> _selectedProjectFileActions;
 		private ProjectFileActionModel _selectedProjectFileAction;
 
 		public ProjectFilesViewModel()
@@ -27,6 +28,8 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			}
 		}
 
+		public IList SelectedProjectFileActions { get; set; }
+
 		public ProjectFileActionModel SelectedProjectFileAction
 		{
 			get => _selectedProjectFileAction;
@@ -39,13 +42,6 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 		public void Dispose()
 		{
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }
