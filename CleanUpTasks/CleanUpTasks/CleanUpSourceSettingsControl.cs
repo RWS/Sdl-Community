@@ -1,14 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using SDLCommunityCleanUpTasks;
 using FileDialog = SDLCommunityCleanUpTasks.Dialogs.FileDialog;
 
 namespace Sdl.Community.CleanUpTasks
 {
-	public partial class CleanUpSourceSettingsControl : UserControl, ISettingsAware<CleanUpSourceSettings>
+	public partial class CleanUpSourceSettingsControl : UserControl, ISettingsAware<CleanUpSourceSettings>,IUISettingsControl
     {
 	    public CleanUpSourceSettingsControl()
         {
