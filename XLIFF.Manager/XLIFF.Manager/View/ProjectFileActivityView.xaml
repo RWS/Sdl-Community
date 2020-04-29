@@ -21,11 +21,17 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+			<Style TargetType="{x:Type UserControl}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
+				<Setter Property="FontSize" Value="12"/>
+				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
+			</Style>
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
 		<controls:SortAwareDataGrid x:Name="MappedLanguagesGrid" 
-			          Style="{StaticResource FilesGridStyle}"
+			          Style="{StaticResource CustomGridStyle}"
 			          Margin="0" 			                           
 					  ItemsSource="{Binding ProjectFileActivities, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                
 					  SelectedValue="{Binding SelectedProjectFileActivity, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"

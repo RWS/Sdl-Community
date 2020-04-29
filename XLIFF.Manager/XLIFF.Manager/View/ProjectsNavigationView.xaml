@@ -4,9 +4,74 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.XLIFF.Manager.View"
+             xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.ViewModel"
+             xmlns:controls="clr-namespace:Sdl.Community.XLIFF.Manager.Controls"
+             xmlns:metroControls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-		
-    </Grid>
+             d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignInstance viewModel:ProjectsNavigationViewModel}">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+			<Style TargetType="{x:Type UserControl}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
+				<Setter Property="FontSize" Value="12"/>
+				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
+			</Style>
+
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Border BorderBrush="Gainsboro" BorderThickness="1">
+		<Grid Margin="2">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+
+			<Grid Margin="2" Grid.Row="0">
+				<TextBox metroControls:TextBoxHelper.UseFloatingWatermark="False"  
+				         metroControls:TextBoxHelper.Watermark="Filter Projects..."
+				         metroControls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(metroControls:TextBoxHelper.HasText), Mode=OneWay}"											             
+				         Text="{Binding FilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 VerticalContentAlignment="Center"
+				         IsEnabled="True"/>
+			</Grid>
+
+
+			<controls:SortAwareDataGrid x:Name="MappedLanguagesGrid" Grid.Row="1"
+			          Style="{StaticResource CustomGridStyle}"
+			          Margin="2,0,2,0" 			                           
+					  ItemsSource="{Binding ProjectInfoModels, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+		              SelectedItemsList="{Binding SelectedProjectInfoModels, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+					  FontSize="12"
+					  BorderBrush="#C1C0C0"
+					  FontFamily="Segoe UI"
+					  GridLinesVisibility="Horizontal"
+					  VerticalScrollBarVisibility="Auto"
+					  HorizontalScrollBarVisibility="Disabled"
+					  CanUserDeleteRows="False">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Name" CanUserSort="True" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+				                    ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="2*"/>
+					<DataGridTextColumn Header="Created" CanUserSort="True" Binding="{Binding Created, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+									    ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="1*"/>
+				</DataGrid.Columns>
+			</controls:SortAwareDataGrid>
+
+			<Grid Grid.Row="2" HorizontalAlignment="Right" Margin="2,0,2,0">
+				<Label Content="{Binding StatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
+		</Grid>
+	</Border>
 </UserControl>

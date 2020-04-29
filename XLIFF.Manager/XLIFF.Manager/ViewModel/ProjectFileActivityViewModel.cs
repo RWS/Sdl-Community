@@ -9,7 +9,7 @@ using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
-	public class ProjectFileActivityViewModel: INotifyPropertyChanged, IDisposable
+	public class ProjectFileActivityViewModel: BaseModel, IDisposable
 	{
 		private List<ProjectFileActivityModel> _projectFileActivities;
 		private ProjectFileActivityModel _selectedProjectFileActivity;
@@ -40,13 +40,6 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 		public void Dispose()
 		{
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}		
 	}
 }

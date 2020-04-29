@@ -107,6 +107,7 @@
     <Compile Include="Controls\ProjectsNavigationViewControl.Designer.cs">
       <DependentUpon>ProjectsNavigationViewControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Controls\ToolWindowsControl.xaml.cs">
       <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
@@ -115,9 +116,11 @@
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\WindowsControlUtils.cs" />
-    <Compile Include="Model\Enumerators.cs" />
+    <Compile Include="Model\BaseModel.cs" />
+    <Compile Include="Common\Enumerators.cs" />
     <Compile Include="Model\ProjectFileActionModel.cs" />
     <Compile Include="Model\ProjectFileActivityModel.cs" />
+    <Compile Include="Model\ProjectInfoModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
