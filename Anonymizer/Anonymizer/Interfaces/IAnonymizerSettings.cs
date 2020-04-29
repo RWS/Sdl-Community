@@ -8,10 +8,15 @@ namespace Sdl.Community.projectAnonymizer.Interfaces
 		BindingList<RegexPattern> RegexPatterns { get; set; }
 		string EncryptionKey { get; set; }
 		bool DefaultListAlreadyAdded { get; set; }
-		BindingList<RegexPattern> GetRegexPatterns();
-		string GetEncryptionKey();
+
 		bool SelectAll { get; set; }
+
 		bool EnableAll { get; set; }
+
 		bool EncryptAll { get; set; }
+
+		BindingList<RegexPattern> GetRegexPatterns();
+
+		string GetEncryptionKey();
 	}
 }

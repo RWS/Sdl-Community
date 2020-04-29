@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.InSource
 {
-    class ProjectQuoteItem
+    public class ProjectQuoteItem
     {
         public string Category
         {

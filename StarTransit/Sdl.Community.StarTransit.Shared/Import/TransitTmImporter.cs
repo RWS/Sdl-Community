@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.LanguagePlatform.Core.Tokenization;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -13,31 +15,21 @@ namespace Sdl.Community.StarTransit.Shared.Import
 	{
 		#region Private Fields
 		private readonly IFileTypeManager _fileTypeManager;
-		private readonly CultureInfo _sourceCulture;
-		private readonly CultureInfo _targetCulture;
-		private readonly bool _createTm;
-		private FileBasedTranslationMemory _fileBasedTM;
+		private readonly FileBasedTranslationMemory _fileBasedTM;
 		#endregion
 
 		#region Constructors
-		public TransitTmImporter(CultureInfo sourceCulture,
-			CultureInfo targetCulture,
-			bool createTm,
-			IFileTypeManager fileTypeManager,
-			string studioTranslationMemory)
+		public TransitTmImporter(LanguagePair pair,	IFileTypeManager fileTypeManager, string studioTranslationMemory)
 		{
-			_sourceCulture = sourceCulture;
-			_targetCulture = targetCulture;
-			_createTm = createTm;
 			_fileTypeManager = fileTypeManager;
 
-			if (_createTm)
+			if (pair.CreateNewTm)
 			{
 				_fileBasedTM = new FileBasedTranslationMemory(
 					studioTranslationMemory,
 					string.Empty,
-					_sourceCulture,
-					_targetCulture,
+					pair.SourceLanguage,
+					pair.TargetLanguage,
 					GetFuzzyIndexes(),
 					GetRecognizers(),
 					TokenizerFlags.DefaultFlags,
@@ -45,24 +37,19 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			}
 			else
 			{
-				_fileBasedTM = new FileBasedTranslationMemory(studioTranslationMemory);
+				_fileBasedTM = new FileBasedTranslationMemory(pair.TmPath);
 			}
 		}
 
-		public TransitTmImporter(
-			string projectPath,
-			CultureInfo sourceLanguage,
-			CultureInfo targetLanguage,
-			string fileName,
-			IFileTypeManager fileTypeManager)
+		public TransitTmImporter(IFileTypeManager fileTypeManager, LanguagePair pair, string projectPath, string fileName)
 		{
 			_fileTypeManager = fileTypeManager;
 
 			_fileBasedTM = new FileBasedTranslationMemory(
 						Path.Combine(projectPath, string.Concat(fileName, ".sdltm")),
 						string.Concat(fileName, " description"),
-						sourceLanguage,
-						targetLanguage,
+						pair.SourceLanguage,
+						pair.TargetLanguage,
 						GetFuzzyIndexes(),
 				 		GetRecognizers(),
 						TokenizerFlags.DefaultFlags,
@@ -82,12 +69,18 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		#region Public Methods
 		public void ImportStarTransitTm(string starTransitTm)
 		{
-			string sdlXliffFullPath = CreateTemporarySdlXliff(starTransitTm);
-
-			ImportSdlXliffIntoTm(sdlXliffFullPath);
+			try
+			{
+				var sdlXliffFullPath = CreateTemporarySdlXliff(starTransitTm);
+				ImportSdlXliffIntoTm(sdlXliffFullPath);
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"ImportStarTransitTm method: {ex.Message}\n {ex.StackTrace}");
+			}
 		}
-		
-		public TranslationProviderReference GetTranslationProviderReference()
+
+	    public TranslationProviderReference GetTranslationProviderReference()
 		{
 			return new TranslationProviderReference(_fileBasedTM.FilePath, true);
 		}
@@ -96,19 +89,25 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		#region Private Methods
 		private void ImportSdlXliffIntoTm(string sdlXliffFullPath)
 		{
-			var tmImporter = new TranslationMemoryImporter(_fileBasedTM.LanguageDirection);
-			var importSettings = new ImportSettings()
+			try
 			{
-				IsDocumentImport = false,
-				CheckMatchingSublanguages = false,
-				IncrementUsageCount = false,
-				NewFields = ImportSettings.NewFieldsOption.Ignore,
-				PlainText = false,
-				ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew
-			};
-			tmImporter.ImportSettings = importSettings;
-
-			tmImporter.Import(sdlXliffFullPath);
+				var tmImporter = new TranslationMemoryImporter(_fileBasedTM.LanguageDirection);
+				var importSettings = new ImportSettings()
+				{
+					IsDocumentImport = false,
+					CheckMatchingSublanguages = false,
+					IncrementUsageCount = false,
+					NewFields = ImportSettings.NewFieldsOption.Ignore,
+					PlainText = false,
+					ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew
+				};
+				tmImporter.ImportSettings = importSettings;
+				tmImporter.Import(sdlXliffFullPath);
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"ImportSdlXliffIntoTm method: {ex.Message}\n {ex.StackTrace}");
+			}
 		}
 
 		/// <summary>
@@ -120,19 +119,22 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		/// <returns></returns>
 		private string CreateTemporarySdlXliff(string starTransitTM)
 		{
-			var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(starTransitTM));
+			try
+			{
+				var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(starTransitTM));
+				var generatedXliffName = string.Format("{0}{1}", Path.GetFileNameWithoutExtension(starTransitTM), ".sdlxliff");
 
-			var generatedXliffName = string.Format("{0}{1}",
-				Path.GetFileNameWithoutExtension(starTransitTM), ".sdlxliff");
+				var sdlXliffFullPath = Path.Combine(pathToExtractFolder, generatedXliffName);
+				var converter = _fileTypeManager.GetConverterToDefaultBilingual(starTransitTM, sdlXliffFullPath, null);
 
-			var sdlXliffFullPath = Path.Combine(pathToExtractFolder, generatedXliffName);
-
-			var converter = _fileTypeManager.GetConverterToDefaultBilingual(starTransitTM,
-				sdlXliffFullPath,
-				null);
-
-			converter.Parse();
-			return sdlXliffFullPath;
+				converter.Parse();
+				return sdlXliffFullPath;
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"CreateTemporarySdlXliff method: {ex.Message}\n {ex.StackTrace}");
+			}
+			return string.Empty;
 		}
 
 		/// <summary>
@@ -147,18 +149,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			{
 				Directory.CreateDirectory(pathToExtractFolder);
 			}
-
 			return pathToExtractFolder;
-		}
-
-		private string GetTemporarySdlXliffPath(string tmFilePath)
-		{
-			var intermediateName =
-			   tmFilePath.Substring(tmFilePath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
-
-			var tmName = intermediateName.Substring(0, intermediateName.LastIndexOf(".", StringComparison.Ordinal));
-
-			return tmName;
 		}
 		
 		private static FuzzyIndexes GetFuzzyIndexes()

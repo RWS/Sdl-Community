@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemory;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.Community.ControlledMTProviders.Integration;
 using Sdl.Community.ControlledMTProviders.Provider.UI;
+using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ControlledMTProviders.Provider
 {
-    [TranslationProviderWinFormsUi(
+	[TranslationProviderWinFormsUi(
         Id = "Sdl.Community.ControlledMTProvidersWinFormsUI",
         Name = "ControledMTProviders",
         Description = "ControledMTProviders")]
@@ -51,8 +48,6 @@ namespace Sdl.Community.ControlledMTProviders.Provider
             var controlledMTProvider = (ControlledMtProvidersProvider)translationProvider;
 
             List<ITranslationProvider> mtProviders = new List<ITranslationProvider>();
-
-            //move this to mmtProvider
           
             using (MTProvidersDialog pd = new MTProvidersDialog(controlledMTProvider))
             {
@@ -66,14 +61,11 @@ namespace Sdl.Community.ControlledMTProviders.Provider
                 var mtProvidersUi = pd.SelectedTranslationProvidersWinformsUI;
                 if (mtProvidersUi.Count == 0) return false;
 
-                foreach (var mtProviderUi in mtProvidersUi)
-                {
-                    var innerProviders = mtProviderUi.Browse(owner, languagePairs, credentialStore);
-                    if (innerProviders != null && innerProviders.All(x => x.TranslationMethod == TranslationMethod.MachineTranslation))
-                    {
-                        mtProviders.AddRange(innerProviders);
-                    }
-                }
+				foreach (var mtProviderUi in mtProvidersUi)
+				{
+					var innerProviders = mtProviderUi.Browse(owner, languagePairs, credentialStore);
+					mtProviders.AddRange(innerProviders);
+				}
             }
             controlledMTProvider.MtProviders = mtProviders;
             return true;

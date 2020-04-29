@@ -1,10 +1,6 @@
 ﻿using Sdl.Desktop.IntegrationApi;
-using Sdl.ProjectAutomation.AutomaticTasks;
 
 namespace ExportToExcel
 {
-    public class ExportToExcelSettingsPage:DefaultSettingsPage<ExportToExcelSettingsControl, GeneratorSettings>
-    {
-       
-    }
+	public class ExportToExcelSettingsPage : DefaultSettingsPage<ExportToExcelSettingsControl, GeneratorSettings> { }
 }

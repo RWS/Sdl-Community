@@ -136,7 +136,7 @@
     <value>User decided to skip {0} translation memory.</value>
   </data>
   <data name="TaskName" xml:space="preserve">
-    <value>Export for Trados 2017</value>
+    <value>Export for Trados 2019</value>
   </data>
   <data name="TMExportFinished" xml:space="preserve">
     <value>Translation memory {0} export finished</value>

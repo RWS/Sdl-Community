@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel;
 
 namespace Sdl.Community.TMOptimizerLib
 {
-    public class TmxFile : INotifyPropertyChanged
+	public class TmxFile : INotifyPropertyChanged
     {
         public TmxFile(string filePath)
         {
@@ -90,10 +86,7 @@ namespace Sdl.Community.TMOptimizerLib
 
         private void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
     }
 }

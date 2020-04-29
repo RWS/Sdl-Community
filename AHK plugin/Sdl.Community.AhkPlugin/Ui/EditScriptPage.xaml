@@ -37,21 +37,21 @@
 
 		<TextBox Grid.Column="0" Style="{DynamicResource DescriptionBox}" Grid.Row="0" Grid.ColumnSpan="2" >From this page you can edit the script selected on previous page. If you want to 
 		disable the script after checking the box please use ';' to comment each line from script. To enable it uncheck the box and  remove ';' character.  </TextBox>
-		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Content="Back" Margin="10,0,0,25"></Button>
+		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Content="Back" Margin="10,0,0,25"/>
 		<StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Content="Save script" Command="{Binding SaveCommand}"></Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Content="Save script" Command="{Binding SaveCommand}"/>
 			</StackPanel>
 		</StackPanel>
 
-		<TextBlock Grid.Column="0" Grid.Row="2" Style="{DynamicResource TextBlockColor}" Text="{Binding Message}" Foreground="{Binding MessageColor}" Visibility="{Binding MessageVisibility }" Margin="10,0,0,10"></TextBlock>
+		<TextBlock Grid.Column="0" Grid.Row="2" Style="{DynamicResource TextBlockColor}" Text="{Binding Message}" Foreground="{Binding MessageColor}" Visibility="{Binding MessageVisibility }" Margin="10,0,0,10"/>
 		<CheckBox Grid.Column="0" Grid.Row="3"  IsChecked= "{Binding IsDisabled,UpdateSourceTrigger=PropertyChanged}" Foreground="#3D9DAA" Margin="10,0,0,10">Is disabled script</CheckBox>
 		<!--text block area-->
-		<TextBlock Grid.Column="0" Grid.Row="4" Style="{DynamicResource TextBlockColor}" Text="Script name*"></TextBlock>
-		<TextBox Name="ScriptNameTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptName}" Grid.Column="1" Grid.Row="4" Height="40"></TextBox>
-		<TextBlock Grid.Column="0" Grid.Row="5" Style="{DynamicResource TextBlockColor}" Text="Description*" Grid.RowSpan="2"></TextBlock>
-		<TextBox Name="DescriptionTextBlock" Style="{DynamicResource TextBoxStyle}"  Text="{Binding ScriptDescription}" Grid.Column="1" Grid.Row="5" Height="70" ></TextBox>
-		<TextBlock   Grid.Column="0" Grid.Row="6" Style="{DynamicResource TextBlockColor}" Text="Script content*"></TextBlock>
-		<TextBox Name="SctiptContentTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptContent}" Grid.Column="1" Grid.Row="6" Height="150"></TextBox>
+		<TextBlock Grid.Column="0" Grid.Row="4" Style="{DynamicResource TextBlockColor}" Text="Script name*"/>
+		<TextBox Name="ScriptNameTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptName}" Grid.Column="1" Grid.Row="4" Height="40"/>
+		<TextBlock Grid.Column="0" Grid.Row="5" Style="{DynamicResource TextBlockColor}" Text="Description*" Grid.RowSpan="2"/>
+		<TextBox Name="DescriptionTextBlock" Style="{DynamicResource TextBoxStyle}"  Text="{Binding ScriptDescription}" Grid.Column="1" Grid.Row="5" Height="70" />
+		<TextBlock   Grid.Column="0" Grid.Row="6" Style="{DynamicResource TextBlockColor}" Text="Script content*"/>
+		<TextBox Name="SctiptContentTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptContent}" Grid.Column="1" Grid.Row="6" Height="150"/>
 	</Grid>
 </UserControl>

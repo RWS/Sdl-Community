@@ -3,39 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
-             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+			 xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.Resources>
-		<Thickness x:Key="ControlMargin">0 5 0 0</Thickness>
-		<ResourceDictionary x:Key="StyleResources">
-			<Style x:Key="NavigationButtonStyle" TargetType="{x:Type ListViewItem}">
-				<Setter Property="Foreground" Value="#FF0B6266" />
-                <Setter Property="FontSize" Value="18.667" />
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="Cursor" Value="Hand" />
-                <Setter Property="Margin" Value="10,10,0,0" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ListViewItem}">
-                            <ContentPresenter />
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsSelected" Value="true">
-                        <Setter Property="Foreground" Value="#3EA691" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\UIHelpers\ButtonsStyle.xaml"/>
+	    <ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UIHelpers\MetroStyle.xaml"/>
+	            <ResourceDictionary Source="..\UIHelpers\ButtonsStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
+		</ResourceDictionary>
+	</UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
@@ -49,16 +27,15 @@
                 <Setter Property="Margin" Value="0,10,0,0"/>
             </Style>
         </Grid.Resources>
-        <ListView x:Name="listView"
+        <ListView 
                 Margin="0"
                 Background="White"
                 BorderBrush="{x:Null}"
                 BorderThickness="0"
                 SelectedItem="{Binding SelectedItem}"
-                ItemContainerStyle="{DynamicResource NavigationButtonStyle}"  
+                ItemContainerStyle="{DynamicResource NavigationButtonStyle2}"  
                 SelectionMode="Single"                
-                ItemsSource ="{Binding LanguagePairs}" 
-                   SelectedIndex="{Binding SelectedIndex}">
+                ItemsSource ="{Binding LanguagePairs}" SelectedIndex="{Binding SelectedIndex}">
             <ListView.ItemTemplate>
                 <ItemContainerTemplate>
                     <TextBlock Text="{Binding PairName }" FontSize="14" Margin="10,10,10,10" />
@@ -69,34 +46,37 @@
             <StackPanel  >
                 <Grid VerticalAlignment="Stretch">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50"></RowDefinition>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="60"></RowDefinition>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="60"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"></ColumnDefinition>
-                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,10,0,0" FontSize="13" FontWeight="DemiBold"></TextBlock>
-					<StackPanel Grid.Row="1" Margin="20,20,0,0">
-						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="{StaticResource ControlMargin}" x:Name="None" Content="None" GroupName="1" IsChecked="{Binding IsNoneChecked}"  Command="{Binding SetBtnNameCommand}"/>
-						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="{StaticResource ControlMargin}" x:Name="Create"  Content="Create TM" GroupName="1"  IsChecked="{Binding IsCreateChecked}"  Command="{Binding SetBtnNameCommand}"/>
-						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="{StaticResource ControlMargin}" x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"/>
+					<StackPanel Grid.Row="1" Margin="20,20,0,0"  Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="373">
+						<RadioButton Style="{DynamicResource MetroRadioButton}" Margin="0,5,0,0" x:Name="None" Content="None" GroupName="1" IsChecked="{Binding IsNoneChecked}"  Command="{Binding SetBtnNameCommand}"/>
+						<StackPanel Orientation="Horizontal">
+							<RadioButton Style="{DynamicResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Create"  Content="Create TM" GroupName="1"  IsChecked="{Binding IsCreateChecked}"  Command="{Binding SetBtnNameCommand}"/>
+							<CheckBox Style="{DynamicResource MetroCheckBox}" Content="Import machine translation" ToolTip="Imports any existing Machine Translation generated by Transit into a separate Translation Memory" IsChecked="{Binding IsImportMTChecked}" Command="{Binding ImportMTCommand}" Visibility="{Binding ImportMTVisible}" Margin="20,0,0,0"/>
+						</StackPanel>
+						<RadioButton Style="{DynamicResource MetroRadioButton}" Margin="0,5,0,0" x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"/>
                     </StackPanel>
-                    <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}" Grid.Row="1" Grid.Column="1"
-							Width="auto" Height="auto" Margin="0,50,123,0" Visibility="{Binding Visibility}" Background="#FF3EA691" BorderBrush="#FF3EA691" Foreground="White">						
+					<Button Style="{DynamicResource ButtonStyleShadowless}" x:Name="CreateTmButton" Command="{Binding Command}" Content="Browse" Grid.Row="1" Grid.Column="1"
+							Width="auto" Height="30" Margin="100,70,5,5" Visibility="{Binding Visibility}" >						
 					</Button>
-                    <TextBlock Grid.Column="0" Grid.Row="2" Text="TM name:" Margin="20,15,22,15"/>
-                    <TextBox Style="{StaticResource MetroTextBox}"
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="TM name:" Margin="25,25,22,15"/>
+                    <TextBox Style="{DynamicResource MetroTextBox}"
 						Controls:TextBoxHelper.ClearTextButton="True"                
 						Controls:TextBoxHelper.IsWaitingForData="True"
 						Controls:TextBoxHelper.UseFloatingWatermark="True" 
   						Controls:TextBoxHelper.Watermark="TM name" 
-						ToolTip="TM Name" Grid.Row="2" Grid.Column="1" Width="auto" Height="40" Margin="0,0,30,0" 
+						ToolTip="{Binding TmName}" Grid.Row="2" Grid.ColumnSpan="2" Width="auto" Height="40" Margin="90,15,5,0" 
 						    Text="{Binding TmName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" IsEnabled="{Binding IsEnabled}"
 						x:Name="TmName" TextWrapping="Wrap" />
-                    <TextBlock Grid.ColumnSpan="2" Margin="20" Foreground="Red" Name="TmLanguageValidation" Visibility="{Binding TmMessage}" Grid.Column="0" Grid.Row="3">Please select a Translation Memory that matches the languages in this project.</TextBlock>
+                    <TextBlock Grid.ColumnSpan="2" Margin="20" Foreground="Red" Name="TmLanguageValidation" Visibility="{Binding TmMessage}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="3">Please select a Translation Memory that matches the languages in this project.</TextBlock>
                 </Grid>
             </StackPanel>
         </Border>

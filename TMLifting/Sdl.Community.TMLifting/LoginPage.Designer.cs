@@ -32,7 +32,6 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.serverNameTxtBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.helpBtnServerBased = new System.Windows.Forms.Button();
             this.authentication_box = new System.Windows.Forms.GroupBox();
             this.passwordTxtBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -48,7 +47,6 @@
             // 
             this.panel3.Controls.Add(this.serverNameTxtBox);
             this.panel3.Controls.Add(this.label4);
-            this.panel3.Controls.Add(this.helpBtnServerBased);
             this.panel3.Controls.Add(this.authentication_box);
             this.panel3.Controls.Add(this.btnOkServerBased);
             this.panel3.Controls.Add(this.cancelBtnServerBased);
@@ -74,15 +72,6 @@
             this.label4.Size = new System.Drawing.Size(82, 13);
             this.label4.TabIndex = 12;
             this.label4.Text = "Server Address:";
-            // 
-            // helpBtnServerBased
-            // 
-            this.helpBtnServerBased.Location = new System.Drawing.Point(372, 193);
-            this.helpBtnServerBased.Name = "helpBtnServerBased";
-            this.helpBtnServerBased.Size = new System.Drawing.Size(75, 23);
-            this.helpBtnServerBased.TabIndex = 11;
-            this.helpBtnServerBased.Text = "Help";
-            this.helpBtnServerBased.UseVisualStyleBackColor = true;
             // 
             // authentication_box
             // 
@@ -133,7 +122,7 @@
             // 
             // btnOkServerBased
             // 
-            this.btnOkServerBased.Location = new System.Drawing.Point(210, 193);
+            this.btnOkServerBased.Location = new System.Drawing.Point(291, 193);
             this.btnOkServerBased.Name = "btnOkServerBased";
             this.btnOkServerBased.Size = new System.Drawing.Size(75, 23);
             this.btnOkServerBased.TabIndex = 3;
@@ -143,7 +132,7 @@
             // 
             // cancelBtnServerBased
             // 
-            this.cancelBtnServerBased.Location = new System.Drawing.Point(291, 193);
+            this.cancelBtnServerBased.Location = new System.Drawing.Point(372, 193);
             this.cancelBtnServerBased.Name = "cancelBtnServerBased";
             this.cancelBtnServerBased.Size = new System.Drawing.Size(75, 23);
             this.cancelBtnServerBased.TabIndex = 10;
@@ -174,7 +163,6 @@
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.TextBox serverNameTxtBox;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Button helpBtnServerBased;
 		private System.Windows.Forms.GroupBox authentication_box;
 		private System.Windows.Forms.TextBox passwordTxtBox;
 		private System.Windows.Forms.Label label3;

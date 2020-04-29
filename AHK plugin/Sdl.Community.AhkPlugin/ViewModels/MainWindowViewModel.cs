@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Sdl.Community.AhkPlugin.Annotations;
-using Sdl.Community.AhkPlugin.Helpers;
-using Sdl.Community.AhkPlugin.Model;
-using Sdl.Community.AhkPlugin.Ui;
+﻿using Sdl.Community.AhkPlugin.Model;
 
 namespace Sdl.Community.AhkPlugin.ViewModels
 {

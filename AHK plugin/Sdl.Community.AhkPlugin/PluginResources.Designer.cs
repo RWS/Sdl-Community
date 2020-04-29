@@ -19,7 +19,7 @@ namespace Sdl.Community.AhkPlugin {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -90,26 +90,62 @@ namespace Sdl.Community.AhkPlugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to #SingleInstance force
-        ///FileGetTime ScriptStartModTime, %A_ScriptFullPath%
-        ///SetTimer CheckScriptUpdate, 100, 0x7FFFFFFF ; 100 ms, highest priority
+        ///   Looks up a localized string similar to SetTimer,UPDATEDSCRIPT,1000
         ///
-        ///CheckScriptUpdate() {
-        ///    global ScriptStartModTime
-        ///    FileGetTime curModTime, %A_ScriptFullPath%
-        ///    If (curModTime &lt;&gt; ScriptStartModTime) {
-        ///        Loop
-        ///        {
-        ///            reload
-        ///            Sleep 300 ; ms
-        ///            MsgBox 0x2, %A_ScriptName%, Reload failed. ; 0x2 = Abort/Retry/Ignore
-        ///            IfMsgBox Abort
-        ///                ExitApp
-        ///        [rest of string was truncated]&quot;;.
+        ///UPDATEDSCRIPT:
+        ///FileGetAttrib,attribs,%A_ScriptFullPath%
+        ///IfInString,attribs,A
+        ///{
+        ///FileSetAttrib,-A,%A_ScriptFullPath%
+        ///SplashTextOn,,,Updated script,
+        ///Sleep,500
+        ///Reload
+        ///}
+        ///Return
+        ///
+        ///
+        ///
+        ///.
         /// </summary>
         internal static string reload {
             get {
                 return ResourceManager.GetString("reload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        internal static string WindowsControl_Close {
+            get {
+                return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximize.
+        /// </summary>
+        internal static string WindowsControl_Maximize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Maximize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        internal static string WindowsControl_Minimize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore.
+        /// </summary>
+        internal static string WindowsControl_Restore {
+            get {
+                return ResourceManager.GetString("WindowsControl_Restore", resourceCulture);
             }
         }
     }

@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DSOFile;
 using Sdl.Community.AhkPlugin.Model;
-using Sdl.Community.AhkPlugin.Repository.DataBase;
 
 namespace Sdl.Community.AhkPlugin.Helpers
 {
 	public static class ProcessScript
 	{
-		private static readonly MasterScriptDb MasterScriptDb = new MasterScriptDb();
+		private static readonly DbContext DbContext = new DbContext();
 		public static List<KeyValuePair<string, Script>> ReadImportedScript(string path)
 		{
 			var scripts = new List<KeyValuePair<string, Script>>();
@@ -150,14 +148,6 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			{
 				if (!string.IsNullOrWhiteSpace(content))
 				{
-					//if (script.Active)
-					//{
-					//	scriptLines.Add(content);
-					//}
-					//else
-					//{
-					//	scriptLines.Add("; " + content);
-					//}
 					scriptLines.Add(content);
 				}
 			}
@@ -209,7 +199,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			//remove spaces from content
 			var scriptText = script.Text;
 			scriptText = Regex.Replace(scriptText, @"\s+", " ");
-			var savedScripts = await MasterScriptDb.GetScriptsFromMaster();
+			var savedScripts = await DbContext.GetScriptsFromMaster();
 			foreach (var loadedScript in savedScripts)
 			{
 				var loadedScriptText = loadedScript.Text;
@@ -225,7 +215,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 
 		public static async void SaveScriptToMaster(Script script)
 		{
-			var masterScript = await MasterScriptDb.GetMasterScript();
+			var masterScript = await DbContext.GetMasterScript();
 			var scriptToBeUpdated = masterScript.Scripts.FirstOrDefault(s => s.ScriptId.Equals(script.ScriptId));
 			if (scriptToBeUpdated != null)
 			{
@@ -233,7 +223,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 				scriptToBeUpdated.Text = script.Text;
 				scriptToBeUpdated.RowColor = script.RowColor;
 				scriptToBeUpdated.ScriptStateAction = script.ScriptStateAction;
-				await MasterScriptDb.UpdateScript(masterScript);
+				await DbContext.UpdateScript(masterScript);
 				//write masterscript on the disk
 				ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
 			}

@@ -1,21 +1,22 @@
-﻿using Microsoft.Win32.TaskScheduler;
+﻿using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using Microsoft.Win32.TaskScheduler;
 using Sdl.Community.BackupService.Helpers;
 using Sdl.Community.BackupService.Models;
-using System;
-using System.IO;
 using static Sdl.Community.BackupService.Helpers.Enums;
-using System.Globalization;
-using System.Linq;
 
 namespace Sdl.Community.BackupService
 {
 	public class Service
-	{ 
+	{
+		public static readonly Log Log = Log.Instance;
+
 		public JsonRequestModel GetJsonInformation()
 		{
-			Persistence persistence = new Persistence();
-			JsonRequestModel result = persistence.ReadFormInformation();
-
+			var persistence = new Persistence();
+			var result = persistence.ReadFormInformation();
 			return result;
 		}
 
@@ -30,7 +31,7 @@ namespace Sdl.Community.BackupService
 			if (jsonRequestModel != null && changeSettingsModelItem != null)
 			{
 				// Create a new task definition for the local machine and assign properties
-				TaskDefinition td = TaskService.Instance.NewTask();
+				var td = TaskService.Instance.NewTask();
 				td.RegistrationInfo.Description = "Backup files";
 
 				if (changeSettingsModelItem.IsPeriodicOptionChecked)
@@ -56,14 +57,14 @@ namespace Sdl.Community.BackupService
 			}
 			AddTrigger(tr, td, backupName, trimmedBackupName);
 		}
-			
+
 		// Add trigger which executes the backup files console application.
 		private void AddTrigger(Trigger trigger, TaskDefinition td, string backupName, string trimmedBackupName)
 		{
-			using (TaskService ts = new TaskService())
+			using (var ts = new TaskService())
 			{
 				td.Triggers.Add(trigger);
-				
+
 				td.Actions.Add(new ExecAction(Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe"), trimmedBackupName));
 
 				try
@@ -72,7 +73,7 @@ namespace Sdl.Community.BackupService
 				}
 				catch (Exception ex)
 				{
-					MessageLogger.LogFileMessage(ex.Message);
+					Log.Logger.Error($"{ Constants.AddTrigger} {ex.Message} \n {ex.StackTrace}");
 				}
 			}
 		}
@@ -83,7 +84,7 @@ namespace Sdl.Community.BackupService
 			var periodicBackupModel = jsonRequestModel?.PeriodicBackupModelList?.FirstOrDefault(p => p.BackupName.Equals(backupName));
 			if (periodicBackupModel != null)
 			{
-				DateTime atScheduleTime = DateTime.Parse(periodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
+				var atScheduleTime = DateTime.Parse(periodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
 				tr.StartBoundary = periodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
 
 				SetupRealDateTime(tr, periodicBackupModel.IsNowPressed);

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AA2AF093-976A-431F-A54B-C86F63C00F5F}"
 	ProjectSection(SolutionItems) = preProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TMOptimizer.Integration", "Sdl.Community.TMOptimizer.Integration\Sdl.Community.TMOptimizer.Integration.csproj", "{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TMOptimizer.Control", "Sdl.Community.TMOptimizer.Control\Sdl.Community.TMOptimizer.Control.csproj", "{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sdl.Community.TMOptimizer.Installer", "Sdl.Community.TMOptimizer.Installer\Sdl.Community.TMOptimizer.Installer.wixproj", "{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,11 +77,24 @@ Global
 		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Release|x86.ActiveCfg = Release|Any CPU
 		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Release|x86.Build.0 = Release|Any CPU
+		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Debug|x86.ActiveCfg = Debug|x86
+		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Debug|x86.Build.0 = Debug|x86
+		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Release|Any CPU.ActiveCfg = Release|x86
+		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Release|Mixed Platforms.Build.0 = Release|x86
+		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Release|x86.ActiveCfg = Release|x86
+		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1D6F8C17-5E28-4A9B-947F-9E12D9036B79} = {AA2AF093-976A-431F-A54B-C86F63C00F5F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A768FF51-78B0-43AC-AF70-8789637C683C}
 	EndGlobalSection
 EndGlobal

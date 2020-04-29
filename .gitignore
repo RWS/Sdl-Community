@@ -208,3 +208,7 @@ packaging/
 .fake/
 sh.exe.stackdump
 *.bkp
+IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_REMOTE_17888.xml
+IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_BASE_17888.xml
+IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_BACKUP_17888.xml
+IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_LOCAL_17888.xml

@@ -130,4 +130,16 @@
   <data name="reload" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\reload.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="WindowsControl_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WindowsControl_Maximize" xml:space="preserve">
+    <value>Maximize</value>
+  </data>
+  <data name="WindowsControl_Minimize" xml:space="preserve">
+    <value>Minimize</value>
+  </data>
+  <data name="WindowsControl_Restore" xml:space="preserve">
+    <value>Restore</value>
+  </data>
 </root>

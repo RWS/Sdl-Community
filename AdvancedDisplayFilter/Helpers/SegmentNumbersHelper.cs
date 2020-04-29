@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
+using Sdl.Community.AdvancedDisplayFilter.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using static System.Int32;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
+namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public static class SegmentNumbersHelper
 	{
@@ -28,6 +26,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			{
 				id = Parse(segmentId);
 			}
+
 			return id % 2 == 0;
 		}
 
@@ -46,6 +45,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			{
 				id = Parse(segmentId);
 			}
+
 			return id % 2 == 1;
 		}
 		
@@ -91,6 +91,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					isInRange = true;
 				}
 			}
+
 			return isInRange;
 		}
 
@@ -104,6 +105,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					exactValuesList.Add(Parse(id));
 				}
 			}
+
 			return exactValuesList;
 		}
 	
@@ -126,6 +128,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					segmentsRangeList.Add(segmentRange);
 				}
 			}
+
 			return segmentsRangeList;
 		}
 
@@ -146,8 +149,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					//is not split segment
 					return false;
 				}
+
 				return true;
 			}
+
 			return false;
 		}
 
@@ -175,6 +180,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				{
 					rowId = match[0].Value;
 				}
+
 				foreach (var segment in segments)
 				{
 					var currentSegmentId = segment.Source.Properties.Id.Id;
@@ -184,17 +190,20 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					{
 						currentSegmentId = currentSegmentMatch[0].Value;
 					}
+
 					//count how many times same id appears in segments id
 					if (rowId.Equals(currentSegmentId))
 					{
 						count++;
 					}
+
 					//this means is split segment
 					if (count.Equals(2))
 					{
 						return false;
 					}
 				}
+
 				if (count.Equals(1))
 				{
 					return true;
@@ -214,11 +223,13 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 						//if is split segment the id has following form "12 a"
 						nextSegmentId = rowId.Split(' ')[0];
 					}
+
 					//the difference between ids is 1 if the segments are not merged
 					if (currentSegment != null && Parse(nextSegmentId) - Parse(currentSegment.Properties.Id.Id) > 1)
 					{
 						return true;
 					}
+
 					if (mergedAcross)
 					{
 						//if a segment is followed by a empty and locked segment it means the segment is merged across paragraph
@@ -232,10 +243,8 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 						{
 							return true;
 						}
-
 					}
-				}
-				
+				}				
 			}
 			return  false;
 		}
@@ -256,8 +265,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				var targetText = textVisitor.GetText(segmentPair.Target);
 
 				var isEqual = string.Compare(sourceText, targetText, !caseSensitive);
+
 				return isEqual.Equals(0);
 			}
+
 			return false;
 		}
 	}

@@ -5,10 +5,10 @@ namespace Sdl.Community.YourProductivity.UI
 {
     public partial class ProductivityForm : Form
     {
-        public ProductivityForm(ProductivityService productivityService, TwitterShareService twitterShare)
+        public ProductivityForm(ProductivityService productivityService)
         {
             InitializeComponent();
-            productivityControl.Initialize(productivityService, twitterShare);
+            productivityControl.Initialize(productivityService);
         }
 
     }

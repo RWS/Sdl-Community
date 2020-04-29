@@ -1,21 +1,18 @@
-﻿using Sdl.Core.Globalization;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows;
+using Sdl.Community.TMOptimizerLib;
+using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System.Globalization;
-using System.Diagnostics;
-using Sdl.Community.TMOptimizerLib;
 
 namespace Sdl.Community.TMOptimizer
 {
-    public class TMCleanerViewModel : INotifyPropertyChanged
+	public class TMCleanerViewModel : INotifyPropertyChanged
     {
         public TMCleanerViewModel()
         {
@@ -139,19 +136,19 @@ namespace Sdl.Community.TMOptimizer
 
         private ProcessingState _processingState;
         public ProcessingState ProcessingState
-        {
-            get
-            {
-                return _processingState;
-        }
-            set
-            {
-                _processingState = value;
-                OnPropertyChanged("ProcessingState");
-                OnPropertyChanged("IsProcessing");
-                OnPropertyChanged("IsCompleted");
-            }
-        }
+		{
+			get
+			{
+				return _processingState;
+			}
+			set
+			{
+				_processingState = value;
+				OnPropertyChanged("ProcessingState");
+				OnPropertyChanged("IsProcessing");
+				OnPropertyChanged("IsCompleted");
+			}
+		}
 
         public bool IsProcessing
         {
@@ -185,20 +182,17 @@ namespace Sdl.Community.TMOptimizer
 
         private void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 
         public void SelectExistingTranslationMemory()
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+           var dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.Title = "Select TM to optimize";
             dlg.DefaultExt = ".sdltm";
             dlg.Filter = "SDL Trados Studio TMs (.sdltm)|*.sdltm";
 
-            if (!String.IsNullOrEmpty(InputTranslationMemory.FilePath))
+            if (!string.IsNullOrEmpty(InputTranslationMemory.FilePath))
             {
                 dlg.FileName = InputTranslationMemory.FilePath;
             }
@@ -211,7 +205,7 @@ namespace Sdl.Community.TMOptimizer
 
         public void AddTmxInputFile()
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+			var dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.Title = "Select TMX files to clean up";
             dlg.DefaultExt = ".tmx";
             dlg.Filter = "TRADOS Workbench TMX (.tmx)|*.tmx";
@@ -225,8 +219,7 @@ namespace Sdl.Community.TMOptimizer
                 {
                     foreach (string fileName in tmxFiles)
                     {
-                        InputTmxFile tmxFile = new InputTmxFile(new TmxFile(fileName));
-
+						var tmxFile = new InputTmxFile(new TmxFile(fileName));
                         try
                         {
                             SafeAddInputTmxFile(tmxFile);
@@ -266,12 +259,12 @@ namespace Sdl.Community.TMOptimizer
 
         public void SelectNewOutputTranslationMemory()
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+			var dlg = new Microsoft.Win32.SaveFileDialog();
             dlg.Title = "Specify output TM file name";
             dlg.DefaultExt = ".sdltm";
             dlg.Filter = "SDL Trados Studio TMs (.sdltm)|*.sdltm";
 
-            if (!String.IsNullOrEmpty(NewOutputTranslationMemoryFilePath))
+            if (!string.IsNullOrEmpty(NewOutputTranslationMemoryFilePath))
             {
                 dlg.FileName = NewOutputTranslationMemoryFilePath;
             }
@@ -282,23 +275,23 @@ namespace Sdl.Community.TMOptimizer
             }
         }
 
-        public void SelectExistingOutputTranslationMemory()
-        {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.Title = "Select output TM";
-            dlg.DefaultExt = ".sdltm";
-            dlg.Filter = "SDL Trados Studio TMs (.sdltm)|*.sdltm";
+		public void SelectExistingOutputTranslationMemory()
+		{
+			var dlg = new Microsoft.Win32.OpenFileDialog();
+			dlg.Title = "Select output TM";
+			dlg.DefaultExt = ".sdltm";
+			dlg.Filter = "SDL Trados Studio TMs (.sdltm)|*.sdltm";
 
-            if (!String.IsNullOrEmpty(OutputTranslationMemory.FilePath))
-            {
-                dlg.FileName = OutputTranslationMemory.FilePath;
-            }
+			if (!string.IsNullOrEmpty(OutputTranslationMemory.FilePath))
+			{
+				dlg.FileName = OutputTranslationMemory.FilePath;
+			}
 
-            if (dlg.ShowDialog() == true)
-            {
-                OutputTranslationMemory.FilePath = dlg.FileName;
-            }
-        }
+			if (dlg.ShowDialog() == true)
+			{
+				OutputTranslationMemory.FilePath = dlg.FileName;
+			}
+		}
         
         /// <summary>
         /// Validates the input sources (TMX and optional TM)
@@ -354,10 +347,10 @@ namespace Sdl.Community.TMOptimizer
                 return false;
             }
 
-            CultureInfo sourceCulture = tm != null ? tm.LanguageDirection.SourceLanguage : InputTmxFiles.First().TmxFile.DetectInfo.SourceLanguage.CultureInfo;
-            CultureInfo targetCulture = tm != null ? tm.LanguageDirection.TargetLanguage : InputTmxFiles.First().TmxFile.DetectInfo.TargetLanguage.CultureInfo;
+            var sourceCulture = tm != null ? tm.LanguageDirection.SourceLanguage : InputTmxFiles.First().TmxFile.DetectInfo.SourceLanguage.CultureInfo;
+			var targetCulture = tm != null ? tm.LanguageDirection.TargetLanguage : InputTmxFiles.First().TmxFile.DetectInfo.TargetLanguage.CultureInfo;
 
-            foreach (InputTmxFile f in InputTmxFiles)
+            foreach (var f in InputTmxFiles)
             {
                 if (!CultureInfoExtensions.AreCompatible(f.TmxFile.DetectInfo.SourceLanguage.CultureInfo, sourceCulture)
                     || !CultureInfoExtensions.AreCompatible(f.TmxFile.DetectInfo.TargetLanguage.CultureInfo, targetCulture))
@@ -419,8 +412,8 @@ namespace Sdl.Community.TMOptimizer
 
                 try
                 {
-                    // try to access the TM
-                    FileBasedTranslationMemory tm = OutputTranslationMemory.TranslationMemory;
+					// try to access the TM
+					var tm = OutputTranslationMemory.TranslationMemory;
 
                     if (!CultureInfoExtensions.AreCompatible(tm.LanguageDirection.SourceLanguage, SourceLanguage.CultureInfo)
                      || !CultureInfoExtensions.AreCompatible(tm.LanguageDirection.TargetLanguage, TargetLanguage.CultureInfo))
@@ -441,7 +434,7 @@ namespace Sdl.Community.TMOptimizer
             else
             {
                 // new TM
-                if (String.IsNullOrEmpty(NewOutputTranslationMemoryFilePath))
+                if (string.IsNullOrEmpty(NewOutputTranslationMemoryFilePath))
                 {
                     ShowError("Select the location where the new translation memory should be created.");
                     return false;
@@ -454,7 +447,7 @@ namespace Sdl.Community.TMOptimizer
         public void CreateProcessingSteps()
         {
             ProcessingSteps.Clear();
-            ProcessingContext context = new ProcessingContext();
+			var context = new ProcessingContext();
             context.Settings = Settings;
             InputTmxFile existingTmtmxFile = null;
             if (Mode == WizardMode.CleanExistingTranslationMemory)
@@ -468,7 +461,7 @@ namespace Sdl.Community.TMOptimizer
                 ProcessingSteps.Add(new StripWorkbenchTusStep(InputTranslationMemory.TranslationMemory.Name, existingTmtmxFile.TmxFile, existingTmtmxFile.CleanTmxFile));
             }
 
-            foreach (InputTmxFile inputTmxFile in InputTmxFiles)
+            foreach (var inputTmxFile in InputTmxFiles)
             {
                 // clean TMX
                 inputTmxFile.CleanTmxFile = new TmxFile(context.GetTempTmxFile());
@@ -488,7 +481,7 @@ namespace Sdl.Community.TMOptimizer
                 outputTranslationMemory = OutputTranslationMemory;
             }
 
-            foreach (InputTmxFile inputTmxFile in InputTmxFiles)
+            foreach (var inputTmxFile in InputTmxFiles)
             {
                 // import clean TMX
                 ProcessingSteps.Add(new ImportStudioTmStep(outputTranslationMemory, Path.GetFileName(inputTmxFile.TmxFile.FilePath), inputTmxFile.CleanTmxFile));
@@ -502,7 +495,7 @@ namespace Sdl.Community.TMOptimizer
             ProcessingSteps.Add(new DeleteTempFilesStep());
 
             // set context of all steps
-            foreach (ProcessingStep step in ProcessingSteps)
+            foreach (var step in ProcessingSteps)
             {
                 step.Context = context;
             }

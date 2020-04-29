@@ -64,13 +64,12 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				AffirmativeButtonText = "OK"
 
 			};
-			var result =
-				await _mainWindow.ShowMessageAsync("Please confirm", "Are you sure you want to restore this folders?", MessageDialogStyle.AffirmativeAndNegative, dialog);
+			var result = await _mainWindow.ShowMessageAsync(Constants.Confirmation, Constants.RestoreMessage, MessageDialogStyle.AffirmativeAndNegative, dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{
 				if (!MultiTermIsRunning())
 				{
-					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are restoring selected folders");
+					var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RestoringMessage);
 					controller.SetIndeterminate();
 
 					var foldersToRestore = LocationsForSelectedVersions();
@@ -83,8 +82,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				}
 				else
 				{
-					await _mainWindow.ShowMessageAsync("MultiTerm is running",
-						"Please close MultiTerm in order to restore selected folders.", MessageDialogStyle.Affirmative, dialog);
+					await _mainWindow.ShowMessageAsync(Constants.MultitermRun, Constants.MultitermCloseMessage, MessageDialogStyle.Affirmative, dialog);
 				}
 			}
 		}
@@ -109,14 +107,14 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 			else
 			{
-				await _mainWindow.ShowMessageAsync("MultiTerm is running",
-					"Please close MultiTerm to repair it.", MessageDialogStyle.Affirmative, dialog);
+				await _mainWindow.ShowMessageAsync(Constants.MultitermRun, Constants.MultitermRepairMessage, MessageDialogStyle.Affirmative, dialog);
 			}
 		}
 
 		private void RunRepair(MultiTermVersionListItem selectedVersion)
 		{
-			var directoriesPath = new DirectoryInfo(_packageCache).GetDirectories()
+			var directoriesPath = new DirectoryInfo(_packageCache)
+				.GetDirectories()
 				.Where(n => n.Name.Contains(selectedVersion.CacheFolderName))
 				.Select(n => n.FullName).ToList();
 
@@ -180,13 +178,12 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				AffirmativeButtonText = "OK"
 
 			};
-			var result =
-				await _mainWindow.ShowMessageAsync("Please confirm", "Are you sure you want to remove this files?", MessageDialogStyle.AffirmativeAndNegative, dialog);
+			var result = await _mainWindow.ShowMessageAsync(Constants.Confirmation, Constants.RemoveMessage, MessageDialogStyle.AffirmativeAndNegative, dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{
 				if (!MultiTermIsRunning())
 				{
-					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
+					var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RemoveFilesMessage);
 					controller.SetIndeterminate();
 
 					var foldersToClearOrRestore = new List<LocationDetails>();
@@ -196,8 +193,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 					var selectedMultiTermLocations = MultiTermLocationCollection.Where(f => f.IsSelected).ToList();
 					if (selectedMultiTermVersions.Any())
 					{
-						var documentsFolderLocation =
-							await FoldersPath.GetMultiTermFoldersPath(_userName, selectedMultiTermVersions, selectedMultiTermLocations);
+						var documentsFolderLocation = await FoldersPath.GetMultiTermFoldersPath(_userName, selectedMultiTermVersions, selectedMultiTermLocations);
 						foldersToClearOrRestore.AddRange(documentsFolderLocation);
 					}
 
@@ -213,10 +209,8 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				}
 				else
 				{
-					await _mainWindow.ShowMessageAsync("MultiTerm is running",
-						"Please close MultiTerm in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
-				}
-				
+					await _mainWindow.ShowMessageAsync(Constants.MultitermRun, Constants.RemoveFoldersMessage, MessageDialogStyle.Affirmative, dialog);
+				}				
 			}
 		}
 

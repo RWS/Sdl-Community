@@ -1,13 +1,11 @@
-﻿using Sdl.Community.TMOptimizerLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
+using Sdl.Community.TMOptimizerLib;
 
 namespace Sdl.Community.TMOptimizer
 {
-    public class ProcessingContext
+	public class ProcessingContext
     {
         public ProcessingContext()
         {

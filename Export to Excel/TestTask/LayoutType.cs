@@ -1,8 +1,7 @@
 ﻿namespace ExportToExcel
 {
     public class LayoutType
-    {
-          
+    {          
         public enum TableType { SideBySide, TopDown };
 
         public LayoutType(TableType currentLayout)
@@ -15,6 +14,5 @@
             get;
             set;
         }
-
     }
 }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Xsl;
 
 namespace Sdl.Community.StyleSheetVerifier
@@ -52,13 +53,18 @@ namespace Sdl.Community.StyleSheetVerifier
                 {
                     File.Delete(htmlPreviewFile);
                 }
-                XslCompiledTransform transformer = new XslCompiledTransform();
-                transformer.Load(txtSheet.Text);
 
+				var transformer = new XslCompiledTransform();
+	            var settings = new XmlReaderSettings
+	            {
+		            DtdProcessing = DtdProcessing.Parse
+	            };
+	            var reader = XmlReader.Create(txtSheet.Text, settings);
 
-                transformer.Transform(txtXml.Text, htmlPreviewFile);
+	            transformer.Load(reader);
+	            transformer.Transform(XmlReader.Create(txtXml.Text, settings), XmlWriter.Create(htmlPreviewFile));
 
-                webBrowser1.Navigate(htmlPreviewFile);
+	            webBrowser1.Navigate(htmlPreviewFile);
             }catch(Exception ex)
             {
                 var message = GetErrorMessage(ex);

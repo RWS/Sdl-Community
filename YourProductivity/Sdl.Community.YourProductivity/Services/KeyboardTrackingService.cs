@@ -1,29 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NLog;
+using Sdl.Community.YourProductivity.Persistance;
+using Sdl.Community.YourProductivity.Persistance.Model;
 using Sdl.Community.YourProductivity.Persistence;
 using Sdl.Community.YourProductivity.Util;
 using Sdl.Core.Globalization;
 using Sdl.DesktopEditor.EditorApi;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.Community.YourProductivity.Persistance.Model;
-using System.Threading.Tasks;
-using Sdl.Community.YourProductivity.Persistance;
-using System.Diagnostics;
-using Raven.Client;
-using System.Threading;
 
 namespace Sdl.Community.YourProductivity.Services
 {
-    public class KeyboardTrackingService
+	public class KeyboardTrackingService
     {
 
         private readonly List<TrackInfo> _trackingInfos; 
         private readonly TrackInfoDb db;
         private readonly Logger _logger;
-        private readonly EmailService _emailService;
         private Document _activeDocument;
         private object lockObject = new object();
         private Timer _timer;
@@ -45,11 +41,9 @@ namespace Sdl.Community.YourProductivity.Services
             }
         }
 
-        public KeyboardTrackingService(Logger logger,
-            EmailService emailService)
+        public KeyboardTrackingService(Logger logger)
         {
             _logger = logger;
-            _emailService = emailService;
             db = new TrackInfoDb();
             _trackingInfos = new List<TrackInfo>();
             _timer = new Timer(AutoSave);
@@ -94,9 +88,7 @@ namespace Sdl.Community.YourProductivity.Services
             catch (Exception exception)
             {
                 _logger.Debug(exception, @"Error appeared when RegisterDocument");
-                _emailService.SendLogFile();
             }
-
         }
 
         private async void EnsureSessionIsNotOld()
@@ -115,7 +107,6 @@ namespace Sdl.Community.YourProductivity.Services
                     var trackInfo = await db.GetTrackInfoByFileIdAsync(file, RavenContext.Current.CurrentSession);
                     _trackingInfos.Add(trackInfo);
                 }
-
             }
         }
         private void AutoSave(object state)
@@ -155,8 +146,6 @@ namespace Sdl.Community.YourProductivity.Services
             catch (Exception exception)
             {
                 _logger.Debug(exception, @"Error appeared when UnregisterDocument");
-                _emailService.SendLogFile();
-
             }
         }
 
@@ -170,7 +159,6 @@ namespace Sdl.Community.YourProductivity.Services
                 if (ActiveDocument == null)
                 {
                     _logger.Error("Segments confirmation level active document is null");
-                    _emailService.SendLogFile();
 
                     return;
                 }
@@ -180,7 +168,6 @@ namespace Sdl.Community.YourProductivity.Services
                 if (file == null)
                 {
                     _logger.Error(string.Format("Segments confirmation level active document has no active file but has {0} files part of it.",ActiveDocument.Files.Count()));
-                    _emailService.SendLogFile();
                     return;
                 }
                 var targetSegment = segmentContainer.Segment;
@@ -191,7 +178,6 @@ namespace Sdl.Community.YourProductivity.Services
             catch (Exception exception)
             {
                 _logger.Debug(exception);
-                _emailService.SendLogFile();
             }
         }
 
@@ -203,7 +189,6 @@ namespace Sdl.Community.YourProductivity.Services
                 if (ActiveDocument == null)
                 {
                     _logger.Error("ContentChanged level active document is null");
-                    _emailService.SendLogFile();
 
                     return;
                 }
@@ -211,7 +196,6 @@ namespace Sdl.Community.YourProductivity.Services
                 if (file == null)
                 {
                     _logger.Error(string.Format("ContentChanged level active document has no active file but has {0} files part of it.", ActiveDocument.Files.Count()));
-                    _emailService.SendLogFile();
                     return;
                 }
                 SetTrackingElement(file.Id, e.Document.ActiveSegmentPair.Target, keyStrokes);
@@ -220,12 +204,8 @@ namespace Sdl.Community.YourProductivity.Services
             catch (Exception ex)
             {
                 _logger.Debug(ex);
-                _emailService.SendLogFile();
-
             }
         }
-
-      
 
         private void SetTrackingElement(Guid fileId,
             ISegment targetSegment,

@@ -207,7 +207,8 @@ namespace Sdl.Community.TranslationMemoryManagementUtility
 				return;
 			}
 
-			pbProgress.Value = (int)progress;
+			var progressVal = (int)progress > 100 ? 100 : (int)progress;
+			pbProgress.Value = progressVal;
 			lblOperation.Text = operationMsg;
 		}
 		/// <summary>

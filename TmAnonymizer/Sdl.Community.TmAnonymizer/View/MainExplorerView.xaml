@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="Sdl.Community.SdlTmAnonymizer.View.MainExplorerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:Sdl.Community.SdlTmAnonymizer.ViewModel"
+             xmlns:view="clr-namespace:Sdl.Community.SdlTmAnonymizer.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600" d:DataContext="{d:DesignData MainViewModel}">
+	<UserControl.Resources>
+		<DataTemplate DataType="{x:Type viewModels:TranslationMemoryViewModel}">
+			<view:TranslationMemoryView/>
+		</DataTemplate>
+	</UserControl.Resources>
+
+	<Grid Name="ParentGrid" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+		<ContentControl Grid.Column="0" Content="{Binding TranslationMemoryViewModel}" Height="{Binding ParentGrid}" />
+	</Grid>
+
+</UserControl>
+

@@ -1,0 +1,80 @@
+﻿<Window x:Class="Sdl.Community.SdlTmAnonymizer.View.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+			 Title="Login"
+             FontFamily="Segoe UI"
+			 Width="415"
+			 Height="270"
+			 ResizeMode="NoResize"
+			 WindowStartupLocation="CenterScreen"			
+             d:DesignHeight="300" d:DesignWidth="300">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\Styles\ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="..\Styles\TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="..\Styles\TextBoxStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+
+		<TextBlock Grid.Row="0" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,20">Please fill following information:</TextBlock>
+		<TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Url*</TextBlock>
+		<TextBox Margin="5,5,10,5"
+				   Grid.Row="1" Grid.Column="1" IsEnabled="True"  Text="{Binding Url,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" ></TextBox>
+		<TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> User name*</TextBlock>
+		<TextBox 
+		          Margin="5,5,10,5"
+				  Grid.Row="2" Grid.Column="1" Text="{Binding UserName,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"></TextBox>
+		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}" > Password*</TextBlock>
+		<PasswordBox Margin="5,5,10,5" Name="Password" Grid.Row="3" Grid.Column="1"></PasswordBox>
+		<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Foreground="{Binding MessageColor}" FontFamily="Segoe UI" Margin="10,20,0,10" Text="{Binding Message}"></TextBlock>
+
+		<Button  Grid.Row="6"
+		         Grid.Column="1" 
+		         IsDefault="False" 
+		         IsCancel="True"
+		         Style="{DynamicResource StudioGreenButtonsStyle }" 
+		         Margin="0,5,10,50"
+		         Width="105" 
+		         FontFamily="Segoe UI" 
+		         HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+			<StackPanel Orientation="Horizontal">
+				<TextBlock>Cancel</TextBlock>
+			</StackPanel>
+		</Button>
+
+		<Button Grid.Row="6" 
+		        Grid.Column="0" 
+		        Grid.ColumnSpan="2"
+		        IsDefault="True" 
+		        Style="{DynamicResource StudioGreenButtonsStyle }" 
+		        Margin="0,5,129,50"
+				Command="{Binding OkCommand}" 
+				CommandParameter="{Binding ElementName=Password}"
+		        Width="105" FontFamily="Segoe UI"		        
+		        HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+			<StackPanel Orientation="Horizontal">
+				<TextBlock>Log in</TextBlock>
+			</StackPanel>
+		</Button>
+	</Grid>
+</Window>
+

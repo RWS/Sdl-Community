@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
+namespace Sdl.Community.AdvancedDisplayFilter {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class StringResources {
@@ -39,7 +39,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.Plugins.AdvancedDisplayFilter.StringResources", typeof(StringResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.AdvancedDisplayFilter.StringResources", typeof(StringResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,33 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New translated content.
+        /// </summary>
+        internal static string DisplayFilter_Control_New_Translated {
+            get {
+                return ResourceManager.GetString("DisplayFilter_Control_New_Translated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using this option will filter the results based on matches found within the translatable text AND within the content of any tags in your file(s)..
+        /// </summary>
+        internal static string DisplayFilter_IncludeTags_Tooltip {
+            get {
+                return ResourceManager.GetString("DisplayFilter_IncludeTags_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using this option will filter the results based on matches that are ONLY found within the content of any tags in your file(s). It will not filter on the translatable text..
+        /// </summary>
+        internal static string DisplayFilter_OnlyTags_Tooltip {
+            get {
+                return ResourceManager.GetString("DisplayFilter_OnlyTags_Tooltip", resourceCulture);
             }
         }
         
@@ -187,6 +214,24 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DSI.
+        /// </summary>
+        internal static string DisplayFilterControl_DSI {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_DSI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edited Fuzzy.
+        /// </summary>
+        internal static string DisplayFilterControl_Edited_Fuzzy {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Edited_Fuzzy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edited fuzzy.
         /// </summary>
         internal static string DisplayFilterControl_EditedFuzzy {
@@ -250,11 +295,29 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found In.
+        /// </summary>
+        internal static string DisplayFilterControl_Found_In {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Found_In", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fuzzy values between.
         /// </summary>
         internal static string DisplayFilterControl_Fuzzy {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Fuzzy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fuzzy Match Repair.
+        /// </summary>
+        internal static string DisplayFilterControl_Fuzzy_Match_Repair {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Fuzzy_Match_Repair", resourceCulture);
             }
         }
         
@@ -304,6 +367,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Max chars.
+        /// </summary>
+        internal static string DisplayFilterControl_MaxChars {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_MaxChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Merged segments across paragraphs.
         /// </summary>
         internal static string DisplayFilterControl_MergedAcross {
@@ -327,6 +399,24 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_MidifiedBy {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_MidifiedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Min chars.
+        /// </summary>
+        internal static string DisplayFilterControl_MinChars {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_MinChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Neural Machine Translation.
+        /// </summary>
+        internal static string DisplayFilterControl_Neural_Machine_Translation {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Neural_Machine_Translation", resourceCulture);
             }
         }
         
@@ -367,6 +457,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Operator.
+        /// </summary>
+        internal static string DisplayFilterControl_Operator {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Operator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OR.
         /// </summary>
         internal static string DisplayFilterControl_OR {
@@ -403,11 +502,29 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Randomly select.
+        /// </summary>
+        internal static string DisplayFilterControl_RandomlySelect {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_RandomlySelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Regular Expression.
         /// </summary>
         internal static string DisplayFilterControl_Regular_Expression {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Regular_Expression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute Relationship.
+        /// </summary>
+        internal static string DisplayFilterControl_Relationship_Operator {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Relationship_Operator", resourceCulture);
             }
         }
         
@@ -484,11 +601,29 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select 1 in every.
+        /// </summary>
+        internal static string DisplayFilterControl_Select1InEvery {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Select1InEvery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected: {0}.
         /// </summary>
         internal static string DisplayFilterControl_Selected {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected: {0}.
+        /// </summary>
+        internal static string DisplayFilterControl_Selected_0_ {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Selected_0_", resourceCulture);
             }
         }
         
@@ -629,6 +764,24 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unedited Fuzzy.
+        /// </summary>
+        internal static string DisplayFilterControl_Unedited_Fuzzy {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Unedited_Fuzzy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unique Occurrences.
+        /// </summary>
+        internal static string DisplayFilterControl_Unique_Occurrences {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Unique_Occurrences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown.
         /// </summary>
         internal static string DisplayFilterControl_Unknown {
@@ -647,11 +800,38 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Backreferences.
+        /// </summary>
+        internal static string DisplayFilterControl_Use_Backreferences {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Use_Backreferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use regex for comment text.
         /// </summary>
         internal static string DisplayFilterControl_UseRegexComments {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_UseRegexComments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search in text and tag content.
+        /// </summary>
+        internal static string DisplayFilterControl_UseTagsAlso {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_UseTagsAlso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search only in tag content.
+        /// </summary>
+        internal static string DisplayFilterControl_UseTagsOnly {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_UseTagsOnly", resourceCulture);
             }
         }
         
@@ -670,6 +850,33 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_With_messages {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_With_messages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With source tracked changes.
+        /// </summary>
+        internal static string DisplayFilterControl_With_Source_Tracked_changes {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_With_Source_Tracked_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With source and target tracked changes.
+        /// </summary>
+        internal static string DisplayFilterControl_With_SourceAndTarget_Tracked_changes {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_With_SourceAndTarget_Tracked_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With target tracked changes.
+        /// </summary>
+        internal static string DisplayFilterControl_With_Target_Tracked_changes {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_With_Target_Tracked_changes", resourceCulture);
             }
         }
         
@@ -698,6 +905,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
             get {
                 object obj = ResourceManager.GetObject("ok.32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Document Structure Information.
+        /// </summary>
+        internal static string Tooltip_Document_Structure_Information_Location {
+            get {
+                return ResourceManager.GetString("Tooltip_Document_Structure_Information_Location", resourceCulture);
             }
         }
     }

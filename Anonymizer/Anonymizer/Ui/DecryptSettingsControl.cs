@@ -8,58 +8,72 @@ using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.projectAnonymizer.Ui
 {
-	public partial class DecryptSettingsControl : UserControl, ISettingsAware<DecryptSettings>
+	public partial class DecryptSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{
 		public DecryptSettingsControl()
 		{
 			InitializeComponent();
-			encryptionBox.LostFocus += EncryptionBox_LostFocus;
+			Timer.Tick += EncryptionBox_UserStoppedTyping;
+			decryptionBox.TextChanged += (t, e) => StartSearchTimer();
 		}
 
-		private void EncryptionBox_LostFocus(object sender, EventArgs e)
-		{
-			messageLbl.Visible = false;
-			CheckIfKeysMatch();
-		}
+		public AnonymizerSettings Settings { get; set; }
 
 		public string EncryptionKey
 		{
-			get => encryptionBox.Text;
-			set => encryptionBox.Text = value;
+			get => decryptionBox.Text;
+			set => decryptionBox.Text = value;
 		}
 
-		public bool IgnoreEncrypted
-		{
-			get => ignoreEncrypted.Checked;
-			set => ignoreEncrypted.Checked = value;
-		}
+		private Timer Timer { get; } = new Timer() { Interval = 500 };
 
 		protected override void OnLoad(EventArgs e)
 		{
+			if (Settings.EncryptionState == State.DefaultState)
+			{
+				Settings.EncryptionState = IsProjectAnonymized() ? State.DataEncrypted : State.Decrypted;
+			}
+
+			if (Settings.EncryptionState.HasFlag(State.Decrypted))
+			{
+				encryptedMessage.Text = "Click finish to untag the text";
+				decryptionBox.Enabled = false;
+			}
+
 			SetSettings(Settings);
 		}
-		private void SetSettings(DecryptSettings settings)
+
+		private void StartSearchTimer()
+		{
+			Timer.Stop();
+			Timer.Start();
+		}
+
+		private bool IsProjectAnonymized()
+		{
+			return Settings.EncryptionKey != "<dummy-encryption-key>";
+		}
+
+		private void SetSettings(AnonymizerSettings settings)
 		{
 			Settings = settings;
-			var key = Settings.GetSetting<string>(nameof(Settings.EncryptionKey)).Value;
-			if (!string.IsNullOrEmpty(key))
-			{
-				encryptionBox.Text = AnonymizeData.DecryptData(key, Constants.Key);
-			}
-			CheckIfKeysMatch();
-			SettingsBinder.DataBindSetting<bool>(ignoreEncrypted, "Checked", Settings, nameof(Settings.IgnoreEncrypted));
 		}
 
 		private void CheckIfKeysMatch()
 		{
 			var anonymizerKey = Settings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>("AnonymizerSettings").EncryptionKey;
-			if (!anonymizerKey.Equals(AnonymizeData.EncryptData(encryptionBox.Text, Constants.Key)))
+			if (!anonymizerKey.Equals(AnonymizeData.EncryptData(decryptionBox.Text, Constants.Key)))
 			{
 				messageLbl.Visible = true;
-				messageLbl.Text = @"Decryption key doesn't match with the encryption key.";
+				messageLbl.Text = "Decryption key doesn't match the encryption key.";
 				messageLbl.ForeColor = Color.Crimson;
 			}
 		}
-		public DecryptSettings Settings { get ; set ; }
+
+		private void EncryptionBox_UserStoppedTyping(object sender, EventArgs e)
+		{
+			messageLbl.Visible = false;
+			CheckIfKeysMatch();
+		}
 	}
 }

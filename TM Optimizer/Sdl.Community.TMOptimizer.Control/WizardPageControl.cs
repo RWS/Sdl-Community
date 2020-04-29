@@ -2,7 +2,6 @@
 {
     public interface IWizardPageControl
     {
-
         bool Next();
 
         bool Previous();

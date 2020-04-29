@@ -15,7 +15,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	public class TranslationMemoryProviderRibbon : AbstractRibbonGroup
 	{
-		[Action("Sdl.Community.TranslationMemoryManagementUtility", Name = "SDL TM Management", Icon = "TranslationMemory", Description = "SDL TM Management")]
+		[Action("Sdl.Community.TranslationMemoryManagementUtility", Name = "SDL TM Management", Icon = "TM_icon", Description = "SDL TM Management")]
 		[ActionLayout(typeof(TranslationMemoryProviderRibbon), 20, DisplayType.Large)]
 		public class TMProviderAction : AbstractAction
 		{

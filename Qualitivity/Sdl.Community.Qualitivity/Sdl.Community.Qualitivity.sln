@@ -19,6 +19,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TM", "..\Sdl.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.WPFListView", "..\Sdl.Community.Qualitivity.WPFListView\Sdl.Community.WPFListView.csproj", "{FBACB9DD-95D2-457A-BE82-0F81BBE32C98}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{80CF1D1C-788C-4BA4-83E5-03BE12EC32FD}"
+	ProjectSection(SolutionItems) = preProject
+		..\Build\SolutionInfo.cs = ..\Build\SolutionInfo.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

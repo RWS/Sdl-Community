@@ -10,12 +10,9 @@ using System.Linq;
 using System.Collections.Generic;
 using PostEdit.Compare.Forms;
 using Sdl.Community.PostEdit.Compare;
-using static Sdl.Community.PostEdit.Compare.Core.Comparison.PairedFiles;
 using Application = PostEdit.Compare.Cache.Application;
 using System.IO;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
-//using PostEdit.Compare;
-//using PostEdit.Compare.Model;
 
 namespace Sdl.Community.PostEdit.Versions
 {

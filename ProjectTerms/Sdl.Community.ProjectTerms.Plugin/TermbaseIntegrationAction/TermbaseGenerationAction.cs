@@ -32,7 +32,7 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                     return;
                 }
                 var selectedFileName = Path.GetFileNameWithoutExtension(SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault().Name);
-                var extractedXmlFileName = Utils.GetXmlFileName(Utils.GetProjecPath());
+                var extractedXmlFileName = Utils.GetXmlFileName(Utils.GetProjectPath());
                 if (selectedFileName != extractedXmlFileName)
                 {
                     MessageBox.Show(PluginResources.MessageContent_GenerateTermbaseAction, PluginResources.MessageType_Info);

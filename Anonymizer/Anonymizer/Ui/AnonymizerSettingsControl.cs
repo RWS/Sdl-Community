@@ -1,48 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.projectAnonymizer.Batch_Task;
 using Sdl.Community.projectAnonymizer.Helpers;
 using Sdl.Community.projectAnonymizer.Models;
 using Sdl.Community.projectAnonymizer.Process_Xliff;
+using Sdl.Community.ProjectAnonymizer;
 using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.projectAnonymizer.Ui
 {
 	public partial class AnonymizerSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{
+		private BindingList<RegexPattern> regexPatterns;
+
 		public AnonymizerSettingsControl()
 		{
 			InitializeComponent();
 		}
 
-		private void EncryptHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
+		public string EncryptionKey
 		{
-			foreach (var pattern in RegexPatterns)
-			{
-				pattern.ShouldEncrypt = e.IsChecked;
-			}
-			Settings.EncryptAll = e.IsChecked;
-			Settings.RegexPatterns = RegexPatterns;
+			get => encryptionBox.Text;
+			set => encryptionBox.Text = value;
 		}
 
-		private void ExportHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
+		public bool SelectAll
 		{
-			foreach (var pattern in RegexPatterns)
-			{
-				pattern.ShouldEnable = e.IsChecked;
-			}
-			Settings.EnableAll = e.IsChecked;
-			Settings.RegexPatterns = RegexPatterns;
+			get => selectAll.Checked;
+			set => selectAll.Checked = value;
 		}
+
+		public BindingList<RegexPattern> RegexPatterns
+		{
+			get
+			{
+				expressionsGrid.EndEdit();
+				foreach (var pattern in regexPatterns)
+				{
+					if (string.IsNullOrEmpty(pattern.Id))
+					{
+						pattern.Id = Guid.NewGuid().ToString();
+					}
+				}
+
+				return regexPatterns;
+			}
+			set
+			{
+				regexPatterns = value;
+			}
+		}
+
+		public AnonymizerSettings Settings { get; set; }
 
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
+
 			//create tooltips for buttons
 			var exportTooltip = new ToolTip();
 			exportTooltip.SetToolTip(exportBtn, "Export selected expressions to disk");
@@ -76,12 +94,13 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			var shouldEncryptColumn = new DataGridViewCheckBoxColumn
 			{
 				HeaderText = @"Encrypt?",
-				Width = 110,
+				Width = 105,
 				DataPropertyName = "ShouldEncrypt",
 				HeaderCell = encryptHeaderCell,
 				Name = "Encrypt"
 			};
 			expressionsGrid.Columns.Add(exportColumn);
+			
 			var pattern = new DataGridViewTextBoxColumn
 			{
 				HeaderText = @"Regex Pattern",
@@ -94,125 +113,171 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				HeaderText = @"Description",
 				DataPropertyName = "Description",
 				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
-
 			};
 			expressionsGrid.Columns.Add(description);
 			expressionsGrid.Columns.Add(shouldEncryptColumn);
 			
+			var moveUpButtonColumn = new DataGridViewImageColumn()
+			{
+				Width = 20,
+				Icon = new Icon(PluginResources.Up, 16, 16),
+				ValuesAreIcons = true,
+				DisplayIndex = 4,
+			};
+
+			expressionsGrid.Columns.Add(moveUpButtonColumn);
+			expressionsGrid.CellClick += UpDownDeleteButtonClick;
+
+			var moveDownButtonColumn = new DataGridViewImageColumn()
+			{
+				Width = 20,
+				Icon = new Icon(PluginResources.Down, 16, 16),
+				ValuesAreIcons = true,
+				DisplayIndex = 5,
+			};
+
+			expressionsGrid.Columns.Add(moveDownButtonColumn);
+
+			var deleteButtonColumn = new DataGridViewImageColumn()
+			{
+				Width = 20,
+				Icon = new Icon(PluginResources.Delete, 16, 16),
+				ValuesAreIcons = true,
+				DisplayIndex = 6,
+			};
+
+			expressionsGrid.Columns.Add(deleteButtonColumn);
+
+			var defaultRow = expressionsGrid.RowTemplate;
+			defaultRow.DefaultCellStyle = null;
+
+			expressionsGrid.AllowUserToAddRows = false;
+
+			if (Settings.EncryptionState == State.DefaultState)
+			{
+				Settings.EncryptionState = IsProjectAnonymized() ? State.DataEncrypted : State.Decrypted;
+			}
+
+			if ((Settings.EncryptionState & State.DataEncrypted) != 0)
+			{
+				mainPanel.Visible = false;
+				encryptedPanel.Visible = true;
+			}
+
 			ReadExistingExpressions();
 			SetSettings(Settings);
 		}
 
-		public string EncryptionKey
+		private void UpDownDeleteButtonClick(object sender, DataGridViewCellEventArgs e)
 		{
-			get => encryptionBox.Text;
-			set => encryptionBox.Text = value;
+			if (e.ColumnIndex == 4)
+			{
+				MovePatternUp(e.RowIndex);
+			}
+
+			if (e.ColumnIndex == 5)
+			{
+				MovePatternDown(e.RowIndex);
+			}
+
+			if (e.ColumnIndex == 6)
+			{
+				DeletePattern(e.RowIndex);
+			}
 		}
 
-		public bool SelectAll
+		private void DeletePattern(int index)
 		{
-			get => selectAll.Checked;
-			set => selectAll.Checked = value;
+			if (index == RegexPatterns.Count - 1)
+			{
+				RegexPatterns.RemoveAt(index);
+			}
+			else
+			{
+				for (int i = index; i < RegexPatterns.Count - 1; i++)
+				{
+					RegexPatterns[i] = RegexPatterns[i+1];
+				}
+
+				RegexPatterns.RemoveAt(RegexPatterns.Count - 1);
+			}
 		}
 
-		public BindingList<RegexPattern> RegexPatterns { get; set; }
-		public AnonymizerSettings Settings { get; set; }
+		private void MovePatternUp(int index)
+		{
+			if (index > 0)
+			{
+				var previousPattern = RegexPatterns[index - 1];
+				RegexPatterns[index - 1] = RegexPatterns[index];
+				RegexPatterns[index] = previousPattern;
+			}
+		}
+
+		private void MovePatternDown(int index)
+		{
+			if (index < RegexPatterns.Count - 1)
+			{
+				var previousPattern = RegexPatterns[index + 1];
+				RegexPatterns[index + 1] = RegexPatterns[index];
+				RegexPatterns[index] = previousPattern;
+			}
+		}
+
+		private void EncryptHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
+		{
+			RemoveEmptyRows();
+			foreach (var pattern in RegexPatterns)
+			{
+				pattern.ShouldEncrypt = e.IsChecked;
+			}
+			Settings.EncryptAll = e.IsChecked;
+			Settings.RegexPatterns = RegexPatterns;
+			expressionsGrid.Refresh();
+		}
+
+		private void ExportHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
+		{
+			RemoveEmptyRows();
+			foreach (var pattern in RegexPatterns)
+			{
+				pattern.ShouldEnable = e.IsChecked;
+			}
+			Settings.EnableAll = e.IsChecked;
+			Settings.RegexPatterns = RegexPatterns;
+			expressionsGrid.Refresh();
+		}
 
 		private void ReadExistingExpressions()
 		{
-			if (!Settings.DefaultListAlreadyAdded)
+			if (Settings.DefaultListAlreadyAdded || Settings.RegexPatterns.Count > 0)
+				return;
+
+			Settings.RegexPatterns.Clear();
+			var patterns = Constants.GetDefaultRegexPatterns();
+			foreach (var pattern in patterns)
 			{
-				RegexPatterns = Constants.GetDefaultRegexPatterns();
-				foreach (var pattern in RegexPatterns)
-				{
-					Settings.AddPattern(pattern);
-				}
-				Settings.DefaultListAlreadyAdded = true;
+				Settings.AddPattern(pattern);
 			}
+			Settings.DefaultListAlreadyAdded = true;
 		}
-	
+
 		private void SetSettings(AnonymizerSettings settings)
 		{
 			Settings = settings;
-			RegexPatterns= Settings.RegexPatterns;
+			RegexPatterns = Settings.RegexPatterns;
 			var key = Settings.GetSetting<string>(nameof(Settings.EncryptionKey)).Value;
+			key = key == "<dummy-encryption-key>" ? "" : key;
 			if (!string.IsNullOrEmpty(key))
 			{
 				encryptionBox.Text = AnonymizeData.DecryptData(key, Constants.Key);
 			}
-			SettingsBinder.DataBindSetting<bool>(selectAll, "Checked", Settings, nameof(Settings.SelectAll));
-			SettingsBinder.DataBindSetting<BindingList<RegexPattern>>(expressionsGrid, "DataSource", Settings,
-				nameof(Settings.RegexPatterns));
-			expressionsGrid.DataSource = RegexPatterns;
-		}
 
-		private void expressionsGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-		{
-			if (e.RowIndex.Equals(RegexPatterns.Count))
-			{
-				var row = expressionsGrid.Rows[e.RowIndex];
-				var newExpression = new RegexPattern
-				{
-					Id = Guid.NewGuid().ToString(),
-					ShouldEncrypt = (bool)row.Cells[3].Value,
-					ShouldEnable = (bool)row.Cells[0].Value
-				};
-				if (row.Cells[1].Value != null)
-				{
-					var pattern = (string) row.Cells[1].Value;
-					newExpression.Pattern = pattern;
-				}
-				if (row.Cells[2].Value != null)
-				{
-					var description = (string)row.Cells[2].Value;
-					newExpression.Description = description;
-				}
-				if (newExpression.Pattern != null)
-				{
-					RegexPatterns.Add(newExpression);
-				}
-			}
-			else
-			{
-				if (e.RowIndex < RegexPatterns.Count)
-				{
-					var selectedPattern = RegexPatterns[e.RowIndex];
-					if (expressionsGrid?.CurrentCell.Value != null)
-					{
-						var currentCellValue = expressionsGrid.CurrentCell.Value;
-						//Enable column
-						if (e.ColumnIndex.Equals(0))
-						{
-							selectedPattern.ShouldEnable = (bool) currentCellValue;
-						}
-						//Regex pattern column
-						if (e.ColumnIndex.Equals(1))
-						{
-							if (!string.IsNullOrEmpty(currentCellValue.ToString()))
-							{
-								selectedPattern.Pattern = currentCellValue.ToString();
-							}
-						}
-						//Description column
-						if (e.ColumnIndex.Equals(2))
-						{
-							if (!string.IsNullOrEmpty(currentCellValue.ToString()))
-							{
-								selectedPattern.Description = currentCellValue.ToString();
-							}
-						}
-						//Encrypt column
-						if (e.ColumnIndex.Equals(3))
-						{
-							selectedPattern.ShouldEncrypt = (bool) currentCellValue;
-						}
-					}
-				}
-			}
+			expressionsGrid.DataSource = RegexPatterns;
 		}
 
 		private void selectAll_CheckedChanged(object sender, EventArgs e)
 		{
+			RemoveEmptyRows();
 			var shouldSelect = ((CheckBox)sender).Checked;
 			foreach (var pattern in RegexPatterns)
 			{
@@ -222,10 +287,14 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			Settings.RegexPatterns = RegexPatterns;
 			Settings.EnableAll = shouldSelect;
 			Settings.EncryptAll = shouldSelect;
+			((CustomColumnHeader) expressionsGrid.Columns[0].HeaderCell).IsChecked = shouldSelect;
+			((CustomColumnHeader)expressionsGrid.Columns[3].HeaderCell).IsChecked = shouldSelect;
+			expressionsGrid.Refresh();
 		}
 
 		private void exportBtn_Click(object sender, EventArgs e)
 		{
+			RemoveEmptyRows();
 			if (expressionsGrid.SelectedRows.Count > 0)
 			{
 				var fileDialog = new SaveFileDialog
@@ -244,17 +313,33 @@ namespace Sdl.Community.projectAnonymizer.Ui
 					}
 					Expressions.ExportExporessions(fileDialog.FileName, selectedExpressions);
 					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
 				}
 			}
 			else
 			{
-				 MessageBox.Show(@"Please select at least one row to export","",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+				MessageBox.Show(@"Please select at least one row to export", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
+		}
+
+		private void RemoveEmptyRows()
+		{
+			var regexPatternsCount = RegexPatterns.Count;
+
+			for (int i=0; i<regexPatternsCount; i++)
+			{
+				if (string.IsNullOrWhiteSpace(RegexPatterns[i].Pattern))
+				{
+					RegexPatterns.RemoveAt(i);
+					i--;
+					regexPatternsCount--;
+				}
+			}
+			
 		}
 
 		private void importBtn_Click(object sender, EventArgs e)
 		{
+			RemoveEmptyRows();
 			var fileDialog = new OpenFileDialog
 			{
 				Title = @"Please select the files you want to import",
@@ -267,10 +352,9 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			var result = fileDialog.ShowDialog();
 			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
 			{
-				var importedExpressions =Expressions.GetImportedExpressions(fileDialog.FileNames.ToList());
+				var importedExpressions = Expressions.GetImportedExpressions(fileDialog.FileNames.ToList());
 				ImportExpressionsInSettings(importedExpressions);
 			}
-
 		}
 
 		private void ImportExpressionsInSettings(List<RegexPattern> expressions)
@@ -312,6 +396,17 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				Settings.RegexPatterns = RegexPatterns;
 			}
 		}
-		
+
+		private bool IsProjectAnonymized()
+		{
+			return Settings.EncryptionKey != "<dummy-encryption-key>";
+		}
+
+		private void addNewPatternButton_Click(object sender, EventArgs e)
+		{
+			RemoveEmptyRows();
+			RegexPatterns.AddNew();
+			expressionsGrid.Focus();
+		}
 	}
 }

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
-using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.Community.AdvancedDisplayFilter.Models;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 using static System.Int32;
 
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
+namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public static class FuzzyHelper
 	{
-		public static bool IsInFuzzyRange(DisplayFilterRowInfo row,string fuzzyMin,string fuzzyMax)
+		public static bool IsInFuzzyRange(DisplayFilterRowInfo row, string fuzzyMin, string fuzzyMax)
 		{
 			try
 			{
@@ -26,73 +26,45 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					return true;
 				}
 			}
-			catch (Exception e)
+			catch
 			{
-				// ignored
+				// catch all; ignore
 			}
 
 			return false;
 		}
 
-		public static bool IsEditedFuzzy(ISegment segment)
+		public static bool IsEditedFuzzyMatch(ITranslationOrigin translationOrigin)
 		{
-			//for 100% edited
-			if ((bool)segment.Properties?.TranslationOrigin?.OriginType.Equals("auto-propagated"))
+			if (translationOrigin?.OriginBeforeAdaptation != null)
 			{
-				return true;
-			}
-
-			if (segment.Properties?.TranslationOrigin?.OriginBeforeAdaptation?.OriginBeforeAdaptation != null)
-			{
-				//for 100% fuzzy which is not edited but is picked as edited
-				if (segment.Properties.TranslationOrigin.TextContextMatchLevel.ToString().Equals("Source"))
-				{
-					return false;
-				}
-
-				if (segment.Properties.TranslationOrigin.OriginBeforeAdaptation.OriginBeforeAdaptation.OriginType != "source")
+				var originType = translationOrigin.OriginType;
+				if (string.Compare(originType, "interactive", StringComparison.InvariantCultureIgnoreCase) == 0
+					&& IsFuzzyMatch(translationOrigin.OriginBeforeAdaptation))
 				{
 					return true;
 				}
 			}
+
 			return false;
 		}
 
-		public static bool ContainsFuzzy(ISegment segment)
+		public static bool ContainsFuzzyMatch(ITranslationOrigin translationOrigin)
+		{			
+			return IsFuzzyMatch(translationOrigin);
+		}
+
+		private static bool IsFuzzyMatch(ITranslationOrigin translationOrigin)
 		{
-			if (segment.Properties?.TranslationOrigin?.OriginBeforeAdaptation == null)
+			var originType = translationOrigin?.OriginType;
+			if (string.Compare(originType, "mt", StringComparison.InvariantCultureIgnoreCase) == 0 
+			    || string.Compare(originType, "nmt", StringComparison.InvariantCultureIgnoreCase) == 0)
 			{
-				if ((bool)segment.Properties?.TranslationOrigin.MatchPercent.Equals(0))
-				{
-					return false;
-				}
+				return false;
 			}
-			else
-			{
-				if (segment.Properties?.TranslationOrigin?.OriginBeforeAdaptation?.OriginBeforeAdaptation == null)
-				{
-					if ((bool)segment.Properties?.TranslationOrigin?.OriginBeforeAdaptation?.MatchPercent.Equals(0))
-					{
-						return false;
-					}
-				}
-				else
-				{
-					if (segment.Properties?.TranslationOrigin?.OriginBeforeAdaptation?.OriginBeforeAdaptation?.OriginType != null)
-					{
-						if ((bool)segment.Properties?.TranslationOrigin?.OriginBeforeAdaptation?.OriginBeforeAdaptation?.OriginType
-							.Equals("source"))
-						{
-							return false;
-						}
-					}
-					if ((bool)segment.Properties?.TranslationOrigin?.OriginBeforeAdaptation?.OriginType.Equals("source"))
-					{
-						return false;
-					}
-				}
-			}
-			return true;
+
+			var match = translationOrigin?.MatchPercent ?? 0;
+			return match != 0 && match < 100;
 		}
 	}
 }

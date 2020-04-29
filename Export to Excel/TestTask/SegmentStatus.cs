@@ -4,17 +4,11 @@ namespace ExportToExcel
 {
     public class SegmentStatus
     {
-        private ConfirmationLevel _status;
+	    public ConfirmationLevel Status { get; set; }
 
-        public ConfirmationLevel Status
+	    public SegmentStatus(ConfirmationLevel status)
         {
-            get { return _status; }
-            set { _status = value; }
-        }
-
-        public SegmentStatus(ConfirmationLevel status)
-        {
-            _status = status;
+            Status = status;
         }
 
         /// <summary>

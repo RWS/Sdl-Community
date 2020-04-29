@@ -2,8 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 	<Style x:Key="TextBlockColor" TargetType="{x:Type TextBlock}">
-		<Setter Property="Foreground" Value="#3D9DAA"/>
-		<Setter Property="FontFamily" Value="Segoe UI"></Setter>
-		<Setter Property="Margin" Value="10,0,0,0"></Setter>
+		<Setter Property="FontFamily" Value="Segoe UI"/>
+		<Setter Property="Margin" Value="10,0,0,0"/>
+		<Setter Property="Foreground" Value="{DynamicResource WindowsControl.Control.Text}"/>
 	</Style>
 </ResourceDictionary>

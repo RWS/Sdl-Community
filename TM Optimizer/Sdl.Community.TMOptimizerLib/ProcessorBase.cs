@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Sdl.Community.TMOptimizerLib
 {
-    public class ProcessorBase
+	public class ProcessorBase
     {
         public event EventHandler<ProgressEventArgs> Progress;
 
@@ -18,7 +15,6 @@ namespace Sdl.Community.TMOptimizerLib
                 Progress(this, e);
                 return !e.Cancel;
             }
-
             return true;
         }
     }

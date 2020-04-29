@@ -1,13 +1,9 @@
-﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TMOptimizer
 {
-    public class TranslationMemoryReference : INotifyPropertyChanged
+	public class TranslationMemoryReference : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -51,10 +47,7 @@ namespace Sdl.Community.TMOptimizer
 
         private void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
     }
 }

@@ -9,16 +9,14 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
     Id = "CommunityAdvancedDisplayFilterViewPart",
     Name = "AdvancedDisplayFilterViewPart_Name",
     Description = "AdvancedDisplayFilterViewPart_Description",
-    Icon = "AdvancedDisplayFiltersIcon")]
+    Icon = "AdvancedDisplayFilter_Icon")]
     [ViewPartLayout(
         typeof(EditorController), Dock = DockType.Right)]
     public class DisplayFilterController : AbstractViewPartController
     {
-        private readonly DisplayFilterControl _control = new DisplayFilterControl();
-      
         protected override Control GetContentControl()
         {
-            return _control;
+	        return CommunityApplicationInitializer.DisplayFilterControl; 
         }
 
         protected override void Initialize()

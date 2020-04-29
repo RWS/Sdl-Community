@@ -1,17 +1,12 @@
-﻿using Sdl.Community.TMOptimizerLib;
-using Sdl.Core.Globalization;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel;
+using Sdl.Community.TMOptimizerLib;
 
 namespace Sdl.Community.TMOptimizer
 {
-    /// <summary>
-    /// A TMX file that needs to be cleaned up.
-    /// </summary>
-    public class InputTmxFile : INotifyPropertyChanged
+	/// <summary>
+	/// A TMX file that needs to be cleaned up.
+	/// </summary>
+	public class InputTmxFile : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -40,11 +35,8 @@ namespace Sdl.Community.TMOptimizer
 
         private void OnNotifyPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 
     }
 }

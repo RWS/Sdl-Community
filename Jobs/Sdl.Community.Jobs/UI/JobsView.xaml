@@ -6,7 +6,11 @@
              xmlns:model="clr-namespace:Sdl.Community.Jobs.Model"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+
+	<UserControl.Resources>
+		<ResourceDictionary Source="../UiHelpers/MetroStyle.xaml" />
+	</UserControl.Resources>
+	<Grid>
         <DataGrid Name="DataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Style="{StaticResource AzureDataGrid}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding (model:JobViewModel.TimePosted)}"></DataGridTextColumn>

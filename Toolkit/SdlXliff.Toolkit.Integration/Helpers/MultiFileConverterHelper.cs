@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
+﻿using Sdl.FileTypeSupport.Framework.IntegrationApi;
 
 namespace SdlXliff.Toolkit.Integration.Helpers
 {

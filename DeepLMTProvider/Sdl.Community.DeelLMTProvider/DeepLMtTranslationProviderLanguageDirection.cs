@@ -1,25 +1,23 @@
 ﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using System.Globalization;
-using System.Windows.Forms;
+using System.Threading.Tasks;
+using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Core.Globalization;
-using Sdl.Community.DeelLMTProvider;
+using Sdl.Community.DeepLMTProvider.WPF.Model;
 
 namespace Sdl.Community.DeepLMTProvider
 {
-    public class DeepLMtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
-    {
+	public class DeepLMtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
+	{
 		private readonly DeepLMtTranslationProvider _deepLMtTranslationProvider;
 		private readonly DeepLTranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
-		private TranslationUnit _inputTu;
 		private DeepLTranslationProviderConnecter _deeplConnect;
+		public static readonly Log Log = Log.Instance;
 
 		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection)
 		{
@@ -30,84 +28,86 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
 
-        public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
+		public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
 
-        public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
+		public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
 
-        public bool CanReverseLanguageDirection => throw new NotImplementedException();
+		public bool CanReverseLanguageDirection => throw new NotImplementedException();
 
-        public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
-        {
-            throw new NotImplementedException();
-        }
+		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
+		{
+			throw new NotImplementedException();
+		}
 
-        public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
-        {
-            throw new NotImplementedException();
-        }
+		public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
+		{
+			throw new NotImplementedException();
+		}
 
-        public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
-        {
-            throw new NotImplementedException();
-        }
+		public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
+		{
+			throw new NotImplementedException();
+		}
 
-        public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
-        {
-            throw new NotImplementedException();
-        }
+		public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
+		{
+			throw new NotImplementedException();
+		}
 
-        public ImportResult[] AddTranslationUnitsMasked(TranslationUnit[] translationUnits, ImportSettings settings, bool[] mask)
-        {
-            throw new NotImplementedException();
-        }
-		
-        public SearchResults SearchSegment(SearchSettings settings, Segment segment)
-        {
+		public ImportResult[] AddTranslationUnitsMasked(TranslationUnit[] translationUnits, ImportSettings settings, bool[] mask)
+		{
+			throw new NotImplementedException();
+		}
+
+		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
+		{
 			var translation = new Segment(_languageDirection.TargetCulture);
-			var results = new SearchResults()
+			var results = new SearchResults
 			{
 				SourceSegment = segment.Duplicate()
 			};
 
-			// if there are match in tm the provider will not search the segment
-			#region "Confirmation Level"
-			if ( _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified) 
+			try
 			{
-				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-				//later get these strings from resource file
-				results.Add(CreateSearchResult(segment, translation, segment.ToString()));
-				return results;
+				var newseg = segment.Duplicate();
+				if (newseg.HasTags && !_options.SendPlainText)
+				{
+					var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
+					var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
+					if (!string.IsNullOrEmpty(translatedText))
+					{
+						translation = tagPlacer.GetTaggedSegment(translatedText);
+
+						results.Add(CreateSearchResult(newseg, translation));
+						return results;
+					}
+				}
+				else
+				{
+					var sourcetext = newseg.ToPlain();
+
+					var translatedText = LookupDeepl(sourcetext);
+					if (!string.IsNullOrEmpty(translatedText))
+					{
+						translation.Add(translatedText);
+
+						results.Add(CreateSearchResult(newseg, translation));
+						return results;
+					}
+				}
 			}
-	        var newseg = segment.Duplicate();
-	        if (newseg.HasTags)
-	        {
-		        var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
-		        var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
-		         translation = tagPlacer.GetTaggedSegment(translatedText);
-
-		        results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
-		        return results;
+			catch (Exception e)
+			{
+				Log.Logger.Error($"SearchSegment method: {e.Message}\n {e.StackTrace}");
 			}
-	        else
-	        {
-
-		        var sourcetext = newseg.ToPlain();
-
-		        var translatedText = LookupDeepl(sourcetext);
-		        translation.Add(translatedText);
-
-		        results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
-		        return results;
-	        }
-
-	        #endregion
+			return results;
 		}
 
 		private string LookupDeepl(string sourcetext)
 		{
 			if (_deeplConnect == null)
 			{
-				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey);
+				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier);
 			}
 			else
 			{
@@ -118,20 +118,25 @@ namespace Sdl.Community.DeepLMTProvider
 			return translatedText;
 		}
 
-		private SearchResult CreateSearchResult(Segment segment, Segment translation, string v)
+		private SearchResult CreateSearchResult(Segment segment, Segment translation)
 		{
 			#region "TranslationUnit"
-			var tu = new TranslationUnit();
-			tu.SourceSegment = segment.Duplicate();//this makes the original source segment, with tags, appear in the search window
-			tu.TargetSegment = translation;
+			var tu = new TranslationUnit
+			{
+				SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
+				TargetSegment = translation
+			};
 			#endregion
 
 			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
-
+			
+			//maybe this we need to add the score which Christine  requested
+			//
 			var score = 0; //score to 0...change if needed to support scoring
-			tu.Origin = TranslationUnitOrigin.MachineTranslation;
+			tu.Origin = TranslationUnitOrigin.Nmt;
 			var searchResult = new SearchResult(tu)
 			{
+				TranslationProposal = new TranslationUnit(tu),
 				ScoringResult = new ScoringResult
 				{
 					BaseScore = score
@@ -143,73 +148,194 @@ namespace Sdl.Community.DeepLMTProvider
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
-        {
-            throw new NotImplementedException();
-        }
+		{
+			throw new NotImplementedException();
+		}
 
-        public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
-        {
-            throw new NotImplementedException();
-        }
+		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
+		{
+			throw new NotImplementedException();
+		}
 
-        public SearchResults SearchText(SearchSettings settings, string segment)
-        {
-            throw new NotImplementedException();
-        }
+		public SearchResults SearchText(SearchSettings settings, string segment)
+		{
+			throw new NotImplementedException();
+		}
 
-        public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
-        {
+		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
+		{
 			//need to use the tu confirmation level in searchsegment method
-			_inputTu = translationUnit;
 			return SearchSegment(settings, translationUnit.SourceSegment);
 		}
 
-        public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
-        {
-            throw new NotImplementedException();
-        }
+		public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
+		{
+			throw new NotImplementedException();
+		}
 
-        public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
-        {
-			var results = new List<SearchResults>();
-			var errors = new List<KeyValuePair<string, string>>();
-			
-			var i = 0;
-			foreach (var tu in translationUnits)
+		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits,
+			bool[] mask)
+		{
+			// bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
+
+			var noOfResults = mask.Length;
+
+			var results = new List<SearchResults>(noOfResults);
+			var preTranslateList = new List<PreTranslateSegment>(noOfResults);
+
+			for (int i = 0; i < noOfResults; i++)
 			{
-				if (mask == null || mask[i])
-				{
-					var result = SearchTranslationUnit(settings, tu);
-					results.Add(result);
-				}
-				else
-				{
-					results.Add(null);
-				}
-				i++;
+				results.Add(null);
+				preTranslateList.Add(null);
 			}
 
-			if (errors.Count > 0)
+			// plugin is called from pre-translate batch task 
+			//we receive the data in chunk of 10 segments
+			if (translationUnits.Length > 2)
 			{
-				var messages = "";
-				foreach (var pair in errors)
+				var i = 0;
+				foreach (var tu in translationUnits)
 				{
-					messages += pair.Key + ":  " + pair.Value + "\n";
+					if (mask[i])
+					{
+						var preTranslate = new PreTranslateSegment
+						{
+							SearchSettings = settings,
+							TranslationUnit = tu
+						};
+						preTranslateList.RemoveAt(i);
+						preTranslateList.Insert(i, preTranslate);
+					}
+					i++;
 				}
-				MessageBox.Show(messages);
-			}
+				if (preTranslateList.Count > 0)
+				{
+					//Create temp file with translations
+					var translatedSegments = PrepareTempData(preTranslateList).Result;
+					var preTranslateSearchResults = GetPreTranslationSearchResults(translatedSegments);
 
+					foreach (var result in preTranslateSearchResults)
+					{
+						if (result != null)
+						{
+							var index = preTranslateSearchResults.IndexOf(result);
+							results.RemoveAt(index);
+							results.Insert(index, result);
+						}
+					}
+				}
+			}
+			else
+			{
+				var i = 0;
+				foreach (var tu in translationUnits)
+				{
+					if (mask[i])
+					{
+						var result = SearchTranslationUnit(settings, tu);
+						results.RemoveAt(i);
+						results.Insert(i, result);
+					}
+					i++;
+				}
+			}
 			return results.ToArray();
 		}
 
-        public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
-        {
-            throw new NotImplementedException();
-        }
+		private List<SearchResults> GetPreTranslationSearchResults(List<PreTranslateSegment> preTranslateList)
+		{
+			var resultsList = new List<SearchResults>(preTranslateList.Capacity);
 
-        public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
-        {
-            throw new NotImplementedException();
-        }
-    }
+			for (int i = 0; i < resultsList.Capacity; i++)
+			{
+				resultsList.Add(null);
+			}
+
+			foreach (var preTranslate in preTranslateList)
+			{
+				if (preTranslate != null)
+				{
+					var translation = new Segment(_languageDirection.TargetCulture);
+					var newSeg = preTranslate.TranslationUnit.SourceSegment.Duplicate();
+					if (newSeg.HasTags)
+					{
+						var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
+
+						translation = tagPlacer.GetTaggedSegment(preTranslate.PlainTranslation);
+						preTranslate.TranslationSegment = translation;
+					}
+					else
+					{
+						translation.Add(preTranslate.PlainTranslation);
+					}
+
+					var searchResult = CreateSearchResult(newSeg, translation);
+					var results = new SearchResults
+					{
+						SourceSegment = newSeg
+					};
+					results.Add(searchResult);
+
+					var index = preTranslateList.IndexOf(preTranslate);
+					resultsList.RemoveAt(index);
+					resultsList.Insert(index, results);
+				}
+			}
+			return resultsList;
+		}
+
+		private async Task<List<PreTranslateSegment>> PrepareTempData(List<PreTranslateSegment> preTranslatesegments)
+		{
+			try
+			{
+				for (var i = 0; i < preTranslatesegments.Count; i++)
+				{
+					if (preTranslatesegments[i] != null)
+					{
+						string sourceText;
+						var newseg = preTranslatesegments[i].TranslationUnit.SourceSegment.Duplicate();
+
+						if (newseg.HasTags)
+						{
+							var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
+							sourceText = tagPlacer.PreparedSourceText;
+						}
+						else
+						{
+							sourceText = newseg.ToPlain();
+						}
+
+						preTranslatesegments[i].SourceText = sourceText;
+					}
+				}
+
+				var translator = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier);
+
+				await Task.Run(() => Parallel.ForEach(preTranslatesegments, segment =>
+				{
+					if (segment != null)
+					{
+						segment.PlainTranslation = translator.Translate(_languageDirection, segment.SourceText);
+					}
+				})).ConfigureAwait(true);
+
+				return preTranslatesegments;
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
+			}
+			return preTranslatesegments;
+		}
+
+		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

@@ -5,7 +5,7 @@ using Sdl.Community.TMOptimizerLib;
 
 namespace Sdl.Community.TMOptimizer.Control
 {
-    public class ProcessingContext
+	public class ProcessingContext
     {
         public ProcessingContext()
         {

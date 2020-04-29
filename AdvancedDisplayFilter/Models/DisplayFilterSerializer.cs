@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Models
+namespace Sdl.Community.AdvancedDisplayFilter.Models
 {
     public class DisplayFilterSerializer
     {

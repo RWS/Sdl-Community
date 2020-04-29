@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Xml;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.FileBased;
@@ -21,7 +17,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			{
 				TagrgetLanguagesCodeList =  new List<string>()
 			};
-			if (node != null)
+			if (node?.HasChildNodes == true)
 			{
 				var sourceLanguageCode = node.ChildNodes[0].Attributes?["SourceLanguageCode"].InnerText;
 				if (!string.IsNullOrEmpty(sourceLanguageCode))
@@ -68,18 +64,22 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 		private  static bool ProjectLanguageMatchesTemplate(TemplateLanguageDetails projectTemplateLanguages, string sourceLanguage, List<Language> targetLanguages)
 		{
+			if (projectTemplateLanguages.SourceLanguageCode == null)
+				return true;
+
 			var targetLanguagesCode = new List<string>();
 			foreach (var language in targetLanguages)
 			{
 				targetLanguagesCode.Add(language.CultureInfo.Name);
 			}
-			if (!projectTemplateLanguages.SourceLanguageCode.Equals(sourceLanguage))
+
+			if (!projectTemplateLanguages.SourceLanguageCode.Equals(sourceLanguage, System.StringComparison.CurrentCultureIgnoreCase))
 			{
 				return false;
 			}
 			foreach (var templateTargetLanguage in projectTemplateLanguages.TagrgetLanguagesCodeList)
 			{
-				var sourceProjectContaisLanguage = targetLanguagesCode.Any(l=>l.Equals(templateTargetLanguage));
+				var sourceProjectContaisLanguage = targetLanguagesCode.Any(l=>l.Equals(templateTargetLanguage, System.StringComparison.CurrentCultureIgnoreCase));
 				if (!sourceProjectContaisLanguage)
 				{
 					return false;

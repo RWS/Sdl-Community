@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using Studio.AssemblyResolver;
+﻿using System.Windows;
 
 namespace Sdl.Community.TMOptimizer
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+	/// <summary>
+	/// Interaction logic for App.xaml
+	/// </summary>
+	public partial class App : Application
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            AssemblyResolver.Resolve();
             // First assign the MainWindow to the main form
-            TMCleanerViewModel viewModel = new TMCleanerViewModel();
-            MainWindow window = new MainWindow();
+            var viewModel = new TMCleanerViewModel();
+            var window = new MainWindow();
             window.DataContext = viewModel;
-            Application.Current.MainWindow = window; // main win
+            Application.Current.MainWindow = window; // main window
             window.Show();
         }
     }

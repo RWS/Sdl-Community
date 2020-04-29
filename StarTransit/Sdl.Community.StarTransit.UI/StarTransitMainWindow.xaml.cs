@@ -1,9 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
+using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
-using Sdl.Community.StarTransit.Shared.Utils;
+using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.ViewModels;
 
@@ -12,27 +11,24 @@ namespace Sdl.Community.StarTransit.UI
 	/// <summary>
 	/// Interaction logic for StarTransitMainWindow.xaml
 	/// </summary>
-	public partial class StarTransitMainWindow : MetroWindow
+	public partial class StarTransitMainWindow
 	{
-		private PackageDetails _packageDetails;
-		private TranslationMemories _translationMemories;
-		private TranslationMemoriesPenaltiesWindow _translationMemoriesPenalties;
-		private FinishViewModel finishViewModel;
-		private Finish _finish;
-		private PackageModel _package;
+		private readonly PackageDetails _packageDetails;
+		private readonly TranslationMemories _translationMemories;
+        private readonly Finish _finish;
 
 		public StarTransitMainWindow(PackageModel package)
 		{
-			InitializeComponent();
-			_package = package;
+            InitializeComponent();
 
-			var packageDetailsViewModel = new PackageDetailsViewModel(package, this);
+            IMessageBoxService messageBoxService = new MessageBoxService();
+			var packageDetailsViewModel = new PackageDetailsViewModel(package, messageBoxService);
 			_packageDetails = new PackageDetails(packageDetailsViewModel);
 
 			var tmViewModel = new TranslationMemoriesViewModel(packageDetailsViewModel);
 			_translationMemories = new TranslationMemories(tmViewModel);
 
-			finishViewModel = new FinishViewModel(tmViewModel, packageDetailsViewModel);
+			var finishViewModel = new FinishViewModel(tmViewModel, packageDetailsViewModel);
 			_finish = new Finish(finishViewModel);
 
 			var starTransitViewModel = new StarTransitMainWindowViewModel(
@@ -41,7 +37,7 @@ namespace Sdl.Community.StarTransit.UI
 				_translationMemories,
 				tmViewModel,
 				finishViewModel,
-				this);
+                messageBoxService);
 
 			DataContext = starTransitViewModel;
 
@@ -49,47 +45,34 @@ namespace Sdl.Community.StarTransit.UI
 			{
 				starTransitViewModel.CloseAction = Close;
 			}
-			if (starTransitViewModel.ShowWindowsMessage == null)
-			{
-				starTransitViewModel.ShowWindowsMessage = ShowWindowsMessage;
-			}
-			if (packageDetailsViewModel.ShowWindowsMessage == null)
-			{
-				packageDetailsViewModel.ShowWindowsMessage = ShowWindowsMessage;
-			}			
 		}
 
 		private void ListViewItem_Selected(object sender, RoutedEventArgs e)
 		{
-			string tag = string.Empty;
+			if (sender == null)
+			{
+				return;
+			}
 
-			if (sender == null) return;
 			var li = sender as ListViewItem;
-			if (li == null) return;
-
+			if (li == null)
+			{
+				return;
+			}
 
 			switch (li.Tag.ToString())
 			{
 				case "packageDetails":
-
 					tcc.Content = _packageDetails;
-
 					break;
-
 				case "tm":
-
 					tcc.Content = _translationMemories;
-
 					break;
 				case "finish":
-
 					tcc.Content = _finish;
-
-
 					break;
 				default:
 					tcc.Content = _packageDetails;
-
 					break;
 			}
 		}
@@ -99,26 +82,13 @@ namespace Sdl.Community.StarTransit.UI
 			packageDetailsItem.IsSelected = true;
 		}
 
-		private async void ShowWindowsMessage(string title, string message)
-		{
-			var dialog = new MetroDialogSettings
-			{
-				AffirmativeButtonText = "OK"
-			};
-			await this.ShowMessageAsync(title, message, MessageDialogStyle.Affirmative, dialog);
-
-			if (dialog.AffirmativeButtonText.Equals("OK"))
-			{
-				Close();
-			}
-		}
-
-		private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			var starTransitViewModel = DataContext as StarTransitMainWindowViewModel;
-
-			e.Cancel = starTransitViewModel.Active;
-			TelemetryService.Instance.SendCrashes(false);
-		}
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var starTransitViewModel = DataContext as StarTransitMainWindowViewModel;
+            if (starTransitViewModel != null)
+            {
+                e.Cancel = starTransitViewModel.Active;
+            }
+        }
 	}
 }

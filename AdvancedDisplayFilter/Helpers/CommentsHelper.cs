@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
+namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public static class CommentsHelper
 	{

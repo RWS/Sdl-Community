@@ -1,7 +1,14 @@
-﻿namespace Sdl.Community.projectAnonymizer.Models
+﻿using System;
+
+namespace Sdl.Community.projectAnonymizer.Models
 {
 	public class RegexPattern
 	{
+		public RegexPattern()
+		{
+			Id = Guid.NewGuid().ToString();
+		}
+
 		public string Pattern { get; set; }
 		public string Description { get; set; }
 		public bool ShouldEncrypt { get; set; }

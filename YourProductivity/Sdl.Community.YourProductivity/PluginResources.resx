@@ -124,55 +124,13 @@
   <data name="Plugin_Name" xml:space="preserve">
     <value>#YourProductivity</value>
   </data>
-  <data name="cup_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\cup-64.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="cup_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\cup-48.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="twitter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\twitter.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="twitter_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\twitter-48.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="twitter_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\twitter-64.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="twitter_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\twitter-24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ProductivityShareViewPartAction_Execute_In_order_to_share_the_result_you_need_to_configure_your_twitter_account" xml:space="preserve">
-    <value>In order to share the result you need to configure your twitter account</value>
-  </data>
-  <data name="ProductivityViewPartAction_Execute_You_need_to_configure_the_twitter_account_to_see_your_score" xml:space="preserve">
-    <value>You need to configure the twitter account to see your score</value>
-  </data>
-  <data name="ProductivityShareViewPartAction_Execute_In_order_to_share_your_score_you_need_to_translate_at_least__0__characters" xml:space="preserve">
-    <value>To be able to share your score to the SDL Leaderboard, and be eligible for our monthly prizes, you will need at least {0} characters translated and confirmed in your active projects.</value>
-  </data>
-  <data name="Leaderboard_Link" xml:space="preserve">
-    <value>http://www.translationzone.com/community/app/community-productivity/</value>
-  </data>
-  <data name="TweetFactory_CreateTweet_SDL_Leaderboard_could_not_be_reached__Please_check_your_internet_connectivity_and_try_again" xml:space="preserve">
-    <value>SDL Leaderboard could not be reached. Please check your internet connectivity and try again.</value>
-  </data>
-  <data name="TweetFactory_CreateTweet_Twitter_could_not_be_reached__Please_check_your_internet_connectivity_and_try_again_" xml:space="preserve">
-    <value>Twitter could not be reached. Please check your internet connectivity and try again.</value>
-  </data>
   <data name="ProductivityViewPartAction_Execute_This_plugin_is_compatible_with_SDL_Studio_2014_CU10_or_later__In_order_to_enjoy_this_plugin_please_upgrade_to_a_newer_version_" xml:space="preserve">
     <value>This plugin is compatible with SDL Studio 2014 CU10 or later. In order to enjoy this plugin please upgrade to a newer version.</value>
-  </data>
-  <data name="leaderboard" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\leaderboard.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="score" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\score.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="info" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\info.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Leaderboard_API_Link" xml:space="preserve">
-    <value>https://leaderboard.translationzone.com/</value>
   </data>
 </root>

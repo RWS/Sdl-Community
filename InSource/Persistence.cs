@@ -15,25 +15,20 @@ namespace Sdl.Community.InSource
         {
             _persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 @"SDL Community\StudioAutomation\studioAutomation.json");
-
         }
 
-        public void SaveProjectRequestList(List<ProjectRequest> persistenceListFolders)
-        {
+	    public void SaveProjectRequestList(List<ProjectRequest> persistenceListFolders)
+	    {
+		    var jsonText = File.ReadAllText(_persistancePath);
+		    var request = JsonConvert.DeserializeObject<Request>(jsonText);
 
-            var jsonText = File.ReadAllText(_persistancePath);
-            var request = JsonConvert.DeserializeObject<Request>(jsonText);
+		    request.ProjectRequest = persistenceListFolders;
+		    var json = JsonConvert.SerializeObject(request);
 
-            request.ProjectRequest = persistenceListFolders;
+		    File.WriteAllText(_persistancePath, json);
+	    }
 
-
-            var json = JsonConvert.SerializeObject(request);
-            
-            File.WriteAllText(_persistancePath,json);
-            
-        }
-
-        public void SaveTimerSettings(TimerModel settings)
+	    public void SaveTimerSettings(TimerModel settings)
         {
             var jsonText = File.ReadAllText(_persistancePath);
             var request = JsonConvert.DeserializeObject<Request>(jsonText);
@@ -43,7 +38,6 @@ namespace Sdl.Community.InSource
             var json = JsonConvert.SerializeObject(request);
 
             File.WriteAllText(_persistancePath, json);
-
         }
 
         private void CreateNewJsonFile(Request recoveredJson)
@@ -71,7 +65,6 @@ namespace Sdl.Community.InSource
             if (projectToUpdate != null) projectToUpdate.Files = new string[] {};
 
             SaveProjectRequestList(projectRequestList);
-
         }
 
         public void UpdateDelete(bool delete)
@@ -79,7 +72,6 @@ namespace Sdl.Community.InSource
             var savedRequest = LoadRequest();
 
             savedRequest.DeleteFolders = delete;
-
             var json = JsonConvert.SerializeObject(savedRequest);
 
             File.WriteAllText(_persistancePath, json);
@@ -94,7 +86,6 @@ namespace Sdl.Community.InSource
             if (result != null) { return result.ProjectRequest; }
             return new List<ProjectRequest>();
         }
-
 
         public Request LoadRequest()
         {
@@ -116,6 +107,5 @@ namespace Sdl.Community.InSource
             var savedData = JsonConvert.DeserializeObject<Request>(json);
             return savedData;
         }
-
     }
 }

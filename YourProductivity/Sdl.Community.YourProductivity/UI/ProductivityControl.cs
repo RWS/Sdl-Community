@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,18 +8,15 @@ using BrightIdeasSoftware;
 using NLog;
 using Sdl.Community.YourProductivity.Model;
 using Sdl.Community.YourProductivity.Services;
-using Sdl.Community.YourProductivity.Util;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.Community.YourProductivity.Persistance;
 
 namespace Sdl.Community.YourProductivity.UI
 {
-    public partial class ProductivityControl : UserControl
+	public partial class ProductivityControl : UserControl
     {
 
         private ProductivityService _productivityService;
-        private TwitterShareService _twitterShareService;
         private List<TrackInfoView> _trackingInfoVews;
         private bool _initialized;
         private Logger _logger;
@@ -30,40 +26,12 @@ namespace Sdl.Community.YourProductivity.UI
         {
             InitializeComponent();
 
-            btnTweet.MouseEnter += btnTweet_MouseEnter;
-            btnTweet.MouseLeave += btnTweet_MouseLeave;
-            btnLeaderboard.MouseEnter += btnLeaderboard_MouseEnter;
-            btnLeaderboard.MouseLeave += btnLeaderboard_MouseLeave;
             _initialized = false;
         }
-
-        void btnLeaderboard_MouseLeave(object sender, EventArgs e)
-        {
-            btnLeaderboard.MouseLeaveColor();
-
-        }
-
-        void btnLeaderboard_MouseEnter(object sender, EventArgs e)
-        {
-            btnLeaderboard.MouseEnterColor();
-
-        }
-
-        void btnTweet_MouseLeave(object sender, EventArgs e)
-        {
-            btnTweet.MouseLeaveColor();
-        }
-
-        void btnTweet_MouseEnter(object sender, EventArgs e)
-        {
-            btnTweet.MouseEnterColor();
-
-        }
-
-        public void Initialize(ProductivityService productivityService, TwitterShareService twitterShareService)
+	
+        public void Initialize(ProductivityService productivityService)
         {
             _productivityService = productivityService;
-            _twitterShareService = twitterShareService;
 
             _initialized = true;
         }
@@ -87,14 +55,6 @@ namespace Sdl.Community.YourProductivity.UI
             btnScore.Text = string.Format("{0}%", _productivityService.ProductivityScore);
             lblScore.Text = _productivityService.Score.ToString(CultureInfo.InvariantCulture);
             lblScore.Text = string.Format("Your score is:\r\n{0:n0} points!", _productivityService.Score);
-
-            var twitterAccount = _twitterShareService.GetUserProfile();
-            if (twitterAccount != null)
-            {
-                lblScore.Text = string.Format("{0}, your score is:\r\n{1:n0} points!", twitterAccount.Name,
-                    _productivityService.Score);
-                pbTweetAccountImage.Load(twitterAccount.ProfileImageUrl);
-            }
 
             InitializeListView();
         }
@@ -176,17 +136,5 @@ namespace Sdl.Community.YourProductivity.UI
 
             editorController.Activate(document);
         }
-
-        private void btnTweet_Click(object sender, EventArgs e)
-        {
-            FormFactory.CreateTweetForm(_logger);
-        }
-
-        private void btnLeaderboard_Click(object sender, EventArgs e)
-        {
-            var sInfo = new ProcessStartInfo(PluginResources.Leaderboard_Link);
-            Process.Start(sInfo);
-        }
-
     }
 }

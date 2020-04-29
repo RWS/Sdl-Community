@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Sdl.Community.TMOptimizerLib
 {
-    class OutputWriter
+	class OutputWriter
     {
         private readonly string _outputFile;
         private StreamWriter _writer;
@@ -55,7 +55,6 @@ namespace Sdl.Community.TMOptimizerLib
             _writer.Write(content + "\n\n");
         }
         
-
         public void Complete()
         {
             _writer.Write("\n</body>\n</tmx>");

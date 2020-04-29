@@ -1,58 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Raven.Client.Indexes;
-using Sdl.Community.AhkPlugin.Model;
-using Sdl.Community.AhkPlugin.Repository.Raven;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
+//using Raven.Client.Indexes;
+//using Sdl.Community.AhkPlugin.Model;
+//using Sdl.Community.AhkPlugin.Repository.Raven;
 
-namespace Sdl.Community.AhkPlugin.Repository.DataBase
-{
-	public class ScriptDb
-	{
-		private bool _disposed;
+//namespace Sdl.Community.AhkPlugin.Repository.DataBase
+//{
+//	public class ScriptDb
+//	{
+//		private bool _disposed;
 
-		public  Task<List<Script>> GetAllScripts()
-		{
-			using (var session = RavenContext.Current.CreateSession())
-			{
-				var allScripts =  session.Query<Script>().ToList();
-				return Task.FromResult(allScripts);
-			}
-		}
+//		public  Task<List<Script>> GetAllScripts()
+//		{
+//			using (var session = RavenContext.Current.CreateSession())
+//			{
+//				var allScripts =  session.Query<Script>().ToList();
+//				return Task.FromResult(allScripts);
+//			}
+//		}
 
-		public Task AddNewScript(Script script)
-		{
-			using (var session = RavenContext.Current.CreateSession())
-			{
-				session.Store(script);
-				session.SaveChanges();
-			}
-			return Task.FromResult(true);
-		}
+//		public Task AddNewScript(Script script)
+//		{
+//			using (var session = RavenContext.Current.CreateSession())
+//			{
+//				session.Store(script);
+//				session.SaveChanges();
+//			}
+//			return Task.FromResult(true);
+//		}
 
-		public Task RemoveScripts(List<Script> scripts)
-		{
-			using (var session = RavenContext.Current.CreateSession())
-			{
-				foreach (var script in scripts)
-				{
-					var result = session.Query<Script, ScriptById>().FirstOrDefault(s => s.ScriptId.Equals(script.ScriptId));
-					session.Delete(result);
-				}
-				session.SaveChanges();
-			}
-			return Task.FromResult(true);
-		}
+//		public Task RemoveScripts(List<Script> scripts)
+//		{
+//			using (var session = RavenContext.Current.CreateSession())
+//			{
+//				foreach (var script in scripts)
+//				{
+//					var result = session.Query<Script, ScriptById>().FirstOrDefault(s => s.ScriptId.Equals(script.ScriptId));
+//					session.Delete(result);
+//				}
+//				session.SaveChanges();
+//			}
+//			return Task.FromResult(true);
+//		}
 
-		public class ScriptById: AbstractIndexCreationTask<Script>
-		{
-			public ScriptById()
-			{
-				Map = scripts => from script in scripts
-					select new { script.ScriptId };
-			}
-		}
-	}
-}
+//		public class ScriptById: AbstractIndexCreationTask<Script>
+//		{
+//			public ScriptById()
+//			{
+//				Map = scripts => from script in scripts
+//					select new { script.ScriptId };
+//			}
+//		}
+//	}
+//}

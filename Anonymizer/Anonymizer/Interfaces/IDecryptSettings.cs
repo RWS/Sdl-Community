@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.projectAnonymizer.Interfaces
 {
-	interface IDecryptSettings
+	internal interface IDecryptSettings
 	{
 		string EncryptionKey { get; set; }
 		bool IgnoreEncrypted { get; set; }

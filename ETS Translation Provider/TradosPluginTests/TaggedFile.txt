@@ -1,0 +1,139 @@
+﻿<1 id=34>CONFIDENTIAL<2 id=38/></1><3 id=43/><4 id=47/><5 id=50>NMT Setup</5>
+Neural Machine Translation
+A Complete Guide to Setup 
+and Pre-translation
+February, 2018
+Contents
+Setting up NMT via the ETS Plugin
+Navigate to the SDL AppStore to download the SDL ETS plugin:
+<1 id=194>https://appstore.sdl.com/language/app/sdl-ets/843/</1>
+https://appstore.sdl.com/language/app/sdl-ets/843/
+Click on <1 id=201>Download</1> and log in with your <2 id=204>SDL Account</2> credentials (<3 id=207>https://</3><4 id=208>oos.sdl.com</4>).
+Reach out to your manager or raise a ticket in <1 id=214>Service Center</1> if you cannot log in.
+C:\Users\dvaldivia\AppData\Local\Microsoft\Windows\Temporary Internet Files\Content.Outlook\KX69FSDP\oos.sdl.com
+Choose the latest version available, if applicable.
+Tick the box to accept <1 id=217>Terms and Conditions</1> and click <2 id=220>Continue</2>.
+Once downloaded, open the .sdlplugin file and the SDL Trados Studio plugin installer will launch.
+<1 id=223>Accept the License Agreement, click on <2 id=247>Next</2>, select the Studio instance where the plugin will be installed (</1><3 id=262>only 2017 version is allowed</3><4 id=271>) and choose <5 id=277>All your domain machines</5>.</4>
+Then, click on <1 id=283>Next</1> and <2 id=289>Finish</2>.
+After that, in SDL Trados Studio, go to <1 id=298>Project Settings</1> -> <2 id=304>All Language Pairs</2> (or your specific language pair, according to your project) -> <3 id=328>Use…</3>
+<1 id=334>Click </1><2 id=337>SDL ETS translation provider…</2>
+Note:
+At this point, please bear in mind that <1 id=355>you will only see any engine if it’s available for the language pairs in your project</1>.
+You won’t be able to add or apply any engine otherwise.
+Enter the following data:
+Host:
+34.235.10.97
+Port:
+8001
+API Key:
+ag_OQiGTPrOZgVC
+Please treat this as <1 id=380><2 id=376>CONFIDENTIAL SDL INTERNAL DATA</2><3 id=379>.</3></1>
+You must not disclose!
+Also, please note that this credential
+Note:
+Please make sure to select the <1 id=389>Save Credentials</1> tick box.
+Due to the nature of the plugin itself, you will need to paste the host IP address when enabling the NMT engine.
+For your convenience, place a txt file on your Desktop or similar, (also instructions in <1 id=392>Appendix A</1> to use AutoHotKey).
+<1 id=403/>Then engine will be already configured and it will look like this:
+Note:
+There is no single setting that you can configure, since NMT does not provide several engines to choose from.
+Once you see the screen below, everything is ready to go.
+If you are using a non-supported language, the plugin will show an error.
+Check that the pre-translation is correctly configured
+After adding the NMT engine via the ETS plugin, you need to make sure that everything is correctly configured so that the output will be applied to the files in your project.
+In Studio, go to <1 id=445>All Language Pairs</1> -> <2 id=448>Batch Processing</2> -> <3 id=454>Pre-translate Files</3> and verify that <4 id=469>Minimum match value</4> is set to 75% (or your low fuzzy value), and <5 id=481>Apply automated translation</5> is enabled.
+Note:
+Depending on your project, materials and options can be configured in a specific language pair or <1 id=492>All Language Pairs</1>.
+As a matter of rule, if you see the following:
+You will need to add your materials and settings in that specific language pair, instead of <1 id=499>All Language Pairs</1>.
+To do so, just go to the appropriate language combination under <1 id=502>All Language Pairs</1> and follow the steps in this guide.
+Running a Pre-translate Batch Task
+There are two scenarios in which you want to apply NMT pre-translation to an existing project:
+If there is no existing PE
+In this case, after adding any required TMs, follow the steps in this guide to setup NMT correctly and run a Pre-translate Batch Task.
+Just click on <1 id=519>Batch Tasks</1> and select <2 id=522>Pre-translate Files</2>, as per the screenshot to the left.
+Since everything has already been configured, just click <1 id=525>Next</1> and <2 id=528>Finish</2>.
+If there is existing PE
+In this case, you need to delete any existing PE.
+To do so, you can follow two different approaches:
+<1 id=536>Open all files in your translation project and use a filtered view</1>, like this:
+Then, select all segments and press <1 id=543>F4</1> to copy source text to target column.
+Depending on project size, this can be feasible or take too long to process.
+If you find it too time-consuming, then you may need to use a different approach:
+Use a plugin.
+We recommend using <1 id=552>Integrated Segment Actions</1>, which can be downloaded from the AppStore <2 id=556>here</2>.
+After installation, you just need to right-click on a given Project and select the next options to “clean” any existing PE segments:
+https://appstore.sdl.com/language/app/integrated-segment-actions/530/
+After clicking on <1 id=566>Perform Actions on all files in project</1>, your segments will be ready for you to apply the NMT output and you can follow the steps as if no PE had been applied.
+Appendix A
+<1 id=577>Important consideration </1>in Project Package creation
+Please make sure to select the following option when creating a project package if you need to send it to an external resource.
+Otherwise, there will be “traces” of the ETS credential.
+<1 id=591>Important consideration </1>in projects publishing
+Please delete the ETS translation provider line from your Project Settings before publishing any project to the server.
+Again, there will be traces of the credential shown to external users.
+AutoHotKey script to load the ETS credential
+Stef Mandigers (<1 id=605>thanks for that!</1>) from the Hengelo office has created a smart AutoHotKey script that populates the data fields with a convenient CTRL + V shortcut.
+Below you can find a working .ahk file that you can use or extract the script from to merge with any current .ahk file that you are already using.
+Preparations
+First of all, make sure the nMT plugin is configured by following the instructions in <1 id=619>NMT Setup Instructions.docx</1>
+After the initial configuration, manual input of only the host number is required every time the nMT engine is connected to a project.
+We have developed an AutoHotkey to input and confirm the number automatically.
+General
+To start using AutoHotkey, first you need to install it on your machine.
+Installation file can be found in the Software Center and on the website (<1 id=627>https://autohotkey.com/</1>).
+AutoHotkey works with script files with file extension .ahk.
+https://autohotkey.com/
+Loading existing script
+To use an existing script, simply double-click it.
+It will become active, and an AutoHotkey logo will show up in your task bar (“H”).
+Right-clicking the icon gives you several options:
+<1 id=657><2 id=654>Pause</2> </1>to stop the script temporarily, but leave the icon in your task bar.
+<1 id=663><2 id=660>Exit</2> </1>to remove it from your task bar entirely.
+As a default, scripts will be removed and will have to be reloaded after rebooting (unless you place a shortcut in your local StartUp folder)
+<1 id=669><2 id=666>Edit This Script</2> </1>will open the script in notepad.
+After making any changes and saving them (and closing the script file), you need to <1 id=675><2 id=672>Reload This Script</2> </1>for the changes to become effective.
+Next:
+Load the attached <1 id=678>nMT host number.ahk</1> file.
+In Studio, go to <1 id=684>Project Settings</1> -> <2 id=690>All Language Pairs</2> (or your specific language pair, according to your project) -> <3 id=696>Use…</3>
+Click <1 id=702>SDL ETS translation provider…</1>
+This screen will appear:
+Make sure your cursor is in the <1 id=712>Host</1> field (it probably already is by default).
+On your keyboard, now press <1 id=715>Shift + V.</1>
+The <1 id=730>Host</1> field and the <2 id=733>API Key</2> field will be automatically populated.
+The window will be closed automatically as well.
+The nMT provider is now attached to your project.
+In order to automatically load the .ahk file every time you start your machine, place a shortcut to the file in your StartUp folder (if you have the appropriate admin rights):
+C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp
+Example:
+Editing the hotkey
+Don't like the hotkey combination?
+You can change it yourself by editing the script.
+In Notepad, you will see this:
+Enter your preferred combination before the double colon and leave the other variables untouched.
+As a general reference:
+# is the Windows key
+^ is the Control key
++ is the Shift key
+! is the Alt key
+Save the script and reload it.
+Appendix B
+Upgrading your SDL ETS app
+Please follow these steps in order to delete any existing installation of the SDL ETS plugin and replace it with an updated version:
+Click the link below to go to the SDL Trados Studio plugins folder:
+<1 id=762>C:\Users\%USERNAME%\AppData\Roaming\SDL\SDL Trados Studio\14\Plugins</1>
+C:\Users\%USERNAME%\AppData\Roaming\SDL\SDL Trados Studio\14\Plugins
+Delete any references to “SDL ETS” <1 id=772>in both folders</1>:
+Namely, delete this file in “Packages” folder:
+And this folder too, under “Unpacked”:
+Go to the appstore, download the latest version available and install it.
+Just follow the instructions in the initial section of this guide.
+<1 id=801>Enjoy</1> your brand new app. <2 id=802/>
+SDL (LSE:
+SDL) is the global innovator in language translation technology, services and content management.
+For more than 20 years, SDL has transformed business results by enabling nuanced digital experiences with customers across the globe so they can create personalized connections anywhere and on any device.
+Are you in the know?
+Find out more at SDL.com.
+Copyright © 2017 SDL plc. All Rights Reserved.
+All company product or service names referenced herein are properties of their respective owners.

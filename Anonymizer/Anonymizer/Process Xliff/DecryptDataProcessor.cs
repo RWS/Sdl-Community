@@ -6,13 +6,18 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 {
 	public class DecryptDataProcessor : AbstractBilingualContentProcessor
 	{
-		private readonly DecryptSettings _decryptSettings;
-		public DecryptDataProcessor(DecryptSettings decryptSettings)
+		private readonly AnonymizerSettings _decryptSettings;
+
+		public DecryptDataProcessor(AnonymizerSettings decryptSettings)
 		{
 			_decryptSettings = decryptSettings;
 		}
+
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
+			if (!(_decryptSettings.HasBeenCheckedByControl ?? false))
+				return;
+
 			base.ProcessParagraphUnit(paragraphUnit);
 			if (paragraphUnit.IsStructure) { return; }
 

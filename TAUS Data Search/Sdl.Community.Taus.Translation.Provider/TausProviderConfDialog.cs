@@ -415,7 +415,7 @@ namespace Sdl.Community.Taus.Translation.Provider
 
 		private void linkLabel_createNewLoginCredentials_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			System.Diagnostics.Process.Start("https://www.tausdata.org/index.php/component/users/?view=registration");
+			System.Diagnostics.Process.Start("https://www.taus.net/data-cloud-lp");
 		}
 
 		private void linkLabel_createNewAuthorizationKey_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

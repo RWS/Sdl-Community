@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="..\Themes\General.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--General Styles-->
+    <Style TargetType="TextBlock" x:Key="SdlTextBlockStyle">
+        <Setter Property="FontSize" Value="12"></Setter>
+        <Setter Property="Foreground" Value="#FF0A1E2C"></Setter>
+        <Setter Property="TextWrapping" Value="WrapWithOverflow"></Setter>
+    </Style>
+
+    <Style x:Uid="SdlHyperlink" x:Key="SdlHyperlinkStyle" TargetType="Hyperlink">
+        <Setter x:Uid="Setter_21" Property="FontFamily" Value="Segoe UI" />
+        <Setter x:Uid="Setter_23" Property="Foreground" Value="#0096D6" />
+        <Setter x:Uid="Setter_24" Property="TextDecorations" Value="" />
+    </Style>
+
+</ResourceDictionary>

@@ -15,7 +15,6 @@ namespace Sdl.Community.ControlledMTProviders.Provider
         Description = "ControledMTProviders")]
     public class ControlledMtProvidersFactory : ITranslationProviderFactory
     {
-        #region ITranslationProviderFactory Members
 
         public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
@@ -43,6 +42,5 @@ namespace Sdl.Community.ControlledMTProviders.Provider
             return translationProviderUri.Scheme.Equals(new Uri(ControlledMtProvidersProvider.ProviderUri).Scheme);
         }
 
-        #endregion
     }
 }

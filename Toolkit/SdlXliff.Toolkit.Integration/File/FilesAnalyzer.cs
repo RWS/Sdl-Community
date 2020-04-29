@@ -9,7 +9,6 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using SdlXliff.Toolkit.Integration.Helpers;
 
 namespace SdlXliff.Toolkit.Integration.File
 {

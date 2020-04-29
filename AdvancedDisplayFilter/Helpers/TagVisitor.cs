@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
+﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
+namespace Sdl.Community.AdvancedDisplayFilter.Helpers
 {
 	public class TagVisitor : IMarkupDataVisitor
 	{
@@ -25,7 +20,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			}
 		}
 
-
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
 			if (tag.TagProperties != null)
@@ -36,7 +30,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		public void VisitText(IText text)
 		{
-
 		}
 
 		public void VisitSegment(ISegment segment)
@@ -46,12 +39,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		public void VisitLocationMarker(ILocationMarker location)
 		{
-
 		}
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
 		{
-
 		}
 
 		public void VisitOtherMarker(IOtherMarker marker)
@@ -60,13 +51,11 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		}
 
 		public void VisitLockedContent(ILockedContent lockedContent)
-		{
-			
+		{			
 		}
 
 		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
-		{
-			
+		{			
 		}
 		private void VisitChildren(IAbstractMarkupDataContainer container)
 		{

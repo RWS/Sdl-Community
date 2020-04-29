@@ -1,4 +1,5 @@
-﻿using Sdl.Community.SdlFreshstart.ViewModel;
+﻿using MahApps.Metro.Controls.Dialogs;
+using Sdl.Community.SdlFreshstart.ViewModel;
 
 namespace Sdl.Community.SdlFreshstart
 {
@@ -11,7 +12,7 @@ namespace Sdl.Community.SdlFreshstart
 		{
 			InitializeComponent();
 			
-			var viewModel = new MainWindowViewModel(this);
+			var viewModel = new MainWindowViewModel(this, DialogCoordinator.Instance);
 			DataContext = viewModel;
 		}
 	}

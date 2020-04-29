@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>Rapid Add Term</PlugInName>
+  <Version>1.0.1.1</Version>
+  <Description>Rapid Add Term</Description>
+  <Author>SDL Community Developers</Author>
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+</PluginPackage>

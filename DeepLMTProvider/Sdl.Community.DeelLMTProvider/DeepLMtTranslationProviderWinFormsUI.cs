@@ -1,12 +1,11 @@
 ﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
 using System.Windows.Forms;
-using Sdl.Community.DeelLMTProvider;
+using System.Windows.Forms.Integration;
+using Sdl.Community.DeepLMTProvider.WPF;
+using Sdl.Community.DeepLMTProvider.WPF.Model;
+
 
 namespace Sdl.Community.DeepLMTProvider
 {
@@ -27,11 +26,17 @@ namespace Sdl.Community.DeepLMTProvider
 			var options = new DeepLTranslationOptions();
 
 			//get credentials
-			var getCredGt = GetCredentials(credentialStore, "deeplprovider:///");
-			var dialog = new DeepLMtDialog(options,credentialStore);
-			if (dialog.ShowDialog(owner) == DialogResult.OK)
+			var credentials = GetCredentials(credentialStore, "deeplprovider:///");
+
+			var dialog = new DeepLWindow(options, credentials, languagePairs);
+			ElementHost.EnableModelessKeyboardInterop(dialog);
+			dialog.ShowDialog();
+			if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
 			{
-				var provider = new DeepLMtTranslationProvider(options);
+				var provider = new DeepLMtTranslationProvider(options)
+				{
+					Options = dialog.Options
+				};
 				var apiKey = dialog.Options.ApiKey;
 				SetDeeplCredentials(credentialStore, apiKey, true);
 				return new ITranslationProvider[] { provider };
@@ -79,8 +84,10 @@ namespace Sdl.Community.DeepLMTProvider
 				editProvider.Options.ApiKey = savedCredentials.Credential;
 			}
 
-			var dialog = new DeepLMtDialog(editProvider.Options,credentialStore);
-			if (dialog.ShowDialog(owner) == DialogResult.OK)
+			var dialog = new DeepLWindow(editProvider.Options, savedCredentials, languagePairs);
+			ElementHost.EnableModelessKeyboardInterop(dialog);
+			dialog.ShowDialog();
+			if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
 			{
 				editProvider.Options = dialog.Options;
 				var apiKey = editProvider.Options.ApiKey;
@@ -100,7 +107,9 @@ namespace Sdl.Community.DeepLMTProvider
 			var info = new TranslationProviderDisplayInfo
 			{
 				Name = "DeepL Translation provider",
-				TooltipText = "DeepL Translation provider"
+				TooltipText = "DeepL Translation provider",
+				//SearchResultImage = PluginResources.DeepL,
+				TranslationProviderIcon = PluginResources.deepLIcon
 			};
 			return info;
         }

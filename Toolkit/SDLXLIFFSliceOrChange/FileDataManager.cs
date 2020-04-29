@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Collections.Generic;
 using Sdl.Core.Globalization;
-
-
-using SdlXliff.Toolkit.Integration;
 using SdlXliff.Toolkit.Integration.Data;
 using SdlXliff.Toolkit.Integration.File;
 

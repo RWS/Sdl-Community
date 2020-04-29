@@ -28,7 +28,7 @@ namespace SDLXLIFFSliceOrChange
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SDLXLIFFSliceOrChange));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.xLIFFFiles = new XLIFFFiles();
             this.selectFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.selectProjectFile = new System.Windows.Forms.OpenFileDialog();
@@ -46,6 +46,7 @@ namespace SDLXLIFFSliceOrChange
             this.ckSystemTranslationMemory = new System.Windows.Forms.CheckBox();
             this.ckSystemMachineTranslation = new System.Windows.Forms.CheckBox();
             this.groupTranslationOrigin = new System.Windows.Forms.GroupBox();
+            this.ckNeuralMachineTranslation = new System.Windows.Forms.CheckBox();
             this.ckAutoPropagated = new System.Windows.Forms.CheckBox();
             this.ckAutomatedTranslation = new System.Windows.Forms.CheckBox();
             this.ckInteractive = new System.Windows.Forms.CheckBox();
@@ -343,6 +344,7 @@ namespace SDLXLIFFSliceOrChange
             // 
             // groupTranslationOrigin
             // 
+            this.groupTranslationOrigin.Controls.Add(this.ckNeuralMachineTranslation);
             this.groupTranslationOrigin.Controls.Add(this.ckAutoPropagated);
             this.groupTranslationOrigin.Controls.Add(this.ckAutomatedTranslation);
             this.groupTranslationOrigin.Controls.Add(this.ckInteractive);
@@ -350,16 +352,27 @@ namespace SDLXLIFFSliceOrChange
             this.groupTranslationOrigin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupTranslationOrigin.Location = new System.Drawing.Point(350, 6);
             this.groupTranslationOrigin.Name = "groupTranslationOrigin";
-            this.groupTranslationOrigin.Size = new System.Drawing.Size(141, 116);
+            this.groupTranslationOrigin.Size = new System.Drawing.Size(141, 126);
             this.groupTranslationOrigin.TabIndex = 5;
             this.groupTranslationOrigin.TabStop = false;
             this.groupTranslationOrigin.Text = "Translation Origin";
+            // 
+            // ckNeuralMachineTranslation
+            // 
+            this.ckNeuralMachineTranslation.AutoSize = true;
+            this.ckNeuralMachineTranslation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ckNeuralMachineTranslation.Location = new System.Drawing.Point(6, 96);
+            this.ckNeuralMachineTranslation.Name = "ckNeuralMachineTranslation";
+            this.ckNeuralMachineTranslation.Size = new System.Drawing.Size(76, 17);
+            this.ckNeuralMachineTranslation.TabIndex = 4;
+            this.ckNeuralMachineTranslation.Text = "Neural MT";
+            this.ckNeuralMachineTranslation.UseVisualStyleBackColor = true;
             // 
             // ckAutoPropagated
             // 
             this.ckAutoPropagated.AutoSize = true;
             this.ckAutoPropagated.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckAutoPropagated.Location = new System.Drawing.Point(6, 86);
+            this.ckAutoPropagated.Location = new System.Drawing.Point(6, 76);
             this.ckAutoPropagated.Name = "ckAutoPropagated";
             this.ckAutoPropagated.Size = new System.Drawing.Size(106, 17);
             this.ckAutoPropagated.TabIndex = 3;
@@ -370,7 +383,7 @@ namespace SDLXLIFFSliceOrChange
             // 
             this.ckAutomatedTranslation.AutoSize = true;
             this.ckAutomatedTranslation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckAutomatedTranslation.Location = new System.Drawing.Point(6, 63);
+            this.ckAutomatedTranslation.Location = new System.Drawing.Point(6, 57);
             this.ckAutomatedTranslation.Name = "ckAutomatedTranslation";
             this.ckAutomatedTranslation.Size = new System.Drawing.Size(132, 17);
             this.ckAutomatedTranslation.TabIndex = 2;
@@ -381,7 +394,7 @@ namespace SDLXLIFFSliceOrChange
             // 
             this.ckInteractive.AutoSize = true;
             this.ckInteractive.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckInteractive.Location = new System.Drawing.Point(6, 40);
+            this.ckInteractive.Location = new System.Drawing.Point(6, 37);
             this.ckInteractive.Name = "ckInteractive";
             this.ckInteractive.Size = new System.Drawing.Size(76, 17);
             this.ckInteractive.TabIndex = 1;
@@ -1482,8 +1495,8 @@ namespace SDLXLIFFSliceOrChange
             // colSize
             // 
             this.colSize.DataPropertyName = "Size";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.colSize.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.colSize.DefaultCellStyle = dataGridViewCellStyle2;
             this.colSize.HeaderText = "Size";
             this.colSize.Name = "colSize";
             this.colSize.ReadOnly = true;
@@ -1720,6 +1733,7 @@ namespace SDLXLIFFSliceOrChange
         private System.Windows.Forms.Panel panelStatus;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.ErrorProvider errorProvider1;
-    }
+		public System.Windows.Forms.CheckBox ckNeuralMachineTranslation;
+	}
 }
 

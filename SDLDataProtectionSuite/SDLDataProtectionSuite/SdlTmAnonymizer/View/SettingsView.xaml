@@ -1,0 +1,67 @@
+﻿<Window x:Class="Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.View.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Controls"
+             mc:Ignorable="d" 
+			 Title="Settings"
+			 Icon="../../Resources/Settings.ico"
+             FontFamily="Segoe UI"
+			 Width="673"
+			 Height="306"
+			 ResizeMode="NoResize"
+			 WindowStartupLocation="CenterScreen">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\Styles\ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="..\Styles\TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="..\Styles\TextBoxStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<Grid Grid.Row="0">
+			<CheckBox IsChecked="{Binding Backup}" Margin="20,27,0,0" Content="Backup Translation Memories before applying changes" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="507"/>
+			<controls:LabelledTextBox Text="{Binding BackupFullPath}" Label="Backup TM Path: " Height="22" Margin="46,49,62,0" VerticalAlignment="Top" Width="Auto"/>
+			<Button Content="..." ToolTip="Browse..." Command="{Binding BrowseCommand}" CommandParameter="Backup" HorizontalAlignment="Right" Margin="0,50,34,0" VerticalAlignment="Top" Width="23"/>
+
+
+
+			<CheckBox IsChecked="True" IsEnabled="False" Margin="20,93,0,0" Content="Create a log report of changes applied to the Translation Memories" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="507"/>
+			<controls:LabelledTextBox Text="{Binding LogsFullPath}" Label="Log report Path:  " Height="22" Margin="46,115,62,0" VerticalAlignment="Top" Width="Auto"/>
+			<Button Content="..." ToolTip="Browse..." Command="{Binding BrowseCommand}" CommandParameter="Logs" HorizontalAlignment="Right" Margin="0,115,34,0" VerticalAlignment="Top" Width="23"/>
+
+		</Grid>
+
+		<StackPanel Grid.Row="1" Orientation="Vertical" Margin="5,0,10,15">
+			<Grid>
+
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+					<Button  Width="90" Style="{DynamicResource LightGreenButtonsStyle }" Command="{Binding OkCommand}" >
+						<StackPanel Orientation="Horizontal">
+							<TextBlock>OK</TextBlock>
+						</StackPanel>
+					</Button>
+					<Button Margin="0" Style="{DynamicResource LightGreenButtonsStyle }" Width="90" IsCancel="True">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock>Cancel</TextBlock>
+						</StackPanel>
+					</Button>
+				</StackPanel>
+				<Button Command="{Binding ResetCommand}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="90" Height="25">
+					<Underline>
+						<TextBlock Text="Reset defaults" Foreground="MediumBlue"/>
+					</Underline>
+				</Button>
+			</Grid>
+		</StackPanel>
+	</Grid>
+</Window>
+

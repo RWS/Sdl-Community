@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
-using Sdl.ProjectAutomation.AutomaticTasks;
 
 namespace ExportToExcel
 {
     public class GeneratorSettings : SettingsGroup
-    {
-       
+    {       
         public enum ExportType { Excel, Word, Xml }
         public enum ExclusionType { Category, Status,Locked }
         public enum UpdateSegmentMode { All, TrackedOnly }

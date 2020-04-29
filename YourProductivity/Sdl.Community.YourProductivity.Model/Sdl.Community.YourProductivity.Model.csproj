@@ -50,10 +50,8 @@
     <Compile Include="..\Sdl.Community.YourProductivity\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="LeaderboardInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrackInfoView.cs" />
-    <Compile Include="TwitterAccountInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SdlCommunity.snk" />

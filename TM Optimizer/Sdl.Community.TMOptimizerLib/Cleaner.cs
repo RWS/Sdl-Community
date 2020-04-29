@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace Sdl.Community.TMOptimizerLib
 {
-    public class Cleaner : ProcessorBase
+	public class Cleaner : ProcessorBase
     {
         private readonly TmxFile _inputFile;
         private readonly Settings _settings;

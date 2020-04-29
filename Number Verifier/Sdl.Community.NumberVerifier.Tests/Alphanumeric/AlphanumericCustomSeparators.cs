@@ -24,7 +24,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
 			var textAlphanumericsList = numberVerifierMain.GetAlphanumericList(text);
 
-			Assert.True(textAlphanumericsList.Count != 0);
+			Assert.True(textAlphanumericsList.Item2.Count != 0);
 		}
 
 		[Theory]
@@ -44,7 +44,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
 			var textAlphanumericsList = numberVerifierMain.GetAlphanumericList(text);
 
-			Assert.True(textAlphanumericsList.Count != 0);
+			Assert.True(textAlphanumericsList.Item2.Count != 0);
 		}
 	}
 }

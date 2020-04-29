@@ -573,7 +573,8 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 				var txtProperties = new Common.TextProperties(text);
 				_iTxt.Properties = txtProperties;
 
-				translationMemoryToolsAssembly = Assembly.LoadFrom(Path.Combine(studioInstalledLocationPath, "Sdl.LanguagePlatform.TranslationMemoryTools.dll"));
+				var tmAssembly = AssemblyName.GetAssemblyName(Path.Combine(studioInstalledLocationPath, "Sdl.LanguagePlatform.TranslationMemoryTools.dll"));
+				translationMemoryToolsAssembly = Assembly.Load(tmAssembly);
 
 				//get object type 
 				var linguaSegmentBuilderType =
@@ -590,7 +591,8 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 				builder.VisitText(_iTxt);
 				builder.Result.Elements.Add(_textSDL);
 
-				languageProcessingAssembly = Assembly.LoadFrom(Path.Combine(studioInstalledLocationPath, "Sdl.Core.LanguageProcessing.dll"));
+				var lpAssembly = AssemblyName.GetAssemblyName(Path.Combine(studioInstalledLocationPath, "Sdl.Core.LanguageProcessing.dll"));
+				languageProcessingAssembly = Assembly.Load(lpAssembly);
 
 				//get object type
 				var tokenizationFactoryType = languageProcessingAssembly.GetType("Sdl.Core.LanguageProcessing.Tokenization.TokenizerSetupFactory");
@@ -626,9 +628,9 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 		}
 
 		/// <summary>
-		/// Get installed version for Studio5(Studio 2017). Always use Studio5 because the loaded dll's contains needed logic.
+		/// Get installed version for Studio15(Studio 2019).
 		/// The call studio.GetStudioVersion() is not working when using the installer, because the app is running outside the Studio context,
-		/// so the workaround is to get all the installed studio versions and use the needed one (Studio5)
+		/// so the workaround is to get all the installed studio versions and use the needed one (Studio15)
 		/// </summary>
 		/// <returns></returns>
 		private static StudioVersion GetInstalledStudioVersion()
@@ -636,7 +638,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 			var studio = new Studio();
 			var allStudioVersions = studio.GetInstalledStudioVersion();
 			
-			return allStudioVersions.Where(v=>v.Version.Equals("Studio5")).FirstOrDefault();
+			return allStudioVersions.FirstOrDefault(v => v.Version.Equals("Studio15"));
 		}
 	}
 }

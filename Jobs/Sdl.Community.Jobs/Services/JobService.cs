@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.Jobs.API;
@@ -157,7 +155,7 @@ namespace Sdl.Community.Jobs.Services
 
             CurrentPage = page;
 
-            HasNext = response.Links.Next != null;
+            HasNext = response.Links?.Next != null;
             HasPrevious = CurrentPage > 1;
 
 

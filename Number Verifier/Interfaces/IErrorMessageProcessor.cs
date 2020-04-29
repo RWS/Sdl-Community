@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sdl.Community.NumberVerifier.Interfaces
+﻿namespace Sdl.Community.NumberVerifier.Interfaces
 {
-    public interface IErrorMessageProcessor
+	public interface IErrorMessageProcessor
     {
-        string GenerateMessage(INumberResults numberResult);
+        string GenerateMessage(INumberResults numberResult, string errorMessage);
     }
 }

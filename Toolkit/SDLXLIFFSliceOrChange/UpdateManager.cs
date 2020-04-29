@@ -263,6 +263,9 @@ namespace SDLXLIFFSliceOrChange
                 case "auto-propagated": //auto propagated
                     doUpdateElement = _sdlxliffSliceOrChange.ckAutoPropagated.Checked;
                     break;
+                case "nmt": //neural machine translation
+	                doUpdateElement = _sdlxliffSliceOrChange.ckNeuralMachineTranslation.Checked;
+	                break;
                 case "": //it does not have origin attribute or it's out of our purpose
                 default:
                     break;
@@ -293,6 +296,9 @@ namespace SDLXLIFFSliceOrChange
                     case "auto-propagated": //auto propagated
                         doUpdateElement = _sdlxliffSliceOrChange.ckAutoPropagated.Checked;
                         break;
+                    case "nmt": //neural machine translation
+	                    doUpdateElement = _sdlxliffSliceOrChange.ckNeuralMachineTranslation.Checked;
+						break;
                     case "": //it does not have origin attribute or it's out of our purpose
                     default:
                         break;

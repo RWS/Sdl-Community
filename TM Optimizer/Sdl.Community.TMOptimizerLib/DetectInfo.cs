@@ -1,4 +1,5 @@
 ﻿using Sdl.Core.Globalization;
+
 namespace Sdl.Community.TMOptimizerLib
 {
     public class DetectInfo
@@ -10,7 +11,6 @@ namespace Sdl.Community.TMOptimizerLib
             Unknown
         };
 
-
         public Versions DetectedVersion { get; set; }
         public Language SourceLanguage { get; set; }
         public Language TargetLanguage { get; set; }
@@ -19,8 +19,6 @@ namespace Sdl.Community.TMOptimizerLib
         public string OriginalTargetLanguage { get; set; }
 
         public int TuCount { get; set; }
-
-
 
         internal DetectInfo Clone()
         {

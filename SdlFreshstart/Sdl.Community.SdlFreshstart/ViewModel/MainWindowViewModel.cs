@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.SdlFreshstart.Properties;
 
 namespace Sdl.Community.SdlFreshstart.ViewModel
@@ -11,11 +12,10 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		public StudioViewModel StudioViewModel { get; set; }
 		public MultiTermViewModel MultiTermViewModel { get; set; }
 
-		public MainWindowViewModel(MainWindow mainWindow)
+		public MainWindowViewModel(MainWindow mainWindow, IDialogCoordinator dialogCoordinator)
 		{
-			StudioViewModel = new StudioViewModel(mainWindow);
+			StudioViewModel = new StudioViewModel(mainWindow, dialogCoordinator);
 			MultiTermViewModel = new MultiTermViewModel(mainWindow);
-
 		}
 		
 		[NotifyPropertyChangedInvocator]

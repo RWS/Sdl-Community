@@ -1,135 +1,125 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
+using System.Windows;
 using Newtonsoft.Json;
-using RestSharp;
-using Sdl.Community.DeelLMTProvider;
 using Sdl.Community.DeelLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.Telemetry;
 using Sdl.LanguagePlatform.Core;
+using System.Xml;
 
 namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter
 	{
-		private readonly ITelemetryTracker _telemetryTracker;
 		public string ApiKey { get; set; }
+		private readonly string _pluginVersion = "";
+		private readonly string _identifier;
+		public static readonly Log Log = Log.Instance;
 
-		public DeepLTranslationProviderConnecter(string key)
+		public DeepLTranslationProviderConnecter(string key, string identifier)
 		{
 			ApiKey = key;
-			_telemetryTracker = new TelemetryTracker();
+			_identifier = identifier;
+
+			try
+			{
+				// fetch the version of the plugin from the manifest deployed
+				var pexecutingAsseblyPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+				pexecutingAsseblyPath = Path.Combine(pexecutingAsseblyPath, "pluginpackage.manifest.xml");
+				var doc = new XmlDocument();
+				doc.Load(pexecutingAsseblyPath);
+
+				if (doc.DocumentElement == null) return;
+				foreach (XmlNode n in doc.DocumentElement.ChildNodes)
+				{
+					if (n.Name == "Version")
+					{
+						_pluginVersion = n.InnerText;
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				// broad catch here, if anything goes wrong with determining the version we don't want the user to be disturbed in any way
+				Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
+			}
 		}
 
-		public string Translate(LanguagePair languageDirection, string sourcetext)
+		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
-			const string tagOption = @"xml";
 			var targetLanguage = languageDirection.TargetCulture.TwoLetterISOLanguageName;
 			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
 			var translatedText = string.Empty;
+			var normalizeHelper = new NormalizeSourceTextHelper();
+
 			try
 			{
-				var client = new RestClient(@"https://api.deepl.com/v1");
-				var request = new RestRequest("translate", Method.POST);
+				sourceText = normalizeHelper.NormalizeText(sourceText);
 
-				//search for words like this <word> 
-				var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
-				var words = rgx.Matches(sourcetext);
-
-				if (words.Count>0)
+				using (var httpClient = new HttpClient())
 				{
-					sourcetext =ReplaceCharacters(sourcetext,words);
-				}
-				//request.AddParameter("auth_key", ApiKey);
-				//request.AddParameter("source_lang", sourceLanguage);
-				//request.AddParameter("target_lang", targetLanguage);
-				//request.AddParameter("text", sourcetext);
+					ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
-				request.AddParameter("text", sourcetext);
-				request.AddParameter("source_lang", sourceLanguage);
-				request.AddParameter("target_lang", targetLanguage);
-				//adding this resolve line breaks issue and missing ##login##
-				request.AddParameter("preserve_formatting", 1);
-				//tag handling cause issues on uppercase words
-				request.AddParameter("tag_handling", tagOption);
-				//if we add this the formattiong is not right
-				//request.AddParameter("split_sentences", 0);
-				
-				request.AddParameter("auth_key", ApiKey);
+					httpClient.Timeout = TimeSpan.FromMinutes(5);
+					var content = new StringContent($"text={sourceText}" +
+					                                $"&source_lang={sourceLanguage}" +
+					                                $"&target_lang={targetLanguage}" +
+					                                "&preserve_formatting=1" +
+					                                $"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
 
+					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
 
-				var response = client.Execute(request).Content;
-				var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(response);
-				if (translatedObject != null)
-				{
-					translatedText = translatedObject.Translations[0].Text;
-					translatedText = HttpUtility.HtmlDecode(translatedText);
+					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result;
+					if (response.IsSuccessStatusCode)
+					{
+						var translationResponse = response.Content?.ReadAsStringAsync().Result;
+						var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(translationResponse);
+
+						if (translatedObject != null && translatedObject.Translations.Any())
+						{
+							translatedText = translatedObject.Translations[0].Text;
+							translatedText = DecodeWhenNeeded(translatedText);
+						}
+					}
+					else
+					{
+                        Log.Logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+                            $"Response content: {response.Content?.ReadAsStringAsync().Result}.");
+                        MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					}
 				}
 			}
-			catch (WebException e) 
+			catch (Exception e)
 			{
-				var eReason = Helpers.ProcessWebException(e);
-				_telemetryTracker.TrackException(e);
-				_telemetryTracker.TrackTrace(e.StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
-				throw new Exception(eReason);
+				Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 
 			return translatedText;
 		}
 
-		private string ReplaceCharacters(string sourcetext,MatchCollection matches)
+		private string DecodeWhenNeeded(string translatedText)
 		{
-			var indexes = new List<int>();
-			foreach (Match match in matches)
+			if (translatedText.Contains("%"))
 			{
-				if (match.Index.Equals(0))
-				{
-					indexes.Add(match.Length);
-				}
-				else
-				{
-					//check if there is any text after PI
-					var remainingText = sourcetext.Substring(match.Index + match.Length);
-					if (!string.IsNullOrEmpty(remainingText))
-					{
-						//get the position where PI starts to split before
-						indexes.Add(match.Index);
-						//split after PI
-						indexes.Add(match.Index + match.Length);
-					}
-					else
-					{
-						indexes.Add(match.Index);
-					}
-				}
-			}
-			var splitedText = sourcetext.SplitAt(indexes.ToArray()).ToList();
-			var positions = new List<int>();
-			for (var i=0;i<splitedText.Count;i++)
-			{
-				if (!splitedText[i].Contains("tg"))
-				{
-					positions.Add(i);
-				}
+				translatedText = Uri.UnescapeDataString(translatedText);
 			}
 
-			foreach (var position in positions)
-			{
-				var originalString = splitedText[position];
-				var start = Regex.Replace(originalString, "<", "&lt;");
-				var finalString = Regex.Replace(start, ">", "&gt;");
-				splitedText[position] = finalString;
-			}
-			var finalText = string.Empty;
-			foreach (var text in splitedText)
-			{
-				finalText += text;
-			}
+			var greater = new Regex(@"&gt;");
+			var less = new Regex(@"&lt;");
 
-			return finalText;
+			translatedText = greater.Replace(translatedText, ">");
+			translatedText = less.Replace(translatedText, "<");
+
+			//the only HTML encodings that appear to be used by DeepL
+			//besides the ones we're sending to escape tags
+			var amp = new Regex("&amp;|&amp");
+			translatedText = amp.Replace(translatedText, "&");
+
+			return translatedText;
 		}
 	}
 }
