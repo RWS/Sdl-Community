@@ -17,9 +17,9 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 		public TemplateLoader()
 		{
 			_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				@"SDL\SDL Trados Studio\15.0.0.0\UserSettings.xml");
+				@"SDL\SDL Trados Studio\16.0.0.0\UserSettings.xml");
 
-			DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Studio 2019");
+			DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Studio 2021");
 		}
 
 		public string DefaultPath { get; set; }

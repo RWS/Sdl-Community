@@ -4,9 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
@@ -63,7 +61,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			_ordinalFollowersChecked = true;
 			_segmentationRulesChecked = true;
 			_selectAllChecked = true;
-			_progressVisibility = "Hidden";
+			_progressVisibility = "Collapsed";
 
 			_tmCollection = new ObservableCollection<TranslationMemory>();
 		}
@@ -343,7 +341,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			ProgressVisibility = "Visible";
 			await Task.Run(() => _template.ApplyTmTemplate(SelectedTmsList));
-			ProgressVisibility = "Hidden";
+			ProgressVisibility = "Collapsed";
 		}
 
 		private async Task ShowMessages(bool withoutBundlesMessage = false)
@@ -447,11 +445,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					});
 					await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
 
-					ProgressVisibility = "Hidden";
+					ProgressVisibility = "Collapsed";
 				}
 				else
 				{
-					ProgressVisibility = "Visible";
+					ProgressVisibility = "Collapsed";
 				
 					if (SelectedTmsList.Count > 0)
 					{
@@ -466,14 +464,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 						await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Warning, PluginResources.Select_at_least_one_TM);
 					}
 
-					ProgressVisibility = "Hidden";
+					ProgressVisibility = "Collapsed";
 				}
 			}
 			catch (Exception e)
 			{
 				await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Error_Window_Title, e.Message);
 
-				ProgressVisibility = "Hidden";
+				ProgressVisibility = "Collapsed";
 				return;
 			}
 
@@ -527,7 +525,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			await _dialogCoordinator.ShowMessageAsync(this, PluginResources.Success_Window_Title, PluginResources.Report_generated_successfully);
 			Process.Start(filePath);
 
-			ProgressVisibility = "Hidden";
+			ProgressVisibility = "Collapsed";
 		}
 
 		private void Browse()

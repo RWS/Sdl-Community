@@ -11,7 +11,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 	{
 		private bool IsValid(string file)
 		{
-			return Path.GetExtension(file) != ".sdltm";
+			return Path.GetExtension(file).ToLower() != ".sdltm";
 		}
 
 		public ObservableCollection<TranslationMemory> GetTms(IEnumerable<string> files, ObservableCollection<TranslationMemory> tmCollection)
