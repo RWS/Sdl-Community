@@ -1061,7 +1061,6 @@ namespace Sdl.Community.ExportAnalysisReports
 								chkBox_SelectAllLanguages.Checked = false;
 							}
 						}
-
 						break;
 
 					case "All":
@@ -1069,6 +1068,7 @@ namespace Sdl.Community.ExportAnalysisReports
 						break;
 
 				}
+				IsClipboardEnabled();
 			}
 			catch (Exception ex)
 			{
