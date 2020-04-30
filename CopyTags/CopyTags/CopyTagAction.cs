@@ -6,7 +6,6 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 using SDLCopyTags.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace SDLCopyTags
 {
