@@ -1,8 +1,6 @@
 variables:
-  - name: buildPlatform
-    value: Any CPU'
-  - name: buildConfiguration
-    value: 'Release'
+  buildPlatform: Any CPU'
+  buildConfiguration: 'Release'
 
 steps:
 - task: NuGetToolInstaller@1
