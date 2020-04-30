@@ -63,6 +63,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			reportOutputPath.Text = Help.GetJsonReportPath(Help.JsonPath);
 			targetBtn.Enabled = !IsNullOrEmpty(reportOutputPath.Text);
 			_optionalInformation = SetOptionalInformation();
+			projectStatusComboBox.SelectedIndex = 0;
 		}
 
 		private OptionalInformation SetOptionalInformation()
@@ -708,7 +709,6 @@ namespace Sdl.Community.ExportAnalysisReports
 			try
 			{
 				var selectedStatus = ((ComboBox)sender).SelectedItem?.ToString();
-				//_languages.Clear();
 
 				_projectsDataSource = BindProjectsBasedOnStatus(selectedStatus);
 				projListbox.DataSource = _projectsDataSource;
@@ -721,6 +721,11 @@ namespace Sdl.Community.ExportAnalysisReports
 				if (chkBox_SelectAllProjects.Checked)
 				{
 					SetProjectsInformation(true);
+				}
+				else
+				{
+					RefreshProjectsListBox();
+					chkBox_SelectAllProjects.Checked = projListbox.CheckedItems.Count.Equals(projListbox.Items.Count) && projListbox.Items.Count > 0;
 				}
 
 				_isStatusChanged = false;
@@ -867,10 +872,7 @@ namespace Sdl.Community.ExportAnalysisReports
 				}
 
 				RefreshLanguageListbox();
-				if (languagesListBox.CheckedItems.Count.Equals(languagesListBox.Items.Count))
-				{
-					chkBox_SelectAllLanguages.Checked = true;
-				}
+				chkBox_SelectAllLanguages.Checked = languagesListBox.CheckedItems.Count.Equals(languagesListBox.Items.Count) && languagesListBox.Items.Count > 0;
 			}
 			catch (Exception ex)
 			{
@@ -1027,7 +1029,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			_isStatusChanged = true;
 			try
 			{
-				//_languages.Clear();
+				_languages.Clear();
 				var projects = _allStudioProjectsDetails;
 
 				switch (selectedStatus)
