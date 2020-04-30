@@ -48,6 +48,11 @@ namespace Sdl.Community.ExportAnalysisReports
 				{
 					PrepareProjectToExport(selectedProject);
 				}
+				else
+				{
+					// disable the Copy to clipboard and Export to CSV buttons if the selected project is null
+					DisableButtons();
+				}
 			}
 
 			ConfigureCheckedItems();
@@ -787,6 +792,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 
 			projListbox.DataSource = _projectsDataSource;
+			ResetSelection();
 			DisableButtons();
 		}
 
@@ -1036,45 +1042,47 @@ namespace Sdl.Community.ExportAnalysisReports
 				{
 					case "InProgress":
 						var inProgressProjects = projects.Where(s => s.Status.Equals("InProgress")).ToList();
-						projectsBindingList = BindProjects(inProgressProjects, projectsBindingList);
-						break;
+						return GetProjectsBindingList(inProgressProjects, projectsBindingList);
 
 					case "Completed":
 						var completedProjects = projects?.Where(s => s.Status.Equals("Completed")).ToList();
-						if (completedProjects != null && completedProjects.Count > 0)
-						{
-							projectsBindingList = BindProjects(completedProjects, projectsBindingList);
-						}
-						else
-						{
-							_languages.Clear();
-							DisableButtons();
-
-							// uncheck the 'Select all projects' and 'Select all languages' when are checked and no projects has 'Completed' status
-							if (chkBox_SelectAllProjects.Checked)
-							{
-								chkBox_SelectAllProjects.Checked = false;
-							}
-
-							if (chkBox_SelectAllLanguages.Checked)
-							{
-								chkBox_SelectAllLanguages.Checked = false;
-							}
-
-							return projectsBindingList;
-						}
-						break;
+						return GetProjectsBindingList(completedProjects, projectsBindingList);
 
 					case "All":
-						projectsBindingList = BindProjects(projects, projectsBindingList);
-						break;
-
+						return GetProjectsBindingList(projects, projectsBindingList);
 				}
 				IsClipboardEnabled();
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"BindProjectsBasedOnStatus method: {ex.Message}\n {ex.StackTrace}");
+			}
+
+			return projectsBindingList;
+		}
+
+		private BindingList<ProjectDetails> GetProjectsBindingList(List<ProjectDetails> projectDetails,
+			BindingList<ProjectDetails> projectsBindingList)
+		{
+			if (projectDetails != null && projectDetails.Count > 0)
+			{
+				projectsBindingList = BindProjects(projectDetails, projectsBindingList);
+			}
+			else
+			{
+				_languages.Clear();
+				DisableButtons();
+
+				// uncheck the 'Select all projects' and 'Select all languages' when are checked and no projects has 'Completed' status
+				if (chkBox_SelectAllProjects.Checked)
+				{
+					chkBox_SelectAllProjects.Checked = false;
+				}
+
+				if (chkBox_SelectAllLanguages.Checked)
+				{
+					chkBox_SelectAllLanguages.Checked = false;
+				}
 			}
 
 			return projectsBindingList;
@@ -1151,6 +1159,13 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			copyBtn.Enabled = false;
 			csvBtn.Enabled = false;
+		}
+
+		private void ResetSelection()
+		{
+			projectStatusComboBox.SelectedIndex = 0;
+			chkBox_SelectAllProjects.Checked = false;
+			chkBox_SelectAllLanguages.Checked = false;
 		}
 	}
 }
