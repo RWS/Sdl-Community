@@ -1060,6 +1060,8 @@ namespace Sdl.Community.ExportAnalysisReports
 							{
 								chkBox_SelectAllLanguages.Checked = false;
 							}
+
+							return projectsBindingList;
 						}
 						break;
 
