@@ -6,7 +6,10 @@
 trigger:
 - master
 
-pool: MariusAgent
+extends:
+  template: start.yaml
+
+pool: VirtualBoxPool
 
 variables:
   - group: AhkPlugin-variable-group
