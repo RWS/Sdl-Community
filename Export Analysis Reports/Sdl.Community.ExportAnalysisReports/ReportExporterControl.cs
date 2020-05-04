@@ -1166,6 +1166,11 @@ namespace Sdl.Community.ExportAnalysisReports
 			projectStatusComboBox.SelectedIndex = 0;
 			chkBox_SelectAllProjects.Checked = false;
 			chkBox_SelectAllLanguages.Checked = false;
+
+			for (var i = 0; i < projListbox.Items.Count; i++)
+			{
+				projListbox.SetItemChecked(i, false);
+			}
 		}
 	}
 }
