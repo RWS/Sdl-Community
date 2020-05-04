@@ -2,7 +2,7 @@
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 
-namespace ExportToExcel
+namespace Sdl.Community.ExportToExcel
 {
     /// <summary>
     /// Automatic task attribute

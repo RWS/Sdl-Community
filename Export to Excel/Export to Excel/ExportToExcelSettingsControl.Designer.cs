@@ -1,4 +1,4 @@
-﻿namespace ExportToExcel
+﻿namespace Sdl.Community.ExportToExcel
 {
     partial class ExportToExcelSettingsControl
     {

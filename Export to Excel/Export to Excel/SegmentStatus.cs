@@ -1,6 +1,6 @@
 ﻿using Sdl.Core.Globalization;
 
-namespace ExportToExcel
+namespace Sdl.Community.ExportToExcel
 {
     public class SegmentStatus
     {

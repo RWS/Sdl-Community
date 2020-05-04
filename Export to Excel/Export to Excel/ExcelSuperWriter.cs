@@ -6,7 +6,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace ExportToExcel
+namespace Sdl.Community.ExportToExcel
 {
     public class ExcelSuperWriter
     {

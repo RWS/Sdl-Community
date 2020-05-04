@@ -3,7 +3,7 @@ using System.Drawing;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
 
-namespace ExportToExcel
+namespace Sdl.Community.ExportToExcel
 {
     public class GeneratorSettings : SettingsGroup
     {       

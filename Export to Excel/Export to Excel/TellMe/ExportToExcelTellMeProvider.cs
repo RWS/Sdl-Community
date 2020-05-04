@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.TellMe.ProviderApi;
+﻿using Sdl.TellMe.ProviderApi;
 
-namespace ExportToExcel.ExportToExcelTellMe
+namespace Sdl.Community.ExportToExcel.TellMe
 {
 	[TellMeProvider]
 	public class ExportToExcelTellMeProvider : ITellMeProvider

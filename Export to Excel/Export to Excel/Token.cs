@@ -1,7 +1,7 @@
 ﻿using System;
 using DocumentFormat.OpenXml;
 
-namespace ExportToExcel
+namespace Sdl.Community.ExportToExcel
 {
     public class Token
     {

@@ -8,8 +8,8 @@
     <ProjectGuid>{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExportToExcel</RootNamespace>
-    <AssemblyName>ExportToExcel</AssemblyName>
+    <RootNamespace>Sdl.Community.ExportToExcel</RootNamespace>
+    <AssemblyName>Sdl.Community.ExportToExcel</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -107,10 +107,10 @@
     <Compile Include="ExclusionsUI.designer.cs">
       <DependentUpon>ExclusionsUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExportToExcelTellMe\CommunityForumAction.cs" />
-    <Compile Include="ExportToExcelTellMe\ExportToExcelTellMeProvider.cs" />
-    <Compile Include="ExportToExcelTellMe\HelpAction.cs" />
-    <Compile Include="ExportToExcelTellMe\StoreAction.cs" />
+    <Compile Include="TellMe\CommunityForumAction.cs" />
+    <Compile Include="TellMe\ExportToExcelTellMeProvider.cs" />
+    <Compile Include="TellMe\HelpAction.cs" />
+    <Compile Include="TellMe\StoreAction.cs" />
     <Compile Include="ExportTypeUI.cs">
       <SubType>UserControl</SubType>
     </Compile>

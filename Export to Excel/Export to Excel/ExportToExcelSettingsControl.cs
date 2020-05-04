@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
-namespace ExportToExcel
+namespace Sdl.Community.ExportToExcel
 {
     public partial class ExportToExcelSettingsControl : UserControl,ISettingsAware<GeneratorSettings>, IUISettingsControl
 	{
