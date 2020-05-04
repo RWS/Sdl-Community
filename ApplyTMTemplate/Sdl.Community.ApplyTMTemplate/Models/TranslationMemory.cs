@@ -43,7 +43,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			get => _sourceStatus;
 			set
 			{
-				if (_sourceStatus.ToLower().Contains("unchecked") || _sourceStatus == "")
+				if (_sourceStatus.ToLower().Contains("unchecked") || _sourceStatus == string.Empty)
 				{
 					_sourceStatus = value;
 				}
@@ -86,7 +86,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			get => _targetStatus;
 			set
 			{
-				if (_targetStatus.ToLower().Contains("unchecked") || _targetStatus == "")
+				if (_targetStatus.ToLower().Contains("unchecked") || _targetStatus == string.Empty)
 				{
 					_targetStatus = value;
 				}
@@ -142,10 +142,10 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 		public void UnmarkTm()
 		{
-			_sourceStatus = "";
-			_sourceStatusToolTip = "";
-			_targetStatus = "";
-			_targetStatusToolTip = "";
+			_sourceStatus = string.Empty;
+			_sourceStatusToolTip = string.Empty;
+			_targetStatus = string.Empty;
+			_targetStatusToolTip = string.Empty;
 		}
 
 		public void ApplyTemplate(LanguageResourceBundle languageResourceBundle)

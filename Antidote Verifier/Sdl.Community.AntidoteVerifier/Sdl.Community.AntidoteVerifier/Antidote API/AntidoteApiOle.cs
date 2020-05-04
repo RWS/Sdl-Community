@@ -2,12 +2,8 @@
 using Microsoft.Win32;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Sdl.Community.AntidoteVerifier.Antidote_API
 {
@@ -20,7 +16,7 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern void BringWindowToTop(IntPtr hwnd);
 
-        private IAntidoteClient _antidoteClient;
+        private readonly IAntidoteClient _antidoteClient;
 
         public AntidoteApiOle(IAntidoteClient antidoteClient)
         {
@@ -29,7 +25,7 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 
         public void CallAntidote(string parameter)
         {
-            Thread thread = new Thread(new ParameterizedThreadStart(CallAntidoteInternal));
+            var thread = new Thread(CallAntidoteInternal);
             thread.Start(parameter);
         }
 
@@ -37,11 +33,8 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         {
             try
             {
-                ApiOle api = GetAntidoteInstance();
-                if (api != null)
-                {
-                    api.LanceOutilDispatch(_antidoteClient, (string)parameter);
-                }
+                var api = GetAntidoteInstance();
+	            api?.LanceOutilDispatch(_antidoteClient, (string)parameter);
             }catch(Exception ex)
             {
                 Log.Error(ex, "An error appeared while starting antidote!");
@@ -50,8 +43,7 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 
         private ApiOle GetAntidoteInstance()
         {
-            IntPtr hwndAntidote;
-            if(IsAntidoteRuning(out hwndAntidote))
+	        if(IsAntidoteRuning(out var hwndAntidote))
             {
                 SetForegroundWindow(hwndAntidote);
                 BringWindowToTop(hwndAntidote);
@@ -70,48 +62,49 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
             return hwndAntidote.ToInt32() != 0;
         }
 
-        private bool LaunchAntidote()
-        {
-            try
-            {
-                RegistryKey pRegKey = Registry.LocalMachine;
-                pRegKey = pRegKey.OpenSubKey(Constants.RegistryInstallLocation);
-                object obj = pRegKey.GetValue(Constants.RegistryInstallLocationValue, "Invalide");
-                if (obj.ToString() == "Invalide")
-                {
-                    //TODO message if the registry values could not be find - this should be displayed
-                    //to the user
-                    return false;
-                }
-                string antidotePath = obj.ToString();
-                if (!antidotePath.EndsWith("\\")) antidotePath += "\\";
-                antidotePath += Constants.AntidoteExecutable;
-                System.Diagnostics.Process.Start(antidotePath, Constants.ApiAntidote);
+	    private bool LaunchAntidote()
+	    {
+		    try
+		    {
+			    var pRegKey = Registry.LocalMachine;
+			    pRegKey = pRegKey.OpenSubKey(Constants.RegistryInstallLocation);
+			    var obj = pRegKey?.GetValue(Constants.RegistryInstallLocationValue, "Invalide");
+			    if (obj?.ToString() == "Invalide")
+			    {
+				    //TODO message if the registry values could not be find - this should be displayed
+				    //to the user
+				    return false;
+			    }
+			    var antidotePath = obj?.ToString();
+			    if (!antidotePath.EndsWith("\\")) antidotePath += "\\";
+			    antidotePath += Constants.AntidoteExecutable;
+			    System.Diagnostics.Process.Start(antidotePath, Constants.ApiAntidote);
 
-                // get a hold of the newly launched Antidote instance
-                long i = 0;
-                IntPtr hwndAntidote;
+			    // get a hold of the newly launched Antidote instance
+			    long i = 0;
+			    IntPtr hwndAntidote;
 
-                while (!IsAntidoteRuning(out hwndAntidote))
-                {
-                    System.Threading.Thread.Sleep(250);
-                    i++;
-                    // limit the number of attempts
-                    if (i > 48)
-                    {
-                        //TODO display a message to the user if this didn't work and we could find the window
-                        //probably didn't launched
-                        return false;
-                    }
-                }
-            }catch(Exception _ex)
-            {
-                Log.Error(_ex, "An error appeared while starting antidote!");
-                return false;
-            }
+			    while (!IsAntidoteRuning(out hwndAntidote))
+			    {
+				    System.Threading.Thread.Sleep(250);
+				    i++;
+				    // limit the number of attempts
+				    if (i > 48)
+				    {
+					    //TODO display a message to the user if this didn't work and we could find the window
+					    //probably didn't launched
+					    return false;
+				    }
+			    }
+		    }
+		    catch (Exception ex)
+		    {
+			    Log.Error(ex, "An error appeared while starting antidote!");
+			    return false;
+		    }
 
-            return true;
-        }
+		    return true;
+	    }
     }
 
 }

@@ -28,27 +28,28 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="sourceXml">The source XML.</param>
         public ApplyTemplate(XmlNode sourceXml)
         {
-            Name = sourceXml.SelectSingleNode("@name").Value;
-            FileLocation = sourceXml.SelectSingleNode("@location").Value;
-            Uri = null;
-            Id = new Guid(sourceXml.SelectSingleNode("@id").Value);
-            TranslationProvidersAllLanguages = GetApplyTemplateOptions(sourceXml, "tpal");
-            TranslationProvidersSpecificLanguages = GetApplyTemplateOptions(sourceXml, "tpsl");
-            TranslationMemoriesAllLanguages = GetApplyTemplateOptions(sourceXml, "tmal");
-            TranslationMemoriesSpecificLanguages = GetApplyTemplateOptions(sourceXml, "tmsl");
-            TerminologyTermbases = GetApplyTemplateOptions(sourceXml, "tbtb");
-            TerminologySearchSettings = GetApplyTemplateOptions(sourceXml, "tbss");
-            TranslationQualityAssessment = GetApplyTemplateOptions(sourceXml, "tqa");
-            VerificationQaChecker30 = GetApplyTemplateOptions(sourceXml, "qaqa");
-            VerificationTagVerifier = GetApplyTemplateOptions(sourceXml, "qatg");
-            VerificationTerminologyVerifier = GetApplyTemplateOptions(sourceXml, "qatv");
-            VerificationNumberVerifier = GetApplyTemplateOptions(sourceXml, "qanv");
-            VerificationGrammarChecker = GetApplyTemplateOptions(sourceXml, "qagc");
-            BatchTasksAllLanguages = GetApplyTemplateOptions(sourceXml, "btal");
-            BatchTasksSpecificLanguages = GetApplyTemplateOptions(sourceXml, "btsl");
-            FileTypes = GetApplyTemplateOptions(sourceXml, "ftts");
-			MatchRepairSettings = GetApplyTemplateOptions(sourceXml, "mrs");
-			VerificationSpecificLanguages = GetApplyTemplateOptions(sourceXml, "vsl");
+	        if (sourceXml is null) return;
+	        Name = sourceXml.SelectSingleNode("@name")?.Value;
+	        FileLocation = sourceXml.SelectSingleNode("@location")?.Value;
+	        Uri = null;
+	        Id = new Guid(sourceXml.SelectSingleNode("@id").Value);
+	        TranslationProvidersAllLanguages = GetApplyTemplateOptions(sourceXml, "tpal");
+	        TranslationProvidersSpecificLanguages = GetApplyTemplateOptions(sourceXml, "tpsl");
+	        TranslationMemoriesAllLanguages = GetApplyTemplateOptions(sourceXml, "tmal");
+	        TranslationMemoriesSpecificLanguages = GetApplyTemplateOptions(sourceXml, "tmsl");
+	        TerminologyTermbases = GetApplyTemplateOptions(sourceXml, "tbtb");
+	        TerminologySearchSettings = GetApplyTemplateOptions(sourceXml, "tbss");
+	        TranslationQualityAssessment = GetApplyTemplateOptions(sourceXml, "tqa");
+	        VerificationQaChecker30 = GetApplyTemplateOptions(sourceXml, "qaqa");
+	        VerificationTagVerifier = GetApplyTemplateOptions(sourceXml, "qatg");
+	        VerificationTerminologyVerifier = GetApplyTemplateOptions(sourceXml, "qatv");
+	        VerificationNumberVerifier = GetApplyTemplateOptions(sourceXml, "qanv");
+	        VerificationGrammarChecker = GetApplyTemplateOptions(sourceXml, "qagc");
+	        BatchTasksAllLanguages = GetApplyTemplateOptions(sourceXml, "btal");
+	        BatchTasksSpecificLanguages = GetApplyTemplateOptions(sourceXml, "btsl");
+	        FileTypes = GetApplyTemplateOptions(sourceXml, "ftts");
+	        MatchRepairSettings = GetApplyTemplateOptions(sourceXml, "mrs");
+	        VerificationSpecificLanguages = GetApplyTemplateOptions(sourceXml, "vsl");
         }
 
         /// <summary>
@@ -399,7 +400,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             var returnValue = ApplyTemplateOptions.Keep;
             if (((XmlElement)xmlNode).HasAttribute(attributeName))
             {
-                string attributeValue = xmlNode.SelectSingleNode("@" + attributeName).Value;
+                var attributeValue = xmlNode.SelectSingleNode("@" + attributeName)?.Value;
                 if (Enum.TryParse(attributeValue, out returnValue))
                 {
                     if (!Enum.IsDefined(typeof(ApplyTemplateOptions), returnValue) && !returnValue.ToString().Contains(","))

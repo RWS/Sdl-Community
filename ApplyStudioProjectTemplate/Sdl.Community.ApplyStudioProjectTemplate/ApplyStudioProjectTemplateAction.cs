@@ -654,7 +654,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			// Merge the language indexes
 			foreach (var sourceLanguageIndex in sourceTermbaseConfig.LanguageIndexes)
 			{
-				bool foundIndex = targetTermbaseConfig.LanguageIndexes.Any(targetLanguageIndex => sourceLanguageIndex.ProjectLanguage.Equals(targetLanguageIndex.ProjectLanguage));
+				var foundIndex = targetTermbaseConfig.LanguageIndexes.Any(targetLanguageIndex => sourceLanguageIndex.ProjectLanguage.Equals(targetLanguageIndex.ProjectLanguage));
 
 				// If we didn't find an entry for this language then add it to the target project
 				if (!foundIndex)
