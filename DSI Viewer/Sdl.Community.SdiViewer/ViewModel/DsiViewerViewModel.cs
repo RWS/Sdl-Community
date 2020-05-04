@@ -15,7 +15,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 	{
 		private List<DsiModel> _documentStructureInformation;
 		private List<IComment> _comments;
-		private Document _activeDocument;
+		private IStudioDocument _activeDocument;
 		private readonly EditorController _editorController;
 		private readonly SegmentVisitor _segmentVisitor;
 
@@ -166,7 +166,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			SetActiveDocument(e.Document);
 		}
 
-		private void SetActiveDocument(Document document)
+		private void SetActiveDocument(IStudioDocument document)
 		{
 			if (_activeDocument != null)
 			{
