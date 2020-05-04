@@ -56,11 +56,13 @@
             this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
             this.projListbox = new System.Windows.Forms.CheckedListBox();
             this.selectProjLbl = new System.Windows.Forms.Label();
+            this.chkBox_IncludeSingleFileProjects = new System.Windows.Forms.CheckBox();
             this.mainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanel
             // 
+            this.mainPanel.Controls.Add(this.chkBox_IncludeSingleFileProjects);
             this.mainPanel.Controls.Add(this.chkBox_SelectAllLanguages);
             this.mainPanel.Controls.Add(this.chkBox_SelectAllProjects);
             this.mainPanel.Controls.Add(this.clearBtn);
@@ -362,6 +364,17 @@
             this.selectProjLbl.TabIndex = 0;
             this.selectProjLbl.Text = "Select project:";
             // 
+            // chkBox_IncludeSingleFileProjects
+            // 
+            this.chkBox_IncludeSingleFileProjects.AutoSize = true;
+            this.chkBox_IncludeSingleFileProjects.Location = new System.Drawing.Point(433, 78);
+            this.chkBox_IncludeSingleFileProjects.Name = "chkBox_IncludeSingleFileProjects";
+            this.chkBox_IncludeSingleFileProjects.Size = new System.Drawing.Size(147, 17);
+            this.chkBox_IncludeSingleFileProjects.TabIndex = 30;
+            this.chkBox_IncludeSingleFileProjects.Text = "Include single file projects";
+            this.chkBox_IncludeSingleFileProjects.UseVisualStyleBackColor = true;
+            this.chkBox_IncludeSingleFileProjects.CheckedChanged += new System.EventHandler(this.chkBox_IncludeSingleFileProjects_CheckedChanged);
+            // 
             // ReportExporterControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -409,5 +422,6 @@
 		private System.Windows.Forms.Button clearBtn;
 		private System.Windows.Forms.CheckBox chkBox_SelectAllProjects;
 		private System.Windows.Forms.CheckBox chkBox_SelectAllLanguages;
+		private System.Windows.Forms.CheckBox chkBox_IncludeSingleFileProjects;
 	}
 }

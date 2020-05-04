@@ -12,7 +12,6 @@ using Sdl.Community.ExportAnalysisReports.Interfaces;
 using Sdl.Community.ExportAnalysisReports.Model;
 using Sdl.Community.ExportAnalysisReports.Service;
 using static System.String;
-using Help = Sdl.Community.ExportAnalysisReports.Helpers.Help;
 
 namespace Sdl.Community.ExportAnalysisReports
 {
@@ -27,19 +26,22 @@ namespace Sdl.Community.ExportAnalysisReports
 		private bool _isAnyLanguageUnchecked;
 		private bool _isAnyProjectUnchecked;
 		private bool _isStatusChanged;
+		private Helpers.Help _help;
 
 		public ReportExporterControl()
 		{
-			InitializeComponent();
-			InitializeSettings();
 			_messageBoxService = new MessageBoxService();
+
+			InitializeComponent();
+			InitializeSettings(new List<string>());
 		}
 
 		public ReportExporterControl(List<string> studioProjectsPath)
 		{
-			InitializeComponent();
-			InitializeSettings();
 			_messageBoxService = new MessageBoxService();
+
+			InitializeComponent();
+			InitializeSettings(studioProjectsPath);
 
 			foreach (var path in studioProjectsPath)
 			{
@@ -58,14 +60,15 @@ namespace Sdl.Community.ExportAnalysisReports
 			ConfigureCheckedItems();
 		}
 
-		private void InitializeSettings()
+		private void InitializeSettings(List<string> studioProjectsPath)
 		{
 			DisableButtons();
+			_help = new Helpers.Help(_messageBoxService);
 			includeHeaderCheck.Checked = true;
-			_projectXmlPath = Help.GetStudioProjectsPath();
+			_projectXmlPath = _help.GetStudioProjectsPath();
 			_allStudioProjectsDetails = new List<ProjectDetails>();
-			LoadProjectsList(_projectXmlPath);
-			reportOutputPath.Text = Help.GetJsonReportPath(Help.JsonPath);
+			LoadProjectsList(_projectXmlPath, studioProjectsPath);
+			reportOutputPath.Text = _help.GetJsonReportPath(_help.JsonPath);
 			targetBtn.Enabled = !IsNullOrEmpty(reportOutputPath.Text);
 			_optionalInformation = SetOptionalInformation();
 			projectStatusComboBox.SelectedIndex = 0;
@@ -118,12 +121,19 @@ namespace Sdl.Community.ExportAnalysisReports
 		/// Reads studio projects from project.xml
 		/// Adds projects to listbox
 		/// </summary>
-		private void LoadProjectsList(string projectXmlPath)
+		private void LoadProjectsList(string projectXmlPath, List<string> studioProjectsPaths)
 		{
 			try
 			{
 				var projectXmlDocument = new XmlDocument();
-				if (!string.IsNullOrEmpty(projectXmlPath))
+				var filePathNames = new List<string>();
+				// use the projPath to identify when user opens a single file project
+				foreach (var path in studioProjectsPaths)
+				{
+					filePathNames.Add(Path.GetFileName(path));
+				}
+
+				if (!IsNullOrEmpty(projectXmlPath))
 				{
 					projectXmlDocument.Load(projectXmlPath);
 
@@ -132,26 +142,92 @@ namespace Sdl.Community.ExportAnalysisReports
 					foreach (var item in projectsNodeList)
 					{
 						var projectInfo = ((XmlNode)item).SelectSingleNode("./ProjectInfo");
-						if (projectInfo?.Attributes != null && projectInfo.Attributes["IsInPlace"].Value != "true")
+						if (projectInfo?.Attributes != null)
 						{
 							var reportExist = ReportFolderExist((XmlNode)item);
 							if (reportExist)
 							{
-								var projectDetails = CreateProjectDetails((XmlNode)item);
-								_projectsDataSource.Add(projectDetails);
-								_allStudioProjectsDetails.Add(projectDetails);
+								var projFileName = Path.GetFileName(((XmlNode) item)?.Attributes["ProjectFilePath"]?.Value);
+								var projPath = filePathNames.FirstOrDefault(p => p.Equals(projFileName));
+								if (projectInfo.Attributes["IsInPlace"].Value.Equals("true") && !IsNullOrEmpty(projPath))
+								{
+									// Include the selected single file project ONLY when user selects it within Projects view -> right click -> Export Analysis Reports
+									SetProjectDetails((XmlNode) item, true);
+								}
+								else if(projectInfo.Attributes["IsInPlace"].Value.Equals("false"))
+								{
+									// Include all projects that are not single file project
+									SetProjectDetails((XmlNode) item, false);
+								}
 							}
 						}
 					}
-
-					projListbox.DataSource = _projectsDataSource;
-					projListbox.ValueMember = "ShouldBeExported";
-					projListbox.DisplayMember = "ProjectName";
+					SetDataSource();
 				}
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"LoadProjectsList method: {ex.Message}\n {ex.StackTrace}");
+			}
+		}
+
+		private void SetProjectDetails(XmlNode item, bool isSingleFileProject)
+		{
+			try
+			{
+				var projectDetails = CreateProjectDetails(item, isSingleFileProject);
+
+				_projectsDataSource.Add(projectDetails);
+				_allStudioProjectsDetails.Add(projectDetails);
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"SetProjectDetails method: {ex.Message}\n {ex.StackTrace}");
+			}
+		}
+
+		private void SetDataSource()
+		{
+			projListbox.DataSource = _projectsDataSource;
+			projListbox.ValueMember = "ShouldBeExported";
+			projListbox.DisplayMember = "ProjectName";
+		}
+
+		// Load all single file projects from projects.xml file
+		private void LoadSingleFileProjects(string projectXmlPath)
+		{
+			try
+			{
+				var projectXmlDocument = new XmlDocument();
+				if (!IsNullOrEmpty(projectXmlPath))
+				{
+					projectXmlDocument.Load(projectXmlPath);
+
+					var projectsNodeList = projectXmlDocument.SelectNodes("//ProjectListItem");
+					if (projectsNodeList == null) return;
+					foreach (var item in projectsNodeList)
+					{
+						var projectInfo = ((XmlNode)item).SelectSingleNode("./ProjectInfo");
+						if (projectInfo?.Attributes != null && projectInfo.Attributes["IsInPlace"].Value == "true")
+						{
+							var reportExist = ReportFolderExist((XmlNode)item);
+							if (reportExist)
+							{
+								var projectDetails = CreateProjectDetails((XmlNode)item, true);
+								if (!_projectsDataSource.Any(p => p.ProjectName.Equals(projectDetails.ProjectName)))
+								{
+									_projectsDataSource.Add(projectDetails);
+									_allStudioProjectsDetails.Add(projectDetails);
+								}
+							}
+						}
+					}
+					SetDataSource();
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"LoadSingleFileProjects method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -182,7 +258,7 @@ namespace Sdl.Community.ExportAnalysisReports
 						}
 					}
 
-					return Help.ReportFileExist(filePath);
+					return _help.ReportFileExist(filePath);
 				}
 			}
 			catch (Exception ex)
@@ -198,7 +274,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		/// </summary>
 		/// <param name="projNode"></param>
 		/// <returns></returns>
-		private ProjectDetails CreateProjectDetails(XmlNode projNode)
+		private ProjectDetails CreateProjectDetails(XmlNode projNode, bool isSingleFileProject)
 		{
 			var projectDetails = new ProjectDetails
 			{
@@ -235,11 +311,12 @@ namespace Sdl.Community.ExportAnalysisReports
 
 				doc.Load(projectDetails.ProjectPath);
 
-				var projectLanguages = Help.LoadLanguageDirections(doc);
+				var projectLanguages = _help.LoadLanguageDirections(doc);
 
 				SetLanguagesForProject(projectDetails, projectLanguages);
 
 				projectDetails.Status = projectStatus;
+				projectDetails.IsSingleFileProject = isSingleFileProject;
 			}
 			catch (Exception ex)
 			{
@@ -347,7 +424,7 @@ namespace Sdl.Community.ExportAnalysisReports
 					{
 						//Read sdlproj
 						doc.Load(selectedProject.ProjectPath);
-						Help.LoadReports(doc, selectedProject.ProjectFolderPath, selectedProject);
+						_help.LoadReports(doc, selectedProject.ProjectFolderPath, selectedProject);
 
 						selectedProject.ShouldBeExported = true;
 						//if an project has only one language select that language
@@ -519,7 +596,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			var isSamePath = IsSameReportPath();
 			if (!isSamePath)
 			{
-				Help.SaveExportPath(reportOutputPath.Text);
+				_help.SaveExportPath(reportOutputPath.Text);
 			}
 
 			GenerateReport();
@@ -527,7 +604,7 @@ namespace Sdl.Community.ExportAnalysisReports
 
 		private bool IsSameReportPath()
 		{
-			var jsonReportPath = Help.GetJsonReportPath(Help.JsonPath);
+			var jsonReportPath = _help.GetJsonReportPath(_help.JsonPath);
 			if (!string.IsNullOrEmpty(jsonReportPath)
 				&& !string.IsNullOrEmpty(reportOutputPath.Text)
 				&& jsonReportPath.Equals(reportOutputPath.Text))
@@ -544,7 +621,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			{
 				if (!IsNullOrEmpty(reportOutputPath.Text))
 				{
-					Help.CreateDirectory(reportOutputPath.Text);
+					_help.CreateDirectory(reportOutputPath.Text);
 					var projectsToBeExported = _projectsDataSource.Where(p => p.ShouldBeExported).ToList();
 					var areCheckedLanguages = projectsToBeExported.Any(p => p.LanguagesForPoject.Any(l => l.Value));
 					if (!areCheckedLanguages && projectsToBeExported.Count >= 1)
@@ -756,12 +833,12 @@ namespace Sdl.Community.ExportAnalysisReports
 					foreach (var projectPath in projectsPathList)
 					{
 						var reportFolderPath = Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)), "Reports");
-						if (Help.ReportFileExist(reportFolderPath))
+						if (_help.ReportFileExist(reportFolderPath))
 						{
 							var projectDetails = ProjectInformation.GetExternalProjectDetails(projectPath);
 
 							doc.Load(projectDetails.ProjectPath);
-							Help.LoadReports(doc, projectDetails.ProjectFolderPath, projectDetails);
+							_help.LoadReports(doc, projectDetails.ProjectFolderPath, projectDetails);
 							externalProjectsBindingList.Add(projectDetails);
 						}
 					}
@@ -1029,6 +1106,26 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 		}
 
+		private void chkBox_IncludeSingleFileProjects_CheckedChanged(object sender, EventArgs e)
+		{
+			var isChecked = ((CheckBox)sender).Checked;
+
+			// Load all Studio single file projects within projects list
+			if (isChecked)
+			{
+				LoadSingleFileProjects(_projectXmlPath);
+			}
+			else
+			{
+				// Remove the single file projects from the list
+				IReadOnlyList<ProjectDetails> projectsToRemove = _projectsDataSource.Where(p => p.IsSingleFileProject).ToList();
+				foreach (var item in projectsToRemove)
+				{
+					_projectsDataSource.Remove(item);
+				}
+			}
+		}
+
 		private BindingList<ProjectDetails> BindProjectsBasedOnStatus(string selectedStatus)
 		{
 			var projectsBindingList = new BindingList<ProjectDetails>();
@@ -1166,6 +1263,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			projectStatusComboBox.SelectedIndex = 0;
 			chkBox_SelectAllProjects.Checked = false;
 			chkBox_SelectAllLanguages.Checked = false;
+			chkBox_IncludeSingleFileProjects.Checked = false;
 
 			for (var i = 0; i < projListbox.Items.Count; i++)
 			{

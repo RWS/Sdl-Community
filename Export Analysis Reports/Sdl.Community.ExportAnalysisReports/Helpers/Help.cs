@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using Newtonsoft.Json;
+using Sdl.Community.ExportAnalysisReports.Interfaces;
 using Sdl.Community.ExportAnalysisReports.Model;
 using Sdl.Community.Toolkit.Core.Services;
 using Sdl.ProjectAutomation.Core;
@@ -12,13 +13,22 @@ using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.ExportAnalysisReports.Helpers
 {
-	public static class Help
+	public class Help
 	{
-		public static readonly Log Log = Log.Instance;
-		public static readonly string CommunityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "ExportAnalysisReports");
-		public static readonly string JsonPath = Path.Combine(CommunityFolderPath, "ExportAnalysisReportSettings.json");
+		private readonly IMessageBoxService _messageBoxService;
+		private readonly string _communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "ExportAnalysisReports");
 
-		public static string GetStudioProjectsPath()
+		public static readonly Log Log = Log.Instance;
+
+		public Help(IMessageBoxService messageBoxService)
+		{
+			JsonPath = Path.Combine(_communityFolderPath, "ExportAnalysisReportSettings.json");
+			_messageBoxService = messageBoxService;
+		}
+
+		public string JsonPath { get; set; }
+
+		public string GetStudioProjectsPath()
 		{
 			try
 			{
@@ -38,7 +48,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			return string.Empty;
 		}
 
-		public static Dictionary<string, LanguageDirection> LoadLanguageDirections(XmlDocument doc)
+		public Dictionary<string, LanguageDirection> LoadLanguageDirections(XmlDocument doc)
 		{
 			var languages = new Dictionary<string, LanguageDirection>();
 			try
@@ -65,7 +75,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			return languages;
 		}
 
-		public static void LoadReports(XmlDocument doc, string projectPath, ProjectDetails project)
+		public void LoadReports(XmlDocument doc, string projectPath, ProjectDetails project)
 		{
 			try
 			{
@@ -125,7 +135,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			}
 		}
 
-		public static bool ReportFileExist(string reportFolderPath)
+		public bool ReportFileExist(string reportFolderPath)
 		{
 			try
 			{
@@ -137,6 +147,10 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 						return true;
 					}
 				}
+				else
+				{
+					_messageBoxService.ShowInformationMessage("Please run the Analyze File batch task, before opening the project within the Export Analysis Reports", "Informative message");
+				}
 			}
 			catch (Exception ex)
 			{
@@ -145,13 +159,13 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			return false;
 		}
 
-		public static void SaveExportPath(string reportOutputPath)
+		public void SaveExportPath(string reportOutputPath)
 		{
 			if (!string.IsNullOrEmpty(reportOutputPath))
 			{
-				if (!Directory.Exists(CommunityFolderPath))
+				if (!Directory.Exists(_communityFolderPath))
 				{
-					Directory.CreateDirectory(CommunityFolderPath);
+					Directory.CreateDirectory(_communityFolderPath);
 				}
 
 				var jsonExportPath = new JsonSettings { ExportPath = reportOutputPath };
@@ -171,7 +185,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			}
 		}
 
-		public static string GetJsonReportPath(string jsonPath)
+		public string GetJsonReportPath(string jsonPath)
 		{
 			if (File.Exists(jsonPath))
 			{
@@ -188,7 +202,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			return string.Empty;
 		}
 
-		public static void CreateDirectory(string path)
+		public void CreateDirectory(string path)
 		{
 			if (!Directory.Exists(path))
 			{
@@ -196,13 +210,13 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			}
 		}
 
-		private static string GetInstalledStudioShortVersion()
+		private string GetInstalledStudioShortVersion()
 		{
 			var studioService = new StudioVersionService();
 			return studioService?.GetStudioVersion()?.ShortVersion;
 		}
 
-		private static ProjectInfo GetProjectInfo(string projectPath)
+		private ProjectInfo GetProjectInfo(string projectPath)
 		{
 			var fileBasedProject = new FileBasedProject(projectPath);
 			var projectInfo = fileBasedProject?.GetProjectInfo();
@@ -210,7 +224,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			return projectInfo;
 		}
 
-		private static bool ReportsFolderExists(string projectFolderPath)
+		private bool ReportsFolderExists(string projectFolderPath)
 		{
 			var projectPath = new Uri(projectFolderPath).LocalPath;
 			var reportFolderPath = Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)), "Reports");
