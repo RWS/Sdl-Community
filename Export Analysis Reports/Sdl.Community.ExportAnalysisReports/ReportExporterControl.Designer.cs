@@ -119,9 +119,9 @@
             // 
             this.clearBtn.Location = new System.Drawing.Point(690, 253);
             this.clearBtn.Name = "clearBtn";
-            this.clearBtn.Size = new System.Drawing.Size(106, 23);
+            this.clearBtn.Size = new System.Drawing.Size(106, 43);
             this.clearBtn.TabIndex = 27;
-            this.clearBtn.Text = "Clear external";
+            this.clearBtn.Text = "Clear external / Refresh projects";
             this.clearBtn.UseVisualStyleBackColor = true;
             this.clearBtn.Click += new System.EventHandler(this.clearBtn_Click);
             // 
