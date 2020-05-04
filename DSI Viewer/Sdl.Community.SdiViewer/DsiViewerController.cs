@@ -1,6 +1,8 @@
-﻿using System.Windows.Forms;
+﻿using Sdl.Community.DsiViewer.View;
+using Sdl.Community.DsiViewer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.DsiViewer
@@ -13,14 +15,16 @@ namespace Sdl.Community.DsiViewer
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
 	public class DsiViewerController : AbstractViewPartController
 	{
-		private readonly DsiViewerControl _control = new DsiViewerControl(); 
-		protected override Control GetContentControl()
+		private readonly DsiViewerView _control = new DsiViewerView(); 
+		protected override IUIControl GetContentControl()
 		{
 			return _control;
 		}
 
 		protected override void Initialize()
 		{
+			var dataContext = new DsiViewerViewModel();
+			_control.DataContext = dataContext;
 		}
 	}
 }
