@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Sdl.Community.XLIFF.Manager.Controls;
+using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.TestData;
 using Sdl.Community.XLIFF.Manager.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -20,34 +23,51 @@ namespace Sdl.Community.XLIFF.Manager
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class XLIFFManagerViewController : AbstractViewController
 	{
+		private readonly object _lockObject = new object();
+		private List<ProjectModel> _projectModels;
 		private ProjectFilesViewModel _projectFilesViewModel;
 		private ProjectsNavigationViewModel _projectsNavigationViewModel;
-		private ProjectFileActivityViewModel _projectFileActivityViewModel;
+		private ProjectFilesViewControl _projectFilesViewControl;
+		private ProjectsNavigationViewControl _projectsNavigationViewControl;
 		private ProjectFileActivityViewController _projectFileActivityViewController;
-		private IStudioEventAggregator _eventAggregator;
+		private IStudioEventAggregator _eventAggregator;		
 
 		protected override void Initialize(IViewContext context)
 		{
 			ActivationChanged += OnActivationChanged;
 
 			_eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
-			_eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>()?.Subscribe(OnStudioWindowCreatedNotificationEvent);		
+			_eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>()?.Subscribe(OnStudioWindowCreatedNotificationEvent);
+
+			var testDataUtil = new TestDataUtil();
+			_projectModels = testDataUtil.GetTestProjectData();
 		}
-		
+
 		protected override Control GetContentControl()
 		{
-			_projectFilesViewModel = new ProjectFilesViewModel();
-			var viewControl = new ProjectFilesViewControl(_projectFilesViewModel);
-			return viewControl;
+			if (_projectFilesViewControl == null)
+			{
+				_projectFilesViewModel = new ProjectFilesViewModel(_projectModels?.Count > 0 ? _projectModels[0].ProjectFileActionModels : null);
+				_projectFilesViewControl = new ProjectFilesViewControl(_projectFilesViewModel);
+
+
+				_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
+			}
+
+			return _projectFilesViewControl;
 		}
 
 		protected override Control GetExplorerBarControl()
 		{
-			_projectsNavigationViewModel = new ProjectsNavigationViewModel();
-			var viewControl = new ProjectsNavigationViewControl(_projectsNavigationViewModel);
+			if (_projectsNavigationViewControl == null)
+			{
+				_projectsNavigationViewModel = new ProjectsNavigationViewModel(_projectModels);
+				_projectsNavigationViewControl = new ProjectsNavigationViewControl(_projectsNavigationViewModel);
+			}
 
-			return viewControl;
+			return _projectsNavigationViewControl;
 		}
+
 
 		private void OnStudioWindowCreatedNotificationEvent(StudioWindowCreatedNotificationEvent e)
 		{
@@ -64,14 +84,22 @@ namespace Sdl.Community.XLIFF.Manager
 
 		private void SetProjectFileActivityViewController()
 		{
-			if (_projectFileActivityViewController == null)
+			lock (_lockObject)
 			{
-				try
-				{					
-					_projectFileActivityViewController = SdlTradosStudio.Application.GetController<ProjectFileActivityViewController>();
+				if (_projectFileActivityViewController != null)
+				{
+					return;
+				}
 
-					_projectFileActivityViewModel = new ProjectFileActivityViewModel();
-					_projectFileActivityViewController.ViewModel = _projectFileActivityViewModel;
+				try
+				{
+					_projectFileActivityViewController =
+						SdlTradosStudio.Application.GetController<ProjectFileActivityViewController>();
+
+					_projectFilesViewModel.ProjectFileActivityViewModel =
+						new ProjectFileActivityViewModel(_projectFilesViewModel?.SelectedProjectFileAction?.ProjectFileActivityModels);
+
+					_projectFileActivityViewController.ViewModel = _projectFilesViewModel.ProjectFileActivityViewModel;
 				}
 				catch
 				{

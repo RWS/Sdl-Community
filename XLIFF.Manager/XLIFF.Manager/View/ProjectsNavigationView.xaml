@@ -41,7 +41,7 @@
 
 			<Grid Margin="2" Grid.Row="0">
 				<TextBox metroControls:TextBoxHelper.UseFloatingWatermark="False"  
-				         metroControls:TextBoxHelper.Watermark="Filter Projects..."
+				         metroControls:TextBoxHelper.Watermark="Filter Project Name"
 				         metroControls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(metroControls:TextBoxHelper.HasText), Mode=OneWay}"											             
 				         Text="{Binding FilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 						 VerticalContentAlignment="Center"
@@ -52,8 +52,10 @@
 			<controls:SortAwareDataGrid x:Name="MappedLanguagesGrid" Grid.Row="1"
 			          Style="{StaticResource CustomGridStyle}"
 			          Margin="2,0,2,0" 			                           
-					  ItemsSource="{Binding ProjectInfoModels, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
-		              SelectedItemsList="{Binding SelectedProjectInfoModels, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+					  ItemsSource="{Binding FilteredProjectModels, Mode=OneWay}" 
+			          SelectedItem="{Binding SelectedProjectModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		              SelectedItems="{Binding SelectedProjectModels, Mode=OneWayToSource}"
+
 					  FontSize="12"
 					  BorderBrush="#C1C0C0"
 					  FontFamily="Segoe UI"

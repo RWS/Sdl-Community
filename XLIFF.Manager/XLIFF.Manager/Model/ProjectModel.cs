@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
-	public class ProjectInfoModel : BaseModel
+	public class ProjectModel : BaseModel
 	{
 		public string Id { get; set; }
 
@@ -23,5 +23,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		public CultureInfo SourceLanguage { get; set; }
 
 		public List<CultureInfo> TargetLanguages { get; set; }
+
+		public List<ProjectFileActionModel> ProjectFileActionModels { get; set; }
 	}
 }
