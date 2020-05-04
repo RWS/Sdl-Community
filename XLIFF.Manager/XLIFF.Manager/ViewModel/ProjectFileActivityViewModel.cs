@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
@@ -14,8 +9,9 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		private List<ProjectFileActivityModel> _projectFileActivities;
 		private ProjectFileActivityModel _selectedProjectFileActivity;
 
-		public ProjectFileActivityViewModel()
-		{			
+		public ProjectFileActivityViewModel(List<ProjectFileActivityModel> projectFileActivities)
+		{
+			ProjectFileActivities = projectFileActivities;
 		}
 
 		public List<ProjectFileActivityModel> ProjectFileActivities

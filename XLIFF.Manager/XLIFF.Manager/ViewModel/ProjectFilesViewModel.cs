@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
@@ -10,13 +8,17 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 	public class ProjectFilesViewModel : BaseModel, IDisposable
 	{
 		private List<ProjectFileActionModel> _projectFileActions;
-		private List<ProjectFileActionModel> _selectedProjectFileActions;
+		private IList _selectedProjectFileActions;
 		private ProjectFileActionModel _selectedProjectFileAction;
 
-		public ProjectFilesViewModel()
+		public ProjectFilesViewModel(List<ProjectFileActionModel> projectFileActions)
 		{
-			//TODO
+			ProjectFileActions = projectFileActions;
+			SelectedProjectFileAction = ProjectFileActions?.Count > 0 ? projectFileActions[0] : null;			
+			SelectedProjectFileActions = new List<ProjectFileActionModel> {SelectedProjectFileAction};
 		}
+
+		public ProjectFileActivityViewModel ProjectFileActivityViewModel { get; internal set; }
 
 		public List<ProjectFileActionModel> ProjectFileActions
 		{
@@ -28,7 +30,15 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			}
 		}
 
-		public IList SelectedProjectFileActions { get; set; }
+		public IList SelectedProjectFileActions
+		{
+			get => _selectedProjectFileActions;
+			set
+			{
+				_selectedProjectFileActions = value;
+				OnPropertyChanged(nameof(SelectedProjectFileActions));
+			}
+		}
 
 		public ProjectFileActionModel SelectedProjectFileAction
 		{
@@ -37,6 +47,11 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			{
 				_selectedProjectFileAction = value;
 				OnPropertyChanged(nameof(SelectedProjectFileAction));
+
+				if (ProjectFileActivityViewModel != null)
+				{
+					ProjectFileActivityViewModel.ProjectFileActivities = _selectedProjectFileAction.ProjectFileActivityModels;
+				}
 			}
 		}
 

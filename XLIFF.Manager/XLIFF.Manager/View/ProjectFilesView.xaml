@@ -33,12 +33,14 @@
 					<componentModel:SortDescription PropertyName="Name"/>
 				</CollectionViewSource.SortDescriptions>
 				<CollectionViewSource.GroupDescriptions>
-					<PropertyGroupDescription PropertyName="ProjectInfo.Name"/>
+					<PropertyGroupDescription PropertyName="ProjectModel.Name"/>
 					<PropertyGroupDescription PropertyName="TargetLanguage.EnglishName"/>
 				</CollectionViewSource.GroupDescriptions>
 			</CollectionViewSource>
 		</ResourceDictionary>
+
 	</UserControl.Resources>
+
 	<Grid>
 		<controls:SortAwareDataGrid x:Name="MappedLanguagesGrid" 
 			          Style="{StaticResource CustomGridStyle}"

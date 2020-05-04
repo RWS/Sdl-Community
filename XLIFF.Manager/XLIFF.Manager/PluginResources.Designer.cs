@@ -205,6 +205,16 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon xliffManager {
+            get {
+                object obj = ResourceManager.GetObject("xliffManager", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to XLIFF Manager.
         /// </summary>
         internal static string XLIFFManager_Description {
@@ -219,6 +229,16 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string XLIFFManager_Name {
             get {
                 return ResourceManager.GetString("XLIFFManager_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon xliffManager2 {
+            get {
+                object obj = ResourceManager.GetObject("xliffManager2", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

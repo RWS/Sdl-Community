@@ -13,9 +13,8 @@
 		{
 			None = 0,
 			Ready = 1,
-			Exported = 2,
-			Imported = 3,
-			Error = 4
+			Success = 2,
+			Error = 3
 		}
 	}
 }

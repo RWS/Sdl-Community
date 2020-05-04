@@ -1,22 +1,28 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
-	public class ProjectsNavigationViewModel: BaseModel, IDisposable
+	public class ProjectsNavigationViewModel : BaseModel, IDisposable
 	{
+		private readonly List<ProjectModel> _projectInfoModels;
 		private string _filterString;
 		private string _statusLabel;
-		private List<ProjectInfoModel> _projectInfoModels;
-		private ProjectInfoModel _selectedProjectInfoModel;
+		private List<ProjectModel> _filteredProjectModels;
+		private ProjectModel _selectedProjectModel;
+		private IList _selectedProjectModels;
 
-		public ProjectsNavigationViewModel()
+		public ProjectsNavigationViewModel(List<ProjectModel> projectInfoModels)
 		{
-			//TODO
+			_projectInfoModels = projectInfoModels;
+			FilteredProjectModels = _projectInfoModels;
+			FilterString = string.Empty;
 		}
+
+		public ProjectFilesViewModel ProjectFilesViewModel { get; internal set; }
 
 		public string FilterString
 		{
@@ -30,6 +36,10 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 				_filterString = value;
 				OnPropertyChanged(nameof(FilterString));
+
+				FilteredProjectModels = string.IsNullOrEmpty(_filterString)
+					? _projectInfoModels
+					: _projectInfoModels.Where(a => a.Name.ToLower().Contains(_filterString)).ToList();
 			}
 		}
 
@@ -48,33 +58,58 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			}
 		}
 
-
-		public List<ProjectInfoModel> ProjectInfoModels
+		public List<ProjectModel> FilteredProjectModels
 		{
-			get => _projectInfoModels;
+			get => _filteredProjectModels;
 			set
 			{
-				_projectInfoModels = value;
-				OnPropertyChanged(nameof(ProjectInfoModels));
+				_filteredProjectModels = value;
+				OnPropertyChanged(nameof(FilteredProjectModels));
+
+				if (_filteredProjectModels?.Count > 0 && !_filteredProjectModels.Contains(SelectedProjectModel))
+				{
+					SelectedProjectModel = _filteredProjectModels[0];
+				}
+				else if (_filteredProjectModels?.Count == 0)
+				{
+					SelectedProjectModel = null;
+				}
 			}
 		}
 
-		public List<ProjectInfoModel> SelectedProjectInfoModels { get; set; }
-
-		public ProjectInfoModel SelectedProjectInfoModel
+		public IList SelectedProjectModels
 		{
-			get => _selectedProjectInfoModel;
+			get => _selectedProjectModels;
 			set
 			{
-				_selectedProjectInfoModel = value;
-				OnPropertyChanged(nameof(SelectedProjectInfoModel));
+				_selectedProjectModels = value;
+				OnPropertyChanged(nameof(SelectedProjectModels));
+
+				if (ProjectFilesViewModel != null && _selectedProjectModels != null)
+				{
+					ProjectFilesViewModel.ProjectFileActions =
+						_selectedProjectModels.Cast<ProjectModel>().SelectMany(a => a.ProjectFileActionModels).ToList();
+				}
 			}
 		}
 
+		public ProjectModel SelectedProjectModel
+		{
+			get => _selectedProjectModel;
+			set
+			{
+				_selectedProjectModel = value;
+				OnPropertyChanged(nameof(SelectedProjectModel));
 
+				if (ProjectFilesViewModel != null && _selectedProjectModel != null)
+				{
+					ProjectFilesViewModel.ProjectFileActions = _selectedProjectModel.ProjectFileActionModels;
+				}
+			}
+		}
 
 		public void Dispose()
-		{			
-		}	
+		{
+		}
 	}
 }

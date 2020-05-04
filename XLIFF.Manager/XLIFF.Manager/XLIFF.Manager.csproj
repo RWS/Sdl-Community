@@ -120,7 +120,7 @@
     <Compile Include="Common\Enumerators.cs" />
     <Compile Include="Model\ProjectFileActionModel.cs" />
     <Compile Include="Model\ProjectFileActivityModel.cs" />
-    <Compile Include="Model\ProjectInfoModel.cs" />
+    <Compile Include="Model\ProjectModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -128,6 +128,7 @@
     </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestData\TestDataUtil.cs" />
     <Compile Include="XLIFFManagerViewGroups.cs" />
     <Compile Include="ViewModel\ProjectFileActivityViewModel.cs" />
     <Compile Include="ViewModel\ProjectFilesViewModel.cs" />
@@ -234,11 +235,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="Resources\Icon.Jigsaw.ico" />
+    <Resource Include="Resources\xliffManager.ico" />
+    <Resource Include="Resources\xliffManager_2.ico" />
+    <Resource Include="Resources\xliffManager_3.ico" />
     <Resource Include="Resources\ExportTo.ico" />
     <Resource Include="Resources\ImportFrom.ico" />
     <Resource Include="Resources\Checked.png" />
     <Resource Include="Resources\ForumIcon.ico" />
-    <Resource Include="Resources\Icon.ico" />
     <Resource Include="Resources\Question.ico" />
     <Resource Include="Resources\Settings.ico" />
     <Resource Include="Resources\TellMe.ico" />
