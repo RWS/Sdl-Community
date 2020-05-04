@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace ExportToExcel
 {
-    public partial class ExportToExcelSettingsControl : UserControl,ISettingsAware<GeneratorSettings>
-    {
+    public partial class ExportToExcelSettingsControl : UserControl,ISettingsAware<GeneratorSettings>, IUISettingsControl
+	{
         public GeneratorSettings Settings { get; set; }
 
         public ExportToExcelSettingsControl()
