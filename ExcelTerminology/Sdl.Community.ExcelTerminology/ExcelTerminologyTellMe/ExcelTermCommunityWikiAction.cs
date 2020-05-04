@@ -7,12 +7,12 @@ namespace Sdl.Community.ExcelTerminology.ExcelTerminologyTellMe
 	public class ExcelTermCommunityWikiAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => "Excel Terminology results";
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override string Category => "Term Excelerator results";
+		public override Icon Icon => PluginResources.Question;
 
 		public ExcelTermCommunityWikiAction()
 		{
-			Name = "SDL Community Excel Terminology / Term Excelerator wiki";
+			Name = "Term Excelerator wiki";
 		}
 
 		public override void Execute()

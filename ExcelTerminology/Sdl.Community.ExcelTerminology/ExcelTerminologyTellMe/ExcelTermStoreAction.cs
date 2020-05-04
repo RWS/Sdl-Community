@@ -7,12 +7,12 @@ namespace Sdl.Community.ExcelTerminology.ExcelTerminologyTellMe
 	public class ExcelTermStoreAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => "Excel Terminology results";
+		public override string Category => "Term Excelerator results";
 		public override Icon Icon => PluginResources.Download;
 
 		public ExcelTermStoreAction()
 		{
-			Name = "Download Excel Terminology / Term Excelerator from AppStore";
+			Name = "Term Excelerator from AppStore";
 		}
 
 		public override void Execute()

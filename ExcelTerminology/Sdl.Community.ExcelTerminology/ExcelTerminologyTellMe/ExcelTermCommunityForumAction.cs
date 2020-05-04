@@ -7,7 +7,7 @@ namespace Sdl.Community.ExcelTerminology.ExcelTerminologyTellMe
 	public class ExcelTermCommunityForumAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => "Excel Terminology results";
+		public override string Category => "Term Excelerator results";
 		public override Icon Icon => PluginResources.ForumIcon;
 
 		public ExcelTermCommunityForumAction()

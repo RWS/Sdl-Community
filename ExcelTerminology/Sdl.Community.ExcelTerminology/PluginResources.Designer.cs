@@ -80,7 +80,7 @@ namespace Sdl.Community.ExcelTerminology {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Excel-based Terminology provider ....
+        ///   Looks up a localized string similar to TermExcelerator Terminology Provider ....
         /// </summary>
         internal static string ExcelTerminologyProviderName {
             get {
@@ -104,6 +104,16 @@ namespace Sdl.Community.ExcelTerminology {
         internal static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }
