@@ -659,15 +659,12 @@ namespace Sdl.Community.ExportAnalysisReports
 								}
 
 								//write report to Reports folder
-								var streamPath = Path.Combine($"{project.ReportPath}{Path.DirectorySeparatorChar}",
-									$"{project.ProjectName}_{languageReport.Key}.csv");
+								var streamPath = Path.Combine($"{project.ReportPath}{Path.DirectorySeparatorChar}", $"{project.ProjectName}_{languageReport.Key}.csv");
 								using (var sw = new StreamWriter(streamPath))
 								{
 									if (project?.LanguageAnalysisReportPaths != null)
 									{
-										var analyseReportPath =
-											project.LanguageAnalysisReportPaths.FirstOrDefault(l =>
-												l.Key.Equals(languageReport.Key));
+										var analyseReportPath = project.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(languageReport.Key));
 										if (!analyseReportPath.Equals(new KeyValuePair<string, string>()))
 										{
 											var report = new StudioAnalysisReport(analyseReportPath.Value);
@@ -678,11 +675,7 @@ namespace Sdl.Community.ExportAnalysisReports
 							}
 						}
 
-						//Clear all lists
-						UncheckAllProjects();
-						_languages.Clear();
-						chkBox_SelectAllProjects.Checked = false;
-						chkBox_SelectAllLanguages.Checked = false;
+						ClearItemsAfterExport();
 						_messageBoxService.ShowOwnerInformationMessage(this, "The analysis files were exported with success.", "Export result");
 					}
 				}
@@ -1305,6 +1298,15 @@ namespace Sdl.Community.ExportAnalysisReports
 			{
 				projListbox.SetItemChecked(i, false);
 			}
+		}
+
+		// Clear all projects and languages lists after the export is finished
+		private void ClearItemsAfterExport()
+		{
+			UncheckAllProjects();
+			_languages.Clear();
+			chkBox_SelectAllProjects.Checked = false;
+			chkBox_SelectAllLanguages.Checked = false;
 		}
 	}
 }
