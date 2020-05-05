@@ -1125,8 +1125,11 @@ namespace Sdl.Community.ExportAnalysisReports
 		private void chkBox_IncludeSingleFileProjects_CheckedChanged(object sender, EventArgs e)
 		{
 			var isChecked = ((CheckBox)sender).Checked;
-			_languages.Clear();
-			// Load all Studio single file projects within projects list
+
+			// Add the current languages to dictionary, because it will be used to keep the current languages selection
+			var languagesDictionary = _help.AddToDictionary(_languages);
+
+			// Load all Studio single file projects within the projects list
 			if (isChecked)
 			{
 				LoadSingleFileProjects(_projectXmlPath);
@@ -1141,8 +1144,22 @@ namespace Sdl.Community.ExportAnalysisReports
 					_allStudioProjectsDetails.Remove(project);
 				}
 			}
-			SetNewProjectLanguage();
 			RefreshProjectsListBox();
+
+			// Clear the _languages, because it was populated automatically on RefreshProjectsListBox(), and for the selected projects, all languages became automatically selected
+			_languages.Clear();
+			
+			// Uncheck the "Select all languages" option, for cases when not all languages are checked
+			chkBox_SelectAllLanguages.Checked = false;
+			
+			// Populate the _languages with the values saved within the dictionary, so the previews languages selection is kept
+			// (the languages selection made by user before including/removing the single file projects)
+			_help.AddFromDictionary(_languages, languagesDictionary);
+			RefreshLanguageListbox();
+
+			// Keep the "Select all languages" checked when all languages were checked
+			chkBox_SelectAllLanguages.Checked = languagesListBox.CheckedItems.Count.Equals(_languages.Count) && !chkBox_SelectAllLanguages.Checked;
+			IsCsvBtnEnabled();
 		}
 
 		private BindingList<ProjectDetails> BindProjectsBasedOnStatus(string selectedStatus)

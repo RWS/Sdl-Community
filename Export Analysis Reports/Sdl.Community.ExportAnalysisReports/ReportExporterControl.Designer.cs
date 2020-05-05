@@ -386,7 +386,7 @@
             this.MaximizeBox = false;
             this.Name = "ReportExporterControl";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SDL Trados Studio 2019 – Export Analisys Reports";
+            this.Text = "SDL Trados Studio – Export Analysis Reports";
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
             this.ResumeLayout(false);

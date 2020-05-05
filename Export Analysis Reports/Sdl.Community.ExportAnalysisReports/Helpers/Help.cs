@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -217,6 +218,34 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			{
 				Directory.CreateDirectory(path);
 			}
+		}
+
+		public Dictionary<string, bool> AddToDictionary(BindingList<LanguageDetails> languages)
+		{
+			var dictionaryResult = new Dictionary<string, bool>();
+			if (languages != null)
+			{
+				foreach (var item in languages)
+				{
+					dictionaryResult.Add(item.LanguageName, item.IsChecked);
+				}
+			}
+
+			return dictionaryResult;
+		}
+
+		public BindingList<LanguageDetails> AddFromDictionary(BindingList<LanguageDetails> languages, Dictionary<string, bool> languagesDictionary)
+		{
+			if (languagesDictionary != null && languagesDictionary.Equals(new Dictionary<bool, string>()))
+			{
+				foreach (var item in languagesDictionary)
+				{
+					var language = new LanguageDetails {LanguageName = item.Key, IsChecked = item.Value};
+					languages.Add(language);
+				}
+			}
+
+			return languages;
 		}
 
 		private string GetInstalledStudioShortVersion()
