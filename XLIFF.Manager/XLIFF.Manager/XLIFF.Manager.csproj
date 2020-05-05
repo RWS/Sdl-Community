@@ -87,6 +87,7 @@
     <Compile Include="Actions\ImportFromXLIFFAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
+    <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
     <Compile Include="Controls\ProjectFileActivityViewControl.cs">
       <SubType>UserControl</SubType>
@@ -118,6 +119,7 @@
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Common\Enumerators.cs" />
+    <Compile Include="Model\ClientModel.cs" />
     <Compile Include="Model\ProjectFileActionModel.cs" />
     <Compile Include="Model\ProjectFileActivityModel.cs" />
     <Compile Include="Model\ProjectModel.cs" />
@@ -160,6 +162,10 @@
     <Page Include="Controls\WindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\TreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\Buttons.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -235,7 +241,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Resource Include="Resources\Project.ico" />
+    <Resource Include="Resources\Close.png" />
     <Content Include="Resources\Icon.Jigsaw.ico" />
+    <Resource Include="Resources\minus.png" />
+    <Resource Include="Resources\plus.png" />
     <Resource Include="Resources\xliffManager.ico" />
     <Resource Include="Resources\xliffManager_2.ico" />
     <Resource Include="Resources\xliffManager_3.ico" />

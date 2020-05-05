@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Sdl.Community.XLIFF.Manager.Model;
 
@@ -8,6 +9,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 	{
 		private List<ProjectFileActivityModel> _projectFileActivities;
 		private ProjectFileActivityModel _selectedProjectFileActivity;
+		private IList _selectedProjectFileActivities;
 
 		public ProjectFileActivityViewModel(List<ProjectFileActivityModel> projectFileActivities)
 		{
@@ -21,6 +23,16 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			{
 				_projectFileActivities = value;
 				OnPropertyChanged(nameof(ProjectFileActivities));
+			}  
+		}
+
+		public IList SelectedProjectFileActivities
+		{
+			get => _selectedProjectFileActivities;
+			set
+			{
+				_selectedProjectFileActivities = value;
+				OnPropertyChanged(nameof(SelectedProjectFileActivities));
 			}
 		}
 

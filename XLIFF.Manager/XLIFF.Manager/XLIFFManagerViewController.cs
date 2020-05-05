@@ -39,6 +39,7 @@ namespace Sdl.Community.XLIFF.Manager
 			_eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 			_eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>()?.Subscribe(OnStudioWindowCreatedNotificationEvent);
 
+			// TODO this will be replaced with a call to recover the relevant data from the projects loaded in Studio
 			var testDataUtil = new TestDataUtil();
 			_projectModels = testDataUtil.GetTestProjectData();
 		}
@@ -49,7 +50,6 @@ namespace Sdl.Community.XLIFF.Manager
 			{
 				_projectFilesViewModel = new ProjectFilesViewModel(_projectModels?.Count > 0 ? _projectModels[0].ProjectFileActionModels : null);
 				_projectFilesViewControl = new ProjectFilesViewControl(_projectFilesViewModel);
-
 
 				_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
 			}
@@ -111,8 +111,7 @@ namespace Sdl.Community.XLIFF.Manager
 		public override void Dispose()
 		{
 			_projectFilesViewModel?.Dispose();
-			_projectsNavigationViewModel?.Dispose();
-
+			_projectsNavigationViewModel?.Dispose();					
 			base.Dispose();
 		}
 	}

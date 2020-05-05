@@ -10,8 +10,6 @@
 	<Style x:Key="LinkButton" 
 	       TargetType="Button"
 	       BasedOn="{StaticResource ResourceKey={x:Type Button}}">
-		<Setter Property="FontFamily" Value="Segoe UI"/>
-		<Setter Property="FontSize" Value="14"/>
 		<Setter Property="Width" Value="Auto"/>
 		<Setter Property="Template">
 			<Setter.Value>

@@ -12,7 +12,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string Path { get; set; }
 
-		public string Client { get; set; }
+		public string ClientName { get; set; }
 
 		public DateTime DueDate { get; set; }
 

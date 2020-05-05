@@ -80,7 +80,7 @@
 										<Expander IsExpanded="True" Foreground="#232121" BorderThickness="1,1,1,3">
 											<Expander.Header>
 												<DockPanel>
-													<TextBlock FontWeight="Bold" Text="" Margin="5,0,0,0"/>
+													<TextBlock FontWeight="Bold" Text="" Margin="2,0,0,0"/>
 													<TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="0"/>
 													<TextBlock FontWeight="Regular"  Margin="00" Text=" " />
 													<TextBlock FontWeight="Bold" Text="files: "  />
@@ -88,7 +88,7 @@
 												</DockPanel>
 											</Expander.Header>
 											<Expander.Content>
-												<ItemsPresenter />
+												<ItemsPresenter  />
 											</Expander.Content>
 										</Expander>
 									</ControlTemplate>
@@ -101,7 +101,7 @@
 					<GroupStyle.HeaderTemplate>
 						<DataTemplate>
 							<DockPanel Background="Transparent" Margin="0,2,0,2">
-								<TextBlock FontWeight="Regular" Text="Target language: " Foreground="Black" Margin="10,0,0,0"/>
+								<TextBlock FontWeight="Regular" Text="Target language: " Foreground="Black" Margin="5,0,0,0"/>
 								<TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Foreground="#3E3E45" Margin="0"/>
 								<TextBlock FontWeight="Regular"  Margin="0,0,0,0" Text=", " Foreground="Black"/>
 								<TextBlock FontWeight="Regular" Text="files: " Foreground="Black" />
