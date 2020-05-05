@@ -236,7 +236,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 
 		public BindingList<LanguageDetails> AddFromDictionary(BindingList<LanguageDetails> languages, Dictionary<string, bool> languagesDictionary)
 		{
-			if (languagesDictionary != null && languagesDictionary.Equals(new Dictionary<string, bool>()))
+			if (languagesDictionary != null && !languagesDictionary.Equals(new Dictionary<string, bool>()))
 			{
 				foreach (var item in languagesDictionary)
 				{
