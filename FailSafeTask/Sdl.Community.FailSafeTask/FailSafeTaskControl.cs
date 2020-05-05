@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.FailSafeTask
 {
-	public partial class FailSafeTaskControl : UserControl, ISettingsAware<FailSafeTaskSettings>
+	public partial class FailSafeTaskControl : UserControl, ISettingsAware<FailSafeTaskSettings>, IUISettingsControl
 	{
 		public FailSafeTaskControl()
 		{
