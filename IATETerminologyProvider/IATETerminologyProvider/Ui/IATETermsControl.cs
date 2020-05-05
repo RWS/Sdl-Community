@@ -156,7 +156,7 @@ namespace Sdl.Community.IATETerminologyProvider.Ui
 			xmlTxtWriter.WriteStartDocument(true);
 
 			xmlTxtWriter.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + "report.xslt" + "'");
-			xmlTxtWriter.WriteComment("IATETerminologyProvider by SDL Community Developers, 2019");
+			xmlTxtWriter.WriteComment("IATETerminologyProvider by SDL Community Developers, 2021");
 
 			WriteReport(entry, xmlTxtWriter);
 
