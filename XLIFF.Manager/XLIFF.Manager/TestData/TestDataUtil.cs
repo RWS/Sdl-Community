@@ -11,23 +11,23 @@ namespace Sdl.Community.XLIFF.Manager.TestData
 		public List<ProjectModel> GetTestProjectData()
 		{			
 			var projectModels = new List<ProjectModel>();
-			projectModels.Add(GetProject(projectModels.Count, new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("it-IT"), new CultureInfo("de-DE") }));
-			projectModels.Add(GetProject(projectModels.Count, new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("it-IT"), new CultureInfo("de-DE"), new CultureInfo("fr-FR") }));
-			projectModels.Add(GetProject(projectModels.Count, new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("de-DE") }));
+			projectModels.Add(GetProject("Avengers", "Project 0", new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("it-IT"), new CultureInfo("de-DE") }));
+			projectModels.Add(GetProject("Avengers", "Project 66", new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("it-IT"), new CultureInfo("de-DE"), new CultureInfo("fr-FR") }));
+			projectModels.Add(GetProject("Travel Guides", "Project 2", new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("de-DE") }));
 
 			return projectModels;
 		}
 
-		private ProjectModel GetProject(int index, CultureInfo sourceLanguage, List<CultureInfo> targetLanguages)
+		private ProjectModel GetProject(string clientName, string projectName, CultureInfo sourceLanguage, List<CultureInfo> targetLanguages)
 		{
 			var projectModel = new ProjectModel
 			{
-				Client = "Client Name",
+				ClientName = clientName,
 				Created = DateTime.Now.Subtract(new TimeSpan(10, 0, 0, 0, 0)),
 				DueDate = DateTime.Now.AddDays(10),
 				Id = Guid.NewGuid().ToString(),
-				Name = "Project " + index,
-				Path = "Project " + index,
+				Name = projectName,
+				Path = projectName,
 				ProjectType = "SDL Project",
 				SourceLanguage = sourceLanguage,
 				TargetLanguages = targetLanguages,
@@ -38,6 +38,12 @@ namespace Sdl.Community.XLIFF.Manager.TestData
 			{
 				projectModel.ProjectFileActionModels.Add(GetProjectFileAction(projectModel, targetLanguage,
 					Enumerators.Action.Export, DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0, 0))));
+				projectModel.ProjectFileActionModels.Add(GetProjectFileAction(projectModel, targetLanguage,
+					Enumerators.Action.Import, DateTime.Now));
+				projectModel.ProjectFileActionModels.Add(GetProjectFileAction(projectModel, targetLanguage,
+					Enumerators.Action.Import, DateTime.Now));
+				projectModel.ProjectFileActionModels.Add(GetProjectFileAction(projectModel, targetLanguage,
+					Enumerators.Action.Import, DateTime.Now));
 				projectModel.ProjectFileActionModels.Add(GetProjectFileAction(projectModel, targetLanguage,
 					Enumerators.Action.Import, DateTime.Now));
 			}
@@ -67,8 +73,13 @@ namespace Sdl.Community.XLIFF.Manager.TestData
 			if (action == Enumerators.Action.Import)
 			{
 				projectFileActionModel.ProjectFileActivityModels.Add(
+					GetProjectFileActivity(projectFileActionModel, Enumerators.Action.Export, Enumerators.Status.Success,
+						projectFileActionModel.Date.Subtract(new TimeSpan(1, 0, 0, 0, 0))));
+
+				projectFileActionModel.ProjectFileActivityModels.Add(
 					GetProjectFileActivity(projectFileActionModel, Enumerators.Action.Import, Enumerators.Status.Error,
 						projectFileActionModel.Date.Subtract(new TimeSpan(0, 0, 2, 0, 0))));
+
 				projectFileActionModel.ProjectFileActivityModels.Add(
 					GetProjectFileActivity(projectFileActionModel, Enumerators.Action.Import, Enumerators.Status.Success,
 						projectFileActionModel.Date));

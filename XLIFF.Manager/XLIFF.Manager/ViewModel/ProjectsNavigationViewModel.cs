@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
+using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
@@ -10,17 +12,22 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 	{
 		private readonly List<ProjectModel> _projectInfoModels;
 		private string _filterString;
-		private string _statusLabel;
 		private List<ProjectModel> _filteredProjectModels;
 		private ProjectModel _selectedProjectModel;
 		private IList _selectedProjectModels;
-
+		private ICommand _clearSelectionCommand;
+		private ICommand _clearFilterCommand;
+		
 		public ProjectsNavigationViewModel(List<ProjectModel> projectInfoModels)
 		{
 			_projectInfoModels = projectInfoModels;
 			FilteredProjectModels = _projectInfoModels;
 			FilterString = string.Empty;
 		}
+
+		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
+
+		public ICommand ClearFilterCommand => _clearFilterCommand ?? (_clearFilterCommand = new CommandHandler(ClearFilter));
 
 		public ProjectFilesViewModel ProjectFilesViewModel { get; internal set; }
 
@@ -45,18 +52,35 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 		public string StatusLabel
 		{
-			get => _statusLabel;
-			set
+			get
 			{
-				if (_statusLabel == value)
-				{
-					return;
-				}
-
-				_statusLabel = value;
-				OnPropertyChanged(nameof(StatusLabel));
-			}
+				var message = "Selected: " + _selectedProjectModels?.Count;
+				return message;
+			}			
 		}
+
+		//public List<ClientModel> ClientModels
+		//{
+		//	get
+		//	{
+		//		var clientModels = new List<ClientModel>();
+
+		//		foreach (var filteredProjectModel in FilteredProjectModels)
+		//		{
+		//			var clientModel = clientModels.FirstOrDefault(a => a.Name == filteredProjectModel.ClientName);
+		//			if (clientModel == null)
+		//			{
+		//				clientModels.Add(new ClientModel{Name = filteredProjectModel.ClientName, ProjectModels = new List<ProjectModel>{filteredProjectModel}});
+		//			}
+		//			else
+		//			{
+		//				clientModel.ProjectModels.Add(filteredProjectModel);
+		//			}
+		//		}
+
+		//		return clientModels;
+		//	}
+		//}
 
 		public List<ProjectModel> FilteredProjectModels
 		{
@@ -74,6 +98,8 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				{
 					SelectedProjectModel = null;
 				}
+
+				//OnPropertyChanged(nameof(ClientModels));
 			}
 		}
 
@@ -90,6 +116,8 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 					ProjectFilesViewModel.ProjectFileActions =
 						_selectedProjectModels.Cast<ProjectModel>().SelectMany(a => a.ProjectFileActionModels).ToList();
 				}
+
+				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
 
@@ -108,8 +136,20 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			}
 		}
 
+		private void ClearSelection(object parameter)
+		{
+			SelectedProjectModels.Clear();
+			SelectedProjectModel = null;
+		}
+
+		private void ClearFilter(object parameter)
+		{
+			FilterString = string.Empty;
+		}
+
 		public void Dispose()
 		{
+			ProjectFilesViewModel?.Dispose();
 		}
 	}
 }

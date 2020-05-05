@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
@@ -14,8 +15,8 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		public ProjectFilesViewModel(List<ProjectFileActionModel> projectFileActions)
 		{
 			ProjectFileActions = projectFileActions;
-			SelectedProjectFileAction = ProjectFileActions?.Count > 0 ? projectFileActions[0] : null;			
-			SelectedProjectFileActions = new List<ProjectFileActionModel> {SelectedProjectFileAction};
+			SelectedProjectFileAction = ProjectFileActions?.Count > 0 ? projectFileActions[0] : null;
+			SelectedProjectFileActions = new List<ProjectFileActionModel> { SelectedProjectFileAction };
 		}
 
 		public ProjectFileActivityViewModel ProjectFileActivityViewModel { get; internal set; }
@@ -37,6 +38,12 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			{
 				_selectedProjectFileActions = value;
 				OnPropertyChanged(nameof(SelectedProjectFileActions));
+
+				if (ProjectFileActivityViewModel != null && _selectedProjectFileActions != null)
+				{
+					ProjectFileActivityViewModel.ProjectFileActivities = _selectedProjectFileActions?.Cast<ProjectFileActionModel>()
+						.SelectMany(a => a.ProjectFileActivityModels).ToList();
+				}
 			}
 		}
 
@@ -50,13 +57,14 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 				if (ProjectFileActivityViewModel != null)
 				{
-					ProjectFileActivityViewModel.ProjectFileActivities = _selectedProjectFileAction.ProjectFileActivityModels;
+					ProjectFileActivityViewModel.ProjectFileActivities = _selectedProjectFileAction?.ProjectFileActivityModels;
 				}
 			}
 		}
 
 		public void Dispose()
 		{
+			ProjectFileActivityViewModel?.Dispose();
 		}
 	}
 }
