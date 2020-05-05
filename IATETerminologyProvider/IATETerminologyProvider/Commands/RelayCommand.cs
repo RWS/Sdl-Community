@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace IATETerminologyProvider.Commands
+namespace Sdl.Community.IATETerminologyProvider.Commands
 {
 	public class RelayCommand : ICommand
 	{

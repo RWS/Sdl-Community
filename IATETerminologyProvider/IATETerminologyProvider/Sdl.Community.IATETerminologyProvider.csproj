@@ -8,8 +8,8 @@
     <ProjectGuid>{5D9C89B8-ACAC-4A3D-9373-43F6343D00E4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IATETerminologyProvider</RootNamespace>
-    <AssemblyName>IATETerminologyProvider</AssemblyName>
+    <RootNamespace>Sdl.Community.IATETerminologyProvider</RootNamespace>
+    <AssemblyName>Sdl.Community.IATETerminologyProvider</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>

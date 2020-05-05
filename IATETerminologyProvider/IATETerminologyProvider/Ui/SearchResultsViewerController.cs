@@ -4,7 +4,7 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace IATETerminologyProvider.Ui
+namespace Sdl.Community.IATETerminologyProvider.Ui
 {
 	[ViewPart(
 		Id = "IATE Results Viewer",

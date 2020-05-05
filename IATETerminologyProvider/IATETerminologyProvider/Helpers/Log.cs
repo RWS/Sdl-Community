@@ -5,7 +5,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 
-namespace IATETerminologyProvider.Helpers
+namespace Sdl.Community.IATETerminologyProvider.Helpers
 {
 	public sealed class Log
 	{

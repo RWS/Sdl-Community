@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace IATETerminologyProvider.Helpers
+namespace Sdl.Community.IATETerminologyProvider.Helpers
 {
 	public sealed class NotifyTaskCompletion<TResult> : INotifyPropertyChanged
 	{

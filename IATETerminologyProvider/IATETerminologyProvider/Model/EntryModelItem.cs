@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IATETerminologyProvider.Model
+namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class EntryModelItem
 	{

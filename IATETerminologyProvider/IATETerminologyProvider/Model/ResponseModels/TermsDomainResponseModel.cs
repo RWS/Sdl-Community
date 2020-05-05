@@ -1,4 +1,4 @@
-﻿namespace IATETerminologyProvider.Model.ResponseModels
+﻿namespace Sdl.Community.IATETerminologyProvider.Model.ResponseModels
 {
 	public class TermsDomainResponseModel
 	{

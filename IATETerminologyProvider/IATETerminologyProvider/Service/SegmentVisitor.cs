@@ -3,7 +3,7 @@ using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 
-namespace IATETerminologyProvider.Service
+namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	internal class SegmentVisitor : IMarkupDataVisitor
 	{

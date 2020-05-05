@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using IATETerminologyProvider.Interface;
+using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Core.Settings;
 
-namespace IATETerminologyProvider.Model
+namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class ProviderSettings : SettingsGroup, IProviderSettings
 	{

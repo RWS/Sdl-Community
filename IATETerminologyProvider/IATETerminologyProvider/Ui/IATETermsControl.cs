@@ -6,12 +6,12 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using IATETerminologyProvider.Helpers;
-using IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace IATETerminologyProvider.Ui
+namespace Sdl.Community.IATETerminologyProvider.Ui
 {
 	public partial class IATETermsControl : UserControl
 	{

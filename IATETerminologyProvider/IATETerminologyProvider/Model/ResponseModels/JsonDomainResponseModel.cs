@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace IATETerminologyProvider.Model.ResponseModels
+namespace Sdl.Community.IATETerminologyProvider.Model.ResponseModels
 {
 	public class JsonDomainResponseModel
 	{
