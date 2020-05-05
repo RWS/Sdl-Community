@@ -1137,6 +1137,7 @@ namespace Sdl.Community.ExportAnalysisReports
 				foreach (var project in projectsToRemove)
 				{
 					_projectsDataSource.Remove(project);
+					_allStudioProjectsDetails.Remove(project);
 				}
 			}
 		}
@@ -1278,7 +1279,6 @@ namespace Sdl.Community.ExportAnalysisReports
 			projectStatusComboBox.SelectedIndex = 0;
 			chkBox_SelectAllProjects.Checked = false;
 			chkBox_SelectAllLanguages.Checked = false;
-			chkBox_IncludeSingleFileProjects.Checked = false;
 
 			for (var i = 0; i < projListbox.Items.Count; i++)
 			{
