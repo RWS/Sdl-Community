@@ -16,7 +16,7 @@ namespace IATETerminologyProvider.Helpers
 		{
 			var config = new LoggingConfiguration();
 			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL",
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",
 				"IATEProviderLogs");
 			if (!Directory.Exists(logDirectoryPath))
 			{

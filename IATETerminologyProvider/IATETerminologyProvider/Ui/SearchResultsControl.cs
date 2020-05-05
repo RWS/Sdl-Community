@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace IATETerminologyProvider.Ui
 {
-	public partial class SearchResultsControl : UserControl
+	public partial class SearchResultsControl : UserControl,IUIControl
 	{
 		public SearchResultsControl()
 		{

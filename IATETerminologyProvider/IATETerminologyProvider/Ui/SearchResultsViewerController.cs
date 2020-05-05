@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace IATETerminologyProvider.Ui
@@ -18,7 +19,7 @@ namespace IATETerminologyProvider.Ui
 		{
 		}
 
-		protected override Control GetContentControl()
+		protected override IUIControl GetContentControl()
 		{
 			return _control;
 		}
