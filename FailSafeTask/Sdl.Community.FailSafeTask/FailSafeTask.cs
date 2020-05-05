@@ -10,7 +10,7 @@ using Sdl.ProjectAutomation.Settings;
 namespace Sdl.Community.FailSafeTask
 {
 	[AutomaticTask("Sdl.Community.FailSafeTask",
-		"Failsafe Task",
+		"Fail Safe Task",
 		"Verifies generating target translation is possible",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]

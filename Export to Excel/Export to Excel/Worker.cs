@@ -1,7 +1,6 @@
 ﻿using Sdl.FileTypeSupport.Framework.IntegrationApi;
 
-
-namespace ExportToExcel
+namespace Sdl.Community.ExportToExcel
 {
     public class Worker
     {

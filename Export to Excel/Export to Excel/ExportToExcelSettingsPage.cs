@@ -1,6 +1,6 @@
 ﻿using Sdl.Desktop.IntegrationApi;
 
-namespace ExportToExcel
+namespace Sdl.Community.ExportToExcel
 {
 	public class ExportToExcelSettingsPage : DefaultSettingsPage<ExportToExcelSettingsControl, GeneratorSettings> { }
 }

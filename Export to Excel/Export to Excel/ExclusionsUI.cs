@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 
-namespace ExportToExcel
+namespace Sdl.Community.ExportToExcel
 {
     public partial class ExclusionsUI : UserControl
     {

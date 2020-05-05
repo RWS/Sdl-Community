@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace ExportToExcel
+namespace Sdl.Community.ExportToExcel
 {
     public class DataExtractor : IMarkupDataVisitor
     {

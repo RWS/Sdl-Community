@@ -5,7 +5,7 @@ using System.Linq;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace ExportToExcel
+namespace Sdl.Community.ExportToExcel
 {
     public class FileReader : IBilingualContentProcessor
 	{
