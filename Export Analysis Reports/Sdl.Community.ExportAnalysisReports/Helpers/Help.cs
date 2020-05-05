@@ -75,7 +75,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			return languages;
 		}
 
-		public void LoadReports(XmlDocument doc, string projectPath, ProjectDetails project)
+		public void LoadReports(XmlDocument doc, ProjectDetails project)
 		{
 			try
 			{
@@ -89,7 +89,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 				var automaticTaskNode = doc.SelectNodes("/Project/Tasks/AutomaticTask");
 				if (automaticTaskNode != null)
 				{
-					var reportsFolderExist = ReportsFolderExists(automaticTaskNode[0].BaseURI);
+					var reportsFolderExist = ReportsFolderExists(automaticTaskNode[0].BaseURI, project.ReportsFolderPath);
 					if (reportsFolderExist)
 					{
 						foreach (var node in automaticTaskNode)
@@ -115,7 +115,11 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 											var targetLangCode = langDirNode.Attributes["TargetLanguageCode"].Value;
 											var langName = projectInfo?.TargetLanguages?.FirstOrDefault(n => n.IsoAbbreviation.Equals(targetLangCode));
 
-											var reportPath = Path.Combine(projectPath, report.Attributes["PhysicalPath"].Value);
+											var reportPath = Path.Combine(project.ProjectFolderPath, report.Attributes["PhysicalPath"].Value);
+											if (!string.IsNullOrEmpty(project.ReportsFolderPath))
+											{
+												reportPath = Path.Combine(project.ReportsFolderPath, Path.GetFileName(report.Attributes["PhysicalPath"].Value));
+											}
 											if (project.LanguageAnalysisReportPaths == null)
 											{
 												project.LanguageAnalysisReportPaths = new Dictionary<string, string>();
@@ -224,12 +228,15 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			return projectInfo;
 		}
 
-		private bool ReportsFolderExists(string projectFolderPath)
+		private bool ReportsFolderExists(string projectFolderPath, string reportsFolderPath)
 		{
+			if (!string.IsNullOrEmpty(reportsFolderPath))
+			{
+				return ReportFileExist(reportsFolderPath);
+			}
 			var projectPath = new Uri(projectFolderPath).LocalPath;
-			var reportFolderPath = Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)), "Reports");
-
-			return ReportFileExist(reportFolderPath);
+			reportsFolderPath = Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)), "Reports");
+			return ReportFileExist(reportsFolderPath);
 		}
 	}
 }

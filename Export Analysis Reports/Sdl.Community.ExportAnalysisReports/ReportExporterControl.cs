@@ -27,6 +27,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		private bool _isAnyProjectUnchecked;
 		private bool _isStatusChanged;
 		private Helpers.Help _help;
+		private string _reportsFolderPath;
 
 		public ReportExporterControl()
 		{
@@ -222,7 +223,6 @@ namespace Sdl.Community.ExportAnalysisReports
 							}
 						}
 					}
-					SetDataSource();
 				}
 			}
 			catch (Exception ex)
@@ -241,23 +241,33 @@ namespace Sdl.Community.ExportAnalysisReports
 
 					if (projectInfoNode.Attributes["ProjectFilePath"] != null)
 					{
-						filePath = projectInfoNode.Attributes["ProjectFilePath"].Value;
+						filePath = projectInfoNode.Attributes["ProjectFilePath"]?.Value;
 						if (!Path.IsPathRooted(filePath))
 						{
 							//project is located inside "Projects" folder in Studio
-							var projectsFolderPath = _projectXmlPath.Substring
-								(0, _projectXmlPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
+							var projectsFolderPath = _projectXmlPath.Substring(0, _projectXmlPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
 							var projectName = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal));
 							filePath = Path.Combine(projectsFolderPath, projectName, "Reports");
 						}
 						else
 						{
-							//is external project
+							// is external or single file project
 							var reportsPath = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
 							filePath = Path.Combine(reportsPath, "Reports");
+							if (!Directory.Exists(filePath))
+							{
+								// get the single file project Reports folder's path
+								var directoryName = Path.GetDirectoryName(filePath);
+								if (!IsNullOrEmpty(directoryName))
+								{
+									var projectName = Path.GetFileNameWithoutExtension(projectInfoNode.Attributes["ProjectFilePath"]?.Value);
+									filePath = Path.Combine(directoryName, $"{projectName}.ProjectFiles", "Reports");
+								}
+							}
 						}
 					}
 
+					_reportsFolderPath = filePath;
 					return _help.ReportFileExist(filePath);
 				}
 			}
@@ -278,7 +288,9 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			var projectDetails = new ProjectDetails
 			{
-				LanguagesForPoject = new Dictionary<string, bool>(), ShouldBeExported = false
+				LanguagesForPoject = new Dictionary<string, bool>(),
+				ShouldBeExported = false,
+				ReportsFolderPath = _reportsFolderPath
 			};
 			var projectFolderPath = Empty;
 			var doc = new XmlDocument();
@@ -422,9 +434,9 @@ namespace Sdl.Community.ExportAnalysisReports
 
 					if (selectedProjectIndex > -1)
 					{
-						//Read sdlproj
+						// Read sdlproj
 						doc.Load(selectedProject.ProjectPath);
-						_help.LoadReports(doc, selectedProject.ProjectFolderPath, selectedProject);
+						_help.LoadReports(doc, selectedProject);
 
 						selectedProject.ShouldBeExported = true;
 						//if an project has only one language select that language
@@ -838,7 +850,7 @@ namespace Sdl.Community.ExportAnalysisReports
 							var projectDetails = ProjectInformation.GetExternalProjectDetails(projectPath);
 
 							doc.Load(projectDetails.ProjectPath);
-							_help.LoadReports(doc, projectDetails.ProjectFolderPath, projectDetails);
+							_help.LoadReports(doc, projectDetails);
 							externalProjectsBindingList.Add(projectDetails);
 						}
 					}
@@ -1109,6 +1121,9 @@ namespace Sdl.Community.ExportAnalysisReports
 		private void chkBox_IncludeSingleFileProjects_CheckedChanged(object sender, EventArgs e)
 		{
 			var isChecked = ((CheckBox)sender).Checked;
+			_languages.Clear();
+			chkBox_SelectAllLanguages.Checked = false;
+			chkBox_SelectAllProjects.Checked = false;
 
 			// Load all Studio single file projects within projects list
 			if (isChecked)
@@ -1119,9 +1134,9 @@ namespace Sdl.Community.ExportAnalysisReports
 			{
 				// Remove the single file projects from the list
 				IReadOnlyList<ProjectDetails> projectsToRemove = _projectsDataSource.Where(p => p.IsSingleFileProject).ToList();
-				foreach (var item in projectsToRemove)
+				foreach (var project in projectsToRemove)
 				{
-					_projectsDataSource.Remove(item);
+					_projectsDataSource.Remove(project);
 				}
 			}
 		}

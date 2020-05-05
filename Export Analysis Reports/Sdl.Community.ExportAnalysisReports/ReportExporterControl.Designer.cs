@@ -30,6 +30,7 @@
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExporterControl));
             this.mainPanel = new System.Windows.Forms.Panel();
+            this.chkBox_IncludeSingleFileProjects = new System.Windows.Forms.CheckBox();
             this.chkBox_SelectAllLanguages = new System.Windows.Forms.CheckBox();
             this.chkBox_SelectAllProjects = new System.Windows.Forms.CheckBox();
             this.clearBtn = new System.Windows.Forms.Button();
@@ -56,7 +57,6 @@
             this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
             this.projListbox = new System.Windows.Forms.CheckedListBox();
             this.selectProjLbl = new System.Windows.Forms.Label();
-            this.chkBox_IncludeSingleFileProjects = new System.Windows.Forms.CheckBox();
             this.mainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,6 +94,17 @@
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Size = new System.Drawing.Size(811, 455);
             this.mainPanel.TabIndex = 0;
+            // 
+            // chkBox_IncludeSingleFileProjects
+            // 
+            this.chkBox_IncludeSingleFileProjects.AutoSize = true;
+            this.chkBox_IncludeSingleFileProjects.Location = new System.Drawing.Point(433, 78);
+            this.chkBox_IncludeSingleFileProjects.Name = "chkBox_IncludeSingleFileProjects";
+            this.chkBox_IncludeSingleFileProjects.Size = new System.Drawing.Size(147, 17);
+            this.chkBox_IncludeSingleFileProjects.TabIndex = 30;
+            this.chkBox_IncludeSingleFileProjects.Text = "Include single file projects";
+            this.chkBox_IncludeSingleFileProjects.UseVisualStyleBackColor = true;
+            this.chkBox_IncludeSingleFileProjects.CheckedChanged += new System.EventHandler(this.chkBox_IncludeSingleFileProjects_CheckedChanged);
             // 
             // chkBox_SelectAllLanguages
             // 
@@ -364,17 +375,6 @@
             this.selectProjLbl.TabIndex = 0;
             this.selectProjLbl.Text = "Select project:";
             // 
-            // chkBox_IncludeSingleFileProjects
-            // 
-            this.chkBox_IncludeSingleFileProjects.AutoSize = true;
-            this.chkBox_IncludeSingleFileProjects.Location = new System.Drawing.Point(433, 78);
-            this.chkBox_IncludeSingleFileProjects.Name = "chkBox_IncludeSingleFileProjects";
-            this.chkBox_IncludeSingleFileProjects.Size = new System.Drawing.Size(147, 17);
-            this.chkBox_IncludeSingleFileProjects.TabIndex = 30;
-            this.chkBox_IncludeSingleFileProjects.Text = "Include single file projects";
-            this.chkBox_IncludeSingleFileProjects.UseVisualStyleBackColor = true;
-            this.chkBox_IncludeSingleFileProjects.CheckedChanged += new System.EventHandler(this.chkBox_IncludeSingleFileProjects_CheckedChanged);
-            // 
             // ReportExporterControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -386,7 +386,7 @@
             this.MaximizeBox = false;
             this.Name = "ReportExporterControl";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SDL Trados Studio 2019 – Export Analysis Reports";
+            this.Text = "SDL Trados Studio 2019 – Export Analisys Reports";
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
             this.ResumeLayout(false);
