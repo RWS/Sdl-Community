@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 
-namespace IATETerminologyProvider.Helpers
+namespace Sdl.Community.IATETerminologyProvider.Helpers
 {
 	public static class Utils
 	{

@@ -1,6 +1,6 @@
 ﻿using System.Web;
 
-namespace IATETerminologyProvider.Helpers
+namespace Sdl.Community.IATETerminologyProvider.Helpers
 {
 	public class ApiUrls
 	{

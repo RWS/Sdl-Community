@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Core.Globalization;
 
-namespace IATETerminologyProvider.EventArgs
+namespace Sdl.Community.IATETerminologyProvider.EventArgs
 {
 	public class TermEntriesChangedEventArgs : System.EventArgs
 	{

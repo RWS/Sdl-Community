@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using IATETerminologyProvider.Helpers;
-using IATETerminologyProvider.Model;
-using IATETerminologyProvider.Service;
-using IATETerminologyProvider.Ui;
-using IATETerminologyProvider.ViewModel;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Service;
+using Sdl.Community.IATETerminologyProvider.Ui;
+using Sdl.Community.IATETerminologyProvider.ViewModel;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace IATETerminologyProvider
+namespace Sdl.Community.IATETerminologyProvider
 {
 	[TerminologyProviderWinFormsUI]
 	public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace IATETerminologyProvider.Commands
+namespace Sdl.Community.IATETerminologyProvider.Commands
 {
 	public  class CommandHandler : ICommand, INotifyPropertyChanged
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace IATETerminologyProvider.Model
+namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class PathInfo
 	{

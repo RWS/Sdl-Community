@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace IATETerminologyProvider.Model.ResponseModels
+namespace Sdl.Community.IATETerminologyProvider.Model.ResponseModels
 {
 	public class SubdomainsResponseModel
 	{
