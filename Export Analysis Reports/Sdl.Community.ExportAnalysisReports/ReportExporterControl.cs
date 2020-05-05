@@ -217,6 +217,10 @@ namespace Sdl.Community.ExportAnalysisReports
 								var projectDetails = CreateProjectDetails((XmlNode)item, true);
 								if (!_projectsDataSource.Any(p => p.ProjectName.Equals(projectDetails.ProjectName)))
 								{
+									if (chkBox_SelectAllProjects.Checked)
+									{
+										projectDetails.ShouldBeExported = true;
+									}
 									_projectsDataSource.Add(projectDetails);
 									_allStudioProjectsDetails.Add(projectDetails);
 								}
@@ -1122,9 +1126,6 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			var isChecked = ((CheckBox)sender).Checked;
 			_languages.Clear();
-			chkBox_SelectAllLanguages.Checked = false;
-			chkBox_SelectAllProjects.Checked = false;
-
 			// Load all Studio single file projects within projects list
 			if (isChecked)
 			{
@@ -1140,6 +1141,8 @@ namespace Sdl.Community.ExportAnalysisReports
 					_allStudioProjectsDetails.Remove(project);
 				}
 			}
+			SetNewProjectLanguage();
+			RefreshProjectsListBox();
 		}
 
 		private BindingList<ProjectDetails> BindProjectsBasedOnStatus(string selectedStatus)

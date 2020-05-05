@@ -153,7 +153,12 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 				}
 				else
 				{
-					_messageBoxService.ShowInformationMessage("Please run the Analyze File batch task, before opening the project within the Export Analysis Reports", "Informative message");
+					var fileName = Path.GetFileName(Path.GetDirectoryName(reportFolderPath));
+					if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles"))
+					{
+						fileName = fileName.Substring(0, fileName.LastIndexOf(".ProjectFiles", StringComparison.Ordinal));
+					}
+					_messageBoxService.ShowInformationMessage($@"Please run the Analyze File batch task for the project ""{fileName}"", otherwise it will not be included within Export Analysis Reports", "Informative message");
 				}
 			}
 			catch (Exception ex)
