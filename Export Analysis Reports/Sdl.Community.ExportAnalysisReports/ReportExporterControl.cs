@@ -682,6 +682,7 @@ namespace Sdl.Community.ExportAnalysisReports
 						UncheckAllProjects();
 						_languages.Clear();
 						chkBox_SelectAllProjects.Checked = false;
+						chkBox_SelectAllLanguages.Checked = false;
 						_messageBoxService.ShowOwnerInformationMessage(this, "The analysis files were exported with success.", "Export result");
 					}
 				}
