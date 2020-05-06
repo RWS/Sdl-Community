@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
@@ -14,16 +13,18 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string ClientName { get; set; }
 
+		public string AbsoluteUri { get; set; }
+
 		public DateTime DueDate { get; set; }
 
 		public DateTime Created { get; set; }
 
 		public string ProjectType { get; set; }
 
-		public CultureInfo SourceLanguage { get; set; }
+		public LanguageInfo SourceLanguage { get; set; }
 
-		public List<CultureInfo> TargetLanguages { get; set; }
-
+		public List<LanguageInfo> TargetLanguages { get; set; }
+		
 		public List<ProjectFileActionModel> ProjectFileActionModels { get; set; }
 	}
 }

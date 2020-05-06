@@ -99,7 +99,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 					SelectedProjectModel = null;
 				}
 
-				//OnPropertyChanged(nameof(ClientModels));
+				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
 

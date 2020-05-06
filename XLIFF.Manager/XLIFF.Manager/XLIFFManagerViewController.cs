@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Controls;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Community.XLIFF.Manager.TestData;
 using Sdl.Community.XLIFF.Manager.ViewModel;
 using Sdl.Desktop.IntegrationApi;
@@ -30,14 +32,29 @@ namespace Sdl.Community.XLIFF.Manager
 		private ProjectFilesViewControl _projectFilesViewControl;
 		private ProjectsNavigationViewControl _projectsNavigationViewControl;
 		private ProjectFileActivityViewController _projectFileActivityViewController;
-		private IStudioEventAggregator _eventAggregator;		
+		private IStudioEventAggregator _eventAggregator;
+		private ProjectsController _projectsController;
+		private ImageService _imageService;
+		private PathInfo _pathInfo;
 
 		protected override void Initialize(IViewContext context)
 		{
+			_pathInfo = new PathInfo();
+			_imageService = new ImageService(_pathInfo);
+			_imageService.ExtractFlags();
+
+
 			ActivationChanged += OnActivationChanged;
+
+
+
 
 			_eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 			_eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>()?.Subscribe(OnStudioWindowCreatedNotificationEvent);
+
+			//_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			//var project = _projectsController.CurrentProject.GetProjectInfo();
+			//project.ServerUri?.
 
 			// TODO this will be replaced with a call to recover the relevant data from the projects loaded in Studio
 			var testDataUtil = new TestDataUtil();
@@ -111,7 +128,7 @@ namespace Sdl.Community.XLIFF.Manager
 		public override void Dispose()
 		{
 			_projectFilesViewModel?.Dispose();
-			_projectsNavigationViewModel?.Dispose();					
+			_projectsNavigationViewModel?.Dispose();
 			base.Dispose();
 		}
 	}

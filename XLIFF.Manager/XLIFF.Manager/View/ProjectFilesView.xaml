@@ -7,11 +7,14 @@
              xmlns:controls="clr-namespace:Sdl.Community.XLIFF.Manager.Controls"
              xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.ViewModel"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:model="clr-namespace:Sdl.Community.XLIFF.Manager.Model"
+             xmlns:converters="clr-namespace:Sdl.Community.XLIFF.Manager.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:ProjectFilesViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ImageStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBoxStyle.xaml"/>
@@ -21,6 +24,8 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>
+			<converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter"/>
 
 			<Style TargetType="{x:Type UserControl}">
 				<Setter Property="FontFamily" Value="Segoe UI" />
@@ -34,7 +39,7 @@
 				</CollectionViewSource.SortDescriptions>
 				<CollectionViewSource.GroupDescriptions>
 					<PropertyGroupDescription PropertyName="ProjectModel.Name"/>
-					<PropertyGroupDescription PropertyName="TargetLanguage.EnglishName"/>
+					<PropertyGroupDescription PropertyName="TargetLanguage.CultureInfo.Name"/>
 				</CollectionViewSource.GroupDescriptions>
 			</CollectionViewSource>
 		</ResourceDictionary>
@@ -42,8 +47,12 @@
 	</UserControl.Resources>
 
 	<Grid>
-		<controls:SortAwareDataGrid x:Name="MappedLanguagesGrid" 
-			          Style="{StaticResource CustomGridStyle}"
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<controls:SortAwareDataGrid Grid.Row="0"
+		                            Style="{StaticResource CustomGridStyle}"
 			          Margin="0" 			                           
 					  ItemsSource="{Binding Source={StaticResource ProjectFiles}}"                
 					  SelectedItem="{Binding SelectedProjectFileAction, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -58,15 +67,47 @@
 					  HorizontalScrollBarVisibility="Disabled"
 					  CanUserDeleteRows="False">
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="Action" CanUserSort="True" Binding="{Binding Action, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
-				                    ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="0.5*"/>
-				<DataGridTextColumn Header="Name" CanUserSort="True" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
-									    ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="2*"/>
+				<DataGridTemplateColumn Header="Name" IsReadOnly="False" SortMemberPath="Name" Width="2*" >
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate DataType="model:ProjectFileActionModel">
+							<Grid Margin="10,0,10,0">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto"/>
+									<ColumnDefinition Width="*"/>
+								</Grid.ColumnDefinitions>
+								<Image Grid.Column="0" Margin="2,0,0,2" VerticalAlignment="Center" Stretch="UniformToFill"
+								       Width="16" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased">
+									<Image.Style>
+										<Style TargetType="Image">
+											<Style.Triggers>
+												<DataTrigger Binding="{Binding Action}" Value="Export">
+													<Setter Property="Source" Value="../Resources/Exported.png"/>
+													<Setter Property="ToolTip" Value="Exported"/>
+												</DataTrigger>
+												<DataTrigger Binding="{Binding Action}" Value="Import">
+													<Setter Property="Source" Value="../Resources/Imported.png"/>
+													<Setter Property="ToolTip" Value="Imported"/>
+												</DataTrigger>
+											</Style.Triggers>
+										</Style>
+									</Image.Style>
+								</Image>
+
+								<TextBlock Grid.Column="1" VerticalAlignment="Center" Padding="4,0,2,0"  
+								           Text="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/> 
+								
+							</Grid>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			
 				<DataGridTextColumn Header="Path" CanUserSort="True" Binding="{Binding Path, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="1*"/>
 				<DataGridTextColumn Header="Date" CanUserSort="True" Binding="{Binding Date, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
 										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="1*"/>
-				<DataGridTextColumn Header="Message" CanUserSort="True" Binding="{Binding Message, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
+				<DataGridTextColumn Header="XLIFF File" CanUserSort="True" Binding="{Binding XliffFilePath, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
+				                    ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="2*"/>
+				<DataGridTextColumn Header="Details" CanUserSort="True" Binding="{Binding Details, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
 										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="2*"/>
 			</DataGrid.Columns>
 			<DataGrid.GroupStyle>
@@ -82,7 +123,7 @@
 												<DockPanel>
 													<TextBlock FontWeight="Bold" Text="" Margin="2,0,0,0"/>
 													<TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="0"/>
-													<TextBlock FontWeight="Regular"  Margin="00" Text=" " />
+													<TextBlock FontWeight="Regular"  Margin="0" Text=" " />
 													<TextBlock FontWeight="Bold" Text="files: "  />
 													<TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}" />
 												</DockPanel>
@@ -99,18 +140,35 @@
 				</GroupStyle>
 				<GroupStyle>
 					<GroupStyle.HeaderTemplate>
-						<DataTemplate>
-							<DockPanel Background="Transparent" Margin="0,2,0,2">
-								<TextBlock FontWeight="Regular" Text="Target language: " Foreground="Black" Margin="5,0,0,0"/>
-								<TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Foreground="#3E3E45" Margin="0"/>
-								<TextBlock FontWeight="Regular"  Margin="0,0,0,0" Text=", " Foreground="Black"/>
-								<TextBlock FontWeight="Regular" Text="files: " Foreground="Black" />
-								<TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}" Foreground="#3E3E45"/>
+						<DataTemplate DataType="{x:Type GroupItem}">
+							<DockPanel Background="Transparent" Margin="4,2,0,2">
+								<Image Margin="4,0,2,0" Width="20"
+									   Stretch="UniformToFill"
+								       RenderOptions.BitmapScalingMode="HighQuality" 
+								       RenderOptions.EdgeMode="Aliased"
+									   HorizontalAlignment="Center"
+									   VerticalAlignment="Stretch"
+								       Source="{Binding Path=Name, Converter={StaticResource CultureInfoNameToImageConverter}}" />
+							
+								<TextBlock FontWeight="Bold" Text="{Binding Path=Name, Converter={StaticResource CultureInfoNameToDisplayNameConverter}}" 
+								           Foreground="#3E3E45" Margin="2,0,2,0" VerticalAlignment="Center" />
+								<TextBlock FontWeight="Regular"  Margin="0,0,0,0" Text=", "  Foreground="Black" VerticalAlignment="Center"/>
+								<TextBlock FontWeight="Regular" Text="files: " Foreground="Black" VerticalAlignment="Center"/>
+								<TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}" Foreground="#3E3E45" VerticalAlignment="Center" />
 							</DockPanel>
 						</DataTemplate>
 					</GroupStyle.HeaderTemplate>
 				</GroupStyle>
 			</DataGrid.GroupStyle>
 		</controls:SortAwareDataGrid>
+		<Grid Grid.Row="1" Margin="2,0,2,0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<Button Grid.Column="0" Command="{Binding ClearSelectionCommand}" HorizontalAlignment="Left" Style="{StaticResource LinkButton}" Content="Clear selection" Margin="4,2,4,2"/>
+			<Label Grid.Column="1" Foreground="#4E4D4D" Content="{Binding StatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+		</Grid>
 	</Grid>
 </UserControl>

@@ -26,7 +26,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public DateTime Date { get; set; }		
 
-		public string Message { get; set; }
+		public string Details { get; set; }
 	
 		//TODO
 		// Options		
