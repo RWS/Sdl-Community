@@ -155,14 +155,14 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 					{
 						return true;
 					}
-					_messageBoxService.ShowInformationMessage($@"Please run the Analyze File batch task for the project ""{fileName}"", otherwise it will not be included within the Export Analysis Reports", "Informative message");
+					_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
 					return false;
 				}
 				if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles"))
 				{
 					fileName = Path.GetFileNameWithoutExtension(fileName);
 				}
-				_messageBoxService.ShowInformationMessage($@"Please run the Analyze File batch task for the project ""{fileName}"", otherwise it will not be included within the Export Analysis Reports", "Informative message");
+				_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
 			}
 			catch (Exception ex)
 			{

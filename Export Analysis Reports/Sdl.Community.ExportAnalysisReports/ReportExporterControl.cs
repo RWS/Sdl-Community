@@ -571,17 +571,17 @@ namespace Sdl.Community.ExportAnalysisReports
 								csvTextBuilder.Append(csvText);
 							}
 
-							_messageBoxService.ShowOwnerInformationMessage(this, "Copy to clipboard was performed with success.", "Copy result");
+							_messageBoxService.ShowOwnerInformationMessage(this, PluginResources.CopyToClipboard_Success_Message, PluginResources.CopyResult_Label);
 							Clipboard.SetText(csvTextBuilder.ToString());
 						}
 						else
 						{
-							_messageBoxService.ShowOwnerInformationMessage(this, "No Analysis report was found for the selected language.", "Copy result");
+							_messageBoxService.ShowOwnerInformationMessage(this, PluginResources.NoAnalyseReportForLanguage_Message, PluginResources.CopyResult_Label);
 						}
 					}
 					else
 					{
-						_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language to copy the corresponding analysis file", "Copy result");
+						_messageBoxService.ShowOwnerInformationMessage(this, PluginResources.SelectLanguage_Copy_Message, PluginResources.CopyResult_Label);
 					}
 				}
 			}
@@ -646,7 +646,7 @@ namespace Sdl.Community.ExportAnalysisReports
 					var areCheckedLanguages = projectsToBeExported.Any(p => p.LanguagesForPoject.Any(l => l.Value));
 					if (!areCheckedLanguages && projectsToBeExported.Count >= 1)
 					{
-						_messageBoxService.ShowOwnerInformationMessage(this, "Please select at least one language to export the report!", "Export result");
+						_messageBoxService.ShowOwnerInformationMessage(this, PluginResources.SelectLanguage_Export_Message, PluginResources.ExportResult_Label);
 					}
 					else
 					{
@@ -682,12 +682,12 @@ namespace Sdl.Community.ExportAnalysisReports
 							}
 						}
 						ClearItemsAfterExport();
-						_messageBoxService.ShowOwnerInformationMessage(this, "The analysis files were exported with success.", "Export result");
+						_messageBoxService.ShowOwnerInformationMessage(this, PluginResources.ExportSuccess_Message, PluginResources.ExportResult_Label);
 					}
 				}
 				else
 				{
-					_messageBoxService.ShowOwnerInformationMessage(this, "Please select an existing folder to export the reports!", string.Empty);
+					_messageBoxService.ShowOwnerInformationMessage(this, PluginResources.SelectFolder_Message, string.Empty);
 				}
 
 			}

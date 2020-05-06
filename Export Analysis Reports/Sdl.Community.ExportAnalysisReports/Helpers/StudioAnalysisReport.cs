@@ -39,7 +39,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 
 					if (!File.Exists(ReportFile))
 					{
-						_messageBoxService.ShowWarningMessage($"Analysis report not found for file {ReportFile}", string.Empty);
+						_messageBoxService.ShowWarningMessage(string.Format(PluginResources.ReportNotFound_Message, ReportFile), string.Empty);
 					}
 
 					var langPairCode = GetLanguagePairCode(fileName);
@@ -64,7 +64,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 
 					if (!AnalyzedFiles.Any())
 					{
-						_messageBoxService.ShowWarningMessage($"No analyzed files in the report!", string.Empty);
+						_messageBoxService.ShowWarningMessage(PluginResources.NoAnalyzeFiles_Message, string.Empty);
 					}
 				}
 			}
