@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using Sdl.Community.XLIFF.Manager.Controls;
 using Sdl.Community.XLIFF.Manager.ViewModel;
 
 namespace Sdl.Community.XLIFF.Manager.View

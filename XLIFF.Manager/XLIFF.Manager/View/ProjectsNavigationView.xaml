@@ -14,6 +14,7 @@
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TreeView.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ButtonsStyle.xaml"/>
@@ -62,7 +63,7 @@
 										<ColumnDefinition Width="16"/>
 										<ColumnDefinition Width="*"/>
 									</Grid.ColumnDefinitions>
-									<Image x:Name="icon" Source="../Resources/plus.png"  Width="14" Height="14" Stretch="UniformToFill" 
+									<Image x:Name="icon" Source="../Resources/Plus.png"  Width="14" Height="14" Stretch="UniformToFill" 
 									       RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" />
 									<ContentPresenter Grid.Column="1" HorizontalAlignment="Left" Margin="4,0,0,0" 
 									                  RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center"/>
@@ -70,7 +71,7 @@
 							</Border>
 							<ControlTemplate.Triggers>
 								<Trigger Property="IsChecked" Value="true">
-									<Setter Property="Source" TargetName="icon" Value="../Resources/minus.png"/>
+									<Setter Property="Source" TargetName="icon" Value="../Resources/Minus.png"/>
 								</Trigger>
 							</ControlTemplate.Triggers>
 						</ControlTemplate>
@@ -216,7 +217,7 @@
 					  HorizontalScrollBarVisibility="Disabled"
 					  CanUserDeleteRows="False">
 				<DataGrid.Columns>
-					<DataGridTemplateColumn Header="Name" IsReadOnly="False" SortMemberPath="HelixJobsId" Width="*"  >
+					<DataGridTemplateColumn Header="Name" IsReadOnly="False" SortMemberPath="Name" Width="*"  >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate DataType="model:ProjectModel">
 								<Grid>
@@ -226,7 +227,9 @@
 									</Grid.ColumnDefinitions>
 									<Image Grid.Column="0" Margin="0,0,0,2" Source="../Resources/Project.ico" VerticalAlignment="Center" 
 									       Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased"/>
-									<TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Padding="2,0,2,0"/>
+									<TextBlock Grid.Column="1" VerticalAlignment="Center" Padding="2,0,2,0"
+									           Style="{StaticResource ProjectInfo.TextBlock.Style}" 
+									           Text="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 								</Grid>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
@@ -269,13 +272,14 @@
 				</DataGrid.GroupStyle>
 			</controls:SortAwareDataGrid>
 
-			<Grid Grid.Column="0" Grid.Row="2" Margin="-1,0,2,0">
+			<Grid Grid.Column="0" Grid.Row="2" Margin="2,0,2,0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="Auto"/>
 				</Grid.ColumnDefinitions>
-				<Label Grid.Column="0" Foreground="#4E4D4D" Content="{Binding StatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-				<Button Grid.Column="1" Command="{Binding ClearSelectionCommand}" HorizontalAlignment="Right" Style="{StaticResource LinkButton}" Content="Clear selection" Margin="2,2,4,2"/>
+				<Button Grid.Column="0" Command="{Binding ClearSelectionCommand}" HorizontalAlignment="Left" Style="{StaticResource LinkButton}" Content="Clear selection" Margin="2,2,4,2"/>
+				<Label Grid.Column="1" Foreground="#4E4D4D" Content="{Binding StatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+				
 			</Grid>
 		</Grid>
 	</Border>

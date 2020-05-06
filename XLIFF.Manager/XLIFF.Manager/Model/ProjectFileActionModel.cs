@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Sdl.Community.XLIFF.Manager.Common;
 
 namespace Sdl.Community.XLIFF.Manager.Model
@@ -16,9 +15,26 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public ProjectModel ProjectModel { get; }
 
-		public List<ProjectFileActivityModel> ProjectFileActivityModels { get; set; }			
+		public List<ProjectFileActivityModel> ProjectFileActivityModels { get; set; }
 
 		public Enumerators.Action Action { get; set; }
+
+		public string Status
+		{
+			get
+			{
+				switch (Action)
+				{
+					case Enumerators.Action.Export:
+						return "Exported";
+					case Enumerators.Action.Import:
+						return "Imported";
+					default:
+
+						return "None";
+				}
+			}
+		}
 
 		public string Id { get; set; }
 
@@ -26,13 +42,15 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string Path { get; set; }
 
+		public string XliffFilePath { get; set; }
+
 		public DateTime Date { get; set; }
 
-		public CultureInfo TargetLanguage { get; set; }
+		public LanguageInfo TargetLanguage { get; set; }
 
-		public string Message { get; set; }
+		public string Details { get; set; }
 
-		
+
 		//TODO
 		// Options
 		// Segments etc...

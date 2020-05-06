@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
+using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
@@ -11,6 +13,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		private List<ProjectFileActionModel> _projectFileActions;
 		private IList _selectedProjectFileActions;
 		private ProjectFileActionModel _selectedProjectFileAction;
+		private ICommand _clearSelectionCommand;
 
 		public ProjectFilesViewModel(List<ProjectFileActionModel> projectFileActions)
 		{
@@ -18,6 +21,8 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			SelectedProjectFileAction = ProjectFileActions?.Count > 0 ? projectFileActions[0] : null;
 			SelectedProjectFileActions = new List<ProjectFileActionModel> { SelectedProjectFileAction };
 		}
+
+		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
 
 		public ProjectFileActivityViewModel ProjectFileActivityViewModel { get; internal set; }
 
@@ -28,6 +33,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			{
 				_projectFileActions = value;
 				OnPropertyChanged(nameof(ProjectFileActions));
+				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
 
@@ -39,11 +45,13 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				_selectedProjectFileActions = value;
 				OnPropertyChanged(nameof(SelectedProjectFileActions));
 
-				if (ProjectFileActivityViewModel != null && _selectedProjectFileActions != null)
-				{
-					ProjectFileActivityViewModel.ProjectFileActivities = _selectedProjectFileActions?.Cast<ProjectFileActionModel>()
-						.SelectMany(a => a.ProjectFileActivityModels).ToList();
-				}
+				OnPropertyChanged(nameof(StatusLabel));
+
+				//if (ProjectFileActivityViewModel != null && _selectedProjectFileActions != null)
+				//{
+				//	ProjectFileActivityViewModel.ProjectFileActivities = _selectedProjectFileActions?.Cast<ProjectFileActionModel>()
+				//		.SelectMany(a => a.ProjectFileActivityModels).ToList();
+				//}
 			}
 		}
 
@@ -59,6 +67,22 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				{
 					ProjectFileActivityViewModel.ProjectFileActivities = _selectedProjectFileAction?.ProjectFileActivityModels;
 				}
+			}
+		}
+
+		private void ClearSelection(object parameter)
+		{
+			SelectedProjectFileActions.Clear();
+			SelectedProjectFileAction = null;
+		}
+
+		public string StatusLabel
+		{
+			get
+			{				
+				var message = "Projects: " + _projectFileActions.Select(a=>a.ProjectModel).Distinct().Count() 
+				                           + ", Files: " + _projectFileActions?.Count + ", Selected: " + _selectedProjectFileActions?.Count;
+				return message;
 			}
 		}
 
