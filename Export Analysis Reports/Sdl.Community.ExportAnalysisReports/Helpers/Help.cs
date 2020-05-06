@@ -54,19 +54,22 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			var languages = new Dictionary<string, LanguageDirection>();
 			try
 			{
-				var languageeDirectionNode = doc.SelectNodes("/Project/LanguageDirections/LanguageDirection");
+				var languagesDirectionNode = doc.SelectNodes("/Project/LanguageDirections/LanguageDirection");
 
-				if (languageeDirectionNode == null) return languages;
-				foreach (var item in languageeDirectionNode)
+				if (languagesDirectionNode == null) return languages;
+				foreach (var item in languagesDirectionNode)
 				{
-					var node = (XmlNode)item;
+					var node = (XmlNode) item;
 					if (node.Attributes == null) continue;
 					var lang = new LanguageDirection
 					{
 						Guid = node.Attributes["Guid"].Value,
 						TargetLang = CultureInfo.GetCultureInfo(node.Attributes["TargetLanguageCode"].Value)
 					};
-					languages.Add(lang.Guid, lang);
+					if (!languages.ContainsKey(lang.Guid))
+					{
+						languages.Add(lang.Guid, lang);
+					}
 				}
 			}
 			catch (Exception ex)
