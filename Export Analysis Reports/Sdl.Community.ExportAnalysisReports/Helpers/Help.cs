@@ -160,7 +160,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 				}
 				if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles"))
 				{
-					fileName = fileName.Substring(0, fileName.LastIndexOf(".ProjectFiles", StringComparison.Ordinal));
+					fileName = Path.GetFileNameWithoutExtension(fileName);
 				}
 				_messageBoxService.ShowInformationMessage($@"Please run the Analyze File batch task for the project ""{fileName}"", otherwise it will not be included within the Export Analysis Reports", "Informative message");
 			}
