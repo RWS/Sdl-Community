@@ -147,6 +147,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 		{
 			try
 			{
+				var fileName = Path.GetFileName(Path.GetDirectoryName(reportFolderPath));
 				if (Directory.Exists(reportFolderPath))
 				{
 					var files = Directory.GetFiles(reportFolderPath);
@@ -154,16 +155,14 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 					{
 						return true;
 					}
-				}
-				else
-				{
-					var fileName = Path.GetFileName(Path.GetDirectoryName(reportFolderPath));
-					if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles"))
-					{
-						fileName = fileName.Substring(0, fileName.LastIndexOf(".ProjectFiles", StringComparison.Ordinal));
-					}
 					_messageBoxService.ShowInformationMessage($@"Please run the Analyze File batch task for the project ""{fileName}"", otherwise it will not be included within the Export Analysis Reports", "Informative message");
+					return false;
 				}
+				if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles"))
+				{
+					fileName = fileName.Substring(0, fileName.LastIndexOf(".ProjectFiles", StringComparison.Ordinal));
+				}
+				_messageBoxService.ShowInformationMessage($@"Please run the Analyze File batch task for the project ""{fileName}"", otherwise it will not be included within the Export Analysis Reports", "Informative message");
 			}
 			catch (Exception ex)
 			{
