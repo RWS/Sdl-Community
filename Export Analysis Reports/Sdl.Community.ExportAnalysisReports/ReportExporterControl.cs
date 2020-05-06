@@ -861,6 +861,12 @@ namespace Sdl.Community.ExportAnalysisReports
 					projListbox.DataSource = _projectsDataSource;
 					RefreshProjectsListBox();
 					RefreshLanguageListbox();
+					
+					// reload the projects if the external project could not be opened
+					if (projListbox.Items.Count == 0)
+					{
+						ReloadProjects();
+					}
 				}
 			}
 			catch (Exception ex)
@@ -873,14 +879,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			_projectsDataSource.Clear();
 			_languages.Clear();
-			foreach (var project in _allStudioProjectsDetails)
-			{
-				_projectsDataSource.Add(project);
-			}
-
-			projListbox.DataSource = _projectsDataSource;
-			ResetSelection();
-			DisableButtons();
+			ReloadProjects();
 		}
 
 		private void reportOutputPath_TextChanged(object sender, EventArgs e)
@@ -947,6 +946,18 @@ namespace Sdl.Community.ExportAnalysisReports
 			{
 				Log.Logger.Error($"languagesListBox_SelectedIndexChanged_1 method: {ex.Message}\n {ex.StackTrace}");
 			}
+		}
+
+		private void ReloadProjects()
+		{
+			foreach (var project in _allStudioProjectsDetails)
+			{
+				_projectsDataSource.Add(project);
+			}
+
+			projListbox.DataSource = _projectsDataSource;
+			ResetSelection();
+			DisableButtons();
 		}
 
 		private void SetNewProjectLanguage()
@@ -1151,8 +1162,8 @@ namespace Sdl.Community.ExportAnalysisReports
 			_help.AddFromDictionary(_languages, languagesDictionary);
 			RefreshLanguageListbox();
 
-			// Keep the "Select all languages" checked when all languages were checked
-			chkBox_SelectAllLanguages.Checked = languagesListBox.CheckedItems.Count.Equals(_languages.Count) && !chkBox_SelectAllLanguages.Checked;
+			// Keep the "Select all languages" checked when all languages were checked and at least one project is selected
+			chkBox_SelectAllLanguages.Checked = languagesListBox.CheckedItems.Count.Equals(_languages.Count) && !chkBox_SelectAllLanguages.Checked && projListbox.CheckedItems.Count > 0;
 			IsCsvBtnEnabled();
 		}
 
