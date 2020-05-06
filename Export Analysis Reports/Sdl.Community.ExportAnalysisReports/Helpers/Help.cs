@@ -175,18 +175,16 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 		{
 			if (!string.IsNullOrEmpty(reportOutputPath))
 			{
-				if (!Directory.Exists(_communityFolderPath))
-				{
-					Directory.CreateDirectory(_communityFolderPath);
-				}
+				Directory.CreateDirectory(_communityFolderPath);
 
-				var jsonExportPath = new JsonSettings { ExportPath = reportOutputPath };
+				var jsonExportPath = new JsonSettings {ExportPath = reportOutputPath};
 				var jsonResult = JsonConvert.SerializeObject(jsonExportPath);
 
 				if (File.Exists(JsonPath))
 				{
 					File.Delete(JsonPath);
-				};
+				}
+
 				File.Create(JsonPath).Dispose();
 
 				using (var tw = new StreamWriter(JsonPath, true))
@@ -216,10 +214,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 
 		public void CreateDirectory(string path)
 		{
-			if (!Directory.Exists(path))
-			{
-				Directory.CreateDirectory(path);
-			}
+			Directory.CreateDirectory(path);
 		}
 
 		public Dictionary<string, bool> AddToDictionary(BindingList<LanguageDetails> languages)
@@ -229,7 +224,10 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			{
 				foreach (var item in languages)
 				{
-					dictionaryResult.Add(item.LanguageName, item.IsChecked);
+					if (!dictionaryResult.ContainsKey(item.LanguageName))
+					{
+						dictionaryResult.Add(item.LanguageName, item.IsChecked);
+					}
 				}
 			}
 
@@ -253,7 +251,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 		private string GetInstalledStudioShortVersion()
 		{
 			var studioService = new StudioVersionService();
-			return studioService?.GetStudioVersion()?.ShortVersion;
+			return studioService.GetStudioVersion()?.ShortVersion;
 		}
 
 		private ProjectInfo GetProjectInfo(string projectPath)
