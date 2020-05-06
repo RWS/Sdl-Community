@@ -159,7 +159,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 					{
 						fileName = fileName.Substring(0, fileName.LastIndexOf(".ProjectFiles", StringComparison.Ordinal));
 					}
-					_messageBoxService.ShowInformationMessage($@"Please run the Analyze File batch task for the project ""{fileName}"", otherwise it will not be included within Export Analysis Reports", "Informative message");
+					_messageBoxService.ShowInformationMessage($@"Please run the Analyze File batch task for the project ""{fileName}"", otherwise it will not be included within the Export Analysis Reports", "Informative message");
 				}
 			}
 			catch (Exception ex)
