@@ -1,10 +1,5 @@
 ﻿using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sdl.Community.AntidoteVerifier.Antidote_API
 {
@@ -13,8 +8,8 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
     [ComVisible(true)]
     public class AntidoteClient : IAntidoteClient
     {
-        private IEditorService _editorService;
-        private bool _spellChecking;
+        private readonly IEditorService _editorService;
+        private readonly bool _spellChecking;
 
         public AntidoteClient(IEditorService editorService, bool spellChecking)
         {
@@ -123,22 +118,22 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 
             return length;
         }
-        /// <summary>
-        /// Informs Antidote about the number of segments from the document
-        /// that will be sent for correcting.
-        /// </summary>
-        /// <param name="id">The document Id</param>
-        /// <returns>Returns the number of zones of text in the specified document</returns>
-        public int DonneNbZonesDeTexte(int id)
-        {
-           var numberOfSegments = _editorService.GetDocumentNoOfSegments();
-            Log.Verbose("Sending document with id {@id} to Antidote having {@numberOfSegments} number of segments.",
-    id, numberOfSegments);
-            return numberOfSegments;
 
-        }
+	    /// <summary>
+	    /// Informs Antidote about the number of segments from the document
+	    /// that will be sent for correcting.
+	    /// </summary>
+	    /// <param name="id">The document Id</param>
+	    /// <returns>Returns the number of zones of text in the specified document</returns>
+	    public int DonneNbZonesDeTexte(int id)
+	    {
+		    var numberOfSegments = _editorService.GetDocumentNoOfSegments();
+		    Log.Verbose("Sending document with id {@id} to Antidote having {@numberOfSegments} number of segments.",
+			    id, numberOfSegments);
+		    return numberOfSegments;
+	    }
 
-        public string DonnePolice(int idDoc, int idZone)
+	    public string DonnePolice(int idDoc, int idZone)
         {
             return string.Empty;
         }

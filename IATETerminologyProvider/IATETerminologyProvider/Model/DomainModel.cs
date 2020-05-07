@@ -1,4 +1,4 @@
-﻿namespace IATETerminologyProvider.Model
+﻿namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class DomainModel : ViewModelBase
 	{		

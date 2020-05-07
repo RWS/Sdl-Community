@@ -2,13 +2,15 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using SDLCommunityCleanUpTasks;
 using SDLCommunityCleanUpTasks.Utilities;
 
 namespace Sdl.Community.CleanUpTasks
 {
-	public partial class ConversionsSettingsControl : UserControl, IConversionsSettingsControl
-    {
+	public partial class ConversionsSettingsControl : UserControl, IConversionsSettingsControl, IUISettingsControl
+
+	{
         private IConversionsSettingsPresenter _presenter;
         private BatchTaskMode _taskMode;
 

@@ -6,12 +6,12 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using IATETerminologyProvider.Helpers;
-using IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace IATETerminologyProvider.Ui
+namespace Sdl.Community.IATETerminologyProvider.Ui
 {
 	public partial class IATETermsControl : UserControl
 	{
@@ -156,7 +156,7 @@ namespace IATETerminologyProvider.Ui
 			xmlTxtWriter.WriteStartDocument(true);
 
 			xmlTxtWriter.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + "report.xslt" + "'");
-			xmlTxtWriter.WriteComment("IATETerminologyProvider by SDL Community Developers, 2019");
+			xmlTxtWriter.WriteComment("IATETerminologyProvider by SDL Community Developers, 2021");
 
 			WriteReport(entry, xmlTxtWriter);
 

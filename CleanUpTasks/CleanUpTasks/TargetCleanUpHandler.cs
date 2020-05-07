@@ -83,8 +83,9 @@ namespace SDLCommunityCleanUpTasks
 				{
 					if (tag.Attributes.Any())
 					{
-						var isTagPair = settings.Placeholders.First(p => Regex.Replace(p.Content, @"\s+", "") == Regex.Replace(content, @"\s+", "")).IsTagPair;
-						if (isTagPair)
+						var isTagPair = settings.Placeholders.FirstOrDefault(p => Regex.Replace(p.Content, @"\s+", "") == Regex.Replace(content, @"\s+", ""))?.IsTagPair;
+
+						if (isTagPair!=null)
 						{
 							text = content;
 						}

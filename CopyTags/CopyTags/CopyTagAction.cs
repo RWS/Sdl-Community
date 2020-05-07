@@ -6,7 +6,6 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 using SDLCopyTags.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace SDLCopyTags
 {
@@ -36,7 +35,7 @@ namespace SDLCopyTags
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{"CopyTagAction Execute method: "} {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{@"CopyTagAction Execute method: "} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -51,7 +50,7 @@ namespace SDLCopyTags
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{"GetTags method: "} {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{@"GetTags method: "} {ex.Message}\n {ex.StackTrace}");
 				return new List<IAbstractMarkupData>();
 			}
 		}

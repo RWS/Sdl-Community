@@ -3,14 +3,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using IATETerminologyProvider.Commands;
-using IATETerminologyProvider.Helpers;
-using IATETerminologyProvider.Interface;
-using IATETerminologyProvider.Model;
-using IATETerminologyProvider.Model.ResponseModels;
-using IATETerminologyProvider.Service;
+using Sdl.Community.IATETerminologyProvider.Commands;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Interface;
+using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
+using Sdl.Community.IATETerminologyProvider.Service;
 
-namespace IATETerminologyProvider.ViewModel
+namespace Sdl.Community.IATETerminologyProvider.ViewModel
 {
 	public class SettingsViewModel : ViewModelBase
 	{

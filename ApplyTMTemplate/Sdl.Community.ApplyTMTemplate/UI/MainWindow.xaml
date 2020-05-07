@@ -42,9 +42,8 @@
 				</Style.Triggers>
 			</Style>
 			<Style TargetType="Button" x:Key="SdlWizardStyleButtonGreen" BasedOn="{StaticResource SdlPrimaryButtonStyle}">
-				<Setter Property="MinWidth" Value="70"></Setter>
-				<Setter Property="Height" Value="34"></Setter>
-				<Setter Property="Margin" Value="5,9,5,11"></Setter>
+				<Setter Property="MinWidth" Value="70"/>
+				<Setter Property="Height" Value="34"/>
 			</Style>
 			<Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
 				<Setter Property="FontSize" Value="12"/>
@@ -108,14 +107,14 @@
 
 			<Button HorizontalContentAlignment="Left" Command="{Binding AddTmCommand}" ToolTip="Add TMs">
 				<StackPanel Orientation="Horizontal">
-					<Image Source="../Resources/PlusSign.ico" Width="15" Height="15"></Image>
+					<Image Source="../Resources/PlusSign.ico" Width="15" Height="15"/>
 					<TextBlock Style="{StaticResource TextBlockStyle}" Text="AddTMs"/>
 				</StackPanel>
 			</Button>
 
 			<Button HorizontalContentAlignment="Left" Command="{Binding RemoveTMsCommand}" ToolTip="Remove TMs">
 				<StackPanel Orientation="Horizontal">
-					<Image Source="../Resources/Remove.ico" Width="15" Height="15"></Image>
+					<Image Source="../Resources/Remove.ico" Width="15" Height="15"/>
 					<TextBlock Style="{StaticResource TextBlockStyle}" Text="RemoveTMs"/>
 				</StackPanel>
 			</Button>
@@ -198,7 +197,9 @@
 		</DataGrid>
 		<StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 			<controls:ProgressRing Visibility="{Binding ProgressVisibility}" Width="30" />
-			<Button IsEnabled="{Binding CanExecuteApply, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SdlWizardStyleButtonGreen}" HorizontalAlignment="Right" Margin="0,10,10,0" Command="{Binding ApplyTemplateCommand}" Content="Apply" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
+			<Button IsEnabled="{Binding CanExecuteApply, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,10" 
+					Style="{StaticResource SdlWizardStyleButtonGreen}" HorizontalAlignment="Right" 
+					Command="{Binding ApplyTemplateCommand}" Content="Apply" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
 		</StackPanel>
 	</Grid>
 </controls:MetroWindow>

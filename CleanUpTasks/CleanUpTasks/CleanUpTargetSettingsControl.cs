@@ -2,14 +2,15 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using SDLCommunityCleanUpTasks;
 using SDLCommunityCleanUpTasks.Dialogs;
 using FileDialog = SDLCommunityCleanUpTasks.Dialogs.FileDialog;
 
 namespace Sdl.Community.CleanUpTasks
 {
-	public partial class CleanUpTargetSettingsControl : UserControl, ISettingsAware<CleanUpTargetSettings>, ICleanUpTargetSettingsControl
-    {
+	public partial class CleanUpTargetSettingsControl : UserControl, ISettingsAware<CleanUpTargetSettings>, ICleanUpTargetSettingsControl, IUISettingsControl
+	{
         private readonly ICleanUpTargetSettingsPresenter presenter = null;
 
         public CleanUpTargetSettingsControl()

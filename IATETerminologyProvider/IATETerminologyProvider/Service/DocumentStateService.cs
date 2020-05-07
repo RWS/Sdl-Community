@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IATETerminologyProvider.Model;
-using IATETerminologyProvider.Ui;
+using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Ui;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace IATETerminologyProvider.Service
+namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class DocumentStateService
 	{

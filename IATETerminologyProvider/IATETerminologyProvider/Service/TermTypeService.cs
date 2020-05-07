@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using IATETerminologyProvider.Helpers;
-using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
 
-namespace IATETerminologyProvider.Service
+namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class TermTypeService
 	{

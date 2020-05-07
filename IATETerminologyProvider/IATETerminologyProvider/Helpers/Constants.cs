@@ -1,4 +1,4 @@
-﻿namespace IATETerminologyProvider.Helpers
+﻿namespace Sdl.Community.IATETerminologyProvider.Helpers
 {
 	public static class Constants
     {

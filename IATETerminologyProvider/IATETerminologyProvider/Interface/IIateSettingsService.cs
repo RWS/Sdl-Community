@@ -1,6 +1,6 @@
-﻿using IATETerminologyProvider.Model;
+﻿using Sdl.Community.IATETerminologyProvider.Model;
 
-namespace IATETerminologyProvider.Interface
+namespace Sdl.Community.IATETerminologyProvider.Interface
 {
     public interface IIateSettingsService
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace IATETerminologyProvider.Model
+namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class SettingsModel
 	{

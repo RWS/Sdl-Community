@@ -1,13 +1,13 @@
 ﻿using System.Linq;
-using IATETerminologyProvider.Interface;
-using IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Interface;
+using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 
-namespace IATETerminologyProvider.Service
+namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class IateSettingsService:IIateSettingsService
 	{

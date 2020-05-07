@@ -5,15 +5,15 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using IATETerminologyProvider.Helpers;
-using IATETerminologyProvider.Model;
-using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
 using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace IATETerminologyProvider.Service
+namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class TermSearchService
 	{

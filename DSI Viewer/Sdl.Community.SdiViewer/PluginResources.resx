@@ -124,4 +124,19 @@
   <data name="Plugin_Name" xml:space="preserve">
     <value>DSI Viewer</value>
   </data>
+  <data name="StructureContextInfo_MetaKey_length_max_value" xml:space="preserve">
+    <value>Maximum value</value>
+  </data>
+  <data name="StructureContextInfo_MetaKey_length_min_value" xml:space="preserve">
+    <value>Minimum value</value>
+  </data>
+  <data name="StructureContextInfo_MetaKey_length_severity" xml:space="preserve">
+    <value>Severity</value>
+  </data>
+  <data name="StructureContextInfo_MetaKey_length_type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="StructureContextInfo_MetaValue_chars" xml:space="preserve">
+    <value>characters</value>
+  </data>
 </root>

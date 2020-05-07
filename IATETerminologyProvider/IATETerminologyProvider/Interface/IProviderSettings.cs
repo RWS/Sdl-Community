@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Model;
 
-namespace IATETerminologyProvider.Interface
+namespace Sdl.Community.IATETerminologyProvider.Interface
 {
 	interface IProviderSettings
 	{

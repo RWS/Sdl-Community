@@ -2,7 +2,7 @@
 using System.Drawing;
 using Sdl.TellMe.ProviderApi;
 
-namespace IATETerminologyProvider.IATEProviderTellMe
+namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 {
 	public class IATECommunityForumAction : AbstractTellMeAction
 	{
