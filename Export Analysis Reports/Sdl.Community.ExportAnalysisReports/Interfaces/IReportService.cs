@@ -8,8 +8,7 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 	public interface IReportService
 	{
 		bool ReportFileExist(string reportFolderPath);
-		void LoadReports(XmlDocument doc, ProjectDetails project);
-		Dictionary<string, LanguageDirection> LoadLanguageDirections(XmlDocument doc);
+		void SetReportInformation(XmlDocument doc, ProjectDetails project);
 		void SaveExportPath(string reportOutputPath);
 		string GetJsonReportPath(string jsonPath);
 		bool IsSameReportPath(string reportOutputPath);

@@ -293,7 +293,7 @@ namespace Sdl.Community.ExportAnalysisReports
 				projectDetails.IsSingleFileProject = isSingleFileProject;
 
 				doc.Load(projectDetails.ProjectPath);
-				var projectLanguages = _reportService.LoadLanguageDirections(doc);
+				var projectLanguages = _studioService.LoadLanguageDirections(doc);
 
 				_studioService.SetLanguagesForProject(projectDetails, projectLanguages);
 			}
@@ -391,7 +391,7 @@ namespace Sdl.Community.ExportAnalysisReports
 					{
 						// Read sdlproj
 						doc.Load(selectedProject.ProjectPath);
-						_reportService.LoadReports(doc, selectedProject);
+						_reportService.SetReportInformation(doc, selectedProject);
 
 						selectedProject.ShouldBeExported = true;
 						//if an project has only one language select that language
@@ -679,7 +679,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			{
 				var selectedStatus = ((ComboBox)sender).SelectedItem?.ToString();
 
-				_projectsDataSource = BindProjectsBasedOnStatus(selectedStatus);
+				_projectsDataSource = SetProjectsBasedOnStatus(selectedStatus);
 				projListbox.DataSource = _projectsDataSource;
 
 				if (languagesListBox.Items.Count == 0)
@@ -725,7 +725,7 @@ namespace Sdl.Community.ExportAnalysisReports
 							var projectDetails = ProjectInformation.GetExternalProjectDetails(projectPath);
 
 							doc.Load(projectDetails.ProjectPath);
-							_reportService.LoadReports(doc, projectDetails);
+							_reportService.SetReportInformation(doc, projectDetails);
 							externalProjectsBindingList.Add(projectDetails);
 						}
 					}
@@ -1045,7 +1045,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			IsCsvBtnEnabled();
 		}
 
-		private BindingList<ProjectDetails> BindProjectsBasedOnStatus(string selectedStatus)
+		private BindingList<ProjectDetails> SetProjectsBasedOnStatus(string selectedStatus)
 		{
 			var projectsBindingList = new BindingList<ProjectDetails>();
 			_isStatusChanged = true;
@@ -1058,26 +1058,26 @@ namespace Sdl.Community.ExportAnalysisReports
 				{
 					case "InProgress":
 						var inProgressProjects = projects.Where(s => s.Status.Equals("InProgress")).ToList();
-						return GetProjectsBindingList(inProgressProjects, projectsBindingList);
+						return GetProjects(inProgressProjects, projectsBindingList);
 
 					case "Completed":
 						var completedProjects = projects?.Where(s => s.Status.Equals("Completed")).ToList();
-						return GetProjectsBindingList(completedProjects, projectsBindingList);
+						return GetProjects(completedProjects, projectsBindingList);
 
 					case "All":
-						return GetProjectsBindingList(projects, projectsBindingList);
+						return GetProjects(projects, projectsBindingList);
 				}
 				IsClipboardEnabled();
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"BindProjectsBasedOnStatus method: {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"SetProjectsBasedOnStatus method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return projectsBindingList;
 		}
 
-		private BindingList<ProjectDetails> GetProjectsBindingList(List<ProjectDetails> projectDetails, BindingList<ProjectDetails> newProjectDetails)
+		private BindingList<ProjectDetails> GetProjects(List<ProjectDetails> projectDetails, BindingList<ProjectDetails> newProjectDetails)
 		{
 			if (projectDetails != null && projectDetails.Count > 0)
 			{

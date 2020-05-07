@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using Sdl.Community.ExportAnalysisReports.Helpers;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
 using Sdl.Community.ExportAnalysisReports.Model;
@@ -83,6 +85,36 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					languagesDictionary.Remove(languageToRemove.Key);
 				}
 			}
+		}
+
+		public Dictionary<string, LanguageDirection> LoadLanguageDirections(XmlDocument doc)
+		{
+			var languages = new Dictionary<string, LanguageDirection>();
+			try
+			{
+				var languagesDirectionNode = doc.SelectNodes("/Project/LanguageDirections/LanguageDirection");
+
+				if (languagesDirectionNode == null) return languages;
+				foreach (var item in languagesDirectionNode)
+				{
+					var node = (XmlNode)item;
+					if (node.Attributes == null) continue;
+					var lang = new LanguageDirection
+					{
+						Guid = node.Attributes["Guid"].Value,
+						TargetLang = CultureInfo.GetCultureInfo(node.Attributes["TargetLanguageCode"].Value)
+					};
+					if (!languages.ContainsKey(lang.Guid))
+					{
+						languages.Add(lang.Guid, lang);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"LoadLanguageDirections method: {ex.Message}\n {ex.StackTrace}");
+			}
+			return languages;
 		}
 
 		private string GetInstalledStudioShortVersion()

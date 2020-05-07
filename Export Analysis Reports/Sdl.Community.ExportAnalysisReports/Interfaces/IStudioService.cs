@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Xml;
 using Sdl.Community.ExportAnalysisReports.Model;
 using Sdl.ProjectAutomation.Core;
 
@@ -12,5 +13,6 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 		void SetLanguagesForProject(ProjectDetails project, Dictionary<string, LanguageDirection> languages);
 		void RemoveLanguages(Dictionary<string, bool> languagesDictionary, BindingList<LanguageDetails> languages);
 		BindingList<ProjectDetails> SetProjects(List<ProjectDetails> projects, BindingList<ProjectDetails> newProjectDetails);
+		Dictionary<string, LanguageDirection> LoadLanguageDirections(XmlDocument doc);
 	}
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -9,6 +8,7 @@ using Newtonsoft.Json;
 using Sdl.Community.ExportAnalysisReports.Helpers;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
 using Sdl.Community.ExportAnalysisReports.Model;
+using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.ExportAnalysisReports.Service
 {
@@ -17,7 +17,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		private readonly IMessageBoxService _messageBoxService;
 		private readonly IStudioService _studioService;
 		private readonly string _communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "ExportAnalysisReports");
-		private Help _help;
+		private readonly Help _help;
 
 		public static readonly Log Log = Log.Instance;
 		public string JsonPath => Path.Combine(_communityFolderPath, "ExportAnalysisReportSettings.json");
@@ -30,12 +30,16 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			_studioService = studioService;
 		}
 
-		public void LoadReports(XmlDocument doc, ProjectDetails project)
+		/// <summary>
+		/// Set report information using the project xml document
+		/// </summary>
+		/// <param name="doc"></param>
+		/// <param name="project"></param>
+		public void SetReportInformation(XmlDocument doc, ProjectDetails project)
 		{
 			try
 			{
 				var projectInfo = _studioService.GetProjectInfo(project.ProjectPath);
-
 				project.LanguageAnalysisReportPaths?.Clear();
 
 				var automaticTaskNode = doc.SelectNodes("/Project/Tasks/AutomaticTask");
@@ -53,32 +57,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 							foreach (var reportNode in reportNodes)
 							{
-								var report = (XmlNode)reportNode;
-								if (report.Attributes != null && report.Attributes["TaskTemplateId"].Value.Equals("Sdl.ProjectApi.AutomaticTasks.Analysis"))
-								{
-									var reportLangDirectionId = report.Attributes["LanguageDirectionGuid"].Value;
-									var languageDirectionsNode = doc.SelectNodes("Project/LanguageDirections/LanguageDirection");
-									foreach (XmlNode langDirNode in languageDirectionsNode)
-									{
-										var fileLangGuid = langDirNode.Attributes["Guid"].Value;
-										if (reportLangDirectionId.Equals(fileLangGuid))
-										{
-											var targetLangCode = langDirNode.Attributes["TargetLanguageCode"].Value;
-											var langName = projectInfo?.TargetLanguages?.FirstOrDefault(n => n.IsoAbbreviation.Equals(targetLangCode));
-
-											var reportPath = Path.Combine(project.ProjectFolderPath, report.Attributes["PhysicalPath"].Value);
-											if (!string.IsNullOrEmpty(project.ReportsFolderPath))
-											{
-												reportPath = Path.Combine(project.ReportsFolderPath, Path.GetFileName(report.Attributes["PhysicalPath"].Value));
-											}
-											if (project.LanguageAnalysisReportPaths == null)
-											{
-												project.LanguageAnalysisReportPaths = new Dictionary<string, string>();
-											}
-											project.LanguageAnalysisReportPaths.Add(langName?.DisplayName, reportPath);
-										}
-									}
-								}
+								ConfigureReportDetails(project, projectInfo, (XmlNode) reportNode, doc);
 							}
 						}
 					}
@@ -90,6 +69,11 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 		}
 
+		/// <summary>
+		/// Get report output path from Json file
+		/// </summary>
+		/// <param name="jsonPath"></param>
+		/// <returns></returns>
 		public string GetJsonReportPath(string jsonPath)
 		{
 			if (File.Exists(jsonPath))
@@ -105,36 +89,6 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				}
 			}
 			return string.Empty;
-		}
-
-		public Dictionary<string, LanguageDirection> LoadLanguageDirections(XmlDocument doc)
-		{
-			var languages = new Dictionary<string, LanguageDirection>();
-			try
-			{
-				var languagesDirectionNode = doc.SelectNodes("/Project/LanguageDirections/LanguageDirection");
-
-				if (languagesDirectionNode == null) return languages;
-				foreach (var item in languagesDirectionNode)
-				{
-					var node = (XmlNode)item;
-					if (node.Attributes == null) continue;
-					var lang = new LanguageDirection
-					{
-						Guid = node.Attributes["Guid"].Value,
-						TargetLang = CultureInfo.GetCultureInfo(node.Attributes["TargetLanguageCode"].Value)
-					};
-					if (!languages.ContainsKey(lang.Guid))
-					{
-						languages.Add(lang.Guid, lang);
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"LoadLanguageDirections method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return languages;
 		}
 
 		/// <summary>
@@ -153,6 +107,11 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			return false;
 		}
 
+		/// <summary>
+		/// Check if the report file exists
+		/// </summary>
+		/// <param name="reportFolderPath"></param>
+		/// <returns></returns>
 		public bool ReportFileExist(string reportFolderPath)
 		{
 			try
@@ -327,6 +286,45 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 		}
 
+		// Configure the details used in the exported report
+		private void ConfigureReportDetails(ProjectDetails project, ProjectInfo projectInfo, XmlNode report, XmlDocument doc)
+		{
+			if (report?.Attributes != null && report.Attributes["TaskTemplateId"].Value.Equals("Sdl.ProjectApi.AutomaticTasks.Analysis"))
+			{
+				var reportLangDirectionId = report.Attributes["LanguageDirectionGuid"].Value;
+				var languageDirectionsNode = doc.SelectNodes("Project/LanguageDirections/LanguageDirection");
+				if (languageDirectionsNode != null)
+				{
+					foreach (XmlNode langDirNode in languageDirectionsNode)
+					{
+						if (langDirNode?.Attributes != null)
+						{
+							var fileLangGuid = langDirNode.Attributes["Guid"]?.Value;
+							if (reportLangDirectionId.Equals(fileLangGuid))
+							{
+								var targetLangCode = langDirNode?.Attributes["TargetLanguageCode"].Value;
+								var languageName = projectInfo?.TargetLanguages?.FirstOrDefault(n => n.IsoAbbreviation.Equals(targetLangCode));
+
+								var reportPath = Path.Combine(project.ProjectFolderPath, report.Attributes["PhysicalPath"].Value);
+								if (!string.IsNullOrEmpty(project.ReportsFolderPath))
+								{
+									reportPath = Path.Combine(project.ReportsFolderPath, Path.GetFileName(report.Attributes["PhysicalPath"].Value));
+								}
+
+								if (project.LanguageAnalysisReportPaths == null)
+								{
+									project.LanguageAnalysisReportPaths = new Dictionary<string, string>();
+								}
+
+								project.LanguageAnalysisReportPaths.Add(languageName?.DisplayName, reportPath);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Check if the report folder exists
 		private bool ReportsFolderExists(string reportsFolderPath)
 		{
 			return !string.IsNullOrEmpty(reportsFolderPath) && ReportFileExist(reportsFolderPath);
