@@ -47,14 +47,11 @@ namespace Sdl.Community.XLIFF.Manager
 			ActivationChanged += OnActivationChanged;
 
 
-
-
 			_eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 			_eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>()?.Subscribe(OnStudioWindowCreatedNotificationEvent);
 
 			//_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			//var project = _projectsController.CurrentProject.GetProjectInfo();
-			//project.ServerUri?.
+			//var project = _projectsController.CurrentProject.GetProjectInfo();			
 
 			// TODO this will be replaced with a call to recover the relevant data from the projects loaded in Studio
 			var testDataUtil = new TestDataUtil();

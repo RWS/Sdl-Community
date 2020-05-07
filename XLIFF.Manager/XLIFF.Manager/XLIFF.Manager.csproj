@@ -57,8 +57,8 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Core" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
+    <Reference Include="Sdl.ProjectAutomation.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
@@ -130,7 +130,6 @@
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Common\Enumerators.cs" />
-    <Compile Include="Model\ClientModel.cs" />
     <Compile Include="Model\LanguageInfo.cs" />
     <Compile Include="Model\ProjectFileActionModel.cs" />
     <Compile Include="Model\ProjectFileActivityModel.cs" />

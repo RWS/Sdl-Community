@@ -4,13 +4,13 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.XLIFF.Manager
 {
-	[RibbonGroup("XLIFFManagerSettingsGroup", "Configuration")]
+	[RibbonGroup("XLIFFManager_SettingsGroup", Name = "XLIFFManager_SettingsGroup_Name")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	public class XLIFFManagerSettingsGroup : AbstractRibbonGroup
 	{
 	}
 
-	[RibbonGroup("XLIFFManagerActionsGroup", "Actions")]
+	[RibbonGroup("XLIFFManager_ActionsGroup", Name = "XLIFFManager_ActionsGroup_Name")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	public class XLIFFManagerActionsGroup : AbstractRibbonGroup
 	{

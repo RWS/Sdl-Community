@@ -140,6 +140,24 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Projects: {0}, Files: {1}, Selected: {2}.
+        /// </summary>
+        internal static string StatusLabel_Projects_0_Files_1_Selected_2 {
+            get {
+                return ResourceManager.GetString("StatusLabel_Projects_0_Files_1_Selected_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected: {0}.
+        /// </summary>
+        internal static string StatusLabel_Selected_0 {
+            get {
+                return ResourceManager.GetString("StatusLabel_Selected_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon TellMe {
@@ -215,11 +233,74 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actions.
+        /// </summary>
+        internal static string XLIFFManager_ActionsGroup_Name {
+            get {
+                return ResourceManager.GetString("XLIFFManager_ActionsGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to XLIFF.
+        /// </summary>
+        internal static string XLIFFManager_ContextMenu_ExportToXLIFF_Description {
+            get {
+                return ResourceManager.GetString("XLIFFManager_ContextMenu_ExportToXLIFF_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to XLIFF.
+        /// </summary>
+        internal static string XLIFFManager_ContextMenu_ExportToXLIFF_Name {
+            get {
+                return ResourceManager.GetString("XLIFFManager_ContextMenu_ExportToXLIFF_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to XLIFF Manager.
         /// </summary>
         internal static string XLIFFManager_Description {
             get {
                 return ResourceManager.GetString("XLIFFManager_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to XLIFF.
+        /// </summary>
+        internal static string XLIFFManager_ExportToXLIFF_Description {
+            get {
+                return ResourceManager.GetString("XLIFFManager_ExportToXLIFF_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        internal static string XLIFFManager_ExportToXLIFF_Name {
+            get {
+                return ResourceManager.GetString("XLIFFManager_ExportToXLIFF_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import from XLIFF.
+        /// </summary>
+        internal static string XLIFFManager_ImportFromXLIFF_Description {
+            get {
+                return ResourceManager.GetString("XLIFFManager_ImportFromXLIFF_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        internal static string XLIFFManager_ImportFromXLIFF_Name {
+            get {
+                return ResourceManager.GetString("XLIFFManager_ImportFromXLIFF_Name", resourceCulture);
             }
         }
         
@@ -233,30 +314,57 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project File Activity.
+        /// </summary>
+        internal static string XLIFFManager_ProjectFileActivity_Description {
+            get {
+                return ResourceManager.GetString("XLIFFManager_ProjectFileActivity_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project File Activity.
+        /// </summary>
+        internal static string XLIFFManager_ProjectFileActivity_Name {
+            get {
+                return ResourceManager.GetString("XLIFFManager_ProjectFileActivity_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View settings.
+        /// </summary>
+        internal static string XLIFFManager_Settings_Description {
+            get {
+                return ResourceManager.GetString("XLIFFManager_Settings_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string XLIFFManager_Settings_Name {
+            get {
+                return ResourceManager.GetString("XLIFFManager_Settings_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configuration.
+        /// </summary>
+        internal static string XLIFFManager_SettingsGroup_Name {
+            get {
+                return ResourceManager.GetString("XLIFFManager_SettingsGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon xliffManager2 {
             get {
                 object obj = ResourceManager.GetObject("xliffManager2", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Project File Activity.
-        /// </summary>
-        internal static string XLIFFManagerProjectFileActivity_Description {
-            get {
-                return ResourceManager.GetString("XLIFFManagerProjectFileActivity_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Project File Activity.
-        /// </summary>
-        internal static string XLIFFManagerProjectFileActivity_Name {
-            get {
-                return ResourceManager.GetString("XLIFFManagerProjectFileActivity_Name", resourceCulture);
             }
         }
     }

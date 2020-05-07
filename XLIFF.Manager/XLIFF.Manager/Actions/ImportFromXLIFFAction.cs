@@ -4,7 +4,10 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 
 namespace Sdl.Community.XLIFF.Manager.Actions
 {
-	[Action("XLIFFManagerImportFromXLIFFAction", typeof(XLIFFManagerViewController), Name = " Import", Icon = "ImportFrom", Description = "Import from XLIFF")]
+	[Action("XLIFFManager_ImportFromXLIFF_Action", typeof(XLIFFManagerViewController), 
+		Name = "XLIFFManager_ImportFromXLIFF_Name", 
+		Icon = "ImportFrom", 
+		Description = "XLIFFManager_ImportFromXLIFF_Description")]
 	[ActionLayout(typeof(XLIFFManagerActionsGroup), 5, DisplayType.Large)]
 	public class ImportFromXLIFFAction : AbstractViewControllerAction<XLIFFManagerViewController>
 	{

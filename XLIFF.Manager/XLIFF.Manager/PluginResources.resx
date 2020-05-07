@@ -126,10 +126,10 @@
   <data name="XLIFFManager_Name" xml:space="preserve">
     <value>XLIFF Manager</value>
   </data>
-  <data name="XLIFFManagerProjectFileActivity_Description" xml:space="preserve">
+  <data name="XLIFFManager_ProjectFileActivity_Description" xml:space="preserve">
     <value>Project File Activity</value>
   </data>
-  <data name="XLIFFManagerProjectFileActivity_Name" xml:space="preserve">
+  <data name="XLIFFManager_ProjectFileActivity_Name" xml:space="preserve">
     <value>Project File Activity</value>
   </data>
   <data name="WindowsControl_Close" xml:space="preserve">
@@ -180,5 +180,41 @@
   </data>
   <data name="xliffManager2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\xliffmanager_2.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StatusLabel_Selected_0" xml:space="preserve">
+    <value>Selected: {0}</value>
+  </data>
+  <data name="StatusLabel_Projects_0_Files_1_Selected_2" xml:space="preserve">
+    <value>Projects: {0}, Files: {1}, Selected: {2}</value>
+  </data>
+  <data name="XLIFFManager_ActionsGroup_Name" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="XLIFFManager_ContextMenu_ExportToXLIFF_Description" xml:space="preserve">
+    <value>Export to XLIFF</value>
+  </data>
+  <data name="XLIFFManager_ContextMenu_ExportToXLIFF_Name" xml:space="preserve">
+    <value>Export to XLIFF</value>
+  </data>
+  <data name="XLIFFManager_ExportToXLIFF_Description" xml:space="preserve">
+    <value>Export to XLIFF</value>
+  </data>
+  <data name="XLIFFManager_ExportToXLIFF_Name" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="XLIFFManager_ImportFromXLIFF_Description" xml:space="preserve">
+    <value>Import from XLIFF</value>
+  </data>
+  <data name="XLIFFManager_ImportFromXLIFF_Name" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="XLIFFManager_SettingsGroup_Name" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="XLIFFManager_Settings_Description" xml:space="preserve">
+    <value>View settings</value>
+  </data>
+  <data name="XLIFFManager_Settings_Name" xml:space="preserve">
+    <value>Settings</value>
   </data>
 </root>

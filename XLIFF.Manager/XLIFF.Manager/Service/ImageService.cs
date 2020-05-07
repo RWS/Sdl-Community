@@ -10,9 +10,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 {
 	public class ImageService
 	{
-
 		private readonly PathInfo _pathInfo;
-		private readonly string ExecutingAssemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
 		public ImageService(PathInfo pathInfo)
 		{
@@ -83,7 +81,6 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			using (var zipFile = ZipFile.Open(_pathInfo.FlagsFilePath, ZipArchiveMode.Read))
 			{
-
 				foreach (var fileEntry in zipFile.Entries)
 				{
 					var outputFile = Path.Combine(_pathInfo.FlagsFolderPath, fileEntry.FullName);
