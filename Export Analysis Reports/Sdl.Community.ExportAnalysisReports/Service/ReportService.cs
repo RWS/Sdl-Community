@@ -51,8 +51,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 							foreach (var reportNode in reportNodes)
 							{
 								var report = (XmlNode)reportNode;
-								if (report.Attributes != null && report.Attributes["TaskTemplateId"].Value ==
-									"Sdl.ProjectApi.AutomaticTasks.Analysis")
+								if (report.Attributes != null && report.Attributes["TaskTemplateId"].Value.Equals("Sdl.ProjectApi.AutomaticTasks.Analysis"))
 								{
 									var reportLangDirectionId = report.Attributes["LanguageDirectionGuid"].Value;
 									var languageDirectionsNode = doc.SelectNodes("Project/LanguageDirections/LanguageDirection");

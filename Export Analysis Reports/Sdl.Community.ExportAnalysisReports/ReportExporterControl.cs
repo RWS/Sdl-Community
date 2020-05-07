@@ -579,7 +579,6 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception exception)
 			{
-				Console.WriteLine(exception);
 				Log.Logger.Error($"copyBtn_Click method: {exception.Message}\n {exception.StackTrace}");
 				throw;
 			}
@@ -674,7 +673,6 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception exception)
 			{
-				Console.WriteLine(exception);
 				Log.Logger.Error($"GenerateReport method: {exception.Message}\n {exception.StackTrace}");
 				throw;
 			}

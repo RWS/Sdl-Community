@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using Sdl.Community.ExportAnalysisReports.Model;
 
 namespace Sdl.Community.ExportAnalysisReports.Helpers
@@ -29,18 +30,13 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			return dictionaryResult;
 		}
 
-		public BindingList<LanguageDetails> AddFromDictionary(BindingList<LanguageDetails> languages, Dictionary<string, bool> languagesDictionary)
+		public void AddFromDictionary(BindingList<LanguageDetails> languages, Dictionary<string, bool> languagesDictionary)
 		{
-			if (languagesDictionary != null && !languagesDictionary.Equals(new Dictionary<string, bool>()))
+			foreach (var item in languagesDictionary)
 			{
-				foreach (var item in languagesDictionary)
-				{
-					var language = new LanguageDetails {LanguageName = item.Key, IsChecked = item.Value};
-					languages.Add(language);
-				}
+				var language = new LanguageDetails { LanguageName = item.Key, IsChecked = item.Value };
+				languages.Add(language);
 			}
-
-			return languages;
 		}
 	}
 }
