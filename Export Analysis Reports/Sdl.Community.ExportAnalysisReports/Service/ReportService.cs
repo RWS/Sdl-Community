@@ -164,8 +164,10 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles"))
 				{
 					fileName = Path.GetFileNameWithoutExtension(fileName);
+					return !string.IsNullOrEmpty(fileName);
 				}
 				_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
+				return false;
 			}
 			catch (Exception ex)
 			{

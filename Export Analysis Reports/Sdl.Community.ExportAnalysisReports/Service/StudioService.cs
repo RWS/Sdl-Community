@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using Sdl.Community.ExportAnalysisReports.Helpers;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
 using Sdl.Community.ExportAnalysisReports.Model;
@@ -65,6 +66,20 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"SetLanguagesForProject method: {ex.Message}\n {ex.StackTrace}");
+			}
+		}
+
+		public void RemoveLanguages(Dictionary<string,bool> languagesDictionary, BindingList<LanguageDetails> languages)
+		{
+			// remove also the language corresponding to the single file project, when the "Is single file project" option is unchecked.
+			if (languagesDictionary.Count > languages.Count)
+			{
+				var languagesToRemove = languagesDictionary.Where(item => !languages.Any(a => a.LanguageName.Equals(item.Key))).ToList();
+
+				foreach (var languageToRemove in languagesToRemove)
+				{
+					languagesDictionary.Remove(languageToRemove.Key);
+				}
 			}
 		}
 

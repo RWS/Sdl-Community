@@ -10,7 +10,7 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 		string GetStudioProjectsPath();
 		ProjectInfo GetProjectInfo(string projectPath);
 		void SetLanguagesForProject(ProjectDetails project, Dictionary<string, LanguageDirection> languages);
-
+		void RemoveLanguages(Dictionary<string, bool> languagesDictionary, BindingList<LanguageDetails> languages);
 		BindingList<ProjectDetails> BindProjects(List<ProjectDetails> projects, BindingList<ProjectDetails> projectsBindingList);
 	}
 }

@@ -1124,7 +1124,15 @@ namespace Sdl.Community.ExportAnalysisReports
 				{
 					_projectsDataSource.Remove(project);
 					_allStudioProjectsDetails.Remove(project);
+					var exportedProj = _projectsDataSource.Where(p => p.ShouldBeExported).ToList();
+					if (!exportedProj.Any(p => p.LanguagesForPoject.Keys.Any(k => project.LanguagesForPoject.Keys.Any(pk => k.Equals(pk)))))
+					{
+						ShouldUnselectLanguages(project);
+					}
 				}
+
+				// remove also the language corresponding to the single file project, when the "Is single file project" option is unchecked.
+				_studioService.RemoveLanguages(languagesDictionary, _languages);
 			}
 			RefreshProjectsListBox();
 
