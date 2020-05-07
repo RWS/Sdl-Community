@@ -20,7 +20,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		private Help _help;
 
 		public static readonly Log Log = Log.Instance;
-		public string JsonPath { get; set; }
+		public string JsonPath => Path.Combine(_communityFolderPath, "ExportAnalysisReportSettings.json");
 		public string ReportsFolderPath { get; set; }
 
 		public ReportService(IMessageBoxService messageBoxService, IStudioService studioService)
@@ -28,7 +28,6 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			_help = new Help();
 			_messageBoxService = messageBoxService;
 			_studioService = studioService;
-			JsonPath = Path.Combine(_communityFolderPath, "ExportAnalysisReportSettings.json");
 		}
 
 		public void LoadReports(XmlDocument doc, ProjectDetails project)
@@ -42,7 +41,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				var automaticTaskNode = doc.SelectNodes("/Project/Tasks/AutomaticTask");
 				if (automaticTaskNode != null)
 				{
-					var reportsFolderExist = ReportsFolderExists(automaticTaskNode[0].BaseURI, project.ReportsFolderPath);
+					var reportsFolderExist = ReportsFolderExists(project.ReportsFolderPath);
 					if (reportsFolderExist)
 					{
 						foreach (var node in automaticTaskNode)
@@ -158,23 +157,30 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		{
 			try
 			{
-				var fileName = Path.GetFileName(Path.GetDirectoryName(reportFolderPath));
-				if (Directory.Exists(reportFolderPath))
+				if (!string.IsNullOrEmpty(reportFolderPath))
 				{
-					var files = Directory.GetFiles(reportFolderPath);
-					if (files.Any(file => file.Contains("Analyze Files")))
+					var fileName = Path.GetFileName(Path.GetDirectoryName(reportFolderPath));
+					if (Directory.Exists(reportFolderPath))
 					{
-						return true;
+						var files = Directory.GetFiles(reportFolderPath);
+						if (files.Any(file => file.Contains("Analyze Files")))
+						{
+							return true;
+						}
+
+						_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
+						return false;
 					}
+
+					if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles"))
+					{
+						fileName = Path.GetFileNameWithoutExtension(fileName);
+						return !string.IsNullOrEmpty(fileName);
+					}
+
 					_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
-					return false;
 				}
-				if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles"))
-				{
-					fileName = Path.GetFileNameWithoutExtension(fileName);
-					return !string.IsNullOrEmpty(fileName);
-				}
-				_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
+
 				return false;
 			}
 			catch (Exception ex)
@@ -204,23 +210,30 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 						if (!Path.IsPathRooted(filePath))
 						{
 							//project is located inside "Projects" folder in Studio
-							var projectsFolderPath = projectXmlPath.Substring(0, projectXmlPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
-							var projectName = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal));
-							filePath = Path.Combine(projectsFolderPath, projectName, "Reports");
+							var projectsFolderPath = Path.GetDirectoryName(projectXmlPath);
+							// .Substring is needed here to keep the selection of projectNamePath correctly, ex: Samples\Sample Project
+							var projectNamePath = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal));
+							if (!string.IsNullOrEmpty(projectsFolderPath) && !string.IsNullOrEmpty(projectNamePath))
+							{
+								filePath = Path.Combine(projectsFolderPath, projectNamePath, "Reports");
+							}
 						}
 						else
 						{
 							// is external or single file project
-							var reportsPath = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
-							filePath = Path.Combine(reportsPath, "Reports");
-							if (!Directory.Exists(filePath))
+							var reportsPath = Path.GetDirectoryName(filePath);
+							if (!string.IsNullOrEmpty(reportsPath))
 							{
-								// get the single file project Reports folder's path
-								var directoryName = Path.GetDirectoryName(filePath);
-								if (!string.IsNullOrEmpty(directoryName))
+								filePath = Path.Combine(reportsPath, "Reports");
+								if (!Directory.Exists(filePath))
 								{
-									var projectName = Path.GetFileNameWithoutExtension(projectInfoNode.Attributes["ProjectFilePath"]?.Value);
-									filePath = Path.Combine(directoryName, $"{projectName}.ProjectFiles", "Reports");
+									// get the single file project Reports folder's path
+									var directoryName = Path.GetDirectoryName(filePath);
+									if (!string.IsNullOrEmpty(directoryName))
+									{
+										var projectName = Path.GetFileNameWithoutExtension(projectInfoNode.Attributes["ProjectFilePath"]?.Value);
+										filePath = Path.Combine(directoryName, $"{projectName}.ProjectFiles", "Reports");
+									}
 								}
 							}
 						}
@@ -314,15 +327,14 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 		}
 
-		private bool ReportsFolderExists(string projectFolderPath, string reportsFolderPath)
+		private bool ReportsFolderExists(string reportsFolderPath)
 		{
 			if (!string.IsNullOrEmpty(reportsFolderPath))
 			{
 				return ReportFileExist(reportsFolderPath);
 			}
-			var projectPath = new Uri(projectFolderPath).LocalPath;
-			reportsFolderPath = Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)), "Reports");
-			return ReportFileExist(reportsFolderPath);
+
+			return false;
 		}
 
 		/// <summary>

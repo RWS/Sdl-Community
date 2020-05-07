@@ -281,8 +281,11 @@ namespace Sdl.Community.ExportAnalysisReports
 				}
 				else
 				{
-					var projectsFolderPath = _projectXmlPath.Substring(0, _projectXmlPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
-					projectDetails.ProjectPath = projectsFolderPath + projectFolderPath;
+					var projectsFolderPath = Path.GetDirectoryName(_projectXmlPath);
+					if (!IsNullOrEmpty(projectsFolderPath))
+					{
+						projectDetails.ProjectPath = Path.Combine(projectsFolderPath, projectFolderPath);
+					}
 				}
 
 				var projectStatus = ProjectInformation.GetProjectStatus(projectDetails.ProjectPath);
@@ -716,7 +719,7 @@ namespace Sdl.Community.ExportAnalysisReports
 					var projectsPathList = Directory.GetFiles(loadFolderPath.FileName, "*.sdlproj", SearchOption.AllDirectories);
 					foreach (var projectPath in projectsPathList)
 					{
-						var reportFolderPath = Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)), "Reports");
+						var reportFolderPath = Path.Combine(Path.GetDirectoryName(projectPath), "Reports");
 						if (_reportService.ReportFileExist(reportFolderPath))
 						{
 							var projectDetails = ProjectInformation.GetExternalProjectDetails(projectPath);

@@ -17,7 +17,7 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 
 		bool IsReportGenerated(BindingList<ProjectDetails> projects, OptionalInformation optionalInformation, string reportOutputPath, bool isChecked);
 
-		string JsonPath { get; set; }
+		string JsonPath { get;  }
 		string ReportsFolderPath { get; set; }
 	}
 }
