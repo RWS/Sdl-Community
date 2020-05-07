@@ -275,7 +275,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		/// <param name="optionalInformation"></param>
 		/// <param name="projects"></param>
 		/// <returns></returns>
-		public bool IsReportGenerated(string reportOutputPath, bool isChecked, OptionalInformation optionalInformation, BindingList<ProjectDetails> projects)
+		public bool IsReportGenerated(BindingList<ProjectDetails> projects, OptionalInformation optionalInformation, string reportOutputPath, bool isChecked)
 		{
 			try
 			{
@@ -301,7 +301,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 								project.ReportPath = reportOutputPath;
 							}
 
-							WriteReportFile(project, languageReport, isChecked, optionalInformation);
+							WriteReportFile(project, optionalInformation, languageReport, isChecked);
 						}
 					}
 				}
@@ -326,13 +326,13 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		}
 
 		/// <summary>
-		/// Write the report file based on the Anaylse file 
+		/// Write the report file based on the Analyse file 
 		/// </summary>
 		/// <param name="project"></param>
 		/// <param name="languageReport"></param>
 		/// <param name="isChecked"></param>
 		/// <param name="optionalInformation"></param>
-		private void WriteReportFile(ProjectDetails project, KeyValuePair<string,bool> languageReport, bool isChecked, OptionalInformation optionalInformation)
+		private void WriteReportFile(ProjectDetails project, OptionalInformation optionalInformation, KeyValuePair<string,bool> languageReport, bool isChecked)
 		{
 			var streamPath = Path.Combine($"{project.ReportPath}{Path.DirectorySeparatorChar}", $"{project.ProjectName}_{languageReport.Key}.csv");
 			using (var sw = new StreamWriter(streamPath))

@@ -1203,7 +1203,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			if (!IsNullOrEmpty(reportOutputPath.Text))
 			{
-				var isReportGenerated = _reportService.IsReportGenerated(reportOutputPath.Text, includeHeaderCheck.Checked, _optionalInformation, _projectsDataSource);
+				var isReportGenerated = _reportService.IsReportGenerated(_projectsDataSource, _optionalInformation, reportOutputPath.Text, includeHeaderCheck.Checked);
 				if (isReportGenerated)
 				{
 					ClearItemsAfterExport();
