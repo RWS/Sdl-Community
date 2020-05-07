@@ -253,7 +253,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			{
 				_help.CreateDirectory(reportOutputPath);
 				var projectsToBeExported = projects.Where(p => p.ShouldBeExported).ToList();
-				var areCheckedLanguages = projectsToBeExported.Any(p => p.LanguagesForPoject.Any(l => l.Value));
+				var areCheckedLanguages = projectsToBeExported.Any(p => p.PojectLanguages.Any(l => l.Value));
 				if (!areCheckedLanguages && projectsToBeExported.Count >= 1)
 				{
 					_messageBoxService.ShowInformationMessage(PluginResources.SelectLanguage_Export_Message, PluginResources.ExportResult_Label);
@@ -262,9 +262,9 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				foreach (var project in projectsToBeExported)
 				{
 					// check which languages to export
-					if (project.LanguagesForPoject != null)
+					if (project.PojectLanguages != null)
 					{
-						var checkedLanguages = project.LanguagesForPoject.Where(l => l.Value).ToList();
+						var checkedLanguages = project.PojectLanguages.Where(l => l.Value).ToList();
 
 						foreach (var languageReport in checkedLanguages)
 						{

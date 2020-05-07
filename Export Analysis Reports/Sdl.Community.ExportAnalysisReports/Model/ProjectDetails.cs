@@ -12,7 +12,7 @@ namespace Sdl.Community.ExportAnalysisReports.Model
 		public string ReportPath { get; set; }
 		public string ReportsFolderPath { get; set; }
 		public bool IsSingleFileProject { get; set; }
-		public Dictionary<string, bool> LanguagesForPoject { get; set; }
+		public Dictionary<string, bool> PojectLanguages { get; set; }
 		public Dictionary<string, string> LanguageAnalysisReportPaths { get; set; }
 
 		public string ProjectFolderPath => Path.GetDirectoryName(ProjectPath);

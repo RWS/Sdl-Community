@@ -59,12 +59,12 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 				ProjectName = projectInfo.Name,
 				ProjectPath = projectInfo.Uri.LocalPath,
 				Status = GetInternalProjectStatus(fileBasedProject),
-				LanguagesForPoject =  new Dictionary<string, bool>(),
+				PojectLanguages =  new Dictionary<string, bool>(),
 				ShouldBeExported = true
 			};
 			foreach (var language in projectInfo.TargetLanguages)
 			{
-				projectDetails.LanguagesForPoject.Add(language.DisplayName,true);
+				projectDetails.PojectLanguages.Add(language.DisplayName,true);
 			}
 			ProjectController.Close(fileBasedProject);
 

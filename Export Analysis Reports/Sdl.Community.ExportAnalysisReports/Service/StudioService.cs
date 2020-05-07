@@ -58,18 +58,18 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			return newProjectDetails;
 		}
 
-		public void SetLanguagesForProject(ProjectDetails project, Dictionary<string, LanguageDirection> languages)
+		public void SetProjectLanguages(ProjectDetails project, Dictionary<string, LanguageDirection> languages)
 		{
 			try
 			{
 				foreach (var language in languages)
 				{
-					project?.LanguagesForPoject?.Add(language.Value.TargetLang.EnglishName, false);
+					project?.PojectLanguages?.Add(language.Value.TargetLang.EnglishName, false);
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetLanguagesForProject method: {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"SetProjectLanguages method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -115,6 +115,24 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				Log.Logger.Error($"LoadLanguageDirections method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return languages;
+		}
+
+		public void FillLanguages(BindingList<LanguageDetails> languages, BindingList<ProjectDetails> projects, ProjectDetails selectedProject)
+		{
+			var selectedProjectToExport = projects?.FirstOrDefault(e => e.ShouldBeExported && e.ProjectName.Equals(selectedProject.ProjectName));
+
+			if (selectedProjectToExport?.PojectLanguages != null)
+			{
+				foreach (var language in selectedProjectToExport.PojectLanguages.ToList())
+				{
+					var languageDetails = languages?.FirstOrDefault(n => n.LanguageName.Equals(language.Key));
+					if (languageDetails == null)
+					{
+						var newLanguage = new LanguageDetails {LanguageName = language.Key, IsChecked = true};
+						languages?.Add(newLanguage);
+					}
+				}
+			}
 		}
 
 		private string GetInstalledStudioShortVersion()
