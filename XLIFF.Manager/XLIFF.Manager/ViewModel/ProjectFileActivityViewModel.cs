@@ -14,6 +14,8 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		public ProjectFileActivityViewModel(List<ProjectFileActivityModel> projectFileActivities)
 		{
 			ProjectFileActivities = projectFileActivities;
+			SelectedProjectFileActivity = ProjectFileActivities?.Count > 0 ? ProjectFileActivities[0] : null;
+			SelectedProjectFileActivities = new List<ProjectFileActivityModel> { SelectedProjectFileActivity };
 		}
 
 		public List<ProjectFileActivityModel> ProjectFileActivities

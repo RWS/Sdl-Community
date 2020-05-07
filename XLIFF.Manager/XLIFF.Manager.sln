@@ -5,6 +5,12 @@ VisualStudioVersion = 15.0.28307.960
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLIFF.Manager", "XLIFF.Manager\XLIFF.Manager.csproj", "{666C678A-5637-40E1-BB6B-D1E1C8CBED70}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0F87361F-4263-4919-9CF2-D4CB19B68D5B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{6B3597EB-0642-47A3-841A-D3AED31928BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLIFF.Manager.UnitTests", "XLIFF.Manager\Tests\UnitTests\XLIFF.Manager.UnitTests\XLIFF.Manager.UnitTests.csproj", "{8BD942E1-6993-4DED-B99F-E65841224835}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +21,17 @@ Global
 		{666C678A-5637-40E1-BB6B-D1E1C8CBED70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{666C678A-5637-40E1-BB6B-D1E1C8CBED70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{666C678A-5637-40E1-BB6B-D1E1C8CBED70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BD942E1-6993-4DED-B99F-E65841224835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BD942E1-6993-4DED-B99F-E65841224835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BD942E1-6993-4DED-B99F-E65841224835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD942E1-6993-4DED-B99F-E65841224835}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6B3597EB-0642-47A3-841A-D3AED31928BB} = {0F87361F-4263-4919-9CF2-D4CB19B68D5B}
+		{8BD942E1-6993-4DED-B99F-E65841224835} = {6B3597EB-0642-47A3-841A-D3AED31928BB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D0F578BD-07AC-4017-AB6C-313E0057C4B5}
