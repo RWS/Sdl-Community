@@ -14,8 +14,7 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 		string GetJsonReportPath(string jsonPath);
 		bool IsSameReportPath(string reportOutputPath);
 		bool ReportFolderExist(XmlNode projectInfoNode, string projectXmlPath);
-
-		bool IsReportGenerated(BindingList<ProjectDetails> projects, OptionalInformation optionalInformation, string reportOutputPath, bool isChecked);
+		bool GenerateReportFile(BindingList<ProjectDetails> projects, OptionalInformation optionalInformation, string reportOutputPath, bool isChecked);
 
 		string JsonPath { get;  }
 		string ReportsFolderPath { get; set; }

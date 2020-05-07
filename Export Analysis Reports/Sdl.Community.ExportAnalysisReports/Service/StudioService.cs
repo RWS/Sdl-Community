@@ -44,14 +44,16 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			return projectInfo;
 		}
 
-		public BindingList<ProjectDetails> BindProjects(List<ProjectDetails> projects, BindingList<ProjectDetails> projectsBindingList)
+		public BindingList<ProjectDetails> SetProjects(List<ProjectDetails> projects, BindingList<ProjectDetails> newProjectDetails)
 		{
-			foreach (var project in projects)
+			if (newProjectDetails != null)
 			{
-				projectsBindingList.Add(project);
+				foreach (var project in projects)
+				{
+					newProjectDetails.Add(project);
+				}
 			}
-
-			return projectsBindingList;
+			return newProjectDetails;
 		}
 
 		public void SetLanguagesForProject(ProjectDetails project, Dictionary<string, LanguageDirection> languages)

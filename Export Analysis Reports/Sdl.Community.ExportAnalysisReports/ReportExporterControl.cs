@@ -1077,11 +1077,11 @@ namespace Sdl.Community.ExportAnalysisReports
 			return projectsBindingList;
 		}
 
-		private BindingList<ProjectDetails> GetProjectsBindingList(List<ProjectDetails> projectDetails, BindingList<ProjectDetails> projectsBindingList)
+		private BindingList<ProjectDetails> GetProjectsBindingList(List<ProjectDetails> projectDetails, BindingList<ProjectDetails> newProjectDetails)
 		{
 			if (projectDetails != null && projectDetails.Count > 0)
 			{
-				projectsBindingList = _studioService.BindProjects(projectDetails, projectsBindingList);
+				newProjectDetails = _studioService.SetProjects(projectDetails, newProjectDetails);
 			}
 			else
 			{
@@ -1100,7 +1100,7 @@ namespace Sdl.Community.ExportAnalysisReports
 				}
 			}
 
-			return projectsBindingList;
+			return newProjectDetails;
 		}
 
 		private void SetProjectsInformation(bool isSelectAllProjects)
@@ -1206,7 +1206,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			if (!IsNullOrEmpty(reportOutputPath.Text))
 			{
-				var isReportGenerated = _reportService.IsReportGenerated(_projectsDataSource, _optionalInformation, reportOutputPath.Text, includeHeaderCheck.Checked);
+				var isReportGenerated = _reportService.GenerateReportFile(_projectsDataSource, _optionalInformation, reportOutputPath.Text, includeHeaderCheck.Checked);
 				if (isReportGenerated)
 				{
 					ClearItemsAfterExport();

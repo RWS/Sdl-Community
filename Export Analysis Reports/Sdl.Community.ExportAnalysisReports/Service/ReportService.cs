@@ -288,7 +288,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		/// <param name="optionalInformation"></param>
 		/// <param name="projects"></param>
 		/// <returns></returns>
-		public bool IsReportGenerated(BindingList<ProjectDetails> projects, OptionalInformation optionalInformation, string reportOutputPath, bool isChecked)
+		public bool GenerateReportFile(BindingList<ProjectDetails> projects, OptionalInformation optionalInformation, string reportOutputPath, bool isChecked)
 		{
 			try
 			{
@@ -329,12 +329,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 		private bool ReportsFolderExists(string reportsFolderPath)
 		{
-			if (!string.IsNullOrEmpty(reportsFolderPath))
-			{
-				return ReportFileExist(reportsFolderPath);
-			}
-
-			return false;
+			return !string.IsNullOrEmpty(reportsFolderPath) && ReportFileExist(reportsFolderPath);
 		}
 
 		/// <summary>
