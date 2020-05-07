@@ -8,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 	{
 		public StoreAction()
 		{
-			Name = "Download SDLMachineTranslationCloud from AppStore";
+			Name = "Download SDL MT Cloud from AppStore";
 		}
 
 		public override void Execute()
@@ -17,7 +17,7 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "SDLMachineTranslationCloud results";
+		public override string Category => "SDL MT Cloud results";
 		public override Icon Icon => PluginResources.TellMe1;
 	}
 }

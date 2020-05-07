@@ -5,24 +5,24 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 	[TellMeProvider]
 	public class TellMeProvider : ITellMeProvider
 	{
-		public string Name => "SDLMachineTranslationCloud tell me provider";
+		public string Name => "SDL MT Cloud tell me provider";
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
 			new CommunitySupportAction
 			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdl machine translation cloud", "sdlmachinetranslationcloud community", "sdlmachinetranslationcloud support" }
+				Keywords = new []{ "sdl mt cloud", "machine translation", "community", "support" }
 			},
 			new ContactAction
 			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdl machine translation cloud", "sdlmachinetranslationcloud contact", "sdlmachinetranslationcloud trial" }
+				Keywords = new []{ "sdl mt cloud", "machine translation", "contact", "trial" }
 			},
 			new HelpAction
 			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdl machine translation cloud", "sdlmachinetranslationcloud help", "sdlmachinetranslationcloud guide" }
+				Keywords = new []{ "sdl mt cloud", "machine translation", "help", "guide" }
 			},
 			new StoreAction
 			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdl machine translation cloud", "sdlmachinetranslationcloud store", "sdlmachinetranslationcloud download" }
+				Keywords = new []{ "sdl mt cloud", "machine translation", "store", "download" }
 			}
 		};
 	}
