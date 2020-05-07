@@ -50,7 +50,6 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string Details { get; set; }
 
-
 		//TODO
 		// Options
 		// Segments etc...

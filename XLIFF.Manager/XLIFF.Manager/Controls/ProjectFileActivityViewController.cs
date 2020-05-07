@@ -6,9 +6,9 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 namespace Sdl.Community.XLIFF.Manager.Controls
 {
 	[ViewPart(
-		Id = "XLIFFManagerProjectFileActivity_ViewPart",
-		Name = "XLIFFManagerProjectFileActivity_Name",
-		Description = "XLIFFManagerProjectFileActivity_Description"
+		Id = "XLIFFManager_ProjectFileActivity_ViewPart",
+		Name = "XLIFFManager_ProjectFileActivity_Name",
+		Description = "XLIFFManager_ProjectFileActivity_Description"
 	)]
 	[ViewPartLayout(Dock = DockType.Bottom, Pinned = false, Height = 200, ZIndex = 0, LocationByType = typeof(XLIFFManagerViewController))]
 	public class ProjectFileActivityViewController : AbstractViewPartController

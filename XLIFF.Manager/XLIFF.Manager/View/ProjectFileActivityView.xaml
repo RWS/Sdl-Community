@@ -22,8 +22,7 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
-			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-
+			
 			<CollectionViewSource x:Key="ProjectFileActivities" Source="{Binding ProjectFileActivities}">
 				<CollectionViewSource.SortDescriptions>
 					<componentModel:SortDescription PropertyName="Name"/>

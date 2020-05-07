@@ -45,13 +45,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				_selectedProjectFileActions = value;
 				OnPropertyChanged(nameof(SelectedProjectFileActions));
 
-				OnPropertyChanged(nameof(StatusLabel));
-
-				//if (ProjectFileActivityViewModel != null && _selectedProjectFileActions != null)
-				//{
-				//	ProjectFileActivityViewModel.ProjectFileActivities = _selectedProjectFileActions?.Cast<ProjectFileActionModel>()
-				//		.SelectMany(a => a.ProjectFileActivityModels).ToList();
-				//}
+				OnPropertyChanged(nameof(StatusLabel));			
 			}
 		}
 
@@ -80,8 +74,10 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		{
 			get
 			{				
-				var message = "Projects: " + _projectFileActions.Select(a=>a.ProjectModel).Distinct().Count() 
-				                           + ", Files: " + _projectFileActions?.Count + ", Selected: " + _selectedProjectFileActions?.Count;
+				var message = string.Format(PluginResources.StatusLabel_Projects_0_Files_1_Selected_2, 
+					_projectFileActions.Select(a => a.ProjectModel).Distinct().Count(), 
+					_projectFileActions?.Count, 
+					_selectedProjectFileActions?.Count);
 				return message;
 			}
 		}

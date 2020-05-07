@@ -4,7 +4,10 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 
 namespace Sdl.Community.XLIFF.Manager.Actions
 {
-	[Action("XLIFFManagerOpenSettingsAction", typeof(XLIFFManagerViewController), Name = " Settings ", Icon = "Settings", Description = "Settings ")]
+	[Action("XLIFFManager_OpenSettings_Action", typeof(XLIFFManagerViewController), 
+		Name = "XLIFFManager_Settings_Name", 
+		Icon = "Settings", 
+		Description = "XLIFFManager_Settings_Description")]
 	[ActionLayout(typeof(XLIFFManagerSettingsGroup), 7, DisplayType.Large)]
 	public class OpenSettingsAction: AbstractViewControllerAction<XLIFFManagerViewController>
 	{

@@ -17,7 +17,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		private IList _selectedProjectModels;
 		private ICommand _clearSelectionCommand;
 		private ICommand _clearFilterCommand;
-		
+
 		public ProjectsNavigationViewModel(List<ProjectModel> projectInfoModels)
 		{
 			_projectInfoModels = projectInfoModels;
@@ -54,33 +54,10 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		{
 			get
 			{
-				var message = "Selected: " + _selectedProjectModels?.Count;
+				var message = string.Format(PluginResources.StatusLabel_Selected_0, _selectedProjectModels?.Count);
 				return message;
-			}			
+			}
 		}
-
-		//public List<ClientModel> ClientModels
-		//{
-		//	get
-		//	{
-		//		var clientModels = new List<ClientModel>();
-
-		//		foreach (var filteredProjectModel in FilteredProjectModels)
-		//		{
-		//			var clientModel = clientModels.FirstOrDefault(a => a.Name == filteredProjectModel.ClientName);
-		//			if (clientModel == null)
-		//			{
-		//				clientModels.Add(new ClientModel{Name = filteredProjectModel.ClientName, ProjectModels = new List<ProjectModel>{filteredProjectModel}});
-		//			}
-		//			else
-		//			{
-		//				clientModel.ProjectModels.Add(filteredProjectModel);
-		//			}
-		//		}
-
-		//		return clientModels;
-		//	}
-		//}
 
 		public List<ProjectModel> FilteredProjectModels
 		{
