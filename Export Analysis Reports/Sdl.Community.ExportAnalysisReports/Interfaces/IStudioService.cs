@@ -14,6 +14,5 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 		void SetProjectLanguages(ProjectDetails project, Dictionary<string, LanguageDirection> languages);
 		void RemoveLanguages(Dictionary<string, bool> languagesDictionary, BindingList<LanguageDetails> languages);
 		Dictionary<string, LanguageDirection> LoadLanguageDirections(XmlDocument doc);
-		void FillLanguages(BindingList<LanguageDetails> languages, BindingList<ProjectDetails> projects, ProjectDetails selectedProject);
 	}
 }

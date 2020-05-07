@@ -98,7 +98,20 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			try
 			{
-				_studioService.FillLanguages(_languages, _projectsDataSource, selectedProject);
+				var selectedProjectToExport = _projectsDataSource?.FirstOrDefault(e => e.ShouldBeExported && e.ProjectName.Equals(selectedProject.ProjectName));
+
+				if (selectedProjectToExport?.PojectLanguages != null)
+				{
+					foreach (var language in selectedProjectToExport.PojectLanguages.ToList())
+					{
+						var languageDetails = _languages?.FirstOrDefault(n => n.LanguageName.Equals(language.Key));
+						if (languageDetails == null)
+						{
+							var newLanguage = new LanguageDetails { LanguageName = language.Key, IsChecked = true };
+							_languages?.Add(newLanguage);
+						}
+					}
+				}
 
 				languagesListBox.DataSource = _languages;
 				languagesListBox.DisplayMember = "LanguageName";
