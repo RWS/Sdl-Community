@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using Sdl.Community.ExportAnalysisReports.Model;
 
 namespace Sdl.Community.ExportAnalysisReports.Helpers

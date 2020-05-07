@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -16,12 +17,15 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		private readonly IMessageBoxService _messageBoxService;
 		private readonly IStudioService _studioService;
 		private readonly string _communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "ExportAnalysisReports");
+		private Help _help;
 
 		public static readonly Log Log = Log.Instance;
 		public string JsonPath { get; set; }
+		public string ReportsFolderPath { get; set; }
 
 		public ReportService(IMessageBoxService messageBoxService, IStudioService studioService)
 		{
+			_help = new Help();
 			_messageBoxService = messageBoxService;
 			_studioService = studioService;
 			JsonPath = Path.Combine(_communityFolderPath, "ExportAnalysisReportSettings.json");
@@ -134,6 +138,11 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			return languages;
 		}
 
+		/// <summary>
+		/// Check if the exported path is the same
+		/// </summary>
+		/// <param name="reportOutputPath"></param>
+		/// <returns></returns>
 		public bool IsSameReportPath(string reportOutputPath)
 		{
 			var jsonReportPath = GetJsonReportPath(JsonPath);
@@ -175,6 +184,65 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			return false;
 		}
 
+		/// <summary>
+		/// Check if the report folder exists
+		/// </summary>
+		/// <param name="projectInfoNode"></param>
+		/// <param name="projectXmlPath"></param>
+		/// <returns></returns>
+		public bool ReportFolderExist(XmlNode projectInfoNode, string projectXmlPath)
+		{
+			try
+			{
+				if (projectInfoNode?.Attributes != null)
+				{
+					var filePath = string.Empty;
+
+					if (projectInfoNode.Attributes["ProjectFilePath"] != null)
+					{
+						filePath = projectInfoNode.Attributes["ProjectFilePath"]?.Value;
+						if (!Path.IsPathRooted(filePath))
+						{
+							//project is located inside "Projects" folder in Studio
+							var projectsFolderPath = projectXmlPath.Substring(0, projectXmlPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
+							var projectName = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal));
+							filePath = Path.Combine(projectsFolderPath, projectName, "Reports");
+						}
+						else
+						{
+							// is external or single file project
+							var reportsPath = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
+							filePath = Path.Combine(reportsPath, "Reports");
+							if (!Directory.Exists(filePath))
+							{
+								// get the single file project Reports folder's path
+								var directoryName = Path.GetDirectoryName(filePath);
+								if (!string.IsNullOrEmpty(directoryName))
+								{
+									var projectName = Path.GetFileNameWithoutExtension(projectInfoNode.Attributes["ProjectFilePath"]?.Value);
+									filePath = Path.Combine(directoryName, $"{projectName}.ProjectFiles", "Reports");
+								}
+							}
+						}
+					}
+
+					ReportsFolderPath = filePath;
+					return ReportFileExist(filePath);
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"ReportFolderExist method: {ex.Message}\n {ex.StackTrace}");
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		///  Save report output path within json file
+		/// (It is saved within a json file, because it is a general path and is not related to an individual project)
+		/// </summary>
+		/// <param name="reportOutputPath"></param>
 		public void SaveExportPath(string reportOutputPath)
 		{
 			if (!string.IsNullOrEmpty(reportOutputPath))
@@ -199,6 +267,53 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 		}
 
+		/// <summary>
+		/// Check if the report was successfully generated
+		/// </summary>
+		/// <param name="reportOutputPath"></param>
+		/// <param name="isChecked"></param>
+		/// <param name="optionalInformation"></param>
+		/// <param name="projects"></param>
+		/// <returns></returns>
+		public bool IsReportGenerated(string reportOutputPath, bool isChecked, OptionalInformation optionalInformation, BindingList<ProjectDetails> projects)
+		{
+			try
+			{
+				_help.CreateDirectory(reportOutputPath);
+				var projectsToBeExported = projects.Where(p => p.ShouldBeExported).ToList();
+				var areCheckedLanguages = projectsToBeExported.Any(p => p.LanguagesForPoject.Any(l => l.Value));
+				if (!areCheckedLanguages && projectsToBeExported.Count >= 1)
+				{
+					_messageBoxService.ShowInformationMessage(PluginResources.SelectLanguage_Export_Message, PluginResources.ExportResult_Label);
+					return false;
+				}
+				foreach (var project in projectsToBeExported)
+				{
+					// check which languages to export
+					if (project.LanguagesForPoject != null)
+					{
+						var checkedLanguages = project.LanguagesForPoject.Where(l => l.Value).ToList();
+
+						foreach (var languageReport in checkedLanguages)
+						{
+							if (string.IsNullOrEmpty(project.ReportPath))
+							{
+								project.ReportPath = reportOutputPath;
+							}
+
+							WriteReportFile(project, languageReport, isChecked, optionalInformation);
+						}
+					}
+				}
+				return true;
+			}
+			catch (Exception exception)
+			{
+				Log.Logger.Error($"GenerateReport method: {exception.Message}\n {exception.StackTrace}");
+				throw;
+			}
+		}
+
 		private bool ReportsFolderExists(string projectFolderPath, string reportsFolderPath)
 		{
 			if (!string.IsNullOrEmpty(reportsFolderPath))
@@ -208,6 +323,30 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			var projectPath = new Uri(projectFolderPath).LocalPath;
 			reportsFolderPath = Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)), "Reports");
 			return ReportFileExist(reportsFolderPath);
+		}
+
+		/// <summary>
+		/// Write the report file based on the Anaylse file 
+		/// </summary>
+		/// <param name="project"></param>
+		/// <param name="languageReport"></param>
+		/// <param name="isChecked"></param>
+		/// <param name="optionalInformation"></param>
+		private void WriteReportFile(ProjectDetails project, KeyValuePair<string,bool> languageReport, bool isChecked, OptionalInformation optionalInformation)
+		{
+			var streamPath = Path.Combine($"{project.ReportPath}{Path.DirectorySeparatorChar}", $"{project.ProjectName}_{languageReport.Key}.csv");
+			using (var sw = new StreamWriter(streamPath))
+			{
+				if (project.LanguageAnalysisReportPaths != null)
+				{
+					var analyseReportPath = project.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(languageReport.Key));
+					if (!analyseReportPath.Equals(new KeyValuePair<string, string>()))
+					{
+						var report = new StudioAnalysisReport(analyseReportPath.Value);
+						sw.Write(report.ToCsv(isChecked, optionalInformation));
+					}
+				}
+			}
 		}
 	}
 }

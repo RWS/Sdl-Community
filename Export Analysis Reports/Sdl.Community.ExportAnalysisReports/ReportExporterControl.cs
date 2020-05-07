@@ -27,7 +27,6 @@ namespace Sdl.Community.ExportAnalysisReports
 		private bool _isAnyProjectUnchecked;
 		private bool _isStatusChanged;
 		private Helpers.Help _help;
-		private string _reportsFolderPath;
 		private readonly IStudioService _studioService;
 		private readonly IReportService _reportService;
 
@@ -152,7 +151,7 @@ namespace Sdl.Community.ExportAnalysisReports
 						var projectInfo = ((XmlNode)item).SelectSingleNode("./ProjectInfo");
 						if (projectInfo?.Attributes != null)
 						{
-							var reportExist = ReportFolderExist((XmlNode)item);
+							var reportExist = _reportService.ReportFolderExist((XmlNode)item, _projectXmlPath);
 							if (reportExist)
 							{
 								var xmlAttributeCollection = ((XmlNode) item)?.Attributes;
@@ -222,7 +221,7 @@ namespace Sdl.Community.ExportAnalysisReports
 						var projectInfo = ((XmlNode)item).SelectSingleNode("./ProjectInfo");
 						if (projectInfo?.Attributes != null && projectInfo.Attributes["IsInPlace"].Value == "true")
 						{
-							var reportExist = ReportFolderExist((XmlNode)item);
+							var reportExist = _reportService.ReportFolderExist((XmlNode)item, _projectXmlPath);
 							if (reportExist)
 							{
 								var projectDetails = CreateProjectDetails((XmlNode)item, true);
@@ -246,54 +245,6 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 		}
 
-		private bool ReportFolderExist(XmlNode projectInfoNode)
-		{
-			try
-			{
-				if (projectInfoNode?.Attributes != null)
-				{
-					var filePath = Empty;
-
-					if (projectInfoNode.Attributes["ProjectFilePath"] != null)
-					{
-						filePath = projectInfoNode.Attributes["ProjectFilePath"]?.Value;
-						if (!Path.IsPathRooted(filePath))
-						{
-							//project is located inside "Projects" folder in Studio
-							var projectsFolderPath = _projectXmlPath.Substring(0, _projectXmlPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
-							var projectName = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal));
-							filePath = Path.Combine(projectsFolderPath, projectName, "Reports");
-						}
-						else
-						{
-							// is external or single file project
-							var reportsPath = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
-							filePath = Path.Combine(reportsPath, "Reports");
-							if (!Directory.Exists(filePath))
-							{
-								// get the single file project Reports folder's path
-								var directoryName = Path.GetDirectoryName(filePath);
-								if (!IsNullOrEmpty(directoryName))
-								{
-									var projectName = Path.GetFileNameWithoutExtension(projectInfoNode.Attributes["ProjectFilePath"]?.Value);
-									filePath = Path.Combine(directoryName, $"{projectName}.ProjectFiles", "Reports");
-								}
-							}
-						}
-					}
-
-					_reportsFolderPath = filePath;
-					return _reportService.ReportFileExist(filePath);
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"ReportFolderExist method: {ex.Message}\n {ex.StackTrace}");
-			}
-
-			return false;
-		}
-
 		/// <summary>
 		/// Creates project details for given project from xml file
 		/// </summary>
@@ -306,7 +257,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			{
 				LanguagesForPoject = new Dictionary<string, bool>(),
 				ShouldBeExported = false,
-				ReportsFolderPath = _reportsFolderPath
+				ReportsFolderPath = _reportService.ReportsFolderPath
 			};
 			var projectFolderPath = Empty;
 			var doc = new XmlDocument();
@@ -609,73 +560,11 @@ namespace Sdl.Community.ExportAnalysisReports
 			var isSamePath = _reportService.IsSameReportPath(reportOutputPath.Text);
 			if (!isSamePath)
 			{
+				// Save the new selected export folder path if it was changed by the user
 				_reportService.SaveExportPath(reportOutputPath.Text);
 			}
 
 			GenerateReport();
-		}
-
-		private void GenerateReport()
-		{
-			try
-			{
-				if (!IsNullOrEmpty(reportOutputPath.Text))
-				{
-					_help.CreateDirectory(reportOutputPath.Text);
-					var projectsToBeExported = _projectsDataSource.Where(p => p.ShouldBeExported).ToList();
-					var areCheckedLanguages = projectsToBeExported.Any(p => p.LanguagesForPoject.Any(l => l.Value));
-					if (!areCheckedLanguages && projectsToBeExported.Count >= 1)
-					{
-						_messageBoxService.ShowOwnerInformationMessage(this, PluginResources.SelectLanguage_Export_Message, PluginResources.ExportResult_Label);
-					}
-					else
-					{
-						foreach (var project in projectsToBeExported)
-						{
-							// check which languages to export
-							if (project.LanguagesForPoject != null)
-							{
-								var checkedLanguages = project.LanguagesForPoject.Where(l => l.Value).ToList();
-
-								foreach (var languageReport in checkedLanguages)
-								{
-									if (IsNullOrEmpty(project.ReportPath))
-									{
-										project.ReportPath = reportOutputPath.Text;
-									}
-
-									//write report to Reports folder
-									var streamPath = Path.Combine($"{project.ReportPath}{Path.DirectorySeparatorChar}", $"{project.ProjectName}_{languageReport.Key}.csv");
-									using (var sw = new StreamWriter(streamPath))
-									{
-										if (project.LanguageAnalysisReportPaths != null)
-										{
-											var analyseReportPath = project.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(languageReport.Key));
-											if (!analyseReportPath.Equals(new KeyValuePair<string, string>()))
-											{
-												var report = new StudioAnalysisReport(analyseReportPath.Value);
-												sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
-											}
-										}
-									}
-								}
-							}
-						}
-						ClearItemsAfterExport();
-						_messageBoxService.ShowOwnerInformationMessage(this, PluginResources.ExportSuccess_Message, PluginResources.ExportResult_Label);
-					}
-				}
-				else
-				{
-					_messageBoxService.ShowOwnerInformationMessage(this, PluginResources.SelectFolder_Message, string.Empty);
-				}
-
-			}
-			catch (Exception exception)
-			{
-				Log.Logger.Error($"GenerateReport method: {exception.Message}\n {exception.StackTrace}");
-				throw;
-			}
 		}
 
 		private void UncheckAllProjects()
@@ -1308,6 +1197,23 @@ namespace Sdl.Community.ExportAnalysisReports
 			_languages.Clear();
 			chkBox_SelectAllProjects.Checked = false;
 			chkBox_SelectAllLanguages.Checked = false;
+		}
+
+		private void GenerateReport()
+		{
+			if (!IsNullOrEmpty(reportOutputPath.Text))
+			{
+				var isReportGenerated = _reportService.IsReportGenerated(reportOutputPath.Text, includeHeaderCheck.Checked, _optionalInformation, _projectsDataSource);
+				if (isReportGenerated)
+				{
+					ClearItemsAfterExport();
+					_messageBoxService.ShowOwnerInformationMessage(this, PluginResources.ExportSuccess_Message, PluginResources.ExportResult_Label);
+				}
+			}
+			else
+			{
+				_messageBoxService.ShowOwnerInformationMessage(this, PluginResources.SelectFolder_Message, string.Empty);
+			}
 		}
 	}
 }
