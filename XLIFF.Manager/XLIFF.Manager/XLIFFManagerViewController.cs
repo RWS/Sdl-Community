@@ -50,12 +50,23 @@ namespace Sdl.Community.XLIFF.Manager
 			_eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 			_eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>()?.Subscribe(OnStudioWindowCreatedNotificationEvent);
 
-			//_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			//var project = _projectsController.CurrentProject.GetProjectInfo();			
 
-			// TODO this will be replaced with a call to recover the relevant data from the projects loaded in Studio
-			var testDataUtil = new TestDataUtil();
+			// TODO this will be replaced with a call to recover the relevant data from the projects loaded in Studio			
+			var testDataUtil = new TestDataUtil(_imageService);
 			_projectModels = testDataUtil.GetTestProjectData();
+		}
+
+		protected override Control GetExplorerBarControl()
+		{
+			if (_projectsNavigationViewControl == null)
+			{
+				_projectsNavigationViewModel = new ProjectsNavigationViewModel(_projectModels);
+				_projectsNavigationViewControl = new ProjectsNavigationViewControl(_projectsNavigationViewModel);
+			}
+
+			return _projectsNavigationViewControl;
 		}
 
 		protected override Control GetContentControl()
@@ -69,17 +80,6 @@ namespace Sdl.Community.XLIFF.Manager
 			}
 
 			return _projectFilesViewControl;
-		}
-
-		protected override Control GetExplorerBarControl()
-		{
-			if (_projectsNavigationViewControl == null)
-			{
-				_projectsNavigationViewModel = new ProjectsNavigationViewModel(_projectModels);
-				_projectsNavigationViewControl = new ProjectsNavigationViewControl(_projectsNavigationViewModel);
-			}
-
-			return _projectsNavigationViewControl;
 		}
 
 
@@ -126,6 +126,7 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			_projectFilesViewModel?.Dispose();
 			_projectsNavigationViewModel?.Dispose();
+
 			base.Dispose();
 		}
 	}

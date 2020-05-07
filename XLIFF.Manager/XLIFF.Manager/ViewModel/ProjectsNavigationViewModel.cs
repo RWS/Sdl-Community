@@ -10,7 +10,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
 	public class ProjectsNavigationViewModel : BaseModel, IDisposable
 	{
-		private readonly List<ProjectModel> _projectInfoModels;
+		private readonly List<ProjectModel> _projectModels;
 		private string _filterString;
 		private List<ProjectModel> _filteredProjectModels;
 		private ProjectModel _selectedProjectModel;
@@ -18,10 +18,10 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		private ICommand _clearSelectionCommand;
 		private ICommand _clearFilterCommand;
 
-		public ProjectsNavigationViewModel(List<ProjectModel> projectInfoModels)
+		public ProjectsNavigationViewModel(List<ProjectModel> projectModels)
 		{
-			_projectInfoModels = projectInfoModels;
-			FilteredProjectModels = _projectInfoModels;
+			_projectModels = projectModels;
+			FilteredProjectModels = _projectModels;
 			FilterString = string.Empty;
 		}
 
@@ -45,8 +45,8 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				OnPropertyChanged(nameof(FilterString));
 
 				FilteredProjectModels = string.IsNullOrEmpty(_filterString)
-					? _projectInfoModels
-					: _projectInfoModels.Where(a => a.Name.ToLower().Contains(_filterString)).ToList();
+					? _projectModels
+					: _projectModels.Where(a => a.Name.ToLower().Contains(_filterString.ToLower())).ToList();
 			}
 		}
 

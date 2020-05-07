@@ -6,7 +6,7 @@ using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Service;
 
-namespace Sdl.Community.XLIFF.Manager.TestData
+namespace XLIFF.Manager.UnitTests.Common
 {
 	public class TestDataUtil
 	{
@@ -17,8 +17,8 @@ namespace Sdl.Community.XLIFF.Manager.TestData
 			_imageService = imageService;
 		}
 
-		public List<ProjectModel> GetTestProjectData()
-		{			
+		public List<ProjectModel> GetDefaultTestProjectData()
+		{
 			var projectModels = new List<ProjectModel>();
 			projectModels.Add(GetProject("Avengers", "Project 0", new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("it-IT"), new CultureInfo("de-DE") }));
 			projectModels.Add(GetProject("Avengers", "Project 66", new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("it-IT"), new CultureInfo("de-DE"), new CultureInfo("fr-FR") }));
@@ -37,7 +37,7 @@ namespace Sdl.Community.XLIFF.Manager.TestData
 				Id = Guid.NewGuid().ToString(),
 				Name = projectName,
 				Path = projectName,
-				ProjectType = "SDL Project",				
+				ProjectType = "SDL Project",
 				ProjectFileActionModels = new List<ProjectFileActionModel>()
 			};
 
@@ -90,7 +90,7 @@ namespace Sdl.Community.XLIFF.Manager.TestData
 			{
 				projectFileActionModel.ProjectFileActivityModels.Add(
 					GetProjectFileActivity(projectFileActionModel, Enumerators.Action.Export, Enumerators.Status.Success,
-						projectFileActionModel.Date));				
+						projectFileActionModel.Date));
 			}
 
 			if (action == Enumerators.Action.Import)
