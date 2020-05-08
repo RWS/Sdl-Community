@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Windows;
 using Sdl.Community.MTCloud.Languages.Provider;
+using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguageCloud.IdentityApi;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -26,14 +28,23 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 
 			connectionService.SaveCredential(credentialStore);
-			
+
 			var translationService = new TranslationService(connectionService);
 			var languageProvider = new LanguageProvider();
 			var editorController = SdlTradosStudio.Application?.GetController<EditorController>();
-			
+			//TODO: Instantiate the new Rate it View part
+			//var rateIt = new RateItController();
+			//rateIt.Activate();
+			translationService.TranslationReceived += TranslationService_TranslationReceived;
+
 			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState, translationService, languageProvider, editorController);			
 			return provider;		
-		}		
+		}
+
+		private void TranslationService_TranslationReceived(Feedback translationFeedback)
+		{
+			MessageBox.Show(translationFeedback.TargetMTText);
+		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{

@@ -4,6 +4,8 @@ using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
+	public delegate void TranslationFeedbackEventRaiser(Feedback translationFeedback);
+
 	public interface ITranslationService
 	{
 		IConnectionService ConnectionService { get; }	
@@ -13,5 +15,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		Task<SubscriptionInfo> GetLanguagePairs(string accountId);
 
 		Task<MTCloudDictionaryInfo> GetDictionaries(string accountId);
+		 event TranslationFeedbackEventRaiser TranslationReceived;
 	}
 }

@@ -149,7 +149,9 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CommandHandler.cs" />
@@ -166,6 +168,7 @@
     <Compile Include="Model\AuthorizationResponse.cs" />
     <Compile Include="Model\ClientCredential.cs" />
     <Compile Include="Model\Credential.cs" />
+    <Compile Include="Model\Feedback.cs" />
     <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\TranslationRequest.cs" />
@@ -175,6 +178,7 @@
     <Compile Include="Model\UserCredential.cs" />
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Service\TranslationService.cs" />
+    <Compile Include="Studio\RateItController.cs" />
     <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\ContactAction.cs" />
@@ -223,6 +227,7 @@
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\CredentialsViewModel.cs" />
+    <Compile Include="ViewModel\RateItViewModel.cs" />
     <Compile Include="View\CredentialsWindow.xaml.cs">
       <DependentUpon>CredentialsWindow.xaml</DependentUpon>
     </Compile>
@@ -235,8 +240,24 @@
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
     <Compile Include="ViewModel\MTCodesViewModel.cs" />
+    <Compile Include="View\RateItControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\RateItControl.Designer.cs">
+      <DependentUpon>RateItControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\RateItWindow.xaml.cs">
+      <DependentUpon>RateItWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="View\RateItControl.resx">
+      <DependentUpon>RateItControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <Page Include="View\RateItWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Resource Include="Resources\checked.png" />
     <Resource Include="Resources\warning.png" />
     <Resource Include="Resources\MTCodesLogo.png" />
