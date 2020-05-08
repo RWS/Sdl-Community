@@ -49,7 +49,7 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			return string.Empty;
 		}
 
-		public static ProjectDetails GetExternalProjectDetails(string path)
+		public static ProjectDetails GetExternalProjectDetails(string path, string reportFolderPath)
 		{
 			var fileBasedProject = new FileBasedProject(path);
 			var projectInfo = fileBasedProject.GetProjectInfo();
@@ -60,7 +60,8 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 				ProjectPath = projectInfo.Uri.LocalPath,
 				Status = GetInternalProjectStatus(fileBasedProject),
 				PojectLanguages =  new Dictionary<string, bool>(),
-				ShouldBeExported = true
+				ShouldBeExported = true,
+				ReportsFolderPath = reportFolderPath
 			};
 			foreach (var language in projectInfo.TargetLanguages)
 			{

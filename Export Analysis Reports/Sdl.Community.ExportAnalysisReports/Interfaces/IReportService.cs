@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Xml;
 using Sdl.Community.ExportAnalysisReports.Model;
 
@@ -16,12 +17,12 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 
 		bool IsSameReportPath(string reportOutputPath);
 
-		bool ReportFileExist(string reportFolderPath);
-
 		bool ReportFolderExist(XmlNode projectInfoNode, string projectXmlPath);
 
 		void SaveExportPath(string reportOutputPath);
 
-		void SetReportInformation(XmlDocument doc, ProjectDetails project);
+		void SetReportInformation(ProjectDetails project);
+
+		List<ProjectDetails> GetExternalProjectReportInfo(string fileName);
 	}
 }

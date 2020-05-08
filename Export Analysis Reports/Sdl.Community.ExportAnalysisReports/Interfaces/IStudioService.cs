@@ -18,6 +18,6 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 
 		void RemoveSingleFileProjectLanguages(Dictionary<string, bool> languagesDictionary, BindingList<LanguageDetails> languages);
 
-		BindingList<ProjectDetails> SetProjectDetails(List<ProjectDetails> projects, BindingList<ProjectDetails> newProjectDetails);
+		void SetProjectDetails(List<ProjectDetails> projects, BindingList<ProjectDetails> newProjectDetails);
 	}
 }

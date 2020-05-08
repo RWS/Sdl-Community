@@ -24,6 +24,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		}
 
 		public string ProjectsXmlPath { get; set; }
+
 		/// <summary>
 		/// Add file path names to list (used to identify when user opens a single file project)
 		/// </summary>
@@ -31,16 +32,10 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		/// <returns></returns>
 		public List<string> AddFilePaths(List<string> studioProjectsPaths)
 		{
-			var filePathNames = new List<string>();
-			if (studioProjectsPaths == null)
-			{
-				studioProjectsPaths = new List<string>();
-			}
-			foreach (var path in studioProjectsPaths)
-			{
-				filePathNames.Add(Path.GetFileName(path));
-			}
-			return filePathNames;
+			if (studioProjectsPaths != null) return studioProjectsPaths.Select(path => Path.GetFileName(path)).ToList();
+
+			studioProjectsPaths = new List<string>();
+			return studioProjectsPaths.Select(path => Path.GetFileName(path)).ToList();
 		}
 
 		/// <summary>
@@ -103,15 +98,20 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		/// <param name="languages"></param>
 		public void RemoveSingleFileProjectLanguages(Dictionary<string, bool> languagesDictionary, BindingList<LanguageDetails> languages)
 		{
-			// remove also the language corresponding to the single file project, when the "Is single file project" option is unchecked.
-			if (languagesDictionary.Count > languages.Count)
+			try
 			{
-				var languagesToRemove = languagesDictionary.Where(item => !languages.Any(a => a.LanguageName.Equals(item.Key))).ToList();
+				// remove also the language corresponding to the single file project, when the "Is single file project" option is unchecked.
+				if (languagesDictionary.Count <= languages.Count) return;
 
+				var languagesToRemove = languagesDictionary.Where(item => !languages.Any(a => a.LanguageName.Equals(item.Key))).ToList();
 				foreach (var languageToRemove in languagesToRemove)
 				{
 					languagesDictionary.Remove(languageToRemove.Key);
 				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"RemoveSingleFileProjectLanguages method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -121,25 +121,30 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		/// <param name="projects"></param>
 		/// <param name="newProjectDetails"></param>
 		/// <returns></returns>
-		public BindingList<ProjectDetails> SetProjectDetails(List<ProjectDetails> projects, BindingList<ProjectDetails> newProjectDetails)
+		public void SetProjectDetails(List<ProjectDetails> projects, BindingList<ProjectDetails> newProjectDetails)
 		{
-			if (newProjectDetails != null)
+			if (newProjectDetails == null) return;
+			foreach (var project in projects)
 			{
-				foreach (var project in projects)
-				{
-					newProjectDetails.Add(project);
-				}
+				newProjectDetails.Add(project);
 			}
-			return newProjectDetails;
 		}
+
 		// Configure the project languages using project details
 		private void ConfigureProjectLanguages(ProjectDetails projectDetails)
 		{
-			var doc = new XmlDocument();
-			doc.Load(projectDetails.ProjectPath);
-			var projectLanguages = LoadLanguageDirections(doc);
+			try
+			{
+				var doc = new XmlDocument();
+				doc.Load(projectDetails.ProjectPath);
+				var projectLanguages = LoadLanguageDirections(doc);
 
-			SetProjectLanguages(projectDetails, projectLanguages);
+				SetProjectLanguages(projectDetails, projectLanguages);
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"ConfigureProjectLanguages method: {ex.Message}\n {ex.StackTrace}");
+			}
 		}
 
 		// Get the short Studio's version
@@ -155,11 +160,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			try
 			{
 				var shortStudioVersion = GetInstalledStudioShortVersion();
-				if (string.IsNullOrEmpty(shortStudioVersion))
-				{
-					return string.Empty;
-				}
-
+				if (string.IsNullOrEmpty(shortStudioVersion)) return string.Empty;
 				var projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), $@"Studio {shortStudioVersion}\Projects\projects.xml");
 				return projectsPath;
 			}
@@ -167,6 +168,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			{
 				Log.Logger.Error($"GetStudioProjectsPath method: {ex.Message}\n {ex.StackTrace}");
 			}
+
 			return string.Empty;
 		}
 
@@ -181,12 +183,11 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				if (languagesDirectionNode == null) return languages;
 				foreach (var item in languagesDirectionNode)
 				{
-					var node = (XmlNode)item;
+					var node = (XmlNode) item;
 					if (node.Attributes == null) continue;
 					var lang = new LanguageDirection
 					{
-						Guid = node.Attributes["Guid"].Value,
-						TargetLang = CultureInfo.GetCultureInfo(node.Attributes["TargetLanguageCode"].Value)
+						Guid = node.Attributes["Guid"].Value, TargetLang = CultureInfo.GetCultureInfo(node.Attributes["TargetLanguageCode"].Value)
 					};
 					if (!languages.ContainsKey(lang.Guid))
 					{
@@ -198,14 +199,16 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			{
 				Log.Logger.Error($"LoadLanguageDirections method: {ex.Message}\n {ex.StackTrace}");
 			}
+
 			return languages;
 		}
 
 		// Set the project file path
 		private ProjectDetails SetProjectFilePath(XmlNode projectNode, ProjectDetails projectDetails)
 		{
-			if (projectNode.Attributes != null)
+			try
 			{
+				if (projectNode.Attributes == null) return projectDetails;
 				var projectFilePath = projectNode.Attributes["ProjectFilePath"]?.Value;
 				if (!string.IsNullOrEmpty(projectFilePath))
 				{
@@ -223,8 +226,14 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					}
 				}
 			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"SetProjectFilePath method: {ex.Message}\n {ex.StackTrace}");
+			}
+
 			return projectDetails;
 		}
+
 		// Set project languages
 		private void SetProjectLanguages(ProjectDetails project, Dictionary<string, LanguageDirection> languages)
 		{
