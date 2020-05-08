@@ -13,12 +13,13 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		Name = "SDLMachineTranslationCloudProviderFactory",
 		Description = "SDL Machine Translation Cloud Provider")]
 	public class SdlMTCloudTranslationProviderFactory : ITranslationProviderFactory
-	{		
+	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
-		{			
-			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(), LanguageCloudIdentityApi.Instance);
-						
+		{
+			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(),
+				LanguageCloudIdentityApi.Instance);
+
 			var credential = connectionService.GetCredential(credentialStore);
 			var connectionResult = connectionService.EnsureSignedIn(credential);
 
@@ -26,24 +27,15 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 			}
-
 			connectionService.SaveCredential(credentialStore);
 
 			var translationService = new TranslationService(connectionService);
 			var languageProvider = new LanguageProvider();
 			var editorController = SdlTradosStudio.Application?.GetController<EditorController>();
-			//TODO: Instantiate the new Rate it View part
-			//var rateIt = new RateItController();
-			//rateIt.Activate();
-			translationService.TranslationReceived += TranslationService_TranslationReceived;
 
-			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState, translationService, languageProvider, editorController);			
-			return provider;		
-		}
-
-		private void TranslationService_TranslationReceived(Feedback translationFeedback)
-		{
-			MessageBox.Show(translationFeedback.TargetMTText);
+			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState,
+				translationService, languageProvider, editorController);
+			return provider;
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

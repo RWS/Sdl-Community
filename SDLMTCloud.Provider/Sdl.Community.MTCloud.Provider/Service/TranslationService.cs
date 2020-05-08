@@ -98,7 +98,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 							return null;
 						}
 						feedback.TargetMTText = translation;
-						//TranslationReceived?.Invoke(feedback);
+						TranslationReceived?.Invoke(feedback);
 						var translatedXliff = Converter.ParseXliffString(translation);
 						if (translatedXliff != null)
 						{
