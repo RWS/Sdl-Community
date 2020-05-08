@@ -8,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 	{
 		public HelpAction()
 		{
-			Name = "SDL MachineTranslationCloud wiki in the SDL Community";
+			Name = "SDL MT Cloud wiki in the SDL Community";
 		}
 
 		public override void Execute()
@@ -17,7 +17,7 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "SDLMachineTranslationCloud results";
+		public override string Category => "SDL MT Cloud results";
 		public override Icon Icon => PluginResources.Question;
 	}
 }

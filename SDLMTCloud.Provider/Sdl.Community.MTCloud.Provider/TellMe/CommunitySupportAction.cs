@@ -16,7 +16,7 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "SDLMachineTranslationCloud results";
+		public override string Category => "SDL MT Cloud results";
 
 		public override Icon Icon => PluginResources.ForumIcon;
 	}
