@@ -6,15 +6,22 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 {
 	public interface IReportService
 	{
-		bool ReportFileExist(string reportFolderPath);
-		void SetReportInformation(XmlDocument doc, ProjectDetails project);
-		void SaveExportPath(string reportOutputPath);
-		string GetJsonReportPath(string jsonPath);
-		bool IsSameReportPath(string reportOutputPath);
-		bool ReportFolderExist(XmlNode projectInfoNode, string projectXmlPath);
+		string JsonPath { get; }
+
+		string ReportsFolderPath { get; set; }
+
 		bool GenerateReportFile(BindingList<ProjectDetails> projects, OptionalInformation optionalInformation, string reportOutputPath, bool isChecked);
 
-		string JsonPath { get;  }
-		string ReportsFolderPath { get; set; }
+		string GetJsonReportPath(string jsonPath);
+
+		bool IsSameReportPath(string reportOutputPath);
+
+		bool ReportFileExist(string reportFolderPath);
+
+		bool ReportFolderExist(XmlNode projectInfoNode, string projectXmlPath);
+
+		void SaveExportPath(string reportOutputPath);
+
+		void SetReportInformation(XmlDocument doc, ProjectDetails project);
 	}
 }

@@ -14,14 +14,11 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 {
 	public class ReportService : IReportService
 	{
-		private readonly IMessageBoxService _messageBoxService;
-		private readonly IStudioService _studioService;
+		public static readonly Log Log = Log.Instance;
 		private readonly string _communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "ExportAnalysisReports");
 		private readonly Help _help;
-
-		public static readonly Log Log = Log.Instance;
-		public string JsonPath => Path.Combine(_communityFolderPath, "ExportAnalysisReportSettings.json");
-		public string ReportsFolderPath { get; set; }
+		private readonly IMessageBoxService _messageBoxService;
+		private readonly IStudioService _studioService;
 
 		public ReportService(IMessageBoxService messageBoxService, IStudioService studioService)
 		{
@@ -30,42 +27,52 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			_studioService = studioService;
 		}
 
+		public string JsonPath => Path.Combine(_communityFolderPath, "ExportAnalysisReportSettings.json");
+		public string ReportsFolderPath { get; set; }
 		/// <summary>
-		/// Set report information using the project xml document
+		/// Check if the report was successfully generated
 		/// </summary>
-		/// <param name="doc"></param>
-		/// <param name="project"></param>
-		public void SetReportInformation(XmlDocument doc, ProjectDetails project)
+		/// <param name="reportOutputPath"></param>
+		/// <param name="isChecked"></param>
+		/// <param name="optionalInformation"></param>
+		/// <param name="projects"></param>
+		/// <returns></returns>
+		public bool GenerateReportFile(BindingList<ProjectDetails> projects, OptionalInformation optionalInformation, string reportOutputPath, bool isChecked)
 		{
 			try
 			{
-				var projectInfo = _studioService.GetProjectInfo(project.ProjectPath);
-				project.LanguageAnalysisReportPaths?.Clear();
-
-				var automaticTaskNode = doc.SelectNodes("/Project/Tasks/AutomaticTask");
-				if (automaticTaskNode != null)
+				_help.CreateDirectory(reportOutputPath);
+				var projectsToBeExported = projects.Where(p => p.ShouldBeExported).ToList();
+				var areCheckedLanguages = projectsToBeExported.Any(p => p.PojectLanguages.Any(l => l.Value));
+				if (!areCheckedLanguages && projectsToBeExported.Count >= 1)
 				{
-					var reportsFolderExist = ReportsFolderExists(project.ReportsFolderPath);
-					if (reportsFolderExist)
+					_messageBoxService.ShowInformationMessage(PluginResources.SelectLanguage_Export_Message, PluginResources.ExportResult_Label);
+					return false;
+				}
+				foreach (var project in projectsToBeExported)
+				{
+					// check which languages to export
+					if (project.PojectLanguages != null)
 					{
-						foreach (var node in automaticTaskNode)
+						var checkedLanguages = project.PojectLanguages.Where(l => l.Value).ToList();
+
+						foreach (var languageReport in checkedLanguages)
 						{
-							var task = (XmlNode)node;
-							var reportNodes = task.SelectNodes("Reports/Report");
-
-							if (reportNodes == null) continue;
-
-							foreach (var reportNode in reportNodes)
+							if (string.IsNullOrEmpty(project.ReportPath))
 							{
-								ConfigureReportDetails(project, projectInfo, (XmlNode) reportNode, doc);
+								project.ReportPath = reportOutputPath;
 							}
+
+							WriteReportFile(project, optionalInformation, languageReport, isChecked);
 						}
 					}
 				}
+				return true;
 			}
-			catch (Exception ex)
+			catch (Exception exception)
 			{
-				Log.Logger.Error($"LoadReports method: {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"GenerateReport method: {exception.Message}\n {exception.StackTrace}");
+				throw;
 			}
 		}
 
@@ -240,52 +247,43 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		}
 
 		/// <summary>
-		/// Check if the report was successfully generated
+		/// Set report information using the project xml document
 		/// </summary>
-		/// <param name="reportOutputPath"></param>
-		/// <param name="isChecked"></param>
-		/// <param name="optionalInformation"></param>
-		/// <param name="projects"></param>
-		/// <returns></returns>
-		public bool GenerateReportFile(BindingList<ProjectDetails> projects, OptionalInformation optionalInformation, string reportOutputPath, bool isChecked)
+		/// <param name="doc"></param>
+		/// <param name="project"></param>
+		public void SetReportInformation(XmlDocument doc, ProjectDetails project)
 		{
 			try
 			{
-				_help.CreateDirectory(reportOutputPath);
-				var projectsToBeExported = projects.Where(p => p.ShouldBeExported).ToList();
-				var areCheckedLanguages = projectsToBeExported.Any(p => p.PojectLanguages.Any(l => l.Value));
-				if (!areCheckedLanguages && projectsToBeExported.Count >= 1)
+				var projectInfo = _studioService.GetProjectInfo(project.ProjectPath);
+				project.LanguageAnalysisReportPaths?.Clear();
+
+				var automaticTaskNode = doc.SelectNodes("/Project/Tasks/AutomaticTask");
+				if (automaticTaskNode != null)
 				{
-					_messageBoxService.ShowInformationMessage(PluginResources.SelectLanguage_Export_Message, PluginResources.ExportResult_Label);
-					return false;
-				}
-				foreach (var project in projectsToBeExported)
-				{
-					// check which languages to export
-					if (project.PojectLanguages != null)
+					var reportsFolderExist = ReportsFolderExists(project.ReportsFolderPath);
+					if (reportsFolderExist)
 					{
-						var checkedLanguages = project.PojectLanguages.Where(l => l.Value).ToList();
-
-						foreach (var languageReport in checkedLanguages)
+						foreach (var node in automaticTaskNode)
 						{
-							if (string.IsNullOrEmpty(project.ReportPath))
-							{
-								project.ReportPath = reportOutputPath;
-							}
+							var task = (XmlNode)node;
+							var reportNodes = task.SelectNodes("Reports/Report");
 
-							WriteReportFile(project, optionalInformation, languageReport, isChecked);
+							if (reportNodes == null) continue;
+
+							foreach (var reportNode in reportNodes)
+							{
+								ConfigureReportDetails(project, projectInfo, (XmlNode) reportNode, doc);
+							}
 						}
 					}
 				}
-				return true;
 			}
-			catch (Exception exception)
+			catch (Exception ex)
 			{
-				Log.Logger.Error($"GenerateReport method: {exception.Message}\n {exception.StackTrace}");
-				throw;
+				Log.Logger.Error($"LoadReports method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
-
 		// Configure the details used in the exported report
 		private void ConfigureReportDetails(ProjectDetails project, ProjectInfo projectInfo, XmlNode report, XmlDocument doc)
 		{
