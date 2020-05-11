@@ -116,9 +116,7 @@
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Help.cs" />
     <Compile Include="Helpers\Log.cs" />
-    <Compile Include="Helpers\ProjectInformation.cs" />
     <Compile Include="Helpers\Reflector.cs" />
-    <Compile Include="Helpers\StudioAnalysisReport.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Interfaces\IReportService.cs" />
     <Compile Include="Interfaces\IProjectService.cs" />

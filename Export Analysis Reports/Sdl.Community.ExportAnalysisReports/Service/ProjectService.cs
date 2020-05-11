@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 using Sdl.Community.ExportAnalysisReports.Helpers;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
@@ -11,6 +12,7 @@ using Sdl.Community.ExportAnalysisReports.Model;
 using Sdl.Community.Toolkit.Core.Services;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.ExportAnalysisReports.Service
 {
@@ -21,9 +23,11 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		public ProjectService()
 		{
 			ProjectsXmlPath = GetStudioProjectsXmlPath();
+			ProjectController = SdlTradosStudio.Application?.GetController<ProjectsController>();
 		}
 
 		public string ProjectsXmlPath { get; set; }
+		public ProjectsController ProjectController { get; set; }
 
 		/// <summary>
 		/// Add file path names to list (used to identify when user opens a single file project)
@@ -64,7 +68,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 				projectDetails = SetProjectFilePath(projNode, projectDetails);
 
-				var projectStatus = ProjectInformation.GetProjectStatus(projectDetails.ProjectPath);
+				var projectStatus = GetProjectStatus(projectDetails.ProjectPath);
 				projectDetails.Status = projectStatus;
 				projectDetails.IsSingleFileProject = isSingleFileProject;
 
@@ -248,6 +252,86 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			{
 				Log.Logger.Error($"SetProjectLanguages method: {ex.Message}\n {ex.StackTrace}");
 			}
+		}
+
+		public ProjectDetails GetExternalProjectDetails(string path, string reportFolderPath)
+		{
+			try
+			{
+				var fileBasedProject = new FileBasedProject(path);
+				var projectInfo = fileBasedProject.GetProjectInfo();
+
+				var projectDetails = new ProjectDetails
+				{
+					ProjectName = projectInfo?.Name,
+					ProjectPath = projectInfo?.Uri.LocalPath,
+					Status = GetInternalProjectStatus(fileBasedProject),
+					PojectLanguages = new Dictionary<string, bool>(),
+					ShouldBeExported = true,
+					ReportsFolderPath = reportFolderPath
+				};
+				foreach (var language in projectInfo?.TargetLanguages)
+				{
+					projectDetails.PojectLanguages.Add(language.DisplayName, true);
+				}
+				ProjectController?.Close(fileBasedProject);
+
+				return projectDetails;
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"GetExternalProjectDetails method: {ex.Message}\n {ex.StackTrace}");
+			}
+			return new ProjectDetails();
+		}
+
+		private string GetInternalProjectStatus(FileBasedProject studioProject)
+		{
+			try
+			{
+				var internalProjPropertyInfo = studioProject?.GetType().GetProperty("InternalProject", BindingFlags.NonPublic | BindingFlags.Instance);
+
+				if (internalProjPropertyInfo == null)
+				{
+					return string.Empty;
+				}
+				var internalProjMethodInfo = internalProjPropertyInfo.GetGetMethod(true);
+
+				dynamic internalProject = internalProjMethodInfo.Invoke(studioProject, null);
+				var statusProperty = internalProject.GetType().GetProperty("Status");
+				var projectStatus = statusProperty.GetValue(internalProject, null).ToString();
+				return projectStatus;
+			}
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"GetInternalProjectStatus method: {ex.Message}\n {ex.StackTrace}");
+			}
+			return string.Empty;
+		}
+
+		private string GetProjectStatus(string projectPath)
+		{
+			var projectStatus = string.Empty;
+			try
+			{
+				var studioProject = GetStudioProjects()?.FirstOrDefault(p => p.FilePath.Equals(projectPath));
+
+				if (studioProject != null)
+				{
+					projectStatus = GetInternalProjectStatus(studioProject);
+				}
+			}
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"GetProjectStatus method: {ex.Message}\n {ex.StackTrace}");
+
+			}
+			return projectStatus;
+		}
+
+		private List<FileBasedProject> GetStudioProjects()
+		{
+			return ProjectController?.GetAllProjects()?.ToList();
 		}
 	}
 }

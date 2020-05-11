@@ -217,9 +217,10 @@ namespace Sdl.Community.ExportAnalysisReports
 							foreach (var selectedLanguage in selectedLanguages)
 							{
 								var languageAnalysisReportPath = selectedProject.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(selectedLanguage.Key));
-								var copyReport = new StudioAnalysisReport(languageAnalysisReportPath.Value);
-								var csvText = copyReport.ToCsv(includeHeaderCheck.Checked, _optionalInformation);
-								csvTextBuilder.Append(csvText);
+								_reportService.PrepareAnalysisReport(languageAnalysisReportPath.Value);
+								
+								var csvContent = _reportService.GetCsvContent(includeHeaderCheck.Checked, _optionalInformation);
+								csvTextBuilder.Append(csvContent);
 							}
 
 							_messageBoxService.ShowOwnerInformationMessage(this, PluginResources.CopyToClipboard_Success_Message, PluginResources.CopyResult_Label);

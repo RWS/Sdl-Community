@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.ExportAnalysisReports.Helpers;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
@@ -17,16 +20,19 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		public static readonly Log Log = Log.Instance;
 		private readonly string _communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "ExportAnalysisReports");
 		private readonly IMessageBoxService _messageBoxService;
-		private readonly IProjectService _studioService;
+		private readonly IProjectService _projectService;
+		private string _reportFile;
+		private IEnumerable<AnalyzedFile> _analyzedFiles;
 
 		public ReportService(IMessageBoxService messageBoxService, IProjectService studioService)
 		{
 			_messageBoxService = messageBoxService;
-			_studioService = studioService;
+			_projectService = studioService;
 		}
 
 		public string JsonPath => Path.Combine(_communityFolderPath, "ExportAnalysisReportSettings.json");
 		public string ReportsFolderPath { get; set; }
+
 
 		/// <summary>
 		/// Check if the report was successfully generated
@@ -169,7 +175,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				var doc = new XmlDocument();
 				doc.Load(project.ProjectPath);
 
-				var projectInfo = _studioService.GetProjectInfo(project.ProjectPath);
+				var projectInfo = _projectService.GetProjectInfo(project.ProjectPath);
 				project.LanguageAnalysisReportPaths?.Clear();
 
 				var automaticTaskNode = doc.SelectNodes("/Project/Tasks/AutomaticTask");
@@ -216,7 +222,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					}
 
 					if (!ReportFileExist(reportFolderPath)) continue;
-					var projectDetails = ProjectInformation.GetExternalProjectDetails(projectPath, reportFolderPath);
+					var projectDetails = _projectService.GetExternalProjectDetails(projectPath, reportFolderPath);
 
 					SetReportInformation(projectDetails);
 					externalProjInfoList.Add(projectDetails);
@@ -228,6 +234,196 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 
 			return externalProjInfoList;
+		}
+
+		public void PrepareAnalysisReport(string pathToXmlReport)
+		{
+			try
+			{
+				var reportsPath = Path.GetDirectoryName(pathToXmlReport);
+				var reportName = Path.GetFileName(pathToXmlReport);
+				var directoryInfo = new DirectoryInfo(reportsPath);
+				if (directoryInfo != null)
+				{
+					var fileName = Path.GetFileNameWithoutExtension(reportName);
+					var fileInfo = directoryInfo?.GetFiles()?.OrderByDescending(f => f.LastWriteTime).FirstOrDefault(n => n.Name.StartsWith(fileName));
+					_reportFile = fileInfo != null ? fileInfo.FullName : pathToXmlReport;
+
+					if (!File.Exists(_reportFile))
+					{
+						_messageBoxService.ShowWarningMessage(string.Format(PluginResources.ReportNotFound_Message, _reportFile), string.Empty);
+					}
+
+					var langPairCode = GetLanguagePairCode(fileName);
+
+					var xDoc = XDocument.Load(_reportFile);
+					_analyzedFiles = from f in xDoc.Root.Descendants("file")
+									 select new AnalyzedFile($"{langPairCode}_{f.Attribute("name").Value}", f.Attribute("guid").Value)
+									 {
+										 Results = from r in f.Element("analyse").Elements()
+												   select new BandResult(r.Name.LocalName)
+												   {
+													   Segments = r.Attribute("segments") != null ? int.Parse(r.Attribute("segments").Value) : 0,
+													   Words = r.Attribute("words") != null ? int.Parse(r.Attribute("words").Value) : 0,
+													   Characters = r.Attribute("characters") != null ? int.Parse(r.Attribute("characters").Value) : 0,
+													   Placeables = r.Attribute("placeables") != null ? int.Parse(r.Attribute("placeables").Value) : 0,
+													   Tags = r.Attribute("tags") != null ? int.Parse(r.Attribute("tags").Value) : 0,
+													   Min = r.Attribute("min") != null ? int.Parse(r.Attribute("min").Value) : 0,
+													   Max = r.Attribute("max") != null ? int.Parse(r.Attribute("max").Value) : 0,
+													   FullRecallWords = r.Attribute("fullRecallWords") != null ? int.Parse(r.Attribute("fullRecallWords").Value) : 0,
+												   }
+									 };
+
+					if (!_analyzedFiles.Any())
+					{
+						_messageBoxService.ShowWarningMessage(PluginResources.NoAnalyzeFiles_Message, string.Empty);
+					}
+				}
+			}
+			catch(Exception ex)
+			{
+				Log.Logger.Error($"PrepareAnalysisReport method: {ex.Message}\n {ex.StackTrace}");
+			}
+		}
+
+		public string GetCsvContent(bool includeHeader, OptionalInformation aditionalHeaders)
+		{
+			try
+			{
+				var csvSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+				var csvHeader = GetCsvHeaderRow(csvSeparator, _analyzedFiles?.FirstOrDefault()?.Fuzzies, aditionalHeaders);
+				var sb = new StringBuilder();
+
+				if (includeHeader)
+				{
+					sb.Append(csvHeader).Append(Environment.NewLine);
+				}
+
+				if (_analyzedFiles != null)
+				{
+					foreach (var file in _analyzedFiles)
+					{
+						WriteCsvInformation(sb, aditionalHeaders, file, csvSeparator);
+					}
+				}
+				return sb.ToString();
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"GetCsvContent method: {ex.Message}\n {ex.StackTrace}");
+			}
+			return string.Empty;
+		}
+
+		// Write to string builder the information used in csv file
+		private void WriteCsvInformation(StringBuilder sb, OptionalInformation optionalInformation, AnalyzedFile file, string csvSeparator)
+		{
+			sb.Append(file.FileName).Append(csvSeparator).Append(file.Repeated.Words).Append(csvSeparator);
+
+			if (optionalInformation.IncludeLocked)
+			{
+				sb.Append(file.Locked.Words).Append(csvSeparator);
+			}
+			if (optionalInformation.IncludePerfectMatch)
+			{
+				sb.Append(file.Perfect.Words).Append(csvSeparator);
+			}
+			if (optionalInformation.IncludeContextMatch)
+			{
+				sb.Append(file.InContextExact.Words).Append(csvSeparator);
+			}
+			if (optionalInformation.IncludeCrossRep)
+			{
+				sb.Append(file.CrossRep.Words).Append(csvSeparator);
+			}
+
+			// the 100% match is actually a sum of Exact, Perfect and InContextExact matches
+			sb.Append((file.Exact.Words + file.Perfect.Words + file.InContextExact.Words).ToString()).Append(csvSeparator);
+
+			foreach (var fuzzy in file.Fuzzies.OrderByDescending(fz => fz.Max))
+			{
+				sb.Append(fuzzy.Words).Append(csvSeparator);
+
+				var internalFuzzy = file.InternalFuzzy(fuzzy.Min, fuzzy.Max);
+				sb.Append(internalFuzzy != null ? internalFuzzy.Words : 0).Append(csvSeparator);
+				if (optionalInformation.IncludeInternalFuzzies)
+				{
+					sb.Append(internalFuzzy != null ? internalFuzzy.FullRecallWords : 0).Append(csvSeparator);
+				}
+			}
+
+			if (optionalInformation.IncludeAdaptiveBaseline)
+			{
+				sb.Append(file.NewBaseline.FullRecallWords).Append(csvSeparator);
+			}
+			if (optionalInformation.IncludeAdaptiveLearnings)
+			{
+				sb.Append(file.NewLearnings.FullRecallWords).Append(csvSeparator);
+			}
+
+			sb.Append(file.Untranslated.Words).Append(csvSeparator).Append(file.Total.Words).Append(csvSeparator).Append(Environment.NewLine);
+		}
+
+		private string GetLanguagePairCode(string fileName)
+		{
+			var langPairCodes = !string.IsNullOrEmpty(fileName) ? fileName.Split(' ') : new string[3];
+			return langPairCodes.Count() == 3 ? langPairCodes[2] : string.Empty;
+		}
+
+		private string GetCsvHeaderRow(string separator, IEnumerable<BandResult> fuzzies, OptionalInformation aditionalHeaders)
+		{
+			try
+			{
+				var headerColumns = new List<string> { "\"Filename\"", "\"Repetitions\"", };
+
+				if (aditionalHeaders.IncludeLocked)
+				{
+					headerColumns.Add("\"Locked\"");
+				}
+
+				if (aditionalHeaders.IncludePerfectMatch)
+				{
+					headerColumns.Add("\"Perfect Match\"");
+				}
+
+				if (aditionalHeaders.IncludeContextMatch)
+				{
+					headerColumns.Add("\"Context Match\"");
+				}
+
+				if (aditionalHeaders.IncludeCrossRep)
+				{
+					headerColumns.Add("\"Cross File Repetitions\"");
+				}
+
+				headerColumns.Add("\"100% (TM)\"");
+				fuzzies.OrderByDescending(br => br.Max).ToList().ForEach(br => {
+						headerColumns.Add(string.Format("\"{0}% - {1}% (TM)\"", br.Max, br.Min));
+						headerColumns.Add(string.Format("\"{0}% - {1}% (AP)\"", br.Max, br.Min));
+						if (aditionalHeaders.IncludeInternalFuzzies)
+						{
+							headerColumns.Add(string.Format("\"{0}% - {1}% (Internal)\"", br.Max, br.Min));
+						}
+					});
+
+				if (aditionalHeaders.IncludeAdaptiveBaseline)
+				{
+					headerColumns.Add("\"AdaptiveMT Baseline\"");
+				}
+				if (aditionalHeaders.IncludeAdaptiveLearnings)
+				{
+					headerColumns.Add("\"AdaptiveMT with Learnings\"");
+				}
+				headerColumns.Add("\"New\"");
+				headerColumns.Add("\"Total Words\"");
+
+				return headerColumns.Aggregate((res, next) => res + separator + next);
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"GetCsvHeaderRow method: {ex.Message}\n {ex.StackTrace}");
+			}
+			return string.Empty;
 		}
 
 		// Set the paths for the projec files
@@ -291,7 +487,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					return false;
 				}
 
-				if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles"))
+				if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles") && Directory.Exists(reportFolderPath))
 				{
 					fileName = Path.GetFileNameWithoutExtension(fileName);
 					return !string.IsNullOrEmpty(fileName);
@@ -382,8 +578,8 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					var analyseReportPath = project.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(languageReport.Key));
 					if (!analyseReportPath.Equals(new KeyValuePair<string, string>()))
 					{
-						var report = new StudioAnalysisReport(analyseReportPath.Value);
-						sw.Write(report.ToCsv(isChecked, optionalInformation));
+						PrepareAnalysisReport(analyseReportPath.Value);
+						sw.Write(GetCsvContent(isChecked, optionalInformation));
 					}
 				}
 			}

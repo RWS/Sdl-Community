@@ -24,5 +24,9 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 		void SetReportInformation(ProjectDetails project);
 
 		List<ProjectDetails> GetExternalProjectReportInfo(string fileName);
+
+		void PrepareAnalysisReport(string pathToXmlReport);
+
+		string GetCsvContent(bool includeHeader, OptionalInformation aditionalHeaders);
 	}
 }
