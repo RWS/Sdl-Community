@@ -83,15 +83,13 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			try
 			{
 				if (!File.Exists(jsonPath)) return string.Empty;
+				JsonSettings item;
 				using (var r = new StreamReader(jsonPath))
 				{
 					var json = r.ReadToEnd();
-					var item = JsonConvert.DeserializeObject<JsonSettings>(json);
-					if (!string.IsNullOrEmpty(item.ExportPath))
-					{
-						return item.ExportPath;
-					}
+					item = JsonConvert.DeserializeObject<JsonSettings>(json);					
 				}
+				return item?.ExportPath ?? string.Empty;
 			}
 			catch (Exception ex)
 			{
