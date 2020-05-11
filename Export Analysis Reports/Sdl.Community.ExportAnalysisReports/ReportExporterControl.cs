@@ -773,17 +773,7 @@ namespace Sdl.Community.ExportAnalysisReports
 				var projectsToExport = _projectsDataSource?.Where(p => p.ShouldBeExported).ToList();
 				if (projectsToExport != null)
 				{
-					foreach (var project in projectsToExport)
-					{
-						if (project.PojectLanguages != null)
-						{
-							var language = project.PojectLanguages.FirstOrDefault(l => l.Key.Equals(languageToUpdate.LanguageName));
-							if (language.Key != null)
-							{
-								project.PojectLanguages[language.Key] = isChecked;
-							}
-						}
-					}
+					_studioService.SetProjectLanguages(projectsToExport, isChecked, languageToUpdate.LanguageName);
 				}
 
 				var checkedLanguage = _languages?.FirstOrDefault(n => n.LanguageName.Equals(languageToUpdate.LanguageName));
@@ -1137,27 +1127,24 @@ namespace Sdl.Community.ExportAnalysisReports
 		private void SetProjectLanguages(ProjectDetails selectedProject)
 		{
 			// if an project has only one language select that language
-			if (selectedProject?.PojectLanguages != null)
+			if (selectedProject?.PojectLanguages != null && selectedProject.PojectLanguages.Count.Equals(1))
 			{
-				if (selectedProject.PojectLanguages.Count.Equals(1))
+				var languageName = selectedProject.PojectLanguages.FirstOrDefault().Key;
+				var languageToBeSelected = _languages.FirstOrDefault(n => n.LanguageName.Equals(languageName));
+				if (languageToBeSelected != null)
 				{
-					var languageName = selectedProject.PojectLanguages.FirstOrDefault().Key;
-					var languageToBeSelected = _languages.FirstOrDefault(n => n.LanguageName.Equals(languageName));
-					if (languageToBeSelected != null)
-					{
-						languageToBeSelected.IsChecked = true;
-					}
-					else
-					{
-						var newLanguage = new LanguageDetails
-						{
-							LanguageName = languageName,
-							IsChecked = true
-						};
-						_languages.Add(newLanguage);
-					}
-					selectedProject.PojectLanguages[languageName] = true;
+					languageToBeSelected.IsChecked = true;
 				}
+				else
+				{
+					var newLanguage = new LanguageDetails
+					{
+						LanguageName = languageName,
+						IsChecked = true
+					};
+					_languages.Add(newLanguage);
+				}
+				selectedProject.PojectLanguages[languageName] = true;
 			}
 
 			var languagesAlreadySelectedForExport = _languages.Where(l => l.IsChecked).ToList();

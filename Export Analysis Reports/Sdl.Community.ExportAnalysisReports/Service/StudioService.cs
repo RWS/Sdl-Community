@@ -130,6 +130,21 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 		}
 
+		public void SetProjectLanguages(List<ProjectDetails> projectDetails, bool isChecked, string languageName)
+		{
+			foreach (var project in projectDetails)
+			{
+				if (project.PojectLanguages != null)
+				{
+					var language = project.PojectLanguages.FirstOrDefault(l => l.Key.Equals(languageName));
+					if (language.Key != null)
+					{
+						project.PojectLanguages[language.Key] = isChecked;
+					}
+				}
+			}
+		}
+
 		// Configure the project languages using project details
 		private void ConfigureProjectLanguages(ProjectDetails projectDetails)
 		{
