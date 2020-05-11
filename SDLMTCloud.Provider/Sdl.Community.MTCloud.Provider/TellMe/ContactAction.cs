@@ -12,11 +12,11 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 		}
 		public ContactAction()
 		{
-			Name = "SDL Machine Translation Cloud user interface";
+			Name = "SDL MT Cloud web interface";
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "SDLMachineTranslationCloud results";
+		public override string Category => "SDL MT Cloud results";
 		public override Icon Icon => PluginResources.global;
 	}
 }
