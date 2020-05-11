@@ -14,11 +14,11 @@ using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.ExportAnalysisReports.Service
 {
-	public class StudioService : IStudioService
+	public class ProjectService : IProjectService
 	{
 		public static readonly Log Log = Log.Instance;
 
-		public StudioService()
+		public ProjectService()
 		{
 			ProjectsXmlPath = GetStudioProjectsXmlPath();
 		}
@@ -112,21 +112,6 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"RemoveSingleFileProjectLanguages method: {ex.Message}\n {ex.StackTrace}");
-			}
-		}
-
-		/// <summary>
-		/// Set project details
-		/// </summary>
-		/// <param name="projects"></param>
-		/// <param name="newProjectDetails"></param>
-		/// <returns></returns>
-		public void SetProjectDetails(List<ProjectDetails> projects, BindingList<ProjectDetails> newProjectDetails)
-		{
-			if (newProjectDetails == null) return;
-			foreach (var project in projects)
-			{
-				newProjectDetails.Add(project);
 			}
 		}
 

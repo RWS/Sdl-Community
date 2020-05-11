@@ -12,30 +12,25 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 		public static ProjectsController ProjectController => SdlTradosStudio.Application.GetController<ProjectsController>();
 		private static string GetInternalProjectStatus(FileBasedProject studioProject)
 		{
-			var internalProjPropertyInfo =
-				studioProject.GetType().GetProperty("InternalProject", BindingFlags.NonPublic | BindingFlags.Instance);
+			var internalProjPropertyInfo = studioProject.GetType().GetProperty("InternalProject", BindingFlags.NonPublic | BindingFlags.Instance);
 
-			if (internalProjPropertyInfo != null)
+			if (internalProjPropertyInfo == null)
 			{
-				var internalProjMethodInfo = internalProjPropertyInfo.GetGetMethod(true);
-
-				dynamic internalProject = internalProjMethodInfo.Invoke(studioProject, null);
-				var statusProperty = internalProject.GetType().GetProperty("Status");
-				var projectStatus = statusProperty.GetValue(internalProject, null).ToString();
-				return projectStatus;
+				return string.Empty;
 			}
-			return string.Empty;
+			var internalProjMethodInfo = internalProjPropertyInfo.GetGetMethod(true);
+
+			dynamic internalProject = internalProjMethodInfo.Invoke(studioProject, null);
+			var statusProperty = internalProject.GetType().GetProperty("Status");
+			var projectStatus = statusProperty.GetValue(internalProject, null).ToString();
+			return projectStatus;
 		}
 
 		public static List<FileBasedProject> GetStudioProjects()
 		{
 			return ProjectController.GetAllProjects().ToList();
 		}
-
-		public static List<FileBasedProject> GetSelectedProjects()
-		{
-			return ProjectController.SelectedProjects.ToList();
-		}
+	
 
 		public static string GetProjectStatus(string projectPath)
 		{

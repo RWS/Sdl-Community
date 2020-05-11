@@ -121,7 +121,7 @@
     <Compile Include="Helpers\StudioAnalysisReport.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Interfaces\IReportService.cs" />
-    <Compile Include="Interfaces\IStudioService.cs" />
+    <Compile Include="Interfaces\IProjectService.cs" />
     <Compile Include="Model\AnalyzedFile.cs" />
     <Compile Include="Model\BandResult.cs" />
     <Compile Include="Model\JsonSettings.cs" />
@@ -144,7 +144,7 @@
     <Compile Include="ReportExporterRibbon.cs" />
     <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Service\ReportService.cs" />
-    <Compile Include="Service\StudioService.cs" />
+    <Compile Include="Service\ProjectService.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
     <Compile Include="TellMe\StoreAction.cs" />

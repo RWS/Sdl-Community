@@ -17,9 +17,9 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		public static readonly Log Log = Log.Instance;
 		private readonly string _communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "ExportAnalysisReports");
 		private readonly IMessageBoxService _messageBoxService;
-		private readonly IStudioService _studioService;
+		private readonly IProjectService _studioService;
 
-		public ReportService(IMessageBoxService messageBoxService, IStudioService studioService)
+		public ReportService(IMessageBoxService messageBoxService, IProjectService studioService)
 		{
 			_messageBoxService = messageBoxService;
 			_studioService = studioService;

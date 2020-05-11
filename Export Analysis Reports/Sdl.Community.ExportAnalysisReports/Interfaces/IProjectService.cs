@@ -6,7 +6,7 @@ using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.ExportAnalysisReports.Interfaces
 {
-	public interface IStudioService
+	public interface IProjectService
 	{
 		string ProjectsXmlPath { get; set; }
 
@@ -17,8 +17,6 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 		ProjectInfo GetProjectInfo(string projectPath);
 
 		void RemoveSingleFileProjectLanguages(Dictionary<string, bool> languagesDictionary, BindingList<LanguageDetails> languages);
-
-		void SetProjectDetails(List<ProjectDetails> projects, BindingList<ProjectDetails> newProjectDetails);
 
 		void SetProjectLanguages(List<ProjectDetails> projectDetails, bool isChecked, string languageName);
 	}
