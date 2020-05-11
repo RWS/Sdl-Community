@@ -24,10 +24,10 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		private string _reportFile;
 		private IEnumerable<AnalyzedFile> _analyzedFiles;
 
-		public ReportService(IMessageBoxService messageBoxService, IProjectService studioService)
+		public ReportService(IMessageBoxService messageBoxService, IProjectService projectService)
 		{
 			_messageBoxService = messageBoxService;
-			_projectService = studioService;
+			_projectService = projectService;
 		}
 
 		public string JsonPath => Path.Combine(_communityFolderPath, "ExportAnalysisReportSettings.json");
