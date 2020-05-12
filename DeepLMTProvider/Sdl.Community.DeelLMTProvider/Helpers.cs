@@ -10,15 +10,13 @@ namespace Sdl.Community.DeepLMTProvider
 			"DE",
 			"FR",
 			"IT",
-			"JA",
 			"NL",
 			"PL",
 			"ES",
 			"PT",
 			"PT-PT",
 			"PT-BR",
-			"RU",
-			"ZH"
+			"RU"
 		};
 
 		private static readonly List<string> TargetSupportedLanguages = new List<string>
@@ -27,7 +25,6 @@ namespace Sdl.Community.DeepLMTProvider
 			"DE",
 			"FR",
 			"IT",
-			"JA",
 			"NL",
 			"PL",
 			"ES",
@@ -35,7 +32,6 @@ namespace Sdl.Community.DeepLMTProvider
 			"PT-PT",
 			"PT-BR",
 			"RU",
-			"ZH"
 		};
 
 		public static bool IsSuportedLanguagePair(string sourceLang, string targetLang)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using Newtonsoft.Json;
 using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
@@ -31,6 +32,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			_editorController = editorController;
 
 			LoadState(translationProviderState);
+			LoadRateItContoller();
 		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
@@ -139,6 +141,20 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				// ignore any casting errors and simply create a new options instance
 				Options = new Options();
+			}
+		}
+		private void LoadRateItContoller()
+		{
+			if (_editorController != null)
+			{
+				//Activate rate it controller
+				Application.Current?.Dispatcher?.Invoke(() =>
+				{
+					RateItController.TranslationService = TranslationService;
+
+					var rateIt = new RateItController();
+					rateIt.Activate();
+				});
 			}
 		}
 

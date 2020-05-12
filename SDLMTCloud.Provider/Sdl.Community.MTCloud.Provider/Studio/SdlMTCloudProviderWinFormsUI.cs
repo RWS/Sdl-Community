@@ -29,6 +29,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		[STAThread]
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
+			//TODO: Instantiate the new Rate it View part
 			try
 			{				
 				var uri = new Uri($"{Constants.MTCloudUriScheme}://");

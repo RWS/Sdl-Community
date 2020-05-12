@@ -16,6 +16,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class TranslationService : ITranslationService
 	{
+		public event TranslationFeedbackEventRaiser TranslationReceived;
+
 		public TranslationService(IConnectionService connectionService)
 		{
 			ConnectionService = connectionService;
@@ -59,6 +61,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					Model = model.SelectedModel.Model,
 					InputFormat = "xliff"
 				};
+				var feedback = new Feedback
+				{
+					SourceText = text,
+					SourceLanguageId = model.SelectedSource.CodeName,
+					TargetLanguageId = model.SelectedTarget.CodeName,
+					EngineModel = model.SelectedModel.Model
+				};
 
 				if (!model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary_available)
 					&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
@@ -72,7 +81,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 				var responseMessage = await httpClient.SendAsync(request);
 				var response = await responseMessage.Content.ReadAsStringAsync();
-
+				
 				if (!responseMessage.IsSuccessStatusCode)
 				{
 					return null;
@@ -88,7 +97,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						{
 							return null;
 						}
-
+						feedback.TargetMTText = translation;
+						TranslationReceived?.Invoke(feedback);
 						var translatedXliff = Converter.ParseXliffString(translation);
 						if (translatedXliff != null)
 						{
@@ -191,6 +201,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			return null;
 		}
+
 
 		private async Task<string> GetTranslations(HttpClient httpClient, string id)
 		{

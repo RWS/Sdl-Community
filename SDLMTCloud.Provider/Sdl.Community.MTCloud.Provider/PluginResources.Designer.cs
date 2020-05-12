@@ -426,6 +426,69 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Capitalization, punctuation.
+        /// </summary>
+        public static string RateIt_Option_Capitalization {
+            get {
+                return ResourceManager.GetString("RateIt_Option_Capitalization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grammar.
+        /// </summary>
+        public static string RateIt_Option_Grammar {
+            get {
+                return ResourceManager.GetString("RateIt_Option_Grammar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spelling.
+        /// </summary>
+        public static string RateIt_Option_Spelling {
+            get {
+                return ResourceManager.GetString("RateIt_Option_Spelling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unintelligence.
+        /// </summary>
+        public static string RateIt_Option_Unintelligence {
+            get {
+                return ResourceManager.GetString("RateIt_Option_Unintelligence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word choice.
+        /// </summary>
+        public static string RateIt_Option_WordChoice {
+            get {
+                return ResourceManager.GetString("RateIt_Option_WordChoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Words addition.
+        /// </summary>
+        public static string RateIt_Option_WordsAddition {
+            get {
+                return ResourceManager.GetString("RateIt_Option_WordsAddition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Words omission.
+        /// </summary>
+        public static string RateIt_Option_WordsOmission {
+            get {
+                return ResourceManager.GetString("RateIt_Option_WordsOmission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap sdl {

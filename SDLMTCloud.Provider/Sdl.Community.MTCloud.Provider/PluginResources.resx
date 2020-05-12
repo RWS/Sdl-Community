@@ -286,4 +286,25 @@
   <data name="Message_No_model_available" xml:space="preserve">
     <value>No model available</value>
   </data>
+  <data name="RateIt_Option_Capitalization" xml:space="preserve">
+    <value>Capitalization, punctuation</value>
+  </data>
+  <data name="RateIt_Option_Grammar" xml:space="preserve">
+    <value>Grammar</value>
+  </data>
+  <data name="RateIt_Option_Spelling" xml:space="preserve">
+    <value>Spelling</value>
+  </data>
+  <data name="RateIt_Option_Unintelligence" xml:space="preserve">
+    <value>Unintelligence</value>
+  </data>
+  <data name="RateIt_Option_WordChoice" xml:space="preserve">
+    <value>Word choice</value>
+  </data>
+  <data name="RateIt_Option_WordsAddition" xml:space="preserve">
+    <value>Words addition</value>
+  </data>
+  <data name="RateIt_Option_WordsOmission" xml:space="preserve">
+    <value>Words omission</value>
+  </data>
 </root>
