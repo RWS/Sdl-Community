@@ -30,7 +30,9 @@
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExporterControl));
             this.mainPanel = new System.Windows.Forms.Panel();
-            this.selectAll = new System.Windows.Forms.CheckBox();
+            this.chkBox_IncludeSingleFileProjects = new System.Windows.Forms.CheckBox();
+            this.chkBox_SelectAllLanguages = new System.Windows.Forms.CheckBox();
+            this.chkBox_SelectAllProjects = new System.Windows.Forms.CheckBox();
             this.clearBtn = new System.Windows.Forms.Button();
             this.loadBtn = new System.Windows.Forms.Button();
             this.projectStatusComboBox = new System.Windows.Forms.ComboBox();
@@ -60,7 +62,9 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.selectAll);
+            this.mainPanel.Controls.Add(this.chkBox_IncludeSingleFileProjects);
+            this.mainPanel.Controls.Add(this.chkBox_SelectAllLanguages);
+            this.mainPanel.Controls.Add(this.chkBox_SelectAllProjects);
             this.mainPanel.Controls.Add(this.clearBtn);
             this.mainPanel.Controls.Add(this.loadBtn);
             this.mainPanel.Controls.Add(this.projectStatusComboBox);
@@ -91,26 +95,48 @@
             this.mainPanel.Size = new System.Drawing.Size(811, 455);
             this.mainPanel.TabIndex = 0;
             // 
-            // selectAll
+            // chkBox_IncludeSingleFileProjects
             // 
-            this.selectAll.AutoSize = true;
-            this.selectAll.Location = new System.Drawing.Point(12, 426);
-            this.selectAll.Name = "selectAll";
-            this.selectAll.Size = new System.Drawing.Size(109, 17);
-            this.selectAll.TabIndex = 28;
-            this.selectAll.Text = "Select all projects";
-            this.selectAll.UseVisualStyleBackColor = true;
-            this.selectAll.CheckedChanged += new System.EventHandler(this.selectAll_CheckedChanged);
+            this.chkBox_IncludeSingleFileProjects.AutoSize = true;
+            this.chkBox_IncludeSingleFileProjects.Location = new System.Drawing.Point(433, 78);
+            this.chkBox_IncludeSingleFileProjects.Name = "chkBox_IncludeSingleFileProjects";
+            this.chkBox_IncludeSingleFileProjects.Size = new System.Drawing.Size(147, 17);
+            this.chkBox_IncludeSingleFileProjects.TabIndex = 30;
+            this.chkBox_IncludeSingleFileProjects.Text = "Include single file projects";
+            this.chkBox_IncludeSingleFileProjects.UseVisualStyleBackColor = true;
+            this.chkBox_IncludeSingleFileProjects.CheckedChanged += new System.EventHandler(this.IncludeSingleFileProjects_CheckedChanged);
+            // 
+            // chkBox_SelectAllLanguages
+            // 
+            this.chkBox_SelectAllLanguages.AutoSize = true;
+            this.chkBox_SelectAllLanguages.Location = new System.Drawing.Point(249, 29);
+            this.chkBox_SelectAllLanguages.Name = "chkBox_SelectAllLanguages";
+            this.chkBox_SelectAllLanguages.Size = new System.Drawing.Size(121, 17);
+            this.chkBox_SelectAllLanguages.TabIndex = 29;
+            this.chkBox_SelectAllLanguages.Text = "Select all languages";
+            this.chkBox_SelectAllLanguages.UseVisualStyleBackColor = true;
+            this.chkBox_SelectAllLanguages.CheckedChanged += new System.EventHandler(this.SelectAllLanguages_CheckedChanged);
+            // 
+            // chkBox_SelectAllProjects
+            // 
+            this.chkBox_SelectAllProjects.AutoSize = true;
+            this.chkBox_SelectAllProjects.Location = new System.Drawing.Point(15, 29);
+            this.chkBox_SelectAllProjects.Name = "chkBox_SelectAllProjects";
+            this.chkBox_SelectAllProjects.Size = new System.Drawing.Size(109, 17);
+            this.chkBox_SelectAllProjects.TabIndex = 28;
+            this.chkBox_SelectAllProjects.Text = "Select all projects";
+            this.chkBox_SelectAllProjects.UseVisualStyleBackColor = true;
+            this.chkBox_SelectAllProjects.CheckedChanged += new System.EventHandler(this.SelectAllProjects_CheckedChanged);
             // 
             // clearBtn
             // 
             this.clearBtn.Location = new System.Drawing.Point(690, 253);
             this.clearBtn.Name = "clearBtn";
-            this.clearBtn.Size = new System.Drawing.Size(106, 23);
+            this.clearBtn.Size = new System.Drawing.Size(106, 43);
             this.clearBtn.TabIndex = 27;
-            this.clearBtn.Text = "Clear external";
+            this.clearBtn.Text = "Clear external / Refresh projects";
             this.clearBtn.UseVisualStyleBackColor = true;
-            this.clearBtn.Click += new System.EventHandler(this.clearBtn_Click);
+            this.clearBtn.Click += new System.EventHandler(this.ClearBtn_Click);
             // 
             // loadBtn
             // 
@@ -120,7 +146,7 @@
             this.loadBtn.TabIndex = 26;
             this.loadBtn.Text = "Load external ";
             this.loadBtn.UseVisualStyleBackColor = true;
-            this.loadBtn.Click += new System.EventHandler(this.loadBtn_Click);
+            this.loadBtn.Click += new System.EventHandler(this.LoadBtn_Click);
             // 
             // projectStatusComboBox
             // 
@@ -133,7 +159,7 @@
             this.projectStatusComboBox.Name = "projectStatusComboBox";
             this.projectStatusComboBox.Size = new System.Drawing.Size(121, 21);
             this.projectStatusComboBox.TabIndex = 25;
-            this.projectStatusComboBox.SelectedIndexChanged += new System.EventHandler(this.projectStatusComboBox_SelectedIndexChanged);
+            this.projectStatusComboBox.SelectedIndexChanged += new System.EventHandler(this.ProjectStatusComboBox_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -161,7 +187,7 @@
             this.browseBtn.TabIndex = 22;
             this.browseBtn.Text = "Browse";
             this.browseBtn.UseVisualStyleBackColor = true;
-            this.browseBtn.Click += new System.EventHandler(this.browseBtn_Click);
+            this.browseBtn.Click += new System.EventHandler(this.BrowseBtn_Click);
             // 
             // reportOutputPath
             // 
@@ -169,8 +195,8 @@
             this.reportOutputPath.Name = "reportOutputPath";
             this.reportOutputPath.Size = new System.Drawing.Size(366, 20);
             this.reportOutputPath.TabIndex = 21;
-            this.reportOutputPath.TextChanged += new System.EventHandler(this.reportOutputPath_TextChanged);
-            this.reportOutputPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.reportOutputPath_KeyUp);
+            this.reportOutputPath.TextChanged += new System.EventHandler(this.ReportOutputPath_TextChanged);
+            this.reportOutputPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ReportOutputPath_KeyUp);
             // 
             // crossRep
             // 
@@ -181,7 +207,7 @@
             this.crossRep.TabIndex = 20;
             this.crossRep.Text = "Cross File Repetitions";
             this.crossRep.UseVisualStyleBackColor = true;
-            this.crossRep.CheckedChanged += new System.EventHandler(this.crossRep_CheckedChanged);
+            this.crossRep.CheckedChanged += new System.EventHandler(this.CrossRep_CheckedChanged);
             // 
             // contextMatch
             // 
@@ -192,7 +218,7 @@
             this.contextMatch.TabIndex = 19;
             this.contextMatch.Text = "Context Match";
             this.contextMatch.UseVisualStyleBackColor = true;
-            this.contextMatch.CheckedChanged += new System.EventHandler(this.contextMatch_CheckedChanged);
+            this.contextMatch.CheckedChanged += new System.EventHandler(this.ContextMatch_CheckedChanged);
             // 
             // perfectMatch
             // 
@@ -203,7 +229,7 @@
             this.perfectMatch.TabIndex = 18;
             this.perfectMatch.Text = "Perfect Match";
             this.perfectMatch.UseVisualStyleBackColor = true;
-            this.perfectMatch.CheckedChanged += new System.EventHandler(this.perfectMatch_CheckedChanged);
+            this.perfectMatch.CheckedChanged += new System.EventHandler(this.PerfectMatch_CheckedChanged);
             // 
             // locked
             // 
@@ -214,7 +240,7 @@
             this.locked.TabIndex = 17;
             this.locked.Text = "Locked";
             this.locked.UseVisualStyleBackColor = true;
-            this.locked.CheckedChanged += new System.EventHandler(this.locked_CheckedChanged);
+            this.locked.CheckedChanged += new System.EventHandler(this.Locked_CheckedChanged);
             // 
             // internalFuzzies
             // 
@@ -225,7 +251,7 @@
             this.internalFuzzies.TabIndex = 16;
             this.internalFuzzies.Text = "Internal Fuzzies";
             this.internalFuzzies.UseVisualStyleBackColor = true;
-            this.internalFuzzies.CheckedChanged += new System.EventHandler(this.internalFuzzies_CheckedChanged);
+            this.internalFuzzies.CheckedChanged += new System.EventHandler(this.InternalFuzzies_CheckedChanged);
             // 
             // adaptiveMT
             // 
@@ -236,7 +262,7 @@
             this.adaptiveMT.TabIndex = 15;
             this.adaptiveMT.Text = "Adaptive MT Baseline";
             this.adaptiveMT.UseVisualStyleBackColor = true;
-            this.adaptiveMT.CheckedChanged += new System.EventHandler(this.adaptiveMT_CheckedChanged);
+            this.adaptiveMT.CheckedChanged += new System.EventHandler(this.AdaptiveMT_CheckedChanged);
             // 
             // adaptiveLearnings
             // 
@@ -247,7 +273,7 @@
             this.adaptiveLearnings.TabIndex = 14;
             this.adaptiveLearnings.Text = "Adaptive MT with Learnings";
             this.adaptiveLearnings.UseVisualStyleBackColor = true;
-            this.adaptiveLearnings.CheckedChanged += new System.EventHandler(this.fragmentMatches_CheckedChanged);
+            this.adaptiveLearnings.CheckedChanged += new System.EventHandler(this.FragmentMatches_CheckedChanged);
             // 
             // optionsLabel
             // 
@@ -260,7 +286,7 @@
             // 
             // exitBtn
             // 
-            this.exitBtn.Location = new System.Drawing.Point(692, 420);
+            this.exitBtn.Location = new System.Drawing.Point(692, 426);
             this.exitBtn.Name = "exitBtn";
             this.exitBtn.Size = new System.Drawing.Size(107, 23);
             this.exitBtn.TabIndex = 11;
@@ -276,7 +302,7 @@
             this.targetBtn.TabIndex = 10;
             this.targetBtn.Text = "Open Target Folder";
             this.targetBtn.UseVisualStyleBackColor = true;
-            this.targetBtn.Click += new System.EventHandler(this.targetBtn_Click);
+            this.targetBtn.Click += new System.EventHandler(this.TargetBtn_Click);
             // 
             // csvBtn
             // 
@@ -286,7 +312,7 @@
             this.csvBtn.TabIndex = 9;
             this.csvBtn.Text = "Export to CSV";
             this.csvBtn.UseVisualStyleBackColor = true;
-            this.csvBtn.Click += new System.EventHandler(this.csvBtn_Click);
+            this.csvBtn.Click += new System.EventHandler(this.CsvBtn_Click);
             // 
             // copyBtn
             // 
@@ -296,17 +322,18 @@
             this.copyBtn.TabIndex = 8;
             this.copyBtn.Text = "Copy to clipboard";
             this.copyBtn.UseVisualStyleBackColor = true;
-            this.copyBtn.Click += new System.EventHandler(this.copyBtn_Click);
+            this.copyBtn.Click += new System.EventHandler(this.CopyBtn_Click);
             // 
             // languagesListBox
             // 
             this.languagesListBox.CheckOnClick = true;
             this.languagesListBox.FormattingEnabled = true;
-            this.languagesListBox.Location = new System.Drawing.Point(249, 29);
+            this.languagesListBox.Location = new System.Drawing.Point(246, 49);
             this.languagesListBox.Name = "languagesListBox";
             this.languagesListBox.Size = new System.Drawing.Size(177, 394);
             this.languagesListBox.TabIndex = 7;
-            this.languagesListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.languagesListBox_ItemCheck);
+            this.languagesListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.LanguagesListBox_ItemCheck);
+            this.languagesListBox.SelectedIndexChanged += new System.EventHandler(this.LanguagesListBox_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -326,22 +353,23 @@
             this.includeHeaderCheck.TabIndex = 5;
             this.includeHeaderCheck.Text = "Include header in export";
             this.includeHeaderCheck.UseVisualStyleBackColor = true;
-            this.includeHeaderCheck.CheckedChanged += new System.EventHandler(this.includeHeaderCheck_CheckedChanged);
+            this.includeHeaderCheck.CheckedChanged += new System.EventHandler(this.IncludeHeaderCheck_CheckedChanged);
             // 
             // projListbox
             // 
             this.projListbox.CheckOnClick = true;
             this.projListbox.FormattingEnabled = true;
-            this.projListbox.Location = new System.Drawing.Point(12, 26);
+            this.projListbox.Location = new System.Drawing.Point(12, 49);
             this.projListbox.Name = "projListbox";
             this.projListbox.Size = new System.Drawing.Size(221, 394);
             this.projListbox.TabIndex = 1;
-            this.projListbox.SelectedIndexChanged += new System.EventHandler(this.projListbox_SelectedIndexChanged);
+            this.projListbox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ProjListbox_ItemCheck);
+            this.projListbox.SelectedIndexChanged += new System.EventHandler(this.ProjListbox_SelectedIndexChanged);
             // 
             // selectProjLbl
             // 
             this.selectProjLbl.AutoSize = true;
-            this.selectProjLbl.Location = new System.Drawing.Point(9, 10);
+            this.selectProjLbl.Location = new System.Drawing.Point(12, 9);
             this.selectProjLbl.Name = "selectProjLbl";
             this.selectProjLbl.Size = new System.Drawing.Size(75, 13);
             this.selectProjLbl.TabIndex = 0;
@@ -358,7 +386,7 @@
             this.MaximizeBox = false;
             this.Name = "ReportExporterControl";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SDL Trados Studio 2019 – Export Analysis Reports";
+            this.Text = "SDL Trados Studio – Export Analysis Reports";
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -392,6 +420,8 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Button loadBtn;
 		private System.Windows.Forms.Button clearBtn;
-		private System.Windows.Forms.CheckBox selectAll;
+		private System.Windows.Forms.CheckBox chkBox_SelectAllProjects;
+		private System.Windows.Forms.CheckBox chkBox_SelectAllLanguages;
+		private System.Windows.Forms.CheckBox chkBox_IncludeSingleFileProjects;
 	}
 }
