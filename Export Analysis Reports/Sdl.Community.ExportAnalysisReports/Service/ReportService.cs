@@ -48,22 +48,18 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			{
 				Directory.CreateDirectory(reportOutputPath);
 				var projectsToBeExported = projects.Where(p => p.ShouldBeExported).ToList();
-				var areCheckedLanguages = projectsToBeExported.Any(p => p.PojectLanguages.Any(l => l.Value));
-				if (areCheckedLanguages || projectsToBeExported.Count < 1)
+				var areCheckedLanguages = projectsToBeExported.Any(p => p.ProjectLanguages.Any(l => l.Value));
+				if (areCheckedLanguages || projectsToBeExported.Count > 0)
 				{
 					foreach (var project in projectsToBeExported)
 					{
 						// check which languages to export
-						if (project.PojectLanguages == null) continue;
-						var checkedLanguages = project.PojectLanguages.Where(l => l.Value).ToList();
+						if (project.ProjectLanguages == null) continue;
+						var checkedLanguages = project.ProjectLanguages.Where(l => l.Value).ToList();
 
 						foreach (var languageReport in checkedLanguages)
 						{
-							if (string.IsNullOrEmpty(project.ReportPath))
-							{
-								project.ReportPath = reportOutputPath;
-							}
-
+							project.ReportPath = reportOutputPath;
 							WriteReportFile(project, optionalInformation, languageReport, isChecked);
 						}
 					}

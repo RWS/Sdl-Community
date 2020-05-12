@@ -1,0 +1,361 @@
+<?xml version="1.0"?>
+<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Guid="b7cc381e-6573-45e8-ac72-51e52837477c" SettingsBundleGuid="e163555a-2353-4d1c-afd3-0351a73dca6a" Version="4.0.0.0" Owner="GLOBAL\fcaputa" ProjectTemplateGuid="10004f3b-4acf-4425-a3e3-38d3b3514276" ReferenceProjectGuid="00000000-0000-0000-0000-000000000000">
+  <LanguageDirections>
+    <LanguageDirection Guid="8deb5b63-9856-4f0e-a9d2-62656ce4bfee" SettingsBundleGuid="ff1f9ed6-8f9f-4b97-8b0d-d899df907da4" TargetLanguageCode="en-GB" SourceLanguageCode="en-US">
+      <AutoSuggestDictionaries />
+      <CascadeItem OverrideParent="false" StopSearchingWhenResultsFound="false" />
+    </LanguageDirection>
+  </LanguageDirections>
+  <TermbaseConfiguration>
+    <RecognitionOptions>
+      <ShowWithNoAvailableTranslation>false</ShowWithNoAvailableTranslation>
+      <MinimumMatchValue>70</MinimumMatchValue>
+      <SearchDepth>200</SearchDepth>
+      <SearchOrder>Parallel</SearchOrder>
+    </RecognitionOptions>
+  </TermbaseConfiguration>
+  <SettingsBundles>
+    <SettingsBundle Guid="e163555a-2353-4d1c-afd3-0351a73dca6a">
+      <SettingsBundle>
+        <SettingsGroup Id="TerminologyProviderSettings">
+          <Setting Id="TermbasesOrder">
+            <ArrayOfstring xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            </ArrayOfstring>
+          </Setting>
+          <Setting Id="Termbases">
+            <ArrayOfTermbase xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Sdl.ProjectApi.Implementation.Xml">
+            </ArrayOfTermbase>
+          </Setting>
+        </SettingsGroup>
+        <SettingsGroup Id="FileViewServiceSettings">
+          <Setting Id="SelectedTargetLanguageCode">en-GB</Setting>
+        </SettingsGroup>
+        <SettingsGroup Id="Plugin.AnyTM.SourceLanguages">
+          <Setting Id="HasMixedSourceLanguages">False</Setting>
+          <Setting Id="AutoDetectSourceLanguage">True</Setting>
+          <Setting Id="SourceLanguages">en-US</Setting>
+        </SettingsGroup>
+        <SettingsGroup Id="ProjectSettings">
+          <Setting Id="ProjectOrigin" />
+        </SettingsGroup>
+        <SettingsGroup Id="CleanUpTargetSettings">
+          <Setting Id="UseConversionSettings">False</Setting>
+        </SettingsGroup>
+        <SettingsGroup Id="CleanUpSourceSettings">
+          <Setting Id="SegmentLockList">
+            <ArrayOfSegmentLockItem xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/SDLCommunityCleanUpTasks.Models">
+            </ArrayOfSegmentLockItem>
+          </Setting>
+          <Setting Id="StructureLockList">
+            <ArrayOfContextDef xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/SDLCommunityCleanUpTasks.Models">
+              <ContextDef>
+                <IsChecked>false</IsChecked>
+                <Purpose>Location</Purpose>
+                <Type>LocationDetails</Type>
+              </ContextDef>
+              <ContextDef>
+                <IsChecked>false</IsChecked>
+                <Purpose>Information</Purpose>
+                <Type>sdl:paragraph</Type>
+              </ContextDef>
+            </ArrayOfContextDef>
+          </Setting>
+          <Setting Id="FormatTagList">
+            <ArrayOfKeyValueOfstringboolean xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+              <KeyValueOfstringboolean>
+                <Key>Background Color</Key>
+                <Value>false</Value>
+              </KeyValueOfstringboolean>
+              <KeyValueOfstringboolean>
+                <Key>Bold Text</Key>
+                <Value>false</Value>
+              </KeyValueOfstringboolean>
+              <KeyValueOfstringboolean>
+                <Key>Font Name</Key>
+                <Value>false</Value>
+              </KeyValueOfstringboolean>
+              <KeyValueOfstringboolean>
+                <Key>Font Size</Key>
+                <Value>false</Value>
+              </KeyValueOfstringboolean>
+              <KeyValueOfstringboolean>
+                <Key>Text Color</Key>
+                <Value>false</Value>
+              </KeyValueOfstringboolean>
+              <KeyValueOfstringboolean>
+                <Key>Italic</Key>
+                <Value>false</Value>
+              </KeyValueOfstringboolean>
+              <KeyValueOfstringboolean>
+                <Key>Text Direction</Key>
+                <Value>false</Value>
+              </KeyValueOfstringboolean>
+              <KeyValueOfstringboolean>
+                <Key>Text Position</Key>
+                <Value>false</Value>
+              </KeyValueOfstringboolean>
+              <KeyValueOfstringboolean>
+                <Key>Underline</Key>
+                <Value>false</Value>
+              </KeyValueOfstringboolean>
+              <KeyValueOfstringboolean>
+                <Key>Strikethrough</Key>
+                <Value>false</Value>
+              </KeyValueOfstringboolean>
+            </ArrayOfKeyValueOfstringboolean>
+          </Setting>
+          <Setting Id="PlaceholderTagList">
+            <ArrayOfKeyValueOfstringboolean xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            </ArrayOfKeyValueOfstringboolean>
+          </Setting>
+          <Setting Id="ConversionFiles">
+            <ArrayOfKeyValueOfstringboolean xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            </ArrayOfKeyValueOfstringboolean>
+          </Setting>
+          <Setting Id="Placeholders">
+            <ArrayOfPlaceholder xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/SDLCommunityCleanUpTasks.Models">
+            </ArrayOfPlaceholder>
+          </Setting>
+        </SettingsGroup>
+      </SettingsBundle>
+    </SettingsBundle>
+  </SettingsBundles>
+  <InitialTaskTemplate Description="ComplexTask_Prepare_NoProjectTM_Description" Name="ComplexTask_Prepare_NoProjectTM_Name" Id="Sdl.ProjectApi.AutomaticTask.Prepare.NoProjectTM">
+    <SubTaskTemplates>
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Conversion" />
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Split" />
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.PerfectMatch" />
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Translate" />
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Analysis" />
+    </SubTaskTemplates>
+  </InitialTaskTemplate>
+  <AnalysisBands>
+    <AnalysisBand MinimumMatchValue="50" />
+    <AnalysisBand MinimumMatchValue="75" />
+    <AnalysisBand MinimumMatchValue="85" />
+    <AnalysisBand MinimumMatchValue="95" />
+  </AnalysisBands>
+  <ManualTaskTemplates />
+  <Users>
+    <User UserId="GLOBAL\fcaputa" FullName="Florentina Caputa" Description="" Email="fcaputa@sdl.com" PhoneNumber="" EmailType="Smtp" />
+  </Users>
+  <CascadeItem OverrideParent="true" StopSearchingWhenResultsFound="false" />
+  <GeneralProjectInfo IsInPlace="false" StartedAt="2020-03-13T10:56:07.2621184Z" IsImported="false" Name="Project 2" Status="Started" CreatedBy="GLOBAL\fcaputa" CreatedAt="2020-03-13T10:55:48.1468396Z" />
+  <SourceLanguageCode>en-US</SourceLanguageCode>
+  <ProjectFiles>
+    <ProjectFile Guid="c26d8935-041f-493d-a856-d0e2ae219618" Path="" Role="Translatable" Name="Test5.docx" ParentProjectFileGuid="00000000-0000-0000-0000-000000000000" FilterDefinitionId="WordprocessingML v. 2">
+      <SpecificTargetLanguages />
+      <LanguageFiles>
+        <LanguageFile Guid="897792dd-22cc-4899-96cf-ec11eeeb760c" SettingsBundleGuid="98b3cf86-d080-4188-bf5a-b041186174a5" LanguageCode="en-US">
+          <FileVersions>
+            <FileVersion Guid="0e145c2e-2ddb-4526-902d-9f54a1cb1b89" VersionNumber="1" Size="11539" FileName="Test5.docx" PhysicalPath="en-US\Test5.docx" CreatedBy="GLOBAL\fcaputa" CreatedAt="2020-03-13T10:55:48.2864311Z" FileTimeStamp="2019-09-02T07:47:41.2059945Z" IsAutoUpload="false" />
+            <FileVersion Guid="93f706f0-26ca-4cbf-b2e7-8d80f49ede25" VersionNumber="2" Size="16675" FileName="Test5.docx.sdlxliff" PhysicalPath="en-US\Test5.docx.sdlxliff" Comment="" CreatedBy="GLOBAL\fcaputa" CreatedAt="2020-03-13T10:56:13.7815648Z" FileTimeStamp="2020-03-13T10:56:08.6810482Z" IsAutoUpload="false" />
+          </FileVersions>
+          <AnalysisStatistics WordCountStatus="None" AnalysisStatus="None">
+            <Total Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Repetitions Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Perfect Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <InContextExact Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Exact Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Fuzzy>
+              <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+              <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+              <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+              <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            </Fuzzy>
+            <New Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <NewBaseline Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <NewLearnings Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Locked Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+          </AnalysisStatistics>
+          <ChildFiles />
+        </LanguageFile>
+        <LanguageFile Guid="b8cc4683-e4a3-45a6-9d01-5eaf82864fa7" SettingsBundleGuid="e2719203-1cc6-445e-98b9-780cd1f2b5fe" LanguageCode="en-GB">
+          <FileVersions>
+            <FileVersion Guid="6b19f0e1-8d73-4e28-9528-ea0fcc494a27" VersionNumber="3" Size="16675" FileName="Test5.docx.sdlxliff" PhysicalPath="en-GB\Test5.docx.sdlxliff" CreatedBy="GLOBAL\fcaputa" CreatedAt="2020-03-13T10:56:13.8104383Z" FileTimeStamp="2020-03-13T10:56:08.6810482Z" IsAutoUpload="false" />
+            <FileVersion Guid="87e65280-030e-484e-8a2a-17dce5b5257d" VersionNumber="4" Size="17012" FileName="Test5.docx.sdlxliff" PhysicalPath="en-GB\Test5.docx.sdlxliff" Comment="Created by 'Apply PerfectMatch+Pre-translate Files+Analyze Files'" CreatedBy="GLOBAL\fcaputa" CreatedAt="2020-03-13T10:56:14.2454168Z" FileTimeStamp="2020-03-13T10:56:14.2294582Z" IsAutoUpload="false" />
+            <FileVersion Guid="eb89ae6d-9b1e-4d6e-aea1-68e04d0909d6" VersionNumber="5" Size="18231" FileName="Test5.docx.sdlxliff" PhysicalPath="en-GB\Test5.docx.sdlxliff" Comment="Created by 'Cleanup Target and Generate Files'" CreatedBy="GLOBAL\fcaputa" CreatedAt="2020-04-15T09:07:16.7770435Z" FileTimeStamp="2020-04-15T09:07:16.7690645Z" IsAutoUpload="false" />
+            <FileVersion Guid="1fcb9f51-7c6d-46d7-86ed-babb7cf4c79a" VersionNumber="6" Size="18231" FileName="Test5.docx.sdlxliff" PhysicalPath="en-GB\Test5.docx.sdlxliff" Comment="Created by 'Cleanup Source'" CreatedBy="GLOBAL\fcaputa" CreatedAt="2020-04-15T09:07:38.8285978Z" FileTimeStamp="2020-04-15T09:07:38.8216495Z" IsAutoUpload="false" />
+          </FileVersions>
+          <AnalysisStatistics WordCountFileTimeStamp="2020-03-13T11:04:51.0374674Z" WordCountStatus="Complete" AnalysisFileTimeStamp="2020-03-13T11:04:51.0374674Z" AnalysisStatus="Complete">
+            <Total Words="27" Characters="98" Segments="2" Placeables="4" Tags="2" />
+            <Repetitions Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Perfect Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <InContextExact Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Exact Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Fuzzy>
+              <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+              <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+              <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+              <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            </Fuzzy>
+            <New Words="27" Characters="98" Segments="2" Placeables="4" Tags="2" />
+            <NewBaseline Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <NewLearnings Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Locked Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+          </AnalysisStatistics>
+          <ConfirmationStatistics FileTimeStamp="2020-04-15T09:07:50.3605534Z" Status="Complete">
+            <Unspecified Words="19" Characters="64" Segments="1" Placeables="4" Tags="2" />
+            <Draft Words="8" Characters="34" Segments="1" Placeables="0" Tags="0" />
+            <Translated Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <RejectedTranslation Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <ApprovedTranslation Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <RejectedSignOff Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <ApprovedSignOff Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+          </ConfirmationStatistics>
+          <ChildFiles />
+        </LanguageFile>
+      </LanguageFiles>
+      <PreviousBilingualFiles />
+    </ProjectFile>
+  </ProjectFiles>
+  <Tasks>
+    <AutomaticTask Guid="1f3626b1-93b9-427e-97a9-2426c4a7d105" Status="Completed" CompletedAt="2020-03-13T10:55:48.3520952Z" PercentComplete="100" CreatedAt="2020-03-13T10:55:48.2864311Z" PredecessorTaskGuid="00000000-0000-0000-0000-000000000000" StartedAt="2020-03-13T10:55:48.287471Z" CreatedBy="GLOBAL\fcaputa">
+      <TaskTemplateIds>
+        <TaskTemplateId>Sdl.ProjectApi.AutomaticTasks.Scan</TaskTemplateId>
+      </TaskTemplateIds>
+      <Files>
+        <TaskFile Guid="b3fb3cdc-4085-48f4-a772-473a24444a54" Completed="true" ParentTaskFileGuid="00000000-0000-0000-0000-000000000000" LanguageFileGuid="897792dd-22cc-4899-96cf-ec11eeeb760c" Purpose="WorkFile">
+          <Result Guid="00000000-0000-0000-0000-000000000000" />
+        </TaskFile>
+      </Files>
+      <OutputFiles>
+        <OutputFile LanguageFileGuid="897792dd-22cc-4899-96cf-ec11eeeb760c" Purpose="WorkFile" />
+      </OutputFiles>
+      <Reports />
+      <Parameters />
+      <Result Guid="00000000-0000-0000-0000-000000000000" />
+    </AutomaticTask>
+    <AutomaticTask Guid="74657e84-4c04-4893-84cb-cfe3a4efdd0c" Status="Completed" CompletedAt="2020-03-13T10:56:13.7815648Z" ComplexTaskTemplateId="Sdl.ProjectApi.AutomaticTask.Prepare.NoProjectTM" PercentComplete="100" CreatedAt="2020-03-13T10:56:07.6103736Z" PredecessorTaskGuid="00000000-0000-0000-0000-000000000000" StartedAt="2020-03-13T10:56:07.7470053Z" CreatedBy="GLOBAL\fcaputa">
+      <TaskTemplateIds>
+        <TaskTemplateId>Sdl.ProjectApi.AutomaticTasks.Conversion</TaskTemplateId>
+      </TaskTemplateIds>
+      <Files>
+        <TaskFile Guid="c06dcf91-1337-4b9e-a881-40b79031adcc" Completed="true" ParentTaskFileGuid="00000000-0000-0000-0000-000000000000" LanguageFileGuid="897792dd-22cc-4899-96cf-ec11eeeb760c" Purpose="WorkFile">
+          <Result Guid="00000000-0000-0000-0000-000000000000" />
+        </TaskFile>
+      </Files>
+      <OutputFiles>
+        <OutputFile LanguageFileGuid="897792dd-22cc-4899-96cf-ec11eeeb760c" Purpose="WorkFile" />
+      </OutputFiles>
+      <Reports />
+      <Parameters />
+      <Result Guid="00000000-0000-0000-0000-000000000000" />
+    </AutomaticTask>
+    <AutomaticTask Guid="928a08c5-3b9f-4590-8000-590dbdd70c51" Status="Completed" CompletedAt="2020-03-13T10:56:13.8234262Z" ComplexTaskTemplateId="Sdl.ProjectApi.AutomaticTask.Prepare.NoProjectTM" PercentComplete="100" CreatedAt="2020-03-13T10:56:07.6103736Z" PredecessorTaskGuid="74657e84-4c04-4893-84cb-cfe3a4efdd0c" StartedAt="2020-03-13T10:56:13.7985094Z" CreatedBy="GLOBAL\fcaputa">
+      <TaskTemplateIds>
+        <TaskTemplateId>Sdl.ProjectApi.AutomaticTasks.Split</TaskTemplateId>
+      </TaskTemplateIds>
+      <Files>
+        <TaskFile Guid="ed1648c1-8856-41f5-a20c-805fb9161b4e" Completed="true" ParentTaskFileGuid="00000000-0000-0000-0000-000000000000" LanguageFileGuid="897792dd-22cc-4899-96cf-ec11eeeb760c" Purpose="WorkFile">
+          <Result Guid="00000000-0000-0000-0000-000000000000" />
+        </TaskFile>
+      </Files>
+      <OutputFiles>
+        <OutputFile LanguageFileGuid="b8cc4683-e4a3-45a6-9d01-5eaf82864fa7" Purpose="WorkFile" />
+      </OutputFiles>
+      <Reports />
+      <Parameters />
+      <Result Guid="00000000-0000-0000-0000-000000000000" />
+    </AutomaticTask>
+    <AutomaticTask Guid="7f2dc180-c989-48c9-a12c-1c5025b44e17" Status="Completed" CompletedAt="2020-03-13T10:56:14.2733754Z" ComplexTaskTemplateId="Sdl.ProjectApi.AutomaticTask.Prepare.NoProjectTM" PercentComplete="100" CreatedAt="2020-03-13T10:56:07.6103736Z" PredecessorTaskGuid="928a08c5-3b9f-4590-8000-590dbdd70c51" StartedAt="2020-03-13T10:56:13.8324481Z" CreatedBy="GLOBAL\fcaputa">
+      <TaskTemplateIds>
+        <TaskTemplateId>Sdl.ProjectApi.AutomaticTasks.PerfectMatch</TaskTemplateId>
+        <TaskTemplateId>Sdl.ProjectApi.AutomaticTasks.Translate</TaskTemplateId>
+        <TaskTemplateId>Sdl.ProjectApi.AutomaticTasks.Analysis</TaskTemplateId>
+      </TaskTemplateIds>
+      <Files>
+        <TaskFile Guid="41a0ae80-5f13-4b28-a4da-36f366a09b48" Completed="true" ParentTaskFileGuid="00000000-0000-0000-0000-000000000000" LanguageFileGuid="b8cc4683-e4a3-45a6-9d01-5eaf82864fa7" Purpose="WorkFile">
+          <Result Guid="00000000-0000-0000-0000-000000000000" />
+        </TaskFile>
+      </Files>
+      <OutputFiles>
+        <OutputFile LanguageFileGuid="b8cc4683-e4a3-45a6-9d01-5eaf82864fa7" Purpose="WorkFile" />
+      </OutputFiles>
+      <Reports>
+        <Report Guid="c003696f-d62b-4875-af5c-e2ea657cccfd" Name="Pre-translate Files Report" Description="Results of applying the translation memories to the files." TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Translate" LanguageDirectionGuid="8deb5b63-9856-4f0e-a9d2-62656ce4bfee" PhysicalPath="Reports\Pre-translate Files en-US_en-GB.xml" />
+        <Report Guid="fcadf14f-616b-4228-89cd-5bb5b4247acd" Name="Analyze Files Report" Description="Statistics showing the expected leverage from applying the translation memories." TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Analysis" LanguageDirectionGuid="8deb5b63-9856-4f0e-a9d2-62656ce4bfee" PhysicalPath="Reports\Analyze Files en-US_en-GB.xml" />
+      </Reports>
+      <Parameters />
+      <Result Guid="00000000-0000-0000-0000-000000000000">
+        <Messages Level="Warning" Message="No translation memories found to look up translations for language pair English (United States)-&gt;English (United Kingdom)." Source="Pre-translate Files" />
+      </Result>
+    </AutomaticTask>
+    <AutomaticTask Guid="af87703c-17c6-4a05-85a7-0ac5c38a8fcc" Status="Completed" CompletedAt="2020-03-30T05:29:11.3375626Z" PercentComplete="100" CreatedAt="2020-03-30T05:29:11.2288502Z" PredecessorTaskGuid="00000000-0000-0000-0000-000000000000" StartedAt="2020-03-30T05:29:11.2398209Z" CreatedBy="GLOBAL\fcaputa">
+      <TaskTemplateIds>
+        <TaskTemplateId>Sdl.ProjectApi.AutomaticTasks.Analysis</TaskTemplateId>
+      </TaskTemplateIds>
+      <Files>
+        <TaskFile Guid="007cef5a-5735-4cbd-9d4d-7574d52324eb" Completed="true" ParentTaskFileGuid="00000000-0000-0000-0000-000000000000" LanguageFileGuid="b8cc4683-e4a3-45a6-9d01-5eaf82864fa7" Purpose="WorkFile">
+          <Result Guid="00000000-0000-0000-0000-000000000000" />
+        </TaskFile>
+      </Files>
+      <OutputFiles>
+        <OutputFile LanguageFileGuid="b8cc4683-e4a3-45a6-9d01-5eaf82864fa7" Purpose="WorkFile" />
+      </OutputFiles>
+      <Reports>
+        <Report Guid="535dec8f-0c9a-42dc-a0dc-ca07bf1bb903" Name="Analyze Files Report" Description="Statistics showing the expected leverage from applying the translation memories." TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Analysis" LanguageDirectionGuid="8deb5b63-9856-4f0e-a9d2-62656ce4bfee" PhysicalPath="Reports\Analyze Files en-US_en-GB(1).xml" />
+      </Reports>
+      <Parameters />
+      <Result Guid="00000000-0000-0000-0000-000000000000" />
+    </AutomaticTask>
+    <AutomaticTask Guid="e33126c0-0f48-418d-a356-571e970a7009" Status="Completed" CompletedAt="2020-04-15T09:07:17.2193769Z" PercentComplete="100" CreatedAt="2020-04-15T09:07:16.6803016Z" PredecessorTaskGuid="00000000-0000-0000-0000-000000000000" StartedAt="2020-04-15T09:07:16.6972566Z" CreatedBy="GLOBAL\fcaputa">
+      <TaskTemplateIds>
+        <TaskTemplateId>Cleanup Target and Generate Files</TaskTemplateId>
+      </TaskTemplateIds>
+      <Files>
+        <TaskFile Guid="893a25fb-f41a-42dc-b1e4-c34fab81b5f3" Completed="true" ParentTaskFileGuid="00000000-0000-0000-0000-000000000000" LanguageFileGuid="b8cc4683-e4a3-45a6-9d01-5eaf82864fa7" Purpose="WorkFile">
+          <Result Guid="00000000-0000-0000-0000-000000000000" />
+        </TaskFile>
+      </Files>
+      <OutputFiles>
+        <OutputFile LanguageFileGuid="b8cc4683-e4a3-45a6-9d01-5eaf82864fa7" Purpose="WorkFile" />
+      </OutputFiles>
+      <Reports>
+        <Report Guid="f12d76c4-d3ba-453a-8260-8a35849f2e81" Name="Cleanup Target Report" Description="Cleanup Target Batch Task Results" TaskTemplateId="Cleanup Target and Generate Files" LanguageDirectionGuid="00000000-0000-0000-0000-000000000000" PhysicalPath="Reports\Cleanup Target and Generate Files .xml" />
+      </Reports>
+      <Parameters />
+      <Result Guid="00000000-0000-0000-0000-000000000000" />
+    </AutomaticTask>
+    <AutomaticTask Guid="381201e8-0b83-47f8-819f-151e34d3fa27" Status="Completed" CompletedAt="2020-04-15T09:07:17.2133932Z" PercentComplete="100" CreatedAt="2020-04-15T09:07:16.7780761Z" PredecessorTaskGuid="00000000-0000-0000-0000-000000000000" StartedAt="2020-04-15T09:07:16.7790402Z" CreatedBy="GLOBAL\fcaputa">
+      <TaskTemplateIds>
+        <TaskTemplateId>Sdl.ProjectApi.AutomaticTasks.GenerateTargetTranslation.ExportFiles</TaskTemplateId>
+      </TaskTemplateIds>
+      <Files>
+        <TaskFile Guid="1195786f-28d1-4753-bc3f-b706ac42ad67" Completed="true" ParentTaskFileGuid="00000000-0000-0000-0000-000000000000" LanguageFileGuid="b8cc4683-e4a3-45a6-9d01-5eaf82864fa7" Purpose="WorkFile">
+          <Result Guid="00000000-0000-0000-0000-000000000000" />
+        </TaskFile>
+      </Files>
+      <OutputFiles>
+        <OutputFile LanguageFileGuid="b8cc4683-e4a3-45a6-9d01-5eaf82864fa7" Purpose="WorkFile" />
+      </OutputFiles>
+      <Reports />
+      <Parameters />
+      <Result Guid="00000000-0000-0000-0000-000000000000" />
+    </AutomaticTask>
+    <AutomaticTask Guid="c54c8bb5-9564-4950-a4b7-894a23ee90d2" Status="Completed" CompletedAt="2020-04-15T09:07:38.8295966Z" PercentComplete="100" CreatedAt="2020-04-15T09:07:38.6902567Z" PredecessorTaskGuid="00000000-0000-0000-0000-000000000000" StartedAt="2020-04-15T09:07:38.7012265Z" CreatedBy="GLOBAL\fcaputa">
+      <TaskTemplateIds>
+        <TaskTemplateId>Cleanup Source</TaskTemplateId>
+      </TaskTemplateIds>
+      <Files>
+        <TaskFile Guid="5dfe33e0-573d-4f4d-8ded-3668fe13ebe9" Completed="true" ParentTaskFileGuid="00000000-0000-0000-0000-000000000000" LanguageFileGuid="b8cc4683-e4a3-45a6-9d01-5eaf82864fa7" Purpose="WorkFile">
+          <Result Guid="00000000-0000-0000-0000-000000000000" />
+        </TaskFile>
+      </Files>
+      <OutputFiles>
+        <OutputFile LanguageFileGuid="b8cc4683-e4a3-45a6-9d01-5eaf82864fa7" Purpose="WorkFile" />
+      </OutputFiles>
+      <Reports>
+        <Report Guid="eaa0ab0e-6ff7-409c-a712-0fb3c5c2f34e" Name="Cleanup Source Report" Description="Cleanup Source Batch Task Results" TaskTemplateId="Cleanup Source" LanguageDirectionGuid="00000000-0000-0000-0000-000000000000" PhysicalPath="Reports\Cleanup Source .xml" />
+      </Reports>
+      <Parameters />
+      <Result Guid="00000000-0000-0000-0000-000000000000" />
+    </AutomaticTask>
+  </Tasks>
+  <PackageOperations>
+    <ProjectPackageCreationOperations />
+    <ProjectPackageImportOperations />
+    <ReturnPackageCreationOperations />
+    <ReturnPackageImportOperations />
+  </PackageOperations>
+</Project>

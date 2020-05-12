@@ -4,7 +4,7 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 {
 	public interface IMessageBoxService
 	{
-		void ShowInformationMessage(string text, string header);
+		DialogResult ShowInformationMessage(string text, string header);
 
 		void ShowOwnerInformationMessage(IWin32Window owner, string text, string header);
 
