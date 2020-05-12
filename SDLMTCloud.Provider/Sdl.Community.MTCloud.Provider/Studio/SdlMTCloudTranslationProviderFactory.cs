@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Windows;
 using Sdl.Community.MTCloud.Languages.Provider;
+using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguageCloud.IdentityApi;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -11,12 +13,13 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		Name = "SDLMachineTranslationCloudProviderFactory",
 		Description = "SDL Machine Translation Cloud Provider")]
 	public class SdlMTCloudTranslationProviderFactory : ITranslationProviderFactory
-	{		
+	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
-		{			
-			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(), LanguageCloudIdentityApi.Instance);
-						
+		{
+			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(),
+				LanguageCloudIdentityApi.Instance);
+
 			var credential = connectionService.GetCredential(credentialStore);
 			var connectionResult = connectionService.EnsureSignedIn(credential);
 
@@ -24,16 +27,16 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 			}
-
 			connectionService.SaveCredential(credentialStore);
-			
+
 			var translationService = new TranslationService(connectionService);
 			var languageProvider = new LanguageProvider();
 			var editorController = SdlTradosStudio.Application?.GetController<EditorController>();
-			
-			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState, translationService, languageProvider, editorController);			
-			return provider;		
-		}		
+
+			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState,
+				translationService, languageProvider, editorController);
+			return provider;
+		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
