@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>DeepL Translation Provider</PlugInName>
-  <Version>4.8.12.3</Version>
+  <Version>4.8.12.5</Version>
   <Description>This plugin provides machine translation results from the DeepL Translator.</Description>
   <Author>SDL Community Developers</Author>
   <Include>
@@ -9,5 +9,5 @@
 		<File>MahApps.Metro.dll</File>
 		<File>System.Windows.Interactivity.dll</File>
 	</Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" maxversion="16.0"/>
 </PluginPackage>
