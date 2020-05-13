@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Sdl.Community.RateItControl.API;
@@ -57,7 +58,7 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 				{
 					RateItControlItemsControl.SelectionChanged += RateItControlItemsControl_SelectionChanged;
 					
-					UpdateRating(Rating);
+					UpdateRatingCollection(Rating);
 				}
 			}
 		}
@@ -87,7 +88,7 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 
 			if (control.RateItControlGrid != null)
 			{
-				control.UpdateRating(control.Rating);
+				control.UpdateRatingCollection(control.Rating);
 			}
 		}
 
@@ -99,7 +100,7 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 
 		public static readonly DependencyProperty RatingProperty =
 			DependencyProperty.Register("Rating", typeof(int), typeof(RateItControl),
-				new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+				new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
 					ItemsPropertyChangedCallback));
 
 		public int Rating
@@ -117,21 +118,43 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 
 			if (control.RateItControlGrid != null)
 			{
-				control.UpdateRating((int)d.NewValue);
+				control.UpdateRatingCollection((int)d.NewValue);
 			}
 		}
 
-		private void UpdateRating(int value)
+		private void UpdateRatingCollection(int value)
+		{			
+			if (RateItControlItemsControl.ItemsSource == null)
+			{				
+				RateItControlItemsControl.ItemsSource = GetRateItItems(value);
+			}
+			else
+			{
+				UpdateRatingValues(value);
+			}
+		}
+
+		private void UpdateRatingValues(int value)
+		{
+			var index = 0;
+			foreach (var item in RateItControlItemsControl.ItemsSource.Cast<IRateItItem>())
+			{
+				item.Selected = index < value;
+				index++;
+			}
+		}
+
+		private IEnumerable<IRateItItem> GetRateItItems(int value)
 		{
 			var items = new List<IRateItItem>();
 			for (var i = 0; i < MaxRating; i++)
 			{
 				items.Add(i < value
-					? new RageItItem { Selected = true }
-					: new RageItItem { Selected = false });
+					? new RageItItem {Selected = true}
+					: new RageItItem {Selected = false});
 			}
 
-			RateItControlItemsControl.ItemsSource = items;
+			return items;
 		}
 
 		private void RateItControlItemsControl_SelectionChanged(object sender, SelectionChangedEventArgs e)

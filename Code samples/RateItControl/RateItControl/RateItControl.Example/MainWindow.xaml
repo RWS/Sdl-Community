@@ -8,14 +8,14 @@
         xmlns:viewModel="clr-namespace:RateItControl.Example.ViewModel"
         x:Class="RateItControl.Example.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="300" d:DataContext="{d:DesignData viewModel:RateItControlViewModel}">
+        Title="MainWindow" Height="200" Width="500" d:DataContext="{d:DesignData viewModel:RateItControlViewModel}">
 	<Grid>
 		<Border HorizontalAlignment="Center" VerticalAlignment="Center"
  		         BorderThickness="1" BorderBrush="Black" Padding="10">
 			<sdl:RateItControl 
 				MaxRating="{Binding MaxRating}"
 				Rating="{Binding Rating}"
-				Height="50" Width="250"/>
+				Height="50" Width="400"/>
 		</Border>
 	</Grid>
 </Window>
