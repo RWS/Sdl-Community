@@ -1,0 +1,99 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:generic="clr-namespace:Sdl.Community.RateItControl.Themes.Generic">
+
+	<Style x:Key="Custom.Image.Style" TargetType="Image">
+		<Setter Property="Stretch" Value="UniformToFill"/>
+		<Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="RenderOptions.EdgeMode" Value="Aliased"/>
+		<Setter Property="Margin" Value="0,0,4,0"/>
+		<Style.Triggers>
+			<DataTrigger Binding="{Binding Path=Selected}" Value="true">
+				<Setter Property="Source" Value="../../Resources/StarYellow.png"/>
+			</DataTrigger>
+			<DataTrigger Binding="{Binding Path=Selected}" Value="false">
+				<Setter Property="Source" Value="../../Resources/StarGrey.png"/>
+			</DataTrigger>
+		</Style.Triggers>
+	</Style>
+
+	<Style x:Key="Custom.ListBox.Style" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}" >
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ListBoxItem}">
+					<Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+						<ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+					</Border>
+					<ControlTemplate.Triggers>
+						<MultiTrigger>
+							<MultiTrigger.Conditions>
+								<Condition Property="IsMouseOver" Value="True"/>
+							</MultiTrigger.Conditions>
+							<Setter Property="Background" TargetName="Bd" Value="Transparent"/>
+							<Setter Property="BorderBrush" TargetName="Bd" Value="Transparent"/>
+						</MultiTrigger>
+						<MultiTrigger>
+							<MultiTrigger.Conditions>
+								<Condition Property="Selector.IsSelectionActive" Value="False"/>
+								<Condition Property="IsSelected" Value="True"/>
+							</MultiTrigger.Conditions>
+							<Setter Property="Background" TargetName="Bd" Value="Transparent"/>
+							<Setter Property="BorderBrush" TargetName="Bd" Value="Transparent"/>
+						</MultiTrigger>
+						<MultiTrigger>
+							<MultiTrigger.Conditions>
+								<Condition Property="Selector.IsSelectionActive" Value="True"/>
+								<Condition Property="IsSelected" Value="True"/>
+							</MultiTrigger.Conditions>
+							<Setter Property="Background" TargetName="Bd" Value="Transparent"/>
+							<Setter Property="BorderBrush" TargetName="Bd" Value="Transparent"/>
+						</MultiTrigger>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="{x:Type generic:RateItControl}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type generic:RateItControl}">
+
+					<Grid x:Name="PART_RateItControl" MaxHeight="{TemplateBinding ActualHeight}" 
+					      MaxWidth="{TemplateBinding ActualWidth}">
+
+						<ListBox x:Name="PART_ItemsControl" 
+								 Focusable="True"
+								 ItemContainerStyle="{StaticResource Custom.ListBox.Style}"
+						         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+						         ScrollViewer.VerticalScrollBarVisibility="Disabled"
+						         SelectionMode="Single">
+							<ListBox.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ListBox.ItemsPanel>
+
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<Grid Margin="0">
+										<Image Grid.Column="0" Margin="2" Height="32"  
+										       Style="{StaticResource Custom.Image.Style}">
+										</Image>
+									</Grid>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+					</Grid>
+
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+</ResourceDictionary>
