@@ -160,6 +160,11 @@
     <Compile Include="Model\TranslationResponseStats.cs" />
     <Compile Include="Model\TranslationResponseStatus.cs" />
     <Compile Include="Model\UserCredential.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Service\TranslationService.cs" />
     <Compile Include="Studio\RateItController.cs" />
@@ -202,11 +207,6 @@
     <Compile Include="Model\SubscriptionInfo.cs" />
     <Compile Include="Model\TranslationModel.cs" />
     <Compile Include="Model\UserDetails.cs" />
-    <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Service\LanguageMappingsService.cs" />
@@ -244,6 +244,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\selectedStar.png" />
+    <None Include="Resources\defaultStar.png" />
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>
     </EmbeddedResource>
