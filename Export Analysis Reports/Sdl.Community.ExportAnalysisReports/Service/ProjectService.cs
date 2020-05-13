@@ -23,7 +23,6 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		public ProjectService()
 		{
 			ProjectsXmlPath = GetStudioProjectsXmlPath();
-			ProjectController = SdlTradosStudio.Application?.GetController<ProjectsController>();
 		}
 
 		public string ProjectsXmlPath { get; set; }
@@ -53,7 +52,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		{
 			var projectDetails = new ProjectDetails
 			{
-				PojectLanguages = new Dictionary<string, bool>(),
+				ProjectLanguages = new Dictionary<string, bool>(),
 				ShouldBeExported = false,
 				ReportsFolderPath = reportsFolderPath
 			};
@@ -123,12 +122,12 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		{
 			foreach (var project in projectDetails)
 			{
-				if (project.PojectLanguages != null)
+				if (project.ProjectLanguages != null)
 				{
-					var language = project.PojectLanguages.FirstOrDefault(l => l.Key.Equals(languageName));
+					var language = project.ProjectLanguages.FirstOrDefault(l => l.Key.Equals(languageName));
 					if (language.Key != null)
 					{
-						project.PojectLanguages[language.Key] = isChecked;
+						project.ProjectLanguages[language.Key] = isChecked;
 					}
 				}
 			}
@@ -152,10 +151,15 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		}
 
 		// Get the short Studio's version
-		private string GetInstalledStudioShortVersion()
+		public virtual string GetInstalledStudioShortVersion()
 		{
 			var studioService = new StudioVersionService();
 			return studioService.GetStudioVersion()?.ShortVersion;
+		}
+
+		private ProjectsController GetProjectsController()
+		{
+			return SdlTradosStudio.Application?.GetController<ProjectsController>();
 		}
 
 		// Get the path of Studio projects's xml file
@@ -245,7 +249,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			{
 				foreach (var language in languages)
 				{
-					project?.PojectLanguages?.Add(language.Value.TargetLang.EnglishName, false);
+					project?.ProjectLanguages?.Add(language.Value.TargetLang.EnglishName, false);
 				}
 			}
 			catch (Exception ex)
@@ -266,13 +270,17 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					ProjectName = projectInfo?.Name,
 					ProjectPath = projectInfo?.Uri.LocalPath,
 					Status = GetInternalProjectStatus(fileBasedProject),
-					PojectLanguages = new Dictionary<string, bool>(),
+					ProjectLanguages = new Dictionary<string, bool>(),
 					ShouldBeExported = true,
 					ReportsFolderPath = reportFolderPath
 				};
 				foreach (var language in projectInfo?.TargetLanguages)
 				{
-					projectDetails.PojectLanguages.Add(language.DisplayName, true);
+					projectDetails.ProjectLanguages.Add(language.DisplayName, true);
+				}
+				if(ProjectController == null)
+				{
+					ProjectController = GetProjectsController();
 				}
 				ProjectController?.Close(fileBasedProject);
 
@@ -331,6 +339,10 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 		private List<FileBasedProject> GetStudioProjects()
 		{
+			if (ProjectController == null)
+			{
+				ProjectController = GetProjectsController();
+			}
 			return ProjectController?.GetAllProjects()?.ToList();
 		}
 	}
