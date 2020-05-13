@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RateItControl.Example.ViewModel
+﻿namespace RateItControl.Example.ViewModel
 {
 	public class RateItControlViewModel: BaseModel
 	{
@@ -9,7 +7,7 @@ namespace RateItControl.Example.ViewModel
 
 		public RateItControlViewModel()
 		{			
-			Rating = 3;
+			Rating = 1;
 			MaxRating = 5;
 		}
 
