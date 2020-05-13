@@ -82,7 +82,7 @@
 							<ListBox.ItemTemplate>
 								<DataTemplate>
 									<Grid Margin="0">
-										<Image Grid.Column="0" Margin="2" Height="32"  
+										<Image Grid.Column="0" Margin="2" Height="32"
 										       Style="{StaticResource Custom.Image.Style}">
 										</Image>
 									</Grid>

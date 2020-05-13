@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Sdl.Community.RateItControl.API;
 using Sdl.Community.RateItControl.Implementation;
 
@@ -9,7 +11,7 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 {
 	[TemplatePart(Name = PART_RateItControl, Type = typeof(Grid))]
 	[TemplatePart(Name = PART_ItemsControl, Type = typeof(ListBox))]
-	public class RateItControl : Control
+	public class RateItControl : Control, IDisposable
 	{
 		private const string PART_RateItControl = "PART_RateItControl";
 		private const string PART_ItemsControl = "PART_ItemsControl";
@@ -28,18 +30,18 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 			{
 				if (_rateItControlGrid != null)
 				{
-
+					_rateItControlGrid.RemoveHandler(MouseMoveEvent, new MouseEventHandler(OnMouseMove));
 				}
 
 				_rateItControlGrid = value;
 
 				if (_rateItControlGrid != null)
 				{
-
+					_rateItControlGrid.AddHandler(MouseMoveEvent, new MouseEventHandler(OnMouseMove), true);
 				}
 			}
 		}
-
+	
 		private ListBox _rateItControlItemsControl;
 
 		private ListBox RateItControlItemsControl
@@ -49,15 +51,15 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 			{
 				if (_rateItControlItemsControl != null)
 				{
-					RateItControlItemsControl.SelectionChanged -= RateItControlItemsControl_SelectionChanged;
+					_rateItControlItemsControl.SelectionChanged -= RateItControlItemsControl_SelectionChanged;
 				}
 
 				_rateItControlItemsControl = value;
 
 				if (_rateItControlItemsControl != null)
 				{
-					RateItControlItemsControl.SelectionChanged += RateItControlItemsControl_SelectionChanged;
-					
+					_rateItControlItemsControl.SelectionChanged += RateItControlItemsControl_SelectionChanged;
+	
 					UpdateRatingCollection(Rating);
 				}
 			}
@@ -157,11 +159,44 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 			return items;
 		}
 
+		private void OnMouseMove(object sender, MouseEventArgs e)
+		{
+			var element = e.OriginalSource as FrameworkElement;
+			if (element?.DataContext is IRateItItem rateItItem)
+			{
+				var index = 0;
+				foreach (var item in RateItControlItemsControl.ItemsSource.Cast<IRateItItem>())
+				{
+					index++;
+					if (rateItItem != item)
+					{
+						continue;
+					}
+
+					UpdateRatingCollection(index);
+					return;
+				}
+			}
+		}
+
 		private void RateItControlItemsControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (RateItControlItemsControl.SelectedItems.Count > 0)
 			{				
 				Rating = RateItControlItemsControl.SelectedIndex + 1;			
+			}
+		}
+
+		public void Dispose()
+		{
+			if (_rateItControlGrid != null)
+			{
+				_rateItControlGrid.RemoveHandler(MouseMoveEvent, new MouseEventHandler(OnMouseMove));
+			}
+
+			if (_rateItControlItemsControl != null)
+			{
+				_rateItControlItemsControl.SelectionChanged -= RateItControlItemsControl_SelectionChanged;
 			}
 		}
 	}
