@@ -77,11 +77,83 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 			}
 		}
 
+		public static readonly DependencyProperty ImageHeightProperty =
+			DependencyProperty.Register("ImageHeight", typeof(long), typeof(RateItControl),
+				new FrameworkPropertyMetadata((long)32, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ImageHeightPropertyChangedCallback));
+
+		private static void ImageHeightPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs d)
+		{
+			if (!(dependencyObject is RateItControl control))
+			{
+				return;
+			}
+
+			if (control.RateItControlGrid != null)
+			{
+				control.UpdateRatingCollection(control.Rating);
+			}
+		}
+
+		public long ImageHeight
+		{
+			get => (long)GetValue(ImageHeightProperty);
+			set => SetValue(ImageHeightProperty, value);
+		}
+
+
+		public static readonly DependencyProperty SelectedImageProperty =
+			DependencyProperty.Register("SelectedImage", typeof(string), typeof(RateItControl),
+				new FrameworkPropertyMetadata("../../Resources/StarYellow.png", 
+					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, EnabledImagePropertyChangedCallback));
+
+		private static void EnabledImagePropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs d)
+		{
+			if (!(dependencyObject is RateItControl control))
+			{
+				return;
+			}
+
+			if (control.RateItControlGrid != null)
+			{
+				control.UpdateRatingCollection(control.Rating);
+			}
+		}
+
+		public string SelectedImage
+		{
+			get => (string)GetValue(SelectedImageProperty);
+			set => SetValue(SelectedImageProperty, value);
+		}
+
+		public static readonly DependencyProperty DisabledImageProperty =
+			DependencyProperty.Register("DisabledImage", typeof(string), typeof(RateItControl),
+				new FrameworkPropertyMetadata("../../Resources/StarGrey.png", 
+					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, DisabledImagePropertyChangedCallback));
+
+		private static void DisabledImagePropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs d)
+		{
+			if (!(dependencyObject is RateItControl control))
+			{
+				return;
+			}
+
+			if (control.RateItControlGrid != null)
+			{
+				control.UpdateRatingCollection(control.Rating);
+			}
+		}
+
+		public string DisabledImage
+		{
+			get => (string)GetValue(DisabledImageProperty);
+			set => SetValue(DisabledImageProperty, value);
+		}
+
 		public static readonly DependencyProperty MaxRatingProperty =
 			DependencyProperty.Register("MaxRating", typeof(int), typeof(RateItControl),
-				new FrameworkPropertyMetadata(5, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PropertyChangedCallback));
+				new FrameworkPropertyMetadata(5, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, MaxRatingPropertyChangedCallback));
 
-		private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+		private static void MaxRatingPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
 		{
 			if (!(dependencyObject is RateItControl control))
 			{
@@ -103,7 +175,7 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 		public static readonly DependencyProperty RatingProperty =
 			DependencyProperty.Register("Rating", typeof(int), typeof(RateItControl),
 				new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-					ItemsPropertyChangedCallback));
+					RatingPropertyChangedCallback));
 
 		public int Rating
 		{
@@ -111,7 +183,7 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 			set => SetValue(RatingProperty, value);
 		}
 
-		private static void ItemsPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs d)
+		private static void RatingPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs d)
 		{
 			if (!(dependencyObject is RateItControl control))
 			{
@@ -173,7 +245,7 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 						continue;
 					}
 
-					UpdateRatingCollection(index);
+					Rating = index;
 					return;
 				}
 			}
