@@ -8,13 +8,13 @@
 		<Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="RenderOptions.EdgeMode" Value="Aliased"/>
-		<Setter Property="Margin" Value="0,0,4,0"/>
+		<Setter Property="Margin" Value="0,0,0,0"/>
 		<Style.Triggers>
 			<DataTrigger Binding="{Binding Path=Selected}" Value="true">
-				<Setter Property="Source" Value="../../Resources/StarYellow.png"/>
+				<Setter Property="Source" Value="{Binding Path=SelectedImage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type generic:RateItControl}}}"/>
 			</DataTrigger>
 			<DataTrigger Binding="{Binding Path=Selected}" Value="false">
-				<Setter Property="Source" Value="../../Resources/StarGrey.png"/>
+				<Setter Property="Source" Value="{Binding Path=DisabledImage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type generic:RateItControl}}}"/>
 			</DataTrigger>
 		</Style.Triggers>
 	</Style>
@@ -82,7 +82,8 @@
 							<ListBox.ItemTemplate>
 								<DataTemplate>
 									<Grid Margin="0">
-										<Image Grid.Column="0" Margin="2" Height="32"
+										<Image Grid.Column="0" Margin="0" 
+										       Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type generic:RateItControl}}, Path=ImageHeight}"
 										       Style="{StaticResource Custom.Image.Style}">
 										</Image>
 									</Grid>
