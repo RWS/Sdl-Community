@@ -435,6 +435,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add feedback (optional).
+        /// </summary>
+        public static string RateIt_FeedbackWatermark {
+            get {
+                return ResourceManager.GetString("RateIt_FeedbackWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Capitalization, punctuation.
         /// </summary>
         public static string RateIt_Option_Capitalization {

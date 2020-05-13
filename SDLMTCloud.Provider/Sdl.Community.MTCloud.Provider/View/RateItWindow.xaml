@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
 			 xmlns:rsx ="clr-namespace:Sdl.Community.MTCloud.Provider"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             d:DataContext="{d:DesignInstance viewModel:RateItViewModel}"
+             xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
+             xmlns:watermarkTextBox="clr-namespace:Sdl.Desktop.Platform.Controls.Controls.WatermarkTextBox;assembly=Sdl.Desktop.Platform.Controls"
+			 d:DataContext="{d:DesignInstance viewModel:RateItViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
@@ -17,6 +17,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Textboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="CheckBox" x:Key="OptionsCheckboxesStyle" BasedOn="{StaticResource Sdl.Checkbox.GenericStyle}">
 				<Setter Property="Margin" Value="10,0,5,10"/>
@@ -34,7 +35,7 @@
 				<ColumnDefinition Width="7*"/>
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
-			<WrapPanel Grid.Row="0" Margin="0,10,0,0" Grid.Column="0">
+			<WrapPanel Grid.Row="0" Margin="0,10,0,0" Grid.Column="0" ItemWidth="165">
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_WordsOmission}"
 					  IsChecked="{Binding WordsOmissionChecked,UpdateSourceTrigger=PropertyChanged}"/>
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Grammar}"
@@ -54,7 +55,8 @@
 								  Value="{Binding Rating,UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Top" Margin="10,5,5,0"
 								  Width="auto" DockPanel.Dock="Left" Foreground="#414141" VerticalContentAlignment="Top">
 		</materialDesign:RatingBar>-->
-			<TextBox Grid.Row="1" Grid.Column="0" MaxLines="3" Text="{Binding Feedback,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"
+			<TextBox  Style="{DynamicResource WatermarkTextBox}" watermarkTextBox:TextBoxWatermarkHelper.WatermarkText ="{x:Static rsx:PluginResources.RateIt_FeedbackWatermark}"
+					  Grid.Row="1" Grid.Column="0" MaxLines="3" Text="{Binding Feedback,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"
 					 VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True"/>
 			<Button Grid.Row="1" Grid.Column="1" Style="{StaticResource Sdl.Button.WindowControlStyle}" Margin="5" 
 					Cursor="Hand" Content="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}" Command="{Binding SendFeedbackCommand}"/>

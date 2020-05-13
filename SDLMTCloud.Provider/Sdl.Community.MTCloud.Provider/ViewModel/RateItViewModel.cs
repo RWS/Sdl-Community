@@ -15,6 +15,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ITranslationService _translationService;
 		private ICommand _ratingCommand;
 		private ICommand _sendFeedbackCommand;
+		private ICommand _clearCommand;
 		private bool _wordsOmissionChecked;
 		private bool _grammarChecked;
 		private bool _unintelligenceChecked;
@@ -36,6 +37,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			_rating = 0;
 			RatingCommand = new CommandHandler(RatingChanged);
 			SendFeedbackCommand = new CommandHandler(SendFeedback);
+			ClearCommand = new CommandHandler(ClearFeedbackBox);
 		}
 
 		public bool WordsOmissionChecked
@@ -139,6 +141,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public ICommand RatingCommand { get; }
 		public ICommand SendFeedbackCommand { get;}
+		public ICommand ClearCommand { get; }
+
 
 		public void IncreaseRating()
 		{
@@ -161,6 +165,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 		private void SendFeedback(object obj)
 		{
+		}
+		private void ClearFeedbackBox(object obj)
+		{
+			Feedback = string.Empty;
 		}
 		private void _translationService_TranslationReceived(Feedback translationFeedback)
 		{
