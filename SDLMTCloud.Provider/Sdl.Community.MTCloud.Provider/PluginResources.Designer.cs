@@ -426,6 +426,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send Feedback.
+        /// </summary>
+        public static string RateIt_FeedbackBtn {
+            get {
+                return ResourceManager.GetString("RateIt_FeedbackBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Capitalization, punctuation.
         /// </summary>
         public static string RateIt_Option_Capitalization {

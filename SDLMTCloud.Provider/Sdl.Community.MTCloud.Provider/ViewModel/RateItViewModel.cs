@@ -14,6 +14,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 	{
 		private ITranslationService _translationService;
 		private ICommand _ratingCommand;
+		private ICommand _sendFeedbackCommand;
 		private bool _wordsOmissionChecked;
 		private bool _grammarChecked;
 		private bool _unintelligenceChecked;
@@ -22,6 +23,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private bool _spellingChecked;
 		private bool _capitalizationChecked;
 		private int _rating;
+		private string _feedback;
 
 		public RateItViewModel(ITranslationService translationService)
 		{
@@ -33,6 +35,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 			_rating = 0;
 			RatingCommand = new CommandHandler(RatingChanged);
+			SendFeedbackCommand = new CommandHandler(SendFeedback);
 		}
 
 		public bool WordsOmissionChecked
@@ -123,7 +126,19 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
+		public string Feedback
+		{
+			get => _feedback;
+			set
+			{
+				if (_feedback == value) return;
+				_feedback = value;
+				OnPropertyChanged(nameof(Feedback));
+			}
+		}
+
 		public ICommand RatingCommand { get; }
+		public ICommand SendFeedbackCommand { get;}
 
 		public void IncreaseRating()
 		{
@@ -143,6 +158,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private void RatingChanged(object obj)
 		{
 			
+		}
+		private void SendFeedback(object obj)
+		{
 		}
 		private void _translationService_TranslationReceived(Feedback translationFeedback)
 		{

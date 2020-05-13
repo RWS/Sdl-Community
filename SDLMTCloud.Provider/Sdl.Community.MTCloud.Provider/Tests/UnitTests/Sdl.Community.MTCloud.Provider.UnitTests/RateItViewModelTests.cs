@@ -146,5 +146,13 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 
 			Assert.False(_rateItViewModel.CapitalizationChecked);
 		}
+
+		[Theory]
+		[InlineData("This is the feedback")]
+		public void Set_FeedbackText(string feedback)
+		{
+			_rateItViewModel.Feedback = feedback;
+			Assert.Equal(feedback,_rateItViewModel.Feedback);
+		}
 	}
 }
