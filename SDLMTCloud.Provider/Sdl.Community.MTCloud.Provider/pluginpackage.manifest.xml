@@ -5,7 +5,6 @@
 	<Description>SDL Machine Translation Cloud provider</Description>
 	<Author>SDL Community Developers</Author>
 	<Include>
-		<File>RestSharp.dll</File>
 		<File>MahApps.Metro.dll</File>
 		<File>System.Windows.Interactivity.dll</File>
 		<File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>

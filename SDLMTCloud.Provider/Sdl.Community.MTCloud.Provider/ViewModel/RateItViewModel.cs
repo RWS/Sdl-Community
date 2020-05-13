@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
-	public class RateItViewModel:BaseViewModel
+	public class RateItViewModel:BaseViewModel,IRatingService
 	{
 		private ITranslationService _translationService;
+		private ICommand _ratingCommand;
 		private bool _wordsOmissionChecked;
 		private bool _grammarChecked;
 		private bool _unintelligenceChecked;
@@ -18,6 +21,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private bool _wordsAdditionChecked;
 		private bool _spellingChecked;
 		private bool _capitalizationChecked;
+		private int _rating;
 
 		public RateItViewModel(ITranslationService translationService)
 		{
@@ -27,6 +31,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				_translationService.TranslationReceived -= _translationService_TranslationReceived;
 				_translationService.TranslationReceived += _translationService_TranslationReceived;
 			}
+			_rating = 0;
+			RatingCommand = new CommandHandler(RatingChanged);
 		}
 
 		public bool WordsOmissionChecked
@@ -106,9 +112,41 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		private void _translationService_TranslationReceived(Feedback translationFeedback)
+		public int Rating
+		{
+			get => _rating;
+			set
+			{
+				if (_rating == value) return;
+				_rating = value;
+				OnPropertyChanged(nameof(Rating));
+			}
+		}
+
+		public ICommand RatingCommand { get; }
+
+		public void IncreaseRating()
+		{
+			if (Rating < 5)
+			{
+				Rating++;
+			}
+		}
+
+		public void DecreaseRating()
+		{
+			if (Rating>0)
+			{
+				Rating--;
+			}
+		}
+		private void RatingChanged(object obj)
 		{
 			
+		}
+		private void _translationService_TranslationReceived(Feedback translationFeedback)
+		{
+
 		}
 	}
 }

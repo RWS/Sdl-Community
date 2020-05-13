@@ -16,6 +16,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	public class RateItController : AbstractViewPartController	
 	{
 		public static ITranslationService TranslationService { get; set; }
+		public IRatingService RateIt => _control?.RatingService;
 		private readonly RateItControl _control = new RateItControl(TranslationService);
 
 		protected override void Initialize()

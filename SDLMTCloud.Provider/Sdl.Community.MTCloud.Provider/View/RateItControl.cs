@@ -6,6 +6,7 @@ namespace Sdl.Community.MTCloud.Provider.View
 {
 	public partial class RateItControl : UserControl
 	{
+		public IRatingService RatingService { get; }
 		public RateItControl(ITranslationService translationService)
 		{
 			InitializeComponent();
@@ -15,6 +16,7 @@ namespace Sdl.Community.MTCloud.Provider.View
 			{
 				DataContext = rateItViewModel
 			};
+			RatingService = rateItViewModel;
 			rateItWindow.InitializeComponent();
 			rateItElementHost.Child = rateItWindow;
 		}
