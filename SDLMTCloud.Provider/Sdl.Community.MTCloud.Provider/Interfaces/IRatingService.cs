@@ -4,5 +4,6 @@
 	{
 		void IncreaseRating();
 		void DecreaseRating();
+		void SetRateOptionFromShortcuts(string optionName);
 	}
 }

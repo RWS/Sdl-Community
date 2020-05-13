@@ -35,7 +35,7 @@
 				<ColumnDefinition Width="7*"/>
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
-			<WrapPanel Grid.Row="0" Margin="0,10,0,0" Grid.Column="0" ItemWidth="165">
+			<WrapPanel Grid.Row="0" Margin="0,10,0,0" Grid.Column="0" ItemWidth="170">
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_WordsOmission}"
 					  IsChecked="{Binding WordsOmissionChecked,UpdateSourceTrigger=PropertyChanged}"/>
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Grammar}"

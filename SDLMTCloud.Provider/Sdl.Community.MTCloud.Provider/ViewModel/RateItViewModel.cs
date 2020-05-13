@@ -159,6 +159,18 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				Rating--;
 			}
 		}
+
+		public void SetRateOptionFromShortcuts(string optionName)
+		{
+			if (!string.IsNullOrWhiteSpace(optionName))
+			{
+				var propertyInfo = GetType().GetProperty(optionName);
+				if (propertyInfo == null) return;
+				var currentCheckboxState = (bool)propertyInfo.GetValue(this);
+				propertyInfo.SetValue(this,!currentCheckboxState);
+			}
+		}
+
 		private void RatingChanged(object obj)
 		{
 			

@@ -5,16 +5,17 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 {
-	[Action(Id = "DecreaseRatingId",
-		Name = "Decrease rating",
-		Description = "Decrease the rating of the translation", //TODO:Move this in a resource file after we confirm the exact string
+	[Action(Id = "WordChoiceOptionId",
+		Name = "Word Choice option",
+		Description =
+			"Check/Uncheck Word Choice option", //TODO:Move this in a resource file after we confirm the exact string
 		ContextByType = typeof(EditorController))]
-	public class DecreaseRating : AbstractAction
+	public class SetWordChoiceAction : AbstractAction
 	{
 		protected override void Execute()
 		{
 			var rateItController = SdlTradosStudio.Application.GetController<RateItController>();
-			rateItController?.RateIt?.DecreaseRating();
+			rateItController?.RateIt?.SetRateOptionFromShortcuts(nameof(RateItViewModel.WordChoiceChecked));
 		}
 	}
 }

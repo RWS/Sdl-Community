@@ -5,16 +5,17 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 {
-	[Action(Id = "DecreaseRatingId",
-		Name = "Decrease rating",
-		Description = "Decrease the rating of the translation", //TODO:Move this in a resource file after we confirm the exact string
+	[Action(Id = "CapitalizationOptionId",
+		Name = "Capitalization,punctuation option",
+		Description =
+			"Check/Uncheck Capitalization,punctuation  option", //TODO:Move this in a resource file after we confirm the exact string
 		ContextByType = typeof(EditorController))]
-	public class DecreaseRating : AbstractAction
+	public class SetCapitalizationAction : AbstractAction
 	{
 		protected override void Execute()
 		{
 			var rateItController = SdlTradosStudio.Application.GetController<RateItController>();
-			rateItController?.RateIt?.DecreaseRating();
+			rateItController?.RateIt?.SetRateOptionFromShortcuts(nameof(RateItViewModel.CapitalizationChecked));
 		}
 	}
 }
