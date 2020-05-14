@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="API\IRateItItem.cs" />
     <Compile Include="Implementation\BaseModel.cs" />
-    <Compile Include="Implementation\RageItItem.cs" />
+    <Compile Include="Implementation\RateItItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Themes\Generic\RateItControl.cs" />
   </ItemGroup>

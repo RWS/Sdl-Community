@@ -2,7 +2,7 @@
 
 namespace Sdl.Community.RateItControl.Implementation
 {
-	public class RageItItem: BaseModel, IRateItItem
+	public class RateItItem: BaseModel, IRateItItem
 	{
 		private bool _selected;
 
