@@ -40,7 +40,7 @@
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_WordsOmission}"
 					  IsChecked="{Binding WordsOmissionChecked,UpdateSourceTrigger=PropertyChanged}">
 					<CheckBox.ToolTip>
-						<ToolTip Content="Words omission" Style="{StaticResource ToolTipStyle}"/>
+						<ToolTip Content="{Binding WordsOmissionTooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
 					</CheckBox.ToolTip>
 				</CheckBox>
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Grammar}"

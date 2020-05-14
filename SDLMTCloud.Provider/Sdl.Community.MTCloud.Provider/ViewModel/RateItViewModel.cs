@@ -7,12 +7,15 @@ using System.Windows.Input;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Studio.ShortcutActions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
 	public class RateItViewModel:BaseViewModel,IRatingService
 	{
 		private ITranslationService _translationService;
+		private IShortcutService _shortcutService;
 		private ICommand _ratingCommand;
 		private ICommand _sendFeedbackCommand;
 		private ICommand _clearCommand;
@@ -25,20 +28,25 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private bool _capitalizationChecked;
 		private int _rating;
 		private string _feedback;
+		private string _wordsOmissionTooltip;
 
-		public RateItViewModel(ITranslationService translationService)
+		public RateItViewModel(ITranslationService translationService,IShortcutService shortcutService)
 		{
 			_translationService = translationService;
+			_shortcutService = shortcutService;
 			if (_translationService != null)
 			{
 				_translationService.TranslationReceived -= _translationService_TranslationReceived;
 				_translationService.TranslationReceived += _translationService_TranslationReceived;
 			}
 			_rating = 0;
+			SetOptionsTooltips();
 			RatingCommand = new CommandHandler(RatingChanged);
 			SendFeedbackCommand = new CommandHandler(SendFeedback);
 			ClearCommand = new CommandHandler(ClearFeedbackBox);
 		}
+
+	
 
 		public bool WordsOmissionChecked
 		{
@@ -139,6 +147,17 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
+		public string WordsOmissionTooltip
+		{
+			get => _wordsOmissionTooltip;
+			set
+			{
+				if (_wordsOmissionTooltip == value) return;
+				_wordsOmissionTooltip = value;
+				OnPropertyChanged(nameof(WordsOmissionTooltip));
+			}
+		}
+
 		public ICommand RatingCommand { get; }
 		public ICommand SendFeedbackCommand { get;}
 		public ICommand ClearCommand { get; }
@@ -171,6 +190,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
+		public void SetTooltipsDinamically(string optionName,string tooltip)
+		{
+			if (string.IsNullOrWhiteSpace(optionName)) return;
+			var propertyInfo = GetType().GetProperty(optionName);
+			if (propertyInfo == null) return;
+			tooltip =!string.IsNullOrEmpty(tooltip) ? tooltip : "No shortcut was set in Studio for this option";
+			propertyInfo.SetValue(this, tooltip);
+		}
+
 		private void RatingChanged(object obj)
 		{
 			
@@ -185,6 +213,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private void _translationService_TranslationReceived(Feedback translationFeedback)
 		{
 
+		}
+		private void SetOptionsTooltips()
+		{
+			var wordsOmissionActionId = SdlTradosStudio.Application.GetAction<SetWordsOmissionAction>().Id;
+			var wordsOmissionShortcut = _shortcutService.GetShotcutDetails(wordsOmissionActionId);
+			SetTooltipsDinamically(nameof(WordsOmissionTooltip),wordsOmissionShortcut);
+
+			//TODO: Add tooltips for the rest of options.
 		}
 	}
 }

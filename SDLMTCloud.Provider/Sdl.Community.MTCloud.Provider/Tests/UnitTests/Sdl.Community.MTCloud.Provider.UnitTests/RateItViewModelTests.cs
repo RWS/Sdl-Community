@@ -8,11 +8,12 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 	public class RateItViewModelTests
 	{
 		private readonly RateItViewModel _rateItViewModel;
-		private readonly ITranslationService _translationService;
+
 		public RateItViewModelTests()
 		{
-			_translationService = Substitute.For<ITranslationService>();
-			_rateItViewModel = new RateItViewModel(_translationService);
+			var translationService = Substitute.For<ITranslationService>();
+			var shortcutService = Substitute.For<IShortcutService>();
+			_rateItViewModel = new RateItViewModel(translationService,shortcutService);
 		}
 
 		[Theory]

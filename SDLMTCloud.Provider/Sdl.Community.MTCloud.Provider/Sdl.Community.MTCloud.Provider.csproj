@@ -148,6 +148,7 @@
     <Compile Include="Interfaces\IConnectionService.cs" />
     <Compile Include="Interfaces\ILanguageMappingsService.cs" />
     <Compile Include="Interfaces\IRatingService.cs" />
+    <Compile Include="Interfaces\IShortcutService.cs" />
     <Compile Include="Interfaces\ITranslationService.cs" />
     <Compile Include="Model\AuthorizationResponse.cs" />
     <Compile Include="Model\ClientCredential.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Model\Feedback.cs" />
     <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
     <Compile Include="Model\Options.cs" />
+    <Compile Include="Model\StudioShortcut.cs" />
     <Compile Include="Model\TranslationRequest.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
     <Compile Include="Model\TranslationResponseStats.cs" />
@@ -166,6 +168,7 @@
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Service\ConnectionService.cs" />
+    <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Service\TranslationService.cs" />
     <Compile Include="Studio\RateItController.cs" />
     <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
