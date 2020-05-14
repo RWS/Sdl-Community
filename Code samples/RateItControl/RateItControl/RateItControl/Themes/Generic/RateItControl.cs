@@ -198,7 +198,7 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 
 		private void UpdateRatingCollection(int value)
 		{			
-			if (RateItControlItemsControl.ItemsSource == null)
+			if (RateItControlItemsControl.ItemsSource == null || RateItControlItemsControl.Items.Count != MaxRating)
 			{				
 				RateItControlItemsControl.ItemsSource = GetRateItItems(value);
 			}
