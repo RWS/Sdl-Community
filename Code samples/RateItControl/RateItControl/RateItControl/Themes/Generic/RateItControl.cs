@@ -224,8 +224,8 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 			for (var i = 0; i < MaxRating; i++)
 			{
 				items.Add(i < value
-					? new RageItItem {Selected = true}
-					: new RageItItem {Selected = false});
+					? new RateItItem {Selected = true}
+					: new RateItItem {Selected = false});
 			}
 
 			return items;
