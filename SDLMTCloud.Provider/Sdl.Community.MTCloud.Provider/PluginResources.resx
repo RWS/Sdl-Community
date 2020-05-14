@@ -307,4 +307,10 @@
   <data name="RateIt_Option_WordsOmission" xml:space="preserve">
     <value>Words omission</value>
   </data>
+  <data name="RateIt_FeedbackBtn" xml:space="preserve">
+    <value>Send Feedback</value>
+  </data>
+  <data name="RateIt_FeedbackWatermark" xml:space="preserve">
+    <value>Add feedback (optional)</value>
+  </data>
 </root>

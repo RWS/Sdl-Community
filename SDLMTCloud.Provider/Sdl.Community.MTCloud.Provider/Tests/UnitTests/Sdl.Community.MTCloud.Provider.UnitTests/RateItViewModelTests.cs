@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NSubstitute;
+﻿using NSubstitute;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Xunit;
@@ -40,6 +35,28 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		}
 
 		[Theory]
+		[InlineData(true,nameof(RateItViewModel.WordsOmissionChecked))]
+		public void Set_WordsOmissionFromShortcuts_Returns_False(bool initialState,string optionName)
+		{
+			_rateItViewModel.WordsOmissionChecked = initialState;
+
+			_rateItViewModel.SetRateOptionFromShortcuts(optionName);
+
+			Assert.False(_rateItViewModel.WordsOmissionChecked);
+		}
+
+		[Theory]
+		[InlineData(false, nameof(RateItViewModel.WordsOmissionChecked))]
+		public void Set_WordsOmissionFromShortcuts_Returns_True(bool initialState, string optionName)
+		{
+			_rateItViewModel.WordsOmissionChecked = initialState;
+
+			_rateItViewModel.SetRateOptionFromShortcuts(optionName);
+
+			Assert.True(_rateItViewModel.WordsOmissionChecked);
+		}
+
+		[Theory]
 		[InlineData(true)]
 		public void Set_Grammar_Returns_True(bool grammarChecked)
 		{
@@ -55,6 +72,26 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			_rateItViewModel.GrammarChecked = grammarChecked;
 
 			Assert.False(_rateItViewModel.GrammarChecked);
+		}
+		[Theory]
+		[InlineData(true, nameof(RateItViewModel.GrammarChecked))]
+		public void Set_GrammarFromShortcuts_Returns_False(bool initialState, string optionName)
+		{
+			_rateItViewModel.GrammarChecked = initialState;
+
+			_rateItViewModel.SetRateOptionFromShortcuts(optionName);
+
+			Assert.False(_rateItViewModel.GrammarChecked);
+		}
+		[Theory]
+		[InlineData(false, nameof(RateItViewModel.GrammarChecked))]
+		public void Set_GrammarFromShortcuts_Returns_True(bool initialState, string optionName)
+		{
+			_rateItViewModel.GrammarChecked = initialState;
+
+			_rateItViewModel.SetRateOptionFromShortcuts(optionName);
+
+			Assert.True(_rateItViewModel.GrammarChecked);
 		}
 
 		[Theory]
@@ -145,6 +182,14 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			_rateItViewModel.CapitalizationChecked = capitalizationChecked;
 
 			Assert.False(_rateItViewModel.CapitalizationChecked);
+		}
+
+		[Theory]
+		[InlineData("This is the feedback")]
+		public void Set_FeedbackText(string feedback)
+		{
+			_rateItViewModel.Feedback = feedback;
+			Assert.Equal(feedback,_rateItViewModel.Feedback);
 		}
 	}
 }
