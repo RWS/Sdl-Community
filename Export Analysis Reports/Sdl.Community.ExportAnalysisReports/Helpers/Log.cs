@@ -18,10 +18,8 @@ namespace Sdl.Community.ExportAnalysisReports.Helpers
 			var config = new LoggingConfiguration();
 			var assembly = Assembly.GetExecutingAssembly();
 			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "ExportAnalysisReports");
-			if (!Directory.Exists(logDirectoryPath))
-			{
-				Directory.CreateDirectory(logDirectoryPath);
-			}
+			Directory.CreateDirectory(logDirectoryPath);
+			
 			var target = new FileTarget
 			{
 				FileName = Path.Combine(logDirectoryPath, "ExportAnalysisReportsLogs.txt"),
