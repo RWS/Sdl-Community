@@ -13,15 +13,19 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		Description = "SDL MT Cloud RateIt",
 		Icon = "")]
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
-	public class RateItController : AbstractViewPartController	
-	{
-		public static ITranslationService TranslationService { get; set; }
-		public IRatingService RateIt => _control?.RatingService;
-		private readonly RateItControl _control = new RateItControl(TranslationService);
+	public class RateItController : AbstractViewPartController
+	{		
+		private RateItControl _control;
+
 
 		protected override void Initialize()
 		{
+			_control = new RateItControl(TranslationService);						
 		}
+
+		public ITranslationService TranslationService { get; set; }
+
+		public IRatingService RateIt => _control?.RatingService;
 
 		protected override Control GetContentControl()
 		{

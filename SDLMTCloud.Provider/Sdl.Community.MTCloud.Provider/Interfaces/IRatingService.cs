@@ -5,5 +5,6 @@
 		void IncreaseRating();
 		void DecreaseRating();
 		void SetRateOptionFromShortcuts(string optionName);
+		void SetOptionTooltip(string optionName, string tooltip);
 	}
 }

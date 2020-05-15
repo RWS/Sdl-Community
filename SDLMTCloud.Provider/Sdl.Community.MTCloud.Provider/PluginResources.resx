@@ -313,4 +313,7 @@
   <data name="RateIt_FeedbackWatermark" xml:space="preserve">
     <value>Add feedback (optional)</value>
   </data>
+  <data name="Rateit_Option_WordsAdditionOptionId" xml:space="preserve">
+    <value>WordsAdditionOptionId</value>
+  </data>
 </root>
