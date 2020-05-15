@@ -13,15 +13,17 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 		ContextByType = typeof(EditorController))]
 	public class SetUnintelligenceAction : AbstractAction, ISDLMTCloudAction
 	{
+		public override void Initialize()
+		{
+			base.Initialize();
+			OptionName = nameof(RateItViewModel.UnintelligenceOption);
+		}
 		protected override void Execute()
 		{
 			var rateItController = SdlTradosStudio.Application.GetController<RateItController>();
 			rateItController?.RateIt?.SetRateOptionFromShortcuts(nameof(RateItViewModel.UnintelligenceOption));
 		}
 
-		public void LoadTooltip(string tooltipText)
-		{
-			ToolTipText = tooltipText;
-		}
+		public string OptionName { get; set; }
 	}
 }

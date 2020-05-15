@@ -36,9 +36,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			SetTranslationService(translationService);
 
 			_shortcutService = shortcutService;
-			_actions = GetActions();
-			UpdateActionTooltips();
-			
 			_wordsOmissionChecked = new FeedbackOption();
 			_grammarChecked = new FeedbackOption();
 			_unintelligenceChecked = new FeedbackOption();
@@ -50,6 +47,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			RatingCommand = new CommandHandler(RatingChanged);
 			SendFeedbackCommand = new CommandHandler(SendFeedback);
 			ClearCommand = new CommandHandler(ClearFeedbackBox);
+
+			_actions = GetActions();
+			UpdateActionTooltips();
 
 			_rating = 0;
 		}
@@ -253,10 +253,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			foreach (var mtCloudAction in _actions)
 			{
 				var tooltipText = _shortcutService.GetShotcutDetails(mtCloudAction.Id);
-				if (string.IsNullOrEmpty(tooltipText))
-				{
-					mtCloudAction.LoadTooltip(tooltipText);
-				}
+				SetOptionTooltip(mtCloudAction.OptionName, tooltipText);
 			}
 		}
 

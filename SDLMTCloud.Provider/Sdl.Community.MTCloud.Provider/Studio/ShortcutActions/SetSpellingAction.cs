@@ -6,22 +6,24 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 {
-	[Action(Id = "SpellingptionId",
+	[Action(Id = "SpellingOptionId",
 		Name = "Spelling option",
 		Description =
 			"Check/Uncheck Spelling option", //TODO:Move this in a resource file after we confirm the exact string
 		ContextByType = typeof(EditorController))]
 	public class SetSpellingAction : AbstractAction, ISDLMTCloudAction
 	{
+		public override void Initialize()
+		{
+			base.Initialize();
+			OptionName = nameof(RateItViewModel.SpellingOption);
+		}
 		protected override void Execute()
 		{
 			var rateItController = SdlTradosStudio.Application.GetController<RateItController>();
 			rateItController?.RateIt?.SetRateOptionFromShortcuts(nameof(RateItViewModel.SpellingOption));
 		}
 
-		public void LoadTooltip(string tooltipText)
-		{
-			ToolTipText = tooltipText;
-		}
+		public string OptionName { get; set; }
 	}
 }

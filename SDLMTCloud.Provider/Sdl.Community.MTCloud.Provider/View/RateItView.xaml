@@ -45,11 +45,25 @@
 				</CheckBox>
 				
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Grammar}"
-			          IsChecked="{Binding GrammarOption.IsChecked,UpdateSourceTrigger=PropertyChanged}"/>
+			          IsChecked="{Binding GrammarOption.IsChecked,UpdateSourceTrigger=PropertyChanged}">
+					<CheckBox.ToolTip>
+						<ToolTip Content="{Binding GrammarOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
+					</CheckBox.ToolTip>
+				</CheckBox>
+				
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Unintelligence}"
-	                   IsChecked="{Binding UnintelligenceOption.IsChecked,UpdateSourceTrigger=PropertyChanged}"/>
+	                   IsChecked="{Binding UnintelligenceOption.IsChecked,UpdateSourceTrigger=PropertyChanged}">
+					<CheckBox.ToolTip>
+						<ToolTip Content="{Binding UnintelligenceOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
+					</CheckBox.ToolTip>
+				</CheckBox>
+				
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_WordChoice}"
-	                   IsChecked="{Binding WordChoiceOption.IsChecked,UpdateSourceTrigger=PropertyChanged}"/>
+	                   IsChecked="{Binding WordChoiceOption.IsChecked,UpdateSourceTrigger=PropertyChanged}">
+					<CheckBox.ToolTip>
+						<ToolTip Content="{Binding WordChoiceOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
+					</CheckBox.ToolTip>
+				</CheckBox>
 				
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_WordsAddition}"
 						 IsChecked="{Binding WordsAdditionOption.IsChecked,UpdateSourceTrigger=PropertyChanged}">
@@ -59,9 +73,17 @@
 				</CheckBox>
 				
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Spelling}"
-	                   IsChecked="{Binding SpellingOption.IsChecked,UpdateSourceTrigger=PropertyChanged}"/>
+	                   IsChecked="{Binding SpellingOption.IsChecked,UpdateSourceTrigger=PropertyChanged}">
+					<CheckBox.ToolTip>
+						<ToolTip Content="{Binding SpellingOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
+					</CheckBox.ToolTip>
+				</CheckBox>
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Capitalization}"
-	                   IsChecked="{Binding CapitalizationOption.IsChecked,UpdateSourceTrigger=PropertyChanged}"/>
+	                   IsChecked="{Binding CapitalizationOption.IsChecked,UpdateSourceTrigger=PropertyChanged}">
+					<CheckBox.ToolTip>
+						<ToolTip Content="{Binding CapitalizationOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
+					</CheckBox.ToolTip>
+				</CheckBox>
 			</WrapPanel>
 			<!--<materialDesign:RatingBar x:Name="RatingBar" Grid.Row="0" Grid.Column="1"
 								  Value="{Binding Rating,UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Top" Margin="10,5,5,0"
