@@ -21,6 +21,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		protected override void Initialize()
 		{
+
 		}
 
 		protected override Control GetContentControl()

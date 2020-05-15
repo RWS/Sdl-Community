@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sdl.Community.MTCloud.Provider.Service;
+using Sdl.Community.MTCloud.Provider.Studio.ShortcutActions;
 using Xunit;
 
 namespace Sdl.Community.MTCloud.Provider.UnitTests
@@ -19,7 +20,11 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		[Fact]
 		public void GetCustomShortcuts()
 		{
+			var test = (typeof(SetWordsOmissionAction));
 			//var test = _shortcutService.GetCustomRateItShortcuts();
+			//SetTooltipsDinamically(typeof(SetWordsOmissionAction),"", "");
+
 		}
+
 	}
 }

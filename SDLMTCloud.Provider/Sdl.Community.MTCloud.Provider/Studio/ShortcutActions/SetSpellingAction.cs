@@ -1,4 +1,5 @@
-﻿using Sdl.Community.MTCloud.Provider.ViewModel;
+﻿using Sdl.Community.MTCloud.Provider.Interfaces;
+using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -10,12 +11,17 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 		Description =
 			"Check/Uncheck Spelling option", //TODO:Move this in a resource file after we confirm the exact string
 		ContextByType = typeof(EditorController))]
-	public class SetSpellingAction : AbstractAction
+	public class SetSpellingAction : AbstractAction, ISdlMTCloudAction
 	{
 		protected override void Execute()
 		{
 			var rateItController = SdlTradosStudio.Application.GetController<RateItController>();
-			rateItController?.RateIt?.SetRateOptionFromShortcuts(nameof(RateItViewModel.SpellingChecked));
+			rateItController?.RateIt?.SetRateOptionFromShortcuts(nameof(RateItViewModel.SpellingOption));
+		}
+
+		public void LoadTooltip(string tooltip)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

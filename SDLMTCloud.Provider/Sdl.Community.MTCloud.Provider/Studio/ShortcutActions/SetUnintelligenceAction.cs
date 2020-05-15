@@ -15,7 +15,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 		protected override void Execute()
 		{
 			var rateItController = SdlTradosStudio.Application.GetController<RateItController>();
-			rateItController?.RateIt?.SetRateOptionFromShortcuts(nameof(RateItViewModel.UnintelligenceChecked));
+			rateItController?.RateIt?.SetRateOptionFromShortcuts(nameof(RateItViewModel.UnintelligenceOption));
 		}
 	}
 }

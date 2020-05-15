@@ -8,6 +8,7 @@ using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Studio.ShortcutActions;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
@@ -19,13 +20,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _ratingCommand;
 		private ICommand _sendFeedbackCommand;
 		private ICommand _clearCommand;
-		private bool _wordsOmissionChecked;
-		private bool _grammarChecked;
-		private bool _unintelligenceChecked;
-		private bool _wordChoiceChecked;
-		private bool _wordsAdditionChecked;
-		private bool _spellingChecked;
-		private bool _capitalizationChecked;
+		private FeedbackOption _wordsOmissionChecked;
+		private FeedbackOption _grammarChecked;
+		private FeedbackOption _unintelligenceChecked;
+		private FeedbackOption _wordChoiceChecked;
+		private FeedbackOption _wordsAdditionChecked;
+		private FeedbackOption _spellingChecked;
+		private FeedbackOption _capitalizationChecked;
 		private int _rating;
 		private string _feedback;
 		private string _wordsOmissionTooltip;
@@ -40,88 +41,92 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				_translationService.TranslationReceived += _translationService_TranslationReceived;
 			}
 			_rating = 0;
-			SetOptionsTooltips();
+			_wordsOmissionChecked = new FeedbackOption();
+			_grammarChecked = new FeedbackOption();
+			_unintelligenceChecked = new FeedbackOption();
+			_wordChoiceChecked = new FeedbackOption();
+			_wordsAdditionChecked = new FeedbackOption();
+			_spellingChecked = new FeedbackOption();
+			_capitalizationChecked = new FeedbackOption();
 			RatingCommand = new CommandHandler(RatingChanged);
 			SendFeedbackCommand = new CommandHandler(SendFeedback);
 			ClearCommand = new CommandHandler(ClearFeedbackBox);
 		}
 
-	
-
-		public bool WordsOmissionChecked
+		public FeedbackOption WordsOmissionOption
 		{
 			get => _wordsOmissionChecked;
 			set
 			{
 				if (_wordsOmissionChecked == value) return;
 				_wordsOmissionChecked = value;
-				OnPropertyChanged(nameof(WordsOmissionChecked));
+				OnPropertyChanged(nameof(WordsOmissionOption));
 			}
 		}
 
-		public bool GrammarChecked
+		public FeedbackOption GrammarOption
 		{
 			get => _grammarChecked;
 			set
 			{
 				if (_grammarChecked == value) return;
 				_grammarChecked = value;
-				OnPropertyChanged(nameof(GrammarChecked));
+				OnPropertyChanged(nameof(GrammarOption));
 			}
 		}
 
-		public bool UnintelligenceChecked
+		public FeedbackOption UnintelligenceOption
 		{
 			get => _unintelligenceChecked;
 			set
 			{
 				if (_unintelligenceChecked == value) return;
 				_unintelligenceChecked = value;
-				OnPropertyChanged(nameof(UnintelligenceChecked));
+				OnPropertyChanged(nameof(UnintelligenceOption));
 			}
 		}
 
-		public bool WordChoiceChecked
+		public FeedbackOption WordChoiceOption
 		{
 			get => _wordChoiceChecked;
 			set
 			{
 				if (_wordChoiceChecked == value) return;
 				_wordChoiceChecked = value;
-				OnPropertyChanged(nameof(WordChoiceChecked));
+				OnPropertyChanged(nameof(WordChoiceOption));
 			}
 		}
 
-		public bool WordsAdditionChecked
+		public FeedbackOption WordsAdditionOption
 		{
 			get => _wordsAdditionChecked;
 			set
 			{
 				if (_wordsAdditionChecked == value) return;
 				_wordsAdditionChecked = value;
-				OnPropertyChanged(nameof(WordsAdditionChecked));
+				OnPropertyChanged(nameof(WordsAdditionOption));
 			}
 		}
 
-		public bool SpellingChecked
+		public FeedbackOption SpellingOption
 		{
 			get => _spellingChecked;
 			set
 			{
 				if (_spellingChecked == value) return;
 				_spellingChecked = value;
-				OnPropertyChanged(nameof(SpellingChecked));
+				OnPropertyChanged(nameof(SpellingOption));
 			}
 		}
 
-		public bool CapitalizationChecked
+		public FeedbackOption CapitalizationOption
 		{
 			get => _capitalizationChecked;
 			set
 			{
 				if (_capitalizationChecked == value) return;
 				_capitalizationChecked = value;
-				OnPropertyChanged(nameof(CapitalizationChecked));
+				OnPropertyChanged(nameof(CapitalizationOption));
 			}
 		}
 
@@ -144,17 +149,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (_feedback == value) return;
 				_feedback = value;
 				OnPropertyChanged(nameof(Feedback));
-			}
-		}
-
-		public string WordsOmissionTooltip
-		{
-			get => _wordsOmissionTooltip;
-			set
-			{
-				if (_wordsOmissionTooltip == value) return;
-				_wordsOmissionTooltip = value;
-				OnPropertyChanged(nameof(WordsOmissionTooltip));
 			}
 		}
 
@@ -181,22 +175,25 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public void SetRateOptionFromShortcuts(string optionName)
 		{
-			if (!string.IsNullOrWhiteSpace(optionName))
-			{
-				var propertyInfo = GetType().GetProperty(optionName);
-				if (propertyInfo == null) return;
-				var currentCheckboxState = (bool)propertyInfo.GetValue(this);
-				propertyInfo.SetValue(this,!currentCheckboxState);
-			}
+			if (string.IsNullOrWhiteSpace(optionName)) return;
+			var propertyInfo = GetType().GetProperty(optionName);
+			if (propertyInfo == null) return;
+
+			dynamic option = propertyInfo.GetValue(this);
+			var currentCheckboxState = option.IsChecked;
+			option.IsChecked = !currentCheckboxState;
+			propertyInfo.SetValue(this, option);
 		}
 
-		public void SetTooltipsDinamically(string optionName,string tooltip)
+		public void SetOptionTooltip(string optionName, string tooltip)
 		{
 			if (string.IsNullOrWhiteSpace(optionName)) return;
 			var propertyInfo = GetType().GetProperty(optionName);
 			if (propertyInfo == null) return;
-			tooltip =!string.IsNullOrEmpty(tooltip) ? tooltip : "No shortcut was set in Studio for this option";
-			propertyInfo.SetValue(this, tooltip);
+
+			dynamic option = propertyInfo.GetValue(this);
+			option.Tooltip = !string.IsNullOrEmpty(tooltip) ? tooltip : "No shortcut was set in Studio for this option";
+			propertyInfo.SetValue(this, option);
 		}
 
 		private void RatingChanged(object obj)
@@ -213,14 +210,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private void _translationService_TranslationReceived(Feedback translationFeedback)
 		{
 
-		}
-		private void SetOptionsTooltips()
-		{
-			var wordsOmissionActionId = SdlTradosStudio.Application.GetAction<SetWordsOmissionAction>().Id;
-			var wordsOmissionShortcut = _shortcutService.GetShotcutDetails(wordsOmissionActionId);
-			SetTooltipsDinamically(nameof(WordsOmissionTooltip),wordsOmissionShortcut);
-
-			//TODO: Add tooltips for the rest of options.
 		}
 	}
 }

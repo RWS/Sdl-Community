@@ -498,6 +498,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to WordsAdditionOptionId.
+        /// </summary>
+        public static string Rateit_Option_WordsAdditionOptionId {
+            get {
+                return ResourceManager.GetString("Rateit_Option_WordsAdditionOptionId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Words omission.
         /// </summary>
         public static string RateIt_Option_WordsOmission {

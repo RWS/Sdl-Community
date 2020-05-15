@@ -9,6 +9,7 @@ using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
+using Sdl.Community.MTCloud.Provider.Studio.ShortcutActions;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -20,6 +21,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private readonly EditorController _editorController;
 		private LanguagePair _languageDirection;
 		private LanguageMappingsService _languageMappingsService;
+		private List<ISdlMTCloudAction> _actions;
 
 		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
 		 ILanguageProvider languageProvider, EditorController editorController)
@@ -33,6 +35,15 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			LoadState(translationProviderState);
 			LoadRateItContoller();
+		}
+
+		private void LoadActions()
+		{
+			_actions = new List<ISdlMTCloudAction>
+			{
+				SdlTradosStudio.Application.GetAction<SetCapitalizationAction>(),
+				SdlTradosStudio.Application.GetAction<SetWordsOmissionAction>() //TODO Add all
+			};
 		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
@@ -143,6 +154,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				Options = new Options();
 			}
 		}
+
 		private void LoadRateItContoller()
 		{
 			if (_editorController != null)

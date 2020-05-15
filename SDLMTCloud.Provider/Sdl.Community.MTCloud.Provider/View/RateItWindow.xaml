@@ -38,23 +38,30 @@
 			</Grid.ColumnDefinitions>
 			<WrapPanel Grid.Row="0" Margin="0,10,0,0" Grid.Column="0" ItemWidth="170">
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_WordsOmission}"
-					  IsChecked="{Binding WordsOmissionChecked,UpdateSourceTrigger=PropertyChanged}">
+					  IsChecked="{Binding WordsOmissionOption.IsChecked,UpdateSourceTrigger=PropertyChanged}">
 					<CheckBox.ToolTip>
-						<ToolTip Content="{Binding WordsOmissionTooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
+						<ToolTip Content="{Binding WordsOmissionOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
 					</CheckBox.ToolTip>
 				</CheckBox>
+				
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Grammar}"
-			          IsChecked="{Binding GrammarChecked,UpdateSourceTrigger=PropertyChanged}"/>
+			          IsChecked="{Binding GrammarOption.IsChecked,UpdateSourceTrigger=PropertyChanged}"/>
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Unintelligence}"
-	                   IsChecked="{Binding UnintelligenceChecked,UpdateSourceTrigger=PropertyChanged}"/>
+	                   IsChecked="{Binding UnintelligenceOption.IsChecked,UpdateSourceTrigger=PropertyChanged}"/>
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_WordChoice}"
-	                   IsChecked="{Binding WordChoiceChecked,UpdateSourceTrigger=PropertyChanged}"/>
+	                   IsChecked="{Binding WordChoiceOption.IsChecked,UpdateSourceTrigger=PropertyChanged}"/>
+				
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_WordsAddition}"
-						 IsChecked="{Binding WordsAdditionChecked,UpdateSourceTrigger=PropertyChanged}"/>
+						 IsChecked="{Binding WordsAdditionOption.IsChecked,UpdateSourceTrigger=PropertyChanged}">
+					<CheckBox.ToolTip>
+						<ToolTip Content="{Binding WordsAdditionOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
+					</CheckBox.ToolTip>
+				</CheckBox>
+				
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Spelling}"
-	                   IsChecked="{Binding SpellingChecked,UpdateSourceTrigger=PropertyChanged}"/>
+	                   IsChecked="{Binding SpellingOption.IsChecked,UpdateSourceTrigger=PropertyChanged}"/>
 				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Capitalization}"
-	                   IsChecked="{Binding CapitalizationChecked,UpdateSourceTrigger=PropertyChanged}"/>
+	                   IsChecked="{Binding CapitalizationOption.IsChecked,UpdateSourceTrigger=PropertyChanged}"/>
 			</WrapPanel>
 			<!--<materialDesign:RatingBar x:Name="RatingBar" Grid.Row="0" Grid.Column="1"
 								  Value="{Binding Rating,UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Top" Margin="10,5,5,0"
