@@ -21,18 +21,21 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				"SDL Trados Studio", "15.0.0.0", "UserSettings.xml");
 			_customShortcuts = new List<StudioShortcut>();
 			_keysConverter = new KeysConverter();
+
+			ReadCustomShortcutsFromUserSettingsXml();
 		}
 
 		public string GetShotcutDetails(string actionId)
-		{
-			ReadCustomShortcutsFromUserSettingsXml();
-
+		{			
 			return _customShortcuts.FirstOrDefault(a => a.ActionId.Equals(actionId))?.ShortcutText;
 		}
 
 		private void ReadCustomShortcutsFromUserSettingsXml()
 		{
-			if (!File.Exists(_settingsXmlPath)) return;
+			if (!File.Exists(_settingsXmlPath))
+			{
+				return;
+			}
 
 			var userSettingsDocument = new XmlDocument();
 			userSettingsDocument.Load(_settingsXmlPath);

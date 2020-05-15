@@ -10,7 +10,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 		Name = "Grammar option",
 		Description = "Check/Uncheck Grammar option", //TODO:Move this in a resource file after we confirm the exact string
 		ContextByType = typeof(EditorController))]
-	public class SetGrammarAction : AbstractAction, ISdlMTCloudAction
+	public class SetGrammarAction : AbstractAction, ISDLMTCloudAction
 	{
 		protected override void Execute()
 		{
@@ -18,9 +18,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 			rateItController?.RateIt?.SetRateOptionFromShortcuts(nameof(RateItViewModel.GrammarOption));
 		}
 
-		public void LoadTooltip(string tooltip)
+		public void LoadTooltip(string tooltipText)
 		{
-			throw new System.NotImplementedException();
+			ToolTipText = tooltipText;
 		}
 	}
 }

@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Studio.ShortcutActions;
-using Sdl.Desktop.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
-	public class RateItViewModel:BaseViewModel,IRatingService
-	{
+	public class RateItViewModel:BaseViewModel, IRatingService, IDisposable
+	{		
+		private readonly IShortcutService _shortcutService;
+		private readonly List<ISDLMTCloudAction> _actions;
 		private ITranslationService _translationService;
-		private IShortcutService _shortcutService;
+
 		private ICommand _ratingCommand;
 		private ICommand _sendFeedbackCommand;
 		private ICommand _clearCommand;
+
 		private FeedbackOption _wordsOmissionChecked;
 		private FeedbackOption _grammarChecked;
 		private FeedbackOption _unintelligenceChecked;
@@ -27,20 +26,19 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private FeedbackOption _wordsAdditionChecked;
 		private FeedbackOption _spellingChecked;
 		private FeedbackOption _capitalizationChecked;
+
 		private int _rating;
 		private string _feedback;
 		private string _wordsOmissionTooltip;
 
-		public RateItViewModel(ITranslationService translationService,IShortcutService shortcutService)
+		public RateItViewModel(ITranslationService translationService, IShortcutService shortcutService)
 		{
-			_translationService = translationService;
+			SetTranslationService(translationService);
+
 			_shortcutService = shortcutService;
-			if (_translationService != null)
-			{
-				_translationService.TranslationReceived -= _translationService_TranslationReceived;
-				_translationService.TranslationReceived += _translationService_TranslationReceived;
-			}
-			_rating = 0;
+			_actions = GetActions();
+			UpdateActionTooltips();
+			
 			_wordsOmissionChecked = new FeedbackOption();
 			_grammarChecked = new FeedbackOption();
 			_unintelligenceChecked = new FeedbackOption();
@@ -48,9 +46,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			_wordsAdditionChecked = new FeedbackOption();
 			_spellingChecked = new FeedbackOption();
 			_capitalizationChecked = new FeedbackOption();
+
 			RatingCommand = new CommandHandler(RatingChanged);
 			SendFeedbackCommand = new CommandHandler(SendFeedback);
 			ClearCommand = new CommandHandler(ClearFeedbackBox);
+
+			_rating = 0;
 		}
 
 		public FeedbackOption WordsOmissionOption
@@ -153,9 +154,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		public ICommand RatingCommand { get; }
-		public ICommand SendFeedbackCommand { get;}
-		public ICommand ClearCommand { get; }
 
+		public ICommand SendFeedbackCommand { get;}
+
+		public ICommand ClearCommand { get; }
 
 		public void IncreaseRating()
 		{
@@ -200,16 +202,70 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			
 		}
+
 		private void SendFeedback(object obj)
 		{
 		}
+
 		private void ClearFeedbackBox(object obj)
 		{
 			Feedback = string.Empty;
 		}
+
 		private void _translationService_TranslationReceived(Feedback translationFeedback)
 		{
 
+		}
+
+		private void SetTranslationService(ITranslationService translationService)
+		{
+			if (_translationService != null)
+			{
+				_translationService.TranslationReceived -= _translationService_TranslationReceived;
+			}
+
+			_translationService = translationService;
+
+			if (_translationService != null)
+			{
+				_translationService.TranslationReceived += _translationService_TranslationReceived;
+			}
+		}
+
+		private List<ISDLMTCloudAction> GetActions()
+		{
+			return new List<ISDLMTCloudAction>
+			{
+				SdlTradosStudio.Application.GetAction<DecreaseRatingAction>(),
+				SdlTradosStudio.Application.GetAction<IncreaseRatingAction>(),
+				SdlTradosStudio.Application.GetAction<SetCapitalizationAction>(),
+				SdlTradosStudio.Application.GetAction<SetGrammarAction>(),
+				SdlTradosStudio.Application.GetAction<SetSpellingAction>(),
+				SdlTradosStudio.Application.GetAction<SetUnintelligenceAction>(),
+				SdlTradosStudio.Application.GetAction<SetWordChoiceAction>(),
+				SdlTradosStudio.Application.GetAction<SetWordsAdditionAction>(),
+				SdlTradosStudio.Application.GetAction<SetWordsOmissionAction>()
+			};
+		}
+
+		private void UpdateActionTooltips()
+		{
+			foreach (var mtCloudAction in _actions)
+			{
+				var tooltipText = _shortcutService.GetShotcutDetails(mtCloudAction.Id);
+				if (string.IsNullOrEmpty(tooltipText))
+				{
+					mtCloudAction.LoadTooltip(tooltipText);
+				}
+			}
+		}
+
+		public void Dispose()
+		{
+			if (_translationService != null)
+			{
+				_translationService.TranslationReceived -= _translationService_TranslationReceived;
+			}
 		}
 	}
 }

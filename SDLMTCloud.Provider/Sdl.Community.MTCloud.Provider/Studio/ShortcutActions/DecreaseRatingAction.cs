@@ -10,7 +10,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 		Name = "Decrease rating",
 		Description = "Decrease the rating of the translation", //TODO:Move this in a resource file after we confirm the exact string
 		ContextByType = typeof(EditorController))]
-	public class DecreaseRatingAction : AbstractAction, ISdlMTCloudAction
+	public class DecreaseRatingAction : AbstractAction, ISDLMTCloudAction
 	{
 		protected override void Execute()
 		{
@@ -18,9 +18,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 			rateItController?.RateIt?.DecreaseRating();
 		}
 
-		public void LoadTooltip(string tooltip)
+		public void LoadTooltip(string tooltipText)
 		{
-			throw new System.NotImplementedException();
+			ToolTipText = tooltipText;
 		}
 	}
 }

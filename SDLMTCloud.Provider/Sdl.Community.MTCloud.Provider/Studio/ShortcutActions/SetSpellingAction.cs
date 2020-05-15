@@ -11,7 +11,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 		Description =
 			"Check/Uncheck Spelling option", //TODO:Move this in a resource file after we confirm the exact string
 		ContextByType = typeof(EditorController))]
-	public class SetSpellingAction : AbstractAction, ISdlMTCloudAction
+	public class SetSpellingAction : AbstractAction, ISDLMTCloudAction
 	{
 		protected override void Execute()
 		{
@@ -19,9 +19,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 			rateItController?.RateIt?.SetRateOptionFromShortcuts(nameof(RateItViewModel.SpellingOption));
 		}
 
-		public void LoadTooltip(string tooltip)
+		public void LoadTooltip(string tooltipText)
 		{
-			throw new System.NotImplementedException();
+			ToolTipText = tooltipText;
 		}
 	}
 }

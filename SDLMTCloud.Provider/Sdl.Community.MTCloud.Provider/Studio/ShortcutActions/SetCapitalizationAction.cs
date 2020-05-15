@@ -11,7 +11,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 		Description =
 			"Check/Uncheck Capitalization,punctuation  option", //TODO:Move this in a resource file after we confirm the exact string
 		ContextByType = typeof(EditorController))]
-	public class SetCapitalizationAction : AbstractAction, ISdlMTCloudAction
+	public class SetCapitalizationAction : AbstractAction, ISDLMTCloudAction
 	{
 		protected override void Execute()
 		{
@@ -19,9 +19,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 			rateItController?.RateIt?.SetRateOptionFromShortcuts(nameof(RateItViewModel.CapitalizationOption));
 		}
 
-		public void LoadTooltip(string tooltip)
+		public void LoadTooltip(string tooltipText)
 		{
-			throw new System.NotImplementedException();
+			ToolTipText = tooltipText;
 		}
 	}
 }

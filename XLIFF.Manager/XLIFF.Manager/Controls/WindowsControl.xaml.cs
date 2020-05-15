@@ -12,6 +12,25 @@ namespace Sdl.Community.XLIFF.Manager.Controls
 	/// </summary>
 	public partial class WindowsControl : UserControl
 	{
+		public WindowsControl()
+		{
+			InitializeComponent();
+
+			Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
+			{
+				if (string.IsNullOrWhiteSpace(ControlMinimize))
+					ControlMinimize = PluginResources.WindowsControl_Minimize;
+				if (string.IsNullOrWhiteSpace(ControlMaximize))
+					ControlMaximize = PluginResources.WindowsControl_Maximize;
+				if (string.IsNullOrWhiteSpace(ControlClose))
+					ControlClose = PluginResources.WindowsControl_Close;
+				if (string.IsNullOrWhiteSpace(ControlRestore))
+					ControlRestore = PluginResources.WindowsControl_Restore;
+				if (string.IsNullOrWhiteSpace(ControlHelp))
+					ControlHelp = PluginResources.WindowsControl_Help;
+			}));
+		}
+
 		/// <summary>
 		///     Identifies the <see cref="ControlHelp" /> property.
 		/// </summary>
@@ -46,7 +65,6 @@ namespace Sdl.Community.XLIFF.Manager.Controls
 		public static readonly DependencyProperty RestoreProperty =
 			DependencyProperty.Register("ControlRestore", typeof(string), typeof(WindowsControl),
 				new PropertyMetadata(string.Empty));
-
 
 		/// <summary>
 		///     Gets or sets the tool-tip for the help button.
@@ -93,24 +111,7 @@ namespace Sdl.Community.XLIFF.Manager.Controls
 			set => SetValue(RestoreProperty, value);
 		}
 
-		public WindowsControl()
-		{
-			InitializeComponent();
-
-			Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
-			{
-				if (string.IsNullOrWhiteSpace(ControlMinimize))
-					ControlMinimize = PluginResources.WindowsControl_Minimize;
-				if (string.IsNullOrWhiteSpace(ControlMaximize))
-					ControlMaximize = PluginResources.WindowsControl_Maximize;
-				if (string.IsNullOrWhiteSpace(ControlClose))
-					ControlClose = PluginResources.WindowsControl_Close;
-				if (string.IsNullOrWhiteSpace(ControlRestore))
-					ControlRestore = PluginResources.WindowsControl_Restore;
-				if (string.IsNullOrWhiteSpace(ControlHelp))
-					ControlHelp = PluginResources.WindowsControl_Help;
-			}));
-		}
+		
 
 		private void CloseButton_OnClick(object sender, RoutedEventArgs e)
 		{

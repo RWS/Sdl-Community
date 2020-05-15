@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -16,7 +17,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	{
 		protected override void Execute()
 		{
-			MessageBox.Show("TODO");
+			WizardService.ShowWizard();
 		}
 
 		public override void Initialize()
@@ -34,7 +35,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	{
 		protected override void Execute()
 		{
-			MessageBox.Show("TODO");
+			WizardService.ShowWizard();
 		}
 
 		public override void Initialize()
@@ -52,7 +53,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	{
 		protected override void Execute()
 		{
-			MessageBox.Show("TODO");
+			WizardService.ShowWizard();
 		}
 
 		public override void Initialize()

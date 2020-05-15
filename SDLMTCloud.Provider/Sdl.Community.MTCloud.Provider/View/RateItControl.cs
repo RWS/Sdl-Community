@@ -7,18 +7,27 @@ namespace Sdl.Community.MTCloud.Provider.View
 {
 	public partial class RateItControl : UserControl
 	{
-		public IRatingService RatingService { get; }
+		public IRatingService RatingService { get; private set; }
+
 		public RateItControl(ITranslationService translationService)
 		{
 			InitializeComponent();
+
+			LoadDataContext(translationService);
+		}
+
+		private void LoadDataContext(ITranslationService translationService)
+		{
 			var shortcutService = new ShortcutService();
-			var rateItViewModel = new RateItViewModel(translationService,shortcutService);
-			var rateItWindow = new RateItWindow
+
+			var rateItViewModel = new RateItViewModel(translationService, shortcutService);
+			var rateItWindow = new RateItView
 			{
 				DataContext = rateItViewModel
 			};
+
 			RatingService = rateItViewModel;
-			rateItWindow.InitializeComponent();
+
 			rateItElementHost.Child = rateItWindow;
 		}
 	}

@@ -148,7 +148,7 @@
     <Compile Include="Interfaces\IConnectionService.cs" />
     <Compile Include="Interfaces\ILanguageMappingsService.cs" />
     <Compile Include="Interfaces\IRatingService.cs" />
-    <Compile Include="Interfaces\ISdlMTCloudAction.cs" />
+    <Compile Include="Interfaces\ISDLMTCloudAction.cs" />
     <Compile Include="Interfaces\IShortcutService.cs" />
     <Compile Include="Interfaces\ITranslationService.cs" />
     <Compile Include="Model\AuthorizationResponse.cs" />
@@ -244,8 +244,8 @@
     <Compile Include="View\RateItControl.Designer.cs">
       <DependentUpon>RateItControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\RateItWindow.xaml.cs">
-      <DependentUpon>RateItWindow.xaml</DependentUpon>
+    <Compile Include="View\RateItView.xaml.cs">
+      <DependentUpon>RateItView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -254,7 +254,7 @@
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>
     </EmbeddedResource>
-    <Page Include="View\RateItWindow.xaml">
+    <Page Include="View\RateItView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

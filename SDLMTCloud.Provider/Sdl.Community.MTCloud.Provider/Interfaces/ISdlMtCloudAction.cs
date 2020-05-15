@@ -1,7 +1,9 @@
 ﻿namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
-	public interface ISdlMTCloudAction
+	public interface ISDLMTCloudAction
 	{
-		void LoadTooltip(string tooltip);
+		string Id { get; set; }
+
+		void LoadTooltip(string tooltipText);
 	}
 }
