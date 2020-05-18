@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
@@ -11,14 +12,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
 	public class RateItViewModel:BaseViewModel, IRatingService, IDisposable
 	{		
-		private readonly IShortcutService _shortcutService;
+		private IShortcutService _shortcutService;
 		private readonly List<ISDLMTCloudAction> _actions;
 		private ITranslationService _translationService;
-
-		private ICommand _ratingCommand;
-		private ICommand _sendFeedbackCommand;
-		private ICommand _clearCommand;
-
 		private FeedbackOption _wordsOmissionChecked;
 		private FeedbackOption _grammarChecked;
 		private FeedbackOption _unintelligenceChecked;
@@ -26,23 +22,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private FeedbackOption _wordsAdditionChecked;
 		private FeedbackOption _spellingChecked;
 		private FeedbackOption _capitalizationChecked;
-
 		private int _rating;
 		private string _feedback;
-		private string _wordsOmissionTooltip;
 
 		public RateItViewModel(ITranslationService translationService, IShortcutService shortcutService)
 		{
 			SetTranslationService(translationService);
-
-			_shortcutService = shortcutService;
-			_wordsOmissionChecked = new FeedbackOption();
-			_grammarChecked = new FeedbackOption();
-			_unintelligenceChecked = new FeedbackOption();
-			_wordChoiceChecked = new FeedbackOption();
-			_wordsAdditionChecked = new FeedbackOption();
-			_spellingChecked = new FeedbackOption();
-			_capitalizationChecked = new FeedbackOption();
+			SetShortcutService(shortcutService);
+			InitializeFeedbackOptions();
 
 			RatingCommand = new CommandHandler(RatingChanged);
 			SendFeedbackCommand = new CommandHandler(SendFeedback);
@@ -194,7 +181,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			if (propertyInfo == null) return;
 
 			dynamic option = propertyInfo.GetValue(this);
-			option.Tooltip = !string.IsNullOrEmpty(tooltip) ? tooltip : "No shortcut was set in Studio for this option";
+			option.Tooltip = !string.IsNullOrEmpty(tooltip) ? tooltip : Resources.RateItViewModel_SetOptionTooltip_No_shortcut_was_set;
 			propertyInfo.SetValue(this, option);
 		}
 
@@ -232,6 +219,25 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
+		private void SetShortcutService(IShortcutService shortcutService)
+		{
+			if (_shortcutService != null)
+			{
+				_shortcutService.StudioShortcutChanged -= _shortcutService_ShortcutChanged;
+			}
+
+			_shortcutService = shortcutService;
+
+			if (_shortcutService != null)
+			{
+				_shortcutService.StudioShortcutChanged += _shortcutService_ShortcutChanged;
+			}
+		}
+		private void _shortcutService_ShortcutChanged()
+		{
+			UpdateActionTooltips();
+		}
+
 		private List<ISDLMTCloudAction> GetActions()
 		{
 			return new List<ISDLMTCloudAction>
@@ -246,6 +252,16 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				SdlTradosStudio.Application.GetAction<SetWordsAdditionAction>(),
 				SdlTradosStudio.Application.GetAction<SetWordsOmissionAction>()
 			};
+		}
+		private void InitializeFeedbackOptions()
+		{
+			_wordsOmissionChecked = new FeedbackOption();
+			_grammarChecked = new FeedbackOption();
+			_unintelligenceChecked = new FeedbackOption();
+			_wordChoiceChecked = new FeedbackOption();
+			_wordsAdditionChecked = new FeedbackOption();
+			_spellingChecked = new FeedbackOption();
+			_capitalizationChecked = new FeedbackOption();
 		}
 
 		private void UpdateActionTooltips()
@@ -262,6 +278,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			if (_translationService != null)
 			{
 				_translationService.TranslationReceived -= _translationService_TranslationReceived;
+			}
+
+			if (_shortcutService != null)
+			{
+				_shortcutService.StudioShortcutChanged -= _shortcutService_ShortcutChanged;
 			}
 		}
 	}

@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
 			 xmlns:rsx ="clr-namespace:Sdl.Community.MTCloud.Provider"
-             xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
              xmlns:watermarkTextBox="clr-namespace:Sdl.Desktop.Platform.Controls.Controls.WatermarkTextBox;assembly=Sdl.Desktop.Platform.Controls"
 			 d:DataContext="{d:DesignInstance viewModel:RateItViewModel}"
              mc:Ignorable="d" 
