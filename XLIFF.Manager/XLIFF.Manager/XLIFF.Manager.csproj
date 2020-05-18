@@ -96,6 +96,7 @@
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Common\PathInfo.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
     <Compile Include="Controls\ProjectFileActivityViewControl.cs">
@@ -165,8 +166,8 @@
     <Compile Include="Wizard\View\WizardPageFilesView.xaml.cs">
       <DependentUpon>WizardPageFilesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\View\WizardView.xaml.cs">
-      <DependentUpon>WizardView.xaml</DependentUpon>
+    <Compile Include="Wizard\View\WizardWindow.xaml.cs">
+      <DependentUpon>WizardWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="XLIFFManagerViewGroups.cs" />
     <Compile Include="ViewModel\ProjectFileActivityViewModel.cs" />
@@ -288,7 +289,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wizard\View\WizardView.xaml">
+    <Page Include="Wizard\View\WizardWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using Sdl.Community.XLIFF.Manager.Common;
+using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
@@ -13,7 +15,8 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	{
 		protected override void Execute()
 		{
-			MessageBox.Show("TODO");
+			var wizardService = new WizardService(Enumerators.Action.Import);
+			wizardService.ShowWizard();
 		}
 
 		public override void Initialize()

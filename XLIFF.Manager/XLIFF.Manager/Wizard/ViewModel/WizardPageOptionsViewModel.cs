@@ -13,6 +13,21 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public WizardPageOptionsViewModel(object view) : base(view)
 		{
+			_displayName = "Options";
+			IsValid = true;
+
+			PropertyChanged += WizardPageOptionsViewModel_PropertyChanged;
+		}
+
+		private void WizardPageOptionsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(CurrentPageChanged))
+			{
+				if (IsCurrentPage)
+				{
+					
+				}
+			}
 		}
 
 		public override string DisplayName => _displayName;

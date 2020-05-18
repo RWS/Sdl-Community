@@ -13,6 +13,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public WizardPageSummaryViewModel(object view) : base(view)
 		{
+			_displayName = "Summary";
+			IsValid = true;
 		}
 
 		public override string DisplayName => _displayName;

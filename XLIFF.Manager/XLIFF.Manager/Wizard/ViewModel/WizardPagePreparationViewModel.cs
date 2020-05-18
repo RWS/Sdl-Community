@@ -13,6 +13,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public WizardPagePreparationViewModel(object view) : base(view)
 		{
+			_displayName = "Preparation";
+			IsValid = true;
 		}
 
 		public override string DisplayName => _displayName;

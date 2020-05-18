@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -17,7 +18,8 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	{
 		protected override void Execute()
 		{
-			WizardService.ShowWizard();
+			var wizardService = new WizardService(Enumerators.Action.Export);
+			wizardService.ShowWizard();
 		}
 
 		public override void Initialize()
@@ -35,7 +37,8 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	{
 		protected override void Execute()
 		{
-			WizardService.ShowWizard();
+			var wizardService = new WizardService(Enumerators.Action.Export);
+			wizardService.ShowWizard();
 		}
 
 		public override void Initialize()
@@ -53,7 +56,8 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	{
 		protected override void Execute()
 		{
-			WizardService.ShowWizard();
+			var wizardService = new WizardService(Enumerators.Action.Export);
+			wizardService.ShowWizard();
 		}
 
 		public override void Initialize()
