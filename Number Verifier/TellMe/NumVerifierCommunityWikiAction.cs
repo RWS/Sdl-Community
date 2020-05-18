@@ -8,11 +8,11 @@ namespace Sdl.Community.NumberVerifier.TellMe
 	{
 		public override bool IsAvailable => true;
 		public override string Category => "Number Verifier results";
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.Question;
 
 		public NumVerifierCommunityWikiAction()
 		{
-			Name = "SDL Community Number Verifier plugin wiki";
+			Name = "SDL Community Number Verifier wiki";
 		}
 
 		public override void Execute()
