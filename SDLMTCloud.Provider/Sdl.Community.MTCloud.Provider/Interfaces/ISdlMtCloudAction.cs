@@ -3,7 +3,6 @@
 	public interface ISDLMTCloudAction
 	{
 		string Id { get; set; }
-
-		void LoadTooltip(string tooltipText);
+		string OptionName { get; set; }
 	}
 }
