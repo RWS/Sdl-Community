@@ -885,14 +885,15 @@ namespace Sdl.Community.NumberVerifier
 
 				#region Omit zero
 				//if only "No separator" is selected "separators" variable will be a empty string
-				string expresion = string.Empty;
+				var expresion = string.Empty;
 
 				if (omitLeadingZero)
 				{
 					_omitLeadingZero = true;
-					if (separators != string.Empty)
+					if (!string.IsNullOrEmpty(separators))
 					{
-						expresion = string.Format(@"-?\u2013?\u2212?\u002E?\u2013?\d+([{0}]\d+)*", separators);
+						var separatorsBuilder = GetBuilderSeparators(separators);
+						expresion = $@"-?\{separatorsBuilder}u2013?\u2212?\u002E?\u2013?\d+([{0}]\d+)*";
 					}
 					else
 					{
@@ -904,12 +905,8 @@ namespace Sdl.Community.NumberVerifier
 					_omitLeadingZero = false;
 					if (!string.IsNullOrEmpty(separators))
 					{
-						var separatorsBuilder = new StringBuilder();
-						for (int i = 0; i < separators.Length; i++)
-						{
-							separatorsBuilder.Append($"{separators[i]}?");
-						}
-						expresion = $@"{separatorsBuilder}-?\u2013?\u2212?\u2013?\d+(\d+)*";
+						var separatorsBuilder = GetBuilderSeparators(separators);
+						expresion = $@"-?\{separatorsBuilder}u2013?\u2212?\u2013?\d+(\d+)*";
 					}
 					else
 					{
@@ -1525,5 +1522,20 @@ namespace Sdl.Community.NumberVerifier
 			return result;
 		}
 		#endregion
+
+		private StringBuilder GetBuilderSeparators(string separators)
+		{
+			var separatorsBuilder = new StringBuilder();
+			var separatorsArray = separators.Split('\\');
+
+			foreach (var separator in separatorsArray)
+			{
+				if (!string.IsNullOrWhiteSpace(separator))
+				{
+					separatorsBuilder.Append($@"{separator}?\");
+				}
+			}
+			return separatorsBuilder;
+		}
 	}
 }
