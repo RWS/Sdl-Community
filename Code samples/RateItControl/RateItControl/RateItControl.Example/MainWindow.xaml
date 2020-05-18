@@ -1,0 +1,34 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RateItControl.Example"
+        xmlns:sdl="http://schemas.sdl.com/xaml"
+        xmlns:viewModel="clr-namespace:RateItControl.Example.ViewModel"
+        x:Class="RateItControl.Example.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="200" Width="500" d:DataContext="{d:DesignData viewModel:RateItControlViewModel}">
+	<Window.Resources>
+		<SolidColorBrush x:Key="Default.Foreground" Color="#484646"/>
+	</Window.Resources>
+	<Grid>
+
+		<Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+
+			<sdl:RateItControl Grid.Row="0"
+				MaxRating="{Binding MaxRating}"
+				Rating="{Binding Rating}"
+				ImageHeight="{Binding ImageHeight}"
+				Height="50" Width="400"/>
+
+
+			<TextBlock Grid.Row="1" Margin="0,2,0,0" Foreground="{StaticResource Default.Foreground}" 
+			           Text="{Binding SelectedMessage, FallbackValue='Rating 1 of 5'}"/>
+		</Grid>
+	</Grid>
+</Window>

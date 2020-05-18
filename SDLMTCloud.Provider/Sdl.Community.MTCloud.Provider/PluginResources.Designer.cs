@@ -426,6 +426,24 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send Feedback.
+        /// </summary>
+        public static string RateIt_FeedbackBtn {
+            get {
+                return ResourceManager.GetString("RateIt_FeedbackBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add feedback (optional).
+        /// </summary>
+        public static string RateIt_FeedbackWatermark {
+            get {
+                return ResourceManager.GetString("RateIt_FeedbackWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Capitalization, punctuation.
         /// </summary>
         public static string RateIt_Option_Capitalization {
@@ -476,6 +494,15 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string RateIt_Option_WordsAddition {
             get {
                 return ResourceManager.GetString("RateIt_Option_WordsAddition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WordsAdditionOptionId.
+        /// </summary>
+        public static string Rateit_Option_WordsAdditionOptionId {
+            get {
+                return ResourceManager.GetString("Rateit_Option_WordsAdditionOptionId", resourceCulture);
             }
         }
         

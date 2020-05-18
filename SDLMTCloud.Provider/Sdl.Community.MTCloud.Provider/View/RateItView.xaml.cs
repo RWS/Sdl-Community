@@ -3,9 +3,9 @@
 	/// <summary>
 	/// Interaction logic for RateItWindow.xaml
 	/// </summary>
-	public partial class RateItWindow 
+	public partial class RateItView 
 	{
-		public RateItWindow()
+		public RateItView()
 		{
 			InitializeComponent();
 		}

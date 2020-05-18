@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using Newtonsoft.Json;
 using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
@@ -15,11 +14,15 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
-	public class SdlMTCloudTranslationProvider : ITranslationProvider
+	public class SdlMTCloudTranslationProvider : ITranslationProvider, IDisposable
 	{
-		private readonly EditorController _editorController;
+		private readonly object _lockObject = new object();
+
+		private EditorController _editorController;
 		private LanguagePair _languageDirection;
 		private LanguageMappingsService _languageMappingsService;
+		private RateItController _rateItController;
+		
 
 		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
 		 ILanguageProvider languageProvider, EditorController editorController)
@@ -29,11 +32,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			LanguageProvider = languageProvider;
 			TranslationService = translationService;
 
-			_editorController = editorController;
+			SetEditorController(editorController);
 
 			LoadState(translationProviderState);
-			LoadRateItContoller();
-		}
+		}		
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
 
@@ -141,20 +143,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				// ignore any casting errors and simply create a new options instance
 				Options = new Options();
-			}
-		}
-		private void LoadRateItContoller()
-		{
-			if (_editorController != null)
-			{
-				//Activate rate it controller
-				Application.Current?.Dispatcher?.Invoke(() =>
-				{
-					RateItController.TranslationService = TranslationService;
-
-					var rateIt = new RateItController();
-					rateIt.Activate();
-				});
 			}
 		}
 
@@ -310,6 +298,57 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					          && l.TargetLanguages.Any(a =>
 						          a.CodeName.Equals(o.TargetLanguageId, StringComparison.InvariantCultureIgnoreCase))));
 			return languagePair;
+		}
+
+		private void SetEditorController(EditorController editorController)
+		{
+			if (_editorController != null)
+			{				
+				_editorController.Opened -= _editorController_Opened;
+			}
+
+			_editorController = editorController;
+
+			if (_editorController != null)
+			{
+				_editorController.Opened += _editorController_Opened;
+			}
+		}
+
+		private void _editorController_Opened(object sender, DocumentEventArgs e)
+		{
+			lock (_lockObject)
+			{
+				if (_rateItController != null)
+				{
+					return;
+				}
+
+				try
+				{
+					_rateItController = SdlTradosStudio.Application.GetController<RateItController>();
+
+					if (_rateItController != null)
+					{
+						_rateItController.TranslationService = TranslationService;
+						_rateItController.Activate();
+					}
+				}
+				catch
+				{
+					// catch all; unable to locate the controller
+				}
+			}
+		}
+
+		
+
+		public void Dispose()
+		{
+			if (_editorController != null)
+			{
+				_editorController.Opened -= _editorController_Opened;
+			}
 		}
 	}
 }

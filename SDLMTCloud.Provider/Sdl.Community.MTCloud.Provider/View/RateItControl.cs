@@ -1,21 +1,33 @@
 ﻿using System.Windows.Forms;
 using Sdl.Community.MTCloud.Provider.Interfaces;
+using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 
 namespace Sdl.Community.MTCloud.Provider.View
 {
 	public partial class RateItControl : UserControl
 	{
+		public IRatingService RatingService { get; private set; }
+
 		public RateItControl(ITranslationService translationService)
 		{
 			InitializeComponent();
-			
-			var rateItViewModel = new RateItViewModel(translationService);
-			var rateItWindow = new RateItWindow
+
+			LoadDataContext(translationService);
+		}
+
+		private void LoadDataContext(ITranslationService translationService)
+		{
+			var shortcutService = new ShortcutService();
+
+			var rateItViewModel = new RateItViewModel(translationService, shortcutService);
+			var rateItWindow = new RateItView
 			{
 				DataContext = rateItViewModel
 			};
-			rateItWindow.InitializeComponent();
+
+			RatingService = rateItViewModel;
+
 			rateItElementHost.Child = rateItWindow;
 		}
 	}
