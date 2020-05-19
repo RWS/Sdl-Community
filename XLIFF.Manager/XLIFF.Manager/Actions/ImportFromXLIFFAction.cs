@@ -1,6 +1,9 @@
 ﻿using System.Windows;
+using Sdl.Community.XLIFF.Manager.Common;
+using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.Actions
 {
@@ -11,13 +14,17 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	[ActionLayout(typeof(XLIFFManagerActionsGroup), 5, DisplayType.Large)]
 	public class ImportFromXLIFFAction : AbstractViewControllerAction<XLIFFManagerViewController>
 	{
+		private ProjectsController _projectsController;
+
 		protected override void Execute()
 		{
-			MessageBox.Show("TODO");
+			var wizardService = new WizardService(Enumerators.Action.Import, _projectsController);
+			wizardService.ShowWizard();
 		}
 
 		public override void Initialize()
 		{
+			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			Enabled = true;
 		}
 	}

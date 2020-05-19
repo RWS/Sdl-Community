@@ -44,7 +44,6 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			{
 				_selectedProjectFileActions = value;
 				OnPropertyChanged(nameof(SelectedProjectFileActions));
-
 				OnPropertyChanged(nameof(StatusLabel));			
 			}
 		}

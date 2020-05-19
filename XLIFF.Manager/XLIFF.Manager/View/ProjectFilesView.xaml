@@ -23,7 +23,7 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
-			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
 			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>
 			<converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter"/>
 
