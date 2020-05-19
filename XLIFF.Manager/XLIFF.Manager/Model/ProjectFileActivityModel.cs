@@ -16,7 +16,9 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public Enumerators.Status Status { get; set; }
 
-		public Enumerators.Action Action { get; set; }		
+		public Enumerators.Action Action { get; set; }	
+		
+		public bool Selected { get; set; }
 
 		public string Id { get; set; }
 
