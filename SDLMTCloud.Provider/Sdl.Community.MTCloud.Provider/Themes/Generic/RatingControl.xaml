@@ -3,6 +3,22 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:generic="clr-namespace:Sdl.Community.MTCloud.Provider.Themes.Generic">
 	
+	<Style x:Key="Custom.Image.Style" TargetType="Image">
+		<Setter Property="Stretch" Value="UniformToFill"/>
+		<Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="RenderOptions.EdgeMode" Value="Aliased"/>
+		<Setter Property="Margin" Value="0,0,0,0"/>
+		<Style.Triggers>
+			<DataTrigger Binding="{Binding Path=Selected}" Value="true">
+				<Setter Property="Source" Value="{Binding Path=SelectedImage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type generic:RatingControl}}}"/>
+			</DataTrigger>
+			<DataTrigger Binding="{Binding Path=Selected}" Value="false">
+				<Setter Property="Source" Value="{Binding Path=DisabledImage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type generic:RatingControl}}}"/>
+			</DataTrigger>
+		</Style.Triggers>
+	</Style>
+
 	<Style x:Key="Custom.ListBox.Style" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}" >
 		<Setter Property="Template">
 			<Setter.Value>
@@ -54,7 +70,22 @@
 						         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 						         ScrollViewer.VerticalScrollBarVisibility="Disabled"
 						         SelectionMode="Single">
-							
+							<ListBox.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ListBox.ItemsPanel>
+
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<Grid Margin="0">
+										<Image Grid.Column="0" Margin="0" 
+											   Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type generic:RatingControl}}, Path=ImageHeight}"
+											   Style="{StaticResource Custom.Image.Style}">
+										</Image>
+									</Grid>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
 						</ListBox>
 					</Grid>
 				</ControlTemplate>

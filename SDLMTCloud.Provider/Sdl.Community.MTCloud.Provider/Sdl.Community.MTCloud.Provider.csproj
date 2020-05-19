@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.JsonPatch">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Microsoft.AspNetCore.JsonPatch.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.IdentityModel.Tokens">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Microsoft.IdentityModel.Tokens.dll</HintPath>
@@ -250,8 +253,8 @@
     <Compile Include="Themes\Generic\RatingControl.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\selectedStar.png" />
-    <None Include="Resources\defaultStar.png" />
+    <None Include="Resources\StarYellow.png" />
+    <None Include="Resources\StarGrey.png" />
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>
     </EmbeddedResource>
