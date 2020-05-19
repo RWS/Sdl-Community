@@ -23,6 +23,7 @@
 			<sdl:RateItControl Grid.Row="0" BorderThickness="1" BorderBrush="#9F9E9E"
 				MaxRating="{Binding MaxRating}"
 				Rating="{Binding Rating}"
+				EnableMouseHoverSelection="{Binding EnableMouseHoverSelection}"
 				ImageHeight="{Binding ImageHeight}"
 				Height="50" Width="400"/>
 
