@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
+using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
@@ -18,25 +19,25 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private Window _window;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
 		private WizardPageViewModelBase _currentPage;
-		private Enumerators.Action _action;
-
+		
 		private RelayCommand _moveNextCommand;
 		private RelayCommand _moveBackCommand;
 		private RelayCommand _finishCommand;
 		private RelayCommand _cancelCommand;
 
-		public WizardViewModel(Window window, Enumerators.Action action, ObservableCollection<WizardPageViewModelBase> pages)
+		public WizardViewModel(Window window, ObservableCollection<WizardPageViewModelBase> pages, 
+			TransactionModel transctionModel, Enumerators.Action action)
 		{
-			SetWindow(window);
-
-			_action = action;
-
+			SetWindow(window);		
 			Pages = pages;
-
+			Action = action;
+			TransctionModel = transctionModel;
 			UpdateWizardHeader(_window.ActualWidth);
-
 			SetCurrentPage(Pages[0]);
 		}
+		public Enumerators.Action Action { get; set; }
+
+		public TransactionModel TransctionModel { get; set; }
 
 		private void SetWindow(Window window)
 		{
@@ -125,7 +126,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 				_currentPage = value;
 
-				WindowTitle = string.Format("{0} {1} Wizard - {2}", PluginResources.XLIFFManager_Name, _action, CurrentPage.DisplayName);
+				WindowTitle = string.Format("{0} {1} Wizard - {2}", PluginResources.XLIFFManager_Name, Action, CurrentPage.DisplayName);
 
 				// move focus to the page in the wizard early
 				OnPropertyChanged(nameof(CurrentPage));

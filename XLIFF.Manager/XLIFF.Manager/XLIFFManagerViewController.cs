@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Controls;
@@ -7,10 +8,12 @@ using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Community.XLIFF.Manager.TestData;
 using Sdl.Community.XLIFF.Manager.ViewModel;
+using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.Desktop.IntegrationApi.Notifications.Events;
+using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
@@ -50,8 +53,7 @@ namespace Sdl.Community.XLIFF.Manager
 			_eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 			_eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>()?.Subscribe(OnStudioWindowCreatedNotificationEvent);
 
-			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			//var project = _projectsController.CurrentProject.GetProjectInfo();			
+			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();					
 
 			// TODO this will be replaced with a call to recover the relevant data from the projects loaded in Studio			
 			var testDataUtil = new TestDataUtil(_imageService);

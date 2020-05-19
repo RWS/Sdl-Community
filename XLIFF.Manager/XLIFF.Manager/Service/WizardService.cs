@@ -1,59 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Markup;
 using Sdl.Community.XLIFF.Manager.Common;
+using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Wizard.View;
 using Sdl.Community.XLIFF.Manager.Wizard.ViewModel;
+using Sdl.ProjectAutomation.FileBased;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.Service
 {
 	public class WizardService
 	{
 		private readonly Enumerators.Action _action;
-
+		private readonly ProjectsController _projectsController;
+		private FileBasedProject _selectedProject;
 		private WizardWindow _wizardWindow;
-		private ObservableCollection<WizardPageViewModelBase> _pages;		
+		private ObservableCollection<WizardPageViewModelBase> _pages;
 
-		public WizardService(Enumerators.Action action)
+		public WizardService(Enumerators.Action action, ProjectsController projectsController)
 		{
 			_action = action;
+			_projectsController = projectsController;
 		}
 
 		public void ShowWizard()
-		{			
+		{
 			if (_action == Enumerators.Action.None)
 			{
 				return;
 			}
 
-			_pages = CreatePages();
+			_selectedProject = _projectsController.SelectedProjects.FirstOrDefault() ?? _projectsController.CurrentProject;
+			
 
-			_wizardWindow = new WizardWindow();							
-			_wizardWindow.Loaded += WizardWindowLoaded;			
+			_wizardWindow = new WizardWindow();
+			_wizardWindow.Loaded += WizardWindowLoaded;
 			_wizardWindow.ShowDialog();
 		}
-		
+
 		private void WizardWindowLoaded(object sender, RoutedEventArgs e)
 		{
+			//TODO get the selected project files
+			var transactionModel = new TransactionModel();
+			
+
+			_pages = CreatePages(transactionModel);
+
 			AddDataTemplates(_wizardWindow, _pages);
 
-			var viewModel = new WizardViewModel(_wizardWindow, _action, _pages);
+
+
+			var viewModel = new WizardViewModel(_wizardWindow, _pages, transactionModel, _action);
 			viewModel.RequestClose += ViewModel_RequestClose;
 			_wizardWindow.DataContext = viewModel;
-		}		
+		}
 
-		private ObservableCollection<WizardPageViewModelBase> CreatePages()
+		private ObservableCollection<WizardPageViewModelBase> CreatePages(TransactionModel transactionModel)
 		{
 			//TODO setup the Import action pages
 
 			var pages = new ObservableCollection<WizardPageViewModelBase>
 			{
-				new WizardPageFilesViewModel( new WizardPageFilesView()),
-				new WizardPageOptionsViewModel(new WizardPageOptionsView()),
-				new WizardPageSummaryViewModel(new WizardPageSummaryView()),
-				new WizardPagePreparationViewModel(new WizardPagePreparationView())
+				new WizardPageFilesViewModel( new WizardPageFilesView(), transactionModel),
+				new WizardPageOptionsViewModel(new WizardPageOptionsView(), transactionModel),
+				new WizardPageSummaryViewModel(new WizardPageSummaryView(), transactionModel),
+				new WizardPagePreparationViewModel(new WizardPagePreparationView(), transactionModel)
 			};
 
 			UpdatePageIndexes(pages);

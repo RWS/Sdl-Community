@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
@@ -11,7 +12,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private string _displayName;
 		private bool _isValid;
 
-		public WizardPageSummaryViewModel(object view) : base(view)
+		public WizardPageSummaryViewModel(object view, TransactionModel transactionModel) : base(view, transactionModel)
 		{
 			_displayName = "Summary";
 			IsValid = true;

@@ -9,8 +9,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		public ProjectFileActionModel(ProjectModel projectModel)
 		{
 			ProjectModel = projectModel;
-			ProjectFileActivityModels = new List<ProjectFileActivityModel>();
-			Action = Enumerators.Action.None;
+			ProjectFileActivityModels = new List<ProjectFileActivityModel>();			
 		}
 
 		public ProjectModel ProjectModel { get; }
@@ -18,6 +17,8 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		public List<ProjectFileActivityModel> ProjectFileActivityModels { get; set; }
 
 		public Enumerators.Action Action { get; set; }
+
+		public bool Selected { get; set; }
 
 		public string Status
 		{
