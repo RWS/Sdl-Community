@@ -3,48 +3,44 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Xml.Linq;
 using Sdl.Community.InSource.Helpers;
+using Sdl.Community.InSource.Interfaces;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.InSource
 {
-    public class ProjectCreator
+	public class ProjectCreator
     {
         public event ProgressChangedEventHandler ProgressChanged;
         public event EventHandler<ProjectMessageEventArgs> MessageReported;
         private double _currentProgress;
 	    private readonly ProjectRequest _projectRequest;
-	    public static readonly Log Log = Log.Instance;
+		private readonly IMessageBoxService _messageBoxService;
 
-		public ProjectCreator(List<ProjectRequest> requests, ProjectTemplateInfo projectTemplate)
+		public static readonly Log Log = Log.Instance;
+
+		public ProjectCreator(List<ProjectRequest> requests, ProjectTemplateInfo projectTemplate, IMessageBoxService messageBoxService)
         {
-            Requests = requests;
+			_messageBoxService = messageBoxService;
+			Requests = requests;
             ProjectTemplate = projectTemplate;
             SuccessfulRequests = new List<Tuple<ProjectRequest, FileBasedProject>>();
         }
 
-	    public ProjectCreator(ProjectRequest projectRequest, ProjectTemplateInfo projectTemplate)
+	    public ProjectCreator(ProjectRequest projectRequest, ProjectTemplateInfo projectTemplate, IMessageBoxService messageBoxService)
 	    {
 		    _projectRequest = projectRequest;
-		    ProjectTemplate = projectTemplate;
-	    }
-        List<ProjectRequest> Requests
-        {
-            get;
-        }
+			_messageBoxService = messageBoxService;
+			ProjectTemplate = projectTemplate;
+		}
 
-        public List<Tuple<ProjectRequest, FileBasedProject>> SuccessfulRequests
-        {
-            get;
-        }
+		List<ProjectRequest> Requests { get; }
 
-        ProjectTemplateInfo ProjectTemplate
-        {
-            get;
-        }
+        public List<Tuple<ProjectRequest, FileBasedProject>> SuccessfulRequests { get; }
+
+        ProjectTemplateInfo ProjectTemplate { get; }
 
 	    public FileBasedProject Execute()
 	    {
@@ -127,15 +123,13 @@ namespace Sdl.Community.InSource
 						catch (Exception ex)
 						{
 							Log.Logger.Error($"ProjectCreator-> CreateProject method: {ex.Message}\n {ex.StackTrace}");
-							MessageBox.Show(
-								@"Please go to File -> Setup -> Project templates -> Select a template -> Edit -> Default Task Sequence -> Ok after that run again Content connector");
+							_messageBoxService.ShowMessage(PluginResources.ProjectTemplateSequenceSelection_Message, string.Empty);
 						}
 					}
 					return project;
 				}
 
-				MessageBox.Show(@"Please select a project template from InSource view", @"Project template is missing",
-					MessageBoxButtons.OK);
+				_messageBoxService.ShowWarningMessage(PluginResources.ProjectTemplateSelection_Message, PluginResources.MissingProjectTemplate_Message);
 			}
 		    catch (Exception e)
 		    {

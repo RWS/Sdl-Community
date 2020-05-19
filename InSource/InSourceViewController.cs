@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.InSource.Helpers;
+using Sdl.Community.InSource.Interfaces;
 using Sdl.Community.InSource.Notifications;
+using Sdl.Community.InSource.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -17,323 +19,238 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.InSource
 {
-    [View(
-        Id = "InSourceView",
-        Name = "InSource!",
-        Description = "Create projects from project request content",
-        Icon = "InSource_large",
-        LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
-    public class InSourceViewController : AbstractViewController, INotifyPropertyChanged
-    {
-        private static readonly Lazy<InSourceViewControl> Control = new Lazy<InSourceViewControl>(() => new InSourceViewControl());
-        private static readonly Lazy<TimerControl> TimerControl = new Lazy<TimerControl>();
-        private ProjectTemplateInfo _selectedProjectTemplate;
-        private List<ProjectRequest> _projectRequests;
-        private List<ProjectRequest> _selectedProjects;
-        private readonly List<bool> _hasTemplateList;
-        private readonly List<bool> _hasFiles; 
-        public static Persistence Persistence = new Persistence();
-        private int _percentComplete;
-	    private IStudioNotificationCommand _createProjectCommand;
-	    private readonly IStudioEventAggregator _eventAggregator;
+	[View(
+		Id = "InSourceView",
+		Name = "InSource!",
+		Description = "Create projects from project request content",
+		Icon = "InSource_large",
+		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
+	public class InSourceViewController : AbstractViewController, INotifyPropertyChanged
+	{
+		private static readonly Lazy<InSourceViewControl> Control = new Lazy<InSourceViewControl>(() => new InSourceViewControl());
+		private static readonly Lazy<TimerControl> TimerControl = new Lazy<TimerControl>();
+		private ProjectTemplateInfo _selectedProjectTemplate;
+		private List<ProjectRequest> _projectRequests;
+		private List<ProjectRequest> _selectedProjects;
+		private readonly List<bool> _hasTemplateList;
+		private readonly List<bool> _hasFiles;
+		private int _percentComplete;
+		private IStudioNotificationCommand _createProjectCommand;
+		private readonly IStudioEventAggregator _eventAggregator;
 		private const string NotificationGroupId = "b0261aa3-b6a5-4f69-8f94-3713784ce8ef";
-	    private readonly InSourceNotificationGroup _notificationGroup;
-	    public static readonly Log Log = Log.Instance;
+		private readonly InSourceNotificationGroup _notificationGroup;
+		private ProjectsController _projectsController;
+		private IMessageBoxService _messageBoxService;
 
+		public static Persistence Persistence = new Persistence();
+		public static readonly Log Log = Log.Instance;
+		
 		public event EventHandler ProjectRequestsChanged;
-	    public event PropertyChangedEventHandler PropertyChanged;
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		public InSourceViewController()
-	    {
-		    _projectRequests = new List<ProjectRequest>();
-		    _hasTemplateList = new List<bool>();
-		    _hasFiles = new List<bool>();
-		    _eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
+		{
+			_projectRequests = new List<ProjectRequest>();
+			_messageBoxService = new MessageBoxService();
+			_hasTemplateList = new List<bool>();
+			_hasFiles = new List<bool>();
+			_eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 
 			_notificationGroup = new InSourceNotificationGroup(NotificationGroupId)
-		    {
-			    Title = "InSource Notifications"
-		    };
-	    }
+			{
+				Title = "InSource Notifications"
+			};
+		}
 
-	    protected override void Initialize(IViewContext context)
-        {
-            ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-            Control.Value.Controller = this;
-            TimerControl.Value.CheckForProjectsRequestEvent += CheckForProjectsEvent;
-        }
+		public IEnumerable<ProjectTemplateInfo> ProjectTemplates => _projectsController.GetProjectTemplates();
 
-        private void CheckForProjectsEvent(object sender, EventArgs e)
-        {
-            CheckForProjects();
-        }
+		public ProjectTemplateInfo SelectedProjectTemplate
+		{
+			get => _selectedProjectTemplate;
+			set
+			{
+				_selectedProjectTemplate = value;
+				OnPropertyChanged(nameof(SelectedProjectTemplate));
+			}
+		}
 
-        private ProjectsController ProjectsController
-        {
-            get;
-            set;
-        }
-        public IEnumerable<ProjectTemplateInfo> ProjectTemplates => ProjectsController.GetProjectTemplates();
-	    public ProjectTemplateInfo SelectedProjectTemplate
-        {
-            get => _selectedProjectTemplate;
-		    set
-            {
-                _selectedProjectTemplate = value;
-                OnPropertyChanged(nameof(SelectedProjectTemplate));
-            }
-        }
+		public List<ProjectRequest> ProjectRequests
+		{
+			get => _projectRequests;
+			set
+			{
+				_projectRequests = value;
+				OnPropertyChanged(nameof(ProjectRequests));
 
-        public List<ProjectRequest> ProjectRequests
-        {
-            get => _projectRequests;
-	        set
-            {
-                _projectRequests = value;
-                OnPropertyChanged(nameof(ProjectRequests));
+				OnProjectRequestsChanged();
+			}
+		}
 
-                OnProjectRequestsChanged();
-            }
-        }
-        public List<ProjectRequest> SelectedProjects
-        {
-            get => _selectedProjects;
-	        set
-            {
-                _selectedProjects = value;
-                OnPropertyChanged(nameof(SelectedProjects));
-            }
-        }
+		public List<ProjectRequest> SelectedProjects
+		{
+			get => _selectedProjects;
+			set
+			{
+				_selectedProjects = value;
+				OnPropertyChanged(nameof(SelectedProjects));
+			}
+		}
 
-        protected override Control GetExplorerBarControl()
-        {
-            return TimerControl.Value;
-        }
+		public int PercentComplete
+		{
+			get => _percentComplete;
+			set
+			{
+				_percentComplete = value;
+				OnPropertyChanged(nameof(PercentComplete));
+			}
+		}
 
-        protected override Control GetContentControl()
-        {
-            return Control.Value;
-        }
+		public List<FileBasedProject> Projects { get; set; }
 
-        public int PercentComplete 
-        {
-            get => _percentComplete;
-	        set
-            {
-                _percentComplete = value;
-                OnPropertyChanged(nameof(PercentComplete));
-            }
-        }
+		protected override void Initialize(IViewContext context)
+		{
+			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			Control.Value.Controller = this;
+			TimerControl.Value.CheckForProjectsRequestEvent += CheckForProjectsEvent;
+			//LoadProjectTemplatest();
+		}
 
-        public List<FileBasedProject> Projects
-        {
-            get;
-            set;
-        }
+		protected override Control GetExplorerBarControl()
+		{
+			return TimerControl.Value;
+		}
 
-	    public void CheckForProjects()
-	    {
-		    try
-		    {
-			    //clear existing notifications
-			    _notificationGroup.Notifications.Clear();
-			    var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
-			    //publish notification group 
-			    _eventAggregator.Publish(addNotificationEvent);
+		protected override Control GetContentControl()
+		{
+			return Control.Value;
+		}
 
-			    var projectRequest = Persistence.Load();
-			    if (projectRequest != null)
-			    {
-				    var watchFoldersList = GetWatchFolders(projectRequest);
-				    ProjectRequests.Clear();
+		public void CheckForProjects()
+		{
+			try
+			{
+				//clear existing notifications
+				_notificationGroup.Notifications.Clear();
+				var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
+				//publish notification group 
+				_eventAggregator.Publish(addNotificationEvent);
+
+				var projectRequest = Persistence.Load();
+				if (projectRequest != null)
+				{
+					var watchFoldersList = GetWatchFolders(projectRequest);
+					ProjectRequests.Clear();
 					foreach (var warchFolder in watchFoldersList)
-				    {
-					    ProjectRequests.AddRange(GetNewDirectories(warchFolder, projectRequest));
+					{
+						ProjectRequests.AddRange(GetNewDirectories(warchFolder, projectRequest));
 					}
-				    if (ProjectRequests?.Count>0)
-				    {
+					if (ProjectRequests?.Count > 0)
+					{
 						Persistence.SaveProjectRequestList(ProjectRequests);
 
-					    foreach (var newProjectRequest in ProjectRequests)
-					    {
-						    var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
-						    CreateSudioNotification(newProjectRequest, newProjectPath);
-					    }
+						foreach (var newProjectRequest in ProjectRequests)
+						{
+							var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
+							CreateSudioNotification(newProjectRequest, newProjectPath);
+						}
 					}
 
 					//publish notification
-				    var groupEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
-				    _eventAggregator.Publish(groupEvent);
+					var groupEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
+					_eventAggregator.Publish(groupEvent);
 
-				    var showNotification = new ShowStudioNotificationsViewEvent(true, true);
-				    _eventAggregator.Publish(showNotification);
-			    }
-		    }
-		    catch (Exception e)
-		    {
-				Log.Logger.Error($"CheckForProjects method: {e.Message}\n {e.StackTrace}");
-			}
-	    }
-
-	    public void CreateSudioNotification(ProjectRequest newProjectRequest,string newProjectPath)
-	    {
-		    var notification = new InSourceNotification(newProjectRequest.NotificationId)
-		    {
-			    Title = newProjectRequest.Name,
-			    AlwaysVisibleDetails = new List<string>
-			    {
-				    "Project request path",
-				    newProjectPath
-			    },
-			    IsActionVisible = true,
-			    AllowsUserToDismiss = true
-		    };
-
-		    Action createProjectAction = () => CreateProjectFromNotification(notification);
-		    _createProjectCommand = new InSourceCommand(createProjectAction)
-		    {
-			    CommandText = "Create project",
-			    CommandToolTip = "Create new project"
-		    };
-		    notification.Action = _createProjectCommand;
-
-		    //dismiss notification action
-		    Action dismissAction = () => ClearNotification(notification);
-		    var clearNotificationCommand = new InSourceCommand(dismissAction);
-		    notification.ClearNotificationAction = clearNotificationCommand;
-
-		    _notificationGroup.Notifications.Add(notification);
-	    }
-
-	    private void CreateProjectFromNotification(InSourceNotification notification)
-	    {
-		    try
-		    {
-			    if (notification != null)
-			    {
-				    var project = ProjectRequests.FirstOrDefault(n => n.NotificationId.Equals(notification.Id));
-
-				    CreateProjectsFromNotifications(project,notification);
-			    }
-			}
-		    catch (Exception e)
-		    {
-				Log.Logger.Error($"CreateProjectFromNotification method: {e.Message}\n {e.StackTrace}");
-			}
-		}
-	    private void ClearNotification(InSourceNotification notification)
-	    {
-		    _eventAggregator.Publish(new RemoveStudioNotificationFromGroupEvent(NotificationGroupId, notification.Id));
-	    }
-
-		private List<string> GetWatchFolders(List<ProjectRequest> projectRequest)
-        {
-            var watchFoldersPath = projectRequest.GroupBy(x => x.Path).Select(y => y.First());;
-            var foldersPath = new List<string>();
-            foreach (var watch in watchFoldersPath)
-            {
-	            var hasFiles = Directory.GetFiles(watch.Path, "*.*",SearchOption.AllDirectories).Any();
-				//if the watch folder doesn't have file a new notification will be created for each watch folder, so we add only the folders which has files
-	            if (hasFiles)
-	            {
-					foldersPath.Add(watch.Path);
+					var showNotification = new ShowStudioNotificationsViewEvent(true, true);
+					_eventAggregator.Publish(showNotification);
 				}
 			}
-            return foldersPath;
-        }
+			catch (Exception e)
+			{
+				Log.Logger.Error($"CheckForProjects method: {e.Message}\n {e.StackTrace}");
+			}
+		}
 
-        private List<ProjectRequest> GetNewDirectories(string watchFolderPath,List<ProjectRequest> projectRequests )
-        {
-            //get the template for watch folder
-            var templateForWatchFolder =
-                projectRequests.Where(s => s.Path == watchFolderPath).Select(t => t.ProjectTemplate).FirstOrDefault();
-           
-            var projectRequestList = new List<ProjectRequest>();
-            var subdirectories = Directory.GetDirectories(watchFolderPath);
-            if (subdirectories.Length != 0)
-            {
-                foreach (var subdirectory in subdirectories)
-                {
-                    var dirInfo = new DirectoryInfo(subdirectory);
+		public void CreateSudioNotification(ProjectRequest newProjectRequest, string newProjectPath)
+		{
+			var notification = new InSourceNotification(newProjectRequest.NotificationId)
+			{
+				Title = newProjectRequest.Name,
+				AlwaysVisibleDetails = new List<string>
+				{
+					"Project request path",
+					newProjectPath
+				},
+				IsActionVisible = true,
+				AllowsUserToDismiss = true
+			};
 
-	                if (dirInfo.Name !="AcceptedRequests")
-	                {
-						var projectRequest = CreateProjectRequest(templateForWatchFolder, dirInfo, watchFolderPath);
-		                projectRequestList.Add(projectRequest);
-					}
-                }
-            }
-            else
-            {
-                var dirInfo = new DirectoryInfo(watchFolderPath);
-           
-               var projectRequest= CreateProjectRequest(templateForWatchFolder, dirInfo, watchFolderPath);
-                projectRequestList.Add(projectRequest);
-            }
-            return projectRequestList;
-        }
+			Action createProjectAction = () => CreateProjectFromNotification(notification);
+			_createProjectCommand = new InSourceCommand(createProjectAction)
+			{
+				CommandText = "Create project",
+				CommandToolTip = "Create new project"
+			};
+			notification.Action = _createProjectCommand;
 
-        private ProjectRequest CreateProjectRequest(ProjectTemplateInfo templateInfo, DirectoryInfo directory,
-            string path)
-        {
-            var projectRequest = new ProjectRequest();
-            if (directory.Name != "AcceptedRequests")
-            {
-                projectRequest.Name = directory.Name;
-                projectRequest.Path = path;
-                projectRequest.ProjectTemplate = templateInfo;
-				projectRequest.NotificationId = Guid.NewGuid();
-                projectRequest.Files = Directory.GetFiles(directory.FullName, "*", SearchOption.AllDirectories);
-            }
-            return projectRequest;
-        }
+			//dismiss notification action
+			Action dismissAction = () => ClearNotification(notification);
+			var clearNotificationCommand = new InSourceCommand(dismissAction);
+			notification.ClearNotificationAction = clearNotificationCommand;
 
-	    public FileBasedProject CreateProjectsFromNotifications(ProjectRequest projectFromNotifications, InSourceNotification notification)
-	    {
+			_notificationGroup.Notifications.Add(notification);
+		}
+
+		public FileBasedProject CreateProjectsFromNotifications(ProjectRequest projectFromNotifications, InSourceNotification notification)
+		{
 			var waitWindow = new WaitWindow();
 			waitWindow.Show();
-		    ProjectCreator creator;
-		    FileBasedProject project = null;
-		    var worker = new BackgroundWorker
-		    {
-			    WorkerReportsProgress = true
-		    };
-		    worker.DoWork += (sender, e) =>
-		    {
-			    creator = new ProjectCreator(projectFromNotifications, projectFromNotifications.ProjectTemplate);
-			    project = creator.Execute();
-		    };
+			ProjectCreator creator;
+			FileBasedProject project = null;
+			var worker = new BackgroundWorker
+			{
+				WorkerReportsProgress = true
+			};
+			worker.DoWork += (sender, e) =>
+			{
+				creator = new ProjectCreator(projectFromNotifications, projectFromNotifications.ProjectTemplate, _messageBoxService);
+				project = creator.Execute();
+			};
 
-		    worker.RunWorkerCompleted += (sender, e) =>
-		    {
-			    if (e.Error != null)
-			    {
-				    MessageBox.Show(e.Error.ToString());
-			    }
-			    else
-			    {
-				    if (project != null)
-				    {
-					    InSource.Instance.RequestAccepted(projectFromNotifications);
-					    //Remove the created project from project request
-					    //this will refresh the list from view part
-					    ProjectRequests.Remove(projectFromNotifications);
-					    ClearNotification(notification);
+			worker.RunWorkerCompleted += (sender, e) =>
+			{
+				if (e.Error != null)
+				{
+					_messageBoxService.ShowMessage(e.Error.ToString(), string.Empty);
+				}
+				else
+				{
+					if (project != null)
+					{
+						InSource.Instance.RequestAccepted(projectFromNotifications);
+						//Remove the created project from project request
+						//this will refresh the list from view part
+						ProjectRequests.Remove(projectFromNotifications);
+						ClearNotification(notification);
 
-					    OnProjectRequestsChanged();
+						OnProjectRequestsChanged();
 						waitWindow.Close();
-					    MessageBox.Show($@"Project {projectFromNotifications.Name} was created");
-				    }
-			    }
-		    };
-		    worker.RunWorkerAsync();
-		    return project;
-	    }
+						_messageBoxService.ShowMessage(string.Format(PluginResources.ProjectSuccessfullyCreated_Message, projectFromNotifications.Name), string.Empty);
+					}
+				}
+			};
+			worker.RunWorkerAsync();
+			return project;
+		}
 
-	    public void CreateProjects()
-	    {
-		    try
-		    {
+		public void Contribute()
+		{
+			System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/InSource");
+		}
+
+		public void CreateProjects()
+		{
+			try
+			{
 				Control.Value.ClearMessages();
 
 				ProjectCreator creator = null;
@@ -344,7 +261,7 @@ namespace Sdl.Community.InSource
 
 				if (SelectedProjects == null || SelectedProjects.Count == 0)
 				{
-					MessageBox.Show(@"Please select a project");
+					_messageBoxService.ShowMessage(PluginResources.ProjectSelection_Message, string.Empty);
 				}
 				else
 				{
@@ -365,17 +282,11 @@ namespace Sdl.Community.InSource
 							{
 								worker.DoWork += (sender, e) =>
 								{
-									if (SelectedProjects.Count != 0 && SelectedProjects != null)
-									{
-										creator = new ProjectCreator(SelectedProjects, SelectedProjectTemplate);
-									}
-									else
-									{
-										creator = new ProjectCreator(ProjectRequests, SelectedProjectTemplate);
-									}
+									creator = SelectedProjects.Count != 0 && SelectedProjects != null
+										? new ProjectCreator(SelectedProjects, SelectedProjectTemplate, _messageBoxService)
+										: new ProjectCreator(ProjectRequests, SelectedProjectTemplate, _messageBoxService);
 
-									creator.ProgressChanged +=
-										(sender2, e2) => { worker.ReportProgress(e2.ProgressPercentage); };
+									creator.ProgressChanged += (sender2, e2) => { worker.ReportProgress(e2.ProgressPercentage); };
 									creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Project, e2.Message); };
 									creator.Execute();
 								};
@@ -388,7 +299,7 @@ namespace Sdl.Community.InSource
 
 									if (e.Error != null)
 									{
-										MessageBox.Show(e.Error.ToString());
+										_messageBoxService.ShowMessage(e.Error.ToString(), string.Empty);
 									}
 									else
 									{
@@ -402,7 +313,7 @@ namespace Sdl.Community.InSource
 
 											//remove notification for project created from the View part
 											var notification =
-												(InSourceNotification)_notificationGroup.Notifications.FirstOrDefault(n => n.Id.Equals(request.Item1.NotificationId)); 
+												(InSourceNotification)_notificationGroup.Notifications.FirstOrDefault(n => n.Id.Equals(request.Item1.NotificationId));
 											if (notification != null)
 											{
 												ClearNotification(notification);
@@ -416,47 +327,130 @@ namespace Sdl.Community.InSource
 						}
 						else
 						{
-							MessageBox.Show(@"Please choose a custom template");
+							_messageBoxService.ShowMessage(PluginResources.CustomTemplateSelection_Message, string.Empty);
 							_hasTemplateList.Clear();
 						}
 					}
 					else
 					{
-						MessageBox.Show(
-							@"Watch folders should contain only folders, please put the files in a directory, and after that click CHECK PROJECT REQUESTS BUTTON ");
+						_messageBoxService.ShowMessage(PluginResources.WatchFoldersSelection_Message, string.Empty);
 						_hasFiles.Clear();
 					}
 				}
 			}
-		    catch (Exception e)
-		    {
+			catch (Exception e)
+			{
 				Log.Logger.Error($"InSourceViewController->CreateProjects method: {e.Message}\n {e.StackTrace}");
 			}
 		}
 
-	    private bool HasFiles(string path)
-        {
-            var hasFiles = Directory.EnumerateFiles(path).Any();
-            return hasFiles;
-        }
+		private void CheckForProjectsEvent(object sender, EventArgs e)
+		{
+			CheckForProjects();
+		}
 
-        public void Contribute()
-        {
-            System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/InSource");
-        }
-        private void ReportMessage(FileBasedProject fileBasedProject, string message)
-        {
-            Control.Value.BeginInvoke(new Action(() => Control.Value.ReportMessage(fileBasedProject, message)));
-        }
+		private void CreateProjectFromNotification(InSourceNotification notification)
+		{
+			try
+			{
+				if (notification != null)
+				{
+					var project = ProjectRequests.FirstOrDefault(n => n.NotificationId.Equals(notification.Id));
 
-        private void OnPropertyChanged(string propertyName)
-        {
+					CreateProjectsFromNotifications(project, notification);
+				}
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"CreateProjectFromNotification method: {e.Message}\n {e.StackTrace}");
+			}
+		}
+
+		private void ClearNotification(InSourceNotification notification)
+		{
+			_eventAggregator.Publish(new RemoveStudioNotificationFromGroupEvent(NotificationGroupId, notification.Id));
+		}
+
+		private List<string> GetWatchFolders(List<ProjectRequest> projectRequest)
+		{
+			var watchFoldersPath = projectRequest.GroupBy(x => x.Path).Select(y => y.First()); ;
+			var foldersPath = new List<string>();
+			foreach (var watch in watchFoldersPath)
+			{
+				var hasFiles = Directory.GetFiles(watch.Path, "*.*", SearchOption.AllDirectories).Any();
+				//if the watch folder doesn't have file a new notification will be created for each watch folder, so we add only the folders which has files
+				if (hasFiles)
+				{
+					foldersPath.Add(watch.Path);
+				}
+			}
+			return foldersPath;
+		}
+
+		private List<ProjectRequest> GetNewDirectories(string watchFolderPath, List<ProjectRequest> projectRequests)
+		{
+			//get the template for watch folder
+			var templateForWatchFolder =
+				projectRequests.Where(s => s.Path == watchFolderPath).Select(t => t.ProjectTemplate).FirstOrDefault();
+
+			var projectRequestList = new List<ProjectRequest>();
+			var subdirectories = Directory.GetDirectories(watchFolderPath);
+			if (subdirectories.Length != 0)
+			{
+				foreach (var subdirectory in subdirectories)
+				{
+					var dirInfo = new DirectoryInfo(subdirectory);
+
+					if (dirInfo.Name != "AcceptedRequests")
+					{
+						var projectRequest = CreateProjectRequest(templateForWatchFolder, dirInfo, watchFolderPath);
+						projectRequestList.Add(projectRequest);
+					}
+				}
+			}
+			else
+			{
+				var dirInfo = new DirectoryInfo(watchFolderPath);
+
+				var projectRequest = CreateProjectRequest(templateForWatchFolder, dirInfo, watchFolderPath);
+				projectRequestList.Add(projectRequest);
+			}
+			return projectRequestList;
+		}
+
+		private ProjectRequest CreateProjectRequest(ProjectTemplateInfo templateInfo, DirectoryInfo directory, string path)
+		{
+			var projectRequest = new ProjectRequest();
+			if (directory.Name != "AcceptedRequests")
+			{
+				projectRequest.Name = directory.Name;
+				projectRequest.Path = path;
+				projectRequest.ProjectTemplate = templateInfo;
+				projectRequest.NotificationId = Guid.NewGuid();
+				projectRequest.Files = Directory.GetFiles(directory.FullName, "*", SearchOption.AllDirectories);
+			}
+			return projectRequest;
+		}
+
+		private bool HasFiles(string path)
+		{
+			var hasFiles = Directory.EnumerateFiles(path).Any();
+			return hasFiles;
+		}
+
+		private void ReportMessage(FileBasedProject fileBasedProject, string message)
+		{
+			Control.Value.BeginInvoke(new Action(() => Control.Value.ReportMessage(fileBasedProject, message)));
+		}
+
+		private void OnPropertyChanged(string propertyName)
+		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-        private void OnProjectRequestsChanged()
-        {
+		private void OnProjectRequestsChanged()
+		{
 			ProjectRequestsChanged?.Invoke(this, EventArgs.Empty);
 		}
-    }
+	}
 }

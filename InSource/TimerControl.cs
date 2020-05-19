@@ -3,7 +3,9 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Timers;
 using System.Windows.Forms;
+using Sdl.Community.InSource.Interfaces;
 using Sdl.Community.InSource.Models;
+using Sdl.Community.InSource.Service;
 using Timer = System.Timers.Timer;
 
 namespace Sdl.Community.InSource
@@ -14,13 +16,16 @@ namespace Sdl.Community.InSource
         private readonly Persistence _persistence = new Persistence();
         private readonly Timer _timer;
         private int _timeLeft;
+		private IMessageBoxService _messageBoxService;
+
         public event EventHandler CheckForProjectsRequestEvent;
 
         public TimerControl()
         {
             InitializeComponent();
+			_messageBoxService = new MessageBoxService();
 
-            _timer = new Timer();
+			_timer = new Timer();
             _timer.Interval = 60000;
             _timer.Elapsed += _timer_Elapsed;
             _timer.AutoReset = true;
@@ -113,8 +118,7 @@ namespace Sdl.Community.InSource
             }
             else
             {
-                 MessageBox.Show(@"Please set a number for timer ",@"Warning" , MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+				_messageBoxService.ShowWarningMessage(PluginResources.TimerNumberSetup_Message, string.Empty);
             }
         }
 
@@ -141,7 +145,6 @@ namespace Sdl.Community.InSource
                 remainingTime.ForeColor = Color.Gray;
                 remainingTime.ForeColor = Color.Gray;
             }
-
         }
 
        private void OnCheckForProjectsRequestEvent()

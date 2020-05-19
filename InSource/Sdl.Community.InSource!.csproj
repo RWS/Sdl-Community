@@ -195,6 +195,7 @@
     <Compile Include="FolderBrowseDialogExtended.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Notifications\InSourceCommand.cs" />
     <Compile Include="Notifications\InSourceNotification.cs" />
@@ -218,6 +219,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Tellme\InSourceCommunitySupportAction.cs" />
     <Compile Include="Tellme\InSourceHelpAction.cs" />
     <Compile Include="Tellme\InSourceStoreAction.cs" />

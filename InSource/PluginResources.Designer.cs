@@ -19,7 +19,7 @@ namespace Sdl.Community.InSource {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -144,12 +144,30 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose a custom template!.
+        /// </summary>
+        internal static string CustomTemplateSelection_Message {
+            get {
+                return ResourceManager.GetString("CustomTemplateSelection_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon ForumIcon {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please import a custom project template within Studio before configuring the Watch folder!.
+        /// </summary>
+        internal static string ImportCustomTemplate_Message {
+            get {
+                return ResourceManager.GetString("ImportCustomTemplate_Message", resourceCulture);
             }
         }
         
@@ -164,6 +182,15 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing project template.
+        /// </summary>
+        internal static string MissingProjectTemplate_Message {
+            get {
+                return ResourceManager.GetString("MissingProjectTemplate_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon opensourceimage {
@@ -174,7 +201,7 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Studio Integration API Sample.
+        ///   Looks up a localized string similar to SDL InSource!.
         /// </summary>
         internal static string Plugin_Name {
             get {
@@ -193,6 +220,42 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select a project!.
+        /// </summary>
+        internal static string ProjectSelection_Message {
+            get {
+                return ResourceManager.GetString("ProjectSelection_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project &apos;{0}&apos; was successfully created..
+        /// </summary>
+        internal static string ProjectSuccessfullyCreated_Message {
+            get {
+                return ResourceManager.GetString("ProjectSuccessfullyCreated_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a project template from the InSource view!.
+        /// </summary>
+        internal static string ProjectTemplateSelection_Message {
+            get {
+                return ResourceManager.GetString("ProjectTemplateSelection_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please go to File -&gt; Setup -&gt; Project templates -&gt; Select a template -&gt; Edit -&gt; Default Task Sequence -&gt; Ok after that run again Content connector.
+        /// </summary>
+        internal static string ProjectTemplateSequenceSelection_Message {
+            get {
+                return ResourceManager.GetString("ProjectTemplateSequenceSelection_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon question {
@@ -203,12 +266,39 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove this watch folder path?.
+        /// </summary>
+        internal static string RemoveWatchFolder_Message {
+            get {
+                return ResourceManager.GetString("RemoveWatchFolder_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon TellMe1 {
             get {
                 object obj = ResourceManager.GetObject("TellMe1", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please set a number for the timer!.
+        /// </summary>
+        internal static string TimerNumberSetup_Message {
+            get {
+                return ResourceManager.GetString("TimerNumberSetup_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watch folders should contain only folders, please put the files in a directory, and click afterwards, the &apos;CHECK PROJECT REQUESTS&apos; button.
+        /// </summary>
+        internal static string WatchFoldersSelection_Message {
+            get {
+                return ResourceManager.GetString("WatchFoldersSelection_Message", resourceCulture);
             }
         }
         
