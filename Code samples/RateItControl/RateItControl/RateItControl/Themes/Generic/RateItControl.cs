@@ -37,11 +37,14 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 
 				if (_rateItControlGrid != null)
 				{
-					_rateItControlGrid.AddHandler(MouseMoveEvent, new MouseEventHandler(OnMouseMove), true);
+					if (EnableMouseHoverSelection)
+					{
+						_rateItControlGrid.AddHandler(MouseMoveEvent, new MouseEventHandler(OnMouseMove), true);
+					}
 				}
 			}
 		}
-	
+
 		private ListBox _rateItControlItemsControl;
 
 		private ListBox RateItControlItemsControl
@@ -59,7 +62,7 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 				if (_rateItControlItemsControl != null)
 				{
 					_rateItControlItemsControl.SelectionChanged += RateItControlItemsControl_SelectionChanged;
-	
+
 					UpdateRatingCollection(Rating);
 				}
 			}
@@ -100,10 +103,9 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 			set => SetValue(ImageHeightProperty, value);
 		}
 
-
 		public static readonly DependencyProperty SelectedImageProperty =
 			DependencyProperty.Register("SelectedImage", typeof(string), typeof(RateItControl),
-				new FrameworkPropertyMetadata("../../Resources/StarYellow.png", 
+				new FrameworkPropertyMetadata("../../Resources/StarYellow.png",
 					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, EnabledImagePropertyChangedCallback));
 
 		private static void EnabledImagePropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs d)
@@ -127,7 +129,7 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 
 		public static readonly DependencyProperty DisabledImageProperty =
 			DependencyProperty.Register("DisabledImage", typeof(string), typeof(RateItControl),
-				new FrameworkPropertyMetadata("../../Resources/StarGrey.png", 
+				new FrameworkPropertyMetadata("../../Resources/StarGrey.png",
 					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, DisabledImagePropertyChangedCallback));
 
 		private static void DisabledImagePropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs d)
@@ -147,6 +149,41 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 		{
 			get => (string)GetValue(DisabledImageProperty);
 			set => SetValue(DisabledImageProperty, value);
+		}
+
+
+		public static readonly DependencyProperty EnableMouseHoverSelectionProperty =
+			DependencyProperty.Register("EnableMouseHoverSelection", typeof(bool), typeof(RateItControl),
+				new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, EnableMouseHoverSelectionPropertyChangedCallback));
+
+		private static void EnableMouseHoverSelectionPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs d)
+		{
+			if (!(dependencyObject is RateItControl control))
+			{
+				return;
+			}
+
+			if (control.RateItControlGrid != null)
+			{
+				var oldValue = (bool)d.OldValue;
+				var newValue = (bool)d.NewValue;
+
+				if (oldValue || !newValue)
+				{
+					control.RateItControlGrid.RemoveHandler(MouseMoveEvent, new MouseEventHandler(control.OnMouseMove));
+				}
+				
+				if (newValue)
+				{
+					control.RateItControlGrid.AddHandler(MouseMoveEvent, new MouseEventHandler(control.OnMouseMove), true);
+				}				
+			}
+		}
+
+		public bool EnableMouseHoverSelection
+		{
+			get => (bool)GetValue(EnableMouseHoverSelectionProperty);
+			set => SetValue(EnableMouseHoverSelectionProperty, value);
 		}
 
 		public static readonly DependencyProperty MaxRatingProperty =
@@ -197,9 +234,9 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 		}
 
 		private void UpdateRatingCollection(int value)
-		{			
+		{
 			if (RateItControlItemsControl.ItemsSource == null || RateItControlItemsControl.Items.Count != MaxRating)
-			{				
+			{
 				RateItControlItemsControl.ItemsSource = GetRateItItems(value);
 			}
 			else
@@ -224,8 +261,8 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 			for (var i = 0; i < MaxRating; i++)
 			{
 				items.Add(i < value
-					? new RateItItem {Selected = true}
-					: new RateItItem {Selected = false});
+					? new RateItItem { Selected = true }
+					: new RateItItem { Selected = false });
 			}
 
 			return items;
@@ -254,8 +291,8 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 		private void RateItControlItemsControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (RateItControlItemsControl.SelectedItems.Count > 0)
-			{				
-				Rating = RateItControlItemsControl.SelectedIndex + 1;			
+			{
+				Rating = RateItControlItemsControl.SelectedIndex + 1;
 			}
 		}
 
