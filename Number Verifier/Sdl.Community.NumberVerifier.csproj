@@ -253,6 +253,7 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\Question.ico" />
     <None Include="Resources\ForumIcon.ico" />
     <None Include="Resources\Download.ico" />
   </ItemGroup>

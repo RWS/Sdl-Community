@@ -12,16 +12,18 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 			"Check/Uncheck Words Addition option", //TODO:Move this in a resource file after we confirm the exact string
 		ContextByType = typeof(EditorController))]
 	public class SetWordsAdditionAction : AbstractAction, ISDLMTCloudAction
-	{	
+	{
+		public override void Initialize()
+		{
+			base.Initialize();
+			OptionName = nameof(RateItViewModel.WordsAdditionOption);
+		}
 		protected override void Execute()
 		{
 			var rateItController = SdlTradosStudio.Application.GetController<RateItController>();
 			rateItController?.RateIt?.SetRateOptionFromShortcuts(nameof(RateItViewModel.WordsAdditionOption));
 		}
 
-		public void LoadTooltip(string tooltipText)
-		{
-			ToolTipText = tooltipText;
-		}
+		public string OptionName { get; set; }
 	}
 }

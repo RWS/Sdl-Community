@@ -69,5 +69,14 @@ namespace Sdl.Community.MTCloud.Languages.Provider {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No shortcut was set in Studio for this option.
+        /// </summary>
+        public static string RateItViewModel_SetOptionTooltip_No_shortcut_was_set {
+            get {
+                return ResourceManager.GetString("RateItViewModel_SetOptionTooltip_No_shortcut_was_set", resourceCulture);
+            }
+        }
     }
 }

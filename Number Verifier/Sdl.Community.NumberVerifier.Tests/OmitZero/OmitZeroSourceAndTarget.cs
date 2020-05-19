@@ -110,16 +110,15 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
        /// <summary>
        /// Source: omit zero true
        /// Target: omit zero false
-       /// No error
        /// </summary>
        /// <param name="source"></param>
        /// <param name="target"></param>
        [Theory]
        [InlineData(".55 another number 0.55 negative -.58 another -0.58", "0.55 number 0.55 negative -0.58 nr -0.58")]
-       public void SourceOmitCheckedTargetUncheckedNoError(string source, string target)
+       public void SourceOmitCheckedTargetUncheckedWithError(string source, string target)
        {
            var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
-           Assert.True(errorMessage.Count == 0);
+           Assert.True(errorMessage.Count > 0);
        }
 
        /// <summary>
@@ -134,32 +133,29 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void SourceOmitCheckedTargetUncheckedError(string source, string target)
         {
             var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number(s) modified/unlocalised. ");
-
+            Assert.Equal("Number removed. ", errorMessage[0].ErrorMessage);
         }
 
         [Theory]
         [InlineData("-.55", "-.55")]
-        public void SourceOmitCheckedTargetUncheckedNegativeNumbers(string source, string target)
+        public void SourceOmitCheckedTargetUncheckedNegativeNumbersNoError(string source, string target)
         {
             var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number(s) modified/unlocalised. ");
-
-        }
+			Assert.True(errorMessage.Count == 0);
+		}
 
         /// <summary>
         /// Source: omit zero false
         /// Target: omit zero true
-        /// No error
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
         [Theory]
         [InlineData("0.55 another number 0.55 neg -0.44", ".55 number 0.55 a −.44")]
-        public void SourceOmitUncheckedTargetCheckedNoError(string source, string target)
+        public void SourceOmitUncheckedTargetCheckedWithErrors(string source, string target)
         {
             var errorMessage = SourceOmitUncheckedTargetChecked(source, target);
-            Assert.True(errorMessage.Count == 0);
+            Assert.True(errorMessage.Count > 0);
         }
 
         /// <summary>
@@ -174,8 +170,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void SourceOmitUncheckedTargetCheckedError(string source, string target)
         {
             var errorMessage = SourceOmitUncheckedTargetChecked(source, target);
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number(s) modified/unlocalised. ");
-
+            Assert.Equal("Number added. ", errorMessage[0].ErrorMessage);
         }
 
         /// <summary>
@@ -202,23 +197,23 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         /// <param name="target"></param>
         [Theory]
         [InlineData(".55 test 0.55 a 0.55 b -.55", ".55 another test .55 number 0.55 c −0.55")]
-        public void SourceOmitCheckedTargetCheckedNoError(string source, string target)
+        public void SourceOmitCheckedTargetCheckedWithError(string source, string target)
         {
             var errorMessage = SourceOmitCheckedTargetChecked(source, target);
-            Assert.True(errorMessage.Count == 0);
+            Assert.True(errorMessage.Count > 0);
         }
 
-        /// <summary>
-        /// Only decimal numbers which start with 0 can be written in short form 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
-        [Theory]
-        [InlineData("1.55", ".55")]
-        public void CheckError(string source, string target)
-       {
-            var errorMessage = SourceOmitCheckedTargetChecked(source, target);
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number(s) modified/unlocalised. ");
-        }
+		/// <summary>
+		/// Only decimal numbers which start with 0 can be written in short form 
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
+		[InlineData("1.55", ".55")]
+		public void CheckError(string source, string target)
+		{
+			var errorMessage = SourceOmitCheckedTargetChecked(source, target);
+			Assert.Equal("Number removed. ", errorMessage[0].ErrorMessage);
+		}
     }
 }
