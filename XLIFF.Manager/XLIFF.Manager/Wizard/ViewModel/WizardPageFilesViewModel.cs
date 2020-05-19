@@ -13,6 +13,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public WizardPageFilesViewModel(object view) : base(view)
 		{
+			_displayName = "Files";
+			IsValid = true;
 		}
 
 		public override string DisplayName => _displayName;

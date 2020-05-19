@@ -1,56 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
+using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Wizard.View;
 using Sdl.Community.XLIFF.Manager.Wizard.ViewModel;
-using Sdl.ProjectAutomation.Core;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.Service
 {
 	public class WizardService
 	{
-		public static void ShowWizard()
+		private readonly Enumerators.Action _action;
+
+		private WizardWindow _wizardWindow;
+		private ObservableCollection<WizardPageViewModelBase> _pages;		
+
+		public WizardService(Enumerators.Action action)
 		{
-			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			var filesController = SdlTradosStudio.Application.GetController<FilesController>();
-			
-			var translatableFilesCount = filesController.SelectedFiles.Count(projectFile => projectFile.Role == FileRole.Translatable);
-			if (translatableFilesCount == 0)
-			{
-				MessageBox.Show("No translatable files selected!", PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
-				return;
-			}
-
-			var isMissingProjectFiles = IsMissingProjectFiles(filesController);
-			if (isMissingProjectFiles)
-			{
-				MessageBox.Show("Some of the selected files could not be found locally. Connect to the server to get the latest version of these files.", PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
-				return;
-			}
-
-			var wizardView = new WizardView();
-			var viewModel = new WizardViewModel(wizardView);
-			
-			wizardView.DataContext = viewModel;
-			wizardView.ShowDialog();
+			_action = action;
 		}
 
+		public void ShowWizard()
+		{			
+			if (_action == Enumerators.Action.None)
+			{
+				return;
+			}
 
-		public static ObservableCollection<WizardPageViewModelBase> CreatePages()
+			_pages = CreatePages();
+
+			_wizardWindow = new WizardWindow();							
+			_wizardWindow.Loaded += WizardWindowLoaded;			
+			_wizardWindow.ShowDialog();
+		}
+		
+		private void WizardWindowLoaded(object sender, RoutedEventArgs e)
 		{
+			AddDataTemplates(_wizardWindow, _pages);
+
+			var viewModel = new WizardViewModel(_wizardWindow, _action, _pages);
+			viewModel.RequestClose += ViewModel_RequestClose;
+			_wizardWindow.DataContext = viewModel;
+		}		
+
+		private ObservableCollection<WizardPageViewModelBase> CreatePages()
+		{
+			//TODO setup the Import action pages
+
 			var pages = new ObservableCollection<WizardPageViewModelBase>
 			{
 				new WizardPageFilesViewModel( new WizardPageFilesView()),
 				new WizardPageOptionsViewModel(new WizardPageOptionsView()),
 				new WizardPageSummaryViewModel(new WizardPageSummaryView()),
-				new WizardPagePreparationViewModel(new WizardPagePreparationView())				
+				new WizardPagePreparationViewModel(new WizardPagePreparationView())
 			};
 
 			UpdatePageIndexes(pages);
@@ -58,19 +61,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return pages;
 		}
 
-		private static bool IsMissingProjectFiles(FilesController filesController)
-		{
-			var currentProject = filesController.CurrentProject;
-			var projectInfo = currentProject.GetProjectInfo();
-			var isGroupshareProject = !string.IsNullOrEmpty(projectInfo.ServerUri?.AbsoluteUri)
-			                          && projectInfo.PublicationStatus == PublicationStatus.Published;
-
-			return isGroupshareProject
-			       && filesController.SelectedFiles.Where(projectFile => projectFile.Role == FileRole.Translatable)
-				       .Any(file => file.LocalFileState == LocalFileState.Missing);
-		}
-
-		private static void UpdatePageIndexes(IReadOnlyList<WizardPageViewModelBase> pages)
+		private void UpdatePageIndexes(IReadOnlyList<WizardPageViewModelBase> pages)
 		{
 			for (var i = 0; i < pages.Count; i++)
 			{
@@ -79,7 +70,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			}
 		}
 
-		public static void AddDataTemplates(FrameworkElement element, IEnumerable<WizardPageViewModelBase> pages)
+		private void AddDataTemplates(FrameworkElement element, IEnumerable<WizardPageViewModelBase> pages)
 		{
 			foreach (var page in pages)
 			{
@@ -87,14 +78,14 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			}
 		}
 
-		private static void AddDataTemplate(FrameworkElement element, Type viewModelType, Type viewType)
+		private void AddDataTemplate(FrameworkElement element, Type viewModelType, Type viewType)
 		{
 			var template = CreateTemplate(viewModelType, viewType);
 			var key = template.DataTemplateKey;
 			element.Resources.Add(key, template);
 		}
 
-		private static DataTemplate CreateTemplate(Type viewModelType, Type viewType)
+		private DataTemplate CreateTemplate(Type viewModelType, Type viewType)
 		{
 			const string xamlTemplate = "<DataTemplate DataType=\"{{x:Type vm:{0}}}\"><v:{1} /></DataTemplate>";
 			var xaml = string.Format(xamlTemplate, viewModelType.Name, viewType.Name);
@@ -111,6 +102,17 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			var template = (DataTemplate)XamlReader.Parse(xaml, context);
 			return template;
+		}
+
+		private void ViewModel_RequestClose(object sender, System.EventArgs e)
+		{
+			if (_wizardWindow.DataContext is WizardViewModel viewModel)
+			{
+				viewModel.RequestClose -= ViewModel_RequestClose;
+				viewModel.Dispose();
+			}
+
+			_wizardWindow.Close();
 		}
 	}
 }

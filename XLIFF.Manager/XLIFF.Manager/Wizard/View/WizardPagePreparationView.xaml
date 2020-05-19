@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
              xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.Wizard.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignData viewModel:WizardViewModel}">
+             d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignInstance viewModel:WizardPagePreparationViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>

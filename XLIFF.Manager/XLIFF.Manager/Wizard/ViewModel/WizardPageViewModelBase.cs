@@ -80,7 +80,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 				_isCurrentPage = value;
 				OnPropertyChanged(nameof(IsCurrentPage));
-
 				OnPropertyChanged(nameof(CurrentPageChanged));
 			}
 		}
