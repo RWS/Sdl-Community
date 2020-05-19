@@ -144,13 +144,21 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 			Assert.True(errorMessage.Count == 0);
 		}
 
-        /// <summary>
-        /// Source: omit zero false
-        /// Target: omit zero true
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
-        [Theory]
+		[Theory]
+		[InlineData("-0.55", "-.55")]
+		public void SourceOmitCheckedTargetUncheckedNegativeNumbersWithError(string source, string target)
+		{
+			var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
+			Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersRemoved);
+		}
+
+		/// <summary>
+		/// Source: omit zero false
+		/// Target: omit zero true
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
         [InlineData("0.55 another number 0.55 neg -0.44", ".55 number 0.55 a −.44")]
         public void SourceOmitUncheckedTargetCheckedWithErrors(string source, string target)
         {
