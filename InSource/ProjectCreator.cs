@@ -149,7 +149,7 @@ namespace Sdl.Community.InSource
 		private bool IsProjectInfoValid(ProjectInfo projectInfo, ProjectRequest projectRequest)
 		{
 			var watchFolderName = Path.GetFileNameWithoutExtension(projectRequest.Path);
-			var existsLanguageDirection = ExistLanguageDirection(projectRequest.ProjectTemplate.Uri?.LocalPath);
+			var existsLanguageDirection = IsAnyLanguageDirection(projectRequest.ProjectTemplate.Uri?.LocalPath);
 
 			if (string.IsNullOrEmpty(projectInfo.LocalProjectFolder))
 			{
@@ -198,7 +198,12 @@ namespace Sdl.Community.InSource
 	        return string.Empty;
         }
 
-		private bool ExistLanguageDirection(string templatePath)
+		/// <summary>
+		/// Validate if any language direction is configured on the custom template
+		/// </summary>
+		/// <param name="templatePath"></param>
+		/// <returns></returns>
+		private bool IsAnyLanguageDirection(string templatePath)
 		{
 			try
 			{
