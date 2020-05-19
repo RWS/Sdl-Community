@@ -247,6 +247,7 @@
     <Compile Include="View\RateItView.xaml.cs">
       <DependentUpon>RateItView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Themes\Generic\RatingControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\selectedStar.png" />
@@ -254,7 +255,15 @@
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>
     </EmbeddedResource>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\RateItView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\RatingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
