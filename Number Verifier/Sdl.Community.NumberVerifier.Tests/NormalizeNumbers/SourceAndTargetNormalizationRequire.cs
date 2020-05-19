@@ -207,7 +207,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// <param name="target"></param>
         [Theory]
         [InlineData("1,55", "1,55")]
-        public void DecimalSeparatorsCommaInsteadOfPeriodErrorMessage(string source, string target)
+        public void DecimalSeparatorsCommaInsteadOfPeriod(string source, string target)
         {
             //target settings
             var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.SpaceCommaPeriod();
@@ -226,8 +226,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
-
+			Assert.True(errorMessage.Count == 0);
         }
 
         /// <summary>
