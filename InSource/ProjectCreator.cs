@@ -50,8 +50,12 @@ namespace Sdl.Community.InSource
 			    foreach (var request in Requests)
 			    {
 				    var project = CreateProject(request);
-				    _currentProgress += 100.0 / Requests.Count;
-				    OnProgressChanged(_currentProgress);
+					if (project != null)
+					{
+						_currentProgress += 100.0 / Requests.Count;
+						OnProgressChanged(_currentProgress);
+					}		
+					
 				    return project;
 			    }
 		    }
@@ -72,8 +76,12 @@ namespace Sdl.Community.InSource
 						Name = request.Name,
 						LocalProjectFolder = GetProjectFolderPath(request.Name, request.ProjectTemplate.Uri?.LocalPath)
 					};
-					var project = new FileBasedProject(projectInfo,
-						new ProjectTemplateReference(request.ProjectTemplate.Uri));
+					var isProjectInfoValid = IsProjectInfoValid(projectInfo, request);
+					if(!isProjectInfoValid)
+					{
+						return null;
+					}
+					var project = new FileBasedProject(projectInfo,	new ProjectTemplateReference(request.ProjectTemplate.Uri));
 
 					OnMessageReported(project, $"Creating project {request.Name}");
 
@@ -135,9 +143,26 @@ namespace Sdl.Community.InSource
 		    {
 				Log.Logger.Error($"ProjectCreator-> CreateProject method: {e.Message}\n {e.StackTrace}");
 		    }
-		    return null;
+			return null;
 	    }
 
+		private bool IsProjectInfoValid(ProjectInfo projectInfo, ProjectRequest projectRequest)
+		{
+			var watchFolderName = Path.GetFileNameWithoutExtension(projectRequest.Path);
+			var existsLanguageDirection = ExistLanguageDirection(projectRequest.ProjectTemplate.Uri?.LocalPath);
+
+			if (string.IsNullOrEmpty(projectInfo.LocalProjectFolder))
+			{
+				_messageBoxService.ShowWarningMessage(string.Format(PluginResources.ProjectTemplateLocation_Message, projectRequest?.ProjectTemplate?.Name, watchFolderName), string.Empty);
+				return false;
+			}			
+			else if (!existsLanguageDirection)
+			{
+				_messageBoxService.ShowWarningMessage(string.Format(PluginResources.ProjectTemplateLanguagePairs_Message, projectRequest?.ProjectTemplate?.Name, watchFolderName), string.Empty);
+				return false;
+			}
+			return true;
+		}
 
 	    /// <summary>
         /// Reads the project folder location from selected template
@@ -150,13 +175,12 @@ namespace Sdl.Community.InSource
 	        try
 	        {
 		        var templateXml = XElement.Load(pathToTemplate);
-		        var settingsGroup =
-			        templateXml.Descendants("SettingsGroup")
-				        .Where(s => s.Attribute("Id").Value.Equals("ProjectTemplateSettings"));
-		        var location =
-			        settingsGroup.Descendants("Setting")
-				        .Where(id => id.Attribute("Id").Value.Equals("ProjectLocation"))
-				        .Select(l => l.Value).FirstOrDefault();
+		        var settingsGroup = templateXml.Descendants("SettingsGroup").Where(s => s.Attribute("Id").Value.Equals("ProjectTemplateSettings"));
+		        var location = settingsGroup.Descendants("Setting").Where(id => id.Attribute("Id").Value.Equals("ProjectLocation")).Select(l => l.Value).FirstOrDefault();
+				if(location == null)
+				{
+					return string.Empty;
+				}
 		        var rootFolder = location;
 		        string folder;
 		        int num = 1;
@@ -173,6 +197,25 @@ namespace Sdl.Community.InSource
 			}
 	        return string.Empty;
         }
+
+		private bool ExistLanguageDirection(string templatePath)
+		{
+			try
+			{
+				var templateXml = XElement.Load(templatePath);
+				var languageDirection = templateXml.Descendants("LanguageDirections").Descendants("LanguageDirection")?.FirstOrDefault();				
+				if (languageDirection == null)
+				{
+					return false;
+				}
+				return true;
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"ExistLanguageDirection method: {e.Message}\n {e.StackTrace}");
+			}
+			return false;
+		}
 
         private void OnProgressChanged(double progress)
         {

@@ -238,6 +238,24 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please configure the Language Pairs for the custom template &apos;{0}&apos; from File -&gt; Setup -&gt; Project Templates -&gt; select the custom template - &gt; Edit -&gt; Language Pairs -&gt; Add. The custom template is set for the Watch Folder &apos;{1}&apos;..
+        /// </summary>
+        internal static string ProjectTemplateLanguagePairs_Message {
+            get {
+                return ResourceManager.GetString("ProjectTemplateLanguagePairs_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please configure the Project Location within the custom template &apos;{0}&apos; from File -&gt; Setup -&gt; Project Templates! The custom template is set for the Watch Folder &apos;{1}&apos;..
+        /// </summary>
+        internal static string ProjectTemplateLocation_Message {
+            get {
+                return ResourceManager.GetString("ProjectTemplateLocation_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select a project template from the InSource view!.
         /// </summary>
         internal static string ProjectTemplateSelection_Message {
