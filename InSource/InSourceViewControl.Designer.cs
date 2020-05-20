@@ -172,6 +172,7 @@
             this._filesListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this._filesListView.HideSelection = false;
             this._filesListView.Location = new System.Drawing.Point(0, 13);
             this._filesListView.Margin = new System.Windows.Forms.Padding(0);
             this._filesListView.Name = "_filesListView";
@@ -244,6 +245,7 @@
             this.templateColumn});
             this.foldersListView.Cursor = System.Windows.Forms.Cursors.Default;
             this.foldersListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.foldersListView.HideSelection = false;
             this.foldersListView.HighlightBackgroundColor = System.Drawing.Color.Empty;
             this.foldersListView.HighlightForegroundColor = System.Drawing.Color.Empty;
             this.foldersListView.Location = new System.Drawing.Point(3, 16);
@@ -255,14 +257,15 @@
             // 
             // pathColumn
             // 
-            this.pathColumn.FillsFreeSpace = true;
+            this.pathColumn.IsEditable = false;
             this.pathColumn.Text = "Path";
-            this.pathColumn.Width = 43;
+            this.pathColumn.ToolTipText = "";
+            this.pathColumn.Width = 300;
             // 
             // deleteColumn
             // 
             this.deleteColumn.Text = "Delete";
-            this.deleteColumn.Width = 200;
+            this.deleteColumn.Width = 50;
             // 
             // templateColumn
             // 
