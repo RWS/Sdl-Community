@@ -157,13 +157,13 @@
     <Compile Include="Service\WizardService.cs" />
     <Compile Include="TestData\TestDataUtil.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageExportFilesViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\WizardPageOptionsViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\WizardPageExportOptionsViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPagePreparationViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageSummaryViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageViewModelBase.cs" />
-    <Compile Include="Wizard\View\WizardPageOptionsView.xaml.cs">
-      <DependentUpon>WizardPageOptionsView.xaml</DependentUpon>
+    <Compile Include="Wizard\View\WizardPageExportOptionsView.xaml.cs">
+      <DependentUpon>WizardPageExportOptionsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wizard\View\WizardPageSummaryView.xaml.cs">
       <DependentUpon>WizardPageSummaryView.xaml</DependentUpon>
@@ -285,7 +285,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wizard\View\WizardPageOptionsView.xaml">
+    <Page Include="Wizard\View\WizardPageExportOptionsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
