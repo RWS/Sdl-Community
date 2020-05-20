@@ -210,7 +210,7 @@ namespace Sdl.Community.InSource
 			try
 			{
 				var templateXml = XElement.Load(templatePath);
-				var languageDirection = templateXml.Descendants("LanguageDirection").FirstOrDefault();
+				var languageDirection = templateXml.Descendants("LanguageDirection")?.FirstOrDefault();
 				return languageDirection != null;
 			}
 			catch (Exception e)
