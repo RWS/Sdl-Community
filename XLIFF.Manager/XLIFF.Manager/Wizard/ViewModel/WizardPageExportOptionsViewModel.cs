@@ -7,12 +7,12 @@ using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
-	public class WizardPageOptionsViewModel : WizardPageViewModelBase
+	public class WizardPageExportOptionsViewModel : WizardPageViewModelBase
 	{
 		private string _displayName;
 		private bool _isValid;
 
-		public WizardPageOptionsViewModel(object view, TransactionModel transactionModel) : base(view, transactionModel)
+		public WizardPageExportOptionsViewModel(object view, TransactionModel transactionModel) : base(view, transactionModel)
 		{
 			_displayName = "Options";
 			IsValid = true;
