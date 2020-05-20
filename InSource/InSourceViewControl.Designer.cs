@@ -265,6 +265,7 @@
             // deleteColumn
             // 
             this.deleteColumn.Text = "Delete";
+            this.deleteColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.deleteColumn.Width = 50;
             // 
             // templateColumn
