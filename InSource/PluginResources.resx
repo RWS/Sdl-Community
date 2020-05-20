@@ -211,4 +211,10 @@
   <data name="ProjectTemplateLanguagePairs_Message" xml:space="preserve">
     <value>Please configure the Language Pairs for the custom template '{0}' from File -&gt; Setup -&gt; Project Templates -&gt; select the custom template - &gt; Edit -&gt; Language Pairs -&gt; Add. The custom template is set for the Watch Folder '{1}'.</value>
   </data>
+  <data name="CreateNewProjectText" xml:space="preserve">
+    <value>Create new project</value>
+  </data>
+  <data name="CreateProjectText" xml:space="preserve">
+    <value>Create project</value>
+  </data>
 </root>

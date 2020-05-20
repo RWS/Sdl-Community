@@ -179,7 +179,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Reflector.cs" />

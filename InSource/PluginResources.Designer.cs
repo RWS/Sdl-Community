@@ -116,6 +116,15 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create new project.
+        /// </summary>
+        internal static string CreateNewProjectText {
+            get {
+                return ResourceManager.GetString("CreateNewProjectText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create projects for all the new project requests.
         /// </summary>
         internal static string CreateProjects_Description {
@@ -140,6 +149,15 @@ namespace Sdl.Community.InSource {
         internal static string CreateProjects_Name {
             get {
                 return ResourceManager.GetString("CreateProjects_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create project.
+        /// </summary>
+        internal static string CreateProjectText {
+            get {
+                return ResourceManager.GetString("CreateProjectText", resourceCulture);
             }
         }
         

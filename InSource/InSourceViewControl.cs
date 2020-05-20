@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using Sdl.Community.InSource.Helpers;
@@ -32,6 +33,16 @@ namespace Sdl.Community.InSource
 			_selectedFolders = new List<ProjectRequest>();
 			_watchFolders = new List<ProjectRequest>();
 			_messageBoxService = new MessageBoxService();
+		}
+
+		public void ClearMessages()
+		{
+			_resultsTextBox.Text = "";
+		}
+
+		public void ReportMessage(FileBasedProject fileBasedProject, string message)
+		{
+			_resultsTextBox.AppendText("\r\n" + message);
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -112,12 +123,13 @@ namespace Sdl.Community.InSource
 				InitializeListView(_watchFolders);
 			}
 		}
+
 		/// <summary>
 		/// A dropdown will appear when user click on a template cell
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void FoldersListView_CellEditStarting(object sender, CellEditEventArgs e)
+		private async void FoldersListView_CellEditStarting(object sender, CellEditEventArgs e)
 		{
 			try
 			{
@@ -127,8 +139,8 @@ namespace Sdl.Community.InSource
 					
 					var confirmDelete = _messageBoxService.AskForConfirmation(PluginResources.RemoveWatchFolder_Message);
 					if (confirmDelete)
-					{
-						RemoveWatchFolders(e);
+					{						
+						await RemoveWatchFolders(e);
 					}
 				}
 
@@ -178,13 +190,14 @@ namespace Sdl.Community.InSource
 			}
 		}
 
-		private void RemoveWatchFolders(CellEditEventArgs e)
+		private async System.Threading.Tasks.Task RemoveWatchFolders(CellEditEventArgs e)
 		{
 			foldersListView.RemoveObject(e.RowObject);
 
 			var folderObject = e.RowObject as ProjectRequest;
 
 			var requestToRemove = _folderPathList?.FindAll(p => p.Path == folderObject.Path);
+
 			if (requestToRemove != null)
 			{
 				foreach (var request in requestToRemove)
@@ -200,8 +213,19 @@ namespace Sdl.Community.InSource
 			{
 				_watchFolders.Remove(watchFolderToRemove);
 			}
-			_persistence.SaveProjectRequestList(_folderPathList);
-			LoadProjectRequests();			
+
+			var asyncWait = WaitTask();
+			if (asyncWait.Result)
+			{
+				_persistence.SaveProjectRequestList(_folderPathList);
+				LoadProjectRequests();
+			}
+		}
+
+		private async Task<bool> WaitTask()
+		{
+			await System.Threading.Tasks.Task.Delay(1000).ConfigureAwait(false);
+			return true;
 		}
 
 		private void InitializeListView(List<ProjectRequest> watchFolders)
@@ -229,17 +253,7 @@ namespace Sdl.Community.InSource
 
 				LoadProjectRequests();
 			}
-		}
-
-		public void ClearMessages()
-		{
-			_resultsTextBox.Text = "";
-		}
-
-		public void ReportMessage(FileBasedProject fileBasedProject, string message)
-		{
-			_resultsTextBox.AppendText("\r\n" + message);
-		}
+		}		
 
 		private void LoadProjectRequests()
 		{
