@@ -217,4 +217,7 @@
   <data name="XLIFFManager_Settings_Name" xml:space="preserve">
     <value>Settings</value>
   </data>
+	<data name="StatusLabel_Files_0_Selected_1" xml:space="preserve">
+    <value>Files: {0}, Selected: {1}</value>
+  </data>
 </root>

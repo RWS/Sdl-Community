@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Markup;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.TestData;
 using Sdl.Community.XLIFF.Manager.Wizard.View;
 using Sdl.Community.XLIFF.Manager.Wizard.ViewModel;
 using Sdl.ProjectAutomation.FileBased;
@@ -17,14 +18,16 @@ namespace Sdl.Community.XLIFF.Manager.Service
 	{
 		private readonly Enumerators.Action _action;
 		private readonly ProjectsController _projectsController;
+		private readonly FilesController _filesController;
 		private FileBasedProject _selectedProject;
 		private WizardWindow _wizardWindow;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
 
-		public WizardService(Enumerators.Action action, ProjectsController projectsController)
+		public WizardService(Enumerators.Action action, ProjectsController projectsController, FilesController filesController)
 		{
 			_action = action;
 			_projectsController = projectsController;
+			_filesController = filesController;
 		}
 
 		public void ShowWizard()
@@ -46,7 +49,14 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		{
 			//TODO get the selected project files
 			var transactionModel = new TransactionModel();
-			
+
+			var _pathInfo = new PathInfo();
+			var _imageService = new ImageService(_pathInfo);
+			//_imageService.ExtractFlags();
+
+			var testDataUtil = new TestDataUtil(_imageService);
+			var _projectModels = testDataUtil.GetTestProjectData();
+			transactionModel.ProjectFileActions = _projectModels[0].ProjectFileActionModels;
 
 			_pages = CreatePages(transactionModel);
 
@@ -65,7 +75,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			var pages = new ObservableCollection<WizardPageViewModelBase>
 			{
-				new WizardPageFilesViewModel( new WizardPageFilesView(), transactionModel),
+				new WizardPageExportFilesViewModel( new WizardPageExportFilesView(), transactionModel),
 				new WizardPageOptionsViewModel(new WizardPageOptionsView(), transactionModel),
 				new WizardPageSummaryViewModel(new WizardPageSummaryView(), transactionModel),
 				new WizardPagePreparationViewModel(new WizardPagePreparationView(), transactionModel)

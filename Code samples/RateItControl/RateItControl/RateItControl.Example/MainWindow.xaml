@@ -23,7 +23,10 @@
 			<sdl:RateItControl Grid.Row="0" BorderThickness="1" BorderBrush="#9F9E9E"
 				MaxRating="{Binding MaxRating}"
 				Rating="{Binding Rating}"
+				EnableMouseHoverSelection="{Binding EnableMouseHoverSelection}"
 				ImageHeight="{Binding ImageHeight}"
+				SelectedImage="pack://application:,,,/RateItControl.Example;component/Resources/StarYellow.png"
+				DisabledImage="pack://application:,,,/RateItControl.Example;component/Resources/StarGrey.png"
 				Height="50" Width="400"/>
 
 
