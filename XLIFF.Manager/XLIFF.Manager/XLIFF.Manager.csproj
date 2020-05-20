@@ -141,11 +141,13 @@
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Common\Enumerators.cs" />
+    <Compile Include="Model\JobProcess.cs" />
     <Compile Include="Model\LanguageInfo.cs" />
     <Compile Include="Model\ProjectFileActionModel.cs" />
     <Compile Include="Model\ProjectFileActivityModel.cs" />
     <Compile Include="Model\ProjectModel.cs" />
     <Compile Include="Model\TransactionModel.cs" />
+    <Compile Include="Model\XLIFFSupportModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -324,6 +326,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Resource Include="Resources\invalid-32.png" />
+    <Resource Include="Resources\job_cancelling.gif" />
+    <Resource Include="Resources\job_completed.gif" />
+    <Resource Include="Resources\job_failed.gif" />
+    <Resource Include="Resources\job_running.gif" />
+    <Resource Include="Resources\job_scheduled.gif" />
+    <Resource Include="Resources\warning-32.png" />
     <Resource Include="Resources\Exported.png" />
     <Resource Include="Resources\Imported.png" />
     <Resource Include="Resources\Project.ico" />

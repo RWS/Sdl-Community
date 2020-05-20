@@ -16,5 +16,12 @@
 			Success = 2,
 			Error = 3
 		}
+
+		public enum XLIFFSupport
+		{
+			xliff12sdl = 0,
+			xliff12polyglot = 1,
+			xliff20sdl = 2
+		}
 	}
 }

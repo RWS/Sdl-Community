@@ -15,8 +15,6 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ExpanderStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TreeView.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBoxStyle.xaml"/>

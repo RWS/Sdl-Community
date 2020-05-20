@@ -9,16 +9,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public class WizardPageSummaryViewModel : WizardPageViewModelBase
 	{
-		private string _displayName;
 		private bool _isValid;
 
 		public WizardPageSummaryViewModel(object view, TransactionModel transactionModel) : base(view, transactionModel)
 		{
-			_displayName = "Summary";
 			IsValid = true;
 		}
 
-		public override string DisplayName => _displayName;
+		public override string DisplayName => "Summary";
 
 		public override bool IsValid
 		{

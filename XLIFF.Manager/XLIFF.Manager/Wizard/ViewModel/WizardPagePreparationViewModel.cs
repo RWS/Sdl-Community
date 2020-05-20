@@ -9,16 +9,27 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public class WizardPagePreparationViewModel : WizardPageViewModelBase
 	{
-		private string _displayName;
 		private bool _isValid;
+		private List<JobProcess> _jobProcesses;
 
 		public WizardPagePreparationViewModel(object view, TransactionModel transactionModel) : base(view, transactionModel)
 		{
-			_displayName = "Preparation";
 			IsValid = true;
 		}
 
-		public override string DisplayName => _displayName;
+		public List<JobProcess> JobProcesses
+		{
+			get { return _jobProcesses; }
+			set
+			{
+				_jobProcesses = value;
+				OnPropertyChanged(nameof(JobProcesses));
+			}
+		}
+
+		public string TextMessage { get; set; }
+
+		public override string DisplayName => "Preparation";
 
 		public override bool IsValid
 		{
