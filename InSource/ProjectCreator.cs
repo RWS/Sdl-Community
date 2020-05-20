@@ -61,8 +61,11 @@ namespace Sdl.Community.InSource
 		    }
 
 		    var fileBasedProject = CreateProject(_projectRequest);
-		    OnProgressChanged(100);
-		    return fileBasedProject;
+			if (fileBasedProject != null)
+			{
+				OnProgressChanged(100);
+			}
+			return fileBasedProject;
 	    }
 
 	    private FileBasedProject CreateProject(ProjectRequest request)
