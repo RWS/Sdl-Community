@@ -46,9 +46,7 @@ namespace Sdl.Community.XLIFF.Manager
 			_imageService = new ImageService(_pathInfo);
 			_imageService.ExtractFlags();
 
-
 			ActivationChanged += OnActivationChanged;
-
 
 			_eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 			_eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>()?.Subscribe(OnStudioWindowCreatedNotificationEvent);

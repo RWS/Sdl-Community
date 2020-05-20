@@ -104,8 +104,8 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 		}
 
 		public static readonly DependencyProperty SelectedImageProperty =
-			DependencyProperty.Register("SelectedImage", typeof(string), typeof(RateItControl),
-				new FrameworkPropertyMetadata("../../Resources/StarYellow.png",
+			DependencyProperty.Register("SelectedImage", typeof(Uri), typeof(RateItControl),
+				new FrameworkPropertyMetadata(new Uri("../../Resources/StarYellow.png", UriKind.RelativeOrAbsolute),
 					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, EnabledImagePropertyChangedCallback));
 
 		private static void EnabledImagePropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs d)
@@ -121,15 +121,15 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 			}
 		}
 
-		public string SelectedImage
+		public Uri SelectedImage
 		{
-			get => (string)GetValue(SelectedImageProperty);
+			get => (Uri)GetValue(SelectedImageProperty);
 			set => SetValue(SelectedImageProperty, value);
 		}
 
 		public static readonly DependencyProperty DisabledImageProperty =
-			DependencyProperty.Register("DisabledImage", typeof(string), typeof(RateItControl),
-				new FrameworkPropertyMetadata("../../Resources/StarGrey.png",
+			DependencyProperty.Register("DisabledImage", typeof(Uri), typeof(RateItControl),
+				new FrameworkPropertyMetadata(new Uri( "../../Resources/StarGrey.png", UriKind.RelativeOrAbsolute),
 					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, DisabledImagePropertyChangedCallback));
 
 		private static void DisabledImagePropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs d)
@@ -145,9 +145,9 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 			}
 		}
 
-		public string DisabledImage
+		public Uri DisabledImage
 		{
-			get => (string)GetValue(DisabledImageProperty);
+			get => (Uri)GetValue(DisabledImageProperty);
 			set => SetValue(DisabledImageProperty, value);
 		}
 
@@ -172,11 +172,11 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 				{
 					control.RateItControlGrid.RemoveHandler(MouseMoveEvent, new MouseEventHandler(control.OnMouseMove));
 				}
-				
+
 				if (newValue)
 				{
 					control.RateItControlGrid.AddHandler(MouseMoveEvent, new MouseEventHandler(control.OnMouseMove), true);
-				}				
+				}
 			}
 		}
 

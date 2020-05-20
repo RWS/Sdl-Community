@@ -156,7 +156,7 @@
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\WizardService.cs" />
     <Compile Include="TestData\TestDataUtil.cs" />
-    <Compile Include="Wizard\ViewModel\WizardPageFilesViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\WizardPageExportFilesViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageOptionsViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPagePreparationViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageSummaryViewModel.cs" />
@@ -171,8 +171,8 @@
     <Compile Include="Wizard\View\WizardPagePreparationView.xaml.cs">
       <DependentUpon>WizardPagePreparationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\View\WizardPageFilesView.xaml.cs">
-      <DependentUpon>WizardPageFilesView.xaml</DependentUpon>
+    <Compile Include="Wizard\View\WizardPageExportFilesView.xaml.cs">
+      <DependentUpon>WizardPageExportFilesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wizard\View\WizardWindow.xaml.cs">
       <DependentUpon>WizardWindow.xaml</DependentUpon>
@@ -212,6 +212,10 @@
     <Page Include="Controls\WindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ExpanderStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\TextBlockProjectInfoToolTipStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -293,7 +297,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wizard\View\WizardPageFilesView.xaml">
+    <Page Include="Wizard\View\WizardPageExportFilesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

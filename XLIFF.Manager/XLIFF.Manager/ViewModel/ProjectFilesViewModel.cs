@@ -80,7 +80,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				return message;
 			}
 		}
-
+		
 		public void Dispose()
 		{
 			ProjectFileActivityViewModel?.Dispose();

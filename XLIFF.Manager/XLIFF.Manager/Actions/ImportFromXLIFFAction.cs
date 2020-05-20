@@ -15,16 +15,17 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	public class ImportFromXLIFFAction : AbstractViewControllerAction<XLIFFManagerViewController>
 	{
 		private ProjectsController _projectsController;
-
+		private FilesController _filesController;
 		protected override void Execute()
 		{
-			var wizardService = new WizardService(Enumerators.Action.Import, _projectsController);
+			var wizardService = new WizardService(Enumerators.Action.Import, _projectsController, _filesController);
 			wizardService.ShowWizard();
 		}
 
 		public override void Initialize()
 		{
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			Enabled = true;
 		}
 	}

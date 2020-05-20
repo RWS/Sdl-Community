@@ -17,16 +17,18 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	public class ExportToXLIFFAction : AbstractViewControllerAction<XLIFFManagerViewController>
 	{
 		private ProjectsController _projectsController;
+		private FilesController _filesController;
 
 		protected override void Execute()
 		{
-			var wizardService = new WizardService(Enumerators.Action.Export, _projectsController);
+			var wizardService = new WizardService(Enumerators.Action.Export, _projectsController, _filesController);
 			wizardService.ShowWizard();
 		}		
 
 		public override void Initialize()
 		{
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			Enabled = true;
 		}			
 	}
@@ -39,16 +41,18 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	public class XLIFFManagerFilesContextMenuExportToXLIFFAction : AbstractAction
 	{
 		private ProjectsController _projectsController;
+		private FilesController _filesController;
 
 		protected override void Execute()
 		{
-			var wizardService = new WizardService(Enumerators.Action.Export, _projectsController);
+			var wizardService = new WizardService(Enumerators.Action.Export, _projectsController, _filesController);
 			wizardService.ShowWizard();
 		}
 
 		public override void Initialize()
 		{
 			SetProjectsController();
+			SetFilesController();
 			SetEnabled();
 		}
 
@@ -67,14 +71,35 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 			}
 		}
 
+		private void SetFilesController()
+		{
+			if (_filesController != null)
+			{
+				_filesController.SelectedFilesChanged -= FilesController_SelectedFilesChanged;
+			}
+
+			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
+
+			if (_filesController != null)
+			{
+				_filesController.SelectedFilesChanged += FilesController_SelectedFilesChanged;
+			}
+		}
+
+		private void FilesController_SelectedFilesChanged(object sender, System.EventArgs e)
+		{
+			SetEnabled();
+		}
+
 		private void ProjectsController_SelectedProjectsChanged(object sender, System.EventArgs e)
 		{
 			SetEnabled();
 		}
 
 		private void SetEnabled()
-		{			
-			Enabled = _projectsController.SelectedProjects.Count() == 1;
+		{
+			Enabled = _projectsController.SelectedProjects.Count() == 1 &&
+			          _filesController.SelectedFiles.Any();
 		}
 	}
 
@@ -86,16 +111,18 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	public class XLIFFManagerProjectsContextMenuExportToXLIFFAction : AbstractAction
 	{
 		private ProjectsController _projectsController;
+		private FilesController _filesController;
 
 		protected override void Execute()
 		{
-			var wizardService = new WizardService(Enumerators.Action.Export, _projectsController);
+			var wizardService = new WizardService(Enumerators.Action.Export, _projectsController, _filesController);
 			wizardService.ShowWizard();
 		}
 
 		public override void Initialize()
 		{
 			SetProjectsController();
+			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			SetEnabled();
 		}
 

@@ -140,6 +140,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Files: {0}, Selected: {1}.
+        /// </summary>
+        internal static string StatusLabel_Files_0_Selected_1 {
+            get {
+                return ResourceManager.GetString("StatusLabel_Files_0_Selected_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Projects: {0}, Files: {1}, Selected: {2}.
         /// </summary>
         internal static string StatusLabel_Projects_0_Files_1_Selected_2 {
