@@ -50,6 +50,10 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="ReachFramework" />
+    <Reference Include="Sdl.Community.RateItControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6073d430a1fe4c62, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>3rd party\Sdl.Community.RateItControl.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
@@ -150,7 +154,6 @@
     <Compile Include="Interfaces\ICredential.cs" />
     <Compile Include="Interfaces\IConnectionService.cs" />
     <Compile Include="Interfaces\ILanguageMappingsService.cs" />
-    <Compile Include="Interfaces\IRateItItem.cs" />
     <Compile Include="Interfaces\IRatingService.cs" />
     <Compile Include="Interfaces\ISDLMTCloudAction.cs" />
     <Compile Include="Interfaces\IShortcutService.cs" />
@@ -162,7 +165,6 @@
     <Compile Include="Model\FeedbackOption.cs" />
     <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
     <Compile Include="Model\Options.cs" />
-    <Compile Include="Model\RateItItem.cs" />
     <Compile Include="Model\StudioShortcut.cs" />
     <Compile Include="Model\TranslationRequest.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
@@ -254,8 +256,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\StarYellow.png" />
-    <Resource Include="Resources\StarGrey.png" />
+    <Resource Include="Resources\selectedStar.png" />
+    <Resource Include="Resources\defaultStar.png" />
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -321,6 +323,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Content Include="3rd party\Sdl.Community.RateItControl.dll" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
