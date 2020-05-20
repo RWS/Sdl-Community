@@ -68,24 +68,22 @@ namespace Sdl.Community.InSource
 			return fileBasedProject;
 	    }
 
+		// Create the project based on the project request
 	    private FileBasedProject CreateProject(ProjectRequest request)
 	    {
 		    try
 		    {
 				if (request?.ProjectTemplate != null)
 				{
-					var projectInfo = new ProjectInfo
-					{
-						Name = request.Name,
-						LocalProjectFolder = GetProjectFolderPath(request.Name, request.ProjectTemplate.Uri?.LocalPath)
-					};
+					var projectInfo = GetProjectInfo(request);
 					var isProjectInfoValid = IsProjectInfoValid(projectInfo, request);
+
 					if(!isProjectInfoValid)
 					{
 						return null;
 					}
-					var project = new FileBasedProject(projectInfo,	new ProjectTemplateReference(request.ProjectTemplate.Uri));
 
+					var project = new FileBasedProject(projectInfo,	new ProjectTemplateReference(request.ProjectTemplate.Uri));
 					OnMessageReported(project, $"Creating project {request.Name}");
 
 					if (request.Files != null)
@@ -96,46 +94,7 @@ namespace Sdl.Community.InSource
 						var projectFiles = project.AddFolderWithFiles(subdirectoryPath, true);
 						project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
 
-						//when a template is created from a Single file project, task sequencies is null.
-						try
-						{
-							var taskSequence = project.RunDefaultTaskSequence(projectFiles.GetIds(),
-								(sender, e)
-									=>
-								{
-									if (Requests != null)
-									{
-										OnProgressChanged(_currentProgress + (double)e.PercentComplete / Requests.Count);
-									}
-								}
-								, (sender, e)
-									=>
-								{
-									OnMessageReported(project, e.Message);
-								});
-
-							project.Save();
-
-							if (taskSequence.Status == TaskStatus.Completed)
-							{
-								if (SuccessfulRequests != null)
-								{
-									SuccessfulRequests.Add(Tuple.Create(request, project));
-									OnMessageReported(project, $"Project {request.Name} created successfully.");
-									return project;
-								}
-							}
-							else
-							{
-								OnMessageReported(project, $"Project {request.Name} creation failed.");
-								return null;
-							}
-						}
-						catch (Exception ex)
-						{
-							Log.Logger.Error($"ProjectCreator-> CreateProject method: {ex.Message}\n {ex.StackTrace}");
-							_messageBoxService.ShowMessage(PluginResources.ProjectTemplateSequenceSelection_Message, string.Empty);
-						}
+						ExecuteTaskSequence(project, projectFiles, request);		
 					}
 					return project;
 				}
@@ -149,6 +108,55 @@ namespace Sdl.Community.InSource
 			return null;
 	    }
 
+		// Get the project info based on the project request
+		private ProjectInfo GetProjectInfo(ProjectRequest request)
+		{
+			return new ProjectInfo
+			{
+				Name = request.Name,
+				LocalProjectFolder = GetProjectFolderPath(request.Name, request.ProjectTemplate.Uri?.LocalPath)
+			};
+		}
+
+		// Execute the default task sequence on the project.
+		// When a template is created from a Single file project, task sequencies is null.						
+		private void ExecuteTaskSequence(FileBasedProject project, ProjectFile[] projectFiles, ProjectRequest request)
+		{
+			try
+			{
+				var taskSequence = project.RunDefaultTaskSequence(projectFiles.GetIds(), (sender, e) =>
+								 {
+									 if (Requests != null)
+									 {
+										 OnProgressChanged(_currentProgress + (double)e.PercentComplete / Requests.Count);
+									 }
+								 }, (sender, e) =>
+								 {
+									 OnMessageReported(project, e.Message);
+								 });
+				project.Save();
+
+				if (taskSequence.Status.Equals(TaskStatus.Completed))
+				{
+					if (SuccessfulRequests != null)
+					{
+						SuccessfulRequests.Add(Tuple.Create(request, project));
+						OnMessageReported(project, $"Project {request.Name} created successfully.");
+					}
+				}
+				else
+				{
+					OnMessageReported(project, $"Project {request.Name} creation failed.");
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"ExecuteTaskSequence method: {ex.Message}\n {ex.StackTrace}");
+				_messageBoxService.ShowMessage(PluginResources.ProjectTemplateSequenceSelection_Message, string.Empty);
+			}
+		}
+
+		// Validate the project information
 		private bool IsProjectInfoValid(ProjectInfo projectInfo, ProjectRequest projectRequest)
 		{
 			var watchFolderName = Path.GetFileNameWithoutExtension(projectRequest.Path);
@@ -167,12 +175,7 @@ namespace Sdl.Community.InSource
 			return true;
 		}
 
-	    /// <summary>
-        /// Reads the project folder location from selected template
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="pathToTemplate"></param>
-        /// <returns></returns>
+        // Get the project folder location from the selected template
         private string GetProjectFolderPath(string name,string pathToTemplate)
         {
 	        try
@@ -201,11 +204,7 @@ namespace Sdl.Community.InSource
 	        return string.Empty;
         }
 
-		/// <summary>
-		/// Validate if any language direction is configured on the custom template
-		/// </summary>
-		/// <param name="templatePath"></param>
-		/// <returns></returns>
+		// Validate if any language direction is configured on the custom template
 		private bool IsAnyLanguageDirection(string templatePath)
 		{
 			try
