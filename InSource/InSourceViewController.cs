@@ -113,7 +113,6 @@ namespace Sdl.Community.InSource
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			Control.Value.Controller = this;
 			TimerControl.Value.CheckForProjectsRequestEvent += CheckForProjectsEvent;
-			//LoadProjectTemplatest();
 		}
 
 		protected override Control GetExplorerBarControl()
@@ -130,39 +129,10 @@ namespace Sdl.Community.InSource
 		{
 			try
 			{
-				//clear existing notifications
-				_notificationGroup.Notifications.Clear();
-				var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
-				//publish notification group 
-				_eventAggregator.Publish(addNotificationEvent);
+				PublishNotifications();
 
 				var projectRequest = Persistence.Load();
-				if (projectRequest != null)
-				{
-					var watchFoldersList = GetWatchFolders(projectRequest);
-					ProjectRequests.Clear();
-					foreach (var warchFolder in watchFoldersList)
-					{
-						ProjectRequests.AddRange(GetNewDirectories(warchFolder, projectRequest));
-					}
-					if (ProjectRequests?.Count > 0)
-					{
-						Persistence.SaveProjectRequestList(ProjectRequests);
-
-						foreach (var newProjectRequest in ProjectRequests)
-						{
-							var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
-							CreateSudioNotification(newProjectRequest, newProjectPath);
-						}
-					}
-
-					//publish notification
-					var groupEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
-					_eventAggregator.Publish(groupEvent);
-
-					var showNotification = new ShowStudioNotificationsViewEvent(true, true);
-					_eventAggregator.Publish(showNotification);
-				}
+				SetWatchFoldersProjects(projectRequest);
 			}
 			catch (Exception e)
 			{
@@ -184,18 +154,8 @@ namespace Sdl.Community.InSource
 				AllowsUserToDismiss = true
 			};
 
-			Action createProjectAction = () => CreateProjectFromNotification(notification);
-			_createProjectCommand = new InSourceCommand(createProjectAction)
-			{
-				CommandText = "Create project",
-				CommandToolTip = "Create new project"
-			};
-			notification.Action = _createProjectCommand;
-
-			//dismiss notification action
-			Action dismissAction = () => ClearNotification(notification);
-			var clearNotificationCommand = new InSourceCommand(dismissAction);
-			notification.ClearNotificationAction = clearNotificationCommand;
+			CreateProjectNotificationCommand(notification);
+			ClearNotificationAction(notification);
 
 			_notificationGroup.Notifications.Add(notification);
 		}
@@ -227,8 +187,7 @@ namespace Sdl.Community.InSource
 					if (project != null)
 					{
 						InSource.Instance.RequestAccepted(projectFromNotifications);
-						//Remove the created project from project request
-						//this will refresh the list from view part
+						//Remove the created project from project request (this will refresh the list from view part)
 						ProjectRequests.Remove(projectFromNotifications);
 						ClearNotification(notification);
 
@@ -236,6 +195,7 @@ namespace Sdl.Community.InSource
 						waitWindow.Close();
 						_messageBoxService.ShowMessage(string.Format(PluginResources.ProjectSuccessfullyCreated_Message, projectFromNotifications.Name), string.Empty);
 					}
+					waitWindow.Close();
 				}
 			};
 			worker.RunWorkerAsync();
@@ -342,6 +302,75 @@ namespace Sdl.Community.InSource
 			{
 				Log.Logger.Error($"InSourceViewController->CreateProjects method: {e.Message}\n {e.StackTrace}");
 			}
+		}
+
+		private void SetStudioNotifications()
+		{
+			// Add the notifications to Studio Notifications panel
+			var groupEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
+			_eventAggregator.Publish(groupEvent);
+
+			var showNotification = new ShowStudioNotificationsViewEvent(true, true);
+			_eventAggregator.Publish(showNotification);
+		}
+
+		private void PublishNotifications()
+		{
+			// remove the existing group notification to avoid notifications duplication
+			var removeNotificationGroup = new RemoveStudioGroupNotificationEvent(_notificationGroup.Key);
+			_eventAggregator.Publish(removeNotificationGroup);
+
+			// clear existing notifications and publish the notification group
+			_notificationGroup.Notifications.Clear();
+			var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
+			_eventAggregator.Publish(addNotificationEvent);
+
+			// set the notification view part focus
+			var showNotification = new ShowStudioNotificationsViewEvent(true, true);
+			_eventAggregator.Publish(showNotification);
+		}
+
+		private void SetWatchFoldersProjects(List<ProjectRequest> projectRequest)
+		{
+			if (projectRequest != null)
+			{
+				var watchFoldersList = GetWatchFolders(projectRequest);
+				ProjectRequests.Clear();
+				foreach (var warchFolder in watchFoldersList)
+				{
+					ProjectRequests.AddRange(GetNewDirectories(warchFolder, projectRequest));
+				}
+				if (ProjectRequests?.Count > 0)
+				{
+					Persistence.SaveProjectRequestList(ProjectRequests);
+
+					foreach (var newProjectRequest in ProjectRequests)
+					{
+						var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
+						CreateSudioNotification(newProjectRequest, newProjectPath);
+					}
+				}
+				OnProjectRequestsChanged();
+				SetStudioNotifications();
+			}
+		}
+
+		private void CreateProjectNotificationCommand(InSourceNotification notification)
+		{
+			Action createProjectAction = () => CreateProjectFromNotification(notification);
+			_createProjectCommand = new InSourceCommand(createProjectAction)
+			{
+				CommandText = "Create project",
+				CommandToolTip = "Create new project"
+			};
+			notification.Action = _createProjectCommand;
+		}
+
+		private void ClearNotificationAction(InSourceNotification notification)
+		{
+			Action dismissAction = () => ClearNotification(notification);
+			var clearNotificationCommand = new InSourceCommand(dismissAction);
+			notification.ClearNotificationAction = clearNotificationCommand;
 		}
 
 		private void CheckForProjectsEvent(object sender, EventArgs e)

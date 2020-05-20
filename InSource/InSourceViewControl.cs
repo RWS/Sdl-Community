@@ -128,24 +128,6 @@ namespace Sdl.Community.InSource
 					if (confirmDelete)
 					{
 						RemoveWatchFolders(e);
-						//foldersListView.RemoveObject(e.RowObject);
-
-						//var folderObject = e.RowObject as ProjectRequest;
-
-
-						//var requestToRemove = _folderPathList.FindAll(p => p.Path == folderObject.Path);
-						//foreach (var request in requestToRemove)
-						//{
-						//	_folderPathList.Remove(request);
-						//}
-
-						//var watchFolderToRemove = _watchFolders.FirstOrDefault(w => w.Path == folderObject.Path);
-						//if (watchFolderToRemove != null)
-						//{
-						//	_watchFolders.Remove(watchFolderToRemove);
-						//}
-						//_persistence.SaveProjectRequestList(_folderPathList);
-						//LoadProjectRequests();
 					}
 				}
 
@@ -216,7 +198,7 @@ namespace Sdl.Community.InSource
 				_watchFolders.Remove(watchFolderToRemove);
 			}
 			_persistence.SaveProjectRequestList(_folderPathList);
-			LoadProjectRequests();
+			LoadProjectRequests();			
 		}
 
 		private void InitializeListView(List<ProjectRequest> watchFolders)
