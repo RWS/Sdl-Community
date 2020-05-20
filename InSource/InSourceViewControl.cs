@@ -129,7 +129,7 @@ namespace Sdl.Community.InSource
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private async void FoldersListView_CellEditStarting(object sender, CellEditEventArgs e)
+		private void FoldersListView_CellEditStarting(object sender, CellEditEventArgs e)
 		{
 			try
 			{
@@ -140,7 +140,7 @@ namespace Sdl.Community.InSource
 					var confirmDelete = _messageBoxService.AskForConfirmation(PluginResources.RemoveWatchFolder_Message);
 					if (confirmDelete)
 					{						
-						await RemoveWatchFolders(e);
+						RemoveWatchFolders(e);
 					}
 				}
 
@@ -190,7 +190,7 @@ namespace Sdl.Community.InSource
 			}
 		}
 
-		private async System.Threading.Tasks.Task RemoveWatchFolders(CellEditEventArgs e)
+		private void RemoveWatchFolders(CellEditEventArgs e)
 		{
 			foldersListView.RemoveObject(e.RowObject);
 
@@ -214,18 +214,8 @@ namespace Sdl.Community.InSource
 				_watchFolders.Remove(watchFolderToRemove);
 			}
 
-			var asyncWait = WaitTask();
-			if (asyncWait.Result)
-			{
-				_persistence.SaveProjectRequestList(_folderPathList);
-				LoadProjectRequests();
-			}
-		}
-
-		private async Task<bool> WaitTask()
-		{
-			await System.Threading.Tasks.Task.Delay(1000).ConfigureAwait(false);
-			return true;
+			_persistence.SaveProjectRequestList(_folderPathList);
+			LoadProjectRequests();
 		}
 
 		private void InitializeListView(List<ProjectRequest> watchFolders)
