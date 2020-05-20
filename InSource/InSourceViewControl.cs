@@ -140,7 +140,6 @@ namespace Sdl.Community.InSource
 				};
 
 				DisplayCustomTemplates(cb, e);
-				LoadProjectRequests();
 			}
 			catch (Exception exception)
 			{
