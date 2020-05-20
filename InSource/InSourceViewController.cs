@@ -37,10 +37,10 @@ namespace Sdl.Community.InSource
 		private int _percentComplete;
 		private IStudioNotificationCommand _createProjectCommand;
 		private readonly IStudioEventAggregator _eventAggregator;
-		private const string NotificationGroupId = "b0261aa3-b6a5-4f69-8f94-3713784ce8ef";
 		private readonly InSourceNotificationGroup _notificationGroup;
 		private ProjectsController _projectsController;
 		private IMessageBoxService _messageBoxService;
+		private readonly Constants _constants;
 
 		public static Persistence Persistence = new Persistence();
 		public static readonly Log Log = Log.Instance;
@@ -55,8 +55,9 @@ namespace Sdl.Community.InSource
 			_hasTemplateList = new List<bool>();
 			_hasFiles = new List<bool>();
 			_eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
+			_constants = new Constants();
 
-			_notificationGroup = new InSourceNotificationGroup(NotificationGroupId)
+			_notificationGroup = new InSourceNotificationGroup(_constants.NotificationGroupId)
 			{
 				Title = "InSource Notifications"
 			};
@@ -360,8 +361,8 @@ namespace Sdl.Community.InSource
 			Action createProjectAction = () => CreateProjectFromNotification(notification);
 			_createProjectCommand = new InSourceCommand(createProjectAction)
 			{
-				CommandText = "Create project",
-				CommandToolTip = "Create new project"
+				CommandText = _constants.CreateProjectText,
+				CommandToolTip = _constants.CreateNewProjectText
 			};
 			notification.Action = _createProjectCommand;
 		}
@@ -397,7 +398,7 @@ namespace Sdl.Community.InSource
 
 		private void ClearNotification(InSourceNotification notification)
 		{
-			_eventAggregator.Publish(new RemoveStudioNotificationFromGroupEvent(NotificationGroupId, notification.Id));
+			_eventAggregator.Publish(new RemoveStudioNotificationFromGroupEvent(_constants.NotificationGroupId, notification.Id));
 		}
 
 		private List<string> GetWatchFolders(List<ProjectRequest> projectRequest)
