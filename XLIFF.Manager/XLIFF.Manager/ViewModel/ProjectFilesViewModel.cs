@@ -44,7 +44,6 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			{
 				_selectedProjectFileActions = value;
 				OnPropertyChanged(nameof(SelectedProjectFileActions));
-
 				OnPropertyChanged(nameof(StatusLabel));			
 			}
 		}
@@ -81,7 +80,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				return message;
 			}
 		}
-
+		
 		public void Dispose()
 		{
 			ProjectFileActivityViewModel?.Dispose();

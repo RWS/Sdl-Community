@@ -12,15 +12,17 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 		ContextByType = typeof(EditorController))]
 	public class IncreaseRatingAction:AbstractAction, ISDLMTCloudAction
 	{
+		public override void Initialize()
+		{
+			base.Initialize();
+			OptionName = nameof(RateItViewModel.IncreaseRating);
+		}
 		protected override void Execute()
 		{
 			var rateItController = SdlTradosStudio.Application.GetController<RateItController>();
 			rateItController?.RateIt?.IncreaseRating();
 		}
 
-		public void LoadTooltip(string tooltipText)
-		{
-			ToolTipText = tooltipText;
-		}
+		public string OptionName { get; set; }
 	}
 }

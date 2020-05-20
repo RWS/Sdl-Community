@@ -51,6 +51,10 @@
     <Reference Include="Sdl.Core.PluginFramework.PackageSupport, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Core.Settings, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
@@ -62,6 +66,9 @@
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Settings">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -96,6 +103,7 @@
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Common\PathInfo.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
     <Compile Include="Controls\ProjectFileActivityViewControl.cs">
@@ -137,6 +145,7 @@
     <Compile Include="Model\ProjectFileActionModel.cs" />
     <Compile Include="Model\ProjectFileActivityModel.cs" />
     <Compile Include="Model\ProjectModel.cs" />
+    <Compile Include="Model\TransactionModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -147,7 +156,7 @@
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\WizardService.cs" />
     <Compile Include="TestData\TestDataUtil.cs" />
-    <Compile Include="Wizard\ViewModel\WizardPageFilesViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\WizardPageExportFilesViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageOptionsViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPagePreparationViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageSummaryViewModel.cs" />
@@ -162,11 +171,11 @@
     <Compile Include="Wizard\View\WizardPagePreparationView.xaml.cs">
       <DependentUpon>WizardPagePreparationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\View\WizardPageFilesView.xaml.cs">
-      <DependentUpon>WizardPageFilesView.xaml</DependentUpon>
+    <Compile Include="Wizard\View\WizardPageExportFilesView.xaml.cs">
+      <DependentUpon>WizardPageExportFilesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\View\WizardView.xaml.cs">
-      <DependentUpon>WizardView.xaml</DependentUpon>
+    <Compile Include="Wizard\View\WizardWindow.xaml.cs">
+      <DependentUpon>WizardWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="XLIFFManagerViewGroups.cs" />
     <Compile Include="ViewModel\ProjectFileActivityViewModel.cs" />
@@ -203,6 +212,10 @@
     <Page Include="Controls\WindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ExpanderStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\TextBlockProjectInfoToolTipStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -284,11 +297,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wizard\View\WizardPageFilesView.xaml">
+    <Page Include="Wizard\View\WizardPageExportFilesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wizard\View\WizardView.xaml">
+    <Page Include="Wizard\View\WizardWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

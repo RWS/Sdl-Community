@@ -1,30 +1,27 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public abstract class WizardPageViewModelBase : INotifyPropertyChanged
 	{
 		private bool _isVisited;
-
 		private bool _isComplete;
-
 		private bool _isUpdated;
-
 		private bool _nextIsVisited;
-
 		private bool _previousIsVisited;
-
 		private bool _isCurrentPage;
-
 		private double _labelLineWidth;
-
 		private double _labelTextWidth;
 
-		protected WizardPageViewModelBase(object view)
+		protected WizardPageViewModelBase(object view, TransactionModel transactionModel)
 		{
 			View = view;
+			TransactionModel = transactionModel;
 		}
+
+		public TransactionModel TransactionModel { get; set; }
 
 		public double LabelLineWidth
 		{
@@ -80,7 +77,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 				_isCurrentPage = value;
 				OnPropertyChanged(nameof(IsCurrentPage));
-
 				OnPropertyChanged(nameof(CurrentPageChanged));
 			}
 		}
