@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using BrightIdeasSoftware;
 using Sdl.Community.InSource.Helpers;
 using Sdl.Community.InSource.Interfaces;
+using Sdl.Community.InSource.Notifications;
 using Sdl.Community.InSource.Service;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
@@ -189,6 +190,8 @@ namespace Sdl.Community.InSource
 				foreach (var request in requestToRemove)
 				{
 					_folderPathList.Remove(request);
+					var notification = GetUINotification(request);
+					_controller.ClearNotification(notification);
 				}
 			}
 
@@ -253,6 +256,21 @@ namespace Sdl.Community.InSource
 				}
 			}
 			LoadFileList();
+		}
+
+		private InSourceNotification GetUINotification(ProjectRequest projectRequest)
+		{
+			return new InSourceNotification(projectRequest.NotificationId)
+			{
+				Title = projectRequest.Name,
+				AlwaysVisibleDetails = new List<string>
+				{
+					"Project request path",
+					projectRequest.Path
+				},
+				IsActionVisible = true,
+				AllowsUserToDismiss = true
+			};
 		}
 
 		private void LoadFileList()

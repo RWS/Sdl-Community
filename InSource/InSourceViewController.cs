@@ -305,6 +305,11 @@ namespace Sdl.Community.InSource
 			}
 		}
 
+		public void ClearNotification(InSourceNotification notification)
+		{
+			_eventAggregator.Publish(new RemoveStudioNotificationFromGroupEvent(_constants.NotificationGroupId, notification.Id));
+		}
+
 		private void SetStudioNotifications()
 		{
 			// Add the notifications to Studio Notifications panel
@@ -394,11 +399,6 @@ namespace Sdl.Community.InSource
 			{
 				Log.Logger.Error($"CreateProjectFromNotification method: {e.Message}\n {e.StackTrace}");
 			}
-		}
-
-		private void ClearNotification(InSourceNotification notification)
-		{
-			_eventAggregator.Publish(new RemoveStudioNotificationFromGroupEvent(_constants.NotificationGroupId, notification.Id));
 		}
 
 		private List<string> GetWatchFolders(List<ProjectRequest> projectRequest)
