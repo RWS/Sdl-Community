@@ -56,7 +56,7 @@
 					  CanUserDeleteRows="False">
 			<DataGrid.Columns>
 
-				<DataGridTemplateColumn Header="XLIFF File" IsReadOnly="True" Width="2*"  CanUserSort="False" >
+				<DataGridTemplateColumn Header="XLIFF File Name" IsReadOnly="True" Width="2*"  CanUserSort="False" >
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:ProjectFileActivityModel">
 							<Grid Margin="10,0,10,0">
@@ -108,11 +108,11 @@
 				</DataGridTemplateColumn>
 
 				<DataGridTextColumn Header="Path" CanUserSort="False" Binding="{Binding Path, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
-										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="1*"/>
+										ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
 				<DataGridTextColumn Header="Date" CanUserSort="False" Binding="{Binding Date, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
-										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="1*"/>
+										ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
 				<DataGridTextColumn Header="Details" CanUserSort="False" Binding="{Binding Details, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
-										ElementStyle="{StaticResource TextBlockStyle}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="2*"/>
+										ElementStyle="{StaticResource TextBlockStyle}" Width="2*"/>
 			</DataGrid.Columns>
 			<!--<DataGrid.GroupStyle>
 				<GroupStyle>

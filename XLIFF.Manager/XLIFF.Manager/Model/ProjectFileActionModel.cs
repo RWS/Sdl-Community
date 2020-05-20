@@ -6,6 +6,8 @@ namespace Sdl.Community.XLIFF.Manager.Model
 {
 	public class ProjectFileActionModel : BaseModel, IDisposable
 	{
+		private bool _selected;
+
 		public ProjectFileActionModel(ProjectModel projectModel)
 		{
 			ProjectModel = projectModel;
@@ -18,7 +20,20 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public Enumerators.Action Action { get; set; }
 
-		public bool Selected { get; set; }
+		public bool Selected
+		{
+			get { return _selected; }
+			set
+			{
+				if (_selected == value)
+				{
+					return;
+				}
+
+				_selected = value;
+				OnPropertyChanged(nameof(Selected));
+			}
+		}
 
 		public string Status
 		{

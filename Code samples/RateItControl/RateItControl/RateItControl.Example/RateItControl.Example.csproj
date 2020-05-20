@@ -112,6 +112,11 @@
       <Name>RateItControl</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\StarGrey.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\StarYellow.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
