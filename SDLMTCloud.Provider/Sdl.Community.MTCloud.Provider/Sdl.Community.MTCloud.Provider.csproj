@@ -150,6 +150,7 @@
     <Compile Include="Interfaces\ICredential.cs" />
     <Compile Include="Interfaces\IConnectionService.cs" />
     <Compile Include="Interfaces\ILanguageMappingsService.cs" />
+    <Compile Include="Interfaces\IRateItItem.cs" />
     <Compile Include="Interfaces\IRatingService.cs" />
     <Compile Include="Interfaces\ISDLMTCloudAction.cs" />
     <Compile Include="Interfaces\IShortcutService.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="Model\FeedbackOption.cs" />
     <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
     <Compile Include="Model\Options.cs" />
+    <Compile Include="Model\RateItItem.cs" />
     <Compile Include="Model\StudioShortcut.cs" />
     <Compile Include="Model\TranslationRequest.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
@@ -253,8 +255,8 @@
     <Compile Include="Themes\Generic\RatingControl.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\StarYellow.png" />
-    <None Include="Resources\StarGrey.png" />
+    <Resource Include="Resources\StarYellow.png" />
+    <Resource Include="Resources\StarGrey.png" />
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>
     </EmbeddedResource>

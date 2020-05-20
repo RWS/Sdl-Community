@@ -23,7 +23,12 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type ListBoxItem}">
-					<Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+					<Border x:Name="Bd"
+					        BorderBrush="{TemplateBinding BorderBrush}"
+					        BorderThickness="{TemplateBinding BorderThickness}"
+					        Background="{TemplateBinding Background}" 
+					        Padding="{TemplateBinding Padding}" 
+					        SnapsToDevicePixels="True">
 						<ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
 					</Border>
 					<ControlTemplate.Triggers>
@@ -63,9 +68,17 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type generic:RatingControl}">
-					<Grid x:Name="PART_RatingControl" MaxWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding ActualHeight}">
-						<ListBox x:Name="PART_ItemsControl"
+
+					<Grid x:Name="PART_RateItControl" MaxHeight="{TemplateBinding ActualHeight}" 
+					      MaxWidth="{TemplateBinding ActualWidth}">
+
+						<ListBox x:Name="PART_ItemsControl" 
 						         Focusable="True"
+						         BorderBrush="{TemplateBinding BorderBrush}"
+						         BorderThickness="{TemplateBinding BorderThickness}"
+						         Background="{TemplateBinding Background}" 
+						         Padding="{TemplateBinding Padding}"
+						         Margin="{TemplateBinding Margin}"
 						         ItemContainerStyle="{StaticResource Custom.ListBox.Style}"
 						         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 						         ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -80,14 +93,15 @@
 								<DataTemplate>
 									<Grid Margin="0">
 										<Image Grid.Column="0" Margin="0" 
-											   Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type generic:RatingControl}}, Path=ImageHeight}"
-											   Style="{StaticResource Custom.Image.Style}">
+										       Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type generic:RatingControl}}, Path=ImageHeight}"
+										       Style="{StaticResource Custom.Image.Style}">
 										</Image>
 									</Grid>
 								</DataTemplate>
 							</ListBox.ItemTemplate>
 						</ListBox>
 					</Grid>
+
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
