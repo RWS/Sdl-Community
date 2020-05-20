@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
 			 xmlns:rsx ="clr-namespace:Sdl.Community.MTCloud.Provider"
-			 xmlns:ratingControl ="clr-namespace:Sdl.Community.MTCloud.Provider.Themes.Generic"
              xmlns:watermarkTextBox="clr-namespace:Sdl.Desktop.Platform.Controls.Controls.WatermarkTextBox;assembly=Sdl.Desktop.Platform.Controls"
 			 d:DataContext="{d:DesignInstance viewModel:RateItViewModel}"
              mc:Ignorable="d" 
@@ -85,7 +84,7 @@
 					</CheckBox.ToolTip>
 				</CheckBox>
 			</WrapPanel>
-			<ratingControl:RatingControl Grid.Row="0" Grid.Column="1" BorderThickness="4" BorderBrush="#9F9E9E" MaxRating="5" ImageHeight="32" Height="50" Width="100"/>
+			<!--<ratingControl:RatingControl Grid.Row="0" Grid.Column="1" BorderThickness="4" BorderBrush="#9F9E9E" MaxRating="5" ImageHeight="32" Height="50" Width="100"/>-->
 			
 			<TextBox  Style="{DynamicResource WatermarkTextBox}" watermarkTextBox:TextBoxWatermarkHelper.WatermarkText ="{x:Static rsx:PluginResources.RateIt_FeedbackWatermark}"
 					  Grid.Row="1" Grid.Column="0" MaxLines="3" Text="{Binding Feedback,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"
