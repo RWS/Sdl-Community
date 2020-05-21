@@ -151,6 +151,7 @@
       <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\WindowsControlUtils.cs" />
+    <Compile Include="Interfaces\IActionProvider.cs" />
     <Compile Include="Interfaces\ICredential.cs" />
     <Compile Include="Interfaces\IConnectionService.cs" />
     <Compile Include="Interfaces\ILanguageMappingsService.cs" />
@@ -176,6 +177,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\ActionProvider.cs" />
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Service\TranslationService.cs" />

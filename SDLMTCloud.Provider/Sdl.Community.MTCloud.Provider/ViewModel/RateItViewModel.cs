@@ -5,8 +5,6 @@ using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Studio.ShortcutActions;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
@@ -22,11 +20,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private FeedbackOption _wordsAdditionChecked;
 		private FeedbackOption _spellingChecked;
 		private FeedbackOption _capitalizationChecked;
+		private readonly IActionProvider _actionProvider;
 		private int _rating;
 		private string _feedback;
 
-		public RateItViewModel(ITranslationService translationService, IShortcutService shortcutService)
+		public RateItViewModel(ITranslationService translationService, IShortcutService shortcutService,IActionProvider actionProvider)
 		{
+			_actionProvider = actionProvider;
 			SetTranslationService(translationService);
 			SetShortcutService(shortcutService);
 			InitializeFeedbackOptions();
@@ -35,7 +35,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			SendFeedbackCommand = new CommandHandler(SendFeedback);
 			ClearCommand = new CommandHandler(ClearFeedbackBox);
 
-			_actions = GetActions();
+			_actions = InitializeActions();
 			UpdateActionTooltips();
 
 			_rating = 0;
@@ -238,26 +238,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			UpdateActionTooltips();
 		}
 
-		private List<ISDLMTCloudAction> GetActions()
+		private List<ISDLMTCloudAction> InitializeActions()
 		{
-			//TODO: Refactor this, unit tests are failing because of SdlTradosStudio
-			if (SdlTradosStudio.Application != null)
-			{
-				return new List<ISDLMTCloudAction>
-				{
-					SdlTradosStudio.Application?.GetAction<DecreaseRatingAction>(),
-					SdlTradosStudio.Application?.GetAction<IncreaseRatingAction>(),
-					SdlTradosStudio.Application?.GetAction<SetCapitalizationAction>(),
-					SdlTradosStudio.Application?.GetAction<SetGrammarAction>(),
-					SdlTradosStudio.Application?.GetAction<SetSpellingAction>(),
-					SdlTradosStudio.Application?.GetAction<SetUnintelligenceAction>(),
-					SdlTradosStudio.Application?.GetAction<SetWordChoiceAction>(),
-					SdlTradosStudio.Application?.GetAction<SetWordsAdditionAction>(),
-					SdlTradosStudio.Application?.GetAction<SetWordsOmissionAction>()
-				};
-			}
-			return  new List<ISDLMTCloudAction>();
+			return _actionProvider.GetActions();
 		}
+
 		private void InitializeFeedbackOptions()
 		{
 			_wordsOmissionChecked = new FeedbackOption();
@@ -271,6 +256,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void UpdateActionTooltips()
 		{
+			if (_actions is null) return;
 			foreach (var mtCloudAction in _actions)
 			{
 				var tooltipText = _shortcutService.GetShotcutDetails(mtCloudAction.Id);
