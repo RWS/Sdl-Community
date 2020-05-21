@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using Sdl.Community.InSource.Helpers;
@@ -43,7 +42,7 @@ namespace Sdl.Community.InSource
 		public void ReportMessage(FileBasedProject fileBasedProject, string message)
 		{
 			_resultsTextBox.AppendText("\r\n" + message);
-		}
+		}		
 
 		protected override void OnLoad(EventArgs e)
 		{

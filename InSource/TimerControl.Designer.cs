@@ -12,18 +12,6 @@ namespace Sdl.Community.InSource
         /// </summary>
         private IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         #region Component Designer generated code
 
@@ -34,22 +22,22 @@ namespace Sdl.Community.InSource
         private void InitializeComponent()
         {
             this.mainPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.timerCheckBox = new System.Windows.Forms.CheckBox();
             this.remainingTime = new System.Windows.Forms.Label();
             this.refreshIntervalTable = new System.Windows.Forms.TableLayoutPanel();
-            this.refreshIntervalLbl = new System.Windows.Forms.Label();
             this.intervalTextBox = new System.Windows.Forms.TextBox();
+            this.refreshIntervalLbl = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.deleteBtn = new System.Windows.Forms.RadioButton();
             this.archiveBtn = new System.Windows.Forms.RadioButton();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.mainPanel.SuspendLayout();
-            this.refreshIntervalTable.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.refreshIntervalTable.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanel
@@ -68,6 +56,35 @@ namespace Sdl.Community.InSource
             this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mainPanel.Size = new System.Drawing.Size(400, 480);
             this.mainPanel.TabIndex = 0;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.tableLayoutPanel1);
+            this.groupBox2.Location = new System.Drawing.Point(10, 3);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(10, 3, 10, 10);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(285, 100);
+            this.groupBox2.TabIndex = 7;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Timer management";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.timerCheckBox, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.remainingTime, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.refreshIntervalTable, 0, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(279, 81);
+            this.tableLayoutPanel1.TabIndex = 0;
             // 
             // timerCheckBox
             // 
@@ -107,6 +124,14 @@ namespace Sdl.Community.InSource
             this.refreshIntervalTable.Size = new System.Drawing.Size(273, 24);
             this.refreshIntervalTable.TabIndex = 4;
             // 
+            // intervalTextBox
+            // 
+            this.intervalTextBox.Location = new System.Drawing.Point(112, 0);
+            this.intervalTextBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.intervalTextBox.Name = "intervalTextBox";
+            this.intervalTextBox.Size = new System.Drawing.Size(100, 20);
+            this.intervalTextBox.TabIndex = 1;
+            // 
             // refreshIntervalLbl
             // 
             this.refreshIntervalLbl.AutoSize = true;
@@ -117,13 +142,17 @@ namespace Sdl.Community.InSource
             this.refreshIntervalLbl.TabIndex = 0;
             this.refreshIntervalLbl.Text = "Refresh interval (min)";
             // 
-            // intervalTextBox
+            // groupBox1
             // 
-            this.intervalTextBox.Location = new System.Drawing.Point(112, 0);
-            this.intervalTextBox.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.intervalTextBox.Name = "intervalTextBox";
-            this.intervalTextBox.Size = new System.Drawing.Size(100, 20);
-            this.intervalTextBox.TabIndex = 1;
+            this.groupBox1.Controls.Add(this.deleteBtn);
+            this.groupBox1.Controls.Add(this.archiveBtn);
+            this.groupBox1.Location = new System.Drawing.Point(10, 116);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(282, 100);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Folders management";
             // 
             // deleteBtn
             // 
@@ -147,47 +176,6 @@ namespace Sdl.Community.InSource
             this.archiveBtn.Text = "Archive folders";
             this.archiveBtn.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.deleteBtn);
-            this.groupBox1.Controls.Add(this.archiveBtn);
-            this.groupBox1.Location = new System.Drawing.Point(10, 116);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(282, 100);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Folders management";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.tableLayoutPanel1);
-            this.groupBox2.Location = new System.Drawing.Point(10, 3);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(10, 3, 10, 10);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(285, 100);
-            this.groupBox2.TabIndex = 7;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Timer management";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.timerCheckBox, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.remainingTime, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.refreshIntervalTable, 0, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(279, 81);
-            this.tableLayoutPanel1.TabIndex = 0;
-            // 
             // TimerControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -196,13 +184,13 @@ namespace Sdl.Community.InSource
             this.Name = "TimerControl";
             this.Size = new System.Drawing.Size(400, 480);
             this.mainPanel.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.refreshIntervalTable.ResumeLayout(false);
             this.refreshIntervalTable.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -221,5 +209,5 @@ namespace Sdl.Community.InSource
         private BackgroundWorker backgroundWorker1;
         private GroupBox groupBox2;
         private TableLayoutPanel tableLayoutPanel1;
-    }
+	}
 }

@@ -25,7 +25,7 @@ namespace Sdl.Community.InSource
 		Description = "Create projects from project request content",
 		Icon = "InSource_large",
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
-	public class InSourceViewController : AbstractViewController, INotifyPropertyChanged
+	public class InSourceViewController : AbstractViewController, INotifyPropertyChanged, IDisposable
 	{
 		private static readonly Lazy<InSourceViewControl> Control = new Lazy<InSourceViewControl>(() => new InSourceViewControl());
 		private static readonly Lazy<TimerControl> TimerControl = new Lazy<TimerControl>();
@@ -41,6 +41,7 @@ namespace Sdl.Community.InSource
 		private readonly string NotificationGroupId = "b0261aa3-b6a5-4f69-8f94-3713784ce8ef";
 		private ProjectsController _projectsController;
 		private IMessageBoxService _messageBoxService;
+		private BackgroundWorker _worker;
 
 		public static Persistence Persistence = new Persistence();
 		public static readonly Log Log = Log.Instance;
@@ -122,7 +123,12 @@ namespace Sdl.Community.InSource
 
 		protected override Control GetContentControl()
 		{
-			return Control.Value;
+			return Control.Value;		
+		}
+
+		public override void Dispose()
+		{
+			TimerControl.Value.CheckForProjectsRequestEvent -= CheckForProjectsEvent;
 		}
 
 		public void CheckForProjects()
@@ -160,23 +166,20 @@ namespace Sdl.Community.InSource
 			_notificationGroup.Notifications.Add(notification);
 		}
 
-		public FileBasedProject CreateProjectsFromNotifications(ProjectRequest projectFromNotifications, InSourceNotification notification)
+		public FileBasedProject CreateProjectsFromNotifications(ProjectRequest projectRequest, InSourceNotification notification)
 		{
 			var waitWindow = new WaitWindow();
 			waitWindow.Show();
-			ProjectCreator creator;
 			FileBasedProject project = null;
-			var worker = new BackgroundWorker
+
+			InitializeBackgroundWorker();
+			_worker.DoWork += (sender, e) =>
 			{
-				WorkerReportsProgress = true
-			};
-			worker.DoWork += (sender, e) =>
-			{
-				creator = new ProjectCreator(projectFromNotifications, projectFromNotifications.ProjectTemplate, _messageBoxService);
-				project = creator.Execute();
+				var projectCreator = new ProjectCreator(projectRequest, projectRequest.ProjectTemplate, _messageBoxService);
+				project = projectCreator.Execute();
 			};
 
-			worker.RunWorkerCompleted += (sender, e) =>
+			_worker.RunWorkerCompleted += (sender, e) =>
 			{
 				if (e.Error != null)
 				{
@@ -186,22 +189,23 @@ namespace Sdl.Community.InSource
 				{
 					if (project != null)
 					{
-						InSource.Instance.RequestAccepted(projectFromNotifications);
+						InSource.Instance.RequestAccepted(projectRequest);
 						//Remove the created project from project request (this will refresh the list from view part)
-						ProjectRequests.Remove(projectFromNotifications);
+						ProjectRequests.Remove(projectRequest);
 						ClearNotification(notification);
 
 						OnProjectRequestsChanged();
 						waitWindow.Close();
-						_messageBoxService.ShowMessage(string.Format(PluginResources.ProjectSuccessfullyCreated_Message, projectFromNotifications.Name), string.Empty);
+						_messageBoxService.ShowMessage(string.Format(PluginResources.ProjectSuccessfullyCreated_Message, projectRequest.Name), string.Empty);
 					}
 					waitWindow.Close();
+					_worker.Dispose();
 				}
 			};
-			worker.RunWorkerAsync();
+			_worker.RunWorkerAsync();
 			return project;
 		}
-
+		
 		public void Contribute()
 		{
 			System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/InSource");
@@ -214,10 +218,7 @@ namespace Sdl.Community.InSource
 				Control.Value.ClearMessages();
 
 				ProjectCreator creator = null;
-				var worker = new BackgroundWorker
-				{
-					WorkerReportsProgress = true
-				};
+				InitializeBackgroundWorker();
 
 				if (SelectedProjects == null || SelectedProjects.Count == 0)
 				{
@@ -240,21 +241,21 @@ namespace Sdl.Community.InSource
 						{
 							if (SelectedProjects != null && (SelectedProjects.Count != 0 && SelectedProjects != null))
 							{
-								worker.DoWork += (sender, e) =>
+								_worker.DoWork += (sender, e) =>
 								{
 									creator = SelectedProjects.Count != 0 && SelectedProjects != null
 										? new ProjectCreator(SelectedProjects, SelectedProjectTemplate, _messageBoxService)
 										: new ProjectCreator(ProjectRequests, SelectedProjectTemplate, _messageBoxService);
 
-									creator.ProgressChanged += (sender2, e2) => { worker.ReportProgress(e2.ProgressPercentage); };
+									creator.ProgressChanged += (sender2, e2) => { _worker.ReportProgress(e2.ProgressPercentage); };
 									creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Project, e2.Message); };
 									creator.Execute();
 								};
-								worker.ProgressChanged += (sender, e) =>
+								_worker.ProgressChanged += (sender, e) =>
 								{
 									PercentComplete = e.ProgressPercentage;
 								};
-								worker.RunWorkerCompleted += (sender, e) =>
+								_worker.RunWorkerCompleted += (sender, e) =>
 								{
 
 									if (e.Error != null)
@@ -281,8 +282,9 @@ namespace Sdl.Community.InSource
 											OnProjectRequestsChanged();
 										}
 									}
+									_worker.Dispose();
 								};
-								worker.RunWorkerAsync();
+								_worker.RunWorkerAsync();
 							}
 						}
 						else
@@ -480,6 +482,17 @@ namespace Sdl.Community.InSource
 		private void OnProjectRequestsChanged()
 		{
 			ProjectRequestsChanged?.Invoke(this, EventArgs.Empty);
+		}
+
+		private void InitializeBackgroundWorker()
+		{
+			if (_worker == null)
+			{
+				_worker = new BackgroundWorker
+				{
+					WorkerReportsProgress = true
+				};
+			}			
 		}
 	}
 }
