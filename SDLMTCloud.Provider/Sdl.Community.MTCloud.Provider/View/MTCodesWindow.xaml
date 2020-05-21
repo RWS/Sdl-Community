@@ -80,11 +80,9 @@
 			          Grid.Column="0" 
 			          Grid.ColumnSpan="2" 
 			          Margin="15,5,15,5" 
-			          AutoGenerateColumns="False" 			                           
 					  ItemsSource="{Binding MappedLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                
 					  SelectedValue="{Binding SelectedMappedLanguage, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 					  FontSize="12"
-					  BorderThickness="1"
 					  BorderBrush="#C1C0C0"
 					  FontFamily="Segoe UI"
 					  GridLinesVisibility="Horizontal"
@@ -120,15 +118,13 @@
 
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
 						<Button Style="{StaticResource ButtonStyleShadowless}" 
-					        HorizontalAlignment="Left"		
-					        MinWidth="110" 
 					        VerticalAlignment="Bottom" Margin="0,0,15,0" 
 					        Content="Reset to Defaults" Command="{Binding ResetToDefaultsCommand}"/>
 					</StackPanel>
 
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  VerticalAlignment="Bottom">
-						<Button Style="{StaticResource ButtonStyleShadowless}" MinWidth="110" Content="OK" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
-						<Button Style="{StaticResource ButtonStyleShadowless}" Content="Cancel" MinWidth="110" IsCancel="True"  Margin="15,0,0,0" />
+						<Button Style="{StaticResource ButtonStyleShadowless}" Content="OK" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=LoginTab}"/>
+						<Button Style="{StaticResource ButtonStyleShadowless}" Content="Cancel" IsCancel="True"  Margin="15,0,0,0" />
 					</StackPanel>
 				</Grid>
 			</Border>
