@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.JsonPatch">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Microsoft.AspNetCore.JsonPatch.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.IdentityModel.Tokens">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Microsoft.IdentityModel.Tokens.dll</HintPath>
@@ -47,6 +50,10 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="ReachFramework" />
+    <Reference Include="Sdl.Community.RateItControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6073d430a1fe4c62, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>3rd party\Sdl.Community.RateItControl.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
@@ -144,6 +151,7 @@
       <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\WindowsControlUtils.cs" />
+    <Compile Include="Interfaces\IActionProvider.cs" />
     <Compile Include="Interfaces\ICredential.cs" />
     <Compile Include="Interfaces\IConnectionService.cs" />
     <Compile Include="Interfaces\ILanguageMappingsService.cs" />
@@ -169,6 +177,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\ActionProvider.cs" />
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Service\TranslationService.cs" />
@@ -249,8 +258,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\selectedStar.png" />
-    <None Include="Resources\defaultStar.png" />
+    <Resource Include="Resources\selectedStar.png" />
+    <Resource Include="Resources\defaultStar.png" />
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -316,6 +325,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Content Include="3rd party\Sdl.Community.RateItControl.dll" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>

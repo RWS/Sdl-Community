@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
+             xmlns:sdl="http://schemas.sdl.com/xaml"
 			 xmlns:rsx ="clr-namespace:Sdl.Community.MTCloud.Provider"
              xmlns:watermarkTextBox="clr-namespace:Sdl.Desktop.Platform.Controls.Controls.WatermarkTextBox;assembly=Sdl.Desktop.Platform.Controls"
 			 d:DataContext="{d:DesignInstance viewModel:RateItViewModel}"
@@ -84,10 +85,14 @@
 					</CheckBox.ToolTip>
 				</CheckBox>
 			</WrapPanel>
-			<!--<materialDesign:RatingBar x:Name="RatingBar" Grid.Row="0" Grid.Column="1"
-								  Value="{Binding Rating,UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Top" Margin="10,5,5,0"
-								  Width="auto" DockPanel.Dock="Left" Foreground="#414141" VerticalContentAlignment="Top">
-		</materialDesign:RatingBar>-->
+			
+			<sdl:RateItControl Grid.Row="0" Grid.Column="1" BorderThickness="0"
+			                   Rating="{Binding Rating}" EnableMouseHoverSelection="False" VerticalAlignment="Top" 
+							   Height="40"
+							   ImageHeight="15"
+							   Width="130"
+							   Cursor="Hand"
+			                   />			
 			<TextBox  Style="{DynamicResource WatermarkTextBox}" watermarkTextBox:TextBoxWatermarkHelper.WatermarkText ="{x:Static rsx:PluginResources.RateIt_FeedbackWatermark}"
 					  Grid.Row="1" Grid.Column="0" MaxLines="3" Text="{Binding Feedback,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"
 					 VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True"/>

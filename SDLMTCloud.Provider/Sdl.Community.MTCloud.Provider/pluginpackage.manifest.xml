@@ -11,6 +11,7 @@
 		<File>Sdl.Community.Toolkit.Core.dll</File>
 		<File>Microsoft.Office.Interop.Excel.dll</File>
 		<File>Sdl.Community.MTCloud.Languages.Provider.dll</File>
+		<File>Sdl.Community.RateItControl.dll</File>
 	</Include>
 	<RequiredProduct name="SDLTradosStudio" minversion="15.2" maxversion="16.0" />
 </PluginPackage>

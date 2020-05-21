@@ -25,9 +25,11 @@
 				Rating="{Binding Rating}"
 				EnableMouseHoverSelection="{Binding EnableMouseHoverSelection}"
 				ImageHeight="{Binding ImageHeight}"
-				SelectedImage="pack://application:,,,/RateItControl.Example;component/Resources/StarYellow.png"
-				DisabledImage="pack://application:,,,/RateItControl.Example;component/Resources/StarGrey.png"
+			    SelectedImage="pack://application:,,,/RateItControl.Example;component/Resources/StarYellow.png"
+			    DisabledImage="pack://application:,,,/RateItControl.Example;component/Resources/StarGrey.png"
+							   Cursor="Hand"
 				Height="50" Width="400"/>
+			
 
 
 			<TextBlock Grid.Row="1" Margin="0,2,0,0" Foreground="{StaticResource Default.Foreground}" 

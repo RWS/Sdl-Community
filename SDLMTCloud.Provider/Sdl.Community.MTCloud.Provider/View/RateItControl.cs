@@ -19,8 +19,9 @@ namespace Sdl.Community.MTCloud.Provider.View
 		private void LoadDataContext(ITranslationService translationService)
 		{
 			var shortcutService = new ShortcutService();
+			var actionProvider = new ActionProvider();
 
-			var rateItViewModel = new RateItViewModel(translationService, shortcutService);
+			var rateItViewModel = new RateItViewModel(translationService, shortcutService, actionProvider);
 			var rateItWindow = new RateItView
 			{
 				DataContext = rateItViewModel
