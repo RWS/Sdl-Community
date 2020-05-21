@@ -217,4 +217,10 @@
   <data name="CreateProjectText" xml:space="preserve">
     <value>Create project</value>
   </data>
+  <data name="DisabledTimer_Message" xml:space="preserve">
+    <value>Timer is disabled</value>
+  </data>
+  <data name="RemainingMinutes_Message" xml:space="preserve">
+    <value> minutes until project request is checked.</value>
+  </data>
 </root>

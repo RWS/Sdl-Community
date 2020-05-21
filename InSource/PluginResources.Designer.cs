@@ -171,6 +171,15 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Timer is disabled.
+        /// </summary>
+        internal static string DisabledTimer_Message {
+            get {
+                return ResourceManager.GetString("DisabledTimer_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon ForumIcon {
@@ -298,6 +307,15 @@ namespace Sdl.Community.InSource {
             get {
                 object obj = ResourceManager.GetObject("question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  minutes until project request is checked..
+        /// </summary>
+        internal static string RemainingMinutes_Message {
+            get {
+                return ResourceManager.GetString("RemainingMinutes_Message", resourceCulture);
             }
         }
         

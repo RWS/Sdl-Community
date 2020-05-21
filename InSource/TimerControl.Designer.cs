@@ -25,7 +25,7 @@ namespace Sdl.Community.InSource
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.timerCheckBox = new System.Windows.Forms.CheckBox();
-            this.remainingTime = new System.Windows.Forms.Label();
+            this.remainingTimeLbl = new System.Windows.Forms.Label();
             this.refreshIntervalTable = new System.Windows.Forms.TableLayoutPanel();
             this.intervalTextBox = new System.Windows.Forms.TextBox();
             this.refreshIntervalLbl = new System.Windows.Forms.Label();
@@ -73,7 +73,7 @@ namespace Sdl.Community.InSource
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.timerCheckBox, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.remainingTime, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.remainingTimeLbl, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.refreshIntervalTable, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
@@ -99,15 +99,15 @@ namespace Sdl.Community.InSource
             this.timerCheckBox.UseVisualStyleBackColor = true;
             this.timerCheckBox.CheckedChanged += new System.EventHandler(this.timerCheckBox_CheckedChanged);
             // 
-            // remainingTime
+            // remainingTimeLbl
             // 
-            this.remainingTime.AutoSize = true;
-            this.remainingTime.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.remainingTime.Location = new System.Drawing.Point(3, 60);
-            this.remainingTime.Name = "remainingTime";
-            this.remainingTime.Size = new System.Drawing.Size(273, 21);
-            this.remainingTime.TabIndex = 3;
-            this.remainingTime.Text = "label1";
+            this.remainingTimeLbl.AutoSize = true;
+            this.remainingTimeLbl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.remainingTimeLbl.Location = new System.Drawing.Point(3, 60);
+            this.remainingTimeLbl.Name = "remainingTimeLbl";
+            this.remainingTimeLbl.Size = new System.Drawing.Size(273, 21);
+            this.remainingTimeLbl.TabIndex = 3;
+            this.remainingTimeLbl.Text = "remainingTimeLabel";
             // 
             // refreshIntervalTable
             // 
@@ -135,8 +135,8 @@ namespace Sdl.Community.InSource
             // refreshIntervalLbl
             // 
             this.refreshIntervalLbl.AutoSize = true;
-            this.refreshIntervalLbl.Location = new System.Drawing.Point(0, 0);
-            this.refreshIntervalLbl.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.refreshIntervalLbl.Location = new System.Drawing.Point(0, 2);
+            this.refreshIntervalLbl.Margin = new System.Windows.Forms.Padding(0, 2, 3, 0);
             this.refreshIntervalLbl.Name = "refreshIntervalLbl";
             this.refreshIntervalLbl.Size = new System.Drawing.Size(106, 13);
             this.refreshIntervalLbl.TabIndex = 0;
@@ -181,6 +181,7 @@ namespace Sdl.Community.InSource
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.mainPanel);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
             this.Name = "TimerControl";
             this.Size = new System.Drawing.Size(400, 480);
             this.mainPanel.ResumeLayout(false);
@@ -199,7 +200,7 @@ namespace Sdl.Community.InSource
 
         private TableLayoutPanel mainPanel;
         private CheckBox timerCheckBox;
-        private Label remainingTime;
+        private Label remainingTimeLbl;
         private TableLayoutPanel refreshIntervalTable;
         private Label refreshIntervalLbl;
         private TextBox intervalTextBox;

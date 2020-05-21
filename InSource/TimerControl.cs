@@ -25,11 +25,7 @@ namespace Sdl.Community.InSource
 			InitializeComponent();
 			_messageBoxService = new MessageBoxService();
 
-			Timer = new Timer();
-			Timer.Interval = 60000;
-			Timer.Elapsed += _timer_Elapsed;
-			Timer.AutoReset = true;
-
+			ConfigureTimer();
 			intervalTextBox.TextChanged += TimeTextBox_TextChanged;
 		}
 
@@ -54,23 +50,20 @@ namespace Sdl.Community.InSource
 			if (_timerSettings.HasTimer)
 			{
 				timerCheckBox.Checked = true;
-				intervalTextBox.Enabled = true;
 				refreshIntervalLbl.ForeColor = Color.Black;
-				intervalTextBox.Text = _timerSettings.Minutes.ToString();
+				SetIntervalTextBox(true, _timerSettings.Minutes.ToString());
 
 				_timeLeft = _timerSettings.Minutes;
 				Timer.Enabled = true;
-				remainingTime.Text = _timerSettings.Minutes + @" minutes until project request is checked. ";
+				remainingTimeLbl.Text = _timerSettings.Minutes + PluginResources.RemainingMinutes_Message;
 			}
 			else
 			{
 				timerCheckBox.Checked = false;
-				intervalTextBox.Enabled = false;
+				SetIntervalTextBox(false, @"0");
+
 				refreshIntervalLbl.ForeColor = Color.Gray;
-				intervalTextBox.Text = @"0";
-				remainingTime.Text = @"Timer is disabled";
-				remainingTime.ForeColor = Color.Gray;
-				remainingTime.ForeColor = Color.Gray;
+				SetRemainingLabel(PluginResources.DisabledTimer_Message, Color.Gray);
 
 				Timer.Enabled = false;
 
@@ -107,19 +100,19 @@ namespace Sdl.Community.InSource
 			if (_timeLeft > 0)
 			{
 				_timeLeft--;
-				remainingTime.Text = _timeLeft + @" minutes until project request is checked. ";
+				remainingTimeLbl.Text = _timeLeft + @" minutes until project request is checked. ";
 			}
 			if (_timeLeft == 0)
 			{
 				OnCheckForProjectsRequestEvent();
 				_timeLeft = _timerSettings.Minutes;
-				remainingTime.Text = _timeLeft + @" minutes until project request is checked. ";
+				remainingTimeLbl.Text = _timeLeft + PluginResources.RemainingMinutes_Message;
 			}
 		}
 
 		private void TimeTextBox_TextChanged(object sender, EventArgs e)
 		{
-			if (Regex.IsMatch(intervalTextBox.Text, "^[0-9]*$"))
+			if (!string.IsNullOrWhiteSpace(intervalTextBox.Text) && Regex.IsMatch(intervalTextBox.Text, "^[0-9]*$"))
 			{
 				_timerSettings.Minutes = int.Parse(intervalTextBox.Text);
 
@@ -127,7 +120,7 @@ namespace Sdl.Community.InSource
 
 				_timeLeft = _timerSettings.Minutes;
 
-				remainingTime.Text = _timeLeft + @" minutes until project request is checked. ";
+				remainingTimeLbl.Text = _timeLeft + PluginResources.RemainingMinutes_Message;
 				Timer.Enabled = true;
 			}
 			else
@@ -142,28 +135,47 @@ namespace Sdl.Community.InSource
 			{
 				intervalTextBox.Enabled = true;
 				refreshIntervalLbl.ForeColor = Color.Black;
-				remainingTime.ForeColor = Color.Black;
-				remainingTime.ForeColor = Color.Black;
+				remainingTimeLbl.ForeColor = Color.Black;
 				_timerSettings.HasTimer = true;
+				if(intervalTextBox.Text.Equals("0"))
+				{
+					remainingTimeLbl.Text = string.Empty;
+				}
 			}
 			else
 			{
-				intervalTextBox.Enabled = false;
+				SetIntervalTextBox(false, @"0");
 				refreshIntervalLbl.ForeColor = Color.Gray;
 				_timerSettings.HasTimer = false;
 				_timerSettings.Minutes = 0;
-				intervalTextBox.Text = @"0";
 
 				Timer.Enabled = false;
-				remainingTime.Text = @"Timer is disabled";
-				remainingTime.ForeColor = Color.Gray;
-				remainingTime.ForeColor = Color.Gray;
+				SetRemainingLabel(PluginResources.DisabledTimer_Message, Color.Gray);
 			}
+		}
+
+		private void SetIntervalTextBox(bool isEnabled, string text)
+		{
+			intervalTextBox.Enabled = isEnabled;
+			intervalTextBox.Text = text;
+		}
+		private void SetRemainingLabel(string text, Color color)
+		{
+			remainingTimeLbl.Text = text;
+			remainingTimeLbl.ForeColor = color;
 		}
 
 		private void OnCheckForProjectsRequestEvent()
 		{
 			CheckForProjectsRequestEvent?.Invoke(this, EventArgs.Empty);
+		}
+
+		private void ConfigureTimer()
+		{
+			Timer = new Timer();
+			Timer.Interval = 60000;
+			Timer.Elapsed += _timer_Elapsed;
+			Timer.AutoReset = true;
 		}
 	}
 }
