@@ -144,6 +144,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AsyncCommand.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
@@ -151,9 +152,12 @@
       <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\WindowsControlUtils.cs" />
+    <Compile Include="Helpers\TaskUtilities.cs" />
     <Compile Include="Interfaces\IActionProvider.cs" />
+    <Compile Include="Interfaces\IAsyncCommand.cs" />
     <Compile Include="Interfaces\ICredential.cs" />
     <Compile Include="Interfaces\IConnectionService.cs" />
+    <Compile Include="Interfaces\IErrorHandler.cs" />
     <Compile Include="Interfaces\ILanguageMappingsService.cs" />
     <Compile Include="Interfaces\IRatingService.cs" />
     <Compile Include="Interfaces\ISDLMTCloudAction.cs" />
@@ -162,11 +166,14 @@
     <Compile Include="Model\AuthorizationResponse.cs" />
     <Compile Include="Model\ClientCredential.cs" />
     <Compile Include="Model\Credential.cs" />
-    <Compile Include="Model\Feedback.cs" />
+    <Compile Include="Model\FeedbackRequest.cs" />
     <Compile Include="Model\FeedbackOption.cs" />
+    <Compile Include="Model\Improvement.cs" />
     <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
     <Compile Include="Model\Options.cs" />
+    <Compile Include="Model\Rating.cs" />
     <Compile Include="Model\StudioShortcut.cs" />
+    <Compile Include="Model\TranslationFeedbackRequest.cs" />
     <Compile Include="Model\TranslationRequest.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
     <Compile Include="Model\TranslationResponseStats.cs" />

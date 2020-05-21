@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
@@ -12,6 +13,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 	{		
 		private IShortcutService _shortcutService;
 		private readonly List<ISDLMTCloudAction> _actions;
+		private ICommand _sendFeedbackCommand;
+
 		private ITranslationService _translationService;
 		private FeedbackOption _wordsOmissionChecked;
 		private FeedbackOption _grammarChecked;
@@ -31,7 +34,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			SetShortcutService(shortcutService);
 			InitializeFeedbackOptions();
 
-			SendFeedbackCommand = new CommandHandler(SendFeedback);
 			ClearCommand = new CommandHandler(ClearFeedbackBox);
 
 			_actions = InitializeActions();
@@ -139,9 +141,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public ICommand SendFeedbackCommand { get;}
-
 		public ICommand ClearCommand { get; }
+		public ICommand SendFeedbackCommand => _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(SendFeedback));
+
 
 		public void IncreaseRating()
 		{
@@ -182,8 +184,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			propertyInfo.SetValue(this, option);
 		}
 
-		private void SendFeedback(object obj)
+		//TODO: Add async comand
+		private async Task SendFeedback()
 		{
+			var accountId = _translationService.ConnectionService.Credential.AccountId;
+			var test = new FeedbackRequest();
+			await _translationService.CreateTranslationFeedback(test, accountId);
+
 		}
 
 		private void ClearFeedbackBox(object obj)
@@ -191,7 +198,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			Feedback = string.Empty;
 		}
 
-		private void _translationService_TranslationReceived(Feedback translationFeedback)
+		private void _translationService_TranslationReceived(FeedbackRequest translationFeedback)
 		{
 
 		}

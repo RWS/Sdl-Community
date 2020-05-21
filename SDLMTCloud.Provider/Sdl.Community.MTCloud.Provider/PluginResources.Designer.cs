@@ -481,7 +481,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unintelligence.
+        ///   Looks up a localized string similar to Unintelligible.
         /// </summary>
         public static string RateIt_Option_Unintelligence {
             get {
