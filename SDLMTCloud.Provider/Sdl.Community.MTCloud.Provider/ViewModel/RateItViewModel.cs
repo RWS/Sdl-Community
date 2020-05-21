@@ -31,7 +31,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			SetShortcutService(shortcutService);
 			InitializeFeedbackOptions();
 
-			RatingCommand = new CommandHandler(RatingChanged);
 			SendFeedbackCommand = new CommandHandler(SendFeedback);
 			ClearCommand = new CommandHandler(ClearFeedbackBox);
 
@@ -140,8 +139,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public ICommand RatingCommand { get; }
-
 		public ICommand SendFeedbackCommand { get;}
 
 		public ICommand ClearCommand { get; }
@@ -183,11 +180,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			dynamic option = propertyInfo.GetValue(this);
 			option.Tooltip = !string.IsNullOrEmpty(tooltip) ? tooltip : Resources.RateItViewModel_SetOptionTooltip_No_shortcut_was_set;
 			propertyInfo.SetValue(this, option);
-		}
-
-		private void RatingChanged(object obj)
-		{
-			
 		}
 
 		private void SendFeedback(object obj)
