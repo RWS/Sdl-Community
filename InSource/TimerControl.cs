@@ -50,20 +50,19 @@ namespace Sdl.Community.InSource
 			if (_timerSettings.HasTimer)
 			{
 				timerCheckBox.Checked = true;
-				refreshIntervalLbl.ForeColor = Color.Black;
+				ConfigureLabel(refreshIntervalLbl, string.Empty, Color.Black);
 				SetIntervalTextBox(true, _timerSettings.Minutes.ToString());
 
 				_timeLeft = _timerSettings.Minutes;
 				Timer.Enabled = true;
-				remainingTimeLbl.Text = _timerSettings.Minutes + PluginResources.RemainingMinutes_Message;
+				ConfigureLabel(remainingTimeLbl, $"{_timerSettings.Minutes}  {PluginResources.RemainingMinutes_Message}", Color.Empty);
 			}
 			else
 			{
 				timerCheckBox.Checked = false;
 				SetIntervalTextBox(false, @"0");
-
-				refreshIntervalLbl.ForeColor = Color.Gray;
-				SetRemainingLabel(PluginResources.DisabledTimer_Message, Color.Gray);
+				ConfigureLabel(refreshIntervalLbl, string.Empty, Color.Gray);
+				ConfigureLabel(remainingTimeLbl, PluginResources.DisabledTimer_Message, Color.Gray);
 
 				Timer.Enabled = false;
 
@@ -120,7 +119,7 @@ namespace Sdl.Community.InSource
 
 				_timeLeft = _timerSettings.Minutes;
 
-				remainingTimeLbl.Text = _timeLeft + PluginResources.RemainingMinutes_Message;
+				ConfigureLabel(remainingTimeLbl, $"{_timeLeft} {PluginResources.RemainingMinutes_Message}", Color.Empty);
 				Timer.Enabled = true;
 			}
 			else
@@ -134,8 +133,9 @@ namespace Sdl.Community.InSource
 			if (timerCheckBox.Checked)
 			{
 				intervalTextBox.Enabled = true;
-				refreshIntervalLbl.ForeColor = Color.Black;
-				remainingTimeLbl.ForeColor = Color.Black;
+				ConfigureLabel(refreshIntervalLbl, string.Empty, Color.Black);
+				ConfigureLabel(remainingTimeLbl, string.Empty, Color.Black);
+
 				_timerSettings.HasTimer = true;
 				if(intervalTextBox.Text.Equals("0"))
 				{
@@ -145,12 +145,13 @@ namespace Sdl.Community.InSource
 			else
 			{
 				SetIntervalTextBox(false, @"0");
-				refreshIntervalLbl.ForeColor = Color.Gray;
+				ConfigureLabel(refreshIntervalLbl, string.Empty, Color.Gray);
+
 				_timerSettings.HasTimer = false;
 				_timerSettings.Minutes = 0;
-
 				Timer.Enabled = false;
-				SetRemainingLabel(PluginResources.DisabledTimer_Message, Color.Gray);
+				
+				ConfigureLabel(remainingTimeLbl, PluginResources.DisabledTimer_Message, Color.Gray);
 			}
 		}
 
@@ -159,10 +160,17 @@ namespace Sdl.Community.InSource
 			intervalTextBox.Enabled = isEnabled;
 			intervalTextBox.Text = text;
 		}
-		private void SetRemainingLabel(string text, Color color)
+
+		private void ConfigureLabel(Label label, string text, Color color)
 		{
-			remainingTimeLbl.Text = text;
-			remainingTimeLbl.ForeColor = color;
+			if (!string.IsNullOrEmpty(text))
+			{
+				label.Text = text;
+			}
+			if (!color.IsEmpty)
+			{
+				label.ForeColor = color;
+			}
 		}
 
 		private void OnCheckForProjectsRequestEvent()

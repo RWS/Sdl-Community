@@ -60,19 +60,14 @@ namespace Sdl.Community.InSource
 				return string.Empty;
 			};
 
-			var imageList = new ImageList();
-			var image = Properties.Resources.delete;
-			imageList.Images.Add(image);
+			SetImages();
 
-			foldersListView.SmallImageList = imageList;
 			deleteColumn.ImageGetter = delegate
 			{
 				return 0;
 			};
-			foldersListView.CellEditActivation = ObjectListView.CellEditActivateMode.SingleClick;
-			foldersListView.CellEditStarting += FoldersListView_CellEditStarting;
-			foldersListView.CellEditFinishing += FoldersListView_CellEditFinishing;
-			foldersListView.CellToolTipShowing += FoldersListView_CellToolTipShowing;
+
+			SetFolderListViewEvents();
 
 			templateColumn.AspectGetter = delegate (object rowObject)
 			{
@@ -409,6 +404,29 @@ namespace Sdl.Community.InSource
 				}
 			}
 			_controller.SelectedProjects = _selectedFolders;
+		}
+
+		private void SetFolderListViewEvents()
+		{
+			foldersListView.CellEditActivation = ObjectListView.CellEditActivateMode.SingleClick;
+			foldersListView.CellEditStarting += FoldersListView_CellEditStarting;
+			foldersListView.CellEditFinishing += FoldersListView_CellEditFinishing;
+			foldersListView.CellToolTipShowing += FoldersListView_CellToolTipShowing;
+		}
+
+		private void SetImages()
+		{
+			var imageList = new ImageList();
+			var image = PluginResources.trash_alt;
+			imageList.Images.Add(image);
+
+			foldersListView.SmallImageList = imageList;
+		}
+
+		private void btn_ClearMessages_Click(object sender, EventArgs e)
+		{
+			_resultsTextBox.Text = string.Empty;
+			_progressBar.Value = 0;
 		}
 	}
 }

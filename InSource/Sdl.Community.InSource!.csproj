@@ -275,6 +275,7 @@
     <Content Include="Resources\money_bill.ico" />
     <Content Include="Resources\opensourceimage.ico" />
     <EmbeddedResource Include="Resources\TellMe1.ico" />
+    <None Include="Resources\trash-alt.png" />
     <Content Include="Resources\Wikipedia.ico" />
   </ItemGroup>
   <ItemGroup>

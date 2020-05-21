@@ -348,6 +348,16 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap trash_alt {
+            get {
+                object obj = ResourceManager.GetObject("trash_alt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Watch folders should contain only folders, please put the files in a directory, and click afterwards, the &apos;CHECK PROJECT REQUESTS&apos; button.
         /// </summary>
         internal static string WatchFoldersSelection_Message {
