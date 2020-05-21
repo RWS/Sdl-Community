@@ -76,7 +76,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			var pages = new ObservableCollection<WizardPageViewModelBase>
 			{
 				new WizardPageExportFilesViewModel( new WizardPageExportFilesView(), transactionModel),
-				new WizardPageOptionsViewModel(new WizardPageOptionsView(), transactionModel),
+				new WizardPageExportOptionsViewModel(new WizardPageExportOptionsView(), transactionModel),
 				new WizardPageSummaryViewModel(new WizardPageSummaryView(), transactionModel),
 				new WizardPagePreparationViewModel(new WizardPagePreparationView(), transactionModel)
 			};

@@ -1,6 +1,5 @@
 ﻿using NSubstitute;
 using Sdl.Community.MTCloud.Provider.Interfaces;
-using Sdl.Community.MTCloud.Provider.Studio.ShortcutActions;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Xunit;
 
@@ -14,7 +13,8 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		{
 			var translationService = Substitute.For<ITranslationService>();
 			var shortcutService = Substitute.For<IShortcutService>();
-			_rateItViewModel = new RateItViewModel(translationService,shortcutService);
+			var providerAction = Substitute.For<IActionProvider>();
+			_rateItViewModel = new RateItViewModel(translationService,shortcutService,providerAction);
 		}
 
 		[Theory]
@@ -58,6 +58,16 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			Assert.True(_rateItViewModel.WordsOmissionOption.IsChecked);
 		}
 
+
+		[Theory]
+		[InlineData("ALT+C", nameof(RateItViewModel.WordsOmissionOption))]
+		public void Set_WordsOmission_Tooltip(string tooltip, string optionName)
+		{
+			_rateItViewModel.SetOptionTooltip(optionName,tooltip);
+
+			Assert.Equal(tooltip,_rateItViewModel.WordsOmissionOption.Tooltip);
+		}
+
 		[Theory]
 		[InlineData(true)]
 		public void Set_Grammar_Returns_True(bool grammarChecked)
@@ -94,6 +104,14 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			_rateItViewModel.SetRateOptionFromShortcuts(optionName);
 
 			Assert.True(_rateItViewModel.GrammarOption.IsChecked);
+		}
+		[Theory]
+		[InlineData("ALT+I", nameof(RateItViewModel.GrammarOption))]
+		public void Set_Grammar_Tooltip(string tooltip, string optionName)
+		{
+			_rateItViewModel.SetOptionTooltip(optionName, tooltip);
+
+			Assert.Equal(tooltip, _rateItViewModel.GrammarOption.Tooltip);
 		}
 
 		[Theory]
@@ -194,6 +212,64 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			Assert.Equal(feedback,_rateItViewModel.Feedback);
 		}
 
-	
+		[Theory]
+		[InlineData(2)]
+		public void SetRating_FromShortcuts_NoRating_Initialy(int ratingValue)
+		{
+			_rateItViewModel.IncreaseRating();
+			_rateItViewModel.IncreaseRating();
+
+			Assert.Equal(ratingValue,_rateItViewModel.Rating);
+		}
+
+		[Theory]
+		[InlineData(3)]
+		public void SetRating_FromShortcuts_OneStar_Initialy(int ratingValue)
+		{
+			_rateItViewModel.Rating = 1;
+			_rateItViewModel.IncreaseRating();
+			_rateItViewModel.IncreaseRating();
+
+			Assert.Equal(ratingValue, _rateItViewModel.Rating);
+		}
+
+		[Fact]
+		public void SetRating_MaxNumber()
+		{
+			_rateItViewModel.Rating = 5;
+			_rateItViewModel.IncreaseRating();
+
+			Assert.Equal(5,_rateItViewModel.Rating);
+		}
+
+		[Fact]
+		public void DecreaseRating_FromShortcuts_NoRating_Initialy()
+		{
+			_rateItViewModel.DecreaseRating();
+			_rateItViewModel.DecreaseRating();
+
+			Assert.Equal(0, _rateItViewModel.Rating);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		public void DecreaseRating_FromShortcuts_OneStar_Initialy(int ratingValue)
+		{
+			_rateItViewModel.Rating = 1;
+			_rateItViewModel.DecreaseRating();
+
+			Assert.Equal(ratingValue, _rateItViewModel.Rating);
+		}
+
+		[Theory]
+		[InlineData(1)]
+		public void DecreaseRating_FromShortcuts_TwoStars_Initialy(int ratingValue)
+		{
+			_rateItViewModel.Rating = 2;
+			_rateItViewModel.DecreaseRating();
+
+			Assert.Equal(ratingValue, _rateItViewModel.Rating);
+		}
+
 	}
 }

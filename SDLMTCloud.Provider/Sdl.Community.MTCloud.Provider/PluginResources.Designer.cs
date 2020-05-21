@@ -81,6 +81,16 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap defaultStar {
+            get {
+                object obj = ResourceManager.GetObject("defaultStar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon dictionaryIcon {
@@ -576,6 +586,16 @@ namespace Sdl.Community.MTCloud.Provider {
         public static System.Drawing.Bitmap Search__1_ {
             get {
                 object obj = ResourceManager.GetObject("Search__1_", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap selectedStar {
+            get {
+                object obj = ResourceManager.GetObject("selectedStar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

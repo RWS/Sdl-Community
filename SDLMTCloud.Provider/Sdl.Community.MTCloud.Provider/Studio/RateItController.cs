@@ -15,12 +15,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
 	public class RateItController : AbstractViewPartController
 	{		
-		private RateItControl _control;
+		private View.RateItControl _control;
 
 
 		protected override void Initialize()
 		{
-			_control = new RateItControl(TranslationService);						
+			_control = new View.RateItControl(TranslationService);						
 		}
 
 		public ITranslationService TranslationService { get; set; }
