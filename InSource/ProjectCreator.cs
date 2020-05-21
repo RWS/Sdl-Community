@@ -3,48 +3,44 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Xml.Linq;
 using Sdl.Community.InSource.Helpers;
+using Sdl.Community.InSource.Interfaces;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.InSource
 {
-    public class ProjectCreator
+	public class ProjectCreator
     {
         public event ProgressChangedEventHandler ProgressChanged;
         public event EventHandler<ProjectMessageEventArgs> MessageReported;
         private double _currentProgress;
 	    private readonly ProjectRequest _projectRequest;
-	    public static readonly Log Log = Log.Instance;
+		private readonly IMessageBoxService _messageBoxService;
 
-		public ProjectCreator(List<ProjectRequest> requests, ProjectTemplateInfo projectTemplate)
+		public static readonly Log Log = Log.Instance;
+
+		public ProjectCreator(List<ProjectRequest> requests, ProjectTemplateInfo projectTemplate, IMessageBoxService messageBoxService)
         {
-            Requests = requests;
+			_messageBoxService = messageBoxService;
+			Requests = requests;
             ProjectTemplate = projectTemplate;
             SuccessfulRequests = new List<Tuple<ProjectRequest, FileBasedProject>>();
         }
 
-	    public ProjectCreator(ProjectRequest projectRequest, ProjectTemplateInfo projectTemplate)
+	    public ProjectCreator(ProjectRequest projectRequest, ProjectTemplateInfo projectTemplate, IMessageBoxService messageBoxService)
 	    {
 		    _projectRequest = projectRequest;
-		    ProjectTemplate = projectTemplate;
-	    }
-        List<ProjectRequest> Requests
-        {
-            get;
-        }
+			_messageBoxService = messageBoxService;
+			ProjectTemplate = projectTemplate;
+		}
 
-        public List<Tuple<ProjectRequest, FileBasedProject>> SuccessfulRequests
-        {
-            get;
-        }
+		List<ProjectRequest> Requests { get; }
 
-        ProjectTemplateInfo ProjectTemplate
-        {
-            get;
-        }
+        public List<Tuple<ProjectRequest, FileBasedProject>> SuccessfulRequests { get; }
+
+        ProjectTemplateInfo ProjectTemplate { get; }
 
 	    public FileBasedProject Execute()
 	    {
@@ -54,31 +50,40 @@ namespace Sdl.Community.InSource
 			    foreach (var request in Requests)
 			    {
 				    var project = CreateProject(request);
-				    _currentProgress += 100.0 / Requests.Count;
-				    OnProgressChanged(_currentProgress);
+					if (project != null)
+					{
+						_currentProgress += 100.0 / Requests.Count;
+						OnProgressChanged(_currentProgress);
+					}		
+					
 				    return project;
 			    }
 		    }
 
 		    var fileBasedProject = CreateProject(_projectRequest);
-		    OnProgressChanged(100);
-		    return fileBasedProject;
+			if (fileBasedProject != null)
+			{
+				OnProgressChanged(100);
+			}
+			return fileBasedProject;
 	    }
 
+		// Create the project based on the project request
 	    private FileBasedProject CreateProject(ProjectRequest request)
 	    {
 		    try
 		    {
 				if (request?.ProjectTemplate != null)
 				{
-					var projectInfo = new ProjectInfo
-					{
-						Name = request.Name,
-						LocalProjectFolder = GetProjectFolderPath(request.Name, request.ProjectTemplate.Uri?.LocalPath)
-					};
-					var project = new FileBasedProject(projectInfo,
-						new ProjectTemplateReference(request.ProjectTemplate.Uri));
+					var projectInfo = GetProjectInfo(request);
+					var isProjectInfoValid = IsProjectInfoValid(projectInfo, request);
 
+					if(!isProjectInfoValid)
+					{
+						return null;
+					}
+
+					var project = new FileBasedProject(projectInfo,	new ProjectTemplateReference(request.ProjectTemplate.Uri));
 					OnMessageReported(project, $"Creating project {request.Name}");
 
 					if (request.Files != null)
@@ -89,80 +94,99 @@ namespace Sdl.Community.InSource
 						var projectFiles = project.AddFolderWithFiles(subdirectoryPath, true);
 						project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
 
-						//when a template is created from a Single file project, task sequencies is null.
-						try
-						{
-							var taskSequence = project.RunDefaultTaskSequence(projectFiles.GetIds(),
-								(sender, e)
-									=>
-								{
-									if (Requests != null)
-									{
-										OnProgressChanged(_currentProgress + (double)e.PercentComplete / Requests.Count);
-									}
-								}
-								, (sender, e)
-									=>
-								{
-									OnMessageReported(project, e.Message);
-								});
-
-							project.Save();
-
-							if (taskSequence.Status == TaskStatus.Completed)
-							{
-								if (SuccessfulRequests != null)
-								{
-									SuccessfulRequests.Add(Tuple.Create(request, project));
-									OnMessageReported(project, $"Project {request.Name} created successfully.");
-									return project;
-								}
-							}
-							else
-							{
-								OnMessageReported(project, $"Project {request.Name} creation failed.");
-								return null;
-							}
-						}
-						catch (Exception ex)
-						{
-							Log.Logger.Error($"ProjectCreator-> CreateProject method: {ex.Message}\n {ex.StackTrace}");
-							MessageBox.Show(
-								@"Please go to File -> Setup -> Project templates -> Select a template -> Edit -> Default Task Sequence -> Ok after that run again Content connector");
-						}
+						ExecuteTaskSequence(project, projectFiles, request);		
 					}
 					return project;
 				}
 
-				MessageBox.Show(@"Please select a project template from InSource view", @"Project template is missing",
-					MessageBoxButtons.OK);
+				_messageBoxService.ShowWarningMessage(PluginResources.ProjectTemplateSelection_Message, PluginResources.MissingProjectTemplate_Message);
 			}
 		    catch (Exception e)
 		    {
 				Log.Logger.Error($"ProjectCreator-> CreateProject method: {e.Message}\n {e.StackTrace}");
 		    }
-		    return null;
+			return null;
 	    }
 
+		// Get the project info based on the project request
+		private ProjectInfo GetProjectInfo(ProjectRequest request)
+		{
+			return new ProjectInfo
+			{
+				Name = request.Name,
+				LocalProjectFolder = GetProjectFolderPath(request.Name, request.ProjectTemplate.Uri?.LocalPath)
+			};
+		}
 
-	    /// <summary>
-        /// Reads the project folder location from selected template
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="pathToTemplate"></param>
-        /// <returns></returns>
+		// Execute the default task sequence on the project.
+		// When a template is created from a Single file project, task sequencies is null.						
+		private void ExecuteTaskSequence(FileBasedProject project, ProjectFile[] projectFiles, ProjectRequest request)
+		{
+			try
+			{
+				var taskSequence = project.RunDefaultTaskSequence(projectFiles.GetIds(), (sender, e) =>
+								 {
+									 if (Requests != null)
+									 {
+										 OnProgressChanged(_currentProgress + (double)e.PercentComplete / Requests.Count);
+									 }
+								 }, (sender, e) =>
+								 {
+									 OnMessageReported(project, e.Message);
+								 });
+				project.Save();
+
+				if (taskSequence.Status.Equals(TaskStatus.Completed))
+				{
+					if (SuccessfulRequests != null)
+					{
+						SuccessfulRequests.Add(Tuple.Create(request, project));
+						OnMessageReported(project, $"Project {request.Name} created successfully.");
+					}
+				}
+				else
+				{
+					OnMessageReported(project, $"Project {request.Name} creation failed.");
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Logger.Error($"ExecuteTaskSequence method: {ex.Message}\n {ex.StackTrace}");
+				_messageBoxService.ShowMessage(PluginResources.ProjectTemplateSequenceSelection_Message, string.Empty);
+			}
+		}
+
+		// Validate the project information
+		private bool IsProjectInfoValid(ProjectInfo projectInfo, ProjectRequest projectRequest)
+		{
+			var watchFolderName = Path.GetFileNameWithoutExtension(projectRequest.Path);
+			var existsLanguageDirection = IsAnyLanguageDirection(projectRequest.ProjectTemplate.Uri?.LocalPath);
+
+			if (string.IsNullOrEmpty(projectInfo.LocalProjectFolder))
+			{
+				_messageBoxService.ShowWarningMessage(string.Format(PluginResources.ProjectTemplateLocation_Message, projectRequest?.ProjectTemplate?.Name, watchFolderName), string.Empty);
+				return false;
+			}			
+			else if (!existsLanguageDirection)
+			{
+				_messageBoxService.ShowWarningMessage(string.Format(PluginResources.ProjectTemplateLanguagePairs_Message, projectRequest?.ProjectTemplate?.Name, watchFolderName), string.Empty);
+				return false;
+			}
+			return true;
+		}
+
+        // Get the project folder location from the selected template
         private string GetProjectFolderPath(string name,string pathToTemplate)
         {
 	        try
 	        {
 		        var templateXml = XElement.Load(pathToTemplate);
-		        var settingsGroup =
-			        templateXml.Descendants("SettingsGroup")
-				        .Where(s => s.Attribute("Id").Value.Equals("ProjectTemplateSettings"));
-		        var location =
-			        settingsGroup.Descendants("Setting")
-				        .Where(id => id.Attribute("Id").Value.Equals("ProjectLocation"))
-				        .Select(l => l.Value).FirstOrDefault();
+		        var settingsGroup = templateXml.Descendants("SettingsGroup").Where(s => s.Attribute("Id").Value.Equals("ProjectTemplateSettings"));
+		        var location = settingsGroup.Descendants("Setting").Where(id => id.Attribute("Id").Value.Equals("ProjectLocation")).Select(l => l.Value).FirstOrDefault();
+				if(location == null)
+				{
+					return string.Empty;
+				}
 		        var rootFolder = location;
 		        string folder;
 		        int num = 1;
@@ -179,6 +203,22 @@ namespace Sdl.Community.InSource
 			}
 	        return string.Empty;
         }
+
+		// Validate if any language direction is configured on the custom template
+		private bool IsAnyLanguageDirection(string templatePath)
+		{
+			try
+			{
+				var templateXml = XElement.Load(templatePath);
+				var languageDirection = templateXml.Descendants("LanguageDirection")?.FirstOrDefault();
+				return languageDirection != null;
+			}
+			catch (Exception e)
+			{
+				Log.Logger.Error($"ExistLanguageDirection method: {e.Message}\n {e.StackTrace}");
+			}
+			return false;
+		}
 
         private void OnProgressChanged(double progress)
         {

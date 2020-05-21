@@ -3,150 +3,187 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Timers;
 using System.Windows.Forms;
+using Sdl.Community.InSource.Interfaces;
 using Sdl.Community.InSource.Models;
+using Sdl.Community.InSource.Service;
 using Timer = System.Timers.Timer;
 
 namespace Sdl.Community.InSource
 {
-    public partial class TimerControl : UserControl
-    {
-        private  TimerModel _timerSettings;
-        private readonly Persistence _persistence = new Persistence();
-        private readonly Timer _timer;
-        private int _timeLeft;
-        public event EventHandler CheckForProjectsRequestEvent;
+	public partial class TimerControl : UserControl, IDisposable
+	{
+		private TimerModel _timerSettings;
+		private readonly Persistence _persistence = new Persistence();
+		private int _timeLeft;
+		private IMessageBoxService _messageBoxService;
 
-        public TimerControl()
-        {
-            InitializeComponent();
+		public event EventHandler CheckForProjectsRequestEvent;
+		public Timer Timer { get; set; }
 
-            _timer = new Timer();
-            _timer.Interval = 60000;
-            _timer.Elapsed += _timer_Elapsed;
-            _timer.AutoReset = true;
+		public TimerControl()
+		{
+			InitializeComponent();
+			_messageBoxService = new MessageBoxService();
 
-            intervalTextBox.TextChanged += TimeTextBox_TextChanged;
-        }
+			ConfigureTimer();
+			intervalTextBox.TextChanged += TimeTextBox_TextChanged;
+		}
 
-        protected override void OnLoad(EventArgs e)
-        {
-            _timerSettings = _persistence.LoadRequest().Timer;
+		/// <summary> 
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			Timer.Dispose();
+			base.Dispose(disposing);
+		}
 
-            if (_timerSettings.HasTimer)
-            {
-                timerCheckBox.Checked = true;
-                intervalTextBox.Enabled = true;
-                refreshIntervalLbl.ForeColor = Color.Black;
-                intervalTextBox.Text = _timerSettings.Minutes.ToString();
+		protected override void OnLoad(EventArgs e)
+		{
+			_timerSettings = _persistence.LoadRequest().Timer;
 
-                _timeLeft = _timerSettings.Minutes;
-                _timer.Enabled = true;
-                remainingTime.Text = _timerSettings.Minutes +@" minutes until project request is checked. ";
-            }
-            else
-            {
-                timerCheckBox.Checked = false;
-                intervalTextBox.Enabled = false;
-                refreshIntervalLbl.ForeColor = Color.Gray;
-                intervalTextBox.Text = @"0";
-                remainingTime.Text = @"Timer is disabled";
-                remainingTime.ForeColor = Color.Gray;
-                remainingTime.ForeColor = Color.Gray;
+			if (_timerSettings.HasTimer)
+			{
+				timerCheckBox.Checked = true;
+				ConfigureLabel(refreshIntervalLbl, string.Empty, Color.Black);
+				SetIntervalTextBox(true, _timerSettings.Minutes.ToString());
 
-                _timer.Enabled = false;
+				_timeLeft = _timerSettings.Minutes;
+				Timer.Enabled = true;
+				ConfigureLabel(remainingTimeLbl, $"{_timerSettings.Minutes}  {PluginResources.RemainingMinutes_Message}", Color.Empty);
+			}
+			else
+			{
+				timerCheckBox.Checked = false;
+				SetIntervalTextBox(false, @"0");
+				ConfigureLabel(refreshIntervalLbl, string.Empty, Color.Gray);
+				ConfigureLabel(remainingTimeLbl, PluginResources.DisabledTimer_Message, Color.Gray);
 
-            }
-            if (_persistence.LoadRequest().DeleteFolders)
-            {
-                deleteBtn.Checked = true;
-            }
-            else
-            {
-                archiveBtn.Checked = true;
-            }
-            archiveBtn.CheckedChanged += ArchiveBtn_CheckedChanged;
+				Timer.Enabled = false;
 
-        }
+			}
+			if (_persistence.LoadRequest().DeleteFolders)
+			{
+				deleteBtn.Checked = true;
+			}
+			else
+			{
+				archiveBtn.Checked = true;
+			}
+			archiveBtn.CheckedChanged += ArchiveBtn_CheckedChanged;
 
-        private void ArchiveBtn_CheckedChanged(object sender, EventArgs e)
-        {
-            bool deleteFolders;
-            if (!archiveBtn.Checked && deleteBtn.Checked)
-            {
-                deleteFolders = true;
-            }
-            else
-            {
-                deleteFolders = false;
-            }
-          
-            _persistence.UpdateDelete(deleteFolders);
-        }
+		}
 
-        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            if (_timeLeft > 0)
-            {
-                _timeLeft--;
-                remainingTime.Text = _timeLeft + @" minutes until project request is checked. ";
-            }
-            if (_timeLeft == 0)
-            {
-                OnCheckForProjectsRequestEvent();
-                _timeLeft = _timerSettings.Minutes;
-                remainingTime.Text = _timeLeft + @" minutes until project request is checked. ";
-            }
-        }
-		
-        private void TimeTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (Regex.IsMatch(intervalTextBox.Text, "^[0-9]*$"))
-            {
-                _timerSettings.Minutes = int.Parse(intervalTextBox.Text);
+		private void ArchiveBtn_CheckedChanged(object sender, EventArgs e)
+		{
+			bool deleteFolders;
+			if (!archiveBtn.Checked && deleteBtn.Checked)
+			{
+				deleteFolders = true;
+			}
+			else
+			{
+				deleteFolders = false;
+			}
 
-                _persistence.SaveTimerSettings(_timerSettings);
+			_persistence.UpdateDelete(deleteFolders);
+		}
 
-                _timeLeft = _timerSettings.Minutes;
+		private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			if (_timeLeft > 0)
+			{
+				_timeLeft--;
+				remainingTimeLbl.Text = _timeLeft + @" minutes until project request is checked. ";
+			}
+			if (_timeLeft == 0)
+			{
+				OnCheckForProjectsRequestEvent();
+				_timeLeft = _timerSettings.Minutes;
+				remainingTimeLbl.Text = _timeLeft + PluginResources.RemainingMinutes_Message;
+			}
+		}
 
-                remainingTime.Text = _timeLeft + @" minutes until project request is checked. ";
-                _timer.Enabled = true;
-            }
-            else
-            {
-                 MessageBox.Show(@"Please set a number for timer ",@"Warning" , MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-            }
-        }
+		private void TimeTextBox_TextChanged(object sender, EventArgs e)
+		{
+			if (!string.IsNullOrWhiteSpace(intervalTextBox.Text) && Regex.IsMatch(intervalTextBox.Text, "^[0-9]*$"))
+			{
+				_timerSettings.Minutes = int.Parse(intervalTextBox.Text);
 
-        private void timerCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (timerCheckBox.Checked)
-            {
-                intervalTextBox.Enabled = true;
-                refreshIntervalLbl.ForeColor = Color.Black;
-                remainingTime.ForeColor = Color.Black;
-                remainingTime.ForeColor = Color.Black;
-                _timerSettings.HasTimer = true;
-            }
-            else
-            {
-                intervalTextBox.Enabled = false;
-                refreshIntervalLbl.ForeColor = Color.Gray;
-                _timerSettings.HasTimer = false;
-                _timerSettings.Minutes = 0;
-                intervalTextBox.Text = @"0";
+				_persistence.SaveTimerSettings(_timerSettings);
 
-                _timer.Enabled = false;
-               remainingTime.Text = @"Timer is disabled";
-                remainingTime.ForeColor = Color.Gray;
-                remainingTime.ForeColor = Color.Gray;
-            }
+				_timeLeft = _timerSettings.Minutes;
 
-        }
+				ConfigureLabel(remainingTimeLbl, $"{_timeLeft} {PluginResources.RemainingMinutes_Message}", Color.Empty);
+				Timer.Enabled = true;
+			}
+			else
+			{
+				_messageBoxService.ShowWarningMessage(PluginResources.TimerNumberSetup_Message, string.Empty);
+			}
+		}
 
-       private void OnCheckForProjectsRequestEvent()
-        {
+		private void timerCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			if (timerCheckBox.Checked)
+			{
+				intervalTextBox.Enabled = true;
+				ConfigureLabel(refreshIntervalLbl, string.Empty, Color.Black);
+				ConfigureLabel(remainingTimeLbl, string.Empty, Color.Black);
+
+				_timerSettings.HasTimer = true;
+				if(intervalTextBox.Text.Equals("0"))
+				{
+					remainingTimeLbl.Text = string.Empty;
+				}
+			}
+			else
+			{
+				SetIntervalTextBox(false, @"0");
+				ConfigureLabel(refreshIntervalLbl, string.Empty, Color.Gray);
+
+				_timerSettings.HasTimer = false;
+				_timerSettings.Minutes = 0;
+				Timer.Enabled = false;
+				
+				ConfigureLabel(remainingTimeLbl, PluginResources.DisabledTimer_Message, Color.Gray);
+			}
+		}
+
+		private void SetIntervalTextBox(bool isEnabled, string text)
+		{
+			intervalTextBox.Enabled = isEnabled;
+			intervalTextBox.Text = text;
+		}
+
+		private void ConfigureLabel(Label label, string text, Color color)
+		{
+			if (!string.IsNullOrEmpty(text))
+			{
+				label.Text = text;
+			}
+			if (!color.IsEmpty)
+			{
+				label.ForeColor = color;
+			}
+		}
+
+		private void OnCheckForProjectsRequestEvent()
+		{
 			CheckForProjectsRequestEvent?.Invoke(this, EventArgs.Empty);
 		}
-    }
+
+		private void ConfigureTimer()
+		{
+			Timer = new Timer();
+			Timer.Interval = 60000;
+			Timer.Elapsed += _timer_Elapsed;
+			Timer.AutoReset = true;
+		}
+	}
 }
