@@ -248,7 +248,7 @@ namespace Sdl.Community.InSource
 										: new ProjectCreator(ProjectRequests, SelectedProjectTemplate, _messageBoxService);
 
 									creator.ProgressChanged += (sender2, e2) => { _worker.ReportProgress(e2.ProgressPercentage); };
-									creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Project, e2.Message); };
+									creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Message); };
 									creator.Execute();
 								};
 								_worker.ProgressChanged += (sender, e) =>
@@ -469,9 +469,9 @@ namespace Sdl.Community.InSource
 			return hasFiles;
 		}
 
-		private void ReportMessage(FileBasedProject fileBasedProject, string message)
+		private void ReportMessage(string message)
 		{
-			Control.Value.BeginInvoke(new Action(() => Control.Value.ReportMessage(fileBasedProject, message)));
+			Control.Value.BeginInvoke(new Action(() => Control.Value.ReportMessage(message)));
 		}
 
 		private void OnPropertyChanged(string propertyName)

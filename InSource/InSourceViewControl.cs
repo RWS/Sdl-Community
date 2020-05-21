@@ -21,7 +21,7 @@ namespace Sdl.Community.InSource
 		private readonly List<ProjectRequest> _selectedFolders;
 		private readonly List<ProjectRequest> _watchFolders;
 		public static readonly Log Log = Log.Instance;
-		private IMessageBoxService _messageBoxService;
+		private readonly IMessageBoxService _messageBoxService;
 
 		public InSourceViewControl()
 		{
@@ -36,12 +36,12 @@ namespace Sdl.Community.InSource
 
 		public void ClearMessages()
 		{
-			_resultsTextBox.Text = "";
+			_resultsTextBox.Text = string.Empty;
 		}
 
-		public void ReportMessage(FileBasedProject fileBasedProject, string message)
+		public void ReportMessage(string message)
 		{
-			_resultsTextBox.AppendText("\r\n" + message);
+			_resultsTextBox.Text = $"{_resultsTextBox.Text} \r\n {message}";
 		}		
 
 		protected override void OnLoad(EventArgs e)
