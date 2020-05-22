@@ -26,7 +26,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private RelayCommand _cancelCommand;
 
 		public WizardViewModel(Window window, ObservableCollection<WizardPageViewModelBase> pages, 
-			TransactionModel transctionModel, Enumerators.Action action)
+			WizardContextModel transctionModel, Enumerators.Action action)
 		{
 			SetWindow(window);		
 			Pages = pages;
@@ -37,7 +37,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		}
 		public Enumerators.Action Action { get; set; }
 
-		public TransactionModel TransctionModel { get; set; }
+		public WizardContextModel TransctionModel { get; set; }
 
 		private void SetWindow(Window window)
 		{
@@ -57,7 +57,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private void SetCurrentPage(WizardPageViewModelBase currentPage)
 		{
 			CurrentPage = currentPage;
-			_window.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
+			//_window.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
 		}
 
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)

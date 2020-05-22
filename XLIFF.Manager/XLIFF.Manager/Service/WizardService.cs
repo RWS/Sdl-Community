@@ -1,84 +1,209 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
-using Sdl.Community.XLIFF.Manager.TestData;
 using Sdl.Community.XLIFF.Manager.Wizard.View;
 using Sdl.Community.XLIFF.Manager.Wizard.ViewModel;
+using Sdl.Core.Globalization;
+using Sdl.Desktop.IntegrationApi.Extensions.Internal;
+using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Size = System.Drawing.Size;
 
 namespace Sdl.Community.XLIFF.Manager.Service
 {
 	public class WizardService
 	{
 		private readonly Enumerators.Action _action;
+		private readonly CustomerProvider _customerProvider;
 		private readonly ProjectsController _projectsController;
 		private readonly FilesController _filesController;
-		private FileBasedProject _selectedProject;
+		private readonly XLIFFManagerViewController _xliffManagerController;
+		private readonly ImageService _imageService;
 		private WizardWindow _wizardWindow;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
+		private WizardContextModel _wizardContextModel;
 
-		public WizardService(Enumerators.Action action, ProjectsController projectsController, FilesController filesController)
+		public WizardService(Enumerators.Action action, CustomerProvider customerProvider, ImageService imageService, XLIFFManagerViewController xliffManagerController, ProjectsController projectsController, FilesController filesController)
 		{
 			_action = action;
+			_customerProvider = customerProvider;
+			_imageService = imageService;
+			_xliffManagerController = xliffManagerController;
 			_projectsController = projectsController;
 			_filesController = filesController;
 		}
 
-		public void ShowWizard()
+		public bool ShowWizard(AbstractController owner, out string message)
 		{
+			message = string.Empty;
+
 			if (_action == Enumerators.Action.None)
 			{
-				return;
+				message = "no action selected";
+				return false;
 			}
 
-			_selectedProject = _projectsController.SelectedProjects.FirstOrDefault() ?? _projectsController.CurrentProject;
+			var projectFileModels = new List<ProjectFileModel>();
 			
+			_wizardContextModel = new WizardContextModel();
+			if (owner is ProjectsController || owner is FilesController)
+			{
+				var selectedProject = _projectsController.CurrentProject;
+				var projectInfo = selectedProject.GetProjectInfo();
 
+				var projectModel = new ProjectModel();
+				projectModel.Id = projectInfo.Id.ToString();
+				projectModel.Name = projectInfo.Name;
+				projectModel.AbsoluteUri = projectInfo.Uri.AbsoluteUri;
+				projectModel.Customer = _customerProvider.GetProjectCustomer(selectedProject);
+				projectModel.Created = projectInfo.CreatedAt;
+				projectModel.DueDate = projectInfo.DueDate ?? DateTime.MaxValue;
+				projectModel.Path = projectInfo.LocalProjectFolder;
+				projectModel.SourceLanguage = GetLanguageInfo(projectInfo.SourceLanguage.CultureInfo);
+				projectModel.TargetLanguages = GetLanguageInfos(projectInfo.TargetLanguages);
+				projectModel.ProjectType = GetProjectType(selectedProject);
+				projectModel.ProjectFileModels = GetProjectFileModels(selectedProject, projectModel);
+
+				projectFileModels = projectModel.ProjectFileModels;
+			}
+			else if (owner is XLIFFManagerViewController)
+			{
+				projectFileModels = _xliffManagerController.GetSelectedProjectFiles();
+				var selectedProjects = GetSelectedProjects(projectFileModels);
+
+				if (selectedProjects.Count > 1)
+				{
+					message = "Multiple projects selected!";
+					return false;
+				}
+			}
+
+			_wizardContextModel.ProjectFileModels = projectFileModels;
 			_wizardWindow = new WizardWindow();
 			_wizardWindow.Loaded += WizardWindowLoaded;
-			_wizardWindow.ShowDialog();
+
+			var result = _wizardWindow.ShowDialog();
+
+			return result ?? false;
 		}
 
 		private void WizardWindowLoaded(object sender, RoutedEventArgs e)
 		{
-			//TODO get the selected project files
-			var transactionModel = new TransactionModel();
-
-			var _pathInfo = new PathInfo();
-			var _imageService = new ImageService(_pathInfo);
-			//_imageService.ExtractFlags();
-
-			var testDataUtil = new TestDataUtil(_imageService);
-			var _projectModels = testDataUtil.GetTestProjectData();
-			transactionModel.ProjectFileActions = _projectModels[0].ProjectFileActionModels;
-
-			_pages = CreatePages(transactionModel);
-
+			_pages = CreatePages(_wizardContextModel);
 			AddDataTemplates(_wizardWindow, _pages);
 
-
-
-			var viewModel = new WizardViewModel(_wizardWindow, _pages, transactionModel, _action);
+			var viewModel = new WizardViewModel(_wizardWindow, _pages, _wizardContextModel, _action);
 			viewModel.RequestClose += ViewModel_RequestClose;
 			_wizardWindow.DataContext = viewModel;
 		}
 
-		private ObservableCollection<WizardPageViewModelBase> CreatePages(TransactionModel transactionModel)
+		private List<ProjectFileModel> GetProjectFileModels(FileBasedProject project, ProjectModel projectModel)
+		{
+			var projectInfo = project.GetProjectInfo();
+			var selectedFiles = _filesController.SelectedFiles.ToList();
+
+			var projectFileModels = new List<ProjectFileModel>();
+
+			foreach (var targetLanguage in projectInfo.TargetLanguages)
+			{
+				var projectFiles = project.GetTargetLanguageFiles(targetLanguage);
+				foreach (var projectFile in projectFiles)
+				{
+					if (projectFile.Role == FileRole.Translatable)
+					{
+						var projectFileModel = new ProjectFileModel(projectModel);
+						projectFileModel.Id = projectFile.Id.ToString();
+						projectFileModel.Name = projectFile.Name;
+						projectFileModel.Path = projectFile.Folder;
+						projectFileModel.Action = Enumerators.Action.Export;
+						projectFileModel.Status = Enumerators.Status.Ready;
+						projectFileModel.Date = DateTime.Now;
+						projectFileModel.TargetLanguage = GetLanguageInfo(targetLanguage.CultureInfo);
+						projectFileModel.Selected = selectedFiles.Any(a => a.Id == projectFile.Id);
+						projectFileModel.XliffFilePath = string.Empty;
+						projectFileModel.FileType = projectFile.FileTypeId;
+
+						projectFileModels.Add(projectFileModel);
+					}
+				}
+			}
+
+			projectFileModels[0].Status = Enumerators.Status.Warning;
+			projectFileModels[0].ShortMessage = "File was exported on date: {datetime}";
+
+			return projectFileModels;
+		}
+
+		private List<LanguageInfo> GetLanguageInfos(IEnumerable<Language> languages)
+		{
+			var targetLanguages = new List<LanguageInfo>();
+			foreach (var targetLanguage in languages)
+			{
+				targetLanguages.Add(GetLanguageInfo(targetLanguage.CultureInfo));
+			}
+
+			return targetLanguages;
+		}
+
+		public string GetProjectType(FileBasedProject project)
+		{
+			var type = project.GetType();
+			var internalProjectField = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (internalProjectField != null)
+			{
+				dynamic internalDynamicProject = internalProjectField.GetValue(project);
+				return internalDynamicProject.ProjectType.ToString();
+			}
+
+			return null;
+		}
+
+		private LanguageInfo GetLanguageInfo(CultureInfo cultureInfo)
+		{
+			var sourceLanguageInfo = new LanguageInfo
+			{
+				CultureInfo = cultureInfo,
+				ImageName = cultureInfo.Name + ".ico"
+			};
+			sourceLanguageInfo.Image = _imageService.GetImage(sourceLanguageInfo.ImageName, new Size(24, 24));
+
+			return sourceLanguageInfo;
+		}
+
+		private List<ProjectModel> GetSelectedProjects(IEnumerable<ProjectFileModel> selectedFiles)
+		{
+			var selectedProjects = new List<ProjectModel>();
+			foreach (var selectedFile in selectedFiles)
+			{
+				if (!selectedProjects.Contains(selectedFile.ProjectModel))
+				{
+					selectedProjects.Add(selectedFile.ProjectModel);
+				}
+			}
+
+			return selectedProjects;
+		}
+
+
+
+		private ObservableCollection<WizardPageViewModelBase> CreatePages(WizardContextModel transactionModel)
 		{
 			//TODO setup the Import action pages
 
 			var pages = new ObservableCollection<WizardPageViewModelBase>
 			{
-				new WizardPageExportFilesViewModel( new WizardPageExportFilesView(), transactionModel),
-				new WizardPageExportOptionsViewModel(new WizardPageExportOptionsView(), transactionModel),
-				new WizardPageSummaryViewModel(new WizardPageSummaryView(), transactionModel),
-				new WizardPagePreparationViewModel(new WizardPagePreparationView(), transactionModel)
+				new WizardPageExportFilesViewModel(_wizardWindow, new WizardPageExportFilesView(), transactionModel),
+				new WizardPageExportOptionsViewModel(_wizardWindow, new WizardPageExportOptionsView(), transactionModel),
+				new WizardPageSummaryViewModel(_wizardWindow, new WizardPageSummaryView(), transactionModel),
+				new WizardPagePreparationViewModel(_wizardWindow, new WizardPagePreparationView(), transactionModel)
 			};
 
 			UpdatePageIndexes(pages);

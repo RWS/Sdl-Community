@@ -16,16 +16,27 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	{
 		private ProjectsController _projectsController;
 		private FilesController _filesController;
+		private XLIFFManagerViewController _xliffManagerController;
+		private CustomerProvider _customerProvider;
+		private ImageService _imageService;
+
 		protected override void Execute()
 		{
-			var wizardService = new WizardService(Enumerators.Action.Import, _projectsController, _filesController);
-			wizardService.ShowWizard();
+			var wizardService = new WizardService(Enumerators.Action.Import, _customerProvider, _imageService, _xliffManagerController, _projectsController, _filesController);
+			var success = wizardService.ShowWizard(_xliffManagerController, out var message);
+			if (!success && !string.IsNullOrEmpty(message))
+			{
+				MessageBox.Show(message);
+			}
 		}
 
 		public override void Initialize()
 		{
+			_xliffManagerController = SdlTradosStudio.Application.GetController<XLIFFManagerViewController>();
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
+			_customerProvider = new CustomerProvider();
+			_imageService = new ImageService(new PathInfo());
 			Enabled = true;
 		}
 	}

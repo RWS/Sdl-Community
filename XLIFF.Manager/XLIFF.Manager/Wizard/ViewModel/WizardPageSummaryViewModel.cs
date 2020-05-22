@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public class WizardPageSummaryViewModel : WizardPageViewModelBase
-	{
+	{	
 		private bool _isValid;
 
-		public WizardPageSummaryViewModel(object view, TransactionModel transactionModel) : base(view, transactionModel)
-		{
+		public WizardPageSummaryViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
+		{	
 			IsValid = true;
 		}
 

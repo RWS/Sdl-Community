@@ -14,7 +14,8 @@
 			None = 0,
 			Ready = 1,
 			Success = 2,
-			Error = 3
+			Error = 3,
+			Warning
 		}
 
 		public enum XLIFFSupport

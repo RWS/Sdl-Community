@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
@@ -15,13 +16,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private double _labelLineWidth;
 		private double _labelTextWidth;
 
-		protected WizardPageViewModelBase(object view, TransactionModel transactionModel)
+		protected WizardPageViewModelBase(Window owner, object view, WizardContextModel wizardContext)
 		{
+			Owner = owner;
 			View = view;
-			TransactionModel = transactionModel;
+			WizardContext = wizardContext;
 		}
 
-		public TransactionModel TransactionModel { get; set; }
+		public WizardContextModel WizardContext { get; set; }
 
 		public double LabelLineWidth
 		{
@@ -60,6 +62,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		public bool IsOnFirstPage => PageIndex == 1;
 
 		public bool IsOnLastPage => PageIndex == TotalPages;
+
+		public Window Owner { get; }
 
 		public object View { get; }
 

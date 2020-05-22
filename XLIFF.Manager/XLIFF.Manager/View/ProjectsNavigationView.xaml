@@ -36,7 +36,7 @@
 					<componentModel:SortDescription PropertyName="Name"/>
 				</CollectionViewSource.SortDescriptions>
 				<CollectionViewSource.GroupDescriptions>
-					<PropertyGroupDescription PropertyName="ClientName"/>
+					<PropertyGroupDescription PropertyName="Customer"/>
 				</CollectionViewSource.GroupDescriptions>
 			</CollectionViewSource>
 

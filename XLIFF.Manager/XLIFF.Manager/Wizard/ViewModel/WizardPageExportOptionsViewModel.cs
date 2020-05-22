@@ -1,36 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public class WizardPageExportOptionsViewModel : WizardPageViewModelBase
-	{
+	{		
 		private bool _isValid;
 		private List<XLIFFSupportModel> _xliffSupport;
 		private XLIFFSupportModel _selectedXliffSupportModel;
-		private string _exportFile;
+		private string _outputFolder;
 		private ICommand _clearExportFileCommand;
+		private ICommand _browseFolderCommand;
 
-		public WizardPageExportOptionsViewModel(object view, TransactionModel transactionModel) : base(view, transactionModel)
-		{			
+		public WizardPageExportOptionsViewModel(Window owner, UserControl view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
+		{		
 			IsValid = true;
 
 			SelectedXliffSupportModel =
 				XLIFFSupport.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot);
 
-			ExportFile = string.Empty;
+			OutputFolder = string.Empty;
 
 			PropertyChanged += WizardPageOptionsViewModel_PropertyChanged;
 		}
 
 		public ICommand ClearExportFileCommand => _clearExportFileCommand ?? (_clearExportFileCommand = new CommandHandler(ClearExportFile));
+
+		public ICommand BrowseFolderCommand => _browseFolderCommand ?? (_browseFolderCommand = new CommandHandler(BrowseFolder));
 
 		public List<XLIFFSupportModel> XLIFFSupport
 		{
@@ -83,18 +90,20 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			}
 		}
 
-		public string ExportFile
+		public string OutputFolder
 		{
-			get { return _exportFile; }
+			get { return _outputFolder; }
 			set
 			{
-				if (_exportFile == value)
+				if (_outputFolder == value)
 				{
 					return;
 				}
 
-				_exportFile = value;
-				OnPropertyChanged(nameof(ExportFile));
+				_outputFolder = value;
+				OnPropertyChanged(nameof(OutputFolder));
+
+				VerifyIsValid();
 			}
 		}
 
@@ -117,9 +126,51 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			set => _isValid = value;
 		}
 
+		private void VerifyIsValid()
+		{
+			IsValid = Directory.Exists(OutputFolder);
+		}
+
 		private void ClearExportFile(object parameter)
 		{
-			ExportFile = string.Empty;
+			OutputFolder = string.Empty;
+		}
+
+		private void BrowseFolder(object parameter)
+		{
+			var browser = new FolderBrowserDialog();
+			browser.SelectedPath = GetValidFolderPath();
+			browser.Description = "Select the output folder";
+
+			if (browser.ShowDialog() == DialogResult.OK)
+			{
+				OutputFolder = browser.SelectedPath;
+			}
+		}
+
+		private string GetValidFolderPath()
+		{
+			if (string.IsNullOrWhiteSpace(OutputFolder))
+			{
+				return string.Empty;
+			}
+
+			var outputFolder = OutputFolder;
+			if (Directory.Exists(outputFolder))
+			{
+				return outputFolder;
+			}
+
+			while (outputFolder.Contains("\\"))
+			{
+				outputFolder = outputFolder.Substring(0, outputFolder.LastIndexOf("\\", StringComparison.Ordinal));
+				if (Directory.Exists(outputFolder))
+				{
+					return outputFolder;
+				}
+			}
+
+			return outputFolder;
 		}
 	}
 }

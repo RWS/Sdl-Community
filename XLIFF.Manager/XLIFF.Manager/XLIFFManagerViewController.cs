@@ -73,7 +73,7 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			if (_projectFilesViewControl == null)
 			{
-				_projectFilesViewModel = new ProjectFilesViewModel(_projectModels?.Count > 0 ? _projectModels[0].ProjectFileActionModels : null);
+				_projectFilesViewModel = new ProjectFilesViewModel(_projectModels?.Count > 0 ? _projectModels[0].ProjectFileModels : null);
 				_projectFilesViewControl = new ProjectFilesViewControl(_projectFilesViewModel);
 
 				_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
@@ -82,6 +82,15 @@ namespace Sdl.Community.XLIFF.Manager
 			return _projectFilesViewControl;
 		}
 
+		public List<ProjectModel> GetSelectedProjects()
+		{
+			return _projectsNavigationViewModel.SelectedProjectModels?.Cast<ProjectModel>().ToList();
+		}
+
+		public List<ProjectFileModel> GetSelectedProjectFiles()
+		{
+			return _projectFilesViewModel.SelectedProjectFiles?.Cast<ProjectFileModel>().ToList();
+		}
 
 		private void OnStudioWindowCreatedNotificationEvent(StudioWindowCreatedNotificationEvent e)
 		{
@@ -111,7 +120,7 @@ namespace Sdl.Community.XLIFF.Manager
 						SdlTradosStudio.Application.GetController<ProjectFileActivityViewController>();
 
 					_projectFilesViewModel.ProjectFileActivityViewModel =
-						new ProjectFileActivityViewModel(_projectFilesViewModel?.SelectedProjectFileAction?.ProjectFileActivityModels);
+						new ProjectFileActivityViewModel(_projectFilesViewModel?.SelectedProjectFile?.ProjectFileActivityModels);
 
 					_projectFileActivityViewController.ViewModel = _projectFilesViewModel.ProjectFileActivityViewModel;
 				}

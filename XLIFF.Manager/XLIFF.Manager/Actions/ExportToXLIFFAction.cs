@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Windows;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
@@ -18,17 +19,28 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	{
 		private ProjectsController _projectsController;
 		private FilesController _filesController;
+		private XLIFFManagerViewController _xliffManagerController;
+		private CustomerProvider _customerProvider;
+		private ImageService _imageService;
 
 		protected override void Execute()
-		{
-			var wizardService = new WizardService(Enumerators.Action.Export, _projectsController, _filesController);
-			wizardService.ShowWizard();
+		{			
+			var wizardService = new WizardService(Enumerators.Action.Export, _customerProvider, _imageService, _xliffManagerController, _projectsController, _filesController);
+			var success = wizardService.ShowWizard(Controller, out var message);
+			if (!success && !string.IsNullOrEmpty(message))
+			{
+				MessageBox.Show(message);
+			}
 		}		
 
 		public override void Initialize()
 		{
+			_xliffManagerController = SdlTradosStudio.Application.GetController<XLIFFManagerViewController>();
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
+			_customerProvider  = new CustomerProvider();
+			_imageService = new ImageService(new PathInfo());
+
 			Enabled = true;
 		}			
 	}
@@ -42,17 +54,28 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	{
 		private ProjectsController _projectsController;
 		private FilesController _filesController;
+		private XLIFFManagerViewController _xliffManagerController;
+		private CustomerProvider _customerProvider;
+		private ImageService _imageService;
 
 		protected override void Execute()
 		{
-			var wizardService = new WizardService(Enumerators.Action.Export, _projectsController, _filesController);
-			wizardService.ShowWizard();
+			var wizardService = new WizardService(Enumerators.Action.Export, _customerProvider, _imageService, _xliffManagerController, _projectsController, _filesController);
+			var success = wizardService.ShowWizard(_filesController, out var message);
+			if (!success && !string.IsNullOrEmpty(message))
+			{
+				MessageBox.Show(message);
+			}
 		}
 
 		public override void Initialize()
 		{
+			_xliffManagerController = SdlTradosStudio.Application.GetController<XLIFFManagerViewController>();
 			SetProjectsController();
 			SetFilesController();
+			_customerProvider = new CustomerProvider();
+			_imageService = new ImageService(new PathInfo());
+
 			SetEnabled();
 		}
 
@@ -98,8 +121,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 
 		private void SetEnabled()
 		{
-			Enabled = _projectsController.SelectedProjects.Count() == 1 &&
-			          _filesController.SelectedFiles.Any();
+			Enabled = _filesController.SelectedFiles.Any();
 		}
 	}
 
@@ -112,17 +134,27 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	{
 		private ProjectsController _projectsController;
 		private FilesController _filesController;
+		private XLIFFManagerViewController _xliffManagerController;
+		private CustomerProvider _customerProvider;
+		private ImageService _imageService;
 
 		protected override void Execute()
 		{
-			var wizardService = new WizardService(Enumerators.Action.Export, _projectsController, _filesController);
-			wizardService.ShowWizard();
+			var wizardService = new WizardService(Enumerators.Action.Export, _customerProvider, _imageService, _xliffManagerController, _projectsController, _filesController);
+			var success = wizardService.ShowWizard(_projectsController, out var message);
+			if (!success && !string.IsNullOrEmpty(message))
+			{
+				MessageBox.Show(message);
+			}
 		}
 
 		public override void Initialize()
 		{
+			_xliffManagerController = SdlTradosStudio.Application.GetController<XLIFFManagerViewController>();
 			SetProjectsController();
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
+			_customerProvider = new CustomerProvider();
+			_imageService = new ImageService(new PathInfo());
 			SetEnabled();
 		}
 

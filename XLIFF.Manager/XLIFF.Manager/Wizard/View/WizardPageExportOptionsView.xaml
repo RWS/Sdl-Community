@@ -44,13 +44,13 @@
 						  SelectedItem="{Binding SelectedXliffSupportModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 				
-				<TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Output File:" Margin="5"/>
+				<TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Output Folder:" Margin="5"/>
 
 				<Grid Grid.Row="1" Grid.Column="1" Height="24">
 					<TextBox Width="500" HorizontalAlignment="Left" Padding="2,0,20,0" Height="24" VerticalAlignment="Center"
 							  VerticalContentAlignment="Center"
-				        Text="{Binding ExportFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="True" />
-					<TextBlock Width="500" IsHitTestVisible="False" Padding="5,0,20,0" Text="Export file (zip)"
+				        Text="{Binding OutputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="True" />
+					<TextBlock Width="500" IsHitTestVisible="False" Padding="5,0,20,0" Text="Select the output folder"
 					       VerticalAlignment="Center" HorizontalAlignment="Left"
 				           Margin="0" Foreground="DarkGray">
 						<TextBlock.Style>
@@ -59,7 +59,7 @@
 								<Style.Triggers>
 									<MultiDataTrigger>
 										<MultiDataTrigger.Conditions>
-											<Condition Binding="{Binding ExportFile}" Value="" />
+											<Condition Binding="{Binding OutputFolder}" Value="" />
 										</MultiDataTrigger.Conditions>
 										<MultiDataTrigger.Setters>
 											<Setter Property="Visibility" Value="Visible" />
@@ -87,7 +87,7 @@
 								<Style.Triggers>
 									<MultiDataTrigger>
 										<MultiDataTrigger.Conditions>
-											<Condition Binding="{Binding ExportFile}" Value="" />
+											<Condition Binding="{Binding OutputFolder}" Value="" />
 										</MultiDataTrigger.Conditions>
 										<MultiDataTrigger.Setters>
 											<Setter Property="Visibility" Value="Collapsed" />
@@ -101,10 +101,10 @@
 					       RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" />
 					</Button>
 				</Grid>
-				
-				
-
-				<Button Grid.Row="1" Grid.Column="2" Content="..." HorizontalAlignment="Left" VerticalAlignment="Center" 
+								
+				<Button Grid.Row="1" Grid.Column="2" Content="..." 
+				        Command="{Binding BrowseFolderCommand}"
+				        HorizontalAlignment="Left" VerticalAlignment="Center" 
 				        Height="24" Width="24" Margin="2,0,0,0"/>
 			</Grid>
 		</GroupBox>

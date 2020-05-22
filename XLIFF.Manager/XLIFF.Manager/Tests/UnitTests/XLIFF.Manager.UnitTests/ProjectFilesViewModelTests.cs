@@ -25,13 +25,13 @@ namespace XLIFF.Manager.UnitTests
 		{
 			// arrange
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
-			var projectFileActions = defaultTestProjectData[1].ProjectFileActionModels;
+			var projectFileActions = defaultTestProjectData[1].ProjectFileModels;
 
 			// act
 			var model = new ProjectFilesViewModel(projectFileActions);
 
 			// assert
-			Assert.Equal(projectFileActions.Count, model.ProjectFileActions.Count);
+			Assert.Equal(projectFileActions.Count, model.ProjectFiles.Count);
 		}
 
 
@@ -40,14 +40,14 @@ namespace XLIFF.Manager.UnitTests
 		{
 			// arrange
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
-			var projectFileActions = defaultTestProjectData[1].ProjectFileActionModels;
+			var projectFileActions = defaultTestProjectData[1].ProjectFileModels;
 
 			// act
 			var model = new ProjectFilesViewModel(projectFileActions);
 
 			// assert	
 			// the first item in the collection is selected by default
-			Assert.Same(projectFileActions[0], model.SelectedProjectFileAction);
+			Assert.Same(projectFileActions[0], model.SelectedProjectFile);
 		}
 	}
 }

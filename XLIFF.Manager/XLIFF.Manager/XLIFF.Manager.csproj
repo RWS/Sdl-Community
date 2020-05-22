@@ -141,12 +141,13 @@
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Common\Enumerators.cs" />
+    <Compile Include="Model\CustomerModel.cs" />
     <Compile Include="Model\JobProcess.cs" />
     <Compile Include="Model\LanguageInfo.cs" />
-    <Compile Include="Model\ProjectFileActionModel.cs" />
+    <Compile Include="Model\ProjectFileModel.cs" />
     <Compile Include="Model\ProjectFileActivityModel.cs" />
     <Compile Include="Model\ProjectModel.cs" />
-    <Compile Include="Model\TransactionModel.cs" />
+    <Compile Include="Model\WizardContextModel.cs" />
     <Compile Include="Model\XLIFFSupportModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -155,6 +156,7 @@
     </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\CustomerProvider.cs" />
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\WizardService.cs" />
     <Compile Include="TestData\TestDataUtil.cs" />
