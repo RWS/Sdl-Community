@@ -135,8 +135,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 		public void SetAllProjectDetails(List<ProjectDetails> allProjectDetails, ProjectDetails projectDetails)
 		{
-			var allProjDetail = allProjectDetails.FirstOrDefault(p => p.ProjectName.Equals(projectDetails.ProjectName));
-			if (allProjDetail == null)
+			if (!allProjectDetails.Any(p => p.ProjectName.Equals(projectDetails.ProjectName)))
 			{
 				allProjectDetails.Add(projectDetails);
 			}
@@ -144,14 +143,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 		public void RemoveAllSingleProjects(List<ProjectDetails> allProjectDetails)
 		{
-			var singleProjects = allProjectDetails.Where(p => p.IsSingleFileProject).ToList();
-			if (singleProjects != null)
-			{
-				foreach (var singleProject in singleProjects)
-				{
-					allProjectDetails.Remove(singleProject);
-				}
-			}
+			allProjectDetails.RemoveAll(x=> x.IsSingleFileProject);
 		}
 
 		// Configure the project languages using project details
