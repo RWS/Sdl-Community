@@ -25,5 +25,9 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 		void SetProjectLanguages(List<ProjectDetails> projectDetails, bool isChecked, string languageName);
 
 		ProjectDetails GetExternalProjectDetails(string path, string reportFolderPath);
+
+		void SetAllProjectDetails(List<ProjectDetails> allProjectDetails, ProjectDetails projectDetails);
+
+		void RemoveAllSingleProjects(List<ProjectDetails> allProjectDetails);
 	}
 }
