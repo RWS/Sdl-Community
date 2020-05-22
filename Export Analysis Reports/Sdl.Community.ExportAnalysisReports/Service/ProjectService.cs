@@ -133,6 +133,27 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 		}
 
+		public void SetAllProjectDetails(List<ProjectDetails> allProjectDetails, ProjectDetails projectDetails)
+		{
+			var allProjDetail = allProjectDetails.FirstOrDefault(p => p.ProjectName.Equals(projectDetails.ProjectName));
+			if (allProjDetail == null)
+			{
+				allProjectDetails.Add(projectDetails);
+			}
+		}
+
+		public void RemoveAllSingleProjects(List<ProjectDetails> allProjectDetails)
+		{
+			var singleProjects = allProjectDetails.Where(p => p.IsSingleFileProject).ToList();
+			if (singleProjects != null)
+			{
+				foreach (var singleProject in singleProjects)
+				{
+					allProjectDetails.Remove(singleProject);
+				}
+			}
+		}
+
 		// Configure the project languages using project details
 		private void ConfigureProjectLanguages(ProjectDetails projectDetails)
 		{

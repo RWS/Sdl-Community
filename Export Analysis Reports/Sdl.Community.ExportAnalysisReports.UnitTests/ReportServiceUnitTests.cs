@@ -34,41 +34,44 @@ namespace Sdl.Community.ExportAnalysisReports.UnitTests
 			Assert.NotNull(jsonPath);
 		}
 
-		[Fact]
-		private void GetReportPath_IsNotSuccessfullyReturned_UnitTest()
+		[Theory]
+		[InlineData("")]
+		private void GetReportPath_IsNotSuccessfullyReturned_UnitTest(string filePath)
 		{
 			_reportService.SaveExportPath(_exportTempFolder);
-			var jsonPath = _reportService.GetJsonReportPath(string.Empty);
+			var jsonPath = _reportService.GetJsonReportPath(filePath);
 
 			Assert.False(!string.IsNullOrEmpty(jsonPath));
 		}
 
-		[Fact]
-		private void GenerateReport_IsSuccessfullyCreated_UnitTest()
+		[Theory]
+		[InlineData(false, true, "Project 2")]
+		private void GenerateReport_IsSuccessfullyCreated_UnitTest(bool isSingleFileProject, bool isChecked, string projectName)
 		{
 			var projects = new BindingList<ProjectDetails>();
-			var projectDetails = _exportReportsConfiguration.GetProjectDetails();
+			var projectDetails = _exportReportsConfiguration.GetProjectDetails(isSingleFileProject, projectName);
 			var optionalInformation = _exportReportsConfiguration.GetOptionalInformation();
 
 			projects.Add(projectDetails);
 
-			var isReportGenerated = _reportService.GenerateReportFile(projects, optionalInformation, _exportTempFolder, true);
+			var isReportGenerated = _reportService.GenerateReportFile(projects, optionalInformation, _exportTempFolder, isChecked);
 
 			Assert.True(isReportGenerated);
 		}
 
-		[Fact]
-		private void GenerateReport_IsNotSuccessfullyCreated_UnitTest()
+		[Theory]
+		[InlineData(false, false, true, "Project 2")]
+		private void GenerateReport_IsNotSuccessfullyCreated_UnitTest(bool isSingleFileProject, bool shouldExport, bool isChecked, string projectName)
 		{
 			var projects = new BindingList<ProjectDetails>();
-			var projectDetails = _exportReportsConfiguration.GetProjectDetails();
+			var projectDetails = _exportReportsConfiguration.GetProjectDetails(isSingleFileProject, projectName);
 			var optionalInformation = _exportReportsConfiguration.GetOptionalInformation();
 			
-			projectDetails.ShouldBeExported = false;
+			projectDetails.ShouldBeExported = shouldExport;
 			projects.Add(projectDetails);
 
 			_messageBoxService.ShowInformationMessage("Please select at least one language to export the report!", "Informative message").Returns(DialogResult.OK);
-			var isReportGenerated = _reportService.GenerateReportFile(projects, optionalInformation, _exportTempFolder, true);
+			var isReportGenerated = _reportService.GenerateReportFile(projects, optionalInformation, _exportTempFolder, isChecked);
 
 			Assert.False(isReportGenerated);
 		}

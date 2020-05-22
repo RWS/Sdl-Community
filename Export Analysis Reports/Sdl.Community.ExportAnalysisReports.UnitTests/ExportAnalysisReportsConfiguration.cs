@@ -36,16 +36,16 @@ namespace Sdl.Community.ExportAnalysisReports.UnitTests
 			};
 		}
 
-		public ProjectDetails GetProjectDetails()
+		public ProjectDetails GetProjectDetails(bool isSingleFileProject, string projectName)
 		{
 			return new ProjectDetails
 			{
 				Status = "In Progress",
-				ProjectName = "Project 2",
-				ProjectPath = Path.Combine(_testingFilesPath, "Project 2.sdlproj"),
-				ReportsFolderPath = Path.Combine(_testingFilesPath, @"Project 2\Reports"),
+				ProjectName = projectName,
+				ProjectPath = Path.Combine(_testingFilesPath, $"{ projectName }.sdlproj"),
+				ReportsFolderPath = Path.Combine(_testingFilesPath, $@"{projectName}\Reports"),
 				ReportPath = null,
-				IsSingleFileProject = false,
+				IsSingleFileProject = isSingleFileProject,
 				ProjectLanguages = AddProjectLanguage(),
 				LanguageAnalysisReportPaths = AddLanguageAnalysisReportPaths(),
 				ShouldBeExported = true
