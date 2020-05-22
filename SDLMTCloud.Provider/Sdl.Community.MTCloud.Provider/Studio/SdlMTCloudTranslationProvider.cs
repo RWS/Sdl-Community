@@ -32,9 +32,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			LanguageProvider = languageProvider;
 			TranslationService = translationService;
 
-			SetEditorController(editorController);
-
 			LoadState(translationProviderState);
+
+			SetEditorController(editorController);
 		}		
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
@@ -309,7 +309,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			_editorController = editorController;
 
-			if (_editorController != null)
+			if (Options != null && Options.SendFeedback && _editorController != null)
 			{
 				_editorController.Opened += _editorController_Opened;
 			}
@@ -330,7 +330,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 					if (_rateItController != null)
 					{
-						_rateItController.TranslationService = TranslationService;
+						_rateItController.RateIt.SetTranslationService(TranslationService);
 						_rateItController.Activate();
 					}
 				}

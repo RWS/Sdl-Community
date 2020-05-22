@@ -6,5 +6,6 @@
 		void DecreaseRating();
 		void SetRateOptionFromShortcuts(string optionName);
 		void SetOptionTooltip(string optionName, string tooltip);
+		void SetTranslationService(ITranslationService transaltionService);
 	}
 }

@@ -6,6 +6,5 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		public TranslationFeedbackRequest Translation { get; set; }
 		public Improvement Improvement { get; set; }
 		public Rating Rating { get; set; }
-		public string AccountId { get; set; }
 	}
 }

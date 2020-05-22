@@ -17,12 +17,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	{		
 		private Lazy<View.RateItControl> _control;
 
+
 		protected override void Initialize()
 		{
-			_control = new Lazy<View.RateItControl>(()=>new View.RateItControl(TranslationService));						
+			_control = new Lazy<View.RateItControl>(()=>new View.RateItControl());						
 		}
-
-		public ITranslationService TranslationService { get; set; }
 
 		public IRatingService RateIt => _control?.Value.RatingService;
 

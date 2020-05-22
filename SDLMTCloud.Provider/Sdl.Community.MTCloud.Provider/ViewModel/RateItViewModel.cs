@@ -12,10 +12,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 	public class RateItViewModel:BaseViewModel, IRatingService, IDisposable
 	{		
 		private IShortcutService _shortcutService;
+		private ITranslationService _translationService;
+		private readonly IActionProvider _actionProvider;
 		private readonly List<ISDLMTCloudAction> _actions;
 		private ICommand _sendFeedbackCommand;
 
-		private ITranslationService _translationService;
 		private FeedbackOption _wordsOmissionChecked;
 		private FeedbackOption _grammarChecked;
 		private FeedbackOption _unintelligenceChecked;
@@ -23,14 +24,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private FeedbackOption _wordsAdditionChecked;
 		private FeedbackOption _spellingChecked;
 		private FeedbackOption _capitalizationChecked;
-		private readonly IActionProvider _actionProvider;
 		private int _rating;
 		private string _feedback;
 
-		public RateItViewModel(ITranslationService translationService, IShortcutService shortcutService,IActionProvider actionProvider)
+		public RateItViewModel(IShortcutService shortcutService,IActionProvider actionProvider)
 		{
 			_actionProvider = actionProvider;
-			SetTranslationService(translationService);
 			SetShortcutService(shortcutService);
 			InitializeFeedbackOptions();
 
@@ -184,13 +183,18 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			propertyInfo.SetValue(this, option);
 		}
 
-		//TODO: Add async comand
 		private async Task SendFeedback()
 		{
-			var accountId = _translationService.ConnectionService.Credential.AccountId;
-			var test = new FeedbackRequest();
-			await _translationService.CreateTranslationFeedback(test, accountId);
-
+			if (_translationService != null)
+			{
+				var accountId = _translationService.ConnectionService.Credential.AccountId;
+				var test = new FeedbackRequest();
+				await _translationService.CreateTranslationFeedback(test, accountId);
+			}
+			else
+			{
+				//TODO: Log that translation service is null
+			}
 		}
 
 		private void ClearFeedbackBox(object obj)
@@ -201,21 +205,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private void _translationService_TranslationReceived(FeedbackRequest translationFeedback)
 		{
 
-		}
-
-		private void SetTranslationService(ITranslationService translationService)
-		{
-			if (_translationService != null)
-			{
-				_translationService.TranslationReceived -= _translationService_TranslationReceived;
-			}
-
-			_translationService = translationService;
-
-			if (_translationService != null)
-			{
-				_translationService.TranslationReceived += _translationService_TranslationReceived;
-			}
 		}
 
 		private void SetShortcutService(IShortcutService shortcutService)
@@ -273,6 +262,21 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			if (_shortcutService != null)
 			{
 				_shortcutService.StudioShortcutChanged -= _shortcutService_ShortcutChanged;
+			}
+		}
+
+		public void SetTranslationService(ITranslationService translationService)
+		{
+			if (_translationService != null)
+			{
+				_translationService.TranslationReceived -= _translationService_TranslationReceived;
+			}
+
+			_translationService = translationService;
+
+			if (_translationService != null)
+			{
+				_translationService.TranslationReceived += _translationService_TranslationReceived;
 			}
 		}
 	}
