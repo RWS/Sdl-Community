@@ -41,7 +41,7 @@ namespace Sdl.Community.ExportAnalysisReports.UnitTests
 			_reportService.SaveExportPath(_exportTempFolder);
 			var jsonPath = _reportService.GetJsonReportPath(filePath);
 
-			Assert.False(!string.IsNullOrEmpty(jsonPath));
+			Assert.True(string.IsNullOrEmpty(jsonPath));
 		}
 
 		[Theory]

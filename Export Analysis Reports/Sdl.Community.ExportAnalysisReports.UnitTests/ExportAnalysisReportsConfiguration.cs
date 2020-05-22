@@ -46,7 +46,7 @@ namespace Sdl.Community.ExportAnalysisReports.UnitTests
 				ReportsFolderPath = Path.Combine(_testingFilesPath, $@"{projectName}\Reports"),
 				ReportPath = null,
 				IsSingleFileProject = isSingleFileProject,
-				ProjectLanguages = AddProjectLanguage(),
+				ProjectLanguages = GetProjectLanguage(),
 				LanguageAnalysisReportPaths = AddLanguageAnalysisReportPaths(),
 				ShouldBeExported = true
 			};
@@ -57,7 +57,7 @@ namespace Sdl.Community.ExportAnalysisReports.UnitTests
 			return new BindingList<LanguageDetails> { new LanguageDetails { IsChecked = true, LanguageName = languageName } };
 		}
 
-		public Dictionary<string, bool> AddMultipleLanguages()
+		public Dictionary<string, bool> GetMultipleLanguages()
 		{
 			var projectLanguages = new Dictionary<string, bool>();
 			projectLanguages.Add("English (United Kingdom)", true);
@@ -66,7 +66,7 @@ namespace Sdl.Community.ExportAnalysisReports.UnitTests
 			return projectLanguages;
 		}
 
-		public Dictionary<string, bool> AddProjectLanguage()
+		public Dictionary<string, bool> GetProjectLanguage()
 		{
 			var projectLanguages = new Dictionary<string, bool>();
 			projectLanguages.Add("English (United Kingdom)", true);

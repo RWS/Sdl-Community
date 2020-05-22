@@ -54,7 +54,7 @@ namespace Sdl.Community.ExportAnalysisReports.UnitTests
 		private void RemoveSingleFileLanguage_IsSuccessfullyRemoved_UnitTest(string languageName)
 		{
 			// Arrange
-			var languagesToRemove = _exportReportsConfiguration.AddMultipleLanguages();
+			var languagesToRemove = _exportReportsConfiguration.GetMultipleLanguages();
 			var projectLanguages = _exportReportsConfiguration.AddLanguageDetails(languageName);
 
 			// Act
@@ -69,7 +69,7 @@ namespace Sdl.Community.ExportAnalysisReports.UnitTests
 		private void RemoveSingleFileLanguage_IsNotSuccessfullyRemoved_UnitTest(string languageName)
 		{
 			// Arrange
-			var languagesToRemove = _exportReportsConfiguration.AddProjectLanguage();
+			var languagesToRemove = _exportReportsConfiguration.GetProjectLanguage();
 			var projectLanguages = _exportReportsConfiguration.AddLanguageDetails(languageName);
 
 			// Act
