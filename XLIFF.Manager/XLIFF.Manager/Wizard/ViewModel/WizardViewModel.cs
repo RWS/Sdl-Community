@@ -2,12 +2,10 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
@@ -215,7 +213,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				if (CurrentPage == null)
 				{
 					return 0;
-					Debug.Fail("The current page is null!");
 				}
 
 				return Pages.IndexOf(CurrentPage);
@@ -232,8 +229,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new RelayCommand(CancelWizard, () => CanCancel));
 
 		private void CancelWizard()
-		{
-			//HelixModel = null;
+		{			
 			OnRequestClose();
 		}
 
@@ -252,10 +248,20 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		{
 			get
 			{
+				var maxPageIndex = 1;
+				var canFinish = true;
+				for (var i = 0; i <= maxPageIndex; i++)
+				{
+					if (!Pages[i].IsValid)
+					{
+						canFinish = false;
+					}
+				}
+
 				return CurrentPage != null
-					   && ((CurrentPageIndex == 0 && CurrentPage.IsValid)
+					   && (canFinish
 							|| (IsOnLastPage && CurrentPage.IsComplete)
-							|| (CurrentPageIndex > 0 && !IsOnLastPage));
+							|| (CurrentPageIndex > maxPageIndex && !IsOnLastPage));
 			}
 		}
 

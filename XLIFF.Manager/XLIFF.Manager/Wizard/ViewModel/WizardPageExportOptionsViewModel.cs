@@ -2,19 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
-using UserControl = System.Windows.Controls.UserControl;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
-	public class WizardPageExportOptionsViewModel : WizardPageViewModelBase
+	public class WizardPageExportOptionsViewModel : WizardPageViewModelBase, IDisposable
 	{		
 		private bool _isValid;
 		private List<XLIFFSupportModel> _xliffSupport;
@@ -23,23 +20,19 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
 
-		public WizardPageExportOptionsViewModel(Window owner, UserControl view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
-		{		
-			IsValid = true;
+		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
+		{
+			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == WizardContext.XLIFFSupport);
+			OutputFolder = WizardContext.OutputFolder;
 
-			SelectedXliffSupportModel =
-				XLIFFSupport.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot);
-
-			OutputFolder = string.Empty;
-
-			PropertyChanged += WizardPageOptionsViewModel_PropertyChanged;
+			PropertyChanged += WizardPageExportOptionsViewModel_PropertyChanged;
 		}
-
+		
 		public ICommand ClearExportFileCommand => _clearExportFileCommand ?? (_clearExportFileCommand = new CommandHandler(ClearExportFile));
 
 		public ICommand BrowseFolderCommand => _browseFolderCommand ?? (_browseFolderCommand = new CommandHandler(BrowseFolder));
 
-		public List<XLIFFSupportModel> XLIFFSupport
+		public List<XLIFFSupportModel> XLIFFSupportList
 		{
 			get
 			{
@@ -71,12 +64,12 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			}
 		}
 
-		public XLIFFSupportModel SelectedXliffSupportModel
+		public XLIFFSupportModel SelectedXliffSupport
 		{
 			get
 			{
 				return _selectedXliffSupportModel
-					   ?? (_selectedXliffSupportModel = XLIFFSupport.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
+					   ?? (_selectedXliffSupportModel = XLIFFSupportList.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
 			}
 			set
 			{
@@ -86,7 +79,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				}
 
 				_selectedXliffSupportModel = value;
-				OnPropertyChanged(nameof(SelectedXliffSupportModel));
+				OnPropertyChanged(nameof(SelectedXliffSupport));
 			}
 		}
 
@@ -106,18 +99,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				VerifyIsValid();
 			}
 		}
-
-		private void WizardPageOptionsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName == nameof(CurrentPageChanged))
-			{
-				if (IsCurrentPage)
-				{
-
-				}
-			}
-		}
-
+	
 		public override string DisplayName => "Options";
 
 		public override bool IsValid
@@ -171,6 +153,37 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			}
 
 			return outputFolder;
+		}
+
+		private void WizardPageExportOptionsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(CurrentPageChanged))
+			{
+				if (IsCurrentPage)
+				{
+					LoadChanges();
+				}
+				else
+				{
+					SaveChanges();
+				}
+			}
+		}
+
+		private void SaveChanges()
+		{
+			WizardContext.OutputFolder = OutputFolder;
+			WizardContext.XLIFFSupport = SelectedXliffSupport.SupportType;
+		}
+
+		private void LoadChanges()
+		{			
+			VerifyIsValid();
+		}
+
+		public void Dispose()
+		{
+			PropertyChanged += WizardPageExportOptionsViewModel_PropertyChanged;
 		}
 	}
 }

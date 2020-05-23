@@ -25,7 +25,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		public WizardPageExportFilesViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
 		{
 			ProjectFiles = wizardContext.ProjectFileModels;
-			PropertyChanged += WizardPageExportFilesViewModel_PropertyChanged;
+			PropertyChanged += WizardPageExportFilesViewModel_PropertyChanged;			
 		}
 		
 		public ICommand CheckAllCommand => _checkAllCommand ?? (_checkAllCommand = new RelayCommand(CheckAll));

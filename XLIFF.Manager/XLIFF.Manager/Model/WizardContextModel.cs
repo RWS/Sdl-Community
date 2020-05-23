@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.XLIFF.Manager.Wizard.ViewModel;
+using Sdl.Community.XLIFF.Manager.Common;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
@@ -11,10 +8,15 @@ namespace Sdl.Community.XLIFF.Manager.Model
 	{
 		public WizardContextModel()
 		{
+			XLIFFSupport = Enumerators.XLIFFSupport.xliff12polyglot;
 			ProjectFileModels = new List<ProjectFileModel>();
 		}
 
 		public List<ProjectFileModel> ProjectFileModels { get; set; }
+
+		public string OutputFolder { get; set; }
+
+		public Enumerators.XLIFFSupport XLIFFSupport { get; set; }
 
 		public object Clone()
 		{

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.XLIFF.Manager.Common
 {
@@ -119,5 +120,41 @@ namespace Sdl.Community.XLIFF.Manager.Common
 		public string SettingsFilePath => Path.Combine(SettingsFolderPath, SettingsFileName);
 
 		public string FlagsFilePath => Path.Combine(FlagsFolderPath, FlagsFileName);
+
+		public string GetProjectOutputPath(ProjectInfo projectInfo)
+		{
+			var rootPath = Path.Combine(projectInfo.LocalProjectFolder, ApplicationPathName);
+			var path = Path.Combine(rootPath, "Output");
+
+			if (!Directory.Exists(rootPath))
+			{
+				Directory.CreateDirectory(rootPath);
+			}
+
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
+
+			return path;
+		}
+
+		public string GetProjectInputPath(ProjectInfo projectInfo)
+		{
+			var rootPath = Path.Combine(projectInfo.LocalProjectFolder, ApplicationPathName);
+			var path = Path.Combine(rootPath, "Input");
+
+			if (!Directory.Exists(rootPath))
+			{
+				Directory.CreateDirectory(rootPath);
+			}
+
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
+
+			return path;
+		}
 	}
 }

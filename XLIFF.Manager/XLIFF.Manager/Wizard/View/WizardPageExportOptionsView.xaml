@@ -26,8 +26,8 @@
 			<Grid Margin="10">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
-					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
@@ -39,18 +39,20 @@
 				<ComboBox Grid.Row="0" Grid.Column="1" Width="150" HorizontalAlignment="Left" Height="22"
 						  VerticalAlignment="Center"
 						  VerticalContentAlignment="Center"
-				          ItemsSource="{Binding XLIFFSupport}"
+				          ItemsSource="{Binding XLIFFSupportList}"
 						  DisplayMemberPath="Name"
-						  SelectedItem="{Binding SelectedXliffSupportModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+						  SelectedItem="{Binding SelectedXliffSupport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-				
+
 				<TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Output Folder:" Margin="5"/>
 
 				<Grid Grid.Row="1" Grid.Column="1" Height="24">
-					<TextBox Width="500" HorizontalAlignment="Left" Padding="2,0,20,0" Height="24" VerticalAlignment="Center"
+					<TextBox HorizontalContentAlignment="Stretch" 
+					         Padding="2,0,20,0" Height="24" 
+					         VerticalAlignment="Center"
 							  VerticalContentAlignment="Center"
 				        Text="{Binding OutputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="True" />
-					<TextBlock Width="500" IsHitTestVisible="False" Padding="5,0,20,0" Text="Select the output folder"
+					<TextBlock  IsHitTestVisible="False" Padding="5,0,20,0" Text="Select the output folder"
 					       VerticalAlignment="Center" HorizontalAlignment="Left"
 				           Margin="0" Foreground="DarkGray">
 						<TextBlock.Style>
@@ -101,7 +103,7 @@
 					       RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" />
 					</Button>
 				</Grid>
-								
+
 				<Button Grid.Row="1" Grid.Column="2" Content="..." 
 				        Command="{Binding BrowseFolderCommand}"
 				        HorizontalAlignment="Left" VerticalAlignment="Center" 

@@ -19,6 +19,31 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		{	
 			IsValid = true;
 			InitializeJobProcessList();
+			PropertyChanged += WizardPagePreparationViewModel_PropertyChanged;
+		}
+
+		private void WizardPagePreparationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(CurrentPageChanged))
+			{
+				if (IsCurrentPage)
+				{
+					LoadChanges();
+				}
+				else
+				{
+					SaveChanges();
+				}
+			}
+		}
+
+		private void SaveChanges()
+		{
+		}
+
+		private void LoadChanges()
+		{
+			
 		}
 
 		public ObservableCollection<JobProcess> JobProcesses

@@ -21,11 +21,14 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 		private FilesController _filesController;
 		private XLIFFManagerViewController _xliffManagerController;
 		private CustomerProvider _customerProvider;
+		private PathInfo _pathInfo;
 		private ImageService _imageService;
+		
 
 		protected override void Execute()
 		{			
-			var wizardService = new WizardService(Enumerators.Action.Export, _customerProvider, _imageService, _xliffManagerController, _projectsController, _filesController);
+			var wizardService = new WizardService(Enumerators.Action.Export, _pathInfo, 
+				_customerProvider, _imageService, _xliffManagerController, _projectsController, _filesController);
 			var success = wizardService.ShowWizard(Controller, out var message);
 			if (!success && !string.IsNullOrEmpty(message))
 			{
@@ -39,7 +42,8 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			_customerProvider  = new CustomerProvider();
-			_imageService = new ImageService(new PathInfo());
+			_pathInfo = new PathInfo();
+			_imageService = new ImageService(_pathInfo);
 
 			Enabled = true;
 		}			
@@ -56,11 +60,12 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 		private FilesController _filesController;
 		private XLIFFManagerViewController _xliffManagerController;
 		private CustomerProvider _customerProvider;
+		private PathInfo _pathInfo;
 		private ImageService _imageService;
 
 		protected override void Execute()
 		{
-			var wizardService = new WizardService(Enumerators.Action.Export, _customerProvider, _imageService, _xliffManagerController, _projectsController, _filesController);
+			var wizardService = new WizardService(Enumerators.Action.Export, _pathInfo, _customerProvider, _imageService, _xliffManagerController, _projectsController, _filesController);
 			var success = wizardService.ShowWizard(_filesController, out var message);
 			if (!success && !string.IsNullOrEmpty(message))
 			{
@@ -74,7 +79,8 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 			SetProjectsController();
 			SetFilesController();
 			_customerProvider = new CustomerProvider();
-			_imageService = new ImageService(new PathInfo());
+			_pathInfo = new PathInfo();
+			_imageService = new ImageService(_pathInfo);
 
 			SetEnabled();
 		}
@@ -136,11 +142,12 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 		private FilesController _filesController;
 		private XLIFFManagerViewController _xliffManagerController;
 		private CustomerProvider _customerProvider;
+		private PathInfo _pathInfo;
 		private ImageService _imageService;
 
 		protected override void Execute()
 		{
-			var wizardService = new WizardService(Enumerators.Action.Export, _customerProvider, _imageService, _xliffManagerController, _projectsController, _filesController);
+			var wizardService = new WizardService(Enumerators.Action.Export, _pathInfo, _customerProvider, _imageService, _xliffManagerController, _projectsController, _filesController);
 			var success = wizardService.ShowWizard(_projectsController, out var message);
 			if (!success && !string.IsNullOrEmpty(message))
 			{
@@ -154,7 +161,8 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 			SetProjectsController();
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			_customerProvider = new CustomerProvider();
-			_imageService = new ImageService(new PathInfo());
+			_pathInfo = new PathInfo();
+			_imageService = new ImageService(_pathInfo);
 			SetEnabled();
 		}
 
