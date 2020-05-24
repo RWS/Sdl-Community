@@ -22,29 +22,26 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			{
 				if (IsCurrentPage)
 				{
-					LoadChanges();
+					LoadView();
 				}
 				else
 				{
-					SaveChanges();
+					LeaveView();
 				}
 			}
 		}
 
-		private void SaveChanges()
+		private void LeaveView()
 		{
 		}
 
-		private void LoadChanges()
+		private void LoadView()
 		{
 			SummaryText = GetSummaryText();
 		}
 
 		private string GetSummaryText()
 		{
-
-
-
 			var project = WizardContext.ProjectFileModels[0].ProjectModel;
 
 			var summaryText = "Id: " + project.Id + Environment.NewLine;
@@ -78,10 +75,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				}
 			}
 
-
-
-
-
 			return summaryText;
 		}
 
@@ -114,7 +107,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public string SummaryText
 		{
-			get { return _summaryText; }
+			get => _summaryText;
 			set
 			{
 				if (_summaryText == value)

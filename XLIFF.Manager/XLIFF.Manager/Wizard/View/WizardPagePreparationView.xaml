@@ -52,13 +52,13 @@
 										<Style TargetType="Image">
 											<Setter Property="Source" Value="../../Resources/job_scheduled.gif"/>
 											<Style.Triggers>
-												<DataTrigger Binding="{Binding Status}" Value="Failed">
+												<DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="Failed">
 													<Setter Property="Source" Value="../../Resources/job_failed.gif"/>
 												</DataTrigger>
-												<DataTrigger Binding="{Binding Status}" Value="Running">
+												<DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="Running">
 													<Setter Property="Source" Value="../../Resources/job_running.gif"/>
 												</DataTrigger>
-												<DataTrigger Binding="{Binding Status}" Value="Completed">
+												<DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="Completed">
 													<Setter Property="Source" Value="../../Resources/job_completed.gif"/>
 												</DataTrigger>
 											</Style.Triggers>

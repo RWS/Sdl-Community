@@ -18,7 +18,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private ProjectFileModel _selectedProjectFile;
 		private ICommand _checkAllCommand;
 		private ICommand _checkSelectedComand;
-		private bool _isValid;
 		private bool _checkedAll;
 		private bool _checkingAllAction;
 
@@ -151,11 +150,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public override string DisplayName => "Files";
 
-		public override bool IsValid
-		{
-			get => _isValid;
-			set => _isValid = value;
-		}
+		public override bool IsValid { get; set; }
 
 		public void VerifyIsValid()
 		{
@@ -178,20 +173,20 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			{
 				if (IsCurrentPage)
 				{
-					LoadChanges();
+					LoadView();
 				}
 				else
 				{
-					SaveChanges();
+					LeaveView();
 				}
 			}
 		}
 
-		private void SaveChanges()
+		private void LeaveView()
 		{			
 		}
 
-		private void LoadChanges()
+		private void LoadView()
 		{
 			UpdateCheckAll();
 			VerifyIsValid();

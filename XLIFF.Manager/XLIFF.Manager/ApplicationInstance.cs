@@ -11,7 +11,7 @@ namespace Sdl.Community.XLIFF.Manager
 	{	
 		public void Execute()
 		{
-			SetApplicationShutdownMode();
+			SetApplicationShutdownMode();			
 		}
 
 		public static Form GetActiveForm()

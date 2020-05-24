@@ -12,8 +12,7 @@ using Sdl.Community.XLIFF.Manager.Model;
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public class WizardPageExportOptionsViewModel : WizardPageViewModelBase, IDisposable
-	{		
-		private bool _isValid;
+	{
 		private List<XLIFFSupportModel> _xliffSupport;
 		private XLIFFSupportModel _selectedXliffSupportModel;
 		private string _outputFolder;
@@ -102,11 +101,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 	
 		public override string DisplayName => "Options";
 
-		public override bool IsValid
-		{
-			get => _isValid;
-			set => _isValid = value;
-		}
+		public override bool IsValid { get; set; }
 
 		private void VerifyIsValid()
 		{
@@ -161,22 +156,22 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			{
 				if (IsCurrentPage)
 				{
-					LoadChanges();
+					LoadView();
 				}
 				else
 				{
-					SaveChanges();
+					LeaveView();
 				}
 			}
 		}
 
-		private void SaveChanges()
+		private void LeaveView()
 		{
 			WizardContext.OutputFolder = OutputFolder;
 			WizardContext.XLIFFSupport = SelectedXliffSupport.SupportType;
 		}
 
-		private void LoadChanges()
+		private void LoadView()
 		{			
 			VerifyIsValid();
 		}

@@ -39,6 +39,10 @@
     <Reference Include="MahApps.Metro">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\MahApps.Metro.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
@@ -60,6 +64,18 @@
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
@@ -104,6 +120,7 @@
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Common\Logger.cs" />
     <Compile Include="Common\PathInfo.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
     <Compile Include="Controls\ProjectFileActivityViewControl.cs">
@@ -138,6 +155,31 @@
     </Compile>
     <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
     <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
+    <Compile Include="Converters\XLIFF\SDLXLIFF\ContentProcessor.cs" />
+    <Compile Include="Converters\XLIFF\SDLXLIFF\FileParser.cs" />
+    <Compile Include="Converters\XLIFF\Model\Body.cs" />
+    <Compile Include="Converters\XLIFF\Model\DocInfo.cs" />
+    <Compile Include="Converters\XLIFF\Model\Element.cs" />
+    <Compile Include="Converters\XLIFF\Model\ElementComment.cs" />
+    <Compile Include="Converters\XLIFF\Model\ElementLocked.cs" />
+    <Compile Include="Converters\XLIFF\Model\ElementPlaceholder.cs" />
+    <Compile Include="Converters\XLIFF\Model\ElementTagPair.cs" />
+    <Compile Include="Converters\XLIFF\Model\ElementText.cs" />
+    <Compile Include="Converters\XLIFF\Model\ExternalFile.cs" />
+    <Compile Include="Converters\XLIFF\Model\File.cs" />
+    <Compile Include="Converters\XLIFF\Model\Header.cs" />
+    <Compile Include="Converters\XLIFF\Model\Phase.cs" />
+    <Compile Include="Converters\XLIFF\Model\PhaseGroup.cs" />
+    <Compile Include="Converters\XLIFF\Model\Segment.cs" />
+    <Compile Include="Converters\XLIFF\Model\SegmentPair.cs" />
+    <Compile Include="Converters\XLIFF\Model\Skl.cs" />
+    <Compile Include="Converters\XLIFF\Model\Source.cs" />
+    <Compile Include="Converters\XLIFF\Model\Target.cs" />
+    <Compile Include="Converters\XLIFF\Model\TransUnit.cs" />
+    <Compile Include="Converters\XLIFF\Model\Xliff.cs" />
+    <Compile Include="Converters\XLIFF\Reader.cs" />
+    <Compile Include="Converters\XLIFF\SDLXLIFF\SegmentVisitor.cs" />
+    <Compile Include="Converters\XLIFF\Writer.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Common\Enumerators.cs" />
