@@ -42,7 +42,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count == 0);
+            Assert.True(errorMessage.Count > 0);
         }
 
         /// <summary>
@@ -66,8 +66,8 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count == 0);
-        }
+			Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
+		}
 
         [Theory]
         [InlineData("-1 554,5","1 554,5")]
@@ -108,7 +108,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count == 0);
+            Assert.True(errorMessage.Count > 0);
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count == 0);
+            Assert.True(errorMessage.Count > 0);
         }
 
         #endregion
@@ -193,7 +193,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count == 0);
+            Assert.True(errorMessage.Count > 0);
         }
 
         #endregion
@@ -223,7 +223,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersRemoved);
+            Assert.Equal(errorMessage[1].ErrorMessage, PluginResources.Error_NumbersRemoved);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierMain.Initialize(docPropMock.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
-            Assert.Equal(errorMessage[0].ErrorMessage,PluginResources.Error_NumbersAdded);
+            Assert.Equal(errorMessage[1].ErrorMessage,PluginResources.Error_NumbersAdded);
         }
 
         #endregion

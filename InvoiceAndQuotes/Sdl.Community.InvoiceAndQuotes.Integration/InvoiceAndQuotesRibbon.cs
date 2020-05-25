@@ -25,12 +25,9 @@ namespace Sdl.Community.InvoiceAndQuotes.Integration
             var templateFolderPath = CreateTemplateFolder();
             AddFilesToTemplateFolder(templateFolderPath);
 
-            var quotes = new StudioInQuote();
-           
+            var quotes = new StudioInQuote();           
             quotes.ShowDialog();
         }
-
-
 
         private string CreateTemplateFolder()
         {

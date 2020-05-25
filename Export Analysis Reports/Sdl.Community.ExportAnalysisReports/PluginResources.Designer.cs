@@ -61,12 +61,57 @@ namespace Sdl.Community.ExportAnalysisReports {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy result.
+        /// </summary>
+        internal static string CopyResult_Label {
+            get {
+                return ResourceManager.GetString("CopyResult_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy to clipboard was performed with success..
+        /// </summary>
+        internal static string CopyToClipboard_Success_Message {
+            get {
+                return ResourceManager.GetString("CopyToClipboard_Success_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon Download {
             get {
                 object obj = ResourceManager.GetObject("Download", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please run the Analyze File batch task for the project &apos;{0}&apos;, otherwise it will not be included within the Export Analysis Reports.
+        /// </summary>
+        internal static string ExecuteAnalyzeBatchTask_Message {
+            get {
+                return ResourceManager.GetString("ExecuteAnalyzeBatchTask_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export result.
+        /// </summary>
+        internal static string ExportResult_Label {
+            get {
+                return ResourceManager.GetString("ExportResult_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The analysis files were exported with success..
+        /// </summary>
+        internal static string ExportSuccess_Message {
+            get {
+                return ResourceManager.GetString("ExportSuccess_Message", resourceCulture);
             }
         }
         
@@ -91,6 +136,33 @@ namespace Sdl.Community.ExportAnalysisReports {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Informative message.
+        /// </summary>
+        internal static string InformativeLabel {
+            get {
+                return ResourceManager.GetString("InformativeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Analysis report was found for the selected language..
+        /// </summary>
+        internal static string NoAnalyseReportForLanguage_Message {
+            get {
+                return ResourceManager.GetString("NoAnalyseReportForLanguage_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No analyzed files in the report!.
+        /// </summary>
+        internal static string NoAnalyzeFiles_Message {
+            get {
+                return ResourceManager.GetString("NoAnalyzeFiles_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Analysis Reports.
         /// </summary>
         internal static string Plugin_Name {
@@ -106,6 +178,42 @@ namespace Sdl.Community.ExportAnalysisReports {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analysis report not found for file &apos;{0}&apos;.
+        /// </summary>
+        internal static string ReportNotFound_Message {
+            get {
+                return ResourceManager.GetString("ReportNotFound_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select an existing folder to export the reports!.
+        /// </summary>
+        internal static string SelectFolder_Message {
+            get {
+                return ResourceManager.GetString("SelectFolder_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select at least one language to copy the corresponding analysis file..
+        /// </summary>
+        internal static string SelectLanguage_Copy_Message {
+            get {
+                return ResourceManager.GetString("SelectLanguage_Copy_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select at least one language to export the report!.
+        /// </summary>
+        internal static string SelectLanguage_Export_Message {
+            get {
+                return ResourceManager.GetString("SelectLanguage_Export_Message", resourceCulture);
             }
         }
     }

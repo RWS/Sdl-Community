@@ -43,9 +43,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count == 0);
-
-
+            Assert.True(errorMessage.Count > 0);
         }
     }
 }
