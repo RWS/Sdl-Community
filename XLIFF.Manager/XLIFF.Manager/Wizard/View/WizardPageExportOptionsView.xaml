@@ -32,6 +32,8 @@
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
 
 
@@ -44,9 +46,10 @@
 						  SelectedItem="{Binding SelectedXliffSupport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 
-				<TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Output Folder:" Margin="5"/>
 
-				<Grid Grid.Row="1" Grid.Column="1" Height="24">
+
+				<TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Output Folder:" Margin="5,10,5,5"/>
+				<Grid Grid.Row="1" Grid.Column="1" Height="24" Margin="0,10,5,5">
 					<TextBox HorizontalContentAlignment="Stretch" 
 					         Padding="2,0,20,0" Height="24" 
 					         VerticalAlignment="Center"
@@ -103,11 +106,19 @@
 					       RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" />
 					</Button>
 				</Grid>
-
 				<Button Grid.Row="1" Grid.Column="2" Content="..." 
 				        Command="{Binding BrowseFolderCommand}"
+						ToolTip="Select the output folder"
 				        HorizontalAlignment="Left" VerticalAlignment="Center" 
-				        Height="24" Width="24" Margin="2,0,0,0"/>
+				        Height="24" Width="24" Margin="0,5,0,0"/>
+
+				<CheckBox Grid.Row="2" Margin="5,10,5,5" Grid.Column="0" Grid.ColumnSpan="2" Content="Include Translations" 
+				          IsChecked="{Binding IncludeTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+				<CheckBox Grid.Row="3" Margin="20,5,5,5" Grid.Column="0" Grid.ColumnSpan="2" Content="Copy Source to Target for empty translations" 
+						  IsEnabled="{Binding CopySourceToTargetEnabled}"
+				          IsChecked="{Binding CopySourceToTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
 			</Grid>
 		</GroupBox>
 	</Grid>

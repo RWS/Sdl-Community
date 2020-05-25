@@ -5,19 +5,23 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF.SDLXLIFF
 {
-	internal class FileParser
+	public class FileParser
 	{
 		public CultureInfo SourceLanguage { get; private set; }
 		public CultureInfo TargetLanguage { get; private set; }
 
-		internal Xliff ParseFile(string projectId, string filePath)
+		public Xliff ParseFile(string projectId, string filePath, bool copySourceToTarget)
 		{
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, null, null);
 
 			var contentProcessor = new ContentProcessor(projectId, filePath, false);
 
-			converter.AddBilingualProcessor(new SourceToTargetCopier(ExistingContentHandling.Preserve));
+			if (copySourceToTarget)
+			{
+				converter.AddBilingualProcessor(new SourceToTargetCopier(ExistingContentHandling.Preserve));
+			}
+
 			converter.AddBilingualProcessor(contentProcessor);
 
 			SourceLanguage = contentProcessor.SourceLanguage;

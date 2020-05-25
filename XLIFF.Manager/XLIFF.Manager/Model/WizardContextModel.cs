@@ -10,9 +10,15 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		{
 			XLIFFSupport = Enumerators.XLIFFSupport.xliff12polyglot;
 			ProjectFileModels = new List<ProjectFileModel>();
+			IncludeTranslations = false;
+			CopySourceToTarget = false;
 		}
 
 		public List<ProjectFileModel> ProjectFileModels { get; set; }
+
+		public bool IncludeTranslations { get; set; }
+
+		public bool CopySourceToTarget { get; set; }
 
 		public string OutputFolder { get; set; }
 

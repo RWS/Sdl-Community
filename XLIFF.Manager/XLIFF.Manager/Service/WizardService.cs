@@ -173,6 +173,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				Id = projectFile.Id.ToString(),
 				Name = projectFile.Name,
 				Path = projectFile.Folder,
+				Location = projectFile.LocalFilePath,
 				Action = Enumerators.Action.Export,
 				Status = Enumerators.Status.Ready,
 				Date = DateTime.Now,
@@ -238,6 +239,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		private ObservableCollection<WizardPageViewModelBase> CreatePages(WizardContextModel transactionModel)
 		{
 			//TODO setup the Import action pages
+
 
 			var pages = new ObservableCollection<WizardPageViewModelBase>
 			{

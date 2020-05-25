@@ -73,6 +73,8 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			}
 		}
 
+		public string Location { get; set; }
+
 		public string XliffFilePath { get; set; }
 
 		public DateTime Date { get; set; }

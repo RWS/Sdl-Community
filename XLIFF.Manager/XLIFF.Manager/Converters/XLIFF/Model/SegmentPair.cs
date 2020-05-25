@@ -15,8 +15,6 @@ namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF.Model
 
 		public ConfirmationLevel ConfirmationLevel { get; set; }
 
-		public ITranslationOrigin TranslationOrigin { get; set; }
-
-		
+		public ITranslationOrigin TranslationOrigin { get; set; }		
 	}
 }

@@ -28,7 +28,7 @@ namespace Sdl.Community.XLIFF.Manager
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class XLIFFManagerViewController : AbstractViewController
 	{
-		private readonly object _lockObject = new object();
+		private readonly object _lockObject = new object();		
 		private List<ProjectModel> _projectModels;
 		private ProjectFilesViewModel _projectFilesViewModel;
 		private ProjectsNavigationViewModel _projectsNavigationViewModel;
@@ -41,20 +41,17 @@ namespace Sdl.Community.XLIFF.Manager
 		private PathInfo _pathInfo;
 
 		protected override void Initialize(IViewContext context)
-		{
+		{			
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService(_pathInfo);
 			_imageService.ExtractFlags();
-
-			var logger = new Logger();
-			logger.Setup(_pathInfo);			
 
 			ActivationChanged += OnActivationChanged;
 
 			_eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 			_eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>()?.Subscribe(OnStudioWindowCreatedNotificationEvent);
 
-			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();					
+			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
 			// TODO this will be replaced with a call to recover the relevant data from the projects loaded in Studio			
 			var testDataUtil = new TestDataUtil(_imageService);
@@ -125,7 +122,7 @@ namespace Sdl.Community.XLIFF.Manager
 					_projectFilesViewModel.ProjectFileActivityViewModel =
 						new ProjectFileActivityViewModel(_projectFilesViewModel?.SelectedProjectFile?.ProjectFileActivityModels);
 
-					_projectFileActivityViewController.ViewModel = _projectFilesViewModel.ProjectFileActivityViewModel;
+					_projectFileActivityViewController.ViewModel = _projectFilesViewModel.ProjectFileActivityViewModel;					
 				}
 				catch
 				{

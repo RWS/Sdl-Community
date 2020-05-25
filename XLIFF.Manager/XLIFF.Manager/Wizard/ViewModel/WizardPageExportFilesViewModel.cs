@@ -12,7 +12,7 @@ using Sdl.Community.XLIFF.Manager.Model;
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public class WizardPageExportFilesViewModel : WizardPageViewModelBase, IDisposable
-	{
+	{	
 		private IList _selectedProjectFiles;		
 		private List<ProjectFileModel> _projectFiles;
 		private ProjectFileModel _selectedProjectFile;
@@ -22,7 +22,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private bool _checkingAllAction;
 
 		public WizardPageExportFilesViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
-		{
+		{		
 			ProjectFiles = wizardContext.ProjectFileModels;
 			PropertyChanged += WizardPageExportFilesViewModel_PropertyChanged;			
 		}

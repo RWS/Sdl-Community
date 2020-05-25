@@ -7,11 +7,11 @@ using Sdl.Community.XLIFF.Manager.Model;
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public class WizardPageSummaryViewModel : WizardPageViewModelBase
-	{
+	{		
 		private string _summaryText;
 
 		public WizardPageSummaryViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
-		{
+		{		
 			IsValid = true;
 			PropertyChanged += WizardPageSummaryViewModel_PropertyChanged;
 		}

@@ -12,18 +12,23 @@ using Sdl.Community.XLIFF.Manager.Model;
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public class WizardPageExportOptionsViewModel : WizardPageViewModelBase, IDisposable
-	{
+	{		
 		private List<XLIFFSupportModel> _xliffSupport;
 		private XLIFFSupportModel _selectedXliffSupportModel;
 		private string _outputFolder;
+		private bool _copySourceToTarget;
+		private bool _copySourceToTargetEnabled;
+		private bool _includeTranslations;
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
 
 		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
-		{
+		{		
 			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == WizardContext.XLIFFSupport);
 			OutputFolder = WizardContext.OutputFolder;
-
+			CopySourceToTarget = wizardContext.CopySourceToTarget;
+			IncludeTranslations = wizardContext.IncludeTranslations;
+		
 			PropertyChanged += WizardPageExportOptionsViewModel_PropertyChanged;
 		}
 		
@@ -51,12 +56,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 					{
 						Name = "XLIFF 1.2 Polyglot",
 						SupportType = Enumerators.XLIFFSupport.xliff12polyglot
-					},
-					new XLIFFSupportModel
-					{
-						Name = "XLIFF 2.0 SDL",
-						SupportType = Enumerators.XLIFFSupport.xliff20sdl
 					}
+					// TODO spport for this format will come later on in the development cycle
+					//new XLIFFSupportModel
+					//{
+					//	Name = "XLIFF 2.0 SDL",
+					//	SupportType = Enumerators.XLIFFSupport.xliff20sdl
+					//}
 				};
 
 				return _xliffSupport;
@@ -84,7 +90,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public string OutputFolder
 		{
-			get { return _outputFolder; }
+			get => _outputFolder;
 			set
 			{
 				if (_outputFolder == value)
@@ -98,13 +104,72 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				VerifyIsValid();
 			}
 		}
-	
+
+		public bool CopySourceToTarget
+		{
+			get => _copySourceToTarget;
+			set
+			{
+				if (_copySourceToTarget == value)
+				{
+					return;
+				}
+
+				_copySourceToTarget = value;
+				OnPropertyChanged(nameof(CopySourceToTarget));
+
+				VerifyIsValid();
+			}
+		}
+
+		public bool CopySourceToTargetEnabled
+		{
+			get => _copySourceToTargetEnabled;
+			set
+			{
+				if (_copySourceToTargetEnabled == value)
+				{
+					return;
+				}
+
+				_copySourceToTargetEnabled = value;
+				OnPropertyChanged(nameof(CopySourceToTargetEnabled));			
+			}
+		}
+
+		public bool IncludeTranslations
+		{
+			get => _includeTranslations;
+			set
+			{
+				if (_includeTranslations == value)
+				{
+					return;
+				}
+
+				_includeTranslations = value;
+				OnPropertyChanged(nameof(IncludeTranslations));
+
+				if (!_includeTranslations)
+				{
+					CopySourceToTarget = false;
+					CopySourceToTargetEnabled = false;
+				}
+				else
+				{
+					CopySourceToTargetEnabled = true;
+				}
+
+				VerifyIsValid();
+			}
+		}
+
 		public override string DisplayName => "Options";
 
 		public override bool IsValid { get; set; }
 
 		private void VerifyIsValid()
-		{
+		{			
 			IsValid = Directory.Exists(OutputFolder);
 		}
 
@@ -169,6 +234,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		{
 			WizardContext.OutputFolder = OutputFolder;
 			WizardContext.XLIFFSupport = SelectedXliffSupport.SupportType;
+			WizardContext.CopySourceToTarget = CopySourceToTarget;
+			WizardContext.IncludeTranslations = IncludeTranslations;									
 		}
 
 		private void LoadView()
