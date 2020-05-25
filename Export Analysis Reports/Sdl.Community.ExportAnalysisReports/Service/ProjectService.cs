@@ -133,6 +133,19 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 		}
 
+		public void SetAllProjectDetails(List<ProjectDetails> allProjectDetails, ProjectDetails projectDetails)
+		{
+			if (!allProjectDetails.Any(p => p.ProjectName.Equals(projectDetails.ProjectName)))
+			{
+				allProjectDetails.Add(projectDetails);
+			}
+		}
+
+		public void RemoveAllSingleProjects(List<ProjectDetails> allProjectDetails)
+		{
+			allProjectDetails.RemoveAll(x => x.IsSingleFileProject);
+		}
+
 		// Configure the project languages using project details
 		private void ConfigureProjectLanguages(ProjectDetails projectDetails)
 		{
@@ -191,11 +204,12 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				if (languagesDirectionNode == null) return languages;
 				foreach (var item in languagesDirectionNode)
 				{
-					var node = (XmlNode) item;
+					var node = (XmlNode)item;
 					if (node.Attributes == null) continue;
 					var lang = new LanguageDirection
 					{
-						Guid = node.Attributes["Guid"].Value, TargetLang = CultureInfo.GetCultureInfo(node.Attributes["TargetLanguageCode"].Value)
+						Guid = node.Attributes["Guid"].Value,
+						TargetLang = CultureInfo.GetCultureInfo(node.Attributes["TargetLanguageCode"].Value)
 					};
 					if (!languages.ContainsKey(lang.Guid))
 					{
@@ -278,7 +292,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				{
 					projectDetails.ProjectLanguages.Add(language.DisplayName, true);
 				}
-				if(ProjectController == null)
+				if (ProjectController == null)
 				{
 					ProjectController = GetProjectsController();
 				}
@@ -310,7 +324,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				var projectStatus = statusProperty.GetValue(internalProject, null).ToString();
 				return projectStatus;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"GetInternalProjectStatus method: {ex.Message}\n {ex.StackTrace}");
 			}
@@ -329,7 +343,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					projectStatus = GetInternalProjectStatus(studioProject);
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"GetProjectStatus method: {ex.Message}\n {ex.StackTrace}");
 
