@@ -93,9 +93,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 				job = JobProcesses.FirstOrDefault(a => a.Name == "Finalize");
 				if (job != null)
-				{
-					
-
+				{					
 					success = Finalize(job);
 				}
 			}
@@ -129,17 +127,18 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 				TextMessage = "Initialzing procedures...";
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
+				jobProcess.Status = JobProcess.ProcessStatus.Running;
+
+
 				OnPropertyChanged(nameof(TextMessage));
 				OnPropertyChanged(nameof(TextMessageBrush));
-				jobProcess.Status = JobProcess.ProcessStatus.Running;
-				Refresh();
+				OnPropertyChanged(nameof(JobProcesses));
 
-				// clear the warnings
-				System.Threading.Thread.Sleep(3000);
+				//Refresh();
+				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 				
 
-				jobProcess.Status = JobProcess.ProcessStatus.Completed;
-				//Refresh();
+				jobProcess.Status = JobProcess.ProcessStatus.Completed;				
 			}
 			catch (Exception ex)
 			{
@@ -163,10 +162,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 				TextMessage = "Converting to XLIFF format...";
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
-				OnPropertyChanged(nameof(TextMessage));
-				OnPropertyChanged(nameof(TextMessageBrush));
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
-				Refresh();
+
+				OnPropertyChanged(nameof(TextMessage));
+				OnPropertyChanged(nameof(TextMessageBrush));				
+				OnPropertyChanged(nameof(JobProcesses));
+
+				//Refresh();
+				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 
 				var project = WizardContext.ProjectFileModels[0].ProjectModel;
 				var workingFolder = GetWorkingFolder();
@@ -248,23 +251,19 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			try
 			{
 				//_logger.Info("Phase: Finalize");
-
-
 				TextMessage = "Finalizing procedures...";
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
+				jobProcess.Status = JobProcess.ProcessStatus.Running;
+
 				OnPropertyChanged(nameof(TextMessage));
 				OnPropertyChanged(nameof(TextMessageBrush));
-				jobProcess.Status = JobProcess.ProcessStatus.Running;
-				Refresh();
+				OnPropertyChanged(nameof(JobProcesses));
 
-
-				// clear the warnings
-				System.Threading.Thread.Sleep(3000);
-
-
-				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 				//Refresh();
+				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 
+				
+				jobProcess.Status = JobProcess.ProcessStatus.Completed;				
 			}
 			catch (Exception ex)
 			{
