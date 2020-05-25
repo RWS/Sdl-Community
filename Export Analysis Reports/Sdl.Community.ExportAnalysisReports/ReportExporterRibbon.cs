@@ -14,11 +14,15 @@ namespace Sdl.Community.ExportAnalysisReports
 	{
 	}
 
-	[Action("ExportAnalysisReports", Name = "Export Analysis Reports", Icon = "folder2_blue", Description = "Export Analysis Reports")]
+	[Action("ExportAnalysisReports", Name = "Export Analysis Reports (all projects)", Icon = "folder2_blue", Description = "Open Export Analysis Reports for all analysed projects")]
 	[ActionLayout(typeof(ReportExporterRibbon), 20, DisplayType.Large)]
 	class ReportExporterViewPartAction : AbstractAction
 	{
-
+		public override void Initialize()
+		{
+			base.Initialize();
+			Text = "Export Analysis Reports";
+		}
 		protected override void Execute()
 		{
 			var exporter = new ReportExporterControl();
@@ -26,14 +30,19 @@ namespace Sdl.Community.ExportAnalysisReports
 		}
 	}
 
-	[Action("ExportAnalysisReports.Button", Name = "Export Analysis Reports", Description = "Export Analysis Reports", Icon = "folder2_blue")]
+	[Action("ExportAnalysisReports.Button", Name = "Export Analysis Reports (selected projects)", Description = "Open Export Analysis Reports based on analysed projects selection", Icon = "folder2_blue")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "", true)]
 	public class ReportExporter : AbstractAction
 	{
+		public override void Initialize()
+		{
+			base.Initialize();
+			Text = "Export Analysis Reports";
+		}
 		protected override void Execute()
 		{
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			var selectedProjects = projectController.SelectedProjects;
+			var selectedProjects = projectController?.SelectedProjects;
 			var foldersPth = new List<string>();
 			foreach (var project in selectedProjects)
 			{
