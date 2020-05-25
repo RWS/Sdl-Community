@@ -332,6 +332,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					{
 						_rateItController.RateIt.SetTranslationService(TranslationService);
 						_rateItController.Activate();
+						//_rateItController.Dispose();
+						
 					}
 				}
 				catch
