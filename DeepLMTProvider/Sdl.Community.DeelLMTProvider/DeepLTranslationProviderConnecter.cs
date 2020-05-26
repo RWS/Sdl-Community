@@ -15,7 +15,6 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter
 	{
-
 		public string ApiKey { get; set; }
 		private readonly string _pluginVersion = "";
 		private readonly string _identifier;
@@ -72,7 +71,7 @@ namespace Sdl.Community.DeepLMTProvider
 													"&preserve_formatting=1" +
 													$"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
 
-					var studioVersion = new Toolkit.Core.Studio().GetStudioVersion().ExecutableVersion;
+					var studioVersion = new Toolkit.Core.Studio().GetStudioVersion()?.ExecutableVersion;
 					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2017 {studioVersion}/plugin {_pluginVersion}");
 
 					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result;

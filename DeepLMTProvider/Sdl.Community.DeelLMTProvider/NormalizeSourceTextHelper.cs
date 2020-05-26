@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace Sdl.Community.DeepLMTProvider
@@ -129,16 +128,7 @@ namespace Sdl.Community.DeepLMTProvider
 				var containsTab = text.Contains('\t');
 				if (isSpace)
 				{
-					string space;
-
-					if (containsTab)
-					{
-						space = spaceRgx.Replace(text, "\t");
-					}
-					else
-					{
-						space = spaceRgx.Replace(text, " ");
-					}
+					var space = spaceRgx.Replace(text, containsTab ? "\t" : " ");
 
 					finalText.Append(space);
 				}
