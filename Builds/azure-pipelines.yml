@@ -23,6 +23,6 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: 'Nitu95/Sdl-Community/AdvancedDisplayFilter/'
+    PathtoPublish: 'Sdl-Community/AdvancedDisplayFilter/Sdl.Community.AdvancedDisplayFilter.sln'
     ArtifactName: 'Sdl.Community.AdvancedDisplayFilter'
     publishLocation: 'Container'
