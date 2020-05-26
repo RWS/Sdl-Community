@@ -22,7 +22,8 @@ steps:
 - template: steps-reuse-template.yml
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: AdvancedDisplayFilter.zip'
   inputs:
-    PathtoPublish: 'Sdl-Community/AdvancedDisplayFilter/Sdl.Community.AdvancedDisplayFilter.sln'
-    ArtifactName: 'Sdl.Community.AdvancedDisplayFilter'
-    publishLocation: 'Container'
+    ArtifactName: 'AdvancedDisplayFilter'
+    publishLocation: FilePath
+    TargetPath: '$(Agent.BuildDirectory)'
