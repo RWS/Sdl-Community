@@ -20,3 +20,9 @@ variables:
 
 steps:
 - template: steps-reuse-template.yml
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'Sdl-Community/AdvancedDisplayFilter/*'
+    ArtifactName: 'Sdl.Community.AdvancedDisplayFilter'
+    publishLocation: 'Container'
