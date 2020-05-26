@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
@@ -24,11 +26,20 @@ namespace Sdl.Community.InSource
 
     [Action("CreateProjectsAction", typeof(InSourceViewController), Name = "CreateProjects_Name", Description = "CreateProjects_Description", Icon = "CreateProjects_Icon")]
     [ActionLayout(typeof(InSourceViewRibbonGroup), 1, DisplayType.Large)]
-    public class CreateProjectsAction : AbstractViewControllerAction<InSourceViewController>
+    public class CreateProjectsAction : AbstractViewControllerAction<InSourceViewController>, IDisposable
     {
-        public override void Initialize()
-        {
-            Controller.ProjectRequestsChanged += OnProjectRequestsChanged;
+		private readonly SafeHandle _safeHandle;
+		public CreateProjectsAction()
+		{
+			_safeHandle = new SafeFileHandle(IntPtr.Zero, true);
+		}
+
+		// The public implementation of Dispose pattern callable by consumers.
+		public void Dispose() => Dispose(true);
+
+		public override void Initialize()
+        {			
+			Controller.ProjectRequestsChanged += OnProjectRequestsChanged;
         }
 
         void OnProjectRequestsChanged(object sender, EventArgs e)
@@ -40,7 +51,20 @@ namespace Sdl.Community.InSource
         {
             Controller.CreateProjects();
         }
-    }
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!disposing) return;
+
+			// Dispose managed state (managed objects).
+			_safeHandle?.Dispose();
+			if (Controller != null)
+			{
+				Controller.ProjectRequestsChanged -= OnProjectRequestsChanged;
+				Controller.Dispose();
+			}
+		}
+	}
 
     [Action("ContributeToProjectAction", typeof(InSourceViewController), Name = "ContributeToProject_Name", Description = "ContributeToProject_Description", Icon = "opensourceimage")]
     [ActionLayout(typeof(InSourceViewRibbonGroup), 0, DisplayType.Large)]

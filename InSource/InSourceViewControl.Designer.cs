@@ -45,8 +45,9 @@
             this.deleteColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.templateColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.btnsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.addBtn = new System.Windows.Forms.Button();
+            this.btn_ClearMessages = new System.Windows.Forms.Button();
             this.saveBtn = new System.Windows.Forms.Button();
+            this.addBtn = new System.Windows.Forms.Button();
             this._resultsTextBox = new System.Windows.Forms.TextBox();
             this._tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -172,6 +173,7 @@
             this._filesListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this._filesListView.HideSelection = false;
             this._filesListView.Location = new System.Drawing.Point(0, 13);
             this._filesListView.Margin = new System.Windows.Forms.Padding(0);
             this._filesListView.Name = "_filesListView";
@@ -244,6 +246,7 @@
             this.templateColumn});
             this.foldersListView.Cursor = System.Windows.Forms.Cursors.Default;
             this.foldersListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.foldersListView.HideSelection = false;
             this.foldersListView.HighlightBackgroundColor = System.Drawing.Color.Empty;
             this.foldersListView.HighlightForegroundColor = System.Drawing.Color.Empty;
             this.foldersListView.Location = new System.Drawing.Point(3, 16);
@@ -255,29 +258,33 @@
             // 
             // pathColumn
             // 
-            this.pathColumn.FillsFreeSpace = true;
+            this.pathColumn.IsEditable = false;
             this.pathColumn.Text = "Path";
-            this.pathColumn.Width = 43;
+            this.pathColumn.ToolTipText = "";
+            this.pathColumn.Width = 300;
             // 
             // deleteColumn
             // 
             this.deleteColumn.Text = "Delete";
-            this.deleteColumn.Width = 200;
+            this.deleteColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.deleteColumn.Width = 50;
             // 
             // templateColumn
             // 
             this.templateColumn.Text = "Template";
-            this.templateColumn.Width = 150;
+            this.templateColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.templateColumn.Width = 120;
             // 
             // btnsLayoutPanel
             // 
             this.btnsLayoutPanel.ColumnCount = 4;
-            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.42973F));
-            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.42973F));
-            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.14053F));
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.68191F));
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.39166F));
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.92642F));
             this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.btnsLayoutPanel.Controls.Add(this.addBtn, 0, 0);
-            this.btnsLayoutPanel.Controls.Add(this.saveBtn, 1, 0);
+            this.btnsLayoutPanel.Controls.Add(this.btn_ClearMessages, 0, 0);
+            this.btnsLayoutPanel.Controls.Add(this.saveBtn, 2, 0);
+            this.btnsLayoutPanel.Controls.Add(this.addBtn, 1, 0);
             this.btnsLayoutPanel.Location = new System.Drawing.Point(3, 139);
             this.btnsLayoutPanel.Name = "btnsLayoutPanel";
             this.btnsLayoutPanel.RowCount = 1;
@@ -285,25 +292,35 @@
             this.btnsLayoutPanel.Size = new System.Drawing.Size(289, 34);
             this.btnsLayoutPanel.TabIndex = 3;
             // 
-            // addBtn
+            // btn_ClearMessages
             // 
-            this.addBtn.Location = new System.Drawing.Point(3, 3);
-            this.addBtn.Name = "addBtn";
-            this.addBtn.Size = new System.Drawing.Size(64, 23);
-            this.addBtn.TabIndex = 0;
-            this.addBtn.Text = "Add folder";
-            this.addBtn.UseVisualStyleBackColor = true;
-            this.addBtn.Click += new System.EventHandler(this.addBtn_Click);
+            this.btn_ClearMessages.Location = new System.Drawing.Point(3, 3);
+            this.btn_ClearMessages.Name = "btn_ClearMessages";
+            this.btn_ClearMessages.Size = new System.Drawing.Size(102, 23);
+            this.btn_ClearMessages.TabIndex = 0;
+            this.btn_ClearMessages.Text = "Clear messages";
+            this.btn_ClearMessages.UseVisualStyleBackColor = true;
+            this.btn_ClearMessages.Click += new System.EventHandler(this.btn_ClearMessages_Click);
             // 
             // saveBtn
             // 
-            this.saveBtn.Location = new System.Drawing.Point(88, 3);
+            this.saveBtn.Location = new System.Drawing.Point(209, 3);
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Size = new System.Drawing.Size(65, 23);
-            this.saveBtn.TabIndex = 1;
+            this.saveBtn.TabIndex = 2;
             this.saveBtn.Text = "Save";
             this.saveBtn.UseVisualStyleBackColor = true;
             this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
+            // 
+            // addBtn
+            // 
+            this.addBtn.Location = new System.Drawing.Point(119, 3);
+            this.addBtn.Name = "addBtn";
+            this.addBtn.Size = new System.Drawing.Size(64, 23);
+            this.addBtn.TabIndex = 1;
+            this.addBtn.Text = "Add folder";
+            this.addBtn.UseVisualStyleBackColor = true;
+            this.addBtn.Click += new System.EventHandler(this.addBtn_Click);
             // 
             // _resultsTextBox
             // 
@@ -365,5 +382,6 @@
         private System.Windows.Forms.TableLayoutPanel btnsLayoutPanel;
         private System.Windows.Forms.Button saveBtn;
         private System.Windows.Forms.Button addBtn;
-    }
+		private System.Windows.Forms.Button btn_ClearMessages;
+	}
 }

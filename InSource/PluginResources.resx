@@ -137,7 +137,7 @@
     <value>Create Projects</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>Studio Integration API Sample</value>
+    <value>SDL InSource!</value>
   </data>
   <data name="WikipediaSearchAction_Description" xml:space="preserve">
     <value>Search Wikipedia with current selection</value>
@@ -174,5 +174,56 @@
   </data>
   <data name="TellMe1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\TellMe1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CustomTemplateSelection_Message" xml:space="preserve">
+    <value>Please choose a custom template!</value>
+  </data>
+  <data name="ImportCustomTemplate_Message" xml:space="preserve">
+    <value>Please import a custom project template within Studio before configuring the Watch folder!</value>
+  </data>
+  <data name="MissingProjectTemplate_Message" xml:space="preserve">
+    <value>Missing project template</value>
+  </data>
+  <data name="ProjectSelection_Message" xml:space="preserve">
+    <value>Please select a project!</value>
+  </data>
+  <data name="ProjectSuccessfullyCreated_Message" xml:space="preserve">
+    <value>Project '{0}' was successfully created.</value>
+  </data>
+  <data name="ProjectTemplateSelection_Message" xml:space="preserve">
+    <value>Please select a project template from the InSource view!</value>
+  </data>
+  <data name="ProjectTemplateSequenceSelection_Message" xml:space="preserve">
+    <value>Please go to File -&gt; Setup -&gt; Project templates -&gt; Select a template -&gt; Edit -&gt; Default Task Sequence -&gt; Ok after that run again Content connector</value>
+  </data>
+  <data name="RemoveWatchFolder_Message" xml:space="preserve">
+    <value>Are you sure you want to remove this watch folder path?</value>
+  </data>
+  <data name="TimerNumberSetup_Message" xml:space="preserve">
+    <value>Please set a number for the timer!</value>
+  </data>
+  <data name="WatchFoldersSelection_Message" xml:space="preserve">
+    <value>Watch folders should contain only folders, please put the files in a directory, and click afterwards, the 'CHECK PROJECT REQUESTS' button</value>
+  </data>
+  <data name="ProjectTemplateLocation_Message" xml:space="preserve">
+    <value>Please configure the Project Location within the custom template '{0}' from File -&gt; Setup -&gt; Project Templates! The custom template is set for the Watch Folder '{1}'.</value>
+  </data>
+  <data name="ProjectTemplateLanguagePairs_Message" xml:space="preserve">
+    <value>Please configure the Language Pairs for the custom template '{0}' from File -&gt; Setup -&gt; Project Templates -&gt; select the custom template - &gt; Edit -&gt; Language Pairs -&gt; Add. The custom template is set for the Watch Folder '{1}'.</value>
+  </data>
+  <data name="CreateNewProjectText" xml:space="preserve">
+    <value>Create new project</value>
+  </data>
+  <data name="CreateProjectText" xml:space="preserve">
+    <value>Create project</value>
+  </data>
+  <data name="DisabledTimer_Message" xml:space="preserve">
+    <value>Timer is disabled</value>
+  </data>
+  <data name="RemainingMinutes_Message" xml:space="preserve">
+    <value> minutes until project request is checked.</value>
+  </data>
+  <data name="trash_alt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\trash-alt.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
