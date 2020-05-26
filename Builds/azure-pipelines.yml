@@ -9,21 +9,21 @@ trigger:
     - master
   paths:
     include:
-    - Sdl-Community/AdvancedDisplayFilter/*
+    - Sdl-Community/AmazonTranslateTradosPlugin/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
+  solution : '**/AmazonTranslateTradosPlugin.sln'
 
 steps:
 - template: steps-reuse-template.yml
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: AdvancedDisplayFilter.zip'
+  displayName: 'Publish Artifact: AmazonTranslateTradosPlugin.zip'
   inputs:
-    ArtifactName: 'AdvancedDisplayFilter'
+    ArtifactName: 'AmazonTranslateTradosPlugin'
     publishLocation: FilePath
     TargetPath: '$(Agent.BuildDirectory)'
