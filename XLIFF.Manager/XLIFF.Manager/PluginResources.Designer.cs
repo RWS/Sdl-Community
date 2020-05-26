@@ -138,6 +138,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy Source to Target: {0}.
+        /// </summary>
+        internal static string Label_CopySourceToTarget {
+            get {
+                return ResourceManager.GetString("Label_CopySourceToTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created: {0}.
         /// </summary>
         internal static string Label_Created {
@@ -183,6 +192,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include Translations: {0}.
+        /// </summary>
+        internal static string Label_IncludeTranslations {
+            get {
+                return ResourceManager.GetString("Label_IncludeTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language: {0}.
         /// </summary>
         internal static string Label_Language {
@@ -206,6 +224,15 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string Label_Name {
             get {
                 return ResourceManager.GetString("Label_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        internal static string Label_Options {
+            get {
+                return ResourceManager.GetString("Label_Options", resourceCulture);
             }
         }
         
@@ -269,6 +296,15 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string Label_WorkingFolder {
             get {
                 return ResourceManager.GetString("Label_WorkingFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XLIFF Support: {0}.
+        /// </summary>
+        internal static string Label_XliffSupport {
+            get {
+                return ResourceManager.GetString("Label_XliffSupport", resourceCulture);
             }
         }
         

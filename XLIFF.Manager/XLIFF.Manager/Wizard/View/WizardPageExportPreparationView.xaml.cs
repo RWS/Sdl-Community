@@ -3,9 +3,9 @@ using System.Windows.Controls;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.View
 {	
-	public partial class WizardPageSummaryView : UserControl
+	public partial class WizardPageExportPreparationView : UserControl
 	{		
-		public WizardPageSummaryView()
+		public WizardPageExportPreparationView()
 		{
 			InitializeComponent();			
 		}		

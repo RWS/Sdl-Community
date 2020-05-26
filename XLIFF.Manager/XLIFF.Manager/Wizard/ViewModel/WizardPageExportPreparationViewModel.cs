@@ -13,18 +13,17 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Converters.SDLXLIFF;
-using Sdl.Community.XLIFF.Manager.Converters.XLIFF;
 using Sdl.Community.XLIFF.Manager.Converters.XLIFF.Writers;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
-	public class WizardPagePreparationViewModel : WizardPageViewModelBase
+	public class WizardPageExportPreparationViewModel : WizardPageViewModelBase
 	{
 		private ObservableCollection<JobProcess> _jobProcesses;
 		private ICommand _openFolderInExplorerCommand;
 
-		public WizardPagePreparationViewModel(Window owner, UserControl view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
+		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
 		{					
 			IsValid = true;
 			InitializeJobProcessList();

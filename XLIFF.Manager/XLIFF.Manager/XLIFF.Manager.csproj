@@ -210,18 +210,18 @@
     <Compile Include="TestData\TestDataUtil.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageExportFilesViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageExportOptionsViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\WizardPagePreparationViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\WizardPageSummaryViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\WizardPageExportPreparationViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\WizardPageExportSummaryViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageViewModelBase.cs" />
     <Compile Include="Wizard\View\WizardPageExportOptionsView.xaml.cs">
       <DependentUpon>WizardPageExportOptionsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\View\WizardPageSummaryView.xaml.cs">
-      <DependentUpon>WizardPageSummaryView.xaml</DependentUpon>
+    <Compile Include="Wizard\View\WizardPageExportSummaryView.xaml.cs">
+      <DependentUpon>WizardPageExportSummaryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\View\WizardPagePreparationView.xaml.cs">
-      <DependentUpon>WizardPagePreparationView.xaml</DependentUpon>
+    <Compile Include="Wizard\View\WizardPageExportPreparationView.xaml.cs">
+      <DependentUpon>WizardPageExportPreparationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wizard\View\WizardPageExportFilesView.xaml.cs">
       <DependentUpon>WizardPageExportFilesView.xaml</DependentUpon>
@@ -339,11 +339,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wizard\View\WizardPageSummaryView.xaml">
+    <Page Include="Wizard\View\WizardPageExportSummaryView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wizard\View\WizardPagePreparationView.xaml">
+    <Page Include="Wizard\View\WizardPageExportPreparationView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

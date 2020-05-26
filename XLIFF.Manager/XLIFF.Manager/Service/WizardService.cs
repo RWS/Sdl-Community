@@ -263,8 +263,8 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			{
 				new WizardPageExportFilesViewModel(_wizardWindow, new WizardPageExportFilesView(), transactionModel),
 				new WizardPageExportOptionsViewModel(_wizardWindow, new WizardPageExportOptionsView(), transactionModel),
-				new WizardPageSummaryViewModel(_wizardWindow, new WizardPageSummaryView(), transactionModel),
-				new WizardPagePreparationViewModel(_wizardWindow, new WizardPagePreparationView(), transactionModel)
+				new WizardPageExportSummaryViewModel(_wizardWindow, new WizardPageExportSummaryView(), transactionModel),
+				new WizardPageExportPreparationViewModel(_wizardWindow, new WizardPageExportPreparationView(), transactionModel)
 			};
 
 			UpdatePageIndexes(pages);

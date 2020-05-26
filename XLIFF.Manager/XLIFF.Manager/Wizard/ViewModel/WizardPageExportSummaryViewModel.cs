@@ -6,11 +6,11 @@ using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
-	public class WizardPageSummaryViewModel : WizardPageViewModelBase
+	public class WizardPageExportSummaryViewModel : WizardPageViewModelBase
 	{
 		private string _summaryText;
 
-		public WizardPageSummaryViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
+		public WizardPageExportSummaryViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
 		{
 			IsValid = true;
 			PropertyChanged += WizardPageSummaryViewModel_PropertyChanged;
@@ -55,12 +55,17 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			summaryText += string.Format(PluginResources.Label_Customer, project.Customer?.Name) + Environment.NewLine;
 
 			summaryText += Environment.NewLine;
+			summaryText += PluginResources.Label_Options + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_XliffSupport, WizardContext.Support) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_IncludeTranslations, WizardContext.IncludeTranslations) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.CopySourceToTarget) + Environment.NewLine;
 
+			summaryText += Environment.NewLine;
 			summaryText += string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFileModels.Count) + Environment.NewLine;
 			summaryText += string.Format(PluginResources.Label_SelectedFiles, WizardContext.ProjectFileModels.Count(a => a.Selected)) + Environment.NewLine;
 			summaryText += string.Format(PluginResources.Label_SelectedLanguages, GetSelectedLanguagesString()) + Environment.NewLine;			
-			summaryText += string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder) + Environment.NewLine;
-
+			
 			var targetLanguages = WizardContext.ProjectFileModels.Where(a => a.Selected)
 				.Select(a => a.TargetLanguage.CultureInfo).Distinct();
 			foreach (var targetLanguage in targetLanguages)
