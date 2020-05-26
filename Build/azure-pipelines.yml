@@ -1,0 +1,17 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - Sdl-Community/AdvancedDisplayFilter/*
+
+pool: Itdevops2
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
+
+steps:
+- template: steps-reuse-template.yml
