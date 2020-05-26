@@ -148,7 +148,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		}
 
 
-		public override string DisplayName => "Files";
+		public override string DisplayName => PluginResources.PageName_Files;
 
 		public override bool IsValid { get; set; }
 

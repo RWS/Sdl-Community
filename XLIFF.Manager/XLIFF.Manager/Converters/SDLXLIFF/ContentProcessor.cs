@@ -8,11 +8,10 @@ using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using File = Sdl.Community.XLIFF.Manager.Converters.XLIFF.Model.File;
 
-namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF.SDLXLIFF
+namespace Sdl.Community.XLIFF.Manager.Converters.SDLXLIFF
 {
 	internal class ContentProcessor : IBilingualContentProcessor
 	{
-
 		private readonly bool _ignoreTags;
 		private readonly string _inputPath;
 		private readonly string _projectId;

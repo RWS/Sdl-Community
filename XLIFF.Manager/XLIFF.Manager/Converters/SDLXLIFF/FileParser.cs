@@ -3,7 +3,7 @@ using Sdl.Community.XLIFF.Manager.Converters.XLIFF.Model;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
-namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF.SDLXLIFF
+namespace Sdl.Community.XLIFF.Manager.Converters.SDLXLIFF
 {
 	public class FileParser
 	{

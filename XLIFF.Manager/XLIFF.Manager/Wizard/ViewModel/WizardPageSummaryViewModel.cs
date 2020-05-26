@@ -7,11 +7,11 @@ using Sdl.Community.XLIFF.Manager.Model;
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public class WizardPageSummaryViewModel : WizardPageViewModelBase
-	{		
+	{
 		private string _summaryText;
 
 		public WizardPageSummaryViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
-		{		
+		{
 			IsValid = true;
 			PropertyChanged += WizardPageSummaryViewModel_PropertyChanged;
 		}
@@ -44,28 +44,30 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		{
 			var project = WizardContext.ProjectFileModels[0].ProjectModel;
 
-			var summaryText = "Id: " + project.Id + Environment.NewLine;
-			summaryText += "Name: " + project.Name + Environment.NewLine;
-			summaryText += "Location: " + project.Path + Environment.NewLine;
-			summaryText += "Created: " + project.Created.ToString(CultureInfo.InvariantCulture);
-			summaryText += "Due Date: " + project.DueDate.ToString(CultureInfo.InvariantCulture) + Environment.NewLine;
-			summaryText += "Soruce Language: " + project.SourceLanguage.CultureInfo.DisplayName + Environment.NewLine;
-			summaryText += "Target Languages: " + GetProjectTargetLanguagesString(project) + Environment.NewLine;
-			summaryText += "Project Type: " + project.ProjectType + Environment.NewLine;
-			summaryText += "Customer: " + project.Customer?.Name + Environment.NewLine;
+			var summaryText = string.Format(PluginResources.Label_Id, project.Id) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_Name, project.Name) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_Location, project.Path) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_Created, project.Created.ToString(CultureInfo.InvariantCulture)) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_DueDate, project.DueDate.ToString(CultureInfo.InvariantCulture)) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_SourceLanguage, project.SourceLanguage.CultureInfo.DisplayName) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_TargetLanguages, GetProjectTargetLanguagesString(project)) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_ProjectType, project.ProjectType) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_Customer, project.Customer?.Name) + Environment.NewLine;
 
 			summaryText += Environment.NewLine;
 
-			summaryText += "Total Files: " + WizardContext.ProjectFileModels.Count + Environment.NewLine;
-			summaryText += "Selected Files: " + WizardContext.ProjectFileModels.Count(a => a.Selected) + Environment.NewLine;
-			summaryText += "Selected Languages: " + GetSelectedLanguagesString() + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFileModels.Count) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_SelectedFiles, WizardContext.ProjectFileModels.Count(a => a.Selected)) + Environment.NewLine;
+			summaryText += string.Format(PluginResources.Label_SelectedLanguages, GetSelectedLanguagesString()) + Environment.NewLine;			
+			summaryText += string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder) + Environment.NewLine;
 
 			var targetLanguages = WizardContext.ProjectFileModels.Where(a => a.Selected)
 				.Select(a => a.TargetLanguage.CultureInfo).Distinct();
 			foreach (var targetLanguage in targetLanguages)
 			{
 				summaryText += Environment.NewLine;
-				summaryText += "Language: " + targetLanguage.DisplayName + Environment.NewLine;
+				summaryText += string.Format(PluginResources.Label_Language, targetLanguage.DisplayName) + Environment.NewLine;
+				summaryText += string.Format(PluginResources.Label_Folder, WizardContext.GetLanguageFolder(targetLanguage)) + Environment.NewLine;
 
 				var targetLanguageFiles =
 					WizardContext.ProjectFileModels.Where(a => a.Selected && Equals(a.TargetLanguage.CultureInfo, targetLanguage));
@@ -104,7 +106,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			return selectedLanguages;
 		}
 
-
 		public string SummaryText
 		{
 			get => _summaryText;
@@ -120,7 +121,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			}
 		}
 
-		public override string DisplayName => "Summary";
+		public override string DisplayName => PluginResources.PageName_Summary;
 
 		public sealed override bool IsValid { get; set; }
 	}

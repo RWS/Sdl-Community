@@ -1,30 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Sdl.Community.XLIFF.Manager.Commands;
+using Sdl.Community.XLIFF.Manager.Converters.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.Converters.XLIFF;
-using Sdl.Community.XLIFF.Manager.Converters.XLIFF.SDLXLIFF;
+using Sdl.Community.XLIFF.Manager.Converters.XLIFF.Writers;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public class WizardPagePreparationViewModel : WizardPageViewModelBase
 	{
-		private ObservableCollection<JobProcess> _jobProcesses;	
+		private ObservableCollection<JobProcess> _jobProcesses;
+		private ICommand _openFolderInExplorerCommand;
 
 		public WizardPagePreparationViewModel(Window owner, UserControl view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
-		{		
+		{					
 			IsValid = true;
 			InitializeJobProcessList();
 			PropertyChanged += WizardPagePreparationViewModel_PropertyChanged;					
 		}
+
+		public ICommand OpenFolderInExplorerCommand => _openFolderInExplorerCommand ?? (_openFolderInExplorerCommand = new CommandHandler(OpenFolderInExplorer));
 
 		public ObservableCollection<JobProcess> JobProcesses
 		{
@@ -38,9 +45,19 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public string TextMessage { get; set; }
 
-		public override string DisplayName => "Preparation";
+		public SolidColorBrush TextMessageBrush { get; set; }
+
+		public override string DisplayName => PluginResources.PageName_Preparation;
 
 		public sealed override bool IsValid { get; set; }
+
+		private void OpenFolderInExplorer(object parameter)
+		{			
+			if (Directory.Exists(WizardContext.WorkingFolder))
+			{
+				Process.Start(WizardContext.WorkingFolder);
+			}
+		}
 
 		private void InitializeJobProcessList()
 		{
@@ -48,31 +65,30 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			{
 				new JobProcess
 				{
-					Name = "Preparation"
+					Name = PluginResources.JobProcess_Preparation
 				},
 				new JobProcess
 				{
-					Name = "Export"
+					Name = PluginResources.JobProcess_Export
 				},
 				new JobProcess
 				{
-					Name = "Finalize"
+					Name = PluginResources.JobProcess_Finalize
 				}
 			};
 		}		
-
-		private string TimeStamp { get; set; }
-
-		public SolidColorBrush TextMessageBrush { get; set; }
-
+				
 		private async void StartProcessing()
-		{
-			TimeStamp = GetDateToString();
-
+		{			
 			//_logger.Info("Start Process: XLIFF.Manager.Export");
 
+			if (!Directory.Exists(WizardContext.WorkingFolder))
+			{
+				Directory.CreateDirectory(WizardContext.WorkingFolder);
+			}
+
 			var success = true;
-			var job = JobProcesses.FirstOrDefault(a => a.Name == "Preparation");
+			var job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Preparation);
 			if (job != null)
 			{
 				success = Preparation(job);
@@ -80,7 +96,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 			if (success)
 			{
-				job = JobProcesses.FirstOrDefault(a => a.Name == "Export");
+				job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Export);
 				if (job != null)
 				{					
 
@@ -91,7 +107,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			if (success)
 			{
 
-				job = JobProcesses.FirstOrDefault(a => a.Name == "Finalize");
+				job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Finalize);
 				if (job != null)
 				{					
 					success = Finalize(job);
@@ -100,13 +116,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 	
 			if (success)
 			{
-				TextMessage = "Successful";
+				TextMessage = PluginResources.Result_Successful;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#017701");
 				IsComplete = true;
 			}
 			else
 			{
-				TextMessage = "Unsuccessful";
+				TextMessage = PluginResources.Result_Unsuccessful;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#7F0505");
 				IsComplete = false;
 			}
@@ -171,17 +187,19 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				//Refresh();
 				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 
-				var project = WizardContext.ProjectFileModels[0].ProjectModel;
-				var workingFolder = GetWorkingFolder();
-
+				var project = WizardContext.ProjectFileModels[0].ProjectModel;				
 				var sdlXliffParser = new FileParser();
-				var xliffWriter = new Writer();
+				var xliffWriter = new XliffWriter(WizardContext.Support);
 
 				var selectedLanguages = GetSelectedLanguages();
 
 				foreach (var cultureInfo in selectedLanguages)
 				{
-					var languageFolder = GetLanguageFolder(workingFolder, cultureInfo);
+					var languageFolder = WizardContext.GetLanguageFolder(cultureInfo);
+					if (!Directory.Exists(languageFolder))
+					{
+						Directory.CreateDirectory(languageFolder);
+					}
 
 					var targetFiles = GetSelectedTargetFiles(cultureInfo);
 					foreach (var targetFile in targetFiles)
@@ -190,7 +208,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 						var xliffData = sdlXliffParser.ParseFile(project.Id, targetFile.Location, WizardContext.CopySourceToTarget);
 
-						xliffWriter.CreateXliffFile(xliffData, outputFilePath, WizardContext.XLIFFSupport, WizardContext.IncludeTranslations);
+						xliffWriter.CreateXliffFile(xliffData, outputFilePath, WizardContext.IncludeTranslations);
 					}
 				}
 				
@@ -220,28 +238,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			var selected = WizardContext.ProjectFileModels.Where(a => a.Selected);
 			var selectedLanguages = selected.Select(a => a.TargetLanguage.CultureInfo).Distinct();
 			return selectedLanguages;
-		}
-
-		private string GetLanguageFolder(string workingFolder, CultureInfo cultureInfo)
-		{
-			var languageFolder = Path.Combine(workingFolder, cultureInfo.Name);
-			if (!Directory.Exists(languageFolder))
-			{
-				Directory.CreateDirectory(languageFolder);
-			}
-
-			return languageFolder;
-		}
-
-		private string GetWorkingFolder()
-		{
-			var workingFolder = Path.Combine(WizardContext.OutputFolder, TimeStamp);
-			if (!Directory.Exists(workingFolder))
-			{
-				Directory.CreateDirectory(workingFolder);
-			}
-
-			return workingFolder;
 		}
 
 		private bool Finalize(JobProcess jobProcess)
@@ -276,27 +272,12 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 			return success;
 		}
-
-		private static string GetDateToString()
-		{
-			var now = DateTime.Now;
-			var value = now.Year
-			            + "" + now.Month.ToString().PadLeft(2, '0')
-			            + "" + now.Day.ToString().PadLeft(2, '0')
-			            + "" + now.Hour.ToString().PadLeft(2, '0')
-			            + "" + now.Minute.ToString().PadLeft(2, '0')
-			            + "" + now.Second.ToString().PadLeft(2, '0');
-
-			return value;
-		}
-
+		
 		private void Refresh()
 		{					
 			Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
 		}
-
 	
-
 		private void WizardPagePreparationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(CurrentPageChanged))

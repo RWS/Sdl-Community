@@ -155,8 +155,10 @@
     </Compile>
     <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
     <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
-    <Compile Include="Converters\XLIFF\SDLXLIFF\ContentProcessor.cs" />
-    <Compile Include="Converters\XLIFF\SDLXLIFF\FileParser.cs" />
+    <Compile Include="Converters\XLIFF\Readers\Xliff12SDLReader.cs" />
+    <Compile Include="Converters\XLIFF\Readers\XliffReader.cs" />
+    <Compile Include="Converters\SDLXLIFF\ContentProcessor.cs" />
+    <Compile Include="Converters\SDLXLIFF\FileParser.cs" />
     <Compile Include="Converters\XLIFF\Model\Body.cs" />
     <Compile Include="Converters\XLIFF\Model\DocInfo.cs" />
     <Compile Include="Converters\XLIFF\Model\Element.cs" />
@@ -177,10 +179,14 @@
     <Compile Include="Converters\XLIFF\Model\Target.cs" />
     <Compile Include="Converters\XLIFF\Model\TransUnit.cs" />
     <Compile Include="Converters\XLIFF\Model\Xliff.cs" />
-    <Compile Include="Converters\XLIFF\Reader.cs" />
-    <Compile Include="Converters\XLIFF\SDLXLIFF\SegmentVisitor.cs" />
-    <Compile Include="Converters\XLIFF\Writer.cs" />
+    <Compile Include="Converters\XLIFF\Readers\Xliff12PolyglotReader.cs" />
+    <Compile Include="Converters\SDLXLIFF\SegmentVisitor.cs" />
+    <Compile Include="Converters\XLIFF\Writers\Xliff12SDLWriter.cs" />
+    <Compile Include="Converters\XLIFF\Writers\Xliff12PolyglotWriter.cs" />
+    <Compile Include="Converters\XLIFF\Writers\XliffWriter.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
+    <Compile Include="Interfaces\XLIFFReader.cs" />
+    <Compile Include="Interfaces\XLIFFWriter.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Common\Enumerators.cs" />
     <Compile Include="Model\CustomerModel.cs" />
@@ -243,9 +249,7 @@
     <EmbeddedResource Include="Resources\Flags\Flags.zip" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Controls\ToolWindowsControl.xaml">
       <SubType>Designer</SubType>

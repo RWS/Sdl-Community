@@ -24,7 +24,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
 		{		
-			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == WizardContext.XLIFFSupport);
+			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == WizardContext.Support);
 			OutputFolder = WizardContext.OutputFolder;
 			CopySourceToTarget = wizardContext.CopySourceToTarget;
 			IncludeTranslations = wizardContext.IncludeTranslations;
@@ -164,7 +164,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			}
 		}
 
-		public override string DisplayName => "Options";
+		public override string DisplayName => PluginResources.PageName_Options;
 
 		public override bool IsValid { get; set; }
 
@@ -233,7 +233,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private void LeaveView()
 		{
 			WizardContext.OutputFolder = OutputFolder;
-			WizardContext.XLIFFSupport = SelectedXliffSupport.SupportType;
+			WizardContext.Support = SelectedXliffSupport.SupportType;
 			WizardContext.CopySourceToTarget = CopySourceToTarget;
 			WizardContext.IncludeTranslations = IncludeTranslations;									
 		}

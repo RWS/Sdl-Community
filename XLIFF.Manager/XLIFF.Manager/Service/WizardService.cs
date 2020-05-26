@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -32,8 +33,8 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		private ObservableCollection<WizardPageViewModelBase> _pages;
 		private WizardContextModel _wizardContext;
 
-		public WizardService(Enumerators.Action action, PathInfo pathInfo, CustomerProvider customerProvider, 
-			ImageService imageService, XLIFFManagerViewController xliffManagerController, 
+		public WizardService(Enumerators.Action action, PathInfo pathInfo, CustomerProvider customerProvider,
+			ImageService imageService, XLIFFManagerViewController xliffManagerController,
 			ProjectsController projectsController, FilesController filesController)
 		{
 			_action = action;
@@ -54,7 +55,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				message = "no action selected";
 				return false;
 			}
-		
+
 			var success = CreateWizardContext(controller, out message);
 			if (!success)
 			{
@@ -78,26 +79,42 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			{
 				var selectedProject = _projectsController.CurrentProject;
 				var projectInfo = selectedProject.GetProjectInfo();
+				var selectedFileIds = controller is FilesController
+					? _filesController.SelectedFiles.Select(a => a.Id.ToString()).ToList()
+					: null;
 
+				_wizardContext.Support = Enumerators.XLIFFSupport.xliff12polyglot;
 				_wizardContext.OutputFolder = _pathInfo.GetProjectOutputPath(projectInfo);
-				_wizardContext.XLIFFSupport = Enumerators.XLIFFSupport.xliff12polyglot;
-
-				var projectModel = GetProjectModel(projectInfo, selectedProject);
-
+				
+				var projectModel = GetProjectModel(selectedProject, selectedFileIds);
 				_wizardContext.ProjectFileModels = projectModel.ProjectFileModels;
 			}
 			else if (controller is XLIFFManagerViewController)
 			{
-				var projectFileModels = _xliffManagerController.GetSelectedProjectFiles();
-				var selectedProjects = GetSelectedProjects(projectFileModels);
-
-				_wizardContext.ProjectFileModels = projectFileModels;
+				var selectedProjectFileModels = _xliffManagerController.GetSelectedProjectFiles();
+				var selectedProjects = GetSelectedProjects(selectedProjectFileModels);
+				var selectedFileIds = selectedProjectFileModels.Select(a => a.Id.ToString()).ToList();
 
 				if (selectedProjects.Count > 1)
 				{
 					message = "Multiple projects selected!";
 					return false;
 				}
+
+				var selectedProject = _projectsController.GetProjects()
+					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == selectedProjects[0].Id);
+				if (selectedProject == null)
+				{
+					message = "Unable to locate the selected project!";
+					return false;
+				}
+
+				var projectInfo = selectedProject.GetProjectInfo();
+				_wizardContext.Support = Enumerators.XLIFFSupport.xliff12polyglot;
+				_wizardContext.OutputFolder = _pathInfo.GetProjectOutputPath(projectInfo);
+				
+				var projectModel = GetProjectModel(selectedProject, selectedFileIds);
+				_wizardContext.ProjectFileModels = projectModel.ProjectFileModels;
 			}
 
 			return true;
@@ -105,6 +122,8 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 		private void WizardWindowLoaded(object sender, RoutedEventArgs e)
 		{
+			_wizardWindow.Loaded -= WizardWindowLoaded;
+
 			_pages = CreatePages(_wizardContext);
 			AddDataTemplates(_wizardWindow, _pages);
 
@@ -113,38 +132,15 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			_wizardWindow.DataContext = viewModel;
 		}
 
-		private List<ProjectFileModel> GetProjectFileModels(IProject project, ProjectModel projectModel)
+		private ProjectModel GetProjectModel(FileBasedProject selectedProject, List<string> selectedFileIds)
 		{
-			var projectInfo = project.GetProjectInfo();
-			var selectedFiles = _filesController.SelectedFiles.ToList();
-
-			var projectFileModels = new List<ProjectFileModel>();
-
-			foreach (var targetLanguage in projectInfo.TargetLanguages)
+			if (selectedProject == null)
 			{
-				var projectFiles = project.GetTargetLanguageFiles(targetLanguage);
-				foreach (var projectFile in projectFiles)
-				{
-					if (projectFile.Role != FileRole.Translatable)
-					{
-						continue;
-					}
-
-					var projectFileModel = GetProjectFileModel(projectModel, projectFile, targetLanguage, selectedFiles);
-
-					projectFileModels.Add(projectFileModel);
-				}
+				return null;
 			}
 
-			// TODO remove after testing phase
-			projectFileModels[0].Status = Enumerators.Status.Warning;
-			projectFileModels[0].ShortMessage = "File was exported on date: {datetime}";
+			var projectInfo = selectedProject.GetProjectInfo();
 
-			return projectFileModels;
-		}
-
-		private ProjectModel GetProjectModel(ProjectInfo projectInfo, FileBasedProject selectedProject)
-		{
 			var projectModel = new ProjectModel
 			{
 				Id = projectInfo.Id.ToString(),
@@ -159,14 +155,37 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				ProjectType = GetProjectType(selectedProject)
 			};
 
-			projectModel.ProjectFileModels = GetProjectFileModels(selectedProject, projectModel);
+			projectModel.ProjectFileModels = GetProjectFileModels(selectedProject, projectModel, selectedFileIds);
 
 			return projectModel;
 		}
 
+		private List<ProjectFileModel> GetProjectFileModels(IProject project, ProjectModel projectModel, List<string> selectedFileIds)
+		{
+			var projectInfo = project.GetProjectInfo();
+			var projectFileModels = new List<ProjectFileModel>();
 
+			foreach (var targetLanguage in projectInfo.TargetLanguages)
+			{
+				var projectFiles = project.GetTargetLanguageFiles(targetLanguage);
+				foreach (var projectFile in projectFiles)
+				{
+					if (projectFile.Role != FileRole.Translatable)
+					{
+						continue;
+					}
+
+					var projectFileModel = GetProjectFileModel(projectModel, projectFile, targetLanguage, selectedFileIds);
+
+					projectFileModels.Add(projectFileModel);
+				}
+			}
+
+			return projectFileModels;
+		}
+		
 		private ProjectFileModel GetProjectFileModel(ProjectModel projectModel, ProjectFile projectFile,
-			Language targetLanguage, IEnumerable<ProjectFile> selectedFiles)
+			Language targetLanguage, IReadOnlyCollection<string> selectedFileIds)
 		{
 			var projectFileModel = new ProjectFileModel(projectModel)
 			{
@@ -178,7 +197,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				Status = Enumerators.Status.Ready,
 				Date = DateTime.Now,
 				TargetLanguage = GetLanguageInfo(targetLanguage.CultureInfo),
-				Selected = selectedFiles.Any(a => a.Id == projectFile.Id),
+				Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString()),
 				XliffFilePath = string.Empty,
 				FileType = projectFile.FileTypeId
 			};
@@ -197,7 +216,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return targetLanguages;
 		}
 
-		public string GetProjectType(FileBasedProject project)
+		private string GetProjectType(FileBasedProject project)
 		{
 			var type = project.GetType();
 			var internalProjectField = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -239,7 +258,6 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		private ObservableCollection<WizardPageViewModelBase> CreatePages(WizardContextModel transactionModel)
 		{
 			//TODO setup the Import action pages
-
 
 			var pages = new ObservableCollection<WizardPageViewModelBase>
 			{
@@ -304,8 +322,8 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				viewModel.RequestClose -= ViewModel_RequestClose;
 				viewModel.Dispose();
 			}
-
+			
 			_wizardWindow.Close();
-		}
+		}		
 	}
 }

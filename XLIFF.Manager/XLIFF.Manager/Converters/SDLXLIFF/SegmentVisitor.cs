@@ -4,7 +4,7 @@ using Sdl.Community.XLIFF.Manager.Converters.XLIFF.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF.SDLXLIFF
+namespace Sdl.Community.XLIFF.Manager.Converters.SDLXLIFF
 {
 	internal class SegmentVisitor : IMarkupDataVisitor
 	{

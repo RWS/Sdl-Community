@@ -3,21 +3,20 @@ using System.Collections.Generic;
 using System.Xml;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Converters.XLIFF.Model;
-using Sdl.Core.Globalization;
+using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF
+namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF.Writers
 {
-	public class Writer
+	public class Xliff12PolyglotWriter : IXliffWriter
 	{
-		private Enumerators.XLIFFSupport XLIFFSupport { get; set; }
-		private Dictionary<string, List<IComment>> XLIFFComments { get; set; }
+		private Dictionary<string, List<IComment>> Comments { get; set; }
+
 		private bool IncludeTranslations { get; set; }
 
-		public bool CreateXliffFile(Xliff xliff, string outputFilePath, Enumerators.XLIFFSupport xliffSupport, bool includeTranslations)
+		public bool CreateXliffFile(Xliff xliff, string outputFilePath, bool includeTranslations)
 		{
-			XLIFFComments = xliff.Comments;
-			XLIFFSupport = xliffSupport;
+			Comments = xliff.Comments;
 			IncludeTranslations = includeTranslations;
 
 			var settings = new XmlWriterSettings
@@ -27,8 +26,8 @@ namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF
 			};
 
 			var version = "1.2";
-			var sdlSupport = xliffSupport.ToString();
-			var sdlVersion = version;
+			var sdlSupport = Enumerators.XLIFFSupport.xliff12polyglot.ToString();
+			var sdlVersion = version + ".1";
 
 			using (var writer = XmlWriter.Create(outputFilePath, settings))
 			{
@@ -77,56 +76,7 @@ namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF
 
 			writer.WriteAttributeString("created", GetDateToString(xliff.DocInfo.Created));
 
-			// only supported by SDL flavor of XLIFF
-			if (XLIFFSupport == Enumerators.XLIFFSupport.xliff12sdl)
-			{
-				WriteCommentDefinitions(xliff, writer);
-			}
-
 			writer.WriteEndElement(); //doc-info
-		}
-
-		private void WriteCommentDefinitions(Xliff xliff, XmlWriter writer)
-		{
-			writer.WriteStartElement("sdl", "cmt-defs", null);
-			foreach (var comments in xliff.Comments)
-			{
-				WriteCommentDefinition(writer, comments);
-			}
-
-			writer.WriteEndElement(); //cmt-defs
-		}
-
-		private void WriteCommentDefinition(XmlWriter writer, KeyValuePair<string, List<IComment>> comments)
-		{
-			writer.WriteStartElement("sdl", "cmt-def", null);
-			writer.WriteAttributeString("id", comments.Key);
-
-			WriteComments(writer, comments);
-
-			writer.WriteEndElement(); //cmt-def
-		}
-
-		private void WriteComments(XmlWriter writer, KeyValuePair<string, List<IComment>> comments)
-		{
-			writer.WriteStartElement("sdl", "comments", null);
-			foreach (var comment in comments.Value)
-			{
-				WriteComment(writer, comment);
-			}
-
-			writer.WriteEndElement(); //comments
-		}
-
-		private void WriteComment(XmlWriter writer, IComment comment)
-		{
-			writer.WriteStartElement("sdl", "comment", null);
-			writer.WriteAttributeString("user", comment.Author);
-			writer.WriteAttributeString("date", GetDateToString(comment.Date));
-			writer.WriteAttributeString("version", comment.Version);
-			writer.WriteAttributeString("severity", comment.Severity.ToString());
-			writer.WriteString(comment.Text);
-			writer.WriteEndElement(); //comment
 		}
 
 		private void WriteFileBody(XmlWriter writer, File xliffFile)
@@ -134,17 +84,10 @@ namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF
 			writer.WriteStartElement("body");
 			foreach (var transUnit in xliffFile.Body.TransUnits)
 			{
-				if (XLIFFSupport == Enumerators.XLIFFSupport.xliff12polyglot)
-				{
-					// Polyglot flavor
-					WriteGroupPolyglot(writer, transUnit);
-				}
-				else
-				{
-					// SDL flavor
-					WriteTransUnit(writer, transUnit);
-				}
+				// Polyglot flavor
+				WriteGroupPolyglot(writer, transUnit);
 			}
+
 			writer.WriteEndElement(); // body
 		}
 
@@ -274,196 +217,6 @@ namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF
 			writer.WriteEndElement(); // source or target
 		}
 
-		private void WriteTransUnit(XmlWriter writer, TransUnit transUnit)
-		{
-			writer.WriteStartElement("trans-unit");
-			writer.WriteAttributeString("id", transUnit.Id);
-
-			WriteSourceParagraph(writer, transUnit);
-			WriteSegSource(writer, transUnit);
-			WriteTargetParagraph(writer, transUnit);
-			WriteSdlSegDefs(writer, transUnit);
-
-			writer.WriteEndElement(); // trans-unit
-		}
-
-		private void WriteSdlSegDefs(XmlWriter writer, TransUnit transUnit)
-		{
-			writer.WriteStartElement("sdl", "seg-defs", null);
-
-			foreach (var segmentPair in transUnit.SegmentPairs)
-			{
-				WriteSdlSeg(writer, segmentPair);
-			}
-
-			writer.WriteEndElement(); //sdl:seg-defs
-		}
-
-		private void WriteSdlSeg(XmlWriter writer, SegmentPair segmentPair)
-		{
-			writer.WriteStartElement("sdl", "seg", null);
-			writer.WriteAttributeString("id", segmentPair.Id);
-			writer.WriteAttributeString("conf", segmentPair.ConfirmationLevel.ToString());
-
-			if (segmentPair.IsLocked)
-			{
-				writer.WriteAttributeString("locked", segmentPair.IsLocked.ToString());
-			}
-
-			if (segmentPair.TranslationOrigin != null)
-			{
-				WriteTranslationOrigin(writer, segmentPair.TranslationOrigin);
-
-				if (segmentPair.TranslationOrigin?.OriginBeforeAdaptation != null)
-				{
-					writer.WriteStartElement("sdl", "prev-origin", null);
-					WriteTranslationOrigin(writer, segmentPair.TranslationOrigin?.OriginBeforeAdaptation);
-					writer.WriteEndElement(); //sdl:prev-origin
-				}
-			}
-
-			writer.WriteEndElement(); //sdl:seg
-		}
-
-		private static void WriteTranslationOrigin(XmlWriter writer, ITranslationOrigin translationOrigin)
-		{
-			var originType = translationOrigin != null ? translationOrigin.OriginType : string.Empty;
-			var originSystem = translationOrigin != null ? translationOrigin.OriginSystem : string.Empty;
-			var matchPercentage = translationOrigin?.MatchPercent.ToString() ?? "0";
-			var structMatch = translationOrigin?.IsStructureContextMatch.ToString() ?? string.Empty;
-			var textMatch = translationOrigin?.TextContextMatchLevel != null 
-				? translationOrigin.TextContextMatchLevel.ToString() 
-				: string.Empty;
-
-			if (!string.IsNullOrEmpty(originType))
-			{
-				writer.WriteAttributeString("origin", originType);
-			}
-
-			if (!string.IsNullOrEmpty(originSystem))
-			{
-				writer.WriteAttributeString("origin-system", originSystem);
-			}
-
-			if (!string.IsNullOrEmpty(matchPercentage) && matchPercentage != "0")
-			{
-				writer.WriteAttributeString("percent", matchPercentage);
-			}
-
-			if (!string.IsNullOrEmpty(structMatch) && structMatch != "False")
-			{
-				writer.WriteAttributeString("struct-match", structMatch);
-			}
-
-			if (!string.IsNullOrEmpty(textMatch) && textMatch != "None")
-			{
-				writer.WriteAttributeString("text-match", textMatch);
-			}
-
-			if (translationOrigin?.MetaData != null)
-			{
-				foreach (var keyValuePair in translationOrigin.MetaData)
-				{
-					writer.WriteStartElement("sdl", "value", null);
-
-					writer.WriteAttributeString("key", keyValuePair.Key);
-					writer.WriteString(keyValuePair.Value);
-
-					writer.WriteEndElement(); //sdl:value
-				}
-			}
-		}
-
-		private void WriteSourceParagraph(XmlWriter writer, TransUnit transUnit)
-		{
-			writer.WriteStartElement("source");
-			for (var index = 0; index < transUnit.SegmentPairs.Count; index++)
-			{
-				var segmentPair = transUnit.SegmentPairs[index];
-
-				if (index > 0)
-				{
-					var addSpace = AddSpaceBetweenSegmentationPosition(transUnit, index);
-					if (addSpace)
-					{
-						writer.WriteString(" ");
-					}
-				}
-
-				foreach (var element in segmentPair.Source.Elements)
-				{
-					WriteSegment(writer, element);
-				}
-			}
-
-			writer.WriteEndElement(); // source
-		}
-
-		private void WriteSegSource(XmlWriter writer, TransUnit transUnit)
-		{
-			writer.WriteStartElement("seg-source");
-			foreach (var segmentPair in transUnit.SegmentPairs)
-			{
-				writer.WriteStartElement("mrk");
-				writer.WriteAttributeString("mtype", "seg");
-				writer.WriteAttributeString("mid", segmentPair.Id);
-
-				if (segmentPair.IsLocked)
-				{
-					writer.WriteStartElement("mrk");
-					writer.WriteAttributeString("mtype", "protected");
-				}
-
-				foreach (var element in segmentPair.Source.Elements)
-				{
-					WriteSegment(writer, element);
-				}
-
-				if (segmentPair.IsLocked)
-				{
-					writer.WriteEndElement(); // mrk
-				}
-
-				writer.WriteEndElement(); // mrk
-			}
-
-			writer.WriteEndElement(); // seg-source
-		}
-
-		private void WriteTargetParagraph(XmlWriter writer, TransUnit transUnit)
-		{
-			writer.WriteStartElement("target");
-
-			foreach (var segmentPair in transUnit.SegmentPairs)
-			{
-				writer.WriteStartElement("mrk");
-				writer.WriteAttributeString("mtype", "seg");
-				writer.WriteAttributeString("sdl", "state", null, GetState(segmentPair.ConfirmationLevel));
-				writer.WriteAttributeString("mid", segmentPair.Id);
-
-				if (segmentPair.IsLocked)
-				{
-					writer.WriteStartElement("mrk");
-					writer.WriteAttributeString("mtype", "protected");
-				}
-
-				foreach (var element in segmentPair.Target.Elements)
-				{
-					WriteSegment(writer, element);
-				}
-
-				if (segmentPair.IsLocked)
-				{
-					writer.WriteEndElement(); // mrk
-				}
-
-
-				writer.WriteEndElement(); // mrk
-			}
-
-			writer.WriteEndElement(); // seg-source
-		}
-
 		private void WriteSegment(XmlWriter writer, Element element)
 		{
 			if (element is ElementText text)
@@ -539,34 +292,6 @@ namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF
 			writer.WriteEndElement(); // header
 		}
 
-		private bool AddSpaceBetweenSegmentationPosition(TransUnit transUnit, int index)
-		{
-			var addSpace = true;
-
-			var foundSpaceStart = false;
-			var foundSpaceEnd = false;
-
-			var currentFirstElement = transUnit.SegmentPairs[index].Source.Elements[0];
-			if (currentFirstElement is ElementText text1)
-			{
-				foundSpaceStart = text1.Text.StartsWith(" ");
-			}
-
-			var previous = transUnit.SegmentPairs[index - 1].Source;
-			var previousLastElement = previous.Elements[previous.Elements.Count - 1];
-			if (previousLastElement is ElementText text2)
-			{
-				foundSpaceEnd = text2.Text.EndsWith(" ");
-			}
-
-			if (foundSpaceStart || foundSpaceEnd)
-			{
-				addSpace = false;
-			}
-
-			return addSpace;
-		}
-
 		private string GetDateToString(DateTime date)
 		{
 			var value = string.Empty;
@@ -579,39 +304,7 @@ namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF
 
 			return value;
 		}
-
-		private string GetState(ConfirmationLevel confirmationLevel)
-		{
-			var state = string.Empty;
-
-			switch (confirmationLevel)
-			{
-				case ConfirmationLevel.Unspecified:
-					state = "new";
-					break;
-				case ConfirmationLevel.Draft:
-					state = "needs-translation";
-					break;
-				case ConfirmationLevel.Translated:
-					state = "translated";
-					break;
-				case ConfirmationLevel.RejectedTranslation:
-					state = "needs-review-translation";
-					break;
-				case ConfirmationLevel.ApprovedTranslation:
-					state = "signed-off";
-					break;
-				case ConfirmationLevel.RejectedSignOff:
-					state = "needs-review-translation";
-					break;
-				case ConfirmationLevel.ApprovedSignOff:
-					state = "final";
-					break;
-			}
-
-			return state;
-		}
-
+		
 		private int GetPriority(Severity severity)
 		{
 			switch (severity)
@@ -634,18 +327,18 @@ namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF
 			{
 				if (element is ElementComment comment && comment.Type == Element.TagType.OpeningTag)
 				{
-					if (!XLIFFComments.ContainsKey(comment.Id))
+					if (!Comments.ContainsKey(comment.Id))
 					{
 						continue;
 					}
 
 					if (comments.ContainsKey(comment.Id))
 					{
-						comments[comment.Id].AddRange(XLIFFComments[comment.Id]);
+						comments[comment.Id].AddRange(Comments[comment.Id]);
 					}
 					else
 					{
-						comments.Add(comment.Id, XLIFFComments[comment.Id]);
+						comments.Add(comment.Id, Comments[comment.Id]);
 					}
 				}
 			}
