@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="Sdl.Community.XLIFF.Manager.Wizard.View.WizardPageSummaryView"
+﻿<UserControl x:Class="Sdl.Community.XLIFF.Manager.Wizard.View.WizardPageExportSummaryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
              xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.Wizard.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="500" d:DataContext="{d:DesignInstance viewModel:WizardPageSummaryViewModel}">
+             d:DesignHeight="250" d:DesignWidth="500" d:DataContext="{d:DesignInstance viewModel:WizardPageExportSummaryViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>

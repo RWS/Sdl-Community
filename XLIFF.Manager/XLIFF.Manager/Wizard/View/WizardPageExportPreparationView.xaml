@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Sdl.Community.XLIFF.Manager.Wizard.View.WizardPagePreparationView"
+﻿<UserControl x:Class="Sdl.Community.XLIFF.Manager.Wizard.View.WizardPageExportPreparationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
              xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.Wizard.ViewModel"
              xmlns:model="clr-namespace:Sdl.Community.XLIFF.Manager.Model"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="500" d:DataContext="{d:DesignInstance viewModel:WizardPagePreparationViewModel}">
+             d:DesignHeight="250" d:DesignWidth="500" d:DataContext="{d:DesignInstance viewModel:WizardPageExportPreparationViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>

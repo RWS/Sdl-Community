@@ -292,4 +292,16 @@
 	<data name="Result_Unsuccessful" xml:space="preserve">
     <value>Unsuccessful</value>
   </data>
+	<data name="Label_Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+	<data name="Label_XliffSupport" xml:space="preserve">
+    <value>XLIFF Support: {0}</value>
+  </data>
+	<data name="Label_IncludeTranslations" xml:space="preserve">
+    <value>Include Translations: {0}</value>
+  </data>
+	<data name="Label_CopySourceToTarget" xml:space="preserve">
+    <value>Copy Source to Target: {0}</value>
+  </data>
 </root>
