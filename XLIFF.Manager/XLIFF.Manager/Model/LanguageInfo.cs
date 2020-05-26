@@ -1,9 +1,10 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Windows.Media.Imaging;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
-	public class LanguageInfo: BaseModel
+	public class LanguageInfo: BaseModel, ICloneable
 	{
 		public CultureInfo CultureInfo { get; set; }
 
@@ -14,6 +15,17 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		public override string ToString()
 		{
 			return CultureInfo.Name;
+		}
+
+		public object Clone()
+		{
+			var model = new LanguageInfo
+			{
+				CultureInfo = CultureInfo.Clone() as CultureInfo,
+				Image = Image.Clone(),
+				ImageName = ImageName
+			};
+			return model;
 		}
 	}
 }

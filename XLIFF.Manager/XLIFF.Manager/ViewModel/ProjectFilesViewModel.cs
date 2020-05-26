@@ -10,63 +10,63 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
 	public class ProjectFilesViewModel : BaseModel, IDisposable
 	{
-		private List<ProjectFileActionModel> _projectFileActions;
-		private IList _selectedProjectFileActions;
-		private ProjectFileActionModel _selectedProjectFileAction;
+		private List<ProjectFileModel> _projectFileActions;
+		private IList _selectedProjectFiles;
+		private ProjectFileModel _selectedProjectFile;
 		private ICommand _clearSelectionCommand;
 
-		public ProjectFilesViewModel(List<ProjectFileActionModel> projectFileActions)
+		public ProjectFilesViewModel(List<ProjectFileModel> projectFiles)
 		{
-			ProjectFileActions = projectFileActions;
-			SelectedProjectFileAction = ProjectFileActions?.Count > 0 ? projectFileActions[0] : null;
-			SelectedProjectFileActions = new List<ProjectFileActionModel> { SelectedProjectFileAction };
+			ProjectFiles = projectFiles;
+			SelectedProjectFile = ProjectFiles?.Count > 0 ? projectFiles[0] : null;
+			SelectedProjectFiles = new List<ProjectFileModel> { SelectedProjectFile };
 		}
 
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
 
 		public ProjectFileActivityViewModel ProjectFileActivityViewModel { get; internal set; }
 
-		public List<ProjectFileActionModel> ProjectFileActions
+		public List<ProjectFileModel> ProjectFiles
 		{
-			get => _projectFileActions ?? (_projectFileActions = new List<ProjectFileActionModel>());
+			get => _projectFileActions ?? (_projectFileActions = new List<ProjectFileModel>());
 			set
 			{
 				_projectFileActions = value;
-				OnPropertyChanged(nameof(ProjectFileActions));
+				OnPropertyChanged(nameof(ProjectFiles));
 				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
 
-		public IList SelectedProjectFileActions
+		public IList SelectedProjectFiles
 		{
-			get => _selectedProjectFileActions;
+			get => _selectedProjectFiles;
 			set
 			{
-				_selectedProjectFileActions = value;
-				OnPropertyChanged(nameof(SelectedProjectFileActions));
+				_selectedProjectFiles = value;
+				OnPropertyChanged(nameof(SelectedProjectFiles));
 				OnPropertyChanged(nameof(StatusLabel));			
 			}
 		}
 
-		public ProjectFileActionModel SelectedProjectFileAction
+		public ProjectFileModel SelectedProjectFile
 		{
-			get => _selectedProjectFileAction;
+			get => _selectedProjectFile;
 			set
 			{
-				_selectedProjectFileAction = value;
-				OnPropertyChanged(nameof(SelectedProjectFileAction));
+				_selectedProjectFile = value;
+				OnPropertyChanged(nameof(SelectedProjectFile));
 
 				if (ProjectFileActivityViewModel != null)
 				{
-					ProjectFileActivityViewModel.ProjectFileActivities = _selectedProjectFileAction?.ProjectFileActivityModels;
+					ProjectFileActivityViewModel.ProjectFileActivities = _selectedProjectFile?.ProjectFileActivityModels;
 				}
 			}
 		}
 
 		private void ClearSelection(object parameter)
 		{
-			SelectedProjectFileActions.Clear();
-			SelectedProjectFileAction = null;
+			SelectedProjectFiles.Clear();
+			SelectedProjectFile = null;
 		}
 
 		public string StatusLabel
@@ -76,7 +76,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				var message = string.Format(PluginResources.StatusLabel_Projects_0_Files_1_Selected_2, 
 					_projectFileActions.Select(a => a.ProjectModel).Distinct().Count(), 
 					_projectFileActions?.Count, 
-					_selectedProjectFileActions?.Count);
+					_selectedProjectFiles?.Count);
 				return message;
 			}
 		}

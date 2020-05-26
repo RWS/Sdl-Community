@@ -27,9 +27,6 @@
 				<CollectionViewSource.SortDescriptions>
 					<componentModel:SortDescription PropertyName="Name"/>
 				</CollectionViewSource.SortDescriptions>
-				<CollectionViewSource.GroupDescriptions>
-					<PropertyGroupDescription PropertyName="ProjectFileActionModel.Name"/>
-				</CollectionViewSource.GroupDescriptions>
 			</CollectionViewSource>
 
 			<Style TargetType="{x:Type UserControl}">
@@ -114,48 +111,6 @@
 				<DataGridTextColumn Header="Details" CanUserSort="False" Binding="{Binding Details, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
 										ElementStyle="{StaticResource TextBlockStyle}" Width="2*"/>
 			</DataGrid.Columns>
-			<!--<DataGrid.GroupStyle>
-				<GroupStyle>
-					<GroupStyle.ContainerStyle>
-						<Style TargetType="{x:Type GroupItem}">
-							<Setter Property="Margin" Value="0,3,0,3"/>
-							<Setter Property="Template">
-								<Setter.Value>
-									<ControlTemplate TargetType="{x:Type GroupItem}">
-										<Expander IsExpanded="True" Foreground="#232121" BorderThickness="1,1,1,3">
-											<Expander.Header>
-												<DockPanel>
-													<TextBlock FontWeight="Bold" Text="" Margin="5,0,0,0"/>
-													<TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="0"/>
-													<TextBlock FontWeight="Regular"  Margin="00" Text=" " />
-													<TextBlock FontWeight="Bold" Text=" activies: "  />
-													<TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}" />
-												</DockPanel>
-											</Expander.Header>
-											<Expander.Content>
-												<ItemsPresenter />
-											</Expander.Content>
-										</Expander>
-									</ControlTemplate>
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</GroupStyle.ContainerStyle>
-				</GroupStyle>
-				<GroupStyle>
-					<GroupStyle.HeaderTemplate>
-						<DataTemplate>
-							<DockPanel Background="Transparent" Margin="0,2,0,2">
-								<TextBlock FontWeight="Regular" Text="Target language: " Foreground="Black" Margin="10,0,0,0"/>
-								<TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Foreground="#3E3E45" Margin="0"/>
-								<TextBlock FontWeight="Regular"  Margin="0,0,0,0" Text=", " Foreground="Black"/>
-								<TextBlock FontWeight="Regular" Text="files: " Foreground="Black" />
-								<TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}" Foreground="#3E3E45"/>
-							</DockPanel>
-						</DataTemplate>
-					</GroupStyle.HeaderTemplate>
-				</GroupStyle>
-			</DataGrid.GroupStyle>-->
 		</controls:SortAwareDataGrid>
 	</Grid>
 </UserControl>

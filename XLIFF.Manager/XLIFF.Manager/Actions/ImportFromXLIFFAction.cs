@@ -13,19 +13,33 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 		Description = "XLIFFManager_ImportFromXLIFF_Description")]
 	[ActionLayout(typeof(XLIFFManagerActionsGroup), 5, DisplayType.Large)]
 	public class ImportFromXLIFFAction : AbstractViewControllerAction<XLIFFManagerViewController>
-	{
+	{	
 		private ProjectsController _projectsController;
 		private FilesController _filesController;
+		private XLIFFManagerViewController _xliffManagerController;
+		private CustomerProvider _customerProvider;
+		private PathInfo _pathInfo;
+		private ImageService _imageService;
+
 		protected override void Execute()
 		{
-			var wizardService = new WizardService(Enumerators.Action.Import, _projectsController, _filesController);
-			wizardService.ShowWizard();
+			var wizardService = new WizardService(Enumerators.Action.Import, _pathInfo, _customerProvider, 
+				_imageService, _xliffManagerController, _projectsController, _filesController);
+			var success = wizardService.ShowWizard(_xliffManagerController, out var message);
+			if (!success && !string.IsNullOrEmpty(message))
+			{
+				MessageBox.Show(message);
+			}
 		}
 
 		public override void Initialize()
-		{
+		{		
+			_xliffManagerController = SdlTradosStudio.Application.GetController<XLIFFManagerViewController>();
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
+			_customerProvider = new CustomerProvider();
+			_pathInfo = new PathInfo();
+			_imageService = new ImageService(_pathInfo);
 			Enabled = true;
 		}
 	}

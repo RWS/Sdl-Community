@@ -11,7 +11,7 @@
         ResizeMode="CanResizeWithGrip"
 		mc:Ignorable="d" 
         Title ="{Binding WindowTitle, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-        MinHeight="250" MinWidth="450" Height="500" Width="850"
+        MinHeight="300" MinWidth="700" Height="500" Width="850"
 		d:DataContext="{d:DesignInstance viewModel:WizardViewModel}">
 	<Window.Resources>
 		<ResourceDictionary>

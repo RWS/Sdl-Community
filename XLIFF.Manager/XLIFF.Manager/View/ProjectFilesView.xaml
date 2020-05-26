@@ -34,7 +34,7 @@
 				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
 			</Style>
 
-			<CollectionViewSource x:Key="ProjectFiles" Source="{Binding ProjectFileActions}">
+			<CollectionViewSource x:Key="ProjectFiles" Source="{Binding ProjectFiles}">
 				<CollectionViewSource.SortDescriptions>
 					<componentModel:SortDescription PropertyName="Name"/>
 				</CollectionViewSource.SortDescriptions>
@@ -68,24 +68,26 @@
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<controls:SortAwareDataGrid Grid.Row="0"
+		              DefaultColumnName="Name"
+		              DefaultSortDirection="Ascending"
 		              Style="{StaticResource CustomGridStyle}"
 			          Margin="0" 			                           
 					  ItemsSource="{Binding Source={StaticResource ProjectFiles}}"                
-					  SelectedItem="{Binding SelectedProjectFileAction, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-		              SelectedItems="{Binding SelectedProjectFileActions, Mode=OneWayToSource}"
+					  SelectedItem="{Binding SelectedProjectFile, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+		              SelectedItems="{Binding SelectedProjectFiles, Mode=OneWayToSource}"
 					  FontSize="12"
 					  BorderBrush="#C1C0C0"
 					  FontFamily="Segoe UI"
 		              SelectionMode="Extended"
 		              SelectionUnit="FullRow"	
-					  GridLinesVisibility="None"
+					  GridLinesVisibility="Horizontal"
 					  VerticalScrollBarVisibility="Auto"
 					  HorizontalScrollBarVisibility="Disabled"
 					  CanUserDeleteRows="False">
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Name" IsReadOnly="False" SortMemberPath="Name" Width="2*" >
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate DataType="model:ProjectFileActionModel">
+						<DataTemplate DataType="model:ProjectFileModel">
 							<Grid Margin="10,0,10,0">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="Auto"/>

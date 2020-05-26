@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
@@ -8,64 +11,71 @@ using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
-	public class WizardPageExportFilesViewModel : WizardPageViewModelBase
-	{
-		private IList _selectedProjectFileActions;
-		private List<ProjectFileActionModel> _projectFileActions;
-		private ProjectFileActionModel _selectedProjectFileAction;
-		private ICommand _clearSelectionCommand;
+	public class WizardPageExportFilesViewModel : WizardPageViewModelBase, IDisposable
+	{	
+		private IList _selectedProjectFiles;		
+		private List<ProjectFileModel> _projectFiles;
+		private ProjectFileModel _selectedProjectFile;
 		private ICommand _checkAllCommand;
-		private bool _isValid;
+		private ICommand _checkSelectedComand;
 		private bool _checkedAll;
+		private bool _checkingAllAction;
 
-		public WizardPageExportFilesViewModel(object view, TransactionModel transactionModel) : base(view, transactionModel)
-		{
-			ProjectFileActions = transactionModel.ProjectFileActions;
-			VerifyIsValid();
+		public WizardPageExportFilesViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
+		{		
+			ProjectFiles = wizardContext.ProjectFileModels;
+			PropertyChanged += WizardPageExportFilesViewModel_PropertyChanged;			
 		}
-
-		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
-
+		
 		public ICommand CheckAllCommand => _checkAllCommand ?? (_checkAllCommand = new RelayCommand(CheckAll));
 
-		public List<ProjectFileActionModel> ProjectFileActions
+		public ICommand CheckSelectedCommand => _checkSelectedComand ?? (_checkSelectedComand = new CommandHandler(CheckSelected));
+
+		public List<ProjectFileModel> ProjectFiles
 		{
-			get => _projectFileActions ?? (_projectFileActions = new List<ProjectFileActionModel>());
+			get => _projectFiles ?? (_projectFiles = new List<ProjectFileModel>());
 			set
 			{
-				_projectFileActions = value;
-				OnPropertyChanged(nameof(ProjectFileActions));
-				OnPropertyChanged(nameof(StatusLabel));
-			}
-		}
-
-		public ProjectFileActionModel SelectedProjectFileAction
-		{
-			get => _selectedProjectFileAction;
-			set
-			{
-				_selectedProjectFileAction = value;
-				OnPropertyChanged(nameof(SelectedProjectFileAction));
-			}
-		}
-
-		public IList SelectedProjectFileActions
-		{
-			get => _selectedProjectFileActions;
-			set
-			{
-				_selectedProjectFileActions = value;
-
-				OnPropertyChanged(nameof(SelectedProjectFileActions));
-				OnPropertyChanged(nameof(StatusLabel));
-
-				foreach (var projectFileAction in ProjectFileActions)
+				if (_projectFiles != null)
 				{
-					projectFileAction.Selected = _selectedProjectFileActions.Contains(projectFileAction);
+					foreach (var projectFile in _projectFiles)
+					{
+						projectFile.PropertyChanged -= ProjectFile_PropertyChanged;
+					}
 				}
 
-				UpdateCheckAll();
-				VerifyIsValid();
+				_projectFiles = value;
+
+				if (_projectFiles != null)
+				{
+					foreach (var projectFile in _projectFiles)
+					{
+						projectFile.PropertyChanged += ProjectFile_PropertyChanged;
+					}
+				}
+
+				OnPropertyChanged(nameof(ProjectFiles));
+				OnPropertyChanged(nameof(StatusLabel));
+			}
+		}
+
+		public ProjectFileModel SelectedProjectFile
+		{
+			get => _selectedProjectFile;
+			set
+			{
+				_selectedProjectFile = value;
+				OnPropertyChanged(nameof(SelectedProjectFile));
+			}
+		}
+
+		public IList SelectedProjectFiles
+		{
+			get => _selectedProjectFiles ?? (_selectedProjectFiles = new ObservableCollection<ProjectFileModel>());
+			set
+			{
+				_selectedProjectFiles = value;
+				OnPropertyChanged(nameof(SelectedProjectFiles));
 			}
 		}
 
@@ -73,7 +83,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public bool CheckedAll
 		{
-			get { return _checkedAll; }
+			get => _checkedAll;
 			set
 			{
 				_checkedAll = value;
@@ -83,24 +93,24 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		private void CheckAll()
 		{
-			if (!CheckedAll)
+			try
 			{
-				_selectedProjectFileActions.Clear();
-			}
-			else
-			{
-				foreach (var projectFileActionModel in ProjectFileActions)
-				{
-					if (!_selectedProjectFileActions.Contains(projectFileActionModel))
-					{
-						_selectedProjectFileActions.Add(projectFileActionModel);
-					}
-				}
-			}
+				_checkingAllAction = true;
 
-			OnPropertyChanged(nameof(SelectedProjectFileActions));
-			OnPropertyChanged(nameof(CheckedAll));
-			VerifyIsValid();
+				var value = CheckedAll;
+				foreach (var file in ProjectFiles)
+				{
+					file.Selected = value;
+				}
+
+				VerifyIsValid();
+				OnPropertyChanged(nameof(CheckedAll));
+				OnPropertyChanged(nameof(StatusLabel));
+			}
+			finally
+			{
+				_checkingAllAction = false;
+			}
 		}
 
 		public string StatusLabel
@@ -108,37 +118,92 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			get
 			{
 				var message = string.Format(PluginResources.StatusLabel_Files_0_Selected_1,
-					_projectFileActions?.Count,
-					_selectedProjectFileActions?.Count);
+					_projectFiles?.Count,
+					_projectFiles?.Count(a => a.Selected));
 				return message;
 			}
 		}
 
 		private void UpdateCheckAll()
 		{
-			var count = ProjectFileActions.Count();
-			CheckedAll = count == SelectedProjectFileActions.Count;
-
+			CheckedAll = ProjectFiles.Count == ProjectFiles.Count(a => a.Selected);
 			OnPropertyChanged(nameof(StatusLabel));
 		}
 
-		private void ClearSelection(object parameter)
+		private void CheckSelected(object parameter)
 		{
-			SelectedProjectFileActions.Clear();
-			SelectedProjectFileAction = null;
+			if (SelectedProjectFiles == null)
+			{
+				return;
+			}
+
+			var isChecked = Convert.ToBoolean(parameter);
+			foreach (var selectedFile in SelectedProjectFiles.Cast<ProjectFileModel>())
+			{
+				selectedFile.Selected = isChecked;
+			}
+
+			UpdateCheckAll();
+			VerifyIsValid();
 		}
 
-		public override string DisplayName => "Files";
 
-		public override bool IsValid
+		public override string DisplayName => PluginResources.PageName_Files;
+
+		public override bool IsValid { get; set; }
+
+		public void VerifyIsValid()
 		{
-			get => _isValid;
-			set => _isValid = value;
+			IsValid = ProjectFiles.Count(a => a.Selected) > 0;
 		}
 
-		private void VerifyIsValid()
+		private void ProjectFile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			IsValid = SelectedProjectFileActions?.Count > 0;
+			if (!_checkingAllAction && e.PropertyName == nameof(ProjectFileModel.Selected))
+			{
+				UpdateCheckAll();
+			}
+
+			VerifyIsValid();
+		}
+
+		private void WizardPageExportFilesViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(CurrentPageChanged))
+			{
+				if (IsCurrentPage)
+				{
+					LoadView();
+				}
+				else
+				{
+					LeaveView();
+				}
+			}
+		}
+
+		private void LeaveView()
+		{			
+		}
+
+		private void LoadView()
+		{
+			UpdateCheckAll();
+			VerifyIsValid();
+		}
+
+		public void Dispose()
+		{
+			if (ProjectFiles != null)
+			{
+				foreach (var projectFile in ProjectFiles)
+				{
+					projectFile.PropertyChanged -= ProjectFile_PropertyChanged;
+				}
+			}
+
+			SelectedProjectFile?.Dispose();
+			PropertyChanged -= WizardPageExportFilesViewModel_PropertyChanged;			
 		}
 	}
 }

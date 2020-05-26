@@ -5,12 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
              xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.Wizard.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignInstance viewModel:WizardPageSummaryViewModel}">
+             d:DesignHeight="250" d:DesignWidth="500" d:DataContext="{d:DesignInstance viewModel:WizardPageSummaryViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TreeView.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBoxStyle.xaml"/>
@@ -21,7 +19,14 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Border BorderBrush="Gainsboro" BorderThickness="1" Background="White">
-		
-	</Border>
+	<Grid Margin="15,10,15,10">
+		<GroupBox Header="Summary">
+			<Grid Margin="10">
+				<TextBox HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+						 TextWrapping="Wrap"
+				         Text="{Binding SummaryText}" Padding="5" />
+
+			</Grid>
+		</GroupBox>
+	</Grid>
 </UserControl>

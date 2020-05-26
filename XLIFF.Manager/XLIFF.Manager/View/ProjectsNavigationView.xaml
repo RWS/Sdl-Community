@@ -36,7 +36,7 @@
 					<componentModel:SortDescription PropertyName="Name"/>
 				</CollectionViewSource.SortDescriptions>
 				<CollectionViewSource.GroupDescriptions>
-					<PropertyGroupDescription PropertyName="ClientName"/>
+					<PropertyGroupDescription PropertyName="Customer"/>
 				</CollectionViewSource.GroupDescriptions>
 			</CollectionViewSource>
 
@@ -146,7 +146,7 @@
 			</Grid.RowDefinitions>
 
 			<Grid Margin="2" Grid.Column="0" Grid.Row="0" Height="24">
-				<TextBox x:Name="WaterMarkedTextBox"  Padding="0,0,20,0" Text="{Binding FilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				<TextBox Padding="0,0,20,0" Text="{Binding FilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				         VerticalContentAlignment="Center"
 				         IsEnabled="True"/>
 				<TextBlock IsHitTestVisible="False" Padding="0,0,20,0" Text="Filter project name" VerticalAlignment="Center" HorizontalAlignment="Left" 

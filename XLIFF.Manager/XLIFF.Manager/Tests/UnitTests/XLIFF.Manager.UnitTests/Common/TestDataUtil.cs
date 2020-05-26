@@ -19,26 +19,40 @@ namespace XLIFF.Manager.UnitTests.Common
 
 		public List<ProjectModel> GetDefaultTestProjectData()
 		{
+			var customer1 = new CustomerModel
+			{
+				Name = "Avengers",
+				Email = "Tror@gods.it",
+				Id = Guid.NewGuid().ToString()
+			};
+
+			var customer2 = new CustomerModel
+			{
+				Name = "Travel Guides",
+				Email = "Travel@Guides.it",
+				Id = Guid.NewGuid().ToString()
+			};
+
 			var projectModels = new List<ProjectModel>();
-			projectModels.Add(GetProject("Avengers", "Project 0", new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("it-IT"), new CultureInfo("de-DE") }));
-			projectModels.Add(GetProject("Avengers", "Project 66", new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("it-IT"), new CultureInfo("de-DE"), new CultureInfo("fr-FR") }));
-			projectModels.Add(GetProject("Travel Guides", "Project 2", new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("de-DE") }));
+			projectModels.Add(GetProject(customer1, "Project 0", new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("it-IT"), new CultureInfo("de-DE") }));
+			projectModels.Add(GetProject(customer1, "Project 66", new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("it-IT"), new CultureInfo("de-DE"), new CultureInfo("fr-FR") }));
+			projectModels.Add(GetProject(customer2, "Project 2", new CultureInfo("en-US"), new List<CultureInfo> { new CultureInfo("de-DE") }));
 
 			return projectModels;
 		}
 
-		private ProjectModel GetProject(string clientName, string projectName, CultureInfo sourceLanguage, List<CultureInfo> targetLanguages)
+		private ProjectModel GetProject(CustomerModel customer, string projectName, CultureInfo sourceLanguage, List<CultureInfo> targetLanguages)
 		{
 			var projectModel = new ProjectModel
 			{
-				ClientName = clientName,
+				Customer = customer,
 				Created = DateTime.Now.Subtract(new TimeSpan(10, 0, 0, 0, 0)),
 				DueDate = DateTime.Now.AddDays(10),
 				Id = Guid.NewGuid().ToString(),
 				Name = projectName,
 				Path = projectName,
 				ProjectType = "SDL Project",
-				ProjectFileActionModels = new List<ProjectFileActionModel>()
+				ProjectFileModels = new List<ProjectFileModel>()
 			};
 
 			var sourceLanguageInfo = new LanguageInfo();
@@ -59,61 +73,61 @@ namespace XLIFF.Manager.UnitTests.Common
 
 			foreach (var targetLanguage in projectModel.TargetLanguages)
 			{
-				projectModel.ProjectFileActionModels.Add(GetProjectFileAction(projectModel, targetLanguage,
+				projectModel.ProjectFileModels.Add(GetProjectFileAction(projectModel, targetLanguage,
 					Enumerators.Action.Export, DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0, 0))));
-				projectModel.ProjectFileActionModels.Add(GetProjectFileAction(projectModel, targetLanguage,
+				projectModel.ProjectFileModels.Add(GetProjectFileAction(projectModel, targetLanguage,
 					Enumerators.Action.Import, DateTime.Now));
-				projectModel.ProjectFileActionModels.Add(GetProjectFileAction(projectModel, targetLanguage,
+				projectModel.ProjectFileModels.Add(GetProjectFileAction(projectModel, targetLanguage,
 					Enumerators.Action.Import, DateTime.Now));
-				projectModel.ProjectFileActionModels.Add(GetProjectFileAction(projectModel, targetLanguage,
+				projectModel.ProjectFileModels.Add(GetProjectFileAction(projectModel, targetLanguage,
 					Enumerators.Action.Import, DateTime.Now));
-				projectModel.ProjectFileActionModels.Add(GetProjectFileAction(projectModel, targetLanguage,
+				projectModel.ProjectFileModels.Add(GetProjectFileAction(projectModel, targetLanguage,
 					Enumerators.Action.Import, DateTime.Now));
 			}
 
 			return projectModel;
 		}
 
-		private ProjectFileActionModel GetProjectFileAction(ProjectModel projectModel, LanguageInfo targetLanguage, Enumerators.Action action, DateTime dateTime)
+		private ProjectFileModel GetProjectFileAction(ProjectModel projectModel, LanguageInfo targetLanguage, Enumerators.Action action, DateTime dateTime)
 		{
-			var projectFileActionModel = new ProjectFileActionModel(projectModel)
+			var projectFileModel = new ProjectFileModel(projectModel)
 			{
 				Action = action,
 				Date = dateTime,
 				Id = Guid.NewGuid().ToString(),
-				Name = projectModel.Name + ">File " + projectModel.ProjectFileActionModels.Count,
-				Path = "\\Project File Path\\" + projectModel.ProjectFileActionModels.Count,
+				Name = projectModel.Name + ">File " + projectModel.ProjectFileModels.Count,
+				Path = "\\Project File Path\\" + projectModel.ProjectFileModels.Count,
 				TargetLanguage = targetLanguage
 			};
 
 			if (action == Enumerators.Action.Export)
 			{
-				projectFileActionModel.ProjectFileActivityModels.Add(
-					GetProjectFileActivity(projectFileActionModel, Enumerators.Action.Export, Enumerators.Status.Success,
-						projectFileActionModel.Date));
+				projectFileModel.ProjectFileActivityModels.Add(
+					GetProjectFileActivity(projectFileModel, Enumerators.Action.Export, Enumerators.Status.Success,
+						projectFileModel.Date));
 			}
 
 			if (action == Enumerators.Action.Import)
 			{
-				projectFileActionModel.ProjectFileActivityModels.Add(
-					GetProjectFileActivity(projectFileActionModel, Enumerators.Action.Export, Enumerators.Status.Success,
-						projectFileActionModel.Date.Subtract(new TimeSpan(1, 0, 0, 0, 0))));
+				projectFileModel.ProjectFileActivityModels.Add(
+					GetProjectFileActivity(projectFileModel, Enumerators.Action.Export, Enumerators.Status.Success,
+						projectFileModel.Date.Subtract(new TimeSpan(1, 0, 0, 0, 0))));
 
-				projectFileActionModel.ProjectFileActivityModels.Add(
-					GetProjectFileActivity(projectFileActionModel, Enumerators.Action.Import, Enumerators.Status.Error,
-						projectFileActionModel.Date.Subtract(new TimeSpan(0, 0, 2, 0, 0))));
+				projectFileModel.ProjectFileActivityModels.Add(
+					GetProjectFileActivity(projectFileModel, Enumerators.Action.Import, Enumerators.Status.Error,
+						projectFileModel.Date.Subtract(new TimeSpan(0, 0, 2, 0, 0))));
 
-				projectFileActionModel.ProjectFileActivityModels.Add(
-					GetProjectFileActivity(projectFileActionModel, Enumerators.Action.Import, Enumerators.Status.Success,
-						projectFileActionModel.Date));
+				projectFileModel.ProjectFileActivityModels.Add(
+					GetProjectFileActivity(projectFileModel, Enumerators.Action.Import, Enumerators.Status.Success,
+						projectFileModel.Date));
 			}
 
-			projectFileActionModel.XliffFilePath = "\\XLIFF File\\" + (projectFileActionModel.ProjectFileActivityModels.Count - 1);
+			projectFileModel.XliffFilePath = "\\XLIFF File\\" + (projectFileModel.ProjectFileActivityModels.Count - 1);
 
-			return projectFileActionModel;
+			return projectFileModel;
 		}
 
-		private ProjectFileActivityModel GetProjectFileActivity(ProjectFileActionModel projectFileActionModel,
+		private ProjectFileActivityModel GetProjectFileActivity(ProjectFileModel projectFileActionModel,
 			Enumerators.Action action, Enumerators.Status status, DateTime dateTime)
 		{
 			var projectFileActivityModel = new ProjectFileActivityModel(projectFileActionModel)

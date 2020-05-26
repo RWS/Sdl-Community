@@ -90,8 +90,8 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 				if (ProjectFilesViewModel != null && _selectedProjectModels != null)
 				{
-					ProjectFilesViewModel.ProjectFileActions =
-						_selectedProjectModels.Cast<ProjectModel>().SelectMany(a => a.ProjectFileActionModels).ToList();
+					ProjectFilesViewModel.ProjectFiles =
+						_selectedProjectModels.Cast<ProjectModel>().SelectMany(a => a.ProjectFileModels).ToList();
 				}
 
 				OnPropertyChanged(nameof(StatusLabel));
@@ -108,7 +108,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 				if (ProjectFilesViewModel != null && _selectedProjectModel != null)
 				{
-					ProjectFilesViewModel.ProjectFileActions = _selectedProjectModel.ProjectFileActionModels;
+					ProjectFilesViewModel.ProjectFiles = _selectedProjectModel.ProjectFileModels;
 				}
 			}
 		}

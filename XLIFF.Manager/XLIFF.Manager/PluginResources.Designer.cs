@@ -111,6 +111,204 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        internal static string JobProcess_Export {
+            get {
+                return ResourceManager.GetString("JobProcess_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finalize.
+        /// </summary>
+        internal static string JobProcess_Finalize {
+            get {
+                return ResourceManager.GetString("JobProcess_Finalize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preparation.
+        /// </summary>
+        internal static string JobProcess_Preparation {
+            get {
+                return ResourceManager.GetString("JobProcess_Preparation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created: {0}.
+        /// </summary>
+        internal static string Label_Created {
+            get {
+                return ResourceManager.GetString("Label_Created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customer: {0}.
+        /// </summary>
+        internal static string Label_Customer {
+            get {
+                return ResourceManager.GetString("Label_Customer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Due Date: {0}.
+        /// </summary>
+        internal static string Label_DueDate {
+            get {
+                return ResourceManager.GetString("Label_DueDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folder: {0}.
+        /// </summary>
+        internal static string Label_Folder {
+            get {
+                return ResourceManager.GetString("Label_Folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id: {0}.
+        /// </summary>
+        internal static string Label_Id {
+            get {
+                return ResourceManager.GetString("Label_Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language: {0}.
+        /// </summary>
+        internal static string Label_Language {
+            get {
+                return ResourceManager.GetString("Label_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location: {0}.
+        /// </summary>
+        internal static string Label_Location {
+            get {
+                return ResourceManager.GetString("Label_Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name: {0}.
+        /// </summary>
+        internal static string Label_Name {
+            get {
+                return ResourceManager.GetString("Label_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Type: {0}.
+        /// </summary>
+        internal static string Label_ProjectType {
+            get {
+                return ResourceManager.GetString("Label_ProjectType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected Files: {0}.
+        /// </summary>
+        internal static string Label_SelectedFiles {
+            get {
+                return ResourceManager.GetString("Label_SelectedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected Languages: {0}.
+        /// </summary>
+        internal static string Label_SelectedLanguages {
+            get {
+                return ResourceManager.GetString("Label_SelectedLanguages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soruce Language: {0}.
+        /// </summary>
+        internal static string Label_SourceLanguage {
+            get {
+                return ResourceManager.GetString("Label_SourceLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target Languages: {0}.
+        /// </summary>
+        internal static string Label_TargetLanguages {
+            get {
+                return ResourceManager.GetString("Label_TargetLanguages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Files: {0}.
+        /// </summary>
+        internal static string Label_TotalFiles {
+            get {
+                return ResourceManager.GetString("Label_TotalFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Working Folder: {0}.
+        /// </summary>
+        internal static string Label_WorkingFolder {
+            get {
+                return ResourceManager.GetString("Label_WorkingFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files.
+        /// </summary>
+        internal static string PageName_Files {
+            get {
+                return ResourceManager.GetString("PageName_Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        internal static string PageName_Options {
+            get {
+                return ResourceManager.GetString("PageName_Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preparation.
+        /// </summary>
+        internal static string PageName_Preparation {
+            get {
+                return ResourceManager.GetString("PageName_Preparation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Summary.
+        /// </summary>
+        internal static string PageName_Summary {
+            get {
+                return ResourceManager.GetString("PageName_Summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to XLIFF Manager Plugin.
         /// </summary>
         internal static string Plugin_Name {
@@ -126,6 +324,24 @@ namespace Sdl.Community.XLIFF.Manager {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successful.
+        /// </summary>
+        internal static string Result_Successful {
+            get {
+                return ResourceManager.GetString("Result_Successful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsuccessful.
+        /// </summary>
+        internal static string Result_Unsuccessful {
+            get {
+                return ResourceManager.GetString("Result_Unsuccessful", resourceCulture);
             }
         }
         
