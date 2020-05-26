@@ -11,7 +11,7 @@ namespace Sdl.Community.DeepLMTProvider
 	{
 		private string _returnedText;
 		private string _preparedSourceText;
-		private Segment _sourceSegment;
+		private readonly Segment _sourceSegment;
 		private Dictionary<string, DeepLTag> _tagsDictionary;
 		public List<TagInfo> TagsInfo { get; set; }
 		public static readonly Log Log = Log.Instance;

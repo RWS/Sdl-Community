@@ -31,7 +31,7 @@ namespace Sdl.Community.DeepLMTProvider
 			"PT",
 			"PT-PT",
 			"PT-BR",
-			"RU",
+			"RU"
 		};
 
 		public static bool IsSuportedLanguagePair(string sourceLang, string targetLang)
