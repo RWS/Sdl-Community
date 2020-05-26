@@ -9,21 +9,20 @@ trigger:
     - master
   paths:
     include:
-    - Sdl-Community/AmazonTranslateTradosPlugin/*
+    - Sdl-Community/Sdl-Community/AntidoteVerifier/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/AmazonTranslateTradosPlugin.sln'
+  solution : '**/Sdl.Community.AntidoteVerifier.sln'
 
 steps:
 - template: steps-reuse-template.yml
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: AmazonTranslateTradosPlugin.zip'
   inputs:
-    ArtifactName: 'AmazonTranslateTradosPlugin'
-    publishLocation: FilePath
-    TargetPath: '$(Agent.BuildDirectory)'
+    PathtoPublish: 'Sdl-Community/Antidote Verifier/Sdl.Community.AntidoteVerifier/Sdl.Community.AntidoteVerifier.sdlplugin'
+    ArtifactName: 'AntidoteVerifier'
+    publishLocation: 'Container'
