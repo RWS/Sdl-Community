@@ -23,6 +23,6 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: 'Sdl-Community/Antidote Verifier/Sdl.Community.AntidoteVerifier/Sdl.Community.AntidoteVerifier.sdlplugin'
+    PathtoPublish: 'C:\Users\User\AppData\Roaming\SDL\SDL Trados Studio\15\Plugins\Packages\Sdl.Community.AntidoteVerifier.sdlplugin'
     ArtifactName: 'AntidoteVerifier'
     publishLocation: 'Container'
