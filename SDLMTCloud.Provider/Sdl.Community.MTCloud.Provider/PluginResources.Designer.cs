@@ -481,7 +481,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unintelligence.
+        ///   Looks up a localized string similar to Unintelligible.
         /// </summary>
         public static string RateIt_Option_Unintelligence {
             get {
@@ -607,6 +607,24 @@ namespace Sdl.Community.MTCloud.Provider {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send Translation feedback.
+        /// </summary>
+        public static string SettingsWindow_FeedbackOption {
+            get {
+                return ResourceManager.GetString("SettingsWindow_FeedbackOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Re-send draft and translated segments.
+        /// </summary>
+        public static string SettingsWindow_ReSendTransaltionOption {
+            get {
+                return ResourceManager.GetString("SettingsWindow_ReSendTransaltionOption", resourceCulture);
             }
         }
         

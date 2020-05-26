@@ -10,12 +10,27 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 {
 	public partial class DeepLWindow
 	{
-		private static readonly List<string> TargetSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL", "ES", "PT", "RU"};
+		private static readonly List<string> TargetSupportedLanguages = new List<string>
+		{
+			"EN",
+			"DE",
+			"FR",
+			"IT",
+			"NL",
+			"PL",
+			"ES",
+			"PT",
+			"PT-PT",
+			"PT-BR",
+			"RU",
+		};
+
 		private readonly bool _tellMeAction;
 		private readonly LanguagePair[] _languagePairs;
 		public DeepLTranslationOptions Options { get; set; }
 
-		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
+		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore,
+			LanguagePair[] languagePairs)
 		{
 			_languagePairs = languagePairs;
 			InitializeComponent();
@@ -44,7 +59,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 		private void Ok_Click(object sender, RoutedEventArgs e)
 		{
-			Options.ApiKey = ApiKeyBox.Password.TrimEnd();
+			Options.ApiKey = ApiKeyBox.Password.Trim();
 			if (PlainText.IsChecked != null)
 			{
 				Options.SendPlainText = (bool) PlainText.IsChecked;
@@ -66,6 +81,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 				ValidationBlock.Visibility = Visibility.Visible;
 			}
 		}
+
 		private void GetSupportedTargetLanguages()
 		{
 			foreach (var languagePair in _languagePairs)
@@ -80,14 +96,10 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 				}
 			}
 		}
+
 		private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
 		{
 			Process.Start("https://www.deepl.com/api-contact.html");
-		}
-
-		private void Cancel_Click(object sender, RoutedEventArgs e)
-		{
-			
 		}
 	}
 }

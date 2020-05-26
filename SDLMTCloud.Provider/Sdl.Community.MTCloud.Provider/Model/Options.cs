@@ -7,10 +7,12 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		public Options()
 		{			
 			ResendDraft = true;
+			SendFeedback = true;
 			LanguageMappings = new List<LanguageMappingModel>();
 		}
 
 		public bool ResendDraft { get; set; }
+		public bool SendFeedback { get; set; }
 
 		public List<LanguageMappingModel> LanguageMappings { get; set; }
 	}

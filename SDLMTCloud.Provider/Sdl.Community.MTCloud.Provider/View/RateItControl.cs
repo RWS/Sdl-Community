@@ -9,19 +9,19 @@ namespace Sdl.Community.MTCloud.Provider.View
 	{
 		public IRatingService RatingService { get; private set; }
 
-		public RateItControl(ITranslationService translationService)
+		public RateItControl()
 		{
 			InitializeComponent();
 
-			LoadDataContext(translationService);
+			LoadDataContext();
 		}
 
-		private void LoadDataContext(ITranslationService translationService)
+		private void LoadDataContext()
 		{
 			var shortcutService = new ShortcutService();
 			var actionProvider = new ActionProvider();
 
-			var rateItViewModel = new RateItViewModel(translationService, shortcutService, actionProvider);
+			var rateItViewModel = new RateItViewModel(shortcutService, actionProvider);
 			var rateItWindow = new RateItView
 			{
 				DataContext = rateItViewModel

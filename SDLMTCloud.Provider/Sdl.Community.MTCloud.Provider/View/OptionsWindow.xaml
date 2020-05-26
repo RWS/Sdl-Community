@@ -3,13 +3,12 @@
 			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			xmlns:metroControls="http://metro.mahapps.com/winfx/xaml/controls"
-			xmlns:view="clr-namespace:Sdl.Community.MTCloud.Provider.View"
 			xmlns:helpers="clr-namespace:Sdl.Community.MTCloud.Provider.Helpers"
 			xmlns:converters="clr-namespace:Sdl.Community.MTCloud.Provider.Converters"		
 			xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
 			xmlns:controls="clr-namespace:Sdl.Community.MTCloud.Provider.Controls"
 			xmlns:model="clr-namespace:Sdl.Community.MTCloud.Provider.Model"
+			xmlns:rsx ="clr-namespace:Sdl.Community.MTCloud.Provider"
 			helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			WindowStartupLocation="CenterScreen" 
 			mc:Ignorable="d"
@@ -39,17 +38,14 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridColumnStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/WindowsBorder.xaml" />
-
-				<ResourceDictionary x:Uid="ResourceKeyId2">
-					<converters:StringIsNullOrEmptyVisibilityConverter x:Key="MessageVisibilityConverter"/>
-				</ResourceDictionary>
-
-
 			</ResourceDictionary.MergedDictionaries>
-
+			<Style TargetType="CheckBox" x:Key="OptionsCheckboxesStyle">
+				<Setter Property="Margin" Value="15,5,15,15"/>
+				<Setter Property="FontFamily" Value="Segoe UI"/>
+				<Setter Property="Foreground" Value="#333232"/>
+				<Setter Property="FontSize" Value="13"/>
+			</Style>
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
-			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-
 		</ResourceDictionary>
 	</Window.Resources>
 	<Border Style="{StaticResource WindowControlBorderStyle}" >
@@ -95,12 +91,10 @@
 				  DefaultColumnName="[none]"
 				  DefaultSortDirection="Ascending"
 				  BorderBrush="#BEBEBE"
-				  BorderThickness="1"
 		          Style="{StaticResource FilesGridStyle}"
 				  ItemsSource="{Binding LanguageMappingModels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
 				  SelectedItem="{Binding SelectedLanguageMappingModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				  Margin="15,10,15,5"
-				  CanUserSortColumns="True"
 				  CanUserResizeColumns="True" 
 				  MinWidth="850"
 				  HorizontalScrollBarVisibility="Disabled"
@@ -216,29 +210,27 @@
 						</DataGridTemplateColumn>
 					</DataGrid.Columns>
 				</controls:SortAwareDataGrid>
-
-				<CheckBox Grid.Row="1" Margin="15,5,15,15" FontFamily="Segoe UI" Foreground="#333232" FontSize="13" IsChecked="{Binding ReSendChecked}" Content="Re-send draft and translated segments" DockPanel.Dock="Bottom" />
+				<DockPanel Grid.Row="1">
+					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding ReSendChecked}" Content="{x:Static rsx:PluginResources.SettingsWindow_ReSendTransaltionOption}"  />
+					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding SendFeedback}" Content="{x:Static rsx:PluginResources.SettingsWindow_FeedbackOption}" />
+				</DockPanel>
 			</Grid >
 
-			<Border Grid.Row="4" Grid.Column="0"  Margin="0" BorderThickness="0,1,0,0" BorderBrush="#ABB0B3" 
-			        >
-
+			<Border Grid.Row="4" Grid.Column="0"  Margin="0" BorderThickness="0,1,0,0" BorderBrush="#ABB0B3">
 				<Grid VerticalAlignment="Center" Margin="15,15,0,15">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
 						<Button Style="{StaticResource ButtonStyleShadowless}" 
-							HorizontalAlignment="Left"	MinWidth="110"					
 							VerticalAlignment="Bottom" Margin="0,0,15,0" 
 							Content="Reset to Defaults" Command="{Binding ResetToDefaultsCommand}"/>
 
 						<Button Style="{StaticResource ButtonStyleShadowless}" 
-							HorizontalAlignment="Left" MinWidth="110"					
 							VerticalAlignment="Bottom" Margin="0,0,15,0" 
 							Content="View Language Mapping" Command="{Binding ViewLanguageMappingsCommand}"/>
 					</StackPanel>
 
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  VerticalAlignment="Bottom">
-						<Button Style="{StaticResource ButtonStyleShadowless}" MinWidth="110" Content="OK" Command="{Binding SaveCommand}"/>
-						<Button Style="{StaticResource ButtonStyleShadowless}" Content="Cancel" MinWidth="110" IsCancel="True" Margin="15,0,15,0" />
+						<Button Style="{StaticResource ButtonStyleShadowless}" Content="OK" Command="{Binding SaveCommand}"/>
+						<Button Style="{StaticResource ButtonStyleShadowless}" Content="Cancel" IsCancel="True" Margin="15,0,15,0" />
 					</StackPanel>
 				</Grid>
 

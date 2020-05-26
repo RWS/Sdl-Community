@@ -11,10 +11,9 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 
 		public RateItViewModelTests()
 		{
-			var translationService = Substitute.For<ITranslationService>();
 			var shortcutService = Substitute.For<IShortcutService>();
 			var providerAction = Substitute.For<IActionProvider>();
-			_rateItViewModel = new RateItViewModel(translationService,shortcutService,providerAction);
+			_rateItViewModel = new RateItViewModel(shortcutService,providerAction);
 		}
 
 		[Theory]

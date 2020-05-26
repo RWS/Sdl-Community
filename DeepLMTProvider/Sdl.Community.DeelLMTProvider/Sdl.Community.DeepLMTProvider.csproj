@@ -115,12 +115,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeepLMtDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DeepLMtDialog.Designer.cs">
-      <DependentUpon>DeepLMtDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="DeepLMtTranslationProvider.cs" />
     <Compile Include="DeepLMtTranslationProviderFactory.cs" />
     <Compile Include="DeepLMtTranslationProviderLanguageDirection.cs" />
@@ -168,9 +162,6 @@
     <EmbeddedResource Include="Resources\deepLResized.png" />
     <EmbeddedResource Include="Resources\deepL_logo_new.png" />
     <EmbeddedResource Include="Resources\DeepL.png" />
-    <EmbeddedResource Include="DeepLMtDialog.resx">
-      <DependentUpon>DeepLMtDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
