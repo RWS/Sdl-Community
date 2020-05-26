@@ -22,7 +22,8 @@ steps:
 - template: steps-reuse-template.yml
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: AntidoteVerifier.SdlPlugin.zip'
   inputs:
-    PathtoPublish: C:\Users\User\AppData\Roaming\SDL\SDL Trados Studio\15\Plugins\Packages\Sdl.Community.AntidoteVerifier.sdlplugin
-    ArtifactName: 'AntidoteVerifier'
-    publishLocation: 'Container'
+    ArtifactName: 'AntidoteVerifier.SdlPlugin'
+    publishLocation: FilePath
+    TargetPath: '$(Agent.BuildDirectory)'
