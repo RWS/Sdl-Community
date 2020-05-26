@@ -300,7 +300,6 @@ namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF.Writers
 			{
 				writer.WriteStartElement("mrk");
 				writer.WriteAttributeString("mtype", "seg");
-				writer.WriteAttributeString("sdl", "state", null, GetState(segmentPair.ConfirmationLevel));
 				writer.WriteAttributeString("mid", segmentPair.Id);
 
 				if (segmentPair.IsLocked)
@@ -440,38 +439,6 @@ namespace Sdl.Community.XLIFF.Manager.Converters.XLIFF.Writers
 			}
 
 			return value;
-		}
-
-		private string GetState(ConfirmationLevel confirmationLevel)
-		{
-			var state = string.Empty;
-
-			switch (confirmationLevel)
-			{
-				case ConfirmationLevel.Unspecified:
-					state = "new";
-					break;
-				case ConfirmationLevel.Draft:
-					state = "needs-translation";
-					break;
-				case ConfirmationLevel.Translated:
-					state = "translated";
-					break;
-				case ConfirmationLevel.RejectedTranslation:
-					state = "needs-review-translation";
-					break;
-				case ConfirmationLevel.ApprovedTranslation:
-					state = "signed-off";
-					break;
-				case ConfirmationLevel.RejectedSignOff:
-					state = "needs-review-translation";
-					break;
-				case ConfirmationLevel.ApprovedSignOff:
-					state = "final";
-					break;
-			}
-
-			return state;
-		}
+		}		
 	}
 }
