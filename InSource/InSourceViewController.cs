@@ -262,7 +262,7 @@ namespace Sdl.Community.InSource
 									{
 										_messageBoxService.ShowMessage(e.Error.ToString(), string.Empty);
 									}
-									else
+									else if(creator != null)
 									{
 										foreach (var request in creator.SuccessfulRequests)
 										{
@@ -486,13 +486,10 @@ namespace Sdl.Community.InSource
 
 		private void InitializeBackgroundWorker()
 		{
-			if (_worker == null)
+			_worker = new BackgroundWorker
 			{
-				_worker = new BackgroundWorker
-				{
-					WorkerReportsProgress = true
-				};
-			}			
+				WorkerReportsProgress = true
+			};
 		}
 	}
 }
