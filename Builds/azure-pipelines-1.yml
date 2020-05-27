@@ -6,10 +6,9 @@
 trigger:
   branches:
     include:
-    - master
+      - master/*
   paths:
-   include:
-    - Sdl-Community/AdvancedDisplayFilter/*
+    include: ["Sdl-Community/AdvancedDisplayFilter/**/*"]
 
 pool: Itdevops2
 
