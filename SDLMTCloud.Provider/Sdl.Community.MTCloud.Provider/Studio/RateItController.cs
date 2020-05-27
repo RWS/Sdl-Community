@@ -5,7 +5,6 @@ using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Application = System.Windows.Forms.Application;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
@@ -28,15 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		protected override Control GetContentControl()
 		{
-			//var parent = _control.Value.Controls.Owner.Parent;
-			//var form = parent as Form;
-			//var parent = cont.Get
-			//foreach (Window window in Application.OpenForms)
-			//{
-			//	Console.WriteLine(window.Title);
-			//}
 			return _control.Value;
-
 		}
 	}
 }

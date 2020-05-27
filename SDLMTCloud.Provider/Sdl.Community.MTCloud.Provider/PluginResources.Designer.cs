@@ -463,6 +463,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable &quot;Send feedback option&quot; from Settings.
+        /// </summary>
+        public static string RateIt_Option_DisabledMessage {
+            get {
+                return ResourceManager.GetString("RateIt_Option_DisabledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grammar.
         /// </summary>
         public static string RateIt_Option_Grammar {

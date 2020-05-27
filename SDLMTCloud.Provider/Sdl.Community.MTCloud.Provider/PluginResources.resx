@@ -328,4 +328,7 @@
   <data name="SettingsWindow_ReSendTransaltionOption" xml:space="preserve">
     <value>Re-send draft and translated segments</value>
   </data>
+  <data name="RateIt_Option_DisabledMessage" xml:space="preserve">
+    <value>Enable "Send feedback option" from Settings</value>
+  </data>
 </root>

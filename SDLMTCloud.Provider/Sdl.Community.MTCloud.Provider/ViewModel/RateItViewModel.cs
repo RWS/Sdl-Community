@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Languages.Provider;
@@ -16,6 +17,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private readonly IActionProvider _actionProvider;
 		private readonly List<ISDLMTCloudAction> _actions;
 		private ICommand _sendFeedbackCommand;
+		private ObservableCollection<FeedbackOption> _feedbackOptions;
 
 		private FeedbackOption _wordsOmissionChecked;
 		private FeedbackOption _grammarChecked;
@@ -26,13 +28,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private FeedbackOption _capitalizationChecked;
 		private int _rating;
 		private string _feedback;
+		private bool _sendFeedback;
 
 		public RateItViewModel(IShortcutService shortcutService,IActionProvider actionProvider)
 		{
 			_actionProvider = actionProvider;
 			SetShortcutService(shortcutService);
 			InitializeFeedbackOptions();
-
+			//_feedbackOptions = new ObservableCollection<FeedbackOption>(
+			//	);
 			ClearCommand = new CommandHandler(ClearFeedbackBox);
 
 			_actions = InitializeActions();
@@ -129,6 +133,17 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
+		public bool SendFeedback
+		{
+			get => _sendFeedback;
+			set
+			{
+				if (_sendFeedback == value) return;
+				_sendFeedback = value;
+				OnPropertyChanged(nameof(SendFeedback));
+			}
+		}
+
 		public string Feedback
 		{
 			get => _feedback;
@@ -141,7 +156,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		public ICommand ClearCommand { get; }
-		public ICommand SendFeedbackCommand => _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(SendFeedback));
+		public ICommand SendFeedbackCommand => _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(SendFeedbackToService));
 
 
 		public void IncreaseRating()
@@ -183,7 +198,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			propertyInfo.SetValue(this, option);
 		}
 
-		private async Task SendFeedback()
+		private async Task SendFeedbackToService()
 		{
 			if (_translationService != null)
 			{
@@ -278,6 +293,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				_translationService.TranslationReceived += _translationService_TranslationReceived;
 			}
+		}
+
+		public void SetSendFeedback(bool sendFeedback)
+		{
+			SendFeedback = sendFeedback;
 		}
 	}
 }
