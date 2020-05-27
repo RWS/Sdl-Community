@@ -1,0 +1,29 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - Sdl-Community/AdvancedDisplayFilter/*
+
+pool: Itdevops2
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
+
+steps:
+- template: steps-reuse-template.yml
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: AdvancedDisplayFilter'
+  inputs:
+    ArtifactName: 'AdvancedDisplayFilter.SdlPlugin'
+    publishLocation: FilePath
+    TargetPath: '$(Agent.BuildDirectory)'
