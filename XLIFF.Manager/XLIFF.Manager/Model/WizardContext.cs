@@ -6,16 +6,22 @@ using Sdl.Community.XLIFF.Manager.Common;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
-	public class WizardContext: BaseModel, ICloneable
-	{		
+	public class WizardContext : BaseModel, ICloneable
+	{
 		public WizardContext()
-		{	
+		{
 			Support = Enumerators.XLIFFSupport.xliff12polyglot;
 			ProjectFiles = new List<ProjectFile>();
 			IncludeTranslations = false;
 			CopySourceToTarget = false;
 			DateTimeStamp = DateTime.UtcNow;
+			Completed = false;
+			Message = string.Empty;
 		}
+
+		public bool Completed { get; set; }
+
+		public string Message { get; set; }
 
 		public Project Project { get; set; }
 
@@ -40,19 +46,19 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			get
 			{
 				var value = DateTimeStamp.Year
-				            + "" + DateTimeStamp.Month.ToString().PadLeft(2, '0')
-				            + "" + DateTimeStamp.Day.ToString().PadLeft(2, '0')
-				            + "" + DateTimeStamp.Hour.ToString().PadLeft(2, '0')
-				            + "" + DateTimeStamp.Minute.ToString().PadLeft(2, '0')
-				            + "" + DateTimeStamp.Second.ToString().PadLeft(2, '0');
+							+ "" + DateTimeStamp.Month.ToString().PadLeft(2, '0')
+							+ "" + DateTimeStamp.Day.ToString().PadLeft(2, '0')
+							+ "" + DateTimeStamp.Hour.ToString().PadLeft(2, '0')
+							+ "" + DateTimeStamp.Minute.ToString().PadLeft(2, '0')
+							+ "" + DateTimeStamp.Second.ToString().PadLeft(2, '0');
 
 				return value;
-			}			
+			}
 		}
 
 		public string GetLanguageFolder(CultureInfo cultureInfo)
-		{			
-			var languageFolder = Path.Combine(OutputFolder, DateTimeStampToString, cultureInfo.Name);			
+		{
+			var languageFolder = Path.Combine(OutputFolder, DateTimeStampToString, cultureInfo.Name);
 			return languageFolder;
 		}
 
@@ -64,7 +70,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				DateTimeStamp = DateTimeStamp,
 				IncludeTranslations = IncludeTranslations,
 				CopySourceToTarget = CopySourceToTarget,
-				Support =  Support
+				Support = Support
 			};
 
 			foreach (var projectFileModel in ProjectFiles)
