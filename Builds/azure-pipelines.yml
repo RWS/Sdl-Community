@@ -22,9 +22,9 @@ steps:
 - template: steps-reuse-template.yml
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: AntidoteVerifier'
+  displayName: 'Publish Artifact: Anonymizer'
   inputs:
-    ArtifactName: 'AntidoteVerifier.sdlplugin'
+    ArtifactName: 'Anonymizer.sdlplugin'
     publishLocation: FilePath
     TargetPath: '$(Agent.BuildDirectory)'
 
