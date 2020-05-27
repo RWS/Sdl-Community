@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -12,29 +11,32 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Sdl.Community.XLIFF.Manager.Commands;
-using Sdl.Community.XLIFF.Manager.Converters.SDLXLIFF;
-using Sdl.Community.XLIFF.Manager.Converters.XLIFF.Writers;
+using Sdl.Community.XLIFF.Manager.Common;
+using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
+using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public class WizardPageExportPreparationViewModel : WizardPageViewModelBase
 	{
-		private ObservableCollection<JobProcess> _jobProcesses;
+		private List<JobProcess> _jobProcesses;
 		private ICommand _openFolderInExplorerCommand;
+		private SolidColorBrush _textMessageBrush;
+		private string _textMessage;
 
-		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
-		{					
+		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext) : base(owner, view, wizardContext)
+		{
 			IsValid = true;
 			InitializeJobProcessList();
-			PropertyChanged += WizardPagePreparationViewModel_PropertyChanged;					
+			PropertyChanged += WizardPagePreparationViewModel_PropertyChanged;
 		}
 
 		public ICommand OpenFolderInExplorerCommand => _openFolderInExplorerCommand ?? (_openFolderInExplorerCommand = new CommandHandler(OpenFolderInExplorer));
 
-		public ObservableCollection<JobProcess> JobProcesses
+		public List<JobProcess> JobProcesses
 		{
-			get { return _jobProcesses; }
+			get => _jobProcesses;
 			set
 			{
 				_jobProcesses = value;
@@ -42,16 +44,32 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			}
 		}
 
-		public string TextMessage { get; set; }
+		public string TextMessage
+		{
+			get => _textMessage;
+			set
+			{
+				_textMessage = value;
+				OnPropertyChanged(nameof(TextMessage));
+			}
+		}
 
-		public SolidColorBrush TextMessageBrush { get; set; }
+		public SolidColorBrush TextMessageBrush
+		{
+			get => _textMessageBrush;
+			set
+			{
+				_textMessageBrush = value;
+				OnPropertyChanged(nameof(TextMessageBrush));
+			}
+		}
 
 		public override string DisplayName => PluginResources.PageName_Preparation;
 
 		public sealed override bool IsValid { get; set; }
 
 		private void OpenFolderInExplorer(object parameter)
-		{			
+		{
 			if (Directory.Exists(WizardContext.WorkingFolder))
 			{
 				Process.Start(WizardContext.WorkingFolder);
@@ -60,7 +78,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		private void InitializeJobProcessList()
 		{
-			JobProcesses = new ObservableCollection<JobProcess>
+			JobProcesses = new List<JobProcess>
 			{
 				new JobProcess
 				{
@@ -75,10 +93,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 					Name = PluginResources.JobProcess_Finalize
 				}
 			};
-		}		
-				
+		}
+
 		private async void StartProcessing()
-		{			
+		{
 			//_logger.Info("Start Process: XLIFF.Manager.Export");
 
 			if (!Directory.Exists(WizardContext.WorkingFolder))
@@ -90,14 +108,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			var job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Preparation);
 			if (job != null)
 			{
-				success = Preparation(job);
+				success = await Preparation(job);
 			}
 
 			if (success)
 			{
 				job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Export);
 				if (job != null)
-				{					
+				{
 
 					success = await Export(job);
 				}
@@ -105,34 +123,19 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 			if (success)
 			{
-
 				job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Finalize);
 				if (job != null)
-				{					
-					success = Finalize(job);
+				{
+					success = await Finalize(job);
 				}
 			}
-	
-			if (success)
-			{
-				TextMessage = PluginResources.Result_Successful;
-				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#017701");
-				IsComplete = true;
-			}
-			else
-			{
-				TextMessage = PluginResources.Result_Unsuccessful;
-				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#7F0505");
-				IsComplete = false;
-			}
 
-			OnPropertyChanged(nameof(TextMessage));
-			OnPropertyChanged(nameof(TextMessageBrush));
+			FinalizeJobProcesses(success);
 
 			//_logger.Info("End Process: XLIFF.Manager.Export" + Environment.NewLine + Environment.NewLine);
 		}
 
-		private bool Preparation(JobProcess jobProcess)
+		private async Task<bool> Preparation(JobProcess jobProcess)
 		{
 			var success = true;
 
@@ -144,16 +147,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
-
-				OnPropertyChanged(nameof(TextMessage));
-				OnPropertyChanged(nameof(TextMessageBrush));
-				OnPropertyChanged(nameof(JobProcesses));
-
 				//Refresh();
 				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
-				
 
-				jobProcess.Status = JobProcess.ProcessStatus.Completed;				
+
+				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
 			catch (Exception ex)
 			{
@@ -164,7 +162,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				//_logger.Error(ex.Message);
 			}
 
-			return success;
+			return await Task.FromResult(success);
 		}
 
 		private async Task<bool> Export(JobProcess jobProcess)
@@ -178,16 +176,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				TextMessage = "Converting to XLIFF format...";
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
-
-				OnPropertyChanged(nameof(TextMessage));
-				OnPropertyChanged(nameof(TextMessageBrush));				
-				OnPropertyChanged(nameof(JobProcesses));
-
-				//Refresh();
+			
 				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 
-				var project = WizardContext.ProjectFileModels[0].ProjectModel;				
-				var sdlXliffParser = new FileParser();
+				var project = WizardContext.ProjectFileModels[0].ProjectModel;
+				var sdlxliffReader = new SdlxliffReader();
 				var xliffWriter = new XliffWriter(WizardContext.Support);
 
 				var selectedLanguages = GetSelectedLanguages();
@@ -203,15 +196,62 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 					var targetFiles = GetSelectedTargetFiles(cultureInfo);
 					foreach (var targetFile in targetFiles)
 					{
-						var outputFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
+						targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
 
-						var xliffData = sdlXliffParser.ParseFile(project.Id, targetFile.Location, WizardContext.CopySourceToTarget);
+						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location, WizardContext.CopySourceToTarget);
 
-						xliffWriter.CreateXliffFile(xliffData, outputFilePath, WizardContext.IncludeTranslations);
+						var exported = xliffWriter.WriteFile(xliffData, targetFile.XliffFilePath, WizardContext.IncludeTranslations);
+						if (exported)
+						{
+							targetFile.Status = Enumerators.Status.Success;
+						}
+
+						var activityFile = new ProjectFileActivity
+						{
+							ProjectFileId = targetFile.Id,
+							Id = Guid.NewGuid().ToString(),
+							Action = targetFile.Action,
+							Status = exported ? Enumerators.Status.Success : Enumerators.Status.Error,
+							Date = targetFile.Date,
+							Path = Path.GetFileName(targetFile.XliffFilePath),
+							Name = Path.GetDirectoryName(targetFile.XliffFilePath),
+							Details = "TODO",
+							ProjectFile = targetFile
+						};
+
+						targetFile.ProjectFileActivities.Add(activityFile);
 					}
 				}
-				
-				jobProcess.Status = JobProcess.ProcessStatus.Completed;				
+
+				jobProcess.Status = JobProcess.ProcessStatus.Completed;
+			}
+			catch (Exception ex)
+			{
+				jobProcess.Errors.Add(ex);
+				jobProcess.Status = JobProcess.ProcessStatus.Failed;
+				success = false;
+
+				//_logger.Error(ex.Message);
+			}
+
+			return await Task.FromResult(success);
+		}	
+
+		private async Task<bool> Finalize(JobProcess jobProcess)
+		{
+			var success = true;
+
+			try
+			{
+				//_logger.Info("Phase: Finalize");
+				TextMessage = "Finalizing procedures...";
+				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
+				jobProcess.Status = JobProcess.ProcessStatus.Running;
+
+				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
+
+
+				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
 			catch (Exception ex)
 			{
@@ -225,7 +265,23 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			return await Task.FromResult(success);
 		}
 
-		private IEnumerable<ProjectFileModel> GetSelectedTargetFiles(CultureInfo cultureInfo)
+		private void FinalizeJobProcesses(bool success)
+		{
+			if (success)
+			{
+				TextMessage = PluginResources.Result_Successful;
+				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#017701");
+				IsComplete = true;
+			}
+			else
+			{
+				TextMessage = PluginResources.Result_Unsuccessful;
+				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#7F0505");
+				IsComplete = false;
+			}
+		}
+
+		private IEnumerable<ProjectFile> GetSelectedTargetFiles(CultureInfo cultureInfo)
 		{
 			var selected = WizardContext.ProjectFileModels.Where(a => a.Selected);
 			var targetFiles = selected.Where(a => Equals(a.TargetLanguage.CultureInfo, cultureInfo));
@@ -239,64 +295,31 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			return selectedLanguages;
 		}
 
-		private bool Finalize(JobProcess jobProcess)
-		{
-			var success = true;
-
-			try
-			{
-				//_logger.Info("Phase: Finalize");
-				TextMessage = "Finalizing procedures...";
-				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
-				jobProcess.Status = JobProcess.ProcessStatus.Running;
-
-				OnPropertyChanged(nameof(TextMessage));
-				OnPropertyChanged(nameof(TextMessageBrush));
-				OnPropertyChanged(nameof(JobProcesses));
-
-				//Refresh();
-				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
-
-				
-				jobProcess.Status = JobProcess.ProcessStatus.Completed;				
-			}
-			catch (Exception ex)
-			{
-				jobProcess.Errors.Add(ex);
-				jobProcess.Status = JobProcess.ProcessStatus.Failed;
-				success = false;
-				
-				//_logger.Error(ex.Message);
-			}
-
-			return success;
-		}
-		
 		private void Refresh()
-		{					
+		{
 			Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
 		}
-	
+
 		private void WizardPagePreparationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(CurrentPageChanged))
 			{
 				if (IsCurrentPage)
 				{
-					LoadView();
+					OnLoadView();
 				}
 				else
 				{
-					LeaveView();
+					OnLeaveView();
 				}
 			}
 		}
 
-		private void LeaveView()
+		private void OnLeaveView()
 		{
 		}
 
-		private void LoadView()
+		private void OnLoadView()
 		{
 			Refresh();
 			StartProcessing();

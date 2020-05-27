@@ -10,15 +10,15 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
 	public class ProjectsNavigationViewModel : BaseModel, IDisposable
 	{
-		private readonly List<ProjectModel> _projectModels;
+		private readonly List<Project> _projectModels;
 		private string _filterString;
-		private List<ProjectModel> _filteredProjectModels;
-		private ProjectModel _selectedProjectModel;
+		private List<Project> _filteredProjectModels;
+		private Project _selectedProjectModel;
 		private IList _selectedProjectModels;
 		private ICommand _clearSelectionCommand;
 		private ICommand _clearFilterCommand;
 
-		public ProjectsNavigationViewModel(List<ProjectModel> projectModels)
+		public ProjectsNavigationViewModel(List<Project> projectModels)
 		{
 			_projectModels = projectModels;
 			FilteredProjectModels = _projectModels;
@@ -59,7 +59,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			}
 		}
 
-		public List<ProjectModel> FilteredProjectModels
+		public List<Project> FilteredProjectModels
 		{
 			get => _filteredProjectModels;
 			set
@@ -91,14 +91,14 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				if (ProjectFilesViewModel != null && _selectedProjectModels != null)
 				{
 					ProjectFilesViewModel.ProjectFiles =
-						_selectedProjectModels.Cast<ProjectModel>().SelectMany(a => a.ProjectFileModels).ToList();
+						_selectedProjectModels.Cast<Project>().SelectMany(a => a.ProjectFiles).ToList();
 				}
 
 				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
 
-		public ProjectModel SelectedProjectModel
+		public Project SelectedProjectModel
 		{
 			get => _selectedProjectModel;
 			set
@@ -108,7 +108,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 				if (ProjectFilesViewModel != null && _selectedProjectModel != null)
 				{
-					ProjectFilesViewModel.ProjectFiles = _selectedProjectModel.ProjectFileModels;
+					ProjectFilesViewModel.ProjectFiles = _selectedProjectModel.ProjectFiles;
 				}
 			}
 		}

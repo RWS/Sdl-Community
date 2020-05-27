@@ -14,14 +14,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 	public class WizardPageExportFilesViewModel : WizardPageViewModelBase, IDisposable
 	{	
 		private IList _selectedProjectFiles;		
-		private List<ProjectFileModel> _projectFiles;
-		private ProjectFileModel _selectedProjectFile;
+		private List<ProjectFile> _projectFiles;
+		private ProjectFile _selectedProjectFile;
 		private ICommand _checkAllCommand;
 		private ICommand _checkSelectedComand;
 		private bool _checkedAll;
 		private bool _checkingAllAction;
 
-		public WizardPageExportFilesViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
+		public WizardPageExportFilesViewModel(Window owner, object view, WizardContext wizardContext) : base(owner, view, wizardContext)
 		{		
 			ProjectFiles = wizardContext.ProjectFileModels;
 			PropertyChanged += WizardPageExportFilesViewModel_PropertyChanged;			
@@ -31,9 +31,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public ICommand CheckSelectedCommand => _checkSelectedComand ?? (_checkSelectedComand = new CommandHandler(CheckSelected));
 
-		public List<ProjectFileModel> ProjectFiles
+		public List<ProjectFile> ProjectFiles
 		{
-			get => _projectFiles ?? (_projectFiles = new List<ProjectFileModel>());
+			get => _projectFiles ?? (_projectFiles = new List<ProjectFile>());
 			set
 			{
 				if (_projectFiles != null)
@@ -59,7 +59,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			}
 		}
 
-		public ProjectFileModel SelectedProjectFile
+		public ProjectFile SelectedProjectFile
 		{
 			get => _selectedProjectFile;
 			set
@@ -71,7 +71,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public IList SelectedProjectFiles
 		{
-			get => _selectedProjectFiles ?? (_selectedProjectFiles = new ObservableCollection<ProjectFileModel>());
+			get => _selectedProjectFiles ?? (_selectedProjectFiles = new ObservableCollection<ProjectFile>());
 			set
 			{
 				_selectedProjectFiles = value;
@@ -138,7 +138,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			}
 
 			var isChecked = Convert.ToBoolean(parameter);
-			foreach (var selectedFile in SelectedProjectFiles.Cast<ProjectFileModel>())
+			foreach (var selectedFile in SelectedProjectFiles.Cast<ProjectFile>())
 			{
 				selectedFile.Selected = isChecked;
 			}
@@ -146,7 +146,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			UpdateCheckAll();
 			VerifyIsValid();
 		}
-
 
 		public override string DisplayName => PluginResources.PageName_Files;
 
@@ -159,7 +158,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		private void ProjectFile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			if (!_checkingAllAction && e.PropertyName == nameof(ProjectFileModel.Selected))
+			if (!_checkingAllAction && e.PropertyName == nameof(ProjectFile.Selected))
 			{
 				UpdateCheckAll();
 			}
@@ -173,20 +172,20 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			{
 				if (IsCurrentPage)
 				{
-					LoadView();
+					OnLoadView();
 				}
 				else
 				{
-					LeaveView();
+					OnLeaveView();
 				}
 			}
 		}
 
-		private void LeaveView()
+		private void OnLeaveView()
 		{			
 		}
 
-		private void LoadView()
+		private void OnLoadView()
 		{
 			UpdateCheckAll();
 			VerifyIsValid();

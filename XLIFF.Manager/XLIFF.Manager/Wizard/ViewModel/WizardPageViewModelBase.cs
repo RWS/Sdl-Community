@@ -16,14 +16,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private double _labelLineWidth;
 		private double _labelTextWidth;
 
-		protected WizardPageViewModelBase(Window owner, object view, WizardContextModel wizardContext)
+		protected WizardPageViewModelBase(Window owner, object view, WizardContext wizardContext)
 		{
 			Owner = owner;
 			View = view;
 			WizardContext = wizardContext;
 		}
 
-		public WizardContextModel WizardContext { get; set; }
+		public WizardContext WizardContext { get; set; }
 
 		public double LabelLineWidth
 		{

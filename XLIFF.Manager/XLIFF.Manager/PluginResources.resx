@@ -304,4 +304,10 @@
 	<data name="Label_CopySourceToTarget" xml:space="preserve">
     <value>Copy Source to Target: {0}</value>
   </data>
+	<data name="Label_Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
+	<data name="Label_Files" xml:space="preserve">
+    <value>Files</value>
+  </data>
 </root>

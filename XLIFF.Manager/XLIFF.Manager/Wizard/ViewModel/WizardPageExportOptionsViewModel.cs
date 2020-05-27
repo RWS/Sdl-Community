@@ -13,8 +13,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 {
 	public class WizardPageExportOptionsViewModel : WizardPageViewModelBase, IDisposable
 	{		
-		private List<XLIFFSupportModel> _xliffSupport;
-		private XLIFFSupportModel _selectedXliffSupportModel;
+		private List<XLIFFSupport> _xliffSupport;
+		private XLIFFSupport _selectedXliffSupportModel;
 		private string _outputFolder;
 		private bool _copySourceToTarget;
 		private bool _copySourceToTargetEnabled;
@@ -22,7 +22,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
 
-		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContextModel wizardContext) : base(owner, view, wizardContext)
+		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext) : base(owner, view, wizardContext)
 		{		
 			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == WizardContext.Support);
 			OutputFolder = WizardContext.OutputFolder;
@@ -36,7 +36,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public ICommand BrowseFolderCommand => _browseFolderCommand ?? (_browseFolderCommand = new CommandHandler(BrowseFolder));
 
-		public List<XLIFFSupportModel> XLIFFSupportList
+		public List<XLIFFSupport> XLIFFSupportList
 		{
 			get
 			{
@@ -45,14 +45,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 					return _xliffSupport;
 				}
 
-				_xliffSupport = new List<XLIFFSupportModel>
+				_xliffSupport = new List<XLIFFSupport>
 				{
-					new XLIFFSupportModel
+					new XLIFFSupport
 					{
 						Name = "XLIFF 1.2 SDL",
 						SupportType = Enumerators.XLIFFSupport.xliff12sdl
 					},
-					new XLIFFSupportModel
+					new XLIFFSupport
 					{
 						Name = "XLIFF 1.2 Polyglot",
 						SupportType = Enumerators.XLIFFSupport.xliff12polyglot
@@ -69,7 +69,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			}
 		}
 
-		public XLIFFSupportModel SelectedXliffSupport
+		public XLIFFSupport SelectedXliffSupport
 		{
 			get
 			{
@@ -221,16 +221,16 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			{
 				if (IsCurrentPage)
 				{
-					LoadView();
+					OnLoadView();
 				}
 				else
 				{
-					LeaveView();
+					OnLeaveView();
 				}
 			}
 		}
 
-		private void LeaveView()
+		private void OnLeaveView()
 		{
 			WizardContext.OutputFolder = OutputFolder;
 			WizardContext.Support = SelectedXliffSupport.SupportType;
@@ -238,7 +238,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			WizardContext.IncludeTranslations = IncludeTranslations;									
 		}
 
-		private void LoadView()
+		private void OnLoadView()
 		{			
 			VerifyIsValid();
 		}

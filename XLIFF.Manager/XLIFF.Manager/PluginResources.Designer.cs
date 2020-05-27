@@ -174,6 +174,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Files.
+        /// </summary>
+        internal static string Label_Files {
+            get {
+                return ResourceManager.GetString("Label_Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Folder: {0}.
         /// </summary>
         internal static string Label_Folder {
@@ -233,6 +242,15 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string Label_Options {
             get {
                 return ResourceManager.GetString("Label_Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project.
+        /// </summary>
+        internal static string Label_Project {
+            get {
+                return ResourceManager.GetString("Label_Project", resourceCulture);
             }
         }
         

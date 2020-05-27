@@ -29,7 +29,7 @@ namespace Sdl.Community.XLIFF.Manager
 	public class XLIFFManagerViewController : AbstractViewController
 	{
 		private readonly object _lockObject = new object();		
-		private List<ProjectModel> _projectModels;
+		private List<Project> _projectModels;
 		private ProjectFilesViewModel _projectFilesViewModel;
 		private ProjectsNavigationViewModel _projectsNavigationViewModel;
 		private ProjectFilesViewControl _projectFilesViewControl;
@@ -73,7 +73,7 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			if (_projectFilesViewControl == null)
 			{
-				_projectFilesViewModel = new ProjectFilesViewModel(_projectModels?.Count > 0 ? _projectModels[0].ProjectFileModels : null);
+				_projectFilesViewModel = new ProjectFilesViewModel(_projectModels?.Count > 0 ? _projectModels[0].ProjectFiles : null);
 				_projectFilesViewControl = new ProjectFilesViewControl(_projectFilesViewModel);
 
 				_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
@@ -82,14 +82,14 @@ namespace Sdl.Community.XLIFF.Manager
 			return _projectFilesViewControl;
 		}
 
-		public List<ProjectModel> GetSelectedProjects()
+		public List<Project> GetSelectedProjects()
 		{
-			return _projectsNavigationViewModel.SelectedProjectModels?.Cast<ProjectModel>().ToList();
+			return _projectsNavigationViewModel.SelectedProjectModels?.Cast<Project>().ToList();
 		}
 
-		public List<ProjectFileModel> GetSelectedProjectFiles()
+		public List<ProjectFile> GetSelectedProjectFiles()
 		{
-			return _projectFilesViewModel.SelectedProjectFiles?.Cast<ProjectFileModel>().ToList();
+			return _projectFilesViewModel.SelectedProjectFiles?.Cast<ProjectFile>().ToList();
 		}
 
 		private void OnStudioWindowCreatedNotificationEvent(StudioWindowCreatedNotificationEvent e)
@@ -120,7 +120,7 @@ namespace Sdl.Community.XLIFF.Manager
 						SdlTradosStudio.Application.GetController<ProjectFileActivityViewController>();
 
 					_projectFilesViewModel.ProjectFileActivityViewModel =
-						new ProjectFileActivityViewModel(_projectFilesViewModel?.SelectedProjectFile?.ProjectFileActivityModels);
+						new ProjectFileActivityViewModel(_projectFilesViewModel?.SelectedProjectFile?.ProjectFileActivities);
 
 					_projectFileActivityViewController.ViewModel = _projectFilesViewModel.ProjectFileActivityViewModel;					
 				}

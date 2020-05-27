@@ -24,18 +24,18 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private RelayCommand _cancelCommand;
 
 		public WizardViewModel(Window window, ObservableCollection<WizardPageViewModelBase> pages, 
-			WizardContextModel transctionModel, Enumerators.Action action)
+			WizardContext wizardContext, Enumerators.Action action)
 		{
 			SetWindow(window);		
 			Pages = pages;
 			Action = action;
-			TransctionModel = transctionModel;
+			WizardContext = wizardContext;
 			UpdateWizardHeader(_window.ActualWidth);
 			SetCurrentPage(Pages[0]);
 		}
 		public Enumerators.Action Action { get; set; }
 
-		public WizardContextModel TransctionModel { get; set; }
+		public WizardContext WizardContext { get; set; }
 
 		private void SetWindow(Window window)
 		{

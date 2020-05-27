@@ -7,7 +7,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 {
 	public class CustomerProvider
 	{
-		public CustomerModel GetProjectCustomer(FileBasedProject project)
+		public Customer GetProjectCustomer(FileBasedProject project)
 		{
 			var type = project.GetType();
 			var internalProjectField = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -17,7 +17,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				var internalProjectCustomer = internalDynamicProject?.Customer;
 				if (internalProjectCustomer != null)
 				{
-					return new CustomerModel
+					return new Customer
 					{
 						Name = internalProjectCustomer.Name,
 						Email = internalProjectCustomer.Email,
@@ -29,7 +29,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return null;
 		}
 
-		public List<CustomerModel> GetProjectCustomers(FileBasedProject project)
+		public List<Customer> GetProjectCustomers(FileBasedProject project)
 		{
 			var type = project.GetType();
 			var internalProjectField = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -42,10 +42,10 @@ namespace Sdl.Community.XLIFF.Manager.Service
 					return null;
 				}
 
-				var customersModels = new List<CustomerModel>();
+				var customersModels = new List<Customer>();
 				foreach (var studioCustomer in studioCustomers)
 				{
-					var customer = new CustomerModel
+					var customer = new Customer
 					{
 						Name = studioCustomer.Name,
 						Email = studioCustomer.Email,

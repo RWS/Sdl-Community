@@ -25,7 +25,7 @@ namespace XLIFF.Manager.UnitTests
 		{
 			// arrange
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
-			var projectFileActivities = defaultTestProjectData[1].ProjectFileModels[1].ProjectFileActivityModels;
+			var projectFileActivities = defaultTestProjectData[1].ProjectFiles[1].ProjectFileActivities;
 
 			// act
 			var model = new ProjectFileActivityViewModel(projectFileActivities);
@@ -40,7 +40,7 @@ namespace XLIFF.Manager.UnitTests
 		{
 			// arrange
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
-			var projectFileActivities = defaultTestProjectData[1].ProjectFileModels[1].ProjectFileActivityModels;
+			var projectFileActivities = defaultTestProjectData[1].ProjectFiles[1].ProjectFileActivities;
 
 			// act
 			var model = new ProjectFileActivityViewModel(projectFileActivities);
