@@ -94,6 +94,11 @@ namespace Sdl.Community.XLIFF.Manager
 
 		public void UpdateProjectData(WizardContext wizardContext)
 		{
+			if (wizardContext == null || !wizardContext.Completed)
+			{
+				return;
+			}
+
 			if (_projects == null)
 			{
 				_projects = new List<Project>();
@@ -116,7 +121,7 @@ namespace Sdl.Community.XLIFF.Manager
 					}
 					else
 					{
-
+						// TODO
 					}
 				}
 			}

@@ -34,7 +34,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		private WizardWindow _wizardWindow;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
 		private WizardContext _wizardContext;
-		private bool _cancelledWizard;
+		private bool _isCancelled;
 
 		public WizardService(Enumerators.Action action, PathInfo pathInfo, CustomerProvider customerProvider,
 			ImageService imageService, XLIFFManagerViewController xliffManagerController,
@@ -65,12 +65,12 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				return null;
 			}
 
-			_cancelledWizard = false;
+			_isCancelled = false;
 			_wizardWindow = new WizardWindow();
 			_wizardWindow.Loaded += WizardWindowLoaded;
 			_wizardWindow.ShowDialog();
 
-			return !_cancelledWizard ? _wizardContext : null;
+			return (!_isCancelled && _wizardContext.Completed) ? _wizardContext : null;
 		}
 
 		private bool CreateWizardContext(AbstractController controller, out string message)
@@ -209,9 +209,9 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				Name = projectFile.Name,
 				Path = projectFile.Folder,
 				Location = projectFile.LocalFilePath,
-				Action = Enumerators.Action.Export,
+				Action = Enumerators.Action.None,
 				Status = Enumerators.Status.Ready,
-				Date = _wizardContext.DateTimeStamp,
+				Date = DateTime.MinValue,
 				TargetLanguage = GetLanguageInfo(targetLanguage.CultureInfo),
 				Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString()),
 				FileType = projectFile.FileTypeId,
@@ -343,7 +343,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 		private void ViewModel_RequestCancel(object sender, EventArgs e)
 		{
-			_cancelledWizard = true;
+			_isCancelled = true;
 			CloseWizard();
 		}
 

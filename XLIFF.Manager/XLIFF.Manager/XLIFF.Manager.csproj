@@ -388,6 +388,7 @@
     <Resource Include="Resources\Imported.png" />
     <Resource Include="Resources\Project.ico" />
     <Resource Include="Resources\Close.png" />
+    <Resource Include="Resources\Fie.png" />
     <Content Include="Resources\Icon.Jigsaw.ico" />
     <Resource Include="Resources\Minus.png" />
     <Resource Include="Resources\Plus.png" />

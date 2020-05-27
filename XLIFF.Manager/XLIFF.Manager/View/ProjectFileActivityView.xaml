@@ -106,7 +106,7 @@
 
 				<DataGridTextColumn Header="Path" CanUserSort="False" Binding="{Binding Path, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 										ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
-				<DataGridTextColumn Header="Date" CanUserSort="False" Binding="{Binding Date, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
+				<DataGridTextColumn Header="Date" CanUserSort="False" Binding="{Binding DateToString, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
 										ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
 				<DataGridTextColumn Header="Details" CanUserSort="False" Binding="{Binding Details, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
 										ElementStyle="{StaticResource TextBlockStyle}" Width="2*"/>

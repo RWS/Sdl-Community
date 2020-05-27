@@ -11,8 +11,8 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		private Enumerators.Status _status;
 
 		public ProjectFile()
-		{			
-			ProjectFileActivities = new List<ProjectFileActivity>();			
+		{
+			ProjectFileActivities = new List<ProjectFileActivity>();
 		}
 
 		public string ProjectId { get; set; }
@@ -79,6 +79,23 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		public string XliffFilePath { get; set; }
 
 		public DateTime Date { get; set; }
+
+		public string DateToString
+		{
+			get
+			{
+				var value = Date != DateTime.MinValue
+					? Date.Year
+							+ "-" + Date.Month.ToString().PadLeft(2, '0')
+							+ "-" + Date.Day.ToString().PadLeft(2, '0')
+							+ " " + Date.Hour.ToString().PadLeft(2, '0')
+							+ ":" + Date.Minute.ToString().PadLeft(2, '0')
+							+ ":" + Date.Second.ToString().PadLeft(2, '0')
+					: "[none]";
+
+				return value;
+			}
+		}
 
 		public LanguageInfo TargetLanguage { get; set; }
 

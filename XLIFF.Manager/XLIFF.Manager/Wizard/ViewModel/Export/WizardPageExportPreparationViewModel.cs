@@ -195,25 +195,28 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 					var targetFiles = GetSelectedTargetFiles(cultureInfo);
 					foreach (var targetFile in targetFiles)
 					{
-						targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
-
+						var xliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");						
 						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location, WizardContext.CopySourceToTarget);
+						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.IncludeTranslations);
 
-						var exported = xliffWriter.WriteFile(xliffData, targetFile.XliffFilePath, WizardContext.IncludeTranslations);
 						if (exported)
 						{
+							targetFile.Date = WizardContext.DateTimeStamp;
+							targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
+							targetFile.Action = Enumerators.Action.Export;
 							targetFile.Status = Enumerators.Status.Success;
 						}
+						
 
 						var activityFile = new ProjectFileActivity
 						{
 							ProjectFileId = targetFile.Id,
 							Id = Guid.NewGuid().ToString(),
-							Action = targetFile.Action,
+							Action = Enumerators.Action.Export,
 							Status = exported ? Enumerators.Status.Success : Enumerators.Status.Error,
 							Date = targetFile.Date,
-							Path = Path.GetFileName(targetFile.XliffFilePath),
-							Name = Path.GetDirectoryName(targetFile.XliffFilePath),
+							Name = Path.GetFileName(targetFile.XliffFilePath),
+							Path = Path.GetDirectoryName(targetFile.XliffFilePath),
 							Details = "TODO",
 							ProjectFile = targetFile
 						};
@@ -222,6 +225,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 					}
 				}
 
+				WizardContext.Completed = true;
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
 			catch (Exception ex)

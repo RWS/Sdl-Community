@@ -91,13 +91,21 @@
 							<Grid Margin="10,0,10,0">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="Auto"/>
+									<ColumnDefinition Width="Auto"/>
 									<ColumnDefinition Width="*"/>
 								</Grid.ColumnDefinitions>
-								<Image Grid.Column="0" Margin="2,0,0,2" VerticalAlignment="Center" Stretch="UniformToFill"
+								<Image Grid.Column="0" Margin="0,0,2,2" VerticalAlignment="Center" Stretch="UniformToFill"
+								       Width="16" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased">
+								</Image>
+								<Image Grid.Column="1" Margin="2,0,0,2" VerticalAlignment="Center" Stretch="UniformToFill"
 								       Width="16" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased">
 									<Image.Style>
 										<Style TargetType="Image">
 											<Style.Triggers>
+												<DataTrigger Binding="{Binding Action}" Value="None">
+													<Setter Property="Source" Value="../Resources/Fie.png"/>
+													<Setter Property="ToolTip" Value="Ready"/>
+												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Export">
 													<Setter Property="Source" Value="../Resources/Exported.png"/>
 													<Setter Property="ToolTip" Value="Exported"/>
@@ -111,7 +119,7 @@
 									</Image.Style>
 								</Image>
 
-								<TextBlock Grid.Column="1" VerticalAlignment="Center" Padding="4,0,2,0"  
+								<TextBlock Grid.Column="2" VerticalAlignment="Center" Padding="4,0,2,0"  
 								           Text="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 							</Grid>
@@ -121,7 +129,7 @@
 
 				<DataGridTextColumn Header="Path" CanUserSort="True" Binding="{Binding Path, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 										ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
-				<DataGridTextColumn Header="Date" CanUserSort="True" Binding="{Binding Date, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
+				<DataGridTextColumn Header="Date" CanUserSort="True" Binding="{Binding DateToString, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
 										ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
 				<DataGridTextColumn Header="XLIFF File" CanUserSort="True" Binding="{Binding XliffFilePath, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
 				                    ElementStyle="{StaticResource TextBlockStyle}" Width="2*"/>
@@ -161,7 +169,7 @@
 				<GroupStyle>
 					<GroupStyle.HeaderTemplate>
 						<DataTemplate DataType="{x:Type GroupItem}">
-							<DockPanel Background="Transparent" Margin="4,2,0,2">
+							<DockPanel Background="Transparent" Margin="4,5,0,5">
 								<Image Margin="8,0,2,0" Width="20"
 									   Stretch="UniformToFill"
 								       RenderOptions.BitmapScalingMode="HighQuality" 

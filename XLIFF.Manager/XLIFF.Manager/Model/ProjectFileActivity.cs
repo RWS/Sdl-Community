@@ -30,7 +30,24 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string Path { get; set; }
 
-		public DateTime Date { get; set; }		
+		public DateTime Date { get; set; }
+
+		public string DateToString
+		{
+			get
+			{
+				var value = Date != DateTime.MinValue
+					? Date.Year
+					  + "-" + Date.Month.ToString().PadLeft(2, '0')
+					  + "-" + Date.Day.ToString().PadLeft(2, '0')
+					  + " " + Date.Hour.ToString().PadLeft(2, '0')
+					  + ":" + Date.Minute.ToString().PadLeft(2, '0')
+					  + ":" + Date.Second.ToString().PadLeft(2, '0')
+					: "[none]";
+
+				return value;
+			}
+		}
 
 		public string Details { get; set; }		
 
