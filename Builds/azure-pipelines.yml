@@ -9,7 +9,7 @@ trigger:
     - master
   paths:
     include:
-    - Sdl-Community/Sdl-Community/AntidoteVerifier/*
+    - Sdl-Community/AntidoteVerifier/*
 
 pool: Studio-OX
 
