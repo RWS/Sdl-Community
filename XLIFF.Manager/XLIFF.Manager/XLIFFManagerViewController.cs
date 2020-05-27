@@ -28,8 +28,8 @@ namespace Sdl.Community.XLIFF.Manager
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class XLIFFManagerViewController : AbstractViewController
 	{
-		private readonly object _lockObject = new object();		
-		private List<Project> _projectModels;
+		private readonly object _lockObject = new object();
+		private List<Project> _projects;
 		private ProjectFilesViewModel _projectFilesViewModel;
 		private ProjectsNavigationViewModel _projectsNavigationViewModel;
 		private ProjectFilesViewControl _projectFilesViewControl;
@@ -41,7 +41,7 @@ namespace Sdl.Community.XLIFF.Manager
 		private PathInfo _pathInfo;
 
 		protected override void Initialize(IViewContext context)
-		{			
+		{
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService(_pathInfo);
 			_imageService.ExtractFlags();
@@ -54,15 +54,15 @@ namespace Sdl.Community.XLIFF.Manager
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
 			// TODO this will be replaced with a call to recover the relevant data from the projects loaded in Studio			
-			var testDataUtil = new TestDataUtil(_imageService);
-			_projectModels = testDataUtil.GetTestProjectData();
+			//var testDataUtil = new TestDataUtil(_imageService);
+			//_projectModels = testDataUtil.GetTestProjectData();
 		}
 
 		protected override Control GetExplorerBarControl()
 		{
 			if (_projectsNavigationViewControl == null)
 			{
-				_projectsNavigationViewModel = new ProjectsNavigationViewModel(_projectModels);
+				_projectsNavigationViewModel = new ProjectsNavigationViewModel(_projects);
 				_projectsNavigationViewControl = new ProjectsNavigationViewControl(_projectsNavigationViewModel);
 			}
 
@@ -73,7 +73,7 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			if (_projectFilesViewControl == null)
 			{
-				_projectFilesViewModel = new ProjectFilesViewModel(_projectModels?.Count > 0 ? _projectModels[0].ProjectFiles : null);
+				_projectFilesViewModel = new ProjectFilesViewModel(_projects?.Count > 0 ? _projects[0].ProjectFiles : null);
 				_projectFilesViewControl = new ProjectFilesViewControl(_projectFilesViewModel);
 
 				_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
@@ -84,12 +84,45 @@ namespace Sdl.Community.XLIFF.Manager
 
 		public List<Project> GetSelectedProjects()
 		{
-			return _projectsNavigationViewModel.SelectedProjectModels?.Cast<Project>().ToList();
+			return _projectsNavigationViewModel.SelectedProjects?.Cast<Project>().ToList();
 		}
 
 		public List<ProjectFile> GetSelectedProjectFiles()
 		{
 			return _projectFilesViewModel.SelectedProjectFiles?.Cast<ProjectFile>().ToList();
+		}
+
+		public void UpdateProjectData(WizardContext wizardContext)
+		{
+			if (_projects == null)
+			{
+				_projects = new List<Project>();
+			}
+
+			var project = _projects.FirstOrDefault(a => a.Id == wizardContext.Project.Id);
+			if (project == null)
+			{
+				_projects.Add(wizardContext.Project);
+				project = wizardContext.Project;
+			}
+			else
+			{
+				foreach (var wcProjectFile in wizardContext.ProjectFiles)
+				{
+					var projectFile = project.ProjectFiles.FirstOrDefault(a => a.Id == wcProjectFile.Id);
+					if (projectFile == null)
+					{
+						project.ProjectFiles.Add(wcProjectFile);
+					}
+					else
+					{
+
+					}
+				}
+			}
+
+			_projectsNavigationViewModel.Projects = _projects;
+			_projectFilesViewModel.ProjectFiles = project.ProjectFiles;			
 		}
 
 		private void OnStudioWindowCreatedNotificationEvent(StudioWindowCreatedNotificationEvent e)
@@ -122,7 +155,7 @@ namespace Sdl.Community.XLIFF.Manager
 					_projectFilesViewModel.ProjectFileActivityViewModel =
 						new ProjectFileActivityViewModel(_projectFilesViewModel?.SelectedProjectFile?.ProjectFileActivities);
 
-					_projectFileActivityViewController.ViewModel = _projectFilesViewModel.ProjectFileActivityViewModel;					
+					_projectFileActivityViewController.ViewModel = _projectFilesViewModel.ProjectFileActivityViewModel;
 				}
 				catch
 				{

@@ -11,13 +11,15 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		public WizardContext()
 		{	
 			Support = Enumerators.XLIFFSupport.xliff12polyglot;
-			ProjectFileModels = new List<ProjectFile>();
+			ProjectFiles = new List<ProjectFile>();
 			IncludeTranslations = false;
 			CopySourceToTarget = false;
 			DateTimeStamp = DateTime.UtcNow;
 		}
 
-		public List<ProjectFile> ProjectFileModels { get; set; }
+		public Project Project { get; set; }
+
+		public List<ProjectFile> ProjectFiles { get; set; }
 
 		public bool IncludeTranslations { get; set; }
 
@@ -65,9 +67,9 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Support =  Support
 			};
 
-			foreach (var projectFileModel in ProjectFileModels)
+			foreach (var projectFileModel in ProjectFiles)
 			{
-				model.ProjectFileModels.Add(projectFileModel.Clone() as ProjectFile);
+				model.ProjectFiles.Add(projectFileModel.Clone() as ProjectFile);
 			}
 
 			return model;

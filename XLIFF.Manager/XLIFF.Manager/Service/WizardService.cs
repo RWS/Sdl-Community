@@ -9,7 +9,9 @@ using System.Windows.Markup;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Wizard.View;
+using Sdl.Community.XLIFF.Manager.Wizard.View.Export;
 using Sdl.Community.XLIFF.Manager.Wizard.ViewModel;
+using Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi.Extensions.Internal;
 using Sdl.ProjectAutomation.Core;
@@ -32,6 +34,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		private WizardWindow _wizardWindow;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
 		private WizardContext _wizardContext;
+		private bool _cancelledWizard;
 
 		public WizardService(Enumerators.Action action, PathInfo pathInfo, CustomerProvider customerProvider,
 			ImageService imageService, XLIFFManagerViewController xliffManagerController,
@@ -62,12 +65,12 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				return null;
 			}
 
+			_cancelledWizard = false;
 			_wizardWindow = new WizardWindow();
 			_wizardWindow.Loaded += WizardWindowLoaded;
+			_wizardWindow.ShowDialog();
 
-			var result = _wizardWindow.ShowDialog();
-
-			return result == true ? _wizardContext : null;
+			return !_cancelledWizard ? _wizardContext : null;
 		}
 
 		private bool CreateWizardContext(AbstractController controller, out string message)
@@ -86,15 +89,22 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				_wizardContext.ProjectFolder = projectInfo.LocalProjectFolder;
 				_wizardContext.Support = Enumerators.XLIFFSupport.xliff12polyglot;
 				_wizardContext.OutputFolder = _pathInfo.GetProjectOutputPath(projectInfo);
-				
+
 				var projectModel = GetProjectModel(selectedProject, selectedFileIds);
-				_wizardContext.ProjectFileModels = projectModel.ProjectFiles;
+				_wizardContext.Project = projectModel;
+				_wizardContext.ProjectFiles = projectModel.ProjectFiles;
 			}
 			else if (controller is XLIFFManagerViewController)
 			{
-				var selectedProjectFileModels = _xliffManagerController.GetSelectedProjectFiles();
-				var selectedProjects = GetSelectedProjects(selectedProjectFileModels);
-				var selectedFileIds = selectedProjectFileModels.Select(a => a.Id.ToString()).ToList();
+				var selectedProjectFiles = _xliffManagerController.GetSelectedProjectFiles();
+				var selectedProjects = GetSelectedProjects(selectedProjectFiles);
+				var selectedFileIds = selectedProjectFiles?.Select(a => a.Id.ToString()).ToList();
+
+				if (selectedProjects.Count == 0)
+				{
+					message = "No project selected!";
+					return false;
+				}
 
 				if (selectedProjects.Count > 1)
 				{
@@ -115,9 +125,10 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				_wizardContext.ProjectFolder = projectInfo.LocalProjectFolder;
 				_wizardContext.Support = Enumerators.XLIFFSupport.xliff12polyglot;
 				_wizardContext.OutputFolder = _pathInfo.GetProjectOutputPath(projectInfo);
-				
+
 				var projectModel = GetProjectModel(selectedProject, selectedFileIds);
-				_wizardContext.ProjectFileModels = projectModel.ProjectFiles;
+				_wizardContext.Project = projectModel;
+				_wizardContext.ProjectFiles = projectModel.ProjectFiles;
 			}
 
 			return true;
@@ -132,6 +143,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			var viewModel = new WizardViewModel(_wizardWindow, _pages, _wizardContext, _action);
 			viewModel.RequestClose += ViewModel_RequestClose;
+			viewModel.RequestCancel += ViewModel_RequestCancel;
 			_wizardWindow.DataContext = viewModel;
 		}
 
@@ -158,20 +170,20 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				ProjectType = GetProjectType(selectedProject)
 			};
 
-			projectModel.ProjectFiles = GetProjectFileModels(selectedProject, projectModel, selectedFileIds);
+			projectModel.ProjectFiles = GetProjectFiles(selectedProject, projectModel, selectedFileIds);
 
 			return projectModel;
 		}
 
-		private List<Model.ProjectFile> GetProjectFileModels(IProject project, Project projectModel, List<string> selectedFileIds)
+		private List<ProjectFile> GetProjectFiles(IProject project, Project projectModel, List<string> selectedFileIds)
 		{
 			var projectInfo = project.GetProjectInfo();
-			var projectFileModels = new List<Model.ProjectFile>();
+			var projectFiles = new List<ProjectFile>();
 
 			foreach (var targetLanguage in projectInfo.TargetLanguages)
 			{
-				var projectFiles = project.GetTargetLanguageFiles(targetLanguage);
-				foreach (var projectFile in projectFiles)
+				var languageFiles = project.GetTargetLanguageFiles(targetLanguage);
+				foreach (var projectFile in languageFiles)
 				{
 					if (projectFile.Role != FileRole.Translatable)
 					{
@@ -180,13 +192,13 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 					var projectFileModel = GetProjectFileModel(projectModel, projectFile, targetLanguage, selectedFileIds);
 
-					projectFileModels.Add(projectFileModel);
+					projectFiles.Add(projectFileModel);
 				}
 			}
 
-			return projectFileModels;
+			return projectFiles;
 		}
-		
+
 		private ProjectFile GetProjectFileModel(Project projectModel, ProjectAutomation.Core.ProjectFile projectFile,
 			Language targetLanguage, IReadOnlyCollection<string> selectedFileIds)
 		{
@@ -245,9 +257,15 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return sourceLanguageInfo;
 		}
 
-		private List<Project> GetSelectedProjects(IEnumerable<Model.ProjectFile> selectedFiles)
+		private List<Project> GetSelectedProjects(IEnumerable<ProjectFile> selectedFiles)
 		{
 			var selectedProjects = new List<Project>();
+
+			if (selectedFiles == null)
+			{
+				return selectedProjects;
+			}
+
 			foreach (var selectedFile in selectedFiles)
 			{
 				if (!selectedProjects.Contains(selectedFile.ProjectModel))
@@ -259,21 +277,25 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return selectedProjects;
 		}
 
-		private ObservableCollection<WizardPageViewModelBase> CreatePages(WizardContext transactionModel)
+		private ObservableCollection<WizardPageViewModelBase> CreatePages(WizardContext wizardContext)
 		{
-			//TODO setup the Import action pages
+			var pages = new List<WizardPageViewModelBase>();
 
-			var pages = new ObservableCollection<WizardPageViewModelBase>
+			if (_action == Enumerators.Action.Export)
 			{
-				new WizardPageExportFilesViewModel(_wizardWindow, new WizardPageExportFilesView(), transactionModel),
-				new WizardPageExportOptionsViewModel(_wizardWindow, new WizardPageExportOptionsView(), transactionModel),
-				new WizardPageExportSummaryViewModel(_wizardWindow, new WizardPageExportSummaryView(), transactionModel),
-				new WizardPageExportPreparationViewModel(_wizardWindow, new WizardPageExportPreparationView(), transactionModel)
-			};
+				pages.Add(new WizardPageExportFilesViewModel(_wizardWindow, new WizardPageExportFilesView(), wizardContext));
+				pages.Add(new WizardPageExportOptionsViewModel(_wizardWindow, new WizardPageExportOptionsView(), wizardContext));
+				pages.Add(new WizardPageExportSummaryViewModel(_wizardWindow, new WizardPageExportSummaryView(), wizardContext));
+				pages.Add(new WizardPageExportPreparationViewModel(_wizardWindow, new WizardPageExportPreparationView(), wizardContext));
+			}
+			else if (_action == Enumerators.Action.Import)
+			{
+				// TODO: (Andrea)
+			}
 
 			UpdatePageIndexes(pages);
 
-			return pages;
+			return new ObservableCollection<WizardPageViewModelBase>(pages);
 		}
 
 		private void UpdatePageIndexes(IReadOnlyList<WizardPageViewModelBase> pages)
@@ -319,15 +341,27 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return template;
 		}
 
+		private void ViewModel_RequestCancel(object sender, EventArgs e)
+		{
+			_cancelledWizard = true;
+			CloseWizard();
+		}
+
 		private void ViewModel_RequestClose(object sender, EventArgs e)
+		{
+			CloseWizard();
+		}
+
+		private void CloseWizard()
 		{
 			if (_wizardWindow.DataContext is WizardViewModel viewModel)
 			{
+				viewModel.RequestCancel -= ViewModel_RequestCancel;
 				viewModel.RequestClose -= ViewModel_RequestClose;
 				viewModel.Dispose();
 			}
-			
+
 			_wizardWindow.Close();
-		}		
+		}
 	}
 }

@@ -10,24 +10,40 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
 	public class ProjectsNavigationViewModel : BaseModel, IDisposable
 	{
-		private readonly List<Project> _projectModels;
+		private List<Project> _projects;
 		private string _filterString;
-		private List<Project> _filteredProjectModels;
-		private Project _selectedProjectModel;
-		private IList _selectedProjectModels;
+		private List<Project> _filteredProjects;
+		private Project _selectedProject;
+		private IList _selectedProjects;
 		private ICommand _clearSelectionCommand;
 		private ICommand _clearFilterCommand;
 
-		public ProjectsNavigationViewModel(List<Project> projectModels)
+		public ProjectsNavigationViewModel(List<Project> projects)
 		{
-			_projectModels = projectModels;
-			FilteredProjectModels = _projectModels;
+			_projects = projects;
+			FilteredProjects = _projects;
 			FilterString = string.Empty;
 		}
 
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
 
 		public ICommand ClearFilterCommand => _clearFilterCommand ?? (_clearFilterCommand = new CommandHandler(ClearFilter));
+
+		public List<Project> Projects
+		{
+			get => _projects;
+			set
+			{
+				_projects = value;
+
+				if (FilteredProjects == null)
+				{
+					FilteredProjects = _projects;
+				}
+
+				OnPropertyChanged(nameof(Projects));				
+			}
+		}
 
 		public ProjectFilesViewModel ProjectFilesViewModel { get; internal set; }
 
@@ -44,9 +60,9 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				_filterString = value;
 				OnPropertyChanged(nameof(FilterString));
 
-				FilteredProjectModels = string.IsNullOrEmpty(_filterString)
-					? _projectModels
-					: _projectModels.Where(a => a.Name.ToLower().Contains(_filterString.ToLower())).ToList();
+				FilteredProjects = string.IsNullOrEmpty(_filterString)
+					? _projects
+					: _projects.Where(a => a.Name.ToLower().Contains(_filterString.ToLower())).ToList();
 			}
 		}
 
@@ -54,69 +70,69 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		{
 			get
 			{
-				var message = string.Format(PluginResources.StatusLabel_Selected_0, _selectedProjectModels?.Count);
+				var message = string.Format(PluginResources.StatusLabel_Selected_0, _selectedProjects?.Count);
 				return message;
 			}
 		}
 
-		public List<Project> FilteredProjectModels
+		public List<Project> FilteredProjects
 		{
-			get => _filteredProjectModels;
+			get => _filteredProjects;
 			set
 			{
-				_filteredProjectModels = value;
-				OnPropertyChanged(nameof(FilteredProjectModels));
+				_filteredProjects = value;
+				OnPropertyChanged(nameof(FilteredProjects));
 
-				if (_filteredProjectModels?.Count > 0 && !_filteredProjectModels.Contains(SelectedProjectModel))
+				if (_filteredProjects?.Count > 0 && !_filteredProjects.Contains(SelectedProject))
 				{
-					SelectedProjectModel = _filteredProjectModels[0];
+					SelectedProject = _filteredProjects[0];
 				}
-				else if (_filteredProjectModels?.Count == 0)
+				else if (_filteredProjects?.Count == 0)
 				{
-					SelectedProjectModel = null;
+					SelectedProject = null;
 				}
 
 				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
 
-		public IList SelectedProjectModels
+		public IList SelectedProjects
 		{
-			get => _selectedProjectModels;
+			get => _selectedProjects;
 			set
 			{
-				_selectedProjectModels = value;
-				OnPropertyChanged(nameof(SelectedProjectModels));
+				_selectedProjects = value;
+				OnPropertyChanged(nameof(SelectedProjects));
 
-				if (ProjectFilesViewModel != null && _selectedProjectModels != null)
+				if (ProjectFilesViewModel != null && _selectedProjects != null)
 				{
 					ProjectFilesViewModel.ProjectFiles =
-						_selectedProjectModels.Cast<Project>().SelectMany(a => a.ProjectFiles).ToList();
+						_selectedProjects.Cast<Project>().SelectMany(a => a.ProjectFiles).ToList();
 				}
 
 				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
 
-		public Project SelectedProjectModel
+		public Project SelectedProject
 		{
-			get => _selectedProjectModel;
+			get => _selectedProject;
 			set
 			{
-				_selectedProjectModel = value;
-				OnPropertyChanged(nameof(SelectedProjectModel));
+				_selectedProject = value;
+				OnPropertyChanged(nameof(SelectedProject));
 
-				if (ProjectFilesViewModel != null && _selectedProjectModel != null)
+				if (ProjectFilesViewModel != null && _selectedProject != null)
 				{
-					ProjectFilesViewModel.ProjectFiles = _selectedProjectModel.ProjectFiles;
+					ProjectFilesViewModel.ProjectFiles = _selectedProject.ProjectFiles;
 				}
 			}
 		}
 
 		private void ClearSelection(object parameter)
 		{
-			SelectedProjectModels.Clear();
-			SelectedProjectModel = null;
+			SelectedProjects?.Clear();
+			SelectedProject = null;
 		}
 
 		private void ClearFilter(object parameter)

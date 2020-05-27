@@ -52,9 +52,9 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			{
 				model.TargetLanguages.Add(languageInfo.Clone() as LanguageInfo);
 			}
-			foreach (var projectFileModel in model.ProjectFiles)
+			foreach (var projectFile in model.ProjectFiles)
 			{
-				model.ProjectFiles.Add(projectFileModel.Clone() as ProjectFile);
+				model.ProjectFiles.Add(projectFile.Clone() as ProjectFile);
 			}
 
 			return model;

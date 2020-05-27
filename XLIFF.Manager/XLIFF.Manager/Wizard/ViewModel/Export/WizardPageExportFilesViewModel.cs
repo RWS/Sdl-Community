@@ -9,7 +9,7 @@ using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
 
-namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
+namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 {
 	public class WizardPageExportFilesViewModel : WizardPageViewModelBase, IDisposable
 	{	
@@ -23,7 +23,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public WizardPageExportFilesViewModel(Window owner, object view, WizardContext wizardContext) : base(owner, view, wizardContext)
 		{		
-			ProjectFiles = wizardContext.ProjectFileModels;
+			ProjectFiles = wizardContext.ProjectFiles;
 			PropertyChanged += WizardPageExportFilesViewModel_PropertyChanged;			
 		}
 		

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows;
 using Sdl.Community.XLIFF.Manager.Model;
 
-namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
+namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 {
 	public class WizardPageExportSummaryViewModel : WizardPageViewModelBase
 	{
@@ -38,7 +38,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		private string GetSummaryText()
 		{
-			var project = WizardContext.ProjectFileModels[0].ProjectModel;
+			var project = WizardContext.ProjectFiles[0].ProjectModel;
 
 			var indent = "   ";
 
@@ -62,11 +62,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFileModels.Count) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_SelectedFiles, WizardContext.ProjectFileModels.Count(a => a.Selected)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_SelectedFiles, WizardContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_SelectedLanguages, GetSelectedLanguagesString()) + Environment.NewLine;
 
-			var targetLanguages = WizardContext.ProjectFileModels.Where(a => a.Selected)
+			var targetLanguages = WizardContext.ProjectFiles.Where(a => a.Selected)
 				.Select(a => a.TargetLanguage.CultureInfo).Distinct();
 			foreach (var targetLanguage in targetLanguages)
 			{
@@ -80,7 +80,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				summaryText += string.Format(PluginResources.Label_Folder, languageFolderLocation) + Environment.NewLine;
 
 				var targetLanguageFiles =
-					WizardContext.ProjectFileModels.Where(a => a.Selected && Equals(a.TargetLanguage.CultureInfo, targetLanguage));
+					WizardContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage.CultureInfo, targetLanguage));
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
 					summaryText += indent + targetLanguageFile.Path + targetLanguageFile.Name + Environment.NewLine;
@@ -104,7 +104,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		private string GetSelectedLanguagesString()
 		{
-			var selected = WizardContext.ProjectFileModels.Where(a => a.Selected);
+			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
 
 			var selectedLanguages = string.Empty;
 			foreach (var cultureInfo in selected.Select(a => a.TargetLanguage.CultureInfo).Distinct())

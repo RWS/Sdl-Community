@@ -29,7 +29,10 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 			if (wizardContext == null && !string.IsNullOrEmpty(message))
 			{
 				MessageBox.Show(message);
+				return;
 			}
+
+			_xliffManagerController.UpdateProjectData(wizardContext);
 		}
 
 		public override void Initialize()

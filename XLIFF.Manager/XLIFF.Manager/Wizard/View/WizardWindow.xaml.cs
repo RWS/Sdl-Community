@@ -11,6 +11,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.View
 
 			var windowInteropHelper = new WindowInteropHelper(this);
 			windowInteropHelper.Owner = ApplicationInstance.GetActiveForm().Handle;
-		}	
+		}
 	}
 }

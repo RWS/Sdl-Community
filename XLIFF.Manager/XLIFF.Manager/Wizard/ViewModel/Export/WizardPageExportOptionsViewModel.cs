@@ -9,7 +9,7 @@ using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
 
-namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
+namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 {
 	public class WizardPageExportOptionsViewModel : WizardPageViewModelBase, IDisposable
 	{		

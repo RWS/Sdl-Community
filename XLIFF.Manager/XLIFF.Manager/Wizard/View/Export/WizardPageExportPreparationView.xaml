@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="Sdl.Community.XLIFF.Manager.Wizard.View.WizardPageExportPreparationView"
+﻿<UserControl x:Class="Sdl.Community.XLIFF.Manager.Wizard.View.Export.WizardPageExportPreparationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
-             xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.Wizard.ViewModel"
+             xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export"
              xmlns:model="clr-namespace:Sdl.Community.XLIFF.Manager.Model"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="500" d:DataContext="{d:DesignInstance viewModel:WizardPageExportPreparationViewModel}">
@@ -51,16 +51,16 @@
 								<Image Margin="1" Width="14" Height="14" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased">
 									<Image.Style>
 										<Style TargetType="Image">
-											<Setter Property="Source" Value="../../Resources/job_scheduled.gif"/>
+											<Setter Property="Source" Value="../../../Resources/job_scheduled.gif"/>
 											<Style.Triggers>
 												<DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="Failed">
-													<Setter Property="Source" Value="../../Resources/job_failed.gif"/>
+													<Setter Property="Source" Value="../../../Resources/job_failed.gif"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="Running">
-													<Setter Property="Source" Value="../../Resources/job_running.gif"/>
+													<Setter Property="Source" Value="../../../Resources/job_running.gif"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="Completed">
-													<Setter Property="Source" Value="../../Resources/job_completed.gif"/>
+													<Setter Property="Source" Value="../../../Resources/job_completed.gif"/>
 												</DataTrigger>
 											</Style.Triggers>
 										</Style>

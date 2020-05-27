@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
@@ -33,6 +34,12 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			UpdateWizardHeader(_window.ActualWidth);
 			SetCurrentPage(Pages[0]);
 		}
+
+		public event EventHandler RequestClose;
+
+		public event EventHandler RequestCancel;
+
+
 		public Enumerators.Action Action { get; set; }
 
 		public WizardContext WizardContext { get; set; }
@@ -55,7 +62,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private void SetCurrentPage(WizardPageViewModelBase currentPage)
 		{
 			CurrentPage = currentPage;
-			//_window.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
+			_window.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
 		}
 
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -229,8 +236,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new RelayCommand(CancelWizard, () => CanCancel));
 
 		private void CancelWizard()
-		{			
-			OnRequestClose();
+		{
+			OnRequestCancel();
 		}
 
 		private bool CanCancel
@@ -279,7 +286,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 				SetCurrentPage(Pages[Pages.Count - 1]);
 			}
-
 			else
 			{
 				OnRequestClose();
@@ -348,8 +354,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				SetCurrentPage(Pages[CurrentPageIndex - 1]);
 			}
 		}
-
-		public event EventHandler RequestClose;
+		
+		private void OnRequestCancel()
+		{
+			RequestCancel?.Invoke(this, EventArgs.Empty);
+		}
 
 		private void OnRequestClose()
 		{

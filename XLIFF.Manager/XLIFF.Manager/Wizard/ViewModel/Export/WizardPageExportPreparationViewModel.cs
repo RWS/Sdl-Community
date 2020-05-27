@@ -16,7 +16,7 @@ using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers;
 using Sdl.Community.XLIFF.Manager.Model;
 
-namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
+namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 {
 	public class WizardPageExportPreparationViewModel : WizardPageViewModelBase
 	{
@@ -116,7 +116,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Export);
 				if (job != null)
 				{
-
 					success = await Export(job);
 				}
 			}
@@ -179,7 +178,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			
 				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 
-				var project = WizardContext.ProjectFileModels[0].ProjectModel;
+				var project = WizardContext.ProjectFiles[0].ProjectModel;
 				var sdlxliffReader = new SdlxliffReader();
 				var xliffWriter = new XliffWriter(WizardContext.Support);
 
@@ -283,14 +282,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		private IEnumerable<ProjectFile> GetSelectedTargetFiles(CultureInfo cultureInfo)
 		{
-			var selected = WizardContext.ProjectFileModels.Where(a => a.Selected);
+			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
 			var targetFiles = selected.Where(a => Equals(a.TargetLanguage.CultureInfo, cultureInfo));
 			return targetFiles;
 		}
 
 		private IEnumerable<CultureInfo> GetSelectedLanguages()
 		{
-			var selected = WizardContext.ProjectFileModels.Where(a => a.Selected);
+			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
 			var selectedLanguages = selected.Select(a => a.TargetLanguage.CultureInfo).Distinct();
 			return selectedLanguages;
 		}
