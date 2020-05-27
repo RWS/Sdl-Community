@@ -1,0 +1,29 @@
+﻿using System;
+
+namespace Sdl.Community.XLIFF.Manager.Model
+{
+	public class Customer : BaseModel, ICloneable
+	{
+		public string Id { get; set; }
+
+		public string Name { get; set; }
+
+		public string Email { get; set; }
+
+		public override string ToString()
+		{
+			return Name;
+		}
+
+		public object Clone()
+		{
+			var model = new Customer
+			{
+				Id = Id,
+				Name = Name,
+				Email = Email
+			};
+			return model;
+		}
+	}
+}

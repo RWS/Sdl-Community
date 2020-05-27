@@ -87,7 +87,7 @@
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Name" IsReadOnly="False" SortMemberPath="Name" Width="2*" >
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate DataType="model:ProjectFileModel">
+						<DataTemplate DataType="model:ProjectFile">
 							<Grid Margin="10,0,10,0">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="Auto"/>

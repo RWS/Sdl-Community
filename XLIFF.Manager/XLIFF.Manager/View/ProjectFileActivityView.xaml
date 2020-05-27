@@ -55,7 +55,7 @@
 
 				<DataGridTemplateColumn Header="XLIFF File Name" IsReadOnly="True" Width="2*"  CanUserSort="False" >
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate DataType="model:ProjectFileActivityModel">
+						<DataTemplate DataType="model:ProjectFileActivity">
 							<Grid Margin="10,0,10,0">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="Auto"/>

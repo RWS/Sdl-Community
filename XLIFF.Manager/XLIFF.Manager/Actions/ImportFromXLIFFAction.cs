@@ -7,13 +7,13 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.Actions
 {
-	[Action("XLIFFManager_ImportFromXLIFF_Action", typeof(XLIFFManagerViewController), 
-		Name = "XLIFFManager_ImportFromXLIFF_Name", 
-		Icon = "ImportFrom", 
+	[Action("XLIFFManager_ImportFromXLIFF_Action", typeof(XLIFFManagerViewController),
+		Name = "XLIFFManager_ImportFromXLIFF_Name",
+		Icon = "ImportFrom",
 		Description = "XLIFFManager_ImportFromXLIFF_Description")]
 	[ActionLayout(typeof(XLIFFManagerActionsGroup), 5, DisplayType.Large)]
 	public class ImportFromXLIFFAction : AbstractViewControllerAction<XLIFFManagerViewController>
-	{	
+	{
 		private ProjectsController _projectsController;
 		private FilesController _filesController;
 		private XLIFFManagerViewController _xliffManagerController;
@@ -23,17 +23,20 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 
 		protected override void Execute()
 		{
-			var wizardService = new WizardService(Enumerators.Action.Import, _pathInfo, _customerProvider, 
+			var wizardService = new WizardService(Enumerators.Action.Import, _pathInfo, _customerProvider,
 				_imageService, _xliffManagerController, _projectsController, _filesController);
-			var success = wizardService.ShowWizard(_xliffManagerController, out var message);
-			if (!success && !string.IsNullOrEmpty(message))
+			var wizardContext = wizardService.ShowWizard(_xliffManagerController, out var message);
+			if (wizardContext == null && !string.IsNullOrEmpty(message))
 			{
 				MessageBox.Show(message);
+				return;
 			}
+
+			_xliffManagerController.UpdateProjectData(wizardContext);
 		}
 
 		public override void Initialize()
-		{		
+		{
 			_xliffManagerController = SdlTradosStudio.Application.GetController<XLIFFManagerViewController>();
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();

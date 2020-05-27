@@ -1,9 +1,9 @@
-﻿using Sdl.Community.XLIFF.Manager.Converters.XLIFF.Model;
+﻿using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Interfaces
 {
 	public interface IXliffWriter
 	{
-		bool CreateXliffFile(Xliff xliff, string outputFilePath, bool includeTranslations);
+		bool WriteFile(Xliff xliff, string outputFilePath, bool includeTranslations);
 	}
 }

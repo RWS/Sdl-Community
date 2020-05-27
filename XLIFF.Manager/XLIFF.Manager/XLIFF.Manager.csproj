@@ -155,48 +155,48 @@
     </Compile>
     <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
     <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
-    <Compile Include="Converters\XLIFF\Readers\Xliff12SDLReader.cs" />
-    <Compile Include="Converters\XLIFF\Readers\XliffReader.cs" />
-    <Compile Include="Converters\SDLXLIFF\ContentProcessor.cs" />
-    <Compile Include="Converters\SDLXLIFF\FileParser.cs" />
-    <Compile Include="Converters\XLIFF\Model\Body.cs" />
-    <Compile Include="Converters\XLIFF\Model\DocInfo.cs" />
-    <Compile Include="Converters\XLIFF\Model\Element.cs" />
-    <Compile Include="Converters\XLIFF\Model\ElementComment.cs" />
-    <Compile Include="Converters\XLIFF\Model\ElementLocked.cs" />
-    <Compile Include="Converters\XLIFF\Model\ElementPlaceholder.cs" />
-    <Compile Include="Converters\XLIFF\Model\ElementTagPair.cs" />
-    <Compile Include="Converters\XLIFF\Model\ElementText.cs" />
-    <Compile Include="Converters\XLIFF\Model\ExternalFile.cs" />
-    <Compile Include="Converters\XLIFF\Model\File.cs" />
-    <Compile Include="Converters\XLIFF\Model\Header.cs" />
-    <Compile Include="Converters\XLIFF\Model\Phase.cs" />
-    <Compile Include="Converters\XLIFF\Model\PhaseGroup.cs" />
-    <Compile Include="Converters\XLIFF\Model\Segment.cs" />
-    <Compile Include="Converters\XLIFF\Model\SegmentPair.cs" />
-    <Compile Include="Converters\XLIFF\Model\Skl.cs" />
-    <Compile Include="Converters\XLIFF\Model\Source.cs" />
-    <Compile Include="Converters\XLIFF\Model\Target.cs" />
-    <Compile Include="Converters\XLIFF\Model\TransUnit.cs" />
-    <Compile Include="Converters\XLIFF\Model\Xliff.cs" />
-    <Compile Include="Converters\XLIFF\Readers\Xliff12PolyglotReader.cs" />
-    <Compile Include="Converters\SDLXLIFF\SegmentVisitor.cs" />
-    <Compile Include="Converters\XLIFF\Writers\Xliff12SDLWriter.cs" />
-    <Compile Include="Converters\XLIFF\Writers\Xliff12PolyglotWriter.cs" />
-    <Compile Include="Converters\XLIFF\Writers\XliffWriter.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Readers\Xliff12SDLReader.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Readers\XliffReader.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\ContentProcessor.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\SdlxliffReader.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Body.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\DocInfo.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Element.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementComment.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementLocked.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementPlaceholder.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementTagPair.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementText.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ExternalFile.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\File.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Header.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Phase.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\PhaseGroup.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Segment.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\SegmentPair.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Skl.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Source.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Target.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\TransUnit.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Xliff.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Readers\Xliff12PolyglotReader.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\SegmentVisitor.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Writers\Xliff12SDLWriter.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Writers\Xliff12PolyglotWriter.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Writers\XliffWriter.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="Interfaces\XLIFFReader.cs" />
     <Compile Include="Interfaces\XLIFFWriter.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Common\Enumerators.cs" />
-    <Compile Include="Model\CustomerModel.cs" />
+    <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\JobProcess.cs" />
     <Compile Include="Model\LanguageInfo.cs" />
-    <Compile Include="Model\ProjectFileModel.cs" />
-    <Compile Include="Model\ProjectFileActivityModel.cs" />
-    <Compile Include="Model\ProjectModel.cs" />
-    <Compile Include="Model\WizardContextModel.cs" />
-    <Compile Include="Model\XLIFFSupportModel.cs" />
+    <Compile Include="Model\ProjectFile.cs" />
+    <Compile Include="Model\ProjectFileActivity.cs" />
+    <Compile Include="Model\Project.cs" />
+    <Compile Include="Model\WizardContext.cs" />
+    <Compile Include="Model\XLIFFSupport.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -208,22 +208,22 @@
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\WizardService.cs" />
     <Compile Include="TestData\TestDataUtil.cs" />
-    <Compile Include="Wizard\ViewModel\WizardPageExportFilesViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\WizardPageExportOptionsViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\WizardPageExportPreparationViewModel.cs" />
-    <Compile Include="Wizard\ViewModel\WizardPageExportSummaryViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Export\WizardPageExportFilesViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Export\WizardPageExportOptionsViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Export\WizardPageExportPreparationViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Export\WizardPageExportSummaryViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageViewModelBase.cs" />
-    <Compile Include="Wizard\View\WizardPageExportOptionsView.xaml.cs">
+    <Compile Include="Wizard\View\Export\WizardPageExportOptionsView.xaml.cs">
       <DependentUpon>WizardPageExportOptionsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\View\WizardPageExportSummaryView.xaml.cs">
+    <Compile Include="Wizard\View\Export\WizardPageExportSummaryView.xaml.cs">
       <DependentUpon>WizardPageExportSummaryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\View\WizardPageExportPreparationView.xaml.cs">
+    <Compile Include="Wizard\View\Export\WizardPageExportPreparationView.xaml.cs">
       <DependentUpon>WizardPageExportPreparationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\View\WizardPageExportFilesView.xaml.cs">
+    <Compile Include="Wizard\View\Export\WizardPageExportFilesView.xaml.cs">
       <DependentUpon>WizardPageExportFilesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wizard\View\WizardWindow.xaml.cs">
@@ -249,7 +249,10 @@
     <EmbeddedResource Include="Resources\Flags\Flags.zip" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Wizard\ViewModel\Import\" />
+    <Folder Include="Wizard\View\Import\" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\ToolWindowsControl.xaml">
       <SubType>Designer</SubType>
@@ -335,19 +338,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wizard\View\WizardPageExportOptionsView.xaml">
+    <Page Include="Wizard\View\Export\WizardPageExportOptionsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wizard\View\WizardPageExportSummaryView.xaml">
+    <Page Include="Wizard\View\Export\WizardPageExportSummaryView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wizard\View\WizardPageExportPreparationView.xaml">
+    <Page Include="Wizard\View\Export\WizardPageExportPreparationView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wizard\View\WizardPageExportFilesView.xaml">
+    <Page Include="Wizard\View\Export\WizardPageExportFilesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

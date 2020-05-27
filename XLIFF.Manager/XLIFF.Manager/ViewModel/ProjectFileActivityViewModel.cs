@@ -7,20 +7,20 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
 	public class ProjectFileActivityViewModel: BaseModel, IDisposable
 	{
-		private List<ProjectFileActivityModel> _projectFileActivities;
-		private ProjectFileActivityModel _selectedProjectFileActivity;
+		private List<ProjectFileActivity> _projectFileActivities;
+		private ProjectFileActivity _selectedProjectFileActivity;
 		private IList _selectedProjectFileActivities;
 
-		public ProjectFileActivityViewModel(List<ProjectFileActivityModel> projectFileActivities)
+		public ProjectFileActivityViewModel(List<ProjectFileActivity> projectFileActivities)
 		{
 			ProjectFileActivities = projectFileActivities;
 			SelectedProjectFileActivity = ProjectFileActivities?.Count > 0 ? ProjectFileActivities[0] : null;
-			SelectedProjectFileActivities = new List<ProjectFileActivityModel> { SelectedProjectFileActivity };
+			SelectedProjectFileActivities = new List<ProjectFileActivity> { SelectedProjectFileActivity };
 		}
 
-		public List<ProjectFileActivityModel> ProjectFileActivities
+		public List<ProjectFileActivity> ProjectFileActivities
 		{
-			get => _projectFileActivities ?? (_projectFileActivities = new List<ProjectFileActivityModel>());
+			get => _projectFileActivities ?? (_projectFileActivities = new List<ProjectFileActivity>());
 			set
 			{
 				_projectFileActivities = value;
@@ -38,7 +38,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			}
 		}
 
-		public ProjectFileActivityModel SelectedProjectFileActivity
+		public ProjectFileActivity SelectedProjectFileActivity
 		{
 			get => _selectedProjectFileActivity;
 			set
