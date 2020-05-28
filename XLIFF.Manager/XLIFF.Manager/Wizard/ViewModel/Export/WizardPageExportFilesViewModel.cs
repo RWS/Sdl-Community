@@ -12,8 +12,8 @@ using Sdl.Community.XLIFF.Manager.Model;
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 {
 	public class WizardPageExportFilesViewModel : WizardPageViewModelBase, IDisposable
-	{	
-		private IList _selectedProjectFiles;		
+	{
+		private IList _selectedProjectFiles;
 		private List<ProjectFile> _projectFiles;
 		private ProjectFile _selectedProjectFile;
 		private ICommand _checkAllCommand;
@@ -21,15 +21,17 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private bool _checkedAll;
 		private bool _checkingAllAction;
 
-		public WizardPageExportFilesViewModel(Window owner, object view, WizardContext wizardContext) 
+		public WizardPageExportFilesViewModel(Window owner, object view, WizardContext wizardContext)
 			: base(owner, view, wizardContext)
-		{		
+		{
 			ProjectFiles = wizardContext.ProjectFiles;
 
-			LoadPage += OnLoadPage;
-			LeavePage += OnLeavePage;			
-		}
+			VerifyProjectFiles();
 
+			LoadPage += OnLoadPage;
+			LeavePage += OnLeavePage;
+		}
+		
 		public ICommand CheckAllCommand => _checkAllCommand ?? (_checkAllCommand = new RelayCommand(CheckAll));
 
 		public ICommand CheckSelectedCommand => _checkSelectedComand ?? (_checkSelectedComand = new CommandHandler(CheckSelected));
@@ -159,6 +161,33 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			IsValid = ProjectFiles.Count(a => a.Selected) > 0;
 		}
 
+		private void VerifyProjectFiles()
+		{
+			foreach (var projectFile in ProjectFiles)
+			{
+				if (projectFile.Action == Enumerators.Action.Export)
+				{
+					var activityfile = projectFile.ProjectFileActivities.FirstOrDefault(a => a.Action == Enumerators.Action.Export);
+
+					//TODO: move localizable strings to resource file
+					projectFile.Status = Enumerators.Status.Warning;
+					projectFile.ShortMessage = "File already exported!";
+					projectFile.Details = "File has been exported on: " + activityfile?.DateToString;
+				}
+
+				if (projectFile.Action == Enumerators.Action.Import)
+				{
+					var activityfile = projectFile.ProjectFileActivities.FirstOrDefault(a => a.Action == Enumerators.Action.Import);
+
+					//TODO: move localizable strings to resource file
+					projectFile.Status = Enumerators.Status.Warning;
+					projectFile.ShortMessage = "File is already imported!";
+					projectFile.Details = "File has been imported on: " + activityfile?.DateToString;
+				}
+			}
+		}
+
+
 		private void ProjectFile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			if (!_checkingAllAction && e.PropertyName == nameof(ProjectFile.Selected))
@@ -169,14 +198,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			VerifyIsValid();
 		}
 
-		private void OnLoadPage(object sender, EventArgs e)
+		private void OnLoadPage(object sender, System.EventArgs e)
 		{
 			UpdateCheckAll();
 			VerifyIsValid();
 		}
 
-		private void OnLeavePage(object sender, EventArgs e)
-		{			
+		private void OnLeavePage(object sender, System.EventArgs e)
+		{
 		}
 
 		public void Dispose()

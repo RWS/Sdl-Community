@@ -157,6 +157,7 @@
     </Compile>
     <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
     <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
+    <Compile Include="CustomEventArgs\ProjectSelectionChangedEventArgs.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Readers\Xliff12SDLReader.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Readers\XliffReader.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ContentProcessor.cs" />
