@@ -216,6 +216,9 @@
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportPreparationViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportSummaryViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Import\WizardPageImportFilesViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Import\WizardPageImportOptionsViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Import\WizardPageImportPreparationViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Import\WizardPageImportSummaryViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageViewModelBase.cs" />
     <Compile Include="Wizard\View\Export\WizardPageExportOptionsView.xaml.cs">
@@ -232,6 +235,15 @@
     </Compile>
     <Compile Include="Wizard\View\Import\WizardPageImportFilesView.xaml.cs">
       <DependentUpon>WizardPageImportFilesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Import\WizardPageImportOptionsView.xaml.cs">
+      <DependentUpon>WizardPageImportOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Import\WizardPageImportPreparationView.xaml.cs">
+      <DependentUpon>WizardPageImportPreparationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Import\WizardPageImportSummaryView.xaml.cs">
+      <DependentUpon>WizardPageImportSummaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wizard\View\WizardWindow.xaml.cs">
       <DependentUpon>WizardWindow.xaml</DependentUpon>
@@ -359,6 +371,18 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Wizard\View\Import\WizardPageImportFilesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wizard\View\Import\WizardPageImportOptionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wizard\View\Import\WizardPageImportPreparationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wizard\View\Import\WizardPageImportSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

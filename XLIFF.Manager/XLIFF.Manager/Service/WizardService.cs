@@ -305,7 +305,9 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			else if (_action == Enumerators.Action.Import)
 			{
 				pages.Add(new WizardPageImportFilesViewModel(_wizardWindow, new WizardPageImportFilesView(), wizardContext));
-				// TODO: (Andrea)
+				pages.Add(new WizardPageImportOptionsViewModel(_wizardWindow,new WizardPageImportOptionsView(), wizardContext));
+				pages.Add(new WizardPageImportSummaryViewModel(_wizardWindow,new WizardPageImportSummaryView(), wizardContext));
+				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow,new WizardPageImportPreparationView(), wizardContext));
 			}
 
 			UpdatePageIndexes(pages);
