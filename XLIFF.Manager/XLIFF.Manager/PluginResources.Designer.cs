@@ -447,6 +447,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} {1} Wizard - {2}.
+        /// </summary>
+        internal static string Title_WizardPage {
+            get {
+                return ResourceManager.GetString("Title_WizardPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Warning {
