@@ -6,13 +6,14 @@ namespace Sdl.Community.XLIFF.Manager.Model
 {
 	public class ProjectFile : BaseModel, IDisposable, ICloneable
 	{
+		private DateTime _date;
 		private bool _selected;
 		private string _path;
 		private Enumerators.Status _status;
 
 		public ProjectFile()
 		{
-			ProjectFileActivities = new List<ProjectFileActivity>();
+			ProjectFileActivities = new List<ProjectFileActivity>();			
 		}
 
 		public string ProjectId { get; set; }
@@ -27,7 +28,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public bool Selected
 		{
-			get { return _selected; }
+			get => _selected;
 			set
 			{
 				if (_selected == value)
@@ -78,7 +79,16 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string XliffFilePath { get; set; }
 
-		public DateTime Date { get; set; }
+		public DateTime Date
+		{
+			get { return _date; }
+			set
+			{
+				_date = value;
+				OnPropertyChanged(nameof(Date));
+				OnPropertyChanged(nameof(DateToString));
+			}
+		}
 
 		public string DateToString
 		{

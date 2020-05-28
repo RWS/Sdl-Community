@@ -65,7 +65,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 		private void ClearSelection(object parameter)
 		{
-			SelectedProjectFiles.Clear();
+			SelectedProjectFiles?.Clear();
 			SelectedProjectFile = null;
 		}
 

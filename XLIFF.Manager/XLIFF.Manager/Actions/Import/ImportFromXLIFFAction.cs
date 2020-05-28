@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Sdl.Community.XLIFF.Manager.Common;
+using Sdl.Community.XLIFF.Manager.CustomEventArgs;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -37,13 +38,33 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Import
 
 		public override void Initialize()
 		{
-			_xliffManagerController = SdlTradosStudio.Application.GetController<XLIFFManagerViewController>();
+			SetupXliffManagerController();
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			_customerProvider = new CustomerProvider();
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService(_pathInfo);
 			Enabled = true;
+		}
+
+		private void SetupXliffManagerController()
+		{
+			if (_xliffManagerController != null)
+			{
+				_xliffManagerController.ProjectSelectionChanged -= OnProjectSelectionChanged;
+			}
+
+			_xliffManagerController = SdlTradosStudio.Application.GetController<XLIFFManagerViewController>();
+
+			if (_xliffManagerController != null)
+			{
+				_xliffManagerController.ProjectSelectionChanged += OnProjectSelectionChanged;
+			}
+		}
+
+		private void OnProjectSelectionChanged(object sender, ProjectSelectionChangedEventArgs e)
+		{
+			Enabled = e.SelectedProject != null;
 		}
 	}
 }

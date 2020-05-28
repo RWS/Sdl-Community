@@ -20,7 +20,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		public BitmapImage GetImage(string name, Size imageSize)
 		{
 			try
-			{				
+			{
 				var filePath = Path.Combine(_pathInfo.FlagsFolderPath, name);
 				if (!File.Exists(filePath))
 				{

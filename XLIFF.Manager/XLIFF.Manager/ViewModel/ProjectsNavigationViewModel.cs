@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Commands;
+using Sdl.Community.XLIFF.Manager.CustomEventArgs;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
@@ -17,6 +18,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		private IList _selectedProjects;
 		private ICommand _clearSelectionCommand;
 		private ICommand _clearFilterCommand;
+		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
 
 		public ProjectsNavigationViewModel(List<Project> projects)
 		{
@@ -36,12 +38,12 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			{
 				_projects = value;
 
-				if (FilteredProjects == null)
-				{
-					FilteredProjects = _projects;
-				}
+				OnPropertyChanged(nameof(Projects));
 
-				OnPropertyChanged(nameof(Projects));				
+				FilterString = string.Empty;
+				FilteredProjects = _projects;
+
+				
 			}
 		}
 
@@ -126,6 +128,8 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				{
 					ProjectFilesViewModel.ProjectFiles = _selectedProject.ProjectFiles;
 				}
+
+				ProjectSelectionChanged?.Invoke(this, new ProjectSelectionChangedEventArgs{SelectedProject = _selectedProject});
 			}
 		}
 

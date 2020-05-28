@@ -147,7 +147,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			_wizardWindow.DataContext = viewModel;
 		}
 
-		private Project GetProjectModel(FileBasedProject selectedProject, List<string> selectedFileIds)
+		private Project GetProjectModel(FileBasedProject selectedProject, IReadOnlyCollection<string> selectedFileIds)
 		{
 			if (selectedProject == null)
 			{
@@ -170,12 +170,16 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				ProjectType = GetProjectType(selectedProject)
 			};
 
-			projectModel.ProjectFiles = GetProjectFiles(selectedProject, projectModel, selectedFileIds);
+			var existingProject = _xliffManagerController.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
+
+			projectModel.ProjectFiles = existingProject != null 
+				? existingProject.ProjectFiles 
+				: GetProjectFiles(selectedProject, projectModel, selectedFileIds);
 
 			return projectModel;
 		}
 
-		private List<ProjectFile> GetProjectFiles(IProject project, Project projectModel, List<string> selectedFileIds)
+		private List<ProjectFile> GetProjectFiles(IProject project, Project projectModel, IReadOnlyCollection<string> selectedFileIds)
 		{
 			var projectInfo = project.GetProjectInfo();
 			var projectFiles = new List<ProjectFile>();
@@ -191,7 +195,6 @@ namespace Sdl.Community.XLIFF.Manager.Service
 					}
 
 					var projectFileModel = GetProjectFileModel(projectModel, projectFile, targetLanguage, selectedFileIds);
-
 					projectFiles.Add(projectFileModel);
 				}
 			}
@@ -199,12 +202,12 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return projectFiles;
 		}
 
-		private ProjectFile GetProjectFileModel(Project projectModel, ProjectAutomation.Core.ProjectFile projectFile,
+		private ProjectFile GetProjectFileModel(Project project, ProjectAutomation.Core.ProjectFile projectFile,
 			Language targetLanguage, IReadOnlyCollection<string> selectedFileIds)
 		{
 			var projectFileModel = new ProjectFile
 			{
-				ProjectId = projectModel.Id,
+				ProjectId = project.Id,
 				Id = projectFile.Id.ToString(),
 				Name = projectFile.Name,
 				Path = projectFile.Folder,
@@ -215,7 +218,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				TargetLanguage = GetLanguageInfo(targetLanguage.CultureInfo),
 				Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString()),
 				FileType = projectFile.FileTypeId,
-				ProjectModel = projectModel
+				ProjectModel = project
 			};
 
 			return projectFileModel;
@@ -290,7 +293,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			}
 			else if (_action == Enumerators.Action.Import)
 			{
-				// TODO: (Andrea)
+				// TODO: (Andrea)				
 			}
 
 			UpdatePageIndexes(pages);
@@ -341,13 +344,13 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return template;
 		}
 
-		private void ViewModel_RequestCancel(object sender, EventArgs e)
+		private void ViewModel_RequestCancel(object sender, System.EventArgs e)
 		{
 			_isCancelled = true;
 			CloseWizard();
 		}
 
-		private void ViewModel_RequestClose(object sender, EventArgs e)
+		private void ViewModel_RequestClose(object sender, System.EventArgs e)
 		{
 			CloseWizard();
 		}
