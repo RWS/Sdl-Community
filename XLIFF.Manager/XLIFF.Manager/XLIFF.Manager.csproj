@@ -421,6 +421,8 @@
     <Resource Include="Resources\Project.ico" />
     <Resource Include="Resources\Close.png" />
     <Resource Include="Resources\Fie.png" />
+    <Resource Include="Resources\folder_add.png" />
+    <Resource Include="Resources\document_add.png" />
     <Content Include="Resources\Icon.Jigsaw.ico" />
     <Resource Include="Resources\Minus.png" />
     <Resource Include="Resources\Plus.png" />

@@ -7,7 +7,31 @@
              d:DataContext="{d:DesignInstance viewModel:WizardPageImportFilesViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ButtonsStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
     <Grid>
-            <TextBlock>Files view</TextBlock>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" LastChildFill="False">
+			<Button Style="{StaticResource BaseButtonStyle}" Width="90" DockPanel.Dock="Left" Margin="10,0,0,0" Command="{Binding AddFolderCommand}">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="../../../Resources/folder_add.png" Width="15"/>
+					<TextBlock Text="Add folder" Margin="5,0,0,0"/>
+				</StackPanel>
+			</Button>
+	        <Button Style="{StaticResource BaseButtonStyle}" Width="90" Margin="10,0,0,0" Command="{Binding AddFilesCommand}">
+		        <StackPanel Orientation="Horizontal">
+			        <Image Source="../../../Resources/document_add.png" Width="15"/>
+					<TextBlock Text="Add files" Margin="5,0,0,0"/>
+		        </StackPanel>
+			</Button>
+		</DockPanel>
     </Grid>
 </UserControl>
