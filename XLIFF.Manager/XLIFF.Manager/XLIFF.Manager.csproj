@@ -114,8 +114,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\ExportToXLIFFAction.cs" />
-    <Compile Include="Actions\ImportFromXLIFFAction.cs" />
+    <Compile Include="Actions\Export\ProjectsContextMenu_ExportToXLIFFAction.cs" />
+    <Compile Include="Actions\Export\FilesContextMenu_ExportToXLIFFAction.cs" />
+    <Compile Include="Actions\Export\ExportToXLIFFAction.cs" />
+    <Compile Include="Actions\Import\ImportFromXLIFFAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
