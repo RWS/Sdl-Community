@@ -10,8 +10,10 @@ using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Wizard.View;
 using Sdl.Community.XLIFF.Manager.Wizard.View.Export;
+using Sdl.Community.XLIFF.Manager.Wizard.View.Import;
 using Sdl.Community.XLIFF.Manager.Wizard.ViewModel;
 using Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export;
+using Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi.Extensions.Internal;
 using Sdl.ProjectAutomation.Core;
@@ -302,7 +304,10 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			}
 			else if (_action == Enumerators.Action.Import)
 			{
-				// TODO: (Andrea)				
+				pages.Add(new WizardPageImportFilesViewModel(_wizardWindow, new WizardPageImportFilesView(), wizardContext));
+				pages.Add(new WizardPageImportOptionsViewModel(_wizardWindow,new WizardPageImportOptionsView(), wizardContext));
+				pages.Add(new WizardPageImportSummaryViewModel(_wizardWindow,new WizardPageImportSummaryView(), wizardContext));
+				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow,new WizardPageImportPreparationView(), wizardContext));
 			}
 
 			UpdatePageIndexes(pages);
