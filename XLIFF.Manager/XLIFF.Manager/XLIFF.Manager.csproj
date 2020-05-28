@@ -214,6 +214,7 @@
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportOptionsViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportPreparationViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportSummaryViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Import\WizardPageImportFilesViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageViewModelBase.cs" />
     <Compile Include="Wizard\View\Export\WizardPageExportOptionsView.xaml.cs">
@@ -227,6 +228,9 @@
     </Compile>
     <Compile Include="Wizard\View\Export\WizardPageExportFilesView.xaml.cs">
       <DependentUpon>WizardPageExportFilesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Import\WizardPageImportFilesView.xaml.cs">
+      <DependentUpon>WizardPageImportFilesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wizard\View\WizardWindow.xaml.cs">
       <DependentUpon>WizardWindow.xaml</DependentUpon>
@@ -251,10 +255,7 @@
     <EmbeddedResource Include="Resources\Flags\Flags.zip" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Wizard\ViewModel\Import\" />
-    <Folder Include="Wizard\View\Import\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Controls\ToolWindowsControl.xaml">
       <SubType>Designer</SubType>
@@ -355,6 +356,10 @@
     <Page Include="Wizard\View\Export\WizardPageExportFilesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\Import\WizardPageImportFilesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wizard\View\WizardWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
