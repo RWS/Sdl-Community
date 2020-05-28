@@ -310,4 +310,7 @@
 	<data name="Label_Files" xml:space="preserve">
     <value>Files</value>
   </data>
+	<data name="Title_WizardPage" xml:space="preserve">
+    <value>{0} {1} Wizard - {2}</value>
+  </data>
 </root>

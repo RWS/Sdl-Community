@@ -71,9 +71,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		public Window Owner { get; }
 
 		public object View { get; }
-
-		//public bool CurrentPageChanged { get; set; }
-
+		
 		public bool IsCurrentPage
 		{
 			get => _isCurrentPage;

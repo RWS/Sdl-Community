@@ -131,7 +131,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 				_currentPage = value;
 
-				WindowTitle = string.Format("{0} {1} Wizard - {2}", PluginResources.XLIFFManager_Name, Action, CurrentPage.DisplayName);
+				WindowTitle = string.Format(PluginResources.Title_WizardPage, 
+					PluginResources.XLIFFManager_Name, Action, CurrentPage.DisplayName);
 
 				// move focus to the page in the wizard early
 				OnPropertyChanged(nameof(CurrentPage));
