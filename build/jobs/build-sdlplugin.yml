@@ -24,4 +24,4 @@ steps:
   displayName: 'Publish Artifact'
   inputs:
     artifactName: drop
-    pathToPublish: '$(pluginName)\bin\Release\Sdl.Community.$(artifactName)'
+    pathToPublish: '$(pluginName)\bin\Release\$(artifactName)'
