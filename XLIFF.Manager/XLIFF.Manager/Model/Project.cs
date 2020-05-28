@@ -5,6 +5,8 @@ namespace Sdl.Community.XLIFF.Manager.Model
 {
 	public class Project : BaseModel, ICloneable
 	{
+		private Customer _customer;
+
 		public Project()
 		{
 			TargetLanguages = new List<LanguageInfo>();
@@ -17,13 +19,31 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string Path { get; set; }
 
-		public Customer Customer { get; set; }
+		public Customer Customer
+		{
+			get
+			{
+				return _customer ?? (_customer = new Customer
+				{
+					Name = "[no client]"
+				});
+			}
+			set
+			{
+				_customer = value;
+				OnPropertyChanged(nameof(Customer));
+			}
+		}
 
 		public string AbsoluteUri { get; set; }
 
 		public DateTime DueDate { get; set; }
 
+		public string DueDateToString => GetDateTimeToString(DueDate);
+
 		public DateTime Created { get; set; }
+
+		public string CreatedToString => GetDateTimeToString(Created);
 
 		public string ProjectType { get; set; }
 
@@ -32,6 +52,19 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		public List<LanguageInfo> TargetLanguages { get; set; }
 
 		public List<ProjectFile> ProjectFiles { get; set; }
+
+		private string GetDateTimeToString(DateTime dateTime)
+		{
+			var value = (dateTime != DateTime.MinValue && dateTime != DateTime.MaxValue)
+				? dateTime.Year
+				  + "-" + dateTime.Month.ToString().PadLeft(2, '0')
+				  + "-" + dateTime.Day.ToString().PadLeft(2, '0')
+				  + " " + dateTime.Hour.ToString().PadLeft(2, '0')
+				  + ":" + dateTime.Minute.ToString().PadLeft(2, '0')
+				  + ":" + dateTime.Second.ToString().PadLeft(2, '0')
+				: "[none]";
+			return value;
+		}
 
 		public object Clone()
 		{

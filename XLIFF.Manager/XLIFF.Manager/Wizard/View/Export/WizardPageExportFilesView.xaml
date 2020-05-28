@@ -112,7 +112,6 @@
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Error">
 													<Setter Property="Source" Value="../../../Resources/invalid-32.png"/>
-													
 												</DataTrigger>
 											</Style.Triggers>
 										</Style>
@@ -156,9 +155,9 @@
 			</DataGrid.Columns>
 			<DataGrid.ContextMenu>
 				<ContextMenu>
-					<MenuItem Header="Check Report" Command="{Binding CheckSelectedCommand}" 
+					<MenuItem Header="Check selected files" Command="{Binding CheckSelectedCommand}" 
 					          CommandParameter="true"/>
-					<MenuItem Header="Uncheck Report" Command="{Binding CheckSelectedCommand}" 
+					<MenuItem Header="Uncheck selected files" Command="{Binding CheckSelectedCommand}" 
 					          CommandParameter="false"/>
 				</ContextMenu>
 			</DataGrid.ContextMenu>

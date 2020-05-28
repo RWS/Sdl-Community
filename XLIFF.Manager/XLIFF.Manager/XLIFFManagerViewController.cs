@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Controls;
+using Sdl.Community.XLIFF.Manager.CustomEventArgs;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Community.XLIFF.Manager.ViewModel;
@@ -35,7 +36,7 @@ namespace Sdl.Community.XLIFF.Manager
 		private IStudioEventAggregator _eventAggregator;
 		private ProjectsController _projectsController;
 		private ImageService _imageService;
-		private PathInfo _pathInfo;
+		private PathInfo _pathInfo;		
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -50,6 +51,7 @@ namespace Sdl.Community.XLIFF.Manager
 
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
+			_projects = new List<Project>();			
 			// TODO this will be replaced with a call to recover the relevant data from the projects loaded in Studio			
 			//var testDataUtil = new TestDataUtil(_imageService);
 			//_projectModels = testDataUtil.GetTestProjectData();
@@ -59,8 +61,15 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			if (_projectsNavigationViewControl == null)
 			{
+				if (_projectsNavigationViewModel != null)
+				{
+					_projectsNavigationViewModel.ProjectSelectionChanged -= OnProjectSelectionChanged;
+				}
+
 				_projectsNavigationViewModel = new ProjectsNavigationViewModel(_projects);
 				_projectsNavigationViewControl = new ProjectsNavigationViewControl(_projectsNavigationViewModel);
+
+				_projectsNavigationViewModel.ProjectSelectionChanged += OnProjectSelectionChanged;
 			}
 
 			return _projectsNavigationViewControl;
@@ -70,13 +79,21 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			if (_projectFilesViewControl == null)
 			{
-				_projectFilesViewModel = new ProjectFilesViewModel(_projects?.Count > 0 ? _projects[0].ProjectFiles : null);
-				_projectFilesViewControl = new ProjectFilesViewControl(_projectFilesViewModel);
+				_projectFilesViewModel = new ProjectFilesViewModel(_projects?.Count > 0 
+					? _projects[0].ProjectFiles : null);
 
-				_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
+				_projectFilesViewControl = new ProjectFilesViewControl(_projectFilesViewModel);
+				_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;				
 			}
 
 			return _projectFilesViewControl;
+		}
+
+		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
+
+		public List<Project> GetProjects()
+		{
+			return _projectsNavigationViewModel.Projects.ToList();
 		}
 
 		public List<Project> GetSelectedProjects()
@@ -96,12 +113,9 @@ namespace Sdl.Community.XLIFF.Manager
 				return;
 			}
 
-			if (_projects == null)
-			{
-				_projects = new List<Project>();
-			}
-
+			_projects = new List<Project>(_projectsNavigationViewModel.Projects);			
 			var project = _projects.FirstOrDefault(a => a.Id == wizardContext.Project.Id);
+
 			if (project == null)
 			{
 				_projects.Add(wizardContext.Project);
@@ -118,13 +132,25 @@ namespace Sdl.Community.XLIFF.Manager
 					}
 					else
 					{
-						// TODO
+						projectFile.Status = wcProjectFile.Status;
+						projectFile.Action = wcProjectFile.Action;
+						projectFile.Date = wcProjectFile.Date;
+						projectFile.XliffFilePath = wcProjectFile.XliffFilePath;
+						projectFile.Details = wcProjectFile.Details;
+						
+						projectFile.ProjectFileActivities = wcProjectFile.ProjectFileActivities;
 					}
 				}
 			}
 
 			_projectsNavigationViewModel.Projects = _projects;
-			_projectFilesViewModel.ProjectFiles = project.ProjectFiles;			
+			_projectFilesViewModel.ProjectFiles = project.ProjectFiles;
+			
+		}
+
+		private void OnProjectSelectionChanged(object sender, ProjectSelectionChangedEventArgs e)
+		{
+			ProjectSelectionChanged?.Invoke(this, e);
 		}
 
 		private void OnStudioWindowCreatedNotificationEvent(StudioWindowCreatedNotificationEvent e)
@@ -168,8 +194,16 @@ namespace Sdl.Community.XLIFF.Manager
 
 		public override void Dispose()
 		{
+			
+
 			_projectFilesViewModel?.Dispose();
-			_projectsNavigationViewModel?.Dispose();
+
+			if (_projectsNavigationViewModel != null)
+			{
+				_projectsNavigationViewModel.ProjectSelectionChanged -= OnProjectSelectionChanged;
+				_projectsNavigationViewModel.Dispose();
+			}
+			
 
 			base.Dispose();
 		}

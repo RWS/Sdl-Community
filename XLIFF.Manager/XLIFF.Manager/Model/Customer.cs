@@ -4,9 +4,24 @@ namespace Sdl.Community.XLIFF.Manager.Model
 {
 	public class Customer : BaseModel, ICloneable
 	{
+		private string _name;
+
 		public string Id { get; set; }
 
-		public string Name { get; set; }
+		public string Name
+		{
+			get => _name;
+			set
+			{
+				if (_name == value)
+				{
+					return;
+				}
+
+				_name = value;
+				OnPropertyChanged(nameof(Name));
+			}
+		}
 
 		public string Email { get; set; }
 

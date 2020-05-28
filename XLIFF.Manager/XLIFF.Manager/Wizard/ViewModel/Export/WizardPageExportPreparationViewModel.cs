@@ -305,13 +305,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
 		}
 
-		private void OnLoadPage(object sender, EventArgs e)
+		private void OnLoadPage(object sender, System.EventArgs e)
 		{
 			Refresh();
 			StartProcessing();
 		}
 
-		private void OnLeavePage(object sender, EventArgs e)
+		private void OnLeavePage(object sender, System.EventArgs e)
 		{
 		}
 
