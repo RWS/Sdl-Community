@@ -172,10 +172,19 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			var existingProject = _xliffManagerController.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
 
-			projectModel.ProjectFiles = existingProject != null 
-				? existingProject.ProjectFiles 
-				: GetProjectFiles(selectedProject, projectModel, selectedFileIds);
-
+			if (existingProject != null)
+			{
+				projectModel.ProjectFiles = existingProject.ProjectFiles;
+				foreach (var projectFile in projectModel.ProjectFiles)
+				{
+					projectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString());
+				}
+			}
+			else
+			{
+				projectModel.ProjectFiles = GetProjectFiles(selectedProject, projectModel, selectedFileIds);
+			}
+				
 			return projectModel;
 		}
 
