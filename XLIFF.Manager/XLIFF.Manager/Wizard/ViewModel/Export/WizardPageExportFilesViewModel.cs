@@ -21,12 +21,15 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private bool _checkedAll;
 		private bool _checkingAllAction;
 
-		public WizardPageExportFilesViewModel(Window owner, object view, WizardContext wizardContext) : base(owner, view, wizardContext)
+		public WizardPageExportFilesViewModel(Window owner, object view, WizardContext wizardContext) 
+			: base(owner, view, wizardContext)
 		{		
 			ProjectFiles = wizardContext.ProjectFiles;
-			PropertyChanged += WizardPageExportFilesViewModel_PropertyChanged;			
+
+			LoadPage += OnLoadPage;
+			LeavePage += OnLeavePage;			
 		}
-		
+
 		public ICommand CheckAllCommand => _checkAllCommand ?? (_checkAllCommand = new RelayCommand(CheckAll));
 
 		public ICommand CheckSelectedCommand => _checkSelectedComand ?? (_checkSelectedComand = new CommandHandler(CheckSelected));
@@ -166,29 +169,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			VerifyIsValid();
 		}
 
-		private void WizardPageExportFilesViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName == nameof(CurrentPageChanged))
-			{
-				if (IsCurrentPage)
-				{
-					OnLoadView();
-				}
-				else
-				{
-					OnLeaveView();
-				}
-			}
-		}
-
-		private void OnLeaveView()
-		{			
-		}
-
-		private void OnLoadView()
+		private void OnLoadPage(object sender, EventArgs e)
 		{
 			UpdateCheckAll();
 			VerifyIsValid();
+		}
+
+		private void OnLeavePage(object sender, EventArgs e)
+		{			
 		}
 
 		public void Dispose()
@@ -202,7 +190,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			}
 
 			SelectedProjectFile?.Dispose();
-			PropertyChanged -= WizardPageExportFilesViewModel_PropertyChanged;			
+
+			LoadPage -= OnLoadPage;
+			LeavePage -= OnLeavePage;
 		}
 	}
 }

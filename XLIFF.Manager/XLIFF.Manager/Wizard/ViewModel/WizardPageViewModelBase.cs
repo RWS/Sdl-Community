@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using Sdl.Community.XLIFF.Manager.Model;
@@ -22,6 +23,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			View = view;
 			WizardContext = wizardContext;
 		}
+
+		public event EventHandler LoadPage;
+
+		public event EventHandler LeavePage;
 
 		public WizardContext WizardContext { get; set; }
 
@@ -67,7 +72,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public object View { get; }
 
-		public bool CurrentPageChanged { get; set; }
+		//public bool CurrentPageChanged { get; set; }
 
 		public bool IsCurrentPage
 		{
@@ -81,7 +86,15 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 				_isCurrentPage = value;
 				OnPropertyChanged(nameof(IsCurrentPage));
-				OnPropertyChanged(nameof(CurrentPageChanged));
+
+				if (_isCurrentPage)
+				{
+					LoadPage?.Invoke(this, null);
+				}
+				else
+				{
+					LeavePage?.Invoke(this, null);
+				}
 			}
 		}
 
