@@ -36,7 +36,7 @@ namespace Sdl.Community.XLIFF.Manager
 		private IStudioEventAggregator _eventAggregator;
 		private ProjectsController _projectsController;
 		private ImageService _imageService;
-		private PathInfo _pathInfo;		
+		private PathInfo _pathInfo;
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -51,7 +51,7 @@ namespace Sdl.Community.XLIFF.Manager
 
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
-			_projects = new List<Project>();			
+			_projects = new List<Project>();
 			// TODO this will be replaced with a call to recover the relevant data from the projects loaded in Studio			
 			//var testDataUtil = new TestDataUtil(_imageService);
 			//_projectModels = testDataUtil.GetTestProjectData();
@@ -61,15 +61,10 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			if (_projectsNavigationViewControl == null)
 			{
-				if (_projectsNavigationViewModel != null)
-				{
-					_projectsNavigationViewModel.ProjectSelectionChanged -= OnProjectSelectionChanged;
-				}
-
 				_projectsNavigationViewModel = new ProjectsNavigationViewModel(_projects);
-				_projectsNavigationViewControl = new ProjectsNavigationViewControl(_projectsNavigationViewModel);
-
 				_projectsNavigationViewModel.ProjectSelectionChanged += OnProjectSelectionChanged;
+
+				_projectsNavigationViewControl = new ProjectsNavigationViewControl(_projectsNavigationViewModel);
 			}
 
 			return _projectsNavigationViewControl;
@@ -79,11 +74,11 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			if (_projectFilesViewControl == null)
 			{
-				_projectFilesViewModel = new ProjectFilesViewModel(_projects?.Count > 0 
+				_projectFilesViewModel = new ProjectFilesViewModel(_projects?.Count > 0
 					? _projects[0].ProjectFiles : null);
 
 				_projectFilesViewControl = new ProjectFilesViewControl(_projectFilesViewModel);
-				_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;				
+				_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
 			}
 
 			return _projectFilesViewControl;
@@ -93,7 +88,7 @@ namespace Sdl.Community.XLIFF.Manager
 
 		public List<Project> GetProjects()
 		{
-			return _projectsNavigationViewModel.Projects.ToList();
+			return _projects;
 		}
 
 		public List<Project> GetSelectedProjects()
@@ -113,7 +108,7 @@ namespace Sdl.Community.XLIFF.Manager
 				return;
 			}
 
-			_projects = new List<Project>(_projectsNavigationViewModel.Projects);			
+			_projects = new List<Project>(_projects);
 			var project = _projects.FirstOrDefault(a => a.Id == wizardContext.Project.Id);
 
 			if (project == null)
@@ -137,15 +132,21 @@ namespace Sdl.Community.XLIFF.Manager
 						projectFile.Date = wcProjectFile.Date;
 						projectFile.XliffFilePath = wcProjectFile.XliffFilePath;
 						projectFile.Details = wcProjectFile.Details;
-						
+
 						projectFile.ProjectFileActivities = wcProjectFile.ProjectFileActivities;
 					}
 				}
 			}
 
-			_projectsNavigationViewModel.Projects = _projects;
-			_projectFilesViewModel.ProjectFiles = project.ProjectFiles;
-			
+			if (_projectsNavigationViewModel != null)
+			{
+				_projectsNavigationViewModel.Projects = _projects;
+			}
+
+			if (_projectFilesViewModel != null)
+			{
+				_projectFilesViewModel.ProjectFiles = project.ProjectFiles;
+			}
 		}
 
 		private void OnProjectSelectionChanged(object sender, ProjectSelectionChangedEventArgs e)
@@ -194,7 +195,7 @@ namespace Sdl.Community.XLIFF.Manager
 
 		public override void Dispose()
 		{
-			
+
 
 			_projectFilesViewModel?.Dispose();
 
@@ -203,7 +204,7 @@ namespace Sdl.Community.XLIFF.Manager
 				_projectsNavigationViewModel.ProjectSelectionChanged -= OnProjectSelectionChanged;
 				_projectsNavigationViewModel.Dispose();
 			}
-			
+
 
 			base.Dispose();
 		}

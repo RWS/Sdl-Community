@@ -49,17 +49,8 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Import
 
 		private void SetupXliffManagerController()
 		{
-			if (_xliffManagerController != null)
-			{
-				_xliffManagerController.ProjectSelectionChanged -= OnProjectSelectionChanged;
-			}
-
 			_xliffManagerController = SdlTradosStudio.Application.GetController<XLIFFManagerViewController>();
-
-			if (_xliffManagerController != null)
-			{
-				_xliffManagerController.ProjectSelectionChanged += OnProjectSelectionChanged;
-			}
+			_xliffManagerController.ProjectSelectionChanged += OnProjectSelectionChanged;
 		}
 
 		private void OnProjectSelectionChanged(object sender, ProjectSelectionChangedEventArgs e)
