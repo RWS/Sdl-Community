@@ -5,7 +5,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.XLIFF.Manager.Actions
+namespace Sdl.Community.XLIFF.Manager.Actions.Import
 {
 	[Action("XLIFFManager_ImportFromXLIFF_Action", typeof(XLIFFManagerViewController),
 		Name = "XLIFFManager_ImportFromXLIFF_Name",
