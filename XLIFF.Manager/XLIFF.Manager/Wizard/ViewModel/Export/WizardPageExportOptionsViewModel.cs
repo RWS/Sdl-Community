@@ -22,14 +22,16 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
 
-		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext) : base(owner, view, wizardContext)
+		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext) 
+			: base(owner, view, wizardContext)
 		{		
 			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == WizardContext.Support);
 			OutputFolder = WizardContext.OutputFolder;
 			CopySourceToTarget = wizardContext.CopySourceToTarget;
 			IncludeTranslations = wizardContext.IncludeTranslations;
-		
-			PropertyChanged += WizardPageExportOptionsViewModel_PropertyChanged;
+
+			LoadPage += OnLoadPage;
+			LeavePage += OnLeavePage;
 		}
 		
 		public ICommand ClearExportFileCommand => _clearExportFileCommand ?? (_clearExportFileCommand = new CommandHandler(ClearExportFile));
@@ -215,37 +217,23 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			return outputFolder;
 		}
 
-		private void WizardPageExportOptionsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		private void OnLoadPage(object sender, EventArgs e)
 		{
-			if (e.PropertyName == nameof(CurrentPageChanged))
-			{
-				if (IsCurrentPage)
-				{
-					OnLoadView();
-				}
-				else
-				{
-					OnLeaveView();
-				}
-			}
+			VerifyIsValid();
 		}
 
-		private void OnLeaveView()
+		private void OnLeavePage(object sender, EventArgs e)
 		{
 			WizardContext.OutputFolder = OutputFolder;
 			WizardContext.Support = SelectedXliffSupport.SupportType;
 			WizardContext.CopySourceToTarget = CopySourceToTarget;
-			WizardContext.IncludeTranslations = IncludeTranslations;									
-		}
-
-		private void OnLoadView()
-		{			
-			VerifyIsValid();
+			WizardContext.IncludeTranslations = IncludeTranslations;
 		}
 
 		public void Dispose()
 		{
-			PropertyChanged += WizardPageExportOptionsViewModel_PropertyChanged;
+			LoadPage -= OnLoadPage;
+			LeavePage -= OnLeavePage;
 		}
 	}
 }

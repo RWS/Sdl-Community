@@ -11,10 +11,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 	{
 		private string _summaryText;
 
-		public WizardPageExportSummaryViewModel(Window owner, object view, WizardContext wizardContext) : base(owner, view, wizardContext)
+		public WizardPageExportSummaryViewModel(Window owner, object view, WizardContext wizardContext) 
+			: base(owner, view, wizardContext)
 		{
 			IsValid = true;
-			PropertyChanged += WizardPageSummaryViewModel_PropertyChanged;
+
+			LoadPage += OnLoadPage;
+			LeavePage += OnLeavePage;
 		}
 
 		public string SummaryText
@@ -114,30 +117,21 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			}
 
 			return selectedLanguages;
-		}		
-
-		private void WizardPageSummaryViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName == nameof(CurrentPageChanged))
-			{
-				if (IsCurrentPage)
-				{
-					LoadView();
-				}
-				else
-				{
-					LeaveView();
-				}
-			}
 		}
 
-		private void LeaveView()
-		{
-		}
-
-		private void LoadView()
+		private void OnLoadPage(object sender, EventArgs e)
 		{
 			SummaryText = GetSummaryText();
+		}
+
+		private void OnLeavePage(object sender, EventArgs e)
+		{
+		}
+
+		public void Dispose()
+		{
+			LoadPage -= OnLoadPage;
+			LeavePage -= OnLeavePage;
 		}
 	}
 }

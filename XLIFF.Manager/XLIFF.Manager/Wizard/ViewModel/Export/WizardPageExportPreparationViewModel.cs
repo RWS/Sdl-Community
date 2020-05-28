@@ -25,11 +25,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private SolidColorBrush _textMessageBrush;
 		private string _textMessage;
 
-		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext) : base(owner, view, wizardContext)
+		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext) 
+			: base(owner, view, wizardContext)
 		{
 			IsValid = true;
 			InitializeJobProcessList();
-			PropertyChanged += WizardPagePreparationViewModel_PropertyChanged;
+
+			LoadPage += OnLoadPage;
+			LeavePage += OnLeavePage;
 		}
 
 		public ICommand OpenFolderInExplorerCommand => _openFolderInExplorerCommand ?? (_openFolderInExplorerCommand = new CommandHandler(OpenFolderInExplorer));
@@ -207,7 +210,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 							targetFile.Status = Enumerators.Status.Success;
 						}
 						
-
 						var activityFile = new ProjectFileActivity
 						{
 							ProjectFileId = targetFile.Id,
@@ -303,29 +305,20 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
 		}
 
-		private void WizardPagePreparationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName == nameof(CurrentPageChanged))
-			{
-				if (IsCurrentPage)
-				{
-					OnLoadView();
-				}
-				else
-				{
-					OnLeaveView();
-				}
-			}
-		}
-
-		private void OnLeaveView()
-		{
-		}
-
-		private void OnLoadView()
+		private void OnLoadPage(object sender, EventArgs e)
 		{
 			Refresh();
 			StartProcessing();
+		}
+
+		private void OnLeavePage(object sender, EventArgs e)
+		{
+		}
+
+		public void Dispose()
+		{
+			LoadPage -= OnLoadPage;
+			LeavePage -= OnLeavePage;
 		}
 	}
 }
