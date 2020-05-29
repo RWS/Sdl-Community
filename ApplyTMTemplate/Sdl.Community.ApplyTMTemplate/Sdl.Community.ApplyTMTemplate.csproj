@@ -49,6 +49,12 @@
       <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Controls">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
@@ -96,6 +102,9 @@
       <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Versioning">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -109,11 +118,22 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\ImageToBitmapImageConverter.cs" />
     <Compile Include="Models\IResource.cs" />
     <Compile Include="Models\Resource.cs" />
     <Compile Include="Models\SegmentationRulesResource.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\TemplateValidity.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Interfaces\IMessageService.cs" />
+    <Compile Include="Services\MessageService.cs" />
+    <Compile Include="UiHelpers\WindowsControl.xaml.cs">
+      <DependentUpon>WindowsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\LanguageFlags.cs" />
     <Compile Include="ViewModels\TimedTextBox.cs" />
     <Compile Include="Models\WordlistResource.cs" />
@@ -124,11 +144,6 @@
     <Compile Include="Converters\RatioConverter.cs" />
     <Compile Include="Models\Template.cs" />
     <Compile Include="Models\TranslationMemory.cs" />
-    <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="TellMe\ApplyTMCommunitySupportAction.cs" />
@@ -152,6 +167,8 @@
     <Compile Include="ViewModels\ModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\AddFolder.png" />
+    <Resource Include="Resources\TM.ico" />
     <Resource Include="Resources\UploadFromExcel.ico" />
     <Resource Include="Resources\SaveToExcel.ico" />
     <Resource Include="Resources\Export2.ico" />
@@ -168,12 +185,10 @@
     <Resource Include="Resources\Checked.ico" />
     <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\Remove.ico" />
-    <Resource Include="Resources\AddFolder.ico" />
-    <Resource Include="Resources\PlusSign.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Resources\FileBasedTM.ico" />
     <Content Include="pluginpackage.manifest.xml">
@@ -209,6 +224,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UiHelpers\TextBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\WindowsBorder.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\WindowsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
