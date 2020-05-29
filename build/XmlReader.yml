@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - XML*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.xmlReader.sln'
+  pluginName: 'xmlReader/Sdl.Community.xmlReader'
+  artifactName: 'Sdl.Community.xmlReader.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
