@@ -120,6 +120,7 @@
 
 	<!--Data Grid Header Styles-->
 	<Style x:Key="StandardColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Background" Value="White" />
 		<Setter Property="FontSize" Value="11" />
 		<Setter Property="Padding" Value="5" />
