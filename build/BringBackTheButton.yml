@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - BringBackTheButton/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.BringBackTheButton.sln'
+  pluginName: 'BringBackTheButton/Sdl.Community.BringBackTheButton.sln'
+  artifactName: 'Sdl.Community.BringBackTheButton.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
