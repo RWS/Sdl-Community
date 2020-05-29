@@ -139,4 +139,43 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+
+	<!--Window Control Button Style-->
+	<Style x:Uid="Style_3" x:Key="WindowControlButtonStyle" TargetType="{x:Type Button}">
+		<Setter x:Uid="Setter_32" Property="Foreground" Value="{DynamicResource WindowsControl.Command.Forground}"/>
+		<Setter x:Uid="Setter_33" Property="FocusVisualStyle" Value="{x:Null}" />
+		<Setter x:Uid="Setter_34" Property="Focusable" Value="False"/>
+		<Setter x:Uid="Setter_35" Property="IsTabStop" Value="False"/>
+		<Setter x:Uid="Setter_36" Property="HorizontalContentAlignment" Value="Center"/>
+
+		<Setter x:Uid="Setter_37" Property="Template">
+			<Setter.Value>
+				<ControlTemplate x:Uid="ControlTemplate_3" TargetType="Button">
+					<Border x:Uid="Border" x:Name="Border" TextBlock.Foreground="{TemplateBinding Foreground}" BorderThickness="1,0,1,1" BorderBrush="Transparent" Background="Transparent">
+						<ContentPresenter x:Uid="ContentPresenter_2" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="False" />
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger x:Uid="Trigger_9" Property="IsMouseOver" Value="True">
+							<Setter x:Uid="Setter_38" TargetName="Border" Property="Background" Value="{DynamicResource WindowsControl.Command.Highlight}"/>
+						</Trigger>
+						<Trigger x:Uid="Trigger_10" Property="IsPressed" Value="True">
+							<Setter x:Uid="Setter_39" TargetName="Border" Property="Background" Value="{DynamicResource WindowsControl.Command.Active}"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+
+		<Style.Triggers>
+			<Trigger x:Uid="Trigger_11" Property="IsMouseOver" Value="True">
+				<Setter x:Uid="Setter_40" Property="Foreground" Value="{DynamicResource WindowsControl.Command.Highlight.Text}"/>
+			</Trigger>
+			<Trigger x:Uid="Trigger_12" Property="IsPressed" Value="True">
+				<Setter x:Uid="Setter_41" Property="Foreground"  Value="{DynamicResource WindowsControl.Command.Active.Text}"/>
+			</Trigger>
+			<Trigger x:Uid="Trigger_13" Property="IsEnabled" Value="False">
+				<Setter x:Uid="Setter_42" Property="Visibility" Value="Collapsed"/>
+			</Trigger>
+		</Style.Triggers>
+	</Style>
 </ResourceDictionary>
