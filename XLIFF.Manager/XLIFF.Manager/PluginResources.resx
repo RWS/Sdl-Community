@@ -217,100 +217,112 @@
   <data name="XLIFFManager_Settings_Name" xml:space="preserve">
     <value>Settings</value>
   </data>
-	<data name="StatusLabel_Files_0_Selected_1" xml:space="preserve">
+  <data name="StatusLabel_Files_0_Selected_1" xml:space="preserve">
     <value>Files: {0}, Selected: {1}</value>
   </data>
-	<data name="Label_Id" xml:space="preserve">
+  <data name="Label_Id" xml:space="preserve">
     <value>Id: {0}</value>
   </data>
-	<data name="Label_Name" xml:space="preserve">
+  <data name="Label_Name" xml:space="preserve">
     <value>Name: {0}</value>
   </data>
-	<data name="Label_Location" xml:space="preserve">
+  <data name="Label_Location" xml:space="preserve">
     <value>Location: {0}</value>
   </data>
-	<data name="Label_Created" xml:space="preserve">
+  <data name="Label_Created" xml:space="preserve">
     <value>Created: {0}</value>
   </data>
-	<data name="Label_DueDate" xml:space="preserve">
+  <data name="Label_DueDate" xml:space="preserve">
     <value>Due Date: {0}</value>
   </data>
-	<data name="Label_SourceLanguage" xml:space="preserve">
+  <data name="Label_SourceLanguage" xml:space="preserve">
     <value>Soruce Language: {0}</value>
   </data>
-	<data name="Label_TargetLanguages" xml:space="preserve">
+  <data name="Label_TargetLanguages" xml:space="preserve">
     <value>Target Languages: {0}</value>
   </data>
-	<data name="Label_ProjectType" xml:space="preserve">
+  <data name="Label_ProjectType" xml:space="preserve">
     <value>Project Type: {0}</value>
   </data>
-	<data name="Label_Customer" xml:space="preserve">
+  <data name="Label_Customer" xml:space="preserve">
     <value>Customer: {0}</value>
   </data>
-	<data name="Label_TotalFiles" xml:space="preserve">
+  <data name="Label_TotalFiles" xml:space="preserve">
     <value>Total Files: {0}</value>
   </data>
-	<data name="Label_SelectedFiles" xml:space="preserve">
+  <data name="Label_SelectedFiles" xml:space="preserve">
     <value>Selected Files: {0}</value>
   </data>
-	<data name="Label_SelectedLanguages" xml:space="preserve">
+  <data name="Label_SelectedLanguages" xml:space="preserve">
     <value>Selected Languages: {0}</value>
   </data>
-	<data name="Label_WorkingFolder" xml:space="preserve">
+  <data name="Label_WorkingFolder" xml:space="preserve">
     <value>Working Folder: {0}</value>
   </data>
-	<data name="Label_Language" xml:space="preserve">
+  <data name="Label_Language" xml:space="preserve">
     <value>Language: {0}</value>
   </data>
-	<data name="Label_Folder" xml:space="preserve">
+  <data name="Label_Folder" xml:space="preserve">
     <value>Folder: {0}</value>
   </data>
-	<data name="PageName_Summary" xml:space="preserve">
+  <data name="PageName_Summary" xml:space="preserve">
     <value>Summary</value>
   </data>
-	<data name="PageName_Files" xml:space="preserve">
+  <data name="PageName_Files" xml:space="preserve">
     <value>Files</value>
   </data>
-	<data name="PageName_Options" xml:space="preserve">
+  <data name="PageName_Options" xml:space="preserve">
     <value>Options</value>
   </data>
-	<data name="PageName_Preparation" xml:space="preserve">
+  <data name="PageName_Preparation" xml:space="preserve">
     <value>Preparation</value>
   </data>
-	<data name="JobProcess_Preparation" xml:space="preserve">
+  <data name="JobProcess_Preparation" xml:space="preserve">
     <value>Preparation</value>
   </data>
-	<data name="JobProcess_Export" xml:space="preserve">
+  <data name="JobProcess_Export" xml:space="preserve">
     <value>Export</value>
   </data>
-	<data name="JobProcess_Finalize" xml:space="preserve">
+  <data name="JobProcess_Finalize" xml:space="preserve">
     <value>Finalize</value>
   </data>
-	<data name="Result_Successful" xml:space="preserve">
+  <data name="Result_Successful" xml:space="preserve">
     <value>Successful</value>
   </data>
-	<data name="Result_Unsuccessful" xml:space="preserve">
+  <data name="Result_Unsuccessful" xml:space="preserve">
     <value>Unsuccessful</value>
   </data>
-	<data name="Label_Options" xml:space="preserve">
+  <data name="Label_Options" xml:space="preserve">
     <value>Options</value>
   </data>
-	<data name="Label_XliffSupport" xml:space="preserve">
+  <data name="Label_XliffSupport" xml:space="preserve">
     <value>XLIFF Support: {0}</value>
   </data>
-	<data name="Label_IncludeTranslations" xml:space="preserve">
+  <data name="Label_IncludeTranslations" xml:space="preserve">
     <value>Include Translations: {0}</value>
   </data>
-	<data name="Label_CopySourceToTarget" xml:space="preserve">
+  <data name="Label_CopySourceToTarget" xml:space="preserve">
     <value>Copy Source to Target: {0}</value>
   </data>
-	<data name="Label_Project" xml:space="preserve">
+  <data name="Label_Project" xml:space="preserve">
     <value>Project</value>
   </data>
-	<data name="Label_Files" xml:space="preserve">
+  <data name="Label_Files" xml:space="preserve">
     <value>Files</value>
   </data>
-	<data name="Title_WizardPage" xml:space="preserve">
+  <data name="Title_WizardPage" xml:space="preserve">
     <value>{0} {1} Wizard - {2}</value>
+  </data>
+  <data name="document_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\document_add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="folder_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\folder_add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FilesDialog_Title" xml:space="preserve">
+    <value>Please select file(s)</value>
+  </data>
+  <data name="FolderDialog_Title" xml:space="preserve">
+    <value>Please select a folder</value>
   </data>
 </root>

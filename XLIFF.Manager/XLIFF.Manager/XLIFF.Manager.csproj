@@ -122,8 +122,10 @@
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Common\FolderSelectDialog.cs" />
     <Compile Include="Common\Logger.cs" />
     <Compile Include="Common\PathInfo.cs" />
+    <Compile Include="Common\Reflector.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
     <Compile Include="Controls\ProjectFileActivityViewControl.cs">
       <SubType>UserControl</SubType>
@@ -188,6 +190,7 @@
     <Compile Include="FileTypeSupport\XLIFF\Writers\Xliff12PolyglotWriter.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Writers\XliffWriter.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
+    <Compile Include="Interfaces\IDialogService.cs" />
     <Compile Include="Interfaces\XLIFFReader.cs" />
     <Compile Include="Interfaces\XLIFFWriter.cs" />
     <Compile Include="Model\BaseModel.cs" />
@@ -208,6 +211,7 @@
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\CustomerProvider.cs" />
+    <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\WizardService.cs" />
     <Compile Include="TestData\TestDataUtil.cs" />
@@ -421,6 +425,8 @@
     <Resource Include="Resources\Project.ico" />
     <Resource Include="Resources\Close.png" />
     <Resource Include="Resources\Fie.png" />
+    <Resource Include="Resources\folder_add.png" />
+    <Resource Include="Resources\document_add.png" />
     <Content Include="Resources\Icon.Jigsaw.ico" />
     <Resource Include="Resources\Minus.png" />
     <Resource Include="Resources\Plus.png" />

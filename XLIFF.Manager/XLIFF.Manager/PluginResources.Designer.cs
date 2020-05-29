@@ -71,12 +71,50 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap document_add {
+            get {
+                object obj = ResourceManager.GetObject("document_add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon ExportTo {
             get {
                 object obj = ResourceManager.GetObject("ExportTo", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select file(s).
+        /// </summary>
+        internal static string FilesDialog_Title {
+            get {
+                return ResourceManager.GetString("FilesDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap folder_add {
+            get {
+                object obj = ResourceManager.GetObject("folder_add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a folder.
+        /// </summary>
+        internal static string FolderDialog_Title {
+            get {
+                return ResourceManager.GetString("FolderDialog_Title", resourceCulture);
             }
         }
         
