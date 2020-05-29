@@ -41,4 +41,4 @@ steps:
    displayName: 'Publish Artifact'
    inputs:
     artifactName: drop
-    pathToPublish: 'C:\Users\build\AppData\Roaming\SDL\SDL Trados Studio\12\Plugins\Packages\$(artifactName).sdlplugin'
+    pathToPublish: 'C:\Users\build\AppData\Roaming\SDL\SDL Trados Studio\12\Plugins\Packages\$(artifactName)'
