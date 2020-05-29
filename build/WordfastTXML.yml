@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.FileTypeSupport.TXML.sln'
   pluginName: 'Wordfast TXML'
-  artifactName: 'Sdl.Community.FileTypeSupport.TXML.sdlplugin'
+  artifactName: 'Sdl.Community.FileType.TXML.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
