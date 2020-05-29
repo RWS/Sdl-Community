@@ -12,7 +12,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.FileTypeSupport.TXML.sln'
-  pluginName: 'Sdl.Community.FileTypeSupport.TXML'
+  pluginName: 'Wordfast TXML'
   artifactName: 'Sdl.Community.FileTypeSupport.TXML.sdlplugin'
 
 steps:
