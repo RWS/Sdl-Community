@@ -13,7 +13,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.AhkPlugin.sln'
-  pluginName: 'AHKPlugin'
+  pluginName: 'AHK plugin'
   artifactName: 'Sdl.Community.AHKPlugin.sdlplugin'
 
 steps:
