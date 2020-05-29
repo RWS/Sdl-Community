@@ -12,7 +12,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/XLIFF.Manager.sln'
-  pluginName: 'XLIFF.Manager/Sdl.Community.XLIFF.Manager'
+  pluginName: 'XLIFF.Manager/XLIFF.Manager'
   artifactName: 'Sdl.Community.XLIFF.Manager.sdlplugin'
 
 steps:
