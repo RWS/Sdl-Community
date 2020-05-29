@@ -12,7 +12,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.ApplyTMTemplate.sln'
-  pluginName: 'ApplyTMTemplate'
+  pluginName: 'ApplyTMTemplate\Sdl.Community.ApplyTMTemplate'
   artifactName: 'Sdl.Community.ApplyTMTemplate.sdlplugin'
 
 steps:
