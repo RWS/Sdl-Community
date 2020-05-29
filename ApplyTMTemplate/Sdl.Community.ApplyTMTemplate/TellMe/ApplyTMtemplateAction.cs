@@ -1,5 +1,5 @@
 ﻿using System.Drawing;
-using MahApps.Metro.Controls.Dialogs;
+using Sdl.Community.ApplyTMTemplate.Services;
 using Sdl.Community.ApplyTMTemplate.UI;
 using Sdl.Community.ApplyTMTemplate.Utilities;
 using Sdl.Community.ApplyTMTemplate.ViewModels;
@@ -14,10 +14,16 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 			Name = "Start Apply TM Template";
 		}
 
+		public override string Category => "Apply TM Template results";
+
+		public override Icon Icon => PluginResources.ATTA;
+
+		public override bool IsAvailable => true;
+
 		public override void Execute()
 		{
 			var timedTextBoxViewModel = new ViewModels.TimedTextBox();
-			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader(), DialogCoordinator.Instance, timedTextBoxViewModel);
+			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader(), new MessageService(), timedTextBoxViewModel);
 
 			var mainWindow = new MainWindow
 			{
@@ -27,11 +33,5 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 			System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(mainWindow);
 			mainWindow.Show();
 		}
-
-		public override bool IsAvailable => true;
-
-		public override string Category => "Apply TM Template results";
-
-		public override Icon Icon => PluginResources.ATTA;
 	}
 }

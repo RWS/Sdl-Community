@@ -7,6 +7,7 @@ using System.Xml;
 using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Versioning;
 
 namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
@@ -17,9 +18,9 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 		public TemplateLoader()
 		{
 			_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				@"SDL\SDL Trados Studio\16.0.0.0\UserSettings.xml");
+				$@"SDL\{Versions.ProductDescription}\{Versions.MajorVersion}.0.0.0\UserSettings.xml");
 
-			DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "Studio 2021");
+			DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), Versions.StudioDocumentsFolderName);
 		}
 
 		public string DefaultPath { get; set; }
@@ -57,28 +58,28 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 			foreach (XmlNode res in lrt)
 			{
-				var successful = int.TryParse(res?.Attributes?["Lcid"]?.Value, out var lcid);
+				var cultureName = res?.Attributes?["CultureName"]?.Value;
 
-				if (!successful) continue;
-				var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.LCID == lcid);
+				if (string.IsNullOrWhiteSpace(cultureName)) continue;
+				var lr = langResBundlesList.FirstOrDefault(lrb => lrb.Language.Name == cultureName);
 
 				if (lr == null)
 				{
 					CultureInfo culture;
 
-					try
-					{
-						culture = CultureInfoExtensions.GetCultureInfo(lcid);
-						if (CultureInfo.GetCultures(CultureTypes.AllCultures).Where(ci => ci.LCID == lcid).ToList().Count > 1) throw new Exception();
-					}
-					catch (Exception)
-					{
-						if (!unIDedLanguages.Exists(id => id == lcid))
-						{
-							unIDedLanguages.Add(lcid);
-						}
-						continue;
-					}
+					//try
+					//{
+						culture = CultureInfoExtensions.GetCultureInfo(cultureName);
+						//if (CultureInfo.GetCultures(CultureTypes.AllCultures).Where(ci => ci.Name == cultureName).ToList().Count > 1) throw new Exception();
+					//}
+					//catch (Exception)
+					//{
+					//	if (!unIDedLanguages.Exists(id => id == cultureName))
+					//	{
+					//		unIDedLanguages.Add(lcid);
+					//	}
+					//	continue;
+					//}
 
 					lr = new LanguageResourceBundle(culture);
 					langResBundlesList.Add(lr);
