@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - YourStudio/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.YourStudio.sln'
+  pluginName: 'YourStudio'
+  artifactName: 'Sdl.Community.YourStudio.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
