@@ -12,7 +12,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.YourProductivity.sln'
-  pluginName: 'YourProductivity'
+  pluginName: 'YourProductivity/Sdl.Community.YourProductivity'
   artifactName: 'Sdl.Community.YourProductivity.sdlplugin'
 
 steps:
