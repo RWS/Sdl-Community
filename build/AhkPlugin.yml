@@ -4,17 +4,17 @@ trigger:
      - master
   paths:
     include:
-     - '$(solutionPath)'
+     - '$(triggerPath)'
 
 pool: Studio-OX
 
 variables:
-  solutionPath: 'AHK plugin/*'
+  triggerPath: 'AHK plugin/*'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.AhkPlugin.sln'
   pluginName: 'AHK plugin'
-  artifactName: 'Sdl.Community.AHKPlugin.sdlplugin'
+  artifactName: 'Sdl.Community.AhkPlugin.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
