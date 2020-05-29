@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Code samples/StudioStyles/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/StudioStyles.sln'
+  pluginName: 'Code samples\StudioStyles\StudioStyles'
+  artifactName: 'StudioStyles.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
