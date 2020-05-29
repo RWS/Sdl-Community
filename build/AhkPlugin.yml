@@ -1,0 +1,21 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - '$(solutionPath)'
+
+pool: Studio-OX
+
+variables:
+  solutionPath: 'AHK plugin/*'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.AhkPlugin.sln'
+  pluginName: 'AHKPlugin'
+  artifactName: 'Sdl.Community.AHKPlugin.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+
