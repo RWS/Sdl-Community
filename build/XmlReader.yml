@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - XML*
+     - XML Reader/*
 
 pool: Studio-OX
 
