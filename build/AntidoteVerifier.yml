@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Antidote Verifier/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.AntidoteVerifier.sln'
+  pluginName: 'AntidoteVerifier'
+  artifactName: 'Sdl.Community.AntidoteVerifier.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
