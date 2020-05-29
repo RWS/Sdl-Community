@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.YourStudio.sln'
   pluginName: 'YourStudio'
-  artifactName: 'Sdl.Community.YourStudio.sdlplugin'
+  artifactName: 'Sdl.Community.YourStudio.Integration.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
