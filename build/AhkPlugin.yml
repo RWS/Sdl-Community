@@ -4,12 +4,11 @@ trigger:
      - master
   paths:
     include:
-     - '$(triggerPath)'
+     - AHK plugin/*
 
 pool: Studio-OX
 
 variables:
-  triggerPath: 'AHK plugin/*'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.AhkPlugin.sln'
