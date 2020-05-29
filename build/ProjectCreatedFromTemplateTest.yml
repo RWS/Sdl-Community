@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Code samples/ProjectCreatedFromTemplateTest/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/ProjectCreatedFromTemplateTest.sln'
+  pluginName: 'Code samples\ProjectCreatedFromTemplateTest\ProjectCreatedFromTemplateTest'
+  artifactName: 'ProjectCreatedFromTemplateTest.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
