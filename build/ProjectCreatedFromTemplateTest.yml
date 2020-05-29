@@ -12,8 +12,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.ProjectCreatedFromTemplateTest.sln'
-  pluginName: 'Code samples\ProjectCreatedFromTemplateTest\ProjectCreatedFromTemplateTest'
-  artifactName: 'ProjectCreatedFromTemplateTest.sdlplugin'
+  pluginName: 'Code samples\ProjectCreatedFromTemplateTest\Sdl.Community.ProjectCreatedFromTemplateTest'
+  artifactName: 'Sdl.Community.ProjectCreatedFromTemplateTest.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
