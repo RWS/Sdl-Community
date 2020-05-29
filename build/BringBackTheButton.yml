@@ -12,7 +12,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.BringBackTheButton.sln'
-  pluginName: 'BringBackTheButton/Sdl.Community.BringBackTheButton.sln'
+  pluginName: 'BringBackTheButton\BringBackTheButton'
   artifactName: 'Sdl.Community.BringBackTheButton.sdlplugin'
 
 steps:
