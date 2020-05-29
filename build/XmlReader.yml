@@ -12,8 +12,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.xmlReader.sln'
-  pluginName: 'xmlReader/Sdl.Community.xmlReader'
-  artifactName: 'Sdl.Community.xmlReader.sdlplugin'
+  pluginName: 'XML Reader/Sdl.Community.XmlReader'
+  artifactName: 'Sdl.Community.XmlReader.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
