@@ -8,6 +8,7 @@
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:controls="clr-namespace:Sdl.Community.XLIFF.Manager.Controls"
              xmlns:model="clr-namespace:Sdl.Community.XLIFF.Manager.Model"
+             xmlns:behaviours="clr-namespace:Sdl.Desktop.Platform.Controls.Behaviours;assembly=Sdl.Desktop.Platform.Controls"
              xmlns:converters="clr-namespace:Sdl.Community.XLIFF.Manager.Converters"
              d:DataContext="{d:DesignInstance viewModel:WizardPageImportFilesViewModel}"
              mc:Ignorable="d" 
@@ -83,6 +84,8 @@
 			VerticalScrollBarVisibility="Auto"
 			HorizontalScrollBarVisibility="Disabled"
 			CanUserDeleteRows="False"
+			AllowDrop="True"
+			behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"
 		    Margin="0">
 			
 			<DataGrid.Columns>

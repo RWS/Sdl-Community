@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -21,6 +22,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private List<ProjectFile> _projectFiles;
 		private bool _checkedAll;
 		private bool _checkingAllAction;
+		private ICommand _dragDropCommand;
+
 
 		public WizardPageImportFilesViewModel(Window owner, object view, WizardContext wizardContext,IDialogService dialogService) : base(owner, view, wizardContext)
 		{
@@ -126,6 +129,35 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			{
 				UpdateCheckAll();
 			}
+		}
+		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragAndDrop));
+
+		private void DragAndDrop(object parameter)
+		{
+			if (parameter == null || !(parameter is DragEventArgs eventArgs)) return;
+
+			var fileDrop = eventArgs.Data.GetData(DataFormats.FileDrop, false);
+			if (fileDrop is string[] filesOrDirectories && filesOrDirectories.Length > 0)
+			{
+				foreach (var fullPath in filesOrDirectories)
+				{
+					var fileAttributes = File.GetAttributes(fullPath);
+					if (fileAttributes.HasFlag(FileAttributes.Directory))
+					{
+						//TODO:Add the files to grid
+						var files = GetAllXliffsFromDirectory(fullPath);
+					}
+					//is file
+					//TODO:Add the file to grid
+
+				}
+			}
+		}
+
+		private List<string> GetAllXliffsFromDirectory(string directoryPath)
+		{
+			return Directory.GetFiles(directoryPath, "*.xliff",
+				SearchOption.AllDirectories).ToList();
 		}
 
 		private void SelectFolder()
