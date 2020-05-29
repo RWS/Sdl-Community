@@ -1,4 +1,4 @@
-﻿using MahApps.Metro.Controls.Dialogs;
+﻿using Sdl.Community.ApplyTMTemplate.Services;
 using Sdl.Community.ApplyTMTemplate.UI;
 using Sdl.Community.ApplyTMTemplate.Utilities;
 using Sdl.Community.ApplyTMTemplate.ViewModels;
@@ -14,7 +14,7 @@ namespace Sdl.Community.ApplyTMTemplate
 		protected override void Execute()
 		{
 			var timedTextBox = new ViewModels.TimedTextBox();
-			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader(), DialogCoordinator.Instance, timedTextBox);
+			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader(), new MessageService(), timedTextBox);
 
 			var mainWindow = new MainWindow
 			{

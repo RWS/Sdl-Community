@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Sdl.Community.ApplyTMTemplate.Utilities;
 using Sdl.Community.ApplyTMTemplate.ViewModels;
+using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Segmentation;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -26,14 +28,14 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			_sourceStatus = "";
 			_targetStatus = "";
 			Tm = tm;
-			SourceLanguageFlagUri = languageFlags.GetImageStudioCodeByLanguageCode(tm.LanguageDirection.SourceLanguage.Name);
-			TargetLanguageFlagUri= languageFlags.GetImageStudioCodeByLanguageCode(tm.LanguageDirection.TargetLanguage.Name);
+			SourceLanguageFlag = new Language(tm.LanguageDirection.SourceLanguage).GetFlagImage();
+			TargetLanguageFlag = new Language(tm.LanguageDirection.TargetLanguage).GetFlagImage();
 			SourceLanguage = tm.LanguageDirection.SourceLanguage.Name;
 			TargetLanguage = tm.LanguageDirection.TargetLanguage.Name;
 		}
 
-		public string SourceLanguageFlagUri { get; set; }
-		public string TargetLanguageFlagUri { get; set; }
+		public Image SourceLanguageFlag { get; set; }
+		public Image TargetLanguageFlag { get; set; }
 
 		public string SourceLanguage { get; set; }
 		public string TargetLanguage { get; set; }
