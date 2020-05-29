@@ -11,7 +11,7 @@ pool: Studio-OX
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/ProjectCreatedFromTemplateTest.sln'
+  solution : '**/Sdl.Community.ProjectCreatedFromTemplateTest.sln'
   pluginName: 'Code samples\ProjectCreatedFromTemplateTest\ProjectCreatedFromTemplateTest'
   artifactName: 'ProjectCreatedFromTemplateTest.sdlplugin'
 
