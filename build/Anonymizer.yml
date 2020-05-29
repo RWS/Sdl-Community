@@ -16,4 +16,4 @@ variables:
   artifactName: 'Sdl.Community.projectAnonymizer.sdlplugin'
   
 steps:
-  - template: build-sdlplugin.yml
+  - template: jobs/build-sdlplugin.yml
