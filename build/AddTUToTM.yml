@@ -12,8 +12,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/AddTUToTM.sln'
-  pluginName: 'AddTUToTM/AddTUToTM'
-  artifactName: 'Sdl.Community.AddTUToTM.sdlplugin'
+  pluginName: 'Code samples\AddTUToTM\AddTUToTM'
+  artifactName: 'AddTUToTM.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
