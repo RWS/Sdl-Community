@@ -12,7 +12,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.CleanUpTasks.sln'
-  pluginName: 'CleanUpTasks/Sdl.Community.CleanUpTasks.sdlplugin'
+  pluginName: 'CleanUpTasks/CleanUpTasks'
   artifactName: 'Sdl.Community.CleanUpTasks.sdlplugin'
 
 steps:
