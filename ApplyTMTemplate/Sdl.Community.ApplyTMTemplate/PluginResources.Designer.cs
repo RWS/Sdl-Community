@@ -70,12 +70,12 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Icon AddFolder {
+        public static System.Drawing.Bitmap AddFolder {
             get {
                 object obj = ResourceManager.GetObject("AddFolder", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -391,16 +391,6 @@ namespace Sdl.Community.ApplyTMTemplate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon PlusSign {
-            get {
-                object obj = ResourceManager.GetObject("PlusSign", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
         public static System.Drawing.Icon Question {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
@@ -546,6 +536,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TM {
+            get {
+                object obj = ResourceManager.GetObject("TM", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This TM is corrupted or the file is not a TM.
         /// </summary>
         public static string TmCorruptedMarker {
@@ -589,6 +589,33 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string Warning {
             get {
                 return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string WindowsControl_Close {
+            get {
+                return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximize.
+        /// </summary>
+        public static string WindowsControl_Maximize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Maximize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        public static string WindowsControl_Minimize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
             }
         }
     }
