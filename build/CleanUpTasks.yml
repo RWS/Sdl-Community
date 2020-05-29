@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.CleanUpTasks.sln'
   pluginName: 'CleanUpTasks/CleanUpTasks'
-  artifactName: 'Sdl.Community.CleanUpTasks.sdlplugin'
+  artifactName: 'SDLCommunityCleanUpTasks.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
