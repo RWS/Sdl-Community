@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Commands;
@@ -12,15 +13,25 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private ICommand _addFolderCommand;
 		private ICommand _addFilesCommand;
 		private readonly IDialogService _dialogService;
+		private List<ProjectFile> _projectFiles;
+
 
 		public WizardPageImportFilesViewModel(Window owner, object view, WizardContext wizardContext,IDialogService dialogService) : base(owner, view, wizardContext)
 		{
 			_dialogService = dialogService;
+			ProjectFiles = wizardContext.ProjectFiles;
+
 			IsValid = true; //TODO remove this. Used to testing porpouse only
 		}
 
 		public ICommand AddFolderCommand => _addFolderCommand ?? (_addFolderCommand = new RelayCommand(SelectFolder));
 		public ICommand AddFilesCommand => _addFilesCommand ?? (_addFilesCommand = new RelayCommand(AddFiles));
+
+		public List<ProjectFile> ProjectFiles
+		{
+			get => _projectFiles ?? (_projectFiles = new List<ProjectFile>());
+			set => _projectFiles = value;
+		}
 
 		private void AddFiles()
 		{
