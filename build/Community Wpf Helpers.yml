@@ -12,8 +12,6 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.CommunityWpfHelpers.sln'
-  pluginName: 'CommunityWpfHelpers/Sdl.CommunityWpfHelpers'
-  artifactName: 'Sdl.CommunityWpfHelpers.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin-without-PublishBuildArtifacts-task.yml
