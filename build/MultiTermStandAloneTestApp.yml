@@ -12,8 +12,6 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/MultiTermStandAloneTestApp.sln'
-  pluginName: 'Code samples\MultiTermStandAloneTestApp\MultiTermStandAloneTestApp'
-  artifactName: 'MultiTermStandAloneTestApp.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin-without-PublishBuildArtifacts-task.yml
