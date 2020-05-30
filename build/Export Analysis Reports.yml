@@ -12,7 +12,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.ExportAnalysisReports.sln'
-  pluginName: 'ExportAnalysisReports\Sdl.Community.ExportAnalysisReports'
+  pluginName: 'Export Analysis Reports\Sdl.Community.ExportAnalysisReports'
   artifactName: 'Sdl.Community.ExportAnalysisReports.sdlplugin'
 
 steps:
