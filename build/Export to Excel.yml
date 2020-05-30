@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Export to Excel/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.ExportToExcel.sln'
+  pluginName: 'Export to Excel\Sdl.Community.ExportToExcel'
+  artifactName: 'Sdl.Community.ExportToExcel.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
