@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - DSI Viewer/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.DsiViewer.sln'
+  pluginName: 'DsiViewer\DsiViewer'
+  artifactName: 'Sdl.Community.DsiViewer.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
