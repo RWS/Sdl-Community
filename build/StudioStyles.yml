@@ -16,4 +16,4 @@ variables:
   artifactName: 'StudioStyles.sdlplugin'
 
 steps:
-  - template: jobs/build-sdlplugin.yml
+  - template: jobs/build-sdlplugin-without-PublishBuildArtifacts-task.yml
