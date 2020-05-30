@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ETS Translation Provider/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/ETSTranslationProvider.sln'
+  pluginName: 'ETSTranslationProvider\Sdl.Community.ETSTranslationProvider'
+  artifactName: 'Sdl.Community.ETSTranslationProvider.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
