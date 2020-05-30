@@ -12,8 +12,6 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/GetTermbaseDetails.sln'
-  pluginName: 'Code samples\GetTermbaseDetails\GetTermbaseDetails'
-  artifactName: 'GetTermbaseDetails.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin-without-PublishBuildArtifacts-task.yml
