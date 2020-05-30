@@ -12,7 +12,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.ExportToExcel.sln'
-  pluginName: 'Export to Excel\Sdl.Community.ExportToExcel'
+  pluginName: 'Export to Excel\Export to Excel'
   artifactName: 'Sdl.Community.ExportToExcel.sdlplugin'
 
 steps:
