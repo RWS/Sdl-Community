@@ -12,8 +12,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/SDLCopyTags.sln'
-  pluginName: 'CopyTags'
-  artifactName: 'Sdl.Community.SDLCopyTags.sdlplugin'
+  pluginName: 'CopyTags\CopyTags'
+  artifactName: 'SDLCopyTags.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
