@@ -12,7 +12,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.DeepLMTProvider.sln'
-  pluginName: 'DeepLMTProvider'
+  pluginName: 'DeepLMTProvider\Sdl.Community.DeelLMTProvider'
   artifactName: 'Sdl.Community.DeepLMTProvider.sdlplugin'
 
 steps:
