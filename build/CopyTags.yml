@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - CopyTags/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/SDLCopyTags.sln'
+  pluginName: 'CopyTags'
+  artifactName: 'Sdl.Community.SDLCopyTags.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
