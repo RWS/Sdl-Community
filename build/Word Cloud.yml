@@ -12,8 +12,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.WordCloud.sln'
-  pluginName: 'WordCloud'
-  artifactName: 'Sdl.Community.WordCloud.sdlplugin'
+  pluginName: 'Word Cloud/Sdl.Community.WordCloud.Plugin'
+  artifactName: 'Sdl.Community.WordCloud.Plugin.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
