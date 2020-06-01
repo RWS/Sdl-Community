@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Sdl.Community.XLIFF.Manager.Common;
+﻿using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Community.XLIFF.Manager.ViewModel;
 using XLIFF.Manager.UnitTests.Common;

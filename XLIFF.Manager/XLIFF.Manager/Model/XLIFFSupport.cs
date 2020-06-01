@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.XLIFF.Manager.Common;
+﻿using Sdl.Community.XLIFF.Manager.Common;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {

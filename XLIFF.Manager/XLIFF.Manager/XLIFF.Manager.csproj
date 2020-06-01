@@ -39,9 +39,9 @@
     <Reference Include="MahApps.Metro">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\MahApps.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+    <Reference Include="NLog">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -67,15 +67,15 @@
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
@@ -158,7 +158,11 @@
     <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
     <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
     <Compile Include="CustomEventArgs\ProjectSelectionChangedEventArgs.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Readers\Xliff12SDLReader.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\SegmentBuilder.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementSegment.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Readers\Class1.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Readers\Xliff12SdlReader.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Readers\XliffSupportSniffer.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Readers\XliffReader.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ContentProcessor.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\SdlxliffReader.cs" />

@@ -313,4 +313,7 @@
 	<data name="Title_WizardPage" xml:space="preserve">
     <value>{0} {1} Wizard - {2}</value>
   </data>
+	<data name="Message_SelectOutputFolder" xml:space="preserve">
+    <value>Select the output folder</value>
+  </data>
 </root>

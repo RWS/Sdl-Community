@@ -231,12 +231,20 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 					case Element.TagType.OpeningTag:
 						writer.WriteStartElement("bpt");
 						writer.WriteAttributeString("id", tag.TagId);
+						if (!string.IsNullOrEmpty(tag.DisplayText))
+						{
+							writer.WriteAttributeString("equiv-text", tag.DisplayText);
+						}						
 						writer.WriteString(tag.TagContent);
 						writer.WriteEndElement();
 						break;
 					case Element.TagType.ClosingTag:
 						writer.WriteStartElement("ept");
 						writer.WriteAttributeString("id", tag.TagId);
+						if (!string.IsNullOrEmpty(tag.DisplayText))
+						{
+							writer.WriteAttributeString("equiv-text", tag.DisplayText);
+						}
 						writer.WriteString(tag.TagContent);
 						writer.WriteEndElement();
 						break;
@@ -247,6 +255,10 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 			{
 				writer.WriteStartElement("ph");
 				writer.WriteAttributeString("id", placeholder.TagId);
+				if (!string.IsNullOrEmpty(placeholder.DisplayText))
+				{
+					writer.WriteAttributeString("equiv-text", placeholder.DisplayText);
+				}
 				writer.WriteString(placeholder.TagContent);
 				writer.WriteEndElement();
 			}

@@ -327,6 +327,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select the output folder.
+        /// </summary>
+        internal static string Message_SelectOutputFolder {
+            get {
+                return ResourceManager.GetString("Message_SelectOutputFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Files.
         /// </summary>
         internal static string PageName_Files {

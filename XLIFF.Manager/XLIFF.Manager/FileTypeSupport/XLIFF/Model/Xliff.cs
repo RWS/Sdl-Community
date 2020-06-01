@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model
@@ -17,6 +18,10 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model
 		public string Version { get; set; }
 
 		public DocInfo DocInfo { get; set; }
+
+		public string SpecificVersion { get; set; }
+
+		public Enumerators.XLIFFSupport Support { get; set; }
 
 		public List<File> Files { get; set; }
 

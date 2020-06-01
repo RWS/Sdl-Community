@@ -42,6 +42,12 @@
       <HintPath>..\..\..\..\packages\NSubstitute.4.2.1\lib\net46\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -70,13 +76,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\TestDataUtil.cs" />
+    <Compile Include="Common\TestFilesUtil.cs" />
     <Compile Include="ProjectFileActivityViewModelTests.cs" />
     <Compile Include="ProjectFilesViewModelTests.cs" />
     <Compile Include="ProjectsNavigationViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FileTypeSupport\XliffReaderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="TestFiles\Xliff12\Polyglot\File.sdlxliff.xliff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestFiles\Xliff12\Sdl\File.sdlxliff.xliff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\..\..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
@@ -87,6 +101,7 @@
       <Name>XLIFF.Manager</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

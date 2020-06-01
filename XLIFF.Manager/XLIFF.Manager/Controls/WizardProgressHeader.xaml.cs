@@ -1,9 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Threading;
-using Sdl.Community.XLIFF.Manager.Extensions;
+﻿using System.Windows.Controls;
 
 namespace Sdl.Community.XLIFF.Manager.Controls
 {

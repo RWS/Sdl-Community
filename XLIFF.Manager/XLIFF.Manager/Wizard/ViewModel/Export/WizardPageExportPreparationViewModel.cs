@@ -20,14 +20,16 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 {
 	public class WizardPageExportPreparationViewModel : WizardPageViewModelBase
 	{
+		private readonly SegmentBuilder _segmentBuilder;
 		private List<JobProcess> _jobProcesses;
 		private ICommand _openFolderInExplorerCommand;
 		private SolidColorBrush _textMessageBrush;
 		private string _textMessage;
 
-		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext) 
+		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext, SegmentBuilder segmentBuilder) 
 			: base(owner, view, wizardContext)
 		{
+			_segmentBuilder = segmentBuilder;
 			IsValid = true;
 			InitializeJobProcessList();
 
@@ -182,7 +184,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 
 				var project = WizardContext.ProjectFiles[0].ProjectModel;
-				var sdlxliffReader = new SdlxliffReader();
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder);
 				var xliffWriter = new XliffWriter(WizardContext.Support);
 
 				var selectedLanguages = GetSelectedLanguages();
@@ -208,6 +210,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 							targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
 							targetFile.Action = Enumerators.Action.Export;
 							targetFile.Status = Enumerators.Status.Success;
+							targetFile.Details = "TODO";
 						}
 						
 						var activityFile = new ProjectFileActivity
