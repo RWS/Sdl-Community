@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Word Cloud/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.WordCloud.sln'
+  pluginName: 'WordCloud'
+  artifactName: 'Sdl.Community.WordCloud.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
