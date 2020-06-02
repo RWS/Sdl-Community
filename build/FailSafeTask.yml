@@ -12,8 +12,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.FailSafeTask.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  pluginName: 'FailSafeTask\Sdl.Community.FailSafeTask'
+  artifactName: 'FailSafeTask.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/PublishBuildArtifact-task.yml
