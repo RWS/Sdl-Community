@@ -14,4 +14,4 @@ variables:
   solution : '**/StudioStyles.sln'
 
 steps:
-  - template: jobs/build-sdlplugin-without-PublishBuildArtifacts-task.yml
+  - template: jobs/build-sdlplugin.yml
