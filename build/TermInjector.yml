@@ -1,0 +1,20 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TermInjector/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.TermInjector.sln'
+  pluginName: 'TmAnonymizer/Sdl.Community.TmAnonymizer'
+  artifactName: 'Sdl.Community.SdlTmAnonymizer.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+ # - template: jobs/PublishBuildArtifact-task.yml
