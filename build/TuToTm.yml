@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TuToTm/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.TuToTm.sln'
+  pluginName: 'TuToTm/Sdl.Community.TuToTm.Plugin'
+  artifactName: 'Sdl.Community.TuToTm.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
