@@ -12,8 +12,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.CommunityLegit.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  pluginName: 'Legit\Sdl.Community.Legit'
+  artifactName: 'Sdl.Community.LegIt.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/PublishBuildArtifact-task.yml
