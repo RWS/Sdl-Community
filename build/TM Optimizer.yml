@@ -12,9 +12,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.TMOptimizer.sln'
-  pluginName: 'TMLifting/Sdl.Community.TMLifting'
-  artifactName: 'Sdl.Community.TMLifting.sdlplugin'
+  pluginName: 'TM Optimizer/Sdl.Community.TMOptimizer.Integration'
+  artifactName: 'Sdl.Community.TMOptimizer.Integration.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
- # - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/PublishBuildArtifact-task.yml
