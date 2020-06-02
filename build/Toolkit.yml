@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Toolkit/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/SDLXLIFFSliceOrChange.sln'
+  pluginName: 'Toolkit/Sdl.Community.SDLXLIFFSliceOrChange'
+  artifactName: 'Sdl.Community.SDLXLIFFSliceOrChange.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
