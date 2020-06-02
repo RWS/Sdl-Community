@@ -11,7 +11,7 @@ pool: Studio-OX
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.TargetWordCount.sln	'
+  solution : '**/Sdl.Community.TargetWordCount.sln'
   pluginName: 'TermInjector/Sdl.Community.TermInjector'
   artifactName: 'Sdl.Community.TermInjector.sdlplugin'
 
