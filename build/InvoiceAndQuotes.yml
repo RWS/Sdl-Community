@@ -12,8 +12,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.InvoiceAndQuotes.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  pluginName: 'InvoiceAndQuotes\Sdl.Community.InvoiceAndQuotes.Integration'
+  artifactName: 'Sdl.Community.InvoiceAndQuotes.Integration.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/PublishBuildArtifact-task.yml
