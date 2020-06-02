@@ -12,9 +12,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.FileTypeSupport.TMX.sln'
-  pluginName: 'TQA/TQA'
-  artifactName: 'Sdl.Community.TQA.sdlplugin'
+  pluginName: 'TMX'
+  artifactName: 'Sdl.Community.FileType.TMX.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
- # - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/PublishBuildArtifact-task.yml
