@@ -17,4 +17,4 @@ variables:
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: PublishBuildArtifact-task.yml
+  - template: jobs/PublishBuildArtifact-task.yml
