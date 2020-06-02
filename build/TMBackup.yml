@@ -12,9 +12,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.TMBackup.sln'
-  pluginName: 'TMLifting/Sdl.Community.TMLifting'
-  artifactName: 'Sdl.Community.TMLifting.sdlplugin'
+  pluginName: 'TMBackup'
+  artifactName: 'Sdl.Community.TMBackup.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
- # - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/PublishBuildArtifact-task.yml
