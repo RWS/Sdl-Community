@@ -17,4 +17,8 @@ variables:
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+     artifactName: drop
+     pathToPublish: '$(pluginName)\build\$(artifactName)'
