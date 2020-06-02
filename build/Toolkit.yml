@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
   solution : '**/SDLXLIFFSliceOrChange.sln'
   pluginName: 'Toolkit/SdlXliffToolkit'
-  artifactName: 'Sdl.Community.SdlXliffToolkit.sdlplugin'
+  artifactName: 'SdlXliffToolkit.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
