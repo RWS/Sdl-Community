@@ -14,4 +14,4 @@ variables:
   solution : '**/Sdl.CommunityWpfHelpers.sln'
 
 steps:
-  - template: jobs/build-sdlplugin-without-PublishBuildArtifacts-task.yml
+  - template: jobs/build-sdlplugin.yml
