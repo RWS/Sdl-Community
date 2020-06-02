@@ -12,8 +12,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/SDLXLIFFSliceOrChange.sln'
-  pluginName: 'Toolkit/Sdl.Community.SDLXLIFFSliceOrChange'
-  artifactName: 'Sdl.Community.SDLXLIFFSliceOrChange.sdlplugin'
+  pluginName: 'Toolkit/SdlXliffToolkit'
+  artifactName: 'Sdl.Community.SdlXliffToolkit.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: PublishBuildArtifact-task.yml
