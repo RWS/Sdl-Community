@@ -12,7 +12,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.TranslationMemoryManagementUtility.sln'
-  pluginName: 'TranslationMemoryManagementUtility/TranslationMemoryManagementUtility'
+  pluginName: 'TranslationMemoryManagementUtility/Sdl.Community.TranslationMemoryManagementUtility'
   artifactName: 'Sdl.Community.TranslationMemoryManagementUtility.sdlplugin'
 
 steps:
