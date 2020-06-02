@@ -12,7 +12,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.TuToTm.sln'
-  pluginName: 'TuToTm/Sdl.Community.TuToTm.Plugin'
+  pluginName: 'TuToTm/TuToTm'
   artifactName: 'Sdl.Community.TuToTm.sdlplugin'
 
 steps:
