@@ -12,9 +12,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.TMLifting.sln'
-  pluginName: 'TQA/TQA'
-  artifactName: 'Sdl.Community.TQA.sdlplugin'
+  pluginName: 'TMLifting/Sdl.Community.TMLifting'
+  artifactName: 'Sdl.Community.TMLifting.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
- # - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/PublishBuildArtifact-task.yml
