@@ -5,7 +5,13 @@ trigger:
   paths:
     include:
      - XML Reader/*
-
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - XML Reader/*
 pool: Studio-OX
 
 variables:
