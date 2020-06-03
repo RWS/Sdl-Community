@@ -6,6 +6,14 @@ trigger:
     include:
      - AdvancedDisplayFilter/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - AdvancedDisplayFilter/*
+
 pool: Studio-OX
 
 variables:
