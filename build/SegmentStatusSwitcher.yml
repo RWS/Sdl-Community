@@ -6,6 +6,14 @@ trigger:
     include:
      - SegmentStatusSwitcher/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SegmentStatusSwitcher/*
+
 pool: Studio-OX
 
 variables:
