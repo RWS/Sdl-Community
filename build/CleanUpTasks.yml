@@ -6,6 +6,14 @@ trigger:
     include:
      - CleanUpTasks/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - CleanUpTasks/*
+
 pool: Studio-OX
 
 variables:
