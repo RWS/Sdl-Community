@@ -6,6 +6,14 @@ trigger:
     include:
      - ApplyStudioProjectTemplate/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ApplyStudioProjectTemplate/*
+
 pool: Studio-OX
 
 variables:
