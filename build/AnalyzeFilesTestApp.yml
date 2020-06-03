@@ -6,6 +6,14 @@ trigger:
     include:
      - Code samples/AnalyzeFilesTestApp/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Code samples/AnalyzeFilesTestApp/*
+
 pool: Studio-OX
 
 variables:
