@@ -12,8 +12,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.MtEnhancedProvider.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  pluginName: 'MT Enhanced Provider\Sdl.Community.MtEnhancedProvider'
+  artifactName: 'Sdl.Community.MtEnhancedProvider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/PublishBuildArtifact01-task.yml
