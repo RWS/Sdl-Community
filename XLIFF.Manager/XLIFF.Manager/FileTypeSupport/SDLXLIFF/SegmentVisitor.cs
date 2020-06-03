@@ -176,9 +176,18 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			
 			var element = new ElementLocked
 			{
-				TagContent = lockedContent.ToString()
-			};	
-			
+				Type = Element.TagType.OpeningTag
+			};
+
+			Elements.Add(element);
+
+			VisitChilderen(lockedContent.Content);
+
+			element = new ElementLocked
+			{
+				Type = Element.TagType.ClosingTag
+			};
+
 			Elements.Add(element);
 		}
 

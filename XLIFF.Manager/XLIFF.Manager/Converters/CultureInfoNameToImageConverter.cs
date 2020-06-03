@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Globalization;
 using System.Windows.Data;
 using Sdl.Community.XLIFF.Manager.Service;

@@ -1,0 +1,21 @@
+﻿<xliff version="1.2" xmlns:sdl="http://schemas.sdl.com/xliff" sdl:support="xliff12polyglot" sdl:version="1.2.1">
+  <sdl:doc-info project-id="1497cd08-1efd-470c-94e3-ce9401b2c348" 
+                source="C:\Users\phartnett\Documents\Studio 2019\Projects\Samples\SampleProject\de-de\lockedcontent.xml.sdlxliff" 
+                source-language="en-US" 
+                target-language="de-DE" 
+                created="2020-06-03T08:38:44.625Z" />
+  <file original="C:\Users\phartnett\Documents\Studio 2019\Projects\Samples\NewProjectSample\en-US\lockedcontent.xml" 
+        source-language="en-US" 
+        target-language="de-DE" 
+        datatype="locked">
+    <header />
+    <body>
+      <group id="89072278-2e60-4b22-bf37-693756384a8a">
+        <trans-unit id="1" sdl:conf="Draft" sdl:origin="interactive">
+          <source>In this sentence <mrk mtype="protected"><bpt id="2" equiv-text="translate">&lt;translate translate="no" &gt;</bpt>these <bpt id="3" equiv-text="b">&lt;b&gt;</bpt>words<ept id="3">&lt;/b&gt;</ept> here<ept id="2">&lt;/translate&gt;</ept></mrk> should be locked</source>
+          <target>In this target sentence <mrk mtype="protected"><bpt id="2" equiv-text="translate">&lt;translate translate="no" &gt;</bpt>these <bpt id="3" equiv-text="b">&lt;b&gt;</bpt>words<ept id="3">&lt;/b&gt;</ept> here<ept id="2">&lt;/translate&gt;</ept></mrk> should be locked</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

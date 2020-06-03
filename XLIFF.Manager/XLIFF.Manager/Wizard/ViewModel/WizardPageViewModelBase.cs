@@ -87,11 +87,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 				if (_isCurrentPage)
 				{
-					LoadPage?.Invoke(this, System.EventArgs.Empty);
+					LoadPage?.Invoke(this, EventArgs.Empty);
 				}
 				else
 				{
-					LeavePage?.Invoke(this, System.EventArgs.Empty);
+					LeavePage?.Invoke(this, EventArgs.Empty);
 				}
 			}
 		}

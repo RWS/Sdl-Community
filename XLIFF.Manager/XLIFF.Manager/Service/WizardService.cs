@@ -22,7 +22,6 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using ProjectFile = Sdl.Community.XLIFF.Manager.Model.ProjectFile;
-using Size = System.Drawing.Size;
 
 namespace Sdl.Community.XLIFF.Manager.Service
 {
@@ -44,7 +43,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 		public WizardService(Enumerators.Action action, PathInfo pathInfo, CustomerProvider customerProvider,
 			ImageService imageService, XLIFFManagerViewController xliffManagerController,
-			ProjectsController projectsController, FilesController filesController, 
+			ProjectsController projectsController, FilesController filesController,
 			SegmentBuilder segmentBuilder, IDialogService dialogService)
 		{
 			_action = action;
@@ -193,7 +192,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			{
 				projectModel.ProjectFiles = GetProjectFiles(selectedProject, projectModel, selectedFileIds);
 			}
-				
+
 			return projectModel;
 		}
 
@@ -311,9 +310,9 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			else if (_action == Enumerators.Action.Import)
 			{
 				pages.Add(new WizardPageImportFilesViewModel(_wizardWindow, new WizardPageImportFilesView(), wizardContext, _dialogService));
-				pages.Add(new WizardPageImportOptionsViewModel(_wizardWindow,new WizardPageImportOptionsView(), wizardContext));
-				pages.Add(new WizardPageImportSummaryViewModel(_wizardWindow,new WizardPageImportSummaryView(), wizardContext));
-				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow,new WizardPageImportPreparationView(), wizardContext));
+				pages.Add(new WizardPageImportOptionsViewModel(_wizardWindow, new WizardPageImportOptionsView(), wizardContext));
+				pages.Add(new WizardPageImportSummaryViewModel(_wizardWindow, new WizardPageImportSummaryView(), wizardContext));
+				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow, new WizardPageImportPreparationView(), wizardContext));
 			}
 
 			UpdatePageIndexes(pages);
@@ -364,13 +363,13 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return template;
 		}
 
-		private void ViewModel_RequestCancel(object sender, System.EventArgs e)
+		private void ViewModel_RequestCancel(object sender, EventArgs e)
 		{
 			_isCancelled = true;
 			CloseWizard();
 		}
 
-		private void ViewModel_RequestClose(object sender, System.EventArgs e)
+		private void ViewModel_RequestClose(object sender, EventArgs e)
 		{
 			CloseWizard();
 		}

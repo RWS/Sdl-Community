@@ -85,12 +85,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="TestFiles\Xliff12\Polyglot\File.sdlxliff.xliff">
+    <Content Include="TestFiles\Xliff12\Polyglot\DefaultSample.sdlxliff.xliff">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestFiles\Xliff12\Sdl\File.sdlxliff.xliff">
+    <Content Include="TestFiles\Xliff12\Sdl\DefaultSample.sdlxliff.xliff">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="TestFiles\Xliff12\Polyglot\LockedContentSample.sdlxliff.xliff" />
+    <None Include="TestFiles\Xliff12\Sdl\LockedContentSample.sdlxliff.xliff" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\..\..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />

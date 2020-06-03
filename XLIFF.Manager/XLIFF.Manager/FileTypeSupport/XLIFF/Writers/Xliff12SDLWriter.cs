@@ -360,10 +360,16 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 			if (element is ElementLocked locked)
 			{
-				writer.WriteStartElement("mrk");
-				writer.WriteAttributeString("type", "protected");
-				writer.WriteString(locked.TagContent);
-				writer.WriteEndElement();
+				switch (locked.Type)
+				{
+					case Element.TagType.OpeningTag:
+						writer.WriteStartElement("mrk");
+						writer.WriteAttributeString("mtype", "protected");
+						break;
+					case Element.TagType.ClosingTag:
+						writer.WriteEndElement();
+						break;
+				}
 			}
 
 			if (element is ElementComment comment)
