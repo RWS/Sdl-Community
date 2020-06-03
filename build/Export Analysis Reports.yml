@@ -6,6 +6,14 @@ trigger:
     include:
      - Export Analysis Reports/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Export Analysis Reports/*
+
 pool: Studio-OX
 
 variables:
