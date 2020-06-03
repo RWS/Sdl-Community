@@ -6,6 +6,14 @@ trigger:
     include:
      - StarTransit/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - StarTransit/*
+
 pool: Studio-OX
 
 variables:
