@@ -6,6 +6,14 @@ trigger:
     include:
      - Number Verifier/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Number Verifier/*
+
 pool: Studio-OX
 
 variables:
