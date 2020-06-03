@@ -6,6 +6,14 @@ trigger:
     include:
      - TMX/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TMX/*
+
 pool: Studio-OX
 
 variables:
