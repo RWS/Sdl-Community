@@ -12,9 +12,6 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.XliffCompare.sln'
-  pluginName: ''
-  artifactName: ''
 
 steps:
   - template: jobs/build-sdlplugin.yml
-#  - template: jobs/PublishBuildArtifact-task.yml
