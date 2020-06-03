@@ -6,6 +6,14 @@ trigger:
     include:
      - Code samples/CurrentProjectLangPairs/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Code samples/CurrentProjectLangPairs/*
+
 pool: Studio-OX
 
 variables:
