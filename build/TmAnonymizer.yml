@@ -6,6 +6,14 @@ trigger:
     include:
      - TmAnonymizer/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TmAnonymizer/*
+
 pool: Studio-OX
 
 variables:
