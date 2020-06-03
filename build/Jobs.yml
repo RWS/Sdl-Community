@@ -6,6 +6,14 @@ trigger:
     include:
      - Jobs/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Jobs/*
+
 pool: Studio-OX
 
 variables:
