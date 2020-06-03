@@ -4,14 +4,14 @@ trigger:
      - master
   paths:
     include:
-     - MTConnectorsGooglePlugin/*
+     - Number Verifier/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.LanguagePlatform.MTConnectors.Google.sln'
+  solution : '**/Sdl.Community.NumberVerifier.sln'
 
 steps:
   - template: jobs/build-sdlplugin.yml
