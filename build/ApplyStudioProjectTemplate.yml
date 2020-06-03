@@ -16,29 +16,5 @@ variables:
   artifactName: 'Sdl.Community.ApplyStudioProjectTemplate.sdlplugin'
 
 steps:
-- task: NuGetToolInstaller@1
-  displayName: 'Use NuGet 4.5.3'
-  inputs:
-    versionSpec: 4.5.3
-
-- task: NuGetCommand@2
-  displayName: 'NuGet restore'
-  inputs:
-    restoreSolution: '$(solution)'
-    vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
-
-- task: VSBuild@1
-  displayName: 'Build solution'
-  inputs:
-    solution: '$(solution)'
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
-    maximumCpuCount: true
-
-- task: PublishPipelineMetadata@0
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact'
-  inputs:
-    artifactName: drop
-    pathToPublish: '$(pluginName)\bin\debug\$(artifactName)'
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/PublishBuildArtifact01-task.yml
