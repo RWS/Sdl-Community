@@ -358,12 +358,12 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		
 		private void OnRequestCancel()
 		{
-			RequestCancel?.Invoke(this, System.EventArgs.Empty);
+			RequestCancel?.Invoke(this, EventArgs.Empty);
 		}
 
 		private void OnRequestClose()
 		{
-			RequestClose?.Invoke(this, System.EventArgs.Empty);
+			RequestClose?.Invoke(this, EventArgs.Empty);
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

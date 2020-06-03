@@ -3,7 +3,6 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using Sdl.Core.Globalization;
 
-
 namespace Sdl.Community.XLIFF.Manager.Service
 {
 	public class ImageService

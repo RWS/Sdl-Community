@@ -33,19 +33,29 @@ namespace XLIFF.Manager.UnitTests.Common
 			}
 		}
 
-		public string TestFilePolyglotXliff12
-		{
-			get { return Path.Combine(ProjectPath, GetTestFilePath("Xliff12", "Polyglot")); }
-		}
+		//public string TestFile01PolyglotXliff12
+		//{
+		//	get { return Path.Combine(ProjectPath, GetSampleFilePath("Xliff12", "Polyglot", "SampleFile01.sdlxliff.xliff")); }
+		//}
 
-		public string TestFileSdlXliff12
-		{
-			get { return Path.Combine(ProjectPath, GetTestFilePath("Xliff12", "Sdl")); }
-		}
+		//public string TestFile01SdlXliff12
+		//{
+		//	get { return Path.Combine(ProjectPath, GetSampleFilePath("Xliff12", "Sdl", "SampleFile01.sdlxliff.xliff")); }
+		//}
 
-		private string GetTestFilePath(string version, string support)
+		//public string TestFile02PolyglotXliff12
+		//{
+		//	get { return Path.Combine(ProjectPath, GetSampleFilePath("Xliff12", "Polyglot", "SampleFile02.sdlxliff.xliff")); }
+		//}
+
+		//public string TestFile02SdlXliff12
+		//{
+		//	get { return Path.Combine(ProjectPath, GetSampleFilePath("Xliff12", "Sdl", "SampleFile02.sdlxliff.xliff")); }
+		//}
+
+		public string GetSampleFilePath(string version, string support, string name)
 		{
-			return Path.Combine(ProjectPath, $"TestFiles\\{version}\\{support}\\File.sdlxliff.xliff");
+			return Path.Combine(ProjectPath, $"TestFiles\\{version}\\{support}\\{name}");
 		}
 	}
 }

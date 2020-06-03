@@ -217,12 +217,12 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			return outputFolder;
 		}
 
-		private void OnLoadPage(object sender, System.EventArgs e)
+		private void OnLoadPage(object sender, EventArgs e)
 		{
 			VerifyIsValid();
 		}
 
-		private void OnLeavePage(object sender, System.EventArgs e)
+		private void OnLeavePage(object sender, EventArgs e)
 		{
 			WizardContext.OutputFolder = OutputFolder;
 			WizardContext.Support = SelectedXliffSupport.SupportType;
