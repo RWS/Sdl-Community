@@ -6,6 +6,14 @@ trigger:
     include:
      - Legacy Converter/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Legacy Converter/*
+
 pool: Studio-OX
 
 variables:
