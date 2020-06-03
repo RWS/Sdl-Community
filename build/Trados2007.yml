@@ -5,7 +5,13 @@ trigger:
   paths:
     include:
      - Trados2007/*
-
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Trados2007/*
 pool: Studio-OX
 
 variables:
