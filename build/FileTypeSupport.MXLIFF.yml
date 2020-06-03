@@ -6,6 +6,14 @@ trigger:
     include:
      - FileTypeSupport.MXLIFF/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - FileTypeSupport.MXLIFF/*
+
 pool: Studio-OX
 
 variables:
