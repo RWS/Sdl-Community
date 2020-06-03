@@ -6,6 +6,14 @@ trigger:
     include:
      - InSource/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - InSource/*
+
 pool: Studio-OX
 
 variables:
