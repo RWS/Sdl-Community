@@ -6,6 +6,14 @@ trigger:
     include:
      - BringBackTheButton/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - BringBackTheButton/*
+
 pool: Studio-OX
 
 variables:
