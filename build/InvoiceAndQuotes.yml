@@ -6,6 +6,14 @@ trigger:
     include:
      - InvoiceAndQuotes/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - InvoiceAndQuotes/*
+
 pool: Studio-OX
 
 variables:
