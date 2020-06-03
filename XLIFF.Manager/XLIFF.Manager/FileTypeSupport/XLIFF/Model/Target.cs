@@ -8,5 +8,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model
 		{
 			Elements = new List<Element>();
 		}
+
+		public string Id { get; set; }
 	}
 }

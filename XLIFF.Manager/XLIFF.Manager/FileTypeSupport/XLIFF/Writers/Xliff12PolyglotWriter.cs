@@ -16,7 +16,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 		public bool WriteFile(Xliff xliff, string outputFilePath, bool includeTranslations)
 		{
-			Comments = xliff.Comments;
+			Comments = xliff.DocInfo.Comments;
 			IncludeTranslations = includeTranslations;
 
 			var settings = new XmlWriterSettings

@@ -39,7 +39,7 @@ namespace XLIFF.Manager.UnitTests.FileTypeSupport
 
 		[Theory]
 		[InlineData(Enumerators.XLIFFSupport.xliff12polyglot)]
-		//[InlineData(Enumerators.XLIFFSupport.xliff12sdl)]
+		[InlineData(Enumerators.XLIFFSupport.xliff12sdl)]
 		public void XliffReader_ReadLockedContent_ReturnsEqual(Enumerators.XLIFFSupport support)
 		{
 			// arrange

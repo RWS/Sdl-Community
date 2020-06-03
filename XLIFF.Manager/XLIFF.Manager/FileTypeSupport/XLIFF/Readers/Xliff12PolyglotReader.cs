@@ -605,10 +605,10 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 						else if (string.Compare(xmlReader.Name, "mrk", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
-							var elements1 = ReadElements(xmlReaderSub);
-							if (elements1?.Count > 0)
+							var subElements = ReadElements(xmlReaderSub);
+							if (subElements?.Count > 0)
 							{
-								elements1.AddRange(elements);
+								elements.AddRange(subElements);
 							}
 
 							xmlReaderSub.Close();
