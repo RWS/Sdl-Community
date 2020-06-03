@@ -14,7 +14,7 @@ namespace XLIFF.Manager.UnitTests
 		public ProjectsNavigationViewModelTests()
 		{
 			var pathInfo = new PathInfo();
-			var imageService = new ImageService(pathInfo);
+			var imageService = new ImageService();
 
 			_testDataUtil = new TestDataUtil(imageService);
 		}

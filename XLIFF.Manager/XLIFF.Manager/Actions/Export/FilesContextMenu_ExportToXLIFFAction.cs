@@ -50,7 +50,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 			SetFilesController();
 			_customerProvider = new CustomerProvider();
 			_pathInfo = new PathInfo();
-			_imageService = new ImageService(_pathInfo);
+			_imageService = new ImageService();
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
 

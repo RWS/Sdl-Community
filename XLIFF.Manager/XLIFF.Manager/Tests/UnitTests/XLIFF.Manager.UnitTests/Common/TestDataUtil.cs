@@ -57,8 +57,7 @@ namespace XLIFF.Manager.UnitTests.Common
 
 			var sourceLanguageInfo = new LanguageInfo();
 			sourceLanguageInfo.CultureInfo = sourceLanguage;
-			sourceLanguageInfo.ImageName = sourceLanguage.Name + ".ico";
-			sourceLanguageInfo.Image = _imageService.GetImage(sourceLanguageInfo.ImageName, new Size(24, 24));
+			sourceLanguageInfo.Image = _imageService.GetImage(sourceLanguage.Name, new Size(24, 24));
 			project.SourceLanguage = sourceLanguageInfo;
 
 			project.TargetLanguages = new List<LanguageInfo>();
@@ -66,8 +65,7 @@ namespace XLIFF.Manager.UnitTests.Common
 			{
 				var targetLanguageInfo = new LanguageInfo();
 				targetLanguageInfo.CultureInfo = targetLanguage;
-				targetLanguageInfo.ImageName = targetLanguage.Name + ".ico";
-				targetLanguageInfo.Image = _imageService.GetImage(targetLanguageInfo.ImageName, new Size(24, 24));
+				targetLanguageInfo.Image = _imageService.GetImage(targetLanguage.Name, new Size(24, 24));
 				project.TargetLanguages.Add(targetLanguageInfo);
 			}
 

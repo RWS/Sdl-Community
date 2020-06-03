@@ -163,7 +163,6 @@
     </Compile>
     <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
     <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
-    <Compile Include="Converters\CultureInfoToImageSourceConverter.cs" />
     <Compile Include="CustomEventArgs\ProjectSelectionChangedEventArgs.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\SegmentBuilder.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\ElementSegment.cs" />
@@ -222,7 +221,6 @@
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\WizardService.cs" />
-    <Compile Include="TestData\TestDataUtil.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportFilesViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportOptionsViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportPreparationViewModel.cs" />
@@ -277,7 +275,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <EmbeddedResource Include="Resources\Flags\Flags.zip" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup />
