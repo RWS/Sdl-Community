@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - MT Enhanced Provider/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.MtEnhancedProvider.sln'
+  pluginName: 'AdvancedDisplayFilter'
+  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
