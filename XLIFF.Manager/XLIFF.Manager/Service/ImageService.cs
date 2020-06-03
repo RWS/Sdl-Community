@@ -8,13 +8,12 @@ namespace Sdl.Community.XLIFF.Manager.Service
 {
 	public class ImageService
 	{
-		public BitmapImage GetImage(string name, Size imageSize)
+		public BitmapImage GetImage(string name)
 		{
 			try
 			{
 				var bitmap = new Language(name).GetFlagImage();
-
-				return Convert(bitmap, null);
+				return Convert(bitmap);
 			}
 			catch
 			{
@@ -22,7 +21,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			}
 		}
 
-		public BitmapImage Convert(object value, string imageName)
+		public BitmapImage Convert(object value)
 		{
 			if (value != null && value is Image image)
 			{

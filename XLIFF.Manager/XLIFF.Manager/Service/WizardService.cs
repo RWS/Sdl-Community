@@ -268,13 +268,13 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 		private LanguageInfo GetLanguageInfo(CultureInfo cultureInfo)
 		{
-			var sourceLanguageInfo = new LanguageInfo
+			var languageInfo = new LanguageInfo
 			{
-				CultureInfo = cultureInfo
+				CultureInfo = cultureInfo,
+				Image = _imageService.GetImage(cultureInfo.Name)
 			};
-			sourceLanguageInfo.Image = _imageService.GetImage(cultureInfo.Name, new Size(24, 24));
 
-			return sourceLanguageInfo;
+			return languageInfo;
 		}
 
 		private List<Project> GetSelectedProjects(IEnumerable<ProjectFile> selectedFiles)
