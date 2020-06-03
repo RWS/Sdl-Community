@@ -5,6 +5,13 @@ trigger:
   paths:
     include:
      - Wordfast TXML/*
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Wordfast TXML/*
 
 pool: Studio-OX
 
