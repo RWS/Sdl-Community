@@ -6,6 +6,14 @@ trigger:
     include:
      - DeepLMTProvider/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - DeepLMTProvider/*
+
 pool: Studio-OX
 
 variables:
