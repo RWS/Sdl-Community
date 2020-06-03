@@ -6,6 +6,14 @@ trigger:
     include:
      - TermInjector/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TermInjector/*
+
 pool: Studio-OX
 
 variables:
