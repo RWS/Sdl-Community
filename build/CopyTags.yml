@@ -6,6 +6,14 @@ trigger:
     include:
      - CopyTags/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - CopyTags/*
+
 pool: Studio-OX
 
 variables:
