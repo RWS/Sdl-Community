@@ -6,6 +6,14 @@ trigger:
     include:
      - FailSafeTask/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - FailSafeTask/*
+
 pool: Studio-OX
 
 variables:
