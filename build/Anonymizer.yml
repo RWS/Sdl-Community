@@ -6,6 +6,14 @@ trigger:
     include:
      - Anonymizer/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Anonymizer/*
+
 pool: Studio-OX
 
 variables:
