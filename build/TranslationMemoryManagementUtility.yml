@@ -5,7 +5,13 @@ trigger:
   paths:
     include:
      - TranslationMemoryManagementUtility/*
-
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TranslationMemoryManagementUtility/*
 pool: Studio-OX
 
 variables:
