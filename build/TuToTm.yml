@@ -5,7 +5,13 @@ trigger:
   paths:
     include:
      - TuToTm/*
-
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TuToTm/*
 pool: Studio-OX
 
 variables:
