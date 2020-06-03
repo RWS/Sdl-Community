@@ -6,6 +6,14 @@ trigger:
     include:
      - Community Wpf Helpers/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Community Wpf Helpers/*
+
 pool: Studio-OX
 
 variables:
