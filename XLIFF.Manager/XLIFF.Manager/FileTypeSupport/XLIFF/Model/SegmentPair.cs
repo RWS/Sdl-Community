@@ -1,10 +1,17 @@
-﻿using Sdl.Core.Globalization;
+﻿using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
+using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model
 {
 	public class SegmentPair
-	{
+	{		
+		public SegmentPair(SegmentBuilder segmentBuilder)
+		{
+			ConfirmationLevel = ConfirmationLevel.Unspecified;
+			TranslationOrigin = segmentBuilder.CreateTranslationOrigin;
+		}
+
 		public string Id { get; set; }
 
 		public Source Source { get; set; }

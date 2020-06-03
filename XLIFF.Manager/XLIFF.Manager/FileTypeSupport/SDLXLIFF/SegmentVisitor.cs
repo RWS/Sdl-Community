@@ -173,7 +173,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			{
 				return;
 			}
-
+			
 			var element = new ElementLocked
 			{
 				TagContent = lockedContent.ToString()

@@ -7,7 +7,15 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 {
 	public class SdlxliffReader
 	{
+		private readonly SegmentBuilder _segmentBuilder;
+
+		public SdlxliffReader(SegmentBuilder segmentBuilder)
+		{
+			_segmentBuilder = segmentBuilder;
+		}
+
 		public CultureInfo SourceLanguage { get; private set; }
+
 		public CultureInfo TargetLanguage { get; private set; }
 
 		public Xliff ReadFile(string projectId, string filePath, bool copySourceToTarget)
@@ -15,7 +23,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, null, null);
 
-			var contentProcessor = new ContentProcessor(projectId, filePath, false);
+			var contentProcessor = new ContentProcessor(projectId, filePath, false, _segmentBuilder);
 
 			if (copySourceToTarget)
 			{

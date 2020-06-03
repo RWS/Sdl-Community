@@ -1,4 +1,12 @@
-﻿namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model
+﻿using System.Collections.Generic;
+
+namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model
 {
-	public class Target: Segment {}
+	public class Target : Segment
+	{
+		public Target()
+		{
+			Elements = new List<Element>();
+		}
+	}
 }

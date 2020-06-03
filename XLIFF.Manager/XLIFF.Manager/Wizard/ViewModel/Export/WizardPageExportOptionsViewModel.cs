@@ -184,7 +184,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		{
 			var browser = new FolderBrowserDialog();
 			browser.SelectedPath = GetValidFolderPath();
-			browser.Description = "Select the output folder";
+			browser.Description = PluginResources.Message_SelectOutputFolder;
 
 			if (browser.ShowDialog() == DialogResult.OK)
 			{

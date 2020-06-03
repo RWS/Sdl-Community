@@ -1,11 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
-
-namespace Sdl.Community.XLIFF.Manager.Common
+﻿namespace Sdl.Community.XLIFF.Manager.Common
 {
 	public class Logger
 	{

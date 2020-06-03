@@ -20,8 +20,9 @@
 
 		public enum XLIFFSupport
 		{
-			xliff12sdl = 0,
-			xliff12polyglot = 1
+			none = 0,
+			xliff12sdl = 1,
+			xliff12polyglot =2
 			// TODO spport for this format will come later on in the development cycle
 			//xliff20sdl = 2
 		}

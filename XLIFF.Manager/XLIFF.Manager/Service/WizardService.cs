@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Markup;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Interfaces;
+using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Wizard.View;
 using Sdl.Community.XLIFF.Manager.Wizard.View.Export;
@@ -34,6 +35,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		private readonly FilesController _filesController;
 		private readonly XLIFFManagerViewController _xliffManagerController;
 		private readonly ImageService _imageService;
+		private readonly SegmentBuilder _segmentBuilder;
 		private WizardWindow _wizardWindow;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
 		private WizardContext _wizardContext;
@@ -42,7 +44,8 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 		public WizardService(Enumerators.Action action, PathInfo pathInfo, CustomerProvider customerProvider,
 			ImageService imageService, XLIFFManagerViewController xliffManagerController,
-			ProjectsController projectsController, FilesController filesController, IDialogService dialogService)
+			ProjectsController projectsController, FilesController filesController, 
+			SegmentBuilder segmentBuilder, IDialogService dialogService)
 		{
 			_action = action;
 			_pathInfo = pathInfo;
@@ -52,6 +55,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			_projectsController = projectsController;
 			_filesController = filesController;
 			_dialogService = dialogService;
+			_segmentBuilder = segmentBuilder;
 		}
 
 		public WizardContext ShowWizard(AbstractController controller, out string message)
@@ -303,7 +307,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				pages.Add(new WizardPageExportFilesViewModel(_wizardWindow, new WizardPageExportFilesView(), wizardContext));
 				pages.Add(new WizardPageExportOptionsViewModel(_wizardWindow, new WizardPageExportOptionsView(), wizardContext));
 				pages.Add(new WizardPageExportSummaryViewModel(_wizardWindow, new WizardPageExportSummaryView(), wizardContext));
-				pages.Add(new WizardPageExportPreparationViewModel(_wizardWindow, new WizardPageExportPreparationView(), wizardContext));
+				pages.Add(new WizardPageExportPreparationViewModel(_wizardWindow, new WizardPageExportPreparationView(), wizardContext, _segmentBuilder));
 			}
 			else if (_action == Enumerators.Action.Import)
 			{

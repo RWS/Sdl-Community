@@ -12,6 +12,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 {
 	internal class ContentProcessor : IBilingualContentProcessor
 	{
+		private readonly SegmentBuilder _segmentBuilder;
 		private readonly bool _ignoreTags;
 		private readonly string _inputPath;
 		private readonly string _projectId;
@@ -19,12 +20,13 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
 		private SegmentVisitor _segmentVisitor;
-
-		internal ContentProcessor(string projectId, string inputPath, bool ignoreTags)
+		
+		internal ContentProcessor(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder)
 		{
 			_projectId = projectId;
 			_inputPath = inputPath;
 			_ignoreTags = ignoreTags;
+			_segmentBuilder = segmentBuilder;
 
 			Xliff = new Xliff();
 		}
@@ -142,7 +144,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					}
 				}
 
-				transUnit.SegmentPairs.Add(new SegmentPair
+				transUnit.SegmentPairs.Add(new SegmentPair(_segmentBuilder)
 				{
 					Id = segmentPair.Properties.Id.Id,
 					Source = new Source { Elements = sourceElements },

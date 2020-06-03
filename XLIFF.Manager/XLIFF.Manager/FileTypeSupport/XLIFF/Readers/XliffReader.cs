@@ -1,23 +1,46 @@
 ﻿using Sdl.Community.XLIFF.Manager.Common;
+using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
+using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 
 namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 {
-	public class XliffReder: IXliffReader
+	public class XliffReder : IXliffReader
 	{
-		private readonly IXliffReader _reader;
-		
-		public XliffReder(Enumerators.XLIFFSupport support)
+		private readonly SegmentBuilder _segmentBuilder;
+		private readonly XliffSupportSniffer _xliffSupportSniffer;
+		private IXliffReader _reader;
+
+		public XliffReder(XliffSupportSniffer xliffSupportSniffer, SegmentBuilder segmentBuilder)
+		{
+			_xliffSupportSniffer = xliffSupportSniffer;
+			_segmentBuilder = segmentBuilder;
+		}
+
+		public Xliff ReadXliff(string filePath)
+		{	
+			var support = _xliffSupportSniffer.GetXliffSupport(filePath);
+			if (support == Enumerators.XLIFFSupport.none)
+			{
+				return null;
+			}
+			
+			_reader = GetXliffReader(support);
+
+			return _reader?.ReadXliff(filePath);
+		}
+
+		private IXliffReader GetXliffReader(Enumerators.XLIFFSupport support)
 		{
 			switch (support)
 			{
 				case Enumerators.XLIFFSupport.xliff12polyglot:
-					_reader = new Xliff12PolyglotReader();
-					break;
+					return new Xliff12PolyglotReader(_segmentBuilder);
 				case Enumerators.XLIFFSupport.xliff12sdl:
-					_reader = new Xliff12SDLReader();
-					break;
+					return new Xliff12SdlReader(_segmentBuilder);				
+				default:
+					return null;
 			}
-		}		
+		}
 	}
 }

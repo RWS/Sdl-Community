@@ -325,4 +325,7 @@
   <data name="FolderDialog_Title" xml:space="preserve">
     <value>Please select a folder</value>
   </data>
+	<data name="Message_SelectOutputFolder" xml:space="preserve">
+    <value>Select the output folder</value>
+  </data>
 </root>

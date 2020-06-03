@@ -2,6 +2,7 @@
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.CustomEventArgs;
 using Sdl.Community.XLIFF.Manager.Interfaces;
+using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -22,13 +23,14 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Import
 		private CustomerProvider _customerProvider;
 		private PathInfo _pathInfo;
 		private ImageService _imageService;
+		private SegmentBuilder _segmentBuilder;
 		private IDialogService _dialogService;
-
 
 		protected override void Execute()
 		{
 			var wizardService = new WizardService(Enumerators.Action.Import, _pathInfo, _customerProvider,
-				_imageService, _xliffManagerController, _projectsController, _filesController,_dialogService);
+				_imageService, _xliffManagerController, _projectsController, _filesController,
+				_segmentBuilder, _dialogService);
 			var wizardContext = wizardService.ShowWizard(_xliffManagerController, out var message);
 			if (wizardContext == null && !string.IsNullOrEmpty(message))
 			{
@@ -48,6 +50,8 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Import
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService(_pathInfo);
 			_dialogService = new DialogService();
+			_segmentBuilder = new SegmentBuilder();
+
 			Enabled = true;
 		}
 
