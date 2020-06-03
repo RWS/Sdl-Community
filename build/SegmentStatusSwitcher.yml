@@ -11,7 +11,7 @@ pool: Studio-OX
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Studio.SegmentStatusSwitcher.sln'
+  solution : '**/Sdl.Community.SegmentStatusSwitcher.sln'
   pluginName: 'TAUS Data Search/Sdl.Community.Taus.Translation.Provider'
   artifactName: 'Sdl.Community.Taus.Translation.Provider.sdlplugin'
 
