@@ -5,7 +5,13 @@ trigger:
   paths:
     include:
      - YourProductivity/*
-
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - YourProductivity/*
 pool: Studio-OX
 
 variables:
