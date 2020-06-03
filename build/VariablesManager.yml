@@ -16,7 +16,7 @@ variables:
   artifactName: 'VariablesManager.sdlplugin'
 
 steps:
-  - template: jobs/build-sdlplugin-without-PublishBuildArtifacts-task.yml
+  - template: jobs/build-sdlplugin.yml
 
   - task:  PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
