@@ -1,0 +1,20 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - StarTransit/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.StarTransit.sln'
+  pluginName: 'TAUS Data Search/Sdl.Community.Taus.Translation.Provider'
+  artifactName: 'Sdl.Community.Taus.Translation.Provider.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+ # - template: jobs/PublishBuildArtifact-task.yml
