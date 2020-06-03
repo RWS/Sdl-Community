@@ -6,6 +6,14 @@ trigger:
     include:
      - Code samples/DeleteGSOrganization/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Code samples/DeleteGSOrganization/*
+
 pool: Studio-OX
 
 variables:
