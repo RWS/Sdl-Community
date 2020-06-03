@@ -6,6 +6,14 @@ trigger:
     include:
      - TQA/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TQA/*
+
 pool: Studio-OX
 
 variables:
