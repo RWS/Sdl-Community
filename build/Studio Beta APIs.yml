@@ -6,6 +6,14 @@ trigger:
     include:
      - Studio Beta APIs/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Studio Beta APIs/*
+
 pool: Studio-OX
 
 variables:
