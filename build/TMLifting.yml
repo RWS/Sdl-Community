@@ -6,6 +6,14 @@ trigger:
     include:
      - TMLifting/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TMLifting/*
+
 pool: Studio-OX
 
 variables:
