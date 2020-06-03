@@ -6,6 +6,14 @@ trigger:
     include:
      - Legit/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Legit/*
+
 pool: Studio-OX
 
 variables:
