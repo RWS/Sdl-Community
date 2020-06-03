@@ -6,6 +6,14 @@ trigger:
     include:
      - Export to Excel/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Export to Excel/*
+
 pool: Studio-OX
 
 variables:
