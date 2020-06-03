@@ -6,6 +6,14 @@ trigger:
     include:
      - TM Optimizer/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TM Optimizer/*
+
 pool: Studio-OX
 
 variables:
