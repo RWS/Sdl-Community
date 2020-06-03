@@ -6,6 +6,14 @@ trigger:
     include:
      - IATETerminologyProvider/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - IATETerminologyProvider/*
+
 pool: Studio-OX
 
 variables:
