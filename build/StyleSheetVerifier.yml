@@ -6,6 +6,14 @@ trigger:
     include:
      - StyleSheetVerifier/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - StyleSheetVerifier/*
+
 pool: Studio-OX
 
 variables:
