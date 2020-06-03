@@ -6,6 +6,14 @@ trigger:
     include:
      - SdlCommunityUnitTest/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SdlCommunityUnitTest/*
+
 pool: Studio-OX
 
 variables:
