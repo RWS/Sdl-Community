@@ -270,10 +270,9 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		{
 			var sourceLanguageInfo = new LanguageInfo
 			{
-				CultureInfo = cultureInfo,
-				ImageName = cultureInfo.Name + ".ico"
+				CultureInfo = cultureInfo
 			};
-			sourceLanguageInfo.Image = _imageService.GetImage(sourceLanguageInfo.ImageName, new Size(24, 24));
+			sourceLanguageInfo.Image = _imageService.GetImage(cultureInfo.Name, new Size(24, 24));
 
 			return sourceLanguageInfo;
 		}

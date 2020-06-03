@@ -19,8 +19,8 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
-			
-			<converters:CultureInfoToImageSourceConverter x:Key="CultureInfoNameToImageSourceConverter"/>
+
+			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageSourceConverter"/>
 			<converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter"/>
 			
 			<CollectionViewSource x:Key="ProjectFiles" Source="{Binding ProjectFiles}">

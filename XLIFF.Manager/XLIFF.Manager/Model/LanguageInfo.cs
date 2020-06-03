@@ -8,9 +8,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 	{
 		public CultureInfo CultureInfo { get; set; }
 
-		public BitmapImage Image { get; set; }
-
-		public string ImageName { get; set; }
+		public BitmapImage Image { get; set; }		
 
 		public override string ToString()
 		{
@@ -22,8 +20,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			var model = new LanguageInfo
 			{
 				CultureInfo = CultureInfo.Clone() as CultureInfo,
-				Image = Image.Clone(),
-				ImageName = ImageName
+				Image = Image.Clone()
 			};
 			return model;
 		}

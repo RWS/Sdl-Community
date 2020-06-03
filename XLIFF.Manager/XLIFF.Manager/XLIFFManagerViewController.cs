@@ -41,8 +41,7 @@ namespace Sdl.Community.XLIFF.Manager
 		protected override void Initialize(IViewContext context)
 		{
 			_pathInfo = new PathInfo();
-			_imageService = new ImageService(_pathInfo);
-			_imageService.ExtractFlags();
+			_imageService = new ImageService();
 
 			ActivationChanged += OnActivationChanged;
 
