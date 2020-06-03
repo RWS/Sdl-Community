@@ -6,6 +6,14 @@ trigger:
     include:
      - Code samples/Create ServerTm/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Code samples/Create ServerTm/*
+
 pool: Studio-OX
 
 variables:
