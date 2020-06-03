@@ -12,9 +12,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/SDL.Community.BetaAPIs.sln'
-  pluginName: 'TAUS Data Search/Sdl.Community.Taus.Translation.Provider'
-  artifactName: 'Sdl.Community.Taus.Translation.Provider.sdlplugin'
+  pluginName: 'Studio Beta APIs\SDL.Community.BetaAPIs\Sdl.Community.BetaAPIs.UI'
+  artifactName: 'Sdl.Community.BetaAPIs.UI.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
- # - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/PublishBuildArtifact-task.yml
