@@ -4,7 +4,15 @@ trigger:
      - master
   paths:
     include:
-     - Code samples/*
+     - '**/Code samples/*/*.sln'
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - '**/Code samples/*/*.sln'
 
 pool: Studio-OX
 
