@@ -6,6 +6,14 @@ trigger:
     include:
      - Antidote Verifier/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Antidote Verifier/*
+
 pool: Studio-OX
 
 variables:
