@@ -12,8 +12,6 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.NumberVerifier.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
