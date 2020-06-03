@@ -6,6 +6,14 @@ trigger:
     include:
      - MT Enhanced Provider/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - MT Enhanced Provider/*
+
 pool: Studio-OX
 
 variables:
