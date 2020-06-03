@@ -22,7 +22,7 @@ namespace Sdl.Community.XLIFF.Manager.Converters
 				return null;
 			}
 
-			var bitmap = _imageService.GetImage((string)value, new Size(24, 24));
+			var bitmap = _imageService.GetImage((string)value);
 			return bitmap;
 		}
 

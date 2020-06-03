@@ -55,17 +55,21 @@ namespace XLIFF.Manager.UnitTests.Common
 				ProjectFiles = new List<ProjectFile>()
 			};
 
-			var sourceLanguageInfo = new LanguageInfo();
-			sourceLanguageInfo.CultureInfo = sourceLanguage;
-			sourceLanguageInfo.Image = _imageService.GetImage(sourceLanguage.Name, new Size(24, 24));
+			var sourceLanguageInfo = new LanguageInfo
+			{
+				CultureInfo = sourceLanguage,
+				Image = _imageService.GetImage(sourceLanguage.Name)
+			};
 			project.SourceLanguage = sourceLanguageInfo;
 
 			project.TargetLanguages = new List<LanguageInfo>();
 			foreach (var targetLanguage in targetLanguages)
 			{
-				var targetLanguageInfo = new LanguageInfo();
-				targetLanguageInfo.CultureInfo = targetLanguage;
-				targetLanguageInfo.Image = _imageService.GetImage(targetLanguage.Name, new Size(24, 24));
+				var targetLanguageInfo = new LanguageInfo
+				{
+					CultureInfo = targetLanguage,
+					Image = _imageService.GetImage(targetLanguage.Name)
+				};
 				project.TargetLanguages.Add(targetLanguageInfo);
 			}
 
