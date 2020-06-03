@@ -6,6 +6,14 @@ trigger:
     include:
      - SdlFreshstart/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SdlFreshstart/*
+
 pool: Studio-OX
 
 variables:
