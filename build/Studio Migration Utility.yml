@@ -6,6 +6,14 @@ trigger:
     include:
      - Studio Migration Utility/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Studio Migration Utility/*
+
 pool: Studio-OX
 
 variables:
