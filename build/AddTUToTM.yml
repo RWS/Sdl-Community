@@ -6,6 +6,14 @@ trigger:
     include:
      - Code samples/AddTUToTM/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Code samples/AddTUToTM/*
+
 pool: Studio-OX
 
 variables:
