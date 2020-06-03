@@ -6,6 +6,14 @@ trigger:
     include:
      - MTConnectorsGooglePlugin/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - MTConnectorsGooglePlugin/*
+
 pool: Studio-OX
 
 variables:
