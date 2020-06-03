@@ -6,6 +6,14 @@ trigger:
     include:
      - Toolkit/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Toolkit/*
+
 pool: Studio-OX
 
 variables:
