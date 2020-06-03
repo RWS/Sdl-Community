@@ -9,6 +9,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		private DateTime _date;
 		private bool _selected;
 		private string _path;
+		private string _importedFilePath;
 		private Enumerators.Status _status;
 
 		public ProjectFile()
@@ -72,6 +73,17 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 				_path = value;
 				OnPropertyChanged(nameof(Path));
+			}
+		}
+
+		public string ImportedFilePath
+		{
+			get => _importedFilePath;
+			set
+			{
+				if (_importedFilePath == value) return;
+				_importedFilePath = value;
+				OnPropertyChanged(nameof(ImportedFilePath));
 			}
 		}
 
