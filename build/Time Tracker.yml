@@ -6,6 +6,14 @@ trigger:
     include:
      - Time Tracker/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Time Tracker/*
+
 pool: Studio-OX
 
 variables:
