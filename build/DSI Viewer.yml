@@ -6,6 +6,14 @@ trigger:
     include:
      - DSI Viewer/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - DSI Viewer/*
+
 pool: Studio-OX
 
 variables:
