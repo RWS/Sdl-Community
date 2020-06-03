@@ -7,6 +7,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Commands;
+using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
+using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
 
@@ -17,25 +19,26 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private ICommand _addFolderCommand;
 		private ICommand _addFilesCommand;
 		private ICommand _checkAllCommand;
+		private ICommand _dragDropCommand;
 		private IList _selectedProjectFiles;
 		private readonly IDialogService _dialogService;
 		private List<ProjectFile> _projectFiles;
 		private bool _checkedAll;
 		private bool _checkingAllAction;
-		private ICommand _dragDropCommand;
 
-
-		public WizardPageImportFilesViewModel(Window owner, object view, WizardContext wizardContext,IDialogService dialogService) : base(owner, view, wizardContext)
+		public WizardPageImportFilesViewModel(Window owner, object view, WizardContext wizardContext,
+			IDialogService dialogService) : base(owner, view, wizardContext)
 		{
 			_dialogService = dialogService;
 			ProjectFiles = wizardContext.ProjectFiles;
 
-			IsValid = true; //TODO remove this. Used to testing porpouse only
+			LoadPage += OnLoadPage;
 		}
 
 		public ICommand AddFolderCommand => _addFolderCommand ?? (_addFolderCommand = new RelayCommand(SelectFolder));
 		public ICommand AddFilesCommand => _addFilesCommand ?? (_addFilesCommand = new RelayCommand(AddFiles));
 		public ICommand CheckAllCommand => _checkAllCommand ?? (_checkAllCommand = new RelayCommand(CheckAll));
+		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragAndDrop));
 
 		public IList SelectedProjectFiles
 		{
@@ -92,11 +95,20 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				return message;
 			}
 		}
+		public override string DisplayName => PluginResources.PageName_Files;
+		public override bool IsValid { get; set; }
+
+		public void VerifyIsValid()
+		{
+			IsValid = ProjectFiles.Count(a => a.Selected) > 0; //TODO: We also need to verify it checked file has an xliff file added for import
+		}
 
 		private void AddFiles()
 		{
 			var selectedFiles = _dialogService.ShowFileDialog("Xliff (*.xliff) |*.xliff", PluginResources.FilesDialog_Title);
+			AddFilesToGrid(selectedFiles);
 		}
+
 		private void UpdateCheckAll()
 		{
 			CheckedAll = ProjectFiles.Count == ProjectFiles.Count(a => a.Selected);
@@ -115,6 +127,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					file.Selected = value;
 				}
 
+				VerifyIsValid();
 				OnPropertyChanged(nameof(CheckedAll));
 				OnPropertyChanged(nameof(StatusLabel));
 			}
@@ -123,14 +136,20 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				_checkingAllAction = false;
 			}
 		}
+
 		private void ProjectFile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			if (!_checkingAllAction && e.PropertyName == nameof(ProjectFile.Selected))
 			{
 				UpdateCheckAll();
 			}
+			VerifyIsValid();
 		}
-		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragAndDrop));
+		private void OnLoadPage(object sender, EventArgs e)
+		{
+			UpdateCheckAll();
+			VerifyIsValid();
+		}
 
 		private void DragAndDrop(object parameter)
 		{
@@ -144,12 +163,33 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					var fileAttributes = File.GetAttributes(fullPath);
 					if (fileAttributes.HasFlag(FileAttributes.Directory))
 					{
-						//TODO:Add the files to grid
 						var files = GetAllXliffsFromDirectory(fullPath);
+						AddFilesToGrid(files);
 					}
 					//is file
-					//TODO:Add the file to grid
+					AddFilesToGrid(new List<string>{fullPath});
+				}
+			}
+		}
 
+		private void AddFilesToGrid(List<string> filesPath)
+		{
+			//TODO: Check if the file type is correct (polyglot, xlf)
+
+			//BUG if we add files and click on cancel, and select import the added files column is populated with the files added before
+			//TODO: If user close the import wizard/cancel -> remove added files
+			var sniffer = new XliffSupportSniffer();
+			var segmentBuilder = new SegmentBuilder();
+			var xliffReader = new XliffReder(sniffer, segmentBuilder);
+			foreach (var filePath in filesPath)
+			{
+				var reader = xliffReader.ReadXliff(filePath);
+
+				var correspondingFile = ProjectFiles.FirstOrDefault(p =>
+					p.Location.Equals(reader.DocInfo.Source) && p.TargetLanguage.CultureInfo.Name.Equals(reader.DocInfo.TargetLanguage));
+				if (correspondingFile != null)
+				{
+					correspondingFile.ImportedFilePath = filePath;
 				}
 			}
 		}
@@ -163,13 +203,21 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private void SelectFolder()
 		{
 			var folderPath = _dialogService.ShowFolderDialog(PluginResources.FolderDialog_Title);
+			var files = GetAllXliffsFromDirectory(folderPath);
+			AddFilesToGrid(files);
 		}
-		
-		public override string DisplayName => PluginResources.PageName_Files;
-		public override bool IsValid { get; set; }
 
 		public void Dispose()
 		{
+			if (ProjectFiles != null)
+			{
+				foreach (var projectFile in ProjectFiles)
+				{
+					projectFile.PropertyChanged -= ProjectFile_PropertyChanged;
+				}
+			}
+
+			LoadPage -= OnLoadPage;
 		}
 	}
 }
