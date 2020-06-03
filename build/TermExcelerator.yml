@@ -6,6 +6,14 @@ trigger:
     include:
      - TermExcelerator/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TermExcelerator/*
+
 pool: Studio-OX
 
 variables:
