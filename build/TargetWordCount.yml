@@ -6,6 +6,14 @@ trigger:
     include:
      - TargetWordCount/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TargetWordCount/*
+
 pool: Studio-OX
 
 variables:
