@@ -6,6 +6,14 @@ trigger:
     include:
      - TAUS Data Search/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TAUS Data Search/*
+
 pool: Studio-OX
 
 variables:
