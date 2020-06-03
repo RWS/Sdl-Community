@@ -6,6 +6,14 @@ trigger:
     include:
      - TMBackup/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TMBackup/*
+
 pool: Studio-OX
 
 variables:
