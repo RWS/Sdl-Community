@@ -12,9 +12,13 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.StudioMigrationUtility.sln'
-  pluginName: 'TAUS Data Search/Sdl.Community.Taus.Translation.Provider'
-  artifactName: 'Sdl.Community.Taus.Translation.Provider.sdlplugin'
+  pluginName: 'Studio Migration Utility\Sdl.Community.StudioMigrationUtility'
+  artifactName: 'Sdl.Community.StudioMigrationUtility.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
- # - template: jobs/PublishBuildArtifact-task.yml
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+     artifactName: drop
+     pathToPublish: '$(pluginName)\bin\Debug\$(artifactName)'
