@@ -16,7 +16,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 		public bool WriteFile(Xliff xliff, string outputFilePath, bool includeTranslations)
 		{
-			Comments = xliff.Comments;
+			Comments = xliff.DocInfo.Comments;
 			IncludeTranslations = includeTranslations;
 
 			var settings = new XmlWriterSettings
@@ -84,7 +84,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 		private void WriteCommentDefinitions(Xliff xliff, XmlWriter writer)
 		{
 			writer.WriteStartElement("sdl", "cmt-defs", null);
-			foreach (var comments in xliff.Comments)
+			foreach (var comments in xliff.DocInfo.Comments)
 			{
 				WriteCommentDefinition(writer, comments);
 			}

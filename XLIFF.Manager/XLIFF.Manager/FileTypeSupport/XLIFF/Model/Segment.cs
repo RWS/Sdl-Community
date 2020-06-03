@@ -4,6 +4,6 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model
 {
 	public abstract class Segment
 	{	
-		public List<Element> Elements { get; set; }
+		public List<Element> Elements { get; set; }		
 	}
 }

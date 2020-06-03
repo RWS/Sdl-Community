@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Sdl.Community.XLIFF.Manager.Common;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model
 {
@@ -10,8 +9,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model
 		public Xliff()
 		{
 			DocInfo = new DocInfo();
-			Files = new List<File>();
-			Comments = new Dictionary<string, List<IComment>>();
+			Files = new List<File>();			
 			Version = "1.2";
 		}
 
@@ -23,8 +21,6 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model
 
 		public Enumerators.XLIFFSupport Support { get; set; }
 
-		public List<File> Files { get; set; }
-
-		public Dictionary<string, List<IComment>> Comments { get; set; }
+		public List<File> Files { get; set; }		
 	}
 }

@@ -9,7 +9,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model
 		public SegmentPair(SegmentBuilder segmentBuilder)
 		{
 			ConfirmationLevel = ConfirmationLevel.Unspecified;
-			TranslationOrigin = segmentBuilder.CreateTranslationOrigin;
+			TranslationOrigin = segmentBuilder.CreateTranslationOrigin();
+			Source = new Source();
+			Target = new Target();
 		}
 
 		public string Id { get; set; }

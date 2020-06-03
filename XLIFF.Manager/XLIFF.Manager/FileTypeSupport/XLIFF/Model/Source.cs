@@ -6,7 +6,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model
 	{
 		public Source()
 		{
-			Elements = new List<Element>();
+			Elements = new List<Element>();			
 		}
+
+		public string Id { get; set; }
 	}
 }

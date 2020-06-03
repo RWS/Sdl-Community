@@ -124,9 +124,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				{
 					foreach (var comment in SegmentVisitor.Comments)
 					{
-						if (!Xliff.Comments.ContainsKey(comment.Key))
+						if (!Xliff.DocInfo.Comments.ContainsKey(comment.Key))
 						{
-							Xliff.Comments.Add(comment.Key, comment.Value);
+							Xliff.DocInfo.Comments.Add(comment.Key, comment.Value);
 						}
 					}					
 				}
@@ -137,9 +137,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				{
 					foreach (var comment in SegmentVisitor.Comments)
 					{
-						if (!Xliff.Comments.ContainsKey(comment.Key))
+						if (!Xliff.DocInfo.Comments.ContainsKey(comment.Key))
 						{
-							Xliff.Comments.Add(comment.Key, comment.Value);
+							Xliff.DocInfo.Comments.Add(comment.Key, comment.Value);
 						}
 					}
 				}
