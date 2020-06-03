@@ -6,6 +6,14 @@ trigger:
     include:
      - SpotCheck/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SpotCheck/*
+
 pool: Studio-OX
 
 variables:
