@@ -5,7 +5,13 @@ trigger:
   paths:
     include:
      - Word Cloud/*
-
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Word Cloud/*
 pool: Studio-OX
 
 variables:
