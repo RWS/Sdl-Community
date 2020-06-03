@@ -1,0 +1,20 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - InvoiceAndQuotes/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.InvoiceAndQuotes.sln'
+  pluginName: 'InvoiceAndQuotes\Sdl.Community.InvoiceAndQuotes.Integration'
+  artifactName: 'Sdl.Community.InvoiceAndQuotes.Integration.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/PublishBuildArtifact-task.yml

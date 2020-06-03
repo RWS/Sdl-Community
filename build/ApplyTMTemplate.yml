@@ -1,0 +1,20 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ApplyTMTemplate/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.ApplyTMTemplate.sln'
+  pluginName: 'ApplyTMTemplate\Sdl.Community.ApplyTMTemplate'
+  artifactName: 'Sdl.Community.ApplyTMTemplate.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/PublishBuildArtifact-task.yml

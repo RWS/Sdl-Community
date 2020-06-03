@@ -1,0 +1,20 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Legit/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.CommunityLegit.sln'
+  pluginName: 'Legit\Sdl.Community.Legit'
+  artifactName: 'Sdl.Community.LegIt.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/PublishBuildArtifact-task.yml

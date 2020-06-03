@@ -1,0 +1,24 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Studio Migration Utility/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.StudioMigrationUtility.sln'
+  pluginName: 'Studio Migration Utility\Sdl.Community.StudioMigrationUtility'
+  artifactName: 'Sdl.Community.StudioMigrationUtility.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+     artifactName: drop
+     pathToPublish: '$(pluginName)\bin\Debug\$(artifactName)'

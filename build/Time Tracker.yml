@@ -1,0 +1,20 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Time Tracker/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.Studio.Time.Tracker.sln'
+  pluginName: 'Time Tracker'
+  artifactName: 'Sdl.Community.Studio.Time.Tracker.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/PublishBuildArtifact-task.yml

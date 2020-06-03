@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - XLIFF.Manager/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/XLIFF.Manager.sln'
+  pluginName: 'XLIFF.Manager/XLIFF.Manager'
+  artifactName: 'Sdl.Community.XLIFF.Manager.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

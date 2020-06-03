@@ -1,0 +1,17 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - MTConnectorsGooglePlugin/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.LanguagePlatform.MTConnectors.Google.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

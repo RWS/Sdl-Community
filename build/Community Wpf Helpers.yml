@@ -1,0 +1,17 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Community Wpf Helpers/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.CommunityWpfHelpers.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

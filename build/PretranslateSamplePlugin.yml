@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Code samples/PretranslateSamplePlugin/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/PretranslateSamplePlugin.sln'
+  pluginName: 'Code samples\PretranslateSamplePlugin'
+  artifactName: 'PretranslateSamplePlugin.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

@@ -1,0 +1,17 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SdlFreshstart/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.SdlFreshstart.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

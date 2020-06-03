@@ -1,0 +1,17 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - GroupShareKitFieldTemplateExample/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/GroupShareKitFieldTemplateExample.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

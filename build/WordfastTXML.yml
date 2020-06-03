@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Wordfast TXML/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.FileTypeSupport.TXML.sln'
+  pluginName: 'Wordfast TXML'
+  artifactName: 'Sdl.Community.FileType.TXML.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
