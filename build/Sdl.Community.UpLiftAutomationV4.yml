@@ -1,0 +1,28 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Sdl.Community.UpLiftAutomationV4/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Sdl.Community.UpLiftAutomationV4/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.FragmentAlignmentAutomation.sln'
+  pluginName: ''
+  artifactName: ''
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+#  - template: jobs/PublishBuildArtifact-task.yml
