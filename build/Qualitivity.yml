@@ -1,0 +1,28 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Qualitivity/Sdl.Community.Qualitivity/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Qualitivity/Sdl.Community.Qualitivity/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.Qualitivity.sln'
+  pluginName: ''
+  artifactName: ''
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+#  - template: jobs/PublishBuildArtifact-task.yml
