@@ -14,7 +14,7 @@ pr:
     include:
      - ProjectTerms/*
 
-pool: Itdevops2
+pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
