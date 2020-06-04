@@ -1,0 +1,28 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Sdl.Community.PostEdit.Compare.DAL/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLXLIFFSplitMerge/*
+
+pool: mypool
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/SDLXLIFFSplitMerge.sln'
+  pluginName: ''
+  artifactName: ''
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+#  - template: jobs/PublishBuildArtifact-task.yml
