@@ -14,7 +14,7 @@ pr:
     include:
      - Post Edit Compare/*
 
-pool: Itdevops2
+pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
