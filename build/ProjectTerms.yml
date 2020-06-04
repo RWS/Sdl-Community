@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ProjectTerms/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ProjectTerms/*
+
+pool: Itdevops2
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.ProjectTerms.sln'
+  pluginName: ''
+  artifactName: ''
+
+steps:
+  - template: jobs/build-sdlplugin.yml
