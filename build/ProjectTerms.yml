@@ -20,8 +20,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.ProjectTerms.sln'
-  pluginName: ''
-  artifactName: ''
+  pluginName: 'ProjectTerms\Sdl.Community.ProjectTerms.Plugin'
+  artifactName: 'Sdl.Community.projectTermExtract.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/PublishBuildArtifact-task.yml
