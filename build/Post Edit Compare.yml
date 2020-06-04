@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Post Edit Compare/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Post Edit Compare/*
+
+pool: Itdevops2
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.PostEdit.Versions.sln'
+  pluginName: 'AdvancedDisplayFilter'
+  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
