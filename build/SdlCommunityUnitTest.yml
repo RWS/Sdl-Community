@@ -14,7 +14,7 @@ pr:
     include:
      - SdlCommunityUnitTest/*
 
-pool: Studio-OX
+pool: mypool
 
 variables:
   buildPlatform: 'Any CPU'
