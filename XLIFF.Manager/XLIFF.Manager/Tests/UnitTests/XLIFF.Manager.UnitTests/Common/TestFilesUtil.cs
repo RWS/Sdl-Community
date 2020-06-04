@@ -57,5 +57,10 @@ namespace XLIFF.Manager.UnitTests.Common
 		{
 			return Path.Combine(ProjectPath, $"TestFiles\\{version}\\{support}\\{name}");
 		}
+
+		public string GetSampleFilePath(string support, string name)
+		{
+			return Path.Combine(ProjectPath, $"TestFiles\\{support}\\{name}");
+		}
 	}
 }

@@ -196,11 +196,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 		private void WriteSegmentPolyglot(XmlWriter writer, SegmentPair segmentPair, bool isSource)
 		{
 			writer.WriteStartElement(isSource ? "source" : "target");
-			if (segmentPair.IsLocked)
-			{
-				writer.WriteStartElement("mrk");
-				writer.WriteAttributeString("mtype", "protected");
-			}
+			//if (segmentPair.IsLocked)
+			//{
+			//	writer.WriteStartElement("mrk");
+			//	writer.WriteAttributeString("mtype", "protected");
+			//}
 
 			var elements = isSource ? segmentPair.Source.Elements : segmentPair.Target.Elements;
 
@@ -209,10 +209,10 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 				WriteSegment(writer, element);
 			}
 
-			if (segmentPair.IsLocked)
-			{
-				writer.WriteEndElement(); // mrk
-			}
+			//if (segmentPair.IsLocked)
+			//{
+			//	writer.WriteEndElement(); // mrk
+			//}
 
 			writer.WriteEndElement(); // source or target
 		}

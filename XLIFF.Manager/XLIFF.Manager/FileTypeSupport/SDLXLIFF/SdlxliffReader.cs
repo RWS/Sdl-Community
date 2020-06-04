@@ -23,27 +23,22 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, null, null);
 
-			var contentProcessor = new ContentProcessor(projectId, filePath, false, _segmentBuilder);
+			var contentReader = new ContentReader(projectId, filePath, false, _segmentBuilder);
 
 			if (copySourceToTarget)
 			{
 				converter.AddBilingualProcessor(new SourceToTargetCopier(ExistingContentHandling.Preserve));
 			}
 
-			converter.AddBilingualProcessor(contentProcessor);
-
-			SourceLanguage = contentProcessor.SourceLanguage;
-			TargetLanguage = contentProcessor.TargetLanguage;
-
-			converter.Progress += Converter_Progress;
-			converter.Parse();
-
-			return contentProcessor.Xliff;
-		}
-
-		private void Converter_Progress(object sender, Sdl.FileTypeSupport.Framework.IntegrationApi.BatchProgressEventArgs e)
-		{
+			converter.AddBilingualProcessor(contentReader);
 			
+
+			SourceLanguage = contentReader.SourceLanguage;
+			TargetLanguage = contentReader.TargetLanguage;
+			
+
+			converter.Parse();
+			return contentReader.Xliff;
 		}
 	}
 }

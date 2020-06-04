@@ -1,0 +1,68 @@
+﻿<xliff version="1.2" xmlns:sdl="http://schemas.sdl.com/xliff" sdl:support="xliff12polyglot" sdl:version="1.2.1">
+  <sdl:doc-info project-id="b749b4a8-7337-4523-a85c-f82db881c203" source="C:\Code\GoogleProject\SDL\Projects\QuotesSample\it-IT\QuotesSample.docx.sdlxliff" source-language="en-US" target-language="it-IT" created="2020-06-04T09:39:14.595Z" />
+  <file original="C:\Code\GoogleProject\SDL\Projects\QuotesSample\en-US\QuotesSample.docx" source-language="en-US" target-language="it-IT" datatype="WordprocessingML v. 2">
+    <header />
+    <body>
+      <group id="5dfc3a76-8843-414b-83e6-04f8d8599492">
+        <trans-unit id="1" sdl:conf="Draft" sdl:origin="mt" sdl:origin-system="SDL Machine Translation">
+          <note sdl:id="9f002e8c-3a1e-4164-a0ef-b28442827b3e" sdl:version="1.0" sdl:date="2020-02-25T09:34:00.513Z" from="phartnett" priority="1" annotates="target">Sample Range Level comment</note>
+          <source>If you build it, he will come.</source>
+          <target>Se si crea un <mrk mtype="x-sdl-comment" cid="9f002e8c-3a1e-4164-a0ef-b28442827b3e">prodotto </mrk>che verrà.</target>
+        </trans-unit>
+        <trans-unit id="2" sdl:conf="Translated" sdl:origin="mt" sdl:origin-system="SDL Machine Translation">
+          <note sdl:id="59014d83-cac6-43d8-adc1-8d0ca6b47763" sdl:version="1.0" sdl:date="2020-02-25T09:34:37.413Z" from="phartnett" priority="2" annotates="target">Sample Segment Level comment</note>
+          <source>You're gonna need a bigger boat.</source>
+          <target>
+            <mrk mtype="x-sdl-comment" cid="59014d83-cac6-43d8-adc1-8d0ca6b47763">Avrai bisogno di una barca più grande.</mrk>
+          </target>
+        </trans-unit>
+      </group>
+      <group id="561b877a-c3ad-4828-9fc2-647bc0e98452">
+        <trans-unit id="3" sdl:conf="Translated" sdl:origin="mt" sdl:origin-system="SDL Machine Translation">
+          <source>I'm <ph id="29" equiv-text="fn">&lt;fn id="1"/&gt;</ph>walking here!</source>
+          <target>Sto <ph id="29" equiv-text="fn">&lt;fn id="1"/&gt;</ph>camminando qui!</target>
+        </trans-unit>
+        <trans-unit id="4" sdl:conf="Draft" sdl:origin="mt" sdl:origin-system="SDL Machine Translation">
+          <source>I'm <bpt id="41" equiv-text="hscoswrapper">&lt;cf underline=single&gt;</bpt>walking<ept id="41">&lt;/cf&gt;</ept> here!</source>
+          <target>Sto <bpt id="41" equiv-text="hscoswrapper">&lt;cf underline=single&gt;</bpt>camminando<ept id="41">&lt;/cf&gt;</ept> qui!</target>
+        </trans-unit>
+      </group>
+      <group id="ce305f86-ba91-4918-b59d-c413242aacf0">
+        <trans-unit id="5" sdl:locked="True" sdl:conf="ApprovedSignOff" sdl:origin="source">
+          <source>
+            <mrk mtype="protected">
+              <ph id="24" equiv-text="fn">&lt;fn id="1"/&gt;</ph> Midnight Cowboy.</mrk>
+          </source>
+          <target>
+            <mrk mtype="protected">
+              <ph id="24" equiv-text="fn">&lt;fn id="1"/&gt;</ph> Midnight Cowboy.</mrk>
+          </target>
+        </trans-unit>
+      </group>
+      <group id="66c3db13-dce2-46fc-ba0a-99a2b87ec702">
+        <trans-unit id="6" sdl:conf="ApprovedTranslation" sdl:origin="mt" sdl:origin-system="SDL Machine Translation">
+          <source>Note: <ph id="51" equiv-text="fn">&lt;fn id="2"/&gt;</ph></source>
+          <target>Nota: <ph id="51" equiv-text="fn">&lt;fn id="2"/&gt;</ph></target>
+        </trans-unit>
+        <trans-unit id="7" sdl:conf="Unspecified" sdl:origin="mt" sdl:origin-system="SDL Machine Translation">
+          <source>
+            <bpt id="54" equiv-text="hscoswrapper">&lt;cf bold=True&gt;</bpt>Toto<ept id="54">&lt;/cf&gt;</ept>, I've a feeling we're not in Kansas anymore.</source>
+          <target>
+            <bpt id="54" equiv-text="hscoswrapper">&lt;cf bold=True&gt;</bpt>Toto<ept id="54">&lt;/cf&gt;</ept>, ho la sensazione che non siamo in Kansas più.</target>
+        </trans-unit>
+      </group>
+      <group id="2acacb9e-6948-4d3e-b227-3609c00ace61">
+        <trans-unit id="8" sdl:locked="True" sdl:conf="ApprovedSignOff" sdl:origin="source">
+          <source>
+            <mrk mtype="protected">
+              <ph id="28" equiv-text="fn">&lt;fn id="2"/&gt;</ph> Wizard of Oz</mrk>
+          </source>
+          <target>
+            <mrk mtype="protected">
+              <ph id="28" equiv-text="fn">&lt;fn id="2"/&gt;</ph> Wizard of Oz</mrk>
+          </target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

@@ -178,7 +178,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			//BUG if we add files and click on cancel, and select import the added files column is populated with the files added before
 			//TODO: If user close the import wizard/cancel -> remove added files
-			var sniffer = new XliffSupportSniffer();
+			var sniffer = new XliffSniffer();
 			var segmentBuilder = new SegmentBuilder();
 			var xliffReader = new XliffReder(sniffer, segmentBuilder);
 			foreach (var filePath in filesPath)
