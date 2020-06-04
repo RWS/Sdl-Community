@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - Sdl.Community.PostEdit.Compare.DAL/*
+     - SDLXLIFFSplitMerge/*
 
 pr:
   branches:
@@ -14,7 +14,7 @@ pr:
     include:
      - SDLXLIFFSplitMerge/*
 
-pool: mypool
+pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
