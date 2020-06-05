@@ -20,7 +20,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/ETSTranslationProvider.sln'
-	pathToPublish: 'ETS Translation Provider\ETSTranslationProvider\Trados2019_Plugin\bin\Release\SDLMachineTranslationEdgeProvider.sdlplugin'
+  pathToPublish: 'ETS Translation Provider\ETSTranslationProvider\Trados2019_Plugin\bin\Release\SDLMachineTranslationEdgeProvider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
