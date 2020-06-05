@@ -22,4 +22,4 @@ variables:
 
 steps:
   - template: jobs/build-sdlplugin.yml
-	- template: jobs/publish-build-artifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml
