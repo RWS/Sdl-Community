@@ -20,8 +20,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.RecordSourceTU.sln'
-  pathToPublish: 'RapidAddTerm\RapidAddTerm\bin\Release\Sdl.Community.RapidAddTerm.sdlplugin'
+  pathToPublish: 'Record Source TU\Sdl.Community.RecordSourceTU\bin\Release\Sdl.Community.RecordSourceTU.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-#  - template: jobs/publish-build-artifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml
