@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - Qualitivity/Sdl.Community.Qualitivity/*
+     - Qualitivity/*
 
 pr:
   branches:
@@ -12,7 +12,7 @@ pr:
      - master
   paths:
     include:
-     - Qualitivity/Sdl.Community.Qualitivity/*
+     - Qualitivity/*
 
 pool: Studio-OX
 
