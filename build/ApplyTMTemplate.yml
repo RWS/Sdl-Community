@@ -20,9 +20,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.ApplyTMTemplate.sln'
-  pluginName: 'ApplyTMTemplate\Sdl.Community.ApplyTMTemplate'
-  artifactName: 'Sdl.Community.ApplyTMTemplate.sdlplugin'
+	pathToPublish: 'ApplyTMTemplate\Sdl.Community.ApplyTMTemplate\bin\Release\Sdl.Community.ApplyTMTemplate.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml
