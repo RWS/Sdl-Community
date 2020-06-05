@@ -20,7 +20,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.BringBackTheButton.sln'
-	pathToPublish: 'BringBackTheButton\BringBackTheButton\bin\Release\Sdl.Community.BringBackTheButton.sdlplugin'
+  pathToPublish: 'BringBackTheButton\BringBackTheButton\bin\Release\Sdl.Community.BringBackTheButton.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
