@@ -5,6 +5,7 @@ trigger:
   paths:
     include:
      - Trados2007/*
+
 pr:
   branches:
     include:
@@ -12,14 +13,15 @@ pr:
   paths:
     include:
      - Trados2007/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Trados2007.sln'
-  pluginName: 'Trados2007/Trados2007'
-  artifactName: 'Sdl.Community.Trados2007.sdlplugin'
+  pathToPublish: 'Trados2007/Trados2007\bin\Release\Sdl.Community.Trados2007.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+	- template: jobs/publish-build-artifact-task.yml
