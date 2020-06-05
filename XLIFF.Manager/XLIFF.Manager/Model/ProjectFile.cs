@@ -76,17 +76,6 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			}
 		}
 
-		public string ImportedFilePath
-		{
-			get => _importedFilePath;
-			set
-			{
-				if (_importedFilePath == value) return;
-				_importedFilePath = value;
-				OnPropertyChanged(nameof(ImportedFilePath));
-			}
-		}
-
 		public string Location { get; set; }
 
 		public string XliffFilePath { get; set; }
@@ -144,11 +133,10 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				TargetLanguage = TargetLanguage.Clone() as LanguageInfo,
 				XliffFilePath = XliffFilePath.Clone() as string,
 				Details = Details?.Clone() as string,
-				FileType = FileType.Clone() as string,
-				ProjectModel = ProjectModel.Clone() as Project,
+				FileType = FileType.Clone() as string
 			};
 
-			foreach (var projectFileActivity in projectFile.ProjectFileActivities)
+			foreach (var projectFileActivity in ProjectFileActivities)
 			{
 				projectFile.ProjectFileActivities.Add(projectFileActivity.Clone() as ProjectFileActivity);
 			}

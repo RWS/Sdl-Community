@@ -328,4 +328,19 @@
 	<data name="Message_SelectOutputFolder" xml:space="preserve">
     <value>Select the output folder</value>
   </data>
+	<data name="Message_File_already_imported" xml:space="preserve">
+    <value>File already imported</value>
+  </data>
+	<data name="Message_File_already_exported" xml:space="preserve">
+    <value>File already exported</value>
+  </data>
+	<data name="Message_Exported_on_0" xml:space="preserve">
+    <value>Exported on: {0}</value>
+  </data>
+	<data name="Message_Imported_on_0" xml:space="preserve">
+    <value>Imported on: {0}</value>
+  </data>
+	<data name="Message_File_Path_0" xml:space="preserve">
+    <value>Path: {0}</value>
+  </data>
 </root>

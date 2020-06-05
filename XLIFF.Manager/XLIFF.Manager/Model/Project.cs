@@ -81,11 +81,11 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				SourceLanguage = SourceLanguage.Clone() as LanguageInfo
 			};
 
-			foreach (var languageInfo in model.TargetLanguages)
+			foreach (var languageInfo in TargetLanguages)
 			{
 				model.TargetLanguages.Add(languageInfo.Clone() as LanguageInfo);
 			}
-			foreach (var projectFile in model.ProjectFiles)
+			foreach (var projectFile in ProjectFiles)
 			{
 				model.ProjectFiles.Add(projectFile.Clone() as ProjectFile);
 			}

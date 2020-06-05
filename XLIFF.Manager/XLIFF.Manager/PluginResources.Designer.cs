@@ -365,6 +365,51 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exported on: {0}.
+        /// </summary>
+        internal static string Message_Exported_on_0 {
+            get {
+                return ResourceManager.GetString("Message_Exported_on_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File already exported.
+        /// </summary>
+        internal static string Message_File_already_exported {
+            get {
+                return ResourceManager.GetString("Message_File_already_exported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File already imported.
+        /// </summary>
+        internal static string Message_File_already_imported {
+            get {
+                return ResourceManager.GetString("Message_File_already_imported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path: {0}.
+        /// </summary>
+        internal static string Message_File_Path_0 {
+            get {
+                return ResourceManager.GetString("Message_File_Path_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imported on: {0}.
+        /// </summary>
+        internal static string Message_Imported_on_0 {
+            get {
+                return ResourceManager.GetString("Message_Imported_on_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the output folder.
         /// </summary>
         internal static string Message_SelectOutputFolder {

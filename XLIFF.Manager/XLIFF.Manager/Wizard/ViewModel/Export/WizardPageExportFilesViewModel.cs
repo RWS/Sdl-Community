@@ -168,21 +168,24 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				if (projectFile.Action == Enumerators.Action.Export)
 				{
 					var activityfile = projectFile.ProjectFileActivities.FirstOrDefault(a => a.Action == Enumerators.Action.Export);
-
-					//TODO: move localizable strings to resource file
+	
 					projectFile.Status = Enumerators.Status.Warning;
-					projectFile.ShortMessage = "File already exported!";
-					projectFile.Details = "File has been exported on: " + activityfile?.DateToString;
+					projectFile.ShortMessage = PluginResources.Message_File_already_exported;
+					projectFile.Details = string.Format(PluginResources.Message_Exported_on_0, activityfile?.DateToString);
 				}
-
-				if (projectFile.Action == Enumerators.Action.Import)
+				else if (projectFile.Action == Enumerators.Action.Import)
 				{
 					var activityfile = projectFile.ProjectFileActivities.FirstOrDefault(a => a.Action == Enumerators.Action.Import);
-
-					//TODO: move localizable strings to resource file
+					
 					projectFile.Status = Enumerators.Status.Warning;
-					projectFile.ShortMessage = "File is already imported!";
-					projectFile.Details = "File has been imported on: " + activityfile?.DateToString;
+					projectFile.ShortMessage = PluginResources.Message_File_already_imported;
+					projectFile.Details = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString);
+				}
+				else
+				{
+					projectFile.Status = Enumerators.Status.Ready;
+					projectFile.ShortMessage = string.Empty;
+					projectFile.Details = string.Empty;
 				}
 			}
 		}

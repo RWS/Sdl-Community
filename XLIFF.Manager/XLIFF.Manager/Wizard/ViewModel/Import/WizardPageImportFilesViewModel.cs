@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Commands;
+using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.XLIFF.Manager.Interfaces;
@@ -14,7 +15,7 @@ using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 {
-	public class WizardPageImportFilesViewModel : WizardPageViewModelBase,IDisposable
+	public class WizardPageImportFilesViewModel : WizardPageViewModelBase, IDisposable
 	{
 		private ICommand _addFolderCommand;
 		private ICommand _addFilesCommand;
@@ -31,7 +32,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		{
 			_dialogService = dialogService;
 			ProjectFiles = wizardContext.ProjectFiles;
-
+			VerifyProjectFiles();
 			LoadPage += OnLoadPage;
 		}
 
@@ -72,6 +73,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 						projectFile.PropertyChanged += ProjectFile_PropertyChanged;
 					}
 				}
+
 				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
@@ -96,11 +98,36 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			}
 		}
 		public override string DisplayName => PluginResources.PageName_Files;
+
 		public override bool IsValid { get; set; }
 
 		public void VerifyIsValid()
 		{
-			IsValid = ProjectFiles.Count(a => a.Selected) > 0; //TODO: We also need to verify it checked file has an xliff file added for import
+			IsValid = ProjectFiles.Count(a => a.Selected) > 0; 
+		}
+
+		private void VerifyProjectFiles()
+		{
+			foreach (var projectFile in ProjectFiles)
+			{			
+				if (projectFile.Action == Enumerators.Action.Import)
+				{
+					var activityfile = projectFile.ProjectFileActivities.FirstOrDefault(a => a.Action == Enumerators.Action.Import);
+					
+					projectFile.Status = Enumerators.Status.Warning;
+					projectFile.ShortMessage = PluginResources.Message_File_already_imported;
+					projectFile.Details = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString) + Environment.NewLine;
+					projectFile.Details += string.Format(PluginResources.Message_File_Path_0, projectFile.XliffFilePath);
+				}
+				else
+				{
+					projectFile.Status = Enumerators.Status.Ready;
+					projectFile.ShortMessage = string.Empty;
+					projectFile.Details = string.Empty;
+				}
+
+				projectFile.XliffFilePath = string.Empty;
+			}
 		}
 
 		private void AddFiles()
@@ -143,6 +170,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			{
 				UpdateCheckAll();
 			}
+
 			VerifyIsValid();
 		}
 		private void OnLoadPage(object sender, EventArgs e)
@@ -153,7 +181,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		private void DragAndDrop(object parameter)
 		{
-			if (parameter == null || !(parameter is DragEventArgs eventArgs)) return;
+			if (parameter == null || !(parameter is DragEventArgs eventArgs))
+			{
+				return;
+			}
 
 			var fileDrop = eventArgs.Data.GetData(DataFormats.FileDrop, false);
 			if (fileDrop is string[] filesOrDirectories && filesOrDirectories.Length > 0)
@@ -165,46 +196,68 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					{
 						var files = GetAllXliffsFromDirectory(fullPath);
 						AddFilesToGrid(files);
-					}
-					//is file
-					AddFilesToGrid(new List<string>{fullPath});
+					}					
 				}
 			}
 		}
 
-		private void AddFilesToGrid(List<string> filesPath)
-		{
-			//TODO: Check if the file type is correct (polyglot, xlf)
-
-			//BUG if we add files and click on cancel, and select import the added files column is populated with the files added before
-			//TODO: If user close the import wizard/cancel -> remove added files
+		private void AddFilesToGrid(IEnumerable<string> filesPath)
+		{		
 			var sniffer = new XliffSniffer();
 			var segmentBuilder = new SegmentBuilder();
 			var xliffReader = new XliffReder(sniffer, segmentBuilder);
+
 			foreach (var filePath in filesPath)
 			{
-				var reader = xliffReader.ReadXliff(filePath);
-
-				var correspondingFile = ProjectFiles.FirstOrDefault(p =>
-					p.Location.Equals(reader.DocInfo.Source) && p.TargetLanguage.CultureInfo.Name.Equals(reader.DocInfo.TargetLanguage));
-				if (correspondingFile != null)
+				var xliff = xliffReader.ReadXliff(filePath);
+				var xliffTargetLanguage = xliff.Files.FirstOrDefault()?.TargetLanguage;
+				var xliffTargetPath = GetPathLocation(xliff.DocInfo.Source, xliffTargetLanguage);
+			
+				foreach (var projectFile in ProjectFiles)
 				{
-					correspondingFile.ImportedFilePath = filePath;
+					var projectFileTargetLanguage = projectFile.TargetLanguage.CultureInfo.Name;
+					var projectFileTargetPath = GetPathLocation(projectFile.Location, xliffTargetLanguage);
+
+					if (string.Compare(projectFileTargetLanguage, xliffTargetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0 &&
+					    string.Compare(projectFileTargetPath, xliffTargetPath, StringComparison.CurrentCultureIgnoreCase) == 0)
+					{
+						projectFile.XliffFilePath = filePath;
+					}
 				}
 			}
 		}
 
-		private List<string> GetAllXliffsFromDirectory(string directoryPath)
+		private string GetPathLocation(string path, string targetLanguage)
 		{
-			return Directory.GetFiles(directoryPath, "*.xliff",
-				SearchOption.AllDirectories).ToList();
+			var location = string.Empty;
+			while (path.Contains("\\"))
+			{
+				var part = path.Substring(path.LastIndexOf("\\", StringComparison.Ordinal) + 1);
+				if (string.Compare(part, targetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0)
+				{
+					break;
+				}
+
+				location = Path.Combine(part, location);
+				path = path.Substring(0, path.LastIndexOf("\\", StringComparison.Ordinal));
+			}
+
+			return location;
+		}
+
+		private IEnumerable<string> GetAllXliffsFromDirectory(string directoryPath)
+		{
+			return Directory.GetFiles(directoryPath, "*.xliff", SearchOption.AllDirectories).ToList();
 		}
 
 		private void SelectFolder()
 		{
 			var folderPath = _dialogService.ShowFolderDialog(PluginResources.FolderDialog_Title);
-			var files = GetAllXliffsFromDirectory(folderPath);
-			AddFilesToGrid(files);
+			if (string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
+			{
+				var files = GetAllXliffsFromDirectory(folderPath);
+				AddFilesToGrid(files);
+			}
 		}
 
 		public void Dispose()

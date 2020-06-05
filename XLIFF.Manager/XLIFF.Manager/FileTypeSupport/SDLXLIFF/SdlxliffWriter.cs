@@ -1,21 +1,22 @@
 ﻿using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
+using Sdl.FileTypeSupport.Framework.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 {
 	public class SdlxliffWriter
 	{
 		private readonly SegmentBuilder _segmentBuilder;
+		private readonly IFileTypeManager _fileTypeManager;
 
-		public SdlxliffWriter(SegmentBuilder segmentBuilder)
+		public SdlxliffWriter(IFileTypeManager fileTypeManager, SegmentBuilder segmentBuilder)
 		{
+			_fileTypeManager = fileTypeManager;
 			_segmentBuilder = segmentBuilder;
 		}
 
 		public bool UpdateFile(Xliff xliff, string filePath)
-		{
-			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, filePath + ".out.sdlxliff", null);
+		{			
+			var converter = _fileTypeManager.GetConverterToDefaultBilingual(filePath, filePath + ".out.sdlxliff", null);
 
 			var contentWriter = new ContentWriter(xliff, _segmentBuilder);
 
