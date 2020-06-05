@@ -20,7 +20,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.AhkPlugin.sln'
-	pathToPublish: 'AHK plugin\Sdl.Community.AhkPlugin\bin\Release\Sdl.Community.AhkPlugin.sdlplugin'
+  pathToPublish: 'AHK plugin\Sdl.Community.AhkPlugin\bin\Release\Sdl.Community.AhkPlugin.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
