@@ -20,9 +20,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/SDL.Community.BetaAPIs.sln'
-  pluginName: 'Studio Beta APIs\SDL.Community.BetaAPIs\Sdl.Community.BetaAPIs.UI'
-  artifactName: 'Sdl.Community.BetaAPIs.UI.sdlplugin'
+  pathToPublish: 'Studio Beta APIs\SDL.Community.BetaAPIs\Sdl.Community.BetaAPIs.UI\bin\Release\Sdl.Community.BetaAPIs.UI.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml
