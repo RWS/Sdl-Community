@@ -20,8 +20,6 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.SDLBatchAnonymize.sln'
-  pathToPublish: 'RapidAddTerm\RapidAddTerm\bin\Release\Sdl.Community.RapidAddTerm.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-#  - template: jobs/publish-build-artifact-task.yml
