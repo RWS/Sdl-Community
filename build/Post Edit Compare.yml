@@ -20,9 +20,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.PostEdit.Versions.sln'
-  pluginName: 'Post Edit Compare'
-  artifactName: 'Sdl.Community.PostEdit.Versions.sdlplugin'
+	pathToPublish: 'Post Edit Compare\bin\Release\Sdl.Community.PostEdit.Versions.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml
