@@ -8,10 +8,10 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 	public class XliffReder : IXliffReader
 	{
 		private readonly SegmentBuilder _segmentBuilder;
-		private readonly XliffSupportSniffer _xliffSupportSniffer;
+		private readonly XliffSniffer _xliffSupportSniffer;
 		private IXliffReader _reader;
 
-		public XliffReder(XliffSupportSniffer xliffSupportSniffer, SegmentBuilder segmentBuilder)
+		public XliffReder(XliffSniffer xliffSupportSniffer, SegmentBuilder segmentBuilder)
 		{
 			_xliffSupportSniffer = xliffSupportSniffer;
 			_segmentBuilder = segmentBuilder;

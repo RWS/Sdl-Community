@@ -10,7 +10,7 @@ using File = Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model.File;
 
 namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 {
-	internal class ContentProcessor : IBilingualContentProcessor
+	internal class ContentReader : IBilingualContentProcessor
 	{
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly bool _ignoreTags;
@@ -21,7 +21,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private IDocumentProperties _documentProperties;
 		private SegmentVisitor _segmentVisitor;
 		
-		internal ContentProcessor(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder)
+		internal ContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder)
 		{
 			_projectId = projectId;
 			_inputPath = inputPath;

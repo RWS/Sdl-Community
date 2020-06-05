@@ -160,7 +160,7 @@
 				<DataGridTemplateColumn Header="XLIFF File" Width="2*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:ProjectFile">
-							<TextBlock Text="{Binding ImportedFilePath,UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow" />
+							<TextBlock Text="{Binding XliffFilePath, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -168,7 +168,7 @@
 				<DataGridTemplateColumn Header="Details" Width="1*" CanUserSort="True" IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:ProjectFile">
-							<TextBlock Text="{Binding Details, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow" />
+							<TextBlock Text="{Binding Details, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

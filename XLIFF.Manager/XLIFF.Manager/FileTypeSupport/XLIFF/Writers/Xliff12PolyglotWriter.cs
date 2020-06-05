@@ -22,7 +22,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 			var settings = new XmlWriterSettings
 			{
 				OmitXmlDeclaration = true,
-				Indent = true
+				Indent = false
 			};
 
 			var version = "1.2";
@@ -196,23 +196,13 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 		private void WriteSegmentPolyglot(XmlWriter writer, SegmentPair segmentPair, bool isSource)
 		{
 			writer.WriteStartElement(isSource ? "source" : "target");
-			if (segmentPair.IsLocked)
-			{
-				writer.WriteStartElement("mrk");
-				writer.WriteAttributeString("mtype", "protected");
-			}
-
+	
 			var elements = isSource ? segmentPair.Source.Elements : segmentPair.Target.Elements;
 
 			foreach (var element in elements)
 			{
 				WriteSegment(writer, element);
-			}
-
-			if (segmentPair.IsLocked)
-			{
-				writer.WriteEndElement(); // mrk
-			}
+			}	
 
 			writer.WriteEndElement(); // source or target
 		}

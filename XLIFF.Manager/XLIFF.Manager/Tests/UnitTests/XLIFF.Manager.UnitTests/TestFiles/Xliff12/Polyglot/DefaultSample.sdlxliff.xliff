@@ -1,10 +1,10 @@
 ﻿<xliff version="1.2" xmlns:sdl="http://schemas.sdl.com/xliff" sdl:support="xliff12polyglot" sdl:version="1.2.1">
   <sdl:doc-info project-id="0c0340b6-f0e1-4719-8825-33ad717d6e02" 
-                source="C:\Users\phartnett\Documents\Studio 2019\Projects\Samples\SampleProject\de-DE\File.doc.sdlxliff" 
+                source="C:\Users\phartnett\Documents\Studio 2019\Projects\Samples\SampleProject\de-DE\DefaultSample.doc.sdlxliff" 
                 source-language="en-US" 
                 target-language="de-DE" 
                 created="2020-05-28T14:43:02.838Z" />
-  <file original="C:\Users\phartnett\Documents\Studio 2019\Projects\Samples\NewSampleProject\en-US\File.doc" 
+  <file original="C:\Users\phartnett\Documents\Studio 2019\Projects\Samples\NewSampleProject\en-US\DefaultSample.doc" 
         source-language="en-US" 
         target-language="de-DE" 
         datatype="Word 2000-2003 v 1.0.0.0">

@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.CustomEventArgs;
-using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
+using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -27,7 +27,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Import
 		private IDialogService _dialogService;
 
 		protected override void Execute()
-		{
+		{			
 			var wizardService = new WizardService(Enumerators.Action.Import, _pathInfo, _customerProvider,
 				_imageService, _xliffManagerController, _projectsController, _filesController,
 				_segmentBuilder, _dialogService);

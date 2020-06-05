@@ -22,7 +22,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 			var settings = new XmlWriterSettings
 			{
 				OmitXmlDeclaration = true,
-				Indent = true
+				Indent = false
 			};
 
 			var version = "1.2";
@@ -221,18 +221,18 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 				writer.WriteAttributeString("text-match", textMatch);
 			}
 
-			if (translationOrigin?.MetaData != null)
-			{
-				foreach (var keyValuePair in translationOrigin.MetaData)
-				{
-					writer.WriteStartElement("sdl", "value", null);
+			//if (translationOrigin?.MetaData != null)
+			//{
+			//	foreach (var keyValuePair in translationOrigin.MetaData)
+			//	{
+			//		writer.WriteStartElement("sdl", "value", null);
 
-					writer.WriteAttributeString("key", keyValuePair.Key);
-					writer.WriteString(keyValuePair.Value);
+			//		writer.WriteAttributeString("key", keyValuePair.Key);
+			//		writer.WriteString(keyValuePair.Value);
 
-					writer.WriteEndElement(); //sdl:value
-				}
-			}
+			//		writer.WriteEndElement(); //sdl:value
+			//	}
+			//}
 		}
 
 		private void WriteSourceParagraph(XmlWriter writer, TransUnit transUnit)
@@ -301,22 +301,10 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 				writer.WriteAttributeString("mtype", "seg");
 				writer.WriteAttributeString("mid", segmentPair.Id);
 
-				if (segmentPair.IsLocked)
-				{
-					writer.WriteStartElement("mrk");
-					writer.WriteAttributeString("mtype", "protected");
-				}
-
 				foreach (var element in segmentPair.Target.Elements)
 				{
 					WriteSegment(writer, element);
 				}
-
-				if (segmentPair.IsLocked)
-				{
-					writer.WriteEndElement(); // mrk
-				}
-
 
 				writer.WriteEndElement(); // mrk
 			}

@@ -4,11 +4,11 @@ using System.Windows.Media.Imaging;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
-	public class LanguageInfo: BaseModel, ICloneable
+	public class LanguageInfo : BaseModel, ICloneable
 	{
 		public CultureInfo CultureInfo { get; set; }
 
-		public BitmapImage Image { get; set; }		
+		public BitmapImage Image { get; set; }
 
 		public override string ToString()
 		{
@@ -17,12 +17,11 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public object Clone()
 		{
-			var model = new LanguageInfo
+			return new LanguageInfo
 			{
-				CultureInfo = CultureInfo.Clone() as CultureInfo,
-				Image = Image.Clone()
+				CultureInfo = new CultureInfo(CultureInfo.Name),
+				Image = Image.CloneCurrentValue()
 			};
-			return model;
 		}
 	}
 }

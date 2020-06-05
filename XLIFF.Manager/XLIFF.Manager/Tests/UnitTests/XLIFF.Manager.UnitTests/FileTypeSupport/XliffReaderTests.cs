@@ -22,7 +22,7 @@ namespace XLIFF.Manager.UnitTests.FileTypeSupport
 		public void XliffReader_XLIFFSupportSniffer_ReturnsEqual(Enumerators.XLIFFSupport support)
 		{
 			// arrange
-			var sniffer = new XliffSupportSniffer();
+			var sniffer = new XliffSniffer();
 			var segmentBuilder = new SegmentBuilder();
 			var xliffReader = new XliffReder(sniffer, segmentBuilder);
 			var testFile = support == Enumerators.XLIFFSupport.xliff12polyglot
@@ -43,7 +43,7 @@ namespace XLIFF.Manager.UnitTests.FileTypeSupport
 		public void XliffReader_ReadLockedContent_ReturnsEqual(Enumerators.XLIFFSupport support)
 		{
 			// arrange
-			var sniffer = new XliffSupportSniffer();
+			var sniffer = new XliffSniffer();
 			var segmentBuilder = new SegmentBuilder();
 			var xliffReader = new XliffReder(sniffer, segmentBuilder);
 			var testFile = support == Enumerators.XLIFFSupport.xliff12polyglot

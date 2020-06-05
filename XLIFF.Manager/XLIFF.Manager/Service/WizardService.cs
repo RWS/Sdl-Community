@@ -78,6 +78,11 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			_wizardWindow.Loaded += WizardWindowLoaded;
 			_wizardWindow.ShowDialog();
 
+			if (!_wizardContext.Completed || _isCancelled)
+			{
+				
+			}
+
 			return (!_isCancelled && _wizardContext.Completed) ? _wizardContext : null;
 		}
 
@@ -182,10 +187,20 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			if (existingProject != null)
 			{
-				projectModel.ProjectFiles = existingProject.ProjectFiles;
-				foreach (var projectFile in projectModel.ProjectFiles)
+				foreach (var projectFile in existingProject.ProjectFiles)
 				{
-					projectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString());
+					if (projectFile.Clone() is ProjectFile clonedProjectFile)
+					{
+						clonedProjectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString());
+						clonedProjectFile.ProjectModel = projectModel;
+
+						foreach (var fileActivity in clonedProjectFile.ProjectFileActivities)
+						{
+							fileActivity.ProjectFile = clonedProjectFile;
+						}
+
+						projectModel.ProjectFiles.Add(clonedProjectFile);
+					}
 				}
 			}
 			else

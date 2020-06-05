@@ -6,7 +6,7 @@ using Sdl.Community.XLIFF.Manager.Common;
 
 namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 {
-	public class XliffSupportSniffer
+	public class XliffSniffer
 	{
 		public Enumerators.XLIFFSupport GetXliffSupport(string filePath)
 		{

@@ -12,7 +12,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 		private Stack<ITagPair> _tagPairStack;
 
-		public SegmentVisitor(bool ignoreTags)
+		public SegmentVisitor(bool ignoreTags = false)
 		{
 			_ignoreTags = ignoreTags;
 			InitializeComponents();

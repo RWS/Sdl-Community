@@ -70,7 +70,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Selected = Selected
 			};
 
-			model.ProjectFile = ProjectFile.Clone() as ProjectFile;
+			//model.ProjectFile = ProjectFile.Clone() as ProjectFile;
 
 			return model;
 		}

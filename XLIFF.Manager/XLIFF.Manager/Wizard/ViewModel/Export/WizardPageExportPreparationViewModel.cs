@@ -200,7 +200,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 					var targetFiles = GetSelectedTargetFiles(cultureInfo);
 					foreach (var targetFile in targetFiles)
 					{
-						var xliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");						
+						var xliffFolder = Path.Combine(languageFolder, targetFile.Path);
+						if (!Directory.Exists(xliffFolder))
+						{
+							Directory.CreateDirectory(xliffFolder);
+						}
+
+						var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");						
 						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location, WizardContext.CopySourceToTarget);
 						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.IncludeTranslations);
 
@@ -210,7 +216,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 							targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
 							targetFile.Action = Enumerators.Action.Export;
 							targetFile.Status = Enumerators.Status.Success;
-							targetFile.Details = "TODO";
+							targetFile.Details = string.Empty;
 						}
 						
 						var activityFile = new ProjectFileActivity

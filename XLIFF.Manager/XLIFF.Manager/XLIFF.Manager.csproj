@@ -55,7 +55,7 @@
     <Reference Include="Sdl.Core.PluginFramework.PackageSupport, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Core.Settings, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.Core.Settings">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
     </Reference>
@@ -65,21 +65,25 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Desktop.Platform.Controls, Version=15.2.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.Desktop.Platform.Controls">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
@@ -164,12 +168,15 @@
     <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
     <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
     <Compile Include="CustomEventArgs\ProjectSelectionChangedEventArgs.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\ContentWriter.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\ElementExtractor.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\SdlxliffWriter.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\SegmentBuilder.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\ElementSegment.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Readers\Xliff12SdlReader.cs" />
-    <Compile Include="FileTypeSupport\XLIFF\Readers\XliffSupportSniffer.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Readers\XliffSniffer.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Readers\XliffReader.cs" />
-    <Compile Include="FileTypeSupport\SDLXLIFF\ContentProcessor.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\ContentReader.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\SdlxliffReader.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\Body.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\DocInfo.cs" />
