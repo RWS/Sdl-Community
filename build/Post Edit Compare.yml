@@ -20,7 +20,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.PostEdit.Versions.sln'
-	pathToPublish: 'Post Edit Compare\bin\Release\Sdl.Community.PostEdit.Versions.sdlplugin'
+  pathToPublish: 'Post Edit Compare\bin\Release\Sdl.Community.PostEdit.Versions.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
