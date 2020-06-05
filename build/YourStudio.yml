@@ -20,13 +20,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.YourStudio.sln'
-  pluginName: 'YourStudio'
-  artifactName: 'Sdl.Community.YourStudio.Integration.sdlplugin'
+  pathToPublish: 'C:\Users\build\AppData\Roaming\SDL\SDL Trados Studio\12\Plugins\Packages\Sdl.Community.YourStudio.Integration.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact'
-    inputs:
-     artifactName: drop
-     pathToPublish: 'C:\Users\build\AppData\Roaming\SDL\SDL Trados Studio\12\Plugins\Packages\$(artifactName)'
+  - template: jobs/publish-build-artifact-task.yml
