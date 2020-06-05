@@ -20,7 +20,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.ApplyTMTemplate.sln'
-	pathToPublish: 'ApplyTMTemplate\Sdl.Community.ApplyTMTemplate\bin\Release\Sdl.Community.ApplyTMTemplate.sdlplugin'
+  pathToPublish: 'ApplyTMTemplate\Sdl.Community.ApplyTMTemplate\bin\Release\Sdl.Community.ApplyTMTemplate.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
