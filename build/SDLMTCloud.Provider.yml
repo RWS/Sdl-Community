@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLMTCloud.Provider/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLMTCloud.Provider/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.MTCloud.Provider.sln'
+  pathToPublish: 'SDLDataProtectionSuite\SDLDataProtectionSuite\bin\Release\Sdl.Community.SdlDataProtectionSuite.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+#  - template: jobs/publish-build-artifact-task.yml
