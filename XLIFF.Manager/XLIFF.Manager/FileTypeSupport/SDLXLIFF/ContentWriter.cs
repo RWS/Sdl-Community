@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
@@ -27,7 +28,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			Comments = _xliff.DocInfo.Comments;
 		}
 
-		private Dictionary<string, List<IComment>> Comments { get; set; }
+		private Dictionary<string, List<IComment>> Comments { get; }
 
 		private SegmentVisitor SegmentVisitor => _segmentVisitor ?? (_segmentVisitor = new SegmentVisitor());
 
@@ -66,148 +67,215 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
-				var segment = paragraph.SegmentPairs.FirstOrDefault(a => a.Id == segmentPair.Properties.Id.Id);
-				if (segment == null)
+				var importedSegmentPair = paragraph.SegmentPairs.FirstOrDefault(a => a.Id == segmentPair.Properties.Id.Id);
+				if (importedSegmentPair == null)
 				{
 					continue;
 				}
 
-				var targetSegment = segmentPair.Target;
-
-				var originalSource = (ISegment) segmentPair.Source.Clone();
-				var originalTarget = (ISegment)targetSegment.Clone();
-
-				// clear the existing content from the target segment
-				targetSegment.Clear();
-
-				var containers = new Stack<IAbstractMarkupDataContainer>();
-				containers.Push(targetSegment);
-
-				var lockedContentId = 0;
-
-				foreach (var element in segment.Target.Elements)
+				if (segmentPair.Properties.IsLocked)
 				{
-					if (element is ElementComment elementComment)
-					{
-						var comments = Comments.FirstOrDefault(a => a.Key == elementComment.Id);
-						var newestComment = comments.Value.LastOrDefault();
-						if (newestComment == null)
-						{
-							continue;
-						}
-
-						if (elementComment.Type == Element.TagType.OpeningTag)
-						{
-							var comment = _segmentBuilder.CreateCommentContainer(newestComment.Text,
-								newestComment.Author, newestComment.Severity,
-								newestComment.Date, newestComment.Version);
-
-							if (comment is IAbstractMarkupDataContainer commentContainer)
-							{
-								commentContainer.Clear();
-
-								var container = containers.Peek();
-								container.Add(comment);
-
-								containers.Push(commentContainer);
-							}
-						}
-						else if (elementComment.Type == Element.TagType.ClosingTag)
-						{
-							containers.Pop();
-						}
-					}
-
-					if (element is ElementTagPair elementTagPair)
-					{						
-						if (elementTagPair.Type == Element.TagType.OpeningTag)
-						{
-							var tagPair = GetElement(elementTagPair.TagId, originalTarget, originalSource, elementTagPair);
-							if (tagPair == null)
-							{
-								tagPair = _segmentBuilder.CreateTagPair(elementTagPair.TagId, elementTagPair.TagContent);
-							}
-
-							if (tagPair is IAbstractMarkupDataContainer tagPairContainer)
-							{
-								tagPairContainer.Clear();
-
-								var container = containers.Peek();
-								container.Add(tagPair);
-								containers.Push(tagPairContainer);
-							}
-						}
-						else if (elementTagPair.Type == Element.TagType.ClosingTag)
-						{
-							containers.Pop();
-						}
-					}
-
-					if (element is ElementLocked elementLocked)
-					{						
-						if (elementLocked.Type == Element.TagType.OpeningTag)
-						{
-							var lockedContent = GetElement(lockedContentId.ToString(), originalTarget, 
-								originalSource, elementLocked);
-							if (lockedContent == null)
-							{
-								lockedContent = _segmentBuilder.CreateLockedContent();
-							}
-
-							if (lockedContent is IAbstractMarkupDataContainer lockedContentContainer)
-							{
-								lockedContentContainer.Clear();
-
-								var container = containers.Peek();
-								container.Add(lockedContent);
-								containers.Push(lockedContentContainer);
-
-								lockedContentId++;
-							}
-						}
-						else if (elementLocked.Type == Element.TagType.ClosingTag)
-						{
-							containers.Pop();
-						}
-					}
-
-					if (element is ElementPlaceholder elementPlaceholder)
-					{
-						var placeholder = GetElement(elementPlaceholder.TagId, originalTarget, 
-							originalSource, elementPlaceholder);
-						if (placeholder == null)
-						{
-							placeholder = _segmentBuilder.CreatePlaceholder(elementPlaceholder.TagId, 
-								elementPlaceholder.TagContent);
-						}
-
-						var container = containers.Peek();
-						container.Add(placeholder);
-					}
-
-					if (element is ElementText elementText && !string.IsNullOrEmpty(elementText.Text))
-					{
-						var text = _segmentBuilder.Text(elementText.Text);
-						var container = containers.Peek();
-						container.Add(text);
-					}
+					continue;
 				}
 
-				//TODO finalize setting the translation origin and properties
-				if (targetSegment.Properties.TranslationOrigin != null)
-				{
-					var currentTranslationOrigin = (ITranslationOrigin)targetSegment.Properties.TranslationOrigin.Clone();
-					targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
-					targetSegment.Properties.TranslationOrigin.MatchPercent = byte.Parse("0");
-				}
-
-				targetSegment.Properties.ConfirmationLevel = ConfirmationLevel.Draft;				
+				UpdateTargetSegment(segmentPair, importedSegmentPair);
 			}
 
 			base.ProcessParagraphUnit(paragraphUnit);
 		}
 
-		private IAbstractMarkupData GetElement(string tagId, IAbstractMarkupDataContainer originalTargetSegment, 
+		private void UpdateTargetSegment(ISegmentPair segmentPair, SegmentPair importedSegmentPair)
+		{
+			var targetSegment = segmentPair.Target;
+
+			var originalSource = (ISegment) segmentPair.Source.Clone();
+			var originalTarget = (ISegment) targetSegment.Clone();
+
+			// clear the existing content from the target segment
+			targetSegment.Clear();
+
+			var containers = new Stack<IAbstractMarkupDataContainer>();
+			containers.Push(targetSegment);
+
+			var lockedContentId = 0;
+			foreach (var element in importedSegmentPair.Target.Elements)
+			{
+				if (element is ElementComment elementComment)
+				{
+					UpdateComment(elementComment, containers);
+				}
+
+				if (element is ElementTagPair elementTagPair)
+				{
+					UpdateTagPair(elementTagPair, originalTarget, originalSource, containers);
+				}
+
+				if (element is ElementLocked elementLocked)
+				{
+					lockedContentId = UpdateLockedContent(elementLocked, lockedContentId, originalTarget, originalSource, containers);
+				}
+
+				if (element is ElementPlaceholder elementPlaceholder)
+				{
+					UpdatePlaceholder(elementPlaceholder, originalTarget, originalSource, containers);
+				}
+
+				if (element is ElementText elementText && !string.IsNullOrEmpty(elementText.Text))
+				{
+					UpdateText(elementText, containers);
+				}
+			}
+
+			UpdateTranslationOrigin(originalTarget, targetSegment);
+		}
+
+		private void UpdateText(ElementText elementText1, Stack<IAbstractMarkupDataContainer> containers)
+		{
+			var text = _segmentBuilder.Text(elementText1.Text);
+			var container = containers.Peek();
+			container.Add(text);
+		}
+
+		private void UpdateTranslationOrigin(ISegment originalTarget, ISegment targetSegment)
+		{
+			// TODO compare if updated
+			SegmentVisitor.VisitSegment(originalTarget);
+			var originalText = SegmentVisitor.Text;
+
+			SegmentVisitor.VisitSegment(targetSegment);
+			var updatedText = SegmentVisitor.Text;
+
+			if (string.Compare(originalText, updatedText, StringComparison.Ordinal) != 0)
+			{
+				// TODO: everything related to the TranslationOrigin will be revised at a later
+				// development phase... assigning default values for now!
+				if (targetSegment.Properties.TranslationOrigin != null)
+				{
+					var currentTranslationOrigin = (ITranslationOrigin)targetSegment.Properties.TranslationOrigin.Clone();
+
+					targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
+
+					targetSegment.Properties.TranslationOrigin.MatchPercent = byte.Parse("0");
+					targetSegment.Properties.TranslationOrigin.OriginSystem = string.Empty;
+					targetSegment.Properties.TranslationOrigin.OriginType = string.Empty;
+					targetSegment.Properties.TranslationOrigin.IsStructureContextMatch = false;
+					targetSegment.Properties.TranslationOrigin.TextContextMatchLevel = TextContextMatchLevel.None;
+
+					targetSegment.Properties.TranslationOrigin.SetMetaData("last_modified_by", "Polyglot");
+					targetSegment.Properties.TranslationOrigin.SetMetaData("modified_on", FormatAsInvariantDateTime(DateTime.UtcNow));
+				}
+
+				targetSegment.Properties.ConfirmationLevel = ConfirmationLevel.Draft;
+			}
+		}
+
+		private void UpdatePlaceholder(ElementPlaceholder elementPlaceholder1, ISegment originalTarget, ISegment originalSource,
+			Stack<IAbstractMarkupDataContainer> containers)
+		{
+			var placeholder = GetElement(elementPlaceholder1.TagId, originalTarget, originalSource, elementPlaceholder1);
+			if (placeholder == null)
+			{
+				placeholder = _segmentBuilder.CreatePlaceholder(elementPlaceholder1.TagId,
+					elementPlaceholder1.TagContent);
+			}
+
+			var container = containers.Peek();
+			container.Add(placeholder);
+		}
+
+		private int UpdateLockedContent(ElementLocked elementLocked1, int lockedContentId, ISegment originalTarget,
+			ISegment originalSource, Stack<IAbstractMarkupDataContainer> containers)
+		{
+			if (elementLocked1.Type == Element.TagType.OpeningTag)
+			{
+				var lockedContent = GetElement(lockedContentId.ToString(), originalTarget, originalSource, elementLocked1);
+				if (lockedContent == null)
+				{
+					lockedContent = _segmentBuilder.CreateLockedContent();
+				}
+
+				if (lockedContent is IAbstractMarkupDataContainer lockedContentContainer)
+				{
+					lockedContentContainer.Clear();
+
+					var container = containers.Peek();
+					container.Add(lockedContent);
+					containers.Push(lockedContentContainer);
+
+					lockedContentId++;
+				}
+			}
+			else if (elementLocked1.Type == Element.TagType.ClosingTag)
+			{
+				containers.Pop();
+			}
+
+			return lockedContentId;
+		}
+
+		private void UpdateTagPair(ElementTagPair elementTagPair1, ISegment originalTarget, ISegment originalSource,
+			Stack<IAbstractMarkupDataContainer> containers)
+		{
+			if (elementTagPair1.Type == Element.TagType.OpeningTag)
+			{
+				var tagPair = GetElement(elementTagPair1.TagId, originalTarget, originalSource, elementTagPair1);
+				if (tagPair == null)
+				{
+					tagPair = _segmentBuilder.CreateTagPair(elementTagPair1.TagId, elementTagPair1.TagContent);
+				}
+
+				if (tagPair is IAbstractMarkupDataContainer tagPairContainer)
+				{
+					tagPairContainer.Clear();
+
+					var container = containers.Peek();
+					container.Add(tagPair);
+					containers.Push(tagPairContainer);
+				}
+			}
+			else if (elementTagPair1.Type == Element.TagType.ClosingTag)
+			{
+				containers.Pop();
+			}
+		}
+
+		private void UpdateComment(ElementComment elementComment1, Stack<IAbstractMarkupDataContainer> containers)
+		{
+			var comments = Comments.FirstOrDefault(a => a.Key == elementComment1.Id);
+			var newestComment = comments.Value.LastOrDefault();
+			if (newestComment != null)
+			{
+				if (elementComment1.Type == Element.TagType.OpeningTag)
+				{
+					var comment = _segmentBuilder.CreateCommentContainer(newestComment.Text,
+						newestComment.Author, newestComment.Severity,
+						newestComment.Date, newestComment.Version);
+
+					if (comment is IAbstractMarkupDataContainer commentContainer)
+					{
+						commentContainer.Clear();
+
+						var container = containers.Peek();
+						container.Add(comment);
+
+						containers.Push(commentContainer);
+					}
+				}
+				else if (elementComment1.Type == Element.TagType.ClosingTag)
+				{
+					containers.Pop();
+				}
+			}
+		}
+
+		private string WindowsUserId => (Environment.UserDomainName + "\\" + Environment.UserName).Trim();
+
+		private string FormatAsInvariantDateTime(DateTime date)
+		{
+			return date.ToString(DateTimeFormatInfo.InvariantInfo);
+		}
+
+		private IAbstractMarkupData GetElement(string tagId, IAbstractMarkupDataContainer originalTargetSegment,
 			IAbstractMarkupDataContainer sourceSegment, Element element)
 		{
 			var extractor = new ElementExtractor();
@@ -216,13 +284,13 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			{
 				return (IAbstractMarkupData)extractor.FoundElement.Clone();
 			}
-			
+
 			extractor.GetTag(tagId, sourceSegment, element);
 			if (extractor.FoundElement != null)
 			{
 				return (IAbstractMarkupData)extractor.FoundElement.Clone();
 			}
-			
+
 			//switch (element)
 			//{
 			//	case ElementTagPair tagPair:

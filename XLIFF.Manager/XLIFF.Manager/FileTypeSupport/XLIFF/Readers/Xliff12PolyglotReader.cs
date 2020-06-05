@@ -15,6 +15,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 	{
 		private readonly SegmentBuilder _segmentBuilder;
 
+		private Dictionary<string, List<IComment>> Comments { get; set; }
+
 		public Xliff12PolyglotReader(SegmentBuilder segmentBuilder)
 		{
 			_segmentBuilder = segmentBuilder;
@@ -25,7 +27,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 			var xliff = new Xliff();
 
 			var xmlTextReader = new XmlTextReader(filePath);
-			var xmlReaderSettings = new XmlReaderSettings { ValidationType = ValidationType.None };
+			var xmlReaderSettings = new XmlReaderSettings
+			{
+				ValidationType = ValidationType.None,
+				IgnoreWhitespace = true,
+				IgnoreComments = true
+			};
 			using (var xmlReader = XmlReader.Create(xmlTextReader, xmlReaderSettings))
 			{
 				var index = 0;
@@ -71,6 +78,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 				}
 			}
 
+			xliff.DocInfo.Comments = Comments;
 			return xliff;
 		}
 
@@ -295,16 +303,135 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							segmentPair.Target = ReadTarget(xmlReaderSub);
 							xmlReaderSub.Close();
 						}
+						else if (string.Compare(xmlReader.Name, "note", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							var comment = ReadComment(xmlReaderSub, out var id);
+
+							AddCommentToCollection(id, comment);
+
+							xmlReaderSub.Close();
+						}
 						break;
 				}
 			}
+
 			transUnit.SegmentPairs.Add(segmentPair);
+
 			return transUnit;
+		}
+
+		private void AddCommentToCollection(string id, IComment comment)
+		{
+			if (Comments == null)
+			{
+				Comments = new Dictionary<string, List<IComment>>();
+			}
+
+			if (Comments.ContainsKey(id))
+			{
+				var commentDef = Comments[id];
+				commentDef.Add(comment);
+			}
+			else
+			{
+				Comments.Add(id, new List<IComment> { comment });
+			}
+		}
+
+		private IComment ReadComment(XmlReader xmlReader, out string id)
+		{
+			id = string.Empty;
+			var user = string.Empty;
+			var version = string.Empty;
+			var date = DateTime.MinValue;
+			var severity = Severity.Undefined;
+			var text = string.Empty;
+			var annotates = string.Empty; // currently not used
+
+			var index = 0;
+			while (xmlReader.Read())
+			{
+				switch (xmlReader.NodeType)
+				{
+					case XmlNodeType.Element:
+						if (index == 0 && string.Compare(xmlReader.Name, "note", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							index++;
+							while (xmlReader.MoveToNextAttribute())
+							{
+								if (string.Compare(xmlReader.Name, "sdl:id", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									id = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "from", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									user = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "sdl:version", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									version = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "sdl:date", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									var format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'";
+									var success = DateTime.TryParseExact(xmlReader.Value, format,
+										CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateValue);
+
+									date = success ? dateValue : DateTime.MinValue;
+								}
+								if (string.Compare(xmlReader.Name, "priority", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									var success = int.TryParse(xmlReader.Value, out var priority);
+									severity = success ? GetSeverity(priority) : Severity.Undefined;
+								}
+								if (string.Compare(xmlReader.Name, "annotates", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									annotates = xmlReader.Value;
+								}
+							}
+						}
+						break;
+					case XmlNodeType.Whitespace:
+						text += xmlReader.Value;
+						break;
+					case XmlNodeType.Text:
+						text += xmlReader.Value;
+						break;
+					case XmlNodeType.CDATA:
+						text += xmlReader.Value;
+						break;
+					case XmlNodeType.EntityReference:
+						text += xmlReader.Name;
+						break;
+				}
+			}
+
+			var comment = _segmentBuilder.CreateComment(text, user, severity, date, version);
+
+			return comment;
+		}
+
+		private Severity GetSeverity(int priority)
+		{
+			switch (priority)
+			{
+				case 5:
+				case 4:
+				case 3:
+					return Severity.High;
+				case 2:
+					return Severity.Medium;
+				case 1:
+					return Severity.Low;
+			}
+
+			return Severity.Undefined;
 		}
 
 		private Source ReadSource(XmlReader xmlReader)
 		{
-			var source = new Source();
+			var segment = new Source();
 
 			while (xmlReader.Read())
 			{
@@ -314,19 +441,19 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 						if (string.Compare(xmlReader.Name, "bpt", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
-							source.Elements.Add(ReadOpeningElementTagPair(xmlReaderSub));
+							segment.Elements.Add(ReadOpeningElementTagPair(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
 						else if (string.Compare(xmlReader.Name, "ept", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
-							source.Elements.Add(ReadClosingElementTagPair(xmlReaderSub));
+							segment.Elements.Add(ReadClosingElementTagPair(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
 						else if (string.Compare(xmlReader.Name, "ph", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
-							source.Elements.Add(ReadElementPlaceholder(xmlReaderSub));
+							segment.Elements.Add(ReadElementPlaceholder(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
 						else if (string.Compare(xmlReader.Name, "mrk", StringComparison.OrdinalIgnoreCase) == 0)
@@ -335,7 +462,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							var elements = ReadElements(xmlReaderSub);
 							if (elements?.Count > 0)
 							{
-								source.Elements.AddRange(elements);
+								segment.Elements.AddRange(elements);
 							}
 						}
 						break;
@@ -346,7 +473,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 								Text = xmlReader.Value
 							};
 
-							source.Elements.Add(whiteSpace);
+							segment.Elements.Add(whiteSpace);
 						}
 						break;
 					case XmlNodeType.Text:
@@ -356,18 +483,38 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 								Text = xmlReader.Value
 							};
 
-							source.Elements.Add(text);
+							segment.Elements.Add(text);
 						}
-						break;		
+						break;
+					case XmlNodeType.CDATA:
+						{
+							var text = new ElementText
+							{
+								Text = xmlReader.Value
+							};
+
+							segment.Elements.Add(text);
+						}
+						break;
+					case XmlNodeType.EntityReference:
+						{
+							var text = new ElementText
+							{
+								Text = xmlReader.Name
+							};
+
+							segment.Elements.Add(text);
+						}
+						break;
 				}
 			}
 
-			return source;
+			return segment;
 		}
 
 		private Target ReadTarget(XmlReader xmlReader)
 		{
-			var target = new Target();
+			var segment = new Target();
 
 			while (xmlReader.Read())
 			{
@@ -377,19 +524,19 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 						if (string.Compare(xmlReader.Name, "bpt", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
-							target.Elements.Add(ReadOpeningElementTagPair(xmlReaderSub));
+							segment.Elements.Add(ReadOpeningElementTagPair(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
 						else if (string.Compare(xmlReader.Name, "ept", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
-							target.Elements.Add(ReadClosingElementTagPair(xmlReaderSub));
+							segment.Elements.Add(ReadClosingElementTagPair(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
 						else if (string.Compare(xmlReader.Name, "ph", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
-							target.Elements.Add(ReadElementPlaceholder(xmlReaderSub));
+							segment.Elements.Add(ReadElementPlaceholder(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
 						else if (string.Compare(xmlReader.Name, "mrk", StringComparison.OrdinalIgnoreCase) == 0)
@@ -398,7 +545,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							var elements = ReadElements(xmlReaderSub);
 							if (elements?.Count > 0)
 							{
-								target.Elements.AddRange(elements);
+								segment.Elements.AddRange(elements);
 							}
 
 							xmlReaderSub.Close();
@@ -411,7 +558,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 								Text = xmlReader.Value
 							};
 
-							target.Elements.Add(whiteSpace);
+							segment.Elements.Add(whiteSpace);
 						}
 						break;
 					case XmlNodeType.Text:
@@ -421,13 +568,33 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 								Text = xmlReader.Value
 							};
 
-							target.Elements.Add(text);
+							segment.Elements.Add(text);
+						}
+						break;
+					case XmlNodeType.CDATA:
+						{
+							var text = new ElementText
+							{
+								Text = xmlReader.Value
+							};
+
+							segment.Elements.Add(text);
+						}
+						break;
+					case XmlNodeType.EntityReference:
+						{
+							var text = new ElementText
+							{
+								Text = xmlReader.Name
+							};
+
+							segment.Elements.Add(text);
 						}
 						break;
 				}
 			}
 
-			return target;
+			return segment;
 		}
 
 		private ElementTagPair ReadOpeningElementTagPair(XmlReader xmlReader)
@@ -464,6 +631,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 						break;
 					case XmlNodeType.Text:
 						elementTagPair.TagContent += xmlReader.Value;
+						break;
+					case XmlNodeType.CDATA:
+						elementTagPair.TagContent += xmlReader.Value;
+						break;
+					case XmlNodeType.EntityReference:
+						elementTagPair.TagContent += xmlReader.Name;
 						break;
 				}
 			}
@@ -506,6 +679,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 					case XmlNodeType.Text:
 						elementTagPair.TagContent += xmlReader.Value;
 						break;
+					case XmlNodeType.CDATA:
+						elementTagPair.TagContent += xmlReader.Value;
+						break;
+					case XmlNodeType.EntityReference:
+						elementTagPair.TagContent += xmlReader.Name;
+						break;
 				}
 			}
 
@@ -544,6 +723,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 						break;
 					case XmlNodeType.Text:
 						placeholder.TagContent += xmlReader.Value;
+						break;
+					case XmlNodeType.CDATA:
+						placeholder.TagContent += xmlReader.Value;
+						break;
+					case XmlNodeType.EntityReference:
+						placeholder.TagContent += xmlReader.Name;
 						break;
 				}
 			}
@@ -634,6 +819,26 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							elements.Add(text);
 						}
 						break;
+					case XmlNodeType.CDATA:
+						{
+							var text = new ElementText
+							{
+								Text = xmlReader.Value
+							};
+
+							elements.Add(text);
+						}
+						break;
+					case XmlNodeType.EntityReference:
+						{
+							var text = new ElementText
+							{
+								Text = xmlReader.Name
+							};
+
+							elements.Add(text);
+						}
+						break;
 				}
 			}
 
@@ -641,11 +846,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 			if (string.Compare(mtype, "protected", StringComparison.InvariantCultureIgnoreCase) == 0)
 			{
 				elements.Insert(0, new ElementLocked
-				{					
+				{
 					Type = Element.TagType.OpeningTag
 				});
 				elements.Add(new ElementLocked
-				{					
+				{
 					Type = Element.TagType.ClosingTag
 				});
 			}

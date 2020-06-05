@@ -1,14 +1,14 @@
 ﻿<xliff version="1.2" xmlns:sdl="http://schemas.sdl.com/xliff" sdl:support="xliff12sdl" sdl:version="1.2.1">
-  <sdl:doc-info project-id="b749b4a8-7337-4523-a85c-f82db881c203" source="C:\Code\GoogleProject\SDL\Projects\QuotesSample\it-IT\QuotesSample.docx.sdlxliff" source-language="en-US" target-language="it-IT" created="2020-06-04T09:39:25.827Z">
+  <sdl:doc-info project-id="b749b4a8-7337-4523-a85c-f82db881c203" source="C:\Code\GoogleProject\SDL\Projects\QuotesSample\it-IT\QuotesSample.docx.sdlxliff" source-language="en-US" target-language="it-IT" created="2020-06-05T10:35:32.985Z">
     <sdl:cmt-defs>
-      <sdl:cmt-def id="8e3d8310-de53-4c85-8287-7212a0a4a1bc">
+      <sdl:cmt-def id="b31b9d7c-7c42-41e0-90a3-a012d5049c23">
         <sdl:comments>
-          <sdl:comment user="phartnett" date="2020-02-25T09:34:00.513Z" version="1.0" severity="Low">Sample Range Level comment</sdl:comment>
+          <sdl:comment user="phartnett" date="2020-02-25T08:34:00.513Z" version="1.0" severity="Low">Sample Range Level comment</sdl:comment>
         </sdl:comments>
       </sdl:cmt-def>
-      <sdl:cmt-def id="ae2efabc-c9fd-49fd-b0ac-50f08702f889">
+      <sdl:cmt-def id="171522ee-e8e1-4b14-825d-36d2cc18b39c">
         <sdl:comments>
-          <sdl:comment user="phartnett" date="2020-02-25T09:34:37.413Z" version="1.0" severity="Medium">Sample Segment Level comment</sdl:comment>
+          <sdl:comment user="phartnett" date="2020-02-25T08:34:37.413Z" version="1.0" severity="Medium">Sample Segment Level comment</sdl:comment>
         </sdl:comments>
       </sdl:cmt-def>
     </sdl:cmt-defs>
@@ -23,30 +23,14 @@
           <mrk mtype="seg" mid="2">You're gonna need a bigger boat.</mrk>
         </seg-source>
         <target>
-          <mrk mtype="seg" mid="1">Se si crea un <mrk mtype="x-sdl-comment" cid="8e3d8310-de53-4c85-8287-7212a0a4a1bc">prodotto </mrk>che verrà.</mrk>
+          <mrk mtype="seg" mid="1">Se si crea un <mrk mtype="x-sdl-comment" cid="b31b9d7c-7c42-41e0-90a3-a012d5049c23">prodotto </mrk>che verrà.</mrk>
           <mrk mtype="seg" mid="2">
-            <mrk mtype="x-sdl-comment" cid="ae2efabc-c9fd-49fd-b0ac-50f08702f889">Avrai bisogno di una barca più grande.</mrk>
+            <mrk mtype="x-sdl-comment" cid="171522ee-e8e1-4b14-825d-36d2cc18b39c">Avrai bisogno di una barca più grande.</mrk>
           </mrk>
         </target>
         <sdl:seg-defs>
-          <sdl:seg id="1" conf="Draft" origin="mt" origin-system="SDL Machine Translation">
-            <sdl:value key="SegmentIdentityHash">+1GZxzmTa47USLsxsAtC4EHQEQc=</sdl:value>
-            <sdl:value key="tuid">0</sdl:value>
-            <sdl:value key="tuguid">0b017d6b-11cf-4c7b-977d-5c7a7a228582</sdl:value>
-            <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="created_on">02/25/2020 07:10:23</sdl:value>
-            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="modified_on">02/25/2020 07:10:23</sdl:value>
-          </sdl:seg>
-          <sdl:seg id="2" conf="Translated" origin="mt" origin-system="SDL Machine Translation">
-            <sdl:value key="SegmentIdentityHash">j4NfC6mg5SnUTYQaXC2gyphOd4c=</sdl:value>
-            <sdl:value key="tuid">0</sdl:value>
-            <sdl:value key="tuguid">b2124c30-7e37-4cad-9e4d-1535958430f9</sdl:value>
-            <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="created_on">02/25/2020 07:10:28</sdl:value>
-            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="modified_on">02/25/2020 09:15:11</sdl:value>
-          </sdl:seg>
+          <sdl:seg id="1" conf="Draft" origin="mt" origin-system="SDL Machine Translation" />
+          <sdl:seg id="2" conf="Translated" origin="mt" origin-system="SDL Machine Translation" />
         </sdl:seg-defs>
       </trans-unit>
       <trans-unit id="561b877a-c3ad-4828-9fc2-647bc0e98452">
@@ -60,24 +44,8 @@
           <mrk mtype="seg" mid="4">Sto <bpt id="41">&lt;cf underline=single&gt;</bpt>camminando<ept id="41">&lt;/cf&gt;</ept> qui!</mrk>
         </target>
         <sdl:seg-defs>
-          <sdl:seg id="3" conf="Translated" origin="mt" origin-system="SDL Machine Translation">
-            <sdl:value key="SegmentIdentityHash">13VeAlife0axu6P/BKi8oomhDes=</sdl:value>
-            <sdl:value key="tuid">0</sdl:value>
-            <sdl:value key="tuguid">d2fa76e4-1b26-4c7a-8abe-863e694eed2b</sdl:value>
-            <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="created_on">02/25/2020 07:10:32</sdl:value>
-            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="modified_on">02/25/2020 09:15:18</sdl:value>
-          </sdl:seg>
-          <sdl:seg id="4" conf="Draft" origin="mt" origin-system="SDL Machine Translation">
-            <sdl:value key="SegmentIdentityHash">KjCy/pdKo78jeNahadRfgDkuaz4=</sdl:value>
-            <sdl:value key="tuid">0</sdl:value>
-            <sdl:value key="tuguid">edd1ea9e-ebb1-4f03-9cc9-d02b7735494e</sdl:value>
-            <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="created_on">02/25/2020 07:10:39</sdl:value>
-            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="modified_on">02/25/2020 07:10:39</sdl:value>
-          </sdl:seg>
+          <sdl:seg id="3" conf="Translated" origin="mt" origin-system="SDL Machine Translation" />
+          <sdl:seg id="4" conf="Draft" origin="mt" origin-system="SDL Machine Translation" />
         </sdl:seg-defs>
       </trans-unit>
       <trans-unit id="ce305f86-ba91-4918-b59d-c413242aacf0">
@@ -91,28 +59,11 @@
         </seg-source>
         <target>
           <mrk mtype="seg" mid="5">
-            <mrk mtype="protected">
-              <ph id="24">&lt;fn id="1"/&gt;</ph> Midnight Cowboy.</mrk>
-          </mrk>
+            <ph id="24">&lt;fn id="1"/&gt;</ph> Midnight Cowboy.</mrk>
         </target>
         <sdl:seg-defs>
           <sdl:seg id="5" conf="ApprovedSignOff" locked="True" origin="source">
-            <sdl:value key="SegmentIdentityHash">ih8scMiwLSR/tjX8qbFqm238ES8=</sdl:value>
-            <sdl:value key="tuid">0</sdl:value>
-            <sdl:value key="tuguid">b9973dfc-94df-4592-a988-9faec46cf4f6</sdl:value>
-            <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="created_on">02/25/2020 09:16:10</sdl:value>
-            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="modified_on">02/25/2020 09:16:10</sdl:value>
-            <sdl:prev-origin origin="source">
-              <sdl:value key="SegmentIdentityHash">ih8scMiwLSR/tjX8qbFqm238ES8=</sdl:value>
-              <sdl:value key="tuid">0</sdl:value>
-              <sdl:value key="tuguid">b9973dfc-94df-4592-a988-9faec46cf4f6</sdl:value>
-              <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
-              <sdl:value key="created_on">02/25/2020 09:16:10</sdl:value>
-              <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
-              <sdl:value key="modified_on">02/25/2020 09:16:10</sdl:value>
-            </sdl:prev-origin>
+            <sdl:prev-origin origin="source" />
           </sdl:seg>
         </sdl:seg-defs>
       </trans-unit>
@@ -129,24 +80,8 @@
             <bpt id="54">&lt;cf bold=True&gt;</bpt>Toto<ept id="54">&lt;/cf&gt;</ept>, ho la sensazione che non siamo in Kansas più.</mrk>
         </target>
         <sdl:seg-defs>
-          <sdl:seg id="6" conf="ApprovedTranslation" origin="mt" origin-system="SDL Machine Translation">
-            <sdl:value key="SegmentIdentityHash">E1+Gsq+ew+BIRNMWVuJn8aF8XZ0=</sdl:value>
-            <sdl:value key="tuid">0</sdl:value>
-            <sdl:value key="tuguid">2cec32d1-6963-45d5-8fd6-a2e631d81aad</sdl:value>
-            <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="created_on">02/25/2020 07:10:47</sdl:value>
-            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="modified_on">02/25/2020 09:15:26</sdl:value>
-          </sdl:seg>
-          <sdl:seg id="7" conf="Unspecified" origin="mt" origin-system="SDL Machine Translation">
-            <sdl:value key="SegmentIdentityHash">9Ffj5xqvE+4cfi9q3YxOH7xeidA=</sdl:value>
-            <sdl:value key="tuid">0</sdl:value>
-            <sdl:value key="tuguid">3c7a2473-ad1a-4191-86fa-24b4e033e866</sdl:value>
-            <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="created_on">02/25/2020 07:10:53</sdl:value>
-            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="modified_on">02/25/2020 07:21:12</sdl:value>
-          </sdl:seg>
+          <sdl:seg id="6" conf="ApprovedTranslation" origin="mt" origin-system="SDL Machine Translation" />
+          <sdl:seg id="7" conf="Unspecified" origin="mt" origin-system="SDL Machine Translation" />
         </sdl:seg-defs>
       </trans-unit>
       <trans-unit id="2acacb9e-6948-4d3e-b227-3609c00ace61">
@@ -160,28 +95,11 @@
         </seg-source>
         <target>
           <mrk mtype="seg" mid="8">
-            <mrk mtype="protected">
-              <ph id="28">&lt;fn id="2"/&gt;</ph> Wizard of Oz</mrk>
-          </mrk>
+            <ph id="28">&lt;fn id="2"/&gt;</ph> Wizard of Oz</mrk>
         </target>
         <sdl:seg-defs>
           <sdl:seg id="8" conf="ApprovedSignOff" locked="True" origin="source">
-            <sdl:value key="SegmentIdentityHash">+7rjliAFqyGZNuYnDVez4TZTeBk=</sdl:value>
-            <sdl:value key="tuid">0</sdl:value>
-            <sdl:value key="tuguid">f0c968a3-38a9-4aeb-80e8-2ccbdc4c6270</sdl:value>
-            <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="created_on">02/25/2020 09:16:06</sdl:value>
-            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
-            <sdl:value key="modified_on">02/25/2020 09:16:06</sdl:value>
-            <sdl:prev-origin origin="source">
-              <sdl:value key="SegmentIdentityHash">+7rjliAFqyGZNuYnDVez4TZTeBk=</sdl:value>
-              <sdl:value key="tuid">0</sdl:value>
-              <sdl:value key="tuguid">f0c968a3-38a9-4aeb-80e8-2ccbdc4c6270</sdl:value>
-              <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
-              <sdl:value key="created_on">02/25/2020 09:16:06</sdl:value>
-              <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
-              <sdl:value key="modified_on">02/25/2020 09:16:06</sdl:value>
-            </sdl:prev-origin>
+            <sdl:prev-origin origin="source" />
           </sdl:seg>
         </sdl:seg-defs>
       </trans-unit>

@@ -26,7 +26,10 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 			var xliff = new Xliff();
 
 			var xmlTextReader = new XmlTextReader(filePath);
-			var xmlReaderSettings = new XmlReaderSettings { ValidationType = ValidationType.None };
+			var xmlReaderSettings = new XmlReaderSettings
+			{
+				ValidationType = ValidationType.None, IgnoreWhitespace = true, IgnoreComments = true
+			};
 			using (var xmlReader = XmlReader.Create(xmlTextReader, xmlReaderSettings))
 			{
 				var index = 0;
@@ -269,14 +272,16 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 						}
 						break;
 					case XmlNodeType.Whitespace:
-						{
-							text += xmlReader.Value;
-						}
+						text += xmlReader.Value;
 						break;
 					case XmlNodeType.Text:
-						{
-							text += xmlReader.Value;
-						}
+						text += xmlReader.Value;
+						break;
+					case XmlNodeType.CDATA:
+						text += xmlReader.Value;
+						break;
+					case XmlNodeType.EntityReference:
+						text += xmlReader.Name;
 						break;
 				}
 			}
@@ -599,6 +604,26 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							segment.Elements.Add(text);
 						}
 						break;
+					case XmlNodeType.CDATA:
+						{
+							var text = new ElementText
+							{
+								Text = xmlReader.Value
+							};
+
+							segment.Elements.Add(text);
+						}
+						break;
+					case XmlNodeType.EntityReference:
+						{
+							var text = new ElementText
+							{
+								Text = xmlReader.Name
+							};
+
+							segment.Elements.Add(text);
+						}
+						break;
 				}
 			}
 
@@ -675,6 +700,26 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							segment.Elements.Add(text);
 						}
 						break;
+					case XmlNodeType.CDATA:
+						{
+							var text = new ElementText
+							{
+								Text = xmlReader.Value
+							};
+
+							segment.Elements.Add(text);
+						}
+						break;
+					case XmlNodeType.EntityReference:
+						{
+							var text = new ElementText
+							{
+								Text = xmlReader.Name
+							};
+
+							segment.Elements.Add(text);
+						}
+						break;
 				}
 			}
 
@@ -715,6 +760,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 						break;
 					case XmlNodeType.Text:
 						elementTagPair.TagContent += xmlReader.Value;
+						break;
+					case XmlNodeType.CDATA:
+						elementTagPair.TagContent += xmlReader.Value;
+						break;
+					case XmlNodeType.EntityReference:
+						elementTagPair.TagContent += xmlReader.Name;
 						break;
 				}
 			}
@@ -757,6 +808,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 					case XmlNodeType.Text:
 						elementTagPair.TagContent += xmlReader.Value;
 						break;
+					case XmlNodeType.CDATA:
+						elementTagPair.TagContent += xmlReader.Value;
+						break;
+					case XmlNodeType.EntityReference:
+						elementTagPair.TagContent += xmlReader.Name;
+						break;
 				}
 			}
 
@@ -780,7 +837,6 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							{
 								if (string.Compare(xmlReader.Name, "id", StringComparison.OrdinalIgnoreCase) == 0)
 								{
-									// for polyglot support, the segment id is represented by the trans-unit id
 									placeholder.TagId = xmlReader.Value;
 								}
 								if (string.Compare(xmlReader.Name, "equiv-text", StringComparison.OrdinalIgnoreCase) == 0)
@@ -795,6 +851,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 						break;
 					case XmlNodeType.Text:
 						placeholder.TagContent += xmlReader.Value;
+						break;
+					case XmlNodeType.CDATA:
+						placeholder.TagContent += xmlReader.Value;
+						break;
+					case XmlNodeType.EntityReference:
+						placeholder.TagContent += xmlReader.Name;
 						break;
 				}
 			}
@@ -880,6 +942,26 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							var text = new ElementText
 							{
 								Text = xmlReader.Value
+							};
+
+							elements.Add(text);
+						}
+						break;
+					case XmlNodeType.CDATA:
+						{
+							var text = new ElementText
+							{
+								Text = xmlReader.Value
+							};
+
+							elements.Add(text);
+						}
+						break;
+					case XmlNodeType.EntityReference:
+						{
+							var text = new ElementText
+							{
+								Text = xmlReader.Name
 							};
 
 							elements.Add(text);
