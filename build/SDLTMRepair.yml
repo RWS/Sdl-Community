@@ -20,8 +20,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.TMRepair.sln'
-  pathToPublish: 'SDLDataProtectionSuite\SDLDataProtectionSuite\bin\Release\Sdl.Community.SdlDataProtectionSuite.sdlplugin'
+  pathToPublish: 'SDLTMRepair\SDLTMRepair\bin\Release\Sdl.Community.TMRepair.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-#  - template: jobs/publish-build-artifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml
