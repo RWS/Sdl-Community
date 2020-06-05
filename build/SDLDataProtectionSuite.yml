@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLDataProtectionSuite/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLDataProtectionSuite/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/SDLDataProtectionSuite.sln'
+  pathToPublish: 'RapidAddTerm\RapidAddTerm\bin\Release\Sdl.Community.RapidAddTerm.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+#  - template: jobs/publish-build-artifact-task.yml
