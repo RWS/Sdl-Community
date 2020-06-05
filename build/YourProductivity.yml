@@ -18,8 +18,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.YourProductivity.sln'
-  pluginName: 'YourProductivity/Sdl.Community.YourProductivity'
-  artifactName: 'Sdl.Community.YourProductivity.sdlplugin'
+  pathToPublish: 'YourProductivity/Sdl.Community.YourProductivity\bin\Release\Sdl.Community.YourProductivity.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+	- template: jobs/publish-build-artifact-task.yml
