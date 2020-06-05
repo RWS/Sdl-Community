@@ -5,6 +5,7 @@ trigger:
   paths:
     include:
      - TranslationMemoryManagementUtility/*
+
 pr:
   branches:
     include:
@@ -12,14 +13,15 @@ pr:
   paths:
     include:
      - TranslationMemoryManagementUtility/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.TranslationMemoryManagementUtility.sln'
-  pluginName: 'TranslationMemoryManagementUtility/Sdl.Community.TranslationMemoryManagementUtility'
-  artifactName: 'Sdl.Community.TranslationMemoryManagementUtility.sdlplugin'
+  pathToPublish: 'TranslationMemoryManagementUtility/Sdl.Community.TranslationMemoryManagementUtility\bin\Release\Sdl.Community.TranslationMemoryManagementUtility.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+	- template: jobs/publish-build-artifact-task.yml
