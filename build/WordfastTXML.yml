@@ -19,7 +19,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.FileTypeSupport.TXML.sln'
-	pathToPublish: 'Wordfast TXML\bin\Release\Sdl.Community.FileType.TXML.sdlplugin'
+  pathToPublish: 'Wordfast TXML\bin\Release\Sdl.Community.FileType.TXML.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
