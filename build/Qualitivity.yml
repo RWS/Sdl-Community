@@ -20,9 +20,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.Qualitivity.sln'
-  pluginName: 'Qualitivity\Sdl.Community.Qualitivity'
-  artifactName: 'Sdl.Community.Qualitivity.sdlplugin'
+  pathToPublish: 'Qualitivity\Sdl.Community.Qualitivity\bin\Release\Sdl.Community.Qualitivity.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml
