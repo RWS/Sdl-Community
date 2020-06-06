@@ -68,14 +68,16 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public object Clone()
 		{
-			var model = new Project
+			var project = new Project
 			{
 				Id = Id,
 				AbsoluteUri = AbsoluteUri,
 				Name = Name,
-				Created = Created,
 				Customer = Customer?.Clone() as Customer,
-				DueDate = DueDate,
+				Created = new DateTime(Created.Year, Created.Month, Created.Day, Created.Hour,
+					Created.Minute, Created.Second, Created.Millisecond, Created.Kind),				
+				DueDate = new DateTime(DueDate.Year, DueDate.Month, DueDate.Day, DueDate.Hour,
+					DueDate.Minute, DueDate.Second, DueDate.Millisecond, DueDate.Kind),
 				Path = Path,
 				ProjectType = ProjectType,
 				SourceLanguage = SourceLanguage.Clone() as LanguageInfo
@@ -83,14 +85,19 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 			foreach (var languageInfo in TargetLanguages)
 			{
-				model.TargetLanguages.Add(languageInfo.Clone() as LanguageInfo);
-			}
-			foreach (var projectFile in ProjectFiles)
-			{
-				model.ProjectFiles.Add(projectFile.Clone() as ProjectFile);
+				project.TargetLanguages.Add(languageInfo.Clone() as LanguageInfo);
 			}
 
-			return model;
+			foreach (var projectFile in ProjectFiles)
+			{
+				if (projectFile.Clone() is ProjectFile projectFileCloned)
+				{
+					projectFileCloned.Project = project;
+					project.ProjectFiles.Add(projectFileCloned);
+				}
+			}
+
+			return project;
 		}
 	}
 }

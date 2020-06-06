@@ -183,7 +183,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			
 				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 
-				var project = WizardContext.ProjectFiles[0].ProjectModel;
+				var project = WizardContext.ProjectFiles[0].Project;
 				var sdlxliffReader = new SdlxliffReader(_segmentBuilder);
 				var xliffWriter = new XliffWriter(WizardContext.Support);
 

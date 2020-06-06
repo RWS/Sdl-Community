@@ -103,7 +103,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		public void VerifyIsValid()
 		{
-			IsValid = ProjectFiles.Count(a => a.Selected) > 0; 
+			IsValid = ProjectFiles.Count(a => a.Selected &&
+					  !string.IsNullOrEmpty(a.XliffFilePath) &&
+					  File.Exists(a.XliffFilePath)) > 0; 
 		}
 
 		private void VerifyProjectFiles()

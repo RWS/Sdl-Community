@@ -74,7 +74,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			get
 			{				
 				var message = string.Format(PluginResources.StatusLabel_Projects_0_Files_1_Selected_2, 
-					_projectFileActions.Select(a => a.ProjectModel).Distinct().Count(), 
+					_projectFileActions.Select(a => a.Project).Distinct().Count(), 
 					_projectFileActions?.Count, 
 					_selectedProjectFiles?.Count);
 				return message;

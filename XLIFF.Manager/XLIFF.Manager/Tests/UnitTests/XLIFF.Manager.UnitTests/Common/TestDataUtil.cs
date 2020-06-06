@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
@@ -101,7 +100,7 @@ namespace XLIFF.Manager.UnitTests.Common
 				Name = project.Name + ">File " + project.ProjectFiles.Count,
 				Path = "\\Project File Path\\" + project.ProjectFiles.Count,
 				TargetLanguage = targetLanguage,
-				ProjectModel = project
+				Project = project
 			};
 
 			if (action == Enumerators.Action.Export)
@@ -142,7 +141,7 @@ namespace XLIFF.Manager.UnitTests.Common
 				Id = Guid.NewGuid().ToString(),
 				Name = projectFile.Name + ">XLIFF File " + projectFile.ProjectFileActivities.Count,
 				Path = "\\XLIFF File Path\\" + projectFile.ProjectFileActivities.Count,
-				Date = dateTime != DateTime.MinValue ? dateTime : GetRamdomDate(projectFile.ProjectModel.Created),
+				Date = dateTime != DateTime.MinValue ? dateTime : GetRamdomDate(projectFile.Project.Created),
 				Details = status.ToString(),
 				ProjectFile = projectFile
 			};
