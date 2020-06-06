@@ -169,7 +169,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			var projectInfo = selectedProject.GetProjectInfo();
 
-			var projectModel = new Project
+			var project = new Project
 			{
 				Id = projectInfo.Id.ToString(),
 				Name = projectInfo.Name,
@@ -191,24 +191,17 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				{
 					if (projectFile.Clone() is ProjectFile clonedProjectFile)
 					{
-						clonedProjectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString());
-						clonedProjectFile.ProjectModel = projectModel;
-
-						foreach (var fileActivity in clonedProjectFile.ProjectFileActivities)
-						{
-							fileActivity.ProjectFile = clonedProjectFile;
-						}
-
-						projectModel.ProjectFiles.Add(clonedProjectFile);
+						clonedProjectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString());					
+						project.ProjectFiles.Add(clonedProjectFile);
 					}
 				}
 			}
 			else
 			{
-				projectModel.ProjectFiles = GetProjectFiles(selectedProject, projectModel, selectedFileIds);
+				project.ProjectFiles = GetProjectFiles(selectedProject, project, selectedFileIds);
 			}
 
-			return projectModel;
+			return project;
 		}
 
 		private List<ProjectFile> GetProjectFiles(IProject project, Project projectModel, IReadOnlyCollection<string> selectedFileIds)
@@ -250,7 +243,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				TargetLanguage = GetLanguageInfo(targetLanguage.CultureInfo),
 				Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString()),
 				FileType = projectFile.FileTypeId,
-				ProjectModel = project
+				Project = project
 			};
 
 			return projectFileModel;
@@ -302,9 +295,9 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			foreach (var selectedFile in selectedFiles)
 			{
-				if (!selectedProjects.Contains(selectedFile.ProjectModel))
+				if (!selectedProjects.Contains(selectedFile.Project))
 				{
-					selectedProjects.Add(selectedFile.ProjectModel);
+					selectedProjects.Add(selectedFile.Project);
 				}
 			}
 

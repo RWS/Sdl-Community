@@ -12,7 +12,7 @@
              xmlns:converters="clr-namespace:Sdl.Community.XLIFF.Manager.Converters"
              d:DataContext="{d:DesignInstance viewModel:WizardPageImportFilesViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="180" d:DesignWidth="650">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>

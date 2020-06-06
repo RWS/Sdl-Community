@@ -57,22 +57,21 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public object Clone()
 		{
-			var model = new ProjectFileActivity
+			var projectFileActivity = new ProjectFileActivity
 			{
 				ProjectFileId = ProjectFile.Id,
 				Action = Action,
 				Status = Status,
 				Id = Id.Clone() as string,
 				Name = Name.Clone() as string,
-				Date = Date,
+				Date = new DateTime(Date.Year, Date.Month, Date.Day, Date.Hour,
+					Date.Minute, Date.Second, Date.Millisecond, Date.Kind),
 				Path = Path,
 				Details = Details,
 				Selected = Selected
 			};
-
-			//model.ProjectFile = ProjectFile.Clone() as ProjectFile;
-
-			return model;
+			
+			return projectFileActivity;
 		}
 	}
 }

@@ -41,7 +41,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 		private string GetSummaryText()
 		{
-			var project = WizardContext.ProjectFiles[0].ProjectModel;
+			var project = WizardContext.ProjectFiles[0].Project;
 
 			var indent = "   ";
 

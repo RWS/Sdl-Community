@@ -9,7 +9,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		private DateTime _date;
 		private bool _selected;
 		private string _path;
-		private string _importedFilePath;
+		private string _xliffFilePath;
 		private Enumerators.Status _status;
 
 		public ProjectFile()
@@ -19,7 +19,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string ProjectId { get; set; }
 
-		public Project ProjectModel { get; set; }
+		public Project Project { get; set; }
 
 		public List<ProjectFileActivity> ProjectFileActivities { get; set; }
 
@@ -78,11 +78,24 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string Location { get; set; }
 
-		public string XliffFilePath { get; set; }
+		public string XliffFilePath
+		{
+			get => _xliffFilePath;
+			set
+			{
+				if (value == _xliffFilePath)
+				{
+					return;
+				}
+
+				_xliffFilePath = value;
+				OnPropertyChanged(nameof(XliffFilePath));
+			}
+		}
 
 		public DateTime Date
 		{
-			get { return _date; }
+			get => _date;
 			set
 			{
 				_date = value;
@@ -126,8 +139,10 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Id = Id.Clone() as string,
 				Name = Name.Clone() as string,
 				Action = Action,
-				Date = Date,
 				Status = Status,
+				Date = new DateTime(Date.Year, Date.Month, Date.Day, Date.Hour, 
+					Date.Minute, Date.Second, Date.Millisecond, Date.Kind),				
+				Location = Location.Clone() as string,
 				Path = Path.Clone() as string,
 				Selected = Selected,
 				TargetLanguage = TargetLanguage.Clone() as LanguageInfo,
@@ -138,7 +153,11 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 			foreach (var projectFileActivity in ProjectFileActivities)
 			{
-				projectFile.ProjectFileActivities.Add(projectFileActivity.Clone() as ProjectFileActivity);
+				if (projectFileActivity.Clone() is ProjectFileActivity projectFileActivityCloned)
+				{
+					projectFileActivityCloned.ProjectFile = projectFile;
+					projectFile.ProjectFileActivities.Add(projectFileActivityCloned);
+				}
 			}
 
 			return projectFile;
