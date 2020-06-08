@@ -166,9 +166,9 @@ namespace Sdl.Community.FailSafeTask
 				root.Add(new XElement("Result",
 						new XAttribute("Name", projectFile.Name),
 						new XAttribute("Failed", true),
-						FormatMessage(task.Messages)));
+						FormatMessage(task?.Messages)));
 
-				errorMsgReporter.StoreMessage(projectFile.Name, FormatMessage(task.Messages));
+				errorMsgReporter.StoreMessage(projectFile.Name, FormatMessage(task?.Messages));
 			}
 		}
 	}
