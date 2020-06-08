@@ -4,22 +4,22 @@ trigger:
      - master
   paths:
     include:
-     - YourProductivity/*
+     - Word Cloud/*
 pr:
   branches:
     include:
      - master
   paths:
     include:
-     - YourProductivity/*
+     - Word Cloud/*
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.YourProductivity.sln'
-  pluginName: 'YourProductivity/Sdl.Community.YourProductivity'
-  artifactName: 'Sdl.Community.YourProductivity.sdlplugin'
+  solution : '**/Sdl.Community.WordCloud.sln'
+  pluginName: 'Word Cloud/Sdl.Community.WordCloud.Plugin'
+  artifactName: 'Sdl.Community.WordCloud.Plugin.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

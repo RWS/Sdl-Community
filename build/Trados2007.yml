@@ -4,22 +4,22 @@ trigger:
      - master
   paths:
     include:
-     - YourProductivity/*
+     - Trados2007/*
 pr:
   branches:
     include:
      - master
   paths:
     include:
-     - YourProductivity/*
+     - Trados2007/*
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.YourProductivity.sln'
-  pluginName: 'YourProductivity/Sdl.Community.YourProductivity'
-  artifactName: 'Sdl.Community.YourProductivity.sdlplugin'
+  solution : '**/Trados2007.sln'
+  pluginName: 'Trados2007/Trados2007'
+  artifactName: 'Sdl.Community.Trados2007.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

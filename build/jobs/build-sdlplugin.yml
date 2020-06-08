@@ -19,9 +19,3 @@ steps:
     maximumCpuCount: true
 
 - task: PublishPipelineMetadata@0
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact'
-  inputs:
-    artifactName: drop
-    pathToPublish: '$(pluginName)\bin\Release\$(artifactName)'

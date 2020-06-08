@@ -4,22 +4,22 @@ trigger:
      - master
   paths:
     include:
-     - YourProductivity/*
+     - SdlFreshstart/*
+
 pr:
   branches:
     include:
      - master
   paths:
     include:
-     - YourProductivity/*
+     - SdlFreshstart/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.YourProductivity.sln'
-  pluginName: 'YourProductivity/Sdl.Community.YourProductivity'
-  artifactName: 'Sdl.Community.YourProductivity.sdlplugin'
+  solution : '**/Sdl.Community.SdlFreshstart.sln'
 
 steps:
   - template: jobs/build-sdlplugin.yml

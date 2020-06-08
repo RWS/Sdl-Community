@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - SegmentStatusSwitcher/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - SegmentStatusSwitcher/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.projectAnonymizer.sln'
-  pluginName: 'Anonymizer\Anonymizer'
-  artifactName: 'Sdl.Community.projectAnonymizer.sdlplugin'
+  solution : '**/Sdl.Community.SegmentStatusSwitcher.sln'
+  pluginName: 'SegmentStatusSwitcher\Sdl.Community.SegmentStatusSwitcher'
+  artifactName: 'Sdl.Community.SegmentStatusSwitcher.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

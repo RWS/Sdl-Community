@@ -1,0 +1,28 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ApplyStudioProjectTemplate/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ApplyStudioProjectTemplate/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.ApplyStudioProjectTemplate.sln'
+  pluginName: 'ApplyStudioProjectTemplate\Sdl.Community.ApplyStudioProjectTemplate'
+  artifactName: 'Sdl.Community.ApplyStudioProjectTemplate.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/PublishBuildArtifact01-task.yml

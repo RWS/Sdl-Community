@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - CopyTags/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - CopyTags/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  solution : '**/SDLCopyTags.sln'
+  pluginName: 'CopyTags\CopyTags'
+  artifactName: 'SDLCopyTags.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

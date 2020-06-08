@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - TermInjector/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - TermInjector/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  solution : '**/Sdl.Community.TermInjector.sln'
+  pluginName: 'TermInjector/Sdl.Community.TermInjector'
+  artifactName: 'Sdl.Community.TermInjector.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

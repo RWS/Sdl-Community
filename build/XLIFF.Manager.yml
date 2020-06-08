@@ -5,7 +5,13 @@ trigger:
   paths:
     include:
      - XLIFF.Manager/*
-
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - XLIFF.Manager/*
 pool: Studio-OX
 
 variables:

@@ -4,22 +4,24 @@ trigger:
      - master
   paths:
     include:
-     - XML Reader/*
+     - Code samples/AddTUToTM/*
+
 pr:
   branches:
     include:
      - master
   paths:
     include:
-     - XML Reader/*
+     - Code samples/AddTUToTM/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.xmlReader.sln'
-  pluginName: 'XML Reader/Sdl.Community.XmlReader'
-  artifactName: 'Sdl.Community.XmlReader.sdlplugin'
+  solution : '**/AddTUToTM.sln'
+  pluginName: 'Code samples\AddTUToTM\AddTUToTM'
+  artifactName: 'AddTUToTM.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

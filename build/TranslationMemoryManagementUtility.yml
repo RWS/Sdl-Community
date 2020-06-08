@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TranslationMemoryManagementUtility/*
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TranslationMemoryManagementUtility/*
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.TranslationMemoryManagementUtility.sln'
+  pluginName: 'TranslationMemoryManagementUtility/Sdl.Community.TranslationMemoryManagementUtility'
+  artifactName: 'Sdl.Community.TranslationMemoryManagementUtility.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

@@ -4,22 +4,22 @@ trigger:
      - master
   paths:
     include:
-     - YourProductivity/*
+     - GroupShareKitFieldTemplateExample/*
+
 pr:
   branches:
     include:
      - master
   paths:
     include:
-     - YourProductivity/*
+     - GroupShareKitFieldTemplateExample/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.YourProductivity.sln'
-  pluginName: 'YourProductivity/Sdl.Community.YourProductivity'
-  artifactName: 'Sdl.Community.YourProductivity.sdlplugin'
+  solution : '**/GroupShareKitFieldTemplateExample.sln'
 
 steps:
   - template: jobs/build-sdlplugin.yml

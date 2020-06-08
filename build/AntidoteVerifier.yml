@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - Antidote Verifier/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - Antidote Verifier/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.projectAnonymizer.sln'
-  pluginName: 'Anonymizer\Anonymizer'
-  artifactName: 'Sdl.Community.projectAnonymizer.sdlplugin'
+  solution : '**/Sdl.Community.AntidoteVerifier.sln'
+  pluginName: 'Antidote Verifier\Sdl.Community.AntidoteVerifier\Sdl.Community.AntidoteVerifier'
+  artifactName: 'Sdl.Community.AntidoteVerifier.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

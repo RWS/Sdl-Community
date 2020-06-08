@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - TmAnonymizer/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - TmAnonymizer/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  solution : '**/Sdl.Community.SdlTmAnonymizer.sln'
+  pluginName: 'TmAnonymizer/Sdl.Community.TmAnonymizer'
+  artifactName: 'Sdl.Community.SdlTmAnonymizer.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

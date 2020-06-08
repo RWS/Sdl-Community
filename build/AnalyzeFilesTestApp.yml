@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - Code samples/AnalyzeFilesTestApp/*
 
 pr:
   branches:
@@ -12,17 +12,16 @@ pr:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - Code samples/AnalyzeFilesTestApp/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  solution : '**/AnalyzeFilesTestApp.sln'
+  pluginName: 'Code samples\AnalyzeFilesTestApp\AnalyzeFilesTestApp'
+  artifactName: 'AnalyzeFilesTestApp.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml

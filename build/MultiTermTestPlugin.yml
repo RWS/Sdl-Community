@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Code samples/MultiTermTestPlugin/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/MultiTermTestPlugin.sln'
+  pluginName: 'Code samples\MultiTermTestPlugin\MultiTermTestPlugin'
+  artifactName: 'MultiTermTestPlugin.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

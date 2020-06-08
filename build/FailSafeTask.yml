@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - FailSafeTask/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - FailSafeTask/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  solution : '**/Sdl.Community.FailSafeTask.sln'
+  pluginName: 'FailSafeTask\Sdl.Community.FailSafeTask'
+  artifactName: 'FailSafeTask.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

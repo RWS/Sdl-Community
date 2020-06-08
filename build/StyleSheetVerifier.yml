@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - StyleSheetVerifier/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - StyleSheetVerifier/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.projectAnonymizer.sln'
-  pluginName: 'Anonymizer\Anonymizer'
-  artifactName: 'Sdl.Community.projectAnonymizer.sdlplugin'
+  solution : '**/Sdl.Community.StyleSheetVerifier.sln'
+  pluginName: 'StyleSheetVerifier\StyleSheetVerifier'
+  artifactName: 'Sdl.Community.StyleSheetVerifier.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

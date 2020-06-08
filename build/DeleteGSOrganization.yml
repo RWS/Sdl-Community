@@ -4,22 +4,22 @@ trigger:
      - master
   paths:
     include:
-     - XML Reader/*
+     - Code samples/DeleteGSOrganization/*
+
 pr:
   branches:
     include:
      - master
   paths:
     include:
-     - XML Reader/*
+     - Code samples/DeleteGSOrganization/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.xmlReader.sln'
-  pluginName: 'XML Reader/Sdl.Community.XmlReader'
-  artifactName: 'Sdl.Community.XmlReader.sdlplugin'
+  solution : '**/DeleteGSOrganization.sln'
 
 steps:
   - template: jobs/build-sdlplugin.yml

@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - IATETerminologyProvider/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - IATETerminologyProvider/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.projectAnonymizer.sln'
-  pluginName: 'Anonymizer\Anonymizer'
-  artifactName: 'Sdl.Community.projectAnonymizer.sdlplugin'
+  solution : '**/Sdl.Community.IATETerminologyProvider.sln'
+  pluginName: 'IATETerminologyProvider\IATETerminologyProvider'
+  artifactName: 'Sdl.Community.IATETerminologyProvider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

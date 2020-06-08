@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - InvoiceAndQuotes/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - InvoiceAndQuotes/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  solution : '**/Sdl.Community.InvoiceAndQuotes.sln'
+  pluginName: 'InvoiceAndQuotes\Sdl.Community.InvoiceAndQuotes.Integration'
+  artifactName: 'Sdl.Community.InvoiceAndQuotes.Integration.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

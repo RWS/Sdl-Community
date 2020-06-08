@@ -6,6 +6,14 @@ trigger:
     include:
      - AHK plugin/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - AHK plugin/*
+
 pool: Studio-OX
 
 variables:
@@ -17,4 +25,4 @@ variables:
 
 steps:
   - template: jobs/build-sdlplugin.yml
-
+  - template: jobs/PublishBuildArtifact-task.yml

@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - Studio Beta APIs/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - Studio Beta APIs/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.projectAnonymizer.sln'
-  pluginName: 'Anonymizer\Anonymizer'
-  artifactName: 'Sdl.Community.projectAnonymizer.sdlplugin'
+  solution : '**/SDL.Community.BetaAPIs.sln'
+  pluginName: 'Studio Beta APIs\SDL.Community.BetaAPIs\Sdl.Community.BetaAPIs.UI'
+  artifactName: 'Sdl.Community.BetaAPIs.UI.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

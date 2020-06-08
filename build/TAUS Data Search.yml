@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - TAUS Data Search/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - TAUS Data Search/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.projectAnonymizer.sln'
-  pluginName: 'Anonymizer\Anonymizer'
-  artifactName: 'Sdl.Community.projectAnonymizer.sdlplugin'
+  solution : '**/Sdl.Community.Taus.Translation.Provider.sln'
+  pluginName: 'TAUS Data Search/Sdl.Community.Taus.Translation.Provider'
+  artifactName: 'Sdl.Community.Taus.Translation.Provider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

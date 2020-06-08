@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - DeepLMTProvider/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - DeepLMTProvider/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  solution : '**/Sdl.Community.DeepLMTProvider.sln'
+  pluginName: 'DeepLMTProvider\Sdl.Community.DeelLMTProvider'
+  artifactName: 'Sdl.Community.DeepLMTProvider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

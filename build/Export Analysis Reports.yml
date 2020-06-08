@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - Export Analysis Reports/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - AdvancedDisplayFilter/*
+     - Export Analysis Reports/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  solution : '**/Sdl.Community.ExportAnalysisReports.sln'
+  pluginName: 'Export Analysis Reports\Sdl.Community.ExportAnalysisReports'
+  artifactName: 'Sdl.Community.ExportAnalysisReports.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

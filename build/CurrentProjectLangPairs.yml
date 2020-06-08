@@ -4,23 +4,24 @@ trigger:
      - master
   paths:
     include:
-     - Wordfast TXML/*
+     - Code samples/CurrentProjectLangPairs/*
+
 pr:
   branches:
     include:
      - master
   paths:
     include:
-     - Wordfast TXML/*
+     - Code samples/CurrentProjectLangPairs/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.FileTypeSupport.TXML.sln'
-  pluginName: 'Wordfast TXML'
-  artifactName: 'Sdl.Community.FileType.TXML.sdlplugin'
+  solution : '**/CurrentProjectLangPairs.sln'
+  pluginName: 'Code samples\CurrentProjectLangPairs\CurrentProjectLangPairs'
+  artifactName: 'CurrentProjectLangPairs.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

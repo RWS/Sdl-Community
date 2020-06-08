@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - TM Optimizer/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - Anonymizer/*
+     - TM Optimizer/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.projectAnonymizer.sln'
-  pluginName: 'Anonymizer\Anonymizer'
-  artifactName: 'Sdl.Community.projectAnonymizer.sdlplugin'
+  solution : '**/Sdl.Community.TMOptimizer.sln'
+  pluginName: 'TM Optimizer/Sdl.Community.TMOptimizer.Integration'
+  artifactName: 'Sdl.Community.TMOptimizer.Integration.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

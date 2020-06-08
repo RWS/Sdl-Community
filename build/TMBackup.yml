@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - YourStudio/*
+     - TMBackup/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - YourStudio/*
+     - TMBackup/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.YourStudio.sln'
-  pluginName: 'YourStudio'
-  artifactName: 'Sdl.Community.YourStudio.Integration.sdlplugin'
+  solution : '**/Sdl.Community.TMBackup.sln'
+  pluginName: 'TMBackup'
+  artifactName: 'Sdl.Community.TMBackup.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
@@ -29,4 +29,4 @@ steps:
     displayName: 'Publish Artifact'
     inputs:
      artifactName: drop
-     pathToPublish: 'C:\Users\build\AppData\Roaming\SDL\SDL Trados Studio\12\Plugins\Packages\$(artifactName)'
+     pathToPublish: '$(pluginName)\build\$(artifactName)'
