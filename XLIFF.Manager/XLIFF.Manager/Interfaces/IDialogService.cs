@@ -8,12 +8,16 @@ namespace Sdl.Community.XLIFF.Manager.Interfaces
 		/// Open File Dialog window
 		/// </summary>
 		/// <param name="filter">Files extensions</param>
-		List<string> ShowFileDialog(string filter,string title);
+		/// <param name="title">The window title</param>
+		/// <param name="initialDirectory">The initial directory that is selected</param>
+		List<string> ShowFileDialog(string filter, string title, string initialDirectory = null);
 
 		/// <summary>
 		/// Display folder dialog window
 		/// </summary>
+		/// <param name="title">The window title</param>
+		/// <param name="initialDirectory">The initial directory that is selected</param>
 		/// <returns>Selected folder path</returns>
-		string ShowFolderDialog(string dialogTitle);
+		string ShowFolderDialog(string title, string initialDirectory = null);
 	}
 }

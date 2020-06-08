@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
+using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 {
 	public class WizardPageExportOptionsViewModel : WizardPageViewModelBase, IDisposable
-	{		
+	{
+		private readonly IDialogService _dialogService;
 		private List<XLIFFSupport> _xliffSupport;
 		private XLIFFSupport _selectedXliffSupportModel;
 		private string _outputFolder;
@@ -22,9 +23,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
 
-		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext) 
+		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext, IDialogService dialogService) 
 			: base(owner, view, wizardContext)
-		{		
+		{
+			_dialogService = dialogService;
 			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == WizardContext.ExportSupport);
 			OutputFolder = WizardContext.TransactionFolder;
 			CopySourceToTarget = wizardContext.ExportCopySourceToTarget;
@@ -182,13 +184,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 		private void BrowseFolder(object parameter)
 		{
-			var browser = new FolderBrowserDialog();
-			browser.SelectedPath = GetValidFolderPath();
-			browser.Description = PluginResources.Message_SelectOutputFolder;
-
-			if (browser.ShowDialog() == DialogResult.OK)
+			var folderPath = _dialogService.ShowFolderDialog(PluginResources.FolderDialog_Title, GetValidFolderPath());
+			if (string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
 			{
-				OutputFolder = browser.SelectedPath;
+				OutputFolder = folderPath;
 			}
 		}
 

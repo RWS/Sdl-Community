@@ -17,12 +17,12 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 {
 	public class WizardPageImportFilesViewModel : WizardPageViewModelBase, IDisposable
 	{
+		private readonly IDialogService _dialogService;
 		private ICommand _addFolderCommand;
 		private ICommand _addFilesCommand;
 		private ICommand _checkAllCommand;
 		private ICommand _dragDropCommand;
 		private IList _selectedProjectFiles;
-		private readonly IDialogService _dialogService;
 		private List<ProjectFile> _projectFiles;
 		private bool _checkedAll;
 		private bool _checkingAllAction;
