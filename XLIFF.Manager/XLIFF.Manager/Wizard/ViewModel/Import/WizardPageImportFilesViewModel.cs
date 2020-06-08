@@ -33,6 +33,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			_dialogService = dialogService;
 			ProjectFiles = wizardContext.ProjectFiles;
 			VerifyProjectFiles();
+			VerifyIsValid();
+
 			LoadPage += OnLoadPage;
 		}
 
@@ -92,8 +94,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			get
 			{
 				var message = string.Format(PluginResources.StatusLabel_Files_0_Selected_1,
-					_projectFiles?.Count,
-					_projectFiles?.Count(a => a.Selected));
+					ProjectFiles?.Count,
+					GetValidProjectFilesCount());
 				return message;
 			}
 		}
@@ -103,19 +105,26 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		public void VerifyIsValid()
 		{
-			IsValid = ProjectFiles.Count(a => a.Selected &&
-					  !string.IsNullOrEmpty(a.XliffFilePath) &&
-					  File.Exists(a.XliffFilePath)) > 0; 
+			IsValid = GetValidProjectFilesCount() > 0;
+		}
+
+		private int? GetValidProjectFilesCount()
+		{
+			var count = ProjectFiles.Count(a => a.Selected &&
+			                        !string.IsNullOrEmpty(a.XliffFilePath) &&
+			                        File.Exists(a.XliffFilePath));
+
+			return count;
 		}
 
 		private void VerifyProjectFiles()
 		{
 			foreach (var projectFile in ProjectFiles)
-			{			
+			{
 				if (projectFile.Action == Enumerators.Action.Import)
 				{
 					var activityfile = projectFile.ProjectFileActivities.FirstOrDefault(a => a.Action == Enumerators.Action.Import);
-					
+
 					projectFile.Status = Enumerators.Status.Warning;
 					projectFile.ShortMessage = PluginResources.Message_File_already_imported;
 					projectFile.Details = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString) + Environment.NewLine;
@@ -198,13 +207,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					{
 						var files = GetAllXliffsFromDirectory(fullPath);
 						AddFilesToGrid(files);
-					}					
+					}
 				}
 			}
 		}
 
 		private void AddFilesToGrid(IEnumerable<string> filesPath)
-		{		
+		{
 			var sniffer = new XliffSniffer();
 			var segmentBuilder = new SegmentBuilder();
 			var xliffReader = new XliffReder(sniffer, segmentBuilder);
@@ -214,19 +223,28 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				var xliff = xliffReader.ReadXliff(filePath);
 				var xliffTargetLanguage = xliff.Files.FirstOrDefault()?.TargetLanguage;
 				var xliffTargetPath = GetPathLocation(xliff.DocInfo.Source, xliffTargetLanguage);
-			
+
 				foreach (var projectFile in ProjectFiles)
 				{
+					if (string.Compare(projectFile.Project.Id, xliff.DocInfo?.ProjectId, StringComparison.CurrentCultureIgnoreCase) != 0)
+					{
+						MessageBox.Show(PluginResources.WizardMessage_ProjectIdMissmatch, 
+							PluginResources.XLIFFManager_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+						return;
+					}
+
 					var projectFileTargetLanguage = projectFile.TargetLanguage.CultureInfo.Name;
 					var projectFileTargetPath = GetPathLocation(projectFile.Location, xliffTargetLanguage);
 
 					if (string.Compare(projectFileTargetLanguage, xliffTargetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0 &&
-					    string.Compare(projectFileTargetPath, xliffTargetPath, StringComparison.CurrentCultureIgnoreCase) == 0)
+						string.Compare(projectFileTargetPath, xliffTargetPath, StringComparison.CurrentCultureIgnoreCase) == 0)
 					{
 						projectFile.XliffFilePath = filePath;
 					}
 				}
 			}
+
+			VerifyIsValid();
 		}
 
 		private string GetPathLocation(string path, string targetLanguage)

@@ -176,6 +176,33 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign Confirmation Status: {0}.
+        /// </summary>
+        internal static string Label_AssignConfirmationStatus {
+            get {
+                return ResourceManager.GetString("Label_AssignConfirmationStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup Files: {0}.
+        /// </summary>
+        internal static string Label_BackupFiles {
+            get {
+                return ResourceManager.GetString("Label_BackupFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirmation Status: {0}.
+        /// </summary>
+        internal static string Label_ConfirmationStatus {
+            get {
+                return ResourceManager.GetString("Label_ConfirmationStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy Source to Target: {0}.
         /// </summary>
         internal static string Label_CopySourceToTarget {
@@ -212,6 +239,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Files {0}.
+        /// </summary>
+        internal static string Label_ExportFiles {
+            get {
+                return ResourceManager.GetString("Label_ExportFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Files.
         /// </summary>
         internal static string Label_Files {
@@ -239,6 +275,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import Files {0}.
+        /// </summary>
+        internal static string Label_ImportFiles {
+            get {
+                return ResourceManager.GetString("Label_ImportFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include Translations: {0}.
         /// </summary>
         internal static string Label_IncludeTranslations {
@@ -253,6 +298,15 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string Label_Language {
             get {
                 return ResourceManager.GetString("Label_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Languages: {0}.
+        /// </summary>
+        internal static string Label_Languages {
+            get {
+                return ResourceManager.GetString("Label_Languages", resourceCulture);
             }
         }
         
@@ -284,6 +338,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overwrite existing translations: {0}.
+        /// </summary>
+        internal static string Label_OverwriteExistingTranslations {
+            get {
+                return ResourceManager.GetString("Label_OverwriteExistingTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Project.
         /// </summary>
         internal static string Label_Project {
@@ -307,15 +370,6 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string Label_SelectedFiles {
             get {
                 return ResourceManager.GetString("Label_SelectedFiles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Selected Languages: {0}.
-        /// </summary>
-        internal static string Label_SelectedLanguages {
-            get {
-                return ResourceManager.GetString("Label_SelectedLanguages", resourceCulture);
             }
         }
         
@@ -599,6 +653,51 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string WindowsControl_Restore {
             get {
                 return ResourceManager.GetString("WindowsControl_Restore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple projects selected!.
+        /// </summary>
+        internal static string WizardMessage_MultipleProjectsSelected {
+            get {
+                return ResourceManager.GetString("WizardMessage_MultipleProjectsSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No action selected.
+        /// </summary>
+        internal static string WizardMessage_NoActionSelected {
+            get {
+                return ResourceManager.GetString("WizardMessage_NoActionSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No project selected!.
+        /// </summary>
+        internal static string WizardMessage_NoProjectSelected {
+            get {
+                return ResourceManager.GetString("WizardMessage_NoProjectSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project id from the import file does not match that of the current project!.
+        /// </summary>
+        internal static string WizardMessage_ProjectIdMissmatch {
+            get {
+                return ResourceManager.GetString("WizardMessage_ProjectIdMissmatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to locate the selected project!.
+        /// </summary>
+        internal static string WizardMessage_UnableToLocateSelectedProject {
+            get {
+                return ResourceManager.GetString("WizardMessage_UnableToLocateSelectedProject", resourceCulture);
             }
         }
         

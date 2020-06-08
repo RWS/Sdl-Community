@@ -25,10 +25,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext) 
 			: base(owner, view, wizardContext)
 		{		
-			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == WizardContext.Support);
-			OutputFolder = WizardContext.OutputFolder;
-			CopySourceToTarget = wizardContext.CopySourceToTarget;
-			IncludeTranslations = wizardContext.IncludeTranslations;
+			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == WizardContext.ExportSupport);
+			OutputFolder = WizardContext.TransactionFolder;
+			CopySourceToTarget = wizardContext.ExportCopySourceToTarget;
+			IncludeTranslations = wizardContext.ExportIncludeTranslations;
 
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
@@ -224,10 +224,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 		private void OnLeavePage(object sender, EventArgs e)
 		{
-			WizardContext.OutputFolder = OutputFolder;
-			WizardContext.Support = SelectedXliffSupport.SupportType;
-			WizardContext.CopySourceToTarget = CopySourceToTarget;
-			WizardContext.IncludeTranslations = IncludeTranslations;
+			WizardContext.TransactionFolder = OutputFolder;
+			WizardContext.ExportSupport = SelectedXliffSupport.SupportType;
+			WizardContext.ExportCopySourceToTarget = CopySourceToTarget;
+			WizardContext.ExportIncludeTranslations = IncludeTranslations;
 		}
 
 		public void Dispose()

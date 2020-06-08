@@ -136,19 +136,19 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			var projectFile = new ProjectFile
 			{
 				ProjectId = ProjectId,
-				Id = Id.Clone() as string,
-				Name = Name.Clone() as string,
+				Id = Id,
+				Name = Name,
 				Action = Action,
 				Status = Status,
 				Date = new DateTime(Date.Year, Date.Month, Date.Day, Date.Hour, 
 					Date.Minute, Date.Second, Date.Millisecond, Date.Kind),				
-				Location = Location.Clone() as string,
-				Path = Path.Clone() as string,
+				Location = Location ,
+				Path = Path ,
 				Selected = Selected,
-				TargetLanguage = TargetLanguage.Clone() as LanguageInfo,
-				XliffFilePath = XliffFilePath.Clone() as string,
-				Details = Details?.Clone() as string,
-				FileType = FileType.Clone() as string
+				TargetLanguage = TargetLanguage?.Clone() as LanguageInfo,
+				XliffFilePath = XliffFilePath ,
+				Details = Details,
+				FileType = FileType
 			};
 
 			foreach (var projectFileActivity in ProjectFileActivities)

@@ -58,25 +58,25 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Options + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_XliffSupport, WizardContext.Support) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_XliffSupport, WizardContext.ExportSupport) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.IncludeTranslations) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.CopySourceToTarget) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.ExportIncludeTranslations) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.ExportCopySourceToTarget) + Environment.NewLine;
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_SelectedFiles, WizardContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_SelectedLanguages, GetSelectedLanguagesString()) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_ExportFiles, WizardContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()) + Environment.NewLine;
 
 			var targetLanguages = WizardContext.ProjectFiles.Where(a => a.Selected)
 				.Select(a => a.TargetLanguage.CultureInfo).Distinct();
 			foreach (var targetLanguage in targetLanguages)
 			{
 				var languageFolder = WizardContext.GetLanguageFolder(targetLanguage);
-				var languageFolderLocation = string.IsNullOrEmpty(WizardContext.ProjectFolder)
+				var languageFolderLocation = string.IsNullOrEmpty(WizardContext.LocalProjectFolder)
 					? languageFolder
-					: Path.Combine("..", languageFolder.Replace(WizardContext.ProjectFolder, string.Empty).Trim('\\'));
+					: Path.Combine("..", languageFolder.Replace(WizardContext.LocalProjectFolder, string.Empty).Trim('\\'));
 
 				summaryText += Environment.NewLine;
 				summaryText += string.Format(PluginResources.Label_Language, targetLanguage.DisplayName) + Environment.NewLine;
