@@ -156,6 +156,7 @@
     </Compile>
     <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="Controls\TextBoxWithEllipsis.cs" />
     <Compile Include="Controls\ToolWindowsControl.xaml.cs">
       <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
     </Compile>
@@ -167,6 +168,7 @@
     </Compile>
     <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
     <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
+    <Compile Include="Converters\GteConverter.cs" />
     <Compile Include="CustomEventArgs\ProjectSelectionChangedEventArgs.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ContentWriter.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ElementExtractor.cs" />

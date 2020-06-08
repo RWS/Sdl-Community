@@ -66,8 +66,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_SelectedFiles, WizardContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_SelectedLanguages, GetSelectedLanguagesString()) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_ExportFiles, WizardContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()) + Environment.NewLine;
 
 			var targetLanguages = WizardContext.ProjectFiles.Where(a => a.Selected)
 				.Select(a => a.TargetLanguage.CultureInfo).Distinct();

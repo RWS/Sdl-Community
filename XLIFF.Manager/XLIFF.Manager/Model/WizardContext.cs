@@ -12,10 +12,11 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		public WizardContext()
 		{
 			Action = Enumerators.Action.None;
+			ProjectFiles = new List<ProjectFile>();
+			DateTimeStamp = DateTime.UtcNow;
+
 			ExportSupport = Enumerators.XLIFFSupport.xliff12polyglot;
-			ImportConfirmationStatus = ConfirmationLevel.Draft;
-			ProjectFiles = new List<ProjectFile>();			
-			DateTimeStamp = DateTime.UtcNow;			
+			ImportConfirmationStatus = ConfirmationLevel.Draft;						
 		}
 
 		public Enumerators.Action Action { get; set; }
@@ -57,7 +58,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public bool ExportCopySourceToTarget { get; set; }
 
-		public bool ImportBackupFile { get; set; }
+		public bool ImportBackupFiles { get; set; }
 
 		public bool ImportOverwriteTranslations { get; set; }
 

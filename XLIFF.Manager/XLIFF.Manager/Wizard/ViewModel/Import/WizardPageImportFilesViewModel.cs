@@ -110,9 +110,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		private int? GetValidProjectFilesCount()
 		{
-			return ProjectFiles.Count(a => a.Selected &&
+			var count = ProjectFiles.Count(a => a.Selected &&
 			                        !string.IsNullOrEmpty(a.XliffFilePath) &&
 			                        File.Exists(a.XliffFilePath));
+
+			return count;
 		}
 
 		private void VerifyProjectFiles()

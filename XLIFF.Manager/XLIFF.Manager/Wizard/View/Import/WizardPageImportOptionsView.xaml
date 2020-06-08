@@ -27,9 +27,7 @@
 		<GroupBox Header="Options">
 			<Grid Margin="10">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
@@ -37,6 +35,26 @@
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
+
+				<CheckBox Grid.Row="0" Margin="5,10,5,5" Grid.Column="0"  Content="Backup Files" 
+				          IsChecked="{Binding BackupFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+				<CheckBox Grid.Row="1" Margin="5,10,5,5" Grid.Column="0" Content="Overwrite existing translations" 
+				          IsChecked="{Binding OverwriteTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+				<StackPanel Grid.Row="2" Grid.Column="0" Height="24" Margin="5,5,5,5" Orientation="Horizontal">
+					
+					<CheckBox Content="Assign Confirmation Status" Margin="0,0,10,0" VerticalAlignment="Center"
+					          IsChecked="{Binding OverrideConfirmationStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+					<ComboBox Width="200" HorizontalAlignment="Left" Height="22"
+					          VerticalAlignment="Center"
+					          VerticalContentAlignment="Center"
+					          ItemsSource="{Binding ConfirmationStatuses, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }"					          
+					          SelectedItem="{Binding ConfirmationStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					          IsEnabled="{Binding OverrideConfirmationStatus, UpdateSourceTrigger=PropertyChanged}"
+					          />
+				</StackPanel>
 
 			</Grid>
 		</GroupBox>

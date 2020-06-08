@@ -253,8 +253,8 @@
   <data name="Label_SelectedFiles" xml:space="preserve">
     <value>Selected Files: {0}</value>
   </data>
-  <data name="Label_SelectedLanguages" xml:space="preserve">
-    <value>Selected Languages: {0}</value>
+  <data name="Label_Languages" xml:space="preserve">
+    <value>Languages: {0}</value>
   </data>
   <data name="Label_WorkingFolder" xml:space="preserve">
     <value>Working Folder: {0}</value>
@@ -325,37 +325,55 @@
   <data name="FolderDialog_Title" xml:space="preserve">
     <value>Please select a folder</value>
   </data>
-	<data name="Message_SelectOutputFolder" xml:space="preserve">
+  <data name="Message_SelectOutputFolder" xml:space="preserve">
     <value>Select the output folder</value>
   </data>
-	<data name="Message_File_already_imported" xml:space="preserve">
+  <data name="Message_File_already_imported" xml:space="preserve">
     <value>File already imported</value>
   </data>
-	<data name="Message_File_already_exported" xml:space="preserve">
+  <data name="Message_File_already_exported" xml:space="preserve">
     <value>File already exported</value>
   </data>
-	<data name="Message_Exported_on_0" xml:space="preserve">
+  <data name="Message_Exported_on_0" xml:space="preserve">
     <value>Exported on: {0}</value>
   </data>
-	<data name="Message_Imported_on_0" xml:space="preserve">
+  <data name="Message_Imported_on_0" xml:space="preserve">
     <value>Imported on: {0}</value>
   </data>
-	<data name="Message_File_Path_0" xml:space="preserve">
+  <data name="Message_File_Path_0" xml:space="preserve">
     <value>Path: {0}</value>
   </data>
-	<data name="WizardMessage_UnableToLocateSelectedProject" xml:space="preserve">
+  <data name="WizardMessage_UnableToLocateSelectedProject" xml:space="preserve">
     <value>Unable to locate the selected project!</value>
   </data>
-	<data name="WizardMessage_MultipleProjectsSelected" xml:space="preserve">
+  <data name="WizardMessage_MultipleProjectsSelected" xml:space="preserve">
     <value>Multiple projects selected!</value>
   </data>
-	<data name="WizardMessage_NoProjectSelected" xml:space="preserve">
+  <data name="WizardMessage_NoProjectSelected" xml:space="preserve">
     <value>No project selected!</value>
   </data>
-	<data name="WizardMessage_NoActionSelected" xml:space="preserve">
+  <data name="WizardMessage_NoActionSelected" xml:space="preserve">
     <value>No action selected</value>
   </data>
-	<data name="WizardMessage_ProjectIdMissmatch" xml:space="preserve">
+  <data name="WizardMessage_ProjectIdMissmatch" xml:space="preserve">
     <value>The project id from the import file does not match that of the current project!</value>
+  </data>
+  <data name="Label_BackupFiles" xml:space="preserve">
+    <value>Backup Files: {0}</value>
+  </data>
+  <data name="Label_OverwriteExistingTranslations" xml:space="preserve">
+    <value>Overwrite existing translations: {0}</value>
+  </data>
+  <data name="Label_AssignConfirmationStatus" xml:space="preserve">
+    <value>Assign Confirmation Status: {0}</value>
+  </data>
+  <data name="Label_ConfirmationStatus" xml:space="preserve">
+    <value>Confirmation Status: {0}</value>
+  </data>
+  <data name="Label_ImportFiles" xml:space="preserve">
+    <value>Import Files {0}</value>
+  </data>
+  <data name="Label_ExportFiles" xml:space="preserve">
+    <value>Export Files {0}</value>
   </data>
 </root>
