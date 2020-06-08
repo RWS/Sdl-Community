@@ -169,26 +169,26 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			}
 		}
 
-		private void UpdatePlaceholder(ElementPlaceholder elementPlaceholder1, ISegment originalTarget, ISegment originalSource,
+		private void UpdatePlaceholder(ElementPlaceholder elementPlaceholder, ISegment originalTarget, ISegment originalSource,
 			Stack<IAbstractMarkupDataContainer> containers)
 		{
-			var placeholder = GetElement(elementPlaceholder1.TagId, originalTarget, originalSource, elementPlaceholder1);
+			var placeholder = GetElement(elementPlaceholder.TagId, originalTarget, originalSource, elementPlaceholder);
 			if (placeholder == null)
 			{
-				placeholder = _segmentBuilder.CreatePlaceholder(elementPlaceholder1.TagId,
-					elementPlaceholder1.TagContent);
+				placeholder = _segmentBuilder.CreatePlaceholder(elementPlaceholder.TagId,
+					elementPlaceholder.TagContent);
 			}
 
 			var container = containers.Peek();
 			container.Add(placeholder);
 		}
 
-		private int UpdateLockedContent(ElementLocked elementLocked1, int lockedContentId, ISegment originalTarget,
+		private int UpdateLockedContent(ElementLocked elementLocked, int lockedContentId, ISegment originalTarget,
 			ISegment originalSource, Stack<IAbstractMarkupDataContainer> containers)
 		{
-			if (elementLocked1.Type == Element.TagType.OpeningTag)
+			if (elementLocked.Type == Element.TagType.OpeningTag)
 			{
-				var lockedContent = GetElement(lockedContentId.ToString(), originalTarget, originalSource, elementLocked1);
+				var lockedContent = GetElement(lockedContentId.ToString(), originalTarget, originalSource, elementLocked);
 				if (lockedContent == null)
 				{
 					lockedContent = _segmentBuilder.CreateLockedContent();
@@ -205,7 +205,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					lockedContentId++;
 				}
 			}
-			else if (elementLocked1.Type == Element.TagType.ClosingTag)
+			else if (elementLocked.Type == Element.TagType.ClosingTag)
 			{
 				containers.Pop();
 			}
@@ -213,15 +213,15 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			return lockedContentId;
 		}
 
-		private void UpdateTagPair(ElementTagPair elementTagPair1, ISegment originalTarget, ISegment originalSource,
+		private void UpdateTagPair(ElementTagPair elementTagPair, ISegment originalTarget, ISegment originalSource,
 			Stack<IAbstractMarkupDataContainer> containers)
 		{
-			if (elementTagPair1.Type == Element.TagType.OpeningTag)
+			if (elementTagPair.Type == Element.TagType.OpeningTag)
 			{
-				var tagPair = GetElement(elementTagPair1.TagId, originalTarget, originalSource, elementTagPair1);
+				var tagPair = GetElement(elementTagPair.TagId, originalTarget, originalSource, elementTagPair);
 				if (tagPair == null)
 				{
-					tagPair = _segmentBuilder.CreateTagPair(elementTagPair1.TagId, elementTagPair1.TagContent);
+					tagPair = _segmentBuilder.CreateTagPair(elementTagPair.TagId, elementTagPair.TagContent);
 				}
 
 				if (tagPair is IAbstractMarkupDataContainer tagPairContainer)
@@ -233,19 +233,19 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					containers.Push(tagPairContainer);
 				}
 			}
-			else if (elementTagPair1.Type == Element.TagType.ClosingTag)
+			else if (elementTagPair.Type == Element.TagType.ClosingTag)
 			{
 				containers.Pop();
 			}
 		}
 
-		private void UpdateComment(ElementComment elementComment1, Stack<IAbstractMarkupDataContainer> containers)
+		private void UpdateComment(ElementComment elementComment, Stack<IAbstractMarkupDataContainer> containers)
 		{
-			var comments = Comments.FirstOrDefault(a => a.Key == elementComment1.Id);
+			var comments = Comments.FirstOrDefault(a => a.Key == elementComment.Id);
 			var newestComment = comments.Value.LastOrDefault();
 			if (newestComment != null)
 			{
-				if (elementComment1.Type == Element.TagType.OpeningTag)
+				if (elementComment.Type == Element.TagType.OpeningTag)
 				{
 					var comment = _segmentBuilder.CreateCommentContainer(newestComment.Text,
 						newestComment.Author, newestComment.Severity,
@@ -261,7 +261,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 						containers.Push(commentContainer);
 					}
 				}
-				else if (elementComment1.Type == Element.TagType.ClosingTag)
+				else if (elementComment.Type == Element.TagType.ClosingTag)
 				{
 					containers.Pop();
 				}

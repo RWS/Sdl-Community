@@ -63,7 +63,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			if (_action == Enumerators.Action.None)
 			{
-				message = "no action selected";
+				message = PluginResources.WizardMessage_NoActionSelected;
 				return null;
 			}
 
@@ -80,7 +80,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			if (!_wizardContext.Completed || _isCancelled)
 			{
-				
+
 			}
 
 			return (!_isCancelled && _wizardContext.Completed) ? _wizardContext : null;
@@ -88,7 +88,11 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 		private bool CreateWizardContext(AbstractController controller, out string message)
 		{
-			_wizardContext = new WizardContext();
+			_wizardContext = new WizardContext
+			{
+				Action = _action
+			};
+
 			message = string.Empty;
 
 			if (controller is ProjectsController || controller is FilesController)
@@ -99,9 +103,8 @@ namespace Sdl.Community.XLIFF.Manager.Service
 					? _filesController.SelectedFiles.Select(a => a.Id.ToString()).ToList()
 					: null;
 
-				_wizardContext.ProjectFolder = projectInfo.LocalProjectFolder;
-				_wizardContext.Support = Enumerators.XLIFFSupport.xliff12polyglot;
-				_wizardContext.OutputFolder = _pathInfo.GetProjectOutputPath(projectInfo);
+				_wizardContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
+				_wizardContext.TransactionFolder = _wizardContext.GetDefaultTransactionPath();
 
 				var projectModel = GetProjectModel(selectedProject, selectedFileIds);
 				_wizardContext.Project = projectModel;
@@ -115,13 +118,13 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 				if (selectedProjects.Count == 0)
 				{
-					message = "No project selected!";
+					message = PluginResources.WizardMessage_NoProjectSelected;
 					return false;
 				}
 
 				if (selectedProjects.Count > 1)
 				{
-					message = "Multiple projects selected!";
+					message = PluginResources.WizardMessage_MultipleProjectsSelected;
 					return false;
 				}
 
@@ -129,15 +132,13 @@ namespace Sdl.Community.XLIFF.Manager.Service
 					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == selectedProjects[0].Id);
 				if (selectedProject == null)
 				{
-					message = "Unable to locate the selected project!";
+					message = PluginResources.WizardMessage_UnableToLocateSelectedProject;
 					return false;
 				}
 
 				var projectInfo = selectedProject.GetProjectInfo();
-
-				_wizardContext.ProjectFolder = projectInfo.LocalProjectFolder;
-				_wizardContext.Support = Enumerators.XLIFFSupport.xliff12polyglot;
-				_wizardContext.OutputFolder = _pathInfo.GetProjectOutputPath(projectInfo);
+				_wizardContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
+				_wizardContext.TransactionFolder = _wizardContext.GetDefaultTransactionPath();
 
 				var projectModel = GetProjectModel(selectedProject, selectedFileIds);
 				_wizardContext.Project = projectModel;
@@ -191,7 +192,8 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				{
 					if (projectFile.Clone() is ProjectFile clonedProjectFile)
 					{
-						clonedProjectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString());					
+						clonedProjectFile.Project = project;
+						clonedProjectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString());
 						project.ProjectFiles.Add(clonedProjectFile);
 					}
 				}

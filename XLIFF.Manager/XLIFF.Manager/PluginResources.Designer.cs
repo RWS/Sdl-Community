@@ -603,6 +603,51 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Multiple projects selected!.
+        /// </summary>
+        internal static string WizardMessage_MultipleProjectsSelected {
+            get {
+                return ResourceManager.GetString("WizardMessage_MultipleProjectsSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No action selected.
+        /// </summary>
+        internal static string WizardMessage_NoActionSelected {
+            get {
+                return ResourceManager.GetString("WizardMessage_NoActionSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No project selected!.
+        /// </summary>
+        internal static string WizardMessage_NoProjectSelected {
+            get {
+                return ResourceManager.GetString("WizardMessage_NoProjectSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project id from the import file does not match that of the current project!.
+        /// </summary>
+        internal static string WizardMessage_ProjectIdMissmatch {
+            get {
+                return ResourceManager.GetString("WizardMessage_ProjectIdMissmatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to locate the selected project!.
+        /// </summary>
+        internal static string WizardMessage_UnableToLocateSelectedProject {
+            get {
+                return ResourceManager.GetString("WizardMessage_UnableToLocateSelectedProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon xliffManager {

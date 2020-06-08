@@ -343,4 +343,19 @@
 	<data name="Message_File_Path_0" xml:space="preserve">
     <value>Path: {0}</value>
   </data>
+	<data name="WizardMessage_UnableToLocateSelectedProject" xml:space="preserve">
+    <value>Unable to locate the selected project!</value>
+  </data>
+	<data name="WizardMessage_MultipleProjectsSelected" xml:space="preserve">
+    <value>Multiple projects selected!</value>
+  </data>
+	<data name="WizardMessage_NoProjectSelected" xml:space="preserve">
+    <value>No project selected!</value>
+  </data>
+	<data name="WizardMessage_NoActionSelected" xml:space="preserve">
+    <value>No action selected</value>
+  </data>
+	<data name="WizardMessage_ProjectIdMissmatch" xml:space="preserve">
+    <value>The project id from the import file does not match that of the current project!</value>
+  </data>
 </root>

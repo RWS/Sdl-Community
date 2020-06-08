@@ -8,11 +8,19 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 	{
 		public WizardPageImportOptionsViewModel(Window owner, object view, WizardContext wizardContext) : base(owner, view, wizardContext)
 		{
-			IsValid = true; //TODO remove this. Used to testing porpouse only
+			VerifyIsValid();
 		}
 
 		public override string DisplayName => PluginResources.PageName_Options;
+
 		public override bool IsValid { get; set; }
+
+		private void VerifyIsValid()
+		{
+			IsValid = true;
+		}
+
+
 		public void Dispose()
 		{
 		}

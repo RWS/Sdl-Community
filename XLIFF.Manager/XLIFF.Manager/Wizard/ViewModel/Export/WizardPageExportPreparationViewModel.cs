@@ -185,7 +185,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 				var project = WizardContext.ProjectFiles[0].Project;
 				var sdlxliffReader = new SdlxliffReader(_segmentBuilder);
-				var xliffWriter = new XliffWriter(WizardContext.Support);
+				var xliffWriter = new XliffWriter(WizardContext.ExportSupport);
 
 				var selectedLanguages = GetSelectedLanguages();
 
@@ -207,8 +207,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 						}
 
 						var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");						
-						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location, WizardContext.CopySourceToTarget);
-						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.IncludeTranslations);
+						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location, WizardContext.ExportCopySourceToTarget);
+						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.ExportIncludeTranslations);
 
 						if (exported)
 						{
