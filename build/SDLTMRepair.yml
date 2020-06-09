@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLTMRepair/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLTMRepair/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.TMRepair.sln'
+  pathToPublish: 'SDLTMRepair\SDLTMRepair\bin\Release\Sdl.Community.TMRepair.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

@@ -20,9 +20,6 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/SdlCommunityUnitTest.sln'
-  pluginName: ''
-  artifactName: ''
 
 steps:
   - template: jobs/build-sdlplugin.yml
-#  - template: jobs/PublishBuildArtifact-task.yml

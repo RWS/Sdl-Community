@@ -4,7 +4,7 @@ trigger:
      - master
   paths:
     include:
-     - Code samples/AddTUToTM/*
+     - AHK plugin/*
 
 pr:
   branches:
@@ -12,16 +12,16 @@ pr:
      - master
   paths:
     include:
-     - Code samples/AddTUToTM/*
+     - AHK plugin/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/AddTUToTM.sln'
-  pluginName: 'Code samples\AddTUToTM\AddTUToTM'
-  artifactName: 'AddTUToTM.sdlplugin'
+  solution : '**/Sdl.Community.AhkPlugin.sln'
+  pathToPublish: 'AHK plugin\Sdl.Community.AhkPlugin\bin\Release\Sdl.Community.AhkPlugin.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

@@ -5,6 +5,7 @@ trigger:
   paths:
     include:
      - TuToTm/*
+
 pr:
   branches:
     include:
@@ -12,14 +13,15 @@ pr:
   paths:
     include:
      - TuToTm/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.TuToTm.sln'
-  pluginName: 'TuToTm/TuToTm'
-  artifactName: 'Sdl.Community.TuToTm.sdlplugin'
+  pathToPublish: 'TuToTm/TuToTm\bin\Release\Sdl.Community.TuToTm.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

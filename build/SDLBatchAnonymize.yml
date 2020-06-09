@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLBatchAnonymize/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLBatchAnonymize/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.SDLBatchAnonymize.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

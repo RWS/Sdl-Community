@@ -20,9 +20,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.DeepLMTProvider.sln'
-  pluginName: 'DeepLMTProvider\Sdl.Community.DeelLMTProvider'
-  artifactName: 'Sdl.Community.DeepLMTProvider.sdlplugin'
+  pathToPublish: 'DeepLMTProvider\Sdl.Community.DeelLMTProvider\bin\Release\Sdl.Community.DeepLMTProvider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

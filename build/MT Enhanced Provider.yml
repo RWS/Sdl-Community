@@ -20,9 +20,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.MtEnhancedProvider.sln'
-  pluginName: 'MT Enhanced Provider\Sdl.Community.MtEnhancedProvider'
-  artifactName: 'Sdl.Community.MtEnhancedProvider.sdlplugin'
+  pathToPublish: 'MT Enhanced Provider\Sdl.Community.MtEnhancedProvider\bin\debug\Sdl.Community.MtEnhancedProvider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact01-task.yml
+  - template: jobs/publish-build-artifact-task.yml

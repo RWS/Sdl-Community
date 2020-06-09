@@ -20,9 +20,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.CommunityLegit.sln'
-  pluginName: 'Legit\Sdl.Community.Legit'
-  artifactName: 'Sdl.Community.LegIt.sdlplugin'
+  pathToPublish: 'Legit\Sdl.Community.Legit\bin\Release\Sdl.Community.LegIt.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

@@ -20,9 +20,8 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.TMOptimizer.sln'
-  pluginName: 'TM Optimizer/Sdl.Community.TMOptimizer.Integration'
-  artifactName: 'Sdl.Community.TMOptimizer.Integration.sdlplugin'
+  pathToPublish: 'TM Optimizer/Sdl.Community.TMOptimizer.Integration\bin\Release\Sdl.Community.TMOptimizer.Integration.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

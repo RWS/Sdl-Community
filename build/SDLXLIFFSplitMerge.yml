@@ -4,16 +4,22 @@ trigger:
      - master
   paths:
     include:
-     - Code samples/EditScript/*
+     - SDLXLIFFSplitMerge/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLXLIFFSplitMerge/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/EditScript.sln'
-  pluginName: 'Code samples\EditScript\EditScript'
-  artifactName: 'EditScript.sdlplugin'
+  solution : '**/SDLXLIFFSplitMerge.sln'
 
 steps:
   - template: jobs/build-sdlplugin.yml
