@@ -201,8 +201,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 		private TransUnit ReadGroup(XmlReader xmlReader)
 		{
 			var transUnit = new TransUnit();
-			var paragraphId = string.Empty;
-
+			
 			var index = 0;
 			while (xmlReader.Read())
 			{
@@ -216,16 +215,15 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							{
 								if (string.Compare(xmlReader.Name, "id", StringComparison.OrdinalIgnoreCase) == 0)
 								{
-									// for polyglot support, the paragraph id is represented by the group id
-									paragraphId = xmlReader.Value;
+									// for polyglot support, the paragraph id is represented by the group id									
+									transUnit.Id = xmlReader.Value;
 								}
 							}
 						}
 						else if (string.Compare(xmlReader.Name, "trans-unit", StringComparison.OrdinalIgnoreCase) == 0)
-						{
+						{							
 							var xmlReaderSub = xmlReader.ReadSubtree();
-							transUnit = ReadTransUnit(xmlReaderSub);
-							transUnit.Id = paragraphId;
+							transUnit.SegmentPairs.Add(ReadTransUnit(xmlReaderSub));							
 							xmlReaderSub.Close();
 						}
 						break;
@@ -235,9 +233,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 			return transUnit;
 		}
 
-		private TransUnit ReadTransUnit(XmlReader xmlReader)
-		{
-			var transUnit = new TransUnit();
+		private SegmentPair ReadTransUnit(XmlReader xmlReader)
+		{			
 			var segmentPair = new SegmentPair(_segmentBuilder);
 
 			var index = 0;
@@ -315,10 +312,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 						break;
 				}
 			}
-
-			transUnit.SegmentPairs.Add(segmentPair);
-
-			return transUnit;
+			
+			return segmentPair;
 		}
 
 		private void AddCommentToCollection(string id, IComment comment)

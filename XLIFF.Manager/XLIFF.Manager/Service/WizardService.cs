@@ -7,8 +7,8 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
 using Sdl.Community.XLIFF.Manager.Common;
-using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
+using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Wizard.View;
 using Sdl.Community.XLIFF.Manager.Wizard.View.Export;
@@ -78,12 +78,23 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			_wizardWindow.Loaded += WizardWindowLoaded;
 			_wizardWindow.ShowDialog();
 
-			if (!_wizardContext.Completed || _isCancelled)
+			if (!_isCancelled && _wizardContext.Completed)
 			{
+				var project = _projectsController.GetAllProjects()?.FirstOrDefault(a =>
+					string.Compare(a.GetProjectInfo().Id.ToString(), _wizardContext.Project.Id,
+						StringComparison.CurrentCultureIgnoreCase) == 0);
 
+				if (project != null && _action == Enumerators.Action.Import)
+				{
+					_projectsController.RefreshProjects();
+					//_projectsController.Close(project);
+					//_projectsController.Add(project.FilePath);
+				}
+
+				return _wizardContext;
 			}
 
-			return (!_isCancelled && _wizardContext.Completed) ? _wizardContext : null;
+			return null;
 		}
 
 		private bool CreateWizardContext(AbstractController controller, out string message)
@@ -322,7 +333,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				pages.Add(new WizardPageImportFilesViewModel(_wizardWindow, new WizardPageImportFilesView(), wizardContext, _dialogService));
 				pages.Add(new WizardPageImportOptionsViewModel(_wizardWindow, new WizardPageImportOptionsView(), wizardContext));
 				pages.Add(new WizardPageImportSummaryViewModel(_wizardWindow, new WizardPageImportSummaryView(), wizardContext));
-				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow, new WizardPageImportPreparationView(), wizardContext));
+				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow, new WizardPageImportPreparationView(), wizardContext, _segmentBuilder));
 			}
 
 			UpdatePageIndexes(pages);

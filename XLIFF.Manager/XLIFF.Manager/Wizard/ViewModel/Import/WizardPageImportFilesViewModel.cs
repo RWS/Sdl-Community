@@ -115,8 +115,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private int? GetValidProjectFilesCount()
 		{
 			var count = ProjectFiles.Count(a => a.Selected &&
-			                        !string.IsNullOrEmpty(a.XliffFilePath) &&
-			                        File.Exists(a.XliffFilePath));
+									!string.IsNullOrEmpty(a.XliffFilePath) &&
+									File.Exists(a.XliffFilePath));
 
 			return count;
 		}
@@ -245,6 +245,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 						var files = GetAllXliffsFromDirectory(fullPath);
 						AddFilesToGrid(files);
 					}
+					else
+					{
+						AddFilesToGrid(new List<string> { fullPath });
+					}
 				}
 			}
 		}
@@ -257,6 +261,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			foreach (var filePath in filesPath)
 			{
+				if (!string.IsNullOrEmpty(filePath) && !File.Exists(filePath))
+				{
+					continue;
+				}
+
 				var xliff = xliffReader.ReadXliff(filePath);
 				var xliffTargetLanguage = xliff.Files.FirstOrDefault()?.TargetLanguage;
 				var xliffTargetPath = GetPathLocation(xliff.DocInfo.Source, xliffTargetLanguage);
@@ -265,7 +274,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				{
 					if (string.Compare(projectFile.Project.Id, xliff.DocInfo?.ProjectId, StringComparison.CurrentCultureIgnoreCase) != 0)
 					{
-						MessageBox.Show(PluginResources.WizardMessage_ProjectIdMissmatch, 
+						MessageBox.Show(PluginResources.WizardMessage_ProjectIdMissmatch,
 							PluginResources.XLIFFManager_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 						return;
 					}

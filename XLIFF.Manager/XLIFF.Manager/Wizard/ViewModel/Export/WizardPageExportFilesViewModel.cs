@@ -190,7 +190,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			}
 		}
 
-
 		private void ProjectFile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			if (!_checkingAllAction && e.PropertyName == nameof(ProjectFile.Selected))

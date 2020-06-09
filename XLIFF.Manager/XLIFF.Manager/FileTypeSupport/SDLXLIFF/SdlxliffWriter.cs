@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
+using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
@@ -14,19 +15,16 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			_segmentBuilder = segmentBuilder;
 		}
 
-		public bool UpdateFile(Xliff xliff, string filePath)
+		public bool UpdateFile(Xliff xliff, string filePathInput, string filePathOutput, bool overWriteTranslations, ConfirmationLevel confirmationStatus)
 		{			
-			var converter = _fileTypeManager.GetConverterToDefaultBilingual(filePath, filePath + ".out.sdlxliff", null);
+			var converter = _fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
 
-			var contentWriter = new ContentWriter(xliff, _segmentBuilder);
+			var contentWriter = new ContentWriter(xliff, _segmentBuilder, overWriteTranslations, confirmationStatus);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();
-
-			//var writer = new XliffFileWriter(filePath);
-			//converter.AddBilingualProcessor(new BilingualContentHandlerAdapter(writer));
+			
 			converter.Parse();
-
 			return true;
 		}
 	}

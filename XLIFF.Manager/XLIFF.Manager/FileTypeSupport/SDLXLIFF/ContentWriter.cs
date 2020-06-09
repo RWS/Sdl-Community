@@ -15,15 +15,19 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 	{
 		private readonly Xliff _xliff;
 		private readonly SegmentBuilder _segmentBuilder;
+		private readonly bool _overwriteTranslations;
+		private readonly ConfirmationLevel _confirmationStatus;
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
 		private SegmentVisitor _segmentVisitor;
 		private File _file;
 
-		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder)
+		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, bool overwriteTranslations, ConfirmationLevel confirmationStatus)
 		{
 			_xliff = xliff;
 			_segmentBuilder = segmentBuilder;
+			_overwriteTranslations = overwriteTranslations;
+			_confirmationStatus = confirmationStatus;
 
 			Comments = _xliff.DocInfo.Comments;
 		}
@@ -52,7 +56,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
-			if (paragraphUnit.IsStructure)
+			if (paragraphUnit.IsStructure || !paragraphUnit.SegmentPairs.Any())
 			{
 				base.ProcessParagraphUnit(paragraphUnit);
 				return;
@@ -78,6 +82,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					continue;
 				}
 
+				if (!_overwriteTranslations && segmentPair.Target.Any())
+				{
+					continue;
+				}
+
 				UpdateTargetSegment(segmentPair, importedSegmentPair);
 			}
 
@@ -88,8 +97,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		{
 			var targetSegment = segmentPair.Target;
 
-			var originalSource = (ISegment) segmentPair.Source.Clone();
-			var originalTarget = (ISegment) targetSegment.Clone();
+			var originalSource = (ISegment)segmentPair.Source.Clone();
+			var originalTarget = (ISegment)targetSegment.Clone();
 
 			// clear the existing content from the target segment
 			targetSegment.Clear();
@@ -129,9 +138,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			UpdateTranslationOrigin(originalTarget, targetSegment);
 		}
 
-		private void UpdateText(ElementText elementText1, Stack<IAbstractMarkupDataContainer> containers)
+		private void UpdateText(ElementText elementText, Stack<IAbstractMarkupDataContainer> containers)
 		{
-			var text = _segmentBuilder.Text(elementText1.Text);
+			var text = _segmentBuilder.Text(elementText.Text);
 			var container = containers.Peek();
 			container.Add(text);
 		}
@@ -165,7 +174,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					targetSegment.Properties.TranslationOrigin.SetMetaData("modified_on", FormatAsInvariantDateTime(DateTime.UtcNow));
 				}
 
-				targetSegment.Properties.ConfirmationLevel = ConfirmationLevel.Draft;
+				targetSegment.Properties.ConfirmationLevel = _confirmationStatus;
 			}
 		}
 

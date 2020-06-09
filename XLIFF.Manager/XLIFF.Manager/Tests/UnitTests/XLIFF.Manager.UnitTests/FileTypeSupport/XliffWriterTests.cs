@@ -29,22 +29,20 @@ namespace XLIFF.Manager.UnitTests.FileTypeSupport
 			//var pocoFilterManager = new PocoFilterManager(false);
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 
-			var xliffWriter = new SdlxliffWriter(fileTypeManager, segmentBuilder);
+			var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, segmentBuilder);
 
 			var testFile = support == Enumerators.XLIFFSupport.xliff12polyglot
 				? _testFilesUtil.GetSampleFilePath("Xliff12", "Polyglot", "QuotesSample.docx.sdlxliff.xliff")
 				: _testFilesUtil.GetSampleFilePath("Xliff12", "Sdl", "QuotesSample.docx.sdlxliff.xliff");
-			var sdlxliffFile = _testFilesUtil.GetSampleFilePath("Sdlxliff", "QuotesSample.docx.sdlxliff");
-
-			var ddd = File.Exists(sdlxliffFile);
+			var sdlxliffFile = _testFilesUtil.GetSampleFilePath("Sdlxliff", "QuotesSample.docx.sdlxliff");			
 
 			// act
 			var xliff = xliffReader.ReadXliff(testFile);
-			var success = xliffWriter.UpdateFile(xliff, sdlxliffFile);
+			var outputFile = sdlxliffFile + ".out.sdlxliff";
+			var success = sdlxliffWriter.UpdateFile(xliff, sdlxliffFile, outputFile);
 			
 			// assert
 			Assert.Equal(support, xliff.Support);
-		}
-	
+		}	
 	}
 }

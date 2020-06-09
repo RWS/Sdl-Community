@@ -36,7 +36,7 @@
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
 
-				<CheckBox Grid.Row="0" Margin="5,10,5,5" Grid.Column="0"  Content="Backup Files" 
+				<CheckBox Grid.Row="0" Margin="5,10,5,5" Grid.Column="0"  Content="Backup Files" IsEnabled="False"
 				          IsChecked="{Binding BackupFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 				<CheckBox Grid.Row="1" Margin="5,10,5,5" Grid.Column="0" Content="Overwrite existing translations" 
