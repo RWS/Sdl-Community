@@ -76,7 +76,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					.Select(a => a.TargetLanguage.CultureInfo).Distinct();
 
 			foreach (var targetLanguage in targetLanguages)
-			{			
+			{
+				var languageFolder = WizardContext.GetLanguageFolder(targetLanguage);
+
 				summaryText += Environment.NewLine;
 				summaryText += string.Format(PluginResources.Label_Language, targetLanguage.DisplayName) + Environment.NewLine;
 
@@ -87,9 +89,19 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
+					var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path);
+					var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
+					var sdlXliffBackup = Path.Combine(xliffFolder, targetLanguageFile.Name);
+
 					summaryText += indent + "SDLXLIFF File: " + targetLanguageFile.Location + Environment.NewLine;
-					summaryText += indent + "Import File: " + targetLanguageFile.XliffFilePath + Environment.NewLine;
-					summaryText += indent + "Copy To TODO: " + targetLanguageFile.XliffFilePath + Environment.NewLine + Environment.NewLine;
+					if (WizardContext.ImportBackupFiles)
+					{
+						summaryText += indent + "Backup: " + sdlXliffBackup + Environment.NewLine;
+					}
+					summaryText += indent + "XLIFF File: " + targetLanguageFile.XliffFilePath + Environment.NewLine;
+					summaryText += indent + "Archive: " + xliffFilePath + Environment.NewLine;
+					
+					summaryText += Environment.NewLine;
 				}
 			}
 

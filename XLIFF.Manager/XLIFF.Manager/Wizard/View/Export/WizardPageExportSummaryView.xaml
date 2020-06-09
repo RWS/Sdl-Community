@@ -22,8 +22,8 @@
 	<Grid Margin="15,10,15,10">
 		<GroupBox Header="Summary">
 			<Grid Margin="10">
-				<TextBox HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
-						 TextWrapping="Wrap"
+				<TextBox HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+				         TextWrapping="NoWrap" IsReadOnly="True"
 				         Text="{Binding SummaryText}" Padding="5" />
 
 			</Grid>

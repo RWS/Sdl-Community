@@ -74,19 +74,19 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			foreach (var targetLanguage in targetLanguages)
 			{
 				var languageFolder = WizardContext.GetLanguageFolder(targetLanguage);
-				var languageFolderLocation = string.IsNullOrEmpty(WizardContext.LocalProjectFolder)
-					? languageFolder
-					: Path.Combine("..", languageFolder.Replace(WizardContext.LocalProjectFolder, string.Empty).Trim('\\'));
-
+			
 				summaryText += Environment.NewLine;
 				summaryText += string.Format(PluginResources.Label_Language, targetLanguage.DisplayName) + Environment.NewLine;
-				summaryText += string.Format(PluginResources.Label_Folder, languageFolderLocation) + Environment.NewLine;
-
+				
 				var targetLanguageFiles =
 					WizardContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage.CultureInfo, targetLanguage));
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
-					summaryText += indent + targetLanguageFile.Path + targetLanguageFile.Name + Environment.NewLine;
+					var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path);
+					var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
+
+					summaryText += indent + "SDLXLIFF File: " + targetLanguageFile.Location + Environment.NewLine;
+					summaryText += indent + "XLIFF File: " + xliffFilePath + Environment.NewLine + Environment.NewLine;										
 				}
 			}
 
