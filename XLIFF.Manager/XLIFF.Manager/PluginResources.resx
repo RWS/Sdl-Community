@@ -376,4 +376,13 @@
   <data name="Label_ExportFiles" xml:space="preserve">
     <value>Export Files {0}</value>
   </data>
+	<data name="label_SdlXliffFile" xml:space="preserve">
+    <value>SDLXLIFF File: {0}</value>
+  </data>
+	<data name="label_XliffFile" xml:space="preserve">
+    <value>XLIFF File: {0}</value>
+  </data>
+	<data name="label_ExceptionMessage" xml:space="preserve">
+    <value>Exception: {0}</value>
+  </data>
 </root>
