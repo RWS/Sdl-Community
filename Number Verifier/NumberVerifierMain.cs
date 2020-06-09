@@ -481,8 +481,9 @@ namespace Sdl.Community.NumberVerifier
 		/// <summary>
 		/// Returns a errors list after numbers are normalized
 		/// </summary>
-		/// <param name="sourceText"></param>
-		/// <param name="targetText"></param>
+		/// <param name="sourceLanguage"></param>
+		/// <param name="targetLanguage"></param>
+		/// <param name="numberModel"></param>
 		/// <returns></returns>
 		public IEnumerable<ErrorReporting> CheckNumbers(string sourceLanguage, string targetLanguage, NumberModel numberModel)
 		{
@@ -500,31 +501,14 @@ namespace Sdl.Community.NumberVerifier
 				numberModel.SourceText = numberModel.SourceArabicText;
 				isHindiVerification = true;
 			}
-			var sourceDecimalExtractComposer = new SourceDecimalSeparatorsExtractComposer().Compose();
-			var sourceThousandsExtractComposer = new SourceThousandSeparatorsExtractComposer().Compose();
+		
+			var sourceNumbersTuple = ValidateSourceText(numberModel);
+			var sourceNumberList = sourceNumbersTuple.Item1;
+			var sourceNormalizedNumberList = sourceNumbersTuple.Item2;
 
-			var sourceDecimalSeparators = sourceDecimalExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { numberModel.SourceText }));
-			var sourceThousandSeparators = sourceThousandsExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { numberModel.SourceText }));
-
-			var sourceList = GetNumbersTuple(numberModel.SourceText, string.Concat(sourceDecimalSeparators),
-				string.Concat(sourceThousandSeparators), VerificationSettings.SourceNoSeparator,
-				VerificationSettings.SourceOmitLeadingZero);
-
-			var targetDecimalExtractComposer = new TargetDecimalSeparatorsExtractComposer().Compose();
-			var targetThousandsExtractComposer = new TargetThousandSeparatorsExtractComposer().Compose();
-
-			var targetDecimalSeparators = targetDecimalExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { numberModel.TargetText }));
-			var targetThousandSeparators = targetThousandsExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { numberModel.TargetText }));
-
-			var targetList = GetNumbersTuple(numberModel.TargetText, string.Concat(targetDecimalSeparators),
-				string.Concat(targetThousandSeparators), VerificationSettings.TargetNoSeparator,
-				VerificationSettings.TargetOmitLeadingZero);
-
-			var sourceNumberList = sourceList.Item1;
-			var sourceNormalizedNumberList = sourceList.Item2;
-
-			var targetNumberList = targetList.Item1;
-			var targetNormalizedNumberList = targetList.Item2;
+			var targetNumbersTuple = ValidateTargetText(numberModel);
+			var targetNumberList = targetNumbersTuple.Item1;
+			var targetNormalizedNumberList = targetNumbersTuple.Item2;
 
 			// remove identical numbers found both in source and target from respective list
 			RemoveIdenticalNumbers(sourceNumberList, targetNumberList, targetNormalizedNumberList,
@@ -538,8 +522,8 @@ namespace Sdl.Community.NumberVerifier
 			RemoveNumbersUndefinedThousandsAndDecimalSeparator(targetNumberList, sourceNumberList,
 				sourceNormalizedNumberList, targetNormalizedNumberList);
 
-			var sourceHindiList = initialSourceHindiText.Equals(numberModel.SourceText) ? new List<string>() { numberModel.SourceText } : new List<string>() { initialSourceHindiText };
-			var targetHindiList = initialTargetHindiText.Equals(numberModel.TargetText) ? new List<string>() { numberModel.TargetText } : new List<string>() { initialTargetHindiText };
+			var sourceHindiList = initialSourceHindiText.Equals(numberModel.SourceText) ? new List<string> { numberModel.SourceText } : new List<string> { initialSourceHindiText };
+			var targetHindiList = initialTargetHindiText.Equals(numberModel.TargetText) ? new List<string> { numberModel.TargetText } : new List<string> { initialTargetHindiText };
 
 			var numberModelRes = new NumberModel
 			{
@@ -569,7 +553,6 @@ namespace Sdl.Community.NumberVerifier
 		public List<ErrorReporting> CheckSourceAndTarget(string sourceText, string targetText)
 		{
 			var errorList = new List<ErrorReporting>();
-			var hindiVerificationList = new List<string>();
 			var errorsListFromNormalizedNumbers = Enumerable.Empty<ErrorReporting>();
 			var numberModel = new NumberModel
 			{
@@ -602,10 +585,7 @@ namespace Sdl.Community.NumberVerifier
 						}
 						return errorList;
 					}
-					else
-					{						
-						return ReturnErrorList(errorsListFromNormalizedNumbers, errorList, numberModel);
-					}
+					return ReturnErrorList(errorsListFromNormalizedNumbers, errorList, numberModel);
 				}
 			}
 			else
@@ -693,6 +673,36 @@ namespace Sdl.Community.NumberVerifier
 			{
 				Log.Logger.Error($"{Constants.RemoveNumbersUndefinedThousandsAndDecimalSeparator} {ex.Message}\n {ex.StackTrace}");
 			}
+		}
+
+		private Tuple<List<string>, List<string>> ValidateSourceText(NumberModel numberModel)
+		{
+			var sourceDecimalExtractComposer = new SourceDecimalSeparatorsExtractComposer().Compose();
+			var sourceThousandsExtractComposer = new SourceThousandSeparatorsExtractComposer().Compose();
+
+			var sourceDecimalSeparators = sourceDecimalExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { numberModel.SourceText }));
+			var sourceThousandSeparators = sourceThousandsExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { numberModel.SourceText }));
+
+			_isSource = true;
+			var sourceNumbersTuple = GetNumbersTuple(numberModel.SourceText, string.Concat(sourceDecimalSeparators),
+				string.Concat(sourceThousandSeparators), VerificationSettings.SourceNoSeparator,
+				VerificationSettings.SourceOmitLeadingZero);
+			return sourceNumbersTuple;
+		}
+
+		private Tuple<List<string>, List<string>> ValidateTargetText(NumberModel numberModel)
+		{
+			var targetDecimalExtractComposer = new TargetDecimalSeparatorsExtractComposer().Compose();
+			var targetThousandsExtractComposer = new TargetThousandSeparatorsExtractComposer().Compose();
+
+			var targetDecimalSeparators = targetDecimalExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { numberModel.TargetText }));
+			var targetThousandSeparators = targetThousandsExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { numberModel.TargetText }));
+
+			_isSource = false;
+			var targetNumbersTuple = GetNumbersTuple(numberModel.TargetText, string.Concat(targetDecimalSeparators),
+				string.Concat(targetThousandSeparators), VerificationSettings.TargetNoSeparator,
+				VerificationSettings.TargetOmitLeadingZero);
+			return targetNumbersTuple;
 		}
 
 		private void RemoveNumbersIgnoreThousandsAndDecimalSeparators(IList sourceNumberList, IList<string> targetNormalizedNumberList,
@@ -798,21 +808,19 @@ namespace Sdl.Community.NumberVerifier
 					}
 				}
 
-				//Compozitie (ApostrophCompositionProcessor)
+				// Composition (ApostrophCompositionProcessor)
 				if (selectedSeparators.Contains("'"))
 				{
 					selectedSep = string.Concat(selectedSeparators, @"\u2019\u0027");
 				}
 
-				//get a list of source separators if we are in case of allow localization, or prevent localization
-				//Composition UniqueSeparatorComposition (are noduri)
-				//primeste IEnumerable(aplic logica de unique)
-				//trebuie com
+				// get a list of source separators if we are in case of allow localization, or prevent localization
+				// Composition UniqueSeparatorComposition
 				if (selectedSep != string.Empty)
 				{
 					var sepSource = selectedSep.Split('\\').ToList();
 
-					//add the separator to list only if that separator does not exists
+					// add the separator to list only if that separator does not exists
 					foreach (var separator in sepSource)
 					{
 						if (!separatorsList.Contains(@"\" + separator.ToLower()) && !string.IsNullOrEmpty(separator))
@@ -822,7 +830,7 @@ namespace Sdl.Community.NumberVerifier
 					}
 				}
 
-				//returns final string of separators used
+				// returns final string of separators used
 				foreach (var sep in separatorsList)
 				{
 					separators = separators + sep;
@@ -835,7 +843,7 @@ namespace Sdl.Community.NumberVerifier
 			return separators;
 		}
 
-		public void NormalizeAlphanumerics(string text, ICollection<string> numeberCollection,
+		public void NormalizeAlphanumerics(string text, ICollection<string> numberCollection,
 			ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators,
 			bool noSeparator, bool omitLeadingZero)
 		{
@@ -897,7 +905,7 @@ namespace Sdl.Community.NumberVerifier
 					}
 					else
 					{
-						expresion = string.Format(@"-?\u2013?\u2212?\u002E?\u2013?\d+(\d+)*");
+						expresion = @"-?\u2013?\u2212?\u002E?\u2013?\d+(\d+)*";
 					}
 				}
 				else
@@ -914,6 +922,10 @@ namespace Sdl.Community.NumberVerifier
 					}
 				}
 				#endregion
+
+				text = FormatTextSpace(separators, text);
+				text = FormatTextForNoSeparator(text);
+
 				foreach (Match match in Regex.Matches(text, expresion))
 				{
 					var normalizedNumber = NormalizedNumber(new SeparatorModel
@@ -925,8 +937,8 @@ namespace Sdl.Community.NumberVerifier
 						CustomSeparators = separators
 					});
 
-					numeberCollection.Add(match.Value);
-					normalizedNumberCollection.Add(normalizedNumber);
+					numberCollection.Add(match.Value?.TrimStart().TrimEnd());
+					normalizedNumberCollection.Add(normalizedNumber.TrimStart().TrimEnd());
 				}
 			}
 			catch(Exception ex)
@@ -989,6 +1001,10 @@ namespace Sdl.Community.NumberVerifier
 				{
 					number = number.Replace("\u2013", "m");
 				}
+				if(positionOfSpecialMinus == 1 && spacePosition == 0)
+				{
+					number = number.Replace("\u2212", "m");
+				}
 				return number.Normalize(NormalizationForm.FormKC);
 			}
 			catch(Exception ex)
@@ -998,22 +1014,29 @@ namespace Sdl.Community.NumberVerifier
 			}
 		}
 
-		public string NormalizeSpecialCharNumber(string number, string separators)
+		// Normalize the custom separators. Replace the corresponding separtor with "m".
+		public string NormalizeSpecialCharNumber(string numberValue, string separators, bool isOmitZero)
 		{
 			try
 			{
-				for (int i = 0; i < separators.Length; i++)
+				// if the number value starts with "m" it means it was already normalized in the previews step
+				if(numberValue.StartsWith("m")  || numberValue.StartsWith(" m") || string.IsNullOrEmpty(separators))
 				{
-					if (number.Contains(separators[i]))
-					{
-						var positionOfChar = number.IndexOf(separators[i]);
-						if (positionOfChar == 0)
-						{
-							number = number.Replace(separators[i], 'm');
-						}
-					}
+					return numberValue;
 				}
-				return number.Normalize(NormalizationForm.FormKC);
+				// do not normalize the OmitZero number (it is already processed within OmitZero method)
+				if (isOmitZero)
+				{
+					return numberValue;
+				}
+
+				var builderSeparators = GetBuilderSeparators(separators);
+				var matchValue = Regex.Match(numberValue, $@"-?\{builderSeparators}d+(\d+)*");
+				if (matchValue.Success)
+				{
+					numberValue = Regex.Replace(matchValue.Value, @"[" + separators + @"]", "m");
+				}
+				return numberValue.Normalize(NormalizationForm.FormKC);
 			}
 			catch(Exception ex)
 			{
@@ -1036,7 +1059,7 @@ namespace Sdl.Community.NumberVerifier
 				}
 
 				separatorModel.MatchValue = NormalizeNumberWithMinusSign(separatorModel.MatchValue);
-				separatorModel.MatchValue = NormalizeSpecialCharNumber(separatorModel.MatchValue, separatorModel.CustomSeparators);
+				separatorModel.MatchValue = NormalizeSpecialCharNumber(separatorModel.MatchValue, separatorModel.CustomSeparators, _omitLeadingZero);
 
 				if (separatorModel.ThousandSeparators != string.Empty &&
 					Regex.IsMatch(separatorModel.MatchValue, @"^m?[1-9]\d{0,2}([" + separatorModel.ThousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
@@ -1088,14 +1111,8 @@ namespace Sdl.Community.NumberVerifier
 
 					if (separatorModel.NoSeparator)
 					{
-						if (_isSource)
-						{
-							normalizedNumber = NormalizeNumberNoSeparator(_sourceDecimalSeparators,	_sourceThousandSeparators, normalizedNumber);
-						}
-						else
-						{
-							normalizedNumber = NormalizeNumberNoSeparator(_targetDecimalSeparators,	_targetThousandSeparators, normalizedNumber);
-						}
+						normalizedNumber = _isSource ? NormalizeNumberNoSeparator(_sourceDecimalSeparators,	_sourceThousandSeparators, normalizedNumber)
+							: NormalizeNumberNoSeparator(_targetDecimalSeparators,	_targetThousandSeparators, normalizedNumber);
 					}
 					return normalizedNumber.Normalize(NormalizationForm.FormKC);
 				}
@@ -1217,6 +1234,40 @@ namespace Sdl.Community.NumberVerifier
 				Log.Logger.Error($"{Constants.NormalizeNumberNoSeparator} {ex.Message}\n {ex.StackTrace}");
 			}
 			return normalizedNumber.Normalize(NormalizationForm.FormKC);
+		}
+
+		// Format text so the 'No-break space'/'Thin space'/'Space'/'Narrow no break space' separators will be removed from the text, when the options are enabled
+		// and Target or Source has NoSeparator option enabled:
+		// eg: source text: 2300 with option 'No separator' and target text: 2 300 with option 'No-break space'
+		private string FormatTextSpace(string separators, string text)
+		{
+			if ((separators.Contains("u00A0") || separators.Contains("u2009") || separators.Contains("u0020") || separators.Contains("u202F"))
+			&& (VerificationSettings.TargetNoSeparator || VerificationSettings.SourceNoSeparator))
+			{
+				text = Regex.Replace(text, @"\s+", "");
+			}
+
+			return text;
+		}
+
+		// Format text so the comma/period will be removed from the text when the TargetNoSeparator or SourceNoSeparator is enabled,
+		// so the number can be validated entirely and it won't be split based on the , or .
+		private string FormatTextForNoSeparator(string text)
+		{
+			if (_isSource && VerificationSettings.TargetNoSeparator || !_isSource && VerificationSettings.SourceNoSeparator)
+			{
+				if (text.Contains(","))
+				{
+					text = Regex.Replace(text, @"\,", "");
+				}
+
+				if (text.Contains("."))
+				{
+					text = Regex.Replace(text, @"\.", "");
+				}
+			}
+
+			return text;
 		}
 
 		private void RemoveMatchingAlphanumerics(IList<string> sourceAlphanumericsList, ICollection<string> targetAlphanumericsList)
