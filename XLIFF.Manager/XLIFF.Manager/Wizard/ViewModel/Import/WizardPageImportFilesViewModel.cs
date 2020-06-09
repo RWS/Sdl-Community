@@ -18,6 +18,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 	public class WizardPageImportFilesViewModel : WizardPageViewModelBase, IDisposable
 	{
 		private readonly IDialogService _dialogService;
+		private ICommand _clearSelectedComand;
+		private ICommand _checkSelectedComand;
 		private ICommand _addFolderCommand;
 		private ICommand _addFilesCommand;
 		private ICommand _checkAllCommand;
@@ -38,6 +40,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			LoadPage += OnLoadPage;
 		}
 
+		public ICommand ClearSelectedCommand => _clearSelectedComand ?? (_clearSelectedComand = new CommandHandler(ClearSelected));
+		public ICommand CheckSelectedCommand => _checkSelectedComand ?? (_checkSelectedComand = new CommandHandler(CheckSelected));
 		public ICommand AddFolderCommand => _addFolderCommand ?? (_addFolderCommand = new RelayCommand(SelectFolder));
 		public ICommand AddFilesCommand => _addFilesCommand ?? (_addFilesCommand = new RelayCommand(AddFiles));
 		public ICommand CheckAllCommand => _checkAllCommand ?? (_checkAllCommand = new RelayCommand(CheckAll));
@@ -151,6 +155,39 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		{
 			CheckedAll = ProjectFiles.Count == ProjectFiles.Count(a => a.Selected);
 			OnPropertyChanged(nameof(StatusLabel));
+		}
+
+		private void ClearSelected(object parameter)
+		{
+			if (SelectedProjectFiles == null)
+			{
+				return;
+			}
+
+			foreach (var selectedFile in SelectedProjectFiles.Cast<ProjectFile>())
+			{
+				selectedFile.XliffFilePath = string.Empty;
+			}
+
+			UpdateCheckAll();
+			VerifyIsValid();
+		}
+
+		private void CheckSelected(object parameter)
+		{
+			if (SelectedProjectFiles == null)
+			{
+				return;
+			}
+
+			var isChecked = Convert.ToBoolean(parameter);
+			foreach (var selectedFile in SelectedProjectFiles.Cast<ProjectFile>())
+			{
+				selectedFile.Selected = isChecked;
+			}
+
+			UpdateCheckAll();
+			VerifyIsValid();
 		}
 
 		private void CheckAll()
@@ -273,7 +310,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private void SelectFolder()
 		{
 			var folderPath = _dialogService.ShowFolderDialog(PluginResources.FolderDialog_Title);
-			if (string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
+			if (!string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
 			{
 				var files = GetAllXliffsFromDirectory(folderPath);
 				AddFilesToGrid(files);

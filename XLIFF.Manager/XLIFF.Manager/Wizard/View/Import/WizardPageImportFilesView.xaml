@@ -87,7 +87,7 @@
 			AllowDrop="True"
 			behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"
 		    Margin="0">
-			
+
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Width="70" IsReadOnly="True" SortMemberPath="Selected" >
 					<DataGridTemplateColumn.Header>
@@ -157,7 +157,7 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				
+
 				<DataGridTemplateColumn Header="XLIFF File" Width="2*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:ProjectFile">
@@ -170,7 +170,7 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				
+
 				<DataGridTemplateColumn Header="Details" Width="1*" CanUserSort="True" IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:ProjectFile">
@@ -179,7 +179,17 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 			</DataGrid.Columns>
-
+			<DataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="Check selected files" Command="{Binding CheckSelectedCommand}" 
+					          CommandParameter="true"/>
+					<MenuItem Header="Uncheck selected files" Command="{Binding CheckSelectedCommand}" 
+					          CommandParameter="false"/>
+					<Separator/>
+					<MenuItem Header="Clear XLIFF file" Command="{Binding ClearSelectedCommand}" 
+					          CommandParameter="false"/>
+				</ContextMenu>
+			</DataGrid.ContextMenu>
 			<DataGrid.GroupStyle>
 				<GroupStyle>
 					<GroupStyle.HeaderTemplate>
@@ -203,6 +213,9 @@
 					</GroupStyle.HeaderTemplate>
 				</GroupStyle>
 			</DataGrid.GroupStyle>
+			<DataGrid.InputBindings>
+				<KeyBinding Key="Delete" Command="{Binding ClearSelectedCommand}" />
+			</DataGrid.InputBindings>
 		</controls:SortAwareDataGrid>
 		<Label Grid.Row="2" HorizontalAlignment="Right" Foreground="#4E4D4D" Content="{Binding StatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 	</Grid>
