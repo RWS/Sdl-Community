@@ -16,7 +16,13 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			DateTimeStamp = DateTime.UtcNow;
 
 			ExportSupport = Enumerators.XLIFFSupport.xliff12polyglot;
-			ImportConfirmationStatus = ConfirmationLevel.Draft;						
+			ExportIncludeTranslations = false;
+			ExportCopySourceToTarget = false;
+
+			ImportBackupFiles = true;
+			ImportOverwriteTranslations = true;
+			ImportOverrideConfirmationStatus = true;
+			ImportConfirmationStatus = ConfirmationLevel.Draft;
 		}
 
 		public Enumerators.Action Action { get; set; }
