@@ -136,6 +136,7 @@
     <Compile Include="GUI\NumberVerifierHelpPage.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Log.cs" />
+    <Compile Include="Helpers\TextFormatter.cs" />
     <Compile Include="Interfaces\IErrorMessageProcessor.cs" />
     <Compile Include="Interfaces\IExtractProcessor.cs" />
     <Compile Include="Interfaces\IExtractSpecification.cs" />

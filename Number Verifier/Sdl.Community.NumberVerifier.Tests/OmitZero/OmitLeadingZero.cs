@@ -47,10 +47,10 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		[InlineData(".55")]
 		public string OmitZeroShortForm(string text)
 		{
-			var imockSettings = Utilities.NumberVerifierLocalizationsSettings.AllowLocalization();
+			var iMockSettings = NumberVerifierLocalizationsSettings.AllowLocalization();
 
-			NumberVerifierLocalizationsSettings.InitSeparators(imockSettings);
-			var numberVerifierMain = new NumberVerifierMain(imockSettings.Object);
+			NumberVerifierLocalizationsSettings.InitSeparators(iMockSettings);
+			var numberVerifierMain = new NumberVerifierMain(iMockSettings.Object);
 
 			var normalizedNumber = numberVerifierMain.OmitZero(text);
 
