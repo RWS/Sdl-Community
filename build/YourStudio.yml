@@ -20,7 +20,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.YourStudio.sln'
-  pathToPublish: $(Build.ArtifactStagingDirectory)
+  pathToPublish: $(System.DefaultWorkingDirectory)
 
 steps:
   - template: jobs/build-sdlplugin.yml
