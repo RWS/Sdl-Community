@@ -11,7 +11,6 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.XLIFF.Manager.Actions.Export
 {
-
 	[Action("XLIFFManager_FilesContextMenu_ExportToXLIFF_Action", typeof(FilesController),
 		Name = "XLIFFManager_ContextMenu_ExportToXLIFF_Name",
 		Icon = "ExportTo",
@@ -102,5 +101,4 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 			Enabled = _filesController.SelectedFiles.Any();
 		}
 	}
-
 }

@@ -13,20 +13,22 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 	internal class ContentReader : IBilingualContentProcessor
 	{
 		private readonly SegmentBuilder _segmentBuilder;
+		private readonly bool _copySourceToTarget;
 		private readonly bool _ignoreTags;
 		private readonly string _inputPath;
 		private readonly string _projectId;
 		private IBilingualContentHandler _output;
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
-		private SegmentVisitor _segmentVisitor;
-		
-		internal ContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder)
+		private SegmentVisitor _segmentVisitor;		
+
+		internal ContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder, bool copySourceToTarget)
 		{
 			_projectId = projectId;
 			_inputPath = inputPath;
 			_ignoreTags = ignoreTags;
 			_segmentBuilder = segmentBuilder;
+			_copySourceToTarget = copySourceToTarget;
 
 			Xliff = new Xliff();
 		}
@@ -129,6 +131,16 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 							Xliff.DocInfo.Comments.Add(comment.Key, comment.Value);
 						}
 					}					
+				}
+
+				if (segmentPair.Target?.Count == 0 && _copySourceToTarget)
+				{
+					segmentPair.Target.Clear();
+
+					foreach (var sourceElement in segmentPair.Source)
+					{
+						segmentPair.Target.Add(sourceElement.Clone() as IAbstractMarkupData);
+					}
 				}
 
 				SegmentVisitor.VisitSegment(segmentPair.Target);

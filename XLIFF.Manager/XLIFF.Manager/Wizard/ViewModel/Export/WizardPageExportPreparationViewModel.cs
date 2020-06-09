@@ -27,7 +27,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private SolidColorBrush _textMessageBrush;
 		private string _textMessage;
 		private StringBuilder _logReport;
-		private string indent = "   ";
 
 		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext, SegmentBuilder segmentBuilder)
 			: base(owner, view, wizardContext)
@@ -106,9 +105,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private async void StartProcessing()
 		{
 			_logReport = new StringBuilder();
-			_logReport.AppendLine("Start Process: XLIFF.Manager.Export " + FormatDateTime(DateTime.Now));
+			_logReport.AppendLine("Start Process: Export " + FormatDateTime(DateTime.Now));
 			_logReport.AppendLine();
 
+			var indent = "   ";
 			var project = WizardContext.ProjectFiles[0].Project;
 			_logReport.AppendLine(PluginResources.Label_Project);
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Id, project.Id));
@@ -168,7 +168,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			FinalizeJobProcesses(success);
 
 			_logReport.AppendLine();
-			_logReport.AppendLine("End Process: XLIFF.Manager.Export " + FormatDateTime(DateTime.Now));
+			_logReport.AppendLine("End Process: Export " + FormatDateTime(DateTime.Now));
 
 
 			var outputFile = Path.Combine(WizardContext.WorkingFolder, "log." + WizardContext.DateTimeStampToString + ".txt");

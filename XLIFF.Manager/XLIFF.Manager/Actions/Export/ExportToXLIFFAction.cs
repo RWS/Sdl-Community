@@ -9,7 +9,6 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.Actions.Export
 {
-
 	[Action("XLIFFManager_ExportToXLIFF_Action", typeof(XLIFFManagerViewController),
 		Name = "XLIFFManager_ExportToXLIFF_Name",
 		Icon = "ExportTo",

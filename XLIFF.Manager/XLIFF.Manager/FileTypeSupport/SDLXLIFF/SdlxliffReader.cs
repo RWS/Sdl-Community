@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
@@ -23,19 +22,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, null, null);
 
-			var contentReader = new ContentReader(projectId, filePath, false, _segmentBuilder);
-
-			if (copySourceToTarget)
-			{
-				converter.AddBilingualProcessor(new SourceToTargetCopier(ExistingContentHandling.Preserve));
-			}
-
+			var contentReader = new ContentReader(projectId, filePath, false, _segmentBuilder, copySourceToTarget);		
 			converter.AddBilingualProcessor(contentReader);
 			
-
 			SourceLanguage = contentReader.SourceLanguage;
-			TargetLanguage = contentReader.TargetLanguage;
-			
+			TargetLanguage = contentReader.TargetLanguage;			
 
 			converter.Parse();
 			return contentReader.Xliff;
