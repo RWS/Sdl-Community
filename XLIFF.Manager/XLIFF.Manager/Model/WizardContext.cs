@@ -92,7 +92,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string GetLanguageFolder(CultureInfo cultureInfo)
 		{
-			var languageFolder = Path.Combine(TransactionFolder, DateTimeStampToString, cultureInfo.Name);
+			var languageFolder = Path.Combine(WorkingFolder, cultureInfo.Name);
 			return languageFolder;
 		}	
 	}

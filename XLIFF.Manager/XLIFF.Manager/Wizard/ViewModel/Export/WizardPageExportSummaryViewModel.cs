@@ -85,8 +85,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 					var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path);
 					var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
 
-					summaryText += indent + "SDLXLIFF File: " + targetLanguageFile.Location + Environment.NewLine;
-					summaryText += indent + "XLIFF File: " + xliffFilePath + Environment.NewLine + Environment.NewLine;										
+					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.label_XliffFile, xliffFilePath + Environment.NewLine) + Environment.NewLine;										
 				}
 			}
 

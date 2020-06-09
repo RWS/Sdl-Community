@@ -239,6 +239,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exception: {0}.
+        /// </summary>
+        internal static string label_ExceptionMessage {
+            get {
+                return ResourceManager.GetString("label_ExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Files {0}.
         /// </summary>
         internal static string Label_ExportFiles {
@@ -365,6 +374,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SDLXLIFF File: {0}.
+        /// </summary>
+        internal static string label_SdlXliffFile {
+            get {
+                return ResourceManager.GetString("label_SdlXliffFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected Files: {0}.
         /// </summary>
         internal static string Label_SelectedFiles {
@@ -406,6 +424,15 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string Label_WorkingFolder {
             get {
                 return ResourceManager.GetString("Label_WorkingFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XLIFF File: {0}.
+        /// </summary>
+        internal static string label_XliffFile {
+            get {
+                return ResourceManager.GetString("label_XliffFile", resourceCulture);
             }
         }
         

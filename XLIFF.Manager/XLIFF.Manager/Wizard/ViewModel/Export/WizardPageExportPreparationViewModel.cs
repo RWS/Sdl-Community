@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,8 +26,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private ICommand _openFolderInExplorerCommand;
 		private SolidColorBrush _textMessageBrush;
 		private string _textMessage;
+		private StringBuilder _logReport;
+		private string indent = "   ";
 
-		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext, SegmentBuilder segmentBuilder) 
+		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext, SegmentBuilder segmentBuilder)
 			: base(owner, view, wizardContext)
 		{
 			_segmentBuilder = segmentBuilder;
@@ -102,7 +105,35 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 		private async void StartProcessing()
 		{
-			//_logger.Info("Start Process: XLIFF.Manager.Export");
+			_logReport = new StringBuilder();
+			_logReport.AppendLine("Start Process: XLIFF.Manager.Export " + FormatDateTime(DateTime.Now));
+			_logReport.AppendLine();
+
+			var project = WizardContext.ProjectFiles[0].Project;
+			_logReport.AppendLine(PluginResources.Label_Project);
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Id, project.Id));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Name, project.Name));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Location, project.Path));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Created, project.Created.ToString(CultureInfo.InvariantCulture)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_DueDate, project.DueDate.ToString(CultureInfo.InvariantCulture)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_SourceLanguage, project.SourceLanguage.CultureInfo.DisplayName));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TargetLanguages, GetProjectTargetLanguagesString(project)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ProjectType, project.ProjectType));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Customer, project.Customer?.Name));
+
+			_logReport.AppendLine();
+			_logReport.AppendLine(PluginResources.Label_Options);
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_XliffSupport, WizardContext.ExportSupport));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.ExportIncludeTranslations));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.ExportCopySourceToTarget));
+
+			_logReport.AppendLine();
+			_logReport.AppendLine(PluginResources.Label_Files);
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExportFiles, WizardContext.ProjectFiles.Count(a => a.Selected)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()));
+			_logReport.AppendLine();
 
 			if (!Directory.Exists(WizardContext.WorkingFolder))
 			{
@@ -136,7 +167,16 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 			FinalizeJobProcesses(success);
 
-			//_logger.Info("End Process: XLIFF.Manager.Export" + Environment.NewLine + Environment.NewLine);
+			_logReport.AppendLine();
+			_logReport.AppendLine("End Process: XLIFF.Manager.Export " + FormatDateTime(DateTime.Now));
+
+
+			var outputFile = Path.Combine(WizardContext.WorkingFolder, "log." + WizardContext.DateTimeStampToString + ".txt");
+			using (var writer = new StreamWriter(outputFile, false, Encoding.UTF8))
+			{
+				writer.Write(_logReport);
+				writer.Flush();
+			}
 		}
 
 		private async Task<bool> Preparation(JobProcess jobProcess)
@@ -145,7 +185,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 			try
 			{
-				//_logger.Info("Phase: Preparation");
+				_logReport.AppendLine();
+				_logReport.AppendLine("Phase: Preparation - Started " + FormatDateTime(DateTime.Now));
 
 				TextMessage = "Initialzing procedures...";
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
@@ -154,7 +195,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				//Refresh();
 				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 
-
+				_logReport.AppendLine("Phase: Preparation - Complete " + FormatDateTime(DateTime.Now));
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
 			catch (Exception ex)
@@ -163,7 +204,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				jobProcess.Status = JobProcess.ProcessStatus.Failed;
 				success = false;
 
-				//_logger.Error(ex.Message);
+				_logReport.AppendLine();
+				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);
@@ -175,12 +217,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 			try
 			{
-				//_logger.Info("Phase: Export");
+				_logReport.AppendLine();
+				_logReport.AppendLine("Phase: Export - Started " + FormatDateTime(DateTime.Now));
 
 				TextMessage = "Converting to XLIFF format...";
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
-			
+
 				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 
 				var project = WizardContext.ProjectFiles[0].Project;
@@ -191,6 +234,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 				foreach (var cultureInfo in selectedLanguages)
 				{
+					_logReport.AppendLine();
+					_logReport.AppendLine(string.Format(PluginResources.Label_Language, cultureInfo.DisplayName));
+
+
 					var languageFolder = WizardContext.GetLanguageFolder(cultureInfo);
 					if (!Directory.Exists(languageFolder))
 					{
@@ -206,9 +253,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 							Directory.CreateDirectory(xliffFolder);
 						}
 
-						var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");						
+						var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");
 						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location, WizardContext.ExportCopySourceToTarget);
 						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.ExportIncludeTranslations);
+
+						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetFile.Location));
+						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, xliffFilePath));
+						_logReport.AppendLine();
 
 						if (exported)
 						{
@@ -218,7 +269,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 							targetFile.Status = Enumerators.Status.Success;
 							targetFile.Details = string.Empty;
 						}
-						
+
 						var activityFile = new ProjectFileActivity
 						{
 							ProjectFileId = targetFile.Id,
@@ -228,13 +279,15 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 							Date = targetFile.Date,
 							Name = Path.GetFileName(targetFile.XliffFilePath),
 							Path = Path.GetDirectoryName(targetFile.XliffFilePath),
-							Details = "TODO",
+							Details = string.Empty,
 							ProjectFile = targetFile
 						};
 
 						targetFile.ProjectFileActivities.Add(activityFile);
 					}
 				}
+
+				_logReport.AppendLine("Phase: Export - Completed " + FormatDateTime(DateTime.Now));
 
 				WizardContext.Completed = true;
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
@@ -245,11 +298,12 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				jobProcess.Status = JobProcess.ProcessStatus.Failed;
 				success = false;
 
-				//_logger.Error(ex.Message);
+				_logReport.AppendLine();
+				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);
-		}	
+		}
 
 		private async Task<bool> Finalize(JobProcess jobProcess)
 		{
@@ -257,14 +311,16 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 			try
 			{
-				//_logger.Info("Phase: Finalize");
+				_logReport.AppendLine();
+				_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.Now));
+
 				TextMessage = "Finalizing procedures...";
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
 				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 
-
+				_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.Now));
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
 			catch (Exception ex)
@@ -273,7 +329,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				jobProcess.Status = JobProcess.ProcessStatus.Failed;
 				success = false;
 
-				//_logger.Error(ex.Message);
+				_logReport.AppendLine();
+				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);
@@ -295,6 +352,32 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			}
 		}
 
+		private string GetProjectTargetLanguagesString(Project project)
+		{
+			var targetLanguages = string.Empty;
+			foreach (var languageInfo in project.TargetLanguages)
+			{
+				targetLanguages += (string.IsNullOrEmpty(targetLanguages) ? string.Empty : ", ") +
+								   languageInfo.CultureInfo.DisplayName;
+			}
+
+			return targetLanguages;
+		}
+
+		private string GetSelectedLanguagesString()
+		{
+			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
+
+			var selectedLanguages = string.Empty;
+			foreach (var cultureInfo in selected.Select(a => a.TargetLanguage.CultureInfo).Distinct())
+			{
+				selectedLanguages += (string.IsNullOrEmpty(selectedLanguages) ? string.Empty : ", ") +
+									 cultureInfo.DisplayName;
+			}
+
+			return selectedLanguages;
+		}
+
 		private IEnumerable<ProjectFile> GetSelectedTargetFiles(CultureInfo cultureInfo)
 		{
 			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
@@ -307,6 +390,19 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
 			var selectedLanguages = selected.Select(a => a.TargetLanguage.CultureInfo).Distinct();
 			return selectedLanguages;
+		}
+
+		private string FormatDateTime(DateTime dateTime)
+		{
+			var value = dateTime.Year
+						+ "-" + dateTime.Month.ToString().PadLeft(2, '0')
+						+ "-" + dateTime.Day.ToString().PadLeft(2, '0')
+						+ "T" + dateTime.Hour.ToString().PadLeft(2, '0')
+						+ ":" + dateTime.Minute.ToString().PadLeft(2, '0')
+						+ ":" + dateTime.Second.ToString().PadLeft(2, '0')
+						+ "." + dateTime.Millisecond.ToString().PadLeft(2, '0');
+
+			return value;
 		}
 
 		private void Refresh()
