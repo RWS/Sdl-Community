@@ -24,4 +24,5 @@ variables:
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - script: $(System.DefaultWorkingDirectory)
   - template: jobs/publish-build-artifact-task.yml
