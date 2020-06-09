@@ -20,7 +20,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.YourStudio.sln'
-  pathToPublish: '%AppData%\Roaming\SDL\SDL Trados Studio\12\Plugins\Packages\Sdl.Community.YourStudio.Integration.sdlplugin'
+  pathToPublish: 'AppData\Roaming\SDL\SDL Trados Studio\12\Plugins\Packages\Sdl.Community.YourStudio.Integration.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
