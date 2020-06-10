@@ -82,7 +82,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 					WizardContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage.CultureInfo, targetLanguage));
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
-					var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path);
+					var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
 					var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
 
 					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;

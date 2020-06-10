@@ -7,13 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Sdl.Community.XLIFF.Manager.Commands;
+using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.Wizard.View;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
@@ -21,21 +24,29 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 	public class WizardPageImportPreparationViewModel : WizardPageViewModelBase, IDisposable
 	{
 		private readonly SegmentBuilder _segmentBuilder;
+		private readonly PathInfo _pathInfo;
 		private List<JobProcess> _jobProcesses;
+		private ICommand _viewExceptionCommand;
 		private ICommand _openFolderInExplorerCommand;
 		private SolidColorBrush _textMessageBrush;
 		private string _textMessage;
 		private StringBuilder _logReport;
 
-		public WizardPageImportPreparationViewModel(Window owner, object view, WizardContext wizardContext, SegmentBuilder segmentBuilder) : base(owner, view, wizardContext)
+		public WizardPageImportPreparationViewModel(Window owner, object view, WizardContext wizardContext, 
+			SegmentBuilder segmentBuilder, PathInfo pathInfo) : base(owner, view, wizardContext)
 		{
 			_segmentBuilder = segmentBuilder;
+			_pathInfo = pathInfo;
+
 			IsValid = true;
 			InitializeJobProcessList();
 
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
 		}
+
+		public ICommand ViewExceptionCommand => _viewExceptionCommand ?? (_viewExceptionCommand = new CommandHandler(ViewException));
+
 		public ICommand OpenFolderInExplorerCommand => _openFolderInExplorerCommand ?? (_openFolderInExplorerCommand = new CommandHandler(OpenFolderInExplorer));
 
 		public List<JobProcess> JobProcesses
@@ -71,6 +82,24 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		public override string DisplayName => PluginResources.PageName_Preparation;
 
 		public sealed override bool IsValid { get; set; }
+
+		private void ViewException(object obj)
+		{
+			var button = obj as Button;
+			if (!(button?.DataContext is JobProcess jobProcess))
+			{
+				return;
+			}
+
+			if (jobProcess.HasErrors)
+			{
+				var exceptionViewer = new ExceptionViewerView();
+				var model = new ExceptionViewerViewModel(jobProcess.Errors, jobProcess.Warnings);
+				exceptionViewer.DataContext = model;
+
+				exceptionViewer.ShowDialog();
+			}
+		}
 
 		private void OpenFolderInExplorer(object parameter)
 		{
@@ -171,12 +200,15 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			_logReport.AppendLine("End Process: Import " + FormatDateTime(DateTime.Now));
 
 
-			var outputFile = Path.Combine(WizardContext.WorkingFolder, "log." + WizardContext.DateTimeStampToString + ".txt");
+			var logFileName = "log." + WizardContext.DateTimeStampToString + ".txt";
+			var outputFile = Path.Combine(WizardContext.WorkingFolder, logFileName);
 			using (var writer = new StreamWriter(outputFile, false, Encoding.UTF8))
 			{
 				writer.Write(_logReport);
 				writer.Flush();
 			}
+
+			File.Copy(outputFile, Path.Combine(_pathInfo.ApplicationLogsFolderPath, logFileName));
 		}
 
 		private async Task<bool> Preparation(JobProcess jobProcess)
@@ -239,7 +271,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				foreach (var targetLanguage in targetLanguages)
 				{
-					var languageFolder = WizardContext.GetLanguageFolder(targetLanguage);					
+					var languageFolder = WizardContext.GetLanguageFolder(targetLanguage);
 					if (!Directory.Exists(languageFolder))
 					{
 						Directory.CreateDirectory(languageFolder);
@@ -254,7 +286,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 					foreach (var targetLanguageFile in targetLanguageFiles)
 					{
-						var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path);
+						var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
 						if (!Directory.Exists(xliffFolder))
 						{
 							Directory.CreateDirectory(xliffFolder);
@@ -262,7 +294,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 						var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
 						var sdlXliffBackup = Path.Combine(xliffFolder, targetLanguageFile.Name);
-						
+
 						_logReport.AppendLine("SDLXLIFF File: " + targetLanguageFile.Location);
 						if (WizardContext.ImportBackupFiles)
 						{
@@ -284,7 +316,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 						}
 
 						var xliff = xliffReader.ReadXliff(xliffFilePath);
-						success = sdlxliffWriter.UpdateFile(xliff, targetLanguageFile.Location, outputFilePath, 
+						success = sdlxliffWriter.UpdateFile(xliff, targetLanguageFile.Location, outputFilePath,
 							WizardContext.ImportOverwriteTranslations, WizardContext.ImportConfirmationStatus);
 
 						if (success)
@@ -296,10 +328,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 							File.Move(outputFilePath, targetLanguageFile.Location);
 						}
 						else
-						{						
+						{
 							File.Copy(sdlXliffBackup, targetLanguageFile.Location, true);
 							throw new Exception("Error occurred while updating the SDLXLIFF");
-						}						
+						}
 					}
 				}
 

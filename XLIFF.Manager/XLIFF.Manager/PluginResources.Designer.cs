@@ -684,6 +684,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close all documents that are open in the editor before proceeding.
+        /// </summary>
+        internal static string WizardMessage_CloseOpenDocumentsInTheEditor {
+            get {
+                return ResourceManager.GetString("WizardMessage_CloseOpenDocumentsInTheEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Multiple projects selected!.
         /// </summary>
         internal static string WizardMessage_MultipleProjectsSelected {

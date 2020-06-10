@@ -128,12 +128,16 @@
     <Compile Include="Actions\Import\ImportFromXLIFFAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
+    <Compile Include="Behaviours\EventBehaviourFactory.cs" />
+    <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Commands\SelectedItemChangedCommand.cs" />
     <Compile Include="Common\FolderSelectDialog.cs" />
     <Compile Include="Common\Logger.cs" />
     <Compile Include="Common\PathInfo.cs" />
     <Compile Include="Common\Reflector.cs" />
+    <Compile Include="Controls\BindableParagraphBlock.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
     <Compile Include="Controls\ProjectFileActivityViewControl.cs">
       <SubType>UserControl</SubType>
@@ -211,6 +215,7 @@
     <Compile Include="Interfaces\XLIFFWriter.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Common\Enumerators.cs" />
+    <Compile Include="Model\Controllers.cs" />
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\JobProcess.cs" />
     <Compile Include="Model\LanguageInfo.cs" />
@@ -218,6 +223,7 @@
     <Compile Include="Model\ProjectFileActivity.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\WizardContext.cs" />
+    <Compile Include="Model\WizardException.cs" />
     <Compile Include="Model\XLIFFSupport.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -230,6 +236,7 @@
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\WizardService.cs" />
+    <Compile Include="Wizard\ViewModel\ExceptionViewerViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportFilesViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportOptionsViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportPreparationViewModel.cs" />
@@ -263,6 +270,9 @@
     </Compile>
     <Compile Include="Wizard\View\Import\WizardPageImportSummaryView.xaml.cs">
       <DependentUpon>WizardPageImportSummaryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\ExceptionViewerView.xaml.cs">
+      <DependentUpon>ExceptionViewerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wizard\View\WizardWindow.xaml.cs">
       <DependentUpon>WizardWindow.xaml</DependentUpon>
@@ -403,6 +413,10 @@
     <Page Include="Wizard\View\Import\WizardPageImportSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wizard\View\ExceptionViewerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Wizard\View\WizardWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

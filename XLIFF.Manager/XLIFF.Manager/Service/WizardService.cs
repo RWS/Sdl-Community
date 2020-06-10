@@ -30,9 +30,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		private readonly Enumerators.Action _action;
 		private readonly PathInfo _pathInfo;
 		private readonly CustomerProvider _customerProvider;
-		private readonly ProjectsController _projectsController;
-		private readonly FilesController _filesController;
-		private readonly XLIFFManagerViewController _xliffManagerController;
+		private readonly Controllers _controllers;
 		private readonly ImageService _imageService;
 		private readonly SegmentBuilder _segmentBuilder;
 		private WizardWindow _wizardWindow;
@@ -42,17 +40,13 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		private readonly IDialogService _dialogService;
 
 		public WizardService(Enumerators.Action action, PathInfo pathInfo, CustomerProvider customerProvider,
-			ImageService imageService, XLIFFManagerViewController xliffManagerController,
-			ProjectsController projectsController, FilesController filesController,
-			SegmentBuilder segmentBuilder, IDialogService dialogService)
+			ImageService imageService, Controllers controllers, SegmentBuilder segmentBuilder, IDialogService dialogService)
 		{
 			_action = action;
 			_pathInfo = pathInfo;
 			_customerProvider = customerProvider;
 			_imageService = imageService;
-			_xliffManagerController = xliffManagerController;
-			_projectsController = projectsController;
-			_filesController = filesController;
+			_controllers = controllers;
 			_dialogService = dialogService;
 			_segmentBuilder = segmentBuilder;
 		}
@@ -73,6 +67,14 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				return null;
 			}
 
+			var documents = _controllers.EditorController.GetDocuments();
+			if (documents.Any())
+			{
+				message = PluginResources.WizardMessage_CloseOpenDocumentsInTheEditor;
+				return null;
+			}
+
+
 			_isCancelled = false;
 			_wizardWindow = new WizardWindow();
 			_wizardWindow.Loaded += WizardWindowLoaded;
@@ -80,15 +82,9 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			if (!_isCancelled && _wizardContext.Completed)
 			{
-				var project = _projectsController.GetAllProjects()?.FirstOrDefault(a =>
-					string.Compare(a.GetProjectInfo().Id.ToString(), _wizardContext.Project.Id,
-						StringComparison.CurrentCultureIgnoreCase) == 0);
-
-				if (project != null && _action == Enumerators.Action.Import)
+				if (_action == Enumerators.Action.Import)
 				{
-					_projectsController.RefreshProjects();
-					//_projectsController.Close(project);
-					//_projectsController.Add(project.FilePath);
+					_controllers.ProjectsController.RefreshProjects();
 				}
 
 				return _wizardContext;
@@ -108,10 +104,10 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			if (controller is ProjectsController || controller is FilesController)
 			{
-				var selectedProject = _projectsController.CurrentProject;
+				var selectedProject = _controllers.ProjectsController.CurrentProject;
 				var projectInfo = selectedProject.GetProjectInfo();
 				var selectedFileIds = controller is FilesController
-					? _filesController.SelectedFiles.Select(a => a.Id.ToString()).ToList()
+					? _controllers.FilesController.SelectedFiles.Select(a => a.Id.ToString()).ToList()
 					: null;
 
 				_wizardContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
@@ -123,7 +119,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			}
 			else if (controller is XLIFFManagerViewController)
 			{
-				var selectedProjectFiles = _xliffManagerController.GetSelectedProjectFiles();
+				var selectedProjectFiles = _controllers.XliffManagerController.GetSelectedProjectFiles();
 				var selectedProjects = GetSelectedProjects(selectedProjectFiles);
 				var selectedFileIds = selectedProjectFiles?.Select(a => a.Id.ToString()).ToList();
 
@@ -139,7 +135,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 					return false;
 				}
 
-				var selectedProject = _projectsController.GetProjects()
+				var selectedProject = _controllers.ProjectsController.GetProjects()
 					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == selectedProjects[0].Id);
 				if (selectedProject == null)
 				{
@@ -195,7 +191,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				ProjectType = GetProjectType(selectedProject)
 			};
 
-			var existingProject = _xliffManagerController.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
+			var existingProject = _controllers.XliffManagerController.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
 
 			if (existingProject != null)
 			{
@@ -326,14 +322,16 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				pages.Add(new WizardPageExportFilesViewModel(_wizardWindow, new WizardPageExportFilesView(), wizardContext));
 				pages.Add(new WizardPageExportOptionsViewModel(_wizardWindow, new WizardPageExportOptionsView(), wizardContext, _dialogService));
 				pages.Add(new WizardPageExportSummaryViewModel(_wizardWindow, new WizardPageExportSummaryView(), wizardContext));
-				pages.Add(new WizardPageExportPreparationViewModel(_wizardWindow, new WizardPageExportPreparationView(), wizardContext, _segmentBuilder));
+				pages.Add(new WizardPageExportPreparationViewModel(_wizardWindow, new WizardPageExportPreparationView(), wizardContext,
+					_segmentBuilder, _pathInfo));
 			}
 			else if (_action == Enumerators.Action.Import)
 			{
 				pages.Add(new WizardPageImportFilesViewModel(_wizardWindow, new WizardPageImportFilesView(), wizardContext, _dialogService));
 				pages.Add(new WizardPageImportOptionsViewModel(_wizardWindow, new WizardPageImportOptionsView(), wizardContext));
 				pages.Add(new WizardPageImportSummaryViewModel(_wizardWindow, new WizardPageImportSummaryView(), wizardContext));
-				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow, new WizardPageImportPreparationView(), wizardContext, _segmentBuilder));
+				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow, new WizardPageImportPreparationView(), wizardContext,
+					_segmentBuilder, _pathInfo));
 			}
 
 			UpdatePageIndexes(pages);

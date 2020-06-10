@@ -385,4 +385,7 @@
 	<data name="label_ExceptionMessage" xml:space="preserve">
     <value>Exception: {0}</value>
   </data>
+	<data name="WizardMessage_CloseOpenDocumentsInTheEditor" xml:space="preserve">
+    <value>Close all documents that are open in the editor before proceeding</value>
+  </data>
 </root>

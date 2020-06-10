@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using File = Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model.File;
 
 namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 {
@@ -19,8 +18,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private readonly ConfirmationLevel _confirmationStatus;
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
-		private SegmentVisitor _segmentVisitor;
-		private File _file;
+		private SegmentVisitor _segmentVisitor;		
 
 		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, bool overwriteTranslations, ConfirmationLevel confirmationStatus)
 		{
@@ -38,13 +36,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 		public override void SetFileProperties(IFileProperties fileInfo)
 		{
-			_fileProperties = fileInfo;
-
-			var fileName = Path.GetFileName(fileInfo.FileConversionProperties.OriginalFilePath);
-
-			_file = _xliff.Files.FirstOrDefault(a =>
-				string.Compare(Path.GetFileName(a.Original), fileName, StringComparison.CurrentCultureIgnoreCase) == 0);
-
+			_fileProperties = fileInfo;		
 			base.SetFileProperties(fileInfo);
 		}
 
@@ -62,8 +54,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				return;
 			}
 
-			var paragraph = _file.Body.TransUnits.FirstOrDefault(a => a.Id == paragraphUnit.Properties.ParagraphUnitId.Id);
-			if (paragraph == null)
+			var importedTransUnit = GetTransUnit(paragraphUnit);
+			if (importedTransUnit == null)
 			{
 				base.ProcessParagraphUnit(paragraphUnit);
 				return;
@@ -71,7 +63,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
-				var importedSegmentPair = paragraph.SegmentPairs.FirstOrDefault(a => a.Id == segmentPair.Properties.Id.Id);
+				var importedSegmentPair = importedTransUnit.SegmentPairs.FirstOrDefault(a => a.Id == segmentPair.Properties.Id.Id);
 				if (importedSegmentPair == null)
 				{
 					continue;
@@ -91,6 +83,22 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			}
 
 			base.ProcessParagraphUnit(paragraphUnit);
+		}
+
+		private TransUnit GetTransUnit(IParagraphUnit paragraphUnit)
+		{			
+			foreach (var xliffFile in _xliff.Files)
+			{
+				foreach (var transUnit in xliffFile.Body.TransUnits)
+				{
+					if (transUnit.Id == paragraphUnit.Properties.ParagraphUnitId.Id)
+					{
+						return transUnit;
+					}
+				}
+			}
+
+			return null;
 		}
 
 		private void UpdateTargetSegment(ISegmentPair segmentPair, SegmentPair importedSegmentPair)
@@ -146,8 +154,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		}
 
 		private void UpdateTranslationOrigin(ISegment originalTarget, ISegment targetSegment)
-		{
-			// TODO compare if updated
+		{			
 			SegmentVisitor.VisitSegment(originalTarget);
 			var originalText = SegmentVisitor.Text;
 
@@ -165,8 +172,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
 
 					targetSegment.Properties.TranslationOrigin.MatchPercent = byte.Parse("0");
-					targetSegment.Properties.TranslationOrigin.OriginSystem = string.Empty;
-					targetSegment.Properties.TranslationOrigin.OriginType = string.Empty;
+					targetSegment.Properties.TranslationOrigin.OriginSystem = "Polyglot";
+					targetSegment.Properties.TranslationOrigin.OriginType = DefaultTranslationOrigin.Interactive;
 					targetSegment.Properties.TranslationOrigin.IsStructureContextMatch = false;
 					targetSegment.Properties.TranslationOrigin.TextContextMatchLevel = TextContextMatchLevel.None;
 

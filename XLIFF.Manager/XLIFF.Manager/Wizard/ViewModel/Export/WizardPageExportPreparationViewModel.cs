@@ -16,28 +16,36 @@ using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.Wizard.View;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 {
 	public class WizardPageExportPreparationViewModel : WizardPageViewModelBase
 	{
 		private readonly SegmentBuilder _segmentBuilder;
+		private readonly PathInfo _pathInfo;
 		private List<JobProcess> _jobProcesses;
+		private ICommand _viewExceptionCommand;
 		private ICommand _openFolderInExplorerCommand;
 		private SolidColorBrush _textMessageBrush;
 		private string _textMessage;
 		private StringBuilder _logReport;
 
-		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext, SegmentBuilder segmentBuilder)
+		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext, 
+			SegmentBuilder segmentBuilder, PathInfo pathInfo)
 			: base(owner, view, wizardContext)
 		{
 			_segmentBuilder = segmentBuilder;
+			_pathInfo = pathInfo;
+
 			IsValid = true;
 			InitializeJobProcessList();
 
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
 		}
+
+		public ICommand ViewExceptionCommand => _viewExceptionCommand ?? (_viewExceptionCommand = new CommandHandler(ViewException));
 
 		public ICommand OpenFolderInExplorerCommand => _openFolderInExplorerCommand ?? (_openFolderInExplorerCommand = new CommandHandler(OpenFolderInExplorer));
 
@@ -74,6 +82,25 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		public override string DisplayName => PluginResources.PageName_Preparation;
 
 		public sealed override bool IsValid { get; set; }
+
+		private void ViewException(object obj)
+		{
+			var button = obj as Button;
+			if (!(button?.DataContext is JobProcess jobProcess))
+			{
+				return;
+			}
+
+			if (jobProcess.HasErrors)
+			{
+				var exceptionViewer = new ExceptionViewerView();
+				var model = new ExceptionViewerViewModel(jobProcess.Errors, jobProcess.Warnings);
+				exceptionViewer.DataContext = model;
+
+				exceptionViewer.ShowDialog();
+			}
+		}
+
 
 		private void OpenFolderInExplorer(object parameter)
 		{
@@ -171,12 +198,15 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			_logReport.AppendLine("End Process: Export " + FormatDateTime(DateTime.Now));
 
 
-			var outputFile = Path.Combine(WizardContext.WorkingFolder, "log." + WizardContext.DateTimeStampToString + ".txt");
+			var logFileName = "log." + WizardContext.DateTimeStampToString + ".txt";
+			var outputFile = Path.Combine(WizardContext.WorkingFolder, logFileName);
 			using (var writer = new StreamWriter(outputFile, false, Encoding.UTF8))
 			{
 				writer.Write(_logReport);
 				writer.Flush();
 			}
+
+			File.Copy(outputFile, Path.Combine(_pathInfo.ApplicationLogsFolderPath, logFileName));
 		}
 
 		private async Task<bool> Preparation(JobProcess jobProcess)
@@ -247,7 +277,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 					var targetFiles = GetSelectedTargetFiles(cultureInfo);
 					foreach (var targetFile in targetFiles)
 					{
-						var xliffFolder = Path.Combine(languageFolder, targetFile.Path);
+						var xliffFolder = Path.Combine(languageFolder, targetFile.Path.TrimStart('\\'));
 						if (!Directory.Exists(xliffFolder))
 						{
 							Directory.CreateDirectory(xliffFolder);
@@ -286,9 +316,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 						targetFile.ProjectFileActivities.Add(activityFile);
 					}
 				}
-
-				_logReport.AppendLine("Phase: Export - Completed " + FormatDateTime(DateTime.Now));
-
+								
 				WizardContext.Completed = true;
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
