@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Model;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
@@ -12,7 +7,7 @@ using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
-    public class NormalizeNumbersNoSeparator
+	public class NormalizeNumbersNoSeparator
     {
         
         [Theory]
@@ -28,7 +23,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             //run initialize method in order to set chosen separators
             var docPropMock = new Mock<IDocumentProperties>();
             numberVerifierMain.Initialize(docPropMock.Object);
-
 
             var normalizedNumber = numberVerifierMain.NormalizedNumber(new SeparatorModel
 				{
@@ -46,7 +40,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
         [Theory]
         [InlineData("1,55", " ", ",", true)]
-        public string NormalizeNoSeparatorNumers(string text, string thousandSep, string decimalSep, bool noSeparator)
+        public string NormalizeNoSeparatorNumbers(string text, string thousandSep, string decimalSep, bool noSeparator)
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.SpaceCommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
@@ -57,8 +51,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             //run initialize method in order to set chosen separators
             var docPropMock = new Mock<IDocumentProperties>();
             numberVerifierMain.Initialize(docPropMock.Object);
-
-
+			
             var normalizedNumber = numberVerifierMain.NormalizedNumber(new SeparatorModel
 			{
 				MatchValue = text,
@@ -69,28 +62,24 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			});
 
             return normalizedNumber;
-
         }
 
         [Theory]
         [InlineData("1,55", " ", ",", true)]
         public void NotNormalizeDecimalNumbers(string text, string thousandSep, string decimalSep, bool noSeparator)
         {
-            var normalizedNumber = NormalizeNoSeparatorNumers(text, thousandSep, decimalSep, noSeparator);
+            var normalizedNumber = NormalizeNoSeparatorNumbers(text, thousandSep, decimalSep, noSeparator);
 
-            Assert.Equal(normalizedNumber, "1d55");
-
+            Assert.Equal("1d55", normalizedNumber);
         }
 
         [Theory]
         [InlineData("1,234.56", ",", ".", true)]
-        public void NormalizeThousandsNumberNoSeparatorSelected(string text, string thousandSep, string decimalSep,
-            bool noSeparator)
+        public void NormalizeThousandsNumberNoSeparatorSelected(string text, string thousandSep, string decimalSep, bool noSeparator)
         {
-            var normalizedNumber = NormalizeNoSeparatorNumers(text, thousandSep, decimalSep, noSeparator);
+            var normalizedNumber = NormalizeNoSeparatorNumbers(text, thousandSep, decimalSep, noSeparator);
 
-            Assert.Equal(normalizedNumber,"1t234d56");
+            Assert.Equal("1t234d56", normalizedNumber);
         }
-
     }
 }

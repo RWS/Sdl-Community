@@ -89,7 +89,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Alphanumeric\AlpahanumericWithNormalSpace.cs" />
+    <Compile Include="Alphanumeric\AlphanumericWithNormalSpace.cs" />
     <Compile Include="Alphanumeric\AlphanumericCustomSeparators.cs" />
     <Compile Include="Alphanumeric\AlphanumericWithNarrowNoBreakSpace.cs" />
     <Compile Include="Alphanumeric\AlphanumericWithNoBreakSpace.cs" />
