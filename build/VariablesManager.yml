@@ -20,7 +20,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution: '**/VariablesManager.sln'
-  pathToPublish: '$(appdata)SDL/SDL Trados Studio/12/Plugins/Packages/VariablesManager.sdlplugin'
+  pathToPublish: '$(appdata)/SDL/SDL Trados Studio/12/Plugins/Packages/VariablesManager.sdlplugin'
 
 steps:
   - powershell: echo "##vso[task.setvariable variable=appdata]$env:appdata"
