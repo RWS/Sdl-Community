@@ -6,6 +6,14 @@ trigger:
     include:
      - GroupShareKitFieldTemplateExample/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - GroupShareKitFieldTemplateExample/*
+
 pool: Studio-OX
 
 variables:

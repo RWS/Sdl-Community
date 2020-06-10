@@ -5,15 +5,21 @@ trigger:
   paths:
     include:
      - XML Reader/*
-
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - XML Reader/*
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.xmlReader.sln'
-  pluginName: 'XML Reader/Sdl.Community.XmlReader'
-  artifactName: 'Sdl.Community.XmlReader.sdlplugin'
+  pathToPublish: 'XML Reader/Sdl.Community.XmlReader\bin\Release\Sdl.Community.XmlReader.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

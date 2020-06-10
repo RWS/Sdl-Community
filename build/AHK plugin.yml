@@ -6,15 +6,22 @@ trigger:
     include:
      - AHK plugin/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - AHK plugin/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.AhkPlugin.sln'
-  pluginName: 'AHK plugin\Sdl.Community.AhkPlugin'
-  artifactName: 'Sdl.Community.AhkPlugin.sdlplugin'
+  pathToPublish: 'AHK plugin\Sdl.Community.AhkPlugin\bin\Release\Sdl.Community.AhkPlugin.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

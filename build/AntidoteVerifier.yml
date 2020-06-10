@@ -6,15 +6,22 @@ trigger:
     include:
      - Antidote Verifier/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Antidote Verifier/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.AntidoteVerifier.sln'
-  pluginName: 'Antidote Verifier\Sdl.Community.AntidoteVerifier\Sdl.Community.AntidoteVerifier'
-  artifactName: 'Sdl.Community.AntidoteVerifier.sdlplugin'
+  pathToPublish: 'Antidote Verifier\Sdl.Community.AntidoteVerifier\Sdl.Community.AntidoteVerifier\bin\Release\Sdl.Community.AntidoteVerifier.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

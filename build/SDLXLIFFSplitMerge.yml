@@ -4,16 +4,22 @@ trigger:
      - master
   paths:
     include:
-     - Code samples/AnalyzeFilesTestApp/*
+     - SDLXLIFFSplitMerge/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLXLIFFSplitMerge/*
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/AnalyzeFilesTestApp.sln'
-  pluginName: 'Code samples\AnalyzeFilesTestApp\AnalyzeFilesTestApp'
-  artifactName: 'AnalyzeFilesTestApp.sdlplugin'
+  solution : '**/SDLXLIFFSplitMerge.sln'
 
 steps:
   - template: jobs/build-sdlplugin.yml

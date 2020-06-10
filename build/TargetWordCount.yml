@@ -6,15 +6,22 @@ trigger:
     include:
      - TargetWordCount/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TargetWordCount/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.TargetWordCount.sln'
-  pluginName: 'TargetWordCount/Sdl.Community.TargetWordCount'
-  artifactName: 'TargetWordCount.sdlplugin'
+  pathToPublish: 'TargetWordCount/Sdl.Community.TargetWordCount\bin\Release\TargetWordCount.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

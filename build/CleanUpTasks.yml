@@ -6,15 +6,22 @@ trigger:
     include:
      - CleanUpTasks/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - CleanUpTasks/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.CleanUpTasks.sln'
-  pluginName: 'CleanUpTasks/CleanUpTasks'
-  artifactName: 'SDLCommunityCleanUpTasks.sdlplugin'
+  pathToPublish: 'CleanUpTasks/CleanUpTasks\bin\Release\SDLCommunityCleanUpTasks.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

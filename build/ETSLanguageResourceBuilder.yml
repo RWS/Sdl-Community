@@ -6,6 +6,14 @@ trigger:
     include:
      - ETS Translation Provider/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ETS Translation Provider/*
+
 pool: Studio-OX
 
 variables:

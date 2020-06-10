@@ -6,15 +6,22 @@ trigger:
     include:
      - FailSafeTask/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - FailSafeTask/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.FailSafeTask.sln'
-  pluginName: 'FailSafeTask\Sdl.Community.FailSafeTask'
-  artifactName: 'FailSafeTask.sdlplugin'
+  pathToPublish: 'FailSafeTask\Sdl.Community.FailSafeTask\bin\Release\FailSafeTask.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

@@ -3,4 +3,4 @@ steps:
   displayName: 'Publish Artifact'
   inputs:
     artifactName: drop
-    pathToPublish: '$(pluginName)\bin\Release\$(artifactName)'
+    pathToPublish: '$(pathToPublish)'

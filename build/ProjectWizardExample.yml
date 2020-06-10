@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ProjectWizardExample/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ProjectWizardExample/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.ProjectTerms.sln'
+  pathToPublish: 'ProjectTerms\Sdl.Community.ProjectTerms.Plugin\bin\Release\Sdl.Community.projectTermExtract.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

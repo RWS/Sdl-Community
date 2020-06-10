@@ -6,20 +6,22 @@ trigger:
     include:
      - VariablesManager/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - VariablesManager/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/VariablesManager.sln'
-  pluginName: 'C:/Users/build/AppData/Roaming/SDL/SDL Trados Studio/12/Plugins/Packages/'
-  artifactName: 'VariablesManager.sdlplugin'
+  pathToPublish: 'C:/Users/build/AppData/Roaming/SDL/SDL Trados Studio/12/Plugins/Packages/VariablesManager.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-
-  - task:  PublishBuildArtifacts@1
-    displayName: 'Publish Artifact'
-    inputs:
-     artifactName: drop
-     pathToPublish: '$(pluginName)$(artifactName)' 
+  - template: jobs/publish-build-artifact-task.yml

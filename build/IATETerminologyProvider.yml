@@ -6,15 +6,22 @@ trigger:
     include:
      - IATETerminologyProvider/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - IATETerminologyProvider/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.IATETerminologyProvider.sln'
-  pluginName: 'IATETerminologyProvider\IATETerminologyProvider'
-  artifactName: 'Sdl.Community.IATETerminologyProvider.sdlplugin'
+  pathToPublish: 'IATETerminologyProvider\IATETerminologyProvider\bin\Release\Sdl.Community.IATETerminologyProvider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml
