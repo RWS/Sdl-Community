@@ -89,7 +89,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
-					var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path);
+					var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
 					var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
 					var sdlXliffBackup = Path.Combine(xliffFolder, targetLanguageFile.Name);
 

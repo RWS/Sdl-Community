@@ -3,6 +3,7 @@ using System.Windows;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
+using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -18,9 +19,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 8, DisplayType.Default, "", true)]
 	public class XLIFFManagerProjectsContextMenuExportToXLIFFAction : AbstractAction
 	{
-		private ProjectsController _projectsController;
-		private FilesController _filesController;
-		private XLIFFManagerViewController _xliffManagerController;
+		private Controllers _controllers;
 		private CustomerProvider _customerProvider;
 		private PathInfo _pathInfo;
 		private ImageService _imageService;
@@ -30,23 +29,22 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 		protected override void Execute()
 		{
 			var wizardService = new WizardService(Enumerators.Action.Export, _pathInfo, _customerProvider,
-				_imageService, _xliffManagerController, _projectsController, _filesController,
-				_segmentBuilder, _dialogService);
-			var wizardContext = wizardService.ShowWizard(_projectsController, out var message);
+				_imageService, _controllers, _segmentBuilder, _dialogService);
+
+			var wizardContext = wizardService.ShowWizard(_controllers.ProjectsController, out var message);
 			if (wizardContext == null && !string.IsNullOrEmpty(message))
 			{
-				MessageBox.Show(message);
+				MessageBox.Show(message, PluginResources.XLIFFManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 				return;
 			}
 
-			_xliffManagerController.UpdateProjectData(wizardContext);
+			_controllers.XliffManagerController.UpdateProjectData(wizardContext);
 		}
 
 		public override void Initialize()
 		{
-			_xliffManagerController = SdlTradosStudio.Application.GetController<XLIFFManagerViewController>();
-			SetProjectsController();
-			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
+			_controllers = new Controllers();
+			SetProjectsController();			
 			_customerProvider = new CustomerProvider();
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService();
@@ -57,17 +55,10 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 		}
 
 		private void SetProjectsController()
-		{
-			if (_projectsController != null)
+		{		
+			if (_controllers.ProjectsController != null)
 			{
-				_projectsController.SelectedProjectsChanged -= ProjectsController_SelectedProjectsChanged;
-			}
-
-			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-
-			if (_projectsController != null)
-			{
-				_projectsController.SelectedProjectsChanged += ProjectsController_SelectedProjectsChanged;
+				_controllers.ProjectsController.SelectedProjectsChanged += ProjectsController_SelectedProjectsChanged;
 			}
 		}
 
@@ -78,7 +69,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 
 		private void SetEnabled()
 		{
-			Enabled = _projectsController.SelectedProjects.Count() == 1;
+			Enabled = _controllers.ProjectsController.SelectedProjects.Count() == 1;
 		}
 	}
 }
