@@ -15,11 +15,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			_segmentBuilder = segmentBuilder;
 		}
 
-		public bool UpdateFile(Xliff xliff, string filePathInput, string filePathOutput, bool overWriteTranslations, ConfirmationLevel confirmationStatus)
+		public bool UpdateFile(Xliff xliff, string filePathInput, string filePathOutput,
+			bool overWriteTranslations, ConfirmationLevel confirmationStatus, string originSystem)
 		{			
 			var converter = _fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
 
-			var contentWriter = new ContentWriter(xliff, _segmentBuilder, overWriteTranslations, confirmationStatus);
+			var contentWriter = new ContentWriter(xliff, _segmentBuilder, overWriteTranslations, confirmationStatus, originSystem);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();

@@ -59,11 +59,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			summaryText += PluginResources.Label_Options + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_BackupFiles, WizardContext.ImportBackupFiles) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_OverwriteExistingTranslations, WizardContext.ImportOverwriteTranslations) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_AssignConfirmationStatus, WizardContext.ImportOverrideConfirmationStatus) + Environment.NewLine;
-			if (WizardContext.ImportOverrideConfirmationStatus)
-			{
-				summaryText += indent + string.Format(PluginResources.Label_ConfirmationStatus, WizardContext.ImportConfirmationStatus.ToString()) + Environment.NewLine;
-			}
+			summaryText += indent + string.Format("Origin System: {0}", WizardContext.ImportOriginSystem) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_ConfirmationStatus, WizardContext.ImportConfirmationStatus.ToString()) + Environment.NewLine;
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;
@@ -84,8 +81,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				var targetLanguageFiles =
 					WizardContext.ProjectFiles.Where(a => a.Selected &&
-					      !string.IsNullOrEmpty(a.XliffFilePath) && File.Exists(a.XliffFilePath) && 
-					      Equals(a.TargetLanguage.CultureInfo, targetLanguage));
+						  !string.IsNullOrEmpty(a.XliffFilePath) && File.Exists(a.XliffFilePath) &&
+						  Equals(a.TargetLanguage.CultureInfo, targetLanguage));
 
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
@@ -100,7 +97,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					}
 					summaryText += indent + "XLIFF File: " + targetLanguageFile.XliffFilePath + Environment.NewLine;
 					summaryText += indent + "Archive: " + xliffFilePath + Environment.NewLine;
-					
+
 					summaryText += Environment.NewLine;
 				}
 			}

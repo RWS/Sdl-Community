@@ -27,6 +27,7 @@
 		<GroupBox Header="Options">
 			<Grid Margin="10">
 				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
@@ -34,27 +35,37 @@
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
 
-				<CheckBox Grid.Row="0" Margin="5,10,5,5" Grid.Column="0"  Content="Backup Files" IsEnabled="False"
+				<CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,10,5,5" Content="Backup Files" IsEnabled="False"
 				          IsChecked="{Binding BackupFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-				<CheckBox Grid.Row="1" Margin="5,10,5,5" Grid.Column="0" Content="Overwrite existing translations" 
+				<CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,10,5,5"  Content="Overwrite existing translations" 
 				          IsChecked="{Binding OverwriteTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-				<StackPanel Grid.Row="2" Grid.Column="0" Height="24" Margin="5,5,5,5" Orientation="Horizontal">
-					
-					<CheckBox Content="Assign Confirmation Status" Margin="0,0,10,0" VerticalAlignment="Center"
-					          IsChecked="{Binding OverrideConfirmationStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-					<ComboBox Width="200" HorizontalAlignment="Left" Height="22"
+				<TextBlock Grid.Row="2" Grid.Column="0" Text="Confirmation status:" Margin="5,10,10,0" VerticalAlignment="Center"/>
+
+				<ComboBox Grid.Row="2" Grid.Column="1"  Margin="0,10,10,0" Width="200" HorizontalAlignment="Left" Height="22"
 					          VerticalAlignment="Center"
 					          VerticalContentAlignment="Center"
 					          ItemsSource="{Binding ConfirmationStatuses, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }"					          
 					          SelectedItem="{Binding ConfirmationStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					          IsEnabled="{Binding OverrideConfirmationStatus, UpdateSourceTrigger=PropertyChanged}"
 					          />
-				</StackPanel>
+
+				<TextBlock Grid.Row="3" Grid.Column="0" Text="Origin system:" Margin="5,10,10,0" VerticalAlignment="Center"/>
+
+				<TextBox Grid.Row="3" Grid.Column="1"  Margin="0,10,10,0" Width="200" HorizontalAlignment="Left" Height="22"
+					          VerticalAlignment="Center"
+					          VerticalContentAlignment="Center"
+					          Text="{Binding OriginSystem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"					          					          
+					/>
+
+				<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Foreground="#575656"
+				           Text="Note: The properties will be assigned if the translation is updated or the option to 'Overwrite existing translations' is checked." 
+				           Margin="5,10,10,0" VerticalAlignment="Center"/>
+
 
 			</Grid>
 		</GroupBox>

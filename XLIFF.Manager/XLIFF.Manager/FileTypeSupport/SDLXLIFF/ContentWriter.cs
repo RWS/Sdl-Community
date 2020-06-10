@@ -16,16 +16,19 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly bool _overwriteTranslations;
 		private readonly ConfirmationLevel _confirmationStatus;
+		private readonly string _originSystem;
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
 		private SegmentVisitor _segmentVisitor;		
 
-		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, bool overwriteTranslations, ConfirmationLevel confirmationStatus)
+		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, 
+			bool overwriteTranslations, ConfirmationLevel confirmationStatus, string originSystem)
 		{
 			_xliff = xliff;
 			_segmentBuilder = segmentBuilder;
 			_overwriteTranslations = overwriteTranslations;
 			_confirmationStatus = confirmationStatus;
+			_originSystem = originSystem;
 
 			Comments = _xliff.DocInfo.Comments;
 		}
@@ -172,12 +175,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
 
 					targetSegment.Properties.TranslationOrigin.MatchPercent = byte.Parse("0");
-					targetSegment.Properties.TranslationOrigin.OriginSystem = "Polyglot";
+					targetSegment.Properties.TranslationOrigin.OriginSystem = _originSystem;
 					targetSegment.Properties.TranslationOrigin.OriginType = DefaultTranslationOrigin.Interactive;
 					targetSegment.Properties.TranslationOrigin.IsStructureContextMatch = false;
 					targetSegment.Properties.TranslationOrigin.TextContextMatchLevel = TextContextMatchLevel.None;
 
-					targetSegment.Properties.TranslationOrigin.SetMetaData("last_modified_by", "Polyglot");
+					targetSegment.Properties.TranslationOrigin.SetMetaData("last_modified_by", _originSystem);
 					targetSegment.Properties.TranslationOrigin.SetMetaData("modified_on", FormatAsInvariantDateTime(DateTime.UtcNow));
 				}
 

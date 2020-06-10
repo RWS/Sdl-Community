@@ -69,6 +69,7 @@
 		</DockPanel>
 		
 		<controls:SortAwareDataGrid 
+			x:Name="Grid"
 			Grid.Row="1"
 			DefaultColumnName="Name"
 			DefaultSortDirection="Ascending"

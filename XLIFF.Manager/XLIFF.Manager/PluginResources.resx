@@ -388,4 +388,7 @@
 	<data name="WizardMessage_CloseOpenDocumentsInTheEditor" xml:space="preserve">
     <value>Close all documents that are open in the editor before proceeding</value>
   </data>
+	<data name="Label_Polyglot" xml:space="preserve">
+    <value>Polyglot</value>
+  </data>
 </root>
