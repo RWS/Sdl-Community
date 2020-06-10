@@ -47,8 +47,8 @@ namespace Sdl.Community.XLIFF.Manager.Controls
 			{
 				return;
 			}
-
-			control.LongText = de.NewValue.ToString();
+			
+			control.LongText = de.NewValue?.ToString() ?? string.Empty;
 			control.PrepareForLayout();
 		}
 
