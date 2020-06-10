@@ -59,7 +59,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			summaryText += PluginResources.Label_Options + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_BackupFiles, WizardContext.ImportBackupFiles) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_OverwriteExistingTranslations, WizardContext.ImportOverwriteTranslations) + Environment.NewLine;
-			summaryText += indent + string.Format("Origin System: {0}", WizardContext.ImportOriginSystem) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_OriginSystem, WizardContext.ImportOriginSystem) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_ConfirmationStatus, WizardContext.ImportConfirmationStatus.ToString()) + Environment.NewLine;
 
 			summaryText += Environment.NewLine;
@@ -90,13 +90,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
 					var sdlXliffBackup = Path.Combine(xliffFolder, targetLanguageFile.Name);
 
-					summaryText += indent + "SDLXLIFF File: " + targetLanguageFile.Location + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
 					if (WizardContext.ImportBackupFiles)
 					{
-						summaryText += indent + "Backup: " + sdlXliffBackup + Environment.NewLine;
+						summaryText += indent + string.Format(PluginResources.Label_BackupFile, sdlXliffBackup) + Environment.NewLine;
 					}
-					summaryText += indent + "XLIFF File: " + targetLanguageFile.XliffFilePath + Environment.NewLine;
-					summaryText += indent + "Archive: " + xliffFilePath + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.label_XliffFile, targetLanguageFile.XliffFilePath) + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.Label_ArchiveFile, xliffFilePath) + Environment.NewLine;
 
 					summaryText += Environment.NewLine;
 				}

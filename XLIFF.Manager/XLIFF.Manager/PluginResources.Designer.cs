@@ -176,11 +176,29 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archive File: {0}.
+        /// </summary>
+        internal static string Label_ArchiveFile {
+            get {
+                return ResourceManager.GetString("Label_ArchiveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assign Confirmation Status: {0}.
         /// </summary>
         internal static string Label_AssignConfirmationStatus {
             get {
                 return ResourceManager.GetString("Label_AssignConfirmationStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup File: {0}.
+        /// </summary>
+        internal static string Label_BackupFile {
+            get {
+                return ResourceManager.GetString("Label_BackupFile", resourceCulture);
             }
         }
         
@@ -347,6 +365,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Origin System: {0}.
+        /// </summary>
+        internal static string Label_OriginSystem {
+            get {
+                return ResourceManager.GetString("Label_OriginSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overwrite existing translations: {0}.
         /// </summary>
         internal static string Label_OverwriteExistingTranslations {
@@ -406,6 +433,15 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string Label_SourceLanguage {
             get {
                 return ResourceManager.GetString("Label_SourceLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success {0}.
+        /// </summary>
+        internal static string Label_Success {
+            get {
+                return ResourceManager.GetString("Label_Success", resourceCulture);
             }
         }
         
@@ -698,6 +734,42 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string WizardMessage_CloseOpenDocumentsInTheEditor {
             get {
                 return ResourceManager.GetString("WizardMessage_CloseOpenDocumentsInTheEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converting to XLIFF format....
+        /// </summary>
+        internal static string WizardMessage_ConvertingToFormat {
+            get {
+                return ResourceManager.GetString("WizardMessage_ConvertingToFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finalizing procedures....
+        /// </summary>
+        internal static string WizardMessage_Finalizing {
+            get {
+                return ResourceManager.GetString("WizardMessage_Finalizing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Importing from XLIFF format....
+        /// </summary>
+        internal static string WizardMessage_ImportingFromFormat {
+            get {
+                return ResourceManager.GetString("WizardMessage_ImportingFromFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Initialzing procedures....
+        /// </summary>
+        internal static string WizardMessage_Initializing {
+            get {
+                return ResourceManager.GetString("WizardMessage_Initializing", resourceCulture);
             }
         }
         

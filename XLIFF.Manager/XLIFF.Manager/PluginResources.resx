@@ -391,4 +391,28 @@
 	<data name="Label_Polyglot" xml:space="preserve">
     <value>Polyglot</value>
   </data>
+	<data name="Label_Success" xml:space="preserve">
+    <value>Success {0}</value>
+  </data>
+	<data name="Label_OriginSystem" xml:space="preserve">
+    <value>Origin System: {0}</value>
+  </data>
+	<data name="Label_BackupFile" xml:space="preserve">
+    <value>Backup File: {0}</value>
+  </data>
+	<data name="Label_ArchiveFile" xml:space="preserve">
+    <value>Archive File: {0}</value>
+  </data>
+	<data name="WizardMessage_ImportingFromFormat" xml:space="preserve">
+    <value>Importing from XLIFF format...</value>
+  </data>
+	<data name="WizardMessage_Finalizing" xml:space="preserve">
+    <value>Finalizing procedures...</value>
+  </data>
+	<data name="WizardMessage_Initializing" xml:space="preserve">
+    <value>Initialzing procedures...</value>
+  </data>
+	<data name="WizardMessage_ConvertingToFormat" xml:space="preserve">
+    <value>Converting to XLIFF format...</value>
+  </data>
 </root>

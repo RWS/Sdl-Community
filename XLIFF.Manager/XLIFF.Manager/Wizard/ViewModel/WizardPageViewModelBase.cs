@@ -16,7 +16,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private bool _isCurrentPage;
 		private double _labelLineWidth;
 		private double _labelTextWidth;
-		private bool _isValid;
 
 		protected WizardPageViewModelBase(Window owner, object view, WizardContext wizardContext)
 		{	

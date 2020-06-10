@@ -101,7 +101,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			}
 		}
 
-
 		private void OpenFolderInExplorer(object parameter)
 		{
 			if (Directory.Exists(WizardContext.WorkingFolder))
@@ -218,7 +217,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: Preparation - Started " + FormatDateTime(DateTime.Now));
 
-				TextMessage = "Initialzing procedures...";
+				TextMessage = PluginResources.WizardMessage_Initializing;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
@@ -250,7 +249,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: Export - Started " + FormatDateTime(DateTime.Now));
 
-				TextMessage = "Converting to XLIFF format...";
+				TextMessage = PluginResources.WizardMessage_ConvertingToFormat;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
@@ -342,7 +341,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.Now));
 
-				TextMessage = "Finalizing procedures...";
+				TextMessage = PluginResources.WizardMessage_Finalizing;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 

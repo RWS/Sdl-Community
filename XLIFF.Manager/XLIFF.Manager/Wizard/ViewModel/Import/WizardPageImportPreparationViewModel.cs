@@ -152,7 +152,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			_logReport.AppendLine(PluginResources.Label_Options);
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_BackupFiles, WizardContext.ImportBackupFiles));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OverwriteExistingTranslations, WizardContext.ImportOverwriteTranslations));
-			_logReport.AppendLine(indent + string.Format("Origin System: {0}", WizardContext.ImportOriginSystem));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OriginSystem, WizardContext.ImportOriginSystem));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ConfirmationStatus, WizardContext.ImportConfirmationStatus.ToString()));
 
 
@@ -218,7 +218,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: Preparation - Started " + FormatDateTime(DateTime.Now));
 
-				TextMessage = "Initialzing procedures...";
+				TextMessage = PluginResources.WizardMessage_Initializing;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
@@ -250,7 +250,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: Import - Started " + FormatDateTime(DateTime.Now));
 
-				TextMessage = "Importing from XLIFF format...";
+				TextMessage = PluginResources.WizardMessage_ImportingFromFormat;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
@@ -293,43 +293,54 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 						var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
 						var sdlXliffBackup = Path.Combine(xliffFolder, targetLanguageFile.Name);
 
-						_logReport.AppendLine("SDLXLIFF File: " + targetLanguageFile.Location);
+						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location));
 						if (WizardContext.ImportBackupFiles)
 						{
-							_logReport.AppendLine("Backup: " + sdlXliffBackup);
+							_logReport.AppendLine(string.Format(PluginResources.Label_BackupFile, sdlXliffBackup));
 						}
-						_logReport.AppendLine("XLIFF File: " + targetLanguageFile.XliffFilePath);
-						_logReport.AppendLine("Archive: " + xliffFilePath);
+						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, targetLanguageFile.XliffFilePath));
+						_logReport.AppendLine(string.Format(PluginResources.Label_ArchiveFile, xliffFilePath));
+					
+						CreateBackup(targetLanguageFile, sdlXliffBackup);
+						CreateArchiveFile(targetLanguageFile, xliffFilePath);
 
-						_logReport.AppendLine();
-
-						File.Copy(targetLanguageFile.Location, sdlXliffBackup);
-						File.Copy(targetLanguageFile.XliffFilePath, xliffFilePath);
-
-
-						var outputFilePath = targetLanguageFile + ".out.sdlxliff";
-						if (File.Exists(outputFilePath))
-						{
-							File.Delete(outputFilePath);
-						}
+						var outputFilePath = Path.GetTempFileName();						
 
 						var xliff = xliffReader.ReadXliff(xliffFilePath);
-						success = sdlxliffWriter.UpdateFile(xliff, targetLanguageFile.Location, outputFilePath,
+						success = sdlxliffWriter.UpdateFile(xliff, sdlXliffBackup, outputFilePath,
 							WizardContext.ImportOverwriteTranslations, WizardContext.ImportConfirmationStatus, WizardContext.ImportOriginSystem);
 
+						_logReport.AppendLine(string.Format(PluginResources.Label_Success, success));
+						_logReport.AppendLine();
 						if (success)
 						{
 							if (File.Exists(targetLanguageFile.Location))
 							{
-								File.Delete(targetLanguageFile.Location);
+								File.Delete(targetLanguageFile.Location);								
 							}
-							File.Move(outputFilePath, targetLanguageFile.Location);
+
+							File.Copy(outputFilePath, targetLanguageFile.Location, true);
+							File.Delete(outputFilePath);
 						}
 						else
 						{
-							File.Copy(sdlXliffBackup, targetLanguageFile.Location, true);
+							if (File.Exists(outputFilePath))
+							{
+								File.Delete(outputFilePath);								
+							}
+
+							if (File.Exists(targetLanguageFile.Location))
+							{
+								File.Delete(targetLanguageFile.Location);								
+							}
+
+							if (File.Exists(sdlXliffBackup))
+							{
+								File.Copy(sdlXliffBackup, targetLanguageFile.Location, true);
+							}
+
 							throw new Exception("Error occurred while updating the SDLXLIFF");
-						}
+						}						
 					}
 				}
 
@@ -350,7 +361,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			return await Task.FromResult(success);
 		}
-
+	
 		private async Task<bool> Finalize(JobProcess jobProcess)
 		{
 			var success = true;
@@ -360,7 +371,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.Now));
 
-				TextMessage = "Finalizing procedures...";
+				TextMessage = PluginResources.WizardMessage_Finalizing;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0096D6");
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
@@ -396,6 +407,26 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#7F0505");
 				IsComplete = false;
 			}
+		}
+
+		private void CreateArchiveFile(ProjectFile targetLanguageFile, string xliffFilePath)
+		{
+			if (File.Exists(xliffFilePath))
+			{
+				File.Delete(xliffFilePath);
+			}
+
+			File.Copy(targetLanguageFile.XliffFilePath, xliffFilePath, true);
+		}
+
+		private void CreateBackup(ProjectFile targetLanguageFile, string sdlXliffBackup)
+		{
+			if (File.Exists(sdlXliffBackup))
+			{
+				File.Delete(sdlXliffBackup);
+			}
+
+			File.Copy(targetLanguageFile.Location, sdlXliffBackup, true);
 		}
 
 		private string GetProjectTargetLanguagesString(Project project)

@@ -111,7 +111,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		public void VerifyIsValid()
 		{
 			IsValid = GetValidProjectFilesCount() > 0;
-			System.Windows.Forms.SendKeys.Send("{ENTER}");		
+			System.Windows.Forms.SendKeys.Send("{TAB}");		
 		}
 
 		private int? GetValidProjectFilesCount()
