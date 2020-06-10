@@ -32,7 +32,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private string _textMessage;
 		private StringBuilder _logReport;
 
-		public WizardPageImportPreparationViewModel(Window owner, object view, WizardContext wizardContext, 
+		public WizardPageImportPreparationViewModel(Window owner, object view, WizardContext wizardContext,
 			SegmentBuilder segmentBuilder, PathInfo pathInfo) : base(owner, view, wizardContext)
 		{
 			_segmentBuilder = segmentBuilder;
@@ -152,11 +152,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			_logReport.AppendLine(PluginResources.Label_Options);
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_BackupFiles, WizardContext.ImportBackupFiles));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OverwriteExistingTranslations, WizardContext.ImportOverwriteTranslations));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_AssignConfirmationStatus, WizardContext.ImportOverrideConfirmationStatus));
-			if (WizardContext.ImportOverrideConfirmationStatus)
-			{
-				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ConfirmationStatus, WizardContext.ImportConfirmationStatus.ToString()));
-			}
+			_logReport.AppendLine(indent + string.Format("Origin System: {0}", WizardContext.ImportOriginSystem));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ConfirmationStatus, WizardContext.ImportConfirmationStatus.ToString()));
+
 
 			_logReport.AppendLine();
 			_logReport.AppendLine(PluginResources.Label_Files);
@@ -317,7 +315,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 						var xliff = xliffReader.ReadXliff(xliffFilePath);
 						success = sdlxliffWriter.UpdateFile(xliff, targetLanguageFile.Location, outputFilePath,
-							WizardContext.ImportOverwriteTranslations, WizardContext.ImportConfirmationStatus);
+							WizardContext.ImportOverwriteTranslations, WizardContext.ImportConfirmationStatus, WizardContext.ImportOriginSystem);
 
 						if (success)
 						{

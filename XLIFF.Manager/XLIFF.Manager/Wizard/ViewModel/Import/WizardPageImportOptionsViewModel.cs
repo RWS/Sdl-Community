@@ -11,13 +11,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 	{
 		private List<ConfirmationLevel> _confirmationStatuses;
 		private ConfirmationLevel _confirmationStatus;
-		private bool _overrideConfirmationStatus;
+		private string _originSystem;
 
 		public WizardPageImportOptionsViewModel(Window owner, object view, WizardContext wizardContext) : base(owner, view, wizardContext)
 		{
 			BackupFiles = wizardContext.ImportBackupFiles;
 			OverwriteTranslations = wizardContext.ImportOverwriteTranslations;
-			OverrideConfirmationStatus = wizardContext.ImportOverrideConfirmationStatus;
+			OriginSystem = wizardContext.ImportOriginSystem;
 			ConfirmationStatuses = Enum.GetValues(typeof(ConfirmationLevel)).Cast<ConfirmationLevel>().ToList();
 			ConfirmationStatus = wizardContext.ImportConfirmationStatus;
 
@@ -33,25 +33,26 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		private void VerifyIsValid()
 		{
-			IsValid = true;
+			IsValid = !string.IsNullOrEmpty(OriginSystem.Trim());
 		}
 
 		public bool BackupFiles { get; set; }
 
 		public bool OverwriteTranslations { get; set; }
 
-		public bool OverrideConfirmationStatus
+		public string OriginSystem
 		{
-			get => _overrideConfirmationStatus;
+			get => _originSystem;
 			set
 			{
-				if (value == _overrideConfirmationStatus)
+				if (value == _originSystem)
 				{
 					return;
 				}
 
-				_overrideConfirmationStatus = value;
-				OnPropertyChanged(nameof(OverrideConfirmationStatus));
+				_originSystem = value;
+				OnPropertyChanged(nameof(OriginSystem));
+				VerifyIsValid();
 			}
 		}
 
@@ -82,6 +83,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		private void OnLoadPage(object sender, EventArgs e)
 		{
+			OriginSystem = WizardContext.ImportOriginSystem;
 			VerifyIsValid();
 		}
 
@@ -89,7 +91,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		{
 			WizardContext.ImportBackupFiles = BackupFiles;
 			WizardContext.ImportOverwriteTranslations = OverwriteTranslations;
-			WizardContext.ImportOverrideConfirmationStatus = OverrideConfirmationStatus;
+			WizardContext.ImportOriginSystem = OriginSystem;
 			WizardContext.ImportConfirmationStatus = ConfirmationStatus;
 		}
 

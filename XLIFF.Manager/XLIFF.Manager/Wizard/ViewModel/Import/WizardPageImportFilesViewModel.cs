@@ -9,6 +9,7 @@ using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
+using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
@@ -110,13 +111,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		public void VerifyIsValid()
 		{
 			IsValid = GetValidProjectFilesCount() > 0;
+			System.Windows.Forms.SendKeys.Send("{ENTER}");		
 		}
 
 		private int? GetValidProjectFilesCount()
 		{
 			var count = ProjectFiles.Count(a => a.Selected &&
 									!string.IsNullOrEmpty(a.XliffFilePath) &&
-									File.Exists(a.XliffFilePath));
+									System.IO.File.Exists(a.XliffFilePath));
 
 			return count;
 		}
@@ -239,7 +241,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			{
 				foreach (var fullPath in filesOrDirectories)
 				{
-					var fileAttributes = File.GetAttributes(fullPath);
+					var fileAttributes = System.IO.File.GetAttributes(fullPath);
 					if (fileAttributes.HasFlag(FileAttributes.Directory))
 					{
 						var files = GetAllXliffsFromDirectory(fullPath);
@@ -261,7 +263,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			foreach (var filePath in filesPath)
 			{
-				if (!string.IsNullOrEmpty(filePath) && !File.Exists(filePath))
+				if (!string.IsNullOrEmpty(filePath) && !System.IO.File.Exists(filePath))
 				{
 					continue;
 				}
@@ -286,11 +288,24 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 						string.Compare(projectFileTargetPath, xliffTargetPath, StringComparison.CurrentCultureIgnoreCase) == 0)
 					{
 						projectFile.XliffFilePath = filePath;
+
+						InitializeOriginSystemValue(xliff);
 					}
 				}
 			}
 
 			VerifyIsValid();
+		}
+
+		private void InitializeOriginSystemValue(Xliff xliff)
+		{
+			if (string.IsNullOrEmpty(WizardContext.ImportOriginSystem))
+			{
+				if (xliff.Support == Enumerators.XLIFFSupport.xliff12polyglot)
+				{
+					WizardContext.ImportOriginSystem = PluginResources.Label_Polyglot;
+				}
+			}
 		}
 
 		private string GetPathLocation(string path, string targetLanguage)

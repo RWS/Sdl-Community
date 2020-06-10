@@ -21,7 +21,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 			ImportBackupFiles = true;
 			ImportOverwriteTranslations = true;
-			ImportOverrideConfirmationStatus = true;
+			ImportOriginSystem = string.Empty;
 			ImportConfirmationStatus = ConfirmationLevel.Draft;
 		}
 
@@ -68,7 +68,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public bool ImportOverwriteTranslations { get; set; }
 
-		public bool ImportOverrideConfirmationStatus { get; set; }
+		public string ImportOriginSystem { get; set; }
 
 		public ConfirmationLevel ImportConfirmationStatus { get; set; }
 

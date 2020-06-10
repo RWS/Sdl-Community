@@ -356,6 +356,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Polyglot.
+        /// </summary>
+        internal static string Label_Polyglot {
+            get {
+                return ResourceManager.GetString("Label_Polyglot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Project.
         /// </summary>
         internal static string Label_Project {
