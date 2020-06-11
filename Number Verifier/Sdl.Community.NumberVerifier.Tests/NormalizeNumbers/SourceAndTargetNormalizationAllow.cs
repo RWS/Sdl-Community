@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
-    /// <summary>
-    /// Target separators + Source separators
-    /// </summary>
-    public class SourceAndTargetNormalizationAllow
+	/// <summary>
+	/// Target separators + Source separators
+	/// </summary>
+	public class SourceAndTargetNormalizationAllow
     {
 
         #region Check thousands numbers and negative numbers
@@ -42,7 +35,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count > 0);
+            Assert.True(errorMessage.Count == 0);
         }
 
         /// <summary>
@@ -66,8 +59,8 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-			Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
-		}
+            Assert.True(errorMessage.Count == 0);
+        }
 
         [Theory]
         [InlineData("-1 554,5","1 554,5")]
@@ -84,7 +77,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
+            Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
         }
         /// <summary>
         /// Thousands sep: space, thin space, no-break space
@@ -108,7 +101,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count > 0);
+            Assert.True(errorMessage.Count == 0);
         }
 
         /// <summary>
@@ -127,8 +120,9 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
             numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
             numberVerifierSettings.Setup(d => d.TargetThousandsPeriod).Returns(true);
+			numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(false);
 
-            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -137,7 +131,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count > 0);
+            Assert.True(errorMessage.Count == 0);
         }
 
         #endregion
@@ -146,7 +140,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
         /// <summary>
         /// Check decimal numbers, both numbers should have comma as separator
-        /// Error message: Number modified
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
@@ -166,17 +159,42 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
+            Assert.True(errorMessage.Count == 0);
         }
 
+		/// <summary>
+		/// Check decimal numbers, numbers can have period or comma as separator
+		/// Error message: Number modified
+		/// /// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
+		[InlineData("1,55", "1.55")]
+		public void DecimalSeparatorsComma_WithErrors(string source, string target)
+		{
+			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+			numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+			numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(false);
 
-        /// <summary>
-        /// Check decimal numbers, numbers can have period or comma as separator
-        /// No error message
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
-        [Theory]
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+			//run initialize method in order to set chosen separators
+			var docPropMock = new Mock<IDocumentProperties>();
+			numberVerifierMain.Initialize(docPropMock.Object);
+
+			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+			Assert.True(errorMessage.Count == 0);
+		}
+
+		/// <summary>
+		/// Check decimal numbers, numbers can have period or comma as separator
+		/// No error message
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
         [InlineData("2,55", "2.55")]
         public void DecimalSeparatorsCommaAndPeriod(string source, string target)
         {
@@ -193,7 +211,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count > 0);
+            Assert.True(errorMessage.Count == 0);
         }
 
         #endregion
@@ -223,7 +241,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[1].ErrorMessage, PluginResources.Error_NumbersRemoved);
+            Assert.Equal(PluginResources.Error_NumbersRemoved, errorMessage[0].ErrorMessage);
         }
 
         /// <summary>
@@ -248,7 +266,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierMain.Initialize(docPropMock.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
-            Assert.Equal(errorMessage[1].ErrorMessage,PluginResources.Error_NumbersAdded);
+            Assert.Equal(PluginResources.Error_NumbersAdded, errorMessage[0].ErrorMessage);
         }
 
         #endregion

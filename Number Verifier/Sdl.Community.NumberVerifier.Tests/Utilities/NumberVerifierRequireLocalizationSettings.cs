@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using Sdl.Community.NumberVerifier.Interfaces;
 
 namespace Sdl.Community.NumberVerifier.Tests.Utilities
 {
-    public class NumberVerifierRequireLocalizationSettings
+	public class NumberVerifierRequireLocalizationSettings
     {
         public static Mock<INumberVerifierSettings> ThousandsSeparatorsSpaceAndNoBreak()
         {
@@ -33,7 +28,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             numberVerifierSettings.Setup(t => t.TargetThousandsNobreakThinSpace).Returns(true);
 
             return numberVerifierSettings;
-
         }
 
         public static Mock<INumberVerifierSettings> SpaceCommaPeriod()
@@ -44,7 +38,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             numberVerifierSettings.Setup(t => t.TargetThousandsPeriod).Returns(true);
 
             return numberVerifierSettings;
-
         }
 
         public static Mock<INumberVerifierSettings> CommaPeriod()

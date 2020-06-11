@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Moq;
-using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
-    public class CheckNumbersAgainstRegularExpression
+	public class CheckNumbersAgainstRegularExpression
     {
 
         /// <summary>
@@ -21,10 +16,9 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// <param name="text"></param>
         /// <param name="thousandSep"></param>
         /// <param name="decimalSep"></param>
-        /// <param name="noSeparator"></param>
         [Theory]
-        [InlineData("- 34", ".,", ",", false)]
-        public void SkippTheDash(string text, string thousandSep, string decimalSep, bool noSeparator)
+        [InlineData("- 34", ".,", ",")]
+        public void SkipTheDash(string text, string thousandSep, string decimalSep)
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
@@ -69,12 +63,12 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierMain.NormalizeAlphanumerics(text, numberCollection, normalizedNumberCollection, thousandSeparators, decimalSeparators, false, false);
 
             Assert.Equal("−74,5", $"{numberCollection[0]}{numberCollection[1]}");
-            Assert.Equal("m74,5", $"{normalizedNumberCollection[0]}{normalizedNumberCollection[1]}");
+            Assert.Equal("m74m5", $"{normalizedNumberCollection[0]}{normalizedNumberCollection[1]}");
         }
 
         [Theory]
-        [InlineData("This ab46 is not an alphanumeric, the plugin will recognize only the number", ".,", ",", false)]
-        public void FindNumbersWithinTheWords(string text, string thousandSep, string decimalSep, bool noSeparator)
+        [InlineData("This ab46 is not an alphanumeric, the plugin will recognize only the number", ".,", ",")]
+        public void FindNumbersWithinTheWords(string text, string thousandSep, string decimalSep)
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
