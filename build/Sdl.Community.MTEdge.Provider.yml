@@ -20,6 +20,10 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.MTEdge.Provider.sln'
+  pathToPublish : SDLMTEdge.Provider\SDLMTEdgeTranslationProvider\bin\Release\SDLMachineTranslationEdgeProvider.sdlplugin
+
+
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml
