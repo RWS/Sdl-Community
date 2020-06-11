@@ -165,27 +165,33 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			var updatedText = SegmentVisitor.Text;
 
 			if (string.Compare(originalText, updatedText, StringComparison.Ordinal) != 0)
-			{
-				// TODO: everything related to the TranslationOrigin will be revised at a later
-				// development phase... assigning default values for now!
+			{				
 				if (targetSegment.Properties.TranslationOrigin != null)
 				{
 					var currentTranslationOrigin = (ITranslationOrigin)targetSegment.Properties.TranslationOrigin.Clone();
-
 					targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
-
-					targetSegment.Properties.TranslationOrigin.MatchPercent = byte.Parse("0");
-					targetSegment.Properties.TranslationOrigin.OriginSystem = _originSystem;
-					targetSegment.Properties.TranslationOrigin.OriginType = DefaultTranslationOrigin.Interactive;
-					targetSegment.Properties.TranslationOrigin.IsStructureContextMatch = false;
-					targetSegment.Properties.TranslationOrigin.TextContextMatchLevel = TextContextMatchLevel.None;
-
-					targetSegment.Properties.TranslationOrigin.SetMetaData("last_modified_by", _originSystem);
-					targetSegment.Properties.TranslationOrigin.SetMetaData("modified_on", FormatAsInvariantDateTime(DateTime.UtcNow));
+					SetTranslationOrigin(targetSegment);
+				}
+				else
+				{
+					targetSegment.Properties.TranslationOrigin = _segmentBuilder.CreateTranslationOrigin();
+					SetTranslationOrigin(targetSegment);
 				}
 
 				targetSegment.Properties.ConfirmationLevel = _confirmationStatus;
 			}
+		}
+
+		private void SetTranslationOrigin(ISegment targetSegment)
+		{
+			targetSegment.Properties.TranslationOrigin.MatchPercent = byte.Parse("0");
+			targetSegment.Properties.TranslationOrigin.OriginSystem = _originSystem;
+			targetSegment.Properties.TranslationOrigin.OriginType = DefaultTranslationOrigin.Interactive;
+			targetSegment.Properties.TranslationOrigin.IsStructureContextMatch = false;
+			targetSegment.Properties.TranslationOrigin.TextContextMatchLevel = TextContextMatchLevel.None;
+
+			targetSegment.Properties.TranslationOrigin.SetMetaData("last_modified_by", _originSystem);
+			targetSegment.Properties.TranslationOrigin.SetMetaData("modified_on", FormatAsInvariantDateTime(DateTime.UtcNow));
 		}
 
 		private void UpdatePlaceholder(ElementPlaceholder elementPlaceholder, ISegment originalTarget, ISegment originalSource,

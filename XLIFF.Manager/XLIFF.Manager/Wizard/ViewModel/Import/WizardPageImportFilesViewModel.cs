@@ -288,7 +288,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 						string.Compare(projectFileTargetPath, xliffTargetPath, StringComparison.CurrentCultureIgnoreCase) == 0)
 					{
 						projectFile.XliffFilePath = filePath;
-
+						projectFile.Selected = true;
 						InitializeOriginSystemValue(xliff);
 					}
 				}

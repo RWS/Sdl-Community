@@ -491,6 +491,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error importing translations from: {0}.
+        /// </summary>
+        internal static string Message_ErrorImportingFrom {
+            get {
+                return ResourceManager.GetString("Message_ErrorImportingFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exported on: {0}.
         /// </summary>
         internal static string Message_Exported_on_0 {
