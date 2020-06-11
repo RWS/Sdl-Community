@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLMTEdge.Provider/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLMTEdge.Provider/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.MTEdge.Provider.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
