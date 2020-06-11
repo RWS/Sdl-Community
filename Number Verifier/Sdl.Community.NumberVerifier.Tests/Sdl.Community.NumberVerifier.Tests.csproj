@@ -63,6 +63,7 @@
     <Compile Include="Alphanumeric\AlphanumericCustomSeparators.cs" />
     <Compile Include="Alphanumeric\AlphanumericWithNarrowNoBreakSpace.cs" />
     <Compile Include="Alphanumeric\AlphanumericWithNoBreakSpace.cs" />
+    <Compile Include="Alphanumeric\AlphanumericWithNormalSpace.cs" />
     <Compile Include="Alphanumeric\AlphanumericWithThinSpace.cs" />
     <Compile Include="Alphanumeric\NormalizeAlphanumerics.cs" />
     <Compile Include="NegativeNumbers\NegativeNumbers.cs" />
