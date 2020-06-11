@@ -209,7 +209,7 @@
             this.rb_ReportBriefMessages.TabStop = true;
             this.rb_ReportBriefMessages.Text = "Brief";
             this.toolTip1.SetToolTip(this.rb_ReportBriefMessages, "Show message details: document name, message, segment number, source and target c" +
-        "ontent.");
+        "ontent");
             this.rb_ReportBriefMessages.UseVisualStyleBackColor = true;
             // 
             // combo_ModifiedAlphanumericsErrorType

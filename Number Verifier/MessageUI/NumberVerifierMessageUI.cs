@@ -59,7 +59,7 @@ namespace Sdl.Community.Extended.MessageUI
 			foreach (var item in targetSegment?.AllSubItems)
 			{
 				targetText.AppendFormat($"{item.ToString()} ");
-			}
+			}			
 			foreach (var item in sourceSegment?.AllSubItems)
 			{
 				sourceText.AppendFormat($"{item.ToString()} ");
@@ -170,7 +170,7 @@ namespace Sdl.Community.Extended.MessageUI
 			if (messageData.MessageType.Equals(Constants.AlphanumericIssue) || messageData.MessageType.Equals(Constants.HindiIssue))
 			{
 				tb_SourceIssues.Text = messageData.InitialSourceIssues;
-				tb_TargetIssues.Text = messageData.InitialTargetIssues;				
+				tb_TargetIssues.Text = messageData.InitialTargetIssues;
 			}
 			else
 			{
@@ -178,8 +178,14 @@ namespace Sdl.Community.Extended.MessageUI
 				tb_TargetIssues.Text = messageData.TargetIssues;
 			}
 
-			ColorTextIssues(tb_SourceIssues.Text, source_richTextBox);
-			ColorTextIssues(tb_TargetIssues.Text, target_richTextBox);
+			if (!string.IsNullOrEmpty(source_richTextBox.Text))
+			{
+				ColorTextIssues(tb_SourceIssues.Text, source_richTextBox);
+			}
+			if (!string.IsNullOrEmpty(target_richTextBox.Text))
+			{
+				ColorTextIssues(tb_TargetIssues.Text, target_richTextBox);
+			}
 		}
 
 		/// <summary>

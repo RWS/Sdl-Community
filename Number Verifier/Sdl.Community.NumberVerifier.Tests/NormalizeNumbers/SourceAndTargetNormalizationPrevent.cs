@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using Sdl.Community.NumberVerifier.Tests.SourceSettings;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -11,10 +6,10 @@ using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
-    /// <summary>
-    /// Source separators
-    /// </summary>
-    public class SourceAndTargetNormalizationPrevent
+	/// <summary>
+	/// Source separators
+	/// </summary>
+	public class SourceAndTargetNormalizationPrevent
     {
         
         /// <summary>
@@ -44,8 +39,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
             Assert.True(errorMessage.Count == 0);
-
-
         }
     }
 }

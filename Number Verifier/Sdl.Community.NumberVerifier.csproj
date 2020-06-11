@@ -64,7 +64,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\NLog.dll</HintPath>
@@ -163,6 +164,7 @@
     <Compile Include="GUI\NumberVerifierHelpPage.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Log.cs" />
+    <Compile Include="Helpers\TextFormatter.cs" />
     <Compile Include="Interfaces\IErrorMessageProcessor.cs" />
     <Compile Include="Interfaces\IExtractProcessor.cs" />
     <Compile Include="Interfaces\IExtractSpecification.cs" />

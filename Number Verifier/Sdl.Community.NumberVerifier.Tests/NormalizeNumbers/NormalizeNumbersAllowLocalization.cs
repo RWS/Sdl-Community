@@ -12,7 +12,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		[InlineData("1,55", " ", ",")]
 		public void NormalizeDecimalNumbersComma(string text, string thousandSep, string decimalSep)
 		{
-			// add to settings allow localization and thousnds separators
+			// add to settings allow localization and thousands separators
 			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.SpaceCommaPeriod();
 			numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
 
@@ -32,7 +32,8 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 				NoSeparator = false,
 				CustomSeparators = string.Empty
 			});
-			Assert.Equal(normalizedNumber, "1d55");
+
+			Assert.Equal("1d55", normalizedNumber);
 		}
 	}
 }

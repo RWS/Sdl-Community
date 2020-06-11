@@ -3,10 +3,10 @@ using Sdl.Community.NumberVerifier.Interfaces;
 
 namespace Sdl.Community.NumberVerifier.Processors
 {
-	public class AggregateExtendedMessageOnNewLineErrorMessageProcessor : IErrorMessageProcessor
-	{
-		public string GenerateMessage(INumberResults numberResult, string errorMessage)
-		{
+	public class AggregateExtendedMessageOnNewLineErrorMessageProcessor:IErrorMessageProcessor
+    {
+        public string GenerateMessage(INumberResults numberResult, string errorMessage)
+        {
 			char[] charsToRemove = { ' ', ',' };
 			var result = new StringBuilder();
 			result.AppendFormat($"{errorMessage} ");
@@ -19,7 +19,7 @@ namespace Sdl.Community.NumberVerifier.Processors
 					result.AppendFormat($"{source}, ");
 				}
 				// remove the last 2 chars from the last word attached to string, which represents the ',' and empty space
-				result = result.Remove(result.Length - 2, 2);
+				result = result.Remove(result.Length-2, 2);
 				result.AppendFormat("; ");
 			}
 			if (numberResult.TargetNumbers.Count > 0)
