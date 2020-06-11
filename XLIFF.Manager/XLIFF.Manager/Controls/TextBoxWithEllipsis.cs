@@ -28,11 +28,20 @@ namespace Sdl.Community.XLIFF.Manager.Controls
 			UseLongTextForToolTip = true;
 			FudgePix = 3.0;
 
+			AllowDrop = true;
+			PreviewDragOver += TextBoxWithEllipsis_DragOver;
+
 			_placement = EllipsisPlacement.Right;
 			_internalEnabled = true;
 
 			LayoutUpdated += TextBoxWithEllipsis_LayoutUpdated;
 			SizeChanged += TextBoxWithEllipsis_SizeChanged;
+		}
+
+		private void TextBoxWithEllipsis_DragOver(object sender, DragEventArgs e)
+		{
+			e.Effects = DragDropEffects.Copy | DragDropEffects.Move;			
+			e.Handled = true;
 		}
 
 		public static readonly DependencyProperty LongTextProperty =
