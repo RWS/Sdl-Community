@@ -19,7 +19,7 @@ pool: Studio-OX
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : '**/SDLMTEdgeLanguageResourceBuilder.sln'
+  solution : '**/ETSTranslationProvider.sln'
   pathToPublish: 'ETS Translation Provider\ETSTranslationProvider\Trados2019_Plugin\bin\Release\SDLMachineTranslationEdgeProvider.sdlplugin'
 
 steps:
