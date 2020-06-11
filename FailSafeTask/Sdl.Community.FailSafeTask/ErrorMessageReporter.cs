@@ -18,7 +18,7 @@ namespace Sdl.Community.FailSafeTask
 		{
 			foreach (var msg in messages)
 			{
-				reporter.ReportMessage(null, msg.Item1, Sdl.FileTypeSupport.Framework.NativeApi.ErrorLevel.Error, msg.Item2, msg.Item1);
+				reporter?.ReportMessage(null, msg.Item1, Sdl.FileTypeSupport.Framework.NativeApi.ErrorLevel.Error, msg.Item2, msg.Item1);
 			}
 		}
 

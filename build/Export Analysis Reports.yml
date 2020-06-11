@@ -6,15 +6,22 @@ trigger:
     include:
      - Export Analysis Reports/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Export Analysis Reports/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.ExportAnalysisReports.sln'
-  pluginName: 'Export Analysis Reports\Sdl.Community.ExportAnalysisReports'
-  artifactName: 'Sdl.Community.ExportAnalysisReports.sdlplugin'
+  pathToPublish: 'Export Analysis Reports\Sdl.Community.ExportAnalysisReports\bin\Release\Sdl.Community.ExportAnalysisReports.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

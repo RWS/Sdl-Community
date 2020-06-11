@@ -6,15 +6,22 @@ trigger:
     include:
      - FileTypeSupport.MXLIFF/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - FileTypeSupport.MXLIFF/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.FileTypeSupport.MXLIFF.sln'
-  pluginName: 'FileTypeSupport.MXLIFF'
-  artifactName: 'MXLIFFFileType.sdlplugin'
+  pathToPublish: 'FileTypeSupport.MXLIFF\bin\Release\MXLIFFFileType.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

@@ -6,15 +6,22 @@ trigger:
     include:
      - TMX/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TMX/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.FileTypeSupport.TMX.sln'
-  pluginName: 'TMX'
-  artifactName: 'Sdl.Community.FileType.TMX.sdlplugin'
+  pathToPublish: 'TMX\bin\Release\Sdl.Community.FileType.TMX.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

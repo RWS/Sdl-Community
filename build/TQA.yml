@@ -6,15 +6,22 @@ trigger:
     include:
      - TQA/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TQA/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.TQA.sln'
-  pluginName: 'TQA/TQA'
-  artifactName: 'Sdl.Community.TQA.sdlplugin'
+  pathToPublish: 'TQA/TQA\bin\Release\Sdl.Community.TQA.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

@@ -6,15 +6,22 @@ trigger:
     include:
      - StarTransit/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - StarTransit/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.StarTransit.sln'
-  pluginName: 'StarTransit\Sdl.Community.StarTransit'
-  artifactName: 'Sdl.Community.StarTransit.sdlplugin'
+  pathToPublish: 'StarTransit\Sdl.Community.StarTransit\bin\Release\Sdl.Community.StarTransit.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

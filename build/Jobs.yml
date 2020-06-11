@@ -6,15 +6,22 @@ trigger:
     include:
      - Jobs/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Jobs/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.Jobs.sln'
-  pluginName: 'Jobs\Sdl.Community.Jobs'
-  artifactName: 'Sdl.Community.Jobs.sdlplugin'
+  pathToPublish: 'Jobs\Sdl.Community.Jobs\bin\Release\Sdl.Community.Jobs.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

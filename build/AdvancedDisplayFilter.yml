@@ -6,15 +6,22 @@ trigger:
     include:
      - AdvancedDisplayFilter/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - AdvancedDisplayFilter/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
-  pluginName: 'AdvancedDisplayFilter'
-  artifactName: 'Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+  pathToPublish: 'AdvancedDisplayFilter\bin\Release\Sdl.Community.AdvancedDisplayFilter.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

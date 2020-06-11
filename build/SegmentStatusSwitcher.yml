@@ -6,15 +6,22 @@ trigger:
     include:
      - SegmentStatusSwitcher/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SegmentStatusSwitcher/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.SegmentStatusSwitcher.sln'
-  pluginName: 'SegmentStatusSwitcher\Sdl.Community.SegmentStatusSwitcher'
-  artifactName: 'Sdl.Community.SegmentStatusSwitcher.sdlplugin'
+  pathToPublish: 'SegmentStatusSwitcher\Sdl.Community.SegmentStatusSwitcher\bin\Release\Sdl.Community.SegmentStatusSwitcher.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

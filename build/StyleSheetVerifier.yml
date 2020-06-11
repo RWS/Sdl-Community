@@ -6,15 +6,22 @@ trigger:
     include:
      - StyleSheetVerifier/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - StyleSheetVerifier/*
+
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution : '**/Sdl.Community.StyleSheetVerifier.sln'
-  pluginName: 'StyleSheetVerifier\StyleSheetVerifier'
-  artifactName: 'Sdl.Community.StyleSheetVerifier.sdlplugin'
+  pathToPublish: 'StyleSheetVerifier\StyleSheetVerifier\bin\Release\Sdl.Community.StyleSheetVerifier.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/PublishBuildArtifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

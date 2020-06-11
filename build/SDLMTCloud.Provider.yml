@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLMTCloud.Provider/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLMTCloud.Provider/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.MTCloud.Provider.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

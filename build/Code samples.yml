@@ -4,14 +4,22 @@ trigger:
      - master
   paths:
     include:
-     - Code samples/*
+     - 'Code samples/*'
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - 'Code samples/*'
 
 pool: Studio-OX
 
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution : 'Code samples/**.sln'
+  solution : '**/Code samples/*/*.sln'
 
 steps:
   - template: jobs/build-sdlplugin.yml

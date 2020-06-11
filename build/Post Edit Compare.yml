@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Post Edit Compare/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Post Edit Compare/*
+
+pool: Studio-OX
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution : '**/Sdl.Community.PostEdit.Versions.sln'
+  pathToPublish: 'Post Edit Compare\bin\Release\Sdl.Community.PostEdit.Versions.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

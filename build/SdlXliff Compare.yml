@@ -6,6 +6,14 @@ trigger:
     include:
      - SdlXliff Compare/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SdlXliff Compare/*
+
 pool: Studio-OX
 
 variables:

@@ -6,6 +6,14 @@ trigger:
     include:
      - HunspellDictionaryManager/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - HunspellDictionaryManager/*
+
 pool: Studio-OX
 
 variables:
