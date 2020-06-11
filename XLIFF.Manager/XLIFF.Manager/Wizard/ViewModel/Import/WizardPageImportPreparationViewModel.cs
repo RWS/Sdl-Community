@@ -170,7 +170,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			SaveLogReport();
 		}
-	
+
 		private async Task<bool> Preparation(JobProcess jobProcess)
 		{
 			var success = true;
@@ -183,7 +183,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				TextMessage = PluginResources.WizardMessage_Initializing;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
-				
+
 				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 
 				_logReport.AppendLine("Phase: Preparation - Complete " + FormatDateTime(DateTime.Now));
@@ -205,6 +205,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private async Task<bool> Import(JobProcess jobProcess)
 		{
 			var success = true;
+			var importFiles = new List<ImportFile>();
 
 			try
 			{
@@ -217,15 +218,16 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
 
-
 				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder);
 
 				var sniffer = new XliffSniffer();
 				var xliffReader = new XliffReder(sniffer, _segmentBuilder);
 
-				var targetLanguages = WizardContext.ProjectFiles.Where(a => a.Selected &&
-									!string.IsNullOrEmpty(a.XliffFilePath) && File.Exists(a.XliffFilePath))
+				var targetLanguages = WizardContext.ProjectFiles.Where(
+									a => a.Selected &&
+									!string.IsNullOrEmpty(a.XliffFilePath) &&
+									File.Exists(a.XliffFilePath))
 									.Select(a => a.TargetLanguage.CultureInfo).Distinct();
 
 				foreach (var targetLanguage in targetLanguages)
@@ -235,43 +237,53 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					_logReport.AppendLine();
 					_logReport.AppendLine(string.Format(PluginResources.Label_Language, targetLanguage.DisplayName));
 
-					var targetLanguageFiles = WizardContext.ProjectFiles.Where(a => a.Selected &&
-									!string.IsNullOrEmpty(a.XliffFilePath) && File.Exists(a.XliffFilePath) &&
-									Equals(a.TargetLanguage.CultureInfo, targetLanguage));
+					var targetLanguageFiles = WizardContext.ProjectFiles.Where(
+												a => a.Selected &&
+												!string.IsNullOrEmpty(a.XliffFilePath) &&
+												File.Exists(a.XliffFilePath) &&
+												Equals(a.TargetLanguage.CultureInfo, targetLanguage));
 
 					foreach (var targetLanguageFile in targetLanguageFiles)
 					{
 						var xliffFolder = GetXliffFolder(languageFolder, targetLanguageFile);
-						var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
-						var sdlXliffBackup = Path.Combine(xliffFolder, targetLanguageFile.Name);
+						var xliffArchiveFile = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
+						var sdlXliffBackupFile = Path.Combine(xliffFolder, targetLanguageFile.Name);
 
 						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location));
 						if (WizardContext.ImportBackupFiles)
 						{
-							_logReport.AppendLine(string.Format(PluginResources.Label_BackupFile, sdlXliffBackup));
+							_logReport.AppendLine(string.Format(PluginResources.Label_BackupFile, sdlXliffBackupFile));
 						}
+
 						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, targetLanguageFile.XliffFilePath));
-						_logReport.AppendLine(string.Format(PluginResources.Label_ArchiveFile, xliffFilePath));
+						_logReport.AppendLine(string.Format(PluginResources.Label_ArchiveFile, xliffArchiveFile));
 
-						CreateBackupFile(targetLanguageFile, sdlXliffBackup);
-						CreateArchiveFile(targetLanguageFile, xliffFilePath);
+						CreateBackupFile(targetLanguageFile.Location, sdlXliffBackupFile);
+						CreateArchiveFile(targetLanguageFile.XliffFilePath, xliffArchiveFile);
 
-						var outputFilePath = Path.GetTempFileName();
+						var sdlXliffImportFile = Path.GetTempFileName();
 
-						var xliff = xliffReader.ReadXliff(xliffFilePath);
-						success = sdlxliffWriter.UpdateFile(xliff, sdlXliffBackup, outputFilePath,
-							WizardContext.ImportOverwriteTranslations, WizardContext.ImportConfirmationStatus, WizardContext.ImportOriginSystem);
+						var importFile = new ImportFile
+						{
+							SdlXliffFile = targetLanguageFile.Location,
+							SdlXliffBackupFile = sdlXliffBackupFile,
+							SdlXliffImportFile = sdlXliffImportFile,
+							XliffFile = targetLanguageFile.XliffFilePath,
+							XliffArchiveFile = xliffArchiveFile
+						};
+						importFiles.Add(importFile);
+
+						var xliff = xliffReader.ReadXliff(targetLanguageFile.XliffFilePath);
+						success = sdlxliffWriter.UpdateFile(xliff, targetLanguageFile.Location, sdlXliffImportFile,
+							WizardContext.ImportOverwriteTranslations, WizardContext.ImportConfirmationStatus,
+							WizardContext.ImportOriginSystem);
 
 						_logReport.AppendLine(string.Format(PluginResources.Label_Success, success));
 						_logReport.AppendLine();
 
-						if (success)
+						if (!success)
 						{
-							CompleteImportProcedures(targetLanguageFile, outputFilePath);
-						}
-						else
-						{
-							UndoImportProcedures(targetLanguageFile, outputFilePath, sdlXliffBackup);
+							throw new Exception(string.Format(PluginResources.Message_ErrorImportingFrom, targetLanguageFile.XliffFilePath));
 						}
 					}
 				}
@@ -289,6 +301,17 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				_logReport.AppendLine();
 				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+			}
+			finally
+			{
+				if (success)
+				{
+					CompleteImport(importFiles);
+				}
+				else
+				{
+					UndoImport(importFiles);
+				}
 			}
 
 			return await Task.FromResult(success);
@@ -344,6 +367,42 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			}
 		}
 
+		private void CompleteImport(IEnumerable<ImportFile> importFiles)
+		{
+			foreach (var importFile in importFiles)
+			{
+				if (File.Exists(importFile.SdlXliffFile))
+				{
+					File.Delete(importFile.SdlXliffFile);
+				}
+
+				File.Copy(importFile.SdlXliffImportFile, importFile.SdlXliffFile, true);
+
+				File.Delete(importFile.SdlXliffImportFile);
+			}
+		}
+
+		private void UndoImport(IEnumerable<ImportFile> importFiles)
+		{
+			foreach (var importFile in importFiles)
+			{
+				if (File.Exists(importFile.SdlXliffImportFile))
+				{
+					File.Delete(importFile.SdlXliffImportFile);
+				}
+
+				if (File.Exists(importFile.SdlXliffBackupFile))
+				{
+					if (File.Exists(importFile.SdlXliffFile))
+					{
+						File.Delete(importFile.SdlXliffFile);
+					}
+
+					File.Copy(importFile.SdlXliffBackupFile, importFile.SdlXliffFile, true);
+				}
+			}
+		}
+
 		private void WriteLogReportHeader()
 		{
 			_logReport = new StringBuilder();
@@ -387,7 +446,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		}
 
 		private void SaveLogReport()
-		{		
+		{
 			var logFileName = "log." + WizardContext.DateTimeStampToString + ".txt";
 			var outputFile = Path.Combine(WizardContext.WorkingFolder, logFileName);
 			using (var writer = new StreamWriter(outputFile, false, Encoding.UTF8))
@@ -410,38 +469,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			return languageFolder;
 		}
 
-		private static void UndoImportProcedures(ProjectFile targetLanguageFile, string outputFilePath, string sdlXliffBackup)
-		{
-			if (File.Exists(outputFilePath))
-			{
-				File.Delete(outputFilePath);
-			}
-
-			if (File.Exists(sdlXliffBackup))
-			{
-				if (File.Exists(targetLanguageFile.Location))
-				{
-					File.Delete(targetLanguageFile.Location);
-				}
-
-				File.Copy(sdlXliffBackup, targetLanguageFile.Location, true);
-			}
-
-			throw new Exception("Error occurred while updating the SDLXLIFF");
-		}
-
-		private static void CompleteImportProcedures(ProjectFile targetLanguageFile, string outputFilePath)
-		{
-			if (File.Exists(targetLanguageFile.Location))
-			{
-				File.Delete(targetLanguageFile.Location);
-			}
-
-			File.Copy(outputFilePath, targetLanguageFile.Location, true);
-
-			File.Delete(outputFilePath);
-		}
-
 		private static string GetXliffFolder(string languageFolder, ProjectFile targetLanguageFile)
 		{
 			var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
@@ -453,24 +480,24 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			return xliffFolder;
 		}
 
-		private void CreateArchiveFile(ProjectFile targetLanguageFile, string xliffFilePath)
+		private void CreateArchiveFile(string xliffFile, string xliffArchiveFile)
 		{
-			if (File.Exists(xliffFilePath))
+			if (File.Exists(xliffArchiveFile))
 			{
-				File.Delete(xliffFilePath);
+				File.Delete(xliffArchiveFile);
 			}
 
-			File.Copy(targetLanguageFile.XliffFilePath, xliffFilePath, true);
+			File.Copy(xliffFile, xliffArchiveFile, true);
 		}
 
-		private void CreateBackupFile(ProjectFile targetLanguageFile, string sdlXliffBackup)
+		private void CreateBackupFile(string sdlXliffFile, string sdlXliffBackup)
 		{
 			if (File.Exists(sdlXliffBackup))
 			{
 				File.Delete(sdlXliffBackup);
 			}
 
-			File.Copy(targetLanguageFile.Location, sdlXliffBackup, true);
+			File.Copy(sdlXliffFile, sdlXliffBackup, true);
 		}
 
 		private string GetProjectTargetLanguagesString(Project project)
@@ -496,20 +523,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 									 cultureInfo.DisplayName;
 			}
 
-			return selectedLanguages;
-		}
-
-		private IEnumerable<ProjectFile> GetSelectedTargetFiles(CultureInfo cultureInfo)
-		{
-			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
-			var targetFiles = selected.Where(a => Equals(a.TargetLanguage.CultureInfo, cultureInfo));
-			return targetFiles;
-		}
-
-		private IEnumerable<CultureInfo> GetSelectedLanguages()
-		{
-			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
-			var selectedLanguages = selected.Select(a => a.TargetLanguage.CultureInfo).Distinct();
 			return selectedLanguages;
 		}
 

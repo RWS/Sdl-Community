@@ -217,6 +217,7 @@
     <Compile Include="Common\Enumerators.cs" />
     <Compile Include="Model\Controllers.cs" />
     <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\ImportFile.cs" />
     <Compile Include="Model\JobProcess.cs" />
     <Compile Include="Model\LanguageInfo.cs" />
     <Compile Include="Model\ProjectFile.cs" />

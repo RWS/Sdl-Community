@@ -415,4 +415,7 @@
 	<data name="WizardMessage_ConvertingToFormat" xml:space="preserve">
     <value>Converting to XLIFF format...</value>
   </data>
+	<data name="Message_ErrorImportingFrom" xml:space="preserve">
+    <value>Error importing translations from: {0}</value>
+  </data>
 </root>

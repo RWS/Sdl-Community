@@ -130,7 +130,7 @@ namespace Sdl.Community.XLIFF.Manager
 						projectFile.Action = wcProjectFile.Action;
 						projectFile.Date = wcProjectFile.Date;
 						projectFile.XliffFilePath = wcProjectFile.XliffFilePath;
-						projectFile.Details = wcProjectFile.Details;
+						//projectFile.Details = wcProjectFile.Details;
 
 						projectFile.ProjectFileActivities = wcProjectFile.ProjectFileActivities;
 					}
