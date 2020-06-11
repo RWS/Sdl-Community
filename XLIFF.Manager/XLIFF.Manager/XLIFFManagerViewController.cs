@@ -6,8 +6,10 @@ using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Controls;
 using Sdl.Community.XLIFF.Manager.CustomEventArgs;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.Model.ProjectSettings;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Community.XLIFF.Manager.ViewModel;
+using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -51,6 +53,7 @@ namespace Sdl.Community.XLIFF.Manager
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
 			_projects = new List<Project>();
+
 			// TODO this will be replaced with a call to recover the relevant data from the projects loaded in Studio			
 			//var testDataUtil = new TestDataUtil(_imageService);
 			//_projectModels = testDataUtil.GetTestProjectData();
@@ -119,7 +122,7 @@ namespace Sdl.Community.XLIFF.Manager
 			{
 				foreach (var wcProjectFile in wizardContext.ProjectFiles)
 				{
-					var projectFile = project.ProjectFiles.FirstOrDefault(a => a.Id == wcProjectFile.Id);
+					var projectFile = project.ProjectFiles.FirstOrDefault(a => a.FileId == wcProjectFile.FileId);
 					if (projectFile == null)
 					{
 						project.ProjectFiles.Add(wcProjectFile);
@@ -145,6 +148,63 @@ namespace Sdl.Community.XLIFF.Manager
 			if (_projectFilesViewModel != null)
 			{
 				_projectFilesViewModel.ProjectFiles = project.ProjectFiles;
+			}
+
+
+			UpdateProjectSettingsBundle(project);
+		}
+
+		public void UpdateProjectSettingsBundle(Project project)
+		{
+			var selectedProject = _projectsController.GetProjects()
+				.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == project.Id);
+
+			if (selectedProject != null)
+			{
+				var settingsGroup = selectedProject.GetSettings().GetSettingsGroup<XliffManagerProject>();
+
+				var settingsProjectFiles = new List<XliffManagerProjectFile>();
+				foreach (var projectFile in project.ProjectFiles)
+				{
+					var settingsFileActivities = new List<XliffManagerProjectFileActivity>();
+
+					foreach (var fileActivity in projectFile.ProjectFileActivities)
+					{
+						var settingFileActivity = new XliffManagerProjectFileActivity();
+						settingFileActivity.ProjectFileId.Value = projectFile.FileId;
+						settingFileActivity.ActivityId.Value = fileActivity.ActivityId;
+						settingFileActivity.Status.Value = fileActivity.Status.ToString();
+						settingFileActivity.Action.Value = fileActivity.Action.ToString();
+						settingFileActivity.Path.Value = fileActivity.Path;
+						settingFileActivity.Name.Value = fileActivity.Name;
+						settingFileActivity.Date.Value = fileActivity.DateToString;
+						settingFileActivity.Details.Value = fileActivity.Details;
+
+						settingsFileActivities.Add(settingFileActivity);
+					}
+
+					var settingProjectFile = new XliffManagerProjectFile();
+					settingProjectFile.Activities.Value = settingsFileActivities;
+					settingProjectFile.Path.Value = projectFile.Path;
+					settingProjectFile.Action.Value = projectFile.Action.ToString();
+					settingProjectFile.Status.Value = projectFile.Status.ToString();
+					settingProjectFile.FileId.Value = projectFile.FileId;
+					settingProjectFile.Path.Value = projectFile.Path;
+					settingProjectFile.Name.Value = projectFile.Name;
+					settingProjectFile.Location.Value = projectFile.Location;
+					settingProjectFile.Date.Value = projectFile.DateToString;
+					settingProjectFile.FileType.Value = projectFile.FileType;
+					settingProjectFile.XliffFilePath.Value = projectFile.XliffFilePath;
+					settingProjectFile.TargetLanguage.Value = projectFile.TargetLanguage.CultureInfo.Name;
+					settingProjectFile.Details.Value = projectFile.Details;
+					settingProjectFile.ShortMessage.Value = projectFile.ShortMessage;
+
+					settingsProjectFiles.Add(settingProjectFile);
+				}
+
+				settingsGroup.ProjectFiles.Value = settingsProjectFiles;
+
+				selectedProject.UpdateSettings(settingsGroup.SettingsBundle);
 			}
 		}
 

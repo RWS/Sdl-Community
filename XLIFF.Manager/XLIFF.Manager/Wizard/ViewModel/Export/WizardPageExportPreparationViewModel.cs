@@ -252,8 +252,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 						var activityFile = new ProjectFileActivity
 						{
-							ProjectFileId = targetFile.Id,
-							Id = Guid.NewGuid().ToString(),
+							ProjectFileId = targetFile.FileId,
+							ActivityId = Guid.NewGuid().ToString(),
 							Action = Enumerators.Action.Export,
 							Status = exported ? Enumerators.Status.Success : Enumerators.Status.Error,
 							Date = targetFile.Date,

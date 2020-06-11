@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Sdl.Community.XLIFF.Manager.Common;
 
 namespace Sdl.Community.XLIFF.Manager.Model
@@ -19,6 +20,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string ProjectId { get; set; }
 
+		[XmlIgnore]
 		public Project Project { get; set; }
 
 		public List<ProjectFileActivity> ProjectFileActivities { get; set; }
@@ -57,7 +59,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			}
 		}
 
-		public string Id { get; set; }
+		public string FileId { get; set; }
 
 		public string Name { get; set; }
 
@@ -121,6 +123,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			}
 		}
 
+		[XmlIgnore]
 		public LanguageInfo TargetLanguage { get; set; }
 
 		public string ShortMessage { get; set; }
@@ -136,7 +139,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			var projectFile = new ProjectFile
 			{
 				ProjectId = ProjectId,
-				Id = Id,
+				FileId = FileId,
 				Name = Name,
 				Action = Action,
 				Status = Status,

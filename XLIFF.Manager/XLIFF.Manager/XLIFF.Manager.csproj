@@ -223,6 +223,9 @@
     <Compile Include="Model\ProjectFile.cs" />
     <Compile Include="Model\ProjectFileActivity.cs" />
     <Compile Include="Model\Project.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerProject.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerProjectFile.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerProjectFileActivity.cs" />
     <Compile Include="Model\WizardContext.cs" />
     <Compile Include="Model\WizardException.cs" />
     <Compile Include="Model\XLIFFSupport.cs" />

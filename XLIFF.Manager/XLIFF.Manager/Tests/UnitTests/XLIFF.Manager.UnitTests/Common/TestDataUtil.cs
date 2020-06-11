@@ -96,7 +96,7 @@ namespace XLIFF.Manager.UnitTests.Common
 				ProjectId = project.Id,
 				Action = action,
 				Date = dateTime,
-				Id = Guid.NewGuid().ToString(),
+				FileId = Guid.NewGuid().ToString(),
 				Name = project.Name + ">File " + project.ProjectFiles.Count,
 				Path = "\\Project File Path\\" + project.ProjectFiles.Count,
 				TargetLanguage = targetLanguage,
@@ -135,10 +135,10 @@ namespace XLIFF.Manager.UnitTests.Common
 		{
 			var projectFileActivity = new ProjectFileActivity
 			{
-				ProjectFileId = projectFile.Id,
+				ProjectFileId = projectFile.FileId,
 				Action = action,
 				Status = status,
-				Id = Guid.NewGuid().ToString(),
+				ActivityId = Guid.NewGuid().ToString(),
 				Name = projectFile.Name + ">XLIFF File " + projectFile.ProjectFileActivities.Count,
 				Path = "\\XLIFF File Path\\" + projectFile.ProjectFileActivities.Count,
 				Date = dateTime != DateTime.MinValue ? dateTime : GetRamdomDate(projectFile.Project.Created),
