@@ -1,7 +1,6 @@
 ﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using Sdl.LanguagePlatform.Core;
-using Sdl.Community.DeelLMTProvider;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 
 namespace Sdl.Community.DeepLMTProvider
@@ -87,7 +86,7 @@ namespace Sdl.Community.DeepLMTProvider
         public bool SupportsLanguageDirection(LanguagePair languageDirection)
         {
 			
-			return Helpers.IsSupportedLanguagePair(languageDirection.SourceCulture.TwoLetterISOLanguageName.ToUpper(), 
+			return Helpers.IsSuportedLanguagePair(languageDirection.SourceCulture.TwoLetterISOLanguageName.ToUpper(), 
 				languageDirection.TargetCulture.TwoLetterISOLanguageName.ToUpper());
         }
     }
