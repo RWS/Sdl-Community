@@ -10,14 +10,12 @@ namespace Sdl.Community.DeepLMTProvider
 			"DE",
 			"FR",
 			"IT",
-			"JA",
 			"NL",
 			"PL",
 			"ES",
 			"PT",
-			"PT-PT",
-			"PT-BR",
 			"RU",
+			"JA",
 			"ZH"
 		};
 
@@ -27,7 +25,6 @@ namespace Sdl.Community.DeepLMTProvider
 			"DE",
 			"FR",
 			"IT",
-			"JA",
 			"NL",
 			"PL",
 			"ES",
@@ -35,10 +32,11 @@ namespace Sdl.Community.DeepLMTProvider
 			"PT-PT",
 			"PT-BR",
 			"RU",
+			"JA",
 			"ZH"
 		};
 
-		public static bool IsSuportedLanguagePair(string sourceLang, string targetLang)
+		public static bool IsSupportedLanguagePair(string sourceLang, string targetLang)
 		{
 			return SourceSupportedLanguages.Contains(sourceLang) && TargetSupportedLanguages.Contains(targetLang);
 		}

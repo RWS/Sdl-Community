@@ -87,8 +87,7 @@ namespace Sdl.Community.DeepLMTProvider
         public bool SupportsLanguageDirection(LanguagePair languageDirection)
         {
 			
-			return
-				Helpers.IsSuportedLanguagePair(languageDirection.SourceCulture.TwoLetterISOLanguageName.ToUpper(), 
+			return Helpers.IsSupportedLanguagePair(languageDirection.SourceCulture.TwoLetterISOLanguageName.ToUpper(), 
 				languageDirection.TargetCulture.TwoLetterISOLanguageName.ToUpper());
         }
     }
