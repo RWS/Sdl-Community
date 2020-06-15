@@ -31,9 +31,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			//TODO: Instantiate the new Rate it View part
 			try
-			{				
-				var uri = new Uri($"{Constants.MTCloudUriScheme}://");
-				var connectionService = new ConnectionService(owner, new VersionService(), LanguageCloudIdentityApi.Instance);
+			{
+				var uri = new Uri($"{Constants.MTCloudUriScheme}://");				
+				var connectionService = new ConnectionService(owner, new VersionService(), StudioInstance.GetLanguageCloudIdentityApi());
 				
 				var credential = connectionService.GetCredential(credentialStore);								
 				var connectionResult = connectionService.EnsureSignedIn(credential, true);
@@ -107,9 +107,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				throw new ArgumentNullException(nameof(translationProviderUri));
 			}
-
-			var supportsProvider = string.Equals(translationProviderUri.Scheme, Constants.MTCloudUriScheme,
-				StringComparison.OrdinalIgnoreCase);
+			
+			var supportsProvider = translationProviderUri.Scheme.StartsWith(Constants.MTCloudUriScheme);
 			return supportsProvider;
 		}
 
