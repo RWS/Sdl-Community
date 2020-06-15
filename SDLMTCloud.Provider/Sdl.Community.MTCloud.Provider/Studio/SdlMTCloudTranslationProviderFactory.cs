@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Windows;
 using Sdl.Community.MTCloud.Languages.Provider;
-using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
-using Sdl.LanguageCloud.IdentityApi;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
@@ -18,7 +14,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			ITranslationProviderCredentialStore credentialStore)
 		{
 			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(),
-				LanguageCloudIdentityApi.Instance);
+				StudioInstance.GetLanguageCloudIdentityApi());
 
 			var credential = connectionService.GetCredential(credentialStore);
 			var connectionResult = connectionService.EnsureSignedIn(credential);
@@ -31,7 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			var translationService = new TranslationService(connectionService);
 			var languageProvider = new LanguageProvider();
-			var editorController = SdlTradosStudio.Application?.GetController<EditorController>();
+			var editorController = StudioInstance.GetEditorController();
 
 			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState,
 				translationService, languageProvider, editorController);
@@ -45,7 +41,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				throw new ArgumentNullException(nameof(translationProviderUri));
 			}
 
-			var supportsProvider = string.Equals(translationProviderUri.Scheme, Constants.MTCloudUriScheme, StringComparison.OrdinalIgnoreCase);
+			var supportsProvider = translationProviderUri.Scheme.StartsWith(Constants.MTCloudUriScheme);
 			return supportsProvider;
 		}
 
@@ -58,6 +54,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			};
 
 			return info;
-		}			
+		}	
 	}
 }

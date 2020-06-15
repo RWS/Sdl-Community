@@ -2,6 +2,8 @@
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.LanguageCloud.IdentityApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Application = System.Windows.Application;
 
 namespace Sdl.Community.MTCloud.Provider
@@ -15,32 +17,78 @@ namespace Sdl.Community.MTCloud.Provider
 		}		
 
 		public static Form GetActiveForm()
-		{			
-			var allForms = System.Windows.Forms.Application.OpenForms;
-			var activeForm = allForms[allForms.Count - 1];
-			foreach (Form form in allForms)
+		{
+			try
 			{
-				if (form.GetType().Name == "StudioWindowForm")
+				var allForms = System.Windows.Forms.Application.OpenForms;
+				if (allForms.Count > 0)
 				{
-					activeForm = form;
-					break;
+					var activeForm = allForms[allForms.Count - 1];
+					foreach (Form form in allForms)
+					{
+						if (form.GetType().Name == "StudioWindowForm")
+						{
+							activeForm = form;
+							break;
+						}
+					}
+					return activeForm;
 				}
 			}
+			catch
+			{
+				//ignore; catch all
+			}
 
-			return activeForm;
+			return null;
+		}
+
+		public static LanguageCloudIdentityApi GetLanguageCloudIdentityApi()
+		{
+			try
+			{
+				return LanguageCloudIdentityApi.Instance;
+			}
+			catch
+			{
+				// ignore; catch all
+			}
+
+			return null;
+		}
+
+		public static EditorController GetEditorController()
+		{			
+			try
+			{
+				return SdlTradosStudio.Application?.GetController<EditorController>();
+			}
+			catch
+			{
+				//catch all; ignore
+			}
+
+			return null;
 		}
 
 		private static void SetApplicationShutdownMode()
 		{
-			if (Application.Current == null)
+			try
 			{
-				// initialize the enviornments application instance
-				new Application();
-			}
+				if (Application.Current == null)
+				{
+					// initialize the enviornments application instance
+					new Application();
+				}
 
-			if (Application.Current != null)
+				if (Application.Current != null)
+				{
+					Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+				}
+			}
+			catch
 			{
-				Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+				//ignore; catch all
 			}
 		}
 	}
