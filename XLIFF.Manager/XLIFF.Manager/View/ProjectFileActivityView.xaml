@@ -121,6 +121,16 @@
 				<DataGridTextColumn Header="Details" CanUserSort="False" Binding="{Binding Details, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
 										ElementStyle="{StaticResource TextBlockStyle}" Width="2*"/>
 			</DataGrid.Columns>
+			<DataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="Open folder in explorer" IsEnabled="{Binding IsProjectFileSelected}"
+					          Command="{Binding OpenFolderCommand}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/Folder.png"/>
+						</MenuItem.Icon>
+					</MenuItem>
+				</ContextMenu>
+			</DataGrid.ContextMenu>
 		</controls:SortAwareDataGrid>
 	</Grid>
 </UserControl>

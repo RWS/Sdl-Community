@@ -4,7 +4,6 @@ using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using XLIFF.Manager.UnitTests.Common;
 using Xunit;
-using File = System.IO.File;
 
 namespace XLIFF.Manager.UnitTests.FileTypeSupport
 {

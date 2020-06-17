@@ -36,7 +36,7 @@
 					<componentModel:SortDescription PropertyName="Name"/>
 				</CollectionViewSource.SortDescriptions>
 				<CollectionViewSource.GroupDescriptions>
-					<PropertyGroupDescription PropertyName="Customer"/>
+					<PropertyGroupDescription PropertyName="Customer.Name"/>
 				</CollectionViewSource.GroupDescriptions>
 			</CollectionViewSource>
 
@@ -235,6 +235,35 @@
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
 				</DataGrid.Columns>
+				<DataGrid.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="Export files" Command="{Binding ExportFilesCommand}" IsEnabled="{Binding IsProjectSelected}" >
+							<MenuItem.Icon>
+								<Image Source="../Resources/export.ico"/>
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Import files" 
+						          Command="{Binding ImportFilesCommand}" IsEnabled="{Binding IsProjectSelected}">
+							<MenuItem.Icon>
+								<Image Source="../Resources/import.ico"/>
+							</MenuItem.Icon>
+						</MenuItem>
+						<Separator/>
+						<MenuItem Header="Open project folder in explorer" IsEnabled="{Binding IsProjectSelected}"
+						          Command="{Binding OpenProjectFolderCommand}">
+							<MenuItem.Icon>
+								<Image Source="../Resources/Folder.png"/>
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Remove project from XLIFF Manager" IsEnabled="{Binding IsProjectSelected}"
+						          ToolTip="This will remove the data managed with XLIFF manager and not the actual project itself from Studio" 
+						          Command="{Binding RemoveProjectDataCommand}">
+							<MenuItem.Icon>
+								<Image Source="../Resources/Remove-32.png"/>
+							</MenuItem.Icon>
+						</MenuItem>
+					</ContextMenu>
+				</DataGrid.ContextMenu>
 				<DataGrid.GroupStyle>
 					<GroupStyle>
 						<GroupStyle.ContainerStyle>

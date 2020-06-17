@@ -12,7 +12,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Import
 {
 	[Action("XLIFFManager_ImportFromXLIFF_Action", typeof(XLIFFManagerViewController),
 		Name = "XLIFFManager_ImportFromXLIFF_Name",
-		Icon = "ImportFrom",
+		Icon = "Import",
 		Description = "XLIFFManager_ImportFromXLIFF_Description")]
 	[ActionLayout(typeof(XLIFFManagerActionsGroup), 5, DisplayType.Large)]
 	public class ImportFromXLIFFAction : AbstractViewControllerAction<XLIFFManagerViewController>
@@ -37,6 +37,11 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Import
 			}
 
 			_controllers.XliffManagerController.UpdateProjectData(wizardContext);
+		}
+
+		public void LaunchWizard()
+		{
+			Execute();
 		}
 
 		public override void Initialize()

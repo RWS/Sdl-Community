@@ -1,5 +1,4 @@
-﻿using System;
-using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
+﻿using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 

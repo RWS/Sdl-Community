@@ -236,7 +236,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 						continue;
 					}
 
-					var projectFileModel = GetProjectFileModel(projectModel, projectFile, targetLanguage, selectedFileIds);
+					var projectFileModel = GetProjectFile(projectModel, projectFile, targetLanguage, selectedFileIds);
 					projectFiles.Add(projectFileModel);
 				}
 			}
@@ -244,7 +244,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return projectFiles;
 		}
 
-		private ProjectFile GetProjectFileModel(Project project, ProjectAutomation.Core.ProjectFile projectFile,
+		private ProjectFile GetProjectFile(Project project, ProjectAutomation.Core.ProjectFile projectFile,
 			Language targetLanguage, IReadOnlyCollection<string> selectedFileIds)
 		{
 			var projectFileModel = new ProjectFile

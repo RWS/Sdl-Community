@@ -129,12 +129,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			{
 				if (projectFile.Action == Enumerators.Action.Import)
 				{
-					var activityfile = projectFile.ProjectFileActivities.FirstOrDefault(a => a.Action == Enumerators.Action.Import);
+					var activityfile = projectFile.ProjectFileActivities.LastOrDefault(a => a.Action == Enumerators.Action.Import);
 
 					projectFile.Status = Enumerators.Status.Warning;
 					projectFile.ShortMessage = PluginResources.Message_File_already_imported;
-					projectFile.Details = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString) + Environment.NewLine;
-					projectFile.Details += string.Format(PluginResources.Message_File_Path_0, projectFile.XliffFilePath);
+					projectFile.Details = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString);
 				}
 				else
 				{
@@ -270,6 +269,12 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				var xliff = xliffReader.ReadXliff(filePath);
 				var xliffTargetLanguage = xliff.Files.FirstOrDefault()?.TargetLanguage;
+
+				if (xliffTargetLanguage == null)
+				{
+					continue;
+				}
+
 				var xliffTargetPath = GetPathLocation(xliff.DocInfo.Source, xliffTargetLanguage);
 
 				foreach (var projectFile in ProjectFiles)

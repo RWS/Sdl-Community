@@ -150,7 +150,7 @@
 										ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
 				<DataGridTextColumn Header="File Type" CanUserSort="True" Binding="{Binding FileType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 				                    ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
-				<DataGridTemplateColumn Header="Details" Width="2*" CanUserSort="True" IsReadOnly="True">
+				<DataGridTemplateColumn Header="Message" Width="2*" CanUserSort="True" IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:ProjectFile">
 							<TextBlock Text="{Binding Details, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow" />

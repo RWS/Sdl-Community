@@ -29,7 +29,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			VerifyProjectFiles();
 
 			LoadPage += OnLoadPage;
-			LeavePage += OnLeavePage;
+			LeavePage += OnLeavePage;			
 		}
 		
 		public ICommand CheckAllCommand => _checkAllCommand ?? (_checkAllCommand = new RelayCommand(CheckAll));
@@ -167,7 +167,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			{
 				if (projectFile.Action == Enumerators.Action.Export)
 				{
-					var activityfile = projectFile.ProjectFileActivities.FirstOrDefault(a => a.Action == Enumerators.Action.Export);
+					var activityfile = projectFile.ProjectFileActivities.LastOrDefault(a => a.Action == Enumerators.Action.Export);
 	
 					projectFile.Status = Enumerators.Status.Warning;
 					projectFile.ShortMessage = PluginResources.Message_File_already_exported;
@@ -175,7 +175,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				}
 				else if (projectFile.Action == Enumerators.Action.Import)
 				{
-					var activityfile = projectFile.ProjectFileActivities.FirstOrDefault(a => a.Action == Enumerators.Action.Import);
+					var activityfile = projectFile.ProjectFileActivities.LastOrDefault(a => a.Action == Enumerators.Action.Import);
 					
 					projectFile.Status = Enumerators.Status.Warning;
 					projectFile.ShortMessage = PluginResources.Message_File_already_imported;

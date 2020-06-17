@@ -14,7 +14,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 {
 	[Action("XLIFFManager_ProjectsContextMenu_ExportToXLIFF_Action", typeof(ProjectsController),
 		Name = "XLIFFManager_ContextMenu_ExportToXLIFF_Name",
-		Icon = "ExportTo",
+		Icon = "Export",
 		Description = "XLIFFManager_ContextMenu_ExportToXLIFF_Description")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 8, DisplayType.Default, "", true)]
 	public class XLIFFManagerProjectsContextMenuExportToXLIFFAction : AbstractAction

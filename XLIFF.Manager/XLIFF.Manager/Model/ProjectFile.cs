@@ -122,7 +122,6 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				return value;
 			}
 		}
-
 		[XmlIgnore]
 		public LanguageInfo TargetLanguage { get; set; }
 
