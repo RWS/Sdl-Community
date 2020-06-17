@@ -148,6 +148,27 @@
 				<DataGridTextColumn Header="Details" CanUserSort="True" Binding="{Binding Details, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
 										ElementStyle="{StaticResource TextBlockStyle}" Width="2*"/>
 			</DataGrid.Columns>
+			<DataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="Export files" Command="{Binding ExportFilesCommand}" IsEnabled="{Binding IsProjectFileSelected}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/export.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Import files" 
+					          Command="{Binding ImportFilesCommand}" IsEnabled="{Binding IsProjectFileSelected}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/import.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator/>
+					<MenuItem Header="Open folder in explorer" Command="{Binding OpenFolderCommand}" IsEnabled="{Binding IsProjectFileSelected}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/Folder.png"/>
+						</MenuItem.Icon>
+					</MenuItem>
+				</ContextMenu>
+			</DataGrid.ContextMenu>
 			<DataGrid.GroupStyle>
 				<GroupStyle>
 					<GroupStyle.ContainerStyle>

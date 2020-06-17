@@ -6,6 +6,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 	public class Project : BaseModel, ICloneable
 	{
 		private Customer _customer;
+		private List<ProjectFile> _projectFiles;
 
 		public Project()
 		{
@@ -51,7 +52,15 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public List<LanguageInfo> TargetLanguages { get; set; }
 
-		public List<ProjectFile> ProjectFiles { get; set; }
+		public List<ProjectFile> ProjectFiles
+		{
+			get => _projectFiles;
+			set
+			{
+				_projectFiles = value;
+				OnPropertyChanged(nameof(ProjectFiles));
+			}
+		}
 
 		private string GetDateTimeToString(DateTime dateTime)
 		{
@@ -75,7 +84,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Name = Name,
 				Customer = Customer?.Clone() as Customer,
 				Created = new DateTime(Created.Year, Created.Month, Created.Day, Created.Hour,
-					Created.Minute, Created.Second, Created.Millisecond, Created.Kind),				
+					Created.Minute, Created.Second, Created.Millisecond, Created.Kind),
 				DueDate = new DateTime(DueDate.Year, DueDate.Month, DueDate.Day, DueDate.Hour,
 					DueDate.Minute, DueDate.Second, DueDate.Millisecond, DueDate.Kind),
 				Path = Path,

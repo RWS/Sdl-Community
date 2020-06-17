@@ -3,33 +3,53 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using Sdl.Community.XLIFF.Manager.Actions.Export;
+using Sdl.Community.XLIFF.Manager.Actions.Import;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.CustomEventArgs;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.Model.ProjectSettings;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
 	public class ProjectsNavigationViewModel : BaseModel, IDisposable
 	{
+		private readonly ProjectsController _projectsController;
 		private List<Project> _projects;
 		private string _filterString;
 		private List<Project> _filteredProjects;
 		private Project _selectedProject;
 		private IList _selectedProjects;
+		private bool _isProjectSelected;
 		private ICommand _clearSelectionCommand;
 		private ICommand _clearFilterCommand;
+		private ICommand _removeProjectDataCommand;
+		private ICommand _openProjectFolderCommand;
+		private ICommand _importFilesCommand;
+		private ICommand _exportFilesCommand;
 		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
 
-		public ProjectsNavigationViewModel(List<Project> projects)
+		public ProjectsNavigationViewModel(List<Project> projects, ProjectsController projectsController)
 		{
 			_projects = projects;
+			_projectsController = projectsController;
+
 			FilteredProjects = _projects;
-			FilterString = string.Empty;
+			FilterString = string.Empty;			
 		}
+
+		public ICommand ExportFilesCommand => _exportFilesCommand ?? (_exportFilesCommand = new CommandHandler(ExportFiles));
+
+		public ICommand ImportFilesCommand => _importFilesCommand ?? (_importFilesCommand = new CommandHandler(ImportFiles));
 
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
 
 		public ICommand ClearFilterCommand => _clearFilterCommand ?? (_clearFilterCommand = new CommandHandler(ClearFilter));
+
+		public ICommand RemoveProjectDataCommand => _removeProjectDataCommand ?? (_removeProjectDataCommand = new CommandHandler(RemoveProjectData));
+
+		public ICommand OpenProjectFolderCommand => _openProjectFolderCommand ?? (_openProjectFolderCommand = new CommandHandler(OpenProjectFolder));
 
 		public List<Project> Projects
 		{
@@ -38,12 +58,11 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			{
 				_projects = value;
 
+				//OnPropertyChanged();
 				OnPropertyChanged(nameof(Projects));
 
 				FilterString = string.Empty;
 				FilteredProjects = _projects;
-
-				
 			}
 		}
 
@@ -129,8 +148,37 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 					ProjectFilesViewModel.ProjectFiles = _selectedProject.ProjectFiles;
 				}
 
-				ProjectSelectionChanged?.Invoke(this, new ProjectSelectionChangedEventArgs{SelectedProject = _selectedProject});
+				ProjectSelectionChanged?.Invoke(this, new ProjectSelectionChangedEventArgs { SelectedProject = _selectedProject });
+
+				IsProjectSelected = _selectedProject != null;
 			}
+		}
+
+		public bool IsProjectSelected
+		{
+			get => _isProjectSelected;
+			set
+			{
+				if (_isProjectSelected == value)
+				{
+					return;
+				}
+
+				_isProjectSelected = value;
+				OnPropertyChanged(nameof(IsProjectSelected));
+			}
+		}
+
+		private void ImportFiles(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<ImportFromXLIFFAction>();			
+			action.LaunchWizard();
+		}
+
+		private void ExportFiles(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<ExportToXLIFFAction>();
+			action.LaunchWizard();
 		}
 
 		private void ClearSelection(object parameter)
@@ -144,9 +192,31 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			FilterString = string.Empty;
 		}
 
+		private void RemoveProjectData(object parameter)
+		{
+			var selectedProject = _projectsController.GetProjects()
+				.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == SelectedProject.Id);
+
+			if (selectedProject != null)
+			{
+				var settingsBundle = selectedProject.GetSettings();
+				var xliffManagerProject = settingsBundle.GetSettingsGroup<XliffManagerProject>();
+				xliffManagerProject.ProjectFiles.Value = new List<XliffManagerProjectFile>();
+				selectedProject.UpdateSettings(settingsBundle);
+				selectedProject.Save();
+
+				Projects = Projects.Where(a => a.Id != SelectedProject.Id).ToList();
+			}
+		}
+
+		private void OpenProjectFolder(object parameter)
+		{
+			System.Diagnostics.Process.Start("explorer.exe", SelectedProject.Path);
+		}		
+
 		public void Dispose()
 		{
-			ProjectFilesViewModel?.Dispose();
+			ProjectFilesViewModel?.Dispose();			
 		}
 	}
 }

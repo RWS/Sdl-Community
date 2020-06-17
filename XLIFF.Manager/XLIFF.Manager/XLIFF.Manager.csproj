@@ -223,6 +223,9 @@
     <Compile Include="Model\ProjectFile.cs" />
     <Compile Include="Model\ProjectFileActivity.cs" />
     <Compile Include="Model\Project.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerProject.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerProjectFile.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerProjectFileActivity.cs" />
     <Compile Include="Model\WizardContext.cs" />
     <Compile Include="Model\WizardException.cs" />
     <Compile Include="Model\XLIFFSupport.cs" />
@@ -441,7 +444,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="pluginpackage.manifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Resource Include="Resources\Import.ico" />
+    <Resource Include="Resources\Remove-32.png" />
     <Resource Include="Resources\invalid-32.png" />
     <Resource Include="Resources\job_cancelling.gif" />
     <Resource Include="Resources\job_completed.gif" />
@@ -456,6 +463,8 @@
     <Resource Include="Resources\Fie.png" />
     <Resource Include="Resources\folder_add.png" />
     <Resource Include="Resources\document_add.png" />
+    <Resource Include="Resources\Folder.png" />
+    <Resource Include="Resources\Export.ico" />
     <Content Include="Resources\Icon.Jigsaw.ico" />
     <Resource Include="Resources\Minus.png" />
     <Resource Include="Resources\Plus.png" />

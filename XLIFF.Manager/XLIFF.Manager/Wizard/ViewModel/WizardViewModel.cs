@@ -39,7 +39,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 
 		public event EventHandler RequestCancel;
 
-
 		public Enumerators.Action Action { get; set; }
 
 		public WizardContext WizardContext { get; set; }
@@ -146,7 +145,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 				OnPropertyChanged(nameof(CurrentPage));
 				OnPropertyChanged(nameof(IsOnLastPage));
 				OnPropertyChanged(nameof(WindowTitle));
-				OnPropertyChanged(nameof(CompletedSteps));
+				OnPropertyChanged(nameof(CompletedSteps));			
 			}
 		}
 
@@ -212,6 +211,16 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			{
 				OnPropertyChanged(nameof(CompletedSteps));
 			}
+
+			if (e.PropertyName == "IsProcessing")
+			{
+				OnPropertyChanged(nameof(CanFinish));
+				OnPropertyChanged(nameof(CanCancel));
+				OnPropertyChanged(nameof(CanMoveToNextPage));
+				OnPropertyChanged(nameof(CanMoveToPreviousPage));
+
+				_window.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
+			}
 		}
 
 		private int CurrentPageIndex
@@ -245,6 +254,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		{
 			get
 			{
+				if (CurrentPage.IsProcessing)
+				{
+					return false;
+				}
+
 				return CurrentPage != null
 					   && (IsOnLastPage && CurrentPage.IsComplete) ? false : true;
 			}
@@ -256,6 +270,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		{
 			get
 			{
+				if (CurrentPage.IsProcessing)
+				{
+					return false;
+				}
+
 				var maxPageIndex = 1;
 				var canFinish = true;
 				for (var i = 0; i <= maxPageIndex; i++)
@@ -297,6 +316,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		{
 			get
 			{
+
 				return _moveNextCommand ??
 					   (_moveNextCommand = new RelayCommand(
 						   MoveToNextPage,
@@ -324,7 +344,18 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			}
 		}
 
-		private bool CanMoveToNextPage => CurrentPage != null && CurrentPage.IsValid && !CurrentPage.IsOnLastPage;
+		private bool CanMoveToNextPage
+		{
+			get
+			{
+				if (CurrentPage.IsProcessing)
+				{
+					return false;
+				}
+
+				return CurrentPage != null && CurrentPage.IsValid && !CurrentPage.IsOnLastPage;
+			}
+		}
 
 		public ICommand MoveBackCommand
 		{
@@ -340,6 +371,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		{
 			get
 			{
+				if (CurrentPage.IsProcessing)
+				{
+					return false;
+				}
+
 				return (CurrentPageIndex > 0 && !CurrentPage.IsOnLastPage)
 					   || (CurrentPage.IsOnLastPage && !CurrentPage.IsComplete);
 			}

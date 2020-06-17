@@ -104,7 +104,15 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			if (controller is ProjectsController || controller is FilesController)
 			{
-				var selectedProject = _controllers.ProjectsController.CurrentProject;
+				var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault() 
+				                      ?? _controllers.ProjectsController.CurrentProject;
+
+				// activate the selected project if diffrent to the current project
+				if (_controllers.ProjectsController.CurrentProject?.GetProjectInfo().Id != selectedProject.GetProjectInfo().Id)
+				{
+					_controllers.ProjectsController.Open(selectedProject);
+				}
+				
 				var projectInfo = selectedProject.GetProjectInfo();
 				var selectedFileIds = controller is FilesController
 					? _controllers.FilesController.SelectedFiles.Select(a => a.Id.ToString()).ToList()
@@ -121,7 +129,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			{
 				var selectedProjectFiles = _controllers.XliffManagerController.GetSelectedProjectFiles();
 				var selectedProjects = GetSelectedProjects(selectedProjectFiles);
-				var selectedFileIds = selectedProjectFiles?.Select(a => a.Id.ToString()).ToList();
+				var selectedFileIds = selectedProjectFiles?.Select(a => a.FileId.ToString()).ToList();
 
 				if (selectedProjects.Count == 0)
 				{
@@ -200,7 +208,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 					if (projectFile.Clone() is ProjectFile clonedProjectFile)
 					{
 						clonedProjectFile.Project = project;
-						clonedProjectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString());
+						clonedProjectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.FileId.ToString());
 						project.ProjectFiles.Add(clonedProjectFile);
 					}
 				}
@@ -228,7 +236,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 						continue;
 					}
 
-					var projectFileModel = GetProjectFileModel(projectModel, projectFile, targetLanguage, selectedFileIds);
+					var projectFileModel = GetProjectFile(projectModel, projectFile, targetLanguage, selectedFileIds);
 					projectFiles.Add(projectFileModel);
 				}
 			}
@@ -236,13 +244,13 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return projectFiles;
 		}
 
-		private ProjectFile GetProjectFileModel(Project project, ProjectAutomation.Core.ProjectFile projectFile,
+		private ProjectFile GetProjectFile(Project project, ProjectAutomation.Core.ProjectFile projectFile,
 			Language targetLanguage, IReadOnlyCollection<string> selectedFileIds)
 		{
 			var projectFileModel = new ProjectFile
 			{
 				ProjectId = project.Id,
-				Id = projectFile.Id.ToString(),
+				FileId = projectFile.Id.ToString(),
 				Name = projectFile.Name,
 				Path = projectFile.Folder,
 				Location = projectFile.LocalFilePath,
