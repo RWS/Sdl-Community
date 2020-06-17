@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Actions.Export;
 using Sdl.Community.XLIFF.Manager.Actions.Import;
@@ -57,8 +59,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			set
 			{
 				_projects = value;
-
-				//OnPropertyChanged();
+				
 				OnPropertyChanged(nameof(Projects));
 
 				FilterString = string.Empty;
@@ -194,6 +195,17 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 		private void RemoveProjectData(object parameter)
 		{
+			var message1 = PluginResources.Message_ActionWillRemoveAllProjectData;
+			var message2 = PluginResources.Message_DoYouWantToProceed;
+
+			var response = MessageBox.Show(message1 + Environment.NewLine + Environment.NewLine + message2,
+				PluginResources.XLIFFManager_Name, MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+			if (response == MessageBoxResult.No)
+			{
+				return;
+			}
+
 			var selectedProject = _projectsController.GetProjects()
 				.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == SelectedProject.Id);
 
@@ -205,7 +217,20 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				selectedProject.UpdateSettings(settingsBundle);
 				selectedProject.Save();
 
-				Projects = Projects.Where(a => a.Id != SelectedProject.Id).ToList();
+				var xliffFolderPath = Path.Combine(SelectedProject.Path, "XLIFF.Manager");
+				if (Directory.Exists(xliffFolderPath))
+				{
+					try
+					{
+						Directory.Delete(xliffFolderPath, true);
+					}
+					catch
+					{
+						// ignore; catch all
+					}
+				}
+
+				Projects = Projects.Where(a => a.Id != SelectedProject.Id).ToList();			
 			}
 		}
 

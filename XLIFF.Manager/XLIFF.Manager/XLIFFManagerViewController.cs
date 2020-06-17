@@ -67,7 +67,7 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			if (_projectsNavigationViewControl == null)
 			{
-				_projectsNavigationViewModel = new ProjectsNavigationViewModel(_xliffProjects, _projectsController);
+				_projectsNavigationViewModel = new ProjectsNavigationViewModel(new List<Project>(), _projectsController);
 				_projectsNavigationViewModel.ProjectSelectionChanged += OnProjectSelectionChanged;
 
 				_projectsNavigationViewControl = new ProjectsNavigationViewControl(_projectsNavigationViewModel);
@@ -80,11 +80,11 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			if (_projectFilesViewControl == null)
 			{
-				_projectFilesViewModel = new ProjectFilesViewModel(_xliffProjects?.Count > 0
-					? _xliffProjects[0].ProjectFiles : null);
+				_projectFilesViewModel = new ProjectFilesViewModel(null);
 
 				_projectFilesViewControl = new ProjectFilesViewControl(_projectFilesViewModel);
 				_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
+				_projectsNavigationViewModel.Projects = _xliffProjects;
 			}
 
 			return _projectFilesViewControl;
@@ -114,7 +114,6 @@ namespace Sdl.Community.XLIFF.Manager
 				return;
 			}
 
-			//_xliffProjects = new List<Project>(_xliffProjects);
 			var project = _xliffProjects.FirstOrDefault(a => a.Id == wizardContext.Project.Id);
 			if (project == null)
 			{
@@ -218,7 +217,6 @@ namespace Sdl.Community.XLIFF.Manager
 			}
 		}
 
-
 		private void LoadProjects()
 		{
 			_xliffProjects = new List<Project>();
@@ -298,8 +296,6 @@ namespace Sdl.Community.XLIFF.Manager
 			}
 		}
 
-
-
 		private void EditorController_Opened(object sender, DocumentEventArgs e)
 		{
 			if (e?.Document?.ActiveFile == null || e?.Document?.Project == null)
@@ -315,14 +311,14 @@ namespace Sdl.Community.XLIFF.Manager
 
 			var xliffProject = _xliffProjects.FirstOrDefault(a => a.Id == projectId);
 			var targetFile = xliffProject?.ProjectFiles.FirstOrDefault(a => a.FileId == documentId &&
-			                                 a.TargetLanguage.CultureInfo.Name == language.CultureInfo.Name);
+											 a.TargetLanguage.CultureInfo.Name == language.CultureInfo.Name);
 
 			if (targetFile != null && targetFile.Action == Enumerators.Action.Export)
 			{
 				var activityfile = targetFile.ProjectFileActivities.LastOrDefault(a => a.Action == Enumerators.Action.Export);
-					
-				var message1 = string.Format("This file has been exported by XLIFF Manager on the {0}", activityfile?.DateToString);
-				var message2 = string.Format("Applying changes on this file.... clever message... TBD Paul", activityfile?.DateToString);
+
+				var message1 = string.Format(PluginResources.Message_FileWasExportedOn, activityfile?.DateToString);
+				var message2 = string.Format(PluginResources.Message_WarningTranslationsCanBeOverwrittenDuringImport, activityfile?.DateToString);
 
 				MessageBox.Show(message1 + Environment.NewLine + message2, PluginResources.XLIFFManager_Name, MessageBoxButtons.OK,
 					MessageBoxIcon.Warning);
@@ -430,6 +426,7 @@ namespace Sdl.Community.XLIFF.Manager
 			if (e.Active)
 			{
 				SetProjectFileActivityViewController();
+				_projectFilesViewModel.Refresh();
 			}
 		}
 

@@ -41,6 +41,11 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 		public ProjectFileActivityViewModel ProjectFileActivityViewModel { get; internal set; }
 
+		public void Refresh()
+		{
+			OnPropertyChanged(nameof(ProjectFiles));
+		}
+
 		public List<ProjectFile> ProjectFiles
 		{
 			get => _projectFileActions ?? (_projectFileActions = new List<ProjectFile>());

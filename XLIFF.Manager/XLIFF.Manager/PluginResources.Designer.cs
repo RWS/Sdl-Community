@@ -187,6 +187,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        internal static string JobProcess_Import {
+            get {
+                return ResourceManager.GetString("JobProcess_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preparation.
         /// </summary>
         internal static string JobProcess_Preparation {
@@ -511,6 +520,24 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This action will remove all project data managed by XLIFF Manager, including the files processed during export/import.
+        /// </summary>
+        internal static string Message_ActionWillRemoveAllProjectData {
+            get {
+                return ResourceManager.GetString("Message_ActionWillRemoveAllProjectData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to proceed?.
+        /// </summary>
+        internal static string Message_DoYouWantToProceed {
+            get {
+                return ResourceManager.GetString("Message_DoYouWantToProceed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error importing translations from: {0}.
         /// </summary>
         internal static string Message_ErrorImportingFrom {
@@ -556,6 +583,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This file has been exported by XLIFF Manager on the {0}..
+        /// </summary>
+        internal static string Message_FileWasExportedOn {
+            get {
+                return ResourceManager.GetString("Message_FileWasExportedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Imported on: {0}.
         /// </summary>
         internal static string Message_Imported_on_0 {
@@ -570,6 +606,15 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string Message_SelectOutputFolder {
             get {
                 return ResourceManager.GetString("Message_SelectOutputFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Depending on the settings you choose during import, changes made before importing the XLIFF may not be retained and could cause the import to fail..
+        /// </summary>
+        internal static string Message_WarningTranslationsCanBeOverwrittenDuringImport {
+            get {
+                return ResourceManager.GetString("Message_WarningTranslationsCanBeOverwrittenDuringImport", resourceCulture);
             }
         }
         

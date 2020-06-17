@@ -123,7 +123,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				},
 				new JobProcess
 				{
-					Name = PluginResources.JobProcess_Export
+					Name = PluginResources.JobProcess_Import
 				},
 				new JobProcess
 				{
@@ -152,7 +152,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				if (success)
 				{
-					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Export);
+					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Import);
 					if (job != null)
 					{
 						success = await Import(job);
