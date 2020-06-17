@@ -147,10 +147,33 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		}
 
 		private void AddFiles()
-		{
-			var selectedFiles = _dialogService.ShowFileDialog("Xliff (*.xliff) |*.xliff", PluginResources.FilesDialog_Title);
+		{			
+			var selectedFiles = _dialogService.ShowFileDialog(
+				"Xliff (*.xliff) |*.xliff",
+				PluginResources.FilesDialog_Title,
+				GetDefaultPath());
 			AddFilesToGrid(selectedFiles);
 		}
+
+		private string GetDefaultPath()
+		{
+			var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+
+			var studioFolder = Path.Combine(path, "Studio 2019");
+			if (Directory.Exists(studioFolder))
+			{
+				path = studioFolder;
+
+				var projectsFolder = Path.Combine(path, "Projects");
+				if (Directory.Exists(projectsFolder))
+				{
+					path = projectsFolder;
+				}
+			}
+
+			return path;
+		}
+
 
 		private void UpdateCheckAll()
 		{
@@ -338,7 +361,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		private void SelectFolder()
 		{
-			var folderPath = _dialogService.ShowFolderDialog(PluginResources.FolderDialog_Title);
+			var folderPath = _dialogService.ShowFolderDialog(PluginResources.FolderDialog_Title, GetDefaultPath());
 			if (!string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
 			{
 				var files = GetAllXliffsFromDirectory(folderPath);
