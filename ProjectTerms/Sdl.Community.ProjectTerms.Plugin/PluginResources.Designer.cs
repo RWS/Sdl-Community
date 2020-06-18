@@ -19,7 +19,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -296,6 +296,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The termbase could not be added to the project! Please try to generate the termbase again..
+        /// </summary>
+        public static string Info_NotSuccessfullyAdded {
+            get {
+                return ResourceManager.GetString("Info_NotSuccessfullyAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your termbase was successfully added to the project!.
         /// </summary>
         public static string Info_SuccessfullyAdded {
@@ -316,6 +325,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         public static string Info_TermbaseExists {
             get {
                 return ResourceManager.GetString("Info_TermbaseExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The termbase can be found at the following location: C:\Users\UserName\AppData\Local\Temp\Tb.
+        /// </summary>
+        public static string LocalTermbaseFilePath_Message {
+            get {
+                return ResourceManager.GetString("LocalTermbaseFilePath_Message", resourceCulture);
             }
         }
         

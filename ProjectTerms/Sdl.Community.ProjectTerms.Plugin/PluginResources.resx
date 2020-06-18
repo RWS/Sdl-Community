@@ -269,4 +269,10 @@ Restart Studio and now you should be able to generate the new termbase.</value>
   <data name="Error_UpdateExitedFile" xml:space="preserve">
     <value>Unable to update the existed file!</value>
   </data>
+  <data name="LocalTermbaseFilePath_Message" xml:space="preserve">
+    <value>The termbase can be found at the following location: C:\Users\UserName\AppData\Local\Temp\Tb</value>
+  </data>
+  <data name="Info_NotSuccessfullyAdded" xml:space="preserve">
+    <value>The termbase could not be added to the project! Please try to generate the termbase again.</value>
+  </data>
 </root>
