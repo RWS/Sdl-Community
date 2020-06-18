@@ -35,7 +35,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private string _textMessage;
 		private StringBuilder _logReport;
 
-		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext, 
+		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext,
 			SegmentBuilder segmentBuilder, PathInfo pathInfo)
 			: base(owner, view, wizardContext)
 		{
@@ -134,42 +134,52 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 		private async void StartProcessing()
 		{
-			WriteLogReportHeader();
-
-			if (!Directory.Exists(WizardContext.WorkingFolder))
+			try
 			{
-				Directory.CreateDirectory(WizardContext.WorkingFolder);
-			}
+				WriteLogReportHeader();
 
-			var success = true;
-			var job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Preparation);
-			if (job != null)
-			{
-				success = await Preparation(job);
-			}
+				if (!Directory.Exists(WizardContext.WorkingFolder))
+				{
+					Directory.CreateDirectory(WizardContext.WorkingFolder);
+				}
 
-			if (success)
-			{
-				job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Export);
+				var success = true;
+				var job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Preparation);
 				if (job != null)
 				{
-					success = await Export(job);
+					success = await Preparation(job);
 				}
-			}
 
-			if (success)
-			{
-				job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Finalize);
-				if (job != null)
+				if (success)
 				{
-					success = await Finalize(job);
+					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Export);
+					if (job != null)
+					{
+						success = await Export(job);
+					}
 				}
-			}
 
-			FinalizeJobProcesses(success);
+				if (success)
+				{
+					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Finalize);
+					if (job != null)
+					{
+						success = await Finalize(job);
+					}
+				}
+
+				FinalizeJobProcesses(success);
+			}
+			finally
+			{
+				Owner.Dispatcher.Invoke(DispatcherPriority.Input, new Action(delegate
+				{
+					IsProcessing = false;
+				}));
+			}
 
 			SaveLogReport();
-		}		
+		}
 
 		private async Task<bool> Preparation(JobProcess jobProcess)
 		{
@@ -184,10 +194,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
-				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
+				Refresh();
 
 				_logReport.AppendLine("Phase: Preparation - Complete " + FormatDateTime(DateTime.Now));
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
+
 			}
 			catch (Exception ex)
 			{
@@ -215,7 +226,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
-				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
+				Refresh();
 
 				var project = WizardContext.ProjectFiles[0].Project;
 				var sdlxliffReader = new SdlxliffReader(_segmentBuilder);
@@ -248,12 +259,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 							targetFile.Action = Enumerators.Action.Export;
 							targetFile.Status = Enumerators.Status.Success;
 							targetFile.Details = string.Empty;
+							targetFile.XliffFilePath = xliffFilePath;
 						}
 
 						var activityFile = new ProjectFileActivity
 						{
-							ProjectFileId = targetFile.Id,
-							Id = Guid.NewGuid().ToString(),
+							ProjectFileId = targetFile.FileId,
+							ActivityId = Guid.NewGuid().ToString(),
 							Action = Enumerators.Action.Export,
 							Status = exported ? Enumerators.Status.Success : Enumerators.Status.Error,
 							Date = targetFile.Date,
@@ -266,8 +278,39 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 						targetFile.ProjectFileActivities.Add(activityFile);
 					}
 				}
-								
+
 				WizardContext.Completed = true;
+				jobProcess.Status = JobProcess.ProcessStatus.Completed;
+			}
+			catch (Exception ex)
+			{
+				jobProcess.Errors.Add(ex);
+				jobProcess.Status = JobProcess.ProcessStatus.Failed;
+				success = false;
+
+				_logReport.AppendLine();
+				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+			}
+
+			return await Task.FromResult(success);
+		}
+
+		private async Task<bool> Finalize(JobProcess jobProcess)
+		{
+			var success = true;
+
+			try
+			{
+				_logReport.AppendLine();
+				_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.Now));
+
+				TextMessage = PluginResources.WizardMessage_Finalizing;
+				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
+				jobProcess.Status = JobProcess.ProcessStatus.Running;
+
+				Refresh();
+
+				_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.Now));
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
 			catch (Exception ex)
@@ -304,38 +347,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 			return languageFolder;
 		}
-
-		private async Task<bool> Finalize(JobProcess jobProcess)
-		{
-			var success = true;
-
-			try
-			{
-				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.Now));
-
-				TextMessage = PluginResources.WizardMessage_Finalizing;
-				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
-				jobProcess.Status = JobProcess.ProcessStatus.Running;
-
-				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
-
-				_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.Now));
-				jobProcess.Status = JobProcess.ProcessStatus.Completed;
-			}
-			catch (Exception ex)
-			{
-				jobProcess.Errors.Add(ex);
-				jobProcess.Status = JobProcess.ProcessStatus.Failed;
-				success = false;
-
-				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
-			}
-
-			return await Task.FromResult(success);
-		}
-
+	
 		private void FinalizeJobProcesses(bool success)
 		{
 			_logReport.AppendLine();
@@ -468,7 +480,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		}
 
 		private void OnLoadPage(object sender, EventArgs e)
-		{
+		{			
+			IsProcessing = true;
 			Refresh();
 			StartProcessing();
 		}

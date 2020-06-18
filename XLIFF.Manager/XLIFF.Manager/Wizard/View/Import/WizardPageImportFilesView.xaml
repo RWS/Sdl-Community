@@ -176,7 +176,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Header="Details" Width="1*" CanUserSort="True" IsReadOnly="True">
+				<DataGridTemplateColumn Header="Message" Width="1*" CanUserSort="True" IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:ProjectFile">
 							<TextBlock Text="{Binding Details, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="NoWrap" />

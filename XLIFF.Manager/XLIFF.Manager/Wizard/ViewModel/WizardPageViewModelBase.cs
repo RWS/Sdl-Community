@@ -11,6 +11,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private bool _isVisited;
 		private bool _isComplete;
 		private bool _isUpdated;
+		private bool _isProcessing;
 		private bool _nextIsVisited;
 		private bool _previousIsVisited;
 		private bool _isCurrentPage;
@@ -18,10 +19,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 		private double _labelTextWidth;
 
 		protected WizardPageViewModelBase(Window owner, object view, WizardContext wizardContext)
-		{	
+		{			
 			Owner = owner;
 			View = view;
 			WizardContext = wizardContext;
+			IsProcessing = false;
 		}
 
 		public event EventHandler LoadPage;
@@ -117,12 +119,29 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel
 			set
 			{
 				if (value == _isComplete)
+				{
 					return;
+				}
 
 				_isComplete = value;
 				OnPropertyChanged(nameof(IsComplete));
 			}
 		}
+
+		public bool IsProcessing
+		{
+			get => _isProcessing;
+			set
+			{
+				if (_isProcessing == value)
+				{
+					return;
+				}
+
+				_isProcessing = value;
+				OnPropertyChanged(nameof(IsProcessing));
+			}
+		}	
 
 		public bool IsUpdated
 		{

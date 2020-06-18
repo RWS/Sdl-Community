@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 using Sdl.Community.XLIFF.Manager.Common;
 
 namespace Sdl.Community.XLIFF.Manager.Model
@@ -11,9 +12,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			Action = Enumerators.Action.None;
 		}
 
-		/// <summary>
-		/// ignore from xml;json
-		/// </summary>
+		[XmlIgnore]
 		public ProjectFile ProjectFile { get; set; }
 
 		public string ProjectFileId { get; set; }
@@ -24,7 +23,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		
 		public bool Selected { get; set; }
 
-		public string Id { get; set; }
+		public string ActivityId { get; set; }
 
 		public string Name { get; set; }
 
@@ -59,10 +58,10 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		{
 			var projectFileActivity = new ProjectFileActivity
 			{
-				ProjectFileId = ProjectFile.Id,
+				ProjectFileId = ProjectFile.FileId,
 				Action = Action,
 				Status = Status,
-				Id = Id,
+				ActivityId = ActivityId,
 				Name = Name,
 				Date = new DateTime(Date.Year, Date.Month, Date.Day, Date.Hour,
 					Date.Minute, Date.Second, Date.Millisecond, Date.Kind),

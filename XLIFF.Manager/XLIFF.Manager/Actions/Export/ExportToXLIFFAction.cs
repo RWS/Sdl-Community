@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Sdl.Community.XLIFF.Manager.Common;
+using Sdl.Community.XLIFF.Manager.CustomEventArgs;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
@@ -11,7 +12,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 {
 	[Action("XLIFFManager_ExportToXLIFF_Action", typeof(XLIFFManagerViewController),
 		Name = "XLIFFManager_ExportToXLIFF_Name",
-		Icon = "ExportTo",
+		Icon = "Export",
 		Description = "XLIFFManager_ExportToXLIFF_Description")]
 	[ActionLayout(typeof(XLIFFManagerActionsGroup), 6, DisplayType.Large)]
 	public class ExportToXLIFFAction : AbstractViewControllerAction<XLIFFManagerViewController>
@@ -38,9 +39,15 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 			_controllers.XliffManagerController.UpdateProjectData(wizardContext);
 		}
 
+		public void LaunchWizard()
+		{
+			Execute();
+		}
+
 		public override void Initialize()
 		{
 			_controllers = new Controllers();
+			SetupXliffManagerController();
 			_customerProvider = new CustomerProvider();
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService();
@@ -48,6 +55,16 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 			_segmentBuilder = new SegmentBuilder();
 
 			Enabled = true;
+		}
+
+		private void SetupXliffManagerController()
+		{
+			_controllers.XliffManagerController.ProjectSelectionChanged += OnProjectSelectionChanged;
+		}
+
+		private void OnProjectSelectionChanged(object sender, ProjectSelectionChangedEventArgs e)
+		{
+			Enabled = e.SelectedProject != null;
 		}
 	}
 }

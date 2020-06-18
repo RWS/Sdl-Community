@@ -123,7 +123,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				},
 				new JobProcess
 				{
-					Name = PluginResources.JobProcess_Export
+					Name = PluginResources.JobProcess_Import
 				},
 				new JobProcess
 				{
@@ -133,40 +133,47 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		}
 
 		private async void StartProcessing()
-		{
-			WriteLogReportHeader();
+		{		
+			try
+			{				
+				WriteLogReportHeader();
 
-			if (!Directory.Exists(WizardContext.WorkingFolder))
-			{
-				Directory.CreateDirectory(WizardContext.WorkingFolder);
-			}
+				if (!Directory.Exists(WizardContext.WorkingFolder))
+				{
+					Directory.CreateDirectory(WizardContext.WorkingFolder);
+				}
 
-			var success = true;
-			var job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Preparation);
-			if (job != null)
-			{
-				success = await Preparation(job);
-			}
-
-			if (success)
-			{
-				job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Export);
+				var success = true;
+				var job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Preparation);
 				if (job != null)
 				{
-					success = await Import(job);
+					success = await Preparation(job);
 				}
-			}
 
-			if (success)
-			{
-				job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Finalize);
-				if (job != null)
+				if (success)
 				{
-					success = await Finalize(job);
+					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Import);
+					if (job != null)
+					{
+						success = await Import(job);
+					}
 				}
-			}
 
-			FinalizeJobProcesses(success);
+				if (success)
+				{
+					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Finalize);
+					if (job != null)
+					{
+						success = await Finalize(job);
+					}
+				}
+
+				FinalizeJobProcesses(success);
+			}
+			finally
+			{
+				IsProcessing = false;
+			}
 
 			SaveLogReport();
 		}
@@ -184,7 +191,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
-				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
+				Refresh();
 
 				_logReport.AppendLine("Phase: Preparation - Complete " + FormatDateTime(DateTime.Now));
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
@@ -216,7 +223,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
-				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
+				Refresh();
 
 				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder);
@@ -278,6 +285,31 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 							WizardContext.ImportOverwriteTranslations, WizardContext.ImportConfirmationStatus,
 							WizardContext.ImportOriginSystem);
 
+
+						if (success)
+						{
+							targetLanguageFile.Date = WizardContext.DateTimeStamp;
+							targetLanguageFile.Action = Enumerators.Action.Import;
+							targetLanguageFile.Status = Enumerators.Status.Success;
+							targetLanguageFile.Details = string.Empty;
+							targetLanguageFile.XliffFilePath = xliffArchiveFile;
+						}
+
+						var activityFile = new ProjectFileActivity
+						{
+							ProjectFileId = targetLanguageFile.FileId,
+							ActivityId = Guid.NewGuid().ToString(),
+							Action = Enumerators.Action.Import,
+							Status = success ? Enumerators.Status.Success : Enumerators.Status.Error,
+							Date = targetLanguageFile.Date,
+							Name = Path.GetFileName(targetLanguageFile.XliffFilePath),
+							Path = Path.GetDirectoryName(targetLanguageFile.XliffFilePath),
+							Details = string.Empty,
+							ProjectFile = targetLanguageFile
+						};
+
+						targetLanguageFile.ProjectFileActivities.Add(activityFile);
+
 						_logReport.AppendLine(string.Format(PluginResources.Label_Success, success));
 						_logReport.AppendLine();
 
@@ -330,7 +362,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
-				Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.Send);
+				Refresh();
 
 				_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.Now));
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
@@ -546,6 +578,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		private void OnLoadPage(object sender, EventArgs e)
 		{
+			IsProcessing = true;
 			Refresh();
 			StartProcessing();
 		}
