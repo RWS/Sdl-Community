@@ -1,6 +1,6 @@
 ﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.ApplyTMTemplate.Models
+namespace Sdl.Community.ApplyTMTemplate.Models.Interfaces
 {
 	public interface IResource
 	{

@@ -5,8 +5,6 @@
 			          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 				      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 					  xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-					  xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
-					  Dialog:DialogParticipation.Register="{Binding}"
 					  xmlns:converters="clr-namespace:Sdl.Community.ApplyTMTemplate.Converters"
 					  xmlns:applyTmTemplate="clr-namespace:Sdl.Community.ApplyTMTemplate"
 					  xmlns:ui="clr-namespace:Sdl.Community.ApplyTMTemplate.UI"

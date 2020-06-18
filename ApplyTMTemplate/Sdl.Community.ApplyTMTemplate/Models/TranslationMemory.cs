@@ -21,7 +21,6 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 		public TranslationMemory(FileBasedTranslationMemory tm)
 		{
-			var languageFlags = new LanguageFlags();
 			_sourceStatusToolTip = "Nothing processed yet";
 			_targetStatusToolTip = "Nothing processed yet";
 			_isSelected = false;
@@ -186,28 +185,28 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 		private static void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle template, string property)
 		{
-			var templateBundleGetter = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(template, null) as Wordlist);
+			var templateBundle = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(template, null) as Wordlist);
 			var templateBundleSetter = typeof(LanguageResourceBundle).GetProperty(property)?.SetMethod;
 			var newBundleGetter = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(newLanguageResourceBundle, null) as Wordlist);
 
 			if (newBundleGetter == null || !newBundleGetter.Items.Any()) return;
 
-			if (templateBundleGetter != null && templateBundleGetter.Items.Any())
+			if (templateBundle != null && templateBundle.Items.Any())
 			{
 				foreach (var abbrev in newBundleGetter.Items)
 				{
-					templateBundleGetter.Add(abbrev);
+					templateBundle.Add(abbrev);
 				}
 			}
 			else
 			{
-				templateBundleSetter?.Invoke(template, new[] { new Wordlist(newBundleGetter) });
+				templateBundleSetter?.Invoke(template, new object[] { new Wordlist(newBundleGetter) });
 			}
 		}
 
 		private void AddLanguageResourceBundleToTm(LanguageResourceBundle languageResourceBundle)
 		{
-			ValidateTm();
+			AddEmptyLanguageResourceBundles();
 
 			MarkSourceNotModified();
 			MarkTargetNotModified();
@@ -215,7 +214,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			var cultureOfNewBundle = languageResourceBundle.Language;
 			var cultureOfSource = Tm.LanguageDirection.SourceLanguage;
 			var cultureOfTarget = Tm.LanguageDirection.TargetLanguage;
-			bool thisLangResIsValid = false;
+			var thisLangResIsValid = false;
 
 			if (cultureOfNewBundle.Equals(cultureOfSource))
 			{
@@ -240,21 +239,19 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			Tm.Save();
 		}
 
-		private void ValidateTm()
+		private void AddEmptyLanguageResourceBundles()
 		{
-			if (Tm.LanguageResourceBundles.Count < 2)
+			if (Tm.LanguageResourceBundles.Count >= 2) return;
+			var sourceLanguage = Tm?.LanguageDirection?.SourceLanguage;
+			var targetLanguage = Tm?.LanguageDirection?.TargetLanguage;
+			if (Tm.LanguageResourceBundles[sourceLanguage] == null)
 			{
-				var sourceLanguage = Tm?.LanguageDirection?.SourceLanguage;
-				var targetLanguage = Tm?.LanguageDirection?.TargetLanguage;
-				if (Tm.LanguageResourceBundles[sourceLanguage] == null)
-				{
-					Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(sourceLanguage));
-				}
+				Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(sourceLanguage));
+			}
 
-				if (Tm.LanguageResourceBundles[targetLanguage] == null)
-				{
-					Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(targetLanguage));
-				}
+			if (Tm.LanguageResourceBundles[targetLanguage] == null)
+			{
+				Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(targetLanguage));
 			}
 		}
 	}

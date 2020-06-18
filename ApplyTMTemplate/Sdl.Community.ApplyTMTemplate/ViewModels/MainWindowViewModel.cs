@@ -10,6 +10,7 @@ using System.Windows.Input;
 using Sdl.Community.AhkPlugin.Helpers;
 using Sdl.Community.ApplyTMTemplate.Commands;
 using Sdl.Community.ApplyTMTemplate.Models;
+using Sdl.Community.ApplyTMTemplate.Services;
 using Sdl.Community.ApplyTMTemplate.Services.Interfaces;
 using Sdl.Community.ApplyTMTemplate.Utilities;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -37,7 +38,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private ICommand _removeTMsCommand;
 		private bool _segmentationRulesChecked;
 		private bool _selectAllChecked;
-		private Template _template;
+		private ResourceManager _resourceManager;
 		private TemplateValidity _templateValidity;
 		private TimedTextBox _timedTextBoxViewModel;
 		private ObservableCollection<TranslationMemory> _tmCollection;
@@ -76,9 +77,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public ICommand AddFolderCommand => _addFolderCommand ?? (_addFolderCommand = new CommandHandler(AddFolder, true));
+		public ICommand AddFolderCommand => _addFolderCommand ??= new CommandHandler(AddFolder, true);
 
-		public ICommand AddTmCommand => _addTmsCommand ?? (_addTmsCommand = new CommandHandler(AddTms, true));
+		public ICommand AddTmCommand => _addTmsCommand ??= new CommandHandler(AddTms, true);
 
 		public bool AllTmsChecked
 		{
@@ -94,17 +95,17 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public ICommand ApplyTemplateCommand => _applyTemplateCommand ?? (_applyTemplateCommand = new RelayCommand(
+		public ICommand ApplyTemplateCommand => _applyTemplateCommand ??= new RelayCommand(
 			ao => ApplyTmTemplate(),
-			po => (int)_templateValidity > 1 && SelectedTmsList.Count > 0));
+			po => (int)_templateValidity > 1 && SelectedTmsList.Count > 0);
 
 		public bool CanExecuteExport => _templateValidity.HasFlag(TemplateValidity.HasResources);
 
-		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
+		public ICommand DragEnterCommand => _dragEnterCommand ??= new RelayCommand(HandlePreviewDrop);
 
-		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export, true));
+		public ICommand ExportCommand => _exportCommand ??= new CommandHandler(Export, true);
 
-		public ICommand ImportCommand => _importCommand ?? (_importCommand = new RelayCommand(Import));
+		public ICommand ImportCommand => _importCommand ??= new RelayCommand(Import);
 
 		public bool OrdinalFollowersChecked
 		{
@@ -126,7 +127,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public ICommand RemoveTMsCommand => _removeTMsCommand ?? (_removeTMsCommand = new CommandHandler(RemoveTMs, true));
+		public ICommand RemoveTMsCommand => _removeTMsCommand ??= new CommandHandler(RemoveTMs, true);
 
 		public string ResourceTemplatePath
 		{
@@ -200,9 +201,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		private ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true));
+		private ICommand BrowseCommand => _browseCommand ??= new CommandHandler(Browse, true);
 
-		public async void StartLoadingResourcesAndValidate(object sender, EventArgs e)
+		public void StartLoadingResourcesAndValidate(object sender, EventArgs e)
 		{
 			_templateValidity = TemplateValidity.IsNotValid;
 
@@ -221,7 +222,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			OnPropertyChanged(nameof(CanExecuteExport));
 
-			await ShowMessages();
+			ShowMessages();
 		}
 
 		private void AddFolder()
@@ -268,7 +269,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private async void ApplyTmTemplate()
 		{
 			var isValid = ValidateTemplate();
-			await ShowMessages();
+			ShowMessages();
 
 			if (!isValid) return;
 
@@ -282,7 +283,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 
 			ProgressVisibility = "Visible";
-			await Task.Run(() => _template.ApplyTmTemplate(SelectedTmsList));
+			await Task.Run(() => _resourceManager.ApplyTmTemplate(SelectedTmsList));
 			ProgressVisibility = "Collapsed";
 		}
 
@@ -333,27 +334,27 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			return filePath;
 		}
 
-		private Template CreateTemplateObjectFromBundles(List<LanguageResourceBundle> languageResourceBundles)
-		{
-			_template = new Template(new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked), ResourceTemplatePath);
+		//private ResourceManager CreateTemplateObjectFromBundles(List<LanguageResourceBundle> languageResourceBundles)
+		//{
+		//	_resourceManager = new ResourceManager();
 
-			if (_message == PluginResources.Template_has_no_resources) return _template;
-			if (languageResourceBundles == null) return null;
+		//	if (_message == PluginResources.Template_has_no_resources) return _resourceManager;
+		//	if (languageResourceBundles == null) return null;
 
-			foreach (var bundle in languageResourceBundles)
-			{
-				_template.LanguageResourceBundles.Add(bundle);
-			}
+		//	foreach (var bundle in languageResourceBundles)
+		//	{
+		//		_resourceManager.LanguageResourceBundles.Add(bundle);
+		//	}
 
-			return _template;
-		}
+		//	return _resourceManager;
+		//}
 
 		private async void Export()
 		{
 			LoadResourcesFromTemplate();
 
 			var isValid = ValidateTemplate();
-			await ShowMessages();
+			ShowMessages();
 			if (!isValid) return;
 
 			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
@@ -388,7 +389,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			await Task.Run(() =>
 			{
-				_template.ExportResources(_template, filePath, settings);
+				_resourceManager.ExportResourcesToExcel(_resourceManager, filePath, settings);
 			});
 
 			_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Report_generated_successfully);
@@ -407,7 +408,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private async void Import(object parameter)
 		{
 			var isValid = ValidateTemplate(false);
-			await ShowMessages(true);
+			ShowMessages(true);
 			if (!isValid) return;
 
 			try
@@ -429,7 +430,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					{
 						if (dlg.FileName.Contains(".xlsx"))
 						{
-							_template.ImportResourcesFromExcel(dlg.FileName);
+							_resourceManager.ImportResourcesFromExcel(dlg.FileName);
 						}
 					});
 					_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
@@ -444,7 +445,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					{
 						await Task.Run(() =>
 						{
-							_template.ImportResourcesFromSdltm(SelectedTmsList);
+							_resourceManager.ImportResourcesFromSdltm(SelectedTmsList);
 						});
 						_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
 					}
@@ -470,9 +471,10 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void LoadResourcesFromTemplate()
 		{
-			_template = CreateTemplateObjectFromBundles(
-				_templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out _message,
-					out _unIDedLanguages));
+			//_template = CreateTemplateObjectFromBundles(
+			//	_templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out _message,
+			//		out _unIDedLanguages));
+			_resourceManager = new ResourceManager(new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked), ResourceTemplatePath, new ExcelResourceManager());
 		}
 
 		private void RemoveTMs()
@@ -482,7 +484,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			OnPropertyChanged(nameof(AllTmsChecked));
 		}
 
-		private async Task ShowMessages(bool withoutBundlesMessage = false)
+		private void ShowMessages(bool withoutBundlesMessage = false)
 		{
 			if (!string.IsNullOrEmpty(_message))
 			{
@@ -522,11 +524,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			var isValid = true;
 			_unIDedLanguagesAsString = _unIDedLanguages?.Aggregate("", (i, j) => i + "\n  \u2022" + j);
-			if (_template != null)
+			if (_resourceManager != null)
 			{
-				if (_template.LanguageResourceBundles != null && checkIfBundlesPresent)
+				if (_resourceManager.LanguageResourceBundles != null && checkIfBundlesPresent)
 				{
-					if (_template.LanguageResourceBundles.Count == 0)
+					if (_resourceManager.LanguageResourceBundles.Count == 0)
 					{
 						isValid = false;
 
@@ -541,7 +543,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 						if (!string.IsNullOrEmpty(_unIDedLanguagesAsString))
 						{
 							var idedLanguages =
-								_template.LanguageResourceBundles.Aggregate("",
+								_resourceManager.LanguageResourceBundles.Aggregate("",
 									(l, j) => l + "\n  \u2022" + j.LanguageCode);
 							_message = $"{PluginResources.Identified_Languages}{idedLanguages}" +
 									   $"\n\n{PluginResources.Unidentified_Languages}{_unIDedLanguagesAsString}";

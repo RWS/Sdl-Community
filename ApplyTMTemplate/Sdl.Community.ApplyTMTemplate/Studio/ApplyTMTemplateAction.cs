@@ -5,7 +5,7 @@ using Sdl.Community.ApplyTMTemplate.ViewModels;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
-namespace Sdl.Community.ApplyTMTemplate
+namespace Sdl.Community.ApplyTMTemplate.Studio
 {
 	[Action("ApplyTMTemplateAction", Icon = "ATTA", Name = "Apply TM Template", Description = "Applies settings from a TM template to a TM")]
 	[ActionLayout(typeof(ApplyTMTemplateRibbonGroup), 10, DisplayType.Large)]
