@@ -295,6 +295,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exclude Filters: {0}.
+        /// </summary>
+        internal static string Label_ExcludeFilters {
+            get {
+                return ResourceManager.GetString("Label_ExcludeFilters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Files {0}.
         /// </summary>
         internal static string Label_ExportFiles {

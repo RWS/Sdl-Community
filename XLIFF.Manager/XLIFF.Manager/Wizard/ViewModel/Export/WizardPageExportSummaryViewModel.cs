@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -62,6 +63,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			summaryText += indent + string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.ExportIncludeTranslations) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.ExportCopySourceToTarget) + Environment.NewLine;
+			if (WizardContext.ExcludeFilterItems.Count > 0)
+			{
+				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExcludeFilterItems)) + Environment.NewLine;
+			}
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;
@@ -91,6 +96,18 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			}
 
 			return summaryText;
+		}
+
+		private string GetFitlerItemsString(IEnumerable<FilterItem> filterItems)
+		{
+			var items = string.Empty;
+			foreach (var filterItem in filterItems)
+			{
+				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
+				                   filterItem.Name;
+			}
+
+			return items;
 		}
 
 		private string GetProjectTargetLanguagesString(Project project)

@@ -320,7 +320,7 @@ namespace Sdl.Community.XLIFF.Manager
 				var message1 = string.Format(PluginResources.Message_FileWasExportedOn, activityfile?.DateToString);
 				var message2 = string.Format(PluginResources.Message_WarningTranslationsCanBeOverwrittenDuringImport, activityfile?.DateToString);
 
-				MessageBox.Show(message1 + Environment.NewLine + message2, PluginResources.XLIFFManager_Name, MessageBoxButtons.OK,
+				MessageBox.Show(message1 + Environment.NewLine + Environment.NewLine + message2, PluginResources.XLIFFManager_Name, MessageBoxButtons.OK,
 					MessageBoxIcon.Warning);
 			}
 		}

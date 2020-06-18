@@ -85,6 +85,7 @@
     <Compile Include="FileTypeSupport\XliffReaderTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <Content Include="TestFiles\Xliff12\Polyglot\DefaultSample.sdlxliff.xliff">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

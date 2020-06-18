@@ -9,6 +9,7 @@
              xmlns:converters="clr-namespace:Sdl.Community.XLIFF.Manager.Converters"
              xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export"
              xmlns:model="clr-namespace:Sdl.Community.XLIFF.Manager.Model"
+             xmlns:sdl="http://schemas.sdl.com/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:WizardPageExportFilesViewModel}">
 	<UserControl.Resources>
@@ -196,7 +197,7 @@
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
-
+			
 			<Label Grid.Column="1" Foreground="#4E4D4D" Content="{Binding StatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 		</Grid>

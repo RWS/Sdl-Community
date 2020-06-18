@@ -59,7 +59,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 
 		private void SetupXliffManagerController()
 		{
-			_controllers.XliffManagerController.ProjectSelectionChanged += OnProjectSelectionChanged;
+			_controllers.XliffManagerController.ProjectSelectionChanged += OnProjectSelectionChanged;		
 		}
 
 		private void OnProjectSelectionChanged(object sender, ProjectSelectionChangedEventArgs e)

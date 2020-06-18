@@ -23,7 +23,11 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			ImportOverwriteTranslations = true;
 			ImportOriginSystem = string.Empty;
 			ImportConfirmationStatus = ConfirmationLevel.Draft;
+
+			ExcludeFilterItems = new List<FilterItem>();
 		}
+
+		public List<FilterItem> ExcludeFilterItems { get; set; }
 
 		public Enumerators.Action Action { get; set; }
 
@@ -33,7 +37,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public Project Project { get; set; }
 
-		public List<ProjectFile> ProjectFiles { get; set; }	
+		public List<ProjectFile> ProjectFiles { get; set; }
 
 		public string TransactionFolder { get; set; }
 
@@ -48,11 +52,11 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			get
 			{
 				var value = DateTimeStamp.Year
-				            + "" + DateTimeStamp.Month.ToString().PadLeft(2, '0')
-				            + "" + DateTimeStamp.Day.ToString().PadLeft(2, '0')
-				            + "" + DateTimeStamp.Hour.ToString().PadLeft(2, '0')
-				            + "" + DateTimeStamp.Minute.ToString().PadLeft(2, '0')
-				            + "" + DateTimeStamp.Second.ToString().PadLeft(2, '0');
+							+ "" + DateTimeStamp.Month.ToString().PadLeft(2, '0')
+							+ "" + DateTimeStamp.Day.ToString().PadLeft(2, '0')
+							+ "" + DateTimeStamp.Hour.ToString().PadLeft(2, '0')
+							+ "" + DateTimeStamp.Minute.ToString().PadLeft(2, '0')
+							+ "" + DateTimeStamp.Second.ToString().PadLeft(2, '0');
 
 				return value;
 			}
@@ -73,7 +77,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		public ConfirmationLevel ImportConfirmationStatus { get; set; }
 
 		public string GetDefaultTransactionPath()
-		{	
+		{
 			var rootPath = Path.Combine(LocalProjectFolder, "XLIFF.Manager");
 			var path = Path.Combine(rootPath, Action.ToString());
 
@@ -94,6 +98,6 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		{
 			var languageFolder = Path.Combine(WorkingFolder, cultureInfo.Name);
 			return languageFolder;
-		}	
+		}
 	}
 }

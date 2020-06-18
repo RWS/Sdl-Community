@@ -439,4 +439,7 @@
 	<data name="Message_WarningTranslationsCanBeOverwrittenDuringImport" xml:space="preserve">
     <value>Depending on the settings you choose during import, changes made before importing the XLIFF may not be retained and could cause the import to fail.</value>
   </data>
+	<data name="Label_ExcludeFilters" xml:space="preserve">
+    <value>Exclude Filters: {0}</value>
+  </data>
 </root>

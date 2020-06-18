@@ -128,7 +128,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			else if (controller is XLIFFManagerViewController)
 			{
 				var selectedProjectFiles = _controllers.XliffManagerController.GetSelectedProjectFiles();
-				var selectedProjects = GetSelectedProjects(selectedProjectFiles);
+				var selectedProjects = GetSelectedProjects();
 				var selectedFileIds = selectedProjectFiles?.Select(a => a.FileId.ToString()).ToList();
 
 				if (selectedProjects.Count == 0)
@@ -301,24 +301,9 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return languageInfo;
 		}
 
-		private List<Project> GetSelectedProjects(IEnumerable<ProjectFile> selectedFiles)
+		private List<Project> GetSelectedProjects()
 		{
-			var selectedProjects = new List<Project>();
-
-			if (selectedFiles == null)
-			{
-				return selectedProjects;
-			}
-
-			foreach (var selectedFile in selectedFiles)
-			{
-				if (!selectedProjects.Contains(selectedFile.Project))
-				{
-					selectedProjects.Add(selectedFile.Project);
-				}
-			}
-
-			return selectedProjects;
+			return _controllers.XliffManagerController.GetSelectedProjects();			
 		}
 
 		private ObservableCollection<WizardPageViewModelBase> CreatePages(WizardContext wizardContext)

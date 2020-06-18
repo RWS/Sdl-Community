@@ -229,7 +229,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				Refresh();
 
 				var project = WizardContext.ProjectFiles[0].Project;
-				var sdlxliffReader = new SdlxliffReader(_segmentBuilder);
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, WizardContext.ExcludeFilterItems);
 				var xliffWriter = new XliffWriter(WizardContext.ExportSupport);
 
 				var selectedLanguages = GetSelectedLanguages();

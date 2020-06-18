@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -8,6 +9,8 @@ using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Core.Globalization;
+using Sdl.MultiSelectComboBox.API;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 {
@@ -20,6 +23,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private bool _copySourceToTarget;
 		private bool _copySourceToTargetEnabled;
 		private bool _includeTranslations;
+		private ObservableCollection<FilterItem> _filterItems;
+		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
 
@@ -32,10 +37,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			CopySourceToTarget = wizardContext.ExportCopySourceToTarget;
 			IncludeTranslations = wizardContext.ExportIncludeTranslations;
 
+			InitializeFilterItems();
+			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(wizardContext.ExcludeFilterItems);
+
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
 		}
-		
+	
 		public ICommand ClearExportFileCommand => _clearExportFileCommand ?? (_clearExportFileCommand = new CommandHandler(ClearExportFile));
 
 		public ICommand BrowseFolderCommand => _browseFolderCommand ?? (_browseFolderCommand = new CommandHandler(BrowseFolder));
@@ -89,6 +97,36 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 				_selectedXliffSupportModel = value;
 				OnPropertyChanged(nameof(SelectedXliffSupport));
+			}
+		}
+
+		public ObservableCollection<FilterItem> FilterItems
+		{
+			get => _filterItems ?? (_filterItems = new ObservableCollection<FilterItem>());
+			set
+			{
+				if (_filterItems == value)
+				{
+					return;
+				}
+
+				_filterItems = value;
+				OnPropertyChanged(nameof(FilterItems));				
+			}
+		}
+
+		public ObservableCollection<FilterItem> SelectedExcludeFilterItems
+		{
+			get => _selectedExcludeFilterItems ?? (_selectedExcludeFilterItems = new ObservableCollection<FilterItem>());
+			set
+			{
+				if (_selectedExcludeFilterItems == value)
+				{
+					return;
+				}
+
+				_selectedExcludeFilterItems = value;
+				OnPropertyChanged(nameof(SelectedExcludeFilterItems));
 			}
 		}
 
@@ -172,6 +210,138 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 		public override bool IsValid { get; set; }
 
+		private void InitializeFilterItems()
+		{
+			var filterItems = new List<FilterItem>();
+
+			AddSegmentPropertyFilters(filterItems, new FilterItemGroup(1, "Properties"));			
+			AddSegmentStatusFilters(filterItems, new FilterItemGroup(2, "Status"));
+			AddMatchTypeFilters(filterItems, new FilterItemGroup(3, "Match"));
+
+			FilterItems = new ObservableCollection<FilterItem>(filterItems);
+		}
+
+		private void AddMatchTypeFilters(ICollection<FilterItem> filterItems, IItemGroup filterItemGroup)
+		{			
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = "PM",
+				Name = "Perfect Match"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = "CM",
+				Name = "Context Match"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = "Exact",
+				Name = "Exact Match"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = "MT",
+				Name = "Machine Translation"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = "AMT",
+				Name = "Adaptive Machine Translation"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = "NMT",
+				Name = "Neural Machine Translation"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = "Fuzzy",
+				Name = "Fuzzy Match"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = "New",
+				Name = "New"
+			});
+		}
+
+		private void AddSegmentStatusFilters(ICollection<FilterItem> filterItems, IItemGroup filterItemGroup)
+		{
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = ConfirmationLevel.Unspecified.ToString(),
+				Name = "Unspecified"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = ConfirmationLevel.Draft.ToString(),
+				Name = "Draft"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = ConfirmationLevel.Translated.ToString(),
+				Name = "Translated"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = ConfirmationLevel.RejectedTranslation.ToString(),
+				Name = "Translation Rejected"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = ConfirmationLevel.ApprovedTranslation.ToString(),
+				Name = "Translation Approved"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = ConfirmationLevel.RejectedSignOff.ToString(),
+				Name = "SignOff Rejected"
+			});
+
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = ConfirmationLevel.ApprovedSignOff.ToString(),
+				Name = "SignOff Approved"
+			});
+		}
+
+		private void AddSegmentPropertyFilters(ICollection<FilterItem> filterItems, IItemGroup filterItemGroup)
+		{
+			filterItems.Add(new FilterItem
+			{
+				Group = filterItemGroup,
+				Id = "Locked",
+				Name = "Locked"
+			});
+		}
+
 		private void VerifyIsValid()
 		{			
 			IsValid = Directory.Exists(OutputFolder);
@@ -217,7 +387,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		}
 
 		private void OnLoadPage(object sender, EventArgs e)
-		{
+		{			
 			VerifyIsValid();
 		}
 
@@ -227,6 +397,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			WizardContext.ExportSupport = SelectedXliffSupport.SupportType;
 			WizardContext.ExportCopySourceToTarget = CopySourceToTarget;
 			WizardContext.ExportIncludeTranslations = IncludeTranslations;
+			WizardContext.ExcludeFilterItems = SelectedExcludeFilterItems.ToList();
 		}
 
 		public void Dispose()
