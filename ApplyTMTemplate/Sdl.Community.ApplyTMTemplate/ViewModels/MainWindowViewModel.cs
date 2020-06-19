@@ -13,7 +13,6 @@ using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.Community.ApplyTMTemplate.Services;
 using Sdl.Community.ApplyTMTemplate.Services.Interfaces;
 using Sdl.Community.ApplyTMTemplate.Utilities;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Button = System.Windows.Controls.Button;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -36,15 +35,13 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private bool _ordinalFollowersChecked;
 		private string _progressVisibility;
 		private ICommand _removeTMsCommand;
+		private ResourceManager _resourceManager;
 		private bool _segmentationRulesChecked;
 		private bool _selectAllChecked;
-		private ResourceManager _resourceManager;
 		private TemplateValidity _templateValidity;
 		private TimedTextBox _timedTextBoxViewModel;
 		private ObservableCollection<TranslationMemory> _tmCollection;
 		private string _tmPath;
-		private List<int> _unIDedLanguages;
-		private string _unIDedLanguagesAsString;
 		private bool _variablesChecked;
 
 		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader,
@@ -283,7 +280,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 
 			ProgressVisibility = "Visible";
-			await Task.Run(() => _resourceManager.ApplyTmTemplate(SelectedTmsList));
+			await Task.Run(() => _resourceManager.ApplyTemplateToTms(SelectedTmsList));
 			ProgressVisibility = "Collapsed";
 		}
 
@@ -334,21 +331,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			return filePath;
 		}
 
-		//private ResourceManager CreateTemplateObjectFromBundles(List<LanguageResourceBundle> languageResourceBundles)
-		//{
-		//	_resourceManager = new ResourceManager();
-
-		//	if (_message == PluginResources.Template_has_no_resources) return _resourceManager;
-		//	if (languageResourceBundles == null) return null;
-
-		//	foreach (var bundle in languageResourceBundles)
-		//	{
-		//		_resourceManager.LanguageResourceBundles.Add(bundle);
-		//	}
-
-		//	return _resourceManager;
-		//}
-
 		private async void Export()
 		{
 			LoadResourcesFromTemplate();
@@ -389,7 +371,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			await Task.Run(() =>
 			{
-				_resourceManager.ExportResourcesToExcel(_resourceManager, filePath, settings);
+				_resourceManager.ExportResourcesToExcel(filePath, settings);
 			});
 
 			_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Report_generated_successfully);
@@ -408,7 +390,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private async void Import(object parameter)
 		{
 			var isValid = ValidateTemplate(false);
-			ShowMessages(true);
 			if (!isValid) return;
 
 			try
@@ -471,10 +452,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void LoadResourcesFromTemplate()
 		{
-			//_template = CreateTemplateObjectFromBundles(
-			//	_templateLoader.GetLanguageResourceBundlesFromFile(ResourceTemplatePath, out _message,
-			//		out _unIDedLanguages));
-			_resourceManager = new ResourceManager(new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked), ResourceTemplatePath, new ExcelResourceManager());
+			_resourceManager = new ResourceManager(new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked), new ExcelResourceManager(), new LanguageResourcesTemplateContainer(ResourceTemplatePath));
 		}
 
 		private void RemoveTMs()
@@ -482,16 +460,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			TmCollection = new ObservableCollection<TranslationMemory>(TmCollection.Where(tm => !tm.IsSelected));
 
 			OnPropertyChanged(nameof(AllTmsChecked));
-		}
-
-		private void ShowMessages(bool withoutBundlesMessage = false)
-		{
-			if (!string.IsNullOrEmpty(_message))
-			{
-				if (withoutBundlesMessage && _message.Equals(PluginResources.Template_has_no_resources)) return; // Don't show messages regarding the lack of resources in the template if we do an import
-				_messageService.ShowWarningMessage(PluginResources.Warning,
-					_message);
-			}
 		}
 
 		private void Tm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -522,8 +490,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private bool ValidateTemplate(bool checkIfBundlesPresent = true)
 		{
+			//TODO: refactor this method; we shouldn't validate based upon the error message
 			var isValid = true;
-			_unIDedLanguagesAsString = _unIDedLanguages?.Aggregate("", (i, j) => i + "\n  \u2022" + j);
 			if (_resourceManager != null)
 			{
 				if (_resourceManager.LanguageResourceBundles != null && checkIfBundlesPresent)
@@ -532,22 +500,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					{
 						isValid = false;
 
-						if (!string.IsNullOrEmpty(_unIDedLanguagesAsString))
-						{
-							_message =
-								$"{PluginResources.No_Languages_IDed}\n\n{PluginResources.Unidentified_Languages}{_unIDedLanguagesAsString}";
-						}
-					}
-					else
-					{
-						if (!string.IsNullOrEmpty(_unIDedLanguagesAsString))
-						{
-							var idedLanguages =
-								_resourceManager.LanguageResourceBundles.Aggregate("",
-									(l, j) => l + "\n  \u2022" + j.LanguageCode);
-							_message = $"{PluginResources.Identified_Languages}{idedLanguages}" +
-									   $"\n\n{PluginResources.Unidentified_Languages}{_unIDedLanguagesAsString}";
-						}
+						
 					}
 				}
 				else

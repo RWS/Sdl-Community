@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sdl.Community.ApplyTMTemplate.Models.Interfaces;
 using Sdl.Community.ApplyTMTemplate.Services.Interfaces;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Segmentation;
@@ -9,24 +10,26 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 namespace Sdl.Community.ApplyTMTemplate.Models
 {
 	public class ResourceManager
-		: FileBasedLanguageResourcesTemplate
 	{
 		private readonly IExcelResourceWriter _excelResourceWriter;
-		private readonly string _pathTo;
+		private readonly ILanguageResourcesContainer _languageResourcesContainer;
 		private readonly Settings _settings;
 
-		public ResourceManager(Settings settings, string pathTo, IExcelResourceWriter excelResourceWriter): base(pathTo)
+		public ResourceManager(Settings settings, IExcelResourceWriter excelResourceWriter, ILanguageResourcesContainer languageResourcesContainer)
 		{
+			_languageResourcesContainer = languageResourcesContainer;
 			_settings = settings;
-			_pathTo = pathTo;
 			_excelResourceWriter = excelResourceWriter;
 		}
 
-		public void ApplyTmTemplate(List<TranslationMemory> translationMemories)
+		public LanguageResourceBundleCollection LanguageResourceBundles =>
+			_languageResourcesContainer.LanguageResourceBundles;
+
+		public void ApplyTemplateToTms(List<TranslationMemory> translationMemories)
 		{
 			var resourceBundlesWithOptions = new List<LanguageResourceBundle>();
 
-			foreach (var resourceBundle in LanguageResourceBundles)
+			foreach (var resourceBundle in _languageResourcesContainer.LanguageResourceBundles)
 			{
 				var newResourceBundle = new LanguageResourceBundle(resourceBundle.Language);
 
@@ -88,10 +91,10 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 		}
 
-		public void ExportResourcesToExcel(FileBasedLanguageResourcesTemplate template, string filePathTo,
+		public void ExportResourcesToExcel(string filePathTo,
 			Settings settings)
 		{
-			_excelResourceWriter.ExportResourcesToExcel(template, filePathTo, settings);
+			_excelResourceWriter.ExportResourcesToExcel(_languageResourcesContainer, filePathTo, settings);
 		}
 
 		public void ImportResourcesFromExcel(string filePathFrom)
@@ -101,7 +104,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			ExcludeWhatIsNotNeeded(newLanguageResourceBundles);
 			AddNewBundles(newLanguageResourceBundles);
 
-			SaveAs(_pathTo);
+			_languageResourcesContainer.Save();
 		}
 
 		public void ImportResourcesFromSdltm(List<TranslationMemory> translationMemories)
@@ -122,7 +125,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 			AddNewBundles(newLanguageResourceBundles);
 
-			SaveAs(_pathTo);
+			_languageResourcesContainer.Save();
 		}
 
 		private static void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle template, string property)
@@ -174,7 +177,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 		{
 			foreach (var newBundle in newLanguageResourceBundles)
 			{
-				var correspondingBundleInTemplate = LanguageResourceBundles[newBundle.Language];
+				var correspondingBundleInTemplate = _languageResourcesContainer.LanguageResourceBundles[newBundle.Language];
 
 				//in case there is already a bundle for that culture, we need to go into more detail and see what to add and what is already there
 				if (correspondingBundleInTemplate != null)
@@ -187,7 +190,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 				//otherwise, just add the newBundle
 				else
 				{
-					LanguageResourceBundles.Add(newBundle);
+					_languageResourcesContainer.LanguageResourceBundles.Add(newBundle);
 				}
 			}
 		}

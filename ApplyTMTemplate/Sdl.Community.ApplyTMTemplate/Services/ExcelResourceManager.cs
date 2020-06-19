@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using Sdl.Community.ApplyTMTemplate.Models;
+using Sdl.Community.ApplyTMTemplate.Models.Interfaces;
 using Sdl.Community.ApplyTMTemplate.Services.Interfaces;
 using Sdl.Community.ApplyTMTemplate.Utilities;
 using Sdl.LanguagePlatform.Core;
@@ -16,10 +17,10 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 {
 	public class ExcelResourceManager : IExcelResourceWriter
 	{
-		public void ExportResourcesToExcel(FileBasedLanguageResourcesTemplate template, string filePathTo, Settings settings)
+		public void ExportResourcesToExcel(ILanguageResourcesContainer resourceContainer, string filePathTo, Settings settings)
 		{
 			using var package = GetExcelPackage(filePathTo);
-			foreach (var languageResourceBundle in template.LanguageResourceBundles)
+			foreach (var languageResourceBundle in resourceContainer.LanguageResourceBundles)
 			{
 				var worksheet = package.Workbook.Worksheets.Add(languageResourceBundle.Language.Name);
 

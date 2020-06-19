@@ -123,7 +123,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\ImageToBitmapImageConverter.cs" />
+    <Compile Include="Models\Interfaces\ILanguageResourcesContainer.cs" />
     <Compile Include="Models\Interfaces\IResource.cs" />
+    <Compile Include="Models\LanguageResourcesTemplateContainer.cs" />
     <Compile Include="Models\Resource.cs" />
     <Compile Include="Models\SegmentationRulesResource.cs" />
     <Compile Include="Models\Settings.cs" />
