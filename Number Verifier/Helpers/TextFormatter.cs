@@ -154,6 +154,21 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			return text;
 		}
 
+		public StringBuilder GetBuilderSeparators(string separators)
+		{
+			var separatorsBuilder = new StringBuilder();
+			var separatorsArray = separators.Split('\\');
+
+			foreach (var separator in separatorsArray)
+			{
+				if (!string.IsNullOrWhiteSpace(separator))
+				{
+					separatorsBuilder.Append($@"{separator}?\");
+				}
+			}
+			return separatorsBuilder;
+		}
+
 		private string ReplaceSeparator(string text, string separator)
 		{
 			if (!text.Contains(separator)) return text;
