@@ -28,7 +28,7 @@
 
 	<Style x:Key="MultiSelectComboBox.DefaultTextBlock.Style" TargetType="TextBlock">
 		<Setter Property="FontFamily" Value="{StaticResource MultiSelectComboBox.Text.FontFamily}"/>
-		<Setter Property="FontSize" Value="11"/>
+		<Setter Property="FontSize" Value="12"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Control.VerticalContentAlignment" Value="Center"/>

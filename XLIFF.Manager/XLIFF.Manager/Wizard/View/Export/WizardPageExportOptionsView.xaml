@@ -23,7 +23,7 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
-
+			
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid Margin="15,10,15,10">
@@ -40,7 +40,6 @@
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 
 
@@ -51,9 +50,6 @@
 				          ItemsSource="{Binding XLIFFSupportList}"
 						  DisplayMemberPath="Name"
 						  SelectedItem="{Binding SelectedXliffSupport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-
-
 
 				<TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Output Folder:" Margin="5,10,5,5"/>
 				<Grid Grid.Row="1" Grid.Column="1" Height="24" Margin="0,10,5,5">
@@ -126,9 +122,20 @@
 						  IsEnabled="{Binding CopySourceToTargetEnabled}"
 				          IsChecked="{Binding CopySourceToTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-				<TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="Exclude:" Margin="5"/>
 
-				<sdl:MultiSelectComboBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" 
+				<Grid Grid.Row="4" Grid.Column="0" ColumnSpan="3" >
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+
+					<TextBlock VerticalAlignment="Center" Text="Exclude Segments" Style="{StaticResource TextBlockColor}" Margin="5,10,5,5"/>
+
+					<sdl:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
 				                Margin="5,0,5,0" 
 				                Height="55" 
 								MaxDropDownHeight="250"
@@ -144,7 +151,11 @@
 					            ClearFilterOnDropdownClosing="True"
 					            ClearSelectionOnFilterChanged="True"
 					            />
-				
+					<Button Grid.Row="2" Grid.Column="0" Margin="0,0,6,0"
+				        Command="{Binding ClearFiltersCommand}" Style="{StaticResource LinkButton}"  HorizontalAlignment="Right" Height="20">
+						<Underline>Clear selected items</Underline>
+					</Button>
+				</Grid>
 
 			</Grid>
 		</GroupBox>

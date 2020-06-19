@@ -60,7 +60,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			summaryText += indent + string.Format(PluginResources.Label_BackupFiles, WizardContext.ImportBackupFiles) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_OverwriteExistingTranslations, WizardContext.ImportOverwriteTranslations) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_OriginSystem, WizardContext.ImportOriginSystem) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_ConfirmationStatus, WizardContext.ImportConfirmationStatus.ToString()) + Environment.NewLine;
+			summaryText += indent + string.Format("Confirmation status for translations updated: {0}",  WizardContext.ImportConfirmationStatusTranslationUpdatedId) + Environment.NewLine;
+			summaryText += indent + string.Format("Confirmation status for translations not updated: {0}", WizardContext.ImportConfirmationStatusTranslationNotUpdatedId) + Environment.NewLine;
+			summaryText += indent + string.Format("Confirmation status for not imported: {0}", WizardContext.ImportConfirmationStatusNotImportedId) + Environment.NewLine;
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;

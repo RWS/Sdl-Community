@@ -22,9 +22,13 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			ImportBackupFiles = true;
 			ImportOverwriteTranslations = true;
 			ImportOriginSystem = string.Empty;
-			ImportConfirmationStatus = ConfirmationLevel.Draft;
-
+	
 			ExcludeFilterItems = new List<FilterItem>();
+
+			ImportConfirmationStatusTranslationUpdatedId = "Draft";
+			ImportConfirmationStatusTranslationNotUpdatedId = string.Empty;
+			ImportConfirmationStatusNotImportedId = string.Empty;
+
 		}
 
 		public List<FilterItem> ExcludeFilterItems { get; set; }
@@ -74,7 +78,11 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string ImportOriginSystem { get; set; }
 
-		public ConfirmationLevel ImportConfirmationStatus { get; set; }
+		public string ImportConfirmationStatusTranslationUpdatedId { get; set; }
+
+		public string ImportConfirmationStatusTranslationNotUpdatedId { get; set; }
+
+		public string ImportConfirmationStatusNotImportedId { get; set; }
 
 		public string GetDefaultTransactionPath()
 		{

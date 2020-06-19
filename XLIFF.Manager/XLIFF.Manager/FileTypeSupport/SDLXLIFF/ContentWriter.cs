@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
+using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
@@ -15,19 +16,26 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private readonly Xliff _xliff;
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly bool _overwriteTranslations;
-		private readonly ConfirmationLevel _confirmationStatus;
+		private readonly ConfirmationStatus _confirmationStatusTranslationUpdated;
+		private readonly ConfirmationStatus _confirmationStatusTranslationNotUpdated;
+		private readonly ConfirmationStatus _confirmationStatusNotImported;
 		private readonly string _originSystem;
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
 		private SegmentVisitor _segmentVisitor;		
 
 		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, 
-			bool overwriteTranslations, ConfirmationLevel confirmationStatus, string originSystem)
+			bool overwriteTranslations, ConfirmationStatus confirmationStatusTranslationUpdated,
+			ConfirmationStatus confirmationStatusTranslationNotUpdated,
+			ConfirmationStatus confirmationStatusNotImported, string originSystem)
 		{
 			_xliff = xliff;
 			_segmentBuilder = segmentBuilder;
 			_overwriteTranslations = overwriteTranslations;
-			_confirmationStatus = confirmationStatus;
+			_confirmationStatusTranslationUpdated = confirmationStatusTranslationUpdated;
+			_confirmationStatusTranslationNotUpdated = confirmationStatusTranslationNotUpdated;
+			_confirmationStatusNotImported = confirmationStatusNotImported;
+
 			_originSystem = originSystem;
 
 			Comments = _xliff.DocInfo.Comments;
@@ -72,16 +80,19 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					continue;
 				}
 
-				if (segmentPair.Properties.IsLocked)
+				if (segmentPair.Properties.IsLocked || !_overwriteTranslations && segmentPair.Target.Any())
 				{
+					if (string.IsNullOrEmpty(_confirmationStatusTranslationNotUpdated.Id))
+					{
+						var success = Enum.TryParse<ConfirmationLevel>(_confirmationStatusTranslationNotUpdated.Id, true, out var result);
+						var confirmationStatusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
+
+						segmentPair.Target.Properties.ConfirmationLevel = confirmationStatusTranslationNotUpdated;
+					}
 					continue;
 				}
 
-				if (!_overwriteTranslations && segmentPair.Target.Any())
-				{
-					continue;
-				}
-
+	
 				UpdateTargetSegment(segmentPair, importedSegmentPair);
 			}
 
@@ -165,7 +176,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			var updatedText = SegmentVisitor.Text;
 
 			if (string.Compare(originalText, updatedText, StringComparison.Ordinal) != 0)
-			{				
+			{
+				if (string.IsNullOrEmpty(_confirmationStatusTranslationUpdated.Id))
+				{
+					return;
+				}
+
 				if (targetSegment.Properties.TranslationOrigin != null)
 				{
 					var currentTranslationOrigin = (ITranslationOrigin)targetSegment.Properties.TranslationOrigin.Clone();
@@ -178,7 +194,17 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					SetTranslationOrigin(targetSegment);
 				}
 
-				targetSegment.Properties.ConfirmationLevel = _confirmationStatus;
+				var success = Enum.TryParse<ConfirmationLevel>(_confirmationStatusTranslationUpdated.Id, true, out var result);
+				var confirmationStatusTranslationUpdated = success ? result : ConfirmationLevel.Unspecified;
+
+				targetSegment.Properties.ConfirmationLevel = confirmationStatusTranslationUpdated;
+			}
+			else if (string.IsNullOrEmpty(_confirmationStatusTranslationNotUpdated.Id))
+			{
+				var success = Enum.TryParse<ConfirmationLevel>(_confirmationStatusTranslationNotUpdated.Id, true, out var result);
+				var confirmationStatusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
+
+				targetSegment.Properties.ConfirmationLevel = confirmationStatusTranslationNotUpdated;
 			}
 		}
 

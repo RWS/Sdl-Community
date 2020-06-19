@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
+using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 
@@ -16,10 +17,17 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		}
 
 		public bool UpdateFile(Xliff xliff, string filePathInput, string filePathOutput,
-			bool overWriteTranslations, ConfirmationLevel confirmationStatus, string originSystem)
+			bool overWriteTranslations, ConfirmationStatus confirmationStatusTranslationUpdated,
+			ConfirmationStatus confirmationStatusTranslationNotUpdated,
+			ConfirmationStatus confirmationStatusNotImported, 
+			string originSystem)
 		{
 			var converter = _fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
-			var contentWriter = new ContentWriter(xliff, _segmentBuilder, overWriteTranslations, confirmationStatus, originSystem);
+			var contentWriter = new ContentWriter(xliff, _segmentBuilder, overWriteTranslations, 
+				confirmationStatusTranslationUpdated,
+				confirmationStatusTranslationNotUpdated,
+				confirmationStatusNotImported, 
+				originSystem);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();

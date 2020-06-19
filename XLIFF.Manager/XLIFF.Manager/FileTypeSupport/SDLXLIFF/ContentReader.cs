@@ -128,7 +128,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				var status = segmentPair.Properties.ConfirmationLevel.ToString();
 				var match = GetTranslationMatchId(segmentPair.Target.Properties.TranslationOrigin);
 
-				if (_excludeFilterItems.Exists(a => a.Id == "Locked")
+				if ((segmentPair.Properties.IsLocked && _excludeFilterItems.Exists(a => a.Id == "Locked"))
 					|| _excludeFilterItems.Exists(a => a.Id == status)
 					|| _excludeFilterItems.Exists(a => a.Id == match))
 				{

@@ -219,6 +219,7 @@
     <Compile Include="Interfaces\XLIFFWriter.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Common\Enumerators.cs" />
+    <Compile Include="Model\ConfirmationStatus.cs" />
     <Compile Include="Model\Controllers.cs" />
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\FilterItem.cs" />

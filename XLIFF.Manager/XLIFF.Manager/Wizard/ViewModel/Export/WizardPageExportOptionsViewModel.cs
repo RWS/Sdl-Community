@@ -27,6 +27,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
+		private ICommand _clearFiltersCommand;
 
 		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext, IDialogService dialogService) 
 			: base(owner, view, wizardContext)
@@ -47,6 +48,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		public ICommand ClearExportFileCommand => _clearExportFileCommand ?? (_clearExportFileCommand = new CommandHandler(ClearExportFile));
 
 		public ICommand BrowseFolderCommand => _browseFolderCommand ?? (_browseFolderCommand = new CommandHandler(BrowseFolder));
+
+		public ICommand ClearFiltersCommand => _clearFiltersCommand ?? (_clearFiltersCommand = new CommandHandler(ClearFilters));
 
 		public List<XLIFFSupport> XLIFFSupportList
 		{
@@ -359,6 +362,12 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			{
 				OutputFolder = folderPath;
 			}
+		}
+
+		private void ClearFilters(object parameter)
+		{
+			SelectedExcludeFilterItems.Clear();
+			OnPropertyChanged(nameof(SelectedExcludeFilterItems));
 		}
 
 		private string GetValidFolderPath()

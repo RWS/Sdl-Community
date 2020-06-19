@@ -17,6 +17,7 @@ using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Wizard.View;
+using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
@@ -280,9 +281,12 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 						};
 						importFiles.Add(importFile);
 
+						//Enum.TryParse<ConfirmationLevel>(WizardContext.ImportConfirmationStatusTranslationUpdatedId, true, out var importConfirmationStatusTranslationUpdated);
+						
+
 						var xliff = xliffReader.ReadXliff(targetLanguageFile.XliffFilePath);
 						success = sdlxliffWriter.UpdateFile(xliff, targetLanguageFile.Location, sdlXliffImportFile,
-							WizardContext.ImportOverwriteTranslations, WizardContext.ImportConfirmationStatus,
+							WizardContext.ImportOverwriteTranslations, null, null, null,
 							WizardContext.ImportOriginSystem);
 
 
@@ -465,8 +469,12 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OverwriteExistingTranslations,
 									  WizardContext.ImportOverwriteTranslations));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OriginSystem, WizardContext.ImportOriginSystem));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ConfirmationStatus,
-									  WizardContext.ImportConfirmationStatus.ToString()));
+			_logReport.AppendLine(indent + string.Format("Confirmation status for translations updated: {0}",
+									  WizardContext.ImportConfirmationStatusTranslationUpdatedId));
+			_logReport.AppendLine(indent + string.Format("Confirmation status for translations not updated: {0}",
+				                      WizardContext.ImportConfirmationStatusTranslationNotUpdatedId));
+			_logReport.AppendLine(indent + string.Format("Confirmation status for not imported: {0}",
+				                      WizardContext.ImportConfirmationStatusNotImportedId));
 
 
 			_logReport.AppendLine();
