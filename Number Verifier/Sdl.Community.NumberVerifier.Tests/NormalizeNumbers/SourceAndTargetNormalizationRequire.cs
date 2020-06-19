@@ -40,12 +40,124 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         }
 
         /// <summary>
-        /// Source sep: decimal - comma , thousands - comma, period, space
-        /// Target sep: decimal - comma, thousands - comma, period
+        /// Source sep: 'No separator' checked
+        /// Target sep: thousands - comma, 'No separator' checked
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
         [Theory]
+        [InlineData("1000", "1,000")]
+        public void ValidateTarget_ThousandsSeparatorsComma_NoSeparatorIsChecked(string source, string target)
+        {
+	        //target settings
+	        var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.SpaceCommaPeriod();
+	        numberVerifierSettings.Setup(d => d.TargetNoSeparator).Returns(true);
+
+	        //source settings
+	        numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        //run initialize method in order to set chosen separators
+	        var docPropMock = new Mock<IDocumentProperties>();
+	        numberVerifierMain.Initialize(docPropMock.Object);
+
+	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+	        Assert.True(errorMessage.Count == 0);
+        }
+
+		/// <summary>
+		/// Source sep: 'No separator' checked
+		/// Target sep: 'No separator' checked
+		/// Verification error: Number(s) modified/unlocalised.
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
+        [InlineData("1000", "1,000")]
+        public void ValidateTarget_NoSeparatorIsChecked_Errors(string source, string target)
+        {
+	        //target settings
+	        var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.AllTypesOfSpacesChecked();
+	        numberVerifierSettings.Setup(d => d.TargetNoSeparator).Returns(true);
+
+	        //source settings
+	        numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        //run initialize method in order to set chosen separators
+	        var docPropMock = new Mock<IDocumentProperties>();
+	        numberVerifierMain.Initialize(docPropMock.Object);
+
+	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+	        Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+        }
+
+
+		/// <summary>
+		/// Source sep: Thousand comma sep, 'No separator' checked
+		/// Target sep: 'No separator' checked
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
+		[InlineData("1,000", "1000")]
+		public void ValidateSource_ThousandsSeparatorsComma_NoSeparatorIsChecked(string source, string target)
+		{
+			//target settings
+			var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.SpaceCommaPeriod();
+			numberVerifierSettings.Setup(d => d.TargetNoSeparator).Returns(true);
+
+			//source settings
+			numberVerifierSettings.Setup(s => s.SourceThousandsComma).Returns(true);
+			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+			//run initialize method in order to set chosen separators
+			var docPropMock = new Mock<IDocumentProperties>();
+			numberVerifierMain.Initialize(docPropMock.Object);
+
+			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+			Assert.True(errorMessage.Count == 0);
+		}
+
+		/// <summary>
+		/// Source sep: 'No separator' checked
+		/// Target sep: 'No separator' checked
+		/// Verification error: Number(s) modified/unlocalised.
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
+		[InlineData("1,000", "1000")]
+		public void ValidateSource_NoSeparatorIsChecked_Errors(string source, string target)
+		{
+			//target settings
+			var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.AllTypesOfSpacesChecked();
+			numberVerifierSettings.Setup(d => d.TargetNoSeparator).Returns(true);
+
+			//source settings
+			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+			//run initialize method in order to set chosen separators
+			var docPropMock = new Mock<IDocumentProperties>();
+			numberVerifierMain.Initialize(docPropMock.Object);
+
+			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+			Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+		}
+
+		/// <summary>
+		/// Source sep: decimal - comma , thousands - comma, period, space
+		/// Target sep: decimal - comma, thousands - comma, period
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
         [InlineData("1 554,5 some word 1.234,5 another word -1,222,3", "1.554,5 test 1,234,5 another test word −1.222,3")]
         public void ThousandsSeparatorsCommaPeriod(string source, string target)
         {
@@ -95,7 +207,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
+            Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
         }
 
         /// <summary>
@@ -163,13 +275,76 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         }
 
         /// <summary>
-        /// Source decimal : comma
-        /// Target decimal: comma, period
-        /// No errors
+        /// Source decimal: comma and Source NoSeparator option
+        /// Target decimal: period and Target NoSeparator option
+        /// No error
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
         [Theory]
+        [InlineData("1,55", "1.55")]
+        public void Validate_DecimalSeparatorsComma_WhenNoSeparatorOption_IsChecked(string source, string target)
+        {
+	        //target settings
+	        var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.SpaceCommaPeriod();
+	        numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
+	        numberVerifierSettings.Setup(d => d.TargetNoSeparator).Returns(true);
+
+			//source settings
+			numberVerifierSettings.Setup(s => s.SourceThousandsComma).Returns(true);
+	        numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
+	        numberVerifierSettings.Setup(d => d.SourceNoSeparator).Returns(true);
+
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        //run initialize method in order to set chosen separators
+	        var docPropMock = new Mock<IDocumentProperties>();
+	        numberVerifierMain.Initialize(docPropMock.Object);
+
+	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+	        Assert.True(errorMessage.Count == 0);
+        }
+
+		/// <summary>
+		/// Source decimal: period and Source NoSeparator option
+		/// Target decimal: period and Target NoSeparator option
+		/// Verification error: Number(s) modified/unlocalised.
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
+        [InlineData("1,55", "1.55")]
+        public void Validate_DecimalSeparatorsComma_WhenNoSeparatorOption_IsChecked_Errors(string source, string target)
+        {
+	        //target settings
+	        var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.SpaceCommaPeriod();
+	        numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
+	        numberVerifierSettings.Setup(d => d.TargetNoSeparator).Returns(true);
+
+			//source settings
+			numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
+	        numberVerifierSettings.Setup(d => d.SourceNoSeparator).Returns(true);
+
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        //run initialize method in order to set chosen separators
+	        var docPropMock = new Mock<IDocumentProperties>();
+	        numberVerifierMain.Initialize(docPropMock.Object);
+
+	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+	        Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
+        }
+
+		/// <summary>
+		/// Source decimal : comma
+		/// Target decimal: comma, period
+		/// No errors
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
         [InlineData("1,55 another number 1,34", "1.55 number 1,34")]
         public void DecimalSeparatorsCommaPeriod(string source, string target)
         {
@@ -345,6 +520,66 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
 	        Assert.True(errorMessage.Count == 0);
+        }
+
+        /// <summary>
+        /// Validate text for source with No separator option and target with no separator option + Sace option enabled.
+        /// No error message returned
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        [Theory]
+        [InlineData("2300", "2 300")]
+        public void ValidateTargetSpace_NoSeparator(string source, string target)
+        {
+	        //target settings
+	        var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+	        numberVerifierSettings.Setup(t => t.TargetNoSeparator).Returns(true);
+	        numberVerifierSettings.Setup(t => t.TargetThousandsSpace).Returns(true);
+
+			// source settings
+			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+
+	        NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        //run initialize method in order to set chosen separators
+	        var docPropMock = new Mock<IDocumentProperties>();
+	        numberVerifierMain.Initialize(docPropMock.Object);
+
+	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+	        Assert.True(errorMessage.Count == 0);
+        }
+
+        /// <summary>
+        /// Validate text for source with No separator option and target with no separator option + Space option disabled.
+        /// Validation error message returned
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        [Theory]
+        [InlineData("1200", "1 200")]
+        public void ValidateTargetSpace_NoSeparator_Errors(string source, string target)
+        {
+	        //target settings
+	        var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+	        numberVerifierSettings.Setup(t => t.TargetNoSeparator).Returns(true);
+	        numberVerifierSettings.Setup(t => t.TargetThousandsSpace).Returns(false);
+
+	        // source settings
+	        numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+
+	        NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        //run initialize method in order to set chosen separators
+	        var docPropMock = new Mock<IDocumentProperties>();
+	        numberVerifierMain.Initialize(docPropMock.Object);
+
+	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+	        Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
         }
 
 		#endregion

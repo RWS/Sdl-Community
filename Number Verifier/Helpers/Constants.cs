@@ -21,7 +21,8 @@
 		public static readonly string NormalizeSpecialCharNumber = "NormalizeSpecialCharNumber method: ";
 		public static readonly string NormalizeNumberWithMinusSign = "NormalizeNumberWithMinusSign method: ";
 		public static readonly string OmitZero = "OmitZero method: ";
-		public static readonly string NormalizeAlphanumerics = "NormalizeAlphanumerics method: ";
+		public static readonly string NormalizeDecimalsNumbers = "NormalizeDecimalsNumbers method: ";
+		public static readonly string NormalizeThousandsNumbers = "NormalizeThousandsNumbers method: ";
 		public static readonly string AddCustomSeparators = "AddCustomSeparators method: ";
 		public static readonly string RemoveIdenticalNumbers = "RemoveIdenticalNumbers method: ";
 		public static readonly string RemoveNumbersIgnoreThousandsAndDecimalSeparators = "RemoveNumbersIgnoreThousandsAndDecimalSeparators method: ";
