@@ -21,61 +21,43 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 	public class MainWindowViewModel : ModelBase
 	{
 		private readonly IMessageService _messageService;
-		private readonly TemplateLoader _templateLoader;
 		private readonly TMLoader _tmLoader;
-		private bool _abbreviationsChecked;
 		private ICommand _addFolderCommand;
 		private ICommand _addTmsCommand;
 		private ICommand _applyTemplateCommand;
 		private ICommand _browseCommand;
+		private bool _datesChecked;
 		private ICommand _dragEnterCommand;
 		private ICommand _exportCommand;
 		private ICommand _importCommand;
 		private string _message;
-		private bool _ordinalFollowersChecked;
 		private string _progressVisibility;
 		private ICommand _removeTMsCommand;
 		private ResourceManager _resourceManager;
-		private bool _segmentationRulesChecked;
+
 		private bool _selectAllChecked;
 		private TemplateValidity _templateValidity;
 		private TimedTextBox _timedTextBoxViewModel;
 		private ObservableCollection<TranslationMemory> _tmCollection;
 		private string _tmPath;
-		private bool _variablesChecked;
 
 		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader,
 			IMessageService messageService, TimedTextBox timedTextBoxViewModel)
 		{
-			_templateLoader = templateLoader;
+			Settings = new Settings();
 			_tmLoader = tmLoader;
 			_messageService = messageService;
 			TimedTextBoxViewModel = timedTextBoxViewModel;
 
-			_tmPath = _templateLoader.GetTmFolderPath();
+			_tmPath = templateLoader.GetTmFolderPath();
 
-			_variablesChecked = true;
-			_abbreviationsChecked = true;
-			_ordinalFollowersChecked = true;
-			_segmentationRulesChecked = true;
 			_selectAllChecked = true;
 			_progressVisibility = "Collapsed";
 
 			_tmCollection = new ObservableCollection<TranslationMemory>();
 		}
 
-		public bool AbbreviationsChecked
-		{
-			get => _abbreviationsChecked;
-			set
-			{
-				_abbreviationsChecked = value;
-				OnPropertyChanged(nameof(AbbreviationsChecked));
-			}
-		}
-
 		public ICommand AddFolderCommand => _addFolderCommand ??= new CommandHandler(AddFolder, true);
-
 		public ICommand AddTmCommand => _addTmsCommand ??= new CommandHandler(AddTms, true);
 
 		public bool AllTmsChecked
@@ -98,21 +80,19 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public bool CanExecuteExport => _templateValidity.HasFlag(TemplateValidity.HasResources);
 
-		public ICommand DragEnterCommand => _dragEnterCommand ??= new RelayCommand(HandlePreviewDrop);
-
-		public ICommand ExportCommand => _exportCommand ??= new CommandHandler(Export, true);
-
-		public ICommand ImportCommand => _importCommand ??= new RelayCommand(Import);
-
-		public bool OrdinalFollowersChecked
+		public bool DatesChecked
 		{
-			get => _ordinalFollowersChecked;
+			get => _datesChecked;
 			set
 			{
-				_ordinalFollowersChecked = value;
-				OnPropertyChanged(nameof(OrdinalFollowersChecked));
+				_datesChecked = value;
+				OnPropertyChanged(nameof(DatesChecked));
 			}
 		}
+
+		public ICommand DragEnterCommand => _dragEnterCommand ??= new RelayCommand(HandlePreviewDrop);
+		public ICommand ExportCommand => _exportCommand ??= new CommandHandler(Export, true);
+		public ICommand ImportCommand => _importCommand ??= new RelayCommand(Import);
 
 		public string ProgressVisibility
 		{
@@ -136,26 +116,17 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public bool SegmentationRulesChecked
-		{
-			get => _segmentationRulesChecked;
-			set
-			{
-				_segmentationRulesChecked = value;
-				OnPropertyChanged(nameof(SegmentationRulesChecked));
-			}
-		}
-
 		public bool SelectAllChecked
 		{
 			get => _selectAllChecked;
 			set
 			{
 				_selectAllChecked = value;
-				AbbreviationsChecked = value;
-				VariablesChecked = value;
-				OrdinalFollowersChecked = value;
-				SegmentationRulesChecked = value;
+				Settings.AbbreviationsChecked = value;
+				Settings.VariablesChecked = value;
+				Settings.OrdinalFollowersChecked = value;
+				Settings.SegmentationRulesChecked = value;
+				Settings.DatesChecked = value;
 				OnPropertyChanged(nameof(SelectAllChecked));
 			}
 		}
@@ -164,6 +135,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			get { return TmCollection.Where(tm => tm.IsSelected).ToList(); }
 		}
+
+		public Settings Settings { get; }
 
 		public TimedTextBox TimedTextBoxViewModel
 		{
@@ -188,16 +161,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		public bool VariablesChecked
-		{
-			get => _variablesChecked;
-			set
-			{
-				_variablesChecked = value;
-				OnPropertyChanged(nameof(VariablesChecked));
-			}
-		}
-
 		private ICommand BrowseCommand => _browseCommand ??= new CommandHandler(Browse, true);
 
 		public void StartLoadingResourcesAndValidate(object sender, EventArgs e)
@@ -218,8 +181,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 
 			OnPropertyChanged(nameof(CanExecuteExport));
-
-			ShowMessages();
 		}
 
 		private void AddFolder()
@@ -266,8 +227,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private async void ApplyTmTemplate()
 		{
 			var isValid = ValidateTemplate();
-			ShowMessages();
-
 			if (!isValid) return;
 
 			UnmarkTms(SelectedTmsList);
@@ -336,10 +295,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			LoadResourcesFromTemplate();
 
 			var isValid = ValidateTemplate();
-			ShowMessages();
 			if (!isValid) return;
-
-			var settings = new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked);
 
 			var dlg = new SaveFileDialog
 			{
@@ -371,7 +327,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			await Task.Run(() =>
 			{
-				_resourceManager.ExportResourcesToExcel(filePath, settings);
+				_resourceManager.ExportResourcesToExcel(filePath, Settings);
 			});
 
 			_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Report_generated_successfully);
@@ -383,7 +339,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private void HandlePreviewDrop(object droppedFile)
 		{
 			if (droppedFile == null) return;
-
 			AddRange(_tmLoader.GetTms(droppedFile as string[], TmCollection));
 		}
 
@@ -452,7 +407,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void LoadResourcesFromTemplate()
 		{
-			_resourceManager = new ResourceManager(new Settings(AbbreviationsChecked, VariablesChecked, OrdinalFollowersChecked, SegmentationRulesChecked), new ExcelResourceManager(), new LanguageResourcesTemplateContainer(ResourceTemplatePath));
+			_resourceManager = new ResourceManager(Settings, new ExcelResourceManager(), new LanguageResourcesTemplateContainer(ResourceTemplatePath));
 		}
 
 		private void RemoveTMs()
@@ -465,7 +420,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private void Tm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName != "IsSelected") return;
-
 			OnPropertyChanged(nameof(AllTmsChecked));
 		}
 
@@ -499,8 +453,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 					if (_resourceManager.LanguageResourceBundles.Count == 0)
 					{
 						isValid = false;
-
-						
 					}
 				}
 				else

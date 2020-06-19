@@ -100,10 +100,11 @@
 
 			<StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,10,0,0">
 				<CheckBox Name="SelectAll" Content="Select all..." Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding SelectAllChecked}" Margin="0,0,30,0"/>
-				<CheckBox Content="Variables" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding VariablesChecked}"/>
-				<CheckBox Content="Abbreviations" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding AbbreviationsChecked}"/>
-				<CheckBox Content="Ordinal followers" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding OrdinalFollowersChecked}"/>
-				<CheckBox Content="Segmentation rules" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding SegmentationRulesChecked}"/>
+				<CheckBox Content="Variables" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding Settings.VariablesChecked}"/>
+				<CheckBox Content="Abbreviations" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding Settings.AbbreviationsChecked}"/>
+				<CheckBox Content="Ordinal followers" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding Settings.OrdinalFollowersChecked}"/>
+				<CheckBox Content="Segmentation rules" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding Settings.SegmentationRulesChecked}"/>
+				<CheckBox Content="Dates" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding Settings.DatesChecked}"/>
 			</StackPanel>
 
 			<StackPanel Margin="5,20,0,10" Grid.Row="5" Grid.Column="0" Orientation="Horizontal" ToolTip="Add Folder">

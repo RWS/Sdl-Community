@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using OfficeOpenXml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using OfficeOpenXml.Style;
 using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.Community.ApplyTMTemplate.Models.Interfaces;
@@ -22,12 +25,15 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			using var package = GetExcelPackage(filePathTo);
 			foreach (var languageResourceBundle in resourceContainer.LanguageResourceBundles)
 			{
+				if (languageResourceBundle == null) continue;
+
 				var worksheet = package.Workbook.Worksheets.Add(languageResourceBundle.Language.Name);
 
 				worksheet.Column(1).Width = 20;
 				worksheet.Column(2).Width = 20;
 				worksheet.Column(3).Width = 20;
 				worksheet.Column(4).Width = 100;
+				worksheet.Column(5).Width = 100;
 
 				//every column that has its Style.Locked set to true will be read-only if IsProtected is also set to true;
 				//we need to make just the segmentation rules column read-only
@@ -35,13 +41,12 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				worksheet.Column(2).Style.Locked = false;
 				worksheet.Column(3).Style.Locked = false;
 				worksheet.Column(4).Style.Locked = true;
+				worksheet.Column(5).Style.Locked = true;
 
 				worksheet.Protection.IsProtected = true;
 
 				var lineNumber = 1;
-
 				SetCellStyle(worksheet, "A", lineNumber, "Abbreviations");
-
 				if (settings.AbbreviationsChecked && languageResourceBundle.Abbreviations != null)
 				{
 					foreach (var abbreviation in languageResourceBundle.Abbreviations.Items)
@@ -51,9 +56,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				}
 
 				lineNumber = 1;
-
 				SetCellStyle(worksheet, "B", lineNumber, "OrdinalFollowers");
-
 				if (settings.OrdinalFollowersChecked && languageResourceBundle.OrdinalFollowers != null)
 				{
 					foreach (var ordinalFollower in languageResourceBundle.OrdinalFollowers.Items)
@@ -63,9 +66,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				}
 
 				lineNumber = 1;
-
 				SetCellStyle(worksheet, "C", lineNumber, "Variables");
-
 				if (settings.VariablesChecked && languageResourceBundle.Variables != null)
 				{
 					foreach (var variable in languageResourceBundle.Variables.Items)
@@ -75,9 +76,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				}
 
 				lineNumber = 1;
-
 				SetCellStyle(worksheet, "D", lineNumber, "SegmentationRules");
-
 				if (settings.SegmentationRulesChecked && languageResourceBundle.SegmentationRules != null)
 				{
 					foreach (var segmentationRule in languageResourceBundle.SegmentationRules.Rules)
@@ -89,16 +88,26 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 					}
 				}
 
-				//if (/*settings.SegmentationRulesChecked &&*/ languageResourceBundle.NumbersSeparators != null)
-				//{
-				//	foreach (var numberSeparator in languageResourceBundle.NumbersSeparators)
-				//	{
-				//		var stringWriter = new Utf8StringWriter();
-				//		var xmlSerializer = new XmlSerializer(typeof(SegmentationRule));
-				//		xmlSerializer.Serialize(stringWriter, numberSeparator);
-				//		worksheet.Cells["D" + ++lineNumber].Value = stringWriter.ToString();
-				//	}
-				//}
+				lineNumber = 1;
+				SetCellStyle(worksheet, "E", lineNumber, "Dates");
+				if (settings.DatesChecked && (languageResourceBundle.LongDateFormats != null || languageResourceBundle.ShortDateFormats != null))
+				{
+					var dates = new List<string>();
+
+					if (languageResourceBundle.LongDateFormats != null)
+					{
+						dates.AddRange(languageResourceBundle.LongDateFormats);
+					}
+					if (languageResourceBundle.ShortDateFormats != null)
+					{
+						dates.AddRange(languageResourceBundle.ShortDateFormats);
+					}
+					
+					foreach (var date in dates)
+					{
+						worksheet.Cells["E" + ++lineNumber].Value = date;
+					}
+				}
 			}
 
 			package.Save();

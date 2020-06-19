@@ -118,11 +118,9 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 					newLanguageResourceBundles.Add(bundle);
 				}
 			}
-
 			if (newLanguageResourceBundles.Count == 0) throw new Exception(PluginResources.No_Resources_in_TMs);
 
 			ExcludeWhatIsNotNeeded(newLanguageResourceBundles);
-
 			AddNewBundles(newLanguageResourceBundles);
 
 			_languageResourcesContainer.Save();
