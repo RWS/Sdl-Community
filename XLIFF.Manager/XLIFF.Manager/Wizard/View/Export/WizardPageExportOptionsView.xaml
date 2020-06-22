@@ -4,11 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export"
+             xmlns:sdl="http://schemas.sdl.com/xaml"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModel:WizardPageExportOptionsViewModel}">
+             d:DesignHeight="290" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModel:WizardPageExportOptionsViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBoxStyle.xaml"/>
@@ -18,7 +23,7 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
-
+			
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid Margin="15,10,15,10">
@@ -34,6 +39,7 @@
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 
 
@@ -44,9 +50,6 @@
 				          ItemsSource="{Binding XLIFFSupportList}"
 						  DisplayMemberPath="Name"
 						  SelectedItem="{Binding SelectedXliffSupport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-
-
 
 				<TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Output Folder:" Margin="5,10,5,5"/>
 				<Grid Grid.Row="1" Grid.Column="1" Height="24" Margin="0,10,5,5">
@@ -118,6 +121,41 @@
 				<CheckBox Grid.Row="3" Margin="20,5,5,5" Grid.Column="0" Grid.ColumnSpan="2" Content="Copy Source to Target for empty translations" 
 						  IsEnabled="{Binding CopySourceToTargetEnabled}"
 				          IsChecked="{Binding CopySourceToTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+
+				<Grid Grid.Row="4" Grid.Column="0" ColumnSpan="3" >
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+
+					<TextBlock VerticalAlignment="Center" Text="Exclude Segments" Style="{StaticResource TextBlockColor}" Margin="5,10,5,5"/>
+
+					<sdl:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
+				                Margin="5,0,5,0" 
+				                Height="55" 
+								MaxDropDownHeight="250"
+								Style="{StaticResource MultiSelectComboBox.Custom.Style}"
+				                SelectedItemTemplate="{StaticResource MultiSelectComboBox.SelectedItems.ItemTemplate}"
+				                DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 
+					            ItemsSource="{Binding FilterItems}"            
+					            SelectedItems="{Binding SelectedExcludeFilterItems}"
+								EnableGrouping="True"
+								EnableFiltering="True"
+					            IsEditable="True"
+					            EnableAutoComplete="True"
+					            ClearFilterOnDropdownClosing="True"
+					            ClearSelectionOnFilterChanged="True"
+					            />
+					<Button Grid.Row="2" Grid.Column="0" Margin="0,0,6,0"
+				        Command="{Binding ClearFiltersCommand}" Style="{StaticResource LinkButton}"  HorizontalAlignment="Right" Height="20">
+						<Underline>Clear selected items</Underline>
+					</Button>
+				</Grid>
 
 			</Grid>
 		</GroupBox>

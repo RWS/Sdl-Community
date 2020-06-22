@@ -4,7 +4,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
+using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using File = Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model.File;
 
@@ -13,22 +15,26 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 	internal class ContentReader : IBilingualContentProcessor
 	{
 		private readonly SegmentBuilder _segmentBuilder;
-		private readonly bool _copySourceToTarget;
+		private readonly ExportOptions _exportOptions;
 		private readonly bool _ignoreTags;
 		private readonly string _inputPath;
 		private readonly string _projectId;
+		private readonly List<FilterItem> _excludeFilterItems;
 		private IBilingualContentHandler _output;
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
-		private SegmentVisitor _segmentVisitor;		
+		private SegmentVisitor _segmentVisitor;
 
-		internal ContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder, bool copySourceToTarget)
+		internal ContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder,
+			List<FilterItem> excludeFilterItems, ExportOptions exportOptions)
 		{
 			_projectId = projectId;
 			_inputPath = inputPath;
 			_ignoreTags = ignoreTags;
 			_segmentBuilder = segmentBuilder;
-			_copySourceToTarget = copySourceToTarget;
+			
+			_excludeFilterItems = excludeFilterItems;
+			_exportOptions = exportOptions;
 
 			Xliff = new Xliff();
 		}
@@ -120,6 +126,16 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
+				var status = segmentPair.Properties.ConfirmationLevel.ToString();
+				var match = GetTranslationMatchId(segmentPair.Target.Properties.TranslationOrigin);
+
+				if ((segmentPair.Properties.IsLocked && _excludeFilterItems.Exists(a => a.Id == "Locked"))
+					|| _excludeFilterItems.Exists(a => a.Id == status)
+					|| _excludeFilterItems.Exists(a => a.Id == match))
+				{
+					continue;
+				}
+
 				SegmentVisitor.VisitSegment(segmentPair.Source);
 				var sourceElements = SegmentVisitor.Elements;
 				if (SegmentVisitor.Comments.Count > 0)
@@ -130,10 +146,10 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 						{
 							Xliff.DocInfo.Comments.Add(comment.Key, comment.Value);
 						}
-					}					
+					}
 				}
 
-				if (segmentPair.Target?.Count == 0 && _copySourceToTarget)
+				if (segmentPair.Target?.Count == 0 && _exportOptions.CopySourceToTarget)
 				{
 					segmentPair.Target.Clear();
 
@@ -167,7 +183,10 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				});
 			}
 
-			Xliff.Files[Xliff.Files.Count - 1].Body.TransUnits.Add(transUnit);
+			if (transUnit.SegmentPairs.Count > 0)
+			{
+				Xliff.Files[Xliff.Files.Count - 1].Body.TransUnits.Add(transUnit);
+			}
 		}
 
 		public IBilingualContentHandler Output
@@ -209,6 +228,51 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					// catch all; ignore
 				}
 			}
+		}
+
+		private string GetTranslationMatchId(ITranslationOrigin translationOrigin)
+		{
+			if (translationOrigin != null)
+			{
+				if (translationOrigin.OriginType == DefaultTranslationOrigin.MachineTranslation)
+				{
+					return "MT";
+				}
+
+				if (translationOrigin.OriginType == DefaultTranslationOrigin.AdaptiveMachineTranslation)
+				{
+					return "AMT";
+				}
+
+				if (translationOrigin.OriginType == DefaultTranslationOrigin.NeuralMachineTranslation)
+				{
+					return "NMT";
+				}
+			
+				if (translationOrigin.MatchPercent >= 100)
+				{					
+					if (translationOrigin.OriginType == DefaultTranslationOrigin.DocumentMatch)
+					{
+						return "PM";
+					}
+
+					if (translationOrigin.TextContextMatchLevel == TextContextMatchLevel.SourceAndTarget)
+					{
+						return "CM";
+					}
+
+					return "Exact";
+				}
+
+				if (translationOrigin.MatchPercent > 0)
+				{					
+					return "Fuzzy";
+				}
+
+				return "New";
+			}
+
+			return string.Empty;
 		}
 	}
 }
