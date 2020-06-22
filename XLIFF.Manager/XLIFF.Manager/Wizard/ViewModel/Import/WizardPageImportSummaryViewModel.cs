@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -57,12 +58,16 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Options + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_BackupFiles, WizardContext.ImportBackupFiles) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_OverwriteExistingTranslations, WizardContext.ImportOverwriteTranslations) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_OriginSystem, WizardContext.ImportOriginSystem) + Environment.NewLine;
-			summaryText += indent + string.Format("Confirmation status for translations updated: {0}",  WizardContext.ImportConfirmationStatusTranslationUpdatedId) + Environment.NewLine;
-			summaryText += indent + string.Format("Confirmation status for translations not updated: {0}", WizardContext.ImportConfirmationStatusTranslationNotUpdatedId) + Environment.NewLine;
-			summaryText += indent + string.Format("Confirmation status for not imported: {0}", WizardContext.ImportConfirmationStatusNotImportedId) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_BackupFiles, WizardContext.ImportOptions.BackupFiles) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_OverwriteExistingTranslations, WizardContext.ImportOptions.OverwriteTranslations) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_OriginSystem, WizardContext.ImportOptions.OriginSystem) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_StatusTranslationsUpdated, GetConfirmationStatusName(WizardContext.ImportOptions.StatusTranslationUpdatedId)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_StatusTranslationsNotUpdated, GetConfirmationStatusName(WizardContext.ImportOptions.StatusTranslationNotUpdatedId)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_StatusSegmentsNotImported, GetConfirmationStatusName(WizardContext.ImportOptions.StatusSegmentNotImportedId)) + Environment.NewLine;
+			if (WizardContext.ExcludeFilterItems.Count > 0)
+			{
+				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExcludeFilterItems)) + Environment.NewLine;
+			}
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;
@@ -93,7 +98,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					var sdlXliffBackup = Path.Combine(xliffFolder, targetLanguageFile.Name);
 
 					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
-					if (WizardContext.ImportBackupFiles)
+					if (WizardContext.ImportOptions.BackupFiles)
 					{
 						summaryText += indent + string.Format(PluginResources.Label_BackupFile, sdlXliffBackup) + Environment.NewLine;
 					}
@@ -105,6 +110,23 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			}
 
 			return summaryText;
+		}
+
+		private string GetConfirmationStatusName(string id)
+		{
+			return string.IsNullOrEmpty(id) ? "[none]" : id;
+		}
+
+		private string GetFitlerItemsString(IEnumerable<FilterItem> filterItems)
+		{
+			var items = string.Empty;
+			foreach (var filterItem in filterItems)
+			{
+				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
+						 filterItem.Name;
+			}
+
+			return items;
 		}
 
 		private string GetProjectTargetLanguagesString(Project project)

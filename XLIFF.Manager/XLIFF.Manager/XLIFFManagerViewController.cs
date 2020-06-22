@@ -315,7 +315,7 @@ namespace Sdl.Community.XLIFF.Manager
 
 			if (targetFile != null && targetFile.Action == Enumerators.Action.Export)
 			{
-				var activityfile = targetFile.ProjectFileActivities.LastOrDefault(a => a.Action == Enumerators.Action.Export);
+				var activityfile = targetFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Export);
 
 				var message1 = string.Format(PluginResources.Message_FileWasExportedOn, activityfile?.DateToString);
 				var message2 = string.Format(PluginResources.Message_WarningTranslationsCanBeOverwrittenDuringImport, activityfile?.DateToString);

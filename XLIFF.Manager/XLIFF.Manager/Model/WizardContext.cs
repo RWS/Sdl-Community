@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Sdl.Community.XLIFF.Manager.Common;
-using Sdl.Core.Globalization;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
@@ -14,21 +13,11 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			Action = Enumerators.Action.None;
 			ProjectFiles = new List<ProjectFile>();
 			DateTimeStamp = DateTime.UtcNow;
-
-			ExportSupport = Enumerators.XLIFFSupport.xliff12polyglot;
-			ExportIncludeTranslations = false;
-			ExportCopySourceToTarget = false;
-
-			ImportBackupFiles = true;
-			ImportOverwriteTranslations = true;
-			ImportOriginSystem = string.Empty;
-	
 			ExcludeFilterItems = new List<FilterItem>();
 
-			ImportConfirmationStatusTranslationUpdatedId = "Draft";
-			ImportConfirmationStatusTranslationNotUpdatedId = string.Empty;
-			ImportConfirmationStatusNotImportedId = string.Empty;
-
+			// TODO: Inject this class
+			ExportOptions = new ExportOptions();
+			ImportOptions = new ImportOptions();
 		}
 
 		public List<FilterItem> ExcludeFilterItems { get; set; }
@@ -66,23 +55,9 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			}
 		}
 
-		public Enumerators.XLIFFSupport ExportSupport { get; set; }
+		public ExportOptions ExportOptions { get; set; }
 
-		public bool ExportIncludeTranslations { get; set; }
-
-		public bool ExportCopySourceToTarget { get; set; }
-
-		public bool ImportBackupFiles { get; set; }
-
-		public bool ImportOverwriteTranslations { get; set; }
-
-		public string ImportOriginSystem { get; set; }
-
-		public string ImportConfirmationStatusTranslationUpdatedId { get; set; }
-
-		public string ImportConfirmationStatusTranslationNotUpdatedId { get; set; }
-
-		public string ImportConfirmationStatusNotImportedId { get; set; }
+		public ImportOptions ImportOptions { get; set; }
 
 		public string GetDefaultTransactionPath()
 		{

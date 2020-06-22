@@ -15,9 +15,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 	public class WizardPageImportOptionsViewModel : WizardPageViewModelBase, IDisposable
 	{
 		private List<ConfirmationStatus> _confirmationStatuses;
-		private ConfirmationStatus _confirmationStatusTranslationUpdated;
-		private ConfirmationStatus _confirmationStatusTranslationNotUpdated;
-		private ConfirmationStatus _confirmationStatusNotImported;
+		private ConfirmationStatus _statusTranslationUpdated;
+		private ConfirmationStatus _statusTranslationNotUpdated;
+		private ConfirmationStatus _statusSegmentNotImported;
 		private string _originSystem;
 		private ObservableCollection<FilterItem> _filterItems;
 		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
@@ -25,9 +25,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		public WizardPageImportOptionsViewModel(Window owner, object view, WizardContext wizardContext) : base(owner, view, wizardContext)
 		{
-			BackupFiles = wizardContext.ImportBackupFiles;
-			OverwriteTranslations = wizardContext.ImportOverwriteTranslations;
-			OriginSystem = wizardContext.ImportOriginSystem;
+			BackupFiles = wizardContext.ImportOptions.BackupFiles;
+			OverwriteTranslations = wizardContext.ImportOptions.OverwriteTranslations;
+			OriginSystem = wizardContext.ImportOptions.OriginSystem;
 
 			// TODO initialize this within the context
 			ConfirmationStatuses = Enumerators.GetConfirmationStatuses();
@@ -47,38 +47,38 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		private void AssignConfirmationStatuses(WizardContext wizardContext)
 		{
-			if (wizardContext.ImportConfirmationStatusTranslationUpdatedId != null)
+			if (wizardContext.ImportOptions.StatusTranslationUpdatedId != null)
 			{
-				ConfirmationStatusTranslationUpdated =
-					ConfirmationStatuses.FirstOrDefault(a => a.Id == wizardContext.ImportConfirmationStatusTranslationUpdatedId);				
+				StatusTranslationUpdated =
+					ConfirmationStatuses.FirstOrDefault(a => a.Id == wizardContext.ImportOptions.StatusTranslationUpdatedId);				
 			}
 
-			if (ConfirmationStatusTranslationUpdated == null)
+			if (StatusTranslationUpdated == null)
 			{
-				ConfirmationStatusTranslationUpdated = ConfirmationStatuses.FirstOrDefault(a => a.Id == "Draft");
+				StatusTranslationUpdated = ConfirmationStatuses.FirstOrDefault(a => a.Id == "Draft");
 			}
 
 
-			if (wizardContext.ImportConfirmationStatusTranslationNotUpdatedId != null)
+			if (wizardContext.ImportOptions.StatusTranslationNotUpdatedId != null)
 			{
-				ConfirmationStatusTranslationNotUpdated =
-					ConfirmationStatuses.FirstOrDefault(a => a.Id == wizardContext.ImportConfirmationStatusTranslationNotUpdatedId);
+				StatusTranslationNotUpdated =
+					ConfirmationStatuses.FirstOrDefault(a => a.Id == wizardContext.ImportOptions.StatusTranslationNotUpdatedId);
 			}
 
-			if (ConfirmationStatusTranslationNotUpdated == null)
+			if (StatusTranslationNotUpdated == null)
 			{
-				ConfirmationStatusTranslationNotUpdated = ConfirmationStatuses.FirstOrDefault(a => a.Id == string.Empty);
+				StatusTranslationNotUpdated = ConfirmationStatuses.FirstOrDefault(a => a.Id == string.Empty);
 			}
 
-			if (wizardContext.ImportConfirmationStatusNotImportedId != null)
+			if (wizardContext.ImportOptions.StatusSegmentNotImportedId != null)
 			{
-				ConfirmationStatusNotImported =
-					ConfirmationStatuses.FirstOrDefault(a => a.Id == wizardContext.ImportConfirmationStatusNotImportedId);
+				StatusSegmentNotImported =
+					ConfirmationStatuses.FirstOrDefault(a => a.Id == wizardContext.ImportOptions.StatusSegmentNotImportedId);
 			}
 
-			if (ConfirmationStatusNotImported == null)
+			if (StatusSegmentNotImported == null)
 			{
-				ConfirmationStatusNotImported = ConfirmationStatuses.FirstOrDefault(a => a.Id == string.Empty);
+				StatusSegmentNotImported = ConfirmationStatuses.FirstOrDefault(a => a.Id == string.Empty);
 			}
 		}
 
@@ -142,48 +142,48 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			}
 		}
 
-		public ConfirmationStatus ConfirmationStatusTranslationUpdated
+		public ConfirmationStatus StatusTranslationUpdated
 		{
-			get => _confirmationStatusTranslationUpdated;
+			get => _statusTranslationUpdated;
 			set
 			{
-				if (value == _confirmationStatusTranslationUpdated)
+				if (value == _statusTranslationUpdated)
 				{
 					return;
 				}
 
-				_confirmationStatusTranslationUpdated = value;
-				OnPropertyChanged(nameof(ConfirmationStatusTranslationUpdated));
+				_statusTranslationUpdated = value;
+				OnPropertyChanged(nameof(StatusTranslationUpdated));
 			}
 		}
 
-		public ConfirmationStatus ConfirmationStatusTranslationNotUpdated
+		public ConfirmationStatus StatusTranslationNotUpdated
 		{
-			get => _confirmationStatusTranslationNotUpdated;
+			get => _statusTranslationNotUpdated;
 			set
 			{
-				if (value == _confirmationStatusTranslationNotUpdated)
+				if (value == _statusTranslationNotUpdated)
 				{
 					return;
 				}
 
-				_confirmationStatusTranslationNotUpdated = value;
-				OnPropertyChanged(nameof(ConfirmationStatusTranslationNotUpdated));
+				_statusTranslationNotUpdated = value;
+				OnPropertyChanged(nameof(StatusTranslationNotUpdated));
 			}
 		}
 
-		public ConfirmationStatus ConfirmationStatusNotImported
+		public ConfirmationStatus StatusSegmentNotImported
 		{
-			get => _confirmationStatusNotImported;
+			get => _statusSegmentNotImported;
 			set
 			{
-				if (value == _confirmationStatusNotImported)
+				if (value == _statusSegmentNotImported)
 				{
 					return;
 				}
 
-				_confirmationStatusNotImported = value;
-				OnPropertyChanged(nameof(ConfirmationStatusNotImported));
+				_statusSegmentNotImported = value;
+				OnPropertyChanged(nameof(StatusSegmentNotImported));
 			}
 		}
 
@@ -331,19 +331,19 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		private void OnLoadPage(object sender, EventArgs e)
 		{
-			OriginSystem = WizardContext.ImportOriginSystem;
+			OriginSystem = WizardContext.ImportOptions.OriginSystem;
 			VerifyIsValid();
 		}
 
 		private void OnLeavePage(object sender, EventArgs e)
 		{
-			WizardContext.ImportBackupFiles = BackupFiles;
-			WizardContext.ImportOverwriteTranslations = OverwriteTranslations;
-			WizardContext.ImportOriginSystem = OriginSystem;
+			WizardContext.ImportOptions.BackupFiles = BackupFiles;
+			WizardContext.ImportOptions.OverwriteTranslations = OverwriteTranslations;
+			WizardContext.ImportOptions.OriginSystem = OriginSystem;
 
-			WizardContext.ImportConfirmationStatusTranslationUpdatedId = ConfirmationStatusTranslationUpdated.Id;
-			WizardContext.ImportConfirmationStatusTranslationNotUpdatedId = ConfirmationStatusTranslationNotUpdated.Id;
-			WizardContext.ImportConfirmationStatusNotImportedId = ConfirmationStatusNotImported.Id;
+			WizardContext.ImportOptions.StatusTranslationUpdatedId = StatusTranslationUpdated.Id;
+			WizardContext.ImportOptions.StatusTranslationNotUpdatedId = StatusTranslationNotUpdated.Id;
+			WizardContext.ImportOptions.StatusSegmentNotImportedId = StatusSegmentNotImported.Id;
 
 			WizardContext.ExcludeFilterItems = SelectedExcludeFilterItems.ToList();
 		}

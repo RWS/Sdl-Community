@@ -33,10 +33,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			: base(owner, view, wizardContext)
 		{
 			_dialogService = dialogService;
-			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == WizardContext.ExportSupport);
+			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == WizardContext.ExportOptions.XliffSupport);
 			OutputFolder = WizardContext.TransactionFolder;
-			CopySourceToTarget = wizardContext.ExportCopySourceToTarget;
-			IncludeTranslations = wizardContext.ExportIncludeTranslations;
+			CopySourceToTarget = wizardContext.ExportOptions.CopySourceToTarget;
+			IncludeTranslations = wizardContext.ExportOptions.IncludeTranslations;
 
 			InitializeFilterItems();
 			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(wizardContext.ExcludeFilterItems);
@@ -403,9 +403,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private void OnLeavePage(object sender, EventArgs e)
 		{
 			WizardContext.TransactionFolder = OutputFolder;
-			WizardContext.ExportSupport = SelectedXliffSupport.SupportType;
-			WizardContext.ExportCopySourceToTarget = CopySourceToTarget;
-			WizardContext.ExportIncludeTranslations = IncludeTranslations;
+			WizardContext.ExportOptions.XliffSupport = SelectedXliffSupport.SupportType;
+			WizardContext.ExportOptions.CopySourceToTarget = CopySourceToTarget;
+			WizardContext.ExportOptions.IncludeTranslations = IncludeTranslations;
 			WizardContext.ExcludeFilterItems = SelectedExcludeFilterItems.ToList();
 		}
 

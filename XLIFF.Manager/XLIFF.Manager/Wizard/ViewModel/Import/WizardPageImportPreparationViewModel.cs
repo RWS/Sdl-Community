@@ -17,7 +17,6 @@ using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Wizard.View;
-using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
@@ -227,7 +226,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				Refresh();
 
 				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder);
+				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder,
+					WizardContext.ExcludeFilterItems, WizardContext.ImportOptions);
 
 				var sniffer = new XliffSniffer();
 				var xliffReader = new XliffReder(sniffer, _segmentBuilder);
@@ -258,7 +258,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 						var sdlXliffBackupFile = Path.Combine(xliffFolder, targetLanguageFile.Name);
 
 						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location));
-						if (WizardContext.ImportBackupFiles)
+						if (WizardContext.ImportOptions.BackupFiles)
 						{
 							_logReport.AppendLine(string.Format(PluginResources.Label_BackupFile, sdlXliffBackupFile));
 						}
@@ -285,9 +285,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 						
 
 						var xliff = xliffReader.ReadXliff(targetLanguageFile.XliffFilePath);
-						success = sdlxliffWriter.UpdateFile(xliff, targetLanguageFile.Location, sdlXliffImportFile,
-							WizardContext.ImportOverwriteTranslations, null, null, null,
-							WizardContext.ImportOriginSystem);
+						success = sdlxliffWriter.UpdateFile(xliff, targetLanguageFile.Location, sdlXliffImportFile);
 
 
 						if (success)
@@ -452,36 +450,31 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Id, project.Id));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Name, project.Name));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Location, project.Path));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Created,
-									  project.Created.ToString(CultureInfo.InvariantCulture)));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_DueDate,
-									  project.DueDate.ToString(CultureInfo.InvariantCulture)));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_SourceLanguage,
-									  project.SourceLanguage.CultureInfo.DisplayName));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TargetLanguages,
-									  GetProjectTargetLanguagesString(project)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Created, project.Created.ToString(CultureInfo.InvariantCulture)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_DueDate, project.DueDate.ToString(CultureInfo.InvariantCulture)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_SourceLanguage, project.SourceLanguage.CultureInfo.DisplayName));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TargetLanguages, GetProjectTargetLanguagesString(project)));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ProjectType, project.ProjectType));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Customer, project.Customer?.Name));
 
 			_logReport.AppendLine();
 			_logReport.AppendLine(PluginResources.Label_Options);
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_BackupFiles, WizardContext.ImportBackupFiles));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OverwriteExistingTranslations,
-									  WizardContext.ImportOverwriteTranslations));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OriginSystem, WizardContext.ImportOriginSystem));
-			_logReport.AppendLine(indent + string.Format("Confirmation status for translations updated: {0}",
-									  WizardContext.ImportConfirmationStatusTranslationUpdatedId));
-			_logReport.AppendLine(indent + string.Format("Confirmation status for translations not updated: {0}",
-				                      WizardContext.ImportConfirmationStatusTranslationNotUpdatedId));
-			_logReport.AppendLine(indent + string.Format("Confirmation status for not imported: {0}",
-				                      WizardContext.ImportConfirmationStatusNotImportedId));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_BackupFiles, WizardContext.ImportOptions.BackupFiles));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OverwriteExistingTranslations, WizardContext.ImportOptions.OverwriteTranslations));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OriginSystem, WizardContext.ImportOptions.OriginSystem));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_StatusTranslationsUpdated, GetConfirmationStatusName(WizardContext.ImportOptions.StatusTranslationUpdatedId)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_StatusTranslationsNotUpdated, GetConfirmationStatusName(WizardContext.ImportOptions.StatusTranslationNotUpdatedId)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_StatusSegmentsNotImported, GetConfirmationStatusName(WizardContext.ImportOptions.StatusSegmentNotImportedId)));
+			if (WizardContext.ExcludeFilterItems.Count > 0)
+			{
+				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExcludeFilterItems)));
+			}
 
 
 			_logReport.AppendLine();
 			_logReport.AppendLine(PluginResources.Label_Files);
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ImportFiles,
-									  WizardContext.ProjectFiles.Count(a => a.Selected)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ImportFiles, WizardContext.ProjectFiles.Count(a => a.Selected)));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()));
 		}
 
@@ -564,6 +557,23 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			}
 
 			return selectedLanguages;
+		}
+
+		private string GetFitlerItemsString(IEnumerable<FilterItem> filterItems)
+		{
+			var items = string.Empty;
+			foreach (var filterItem in filterItems)
+			{
+				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
+				         filterItem.Name;
+			}
+
+			return items;
+		}
+
+		private string GetConfirmationStatusName(string id)
+		{
+			return string.IsNullOrEmpty(id) ? "[none]" : id;
 		}
 
 		private string FormatDateTime(DateTime dateTime)

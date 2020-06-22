@@ -222,9 +222,11 @@
     <Compile Include="Model\ConfirmationStatus.cs" />
     <Compile Include="Model\Controllers.cs" />
     <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\ExportOptions.cs" />
     <Compile Include="Model\FilterItem.cs" />
     <Compile Include="Model\FilterItemGroup.cs" />
     <Compile Include="Model\ImportFile.cs" />
+    <Compile Include="Model\ImportOptions.cs" />
     <Compile Include="Model\JobProcess.cs" />
     <Compile Include="Model\LanguageInfo.cs" />
     <Compile Include="Model\ProjectFile.cs" />

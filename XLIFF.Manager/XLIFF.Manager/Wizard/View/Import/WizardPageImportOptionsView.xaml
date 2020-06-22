@@ -59,7 +59,7 @@
 					         Text="{Binding OriginSystem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
 				</Grid>
 
-				<TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource TextBlockColor}" Text="Status Assignment" Margin="5,10,10,0" VerticalAlignment="Center"/>
+				<TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource TextBlockColor}" Text="Segment Status Assignment" Margin="5,10,10,0" VerticalAlignment="Center"/>
 
 				<Grid Grid.Row="3" Margin="20,0,0,0">
 					<Grid.ColumnDefinitions>
@@ -73,26 +73,26 @@
 					</Grid.RowDefinitions>
 
 
-					<TextBlock Grid.Row="0" Grid.Column="0" Text="Change status of translations that were updated:" Margin="5,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+					<TextBlock Grid.Row="0" Grid.Column="0" Text="Translations updated:" Margin="5,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 					<ComboBox Grid.Row="0" Grid.Column="1"  Margin="0,10,10,0" Width="200" DisplayMemberPath="Name" HorizontalAlignment="Left" Height="22"
 					          VerticalAlignment="Center"
 					          VerticalContentAlignment="Center"
 					          ItemsSource="{Binding ConfirmationStatuses, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }"					          
-					          SelectedItem="{Binding ConfirmationStatusTranslationUpdated, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					          SelectedItem="{Binding StatusTranslationUpdated, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 					          />
-					
-					<TextBlock Grid.Row="1" Grid.Column="0" Text="Change status of translations that weren't updated:" Margin="5,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+
+					<TextBlock Grid.Row="1" Grid.Column="0" Text="Translations not updated:" Margin="5,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 					<ComboBox Grid.Row="1" Grid.Column="1"  Margin="0,10,10,0" Width="200" DisplayMemberPath="Name" HorizontalAlignment="Left" Height="22"
 				          VerticalAlignment="Center"
 				          VerticalContentAlignment="Center"
 				          ItemsSource="{Binding ConfirmationStatuses, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }"					          
-				          SelectedItem="{Binding ConfirmationStatusTranslationNotUpdated, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-					<TextBlock Grid.Row="2" Grid.Column="0" Text="Change status of segments that weren't imported:" Margin="5,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+				          SelectedItem="{Binding StatusTranslationNotUpdated, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+					<TextBlock Grid.Row="2" Grid.Column="0" Text="Segments not imported:" Margin="5,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 					<ComboBox Grid.Row="2" Grid.Column="1"  Margin="0,10,10,0" Width="200" DisplayMemberPath="Name" HorizontalAlignment="Left" Height="22"
 				          VerticalAlignment="Center"
 				          VerticalContentAlignment="Center"
 				          ItemsSource="{Binding ConfirmationStatuses, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }"					          
-				          SelectedItem="{Binding ConfirmationStatusNotImported, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				          SelectedItem="{Binding StatusSegmentNotImported, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 				</Grid>
 
 

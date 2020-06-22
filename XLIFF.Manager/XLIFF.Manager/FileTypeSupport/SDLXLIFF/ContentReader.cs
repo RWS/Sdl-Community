@@ -15,7 +15,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 	internal class ContentReader : IBilingualContentProcessor
 	{
 		private readonly SegmentBuilder _segmentBuilder;
-		private readonly bool _copySourceToTarget;
+		private readonly ExportOptions _exportOptions;
 		private readonly bool _ignoreTags;
 		private readonly string _inputPath;
 		private readonly string _projectId;
@@ -26,14 +26,15 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private SegmentVisitor _segmentVisitor;
 
 		internal ContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder,
-			bool copySourceToTarget, List<FilterItem> excludeFilterItems)
+			List<FilterItem> excludeFilterItems, ExportOptions exportOptions)
 		{
 			_projectId = projectId;
 			_inputPath = inputPath;
 			_ignoreTags = ignoreTags;
 			_segmentBuilder = segmentBuilder;
-			_copySourceToTarget = copySourceToTarget;
+			
 			_excludeFilterItems = excludeFilterItems;
+			_exportOptions = exportOptions;
 
 			Xliff = new Xliff();
 		}
@@ -148,7 +149,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					}
 				}
 
-				if (segmentPair.Target?.Count == 0 && _copySourceToTarget)
+				if (segmentPair.Target?.Count == 0 && _exportOptions.CopySourceToTarget)
 				{
 					segmentPair.Target.Clear();
 

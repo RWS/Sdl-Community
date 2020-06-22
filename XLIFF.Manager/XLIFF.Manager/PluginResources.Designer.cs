@@ -475,6 +475,33 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status - Segments not imported: {0}.
+        /// </summary>
+        internal static string Label_StatusSegmentsNotImported {
+            get {
+                return ResourceManager.GetString("Label_StatusSegmentsNotImported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status - Translations not updated: {0}.
+        /// </summary>
+        internal static string Label_StatusTranslationsNotUpdated {
+            get {
+                return ResourceManager.GetString("Label_StatusTranslationsNotUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status - Translations updated: {0}.
+        /// </summary>
+        internal static string Label_StatusTranslationsUpdated {
+            get {
+                return ResourceManager.GetString("Label_StatusTranslationsUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Success {0}.
         /// </summary>
         internal static string Label_Success {

@@ -59,10 +59,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Options + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_XliffSupport, WizardContext.ExportSupport) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_XliffSupport, WizardContext.ExportOptions.XliffSupport) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.ExportIncludeTranslations) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.ExportCopySourceToTarget) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.ExportOptions.IncludeTranslations) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.ExportOptions.CopySourceToTarget) + Environment.NewLine;
 			if (WizardContext.ExcludeFilterItems.Count > 0)
 			{
 				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExcludeFilterItems)) + Environment.NewLine;
