@@ -11,19 +11,21 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 {
 	public class ResourceManager
 	{
-		private readonly IExcelResourceWriter _excelResourceWriter;
+		private readonly IResourceManager _resourceManager;
 		private readonly ILanguageResourcesContainer _languageResourcesContainer;
 		private readonly Settings _settings;
 
-		public ResourceManager(Settings settings, IExcelResourceWriter excelResourceWriter, ILanguageResourcesContainer languageResourcesContainer)
+		public ResourceManager(Settings settings, IResourceManager resourceManager, ILanguageResourcesContainer languageResourcesContainer)
 		{
 			_languageResourcesContainer = languageResourcesContainer;
 			_settings = settings;
-			_excelResourceWriter = excelResourceWriter;
+			_resourceManager = resourceManager;
 		}
 
-		public LanguageResourceBundleCollection LanguageResourceBundles =>
-			_languageResourcesContainer.LanguageResourceBundles;
+		public bool ValidateTemplate()
+		{
+			return _languageResourcesContainer.ValidateTemplate();
+		}
 
 		public void ApplyTemplateToTms(List<TranslationMemory> translationMemories)
 		{
@@ -67,6 +69,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 		public void ExcludeWhatIsNotNeeded(List<LanguageResourceBundle> languageResourceBundles)
 		{
+			//this method ensures that the defaults are used and that data that wasn't opted for isn't affected
 			foreach (var bundle in languageResourceBundles)
 			{
 				if (bundle.Abbreviations != null && (!_settings.AbbreviationsChecked || bundle.Abbreviations.Count == 0))
@@ -94,12 +97,12 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 		public void ExportResourcesToExcel(string filePathTo,
 			Settings settings)
 		{
-			_excelResourceWriter.ExportResourcesToExcel(_languageResourcesContainer, filePathTo, settings);
+			_resourceManager.ExportResourcesToExcel(_languageResourcesContainer, filePathTo, settings);
 		}
 
 		public void ImportResourcesFromExcel(string filePathFrom)
 		{
-			var newLanguageResourceBundles = _excelResourceWriter.GetResourceBundlesFromExcel(filePathFrom);
+			var newLanguageResourceBundles = _resourceManager.GetResourceBundlesFromExcel(filePathFrom);
 
 			ExcludeWhatIsNotNeeded(newLanguageResourceBundles);
 			AddNewBundles(newLanguageResourceBundles);

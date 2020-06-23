@@ -19,5 +19,10 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 		{
 			_languageResourceTemplate.Save();
 		}
+
+		public bool ValidateTemplate()
+		{
+			return LanguageResourceBundles?.Count != 0;
+		}
 	}
 }

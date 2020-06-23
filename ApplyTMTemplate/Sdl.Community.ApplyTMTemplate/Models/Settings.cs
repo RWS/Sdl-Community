@@ -6,11 +6,9 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 	{
 		private bool _abbreviationsChecked;
 
-		private bool _variablesChecked;
-
 		private bool _ordinalFollowersChecked;
-
 		private bool _segmentationRulesChecked;
+		private bool _variablesChecked;
 
 		public Settings()
 		{
@@ -19,27 +17,27 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			OrdinalFollowersChecked = true;
 			SegmentationRulesChecked = true;
 			DatesChecked = true;
+			TimesChecked = true;
+			NumbersChecked = true;
+			MeasurementsChecked = true;
+			CurrenciesChecked = true;
 		}
-		
+
+		public bool CurrenciesChecked { get; set; }
+
 		public bool AbbreviationsChecked
 		{
 			get => _abbreviationsChecked;
 			set
 			{
-				_abbreviationsChecked = value; 
+				_abbreviationsChecked = value;
 				OnPropertyChanged();
 			}
 		}
 
-		public bool VariablesChecked
-		{
-			get => _variablesChecked;
-			set
-			{
-				_variablesChecked = value;
-				OnPropertyChanged();
-			}
-		}
+		public bool DatesChecked { get; set; }
+		public bool MeasurementsChecked { get; set; }
+		public bool NumbersChecked { get; set; }
 
 		public bool OrdinalFollowersChecked
 		{
@@ -61,6 +59,16 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 		}
 
-		public bool DatesChecked { get; set; }
+		public bool TimesChecked { get; set; }
+
+		public bool VariablesChecked
+		{
+			get => _variablesChecked;
+			set
+			{
+				_variablesChecked = value;
+				OnPropertyChanged();
+			}
+		}
 	}
 }

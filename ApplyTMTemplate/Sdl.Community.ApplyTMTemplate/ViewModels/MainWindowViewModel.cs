@@ -2,26 +2,24 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
-using Sdl.Community.AhkPlugin.Helpers;
 using Sdl.Community.ApplyTMTemplate.Commands;
 using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.Community.ApplyTMTemplate.Services;
 using Sdl.Community.ApplyTMTemplate.Services.Interfaces;
 using Sdl.Community.ApplyTMTemplate.Utilities;
 using Button = System.Windows.Controls.Button;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace Sdl.Community.ApplyTMTemplate.ViewModels
 {
 	public class MainWindowViewModel : ModelBase
 	{
+		private readonly FilePathDialogService _filePathDialogService;
 		private readonly IMessageService _messageService;
 		private readonly TMLoader _tmLoader;
+		private readonly string _tmPath;
 		private ICommand _addFolderCommand;
 		private ICommand _addTmsCommand;
 		private ICommand _applyTemplateCommand;
@@ -33,20 +31,20 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private string _message;
 		private string _progressVisibility;
 		private ICommand _removeTMsCommand;
-		private ResourceManager _resourceManager;
+		private Models.ResourceManager _resourceManager;
 
 		private bool _selectAllChecked;
-		private TemplateValidity _templateValidity;
+		private bool _templateValidity;
 		private TimedTextBox _timedTextBoxViewModel;
 		private ObservableCollection<TranslationMemory> _tmCollection;
-		private string _tmPath;
 
 		public MainWindowViewModel(TemplateLoader templateLoader, TMLoader tmLoader,
-			IMessageService messageService, TimedTextBox timedTextBoxViewModel)
+			IMessageService messageService, TimedTextBox timedTextBoxViewModel, FilePathDialogService filePathDialogService)
 		{
 			Settings = new Settings();
 			_tmLoader = tmLoader;
 			_messageService = messageService;
+			_filePathDialogService = filePathDialogService;
 			TimedTextBoxViewModel = timedTextBoxViewModel;
 
 			_tmPath = templateLoader.GetTmFolderPath();
@@ -76,9 +74,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public ICommand ApplyTemplateCommand => _applyTemplateCommand ??= new RelayCommand(
 			ao => ApplyTmTemplate(),
-			po => (int)_templateValidity > 1 && SelectedTmsList.Count > 0);
-
-		public bool CanExecuteExport => _templateValidity.HasFlag(TemplateValidity.HasResources);
+			po => SelectedTmsList.Count > 0);
 
 		public bool DatesChecked
 		{
@@ -147,7 +143,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				_timedTextBoxViewModel.BrowseCommand = BrowseCommand;
 				_timedTextBoxViewModel.ImportCommand = ImportCommand;
 				_timedTextBoxViewModel.ExportCommand = ExportCommand;
-				_timedTextBoxViewModel.ShouldStartValidation += StartLoadingResourcesAndValidate;
+				_timedTextBoxViewModel.ShouldStartValidation += LoadResourcesAndValidate;
 			}
 		}
 
@@ -163,46 +159,23 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private ICommand BrowseCommand => _browseCommand ??= new CommandHandler(Browse, true);
 
-		public void StartLoadingResourcesAndValidate(object sender, EventArgs e)
+		public void LoadResourcesAndValidate(object sender, EventArgs e)
 		{
-			_templateValidity = TemplateValidity.IsNotValid;
-
 			LoadResourcesFromTemplate();
-
-			//check if the template is valid(resources ignored)
-			if (ValidateTemplate(false))
-			{
-				_templateValidity = TemplateValidity.IsValid;
-			}
-			//check if the template has any resources
-			if (ValidateTemplate())
-			{
-				_templateValidity = TemplateValidity.IsValid | TemplateValidity.HasResources;
-			}
-
-			OnPropertyChanged(nameof(CanExecuteExport));
 		}
 
 		private void AddFolder()
 		{
-			var dlg = new FolderSelectDialog
-			{
-				Title = PluginResources.Please_select_the_folder_containing_the_TMs,
-				InitialDirectory = _tmPath
-			};
+			var filesPaths =
+				_filePathDialogService.GetFilesFromFolderInputByUser(
+					PluginResources.Please_select_the_folder_containing_the_TMs, _tmPath);
 
-			if (!dlg.ShowDialog()) return;
+			if (filesPaths == null) return;
 
-			_tmPath = dlg.FileName;
-
-			if (string.IsNullOrEmpty(_tmPath)) return;
-
-			var files = Directory.GetFiles(_tmPath);
-
-			AddRange(_tmLoader.GetTms(files, TmCollection));
+			AddRange(_tmLoader.GetTms(filesPaths, TmCollection));
 		}
 
-		private void AddRange(ObservableCollection<TranslationMemory> tmsCollection)
+		private void AddRange(IEnumerable<TranslationMemory> tmsCollection)
 		{
 			foreach (var tm in tmsCollection)
 			{
@@ -213,20 +186,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void AddTms()
 		{
-			var dlg = new OpenFileDialog()
-			{
-				Filter = "Translation Memories|*.sdltm",
-				InitialDirectory = _tmPath,
-				Multiselect = true
-			};
-
-			dlg.ShowDialog();
-			AddRange(_tmLoader.GetTms(dlg.FileNames, TmCollection));
+			var filePaths = _filePathDialogService.GetFilePathInputFromUser(filter: "Translation Memories|*.sdltm", initialDirectory: _tmPath, multiselect: true);
+			if (filePaths == null) return;
+			AddRange(_tmLoader.GetTms(filePaths, TmCollection));
 		}
 
 		private async void ApplyTmTemplate()
 		{
-			var isValid = ValidateTemplate();
+			var isValid = IsTemplateValid();
 			if (!isValid) return;
 
 			UnmarkTms(SelectedTmsList);
@@ -250,90 +217,46 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void Browse()
 		{
-			var dlg = new OpenFileDialog
-			{
-				Filter = "Language resource templates|*.sdltm.resource",
-			};
-
-			var result = dlg.ShowDialog();
-
-			if (result == true)
-			{
-				ResourceTemplatePath = dlg.FileName;
-			}
-		}
-
-		private string CreateNewFile(string filePath)
-		{
-			var index = 0;
-			while (true)
-			{
-				if (index == 0)
-				{
-					filePath = filePath.Insert(filePath.IndexOf(".xlsx", StringComparison.OrdinalIgnoreCase),
-						$"_{index}");
-				}
-				else
-				{
-					filePath = filePath.Replace((index - 1).ToString(), index.ToString());
-				}
-
-				if (File.Exists(filePath))
-				{
-					index++;
-					continue;
-				}
-
-				break;
-			}
-
-			return filePath;
+			var resourceTemplatePath = _filePathDialogService.GetFilePathInputFromUser(filter: "Language resource templates|*.sdltm.resource");
+			ResourceTemplatePath = resourceTemplatePath[0];
 		}
 
 		private async void Export()
 		{
 			LoadResourcesFromTemplate();
-
-			var isValid = ValidateTemplate();
+			var isValid = IsTemplateValid();
 			if (!isValid) return;
 
-			var dlg = new SaveFileDialog
-			{
-				Title = PluginResources.Export_language_resources,
-				Filter = @"Excel |*.xlsx",
-				FileName = PluginResources.Exported_filename,
-				AddExtension = false
-			};
-
-			var result = dlg.ShowDialog();
-
-			if (result != DialogResult.OK) return;
+			var saveLocation = GetSaveLocation();
+			if (saveLocation == null) return;
 
 			ProgressVisibility = "Visible";
-			var filePath = dlg.FileName;
-
-			if (File.Exists(filePath))
-			{
-				try
-				{
-					File.Delete(filePath);
-				}
-				catch (Exception e)
-				{
-					filePath = CreateNewFile(filePath);
-					_messageService.ShowWarningMessage(PluginResources.Warning, $"{e.Message}\n\n{PluginResources.A_new_file_created}: {filePath}");
-				}
-			}
-
 			await Task.Run(() =>
 			{
-				_resourceManager.ExportResourcesToExcel(filePath, Settings);
+				_resourceManager.ExportResourcesToExcel(saveLocation, Settings);
 			});
 
 			_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Report_generated_successfully);
-			Process.Start(filePath);
+			Process.Start(saveLocation);
 
 			ProgressVisibility = "Collapsed";
+		}
+
+		private string GetSaveLocation()
+		{
+			var saveLocation = "";
+			try
+			{
+				_filePathDialogService.GetSaveLocationInputFromUser(out saveLocation,
+					PluginResources.Export_language_resources, "Excel |*.xlsx", PluginResources.Exported_filename);
+			}
+			catch (Exception e)
+			{
+				_messageService.ShowWarningMessage(PluginResources.Warning,
+					$"{e.Message}\n\n{PluginResources.A_new_file_created}: {saveLocation}");
+			}
+
+			return saveLocation;
 		}
 
 		private void HandlePreviewDrop(object droppedFile)
@@ -344,69 +267,86 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private async void Import(object parameter)
 		{
-			var isValid = ValidateTemplate(false);
-			if (!isValid) return;
+			if (!IsTemplateValid()) return;
 
 			try
 			{
+				//TODO: maybe we can implement Strategy pattern to better generalize this process
 				if ((parameter as Button)?.Name == "ImportFromExcel")
 				{
-					var dlg = new OpenFileDialog()
-					{
-						Title = PluginResources.Import_window_title,
-						Filter = "Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx",
-					};
-
-					var result = dlg.ShowDialog();
-
-					if (!(result ?? false)) return;
-
-					ProgressVisibility = "Visible";
-					await Task.Run(() =>
-					{
-						if (dlg.FileName.Contains(".xlsx"))
-						{
-							_resourceManager.ImportResourcesFromExcel(dlg.FileName);
-						}
-					});
-					_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
-
-					ProgressVisibility = "Collapsed";
+					var filePath = _filePathDialogService.GetFilePathInputFromUser(
+						PluginResources.Import_window_title,
+						"Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx");
+					if (filePath == null) return;
+					await ImportResourcesFromExcel(filePath);
 				}
 				else
 				{
 					ProgressVisibility = "Collapsed";
-
 					if (SelectedTmsList.Count > 0)
 					{
-						await Task.Run(() =>
-						{
-							_resourceManager.ImportResourcesFromSdltm(SelectedTmsList);
-						});
-						_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
+						await ImportResourcesFromSdltm();
 					}
 					else
 					{
 						_messageService.ShowWarningMessage(PluginResources.Warning, PluginResources.Select_at_least_one_TM);
 					}
-
 					ProgressVisibility = "Collapsed";
 				}
 			}
 			catch (Exception e)
 			{
 				_messageService.ShowErrorMessage(PluginResources.Error_Window_Title, e.Message);
-
 				ProgressVisibility = "Collapsed";
-				return;
+			}
+		}
+
+		private async Task ImportResourcesFromExcel(string[] fileName)
+		{
+			ProgressVisibility = "Visible";
+			await Task.Run(() =>
+			{
+				if (fileName.Contains(".xlsx"))
+				{
+					_resourceManager.ImportResourcesFromExcel(fileName[0]);
+				}
+			});
+			_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
+			ProgressVisibility = "Collapsed";
+		}
+
+		private async Task ImportResourcesFromSdltm()
+		{
+			await Task.Run(() => { _resourceManager.ImportResourcesFromSdltm(SelectedTmsList); });
+			_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
+		}
+
+		private bool IsTemplateValid()
+		{
+			bool isValid;
+			if (_resourceManager != null)
+			{
+				isValid = _resourceManager.ValidateTemplate();
+			}
+			else
+			{
+				if (string.IsNullOrEmpty(ResourceTemplatePath))
+				{
+					_message = PluginResources.Select_A_Template;
+				}
+				isValid = false;
 			}
 
-			_templateValidity = TemplateValidity.HasResources;
-			OnPropertyChanged(nameof(CanExecuteExport));
+			return isValid;
 		}
 
 		private void LoadResourcesFromTemplate()
 		{
+			if (string.IsNullOrWhiteSpace(ResourceTemplatePath))
+			{
+				_messageService.ShowWarningMessage(PluginResources.Warning, PluginResources.Template_filePath_Not_Correct);
+				return;
+			}
 			_resourceManager = new ResourceManager(Settings, new ExcelResourceManager(), new LanguageResourcesTemplateContainer(ResourceTemplatePath));
 		}
 
@@ -434,46 +374,12 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		private void UnmarkTms(List<TranslationMemory> tms)
+		private void UnmarkTms(IEnumerable<TranslationMemory> tms)
 		{
 			foreach (var tm in tms)
 			{
 				tm.UnmarkTm();
 			}
-		}
-
-		private bool ValidateTemplate(bool checkIfBundlesPresent = true)
-		{
-			//TODO: refactor this method; we shouldn't validate based upon the error message
-			var isValid = true;
-			if (_resourceManager != null)
-			{
-				if (_resourceManager.LanguageResourceBundles != null && checkIfBundlesPresent)
-				{
-					if (_resourceManager.LanguageResourceBundles.Count == 0)
-					{
-						isValid = false;
-					}
-				}
-				else
-				{
-					if (_message == PluginResources.Template_corrupted_or_file_not_template ||
-						_message == PluginResources.Template_filePath_Not_Correct)
-					{
-						isValid = false;
-					}
-				}
-			}
-			else
-			{
-				if (string.IsNullOrEmpty(ResourceTemplatePath))
-				{
-					_message = PluginResources.Select_A_Template;
-				}
-				isValid = false;
-			}
-
-			return isValid;
 		}
 	}
 }

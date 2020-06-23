@@ -11,5 +11,6 @@ namespace Sdl.Community.ApplyTMTemplate.Models.Interfaces
 	{
 		LanguageResourceBundleCollection LanguageResourceBundles { get; }
 		void Save();
+		bool ValidateTemplate();
 	}
 }

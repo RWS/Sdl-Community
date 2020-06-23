@@ -70,6 +70,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abbreviations.
+        /// </summary>
+        public static string Abbreviations {
+            get {
+                return ResourceManager.GetString("Abbreviations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap AddFolder {
@@ -123,6 +132,33 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string Choose_Template {
             get {
                 return ResourceManager.GetString("Choose_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currencies.
+        /// </summary>
+        public static string Currencies {
+            get {
+                return ResourceManager.GetString("Currencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dates.
+        /// </summary>
+        public static string Dates {
+            get {
+                return ResourceManager.GetString("Dates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Decimal.
+        /// </summary>
+        public static string DecimalSeparatorCategory {
+            get {
+                return ResourceManager.GetString("DecimalSeparatorCategory", resourceCulture);
             }
         }
         
@@ -362,6 +398,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Measurements.
+        /// </summary>
+        public static string Measurements {
+            get {
+                return ResourceManager.GetString("Measurements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No languages could be identified in the template.
         /// </summary>
         public static string No_Languages_IDed {
@@ -376,6 +421,24 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string No_Resources_in_TMs {
             get {
                 return ResourceManager.GetString("No_Resources_in_TMs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NumberSeparators.
+        /// </summary>
+        public static string NumberSeparators {
+            get {
+                return ResourceManager.GetString("NumberSeparators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OrdinalFollowers.
+        /// </summary>
+        public static string OrdinalFollowers {
+            get {
+                return ResourceManager.GetString("OrdinalFollowers", resourceCulture);
             }
         }
         
@@ -433,6 +496,15 @@ namespace Sdl.Community.ApplyTMTemplate {
             get {
                 object obj = ResourceManager.GetObject("SaveToExcel", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SegmentationRules.
+        /// </summary>
+        public static string SegmentationRules {
+            get {
+                return ResourceManager.GetString("SegmentationRules", resourceCulture);
             }
         }
         
@@ -536,6 +608,24 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thousands.
+        /// </summary>
+        public static string ThousandsSeparatorCategory {
+            get {
+                return ResourceManager.GetString("ThousandsSeparatorCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Times.
+        /// </summary>
+        public static string Times {
+            get {
+                return ResourceManager.GetString("Times", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon TM {
@@ -580,6 +670,15 @@ namespace Sdl.Community.ApplyTMTemplate {
             get {
                 object obj = ResourceManager.GetObject("UploadFromExcel", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variables.
+        /// </summary>
+        public static string Variables {
+            get {
+                return ResourceManager.GetString("Variables", resourceCulture);
             }
         }
         

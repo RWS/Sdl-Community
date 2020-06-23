@@ -298,4 +298,37 @@
   <data name="WindowsControl_Minimize" xml:space="preserve">
     <value>Minimize</value>
   </data>
+  <data name="ThousandsSeparatorCategory" xml:space="preserve">
+    <value>Thousands</value>
+  </data>
+  <data name="DecimalSeparatorCategory" xml:space="preserve">
+    <value>Decimal</value>
+  </data>
+  <data name="Measurements" xml:space="preserve">
+    <value>Measurements</value>
+  </data>
+  <data name="NumberSeparators" xml:space="preserve">
+    <value>NumberSeparators</value>
+  </data>
+  <data name="Times" xml:space="preserve">
+    <value>Times</value>
+  </data>
+  <data name="Dates" xml:space="preserve">
+    <value>Dates</value>
+  </data>
+  <data name="SegmentationRules" xml:space="preserve">
+    <value>SegmentationRules</value>
+  </data>
+  <data name="Variables" xml:space="preserve">
+    <value>Variables</value>
+  </data>
+  <data name="OrdinalFollowers" xml:space="preserve">
+    <value>OrdinalFollowers</value>
+  </data>
+  <data name="Abbreviations" xml:space="preserve">
+    <value>Abbreviations</value>
+  </data>
+  <data name="Currencies" xml:space="preserve">
+	  <value>Currencies</value>
+  </data>
 </root>

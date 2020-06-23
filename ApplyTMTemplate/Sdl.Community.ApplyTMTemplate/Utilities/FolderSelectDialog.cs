@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Sdl.Community.AhkPlugin.Helpers
+namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
 	public class FolderSelectDialog
 	{

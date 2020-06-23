@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Xml.Serialization;
 using OfficeOpenXml;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using OfficeOpenXml.Style;
 using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.Community.ApplyTMTemplate.Models.Interfaces;
@@ -18,8 +15,9 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ApplyTMTemplate.Services
 {
-	public class ExcelResourceManager : IExcelResourceWriter
+	public class ExcelResourceManager : IResourceManager
 	{
+
 		public void ExportResourcesToExcel(ILanguageResourcesContainer resourceContainer, string filePathTo, Settings settings)
 		{
 			using var package = GetExcelPackage(filePathTo);
@@ -28,25 +26,9 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				if (languageResourceBundle == null) continue;
 
 				var worksheet = package.Workbook.Worksheets.Add(languageResourceBundle.Language.Name);
-
-				worksheet.Column(1).Width = 20;
-				worksheet.Column(2).Width = 20;
-				worksheet.Column(3).Width = 20;
-				worksheet.Column(4).Width = 100;
-				worksheet.Column(5).Width = 100;
-
-				//every column that has its Style.Locked set to true will be read-only if IsProtected is also set to true;
-				//we need to make just the segmentation rules column read-only
-				worksheet.Column(1).Style.Locked = false;
-				worksheet.Column(2).Style.Locked = false;
-				worksheet.Column(3).Style.Locked = false;
-				worksheet.Column(4).Style.Locked = true;
-				worksheet.Column(5).Style.Locked = true;
-
-				worksheet.Protection.IsProtected = true;
+				PrepareWorksheet(worksheet);
 
 				var lineNumber = 1;
-				SetCellStyle(worksheet, "A", lineNumber, "Abbreviations");
 				if (settings.AbbreviationsChecked && languageResourceBundle.Abbreviations != null)
 				{
 					foreach (var abbreviation in languageResourceBundle.Abbreviations.Items)
@@ -56,7 +38,6 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				}
 
 				lineNumber = 1;
-				SetCellStyle(worksheet, "B", lineNumber, "OrdinalFollowers");
 				if (settings.OrdinalFollowersChecked && languageResourceBundle.OrdinalFollowers != null)
 				{
 					foreach (var ordinalFollower in languageResourceBundle.OrdinalFollowers.Items)
@@ -66,7 +47,6 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				}
 
 				lineNumber = 1;
-				SetCellStyle(worksheet, "C", lineNumber, "Variables");
 				if (settings.VariablesChecked && languageResourceBundle.Variables != null)
 				{
 					foreach (var variable in languageResourceBundle.Variables.Items)
@@ -76,7 +56,6 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				}
 
 				lineNumber = 1;
-				SetCellStyle(worksheet, "D", lineNumber, "SegmentationRules");
 				if (settings.SegmentationRulesChecked && languageResourceBundle.SegmentationRules != null)
 				{
 					foreach (var segmentationRule in languageResourceBundle.SegmentationRules.Rules)
@@ -89,7 +68,6 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				}
 
 				lineNumber = 1;
-				SetCellStyle(worksheet, "E", lineNumber, "Dates");
 				if (settings.DatesChecked && (languageResourceBundle.LongDateFormats != null || languageResourceBundle.ShortDateFormats != null))
 				{
 					var dates = new List<string>();
@@ -102,10 +80,58 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 					{
 						dates.AddRange(languageResourceBundle.ShortDateFormats);
 					}
-					
+
 					foreach (var date in dates)
 					{
 						worksheet.Cells["E" + ++lineNumber].Value = date;
+					}
+				}
+
+				lineNumber = 1;
+				if (settings.TimesChecked && (languageResourceBundle.LongTimeFormats != null || languageResourceBundle.ShortTimeFormats != null))
+				{
+					var times = new List<string>();
+
+					if (languageResourceBundle.LongTimeFormats != null)
+					{
+						times.AddRange(languageResourceBundle.LongTimeFormats);
+					}
+					if (languageResourceBundle.ShortTimeFormats != null)
+					{
+						times.AddRange(languageResourceBundle.ShortTimeFormats);
+					}
+
+					foreach (var time in times)
+					{
+						worksheet.Cells["F" + ++lineNumber].Value = time;
+					}
+				}
+
+				lineNumber = 1;
+				if (settings.NumbersChecked && languageResourceBundle.NumbersSeparators != null)
+				{
+					foreach (var separator in languageResourceBundle.NumbersSeparators)
+					{
+						worksheet.Cells["G" + ++lineNumber].Value =
+							$"{{{separator.GroupSeparators} {separator.DecimalSeparators}}}";
+					}
+				}
+
+				lineNumber = 1;
+				if (settings.MeasurementsChecked && languageResourceBundle.MeasurementUnits != null)
+				{
+					foreach (var unit in languageResourceBundle.MeasurementUnits)
+					{
+						worksheet.Cells["H" + ++lineNumber].Value = unit.Key;
+					}
+				}
+
+				lineNumber = 1;
+				if (settings.CurrenciesChecked && languageResourceBundle.CurrencyFormats != null)
+				{
+					foreach (var currency in languageResourceBundle.CurrencyFormats)
+					{
+						worksheet.Cells["I" + ++lineNumber].Value = currency.Symbol;
 					}
 				}
 			}
@@ -113,6 +139,47 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			package.Save();
 		}
 
+		private static void PrepareWorksheet(ExcelWorksheet worksheet)
+		{
+			worksheet.Column(1).Width = 15;
+			worksheet.Column(2).Width = 20;
+			worksheet.Column(3).Width = 20;
+			worksheet.Column(4).Width = 25;
+			worksheet.Column(5).Width = 25;
+			worksheet.Column(6).Width = 25;
+			worksheet.Column(7).Width = 20;
+			worksheet.Column(8).Width = 20;
+			worksheet.Column(9).Width = 17;
+
+			//every column that has its Style.Locked set to true will be read-only if IsProtected is also set to true;
+			//we need to make just the segmentation rules column read-only
+			worksheet.Column(1).Style.Locked = false;
+			worksheet.Column(2).Style.Locked = false;
+			worksheet.Column(3).Style.Locked = false;
+			worksheet.Column(4).Style.Locked = true;
+			worksheet.Column(5).Style.Locked = true;
+
+			worksheet.Protection.IsProtected = true;
+
+			SetCellStyle(worksheet, "A", 1, PluginResources.Abbreviations);
+			SetCellStyle(worksheet, "B", 1, PluginResources.OrdinalFollowers);
+			SetCellStyle(worksheet, "C", 1, PluginResources.Variables);
+			SetCellStyle(worksheet, "D", 1, PluginResources.SegmentationRules);
+			SetCellStyle(worksheet, "E", 1, PluginResources.Dates);
+			SetCellStyle(worksheet, "F", 1, PluginResources.Times);
+			SetCellStyle(worksheet, "G", 1, PluginResources.NumberSeparators);
+			SetCellStyle(worksheet, "H", 1, PluginResources.Measurements);
+			SetCellStyle(worksheet, "I", 1, PluginResources.Currencies);
+		}
+
+		private static void SetCellStyle(ExcelWorksheet worksheet, string columnLetter, int lineNumber, string property)
+		{
+			worksheet.Cells[columnLetter + lineNumber].Value = property;
+			worksheet.Cells[columnLetter + lineNumber].Style.Fill.PatternType = ExcelFillStyle.Solid;
+			worksheet.Cells[columnLetter + lineNumber].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(37, 189, 89));
+			worksheet.Cells[columnLetter + lineNumber].Style.Font.Color.SetColor(Color.White);
+			worksheet.Cells[columnLetter + lineNumber].Style.Font.Name = "Sommet Rounded";
+		}
 
 		public List<LanguageResourceBundle> GetResourceBundlesFromExcel(string filePathFrom)
 		{
@@ -152,24 +219,15 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			return newLanguageResourceBundles;
 		}
 
-		private static void SetCellStyle(ExcelWorksheet worksheet, string columnLetter, int lineNumber, string property)
-		{
-			worksheet.Cells[columnLetter + lineNumber].Value = property;
-			worksheet.Cells[columnLetter + lineNumber].Style.Fill.PatternType = ExcelFillStyle.Solid;
-			worksheet.Cells[columnLetter + lineNumber].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(37, 189, 89));
-			worksheet.Cells[columnLetter + lineNumber].Style.Font.Color.SetColor(Color.White);
-			worksheet.Cells[columnLetter + lineNumber].Style.Font.Name = "Sommet Rounded";
-		}
-
 		private bool AreColumnsValid(object column01, object column02, object column03, object column04)
 		{
 			bool areValid;
 			try
 			{
-				areValid = column01.ToString().Equals("Abbreviations") &&
-						   column02.ToString().Equals("OrdinalFollowers") &&
-						   column03.ToString().Equals("Variables") &&
-						   column04.ToString().Equals("SegmentationRules");
+				areValid = column01.ToString().Equals(PluginResources.Abbreviations) &&
+						   column02.ToString().Equals(PluginResources.OrdinalFollowers) &&
+						   column03.ToString().Equals(PluginResources.Variables) &&
+						   column04.ToString().Equals(PluginResources.SegmentationRules);
 			}
 			catch
 			{
