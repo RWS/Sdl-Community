@@ -148,9 +148,10 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         public void DecimalSeparatorsComma(string source, string target)
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-            numberVerifierSettings.Setup(d => d.TargetDecimalComma).Returns(true);
+            numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
+            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
 
-            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -185,7 +186,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-			Assert.True(errorMessage.Count == 0);
+			Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
 		}
 
 		/// <summary>

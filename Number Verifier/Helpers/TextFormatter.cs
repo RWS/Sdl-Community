@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -154,6 +155,28 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			return text;
 		}
 
+		public string FormatSeparators(IEnumerable<string> separators)
+		{
+			var separatorsBuilder = new StringBuilder();
+			foreach (var item in separators)
+			{
+				if (!string.IsNullOrEmpty(item))
+				{
+					// it is required to add \\ for the custom separators, so they will be identified correctly when doing the normalization.
+					if (!item.Contains("\\"))
+					{
+						separatorsBuilder.Append($"\\{item}");
+					}
+					else
+					{
+						separatorsBuilder.Append(item);
+					}
+				}
+			}
+
+			return separatorsBuilder.ToString();
+		}
+		
 		private string ReplaceSeparator(string text, string separator)
 		{
 			if (!text.Contains(separator)) return text;

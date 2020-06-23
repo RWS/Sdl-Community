@@ -307,37 +307,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         }
 
 		/// <summary>
-		/// Source decimal: period and Source NoSeparator option
-		/// Target decimal: period and Target NoSeparator option
-		/// Verification error: Number(s) modified/unlocalised.
-		/// </summary>
-		/// <param name="source"></param>
-		/// <param name="target"></param>
-		[Theory]
-        [InlineData("1,55", "1.55")]
-        public void Validate_DecimalSeparatorsComma_WhenNoSeparatorOption_IsChecked_Errors(string source, string target)
-        {
-	        //target settings
-	        var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.SpaceCommaPeriod();
-	        numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
-	        numberVerifierSettings.Setup(d => d.TargetNoSeparator).Returns(true);
-
-			//source settings
-			numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
-	        numberVerifierSettings.Setup(d => d.SourceNoSeparator).Returns(true);
-
-	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
-
-	        //run initialize method in order to set chosen separators
-	        var docPropMock = new Mock<IDocumentProperties>();
-	        numberVerifierMain.Initialize(docPropMock.Object);
-
-	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
-
-	        Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
-        }
-
-		/// <summary>
 		/// Source decimal : comma
 		/// Target decimal: comma, period
 		/// No errors
@@ -354,7 +323,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierSettings.Setup(d => d.TargetDecimalComma).Returns(true);
 
             //source settings
-            numberVerifierSettings.Setup(s => s.SourceThousandsComma).Returns(true);
             numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
@@ -445,13 +413,12 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         public void CheckForAddedNumbers(string source, string target)
         {
 	        //target settings
-            var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.AllTypesOfSpacesChecked();
+            var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.ThousandsSeparatorsSpaceAndNoBreak();
             numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
-			
-            //source settings
-            numberVerifierSettings.Setup(s => s.SourceThousandsSpace).Returns(true);
-            numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
-            numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
+
+			//source settings
+			numberVerifierSettings.Setup(s => s.SourceThousandsSpace).Returns(true);
+			numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
 
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
@@ -477,6 +444,9 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         {
 	        //target settings
 	        var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.AllTypesOfSpacesChecked();
+
+	        numberVerifierSettings.Setup(s => s.TargetNoSeparator).Returns(true);
+	        numberVerifierSettings.Setup(s => s.TargetThousandsSpace).Returns(true);
 
 			// source settings
 			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);

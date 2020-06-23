@@ -24,7 +24,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var docPropMock = new Mock<IDocumentProperties>();
             numberVerifierMain.Initialize(docPropMock.Object);
 
-            var normalizedNumber = numberVerifierMain.NormalizedNumber(new SeparatorModel
+            var normalizedNumber = numberVerifierMain.NormalizeNumber(new SeparatorModel
 				{
 					MatchValue = text,
 					ThousandSeparators = thousandSep,
@@ -52,7 +52,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var docPropMock = new Mock<IDocumentProperties>();
             numberVerifierMain.Initialize(docPropMock.Object);
 			
-            var normalizedNumber = numberVerifierMain.NormalizedNumber(new SeparatorModel
+            var normalizedNumber = numberVerifierMain.NormalizeNumber(new SeparatorModel
 			{
 				MatchValue = text,
 				ThousandSeparators = thousandSep,
