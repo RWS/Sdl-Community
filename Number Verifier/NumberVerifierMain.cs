@@ -1054,12 +1054,6 @@ namespace Sdl.Community.NumberVerifier
 					{
 						normalizedNumber = separatorModel.MatchValue;
 					}
-
-					//if (separatorModel.NoSeparator)
-					//{
-					//	normalizedNumber = _isSource ? NormalizeNumberNoSeparator(_sourceDecimalSeparators,	_sourceThousandSeparators, normalizedNumber)
-					//		: NormalizeNumberNoSeparator(_targetDecimalSeparators,	_targetThousandSeparators, normalizedNumber);
-					//}
 					return normalizedNumber.Normalize(NormalizationForm.FormKC);
 				}
 			}
