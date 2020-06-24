@@ -33,8 +33,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
             var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(text, thousandSeparators, decimalSeparators, false, false);
 
-            numberVerifierMain.NormalizeDecimalsNumbers(normalizeNumber);
-            numberVerifierMain.NormalizeThousandsNumbers(normalizeNumber);
+            numberVerifierMain.NormalizeNumbers(normalizeNumber);
 
             Assert.Equal("34", normalizeNumber.InitialNumberList[0]);
             Assert.Equal("34", normalizeNumber.NormalizedNumberList[0]);
@@ -58,8 +57,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
 
             var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(text, thousandSeparators, decimalSeparators, false, false);
-            numberVerifierMain.NormalizeDecimalsNumbers(normalizeNumber);
-            numberVerifierMain.NormalizeThousandsNumbers(normalizeNumber);
+            numberVerifierMain.NormalizeNumbers(normalizeNumber);
 
             Assert.Equal("−74,5", $"{normalizeNumber.InitialNumberList[0]}{normalizeNumber.InitialNumberList[1]}");
             Assert.Equal("m74m5", $"{normalizeNumber.NormalizedNumberList[0]}{normalizeNumber.NormalizedNumberList[1]}");
@@ -83,8 +81,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
            
             var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(text, thousandSeparators, decimalSeparators, false, false);
-            numberVerifierMain.NormalizeDecimalsNumbers(normalizeNumber);
-            numberVerifierMain.NormalizeThousandsNumbers(normalizeNumber);
+            numberVerifierMain.NormalizeNumbers(normalizeNumber);
 
             Assert.Equal("46", normalizeNumber.InitialNumberList[0]);
             Assert.Equal("46", normalizeNumber.NormalizedNumberList[0]);

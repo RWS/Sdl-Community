@@ -19,8 +19,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 			var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(number, ".", ".", false, numberVerifierSettings.Object.SourceOmitLeadingZero);
 
-			numberVerifierMain.NormalizeDecimalsNumbers(normalizeNumber);
-			numberVerifierMain.NormalizeThousandsNumbers(normalizeNumber);
+			numberVerifierMain.NormalizeNumbers(normalizeNumber);
 
 			var normalizedNumber = numberVerifierMain.NormalizeNumber(new SeparatorModel
 			{
@@ -133,8 +132,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 			var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(number,".", ".", false, numberVerifierSettings.Object.SourceOmitLeadingZero);
 
-			numberVerifierMain.NormalizeDecimalsNumbers(normalizeNumber);
-			numberVerifierMain.NormalizeThousandsNumbers(normalizeNumber);
+			numberVerifierMain.NormalizeNumbers(normalizeNumber);
 			var normalizedNumber = numberVerifierMain.NormalizeNumber(new SeparatorModel
 			{
 				MatchValue = number,
