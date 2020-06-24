@@ -1,30 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.Community.ApplyTMTemplate.Models.Interfaces;
 using Sdl.Community.ApplyTMTemplate.Services.Interfaces;
+using Sdl.Core.LanguageProcessing.Tokenization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Segmentation;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.ApplyTMTemplate.Models
+namespace Sdl.Community.ApplyTMTemplate.Services
 {
 	public class ResourceManager
 	{
-		private readonly IResourceManager _resourceManager;
+		private readonly IExcelResourceManager _excelResourceManager;
 		private readonly ILanguageResourcesContainer _languageResourcesContainer;
 		private readonly Settings _settings;
 
-		public ResourceManager(Settings settings, IResourceManager resourceManager, ILanguageResourcesContainer languageResourcesContainer)
+		public ResourceManager(Settings settings, IExcelResourceManager excelResourceManager, ILanguageResourcesContainer languageResourcesContainer)
 		{
 			_languageResourcesContainer = languageResourcesContainer;
 			_settings = settings;
-			_resourceManager = resourceManager;
+			_excelResourceManager = excelResourceManager;
 		}
 
-		public bool ValidateTemplate()
+		public bool ValidateTemplate(bool isImport)
 		{
-			return _languageResourcesContainer.ValidateTemplate();
+			return _languageResourcesContainer.ValidateTemplate(isImport);
 		}
 
 		public void ApplyTemplateToTms(List<TranslationMemory> translationMemories)
@@ -54,6 +56,8 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 				{
 					newResourceBundle.SegmentationRules = resourceBundle.SegmentationRules;
 				}
+
+
 
 				resourceBundlesWithOptions.Add(newResourceBundle);
 			}
@@ -97,16 +101,15 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 		public void ExportResourcesToExcel(string filePathTo,
 			Settings settings)
 		{
-			_resourceManager.ExportResourcesToExcel(_languageResourcesContainer, filePathTo, settings);
+			_excelResourceManager.ExportResourcesToExcel(_languageResourcesContainer, filePathTo, settings);
 		}
 
 		public void ImportResourcesFromExcel(string filePathFrom)
 		{
-			var newLanguageResourceBundles = _resourceManager.GetResourceBundlesFromExcel(filePathFrom);
-
-			ExcludeWhatIsNotNeeded(newLanguageResourceBundles);
+			var newLanguageResourceBundles = _excelResourceManager.GetResourceBundlesFromExcel(filePathFrom, _settings);
 			AddNewBundles(newLanguageResourceBundles);
 
+			//TODO: add Global Settings to template
 			_languageResourcesContainer.Save();
 		}
 
@@ -129,7 +132,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			_languageResourcesContainer.Save();
 		}
 
-		private static void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle template, string property)
+		private void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle template, string property)
 		{
 			var templateBundleGetter = typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(template, null) as Wordlist;
 			var templateBundleSetter = typeof(LanguageResourceBundle).GetProperty(property)?.SetMethod;
@@ -150,23 +153,42 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 		}
 
-		private static void AddSegmentationRulesToBundle(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
+		private void AddNumberSeparators(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
+		{
+			if (newBundle.NumbersSeparators?.Count > 0)
+			{
+				if (correspondingBundleInTemplate.NumbersSeparators != null &&
+					correspondingBundleInTemplate.NumbersSeparators.Count > 0)
+				{
+					foreach (var separator in newBundle.NumbersSeparators)
+					{
+						if (!correspondingBundleInTemplate.NumbersSeparators.Contains(separator))
+						{
+							correspondingBundleInTemplate.NumbersSeparators.Add(separator);
+						}
+					}
+				}
+				else
+				{
+					correspondingBundleInTemplate.NumbersSeparators = newBundle.NumbersSeparators;
+				}
+			}
+		}
+
+		private void AddSegmentationRulesToBundle(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
 		{
 			if (newBundle.SegmentationRules == null) return;
 			if (correspondingBundleInTemplate.SegmentationRules != null)
 			{
-				var newSegmentationRules = new SegmentationRules();
 				foreach (var newRule in newBundle.SegmentationRules.Rules)
 				{
-					if (correspondingBundleInTemplate.SegmentationRules.Rules.All(oldRule =>
-						!string.Equals(newRule.Description.Text, oldRule.Description.Text,
+					if (!correspondingBundleInTemplate.SegmentationRules.Rules.Any(oldRule =>
+						string.Equals(newRule.Description.Text, oldRule.Description.Text,
 							StringComparison.OrdinalIgnoreCase)))
 					{
-						newSegmentationRules.AddRule(newRule);
+						correspondingBundleInTemplate.SegmentationRules.AddRule(newRule);
 					}
 				}
-
-				correspondingBundleInTemplate.SegmentationRules.Rules.AddRange(newSegmentationRules.Rules);
 			}
 			else
 			{
@@ -187,11 +209,96 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "OrdinalFollowers");
 					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Variables");
 					AddSegmentationRulesToBundle(newBundle, correspondingBundleInTemplate);
+					AddDates(newBundle, correspondingBundleInTemplate);
+					AddTimes(newBundle, correspondingBundleInTemplate);
+					AddNumberSeparators(newBundle, correspondingBundleInTemplate);
+					newBundle.CurrencyFormats.C
 				}
 				//otherwise, just add the newBundle
 				else
 				{
 					_languageResourcesContainer.LanguageResourceBundles.Add(newBundle);
+				}
+			}
+		}
+
+
+
+		private void AddTimes(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
+		{
+			if (newBundle.LongTimeFormats?.Count > 0)
+			{
+				if (correspondingBundleInTemplate.LongTimeFormats != null &&
+					correspondingBundleInTemplate.LongTimeFormats.Count > 0)
+				{
+					foreach (var longTime in newBundle.LongTimeFormats)
+					{
+						if (!correspondingBundleInTemplate.LongTimeFormats.Contains(longTime))
+						{
+							correspondingBundleInTemplate.LongTimeFormats.Add(longTime);
+						}
+					}
+				}
+				else
+				{
+					correspondingBundleInTemplate.LongTimeFormats = newBundle.LongTimeFormats;
+				}
+			}
+
+			if (newBundle.ShortTimeFormats?.Count > 0)
+			{
+				if (correspondingBundleInTemplate.ShortTimeFormats != null && correspondingBundleInTemplate.ShortTimeFormats.Count > 0)
+				{
+					foreach (var shortTime in newBundle.ShortTimeFormats)
+					{
+						if (!correspondingBundleInTemplate.ShortTimeFormats.Contains(shortTime))
+						{
+							correspondingBundleInTemplate.ShortTimeFormats.Add(shortTime);
+						}
+					}
+				}
+				else
+				{
+					correspondingBundleInTemplate.ShortTimeFormats = newBundle.ShortTimeFormats;
+				}
+			}
+		}
+
+		private void AddDates(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
+		{
+			if (newBundle.LongDateFormats?.Count > 0)
+			{
+				if (correspondingBundleInTemplate.LongDateFormats != null && correspondingBundleInTemplate.LongDateFormats.Count > 0)
+				{
+					foreach (var longDate in newBundle.LongDateFormats)
+					{
+						if (!correspondingBundleInTemplate.LongDateFormats.Contains(longDate))
+						{
+							correspondingBundleInTemplate.LongDateFormats.Add(longDate);
+						}
+					}
+				}
+				else
+				{
+					correspondingBundleInTemplate.LongDateFormats = newBundle.LongDateFormats;
+				}
+			}
+
+			if (newBundle.ShortDateFormats?.Count > 0)
+			{
+				if (correspondingBundleInTemplate.ShortDateFormats != null && correspondingBundleInTemplate.ShortDateFormats.Count > 0)
+				{
+					foreach (var shortDate in newBundle.ShortDateFormats)
+					{
+						if (!correspondingBundleInTemplate.ShortDateFormats.Contains(shortDate))
+						{
+							correspondingBundleInTemplate.ShortDateFormats.Add(shortDate);
+						}
+					}
+				}
+				else
+				{
+					correspondingBundleInTemplate.ShortDateFormats = newBundle.ShortDateFormats;
 				}
 			}
 		}

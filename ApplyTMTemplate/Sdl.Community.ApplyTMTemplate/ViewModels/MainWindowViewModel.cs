@@ -28,13 +28,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private ICommand _dragEnterCommand;
 		private ICommand _exportCommand;
 		private ICommand _importCommand;
-		private string _message;
 		private string _progressVisibility;
 		private ICommand _removeTMsCommand;
-		private Models.ResourceManager _resourceManager;
+		private ResourceManager _resourceManager;
 
 		private bool _selectAllChecked;
-		private bool _templateValidity;
 		private TimedTextBox _timedTextBoxViewModel;
 		private ObservableCollection<TranslationMemory> _tmCollection;
 
@@ -123,13 +121,19 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				Settings.OrdinalFollowersChecked = value;
 				Settings.SegmentationRulesChecked = value;
 				Settings.DatesChecked = value;
+				Settings.TimesChecked = value;
+				Settings.NumbersChecked = value;
+				Settings.MeasurementsChecked = value;
+				Settings.CurrenciesChecked = value;
+				Settings.RecognizersChecked = value;
+				Settings.WordCountFlagsChecked = value;
 				OnPropertyChanged(nameof(SelectAllChecked));
 			}
 		}
 
 		public List<TranslationMemory> SelectedTmsList
 		{
-			get { return TmCollection.Where(tm => tm.IsSelected).ToList(); }
+			get => TmCollection.Where(tm => tm.IsSelected).ToList();
 		}
 
 		public Settings Settings { get; }
@@ -193,7 +197,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private async void ApplyTmTemplate()
 		{
-			var isValid = IsTemplateValid();
+			var isValid = IsTemplateValid(false);
 			if (!isValid) return;
 
 			UnmarkTms(SelectedTmsList);
@@ -218,13 +222,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private void Browse()
 		{
 			var resourceTemplatePath = _filePathDialogService.GetFilePathInputFromUser(filter: "Language resource templates|*.sdltm.resource");
+			if (resourceTemplatePath == null) return;
 			ResourceTemplatePath = resourceTemplatePath[0];
 		}
 
 		private async void Export()
 		{
 			LoadResourcesFromTemplate();
-			var isValid = IsTemplateValid();
+			var isValid = IsTemplateValid(false);
 			if (!isValid) return;
 
 			var saveLocation = GetSaveLocation();
@@ -267,18 +272,17 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private async void Import(object parameter)
 		{
-			if (!IsTemplateValid()) return;
+			if (!IsTemplateValid(true)) return;
 
 			try
 			{
-				//TODO: maybe we can implement Strategy pattern to better generalize this process
 				if ((parameter as Button)?.Name == "ImportFromExcel")
 				{
-					var filePath = _filePathDialogService.GetFilePathInputFromUser(
+					var fileNamesInput = _filePathDialogService.GetFilePathInputFromUser(
 						PluginResources.Import_window_title,
-						"Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx");
-					if (filePath == null) return;
-					await ImportResourcesFromExcel(filePath);
+						filter:"Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx");
+					if (fileNamesInput == null) return;
+					await ImportResourcesFromExcel(fileNamesInput);
 				}
 				else
 				{
@@ -306,7 +310,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			ProgressVisibility = "Visible";
 			await Task.Run(() =>
 			{
-				if (fileName.Contains(".xlsx"))
+				if (fileName[0].Contains(".xlsx"))
 				{
 					_resourceManager.ImportResourcesFromExcel(fileName[0]);
 				}
@@ -321,23 +325,18 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
 		}
 
-		private bool IsTemplateValid()
+		private bool IsTemplateValid(bool isImport)
 		{
-			bool isValid;
 			if (_resourceManager != null)
 			{
-				isValid = _resourceManager.ValidateTemplate();
+				return _resourceManager.ValidateTemplate(isImport);
 			}
-			else
+			if (string.IsNullOrEmpty(ResourceTemplatePath))
 			{
-				if (string.IsNullOrEmpty(ResourceTemplatePath))
-				{
-					_message = PluginResources.Select_A_Template;
-				}
-				isValid = false;
+				_messageService.ShowWarningMessage(PluginResources.No_file_path_provided, PluginResources.Select_A_Template);
 			}
 
-			return isValid;
+			return false;
 		}
 
 		private void LoadResourcesFromTemplate()

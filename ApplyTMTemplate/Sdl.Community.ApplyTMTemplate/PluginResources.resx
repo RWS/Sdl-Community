@@ -308,13 +308,13 @@
     <value>Measurements</value>
   </data>
   <data name="NumberSeparators" xml:space="preserve">
-    <value>NumberSeparators</value>
+    <value>Number separators</value>
   </data>
-  <data name="Times" xml:space="preserve">
-    <value>Times</value>
+  <data name="LongTimes" xml:space="preserve">
+    <value>Long times</value>
   </data>
-  <data name="Dates" xml:space="preserve">
-    <value>Dates</value>
+  <data name="LongDates" xml:space="preserve">
+    <value>Long dates</value>
   </data>
   <data name="SegmentationRules" xml:space="preserve">
     <value>SegmentationRules</value>
@@ -323,12 +323,30 @@
     <value>Variables</value>
   </data>
   <data name="OrdinalFollowers" xml:space="preserve">
-    <value>OrdinalFollowers</value>
+    <value>Ordinal followers</value>
   </data>
   <data name="Abbreviations" xml:space="preserve">
     <value>Abbreviations</value>
   </data>
   <data name="Currencies" xml:space="preserve">
-	  <value>Currencies</value>
+    <value>Currencies</value>
+  </data>
+  <data name="Recognizers" xml:space="preserve">
+    <value>Recognizers</value>
+  </data>
+  <data name="WordCountFlags" xml:space="preserve">
+    <value>Word count flags</value>
+  </data>
+  <data name="ShortDates" xml:space="preserve">
+    <value>Short dates</value>
+  </data>
+  <data name="ShortTimes" xml:space="preserve">
+    <value>Short times</value>
+  </data>
+  <data name="GlobalSettings" xml:space="preserve">
+	  <value>Global settings</value>
+  </data>
+  <data name="No_file_path_provided" xml:space="preserve">
+	  <value>No file path provided</value>
   </data>
 </root>

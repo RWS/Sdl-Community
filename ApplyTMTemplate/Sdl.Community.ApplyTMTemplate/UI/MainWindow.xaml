@@ -25,9 +25,9 @@
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
-				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
-				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/checkboxresources.xaml" />
-				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
+				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/CheckboxResources.xaml" />
+				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
 				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
 			</ResourceDictionary.MergedDictionaries>
@@ -64,6 +64,11 @@
 				<Setter Property="Height" Value="20"/>
 			</Style>
 
+			<Style x:Key="OptionsCheckBoxes" BasedOn="{StaticResource CheckBoxStyle}" TargetType="CheckBox">
+				<Setter Property="Width" Value="130"/>
+				<Setter Property="Margin" Value="0"/>
+			</Style>
+
 			<DataTemplate DataType="{x:Type viewModels:TimedTextBox}">
 				<ui:TimedTextBox />
 			</DataTemplate>
@@ -74,8 +79,8 @@
 	        Style="{StaticResource WindowControlBorderStyle}">
 		<Grid>
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition />
-				<ColumnDefinition />
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition  Width="8*"/>
 			</Grid.ColumnDefinitions>
 
 			<Grid.RowDefinitions>
@@ -98,34 +103,41 @@
 				<TextBlock Text="What to apply:" FontSize="13" Style="{StaticResource TextBlockStyle}" />
 			</StackPanel>
 
-			<DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+			<CheckBox Grid.Row="4" Grid.Column="0" 
+			          Name="SelectAll" Content="Select all..." 
+			          Style="{StaticResource CheckBoxStyle}"
+					  HorizontalAlignment="Right"
+			          IsChecked="{Binding SelectAllChecked}" Margin="0,0,30,0" />
+			<DockPanel Grid.Row="4" Grid.Column="1" >
 				<StackPanel DockPanel.Dock="Top" Orientation="Horizontal"  Margin="10,10,0,0">
-					<CheckBox Name="SelectAll" Content="Select all..." Style="{StaticResource CheckBoxStyle}"
-					          IsChecked="{Binding SelectAllChecked}" Margin="0,0,30,0" />
-					<CheckBox Content="Variables" Style="{StaticResource CheckBoxStyle}"
-					          IsChecked="{Binding Settings.VariablesChecked}" />
-					<CheckBox Content="Abbreviations" Style="{StaticResource CheckBoxStyle}"
+					<CheckBox Content="Variables" 
+					          IsChecked="{Binding Settings.VariablesChecked}" 
+					          Style="{StaticResource OptionsCheckBoxes}"/>
+					<CheckBox Content="Abbreviations" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.AbbreviationsChecked}" />
-					<CheckBox Content="Ordinal followers" Style="{StaticResource CheckBoxStyle}"
+					<CheckBox Content="Ordinal followers" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.OrdinalFollowersChecked}" />
-					<CheckBox Content="Segmentation rules" Style="{StaticResource CheckBoxStyle}"
+					<CheckBox Content="Segmentation rules" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.SegmentationRulesChecked}" />
-					<CheckBox Content="Dates" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding Settings.DatesChecked}" />
+					<CheckBox Content="Dates" Style="{StaticResource OptionsCheckBoxes}" IsChecked="{Binding Settings.DatesChecked}" />
 				</StackPanel>
-				<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"  Margin="108,10,0,0">
-					<CheckBox Content="Times" Style="{StaticResource CheckBoxStyle}"
+				<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"  Margin="10,10,0,0">
+					<CheckBox Content="Times" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.TimesChecked}" />
-					<CheckBox Content="Numbers" Style="{StaticResource CheckBoxStyle}"
+					<CheckBox Content="Numbers" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.NumbersChecked}" />
-					<CheckBox Content="Measurements" Style="{StaticResource CheckBoxStyle}"
+					<CheckBox Content="Measurements" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.MeasurementsChecked}" />
-					<CheckBox Content="Currencies" Style="{StaticResource CheckBoxStyle}"
-					          IsChecked="{Binding Settings.c}" />
-					<CheckBox Content="Dates" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding Settings.DatesChecked}" />
+					<CheckBox Content="Currencies" Style="{StaticResource OptionsCheckBoxes}"
+					          IsChecked="{Binding Settings.CurrenciesChecked}" />
+					<CheckBox Content="Recognizers" Style="{StaticResource OptionsCheckBoxes}" 
+					          IsChecked="{Binding Settings.RecognizersChecked}" />
+					<CheckBox Content="Word count flags" Style="{StaticResource OptionsCheckBoxes}" 
+					          IsChecked="{Binding Settings.WordCountFlagsChecked}" />
 				</StackPanel>
 			</DockPanel>
 
-			<StackPanel Margin="5,20,0,10" Grid.Row="5" Grid.Column="0" Orientation="Horizontal" ToolTip="Add Folder">
+			<StackPanel Margin="5,20,0,10" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" ToolTip="Add Folder">
 				<Button HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}" Style="{StaticResource TmActionButtonStyle}">
 					<StackPanel Orientation="Horizontal">
 						<Image Source="../Resources/AddFolder.png" Style="{StaticResource TmActionImageStyle}"/>
@@ -166,7 +178,7 @@
 				<DataGrid.Columns>
 					<DataGridTemplateColumn Width="Auto" MinWidth="50">
 						<DataGridTemplateColumn.Header>
-								<CheckBox IsChecked="{Binding Path=DataContext.AllTmsChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							<CheckBox IsChecked="{Binding Path=DataContext.AllTmsChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 										  Style="{StaticResource CheckBoxStyle}" />
 						</DataGridTemplateColumn.Header>
 

@@ -145,15 +145,6 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dates.
-        /// </summary>
-        public static string Dates {
-            get {
-                return ResourceManager.GetString("Dates", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Decimal.
         /// </summary>
         public static string DecimalSeparatorCategory {
@@ -333,6 +324,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Global settings.
+        /// </summary>
+        public static string GlobalSettings {
+            get {
+                return ResourceManager.GetString("GlobalSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon GreenDropDown {
@@ -398,11 +398,38 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Long dates.
+        /// </summary>
+        public static string LongDates {
+            get {
+                return ResourceManager.GetString("LongDates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Long times.
+        /// </summary>
+        public static string LongTimes {
+            get {
+                return ResourceManager.GetString("LongTimes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Measurements.
         /// </summary>
         public static string Measurements {
             get {
                 return ResourceManager.GetString("Measurements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No file path provided.
+        /// </summary>
+        public static string No_file_path_provided {
+            get {
+                return ResourceManager.GetString("No_file_path_provided", resourceCulture);
             }
         }
         
@@ -425,7 +452,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NumberSeparators.
+        ///   Looks up a localized string similar to Number separators.
         /// </summary>
         public static string NumberSeparators {
             get {
@@ -434,7 +461,7 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OrdinalFollowers.
+        ///   Looks up a localized string similar to Ordinal followers.
         /// </summary>
         public static string OrdinalFollowers {
             get {
@@ -458,6 +485,15 @@ namespace Sdl.Community.ApplyTMTemplate {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recognizers.
+        /// </summary>
+        public static string Recognizers {
+            get {
+                return ResourceManager.GetString("Recognizers", resourceCulture);
             }
         }
         
@@ -523,6 +559,24 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string Select_at_least_one_TM {
             get {
                 return ResourceManager.GetString("Select_at_least_one_TM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Short dates.
+        /// </summary>
+        public static string ShortDates {
+            get {
+                return ResourceManager.GetString("ShortDates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Short times.
+        /// </summary>
+        public static string ShortTimes {
+            get {
+                return ResourceManager.GetString("ShortTimes", resourceCulture);
             }
         }
         
@@ -617,15 +671,6 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Times.
-        /// </summary>
-        public static string Times {
-            get {
-                return ResourceManager.GetString("Times", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon TM {
@@ -715,6 +760,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string WindowsControl_Minimize {
             get {
                 return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word count flags.
+        /// </summary>
+        public static string WordCountFlags {
+            get {
+                return ResourceManager.GetString("WordCountFlags", resourceCulture);
             }
         }
     }

@@ -7,8 +7,15 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 		private bool _abbreviationsChecked;
 
 		private bool _ordinalFollowersChecked;
+		private bool _recognizersChecked;
 		private bool _segmentationRulesChecked;
 		private bool _variablesChecked;
+		private bool _wordCountFlagsChecked;
+		private bool _timesChecked;
+		private bool _numbersChecked;
+		private bool _measurementsChecked;
+		private bool _datesChecked;
+		private bool _currenciesChecked;
 
 		public Settings()
 		{
@@ -21,9 +28,9 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			NumbersChecked = true;
 			MeasurementsChecked = true;
 			CurrenciesChecked = true;
+			RecognizersChecked = true;
+			WordCountFlagsChecked = true;
 		}
-
-		public bool CurrenciesChecked { get; set; }
 
 		public bool AbbreviationsChecked
 		{
@@ -35,9 +42,45 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 		}
 
-		public bool DatesChecked { get; set; }
-		public bool MeasurementsChecked { get; set; }
-		public bool NumbersChecked { get; set; }
+		public bool CurrenciesChecked
+		{
+			get => _currenciesChecked;
+			set
+			{
+				_currenciesChecked = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool DatesChecked
+		{
+			get => _datesChecked;
+			set
+			{
+				_datesChecked = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool MeasurementsChecked
+		{
+			get => _measurementsChecked;
+			set
+			{
+				_measurementsChecked = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool NumbersChecked
+		{
+			get => _numbersChecked;
+			set
+			{
+				_numbersChecked = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public bool OrdinalFollowersChecked
 		{
@@ -45,6 +88,16 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			set
 			{
 				_ordinalFollowersChecked = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool RecognizersChecked
+		{
+			get => _recognizersChecked;
+			set
+			{
+				_recognizersChecked = value;
 				OnPropertyChanged();
 			}
 		}
@@ -59,7 +112,15 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 		}
 
-		public bool TimesChecked { get; set; }
+		public bool TimesChecked
+		{
+			get => _timesChecked;
+			set
+			{
+				_timesChecked = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public bool VariablesChecked
 		{
@@ -67,6 +128,16 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			set
 			{
 				_variablesChecked = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool WordCountFlagsChecked
+		{
+			get => _wordCountFlagsChecked;
+			set
+			{
+				_wordCountFlagsChecked = value;
 				OnPropertyChanged();
 			}
 		}

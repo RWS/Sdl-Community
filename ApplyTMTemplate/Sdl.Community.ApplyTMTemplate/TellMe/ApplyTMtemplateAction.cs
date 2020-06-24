@@ -31,7 +31,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 			};
 
 			System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(mainWindow);
-			mainWindow.Show();
+			mainWindow.ShowDialog();
 		}
 	}
 }

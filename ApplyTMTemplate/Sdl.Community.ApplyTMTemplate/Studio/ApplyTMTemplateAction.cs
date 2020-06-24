@@ -22,7 +22,7 @@ namespace Sdl.Community.ApplyTMTemplate.Studio
 			};
 
 			System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(mainWindow);
-			mainWindow.Show();
+			mainWindow.ShowDialog();
 		}
 	}
 }
