@@ -903,11 +903,14 @@ namespace Sdl.Community.NumberVerifier
 
 		private bool IsNumberDecimal(string numberText, int lengthCommaOrCustomSep, int lengthPeriodOrCustomSep)
 		{
-			return (lengthCommaOrCustomSep > 0 && lengthCommaOrCustomSep <= 2 && lengthPeriodOrCustomSep == 0 
+			var isDecimal = decimal.TryParse(numberText, out _);
+			var number = isDecimal ? decimal.Parse(numberText) : 0;
+			return (lengthCommaOrCustomSep > 0 && lengthCommaOrCustomSep <= 2 && lengthPeriodOrCustomSep == 0
 			        || lengthPeriodOrCustomSep > 0 && lengthPeriodOrCustomSep <= 2 && lengthCommaOrCustomSep == 0
-			        || lengthCommaOrCustomSep == 0 && lengthPeriodOrCustomSep == 0 // -> it means the number does not contains , or . and is not a thousand number like 2 300
-			        || numberText.Length <= 2)
-			       && !numberText.Contains(" ");
+			        || lengthCommaOrCustomSep == 0 &&
+			        lengthPeriodOrCustomSep == 0 // -> it means the number does not contains , or . and is not a thousand number like 2 300
+			        || number > 0 && number < 1000)
+			       && !Regex.IsMatch(numberText, @"\s"); // number does not contain empty space, which means is not thousand, example: 1 200
 		}
 
 		private bool IsNumberThousandDecimal(string numberText, int lengthCommaOrCustomSep, int lengthPeriodOrCustomSep)
