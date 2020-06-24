@@ -229,8 +229,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				Refresh();
 
 				var project = WizardContext.ProjectFiles[0].Project;
-				var sdlxliffReader = new SdlxliffReader(_segmentBuilder);
-				var xliffWriter = new XliffWriter(WizardContext.ExportSupport);
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, WizardContext.ExcludeFilterItems, WizardContext.ExportOptions);
+				var xliffWriter = new XliffWriter(WizardContext.ExportOptions.XliffSupport);
 
 				var selectedLanguages = GetSelectedLanguages();
 
@@ -245,8 +245,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 					{
 						var xliffFolder = GetXliffFolder(languageFolder, targetFile);
 						var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");
-						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location, WizardContext.ExportCopySourceToTarget);
-						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.ExportIncludeTranslations);
+						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location);
+						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.ExportOptions.IncludeTranslations);
 
 						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetFile.Location));
 						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, xliffFilePath));
@@ -392,31 +392,28 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Id, project.Id));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Name, project.Name));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Location, project.Path));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Created,
-									  project.Created.ToString(CultureInfo.InvariantCulture)));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_DueDate,
-									  project.DueDate.ToString(CultureInfo.InvariantCulture)));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_SourceLanguage,
-									  project.SourceLanguage.CultureInfo.DisplayName));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TargetLanguages,
-									  GetProjectTargetLanguagesString(project)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Created, project.Created.ToString(CultureInfo.InvariantCulture)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_DueDate, project.DueDate.ToString(CultureInfo.InvariantCulture)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_SourceLanguage, project.SourceLanguage.CultureInfo.DisplayName));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TargetLanguages, GetProjectTargetLanguagesString(project)));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ProjectType, project.ProjectType));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Customer, project.Customer?.Name));
 
 			_logReport.AppendLine();
 			_logReport.AppendLine(PluginResources.Label_Options);
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_XliffSupport, WizardContext.ExportSupport));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_XliffSupport, WizardContext.ExportOptions.XliffSupport));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_IncludeTranslations,
-									  WizardContext.ExportIncludeTranslations));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_CopySourceToTarget,
-									  WizardContext.ExportCopySourceToTarget));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.ExportOptions.IncludeTranslations));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.ExportOptions.CopySourceToTarget));
+			if (WizardContext.ExcludeFilterItems.Count > 0)
+			{
+				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExcludeFilterItems)));
+			}
 
 			_logReport.AppendLine();
 			_logReport.AppendLine(PluginResources.Label_Files);
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExportFiles,
-									  WizardContext.ProjectFiles.Count(a => a.Selected)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExportFiles, WizardContext.ProjectFiles.Count(a => a.Selected)));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()));
 			_logReport.AppendLine();
 		}
@@ -488,6 +485,18 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 		private void OnLeavePage(object sender, EventArgs e)
 		{
+		}
+
+		private string GetFitlerItemsString(IEnumerable<FilterItem> filterItems)
+		{
+			var items = string.Empty;
+			foreach (var filterItem in filterItems)
+			{
+				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
+				         filterItem.Name;
+			}
+
+			return items;
 		}
 
 		public void Dispose()

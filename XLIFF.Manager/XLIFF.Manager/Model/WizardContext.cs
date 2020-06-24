@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Sdl.Community.XLIFF.Manager.Common;
-using Sdl.Core.Globalization;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
@@ -14,16 +13,14 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			Action = Enumerators.Action.None;
 			ProjectFiles = new List<ProjectFile>();
 			DateTimeStamp = DateTime.UtcNow;
+			ExcludeFilterItems = new List<FilterItem>();
 
-			ExportSupport = Enumerators.XLIFFSupport.xliff12polyglot;
-			ExportIncludeTranslations = false;
-			ExportCopySourceToTarget = false;
-
-			ImportBackupFiles = true;
-			ImportOverwriteTranslations = true;
-			ImportOriginSystem = string.Empty;
-			ImportConfirmationStatus = ConfirmationLevel.Draft;
+			// TODO: Inject this class
+			ExportOptions = new ExportOptions();
+			ImportOptions = new ImportOptions();
 		}
+
+		public List<FilterItem> ExcludeFilterItems { get; set; }
 
 		public Enumerators.Action Action { get; set; }
 
@@ -33,7 +30,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public Project Project { get; set; }
 
-		public List<ProjectFile> ProjectFiles { get; set; }	
+		public List<ProjectFile> ProjectFiles { get; set; }
 
 		public string TransactionFolder { get; set; }
 
@@ -48,32 +45,22 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			get
 			{
 				var value = DateTimeStamp.Year
-				            + "" + DateTimeStamp.Month.ToString().PadLeft(2, '0')
-				            + "" + DateTimeStamp.Day.ToString().PadLeft(2, '0')
-				            + "" + DateTimeStamp.Hour.ToString().PadLeft(2, '0')
-				            + "" + DateTimeStamp.Minute.ToString().PadLeft(2, '0')
-				            + "" + DateTimeStamp.Second.ToString().PadLeft(2, '0');
+							+ "" + DateTimeStamp.Month.ToString().PadLeft(2, '0')
+							+ "" + DateTimeStamp.Day.ToString().PadLeft(2, '0')
+							+ "" + DateTimeStamp.Hour.ToString().PadLeft(2, '0')
+							+ "" + DateTimeStamp.Minute.ToString().PadLeft(2, '0')
+							+ "" + DateTimeStamp.Second.ToString().PadLeft(2, '0');
 
 				return value;
 			}
 		}
 
-		public Enumerators.XLIFFSupport ExportSupport { get; set; }
+		public ExportOptions ExportOptions { get; set; }
 
-		public bool ExportIncludeTranslations { get; set; }
-
-		public bool ExportCopySourceToTarget { get; set; }
-
-		public bool ImportBackupFiles { get; set; }
-
-		public bool ImportOverwriteTranslations { get; set; }
-
-		public string ImportOriginSystem { get; set; }
-
-		public ConfirmationLevel ImportConfirmationStatus { get; set; }
+		public ImportOptions ImportOptions { get; set; }
 
 		public string GetDefaultTransactionPath()
-		{	
+		{
 			var rootPath = Path.Combine(LocalProjectFolder, "XLIFF.Manager");
 			var path = Path.Combine(rootPath, Action.ToString());
 
@@ -94,6 +81,6 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		{
 			var languageFolder = Path.Combine(WorkingFolder, cultureInfo.Name);
 			return languageFolder;
-		}	
+		}
 	}
 }

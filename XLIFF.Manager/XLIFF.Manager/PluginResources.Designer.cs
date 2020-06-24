@@ -295,6 +295,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exclude Filters: {0}.
+        /// </summary>
+        internal static string Label_ExcludeFilters {
+            get {
+                return ResourceManager.GetString("Label_ExcludeFilters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Files {0}.
         /// </summary>
         internal static string Label_ExportFiles {
@@ -462,6 +471,33 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string Label_SourceLanguage {
             get {
                 return ResourceManager.GetString("Label_SourceLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status - Segments not imported: {0}.
+        /// </summary>
+        internal static string Label_StatusSegmentsNotImported {
+            get {
+                return ResourceManager.GetString("Label_StatusSegmentsNotImported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status - Translations not updated: {0}.
+        /// </summary>
+        internal static string Label_StatusTranslationsNotUpdated {
+            get {
+                return ResourceManager.GetString("Label_StatusTranslationsNotUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status - Translations updated: {0}.
+        /// </summary>
+        internal static string Label_StatusTranslationsUpdated {
+            get {
+                return ResourceManager.GetString("Label_StatusTranslationsUpdated", resourceCulture);
             }
         }
         

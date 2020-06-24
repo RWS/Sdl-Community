@@ -85,6 +85,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.MultiSelectComboBox, Version=1.0.17.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Thirdparty\Sdl.MultiSelectComboBox.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
@@ -215,9 +219,14 @@
     <Compile Include="Interfaces\XLIFFWriter.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Common\Enumerators.cs" />
+    <Compile Include="Model\ConfirmationStatus.cs" />
     <Compile Include="Model\Controllers.cs" />
     <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\ExportOptions.cs" />
+    <Compile Include="Model\FilterItem.cs" />
+    <Compile Include="Model\FilterItemGroup.cs" />
     <Compile Include="Model\ImportFile.cs" />
+    <Compile Include="Model\ImportOptions.cs" />
     <Compile Include="Model\JobProcess.cs" />
     <Compile Include="Model\LanguageInfo.cs" />
     <Compile Include="Model\ProjectFile.cs" />
@@ -238,6 +247,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\CustomerProvider.cs" />
     <Compile Include="Service\DialogService.cs" />
+    <Compile Include="Service\FilterService.cs" />
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\WizardService.cs" />
     <Compile Include="Wizard\ViewModel\ExceptionViewerViewModel.cs" />
@@ -297,10 +307,10 @@
     <Compile Include="XLIFFManagerViewController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Page Include="Controls\ToolWindowsControl.xaml">
       <SubType>Designer</SubType>
@@ -313,6 +323,26 @@
     <Page Include="Controls\WindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Custom.Image.Resources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Custom.SelectedItemTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Custom.DropdownItemTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Resources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Custom.ControlTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\ExpanderStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -479,6 +509,9 @@
     <Resource Include="Resources\Settings.ico" />
     <Resource Include="Resources\TellMe.ico" />
     <Resource Include="Resources\Warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Thirdparty\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

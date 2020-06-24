@@ -129,7 +129,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			{
 				if (projectFile.Action == Enumerators.Action.Import)
 				{
-					var activityfile = projectFile.ProjectFileActivities.LastOrDefault(a => a.Action == Enumerators.Action.Import);
+					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Import);
 
 					projectFile.Status = Enumerators.Status.Warning;
 					projectFile.ShortMessage = PluginResources.Message_File_already_imported;
@@ -327,11 +327,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		private void InitializeOriginSystemValue(Xliff xliff)
 		{
-			if (string.IsNullOrEmpty(WizardContext.ImportOriginSystem))
+			if (string.IsNullOrEmpty(WizardContext.ImportOptions.OriginSystem))
 			{
 				if (xliff.Support == Enumerators.XLIFFSupport.xliff12polyglot)
 				{
-					WizardContext.ImportOriginSystem = PluginResources.Label_Polyglot;
+					WizardContext.ImportOptions.OriginSystem = PluginResources.Label_Polyglot;
 				}
 			}
 		}
