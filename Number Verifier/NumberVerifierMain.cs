@@ -772,50 +772,21 @@ namespace Sdl.Community.NumberVerifier
 			try
 			{
 				// you can use in target as separators source separators or selected target separators
-				//1 specificicat-done
 				if (_verificationSettings.AllowLocalizations)
 				{
-
-					if (isDecimalSeparator)
-					{
-						selectedSep = _sourceMatchingDecimalSeparators;//decimalAllowlocalizationProcessor
-						selectedSep = selectedSep + _targetMatchingDecimalSeparators;
-					}
-					else
-					{
-						selectedSep = _sourceMatchingThousandSeparators;//thousandAlloProc
-						selectedSep = selectedSep + _targetMatchingThousandSeparators;
-					}
+					selectedSep = isDecimalSeparator ? _sourceMatchingDecimalSeparators : _sourceMatchingThousandSeparators;
+					selectedSep = isDecimalSeparator ? $"{selectedSep}{_targetMatchingDecimalSeparators}" : $"{selectedSep}{_targetMatchingThousandSeparators}";
 				}
 
-				//1 specificicat
-				//you can use only source separators selected
+				// you can use only source separators selected
 				if (_verificationSettings.PreventLocalizations)
 				{
-					if (isDecimalSeparator)
-					{
-						selectedSep = _sourceMatchingDecimalSeparators; //DecimalPrevProc
-					}
-					else
-					{
-						selectedSep = _sourceMatchingThousandSeparators;//ThouPrevProc
-					}
-
+					selectedSep = isDecimalSeparator ? _sourceMatchingDecimalSeparators : _sourceMatchingThousandSeparators;
 				}
 
-				//1 specificicat
 				if (_verificationSettings.RequireLocalizations)
 				{
-					if (isDecimalSeparator)
-					{
-						selectedSep = selectedSeparators;//DecimalReqProc
-														 //sourceDecimalProc
-														 //tarDecimalProc
-					}
-					else
-					{
-						selectedSep = selectedSeparators;//sourceThProcess, targetThProc
-					}
+					selectedSep = selectedSeparators;
 				}
 
 				// Composition (ApostrophCompositionProcessor)
@@ -826,7 +797,7 @@ namespace Sdl.Community.NumberVerifier
 
 				// get a list of source separators if we are in case of allow localization, or prevent localization
 				// Composition UniqueSeparatorComposition
-				if (selectedSep != string.Empty)
+				if (!string.IsNullOrEmpty(selectedSep))
 				{
 					var sepSource = selectedSep.Split('\\').ToList();
 
@@ -846,7 +817,7 @@ namespace Sdl.Community.NumberVerifier
 					separators.Append(sep);
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 			}
@@ -858,38 +829,37 @@ namespace Sdl.Community.NumberVerifier
 			try
 			{
 				var customSeparators = GetCustomSeparators(VerificationSettings.GetSourceDecimalCustomSeparator, VerificationSettings.GetTargetDecimalCustomSeparator);
-				var spacesSeparators = $@"\u2009\u00A0\u0020\u202F";
-				var numbers = Regex.Split(normalizedNumber.Text, $@"[^−\-\0-9 ０-９\[.,{customSeparators}{spacesSeparators}]+").Where(c => c != "." && c.Trim() != "");
+				var numbers = Regex.Split(normalizedNumber.Text, $@"[^−\-\0-9 ０-９\[.,{customSeparators}{Constants.SpaceSeparators}]+").Where(c => c != "." && c.Trim() != "");
 
 				if (numbers.Any())
 				{
 					foreach (var item in numbers)
 					{
 						var text = item.Trim();
-						var lengthCommaOrCustomSep = GetItemLength(text, ',', customSeparators);
-						var lengthPeriodOrCustomSep = GetItemLength(text, '.', customSeparators);
+						var separatorModel = new SeparatorModel
+						{
+							LengthCommaOrCustomSep = GetItemLength(text, ',', customSeparators),
+							LengthPeriodOrCustomSep = GetItemLength(text, '.', customSeparators),
+							CustomSeparators = customSeparators
+						};
 
-						if (IsNumberDecimal(text, lengthCommaOrCustomSep, lengthPeriodOrCustomSep))
+						if (IsNumberDecimal(text, separatorModel))
 						{
 							// check if thousand is only decimal
 							normalizedNumber.Separators = normalizedNumber.DecimalSeparators;
 							SetNormalizedNumber(normalizedNumber, text);
 						}
-						else if(IsNumberThousandDecimal(text, lengthCommaOrCustomSep, lengthPeriodOrCustomSep))
+						else if(IsNumberThousandDecimal(text, separatorModel))
 						{
 							// check if the number is both thousand and decimal
-							text = _textFormatter.FormatTextSpace(normalizedNumber.ThousandSeparators, text);
-							text = _textFormatter.FormatTextForNoSeparator(text, _isSource, lengthCommaOrCustomSep, lengthPeriodOrCustomSep, customSeparators);
-							normalizedNumber.Separators = $"{normalizedNumber.ThousandSeparators}{normalizedNumber.DecimalSeparators}";
-
+							var separators = $"{normalizedNumber.ThousandSeparators}{normalizedNumber.DecimalSeparators}";
+							text = _textFormatter.FormatText(separatorModel, normalizedNumber, text, separators, _isSource);
 							SetNormalizedNumber(normalizedNumber, text);
 						}
 						else
 						{
 							// number is only thousand
-							text = _textFormatter.FormatTextSpace(normalizedNumber.ThousandSeparators, text);
-							text = _textFormatter.FormatTextForNoSeparator(text, _isSource, lengthCommaOrCustomSep, lengthPeriodOrCustomSep, customSeparators);
-							normalizedNumber.Separators = normalizedNumber.ThousandSeparators;
+							text = _textFormatter.FormatText(separatorModel, normalizedNumber, text, normalizedNumber.ThousandSeparators, _isSource);
 							SetNormalizedNumber(normalizedNumber, text);
 						}
 					}
@@ -901,22 +871,23 @@ namespace Sdl.Community.NumberVerifier
 			}
 		}
 
-		private bool IsNumberDecimal(string numberText, int lengthCommaOrCustomSep, int lengthPeriodOrCustomSep)
+		private bool IsNumberDecimal(string numberText, SeparatorModel separatorModel)
 		{
 			var isDecimal = decimal.TryParse(numberText, out _);
 			var number = isDecimal ? decimal.Parse(numberText) : 0;
-			return (lengthCommaOrCustomSep > 0 && lengthCommaOrCustomSep <= 2 && lengthPeriodOrCustomSep == 0
-			        || lengthPeriodOrCustomSep > 0 && lengthPeriodOrCustomSep <= 2 && lengthCommaOrCustomSep == 0
-			        || lengthCommaOrCustomSep == 0 &&
-			        lengthPeriodOrCustomSep == 0 // -> it means the number does not contains , or . and is not a thousand number like 2 300
+
+			return (separatorModel.LengthCommaOrCustomSep > 0 && separatorModel.LengthCommaOrCustomSep <= 2 && separatorModel.LengthPeriodOrCustomSep == 0
+			        || separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthPeriodOrCustomSep <= 2 && separatorModel.LengthCommaOrCustomSep == 0
+			        || separatorModel.LengthCommaOrCustomSep == 0 &&
+			        separatorModel.LengthPeriodOrCustomSep == 0 // -> it means the number does not contains , or . and is not a thousand number like 2 300
 			        || number > 0 && number < 1000)
 			       && !Regex.IsMatch(numberText, @"\s"); // number does not contain empty space, which means is not thousand, example: 1 200
 		}
 
-		private bool IsNumberThousandDecimal(string numberText, int lengthCommaOrCustomSep, int lengthPeriodOrCustomSep)
+		private bool IsNumberThousandDecimal(string numberText, SeparatorModel separatorModel)
 		{
-			return lengthPeriodOrCustomSep >= 3 && lengthCommaOrCustomSep <= 2  // corresponds to thousands period(or other thousands custom separator) AND decimal comma(or other decimal custom separator)
-			       || lengthCommaOrCustomSep >= 3 && lengthPeriodOrCustomSep <= 2 // corresponds to thousands comma(or other thousands custom separator) AND decimal period(or other decimal custom separator)
+			return separatorModel.LengthPeriodOrCustomSep >= 3 && separatorModel.LengthCommaOrCustomSep <= 2  // corresponds to thousands period(or other thousands custom separator) AND decimal comma(or other decimal custom separator)
+			       || separatorModel.LengthCommaOrCustomSep >= 3 && separatorModel.LengthPeriodOrCustomSep <= 2 // corresponds to thousands comma(or other thousands custom separator) AND decimal period(or other decimal custom separator)
 			       || Regex.Matches(numberText, ",").Count > 1 // corresponds to thousands and decimal COMMA (any other custom separator is not applied the SAME for thousand and decimal place)
 			       || Regex.Matches(numberText, @"\.").Count > 1
 			       || numberText.Length > 3;

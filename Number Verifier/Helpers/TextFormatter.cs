@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using Sdl.Community.NumberVerifier.Model;
 
 namespace Sdl.Community.NumberVerifier.Helpers
 {
@@ -67,7 +68,7 @@ namespace Sdl.Community.NumberVerifier.Helpers
 		// Format text so the comma/period will be removed from the text when the TargetNoSeparator or SourceNoSeparator is enabled,
 		// so the number can be validated entirely and it won't be split based on the , or .
 		// E.g: source text: 1,300 with option 'Comma separator' and target text: 1300 with option 'No separator'
-		public string FormatTextForNoSeparator(string text, bool isSource, int lengthCommaOrCustomSep, int lengthPeriodOrCustomSep, string customSeparators)
+		public string FormatTextForNoSeparator(string text, bool isSource, SeparatorModel separatorModel)
 		{
 			// Replace separator when for both source AND target, the 'NoSeparator' option is enabled
 			// AND user enables also one of the option: SourceThousandsComma/SourceThousandsPeriod when the text is source and
@@ -76,9 +77,9 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			if (isSource && verificationSettings.SourceNoSeparator && verificationSettings.TargetNoSeparator
 			    && (verificationSettings.SourceThousandsComma || verificationSettings.SourceThousandsPeriod)
 			    || !isSource && verificationSettings.TargetNoSeparator && verificationSettings.SourceNoSeparator
-				   && (verificationSettings.TargetThousandsComma || verificationSettings.TargetThousandsPeriod))
+			    && (verificationSettings.TargetThousandsComma || verificationSettings.TargetThousandsPeriod))
 			{
-				text = GetFormattedText(text, lengthCommaOrCustomSep, lengthPeriodOrCustomSep, customSeparators);
+				text = GetFormattedText(separatorModel, text);
 				return text;
 			}
 			// When for both source AND target settings, only the 'No separator' is checked, do not format the text
@@ -89,7 +90,7 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			// When text is source and the verification is for Target 'NoSeparator' OR the text is target and the verification is for Source 'NoSeparator', then format the text
 			if (isSource && verificationSettings.TargetNoSeparator || !isSource && verificationSettings.SourceNoSeparator)
 			{
-				text = GetFormattedText(text, lengthCommaOrCustomSep, lengthPeriodOrCustomSep, customSeparators);
+				text = GetFormattedText(separatorModel, text);
 			}
 			return text;
 		}
@@ -174,22 +175,32 @@ namespace Sdl.Community.NumberVerifier.Helpers
 
 			return separatorsBuilder.ToString();
 		}
+
+		// Format text for the thousand numbers (ex: 1,200) or for the combination of thousand-decimal numbers (ex: 1,200.31)
+		public string FormatText(SeparatorModel separatorModel, NormalizedNumber normalizedNumber, string text, string separators, bool isSource)
+		{
+			text = FormatTextSpace(normalizedNumber.ThousandSeparators, text);
+			text = FormatTextForNoSeparator(text, isSource, separatorModel);
+			normalizedNumber.Separators = separators;
+
+			return text;
+		}
 		
 		// Get the formatted text after the thousand separator is removed
-		private string GetFormattedText(string text, int lengthCommaOrCustomSep, int lengthPeriodOrCustomSep, string customSeparators )
+		private string GetFormattedText(SeparatorModel separatorModel, string text)
 		{
-			if (lengthCommaOrCustomSep >= 3)
+			if (separatorModel.LengthCommaOrCustomSep >= 3)
 			{
 				// replace the "," or custom separator only when it located at thousand position
-				customSeparators = $"{customSeparators},";
-				text = GetReplacedText(text, customSeparators);
+				separatorModel.CustomSeparators = $"{separatorModel.CustomSeparators},";
+				text = GetReplacedText(text, separatorModel.CustomSeparators);
 			}
 
-			if (lengthPeriodOrCustomSep >= 3)
-			{               
+			if (separatorModel.LengthPeriodOrCustomSep >= 3)
+			{
 				// replace the "." or custom separator only when it located at thousand position
-				customSeparators = $"{customSeparators}.";
-				text = GetReplacedText(text, customSeparators);
+				separatorModel.CustomSeparators = $"{separatorModel.CustomSeparators}.";
+				text = GetReplacedText(text, separatorModel.CustomSeparators);
 			}
 
 			return text;
@@ -209,7 +220,6 @@ namespace Sdl.Community.NumberVerifier.Helpers
 					// remove the first thousand separator for case like: 1,200,50 (when the same separator is used for both thousand and decimal)
 					var indexOfSeparator = text.IndexOf(separator, StringComparison.Ordinal);
 					text = text.Remove(indexOfSeparator, 1).Insert(indexOfSeparator, string.Empty);
-
 				}
 				else
 				{
