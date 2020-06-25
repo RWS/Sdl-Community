@@ -1,6 +1,8 @@
-﻿using Sdl.Community.XLIFF.Manager.Common;
+﻿using System.Collections.Generic;
+using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers;
+using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using XLIFF.Manager.UnitTests.Common;
 using Xunit;
@@ -27,8 +29,9 @@ namespace XLIFF.Manager.UnitTests.FileTypeSupport
 			var xliffReader = new XliffReder(sniffer, segmentBuilder);
 			//var pocoFilterManager = new PocoFilterManager(false);
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-
-			var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, segmentBuilder);
+			var filterItems = new List<FilterItem>();
+			var importOptions = new ImportOptions();
+			var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, segmentBuilder, filterItems, importOptions);
 
 			var testFile = support == Enumerators.XLIFFSupport.xliff12polyglot
 				? _testFilesUtil.GetSampleFilePath("Xliff12", "Polyglot", "QuotesSample.docx.sdlxliff.xliff")

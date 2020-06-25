@@ -132,8 +132,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Import);
 
 					projectFile.Status = Enumerators.Status.Warning;
-					projectFile.ShortMessage = PluginResources.Message_File_already_imported;
-					projectFile.Details = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString);
+					projectFile.ShortMessage = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString);					
 				}
 				else
 				{
@@ -309,7 +308,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 						return;
 					}
 
-					var projectFileTargetLanguage = projectFile.TargetLanguage.CultureInfo.Name;
+					var projectFileTargetLanguage = projectFile.TargetLanguage;
 					var projectFileTargetPath = GetPathLocation(projectFile.Location, xliffTargetLanguage);
 
 					if (string.Compare(projectFileTargetLanguage, xliffTargetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0 &&

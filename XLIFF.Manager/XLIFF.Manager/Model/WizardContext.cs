@@ -14,8 +14,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			ProjectFiles = new List<ProjectFile>();
 			DateTimeStamp = DateTime.UtcNow;
 			ExcludeFilterItems = new List<FilterItem>();
-
-			// TODO: Inject this class
+			
 			ExportOptions = new ExportOptions();
 			ImportOptions = new ImportOptions();
 		}
@@ -77,9 +76,9 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			return path;
 		}
 
-		public string GetLanguageFolder(CultureInfo cultureInfo)
+		public string GetLanguageFolder(string name)
 		{
-			var languageFolder = Path.Combine(WorkingFolder, cultureInfo.Name);
+			var languageFolder = Path.Combine(WorkingFolder, name);
 			return languageFolder;
 		}
 	}

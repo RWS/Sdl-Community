@@ -85,9 +85,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.MultiSelectComboBox, Version=1.0.17.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
+    <Reference Include="Sdl.MultiSelectComboBox, Version=1.0.18.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Thirdparty\Sdl.MultiSelectComboBox.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
@@ -132,6 +136,35 @@
     <Compile Include="Actions\Import\ImportFromXLIFFAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
+    <Compile Include="BatchTasks\ExportBatchTask.cs" />
+    <Compile Include="BatchTasks\ImportSettingsPage.cs" />
+    <Compile Include="BatchTasks\ImportSettings.cs" />
+    <Compile Include="BatchTasks\ExportSettings.cs" />
+    <Compile Include="BatchTasks\ExportSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BatchTasks\ExportSettingsControl.Designer.cs">
+      <DependentUpon>ExportSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BatchTasks\ExportSettingsPage.cs" />
+    <Compile Include="BatchTasks\ImportBatchTask.cs" />
+    <Compile Include="BatchTasks\ImportSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BatchTasks\ImportSettingsControl.Designer.cs">
+      <DependentUpon>ImportSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BatchTasks\RequiresSettingsPageAttribute.cs" />
+    <Compile Include="BatchTasks\ViewModel\ExportSettingsViewModel.cs" />
+    <Compile Include="BatchTasks\View\ExportSettingsView.xaml.cs">
+      <DependentUpon>ExportSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BatchTasks\View\ExportOptionsView.xaml.cs">
+      <DependentUpon>ExportOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BatchTasks\View\ExportFilesView.xaml.cs">
+      <DependentUpon>ExportFilesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
     <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
@@ -312,6 +345,18 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="BatchTasks\View\ExportSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BatchTasks\View\ExportOptionsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BatchTasks\View\ExportFilesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\ToolWindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -458,6 +503,12 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BatchTasks\ExportSettingsControl.resx">
+      <DependentUpon>ExportSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BatchTasks\ImportSettingsControl.resx">
+      <DependentUpon>ImportSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProjectFileActivityViewControl.resx">
       <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -511,6 +562,7 @@
     <Resource Include="Resources\Warning.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Model\BatchTaskSettings\" />
     <Folder Include="Thirdparty\" />
   </ItemGroup>
   <PropertyGroup>

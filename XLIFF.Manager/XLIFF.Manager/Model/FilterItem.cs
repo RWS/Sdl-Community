@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
+using System.Xml.Serialization;
 using Sdl.MultiSelectComboBox.API;
 
 namespace Sdl.Community.XLIFF.Manager.Model
@@ -128,6 +129,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		/// 
 		/// Use the ImageSize to identify the space required to display the image in the view.
 		/// </summary>
+		[XmlIgnore]
 		public BitmapImage Image
 		{
 			get => _image;

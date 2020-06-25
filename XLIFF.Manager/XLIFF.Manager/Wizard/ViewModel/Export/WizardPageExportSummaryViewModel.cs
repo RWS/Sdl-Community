@@ -75,16 +75,17 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			summaryText += indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()) + Environment.NewLine;
 
 			var targetLanguages = WizardContext.ProjectFiles.Where(a => a.Selected)
-				.Select(a => a.TargetLanguage.CultureInfo).Distinct();
+				.Select(a => a.TargetLanguage).Distinct();
+
 			foreach (var targetLanguage in targetLanguages)
 			{
 				var languageFolder = WizardContext.GetLanguageFolder(targetLanguage);
 			
 				summaryText += Environment.NewLine;
-				summaryText += string.Format(PluginResources.Label_Language, targetLanguage.DisplayName) + Environment.NewLine;
+				summaryText += string.Format(PluginResources.Label_Language, targetLanguage) + Environment.NewLine;
 				
 				var targetLanguageFiles =
-					WizardContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage.CultureInfo, targetLanguage));
+					WizardContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage, targetLanguage));
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
 					var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
@@ -127,10 +128,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
 
 			var selectedLanguages = string.Empty;
-			foreach (var cultureInfo in selected.Select(a => a.TargetLanguage.CultureInfo).Distinct())
+			foreach (var name in selected.Select(a => a.TargetLanguage).Distinct())
 			{
-				selectedLanguages += (string.IsNullOrEmpty(selectedLanguages) ? string.Empty : ", ") +
-									 cultureInfo.DisplayName;
+				selectedLanguages += (string.IsNullOrEmpty(selectedLanguages) ? string.Empty : ", ") + name;
 			}
 
 			return selectedLanguages;

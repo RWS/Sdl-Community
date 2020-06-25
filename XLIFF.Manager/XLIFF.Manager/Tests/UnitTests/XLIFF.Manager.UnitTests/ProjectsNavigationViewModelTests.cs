@@ -26,7 +26,7 @@ namespace XLIFF.Manager.UnitTests
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
 
 			// act
-			var model = new ProjectsNavigationViewModel(defaultTestProjectData);
+			var model = new ProjectsNavigationViewModel(defaultTestProjectData, null);
 
 			// assert
 			Assert.Equal(defaultTestProjectData.Count, model.FilteredProjects.Count);
@@ -39,7 +39,7 @@ namespace XLIFF.Manager.UnitTests
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
 
 			// act
-			var model = new ProjectsNavigationViewModel(defaultTestProjectData);
+			var model = new ProjectsNavigationViewModel(defaultTestProjectData, null);
 
 			// assert
 			// the first item in the collection is selected by default
@@ -53,7 +53,7 @@ namespace XLIFF.Manager.UnitTests
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
 
 			// act
-			var model = new ProjectsNavigationViewModel(defaultTestProjectData);
+			var model = new ProjectsNavigationViewModel(defaultTestProjectData, null);
 			model.FilterString = defaultTestProjectData[1].Name;
 
 			// assert			
@@ -70,7 +70,7 @@ namespace XLIFF.Manager.UnitTests
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
 
 			// act
-			var model = new ProjectsNavigationViewModel(defaultTestProjectData);
+			var model = new ProjectsNavigationViewModel(defaultTestProjectData, null);
 			model.FilterString = defaultTestProjectData[1].Name.Substring(defaultTestProjectData[1].Name.Length - 2);
 
 			// assert			
@@ -86,7 +86,7 @@ namespace XLIFF.Manager.UnitTests
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
 
 			// act
-			var model = new ProjectsNavigationViewModel(defaultTestProjectData);
+			var model = new ProjectsNavigationViewModel(defaultTestProjectData, null);
 			model.FilterString = defaultTestProjectData[1].Name.ToUpper();
 
 			// assert			
@@ -103,7 +103,7 @@ namespace XLIFF.Manager.UnitTests
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
 
 			// act
-			var model = new ProjectsNavigationViewModel(defaultTestProjectData);
+			var model = new ProjectsNavigationViewModel(defaultTestProjectData, null);
 			model.FilterString = defaultTestProjectData[1].Name;
 			model.FilterString = string.Empty;
 

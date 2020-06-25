@@ -257,7 +257,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				Action = Enumerators.Action.None,
 				Status = Enumerators.Status.Ready,
 				Date = DateTime.MinValue,
-				TargetLanguage = GetLanguageInfo(targetLanguage.CultureInfo),
+				TargetLanguage = targetLanguage.CultureInfo.Name,
 				Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString()),
 				FileType = projectFile.FileTypeId,
 				Project = project

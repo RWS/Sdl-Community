@@ -637,6 +637,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No project files selected!.
+        /// </summary>
+        internal static string Message_NoProjectFilesSelected {
+            get {
+                return ResourceManager.GetString("Message_NoProjectFilesSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the output folder.
         /// </summary>
         internal static string Message_SelectOutputFolder {

@@ -236,20 +236,20 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 									a => a.Selected &&
 									!string.IsNullOrEmpty(a.XliffFilePath) &&
 									File.Exists(a.XliffFilePath))
-									.Select(a => a.TargetLanguage.CultureInfo).Distinct();
+									.Select(a => a.TargetLanguage).Distinct();
 
 				foreach (var targetLanguage in targetLanguages)
 				{
 					var languageFolder = GetLanguageFolder(targetLanguage);
 
 					_logReport.AppendLine();
-					_logReport.AppendLine(string.Format(PluginResources.Label_Language, targetLanguage.DisplayName));
+					_logReport.AppendLine(string.Format(PluginResources.Label_Language, targetLanguage));
 
 					var targetLanguageFiles = WizardContext.ProjectFiles.Where(
 												a => a.Selected &&
 												!string.IsNullOrEmpty(a.XliffFilePath) &&
 												File.Exists(a.XliffFilePath) &&
-												Equals(a.TargetLanguage.CultureInfo, targetLanguage));
+												Equals(a.TargetLanguage, targetLanguage));
 
 					foreach (var targetLanguageFile in targetLanguageFiles)
 					{
@@ -491,9 +491,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			File.Copy(outputFile, Path.Combine(_pathInfo.ApplicationLogsFolderPath, logFileName));
 		}
 
-		private string GetLanguageFolder(CultureInfo targetLanguage)
+		private string GetLanguageFolder(string name)
 		{
-			var languageFolder = WizardContext.GetLanguageFolder(targetLanguage);
+			var languageFolder = WizardContext.GetLanguageFolder(name);
 			if (!Directory.Exists(languageFolder))
 			{
 				Directory.CreateDirectory(languageFolder);
@@ -550,10 +550,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
 
 			var selectedLanguages = string.Empty;
-			foreach (var cultureInfo in selected.Select(a => a.TargetLanguage.CultureInfo).Distinct())
+			foreach (var name in selected.Select(a => a.TargetLanguage).Distinct())
 			{
-				selectedLanguages += (string.IsNullOrEmpty(selectedLanguages) ? string.Empty : ", ") +
-									 cultureInfo.DisplayName;
+				selectedLanguages += (string.IsNullOrEmpty(selectedLanguages) ? string.Empty : ", ") + name;
 			}
 
 			return selectedLanguages;

@@ -40,7 +40,7 @@
 				</CollectionViewSource.SortDescriptions>
 				<CollectionViewSource.GroupDescriptions>
 					<PropertyGroupDescription PropertyName="ProjectModel.Name"/>
-					<PropertyGroupDescription PropertyName="TargetLanguage.CultureInfo.Name"/>
+					<PropertyGroupDescription PropertyName="TargetLanguage"/>
 				</CollectionViewSource.GroupDescriptions>
 			</CollectionViewSource>
 

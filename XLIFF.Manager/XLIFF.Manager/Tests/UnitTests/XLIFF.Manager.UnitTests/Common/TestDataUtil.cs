@@ -99,7 +99,7 @@ namespace XLIFF.Manager.UnitTests.Common
 				FileId = Guid.NewGuid().ToString(),
 				Name = project.Name + ">File " + project.ProjectFiles.Count,
 				Path = "\\Project File Path\\" + project.ProjectFiles.Count,
-				TargetLanguage = targetLanguage,
+				TargetLanguage = targetLanguage.CultureInfo.Name,
 				Project = project
 			};
 

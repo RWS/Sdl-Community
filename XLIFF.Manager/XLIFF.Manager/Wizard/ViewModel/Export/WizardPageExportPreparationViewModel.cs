@@ -234,13 +234,13 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 				var selectedLanguages = GetSelectedLanguages();
 
-				foreach (var cultureInfo in selectedLanguages)
+				foreach (var name in selectedLanguages)
 				{
 					_logReport.AppendLine();
-					_logReport.AppendLine(string.Format(PluginResources.Label_Language, cultureInfo.DisplayName));
+					_logReport.AppendLine(string.Format(PluginResources.Label_Language, name));
 
-					var languageFolder = GetLanguageFolder(cultureInfo);
-					var targetFiles = GetSelectedTargetFiles(cultureInfo);
+					var languageFolder = GetLanguageFolder(name);
+					var targetFiles = GetSelectedTargetFiles(name);
 					foreach (var targetFile in targetFiles)
 					{
 						var xliffFolder = GetXliffFolder(languageFolder, targetFile);
@@ -337,9 +337,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			return xliffFolder;
 		}
 
-		private string GetLanguageFolder(CultureInfo cultureInfo)
+		private string GetLanguageFolder(string name)
 		{
-			var languageFolder = WizardContext.GetLanguageFolder(cultureInfo);
+			var languageFolder = WizardContext.GetLanguageFolder(name);
 			if (!Directory.Exists(languageFolder))
 			{
 				Directory.CreateDirectory(languageFolder);
@@ -435,26 +435,25 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
 
 			var selectedLanguages = string.Empty;
-			foreach (var cultureInfo in selected.Select(a => a.TargetLanguage.CultureInfo).Distinct())
+			foreach (var name in selected.Select(a => a.TargetLanguage).Distinct())
 			{
-				selectedLanguages += (string.IsNullOrEmpty(selectedLanguages) ? string.Empty : ", ") +
-									 cultureInfo.DisplayName;
+				selectedLanguages += (string.IsNullOrEmpty(selectedLanguages) ? string.Empty : ", ") + name;
 			}
 
 			return selectedLanguages;
 		}
 
-		private IEnumerable<ProjectFile> GetSelectedTargetFiles(CultureInfo cultureInfo)
+		private IEnumerable<ProjectFile> GetSelectedTargetFiles(string name)
 		{
 			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
-			var targetFiles = selected.Where(a => Equals(a.TargetLanguage.CultureInfo, cultureInfo));
+			var targetFiles = selected.Where(a => Equals(a.TargetLanguage, name));
 			return targetFiles;
 		}
 
-		private IEnumerable<CultureInfo> GetSelectedLanguages()
+		private IEnumerable<string> GetSelectedLanguages()
 		{
 			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
-			var selectedLanguages = selected.Select(a => a.TargetLanguage.CultureInfo).Distinct();
+			var selectedLanguages = selected.Select(a => a.TargetLanguage).Distinct();
 			return selectedLanguages;
 		}
 

@@ -33,7 +33,7 @@
 					<componentModel:SortDescription PropertyName="Name"/>
 				</CollectionViewSource.SortDescriptions>
 				<CollectionViewSource.GroupDescriptions>
-					<PropertyGroupDescription PropertyName="TargetLanguage.CultureInfo.Name"/>
+					<PropertyGroupDescription PropertyName="TargetLanguage"/>
 				</CollectionViewSource.GroupDescriptions>
 			</CollectionViewSource>
 
@@ -90,8 +90,7 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<!--<DataGridTextColumn Header="Status" CanUserSort="True" Binding="{Binding Status, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
-				                    ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>-->
+				
 				<DataGridTemplateColumn Header="Name" IsReadOnly="False" SortMemberPath="Name" Width="2*" >
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:ProjectFile">
@@ -149,16 +148,9 @@
 
 				<DataGridTextColumn Header="Path" CanUserSort="True" Binding="{Binding Path, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 										ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
+
 				<DataGridTextColumn Header="File Type" CanUserSort="True" Binding="{Binding FileType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 				                    ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
-				<DataGridTemplateColumn Header="Message" Width="2*" CanUserSort="True" IsReadOnly="True">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate DataType="model:ProjectFile">
-							<TextBlock Text="{Binding Details, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow" />
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-				
 			</DataGrid.Columns>
 			<DataGrid.ContextMenu>
 				<ContextMenu>
