@@ -828,8 +828,9 @@ namespace Sdl.Community.NumberVerifier
 		{
 			try
 			{
-				var customDecimalSeparators = GetCustomSeparators(VerificationSettings.GetSourceDecimalCustomSeparator, VerificationSettings.GetTargetDecimalCustomSeparator);
-				var customThousandSeparators = GetCustomSeparators(VerificationSettings.GetSourceThousandsCustomSeparator, VerificationSettings.GetTargetThousandsCustomSeparator);
+				// to do: get the separators only if the checkbox is checked
+				var customDecimalSeparators = GetCustomSeparators(VerificationSettings.GetSourceDecimalCustomSeparator, VerificationSettings.GetTargetDecimalCustomSeparator, VerificationSettings.SourceDecimalCustomSeparator, VerificationSettings.TargetDecimalCustomSeparator);
+				var customThousandSeparators = GetCustomSeparators(VerificationSettings.GetSourceThousandsCustomSeparator, VerificationSettings.GetTargetThousandsCustomSeparator, VerificationSettings.SourceThousandsCustomSeparator, VerificationSettings.TargetThousandsCustomSeparator);
 
 				var numbers = Regex.Split(normalizedNumber.Text, $@"[^−\-\0-9 ０-９\[.,{customDecimalSeparators}{customThousandSeparators}{Constants.SpaceSeparators}]+").Where(c => c != "." && c.Trim() != "");
 
@@ -1173,9 +1174,10 @@ namespace Sdl.Community.NumberVerifier
 			return normalizedNumber.Normalize(NormalizationForm.FormKC);
 		}
 
-		private string GetCustomSeparators(string sourceCustomSeparators, string targetCustomSeparators)
+		private string GetCustomSeparators(string sourceCustomSeparators, string targetCustomSeparators, bool isSourceSeparatorChecked, bool isTargetSeparatorChecked)
 		{
-			var customSeparators = _isSource ? sourceCustomSeparators : targetCustomSeparators;
+			var customSeparators = _isSource && isSourceSeparatorChecked ? sourceCustomSeparators
+								: !_isSource && isTargetSeparatorChecked ? targetCustomSeparators : string.Empty;
 
 			return customSeparators;
 		}
