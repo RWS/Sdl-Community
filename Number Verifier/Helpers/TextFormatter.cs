@@ -176,6 +176,20 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			return separatorsBuilder.ToString();
 		}
 
+		public string GetSeparators(string separators)
+		{
+			var separatorsBuilder=  new StringBuilder();
+			if (separators != null)
+			{
+				foreach (var separator in separators)
+				{
+					separatorsBuilder.Append($"\\{separator}");
+				}
+			}
+
+			return separatorsBuilder.ToString();
+		}
+
 		// Format text for the thousand numbers (ex: 1,200) or for the combination of thousand-decimal numbers (ex: 1,200.31)
 		public string FormatText(SeparatorModel separatorModel, NormalizedNumber normalizedNumber, string text, string separators, bool isSource)
 		{
@@ -214,18 +228,12 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			foreach (var customSeparator in customSeparators)
 			{
 				var separator = customSeparator.ToString();
-				separator = separator.Equals(".") ? @"\." : separator;
-				if (Regex.Matches(text, separator).Count > 1)
+				var formattedSeparator = $@"\{separator}";
+				if (Regex.IsMatch(text, formattedSeparator))
 				{
-					// remove the first thousand separator for case like: 1,200,50 (when the same separator is used for both thousand and decimal)
+					// remove the thousand separator, ex: 1,200,50 / 1*200.50 / 1.200
 					var indexOfSeparator = text.IndexOf(separator, StringComparison.Ordinal);
 					text = text.Remove(indexOfSeparator, 1).Insert(indexOfSeparator, string.Empty);
-				}
-				else
-				{
-					// replace the thousand separator for case like: 1,200 / 1,200.35 etc
-					if (!text.Contains(customSeparator.ToString())) return text;
-					text = Regex.Replace(text, $@"\{customSeparator}", string.Empty);
 				}
 			}
 
