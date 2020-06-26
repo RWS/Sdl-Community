@@ -136,7 +136,7 @@
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="BatchTasks\ExportBatchTask.cs" />
-    <Compile Include="BatchTasks\ExportSettings.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerExportSettings.cs" />
     <Compile Include="BatchTasks\ExportSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

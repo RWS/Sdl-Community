@@ -10,6 +10,7 @@ using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.Model.ProjectSettings;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
@@ -26,10 +27,10 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 		"Export to XLIFF",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget, AllowMultiple = true)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
-	[RequiresSettings(typeof(ExportSettings), typeof(ExportSettingsPage))]
+	[RequiresSettings(typeof(XliffManagerExportSettings), typeof(ExportSettingsPage))]
 	public class ExportBatchTask : AbstractFileContentProcessingAutomaticTask
 	{
-		private ExportSettings _exportSettings;
+		private XliffManagerExportSettings _exportSettings;
 		private SegmentBuilder _segmentBuilder;
 		private ProjectInfo _projectInfo;
 		private StringBuilder _logReport;
@@ -50,30 +51,14 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			_logReport = new StringBuilder();
 			_projectInfo = Project.GetProjectInfo();
 			_segmentBuilder = new SegmentBuilder();
-			_exportSettings = GetSetting<ExportSettings>();
+			_exportSettings = GetSetting<XliffManagerExportSettings>();
 			_pathInfo = new PathInfo();
 			_customerProvider = new CustomerProvider();
 			_imageService = new ImageService();
 			_isError = false;
 			_xliffManagerController = GetXliffManagerController();
-
-			var selectedIds = TaskFiles.Select(projectFile => projectFile.Id.ToString()).ToList();
-
-			_project = GetProjectModel(Project as FileBasedProject, selectedIds);
-
-			_wizardContext = new WizardContext
-			{
-				Action = Enumerators.Action.Export,
-				Completed = false,
-				Project = _project,
-				DateTimeStamp = _exportSettings.DateTimeStamp,
-				ExcludeFilterItems = GetSelectedFilterItems(),
-				ExportOptions = _exportSettings.ExportOptions,
-				LocalProjectFolder = _exportSettings.LocalProjectFolder,
-				TransactionFolder = _exportSettings.TransactionFolder,
-				ProjectFiles = _project.ProjectFiles
-			};
-
+			
+			CreateWizardContext();
 			WriteLogReportHeader();
 			SubscribeToWindowClosing();
 
@@ -81,7 +66,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			_logReport.AppendLine("Phase: Export - Started " + FormatDateTime(DateTime.UtcNow));
 
 			base.OnInitializeTask();
-		}
+		}		
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
@@ -179,6 +164,25 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 				_wizardContext.Completed = true;
 				_xliffManagerController?.UpdateProjectData(_wizardContext);
 			}
+		}
+
+		private void CreateWizardContext()
+		{
+			var selectedIds = TaskFiles.Select(projectFile => projectFile.Id.ToString()).ToList();
+			_project = GetProjectModel(Project as FileBasedProject, selectedIds);
+
+			_wizardContext = new WizardContext
+			{
+				Action = Enumerators.Action.Export,
+				Completed = false,
+				Project = _project,
+				DateTimeStamp = _exportSettings.DateTimeStamp,
+				ExcludeFilterItems = GetSelectedFilterItems(),
+				ExportOptions = _exportSettings.ExportOptions,
+				LocalProjectFolder = _exportSettings.LocalProjectFolder,
+				TransactionFolder = _exportSettings.TransactionFolder,
+				ProjectFiles = _project.ProjectFiles
+			};
 		}
 
 		private List<FilterItem> GetSelectedFilterItems()

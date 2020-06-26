@@ -10,6 +10,7 @@ using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.Model.ProjectSettings;
 using Sdl.MultiSelectComboBox.EventArgs;
 
 namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
@@ -30,7 +31,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
 		private ICommand _clearFiltersCommand;		
 		private ICommand _selectedItemsChangedCommand;	
 
-		public ExportOptionsViewModel(ExportSettings exportSettings, IDialogService dialogService)
+		public ExportOptionsViewModel(XliffManagerExportSettings exportSettings, IDialogService dialogService)
 		{
 			_dialogService = dialogService;
 
