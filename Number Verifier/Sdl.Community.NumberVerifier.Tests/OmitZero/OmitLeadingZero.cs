@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Moq;
+﻿using Moq;
 using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Model;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
@@ -9,7 +8,6 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 {
 	public class OmitLeadingZero
 	{
-
 		[Theory]
 		[InlineData(".55")]
 		public string OmitZeroChecked(string number)
@@ -19,9 +17,11 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
-			numberVerifierMain.NormalizeAlphanumerics(number, new List<string>(), new List<string>(), ".", ".", false,
-				numberVerifierSettings.Object.SourceOmitLeadingZero);
-			var normalizedNumber = numberVerifierMain.NormalizedNumber(new SeparatorModel
+			var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(number, ".", ".", false, numberVerifierSettings.Object.SourceOmitLeadingZero);
+
+			numberVerifierMain.NormalizeNumbers(normalizeNumber);
+
+			var normalizedNumber = numberVerifierMain.NormalizeNumber(new SeparatorModel
 			{
 				MatchValue = number,
 				ThousandSeparators = ".",
@@ -130,9 +130,10 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
-			numberVerifierMain.NormalizeAlphanumerics(number, new List<string>(), new List<string>(), ".", ".", false,
-				numberVerifierSettings.Object.SourceOmitLeadingZero);
-			var normalizedNumber = numberVerifierMain.NormalizedNumber(new SeparatorModel
+			var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(number,".", ".", false, numberVerifierSettings.Object.SourceOmitLeadingZero);
+
+			numberVerifierMain.NormalizeNumbers(normalizeNumber);
+			var normalizedNumber = numberVerifierMain.NormalizeNumber(new SeparatorModel
 			{
 				MatchValue = number,
 				ThousandSeparators = ".",
