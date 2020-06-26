@@ -134,9 +134,7 @@ namespace Sdl.Community.XLIFF.Manager
 						projectFile.Status = wcProjectFile.Status;
 						projectFile.Action = wcProjectFile.Action;
 						projectFile.Date = wcProjectFile.Date;
-						projectFile.XliffFilePath = wcProjectFile.XliffFilePath;
-						//projectFile.Details = wcProjectFile.Details;
-
+						projectFile.XliffFilePath = wcProjectFile.XliffFilePath;						
 						projectFile.ProjectFileActivities = wcProjectFile.ProjectFileActivities;
 					}
 				}
@@ -201,7 +199,7 @@ namespace Sdl.Community.XLIFF.Manager
 						Date = GetDateToString(projectFile.Date),
 						FileType = projectFile.FileType,
 						XliffFilePath = projectFile.XliffFilePath,
-						TargetLanguage = projectFile.TargetLanguage.CultureInfo.Name,
+						TargetLanguage = projectFile.TargetLanguage,
 						Details = projectFile.Details,
 						ShortMessage = projectFile.ShortMessage
 					};
@@ -267,7 +265,7 @@ namespace Sdl.Community.XLIFF.Manager
 							ProjectFileActivities = xliffFileActivities,
 							XliffFilePath = projectFile.XliffFilePath,
 							Project = xliffProject,
-							TargetLanguage = GetLanguageInfo(projectFile.TargetLanguage)
+							TargetLanguage = projectFile.TargetLanguage
 						};
 
 						foreach (var fileActivity in projectFile.Activities)
@@ -311,7 +309,7 @@ namespace Sdl.Community.XLIFF.Manager
 
 			var xliffProject = _xliffProjects.FirstOrDefault(a => a.Id == projectId);
 			var targetFile = xliffProject?.ProjectFiles.FirstOrDefault(a => a.FileId == documentId &&
-											 a.TargetLanguage.CultureInfo.Name == language.CultureInfo.Name);
+											 a.TargetLanguage == language.CultureInfo.Name);
 
 			if (targetFile != null && targetFile.Action == Enumerators.Action.Export)
 			{
@@ -323,20 +321,6 @@ namespace Sdl.Community.XLIFF.Manager
 				MessageBox.Show(message1 + Environment.NewLine + Environment.NewLine + message2, PluginResources.XLIFFManager_Name, MessageBoxButtons.OK,
 					MessageBoxIcon.Warning);
 			}
-		}
-
-		private LanguageInfo GetLanguageInfo(string value)
-		{
-			if (string.IsNullOrEmpty(value))
-			{
-				return null;
-			}
-
-			return new LanguageInfo
-			{
-				CultureInfo = new CultureInfo(value),
-				Image = _imageService.GetImage(value)
-			};
 		}
 
 		private DateTime GetDateTime(string value)

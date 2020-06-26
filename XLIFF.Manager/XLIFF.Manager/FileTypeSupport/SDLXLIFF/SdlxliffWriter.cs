@@ -9,11 +9,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 	{
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly IFileTypeManager _fileTypeManager;
-		private readonly List<FilterItem> _excludeFilterItems;
+		private readonly List<string> _excludeFilterItems;
 		private readonly ImportOptions _importOptions;
 
 		public SdlxliffWriter(IFileTypeManager fileTypeManager, SegmentBuilder segmentBuilder,
-			List<FilterItem> excludeFilterItems, ImportOptions importOptions)
+			List<string> excludeFilterItems, ImportOptions importOptions)
 		{
 			_fileTypeManager = fileTypeManager;
 			_segmentBuilder = segmentBuilder;

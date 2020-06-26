@@ -19,7 +19,7 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid Margin="15,10,15,10">
+	<Grid Margin="0">
 		<GroupBox Header="Summary">
 			<Grid Margin="10">
 				<TextBox HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"

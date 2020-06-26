@@ -170,16 +170,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Export);
 
 					projectFile.Status = Enumerators.Status.Warning;
-					projectFile.ShortMessage = PluginResources.Message_File_already_exported;
-					projectFile.Details = string.Format(PluginResources.Message_Exported_on_0, activityfile?.DateToString);
+					projectFile.ShortMessage = string.Format(PluginResources.Message_Exported_on_0, activityfile?.DateToString);					
 				}
 				else if (projectFile.Action == Enumerators.Action.Import)
 				{
 					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Import);
 
 					projectFile.Status = Enumerators.Status.Warning;
-					projectFile.ShortMessage = PluginResources.Message_File_already_imported;
-					projectFile.Details = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString);
+					projectFile.ShortMessage = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString);					
 				}
 				else
 				{

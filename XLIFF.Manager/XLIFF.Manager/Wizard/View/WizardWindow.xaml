@@ -83,7 +83,7 @@
 			<controls:WizardProgressHeader  Grid.Column="0" Grid.Row="1" />
 
 			<!-- CURRENT PAGE AREA -->
-			<Border Background="White" Grid.Column="0" Grid.Row="2">
+			<Border Background="White" Grid.Column="0" Grid.Row="2" Margin="15,10,15,10">
 				<ContentControl Content="{Binding Path=CurrentPage}"/>
 			</Border>
 

@@ -122,8 +122,8 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				return value;
 			}
 		}
-		[XmlIgnore]
-		public LanguageInfo TargetLanguage { get; set; }
+		
+		public string TargetLanguage { get; set; }
 
 		public string ShortMessage { get; set; }
 
@@ -147,7 +147,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Location = Location ,
 				Path = Path ,
 				Selected = Selected,
-				TargetLanguage = TargetLanguage?.Clone() as LanguageInfo,
+				TargetLanguage = TargetLanguage,
 				XliffFilePath = XliffFilePath ,
 				Details = Details,
 				FileType = FileType
@@ -156,8 +156,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			foreach (var projectFileActivity in ProjectFileActivities)
 			{
 				if (projectFileActivity.Clone() is ProjectFileActivity projectFileActivityCloned)
-				{
-					projectFileActivityCloned.ProjectFile = projectFile;
+				{					
 					projectFile.ProjectFileActivities.Add(projectFileActivityCloned);
 				}
 			}

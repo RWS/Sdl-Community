@@ -26,7 +26,7 @@
 			
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid Margin="15,10,15,10">
+	<Grid Margin="0">
 		<GroupBox Header="Options">
 			<Grid Margin="10">
 				<Grid.ColumnDefinitions>
@@ -118,7 +118,7 @@
 				<CheckBox Grid.Row="2" Margin="5,10,5,5" Grid.Column="0" Grid.ColumnSpan="2" Content="Include Translations" 
 				          IsChecked="{Binding IncludeTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-				<CheckBox Grid.Row="3" Margin="20,5,5,5" Grid.Column="0" Grid.ColumnSpan="2" Content="Copy Source to Target for empty translations" 
+				<CheckBox Grid.Row="3" Margin="5,5,5,5" Grid.Column="0" Grid.ColumnSpan="2" Content="Copy Source to Target for empty translations" 
 						  IsEnabled="{Binding CopySourceToTargetEnabled}"
 				          IsChecked="{Binding CopySourceToTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 

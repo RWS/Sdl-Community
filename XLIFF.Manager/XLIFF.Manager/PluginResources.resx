@@ -451,4 +451,7 @@
   <data name="Label_StatusSegmentsNotImported" xml:space="preserve">
     <value>Status - Segments not imported: {0}</value>
   </data>
+	<data name="Message_NoProjectFilesSelected" xml:space="preserve">
+    <value>No project files selected!</value>
+  </data>
 </root>

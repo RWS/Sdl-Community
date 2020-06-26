@@ -185,7 +185,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			try
 			{
 				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Preparation - Started " + FormatDateTime(DateTime.Now));
+				_logReport.AppendLine("Phase: Preparation - Started " + FormatDateTime(DateTime.UtcNow));
 
 				TextMessage = PluginResources.WizardMessage_Initializing;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
@@ -193,7 +193,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				Refresh();
 
-				_logReport.AppendLine("Phase: Preparation - Complete " + FormatDateTime(DateTime.Now));
+				_logReport.AppendLine("Phase: Preparation - Complete " + FormatDateTime(DateTime.UtcNow));
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
 			catch (Exception ex)
@@ -217,7 +217,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			try
 			{
 				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Import - Started " + FormatDateTime(DateTime.Now));
+				_logReport.AppendLine("Phase: Import - Started " + FormatDateTime(DateTime.UtcNow));
 
 				TextMessage = PluginResources.WizardMessage_ImportingFromFormat;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
@@ -226,8 +226,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				Refresh();
 
 				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder,
-					WizardContext.ExcludeFilterItems, WizardContext.ImportOptions);
+				var filterItems = WizardContext.ExcludeFilterItems.Select(a => a.Id).ToList();
+				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder, filterItems, WizardContext.ImportOptions);
 
 				var sniffer = new XliffSniffer();
 				var xliffReader = new XliffReder(sniffer, _segmentBuilder);
@@ -236,20 +236,20 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 									a => a.Selected &&
 									!string.IsNullOrEmpty(a.XliffFilePath) &&
 									File.Exists(a.XliffFilePath))
-									.Select(a => a.TargetLanguage.CultureInfo).Distinct();
+									.Select(a => a.TargetLanguage).Distinct();
 
 				foreach (var targetLanguage in targetLanguages)
 				{
 					var languageFolder = GetLanguageFolder(targetLanguage);
 
 					_logReport.AppendLine();
-					_logReport.AppendLine(string.Format(PluginResources.Label_Language, targetLanguage.DisplayName));
+					_logReport.AppendLine(string.Format(PluginResources.Label_Language, targetLanguage));
 
 					var targetLanguageFiles = WizardContext.ProjectFiles.Where(
 												a => a.Selected &&
 												!string.IsNullOrEmpty(a.XliffFilePath) &&
 												File.Exists(a.XliffFilePath) &&
-												Equals(a.TargetLanguage.CultureInfo, targetLanguage));
+												Equals(a.TargetLanguage, targetLanguage));
 
 					foreach (var targetLanguageFile in targetLanguageFiles)
 					{
@@ -322,7 +322,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					}
 				}
 
-				_logReport.AppendLine("Phase: Import - Completed " + FormatDateTime(DateTime.Now));
+				_logReport.AppendLine("Phase: Import - Completed " + FormatDateTime(DateTime.UtcNow));
 
 				WizardContext.Completed = true;
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
@@ -358,7 +358,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			try
 			{
 				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.Now));
+				_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.UtcNow));
 
 				TextMessage = PluginResources.WizardMessage_Finalizing;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
@@ -366,7 +366,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				Refresh();
 
-				_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.Now));
+				_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.UtcNow));
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
 			catch (Exception ex)
@@ -385,7 +385,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private void FinalizeJobProcesses(bool success)
 		{
 			_logReport.AppendLine();
-			_logReport.AppendLine("End Process: Import " + FormatDateTime(DateTime.Now));
+			_logReport.AppendLine("End Process: Import " + FormatDateTime(DateTime.UtcNow));
 
 			if (success)
 			{
@@ -440,7 +440,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private void WriteLogReportHeader()
 		{
 			_logReport = new StringBuilder();
-			_logReport.AppendLine("Start Process: Import " + FormatDateTime(DateTime.Now));
+			_logReport.AppendLine("Start Process: Import " + FormatDateTime(DateTime.UtcNow));
 			_logReport.AppendLine();
 
 			var project = WizardContext.ProjectFiles[0].Project;
@@ -491,9 +491,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			File.Copy(outputFile, Path.Combine(_pathInfo.ApplicationLogsFolderPath, logFileName));
 		}
 
-		private string GetLanguageFolder(CultureInfo targetLanguage)
+		private string GetLanguageFolder(string name)
 		{
-			var languageFolder = WizardContext.GetLanguageFolder(targetLanguage);
+			var languageFolder = WizardContext.GetLanguageFolder(name);
 			if (!Directory.Exists(languageFolder))
 			{
 				Directory.CreateDirectory(languageFolder);
@@ -550,10 +550,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
 
 			var selectedLanguages = string.Empty;
-			foreach (var cultureInfo in selected.Select(a => a.TargetLanguage.CultureInfo).Distinct())
+			foreach (var name in selected.Select(a => a.TargetLanguage).Distinct())
 			{
-				selectedLanguages += (string.IsNullOrEmpty(selectedLanguages) ? string.Empty : ", ") +
-									 cultureInfo.DisplayName;
+				selectedLanguages += (string.IsNullOrEmpty(selectedLanguages) ? string.Empty : ", ") + name;
 			}
 
 			return selectedLanguages;

@@ -77,19 +77,19 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			var targetLanguages = WizardContext.ProjectFiles.Where(a => a.Selected &&
 				 !string.IsNullOrEmpty(a.XliffFilePath) && File.Exists(a.XliffFilePath))
-					.Select(a => a.TargetLanguage.CultureInfo).Distinct();
+					.Select(a => a.TargetLanguage).Distinct();
 
 			foreach (var targetLanguage in targetLanguages)
 			{
 				var languageFolder = WizardContext.GetLanguageFolder(targetLanguage);
 
 				summaryText += Environment.NewLine;
-				summaryText += string.Format(PluginResources.Label_Language, targetLanguage.DisplayName) + Environment.NewLine;
+				summaryText += string.Format(PluginResources.Label_Language, targetLanguage) + Environment.NewLine;
 
 				var targetLanguageFiles =
 					WizardContext.ProjectFiles.Where(a => a.Selected &&
 						  !string.IsNullOrEmpty(a.XliffFilePath) && File.Exists(a.XliffFilePath) &&
-						  Equals(a.TargetLanguage.CultureInfo, targetLanguage));
+						  Equals(a.TargetLanguage, targetLanguage));
 
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
@@ -146,10 +146,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
 
 			var selectedLanguages = string.Empty;
-			foreach (var cultureInfo in selected.Select(a => a.TargetLanguage.CultureInfo).Distinct())
+			foreach (var name in selected.Select(a => a.TargetLanguage).Distinct())
 			{
 				selectedLanguages += (string.IsNullOrEmpty(selectedLanguages) ? string.Empty : ", ") +
-									 cultureInfo.DisplayName;
+									 name;
 			}
 
 			return selectedLanguages;

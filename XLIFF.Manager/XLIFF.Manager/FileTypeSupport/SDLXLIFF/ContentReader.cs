@@ -19,14 +19,14 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private readonly bool _ignoreTags;
 		private readonly string _inputPath;
 		private readonly string _projectId;
-		private readonly List<FilterItem> _excludeFilterItems;
+		private readonly List<string> _excludeFilterItems;
 		private IBilingualContentHandler _output;
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
 		private SegmentVisitor _segmentVisitor;
 
 		internal ContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder,
-			List<FilterItem> excludeFilterItems, ExportOptions exportOptions)
+			List<string> excludeFilterItems, ExportOptions exportOptions)
 		{
 			_projectId = projectId;
 			_inputPath = inputPath;
@@ -126,14 +126,17 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
-				var status = segmentPair.Properties.ConfirmationLevel.ToString();
-				var match = GetTranslationMatchId(segmentPair.Target.Properties.TranslationOrigin);
-
-				if ((segmentPair.Properties.IsLocked && _excludeFilterItems.Exists(a => a.Id == "Locked"))
-					|| _excludeFilterItems.Exists(a => a.Id == status)
-					|| _excludeFilterItems.Exists(a => a.Id == match))
+				if (_excludeFilterItems != null)
 				{
-					continue;
+					var status = segmentPair.Properties.ConfirmationLevel.ToString();
+					var match = GetTranslationMatchId(segmentPair.Target.Properties.TranslationOrigin);
+
+					if ((segmentPair.Properties.IsLocked && _excludeFilterItems.Exists(a => a == "Locked"))
+					    || _excludeFilterItems.Exists(a => a == status)
+					    || _excludeFilterItems.Exists(a => a == match))
+					{
+						continue;
+					}
 				}
 
 				SegmentVisitor.VisitSegment(segmentPair.Source);
