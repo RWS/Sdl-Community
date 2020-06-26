@@ -879,25 +879,23 @@ namespace Sdl.Community.NumberVerifier
 
 		private bool IsNumberDecimal(string numberText, SeparatorModel separatorModel)
 		{
-			var isDecimal = decimal.TryParse(numberText, out _);
-			var number = isDecimal ? decimal.Parse(numberText) : 0;
-
 			return (separatorModel.LengthCommaOrCustomSep > 0 && separatorModel.LengthCommaOrCustomSep <= 2 && separatorModel.LengthPeriodOrCustomSep == 0
 			        || separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthPeriodOrCustomSep <= 2 && separatorModel.LengthCommaOrCustomSep == 0
 			        || separatorModel.LengthCommaOrCustomSep == 0 && separatorModel.LengthPeriodOrCustomSep == 0 // -> it means the number does not contains , or . and is not a thousand number like 2 300
-			        || number > 0 && number < 1000
 			        || (separatorModel.LengthCommaOrCustomSep == separatorModel.LengthPeriodOrCustomSep && separatorModel.LengthCommaOrCustomSep > 0 && separatorModel.LengthPeriodOrCustomSep > 0
-			        && separatorModel.LengthCommaOrCustomSep < 3 && separatorModel.LengthPeriodOrCustomSep < 3)) // -> it means the decimal is having custom separator different then , or .
-			        && !Regex.IsMatch(numberText, @"\s"); // number does not contain empty space, which means is not thousand, example: 1 200 
+			            && separatorModel.LengthCommaOrCustomSep < 3 && separatorModel.LengthPeriodOrCustomSep < 3)) // -> it means the decimal is having custom separator different then , or .
+			       && !Regex.IsMatch(numberText, @"\s"); // number does not contain empty space, which means is not thousand, example: 1 200 
 		}
 
 		private bool IsNumberThousandDecimal(string numberText, SeparatorModel separatorModel)
 		{
-			return separatorModel.LengthPeriodOrCustomSep >= 3 && separatorModel.LengthCommaOrCustomSep <= 2  // corresponds to thousands period(or other thousands custom separator) AND decimal comma(or other decimal custom separator)
-			       || separatorModel.LengthCommaOrCustomSep >= 3 && separatorModel.LengthPeriodOrCustomSep <= 2 // corresponds to thousands comma(or other thousands custom separator) AND decimal period(or other decimal custom separator)
+			return (separatorModel.LengthPeriodOrCustomSep >= 3 && separatorModel.LengthCommaOrCustomSep <= 2
+			        // corresponds to thousands period(or other thousands custom separator) AND decimal comma(or other decimal custom separator)
+				   || separatorModel.LengthCommaOrCustomSep >= 3 && separatorModel.LengthPeriodOrCustomSep <= 2 // corresponds to thousands comma(or other thousands custom separator) AND decimal period(or other decimal custom separator)
 			       || Regex.Matches(numberText, ",").Count > 1 // corresponds to thousands and decimal COMMA (any other custom separator is not applied the SAME for thousand and decimal place)
 			       || Regex.Matches(numberText, @"\.").Count > 1
-			       || numberText.Length > 3;
+			       || numberText.Length > 3)
+			       && separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthCommaOrCustomSep > 0;
 		}
 
 		public string OmitZero(string number)
