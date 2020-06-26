@@ -482,7 +482,7 @@ namespace Sdl.Community.NumberVerifier
 				InitialNumberList = new List<string>()
 			};
 
-			// normalize the decimals numbers
+			// normalize the numbers
 			NormalizeNumbers(normalizedNumber);
 			
 			var numbersTuple = Tuple.Create(normalizedNumber.InitialNumberList, normalizedNumber.NormalizedNumberList);
@@ -828,7 +828,6 @@ namespace Sdl.Community.NumberVerifier
 		{
 			try
 			{
-				// to do: get the separators only if the checkbox is checked
 				var customDecimalSeparators = GetCustomSeparators(VerificationSettings.GetSourceDecimalCustomSeparator, VerificationSettings.GetTargetDecimalCustomSeparator, VerificationSettings.SourceDecimalCustomSeparator, VerificationSettings.TargetDecimalCustomSeparator);
 				var customThousandSeparators = GetCustomSeparators(VerificationSettings.GetSourceThousandsCustomSeparator, VerificationSettings.GetTargetThousandsCustomSeparator, VerificationSettings.SourceThousandsCustomSeparator, VerificationSettings.TargetThousandsCustomSeparator);
 
