@@ -15,7 +15,6 @@ using Sdl.Community.NumberVerifier.Model;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.FileTypeSupport.Framework.Formatting;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Verification.Api;
@@ -37,7 +36,6 @@ namespace Sdl.Community.NumberVerifier
 		private bool _omitLeadingZero;
 		private INumberVerifierSettings _verificationSettings;
 		private readonly TextFormatter _textFormatter;
-		private bool _isNumberDecimal;
 
 		#endregion
 
@@ -54,7 +52,7 @@ namespace Sdl.Community.NumberVerifier
 		public NumberVerifierMain(INumberVerifierSettings numberVerifierSettings)
 		{
 			_verificationSettings = numberVerifierSettings;
-			
+
 			if (_textFormatter == null)
 			{
 				_textFormatter = new TextFormatter(this);
@@ -484,14 +482,14 @@ namespace Sdl.Community.NumberVerifier
 
 			// normalize the numbers
 			NormalizeNumbers(normalizedNumber);
-			
+
 			var numbersTuple = Tuple.Create(normalizedNumber.InitialNumberList, normalizedNumber.NormalizedNumberList);
 
 			return numbersTuple;
 		}
 
 		public Tuple<List<string>, List<string>> GetAlphnumericsTuple(List<string> alphaNumericsList, List<string> normalizedAlphaNumericsList)
-		{			
+		{
 			return Tuple.Create(alphaNumericsList, normalizedAlphaNumericsList);
 		}
 
@@ -513,7 +511,7 @@ namespace Sdl.Community.NumberVerifier
 				numberModel.TargetText = numberModel.TargetArabicText;
 				isHindiVerification = true;
 			}
-			if(sourceLanguage.Equals(Constants.HindiLanguage))
+			if (sourceLanguage.Equals(Constants.HindiLanguage))
 			{
 				numberModel.SourceText = numberModel.SourceArabicText;
 				isHindiVerification = true;
@@ -626,7 +624,7 @@ namespace Sdl.Community.NumberVerifier
 
 		private List<ErrorReporting> ReturnErrorList(
 			IEnumerable<ErrorReporting> errorsListFromNormalizedNumbers,
-			List<ErrorReporting> errorList, 
+			List<ErrorReporting> errorList,
 			NumberModel numberModel)
 		{
 			errorsListFromNormalizedNumbers = CheckNumbers(string.Empty, string.Empty, numberModel);
@@ -706,7 +704,7 @@ namespace Sdl.Community.NumberVerifier
 
 		private Tuple<List<string>, List<string>> ValidateText(string text, IExtractProcessor decimalProcessor, IExtractProcessor thousandProcessor, bool noSeparator, bool omitLeadingZero)
 		{
-			var decimalSeparatorsData= decimalProcessor.Extract(new ExtractData(VerificationSettings, new[] { text }));
+			var decimalSeparatorsData = decimalProcessor.Extract(new ExtractData(VerificationSettings, new[] { text }));
 			var thousandSeparatorData = thousandProcessor.Extract(new ExtractData(VerificationSettings, new[] { text }));
 			var decimalSeparators = _textFormatter.FormatSeparators(decimalSeparatorsData);
 			var thousandSeparators = _textFormatter.FormatSeparators(thousandSeparatorData);
@@ -757,7 +755,7 @@ namespace Sdl.Community.NumberVerifier
 					}
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 			}
@@ -852,11 +850,11 @@ namespace Sdl.Community.NumberVerifier
 							normalizedNumber.Separators = $"{normalizedNumber.DecimalSeparators}{_textFormatter.GetSeparators(separatorModel.DecimalCustomSeparators)}";
 							SetNormalizedNumber(normalizedNumber, text);
 						}
-						else if(IsNumberThousandDecimal(text, separatorModel))
+						else if (IsNumberThousandDecimal(text, separatorModel))
 						{
 							// check if the number is both thousand and decimal
 							var separators = $"{normalizedNumber.ThousandSeparators}{normalizedNumber.DecimalSeparators}" +
-							                 $"{_textFormatter.GetSeparators(separatorModel.DecimalCustomSeparators)}{_textFormatter.GetSeparators(separatorModel.ThousandCustomSeparators)}";
+											 $"{_textFormatter.GetSeparators(separatorModel.DecimalCustomSeparators)}{_textFormatter.GetSeparators(separatorModel.ThousandCustomSeparators)}";
 							separatorModel.CustomSeparators = separatorModel.ThousandCustomSeparators;
 							text = _textFormatter.FormatText(separatorModel, normalizedNumber, text, separators, _isSource);
 							SetNormalizedNumber(normalizedNumber, text);
@@ -879,25 +877,22 @@ namespace Sdl.Community.NumberVerifier
 
 		private bool IsNumberDecimal(string numberText, SeparatorModel separatorModel)
 		{
-			var isDecimal = decimal.TryParse(numberText, out _);
-			var number = isDecimal ? decimal.Parse(numberText) : 0;
-
 			return (separatorModel.LengthCommaOrCustomSep > 0 && separatorModel.LengthCommaOrCustomSep <= 2 && separatorModel.LengthPeriodOrCustomSep == 0
-			        || separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthPeriodOrCustomSep <= 2 && separatorModel.LengthCommaOrCustomSep == 0
-			        || separatorModel.LengthCommaOrCustomSep == 0 && separatorModel.LengthPeriodOrCustomSep == 0 // -> it means the number does not contains , or . and is not a thousand number like 2 300
-			        || number > 0 && number < 1000
-			        || (separatorModel.LengthCommaOrCustomSep == separatorModel.LengthPeriodOrCustomSep && separatorModel.LengthCommaOrCustomSep > 0 && separatorModel.LengthPeriodOrCustomSep > 0
-			        && separatorModel.LengthCommaOrCustomSep < 3 && separatorModel.LengthPeriodOrCustomSep < 3)) // -> it means the decimal is having custom separator different then , or .
-			        && !Regex.IsMatch(numberText, @"\s"); // number does not contain empty space, which means is not thousand, example: 1 200 
+					|| separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthPeriodOrCustomSep <= 2 && separatorModel.LengthCommaOrCustomSep == 0
+					|| separatorModel.LengthCommaOrCustomSep == 0 && separatorModel.LengthPeriodOrCustomSep == 0 // -> it means the number does not contains , or . and is not a thousand number like 2 300
+					|| (separatorModel.LengthCommaOrCustomSep == separatorModel.LengthPeriodOrCustomSep && separatorModel.LengthCommaOrCustomSep > 0 && separatorModel.LengthPeriodOrCustomSep > 0
+						&& separatorModel.LengthCommaOrCustomSep < 3 && separatorModel.LengthPeriodOrCustomSep < 3)) // -> it means the decimal is having custom separator different then , or .
+				   && !Regex.IsMatch(numberText, @"\s"); // number does not contain empty space, which means is not thousand, example: 1 200 
 		}
 
 		private bool IsNumberThousandDecimal(string numberText, SeparatorModel separatorModel)
 		{
-			return separatorModel.LengthPeriodOrCustomSep >= 3 && separatorModel.LengthCommaOrCustomSep <= 2  // corresponds to thousands period(or other thousands custom separator) AND decimal comma(or other decimal custom separator)
-			       || separatorModel.LengthCommaOrCustomSep >= 3 && separatorModel.LengthPeriodOrCustomSep <= 2 // corresponds to thousands comma(or other thousands custom separator) AND decimal period(or other decimal custom separator)
-			       || Regex.Matches(numberText, ",").Count > 1 // corresponds to thousands and decimal COMMA (any other custom separator is not applied the SAME for thousand and decimal place)
-			       || Regex.Matches(numberText, @"\.").Count > 1
-			       || numberText.Length > 3;
+			return (separatorModel.LengthPeriodOrCustomSep >= 3 && separatorModel.LengthCommaOrCustomSep <= 2 // corresponds to thousands period(or other thousands custom separator) AND decimal comma(or other decimal custom separator)
+				   || separatorModel.LengthCommaOrCustomSep >= 3 && separatorModel.LengthPeriodOrCustomSep <= 2 // corresponds to thousands comma(or other thousands custom separator) AND decimal period(or other decimal custom separator)
+				   || Regex.Matches(numberText, ",").Count > 1 // corresponds to thousands and decimal COMMA (any other custom separator is not applied the SAME for thousand and decimal place)
+				   || Regex.Matches(numberText, @"\.").Count > 1
+				   || numberText.Length > 3)
+				   && separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthCommaOrCustomSep > 0;
 		}
 
 		public string OmitZero(string number)
@@ -924,7 +919,7 @@ namespace Sdl.Community.NumberVerifier
 					number = number.Substring(1);
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 			}
@@ -954,13 +949,13 @@ namespace Sdl.Community.NumberVerifier
 				{
 					number = number.Replace("\u2013", "m");
 				}
-				if(positionOfSpecialMinus == 1 && spacePosition == 0)
+				if (positionOfSpecialMinus == 1 && spacePosition == 0)
 				{
 					number = number.Replace("\u2212", "m");
 				}
 				return number.Normalize(NormalizationForm.FormKC);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 				return string.Empty;
@@ -973,7 +968,7 @@ namespace Sdl.Community.NumberVerifier
 			try
 			{
 				// if the number value starts with "m" it means it was already normalized in the previews step
-				if(numberValue.StartsWith("m")  || numberValue.StartsWith(" m") || string.IsNullOrEmpty(separators))
+				if (numberValue.StartsWith("m") || numberValue.StartsWith(" m") || string.IsNullOrEmpty(separators))
 				{
 					return numberValue;
 				}
@@ -991,7 +986,7 @@ namespace Sdl.Community.NumberVerifier
 				}
 				return numberValue.Normalize(NormalizationForm.FormKC);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 				return string.Empty;
@@ -1025,7 +1020,7 @@ namespace Sdl.Community.NumberVerifier
 							 @"^m?[1-9]\d{0,2}([" + separatorModel.ThousandSeparators + @"])\d\d\d(\1\d\d\d)*[" + separatorModel.DecimalSeparators +
 							 @"]\d+$")) // e.g. 1,000.5
 				{
-					var usedThousandSeparator =	Regex.Match(separatorModel.MatchValue, @"[" + separatorModel.ThousandSeparators + @"]").Value;
+					var usedThousandSeparator = Regex.Match(separatorModel.MatchValue, @"[" + separatorModel.ThousandSeparators + @"]").Value;
 
 					//for ex if we have 1.45.67, we need to replace only first aparition of the thousand separator
 					var reg = new Regex(Regex.Escape(usedThousandSeparator));
@@ -1064,7 +1059,7 @@ namespace Sdl.Community.NumberVerifier
 					return normalizedNumber.Normalize(NormalizationForm.FormKC);
 				}
 			}
-			catch (Exception ex) 
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 			}
@@ -1103,7 +1098,7 @@ namespace Sdl.Community.NumberVerifier
 					}
 					else
 					{
-						decimal.TryParse(numberElements[0].Normalize(NormalizationForm.FormKC), out thousandNumber);	
+						decimal.TryParse(numberElements[0].Normalize(NormalizationForm.FormKC), out thousandNumber);
 					}
 
 					//number must be >= 1000 to run no separator option
@@ -1347,7 +1342,7 @@ namespace Sdl.Community.NumberVerifier
 
 				return GetAlphnumericsTuple(unNormalizedAlphanumerics, normalizedAlphaList);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 				return new Tuple<List<string>, List<string>>(new List<string>(), new List<string>());
@@ -1451,14 +1446,14 @@ namespace Sdl.Community.NumberVerifier
 					result = GetFormatedNumbers(hindiNumberModel);
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 			}
 			return result;
 		}
 
-		public Dictionary<string,string> GetHindiNumbers()
+		public Dictionary<string, string> GetHindiNumbers()
 		{
 			var hindiDictionary = new Dictionary<string, string>();
 			hindiDictionary.Add("0", "٠");
@@ -1553,7 +1548,7 @@ namespace Sdl.Community.NumberVerifier
 					}
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 			}
