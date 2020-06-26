@@ -7,9 +7,8 @@ using Xunit;
 namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
 	public class CheckNumbersAgainstRegularExpression
-    {
-
-        /// <summary>
+	{
+		/// <summary>
         /// In case of -(space)number the dash should be ignored because is not a negative number  
         /// is a item in a list
         /// </summary>
@@ -30,15 +29,14 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var docPropMock = new Mock<IDocumentProperties>();
             numberVerifierMain.Initialize(docPropMock.Object);
 
-            var normalizedNumberCollection = new List<string>();
-            var numberCollection = new List<string>();
-
             var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep,true);
             var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
-            numberVerifierMain.NormalizeAlphanumerics(text, numberCollection, normalizedNumberCollection, thousandSeparators, decimalSeparators, false, false);
+            var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(text, thousandSeparators, decimalSeparators, false, false);
 
-            Assert.Equal("34",numberCollection[0]);
-            Assert.Equal("34", normalizedNumberCollection[0]);
+            numberVerifierMain.NormalizeNumbers(normalizeNumber);
+
+            Assert.Equal("34", normalizeNumber.InitialNumberList[0]);
+            Assert.Equal("34", normalizeNumber.NormalizedNumberList[0]);
             
         }
 
@@ -54,16 +52,15 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             //run initialize method in order to set chosen separators
             var docPropMock = new Mock<IDocumentProperties>();
             numberVerifierMain.Initialize(docPropMock.Object);
-
-            var normalizedNumberCollection = new List<string>();
-            var numberCollection = new List<string>();
-
+			
             var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep,true);
             var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
-            numberVerifierMain.NormalizeAlphanumerics(text, numberCollection, normalizedNumberCollection, thousandSeparators, decimalSeparators, false, false);
 
-            Assert.Equal("−74,5", $"{numberCollection[0]}{numberCollection[1]}");
-            Assert.Equal("m74m5", $"{normalizedNumberCollection[0]}{normalizedNumberCollection[1]}");
+            var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(text, thousandSeparators, decimalSeparators, false, false);
+            numberVerifierMain.NormalizeNumbers(normalizeNumber);
+
+            Assert.Equal("−74,5", $"{normalizeNumber.InitialNumberList[0]}{normalizeNumber.InitialNumberList[1]}");
+            Assert.Equal("m74m5", $"{normalizeNumber.NormalizedNumberList[0]}{normalizeNumber.NormalizedNumberList[1]}");
         }
 
         [Theory]
@@ -80,16 +77,14 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var docPropMock = new Mock<IDocumentProperties>();
             numberVerifierMain.Initialize(docPropMock.Object);
 
-            var normalizedNumberCollection = new List<string>();
-            var numberCollection = new List<string>();
-
             var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep,true);
             var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
-            numberVerifierMain.NormalizeAlphanumerics(text, numberCollection, normalizedNumberCollection, thousandSeparators, decimalSeparators, false, false);
+           
+            var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(text, thousandSeparators, decimalSeparators, false, false);
+            numberVerifierMain.NormalizeNumbers(normalizeNumber);
 
-            Assert.Equal("46", numberCollection[0]);
-            Assert.Equal("46", normalizedNumberCollection[0]);
-
+            Assert.Equal("46", normalizeNumber.InitialNumberList[0]);
+            Assert.Equal("46", normalizeNumber.NormalizedNumberList[0]);
         }
 
 		[Theory]
