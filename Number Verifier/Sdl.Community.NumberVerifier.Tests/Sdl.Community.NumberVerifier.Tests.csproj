@@ -85,6 +85,7 @@
     <Compile Include="SourceSettings\SourceSettingsAndPreventLocalization.cs" />
     <Compile Include="Utilities\NumberVerifierLocalizationsSettings.cs" />
     <Compile Include="Utilities\NumberVerifierRequireLocalizationSettings.cs" />
+    <Compile Include="Utilities\NumberVerifierSetup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sdl.Community.NumberVerifier.csproj">
