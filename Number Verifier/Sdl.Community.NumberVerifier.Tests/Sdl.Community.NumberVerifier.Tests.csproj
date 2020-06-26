@@ -105,7 +105,6 @@
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationAllow.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationPrevent.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationRequire.cs" />
-    <Compile Include="NumberVerifierMainTests.cs" />
     <Compile Include="OmitZero\OmitLeadingZero.cs" />
     <Compile Include="OmitZero\OmitZeroSettings.cs" />
     <Compile Include="OmitZero\OmitZeroSourceAndTarget.cs" />
@@ -114,6 +113,7 @@
     <Compile Include="SourceSettings\SourceSettingsAndPreventLocalization.cs" />
     <Compile Include="Utilities\NumberVerifierLocalizationsSettings.cs" />
     <Compile Include="Utilities\NumberVerifierRequireLocalizationSettings.cs" />
+    <Compile Include="Utilities\NumberVerifierSetup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sdl.Community.NumberVerifier.csproj">
