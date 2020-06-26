@@ -29,7 +29,7 @@ namespace XLIFF.Manager.UnitTests.FileTypeSupport
 			var xliffReader = new XliffReder(sniffer, segmentBuilder);
 			//var pocoFilterManager = new PocoFilterManager(false);
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-			var filterItems = new List<FilterItem>();
+			var filterItems = new List<string>();
 			var importOptions = new ImportOptions();
 			var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, segmentBuilder, filterItems, importOptions);
 

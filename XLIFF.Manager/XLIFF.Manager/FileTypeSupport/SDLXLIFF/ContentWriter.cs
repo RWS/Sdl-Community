@@ -15,13 +15,13 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 	{
 		private readonly Xliff _xliff;
 		private readonly SegmentBuilder _segmentBuilder;
-		private readonly List<FilterItem> _excludeFilterItems;
+		private readonly List<string> _excludeFilterItems;
 		private readonly ImportOptions _importOptions;
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
 		private SegmentVisitor _segmentVisitor;
 
-		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, List<FilterItem> excludeFilterItems,
+		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, List<string> excludeFilterItems,
 			ImportOptions importOptions)
 		{
 			_xliff = xliff;
@@ -59,7 +59,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			var importedTransUnit = GetTransUnit(paragraphUnit);
 			if (importedTransUnit == null)
 			{
-				if (string.IsNullOrEmpty(_importOptions.StatusSegmentNotImportedId))
+				if (!string.IsNullOrEmpty(_importOptions.StatusSegmentNotImportedId))
 				{
 					var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusSegmentNotImportedId, true, out var result);
 					var statusSegmentNotImported = success ? result : ConfirmationLevel.Unspecified;
@@ -79,34 +79,41 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				var importedSegmentPair = importedTransUnit.SegmentPairs.FirstOrDefault(a => a.Id == segmentPair.Properties.Id.Id);
 				if (importedSegmentPair == null)
 				{
-					if (string.IsNullOrEmpty(_importOptions.StatusSegmentNotImportedId))
+					if (!string.IsNullOrEmpty(_importOptions.StatusSegmentNotImportedId))
 					{
 						var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusSegmentNotImportedId, true, out var result);
 						var statusSegmentNotImported = success ? result : ConfirmationLevel.Unspecified;
 
 						segmentPair.Target.Properties.ConfirmationLevel = statusSegmentNotImported;
 					}
+
 					continue;
 				}
 
-
-				var status = segmentPair.Properties.ConfirmationLevel.ToString();
-				var match = GetTranslationMatchId(segmentPair.Target.Properties.TranslationOrigin);
-
-				if ((!_importOptions.OverwriteTranslations && segmentPair.Target.Any())
-					|| (segmentPair.Properties.IsLocked && _excludeFilterItems.Exists(a => a.Id == "Locked"))
-				    || _excludeFilterItems.Exists(a => a.Id == status)
-				    || _excludeFilterItems.Exists(a => a.Id == match))
+				var noOverwrite = !_importOptions.OverwriteTranslations && segmentPair.Target.Any();
+				var excludeFilter = false;
+				if (_excludeFilterItems != null)
 				{
-					if (string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
+					var status = segmentPair.Properties.ConfirmationLevel.ToString();
+					var match = GetTranslationMatchId(segmentPair.Target.Properties.TranslationOrigin);
+
+					excludeFilter = (segmentPair.Properties.IsLocked && _excludeFilterItems.Exists(a => a == "Locked"))
+					                || _excludeFilterItems.Exists(a => a == status)
+					                || _excludeFilterItems.Exists(a => a == match);
+				}
+
+				if (noOverwrite || excludeFilter)
+				{
+					if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
 					{
 						var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
 						var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
 
 						segmentPair.Target.Properties.ConfirmationLevel = statusTranslationNotUpdated;
 					}
+
 					continue;
-				}				
+				}
 
 				UpdateTargetSegment(segmentPair, importedSegmentPair);
 			}
@@ -214,7 +221,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 				targetSegment.Properties.ConfirmationLevel = statusTranslationUpdated;
 			}
-			else if (string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
+			else if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
 			{
 				var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
 				var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;

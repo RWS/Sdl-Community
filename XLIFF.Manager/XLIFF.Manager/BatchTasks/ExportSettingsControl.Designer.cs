@@ -18,7 +18,7 @@
 		private void InitializeComponent()
 		{
 			this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-			this.exportView1 = new Sdl.Community.XLIFF.Manager.BatchTasks.View.ExportSettingsView();
+			this.exportView1 = new Sdl.Community.XLIFF.Manager.BatchTasks.View.ExportOptionsView();
 			this.SuspendLayout();
 			// 
 			// elementHost1
@@ -45,6 +45,6 @@
 		#endregion
 
 		private System.Windows.Forms.Integration.ElementHost elementHost1;
-		private View.ExportSettingsView exportView1;
+		private View.ExportOptionsView exportView1;
 	}
 }

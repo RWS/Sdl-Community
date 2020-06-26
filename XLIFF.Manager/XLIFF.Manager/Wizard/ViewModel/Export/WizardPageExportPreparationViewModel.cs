@@ -188,7 +188,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			try
 			{
 				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Preparation - Started " + FormatDateTime(DateTime.Now));
+				_logReport.AppendLine("Phase: Preparation - Started " + FormatDateTime(DateTime.UtcNow));
 
 				TextMessage = PluginResources.WizardMessage_Initializing;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
@@ -196,7 +196,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 				Refresh();
 
-				_logReport.AppendLine("Phase: Preparation - Complete " + FormatDateTime(DateTime.Now));
+				_logReport.AppendLine("Phase: Preparation - Complete " + FormatDateTime(DateTime.UtcNow));
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 
 			}
@@ -220,7 +220,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			try
 			{
 				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Export - Started " + FormatDateTime(DateTime.Now));
+				_logReport.AppendLine("Phase: Export - Started " + FormatDateTime(DateTime.UtcNow));
 
 				TextMessage = PluginResources.WizardMessage_ConvertingToFormat;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
@@ -229,7 +229,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				Refresh();
 
 				var project = WizardContext.ProjectFiles[0].Project;
-				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, WizardContext.ExcludeFilterItems, WizardContext.ExportOptions);
+				var filterItems = WizardContext.ExcludeFilterItems.Select(a => a.Id).ToList();
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, filterItems, WizardContext.ExportOptions);
 				var xliffWriter = new XliffWriter(WizardContext.ExportOptions.XliffSupport);
 
 				var selectedLanguages = GetSelectedLanguages();
@@ -245,11 +246,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 					{
 						var xliffFolder = GetXliffFolder(languageFolder, targetFile);
 						var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");
-						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location);
-						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.ExportOptions.IncludeTranslations);
 
 						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetFile.Location));
 						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, xliffFilePath));
+
+						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location);
+						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.ExportOptions.IncludeTranslations);
+						
+						_logReport.AppendLine(string.Format(PluginResources.Label_Success, exported));
 						_logReport.AppendLine();
 
 						if (exported)
@@ -279,6 +283,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 					}
 				}
 
+				_logReport.AppendLine();
+				_logReport.AppendLine("Phase: Export - Completed " + FormatDateTime(DateTime.UtcNow));
+
 				WizardContext.Completed = true;
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
@@ -302,7 +309,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			try
 			{
 				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.Now));
+				_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.UtcNow));
 
 				TextMessage = PluginResources.WizardMessage_Finalizing;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
@@ -310,7 +317,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 				Refresh();
 
-				_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.Now));
+				_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.UtcNow));
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
 			catch (Exception ex)
@@ -351,7 +358,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private void FinalizeJobProcesses(bool success)
 		{
 			_logReport.AppendLine();
-			_logReport.AppendLine("End Process: Export " + FormatDateTime(DateTime.Now));
+			_logReport.AppendLine("End Process: Export " + FormatDateTime(DateTime.UtcNow));
 
 			if (success)
 			{
@@ -383,7 +390,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private void WriteLogReportHeader()
 		{
 			_logReport = new StringBuilder();
-			_logReport.AppendLine("Start Process: Export " + FormatDateTime(DateTime.Now));
+			_logReport.AppendLine("Start Process: Export " + FormatDateTime(DateTime.UtcNow));
 			_logReport.AppendLine();
 
 			var indent = "   ";

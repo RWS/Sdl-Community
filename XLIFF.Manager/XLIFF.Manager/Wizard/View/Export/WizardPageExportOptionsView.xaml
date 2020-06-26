@@ -26,7 +26,7 @@
 			
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid Margin="15,10,15,10">
+	<Grid Margin="0">
 		<GroupBox Header="Options">
 			<Grid Margin="10">
 				<Grid.ColumnDefinitions>

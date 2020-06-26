@@ -11,19 +11,12 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 		private const string TransactionFolderSettingId = "TransactionFolder";
 		private const string SelectedFilterItemIdsSettingId = "SelectedFilterItemIds";
 		private const string DateTimeStampSettingId = "DateTimeStamp";
-		private const string ProjectFilesSettingId = "ProjectFiles";
 		private const string LocalProjectFolderSettingId = "LocalProjectFolder";
 
 		public string LocalProjectFolder
 		{
 			get => GetSetting<string>(LocalProjectFolderSettingId);
 			set => GetSetting<string>(LocalProjectFolderSettingId).Value = value;
-		}
-
-		public List<ProjectFile> ProjectFiles
-		{
-			get => GetSetting<List<ProjectFile>>(ProjectFilesSettingId);
-			set => GetSetting<List<ProjectFile>>(ProjectFilesSettingId).Value = value;
 		}
 
 		public ExportOptions ExportOptions

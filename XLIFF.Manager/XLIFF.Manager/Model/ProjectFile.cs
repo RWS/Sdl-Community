@@ -156,8 +156,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			foreach (var projectFileActivity in ProjectFileActivities)
 			{
 				if (projectFileActivity.Clone() is ProjectFileActivity projectFileActivityCloned)
-				{
-					//projectFileActivityCloned.ProjectFile = projectFile;
+				{					
 					projectFile.ProjectFileActivities.Add(projectFileActivityCloned);
 				}
 			}

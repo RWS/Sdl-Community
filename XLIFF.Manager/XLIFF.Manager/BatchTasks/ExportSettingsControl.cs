@@ -11,7 +11,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 {
 	public partial class ExportSettingsControl : UserControl, ISettingsAware<ExportSettings>
 	{
-		private ExportSettingsViewModel _exportOptionsViewModel;
+		private ExportOptionsViewModel _exportOptionsViewModel;
 
 		public ExportSettingsControl()
 		{
@@ -22,14 +22,14 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 
 		public void SetDataContext()
 		{
-			if (elementHost1.Child is ExportSettingsView view && view.DataContext == null)
+			if (elementHost1.Child is ExportOptionsView view && view.DataContext == null)
 			{
-				ExportOptionsViewModel = new ExportSettingsViewModel(Settings, new DialogService());
+				ExportOptionsViewModel = new ExportOptionsViewModel(Settings, new DialogService());
 				view.DataContext = ExportOptionsViewModel;
 			}
 		}
 
-		public ExportSettingsViewModel ExportOptionsViewModel
+		public ExportOptionsViewModel ExportOptionsViewModel
 		{
 			get => _exportOptionsViewModel;
 			set
@@ -49,20 +49,15 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 		}
 
 		private void ExportOptionsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-		{			
-			UpdateSettings(e.PropertyName);
+		{		
+			UpdateSettings(e.PropertyName);			
 		}
 
 		private void UpdateSettings(string propertyName)
-		{
-			if (propertyName == nameof(ExportSettingsViewModel.ProjectFiles))
-			{
-				Settings.ProjectFiles = _exportOptionsViewModel.ProjectFiles;
-			}
-
-			if (propertyName == nameof(ExportSettingsViewModel.CopySourceToTarget) ||
-			    propertyName == nameof(ExportSettingsViewModel.IncludeTranslations) ||
-			    propertyName == nameof(ExportSettingsViewModel.SelectedXliffSupport))
+		{			
+			if (propertyName == nameof(ViewModel.ExportOptionsViewModel.CopySourceToTarget) ||
+			    propertyName == nameof(ViewModel.ExportOptionsViewModel.IncludeTranslations) ||
+			    propertyName == nameof(ViewModel.ExportOptionsViewModel.SelectedXliffSupport))
 			{
 				var options = new ExportOptions
 				{
@@ -74,12 +69,12 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 				Settings.ExportOptions = options;
 			}
 
-			if (propertyName == nameof(ExportSettingsViewModel.OutputFolder))
+			if (propertyName == nameof(ViewModel.ExportOptionsViewModel.OutputFolder))
 			{
 				Settings.TransactionFolder = _exportOptionsViewModel.OutputFolder;
 			}
 
-			if (propertyName == nameof(ExportSettingsViewModel.SelectedExcludeFilterItems))
+			if (propertyName == nameof(ViewModel.ExportOptionsViewModel.SelectedExcludeFilterItems))
 			{
 				Settings.SelectedFilterItemIds = _exportOptionsViewModel.SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 			}

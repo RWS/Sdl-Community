@@ -86,8 +86,7 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.MultiSelectComboBox, Version=1.0.18.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Thirdparty\Sdl.MultiSelectComboBox.dll</HintPath>
+      <HintPath>..\packages\Sdl.MultiSelectComboBox.1.0.18\lib\net47\Sdl.MultiSelectComboBox.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <SpecificVersion>False</SpecificVersion>
@@ -137,8 +136,6 @@
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="BatchTasks\ExportBatchTask.cs" />
-    <Compile Include="BatchTasks\ImportSettingsPage.cs" />
-    <Compile Include="BatchTasks\ImportSettings.cs" />
     <Compile Include="BatchTasks\ExportSettings.cs" />
     <Compile Include="BatchTasks\ExportSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -147,23 +144,9 @@
       <DependentUpon>ExportSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="BatchTasks\ExportSettingsPage.cs" />
-    <Compile Include="BatchTasks\ImportBatchTask.cs" />
-    <Compile Include="BatchTasks\ImportSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="BatchTasks\ImportSettingsControl.Designer.cs">
-      <DependentUpon>ImportSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BatchTasks\RequiresSettingsPageAttribute.cs" />
-    <Compile Include="BatchTasks\ViewModel\ExportSettingsViewModel.cs" />
-    <Compile Include="BatchTasks\View\ExportSettingsView.xaml.cs">
-      <DependentUpon>ExportSettingsView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="BatchTasks\ViewModel\ExportOptionsViewModel.cs" />
     <Compile Include="BatchTasks\View\ExportOptionsView.xaml.cs">
       <DependentUpon>ExportOptionsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BatchTasks\View\ExportFilesView.xaml.cs">
-      <DependentUpon>ExportFilesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
     <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
@@ -345,15 +328,7 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="BatchTasks\View\ExportSettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="BatchTasks\View\ExportOptionsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="BatchTasks\View\ExportFilesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -506,9 +481,6 @@
     <EmbeddedResource Include="BatchTasks\ExportSettingsControl.resx">
       <DependentUpon>ExportSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BatchTasks\ImportSettingsControl.resx">
-      <DependentUpon>ImportSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProjectFileActivityViewControl.resx">
       <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -561,10 +533,7 @@
     <Resource Include="Resources\TellMe.ico" />
     <Resource Include="Resources\Warning.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\BatchTaskSettings\" />
-    <Folder Include="Thirdparty\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
