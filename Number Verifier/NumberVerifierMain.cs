@@ -887,8 +887,7 @@ namespace Sdl.Community.NumberVerifier
 
 		private bool IsNumberThousandDecimal(string numberText, SeparatorModel separatorModel)
 		{
-			return (separatorModel.LengthPeriodOrCustomSep >= 3 && separatorModel.LengthCommaOrCustomSep <= 2
-				   // corresponds to thousands period(or other thousands custom separator) AND decimal comma(or other decimal custom separator)
+			return (separatorModel.LengthPeriodOrCustomSep >= 3 && separatorModel.LengthCommaOrCustomSep <= 2 // corresponds to thousands period(or other thousands custom separator) AND decimal comma(or other decimal custom separator)
 				   || separatorModel.LengthCommaOrCustomSep >= 3 && separatorModel.LengthPeriodOrCustomSep <= 2 // corresponds to thousands comma(or other thousands custom separator) AND decimal period(or other decimal custom separator)
 				   || Regex.Matches(numberText, ",").Count > 1 // corresponds to thousands and decimal COMMA (any other custom separator is not applied the SAME for thousand and decimal place)
 				   || Regex.Matches(numberText, @"\.").Count > 1
