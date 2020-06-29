@@ -1,4 +1,9 @@
-﻿using Sdl.Community.ProjectTerms.Plugin.Exceptions;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
+using Sdl.Community.ProjectTerms.Plugin.Exceptions;
 using Sdl.Community.ProjectTerms.Telemetry;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -6,60 +11,162 @@ using Sdl.MultiTerm.TMO.Interop;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 {
-    public class TermbaseGeneration : AbstractBilingualContentHandler
+	public class TermbaseGeneration : AbstractBilingualContentHandler
     {
-        private ITelemetryTracker telemetryTracker;
+        private readonly ITelemetryTracker _telemetryTracker;
+        private readonly Dictionary<string, string> _languages;
 
-        private FileBasedProject project;
-        private ProjectFile selectedFile;
-        private string termbasePath;
-        private Dictionary<string, string> langs;
+		private FileBasedProject _project;
+        private ProjectFile _selectedFile;
+        private string _termbasePath;
 
         public TermbaseGeneration()
         {
-            telemetryTracker = new TelemetryTracker();
-            langs = new Dictionary<string, string>();
+            _telemetryTracker = new TelemetryTracker();
+            _languages = new Dictionary<string, string>();
         }
 
-        private void CheckedTermbaseDirectoryExists(string termbasePath)
+
+        /// <summary>
+        /// Create a termbase and add it to Termbases file in sdl project.
+        /// </summary>
+        /// <param name="termbaseDefinitionPath"></param>
+        /// <returns></returns>
+        public ITermbase CreateTermbase(string termbaseDefinitionPath)
         {
-            if (!Directory.Exists(Path.GetDirectoryName(termbasePath)))
-            {
-                Utils.Utils.CreateDirectory(Path.GetDirectoryName(termbasePath));
-            }
+	        try
+	        {
+		        _telemetryTracker.StartTrackRequest("Creating termbase");
+		        _telemetryTracker.TrackEvent("Creating termbase");
+
+		        var termbases = ConnectToTermbaseLocalRepository();
+
+		        if (File.Exists(_termbasePath) && ExistsProjectTermbase())
+		        {
+			        return null;
+		        }
+		        var termbase = termbases.New(Path.GetFileNameWithoutExtension(_selectedFile.LocalFilePath), "Optional Description", termbaseDefinitionPath, _termbasePath);
+
+		        Utils.Utils.RemoveDirectory(Path.GetDirectoryName(termbaseDefinitionPath));
+		        return termbase;
+	        }
+	        catch (Exception e)
+	        {
+		        _telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_CreateTermbase + e.Message));
+		        _telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_CreateTermbase + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
+		        throw new TermbaseGenerationException(PluginResources.Error_CreateTermbase + e.Message);
+	        }
         }
 
-        private void Settings()
+		/// <summary>
+		/// Add entries to a given termbase
+		/// </summary>
+		/// <param name="termbase"></param>
+		public void PopulateTermbase(ITermbase termbase)
+		{
+			try
+			{
+				_telemetryTracker.StartTrackRequest("Population of the termbase");
+				_telemetryTracker.TrackEvent("Population of the termbase");
+
+				var extractor = new ProjectTermsExtractor();
+
+				var targetProjectFiles = _project.GetTargetLanguageFiles();
+				var targetFilesReportedToSelectedFile = targetProjectFiles.Where(file => file.Name.Equals(_selectedFile.Name));
+
+				extractor.ExtractBilingualContent(targetFilesReportedToSelectedFile.ToArray());
+
+				var bilingualContentPair = extractor.GetBilingualContentPair();
+				if (bilingualContentPair != null)
+				{
+					foreach (var item in bilingualContentPair.Keys)
+					{
+						var entry = CreateEntry(item, _selectedFile.SourceFile.Language, bilingualContentPair[item]);
+						var oEntries = termbase?.Entries;
+						if (oEntries == null) continue;
+						oEntries.New(entry, true);
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				_telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_PopulateTermbase + e.Message));
+				_telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_PopulateTermbase + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
+				throw new TermbaseGenerationException(PluginResources.Error_PopulateTermbase + e.Message);
+			}
+		}
+
+		/// <summary>
+		/// Extract the project languages to include them in termbase
+		/// </summary>
+		/// <returns></returns>
+		public Dictionary<string, string> GetProjectTargetLanguages()
+		{
+			try
+			{
+				_telemetryTracker.StartTrackRequest("Extracting project languages in order to complete the .xdt file");
+				_telemetryTracker.TrackEvent("Extracting project languages in order to complete the .xdt file", null);
+
+				if (_project == null)
+				{
+					GetSettings();
+				}
+
+				var projectInfo = _project.GetProjectInfo();
+				if (projectInfo != null)
+				{
+					_languages[projectInfo.SourceLanguage.DisplayName] = projectInfo.SourceLanguage.IsoAbbreviation.ToUpper();
+					foreach (var targetLang in projectInfo.TargetLanguages)
+					{
+						_languages[targetLang.DisplayName] = targetLang.IsoAbbreviation.ToUpper();
+					}
+				}
+
+				return _languages;
+			}
+			catch (Exception e)
+			{
+				_telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_GetProjectLanguages + e.Message));
+				_telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_GetProjectLanguages + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
+				throw new TermbaseGenerationException(PluginResources.Error_GetProjectLanguages + e.Message);
+			}
+		}
+
+		private void GetSettings()
         {
             try
             {
-                telemetryTracker.StartTrackRequest("Termbase settings");
-                telemetryTracker.TrackEvent("Termbase settings", null);
+                _telemetryTracker.StartTrackRequest("Termbase settings");
+                _telemetryTracker.TrackEvent("Termbase settings", null);
 
-                project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
-                selectedFile = SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault();
-                termbasePath = Path.Combine(Path.GetTempPath() + "\\Tb", Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath) + ".sdltb");
-                if(!Directory.Exists(Path.GetDirectoryName(termbasePath)))
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(termbasePath));
-                }
+                _project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
+                _selectedFile = SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault();
+                _termbasePath = Path.Combine(Path.GetTempPath() + "\\Tb", Path.GetFileNameWithoutExtension(_selectedFile?.LocalFilePath) + ".sdltb");
+                CreateDirectory();
             }
             catch (Exception e)
             {
-                telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_Settings + e.Message));
-                telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_Settings + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
+                _telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_Settings + e.Message));
+                _telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_Settings + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
 
                 throw new TermbaseGenerationException(PluginResources.Error_Settings + e.Message);
             }
         }
+
+        private void CreateDirectory()
+        {
+	        if (!Directory.Exists(Path.GetDirectoryName(_termbasePath)))
+	        {
+		        var directoryName = Path.GetDirectoryName(_termbasePath);
+		        if (!string.IsNullOrEmpty(directoryName))
+		        {
+			        Directory.CreateDirectory(directoryName);
+		        }
+	        }
+		}
 
         /// <summary>
         /// Connect to local termbase repository
@@ -69,62 +176,50 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
         {
             try
             {
-                telemetryTracker.StartTrackRequest("Connecting to the local repository");
-                telemetryTracker.TrackEvent("Connecting to the local repository", null);
+                _telemetryTracker.StartTrackRequest("Connecting to the local repository");
+                _telemetryTracker.TrackEvent("Connecting to the local repository");
 
                 var multiTermClientObject = new Application();
                 var localRepository = multiTermClientObject.LocalRepository;
-                localRepository.Connect("", "");
+                localRepository.Connect(string.Empty, string.Empty);
                 return localRepository.Termbases;
-            } catch(Exception e)
+            }
+            catch(Exception e)
             {
-                telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_ConnectToTermbaseLocalRepository + e.Message));
-                telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_ConnectToTermbaseLocalRepository + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
+                _telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_ConnectToTermbaseLocalRepository + e.Message));
+                _telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_ConnectToTermbaseLocalRepository + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new TermbaseGenerationException(PluginResources.Error_ConnectToTermbaseLocalRepository + e.Message);
             }
         }
 
-        /// <summary>
-        /// Create a termbase and add it to Termbases file in sdl project.
-        /// </summary>
-        /// <param name="termbaseDefinitionPath"></param>
-        /// <returns></returns>
-        public ITermbase CreateTermbase(string termbaseDefinitionPath)
+		// Check if the project termbase exists
+        private bool ExistsProjectTermbase()
+        {
+	        if (_project != null)
+	        {
+		        var termbaseName = Path.GetFileNameWithoutExtension(_termbasePath);
+		        var projectTermbases = _project.GetTermbaseConfiguration()?.Termbases;
+				if(projectTermbases !=null && projectTermbases.Any(t=>t.Name.Equals(termbaseName)))
+				{
+					return true;
+				}
+	        }
+	        return false;
+		}
+
+		/// <summary>
+		/// Create xml entry as string
+		/// </summary>
+		/// <param name="sourceText"></param>
+		/// <param name="sourceLang"></param>
+		/// <param name="targets"></param>
+		/// <returns></returns>
+		private string CreateEntry(string sourceText, Language sourceLang, List<KeyValuePair<string, string>> targets)
         {
             try
             {
-                telemetryTracker.StartTrackRequest("Creating termbase");
-                telemetryTracker.TrackEvent("Creating termbase", null);
-
-                var termbases = ConnectToTermbaseLocalRepository();
-
-                if (File.Exists(termbasePath)) return null;
-
-                var termbase = termbases.New(Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath), "Optional Description", termbaseDefinitionPath, termbasePath);
-
-                Utils.Utils.RemoveDirectory(Path.GetDirectoryName(termbaseDefinitionPath));
-                return termbase;
-            } catch (Exception e)
-            {
-                telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_CreateTermbase + e.Message));
-                telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_CreateTermbase + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
-                throw new TermbaseGenerationException(PluginResources.Error_CreateTermbase + e.Message);
-            }
-        }
-
-        /// <summary>
-        /// Create xml entry as string
-        /// </summary>
-        /// <param name="sourceText"></param>
-        /// <param name="sourceLang"></param>
-        /// <param name="targets"></param>
-        /// <returns></returns>
-        private string CreateEntry(string sourceText, Language sourceLang, List<KeyValuePair<string, string>> targets)
-        {
-            try
-            {
-                telemetryTracker.StartTrackRequest("Creating entry xml element in order to populate the termbase");
-                telemetryTracker.TrackEvent("Creating entry xml element in order to populate the termbase", null);
+                _telemetryTracker.StartTrackRequest("Creating entry xml element in order to populate the termbase");
+                _telemetryTracker.TrackEvent("Creating entry xml element in order to populate the termbase", null);
 
 				return new XElement("conceptGrp",
                     // Add source text
@@ -134,84 +229,16 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                     // Add target texts
                     targets.Select(item =>
                          new XElement("languageGrp",
-                            new XElement("language", new XAttribute("lang", langs[item.Value]), new XAttribute("type", item.Value)),
+                            new XElement("language", new XAttribute("lang", _languages[item.Value]), new XAttribute("type", item.Value)),
                             new XElement("termGrp", new XElement("term", item.Key)))
-                    )
-                ).ToString();
-            } catch(Exception e)
+                    )).ToString();
+            } 
+            catch(Exception e)
             {
-                telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_CreateEntry + e.Message));
-                telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_CreateEntry + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
+                _telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_CreateEntry + e.Message));
+                _telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_CreateEntry + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new TermbaseGenerationException(PluginResources.Error_CreateEntry + e.Message);
             }
         }
-
-        /// <summary>
-        /// Add entries to a given termbase
-        /// </summary>
-        /// <param name="oTb"></param>
-        public void PopulateTermbase(ITermbase termbase)
-        {
-            try
-            {
-                telemetryTracker.StartTrackRequest("Population of the termbase");
-                telemetryTracker.TrackEvent("Population of the termbase", null);
-
-                var extractor = new ProjectTermsExtractor();
-
-                var targetProjectFiles = project.GetTargetLanguageFiles();
-                var targetFilesReportedToSelectedFile = targetProjectFiles.Where(file => file.Name.Equals(selectedFile.Name));
-
-                extractor.ExtractBilingualContent(targetFilesReportedToSelectedFile.ToArray());
-
-                Dictionary<string, List<KeyValuePair<string, string>>> bilingualContentPair = extractor.GetBilingualContentPair();
-                foreach (var item in bilingualContentPair.Keys)
-                {
-                    var entry = CreateEntry(item, selectedFile.SourceFile.Language, bilingualContentPair[item]);
-                    var oEntries = termbase.Entries;
-                    oEntries.New(entry, true);
-                }
-            }
-            catch (Exception e)
-            {
-                telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_PopulateTermbase + e.Message));
-                telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_PopulateTermbase + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
-                throw new TermbaseGenerationException(PluginResources.Error_PopulateTermbase + e.Message);
-            }
-        }
-
-        /// <summary>
-        /// Extract the project languages to include them in termbase
-        /// </summary>
-        /// <returns></returns>
-        public Dictionary<string, string> GetProjectLanguages()
-        {
-            try
-            {
-                telemetryTracker.StartTrackRequest("Extracting project languages in order to complete the .xdt file");
-                telemetryTracker.TrackEvent("Extracting project languages in order to complete the .xdt file", null);
-
-				if (project == null)
-				{
-					Settings();
-				}
-
-				var sourceLanguage = project.GetProjectInfo().SourceLanguage;
-                langs[sourceLanguage.DisplayName] = sourceLanguage.IsoAbbreviation.ToUpper();
-                var targetLanguages = project.GetProjectInfo().TargetLanguages;
-                foreach (var lang in targetLanguages)
-                {
-                    langs[lang.DisplayName] = lang.IsoAbbreviation.ToUpper();
-                }
-
-                return langs;
-            }
-            catch (Exception e)
-            {
-                telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_GetProjectLanguages + e.Message));
-                telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_GetProjectLanguages + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
-                throw new TermbaseGenerationException(PluginResources.Error_GetProjectLanguages + e.Message);
-            }
-        }
-	}
+    }
 }
