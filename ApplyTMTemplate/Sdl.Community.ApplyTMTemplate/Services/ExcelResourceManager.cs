@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Xml.Serialization;
 using OfficeOpenXml;
@@ -13,13 +14,13 @@ using Sdl.Core.LanguageProcessing.Tokenization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Segmentation;
 using Sdl.LanguagePlatform.Core.Tokenization;
+using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ApplyTMTemplate.Services
 {
 	public class ExcelResourceManager : IExcelResourceManager
 	{
-
 		public void ExportResourcesToExcel(ILanguageResourcesContainer resourceContainer, string filePathTo, Settings settings)
 		{
 			using var package = GetExcelPackage(filePathTo);
@@ -165,9 +166,9 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 
 			var globalSettingsWorksheet = package.Workbook.Worksheets.Add(PluginResources.GlobalSettings);
 			PrepareGlobalSettingsWorksheet(globalSettingsWorksheet);
-			var recognizers = resourceContainer.Recognizers.ToString().Split(',');
 			if (settings.RecognizersChecked && resourceContainer.Recognizers != null)
 			{
+				var recognizers = resourceContainer.Recognizers.ToString().Split(',');
 				lineNumber = 1;
 				foreach (var recognizer in recognizers)
 				{
@@ -175,9 +176,9 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				}
 			}
 
-			var wordCountFlags = resourceContainer.WordCountFlags.ToString().Split(',');
 			if (settings.WordCountFlagsChecked && resourceContainer.WordCountFlags != null)
 			{
+				var wordCountFlags = resourceContainer.WordCountFlags.ToString().Split(',');
 				lineNumber = 1;
 				foreach (var wordCountFlag in wordCountFlags)
 				{
@@ -243,7 +244,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			worksheet.Cells[columnLetter + lineNumber].Style.Font.Name = "Sommet Rounded";
 		}
 
-		public List<LanguageResourceBundle> GetResourceBundlesFromExcel(string filePathFrom, Settings settings)
+		public List<LanguageResourceBundle> GetResourceBundlesFromExcel(string filePathFrom)
 		{
 			using var package = GetExcelPackage(filePathFrom);
 			var newLanguageResourceBundles = new List<LanguageResourceBundle>();
@@ -252,30 +253,55 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			foreach (var workSheet in package.Workbook.Worksheets)
 			{
 				if (workSheet.Name == PluginResources.GlobalSettings) continue;
-
-				var (abbreviations, ordinalFollowers, variables, segmentationRules, longDates, shortDates, longTimes,
-					shortTimes, numberSeparators, measurementUnits, currencies) = GetFromExcel(workSheet, settings);
-
-				var newLanguageResourceBundle =
-					new LanguageResourceBundle(CultureInfoExtensions.GetCultureInfo(workSheet.Name))
-					{
-						Abbreviations = abbreviations,
-						OrdinalFollowers = ordinalFollowers,
-						Variables = variables,
-						SegmentationRules = segmentationRules,
-						LongDateFormats = longDates,
-						ShortDateFormats = shortDates,
-						LongTimeFormats = longTimes,
-						ShortTimeFormats = shortTimes,
-						NumbersSeparators = numberSeparators,
-						MeasurementUnits = measurementUnits,
-						CurrencyFormats = currencies
-					};
-
-				newLanguageResourceBundles.Add(newLanguageResourceBundle);
+				newLanguageResourceBundles.Add(GetFromExcel(workSheet, CultureInfoExtensions.GetCultureInfo(workSheet.Name)));
 			}
 
 			return newLanguageResourceBundles;
+		}
+
+		public (BuiltinRecognizers?, WordCountFlags?) GetTemplateGlobalSettings(string filePathFrom, Settings settings)
+		{
+			var excelDoc = GetExcelPackage(filePathFrom);
+			var settingsWorksheet = excelDoc.Workbook.Worksheets["Global settings"];
+			var cells = settingsWorksheet.Cells;
+
+			BuiltinRecognizers? recognizers = BuiltinRecognizers.RecognizeNone;
+			WordCountFlags? wordCountFlags = WordCountFlags.NoFlags;
+			for (var i = 2; i <= settingsWorksheet.Dimension.End.Row; i++)
+			{
+				if (settings.RecognizersChecked)
+				{
+					AddRecognizers(cells[i, 1].Value?.ToString(), ref recognizers);
+				}
+				if (settings.WordCountFlagsChecked)
+				{
+					AddWordCountFlags(cells[i, 2].Value?.ToString(), ref wordCountFlags);
+				}
+			}
+
+			return (recognizers, wordCountFlags);
+		}
+
+		private void AddWordCountFlags(string wordCountFlagSerialized, ref WordCountFlags? wordCountFlags)
+		{
+			if (!string.IsNullOrWhiteSpace(wordCountFlagSerialized))
+			{
+				if (Enum.TryParse(wordCountFlagSerialized, out WordCountFlags recognizer))
+				{
+					wordCountFlags |= recognizer;
+				}
+			}
+		}
+
+		private void AddRecognizers(string recognizerSerialized, ref BuiltinRecognizers? recognizers)
+		{
+			if (!string.IsNullOrWhiteSpace(recognizerSerialized))
+			{
+				if (Enum.TryParse(recognizerSerialized, out BuiltinRecognizers recognizer))
+				{
+					recognizers |= recognizer;
+				}
+			}
 		}
 
 		private bool IsExcelDocumentValid(ExcelPackage excelPackage)
@@ -326,120 +352,144 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			return excelPackage;
 		}
 
-		private (Wordlist, Wordlist, Wordlist, SegmentationRules, List<string>, List<string>, List<string>, List<string>, List<SeparatorCombination>, Dictionary<string, CustomUnitDefinition>, List<CurrencyFormat>) GetFromExcel(ExcelWorksheet workSheet, Settings settings)
+		//public string GetValueFromCell();
+
+		private LanguageResourceBundle GetFromExcel(ExcelWorksheet workSheet, CultureInfo cultureInfo)
 		{
 			var cells = workSheet.Cells;
 
-			var abbreviations = !settings.AbbreviationsChecked ? null : new Wordlist();
-			var ordinalFollowers = !settings.OrdinalFollowersChecked ? null : new Wordlist();
-			var variables = !settings.VariablesChecked ? null : new Wordlist();
-			var segmentationRules = !settings.SegmentationRulesChecked ? null : new SegmentationRules();
-			var longDates = !settings.DatesChecked ? null : new List<string>();
-			var shortDates = !settings.DatesChecked ? null : new List<string>();
-			var longTimes = !settings.TimesChecked ? null : new List<string>();
-			var shortTimes = !settings.TimesChecked ? null : new List<string>();
-			var numberSeparators = !settings.NumbersChecked ? null : new List<SeparatorCombination>();
-			var measurementUnits = !settings.MeasurementsChecked ? null : new Dictionary<string, CustomUnitDefinition>();
-			var currencies = !settings.CurrenciesChecked ? null : new List<CurrencyFormat>();
-
+			var languageResourceBundle =
+				new LanguageResourceBundle(cultureInfo)
+				{
+					Abbreviations = new Wordlist(),
+					OrdinalFollowers = new Wordlist(),
+					Variables = new Wordlist(),
+					SegmentationRules = new SegmentationRules(),
+					LongDateFormats = new List<string>(),
+					ShortDateFormats = new List<string>(),
+					LongTimeFormats = new List<string>(),
+					ShortTimeFormats = new List<string>(),
+					NumbersSeparators = new List<SeparatorCombination>(),
+					MeasurementUnits = new Dictionary<string, CustomUnitDefinition>(),
+					CurrencyFormats = new List<CurrencyFormat>()
+				};
 
 			for (var i = 2; i <= workSheet.Dimension.End.Row; i++)
 			{
 				var abbreviation = cells[i, 1]?.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(abbreviation))
-				{
-					abbreviations?.Add(cells[i, 1]?.Value?.ToString());
-				}
+				AddToWordlist(abbreviation, languageResourceBundle.Abbreviations);
 
 				var ordinalFollower = cells[i, 2]?.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(ordinalFollower))
-				{
-					ordinalFollowers?.Add(ordinalFollower);
-				}
+				AddToWordlist(ordinalFollower, languageResourceBundle.OrdinalFollowers);
 
 				var variable = cells[i, 3]?.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(variable))
-				{
-					variables?.Add(variable);
-				}
+				AddToWordlist(variable, languageResourceBundle.Variables);
 
 				var serializedData = cells[i, 4]?.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(serializedData))
-				{
-					var stringReader = new StringReader(serializedData);
-					var xmlSerializer = new XmlSerializer(typeof(SegmentationRule));
-
-					var segmentationRule = (SegmentationRule)xmlSerializer.Deserialize(stringReader);
-					segmentationRules?.AddRule(segmentationRule);
-				}
+				AddSegmentationRule(serializedData, languageResourceBundle.SegmentationRules.Rules);
 
 				var longDate = cells[i, 5]?.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(longDate))
-				{
-					longDates?.Add(longDate);
-				}
+				AddDateFormat(longDate, languageResourceBundle.LongDateFormats);
 
 				var shortDate = cells[i, 6]?.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(shortDate))
-				{
-					shortDates?.Add(shortDate);
-				}
+				AddDateFormat(shortDate, languageResourceBundle.ShortDateFormats);
 
 				var longTime = cells[i, 7]?.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(longTime))
-				{
-					longTimes?.Add(longTime);
-				}
+				AddDateFormat(longTime, languageResourceBundle.LongTimeFormats);
 
 				var shortTime = cells[i, 8]?.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(shortTime))
-				{
-					shortTimes?.Add(shortTime);
-				}
+				AddDateFormat(shortTime, languageResourceBundle.ShortTimeFormats);
 
 				serializedData = cells[i, 9]?.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(serializedData))
-				{
-					var separatorCombinationsStrings = serializedData.Trim('{', '}').Split(' ');
-
-					if (separatorCombinationsStrings.Length > 1)
-					{
-						var separatorCombination = new SeparatorCombination(separatorCombinationsStrings[0], separatorCombinationsStrings[1], false);
-						numberSeparators?.Add(separatorCombination);
-					}
-				}
+				AddNumberSeparator(serializedData, languageResourceBundle.NumbersSeparators);
 
 				var unit = cells[i, 10]?.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(unit))
-				{
-					measurementUnits?.Add(unit, new CustomUnitDefinition());
-				}
+				AddMeasurementUnits(unit, languageResourceBundle.MeasurementUnits);
 
 				serializedData = cells[i, 11]?.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(serializedData))
-				{
-					var currencyData = serializedData.Split('-');
-					var parseSucceeded = Enum.TryParse(currencyData[1], out CurrencySymbolPosition currencySymbolPosition);
-					if (parseSucceeded)
-					{
-						var currencySymbolPositions = new List<CurrencySymbolPosition>
-						{
-							currencySymbolPosition,
-							currencySymbolPosition == CurrencySymbolPosition.afterAmount
-								? CurrencySymbolPosition.beforeAmount
-								: CurrencySymbolPosition.afterAmount
-						};
-						var currency = new CurrencyFormat
-						{
-							Symbol = currencyData[0].Trim(),
-							CurrencySymbolPositions = currencySymbolPositions
-						};
-						currencies?.Add(currency);
-					}
-				}
+				AddCurrencies(serializedData, languageResourceBundle.CurrencyFormats);
 			}
 
-			return (abbreviations, ordinalFollowers, variables, segmentationRules, longDates, shortDates, longTimes, shortTimes, numberSeparators, measurementUnits, currencies);
+			return languageResourceBundle;
+		}
+
+		private static void AddCurrencies(string serializedData, List<CurrencyFormat> currencyFormats)
+		{
+			if (!string.IsNullOrWhiteSpace(serializedData))
+			{
+				var currencyData = serializedData.Split('-');
+				var parseSucceeded = Enum.TryParse(currencyData[1], out CurrencySymbolPosition currencySymbolPosition);
+				if (parseSucceeded)
+				{
+					var currencySymbolPositions = new List<CurrencySymbolPosition>
+					{
+						currencySymbolPosition,
+						currencySymbolPosition == CurrencySymbolPosition.afterAmount
+							? CurrencySymbolPosition.beforeAmount
+							: CurrencySymbolPosition.afterAmount
+					};
+					var currency = new CurrencyFormat
+					{
+						Symbol = currencyData[0].Trim(),
+						CurrencySymbolPositions = currencySymbolPositions
+					};
+					currencyFormats?.Add(currency);
+				}
+			}
+		}
+
+		private static void AddMeasurementUnits(string unit, Dictionary<string, CustomUnitDefinition> measurementUnits)
+		{
+			if (!string.IsNullOrWhiteSpace(unit))
+			{
+				measurementUnits?.Add(unit, new CustomUnitDefinition());
+			}
+		}
+
+		private void AddNumberSeparator(string serializedData, List<SeparatorCombination> numberSeparators)
+		{
+			if (!string.IsNullOrWhiteSpace(serializedData))
+			{
+				var separatorCombinationsStrings = serializedData.Trim('{', '}').Split(' ');
+
+				if (separatorCombinationsStrings.Length > 1)
+				{
+					var separatorCombination = new SeparatorCombination(separatorCombinationsStrings[0], separatorCombinationsStrings[1], false);
+					numberSeparators?.Add(separatorCombination);
+				}
+			}
+		}
+
+		private void AddDateFormat(string date, List<string> list)
+		{
+			if (!string.IsNullOrWhiteSpace(date))
+			{
+				list?.Add(date);
+			}
+		}
+
+		private void AddToWordlist(string word, Wordlist list)
+		{
+			if (!string.IsNullOrWhiteSpace(word))
+			{
+				list?.Add(word);
+			}
+		}
+
+		private void AddSegmentationRule(string serializedData, List<SegmentationRule> list)
+		{
+			if (!string.IsNullOrWhiteSpace(serializedData))
+			{
+				var stringReader = new StringReader(serializedData);
+				var xmlSerializer = new XmlSerializer(typeof(SegmentationRule));
+
+				var segmentationRule = (SegmentationRule)xmlSerializer.Deserialize(stringReader);
+
+				if (segmentationRule != null)
+				{
+					list?.Add(segmentationRule);
+				}
+			}
 		}
 	}
 }

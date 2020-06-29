@@ -125,10 +125,12 @@
     <Compile Include="Converters\ImageToBitmapImageConverter.cs" />
     <Compile Include="Models\Interfaces\ILanguageResourcesContainer.cs" />
     <Compile Include="Models\Interfaces\IResource.cs" />
-    <Compile Include="Models\LanguageResourcesTemplateContainer.cs" />
+    <Compile Include="Models\LanguageResourcesProxy.cs" />
     <Compile Include="Models\Resource.cs" />
     <Compile Include="Models\SegmentationRulesResource.cs" />
     <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\Wrappers\LanguageResourcesTemplateContainer.cs" />
+    <Compile Include="Models\Wrappers\TranslationMemoryContainer.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -136,8 +138,9 @@
     </Compile>
     <Compile Include="Services\ExcelResourceManager.cs" />
     <Compile Include="Services\FilePathDialogService.cs" />
-    <Compile Include="Services\Interfaces\IResourceManager.cs" />
+    <Compile Include="Services\Interfaces\IExcelResourceManager.cs" />
     <Compile Include="Services\Interfaces\IMessageService.cs" />
+    <Compile Include="Services\IResourceManager.cs" />
     <Compile Include="Services\MessageService.cs" />
     <Compile Include="UiHelpers\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>

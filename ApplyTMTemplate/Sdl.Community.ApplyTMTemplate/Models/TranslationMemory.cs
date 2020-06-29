@@ -141,7 +141,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			TargetStatusToolTip = PluginResources.TmCorruptedMarker;
 		}
 
-		public void UnmarkTm()
+		public void ResetAnnotations()
 		{
 			_sourceStatus = string.Empty;
 			_sourceStatusToolTip = string.Empty;

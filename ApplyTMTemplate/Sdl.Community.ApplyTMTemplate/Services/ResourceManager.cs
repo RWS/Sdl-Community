@@ -4,61 +4,51 @@ using System.Linq;
 using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.Community.ApplyTMTemplate.Models.Interfaces;
 using Sdl.Community.ApplyTMTemplate.Services.Interfaces;
-using Sdl.Core.LanguageProcessing.Tokenization;
 using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.Core.Segmentation;
+using Sdl.LanguagePlatform.Core.Tokenization;
+using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ApplyTMTemplate.Services
 {
-	public class ResourceManager
+	public class ResourceManager : IResourceManager
 	{
 		private readonly IExcelResourceManager _excelResourceManager;
-		private readonly ILanguageResourcesContainer _languageResourcesContainer;
-		private readonly Settings _settings;
+		private readonly IMessageService _messageService;
 
-		public ResourceManager(Settings settings, IExcelResourceManager excelResourceManager, ILanguageResourcesContainer languageResourcesContainer)
+		public ResourceManager(IExcelResourceManager excelResourceManager, IMessageService messageService)
 		{
-			_languageResourcesContainer = languageResourcesContainer;
-			_settings = settings;
+			_messageService = messageService;
 			_excelResourceManager = excelResourceManager;
 		}
 
-		public bool ValidateTemplate(bool isImport)
-		{
-			return _languageResourcesContainer.ValidateTemplate(isImport);
-		}
-
-		public void ApplyTemplateToTms(List<TranslationMemory> translationMemories)
+		public void ApplyTemplateToTms(ILanguageResourcesContainer languageResourcesContainer, List<TranslationMemory> translationMemories, Settings settings)
 		{
 			var resourceBundlesWithOptions = new List<LanguageResourceBundle>();
 
-			foreach (var resourceBundle in _languageResourcesContainer.LanguageResourceBundles)
+			foreach (var resourceBundle in languageResourcesContainer.LanguageResourceBundles)
 			{
 				var newResourceBundle = new LanguageResourceBundle(resourceBundle.Language);
 
-				if (_settings.VariablesChecked)
+				if (settings.VariablesChecked)
 				{
 					newResourceBundle.Variables = resourceBundle.Variables;
 				}
 
-				if (_settings.AbbreviationsChecked)
+				if (settings.AbbreviationsChecked)
 				{
 					newResourceBundle.Abbreviations = resourceBundle.Abbreviations;
 				}
 
-				if (_settings.OrdinalFollowersChecked)
+				if (settings.OrdinalFollowersChecked)
 				{
 					newResourceBundle.OrdinalFollowers = resourceBundle.OrdinalFollowers;
 				}
 
-				if (_settings.SegmentationRulesChecked)
+				if (settings.SegmentationRulesChecked)
 				{
 					newResourceBundle.SegmentationRules = resourceBundle.SegmentationRules;
 				}
-
-
-
 				resourceBundlesWithOptions.Add(newResourceBundle);
 			}
 
@@ -71,49 +61,45 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			}
 		}
 
-		public void ExcludeWhatIsNotNeeded(List<LanguageResourceBundle> languageResourceBundles)
-		{
-			//this method ensures that the defaults are used and that data that wasn't opted for isn't affected
-			foreach (var bundle in languageResourceBundles)
-			{
-				if (bundle.Abbreviations != null && (!_settings.AbbreviationsChecked || bundle.Abbreviations.Count == 0))
-				{
-					bundle.Abbreviations = null;
-				}
-
-				if (bundle.OrdinalFollowers != null && (!_settings.OrdinalFollowersChecked || bundle.OrdinalFollowers.Count == 0))
-				{
-					bundle.OrdinalFollowers = null;
-				}
-
-				if (bundle.Variables != null && (!_settings.VariablesChecked || bundle.Variables.Count == 0))
-				{
-					bundle.Variables = null;
-				}
-
-				if (bundle.SegmentationRules != null && (!_settings.SegmentationRulesChecked || bundle.SegmentationRules.Count == 0))
-				{
-					bundle.SegmentationRules = null;
-				}
-			}
-		}
-
-		public void ExportResourcesToExcel(string filePathTo,
+		public void ExportResourcesToExcel(ILanguageResourcesContainer languageResourcesContainer, string filePathTo,
 			Settings settings)
 		{
-			_excelResourceManager.ExportResourcesToExcel(_languageResourcesContainer, filePathTo, settings);
+			_excelResourceManager.ExportResourcesToExcel(languageResourcesContainer, filePathTo, settings);
 		}
 
-		public void ImportResourcesFromExcel(string filePathFrom)
+		public void ImportResourcesFromExcel(string excelFilePath, ILanguageResourcesContainer languageResourcesContainer, Settings settings)
 		{
-			var newLanguageResourceBundles = _excelResourceManager.GetResourceBundlesFromExcel(filePathFrom, _settings);
-			AddNewBundles(newLanguageResourceBundles);
+			var newLanguageResourceBundles = _excelResourceManager.GetResourceBundlesFromExcel(excelFilePath);
+			ExcludeWhatIsNotNeeded(settings, newLanguageResourceBundles);
+			AddNewBundles(languageResourcesContainer, newLanguageResourceBundles);
 
-			//TODO: add Global Settings to template
-			_languageResourcesContainer.Save();
+			var (recognizers, wordCountFlags) = _excelResourceManager.GetTemplateGlobalSettings(excelFilePath, settings);
+			AddGlobalSettings(languageResourcesContainer, recognizers, wordCountFlags);
+
+			SaveTemplate(languageResourcesContainer);
 		}
 
-		public void ImportResourcesFromSdltm(List<TranslationMemory> translationMemories)
+		public void ImportResourcesFromSdltm(List<TranslationMemory> translationMemories, ILanguageResourcesContainer languageResourcesContainer, Settings settings)
+		{
+			var newLanguageResourceBundles = GetResourcesFromTMs(translationMemories);
+			if (newLanguageResourceBundles.Count == 0)
+			{
+				_messageService.ShowWarningMessage(PluginResources.Warning, PluginResources.No_Resources_in_TMs);
+			}
+
+			ExcludeWhatIsNotNeeded(settings, newLanguageResourceBundles);
+			AddNewBundles(languageResourcesContainer, newLanguageResourceBundles);
+
+			SaveTemplate(languageResourcesContainer);
+		}
+
+		public bool ValidateTemplate(ILanguageResourcesContainer languageResourcesContainer, bool isImport)
+		{
+			//TODO: do this before any action undertaken
+			return languageResourcesContainer.ValidateTemplate(isImport);
+		}
+
+		private static List<LanguageResourceBundle> GetResourcesFromTMs(List<TranslationMemory> translationMemories)
 		{
 			var newLanguageResourceBundles = new List<LanguageResourceBundle>();
 			foreach (var tm in translationMemories)
@@ -124,183 +110,258 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 					newLanguageResourceBundles.Add(bundle);
 				}
 			}
-			if (newLanguageResourceBundles.Count == 0) throw new Exception(PluginResources.No_Resources_in_TMs);
 
-			ExcludeWhatIsNotNeeded(newLanguageResourceBundles);
-			AddNewBundles(newLanguageResourceBundles);
-
-			_languageResourcesContainer.Save();
+			return newLanguageResourceBundles;
 		}
 
-		private void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle template, string property)
+		private void AddGlobalSettings(ILanguageResourcesContainer languageResourcesContainer, BuiltinRecognizers? recognizers, WordCountFlags? wordCountFlags)
 		{
-			var templateBundleGetter = typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(template, null) as Wordlist;
-			var templateBundleSetter = typeof(LanguageResourceBundle).GetProperty(property)?.SetMethod;
-			var newBundleGetter = typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(newLanguageResourceBundle, null) as Wordlist;
-
-			if (newBundleGetter == null || !newBundleGetter.Items.Any()) return;
-
-			if (templateBundleGetter != null && templateBundleGetter.Items.Any())
-			{
-				foreach (var abbrev in newBundleGetter.Items)
-				{
-					templateBundleGetter.Add(abbrev);
-				}
-			}
-			else
-			{
-				templateBundleSetter?.Invoke(template, new object[] { new Wordlist(newBundleGetter) });
-			}
+			languageResourcesContainer.Recognizers = recognizers;
+			languageResourcesContainer.WordCountFlags = wordCountFlags;
 		}
 
-		private void AddNumberSeparators(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
+		private Wordlist AddItemsToWordlist(Wordlist listOne, Wordlist listTwo)
 		{
-			if (newBundle.NumbersSeparators?.Count > 0)
+			if (listTwo != null)
 			{
-				if (correspondingBundleInTemplate.NumbersSeparators != null &&
-					correspondingBundleInTemplate.NumbersSeparators.Count > 0)
+				listOne?.Items.ToList().ForEach(newItem => listTwo.Add(newItem));
+			}
+
+			return listTwo?.Count > 0 ? listTwo : null;
+		}
+
+		private void AddMeasurementUnits(LanguageResourceBundle newBundle,
+																			LanguageResourceBundle correspondingBundleInTemplate)
+		{
+			if (newBundle.MeasurementUnits != null)
+			{
+				if (correspondingBundleInTemplate.MeasurementUnits != null)
 				{
-					foreach (var separator in newBundle.NumbersSeparators)
+					foreach (var unit in newBundle.MeasurementUnits)
 					{
-						if (!correspondingBundleInTemplate.NumbersSeparators.Contains(separator))
+						if (!correspondingBundleInTemplate.MeasurementUnits.ContainsKey(unit.Key))
 						{
-							correspondingBundleInTemplate.NumbersSeparators.Add(separator);
+							correspondingBundleInTemplate.MeasurementUnits.Add(unit.Key, unit.Value);
 						}
 					}
 				}
 				else
 				{
-					correspondingBundleInTemplate.NumbersSeparators = newBundle.NumbersSeparators;
+					correspondingBundleInTemplate.MeasurementUnits = newBundle.MeasurementUnits;
 				}
+			}
+
+			if (correspondingBundleInTemplate.MeasurementUnits.Count == 0)
+			{
+				correspondingBundleInTemplate.MeasurementUnits = null;
+			}
+		}
+
+		private void AddNewBundles(ILanguageResourcesContainer languageResourcesContainer, List<LanguageResourceBundle> newLanguageResourceBundles)
+		{
+			foreach (var newBundle in newLanguageResourceBundles)
+			{
+				var correspondingBundleInTemplate = languageResourcesContainer.LanguageResourceBundles[newBundle.Language];
+				if (correspondingBundleInTemplate == null)
+				{
+					correspondingBundleInTemplate = new LanguageResourceBundle(newBundle.Language);
+					languageResourcesContainer.LanguageResourceBundles.Add(correspondingBundleInTemplate);
+				}
+				//to be able to deal with all the resources uniformly and easily, we must ensure that none are null
+				InitializeBundle(correspondingBundleInTemplate);
+
+				AddWordlists(correspondingBundleInTemplate, newBundle);
+				AddSegmentationRulesToBundle(newBundle, correspondingBundleInTemplate);
+				AddSimpleResources(correspondingBundleInTemplate, newBundle);
+				AddMeasurementUnits(newBundle, correspondingBundleInTemplate);
 			}
 		}
 
 		private void AddSegmentationRulesToBundle(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
 		{
-			if (newBundle.SegmentationRules == null) return;
-			if (correspondingBundleInTemplate.SegmentationRules != null)
+			if (newBundle.SegmentationRules != null)
 			{
-				foreach (var newRule in newBundle.SegmentationRules.Rules)
+				if (correspondingBundleInTemplate.SegmentationRules != null)
 				{
-					if (!correspondingBundleInTemplate.SegmentationRules.Rules.Any(oldRule =>
-						string.Equals(newRule.Description.Text, oldRule.Description.Text,
-							StringComparison.OrdinalIgnoreCase)))
+					foreach (var newRule in newBundle.SegmentationRules.Rules)
 					{
-						correspondingBundleInTemplate.SegmentationRules.AddRule(newRule);
+						if (!correspondingBundleInTemplate.SegmentationRules.Rules.Any(oldRule =>
+							string.Equals(newRule.Description.Text, oldRule.Description.Text,
+								StringComparison.OrdinalIgnoreCase)))
+						{
+							correspondingBundleInTemplate.SegmentationRules.AddRule(newRule);
+						}
 					}
 				}
+				else
+				{
+					correspondingBundleInTemplate.SegmentationRules = newBundle.SegmentationRules;
+				}
 			}
-			else
+
+			if (correspondingBundleInTemplate.SegmentationRules.Count == 0)
 			{
-				correspondingBundleInTemplate.SegmentationRules = new SegmentationRules(newBundle.SegmentationRules);
+				correspondingBundleInTemplate.SegmentationRules = null;
 			}
 		}
 
-		private void AddNewBundles(List<LanguageResourceBundle> newLanguageResourceBundles)
+		private void AddSimpleResources(LanguageResourceBundle correspondingBundleInTemplate, LanguageResourceBundle newBundle)
 		{
-			foreach (var newBundle in newLanguageResourceBundles)
-			{
-				var correspondingBundleInTemplate = _languageResourcesContainer.LanguageResourceBundles[newBundle.Language];
+			correspondingBundleInTemplate.LongDateFormats = GetUnionOfListsOfObjects(newBundle.LongDateFormats,
+				correspondingBundleInTemplate.LongDateFormats);
+			correspondingBundleInTemplate.ShortDateFormats = GetUnionOfListsOfObjects(newBundle.ShortDateFormats,
+				correspondingBundleInTemplate.ShortDateFormats);
+			correspondingBundleInTemplate.LongTimeFormats = GetUnionOfListsOfObjects(newBundle.LongTimeFormats,
+				correspondingBundleInTemplate.LongTimeFormats);
+			correspondingBundleInTemplate.ShortTimeFormats = GetUnionOfListsOfObjects(newBundle.ShortTimeFormats,
+				correspondingBundleInTemplate.ShortTimeFormats);
 
-				//in case there is already a bundle for that culture, we need to go into more detail and see what to add and what is already there
-				if (correspondingBundleInTemplate != null)
-				{
-					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Abbreviations");
-					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "OrdinalFollowers");
-					AddItemsToWordlist(newBundle, correspondingBundleInTemplate, "Variables");
-					AddSegmentationRulesToBundle(newBundle, correspondingBundleInTemplate);
-					AddDates(newBundle, correspondingBundleInTemplate);
-					AddTimes(newBundle, correspondingBundleInTemplate);
-					AddNumberSeparators(newBundle, correspondingBundleInTemplate);
-					newBundle.CurrencyFormats.C
-				}
-				//otherwise, just add the newBundle
-				else
-				{
-					_languageResourcesContainer.LanguageResourceBundles.Add(newBundle);
-				}
-			}
+			correspondingBundleInTemplate.NumbersSeparators = GetUnionOfListsOfObjects(newBundle.NumbersSeparators,
+				correspondingBundleInTemplate.NumbersSeparators);
+			correspondingBundleInTemplate.CurrencyFormats = GetUnionOfListsOfObjects(newBundle.CurrencyFormats,
+				correspondingBundleInTemplate.CurrencyFormats);
 		}
 
-
-
-		private void AddTimes(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
+		private void AddWordlists(LanguageResourceBundle correspondingBundleInTemplate, LanguageResourceBundle newBundle)
 		{
-			if (newBundle.LongTimeFormats?.Count > 0)
-			{
-				if (correspondingBundleInTemplate.LongTimeFormats != null &&
-					correspondingBundleInTemplate.LongTimeFormats.Count > 0)
-				{
-					foreach (var longTime in newBundle.LongTimeFormats)
-					{
-						if (!correspondingBundleInTemplate.LongTimeFormats.Contains(longTime))
-						{
-							correspondingBundleInTemplate.LongTimeFormats.Add(longTime);
-						}
-					}
-				}
-				else
-				{
-					correspondingBundleInTemplate.LongTimeFormats = newBundle.LongTimeFormats;
-				}
-			}
-
-			if (newBundle.ShortTimeFormats?.Count > 0)
-			{
-				if (correspondingBundleInTemplate.ShortTimeFormats != null && correspondingBundleInTemplate.ShortTimeFormats.Count > 0)
-				{
-					foreach (var shortTime in newBundle.ShortTimeFormats)
-					{
-						if (!correspondingBundleInTemplate.ShortTimeFormats.Contains(shortTime))
-						{
-							correspondingBundleInTemplate.ShortTimeFormats.Add(shortTime);
-						}
-					}
-				}
-				else
-				{
-					correspondingBundleInTemplate.ShortTimeFormats = newBundle.ShortTimeFormats;
-				}
-			}
+			correspondingBundleInTemplate.Abbreviations =
+				AddItemsToWordlist(newBundle.Abbreviations, correspondingBundleInTemplate.Abbreviations);
+			correspondingBundleInTemplate.OrdinalFollowers =
+				AddItemsToWordlist(newBundle.OrdinalFollowers, correspondingBundleInTemplate.OrdinalFollowers);
+			correspondingBundleInTemplate.Variables =
+				AddItemsToWordlist(newBundle.Variables, correspondingBundleInTemplate.Variables);
 		}
 
-		private void AddDates(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
+		//public void ExcludeWhatIsNotNeeded(List<LanguageResourceBundle> languageResourceBundles)
+		//{
+		//	//this method ensures that the defaults are used and that data that wasn't opted for isn't affected
+		//	foreach (var bundle in languageResourceBundles)
+		//	{
+		//		if (!_settings.AbbreviationsChecked)
+		//		{
+		//			bundle.Abbreviations = null;
+		//		}
+
+		//		if (!_settings.OrdinalFollowersChecked)
+		//		{
+		//			bundle.OrdinalFollowers = null;
+		//		}
+
+		//		if (!_settings.VariablesChecked)
+		//		{
+		//			bundle.Variables = null;
+		//		}
+
+		//		if (!_settings.SegmentationRulesChecked)
+		//		{
+		//			bundle.SegmentationRules = null;
+		//		}
+
+		//		if (!_settings.DatesChecked)
+		//		{
+		//			bundle.LongDateFormats = null;
+		//			bundle.ShortDateFormats = null;
+		//		}
+
+		//		if (!_settings.TimesChecked)
+		//		{
+		//			bundle.LongTimeFormats = null;
+		//			bundle.ShortTimeFormats = null;
+		//		}
+
+		//		if (!_settings.NumbersChecked)
+		//		{
+		//			bundle.NumbersSeparators = null;
+		//		}
+
+		//		if (!_settings.MeasurementsChecked)
+		//		{
+		//			bundle.MeasurementUnits = null;
+		//		}
+
+		//		if (!_settings.CurrenciesChecked)
+		//		{
+		//			bundle.CurrencyFormats = null;
+		//		}
+		//	}
+		//}
+
+		private void ExcludeWhatIsNotNeeded(Settings settings, List<LanguageResourceBundle> languageResourceBundles)
 		{
-			if (newBundle.LongDateFormats?.Count > 0)
+			foreach (var languageResourceBundle in languageResourceBundles)
 			{
-				if (correspondingBundleInTemplate.LongDateFormats != null && correspondingBundleInTemplate.LongDateFormats.Count > 0)
+				foreach (var propertyInfo in typeof(Settings).GetProperties())
 				{
-					foreach (var longDate in newBundle.LongDateFormats)
+					if (propertyInfo.CanWrite)
 					{
-						if (!correspondingBundleInTemplate.LongDateFormats.Contains(longDate))
+						if (!(bool)propertyInfo.GetValue(settings))
 						{
-							correspondingBundleInTemplate.LongDateFormats.Add(longDate);
+							var property = languageResourceBundle.GetType().GetProperties()
+								.Where(prop => prop.Name.Contains(propertyInfo.Name.Substring(0, 4)));
+							property.ToList().ForEach(bundleProp => bundleProp?.SetValue(languageResourceBundle, null));
 						}
 					}
-				}
-				else
-				{
-					correspondingBundleInTemplate.LongDateFormats = newBundle.LongDateFormats;
-				}
-			}
-
-			if (newBundle.ShortDateFormats?.Count > 0)
-			{
-				if (correspondingBundleInTemplate.ShortDateFormats != null && correspondingBundleInTemplate.ShortDateFormats.Count > 0)
-				{
-					foreach (var shortDate in newBundle.ShortDateFormats)
-					{
-						if (!correspondingBundleInTemplate.ShortDateFormats.Contains(shortDate))
-						{
-							correspondingBundleInTemplate.ShortDateFormats.Add(shortDate);
-						}
-					}
-				}
-				else
-				{
-					correspondingBundleInTemplate.ShortDateFormats = newBundle.ShortDateFormats;
 				}
 			}
 		}
+
+		private List<T> GetUnionOfListsOfObjects<T>(List<T> listOne, List<T> listTwo)
+		{
+			if (listOne != null)
+			{
+				listTwo = listTwo?.Union(listOne).ToList();
+			}
+
+			return listTwo?.Count == 0 ? null : listTwo;
+		}
+
+		private void InitializeBundle(LanguageResourceBundle correspondingBundleInTemplate)
+		{
+			foreach (var propertyInfo in typeof(LanguageResourceBundle).GetProperties())
+			{
+				if (propertyInfo.CanWrite)
+				{
+					if (propertyInfo.GetValue(correspondingBundleInTemplate) == null)
+						propertyInfo.SetValue(correspondingBundleInTemplate, Activator.CreateInstance(propertyInfo.PropertyType));
+				}
+			}
+		}
+
+		private void SaveTemplate(ILanguageResourcesContainer languageResourcesContainer)
+		{
+			languageResourcesContainer.Save();
+		}
+
+		//	if (templateBundleGetter != null && templateBundleGetter.Items.Any())
+		//	{
+		//		foreach (var abbrev in newBundleGetter.Items)
+		//		{
+		//			templateBundleGetter.Add(abbrev);
+		//		}
+		//	}
+		//	else
+		//	{
+		//		templateBundleSetter?.Invoke(template, new object[] { new Wordlist(newBundleGetter) });
+		//	}
+		//}
+
+		//private void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle template, string property)
+		//{
+		//	var templateBundleGetter = typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(template, null) as Wordlist;
+		//	var templateBundleSetter = typeof(LanguageResourceBundle).GetProperty(property)?.SetMethod;
+		//	var newBundleGetter = typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(newLanguageResourceBundle, null) as Wordlist;
+
+		//	if (newBundleGetter == null || !newBundleGetter.Items.Any()) return;
+
+		//public T GetPropertyValue<T>(object languageResourceBundle, string property)
+		//{
+		//	var resObj = languageResourceBundle.GetType().GetProperty(property)?.GetMethod.Invoke(languageResourceBundle, null);
+		//	//if (subProperty != null)
+		//	//{
+		//	//	var subPropValue = typeof(T).GetProperty(subProperty)?.GetMethod.Invoke(resObj, null);
+		//	//	return (default, (U)subPropValue);
+		//	//}
+		//	return (T)resObj;
+		//}
 	}
 }

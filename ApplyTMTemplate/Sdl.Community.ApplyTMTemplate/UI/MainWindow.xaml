@@ -28,6 +28,7 @@
 				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/CheckboxResources.xaml" />
 				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
+				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/progressringasteriskstyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
 			</ResourceDictionary.MergedDictionaries>
@@ -233,7 +234,12 @@
 				</DataGrid.Columns>
 			</DataGrid>
 			<StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-				<controls:ProgressRing Visibility="{Binding ProgressVisibility}" Width="30" />
+				<controls:ProgressRing Visibility="{Binding ProgressVisibility}" 
+				                       Width="Auto"
+									   Height="Auto"
+				                       Style="{StaticResource Sdl.ProgressRing.Asterisk}"
+				                       VerticalAlignment="Center"
+				                       VerticalContentAlignment="Center"/>
 				<Button Style="{StaticResource SdlWizardStyleButtonGreen}" HorizontalAlignment="Right" Margin="10" Command="{Binding ApplyTemplateCommand}" Content="Apply" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
 			</StackPanel>
 		</Grid>

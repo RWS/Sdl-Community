@@ -6,9 +6,9 @@ namespace Sdl.Community.ApplyTMTemplate.Models.Interfaces
 {
 	public interface ILanguageResourcesContainer
 	{
-		LanguageResourceBundleCollection LanguageResourceBundles { get; }
-		BuiltinRecognizers? Recognizers { get; }
-		WordCountFlags? WordCountFlags { get; }
+		LanguageResourceBundleCollection LanguageResourceBundles { get;}
+		BuiltinRecognizers? Recognizers { get; set; }
+		WordCountFlags? WordCountFlags { get; set; }
 
 		void Save();
 
