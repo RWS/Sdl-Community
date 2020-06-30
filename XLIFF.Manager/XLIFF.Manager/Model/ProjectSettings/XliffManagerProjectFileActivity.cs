@@ -27,6 +27,10 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 
 		public string Details { get; set; }
 
+		public ConfirmationStatistics ConfirmationStatistics { get; set; }
+
+		public TranslationOriginStatistics TranslationOriginStatistics { get; set; }
+
 		private static string FormatDateTime(DateTime dateTime)
 		{
 			var value = dateTime.Year

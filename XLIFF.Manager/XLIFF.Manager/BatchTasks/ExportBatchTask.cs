@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
@@ -18,6 +19,7 @@ using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using AnalysisBand = Sdl.Community.XLIFF.Manager.Model.AnalysisBand;
 using ProjectFile = Sdl.ProjectAutomation.Core.ProjectFile;
 
 namespace Sdl.Community.XLIFF.Manager.BatchTasks
@@ -82,7 +84,6 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 					return;
 				}
 
-
 				if (string.IsNullOrEmpty(_currentLanguage) || languageName != _currentLanguage)
 				{
 					_logReport.AppendLine();
@@ -90,7 +91,11 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 					_currentLanguage = languageName;
 				}
 
-				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, _exportSettings.SelectedFilterItemIds, _exportSettings.ExportOptions);
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, 
+					_exportSettings.SelectedFilterItemIds, 
+					_exportSettings.ExportOptions,
+					GetAnalysisBands(Project as FileBasedProject));
+
 				var xliffWriter = new XliffWriter(_exportSettings.ExportOptions.XliffSupport);
 
 				var dateTimeStampToString = GetDateTimeStampToString(_exportSettings.DateTimeStamp);
@@ -107,9 +112,11 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 				{
 					var xliffData = sdlxliffReader.ReadFile(_projectInfo.Id.ToString(), targetFile.Location);
 					var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, _exportSettings.ExportOptions.IncludeTranslations);
-
+					
 					if (exported)
 					{
+						targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
+						targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
 						targetFile.Date = _exportSettings.DateTimeStamp;
 						targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
 						targetFile.Action = Enumerators.Action.Export;
@@ -128,7 +135,9 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 						Date = targetFile.Date,
 						Name = Path.GetFileName(targetFile.XliffFilePath),
 						Path = Path.GetDirectoryName(targetFile.XliffFilePath),
-						Details = string.Empty
+						Details = string.Empty,
+						ConfirmationStatistics = targetFile.ConfirmationStatistics,
+						TranslationOriginStatistics = targetFile.TranslationOriginStatistics
 					};
 
 					targetFile.ProjectFileActivities.Add(activityFile);
@@ -163,16 +172,15 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			{
 				_wizardContext.Completed = true;
 				_xliffManagerController?.UpdateProjectData(_wizardContext);
-			}
+			}			
 		}
 
 		private void CreateWizardContext()
 		{
 			var selectedIds = TaskFiles.Select(projectFile => projectFile.Id.ToString()).ToList();
-			_project = GetProjectModel(Project as FileBasedProject, selectedIds);
-
+			_project = GetProjectModel(Project as FileBasedProject, selectedIds);			
 			_wizardContext = new WizardContext
-			{
+			{				
 				Action = Enumerators.Action.Export,
 				Completed = false,
 				Project = _project,
@@ -181,7 +189,8 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 				ExportOptions = _exportSettings.ExportOptions,
 				LocalProjectFolder = _exportSettings.LocalProjectFolder,
 				TransactionFolder = _exportSettings.TransactionFolder,
-				ProjectFiles = _project.ProjectFiles
+				ProjectFiles = _project.ProjectFiles,
+				AnalysisBands = GetAnalysisBands(Project as FileBasedProject)
 			};
 		}
 
@@ -287,6 +296,35 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			}
 
 			return null;
+		}
+
+		private List<AnalysisBand> GetAnalysisBands(FileBasedProject project)
+		{
+			var regex = new Regex(@"(?<min>[\d]*)([^\d]*)(?<max>[\d]*)", RegexOptions.IgnoreCase);
+
+			var analysisBands = new List<AnalysisBand>();
+			var type = project.GetType();
+			var internalProjectField = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (internalProjectField != null)
+			{
+				dynamic internalDynamicProject = internalProjectField.GetValue(project);
+				foreach (var analysisBand in internalDynamicProject.AnalysisBands)
+				{
+					Match match = regex.Match(analysisBand.ToString());
+					if (match.Success)
+					{
+						var min = match.Groups["min"].Value;
+						var max = match.Groups["max"].Value;
+						analysisBands.Add(new AnalysisBand
+						{
+							MinimumMatchValue = Convert.ToInt32(min),
+							MaximumMatchValue = Convert.ToInt32(max)
+						});
+					}
+				}
+			}
+
+			return analysisBands;
 		}
 
 		private LanguageInfo GetLanguageInfo(CultureInfo cultureInfo)

@@ -17,17 +17,19 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly List<string> _excludeFilterItems;
 		private readonly ImportOptions _importOptions;
+		private readonly List<AnalysisBand> _analysisBands;
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
 		private SegmentVisitor _segmentVisitor;
 
 		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, List<string> excludeFilterItems,
-			ImportOptions importOptions)
+			ImportOptions importOptions, List<AnalysisBand> analysisBands)
 		{
 			_xliff = xliff;
 			_segmentBuilder = segmentBuilder;
 			_excludeFilterItems = excludeFilterItems;
 			_importOptions = importOptions;
+			_analysisBands = analysisBands;
 
 			Comments = _xliff.DocInfo.Comments;
 		}
@@ -94,12 +96,13 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				var excludeFilter = false;
 				if (_excludeFilterItems != null)
 				{
-					var status = segmentPair.Properties.ConfirmationLevel.ToString();
-					var match = GetTranslationMatchId(segmentPair.Target.Properties.TranslationOrigin);
+					var status = segmentPair.Properties.ConfirmationLevel;
+					var match = Common.Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin,
+						_analysisBands);
 
 					excludeFilter = (segmentPair.Properties.IsLocked && _excludeFilterItems.Exists(a => a == "Locked"))
-					                || _excludeFilterItems.Exists(a => a == status)
-					                || _excludeFilterItems.Exists(a => a == match);
+					                || _excludeFilterItems.Exists(a => a == status.ToString())
+					                || _excludeFilterItems.Exists(a => a == match.ToString());
 				}
 
 				if (noOverwrite || excludeFilter)
@@ -377,50 +380,6 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 			return null;
 		}
-
-		private string GetTranslationMatchId(ITranslationOrigin translationOrigin)
-		{
-			if (translationOrigin != null)
-			{
-				if (translationOrigin.OriginType == DefaultTranslationOrigin.MachineTranslation)
-				{
-					return "MT";
-				}
-
-				if (translationOrigin.OriginType == DefaultTranslationOrigin.AdaptiveMachineTranslation)
-				{
-					return "AMT";
-				}
-
-				if (translationOrigin.OriginType == DefaultTranslationOrigin.NeuralMachineTranslation)
-				{
-					return "NMT";
-				}
-
-				if (translationOrigin.MatchPercent >= 100)
-				{
-					if (translationOrigin.OriginType == DefaultTranslationOrigin.DocumentMatch)
-					{
-						return "PM";
-					}
-
-					if (translationOrigin.TextContextMatchLevel == TextContextMatchLevel.SourceAndTarget)
-					{
-						return "CM";
-					}
-
-					return "Exact";
-				}
-
-				if (translationOrigin.MatchPercent > 0)
-				{
-					return "Fuzzy";
-				}
-
-				return "New";
-			}
-
-			return string.Empty;
-		}
+		
 	}
 }

@@ -7,5 +7,7 @@
 	<RequiredProduct name="SDLTradosStudio" minversion="15.2" maxversion="16.0" />
 	<Include>
 		<File>Sdl.MultiSelectComboBox.dll</File>
+		<File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>
+		<File>Sdl.Community.Toolkit.Core.dll</File>
 	</Include>
 </PluginPackage>

@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
@@ -227,7 +228,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 				var filterItems = WizardContext.ExcludeFilterItems.Select(a => a.Id).ToList();
-				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder, filterItems, WizardContext.ImportOptions);
+				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder, filterItems, 
+					WizardContext.ImportOptions, WizardContext.AnalysisBands);
 
 				var sniffer = new XliffSniffer();
 				var xliffReader = new XliffReder(sniffer, _segmentBuilder);
@@ -350,6 +352,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			return await Task.FromResult(success);
 		}
+
+		
 
 		private async Task<bool> Finalize(JobProcess jobProcess)
 		{

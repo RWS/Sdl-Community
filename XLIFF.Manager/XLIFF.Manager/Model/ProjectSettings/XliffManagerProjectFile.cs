@@ -15,7 +15,11 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 		}
 
 		public List<XliffManagerProjectFileActivity> Activities { get; set; }
-		
+
+		public ConfirmationStatistics ConfirmationStatistics { get; set; }
+
+		public TranslationOriginStatistics TranslationOriginStatistics { get; set; }
+
 		public string Status { get; set; }
 
 		public string Action { get; set; }

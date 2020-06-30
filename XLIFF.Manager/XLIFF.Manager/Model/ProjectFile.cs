@@ -15,13 +15,19 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public ProjectFile()
 		{
-			ProjectFileActivities = new List<ProjectFileActivity>();			
+			Status = Enumerators.Status.None;
+			Action = Enumerators.Action.None;
+			ProjectFileActivities = new List<ProjectFileActivity>();		
 		}
 
 		public string ProjectId { get; set; }
 
 		[XmlIgnore]
 		public Project Project { get; set; }
+
+		public ConfirmationStatistics ConfirmationStatistics { get; set; }
+
+		public TranslationOriginStatistics TranslationOriginStatistics { get; set; }
 
 		public List<ProjectFileActivity> ProjectFileActivities { get; set; }
 
@@ -152,6 +158,16 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Details = Details,
 				FileType = FileType
 			};
+
+			if (ConfirmationStatistics != null)
+			{
+				projectFile.ConfirmationStatistics = ConfirmationStatistics.Clone() as ConfirmationStatistics;
+			}
+
+			if (TranslationOriginStatistics != null)
+			{
+				projectFile.TranslationOriginStatistics = TranslationOriginStatistics.Clone() as TranslationOriginStatistics;
+			}
 
 			foreach (var projectFileActivity in ProjectFileActivities)
 			{

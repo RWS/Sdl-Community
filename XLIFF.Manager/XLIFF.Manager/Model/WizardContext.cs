@@ -13,14 +13,19 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			ProjectFiles = new List<ProjectFile>();
 			DateTimeStamp = DateTime.UtcNow;
 			ExcludeFilterItems = new List<FilterItem>();
-			
+
 			ExportOptions = new ExportOptions();
 			ImportOptions = new ImportOptions();
+			Reports = new List<TaskReport>();
 		}
 
 		public List<FilterItem> ExcludeFilterItems { get; set; }
 
 		public Enumerators.Action Action { get; set; }
+
+		public List<TaskReport> Reports { get; set; }
+
+		public List<AnalysisBand> AnalysisBands { get; set; }
 
 		public bool Completed { get; set; }
 
