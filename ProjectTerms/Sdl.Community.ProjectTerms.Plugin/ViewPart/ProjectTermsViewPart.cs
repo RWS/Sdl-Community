@@ -1,5 +1,6 @@
 ﻿using Sdl.Desktop.IntegrationApi;
 using System;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
 {
@@ -8,7 +9,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
     {
         private readonly Lazy<ProjectTermsViewPartControl> control = new Lazy<ProjectTermsViewPartControl>(() => new ProjectTermsViewPartControl());
 
-        protected override System.Windows.Forms.Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return control.Value;
         }

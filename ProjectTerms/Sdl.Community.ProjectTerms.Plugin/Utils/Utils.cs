@@ -14,10 +14,10 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
     {
         public static void RemoveDirectoryFiles(string directoryPath)
         {
-            foreach (var file in Directory.GetFiles(directoryPath))
-            {
-                File.Delete(file);
-            }
+	        foreach (var file in Directory.GetFiles(directoryPath))
+	        {
+		        File.Delete(file);
+	        }
         }
 
         public static void RemoveDirectory(string directoryPath)
@@ -48,7 +48,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
             try
             {
                 telemetryTracker.StartTrackRequest("Creating the directory");
-                telemetryTracker.TrackEvent("Creating the directory", null);
+                telemetryTracker.TrackEvent("Creating the directory");
 
                 if (!Directory.Exists(directoryPath))
                 {
@@ -67,7 +67,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
             }
         }
 
-        public static bool VerifyRegexPattern(String pattern)
+        public static bool VerifyRegexPattern(string pattern)
         {
             try
             {
@@ -81,41 +81,21 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
         public static bool VerifySingleFileProjectType()
         {
             var project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
-            FieldInfo projectVal = typeof(FileBasedProject).GetField(PluginResources.Constant_ProjectType, BindingFlags.NonPublic | BindingFlags.Instance);
+            var projectVal = typeof(FileBasedProject).GetField(PluginResources.Constant_ProjectType, BindingFlags.NonPublic | BindingFlags.Instance);
 
             dynamic projectValDynamic = projectVal.GetValue(project);
             dynamic projectType = projectValDynamic.ProjectType != null ? projectValDynamic.ProjectType : string.Empty;
 
-            string projectTypeContent = Convert.ToString(projectType);
+            var projectTypeContent = Convert.ToString(projectType);
 
             return projectTypeContent.Equals(PluginResources.Constant_ProjectTypeContent);
         }
 
         public static string GetXMLFilePath(string projectPath, bool wordCloudFile = false)
         {
-            if (!wordCloudFile)
-            {
-                var projectName = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().Name;
-                return Path.Combine(projectPath + "\\tmp", projectName + DateTime.Now.ToString("_yyyy_MM_dd_HH_mm", System.Globalization.DateTimeFormatInfo.InvariantInfo) + ".xml");
-            }
-            else
-
-            {
-                return Path.Combine(projectPath, PluginResources.WordCloudFileName + ".xml");
-            }
-        }
-
-        public static string GetParentDirectory(string path, int parentCount)
-        {
-            if (string.IsNullOrEmpty(path) || parentCount < 1)
-                return path;
-
-            string parent = System.IO.Path.GetDirectoryName(path);
-
-            if (--parentCount > 0)
-                return GetParentDirectory(parent, parentCount);
-
-            return parent;
+	        if (wordCloudFile) return Path.Combine(projectPath, PluginResources.WordCloudFileName + ".xml");
+	        var projectName = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().Name;
+	        return Path.Combine(projectPath + "\\tmp", projectName + DateTime.Now.ToString("_yyyy_MM_dd_HH_mm", System.Globalization.DateTimeFormatInfo.InvariantInfo) + ".xml");
         }
 
         public static string GetProjectPath()
@@ -128,15 +108,10 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
             return SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
         }
 
-        public static string GenerateBlackListPath()
-        {
-            return Path.Combine(Utils.GetProjectPath(), PluginResources.BlacklistFileName);
-        }
-
         public static string GetExistedFileName(string directoryPath)
         {
-            var files = Directory.GetFiles(directoryPath);
-            return files.Count() == 1 ? Path.GetFileName(files.FirstOrDefault()) : string.Empty;
+	        var files = Directory.GetFiles(directoryPath);
+	        return files.Length == 1 ? Path.GetFileName(files.FirstOrDefault()) : string.Empty;
         }
 
         public static string GetSelectedProjectPath()
@@ -146,13 +121,10 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
 
         public static string GetXmlFileName(string projectPath)
         {
-            var xmlFileDirectory = projectPath + "\\tmp";
-            if (Directory.Exists(xmlFileDirectory))
-            {
-                return Path.GetFileNameWithoutExtension(Directory.GetFiles(xmlFileDirectory)[0]) + ".xml";
-            }
-
-            return string.Empty;
+	        var xmlFileDirectory = projectPath + "\\tmp";
+	        return Directory.Exists(xmlFileDirectory)
+		        ? Path.GetFileNameWithoutExtension(Directory.GetFiles(xmlFileDirectory)[0]) + ".xml"
+		        : string.Empty;
         }
     }
 }
