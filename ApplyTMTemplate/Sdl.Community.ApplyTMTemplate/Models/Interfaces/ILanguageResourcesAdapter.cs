@@ -4,14 +4,13 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ApplyTMTemplate.Models.Interfaces
 {
-	public interface ILanguageResourcesContainer
+	public interface ILanguageResourcesAdapter
 	{
-		LanguageResourceBundleCollection LanguageResourceBundles { get;}
-		BuiltinRecognizers Recognizers { get; set; }
-		WordCountFlags WordCountFlags { get; set; }
-
+		void Load(string filePath);
+		LanguageResourceBundleCollection LanguageResourceBundles { get; }
+		BuiltinRecognizers? Recognizers { get; set; }
+		WordCountFlags? WordCountFlags { get; set; }
 		void Save();
-
 		bool ValidateTemplate(bool isImport);
 	}
 }

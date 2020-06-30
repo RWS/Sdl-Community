@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Sdl.Community.ApplyTMTemplate.Models.Interfaces;
 using Sdl.Community.ApplyTMTemplate.Models.Wrappers;
 using Sdl.LanguagePlatform.Core.Tokenization;
@@ -9,11 +11,11 @@ using TranslationMemoryContainer = Sdl.Community.ApplyTMTemplate.Models.Wrappers
 
 namespace Sdl.Community.ApplyTMTemplate.Models
 {
-	public class LanguageResourcesProxy
+	public class LanguageResourcesAdapter : ILanguageResourcesAdapter
 	{
-		private readonly ILanguageResourcesContainer _languageResourceContainer;
+		private ILanguageResourcesContainer _languageResourceContainer;
 
-		public LanguageResourcesProxy(string filePath)
+		public void Load(string filePath)
 		{
 			if (string.IsNullOrWhiteSpace(filePath))
 			{
@@ -30,8 +32,18 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 		}
 
-		public LanguageResourceBundleCollection LanguageResourceBundles =>
-			_languageResourceContainer.LanguageResourceBundles;
+		public List<LanguageResourceBundle> LanguageResourceBundles
+		{
+			get => _languageResourceContainer.LanguageResourceBundles.ToList();
+			set
+			{
+				foreach (var bundle in value)
+				{
+					_languageResourceContainer.LanguageResourceBundles.Clear();
+					_languageResourceContainer.LanguageResourceBundles.Insert(0, bundle);
+				}
+			}
+		}
 
 		public BuiltinRecognizers? Recognizers
 		{

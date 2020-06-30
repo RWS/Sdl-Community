@@ -9,7 +9,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services.Interfaces
 {
 	public interface IExcelResourceManager
 	{
-		void ExportResourcesToExcel(ILanguageResourcesContainer template, string filePathTo, Settings settings);
+		void ExportResourcesToExcel(ILanguageResourcesAdapter template, string filePathTo, Settings settings);
 		List<LanguageResourceBundle> GetResourceBundlesFromExcel(string filePathFrom);
 		(BuiltinRecognizers?, WordCountFlags?) GetTemplateGlobalSettings(string filePathFrom, Settings settings);
 	}

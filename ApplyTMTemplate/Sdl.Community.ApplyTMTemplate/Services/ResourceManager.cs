@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.Community.ApplyTMTemplate.Models.Interfaces;
@@ -22,52 +23,77 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			_excelResourceManager = excelResourceManager;
 		}
 
-		public void ApplyTemplateToTms(ILanguageResourcesContainer languageResourcesContainer, List<TranslationMemory> translationMemories, Settings settings)
+		public void ApplySettings(Settings settings, LanguageResourceBundle newBundle, LanguageResourceBundle sourceBundle)
 		{
-			var resourceBundlesWithOptions = new List<LanguageResourceBundle>();
+			foreach (var propertyInfo in typeof(Settings).GetProperties())
+			{
+				if (propertyInfo.CanWrite)
+				{
+					if ((bool)propertyInfo.GetValue(settings))
+					{
+						var property = newBundle.GetType().GetProperties()
+							.Where(prop => prop.Name.Contains(propertyInfo.Name.Substring(0, 4)));
+						property.ToList().ForEach(bundleProp => bundleProp?.SetValue(newBundle, bundleProp.GetValue(sourceBundle)));
+					}
+				}
+			}
+		}
+
+		public void ApplyTemplateToTms(ILanguageResourcesAdapter languageResourcesContainer, List<TranslationMemory> translationMemories, Settings settings)
+		{
+			//var resourceBundlesWithOptions = new List<LanguageResourceBundle>();
 
 			foreach (var resourceBundle in languageResourcesContainer.LanguageResourceBundles)
 			{
 				var newResourceBundle = new LanguageResourceBundle(resourceBundle.Language);
 
-				if (settings.VariablesChecked)
-				{
-					newResourceBundle.Variables = resourceBundle.Variables;
-				}
+				ApplySettings(settings, newResourceBundle, resourceBundle);
 
-				if (settings.AbbreviationsChecked)
-				{
-					newResourceBundle.Abbreviations = resourceBundle.Abbreviations;
-				}
+				//if (settings.VariablesChecked)
+				//{
+				//	newResourceBundle.Variables = resourceBundle.Variables;
+				//}
 
-				if (settings.OrdinalFollowersChecked)
-				{
-					newResourceBundle.OrdinalFollowers = resourceBundle.OrdinalFollowers;
-				}
+				//if (settings.AbbreviationsChecked)
+				//{
+				//	newResourceBundle.Abbreviations = resourceBundle.Abbreviations;
+				//}
 
-				if (settings.SegmentationRulesChecked)
-				{
-					newResourceBundle.SegmentationRules = resourceBundle.SegmentationRules;
-				}
-				resourceBundlesWithOptions.Add(newResourceBundle);
-			}
+				//if (settings.OrdinalFollowersChecked)
+				//{
+				//	newResourceBundle.OrdinalFollowers = resourceBundle.OrdinalFollowers;
+				//}
 
-			foreach (var languageResourceBundle in resourceBundlesWithOptions)
-			{
+				//if (settings.SegmentationRulesChecked)
+				//{
+				//	newResourceBundle.SegmentationRules = resourceBundle.SegmentationRules;
+				//}
+
 				foreach (var translationMemory in translationMemories)
 				{
-					translationMemory.ApplyTemplate(languageResourceBundle);
+					translationMemory.ApplyTemplate(newResourceBundle);
 				}
+
+				//resourceBundlesWithOptions.Add(newResourceBundle);
 			}
+
+			//foreach (var languageResourceBundle in resourceBundlesWithOptions)
+			//{
+				
+			//}
 		}
 
-		public void ExportResourcesToExcel(ILanguageResourcesContainer languageResourcesContainer, string filePathTo,
+		public void ExportResourcesToExcel(ILanguageResourcesAdapter languageResourcesContainer, string filePathTo,
 			Settings settings)
 		{
+			//TODO: refactor so settings don't have to be passed to the _excelResourceManager; use ExcludeWhatIsNotNeeded method
+			var resourceBundles = languageResourcesContainer.LanguageResourceBundles.ToList();
+			ExcludeWhatIsNotNeeded(settings, resourceBundles);
+			languageResourcesContainer.LanguageResourceBundles = resourceBundles;
 			_excelResourceManager.ExportResourcesToExcel(languageResourcesContainer, filePathTo, settings);
 		}
 
-		public void ImportResourcesFromExcel(string excelFilePath, ILanguageResourcesContainer languageResourcesContainer, Settings settings)
+		public void ImportResourcesFromExcel(string excelFilePath, ILanguageResourcesAdapter languageResourcesContainer, Settings settings)
 		{
 			var newLanguageResourceBundles = _excelResourceManager.GetResourceBundlesFromExcel(excelFilePath);
 			ExcludeWhatIsNotNeeded(settings, newLanguageResourceBundles);
@@ -79,7 +105,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			SaveTemplate(languageResourcesContainer);
 		}
 
-		public void ImportResourcesFromSdltm(List<TranslationMemory> translationMemories, ILanguageResourcesContainer languageResourcesContainer, Settings settings)
+		public void ImportResourcesFromSdltm(List<TranslationMemory> translationMemories, ILanguageResourcesAdapter languageResourcesContainer, Settings settings)
 		{
 			var newLanguageResourceBundles = GetResourcesFromTMs(translationMemories);
 			if (newLanguageResourceBundles.Count == 0)
@@ -93,7 +119,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			SaveTemplate(languageResourcesContainer);
 		}
 
-		public bool ValidateTemplate(ILanguageResourcesContainer languageResourcesContainer, bool isImport)
+		public bool ValidateTemplate(ILanguageResourcesAdapter languageResourcesContainer, bool isImport)
 		{
 			//TODO: do this before any action undertaken
 			return languageResourcesContainer.ValidateTemplate(isImport);
@@ -114,7 +140,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			return newLanguageResourceBundles;
 		}
 
-		private void AddGlobalSettings(ILanguageResourcesContainer languageResourcesContainer, BuiltinRecognizers? recognizers, WordCountFlags? wordCountFlags)
+		private void AddGlobalSettings(ILanguageResourcesAdapter languageResourcesContainer, BuiltinRecognizers? recognizers, WordCountFlags? wordCountFlags)
 		{
 			languageResourcesContainer.Recognizers = recognizers;
 			languageResourcesContainer.WordCountFlags = wordCountFlags;
@@ -157,7 +183,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			}
 		}
 
-		private void AddNewBundles(ILanguageResourcesContainer languageResourcesContainer, List<LanguageResourceBundle> newLanguageResourceBundles)
+		private void AddNewBundles(ILanguageResourcesAdapter languageResourcesContainer, List<LanguageResourceBundle> newLanguageResourceBundles)
 		{
 			foreach (var newBundle in newLanguageResourceBundles)
 			{
@@ -305,6 +331,8 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			}
 		}
 
+
+
 		private List<T> GetUnionOfListsOfObjects<T>(List<T> listOne, List<T> listTwo)
 		{
 			if (listOne != null)
@@ -327,7 +355,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			}
 		}
 
-		private void SaveTemplate(ILanguageResourcesContainer languageResourcesContainer)
+		private void SaveTemplate(ILanguageResourcesAdapter languageResourcesContainer)
 		{
 			languageResourcesContainer.Save();
 		}

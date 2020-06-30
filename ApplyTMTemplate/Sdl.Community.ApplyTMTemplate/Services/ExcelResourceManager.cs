@@ -21,7 +21,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 {
 	public class ExcelResourceManager : IExcelResourceManager
 	{
-		public void ExportResourcesToExcel(ILanguageResourcesContainer resourceContainer, string filePathTo, Settings settings)
+		public void ExportResourcesToExcel(ILanguageResourcesAdapter resourceContainer, string filePathTo, Settings settings)
 		{
 			using var package = GetExcelPackage(filePathTo);
 			int lineNumber;

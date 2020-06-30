@@ -195,7 +195,7 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-									<Image Source="{Binding Icon}" Width="25" Height="25" HorizontalAlignment="Center" />
+									<Image Source="../Resources/FileBasedTM.ico"  Width="25" Height="25" HorizontalAlignment="Center" />
 									<TextBlock Text="{Binding Name}" Margin="5" HorizontalAlignment="Left" />
 								</StackPanel>
 							</DataTemplate>

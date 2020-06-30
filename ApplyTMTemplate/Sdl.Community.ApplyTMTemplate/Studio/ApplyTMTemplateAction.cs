@@ -1,4 +1,5 @@
-﻿using Sdl.Community.ApplyTMTemplate.Services;
+﻿using Sdl.Community.ApplyTMTemplate.Models;
+using Sdl.Community.ApplyTMTemplate.Services;
 using Sdl.Community.ApplyTMTemplate.UI;
 using Sdl.Community.ApplyTMTemplate.Utilities;
 using Sdl.Community.ApplyTMTemplate.ViewModels;
@@ -14,7 +15,7 @@ namespace Sdl.Community.ApplyTMTemplate.Studio
 		protected override void Execute()
 		{
 			var timedTextBox = new ViewModels.TimedTextBox();
-			var mainWindowViewModel = new MainWindowViewModel(new ResourceManager(new ExcelResourceManager(), new MessageService()), new TemplateLoader(), new TMLoader(), new MessageService(), timedTextBox, new FilePathDialogService());
+			var mainWindowViewModel = new MainWindowViewModel(new LanguageResourcesAdapter(), new ResourceManager(new ExcelResourceManager(), new MessageService()), new TemplateLoader(), new TMLoader(), new MessageService(), timedTextBox, new FilePathDialogService());
 
 			var mainWindow = new MainWindow
 			{

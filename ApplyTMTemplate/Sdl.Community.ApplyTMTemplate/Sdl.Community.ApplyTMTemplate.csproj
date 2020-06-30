@@ -123,9 +123,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\ImageToBitmapImageConverter.cs" />
+    <Compile Include="Models\Cozonac.cs" />
+    <Compile Include="Models\Interfaces\ILanguageResourcesAdapter.cs" />
     <Compile Include="Models\Interfaces\ILanguageResourcesContainer.cs" />
     <Compile Include="Models\Interfaces\IResource.cs" />
-    <Compile Include="Models\LanguageResourcesProxy.cs" />
+    <Compile Include="Models\LanguageResourcesAdapter.cs" />
     <Compile Include="Models\Resource.cs" />
     <Compile Include="Models\SegmentationRulesResource.cs" />
     <Compile Include="Models\Settings.cs" />
@@ -140,7 +142,7 @@
     <Compile Include="Services\FilePathDialogService.cs" />
     <Compile Include="Services\Interfaces\IExcelResourceManager.cs" />
     <Compile Include="Services\Interfaces\IMessageService.cs" />
-    <Compile Include="Services\IResourceManager.cs" />
+    <Compile Include="Services\Interfaces\IResourceManager.cs" />
     <Compile Include="Services\MessageService.cs" />
     <Compile Include="UiHelpers\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>

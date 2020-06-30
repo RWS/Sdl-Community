@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Sdl.Community.ApplyTMTemplate.Utilities;
+using Sdl.Community.ApplyTMTemplate.Models.Interfaces;
 using Sdl.Community.ApplyTMTemplate.ViewModels;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
@@ -13,11 +13,11 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 {
 	public class TranslationMemory : ModelBase
 	{
-		private string _sourceStatus;
-		private string _targetStatus;
-		private string _sourceStatusToolTip;
-		private string _targetStatusToolTip;
 		private bool _isSelected;
+		private string _sourceStatus;
+		private string _sourceStatusToolTip;
+		private string _targetStatus;
+		private string _targetStatusToolTip;
 
 		public TranslationMemory(FileBasedTranslationMemory tm)
 		{
@@ -33,11 +33,19 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			TargetLanguage = tm.LanguageDirection.TargetLanguage.Name;
 		}
 
-		public Image SourceLanguageFlag { get; set; }
-		public Image TargetLanguageFlag { get; set; }
+		public bool IsSelected
+		{
+			get => _isSelected;
+			set
+			{
+				_isSelected = value;
+				OnPropertyChanged(nameof(IsSelected));
+			}
+		}
 
+		public string Name => Tm.Name;
 		public string SourceLanguage { get; set; }
-		public string TargetLanguage { get; set; }
+		public Image SourceLanguageFlag { get; set; }
 
 		public string SourceStatus
 		{
@@ -50,18 +58,6 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 				}
 
 				OnPropertyChanged();
-			}
-		}
-
-		public string Icon => @"../Resources/FileBasedTM.ico";
-
-		public bool IsSelected
-		{
-			get => _isSelected;
-			set
-			{
-				_isSelected = value;
-				OnPropertyChanged(nameof(IsSelected));
 			}
 		}
 
@@ -78,9 +74,8 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 		}
 
-		public string Name => Tm.Name;
-
-		public FileBasedTranslationMemory Tm { get; }
+		public string TargetLanguage { get; set; }
+		public Image TargetLanguageFlag { get; set; }
 
 		public string TargetStatus
 		{
@@ -106,6 +101,20 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 					_targetStatusToolTip = value;
 				}
 				OnPropertyChanged();
+			}
+		}
+
+		public FileBasedTranslationMemory Tm { get; }
+
+		public void ApplyTemplate(LanguageResourceBundle languageResourceBundle)
+		{
+			try
+			{
+				AddLanguageResourceBundleToTm(languageResourceBundle);
+			}
+			catch (Exception)
+			{
+				MarkTmCorrupted();
 			}
 		}
 
@@ -149,15 +158,24 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			_targetStatusToolTip = string.Empty;
 		}
 
-		public void ApplyTemplate(LanguageResourceBundle languageResourceBundle)
+		private static void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle template, string property)
 		{
-			try
+			var templateBundle = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(template, null) as Wordlist);
+			var templateBundleSetter = typeof(LanguageResourceBundle).GetProperty(property)?.SetMethod;
+			var newBundleGetter = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(newLanguageResourceBundle, null) as Wordlist);
+
+			if (newBundleGetter == null || !newBundleGetter.Items.Any()) return;
+
+			if (templateBundle != null && templateBundle.Items.Any())
 			{
-				AddLanguageResourceBundleToTm(languageResourceBundle);
+				foreach (var abbrev in newBundleGetter.Items)
+				{
+					templateBundle.Add(abbrev);
+				}
 			}
-			catch (Exception)
+			else
 			{
-				MarkTmCorrupted();
+				templateBundleSetter?.Invoke(template, new object[] { new Wordlist(newBundleGetter) });
 			}
 		}
 
@@ -183,24 +201,19 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 		}
 
-		private static void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle template, string property)
+		private void AddEmptyLanguageResourceBundles()
 		{
-			var templateBundle = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(template, null) as Wordlist);
-			var templateBundleSetter = typeof(LanguageResourceBundle).GetProperty(property)?.SetMethod;
-			var newBundleGetter = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(newLanguageResourceBundle, null) as Wordlist);
-
-			if (newBundleGetter == null || !newBundleGetter.Items.Any()) return;
-
-			if (templateBundle != null && templateBundle.Items.Any())
+			if (Tm.LanguageResourceBundles.Count >= 2) return;
+			var sourceLanguage = Tm?.LanguageDirection?.SourceLanguage;
+			var targetLanguage = Tm?.LanguageDirection?.TargetLanguage;
+			if (Tm.LanguageResourceBundles[sourceLanguage] == null)
 			{
-				foreach (var abbrev in newBundleGetter.Items)
-				{
-					templateBundle.Add(abbrev);
-				}
+				Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(sourceLanguage));
 			}
-			else
+
+			if (Tm.LanguageResourceBundles[targetLanguage] == null)
 			{
-				templateBundleSetter?.Invoke(template, new object[] { new Wordlist(newBundleGetter) });
+				Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(targetLanguage));
 			}
 		}
 
@@ -237,22 +250,6 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 			AddSegmentationRulesToBundle(languageResourceBundle, Tm.LanguageResourceBundles[cultureOfNewBundle]);
 			Tm.Save();
-		}
-
-		private void AddEmptyLanguageResourceBundles()
-		{
-			if (Tm.LanguageResourceBundles.Count >= 2) return;
-			var sourceLanguage = Tm?.LanguageDirection?.SourceLanguage;
-			var targetLanguage = Tm?.LanguageDirection?.TargetLanguage;
-			if (Tm.LanguageResourceBundles[sourceLanguage] == null)
-			{
-				Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(sourceLanguage));
-			}
-
-			if (Tm.LanguageResourceBundles[targetLanguage] == null)
-			{
-				Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(targetLanguage));
-			}
 		}
 	}
 }

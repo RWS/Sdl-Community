@@ -349,4 +349,7 @@
   <data name="No_file_path_provided" xml:space="preserve">
 	  <value>No file path provided</value>
   </data>
+  <data name="No_resource_template_path_provided" xml:space="preserve">
+	  <value>No resource template path provided</value>
+  </data>
 </root>

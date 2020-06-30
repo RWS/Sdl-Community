@@ -31,15 +31,17 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private ICommand _importCommand;
 		private string _progressVisibility;
 		private ICommand _removeTMsCommand;
+		private readonly ILanguageResourcesAdapter _languageResourcesAdapter;
 		private readonly IResourceManager _resourceManager;
 
 		private bool _selectAllChecked;
 		private TimedTextBox _timedTextBoxViewModel;
 		private ObservableCollection<TranslationMemory> _tmCollection;
 
-		public MainWindowViewModel(IResourceManager resourceManager, TemplateLoader templateLoader, TMLoader tmLoader,
+		public MainWindowViewModel(ILanguageResourcesAdapter languageResourcesAdapter, IResourceManager resourceManager, TemplateLoader templateLoader, TMLoader tmLoader,
 			IMessageService messageService, TimedTextBox timedTextBoxViewModel, FilePathDialogService filePathDialogService)
 		{
+			_languageResourcesAdapter = languageResourcesAdapter;
 			_resourceManager = resourceManager;
 			Settings = new Settings();
 			_tmLoader = tmLoader;
@@ -87,8 +89,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		}
 
 		public ICommand DragEnterCommand => _dragEnterCommand ??= new RelayCommand(HandlePreviewDrop);
-		public ICommand ExportCommand => _exportCommand ??= new CommandHandler(()=>ExportToExcel(new LanguageResourcesProxy(ResourceTemplatePath)), true);
-		public ICommand ImportCommand => _importCommand ??= new RelayCommand(obj=>Import(obj, new LanguageResourcesProxy(ResourceTemplatePath)));
+		public ICommand ExportCommand => _exportCommand ??= new CommandHandler(ExportToExcel, true);
+		public ICommand ImportCommand => _importCommand ??= new RelayCommand(Import);
 
 		public string ProgressVisibility
 		{
@@ -194,6 +196,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private async void ApplyTmTemplate()
 		{
+			if (!IsTemplatePathValid()) return;
 			UnmarkTms(SelectedTmsList);
 			if (SelectedTmsList.Count == 0)
 			{
@@ -203,7 +206,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 
 			ProgressVisibility = "Visible";
-			await Task.Run(() => _resourceManager.ApplyTemplateToTms(new LanguageResourcesProxy(ResourceTemplatePath), SelectedTmsList, Settings));
+			await Task.Run(() => _resourceManager.ApplyTemplateToTms(_languageResourcesAdapter, SelectedTmsList, Settings));
 			ProgressVisibility = "Collapsed";
 		}
 
@@ -219,15 +222,31 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			ResourceTemplatePath = resourceTemplatePath[0];
 		}
 
-		private async void ExportToExcel(ILanguageResourcesContainer languageResourcesContainer)
+		public bool IsTemplatePathValid()
 		{
+			if (string.IsNullOrWhiteSpace(ResourceTemplatePath))
+			{
+				_messageService.ShowErrorMessage(PluginResources.Error_Window_Title, PluginResources.No_resource_template_path_provided);
+				return false;
+			}
+
+			_languageResourcesAdapter.Load(ResourceTemplatePath);
+
+			return true;
+		}
+
+		private async void ExportToExcel()
+		{
+
+			if (!IsTemplatePathValid()) return;
+
 			var saveLocation = GetSaveLocation();
 			if (saveLocation == null) return;
 
 			ProgressVisibility = "Visible";
 			await Task.Run(() =>
 			{
-				_resourceManager.ExportResourcesToExcel(languageResourcesContainer, saveLocation, Settings);
+				_resourceManager.ExportResourcesToExcel(_languageResourcesAdapter, saveLocation, Settings);
 			});
 
 			_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Report_generated_successfully);
@@ -259,25 +278,25 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			AddRange(_tmLoader.GetTms(droppedFile as string[], TmCollection));
 		}
 
-		private async void Import(object parameter, ILanguageResourcesConta)
+		private async void Import(object parameter)
 		{
-			var languageResourceAdapter = new LanguageResourcesProxy(ResourceTemplatePath);
+			if (!IsTemplatePathValid()) return;
 			try
 			{
 				if ((parameter as Button)?.Name == "ImportFromExcel")
 				{
 					var fileNamesInput = _filePathDialogService.GetFilePathInputFromUser(
 						PluginResources.Import_window_title,
-						filter:"Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx");
+						filter: "Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx");
 					if (fileNamesInput == null) return;
-					await ImportResourcesFromExcel(fileNamesInput, languageResourceAdapter);
+					await ImportResourcesFromExcel(fileNamesInput);
 				}
 				else
 				{
 					ProgressVisibility = "Collapsed";
 					if (SelectedTmsList.Count > 0)
 					{
-						await ImportResourcesFromSdltm(languageResourceAdapter);
+						await ImportResourcesFromSdltm();
 					}
 					else
 					{
@@ -293,23 +312,23 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 		}
 
-		private async Task ImportResourcesFromExcel(string[] fileName, ILanguageResourcesContainer languageResourcesContainer)
+		private async Task ImportResourcesFromExcel(string[] fileName)
 		{
 			ProgressVisibility = "Visible";
 			await Task.Run(() =>
 			{
 				if (fileName[0].Contains(".xlsx"))
 				{
-					_resourceManager.ImportResourcesFromExcel(fileName[0], languageResourcesContainer, Settings);
+					_resourceManager.ImportResourcesFromExcel(fileName[0], _languageResourcesAdapter, Settings);
 				}
 			});
 			_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
 			ProgressVisibility = "Collapsed";
 		}
 
-		private async Task ImportResourcesFromSdltm(ILanguageResourcesContainer languageResourcesContainer)
+		private async Task ImportResourcesFromSdltm()
 		{
-			await Task.Run(() => { _resourceManager.ImportResourcesFromSdltm(SelectedTmsList, languageResourcesContainer, Settings); });
+			await Task.Run(() => { _resourceManager.ImportResourcesFromSdltm(SelectedTmsList, _languageResourcesAdapter, Settings); });
 			_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
 		}
 

@@ -443,6 +443,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No resource template path provided.
+        /// </summary>
+        public static string No_resource_template_path_provided {
+            get {
+                return ResourceManager.GetString("No_resource_template_path_provided", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no resources added to any of the selected TMs.
         /// </summary>
         public static string No_Resources_in_TMs {
