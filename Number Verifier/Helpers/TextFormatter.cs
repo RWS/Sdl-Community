@@ -16,55 +16,6 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			_numberVerifierMain = numberVerifierMain;
 		}
 
-		// Format text so the 'No-break space'/'Thin space'/'Space'/'Narrow no break space' separators will be removed from the text, when the options are enabled
-		// and Target or Source has NoSeparator option enabled:
-		// E.g: source text: 2300 with option 'No separator' and target text: 2 300 with option 'No-break space'
-		public string FormatTextSpace(string separators, string text)
-		{
-			if ((separators.Contains("u00A0") || separators.Contains("u2009") || separators.Contains("u0020") || separators.Contains("u202F"))
-			    && (_numberVerifierMain.VerificationSettings.TargetNoSeparator || _numberVerifierMain.VerificationSettings.SourceNoSeparator))
-			{
-				foreach (var separator in separators.Split('\\'))
-				{
-					if (!string.IsNullOrEmpty(separator))
-					{
-						// replace the text space only for the enabled separator
-						switch (separator)
-						{
-							case "u00A0":
-								if (separators.Contains("u00A0"))
-								{
-									text = text.Replace("\u00A0", string.Empty);
-								}
-								continue;
-							case "u2009":
-								if (separators.Contains("u2009"))
-								{
-									text = text.Replace("\u2009", string.Empty);
-								}
-								continue;
-							case "u0020":
-								if (separators.Contains("u0020"))
-								{
-									text = text.Replace("\u0020", string.Empty);
-								}
-								continue;
-
-							case "u202F":
-								if (separators.Contains("u202F"))
-								{
-									text = text.Replace("\u202F", string.Empty);
-								}
-								continue;
-							default:
-								continue;
-						}
-					}
-				}
-			}
-			return text;
-		}
-
 		// Format text so the comma/period will be removed from the text when the TargetNoSeparator or SourceNoSeparator is enabled,
 		// so the number can be validated entirely and it won't be split based on the , or .
 		// E.g: source text: 1,300 with option 'Comma separator' and target text: 1300 with option 'No separator'
@@ -190,30 +141,61 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			return separatorsBuilder.ToString();
 		}
 
+
 		// Format text for the thousand numbers (ex: 1,200) or for the combination of thousand-decimal numbers (ex: 1,200.31)
 		public string FormatText(SeparatorModel separatorModel, NormalizedNumber normalizedNumber, string text, string separators, bool isSource)
 		{
-			text = FormatTextSpace(normalizedNumber.ThousandSeparators, text);
 			text = FormatTextForNoSeparator(text, isSource, separatorModel);
+			//text = FormatTextNoSeparator(separatorModel, isSource, separators, text);
 			normalizedNumber.Separators = separators;
 
 			return text;
 		}
-		
-		// Get the formatted text after the thousand separator is removed
+
+		// To Do: the below method should be updated in case the following scenario is true: when "No separator" is checked, no thousand
+		// separator should be taken into consideration and it should be removed or replaced: ex: 2,300/ 2.300/ 2 300/ etc 
+		// (waiting for Lyudmila response)
+		public string FormatTextNoSeparator(SeparatorModel separatorModel, bool isSource, string separators, string text)
+		{
+			var verificationSettings = _numberVerifierMain.VerificationSettings;
+			if (isSource && verificationSettings.SourceNoSeparator ||
+				!isSource && verificationSettings.TargetNoSeparator)
+			{
+				var allSeparators = $"-?\\u00A0\\u002C\\u002E\\u2009\\u202F\\u0020{separatorModel.CustomSeparators}*";
+				if (Regex.IsMatch(text, allSeparators))
+				{
+					text = GetReplacedText(text, separators);
+				}
+			}
+			return text;
+		}
+
+
+        public bool IsSpaceSeparator(string separators)
+		{
+			return separators.Contains("u00A0") || separators.Contains("u2009") || separators.Contains("u0020") || separators.Contains("u202F");
+		}
+
+        // Get the formatted text after the thousand separator is removed
 		private string GetFormattedText(SeparatorModel separatorModel, string text)
 		{
-			if (separatorModel.LengthCommaOrCustomSep >= 3)
+			if (separatorModel.IsThousandDecimal && separatorModel.LengthCommaOrCustomSep > 3
+			    || !separatorModel.IsThousandDecimal && separatorModel.LengthCommaOrCustomSep >= 3)
 			{
 				// replace the "," or custom separator only when it located at thousand position
-				separatorModel.CustomSeparators = $"{separatorModel.CustomSeparators},";
+				separatorModel.CustomSeparators = separatorModel.ThousandSeparators.Contains("u002C")
+					? $"{separatorModel.CustomSeparators},"
+					: separatorModel.CustomSeparators;
 				text = GetReplacedText(text, separatorModel.CustomSeparators);
 			}
 
-			if (separatorModel.LengthPeriodOrCustomSep >= 3)
+			if (separatorModel.IsThousandDecimal && separatorModel.LengthPeriodOrCustomSep > 3
+			    || !separatorModel.IsThousandDecimal && separatorModel.LengthPeriodOrCustomSep >= 3)
 			{
 				// replace the "." or custom separator only when it located at thousand position
-				separatorModel.CustomSeparators = $"{separatorModel.CustomSeparators}.";
+				separatorModel.CustomSeparators = separatorModel.ThousandSeparators.Contains("u002E")
+					? $"{separatorModel.CustomSeparators}."
+					: separatorModel.CustomSeparators;
 				text = GetReplacedText(text, separatorModel.CustomSeparators);
 			}
 
