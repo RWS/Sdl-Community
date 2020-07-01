@@ -123,7 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\ImageToBitmapImageConverter.cs" />
-    <Compile Include="Models\Cozonac.cs" />
+    <Compile Include="Converters\NullableBooleanToVisibilityConverter.cs" />
     <Compile Include="Models\Interfaces\ILanguageResourcesAdapter.cs" />
     <Compile Include="Models\Interfaces\ILanguageResourcesContainer.cs" />
     <Compile Include="Models\Interfaces\IResource.cs" />
@@ -131,8 +131,7 @@
     <Compile Include="Models\Resource.cs" />
     <Compile Include="Models\SegmentationRulesResource.cs" />
     <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\Wrappers\LanguageResourcesTemplateContainer.cs" />
-    <Compile Include="Models\Wrappers\TranslationMemoryContainer.cs" />
+    <Compile Include="Models\LanguageResourcesTemplate.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -160,7 +159,7 @@
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="TellMe\ApplyTMCommunitySupportAction.cs" />
     <Compile Include="TellMe\ApplyTMStoreAction.cs" />
-    <Compile Include="TellMe\ApplyTMtemplateAction.cs" />
+    <Compile Include="TellMe\ApplyTmtemplateAction.cs" />
     <Compile Include="TellMe\ApplyTMTemplateHelpAction.cs" />
     <Compile Include="TellMe\ApplyTMTemplateTellMeProvider.cs" />
     <Compile Include="UI\MainWindow.xaml.cs">
@@ -172,13 +171,14 @@
     <Compile Include="Utilities\DropBehaviour.cs" />
     <Compile Include="Utilities\FolderSelectDialog.cs" />
     <Compile Include="Utilities\Reflector.cs" />
-    <Compile Include="Utilities\TemplateLoader.cs" />
-    <Compile Include="Utilities\TMLoader.cs" />
+    <Compile Include="Utilities\TmLoader.cs" />
     <Compile Include="Utilities\Utf8StringWriter.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Checked.png" />
+    <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\AddFolder.png" />
     <Resource Include="Resources\TM.ico" />
     <Resource Include="Resources\UploadFromExcel.ico" />
@@ -194,8 +194,6 @@
     <Resource Include="Resources\Question.ico" />
     <Resource Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\ATTA.ico" />
-    <Resource Include="Resources\Checked.ico" />
-    <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\Remove.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

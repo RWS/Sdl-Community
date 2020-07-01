@@ -11,12 +11,13 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 	{
 		public string[] GetFilePathInputFromUser(string title = "", string initialDirectory = "", string filter = "", bool multiselect = false)
 		{
+			GetInitialPath(initialDirectory);
 			var dlg = new OpenFileDialog
 			{
 				Title = title,
 				Filter = filter,
-				InitialDirectory = initialDirectory,
-				Multiselect = multiselect
+				InitialDirectory = GetInitialPath(initialDirectory),
+				Multiselect = multiselect,
 			};
 
 			var result = dlg.ShowDialog();
@@ -27,12 +28,21 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			return dlg.FileNames;
 		}
 
+		private string GetInitialPath(string initialDirectory)
+		{
+			return string.IsNullOrWhiteSpace(initialDirectory)
+				? ""
+				: initialDirectory.Contains(".")
+					? initialDirectory.Substring(0, initialDirectory.LastIndexOf('\\') + 1)
+					: initialDirectory;
+		}
+
 		public string[] GetFilesFromFolderInputByUser(string title = "", string initialPath = "")
 		{
 			var dlg = new FolderSelectDialog
 			{
 				Title = title,
-				InitialDirectory = initialPath
+				InitialDirectory = initialPath,
 			};
 
 			if (!dlg.ShowDialog())
@@ -50,7 +60,8 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				Title = title,
 				Filter = filter,
 				FileName = fileName,
-				AddExtension = false
+				AddExtension = false,
+				RestoreDirectory = true
 			};
 
 			if (dlg.ShowDialog() != DialogResult.OK)

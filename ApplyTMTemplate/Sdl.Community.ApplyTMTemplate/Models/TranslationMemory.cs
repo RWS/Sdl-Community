@@ -1,37 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using Sdl.Community.ApplyTMTemplate.Models.Interfaces;
-using Sdl.Community.ApplyTMTemplate.ViewModels;
 using Sdl.Core.Globalization;
-using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.Core.Segmentation;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ApplyTMTemplate.Models
 {
-	public class TranslationMemory : ModelBase
+	public class TranslationMemory : FileBasedTranslationMemory, ILanguageResourcesContainer, INotifyPropertyChanged
 	{
 		private bool _isSelected;
-		private string _sourceStatus;
+		private bool? _sourceModified;
 		private string _sourceStatusToolTip;
-		private string _targetStatus;
+		private bool? _targetModified;
 		private string _targetStatusToolTip;
 
-		public TranslationMemory(FileBasedTranslationMemory tm)
+		public TranslationMemory(string tmPath) : base(tmPath)
 		{
-			_sourceStatusToolTip = "Nothing processed yet";
-			_targetStatusToolTip = "Nothing processed yet";
+			_sourceStatusToolTip = PluginResources.Nothing_processed_yet;
+			_targetStatusToolTip = PluginResources.Nothing_processed_yet;
 			_isSelected = false;
-			_sourceStatus = "";
-			_targetStatus = "";
-			Tm = tm;
-			SourceLanguageFlag = new Language(tm.LanguageDirection.SourceLanguage).GetFlagImage();
-			TargetLanguageFlag = new Language(tm.LanguageDirection.TargetLanguage).GetFlagImage();
-			SourceLanguage = tm.LanguageDirection.SourceLanguage.Name;
-			TargetLanguage = tm.LanguageDirection.TargetLanguage.Name;
+			LanguageResourceBundles.CollectionChanged += LanguageResourceBundles_CollectionChanged;
 		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		public bool IsSelected
 		{
@@ -43,21 +36,21 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			}
 		}
 
-		public string Name => Tm.Name;
-		public string SourceLanguage { get; set; }
-		public Image SourceLanguageFlag { get; set; }
-
-		public string SourceStatus
+		public string SourceLanguage
 		{
-			get => _sourceStatus;
+			get => LanguageDirection.SourceLanguage.Name;
+		}
+
+		public Image SourceLanguageFlag => new Language(LanguageDirection.SourceLanguage).GetFlagImage();
+
+		public bool? SourceModified
+		{
+			get => _sourceModified;
 			set
 			{
-				if (_sourceStatus.ToLower().Contains("unchecked") || _sourceStatus == string.Empty)
-				{
-					_sourceStatus = value;
-				}
-
-				OnPropertyChanged();
+				if (_sourceModified == value || _sourceModified == true && value != null) return;
+				_sourceModified = value;
+				OnPropertyChanged(nameof(SourceModified));
 			}
 		}
 
@@ -70,24 +63,22 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 				{
 					_sourceStatusToolTip = value;
 				}
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SourceStatusToolTip));
 			}
 		}
 
-		public string TargetLanguage { get; set; }
-		public Image TargetLanguageFlag { get; set; }
+		public string TargetLanguage => LanguageDirection.TargetLanguage.Name;
 
-		public string TargetStatus
+		public Image TargetLanguageFlag => new Language(LanguageDirection.TargetLanguage).GetFlagImage();
+
+		public bool? TargetModified
 		{
-			get => _targetStatus;
+			get => _targetModified;
 			set
 			{
-				if (_targetStatus.ToLower().Contains("unchecked") || _targetStatus == string.Empty)
-				{
-					_targetStatus = value;
-				}
-
-				OnPropertyChanged();
+				if (_targetModified == value || _targetModified == true && value != null) return;
+				_targetModified = value;
+				OnPropertyChanged(nameof(TargetModified));
 			}
 		}
 
@@ -100,156 +91,84 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 				{
 					_targetStatusToolTip = value;
 				}
-				OnPropertyChanged();
-			}
-		}
-
-		public FileBasedTranslationMemory Tm { get; }
-
-		public void ApplyTemplate(LanguageResourceBundle languageResourceBundle)
-		{
-			try
-			{
-				AddLanguageResourceBundleToTm(languageResourceBundle);
-			}
-			catch (Exception)
-			{
-				MarkTmCorrupted();
+				OnPropertyChanged(nameof(TargetStatusToolTip));
 			}
 		}
 
 		public void MarkSourceModified()
 		{
-			SourceStatus = "../Resources/Checked.ico";
+			SourceModified = true;
 			SourceStatusToolTip = PluginResources.SourceModifiedMarker;
 		}
 
 		public void MarkSourceNotModified()
 		{
-			SourceStatus = "../Resources/Unchecked.ico";
+			SourceModified = false;
 			SourceStatusToolTip = PluginResources.SourceNotModifiedMarker;
 		}
 
 		public void MarkTargetModified()
 		{
-			TargetStatus = "../Resources/Checked.ico";
+			TargetModified = true;
 			TargetStatusToolTip = PluginResources.TargetModifiedMarker;
 		}
 
 		public void MarkTargetNotModified()
 		{
-			TargetStatus = "../Resources/Unchecked.ico";
+			TargetModified = false;
 			TargetStatusToolTip = PluginResources.TargetNotModified;
-		}
-
-		public void MarkTmCorrupted()
-		{
-			SourceStatus = "../Resources/Error.ico";
-			TargetStatus = "../Resources/Error.ico";
-			SourceStatusToolTip = PluginResources.TmCorruptedMarker;
-			TargetStatusToolTip = PluginResources.TmCorruptedMarker;
 		}
 
 		public void ResetAnnotations()
 		{
-			_sourceStatus = string.Empty;
-			_sourceStatusToolTip = string.Empty;
-			_targetStatus = string.Empty;
-			_targetStatusToolTip = string.Empty;
-		}
-
-		private static void AddItemsToWordlist(LanguageResourceBundle newLanguageResourceBundle, LanguageResourceBundle template, string property)
-		{
-			var templateBundle = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(template, null) as Wordlist);
-			var templateBundleSetter = typeof(LanguageResourceBundle).GetProperty(property)?.SetMethod;
-			var newBundleGetter = (typeof(LanguageResourceBundle).GetProperty(property)?.GetMethod.Invoke(newLanguageResourceBundle, null) as Wordlist);
-
-			if (newBundleGetter == null || !newBundleGetter.Items.Any()) return;
-
-			if (templateBundle != null && templateBundle.Items.Any())
+			SourceModified = null;
+			TargetModified = null;
+			foreach (var languageResourceBundle in LanguageResourceBundles)
 			{
-				foreach (var abbrev in newBundleGetter.Items)
-				{
-					templateBundle.Add(abbrev);
-				}
-			}
-			else
-			{
-				templateBundleSetter?.Invoke(template, new object[] { new Wordlist(newBundleGetter) });
+				languageResourceBundle.PropertyChanged += LanguageResourceBundle_PropertyChanged;
 			}
 		}
 
-		private static void AddSegmentationRulesToBundle(LanguageResourceBundle newBundle, LanguageResourceBundle correspondingBundleInTemplate)
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
-			if (newBundle.SegmentationRules == null) return;
-			if (correspondingBundleInTemplate.SegmentationRules != null)
-			{
-				var newSegmentationRules = new SegmentationRules();
-				foreach (var newRule in newBundle.SegmentationRules.Rules)
-				{
-					if (correspondingBundleInTemplate.SegmentationRules.Rules.All(oldRule => !string.Equals(newRule.Description.Text, oldRule.Description.Text, StringComparison.OrdinalIgnoreCase)))
-					{
-						newSegmentationRules.AddRule(newRule);
-					}
-				}
-
-				correspondingBundleInTemplate.SegmentationRules.Rules.AddRange(newSegmentationRules.Rules);
-			}
-			else
-			{
-				correspondingBundleInTemplate.SegmentationRules = new SegmentationRules(newBundle.SegmentationRules);
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		private void AddEmptyLanguageResourceBundles()
+		private void LanguageResourceBundle_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (Tm.LanguageResourceBundles.Count >= 2) return;
-			var sourceLanguage = Tm?.LanguageDirection?.SourceLanguage;
-			var targetLanguage = Tm?.LanguageDirection?.TargetLanguage;
-			if (Tm.LanguageResourceBundles[sourceLanguage] == null)
-			{
-				Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(sourceLanguage));
-			}
-
-			if (Tm.LanguageResourceBundles[targetLanguage] == null)
-			{
-				Tm.LanguageResourceBundles.Add(new LanguageResourceBundle(targetLanguage));
-			}
-		}
-
-		private void AddLanguageResourceBundleToTm(LanguageResourceBundle languageResourceBundle)
-		{
-			AddEmptyLanguageResourceBundles();
-
-			MarkSourceNotModified();
-			MarkTargetNotModified();
-
-			var cultureOfNewBundle = languageResourceBundle.Language;
-			var cultureOfSource = Tm.LanguageDirection.SourceLanguage;
-			var cultureOfTarget = Tm.LanguageDirection.TargetLanguage;
-			var thisLangResIsValid = false;
-
-			if (cultureOfNewBundle.Equals(cultureOfSource))
+			if (((LanguageResourceBundle)sender).Language.Name.Equals(LanguageDirection.SourceLanguage.Name))
 			{
 				MarkSourceModified();
-				thisLangResIsValid = true;
+				LanguageResourceBundles[LanguageDirection.SourceLanguage].PropertyChanged -=
+					LanguageResourceBundle_PropertyChanged;
+				MarkTargetNotModified();
 			}
-
-			if (cultureOfNewBundle.Equals(cultureOfTarget))
+			if (((LanguageResourceBundle)sender).Language.Name.Equals(LanguageDirection.TargetLanguage.Name))
 			{
 				MarkTargetModified();
-				thisLangResIsValid = true;
+				LanguageResourceBundles[LanguageDirection.TargetLanguage].PropertyChanged -=
+					LanguageResourceBundle_PropertyChanged;
+				MarkSourceNotModified();
 			}
+		}
 
-			if (!thisLangResIsValid) return;
-
-			var properties = new List<string> { "Abbreviations", "OrdinalFollowers", "Variables" };
-			foreach (var property in properties)
+		private void LanguageResourceBundles_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
-				AddItemsToWordlist(languageResourceBundle, Tm.LanguageResourceBundles[cultureOfNewBundle], property);
+				if (LanguageDirection.SourceLanguage.Name.Equals(
+					((LanguageResourceBundle)e.NewItems[0]).Language.Name))
+				{
+					MarkSourceModified();
+				}
+				if (LanguageDirection.TargetLanguage.Name.Equals(
+					((LanguageResourceBundle)e.NewItems[0]).Language.Name))
+				{
+					MarkTargetModified();
+				}
+
+				((LanguageResourceBundle)e.NewItems[0]).PropertyChanged += LanguageResourceBundle_PropertyChanged;
 			}
-			AddSegmentationRulesToBundle(languageResourceBundle, Tm.LanguageResourceBundles[cultureOfNewBundle]);
-			Tm.Save();
 		}
 	}
 }

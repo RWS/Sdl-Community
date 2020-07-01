@@ -21,7 +21,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 {
 	public class ExcelResourceManager : IExcelResourceManager
 	{
-		public void ExportResourcesToExcel(ILanguageResourcesAdapter resourceContainer, string filePathTo, Settings settings)
+		public void ExportResourcesToExcel(ILanguageResourcesContainer resourceContainer, string filePathTo, Settings settings)
 		{
 			using var package = GetExcelPackage(filePathTo);
 			int lineNumber;
@@ -259,14 +259,14 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			return newLanguageResourceBundles;
 		}
 
-		public (BuiltinRecognizers?, WordCountFlags?) GetTemplateGlobalSettings(string filePathFrom, Settings settings)
+		public (BuiltinRecognizers, WordCountFlags) GetTemplateGlobalSettings(string filePathFrom, Settings settings)
 		{
 			var excelDoc = GetExcelPackage(filePathFrom);
 			var settingsWorksheet = excelDoc.Workbook.Worksheets["Global settings"];
 			var cells = settingsWorksheet.Cells;
 
-			BuiltinRecognizers? recognizers = BuiltinRecognizers.RecognizeNone;
-			WordCountFlags? wordCountFlags = WordCountFlags.NoFlags;
+			var recognizers = BuiltinRecognizers.RecognizeNone;
+			var wordCountFlags = WordCountFlags.NoFlags;
 			for (var i = 2; i <= settingsWorksheet.Dimension.End.Row; i++)
 			{
 				if (settings.RecognizersChecked)
@@ -282,7 +282,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			return (recognizers, wordCountFlags);
 		}
 
-		private void AddWordCountFlags(string wordCountFlagSerialized, ref WordCountFlags? wordCountFlags)
+		private void AddWordCountFlags(string wordCountFlagSerialized, ref WordCountFlags wordCountFlags)
 		{
 			if (!string.IsNullOrWhiteSpace(wordCountFlagSerialized))
 			{
@@ -293,7 +293,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			}
 		}
 
-		private void AddRecognizers(string recognizerSerialized, ref BuiltinRecognizers? recognizers)
+		private void AddRecognizers(string recognizerSerialized, ref BuiltinRecognizers recognizers)
 		{
 			if (!string.IsNullOrWhiteSpace(recognizerSerialized))
 			{

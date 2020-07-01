@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,6 +12,7 @@ using Sdl.Community.ApplyTMTemplate.Models.Interfaces;
 using Sdl.Community.ApplyTMTemplate.Services;
 using Sdl.Community.ApplyTMTemplate.Services.Interfaces;
 using Sdl.Community.ApplyTMTemplate.Utilities;
+using Sdl.Versioning;
 using Button = System.Windows.Controls.Button;
 
 namespace Sdl.Community.ApplyTMTemplate.ViewModels
@@ -18,46 +20,52 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 	public class MainWindowViewModel : ModelBase
 	{
 		private readonly FilePathDialogService _filePathDialogService;
+		private readonly ILanguageResourcesAdapter _languageResourcesAdapter;
 		private readonly IMessageService _messageService;
-		private readonly TMLoader _tmLoader;
-		private readonly string _tmPath;
+		private readonly IResourceManager _resourceManager;
+		private readonly TmLoader _tmLoader;
 		private ICommand _addFolderCommand;
 		private ICommand _addTmsCommand;
 		private ICommand _applyTemplateCommand;
 		private ICommand _browseCommand;
 		private bool _datesChecked;
 		private ICommand _dragEnterCommand;
+		private string _excelSheetPath;
 		private ICommand _exportCommand;
 		private ICommand _importCommand;
 		private string _progressVisibility;
 		private ICommand _removeTMsCommand;
-		private readonly ILanguageResourcesAdapter _languageResourcesAdapter;
-		private readonly IResourceManager _resourceManager;
-
-		private bool _selectAllChecked;
 		private TimedTextBox _timedTextBoxViewModel;
 		private ObservableCollection<TranslationMemory> _tmCollection;
+		private string _tmPath;
 
-		public MainWindowViewModel(ILanguageResourcesAdapter languageResourcesAdapter, IResourceManager resourceManager, TemplateLoader templateLoader, TMLoader tmLoader,
+		public MainWindowViewModel(ILanguageResourcesAdapter languageResourcesAdapter, IResourceManager resourceManager, TmLoader tmLoader,
 			IMessageService messageService, TimedTextBox timedTextBoxViewModel, FilePathDialogService filePathDialogService)
 		{
 			_languageResourcesAdapter = languageResourcesAdapter;
 			_resourceManager = resourceManager;
+
 			Settings = new Settings();
+			Settings.PropertyChanged += Settings_PropertyChanged;
+
 			_tmLoader = tmLoader;
 			_messageService = messageService;
 			_filePathDialogService = filePathDialogService;
 			TimedTextBoxViewModel = timedTextBoxViewModel;
 
-			_tmPath = templateLoader.GetTmFolderPath();
+			ResourceTemplatePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+				Versions.StudioDocumentsFolderName);
 
-			_selectAllChecked = true;
+			_tmPath = ResourceTemplatePath;
+			_excelSheetPath = ResourceTemplatePath;
+
 			_progressVisibility = "Collapsed";
 
 			_tmCollection = new ObservableCollection<TranslationMemory>();
 		}
 
 		public ICommand AddFolderCommand => _addFolderCommand ??= new CommandHandler(AddFolder, true);
+
 		public ICommand AddTmCommand => _addTmsCommand ??= new CommandHandler(AddTms, true);
 
 		public bool AllTmsChecked
@@ -65,11 +73,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			get => AreAllTmsSelected();
 			set
 			{
-				if (value)
-				{
-					ToggleCheckAllTms(true);
-				}
-
+				ToggleCheckAllTms(value);
 				OnPropertyChanged(nameof(AllTmsChecked));
 			}
 		}
@@ -89,7 +93,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		}
 
 		public ICommand DragEnterCommand => _dragEnterCommand ??= new RelayCommand(HandlePreviewDrop);
+
 		public ICommand ExportCommand => _exportCommand ??= new CommandHandler(ExportToExcel, true);
+
 		public ICommand ImportCommand => _importCommand ??= new RelayCommand(Import);
 
 		public string ProgressVisibility
@@ -116,21 +122,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		public bool SelectAllChecked
 		{
-			get => _selectAllChecked;
+			get => AreAllOptionsChecked();
 			set
 			{
-				_selectAllChecked = value;
-				Settings.AbbreviationsChecked = value;
-				Settings.VariablesChecked = value;
-				Settings.OrdinalFollowersChecked = value;
-				Settings.SegmentationRulesChecked = value;
-				Settings.DatesChecked = value;
-				Settings.TimesChecked = value;
-				Settings.NumbersChecked = value;
-				Settings.MeasurementsChecked = value;
-				Settings.CurrenciesChecked = value;
-				Settings.RecognizersChecked = value;
-				Settings.WordCountFlagsChecked = value;
+				foreach (var propertyInfo in Settings.GetType().GetProperties())
+				{
+					if (propertyInfo.CanWrite) propertyInfo.SetValue(Settings, value);
+				}
+
 				OnPropertyChanged(nameof(SelectAllChecked));
 			}
 		}
@@ -151,7 +150,6 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				_timedTextBoxViewModel.BrowseCommand = BrowseCommand;
 				_timedTextBoxViewModel.ImportCommand = ImportCommand;
 				_timedTextBoxViewModel.ExportCommand = ExportCommand;
-				//_timedTextBoxViewModel.ShouldStartValidation += IsResourceTemplatePathValid;
 			}
 		}
 
@@ -167,6 +165,19 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private ICommand BrowseCommand => _browseCommand ??= new CommandHandler(Browse, true);
 
+		public bool IsTemplatePathValid()
+		{
+			if (string.IsNullOrWhiteSpace(ResourceTemplatePath))
+			{
+				_messageService.ShowErrorMessage(PluginResources.Error_Window_Title, PluginResources.No_resource_template_path_provided);
+				return false;
+			}
+
+			_languageResourcesAdapter.Load(ResourceTemplatePath);
+
+			return true;
+		}
+
 		private void AddFolder()
 		{
 			var filesPaths =
@@ -175,10 +186,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			if (filesPaths == null) return;
 
-			AddRange(_tmLoader.GetTms(filesPaths, TmCollection));
+			_tmPath = filesPaths[0];
+			AddRangeOfTms(_tmLoader.GetTms(filesPaths, TmCollection));
 		}
 
-		private void AddRange(IEnumerable<TranslationMemory> tmsCollection)
+		private void AddRangeOfTms(IEnumerable<TranslationMemory> tmsCollection)
 		{
 			foreach (var tm in tmsCollection)
 			{
@@ -191,7 +203,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			var filePaths = _filePathDialogService.GetFilePathInputFromUser(filter: "Translation Memories|*.sdltm", initialDirectory: _tmPath, multiselect: true);
 			if (filePaths == null) return;
-			AddRange(_tmLoader.GetTms(filePaths, TmCollection));
+			_tmPath = filePaths[0];
+			AddRangeOfTms(_tmLoader.GetTms(filePaths, TmCollection));
 		}
 
 		private async void ApplyTmTemplate()
@@ -210,6 +223,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			ProgressVisibility = "Collapsed";
 		}
 
+		private bool AreAllOptionsChecked() => Settings.GetType().GetProperties().All(propertyInfo => !propertyInfo.CanWrite || (bool)propertyInfo.GetValue(Settings));
+
 		private bool AreAllTmsSelected()
 		{
 			return TmCollection.Count > 0 && TmCollection.All(tm => tm.IsSelected);
@@ -217,27 +232,13 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private void Browse()
 		{
-			var resourceTemplatePath = _filePathDialogService.GetFilePathInputFromUser(filter: "Language resource templates|*.sdltm.resource");
+			var resourceTemplatePath = _filePathDialogService.GetFilePathInputFromUser(initialDirectory: ResourceTemplatePath, filter: "Language resource templates|*.sdltm.resource");
 			if (resourceTemplatePath == null) return;
 			ResourceTemplatePath = resourceTemplatePath[0];
 		}
 
-		public bool IsTemplatePathValid()
-		{
-			if (string.IsNullOrWhiteSpace(ResourceTemplatePath))
-			{
-				_messageService.ShowErrorMessage(PluginResources.Error_Window_Title, PluginResources.No_resource_template_path_provided);
-				return false;
-			}
-
-			_languageResourcesAdapter.Load(ResourceTemplatePath);
-
-			return true;
-		}
-
 		private async void ExportToExcel()
 		{
-
 			if (!IsTemplatePathValid()) return;
 
 			var saveLocation = GetSaveLocation();
@@ -275,7 +276,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private void HandlePreviewDrop(object droppedFile)
 		{
 			if (droppedFile == null) return;
-			AddRange(_tmLoader.GetTms(droppedFile as string[], TmCollection));
+			AddRangeOfTms(_tmLoader.GetTms(droppedFile as string[], TmCollection));
 		}
 
 		private async void Import(object parameter)
@@ -287,8 +288,10 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				{
 					var fileNamesInput = _filePathDialogService.GetFilePathInputFromUser(
 						PluginResources.Import_window_title,
-						filter: "Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx");
+						filter: "Excel spreadsheet|*.xlsx|Translation memories|*.sdltm|Both|*.sdltm;*.xlsx",
+						initialDirectory: _excelSheetPath);
 					if (fileNamesInput == null) return;
+					_excelSheetPath = fileNamesInput[0];
 					await ImportResourcesFromExcel(fileNamesInput);
 				}
 				else
@@ -336,6 +339,11 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			TmCollection = new ObservableCollection<TranslationMemory>(TmCollection.Where(tm => !tm.IsSelected));
 			OnPropertyChanged(nameof(AllTmsChecked));
+		}
+
+		private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			OnPropertyChanged(nameof(SelectAllChecked));
 		}
 
 		private void Tm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

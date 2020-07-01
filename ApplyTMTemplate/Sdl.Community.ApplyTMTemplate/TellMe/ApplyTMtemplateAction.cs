@@ -8,9 +8,9 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.ApplyTMTemplate.TellMe
 {
-	public class ApplyTMTemplateAction : AbstractTellMeAction
+	public class ApplyTmTemplateAction : AbstractTellMeAction
 	{
-		public ApplyTMTemplateAction()
+		public ApplyTmTemplateAction()
 		{
 			Name = "Start Apply TM Template";
 		}
@@ -24,7 +24,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 		public override void Execute()
 		{
 			var timedTextBoxViewModel = new ViewModels.TimedTextBox();
-			var mainWindowViewModel = new MainWindowViewModel(new LanguageResourcesAdapter(), new ResourceManager(new ExcelResourceManager(), new MessageService()), new TemplateLoader(), new TMLoader(), new MessageService(), timedTextBoxViewModel, new FilePathDialogService());
+			var mainWindowViewModel = new MainWindowViewModel(new LanguageResourcesAdapter(), new ResourceManager(new ExcelResourceManager(), new MessageService()), new TmLoader(), new MessageService(), timedTextBoxViewModel, new FilePathDialogService());
 
 			var mainWindow = new MainWindow
 			{

@@ -124,12 +124,6 @@
   <data name="Remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Remove.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Checked" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Checked.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Unchecked" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Unchecked.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ForumIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -344,12 +338,18 @@
     <value>Short times</value>
   </data>
   <data name="GlobalSettings" xml:space="preserve">
-	  <value>Global settings</value>
+    <value>Global settings</value>
   </data>
   <data name="No_file_path_provided" xml:space="preserve">
-	  <value>No file path provided</value>
+    <value>No file path provided</value>
   </data>
   <data name="No_resource_template_path_provided" xml:space="preserve">
-	  <value>No resource template path provided</value>
+    <value>No resource template path provided</value>
+  </data>
+  <data name="Add_Folder" xml:space="preserve">
+    <value>Add Folder</value>
+  </data>
+  <data name="Nothing_processed_yet" xml:space="preserve">
+    <value>Nothing processed yet</value>
   </data>
 </root>

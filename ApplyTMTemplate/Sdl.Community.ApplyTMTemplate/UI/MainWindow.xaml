@@ -9,6 +9,7 @@
 					  xmlns:applyTmTemplate="clr-namespace:Sdl.Community.ApplyTMTemplate"
 					  xmlns:ui="clr-namespace:Sdl.Community.ApplyTMTemplate.UI"
 					  xmlns:viewModels="clr-namespace:Sdl.Community.ApplyTMTemplate.ViewModels"
+					  xmlns:models="clr-namespace:Sdl.Community.ApplyTMTemplate.Models"
 					  xmlns:uiHelpers="clr-namespace:Sdl.Community.ApplyTMTemplate.UiHelpers"
 					  WindowStartupLocation="CenterScreen"
 					  ResizeMode="NoResize"
@@ -32,7 +33,10 @@
 				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+
 			<converters:ImageToBitmapImageConverter x:Key="ImageToBitmapImageConverter"/>
+			<converters:NullableBooleanToVisibilityConverter x:Key="NullableBooleanToVisibilityConverter"/>
+
 			<Style TargetType="Button" x:Key="SdlWizardStyleButtonGreen" BasedOn="{StaticResource SdlPrimaryButtonStyle}">
 				<Setter Property="MinWidth" Value="70"></Setter>
 				<Setter Property="Height" Value="34"></Setter>
@@ -43,7 +47,7 @@
 				<Setter Property="FontFamily" Value="Calibri"/>
 				<Setter Property="Margin" Value="5,5,0,0"/>
 			</Style>
-			<Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource Sdl.Checkbox.GenericStyle}">
+			<Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource Sdl.Checkbox.NoHighlightStyle}">
 				<Setter Property="Margin" Value="10 0 0 0"/>
 				<Setter Property="HorizontalAlignment" Value="Center"/>
 				<Setter Property="VerticalAlignment" Value="Center"/>
@@ -108,7 +112,7 @@
 			          Name="SelectAll" Content="Select all..." 
 			          Style="{StaticResource CheckBoxStyle}"
 					  HorizontalAlignment="Right"
-			          IsChecked="{Binding SelectAllChecked}" Margin="0,0,30,0" />
+			          IsChecked="{Binding SelectAllChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="0,0,30,0" />
 			<DockPanel Grid.Row="4" Grid.Column="1" >
 				<StackPanel DockPanel.Dock="Top" Orientation="Horizontal"  Margin="10,10,0,0">
 					<CheckBox Content="Variables" 
@@ -122,7 +126,7 @@
 					          IsChecked="{Binding Settings.SegmentationRulesChecked}" />
 					<CheckBox Content="Dates" Style="{StaticResource OptionsCheckBoxes}" IsChecked="{Binding Settings.DatesChecked}" />
 				</StackPanel>
-				<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"  Margin="10,10,0,0">
+				<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"  Margin="10,5,0,0">
 					<CheckBox Content="Times" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.TimesChecked}" />
 					<CheckBox Content="Numbers" Style="{StaticResource OptionsCheckBoxes}"
@@ -138,7 +142,7 @@
 				</StackPanel>
 			</DockPanel>
 
-			<StackPanel Margin="5,20,0,10" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" ToolTip="Add Folder">
+			<StackPanel Margin="5,20,0,5" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
 				<Button HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}" Style="{StaticResource TmActionButtonStyle}">
 					<StackPanel Orientation="Horizontal">
 						<Image Source="../Resources/AddFolder.png" Style="{StaticResource TmActionImageStyle}"/>
@@ -171,7 +175,8 @@
 				       VerticalScrollBarVisibility="Auto"
 		               AllowDrop="True"
 		               utilities:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}"
-		               GridLinesVisibility="None">
+		               GridLinesVisibility="None"
+		               d:DataContext="{d:DesignInstance models:TranslationMemory}">
 				<DataGrid.RowStyle>
 					<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
 				</DataGrid.RowStyle>
@@ -208,9 +213,23 @@
 								<DockPanel>
 									<Image DockPanel.Dock="Left" Source="{Binding SourceLanguageFlag, Converter={StaticResource ImageToBitmapImageConverter}}" Width="25" Height="25"/>
 									<TextBlock DockPanel.Dock="Left" Text="{Binding SourceLanguage}" Margin="5" />
-									<Image DockPanel.Dock="Right" Source="{Binding SourceStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  
-								       ToolTip="{Binding SourceStatusToolTip}" 
-								       Style="{StaticResource ImageStyle}"/>
+									<Image DockPanel.Dock="Right" 
+									       ToolTip="{Binding SourceStatusToolTip}"
+									       Visibility="{Binding SourceModified, Converter={StaticResource NullableBooleanToVisibilityConverter}}">
+										<Image.Style>
+											<Style BasedOn="{StaticResource ImageStyle}" TargetType="Image">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding SourceModified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+														<Setter Property="Source" Value="../Resources/Checked.png"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding SourceModified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+														<Setter Property="Source" Value="../Resources/Unchecked.ico"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</Image.Style>
+									</Image>
+
 								</DockPanel>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
@@ -223,9 +242,21 @@
 									<Image DockPanel.Dock="Left" Source="{Binding TargetLanguageFlag, Converter={StaticResource ImageToBitmapImageConverter}}" Width="25" Height="25" />
 									<TextBlock DockPanel.Dock="Left" Text="{Binding TargetLanguage}" Margin="5"  />
 									<Image DockPanel.Dock="Right" 
-									   Source="{Binding TargetStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-								       ToolTip="{Binding TargetStatusToolTip}" 
-								       Style="{StaticResource ImageStyle}"/>
+										   ToolTip="{Binding TargetStatusToolTip}" 
+										   Visibility="{Binding TargetModified, Converter={StaticResource NullableBooleanToVisibilityConverter}}">
+										<Image.Style>
+											<Style BasedOn="{StaticResource ImageStyle}" TargetType="Image">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding TargetModified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+														<Setter Property="Source" Value="../Resources/Checked.png"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding TargetModified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+														<Setter Property="Source" Value="../Resources/Unchecked.ico"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</Image.Style>
+									</Image>
 								</DockPanel>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>

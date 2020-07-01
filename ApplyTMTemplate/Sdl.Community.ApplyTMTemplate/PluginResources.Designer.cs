@@ -79,6 +79,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Folder.
+        /// </summary>
+        public static string Add_Folder {
+            get {
+                return ResourceManager.GetString("Add_Folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap AddFolder {
@@ -113,16 +122,6 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string Browse_button_Tooltip {
             get {
                 return ResourceManager.GetString("Browse_button_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Checked {
-            get {
-                object obj = ResourceManager.GetObject("Checked", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -461,6 +460,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nothing processed yet.
+        /// </summary>
+        public static string Nothing_processed_yet {
+            get {
+                return ResourceManager.GetString("Nothing_processed_yet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number separators.
         /// </summary>
         public static string NumberSeparators {
@@ -695,16 +703,6 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string TmCorruptedMarker {
             get {
                 return ResourceManager.GetString("TmCorruptedMarker", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Unchecked {
-            get {
-                object obj = ResourceManager.GetObject("Unchecked", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

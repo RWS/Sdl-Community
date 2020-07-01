@@ -6,15 +6,15 @@ namespace Sdl.Community.ApplyTMTemplate.Services.Interfaces
 {
 	public interface IResourceManager
 	{
-		void ApplyTemplateToTms(ILanguageResourcesAdapter languageResourcesContainer, List<TranslationMemory> translationMemories, Settings settings);
+		void ApplyTemplateToTms(ILanguageResourcesContainer languageResourcesContainer, List<TranslationMemory> translationMemories, Settings settings);
 
-		void ExportResourcesToExcel(ILanguageResourcesAdapter languageResourcesContainer, string filePathTo,
+		void ExportResourcesToExcel(ILanguageResourcesContainer languageResourcesContainer, string filePathTo,
 			Settings settings);
 
-		void ImportResourcesFromExcel(string excelFilePath, ILanguageResourcesAdapter languageResourcesContainer, Settings settings);
+		void ImportResourcesFromExcel(string excelFilePath, ILanguageResourcesContainer languageResourcesContainer, Settings settings);
 
-		void ImportResourcesFromSdltm(List<TranslationMemory> translationMemories, ILanguageResourcesAdapter languageResourcesContainer, Settings settings);
+		void ImportResourcesFromSdltm(List<TranslationMemory> translationMemories, ILanguageResourcesContainer languageResourcesContainer, Settings settings);
 
-		bool ValidateTemplate(ILanguageResourcesAdapter languageResourcesContainer, bool isImport);
+		//bool ValidateTemplate(ILanguageResourcesContainer languageResourcesContainer, bool isImport);
 	}
 }

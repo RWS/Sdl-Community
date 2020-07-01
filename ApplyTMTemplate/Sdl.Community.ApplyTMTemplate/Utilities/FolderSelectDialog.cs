@@ -53,6 +53,7 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			ofd.CheckFileExists = false;
 			ofd.DereferenceLinks = true;
 			ofd.Multiselect = false;
+			ofd.RestoreDirectory = true;
 		}
 
 		public bool ShowDialog()
