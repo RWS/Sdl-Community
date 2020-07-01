@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
@@ -9,10 +10,14 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		{
 			Processed = new List<WordCount>();
 			Ignored = new List<WordCount>();
-		}		
+		}
 
+		[XmlArray]
+		[XmlArrayItem("WordCount", Type = typeof(WordCount))]
 		public List<WordCount> Processed { get; set; }
 
+		[XmlArray]
+		[XmlArrayItem("WordCount", Type = typeof(WordCount))]
 		public List<WordCount> Ignored { get; set; }
 				
 		public object Clone()

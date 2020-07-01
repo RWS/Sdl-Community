@@ -141,6 +141,8 @@
     <Compile Include="Actions\Import\ImportFromXLIFFAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
+    <Compile Include="BatchTasks\ExportBatchTask.cs" />
+    <Compile Include="BatchTasks\ImportBatchTask.cs" />
     <Compile Include="BatchTasks\ImportSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -148,8 +150,6 @@
       <DependentUpon>ImportSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="BatchTasks\ImportSettingsPage.cs" />
-    <Compile Include="BatchTasks\ImportBatchTask.cs" />
-    <Compile Include="BatchTasks\ExportBatchTask.cs" />
     <Compile Include="Model\AnalysisBand.cs" />
     <Compile Include="Model\TranslationOriginStatistics.cs" />
     <Compile Include="Model\ConfirmationStatistics.cs" />
@@ -506,11 +506,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="BatchTasks\ImportSettingsControl.resx">
-      <DependentUpon>ImportSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="BatchTasks\ExportSettingsControl.resx">
       <DependentUpon>ExportSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BatchTasks\ImportSettingsControl.resx">
+      <DependentUpon>ImportSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProjectFileActivityViewControl.resx">
       <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>

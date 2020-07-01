@@ -105,9 +105,13 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			message = string.Empty;
 
 			if (controller is ProjectsController || controller is FilesController)
-			{			
-				var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault() 
-				                      ?? _controllers.ProjectsController.CurrentProject;
+			{
+				var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault()
+									  ?? _controllers.ProjectsController.CurrentProject;
+
+				_wizardContext.Owner = controller is ProjectsController
+					? Enumerators.Controller.Projects
+					: Enumerators.Controller.Files;
 
 				// activate the selected project if diffrent to the current project
 				if (_controllers.ProjectsController.CurrentProject?.GetProjectInfo().Id != selectedProject.GetProjectInfo().Id)
@@ -130,7 +134,9 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				_wizardContext.ProjectFiles = projectModel.ProjectFiles;
 			}
 			else if (controller is XLIFFManagerViewController)
-			{				
+			{
+				_wizardContext.Owner = Enumerators.Controller.XliffManager;
+
 				var selectedProjectFiles = _controllers.XliffManagerController.GetSelectedProjectFiles();
 				var selectedProjects = GetSelectedProjects();
 				var selectedFileIds = selectedProjectFiles?.Select(a => a.FileId.ToString()).ToList();
@@ -190,7 +196,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			}
 
 			var projectInfo = selectedProject.GetProjectInfo();
-			
+
 			var project = new Project
 			{
 				Id = projectInfo.Id.ToString(),
@@ -318,7 +324,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 							MinimumMatchValue = Convert.ToInt32(min),
 							MaximumMatchValue = Convert.ToInt32(max)
 						});
-					}										
+					}
 				}
 			}
 
@@ -338,7 +344,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 		private List<Project> GetSelectedProjects()
 		{
-			return _controllers.XliffManagerController.GetSelectedProjects();			
+			return _controllers.XliffManagerController.GetSelectedProjects();
 		}
 
 		private ObservableCollection<WizardPageViewModelBase> CreatePages(WizardContext wizardContext)

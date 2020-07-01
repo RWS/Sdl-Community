@@ -114,15 +114,15 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 					var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, _exportSettings.ExportOptions.IncludeTranslations);
 					
 					if (exported)
-					{
-						targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
-						targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
+					{						
 						targetFile.Date = _exportSettings.DateTimeStamp;
 						targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
 						targetFile.Action = Enumerators.Action.Export;
 						targetFile.Status = Enumerators.Status.Success;
 						targetFile.Details = string.Empty;
 						targetFile.XliffFilePath = xliffFilePath;
+						targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
+						targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
 					}
 
 					var activityFile = new ProjectFileActivity
@@ -184,6 +184,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 				Action = Enumerators.Action.Export,
 				Completed = false,
 				Project = _project,
+				Owner = Enumerators.Controller.Files, // TODO: check if Files or Projects controller
 				DateTimeStamp = _exportSettings.DateTimeStamp,
 				ExcludeFilterItems = GetSelectedFilterItems(),
 				ExportOptions = _exportSettings.ExportOptions,

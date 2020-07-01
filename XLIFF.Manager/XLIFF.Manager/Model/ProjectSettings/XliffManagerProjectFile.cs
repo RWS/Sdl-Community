@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Sdl.Community.XLIFF.Manager.Common;
 
 namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
@@ -16,8 +17,10 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 
 		public List<XliffManagerProjectFileActivity> Activities { get; set; }
 
+		[XmlElement]
 		public ConfirmationStatistics ConfirmationStatistics { get; set; }
 
+		[XmlElement]
 		public TranslationOriginStatistics TranslationOriginStatistics { get; set; }
 
 		public string Status { get; set; }

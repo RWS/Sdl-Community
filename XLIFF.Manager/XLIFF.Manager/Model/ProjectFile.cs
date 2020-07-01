@@ -24,9 +24,9 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		[XmlIgnore]
 		public Project Project { get; set; }
-
+		
 		public ConfirmationStatistics ConfirmationStatistics { get; set; }
-
+		
 		public TranslationOriginStatistics TranslationOriginStatistics { get; set; }
 
 		public List<ProjectFileActivity> ProjectFileActivities { get; set; }

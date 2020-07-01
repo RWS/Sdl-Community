@@ -6,7 +6,7 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 	public class XliffManagerProject:  SettingsGroup
 	{		
 		private const string ProjectFilesSetting = "ProjectFiles";		
-		
+				
 		public Setting<List<XliffManagerProjectFile>> ProjectFiles
 		{
 			get => GetSetting<List<XliffManagerProjectFile>>(ProjectFilesSetting);

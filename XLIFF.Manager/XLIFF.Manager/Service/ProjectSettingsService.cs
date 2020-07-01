@@ -47,7 +47,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				// ignore catch all
 			}
 		}
-
+		
 		public List<LanguageDirectionInfo> GetLanguageDirections(string filePath)
 		{
 			var languageDirections = new List<LanguageDirectionInfo>();

@@ -22,6 +22,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		private ICommand _importFilesCommand;
 		private ICommand _exportFilesCommand;
 		private ICommand _openFolderCommand;
+		private ICommand _viewReportCommand;
 
 		public ProjectFilesViewModel(List<ProjectFile> projectFiles)
 		{
@@ -38,6 +39,8 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
 
 		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
+
+		public ICommand ViewReportCommand => _viewReportCommand ?? (_viewReportCommand = new CommandHandler(ViewReport));
 
 		public ProjectFileActivityViewModel ProjectFileActivityViewModel { get; internal set; }
 
@@ -133,6 +136,16 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		private void OpenFolder(object parameter)
 		{
 			System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(SelectedProjectFile.Location));
+		}
+
+		private void ViewReport(object parameter)
+		{
+			if (SelectedProjectFile == null || string.IsNullOrEmpty(SelectedProjectFile.Details))
+			{
+				return;
+			}
+
+			System.Diagnostics.Process.Start(SelectedProjectFile.Details);
 		}
 
 		public void Dispose()

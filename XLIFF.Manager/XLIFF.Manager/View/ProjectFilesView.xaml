@@ -149,8 +149,18 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTextColumn Header="Details" CanUserSort="True" Binding="{Binding Details, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
-										ElementStyle="{StaticResource TextBlockStyle}" Width="2*"/>
+				<DataGridTemplateColumn Header="Report" CanUserSort="False" Width="1*" >
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock>
+								<Hyperlink IsEnabled="True" Command="{Binding Path=DataContext.ViewReportCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+								           CommandParameter="{Binding}">
+									<TextBlock Text="View Report" />
+								</Hyperlink>
+							</TextBlock>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 			</DataGrid.Columns>
 			<DataGrid.ContextMenu>
 				<ContextMenu>

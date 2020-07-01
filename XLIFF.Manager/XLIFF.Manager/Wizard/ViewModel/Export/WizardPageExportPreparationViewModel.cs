@@ -258,15 +258,15 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 						_logReport.AppendLine();
 
 						if (exported)
-						{
-							targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
-							targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
+						{							
 							targetFile.Date = WizardContext.DateTimeStamp;
 							targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
 							targetFile.Action = Enumerators.Action.Export;
 							targetFile.Status = Enumerators.Status.Success;
 							targetFile.Details = string.Empty;
 							targetFile.XliffFilePath = xliffFilePath;
+							targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
+							targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
 						}
 
 						var activityFile = new ProjectFileActivity

@@ -16,6 +16,15 @@ namespace Sdl.Community.XLIFF.Manager.Common
 			Import = 2
 		}
 
+		public enum Controller
+		{
+			None = 0,
+			XliffManager = 1,
+			Projects = 2,
+			Files = 3,
+			Editor = 4
+		}
+
 		public enum CountType
 		{
 			Segments,
@@ -101,7 +110,7 @@ namespace Sdl.Community.XLIFF.Manager.Common
 						if (translationOrigin.MatchPercent >= analysisBand.MinimumMatchValue &&
 							translationOrigin.MatchPercent <= analysisBand.MaximumMatchValue)
 						{
-							return MatchType.Fuzzy + string.Format(" {0} - {1}",
+							return string.Format("{0} {1} - {2}", MatchType.Fuzzy.ToString(),
 									   analysisBand.MinimumMatchValue + "%", analysisBand.MaximumMatchValue + "%");
 						}
 					}

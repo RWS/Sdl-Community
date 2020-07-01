@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
@@ -9,6 +10,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			WordCounts = new WordCounts();
 		}
 
+		[XmlElement]
 		public WordCounts WordCounts { get; set; }
 
 		public object Clone()

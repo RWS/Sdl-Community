@@ -1,5 +1,4 @@
 ﻿using System.Windows.Forms;
-using Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel;
 using Sdl.Community.XLIFF.Manager.Model.ProjectSettings;
 using Sdl.Desktop.IntegrationApi;
 

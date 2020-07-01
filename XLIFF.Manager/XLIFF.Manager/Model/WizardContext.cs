@@ -16,20 +16,21 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 			ExportOptions = new ExportOptions();
 			ImportOptions = new ImportOptions();
-			Reports = new List<TaskReport>();
+
+			Owner = Enumerators.Controller.None;
 		}
 
 		public List<FilterItem> ExcludeFilterItems { get; set; }
 
 		public Enumerators.Action Action { get; set; }
 
-		public List<TaskReport> Reports { get; set; }
-
 		public List<AnalysisBand> AnalysisBands { get; set; }
 
 		public bool Completed { get; set; }
 
 		public string Message { get; set; }
+
+		public Enumerators.Controller Owner { get; set; }
 
 		public Project Project { get; set; }
 
@@ -38,6 +39,8 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		public string TransactionFolder { get; set; }
 
 		public string WorkingFolder => Path.Combine(TransactionFolder, DateTimeStampToString);
+
+		public string RelativeWorkingFolder => WorkingFolder.Replace(Project.Path + '\\', string.Empty).Trim('\\');
 
 		public string LocalProjectFolder { get; set; }
 
