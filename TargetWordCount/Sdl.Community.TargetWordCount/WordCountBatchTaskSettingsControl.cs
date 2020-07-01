@@ -7,10 +7,11 @@ using System.Windows.Forms;
 using Sdl.Community.TargetWordCount.Models;
 using Sdl.Community.TargetWordCount.Utilities;
 using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.TargetWordCount
 {
-	public partial class WordCountBatchTaskSettingsControl : UserControl, ISettingsAware<WordCountBatchTaskSettings>
+	public partial class WordCountBatchTaskSettingsControl : UserControl, ISettingsAware<WordCountBatchTaskSettings>, IUISettingsControl
 	{
 		private readonly Dictionary<RateType, string> displayString = new Dictionary<RateType, string>()
 		{
