@@ -2,10 +2,11 @@
 using Sdl.Community.SDLBatchAnonymize.BatchTask;
 using Sdl.Community.SDLBatchAnonymize.ViewModel;
 using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.SDLBatchAnonymize.Control
 {
-	public partial class BatchAnonymizerHostControl : UserControl, ISettingsAware<BatchAnonymizerSettings>
+	public partial class BatchAnonymizerHostControl : UserControl, ISettingsAware<BatchAnonymizerSettings>, IUISettingsControl
 	{
 		public BatchAnonymizerHostControl()
 		{
