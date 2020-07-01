@@ -77,7 +77,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		/// <param name="source"></param>
 		/// <param name="target"></param>
 		[Theory]
-        [InlineData("1000", "1,000")]
+        [InlineData("1000", "2,000")]
         public void ValidateTarget_NoSeparatorIsChecked_Errors(string source, string target)
         {
 	        //target settings
@@ -132,13 +132,13 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		/// <summary>
 		/// Source sep: 'No separator' checked
 		/// Target sep: 'No separator' checked
-		/// Verification error: Number(s) modified/unlocalised.
+		/// Verification error: no errors should be returned.
 		/// </summary>
 		/// <param name="source"></param>
 		/// <param name="target"></param>
 		[Theory]
 		[InlineData("1,000", "1000")]
-		public void ValidateSource_NoSeparatorIsChecked_Errors(string source, string target)
+		public void ValidateSource_NoSeparatorIsChecked_NoErrors(string source, string target)
 		{
 			//target settings
 			var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.AllTypesOfSpacesChecked();
@@ -154,7 +154,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-			Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+			Assert.True(errorMessage.Count == 0);
 		}
 
 		/// <summary>
@@ -535,7 +535,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// <param name="source"></param>
         /// <param name="target"></param>
         [Theory]
-        [InlineData("1200", "1 200")]
+        [InlineData("1200", "1 201")]
         public void ValidateTargetSpace_NoSeparator_Errors(string source, string target)
         {
 	        //target settings

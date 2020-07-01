@@ -36,6 +36,7 @@ namespace Sdl.Community.NumberVerifier
 		private bool _omitLeadingZero;
 		private INumberVerifierSettings _verificationSettings;
 		private readonly TextFormatter _textFormatter;
+		private bool _isNoSeparator;
 
 		#endregion
 
@@ -848,27 +849,28 @@ namespace Sdl.Community.NumberVerifier
 
 						if (IsNumberDecimal(text, separatorModel))
 						{
-							// check if thousand is only decimal
+							_isNoSeparator = false; // the 'NoSeparator' option can be checked only for thousand or thousand-decimal numbers 
 							normalizedNumber.Separators = $"{normalizedNumber.DecimalSeparators}{_textFormatter.GetSeparators(separatorModel.DecimalCustomSeparators)}";
-							SetNormalizedNumber(normalizedNumber, text);
+							SetNormalizedNumber(normalizedNumber, string.Empty, text);
 						}
 						else if (IsNumberThousandDecimal(text, separatorModel))
 						{
-							// check if the number is both thousand and decimal
 							var separators = $"{normalizedNumber.ThousandSeparators}{normalizedNumber.DecimalSeparators}" +
 											 $"{_textFormatter.GetSeparators(separatorModel.DecimalCustomSeparators)}{_textFormatter.GetSeparators(separatorModel.ThousandCustomSeparators)}";
-							separatorModel.IsThousandDecimal = true;
-							separatorModel.CustomSeparators = $"{separatorModel.ThousandCustomSeparators}{separatorModel.DecimalCustomSeparators}";
-							text = _textFormatter.FormatText(separatorModel, normalizedNumber, text, separators, _isSource);
-							SetNormalizedNumber(normalizedNumber, text);
+
+							_isNoSeparator = VerificationSettings.SourceNoSeparator || VerificationSettings.TargetNoSeparator;
+							var customSeparators = $"{separatorModel.ThousandCustomSeparators}{separatorModel.DecimalCustomSeparators}";
+							SetSeparatorInformation(separatorModel, customSeparators, true);
+							normalizedNumber.Separators = separators;
+							SetNormalizedNumber(normalizedNumber, separatorModel.CustomSeparators, text);
 						}
 						else
 						{
 							// number is only thousand
-							separatorModel.IsThousandDecimal = false;
-							separatorModel.CustomSeparators = separatorModel.ThousandCustomSeparators;
-							text = _textFormatter.FormatText(separatorModel, normalizedNumber, text, normalizedNumber.ThousandSeparators, _isSource);
-							SetNormalizedNumber(normalizedNumber, text);
+							_isNoSeparator = VerificationSettings.SourceNoSeparator || VerificationSettings.TargetNoSeparator;
+							SetSeparatorInformation(separatorModel, separatorModel.ThousandCustomSeparators, false);
+							normalizedNumber.Separators = normalizedNumber.ThousandSeparators;
+							SetNormalizedNumber(normalizedNumber, separatorModel.CustomSeparators, text);
 						}
 					}
 				}
@@ -877,6 +879,12 @@ namespace Sdl.Community.NumberVerifier
 			{
 				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 			}
+		}
+
+		private void SetSeparatorInformation(SeparatorModel separatorModel, string customSeparators, bool isThousandDecimal)
+		{
+			separatorModel.IsThousandDecimal = isThousandDecimal;
+			separatorModel.CustomSeparators = customSeparators;
 		}
 
 		private bool IsNumberDecimal(string numberText, SeparatorModel separatorModel)
@@ -1242,27 +1250,37 @@ namespace Sdl.Community.NumberVerifier
 			return item.IndexOf(separator) > -1 ? item.Substring(item.IndexOf(separator), item.Length - item.IndexOf(separator)).Length - 1 : 0;
 		}
 
-		private void SetNormalizedNumber(NormalizedNumber normalizedNumber, string numberText)
+		private void SetNormalizedNumber(NormalizedNumber normalizedNumber, string customSeparators, string numberText)
 		{
 			numberText = _textFormatter.FormatTextDate(numberText);
 			numberText = _textFormatter.FormatDashText(numberText);
+			if (_isNoSeparator)
+			{
+				numberText = _textFormatter.FormatTextNoSeparator(customSeparators, numberText);
+				SetNormalizedNumber(normalizedNumber, numberText);
+				return;
+			}
 
 			var regExExpression = GetValidationRegEx(normalizedNumber.OmitLeadingZero, normalizedNumber.Separators);
-
 			foreach (Match match in Regex.Matches(numberText, regExExpression))
 			{
-				var normalizeNumberResult = NormalizeNumber(new SeparatorModel
-				{
-					MatchValue = match.Value,
-					ThousandSeparators = normalizedNumber.ThousandSeparators,
-					DecimalSeparators = normalizedNumber.DecimalSeparators,
-					NoSeparator = normalizedNumber.IsNoSeparator,
-					CustomSeparators = normalizedNumber.Separators
-				});
-
-				normalizedNumber.InitialNumberList.Add(match.Value.Trim());
-				normalizedNumber.NormalizedNumberList.Add(normalizeNumberResult.Trim());
+				SetNormalizedNumber(normalizedNumber, match.Value);
 			}
+		}
+
+		private void SetNormalizedNumber(NormalizedNumber normalizedNumber, string numberText)
+		{
+			var normalizeNumberResult = NormalizeNumber(new SeparatorModel
+			{
+				MatchValue = numberText,
+				ThousandSeparators = normalizedNumber.ThousandSeparators,
+				DecimalSeparators = normalizedNumber.DecimalSeparators,
+				NoSeparator = normalizedNumber.IsNoSeparator,
+				CustomSeparators = normalizedNumber.Separators
+			});
+
+			normalizedNumber.InitialNumberList.Add(numberText.Trim());
+			normalizedNumber.NormalizedNumberList.Add(normalizeNumberResult.Trim());
 		}
 
 		private string GetValidationRegEx(bool omitLeadingZero, string separators)

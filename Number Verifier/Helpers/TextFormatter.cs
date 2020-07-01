@@ -140,43 +140,36 @@ namespace Sdl.Community.NumberVerifier.Helpers
 
 			return separatorsBuilder.ToString();
 		}
-
-
-		// Format text for the thousand numbers (ex: 1,200) or for the combination of thousand-decimal numbers (ex: 1,200.31)
-		public string FormatText(SeparatorModel separatorModel, NormalizedNumber normalizedNumber, string text, string separators, bool isSource)
-		{
-			text = FormatTextForNoSeparator(text, isSource, separatorModel);
-			//text = FormatTextNoSeparator(separatorModel, isSource, separators, text);
-			normalizedNumber.Separators = separators;
-
-			return text;
-		}
-
-		// To Do: the below method should be updated in case the following scenario is true: when "No separator" is checked, no thousand
-		// separator should be taken into consideration and it should be removed or replaced: ex: 2,300/ 2.300/ 2 300/ etc 
-		// (waiting for Lyudmila response)
-		public string FormatTextNoSeparator(SeparatorModel separatorModel, bool isSource, string separators, string text)
+		
+		// Remove the corresponding thousand separator when "No separator" is checked and the number contains separator
+		public string FormatTextNoSeparator(string customSeparators, string text)
 		{
 			var verificationSettings = _numberVerifierMain.VerificationSettings;
-			if (isSource && verificationSettings.SourceNoSeparator ||
-				!isSource && verificationSettings.TargetNoSeparator)
+			if (verificationSettings.SourceNoSeparator || verificationSettings.TargetNoSeparator)
 			{
-				var allSeparators = $"-?\\u00A0\\u002C\\u002E\\u2009\\u202F\\u0020{separatorModel.CustomSeparators}*";
-				if (Regex.IsMatch(text, allSeparators))
+				var separators = $",.{' '}&nbsp{customSeparators}";
+				foreach (var letter in text)
 				{
-					text = GetReplacedText(text, separators);
+					if (separators.Contains(letter.ToString()))
+					{
+						// remove and return the text first time the separator was replaced (it means that the thousand separator was identified and replaced)
+						// the foreach shouldn't continue, because in case of a decimal separator, it should not be removed
+						var indexOfLetter = text.IndexOf(letter.ToString(), StringComparison.Ordinal);
+						text = text.Remove(indexOfLetter, 1).Insert(indexOfLetter, string.Empty);
+
+						return text;
+					}
 				}
 			}
 			return text;
 		}
 
-
-        public bool IsSpaceSeparator(string separators)
+		public bool IsSpaceSeparator(string separators)
 		{
 			return separators.Contains("u00A0") || separators.Contains("u2009") || separators.Contains("u0020") || separators.Contains("u202F");
 		}
 
-        // Get the formatted text after the thousand separator is removed
+		// Get the formatted text after the thousand separator is removed
 		private string GetFormattedText(SeparatorModel separatorModel, string text)
 		{
 			if (separatorModel.IsThousandDecimal && separatorModel.LengthCommaOrCustomSep > 3
