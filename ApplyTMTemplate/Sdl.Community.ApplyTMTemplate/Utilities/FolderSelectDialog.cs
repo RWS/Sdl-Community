@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Sdl.Community.AhkPlugin.Helpers
+namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
 	public class FolderSelectDialog
 	{
@@ -53,6 +53,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			ofd.CheckFileExists = false;
 			ofd.DereferenceLinks = true;
 			ofd.Multiselect = false;
+			ofd.RestoreDirectory = true;
 		}
 
 		public bool ShowDialog()

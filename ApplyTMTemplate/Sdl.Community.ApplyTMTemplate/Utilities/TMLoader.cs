@@ -7,7 +7,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
-	public class TMLoader
+	public class TmLoader
 	{
 		private bool IsValid(string file)
 		{
@@ -22,11 +22,11 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 			{
 				if (IsValid(file)) continue;
 
-				var fileBasedTm = new FileBasedTranslationMemory(file);
+				var fileBasedTm = new TranslationMemory(file);
 
 				if (tmCollection.All(tm => tm.Name != fileBasedTm.Name))
 				{
-					newTmsCollection.Add(new TranslationMemory(fileBasedTm));
+					newTmsCollection.Add(fileBasedTm);
 				}
 			}
 

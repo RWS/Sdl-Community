@@ -12,6 +12,9 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private string _path;
 		private ICommand _menuCommand;
 
+		//TODO: This class has to go; it is not at all part of any pattern;
+		//Unfortunately this class is not easy to give up, since it is the VM of TimedTextBox,
+		//which holds all the menu logic for the template
 		public TimedTextBox()
 		{
 			Timer.Tick += StartValidation;

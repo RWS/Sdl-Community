@@ -124,12 +124,6 @@
   <data name="Remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Remove.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Checked" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Checked.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Unchecked" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Unchecked.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ForumIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -297,5 +291,65 @@
   </data>
   <data name="WindowsControl_Minimize" xml:space="preserve">
     <value>Minimize</value>
+  </data>
+  <data name="ThousandsSeparatorCategory" xml:space="preserve">
+    <value>Thousands</value>
+  </data>
+  <data name="DecimalSeparatorCategory" xml:space="preserve">
+    <value>Decimal</value>
+  </data>
+  <data name="Measurements" xml:space="preserve">
+    <value>Measurements</value>
+  </data>
+  <data name="NumberSeparators" xml:space="preserve">
+    <value>Number separators</value>
+  </data>
+  <data name="LongTimes" xml:space="preserve">
+    <value>Long times</value>
+  </data>
+  <data name="LongDates" xml:space="preserve">
+    <value>Long dates</value>
+  </data>
+  <data name="SegmentationRules" xml:space="preserve">
+    <value>SegmentationRules</value>
+  </data>
+  <data name="Variables" xml:space="preserve">
+    <value>Variables</value>
+  </data>
+  <data name="OrdinalFollowers" xml:space="preserve">
+    <value>Ordinal followers</value>
+  </data>
+  <data name="Abbreviations" xml:space="preserve">
+    <value>Abbreviations</value>
+  </data>
+  <data name="Currencies" xml:space="preserve">
+    <value>Currencies</value>
+  </data>
+  <data name="Recognizers" xml:space="preserve">
+    <value>Recognizers</value>
+  </data>
+  <data name="WordCountFlags" xml:space="preserve">
+    <value>Word count flags</value>
+  </data>
+  <data name="ShortDates" xml:space="preserve">
+    <value>Short dates</value>
+  </data>
+  <data name="ShortTimes" xml:space="preserve">
+    <value>Short times</value>
+  </data>
+  <data name="GlobalSettings" xml:space="preserve">
+    <value>Global settings</value>
+  </data>
+  <data name="No_file_path_provided" xml:space="preserve">
+    <value>No file path provided</value>
+  </data>
+  <data name="No_resource_template_path_provided" xml:space="preserve">
+    <value>No resource template path provided</value>
+  </data>
+  <data name="Add_Folder" xml:space="preserve">
+    <value>Add Folder</value>
+  </data>
+  <data name="Nothing_processed_yet" xml:space="preserve">
+    <value>Nothing processed yet</value>
   </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Sdl.Community.ApplyTMTemplate.Models;
 using Sdl.Community.ApplyTMTemplate.Services;
 using Sdl.Community.ApplyTMTemplate.UI;
 using Sdl.Community.ApplyTMTemplate.Utilities;
@@ -7,9 +8,9 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.ApplyTMTemplate.TellMe
 {
-	public class ApplyTMTemplateAction : AbstractTellMeAction
+	public class ApplyTmTemplateAction : AbstractTellMeAction
 	{
-		public ApplyTMTemplateAction()
+		public ApplyTmTemplateAction()
 		{
 			Name = "Start Apply TM Template";
 		}
@@ -23,7 +24,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 		public override void Execute()
 		{
 			var timedTextBoxViewModel = new ViewModels.TimedTextBox();
-			var mainWindowViewModel = new MainWindowViewModel(new TemplateLoader(), new TMLoader(), new MessageService(), timedTextBoxViewModel);
+			var mainWindowViewModel = new MainWindowViewModel(new LanguageResourcesAdapter(), new ResourceManager(new ExcelResourceManager(), new MessageService()), new TmLoader(), new MessageService(), timedTextBoxViewModel, new FilePathDialogService());
 
 			var mainWindow = new MainWindow
 			{
@@ -31,7 +32,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 			};
 
 			System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(mainWindow);
-			mainWindow.Show();
+			mainWindow.ShowDialog();
 		}
 	}
 }
