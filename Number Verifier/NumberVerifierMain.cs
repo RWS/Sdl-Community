@@ -37,6 +37,7 @@ namespace Sdl.Community.NumberVerifier
 		private INumberVerifierSettings _verificationSettings;
 		private readonly TextFormatter _textFormatter;
 		private bool _isNoSeparator;
+		private bool _isThousandDecimal;
 
 		#endregion
 
@@ -921,7 +922,8 @@ namespace Sdl.Community.NumberVerifier
 			var isDigitChar = (!string.IsNullOrEmpty(decimalMatch) && decimalMatch.Length <= 3 || !string.IsNullOrEmpty(numberDigits) && Regex.IsMatch(numberDigits[0].ToString(), @"\s"))
 			                  && replacedText.Length <= 3
 			                  && textBeforeSeparator.Length <= 3; // text length before the separator should be <= 3 chars to correspond to decimal number standards
-				
+			_isThousandDecimal = textBeforeSeparator.Length > 3 && decimalMatch.Length <= 3; // used for the validation within IsNumberThousandDecimal()
+
 			// validate if the first decimal char is not number, then check
 			// if the same separator is found more than one time, it means the number is in thousand-decimal format
 			if (!string.IsNullOrEmpty(decimalMatch) && !Regex.IsMatch(decimalMatch[0].ToString(), "[0-9 ０-９]"))
@@ -931,9 +933,8 @@ namespace Sdl.Community.NumberVerifier
 			}
 
 			var isThousandFormat = !string.IsNullOrEmpty(textBeforeSeparator) && decimalMatch.Length >= 3;
-			
 			return (isDigitChar || numberText.Length <= 3 || !string.IsNullOrEmpty(textBeforeSeparator))
-				&& !isThousandFormat;
+			       && !isThousandFormat;
 		}
 
 		private bool IsNumberThousandDecimal(string numberText, SeparatorModel separatorModel)
@@ -942,7 +943,8 @@ namespace Sdl.Community.NumberVerifier
 				   || separatorModel.LengthCommaOrCustomSep >= 3 && separatorModel.LengthPeriodOrCustomSep <= 2 && separatorModel.LengthPeriodOrCustomSep > 0 // corresponds to thousands comma(or other thousands custom separator) AND decimal period(or other decimal custom separator)
 				   || Regex.Matches(numberText, ",").Count > 1 // corresponds to thousands and decimal COMMA (any other custom separator is not applied the SAME for thousand and decimal place)
 				   || Regex.Matches(numberText, @"\.").Count > 1
-				   || separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthCommaOrCustomSep > 0;
+				   || separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthCommaOrCustomSep > 0
+				   || _isThousandDecimal;
 		}
 
 		public string OmitZero(string number)

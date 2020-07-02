@@ -148,13 +148,20 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			if (verificationSettings.SourceNoSeparator || verificationSettings.TargetNoSeparator)
 			{
 				var separators = $",.{' '}&nbsp{customSeparators}";
+				
 				foreach (var letter in text)
 				{
 					if (separators.Contains(letter.ToString()))
 					{
+						var indexOfLetter = text.IndexOf(letter.ToString(), StringComparison.Ordinal);
+						var textLengtWithSep = text.Substring(indexOfLetter).Length - 1; // get length of text after separator to check if it's not corresponding to decimal
+						if (textLengtWithSep < 3) // if the text after separator is < 3 it means it's corresponding to decimal and the separator shouldn't be removed
+						{
+							continue;
+						}
+
 						// remove and return the text first time the separator was replaced (it means that the thousand separator was identified and replaced)
 						// the foreach shouldn't continue, because in case of a decimal separator, it should not be removed
-						var indexOfLetter = text.IndexOf(letter.ToString(), StringComparison.Ordinal);
 						text = text.Remove(indexOfLetter, 1).Insert(indexOfLetter, string.Empty);
 
 						return text;
