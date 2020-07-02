@@ -138,7 +138,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				{
 					projectFile.Status = Enumerators.Status.Ready;
 					projectFile.ShortMessage = string.Empty;
-					projectFile.Details = string.Empty;
+					projectFile.Report = string.Empty;
 				}
 
 				projectFile.XliffFilePath = string.Empty;

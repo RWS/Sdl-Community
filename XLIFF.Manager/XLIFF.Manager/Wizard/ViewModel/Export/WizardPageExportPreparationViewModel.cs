@@ -230,7 +230,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 				var project = WizardContext.ProjectFiles[0].Project;
 				var filterItems = WizardContext.ExcludeFilterItems.Select(a => a.Id).ToList();
-				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, filterItems, WizardContext.ExportOptions);
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, filterItems, 
+					WizardContext.ExportOptions, WizardContext.AnalysisBands);
 				var xliffWriter = new XliffWriter(WizardContext.ExportOptions.XliffSupport);
 
 				var selectedLanguages = GetSelectedLanguages();
@@ -250,20 +251,22 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetFile.Location));
 						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, xliffFilePath));
 
-						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location);
+						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location);												
 						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.ExportOptions.IncludeTranslations);
 						
 						_logReport.AppendLine(string.Format(PluginResources.Label_Success, exported));
 						_logReport.AppendLine();
 
 						if (exported)
-						{
+						{							
 							targetFile.Date = WizardContext.DateTimeStamp;
 							targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
 							targetFile.Action = Enumerators.Action.Export;
 							targetFile.Status = Enumerators.Status.Success;
-							targetFile.Details = string.Empty;
+							targetFile.Report = string.Empty;
 							targetFile.XliffFilePath = xliffFilePath;
+							targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
+							targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
 						}
 
 						var activityFile = new ProjectFileActivity
@@ -275,9 +278,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 							Date = targetFile.Date,
 							Name = Path.GetFileName(targetFile.XliffFilePath),
 							Path = Path.GetDirectoryName(targetFile.XliffFilePath),
-							Details = string.Empty,
-							ProjectFile = targetFile
-						};
+							Report = string.Empty,
+							ProjectFile = targetFile,
+							ConfirmationStatistics = targetFile.ConfirmationStatistics,
+							TranslationOriginStatistics = targetFile.TranslationOriginStatistics
+					};
 
 						targetFile.ProjectFileActivities.Add(activityFile);
 					}

@@ -183,7 +183,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				{
 					projectFile.Status = Enumerators.Status.Ready;
 					projectFile.ShortMessage = string.Empty;
-					projectFile.Details = string.Empty;
+					projectFile.Report = string.Empty;
 				}
 			}
 		}

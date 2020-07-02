@@ -230,6 +230,9 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 					}
 				}
 
+				// TODO: remove reports
+
+
 				Projects = Projects.Where(a => a.Id != SelectedProject.Id).ToList();			
 			}
 		}

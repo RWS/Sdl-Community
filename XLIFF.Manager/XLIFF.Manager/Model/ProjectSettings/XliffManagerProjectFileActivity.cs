@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 using Sdl.Community.XLIFF.Manager.Common;
 
 namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
@@ -25,7 +26,13 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 
 		public string Date { get; set; }
 
-		public string Details { get; set; }
+		public string Report { get; set; }
+
+		[XmlElement]
+		public ConfirmationStatistics ConfirmationStatistics { get; set; }
+
+		[XmlElement]
+		public TranslationOriginStatistics TranslationOriginStatistics { get; set; }
 
 		private static string FormatDateTime(DateTime dateTime)
 		{

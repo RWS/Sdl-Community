@@ -46,6 +46,12 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Sdl.Community.Toolkit.Core, Version=1.9.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.Core.Studio2019.1.9.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=1.9.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.Studio2019.1.9.1\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
@@ -136,7 +142,24 @@
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="BatchTasks\ExportBatchTask.cs" />
-    <Compile Include="BatchTasks\ExportSettings.cs" />
+    <Compile Include="BatchTasks\ImportBatchTask.cs" />
+    <Compile Include="BatchTasks\ImportSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BatchTasks\ImportSettingsControl.Designer.cs">
+      <DependentUpon>ImportSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BatchTasks\ImportSettingsPage.cs" />
+    <Compile Include="Controls\BindingWebBrowserSource.cs" />
+    <Compile Include="Controls\WebBrowserHelper.cs" />
+    <Compile Include="Converters\TextEmptyToVisibilityConverter.cs" />
+    <Compile Include="Model\AnalysisBand.cs" />
+    <Compile Include="Model\TranslationOriginStatistics.cs" />
+    <Compile Include="Model\ConfirmationStatistics.cs" />
+    <Compile Include="Model\WordCount.cs" />
+    <Compile Include="Model\LanguageDirectionInfo.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerImportSettings.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerExportSettings.cs" />
     <Compile Include="BatchTasks\ExportSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -251,6 +274,13 @@
     <Compile Include="Model\ProjectSettings\XliffManagerProject.cs" />
     <Compile Include="Model\ProjectSettings\XliffManagerProjectFile.cs" />
     <Compile Include="Model\ProjectSettings\XliffManagerProjectFileActivity.cs" />
+    <Compile Include="Model\WordCounts.cs" />
+    <Compile Include="Model\TaskReport.cs" />
+    <Compile Include="Model\Tasks\AutomaticTask.cs" />
+    <Compile Include="Model\Tasks\OutputFile.cs" />
+    <Compile Include="Model\Tasks\Report.cs" />
+    <Compile Include="Model\Tasks\TaskFile.cs" />
+    <Compile Include="Model\Tasks\TemplateId.cs" />
     <Compile Include="Model\WizardContext.cs" />
     <Compile Include="Model\WizardException.cs" />
     <Compile Include="Model\XLIFFSupport.cs" />
@@ -265,7 +295,9 @@
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\FilterService.cs" />
     <Compile Include="Service\ImageService.cs" />
+    <Compile Include="Service\ProjectSettingsService.cs" />
     <Compile Include="Service\WizardService.cs" />
+    <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="Wizard\ViewModel\ExceptionViewerViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportFilesViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportOptionsViewModel.cs" />
@@ -303,6 +335,9 @@
     </Compile>
     <Compile Include="Wizard\View\ExceptionViewerView.xaml.cs">
       <DependentUpon>ExceptionViewerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ReportWindow.xaml.cs">
+      <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wizard\View\WizardWindow.xaml.cs">
       <DependentUpon>WizardWindow.xaml</DependentUpon>
@@ -472,6 +507,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\ReportWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Wizard\View\WizardWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -480,6 +519,9 @@
   <ItemGroup>
     <EmbeddedResource Include="BatchTasks\ExportSettingsControl.resx">
       <DependentUpon>ExportSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BatchTasks\ImportSettingsControl.resx">
+      <DependentUpon>ImportSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProjectFileActivityViewControl.resx">
       <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
@@ -497,6 +539,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BatchTasks\Report.xsl" />
+    <None Include="BatchTasks\Report.xsl.bak" />
+    <Content Include="Controls\ReportDefault.html" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>

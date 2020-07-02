@@ -12,14 +12,22 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly List<string> _excludeFilterItems;
 		private readonly ExportOptions _exportOptions;
+		private readonly List<AnalysisBand> _analysisBands;
 		private readonly IMultiFileConverter _multiFileConverter;
 
-		public SdlxliffReader(SegmentBuilder segmentBuilder, List<string> excludeFilterItems, ExportOptions exportOptions)
+		public SdlxliffReader(SegmentBuilder segmentBuilder, List<string> excludeFilterItems, 
+			ExportOptions exportOptions, List<AnalysisBand> analysisBands)
 		{
 			_segmentBuilder = segmentBuilder;
 			_excludeFilterItems = excludeFilterItems;
 			_exportOptions = exportOptions;
+			_analysisBands = analysisBands;
+			ConfirmationStatistics = new ConfirmationStatistics();
 		}
+
+		public ConfirmationStatistics ConfirmationStatistics { get; private set; }
+
+		public TranslationOriginStatistics TranslationOriginStatistics { get; private set; }
 
 		public CultureInfo SourceLanguage { get; private set; }
 
@@ -30,13 +38,18 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, null, null);
 
-			var contentReader = new ContentReader(projectId, filePath, false, _segmentBuilder, _excludeFilterItems, _exportOptions);		
+			var contentReader = new ContentReader(projectId, filePath, false, _segmentBuilder, 
+				_excludeFilterItems, _exportOptions, _analysisBands);		
 			converter.AddBilingualProcessor(contentReader);
 			
 			SourceLanguage = contentReader.SourceLanguage;
 			TargetLanguage = contentReader.TargetLanguage;			
 
 			converter.Parse();
+
+			ConfirmationStatistics = contentReader.ConfirmationStatistics;
+			TranslationOriginStatistics = contentReader.TranslationOriginStatistics;
+
 			return contentReader.Xliff;
 		}
 	}

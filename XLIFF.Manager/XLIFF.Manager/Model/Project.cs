@@ -18,7 +18,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string Name { get; set; }
 
-		public string Path { get; set; }
+		public string Path { get; set; }	
 
 		public Customer Customer
 		{
