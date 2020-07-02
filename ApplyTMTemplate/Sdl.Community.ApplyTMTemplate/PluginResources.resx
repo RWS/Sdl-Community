@@ -352,4 +352,10 @@
   <data name="Nothing_processed_yet" xml:space="preserve">
     <value>Nothing processed yet</value>
   </data>
+  <data name="Template_loading_error" xml:space="preserve">
+	  <value>Template loading error</value>
+  </data>
+  <data name="Please_specify_a_correct_template_path" xml:space="preserve">
+	  <value>Please specify a correct template path</value>
+  </data>
 </root>

@@ -496,6 +496,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please specify a correct template path.
+        /// </summary>
+        public static string Please_specify_a_correct_template_path {
+            get {
+                return ResourceManager.GetString("Please_specify_a_correct_template_path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Question {
@@ -666,6 +675,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string Template_has_no_resources {
             get {
                 return ResourceManager.GetString("Template_has_no_resources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template loading error.
+        /// </summary>
+        public static string Template_loading_error {
+            get {
+                return ResourceManager.GetString("Template_loading_error", resourceCulture);
             }
         }
         

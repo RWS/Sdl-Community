@@ -173,7 +173,15 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				return false;
 			}
 
-			_languageResourcesAdapter.Load(ResourceTemplatePath);
+			try
+			{
+				_languageResourcesAdapter.Load(ResourceTemplatePath);
+			}
+			catch (Exception e)
+			{
+				_messageService.ShowWarningMessage(PluginResources.Template_loading_error, PluginResources.Please_specify_a_correct_template_path);
+				return false;
+			}
 
 			return true;
 		}
