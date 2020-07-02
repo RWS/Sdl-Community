@@ -591,15 +591,15 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         }
 
 
-        /// <summary>
-        /// Validate big number containing thousand and decimals
-        /// No validation error should be returned
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
-        [Theory]
-        [InlineData("234,463.345", "234,463,345")]
-        public void ValidateThousandDecimalsNumbers_NoErrors(string source, string target)
+		/// <summary>
+		/// Validate big number containing thousand with comma and period separators
+		/// No validation error should be returned
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
+        [InlineData("234,463.345", "234,463.345")]
+        public void ValidateThousandNumbers_NoErrors(string source, string target)
         {
 	        //target settings
 	        var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
@@ -620,6 +620,37 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
 	        Assert.True(errorMessage.Count == 0);
+        }
+
+        /// <summary>
+        /// Validate big number containing thousand with comma and period separators
+        /// Validation errors should be reported
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        [Theory]
+        [InlineData("234,463.345", "234,463,345")]
+        public void ValidateThousandNumbers_WithErrors(string source, string target)
+        {
+	        //target settings
+	        var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+	        numberVerifierSettings.Setup(t => t.TargetThousandsComma).Returns(true);
+	        numberVerifierSettings.Setup(t => t.TargetDecimalComma).Returns(false);
+
+	        // source settings
+	        numberVerifierSettings.Setup(s => s.SourceThousandsComma).Returns(true);
+	        numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
+
+	        NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        //run initialize method in order to set chosen separators
+	        var docPropMock = new Mock<IDocumentProperties>();
+	        numberVerifierMain.Initialize(docPropMock.Object);
+
+	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+	        Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
         }
 		#endregion
 	}

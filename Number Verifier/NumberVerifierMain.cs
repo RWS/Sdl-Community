@@ -943,7 +943,8 @@ namespace Sdl.Community.NumberVerifier
 				   || separatorModel.LengthCommaOrCustomSep >= 3 && separatorModel.LengthPeriodOrCustomSep <= 2 && separatorModel.LengthPeriodOrCustomSep > 0 // corresponds to thousands comma(or other thousands custom separator) AND decimal period(or other decimal custom separator)
 				   || Regex.Matches(numberText, ",").Count > 1 // corresponds to thousands and decimal COMMA (any other custom separator is not applied the SAME for thousand and decimal place)
 				   || Regex.Matches(numberText, @"\.").Count > 1
-				   || separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthCommaOrCustomSep > 0
+				   || separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthCommaOrCustomSep > 0 && separatorModel.LengthPeriodOrCustomSep < 3 // the thousand sep is > 0 digits and decimal  < 3 digits
+				   || separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthCommaOrCustomSep > 0 && separatorModel.LengthCommaOrCustomSep < 3 // the thousand sep is > 0 digits and decimal  < 3
 				   || _isThousandDecimal;
 		}
 
