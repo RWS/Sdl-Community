@@ -26,7 +26,7 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 
 		public string Date { get; set; }
 
-		public string Details { get; set; }
+		public string Report { get; set; }
 
 		[XmlElement]
 		public ConfirmationStatistics ConfirmationStatistics { get; set; }

@@ -119,7 +119,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 						targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
 						targetFile.Action = Enumerators.Action.Export;
 						targetFile.Status = Enumerators.Status.Success;
-						targetFile.Details = string.Empty;
+						targetFile.Report = string.Empty;
 						targetFile.XliffFilePath = xliffFilePath;
 						targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
 						targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
@@ -135,7 +135,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 						Date = targetFile.Date,
 						Name = Path.GetFileName(targetFile.XliffFilePath),
 						Path = Path.GetDirectoryName(targetFile.XliffFilePath),
-						Details = string.Empty,
+						Report = string.Empty,
 						ConfirmationStatistics = targetFile.ConfirmationStatistics,
 						TranslationOriginStatistics = targetFile.TranslationOriginStatistics
 					};

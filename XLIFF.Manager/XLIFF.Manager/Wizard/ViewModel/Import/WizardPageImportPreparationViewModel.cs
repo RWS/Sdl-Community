@@ -294,7 +294,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 							targetLanguageFile.Date = WizardContext.DateTimeStamp;
 							targetLanguageFile.Action = Enumerators.Action.Import;
 							targetLanguageFile.Status = Enumerators.Status.Success;
-							targetLanguageFile.Details = string.Empty;
+							targetLanguageFile.Report = string.Empty;
 							targetLanguageFile.XliffFilePath = xliffArchiveFile;
 						}
 
@@ -307,7 +307,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 							Date = targetLanguageFile.Date,
 							Name = Path.GetFileName(targetLanguageFile.XliffFilePath),
 							Path = Path.GetDirectoryName(targetLanguageFile.XliffFilePath),
-							Details = string.Empty,
+							Report = string.Empty,
 							ProjectFile = targetLanguageFile
 						};
 

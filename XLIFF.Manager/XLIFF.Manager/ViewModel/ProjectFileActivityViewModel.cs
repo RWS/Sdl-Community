@@ -81,12 +81,12 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 		private void ViewReport(object parameter)
 		{
-			if (SelectedProjectFileActivity == null || string.IsNullOrEmpty(SelectedProjectFileActivity.Details))
+			if (SelectedProjectFileActivity == null || string.IsNullOrEmpty(SelectedProjectFileActivity.Report))
 			{
 				return;
 			}
 
-			System.Diagnostics.Process.Start(SelectedProjectFileActivity.Details);
+			System.Diagnostics.Process.Start(SelectedProjectFileActivity.Report);
 		}
 
 		public void Dispose()

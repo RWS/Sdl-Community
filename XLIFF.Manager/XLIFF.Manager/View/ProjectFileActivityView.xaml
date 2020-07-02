@@ -8,6 +8,7 @@
              xmlns:controls="clr-namespace:Sdl.Community.XLIFF.Manager.Controls"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:model="clr-namespace:Sdl.Community.XLIFF.Manager.Model"
+             xmlns:converters="clr-namespace:Sdl.Community.XLIFF.Manager.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:ProjectFileActivityViewModel}">
 
@@ -22,7 +23,9 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
-			
+
+			<converters:TextEmptyToVisibilityConverter x:Key="TextEmptyToVisibilityConverter"/>
+
 			<CollectionViewSource x:Key="ProjectFileActivities" Source="{Binding ProjectFileActivities}">
 				<CollectionViewSource.SortDescriptions>
 					<componentModel:SortDescription PropertyName="Name"/>
@@ -121,8 +124,8 @@
 
 				<DataGridTemplateColumn Header="Report" CanUserSort="False" Width="1*" >
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<TextBlock>
+						<DataTemplate DataType="model:ProjectFileActivity">
+							<TextBlock Visibility="{Binding Path=Report, Converter={StaticResource TextEmptyToVisibilityConverter}}">
 								<Hyperlink IsEnabled="True" Command="{Binding Path=DataContext.ViewReportCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
 								           CommandParameter="{Binding}">
 									<TextBlock Text="View Report" />

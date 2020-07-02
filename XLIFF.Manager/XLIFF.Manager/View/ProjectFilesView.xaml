@@ -27,6 +27,7 @@
 
 			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>
 			<converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter"/>
+			<converters:TextEmptyToVisibilityConverter x:Key="TextEmptyToVisibilityConverter"/>
 
 			<Style TargetType="{x:Type UserControl}">
 				<Setter Property="FontFamily" Value="Segoe UI" />
@@ -151,11 +152,11 @@
 				</DataGridTemplateColumn>
 				<DataGridTemplateColumn Header="Report" CanUserSort="False" Width="1*" >
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<TextBlock>
-								<Hyperlink IsEnabled="True" Command="{Binding Path=DataContext.ViewReportCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+						<DataTemplate DataType="model:ProjectFile">
+							<TextBlock Visibility="{Binding Path=Report, Converter={StaticResource TextEmptyToVisibilityConverter}}">
+								<Hyperlink IsEnabled="True"  Command="{Binding Path=DataContext.ViewReportCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
 								           CommandParameter="{Binding}">
-									<TextBlock Text="View Report" />
+									<TextBlock Text="View Report"  />
 								</Hyperlink>
 							</TextBlock>
 						</DataTemplate>

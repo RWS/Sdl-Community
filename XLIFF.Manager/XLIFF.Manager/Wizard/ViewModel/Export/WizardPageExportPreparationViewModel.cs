@@ -263,7 +263,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 							targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
 							targetFile.Action = Enumerators.Action.Export;
 							targetFile.Status = Enumerators.Status.Success;
-							targetFile.Details = string.Empty;
+							targetFile.Report = string.Empty;
 							targetFile.XliffFilePath = xliffFilePath;
 							targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
 							targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
@@ -278,7 +278,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 							Date = targetFile.Date,
 							Name = Path.GetFileName(targetFile.XliffFilePath),
 							Path = Path.GetDirectoryName(targetFile.XliffFilePath),
-							Details = string.Empty,
+							Report = string.Empty,
 							ProjectFile = targetFile,
 							ConfirmationStatistics = targetFile.ConfirmationStatistics,
 							TranslationOriginStatistics = targetFile.TranslationOriginStatistics

@@ -626,7 +626,7 @@
 							Total
 						</th>
 						<th class="TypeHead">
-							Confirmation Level
+							Type
 						</th>
 						<th class="Unit">
 							Segments
@@ -660,7 +660,7 @@
 							File
 						</th>
 						<th class="TypeHead">
-							Confirmation Level
+							Type
 						</th>
 						<th class="Unit">
 							Segments
@@ -694,9 +694,9 @@
 					<xsl:value-of select="@name"/>
 				</th>
 				<th class="Header">
-					Not Translated
+					Perfect Match
 				</th>
-				<xsl:apply-templates select="confirmation/processed/unspecified"/>
+				<xsl:apply-templates select="analysis/processed/perfect"/>
 			</tr>
 		</xsl:if>
 		<xsl:if test="local-name() = 'batchTotal'">
@@ -706,9 +706,9 @@
 					<xsl:value-of select="count(parent::node()/file)"/>
 				</th>
 				<th class="Header">
-					Not Translated
+					Perfect Match
 				</th>
-				<xsl:apply-templates select="confirmation/processed/unspecified"/>
+				<xsl:apply-templates select="analysis/processed/perfect"/>
 			</tr>
 		</xsl:if>
 
@@ -718,46 +718,66 @@
 	<xsl:template name="normalLayout">
 
 		<tr>
-			<th class="CharPerWord" rowspan="7" align="left" valign="top">
+			<th class="CharPerWord" rowspan="{count(analysis/processed/fuzzy) + 8}" align="left" valign="top">
 				<xsl:text>&#160;</xsl:text>
 			</th>
 			<th class="Header">
-				Draft
+				Context Match
 			</th>
-			<xsl:apply-templates select="confirmation/processed/draft"/>
+			<xsl:apply-templates select="analysis/processed/context"/>
 		</tr>
 
 		<tr>
 			<th class="Header">
-				Translated
+				Repetitions
 			</th>
-			<xsl:apply-templates select="confirmation/processed/translated"/>
+			<xsl:apply-templates select="analysis/processed/repetition"/>
 		</tr>
 
 		<tr>
 			<th class="Header">
-				Translation Rejected
+				100%
 			</th>
-			<xsl:apply-templates select="confirmation/processed/rejectedTranslation"/>
+			<xsl:apply-templates select="analysis/processed/exact"/>
+		</tr>
+
+		<xsl:for-each select="analysis/processed/fuzzy">
+			<xsl:sort select="@max" order="descending"/>
+			<tr>
+				<th class="Header">
+					<xsl:value-of select="@min" />
+					<xsl:text>% - </xsl:text>
+					<xsl:value-of select="@max" />
+					<xsl:text>%</xsl:text>
+				</th>
+				<xsl:call-template name="counts"/>
+			</tr>
+		</xsl:for-each>
+
+		<tr>
+			<th class="Header">
+				New
+			</th>
+			<xsl:apply-templates select="analysis/processed/new"/>
 		</tr>
 		<tr>
 			<th class="Header">
-				Translation Approved
+				Neural MT
 			</th>
-			<xsl:apply-templates select="confirmation/processed/approvedTranslation"/>
+			<xsl:apply-templates select="analysis/processed/nmt"/>
 		</tr>
 		<tr>
 			<th class="Header">
-				Sign-off Rejected
+				Adaptive MT
 			</th>
-			<xsl:apply-templates select="confirmation/processed/rejectedSignOff"/>
+			<xsl:apply-templates select="analysis/processed/amt"/>
 		</tr>
 		<tr>
 			<th class="Header">
-				Signed Off
+				MT
 			</th>
-			<xsl:apply-templates select="confirmation/processed/approvedSignOff"/>
-		</tr>		
+			<xsl:apply-templates select="analysis/processed/mt"/>
+		</tr>
 		<xsl:call-template name="totalCounts" />
 	</xsl:template>
 
@@ -767,29 +787,29 @@
 				Total
 			</th>
 			<td class="Total">
-				<xsl:value-of select="confirmation/processed/total/@segments"/>
+				<xsl:value-of select="analysis/processed/total/@segments"/>
 			</td>
 
 			<td class="Total">
-				<xsl:value-of select="confirmation/processed/total/@words"/>
+				<xsl:value-of select="analysis/processed/total/@words"/>
 			</td>
 
 			<td class="Total">
-				<xsl:value-of select="confirmation/processed/total/@characters"/>
+				<xsl:value-of select="analysis/processed/total/@characters"/>
 			</td>
 			<td class="Total">
 				100%
 			</td>
 			<td class="Total">
-				<xsl:value-of select="confirmation/processed/total/@placeables"/>
+				<xsl:value-of select="analysis/processed/total/@placeables"/>
 			</td>
 			<td class="Total">
-				<xsl:value-of select="confirmation/processed/total/@tags"/>
+				<xsl:value-of select="analysis/processed/total/@tags"/>
 			</td>
 		</tr>
 	</xsl:template>
 
-	<xsl:template name="counts" match="unspecified | draft | translated | rejectedTranslation | approvedTranslation | rejectedSignOff | approvedSignOff">
+	<xsl:template name="counts" match="perfect | context | repetition | exact | new | nmt | amt | mt | total | fuzzy">
 		<xsl:param name="className"/>
 
 		<td class="WithLineAbove">

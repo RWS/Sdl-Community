@@ -52,7 +52,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			}
 		}
 
-		public string Details { get; set; }		
+		public string Report { get; set; }		
 
 		public void Dispose()
 		{
@@ -70,7 +70,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Date = new DateTime(Date.Year, Date.Month, Date.Day, Date.Hour,
 					Date.Minute, Date.Second, Date.Millisecond, Date.Kind),
 				Path = Path,
-				Details = Details,
+				Report = Report,
 				Selected = Selected
 			};
 

@@ -168,9 +168,7 @@ namespace Sdl.Community.XLIFF.Manager
 			{
 				_projectsNavigationViewModel.Projects = new List<Project>();
 				_projectsNavigationViewModel.Projects = _xliffProjects;
-			}
-
-			UpdateProjectSettingsBundle(project);
+			}			
 
 			var selectedProject = _projectsController.GetProjects()
 				.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == wizardContext.Project.Id);
@@ -182,6 +180,8 @@ namespace Sdl.Community.XLIFF.Manager
 			var automaticTask = CreateAutomaticTask(wizardContext, selectedProject);
 			CreateHtmlReport(wizardContext, selectedProject, automaticTask);
 			UpdateProjectReports(wizardContext, selectedProject, automaticTask);
+
+			UpdateProjectSettingsBundle(project);
 		}
 
 		private void CreateHtmlReport(WizardContext wizardContext, FileBasedProject selectedProject, AutomaticTask automaticTask)
@@ -208,12 +208,12 @@ namespace Sdl.Community.XLIFF.Manager
 					var projectFile = project?.ProjectFiles.FirstOrDefault(a => a.FileId == wcProjectFile.FileId);
 					if (projectFile != null)
 					{
-						projectFile.Details = htmlReportFilePath;
+						projectFile.Report = htmlReportFilePath;
 
 						var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault();
 						if (activityfile != null)
 						{
-							activityfile.Details = htmlReportFilePath;
+							activityfile.Report = htmlReportFilePath;
 						}
 					}
 				}
@@ -822,7 +822,7 @@ namespace Sdl.Community.XLIFF.Manager
 							Path = fileActivity.Path,
 							Name = fileActivity.Name,
 							Date = GetDateToString(fileActivity.Date),
-							Details = fileActivity.Details,
+							Report = fileActivity.Report,
 							ConfirmationStatistics = fileActivity.ConfirmationStatistics,
 							TranslationOriginStatistics = fileActivity.TranslationOriginStatistics
 						};
@@ -843,7 +843,7 @@ namespace Sdl.Community.XLIFF.Manager
 						FileType = projectFile.FileType,
 						XliffFilePath = projectFile.XliffFilePath,
 						TargetLanguage = projectFile.TargetLanguage,
-						Details = projectFile.Details,
+						Report = projectFile.Report,
 						ShortMessage = projectFile.ShortMessage,
 						ConfirmationStatistics = projectFile.ConfirmationStatistics,
 						TranslationOriginStatistics = projectFile.TranslationOriginStatistics
@@ -903,7 +903,7 @@ namespace Sdl.Community.XLIFF.Manager
 								Action = GetAction(projectFile.Action),
 								Status = GetStatus(projectFile.Status),
 								Date = GetDateTime(projectFile.Date),
-								Details = projectFile.Details,
+								Report = projectFile.Report,
 								FileId = projectFile.FileId,
 								FileType = projectFile.FileType,
 								Location = projectFile.Location,
@@ -927,7 +927,7 @@ namespace Sdl.Community.XLIFF.Manager
 									Status = GetStatus(fileActivity.Status),
 									ActivityId = fileActivity.ActivityId,
 									Date = GetDateTime(fileActivity.Date),
-									Details = fileActivity.Details,
+									Report = fileActivity.Report,
 									Name = fileActivity.Name,
 									ProjectFileId = fileActivity.ProjectFileId,
 									ConfirmationStatistics = fileActivity.ConfirmationStatistics,

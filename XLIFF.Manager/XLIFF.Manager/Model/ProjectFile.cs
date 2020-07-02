@@ -133,7 +133,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		public string ShortMessage { get; set; }
 
-		public string Details { get; set; }
+		public string Report { get; set; }
 
 		public void Dispose()
 		{
@@ -155,7 +155,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Selected = Selected,
 				TargetLanguage = TargetLanguage,
 				XliffFilePath = XliffFilePath ,
-				Details = Details,
+				Report = Report,
 				FileType = FileType
 			};
 

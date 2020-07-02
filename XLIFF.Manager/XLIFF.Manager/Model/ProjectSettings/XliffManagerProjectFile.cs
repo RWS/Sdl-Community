@@ -41,7 +41,7 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 
 		public string Date { get; set; }
 
-		public string Details { get; set; }
+		public string Report { get; set; }
 
 		public string XliffFilePath { get; set; }
 

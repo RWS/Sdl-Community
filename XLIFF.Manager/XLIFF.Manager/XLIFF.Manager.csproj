@@ -150,6 +150,9 @@
       <DependentUpon>ImportSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="BatchTasks\ImportSettingsPage.cs" />
+    <Compile Include="Controls\BindingWebBrowserSource.cs" />
+    <Compile Include="Controls\WebBrowserHelper.cs" />
+    <Compile Include="Converters\TextEmptyToVisibilityConverter.cs" />
     <Compile Include="Model\AnalysisBand.cs" />
     <Compile Include="Model\TranslationOriginStatistics.cs" />
     <Compile Include="Model\ConfirmationStatistics.cs" />
@@ -294,6 +297,7 @@
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\ProjectSettingsService.cs" />
     <Compile Include="Service\WizardService.cs" />
+    <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="Wizard\ViewModel\ExceptionViewerViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportFilesViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportOptionsViewModel.cs" />
@@ -331,6 +335,9 @@
     </Compile>
     <Compile Include="Wizard\View\ExceptionViewerView.xaml.cs">
       <DependentUpon>ExceptionViewerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ReportWindow.xaml.cs">
+      <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wizard\View\WizardWindow.xaml.cs">
       <DependentUpon>WizardWindow.xaml</DependentUpon>
@@ -500,6 +507,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\ReportWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Wizard\View\WizardWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -529,6 +540,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BatchTasks\Report.xsl" />
+    <None Include="BatchTasks\Report.xsl.bak" />
+    <Content Include="Controls\ReportDefault.html" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
