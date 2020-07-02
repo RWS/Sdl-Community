@@ -1258,7 +1258,7 @@ namespace Sdl.Community.NumberVerifier
 			numberText = _textFormatter.FormatDashText(numberText);
 			if (_isNoSeparator)
 			{
-				numberText = _textFormatter.FormatTextNoSeparator(customSeparators, numberText);
+				numberText = _textFormatter.FormatTextNoSeparator(customSeparators, numberText, normalizedNumber.Separators, _isSource);
 				SetNormalizedNumber(normalizedNumber, numberText);
 				return;
 			}

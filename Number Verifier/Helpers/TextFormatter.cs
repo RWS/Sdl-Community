@@ -16,36 +16,6 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			_numberVerifierMain = numberVerifierMain;
 		}
 
-		// Format text so the comma/period will be removed from the text when the TargetNoSeparator or SourceNoSeparator is enabled,
-		// so the number can be validated entirely and it won't be split based on the , or .
-		// E.g: source text: 1,300 with option 'Comma separator' and target text: 1300 with option 'No separator'
-		public string FormatTextForNoSeparator(string text, bool isSource, SeparatorModel separatorModel)
-		{
-			// Replace separator when for both source AND target, the 'NoSeparator' option is enabled
-			// AND user enables also one of the option: SourceThousandsComma/SourceThousandsPeriod when the text is source and
-			// TargetThousandsComma/TargetThousandsPeriod when the text is target
-			var verificationSettings = _numberVerifierMain.VerificationSettings;
-			if (isSource && verificationSettings.SourceNoSeparator && verificationSettings.TargetNoSeparator
-			    && (verificationSettings.SourceThousandsComma || verificationSettings.SourceThousandsPeriod)
-			    || !isSource && verificationSettings.TargetNoSeparator && verificationSettings.SourceNoSeparator
-			    && (verificationSettings.TargetThousandsComma || verificationSettings.TargetThousandsPeriod))
-			{
-				text = GetFormattedText(separatorModel, text);
-				return text;
-			}
-			// When for both source AND target settings, only the 'No separator' is checked, do not format the text
-			if (verificationSettings.TargetNoSeparator && verificationSettings.SourceNoSeparator)
-			{
-				return text;
-			}
-			// When text is source and the verification is for Target 'NoSeparator' OR the text is target and the verification is for Source 'NoSeparator', then format the text
-			if (isSource && verificationSettings.TargetNoSeparator || !isSource && verificationSettings.SourceNoSeparator)
-			{
-				text = GetFormattedText(separatorModel, text);
-			}
-			return text;
-		}
-
 		public StringBuilder GetBuilderSeparators(string separators)
 		{
 			var separatorsBuilder = new StringBuilder();
@@ -142,30 +112,49 @@ namespace Sdl.Community.NumberVerifier.Helpers
 		}
 		
 		// Remove the corresponding thousand separator when "No separator" is checked and the number contains separator
-		public string FormatTextNoSeparator(string customSeparators, string text)
-		{
+		public string FormatTextNoSeparator(string customSeparators, string text, string separators, bool isSource)
+		{ 
 			var verificationSettings = _numberVerifierMain.VerificationSettings;
-			if (verificationSettings.SourceNoSeparator || verificationSettings.TargetNoSeparator)
+			if (isSource && verificationSettings.SourceNoSeparator || !isSource && verificationSettings.TargetNoSeparator)
 			{
-				var separators = $",.{' '}&nbsp{customSeparators}";
-				
-				foreach (var letter in text)
+				// process the source or target text which has the "No separator" checked
+				text = RemoveSeparator(text, customSeparators);
+				return text;
+			}
+
+			if (isSource && verificationSettings.TargetNoSeparator || !isSource && verificationSettings.SourceNoSeparator)
+			{
+				// process text for the corresponding source/target which doesn't have the "No separator" option checked
+				var separatorsBuilder = GetBuilderSeparators(separators).ToString();
+				if (Regex.IsMatch(text, $@"-?\{separatorsBuilder}d+([{0}]\d+)*"))
 				{
-					if (separators.Contains(letter.ToString()))
+					text = Regex.Replace(text, @"[" + separators + @"]", string.Empty);
+				}
+				return text;
+			}
+			return text;
+		}
+
+		private string RemoveSeparator(string text, string customSeparators)
+		{
+			var allSeparators = $",.{' '}&nbsp{customSeparators}";
+
+			foreach (var letter in text)
+			{
+				if (allSeparators.Contains(letter.ToString()) || Regex.IsMatch(letter.ToString(), @"\s"))
+				{
+					var indexOfLetter = text.IndexOf(letter.ToString(), StringComparison.Ordinal);
+					var textLengtWithSep = text.Substring(indexOfLetter).Length - 1; // get length of text after separator to check if it's not corresponding to decimal
+					if (textLengtWithSep < 3) // if the text after separator is < 3 it means it's corresponding to decimal and the separator shouldn't be removed
 					{
-						var indexOfLetter = text.IndexOf(letter.ToString(), StringComparison.Ordinal);
-						var textLengtWithSep = text.Substring(indexOfLetter).Length - 1; // get length of text after separator to check if it's not corresponding to decimal
-						if (textLengtWithSep < 3) // if the text after separator is < 3 it means it's corresponding to decimal and the separator shouldn't be removed
-						{
-							continue;
-						}
-
-						// remove and return the text first time the separator was replaced (it means that the thousand separator was identified and replaced)
-						// the foreach shouldn't continue, because in case of a decimal separator, it should not be removed
-						text = text.Remove(indexOfLetter, 1).Insert(indexOfLetter, string.Empty);
-
-						return text;
+						continue;
 					}
+
+					// remove and return the text first time the separator was replaced (it means that the thousand separator was identified and replaced)
+					// the foreach shouldn't continue, because in case of a decimal separator, it should not be removed
+					text = text.Remove(indexOfLetter, 1).Insert(indexOfLetter, string.Empty);
+
+					return text;
 				}
 			}
 			return text;
