@@ -4,12 +4,13 @@ using System.Windows.Forms;
 using Sdl.Community.XLIFF.Manager.BatchTasks.View;
 using Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.Model.ProjectSettings;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.BatchTasks
 {
-	public partial class ExportSettingsControl : UserControl, ISettingsAware<ExportSettings>
+	public partial class ExportSettingsControl : UserControl, ISettingsAware<XliffManagerExportSettings>
 	{
 		private ExportOptionsViewModel _exportOptionsViewModel;
 
@@ -18,7 +19,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			InitializeComponent();
 		}
 		
-		public ExportSettings Settings { get; set; }
+		public XliffManagerExportSettings Settings { get; set; }
 
 		public void SetDataContext()
 		{

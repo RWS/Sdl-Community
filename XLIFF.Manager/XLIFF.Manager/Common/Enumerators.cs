@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Core.Globalization;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.MultiSelectComboBox.API;
 
 namespace Sdl.Community.XLIFF.Manager.Common
@@ -14,6 +16,22 @@ namespace Sdl.Community.XLIFF.Manager.Common
 			Import = 2
 		}
 
+		public enum Controller
+		{
+			None = 0,
+			XliffManager = 1,
+			Projects = 2,
+			Files = 3,
+			Editor = 4
+		}
+
+		public enum CountType
+		{
+			Segments,
+			Words,
+			Characters
+		}
+
 		public enum Status
 		{
 			None = 0,
@@ -23,13 +41,83 @@ namespace Sdl.Community.XLIFF.Manager.Common
 			Warning
 		}
 
+		public enum MatchType
+		{
+			None,
+			New,
+			Repetition,
+			Fuzzy,
+			MT,
+			AMT,
+			NMT,
+			Exact,
+			CM,
+			PM
+		}
+
 		public enum XLIFFSupport
 		{
 			none = 0,
 			xliff12sdl = 1,
-			xliff12polyglot =2
+			xliff12polyglot = 2
 			// TODO spport for this format will come later on in the development cycle
 			//xliff20sdl = 2
+		}
+
+		public static string GetTranslationOriginType(ITranslationOrigin translationOrigin, List<AnalysisBand> analysisBands)
+		{
+			if (translationOrigin != null)
+			{
+				if (translationOrigin.OriginType == DefaultTranslationOrigin.AutoPropagated)
+				{
+					return MatchType.Repetition.ToString();
+				}
+
+				if (translationOrigin.OriginType == DefaultTranslationOrigin.MachineTranslation)
+				{
+					return MatchType.MT.ToString();
+				}
+
+				if (translationOrigin.OriginType == DefaultTranslationOrigin.AdaptiveMachineTranslation)
+				{
+					return MatchType.AMT.ToString();
+				}
+
+				if (translationOrigin.OriginType == DefaultTranslationOrigin.NeuralMachineTranslation)
+				{
+					return MatchType.NMT.ToString();
+				}
+
+				if (translationOrigin.MatchPercent >= 100)
+				{
+					if (translationOrigin.OriginType == DefaultTranslationOrigin.DocumentMatch)
+					{
+						return MatchType.PM.ToString();
+					}
+
+					if (translationOrigin.TextContextMatchLevel == TextContextMatchLevel.SourceAndTarget)
+					{
+						return MatchType.CM.ToString();
+					}
+
+					return MatchType.Exact.ToString();
+				}
+
+				if (translationOrigin.MatchPercent > 0)
+				{
+					foreach (var analysisBand in analysisBands)
+					{
+						if (translationOrigin.MatchPercent >= analysisBand.MinimumMatchValue &&
+							translationOrigin.MatchPercent <= analysisBand.MaximumMatchValue)
+						{
+							return string.Format("{0} {1} - {2}", MatchType.Fuzzy.ToString(),
+									   analysisBand.MinimumMatchValue + "%", analysisBand.MaximumMatchValue + "%");
+						}
+					}
+				}
+			}
+
+			return MatchType.New.ToString();
 		}
 
 		public static List<ConfirmationStatus> GetConfirmationStatuses()

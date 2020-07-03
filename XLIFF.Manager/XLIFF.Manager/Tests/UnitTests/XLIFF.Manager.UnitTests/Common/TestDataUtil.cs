@@ -142,7 +142,7 @@ namespace XLIFF.Manager.UnitTests.Common
 				Name = projectFile.Name + ">XLIFF File " + projectFile.ProjectFileActivities.Count,
 				Path = "\\XLIFF File Path\\" + projectFile.ProjectFileActivities.Count,
 				Date = dateTime != DateTime.MinValue ? dateTime : GetRamdomDate(projectFile.Project.Created),
-				Details = status.ToString(),
+				Report = status.ToString(),
 				ProjectFile = projectFile
 			};
 

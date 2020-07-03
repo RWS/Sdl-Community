@@ -227,7 +227,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 				var filterItems = WizardContext.ExcludeFilterItems.Select(a => a.Id).ToList();
-				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder, filterItems, WizardContext.ImportOptions);
+				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder, filterItems, 
+					WizardContext.ImportOptions, WizardContext.AnalysisBands);
 
 				var sniffer = new XliffSniffer();
 				var xliffReader = new XliffReder(sniffer, _segmentBuilder);
@@ -293,7 +294,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 							targetLanguageFile.Date = WizardContext.DateTimeStamp;
 							targetLanguageFile.Action = Enumerators.Action.Import;
 							targetLanguageFile.Status = Enumerators.Status.Success;
-							targetLanguageFile.Details = string.Empty;
+							targetLanguageFile.Report = string.Empty;
 							targetLanguageFile.XliffFilePath = xliffArchiveFile;
 						}
 
@@ -306,7 +307,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 							Date = targetLanguageFile.Date,
 							Name = Path.GetFileName(targetLanguageFile.XliffFilePath),
 							Path = Path.GetDirectoryName(targetLanguageFile.XliffFilePath),
-							Details = string.Empty,
+							Report = string.Empty,
 							ProjectFile = targetLanguageFile
 						};
 
@@ -350,6 +351,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			return await Task.FromResult(success);
 		}
+
+		
 
 		private async Task<bool> Finalize(JobProcess jobProcess)
 		{

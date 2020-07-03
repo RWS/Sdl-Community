@@ -72,7 +72,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 				if (SourceLanguage == null || TargetLanguage == null)
 				{
 					throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguage == null ? "Source" : "Target"));
-				}
+				}				
 
 				_segmentPairProcessor = new SegmentPairProcessor(
 					new Toolkit.LanguagePlatform.Models.Settings(new CultureInfo(SourceLanguage), new CultureInfo(TargetLanguage)),

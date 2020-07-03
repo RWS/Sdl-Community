@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Markup;
 using Sdl.Community.XLIFF.Manager.Common;
@@ -21,6 +22,7 @@ using Sdl.Desktop.IntegrationApi.Extensions.Internal;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using AnalysisBand = Sdl.Community.XLIFF.Manager.Model.AnalysisBand;
 using ProjectFile = Sdl.Community.XLIFF.Manager.Model.ProjectFile;
 
 namespace Sdl.Community.XLIFF.Manager.Service
@@ -104,15 +106,21 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 			if (controller is ProjectsController || controller is FilesController)
 			{
-				var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault() 
-				                      ?? _controllers.ProjectsController.CurrentProject;
+				var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault()
+									  ?? _controllers.ProjectsController.CurrentProject;
+
+				_wizardContext.Owner = controller is ProjectsController
+					? Enumerators.Controller.Projects
+					: Enumerators.Controller.Files;
 
 				// activate the selected project if diffrent to the current project
 				if (_controllers.ProjectsController.CurrentProject?.GetProjectInfo().Id != selectedProject.GetProjectInfo().Id)
 				{
 					_controllers.ProjectsController.Open(selectedProject);
 				}
-				
+
+				_wizardContext.AnalysisBands = GetAnalysisBands(selectedProject);
+
 				var projectInfo = selectedProject.GetProjectInfo();
 				var selectedFileIds = controller is FilesController
 					? _controllers.FilesController.SelectedFiles.Select(a => a.Id.ToString()).ToList()
@@ -127,6 +135,8 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			}
 			else if (controller is XLIFFManagerViewController)
 			{
+				_wizardContext.Owner = Enumerators.Controller.XliffManager;
+
 				var selectedProjectFiles = _controllers.XliffManagerController.GetSelectedProjectFiles();
 				var selectedProjects = GetSelectedProjects();
 				var selectedFileIds = selectedProjectFiles?.Select(a => a.FileId.ToString()).ToList();
@@ -150,6 +160,8 @@ namespace Sdl.Community.XLIFF.Manager.Service
 					message = PluginResources.WizardMessage_UnableToLocateSelectedProject;
 					return false;
 				}
+
+				_wizardContext.AnalysisBands = GetAnalysisBands(selectedProject);
 
 				var projectInfo = selectedProject.GetProjectInfo();
 				_wizardContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
@@ -290,6 +302,35 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return null;
 		}
 
+		private List<AnalysisBand> GetAnalysisBands(FileBasedProject project)
+		{
+			var regex = new Regex(@"(?<min>[\d]*)([^\d]*)(?<max>[\d]*)", RegexOptions.IgnoreCase);
+
+			var analysisBands = new List<AnalysisBand>();
+			var type = project.GetType();
+			var internalProjectField = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (internalProjectField != null)
+			{
+				dynamic internalDynamicProject = internalProjectField.GetValue(project);
+				foreach (var analysisBand in internalDynamicProject.AnalysisBands)
+				{
+					Match match = regex.Match(analysisBand.ToString());
+					if (match.Success)
+					{
+						var min = match.Groups["min"].Value;
+						var max = match.Groups["max"].Value;
+						analysisBands.Add(new AnalysisBand
+						{
+							MinimumMatchValue = Convert.ToInt32(min),
+							MaximumMatchValue = Convert.ToInt32(max)
+						});
+					}
+				}
+			}
+
+			return analysisBands;
+		}
+
 		private LanguageInfo GetLanguageInfo(CultureInfo cultureInfo)
 		{
 			var languageInfo = new LanguageInfo
@@ -303,7 +344,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 		private List<Project> GetSelectedProjects()
 		{
-			return _controllers.XliffManagerController.GetSelectedProjects();			
+			return _controllers.XliffManagerController.GetSelectedProjects();
 		}
 
 		private ObservableCollection<WizardPageViewModelBase> CreatePages(WizardContext wizardContext)

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Sdl.Community.Toolkit.LanguagePlatform;
+using Sdl.Community.Toolkit.LanguagePlatform.Models;
+using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using File = Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model.File;
 
@@ -20,28 +22,38 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private readonly string _inputPath;
 		private readonly string _projectId;
 		private readonly List<string> _excludeFilterItems;
+		private readonly List<AnalysisBand> _analysisBands;
 		private IBilingualContentHandler _output;
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
 		private SegmentVisitor _segmentVisitor;
+		private SegmentPairProcessor _segmentPairProcessor;
 
 		internal ContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder,
-			List<string> excludeFilterItems, ExportOptions exportOptions)
+			List<string> excludeFilterItems, ExportOptions exportOptions, List<AnalysisBand> analysisBands)
 		{
 			_projectId = projectId;
 			_inputPath = inputPath;
 			_ignoreTags = ignoreTags;
 			_segmentBuilder = segmentBuilder;
-			
+
 			_excludeFilterItems = excludeFilterItems;
 			_exportOptions = exportOptions;
+			_analysisBands = analysisBands;
 
 			Xliff = new Xliff();
+			ConfirmationStatistics = new ConfirmationStatistics();
+			TranslationOriginStatistics = new TranslationOriginStatistics();
 		}
+
+		public ConfirmationStatistics ConfirmationStatistics { get; }
+
+		public TranslationOriginStatistics TranslationOriginStatistics { get; }
 
 		public Xliff Xliff { get; }
 
 		public CultureInfo SourceLanguage { get; private set; }
+
 		public CultureInfo TargetLanguage { get; private set; }
 
 		private SegmentVisitor SegmentVisitor => _segmentVisitor ?? (_segmentVisitor = new SegmentVisitor(_ignoreTags));
@@ -126,15 +138,19 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
+				var segmentPairInfo = SegmentPairProcessor.GetSegmentPairInfo(segmentPair);
+				var status = segmentPair.Properties.ConfirmationLevel.ToString();
+				var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin,
+					_analysisBands);
+
 				if (_excludeFilterItems != null)
 				{
-					var status = segmentPair.Properties.ConfirmationLevel.ToString();
-					var match = GetTranslationMatchId(segmentPair.Target.Properties.TranslationOrigin);
-
 					if ((segmentPair.Properties.IsLocked && _excludeFilterItems.Exists(a => a == "Locked"))
-					    || _excludeFilterItems.Exists(a => a == status)
-					    || _excludeFilterItems.Exists(a => a == match))
+						|| _excludeFilterItems.Exists(a => a == status)
+						|| _excludeFilterItems.Exists(a => a == match))
 					{
+						AddWordCounts(status, ConfirmationStatistics.WordCounts.Ignored, segmentPairInfo);
+						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Ignored, segmentPairInfo);
 						continue;
 					}
 				}
@@ -175,7 +191,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					}
 				}
 
-				transUnit.SegmentPairs.Add(new SegmentPair(_segmentBuilder)
+				var newSegmentPair = new SegmentPair(_segmentBuilder)
 				{
 					Id = segmentPair.Properties.Id.Id,
 					Source = new Source { Elements = sourceElements },
@@ -183,7 +199,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					IsLocked = segmentPair.Properties.IsLocked,
 					ConfirmationLevel = segmentPair.Properties.ConfirmationLevel,
 					TranslationOrigin = segmentPair.Properties.TranslationOrigin
-				});
+				};
+				transUnit.SegmentPairs.Add(newSegmentPair);
+
+				AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
+				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);				
 			}
 
 			if (transUnit.SegmentPairs.Count > 0)
@@ -192,6 +212,33 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			}
 		}
 
+		private static void AddWordCounts(string category, ICollection<WordCount> wordCounts, SegmentPairInfo segmentPairInfo)
+		{
+			var count = wordCounts.FirstOrDefault(a => a.Category == category);
+			if (count != null)
+			{
+				count.Segments++;
+				count.Words += segmentPairInfo.SourceWordCounts.Words;
+				count.Characters += segmentPairInfo.SourceWordCounts.Characters;
+				count.Placeables += segmentPairInfo.SourceWordCounts.Placeables;
+				count.Tags += segmentPairInfo.SourceWordCounts.Tags;			
+			}
+			else
+			{
+				var wordCount = new WordCount
+				{
+					Category = category,
+					Segments = 1,
+					Words = segmentPairInfo.SourceWordCounts.Words,
+					Characters = segmentPairInfo.SourceWordCounts.Characters,
+					Placeables = segmentPairInfo.SourceWordCounts.Placeables,
+					Tags = segmentPairInfo.SourceWordCounts.Tags
+				};
+
+				wordCounts.Add(wordCount);
+			}			
+		}
+		
 		public IBilingualContentHandler Output
 		{
 			get => _output;
@@ -233,49 +280,26 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			}
 		}
 
-		private string GetTranslationMatchId(ITranslationOrigin translationOrigin)
+		public SegmentPairProcessor SegmentPairProcessor
 		{
-			if (translationOrigin != null)
+			get
 			{
-				if (translationOrigin.OriginType == DefaultTranslationOrigin.MachineTranslation)
+				if (_segmentPairProcessor != null)
 				{
-					return "MT";
+					return _segmentPairProcessor;
 				}
 
-				if (translationOrigin.OriginType == DefaultTranslationOrigin.AdaptiveMachineTranslation)
+				if (SourceLanguage == null || TargetLanguage == null)
 				{
-					return "AMT";
+					throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguage == null ? "Source" : "Target"));
 				}
 
-				if (translationOrigin.OriginType == DefaultTranslationOrigin.NeuralMachineTranslation)
-				{
-					return "NMT";
-				}
-			
-				if (translationOrigin.MatchPercent >= 100)
-				{					
-					if (translationOrigin.OriginType == DefaultTranslationOrigin.DocumentMatch)
-					{
-						return "PM";
-					}
+				_segmentPairProcessor = new SegmentPairProcessor(
+					new Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage),
+					new Toolkit.LanguagePlatform.Models.PathInfo());
 
-					if (translationOrigin.TextContextMatchLevel == TextContextMatchLevel.SourceAndTarget)
-					{
-						return "CM";
-					}
-
-					return "Exact";
-				}
-
-				if (translationOrigin.MatchPercent > 0)
-				{					
-					return "Fuzzy";
-				}
-
-				return "New";
+				return _segmentPairProcessor;
 			}
-
-			return string.Empty;
 		}
 	}
 }

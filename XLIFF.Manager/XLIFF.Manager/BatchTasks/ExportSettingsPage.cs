@@ -3,16 +3,17 @@ using System.IO;
 using System.Linq;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.Model.ProjectSettings;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.XLIFF.Manager.BatchTasks
 {
-	public class ExportSettingsPage : DefaultSettingsPage<ExportSettingsControl, ExportSettings>
+	public class ExportSettingsPage : DefaultSettingsPage<ExportSettingsControl, XliffManagerExportSettings>
 	{
 		private readonly ProjectsController _projectsController;
-		private ExportSettings _settings;
+		private XliffManagerExportSettings _settings;
 		private ExportSettingsControl _control;
 
 		public ExportSettingsPage()
@@ -22,7 +23,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 
 		public override object GetControl()
 		{
-			_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<ExportSettings>();
+			_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<XliffManagerExportSettings>();
 			_control = base.GetControl() as ExportSettingsControl;
 			if (_control != null && _control.ExportOptionsViewModel == null)
 			{

@@ -15,6 +15,10 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		[XmlIgnore]
 		public ProjectFile ProjectFile { get; set; }
 
+		public ConfirmationStatistics ConfirmationStatistics { get; set; }
+
+		public TranslationOriginStatistics TranslationOriginStatistics { get; set; }
+
 		public string ProjectFileId { get; set; }
 
 		public Enumerators.Status Status { get; set; }
@@ -48,7 +52,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			}
 		}
 
-		public string Details { get; set; }		
+		public string Report { get; set; }		
 
 		public void Dispose()
 		{
@@ -58,7 +62,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		{
 			var projectFileActivity = new ProjectFileActivity
 			{
-				ProjectFileId = ProjectFile.FileId,
+				ProjectFileId = ProjectFileId,
 				Action = Action,
 				Status = Status,
 				ActivityId = ActivityId,
@@ -66,10 +70,20 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Date = new DateTime(Date.Year, Date.Month, Date.Day, Date.Hour,
 					Date.Minute, Date.Second, Date.Millisecond, Date.Kind),
 				Path = Path,
-				Details = Details,
+				Report = Report,
 				Selected = Selected
 			};
-			
+
+			if (ConfirmationStatistics != null)
+			{
+				projectFileActivity.ConfirmationStatistics = ConfirmationStatistics.Clone() as ConfirmationStatistics;
+			}
+
+			if (TranslationOriginStatistics != null)
+			{
+				projectFileActivity.TranslationOriginStatistics = TranslationOriginStatistics.Clone() as TranslationOriginStatistics;
+			}
+
 			return projectFileActivity;
 		}
 	}

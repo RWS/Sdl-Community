@@ -14,6 +14,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		private IList _selectedProjectFileActivities;
 		private bool _isProjectFileSelected;
 		private ICommand _openFolderCommand;
+		private ICommand _viewReportCommand;
 
 		public ProjectFileActivityViewModel(List<ProjectFileActivity> projectFileActivities)
 		{
@@ -24,6 +25,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
 
+		public ICommand ViewReportCommand => _viewReportCommand ?? (_viewReportCommand = new CommandHandler(ViewReport));
 
 		public List<ProjectFileActivity> ProjectFileActivities
 		{
@@ -75,6 +77,16 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 		private void OpenFolder(object parameter)
 		{
 			System.Diagnostics.Process.Start("explorer.exe", SelectedProjectFileActivity.Path);
+		}
+
+		private void ViewReport(object parameter)
+		{
+			if (SelectedProjectFileActivity == null || string.IsNullOrEmpty(SelectedProjectFileActivity.Report))
+			{
+				return;
+			}
+
+			System.Diagnostics.Process.Start(SelectedProjectFileActivity.Report);
 		}
 
 		public void Dispose()

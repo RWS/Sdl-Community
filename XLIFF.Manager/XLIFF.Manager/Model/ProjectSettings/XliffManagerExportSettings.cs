@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Core.Settings;
 
-namespace Sdl.Community.XLIFF.Manager.BatchTasks
+namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 {
-	public class ExportSettings : SettingsGroup
+	public class XliffManagerExportSettings : SettingsGroup
 	{
 		private const string ExportOptionsSettingId = "ExportOptions";
 		private const string TransactionFolderSettingId = "TransactionFolder";
 		private const string SelectedFilterItemIdsSettingId = "SelectedFilterItemIds";
 		private const string DateTimeStampSettingId = "DateTimeStamp";
 		private const string LocalProjectFolderSettingId = "LocalProjectFolder";
-
+		
 		public string LocalProjectFolder
 		{
 			get => GetSetting<string>(LocalProjectFolderSettingId);
