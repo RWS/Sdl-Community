@@ -5,6 +5,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using Sdl.Community.Jobs.UI;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.Jobs
 {
@@ -22,12 +23,12 @@ namespace Sdl.Community.Jobs
         }
 
 
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return _viewControl.Value;
         }
 
-        protected override Control GetExplorerBarControl()
+        protected override IUIControl GetExplorerBarControl()
         {
             return _searchControl.Value;
         }
