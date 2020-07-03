@@ -81,5 +81,30 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 			Assert.True(errorMessage.Count == 0);
 		}
+
+        [Theory]
+        [InlineData("11000,20", "11,000.20")]
+        public void NormalizeThousandsDecimalNumberNoSeparatorSelected(string source, string target)
+        {
+	        //target settings
+	        var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+	        numberVerifierSettings.Setup(t => t.TargetThousandsComma).Returns(true);
+	        numberVerifierSettings.Setup(t => t.TargetDecimalPeriod).Returns(true);
+
+			// source settings
+			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+	        numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
+
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        //run initialize method in order to set chosen separators
+	        var docPropMock = new Mock<IDocumentProperties>();
+	        numberVerifierMain.Initialize(docPropMock.Object);
+
+	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+	        Assert.True(errorMessage.Count == 0);
+        }
 	}
 }

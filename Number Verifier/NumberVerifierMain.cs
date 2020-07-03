@@ -901,6 +901,7 @@ namespace Sdl.Community.NumberVerifier
 			        && separatorModel.LengthCommaOrCustomSep < 3 && separatorModel.LengthPeriodOrCustomSep < 3)
 				|| Regex.IsMatch(numberText, @"\s")))
 			{
+				SetSeparateThousandDecimal(string.Empty, string.Empty);
 				return false;
 			}
 
@@ -1130,7 +1131,7 @@ namespace Sdl.Community.NumberVerifier
 				{
 					foreach (Match match in Regex.Matches(normalizedNumber.NormalizedNumberList[1], regExExpression))
 					{
-						SetNormalizedNumber(normalizedNumber, match.Value);
+						SetNormalizedNumber(normalizedNumber, int.TryParse(match.Value, out _) ? $"m{match.Value}" : match.Value);
 					}
 					normalizedNumber.InitialNumberList.RemoveAt(1);
 					normalizedNumber.NormalizedNumberList.RemoveAt(1);
