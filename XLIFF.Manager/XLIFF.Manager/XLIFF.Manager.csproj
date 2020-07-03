@@ -296,6 +296,7 @@
     <Compile Include="Service\FilterService.cs" />
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\ProjectSettingsService.cs" />
+    <Compile Include="Service\ReportService.cs" />
     <Compile Include="Service\WizardService.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="Wizard\ViewModel\ExceptionViewerViewModel.cs" />
@@ -540,7 +541,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BatchTasks\Report.xsl" />
-    <None Include="BatchTasks\Report.xsl.bak" />
     <Content Include="Controls\ReportDefault.html" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>

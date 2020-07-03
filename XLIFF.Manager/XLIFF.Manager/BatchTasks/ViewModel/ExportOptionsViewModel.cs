@@ -28,8 +28,8 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
 		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
-		private ICommand _clearFiltersCommand;		
-		private ICommand _selectedItemsChangedCommand;	
+		private ICommand _clearFiltersCommand;
+		private ICommand _selectedItemsChangedCommand;
 
 		public ExportOptionsViewModel(XliffManagerExportSettings exportSettings, IDialogService dialogService)
 		{
@@ -38,7 +38,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
 			if (exportSettings.ExportOptions == null)
 			{
 				exportSettings.ExportOptions = new ExportOptions();
-			}						
+			}
 
 			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == exportSettings.ExportOptions.XliffSupport);
 			OutputFolder = exportSettings.TransactionFolder;
@@ -47,7 +47,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
 
 			InitializeFilterItems(exportSettings.SelectedFilterItemIds);
 		}
-	
+
 		public ICommand ClearExportFileCommand => _clearExportFileCommand ?? (_clearExportFileCommand = new CommandHandler(ClearExportFile));
 
 		public ICommand BrowseFolderCommand => _browseFolderCommand ?? (_browseFolderCommand = new CommandHandler(BrowseFolder));
@@ -149,7 +149,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
 				}
 
 				_outputFolder = value;
-				OnPropertyChanged(nameof(OutputFolder));				
+				OnPropertyChanged(nameof(OutputFolder));
 			}
 		}
 
@@ -204,7 +204,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
 				else
 				{
 					CopySourceToTargetEnabled = true;
-				}				
+				}
 			}
 		}
 

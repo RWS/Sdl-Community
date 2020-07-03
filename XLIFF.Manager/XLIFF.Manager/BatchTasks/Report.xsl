@@ -13,11 +13,7 @@
 			
 			return (100 * number / total).toFixed(2) + "%";
 		}
-						
-		function getCharsPerWord(words, chars)
-		{
-			return (chars / words).toFixed(2);
-		}	    		
+								    		
 		]]>
 	</msxsl:script>
 
@@ -56,7 +52,7 @@
 					padding-right: 40px;
 					white-space: nowrap !important;
 					line-height: 20px;
-					width: 30%;
+					width: 20%;
 					overflow: hidden;
 					}
 
@@ -388,12 +384,30 @@
 					margin: 0px;
 					}
 
+					h1.first {
+					font-family: Segoe UI;
+					font-weight: normal;
+					font-size: 22px;
+					color: #636463;
+					padding: 20px 20px 20px 0px;
+					margin: 0px 20pc 2px 0;
+					}
+
 					h2.first {
 					font-family: Segoe UI;
 					line-height: 22px;
 					font-size: 16px;
 					color: #0A1E2C;
 					padding: 20px 0 2px 0;
+					margin: 0px 0 2px 0;
+					}
+					
+					h2.firstWithEmphasis {
+					font-family: Segoe UI;
+					line-height: 22px;
+					font-size: 16px;
+					color: #0A1E2C;
+					padding: 30px 0 10px 0;
 					margin: 0px 0 2px 0;
 					}
 
@@ -403,6 +417,14 @@
 					font-size: 16px;
 					color: #0A1E2C;
 					padding: 20px 0 2px 0;
+					margin: 0px 0 2px 0;
+					}
+					
+					h3 {
+					font-family: Segoe UI;
+					font-size: 10px;
+					color: #0A1E2C;
+					padding: 2px 0 2px 0;
 					margin: 0px 0 2px 0;
 					}
 
@@ -559,67 +581,117 @@
 				</h2>
 
 				<table class="InfoList" width="100%" border="0" cellpadding="0" cellspacing="2">
-					<xsl:if test="//taskInfo/settings/@xliffSupport">
-						<tr>
-							<td class="InfoItem">
-								Xliff Support:
-							</td>
-							<td class="InfoData InfoDataMinColWidth">
-								<xsl:value-of select="//taskInfo/settings/@xliffSupport"/>
-							</td>
-							<td class="InfoData">
-								<xsl:text>&#160;</xsl:text>
-							</td>
-						</tr>
-					</xsl:if>
-					<xsl:if test="//taskInfo/settings/@includeTranslations">
-						<tr>
-							<td class="InfoItem">
-								Include Translations:
-							</td>
-							<td class="InfoData InfoDataMinColWidth">
-								<xsl:value-of select="//taskInfo/settings/@includeTranslations"/>
-							</td>
-							<td class="InfoData">
-								<xsl:text>&#160;</xsl:text>
-							</td>
-						</tr>
-					</xsl:if>
+					<xsl:choose>
+						<xsl:when  test="//@action = 'Export'">
+							<tr>
+								<td class="InfoItem">
+									Xliff Support:
+								</td>
+								<td class="InfoData">
+									<xsl:value-of select="//taskInfo/settings/@xliffSupport"/>
+								</td>								
+							</tr>
 
-					<xsl:if test="//taskInfo/settings/@copySourceToTarget">
-						<tr>
-							<td class="InfoItem">
-								Copy Source to Target:
-							</td>
-							<td class="InfoData InfoDataMinColWidth">
-								<xsl:value-of select="//taskInfo/settings/@copySourceToTarget"/>
-							</td>
-							<td class="InfoData">
-								<xsl:text>&#160;</xsl:text>
-							</td>
-						</tr>
-					</xsl:if>
+							<tr>
+								<td class="InfoItem">
+									Include Translations:
+								</td>
+								<td class="InfoData">
+									<xsl:value-of select="//taskInfo/settings/@includeTranslations"/>
+								</td>								
+							</tr>
 
-					<xsl:if test="//taskInfo/settings/@excludeFilterItems">
-						<tr>
-							<td class="InfoItem">
-								Exclude Filters
-								:
-							</td>
-							<td class="InfoData InfoDataMinColWidth">
-								<xsl:value-of select="//taskInfo/settings/@excludeFilterItems"/>
-							</td>
-							<td class="InfoData">
-								<xsl:text>&#160;</xsl:text>
-							</td>
-						</tr>
-					</xsl:if>
+							<tr>
+								<td class="InfoItem">
+									Copy Source to Target:
+								</td>
+								<td class="InfoData">
+									<xsl:value-of select="//taskInfo/settings/@copySourceToTarget"/>
+								</td>								
+							</tr>
+
+						</xsl:when>
+						<xsl:otherwise>
+
+							<tr>
+								<td class="InfoItem">
+									Overwrite existing translations:
+								</td>
+								<td class="InfoData">
+									<xsl:value-of select="//taskInfo/settings/@overwriteTranslations"/>
+								</td>								
+							</tr>
+
+							<tr>
+								<td class="InfoItem">
+									Origin system:
+								</td>
+								<td class="InfoData">
+									<xsl:value-of select="//taskInfo/settings/@originSystem"/>
+								</td>								
+							</tr>
+
+							<tr>
+								<td class="InfoItem">
+									Segment Status Assignment
+								</td>
+								<td class="InfoData">
+									<xsl:text>&#160;</xsl:text>
+								</td>								
+							</tr>
+
+							<tr>
+								<td class="InfoItemWithIndent">
+									Translations updated:
+								</td>
+								<td class="InfoData">
+									<xsl:value-of select="//taskInfo/settings/@statusTranslationUpdatedId"/>
+								</td>								
+							</tr>
+
+							<tr>
+								<td class="InfoItemWithIndent">
+									Translations not updated:
+								</td>
+								<td class="InfoData">
+									<xsl:value-of select="//taskInfo/settings/@statusTranslationNotUpdatedId"/>
+								</td>								
+							</tr>
+
+							<tr>
+								<td class="InfoItemWithIndent">
+									Segments not imported:
+								</td>
+								<td class="InfoData">
+									<xsl:value-of select="//taskInfo/settings/@statusSegmentNotImportedId"/>
+								</td>								
+							</tr>
+						</xsl:otherwise>
+					</xsl:choose>
+
+					<tr>
+						<td class="InfoItem">
+							Exclude Segments Filter:
+						</td>
+						<td class="InfoData">
+							<xsl:value-of select="//taskInfo/settings/@excludeFilterItems"/>
+						</td>						
+					</tr>
+
 				</table>
 
-				<h2>
-					Totals
+				
+				<h2 class="firstWithEmphasis">
+					<xsl:choose>
+						<xsl:when  test="//@action = 'Export'">
+							Exported
+						</xsl:when>
+						<xsl:otherwise>
+							Imported (Translations updated)
+						</xsl:otherwise>
+					</xsl:choose>
 				</h2>
-
+				
 				<table class="ReportTable" border="0" cellspacing="0" cellpadding="2" width="100%">
 					<tr>
 						<th class="TypeHead" width="100%">
@@ -647,12 +719,12 @@
 							Tags
 						</th>
 					</tr>
-					<xsl:apply-templates select="//batchTotal"/>
+					<xsl:apply-templates select="//batchTotal">
+						<xsl:with-param name="type" select="'processed'" />
+					</xsl:apply-templates>
 				</table>
 
-				<h2>
-					File Details
-				</h2>
+				<h3/>
 
 				<table class="ReportTable" border="0" cellspacing="0" cellpadding="2"  width="100%">
 					<tr>
@@ -681,13 +753,169 @@
 							Tags
 						</th>
 					</tr>
-					<xsl:apply-templates select="//file"/>
+					<xsl:apply-templates select="//file">
+						<xsl:with-param name="type" select="'processed'" />
+					</xsl:apply-templates>
 				</table>
+
+				
+				<h2 class="firstWithEmphasis">
+					<xsl:choose>
+						<xsl:when  test="//@action = 'Export'">
+							Not Exported
+						</xsl:when>
+						<xsl:otherwise>
+							Imported (Translations not updated)
+						</xsl:otherwise>
+					</xsl:choose>
+				</h2>
+				
+				<table class="ReportTable" border="0" cellspacing="0" cellpadding="2" width="100%">
+					<tr>
+						<th class="TypeHead" width="100%">
+							Total
+						</th>
+						<th class="TypeHead">
+							Confirmation Level
+						</th>
+						<th class="Unit">
+							Segments
+						</th>
+						<th class="Unit">
+							Words
+						</th>
+						<th class="Unit">
+							Characters
+						</th>
+						<th class="Unit">
+							Percent
+						</th>
+						<th class="Unit">
+							Recognized Tokens
+						</th>
+						<th class="Unit">
+							Tags
+						</th>
+					</tr>
+					<xsl:apply-templates select="//batchTotal">
+						<xsl:with-param name="type" select="'excluded'" />
+					</xsl:apply-templates>
+				</table>				
+
+				<h3/>
+
+				<table class="ReportTable" border="0" cellspacing="0" cellpadding="2"  width="100%">
+					<tr>
+						<th class="TypeHead" width="100%">
+							File
+						</th>
+						<th class="TypeHead">
+							Confirmation Level
+						</th>
+						<th class="Unit">
+							Segments
+						</th>
+						<th class="Unit">
+							Words
+						</th>
+						<th class="Unit">
+							Characters
+						</th>
+						<th class="Unit">
+							Percent
+						</th>
+						<th class="Unit">
+							Recognized Tokens
+						</th>
+						<th class="Unit">
+							Tags
+						</th>
+					</tr>
+					<xsl:apply-templates select="//file">
+						<xsl:with-param name="type" select="'excluded'" />
+					</xsl:apply-templates>
+
+				</table>
+
+				<xsl:if test="//taskInfo/@action = 'Import'">					
+					<h2 class="firstWithEmphasis">
+						Not Imported
+					</h2>					
+
+					<table class="ReportTable" border="0" cellspacing="0" cellpadding="2" width="100%">
+						<tr>
+							<th class="TypeHead" width="100%">
+								Total
+							</th>
+							<th class="TypeHead">
+								Confirmation Level
+							</th>
+							<th class="Unit">
+								Segments
+							</th>
+							<th class="Unit">
+								Words
+							</th>
+							<th class="Unit">
+								Characters
+							</th>
+							<th class="Unit">
+								Percent
+							</th>
+							<th class="Unit">
+								Recognized Tokens
+							</th>
+							<th class="Unit">
+								Tags
+							</th>
+						</tr>
+						<xsl:apply-templates select="//batchTotal">
+							<xsl:with-param name="type" select="'notProcessed'" />
+						</xsl:apply-templates>
+					</table>
+					
+					<h3/>
+
+					<table class="ReportTable" border="0" cellspacing="0" cellpadding="2"  width="100%">
+						<tr>
+							<th class="TypeHead" width="100%">
+								File
+							</th>
+							<th class="TypeHead">
+								Confirmation Level
+							</th>
+							<th class="Unit">
+								Segments
+							</th>
+							<th class="Unit">
+								Words
+							</th>
+							<th class="Unit">
+								Characters
+							</th>
+							<th class="Unit">
+								Percent
+							</th>
+							<th class="Unit">
+								Recognized Tokens
+							</th>
+							<th class="Unit">
+								Tags
+							</th>
+						</tr>
+						<xsl:apply-templates select="//file">
+							<xsl:with-param name="type" select="'notProcessed'" />
+						</xsl:apply-templates>
+
+					</table>
+				</xsl:if>
+
 			</body>
 		</html>
 	</xsl:template>
 
 	<xsl:template match="file | batchTotal">
+		<xsl:param name="type" />
 		<xsl:if test="local-name() = 'file'">
 			<tr>
 				<th class="File" align="left" valign="top">
@@ -696,7 +924,15 @@
 				<th class="Header">
 					Not Translated
 				</th>
-				<xsl:apply-templates select="confirmation/processed/unspecified"/>
+				<xsl:if test="$type = 'processed'">
+					<xsl:apply-templates select="confirmation/processed/unspecified"/>
+				</xsl:if>
+				<xsl:if test="$type = 'excluded'">
+					<xsl:apply-templates select="confirmation/excluded/unspecified"/>
+				</xsl:if>
+				<xsl:if test="$type = 'notProcessed'">
+					<xsl:apply-templates select="confirmation/notProcessed/unspecified"/>
+				</xsl:if>
 			</tr>
 		</xsl:if>
 		<xsl:if test="local-name() = 'batchTotal'">
@@ -708,15 +944,25 @@
 				<th class="Header">
 					Not Translated
 				</th>
-				<xsl:apply-templates select="confirmation/processed/unspecified"/>
+				<xsl:if test="$type = 'processed'">
+					<xsl:apply-templates select="confirmation/processed/unspecified"/>
+				</xsl:if>
+				<xsl:if test="$type = 'excluded'">
+					<xsl:apply-templates select="confirmation/excluded/unspecified"/>
+				</xsl:if>
+				<xsl:if test="$type = 'notProcessed'">
+					<xsl:apply-templates select="confirmation/notProcessed/unspecified"/>
+				</xsl:if>
 			</tr>
 		</xsl:if>
 
-		<xsl:call-template name="normalLayout"/>
+		<xsl:call-template name="normalLayout">
+			<xsl:with-param name="type" select="$type" />
+		</xsl:call-template>
 	</xsl:template>
 
 	<xsl:template name="normalLayout">
-
+		<xsl:param name="type" />
 		<tr>
 			<th class="CharPerWord" rowspan="7" align="left" valign="top">
 				<xsl:text>&#160;</xsl:text>
@@ -724,67 +970,161 @@
 			<th class="Header">
 				Draft
 			</th>
-			<xsl:apply-templates select="confirmation/processed/draft"/>
+			<xsl:if test="$type = 'processed'">
+				<xsl:apply-templates select="confirmation/processed/draft"/>
+			</xsl:if>
+			<xsl:if test="$type = 'excluded'">
+				<xsl:apply-templates select="confirmation/excluded/draft"/>
+			</xsl:if>
+			<xsl:if test="$type = 'notProcessed'">
+				<xsl:apply-templates select="confirmation/notProcessed/draft"/>
+			</xsl:if>
 		</tr>
 
 		<tr>
 			<th class="Header">
 				Translated
 			</th>
-			<xsl:apply-templates select="confirmation/processed/translated"/>
+			<xsl:if test="$type = 'processed'">
+				<xsl:apply-templates select="confirmation/processed/translated"/>
+			</xsl:if>
+			<xsl:if test="$type = 'excluded'">
+				<xsl:apply-templates select="confirmation/excluded/translated"/>
+			</xsl:if>
+			<xsl:if test="$type = 'notProcessed'">
+				<xsl:apply-templates select="confirmation/notProcessed/translated"/>
+			</xsl:if>
 		</tr>
 
 		<tr>
 			<th class="Header">
 				Translation Rejected
 			</th>
-			<xsl:apply-templates select="confirmation/processed/rejectedTranslation"/>
+			<xsl:if test="$type = 'processed'">
+				<xsl:apply-templates select="confirmation/processed/rejectedTranslation"/>
+			</xsl:if>
+			<xsl:if test="$type = 'excluded'">
+				<xsl:apply-templates select="confirmation/excluded/rejectedTranslation"/>
+			</xsl:if>
+			<xsl:if test="$type = 'notProcessed'">
+				<xsl:apply-templates select="confirmation/notProcessed/rejectedTranslation"/>
+			</xsl:if>
 		</tr>
 		<tr>
 			<th class="Header">
 				Translation Approved
 			</th>
-			<xsl:apply-templates select="confirmation/processed/approvedTranslation"/>
+			<xsl:if test="$type = 'processed'">
+				<xsl:apply-templates select="confirmation/processed/approvedTranslation"/>
+			</xsl:if>
+			<xsl:if test="$type = 'excluded'">
+				<xsl:apply-templates select="confirmation/excluded/approvedTranslation"/>
+			</xsl:if>
+			<xsl:if test="$type = 'notProcessed'">
+				<xsl:apply-templates select="confirmation/notProcessed/approvedTranslation"/>
+			</xsl:if>
 		</tr>
 		<tr>
 			<th class="Header">
 				Sign-off Rejected
 			</th>
-			<xsl:apply-templates select="confirmation/processed/rejectedSignOff"/>
+			<xsl:if test="$type = 'processed'">
+				<xsl:apply-templates select="confirmation/processed/rejectedSignOff"/>
+			</xsl:if>
+			<xsl:if test="$type = 'excluded'">
+				<xsl:apply-templates select="confirmation/excluded/rejectedSignOff"/>
+			</xsl:if>
+			<xsl:if test="$type = 'notProcessed'">
+				<xsl:apply-templates select="confirmation/notProcessed/rejectedSignOff"/>
+			</xsl:if>
 		</tr>
 		<tr>
 			<th class="Header">
 				Signed Off
 			</th>
-			<xsl:apply-templates select="confirmation/processed/approvedSignOff"/>
-		</tr>		
-		<xsl:call-template name="totalCounts" />
+			<xsl:if test="$type = 'processed'">
+				<xsl:apply-templates select="confirmation/processed/approvedSignOff"/>
+			</xsl:if>
+			<xsl:if test="$type = 'excluded'">
+				<xsl:apply-templates select="confirmation/excluded/approvedSignOff"/>
+			</xsl:if>
+			<xsl:if test="$type = 'notProcessed'">
+				<xsl:apply-templates select="confirmation/notProcessed/approvedSignOff"/>
+			</xsl:if>
+		</tr>
+
+
+		<xsl:call-template name="totalCounts" >
+			<xsl:with-param name="type" select="$type" />
+		</xsl:call-template>
+
 	</xsl:template>
 
 	<xsl:template name="totalCounts">
+		<xsl:param name="type" />
 		<tr>
 			<th class="Total">
 				Total
 			</th>
 			<td class="Total">
-				<xsl:value-of select="confirmation/processed/total/@segments"/>
+				<xsl:if test="$type = 'processed'">
+					<xsl:value-of select="confirmation/processed/total/@segments"/>
+				</xsl:if>
+				<xsl:if test="$type = 'excluded'">
+					<xsl:value-of select="confirmation/excluded/total/@segments"/>
+				</xsl:if>
+				<xsl:if test="$type = 'notProcessed'">
+					<xsl:value-of select="confirmation/notProcessed/total/@segments"/>
+				</xsl:if>
 			</td>
 
 			<td class="Total">
-				<xsl:value-of select="confirmation/processed/total/@words"/>
+				<xsl:if test="$type = 'processed'">
+					<xsl:value-of select="confirmation/processed/total/@words"/>
+				</xsl:if>
+				<xsl:if test="$type = 'excluded'">
+					<xsl:value-of select="confirmation/excluded/total/@words"/>
+				</xsl:if>
+				<xsl:if test="$type = 'notProcessed'">
+					<xsl:value-of select="confirmation/notProcessed/total/@words"/>
+				</xsl:if>
 			</td>
 
 			<td class="Total">
-				<xsl:value-of select="confirmation/processed/total/@characters"/>
+				<xsl:if test="$type = 'processed'">
+					<xsl:value-of select="confirmation/processed/total/@characters"/>
+				</xsl:if>
+				<xsl:if test="$type = 'excluded'">
+					<xsl:value-of select="confirmation/excluded/total/@characters"/>
+				</xsl:if>
+				<xsl:if test="$type = 'notProcessed'">
+					<xsl:value-of select="confirmation/notProcessed/total/@characters"/>
+				</xsl:if>
 			</td>
 			<td class="Total">
 				100%
 			</td>
 			<td class="Total">
-				<xsl:value-of select="confirmation/processed/total/@placeables"/>
+				<xsl:if test="$type = 'processed'">
+					<xsl:value-of select="confirmation/processed/total/@placeables"/>
+				</xsl:if>
+				<xsl:if test="$type = 'excluded'">
+					<xsl:value-of select="confirmation/excluded/total/@placeables"/>
+				</xsl:if>
+				<xsl:if test="$type = 'notProcessed'">
+					<xsl:value-of select="confirmation/notProcessed/total/@placeables"/>
+				</xsl:if>
 			</td>
 			<td class="Total">
-				<xsl:value-of select="confirmation/processed/total/@tags"/>
+				<xsl:if test="$type = 'processed'">
+					<xsl:value-of select="confirmation/processed/total/@tags"/>
+				</xsl:if>
+				<xsl:if test="$type = 'excluded'">
+					<xsl:value-of select="confirmation/excluded/total/@tags"/>
+				</xsl:if>
+				<xsl:if test="$type = 'notProcessed'">
+					<xsl:value-of select="confirmation/notProcessed/total/@tags"/>
+				</xsl:if>
 			</td>
 		</tr>
 	</xsl:template>

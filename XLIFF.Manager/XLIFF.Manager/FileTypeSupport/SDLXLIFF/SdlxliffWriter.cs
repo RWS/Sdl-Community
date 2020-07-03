@@ -21,7 +21,13 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			_excludeFilterItems = excludeFilterItems;
 			_importOptions = importOptions;
 			_analysisBands = analysisBands;
+			ConfirmationStatistics = new ConfirmationStatistics();
+			TranslationOriginStatistics = new TranslationOriginStatistics();
 		}
+
+		public ConfirmationStatistics ConfirmationStatistics { get; private set; }
+
+		public TranslationOriginStatistics TranslationOriginStatistics { get; private set; }
 
 		public bool UpdateFile(Xliff xliff, string filePathInput, string filePathOutput)
 		{
@@ -32,6 +38,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			converter.SynchronizeDocumentProperties();
 
 			converter.Parse();
+
+			ConfirmationStatistics = contentWriter.ConfirmationStatistics;
+			TranslationOriginStatistics = contentWriter.TranslationOriginStatistics;
 
 			return true;
 		}

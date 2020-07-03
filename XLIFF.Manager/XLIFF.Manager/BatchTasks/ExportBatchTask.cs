@@ -45,6 +45,8 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 		private bool _isError;
 		private XLIFFManagerViewController _xliffManagerController;
 		private WizardContext _wizardContext;
+		private ReportService _reportService;
+		private ProjectSettingsService _projectSettingsService;
 
 		protected override void OnInitializeTask()
 		{
@@ -54,12 +56,19 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			_projectInfo = Project.GetProjectInfo();
 			_segmentBuilder = new SegmentBuilder();
 			_exportSettings = GetSetting<XliffManagerExportSettings>();
+			if (_exportSettings.ExportOptions == null)
+			{
+				CreateDefaultContext();
+			}
+
 			_pathInfo = new PathInfo();
 			_customerProvider = new CustomerProvider();
 			_imageService = new ImageService();
+			_reportService = new ReportService();
+			_projectSettingsService = new ProjectSettingsService();
 			_isError = false;
 			_xliffManagerController = GetXliffManagerController();
-			
+
 			CreateWizardContext();
 			WriteLogReportHeader();
 			SubscribeToWindowClosing();
@@ -68,7 +77,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			_logReport.AppendLine("Phase: Export - Started " + FormatDateTime(DateTime.UtcNow));
 
 			base.OnInitializeTask();
-		}		
+		}
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
@@ -91,8 +100,8 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 					_currentLanguage = languageName;
 				}
 
-				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, 
-					_exportSettings.SelectedFilterItemIds, 
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder,
+					_exportSettings.SelectedFilterItemIds,
 					_exportSettings.ExportOptions,
 					GetAnalysisBands(Project as FileBasedProject));
 
@@ -112,14 +121,13 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 				{
 					var xliffData = sdlxliffReader.ReadFile(_projectInfo.Id.ToString(), targetFile.Location);
 					var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, _exportSettings.ExportOptions.IncludeTranslations);
-					
+
 					if (exported)
-					{						
+					{
 						targetFile.Date = _exportSettings.DateTimeStamp;
 						targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
 						targetFile.Action = Enumerators.Action.Export;
 						targetFile.Status = Enumerators.Status.Success;
-						targetFile.Report = string.Empty;
 						targetFile.XliffFilePath = xliffFilePath;
 						targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
 						targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
@@ -135,7 +143,6 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 						Date = targetFile.Date,
 						Name = Path.GetFileName(targetFile.XliffFilePath),
 						Path = Path.GetDirectoryName(targetFile.XliffFilePath),
-						Report = string.Empty,
 						ConfirmationStatistics = targetFile.ConfirmationStatistics,
 						TranslationOriginStatistics = targetFile.TranslationOriginStatistics
 					};
@@ -170,17 +177,118 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			SaveLogReport();
 			if (!_isError)
 			{
+				var project = Project as FileBasedProject;
+				var languageDirections = GetLanguageDirections(project?.FilePath, _wizardContext);
+
+
+
+
+				foreach (var languageDirection in languageDirections)
+				{
+					var ld = GetLanguageDirection(languageDirection.Key.TargetLanguageCode, project);
+
+					var actionName = _wizardContext.Action == Enumerators.Action.Export
+						? "Export To XLIFF"
+						: "Import From XLIFF";
+
+					var reportName = string.Format("{0}_{1}_{2}_{3}.xml",
+						actionName.Replace(" ", ""),
+						_wizardContext.DateTimeStampToString,
+						languageDirection.Key.SourceLanguageCode,
+						languageDirection.Key.TargetLanguageCode);
+
+					var tempFile = Path.GetTempFileName();
+
+					_reportService.CreateReport(_wizardContext, tempFile, project, languageDirection.Key.TargetLanguageCode);
+
+					string reportData;
+					using (var r = new StreamReader(tempFile, Encoding.UTF8))
+					{
+						reportData = r.ReadToEnd();
+						r.Close();
+					}
+
+					CreateReport(reportName, actionName, reportData, ld);
+
+					if (File.Exists(tempFile))
+					{
+						File.Delete(tempFile);
+					}
+				}
+
 				_wizardContext.Completed = true;
-				_xliffManagerController?.UpdateProjectData(_wizardContext);
-			}			
+			}
+		}
+
+		private static LanguageDirection GetLanguageDirection(string targetLanguageCode, FileBasedProject project)
+		{
+			var cultureInfo = new CultureInfo(targetLanguageCode);
+			var language = new Language(cultureInfo);
+			var projectFiles = project?.GetTargetLanguageFiles(language);
+			var ld = projectFiles?[0].GetLanguageDirection();
+			return ld;
+		}
+
+		private Dictionary<LanguageDirectionInfo, List<Model.ProjectFile>> GetLanguageDirections(string projectsFile, WizardContext wizardContext)
+		{
+			var languageDirections = new Dictionary<LanguageDirectionInfo, List<Model.ProjectFile>>();
+			foreach (var language in _projectSettingsService.GetLanguageDirections(projectsFile))
+			{
+				foreach (var projectFile in wizardContext.ProjectFiles)
+				{
+					if (!projectFile.Selected)
+					{
+						continue;
+					}
+
+					if (languageDirections.ContainsKey(language))
+					{
+						languageDirections[language].Add(projectFile);
+					}
+					else
+					{
+						languageDirections.Add(language, new List<Model.ProjectFile> { projectFile });
+					}
+				}
+			}
+
+			return languageDirections;
+		}
+		private void CreateDefaultContext()
+		{
+			_exportSettings.DateTimeStamp = DateTime.UtcNow;
+
+			var projectInfo = Project.GetProjectInfo();
+
+			_exportSettings.LocalProjectFolder = projectInfo.LocalProjectFolder;
+			_exportSettings.TransactionFolder = GetDefaultTransactionPath(_exportSettings.LocalProjectFolder, Enumerators.Action.Export);
+			_exportSettings.ExportOptions = _exportSettings.ExportOptions ?? new ExportOptions();
+		}
+
+		private string GetDefaultTransactionPath(string localProjectFolder, Enumerators.Action action)
+		{
+			var rootPath = Path.Combine(localProjectFolder, "XLIFF.Manager");
+			var path = Path.Combine(rootPath, action.ToString());
+
+			if (!Directory.Exists(rootPath))
+			{
+				Directory.CreateDirectory(rootPath);
+			}
+
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
+
+			return path;
 		}
 
 		private void CreateWizardContext()
 		{
 			var selectedIds = TaskFiles.Select(projectFile => projectFile.Id.ToString()).ToList();
-			_project = GetProjectModel(Project as FileBasedProject, selectedIds);			
+			_project = GetProjectModel(Project as FileBasedProject, selectedIds);
 			_wizardContext = new WizardContext
-			{				
+			{
 				Action = Enumerators.Action.Export,
 				Completed = false,
 				Project = _project,
@@ -213,7 +321,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			}
 
 			return selectedFilterItems;
-		}		
+		}
 
 		private void WriteLogReportHeader()
 		{
@@ -599,6 +707,10 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			RemoveSettingsFromProject(_exportSettings.Id);
+			if (_wizardContext.Completed)
+			{
+				_xliffManagerController?.UpdateProjectData(_wizardContext, true);
+			}
 		}
 	}
 }

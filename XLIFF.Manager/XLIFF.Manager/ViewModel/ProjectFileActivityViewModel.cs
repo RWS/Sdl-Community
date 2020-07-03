@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Commands;
+using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.View;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
@@ -81,12 +83,21 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 		private void ViewReport(object parameter)
 		{
-			if (SelectedProjectFileActivity == null || string.IsNullOrEmpty(SelectedProjectFileActivity.Report))
+			if (string.IsNullOrEmpty(SelectedProjectFileActivity?.Report))
 			{
 				return;
-			}
+			}			
 
-			System.Diagnostics.Process.Start(SelectedProjectFileActivity.Report);
+			var viewModel = new ReportViewModel
+			{
+				HtmlUri = SelectedProjectFileActivity.Report,
+				WindowTitle = SelectedProjectFileActivity.Action == Enumerators.Action.Export
+					? "Export to XLIFF Report"
+					: "Import from XLIFF Report"
+			};
+
+			var view = new ReportWindow(viewModel);
+			view.ShowDialog();
 		}
 
 		public void Dispose()

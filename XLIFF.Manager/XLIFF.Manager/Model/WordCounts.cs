@@ -9,7 +9,8 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		public WordCounts()
 		{
 			Processed = new List<WordCount>();
-			Ignored = new List<WordCount>();
+			Excluded = new List<WordCount>();
+			NotProcessed = new List<WordCount>();
 		}
 
 		[XmlArray]
@@ -18,8 +19,12 @@ namespace Sdl.Community.XLIFF.Manager.Model
 
 		[XmlArray]
 		[XmlArrayItem("WordCount", Type = typeof(WordCount))]
-		public List<WordCount> Ignored { get; set; }
-				
+		public List<WordCount> Excluded { get; set; }
+
+		[XmlArray]
+		[XmlArrayItem("WordCount", Type = typeof(WordCount))]
+		public List<WordCount> NotProcessed { get; set; }
+
 		public object Clone()
 		{
 			var wordCounts = new WordCounts();
@@ -30,13 +35,17 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				wordCounts.Processed.Add(wordCount.Clone() as WordCount);
 			}
 
-			var ignored = new WordCounts();
-			ignored.Ignored = new List<WordCount>();
-			foreach (var wordCount in Ignored)
+			wordCounts.Excluded = new List<WordCount>();
+			foreach (var wordCount in Excluded)
 			{
-				ignored.Ignored.Add(wordCount.Clone() as WordCount);
+				wordCounts.Excluded.Add(wordCount.Clone() as WordCount);
 			}
 
+			wordCounts.NotProcessed = new List<WordCount>();
+			foreach (var wordCount in NotProcessed)
+			{
+				wordCounts.NotProcessed.Add(wordCount.Clone() as WordCount);
+			}
 
 			return wordCounts;
 		}

@@ -23,6 +23,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			_exportOptions = exportOptions;
 			_analysisBands = analysisBands;
 			ConfirmationStatistics = new ConfirmationStatistics();
+			TranslationOriginStatistics = new TranslationOriginStatistics();
 		}
 
 		public ConfirmationStatistics ConfirmationStatistics { get; private set; }

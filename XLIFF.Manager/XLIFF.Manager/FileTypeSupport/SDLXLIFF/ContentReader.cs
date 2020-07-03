@@ -140,8 +140,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			{
 				var segmentPairInfo = SegmentPairProcessor.GetSegmentPairInfo(segmentPair);
 				var status = segmentPair.Properties.ConfirmationLevel.ToString();
-				var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin,
-					_analysisBands);
+				var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
 				if (_excludeFilterItems != null)
 				{
@@ -149,8 +148,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 						|| _excludeFilterItems.Exists(a => a == status)
 						|| _excludeFilterItems.Exists(a => a == match))
 					{
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Ignored, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Ignored, segmentPairInfo);
+						AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
+						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
 						continue;
 					}
 				}
@@ -280,7 +279,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			}
 		}
 
-		public SegmentPairProcessor SegmentPairProcessor
+		private SegmentPairProcessor SegmentPairProcessor
 		{
 			get
 			{
