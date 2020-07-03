@@ -15,6 +15,8 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 		{
 			var translationOrigin = segmentPair.Properties.TranslationOrigin;
 
+			if (translationOrigin == null) return;
+
 			if (anonymizerSettings.CreatedByChecked)
 			{
 				EditUserMetadata(translationOrigin, "created_by", anonymizerSettings.CreatedByName);
