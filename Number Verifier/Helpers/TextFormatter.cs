@@ -7,6 +7,11 @@ namespace Sdl.Community.NumberVerifier.Helpers
 {
 	public class TextFormatter
 	{
+		/// <summary>
+		/// Get the builder separators with specific format (used when matching the number based on the specific separator)
+		/// </summary>
+		/// <param name="separators"></param>
+		/// <returns></returns>
 		public StringBuilder GetBuilderSeparators(string separators)
 		{
 			var separatorsBuilder = new StringBuilder();
@@ -22,6 +27,11 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			return separatorsBuilder;
 		}
 
+		/// <summary>
+		/// Format different types of dates
+		/// </summary>
+		/// <param name="text"></param>
+		/// <returns></returns>
 		public string FormatTextDate(string text)
 		{
 			string[] shortFormats = { "d/M/yy", "dd/MM/yy", "d.M.yy", "dd.MM.yy", "dd/M/yy", "dd.M.yy" };
@@ -51,6 +61,11 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			return text;
 		}
 
+		/// <summary>
+		/// Format the different types of dash
+		/// </summary>
+		/// <param name="text"></param>
+		/// <returns></returns>
 		public string FormatDashText(string text)
 		{
 			//skip the "-" in case of: - 23 (dash, space, number)
@@ -66,6 +81,11 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			return text;
 		}
 
+		/// <summary>
+		/// Format separators for a proper identification of number within the normalization process 
+		/// </summary>
+		/// <param name="separators"></param>
+		/// <returns></returns>
 		public string FormatSeparators(IEnumerable<string> separators)
 		{
 			var separatorsBuilder = new StringBuilder();
@@ -88,9 +108,14 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			return separatorsBuilder.ToString();
 		}
 
+		/// <summary>
+		/// Get separators
+		/// </summary>
+		/// <param name="separators"></param>
+		/// <returns></returns>
 		public string GetSeparators(string separators)
 		{
-			var separatorsBuilder=  new StringBuilder();
+			var separatorsBuilder = new StringBuilder();
 			if (separators != null)
 			{
 				foreach (var separator in separators)
@@ -102,9 +127,47 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			return separatorsBuilder.ToString();
 		}
 		
+		/// <summary>
+		/// Check if the separators contains one of the space type unicode
+		/// </summary>
+		/// <param name="separators"></param>
+		/// <returns></returns>
 		public bool IsSpaceSeparator(string separators)
 		{
 			return separators.Contains("u00A0") || separators.Contains("u2009") || separators.Contains("u0020") || separators.Contains("u202F");
+		}
+
+		/// <summary>
+		/// Parse the number text when 'No separator' is checked and the number is thousand or thousand-decimal format.
+		/// </summary>
+		/// <param name="numberText"></param>
+		/// <param name="tempNormalized"></param>
+		/// <returns></returns>
+		public string ParseNoSeparatorNumber(string numberText, StringBuilder tempNormalized)
+		{
+			if (int.Parse(numberText) >= 1000)
+			{
+				var position = 0;
+				for (var i = numberText.Length - 1; i >= 0; i--)
+				{
+					if (position > 0 && position == 3)
+					{
+						tempNormalized.Insert(0, "m");
+					}
+					else
+					{
+						tempNormalized.Insert(0, numberText[i]);
+					}
+
+					position++;
+				}
+
+				// insert also the remained first letter back to the number text
+				tempNormalized.Insert(0, numberText[0]);
+				return tempNormalized.ToString();
+			}
+
+			return numberText;
 		}
 	}
 }

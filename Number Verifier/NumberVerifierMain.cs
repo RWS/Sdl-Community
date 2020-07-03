@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -40,6 +39,8 @@ namespace Sdl.Community.NumberVerifier
 		private bool _isThousandDecimal;
 		private string _targetText;
 		private string _sourceText;
+		private string _thousandWithoutDecimal;
+		private string _decimalAfterThousand;
 
 		#endregion
 
@@ -924,7 +925,8 @@ namespace Sdl.Community.NumberVerifier
 			var isDigitChar = (!string.IsNullOrEmpty(decimalMatch) && decimalMatch.Length <= 3 || !string.IsNullOrEmpty(numberDigits) && Regex.IsMatch(numberDigits[0].ToString(), @"\s"))
 			                  && replacedText.Length <= 3
 			                  && textBeforeSeparator.Length <= 3; // text length before the separator should be <= 3 chars to correspond to decimal number standards
-			_isThousandDecimal = textBeforeSeparator.Length > 3 && decimalMatch.Length <= 3; // used for the validation within IsNumberThousandDecimal()
+
+			SetSeparateThousandDecimal(textBeforeSeparator, decimalMatch);
 
 			// validate if the first decimal char is not number, then check
 			// if the same separator is found more than one time, it means the number is in thousand-decimal format
@@ -937,6 +939,13 @@ namespace Sdl.Community.NumberVerifier
 			var isThousandFormat = !string.IsNullOrEmpty(textBeforeSeparator) && decimalMatch.Length >= 3;
 			return (isDigitChar || numberText.Length <= 3 || !string.IsNullOrEmpty(textBeforeSeparator))
 			       && !isThousandFormat;
+		}
+
+		private void SetSeparateThousandDecimal(string textBeforeSeparator, string decimalMatch)
+		{
+			_isThousandDecimal = textBeforeSeparator.Length > 3 && decimalMatch.Length <= 3; // used for the validation within IsNumberThousandDecimal() and NoSeparator validation
+			_thousandWithoutDecimal = _isThousandDecimal ? textBeforeSeparator : string.Empty;
+			_decimalAfterThousand = _isThousandDecimal ? decimalMatch : string.Empty;
 		}
 
 		private bool IsNumberThousandDecimal(string numberText, SeparatorModel separatorModel)
@@ -1060,7 +1069,6 @@ namespace Sdl.Community.NumberVerifier
 			try
 			{
 				// see http://www.fileformat.info/info/unicode/char/2212/index.htm
-				//request to support special minus sign
 
 				if (_omitLeadingZero)
 				{
@@ -1069,163 +1077,15 @@ namespace Sdl.Community.NumberVerifier
 
 				separatorModel.MatchValue = NormalizeNumberWithMinusSign(separatorModel.MatchValue);
 				separatorModel.MatchValue = NormalizeSpecialCharNumber(separatorModel.MatchValue, separatorModel.CustomSeparators, _omitLeadingZero);
-		
-				if (separatorModel.ThousandSeparators != string.Empty &&
-					Regex.IsMatch(separatorModel.MatchValue, @"^m?[1-9]\d{0,2}([" + separatorModel.ThousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
-				// e.g 1,000,000
-				{
-					normalizedNumber = Regex.Replace(separatorModel.MatchValue, @"[" + separatorModel.ThousandSeparators + @"]", "t");
-				}
-				else if (!string.IsNullOrEmpty(separatorModel.ThousandSeparators) && !string.IsNullOrEmpty(separatorModel.DecimalSeparators) &&
-						 Regex.IsMatch(separatorModel.MatchValue,
-							 @"^m?[1-9]\d{0,2}([" + separatorModel.ThousandSeparators + @"])\d\d\d(\1\d\d\d)*[" + separatorModel.DecimalSeparators +
-							 @"]\d+$")) // e.g. 1,000.5
-				{
-					var usedThousandSeparator = Regex.Match(separatorModel.MatchValue, @"[" + separatorModel.ThousandSeparators + @"]").Value;
 
-					//for ex if we have 1.45.67, we need to replace only first aparition of the thousand separator
-					var reg = new Regex(Regex.Escape(usedThousandSeparator));
-					normalizedNumber = reg.Replace(separatorModel.MatchValue, "t", 1);
-
-					var usedDecimalSeparator = Regex.Match(normalizedNumber, @"[" + separatorModel.DecimalSeparators + @"]").Value;
-					normalizedNumber = !string.IsNullOrEmpty(usedDecimalSeparator)
-						? Regex.Replace(normalizedNumber, @"[" + usedDecimalSeparator + @"]", "d")
-						: normalizedNumber;
-				}
-				else if (!string.IsNullOrEmpty(separatorModel.ThousandSeparators)
-						&& Regex.IsMatch(separatorModel.MatchValue, @"^m?[1-9]\d{0,2}([" + separatorModel.ThousandSeparators + @"])\d\d\d$"))
-				// e.g. 1,000
-				{
-					if (!string.IsNullOrEmpty(_sourceMatchingDecimalSeparators)
-						&& Regex.IsMatch(separatorModel.MatchValue, @"^m?[1-9]\d{0,2}([" + separatorModel.DecimalSeparators + @"])\d\d\d$"))
-					{
-						normalizedNumber = Regex.Replace(separatorModel.MatchValue, @"[" + separatorModel.ThousandSeparators + @"]", "u");
-					}
-					else
-					{
-						normalizedNumber = Regex.Replace(separatorModel.MatchValue, @"[" + separatorModel.ThousandSeparators + @"]", "t");
-					}
-				}
-				else
-				{
-					if (!string.IsNullOrEmpty(_sourceMatchingDecimalSeparators)
-						&& !string.IsNullOrEmpty(separatorModel.DecimalSeparators) && Regex.IsMatch(separatorModel.MatchValue, @"^m?\d+[" + separatorModel.DecimalSeparators + @"]\d+$")) // e.g. 0,100
-					{
-						normalizedNumber = Regex.Replace(separatorModel.MatchValue, @"[" + separatorModel.DecimalSeparators + @"]", "d");
-					}
-					else
-					{
-						normalizedNumber = separatorModel.MatchValue;
-					}
-					return normalizedNumber.Normalize(NormalizationForm.FormKC);
-				}
+				normalizedNumber = separatorModel.MatchValue;
+				return normalizedNumber.Normalize(NormalizationForm.FormKC);
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 			}
 
-			return normalizedNumber.Normalize(NormalizationForm.FormKC);
-		}
-
-		public string NormalizeNumberNoSeparator(string decimalSeparators, string thousandSeparators, string normalizedNumber)
-		{
-			var thousandSeparator = string.Empty;
-			var decimalSeparator = string.Empty;
-			var hasMinusSign = false;
-
-			if (thousandSeparators != string.Empty)
-			{
-				thousandSeparator = thousandSeparators.Substring(0, 1);
-			}
-
-			if (decimalSeparators != string.Empty)
-			{
-				decimalSeparator = decimalSeparators.Substring(0, 1);
-			}
-
-			try
-			{
-				if (!(normalizedNumber.Contains("u") || normalizedNumber.Contains("t")))
-				{
-					var numberElements = Regex.Split(normalizedNumber, "d");
-					decimal thousandNumber;
-
-					if (numberElements[0].IndexOf('m') == 0)
-					{
-						var numberWithoutMinus = numberElements[0].Substring(1);
-						thousandNumber = decimal.Parse(numberWithoutMinus.Normalize(NormalizationForm.FormKC));
-						hasMinusSign = true;
-					}
-					else
-					{
-						decimal.TryParse(numberElements[0].Normalize(NormalizationForm.FormKC), out thousandNumber);
-					}
-
-					//number must be >= 1000 to run no separator option
-					if (thousandNumber >= 1000)
-					{
-						var thousands = thousandNumber.ToString(CultureInfo.InvariantCulture);
-						var tempNormalized = new StringBuilder();
-						var counter = 0;
-						for (var i = thousands.Length - 1; i >= 0; i--)
-						{
-							if (tempNormalized.Length > 0 && counter % 3 == 0)
-							{
-								if (!string.IsNullOrEmpty(thousandSeparators))
-								{
-									tempNormalized.Insert(0, !thousandSeparator.Contains(" ") ? $@"{thousands[i]}{thousandSeparator}" : $@"{thousands[i]}{string.Empty}");
-								}
-								else
-								{
-									tempNormalized.Insert(0, thousands[i]);
-								}
-								counter = 1;
-							}
-							else
-							{
-								tempNormalized.Insert(0, thousands[i]);
-								counter++;
-							}
-						}
-
-						if (numberElements.Length > 1)
-						{
-							if (!string.IsNullOrEmpty(decimalSeparator))
-							{
-
-								tempNormalized.Append($@"{decimalSeparator}{numberElements[1]}");
-								if (hasMinusSign)
-								{
-									tempNormalized.Insert(0, "m");
-								}
-							}
-							else
-							{
-								tempNormalized.Append(numberElements[1]);
-								if (hasMinusSign)
-								{
-									tempNormalized.Insert(0, "m");
-								}
-							}
-						}
-						var temNormalizedWithoutSpaces = tempNormalized.ToString().Normalize(NormalizationForm.FormKC);
-
-						normalizedNumber = NormalizeNumber(new SeparatorModel
-						{
-							MatchValue = temNormalizedWithoutSpaces,
-							ThousandSeparators = thousandSeparators,
-							DecimalSeparators = decimalSeparators,
-							NoSeparator = false,
-							CustomSeparators = string.Empty
-						});
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
-			}
 			return normalizedNumber.Normalize(NormalizationForm.FormKC);
 		}
 
@@ -1259,14 +1119,26 @@ namespace Sdl.Community.NumberVerifier
 		{
 			numberText = _textFormatter.FormatTextDate(numberText);
 			numberText = _textFormatter.FormatDashText(numberText);
+			var regExExpression = GetValidationRegEx(normalizedNumber.OmitLeadingZero, normalizedNumber.Separators);
 
 			// return if the thousand number with 'No separator' was already normalized and set to the 'normalizedNumber' object
 			if (IsNoSeparatorNumberNormalized(normalizedNumber, numberText))
 			{
+				// in case the number has thousand-decimal format, and the thousand number was normalized(within IsNoSeparatorNumberNormalized()),
+				// then also the decimal number should be normalized based on the decimal separators
+				if (_isThousandDecimal && !string.IsNullOrEmpty(_thousandWithoutDecimal))
+				{
+					foreach (Match match in Regex.Matches(normalizedNumber.NormalizedNumberList[1], regExExpression))
+					{
+						SetNormalizedNumber(normalizedNumber, match.Value);
+					}
+					normalizedNumber.InitialNumberList.RemoveAt(1);
+					normalizedNumber.NormalizedNumberList.RemoveAt(1);
+				}
+
 				return;
 			}
-
-			var regExExpression = GetValidationRegEx(normalizedNumber.OmitLeadingZero, normalizedNumber.Separators);
+			
 			foreach (Match match in Regex.Matches(numberText, regExExpression))
 			{
 				SetNormalizedNumber(normalizedNumber, match.Value);
@@ -1295,29 +1167,20 @@ namespace Sdl.Community.NumberVerifier
 		private string NormalizeNoSeparator(string numberText)
 		{
 			var tempNormalized = new StringBuilder();
+
+			if (_isThousandDecimal && !string.IsNullOrEmpty(_thousandWithoutDecimal) && _isNoSeparator)
+			{
+				if (int.TryParse(_thousandWithoutDecimal, out _))
+				{
+					numberText = _textFormatter.ParseNoSeparatorNumber(_thousandWithoutDecimal, tempNormalized);
+					numberText = numberText.Insert(numberText.Length, _decimalAfterThousand);
+					return numberText;
+				}
+			}
 			if (int.TryParse(numberText, out _) && _isNoSeparator)
 			{
-				if (int.Parse(numberText) >= 1000)
-				{
-					var position = 0;
-					for (var i = numberText.Length - 1; i >= 0; i--)
-					{
-						if (position > 0 && position == 3)
-						{
-							tempNormalized.Insert(0, "m");
-						}
-						else
-						{
-							tempNormalized.Insert(0, numberText[i]);
-						}
-
-						position++;
-					}
-
-					// insert also the remained first letter back to the number text
-					tempNormalized.Insert(0, numberText[0]);
-					return tempNormalized.ToString();
-				}
+				numberText = _textFormatter.ParseNoSeparatorNumber(numberText, tempNormalized);
+				return numberText;
 			}
 
 			return numberText;
