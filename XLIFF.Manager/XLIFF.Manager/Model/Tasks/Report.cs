@@ -11,7 +11,7 @@ namespace Sdl.Community.XLIFF.Manager.Model.Tasks
 			_action = action;
 
 			Guid = System.Guid.NewGuid().ToString();
-			TaskTemplateId = "XLIFF.Manager.BatchTasks.Export";
+			TaskTemplateId = "XLIFF.Manager.BatchTasks."+ action;
 		}
 
 		public string Guid { get; set; }

@@ -281,8 +281,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 							XliffArchiveFile = xliffArchiveFile
 						};
 						importFiles.Add(importFile);
-
-						//Enum.TryParse<ConfirmationLevel>(WizardContext.ImportConfirmationStatusTranslationUpdatedId, true, out var importConfirmationStatusTranslationUpdated);
 						
 
 						var xliff = xliffReader.ReadXliff(targetLanguageFile.XliffFilePath);
@@ -296,6 +294,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 							targetLanguageFile.Status = Enumerators.Status.Success;
 							targetLanguageFile.Report = string.Empty;
 							targetLanguageFile.XliffFilePath = xliffArchiveFile;
+							targetLanguageFile.ConfirmationStatistics = sdlxliffWriter.ConfirmationStatistics;
+							targetLanguageFile.TranslationOriginStatistics = sdlxliffWriter.TranslationOriginStatistics;
 						}
 
 						var activityFile = new ProjectFileActivity
@@ -308,7 +308,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 							Name = Path.GetFileName(targetLanguageFile.XliffFilePath),
 							Path = Path.GetDirectoryName(targetLanguageFile.XliffFilePath),
 							Report = string.Empty,
-							ProjectFile = targetLanguageFile
+							ProjectFile = targetLanguageFile,
+							ConfirmationStatistics = targetLanguageFile.ConfirmationStatistics,
+							TranslationOriginStatistics = targetLanguageFile.TranslationOriginStatistics
 						};
 
 						targetLanguageFile.ProjectFileActivities.Add(activityFile);
