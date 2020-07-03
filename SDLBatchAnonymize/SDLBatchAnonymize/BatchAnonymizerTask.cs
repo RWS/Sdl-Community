@@ -36,7 +36,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 			if (projectInfo is null) return;
 			var backupService = new BackupService();
 
-			Application.Current.Dispatcher.Invoke(() =>
+			Application.Current?.Dispatcher?.Invoke(() =>
 			{
 				foreach (Window window in Application.Current.Windows)
 				{
