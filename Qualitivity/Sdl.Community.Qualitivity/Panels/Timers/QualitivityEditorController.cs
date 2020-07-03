@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Qualitivity.Panels.Timers
@@ -17,7 +18,7 @@ namespace Sdl.Community.Qualitivity.Panels.Timers
     {
 
 
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return Control.Value;
         }

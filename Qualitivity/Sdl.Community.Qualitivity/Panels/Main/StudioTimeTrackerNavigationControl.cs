@@ -1,10 +1,11 @@
 using System;
 using System.Windows.Forms;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.Qualitivity.Panels.Main
 {
-    public partial class QualitivityNavigationControl : UserControl
-    {
+    public partial class QualitivityNavigationControl : UserControl, IUIControl
+	{
         public QualitivityNavigationControl()
         {
             InitializeComponent();

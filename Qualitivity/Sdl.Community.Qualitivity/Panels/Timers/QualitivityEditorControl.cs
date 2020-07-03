@@ -3,12 +3,13 @@ using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.Qualitivity.Panels.Main;
 using Sdl.Community.Qualitivity.Tracking;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Qualitivity.Panels.Timers
 {
-    public partial class QualitivityEditorControl : UserControl
-    {
+    public partial class QualitivityEditorControl : UserControl, IUIControl
+	{
         private QualitivityViewController _controller { get; set; }
         public QualitivityViewController Controller
         {

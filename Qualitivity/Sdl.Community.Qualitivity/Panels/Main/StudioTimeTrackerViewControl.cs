@@ -6,11 +6,12 @@ using Sdl.Community.Qualitivity.Tracking;
 using Sdl.Community.Structures.Profile;
 using Sdl.Community.Structures.Projects;
 using Sdl.Community.Structures.Projects.Activities;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.Qualitivity.Panels.Main
 {
-    public partial class QualitivityViewControl : UserControl
-    {
+    public partial class QualitivityViewControl : UserControl, IUIControl
+	{
 
 
         private List<Project> ProjectsTemp { get; set; }

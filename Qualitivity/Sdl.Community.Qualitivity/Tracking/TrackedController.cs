@@ -64,7 +64,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			ProgressWindow.ProgressDialogWorker.ReportProgress(current, progress);
 		}
 
-		public static void TrackNewDocumentEntry(Document doc)
+		public static void TrackNewDocumentEntry(IStudioDocument doc)
 		{
 			var projectFile = doc.Files.FirstOrDefault();
 			if (projectFile == null || Tracked.DictCacheDocumentItems.ContainsKey(projectFile.Id.ToString()))
@@ -383,7 +383,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 		}
 
-		public static Project NewQualitivityProject(Document doc)
+		public static Project NewQualitivityProject(IStudioDocument doc)
 		{
 
 			Project newProject = null;
@@ -450,7 +450,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			return newProject;
 		}
 
-		public static List<StateCountItem> InitializeDocumentStatisticalState(Document doc, string fileId)
+		public static List<StateCountItem> InitializeDocumentStatisticalState(IStudioDocument doc, string fileId)
 		{
 			var stateCountItems = new List<StateCountItem>();
 
@@ -930,7 +930,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			return stateCountItems;
 		}
 
-		public static List<StateCountItem> InitalizeDocumentConfirmationStatisticalState(Document doc, string fileId)
+		public static List<StateCountItem> InitalizeDocumentConfirmationStatisticalState(IStudioDocument doc, string fileId)
 		{
 
 			var tccsos = new List<StateCountItem>();
@@ -1527,7 +1527,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 		}
 
-		public static void TrackSegmentPairs(Document doc)
+		public static void TrackSegmentPairs(IStudioDocument doc)
 		{
 			Tracked.DocumentSegmentPairs = new Dictionary<string, SegmentPair>();
 
@@ -1546,7 +1546,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 		}
 
-		public static void InitializeDocumentTracking(Document doc)
+		public static void InitializeDocumentTracking(IStudioDocument doc)
 		{
 			#region  |  initialize document cache item  |
 

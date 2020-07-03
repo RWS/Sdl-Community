@@ -4,6 +4,7 @@ using BrightIdeasSoftware;
 using Sdl.Community.Qualitivity.Panels.Main;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.Qualitivity.Panels.Properties
 {
@@ -18,7 +19,7 @@ namespace Sdl.Community.Qualitivity.Panels.Properties
     [ViewPartLayout(Dock = DockType.Right, ZIndex = 2, LocationByType = typeof(QualitivityViewController))]
     public class QualitivityViewPropertiesController : AbstractViewPartController
     {
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return Control.Value;
         }
