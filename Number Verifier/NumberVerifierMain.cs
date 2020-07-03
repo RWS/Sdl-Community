@@ -38,6 +38,8 @@ namespace Sdl.Community.NumberVerifier
 		private readonly TextFormatter _textFormatter;
 		private bool _isNoSeparator;
 		private bool _isThousandDecimal;
+		private string _targetText;
+		private string _sourceText;
 
 		#endregion
 
@@ -47,7 +49,7 @@ namespace Sdl.Community.NumberVerifier
 		{
 			if (_textFormatter == null)
 			{
-				_textFormatter = new TextFormatter(this);
+				_textFormatter = new TextFormatter();
 			}
 		}
 
@@ -57,7 +59,7 @@ namespace Sdl.Community.NumberVerifier
 
 			if (_textFormatter == null)
 			{
-				_textFormatter = new TextFormatter(this);
+				_textFormatter = new TextFormatter();
 			}
 		}
 
@@ -308,10 +310,10 @@ namespace Sdl.Community.NumberVerifier
 				// loop through the whole paragraph unit
 				foreach (var segmentPair in paragraphUnit.SegmentPairs.Where(FilterSegmentPairs))
 				{
-					var sourceText = GetSegmentText(segmentPair.Source);
-					var targetText = GetSegmentText(segmentPair.Target);
+					_sourceText = GetSegmentText(segmentPair.Source);
+					_targetText = GetSegmentText(segmentPair.Target);
 
-					var errorMessageList = CheckSourceAndTarget(sourceText, targetText);
+					var errorMessageList = CheckSourceAndTarget(_sourceText, _targetText);
 
 					#region ReportingMessage
 
@@ -852,7 +854,7 @@ namespace Sdl.Community.NumberVerifier
 						{
 							_isNoSeparator = false; // the 'NoSeparator' option can be checked only for thousand or thousand-decimal numbers 
 							normalizedNumber.Separators = $"{normalizedNumber.DecimalSeparators}{_textFormatter.GetSeparators(separatorModel.DecimalCustomSeparators)}";
-							SetNormalizedNumber(normalizedNumber, string.Empty, text);
+							ConfigureNormalizedNumber(normalizedNumber, text);
 						}
 						else if (IsNumberThousandDecimal(text, separatorModel))
 						{
@@ -863,7 +865,7 @@ namespace Sdl.Community.NumberVerifier
 							var customSeparators = $"{separatorModel.ThousandCustomSeparators}{separatorModel.DecimalCustomSeparators}";
 							SetSeparatorInformation(separatorModel, customSeparators, true);
 							normalizedNumber.Separators = separators;
-							SetNormalizedNumber(normalizedNumber, separatorModel.CustomSeparators, text);
+							ConfigureNormalizedNumber(normalizedNumber, text);
 						}
 						else
 						{
@@ -871,7 +873,7 @@ namespace Sdl.Community.NumberVerifier
 							_isNoSeparator = VerificationSettings.SourceNoSeparator || VerificationSettings.TargetNoSeparator;
 							SetSeparatorInformation(separatorModel, separatorModel.ThousandCustomSeparators, false);
 							normalizedNumber.Separators = normalizedNumber.ThousandSeparators;
-							SetNormalizedNumber(normalizedNumber, separatorModel.CustomSeparators, text);
+							ConfigureNormalizedNumber(normalizedNumber, text);
 						}
 					}
 				}
@@ -1067,7 +1069,7 @@ namespace Sdl.Community.NumberVerifier
 
 				separatorModel.MatchValue = NormalizeNumberWithMinusSign(separatorModel.MatchValue);
 				separatorModel.MatchValue = NormalizeSpecialCharNumber(separatorModel.MatchValue, separatorModel.CustomSeparators, _omitLeadingZero);
-
+		
 				if (separatorModel.ThousandSeparators != string.Empty &&
 					Regex.IsMatch(separatorModel.MatchValue, @"^m?[1-9]\d{0,2}([" + separatorModel.ThousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
 				// e.g 1,000,000
@@ -1253,14 +1255,14 @@ namespace Sdl.Community.NumberVerifier
 			return item.IndexOf(separator) > -1 ? item.Substring(item.IndexOf(separator), item.Length - item.IndexOf(separator)).Length - 1 : 0;
 		}
 
-		private void SetNormalizedNumber(NormalizedNumber normalizedNumber, string customSeparators, string numberText)
+		private void ConfigureNormalizedNumber(NormalizedNumber normalizedNumber, string numberText)
 		{
 			numberText = _textFormatter.FormatTextDate(numberText);
 			numberText = _textFormatter.FormatDashText(numberText);
-			if (_isNoSeparator)
+
+			// return if the thousand number with 'No separator' was already normalized and set to the 'normalizedNumber' object
+			if (IsNoSeparatorNumberNormalized(normalizedNumber, numberText))
 			{
-				numberText = _textFormatter.FormatTextNoSeparator(customSeparators, numberText, normalizedNumber.Separators, _isSource);
-				SetNormalizedNumber(normalizedNumber, numberText);
 				return;
 			}
 
@@ -1269,6 +1271,56 @@ namespace Sdl.Community.NumberVerifier
 			{
 				SetNormalizedNumber(normalizedNumber, match.Value);
 			}
+		}
+
+		// Check if the thousand number with 'No separator' is successfully normalized.
+		// (add "m" to position where thousand is corresponding, ex: 1m200 or 123m000)
+		private bool IsNoSeparatorNumberNormalized(NormalizedNumber normalizedNumber, string numberText)
+		{
+			numberText = NormalizeNoSeparator(numberText);
+			// split the number normalized above based on 'm', so it will be added correctly to the normalized number 
+			var splitNumber = Regex.Split(numberText, @"(m)");
+			if (splitNumber.Length == 3)
+			{
+				// Set the 'No separator' normalized number to be validated correctly with the corresponding verification text
+				SetNormalizedNumber(normalizedNumber, splitNumber[0]); // ex: 1
+				SetNormalizedNumber(normalizedNumber, $"{splitNumber[1]}{splitNumber[2]}"); // ex: m234
+
+				return true;
+			}
+			return false;
+		}
+
+		// Normalize the text number if number is full thousand (ex: 1200) and the 'No separator' option is checked
+		private string NormalizeNoSeparator(string numberText)
+		{
+			var tempNormalized = new StringBuilder();
+			if (int.TryParse(numberText, out _) && _isNoSeparator)
+			{
+				if (int.Parse(numberText) >= 1000)
+				{
+					var position = 0;
+					for (var i = numberText.Length - 1; i >= 0; i--)
+					{
+						if (position > 0 && position == 3)
+						{
+							tempNormalized.Insert(0, "m");
+						}
+						else
+						{
+							tempNormalized.Insert(0, numberText[i]);
+						}
+
+						position++;
+					}
+
+					// insert also the remained first letter back to the number text
+					tempNormalized.Insert(0, numberText[0]);
+					return tempNormalized.ToString();
+				}
+			}
+
+			return numberText;
 		}
 
 		private void SetNormalizedNumber(NormalizedNumber normalizedNumber, string numberText)

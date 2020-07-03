@@ -2,20 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using System.Text.RegularExpressions;
-using Sdl.Community.NumberVerifier.Model;
 
 namespace Sdl.Community.NumberVerifier.Helpers
 {
 	public class TextFormatter
 	{
-		private readonly NumberVerifierMain _numberVerifierMain;
-
-		public TextFormatter(NumberVerifierMain numberVerifierMain)
-		{
-			_numberVerifierMain = numberVerifierMain;
-		}
-
 		public StringBuilder GetBuilderSeparators(string separators)
 		{
 			var separatorsBuilder = new StringBuilder();
@@ -111,104 +102,9 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			return separatorsBuilder.ToString();
 		}
 		
-		// Remove the corresponding thousand separator when "No separator" is checked and the number contains separator
-		public string FormatTextNoSeparator(string customSeparators, string text, string separators, bool isSource)
-		{ 
-			var verificationSettings = _numberVerifierMain.VerificationSettings;
-			if (isSource && verificationSettings.SourceNoSeparator || !isSource && verificationSettings.TargetNoSeparator)
-			{
-				// process the source or target text which has the "No separator" checked
-				text = RemoveSeparator(text, customSeparators);
-				return text;
-			}
-
-			if (isSource && verificationSettings.TargetNoSeparator || !isSource && verificationSettings.SourceNoSeparator)
-			{
-				// process text for the corresponding source/target which doesn't have the "No separator" option checked
-				var separatorsBuilder = GetBuilderSeparators(separators).ToString();
-				if (Regex.IsMatch(text, $@"-?\{separatorsBuilder}d+([{0}]\d+)*"))
-				{
-					text = Regex.Replace(text, @"[" + separators + @"]", string.Empty);
-				}
-				return text;
-			}
-			return text;
-		}
-
-		private string RemoveSeparator(string text, string customSeparators)
-		{
-			var allSeparators = $",.{' '}&nbsp{customSeparators}";
-
-			foreach (var letter in text)
-			{
-				if (allSeparators.Contains(letter.ToString()) || Regex.IsMatch(letter.ToString(), @"\s"))
-				{
-					var indexOfLetter = text.IndexOf(letter.ToString(), StringComparison.Ordinal);
-					var textLengtWithSep = text.Substring(indexOfLetter).Length - 1; // get length of text after separator to check if it's not corresponding to decimal
-					if (textLengtWithSep < 3) // if the text after separator is < 3 it means it's corresponding to decimal and the separator shouldn't be removed
-					{
-						continue;
-					}
-
-					// remove and return the text first time the separator was replaced (it means that the thousand separator was identified and replaced)
-					// the foreach shouldn't continue, because in case of a decimal separator, it should not be removed
-					text = text.Remove(indexOfLetter, 1).Insert(indexOfLetter, string.Empty);
-
-					return text;
-				}
-			}
-			return text;
-		}
-
 		public bool IsSpaceSeparator(string separators)
 		{
 			return separators.Contains("u00A0") || separators.Contains("u2009") || separators.Contains("u0020") || separators.Contains("u202F");
-		}
-
-		// Get the formatted text after the thousand separator is removed
-		private string GetFormattedText(SeparatorModel separatorModel, string text)
-		{
-			if (separatorModel.IsThousandDecimal && separatorModel.LengthCommaOrCustomSep > 3
-			    || !separatorModel.IsThousandDecimal && separatorModel.LengthCommaOrCustomSep >= 3)
-			{
-				// replace the "," or custom separator only when it located at thousand position
-				separatorModel.CustomSeparators = separatorModel.ThousandSeparators.Contains("u002C")
-					? $"{separatorModel.CustomSeparators},"
-					: separatorModel.CustomSeparators;
-				text = GetReplacedText(text, separatorModel.CustomSeparators);
-			}
-
-			if (separatorModel.IsThousandDecimal && separatorModel.LengthPeriodOrCustomSep > 3
-			    || !separatorModel.IsThousandDecimal && separatorModel.LengthPeriodOrCustomSep >= 3)
-			{
-				// replace the "." or custom separator only when it located at thousand position
-				separatorModel.CustomSeparators = separatorModel.ThousandSeparators.Contains("u002E")
-					? $"{separatorModel.CustomSeparators}."
-					: separatorModel.CustomSeparators;
-				text = GetReplacedText(text, separatorModel.CustomSeparators);
-			}
-
-			return text;
-		}
-
-		// Return the replaced text based on the custom separators and specific conditions
-		private string GetReplacedText(string text, string customSeparators)
-		{
-			if (string.IsNullOrEmpty(text)) return text;
-
-			foreach (var customSeparator in customSeparators)
-			{
-				var separator = customSeparator.ToString();
-				var formattedSeparator = $@"\{separator}";
-				if (Regex.IsMatch(text, formattedSeparator))
-				{
-					// remove the thousand separator, ex: 1,200,50 / 1*200.50 / 1.200
-					var indexOfSeparator = text.IndexOf(separator, StringComparison.Ordinal);
-					text = text.Remove(indexOfSeparator, 1).Insert(indexOfSeparator, string.Empty);
-				}
-			}
-
-			return text;
 		}
 	}
 }

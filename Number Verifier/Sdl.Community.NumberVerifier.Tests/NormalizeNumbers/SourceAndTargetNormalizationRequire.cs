@@ -51,7 +51,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         {
 			//target settings
 			var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
-			numberVerifierSettings.Setup(d => d.TargetNoSeparator).Returns(true);
 			numberVerifierSettings.Setup(d => d.TargetThousandsComma).Returns(true);
 
 			//source settings
@@ -130,7 +129,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		}
 
 		/// <summary>
-		/// Source sep: 'No separator' checked
+		/// Source sep: 'Comma' checked
 		/// Target sep: 'No separator' checked
 		/// Verification error: no errors should be returned.
 		/// </summary>
@@ -138,14 +137,46 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		/// <param name="target"></param>
 		[Theory]
 		[InlineData("1,000", "1000")]
+		public void ValidateTarget_NoSeparatorIsChecked_NoErrors(string source, string target)
+		{
+			//target settings
+			var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+			numberVerifierSettings.Setup(t => t.TargetNoSeparator).Returns(true);
+
+			// source settings
+			numberVerifierSettings.Setup(s => s.SourceThousandsComma).Returns(true);
+
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+			//run initialize method in order to set chosen separators
+			var docPropMock = new Mock<IDocumentProperties>();
+			numberVerifierMain.Initialize(docPropMock.Object);
+
+			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+			Assert.True(errorMessage.Count == 0);
+		}
+
+		/// <summary>
+		/// Source sep: 'No separator' checked
+		/// Target sep: 'Comma' checked
+		/// Verification error: no errors should be returned.
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
+		[InlineData("1000", "1,000")]
 		public void ValidateSource_NoSeparatorIsChecked_NoErrors(string source, string target)
 		{
 			//target settings
-			var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.AllTypesOfSpacesChecked();
-			numberVerifierSettings.Setup(d => d.TargetNoSeparator).Returns(true);
+			var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+			numberVerifierSettings.Setup(t => t.TargetThousandsComma).Returns(true);
 
-			//source settings
+			// source settings
 			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
 			//run initialize method in order to set chosen separators
