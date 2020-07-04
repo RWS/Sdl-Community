@@ -14,9 +14,10 @@ using System.Xml;
 using System.Xml.XPath;
 using FolderSelect;
 using log4net;
-using Sdl.Community.Toolkit.Core.Services;
 using Sdl.Core.Globalization;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Versioning;
 using SdlXliff.Toolkit.Integration;
 using SdlXliff.Toolkit.Integration.Controls;
 using SdlXliff.Toolkit.Integration.Data;
@@ -26,7 +27,7 @@ using SDLXLIFFSliceOrChange.ResourceManager;
 
 namespace SDLXLIFFSliceOrChange
 {
-	public partial class SDLXLIFFSliceOrChange : UserControl
+	public partial class SDLXLIFFSliceOrChange : UserControl,IUIControl
 	{
 		public string _folderForSlicedFiles;
 		private readonly SliceManager _sliceManager;
