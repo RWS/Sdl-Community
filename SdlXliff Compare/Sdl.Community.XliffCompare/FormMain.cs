@@ -5,11 +5,12 @@ using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.XliffCompare.Core;
 using Sdl.Community.XliffCompare.Core.Comparer;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.XliffCompare
 {
-    public partial class FormMain : UserControl
-    {
+    public partial class FormMain : UserControl, IUIControl
+	{
         public FormMain()
         {
             InitializeComponent();
