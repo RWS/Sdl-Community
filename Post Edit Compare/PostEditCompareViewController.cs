@@ -13,6 +13,7 @@ using Sdl.Community.PostEdit.Versions.Dialogs;
 using Sdl.Community.PostEdit.Versions.Structures;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -47,11 +48,11 @@ namespace Sdl.Community.PostEdit.Versions
 
         public event EventHandler CheckEnabledObjectsEvent;
 
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return _viewContent.Value;
         }
-        protected override Control GetExplorerBarControl()
+        protected override IUIControl GetExplorerBarControl()
         {
             return _viewNavigation.Value;
         }
