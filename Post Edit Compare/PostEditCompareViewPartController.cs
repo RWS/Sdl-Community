@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.PostEdit.Versions
 {
@@ -16,7 +17,7 @@ namespace Sdl.Community.PostEdit.Versions
     [ViewPartLayout(typeof(PostEditCompareViewController), Dock = DockType.Right)]
     public class PostEditCompareViewPartController : AbstractViewPartController
     {
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return Control.Value;
         }
