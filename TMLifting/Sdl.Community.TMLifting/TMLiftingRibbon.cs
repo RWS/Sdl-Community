@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using System.Reflection;
 using Sdl.Community.TMLifting.Helpers;
 using System.Diagnostics;
+using Sdl.Desktop.IntegrationApi.Interfaces;
+
 
 namespace Sdl.Community.TMLifting
 {
@@ -24,7 +26,7 @@ namespace Sdl.Community.TMLifting
     public class TMLiftingRibbon : AbstractViewController
     {
         private readonly Lazy<TMLiftingForm> _viewContent = new Lazy<TMLiftingForm>();
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return _viewContent.Value;
         }

@@ -1,8 +1,8 @@
 ﻿using Sdl.Community.TMLifting.Processor;
-using Sdl.Community.Toolkit.Core.Services;
 using Sdl.LanguagePlatform.Core.Tokenization;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Versioning;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,12 +30,16 @@ namespace Sdl.Community.TMLifting.TranslationMemory
         public List<TranslationMemoryInfo> LoadLocalUserTms()
         {
             var xmlDocument = new XmlDocument();
-            xmlDocument.Load(_tmsConfigPath);
+			if (File.Exists(_tmsConfigPath))
+			{
+				xmlDocument.Load(_tmsConfigPath);
 
-            return (from XmlElement tmElement in xmlDocument.SelectNodes("/TranslationMemoryRepository/TranslationMemories/TranslationMemory")
-                    select tmElement.GetAttribute("path") into path
-                    where !string.IsNullOrEmpty(path) && File.Exists(path)
-                    select new TranslationMemoryInfo(path, true)).ToList();
+				return (from XmlElement tmElement in xmlDocument.SelectNodes("/TranslationMemoryRepository/TranslationMemories/TranslationMemory")
+						select tmElement.GetAttribute("path") into path
+						where !string.IsNullOrEmpty(path) && File.Exists(path)
+						select new TranslationMemoryInfo(path, true)).ToList();
+			}
+			return new List<TranslationMemoryInfo>();
         }
 
         public List<TranslationMemoryInfo> LoadTmsFromPath(string path)
