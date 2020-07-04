@@ -356,8 +356,6 @@ namespace Sdl.Community.FileTypeSupport.TXML
             return contextProperties;
         }
 
-
-
         private ICommentProperties CreateComment(XmlNode item)
         {
             ICommentProperties commentProperties = PropertiesFactory.CreateCommentProperties();
