@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 
-namespace Sdl.Studio.SpotCheck.Helpers
+namespace Sdl.Community.SpotCheck.Helpers
 {
     public class ApplicationSettingsBase
     {

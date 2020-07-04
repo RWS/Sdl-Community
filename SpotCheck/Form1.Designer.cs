@@ -1,4 +1,4 @@
-﻿namespace Sdl.Studio.SpotCheck
+﻿namespace Sdl.Community.SpotCheck
 {
     partial class dlgSpotcheckWarning
     {

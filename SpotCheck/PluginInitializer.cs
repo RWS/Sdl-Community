@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.ProjectAutomation.Core;
 
-using Sdl.Studio.SpotCheck.Helpers;
-using Sdl.Studio.SpotCheck.SdlXliff;
-
-namespace Sdl.Studio.SpotCheck
+namespace Sdl.Community.SpotCheck
 {    
     /// <summary>
     /// Implements a SDL Trados Studio application initializer. 

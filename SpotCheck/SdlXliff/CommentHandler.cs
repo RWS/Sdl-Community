@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Xml;
 
 #region comments
@@ -34,7 +32,7 @@ enu.Current.Target.Add(d);
 
 #endregion
 
-namespace Sdl.Studio.SpotCheck.SdlXliff
+namespace Sdl.Community.SpotCheck.SdlXliff
 {
     class CommentHandler
     {

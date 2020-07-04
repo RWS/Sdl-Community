@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Studio.SpotCheck
+namespace Sdl.Community.SpotCheck
 {
     [ViewPart(
         Id = "SDL SpotCheck",
@@ -15,7 +15,7 @@ namespace Sdl.Studio.SpotCheck
     [ViewPartLayout(typeof(FilesController), Dock = DockType.Bottom)]
     class SpotCheckFilesViewPart : AbstractViewPartController
     {
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return _control.Value;
         }
