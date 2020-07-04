@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 
@@ -20,7 +21,7 @@ namespace Sdl.Community.XliffCompare
            
         }
 
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return _control.Value; 
         }
@@ -36,7 +37,7 @@ namespace Sdl.Community.XliffCompare
            
         }
 
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return _control.Value;
         }
@@ -62,7 +63,7 @@ namespace Sdl.Community.XliffCompare
             
         }
 
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return _control.Value;
         }
