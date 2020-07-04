@@ -8,11 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.TMLifting
 {
 	public delegate void AddServerBasedTMsDetails(string userName, string password, string uri);
-    public partial class TMLiftingForm : UserControl
+    public partial class TMLiftingForm : UserControl,IUIControl
     {
         private readonly TranslationMemoryHelper _tmHelper;
         private readonly BackgroundWorker _bw;
