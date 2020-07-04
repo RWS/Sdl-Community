@@ -4,13 +4,13 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 
 namespace Sdl.Community.YourStudio.Integration
 {
-    [RibbonGroup("Sdl.Community.YourStudio", Name = "YourStudio")]
+    [RibbonGroup("Sdl.Community.YourStudio", Name = "Your SDL Studio")]
     [RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
     class YourStudioRibbon : AbstractRibbonGroup
     {
     }
 
-    [Action("Sdl.Community.YourStudio", Name = "YourStudio", Icon = "yoursdlstudio", Description = "YourStudio")]
+    [Action("Sdl.Community.YourStudio", Name = "Your SDL Studio", Icon = "yoursdlstudio", Description = "YourStudio")]
     [ActionLayout(typeof(YourStudioRibbon), 20, DisplayType.Large)]
     class YourStudioViewPartAction:AbstractAction
     {
