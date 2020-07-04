@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
 using Sdl.Community.Jobs.Services;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.Jobs.UI
 {
-    public partial class JobsControl : UserControl
-    {
+    public partial class JobsControl : UserControl, IUIControl
+	{
         private readonly JobService _service;
         public JobsControl()
         {

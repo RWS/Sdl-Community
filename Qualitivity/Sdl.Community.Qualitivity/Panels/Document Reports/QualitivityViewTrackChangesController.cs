@@ -9,6 +9,7 @@ using Sdl.Community.Structures.Projects.Activities;
 using Sdl.Community.TM.Database;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.Qualitivity.Panels.Document_Reports
 {
@@ -23,7 +24,7 @@ namespace Sdl.Community.Qualitivity.Panels.Document_Reports
     [ViewPartLayout(Dock = DockType.Bottom, ZIndex = 1, LocationByType = typeof(QualitivityViewController))]
     public class QualitivityViewTrackChangesController : AbstractViewPartController
     {
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return Control.Value;
         }

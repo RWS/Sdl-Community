@@ -31,6 +31,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Activity = Sdl.Community.Structures.Projects.Activities.Activity;
 using DocumentActivities = Sdl.Community.Structures.Projects.Activities.DocumentActivities;
 using Project = Sdl.Community.Structures.Projects.Project;
@@ -67,11 +68,11 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 		public List<Activity> SelectedActivities { get; set; }
 
 
-		protected override Control GetContentControl()
+		protected override IUIControl GetContentControl()
 		{
 			return _viewContent.Value;
 		}
-		protected override Control GetExplorerBarControl()
+		protected override IUIControl GetExplorerBarControl()
 		{
 			return _viewNavigation.Value;
 		}

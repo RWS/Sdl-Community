@@ -7,13 +7,14 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Sdl.Community.Qualitivity.Panels.Main;
 using Sdl.Community.Qualitivity.Tracking;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using QualityMetric = Sdl.Community.Structures.Documents.Records.QualityMetric;
 
 namespace Sdl.Community.Qualitivity.Panels.QualityMetrics
 {
-    public partial class QualitivityRevisionControl : UserControl
-    {
+    public partial class QualitivityRevisionControl : UserControl, IUIControl
+	{
         private QualitivityViewController _controller { get; set; }
         public QualitivityViewController Controller
         {

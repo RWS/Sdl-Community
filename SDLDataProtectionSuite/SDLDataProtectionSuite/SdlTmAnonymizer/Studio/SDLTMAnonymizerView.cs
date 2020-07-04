@@ -6,6 +6,7 @@ using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.View;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using UserControl = System.Windows.Forms.UserControl;
 
@@ -55,12 +56,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 			}
 		}
 
-		protected override System.Windows.Forms.Control GetContentControl()
+		protected override IUIControl GetContentControl()
 		{
 			return _control;
 		}
 
-		protected override System.Windows.Forms.Control GetExplorerBarControl()
+		protected override IUIControl GetExplorerBarControl()
 		{
 			return _explorerControl;
 		}

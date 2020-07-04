@@ -5,6 +5,7 @@ using Sdl.Community.Qualitivity.Panels.Main;
 using Sdl.Community.Structures.Projects.Activities;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.Qualitivity.Panels.Activity_Records
 {
@@ -19,7 +20,7 @@ namespace Sdl.Community.Qualitivity.Panels.Activity_Records
     [ViewPartLayout(Dock = DockType.Bottom, ZIndex = 1, LocationByType = typeof(QualitivityViewController))]
     public class QualitivityViewActivityRecordsController : AbstractViewPartController
     {
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return Control.Value;
         }

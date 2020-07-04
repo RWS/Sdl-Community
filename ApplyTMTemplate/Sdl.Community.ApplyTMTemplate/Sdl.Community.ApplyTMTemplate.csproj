@@ -124,6 +124,7 @@
   <ItemGroup>
     <Compile Include="Converters\ImageToBitmapImageConverter.cs" />
     <Compile Include="Converters\NullableBooleanToVisibilityConverter.cs" />
+    <Compile Include="Models\CurrencyComparer.cs" />
     <Compile Include="Models\Interfaces\ILanguageResourcesAdapter.cs" />
     <Compile Include="Models\Interfaces\ILanguageResourcesContainer.cs" />
     <Compile Include="Models\Interfaces\IResource.cs" />

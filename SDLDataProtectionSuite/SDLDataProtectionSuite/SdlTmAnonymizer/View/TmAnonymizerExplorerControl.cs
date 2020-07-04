@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.View
 {
-	public partial class TmAnonymizerExplorerControl : System.Windows.Forms.UserControl
+	public partial class TmAnonymizerExplorerControl : System.Windows.Forms.UserControl, IUIControl
 	{
 		private readonly AcceptView _acceptView;
 		private readonly MainViewModel _model;

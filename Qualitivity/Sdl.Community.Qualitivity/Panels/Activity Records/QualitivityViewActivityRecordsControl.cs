@@ -7,10 +7,11 @@ using Sdl.Community.Qualitivity.Tracking;
 using Sdl.Community.Report;
 using Sdl.Community.Structures.Documents;
 using Sdl.Community.Structures.Projects.Activities;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.Qualitivity.Panels.Activity_Records
 {
-    public partial class QualitivityViewActivityRecordsControl : UserControl
+    public partial class QualitivityViewActivityRecordsControl : UserControl, IUIControl
     {
     
         QualitivityViewActivityRecordsController _controller { get; set; }

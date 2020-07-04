@@ -66,7 +66,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 
         public static Dictionary<string, TrackedDocuments> DictCacheDocumentItems { get; set; }
 
-        public static Document ActiveDocument { get; set; }
+        public static IStudioDocument ActiveDocument { get; set; }
 
         public static DateTime TrackerLastActivity { get; set; }
 

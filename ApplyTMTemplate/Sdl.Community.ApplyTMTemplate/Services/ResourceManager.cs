@@ -215,8 +215,8 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 
 			correspondingBundleInTemplate.NumbersSeparators = GetUnionOfListsOfObjects(newBundle.NumbersSeparators,
 				correspondingBundleInTemplate.NumbersSeparators);
-			correspondingBundleInTemplate.CurrencyFormats = GetUnionOfListsOfObjects(newBundle.CurrencyFormats,
-				correspondingBundleInTemplate.CurrencyFormats);
+			correspondingBundleInTemplate.CurrencyFormats = GetUnionOfListsOfObjects<CurrencyFormat>(newBundle.CurrencyFormats,
+				correspondingBundleInTemplate.CurrencyFormats, new CurrencyComparer());
 		}
 
 		private void AddWordlists(LanguageResourceBundle correspondingBundleInTemplate, LanguageResourceBundle newBundle)
@@ -248,11 +248,13 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			}
 		}
 
-		private List<T> GetUnionOfListsOfObjects<T>(List<T> listOne, List<T> listTwo)
+		private List<T> GetUnionOfListsOfObjects<T>(List<T> listOne, List<T> listTwo, IEqualityComparer<T> equalityComparer = null)
 		{
 			if (listOne != null)
 			{
-				listTwo = listTwo?.Union(listOne).ToList();
+				listTwo = equalityComparer != null
+					? listTwo?.Union(listOne, equalityComparer).ToList()
+					: listTwo?.Union(listOne).ToList();
 			}
 
 			return listTwo?.Count == 0 ? null : listTwo;
