@@ -1,5 +1,4 @@
-﻿using System;
-using Sdl.Community.XmlReader.WPF.Helpers;
+﻿using Sdl.Community.XmlReader.WPF.Helpers;
 using Sdl.Community.XmlReader.WPF.Models;
 using Sdl.Community.XmlReader.WPF.Repository;
 using System.Collections.Generic;
@@ -23,8 +22,6 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 		private string _generateColor;
 		private string _clearColor;
 		public ObservableCollection<TargetLanguageCodeViewModel> XmlFiles { get; }
-
-
 		public XmlFileViewModel(List<TargetLanguageCode> codes)
 		{
 			MessageVisibility = "Hidden";

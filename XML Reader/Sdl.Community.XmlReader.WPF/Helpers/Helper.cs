@@ -1,13 +1,14 @@
 ﻿using System.Globalization;
 using System.IO;
 using System.Xml;
+using Sdl.Versioning;
 
 namespace Sdl.Community.XmlReader.WPF.Helpers
 {
     public static class Helper
     {
-        #region Analyze Files management
-        public static string GetFileName(string filePath)
+		#region Analyze Files management
+		public static string GetFileName(string filePath)
         {
             return Path.GetFileNameWithoutExtension(filePath);
         }
@@ -41,8 +42,8 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
         #region Studio language's flags
         public static string GetStudioInstalationPath()
         {
-            var studioService = new Toolkit.Core.Services.StudioVersionService();
-            return Path.GetDirectoryName(studioService.GetStudioVersion().InstallPath);
+			var studioVersionService = new StudioVersionService();
+			return Path.GetDirectoryName(studioVersionService.GetStudioVersion().InstallPath);
         }
 
         public static int GetImageStudioCodeByLanguageCode(string languageCode)
