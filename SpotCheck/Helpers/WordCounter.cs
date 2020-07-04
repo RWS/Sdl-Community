@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Sdl.Studio.SpotCheck.Helpers
+﻿namespace Sdl.Community.SpotCheck.Helpers
 {
     class WordCounter
     {

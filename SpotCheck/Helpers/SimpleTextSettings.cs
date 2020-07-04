@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
-namespace Sdl.Studio.SpotCheck.Helpers
+namespace Sdl.Community.SpotCheck.Helpers
 {
     public class SimpleTextSettings
     {

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
+using Sdl.Community.SpotCheck.Helpers;
+using Sdl.Community.SpotCheck.SdlXliff;
 
-using Sdl.Studio.SpotCheck.SdlXliff;
-using Sdl.Studio.SpotCheck.Helpers;
-
-namespace Sdl.Studio.SpotCheck
+namespace Sdl.Community.SpotCheck
 {
     class SpotCheckProcessor
     {

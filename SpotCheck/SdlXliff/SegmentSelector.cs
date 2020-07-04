@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
+using Sdl.Community.SpotCheck.Helpers;
 
-using Sdl.Studio.SpotCheck.Helpers;
-
-namespace Sdl.Studio.SpotCheck.SdlXliff
+namespace Sdl.Community.SpotCheck.SdlXliff
 {
     class SegmentSelector
     {
