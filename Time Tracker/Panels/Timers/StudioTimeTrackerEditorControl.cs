@@ -2,12 +2,13 @@
 using System.Windows.Forms;
 using Sdl.Community.Studio.Time.Tracker.Panels.Main;
 using Sdl.Community.Studio.Time.Tracker.Tracking;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Studio.Time.Tracker.Panels.Timers
 {
-    public partial class StudioTimeTrackerEditorControl : UserControl
-    {
+    public partial class StudioTimeTrackerEditorControl : UserControl, IUIControl
+	{
         private StudioTimeTrackerViewController _controller { get; set; }
         public StudioTimeTrackerViewController Controller
         {

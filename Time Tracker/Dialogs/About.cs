@@ -12,9 +12,8 @@ namespace Sdl.Community.Studio.Time.Tracker.Dialogs
         {
             InitializeComponent();
 
-            Text = string.Format("About {0}", AssemblyProduct) + @" for SDL Trados Studio 2019";
+            Text = string.Format("About {0}", AssemblyProduct) + @" for SDL Trados Studio 2021";
 	        labelProductNameAndVersion.Text = @"2.0";
-            //this.linkLabelpostEditCompareNameAndVersion.Text = "Post-Edit Compare " + " - " + String.Format("Version {0}", getPostEditCompareProductVersion());
             labelCopyright.Text = AssemblyCopyright;
             labelCompanyName.Text = AssemblyCompany;
             textBoxDescription.Text = CopyRight;
