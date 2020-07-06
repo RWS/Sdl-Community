@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.StudioMigrationUtility.Services;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Versioning;
 
 namespace Sdl.Community.StudioMigrationUtility
 {
@@ -29,7 +25,7 @@ namespace Sdl.Community.StudioMigrationUtility
 
 		}
 	}
-	[Action("Sdl.Community.StudioMigrationUtilityHelp", Name = "Migration Utility help", Icon = "question", Description = "An wiki page will be opened in browser uith user documentation")]
+	[Action("Sdl.Community.StudioMigrationUtilityHelp", Name = "Migration Utility help", Icon = "question", Description = "An wiki page will be opened in browser with user documentation")]
 	[ActionLayout(typeof(StudioMigrationUtilityRibbon), 250, DisplayType.Large)]
 	public class AhkHelpAction : AbstractAction
 	{

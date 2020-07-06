@@ -5,20 +5,18 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using Sdl.Community.Controls;
 using Sdl.Community.StudioMigrationUtility.Model;
 using Sdl.Community.StudioMigrationUtility.Properties;
 using Sdl.Community.StudioMigrationUtility.Services;
-using Sdl.Desktop.IntegrationApi;
-using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Versioning;
 
 namespace Sdl.Community.StudioMigrationUtility
 {
-    public partial class MigrateUtility : Form
+	public partial class MigrateUtility : Form
     {
         private readonly StudioVersionService _studioVersionService;
         private BackgroundWorker _bw;

@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.StudioMigrationUtility.Model;
+using Sdl.Versioning;
 
 namespace Sdl.Community.StudioMigrationUtility.Services
 {
-    public class PluginService
+	public class PluginService
     {
         private readonly List<string> _pluginFolderLocations = new List<string>
         {
