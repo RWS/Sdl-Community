@@ -72,8 +72,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Versioning">
-      <HintPath>..\..\..\VSTS_Repo\TradosStudio\src\Sdl\Versioning\obj\Debug\Sdl.Versioning.dll</HintPath>
+    <Reference Include="Sdl.Versioning, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
