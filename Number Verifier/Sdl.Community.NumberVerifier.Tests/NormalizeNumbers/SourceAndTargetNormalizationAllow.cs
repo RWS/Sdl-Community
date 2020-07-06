@@ -111,15 +111,16 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// <param name="source"></param>
         /// <param name="target"></param>
         [Theory]
-        [InlineData("1554.5 some word 1.234,5 another word 1222,3", "1,554,5 test 1234.5 another test word 1222,3")]
+        [InlineData("1,554.5 some word 1.234,5 another word 1.222,3", "1,554,5 test 1,234.5 another test word 1.222,3")]
         public void ThousandsSeparatorsNoSeparatorCommaPeriod(string source, string target)
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
             numberVerifierSettings.Setup(s => s.TargetNoSeparator).Returns(true);
+            numberVerifierSettings.Setup(d => d.SourceDecimalPeriod).Returns(true);
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
             numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
-            numberVerifierSettings.Setup(d => d.TargetThousandsPeriod).Returns(true);
+            numberVerifierSettings.Setup(d => d.TargetThousandsComma).Returns(true);
 			numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(false);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
