@@ -17,7 +17,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private ConfirmationStatus _statusTranslationNotUpdated;
 		private ConfirmationStatus _statusSegmentNotImported;
 		private string _originSystem;
-		private ObservableCollection<FilterItem> _filterItems;
+		private List<FilterItem> _filterItems;
 		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
 		private ICommand _clearFiltersCommand;
 
@@ -26,12 +26,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			BackupFiles = wizardContext.ImportOptions.BackupFiles;
 			OverwriteTranslations = wizardContext.ImportOptions.OverwriteTranslations;
 			OriginSystem = wizardContext.ImportOptions.OriginSystem;
-			
-			ConfirmationStatuses = Enumerators.GetConfirmationStatuses();
-			AssignConfirmationStatuses(wizardContext);
 
-			FilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems());
-			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(wizardContext.ExcludeFilterItems);
+			ConfirmationStatuses = Enumerators.GetConfirmationStatuses();
+			StatusTranslationUpdated = Enumerators.GetConfirmationStatus(ConfirmationStatuses, wizardContext.ImportOptions.StatusTranslationUpdatedId, "Draft");
+			StatusTranslationNotUpdated = Enumerators.GetConfirmationStatus(ConfirmationStatuses, wizardContext.ImportOptions.StatusTranslationNotUpdatedId, string.Empty);
+			StatusSegmentNotImported = Enumerators.GetConfirmationStatus(ConfirmationStatuses, wizardContext.ImportOptions.StatusSegmentNotImportedId, string.Empty);
+
+			FilterItems = new List<FilterItem>(Enumerators.GetFilterItems());
+			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, wizardContext.ImportOptions.ExcludeFilterIds));
 
 			VerifyIsValid();
 
@@ -40,44 +42,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		}
 
 		public ICommand ClearFiltersCommand => _clearFiltersCommand ?? (_clearFiltersCommand = new CommandHandler(ClearFilters));
-
-		private void AssignConfirmationStatuses(WizardContext wizardContext)
-		{
-			if (wizardContext.ImportOptions.StatusTranslationUpdatedId != null)
-			{
-				StatusTranslationUpdated =
-					ConfirmationStatuses.FirstOrDefault(a => a.Id == wizardContext.ImportOptions.StatusTranslationUpdatedId);				
-			}
-
-			if (StatusTranslationUpdated == null)
-			{
-				StatusTranslationUpdated = ConfirmationStatuses.FirstOrDefault(a => a.Id == "Draft");
-			}
-
-
-			if (wizardContext.ImportOptions.StatusTranslationNotUpdatedId != null)
-			{
-				StatusTranslationNotUpdated =
-					ConfirmationStatuses.FirstOrDefault(a => a.Id == wizardContext.ImportOptions.StatusTranslationNotUpdatedId);
-			}
-
-			if (StatusTranslationNotUpdated == null)
-			{
-				StatusTranslationNotUpdated = ConfirmationStatuses.FirstOrDefault(a => a.Id == string.Empty);
-			}
-
-			if (wizardContext.ImportOptions.StatusSegmentNotImportedId != null)
-			{
-				StatusSegmentNotImported =
-					ConfirmationStatuses.FirstOrDefault(a => a.Id == wizardContext.ImportOptions.StatusSegmentNotImportedId);
-			}
-
-			if (StatusSegmentNotImported == null)
-			{
-				StatusSegmentNotImported = ConfirmationStatuses.FirstOrDefault(a => a.Id == string.Empty);
-			}
-		}
-
 
 		public override string DisplayName => PluginResources.PageName_Options;
 
@@ -108,9 +72,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			}
 		}
 
-		public ObservableCollection<FilterItem> FilterItems
+		public List<FilterItem> FilterItems
 		{
-			get => _filterItems ?? (_filterItems = new ObservableCollection<FilterItem>());
+			get => _filterItems;
 			set
 			{
 				if (_filterItems == value)
@@ -208,8 +172,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			WizardContext.ImportOptions.StatusTranslationUpdatedId = StatusTranslationUpdated.Id;
 			WizardContext.ImportOptions.StatusTranslationNotUpdatedId = StatusTranslationNotUpdated.Id;
 			WizardContext.ImportOptions.StatusSegmentNotImportedId = StatusSegmentNotImported.Id;
-
-			WizardContext.ExcludeFilterItems = SelectedExcludeFilterItems.ToList();
+			WizardContext.ImportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
+			//WizardContext.ExcludeFilterItemIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 		}
 
 		private void ClearFilters(object parameter)

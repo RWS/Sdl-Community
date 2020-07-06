@@ -226,8 +226,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				Refresh();
 
 				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-				var filterItems = WizardContext.ExcludeFilterItems.Select(a => a.Id).ToList();
-				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder, filterItems, 
+				
+				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder, 
 					WizardContext.ImportOptions, WizardContext.AnalysisBands);
 
 				var sniffer = new XliffSniffer();
@@ -470,9 +470,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_StatusTranslationsUpdated, GetConfirmationStatusName(WizardContext.ImportOptions.StatusTranslationUpdatedId)));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_StatusTranslationsNotUpdated, GetConfirmationStatusName(WizardContext.ImportOptions.StatusTranslationNotUpdatedId)));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_StatusSegmentsNotImported, GetConfirmationStatusName(WizardContext.ImportOptions.StatusSegmentNotImportedId)));
-			if (WizardContext.ExcludeFilterItems.Count > 0)
+			if (WizardContext.ImportOptions.ExcludeFilterIds.Count > 0)
 			{
-				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExcludeFilterItems)));
+				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ImportOptions.ExcludeFilterIds)));
 			}
 
 
@@ -563,13 +563,20 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			return selectedLanguages;
 		}
 
-		private string GetFitlerItemsString(IEnumerable<FilterItem> filterItems)
+		private string GetFitlerItemsString(IEnumerable<string> ids)
 		{
+			var allFilterItems = Enumerators.GetFilterItems();
+			var filterItems = Enumerators.GetFilterItems(allFilterItems, ids);
 			var items = string.Empty;
 			foreach (var filterItem in filterItems)
 			{
 				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
 				         filterItem.Name;
+			}
+
+			if (string.IsNullOrEmpty(items))
+			{
+				items = "[none]";
 			}
 
 			return items;

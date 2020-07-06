@@ -28,10 +28,10 @@ namespace XLIFF.Manager.UnitTests.FileTypeSupport
 			var segmentBuilder = new SegmentBuilder();
 			var xliffReader = new XliffReder(sniffer, segmentBuilder);
 			//var pocoFilterManager = new PocoFilterManager(false);
-			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-			var filterItems = new List<string>();
+			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);			
 			var importOptions = new ImportOptions();
-			var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, segmentBuilder, filterItems, importOptions);
+			var analysisBands = new List<AnalysisBand>();
+			var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, segmentBuilder, importOptions, analysisBands);
 
 			var testFile = support == Enumerators.XLIFFSupport.xliff12polyglot
 				? _testFilesUtil.GetSampleFilePath("Xliff12", "Polyglot", "QuotesSample.docx.sdlxliff.xliff")

@@ -39,6 +39,10 @@
     <Reference Include="MahApps.Metro">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\MahApps.Metro.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
@@ -150,10 +154,12 @@
       <DependentUpon>ImportSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="BatchTasks\ImportSettingsPage.cs" />
+    <Compile Include="Controls\BindingDataProxy.cs" />
     <Compile Include="Controls\BindingWebBrowserSource.cs" />
     <Compile Include="Controls\WebBrowserHelper.cs" />
     <Compile Include="Converters\TextEmptyToVisibilityConverter.cs" />
     <Compile Include="Model\AnalysisBand.cs" />
+    <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\TranslationOriginStatistics.cs" />
     <Compile Include="Model\ConfirmationStatistics.cs" />
     <Compile Include="Model\WordCount.cs" />
@@ -283,7 +289,7 @@
     <Compile Include="Model\Tasks\TemplateId.cs" />
     <Compile Include="Model\WizardContext.cs" />
     <Compile Include="Model\WizardException.cs" />
-    <Compile Include="Model\XLIFFSupport.cs" />
+    <Compile Include="Model\XLIFFSupportItem.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -298,7 +304,11 @@
     <Compile Include="Service\ProjectSettingsService.cs" />
     <Compile Include="Service\ReportService.cs" />
     <Compile Include="Service\WizardService.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
+    <Compile Include="View\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wizard\ViewModel\ExceptionViewerViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportFilesViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportOptionsViewModel.cs" />
@@ -472,6 +482,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\SettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Wizard\View\Export\WizardPageExportOptionsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -541,7 +555,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BatchTasks\Report.xsl" />
-    <Content Include="Controls\ReportDefault.html" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>

@@ -41,6 +41,8 @@
 	</UserControl.Resources>
 	<Grid>
 		<controls:SortAwareDataGrid x:Name="MappedLanguagesGrid" 
+					  DefaultColumnName="Date"
+					  DefaultSortDirection="Descending"
 			          Style="{StaticResource CustomGridStyle}"
 			          Margin="0" 			       
 		              ItemsSource="{Binding Source={StaticResource ProjectFileActivities}}"                
@@ -52,11 +54,10 @@
 					  GridLinesVisibility="Horizontal"
 					  VerticalScrollBarVisibility="Auto"
 					  HorizontalScrollBarVisibility="Disabled"
-					  CanUserSortColumns="False"
 					  CanUserDeleteRows="False">
 			<DataGrid.Columns>
 
-				<DataGridTemplateColumn Header="Name" IsReadOnly="True" Width="2*"  CanUserSort="False" >
+				<DataGridTemplateColumn Header="Name" IsReadOnly="True" Width="2*"  >
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:ProjectFileActivity">
 							<Grid Margin="10,0,10,0">
@@ -119,10 +120,10 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTextColumn Header="Date" CanUserSort="False" Binding="{Binding DateToString, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
+				<DataGridTextColumn Header="Date" Binding="{Binding DateToString, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"
 										ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
 
-				<DataGridTemplateColumn Header="Report" CanUserSort="False" Width="1*" >
+				<DataGridTemplateColumn Header="Report"  Width="1*" >
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:ProjectFileActivity">
 							<TextBlock Visibility="{Binding Path=Report, Converter={StaticResource TextEmptyToVisibilityConverter}}">

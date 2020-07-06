@@ -58,14 +58,16 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 		{			
 			if (propertyName == nameof(ViewModel.ExportOptionsViewModel.CopySourceToTarget) ||
 			    propertyName == nameof(ViewModel.ExportOptionsViewModel.IncludeTranslations) ||
-			    propertyName == nameof(ViewModel.ExportOptionsViewModel.SelectedXliffSupport))
+			    propertyName == nameof(ViewModel.ExportOptionsViewModel.SelectedXliffSupportItem) ||
+			    propertyName == nameof(ViewModel.ExportOptionsViewModel.SelectedExcludeFilterItems))
 			{
 				var options = new ExportOptions
 				{
 					CopySourceToTarget = _exportOptionsViewModel.CopySourceToTarget,
 					IncludeTranslations = _exportOptionsViewModel.IncludeTranslations,
-					XliffSupport = _exportOptionsViewModel.SelectedXliffSupport.SupportType
-				};
+					XliffSupport = _exportOptionsViewModel.SelectedXliffSupportItem.SupportType,
+					ExcludeFilterIds = _exportOptionsViewModel.SelectedExcludeFilterItems.Select(a => a.Id).ToList()
+			};
 
 				Settings.ExportOptions = options;
 			}
@@ -73,12 +75,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			if (propertyName == nameof(ViewModel.ExportOptionsViewModel.OutputFolder))
 			{
 				Settings.TransactionFolder = _exportOptionsViewModel.OutputFolder;
-			}
-
-			if (propertyName == nameof(ViewModel.ExportOptionsViewModel.SelectedExcludeFilterItems))
-			{
-				Settings.SelectedFilterItemIds = _exportOptionsViewModel.SelectedExcludeFilterItems.Select(a => a.Id).ToList();
-			}
+			}			
 		}
 
 

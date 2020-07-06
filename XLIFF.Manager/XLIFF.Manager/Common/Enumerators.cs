@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
@@ -63,6 +64,33 @@ namespace Sdl.Community.XLIFF.Manager.Common
 			// TODO spport for this format will come later on in the development cycle
 			//xliff20sdl = 2
 		}
+
+		public static List<XLIFFSupportItem> GetXLIFFSupportItems()
+		{
+			var xliffSupportItems = new List<XLIFFSupportItem>
+				{
+					new XLIFFSupportItem
+					{
+						Name = "XLIFF 1.2 SDL",
+						SupportType = Enumerators.XLIFFSupport.xliff12sdl
+					},
+					new XLIFFSupportItem
+					{
+						Name = "XLIFF 1.2 Polyglot",
+						SupportType = Enumerators.XLIFFSupport.xliff12polyglot
+					}
+					// TODO spport for this format will come later on in the development cycle
+					//new XLIFFSupportModel
+					//{
+					//	Name = "XLIFF 2.0 SDL",
+					//	SupportType = Enumerators.XLIFFSupport.xliff20sdl
+					//}
+				};
+
+			return xliffSupportItems;
+
+		}
+
 
 		public static string GetTranslationOriginType(ITranslationOrigin translationOrigin, List<AnalysisBand> analysisBands)
 		{
@@ -169,6 +197,14 @@ namespace Sdl.Community.XLIFF.Manager.Common
 			return confirmationStatuses;
 		}
 
+		public static ConfirmationStatus GetConfirmationStatus(List<ConfirmationStatus> list, string id, string defaultId)
+		{			
+			var selected = list.FirstOrDefault(a => a.Id == id);
+			
+			return selected ?? list.FirstOrDefault(a => a.Id == defaultId);
+		}
+
+
 		public static List<FilterItem> GetFilterItems()
 		{
 			var filterItems = new List<FilterItem>();
@@ -176,6 +212,21 @@ namespace Sdl.Community.XLIFF.Manager.Common
 			AddSegmentPropertyFilters(filterItems, new FilterItemGroup(1, "Properties"));
 			AddSegmentStatusFilters(filterItems, new FilterItemGroup(2, "Status"));
 			AddMatchTypeFilters(filterItems, new FilterItemGroup(3, "Match"));
+
+			return filterItems;
+		}
+
+		public static List<FilterItem> GetFilterItems(List<FilterItem> items, IEnumerable<string> filterIds)
+		{
+			var filterItems = new List<FilterItem>();
+			foreach (var filterId in filterIds)
+			{
+				var filterItem = items.FirstOrDefault(a => a.Id == filterId);
+				if (filterItem != null)
+				{
+					filterItems.Add(filterItem);
+				}
+			}
 
 			return filterItems;
 		}

@@ -35,6 +35,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		private readonly Controllers _controllers;
 		private readonly ImageService _imageService;
 		private readonly SegmentBuilder _segmentBuilder;
+		private readonly Settings _settings;
 		private WizardWindow _wizardWindow;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
 		private WizardContext _wizardContext;
@@ -42,7 +43,8 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		private readonly IDialogService _dialogService;
 
 		public WizardService(Enumerators.Action action, PathInfo pathInfo, CustomerProvider customerProvider,
-			ImageService imageService, Controllers controllers, SegmentBuilder segmentBuilder, IDialogService dialogService)
+			ImageService imageService, Controllers controllers, SegmentBuilder segmentBuilder, Settings settings,
+			IDialogService dialogService)
 		{
 			_action = action;
 			_pathInfo = pathInfo;
@@ -51,6 +53,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			_controllers = controllers;
 			_dialogService = dialogService;
 			_segmentBuilder = segmentBuilder;
+			_settings = settings;
 		}
 
 		public WizardContext ShowWizard(AbstractController controller, out string message)
@@ -97,10 +100,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 		private bool CreateWizardContext(AbstractController controller, out string message)
 		{
-			_wizardContext = new WizardContext
-			{
-				Action = _action
-			};
+			_wizardContext = new WizardContext(_action, _settings);
 
 			message = string.Empty;
 

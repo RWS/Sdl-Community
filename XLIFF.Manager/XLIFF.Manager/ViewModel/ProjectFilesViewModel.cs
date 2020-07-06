@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Actions.Export;
 using Sdl.Community.XLIFF.Manager.Actions.Import;

@@ -18,7 +18,6 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 	{
 		private readonly Xliff _xliff;
 		private readonly SegmentBuilder _segmentBuilder;
-		private readonly List<string> _excludeFilterItems;
 		private readonly ImportOptions _importOptions;
 		private readonly List<AnalysisBand> _analysisBands;
 		private IFileProperties _fileProperties;
@@ -26,12 +25,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private SegmentVisitor _segmentVisitor;
 		private SegmentPairProcessor _segmentPairProcessor;
 
-		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, List<string> excludeFilterItems,
+		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, 
 			ImportOptions importOptions, List<AnalysisBand> analysisBands)
 		{
 			_xliff = xliff;
 			_segmentBuilder = segmentBuilder;
-			_excludeFilterItems = excludeFilterItems;
 			_importOptions = importOptions;
 			_analysisBands = analysisBands;
 
@@ -128,14 +126,14 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 				var noOverwrite = !_importOptions.OverwriteTranslations && segmentPair.Target.Any();
 				var excludeFilter = false;
-				if (_excludeFilterItems != null)
+				if (_importOptions.ExcludeFilterIds != null)
 				{
 					var status = segmentPair.Properties.ConfirmationLevel.ToString();
 					var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
-					excludeFilter = (segmentPair.Properties.IsLocked && _excludeFilterItems.Exists(a => a == "Locked"))
-					                || _excludeFilterItems.Exists(a => a == status)
-					                || _excludeFilterItems.Exists(a => a == match);
+					excludeFilter = (segmentPair.Properties.IsLocked && _importOptions.ExcludeFilterIds.Exists(a => a == "Locked"))
+					                || _importOptions.ExcludeFilterIds.Exists(a => a == status)
+					                || _importOptions.ExcludeFilterIds.Exists(a => a == match);
 				}
 
 				if (noOverwrite || excludeFilter)

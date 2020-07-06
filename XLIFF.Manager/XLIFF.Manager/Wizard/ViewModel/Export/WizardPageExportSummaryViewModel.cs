@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
@@ -63,9 +64,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			summaryText += indent + string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.ExportOptions.IncludeTranslations) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.ExportOptions.CopySourceToTarget) + Environment.NewLine;
-			if (WizardContext.ExcludeFilterItems.Count > 0)
+			if (WizardContext.ExportOptions.ExcludeFilterIds.Count > 0)
 			{
-				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExcludeFilterItems)) + Environment.NewLine;
+				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExportOptions.ExcludeFilterIds)) + Environment.NewLine;
 			}
 
 			summaryText += Environment.NewLine;
@@ -99,13 +100,20 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			return summaryText;
 		}
 
-		private string GetFitlerItemsString(IEnumerable<FilterItem> filterItems)
+		private string GetFitlerItemsString(IEnumerable<string> ids)
 		{
+			var allFilterItems = Enumerators.GetFilterItems();
+			var filterItems = Enumerators.GetFilterItems(allFilterItems, ids);
 			var items = string.Empty;
 			foreach (var filterItem in filterItems)
 			{
 				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
-				                   filterItem.Name;
+				         filterItem.Name;
+			}
+
+			if (string.IsNullOrEmpty(items))
+			{
+				items = "[none]";
 			}
 
 			return items;

@@ -16,30 +16,33 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 	public class WizardPageExportOptionsViewModel : WizardPageViewModelBase, IDisposable
 	{
 		private readonly IDialogService _dialogService;
-		private List<XLIFFSupport> _xliffSupport;
-		private XLIFFSupport _selectedXliffSupportModel;
+		private List<XLIFFSupportItem> _xliffSupportItems;
+		private XLIFFSupportItem _selectedXliffSupportItemModel;
 		private string _outputFolder;
 		private bool _copySourceToTarget;
 		private bool _copySourceToTargetEnabled;
 		private bool _includeTranslations;
-		private ObservableCollection<FilterItem> _filterItems;
+		private List<FilterItem> _filterItems;
 		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
 		private ICommand _clearFiltersCommand;
-		private ICommand _selectedItemsChangedCommand;
+		private ICommand _selectedItemsChangedCommand;	
 
 		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext, IDialogService dialogService) 
 			: base(owner, view, wizardContext)
 		{
 			_dialogService = dialogService;
-			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == WizardContext.ExportOptions.XliffSupport);
+			XLIFFSupportItems = Enumerators.GetXLIFFSupportItems();
+			
+
+			SelectedXliffSupportItem = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == WizardContext.ExportOptions.XliffSupport);
 			OutputFolder = WizardContext.TransactionFolder;
 			CopySourceToTarget = wizardContext.ExportOptions.CopySourceToTarget;
 			IncludeTranslations = wizardContext.ExportOptions.IncludeTranslations;
 
-			FilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems());
-			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(wizardContext.ExcludeFilterItems);
+			FilterItems = new List<FilterItem>(Enumerators.GetFilterItems());
+			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, WizardContext.ExportOptions.ExcludeFilterIds));
 
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
@@ -53,62 +56,38 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 
 		public ICommand SelectedItemsChangedCommand => _selectedItemsChangedCommand ?? (_selectedItemsChangedCommand = new CommandHandler(SelectedItemsChanged));
 
-
-		public List<XLIFFSupport> XLIFFSupportList
+		public List<XLIFFSupportItem> XLIFFSupportItems
 		{
-			get
+			get => _xliffSupportItems;
+			set
 			{
-				if (_xliffSupport != null)
-				{
-					return _xliffSupport;
-				}
-
-				_xliffSupport = new List<XLIFFSupport>
-				{
-					new XLIFFSupport
-					{
-						Name = "XLIFF 1.2 SDL",
-						SupportType = Enumerators.XLIFFSupport.xliff12sdl
-					},
-					new XLIFFSupport
-					{
-						Name = "XLIFF 1.2 Polyglot",
-						SupportType = Enumerators.XLIFFSupport.xliff12polyglot
-					}
-					// TODO spport for this format will come later on in the development cycle
-					//new XLIFFSupportModel
-					//{
-					//	Name = "XLIFF 2.0 SDL",
-					//	SupportType = Enumerators.XLIFFSupport.xliff20sdl
-					//}
-				};
-
-				return _xliffSupport;
+				_xliffSupportItems = value;
+				OnPropertyChanged(nameof(XLIFFSupportItems));
 			}
 		}
 
-		public XLIFFSupport SelectedXliffSupport
+		public XLIFFSupportItem SelectedXliffSupportItem
 		{
 			get
 			{
-				return _selectedXliffSupportModel
-					   ?? (_selectedXliffSupportModel = XLIFFSupportList.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
+				return _selectedXliffSupportItemModel
+					   ?? (_selectedXliffSupportItemModel = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
 			}
 			set
 			{
-				if (_selectedXliffSupportModel == value)
+				if (_selectedXliffSupportItemModel == value)
 				{
 					return;
 				}
 
-				_selectedXliffSupportModel = value;
-				OnPropertyChanged(nameof(SelectedXliffSupport));
+				_selectedXliffSupportItemModel = value;
+				OnPropertyChanged(nameof(SelectedXliffSupportItem));
 			}
 		}
 
-		public ObservableCollection<FilterItem> FilterItems
+		public List<FilterItem> FilterItems
 		{
-			get => _filterItems ?? (_filterItems = new ObservableCollection<FilterItem>());
+			get => _filterItems;
 			set
 			{
 				if (_filterItems == value)
@@ -282,10 +261,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private void OnLeavePage(object sender, EventArgs e)
 		{
 			WizardContext.TransactionFolder = OutputFolder;
-			WizardContext.ExportOptions.XliffSupport = SelectedXliffSupport.SupportType;
+			WizardContext.ExportOptions.XliffSupport = SelectedXliffSupportItem.SupportType;
 			WizardContext.ExportOptions.CopySourceToTarget = CopySourceToTarget;
 			WizardContext.ExportOptions.IncludeTranslations = IncludeTranslations;
-			WizardContext.ExcludeFilterItems = SelectedExcludeFilterItems.ToList();
+			WizardContext.ExportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
+			//WizardContext.ExcludeFilterItemIds =
 		}
 
 		public void Dispose()

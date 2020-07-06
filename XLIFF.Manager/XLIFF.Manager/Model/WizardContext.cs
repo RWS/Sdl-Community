@@ -6,22 +6,19 @@ using Sdl.Community.XLIFF.Manager.Common;
 namespace Sdl.Community.XLIFF.Manager.Model
 {
 	public class WizardContext : BaseModel
-	{
-		public WizardContext()
+	{		
+		public WizardContext(Enumerators.Action action, Settings settings)
 		{
-			Action = Enumerators.Action.None;
+			Action = action;
 			ProjectFiles = new List<ProjectFile>();
 			DateTimeStamp = DateTime.UtcNow;
-			ExcludeFilterItems = new List<FilterItem>();
-
-			ExportOptions = new ExportOptions();
-			ImportOptions = new ImportOptions();
-
+			
+			ExportOptions = settings.ExportOptions;
+			ImportOptions = settings.ImportOptions;
+			
 			Owner = Enumerators.Controller.None;
 		}
-
-		public List<FilterItem> ExcludeFilterItems { get; set; }
-
+	
 		public Enumerators.Action Action { get; set; }
 
 		public List<AnalysisBand> AnalysisBands { get; set; }
@@ -87,6 +84,6 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		{
 			var languageFolder = Path.Combine(WorkingFolder, name);
 			return languageFolder;
-		}
+		}		
 	}
 }
