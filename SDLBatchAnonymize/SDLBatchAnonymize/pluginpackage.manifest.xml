@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SDL Batch Anonymizer</PlugInName>
-  <Version>1.0.2.3</Version>
+  <Version>2.0.3.0</Version>
   <Description>Provides various options for anonymizing the files in a Studio project.</Description>
   <Author>SDL Community Developers</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.2" maxversion="16.0"/>
+  <RequiredProduct name="SDLTradosStudio" minversion="16.0"/>
 </PluginPackage>

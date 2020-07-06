@@ -18,6 +18,7 @@ using Sdl.Community.Structures.Comparer;
 using Sdl.Community.Structures.Documents;
 using Sdl.Community.Structures.Documents.Records;
 using Sdl.Community.Structures.Projects.Activities;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Drawing.Color;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
@@ -26,7 +27,7 @@ using Path = System.IO.Path;
 
 namespace Sdl.Community.Qualitivity.Panels.Document_Reports
 {
-    public partial class QualitivityViewTrackChangesControl : UserControl
+    public partial class QualitivityViewTrackChangesControl : UserControl, IUIControl
     {
 
         public QualitivityViewTrackChangesControl()

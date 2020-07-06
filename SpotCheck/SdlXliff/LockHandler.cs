@@ -17,7 +17,7 @@ using System.Xml;
  */
 #endregion
 
-namespace Sdl.Studio.SpotCheck.SdlXliff
+namespace Sdl.Community.SpotCheck.SdlXliff
 {
     class LockHandler
     {

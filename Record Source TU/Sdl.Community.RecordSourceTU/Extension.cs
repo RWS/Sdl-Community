@@ -39,7 +39,7 @@ namespace Sdl.Community.RecordSourceTU
 				if (editorController == null) return filePath;
 				if (editorController.ActiveDocument == null) return filePath;
 
-				var activeFile = editorController.ActiveDocument.TryGetActiveFile();
+				var activeFile = editorController.ActiveDocument.ActiveFile;
 
 				filePath = activeFile.LocalFilePath;
 			}

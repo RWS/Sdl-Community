@@ -14,6 +14,6 @@ namespace Sdl.Community.TargetWordCount
 		{
 			_control = base.GetControl() as WordCountBatchTaskSettingsControl;
 			return _control;
-		}
+		}	
 	}
 }

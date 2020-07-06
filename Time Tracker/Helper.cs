@@ -9,9 +9,7 @@ namespace Sdl.Community.Studio.Time.Tracker
 {
     public class Helper
     {
-
-       
-        public static Structures.TrackerProject GetTrackerProjectFromDocument(Document doc)
+        public static Structures.TrackerProject GetTrackerProjectFromDocument(IStudioDocument doc)
         {
 
             Structures.TrackerProject trackerProject = null;

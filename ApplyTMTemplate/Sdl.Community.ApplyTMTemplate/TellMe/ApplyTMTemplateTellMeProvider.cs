@@ -17,7 +17,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 			{
 				Keywords = new[] {"apply tm template", "community", "support"}
 			},
-			new ApplyTMTemplateAction
+			new ApplyTmTemplateAction
 			{
 				Keywords = new[] {"apply tm template", "start"}
 			},

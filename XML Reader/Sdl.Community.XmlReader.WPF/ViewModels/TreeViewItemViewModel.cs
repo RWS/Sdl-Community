@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq.Expressions;
 
 namespace Sdl.Community.XmlReader.WPF.ViewModels
 {
-    public class TreeViewItemViewModel : INotifyPropertyChanged
+	public class TreeViewItemViewModel : INotifyPropertyChanged
     {
         readonly ObservableCollection<TreeViewItemViewModel> _children;
         readonly TreeViewItemViewModel _parent;

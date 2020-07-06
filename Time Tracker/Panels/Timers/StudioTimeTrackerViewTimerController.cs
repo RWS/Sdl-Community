@@ -3,11 +3,10 @@ using System.Windows.Forms;
 using Sdl.Community.Studio.Time.Tracker.Panels.Main;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.Studio.Time.Tracker.Panels.Timers
 {
-    
-
     [ViewPart(
         Id = "StudioTimeTrackerTimeTrackerController",
         Name = "Activity Tracker",
@@ -17,7 +16,7 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Timers
     [ViewPartLayout(typeof(StudioTimeTrackerViewController), Dock = DockType.Right)]
     public class StudioTimeTrackerViewTimerController : AbstractViewPartController
     {
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return Control.Value;
         }

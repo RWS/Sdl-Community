@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Sdl.Community.Qualitivity.Panels.Main;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.Qualitivity.Panels.Timers
 {
@@ -17,7 +18,7 @@ namespace Sdl.Community.Qualitivity.Panels.Timers
     [ViewPartLayout(Dock = DockType.Right, ZIndex = 3, LocationByType = typeof(QualitivityViewController))]
     public class QualitivityViewTimerController : AbstractViewPartController
     {
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return Control.Value;
         }

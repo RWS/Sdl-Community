@@ -4,13 +4,14 @@ using System.Windows.Forms;
 using Sdl.Community.Qualitivity.Tracking;
 using Sdl.Community.Structures.Profile;
 using Sdl.Community.Structures.PropertyView;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Activity = Sdl.Community.Structures.Projects.Activities.Activity;
 using Project = Sdl.Community.Structures.Projects.Project;
 
 namespace Sdl.Community.Qualitivity.Panels.Properties
 {
-    public partial class QualitivityViewPropertiesControl : UserControl
-    {
+    public partial class QualitivityViewPropertiesControl : UserControl, IUIControl
+	{
 
         public QualitivityViewPropertiesControl()
         {
