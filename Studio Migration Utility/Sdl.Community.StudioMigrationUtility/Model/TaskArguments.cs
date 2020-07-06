@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sdl.Versioning;
 
 namespace Sdl.Community.StudioMigrationUtility.Model
 {
