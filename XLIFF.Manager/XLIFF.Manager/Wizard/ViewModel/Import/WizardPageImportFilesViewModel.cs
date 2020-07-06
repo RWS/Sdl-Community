@@ -9,7 +9,6 @@ using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
@@ -315,8 +314,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 						string.Compare(projectFileTargetPath, xliffTargetPath, StringComparison.CurrentCultureIgnoreCase) == 0)
 					{
 						projectFile.XliffFilePath = filePath;
-						projectFile.Selected = true;
-						InitializeOriginSystemValue(xliff);
+						projectFile.Selected = true;						
 					}
 				}
 			}
@@ -324,16 +322,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			VerifyIsValid();
 		}
 
-		private void InitializeOriginSystemValue(Xliff xliff)
-		{
-			if (string.IsNullOrEmpty(WizardContext.ImportOptions.OriginSystem))
-			{
-				if (xliff.Support == Enumerators.XLIFFSupport.xliff12polyglot)
-				{
-					WizardContext.ImportOptions.OriginSystem = PluginResources.Label_Polyglot;
-				}
-			}
-		}
 
 		private string GetPathLocation(string path, string targetLanguage)
 		{

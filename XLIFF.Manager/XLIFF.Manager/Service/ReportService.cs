@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
@@ -167,7 +165,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				writer.WriteAttributeString("xliffSupport", wizardContext.ExportOptions.XliffSupport.ToString());
 				writer.WriteAttributeString("includeTranslations", wizardContext.ExportOptions.IncludeTranslations.ToString());
 				writer.WriteAttributeString("copySourceToTarget", wizardContext.ExportOptions.CopySourceToTarget.ToString());
-				writer.WriteAttributeString("excludeFilterItems", GetFitlerItemsString(wizardContext.ExcludeFilterItems));
+				writer.WriteAttributeString("excludeFilterItems", GetFitlerItemsString(wizardContext.ExportOptions.ExcludeFilterIds));
 			}
 			else
 			{
@@ -176,7 +174,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 				writer.WriteAttributeString("statusTranslationUpdatedId", GetSegmentStatus(wizardContext.ImportOptions.StatusTranslationUpdatedId));
 				writer.WriteAttributeString("statusTranslationNotUpdatedId", GetSegmentStatus(wizardContext.ImportOptions.StatusTranslationNotUpdatedId));
 				writer.WriteAttributeString("statusSegmentNotImportedId", GetSegmentStatus(wizardContext.ImportOptions.StatusSegmentNotImportedId));
-				writer.WriteAttributeString("excludeFilterItems", GetFitlerItemsString(wizardContext.ExcludeFilterItems));
+				writer.WriteAttributeString("excludeFilterItems", GetFitlerItemsString(wizardContext.ImportOptions.ExcludeFilterIds));
 			}
 
 			writer.WriteEndElement(); //settings
@@ -334,8 +332,10 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			return statistics;
 		}
 
-		private string GetFitlerItemsString(IEnumerable<FilterItem> filterItems)
+		private string GetFitlerItemsString(IEnumerable<string> ids)
 		{
+			var allFilterItems = Enumerators.GetFilterItems();
+			var filterItems = Enumerators.GetFilterItems(allFilterItems, ids);
 			var items = string.Empty;
 			foreach (var filterItem in filterItems)
 			{

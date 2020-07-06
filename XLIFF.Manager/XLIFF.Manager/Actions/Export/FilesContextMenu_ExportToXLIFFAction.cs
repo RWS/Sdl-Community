@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Windows;
+using Newtonsoft.Json;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
@@ -29,7 +31,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 		protected override void Execute()
 		{
 			var wizardService = new WizardService(Enumerators.Action.Export, _pathInfo, _customerProvider,
-				_imageService, _controllers, _segmentBuilder, _dialogService);
+				_imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService);
 
 			var wizardContext = wizardService.ShowWizard(_controllers.FilesController, out var message);
 			if (wizardContext == null && !string.IsNullOrEmpty(message))
@@ -50,9 +52,20 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
-			_segmentBuilder = new SegmentBuilder();
+			_segmentBuilder = new SegmentBuilder();		
 
 			SetEnabled();
+		}
+
+		private Settings GetSettings()
+		{
+			if (File.Exists(_pathInfo.SettingsFilePath))
+			{
+				var json = File.ReadAllText(_pathInfo.SettingsFilePath);
+				return JsonConvert.DeserializeObject<Settings>(json);
+			}
+
+			return new Settings();
 		}
 
 		private void SetProjectsController()

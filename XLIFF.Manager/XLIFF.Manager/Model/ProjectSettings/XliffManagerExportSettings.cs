@@ -8,7 +8,6 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 	{
 		private const string ExportOptionsSettingId = "ExportOptions";
 		private const string TransactionFolderSettingId = "TransactionFolder";
-		private const string SelectedFilterItemIdsSettingId = "SelectedFilterItemIds";
 		private const string DateTimeStampSettingId = "DateTimeStamp";
 		private const string LocalProjectFolderSettingId = "LocalProjectFolder";
 		
@@ -34,12 +33,6 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 		{
 			get => GetSetting<string>(TransactionFolderSettingId);
 			set => GetSetting<string>(TransactionFolderSettingId).Value = value;
-		}
-
-		public List<string> SelectedFilterItemIds
-		{
-			get => GetSetting<List<string>>(SelectedFilterItemIdsSettingId);
-			set => GetSetting<List<string>>(SelectedFilterItemIdsSettingId).Value = value;
-		}
+		}		
 	}
 }

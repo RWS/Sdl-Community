@@ -21,7 +21,6 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private readonly bool _ignoreTags;
 		private readonly string _inputPath;
 		private readonly string _projectId;
-		private readonly List<string> _excludeFilterItems;
 		private readonly List<AnalysisBand> _analysisBands;
 		private IBilingualContentHandler _output;
 		private IFileProperties _fileProperties;
@@ -30,14 +29,13 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private SegmentPairProcessor _segmentPairProcessor;
 
 		internal ContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder,
-			List<string> excludeFilterItems, ExportOptions exportOptions, List<AnalysisBand> analysisBands)
+			ExportOptions exportOptions, List<AnalysisBand> analysisBands)
 		{
 			_projectId = projectId;
 			_inputPath = inputPath;
 			_ignoreTags = ignoreTags;
 			_segmentBuilder = segmentBuilder;
-
-			_excludeFilterItems = excludeFilterItems;
+			
 			_exportOptions = exportOptions;
 			_analysisBands = analysisBands;
 
@@ -142,11 +140,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				var status = segmentPair.Properties.ConfirmationLevel.ToString();
 				var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
-				if (_excludeFilterItems != null)
+				if (_exportOptions.ExcludeFilterIds != null)
 				{
-					if ((segmentPair.Properties.IsLocked && _excludeFilterItems.Exists(a => a == "Locked"))
-						|| _excludeFilterItems.Exists(a => a == status)
-						|| _excludeFilterItems.Exists(a => a == match))
+					if ((segmentPair.Properties.IsLocked && _exportOptions.ExcludeFilterIds.Exists(a => a == "Locked"))
+						|| _exportOptions.ExcludeFilterIds.Exists(a => a == status)
+						|| _exportOptions.ExcludeFilterIds.Exists(a => a == match))
 					{
 						AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
 						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);

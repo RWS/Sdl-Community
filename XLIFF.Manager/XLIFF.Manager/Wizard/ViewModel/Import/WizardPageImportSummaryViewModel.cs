@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
@@ -64,9 +65,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			summaryText += indent + string.Format(PluginResources.Label_StatusTranslationsUpdated, GetConfirmationStatusName(WizardContext.ImportOptions.StatusTranslationUpdatedId)) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_StatusTranslationsNotUpdated, GetConfirmationStatusName(WizardContext.ImportOptions.StatusTranslationNotUpdatedId)) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_StatusSegmentsNotImported, GetConfirmationStatusName(WizardContext.ImportOptions.StatusSegmentNotImportedId)) + Environment.NewLine;
-			if (WizardContext.ExcludeFilterItems.Count > 0)
+			if (WizardContext.ImportOptions.ExcludeFilterIds.Count > 0)
 			{
-				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExcludeFilterItems)) + Environment.NewLine;
+				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ImportOptions.ExcludeFilterIds)) + Environment.NewLine;
 			}
 
 			summaryText += Environment.NewLine;
@@ -116,14 +117,21 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		{
 			return string.IsNullOrEmpty(id) ? "[none]" : id;
 		}
-
-		private string GetFitlerItemsString(IEnumerable<FilterItem> filterItems)
+		
+		private string GetFitlerItemsString(List<string> ids)
 		{
+			var allFilterItems = Enumerators.GetFilterItems();
+			var filterItems = Enumerators.GetFilterItems(allFilterItems, ids);
 			var items = string.Empty;
 			foreach (var filterItem in filterItems)
 			{
 				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
-						 filterItem.Name;
+				         filterItem.Name;
+			}
+
+			if (string.IsNullOrEmpty(items))
+			{
+				items = "[none]";
 			}
 
 			return items;

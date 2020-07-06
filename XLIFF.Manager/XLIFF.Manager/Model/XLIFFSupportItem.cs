@@ -2,7 +2,7 @@
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
-    public class XLIFFSupport
+    public class XLIFFSupportItem
     {
 		public Enumerators.XLIFFSupport SupportType { get; set; }
 

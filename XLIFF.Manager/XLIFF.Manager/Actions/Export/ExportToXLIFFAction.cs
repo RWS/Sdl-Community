@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
+using Newtonsoft.Json;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.CustomEventArgs;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
@@ -23,11 +25,11 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 		private ImageService _imageService;
 		private IDialogService _dialogService;
 		private SegmentBuilder _segmentBuilder;
-
+		
 		protected override void Execute()
 		{
 			var wizardService = new WizardService(Enumerators.Action.Export, _pathInfo, _customerProvider,
-				 _imageService, _controllers, _segmentBuilder, _dialogService);
+				 _imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService);
 
 			var wizardContext = wizardService.ShowWizard(Controller, out var message);
 			if (wizardContext == null && !string.IsNullOrEmpty(message))
@@ -53,8 +55,19 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
-
+		
 			Enabled = true;
+		}
+
+		private Settings GetSettings()
+		{			
+			if (File.Exists(_pathInfo.SettingsFilePath))
+			{
+				var json = File.ReadAllText(_pathInfo.SettingsFilePath);
+				return JsonConvert.DeserializeObject<Settings>(json);
+			}
+
+			return new Settings();
 		}
 
 		private void SetupXliffManagerController()

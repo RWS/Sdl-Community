@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using Newtonsoft.Json;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers;
@@ -54,18 +55,18 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 
 			_logReport = new StringBuilder();
 			_projectInfo = Project.GetProjectInfo();
-			_segmentBuilder = new SegmentBuilder();
-			_exportSettings = GetSetting<XliffManagerExportSettings>();
-			if (_exportSettings.ExportOptions == null)
-			{
-				CreateDefaultContext();
-			}
-
+			_segmentBuilder = new SegmentBuilder();			
 			_pathInfo = new PathInfo();
 			_customerProvider = new CustomerProvider();
 			_imageService = new ImageService();
 			_reportService = new ReportService();
 			_projectSettingsService = new ProjectSettingsService();
+			_exportSettings = GetSetting<XliffManagerExportSettings>();
+			if (_exportSettings.ExportOptions == null)
+			{
+				CreateDefaultContext();
+			}
+			
 			_isError = false;
 			_xliffManagerController = GetXliffManagerController();
 
@@ -101,7 +102,6 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 				}
 
 				var sdlxliffReader = new SdlxliffReader(_segmentBuilder,
-					_exportSettings.SelectedFilterItemIds,
 					_exportSettings.ExportOptions,
 					GetAnalysisBands(Project as FileBasedProject));
 
@@ -262,7 +262,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 
 			_exportSettings.LocalProjectFolder = projectInfo.LocalProjectFolder;
 			_exportSettings.TransactionFolder = GetDefaultTransactionPath(_exportSettings.LocalProjectFolder, Enumerators.Action.Export);
-			_exportSettings.ExportOptions = _exportSettings.ExportOptions ?? new ExportOptions();
+			_exportSettings.ExportOptions = GetSettings().ExportOptions;
 		}
 
 		private string GetDefaultTransactionPath(string localProjectFolder, Enumerators.Action action)
@@ -287,14 +287,14 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 		{
 			var selectedIds = TaskFiles.Select(projectFile => projectFile.Id.ToString()).ToList();
 			_project = GetProjectModel(Project as FileBasedProject, selectedIds);
-			_wizardContext = new WizardContext
-			{
-				Action = Enumerators.Action.Export,
+			var settings = GetSettings();
+						 
+			_wizardContext = new WizardContext(Enumerators.Action.Export, settings)
+			{				
 				Completed = false,
 				Project = _project,
 				Owner = Enumerators.Controller.Files, // TODO: check if Files or Projects controller
 				DateTimeStamp = _exportSettings.DateTimeStamp,
-				ExcludeFilterItems = GetSelectedFilterItems(),
 				ExportOptions = _exportSettings.ExportOptions,
 				LocalProjectFolder = _exportSettings.LocalProjectFolder,
 				TransactionFolder = _exportSettings.TransactionFolder,
@@ -303,26 +303,17 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			};
 		}
 
-		private List<FilterItem> GetSelectedFilterItems()
+		private Settings GetSettings()
 		{
-			var selectedFilterItems = new List<FilterItem>();
-
-			var allFilterItems = Enumerators.GetFilterItems();
-			if (_exportSettings.SelectedFilterItemIds != null)
+			if (File.Exists(_pathInfo.SettingsFilePath))
 			{
-				foreach (var filterItemId in _exportSettings.SelectedFilterItemIds)
-				{
-					var filterItem = allFilterItems.FirstOrDefault(a => a.Id == filterItemId);
-					if (filterItem != null)
-					{
-						selectedFilterItems.Add(filterItem);
-					}
-				}
+				var json = File.ReadAllText(_pathInfo.SettingsFilePath);
+				return JsonConvert.DeserializeObject<Settings>(json);
 			}
 
-			return selectedFilterItems;
+			return new Settings();
 		}
-
+	
 		private void WriteLogReportHeader()
 		{
 			var dateTimeStampToString = GetDateTimeStampToString(_exportSettings.DateTimeStamp);
@@ -350,9 +341,9 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_WorkingFolder, workingFolder));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_IncludeTranslations, _exportSettings.ExportOptions.IncludeTranslations));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_CopySourceToTarget, _exportSettings.ExportOptions.CopySourceToTarget));
-			if (_exportSettings.SelectedFilterItemIds?.Count > 0)
+			if (_exportSettings.ExportOptions.ExcludeFilterIds?.Count > 0)
 			{
-				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(_exportSettings.SelectedFilterItemIds)));
+				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(_exportSettings.ExportOptions.ExcludeFilterIds)));
 			}
 
 			_logReport.AppendLine();

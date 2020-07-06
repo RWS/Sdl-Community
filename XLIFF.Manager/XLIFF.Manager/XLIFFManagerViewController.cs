@@ -22,13 +22,10 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.Desktop.IntegrationApi.Notifications.Events;
-using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-using AnalysisBand = Sdl.Community.XLIFF.Manager.Model.AnalysisBand;
 using AutomaticTask = Sdl.Community.XLIFF.Manager.Model.Tasks.AutomaticTask;
-using ConfirmationStatistics = Sdl.Community.XLIFF.Manager.Model.ConfirmationStatistics;
 using ProjectFile = Sdl.Community.XLIFF.Manager.Model.ProjectFile;
 using TaskFile = Sdl.Community.XLIFF.Manager.Model.Tasks.TaskFile;
 

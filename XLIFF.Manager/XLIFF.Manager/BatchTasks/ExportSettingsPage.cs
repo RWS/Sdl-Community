@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Model.ProjectSettings;
@@ -14,28 +15,30 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 	{
 		private readonly ProjectsController _projectsController;
 		private XliffManagerExportSettings _settings;
+		private PathInfo _pathInfo;
 		private ExportSettingsControl _control;
 
 		public ExportSettingsPage()
 		{
+			_pathInfo = new PathInfo();
 			_projectsController = GetProjectsController();
 		}
 
 		public override object GetControl()
-		{
-			_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<XliffManagerExportSettings>();
+		{			
+			_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<XliffManagerExportSettings>();						
 			_control = base.GetControl() as ExportSettingsControl;
 			if (_control != null && _control.ExportOptionsViewModel == null)
 			{
-				CreateDefaultContext();
+				CreateContext();
 				_control.Settings = _settings;
 				_control.SetDataContext();
 			}
 
 			return _control;
-		}
+		}	
 
-		private void CreateDefaultContext()
+		private void CreateContext()
 		{
 			_settings.DateTimeStamp = DateTime.UtcNow;
 			var selectedProject = _projectsController?.SelectedProjects.FirstOrDefault()
@@ -48,7 +51,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 				_settings.TransactionFolder = GetDefaultTransactionPath(_settings.LocalProjectFolder, Enumerators.Action.Export);
 			}
 
-			_settings.ExportOptions = _settings.ExportOptions ?? new ExportOptions();
+			_settings.ExportOptions = GetSettings().ExportOptions;
 		}
 
 		public override void Save()
@@ -73,6 +76,17 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			}
 
 			return path;
+		}
+
+		private Settings GetSettings()
+		{
+			if (File.Exists(_pathInfo.SettingsFilePath))
+			{
+				var json = File.ReadAllText(_pathInfo.SettingsFilePath);
+				return JsonConvert.DeserializeObject<Settings>(json);
+			}
+
+			return new Settings();
 		}
 
 		private static ProjectsController GetProjectsController()

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Input;
-using Sdl.Community.XLIFF.Manager.Commands;
-using Sdl.Community.XLIFF.Manager.Model;
+﻿using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
 {

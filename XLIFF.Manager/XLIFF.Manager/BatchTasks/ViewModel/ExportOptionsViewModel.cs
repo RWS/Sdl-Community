@@ -18,13 +18,13 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
 	public class ExportOptionsViewModel : INotifyPropertyChanged
 	{
 		private readonly IDialogService _dialogService;
-		private List<XLIFFSupport> _xliffSupport;
-		private XLIFFSupport _selectedXliffSupportModel;
+		private List<XLIFFSupportItem> _xliffSupportItems;
+		private XLIFFSupportItem _selectedXliffSupportItemModel;
 		private string _outputFolder;
 		private bool _copySourceToTarget;
 		private bool _copySourceToTargetEnabled;
 		private bool _includeTranslations;
-		private ObservableCollection<FilterItem> _filterItems;
+		private List<FilterItem> _filterItems;
 		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
@@ -40,12 +40,14 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
 				exportSettings.ExportOptions = new ExportOptions();
 			}
 
-			SelectedXliffSupport = XLIFFSupportList.FirstOrDefault(a => a.SupportType == exportSettings.ExportOptions.XliffSupport);
+			XLIFFSupportItems = Enumerators.GetXLIFFSupportItems();
+
+			SelectedXliffSupportItem = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == exportSettings.ExportOptions.XliffSupport);
 			OutputFolder = exportSettings.TransactionFolder;
 			CopySourceToTarget = exportSettings.ExportOptions.CopySourceToTarget;
 			IncludeTranslations = exportSettings.ExportOptions.IncludeTranslations;
 
-			InitializeFilterItems(exportSettings.SelectedFilterItemIds);
+			InitializeFilterItems(exportSettings.ExportOptions.ExcludeFilterIds);
 		}
 
 		public ICommand ClearExportFileCommand => _clearExportFileCommand ?? (_clearExportFileCommand = new CommandHandler(ClearExportFile));
@@ -56,61 +58,38 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
 
 		public ICommand SelectedItemsChangedCommand => _selectedItemsChangedCommand ?? (_selectedItemsChangedCommand = new CommandHandler(SelectedItemsChanged));
 
-		public List<XLIFFSupport> XLIFFSupportList
+		public List<XLIFFSupportItem> XLIFFSupportItems
 		{
-			get
+			get => _xliffSupportItems;
+			set
 			{
-				if (_xliffSupport != null)
-				{
-					return _xliffSupport;
-				}
-
-				_xliffSupport = new List<XLIFFSupport>
-				{
-					new XLIFFSupport
-					{
-						Name = "XLIFF 1.2 SDL",
-						SupportType = Enumerators.XLIFFSupport.xliff12sdl
-					},
-					new XLIFFSupport
-					{
-						Name = "XLIFF 1.2 Polyglot",
-						SupportType = Enumerators.XLIFFSupport.xliff12polyglot
-					}
-					// TODO spport for this format will come later on in the development cycle
-					//new XLIFFSupportModel
-					//{
-					//	Name = "XLIFF 2.0 SDL",
-					//	SupportType = Enumerators.XLIFFSupport.xliff20sdl
-					//}
-				};
-
-				return _xliffSupport;
+				_xliffSupportItems = value;
+				OnPropertyChanged(nameof(XLIFFSupportItems));
 			}
 		}
 
-		public XLIFFSupport SelectedXliffSupport
+		public XLIFFSupportItem SelectedXliffSupportItem
 		{
 			get
 			{
-				return _selectedXliffSupportModel
-					   ?? (_selectedXliffSupportModel = XLIFFSupportList.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
+				return _selectedXliffSupportItemModel
+					   ?? (_selectedXliffSupportItemModel = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
 			}
 			set
 			{
-				if (_selectedXliffSupportModel == value)
+				if (_selectedXliffSupportItemModel == value)
 				{
 					return;
 				}
 
-				_selectedXliffSupportModel = value;
-				OnPropertyChanged(nameof(SelectedXliffSupport));
+				_selectedXliffSupportItemModel = value;
+				OnPropertyChanged(nameof(SelectedXliffSupportItem));
 			}
 		}
 
-		public ObservableCollection<FilterItem> FilterItems
+		public List<FilterItem> FilterItems
 		{
-			get => _filterItems ?? (_filterItems = new ObservableCollection<FilterItem>());
+			get => _filterItems;
 			set
 			{
 				if (_filterItems == value)
@@ -210,7 +189,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
 
 		private void InitializeFilterItems(IReadOnlyCollection<string> selecteFilterItemIds)
 		{
-			FilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems());
+			FilterItems = new List<FilterItem>(Enumerators.GetFilterItems());
 			SetSelectedFilterItems(selecteFilterItemIds);
 		}
 
@@ -222,7 +201,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
 				foreach (var id in selecteFilterItemIds)
 				{
 					var filterItem = FilterItems.FirstOrDefault(a => a.Id == id);
-					if (filterItem != null && selectedFilterItems.Exists(a => a.Id == id))
+					if (filterItem != null && !selectedFilterItems.Exists(a => a.Id == id))
 					{
 						selectedFilterItems.Add(filterItem);
 					}

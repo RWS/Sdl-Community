@@ -229,8 +229,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				Refresh();
 
 				var project = WizardContext.ProjectFiles[0].Project;
-				var filterItems = WizardContext.ExcludeFilterItems.Select(a => a.Id).ToList();
-				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, filterItems, 
+				
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, 
 					WizardContext.ExportOptions, WizardContext.AnalysisBands);
 				var xliffWriter = new XliffWriter(WizardContext.ExportOptions.XliffSupport);
 
@@ -415,9 +415,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.ExportOptions.IncludeTranslations));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.ExportOptions.CopySourceToTarget));
-			if (WizardContext.ExcludeFilterItems.Count > 0)
+			if (WizardContext.ExportOptions.ExcludeFilterIds.Count > 0)
 			{
-				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExcludeFilterItems)));
+				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExportOptions.ExcludeFilterIds)));
 			}
 
 			_logReport.AppendLine();
@@ -496,13 +496,20 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		{
 		}
 
-		private string GetFitlerItemsString(IEnumerable<FilterItem> filterItems)
+		private string GetFitlerItemsString(IEnumerable<string> ids)
 		{
+			var allFilterItems = Enumerators.GetFilterItems();
+			var filterItems = Enumerators.GetFilterItems(allFilterItems, ids);
 			var items = string.Empty;
 			foreach (var filterItem in filterItems)
 			{
 				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
 				         filterItem.Name;
+			}
+
+			if (string.IsNullOrEmpty(items))
+			{
+				items = "[none]";
 			}
 
 			return items;

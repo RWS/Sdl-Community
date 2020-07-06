@@ -10,16 +10,14 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 	public class SdlxliffReader
 	{
 		private readonly SegmentBuilder _segmentBuilder;
-		private readonly List<string> _excludeFilterItems;
 		private readonly ExportOptions _exportOptions;
 		private readonly List<AnalysisBand> _analysisBands;
 		private readonly IMultiFileConverter _multiFileConverter;
 
-		public SdlxliffReader(SegmentBuilder segmentBuilder, List<string> excludeFilterItems, 
+		public SdlxliffReader(SegmentBuilder segmentBuilder,  
 			ExportOptions exportOptions, List<AnalysisBand> analysisBands)
 		{
 			_segmentBuilder = segmentBuilder;
-			_excludeFilterItems = excludeFilterItems;
 			_exportOptions = exportOptions;
 			_analysisBands = analysisBands;
 			ConfirmationStatistics = new ConfirmationStatistics();
@@ -40,7 +38,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, null, null);
 
 			var contentReader = new ContentReader(projectId, filePath, false, _segmentBuilder, 
-				_excludeFilterItems, _exportOptions, _analysisBands);		
+				_exportOptions, _analysisBands);		
 			converter.AddBilingualProcessor(contentReader);
 			
 			SourceLanguage = contentReader.SourceLanguage;
