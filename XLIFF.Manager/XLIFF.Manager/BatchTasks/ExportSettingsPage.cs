@@ -27,7 +27,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			_control = base.GetControl() as ExportSettingsControl;
 			if (_control != null && _control.ExportOptionsViewModel == null)
 			{
-				CreateContext();
+				CreateDefaultContext();
 				_control.Settings = _settings;
 				_control.SetDataContext();
 			}
@@ -35,7 +35,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			return _control;
 		}
 
-		private void CreateContext()
+		private void CreateDefaultContext()
 		{
 			_settings.DateTimeStamp = DateTime.UtcNow;
 			var selectedProject = _projectsController?.SelectedProjects.FirstOrDefault()

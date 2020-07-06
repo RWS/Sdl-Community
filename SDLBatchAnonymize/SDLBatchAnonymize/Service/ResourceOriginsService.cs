@@ -12,15 +12,15 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 		public void RemoveMt(ISegmentPair segmentPair, IBatchAnonymizerSettings anonymizerSettings)
 		{
 			var translationOrigin = segmentPair?.Properties?.TranslationOrigin;
-			var originBefereAdaptation = segmentPair?.Properties?.TranslationOrigin.OriginBeforeAdaptation;
+			var originBeforeAdaptation = segmentPair?.Properties?.TranslationOrigin?.OriginBeforeAdaptation;
 
 			if (translationOrigin != null && IsAutomatedTranslated(translationOrigin))
 			{
 				AnonymizeMtTranslationOrigin(segmentPair, anonymizerSettings, translationOrigin);
 			}
-			if (originBefereAdaptation != null && IsAutomatedTranslated(originBefereAdaptation))
+			if (originBeforeAdaptation != null && IsAutomatedTranslated(originBeforeAdaptation))
 			{
-				AnonymizeMtTranslationOrigin(segmentPair, anonymizerSettings, originBefereAdaptation);
+				AnonymizeMtTranslationOrigin(segmentPair, anonymizerSettings, originBeforeAdaptation);
 			}
 		}
 

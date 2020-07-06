@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace Sdl.Community.XLIFF.Manager.Model
 {
 	public class WordCount : ICloneable
-	{
+	{	
 		[XmlAttribute]
 		public string Category { get; set; }
 

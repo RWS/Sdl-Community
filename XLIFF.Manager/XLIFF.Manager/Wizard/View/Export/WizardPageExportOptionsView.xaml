@@ -144,6 +144,7 @@
 				                DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 
 					            ItemsSource="{Binding FilterItems}"            
 					            SelectedItems="{Binding SelectedExcludeFilterItems}"
+					            sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding SelectedItemsChangedCommand}"
 								EnableGrouping="True"
 								EnableFiltering="True"
 					            IsEditable="True"

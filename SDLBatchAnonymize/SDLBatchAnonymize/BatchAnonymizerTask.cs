@@ -31,12 +31,12 @@ namespace Sdl.Community.SDLBatchAnonymize
 		{
 			_resourceOriginsService = new ResourceOriginsService();
 			_userNameService = new UserNameService();
-			
+
 			var projectInfo = Project?.GetProjectInfo();
 			if (projectInfo is null) return;
 			var backupService = new BackupService();
 
-			Application.Current.Dispatcher.Invoke(() =>
+			Application.Current?.Dispatcher?.Invoke(() =>
 			{
 				foreach (Window window in Application.Current.Windows)
 				{
@@ -54,7 +54,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 			var generalSettings = GetSetting<BatchAnonymizerSettings>();
 
 			_settings = generalSettings.UseGeneral ? generalSettings : GetAnonymizationSettings(projectFile.Language);
-		
+
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerProcessor(_settings, _userNameService, _resourceOriginsService)));
 		}
 
@@ -79,7 +79,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 					RemoveSettings(projectSettings);
 					Project.UpdateSettings(projectSettings);
 				}
-				 if (languageSettings.ClearSettings)
+				if (languageSettings.ClearSettings)
 				{
 					var projectSettings = Project.GetSettings(targetLanguage);
 					RemoveSettings(projectSettings);
@@ -96,7 +96,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 			var anonymizeProjService = new AnonymizeSdlProjService();
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			var proj = projectController.CurrentProject;
-			
+
 			if (proj != null)
 			{
 				proj.Save();

@@ -58,6 +58,7 @@ namespace Sdl.Community.XLIFF.Manager
 		private PathInfo _pathInfo;
 		private CustomerProvider _customerProvider;
 		private ProjectSettingsService _projectSettingsService;
+		private ReportService _reportService;
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -65,6 +66,7 @@ namespace Sdl.Community.XLIFF.Manager
 			_imageService = new ImageService();
 			_customerProvider = new CustomerProvider();
 			_projectSettingsService = new ProjectSettingsService();
+			_reportService = new ReportService();
 
 			ActivationChanged += OnActivationChanged;
 
@@ -123,7 +125,7 @@ namespace Sdl.Community.XLIFF.Manager
 			return _projectFilesViewModel.SelectedProjectFiles?.Cast<ProjectFile>().ToList();
 		}
 
-		public void UpdateProjectData(WizardContext wizardContext)
+		public void UpdateProjectData(WizardContext wizardContext, bool isBatchTask = false)
 		{
 			if (wizardContext == null || !wizardContext.Completed)
 			{
@@ -168,7 +170,7 @@ namespace Sdl.Community.XLIFF.Manager
 			{
 				_projectsNavigationViewModel.Projects = new List<Project>();
 				_projectsNavigationViewModel.Projects = _xliffProjects;
-			}			
+			}
 
 			var selectedProject = _projectsController.GetProjects()
 				.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == wizardContext.Project.Id);
@@ -177,9 +179,12 @@ namespace Sdl.Community.XLIFF.Manager
 				return;
 			}
 
-			var automaticTask = CreateAutomaticTask(wizardContext, selectedProject);
+			var automaticTask = CreateAutomaticTask(wizardContext, selectedProject, isBatchTask);
 			CreateHtmlReport(wizardContext, selectedProject, automaticTask);
-			UpdateProjectReports(wizardContext, selectedProject, automaticTask);
+			if (!isBatchTask)
+			{
+				UpdateProjectReports(wizardContext, selectedProject, automaticTask);
+			}
 
 			UpdateProjectSettingsBundle(project);
 		}
@@ -200,7 +205,7 @@ namespace Sdl.Community.XLIFF.Manager
 				foreach (var wcProjectFile in wizardContext.ProjectFiles)
 				{
 					if (!wcProjectFile.Selected || string.Compare(wcProjectFile.TargetLanguage, languageDirection?.TargetLanguageCode,
-						    StringComparison.CurrentCultureIgnoreCase) != 0)
+							StringComparison.CurrentCultureIgnoreCase) != 0)
 					{
 						continue;
 					}
@@ -220,7 +225,7 @@ namespace Sdl.Community.XLIFF.Manager
 			}
 		}
 
-		private AutomaticTask CreateAutomaticTask(WizardContext wizardContext, FileBasedProject selectedProject)
+		private AutomaticTask CreateAutomaticTask(WizardContext wizardContext, FileBasedProject selectedProject, bool isBatchTask)
 		{
 			var projectInfo = selectedProject.GetProjectInfo();
 			var automaticTask = new AutomaticTask(wizardContext.Action)
@@ -249,16 +254,16 @@ namespace Sdl.Community.XLIFF.Manager
 				}
 			}
 
-			var languageDirections = GetLanguageDirections(selectedProject, wizardContext);
+			var languageDirections = GetLanguageDirections(selectedProject.FilePath, wizardContext);
 
 			foreach (var languageDirection in languageDirections)
 			{
-				var actionType = wizardContext.Action == Enumerators.Action.Export
-					? "ExportToXLIFF"
-					: "ImportFromXLIFF";
+				var actionName = wizardContext.Action == Enumerators.Action.Export
+					? "Export To XLIFF"
+					: "Import From XLIFF";
 
 				var reportName = string.Format("{0}_{1}_{2}_{3}.xml",
-					actionType,
+					actionName.Replace(" ", ""),
 					wizardContext.DateTimeStampToString,
 					languageDirection.Key.SourceLanguageCode,
 					languageDirection.Key.TargetLanguageCode);
@@ -274,36 +279,13 @@ namespace Sdl.Community.XLIFF.Manager
 				var projectReportsFilePath = Path.Combine(projectsReportsFolder, reportName);
 				var relativeProjectReportsFilePath = Path.Combine("Reports", reportName);
 
-				var settings = new XmlWriterSettings
-				{
-					OmitXmlDeclaration = true,
-					Indent = false
-				};
-
-				var actionName = wizardContext.Action == Enumerators.Action.Export
-					? "Export to XLIFF"
-					: "Import from XLIFF";
-
-				using (var writer = XmlWriter.Create(reportFile, settings))
-				{
-					writer.WriteStartElement("task");
-					writer.WriteAttributeString("name", actionName);
-					writer.WriteAttributeString("created", wizardContext.DateTimeStampToString);
-
-					WriteReportTaskInfo(writer, wizardContext, selectedProject, languageDirection);
-
-					foreach (var projectFile in languageDirection.Value)
-					{
-						WriteReportFile(writer, wizardContext, projectFile);
-					}
-
-					WriteReportTotal(writer, wizardContext, languageDirection);
-
-					writer.WriteEndElement(); //task
-				}
+				_reportService.CreateReport(wizardContext, reportFile, selectedProject, languageDirection.Key.TargetLanguageCode);
 
 				// Copy to project reports folder
-				File.Copy(reportFile, projectReportsFilePath, true);
+				if (!isBatchTask)
+				{
+					File.Copy(reportFile, projectReportsFilePath, true);
+				}
 
 				var report = new Report(wizardContext.Action)
 				{
@@ -323,7 +305,7 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			if (File.Exists(fullFilePath))
 			{
-				return;
+				File.Delete(fullFilePath);
 			}
 
 			using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
@@ -365,395 +347,10 @@ namespace Sdl.Community.XLIFF.Manager
 			return htmlReportFilePath;
 		}
 
-		private void WriteReportTotal(XmlWriter writer, WizardContext wizardContext, KeyValuePair<LanguageDirectionInfo, List<ProjectFile>> languageDirection)
-		{
-			writer.WriteStartElement("batchTotal");
-
-			var totalTranslationOriginStatistics = GetTotalTranslationOriginStatistics(languageDirection.Value);
-			WriteAnalysisXml(writer, totalTranslationOriginStatistics?.WordCounts, wizardContext.AnalysisBands);
-
-			var totalConfirmationStatistics = GetTotalConfirmationStatistics(languageDirection.Value);
-			WriteConfirmationXml(writer, totalConfirmationStatistics?.WordCounts);
-
-			writer.WriteEndElement(); //batchTotal
-		}
-
-		private void WriteReportFile(XmlWriter writer, WizardContext wizardContext, ProjectFile projectFile)
-		{
-			writer.WriteStartElement("file");
-			writer.WriteAttributeString("name", Path.Combine(projectFile.Path, projectFile.Name));
-			writer.WriteAttributeString("guid", projectFile.FileId);
-
-			WriteAnalysisXml(writer, projectFile.TranslationOriginStatistics?.WordCounts, wizardContext.AnalysisBands);
-			WriteConfirmationXml(writer, projectFile.ConfirmationStatistics?.WordCounts);
-
-			writer.WriteEndElement(); //file
-		}
-
-		private void WriteReportTaskInfo(XmlWriter writer, WizardContext wizardContext, IProject fileBasedProject, KeyValuePair<LanguageDirectionInfo, List<ProjectFile>> languageDirection)
-		{
-			writer.WriteStartElement("taskInfo");
-			writer.WriteAttributeString("taskId", Guid.NewGuid().ToString());
-			writer.WriteAttributeString("runAt", wizardContext.DateTimeStamp.ToShortDateString() + " " + wizardContext.DateTimeStamp.ToShortTimeString());
-
-			WriteReportProject(writer, wizardContext);
-
-			WriteReportLanguage(writer, languageDirection);
-
-			WriteReportCustomer(writer, wizardContext);
-
-			WriteReportTranslationProviders(writer, fileBasedProject);
-
-			WriteReportSettings(writer, wizardContext);
-
-			writer.WriteEndElement(); //taskInfo
-		}
-
-		private static void WriteReportTranslationProviders(XmlWriter writer, IProject fileBasedProject)
-		{
-			//var cultureInfo = new CultureInfo(languageDirection.Key.TargetLanguageCode);
-			//var language = new Language(cultureInfo);
-			var config = fileBasedProject.GetTranslationProviderConfiguration();
-			foreach (var cascadeEntry in config.Entries)
-			{
-				if (!cascadeEntry.MainTranslationProvider.Enabled)
-				{
-					continue;
-				}
-
-				var scheme = cascadeEntry.MainTranslationProvider.Uri.Scheme;
-				var segments = cascadeEntry.MainTranslationProvider.Uri.Segments;
-				var name = scheme + "://";
-				if (segments.Length >= 0)
-				{
-					name += segments[segments.Length - 1];
-				}
-
-				writer.WriteStartElement("tm");
-				writer.WriteAttributeString("name", name);
-				writer.WriteEndElement(); //tm
-			}
-		}
-
-		private static void WriteReportLanguage(XmlWriter writer, KeyValuePair<LanguageDirectionInfo, List<ProjectFile>> languageDirection)
-		{
-			writer.WriteStartElement("language");
-			writer.WriteAttributeString("id", languageDirection.Key.TargetLanguageCode);
-			writer.WriteAttributeString("name", new CultureInfo(languageDirection.Key.TargetLanguageCode).DisplayName);
-			writer.WriteEndElement(); //language
-		}
-
-		private static void WriteReportCustomer(XmlWriter writer, WizardContext wizardContext)
-		{
-			if (!string.IsNullOrEmpty(wizardContext.Project.Customer?.Name))
-			{
-				writer.WriteStartElement("customer");
-				writer.WriteAttributeString("name", wizardContext.Project.Customer.Name);
-				writer.WriteAttributeString("email", wizardContext.Project.Customer.Email);
-				writer.WriteEndElement(); //customer												  
-			}
-		}
-
-		private static void WriteReportProject(XmlWriter writer, WizardContext wizardContext)
-		{
-			writer.WriteStartElement("project");
-			writer.WriteAttributeString("name", wizardContext.Project.Name);
-			writer.WriteAttributeString("number", wizardContext.Project.Id);
-			if (wizardContext.Project.DueDate != DateTime.MinValue && wizardContext.Project.DueDate != DateTime.MaxValue)
-			{
-				writer.WriteAttributeString("dueDate",
-					wizardContext.Project.DueDate.ToShortDateString() + " " + wizardContext.Project.DueDate.ToShortTimeString());
-			}
-
-			writer.WriteEndElement(); //project
-		}
-
-		private void WriteReportSettings(XmlWriter writer, WizardContext wizardContext)
-		{
-			writer.WriteStartElement("settings");
-			writer.WriteAttributeString("xliffSupport", wizardContext.ExportOptions.XliffSupport.ToString());
-			writer.WriteAttributeString("includeTranslations", wizardContext.ExportOptions.IncludeTranslations.ToString());
-			writer.WriteAttributeString("copySourceToTarget", wizardContext.ExportOptions.CopySourceToTarget.ToString());
-			writer.WriteAttributeString("excludeFilterItems", GetFitlerItemsString(wizardContext.ExcludeFilterItems));
-			writer.WriteEndElement(); //settings
-		}
-
-		private void WriteConfirmationXml(XmlWriter writer, WordCounts wordCounts)
-		{
-			writer.WriteStartElement("confirmation");
-			var processed = wordCounts?.Processed;
-			WriteConfirmationWordCountStatistics(writer, processed, "processed");
-
-			var ignored = wordCounts?.Ignored;
-			WriteConfirmationWordCountStatistics(writer, ignored, "ignored");
-			writer.WriteEndElement(); //confirmation
-		}
-
-		private void WriteAnalysisXml(XmlWriter writer, WordCounts wordCounts, IReadOnlyCollection<AnalysisBand> analysisBands)
-		{
-			writer.WriteStartElement("analysis");
-			var processed = wordCounts?.Processed;
-			WriteAnalysisWordCountStatistics(writer, processed, analysisBands, "processed");
-
-			var ignored = wordCounts?.Ignored;
-			WriteAnalysisWordCountStatistics(writer, ignored, analysisBands, "ignored");
-			writer.WriteEndElement(); //analysis
-		}
-
-		private TranslationOriginStatistics GetTotalTranslationOriginStatistics(IEnumerable<ProjectFile> projectFiles)
-		{
-			var statistics = new TranslationOriginStatistics();
-
-			foreach (var projectFile in projectFiles)
-			{
-				if (projectFile.TranslationOriginStatistics?.WordCounts != null)
-				{
-					foreach (var wordCount in projectFile.TranslationOriginStatistics?.WordCounts?.Processed)
-					{
-						var totalWordCount = statistics.WordCounts.Processed.FirstOrDefault(a =>
-							a.Category == wordCount.Category);
-						if (totalWordCount != null)
-						{
-							UpdateTotalWordCount(wordCount, totalWordCount);
-						}
-						else
-						{
-							statistics.WordCounts.Processed.Add(wordCount);
-						}
-					}
-
-					foreach (var wordCount in projectFile.TranslationOriginStatistics?.WordCounts?.Ignored)
-					{
-						var totalWordCount = statistics.WordCounts.Ignored.FirstOrDefault(a =>
-							a.Category == wordCount.Category);
-						if (totalWordCount != null)
-						{
-							UpdateTotalWordCount(wordCount, totalWordCount);
-						}
-						else
-						{
-							statistics.WordCounts.Ignored.Add(wordCount);
-						}
-					}
-				}
-			}
-
-			return statistics;
-		}
-
-		private ConfirmationStatistics GetTotalConfirmationStatistics(IEnumerable<ProjectFile> projectFiles)
-		{
-			var statistics = new ConfirmationStatistics();
-
-			foreach (var projectFile in projectFiles)
-			{
-				if (projectFile.ConfirmationStatistics?.WordCounts != null)
-				{
-					foreach (var wordCount in projectFile.ConfirmationStatistics?.WordCounts?.Processed)
-					{
-						var totalWordCount = statistics.WordCounts.Processed.FirstOrDefault(a =>
-							a.Category == wordCount.Category);
-						if (totalWordCount != null)
-						{
-							UpdateTotalWordCount(wordCount, totalWordCount);
-						}
-						else
-						{
-							statistics.WordCounts.Processed.Add(wordCount);
-						}
-					}
-
-					foreach (var wordCount in projectFile.ConfirmationStatistics?.WordCounts?.Ignored)
-					{
-						var totalWordCount = statistics.WordCounts.Ignored.FirstOrDefault(a =>
-							a.Category == wordCount.Category);
-						if (totalWordCount != null)
-						{
-							UpdateTotalWordCount(wordCount, totalWordCount);
-						}
-						else
-						{
-							statistics.WordCounts.Ignored.Add(wordCount);
-						}
-					}
-				}
-			}
-
-			return statistics;
-		}
-
-		private void WriteAnalysisWordCountStatistics(XmlWriter writer,
-			IReadOnlyCollection<WordCount> wordCounts, IEnumerable<AnalysisBand> analysisBands, string name)
-		{
-			writer.WriteStartElement(name);
-
-			var totalWordCount = new WordCount
-			{
-				Category = "Total"
-			};
-
-			var perfectMatch = wordCounts?.FirstOrDefault(a =>
-					a.Category == Enumerators.MatchType.PM.ToString()) ?? new WordCount { Category = Enumerators.MatchType.PM.ToString() };
-			WriteWordCount(writer, perfectMatch, "perfect");
-			UpdateTotalWordCount(perfectMatch, totalWordCount);
-
-			var contextMatch = wordCounts?.FirstOrDefault(a =>
-					a.Category == Enumerators.MatchType.CM.ToString()) ?? new WordCount { Category = Enumerators.MatchType.CM.ToString() };
-			WriteWordCount(writer, contextMatch, "context");
-			UpdateTotalWordCount(contextMatch, totalWordCount);
-
-			var repetitionMatch = wordCounts?.FirstOrDefault(a =>
-					a.Category == Enumerators.MatchType.Repetition.ToString()) ?? new WordCount { Category = Enumerators.MatchType.Repetition.ToString() };
-			WriteWordCount(writer, repetitionMatch, "repetition");
-			UpdateTotalWordCount(repetitionMatch, totalWordCount);
-
-			var exactMatch = wordCounts?.FirstOrDefault(a =>
-					a.Category == Enumerators.MatchType.Exact.ToString()) ?? new WordCount { Category = Enumerators.MatchType.Exact.ToString() };
-			WriteWordCount(writer, exactMatch, "exact");
-			UpdateTotalWordCount(exactMatch, totalWordCount);
-
-			foreach (var analysisBand in analysisBands)
-			{
-				var fuzzyMatchKey = string.Format("{0} {1} - {2}", Enumerators.MatchType.Fuzzy.ToString(),
-					analysisBand.MinimumMatchValue + "%", analysisBand.MaximumMatchValue + "%");
-
-				var fuzzyMatch = wordCounts?.FirstOrDefault(a =>
-					a.Category == fuzzyMatchKey) ?? new WordCount { Category = fuzzyMatchKey };
-
-				WriteWordCount(writer, fuzzyMatch, "fuzzy",
-					analysisBand.MinimumMatchValue, analysisBand.MaximumMatchValue);
-
-				UpdateTotalWordCount(fuzzyMatch, totalWordCount);
-			}
-
-			var newMatch = wordCounts?.FirstOrDefault(a =>
-				 a.Category == Enumerators.MatchType.New.ToString()) ?? new WordCount { Category = Enumerators.MatchType.New.ToString() };
-			WriteWordCount(writer, newMatch, "new");
-			UpdateTotalWordCount(newMatch, totalWordCount);
-
-			var nmtMatch = wordCounts?.FirstOrDefault(a =>
-				 a.Category == Enumerators.MatchType.NMT.ToString()) ?? new WordCount { Category = Enumerators.MatchType.NMT.ToString() };
-			WriteWordCount(writer, nmtMatch, "nmt");
-			UpdateTotalWordCount(nmtMatch, totalWordCount);
-
-			var amtMatch = wordCounts?.FirstOrDefault(a =>
-				 a.Category == Enumerators.MatchType.AMT.ToString()) ?? new WordCount { Category = Enumerators.MatchType.AMT.ToString() };
-			WriteWordCount(writer, amtMatch, "amt");
-			UpdateTotalWordCount(amtMatch, totalWordCount);
-
-			var mtMatch = wordCounts?.FirstOrDefault(a =>
-				 a.Category == Enumerators.MatchType.MT.ToString()) ?? new WordCount { Category = Enumerators.MatchType.MT.ToString() };
-			WriteWordCount(writer, mtMatch, "mt");
-			UpdateTotalWordCount(mtMatch, totalWordCount);
-
-			WriteWordCount(writer, totalWordCount, "total");
-
-			writer.WriteEndElement();
-		}
-
-		private void WriteConfirmationWordCountStatistics(XmlWriter writer, IReadOnlyCollection<WordCount> wordCounts, string name)
-		{
-			writer.WriteStartElement(name);
-
-			var totalWordCount = new WordCount
-			{
-				Category = "Total"
-			};
-
-			var approvedSignOff = wordCounts?.FirstOrDefault(a =>
-					a.Category == ConfirmationLevel.ApprovedSignOff.ToString()) ?? new WordCount { Category = ConfirmationLevel.ApprovedSignOff.ToString() };
-			WriteWordCount(writer, approvedSignOff, "approvedSignOff");
-			UpdateTotalWordCount(approvedSignOff, totalWordCount);
-
-			var rejectedSignOff = wordCounts?.FirstOrDefault(a =>
-					a.Category == ConfirmationLevel.RejectedSignOff.ToString()) ?? new WordCount { Category = ConfirmationLevel.RejectedSignOff.ToString() };
-			WriteWordCount(writer, rejectedSignOff, "rejectedSignOff");
-			UpdateTotalWordCount(rejectedSignOff, totalWordCount);
-
-			var approvedTranslation = wordCounts?.FirstOrDefault(a =>
-					a.Category == ConfirmationLevel.ApprovedTranslation.ToString()) ?? new WordCount { Category = ConfirmationLevel.ApprovedTranslation.ToString() };
-			WriteWordCount(writer, approvedTranslation, "approvedTranslation");
-			UpdateTotalWordCount(approvedTranslation, totalWordCount);
-
-			var rejectedTranslation = wordCounts?.FirstOrDefault(a =>
-					a.Category == ConfirmationLevel.RejectedTranslation.ToString()) ?? new WordCount { Category = ConfirmationLevel.RejectedTranslation.ToString() };
-			WriteWordCount(writer, rejectedTranslation, "rejectedTranslation");
-			UpdateTotalWordCount(rejectedTranslation, totalWordCount);
-
-			var translated = wordCounts?.FirstOrDefault(a =>
-				 a.Category == ConfirmationLevel.Translated.ToString()) ?? new WordCount { Category = ConfirmationLevel.Translated.ToString() };
-			WriteWordCount(writer, translated, "translated");
-			UpdateTotalWordCount(translated, totalWordCount);
-
-			var draft = wordCounts?.FirstOrDefault(a =>
-				 a.Category == ConfirmationLevel.Draft.ToString()) ?? new WordCount { Category = ConfirmationLevel.Draft.ToString() };
-			WriteWordCount(writer, draft, "draft");
-			UpdateTotalWordCount(draft, totalWordCount);
-
-			var unspecified = wordCounts?.FirstOrDefault(a =>
-				 a.Category == ConfirmationLevel.Unspecified.ToString()) ?? new WordCount { Category = ConfirmationLevel.Unspecified.ToString() };
-			WriteWordCount(writer, unspecified, "unspecified");
-			UpdateTotalWordCount(unspecified, totalWordCount);
-
-			WriteWordCount(writer, totalWordCount, "total");
-
-			writer.WriteEndElement();
-		}
-
-		private static void WriteWordCount(XmlWriter writer, WordCount wordCount, string name)
-		{
-			writer.WriteStartElement(name);
-			writer.WriteAttributeString("segments", wordCount.Segments.ToString());
-			writer.WriteAttributeString("words", wordCount.Words.ToString());
-			writer.WriteAttributeString("characters", wordCount.Characters.ToString());
-			writer.WriteAttributeString("placeables", wordCount.Placeables.ToString());
-			writer.WriteAttributeString("tags", wordCount.Tags.ToString());
-			writer.WriteEndElement(); //name			
-		}
-
-		private void UpdateTotalWordCount(WordCount wordCount, WordCount totalWordCount)
-		{
-			totalWordCount.Segments += wordCount.Segments;
-			totalWordCount.Words += wordCount.Words;
-			totalWordCount.Characters += wordCount.Characters;
-			totalWordCount.Placeables += wordCount.Placeables;
-			totalWordCount.Tags += wordCount.Tags;
-		}
-
-		private static void WriteWordCount(XmlWriter writer, WordCount wordCount, string name, int min, int max)
-		{
-			writer.WriteStartElement(name);
-			writer.WriteAttributeString("min", min.ToString());
-			writer.WriteAttributeString("max", max.ToString());
-			writer.WriteAttributeString("segments", wordCount.Segments.ToString());
-			writer.WriteAttributeString("words", wordCount.Words.ToString());
-			writer.WriteAttributeString("characters", wordCount.Characters.ToString());
-			writer.WriteAttributeString("placeables", wordCount.Placeables.ToString());
-			writer.WriteAttributeString("tags", wordCount.Tags.ToString());
-			writer.WriteEndElement(); //name
-		}
-
-		private string GetFitlerItemsString(IEnumerable<FilterItem> filterItems)
-		{
-			var items = string.Empty;
-			foreach (var filterItem in filterItems)
-			{
-				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
-						 filterItem.Name;
-			}
-
-			if (string.IsNullOrEmpty(items))
-			{
-				items = "[none]";
-			}
-
-			return items;
-		}
-
-		private Dictionary<LanguageDirectionInfo, List<ProjectFile>> GetLanguageDirections(FileBasedProject project, WizardContext wizardContext)
+		private Dictionary<LanguageDirectionInfo, List<ProjectFile>> GetLanguageDirections(string projectsFile, WizardContext wizardContext)
 		{
 			var languageDirections = new Dictionary<LanguageDirectionInfo, List<ProjectFile>>();
-			foreach (var language in _projectSettingsService.GetLanguageDirections(project.FilePath))
+			foreach (var language in _projectSettingsService.GetLanguageDirections(projectsFile))
 			{
 				foreach (var projectFile in wizardContext.ProjectFiles)
 				{

@@ -9,6 +9,7 @@ using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.MultiSelectComboBox.EventArgs;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 {
@@ -26,6 +27,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
 		private ICommand _clearFiltersCommand;
+		private ICommand _selectedItemsChangedCommand;
 
 		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext, IDialogService dialogService) 
 			: base(owner, view, wizardContext)
@@ -48,6 +50,9 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		public ICommand BrowseFolderCommand => _browseFolderCommand ?? (_browseFolderCommand = new CommandHandler(BrowseFolder));
 
 		public ICommand ClearFiltersCommand => _clearFiltersCommand ?? (_clearFiltersCommand = new CommandHandler(ClearFilters));
+
+		public ICommand SelectedItemsChangedCommand => _selectedItemsChangedCommand ?? (_selectedItemsChangedCommand = new CommandHandler(SelectedItemsChanged));
+
 
 		public List<XLIFFSupport> XLIFFSupportList
 		{
@@ -234,6 +239,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		{
 			SelectedExcludeFilterItems.Clear();
 			OnPropertyChanged(nameof(SelectedExcludeFilterItems));
+		}
+
+		private void SelectedItemsChanged(object parameter)
+		{
+			if (parameter is SelectedItemsChangedEventArgs)
+			{
+				OnPropertyChanged(nameof(SelectedExcludeFilterItems));
+			}
 		}
 
 		private string GetValidFolderPath()

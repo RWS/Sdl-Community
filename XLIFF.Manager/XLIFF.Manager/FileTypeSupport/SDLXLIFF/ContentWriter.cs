@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Sdl.Community.Toolkit.LanguagePlatform;
+using Sdl.Community.Toolkit.LanguagePlatform.Models;
+using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Core.Globalization;
@@ -21,6 +24,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
 		private SegmentVisitor _segmentVisitor;
+		private SegmentPairProcessor _segmentPairProcessor;
 
 		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, List<string> excludeFilterItems,
 			ImportOptions importOptions, List<AnalysisBand> analysisBands)
@@ -32,7 +36,17 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			_analysisBands = analysisBands;
 
 			Comments = _xliff.DocInfo.Comments;
+			ConfirmationStatistics = new ConfirmationStatistics();
+			TranslationOriginStatistics = new TranslationOriginStatistics();
 		}
+
+		public ConfirmationStatistics ConfirmationStatistics { get; }
+
+		public TranslationOriginStatistics TranslationOriginStatistics { get; }
+
+		public CultureInfo SourceLanguage { get; private set; }
+
+		public CultureInfo TargetLanguage { get; private set; }
 
 		private Dictionary<string, List<IComment>> Comments { get; }
 
@@ -47,6 +61,10 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		public override void Initialize(IDocumentProperties documentInfo)
 		{
 			_documentProperties = documentInfo;
+
+			SourceLanguage = documentInfo.SourceLanguage.CultureInfo;
+			TargetLanguage = documentInfo.TargetLanguage?.CultureInfo ?? SourceLanguage;
+
 			base.Initialize(documentInfo);
 		}
 
@@ -68,7 +86,15 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 					foreach (var segmentPair in paragraphUnit.SegmentPairs)
 					{
+						var segmentPairInfo = SegmentPairProcessor.GetSegmentPairInfo(segmentPair);
+						
 						segmentPair.Target.Properties.ConfirmationLevel = statusSegmentNotImported;
+
+						var status = segmentPair.Properties.ConfirmationLevel.ToString();
+						var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
+
+						AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
+						AddWordCounts(match, TranslationOriginStatistics.WordCounts.NotProcessed, segmentPairInfo);
 					}
 				}
 
@@ -78,6 +104,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
+				var segmentPairInfo = SegmentPairProcessor.GetSegmentPairInfo(segmentPair);
+				
 				var importedSegmentPair = importedTransUnit.SegmentPairs.FirstOrDefault(a => a.Id == segmentPair.Properties.Id.Id);
 				if (importedSegmentPair == null)
 				{
@@ -85,9 +113,15 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					{
 						var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusSegmentNotImportedId, true, out var result);
 						var statusSegmentNotImported = success ? result : ConfirmationLevel.Unspecified;
-
+						
 						segmentPair.Target.Properties.ConfirmationLevel = statusSegmentNotImported;
 					}
+
+					var status = segmentPair.Properties.ConfirmationLevel.ToString();
+					var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
+
+					AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
+					AddWordCounts(match, TranslationOriginStatistics.WordCounts.NotProcessed, segmentPairInfo);
 
 					continue;
 				}
@@ -96,13 +130,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				var excludeFilter = false;
 				if (_excludeFilterItems != null)
 				{
-					var status = segmentPair.Properties.ConfirmationLevel;
-					var match = Common.Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin,
-						_analysisBands);
+					var status = segmentPair.Properties.ConfirmationLevel.ToString();
+					var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
 					excludeFilter = (segmentPair.Properties.IsLocked && _excludeFilterItems.Exists(a => a == "Locked"))
-					                || _excludeFilterItems.Exists(a => a == status.ToString())
-					                || _excludeFilterItems.Exists(a => a == match.ToString());
+					                || _excludeFilterItems.Exists(a => a == status)
+					                || _excludeFilterItems.Exists(a => a == match);
 				}
 
 				if (noOverwrite || excludeFilter)
@@ -111,17 +144,50 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					{
 						var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
 						var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
-
+						
 						segmentPair.Target.Properties.ConfirmationLevel = statusTranslationNotUpdated;
 					}
+
+					var status = segmentPair.Properties.ConfirmationLevel.ToString();
+					var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
+
+					AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
+					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
 
 					continue;
 				}
 
-				UpdateTargetSegment(segmentPair, importedSegmentPair);
+				UpdateTargetSegment(segmentPair, importedSegmentPair, segmentPairInfo);
 			}
 
 			base.ProcessParagraphUnit(paragraphUnit);
+		}
+
+		private static void AddWordCounts(string category, ICollection<WordCount> wordCounts, SegmentPairInfo segmentPairInfo)
+		{
+			var count = wordCounts.FirstOrDefault(a => a.Category == category);
+			if (count != null)
+			{
+				count.Segments++;
+				count.Words += segmentPairInfo.SourceWordCounts.Words;
+				count.Characters += segmentPairInfo.SourceWordCounts.Characters;
+				count.Placeables += segmentPairInfo.SourceWordCounts.Placeables;
+				count.Tags += segmentPairInfo.SourceWordCounts.Tags;
+			}
+			else
+			{
+				var wordCount = new WordCount
+				{
+					Category = category,
+					Segments = 1,
+					Words = segmentPairInfo.SourceWordCounts.Words,
+					Characters = segmentPairInfo.SourceWordCounts.Characters,
+					Placeables = segmentPairInfo.SourceWordCounts.Placeables,
+					Tags = segmentPairInfo.SourceWordCounts.Tags
+				};
+
+				wordCounts.Add(wordCount);
+			}
 		}
 
 		private TransUnit GetTransUnit(IParagraphUnit paragraphUnit)
@@ -140,7 +206,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			return null;
 		}
 
-		private void UpdateTargetSegment(ISegmentPair segmentPair, SegmentPair importedSegmentPair)
+		private void UpdateTargetSegment(ISegmentPair segmentPair, SegmentPair importedSegmentPair, SegmentPairInfo segmentPairInfo)
 		{
 			var targetSegment = segmentPair.Target;
 
@@ -182,7 +248,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				}
 			}
 
-			UpdateTranslationOrigin(originalTarget, targetSegment);
+			UpdateTranslationOrigin(originalTarget, targetSegment, segmentPairInfo);
 		}
 
 		private void UpdateText(ElementText elementText, Stack<IAbstractMarkupDataContainer> containers)
@@ -192,44 +258,58 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			container.Add(text);
 		}
 
-		private void UpdateTranslationOrigin(ISegment originalTarget, ISegment targetSegment)
+		private void UpdateTranslationOrigin(ISegment originalTarget, ISegment targetSegment, SegmentPairInfo segmentPairInfo)
 		{
 			SegmentVisitor.VisitSegment(originalTarget);
 			var originalText = SegmentVisitor.Text;
 
 			SegmentVisitor.VisitSegment(targetSegment);
 			var updatedText = SegmentVisitor.Text;
-
+			
 			if (string.Compare(originalText, updatedText, StringComparison.Ordinal) != 0)
 			{
-				if (string.IsNullOrEmpty(_importOptions.StatusTranslationUpdatedId))
+				if (!string.IsNullOrEmpty(_importOptions.StatusTranslationUpdatedId))
 				{
-					return;
+					if (targetSegment.Properties.TranslationOrigin != null)
+					{
+						var currentTranslationOrigin = (ITranslationOrigin) targetSegment.Properties.TranslationOrigin.Clone();
+						targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
+						SetTranslationOrigin(targetSegment);
+					}
+					else
+					{
+						targetSegment.Properties.TranslationOrigin = _segmentBuilder.CreateTranslationOrigin();
+						SetTranslationOrigin(targetSegment);
+					}
+
+					var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationUpdatedId, true, out var result);
+					var statusTranslationUpdated = success ? result : ConfirmationLevel.Unspecified;
+
+					targetSegment.Properties.ConfirmationLevel = statusTranslationUpdated;
 				}
 
-				if (targetSegment.Properties.TranslationOrigin != null)
-				{
-					var currentTranslationOrigin = (ITranslationOrigin)targetSegment.Properties.TranslationOrigin.Clone();
-					targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
-					SetTranslationOrigin(targetSegment);
-				}
-				else
-				{
-					targetSegment.Properties.TranslationOrigin = _segmentBuilder.CreateTranslationOrigin();
-					SetTranslationOrigin(targetSegment);
-				}
+				var status = targetSegment.Properties.ConfirmationLevel.ToString();
+				var match = Enumerators.GetTranslationOriginType(targetSegment.Properties.TranslationOrigin, _analysisBands);
 
-				var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationUpdatedId, true, out var result);
-				var statusTranslationUpdated = success ? result : ConfirmationLevel.Unspecified;
+				AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
+				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
 
-				targetSegment.Properties.ConfirmationLevel = statusTranslationUpdated;
 			}
-			else if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
+			else 
 			{
-				var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
-				var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
+				if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
+				{
+					var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
+					var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
 
-				targetSegment.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+					targetSegment.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+				}
+
+				var status = targetSegment.Properties.ConfirmationLevel.ToString();
+				var match = Enumerators.GetTranslationOriginType(targetSegment.Properties.TranslationOrigin, _analysisBands);
+
+				AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
+				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
 			}
 		}
 
@@ -380,6 +460,28 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 			return null;
 		}
-		
+
+		private SegmentPairProcessor SegmentPairProcessor
+		{
+			get
+			{
+				if (_segmentPairProcessor != null)
+				{
+					return _segmentPairProcessor;
+				}
+
+				if (SourceLanguage == null || TargetLanguage == null)
+				{
+					throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguage == null ? "Source" : "Target"));
+				}
+
+				_segmentPairProcessor = new SegmentPairProcessor(
+					new Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage),
+					new Toolkit.LanguagePlatform.Models.PathInfo());
+
+				return _segmentPairProcessor;
+			}
+		}
+
 	}
 }
