@@ -27,7 +27,7 @@ namespace XLIFF.Manager.UnitTests.FileTypeSupport
 			var xliffReader = new XliffReder(sniffer, segmentBuilder);
 			var testFile = support == Enumerators.XLIFFSupport.xliff12polyglot
 				? _testFilesUtil.GetSampleFilePath("Xliff12", "Polyglot", "DefaultSample.sdlxliff.xliff")
-				: _testFilesUtil.GetSampleFilePath("Xliff12", "Sdl", "DefaultSample.sdlxliff.xliff");
+				: _testFilesUtil.GetSampleFilePath("Xliff12", "xsi", "DefaultSample.sdlxliff.xliff");
 
 			// act
 			var reader = xliffReader.ReadXliff(testFile);
@@ -48,7 +48,7 @@ namespace XLIFF.Manager.UnitTests.FileTypeSupport
 			var xliffReader = new XliffReder(sniffer, segmentBuilder);
 			var testFile = support == Enumerators.XLIFFSupport.xliff12polyglot
 				? _testFilesUtil.GetSampleFilePath("Xliff12", "Polyglot", "LockedContentSample.sdlxliff.xliff")
-				: _testFilesUtil.GetSampleFilePath("Xliff12", "Sdl", "LockedContentSample.sdlxliff.xliff");
+				: _testFilesUtil.GetSampleFilePath("Xliff12", "xsi", "LockedContentSample.sdlxliff.xliff");
 
 			// act
 			var reader = xliffReader.ReadXliff(testFile);

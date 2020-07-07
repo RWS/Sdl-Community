@@ -451,7 +451,25 @@
   <data name="Label_StatusSegmentsNotImported" xml:space="preserve">
     <value>Status - Segments not imported: {0}</value>
   </data>
-	<data name="Message_NoProjectFilesSelected" xml:space="preserve">
+  <data name="Message_NoProjectFilesSelected" xml:space="preserve">
     <value>No project files selected!</value>
+  </data>
+  <data name="Message_UnableToProcessFileWithTrackChanges" xml:space="preserve">
+    <value>Unable to process file with revision markers.</value>
+  </data>
+  <data name="Message_AccecptRejectTrackChangesBeforeExporting" xml:space="preserve">
+    <value>Accept/Reject all track changes before exporting to XLIFF format</value>
+  </data>
+  <data name="XLIFFManager_BatchTasks_Export_Description" xml:space="preserve">
+    <value>Export to XLIFF</value>
+  </data>
+  <data name="XLIFFManager_BatchTasks_Export_Name" xml:space="preserve">
+    <value>Export to XLIFF</value>
+  </data>
+  <data name="XLIFFManager_BatchTasks_Import_Description" xml:space="preserve">
+    <value>The batch task for this procedure is currently not available.  To import XLIFF files, you should select the ‘Import’ option from the XLIFF Manager view.</value>
+  </data>
+  <data name="XLIFFManager_BatchTasks_Import_Name" xml:space="preserve">
+    <value>Import from XLIFF</value>
   </data>
 </root>

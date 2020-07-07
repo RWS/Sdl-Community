@@ -26,8 +26,8 @@ using ProjectFile = Sdl.ProjectAutomation.Core.ProjectFile;
 namespace Sdl.Community.XLIFF.Manager.BatchTasks
 {
 	[AutomaticTask("XLIFF.Manager.BatchTasks.Export",
-		"Export to XLIFF",
-		"Export to XLIFF",
+		"XLIFFManager_BatchTasks_Export_Name",
+		"XLIFFManager_BatchTasks_Export_Description",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget, AllowMultiple = true)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	[RequiresSettings(typeof(XliffManagerExportSettings), typeof(ExportSettingsPage))]

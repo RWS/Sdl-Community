@@ -556,6 +556,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accept/Reject all track changes before exporting to XLIFF format.
+        /// </summary>
+        internal static string Message_AccecptRejectTrackChangesBeforeExporting {
+            get {
+                return ResourceManager.GetString("Message_AccecptRejectTrackChangesBeforeExporting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This action will remove all project data managed by XLIFF Manager, including the files processed during export/import.
         /// </summary>
         internal static string Message_ActionWillRemoveAllProjectData {
@@ -651,6 +660,15 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string Message_SelectOutputFolder {
             get {
                 return ResourceManager.GetString("Message_SelectOutputFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to process file with revision markers..
+        /// </summary>
+        internal static string Message_UnableToProcessFileWithTrackChanges {
+            get {
+                return ResourceManager.GetString("Message_UnableToProcessFileWithTrackChanges", resourceCulture);
             }
         }
         
@@ -953,6 +971,42 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string XLIFFManager_ActionsGroup_Name {
             get {
                 return ResourceManager.GetString("XLIFFManager_ActionsGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to XLIFF.
+        /// </summary>
+        internal static string XLIFFManager_BatchTasks_Export_Description {
+            get {
+                return ResourceManager.GetString("XLIFFManager_BatchTasks_Export_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to XLIFF.
+        /// </summary>
+        internal static string XLIFFManager_BatchTasks_Export_Name {
+            get {
+                return ResourceManager.GetString("XLIFFManager_BatchTasks_Export_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The batch task for this procedure is currently not available.  To import XLIFF files, you should select the ‘Import’ option from the XLIFF Manager view..
+        /// </summary>
+        internal static string XLIFFManager_BatchTasks_Import_Description {
+            get {
+                return ResourceManager.GetString("XLIFFManager_BatchTasks_Import_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import from XLIFF.
+        /// </summary>
+        internal static string XLIFFManager_BatchTasks_Import_Name {
+            get {
+                return ResourceManager.GetString("XLIFFManager_BatchTasks_Import_Name", resourceCulture);
             }
         }
         

@@ -85,9 +85,9 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			}
 
 			var path = Path.Combine(SelectedProjectFileActivity.ProjectFile.Project.Path, SelectedProjectFileActivity.Path.Trim('\\'));
-			if (File.Exists(path))
+			if (Directory.Exists(path))
 			{
-				System.Diagnostics.Process.Start("explorer.exe", SelectedProjectFileActivity.Path);
+				System.Diagnostics.Process.Start("explorer.exe", path);
 			}
 		}
 

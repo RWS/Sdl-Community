@@ -10,8 +10,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 {
 	public class Xliff12PolyglotWriter : IXliffWriter
 	{
+		private const string NsPrefix = "sdlxliff";
 		private Dictionary<string, List<IComment>> Comments { get; set; }
-
+		
 		private bool IncludeTranslations { get; set; }
 
 		public bool WriteFile(Xliff xliff, string outputFilePath, bool includeTranslations)
@@ -21,7 +22,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 			var settings = new XmlWriterSettings
 			{
-				OmitXmlDeclaration = true,
+				OmitXmlDeclaration = false,
 				Indent = false
 			};
 
@@ -33,9 +34,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 			{
 				writer.WriteStartElement("xliff");
 				writer.WriteAttributeString("version", version);
-				writer.WriteAttributeString("xmlns", "sdl", null, "http://schemas.sdl.com/xliff");
-				writer.WriteAttributeString("sdl", "support", null, sdlSupport);
-				writer.WriteAttributeString("sdl", "version", null, sdlVersion);
+				writer.WriteAttributeString("xmlns", NsPrefix, null, "http://schemas.sdl.com/xliff");
+				writer.WriteAttributeString(NsPrefix, "support", null, sdlSupport);
+				writer.WriteAttributeString(NsPrefix, "version", null, sdlVersion);
 
 				WriteDocInfo(xliff, writer);
 
@@ -49,7 +50,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 						writer.WriteAttributeString("target-language", xliffFile.TargetLanguage);
 					}
 
-					writer.WriteAttributeString("datatype", xliffFile.DataType);
+					//writer.WriteAttributeString("datatype", xliffFile.DataType);
+					writer.WriteAttributeString("datatype", "xml");
 
 					WriterFileHeader(writer, xliffFile);
 					WriteFileBody(writer, xliffFile);
@@ -65,7 +67,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 		private void WriteDocInfo(Xliff xliff, XmlWriter writer)
 		{
-			writer.WriteStartElement("sdl", "doc-info", null);
+			writer.WriteStartElement(NsPrefix, "doc-info", null);
 			writer.WriteAttributeString("project-id", xliff.DocInfo.ProjectId);
 			writer.WriteAttributeString("source", xliff.DocInfo.Source);
 			writer.WriteAttributeString("source-language", xliff.DocInfo.SourceLanguage);
@@ -115,32 +117,32 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 				writer.WriteAttributeString("id", segmentPair.Id);
 				if (segmentPair.IsLocked)
 				{
-					writer.WriteAttributeString("sdl", "locked", null, segmentPair.IsLocked.ToString());
+					writer.WriteAttributeString(NsPrefix, "locked", null, segmentPair.IsLocked.ToString());
 				}
 
 				if (IncludeTranslations)
 				{
-					writer.WriteAttributeString("sdl", "conf", null, segmentPair.ConfirmationLevel.ToString());
-					writer.WriteAttributeString("sdl", "origin", null, originType);
+					writer.WriteAttributeString(NsPrefix, "conf", null, segmentPair.ConfirmationLevel.ToString());
+					writer.WriteAttributeString(NsPrefix, "origin", null, originType);
 
 					if (!string.IsNullOrEmpty(originSystem))
 					{
-						writer.WriteAttributeString("sdl", "origin-system", null, originSystem);
+						writer.WriteAttributeString(NsPrefix, "origin-system", null, originSystem);
 					}
 
 					if (!string.IsNullOrEmpty(matchPercentage) && matchPercentage != "0")
 					{
-						writer.WriteAttributeString("sdl", "percent", null, matchPercentage);
+						writer.WriteAttributeString(NsPrefix, "percent", null, matchPercentage);
 					}
 
 					if (!string.IsNullOrEmpty(structMatch) && structMatch != "False")
 					{
-						writer.WriteAttributeString("sdl", "struct-match", null, structMatch);
+						writer.WriteAttributeString(NsPrefix, "struct-match", null, structMatch);
 					}
 
 					if (!string.IsNullOrEmpty(textMatch) && textMatch != "None")
 					{
-						writer.WriteAttributeString("sdl", "text-match", null, textMatch);
+						writer.WriteAttributeString(NsPrefix, "text-match", null, textMatch);
 					}
 				}
 
@@ -175,11 +177,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 				foreach (var comment in commentKeyPair.Value)
 				{
 					writer.WriteStartElement("note");
-					writer.WriteAttributeString("sdl", "id", null, commentKeyPair.Key);
-					writer.WriteAttributeString("sdl", "version", null, comment.Version);
+					writer.WriteAttributeString(NsPrefix, "id", null, commentKeyPair.Key);
+					writer.WriteAttributeString(NsPrefix, "version", null, comment.Version);
 					if (comment.DateSpecified)
 					{
-						writer.WriteAttributeString("sdl", "date", null, GetDateToString(comment.Date));
+						writer.WriteAttributeString(NsPrefix, "date", null, GetDateToString(comment.Date));
 					}
 
 					writer.WriteAttributeString("from", comment.Author);

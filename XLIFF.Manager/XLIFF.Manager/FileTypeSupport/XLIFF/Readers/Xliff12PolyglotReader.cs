@@ -13,6 +13,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 {
 	public class Xliff12PolyglotReader : IXliffReader
 	{
+		private const string NsPrefix = "sdlxliff";
 		private readonly SegmentBuilder _segmentBuilder;
 
 		private Dictionary<string, List<IComment>> Comments { get; set; }
@@ -50,18 +51,18 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 									{
 										xliff.Version = xmlReader.Value;
 									}
-									else if (string.Compare(xmlReader.Name, "sdl:support", StringComparison.OrdinalIgnoreCase) == 0)
+									else if (string.Compare(xmlReader.Name, NsPrefix + ":support", StringComparison.OrdinalIgnoreCase) == 0)
 									{
 										var success = Enum.TryParse(xmlReader.Value, true, out Enumerators.XLIFFSupport support);
 										xliff.Support = success ? support : Enumerators.XLIFFSupport.none;
 									}
-									else if (string.Compare(xmlReader.Name, "sdl:version", StringComparison.OrdinalIgnoreCase) == 0)
+									else if (string.Compare(xmlReader.Name, NsPrefix + ":version", StringComparison.OrdinalIgnoreCase) == 0)
 									{
 										xliff.SpecificVersion = xmlReader.Value;
 									}
 								}
 							}
-							else if (string.Compare(xmlReader.Name, "sdl:doc-info", StringComparison.OrdinalIgnoreCase) == 0)
+							else if (string.Compare(xmlReader.Name, NsPrefix + ":doc-info", StringComparison.OrdinalIgnoreCase) == 0)
 							{
 								var xmlReaderSub = xmlReader.ReadSubtree();
 								xliff.DocInfo = ReadDocInfo(xmlReaderSub);
@@ -92,7 +93,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 				switch (xmlReader.NodeType)
 				{
 					case XmlNodeType.Element:
-						if (index == 0 && string.Compare(xmlReader.Name, "sdl:doc-info", StringComparison.OrdinalIgnoreCase) == 0)
+						if (index == 0 && string.Compare(xmlReader.Name, NsPrefix + ":doc-info", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							index++;
 							while (xmlReader.MoveToNextAttribute())
@@ -253,35 +254,35 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 									// for polyglot support, the segment id is represented by the trans-unit id
 									segmentPair.Id = xmlReader.Value;
 								}
-								if (string.Compare(xmlReader.Name, "sdl:conf", StringComparison.OrdinalIgnoreCase) == 0)
+								if (string.Compare(xmlReader.Name, NsPrefix + ":conf", StringComparison.OrdinalIgnoreCase) == 0)
 								{
 									var success = Enum.TryParse<ConfirmationLevel>(xmlReader.Value, true, out var value);
 									segmentPair.ConfirmationLevel = success ? value : ConfirmationLevel.Unspecified;
 								}
-								if (string.Compare(xmlReader.Name, "sdl:locked", StringComparison.OrdinalIgnoreCase) == 0)
+								if (string.Compare(xmlReader.Name, NsPrefix + ":locked", StringComparison.OrdinalIgnoreCase) == 0)
 								{
 									var success = bool.TryParse(xmlReader.Value, out var result);
 									segmentPair.IsLocked = success && result;
 								}
-								if (string.Compare(xmlReader.Name, "sdl:origin", StringComparison.OrdinalIgnoreCase) == 0)
+								if (string.Compare(xmlReader.Name, NsPrefix + ":origin", StringComparison.OrdinalIgnoreCase) == 0)
 								{
 									segmentPair.TranslationOrigin.OriginType = xmlReader.Value;
 								}
-								if (string.Compare(xmlReader.Name, "sdl:origin-system", StringComparison.OrdinalIgnoreCase) == 0)
+								if (string.Compare(xmlReader.Name, NsPrefix + ":origin-system", StringComparison.OrdinalIgnoreCase) == 0)
 								{
 									segmentPair.TranslationOrigin.OriginSystem = xmlReader.Value;
 								}
-								if (string.Compare(xmlReader.Name, "sdl:percent", StringComparison.OrdinalIgnoreCase) == 0)
+								if (string.Compare(xmlReader.Name, NsPrefix + ":percent", StringComparison.OrdinalIgnoreCase) == 0)
 								{
 									var success = byte.TryParse(xmlReader.Value, out var result);
 									segmentPair.TranslationOrigin.MatchPercent = success ? result : (byte)0;
 								}
-								if (string.Compare(xmlReader.Name, "sdl:struct-match", StringComparison.OrdinalIgnoreCase) == 0)
+								if (string.Compare(xmlReader.Name, NsPrefix + ":struct-match", StringComparison.OrdinalIgnoreCase) == 0)
 								{
 									var success = bool.TryParse(xmlReader.Value, out var result);
 									segmentPair.TranslationOrigin.IsStructureContextMatch = success && result;
 								}
-								if (string.Compare(xmlReader.Name, "sdl:text-match", StringComparison.OrdinalIgnoreCase) == 0)
+								if (string.Compare(xmlReader.Name, NsPrefix + ":text-match", StringComparison.OrdinalIgnoreCase) == 0)
 								{
 									var success = Enum.TryParse<TextContextMatchLevel>(xmlReader.Value, true, out var result);
 									segmentPair.TranslationOrigin.TextContextMatchLevel = success ? result : TextContextMatchLevel.None;
@@ -355,7 +356,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							index++;
 							while (xmlReader.MoveToNextAttribute())
 							{
-								if (string.Compare(xmlReader.Name, "sdl:id", StringComparison.OrdinalIgnoreCase) == 0)
+								if (string.Compare(xmlReader.Name, NsPrefix + ":id", StringComparison.OrdinalIgnoreCase) == 0)
 								{
 									id = xmlReader.Value;
 								}
@@ -363,11 +364,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 								{
 									user = xmlReader.Value;
 								}
-								if (string.Compare(xmlReader.Name, "sdl:version", StringComparison.OrdinalIgnoreCase) == 0)
+								if (string.Compare(xmlReader.Name, NsPrefix + ":version", StringComparison.OrdinalIgnoreCase) == 0)
 								{
 									version = xmlReader.Value;
 								}
-								if (string.Compare(xmlReader.Name, "sdl:date", StringComparison.OrdinalIgnoreCase) == 0)
+								if (string.Compare(xmlReader.Name, NsPrefix + ":date", StringComparison.OrdinalIgnoreCase) == 0)
 								{
 									var format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'";
 									var success = DateTime.TryParseExact(xmlReader.Value, format,

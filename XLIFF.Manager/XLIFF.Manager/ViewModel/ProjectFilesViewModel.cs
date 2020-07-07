@@ -143,6 +143,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			}
 
 			var path = Path.Combine(SelectedProjectFile.Project.Path, SelectedProjectFile.Location.Trim('\\'));
+
 			if (File.Exists(path))
 			{
 				System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(path));
