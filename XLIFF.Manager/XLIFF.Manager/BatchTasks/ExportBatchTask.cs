@@ -26,8 +26,8 @@ using ProjectFile = Sdl.ProjectAutomation.Core.ProjectFile;
 namespace Sdl.Community.XLIFF.Manager.BatchTasks
 {
 	[AutomaticTask("XLIFF.Manager.BatchTasks.Export",
-		"Export to XLIFF",
-		"Export to XLIFF",
+		"XLIFFManager_BatchTasks_Export_Name",
+		"XLIFFManager_BatchTasks_Export_Description",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget, AllowMultiple = true)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	[RequiresSettings(typeof(XliffManagerExportSettings), typeof(ExportSettingsPage))]
@@ -94,6 +94,8 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 					return;
 				}
 
+				targetFile.Location =  Path.Combine(targetFile.Project.Path, targetFile.Location.Trim('\\'));
+
 				if (string.IsNullOrEmpty(_currentLanguage) || languageName != _currentLanguage)
 				{
 					_logReport.AppendLine();
@@ -124,8 +126,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 
 					if (exported)
 					{
-						targetFile.Date = _exportSettings.DateTimeStamp;
-						targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
+						targetFile.Date = _exportSettings.DateTimeStamp;						
 						targetFile.Action = Enumerators.Action.Export;
 						targetFile.Status = Enumerators.Status.Success;
 						targetFile.XliffFilePath = xliffFilePath;
@@ -178,10 +179,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			if (!_isError)
 			{
 				var project = Project as FileBasedProject;
-				var languageDirections = GetLanguageDirections(project?.FilePath, _wizardContext);
-
-
-
+				var languageDirections = GetLanguageDirectionFiles(project?.FilePath, _wizardContext);
 
 				foreach (var languageDirection in languageDirections)
 				{
@@ -229,7 +227,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			return ld;
 		}
 
-		private Dictionary<LanguageDirectionInfo, List<Model.ProjectFile>> GetLanguageDirections(string projectsFile, WizardContext wizardContext)
+		private Dictionary<LanguageDirectionInfo, List<Model.ProjectFile>> GetLanguageDirectionFiles(string projectsFile, WizardContext wizardContext)
 		{
 			var languageDirections = new Dictionary<LanguageDirectionInfo, List<Model.ProjectFile>>();
 			foreach (var language in _projectSettingsService.GetLanguageDirections(projectsFile))
@@ -237,6 +235,12 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 				foreach (var projectFile in wizardContext.ProjectFiles)
 				{
 					if (!projectFile.Selected)
+					{
+						continue;
+					}
+
+					if (string.Compare(projectFile.TargetLanguage, language.TargetLanguageCode,
+						    StringComparison.CurrentCultureIgnoreCase) != 0)
 					{
 						continue;
 					}

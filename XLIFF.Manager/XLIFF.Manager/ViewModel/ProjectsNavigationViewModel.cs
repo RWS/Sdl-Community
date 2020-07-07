@@ -213,7 +213,9 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			{
 				var settingsBundle = selectedProject.GetSettings();
 				var xliffManagerProject = settingsBundle.GetSettingsGroup<XliffManagerProject>();
-				xliffManagerProject.ProjectFiles.Value = new List<XliffManagerProjectFile>();
+
+				xliffManagerProject.ProjectFilesJson.Value = string.Empty;
+
 				selectedProject.UpdateSettings(settingsBundle);
 				selectedProject.Save();
 
@@ -239,7 +241,10 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 		private void OpenProjectFolder(object parameter)
 		{
-			System.Diagnostics.Process.Start("explorer.exe", SelectedProject.Path);
+			if (Directory.Exists(SelectedProject.Path))
+			{
+				System.Diagnostics.Process.Start("explorer.exe", SelectedProject.Path);
+			}
 		}		
 
 		public void Dispose()

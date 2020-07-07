@@ -8,6 +8,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 {
 	public class XliffSniffer
 	{
+		private const string NsPrefix = "sdlxliff";
+
 		public Enumerators.XLIFFSupport GetXliffSupport(string filePath)
 		{
 			var buffer = new char[500];
@@ -22,7 +24,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 				return Enumerators.XLIFFSupport.none;
 			}
 
-			var regex = new Regex(@"sdl\:support\=""(?<value>[^""]*)""", RegexOptions.IgnoreCase);
+			var regex = new Regex(NsPrefix + @"\:support\=""(?<value>[^""]*)""", RegexOptions.IgnoreCase);
 			var match = regex.Match(data);
 			if (match.Success)
 			{

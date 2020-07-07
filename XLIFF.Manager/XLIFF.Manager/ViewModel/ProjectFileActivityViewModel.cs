@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Input;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
@@ -9,7 +10,7 @@ using Sdl.Community.XLIFF.Manager.View;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
-	public class ProjectFileActivityViewModel: BaseModel, IDisposable
+	public class ProjectFileActivityViewModel : BaseModel, IDisposable
 	{
 		private List<ProjectFileActivity> _projectFileActivities;
 		private ProjectFileActivity _selectedProjectFileActivity;
@@ -36,7 +37,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			{
 				_projectFileActivities = value;
 				OnPropertyChanged(nameof(ProjectFileActivities));
-			}  
+			}
 		}
 
 		public IList SelectedProjectFileActivities
@@ -78,7 +79,16 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 		private void OpenFolder(object parameter)
 		{
-			System.Diagnostics.Process.Start("explorer.exe", SelectedProjectFileActivity.Path);
+			if (SelectedProjectFileActivity.ProjectFile?.Project?.Path == null)
+			{
+				return;
+			}
+
+			var path = Path.Combine(SelectedProjectFileActivity.ProjectFile.Project.Path, SelectedProjectFileActivity.Path.Trim('\\'));
+			if (Directory.Exists(path))
+			{
+				System.Diagnostics.Process.Start("explorer.exe", path);
+			}
 		}
 
 		private void ViewReport(object parameter)
@@ -86,22 +96,31 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			if (string.IsNullOrEmpty(SelectedProjectFileActivity?.Report))
 			{
 				return;
-			}			
+			}
 
-			var viewModel = new ReportViewModel
+			if (SelectedProjectFileActivity.ProjectFile?.Project?.Path == null)
 			{
-				HtmlUri = SelectedProjectFileActivity.Report,
-				WindowTitle = SelectedProjectFileActivity.Action == Enumerators.Action.Export
-					? "Export to XLIFF Report"
-					: "Import from XLIFF Report"
-			};
+				return;
+			}
 
-			var view = new ReportWindow(viewModel);
-			view.ShowDialog();
+			var path = Path.Combine(SelectedProjectFileActivity.ProjectFile.Project.Path, SelectedProjectFileActivity.Report.Trim('\\'));
+			if (File.Exists(path))
+			{
+				var viewModel = new ReportViewModel
+				{
+					HtmlUri = path,
+					WindowTitle = SelectedProjectFileActivity.Action == Enumerators.Action.Export
+						? "Export to XLIFF Report"
+						: "Import from XLIFF Report"
+				};
+
+				var view = new ReportWindow(viewModel);
+				view.ShowDialog();
+			}
 		}
 
 		public void Dispose()
 		{
-		}		
+		}
 	}
 }

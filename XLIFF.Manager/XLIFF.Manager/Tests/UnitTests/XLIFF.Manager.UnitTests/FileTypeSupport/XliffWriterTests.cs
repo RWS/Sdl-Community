@@ -35,7 +35,7 @@ namespace XLIFF.Manager.UnitTests.FileTypeSupport
 
 			var testFile = support == Enumerators.XLIFFSupport.xliff12polyglot
 				? _testFilesUtil.GetSampleFilePath("Xliff12", "Polyglot", "QuotesSample.docx.sdlxliff.xliff")
-				: _testFilesUtil.GetSampleFilePath("Xliff12", "Sdl", "QuotesSample.docx.sdlxliff.xliff");
+				: _testFilesUtil.GetSampleFilePath("Xliff12", "xsi", "QuotesSample.docx.sdlxliff.xliff");
 			var sdlxliffFile = _testFilesUtil.GetSampleFilePath("Sdlxliff", "QuotesSample.docx.sdlxliff");			
 
 			// act

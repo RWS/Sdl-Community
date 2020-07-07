@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml.Serialization;
 using Sdl.Community.XLIFF.Manager.Common;
 
 namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
@@ -27,11 +26,9 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 		public string Date { get; set; }
 
 		public string Report { get; set; }
-
-		[XmlElement]
+		
 		public ConfirmationStatistics ConfirmationStatistics { get; set; }
-
-		[XmlElement]
+		
 		public TranslationOriginStatistics TranslationOriginStatistics { get; set; }
 
 		private static string FormatDateTime(DateTime dateTime)
@@ -42,7 +39,8 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 						+ "T" + dateTime.Hour.ToString().PadLeft(2, '0')
 						+ ":" + dateTime.Minute.ToString().PadLeft(2, '0')
 						+ ":" + dateTime.Second.ToString().PadLeft(2, '0')
-						+ "." + dateTime.Millisecond.ToString().PadLeft(2, '0');
+						+ "." + dateTime.Millisecond.ToString().PadLeft(2, '0')
+						+ "Z";
 
 			return value;
 		}

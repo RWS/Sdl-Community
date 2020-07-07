@@ -14,6 +14,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 {
 	public class Xliff12SdlReader : IXliffReader
 	{
+		private const string NsPrefix = "sdlxliff";
 		private readonly SegmentBuilder _segmentBuilder;
 
 		public Xliff12SdlReader(SegmentBuilder segmentBuilder)
@@ -47,18 +48,18 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 									{
 										xliff.Version = xmlReader.Value;
 									}
-									else if (string.Compare(xmlReader.Name, "sdl:support", StringComparison.OrdinalIgnoreCase) == 0)
+									else if (string.Compare(xmlReader.Name, NsPrefix + ":support", StringComparison.OrdinalIgnoreCase) == 0)
 									{
 										var success = Enum.TryParse(xmlReader.Value, true, out Enumerators.XLIFFSupport support);
 										xliff.Support = success ? support : Enumerators.XLIFFSupport.none;
 									}
-									else if (string.Compare(xmlReader.Name, "sdl:version", StringComparison.OrdinalIgnoreCase) == 0)
+									else if (string.Compare(xmlReader.Name, NsPrefix + ":version", StringComparison.OrdinalIgnoreCase) == 0)
 									{
 										xliff.SpecificVersion = xmlReader.Value;
 									}
 								}
 							}
-							else if (string.Compare(xmlReader.Name, "sdl:doc-info", StringComparison.OrdinalIgnoreCase) == 0)
+							else if (string.Compare(xmlReader.Name, NsPrefix + ":doc-info", StringComparison.OrdinalIgnoreCase) == 0)
 							{
 								var xmlReaderSub = xmlReader.ReadSubtree();
 								xliff.DocInfo = ReadDocInfo(xmlReaderSub);
@@ -88,7 +89,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 				switch (xmlReader.NodeType)
 				{
 					case XmlNodeType.Element:
-						if (index == 0 && string.Compare(xmlReader.Name, "sdl:doc-info", StringComparison.OrdinalIgnoreCase) == 0)
+						if (index == 0 && string.Compare(xmlReader.Name, NsPrefix + ":doc-info", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							index++;
 							while (xmlReader.MoveToNextAttribute())
@@ -119,7 +120,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 								}
 							}
 						}
-						else if (string.Compare(xmlReader.Name, "sdl:cmt-defs", StringComparison.OrdinalIgnoreCase) == 0)
+						else if (string.Compare(xmlReader.Name, NsPrefix + ":cmt-defs", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							docInfo.Comments = ReadCommentDefinitions(xmlReaderSub);
@@ -143,11 +144,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 				switch (xmlReader.NodeType)
 				{
 					case XmlNodeType.Element:
-						if (index == 0 && string.Compare(xmlReader.Name, "sdl:cmt-defs", StringComparison.OrdinalIgnoreCase) == 0)
+						if (index == 0 && string.Compare(xmlReader.Name, NsPrefix + ":cmt-defs", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							index++;
 						}
-						else if (string.Compare(xmlReader.Name, "sdl:cmt-def", StringComparison.OrdinalIgnoreCase) == 0)
+						else if (string.Compare(xmlReader.Name, NsPrefix + ":cmt-def", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							var item = ReadCommentDefinition(xmlReaderSub);
@@ -176,7 +177,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 				switch (xmlReader.NodeType)
 				{
 					case XmlNodeType.Element:
-						if (index == 0 && string.Compare(xmlReader.Name, "sdl:cmt-def", StringComparison.OrdinalIgnoreCase) == 0)
+						if (index == 0 && string.Compare(xmlReader.Name, NsPrefix + ":cmt-def", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							index++;
 							while (xmlReader.MoveToNextAttribute())
@@ -187,7 +188,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 								}
 							}
 						}
-						else if (string.Compare(xmlReader.Name, "sdl:comments", StringComparison.OrdinalIgnoreCase) == 0)
+						else if (string.Compare(xmlReader.Name, NsPrefix + ":comments", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							commentDefinition = new KeyValuePair<string, List<IComment>>(id, ReadComments(xmlReaderSub));
@@ -211,11 +212,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 				switch (xmlReader.NodeType)
 				{
 					case XmlNodeType.Element:
-						if (index == 0 && string.Compare(xmlReader.Name, "sdl:comments", StringComparison.OrdinalIgnoreCase) == 0)
+						if (index == 0 && string.Compare(xmlReader.Name, NsPrefix + ":comments", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							index++;
 						}
-						else if (string.Compare(xmlReader.Name, "sdl:comment", StringComparison.OrdinalIgnoreCase) == 0)
+						else if (string.Compare(xmlReader.Name, NsPrefix + ":comment", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							comments.Add(ReadComment(xmlReaderSub));
@@ -242,7 +243,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 				switch (xmlReader.NodeType)
 				{
 					case XmlNodeType.Element:
-						if (index == 0 && string.Compare(xmlReader.Name, "sdl:comment", StringComparison.OrdinalIgnoreCase) == 0)
+						if (index == 0 && string.Compare(xmlReader.Name, NsPrefix + ":comment", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							index++;
 							while (xmlReader.MoveToNextAttribute())
@@ -428,7 +429,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							targetSegments = ReadTargetSegments(xmlReaderSub);
 							xmlReaderSub.Close();
 						}
-						else if (string.Compare(xmlReader.Name, "sdl:seg-defs", StringComparison.OrdinalIgnoreCase) == 0)
+						else if (string.Compare(xmlReader.Name, NsPrefix + ":seg-defs", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							segmentPairProperties = ReadSegmentPairPropertyDefinitions(xmlReaderSub);
@@ -474,7 +475,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 				switch (xmlReader.NodeType)
 				{
 					case XmlNodeType.Element:
-						if (string.Compare(xmlReader.Name, "sdl:seg", StringComparison.OrdinalIgnoreCase) == 0)
+						if (string.Compare(xmlReader.Name, NsPrefix + ":seg", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							segmentPairProperties.Add(ReadSdlSeg(xmlReaderSub));
@@ -1022,7 +1023,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 				switch (xmlReader.NodeType)
 				{
 					case XmlNodeType.Element:
-						if (index == 0 && string.Compare(xmlReader.Name, "sdl:seg", StringComparison.OrdinalIgnoreCase) == 0)
+						if (index == 0 && string.Compare(xmlReader.Name, NsPrefix + ":seg", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							index++;
 							while (xmlReader.MoveToNextAttribute())
@@ -1066,7 +1067,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 								}
 							}
 						}
-						if (string.Compare(xmlReader.Name, "sdl:prev-origin", StringComparison.OrdinalIgnoreCase) == 0)
+						if (string.Compare(xmlReader.Name, NsPrefix + ":prev-origin", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							properties.TranslationOrigin.OriginBeforeAdaptation = ReadPreviousTranslationOrigin(xmlReaderSub);
@@ -1090,7 +1091,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 				switch (xmlReader.NodeType)
 				{
 					case XmlNodeType.Element:
-						if (index == 0 && string.Compare(xmlReader.Name, "sdl:prev-origin", StringComparison.OrdinalIgnoreCase) == 0)
+						if (index == 0 && string.Compare(xmlReader.Name, NsPrefix + ":prev-origin", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							index++;
 							while (xmlReader.MoveToNextAttribute())
@@ -1120,7 +1121,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 								}
 							}
 						}
-						if (string.Compare(xmlReader.Name, "sdl:prev-origin", StringComparison.OrdinalIgnoreCase) == 0)
+						if (string.Compare(xmlReader.Name, NsPrefix + ":prev-origin", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							translationOrigin.OriginBeforeAdaptation = ReadPreviousTranslationOrigin(xmlReaderSub);

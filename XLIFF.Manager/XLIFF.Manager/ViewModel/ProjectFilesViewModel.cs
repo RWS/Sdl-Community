@@ -137,7 +137,17 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 
 		private void OpenFolder(object parameter)
 		{
-			System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(SelectedProjectFile.Location));
+			if (SelectedProjectFile?.Project?.Path == null)
+			{
+				return;
+			}
+
+			var path = Path.Combine(SelectedProjectFile.Project.Path, SelectedProjectFile.Location.Trim('\\'));
+
+			if (File.Exists(path))
+			{
+				System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(path));
+			}
 		}
 
 		private void ViewReport(object parameter)
@@ -147,17 +157,25 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 				return;
 			}
 
-
-			var viewModel = new ReportViewModel
+			if (SelectedProjectFile?.Project?.Path == null)
 			{
-				HtmlUri = SelectedProjectFile.Report,
-				WindowTitle = SelectedProjectFile.Action == Enumerators.Action.Export
-					? "Export to XLIFF Report"
-					: "Import from XLIFF Report"
-			};
+				return;
+			}
 
-			var view = new ReportWindow(viewModel);
-			view.ShowDialog();
+			var path = Path.Combine(SelectedProjectFile.Project.Path, SelectedProjectFile.Report.Trim('\\'));
+			if (File.Exists(path))
+			{
+				var viewModel = new ReportViewModel
+				{
+					HtmlUri = path,
+					WindowTitle = SelectedProjectFile.Action == Enumerators.Action.Export
+						? "Export to XLIFF Report"
+						: "Import from XLIFF Report"
+				};
+
+				var view = new ReportWindow(viewModel);
+				view.ShowDialog();
+			}
 		}
 
 		public void Dispose()

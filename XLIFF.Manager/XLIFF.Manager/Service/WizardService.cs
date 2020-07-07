@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -212,7 +213,6 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			};
 
 			var existingProject = _controllers.XliffManagerController.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
-
 			if (existingProject != null)
 			{
 				foreach (var projectFile in existingProject.ProjectFiles)
@@ -220,6 +220,9 @@ namespace Sdl.Community.XLIFF.Manager.Service
 					if (projectFile.Clone() is ProjectFile clonedProjectFile)
 					{
 						clonedProjectFile.Project = project;
+						clonedProjectFile.Location = GeFullPath(project.Path, clonedProjectFile.Location);
+						clonedProjectFile.Report = GeFullPath(project.Path, clonedProjectFile.Report);
+						clonedProjectFile.XliffFilePath = GeFullPath(project.Path, clonedProjectFile.XliffFilePath);
 						clonedProjectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.FileId.ToString());
 						project.ProjectFiles.Add(clonedProjectFile);
 					}
@@ -231,6 +234,16 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			}
 
 			return project;
+		}
+
+		private string GeFullPath(string projectPath, string path)
+		{
+			if (string.IsNullOrEmpty(path.Trim('\\')))
+			{
+				return string.Empty;
+			}
+
+			return Path.Combine(projectPath.Trim('\\'), path.Trim('\\'));
 		}
 
 		private List<ProjectFile> GetProjectFiles(IProject project, Project projectModel, IReadOnlyCollection<string> selectedFileIds)

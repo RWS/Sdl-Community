@@ -260,7 +260,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 						if (exported)
 						{							
 							targetFile.Date = WizardContext.DateTimeStamp;
-							targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
 							targetFile.Action = Enumerators.Action.Export;
 							targetFile.Status = Enumerators.Status.Success;							
 							targetFile.XliffFilePath = xliffFilePath;

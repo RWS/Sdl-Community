@@ -10,8 +10,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 {
 	public class Xliff12SDLWriter : IXliffWriter
 	{
+		private const string NsPrefix = "sdlxliff";
 		private Dictionary<string, List<IComment>> Comments { get; set; }
-
+		
 		private bool IncludeTranslations { get; set; }
 
 		public bool WriteFile(Xliff xliff, string outputFilePath, bool includeTranslations)
@@ -21,7 +22,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 			var settings = new XmlWriterSettings
 			{
-				OmitXmlDeclaration = true,
+				OmitXmlDeclaration = false,
 				Indent = false
 			};
 
@@ -33,9 +34,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 			{
 				writer.WriteStartElement("xliff");
 				writer.WriteAttributeString("version", version);
-				writer.WriteAttributeString("xmlns", "sdl", null, "http://schemas.sdl.com/xliff");
-				writer.WriteAttributeString("sdl", "support", null, sdlSupport);
-				writer.WriteAttributeString("sdl", "version", null, sdlVersion);
+				writer.WriteAttributeString("xmlns", NsPrefix, null, "http://schemas.sdl.com/xliff");
+				writer.WriteAttributeString(NsPrefix, "support", null, sdlSupport);
+				writer.WriteAttributeString(NsPrefix, "version", null, sdlVersion);
 
 				WriteDocInfo(xliff, writer);
 
@@ -49,8 +50,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 						writer.WriteAttributeString("target-language", xliffFile.TargetLanguage);
 					}
 
-					writer.WriteAttributeString("datatype", xliffFile.DataType);
-
+					//writer.WriteAttributeString("datatype", xliffFile.DataType);
+					writer.WriteAttributeString("datatype", "xml");
+					
 					WriterFileHeader(writer, xliffFile);
 					WriteFileBody(writer, xliffFile);
 
@@ -65,7 +67,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 		private void WriteDocInfo(Xliff xliff, XmlWriter writer)
 		{
-			writer.WriteStartElement("sdl", "doc-info", null);
+			writer.WriteStartElement(NsPrefix, "doc-info", null);
 			writer.WriteAttributeString("project-id", xliff.DocInfo.ProjectId);
 			writer.WriteAttributeString("source", xliff.DocInfo.Source);
 			writer.WriteAttributeString("source-language", xliff.DocInfo.SourceLanguage);
@@ -83,7 +85,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 		private void WriteCommentDefinitions(Xliff xliff, XmlWriter writer)
 		{
-			writer.WriteStartElement("sdl", "cmt-defs", null);
+			writer.WriteStartElement(NsPrefix, "cmt-defs", null);
 			foreach (var comments in xliff.DocInfo.Comments)
 			{
 				WriteCommentDefinition(writer, comments);
@@ -94,7 +96,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 		private void WriteCommentDefinition(XmlWriter writer, KeyValuePair<string, List<IComment>> comments)
 		{
-			writer.WriteStartElement("sdl", "cmt-def", null);
+			writer.WriteStartElement(NsPrefix, "cmt-def", null);
 			writer.WriteAttributeString("id", comments.Key);
 
 			WriteComments(writer, comments);
@@ -104,7 +106,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 		private void WriteComments(XmlWriter writer, KeyValuePair<string, List<IComment>> comments)
 		{
-			writer.WriteStartElement("sdl", "comments", null);
+			writer.WriteStartElement(NsPrefix, "comments", null);
 			foreach (var comment in comments.Value)
 			{
 				WriteComment(writer, comment);
@@ -115,7 +117,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 		private void WriteComment(XmlWriter writer, IComment comment)
 		{
-			writer.WriteStartElement("sdl", "comment", null);
+			writer.WriteStartElement(NsPrefix, "comment", null);
 			writer.WriteAttributeString("user", comment.Author);
 			writer.WriteAttributeString("date", GetDateToString(comment.Date));
 			writer.WriteAttributeString("version", comment.Version);
@@ -127,11 +129,15 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 		private void WriteFileBody(XmlWriter writer, File xliffFile)
 		{
 			writer.WriteStartElement("body");
+
+			//writer.WriteStartElement("group");
 			foreach (var transUnit in xliffFile.Body.TransUnits)
 			{
 				// SDL flavor
 				WriteTransUnit(writer, transUnit);
 			}
+			//writer.WriteEndElement(); // group
+
 			writer.WriteEndElement(); // body
 		}
 
@@ -150,7 +156,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 		private void WriteSdlSegDefs(XmlWriter writer, TransUnit transUnit)
 		{
-			writer.WriteStartElement("sdl", "seg-defs", null);
+			writer.WriteStartElement(NsPrefix, "seg-defs", null);
 
 			foreach (var segmentPair in transUnit.SegmentPairs)
 			{
@@ -162,7 +168,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 		private void WriteSdlSeg(XmlWriter writer, SegmentPair segmentPair)
 		{
-			writer.WriteStartElement("sdl", "seg", null);
+			writer.WriteStartElement(NsPrefix, "seg", null);
 			writer.WriteAttributeString("id", segmentPair.Id);
 			writer.WriteAttributeString("conf", segmentPair.ConfirmationLevel.ToString());
 
@@ -177,7 +183,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 				if (segmentPair.TranslationOrigin?.OriginBeforeAdaptation != null)
 				{
-					writer.WriteStartElement("sdl", "prev-origin", null);
+					writer.WriteStartElement(NsPrefix, "prev-origin", null);
 					WriteTranslationOrigin(writer, segmentPair.TranslationOrigin?.OriginBeforeAdaptation);
 					writer.WriteEndElement(); //sdl:prev-origin
 				}
@@ -225,7 +231,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 			//{
 			//	foreach (var keyValuePair in translationOrigin.MetaData)
 			//	{
-			//		writer.WriteStartElement("sdl", "value", null);
+			//		writer.WriteStartElement(nsPrefix, "value", null);
 
 			//		writer.WriteAttributeString("key", keyValuePair.Key);
 			//		writer.WriteString(keyValuePair.Value);

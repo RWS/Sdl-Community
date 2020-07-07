@@ -8,7 +8,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 {
 	internal class SegmentVisitor : IMarkupDataVisitor
 	{
-		private readonly bool _ignoreTags;
+		private readonly bool _ignoreTags;		
 
 		private Stack<ITagPair> _tagPairStack;
 
@@ -17,7 +17,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			_ignoreTags = ignoreTags;
 			InitializeComponents();
 		}
-
+		
 		public List<Element> Elements { get; private set; }
 
 		public bool HasRevisions { get; private set; }

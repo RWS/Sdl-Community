@@ -16,7 +16,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 
 		public override bool ValidateInput()
 		{
-			MessageBox.Show("Not available!", PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+			MessageBox.Show(PluginResources.XLIFFManager_BatchTasks_Import_Description, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 			return false;			
 		}
 	}

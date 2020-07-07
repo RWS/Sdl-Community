@@ -7,8 +7,8 @@ using ProjectFile = Sdl.ProjectAutomation.Core.ProjectFile;
 namespace Sdl.Community.XLIFF.Manager.BatchTasks
 {
 	[AutomaticTask("XLIFF.Manager.BatchTasks.Import",
-		"Import from XLIFF",
-		"Import from XLIFF",
+		"XLIFFManager_BatchTasks_Import_Name",
+		"XLIFFManager_BatchTasks_Import_Description",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget, AllowMultiple = true)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	[RequiresSettings(typeof(XliffManagerImportSettings), typeof(ImportSettingsPage))]
@@ -16,7 +16,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 	{
 		protected override void OnInitializeTask()
 		{
-			throw new Exception("Not available!");
+			throw new Exception(PluginResources.XLIFFManager_BatchTasks_Import_Description);
 		}
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)

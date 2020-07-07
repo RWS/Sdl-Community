@@ -38,13 +38,19 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			VerifyIsValid();
 
 			LoadPage += OnLoadPage;
-		}
+			LeavePage += OnLeavePage;
+		}		
 
 		public ICommand ClearSelectedCommand => _clearSelectedComand ?? (_clearSelectedComand = new CommandHandler(ClearSelected));
+
 		public ICommand CheckSelectedCommand => _checkSelectedComand ?? (_checkSelectedComand = new CommandHandler(CheckSelected));
+
 		public ICommand AddFolderCommand => _addFolderCommand ?? (_addFolderCommand = new RelayCommand(SelectFolder));
+
 		public ICommand AddFilesCommand => _addFilesCommand ?? (_addFilesCommand = new RelayCommand(AddFiles));
+
 		public ICommand CheckAllCommand => _checkAllCommand ?? (_checkAllCommand = new RelayCommand(CheckAll));
+
 		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragAndDrop));
 
 		public IList SelectedProjectFiles
@@ -93,6 +99,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				OnPropertyChanged(nameof(CheckedAll));
 			}
 		}
+
 		public string StatusLabel
 		{
 			get
@@ -103,6 +110,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 				return message;
 			}
 		}
+
 		public override string DisplayName => PluginResources.PageName_Files;
 
 		public override bool IsValid { get; set; }
@@ -116,8 +124,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private int? GetValidProjectFilesCount()
 		{
 			var count = ProjectFiles.Count(a => a.Selected &&
-									!string.IsNullOrEmpty(a.XliffFilePath) &&
-									System.IO.File.Exists(a.XliffFilePath));
+						!string.IsNullOrEmpty(a.XliffFilePath) && File.Exists(a.XliffFilePath));
 
 			return count;
 		}
@@ -243,10 +250,27 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			VerifyIsValid();
 		}
+
 		private void OnLoadPage(object sender, EventArgs e)
 		{
 			UpdateCheckAll();
 			VerifyIsValid();
+		}
+
+		private void OnLeavePage(object sender, EventArgs e)
+		{
+			foreach (var projectFile in ProjectFiles)
+			{
+				if (!projectFile.Selected)
+				{
+					continue;
+				}
+
+				if (string.IsNullOrEmpty(projectFile.XliffFilePath) || !File.Exists(projectFile.XliffFilePath))
+				{
+					projectFile.Selected = false;
+				}
+			}
 		}
 
 		private void DragAndDrop(object parameter)
@@ -322,7 +346,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			VerifyIsValid();
 		}
 
-
 		private string GetPathLocation(string path, string targetLanguage)
 		{
 			var location = string.Empty;
@@ -367,6 +390,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			}
 
 			LoadPage -= OnLoadPage;
+			LeavePage -= OnLeavePage;
 		}
 	}
 }

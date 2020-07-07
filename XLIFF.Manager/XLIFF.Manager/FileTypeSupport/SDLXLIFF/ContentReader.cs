@@ -65,7 +65,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			SourceLanguage = documentInfo.SourceLanguage.CultureInfo;
 			TargetLanguage = documentInfo.TargetLanguage?.CultureInfo ?? SourceLanguage;
 
-			Xliff.DocInfo.Created = DateTime.Now;
+			Xliff.DocInfo.Created = DateTime.UtcNow;
 			Xliff.DocInfo.Source = _inputPath;
 			Xliff.DocInfo.ProjectId = _projectId;
 			Xliff.DocInfo.SourceLanguage = SourceLanguage.Name;
@@ -153,6 +153,13 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				}
 
 				SegmentVisitor.VisitSegment(segmentPair.Source);
+				if (SegmentVisitor.HasRevisions)
+				{					
+					throw new Exception(PluginResources.Message_UnableToProcessFileWithTrackChanges + 
+					                    Environment.NewLine +
+					                    PluginResources.Message_AccecptRejectTrackChangesBeforeExporting);
+				}
+
 				var sourceElements = SegmentVisitor.Elements;
 				if (SegmentVisitor.Comments.Count > 0)
 				{
@@ -176,6 +183,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				}
 
 				SegmentVisitor.VisitSegment(segmentPair.Target);
+				if (SegmentVisitor.HasRevisions)
+				{
+					throw new Exception(PluginResources.Message_UnableToProcessFileWithTrackChanges +
+					                    Environment.NewLine +
+					                    PluginResources.Message_AccecptRejectTrackChangesBeforeExporting);
+				}
 				var targetElements = SegmentVisitor.Elements;
 				if (SegmentVisitor.Comments.Count > 0)
 				{
