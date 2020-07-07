@@ -3,20 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Sdl.Community.HunspellDictionaryManager.Ui"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
 		GlowBrush="#008C95"
         WindowTitleBrush="#008C95"
-        Title="Hunspell Dictionary Manager Studio 2019" Height="260" Width="650"
+        Title="Hunspell Dictionary Manager Studio 2021" Height="260" Width="650"
 		ResizeMode="NoResize"
 		WindowStartupLocation="CenterScreen">
 	<Window.Resources>
 		<ResourceDictionary >
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
@@ -62,60 +61,60 @@
 			<ColumnDefinition Width="80*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
 		<DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" >
-			<Menu DockPanel.Dock="Top" Background="#3EA691">
-				<MenuItem Header="_About" Foreground="White" FontSize="14">
-					<MenuItem Header="_Help" Foreground="#FF00747C" FontSize ="13" Command="{Binding HelpCommand}">
+			<Menu DockPanel.Dock="Top">
+				<MenuItem Header="_About">
+					<MenuItem Header="_Help" Command="{Binding HelpCommand}">
 						<MenuItem.Icon>
-							<Image Source="/Sdl.Community.HunspellDictionaryManager;component/Resources/help.png" Width="15"></Image>
+							<Image Source="/Sdl.Community.HunspellDictionaryManager;component/Resources/help.png" Width="14"></Image>
 						</MenuItem.Icon>
 					</MenuItem>
 				</MenuItem>
 			</Menu>
 		</DockPanel>
-		<Label Name="instructionLbl" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="2" Foreground="Red" FontSize="14" Content="IMPORTANT: Studio must be restarted for any changes to take effect." Margin="3 0 0 0" />
+		<Label Name="instructionLbl" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="2" Foreground="Red" FontSize="12" Content="IMPORTANT: Studio must be restarted for any changes to take effect." Margin="2 5 0 0" />
 		<TextBox Name="resultMessageLbl" Grid.Row="2"  Grid.Column="0" Margin="5 0 0 0"
-				 Text="{Binding ResultMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" FontWeight="Normal" FontSize="15" Width="Auto" BorderThickness="0"	   
+				 Text="{Binding ResultMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" FontWeight="Normal" FontSize="13" Width="Auto" BorderThickness="0"	   
 			     Visibility="{Binding LabelVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				 Foreground="{Binding ResultMessageColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto"/>
-		<Label Name="selectLbl" Grid.Row="3"  Grid.Column="0" Content="Select appropriate dictionary language" Margin="3 0 0 0" />
+		<Label Name="selectLbl" Grid.Row="3"  Grid.Column="0" Content="Select appropriate dictionary language" Margin="2 0 0 0" />
 		<ComboBox Grid.Row="3" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
 			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding SelectedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
 
-		<Label Name="enterLangLbl" Grid.Row="4"  Grid.Column="0" Content="Select new dictionary language" Margin="3 0 0 0" />
+		<Label Name="enterLangLbl" Grid.Row="4"  Grid.Column="0" Content="Select new dictionary language" Margin="2 0 0 0" />
 		<ComboBox Grid.Row="4" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Selecte language for the new dictionary"
 			ItemsSource="{Binding Languages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding NewDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="LanguageName" Margin="5,5,5,0" />
 
-		<Label Name="deleteLangLbl" Grid.Row="5"  Grid.Column="0" Content="Select dictionary to delete" Margin="3 0 0 0" />
+		<Label Name="deleteLangLbl" Grid.Row="5"  Grid.Column="0" Content="Select dictionary to delete" Margin="2 0 0 0" />
 		<ComboBox Grid.Row="5" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
 			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding DeletedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
 
-		<Label Name="undoDictionaryLbl" Grid.Row="6"  Grid.Column="0" Content="Restore deleted dictionary" Visibility="{Binding UndoLabelVisibility}" Margin="3 0 0 0" />
+		<Label Name="undoDictionaryLbl" Grid.Row="6"  Grid.Column="0" Content="Restore deleted dictionary" Visibility="{Binding UndoLabelVisibility}" Margin="2 0 0 0" />
 		<ComboBox Grid.Row="6" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
             controls:TextBoxHelper.Watermark="Choose dictionary language to restore" Visibility="{Binding UndoDictVisibility}"
 			ItemsSource="{Binding UndoDictionaries, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding SelectedUndoDictionary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
 
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="7" Grid.Column="1" Width="85" Height="25"
-                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" ToolTip="Create new Hunspell dictionary"
+		<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="7" Grid.Column="1" Width="85" Height="25"
+                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="15,0,0,5" ToolTip="Create new Hunspell dictionary"
                     IsEnabled="{Binding IsCreateEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="7" Grid.Column="1" Width="85" Height="25"
-                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="92,0,90,5" ToolTip="Delete selected Hunspell dictionary"
+		<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="7" Grid.Column="1" Width="85" Height="25"
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="92,0,80,5" ToolTip="Delete selected Hunspell dictionary"
                     IsEnabled="{Binding IsDeleteEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CloseCommand}" Content="Close" Grid.Row="7" Grid.Column="1" Width="85" Height="25"
+		<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" Command="{Binding CloseCommand}" Content="Close" Grid.Row="7" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="7" Grid.Column="0" Width="85" Height="25"
+		<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="7" Grid.Column="0" Width="85" Height="25"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding UndoCommand}" Content="Restore" Grid.Row="7" Grid.Column="0" Width="85" Height="25"
+		<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" Command="{Binding UndoCommand}" Content="Restore" Grid.Row="7" Grid.Column="0" Width="85" Height="25"
                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="100,0,0,5" ToolTip="Undo the dictionary deletion"
 				   IsEnabled="{Binding IsRestoreEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 	</Grid>

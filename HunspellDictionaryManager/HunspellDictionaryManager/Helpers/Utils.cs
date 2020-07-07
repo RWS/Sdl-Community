@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using Sdl.Versioning;
 
 namespace Sdl.Community.HunspellDictionaryManager.Helpers
 {
@@ -51,22 +52,20 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 		}
 
         /// <summary>
-        /// Get installed version for Studio 2019
+        /// Get installed version for Studio 2021
         /// </summary>
         /// <returns></returns>
         public static string GetInstalledStudioPath()
         {
 			try
 			{
-				var studio = new Toolkit.Core.Studio().GetInstalledStudioVersion()?.Where(v => v.Version.Equals("Studio15")).FirstOrDefault();
+				var studio = new StudioVersionService().GetInstalledStudioVersions()?.Where(v => v.Version.Equals("Studio16")).FirstOrDefault();
 				if (studio != null)
 				{
 					return studio.InstallPath;
 				}
-				else
-				{
-					MessageBox.Show(Constants.Studio2019ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);					
-				}
+
+				MessageBox.Show(Constants.Studio2021ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 			catch (Exception ex)
 			{
