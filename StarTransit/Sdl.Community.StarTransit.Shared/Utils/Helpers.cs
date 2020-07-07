@@ -15,9 +15,8 @@ namespace Sdl.Community.StarTransit.Shared.Utils
 		public string GetIconPath()
 		{
 			var assemblyPath = Assembly.GetExecutingAssembly().Location;
-			var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-			var targetPath = assemblyPath.Remove(assemblyPath.Length - assemblyName.Length - 4);
-			targetPath = targetPath + "transit.ico";
+			var directoryInfo = Directory.GetParent(assemblyPath);
+			var targetPath = Path.Combine(directoryInfo.FullName, "transit.ico");
 
 			using (var fs = new FileStream(targetPath, FileMode.Create))
 			{
