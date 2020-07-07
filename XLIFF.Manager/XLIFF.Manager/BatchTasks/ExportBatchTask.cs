@@ -94,6 +94,8 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 					return;
 				}
 
+				targetFile.Location =  Path.Combine(targetFile.Project.Path, targetFile.Location.Trim('\\'));
+
 				if (string.IsNullOrEmpty(_currentLanguage) || languageName != _currentLanguage)
 				{
 					_logReport.AppendLine();
@@ -124,8 +126,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 
 					if (exported)
 					{
-						targetFile.Date = _exportSettings.DateTimeStamp;
-						targetFile.XliffFilePath = Path.Combine(languageFolder, targetFile.Name + ".xliff");
+						targetFile.Date = _exportSettings.DateTimeStamp;						
 						targetFile.Action = Enumerators.Action.Export;
 						targetFile.Status = Enumerators.Status.Success;
 						targetFile.XliffFilePath = xliffFilePath;
