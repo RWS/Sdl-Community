@@ -24,14 +24,15 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private readonly IFileTypeManager _fileTypeManager;
 		private readonly ProjectsController _projectsController;
 		private readonly List<ProjectFile> _targetProjectFiles;
-
+		private readonly string _iconPath;
+		
 		public ProjectService(IFileTypeManager fileTypeManager, Helpers helpers)
 		{
 			_fileTypeManager = fileTypeManager;
-
 			if (helpers != null)
 			{
 				_projectsController = helpers.GetProjectsController();
+				_iconPath = string.IsNullOrEmpty(_iconPath) ? helpers.GetIconPath() : _iconPath;
 			}
 
 			_messageModel = new MessageModel();
@@ -93,7 +94,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					LocalProjectFolder = package.Location,
 					SourceLanguage = new Language(package.LanguagePairs[0].SourceLanguage),
 					TargetLanguages = target,
-					DueDate = package.DueDate
+					DueDate = package.DueDate,
+					ProjectOrigin = "Star Transit project",
+					IconPath = _iconPath
 				};
 
 				var newProject = CreateNewProject(projectInfo, new ProjectTemplateReference(package.ProjectTemplate.Uri));

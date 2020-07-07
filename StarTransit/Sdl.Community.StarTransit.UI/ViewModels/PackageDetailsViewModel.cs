@@ -8,13 +8,12 @@ using System.Windows.Input;
 using System.Xml.Linq;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
-using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.Community.StarTransit.UI.Interfaces;
-using Sdl.Community.Toolkit.Core.Services;
 using Sdl.ProjectAutomation.Core;
+using Sdl.Versioning;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
@@ -364,7 +363,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private string GetInstalledStudioShortVersion()
 		{
 			var studioService = new StudioVersionService();
-			return studioService?.GetStudioVersion()?.ShortVersion;
+			return studioService.GetStudioVersion()?.ShortVersion;
 		}
 
 		private void ReadCustomers(string projectsPath)
