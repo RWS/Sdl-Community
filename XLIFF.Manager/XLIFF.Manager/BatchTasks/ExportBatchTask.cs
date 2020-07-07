@@ -178,10 +178,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			if (!_isError)
 			{
 				var project = Project as FileBasedProject;
-				var languageDirections = GetLanguageDirections(project?.FilePath, _wizardContext);
-
-
-
+				var languageDirections = GetLanguageDirectionFiles(project?.FilePath, _wizardContext);
 
 				foreach (var languageDirection in languageDirections)
 				{
@@ -229,7 +226,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 			return ld;
 		}
 
-		private Dictionary<LanguageDirectionInfo, List<Model.ProjectFile>> GetLanguageDirections(string projectsFile, WizardContext wizardContext)
+		private Dictionary<LanguageDirectionInfo, List<Model.ProjectFile>> GetLanguageDirectionFiles(string projectsFile, WizardContext wizardContext)
 		{
 			var languageDirections = new Dictionary<LanguageDirectionInfo, List<Model.ProjectFile>>();
 			foreach (var language in _projectSettingsService.GetLanguageDirections(projectsFile))
@@ -237,6 +234,12 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 				foreach (var projectFile in wizardContext.ProjectFiles)
 				{
 					if (!projectFile.Selected)
+					{
+						continue;
+					}
+
+					if (string.Compare(projectFile.TargetLanguage, language.TargetLanguageCode,
+						    StringComparison.CurrentCultureIgnoreCase) != 0)
 					{
 						continue;
 					}

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Sdl.Core.Settings;
 
 namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings

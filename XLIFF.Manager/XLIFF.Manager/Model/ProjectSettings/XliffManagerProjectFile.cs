@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using Sdl.Community.XLIFF.Manager.Common;
 
 namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
@@ -16,11 +15,9 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 		}
 
 		public List<XliffManagerProjectFileActivity> Activities { get; set; }
-
-		[XmlElement]
+		
 		public ConfirmationStatistics ConfirmationStatistics { get; set; }
-
-		[XmlElement]
+		
 		public TranslationOriginStatistics TranslationOriginStatistics { get; set; }
 
 		public string Status { get; set; }
@@ -55,7 +52,8 @@ namespace Sdl.Community.XLIFF.Manager.Model.ProjectSettings
 						+ "T" + dateTime.Hour.ToString().PadLeft(2, '0')
 						+ ":" + dateTime.Minute.ToString().PadLeft(2, '0')
 						+ ":" + dateTime.Second.ToString().PadLeft(2, '0')
-						+ "." + dateTime.Millisecond.ToString().PadLeft(2, '0');
+						+ "." + dateTime.Millisecond.ToString().PadLeft(2, '0')
+						+ "Z";
 
 			return value;
 		}

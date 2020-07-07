@@ -107,6 +107,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 			set
 			{
 				_date = value;
+				
 				OnPropertyChanged(nameof(Date));
 				OnPropertyChanged(nameof(DateToString));
 			}
@@ -116,7 +117,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		{
 			get
 			{
-				var value = Date != DateTime.MinValue
+				var value = (Date != DateTime.MinValue && Date != DateTime.MaxValue)
 					? Date.Year
 							+ "-" + Date.Month.ToString().PadLeft(2, '0')
 							+ "-" + Date.Day.ToString().PadLeft(2, '0')
@@ -148,8 +149,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Name = Name,
 				Action = Action,
 				Status = Status,
-				Date = new DateTime(Date.Year, Date.Month, Date.Day, Date.Hour, 
-					Date.Minute, Date.Second, Date.Millisecond, Date.Kind),				
+				Date = new DateTime(Date.Ticks),				
 				Location = Location ,
 				Path = Path ,
 				Selected = Selected,

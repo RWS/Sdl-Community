@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
+using Newtonsoft.Json;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Controls;
 using Sdl.Community.XLIFF.Manager.CustomEventArgs;
@@ -133,27 +134,41 @@ namespace Sdl.Community.XLIFF.Manager
 			if (project == null)
 			{
 				_xliffProjects.Add(wizardContext.Project);
+
+				foreach (var wcProjectFile in wizardContext.ProjectFiles)
+				{
+					ConvertToRelativePaths(wizardContext.Project, wcProjectFile);
+				}
+
 				project = wizardContext.Project;
 			}
 			else
 			{
 				foreach (var wcProjectFile in wizardContext.ProjectFiles)
-				{
+				{					
 					var projectFile = project.ProjectFiles.FirstOrDefault(a => a.FileId == wcProjectFile.FileId);
 					if (projectFile == null)
 					{
 						wcProjectFile.Project = project;
+						ConvertToRelativePaths(project, wcProjectFile);
 						project.ProjectFiles.Add(wcProjectFile);
 					}
 					else if (wcProjectFile.Selected)
 					{
+						foreach (var fileActivity in wcProjectFile.ProjectFileActivities)
+						{
+							fileActivity.ProjectFile = projectFile;
+						}
+
+						ConvertToRelativePaths(project, wcProjectFile);
+
 						projectFile.Status = wcProjectFile.Status;
 						projectFile.Action = wcProjectFile.Action;
-						projectFile.Date = wcProjectFile.Date;
-						projectFile.XliffFilePath = wcProjectFile.XliffFilePath;
+						projectFile.Date = wcProjectFile.Date;					
 						projectFile.ConfirmationStatistics = wcProjectFile.ConfirmationStatistics;
 						projectFile.TranslationOriginStatistics = wcProjectFile.TranslationOriginStatistics;
 						projectFile.ProjectFileActivities = wcProjectFile.ProjectFileActivities;
+						
 					}
 				}
 			}
@@ -186,6 +201,19 @@ namespace Sdl.Community.XLIFF.Manager
 			UpdateProjectSettingsBundle(project);
 		}
 
+		private void ConvertToRelativePaths(Project project, ProjectFile wcProjectFile)
+		{
+			foreach (var fileActivity in wcProjectFile.ProjectFileActivities)
+			{
+				fileActivity.Path = GetRelativePath(project.Path, fileActivity.Path);
+				fileActivity.Report = GetRelativePath(project.Path, fileActivity.Report);
+			}
+
+			wcProjectFile.XliffFilePath = GetRelativePath(project.Path, wcProjectFile.XliffFilePath);
+			wcProjectFile.Location = GetRelativePath(project.Path, wcProjectFile.Location);
+			wcProjectFile.Report = GetRelativePath(project.Path, wcProjectFile.Report);
+		}
+
 		private void CreateHtmlReport(WizardContext wizardContext, FileBasedProject selectedProject, AutomaticTask automaticTask)
 		{
 			var project = _xliffProjects.FirstOrDefault(a => a.Id == wizardContext.Project.Id);
@@ -210,12 +238,12 @@ namespace Sdl.Community.XLIFF.Manager
 					var projectFile = project?.ProjectFiles.FirstOrDefault(a => a.FileId == wcProjectFile.FileId);
 					if (projectFile != null)
 					{
-						projectFile.Report = htmlReportFilePath;
+						projectFile.Report = GetRelativePath(project.Path, htmlReportFilePath);
 
 						var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault();
 						if (activityfile != null)
 						{
-							activityfile.Report = htmlReportFilePath;
+							activityfile.Report = GetRelativePath(project.Path, htmlReportFilePath);
 						}
 					}
 				}
@@ -251,7 +279,7 @@ namespace Sdl.Community.XLIFF.Manager
 				}
 			}
 
-			var languageDirections = GetLanguageDirections(selectedProject.FilePath, wizardContext);
+			var languageDirections = GetLanguageDirectionFiles(selectedProject.FilePath, wizardContext);
 
 			foreach (var languageDirection in languageDirections)
 			{
@@ -344,7 +372,7 @@ namespace Sdl.Community.XLIFF.Manager
 			return htmlReportFilePath;
 		}
 
-		private Dictionary<LanguageDirectionInfo, List<ProjectFile>> GetLanguageDirections(string projectsFile, WizardContext wizardContext)
+		private Dictionary<LanguageDirectionInfo, List<ProjectFile>> GetLanguageDirectionFiles(string projectsFile, WizardContext wizardContext)
 		{
 			var languageDirections = new Dictionary<LanguageDirectionInfo, List<ProjectFile>>();
 			foreach (var language in _projectSettingsService.GetLanguageDirections(projectsFile))
@@ -352,6 +380,12 @@ namespace Sdl.Community.XLIFF.Manager
 				foreach (var projectFile in wizardContext.ProjectFiles)
 				{
 					if (!projectFile.Selected)
+					{
+						continue;
+					}
+
+					if (string.Compare(projectFile.TargetLanguage, language.TargetLanguageCode,
+						    StringComparison.CurrentCultureIgnoreCase) != 0)
 					{
 						continue;
 					}
@@ -413,10 +447,10 @@ namespace Sdl.Community.XLIFF.Manager
 							ActivityId = fileActivity.ActivityId,
 							Status = fileActivity.Status.ToString(),
 							Action = fileActivity.Action.ToString(),
-							Path = fileActivity.Path,
+							Path = GetRelativePath(project.Path, fileActivity.Path),
 							Name = fileActivity.Name,
 							Date = GetDateToString(fileActivity.Date),
-							Report = fileActivity.Report,
+							Report = GetRelativePath(project.Path, fileActivity.Report),
 							ConfirmationStatistics = fileActivity.ConfirmationStatistics,
 							TranslationOriginStatistics = fileActivity.TranslationOriginStatistics
 						};
@@ -427,17 +461,17 @@ namespace Sdl.Community.XLIFF.Manager
 					var settingProjectFile = new XliffManagerProjectFile
 					{
 						Activities = fileActivities,
-						Path = projectFile.Path,
+						Path = GetRelativePath(project.Path, projectFile.Path),
 						Action = projectFile.Action.ToString(),
 						Status = projectFile.Status.ToString(),
 						FileId = projectFile.FileId,
 						Name = projectFile.Name,
-						Location = projectFile.Location,
+						Location = GetRelativePath(project.Path, projectFile.Location),
 						Date = GetDateToString(projectFile.Date),
 						FileType = projectFile.FileType,
-						XliffFilePath = projectFile.XliffFilePath,
+						XliffFilePath = GetRelativePath(project.Path, projectFile.XliffFilePath),
 						TargetLanguage = projectFile.TargetLanguage,
-						Report = projectFile.Report,
+						Report = GetRelativePath(project.Path, projectFile.Report),
 						ShortMessage = projectFile.ShortMessage,
 						ConfirmationStatistics = projectFile.ConfirmationStatistics,
 						TranslationOriginStatistics = projectFile.TranslationOriginStatistics
@@ -446,7 +480,8 @@ namespace Sdl.Community.XLIFF.Manager
 					projectFiles.Add(settingProjectFile);
 				}
 
-				xliffManagerProject.ProjectFiles.Value = projectFiles;
+				
+				xliffManagerProject.ProjectFilesJson.Value = JsonConvert.SerializeObject(projectFiles);
 
 				selectedProject.UpdateSettings(xliffManagerProject.SettingsBundle);
 
@@ -466,8 +501,7 @@ namespace Sdl.Community.XLIFF.Manager
 					var settingsBundle = project.GetSettings();
 					var xliffManagerProject = settingsBundle.GetSettingsGroup<XliffManagerProject>();
 
-					var projectFiles = xliffManagerProject.ProjectFiles.Value;
-
+					var projectFiles = SerializeProjectFiles(xliffManagerProject.ProjectFilesJson.Value);					
 					if (projectFiles?.Count > 0)
 					{
 						var xliffProjectFiles = new List<ProjectFile>();
@@ -497,14 +531,14 @@ namespace Sdl.Community.XLIFF.Manager
 								Action = GetAction(projectFile.Action),
 								Status = GetStatus(projectFile.Status),
 								Date = GetDateTime(projectFile.Date),
-								Report = projectFile.Report,
+								Report = GetRelativePath(xliffProject.Path, projectFile.Report),
 								FileId = projectFile.FileId,
 								FileType = projectFile.FileType,
-								Location = projectFile.Location,
+								Location = GetRelativePath(xliffProject.Path, projectFile.Location),
 								Name = projectFile.Name,
 								ProjectId = projectInfo.Id.ToString(),
 								ProjectFileActivities = xliffFileActivities,
-								XliffFilePath = projectFile.XliffFilePath,
+								XliffFilePath = GetRelativePath(xliffProject.Path, projectFile.XliffFilePath),
 								Project = xliffProject,
 								TargetLanguage = projectFile.TargetLanguage,
 								ConfirmationStatistics = projectFile.ConfirmationStatistics,
@@ -516,12 +550,12 @@ namespace Sdl.Community.XLIFF.Manager
 								var xliffFileActivity = new ProjectFileActivity
 								{
 									ProjectFile = xliffProjectFile,
-									Path = fileActivity.Path,
+									Path = GetRelativePath(xliffProject.Path, fileActivity.Path),
 									Action = GetAction(fileActivity.Action),
 									Status = GetStatus(fileActivity.Status),
 									ActivityId = fileActivity.ActivityId,
 									Date = GetDateTime(fileActivity.Date),
-									Report = fileActivity.Report,
+									Report = GetRelativePath(xliffProject.Path, fileActivity.Report),
 									Name = fileActivity.Name,
 									ProjectFileId = fileActivity.ProjectFileId,
 									ConfirmationStatistics = fileActivity.ConfirmationStatistics,
@@ -545,6 +579,33 @@ namespace Sdl.Community.XLIFF.Manager
 						MessageBoxIcon.Information);
 				}
 			}
+		}
+
+		private static List<XliffManagerProjectFile> SerializeProjectFiles(string value)
+		{
+			try
+			{
+				var projectFiles =
+					JsonConvert.DeserializeObject<List<XliffManagerProjectFile>>(value);
+				return projectFiles;
+			}
+			catch
+			{
+				// catch all; ignore
+			}
+
+			return null;
+		}
+
+
+		private string GetRelativePath(string projectPath, string path)
+		{
+			if (string.IsNullOrEmpty(path))
+			{
+				return string.Empty;
+			}
+
+			return path.Replace(projectPath.Trim('\\') + '\\', string.Empty);
 		}
 
 		private void EditorController_Opened(object sender, DocumentEventArgs e)

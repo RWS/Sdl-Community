@@ -65,7 +65,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			SourceLanguage = documentInfo.SourceLanguage.CultureInfo;
 			TargetLanguage = documentInfo.TargetLanguage?.CultureInfo ?? SourceLanguage;
 
-			Xliff.DocInfo.Created = DateTime.Now;
+			Xliff.DocInfo.Created = DateTime.UtcNow;
 			Xliff.DocInfo.Source = _inputPath;
 			Xliff.DocInfo.ProjectId = _projectId;
 			Xliff.DocInfo.SourceLanguage = SourceLanguage.Name;

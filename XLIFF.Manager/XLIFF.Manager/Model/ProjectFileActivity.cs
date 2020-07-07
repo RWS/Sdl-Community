@@ -39,7 +39,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		{
 			get
 			{
-				var value = Date != DateTime.MinValue
+				var value = (Date != DateTime.MinValue && Date != DateTime.MaxValue)
 					? Date.Year
 					  + "-" + Date.Month.ToString().PadLeft(2, '0')
 					  + "-" + Date.Day.ToString().PadLeft(2, '0')
@@ -67,8 +67,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Status = Status,
 				ActivityId = ActivityId,
 				Name = Name,
-				Date = new DateTime(Date.Year, Date.Month, Date.Day, Date.Hour,
-					Date.Minute, Date.Second, Date.Millisecond, Date.Kind),
+				Date = new DateTime(Date.Ticks),
 				Path = Path,
 				Report = Report,
 				Selected = Selected
