@@ -40,7 +40,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 
 		private void CreateContext()
 		{
-			_settings.DateTimeStamp = DateTime.UtcNow;
+			_settings.DateTimeStamp = new DateTime(DateTime.UtcNow.Ticks, DateTimeKind.Utc);
 			var selectedProject = _projectsController?.SelectedProjects.FirstOrDefault()
 								  ?? _projectsController?.CurrentProject;
 

@@ -154,7 +154,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private void AddFiles()
 		{			
 			var selectedFiles = _dialogService.ShowFileDialog(
-				"Xliff (*.xliff) |*.xliff",
+				"Xliff (*.xliff) |*.xliff;*.xlf",
 				PluginResources.FilesDialog_Title,
 				GetDefaultPath());
 			AddFilesToGrid(selectedFiles);
@@ -178,7 +178,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			return path;
 		}
-
 
 		private void UpdateCheckAll()
 		{
@@ -285,7 +284,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			{
 				foreach (var fullPath in filesOrDirectories)
 				{
-					var fileAttributes = System.IO.File.GetAttributes(fullPath);
+					var fileAttributes = File.GetAttributes(fullPath);
 					if (fileAttributes.HasFlag(FileAttributes.Directory))
 					{
 						var files = GetAllXliffsFromDirectory(fullPath);
@@ -307,7 +306,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			foreach (var filePath in filesPath)
 			{
-				if (!string.IsNullOrEmpty(filePath) && !System.IO.File.Exists(filePath))
+				if (!string.IsNullOrEmpty(filePath) && !File.Exists(filePath))
 				{
 					continue;
 				}
@@ -366,7 +365,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		private IEnumerable<string> GetAllXliffsFromDirectory(string directoryPath)
 		{
-			return Directory.GetFiles(directoryPath, "*.xliff", SearchOption.AllDirectories).ToList();
+			var files = new List<string>();
+			files.AddRange(Directory.GetFiles(directoryPath, "*.xliff", SearchOption.AllDirectories).ToList());
+			files.AddRange(Directory.GetFiles(directoryPath, "*.xlf", SearchOption.AllDirectories).ToList());
+
+			return files;
 		}
 
 		private void SelectFolder()

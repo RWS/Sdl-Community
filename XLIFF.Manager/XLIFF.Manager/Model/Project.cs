@@ -83,8 +83,8 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				AbsoluteUri = AbsoluteUri,
 				Name = Name,
 				Customer = Customer?.Clone() as Customer,
-				Created = new DateTime(Created.Ticks),
-				DueDate = new DateTime(DueDate.Ticks),
+				Created = new DateTime(Created.Ticks, DateTimeKind.Utc),
+				DueDate = new DateTime(DueDate.Ticks, DateTimeKind.Utc),
 				Path = Path,
 				ProjectType = ProjectType,
 				SourceLanguage = SourceLanguage.Clone() as LanguageInfo

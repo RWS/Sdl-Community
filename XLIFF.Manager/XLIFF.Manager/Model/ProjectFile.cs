@@ -149,7 +149,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Name = Name,
 				Action = Action,
 				Status = Status,
-				Date = new DateTime(Date.Ticks),				
+				Date = new DateTime(Date.Ticks, DateTimeKind.Utc),				
 				Location = Location ,
 				Path = Path ,
 				Selected = Selected,
