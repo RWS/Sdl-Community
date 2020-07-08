@@ -107,7 +107,6 @@
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationAllow.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationPrevent.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationRequire.cs" />
-    <Compile Include="NumberVerifierMainTests.cs" />
     <Compile Include="OmitZero\OmitLeadingZero.cs" />
     <Compile Include="OmitZero\OmitZeroSettings.cs" />
     <Compile Include="OmitZero\OmitZeroSourceAndTarget.cs" />
