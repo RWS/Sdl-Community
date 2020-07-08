@@ -9,12 +9,17 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 	public class NormalizeNumbersAllowLocalization
 	{
 		[Theory]
-		[InlineData("1,55", " ", ",")]
-		public void NormalizeDecimalNumbersComma(string text, string thousandSep, string decimalSep)
+		[InlineData("1,55", "1.55")]
+		public void NormalizeDecimalNumbersComma(string source, string target)
 		{
-			// add to settings allow localization and thousands separators
-			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.SpaceCommaPeriod();
-			numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+			//target settings
+			var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+			numberVerifierSettings.Setup(t => t.TargetNoSeparator).Returns(true);
+			numberVerifierSettings.Setup(t => t.TargetDecimalPeriod).Returns(true);
+
+			// source settings
+			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+			numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
@@ -23,17 +28,9 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			var docPropMock = new Mock<IDocumentProperties>();
 			numberVerifierMain.Initialize(docPropMock.Object);
 
+			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-			var normalizedNumber = numberVerifierMain.NormalizeNumber(new SeparatorModel
-			{
-				MatchValue = text,
-				ThousandSeparators = thousandSep,
-				DecimalSeparators = decimalSep,
-				NoSeparator = false,
-				CustomSeparators = string.Empty
-			});
-
-			Assert.Equal("1d55", normalizedNumber);
+			Assert.True(errorMessage.Count == 0);
 		}
 	}
 }
