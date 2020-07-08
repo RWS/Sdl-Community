@@ -8,7 +8,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 {
 	public static class MultiTermFolders
 	{
-		private static string _backupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
+		private static readonly string BackupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
 		public static readonly Log Log = Log.Instance;
 
 		public static List<LocationDetails> GetPackageCachePaths(List<MultiTermVersionListItem> multiTermVersions)
@@ -28,7 +28,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 							var details = new LocationDetails
 							{
 								OriginalFilePath = packagePath,
-								BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "PackageCache", directoryInfo.Name),
+								BackupFilePath = Path.Combine(BackupFolderPath, multiTermVersion.DisplayName, "PackageCache", directoryInfo.Name),
 								Version = multiTermVersion.DisplayName
 							};
 							packagePaths.Add(details);
@@ -78,7 +78,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 					var details = new LocationDetails
 					{
 						OriginalFilePath = programFilePath,
-						BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "ProgramFiles", directoryInfo.Name),
+						BackupFilePath = Path.Combine(BackupFolderPath, multiTermVersion.DisplayName, "ProgramFiles", directoryInfo.Name),
 						Version = multiTermVersion.DisplayName
 					};
 					programFilesPaths.Add(details);
@@ -103,7 +103,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 					var details = new LocationDetails
 					{
 						OriginalFilePath = appDataFilePath,
-						BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "Local", directoryInfo.Name),
+						BackupFilePath = Path.Combine(BackupFolderPath, multiTermVersion.DisplayName, "Local", directoryInfo.Name),
 						Version = multiTermVersion.DisplayName
 					};
 					appDataPaths.Add(details);
@@ -128,7 +128,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 					var details = new LocationDetails
 					{
 						OriginalFilePath = appDataFilePath,
-						BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "Roaming", directoryInfo.Name),
+						BackupFilePath = Path.Combine(BackupFolderPath, multiTermVersion.DisplayName, "Roaming", directoryInfo.Name),
 						Version = multiTermVersion.DisplayName
 					};
 					appDataPaths.Add(details);

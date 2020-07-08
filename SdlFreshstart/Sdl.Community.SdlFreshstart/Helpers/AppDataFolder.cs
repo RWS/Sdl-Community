@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Sdl.Community.SdlFreshstart.Model;
 using Sdl.Community.Toolkit.Core;
@@ -9,7 +10,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 {
 	public static class AppDataFolder
 	{
-		private static string _backupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
+		private static readonly string BackupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
 		public static readonly Log Log = Log.Instance;
 
 		public static List<LocationDetails> GetRoamingMajorFolderPath(string userName, StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
@@ -19,13 +20,16 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			{
 				foreach (var studioVersion in studioVersions)
 				{
-					var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL\SDL Trados Studio\{1}", userName,
-						studioVersion.MajorVersionNumber);
+					var majorFolderPath =
+						$@"C:\Users\{userName}\AppData\Roaming\SDL\SDL Trados Studio\{studioVersion.MajorVersionNumber}";
+
 					var directoryInfo = new DirectoryInfo(majorFolderPath);
+					if (!directoryInfo.Exists) continue;
+
 					var details = new LocationDetails
 					{
 						OriginalFilePath = majorFolderPath,
-						BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
+						BackupFilePath = Path.Combine(BackupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
 						Alias = selectedLocation.Alias,
 						Version = studioVersion.DisplayName
 					};
@@ -82,15 +86,20 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			{
 				foreach (var studioVersion in studioVersions)
 				{
-					var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL\SDL Trados Studio\{1}.0.0.0", userName,
-						studioVersion.MajorVersionNumber);
+					var majorVersion = GetNumericVersion(studioVersion);
+					var majorFolderPath = majorVersion > 15
+						? $@"C:\Users\{userName}\AppData\Roaming\SDL\SDL Trados Studio\{studioVersion.FolderName}"
+						: $@"C:\Users\{userName}\AppData\Roaming\SDL\SDL Trados Studio\{studioVersion.MajorVersionNumber}.0.0.0";
+
 					var directoryInfo = new DirectoryInfo(majorFolderPath);
+					if (!directoryInfo.Exists) continue;
+
 					var details = new LocationDetails
 					{
 						OriginalFilePath = majorFolderPath,
-						BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
+						BackupFilePath = Path.Combine(BackupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
 						Alias = selectedLocation?.Alias,
-						Version = studioVersion?.DisplayName
+						Version = studioVersion.DisplayName
 					};
 					studioDetails.Add(details);
 				}
@@ -100,6 +109,13 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 				Log.Logger.Error($"{Constants.GetRoamingMajorFullFolderPath} {ex.Message}\n {ex.StackTrace}");
 			}
 			return studioDetails;
+		}
+
+		private static int GetNumericVersion(StudioVersionListItem studioVersion)
+		{
+			var numericVersion = new string(studioVersion.MajorVersionNumber.TakeWhile(char.IsDigit).ToArray());
+			int.TryParse(numericVersion, out var majorVersion);
+			return majorVersion;
 		}
 
 		public static List<LocationDetails> GetRoamingProjectApiFolderPath(StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
@@ -119,10 +135,12 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 							if (!string.IsNullOrEmpty(projApiFolderPath))
 							{
 								var directoryInfo = new DirectoryInfo(projApiFolderPath);
+								if (!directoryInfo.Exists) continue;
+
 								var details = new LocationDetails
 								{
 									OriginalFilePath = projApiFolderPath,
-									BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "ProjectApi", directoryInfo.Name),
+									BackupFilePath = Path.Combine(BackupFolderPath, studioVersion.DisplayName, "ProjectApi", directoryInfo.Name),
 									Alias = selectedLocation?.Alias,
 									Version = studioVersion?.DisplayName
 								};
@@ -146,13 +164,18 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			{
 				foreach (var studioVersion in studioVersions)
 				{
-					var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Local\SDL\SDL Trados Studio\{1}.0.0.0", userName,
-						studioVersion.MajorVersionNumber);
+					var majorVersion = GetNumericVersion(studioVersion);
+					var majorFolderPath = majorVersion > 15 
+						? $@"C:\Users\{userName}\AppData\Local\SDL\SDL Trados Studio\{studioVersion.FolderName}"
+						: $@"C:\Users\{userName}\AppData\Local\SDL\SDL Trados Studio\{studioVersion.MajorVersionNumber}.0.0.0";
+
 					var directoryInfo = new DirectoryInfo(majorFolderPath);
+					if (!directoryInfo.Exists) continue;
+
 					var details = new LocationDetails
 					{
 						OriginalFilePath = majorFolderPath,
-						BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "SDL Trados Studio", directoryInfo.Name),
+						BackupFilePath = Path.Combine(BackupFolderPath, studioVersion.DisplayName, "SDL Trados Studio", directoryInfo.Name),
 						Alias = selectedLocation?.Alias,
 						Version = studioVersion?.DisplayName
 					};
@@ -173,13 +196,16 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			{
 				foreach (var studioVersion in studioVersions)
 				{
-					var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Local\SDL\SDL Trados Studio\{1}", userName,
-						studioVersion.MajorVersionNumber);
+					var majorFolderPath =
+						$@"C:\Users\{userName}\AppData\Local\SDL\SDL Trados Studio\{studioVersion.MajorVersionNumber}";
+
 					var directoryInfo = new DirectoryInfo(majorFolderPath);
+					if (!directoryInfo.Exists) continue;
+
 					var details = new LocationDetails
 					{
 						OriginalFilePath = majorFolderPath,
-						BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "SDL Trados Studio", directoryInfo.Name),
+						BackupFilePath = Path.Combine(BackupFolderPath, studioVersion.DisplayName, "SDL Trados Studio", directoryInfo.Name),
 						Alias = selectedLocation?.Alias,
 						Version = studioVersion?.DisplayName
 					};

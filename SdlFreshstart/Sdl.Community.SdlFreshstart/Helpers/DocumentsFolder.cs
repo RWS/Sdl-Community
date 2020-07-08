@@ -7,7 +7,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 {
 	public static class DocumentsFolder
     {
-	    private static string _backupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
+	    private static readonly string BackupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
 		public static readonly Log Log = Log.Instance;
 
 		public static List<LocationDetails> GetProjectTemplatesFolderPath(string userName, StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
@@ -17,12 +17,13 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			{
 				foreach (var studioVersion in studioVersions)
 				{
-					var projectTemplatePath = string.Format(@"C:\Users\{0}\Documents\{1}\Project Templates", userName, studioVersion.DisplayName);
+					var projectTemplatePath =
+						$@"C:\Users\{userName}\Documents\{studioVersion.DisplayName}\Project Templates";
 					var directoryInfo = new DirectoryInfo(projectTemplatePath);
 					var details = new LocationDetails
 					{
 						OriginalFilePath = projectTemplatePath,
-						BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
+						BackupFilePath = Path.Combine(BackupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
 						Alias = selectedLocation?.Alias,
 						Version = studioVersion?.DisplayName
 					};
@@ -43,11 +44,12 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			{
 				foreach (var studioVersion in studioVersions)
 				{
-					var projectsXmlPath = string.Format(@"C:\Users\{0}\Documents\{1}\Projects\projects.xml", userName, studioVersion.DisplayName);
+					var projectsXmlPath =
+						$@"C:\Users\{userName}\Documents\{studioVersion.DisplayName}\Projects\projects.xml";
 					var details = new LocationDetails
 					{
 						OriginalFilePath = projectsXmlPath,
-						BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "Projects", "projects.xml"),
+						BackupFilePath = Path.Combine(BackupFolderPath, studioVersion.DisplayName, "Projects", "projects.xml"),
 						Alias = selectedLocation?.Alias,
 						Version = studioVersion?.DisplayName
 					};

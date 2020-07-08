@@ -260,14 +260,14 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			{
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\15.0.0.0",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\Studio16Beta",
 					IsSelected = true,
 					Description = FoldersDescriptionText.AppDataRoamingMajorFull(),
 					Alias = "roamingMajorFull"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\15",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\16Beta",
 					IsSelected = true,
 					Description = FoldersDescriptionText.AppDataLocalMajor(),
 					Alias = "localMajor"
@@ -275,49 +275,49 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\15",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\16Beta",
 					IsSelected = true,
 					Description = FoldersDescriptionText.AppDataRoamingMajor(),
 					Alias = "roamingMajor"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\15.0.0.0",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\Studio16Beta",
 					IsSelected = true,
 					Description = FoldersDescriptionText.AppDataLocalMajorFull(),
 					Alias = "localMajorFull"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\15",
+					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\16Beta",
 					IsSelected = true,
 					Description = FoldersDescriptionText.ProgramData(),
 					Alias = "programDataMajor"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\15.0.0.0",
+					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\16.0.0.0",
 					IsSelected = true,
 					Description = FoldersDescriptionText.ProgramDataFull(),
 					Alias = "programDataMajorFull"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\Studio15",
+					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\Studio16Beta",
 					IsSelected = true,
 					Description = FoldersDescriptionText.ProgramDataVersionNumber(),
 					Alias = "programData"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2019\Projects\projects.xml",
+					DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2021\Projects\projects.xml",
 					IsSelected = false,
 					Description = FoldersDescriptionText.ProjectsXml(),
 					Alias = "projectsXml"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2019\Project Templates",
+					DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2021\Project Templates",
 					IsSelected = false,
 					Description = FoldersDescriptionText.ProjectsTemplates(),
 					Alias = "projectTemplates"
@@ -397,6 +397,15 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 	    {
 		    _studioVersionsCollection = new ObservableCollection<StudioVersionListItem>
 		    {
+			    new StudioVersionListItem
+			    {
+				    DisplayName = "Studio 2021 Beta",
+				    IsSelected = false,
+				    MajorVersionNumber = "16Beta",
+				    MinorVersionNumber = "16Beta",
+				    FolderName ="Studio16Beta",
+				    CacheFolderName = "SDLTradosStudio2021"
+			    },
 				new StudioVersionListItem
 				{
 					DisplayName = "Studio 2019",
@@ -532,7 +541,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 					var msiFile = Path.Combine(moduleDirectoryPath,msiName);
 					if (File.Exists(msiFile))
 					{
-
 						var process = new ProcessStartInfo
 						{
 							FileName = "msiexec",
@@ -548,7 +556,10 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private string GetMsiName(StudioVersionListItem version)
 		{
-			var msiName = string.Format("TranslationStudio{0}.msi", version.MinorVersionNumber);
+			int.TryParse(version.MajorVersionNumber, out var majorVersion);
+			var msiName = majorVersion > 15
+				? "TradosStudio.msi"
+				: $"TranslationStudio{version.MinorVersionNumber}.msi";
 			return msiName;
 		}
 		
