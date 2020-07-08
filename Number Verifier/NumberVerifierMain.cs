@@ -329,8 +329,8 @@ namespace Sdl.Community.NumberVerifier
 								#region CreateExtendedData
 								var messageDataModel = new MessageDataModel
 								{
-									SourceIssues = errorMessage.SourceNumberIssues,
-									TargetIssues = errorMessage.TargetNumberIssues,
+									SourceIssues = errorMessage.SourceNumberIssues.Replace(Environment.NewLine, string.Empty),
+									TargetIssues = errorMessage.TargetNumberIssues.Replace(Environment.NewLine, string.Empty),
 									ReplacementSuggestion = segmentPair.Target,
 									InitialSourceIssues = errorMessage.InitialSourceNumber,
 									InitialTargetIssues = errorMessage.InitialTargetNumber,

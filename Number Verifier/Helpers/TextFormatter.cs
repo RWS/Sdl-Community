@@ -153,6 +153,11 @@ namespace Sdl.Community.NumberVerifier.Helpers
 					if (position > 0 && position == 3)
 					{
 						tempNormalized.Insert(0, "m");
+						//if on the thousand position a number is allocated, then add it back to tempNormalized, at position before the "m"
+						if (int.TryParse(numberText[i].ToString(), out _))
+						{
+							tempNormalized.Insert(0, numberText[i]);
+						}
 					}
 					else
 					{
@@ -162,8 +167,12 @@ namespace Sdl.Community.NumberVerifier.Helpers
 					position++;
 				}
 
-				// insert also the remained first letter back to the number text
-				tempNormalized.Insert(0, numberText[0]);
+				// insert also the remained first letter back to the number text, in case it was not already added (above at line 157)
+				if (tempNormalized.ToString().Length != numberText.Length + 1)
+				{
+					tempNormalized.Insert(0, numberText[0]);
+				}
+
 				return tempNormalized.ToString();
 			}
 
