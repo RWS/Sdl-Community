@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using Sdl.Community.TMOptimizer.Control;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
@@ -17,7 +18,9 @@ namespace Sdl.Community.TMOptimizer.Integration
     {
         protected override void Execute()
         {
-            var main = new MainWindow();
+	        var main = new MainWindow {DataContext = new TMCleanerViewModel()};
+	        Application.Current.MainWindow = main;
+
             main.ShowDialog();
         }
     }
