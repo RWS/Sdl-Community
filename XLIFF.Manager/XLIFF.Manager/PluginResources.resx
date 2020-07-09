@@ -484,4 +484,19 @@
   <data name="XLIFFManager_LanguageMappings_Name" xml:space="preserve">
     <value>Language Mappings</value>
   </data>
+	<data name="StatusLabel_TotalLanguages" xml:space="preserve">
+    <value>Total Languages: {0}</value>
+  </data>
+	<data name="StatusLabel_TotalLanguagesFiltered" xml:space="preserve">
+    <value>Total Languages: {0}, Filtered: {1}</value>
+  </data>
+	<data name="Warning_FilePathNull" xml:space="preserve">
+    <value>File path cannot be null!</value>
+  </data>
+	<data name="Warning_LanguagesEmpty" xml:space="preserve">
+    <value>Languages cannot be empty or null!</value>
+  </data>
+	<data name="Messagel_ResetLanguagesSuccess" xml:space="preserve">
+    <value>Successfully reset language mappings</value>
+  </data>
 </root>
