@@ -162,6 +162,9 @@ namespace Sdl.Community.XLIFF.Manager
 
 						ConvertToRelativePaths(project, wcProjectFile);
 
+						projectFile.XliffFilePath = wcProjectFile.XliffFilePath;
+						projectFile.Location = wcProjectFile.Location;
+						projectFile.Report = wcProjectFile.Report;
 						projectFile.Status = wcProjectFile.Status;
 						projectFile.Action = wcProjectFile.Action;
 						projectFile.Date = wcProjectFile.Date;					
@@ -243,7 +246,7 @@ namespace Sdl.Community.XLIFF.Manager
 						var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault();
 						if (activityfile != null)
 						{
-							activityfile.Report = GetRelativePath(project.Path, htmlReportFilePath);
+							activityfile.Report = projectFile.Report;
 						}
 					}
 				}
@@ -512,8 +515,8 @@ namespace Sdl.Community.XLIFF.Manager
 							Name = projectInfo.Name,
 							AbsoluteUri = projectInfo.Uri.AbsoluteUri,
 							Customer = _customerProvider.GetProjectCustomer(project),
-							Created = projectInfo.CreatedAt,
-							DueDate = projectInfo.DueDate ?? DateTime.MaxValue,
+							Created = projectInfo.CreatedAt.ToUniversalTime(),
+							DueDate = projectInfo.DueDate?.ToUniversalTime() ?? DateTime.MaxValue,
 							Path = projectInfo.LocalProjectFolder,
 							SourceLanguage = GetLanguageInfo(projectInfo.SourceLanguage.CultureInfo),
 							TargetLanguages = GetLanguageInfos(projectInfo.TargetLanguages),
@@ -641,9 +644,9 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			var format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'";
 			var successDate = DateTime.TryParseExact(value, format,
-				CultureInfo.InvariantCulture, DateTimeStyles.None, out var resultDate);
+				CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var resultDate);
 
-			var date = successDate ? resultDate : DateTime.MinValue;
+			var date = successDate ? resultDate.ToUniversalTime() : DateTime.MinValue;
 			return date;
 		}
 

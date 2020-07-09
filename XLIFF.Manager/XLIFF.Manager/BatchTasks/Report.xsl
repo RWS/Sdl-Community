@@ -508,7 +508,7 @@
 							</td>
 							<td class="InfoData">
 								<xsl:value-of select="//taskInfo/customer/@name"/>
-								<xsl:if test="//customer/@email">
+								<xsl:if test="//customer/@email and //customer/@email != ''">
 									&#32;(<xsl:value-of select="//taskInfo/customer/@email"/>)
 								</xsl:if>
 							</td>

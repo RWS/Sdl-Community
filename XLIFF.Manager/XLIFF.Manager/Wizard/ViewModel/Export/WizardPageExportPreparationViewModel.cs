@@ -117,10 +117,10 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		{
 			JobProcesses = new List<JobProcess>
 			{
-				new JobProcess
-				{
-					Name = PluginResources.JobProcess_Preparation
-				},
+				//new JobProcess
+				//{
+				//	Name = PluginResources.JobProcess_Preparation
+				//},
 				new JobProcess
 				{
 					Name = PluginResources.JobProcess_Export

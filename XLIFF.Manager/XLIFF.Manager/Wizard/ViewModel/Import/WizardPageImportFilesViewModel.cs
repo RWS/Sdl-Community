@@ -11,6 +11,8 @@ using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.XLIFF.Manager.Interfaces;
+using Sdl.Community.XLIFF.Manager.LanguageMapping.Interfaces;
+using Sdl.Community.XLIFF.Manager.LanguageMapping.Model;
 using Sdl.Community.XLIFF.Manager.Model;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
@@ -18,6 +20,8 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 	public class WizardPageImportFilesViewModel : WizardPageViewModelBase, IDisposable
 	{
 		private readonly IDialogService _dialogService;
+		private readonly ILanguageProvider _languageProvider;
+		private List<MappedLanguage> _languageMappings;
 		private ICommand _clearSelectedComand;
 		private ICommand _checkSelectedComand;
 		private ICommand _addFolderCommand;
@@ -30,12 +34,15 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private bool _checkingAllAction;
 
 		public WizardPageImportFilesViewModel(Window owner, object view, WizardContext wizardContext,
-			IDialogService dialogService) : base(owner, view, wizardContext)
+			IDialogService dialogService, ILanguageProvider languageProvider) : base(owner, view, wizardContext)
 		{
 			_dialogService = dialogService;
+			_languageProvider = languageProvider;
 			ProjectFiles = wizardContext.ProjectFiles;
 			VerifyProjectFiles();
 			VerifyIsValid();
+
+			_languageMappings = _languageProvider.GetMappedLanguages(false);
 
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
@@ -154,7 +161,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		private void AddFiles()
 		{			
 			var selectedFiles = _dialogService.ShowFileDialog(
-				"Xliff (*.xliff) |*.xliff",
+				"Xliff (*.xliff) |*.xliff;*.xlf",
 				PluginResources.FilesDialog_Title,
 				GetDefaultPath());
 			AddFilesToGrid(selectedFiles);
@@ -178,7 +185,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			return path;
 		}
-
 
 		private void UpdateCheckAll()
 		{
@@ -285,7 +291,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			{
 				foreach (var fullPath in filesOrDirectories)
 				{
-					var fileAttributes = System.IO.File.GetAttributes(fullPath);
+					var fileAttributes = File.GetAttributes(fullPath);
 					if (fileAttributes.HasFlag(FileAttributes.Directory))
 					{
 						var files = GetAllXliffsFromDirectory(fullPath);
@@ -307,20 +313,36 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			foreach (var filePath in filesPath)
 			{
-				if (!string.IsNullOrEmpty(filePath) && !System.IO.File.Exists(filePath))
+				if (!string.IsNullOrEmpty(filePath) && !File.Exists(filePath))
 				{
 					continue;
 				}
 
 				var xliff = xliffReader.ReadXliff(filePath);
-				var xliffTargetLanguage = xliff.Files.FirstOrDefault()?.TargetLanguage;
+				var xliffTargetLanguage = xliff.Files?.FirstOrDefault()?.TargetLanguage;
+				var docInfoSourceFile = xliff.DocInfo?.Source;
+				var docInfoTargetLanguage = xliff.DocInfo?.TargetLanguage;
 
-				if (xliffTargetLanguage == null)
+				if (string.IsNullOrEmpty(xliffTargetLanguage) || string.IsNullOrEmpty(docInfoTargetLanguage))
 				{
 					continue;
 				}
 
-				var xliffTargetPath = GetPathLocation(xliff.DocInfo.Source, xliffTargetLanguage);
+				// Get the mapped language code
+				var mappedLanguage = _languageMappings.FirstOrDefault(a =>
+					string.Compare(a.LanguageCode, xliffTargetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0
+					|| string.Compare(a.MappedCode, xliffTargetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0);
+				if (mappedLanguage == null)
+				{
+					MessageBox.Show(string.Format("Unable to map the target langauge code {0}", xliffTargetLanguage),
+						PluginResources.XLIFFManager_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+					return;
+				}
+
+				// Assign the SDL Studio language code
+				xliffTargetLanguage = mappedLanguage.LanguageCode;
+
+				var xliffTargetPath = GetPathLocation(docInfoSourceFile, docInfoTargetLanguage);
 
 				foreach (var projectFile in ProjectFiles)
 				{
@@ -366,7 +388,11 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 		private IEnumerable<string> GetAllXliffsFromDirectory(string directoryPath)
 		{
-			return Directory.GetFiles(directoryPath, "*.xliff", SearchOption.AllDirectories).ToList();
+			var files = new List<string>();
+			files.AddRange(Directory.GetFiles(directoryPath, "*.xliff", SearchOption.AllDirectories).ToList());
+			files.AddRange(Directory.GetFiles(directoryPath, "*.xlf", SearchOption.AllDirectories).ToList());
+
+			return files;
 		}
 
 		private void SelectFolder()

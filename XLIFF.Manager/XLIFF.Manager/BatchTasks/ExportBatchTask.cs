@@ -126,7 +126,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 
 					if (exported)
 					{
-						targetFile.Date = _exportSettings.DateTimeStamp;						
+						targetFile.Date = new DateTime(_exportSettings.DateTimeStamp.Ticks, DateTimeKind.Utc);						
 						targetFile.Action = Enumerators.Action.Export;
 						targetFile.Status = Enumerators.Status.Success;
 						targetFile.XliffFilePath = xliffFilePath;
@@ -260,7 +260,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 		}
 		private void CreateDefaultContext()
 		{
-			_exportSettings.DateTimeStamp = DateTime.UtcNow;
+			_exportSettings.DateTimeStamp = new DateTime(DateTime.UtcNow.Ticks, DateTimeKind.Utc);
 
 			var projectInfo = Project.GetProjectInfo();
 
@@ -530,8 +530,8 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 				Name = projectInfo.Name,
 				AbsoluteUri = projectInfo.Uri.AbsoluteUri,
 				Customer = _customerProvider.GetProjectCustomer(selectedProject),
-				Created = projectInfo.CreatedAt,
-				DueDate = projectInfo.DueDate ?? DateTime.MaxValue,
+				Created = projectInfo.CreatedAt.ToUniversalTime(),
+				DueDate = projectInfo.DueDate?.ToUniversalTime() ?? DateTime.MaxValue,
 				Path = projectInfo.LocalProjectFolder,
 				SourceLanguage = GetLanguageInfo(projectInfo.SourceLanguage.CultureInfo),
 				TargetLanguages = GetLanguageInfos(projectInfo.TargetLanguages),

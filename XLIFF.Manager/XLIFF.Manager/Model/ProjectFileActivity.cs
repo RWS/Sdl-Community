@@ -67,7 +67,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				Status = Status,
 				ActivityId = ActivityId,
 				Name = Name,
-				Date = new DateTime(Date.Ticks),
+				Date = new DateTime(Date.Ticks, DateTimeKind.Utc),
 				Path = Path,
 				Report = Report,
 				Selected = Selected

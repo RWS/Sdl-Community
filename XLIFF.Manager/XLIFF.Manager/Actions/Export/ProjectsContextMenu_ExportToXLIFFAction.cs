@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
+using Sdl.Community.XLIFF.Manager.LanguageMapping;
+using Sdl.Community.XLIFF.Manager.LanguageMapping.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
@@ -18,7 +20,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 		Name = "XLIFFManager_ContextMenu_ExportToXLIFF_Name",
 		Icon = "Export",
 		Description = "XLIFFManager_ContextMenu_ExportToXLIFF_Description")]
-	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 8, DisplayType.Default, "", true)]
+	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 5, DisplayType.Default, "", true)]
 	public class XLIFFManagerProjectsContextMenuExportToXLIFFAction : AbstractAction
 	{
 		private Controllers _controllers;
@@ -27,11 +29,12 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 		private ImageService _imageService;
 		private SegmentBuilder _segmentBuilder;
 		private IDialogService _dialogService;
+		private ILanguageProvider _languageProvider;
 
 		protected override void Execute()
 		{
 			var wizardService = new WizardService(Enumerators.Action.Export, _pathInfo, _customerProvider,
-				_imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService);
+				_imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService, _languageProvider);
 
 			var wizardContext = wizardService.ShowWizard(_controllers.ProjectsController, out var message);
 			if (wizardContext == null && !string.IsNullOrEmpty(message))
@@ -51,7 +54,8 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
-			_segmentBuilder = new SegmentBuilder();			
+			_segmentBuilder = new SegmentBuilder();
+			_languageProvider = new LanguageProvider(_pathInfo);
 
 			SetEnabled();
 		}

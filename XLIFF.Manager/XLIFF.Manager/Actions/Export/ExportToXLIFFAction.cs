@@ -5,6 +5,8 @@ using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.CustomEventArgs;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.Interfaces;
+using Sdl.Community.XLIFF.Manager.LanguageMapping;
+using Sdl.Community.XLIFF.Manager.LanguageMapping.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
@@ -16,7 +18,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 		Name = "XLIFFManager_ExportToXLIFF_Name",
 		Icon = "Export",
 		Description = "XLIFFManager_ExportToXLIFF_Description")]
-	[ActionLayout(typeof(XLIFFManagerActionsGroup), 6, DisplayType.Large)]
+	[ActionLayout(typeof(XLIFFManagerActionsGroup), 5, DisplayType.Large)]
 	public class ExportToXLIFFAction : AbstractViewControllerAction<XLIFFManagerViewController>
 	{
 		private Controllers _controllers;
@@ -25,11 +27,12 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 		private ImageService _imageService;
 		private IDialogService _dialogService;
 		private SegmentBuilder _segmentBuilder;
+		private ILanguageProvider _languageProvider;
 		
 		protected override void Execute()
 		{
 			var wizardService = new WizardService(Enumerators.Action.Export, _pathInfo, _customerProvider,
-				 _imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService);
+				 _imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService, _languageProvider);
 
 			var wizardContext = wizardService.ShowWizard(Controller, out var message);
 			if (wizardContext == null && !string.IsNullOrEmpty(message))
@@ -55,7 +58,8 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
-		
+			_languageProvider = new LanguageProvider(_pathInfo);
+
 			Enabled = true;
 		}
 

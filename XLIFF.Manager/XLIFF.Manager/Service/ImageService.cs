@@ -10,7 +10,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		public BitmapImage GetImage(string name)
 		{
 			try
-			{
+			{				
 				var bitmap = new Language(name).GetFlagImage();
 				return Convert(bitmap);
 			}

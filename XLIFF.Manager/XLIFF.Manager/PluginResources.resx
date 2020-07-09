@@ -472,4 +472,16 @@
   <data name="XLIFFManager_BatchTasks_Import_Name" xml:space="preserve">
     <value>Import from XLIFF</value>
   </data>
+  <data name="DefaultLanguageMappings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\defaultlanguagemappings.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="LanguageMappings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\languagemapping.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="XLIFFManager_LanguageMappings_Description" xml:space="preserve">
+    <value>Language Mappings</value>
+  </data>
+  <data name="XLIFFManager_LanguageMappings_Name" xml:space="preserve">
+    <value>Language Mappings</value>
+  </data>
 </root>
