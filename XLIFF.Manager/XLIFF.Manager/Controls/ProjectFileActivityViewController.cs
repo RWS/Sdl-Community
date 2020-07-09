@@ -2,6 +2,7 @@
 using Sdl.Community.XLIFF.Manager.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.XLIFF.Manager.Controls
 {
@@ -22,7 +23,7 @@ namespace Sdl.Community.XLIFF.Manager.Controls
 			_control = new ProjectFileActivityViewControl(ViewModel);
 		}
 
-		protected override Control GetContentControl()
+		protected override IUIControl GetContentControl()
 		{
 			return _control;
 		}

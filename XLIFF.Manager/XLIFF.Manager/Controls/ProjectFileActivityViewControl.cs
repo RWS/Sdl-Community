@@ -1,10 +1,11 @@
 ﻿using System.Windows.Forms;
 using Sdl.Community.XLIFF.Manager.View;
 using Sdl.Community.XLIFF.Manager.ViewModel;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.XLIFF.Manager.Controls
 {
-	public partial class ProjectFileActivityViewControl : UserControl
+	public partial class ProjectFileActivityViewControl : UserControl, IUIControl
 	{
 		public ProjectFileActivityViewControl(ProjectFileActivityViewModel viewModel)
 		{

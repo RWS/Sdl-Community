@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,10 +8,9 @@ using System.Windows.Data;
 
 namespace Sdl.Community.XLIFF.Manager.Controls
 {
-	public class SortAwareDataGrid : SelectedItemsAwareDataGrid, IDisposable
+	public class SortAwareDataGrid : SelectedItemsAwareDataGrid
 	{
 		public const string EmptyColumnName = "[none]";
-		public const string SelectedItemsListName = "SelectedItemsList";
 
 		public SortAwareDataGrid()
 		{
@@ -21,9 +19,16 @@ namespace Sdl.Community.XLIFF.Manager.Controls
 			Loaded += SortAwareDataGrid_Loaded;
 		}
 
-		public string DefaultColumnName { get; set; }
+		private void SortAwareDataGrid_Loaded(object sender, RoutedEventArgs e)
+		{
+			Loaded -= SortAwareDataGrid_Loaded;
+			//SelectedItem = Items.Count > 0 ? Items[0] : null;
+		}
 
-		public ListSortDirection DefaultSortDirection { get; set; }
+		private void SortAwareDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			SelectedItemsList = SelectedItems;
+		}
 
 		public IList SelectedItemsList
 		{
@@ -32,8 +37,13 @@ namespace Sdl.Community.XLIFF.Manager.Controls
 		}
 
 		public static readonly DependencyProperty SelectedItemsListProperty =
-			DependencyProperty.Register(SelectedItemsListName, typeof(IList), typeof(SortAwareDataGrid), new PropertyMetadata(null));
+			DependencyProperty.Register("SelectedItemsList", typeof(IList), typeof(SortAwareDataGrid), new PropertyMetadata(null));
 
+		public string DefaultColumnName { get; set; }
+
+		public ListSortDirection DefaultSortDirection { get; set; }
+
+	
 		private List<SortDescription> _sortDescriptions;
 
 		protected override void OnSorting(DataGridSortingEventArgs eventArgs)
@@ -41,12 +51,6 @@ namespace Sdl.Community.XLIFF.Manager.Controls
 			base.OnSorting(eventArgs);
 
 			UpdateSorting();
-		}
-
-		private void SortAwareDataGrid_Loaded(object sender, RoutedEventArgs e)
-		{
-			Loaded -= SortAwareDataGrid_Loaded;
-			SelectedItem = Items.Count > 0 ? Items[0] : null;
 		}
 
 		protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
@@ -118,17 +122,6 @@ namespace Sdl.Community.XLIFF.Manager.Controls
 			{
 				new SortDescription(DefaultColumnName, DefaultSortDirection)
 			};
-		}
-
-		private void SortAwareDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			SelectedItemsList = SelectedItems;
-		}
-
-		public void Dispose()
-		{
-			SelectionChanged -= SortAwareDataGrid_SelectionChanged;
-			Loaded -= SortAwareDataGrid_Loaded;
 		}
 	}
 }
