@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.SdlFreshstart.Helpers;
@@ -38,10 +40,15 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private readonly Persistence _persistenceSettings;
 		private readonly IDialogCoordinator _dialogCoordinator;
+		private readonly VersionService _versionService;
+		private readonly IMessageService _messageService;
+		private List<StudioVersion> _installedVersions;
 
-		public StudioViewModel(MainWindow mainWindow, IDialogCoordinator dialogCoordinator)
+		public StudioViewModel(MainWindow mainWindow, IDialogCoordinator dialogCoordinator, VersionService versionService, IMessageService messageService)
 		{
 			_dialogCoordinator = dialogCoordinator;
+			_versionService = versionService;
+			_messageService = messageService;
 			_mainWindow = mainWindow;
 			_persistenceSettings = new Persistence();
 		    _folderDescription = string.Empty;
@@ -55,10 +62,20 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			_repairForeground = "Gray";
 			_restoreBtnColor = "LightGray";
 			_restoreForeground = "Gray";
+
+			GetInstalledVersions();
 			FillStudioVersionList();
 		    FillFoldersLocationList();
 		}
-		
+
+		private void GetInstalledVersions()
+		{
+			_installedVersions = _versionService.GetInstalledStudioVersions();
+			_installedVersions.Sort((item1, item2) =>
+				item1.ExecutableVersion < item2.ExecutableVersion ? -1 :
+				item1.ExecutableVersion > item2.ExecutableVersion ? 1 : 0);
+		}
+
 		public StudioLocationListItem SelectedLocation
 		{
 			get => _selectedLocation;
@@ -256,77 +273,81 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void FillFoldersLocationList()
 		{
+			
+
+			var latestVersion = _installedVersions.Last();
+
 			_foldersLocations = new ObservableCollection<StudioLocationListItem>
 			{
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\Studio16Beta",
+					DisplayName = latestVersion.AppDataRoamingPaths[0],
 					IsSelected = true,
-					Description = FoldersDescriptionText.AppDataRoamingMajorFull(),
+					Description = FoldersDescriptionText.AppDataRoamingMajorFull,
 					Alias = "roamingMajorFull"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\16Beta",
+					DisplayName = latestVersion.AppDataLocalPaths[1],
 					IsSelected = true,
-					Description = FoldersDescriptionText.AppDataLocalMajor(),
+					Description = FoldersDescriptionText.AppDataLocalMajor,
 					Alias = "localMajor"
 				},
 
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\16Beta",
+					DisplayName = latestVersion.AppDataRoamingPaths[1],
 					IsSelected = true,
-					Description = FoldersDescriptionText.AppDataRoamingMajor(),
+					Description = FoldersDescriptionText.AppDataRoamingMajor,
 					Alias = "roamingMajor"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\Studio16Beta",
+					DisplayName = latestVersion.AppDataLocalPaths[0],
 					IsSelected = true,
-					Description = FoldersDescriptionText.AppDataLocalMajorFull(),
+					Description = FoldersDescriptionText.AppDataLocalMajorFull,
 					Alias = "localMajorFull"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\16Beta",
+					DisplayName = latestVersion.ProgramDataPaths[0],
 					IsSelected = true,
-					Description = FoldersDescriptionText.ProgramData(),
+					Description = FoldersDescriptionText.ProgramData,
 					Alias = "programDataMajor"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\16.0.0.0",
+					DisplayName = latestVersion.ProgramDataPaths[1],
 					IsSelected = true,
-					Description = FoldersDescriptionText.ProgramDataFull(),
+					Description = FoldersDescriptionText.ProgramDataFull,
 					Alias = "programDataMajorFull"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\Studio16Beta",
+					DisplayName = $@"{latestVersion.ProgramDataPaths[1]}\Data",
 					IsSelected = true,
-					Description = FoldersDescriptionText.ProgramDataVersionNumber(),
+					Description = FoldersDescriptionText.ProgramDataVersionNumber,
 					Alias = "programData"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2021\Projects\projects.xml",
+					DisplayName = $@"{latestVersion.DocumentsPath}\Projects\projects.xml",
 					IsSelected = false,
-					Description = FoldersDescriptionText.ProjectsXml(),
+					Description = FoldersDescriptionText.ProjectsXml,
 					Alias = "projectsXml"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2021\Project Templates",
+					DisplayName = $@"{latestVersion.DocumentsPath}\Project Templates",
 					IsSelected = false,
-					Description = FoldersDescriptionText.ProjectsTemplates(),
+					Description = FoldersDescriptionText.ProjectsTemplates,
 					Alias = "projectTemplates"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = $@"C:\Users[USERNAME]\AppData\Roaming\SDL\ProjectApi\",
+					DisplayName = @"C:\Users[USERNAME]\AppData\Roaming\SDL\ProjectApi\",
 					IsSelected = false,
-					Description = FoldersDescriptionText.ProjectApi(),
+					Description = FoldersDescriptionText.ProjectApi,
 					Alias = "roamingProjectApi"
 				}
 			};
@@ -397,6 +418,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 	    {
 		    _studioVersionsCollection = new ObservableCollection<StudioVersionListItem>
 		    {
+
 			    new StudioVersionListItem
 			    {
 				    DisplayName = "Studio 2021 Beta",
@@ -456,14 +478,10 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private async void RestoreFolders()
 		{
-			var dialog = new MetroDialogSettings
-			{
-				AffirmativeButtonText = "OK"
-
-			};
 			var result =
-				await _mainWindow.ShowMessageAsync(Constants.Confirmation, Constants.RestoreRemovedFoldersMessage, MessageDialogStyle.AffirmativeAndNegative, dialog);
-			if (result == MessageDialogResult.Affirmative)
+				_messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RestoreRemovedFoldersMessage);
+
+			if (result == MessageBoxResult.Yes)
 			{
 				if (!IsStudioRunning())
 				{
@@ -480,7 +498,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				}
 				else
 				{
-					await _mainWindow.ShowMessageAsync(Constants.StudioRunMessage,	Constants.CloseStudioRestoreMessage, MessageDialogStyle.Affirmative, dialog);
+					_messageService.ShowWarningMessage(Constants.StudioRunMessage,	Constants.CloseStudioRestoreMessage);
 				}
 			}
 		}
@@ -502,7 +520,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			return allFolders;
 		}
 
-		private async void RepairStudio()
+		private void RepairStudio()
 		{
 			if (!IsStudioRunning())
 			{
@@ -517,12 +535,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 			else
 			{
-				var dialog = new MetroDialogSettings
-				{
-					AffirmativeButtonText = "OK"
-
-				};
-				await _mainWindow.ShowMessageAsync(Constants.StudioRunMessage,Constants.CloseStudioRepairMessage, MessageDialogStyle.Affirmative, dialog);
+				_messageService.ShowWarningMessage(Constants.StudioRunMessage,Constants.CloseStudioRepairMessage);
 			}
 		
 		}
@@ -573,20 +586,15 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private async void RemoveFiles()
 		{
-			var dialog = new MetroDialogSettings
-			{
-				AffirmativeButtonText = "OK"
+			var result = _messageService.ShowConfirmationMessage(Constants.RemoveMessage, Constants.Confirmation);
 
-			};
-			var result =
-				await _mainWindow.ShowMessageAsync(Constants.Confirmation, Constants.RemoveMessage, MessageDialogStyle.AffirmativeAndNegative,dialog);
-			if (result == MessageDialogResult.Affirmative)
+			if (result == MessageBoxResult.Yes)
 			{
 				if (!IsStudioRunning())
 				{
+					var controller = await ShowProgress();
+
 					var foldersToClearOrRestore = new List<LocationDetails>();
-					var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RemoveFilesMessage);
-					controller.SetIndeterminate();
 
 					var selectedStudioVersions = StudioVersionsCollection.Where(s => s.IsSelected).ToList();
 					var selectedStudioLocations = FoldersLocationsCollection.Where(f => f.IsSelected).ToList();
@@ -605,9 +613,9 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 					{
 						await Remove.FromSelectedLocations(foldersToClearOrRestore);
 					}
-					catch(Exception e)
+					catch
 					{
-						await _dialogCoordinator.ShowMessageAsync(this, Constants.Warning, Constants.FilesNotDeletedMessage);
+						_messageService.ShowWarningMessage(Constants.Warning, Constants.FilesNotDeletedMessage);
 					}
 
 					UnselectGrids();
@@ -616,12 +624,19 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				}
 				else
 				{
-					await _mainWindow.ShowMessageAsync(Constants.StudioRunMessage, Constants.CloseStudioRemoveMessage, MessageDialogStyle.Affirmative, dialog);
+					_messageService.ShowWarningMessage(Constants.StudioRunMessage, Constants.CloseStudioRemoveMessage);
 				}
 
 			}
 		}
-		
+
+		private async Task<ProgressDialogController> ShowProgress()
+		{
+			var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RemoveFilesMessage);
+			controller.SetIndeterminate();
+			return controller;
+		}
+
 		private void UnselectGrids()
 		{
 			var selectedVersions = StudioVersionsCollection.Where(v => v.IsSelected).ToList();

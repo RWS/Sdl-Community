@@ -34,14 +34,14 @@
 		public static readonly string RemoveDirectoryInfo = "RemoveDirectoryInfo method: ";
 
 		// Messages
-		public static readonly string Confirmation = "Please confirm";
-		public static readonly string RestoreMessage = "Are you sure you want to restore this folders?";
+		public static readonly string Confirmation = "Confirmation";
+		public static readonly string RestoreMessage = "Are you sure you want to restore these folders?";
 		public static readonly string Wait = "Please wait...";
 		public static readonly string RestoringMessage = "We are restoring selected folders";
 		public static readonly string MultitermRun = "MultiTerm is running";
 		public static readonly string MultitermCloseMessage = "Please close MultiTerm in order to restore selected folders.";
 		public static readonly string MultitermRepairMessage = "Please close MultiTerm to repair it.";
-		public static readonly string RemoveMessage = "Are you sure you want to remove this files?";
+		public static readonly string RemoveMessage = "Are you sure you want to remove these files?";
 		public static readonly string RemoveFilesMessage = "We are removing selected files";
 		public static readonly string RemoveFoldersMessage = "Please close MultiTerm in order to remove selected folders.";
 		public static readonly string RestoreRemovedFoldersMessage = "Are you sure you want to restore removed folders?";

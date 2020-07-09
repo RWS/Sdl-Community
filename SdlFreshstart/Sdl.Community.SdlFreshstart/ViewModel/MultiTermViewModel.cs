@@ -154,13 +154,13 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				{
 					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL MultiTerm\MultiTerm15",
 					IsSelected = false,
-					Description = FoldersDescriptionText.MultiTermLocal(),
+					Description = FoldersDescriptionText.MultiTermLocal,
 					Alias = "appDataLocal"
 				},new MultiTermLocationListItem
 				{
 					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm15",
 					IsSelected = false,
-					Description =FoldersDescriptionText.MultiTermRoaming(),
+					Description =FoldersDescriptionText.MultiTermRoaming,
 					Alias = "appDataRoming"
 				}
 			};

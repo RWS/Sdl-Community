@@ -2,6 +2,7 @@
 {
 	public interface IStudioVersion
 	{
+		string PublicVersion { get; set; }
 		string[] AppDataLocalPaths { get; set; }
 		string[] AppDataRoamingPaths { get; set; }
 		string DocumentsPath { get; set; }

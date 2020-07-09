@@ -111,8 +111,10 @@
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\DocumentsFolder.cs" />
     <Compile Include="Helpers\FoldersDescriptionText.cs" />
+    <Compile Include="Helpers\IMessageService.cs" />
     <Compile Include="Helpers\IStudioVersion.cs" />
     <Compile Include="Helpers\Log.cs" />
+    <Compile Include="Helpers\MessageService.cs" />
     <Compile Include="Helpers\MultiTermFolders.cs" />
     <Compile Include="Helpers\Persistence.cs" />
     <Compile Include="Helpers\ProgramData.cs" />

@@ -10,9 +10,10 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 	{
 		public MainWindowViewModel(MainWindow mainWindow, IDialogCoordinator dialogCoordinator)
 		{
-			StudioViewModel = new StudioViewModel(mainWindow, dialogCoordinator);
+			var versionService = new VersionService();
+			StudioViewModel = new StudioViewModel(mainWindow, dialogCoordinator, versionService, new MessageService());
 			MultiTermViewModel = new MultiTermViewModel(mainWindow);
-			ReadMeViewModel = new ReadMeViewModel(new VersionService());
+			ReadMeViewModel = new ReadMeViewModel(versionService);
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
