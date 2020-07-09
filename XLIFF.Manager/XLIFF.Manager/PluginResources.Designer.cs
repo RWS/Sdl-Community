@@ -702,6 +702,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Successfully reset language mappings.
+        /// </summary>
+        internal static string Messagel_ResetLanguagesSuccess {
+            get {
+                return ResourceManager.GetString("Messagel_ResetLanguagesSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Files.
         /// </summary>
         internal static string PageName_Files {
@@ -812,6 +821,24 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total Languages: {0}.
+        /// </summary>
+        internal static string StatusLabel_TotalLanguages {
+            get {
+                return ResourceManager.GetString("StatusLabel_TotalLanguages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Languages: {0}, Filtered: {1}.
+        /// </summary>
+        internal static string StatusLabel_TotalLanguagesFiltered {
+            get {
+                return ResourceManager.GetString("StatusLabel_TotalLanguagesFiltered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon TellMe {
@@ -837,6 +864,24 @@ namespace Sdl.Community.XLIFF.Manager {
             get {
                 object obj = ResourceManager.GetObject("Warning", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File path cannot be null!.
+        /// </summary>
+        internal static string Warning_FilePathNull {
+            get {
+                return ResourceManager.GetString("Warning_FilePathNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Languages cannot be empty or null!.
+        /// </summary>
+        internal static string Warning_LanguagesEmpty {
+            get {
+                return ResourceManager.GetString("Warning_LanguagesEmpty", resourceCulture);
             }
         }
         

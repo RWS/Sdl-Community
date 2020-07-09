@@ -15,16 +15,13 @@ namespace Sdl.Community.XLIFF.Manager.LanguageMapping.ViewModel
 {
 	public class LanguageMappingViewModel : BaseModel
 	{
-
 		private readonly ILanguageProvider _languageProvider;
-
+		private readonly List<Language> _languages;
 		private ICommand _saveCommand;
 		private ICommand _resetCommand;
 		private ICommand _clearFilterCommand;
-
 		private MappedLanguage _selectedMappedLanguage;
-		private List<MappedLanguage> _mappedLanguages;
-		private readonly List<Language> _languages;
+		private List<MappedLanguage> _mappedLanguages;		
 		private string _message;
 		private string _query;
 		private string _itemsCountLabel;
@@ -54,7 +51,7 @@ namespace Sdl.Community.XLIFF.Manager.LanguageMapping.ViewModel
 				_mappedLanguages = value;
 
 				OnPropertyChanged(nameof(MappedLanguages));
-				ItemsCountLabel = string.Format("Total Languages: {0}", _mappedLanguages.Count);
+				ItemsCountLabel = string.Format(PluginResources.StatusLabel_TotalLanguages, _mappedLanguages.Count);
 			}
 		}
 
@@ -138,8 +135,8 @@ namespace Sdl.Community.XLIFF.Manager.LanguageMapping.ViewModel
 			var filteredCount = filtered.Count;
 			var totalCount = MappedLanguages.Count;
 			ItemsCountLabel = filteredCount < totalCount
-				? string.Format("Total Languages: {0}, Filtered: {1}", totalCount, filteredCount)
-				: string.Format("Total Languages: {0}", totalCount);
+				? string.Format(PluginResources.StatusLabel_TotalLanguagesFiltered, totalCount, filteredCount)
+				: string.Format(PluginResources.StatusLabel_TotalLanguages, totalCount);
 		}
 
 		private IEnumerable<MappedLanguage> GetAllMappedLanguages(bool reset)
@@ -172,13 +169,12 @@ namespace Sdl.Community.XLIFF.Manager.LanguageMapping.ViewModel
 
 			return mappedLanguages;
 		}
-
 		
 		private void Reset(object obj)
 		{
 			MappedLanguages = new List<MappedLanguage>(GetAllMappedLanguages(true));
 
-			MessageBox.Show("Successfully reset language mappings",
+			MessageBox.Show(PluginResources.Messagel_ResetLanguagesSuccess,
 				Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
 		}
 

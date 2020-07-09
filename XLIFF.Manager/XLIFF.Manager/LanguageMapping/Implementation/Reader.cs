@@ -33,7 +33,7 @@ namespace Sdl.Community.XLIFF.Manager.LanguageMapping.Implementation
 		{
 			if (string.IsNullOrEmpty(path))
 			{
-				throw new Exception("File path cannot be null!");
+				throw new Exception(PluginResources.Warning_FilePathNull);
 			}
 
 			if (!File.Exists(path))

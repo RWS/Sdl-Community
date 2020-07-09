@@ -13,12 +13,12 @@ namespace Sdl.Community.XLIFF.Manager.LanguageMapping.Implementation
 		{
 			if (string.IsNullOrEmpty(path))
 			{
-				throw new Exception("File path cannot be null!");
+				throw new Exception(PluginResources.Warning_FilePathNull);
 			}
 
 			if (mappedLanguages == null || mappedLanguages.Count == 0)
 			{
-				throw new NullReferenceException("Languages cannot be empty or null!");
+				throw new NullReferenceException(PluginResources.Warning_LanguagesEmpty);
 			}			
 
 			File.Delete(path);
