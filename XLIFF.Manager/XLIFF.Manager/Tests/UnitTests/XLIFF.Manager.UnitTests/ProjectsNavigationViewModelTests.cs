@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Community.XLIFF.Manager.ViewModel;
@@ -15,7 +14,7 @@ namespace XLIFF.Manager.UnitTests
 		public ProjectsNavigationViewModelTests()
 		{
 			var pathInfo = new PathInfo();
-			var imageService = new ImageService(pathInfo);
+			var imageService = new ImageService();
 
 			_testDataUtil = new TestDataUtil(imageService);
 		}
@@ -27,10 +26,10 @@ namespace XLIFF.Manager.UnitTests
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
 
 			// act
-			var model = new ProjectsNavigationViewModel(defaultTestProjectData);
+			var model = new ProjectsNavigationViewModel(defaultTestProjectData, null);
 
 			// assert
-			Assert.Equal(defaultTestProjectData.Count, model.FilteredProjectModels.Count);
+			Assert.Equal(defaultTestProjectData.Count, model.FilteredProjects.Count);
 		}
 
 		[Fact]
@@ -40,11 +39,11 @@ namespace XLIFF.Manager.UnitTests
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
 
 			// act
-			var model = new ProjectsNavigationViewModel(defaultTestProjectData);
+			var model = new ProjectsNavigationViewModel(defaultTestProjectData, null);
 
 			// assert
 			// the first item in the collection is selected by default
-			Assert.Same(defaultTestProjectData[0], model.SelectedProjectModel);
+			Assert.Same(defaultTestProjectData[0], model.SelectedProject);
 		}
 
 		[Fact]
@@ -54,13 +53,13 @@ namespace XLIFF.Manager.UnitTests
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
 
 			// act
-			var model = new ProjectsNavigationViewModel(defaultTestProjectData);
+			var model = new ProjectsNavigationViewModel(defaultTestProjectData, null);
 			model.FilterString = defaultTestProjectData[1].Name;
 
 			// assert			
-			Assert.Contains(defaultTestProjectData[1], model.FilteredProjectModels);
+			Assert.Contains(defaultTestProjectData[1], model.FilteredProjects);
 			Assert.Equal(defaultTestProjectData.Where(
-				a => a.Name.Contains(defaultTestProjectData[1].Name)).ToList().Count, model.FilteredProjectModels.Count);
+				a => a.Name.Contains(defaultTestProjectData[1].Name)).ToList().Count, model.FilteredProjects.Count);
 		}
 
 
@@ -71,13 +70,13 @@ namespace XLIFF.Manager.UnitTests
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
 
 			// act
-			var model = new ProjectsNavigationViewModel(defaultTestProjectData);
+			var model = new ProjectsNavigationViewModel(defaultTestProjectData, null);
 			model.FilterString = defaultTestProjectData[1].Name.Substring(defaultTestProjectData[1].Name.Length - 2);
 
 			// assert			
-			Assert.Contains(defaultTestProjectData[1], model.FilteredProjectModels);
+			Assert.Contains(defaultTestProjectData[1], model.FilteredProjects);
 			Assert.Equal(defaultTestProjectData.Where(
-				a => a.Name.Contains(defaultTestProjectData[1].Name)).ToList().Count, model.FilteredProjectModels.Count);
+				a => a.Name.Contains(defaultTestProjectData[1].Name)).ToList().Count, model.FilteredProjects.Count);
 		}
 
 		[Fact]
@@ -87,13 +86,13 @@ namespace XLIFF.Manager.UnitTests
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
 
 			// act
-			var model = new ProjectsNavigationViewModel(defaultTestProjectData);
+			var model = new ProjectsNavigationViewModel(defaultTestProjectData, null);
 			model.FilterString = defaultTestProjectData[1].Name.ToUpper();
 
 			// assert			
-			Assert.Contains(defaultTestProjectData[1], model.FilteredProjectModels);
+			Assert.Contains(defaultTestProjectData[1], model.FilteredProjects);
 			Assert.Equal(defaultTestProjectData.Where(
-				a => a.Name.Contains(defaultTestProjectData[1].Name)).ToList().Count, model.FilteredProjectModels.Count);
+				a => a.Name.Contains(defaultTestProjectData[1].Name)).ToList().Count, model.FilteredProjects.Count);
 		}
 
 
@@ -104,12 +103,12 @@ namespace XLIFF.Manager.UnitTests
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
 
 			// act
-			var model = new ProjectsNavigationViewModel(defaultTestProjectData);
+			var model = new ProjectsNavigationViewModel(defaultTestProjectData, null);
 			model.FilterString = defaultTestProjectData[1].Name;
 			model.FilterString = string.Empty;
 
 			// assert	
-			Assert.Equal(defaultTestProjectData.Count, model.FilteredProjectModels.Count);
+			Assert.Equal(defaultTestProjectData.Count, model.FilteredProjects.Count);
 		}
 	}
 }

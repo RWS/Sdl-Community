@@ -1,0 +1,108 @@
+﻿<xliff version="1.2" xmlns:sdl="http://schemas.sdl.com/xliff" sdl:support="xliff12sdl" sdl:version="1.2.1">
+  <sdl:doc-info project-id="b749b4a8-7337-4523-a85c-f82db881c203" source="C:\Code\GoogleProject\SDL\Projects\QuotesSample\it-IT\QuotesSample.docx.sdlxliff" source-language="en-US" target-language="it-IT" created="2020-06-05T10:35:32.985Z">
+    <sdl:cmt-defs>
+      <sdl:cmt-def id="b31b9d7c-7c42-41e0-90a3-a012d5049c23">
+        <sdl:comments>
+          <sdl:comment user="phartnett" date="2020-02-25T08:34:00.513Z" version="1.0" severity="Low">Sample Range Level comment</sdl:comment>
+        </sdl:comments>
+      </sdl:cmt-def>
+      <sdl:cmt-def id="171522ee-e8e1-4b14-825d-36d2cc18b39c">
+        <sdl:comments>
+          <sdl:comment user="phartnett" date="2020-02-25T08:34:37.413Z" version="1.0" severity="Medium">Sample Segment Level comment</sdl:comment>
+        </sdl:comments>
+      </sdl:cmt-def>
+    </sdl:cmt-defs>
+  </sdl:doc-info>
+  <file original="C:\Code\GoogleProject\SDL\Projects\QuotesSample\en-US\QuotesSample.docx" source-language="en-US" target-language="it-IT" datatype="WordprocessingML v. 2">
+    <header />
+    <body>
+      <trans-unit id="5dfc3a76-8843-414b-83e6-04f8d8599492">
+        <source>If you build it, he will come. You're gonna need a bigger boat.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="1">If you build it, he will come.</mrk>
+          <mrk mtype="seg" mid="2">You're gonna need a bigger boat.</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="1">Se si crea un <mrk mtype="x-sdl-comment" cid="b31b9d7c-7c42-41e0-90a3-a012d5049c23">prodotto </mrk>che verrà.</mrk>
+          <mrk mtype="seg" mid="2">
+            <mrk mtype="x-sdl-comment" cid="171522ee-e8e1-4b14-825d-36d2cc18b39c">Avrai bisogno di una barca più grande.</mrk>
+          </mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="1" conf="Draft" origin="mt" origin-system="SDL Machine Translation" />
+          <sdl:seg id="2" conf="Translated" origin="mt" origin-system="SDL Machine Translation" />
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="561b877a-c3ad-4828-9fc2-647bc0e98452">
+        <source>I'm <ph id="29">&lt;fn id="1"/&gt;</ph>walking here! I'm <bpt id="41">&lt;cf underline=single&gt;</bpt>walking<ept id="41">&lt;/cf&gt;</ept> here!</source>
+        <seg-source>
+          <mrk mtype="seg" mid="3">I'm <ph id="29">&lt;fn id="1"/&gt;</ph>walking here!</mrk>
+          <mrk mtype="seg" mid="4">I'm <bpt id="41">&lt;cf underline=single&gt;</bpt>walking<ept id="41">&lt;/cf&gt;</ept> here!</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="3">Sto <ph id="29">&lt;fn id="1"/&gt;</ph>camminando qui!</mrk>
+          <mrk mtype="seg" mid="4">Sto <bpt id="41">&lt;cf underline=single&gt;</bpt>camminando<ept id="41">&lt;/cf&gt;</ept> qui!</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="3" conf="Translated" origin="mt" origin-system="SDL Machine Translation" />
+          <sdl:seg id="4" conf="Draft" origin="mt" origin-system="SDL Machine Translation" />
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="ce305f86-ba91-4918-b59d-c413242aacf0">
+        <source>
+          <ph id="24">&lt;fn id="1"/&gt;</ph> Midnight Cowboy.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="5">
+            <mrk mtype="protected">
+              <ph id="24">&lt;fn id="1"/&gt;</ph> Midnight Cowboy.</mrk>
+          </mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="5">
+            <ph id="24">&lt;fn id="1"/&gt;</ph> Midnight Cowboy.</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="5" conf="ApprovedSignOff" locked="True" origin="source">
+            <sdl:prev-origin origin="source" />
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="66c3db13-dce2-46fc-ba0a-99a2b87ec702">
+        <source>Note: <ph id="51">&lt;fn id="2"/&gt;</ph> <bpt id="54">&lt;cf bold=True&gt;</bpt>Toto<ept id="54">&lt;/cf&gt;</ept>, I've a feeling we're not in Kansas anymore.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="6">Note: <ph id="51">&lt;fn id="2"/&gt;</ph></mrk>
+          <mrk mtype="seg" mid="7">
+            <bpt id="54">&lt;cf bold=True&gt;</bpt>Toto<ept id="54">&lt;/cf&gt;</ept>, I've a feeling we're not in Kansas anymore.</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="6">Nota: <ph id="51">&lt;fn id="2"/&gt;</ph></mrk>
+          <mrk mtype="seg" mid="7">
+            <bpt id="54">&lt;cf bold=True&gt;</bpt>Toto<ept id="54">&lt;/cf&gt;</ept>, ho la sensazione che non siamo in Kansas più.</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="6" conf="ApprovedTranslation" origin="mt" origin-system="SDL Machine Translation" />
+          <sdl:seg id="7" conf="Unspecified" origin="mt" origin-system="SDL Machine Translation" />
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="2acacb9e-6948-4d3e-b227-3609c00ace61">
+        <source>
+          <ph id="28">&lt;fn id="2"/&gt;</ph> Wizard of Oz</source>
+        <seg-source>
+          <mrk mtype="seg" mid="8">
+            <mrk mtype="protected">
+              <ph id="28">&lt;fn id="2"/&gt;</ph> Wizard of Oz</mrk>
+          </mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="8">
+            <ph id="28">&lt;fn id="2"/&gt;</ph> Wizard of Oz</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="8" conf="ApprovedSignOff" locked="True" origin="source">
+            <sdl:prev-origin origin="source" />
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
