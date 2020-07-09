@@ -71,6 +71,16 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] DefaultLanguageMappings {
+            get {
+                object obj = ResourceManager.GetObject("DefaultLanguageMappings", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap document_add {
@@ -552,6 +562,16 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string Label_XliffSupport {
             get {
                 return ResourceManager.GetString("Label_XliffSupport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon LanguageMappings {
+            get {
+                object obj = ResourceManager.GetObject("LanguageMappings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -1070,6 +1090,24 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string XLIFFManager_ImportFromXLIFF_Name {
             get {
                 return ResourceManager.GetString("XLIFFManager_ImportFromXLIFF_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Mappings.
+        /// </summary>
+        internal static string XLIFFManager_LanguageMappings_Description {
+            get {
+                return ResourceManager.GetString("XLIFFManager_LanguageMappings_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Mappings.
+        /// </summary>
+        internal static string XLIFFManager_LanguageMappings_Name {
+            get {
+                return ResourceManager.GetString("XLIFFManager_LanguageMappings_Name", resourceCulture);
             }
         }
         

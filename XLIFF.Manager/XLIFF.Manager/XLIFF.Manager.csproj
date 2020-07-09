@@ -36,6 +36,10 @@
     <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -143,6 +147,7 @@
     <Compile Include="Actions\Export\FilesContextMenu_ExportToXLIFFAction.cs" />
     <Compile Include="Actions\Export\ExportToXLIFFAction.cs" />
     <Compile Include="Actions\Import\ImportFromXLIFFAction.cs" />
+    <Compile Include="Actions\OpenLanguageMappingsAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="BatchTasks\ExportBatchTask.cs" />
@@ -158,6 +163,21 @@
     <Compile Include="Controls\BindingWebBrowserSource.cs" />
     <Compile Include="Controls\WebBrowserHelper.cs" />
     <Compile Include="Converters\TextEmptyToVisibilityConverter.cs" />
+    <Compile Include="LanguageMapping\Constants.cs" />
+    <Compile Include="LanguageMapping\Implementation\Common.cs" />
+    <Compile Include="LanguageMapping\Implementation\Reader.cs" />
+    <Compile Include="LanguageMapping\Implementation\Writer.cs" />
+    <Compile Include="LanguageMapping\Interfaces\ILanguageProvider.cs" />
+    <Compile Include="LanguageMapping\LanguageProvider.cs" />
+    <Compile Include="LanguageMapping\Model\ExcelCell.cs" />
+    <Compile Include="LanguageMapping\Model\ExcelColumn.cs" />
+    <Compile Include="LanguageMapping\Model\ExcelRow.cs" />
+    <Compile Include="LanguageMapping\Model\MappedLanguage.cs" />
+    <Compile Include="LanguageMapping\OpenXml\Excel.cs" />
+    <Compile Include="LanguageMapping\ViewModel\LanguageMappingViewModel.cs" />
+    <Compile Include="LanguageMapping\View\LanguageMappingWindow.xaml.cs">
+      <DependentUpon>LanguageMappingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\AnalysisBand.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\TranslationOriginStatistics.cs" />
@@ -371,6 +391,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Resources\DefaultLanguageMappings.xlsx" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -389,6 +410,10 @@
     <Page Include="Controls\WindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LanguageMapping\View\LanguageMappingWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\MultiSelectComboBox.Custom.Image.Resources.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -554,6 +579,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\LanguageMapping.ico" />
+    <Resource Include="Resources\Search.png" />
     <EmbeddedResource Include="BatchTasks\Report.xsl" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>

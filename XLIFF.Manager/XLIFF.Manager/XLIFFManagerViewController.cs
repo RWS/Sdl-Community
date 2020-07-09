@@ -162,6 +162,9 @@ namespace Sdl.Community.XLIFF.Manager
 
 						ConvertToRelativePaths(project, wcProjectFile);
 
+						projectFile.XliffFilePath = wcProjectFile.XliffFilePath;
+						projectFile.Location = wcProjectFile.Location;
+						projectFile.Report = wcProjectFile.Report;
 						projectFile.Status = wcProjectFile.Status;
 						projectFile.Action = wcProjectFile.Action;
 						projectFile.Date = wcProjectFile.Date;					

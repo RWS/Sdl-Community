@@ -5,6 +5,8 @@ using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.CustomEventArgs;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.Interfaces;
+using Sdl.Community.XLIFF.Manager.LanguageMapping;
+using Sdl.Community.XLIFF.Manager.LanguageMapping.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Desktop.IntegrationApi;
@@ -16,7 +18,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Import
 		Name = "XLIFFManager_ImportFromXLIFF_Name",
 		Icon = "Import",
 		Description = "XLIFFManager_ImportFromXLIFF_Description")]
-	[ActionLayout(typeof(XLIFFManagerActionsGroup), 5, DisplayType.Large)]
+	[ActionLayout(typeof(XLIFFManagerActionsGroup), 4, DisplayType.Large)]
 	public class ImportFromXLIFFAction : AbstractViewControllerAction<XLIFFManagerViewController>
 	{
 		private Controllers _controllers;
@@ -25,11 +27,12 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Import
 		private ImageService _imageService;
 		private SegmentBuilder _segmentBuilder;
 		private IDialogService _dialogService;
+		private ILanguageProvider _languageProvider;
 
 		protected override void Execute()
-		{			
+		{
 			var wizardService = new WizardService(Enumerators.Action.Import, _pathInfo, _customerProvider,
-				_imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService);
+				_imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService, _languageProvider);
 
 			var wizardContext = wizardService.ShowWizard(_controllers.XliffManagerController, out var message);
 			if (wizardContext == null && !string.IsNullOrEmpty(message))
@@ -49,12 +52,13 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Import
 		public override void Initialize()
 		{
 			_controllers = new Controllers();
-			SetupXliffManagerController();			
+			SetupXliffManagerController();
 			_customerProvider = new CustomerProvider();
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
-			_segmentBuilder = new SegmentBuilder();			
+			_segmentBuilder = new SegmentBuilder();
+			_languageProvider = new LanguageProvider(_pathInfo);
 
 			Enabled = true;
 		}
@@ -72,7 +76,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Import
 
 		private void SetupXliffManagerController()
 		{
-			_controllers.XliffManagerController.ProjectSelectionChanged += OnProjectSelectionChanged;			
+			_controllers.XliffManagerController.ProjectSelectionChanged += OnProjectSelectionChanged;
 		}
 
 		private void OnProjectSelectionChanged(object sender, ProjectSelectionChangedEventArgs e)

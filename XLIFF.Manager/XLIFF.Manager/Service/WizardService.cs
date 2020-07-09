@@ -11,6 +11,7 @@ using System.Windows.Markup;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.XLIFF.Manager.Interfaces;
+using Sdl.Community.XLIFF.Manager.LanguageMapping.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Wizard.View;
 using Sdl.Community.XLIFF.Manager.Wizard.View.Export;
@@ -37,15 +38,16 @@ namespace Sdl.Community.XLIFF.Manager.Service
 		private readonly ImageService _imageService;
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly Settings _settings;
+		private readonly IDialogService _dialogService;
+		private readonly ILanguageProvider _languageProvider;
 		private WizardWindow _wizardWindow;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
 		private WizardContext _wizardContext;
 		private bool _isCancelled;
-		private readonly IDialogService _dialogService;
-
+		
 		public WizardService(Enumerators.Action action, PathInfo pathInfo, CustomerProvider customerProvider,
 			ImageService imageService, Controllers controllers, SegmentBuilder segmentBuilder, Settings settings,
-			IDialogService dialogService)
+			IDialogService dialogService, ILanguageProvider languageProvider)
 		{
 			_action = action;
 			_pathInfo = pathInfo;
@@ -55,6 +57,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			_dialogService = dialogService;
 			_segmentBuilder = segmentBuilder;
 			_settings = settings;
+			_languageProvider = languageProvider;
 		}
 
 		public WizardContext ShowWizard(AbstractController controller, out string message)
@@ -374,7 +377,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 			}
 			else if (_action == Enumerators.Action.Import)
 			{
-				pages.Add(new WizardPageImportFilesViewModel(_wizardWindow, new WizardPageImportFilesView(), wizardContext, _dialogService));
+				pages.Add(new WizardPageImportFilesViewModel(_wizardWindow, new WizardPageImportFilesView(), wizardContext, _dialogService, _languageProvider));
 				pages.Add(new WizardPageImportOptionsViewModel(_wizardWindow, new WizardPageImportOptionsView(), wizardContext));
 				pages.Add(new WizardPageImportSummaryViewModel(_wizardWindow, new WizardPageImportSummaryView(), wizardContext));
 				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow, new WizardPageImportPreparationView(), wizardContext,
