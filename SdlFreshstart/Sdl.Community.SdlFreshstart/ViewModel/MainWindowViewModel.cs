@@ -7,8 +7,9 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		public MainWindowViewModel(MainWindow mainWindow)
 		{
 			var versionService = new VersionService();
-			StudioViewModel = new StudioViewModel(mainWindow, versionService, new MessageService());
-			MultiTermViewModel = new MultiTermViewModel(mainWindow);
+			var messageService = new MessageService();
+			StudioViewModel = new StudioViewModel(mainWindow, versionService, messageService);
+			MultiTermViewModel = new MultiTermViewModel(mainWindow, messageService);
 			ReadMeViewModel = new ReadMeViewModel(versionService);
 		}
 

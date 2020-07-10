@@ -151,7 +151,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
+		public ICommand RemoveCommand => _removeCommand ??= new CommandHandler(RemoveFiles, true);
 
 		public string RemoveForeground
 		{
@@ -183,7 +183,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ICommand RepairCommand => _repairCommand ?? (_repairCommand = new CommandHandler(RepairStudio, true));
+		public ICommand RepairCommand => _repairCommand ??= new CommandHandler(RepairStudio, true);
 
 		public string RepairForeground
 		{
@@ -215,7 +215,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ICommand RestoreCommand => _restoreCommand ?? (_restoreCommand = new CommandHandler(RestoreFolders, true));
+		public ICommand RestoreCommand => _restoreCommand ??= new CommandHandler(RestoreFolders, true);
 
 		public string RestoreForeground
 		{

@@ -5,17 +5,20 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.SdlFreshstart.Commands;
 using Sdl.Community.SdlFreshstart.Helpers;
 using Sdl.Community.SdlFreshstart.Model;
+using Sdl.Community.SdlFreshstart.Services;
 
 namespace Sdl.Community.SdlFreshstart.ViewModel
 {
 	public class MultiTermViewModel : BaseModel
 	{
 		private readonly MainWindow _mainWindow;
+		private readonly IMessageService _messageService;
 		private readonly Persistence _persistence;
 		private readonly string _userName;
 		private bool _checkAll;
@@ -35,9 +38,10 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private ICommand _restoreCommand;
 		private MultiTermLocationListItem _selectedLocation;
 
-		public MultiTermViewModel(MainWindow mainWindow)
+		public MultiTermViewModel(MainWindow mainWindow, IMessageService messageService)
 		{
 			_mainWindow = mainWindow;
+			_messageService = messageService;
 			_userName = Environment.UserName;
 			_persistence = new Persistence();
 			_folderDescription = string.Empty;
@@ -170,7 +174,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
+		public ICommand RemoveCommand => _removeCommand ??= new CommandHandler(RemoveFiles, true);
 
 		public string RemoveForeground
 		{
@@ -202,7 +206,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ICommand RepairCommand => _repairCommand ?? (_repairCommand = new CommandHandler(RepairMultiTerm, true));
+		public ICommand RepairCommand => _repairCommand ??= new CommandHandler(RepairMultiTerm, true);
 
 		public string RepairForeground
 		{
@@ -219,7 +223,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ICommand RestoreCommand => _restoreCommand ?? (_restoreCommand = new CommandHandler(RestoreFolders, true));
+		public ICommand RestoreCommand => _restoreCommand ??= new CommandHandler(RestoreFolders, true);
 
 		public MultiTermLocationListItem SelectedLocation
 		{
@@ -320,7 +324,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private string GetMsiName(MultiTermVersionListItem selectedVersion)
 		{
-			var msiName = string.Format("MTCore{0}.msi", selectedVersion.MajorVersionNumber);
+			var msiName = $"MTCore{selectedVersion.MajorVersionNumber}.msi";
 			return msiName;
 		}
 
@@ -380,12 +384,8 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private async void RemoveFiles()
 		{
-			var dialog = new MetroDialogSettings
-			{
-				AffirmativeButtonText = "OK"
-			};
-			var result = await _mainWindow.ShowMessageAsync(Constants.Confirmation, Constants.RemoveMessage, MessageDialogStyle.AffirmativeAndNegative, dialog);
-			if (result == MessageDialogResult.Affirmative)
+			var result = _messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RemoveMessage);
+			if (result == MessageBoxResult.Yes)
 			{
 				if (!MultiTermIsRunning())
 				{
@@ -415,17 +415,13 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				}
 				else
 				{
-					await _mainWindow.ShowMessageAsync(Constants.MultitermRun, Constants.RemoveFoldersMessage, MessageDialogStyle.Affirmative, dialog);
+					_messageService.ShowWarningMessage(Constants.MultitermRun, Constants.RemoveFoldersMessage);
 				}
 			}
 		}
 
-		private async void RepairMultiTerm()
+		private void RepairMultiTerm()
 		{
-			var dialog = new MetroDialogSettings
-			{
-				AffirmativeButtonText = "OK"
-			};
 			if (!MultiTermIsRunning())
 			{
 				if (Directory.Exists(_packageCache))
@@ -439,18 +435,14 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 			else
 			{
-				await _mainWindow.ShowMessageAsync(Constants.MultitermRun, Constants.MultitermRepairMessage, MessageDialogStyle.Affirmative, dialog);
+				_messageService.ShowWarningMessage(Constants.MultitermRun, Constants.MultitermRepairMessage);
 			}
 		}
 
 		private async void RestoreFolders()
 		{
-			var dialog = new MetroDialogSettings
-			{
-				AffirmativeButtonText = "OK"
-			};
-			var result = await _mainWindow.ShowMessageAsync(Constants.Confirmation, Constants.RestoreMessage, MessageDialogStyle.AffirmativeAndNegative, dialog);
-			if (result == MessageDialogResult.Affirmative)
+			var result = _messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RestoreMessage);
+			if (result == MessageBoxResult.Yes)
 			{
 				if (!MultiTermIsRunning())
 				{
@@ -467,7 +459,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				}
 				else
 				{
-					await _mainWindow.ShowMessageAsync(Constants.MultitermRun, Constants.MultitermCloseMessage, MessageDialogStyle.Affirmative, dialog);
+					_messageService.ShowWarningMessage(Constants.MultitermRun, Constants.MultitermCloseMessage);
 				}
 			}
 		}

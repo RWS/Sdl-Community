@@ -20,10 +20,16 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 				{
 					var location = (string)studioVersions[0]?.GetType().GetProperty(locationName)?.GetValue(version);
 
+					var fileName = string.Empty;
+					if (File.Exists(location))
+					{
+						fileName = location != null ? location.Substring(location.LastIndexOf('\\') + 1) : fileName;
+					}
+
 					var locationDetails = new LocationDetails
 					{
 						Alias = locationName,
-						BackupFilePath = Path.Combine(BackupFolderPath, version.ShortVersion, locationName),
+						BackupFilePath = Path.Combine(BackupFolderPath, version.ShortVersion, locationName, fileName),
 						OriginalFilePath = location,
 						Version = version.ShortVersion
 					};

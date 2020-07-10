@@ -65,21 +65,14 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 		    {
 			    foreach (var folder in foldersToRemove)
 			    {
-				    //var directory = await Task.FromResult(IsDirectory(folder.OriginalFilePath));
-
-				    if (!Directory.Exists(folder.OriginalFilePath))
+				    if (Directory.Exists(folder.OriginalFilePath))
 				    {
-
-						if (File.Exists(folder.OriginalFilePath))
-					    {
-						    File.Delete(folder.OriginalFilePath);
-					    }
+					    Directory.Delete(folder.OriginalFilePath, true);
 				    }
 				    else
 				    {
-						Directory.Delete(folder.OriginalFilePath, true);
-						//var directoryInfo = new DirectoryInfo(folder.OriginalFilePath);
-					    //await Task.Run(() => RemoveDirectoryInfo(directoryInfo));
+					    if (!File.Exists(folder.OriginalFilePath)) continue;
+					    File.Delete(folder.OriginalFilePath);
 				    }
 			    }
 		    }
