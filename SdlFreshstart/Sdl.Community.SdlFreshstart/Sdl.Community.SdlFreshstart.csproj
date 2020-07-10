@@ -69,7 +69,9 @@
       <HintPath>..\packages\Sdl.Community.Toolkit.Core.1.7.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Versioning">
-      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

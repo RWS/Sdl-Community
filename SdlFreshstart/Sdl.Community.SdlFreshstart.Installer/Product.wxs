@@ -69,6 +69,10 @@
 			<Component Id="NLog.dll" Guid="*">
 				<File Id="NLog.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\NLog.dll"></File>
 			</Component>
+
+			<Component Id="Sdl.Versioning.dll" Guid="*">
+				<File Id="Sdl.Versioning.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\Sdl.Versioning.dll"></File>
+			</Component>
 		</ComponentGroup>
 	</Fragment>	
 </Wix>
