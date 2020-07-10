@@ -32,11 +32,11 @@ steps:
 
   - template: tasks/sign-artifacts/sign-artifacts-azure.yml
     parameters:
-      SigningRoot: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(Configuration)'
+      SigningRoot: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)'
       SigningFileList: '$(Build.Repository.LocalPath)\SdlFreshstart\Signing.csv'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
     inputs:
       artifactName: SdlFreshstartInstaller
-      pathToPublish: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(Configuration)'
+      pathToPublish: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)'
