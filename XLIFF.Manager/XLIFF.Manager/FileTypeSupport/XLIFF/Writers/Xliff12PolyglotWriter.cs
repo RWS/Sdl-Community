@@ -70,12 +70,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 			writer.WriteStartElement(NsPrefix, "doc-info", null);
 			writer.WriteAttributeString("project-id", xliff.DocInfo.ProjectId);
 			writer.WriteAttributeString("source", xliff.DocInfo.Source);
-			writer.WriteAttributeString("source-language", xliff.DocInfo.SourceLanguage);
-			if (IncludeTranslations)
-			{
-				writer.WriteAttributeString("target-language", xliff.DocInfo.TargetLanguage);
-			}
-
+			writer.WriteAttributeString("source-language", xliff.DocInfo.SourceLanguage);			
+			writer.WriteAttributeString("target-language", xliff.DocInfo.TargetLanguage);
+			
 			writer.WriteAttributeString("created", GetDateToString(xliff.DocInfo.Created));
 
 			writer.WriteEndElement(); //doc-info
