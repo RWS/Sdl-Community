@@ -14,7 +14,11 @@ pr:
     include:
      - SdlFreshstart/*
 
-pool: Studio-OX
+pool:
+  name: StudioCluj
+  demands:
+    - Agent.OSVersion -equals 10.0.14393
+    - TradosVersion -equals 16.0.0.2225
 
 variables:
   - group: 'SDLPLC Authenticode Credentials'
