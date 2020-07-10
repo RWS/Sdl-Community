@@ -61,7 +61,7 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.6.7\lib\net45\NLog.dll</HintPath>
