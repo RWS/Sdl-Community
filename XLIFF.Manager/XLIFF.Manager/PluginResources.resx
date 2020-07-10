@@ -499,4 +499,7 @@
 	<data name="Messagel_ResetLanguagesSuccess" xml:space="preserve">
     <value>Successfully reset language mappings</value>
   </data>
+	<data name="WarningMessage_UnableToMapLanguage" xml:space="preserve">
+    <value>Unable to map the target langauge code {0}</value>
+  </data>
 </root>

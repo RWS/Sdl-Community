@@ -46,7 +46,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
-		}		
+		}
 
 		public ICommand ClearSelectedCommand => _clearSelectedComand ?? (_clearSelectedComand = new CommandHandler(ClearSelected));
 
@@ -125,7 +125,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		public void VerifyIsValid()
 		{
 			IsValid = GetValidProjectFilesCount() > 0;
-			System.Windows.Forms.SendKeys.Send("{TAB}");		
+			System.Windows.Forms.SendKeys.Send("{TAB}");
 		}
 
 		private int? GetValidProjectFilesCount()
@@ -145,7 +145,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Import);
 
 					projectFile.Status = Enumerators.Status.Warning;
-					projectFile.ShortMessage = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString);					
+					projectFile.ShortMessage = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString);
 				}
 				else
 				{
@@ -159,7 +159,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		}
 
 		private void AddFiles()
-		{			
+		{
 			var selectedFiles = _dialogService.ShowFileDialog(
 				"Xliff (*.xliff) |*.xliff;*.xlf",
 				PluginResources.FilesDialog_Title,
@@ -320,47 +320,54 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 
 				var xliff = xliffReader.ReadXliff(filePath);
 				var xliffTargetLanguage = xliff.Files?.FirstOrDefault()?.TargetLanguage;
-				var docInfoSourceFile = xliff.DocInfo?.Source;
-				var docInfoTargetLanguage = xliff.DocInfo?.TargetLanguage;
-
-				if (string.IsNullOrEmpty(xliffTargetLanguage) || string.IsNullOrEmpty(docInfoTargetLanguage))
-				{
-					continue;
-				}
+				var docInfoSourceFile = xliff.DocInfo?.Source;				
 
 				// Get the mapped language code
 				var mappedLanguage = _languageMappings.FirstOrDefault(a =>
 					string.Compare(a.LanguageCode, xliffTargetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0
 					|| string.Compare(a.MappedCode, xliffTargetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0);
+
 				if (mappedLanguage == null)
 				{
-					MessageBox.Show(string.Format("Unable to map the target langauge code {0}", xliffTargetLanguage),
+					MessageBox.Show(string.Format(PluginResources.WarningMessage_UnableToMapLanguage, xliffTargetLanguage),
 						PluginResources.XLIFFManager_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 					return;
 				}
 
 				// Assign the SDL Studio language code
 				xliffTargetLanguage = mappedLanguage.LanguageCode;
+				var projectLanguages = GetProjectLanguages(xliff.DocInfo?.TargetLanguage);
 
-				var xliffTargetPath = GetPathLocation(docInfoSourceFile, docInfoTargetLanguage);
+				var xliffTargetPath = GetPathLocation(docInfoSourceFile, projectLanguages, out var foundTargetLanguage);
+				if (!foundTargetLanguage)
+				{
+					continue;
+				}
 
 				foreach (var projectFile in ProjectFiles)
 				{
 					if (string.Compare(projectFile.Project.Id, xliff.DocInfo?.ProjectId, StringComparison.CurrentCultureIgnoreCase) != 0)
 					{
-						MessageBox.Show(PluginResources.WizardMessage_ProjectIdMissmatch,
-							PluginResources.XLIFFManager_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+						MessageBox.Show(PluginResources.WizardMessage_ProjectIdMissmatch, PluginResources.XLIFFManager_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 						return;
 					}
 
 					var projectFileTargetLanguage = projectFile.TargetLanguage;
-					var projectFileTargetPath = GetPathLocation(projectFile.Location, xliffTargetLanguage);
+					if (string.Compare(projectFileTargetLanguage, xliffTargetLanguage, StringComparison.CurrentCultureIgnoreCase) != 0)
+					{
+						continue;
+					}
+					
+					var projectFileTargetPath = GetPathLocation(projectFile.Location, xliffTargetLanguage, out var foundXliffTargetLanguage);
+					if (!foundXliffTargetLanguage)
+					{
+						continue;
+					}
 
-					if (string.Compare(projectFileTargetLanguage, xliffTargetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0 &&
-						string.Compare(projectFileTargetPath, xliffTargetPath, StringComparison.CurrentCultureIgnoreCase) == 0)
+					if (string.Compare(projectFileTargetPath, xliffTargetPath, StringComparison.CurrentCultureIgnoreCase) == 0)
 					{
 						projectFile.XliffFilePath = filePath;
-						projectFile.Selected = true;						
+						projectFile.Selected = true;
 					}
 				}
 			}
@@ -368,22 +375,56 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			VerifyIsValid();
 		}
 
-		private string GetPathLocation(string path, string targetLanguage)
+		private List<string> GetProjectLanguages(string targetLanguage)
 		{
+			var projectLanguages = WizardContext.Project.TargetLanguages.Select(a => a.CultureInfo.Name).ToList();
+			if (!string.IsNullOrEmpty(targetLanguage) && !projectLanguages.Contains(targetLanguage))
+			{
+				projectLanguages.Insert(0, targetLanguage);
+			}
+
+			if (!projectLanguages.Contains(WizardContext.Project.SourceLanguage.CultureInfo.Name))
+			{
+				projectLanguages.Add(WizardContext.Project.SourceLanguage.CultureInfo.Name);
+			}
+
+			return projectLanguages;
+		}
+
+		private string GetPathLocation(string path, string targetLanguage, out bool foundLanguage)
+		{			
 			var location = string.Empty;
 			while (path.Contains("\\"))
 			{
 				var part = path.Substring(path.LastIndexOf("\\", StringComparison.Ordinal) + 1);
 				if (string.Compare(part, targetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0)
 				{
-					break;
+					foundLanguage = true;
+					return location;
 				}
 
 				location = Path.Combine(part, location);
 				path = path.Substring(0, path.LastIndexOf("\\", StringComparison.Ordinal));
 			}
 
-			return location;
+			foundLanguage = false;
+			return null;
+		}
+
+		private string GetPathLocation(string path, List<string> targetLanguages, out bool foundLanguage)
+		{
+			foreach (var targetLanguage in targetLanguages)
+			{
+				var location = GetPathLocation(path, targetLanguage, out var found);
+				if (found)
+				{
+					foundLanguage = true;
+					return location;
+				}
+			}
+
+			foundLanguage = false;
+			return null;
 		}
 
 		private IEnumerable<string> GetAllXliffsFromDirectory(string directoryPath)

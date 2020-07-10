@@ -886,6 +886,15 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to map the target langauge code {0}.
+        /// </summary>
+        internal static string WarningMessage_UnableToMapLanguage {
+            get {
+                return ResourceManager.GetString("WarningMessage_UnableToMapLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string WindowsControl_Close {
