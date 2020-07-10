@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Sdl.Community.SdlFreshstart.Helpers
+namespace Sdl.Community.SdlFreshstart.Services
 {
 	public interface IMessageService
 	{

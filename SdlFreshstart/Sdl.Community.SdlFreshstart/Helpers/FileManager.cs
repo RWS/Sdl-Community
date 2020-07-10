@@ -6,7 +6,7 @@ using Sdl.Community.SdlFreshstart.Model;
 
 namespace Sdl.Community.SdlFreshstart.Helpers
 {
-	public static class Remove
+	public static class FileManager
 	{
 		public static readonly Log Log = Log.Instance;
 
@@ -59,29 +59,34 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 		}
 
-		public static async Task FromSelectedLocations(List<LocationDetails> foldersToRemove)
+		public static void RemoveFromSelectedLocations(List<LocationDetails> foldersToRemove)
 	    {
 		    try
 		    {
 			    foreach (var folder in foldersToRemove)
 			    {
-				    var directory = await Task.FromResult(IsDirectory(folder.OriginalFilePath));
+				    //var directory = await Task.FromResult(IsDirectory(folder.OriginalFilePath));
 
-				    if (!directory)
+				    if (!Directory.Exists(folder.OriginalFilePath))
 				    {
-					    File.Delete(folder.OriginalFilePath);
+
+						if (File.Exists(folder.OriginalFilePath))
+					    {
+						    File.Delete(folder.OriginalFilePath);
+					    }
 				    }
 				    else
 				    {
-						var directoryInfo = new DirectoryInfo(folder.OriginalFilePath);
-					    await Task.Run(() => RemoveDirectoryInfo(directoryInfo));
+						Directory.Delete(folder.OriginalFilePath, true);
+						//var directoryInfo = new DirectoryInfo(folder.OriginalFilePath);
+					    //await Task.Run(() => RemoveDirectoryInfo(directoryInfo));
 				    }
 			    }
 		    }
 		    catch (Exception ex)
 		    {
 				Log.Logger.Error($"{Constants.FromSelectedLocations} {ex.Message}\n {ex.StackTrace}");
-				throw ex;
+				throw;
 			}
 		}
 

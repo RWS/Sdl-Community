@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Sdl.Community.SdlFreshstart.Helpers
+namespace Sdl.Community.SdlFreshstart.Services
 {
 	public class MessageService : IMessageService
 	{
@@ -21,7 +21,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 
 		public MessageBoxResult ShowConfirmationMessage(string title, string question)
 		{
-			return MessageBox.Show(title, question, MessageBoxButton.YesNo);
+			return MessageBox.Show(question, title, MessageBoxButton.YesNo, MessageBoxImage.Question);
 		}
 	}
 }

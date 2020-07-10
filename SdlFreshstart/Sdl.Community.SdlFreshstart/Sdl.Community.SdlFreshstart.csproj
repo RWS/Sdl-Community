@@ -107,21 +107,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\CommandHandler.cs" />
+    <Compile Include="Converters\StringNullOrEmptyToVisibilityConverter.cs" />
+    <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Helpers\Constants.cs" />
-    <Compile Include="Helpers\DocumentsFolder.cs" />
     <Compile Include="Helpers\FoldersDescriptionText.cs" />
-    <Compile Include="Helpers\IMessageService.cs" />
-    <Compile Include="Helpers\IStudioVersion.cs" />
+    <Compile Include="Services\IMessageService.cs" />
+    <Compile Include="Model\IStudioVersion.cs" />
     <Compile Include="Helpers\Log.cs" />
-    <Compile Include="Helpers\MessageService.cs" />
+    <Compile Include="Services\MessageService.cs" />
     <Compile Include="Helpers\MultiTermFolders.cs" />
     <Compile Include="Helpers\Persistence.cs" />
-    <Compile Include="Helpers\ProgramData.cs" />
-    <Compile Include="Helpers\AppDataFolder.cs" />
-    <Compile Include="Helpers\Remove.cs" />
-    <Compile Include="Helpers\StudioVersion.cs" />
-    <Compile Include="Helpers\VersionService.cs" />
+    <Compile Include="Helpers\FileManager.cs" />
+    <Compile Include="Model\StudioVersion.cs" />
+    <Compile Include="Services\VersionService.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -145,11 +143,11 @@
     <Compile Include="Model\LocationDetails.cs" />
     <Compile Include="Model\StudioLocationListItem.cs" />
     <Compile Include="Model\MultiTermVersionListItem.cs" />
-    <Compile Include="Model\StudioVersionListItem.cs" />
     <Compile Include="Properties\Annotations1.cs" />
     <Compile Include="ViewModel\MultiTermViewModel.cs" />
     <Compile Include="ViewModel\ReadMeViewModel.cs" />
     <Compile Include="ViewModel\StudioViewModel.cs" />
+    <Compile Include="ViewModel\BaseModel.cs" />
     <Compile Include="Views\MultiTerm.xaml.cs">
       <DependentUpon>MultiTerm.xaml</DependentUpon>
     </Compile>
@@ -215,6 +213,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Sdl.Versioning;
+using StudioVersion = Sdl.Community.SdlFreshstart.Model.StudioVersion;
 
-namespace Sdl.Community.SdlFreshstart.Helpers
+namespace Sdl.Community.SdlFreshstart.Services
 {
 	public class VersionService
 	{
@@ -19,8 +20,8 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 
 			return installedStudioVersions.Select(v =>
 				v.Edition.Equals("Beta")
-					? new StudioVersion(v.Version, v.PublicVersion, v.Edition)
-					: new StudioVersion(v.Version, v.PublicVersion)).ToList();
+					? new StudioVersion(v.Version, v.PublicVersion, v.ExecutableVersion, v.Edition)
+					: new StudioVersion(v.Version, v.PublicVersion, v.ExecutableVersion)).ToList();
 		}
 	}
 }

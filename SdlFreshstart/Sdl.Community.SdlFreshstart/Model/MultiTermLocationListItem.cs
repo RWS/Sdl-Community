@@ -1,35 +1,25 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Sdl.Community.SdlFreshstart.Properties;
+﻿using Sdl.Community.SdlFreshstart.ViewModel;
 
 namespace Sdl.Community.SdlFreshstart.Model
 {
-    public class MultiTermLocationListItem:INotifyPropertyChanged
-    {
-	    private bool _isSelected;
-	    public string DisplayName { get; set; }
-	    public string Description { get; set; }
-
-	    public string Alias { get; set; }
+	public class MultiTermLocationListItem : BaseModel
+	{
+		private bool _isSelected;
+		public string Alias { get; set; }
+		public string Description { get; set; }
+		public string DisplayName { get; set; }
 
 		public bool IsSelected
-	    {
-		    get => _isSelected;
-		    set
-		    {
-			    if (_isSelected != value)
-			    {
-				    _isSelected = value;
-				    OnPropertyChanged(nameof(IsSelected));
-			    }
-		    }
-	    }
-		public event PropertyChangedEventHandler PropertyChanged;
-
-	    [NotifyPropertyChangedInvocator]
-	    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-	    {
-		    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	    }
-    }
+		{
+			get => _isSelected;
+			set
+			{
+				if (_isSelected != value)
+				{
+					_isSelected = value;
+					OnPropertyChanged(nameof(IsSelected));
+				}
+			}
+		}
+	}
 }

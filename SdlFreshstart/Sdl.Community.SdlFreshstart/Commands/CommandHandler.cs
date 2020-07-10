@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Sdl.Community.SdlFreshstart.Properties;
 
-namespace Sdl.Community.SdlFreshstart.Helpers
+namespace Sdl.Community.SdlFreshstart.Commands
 {
     public class CommandHandler : ICommand, INotifyPropertyChanged
 	{

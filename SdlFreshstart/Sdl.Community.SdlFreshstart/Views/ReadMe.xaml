@@ -35,8 +35,8 @@
 				<DataTemplate>
 					<StackPanel Margin="0 0 100 0">
 						<Label FontWeight="Bold" Foreground="#3EA691" Content="{Binding PublicVersion}" />
-						<Label Content="{Binding ExecutableVersion}" />
-						<Label Content="{Binding StudioFolder}" />
+						<Label Content="{Binding MajorVersion}" />
+						<Label Content="{Binding AppDataStudioFolder}" />
 						<Label Content="{Binding VersionName}" />
 					</StackPanel>
 				</DataTemplate>

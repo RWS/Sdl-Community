@@ -46,14 +46,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			try
 			{
 				var json = JsonConvert.SerializeObject(locations);
-				if (studioSettings)
-				{
-					File.WriteAllText(_studioPersistancePath, json);
-				}
-				else
-				{
-					File.WriteAllText(_multiTermPersistancePath, json);
-				}
+				File.WriteAllText(studioSettings ? _studioPersistancePath : _multiTermPersistancePath, json);
 			}
 			catch(Exception ex)
 			{

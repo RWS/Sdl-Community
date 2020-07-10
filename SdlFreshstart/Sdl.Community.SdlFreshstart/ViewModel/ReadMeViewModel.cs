@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using Sdl.Community.SdlFreshstart.Helpers;
+using Sdl.Community.SdlFreshstart.Model;
+using Sdl.Community.SdlFreshstart.Services;
 
 namespace Sdl.Community.SdlFreshstart.ViewModel
 {
@@ -11,8 +13,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			StudioVersions = studioVersionService.GetListOfStudioVersions();
 			StudioVersions.Reverse();
 		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
 
 		public List<StudioVersion> StudioVersions { get; set; }
 	}
