@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Sdl.Community.BackupService.Helpers;
-using Sdl.Community.Toolkit.Core;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Sdl.Versioning;
 
 namespace Sdl.Community.TMBackup
 {
@@ -42,15 +42,8 @@ namespace Sdl.Community.TMBackup
 			{
 				var path = Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe");
 
-				if (!Directory.Exists(Constants.SdlCommunityPath))
-				{
-					Directory.CreateDirectory(Constants.SdlCommunityPath);
-				}
-
-				if (!Directory.Exists(Constants.DeployPath))
-				{
-					Directory.CreateDirectory(Constants.DeployPath);
-				}
+				Directory.CreateDirectory(Constants.SdlCommunityPath);
+				Directory.CreateDirectory(Constants.DeployPath);
 
 				var directoryFiles = new List<string>(Directory.GetFiles(Constants.DeployPath));
 
@@ -74,14 +67,14 @@ namespace Sdl.Community.TMBackup
 		// Get the Sdl.Community.TMBackup.exe path from the Unpacked folder when plugin is loaded in Studio
 		private static string GetUnpackedFolder()
 		{
-			var executableVersion = new Studio().GetStudioVersion().ExecutableVersion.Major;
+			var executableVersion = new StudioVersionService().GetStudioVersion()?.ExecutableVersion?.Major;
 			foreach (var pluginFolderLocation in _pluginFolderLocations)
 			{
-				var unpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\SDL TMBackup";
+				var unpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\{PluginResources.Plugin_Name}";
 
 				if (Directory.Exists(unpackedFolder))
 				{
-					var pluginExePath = Directory.GetFiles(unpackedFolder, "*.exe").FirstOrDefault().ToString();
+					var pluginExePath = Directory.GetFiles(unpackedFolder, "*.exe").FirstOrDefault();
 					return pluginExePath;
 				}
 			}
