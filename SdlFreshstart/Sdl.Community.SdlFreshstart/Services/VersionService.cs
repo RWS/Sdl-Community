@@ -18,10 +18,8 @@ namespace Sdl.Community.SdlFreshstart.Services
 			var studioVersionService = new StudioVersionService();
 			var installedStudioVersions = studioVersionService.GetInstalledStudioVersions();
 
-			return installedStudioVersions.Select(v =>
-				v.Edition.Equals("Beta")
-					? new StudioVersion(v.Version, v.PublicVersion, v.ExecutableVersion, v.Edition)
-					: new StudioVersion(v.Version, v.PublicVersion, v.ExecutableVersion)).ToList();
+			return installedStudioVersions
+				?.Select(v => new StudioVersion(v.Version, v.PublicVersion, v.Edition)).ToList();
 		}
 	}
 }

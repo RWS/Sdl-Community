@@ -67,7 +67,8 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			    {
 				    if (Directory.Exists(folder.OriginalFilePath))
 				    {
-					    Directory.Delete(folder.OriginalFilePath, true);
+						var directoryInfo = new DirectoryInfo(folder.OriginalFilePath);
+						RemoveDirectoryInfo(directoryInfo);
 				    }
 				    else
 				    {

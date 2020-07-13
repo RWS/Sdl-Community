@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
-using Sdl.Community.SdlFreshstart.Helpers;
 using Sdl.Community.SdlFreshstart.Model;
 using Sdl.Community.SdlFreshstart.Services;
 

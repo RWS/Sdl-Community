@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.SdlFreshstart.ViewModel;
 
@@ -20,7 +21,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 		private bool _isSelected;
 		private int _numericVersion;
 
-		public StudioVersion(string versionName, string publicVersion, Version executableVersion = null, string edition = "")
+		public StudioVersion(string versionName, string publicVersion, string edition = "")
 		{
 			VersionName = $"{versionName}{edition}";
 			PublicVersion = publicVersion;
@@ -60,9 +61,9 @@ namespace Sdl.Community.SdlFreshstart.Model
 
 			ProjectTemplatesPath = $@"{DocumentsPath}\Project Templates";
 
-			ProjectApiPath = MajorVersion < 16 && executableVersion != null
-				? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "ProjectApi", executableVersion.ToString())
-				: null;
+			ProjectApiPath = Directory.GetDirectories(Path.Combine(
+				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+				"SDL", "ProjectApi")).FirstOrDefault(d => d.Contains(MajorVersion.ToString()));
 		}
 
 		public string AppDataLocalPluginsPath { get; set; }

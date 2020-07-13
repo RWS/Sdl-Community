@@ -279,15 +279,15 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		{
 			var listOfProperties = new List<string>
 			{
-				"AppDataRoamingStudioPath",
-				"AppDataRoamingPluginsPath",
-				"AppDataLocalStudioPath",
-				"AppDataLocalPluginsPath",
-				"ProgramDataStudioPath",
-				"ProgramDataPluginsPath",
-				"ProgramDataStudioDataSubfolderPath",
-				"ProjectsXmlPath",
-				"ProjectTemplatesPath",
+				nameof(StudioVersion.AppDataRoamingStudioPath),
+				nameof(StudioVersion.AppDataRoamingPluginsPath),
+				nameof(StudioVersion.AppDataLocalStudioPath),
+				nameof(StudioVersion.AppDataLocalPluginsPath),
+				nameof(StudioVersion.ProgramDataStudioPath),
+				nameof(StudioVersion.ProgramDataPluginsPath),
+				nameof(StudioVersion.ProgramDataStudioDataSubfolderPath),
+				nameof(StudioVersion.ProjectsXmlPath),
+				nameof(StudioVersion.ProjectTemplatesPath),
 			};
 			
 			var latestVersion = StudioVersionsCollection.First();
@@ -306,6 +306,18 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 					Alias = property
 				});
 			}
+
+			var projectApiPath =
+				StudioVersionsCollection.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v.ProjectApiPath))?.ProjectApiPath;
+			var apiPathDescription = FoldersDescriptionText.ProjectApiPath;
+
+			_foldersLocations.Add(new StudioLocationListItem
+			{
+				DisplayName = Path.GetDirectoryName(projectApiPath),
+				IsSelected = true,
+				Description = apiPathDescription,
+				Alias = nameof(StudioVersion.ProjectApiPath)
+			});
 
 			foreach (var location in _foldersLocations)
 			{

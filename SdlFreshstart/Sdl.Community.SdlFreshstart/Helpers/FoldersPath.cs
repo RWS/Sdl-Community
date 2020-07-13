@@ -23,7 +23,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 					var fileName = string.Empty;
 					if (File.Exists(location))
 					{
-						fileName = location != null ? location.Substring(location.LastIndexOf('\\') + 1) : fileName;
+						fileName = location != null ? Path.GetFileName(location) : fileName;
 					}
 
 					var locationDetails = new LocationDetails

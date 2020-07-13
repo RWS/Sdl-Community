@@ -17,9 +17,6 @@
 	</UserControl.Resources>
 
 	<Grid>
-		<!--<Grid.Resources>
-			<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
-		</Grid.Resources>-->
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
@@ -109,7 +106,7 @@
 		           Grid.Row="4"
 		           HorizontalAlignment="Stretch">
 			<Separator DockPanel.Dock="Left" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-			<StackPanel DockPanel.Dock="Right" Orientation="Vertical" Height="200" Width="750">
+			<StackPanel DockPanel.Dock="Right" Orientation="Vertical" Width="750">
 				<TextBlock Margin="5,0,0,0"
 					       TextWrapping="Wrap"
 					       Text="{Binding SelectedLocation.Description}"
@@ -117,7 +114,7 @@
 			</StackPanel>
 		</DockPanel>
 
-		<DockPanel Grid.Column="1" Grid.Row="5" LastChildFill="False" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+		<DockPanel Grid.Column="1" Grid.Row="5" LastChildFill="False" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 0 10">
 			<Button FontSize="13" FontWeight="Normal" Width="120" Margin="0,40,0,0" Foreground="{Binding RemoveForeground}" Content="Remove folders" 
 			        VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="{Binding IsRemoveEnabled}" Command="{Binding RemoveCommand}">
 				<Button.Template>
