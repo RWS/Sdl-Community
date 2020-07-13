@@ -23,6 +23,6 @@ namespace Sdl.Community.TMBackup.TMBackupTellMe
 
 		public override bool IsAvailable => true;
 		public override string Category => "SDLTMBackup results";
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.Question;
 	}
 }
