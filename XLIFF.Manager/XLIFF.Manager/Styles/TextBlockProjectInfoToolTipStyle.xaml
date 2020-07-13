@@ -47,13 +47,13 @@
 							<TextBlock Text="{Binding Path=Path}" Grid.Column="1" Grid.Row="2" Margin="1"/>
 
 							<TextBlock Text="Client: " Style="{StaticResource PropertyTitleLabel.TextBlock.Style}" TextWrapping="WrapWithOverflow" Grid.Column="0" Grid.Row="3" />
-							<TextBlock Text="{Binding Path=ClientName}" Grid.Column="1" Grid.Row="3" Margin="1"/>
+							<TextBlock Text="{Binding Path=Customer.Name}" Grid.Column="1" Grid.Row="3" Margin="1"/>
 
 							<TextBlock Text="Created: " Style="{StaticResource PropertyTitleLabel.TextBlock.Style}" TextWrapping="WrapWithOverflow" Grid.Column="0" Grid.Row="4" />
-							<TextBlock Text="{Binding Path=Created}" Grid.Column="1" Grid.Row="4" Margin="1"/>
+							<TextBlock Text="{Binding Path=CreatedToString}" Grid.Column="1" Grid.Row="4" Margin="1"/>
 
 							<TextBlock Text="Due: " Style="{StaticResource PropertyTitleLabel.TextBlock.Style}" TextWrapping="WrapWithOverflow" Grid.Column="0" Grid.Row="5" />
-							<TextBlock Text="{Binding Path=DueDate}" Grid.Column="1" Grid.Row="5" Margin="1"/>
+							<TextBlock Text="{Binding Path=DueDateToString}" Grid.Column="1" Grid.Row="5" Margin="1"/>
 
 							<TextBlock Text="Source: " Style="{StaticResource PropertyTitleLabel.TextBlock.Style}" TextWrapping="WrapWithOverflow" Grid.Column="0" Grid.Row="6" />
 							<Grid Grid.Column="1" Grid.Row="6" Margin="1">

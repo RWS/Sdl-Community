@@ -1,0 +1,16 @@
+parameters:
+  SigningFileList: '$PSScriptRoot\..\..\..\..'
+  SigningRoot: '$psscriptroot\filestosign.csv'
+ 
+steps:
+- task: PowerShell@2
+  displayName: 'Sign artifacts'
+  inputs:
+    targetType: filePath
+    filePath: './build/tasks/sign-artifacts/sign-artifacts-azure.ps1'
+    arguments: '"${{ parameters.SigningFileList }}" "${{ parameters.SigningRoot }}"'
+  env:
+    CurrentCertificateName: $(CurrentCertificateName)
+    SigningClientId: $(SigningClientId)
+    SigningSecret: $(SigningSecret)
+    KeyVaultUrl: $(KeyVaultUrl)

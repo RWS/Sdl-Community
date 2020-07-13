@@ -1,16 +1,12 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Sdl.Community.SdlFreshstart.Properties;
+﻿using Sdl.Community.SdlFreshstart.ViewModel;
 
 namespace Sdl.Community.SdlFreshstart.Model
 {
-    public class MultiTermVersionListItem : INotifyPropertyChanged
+	public class MultiTermVersionListItem : BaseModel
 	{
 		private bool _isSelected;
-		public string DisplayName { get; set; }
-		public string MajorVersionNumber { get; set; }
-		public string ReleaseNumber { get; set; }
 		public string CacheFolderName { get; set; }
+		public string DisplayName { get; set; }
 
 		public bool IsSelected
 		{
@@ -25,12 +21,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 			}
 		}
 
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
+		public string MajorVersionNumber { get; set; }
+		public string ReleaseNumber { get; set; }
 	}
 }

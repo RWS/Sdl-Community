@@ -12,7 +12,7 @@ namespace Sdl.Community.SdlFreshstart
 		{
 			InitializeComponent();
 			
-			var viewModel = new MainWindowViewModel(this, DialogCoordinator.Instance);
+			var viewModel = new MainWindowViewModel(this);
 			DataContext = viewModel;
 		}
 	}

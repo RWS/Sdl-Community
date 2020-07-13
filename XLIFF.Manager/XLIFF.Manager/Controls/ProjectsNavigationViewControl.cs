@@ -1,10 +1,11 @@
 ﻿using System.Windows.Forms;
 using Sdl.Community.XLIFF.Manager.View;
 using Sdl.Community.XLIFF.Manager.ViewModel;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.XLIFF.Manager.Controls
 {
-	public partial class ProjectsNavigationViewControl : UserControl
+	public partial class ProjectsNavigationViewControl : UserControl, IUIControl
 	{		
 		public ProjectsNavigationViewControl(ProjectsNavigationViewModel viewModel)
 		{

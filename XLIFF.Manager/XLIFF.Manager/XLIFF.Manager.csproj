@@ -9,12 +9,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.XLIFF.Manager</RootNamespace>
     <AssemblyName>Sdl.Community.XLIFF.Manager</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,7 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,51 +34,103 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\MahApps.Metro.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Sdl.Community.Toolkit.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.Core.3.0.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=3.0.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.3.0.0\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
+      <HintPath>..\packages\Sdl.Core.PluginFramework.2.0.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework.PackageSupport, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+      <HintPath>..\packages\Sdl.Core.PluginFramework.2.0.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Settings">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Controls">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.MultiSelectComboBox, Version=1.0.18.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.MultiSelectComboBox.1.0.18\lib\net47\Sdl.MultiSelectComboBox.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Settings">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Versioning">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Reactive.Core">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\System.Reactive.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -91,12 +144,70 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\ExportToXLIFFAction.cs" />
-    <Compile Include="Actions\ImportFromXLIFFAction.cs" />
+    <Compile Include="Actions\Export\ProjectsContextMenu_ExportToXLIFFAction.cs" />
+    <Compile Include="Actions\Export\FilesContextMenu_ExportToXLIFFAction.cs" />
+    <Compile Include="Actions\Export\ExportToXLIFFAction.cs" />
+    <Compile Include="Actions\Import\ImportFromXLIFFAction.cs" />
+    <Compile Include="Actions\OpenLanguageMappingsAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
+    <Compile Include="BatchTasks\ExportBatchTask.cs" />
+    <Compile Include="BatchTasks\ImportBatchTask.cs" />
+    <Compile Include="BatchTasks\ImportSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BatchTasks\ImportSettingsControl.Designer.cs">
+      <DependentUpon>ImportSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BatchTasks\ImportSettingsPage.cs" />
+    <Compile Include="Controls\BindingDataProxy.cs" />
+    <Compile Include="Controls\BindingWebBrowserSource.cs" />
+    <Compile Include="Controls\WebBrowserHelper.cs" />
+    <Compile Include="Converters\TextEmptyToVisibilityConverter.cs" />
+    <Compile Include="LanguageMapping\Constants.cs" />
+    <Compile Include="LanguageMapping\Implementation\Common.cs" />
+    <Compile Include="LanguageMapping\Implementation\Reader.cs" />
+    <Compile Include="LanguageMapping\Implementation\Writer.cs" />
+    <Compile Include="LanguageMapping\Interfaces\ILanguageProvider.cs" />
+    <Compile Include="LanguageMapping\LanguageProvider.cs" />
+    <Compile Include="LanguageMapping\Model\ExcelCell.cs" />
+    <Compile Include="LanguageMapping\Model\ExcelColumn.cs" />
+    <Compile Include="LanguageMapping\Model\ExcelRow.cs" />
+    <Compile Include="LanguageMapping\Model\MappedLanguage.cs" />
+    <Compile Include="LanguageMapping\OpenXml\Excel.cs" />
+    <Compile Include="LanguageMapping\ViewModel\LanguageMappingViewModel.cs" />
+    <Compile Include="LanguageMapping\View\LanguageMappingWindow.xaml.cs">
+      <DependentUpon>LanguageMappingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AnalysisBand.cs" />
+    <Compile Include="Model\Settings.cs" />
+    <Compile Include="Model\TranslationOriginStatistics.cs" />
+    <Compile Include="Model\ConfirmationStatistics.cs" />
+    <Compile Include="Model\WordCount.cs" />
+    <Compile Include="Model\LanguageDirectionInfo.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerImportSettings.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerExportSettings.cs" />
+    <Compile Include="BatchTasks\ExportSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BatchTasks\ExportSettingsControl.Designer.cs">
+      <DependentUpon>ExportSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BatchTasks\ExportSettingsPage.cs" />
+    <Compile Include="BatchTasks\ViewModel\ExportOptionsViewModel.cs" />
+    <Compile Include="BatchTasks\View\ExportOptionsView.xaml.cs">
+      <DependentUpon>ExportOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Behaviours\EventBehaviourFactory.cs" />
+    <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Commands\SelectedItemChangedCommand.cs" />
+    <Compile Include="Common\FolderSelectDialog.cs" />
+    <Compile Include="Common\Logger.cs" />
     <Compile Include="Common\PathInfo.cs" />
+    <Compile Include="Common\Reflector.cs" />
+    <Compile Include="Controls\BindableParagraphBlock.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
     <Compile Include="Controls\ProjectFileActivityViewControl.cs">
       <SubType>UserControl</SubType>
@@ -119,21 +230,87 @@
     </Compile>
     <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="Controls\TextBoxWithEllipsis.cs" />
     <Compile Include="Controls\ToolWindowsControl.xaml.cs">
       <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WizardProgressHeader.xaml.cs">
+      <DependentUpon>WizardProgressHeader.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
     <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
+    <Compile Include="Converters\GteConverter.cs" />
+    <Compile Include="CustomEventArgs\ProjectSelectionChangedEventArgs.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\ContentWriter.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\ElementExtractor.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\SdlxliffWriter.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\SegmentBuilder.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementSegment.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Readers\Xliff12SdlReader.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Readers\XliffSniffer.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Readers\XliffReader.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\ContentReader.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\SdlxliffReader.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Body.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\DocInfo.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Element.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementComment.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementLocked.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementPlaceholder.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementTagPair.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementText.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ExternalFile.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\File.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Header.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Phase.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\PhaseGroup.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Segment.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\SegmentPair.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Skl.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Source.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Target.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\TransUnit.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Xliff.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Readers\Xliff12PolyglotReader.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\SegmentVisitor.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Writers\Xliff12SDLWriter.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Writers\Xliff12PolyglotWriter.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Writers\XliffWriter.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
+    <Compile Include="Interfaces\IDialogService.cs" />
+    <Compile Include="Interfaces\XLIFFReader.cs" />
+    <Compile Include="Interfaces\XLIFFWriter.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Common\Enumerators.cs" />
+    <Compile Include="Model\ConfirmationStatus.cs" />
+    <Compile Include="Model\Controllers.cs" />
+    <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\ExportOptions.cs" />
+    <Compile Include="Model\FilterItem.cs" />
+    <Compile Include="Model\FilterItemGroup.cs" />
+    <Compile Include="Model\ImportFile.cs" />
+    <Compile Include="Model\ImportOptions.cs" />
+    <Compile Include="Model\JobProcess.cs" />
     <Compile Include="Model\LanguageInfo.cs" />
-    <Compile Include="Model\ProjectFileActionModel.cs" />
-    <Compile Include="Model\ProjectFileActivityModel.cs" />
-    <Compile Include="Model\ProjectModel.cs" />
+    <Compile Include="Model\ProjectFile.cs" />
+    <Compile Include="Model\ProjectFileActivity.cs" />
+    <Compile Include="Model\Project.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerProject.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerProjectFile.cs" />
+    <Compile Include="Model\ProjectSettings\XliffManagerProjectFileActivity.cs" />
+    <Compile Include="Model\WordCounts.cs" />
+    <Compile Include="Model\TaskReport.cs" />
+    <Compile Include="Model\Tasks\AutomaticTask.cs" />
+    <Compile Include="Model\Tasks\OutputFile.cs" />
+    <Compile Include="Model\Tasks\Report.cs" />
+    <Compile Include="Model\Tasks\TaskFile.cs" />
+    <Compile Include="Model\Tasks\TemplateId.cs" />
+    <Compile Include="Model\WizardContext.cs" />
+    <Compile Include="Model\WizardException.cs" />
+    <Compile Include="Model\XLIFFSupportItem.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -141,8 +318,62 @@
     </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\CustomerProvider.cs" />
+    <Compile Include="Service\DialogService.cs" />
+    <Compile Include="Service\FilterService.cs" />
     <Compile Include="Service\ImageService.cs" />
-    <Compile Include="TestData\TestDataUtil.cs" />
+    <Compile Include="Service\ProjectSettingsService.cs" />
+    <Compile Include="Service\ReportService.cs" />
+    <Compile Include="Service\WizardService.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\ReportViewModel.cs" />
+    <Compile Include="View\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\ViewModel\ExceptionViewerViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Export\WizardPageExportFilesViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Export\WizardPageExportOptionsViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Export\WizardPageExportPreparationViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Export\WizardPageExportSummaryViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Import\WizardPageImportFilesViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Import\WizardPageImportOptionsViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Import\WizardPageImportPreparationViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Import\WizardPageImportSummaryViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\WizardViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\WizardPageViewModelBase.cs" />
+    <Compile Include="Wizard\View\Export\WizardPageExportOptionsView.xaml.cs">
+      <DependentUpon>WizardPageExportOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Export\WizardPageExportSummaryView.xaml.cs">
+      <DependentUpon>WizardPageExportSummaryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Export\WizardPageExportPreparationView.xaml.cs">
+      <DependentUpon>WizardPageExportPreparationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Export\WizardPageExportFilesView.xaml.cs">
+      <DependentUpon>WizardPageExportFilesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Import\WizardPageImportFilesView.xaml.cs">
+      <DependentUpon>WizardPageImportFilesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Import\WizardPageImportOptionsView.xaml.cs">
+      <DependentUpon>WizardPageImportOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Import\WizardPageImportPreparationView.xaml.cs">
+      <DependentUpon>WizardPageImportPreparationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Import\WizardPageImportSummaryView.xaml.cs">
+      <DependentUpon>WizardPageImportSummaryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\ExceptionViewerView.xaml.cs">
+      <DependentUpon>ExceptionViewerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ReportWindow.xaml.cs">
+      <DependentUpon>ReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\WizardWindow.xaml.cs">
+      <DependentUpon>WizardWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="XLIFFManagerViewGroups.cs" />
     <Compile Include="ViewModel\ProjectFileActivityViewModel.cs" />
     <Compile Include="ViewModel\ProjectFilesViewModel.cs" />
@@ -159,21 +390,59 @@
     <Compile Include="XLIFFManagerViewController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="Resources\Flags\Flags.zip" />
+    <EmbeddedResource Include="Resources\DefaultLanguageMappings.xlsx" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Page Include="BatchTasks\View\ExportOptionsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\ToolWindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\WizardProgressHeader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\WindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LanguageMapping\View\LanguageMappingWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Custom.Image.Resources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Custom.SelectedItemTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Custom.DropdownItemTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Resources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Custom.ControlTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ExpanderStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\TextBlockProjectInfoToolTipStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -211,10 +480,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Styles\RadioButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -243,8 +508,62 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\SettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\Export\WizardPageExportOptionsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\Export\WizardPageExportSummaryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\Export\WizardPageExportPreparationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\Export\WizardPageExportFilesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\Import\WizardPageImportFilesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wizard\View\Import\WizardPageImportOptionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wizard\View\Import\WizardPageImportPreparationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wizard\View\Import\WizardPageImportSummaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wizard\View\ExceptionViewerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ReportWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\WizardWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BatchTasks\ExportSettingsControl.resx">
+      <DependentUpon>ExportSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BatchTasks\ImportSettingsControl.resx">
+      <DependentUpon>ImportSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProjectFileActivityViewControl.resx">
       <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -257,14 +576,34 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="pluginpackage.manifest.xml" />
+    <Resource Include="Resources\LanguageMapping.ico" />
+    <Resource Include="Resources\Search.png" />
+    <EmbeddedResource Include="BatchTasks\Report.xsl" />
+    <Content Include="pluginpackage.manifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Resource Include="Resources\Import.ico" />
+    <Resource Include="Resources\Remove-32.png" />
+    <Resource Include="Resources\invalid-32.png" />
+    <Resource Include="Resources\job_cancelling.gif" />
+    <Resource Include="Resources\job_completed.gif" />
+    <Resource Include="Resources\job_failed.gif" />
+    <Resource Include="Resources\job_running.gif" />
+    <Resource Include="Resources\job_scheduled.gif" />
+    <Resource Include="Resources\warning-32.png" />
     <Resource Include="Resources\Exported.png" />
     <Resource Include="Resources\Imported.png" />
     <Resource Include="Resources\Project.ico" />
     <Resource Include="Resources\Close.png" />
+    <Resource Include="Resources\Fie.png" />
+    <Resource Include="Resources\folder_add.png" />
+    <Resource Include="Resources\document_add.png" />
+    <Resource Include="Resources\Folder.png" />
+    <Resource Include="Resources\Export.ico" />
     <Content Include="Resources\Icon.Jigsaw.ico" />
     <Resource Include="Resources\Minus.png" />
     <Resource Include="Resources\Plus.png" />
@@ -280,6 +619,7 @@
     <Resource Include="Resources\TellMe.ico" />
     <Resource Include="Resources\Warning.png" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
@@ -290,11 +630,11 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.15.1.0\build\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.15.1.0\build\Sdl.Core.PluginFramework.Build.targets')" />
+  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.16.0.1\build\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.16.0.1\build\Sdl.Core.PluginFramework.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.15.1.0\build\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.15.1.0\build\Sdl.Core.PluginFramework.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.16.0.1\build\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.16.0.1\build\Sdl.Core.PluginFramework.Build.targets'))" />
   </Target>
 </Project>

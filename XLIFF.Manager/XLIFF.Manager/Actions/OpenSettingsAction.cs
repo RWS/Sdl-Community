@@ -1,4 +1,9 @@
-﻿using System.Windows;
+﻿using System.IO;
+using Newtonsoft.Json;
+using Sdl.Community.XLIFF.Manager.Common;
+using Sdl.Community.XLIFF.Manager.Model;
+using Sdl.Community.XLIFF.Manager.View;
+using Sdl.Community.XLIFF.Manager.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
@@ -11,14 +16,32 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 	[ActionLayout(typeof(XLIFFManagerSettingsGroup), 7, DisplayType.Large)]
 	public class OpenSettingsAction: AbstractViewControllerAction<XLIFFManagerViewController>
 	{
+		private PathInfo _pathInfo;
+
 		protected override void Execute()
 		{
-			MessageBox.Show("TODO");
+			var settings = GetSettings();
+			var view = new SettingsWindow();			
+			var viewModel = new SettingsViewModel(view, settings, _pathInfo);
+			view.DataContext = viewModel;
+			view.ShowDialog();
+		}
+
+		private Settings GetSettings()
+		{
+			if (File.Exists(_pathInfo.SettingsFilePath))
+			{
+				var json = File.ReadAllText(_pathInfo.SettingsFilePath);
+				return JsonConvert.DeserializeObject<Settings>(json);
+			}
+
+			return new Settings();
 		}
 
 		public override void Initialize()
 		{
 			Enabled = true;
+			_pathInfo = new PathInfo();
 		}
 	}
 }

@@ -1,0 +1,133 @@
+﻿<xliff version="1.2" xmlns:sdl="http://schemas.sdl.com/xliff" sdl:support="xliff12polyglot" sdl:version="1.2.1">
+  <sdl:doc-info project-id="0c0340b6-f0e1-4719-8825-33ad717d6e02" 
+                source="C:\Users\phartnett\Documents\Studio 2019\Projects\Samples\SampleProject\de-DE\DefaultSample.doc.sdlxliff" 
+                source-language="en-US" 
+                target-language="de-DE" 
+                created="2020-05-28T14:43:02.838Z" />
+  <file original="C:\Users\phartnett\Documents\Studio 2019\Projects\Samples\NewSampleProject\en-US\DefaultSample.doc" 
+        source-language="en-US" 
+        target-language="de-DE" 
+        datatype="Word 2000-2003 v 1.0.0.0">
+    <header />
+    <body>
+      <group id="c54aa716-7cec-41fe-921c-8df7bd5898fe">
+        <trans-unit id="1" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Getting Started</source>
+          <target>Getting Started</target>
+        </trans-unit>
+      </group>
+      <group id="cad198fe-2086-47da-a63b-3773ebe46405">
+        <trans-unit id="2" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Finding a location for your photo printer</source>
+          <target>Finding a location for your photo printer</target>
+        </trans-unit>
+      </group>
+      <group id="17555c3a-3385-4df5-90f8-cd975816940e">
+        <trans-unit id="3" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Place the photo printer on a flat, clean and dust-free surface, <bpt id="pt10">&lt;cf bold="on"&gt;</bpt>in a dry location<ept id="pt10">&lt;/cf&gt;</ept>, and <bpt id="pt11">&lt;cf italic="on"&gt;</bpt>out of direct sunlight<ept id="pt11">&lt;/cf&gt;</ept>.</source>
+          <target>Place the photo printer on a flat, clean and dust-free surface, <bpt id="pt10">&lt;cf bold="on"&gt;</bpt>in a dry location<ept id="pt10">&lt;/cf&gt;</ept>, and <bpt id="pt11">&lt;cf italic="on"&gt;</bpt>out of direct sunlight<ept id="pt11">&lt;/cf&gt;</ept>.</target>
+        </trans-unit>
+      </group>
+      <group id="892b95cc-a342-48c8-ab55-254a51842330">
+        <trans-unit id="4" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Allow at least 12 cm clearance from the back of the photo printer for the paper to travel.</source>
+          <target>Allow at least 12 cm clearance from the back of the photo printer for the paper to travel.</target>
+        </trans-unit>
+        <trans-unit id="5 a" sdl:conf="Draft" sdl:origin="interactive">
+          <source>When</source>
+          <target>When </target>
+        </trans-unit>
+        <trans-unit id="5 b" sdl:conf="Draft" sdl:origin="interactive">
+          <note sdl:id="417446f3-d413-4a1f-9d82-3b5176d6291f" sdl:version="1.0" sdl:date="2020-02-21T14:14:08.099Z" from="phartnett" priority="2" annotates="target">some comment</note>
+          <note sdl:id="a12311b0-aacf-469a-ab08-6d47d520c273" sdl:version="1.0" sdl:date="2020-02-21T14:14:17.410Z" from="phartnett" priority="1" annotates="target">another comment</note>
+          <source>connecting power or USB cables, keep the cables clear of the paper path to the front and rear of the photo printer.</source>
+          <target>connecting <bpt id="1">&lt;cf highlight=yellow&gt;</bpt>power <ept id="1">&lt;/cf&gt;</ept>or USB cables, <bpt id="Underline">&lt;cf underlinestyle="single"&gt;</bpt>keep the<ept id="Underline">&lt;/cf&gt;</ept> cables clear of the paper path to the front <mrk mtype="x-sdl-comment" cid="417446f3-d413-4a1f-9d82-3b5176d6291f">and </mrk>rear of<mrk mtype="x-sdl-comment" cid="a12311b0-aacf-469a-ab08-6d47d520c273"> the photo</mrk> printer.</target>
+        </trans-unit>
+      </group>
+      <group id="f5afdbbe-ad12-488c-859c-0b7ce5029b36">
+        <trans-unit id="6" sdl:conf="Unspecified" sdl:origin="source">
+          <source>For proper ventilation<ph id="ph14">&lt;footnotereference style="Footnote Reference" autonumber="1"/&gt;</ph>, make sure the top and back of the photo printer are not blocked.</source>
+          <target>For proper ventilation<ph id="ph14">&lt;footnotereference style="Footnote Reference" autonumber="1"/&gt;</ph>, make sure the top and back of the photo printer are not blocked.</target>
+        </trans-unit>
+      </group>
+      <group id="33038aff-f8f5-4d0e-b587-a9822ed97c1a">
+        <trans-unit id="7 a" sdl:conf="Draft" sdl:origin="interactive">
+          <source>Allow enough</source>
+          <target>Allow enough space on all sides of the photo printer to let you connect and disconnect cables, change the color cartridge, and add paper.</target>
+        </trans-unit>
+        <trans-unit id="7 b" sdl:conf="Draft" sdl:origin="interactive">
+          <source>space on all sides of the photo printer to let you connect and disconnect cables, change the color cartridge, and add paper.</source>
+          <target>New translation</target>
+        </trans-unit>
+      </group>
+      <group id="a2ec7d0a-5a97-46f9-8ab7-091f9469f720">
+        <trans-unit id="8" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Connecting and turning on the power</source>
+          <target>Connecting and turning on the power</target>
+        </trans-unit>
+      </group>
+      <group id="9db6b9df-68f1-435c-8f13-d02442eb0cf6">
+        <trans-unit id="9" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Note:</source>
+          <target>Note:</target>
+        </trans-unit>
+        <trans-unit id="10" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Use only the AC power adapter included with your photo printer.</source>
+          <target>Use only the AC power adapter included with your photo printer.</target>
+        </trans-unit>
+        <trans-unit id="11" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Other adapters can damage your camera, photo printer, or computer.</source>
+          <target>Other adapters can damage your camera, photo printer, or computer.</target>
+        </trans-unit>
+      </group>
+      <group id="9365d622-bd96-4d4d-858a-dfed753434b2">
+        <trans-unit id="12" sdl:conf="Unspecified" sdl:origin="source">
+          <source>To connect and turn on the power, follow these steps:</source>
+          <target>To connect and turn on the power, follow these steps:</target>
+        </trans-unit>
+      </group>
+      <group id="a8f07e4d-64fb-42f8-9793-a178cd810252">
+        <trans-unit id="13" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Step</source>
+          <target>Step</target>
+        </trans-unit>
+      </group>
+      <group id="1de523ef-14d1-4799-a2f1-44d90ea2f289">
+        <trans-unit id="14" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Notes</source>
+          <target>Notes</target>
+        </trans-unit>
+      </group>
+      <group id="1be37e0e-228b-454c-b7b5-7af01022a19f">
+        <trans-unit id="15" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Connect the AC power cord to the AC power adapter, then to the back of the photo printer.</source>
+          <target>Connect the AC power cord to the AC power adapter, then to the back of the photo printer.</target>
+        </trans-unit>
+      </group>
+      <group id="0c2a9011-f426-41c5-a4f2-8272aa00346b">
+        <trans-unit id="16" sdl:conf="Unspecified" sdl:origin="source">
+          <source>The AC power cable included with your photo printer may not require assembly, and may be different from the one shown.</source>
+          <target>The AC power cable included with your photo printer may not require assembly, and may be different from the one shown.</target>
+        </trans-unit>
+      </group>
+      <group id="c50ffbd7-87c1-4521-b577-d5606ba5385d">
+        <trans-unit id="17" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Plug the AC power cable into a power outlet.</source>
+          <target>Plug the AC power cable into a power outlet.</target>
+        </trans-unit>
+      </group>
+      <group id="ef9fa187-5a81-436f-adc9-87a39adf4119">
+        <trans-unit id="18" sdl:conf="Unspecified" sdl:origin="source">
+          <source>Press the On / Off button to turn the power on.</source>
+          <target>Press the On / Off button to turn the power on.</target>
+        </trans-unit>
+      </group>
+      <group id="8065ecbd-f7c2-4117-a9e8-419ec4b2d488">
+        <trans-unit id="19" sdl:conf="Unspecified" sdl:origin="source">
+          <source>The photo printer initializes and the On/Off button glows steady green.</source>
+          <target>The photo printer initializes and the On/Off button glows steady green.</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Sdl.Community.XLIFF.Manager.Common;
+﻿using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Community.XLIFF.Manager.ViewModel;
 using XLIFF.Manager.UnitTests.Common;
@@ -15,7 +13,7 @@ namespace XLIFF.Manager.UnitTests
 		public ProjectFileActivityViewModelTests()
 		{
 			var pathInfo = new PathInfo();
-			var imageService = new ImageService(pathInfo);
+			var imageService = new ImageService();
 
 			_testDataUtil = new TestDataUtil(imageService);
 		}
@@ -25,7 +23,7 @@ namespace XLIFF.Manager.UnitTests
 		{
 			// arrange
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
-			var projectFileActivities = defaultTestProjectData[1].ProjectFileActionModels[1].ProjectFileActivityModels;
+			var projectFileActivities = defaultTestProjectData[1].ProjectFiles[1].ProjectFileActivities;
 
 			// act
 			var model = new ProjectFileActivityViewModel(projectFileActivities);
@@ -40,7 +38,7 @@ namespace XLIFF.Manager.UnitTests
 		{
 			// arrange
 			var defaultTestProjectData = _testDataUtil.GetDefaultTestProjectData();
-			var projectFileActivities = defaultTestProjectData[1].ProjectFileActionModels[1].ProjectFileActivityModels;
+			var projectFileActivities = defaultTestProjectData[1].ProjectFiles[1].ProjectFileActivities;
 
 			// act
 			var model = new ProjectFileActivityViewModel(projectFileActivities);

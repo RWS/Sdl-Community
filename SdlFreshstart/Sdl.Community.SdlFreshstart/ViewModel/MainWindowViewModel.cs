@@ -1,27 +1,20 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using MahApps.Metro.Controls.Dialogs;
-using Sdl.Community.SdlFreshstart.Properties;
+﻿using Sdl.Community.SdlFreshstart.Services;
 
 namespace Sdl.Community.SdlFreshstart.ViewModel
 {
-	public class MainWindowViewModel:INotifyPropertyChanged
+	public class MainWindowViewModel
 	{
-		public event PropertyChangedEventHandler PropertyChanged;
+		public MainWindowViewModel(MainWindow mainWindow)
+		{
+			var versionService = new VersionService();
+			var messageService = new MessageService();
+			StudioViewModel = new StudioViewModel(mainWindow, versionService, messageService);
+			MultiTermViewModel = new MultiTermViewModel(mainWindow, messageService);
+			ReadMeViewModel = new ReadMeViewModel(versionService);
+		}
 
-		public StudioViewModel StudioViewModel { get; set; }
 		public MultiTermViewModel MultiTermViewModel { get; set; }
-
-		public MainWindowViewModel(MainWindow mainWindow, IDialogCoordinator dialogCoordinator)
-		{
-			StudioViewModel = new StudioViewModel(mainWindow, dialogCoordinator);
-			MultiTermViewModel = new MultiTermViewModel(mainWindow);
-		}
-		
-		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
+		public ReadMeViewModel ReadMeViewModel { get; set; }
+		public StudioViewModel StudioViewModel { get; set; }
 	}
 }
