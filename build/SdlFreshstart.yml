@@ -14,12 +14,33 @@ pr:
     include:
      - SdlFreshstart/*
 
-pool: Studio-OX
+pool:
+  name: StudioCluj
+  demands:
+    - Agent.OSVersion -equals 10.0.14393
+    - TradosVersion -equals 16.0.0.2225
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.SdlFreshstart.sln'
+  - group: 'SDLPLC Authenticode Credentials'
+  - name: buildPlatform
+    value: 'Any CPU'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: solution
+    value: '**/Sdl.Community.SdlFreshstart.sln'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+
+  - template: tasks/sign-artifacts/prepare-signing.yml
+
+  - template: tasks/sign-artifacts/sign-artifacts-azure.yml
+    parameters:
+      SigningRoot: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)'
+      SigningFileList: '$(Build.Repository.LocalPath)\SdlFreshstart\Signing.csv'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+      artifactName: SdlFreshstartInstaller
+      pathToPublish: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)'

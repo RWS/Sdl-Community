@@ -9,75 +9,36 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 	public static class FoldersPath
 	{
 		public static readonly Log Log = Log.Instance;
+		private static readonly string BackupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
 
-		public static async Task<List<LocationDetails>> GetFoldersPath(string userName, List<StudioVersionListItem> studioVersions, List<StudioLocationListItem> locations)
+		public static List<LocationDetails> GetLocationsFromVersions(List<string> locationNames, List<StudioVersion> studioVersions)
 		{
-			var foldersToBackup = new List<LocationDetails>();
-			try
+			var locations = new List<LocationDetails>(studioVersions.Count * locationNames.Count);
+			foreach (var locationName in locationNames)
 			{
-				foreach (var location in locations)
+				foreach (var version in studioVersions)
 				{
-					if (location.Alias != null)
-					{
-						if (location.Alias.Equals("projectsXml"))
-						{
-							var projectsXmlFolderPath =	await Task.FromResult(DocumentsFolder.GetProjectsFolderPath(userName, location, studioVersions));
-							foldersToBackup.AddRange(projectsXmlFolderPath);
-						}
-						if (location.Alias.Equals("projectTemplates"))
-						{
-							var projectTemplatesFolderPath = await Task.FromResult(DocumentsFolder.GetProjectTemplatesFolderPath(userName, location, studioVersions));
-							foldersToBackup.AddRange(projectTemplatesFolderPath);
+					var location = (string)studioVersions[0]?.GetType().GetProperty(locationName)?.GetValue(version);
 
-						}
-						if (location.Alias.Equals("roamingMajor"))
-						{
-							var roamingMajorVersionFolderPath = await Task.FromResult(AppDataFolder.GetRoamingMajorFolderPath(userName, location, studioVersions));
-							foldersToBackup.AddRange(roamingMajorVersionFolderPath);
-						}
-						if (location.Alias.Equals("roamingMajorFull"))
-						{
-							var roamingMajorFullVersionFolderPath = await Task.FromResult(AppDataFolder.GetRoamingMajorFullFolderPath(userName, location, studioVersions));
-							foldersToBackup.AddRange(roamingMajorFullVersionFolderPath);
-						}
-						if (location.Alias.Equals("roamingProjectApi"))
-						{
-							var roamingProjectApiFolderPath = await Task.FromResult(AppDataFolder.GetRoamingProjectApiFolderPath(location, studioVersions));
-							foldersToBackup.AddRange(roamingProjectApiFolderPath);
-						}
-						if (location.Alias.Equals("localMajorFull"))
-						{
-							var localMajorFullFolderPath = await Task.FromResult(AppDataFolder.GetLocalMajorFullFolderPath(userName, location, studioVersions));
-							foldersToBackup.AddRange(localMajorFullFolderPath);
-						}
-						if (location.Alias.Equals("localMajor"))
-						{
-							var localMajorFolderPath = await Task.FromResult(AppDataFolder.GetLocalMajorFolderPath(userName, location, studioVersions));
-							foldersToBackup.AddRange(localMajorFolderPath);
-						}
-						if (location.Alias.Equals("programDataMajor"))
-						{
-							var programDataMajorFolderPath = await Task.FromResult(ProgramData.GetProgramDataMajorFolderPath(location, studioVersions));
-							foldersToBackup.AddRange(programDataMajorFolderPath);
-						}
-						if (location.Alias.Equals("programDataMajorFull"))
-						{
-							var programDataMajorFullFolderPath = await Task.FromResult(ProgramData.GetProgramDataMajorFullFolderPath(location, studioVersions));
-							foldersToBackup.AddRange(programDataMajorFullFolderPath);
-						}
-						if (location.Alias.Equals("programData"))
-						{
-							var programDataFolderPath = await Task.FromResult(ProgramData.GetProgramDataFolderPath(location, studioVersions));
-							foldersToBackup.AddRange(programDataFolderPath);
-						}
+					var fileName = string.Empty;
+					if (File.Exists(location))
+					{
+						fileName = location != null ? Path.GetFileName(location) : fileName;
 					}
+
+					var locationDetails = new LocationDetails
+					{
+						Alias = locationName,
+						BackupFilePath = Path.Combine(BackupFolderPath, version.ShortVersion, locationName, fileName),
+						OriginalFilePath = location,
+						Version = version.ShortVersion
+					};
+
+					locations.Add(locationDetails);
 				}
 			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"{Constants.GetFoldersPath} {ex.Message}\n {ex.StackTrace}");
-			}
-			return foldersToBackup;
+
+			return locations;
 		}
 
 		public static async Task<List<LocationDetails>> GetMultiTermFoldersPath(
