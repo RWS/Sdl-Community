@@ -9,8 +9,8 @@ using Newtonsoft.Json;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
-using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.LanguagePlatform.Core;
+using Converter = Sdl.Community.MTCloud.Provider.XliffConverter.Converter.Converter;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
