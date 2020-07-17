@@ -4,13 +4,15 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
+using Sdl.Community.MTCloud.Provider.XliffConverter.Models;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
+using Xliff = Sdl.Community.MTCloud.Provider.XliffConverter.Converter.Xliff;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
@@ -58,8 +60,17 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public Xliff CreateXliffFile(Segment[] segments)
 		{
-			var xliffDocument = new Xliff(_languageDirection.SourceCulture, _languageDirection.TargetCulture);
+			var file = new File
+			{
+				SourceCulture = _languageDirection.SourceCulture,
+				TargetCulture = _languageDirection.TargetCulture				
+			};
 
+			var xliffDocument = new Xliff
+			{
+				File = file
+			};
+			
 			foreach (var seg in segments)
 			{
 				if (seg != null)

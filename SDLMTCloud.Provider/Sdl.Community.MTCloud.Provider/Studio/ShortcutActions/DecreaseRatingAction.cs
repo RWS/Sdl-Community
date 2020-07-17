@@ -2,7 +2,6 @@
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.Desktop.IntegrationApi.Extensions.Internal;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions

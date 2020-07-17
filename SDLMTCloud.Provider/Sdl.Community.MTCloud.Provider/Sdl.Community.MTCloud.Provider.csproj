@@ -264,6 +264,17 @@
     <Compile Include="View\RateItView.xaml.cs">
       <DependentUpon>RateItView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="XliffConverter\Models\Body.cs" />
+    <Compile Include="XliffConverter\Models\File.cs" />
+    <Compile Include="XliffConverter\Models\Header.cs" />
+    <Compile Include="XliffConverter\Models\TargetTranslation.cs" />
+    <Compile Include="XliffConverter\Models\Tool.cs" />
+    <Compile Include="XliffConverter\Models\TranslationOption.cs" />
+    <Compile Include="XliffConverter\Models\TranslationUnit.cs" />
+    <Compile Include="XliffConverter\SegmentParser\Parser.cs" />
+    <Compile Include="XliffConverter\Converter\Converter.cs" />
+    <Compile Include="XliffConverter\Converter\Extensions.cs" />
+    <Compile Include="XliffConverter\Converter\Xliff.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\selectedStar.png" />
@@ -397,11 +408,8 @@
     <PackageReference Include="Microsoft.Office.Interop.Excel">
       <Version>15.0.4795.1000</Version>
     </PackageReference>
-    <PackageReference Include="Sdl.Community.Toolkit.Core">
-      <Version>1.8.8</Version>
-    </PackageReference>
-    <PackageReference Include="Sdl.Community.Toolkit.LanguagePlatform">
-      <Version>1.9.0</Version>
+    <PackageReference Include="Sdl.Community.Toolkit.Core.Studio2019">
+      <Version>1.9.1</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
       <Version>15.0.2</Version>
