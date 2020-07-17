@@ -10,7 +10,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 		"XLIFFManager_BatchTasks_Import_Name",
 		"XLIFFManager_BatchTasks_Import_Description",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget, AllowMultiple = true)]
-	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
+	//[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	[RequiresSettings(typeof(XliffManagerImportSettings), typeof(ImportSettingsPage))]
 	public class ImportBatchTask : AbstractFileContentProcessingAutomaticTask
 	{
