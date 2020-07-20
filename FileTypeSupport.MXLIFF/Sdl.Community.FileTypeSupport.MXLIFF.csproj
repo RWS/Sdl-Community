@@ -143,6 +143,7 @@
     <Compile Include="TellMe\MXLIFFCommunityWikiAction.cs" />
     <Compile Include="TellMe\MXLIFFStoreAction.cs" />
     <Compile Include="TellMe\MXLIFFTellMeProvider.cs" />
+    <Compile Include="Utils\Helper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PluginResources.resx">
