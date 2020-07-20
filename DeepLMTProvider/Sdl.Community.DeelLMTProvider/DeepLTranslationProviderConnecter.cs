@@ -51,7 +51,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
-			var targetLanguage = languageDirection.TargetCulture.TwoLetterISOLanguageName;
+			var targetLanguage = GetTargetLanguage(languageDirection);
 			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
 			var translatedText = string.Empty;
 			var normalizeHelper = new NormalizeSourceTextHelper();
@@ -120,6 +120,15 @@ namespace Sdl.Community.DeepLMTProvider
 			translatedText = amp.Replace(translatedText, "&");
 
 			return translatedText;
+		}
+
+		// Get the target language based on language direction
+		// (for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor)
+		private string GetTargetLanguage(LanguagePair languageDirection)
+		{
+			return languageDirection.TargetCulture.DisplayName.Contains("Portuguese")
+				? languageDirection.TargetCulture.Name
+				: languageDirection.TargetCulture.TwoLetterISOLanguageName;
 		}
 	}
 }
