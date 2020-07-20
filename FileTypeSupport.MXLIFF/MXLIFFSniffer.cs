@@ -2,91 +2,101 @@
 using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using System.Xml;
+using Sdl.Community.FileTypeSupport.MXLIFF.Utils;
 
 namespace Sdl.Community.FileTypeSupport.MXLIFF
 {
-    internal class MXLIFFSniffer : INativeFileSniffer
-    {
-        private const string BilingualDocument = "xliff";
-        private const string File = "file";
-        private const string SourceLanguage = "source-language";
-        private const string TargetLanguage = "target-language";
+	internal class MXLIFFSniffer : INativeFileSniffer
+	{
+		private const string BilingualDocument = "xliff";
+		private const string File = "file";
+		private const string SourceLanguage = "source-language";
+		private const string TargetLanguage = "target-language";
+		private readonly Helper _helper;
 
-        public SniffInfo Sniff(string nativeFilePath, Language suggestedSourceLanguage,
-            Codepage suggestedCodepage, INativeTextLocationMessageReporter messageReporter,
-            ISettingsGroup settingsGroup)
-        {
-            var info = new SniffInfo();
+		public MXLIFFSniffer()
+		{
+			_helper = new Helper();
+		}
 
-            if (System.IO.File.Exists(nativeFilePath))
-            {
-                // call method to check if file is supported
-                info.IsSupported = IsFileSupported(nativeFilePath);
-                // call method to determine the file language pair
-                GetFileLanguages(ref info, nativeFilePath);
-            }
-            else
-            {
-                info.IsSupported = false;
-            }
+		public SniffInfo Sniff(string nativeFilePath, Language suggestedSourceLanguage,
+			Codepage suggestedCodepage, INativeTextLocationMessageReporter messageReporter,
+			ISettingsGroup settingsGroup)
+		{
+			var info = new SniffInfo();
 
-            return info;
-        }
+			if (System.IO.File.Exists(nativeFilePath))
+			{
+				// call method to check if file is supported
+				info.IsSupported = IsFileSupported(nativeFilePath);
+				
+				// call method to determine the file language pair
+				GetFileLanguages(ref info, nativeFilePath);
+				
+				_helper.BackupNativeFile(nativeFilePath);
+			}
+			else
+			{
+				info.IsSupported = false;
+			}
 
-        // determine whether a given file is supported based on the
-        // root element
-        private bool IsFileSupported(string nativeFilePath)
-        {
-            bool result = false;
-            var doc = new XmlDocument();
-            doc.Load(nativeFilePath);
-            if (doc.DocumentElement != null && doc.DocumentElement.Name == BilingualDocument)
-            {
-                var memsource = doc.DocumentElement.Attributes["xmlns:m"];
+			return info;
+		}
 
-                if (memsource != null && memsource.Value == "http://www.memsource.com/mxlf/2.0")
-                {
-                    result = true;
-                }
-            }
+		// determine whether a given file is supported based on the
+		// root element
+		private bool IsFileSupported(string nativeFilePath)
+		{
+			bool result = false;
+			var doc = new XmlDocument();
+			doc.Load(nativeFilePath);
+			if (doc.DocumentElement != null && doc.DocumentElement.Name == BilingualDocument)
+			{
+				var memsource = doc.DocumentElement.Attributes["xmlns:m"];
 
-            return result;
-        }
+				if (memsource != null && memsource.Value == "http://www.memsource.com/mxlf/2.0")
+				{
+					result = true;
+				}
+			}
 
-        // retrieve the source and target language
-        // from the file header
-        private void GetFileLanguages(ref SniffInfo info, string nativeFilePath)
-        {
-            var doc = new XmlDocument();
+			return result;
+		}
 
-            doc.Load(nativeFilePath);
+		// retrieve the source and target language
+		// from the file header
+		private void GetFileLanguages(ref SniffInfo info, string nativeFilePath)
+		{
+			var doc = new XmlDocument();
 
-            if (doc.DocumentElement != null)
-            {
-                var fileElements = doc.GetElementsByTagName(File);
+			doc.Load(nativeFilePath);
 
-                foreach (XmlElement file in fileElements)
-                {
-                    if (file.HasAttributes)
-                    {
-                        XmlAttribute source = file.Attributes[SourceLanguage];
-                        if (source != null && source.Value.Length == 5)
-                        {
-                            info.DetectedSourceLanguage =
-                                new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(source.Value),
-                                    DetectionLevel.Certain);
-                        }
+			if (doc.DocumentElement != null)
+			{
+				var fileElements = doc.GetElementsByTagName(File);
 
-                        XmlAttribute target = file.Attributes[TargetLanguage];
-                        if (target != null && target.Value.Length == 5)
-                        {
-                            info.DetectedTargetLanguage =
-                                new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(target.Value),
-                                    DetectionLevel.Certain);
-                        }
-                    }
-                }
-            }
-        }
-    }
+				foreach (XmlElement file in fileElements)
+				{
+					if (file.HasAttributes)
+					{
+						var source = file.Attributes[SourceLanguage];
+						if (source != null && source.Value.Length == 5)
+						{
+							info.DetectedSourceLanguage =
+								new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(source.Value),
+									DetectionLevel.Certain);
+						}
+
+						var target = file.Attributes[TargetLanguage];
+						if (target != null && target.Value.Length == 5)
+						{
+							info.DetectedTargetLanguage =
+								new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(target.Value),
+									DetectionLevel.Certain);
+						}
+					}
+				}
+			}
+		}
+	}
 }
