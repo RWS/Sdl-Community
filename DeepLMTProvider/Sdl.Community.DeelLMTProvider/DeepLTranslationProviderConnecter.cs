@@ -51,7 +51,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
-			var targetLanguage = languageDirection.TargetCulture.TwoLetterISOLanguageName;
+			var targetLanguage = GetTargetLanguage(languageDirection);
 			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
 			var translatedText = string.Empty;
 			var normalizeHelper = new NormalizeSourceTextHelper();
@@ -66,12 +66,12 @@ namespace Sdl.Community.DeepLMTProvider
 
 					httpClient.Timeout = TimeSpan.FromMinutes(5);
 					var content = new StringContent($"text={sourceText}" +
-					                                $"&source_lang={sourceLanguage}" +
-					                                $"&target_lang={targetLanguage}" +
-					                                "&preserve_formatting=1" +
-					                                $"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
+													$"&source_lang={sourceLanguage}" +
+													$"&target_lang={targetLanguage}" +
+													"&preserve_formatting=1" +
+													$"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
 
-					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2021 /plugin {_pluginVersion}");
+					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
 
 					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result;
 					if (response.IsSuccessStatusCode)
@@ -87,9 +87,9 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 					else
 					{
-                        Log.Logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
-                            $"Response content: {response.Content?.ReadAsStringAsync().Result}.");
-                        MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+						Log.Logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+							$"Response content: {response.Content?.ReadAsStringAsync().Result}.");
+						MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					}
 				}
 			}
@@ -120,6 +120,15 @@ namespace Sdl.Community.DeepLMTProvider
 			translatedText = amp.Replace(translatedText, "&");
 
 			return translatedText;
+		}
+
+		// Get the target language based on language direction
+		// (for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor)
+		private string GetTargetLanguage(LanguagePair languageDirection)
+		{
+			return languageDirection.TargetCulture.DisplayName.Contains("Portuguese")
+				? languageDirection.TargetCulture.Name
+				: languageDirection.TargetCulture.TwoLetterISOLanguageName;
 		}
 	}
 }
