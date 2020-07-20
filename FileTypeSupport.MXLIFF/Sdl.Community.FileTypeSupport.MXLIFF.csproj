@@ -135,6 +135,7 @@
     <Compile Include="TellMe\MXLIFFCommunityWikiAction.cs" />
     <Compile Include="TellMe\MXLIFFStoreAction.cs" />
     <Compile Include="TellMe\MXLIFFTellMeProvider.cs" />
+    <Compile Include="Utils\Helper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PluginResources.resx">
@@ -183,5 +184,6 @@
       <Version>16.0.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
