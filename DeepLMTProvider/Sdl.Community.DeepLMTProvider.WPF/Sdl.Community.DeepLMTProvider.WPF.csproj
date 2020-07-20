@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -45,20 +45,14 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
+    <Reference Include="MahApps.Metro">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.PluginFramework">
-      <HintPath>..\packages\Sdl.Core.PluginFramework.2.0.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Sdl.Core.PluginFramework.PackageSupport">
-      <HintPath>..\packages\Sdl.Core.PluginFramework.2.0.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Controls">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Controls.dll</HintPath>
@@ -72,7 +66,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -123,7 +116,6 @@
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -165,6 +157,11 @@
   <ItemGroup>
     <Resource Include="Logo\deepLResized.png" />
     <Resource Include="Logo\deepL_logo_new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Sdl.Core.PluginFramework">
+      <Version>2.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
