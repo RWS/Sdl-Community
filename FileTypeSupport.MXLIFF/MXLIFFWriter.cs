@@ -5,10 +5,12 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using Sdl.Community.FileTypeSupport.MXLIFF.Utils;
 
 namespace Sdl.Community.FileTypeSupport.MXLIFF
 {
@@ -20,6 +22,12 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
 		private XmlDocument _targetFile;
 		private MXLIFFTextExtractor _textExtractor;
 		private readonly Dictionary<string, string> _users = new Dictionary<string, string>();
+		private readonly Helper _helper;
+	
+		public MXLIFFWriter()
+		{
+			_helper = new Helper();
+		}
 
 		public void Complete()
 		{
@@ -60,9 +68,13 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
 
 		public void SetFileProperties(IFileProperties fileInfo)
 		{
-			_targetFile = new XmlDocument();
-			_targetFile.PreserveWhitespace = false;
-			_targetFile.Load(_originalFileProperties.OriginalFilePath);
+			_targetFile = new XmlDocument
+			{
+				PreserveWhitespace = false
+			};
+
+			LoadFile();
+
 			_nsmgr = new XmlNamespaceManager(_targetFile.NameTable);
 			_nsmgr.AddNamespace("x", "urn:oasis:names:tc:xliff:document:1.2");
 			_nsmgr.AddNamespace("m", "http://www.memsource.com/mxlf/2.0");
@@ -86,6 +98,23 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
 		public void SetOutputProperties(INativeOutputFileProperties properties)
 		{
 			_nativeFileProperties = properties;
+		}
+
+		private void LoadFile()
+		{
+			if (_originalFileProperties != null)
+			{
+				var backupFile = _helper.GetBackupFile(Path.GetFileNameWithoutExtension(_originalFileProperties.OriginalFilePath));
+				if (File.Exists(_originalFileProperties.OriginalFilePath))
+				{
+					_targetFile.Load(_originalFileProperties.OriginalFilePath);
+				}
+
+				else if (!string.IsNullOrWhiteSpace(backupFile) && File.Exists(backupFile))
+				{
+					_targetFile.Load(backupFile);
+				}
+			}
 		}
 
 		private static void UpdateConfirmedAttribute(XmlNode transUnit, ISegmentPair segmentPair)
@@ -195,7 +224,7 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
 				transUnit.Attributes["id"].Value = UpdateTopId(transUnit.Attributes["id"].Value);
 
 				var topId = transUnit.Attributes["id"].Value;
-				var count = (int) char.GetNumericValue(topId.Last()) + 1;
+				var count = (int)char.GetNumericValue(topId.Last()) + 1;
 				// Iterate all segment pairs
 				foreach (var segmentPair in paragraphUnit.SegmentPairs.Skip(1).Reverse())
 				{
@@ -350,7 +379,6 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF
 
 			node.InnerText = _textExtractor.GetPlainText(seg);
 		}
-
 
 		private void UpdateSegment(XmlNode transUnit, ISegmentPair segmentPair)
 		{
