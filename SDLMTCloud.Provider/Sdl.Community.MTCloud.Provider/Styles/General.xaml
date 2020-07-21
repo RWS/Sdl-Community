@@ -52,5 +52,24 @@
 		<Setter x:Uid="Setter_23" Property="Foreground" Value="#0096D6" />
 		<Setter x:Uid="Setter_24" Property="TextDecorations" Value="" />
 	</Style>
+	
+	<Style TargetType="{x:Type ToolTip}" x:Key="ToolTipStyle">
+		<Setter Property="Background" Value="White"/>
+		<Setter Property="BorderThickness" Value="0.5"/>
+		<Setter Property="BorderBrush" Value="#298FC2"/>
+		<Setter Property="FontFamily" Value="Calibri"/>
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="Foreground" Value="#414141"/>
+		<Setter Property="MaxWidth" Value="170"/>
+		<Style.Resources>
+			<Style TargetType="ContentPresenter">
+				<Style.Resources>
+					<Style TargetType="TextBlock">
+						<Setter Property="TextWrapping" Value="Wrap" />
+					</Style>
+				</Style.Resources>
+			</Style>
+		</Style.Resources>
+	</Style>
 
 </ResourceDictionary>

@@ -28,6 +28,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _viewLanguageMappingsCommand;
 
 		private bool _reSendChecked;
+		private bool _sendFeedback;
 		private LanguageMappingModel _selectedLanguageMappingModel;
 		private ObservableCollection<LanguageMappingModel> _languageMappingModels;
 		private bool _isWaiting;
@@ -104,7 +105,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				OnPropertyChanged(nameof(ReSendChecked));
 			}
 		}
-
+		
+		
 		public bool IsWaiting
 		{
 			get => _isWaiting;

@@ -222,6 +222,8 @@
 		<Setter Property="FontSize" Value="11" />
 		<Setter Property="Cursor" Value="Hand" />
 		<Setter Property="Width" Value="Auto" />
+		<Setter Property="MinWidth" Value="110"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
 		<Setter Property="Height" Value="26" />
 		<Setter Property="VerticalAlignment" Value="Top" />
 		<Setter Property="Template">
