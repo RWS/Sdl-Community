@@ -500,6 +500,6 @@
     <value>Successfully reset language mappings</value>
   </data>
 	<data name="WarningMessage_UnableToMapLanguage" xml:space="preserve">
-    <value>Unable to map the target langauge code {0}</value>
+    <value>Unable to map the target language code {0}</value>
   </data>
 </root>

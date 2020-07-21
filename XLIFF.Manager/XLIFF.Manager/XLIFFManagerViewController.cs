@@ -21,6 +21,7 @@ using Sdl.Community.XLIFF.Manager.ViewModel;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
@@ -167,7 +168,6 @@ namespace Sdl.Community.XLIFF.Manager
 						projectFile.ConfirmationStatistics = wcProjectFile.ConfirmationStatistics;
 						projectFile.TranslationOriginStatistics = wcProjectFile.TranslationOriginStatistics;
 						projectFile.ProjectFileActivities = wcProjectFile.ProjectFileActivities;
-
 					}
 				}
 			}
@@ -497,7 +497,7 @@ namespace Sdl.Community.XLIFF.Manager
 				AddProjectToContainer(project);
 			}
 		}
-		
+
 		private static List<XliffManagerProjectFile> SerializeProjectFiles(string value)
 		{
 			try
@@ -751,6 +751,12 @@ namespace Sdl.Community.XLIFF.Manager
 						xliffProject.ProjectFiles.Add(xliffProjectFile);
 					}
 
+					var addedNewFiles = AddNewProjectFiles(project, xliffProject);
+					if (addedNewFiles)
+					{
+						UpdateProjectSettingsBundle(xliffProject);
+					}
+
 					_xliffProjects.Add(xliffProject);
 
 					return true;
@@ -765,6 +771,49 @@ namespace Sdl.Community.XLIFF.Manager
 			}
 
 			return false;
+		}
+
+		private static bool AddNewProjectFiles(FileBasedProject project, Project xliffProject)
+		{
+			var addedNewFiles = false;
+			var projectInfo = project.GetProjectInfo();
+
+			foreach (var targetLanguage in projectInfo.TargetLanguages)
+			{
+				var projectFiles = project.GetTargetLanguageFiles(targetLanguage);
+				foreach (var projectFile in projectFiles)
+				{
+					if (projectFile.Role != FileRole.Translatable)
+					{
+						continue;
+					}
+
+					var xliffFile = xliffProject.ProjectFiles.FirstOrDefault(a => a.FileId == projectFile.Id.ToString());
+					if (xliffFile == null)
+					{
+						addedNewFiles = true;
+						var file = new ProjectFile
+						{
+							ProjectId = projectInfo.Id.ToString(),
+							FileId = projectFile.Id.ToString(),
+							Name = projectFile.Name,
+							Path = projectFile.Folder,
+							Location = projectFile.LocalFilePath,
+							Action = Enumerators.Action.None,
+							Status = Enumerators.Status.Ready,
+							Date = DateTime.MinValue,
+							TargetLanguage = targetLanguage.CultureInfo.Name,
+							Selected = false,
+							FileType = projectFile.FileTypeId,
+							Project = xliffProject
+						};
+
+						xliffProject.ProjectFiles.Add(file);
+					}
+				}
+			}
+
+			return addedNewFiles;
 		}
 
 		private bool RemoveProjectsFromContainer()
@@ -798,7 +847,7 @@ namespace Sdl.Community.XLIFF.Manager
 
 			return removedProjects;
 		}
-		
+
 		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
 		{
 			var updated = AddProjectToContainer(_projectsController?.CurrentProject);
@@ -813,7 +862,7 @@ namespace Sdl.Community.XLIFF.Manager
 				_projectsNavigationViewModel.Projects = _xliffProjects;
 			}
 		}
-	
+
 		public override void Dispose()
 		{
 			_projectFilesViewModel?.Dispose();

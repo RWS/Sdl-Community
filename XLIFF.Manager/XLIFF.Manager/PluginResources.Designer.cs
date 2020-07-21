@@ -886,7 +886,7 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to map the target langauge code {0}.
+        ///   Looks up a localized string similar to Unable to map the target language code {0}.
         /// </summary>
         internal static string WarningMessage_UnableToMapLanguage {
             get {
