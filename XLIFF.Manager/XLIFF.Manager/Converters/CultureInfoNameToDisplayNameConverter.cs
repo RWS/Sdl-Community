@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using Sdl.Core.Globalization;
 
 namespace Sdl.Community.XLIFF.Manager.Converters
 {
@@ -12,10 +13,10 @@ namespace Sdl.Community.XLIFF.Manager.Converters
 			{
 				return null;
 			}
-			
-			var cultureInfo = new CultureInfo(value.ToString());
-			
-			return cultureInfo.DisplayName;
+
+			var language = new Language(value.ToString());
+
+			return language.DisplayName;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
