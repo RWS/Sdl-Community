@@ -185,21 +185,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Service\ActionProvider.cs" />
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Service\TranslationService.cs" />
-    <Compile Include="Studio\RateItController.cs" />
     <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
-    <Compile Include="Studio\ShortcutActions\DecreaseRatingAction.cs" />
-    <Compile Include="Studio\ShortcutActions\IncreaseRatingAction.cs" />
-    <Compile Include="Studio\ShortcutActions\SetCapitalizationAction.cs" />
-    <Compile Include="Studio\ShortcutActions\SetGrammarAction.cs" />
-    <Compile Include="Studio\ShortcutActions\SetSpellingAction.cs" />
-    <Compile Include="Studio\ShortcutActions\SetUnintelligenceAction.cs" />
-    <Compile Include="Studio\ShortcutActions\SetWordChoiceAction.cs" />
-    <Compile Include="Studio\ShortcutActions\SetWordsAdditionAction.cs" />
-    <Compile Include="Studio\ShortcutActions\SetWordsOmissionAction.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\ContactAction.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
@@ -242,7 +231,6 @@
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\CredentialsViewModel.cs" />
-    <Compile Include="ViewModel\RateItViewModel.cs" />
     <Compile Include="View\CredentialsWindow.xaml.cs">
       <DependentUpon>CredentialsWindow.xaml</DependentUpon>
     </Compile>
@@ -255,15 +243,6 @@
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
     <Compile Include="ViewModel\MTCodesViewModel.cs" />
-    <Compile Include="View\RateItControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="View\RateItControl.Designer.cs">
-      <DependentUpon>RateItControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\RateItView.xaml.cs">
-      <DependentUpon>RateItView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="XliffConverter\Models\Body.cs" />
     <Compile Include="XliffConverter\Models\File.cs" />
     <Compile Include="XliffConverter\Models\Header.cs" />
@@ -279,13 +258,6 @@
   <ItemGroup>
     <Resource Include="Resources\selectedStar.png" />
     <Resource Include="Resources\defaultStar.png" />
-    <EmbeddedResource Include="View\RateItControl.resx">
-      <DependentUpon>RateItControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <Page Include="View\RateItView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Resource Include="Resources\checked.png" />
     <Resource Include="Resources\warning.png" />
     <Resource Include="Resources\MTCodesLogo.png" />
@@ -344,7 +316,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Content Include="3rd party\Sdl.Community.RateItControl.dll" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>

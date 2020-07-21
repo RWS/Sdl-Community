@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using Newtonsoft.Json;
 using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
@@ -20,7 +19,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private readonly EditorController _editorController;
 		private LanguagePair _languageDirection;
 		private LanguageMappingsService _languageMappingsService;
-		private RateItController _rateItController;
+		
 
 		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
 		 ILanguageProvider languageProvider, EditorController editorController)
@@ -140,11 +139,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				// ignore any casting errors and simply create a new options instance
 				Options = new Options();
-			}
-			finally
-			{
-				ActivateRatingController();
-			}
+			}			
 		}
 
 		private MTCloudLanguagePair GetMTCloudLanguagePair(LanguagePair languagePair)
@@ -299,34 +294,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					          && l.TargetLanguages.Any(a =>
 						          a.CodeName.Equals(o.TargetLanguageId, StringComparison.InvariantCultureIgnoreCase))));
 			return languagePair;
-		}
-
-		private void ActivateRatingController()
-		{
-			if (_rateItController != null)
-			{
-				_rateItController.RateIt.SetSendFeedback(Options.SendFeedback);
-				return;
-			}
-
-			try
-			{
-				Application.Current?.Dispatcher?.Invoke(() =>
-				{
-					_rateItController = SdlTradosStudio.Application.GetController<RateItController>();
-
-					if (_rateItController != null)
-					{
-						_rateItController.RateIt.SetTranslationService(TranslationService);
-						_rateItController.RateIt.SetSendFeedback(Options.SendFeedback); // TODO: Set the feedback to the view model after whe
-						_rateItController.Activate();
-					}
-				});
-			}
-			catch
-			{
-				// catch all; unable to locate the controller
-			}
-		}
+		}		
 	}
 }

@@ -212,7 +212,6 @@
 				</controls:SortAwareDataGrid>
 				<DockPanel Grid.Row="1">
 					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding ReSendChecked}" Content="{x:Static rsx:PluginResources.SettingsWindow_ReSendTransaltionOption}"  />
-					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding SendFeedback}" Content="{x:Static rsx:PluginResources.SettingsWindow_FeedbackOption}" />
 				</DockPanel>
 			</Grid >
 

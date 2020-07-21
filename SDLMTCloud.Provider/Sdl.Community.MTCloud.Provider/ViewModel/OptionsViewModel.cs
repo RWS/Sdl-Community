@@ -41,7 +41,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			_languagePairs = languagePairs;
 
 			ReSendChecked = provider.Options?.ResendDraft ?? true;
-			SendFeedback = provider.Options?.SendFeedback ?? true;
 			LoadLanguageMappings();
 		}
 
@@ -106,20 +105,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				OnPropertyChanged(nameof(ReSendChecked));
 			}
 		}
-		public bool SendFeedback
-		{
-			get => _sendFeedback;
-			set
-			{
-				if (_sendFeedback == value)
-				{
-					return;
-				}
-
-				_sendFeedback = value;
-				OnPropertyChanged(nameof(SendFeedback));
-			}
-		}
+		
+		
 		public bool IsWaiting
 		{
 			get => _isWaiting;
@@ -156,7 +143,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			try
 			{
 				ReSendChecked = true;
-				SendFeedback = true;
 
 				_provider.Options = new Options();
 
@@ -269,7 +255,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (canSave)
 				{
 					_provider.Options.ResendDraft = ReSendChecked;
-					_provider.Options.SendFeedback = SendFeedback;
 					_provider.Options.LanguageMappings = LanguageMappingModels.ToList();
 
 					Dispose();
