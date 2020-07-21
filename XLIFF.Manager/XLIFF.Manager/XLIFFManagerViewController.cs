@@ -55,6 +55,7 @@ namespace Sdl.Community.XLIFF.Manager
 		private CustomerProvider _customerProvider;
 		private ProjectSettingsService _projectSettingsService;
 		private ReportService _reportService;
+		private bool _supressProjectControllerEvents;
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -407,18 +408,27 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			if (project != null)
 			{
-				_projectsController.Close(project);
-				_projectSettingsService.UpdateAnalysisTaskReportInfo(project, automaticTask);
-				_projectsController.Add(project.FilePath);
-
-				switch (wizardContext.Owner)
+				try
 				{
-					case Enumerators.Controller.Files:
-						_filesController.Activate();
-						break;
-					case Enumerators.Controller.Projects:
-						_projectsController.Activate();
-						break;
+					_supressProjectControllerEvents = true;
+
+					_projectsController.Close(project);
+					_projectSettingsService.UpdateAnalysisTaskReportInfo(project, automaticTask);
+					_projectsController.Add(project.FilePath);
+
+					switch (wizardContext.Owner)
+					{
+						case Enumerators.Controller.Files:
+							_filesController.Activate();
+							break;
+						case Enumerators.Controller.Projects:
+							_projectsController.Activate();
+							break;
+					}
+				}
+				finally
+				{
+					_supressProjectControllerEvents = false;
 				}
 			}
 		}
@@ -850,6 +860,11 @@ namespace Sdl.Community.XLIFF.Manager
 
 		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
 		{
+			if (_supressProjectControllerEvents)
+			{
+				return;
+			}
+
 			var updated = AddProjectToContainer(_projectsController?.CurrentProject);
 			if (!updated)
 			{
