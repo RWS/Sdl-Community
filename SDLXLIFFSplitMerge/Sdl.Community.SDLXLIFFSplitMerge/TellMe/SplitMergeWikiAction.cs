@@ -12,7 +12,7 @@ namespace Sdl.Community.SDLXLIFFSplitMerge.TellMe
 
 		public SplitMergeWikiAction()
 		{
-			Name = "SDLXLIFF Split/Merge wiki";
+			Name = "SDLXLIFF Split/Merge Wiki";
 		}
 
 		public override void Execute()
