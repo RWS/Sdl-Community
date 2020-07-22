@@ -1,16 +1,15 @@
 ﻿using System.IO;
 using System.Reflection;
 using Sdl.LanguagePlatform.Core;
+using Sdl.Versioning;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.Linq;
-	using System.Windows.Forms;
-	using Sdl.Community.Toolkit.Core;
-
 	/// <summary>
 	/// Class contains extentsion methods to simplify work with strings
 	/// </summary>
@@ -628,17 +627,16 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 		}
 
 		/// <summary>
-		/// Get installed version for Studio15(Studio 2019).
+		/// Get installed version for Studio16(Studio 2021).
 		/// The call studio.GetStudioVersion() is not working when using the installer, because the app is running outside the Studio context,
-		/// so the workaround is to get all the installed studio versions and use the needed one (Studio15)
+		/// so the workaround is to get all the installed studio versions and use the needed one (Studio16)
 		/// </summary>
 		/// <returns></returns>
 		private static StudioVersion GetInstalledStudioVersion()
 		{
-			var studio = new Studio();
-			var allStudioVersions = studio.GetInstalledStudioVersion();
-			
-			return allStudioVersions.FirstOrDefault(v => v.Version.Equals("Studio15"));
+			var allStudioVersions = new StudioVersionService().GetInstalledStudioVersions();
+
+			return allStudioVersions?.FirstOrDefault(v => v.Version.Equals("Studio16"));
 		}
 	}
 }
