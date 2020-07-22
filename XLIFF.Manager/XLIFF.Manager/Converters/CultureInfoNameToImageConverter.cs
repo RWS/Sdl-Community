@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Data;
 using Sdl.Community.XLIFF.Manager.Service;
 
@@ -16,13 +17,26 @@ namespace Sdl.Community.XLIFF.Manager.Converters
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (string.IsNullOrEmpty((string)value))
+			var itemValue = value?.ToString();
+			if (string.IsNullOrEmpty(itemValue))
 			{
 				return null;
 			}
 
-			var bitmap = _imageService.GetImage((string)value);
-			return bitmap;
+			if (!itemValue.Contains(","))
+			{
+				return _imageService.GetImage(itemValue);
+			}
+
+			var items = itemValue.Split(',').ToList();
+			if (items.Count > 1)
+			{
+				var sourceCulture = items[0];
+				var targetCulture = items[1];
+				return _imageService.GetImage(parameter?.ToString() == "Source" ? sourceCulture : targetCulture); ;
+			}
+
+			return null;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
