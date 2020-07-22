@@ -241,7 +241,7 @@ namespace Sdl.Community.XLIFF.Manager.Service
 
 		private string GeFullPath(string projectPath, string path)
 		{
-			if (string.IsNullOrEmpty(path.Trim('\\')))
+			if (string.IsNullOrEmpty(path?.Trim('\\')))
 			{
 				return string.Empty;
 			}

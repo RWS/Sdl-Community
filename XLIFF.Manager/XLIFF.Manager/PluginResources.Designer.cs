@@ -766,6 +766,16 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Refresh {
+            get {
+                object obj = ResourceManager.GetObject("Refresh", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Successful.
         /// </summary>
         internal static string Result_Successful {
@@ -1189,6 +1199,24 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string XLIFFManager_ProjectFileActivity_Name {
             get {
                 return ResourceManager.GetString("XLIFFManager_ProjectFileActivity_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh project data.
+        /// </summary>
+        internal static string XLIFFManager_Refresh_Description {
+            get {
+                return ResourceManager.GetString("XLIFFManager_Refresh_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        internal static string XLIFFManager_Refresh_Name {
+            get {
+                return ResourceManager.GetString("XLIFFManager_Refresh_Name", resourceCulture);
             }
         }
         

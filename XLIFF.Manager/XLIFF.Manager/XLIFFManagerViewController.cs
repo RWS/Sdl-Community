@@ -56,6 +56,7 @@ namespace Sdl.Community.XLIFF.Manager
 		private CustomerProvider _customerProvider;
 		private ProjectSettingsService _projectSettingsService;
 		private ReportService _reportService;
+		private bool _supressProjectControllerEvents;
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -105,6 +106,49 @@ namespace Sdl.Community.XLIFF.Manager
 		}
 
 		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
+
+		public void RefreshProjects()
+		{
+			if (_projectsNavigationViewModel == null)
+			{
+				return;
+			}
+
+			var refresh = false;
+			foreach (var project in _projectsController.GetAllProjects())
+			{
+				var addedNewProject = AddNewProjectToContainer(project);
+				if (addedNewProject)
+				{
+					refresh = true;
+				}
+				else
+				{
+					var projectInfo = project.GetProjectInfo();
+					var xliffProject = _xliffProjects.FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
+					if (xliffProject != null)
+					{
+						var addedNewFiles = AddNewProjectFiles(project, xliffProject);
+						if (addedNewFiles)
+						{
+							refresh = true;
+						}
+					}
+				}
+
+				var unloadedExistingProject = UnloadRemovedProjectsFromContainer();
+				if (unloadedExistingProject)
+				{
+					refresh = true;
+				}				
+			}
+
+			if (refresh)
+			{
+				_projectsNavigationViewModel.Projects = new List<Project>();
+				_projectsNavigationViewModel.Projects = _xliffProjects;
+			}
+		}
 
 		public List<Project> GetProjects()
 		{
@@ -408,18 +452,27 @@ namespace Sdl.Community.XLIFF.Manager
 		{
 			if (project != null)
 			{
-				_projectsController.Close(project);
-				_projectSettingsService.UpdateAnalysisTaskReportInfo(project, automaticTask);
-				_projectsController.Add(project.FilePath);
-
-				switch (wizardContext.Owner)
+				try
 				{
-					case Enumerators.Controller.Files:
-						_filesController.Activate();
-						break;
-					case Enumerators.Controller.Projects:
-						_projectsController.Activate();
-						break;
+					_supressProjectControllerEvents = true;
+
+					_projectsController.Close(project);
+					_projectSettingsService.UpdateAnalysisTaskReportInfo(project, automaticTask);
+					_projectsController.Add(project.FilePath);
+
+					switch (wizardContext.Owner)
+					{
+						case Enumerators.Controller.Files:
+							_filesController.Activate();
+							break;
+						case Enumerators.Controller.Projects:
+							_projectsController.Activate();
+							break;
+					}
+				}
+				finally
+				{
+					_supressProjectControllerEvents = false;
 				}
 			}
 		}
@@ -495,7 +548,7 @@ namespace Sdl.Community.XLIFF.Manager
 
 			foreach (var project in _projectsController.GetAllProjects())
 			{
-				AddProjectToContainer(project);
+				AddNewProjectToContainer(project);
 			}
 		}
 
@@ -666,7 +719,7 @@ namespace Sdl.Community.XLIFF.Manager
 			}
 		}
 
-		private bool AddProjectToContainer(FileBasedProject project)
+		private bool AddNewProjectToContainer(FileBasedProject project)
 		{
 			if (project == null)
 			{
@@ -774,7 +827,7 @@ namespace Sdl.Community.XLIFF.Manager
 			return false;
 		}
 
-		private static bool AddNewProjectFiles(FileBasedProject project, Project xliffProject)
+		private bool AddNewProjectFiles(FileBasedProject project, Project xliffProject)
 		{
 			var addedNewFiles = false;
 			var projectInfo = project.GetProjectInfo();
@@ -798,8 +851,8 @@ namespace Sdl.Community.XLIFF.Manager
 							ProjectId = projectInfo.Id.ToString(),
 							FileId = projectFile.Id.ToString(),
 							Name = projectFile.Name,
-							Path = projectFile.Folder,
-							Location = projectFile.LocalFilePath,
+							Path = GetRelativePath(projectInfo.LocalProjectFolder, projectFile.Folder),
+							Location = GetRelativePath(projectInfo.LocalProjectFolder, projectFile.LocalFilePath),
 							Action = Enumerators.Action.None,
 							Status = Enumerators.Status.Ready,
 							Date = DateTime.MinValue,
@@ -817,7 +870,7 @@ namespace Sdl.Community.XLIFF.Manager
 			return addedNewFiles;
 		}
 
-		private bool RemoveProjectsFromContainer()
+		private bool UnloadRemovedProjectsFromContainer()
 		{
 			var updated = false;
 			var removedProjects = GetRemovedProjects();
@@ -851,10 +904,15 @@ namespace Sdl.Community.XLIFF.Manager
 
 		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
 		{
-			var updated = AddProjectToContainer(_projectsController?.CurrentProject);
+			if (_supressProjectControllerEvents)
+			{
+				return;
+			}
+
+			var updated = AddNewProjectToContainer(_projectsController?.CurrentProject);
 			if (!updated)
 			{
-				updated = RemoveProjectsFromContainer();
+				updated = UnloadRemovedProjectsFromContainer();
 			}
 
 			if (updated && _projectsNavigationViewModel != null)
