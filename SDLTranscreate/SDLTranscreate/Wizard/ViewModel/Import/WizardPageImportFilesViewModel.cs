@@ -319,8 +319,13 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 				}
 
 				var xliff = xliffReader.ReadXliff(filePath);
+				var docInfoSourceFile = xliff.DocInfo?.Source;
 				var xliffTargetLanguage = xliff.Files?.FirstOrDefault()?.TargetLanguage;
-				var docInfoSourceFile = xliff.DocInfo?.Source;				
+				// take the default target from <doc-info> when not specified in <File>
+				if (string.IsNullOrEmpty(xliffTargetLanguage))
+				{
+					xliffTargetLanguage = xliff.DocInfo?.TargetLanguage;
+				}
 
 				// Get the mapped language code
 				var mappedLanguage = _languageMappings.FirstOrDefault(a =>

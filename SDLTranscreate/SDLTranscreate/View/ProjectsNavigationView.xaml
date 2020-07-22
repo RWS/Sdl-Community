@@ -105,6 +105,7 @@
 				<TreeView.ItemContainerStyle>
 					<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
 						<Setter Property="IsSelected" Value="{Binding IsSelected}" />
+						<Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
 					</Style>
 				</TreeView.ItemContainerStyle>
 				<TreeView.ItemTemplate >

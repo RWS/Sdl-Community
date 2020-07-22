@@ -10,7 +10,7 @@ namespace Sdl.Community.Transcreate.Controls
 		Name = "TranscreateManager_ProjectFileActivity_Name",
 		Description = "TranscreateManager_ProjectFileActivity_Description"
 	)]
-	[ViewPartLayout(Dock = DockType.Bottom, Pinned = false, Height = 200, ZIndex = 0, LocationByType = typeof(TranscreateViewController))]
+	[ViewPartLayout(Dock = DockType.Bottom, Pinned = false, Height = 200, ZIndex = 1, LocationByType = typeof(TranscreateViewController))]
 	public class ProjectFileActivityViewController : AbstractViewPartController
 	{		
 		private ProjectFileActivityViewControl _control;

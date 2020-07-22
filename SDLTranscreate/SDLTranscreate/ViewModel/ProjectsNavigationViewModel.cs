@@ -128,16 +128,22 @@ namespace Sdl.Community.Transcreate.ViewModel
 						var customer = customerGroups.FirstOrDefault(a => a.Customer?.Name == filteredProject.Customer?.Name);
 						if (customer == null)
 						{
-							var customerGroup = new CustomerGroup
+							customer = new CustomerGroup
 							{
 								Customer = filteredProject.Customer,
 								Projects = new List<Project> { filteredProject }
 							};
-							customerGroups.Add(customerGroup);
+
+							customerGroups.Add(customer);
 						}
 						else
 						{
 							customer.Projects.Add(filteredProject);
+						}
+
+						if (filteredProject.IsSelected)
+						{
+							customer.IsExpanded = true;
 						}
 					}
 				}

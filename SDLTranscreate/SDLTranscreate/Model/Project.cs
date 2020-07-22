@@ -8,15 +8,45 @@ namespace Sdl.Community.Transcreate.Model
 		private Customer _customer;
 		private List<ProjectFile> _projectFiles;
 		private List<BackTranslationProject> _backTranslationProjects;
+		private bool _isSelected;
+		private bool _isExpanded;
 
 		public Project()
 		{
 			TargetLanguages = new List<LanguageInfo>();
 			ProjectFiles = new List<ProjectFile>();
-			BackTranslationProjects = new List<BackTranslationProject>();			
+			BackTranslationProjects = new List<BackTranslationProject>();
 		}
 
-		public bool IsSelected { get; set; }
+		public bool IsSelected
+		{
+			get => _isSelected;
+			set
+			{
+				if (_isSelected == value)
+				{
+					return;
+				}
+
+				_isSelected = value;
+				OnPropertyChanged(nameof(IsSelected));
+			}
+		}
+
+		public bool IsExpanded
+		{
+			get => _isExpanded;
+			set
+			{
+				if (_isExpanded == value)
+				{
+					return;
+				}
+
+				_isExpanded = value;
+				OnPropertyChanged(nameof(IsExpanded));
+			}
+		}
 
 		public string Id { get; set; }
 

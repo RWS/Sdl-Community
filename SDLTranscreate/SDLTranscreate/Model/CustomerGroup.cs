@@ -19,6 +19,8 @@ namespace Sdl.Community.Transcreate.Model
 
 		public bool IsSelected { get; set; }
 
+		public bool IsExpanded { get; set; }
+
 		public List<Project> Projects
 		{
 			get => _projects;

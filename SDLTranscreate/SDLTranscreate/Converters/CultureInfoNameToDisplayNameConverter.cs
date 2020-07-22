@@ -18,17 +18,15 @@ namespace Sdl.Community.Transcreate.Converters
 
 			if (!itemValue.Contains(","))
 			{
-				return null;
+				return new Language(itemValue).DisplayName;
 			}
 
 			var items = itemValue.Split(',').ToList();
 			if (items.Count > 1)
 			{
 				var sourceCulture = items[0];
-				var targetCulture = items[1];
-
-				var language = new Language(parameter?.ToString() == "Source" ? sourceCulture : targetCulture);
-				return language.DisplayName;
+				var targetCulture = items[1];				
+				return new Language(parameter?.ToString() == "Source" ? sourceCulture : targetCulture).DisplayName;
 			}
 
 			return null;

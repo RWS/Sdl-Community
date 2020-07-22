@@ -25,17 +25,15 @@ namespace Sdl.Community.Transcreate.Converters
 
 			if (!itemValue.Contains(","))
 			{
-				return null;
+				return _imageService.GetImage(itemValue); 
 			}
 
 			var items = itemValue.Split(',').ToList();
 			if (items.Count > 1)
 			{			
 				var sourceCulture = items[0];
-				var targetCulture = items[1];
-
-				var bitmap = _imageService.GetImage(parameter?.ToString() == "Source" ? sourceCulture : targetCulture);
-				return bitmap;
+				var targetCulture = items[1];				
+				return _imageService.GetImage(parameter?.ToString() == "Source" ? sourceCulture : targetCulture); ;
 			}
 
 			return null;
