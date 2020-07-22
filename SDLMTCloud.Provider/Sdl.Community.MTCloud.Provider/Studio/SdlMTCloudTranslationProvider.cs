@@ -19,6 +19,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private readonly EditorController _editorController;
 		private LanguagePair _languageDirection;
 		private LanguageMappingsService _languageMappingsService;
+		
 
 		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
 		 ILanguageProvider languageProvider, EditorController editorController)
@@ -27,11 +28,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			LanguageProvider = languageProvider;
 			TranslationService = translationService;
-
 			_editorController = editorController;
 
 			LoadState(translationProviderState);
-		}
+		}		
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
 
@@ -132,14 +132,14 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public void LoadState(string translationProviderState)
 		{
 			try
-			{				
+			{
 				Options = JsonConvert.DeserializeObject<Options>(translationProviderState);
 			}
 			catch
 			{
 				// ignore any casting errors and simply create a new options instance
 				Options = new Options();
-			}
+			}			
 		}
 
 		private MTCloudLanguagePair GetMTCloudLanguagePair(LanguagePair languagePair)
@@ -294,6 +294,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					          && l.TargetLanguages.Any(a =>
 						          a.CodeName.Equals(o.TargetLanguageId, StringComparison.InvariantCultureIgnoreCase))));
 			return languagePair;
-		}
+		}		
 	}
 }

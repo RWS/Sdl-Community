@@ -9,20 +9,19 @@ using Newtonsoft.Json;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
-using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.LanguagePlatform.Core;
+using Converter = Sdl.Community.MTCloud.Provider.XliffConverter.Converter.Converter;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class TranslationService : ITranslationService
-	{
+	{		
 		public TranslationService(IConnectionService connectionService)
 		{
 			ConnectionService = connectionService;
 		}
 
 		public IConnectionService ConnectionService { get; }
-
 		
 		public async Task<Segment[]> TranslateText(string text, LanguageMappingModel model)
 		{			
@@ -59,6 +58,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					Model = model.SelectedModel.Model,
 					InputFormat = "xliff"
 				};
+				//var feedback = new Feedback
+				//{
+				//	SourceText = text,
+				//	SourceLanguageId = model.SelectedSource.CodeName,
+				//	TargetLanguageId = model.SelectedTarget.CodeName,
+				//	Model = model.SelectedModel.Model
+				//};
 
 				if (!model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary_available)
 					&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
@@ -72,7 +78,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 				var responseMessage = await httpClient.SendAsync(request);
 				var response = await responseMessage.Content.ReadAsStringAsync();
-
+				
 				if (!responseMessage.IsSuccessStatusCode)
 				{
 					return null;
@@ -88,7 +94,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						{
 							return null;
 						}
-
+						//feedback.TargetMtText = translation;
+						//TranslationReceived?.Invoke(feedback);
 						var translatedXliff = Converter.ParseXliffString(translation);
 						if (translatedXliff != null)
 						{

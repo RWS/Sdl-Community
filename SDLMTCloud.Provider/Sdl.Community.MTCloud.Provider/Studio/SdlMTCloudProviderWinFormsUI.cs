@@ -6,7 +6,6 @@ using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
-using Sdl.LanguageCloud.IdentityApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -29,10 +28,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		[STAThread]
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
+			//TODO: Instantiate the new Rate it View part
 			try
-			{				
-				var uri = new Uri($"{Constants.MTCloudUriScheme}://");
-				var connectionService = new ConnectionService(owner, new VersionService(), LanguageCloudIdentityApi.Instance);
+			{
+				var uri = new Uri($"{Constants.MTCloudUriScheme}://");				
+				var connectionService = new ConnectionService(owner, new VersionService(), StudioInstance.GetLanguageCloudIdentityApi());
 				
 				var credential = connectionService.GetCredential(credentialStore);								
 				var connectionResult = connectionService.EnsureSignedIn(credential, true);
@@ -106,9 +106,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				throw new ArgumentNullException(nameof(translationProviderUri));
 			}
-
-			var supportsProvider = string.Equals(translationProviderUri.Scheme, Constants.MTCloudUriScheme,
-				StringComparison.OrdinalIgnoreCase);
+			
+			var supportsProvider = translationProviderUri.Scheme.StartsWith(Constants.MTCloudUriScheme);
 			return supportsProvider;
 		}
 

@@ -1,7 +1,8 @@
 ﻿using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Xml;
+using System.Linq;
+using Sdl.Versioning;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
@@ -50,7 +51,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			try
 			{
-				var studioVersion = new Toolkit.Core.Studio().GetInstalledStudioVersion()?.FirstOrDefault(v => v.Version.Equals("Studio15"));
+				var studioVersion = new StudioVersionService().GetInstalledStudioVersions()?.FirstOrDefault(v => v.Version.Equals("Studio15"));
 				if (studioVersion != null)
 				{
 					return $"{studioVersion.PublicVersion}-{studioVersion.ExecutableVersion}";
