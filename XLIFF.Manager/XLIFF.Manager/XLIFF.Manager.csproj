@@ -148,6 +148,7 @@
     <Compile Include="Actions\Export\ExportToXLIFFAction.cs" />
     <Compile Include="Actions\Import\ImportFromXLIFFAction.cs" />
     <Compile Include="Actions\OpenLanguageMappingsAction.cs" />
+    <Compile Include="Actions\RefreshAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="BatchTasks\ExportBatchTask.cs" />
@@ -579,6 +580,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Refresh.ico" />
     <Resource Include="Resources\LanguageMapping.ico" />
     <Resource Include="Resources\Search.png" />
     <EmbeddedResource Include="BatchTasks\Report.xsl" />

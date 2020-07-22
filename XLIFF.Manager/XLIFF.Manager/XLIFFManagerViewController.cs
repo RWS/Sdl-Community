@@ -106,6 +106,49 @@ namespace Sdl.Community.XLIFF.Manager
 
 		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
 
+		public void RefreshProjects()
+		{
+			if (_projectsNavigationViewModel == null)
+			{
+				return;
+			}
+
+			var refresh = false;
+			foreach (var project in _projectsController.GetAllProjects())
+			{
+				var addedNewProject = AddNewProjectToContainer(project);
+				if (addedNewProject)
+				{
+					refresh = true;
+				}
+				else
+				{
+					var projectInfo = project.GetProjectInfo();
+					var xliffProject = _xliffProjects.FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
+					if (xliffProject != null)
+					{
+						var addedNewFiles = AddNewProjectFiles(project, xliffProject);
+						if (addedNewFiles)
+						{
+							refresh = true;
+						}
+					}
+				}
+
+				var unloadedExistingProject = UnloadRemovedProjectsFromContainer();
+				if (unloadedExistingProject)
+				{
+					refresh = true;
+				}				
+			}
+
+			if (refresh)
+			{
+				_projectsNavigationViewModel.Projects = new List<Project>();
+				_projectsNavigationViewModel.Projects = _xliffProjects;
+			}
+		}
+
 		public List<Project> GetProjects()
 		{
 			return _xliffProjects;
@@ -504,7 +547,7 @@ namespace Sdl.Community.XLIFF.Manager
 
 			foreach (var project in _projectsController.GetAllProjects())
 			{
-				AddProjectToContainer(project);
+				AddNewProjectToContainer(project);
 			}
 		}
 
@@ -675,7 +718,7 @@ namespace Sdl.Community.XLIFF.Manager
 			}
 		}
 
-		private bool AddProjectToContainer(FileBasedProject project)
+		private bool AddNewProjectToContainer(FileBasedProject project)
 		{
 			if (project == null)
 			{
@@ -783,7 +826,7 @@ namespace Sdl.Community.XLIFF.Manager
 			return false;
 		}
 
-		private static bool AddNewProjectFiles(FileBasedProject project, Project xliffProject)
+		private bool AddNewProjectFiles(FileBasedProject project, Project xliffProject)
 		{
 			var addedNewFiles = false;
 			var projectInfo = project.GetProjectInfo();
@@ -807,8 +850,8 @@ namespace Sdl.Community.XLIFF.Manager
 							ProjectId = projectInfo.Id.ToString(),
 							FileId = projectFile.Id.ToString(),
 							Name = projectFile.Name,
-							Path = projectFile.Folder,
-							Location = projectFile.LocalFilePath,
+							Path = GetRelativePath(projectInfo.LocalProjectFolder, projectFile.Folder),
+							Location = GetRelativePath(projectInfo.LocalProjectFolder, projectFile.LocalFilePath),
 							Action = Enumerators.Action.None,
 							Status = Enumerators.Status.Ready,
 							Date = DateTime.MinValue,
@@ -826,7 +869,7 @@ namespace Sdl.Community.XLIFF.Manager
 			return addedNewFiles;
 		}
 
-		private bool RemoveProjectsFromContainer()
+		private bool UnloadRemovedProjectsFromContainer()
 		{
 			var updated = false;
 			var removedProjects = GetRemovedProjects();
@@ -865,10 +908,10 @@ namespace Sdl.Community.XLIFF.Manager
 				return;
 			}
 
-			var updated = AddProjectToContainer(_projectsController?.CurrentProject);
+			var updated = AddNewProjectToContainer(_projectsController?.CurrentProject);
 			if (!updated)
 			{
-				updated = RemoveProjectsFromContainer();
+				updated = UnloadRemovedProjectsFromContainer();
 			}
 
 			if (updated && _projectsNavigationViewModel != null)
