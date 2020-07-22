@@ -41,7 +41,7 @@
 				</CollectionViewSource.SortDescriptions>
 				<CollectionViewSource.GroupDescriptions>
 					<PropertyGroupDescription PropertyName="Project.Name"/>
-					<PropertyGroupDescription PropertyName="TargetLanguage"/>
+					<PropertyGroupDescription PropertyName="LanguageDirection"/>
 				</CollectionViewSource.GroupDescriptions>
 			</CollectionViewSource>
 
@@ -216,17 +216,30 @@
 				<GroupStyle>
 					<GroupStyle.HeaderTemplate>
 						<DataTemplate DataType="{x:Type GroupItem}">
-							<DockPanel Background="Transparent" Margin="4,5,0,5">
-								<Image Margin="8,0,2,0" Width="20"
-									   Stretch="UniformToFill"
+							<DockPanel Margin="12,5,0,5">
+								<Image Margin="0,0,2,0" Width="20"
+								       Stretch="UniformToFill"
 								       RenderOptions.BitmapScalingMode="HighQuality" 
 								       RenderOptions.EdgeMode="Aliased"
-									   HorizontalAlignment="Center"
-									   VerticalAlignment="Stretch"
-								       Source="{Binding Path=Name, Converter={StaticResource CultureInfoNameToImageConverter}}" />
+								       HorizontalAlignment="Center"
+								       VerticalAlignment="Stretch"
+								       Source="{Binding Path=Name, Converter={StaticResource CultureInfoNameToImageConverter}, ConverterParameter='Source'}" />
 
-								<TextBlock FontWeight="Bold" Text="{Binding Path=Name, Converter={StaticResource CultureInfoNameToDisplayNameConverter}}" 
+								<TextBlock FontWeight="Bold" Text="{Binding Path=Name, Converter={StaticResource CultureInfoNameToDisplayNameConverter}, ConverterParameter='Source'}" 
 								           Foreground="#3E3E45" Margin="2,0,2,0" VerticalAlignment="Center" />
+
+								<TextBlock FontWeight="Regular"  Margin="0,0,0,0" Text=" > "  Foreground="Black" VerticalAlignment="Center"/>
+								<Image Margin="2,0,2,0" Width="20"
+								       Stretch="UniformToFill"
+								       RenderOptions.BitmapScalingMode="HighQuality" 
+								       RenderOptions.EdgeMode="Aliased"
+								       HorizontalAlignment="Center"
+								       VerticalAlignment="Stretch"
+								       Source="{Binding Path=Name, Converter={StaticResource CultureInfoNameToImageConverter}, ConverterParameter='Target'}" />
+
+								<TextBlock FontWeight="Bold" Text="{Binding Path=Name, Converter={StaticResource CultureInfoNameToDisplayNameConverter}, ConverterParameter='Target'}" 
+								           Foreground="#3E3E45" Margin="2,0,2,0" VerticalAlignment="Center" />
+
 								<TextBlock FontWeight="Regular"  Margin="0,0,0,0" Text=", "  Foreground="Black" VerticalAlignment="Center"/>
 								<TextBlock FontWeight="Regular" Text="files: " Foreground="Black" VerticalAlignment="Center"/>
 								<TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}" Foreground="#3E3E45" VerticalAlignment="Center" />

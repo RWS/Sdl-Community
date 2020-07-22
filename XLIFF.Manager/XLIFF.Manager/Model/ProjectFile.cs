@@ -11,6 +11,7 @@ namespace Sdl.Community.XLIFF.Manager.Model
 		private bool _selected;
 		private string _path;
 		private string _xliffFilePath;
+		private string _targetLanguage;
 		private Enumerators.Status _status;
 
 		public ProjectFile()
@@ -129,8 +130,24 @@ namespace Sdl.Community.XLIFF.Manager.Model
 				return value;
 			}
 		}
-		
-		public string TargetLanguage { get; set; }
+
+		public string TargetLanguage
+		{
+			get => _targetLanguage;
+			set
+			{
+				if (_targetLanguage == value)
+				{
+					return;
+				}
+
+				_targetLanguage = value;
+				OnPropertyChanged(nameof(TargetLanguage));
+				OnPropertyChanged(nameof(LanguageDirection));
+			}
+		}
+
+		public string LanguageDirection => Project?.SourceLanguage?.CultureInfo?.Name + "," + TargetLanguage;
 
 		public string ShortMessage { get; set; }
 
